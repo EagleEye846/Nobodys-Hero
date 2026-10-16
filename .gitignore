@@ -1,3 +1,5 @@
 # Backups the Studio makes before overwriting a file (tools/serve.py).
 .studio-backups/
 __pycache__/
+
+*.lnk
