@@ -9,9 +9,11 @@ export const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 // The angle from one point to another, for aiming.
 export const angleTo = (from, to) => Math.atan2(to.y - from.y, to.x - from.x);
 
-// Runs an action at random intervals between min and max seconds.
-export function every(min, max, action) {
-  let timer = rand(min, max);
+// Runs an action at random intervals between min and max seconds. The first
+// time comes almost straight away (after `first` seconds), so attacks don't
+// leave the box empty for their opening seconds.
+export function every(min, max, action, { first = rand(0.1, 0.3) } = {}) {
+  let timer = first;
   return (dt, ...args) => {
     timer -= dt;
     while (timer <= 0) {
@@ -19,6 +21,33 @@ export function every(min, max, action) {
       action(...args);
     }
   };
+}
+
+// Random, but fair: hands out the options in a shuffled order, and only
+// reshuffles once every option has come up. So a side is never picked many
+// times in a row while the others wait. `const side = shuffleBag(['left', 'right'])`,
+// then `side()` each time.
+export function shuffleBag(options) {
+  let bag = [];
+  let last;
+  return () => {
+    if (!bag.length) {
+      bag = [...options].sort(() => Math.random() - 0.5);
+      // Don't repeat the last pick across a reshuffle.
+      if (bag.length > 1 && bag[bag.length - 1] === last) bag.unshift(bag.pop());
+    }
+    last = bag.pop();
+    return last;
+  };
+}
+
+// Random positions between min and max that still cover the whole range: the
+// range is split into `slots` lanes, handed out by a shuffleBag, with a random
+// spot inside each lane. `const nextX = spreadAcross(box.x + 6, box.x + box.w - 6)`.
+export function spreadAcross(min, max, slots = 4) {
+  const lane = shuffleBag([...Array(slots).keys()]);
+  const width = (max - min) / slots;
+  return () => min + (lane() + Math.random()) * width;
 }
 
 // A random point just outside one edge of the box, and which edge it's on.

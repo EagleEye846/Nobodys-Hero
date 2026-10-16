@@ -88,20 +88,21 @@ defineBulletArt('target', {
 export const DUMMY_ATTACKS = {
   // A column of sewing pins lines up at one side of the box, level with you,
   // blinks a warning, then shoots across. Step out of their row.
-  pinCushion(box, density, { Shot, every, pick, rand, clamp }) {
-    const spacing = 9;
-    const volley = every(0.95, 1.3, (bullets, soul) => {
-      const fromLeft = Math.random() < 0.5;
-      const count = pick([3, 4]);
+  pinCushion(box, density, { Shot, every, pick, rand, clamp, shuffleBag }) {
+    const spacing = 10;
+    const side = shuffleBag(['left', 'right']);
+    const volley = every(1.3, 1.7, (bullets, soul) => {
+      const fromLeft = side() === 'left';
+      const count = pick([2, 3]);
       const span = (count - 1) * spacing;
       const top = clamp(soul.y - span / 2 + rand(-5, 5), box.y + 4, box.y + box.h - 4 - span);
       for (let i = 0; i < count; i++) {
         bullets.push(new Shot({
           x: fromLeft ? box.x + 4 : box.x + box.w - 4,
           y: top + i * spacing,
-          vx: fromLeft ? 105 : -105,
+          vx: fromLeft ? 90 : -90,
           art: 'pin',
-          warn: 0.45,
+          warn: 0.6,
         }));
       }
     });
@@ -110,26 +111,29 @@ export const DUMMY_ATTACKS = {
 
   // Big buttons pop off and ricochet around the box, spinning, while loose
   // stuffing drifts down between them.
-  buttonBounce(box, density, { Shot, every, rand, pick }) {
-    const total = 3 + Math.round(density);
+  buttonBounce(box, density, { Shot, every, rand, shuffleBag, spreadAcross }) {
+    const dropX = spreadAcross(box.x + 10, box.x + box.w - 10);
+    const fluffX = spreadAcross(box.x + 4, box.x + box.w - 4, 5);
+    const heading = shuffleBag([-1, 1]);
+    const total = 2 + Math.round(density);
     let thrown = 0;
-    const pop = every(0.55, 0.85, (bullets) => {
+    const pop = every(0.8, 1.1, (bullets) => {
       if (thrown >= total) return;
       thrown++;
       const angle = rand(0.25, 0.75) * Math.PI;
-      const speed = rand(58, 76);
+      const speed = rand(48, 62);
       bullets.push(new Shot({
-        x: rand(box.x + 10, box.x + box.w - 10),
+        x: dropX(),
         y: box.y + 6,
-        vx: Math.cos(angle) * speed * pick([-1, 1]),
+        vx: Math.cos(angle) * speed * heading(),
         vy: Math.sin(angle) * speed,
         art: 'button',
         bounce: true,
-        warn: 0.35,
+        warn: 0.5,
       }));
     });
-    const fluff = every(0.65, 1, (bullets) => {
-      bullets.push(new Shot({ x: rand(box.x + 4, box.x + box.w - 4), y: box.y - 3, vy: rand(38, 52), art: 'tuft' }));
+    const fluff = every(0.9, 1.3, (bullets) => {
+      bullets.push(new Shot({ x: fluffX(), y: box.y - 3, vy: rand(38, 52), art: 'tuft' }));
     });
     return {
       duration: 6.5,
@@ -142,12 +146,14 @@ export const DUMMY_ATTACKS = {
 
   // A needle shoots across the box pulling a line of thread behind it, near
   // where you are. The thread lingers for a moment, so lines can box you in.
-  stitchLine(box, density, { Shot, Line, every, rand, clamp }) {
-    const warn = 0.6;
-    const speed = 170;
-    const stitch = every(1.15, 1.5, (bullets, soul) => {
-      const horizontal = Math.random() < 0.6;
-      const forward = Math.random() < 0.5;
+  stitchLine(box, density, { Shot, Line, every, rand, clamp, shuffleBag }) {
+    const direction = shuffleBag(['right', 'left', 'down', 'up', 'right', 'left']);
+    const warn = 0.8;
+    const speed = 150;
+    const stitch = every(1.8, 2.2, (bullets, soul) => {
+      const way = direction();
+      const horizontal = way === 'right' || way === 'left';
+      const forward = way === 'right' || way === 'down';
       let x;
       let y;
       let angle;
@@ -163,18 +169,18 @@ export const DUMMY_ATTACKS = {
         angle = forward ? Math.PI / 2 : -Math.PI / 2;
         length = box.h + 8;
       }
-      bullets.push(new Line({ x, y, angle, length, thickness: 2, warn, grow: speed, life: 1.4, color: '#f2ecff', dash: [3, 2] }));
+      bullets.push(new Line({ x, y, angle, length, thickness: 2, warn, grow: speed, life: 0.9, color: '#f2ecff', dash: [3, 2] }));
       bullets.push(new Shot({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, art: 'needle', warn }));
     });
     return { duration: 7, update: (dt, bullets, soul) => stitch(dt, bullets, soul) };
   },
 
   // Balls of stuffing swell up around the box (never right on top of you),
-  // then burst into a ring of tufts.
+  // then burst into a ring of six tufts.
   stuffingBurst(box, density, { Shot, every, rand, pointAwayFrom }) {
-    const swell = 0.65;
+    const swell = 0.8;
     let swelling = [];
-    const grow = every(0.85, 1.2, (bullets, soul) => {
+    const grow = every(1.2, 1.6, (bullets, soul) => {
       const { x, y } = pointAwayFrom(box, soul, 28);
       bullets.push(new Shot({ x, y, art: 'cottonBall', harmless: true, life: swell }));
       swelling.push({ x, y, t: swell });
@@ -187,9 +193,9 @@ export const DUMMY_ATTACKS = {
           ball.t -= dt;
           if (ball.t > 0) continue;
           const turn = rand(0, Math.PI * 2);
-          for (let i = 0; i < 8; i++) {
-            const angle = turn + (i / 8) * Math.PI * 2;
-            bullets.push(new Shot({ x: ball.x, y: ball.y, vx: Math.cos(angle) * 52, vy: Math.sin(angle) * 52, art: 'tuft' }));
+          for (let i = 0; i < 6; i++) {
+            const angle = turn + (i / 6) * Math.PI * 2;
+            bullets.push(new Shot({ x: ball.x, y: ball.y, vx: Math.cos(angle) * 44, vy: Math.sin(angle) * 44, art: 'tuft' }));
           }
         }
         swelling = swelling.filter((ball) => ball.t > 0);
@@ -199,13 +205,14 @@ export const DUMMY_ATTACKS = {
 
   // Practice targets pop up in the top of the box and, a moment later, each
   // fires three pins at you.
-  trainingTargets(box, density, { Shot, every, rand, angleTo }) {
+  trainingTargets(box, density, { Shot, every, rand, angleTo, spreadAcross }) {
+    const targetX = spreadAcross(box.x + 12, box.x + box.w - 12, 3);
     let targets = [];
-    const raise = every(1.25, 1.65, (bullets) => {
-      const x = rand(box.x + 12, box.x + box.w - 12);
+    const raise = every(1.5, 1.9, (bullets) => {
+      const x = targetX();
       const y = rand(box.y + 10, box.y + box.h * 0.45);
-      bullets.push(new Shot({ x, y, art: 'target', harmless: true, life: 1.1 }));
-      targets.push({ x, y, t: 0.55 });
+      bullets.push(new Shot({ x, y, art: 'target', harmless: true, life: 1.3 }));
+      targets.push({ x, y, t: 0.75 });
     });
     return {
       duration: 6.5,
@@ -215,8 +222,8 @@ export const DUMMY_ATTACKS = {
           target.t -= dt;
           if (target.t > 0) continue;
           const aim = angleTo(target, soul);
-          for (const offset of [-0.28, 0, 0.28]) {
-            bullets.push(new Shot({ x: target.x, y: target.y, vx: Math.cos(aim + offset) * 88, vy: Math.sin(aim + offset) * 88, art: 'pin' }));
+          for (const offset of [-0.4, 0, 0.4]) {
+            bullets.push(new Shot({ x: target.x, y: target.y, vx: Math.cos(aim + offset) * 72, vy: Math.sin(aim + offset) * 72, art: 'pin' }));
           }
         }
         targets = targets.filter((target) => target.t > 0);

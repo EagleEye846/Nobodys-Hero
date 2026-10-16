@@ -4,8 +4,8 @@
 //
 // Effects (added together across learned skills):
 //   fightPower       extra FIGHT damage (0.15 = +15%)
-//   strikeTolerance  how much wider the strike rings' hit window is (0.3 = +30%)
-//   strikeRings      extra FIGHT rings
+//   strikeTolerance  how much wider the FIGHT bar's hit window is (0.3 = +30%)
+//   strikeSlashes    extra FIGHT slashes
 //   spell            a spell id from src/data/spells.js to learn
 //   grazeSp          extra SP from grazing (0.25 = +25%)
 //   grazeRadius      extra graze reach, in world pixels
@@ -21,7 +21,7 @@ export const SKILL_BRANCHES = [
       { id: 'sharpened', name: 'Sharpened', cost: 1, effect: { fightPower: 0.15 } },
       { id: 'keen_eye', name: 'Keen Eye', cost: 1, effect: { strikeTolerance: 0.3 } },
       { id: 'rend', name: 'Rend', cost: 2, effect: { spell: 'rend' } },
-      { id: 'flurry', name: 'Flurry', cost: 2, effect: { strikeRings: 1 } },
+      { id: 'flurry', name: 'Flurry', cost: 2, effect: { strikeSlashes: 1 } },
     ],
   },
   {

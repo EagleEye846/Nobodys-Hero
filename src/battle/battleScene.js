@@ -11,8 +11,8 @@ import { WEAPONS } from '../data/weapons.js';
 import { SPELLS } from '../data/spells.js';
 import { Soul, SOUL_RADIUS, GRAZE_RADIUS } from './soul.js';
 import { SOUL_ABILITIES } from './soulAbilities.js';
-import { createPattern, Shot } from './bullets.js';
-import { StrikeRings } from './strikeRings.js';
+import { createPattern } from './bullets.js';
+import { StrikeBar } from './strikeBar.js';
 import { BACKDROPS } from './backdrops.js';
 import * as hud from './hud.js';
 
@@ -52,14 +52,6 @@ const RUN_MAX_CHANCE = 0.9;
 const MAX_ATTACKERS = 2;
 const COMBINED_DENSITY = 0.8;
 const SECOND_ATTACKER_DELAY = 0.6;
-
-// Standing still is never safe: after STILL_SECONDS without moving more than
-// STILL_RADIUS, a spread of aimed shots flies at the soul, again and again
-// until it moves.
-const STILL_SECONDS = 1.1;
-const STILL_REPEAT_SECONDS = 0.7;
-const STILL_RADIUS = 6;
-const STILL_SHOT_SPEED = 80;
 
 const COMMANDS = [
   { label: 'FIGHT', icon: 'fight' },
@@ -244,9 +236,10 @@ export class BattleScene {
         this.cursor = 0;
         break;
       case 'fight':
-        this.strike = new StrikeRings(this.target.center.x * S, this.target.center.y * S, {
-          extraRings: skillBonus('strikeRings'),
+        this.strike = new StrikeBar(this.target.center.x * S, this.target.center.y * S, {
+          extraSlashes: skillBonus('strikeSlashes'),
           toleranceScale: 1 + skillBonus('strikeTolerance'),
+          color: this.hero.color,
         });
         break;
       case 'taunt': {
@@ -311,8 +304,6 @@ export class BattleScene {
     const box = hud.BOX;
     const startY = mode === 'heavy' ? box.y + box.h : box.y + box.h / 2;
     this.soul.reset(box.x + box.w / 2, startY, mode);
-    this.stillAnchor = { x: this.soul.x, y: this.soul.y };
-    this.stillTime = 0;
 
     // Explain a soul mode or weapon ability the first time it shows up.
     this.dodgeHint = '';
@@ -663,7 +654,6 @@ export class BattleScene {
     }
     this.ability?.beforeMove?.(this, input, dt);
     this.soul.update(dt, input, hud.BOX);
-    this.punishStillness(dt);
     for (const bullet of this.bullets) bullet.update(dt * this.bulletTimeScale(bullet), hud.BOX);
     this.bullets = this.bullets.filter((bullet) => !bullet.isGone(hud.BOX));
     this.updateAbility(dt, input);
@@ -681,43 +671,6 @@ export class BattleScene {
     const fallen = this.activeFoes().find((foe) => foe.hp <= 0);
     if (fallen) this.foeLeaves(fallen, 'defeated', 'command');
     else this.setPhase('command');
-  }
-
-  // Watches for a soul that isn't moving, and sends aimed shots at it.
-  punishStillness(dt) {
-    const soul = this.soul;
-    // Boss soul modes have their own rules about moving, and channelling with
-    // the Oak Staff means choosing to stand still.
-    if (soul.modeName !== 'normal' || soul.locked) {
-      this.stillTime = 0;
-      return;
-    }
-    if (Math.hypot(soul.x - this.stillAnchor.x, soul.y - this.stillAnchor.y) > STILL_RADIUS) {
-      this.stillAnchor = { x: soul.x, y: soul.y };
-      this.stillTime = 0;
-      return;
-    }
-    this.stillTime += dt;
-    if (this.stillTime < STILL_SECONDS) return;
-    this.stillTime = STILL_SECONDS - STILL_REPEAT_SECONDS;
-
-    // From a random edge of the box, aimed right at the soul.
-    const box = hud.BOX;
-    const side = Math.floor(Math.random() * 4);
-    const x = side === 0 ? box.x - 3 : side === 1 ? box.x + box.w + 3 : box.x + Math.random() * box.w;
-    const y = side === 2 ? box.y - 3 : side === 3 ? box.y + box.h + 3 : box.y + Math.random() * box.h;
-    const aim = Math.atan2(soul.y - y, soul.x - x);
-    const damage = this.attacks[0]?.foe.data.damage ?? this.foes[0].data.damage;
-    for (const offset of [-0.2, 0, 0.2]) {
-      this.bullets.push(new Shot({
-        x,
-        y,
-        vx: Math.cos(aim + offset) * STILL_SHOT_SPEED,
-        vy: Math.sin(aim + offset) * STILL_SHOT_SPEED,
-        size: 'small',
-        dmg: damage,
-      }));
-    }
   }
 
   // Abilities like the lantern and bell slow or freeze bullets while active.
@@ -888,7 +841,7 @@ export class BattleScene {
 
     inUiSpace(ctx, () => {
       this.drawSlash(ctx);
-      if (this.strike) this.strike.draw(ctx);
+      this.strike?.drawLabels(ctx);
       if (this.phase === 'taunt') {
         const { pos } = this.speaker;
         hud.drawSpeech(ctx, this.taunt.slice(0, this.visibleTauntChars()), pos.x * S - 4, (pos.y + 14) * S);
@@ -1071,6 +1024,10 @@ export class BattleScene {
 
   drawPanelText(ctx) {
     switch (this.phase) {
+      case 'fight':
+      case 'fightResult':
+        this.strike?.drawBar(ctx);
+        break;
       case 'message':
         hud.drawTextBox(ctx, this.message.text);
         break;
@@ -1099,10 +1056,6 @@ export class BattleScene {
           noteColor: hud.COLORS.enemyHp,
           enabled: true,
         })), this.cursor);
-        break;
-      case 'fight':
-      case 'fightResult':
-        if (this.strike) hud.drawTextBox(ctx, 'Press Z as each ring meets the target!');
         break;
       case 'dodge':
         if (this.dodgeHint) hud.drawTextBox(ctx, this.dodgeHint);

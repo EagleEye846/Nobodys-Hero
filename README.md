@@ -19,7 +19,7 @@ Then open http://localhost:8000 for the game, or http://localhost:8000/tools/ fo
 | Key | Overworld | Battle |
 | --- | --- | --- |
 | Arrow keys / WASD | Move | Choose commands, steer your soul |
-| Z / Enter | Read signs, talk | Confirm, hit strike rings |
+| Z / Enter | Read signs, talk | Confirm, strike as slashes cross the notch |
 | X | Hold to run, skip text | Back out of lists; hold to focus (slower soul) |
 | Shift | Hold to run, skip text | Back out of lists; use your weapon's soul ability |
 | C / Ctrl | Open the menu (EQUIP, SKILLS, status) | |
@@ -71,17 +71,19 @@ Walk into an enemy to start a battle. The Old Keeper in the west room has advice
 
 | Enemy | Where | Attacks |
 | --- | --- | --- |
-| Rogue Dummy | Entrance, east room | Cotton rain, sweeping rows, spirals and more (the gentlest) |
-| Dust Bunny | Entrance, east room (lower) | Dust puffs that hop up in arcs |
-| Lantern Moth | Lantern Hall | Weaving dust and rings of embers |
-| Waxling | Lantern Hall | Wax drips that fall faster and faster |
-| Shade | Lantern Hall | A ring of shadow that closes in, with a gap to escape through |
+| Rogue Dummy | Entrance, east room | A sewing basket: rows of pins, bouncing buttons, a needle stitching thread across the box, stuffing that bursts, practice targets that fire pins (the gentlest) |
+| Dust Bunny | Entrance, east room (lower) | Dust sneezes, hopping baby bunnies, a broom sweeping a wall of lint, falling carrots, cobweb strands |
+| Lantern Moth | Lantern Hall | Moths drawn to your light, lantern beams, a swinging lantern shedding sparks, cocoons that hatch, spirals of wing dust |
+| Waxling | Lantern Hall | Wax drips that splash, candles that shoot up columns of flame, tossed matches, a creeping curtain of flames, curls of smoke |
+| Shade | Lantern Hall | Eyes that open and stare beams, grasping hands, curving crescent blades, a cage of tendrils, wisps that follow then lose interest |
+
+Every enemy has its own set of attacks (at least three, and the game refuses to start a fight otherwise), with bullets drawn as things from that enemy. They live in `src/battle/attacks/<enemy>.js`: each file draws its bullet art with `defineBulletArt` and exports its attacks, and the enemy's data file lists which ones it uses. `dummy.js` is the example to copy.
 
 **Group battles:** enemies close to the one you touch (within about 4 tiles) join the fight, up to 3 at once. To keep it fair, at most two attack in a turn, each with fewer bullets, and the second starts a second later. With several enemies, FIGHT, TALK and the targeted spells first ask which enemy, Deltarune style, showing each one's HP and MERCY. Beaten or pacified enemies leave mid-fight, and you win when they're all gone. Your party stands on the left, the enemy on the right, against an animated backdrop of the Ruins.
 
 On your turn, pick a command:
 
-- **FIGHT**: three rings shrink onto a target around the enemy. Press Z as each one meets it; PERFECT hits do bonus damage.
+- **FIGHT**: three slashes slide along a bar toward a notch on the left. Press Z as each one crosses it; the closer, the harder you hit, and PERFECT hits do bonus damage. Pressing when nothing is at the notch wastes the next slash, so mashing doesn't work.
 - **TALK**: talk to an enemy. Most options raise its MERCY meter.
 - **SPELLS**: spend SP (spell power) on magic.
   - Heal Pulse (32%) heals 35 HP.
@@ -95,10 +97,10 @@ On the enemy's turn, a box opens in the middle of the screen and you steer your 
 
 - Each turn, the enemy picks a random attack, never the same one twice in a row. Each attack also randomises its own details, such as wind direction, spin direction, where gaps open, and how its emitters move.
 - Only the very centre of the soul can be hit.
-- Standing still is never safe: if your soul barely moves for about a second, aimed shots fly at it until it moves (except while channelling with the Oak Staff).
+- Standing still is never safe: every enemy's attacks are built to find a soul that stops moving.
 - **Grazing**, like Deltarune: letting bullets pass close by lights up a larger outline around your soul and fills **SP** (the purple gauge on the left). Each new bullet you graze gives a burst of SP and shortens the enemy's turn slightly; staying close keeps SP trickling in.
 
-Each enemy has a `difficulty` in its data file: `density` scales how often bullets spawn and `speed` how fast they fly. The rogue dummy, the first enemy you meet, uses gentle settings; the lantern moth is a step up, with its own attacks: dust that weaves across the box and rings of embers.
+Each enemy has a `difficulty` in its data file: `density` scales how often bullets spawn and `speed` how fast they fly. The rogue dummy, the first enemy you meet, uses the gentlest settings.
 
 Beaten and pacified enemies stay gone, even after you leave the room and come back.
 
@@ -113,7 +115,7 @@ Press C and choose SKILLS to spend points. The tree is drawn as three constellat
 | Sharpened (1): FIGHT +15% | Focus (1): grazing +25% SP | Tough (1): +15 max HP |
 | Keen Eye (1): wider strike window | Lull (1): spell, +30% MERCY | Steady Soul (1): longer invincibility after a hit |
 | Rend (2): spell, 30 damage | Wide Graze (2): bigger graze area | Guard Up (1): DEFEND heals 8 HP |
-| Flurry (2): a fourth FIGHT ring | Starfall (2): spell, 45 damage | Last Stand (2): survive one knockout per battle |
+| Flurry (2): a fourth FIGHT slash | Starfall (2): spell, 45 damage | Last Stand (2): survive one knockout per battle |
 
 Heal Pulse and Pacify are known from the start. Skills are defined in `src/data/skills.js` (the comment there lists every effect), with descriptions in `text/skills/skills.txt`. Spell costs are in `src/data/spells.js`.
 
@@ -194,7 +196,7 @@ src/
   overworld/              Exploring: scene, rooms, tileset, camera, player, props, enemies
   shop/                   The shop screen
   battle/                 Battles: scene, HUD, soul and soul modes, projectiles,
-                          strike rings, area backdrops
+                          the FIGHT strike bar, area backdrops
     attacks/              Each enemy's own attacks and bullet art, one file per enemy
   gameOver/               Game over screen
   ui/                     Shared UI: text, the overworld textbox, and the C menu (EQUIP, SKILLS)

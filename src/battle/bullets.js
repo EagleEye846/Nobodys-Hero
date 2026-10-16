@@ -1,6 +1,6 @@
 import { CUSTOM_PATTERNS } from '../data/patterns/index.js';
 import { Shot, Line, Pillar, defineBulletArt, bulletArtNames } from './projectiles.js';
-import { rand, pick, clamp, every, angleTo, edgePoint, pointAwayFrom } from './patternTools.js';
+import { rand, pick, clamp, every, angleTo, edgePoint, pointAwayFrom, shuffleBag, spreadAcross } from './patternTools.js';
 import { ENEMY_ATTACKS } from './attacks/index.js';
 
 // Attack patterns, and how an enemy's attack is created for a turn.
@@ -16,11 +16,11 @@ import { ENEMY_ATTACKS } from './attacks/index.js';
 //   - the plain generic patterns below, kept for the Pattern Lab and testing
 //   - patterns made in the Pattern Lab, in src/data/patterns/
 
-export { Shot, Line, Pillar, defineBulletArt, rand, pick, clamp, every, angleTo, edgePoint, pointAwayFrom };
+export { Shot, Line, Pillar, defineBulletArt, rand, pick, clamp, every, angleTo, edgePoint, pointAwayFrom, shuffleBag, spreadAcross };
 
 // Everything a pattern is handed as its third argument, so pattern files don't
 // need to import anything.
-export const PATTERN_TOOLS = { Shot, Line, Pillar, defineBulletArt, rand, pick, clamp, every, angleTo, edgePoint, pointAwayFrom };
+export const PATTERN_TOOLS = { Shot, Line, Pillar, defineBulletArt, rand, pick, clamp, every, angleTo, edgePoint, pointAwayFrom, shuffleBag, spreadAcross };
 
 // `difficulty` tunes a pattern for an enemy. density < 1 spawns bullets less
 // often (and slows moving emitters); speed < 1 makes each bullet fly slower.

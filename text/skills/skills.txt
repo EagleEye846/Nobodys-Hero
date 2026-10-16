@@ -5,13 +5,13 @@
 FIGHT does 15% more damage.
 
 [keen_eye]
-The strike rings' hit window is wider, so PERFECT hits come easier.
+The FIGHT bar's notch is wider, so PERFECT hits come easier.
 
 [rend]
 Learn the spell Rend: 40% SP for a guaranteed 30 damage.
 
 [flurry]
-FIGHT gets a fourth ring to hit.
+FIGHT gets a fourth slash to hit.
 
 [focus]
 Grazing builds 25% more SP.

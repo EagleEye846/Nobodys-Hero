@@ -102,13 +102,14 @@ export const BUNNY_ATTACKS = {
   // "Achoo!" A sneeze cloud puffs up at the edge of the box, then blasts a
   // cone of dust specks toward you. The dust slows down and hangs in the air
   // for a moment before settling, so the floor gets cluttered.
-  bunnySneeze(box, density, { Shot, every, rand, angleTo, edgePoint, clamp }) {
-    const windUp = 0.6;
+  bunnySneeze(box, density, { Shot, every, rand, angleTo, edgePoint, clamp, shuffleBag }) {
+    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
+    const windUp = 0.7;
     let clouds = [];
-    const inhale = every(1.05, 1.4, (bullets) => {
-      const edge = edgePoint(box, undefined, 0);
-      const x = clamp(edge.x, box.x + 6, box.x + box.w - 6);
-      const y = clamp(edge.y, box.y + 6, box.y + box.h - 6);
+    const inhale = every(1.7, 2.1, (bullets) => {
+      const spot = edgePoint(box, edge(), 0);
+      const x = clamp(spot.x, box.x + 6, box.x + box.w - 6);
+      const y = clamp(spot.y, box.y + 6, box.y + box.h - 6);
       bullets.push(new Shot({ x, y, art: 'bunnySneezeCloud', harmless: true, life: windUp + 0.2 }));
       clouds.push({ x, y, t: windUp });
     });
@@ -119,16 +120,16 @@ export const BUNNY_ATTACKS = {
         for (const cloud of clouds) {
           cloud.t -= dt;
           if (cloud.t > 0) continue;
-          const aim = angleTo(cloud, soul);
-          for (let i = 0; i < 7; i++) {
-            const angle = aim + (i - 3) * 0.13 + rand(-0.04, 0.04);
-            const speed = rand(92, 112);
+          const aim = angleTo(cloud, soul) + rand(-0.14, 0.14);
+          for (let i = 0; i < 5; i++) {
+            const angle = aim + (i - 2) * 0.24 + rand(-0.04, 0.04);
+            const speed = rand(72, 86);
             bullets.push(new Shot({
               x: cloud.x,
               y: cloud.y,
               vx: Math.cos(angle) * speed,
               vy: Math.sin(angle) * speed,
-              accel: -60,
+              accel: -45,
               life: 1.5,
               art: 'bunnyMote',
             }));
@@ -142,17 +143,21 @@ export const BUNNY_ATTACKS = {
   // Baby dust bunnies tumble in from the sides and hop around the box,
   // bouncing off the floor and walls. Each one blinks first on the floor, then
   // leaps for where you are: high enough to reach you, landing past you.
-  bunnyHopscotch(box, density, { Shot, every, rand, clamp }) {
+  bunnyHopscotch(box, density, { Shot, every, rand, clamp, shuffleBag }) {
+    const side = shuffleBag(['left', 'right']);
     const floor = box.y + box.h - 4;
     const gravity = 150;
-    const hop = every(0.6, 0.85, (bullets, soul) => {
-      const fromLeft = Math.random() < 0.5;
+    const hop = every(0.95, 1.25, (bullets, soul) => {
+      const fromLeft = side() === 'left';
       const x = fromLeft ? box.x + 5 : box.x + box.w - 5;
-      // Jump just over your height, so the top of the hop passes through you.
-      const height = clamp(floor - soul.y + rand(4, 14), 18, box.h - 8);
+      // About one bunny in three jumps just over your height, so the top of
+      // its hop passes through you (a little extra, since the bunny's slow
+      // difficulty takes some height off). The rest hop at random heights.
+      const aimed = Math.random() < 0.3;
+      const height = aimed ? clamp(floor - soul.y + rand(12, 20), 18, box.h - 8) : rand(18, box.h - 10);
       const jump = Math.sqrt(2 * gravity * height);
       const timeToTop = jump / gravity;
-      const run = clamp(Math.abs(soul.x - x) / timeToTop, 28, 75);
+      const run = aimed ? clamp(Math.abs(soul.x - x) / timeToTop, 25, 60) : rand(25, 45);
       bullets.push(new Shot({
         x,
         y: floor,
@@ -160,8 +165,8 @@ export const BUNNY_ATTACKS = {
         vy: -jump,
         gravity,
         bounce: true,
-        warn: 0.45,
-        life: 3.6,
+        warn: 0.6,
+        life: 2.4,
         art: 'bunnyKit',
       }));
     });
@@ -170,14 +175,15 @@ export const BUNNY_ATTACKS = {
 
   // A broom sweeps a wall of lint across the box. Each wall has one gap in
   // it; slip through the gap before the lint rolls over you.
-  bunnyBroomSweep(box, density, { Shot, every, rand }) {
-    const spacing = 6;
-    const gapHalf = 12;
-    const speed = 48;
-    const warn = 0.55;
+  bunnyBroomSweep(box, density, { Shot, every, rand, spreadAcross }) {
+    const nextGap = spreadAcross(box.y + 14, box.y + box.h - 14, 3);
+    const spacing = 7;
+    const gapHalf = 13;
+    const speed = 42;
+    const warn = 0.65;
     let fromLeft = Math.random() < 0.5;
-    const sweep = every(1.4, 1.75, (bullets) => {
-      const gapY = rand(box.y + 14, box.y + box.h - 14);
+    const sweep = every(2.1, 2.5, (bullets) => {
+      const gapY = nextGap();
       const x = fromLeft ? box.x + 3 : box.x + box.w - 3;
       const vx = fromLeft ? speed : -speed;
       for (let y = box.y + 3; y <= box.y + box.h - 3; y += spacing) {
@@ -195,30 +201,32 @@ export const BUNNY_ATTACKS = {
   // Carrots the bunny was hoarding drop from the top of the box near you,
   // point first. Each hangs and blinks, then falls faster and faster.
   bunnyCarrotDrop(box, density, { Shot, every, rand, clamp }) {
-    const drop = every(0.42, 0.62, (bullets, soul) => {
-      const x = clamp(soul.x + rand(-16, 16), box.x + 4, box.x + box.w - 4);
-      bullets.push(new Shot({ x, y: box.y + 4, vy: 25, accel: 190, warn: 0.55, art: 'bunnyCarrot', angle: Math.PI / 2 }));
+    const drop = every(0.75, 1.0, (bullets, soul) => {
+      const x = clamp(soul.x + rand(-18, 18), box.x + 4, box.x + box.w - 4);
+      bullets.push(new Shot({ x, y: box.y + 4, vy: 20, accel: 120, warn: 0.7, art: 'bunnyCarrot', angle: Math.PI / 2 }));
     });
     return { duration: 6, update: (dt, bullets, soul) => drop(dt, bullets, soul) };
   },
 
   // Cobwebs from the corners the bunny lives in. A knot appears in a corner,
-  // then strands of web flash across the box from it in a fan. Find a gap
+  // then strands of web shoot across the box from it in a fan. Find a gap
   // between the strands, or step away before they snap tight. Dust drifts
   // down through the webs the whole time.
-  bunnyCobweb(box, density, { Line, Shot, every, rand, pick }) {
+  bunnyCobweb(box, density, { Line, Shot, every, rand, shuffleBag, spreadAcross }) {
     const corners = [
       { x: box.x, y: box.y, angle: 0 },
       { x: box.x + box.w, y: box.y, angle: Math.PI / 2 },
       { x: box.x + box.w, y: box.y + box.h, angle: Math.PI },
       { x: box.x, y: box.y + box.h, angle: Math.PI * 1.5 },
     ];
+    const nextCorner = shuffleBag(corners);
+    const moteX = spreadAcross(box.x + 4, box.x + box.w - 4);
     const strands = 4;
     const warn = 0.85;
-    const weave = every(1.45, 1.8, (bullets) => {
-      const corner = pick(corners);
-      const tilt = rand(-0.08, 0.08);
-      bullets.push(new Shot({ x: corner.x, y: corner.y, art: 'bunnyWebKnot', harmless: true, life: warn + 0.7 }));
+    const weave = every(1.55, 1.95, (bullets) => {
+      const corner = nextCorner();
+      const tilt = rand(-0.4, 0.4);
+      bullets.push(new Shot({ x: corner.x, y: corner.y, art: 'bunnyWebKnot', harmless: true, life: warn + 0.6 }));
       for (let i = 0; i < strands; i++) {
         const angle = corner.angle + tilt + (i + 0.5) / strands * (Math.PI / 2);
         bullets.push(new Line({
@@ -226,16 +234,17 @@ export const BUNNY_ATTACKS = {
           y: corner.y,
           angle,
           length: 118,
-          thickness: 2,
+          thickness: 1.5,
           warn,
-          life: 0.7,
+          grow: 150,
+          life: 0.6,
           color: '#d8d4e4',
           dash: [4, 1],
         }));
       }
     });
-    const drift = every(0.75, 1.1, (bullets) => {
-      bullets.push(new Shot({ x: rand(box.x + 4, box.x + box.w - 4), y: box.y - 3, vx: rand(-10, 10), vy: rand(30, 42), art: 'bunnyMote' }));
+    const drift = every(2.0, 2.6, (bullets) => {
+      bullets.push(new Shot({ x: moteX(), y: box.y - 3, vx: rand(-10, 10), vy: rand(30, 42), art: 'bunnyMote' }));
     });
     return {
       duration: 7,

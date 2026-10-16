@@ -126,12 +126,13 @@ export const SHADE_ATTACKS = {
   // Eyes open along the walls of the box. Each one blinks awake, looks at
   // you, and a moment later stares a beam straight through where you were.
   // The flashing preview shows the beam's path; step off it.
-  shadeWatchingEyes(box, density, { Shot, Line, every, rand, pick, angleTo }) {
+  shadeWatchingEyes(box, density, { Shot, Line, every, rand, angleTo, shuffleBag }) {
+    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
     const shutSeconds = 0.4;
-    const stareWarn = 0.55;
+    const stareWarn = 0.7;
     let waking = [];
-    const openEye = every(0.85, 1.15, (bullets) => {
-      const side = pick(['top', 'left', 'right', 'bottom']);
+    const openEye = every(2.1, 2.5, (bullets) => {
+      const side = edge();
       let x;
       let y;
       if (side === 'top' || side === 'bottom') {
@@ -155,11 +156,12 @@ export const SHADE_ATTACKS = {
           bullets.push(new Line({
             x: eye.x,
             y: eye.y,
-            angle: angleTo(eye, soul),
+            angle: angleTo(eye, soul) + rand(-0.12, 0.12), // it squints a little off
             length: 130,
-            thickness: 3,
+            thickness: 2,
             warn: stareWarn,
-            life: 0.35,
+            grow: 260,
+            life: 0.4,
             color: '#4fe3d0',
             glow: '#4fe3d0',
           }));
@@ -171,9 +173,10 @@ export const SHADE_ATTACKS = {
 
   // Shadow hands lunge in from the sides of the box, level with you, stop to
   // grab at the air, then slowly pull back out. Later on, two reach in at once.
-  shadeGraspingHands(box, density, { Shot, every, rand, pick, clamp }) {
-    const lungeSpeed = 150;
-    const slowing = 260; // the hand stops about 43 px in
+  shadeGraspingHands(box, density, { Shot, every, rand, clamp, shuffleBag }) {
+    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
+    const lungeSpeed = 90;
+    const slowing = 70; // the hand stops about 50 px in
     const holdSeconds = 0.3;
     let hands = [];
     let elapsed = 0;
@@ -184,9 +187,9 @@ export const SHADE_ATTACKS = {
       let y;
       if (from.dx) {
         x = from.dx > 0 ? box.x + 3 : box.x + box.w - 3;
-        y = clamp(soul.y + rand(-4, 4), box.y + 5, box.y + box.h - 5);
+        y = clamp(soul.y + rand(-16, 16), box.y + 5, box.y + box.h - 5);
       } else {
-        x = clamp(soul.x + rand(-4, 4), box.x + 5, box.x + box.w - 5);
+        x = clamp(soul.x + rand(-16, 16), box.x + 5, box.x + box.w - 5);
         y = from.dy > 0 ? box.y + 3 : box.y + box.h - 3;
       }
       const shot = new Shot({
@@ -196,17 +199,16 @@ export const SHADE_ATTACKS = {
         vy: from.dy * lungeSpeed,
         accel: -slowing,
         art: from.art,
-        warn: 0.45,
+        warn: 0.6,
       });
       bullets.push(shot);
       hands.push({ shot, from, pullBack: 0, retracting: false, startSpeed: 0 });
     }
 
-    const lunge = every(0.85, 1.15, (bullets, soul) => {
-      const sides = ['top', 'left', 'right', 'bottom'];
-      const first = pick(sides);
+    const lunge = every(1.8, 2.2, (bullets, soul) => {
+      const first = edge();
       reachIn(bullets, soul, first);
-      if (elapsed > 3 && Math.random() < 0.5) {
+      if (elapsed > 3.5 && Math.random() < 0.25) {
         const opposite = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
         reachIn(bullets, soul, opposite[first]);
       }
@@ -228,8 +230,8 @@ export const SHADE_ATTACKS = {
           // Done grabbing: slide back out the way it came, still facing in.
           hand.retracting = true;
           shot.accel = 0;
-          shot.vx = -hand.from.dx * hand.startSpeed * 0.45;
-          shot.vy = -hand.from.dy * hand.startSpeed * 0.45;
+          shot.vx = -hand.from.dx * hand.startSpeed * 0.6;
+          shot.vy = -hand.from.dy * hand.startSpeed * 0.6;
           shot.life = shot.age - shot.warn + 1.2;
         }
         hands = hands.filter((hand) => !hand.retracting);
@@ -240,23 +242,24 @@ export const SHADE_ATTACKS = {
   // Crescents of shadow are flung in from the edges, slow at first, then
   // pick up speed while their path bends, so they sweep around instead of
   // flying straight. Each one curves the opposite way to the last.
-  shadeCrescentBlades(box, density, { Shot, every, rand, edgePoint, angleTo }) {
+  shadeCrescentBlades(box, density, { Shot, every, rand, edgePoint, angleTo, shuffleBag }) {
+    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
     let crescents = [];
     let bendWay = 1;
-    const fling = every(0.45, 0.65, (bullets, soul) => {
-      const start = edgePoint(box);
-      const bend = bendWay * rand(1.3, 1.8); // radians per second
+    const fling = every(0.95, 1.25, (bullets, soul) => {
+      const start = edgePoint(box, edge());
+      const bend = bendWay * rand(1.0, 1.4); // radians per second
       bendWay = -bendWay;
       // Aim to one side of the soul so the bend carries it back across.
-      const aim = angleTo(start, soul) - bend * 0.4;
+      const aim = angleTo(start, soul) - bend * 0.55 + rand(-0.4, 0.4);
       const shot = new Shot({
         x: start.x,
         y: start.y,
-        vx: Math.cos(aim) * 38,
-        vy: Math.sin(aim) * 38,
-        accel: 55,
+        vx: Math.cos(aim) * 30,
+        vy: Math.sin(aim) * 30,
+        accel: 30,
         art: 'shadeCrescent',
-        warn: 0.35,
+        warn: 0.55,
       });
       bullets.push(shot);
       crescents.push({ shot, bend });
@@ -282,18 +285,21 @@ export const SHADE_ATTACKS = {
   // Rows of thorny tendrils creep across the box from one wall, leaving one
   // gap to squeeze through. Then the next rows come the other way, crossways,
   // closing in like the bars of a cage.
-  shadeTendrilCage(box, density, { Shot, Line, every, rand, pick }) {
+  shadeTendrilCage(box, density, { Shot, Line, every, rand, shuffleBag, spreadAcross }) {
+    const startSide = shuffleBag([true, false]);
+    const gapAlong = { width: spreadAcross(0, 1, 3), height: spreadAcross(0, 1, 3) };
     const spacing = 10;
     const gapWidth = 22;
-    const warn = 0.75;
-    const growSpeed = 190;
+    const warn = 0.85;
+    const growSpeed = 160;
     let crossways = Math.random() < 0.5;
-    const close = every(1.45, 1.75, (bullets) => {
+    const close = every(1.7, 2.0, (bullets) => {
       crossways = !crossways;
-      const fromStart = pick([true, false]);
+      const fromStart = startSide();
       const across = crossways ? box.w : box.h; // the side the bars are spread along
-      const gapStart = rand(4, across - gapWidth - 4);
-      for (let offset = 5; offset < across; offset += spacing) {
+      const gapStart = 4 + (crossways ? gapAlong.width() : gapAlong.height()) * (across - gapWidth - 8);
+      // The bars shift a little each time, so no spot is always safe.
+      for (let offset = rand(2, spacing); offset < across - 1; offset += spacing) {
         if (offset > gapStart && offset < gapStart + gapWidth) continue;
         let x;
         let y;
@@ -312,7 +318,7 @@ export const SHADE_ATTACKS = {
           angle = fromStart ? 0 : Math.PI;
           length = box.w + 4;
         }
-        bullets.push(new Line({ x, y, angle, length, thickness: 2, warn, grow: growSpeed, life: 0.75, color: '#7a5cc0', glow: '#2a1a48' }));
+        bullets.push(new Line({ x, y, angle, length, thickness: 2, warn, grow: growSpeed, life: 0.7, color: '#7a5cc0', glow: '#2a1a48' }));
         bullets.push(new Shot({
           x,
           y,
@@ -329,22 +335,23 @@ export const SHADE_ATTACKS = {
   },
 
   // Little wisps of the shade peel off the walls and drift after you, but
-  // they lose interest after a moment and wander off the way they're facing,
-  // speeding up. Lead them away, then slip aside.
-  shadeLostWisps(box, density, { Shot, every, edgePoint, angleTo }) {
-    const followSeconds = 1.2;
+  // they lose interest after a moment, veer off to one side and wander away,
+  // speeding up. Don't stand where they wander.
+  shadeLostWisps(box, density, { Shot, every, rand, pick, edgePoint, angleTo, shuffleBag }) {
+    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
+    const followSeconds = 1.1;
     let wisps = [];
-    const peel = every(0.6, 0.85, (bullets, soul) => {
-      const start = edgePoint(box);
-      const aim = angleTo(start, soul);
+    const peel = every(1.0, 1.3, (bullets, soul) => {
+      const start = edgePoint(box, edge());
+      const aim = angleTo(start, soul) + rand(-0.7, 0.7);
       const shot = new Shot({
         x: start.x,
         y: start.y,
-        vx: Math.cos(aim) * 46,
-        vy: Math.sin(aim) * 46,
+        vx: Math.cos(aim) * 38,
+        vy: Math.sin(aim) * 38,
         art: 'shadeWisp',
-        warn: 0.4,
-        homing: { target: soul, turn: 2.4 },
+        warn: 0.55,
+        homing: { target: soul, turn: 1.1 },
       });
       bullets.push(shot);
       wisps.push(shot);
@@ -355,7 +362,13 @@ export const SHADE_ATTACKS = {
         peel(dt, bullets, soul);
         for (const shot of wisps) {
           if (shot.age < shot.warn + followSeconds) continue;
-          // Bored now: stop following and drift away, faster.
+          // Bored now: stop following, veer off to one side and drift away,
+          // faster.
+          const veer = pick([-1, 1]) * rand(0.6, 1.0);
+          const vx = shot.vx * Math.cos(veer) - shot.vy * Math.sin(veer);
+          const vy = shot.vx * Math.sin(veer) + shot.vy * Math.cos(veer);
+          shot.vx = vx;
+          shot.vy = vy;
           shot.homing = null;
           shot.accel = 45;
         }

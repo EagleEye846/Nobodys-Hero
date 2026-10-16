@@ -104,17 +104,18 @@ export const WAXLING_ATTACKS = {
   // speeding up. Where one lands it splashes: a few flecks hop out sideways
   // and a hot puddle sits on the floor for a moment. Some drops form right
   // above you.
-  waxlingDripSplash(box, density, { Shot, every, rand, clamp }) {
+  waxlingDripSplash(box, density, { Shot, every, rand, clamp, spreadAcross }) {
+    const dripX = spreadAcross(box.x + 4, box.x + box.w - 4, 5);
     const floor = box.y + box.h - 2;
     let falling = [];
     let count = 0;
-    const form = every(0.4, 0.55, (bullets, soul) => {
+    const form = every(0.5, 0.7, (bullets, soul) => {
       count++;
-      const aimed = count % 4 === 0;
+      const aimed = count % 5 === 0;
       const x = aimed
         ? clamp(soul.x + rand(-3, 3), box.x + 4, box.x + box.w - 4)
-        : rand(box.x + 4, box.x + box.w - 4);
-      const drip = new Shot({ x, y: box.y + 3, vy: 12, art: 'waxlingDrip', gravity: 150, warn: 0.45 });
+        : dripX();
+      const drip = new Shot({ x, y: box.y + 3, vy: 12, art: 'waxlingDrip', gravity: 95, warn: 0.6 });
       bullets.push(drip);
       falling.push(drip);
     });
@@ -145,14 +146,14 @@ export const WAXLING_ATTACKS = {
 
   // Little candles pop up along the floor of the box. A dotted line shows
   // above each one, then its flame roars straight up to the ceiling as a
-  // column of fire. Every other wave, one candle lands right under you.
+  // column of fire. Every third wave, one candle lands right under you.
   waxlingCandleColumns(box, density, { Shot, Line, every, rand, clamp }) {
     const floor = box.y + box.h - 5;
     let wave = 0;
-    const light = every(1.25, 1.5, (bullets, soul) => {
+    const light = every(1.5, 1.8, (bullets, soul) => {
       wave++;
       const spots = [];
-      if (wave % 2 === 1) spots.push(clamp(soul.x + rand(-2, 2), box.x + 4, box.x + box.w - 4));
+      if (wave % 3 === 1) spots.push(clamp(soul.x + rand(-2, 2), box.x + 4, box.x + box.w - 4));
       while (spots.length < 2) {
         const x = rand(box.x + 5, box.x + box.w - 5);
         if (spots.every((other) => Math.abs(other - x) > 14)) spots.push(x);
@@ -166,7 +167,7 @@ export const WAXLING_ATTACKS = {
           length: box.h - 8,
           thickness: 4,
           warn: 0.75,
-          grow: 240,
+          grow: 110,
           life: 0.5,
           color: '#ff8c1a',
           glow: '#ffe14d',
@@ -178,16 +179,21 @@ export const WAXLING_ATTACKS = {
 
   // Lit matchsticks are flicked in from the sides, blinking first at the
   // edge, then spinning through the air in an arc that comes down where you
-  // are. Two at a time, on different arcs.
-  waxlingMatchToss(box, density, { Shot, every, rand, pick }) {
+  // are. Two at a time, on different arcs: one at you, one off to a side.
+  waxlingMatchToss(box, density, { Shot, every, rand, pick, shuffleBag }) {
+    const side = shuffleBag(['left', 'right']);
     const gravity = 110;
-    const toss = every(0.8, 1.05, (bullets, soul) => {
-      const fromLeft = Math.random() < 0.5;
+    const toss = every(1.5, 1.8, (bullets, soul) => {
+      const fromLeft = side() === 'left';
       const x = fromLeft ? box.x + 3 : box.x + box.w - 3;
       const y = rand(box.y + box.h * 0.45, box.y + box.h - 6);
-      for (const flight of [0.75, pick([1.05, 1.2])]) {
-        const targetX = soul.x + rand(-4, 4);
-        const targetY = soul.y + rand(-4, 4);
+      // The quick one comes down near you; the slow one lands off to a side.
+      const throws = [{ flight: 0.85, miss: rand(-10, 10) }, { flight: pick([1.1, 1.25]), miss: pick([-1, 1]) * rand(12, 18) }];
+      for (const { flight, miss } of throws) {
+        const targetX = soul.x + miss;
+        // Aimed a little high: the Waxling's slower bullet speed stretches the
+        // flight, so gravity has longer to pull the match down onto you.
+        const targetY = soul.y + rand(-2, 2) - 0.12 * gravity * flight * flight;
         bullets.push(new Shot({
           x,
           y,
@@ -195,7 +201,7 @@ export const WAXLING_ATTACKS = {
           vy: (targetY - y) / flight - 0.5 * gravity * flight,
           gravity,
           art: 'waxlingMatch',
-          warn: 0.4,
+          warn: 0.6,
         }));
       }
     });
@@ -206,10 +212,10 @@ export const WAXLING_ATTACKS = {
   // Each new wall has its gap somewhere else, so you have to keep sliding
   // over to find it.
   waxlingFlameCurtain(box, density, { Shot, every, rand }) {
-    const spacing = 7;
-    const gapWidth = 24;
+    const spacing = 8;
+    const gapWidth = 28;
     let gapCentre = rand(box.x + 16, box.x + box.w - 16);
-    const lower = every(1.75, 2.0, (bullets) => {
+    const lower = every(2.3, 2.6, (bullets) => {
       let next = rand(box.x + 14, box.x + box.w - 14);
       for (let tries = 0; tries < 8 && Math.abs(next - gapCentre) < 22; tries++) {
         next = rand(box.x + 14, box.x + box.w - 14);
@@ -217,19 +223,20 @@ export const WAXLING_ATTACKS = {
       gapCentre = next;
       for (let x = box.x + 3; x <= box.x + box.w - 3; x += spacing) {
         if (Math.abs(x - gapCentre) < gapWidth / 2) continue;
-        bullets.push(new Shot({ x, y: box.y + 3, vy: 34, art: 'waxlingFlame', warn: 0.5 }));
+        bullets.push(new Shot({ x, y: box.y + 3, vy: 28, art: 'waxlingFlame', warn: 0.6 }));
       }
     });
     return { duration: 6.5, update: (dt, bullets) => lower(dt, bullets) };
   },
 
   // Curls of smoke appear around the box (never right on top of you), then
-  // drift toward you, swaying, before they thin out. Every so often a stray
+  // drift lazily toward you, swaying, before they thin out. Now and then a stray
   // flame flickers across the box too.
-  waxlingSmokeCurls(box, density, { Shot, every, rand, angleTo, pointAwayFrom, edgePoint }) {
-    const puff = every(0.85, 1.15, (bullets, soul) => {
+  waxlingSmokeCurls(box, density, { Shot, every, rand, angleTo, pointAwayFrom, edgePoint, shuffleBag }) {
+    const straySide = shuffleBag(['left', 'right']);
+    const puff = every(1.3, 1.7, (bullets, soul) => {
       const { x, y } = pointAwayFrom(box, soul, 30);
-      const aim = angleTo({ x, y }, soul) + rand(-0.4, 0.4);
+      const aim = angleTo({ x, y }, soul) + rand(-0.6, 0.6);
       const speed = rand(30, 38);
       bullets.push(new Shot({
         x,
@@ -237,22 +244,22 @@ export const WAXLING_ATTACKS = {
         vx: Math.cos(aim) * speed,
         vy: Math.sin(aim) * speed,
         art: 'waxlingSmoke',
-        warn: 0.5,
-        life: 2.8,
-        homing: { target: soul, turn: 1.1 },
+        warn: 0.6,
+        life: 2.2,
+        homing: { target: soul, turn: 0.35 },
         wobble: { amplitude: 2, frequency: 7 },
       }));
     });
-    const stray = every(1.3, 1.8, (bullets, soul) => {
-      const start = edgePoint(box, Math.random() < 0.5 ? 'left' : 'right', -3);
-      const aim = angleTo(start, soul);
+    const stray = every(2.6, 3.2, (bullets, soul) => {
+      const start = edgePoint(box, straySide(), -3);
+      const aim = angleTo(start, soul) + rand(-0.25, 0.25);
       bullets.push(new Shot({
         x: start.x,
         y: start.y,
-        vx: Math.cos(aim) * 70,
-        vy: Math.sin(aim) * 70,
+        vx: Math.cos(aim) * 60,
+        vy: Math.sin(aim) * 60,
         art: 'waxlingFlame',
-        warn: 0.4,
+        warn: 0.6,
         wobble: { amplitude: 3, frequency: 12 },
       }));
     });

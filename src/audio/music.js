@@ -25,6 +25,7 @@ const SFX = {
   hurt: [{ midi: 50, wave: 'sawtooth', length: 0.2, volume: 0.08, slide: -14 }],
   hit: [{ midi: 64, wave: 'square', length: 0.12, volume: 0.06, slide: -18 }],
   graze: [{ midi: 98, wave: 'triangle', length: 0.03, volume: 0.035 }],
+  slash: [{ midi: 91, wave: 'sawtooth', length: 0.07, volume: 0.035, slide: -30 }],
   heal: [72, 76, 79, 84].map((midi, i) => ({ midi, wave: 'triangle', length: 0.1, volume: 0.07, delay: i * 0.06 })),
   levelUp: [72, 76, 79, 84, 88].map((midi, i) => ({ midi, wave: 'square', length: 0.12, volume: 0.04, delay: i * 0.07 })),
   save: [

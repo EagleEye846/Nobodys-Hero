@@ -25,6 +25,7 @@ Run `python tools/serve.py --generate` to rebuild those files without serving.
 import json
 import re
 import shutil
+import socket
 import sys
 import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -226,12 +227,30 @@ class StudioHandler(SimpleHTTPRequestHandler):
             self.send_json(500, {"ok": False, "error": str(error)})
 
 
+class StudioServer(ThreadingHTTPServer):
+    # Never share the port with another server. Windows otherwise lets a
+    # second server (like an old `python -m http.server`) bind the same port,
+    # and the browser may reach that one instead, where saving doesn't work.
+    allow_reuse_address = sys.platform != "win32"
+
+    def server_bind(self):
+        if sys.platform == "win32":
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        super().server_bind()
+
+
 def main():
     generate_all()
     if "--generate" in sys.argv:
         return
     port = next((int(a) for a in sys.argv[1:] if a.isdigit()), 8000)
-    server = ThreadingHTTPServer(("127.0.0.1", port), StudioHandler)
+    try:
+        server = StudioServer(("127.0.0.1", port), StudioHandler)
+    except OSError:
+        print(f"Port {port} is already in use, probably by another server that is still running")
+        print("(an older serve.py, or `python -m http.server`). Close that terminal window, or")
+        print(f"start this one on another port: python tools/serve.py {port + 1}")
+        sys.exit(1)
     print(f"Game:   http://localhost:{port}/")
     print(f"Studio: http://localhost:{port}/tools/")
     print("Press Ctrl+C to stop.")
