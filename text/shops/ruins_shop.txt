@@ -1,0 +1,39 @@
+# RUINS SHOP: Moss, the travelling merchant in the west room of the Ruins.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Oh! A customer! Welcome to my little shop. Everything's free today. Don't ask why.
+
+[menu_prompt]
+Anything else catch your eye?
+
+[buy_prompt]
+Take a look! Sharp things on the left, shiny things on the right.
+
+[talk_prompt]
+Oh, you want to chat? I love to chat.
+
+[bought]
+A fine choice! Press C out there to equip it.
+
+[owned]
+You already have that one, friend.
+
+[too_poor]
+Ah... you can't quite afford that.
+
+[farewell]
+Come back soon! Mind the dummy.
+
+[talk: Who are you?]
+I'm Moss! I carry the whole shop on my back. My back has opinions about this.
+
+[talk: The Ruins]
+Nobody remembers who built these halls. The Keeper says the lanterns remember, though.
+
+[talk: That dummy]
+It used to train heroes. Then one day it decided it would rather fight them. Can't say I blame it, really. Hitting things looks fun.
+
+[talk: Free stuff?]
+Business has been slow for about a hundred years. Giving things away is the only way anyone visits!

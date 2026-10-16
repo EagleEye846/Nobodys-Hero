@@ -1,18 +1,19 @@
 import { TILE_SIZE as T } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
-import { DUMMY_PALETTE, DUMMY_SPRITE } from '../data/art/dummy.js';
-
-const ART = {
-  dummy: { rows: DUMMY_SPRITE, palette: DUMMY_PALETTE },
-};
+import { ENEMIES } from '../data/enemies/index.js';
 
 const SPEED = 18; // pixels per second
 const TOUCH_DISTANCE = 16;
+// After you run from a fight, the enemy blinks and ignores you this long.
+const COOLDOWN_SECONDS = 2.5;
 
 // A floating enemy that patrols a strip of floor. Touching it starts a battle.
 export class Npc {
+  // `art` is optional: by default the enemy looks like its own battle sprite.
   constructor({ art, enemy, x, y, patrol }) {
-    const { rows, palette } = ART[art];
+    const source = ENEMIES[art] ?? ENEMIES[enemy];
+    if (!source) throw new Error(`Unknown enemy '${enemy}' in a room's npcs`);
+    const { rows, palette } = source.sprite;
     this.sprite = makeSprite(rows, palette);
     this.enemy = enemy;
     // Like the player, (x, y) is the point under the feet.
@@ -22,6 +23,11 @@ export class Npc {
     this.maxX = (patrol[1] + 0.5) * T;
     this.direction = 1;
     this.time = Math.random() * 10;
+    this.cooldown = 0;
+  }
+
+  startCooldown() {
+    this.cooldown = COOLDOWN_SECONDS;
   }
 
   get sortY() {
@@ -30,6 +36,7 @@ export class Npc {
 
   update(dt) {
     this.time += dt;
+    this.cooldown = Math.max(0, this.cooldown - dt);
     this.x += this.direction * SPEED * dt;
     if (this.x > this.maxX) {
       this.x = this.maxX;
@@ -41,10 +48,11 @@ export class Npc {
   }
 
   touches(player) {
-    return Math.hypot(this.x - player.x, this.y - player.y) < TOUCH_DISTANCE;
+    return this.cooldown <= 0 && Math.hypot(this.x - player.x, this.y - player.y) < TOUCH_DISTANCE;
   }
 
   draw(ctx, camera) {
+    if (this.cooldown > 0 && Math.floor(this.cooldown * 10) % 2 === 0) return;
     const x = Math.round(this.x) - camera.x;
     const y = this.y - camera.y;
     const bob = Math.round(Math.sin(this.time * 3) * 2);

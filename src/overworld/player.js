@@ -1,11 +1,8 @@
 import { TILE_SIZE as T } from '../config.js';
-import { makeSprite, flipHorizontal } from '../engine/sprite.js';
-import { PLAYER_PALETTE, PLAYER_SPRITES } from '../data/art/player.js';
+import { HERO_ANIMATIONS, chooseFacing, heroFrame, heroBounce } from '../characters/hero.js';
 
 const WALK_SPEED = 70; // pixels per second
 const RUN_SPEED = 130;
-const SECONDS_PER_FRAME = 0.15;
-const RUN_ANIMATION_RATE = 1.6;
 
 const JUMP_SPEED = 150; // pixels per second, upwards
 const GRAVITY = 700; // pixels per second squared
@@ -20,23 +17,6 @@ const FALL_GRAVITY = 500;
 const HITBOX_HALF_WIDTH = 5;
 const HITBOX_HEIGHT = 6;
 
-const sprite = (name) => makeSprite(PLAYER_SPRITES[name], PLAYER_PALETTE);
-const downIdle = sprite('downIdle');
-const downStep = sprite('downStep');
-const upIdle = sprite('upIdle');
-const upStep = sprite('upStep');
-const leftIdle = sprite('leftIdle');
-const leftStep = sprite('leftStep');
-
-// 4-frame walk cycles. Frame 0 doubles as the standing pose and frame 1 as the jump pose.
-// Front and back views mirror the step frame to alternate legs.
-const ANIMATIONS = {
-  down: [downIdle, downStep, downIdle, flipHorizontal(downStep)],
-  up: [upIdle, upStep, upIdle, flipHorizontal(upStep)],
-  left: [leftIdle, leftStep, leftIdle, leftStep],
-  right: [leftIdle, leftStep, leftIdle, leftStep].map(flipHorizontal),
-};
-
 export class Player {
   // (x, y) is the point between the player's feet, in whole pixels.
   constructor(x, y) {
@@ -46,6 +26,7 @@ export class Player {
     this.remainderY = 0;
     this.facing = 'down';
     this.moving = false;
+    this.running = false;
     this.animationTime = 0;
 
     // Height above the ground. Jumping is visual only; collision stays at the feet.
@@ -86,12 +67,12 @@ export class Player {
       this.facing = chooseFacing(dx, dy, this.facing);
 
       // Diagonals aren't normalised, matching Deltarune's movement feel.
-      const running = input.isDown('cancel');
-      const speed = running ? RUN_SPEED : WALK_SPEED;
+      this.running = input.isDown('cancel');
+      const speed = this.running ? RUN_SPEED : WALK_SPEED;
       this.moveAxis(room, 'x', dx * speed * dt);
       this.moveAxis(room, 'y', dy * speed * dt);
 
-      this.animationTime += dt * (running ? RUN_ANIMATION_RATE : 1);
+      this.animationTime += dt;
     } else {
       this.animationTime = 0;
     }
@@ -179,15 +160,11 @@ export class Player {
       return;
     }
 
-    const frames = ANIMATIONS[this.facing];
-    let frame = frames[0];
-    if (this.isAirborne) {
-      frame = frames[1];
-      this.drawShadow(ctx, camera);
-    } else if (this.moving) {
-      frame = frames[Math.floor(this.animationTime / SECONDS_PER_FRAME) % frames.length];
-    }
-    this.drawFrame(ctx, camera, frame, this.y - Math.round(this.z));
+    if (this.isAirborne) this.drawShadow(ctx, camera);
+    // Running has its own frames and a little bounce.
+    const frame = heroFrame(this.facing, this.moving, this.isAirborne, this.animationTime, this.running);
+    const bounce = heroBounce(this.moving, this.isAirborne, this.animationTime, this.running);
+    this.drawFrame(ctx, camera, frame, this.y - Math.round(this.z) - bounce);
   }
 
   drawShadow(ctx, camera) {
@@ -210,20 +187,11 @@ export class Player {
     ctx.rect(0, 0, ctx.canvas.width, holeY);
     ctx.rect(holeX, holeY, T, T);
     ctx.clip();
-    this.drawFrame(ctx, camera, ANIMATIONS.down[0], this.y + drop);
+    this.drawFrame(ctx, camera, HERO_ANIMATIONS.down[0], this.y + drop);
     ctx.restore();
   }
 
   drawFrame(ctx, camera, frame, feetY) {
     ctx.drawImage(frame, this.x - Math.floor(frame.width / 2) - camera.x, feetY - frame.height - camera.y);
   }
-}
-
-// Keeps the current facing while that direction is still held, so walking
-// diagonally doesn't flicker between two directions.
-function chooseFacing(dx, dy, current) {
-  const held = { up: dy < 0, down: dy > 0, left: dx < 0, right: dx > 0 };
-  if (held[current]) return current;
-  if (dy !== 0) return dy < 0 ? 'up' : 'down';
-  return dx < 0 ? 'left' : 'right';
 }

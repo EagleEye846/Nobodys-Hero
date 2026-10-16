@@ -1,0 +1,50 @@
+# Weapon descriptions for the EQUIP menu (C in the overworld) and shops.
+# One section per weapon id in src/data/weapons.js. The menus show FIGHT power
+# and the SHIFT ability automatically, so these are just flavour and how it works.
+
+[worn_sword]
+A dependable old blade. No tricks, full damage.
+
+[old_shield]
+Dented, but sturdy.
+Raise a barrier around your SOUL that destroys bullets. Takes a few seconds to recharge.
+
+[duelist_blade]
+Thin, quick and very sharp.
+A fast slash around your SOUL. Parry a bullet just before it hits and it recharges instantly.
+
+[ash_spear]
+Light enough to throw yourself after.
+Dash the way you're moving. Nothing can hurt you mid-dash.
+
+[hunting_bow]
+Strung with something that hums.
+Fire arrows straight up that break the first bullet they hit. Three arrows per turn.
+
+[oak_staff]
+Warm to the touch, even here.
+Hold SHIFT to stand still and channel. Grazing builds SP three times as fast.
+
+[stone_hammer]
+Mostly rock. Partly handle.
+Slam the ground to clear the bullets closest to you. Slow to recharge.
+
+[spare_lantern]
+The Keeper says it was never needed. Until now.
+Leave a pool of light. Bullets inside it slow to a crawl.
+
+[glass_dagger]
+You can see yourself in it, slightly to the left.
+Blink to the opposite side of the box.
+
+[iron_gauntlets]
+Heavy, cold, and eager.
+Punch the nearest bullet back at the enemy for damage. It has to be close!
+
+[chapel_bell]
+One clear note, and everything listens.
+Ring it to freeze every bullet for a moment.
+
+[old_tome]
+The pages remember what you forgot.
+Spend 20% SP to heal 12 HP, right in the middle of an attack.

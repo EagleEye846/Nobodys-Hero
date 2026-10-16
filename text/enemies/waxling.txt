@@ -1,0 +1,50 @@
+# WAXLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/waxling.js.
+
+[intro]
+A WAXLING hops down from its candlestick, flame flaring!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The waxling is very slowly getting shorter.
+
+Hot wax hisses where it drips.
+
+Its flame leans toward the lantern moth, wistfully.
+
+It glares at you. Its flame flickers when it does.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Feel the drip!
+
+I burn for this!
+
+Don't you dare blow!
+
+Melt, melt, MELT!
+
+Stand still so I can drip on you!
+
+# One section per TALK option. The names after "talk:" must match
+# src/data/enemies/waxling.js.
+[talk: Inspect]
+WAXLING - HP 110
+A candle that got tired of standing still. It's in a hurry, before it melts.
+
+[talk: Shield its flame]
+You cup your hands around its flame to block the draught. It looks at you, surprised.
+
+[talk: Admire its glow]
+You tell it its glow is lovely. It flares up, flustered.
+
+[talk: Tell it a story]
+You tell it a long, slow story. Its flame settles to a steady glow.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+WAXLING sputters out with a tiny puff of smoke.
+
+[pacified]
+WAXLING hops back onto its candlestick and glows contentedly.

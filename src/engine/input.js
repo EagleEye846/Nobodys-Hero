@@ -1,15 +1,17 @@
 // Maps physical keys to game actions, following Deltarune's defaults:
 // arrows to move, Z/Enter to confirm, X/Shift to cancel (and run), C/Ctrl for the menu.
-// Space to jump is our own addition.
+// Our own additions: Space jumps, X held is focus while dodging, and Shift uses
+// your equipped weapon's soul ability. A key can trigger several actions.
 const KEY_BINDINGS = {
-  Space: 'jump',
-  ArrowUp: 'up', KeyW: 'up',
-  ArrowDown: 'down', KeyS: 'down',
-  ArrowLeft: 'left', KeyA: 'left',
-  ArrowRight: 'right', KeyD: 'right',
-  KeyZ: 'confirm', Enter: 'confirm',
-  KeyX: 'cancel', ShiftLeft: 'cancel', ShiftRight: 'cancel',
-  KeyC: 'menu', ControlLeft: 'menu', ControlRight: 'menu',
+  Space: ['jump'],
+  ArrowUp: ['up'], KeyW: ['up'],
+  ArrowDown: ['down'], KeyS: ['down'],
+  ArrowLeft: ['left'], KeyA: ['left'],
+  ArrowRight: ['right'], KeyD: ['right'],
+  KeyZ: ['confirm'], Enter: ['confirm'],
+  KeyX: ['cancel', 'focus'],
+  ShiftLeft: ['cancel', 'ability'], ShiftRight: ['cancel', 'ability'],
+  KeyC: ['menu'], ControlLeft: ['menu'], ControlRight: ['menu'],
 };
 
 export class Input {
@@ -18,10 +20,10 @@ export class Input {
     this.pressedActions = new Set();
 
     window.addEventListener('keydown', (event) => {
-      const action = KEY_BINDINGS[event.code];
-      if (!action) return;
+      const actions = KEY_BINDINGS[event.code];
+      if (!actions) return;
       event.preventDefault();
-      if (!event.repeat) this.pressedActions.add(action);
+      if (!event.repeat) for (const action of actions) this.pressedActions.add(action);
       this.heldKeys.add(event.code);
     });
     window.addEventListener('keyup', (event) => this.heldKeys.delete(event.code));
@@ -32,7 +34,7 @@ export class Input {
   // True while any key bound to the action is held.
   isDown(action) {
     for (const code of this.heldKeys) {
-      if (KEY_BINDINGS[code] === action) return true;
+      if (KEY_BINDINGS[code].includes(action)) return true;
     }
     return false;
   }

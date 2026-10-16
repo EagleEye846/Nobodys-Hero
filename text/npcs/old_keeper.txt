@@ -1,0 +1,20 @@
+# OLD KEEPER: a hooded figure with a lantern, in the west room of the Ruins.
+# Each entry (separated by a blank line) is one page of the textbox.
+
+# Said the first time you talk to them.
+[first]
+Oh! A visitor. It has been a long time since anyone walked these halls.
+
+They call me the Keeper. I tend the lantern, and the lantern tends the dark.
+
+That dummy in the east room was built to train heroes. Now it trains itself to hate them.
+
+If it attacks, don't just run from the bullets. Brushing close past them fills your spell power.
+
+The floating crystals are older than me. Touch one, and the Ruins will remember you.
+
+# Said every time after that.
+[repeat]
+The lantern still burns. That is enough for today.
+
+North of here is the Lantern Hall. Lately a moth has taken a liking to the light. A big one.

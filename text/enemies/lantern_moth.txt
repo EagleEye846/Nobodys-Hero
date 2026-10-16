@@ -1,0 +1,50 @@
+# LANTERN MOTH
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/moth.js.
+
+[intro]
+LANTERN MOTH flutters out of the dark, drawn to your light!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The moth circles you, wings shedding glittering dust.
+
+It keeps glancing at the lanterns, then back at you.
+
+The air smells like candle smoke.
+
+Its glow flickers, like it's nervous.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Your light is mine!
+
+Brighter... brighter!
+
+Don't you dare go out!
+
+Dust and flame!
+
+Shine for me!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/moth.js.
+[talk: Inspect]
+LANTERN MOTH - HP 150
+Drawn to any light. Including yours. Especially yours.
+
+[talk: Dim your light]
+You shade the glow around you. The moth's frantic circling slows.
+
+[talk: Admire wings]
+You compliment its wing patterns. It does a proud little loop.
+
+[talk: Hum softly]
+You hum. The moth's wings slow to the rhythm.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+LANTERN MOTH scatters into a cloud of glittering dust!
+
+[pacified]
+LANTERN MOTH settles on a lantern, content, and lets you pass.

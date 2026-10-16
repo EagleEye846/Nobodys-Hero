@@ -1,27 +1,56 @@
-const BOX = { x: 16, y: 164, width: 288, height: 64 };
-const PADDING = 10;
-const LINE_HEIGHT = 14;
-const CHARACTERS_PER_SECOND = 45;
-// TODO: replace with a bitmap pixel font from assets/fonts/; canvas text blurs when scaled.
-const FONT = '10px monospace';
+import { inUiSpace } from '../engine/screen.js';
+import { makeSprite } from '../engine/sprite.js';
+import { PORTRAITS } from '../data/art/portraits.js';
+import { layoutDialogue, drawDialogue } from './text.js';
 
-// Deltarune-style dialogue box. Text types out a character at a time;
+// In UI pixels (640x480).
+const BOX = { x: 32, y: 318, w: 576, h: 146 };
+const BORDER = 4;
+const PADDING_X = 26;
+const PADDING_Y = 20;
+const TEXT_SIZE = 30;
+const LINE_HEIGHT = 34;
+const CHARACTERS_PER_SECOND = 45;
+
+// Portraits sit on the left of the box, drawn at 3x, with the text beside them.
+const PORTRAIT_SCALE = 3;
+const PORTRAIT_GAP = 18;
+const BLINK_PERIOD = 3.4;
+const BLINK_SECONDS = 0.14;
+
+const portraitCache = new Map();
+function portraitSprites(id) {
+  if (!portraitCache.has(id)) {
+    const art = PORTRAITS[id];
+    portraitCache.set(id, art && {
+      idle: makeSprite(art.idle, art.palette),
+      blink: makeSprite(art.blink, art.palette),
+    });
+  }
+  return portraitCache.get(id);
+}
+
+// Overworld dialogue box. Text types out a character at a time;
 // cancel skips to the end of the page and confirm advances to the next page.
+// NPCs with an entry in PORTRAITS show their face beside the text, Undertale style.
 export class TextBox {
   constructor() {
     this.pages = null;
     this.pageIndex = 0;
     this.visibleCharacters = 0;
+    this.portrait = null;
   }
 
   get isOpen() {
     return this.pages !== null;
   }
 
-  open(pages) {
+  // `speaker` is an NPC id; their portrait shows if they have one.
+  open(pages, speaker = null) {
     this.pages = pages;
     this.pageIndex = 0;
     this.visibleCharacters = 0;
+    this.portrait = speaker ? portraitSprites(speaker) : null;
   }
 
   update(dt, input) {
@@ -43,18 +72,29 @@ export class TextBox {
   draw(ctx) {
     if (!this.isOpen) return;
 
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(BOX.x, BOX.y, BOX.width, BOX.height);
-    ctx.fillStyle = '#000';
-    ctx.fillRect(BOX.x + 2, BOX.y + 2, BOX.width - 4, BOX.height - 4);
+    inUiSpace(ctx, () => {
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(BOX.x, BOX.y, BOX.w, BOX.h);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(BOX.x + BORDER, BOX.y + BORDER, BOX.w - BORDER * 2, BOX.h - BORDER * 2);
 
-    const text = this.pages[this.pageIndex].slice(0, Math.floor(this.visibleCharacters));
-    ctx.fillStyle = '#fff';
-    ctx.font = FONT;
-    ctx.textBaseline = 'top';
-    ctx.fillText('*', BOX.x + PADDING, BOX.y + PADDING);
-    text.split('\n').forEach((line, i) => {
-      ctx.fillText(line, BOX.x + PADDING + 12, BOX.y + PADDING + i * LINE_HEIGHT);
+      let textX = BOX.x + PADDING_X;
+      if (this.portrait) {
+        const blinking = (performance.now() / 1000) % BLINK_PERIOD < BLINK_SECONDS;
+        const face = blinking ? this.portrait.blink : this.portrait.idle;
+        const size = face.width * PORTRAIT_SCALE;
+        const faceX = BOX.x + PADDING_X - 6;
+        ctx.drawImage(face, faceX, BOX.y + (BOX.h - size) / 2, size, size);
+        textX = faceX + size + PORTRAIT_GAP;
+      }
+
+      const width = BOX.x + BOX.w - PADDING_X - textX;
+      const lines = layoutDialogue(ctx, this.pages[this.pageIndex], width, TEXT_SIZE);
+      drawDialogue(ctx, lines, textX, BOX.y + PADDING_Y, {
+        size: TEXT_SIZE,
+        lineHeight: LINE_HEIGHT,
+        visible: Math.floor(this.visibleCharacters),
+      });
     });
   }
 }

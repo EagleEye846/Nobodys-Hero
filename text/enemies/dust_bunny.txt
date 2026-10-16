@@ -1,0 +1,50 @@
+# DUST BUNNY
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/bunny.js.
+
+[intro]
+A DUST BUNNY tumbles out from under a loose stone!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The dust bunny twitches its nose at you.
+
+It sheds a little. Then a little more.
+
+It's trying very hard to look scary.
+
+Its ears swivel toward every sound.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Hop! Hop!
+
+Achoo!
+
+You're on MY floor!
+
+I'm fluffy AND fearsome!
+
+Dust to dust!
+
+# One section per TALK option. The names after "talk:" must match
+# src/data/enemies/bunny.js.
+[talk: Inspect]
+DUST BUNNY - HP 80
+Made of every speck that was ever swept into a corner. Surprisingly soft.
+
+[talk: Pet]
+You pet the dust bunny. It purrs. Bunnies don't purr. This one does.
+
+[talk: Offer a crumb]
+You offer a crumb of Trail Mix. It nibbles it suspiciously.
+
+[talk: Stay very still]
+You hold perfectly still. The bunny forgets why it was angry.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+DUST BUNNY poofs into a little cloud and settles on the floor.
+
+[pacified]
+DUST BUNNY curls up in a corner and starts to snooze.

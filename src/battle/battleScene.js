@@ -1,64 +1,223 @@
-import { SCREEN_WIDTH } from '../config.js';
+import { UI_SCALE as S } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
-import { Soul, HEART_SPRITE, SOUL_HIT_RADIUS, GRAZE_RADIUS } from './soul.js';
-import { createPattern } from './bullets.js';
-import { AttackBar } from './attackBar.js';
+import { inUiSpace } from '../engine/screen.js';
+import { music, sfx } from '../audio/music.js';
+import { textSection } from '../engine/textLoader.js';
+import { drawText } from '../ui/text.js';
+import { HERO_ANIMATIONS } from '../characters/hero.js';
+import { HERO_STATE } from '../characters/heroState.js';
+import { gainExp, heroMaxHp, knownSpells, skillBonus } from '../characters/progress.js';
+import { WEAPONS } from '../data/weapons.js';
+import { SPELLS } from '../data/spells.js';
+import { Soul, SOUL_RADIUS, GRAZE_RADIUS } from './soul.js';
+import { SOUL_ABILITIES } from './soulAbilities.js';
+import { createPattern, Shot } from './bullets.js';
+import { StrikeRings } from './strikeRings.js';
+import { BACKDROPS } from './backdrops.js';
+import * as hud from './hud.js';
 
-const PLAYER = { name: 'HERO', lv: 1, maxHp: 90 };
-const STARTING_ITEMS = ['Dark Candy', 'Dark Candy'];
+// The party fights from the left. Only the hero for now; max HP and level come
+// from their progress (src/characters/progress.js).
+const PARTY = [{ name: 'HERO', color: '#4fe3d0', sprite: HERO_ANIMATIONS.right[0] }];
+const STARTING_ITEMS = ['Trail Mix', 'Trail Mix'];
 const ITEM_HEAL = 40;
-const DEFEND_TP = 16;
-const TP_PER_GRAZE = 2;
-const HIT_IFRAMES = 1;
+const DEFEND_SP = 16;
+const BASE_IFRAMES = 1;
+// Fights refuse enemies with fewer different attacks than this.
+const MIN_ATTACKS = 3;
 
-const BUTTONS = ['FIGHT', 'ACT', 'ITEM', 'SPARE', 'DEFEND'];
-const BUTTON = { w: 52, h: 26, gap: 4, y: 204 };
-const BUTTONS_X = Math.floor((SCREEN_WIDTH - BUTTONS.length * BUTTON.w - (BUTTONS.length - 1) * BUTTON.gap) / 2);
+// What each spell does (costs are in src/data/spells.js). Pacify only works
+// once the target is fully calm. Spells in TARGETED_SPELLS ask which enemy.
+const HEAL_PULSE_HP = 35;
+const REND_DAMAGE = 30;
+const LULL_CALM = 30;
+const STARFALL_DAMAGE = 45;
+const TARGETED_SPELLS = new Set(['rend', 'lull', 'pacify', 'starfall']);
 
-// The battle box morphs between a wide text box and a taller dodging arena.
-const MENU_BOX = { x: 40, y: 96, w: 240, h: 68 };
-const DODGE_BOX = { x: 105, y: 92, w: 110, h: 96 };
+// Grazing, like Deltarune: a bullet entering the graze area gives a burst of SP
+// and shaves a little off the enemy's turn; staying close keeps trickling SP in.
+const GRAZE_SP = 2.5;
+const GRAZE_HOLD_SP_PER_SECOND = 4;
+const GRAZE_TURN_CUT_SECONDS = 0.08;
+// Blocking a bullet with a weapon ability gives a little SP too.
+const BLOCK_SP = 1;
 
-const ENEMY = { x: 136, y: 8, scale: 3 };
+// Running away gets likelier every turn.
+const RUN_BASE_CHANCE = 0.4;
+const RUN_CHANCE_PER_TURN = 0.15;
+const RUN_MAX_CHANCE = 0.9;
 
-const FONT = '8px monospace';
-const LINE_HEIGHT = 11;
-const QUIP_SPEED = 35; // characters per second
-const GRAZE_SPARK_LIFE = 0.35;
+// Fighting a group. At most two enemies attack in a turn; their bullets are
+// thinned out, and the second one starts a moment later, so it stays fair.
+const MAX_ATTACKERS = 2;
+const COMBINED_DENSITY = 0.8;
+const SECOND_ATTACKER_DELAY = 0.6;
 
-// A Deltarune-style battle. On your turn you pick a button; on the enemy's turn
-// you dodge its bullets as a soul in the box. The scene ends through onEnd with
-// 'victory', 'spared' or 'death'.
+// Standing still is never safe: after STILL_SECONDS without moving more than
+// STILL_RADIUS, a spread of aimed shots flies at the soul, again and again
+// until it moves.
+const STILL_SECONDS = 1.1;
+const STILL_REPEAT_SECONDS = 0.7;
+const STILL_RADIUS = 6;
+const STILL_SHOT_SPEED = 80;
+
+const COMMANDS = [
+  { label: 'FIGHT', icon: 'fight' },
+  { label: 'TALK', icon: 'talk' },
+  { label: 'SPELLS', icon: 'spells' },
+  { label: 'ITEMS', icon: 'items' },
+  { label: 'DEFEND', icon: 'defend' },
+  { label: 'RUN', icon: 'run' },
+];
+
+// World positions: party on the left, enemies on the right, both side-on at
+// double size. FOE_LAYOUTS gives each enemy's top-left for 1, 2 or 3 enemies.
+const SCALE = 2;
+const PARTY_FEET = { x: 58, y: 128 };
+const FOE_LAYOUTS = {
+  1: [{ x: 236, y: 56 }],
+  2: [{ x: 228, y: 22 }, { x: 262, y: 88 }],
+  3: [{ x: 234, y: 4 }, { x: 270, y: 54 }, { x: 234, y: 104 }],
+};
+const ENEMY_STATUS_GAP = 4;
+
+const BOX_OPEN_SECONDS = 0.25;
+
+// The hero's aura: a pulsing glow behind them and motes rising from their feet.
+const AURA_MOTE_INTERVAL = 0.08;
+const AURA_MOTE_LIFE = 1.2;
+const SLASH_SECONDS = 0.25;
+const ENEMY_FLASH_SECONDS = 0.12;
+const FOE_FADE_SECONDS = 1;
+
+const TAUNT_SPEED = 35; // characters per second
+const SHAKE_SECONDS = 0.25;
+const SPARK_SECONDS = 0.35;
+const POPUP_SECONDS = 0.9;
+const DEFEAT_SECONDS = 1.8;
+
+// A turn-based battle against one to three enemies. On your turn you pick a
+// command (and, with several enemies, a target); on the enemies' turn you steer
+// your soul around a fixed box while their attacks play. The scene ends
+// through onEnd with 'won' (every enemy beaten or pacified), 'fled' or 'death'.
 export class BattleScene {
-  constructor(enemy, onEnd) {
-    this.enemy = enemy;
+  constructor(enemies, onEnd, area = 'ruins') {
+    const list = Array.isArray(enemies) ? enemies : [enemies];
+    const layout = FOE_LAYOUTS[list.length];
+    if (!layout) throw new Error(`A battle needs 1 to 3 enemies, not ${list.length}`);
     this.onEnd = onEnd;
-    this.sprite = makeSprite(enemy.sprite.rows, enemy.sprite.palette);
+    this.backdrop = BACKDROPS[area] ?? BACKDROPS.ruins;
+    this.foes = list.map((data, i) => this.makeFoe(data, layout[i]));
+    for (const foe of this.foes) this.checkPatterns(foe.data);
 
-    this.enemyHp = enemy.maxHp;
-    this.mercy = 0;
-    this.hp = PLAYER.maxHp;
-    this.tp = 0;
+    this.party = PARTY.map((member) => ({ ...member, level: HERO_STATE.level, maxHp: heroMaxHp(), hp: heroMaxHp() }));
+    this.hero = this.party[0];
+
+    // Learned skills shape the whole battle.
+    this.spells = knownSpells().map((id) => ({ id, ...SPELLS[id] }));
+    this.fightPowerBonus = 1 + skillBonus('fightPower');
+    this.grazeRadius = GRAZE_RADIUS + skillBonus('grazeRadius');
+    this.grazeSpBonus = 1 + skillBonus('grazeSp');
+    this.lastStandReady = skillBonus('lastStand') > 0;
+
+    this.sp = 0;
     this.items = [...STARTING_ITEMS];
     this.turn = 0;
     this.defending = false;
+    this.seenModes = new Set(['normal']);
+    this.earned = { exp: 0, coins: 0 };
+    this.target = this.foes[0];
+    this.slashFoe = null;
 
-    this.selected = 0; // main menu button
-    this.cursor = 0; // submenu row
+    // The equipped weapon sets FIGHT power and may give the soul a SHIFT ability.
+    this.weapon = WEAPONS[HERO_STATE.weapon];
+    this.ability = this.weapon.ability ? SOUL_ABILITIES[this.weapon.ability] : null;
+    this.abilityCooldown = 0;
+    this.abilityLeft = 0;
+    this.abilityUses = 0;
+    this.abilityState = {};
+    this.abilityHintShown = false;
+    this.grazeMultiplier = 1;
+    this.box = hud.BOX;
+
+    this.selected = 0; // command button
+    this.cursor = 0; // option in a TALK, SPELLS, ITEMS or target list
     this.soul = new Soul();
     this.bullets = [];
-    this.particles = [];
-    this.popup = null;
+    this.attacks = [];
+    this.sparks = [];
+    this.motes = [];
+    this.moteTimer = 0;
+    this.popups = [];
+    this.strike = null;
+    this.slashTime = 0;
     this.result = null;
     this.finished = false;
     this.time = 0;
-    this.box = { ...MENU_BOX };
+    this.shake = 0;
+    this.heroFlinch = 0;
 
-    this.showMessage(`* ${enemy.name} blocks the way!`, 'menu');
+    this.showMessage(this.introText(), 'command');
+  }
+
+  makeFoe(data, pos) {
+    const sprite = makeSprite(data.sprite.rows, data.sprite.palette);
+    // A white silhouette, flashed for a moment when the enemy takes a hit.
+    const white = Object.fromEntries(Object.keys(data.sprite.palette).map((key) => [key, '#ffffff']));
+    return {
+      data,
+      name: data.name,
+      sprite,
+      flashSprite: makeSprite(data.sprite.rows, white),
+      pos,
+      center: { x: pos.x + (sprite.width * SCALE) / 2, y: pos.y + (sprite.height * SCALE) / 2 },
+      hp: data.maxHp,
+      maxHp: data.maxHp,
+      calm: 0,
+      flash: 0,
+      lastPattern: null,
+      state: 'active', // then 'defeated' or 'pacified'
+      leftAt: 0,
+    };
+  }
+
+  activeFoes() {
+    return this.foes.filter((foe) => foe.state === 'active');
+  }
+
+  // Each enemy's lines come from its file in /text.
+  foeLines(foe, section) {
+    return textSection(foe.data.textFile, section);
+  }
+
+  foeLine(foe, section) {
+    return this.foeLines(foe, section)[0];
+  }
+
+  introText() {
+    const [first, ...others] = this.foes;
+    return [this.foeLine(first, 'intro'), ...others.map((foe) => `${foe.name} joins the fight!`)].join('\n');
+  }
+
+  // Every enemy needs several attacks, and soul modes are for special boss
+  // battles only.
+  checkPatterns(enemy) {
+    const names = new Set(enemy.patterns.map(({ name }) => name));
+    if (names.size < MIN_ATTACKS) {
+      throw new Error(`${enemy.name} has ${names.size} attack(s); every enemy needs at least ${MIN_ATTACKS} different ones (see src/battle/attacks/).`);
+    }
+    if (enemy.boss) return;
+    for (const { name } of enemy.patterns) {
+      const { mode } = createPattern(name, hud.BOX);
+      if (mode !== 'normal') {
+        throw new Error(`${enemy.name} uses '${name}', which needs the ${mode} soul mode. Soul modes are for bosses only (boss: true).`);
+      }
+    }
   }
 
   enter(game) {
     this.game = game;
+    music.play(this.foes[0].data.music ?? 'battle');
   }
 
   showMessage(text, next) {
@@ -69,21 +228,101 @@ export class BattleScene {
   setPhase(phase) {
     this.phase = phase;
     this.phaseTime = 0;
-    if (phase === 'menu') {
-      this.flavor = this.enemy.flavor[this.turn % this.enemy.flavor.length];
-    } else if (phase === 'dialogue') {
-      this.quip = this.enemy.quips[Math.floor(Math.random() * this.enemy.quips.length)];
-      this.quipDone = false;
-    } else if (phase === 'dodge') {
-      this.soul.reset(DODGE_BOX.x + DODGE_BOX.w / 2, DODGE_BOX.y + DODGE_BOX.h * 0.7);
-      this.bullets = [];
-      this.particles = [];
-      this.pattern = createPattern(this.enemy.patterns[this.turn % this.enemy.patterns.length], DODGE_BOX);
-    } else if (phase === 'attack') {
-      this.attackBar = new AttackBar(200);
-    } else if (phase === 'act' || phase === 'item') {
-      this.cursor = 0;
+    switch (phase) {
+      case 'command': {
+        // Each turn, a different enemy sets the scene.
+        const active = this.activeFoes();
+        const foe = active[this.turn % active.length];
+        const flavor = this.foeLines(foe, 'flavor');
+        this.flavor = flavor[Math.floor(this.turn / active.length) % flavor.length];
+        break;
+      }
+      case 'talk':
+      case 'spells':
+      case 'items':
+      case 'target':
+        this.cursor = 0;
+        break;
+      case 'fight':
+        this.strike = new StrikeRings(this.target.center.x * S, this.target.center.y * S, {
+          extraRings: skillBonus('strikeRings'),
+          toleranceScale: 1 + skillBonus('strikeTolerance'),
+        });
+        break;
+      case 'taunt': {
+        this.strike = null;
+        this.attackers = this.chooseAttackers();
+        this.speaker = this.attackers[Math.floor(Math.random() * this.attackers.length)];
+        const taunts = this.foeLines(this.speaker, 'taunts');
+        this.taunt = taunts[Math.floor(Math.random() * taunts.length)];
+        this.tauntSkipped = false;
+        break;
+      }
+      case 'dodge':
+        this.startAttack();
+        break;
     }
+  }
+
+  // Up to MAX_ATTACKERS of the enemies still standing, in a random order.
+  chooseAttackers() {
+    const shuffled = [...this.activeFoes()].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, MAX_ATTACKERS);
+  }
+
+  // Picks a weighted random attack for one enemy, never the same one twice in a row.
+  pickPattern(foe) {
+    const all = foe.data.patterns;
+    const options = all.length > 1 ? all.filter((p) => p.name !== foe.lastPattern) : all;
+    const total = options.reduce((sum, p) => sum + (p.weight ?? 1), 0);
+    let roll = Math.random() * total;
+    for (const option of options) {
+      roll -= option.weight ?? 1;
+      if (roll <= 0) return option.name;
+    }
+    return options[options.length - 1].name;
+  }
+
+  startAttack() {
+    const crowd = this.attackers.length > 1 ? COMBINED_DENSITY : 1;
+    let attacks = this.attackers.map((foe, i) => {
+      const name = this.pickPattern(foe);
+      foe.lastPattern = name;
+      const { density = 1, speed = 1 } = foe.data.difficulty ?? {};
+      return { foe, pattern: createPattern(name, hud.BOX, { density: density * crowd, speed }), delay: i * SECOND_ATTACKER_DELAY };
+    });
+    // A boss's special soul mode takes the whole turn to itself.
+    const special = attacks.find((attack) => attack.pattern.mode !== 'normal');
+    if (special) attacks = [{ ...special, delay: 0 }];
+    this.attacks = attacks;
+    this.turnLength = Math.max(...attacks.map((attack) => attack.delay + attack.pattern.duration));
+    const mode = attacks[0].pattern.mode;
+
+    this.bullets = [];
+    this.sparks = [];
+    this.dodgeTime = 0;
+    // The weapon ability starts every enemy turn ready and fully charged.
+    this.abilityCooldown = 0;
+    this.abilityLeft = 0;
+    this.abilityUses = 0;
+    this.abilityState = {};
+    this.grazeMultiplier = 1;
+
+    const box = hud.BOX;
+    const startY = mode === 'heavy' ? box.y + box.h : box.y + box.h / 2;
+    this.soul.reset(box.x + box.w / 2, startY, mode);
+    this.stillAnchor = { x: this.soul.x, y: this.soul.y };
+    this.stillTime = 0;
+
+    // Explain a soul mode or weapon ability the first time it shows up.
+    this.dodgeHint = '';
+    if (!this.seenModes.has(mode)) {
+      this.dodgeHint = this.soul.mode.hint;
+    } else if (this.ability && !this.abilityHintShown) {
+      this.dodgeHint = this.ability.hint;
+      this.abilityHintShown = true;
+    }
+    this.seenModes.add(mode);
   }
 
   finish(result) {
@@ -95,359 +334,787 @@ export class BattleScene {
   update(dt, input) {
     this.time += dt;
     this.phaseTime += dt;
-    if (this.popup) {
-      this.popup.t += dt;
-      if (this.popup.t > 1) this.popup = null;
-    }
-
-    // Ease the box toward the shape the current phase wants.
-    const target = this.phase === 'dodge' || this.phase === 'death' ? DODGE_BOX : MENU_BOX;
-    const ease = Math.min(1, dt * 10);
-    for (const key of ['x', 'y', 'w', 'h']) this.box[key] += (target[key] - this.box[key]) * ease;
+    this.shake = Math.max(0, this.shake - dt);
+    this.heroFlinch = Math.max(0, this.heroFlinch - dt);
+    this.slashTime = Math.max(0, this.slashTime - dt);
+    for (const foe of this.foes) foe.flash = Math.max(0, foe.flash - dt);
+    this.updateEffects(dt);
 
     switch (this.phase) {
       case 'message':
         if (input.wasPressed('confirm')) this.advanceMessage();
         break;
-      case 'menu':
-        this.updateMenu(input);
+      case 'command':
+        this.updateCommand(input);
         break;
-      case 'act':
-        this.updateActMenu(input);
+      case 'target':
+        this.updateTarget(input);
         break;
-      case 'item':
-        this.updateItemMenu(input);
+      case 'talk':
+        this.updateTalk(input);
         break;
-      case 'attack': {
-        const result = this.attackBar.update(dt, input);
-        if (result) this.resolveAttack(result);
+      case 'spells':
+        this.updateSpells(input);
+        break;
+      case 'items':
+        this.updateItems(input);
+        break;
+      case 'fight': {
+        const result = this.strike.update(dt, input);
+        if (result) this.resolveStrike(Math.round(result.damage * this.weapon.fightPower * this.fightPowerBonus));
         break;
       }
-      case 'attackResult':
+      case 'fightResult':
+        this.strike?.update(dt, input);
         if (this.phaseTime >= 0.9) {
-          if (this.enemyHp <= 0) this.win(false);
-          else this.setPhase('dialogue');
+          if (this.target.hp <= 0) this.foeLeaves(this.target, 'defeated', 'taunt');
+          else this.setPhase('taunt');
         }
         break;
-      case 'dialogue':
-        this.updateDialogue(input);
+      case 'taunt':
+        this.updateTaunt(input);
         break;
       case 'dodge':
         this.updateDodge(dt, input);
         break;
-      case 'death':
-        if (this.phaseTime >= 1.5) this.finish('death');
+      case 'defeat':
+        if (this.phaseTime >= DEFEAT_SECONDS) this.finish('death');
         break;
     }
   }
 
+  updateEffects(dt) {
+    for (const spark of this.sparks) {
+      spark.x += spark.vx * dt;
+      spark.y += spark.vy * dt;
+      spark.life -= dt;
+    }
+    this.sparks = this.sparks.filter((spark) => spark.life > 0);
+    for (const popup of this.popups) popup.t += dt;
+    this.popups = this.popups.filter((popup) => popup.t < POPUP_SECONDS);
+
+    // Aura motes drift up from the hero's feet.
+    for (const mote of this.motes) {
+      mote.y += mote.vy * dt;
+      mote.x += Math.sin(mote.life * 6 + mote.phase) * 4 * dt;
+      mote.life -= dt;
+    }
+    this.motes = this.motes.filter((mote) => mote.life > 0);
+    this.moteTimer -= dt;
+    if (this.moteTimer <= 0 && this.phase !== 'defeat') {
+      this.moteTimer += AURA_MOTE_INTERVAL;
+      this.motes.push({
+        x: PARTY_FEET.x + (Math.random() - 0.5) * 22,
+        y: PARTY_FEET.y - Math.random() * 6,
+        vy: -(14 + Math.random() * 18),
+        life: AURA_MOTE_LIFE,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+
+  // `next` is a phase name, 'exit' to end the battle, or a function to run.
   advanceMessage() {
     const { next } = this.message;
-    if (next === 'exit') {
-      this.finish(this.result);
-      return;
-    }
-    this.setPhase(next);
+    if (typeof next === 'function') next();
+    else if (next === 'exit') this.finish(this.result);
+    else this.setPhase(next);
   }
 
-  updateMenu(input) {
+  gainSp(amount) {
+    this.sp = Math.min(100, this.sp + amount);
+  }
+
+  updateCommand(input) {
     const dir = (input.wasPressed('right') ? 1 : 0) - (input.wasPressed('left') ? 1 : 0);
-    this.selected = (this.selected + dir + BUTTONS.length) % BUTTONS.length;
+    if (dir) sfx('move');
+    this.selected = (this.selected + dir + COMMANDS.length) % COMMANDS.length;
     if (!input.wasPressed('confirm')) return;
+    sfx('select');
 
-    switch (BUTTONS[this.selected]) {
+    switch (COMMANDS[this.selected].label) {
       case 'FIGHT':
-        this.setPhase('attack');
+        this.chooseTarget(() => this.setPhase('fight'));
         break;
-      case 'ACT':
-        this.setPhase('act');
+      case 'TALK':
+        this.chooseTarget(() => this.setPhase('talk'));
         break;
-      case 'ITEM':
-        if (this.items.length) this.setPhase('item');
-        else this.showMessage("* You're out of items.", 'menu');
+      case 'SPELLS':
+        this.setPhase('spells');
         break;
-      case 'SPARE':
-        if (this.mercy >= 100) this.win(true);
-        else this.showMessage(`* You spared ${this.enemy.name}.\n* But its name wasn't yellow.`, 'dialogue');
+      case 'ITEMS':
+        if (this.items.length) this.setPhase('items');
+        else this.showMessage('Your bag is empty.', 'command');
         break;
-      case 'DEFEND':
+      case 'DEFEND': {
         this.defending = true;
-        this.tp = Math.min(100, this.tp + DEFEND_TP);
-        this.showMessage('* You brace yourself.\n* TP increased!', 'dialogue');
+        this.gainSp(DEFEND_SP);
+        let text = `${this.hero.name} braces. Damage is halved this turn.\nSP +${DEFEND_SP}%`;
+        const heal = skillBonus('defendHeal');
+        if (heal) {
+          this.healHero(heal);
+          text += `, HP +${heal}`;
+        }
+        this.showMessage(text, 'taunt');
+        break;
+      }
+      case 'RUN':
+        this.tryToRun();
         break;
     }
   }
 
-  updateActMenu(input) {
+  // With one enemy left, acts on it straight away; otherwise asks which one first.
+  chooseTarget(action) {
+    const active = this.activeFoes();
+    if (active.length === 1) {
+      this.target = active[0];
+      action(this.target);
+      return;
+    }
+    this.targetAction = action;
+    this.setPhase('target');
+  }
+
+  updateTarget(input) {
+    const active = this.activeFoes();
     if (input.wasPressed('cancel')) {
-      this.setPhase('menu');
+      sfx('back');
+      this.setPhase('command');
       return;
     }
-    const acts = this.enemy.acts;
-    const dir = (input.wasPressed('down') ? 1 : 0) - (input.wasPressed('up') ? 1 : 0);
-    this.cursor = (this.cursor + dir + acts.length) % acts.length;
+    const before = this.cursor;
+    if (input.wasPressed('down')) this.cursor = Math.min(active.length - 1, this.cursor + 1);
+    if (input.wasPressed('up')) this.cursor = Math.max(0, this.cursor - 1);
+    if (this.cursor !== before) sfx('move');
     if (!input.wasPressed('confirm')) return;
-
-    const act = acts[this.cursor];
-    if (act.tp && this.tp < act.tp) {
-      this.showMessage('* Not enough TP.', 'act');
-      return;
-    }
-    this.tp -= act.tp ?? 0;
-    if (act.mercy) this.mercy = Math.min(100, this.mercy + act.mercy);
-    const suffix = act.mercy ? `\n* MERCY +${act.mercy}%` : '';
-    this.showMessage(act.text + suffix, 'dialogue');
+    sfx('select');
+    this.target = active[this.cursor];
+    this.targetAction(this.target);
   }
 
-  updateItemMenu(input) {
+  tryToRun() {
+    const chance = Math.min(RUN_MAX_CHANCE, RUN_BASE_CHANCE + this.turn * RUN_CHANCE_PER_TURN);
+    if (Math.random() < chance) {
+      this.result = 'fled';
+      this.showMessage('You slipped away into the ruins!', 'exit');
+    } else {
+      const active = this.activeFoes();
+      const who = active.length === 1 ? active[0].name : 'The enemies';
+      this.showMessage(`${who} block${active.length === 1 ? 's' : ''} your escape!`, 'taunt');
+    }
+  }
+
+  // Options sit in two columns: left/right picks the column, up/down the row.
+  moveGridCursor(input, length) {
+    let cursor = this.cursor;
+    if (input.wasPressed('right') && cursor % 2 === 0 && cursor + 1 < length) cursor++;
+    if (input.wasPressed('left') && cursor % 2 === 1) cursor--;
+    if (input.wasPressed('down') && cursor + 2 < length) cursor += 2;
+    if (input.wasPressed('up') && cursor >= 2) cursor -= 2;
+    this.cursor = cursor;
+  }
+
+  // Shared handling for the pick lists. Returns the chosen index, or null.
+  pickFromList(input, length) {
     if (input.wasPressed('cancel')) {
-      this.setPhase('menu');
+      sfx('back');
+      this.setPhase('command');
+      return null;
+    }
+    const before = this.cursor;
+    this.moveGridCursor(input, length);
+    if (this.cursor !== before) sfx('move');
+    if (!input.wasPressed('confirm')) return null;
+    sfx('select');
+    return this.cursor;
+  }
+
+  // Raises a foe's MERCY (stored as `calm`), noting when it's ready to be pacified.
+  calmFoe(foe, amount, text) {
+    foe.calm = Math.min(100, foe.calm + amount);
+    let result = `${text}\n${foe.name} MERCY +${amount}%`;
+    if (foe.calm >= 100) result += ` - it seems peaceful now.`;
+    return result;
+  }
+
+  updateTalk(input) {
+    const foe = this.target;
+    const index = this.pickFromList(input, foe.data.talk.length);
+    if (index === null) return;
+
+    const option = foe.data.talk[index];
+    let text = this.foeLine(foe, `talk: ${option.name}`);
+    if (option.calm) text = this.calmFoe(foe, option.calm, text);
+    this.showMessage(text, 'taunt');
+  }
+
+  updateSpells(input) {
+    const index = this.pickFromList(input, this.spells.length);
+    if (index === null) return;
+
+    const spell = this.spells[index];
+    if (this.sp < spell.sp) {
+      this.showMessage('Not enough SP.\nGraze past bullets to build spell power.', 'spells');
       return;
     }
-    const dir = (input.wasPressed('down') ? 1 : 0) - (input.wasPressed('up') ? 1 : 0);
-    this.cursor = (this.cursor + dir + this.items.length) % this.items.length;
-    if (!input.wasPressed('confirm')) return;
-
-    const [item] = this.items.splice(this.cursor, 1);
-    this.hp = Math.min(PLAYER.maxHp, this.hp + ITEM_HEAL);
-    this.showMessage(`* You ate the ${item}.\n* Recovered ${ITEM_HEAL} HP!`, 'dialogue');
+    if (TARGETED_SPELLS.has(spell.id)) this.chooseTarget((foe) => this.castSpell(spell, foe));
+    else this.castSpell(spell, null);
   }
 
-  resolveAttack({ hit, closeness }) {
-    let damage = 0;
-    let label = 'MISS';
-    if (hit) {
-      damage = Math.round(12 + closeness * closeness * 38);
-      label = closeness > 0.92 ? `${damage}!!` : `${damage}`;
+  castSpell(spell, foe) {
+    this.sp -= spell.sp;
+    const name = this.hero.name;
+    switch (spell.id) {
+      case 'heal':
+        this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + HEAL_PULSE_HP);
+        sfx('heal');
+        this.showMessage(`${name} cast Heal Pulse! Recovered ${HEAL_PULSE_HP} HP.`, 'taunt');
+        break;
+      case 'rend':
+        // A guaranteed hit, shown with the same slash and popup as FIGHT.
+        this.showMessage(`${name} cast Rend! A blade of light cuts through.`, () => this.resolveStrike(REND_DAMAGE));
+        break;
+      case 'pacify':
+        if (foe.calm >= 100) {
+          this.foeLeaves(foe, 'pacified', 'taunt', `${name} cast Pacify!`);
+        } else {
+          this.showMessage(`${name} cast Pacify...\nBut ${foe.name} isn't calm enough yet.`, 'taunt');
+        }
+        break;
+      case 'lull':
+        this.showMessage(this.calmFoe(foe, LULL_CALM, `${name} cast Lull. A soft hush settles over the room.`), 'taunt');
+        break;
+      case 'starfall':
+        this.showMessage(`${name} cast Starfall! Light pours down from above.`, () => this.resolveStrike(STARFALL_DAMAGE));
+        break;
     }
-    this.enemyHp = Math.max(0, this.enemyHp - damage);
-    this.popup = { text: label, t: 0 };
-    this.setPhase('attackResult');
   }
 
-  updateDialogue(input) {
+  updateItems(input) {
+    const index = this.pickFromList(input, this.items.length);
+    if (index === null) return;
+
+    const [item] = this.items.splice(index, 1);
+    this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + ITEM_HEAL);
+    sfx('heal');
+    this.showMessage(`You ate the ${item}. Recovered ${ITEM_HEAL} HP!`, 'taunt');
+  }
+
+  resolveStrike(damage) {
+    const foe = this.target;
+    foe.hp = Math.max(0, foe.hp - damage);
+    this.addPopup(damage ? `${damage}` : 'MISS', foe.center.x, foe.pos.y - 4, hud.COLORS.danger);
+    if (damage) {
+      this.slashFoe = foe;
+      this.slashTime = SLASH_SECONDS;
+      foe.flash = ENEMY_FLASH_SECONDS;
+      sfx('hit');
+    }
+    this.setPhase('fightResult');
+  }
+
+  // An enemy is beaten or pacified: it fades away, its rewards are banked, and
+  // the battle carries on (to `next`) or is won if it was the last one.
+  foeLeaves(foe, how, next, prefix = '') {
+    foe.state = how;
+    foe.leftAt = this.time;
+    this.earned.coins += foe.data.rewards.coins;
+    // Like Deltarune, sparing an enemy earns gold but no EXP.
+    if (how === 'defeated') this.earned.exp += foe.data.rewards.exp;
+    const line = this.foeLine(foe, how === 'defeated' ? 'victory' : 'pacified');
+    const text = prefix ? `${prefix}\n${line}` : line;
+    this.showMessage(text, () => {
+      // Another enemy may have been knocked out at the same time.
+      const alsoFallen = this.activeFoes().find((other) => other.hp <= 0);
+      if (alsoFallen) this.foeLeaves(alsoFallen, 'defeated', next);
+      else if (this.activeFoes().length) this.setPhase(next);
+      else this.win();
+    });
+  }
+
+  // Popups are positioned in world units and drawn in UI space.
+  addPopup(text, x, y, color) {
+    this.popups.push({ text, x: x * S, y: y * S, color, t: 0 });
+  }
+
+  updateTaunt(input) {
     if (!input.wasPressed('confirm')) return;
-    const fullyShown = this.quipDone || Math.floor(this.phaseTime * QUIP_SPEED) >= this.quip.length;
-    if (fullyShown) this.setPhase('dodge');
-    else this.quipDone = true;
+    if (this.tauntSkipped || this.visibleTauntChars() >= this.taunt.length) this.setPhase('dodge');
+    else this.tauntSkipped = true;
+  }
+
+  visibleTauntChars() {
+    return this.tauntSkipped ? this.taunt.length : Math.floor(this.phaseTime * TAUNT_SPEED);
   }
 
   updateDodge(dt, input) {
-    this.pattern.update(dt, this.phaseTime, this.bullets, this.soul);
-    this.soul.update(dt, input, DODGE_BOX);
-    for (const bullet of this.bullets) bullet.update(dt, DODGE_BOX);
-    this.bullets = this.bullets.filter((bullet) => !bullet.isGone(DODGE_BOX));
-    this.checkBullets();
+    if (this.phaseTime < BOX_OPEN_SECONDS) return;
 
-    for (const p of this.particles) {
-      p.x += p.vx * dt;
-      p.y += p.vy * dt;
-      p.life -= dt;
-    }
-    this.particles = this.particles.filter((p) => p.life > 0);
-
-    if (this.phaseTime >= this.pattern.duration && this.phase === 'dodge') {
-      this.bullets = [];
-      this.defending = false;
-      this.turn++;
-      this.setPhase('menu');
-    }
-  }
-
-  checkBullets() {
-    for (const bullet of this.bullets) {
-      const distance = Math.hypot(bullet.x - this.soul.x, bullet.y - this.soul.y);
-      if (distance < bullet.r + SOUL_HIT_RADIUS) {
-        this.hitSoul(bullet);
-      } else if (!bullet.grazed && distance < bullet.r + GRAZE_RADIUS) {
-        // Touhou-style graze: shaving past a bullet charges TP.
-        bullet.grazed = true;
-        this.tp = Math.min(100, this.tp + TP_PER_GRAZE);
-        this.particles.push({
-          x: this.soul.x + (Math.random() - 0.5) * 8,
-          y: this.soul.y + (Math.random() - 0.5) * 8,
-          vx: (Math.random() - 0.5) * 40,
-          vy: -30,
-          life: GRAZE_SPARK_LIFE,
-        });
+    this.dodgeTime += dt;
+    for (const attack of this.attacks) {
+      if (this.dodgeTime < attack.delay) continue;
+      const before = this.bullets.length;
+      attack.pattern.update(dt, this.bullets, this.soul);
+      // Bullets hurt as much as the enemy that fired them.
+      for (let i = before; i < this.bullets.length; i++) {
+        if (this.bullets[i].dmg === null) this.bullets[i].dmg = attack.foe.data.damage;
       }
     }
+    this.ability?.beforeMove?.(this, input, dt);
+    this.soul.update(dt, input, hud.BOX);
+    this.punishStillness(dt);
+    for (const bullet of this.bullets) bullet.update(dt * this.bulletTimeScale(bullet), hud.BOX);
+    this.bullets = this.bullets.filter((bullet) => !bullet.isGone(hud.BOX));
+    this.updateAbility(dt, input);
+    this.checkBullets(dt);
+
+    if (this.phase === 'dodge' && this.dodgeTime >= this.turnLength) this.endEnemyTurn();
   }
 
-  hitSoul(bullet) {
+  endEnemyTurn() {
+    this.bullets = [];
+    this.defending = false;
+    this.soul.locked = false;
+    this.turn++;
+    // A weapon ability can knock an enemy out during its own turn.
+    const fallen = this.activeFoes().find((foe) => foe.hp <= 0);
+    if (fallen) this.foeLeaves(fallen, 'defeated', 'command');
+    else this.setPhase('command');
+  }
+
+  // Watches for a soul that isn't moving, and sends aimed shots at it.
+  punishStillness(dt) {
+    const soul = this.soul;
+    // Boss soul modes have their own rules about moving, and channelling with
+    // the Oak Staff means choosing to stand still.
+    if (soul.modeName !== 'normal' || soul.locked) {
+      this.stillTime = 0;
+      return;
+    }
+    if (Math.hypot(soul.x - this.stillAnchor.x, soul.y - this.stillAnchor.y) > STILL_RADIUS) {
+      this.stillAnchor = { x: soul.x, y: soul.y };
+      this.stillTime = 0;
+      return;
+    }
+    this.stillTime += dt;
+    if (this.stillTime < STILL_SECONDS) return;
+    this.stillTime = STILL_SECONDS - STILL_REPEAT_SECONDS;
+
+    // From a random edge of the box, aimed right at the soul.
+    const box = hud.BOX;
+    const side = Math.floor(Math.random() * 4);
+    const x = side === 0 ? box.x - 3 : side === 1 ? box.x + box.w + 3 : box.x + Math.random() * box.w;
+    const y = side === 2 ? box.y - 3 : side === 3 ? box.y + box.h + 3 : box.y + Math.random() * box.h;
+    const aim = Math.atan2(soul.y - y, soul.x - x);
+    const damage = this.attacks[0]?.foe.data.damage ?? this.foes[0].data.damage;
+    for (const offset of [-0.2, 0, 0.2]) {
+      this.bullets.push(new Shot({
+        x,
+        y,
+        vx: Math.cos(aim + offset) * STILL_SHOT_SPEED,
+        vy: Math.sin(aim + offset) * STILL_SHOT_SPEED,
+        size: 'small',
+        dmg: damage,
+      }));
+    }
+  }
+
+  // Abilities like the lantern and bell slow or freeze bullets while active.
+  bulletTimeScale(bullet) {
+    if (this.abilityLeft <= 0 || !this.ability?.bulletTimeScale) return 1;
+    return this.ability.bulletTimeScale(this, bullet);
+  }
+
+  // SHIFT uses the equipped weapon's soul ability, then it recharges.
+  updateAbility(dt, input) {
+    const ability = this.ability;
+    if (!ability) return;
+    this.abilityCooldown = Math.max(0, this.abilityCooldown - dt);
+
+    const hasCharges = ability.charges === undefined || this.abilityUses < ability.charges;
+    const canUse = !ability.hold && hasCharges && this.abilityCooldown <= 0 && this.soul.iframes <= 0;
+    if (canUse && input.wasPressed('ability')) {
+      if (ability.activate?.(this, input) === false) {
+        // It fizzled: a short pause before trying again, but no charge used.
+        this.abilityCooldown = 0.4;
+      } else {
+        this.abilityUses++;
+        this.abilityLeft = ability.duration;
+        this.abilityCooldown = ability.cooldown;
+      }
+    }
+
+    ability.tick?.(this, dt);
+    if (this.abilityLeft > 0) {
+      this.abilityLeft = Math.max(0, this.abilityLeft - dt);
+      ability.update?.(this, dt);
+    }
+  }
+
+  // The text and recharge bar under the box.
+  abilityStatus() {
+    const ability = this.ability;
+    if (ability.hold) return { label: `HOLD SHIFT: ${ability.name}`, readiness: 1 };
+    let label = `SHIFT: ${ability.name}`;
+    let readiness = ability.cooldown ? 1 - this.abilityCooldown / ability.cooldown : 1;
+    if (ability.charges !== undefined) {
+      const left = ability.charges - this.abilityUses;
+      label += ` x${left}`;
+      if (left <= 0) readiness = 0;
+    }
+    return { label, readiness };
+  }
+
+  // Damage dealt by a soul ability (like the gauntlets' reflect) during the
+  // enemies' turn. It lands on one of the attackers still standing.
+  damageEnemy(amount) {
+    const standing = this.attacks.map((attack) => attack.foe).filter((foe) => foe.state === 'active' && foe.hp > 0);
+    const foe = standing[Math.floor(Math.random() * standing.length)] ?? this.activeFoes()[0];
+    if (!foe) return;
+    foe.hp = Math.max(0, foe.hp - amount);
+    foe.flash = ENEMY_FLASH_SECONDS;
+    this.addPopup(`${amount}`, foe.center.x, foe.pos.y - 4, hud.COLORS.danger);
+    sfx('hit');
+  }
+
+  healHero(amount) {
+    this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + amount);
+    this.addPopup(`+${amount}`, PARTY_FEET.x, PARTY_FEET.y - 46, hud.COLORS.enemyHp);
+    sfx('heal');
+  }
+
+  // Called by abilities that destroy a bullet.
+  onBlocked(bullet) {
+    this.gainSp(BLOCK_SP);
+    for (let i = 0; i < 3; i++) {
+      this.sparks.push({
+        x: bullet.x,
+        y: bullet.y,
+        vx: (Math.random() - 0.5) * 80,
+        vy: (Math.random() - 0.5) * 80,
+        life: SPARK_SECONDS,
+        color: hud.COLORS.teal,
+      });
+    }
+  }
+
+  checkBullets(dt) {
+    const soul = this.soul;
+    for (const bullet of this.bullets) {
+      const gap = bullet.edgeDistance(soul.x, soul.y);
+      if (gap < SOUL_RADIUS) this.hurt(bullet);
+      else if (gap < this.grazeRadius) this.graze(bullet, dt);
+      if (this.phase !== 'dodge') return;
+    }
+  }
+
+  graze(bullet, dt) {
     if (this.soul.iframes > 0) return;
-    let damage = bullet.dmg ?? this.enemy.bulletDamage;
-    if (this.defending) damage = Math.ceil(damage / 2);
-    this.hp = Math.max(0, this.hp - damage);
-    this.soul.iframes = HIT_IFRAMES;
-    if (this.hp <= 0) this.setPhase('death');
+    // Some weapons (the staff) multiply what grazing earns.
+    if (!bullet.grazed) {
+      bullet.grazed = true;
+      sfx('graze');
+      this.gainSp(GRAZE_SP * this.grazeMultiplier * this.grazeSpBonus);
+      this.dodgeTime += GRAZE_TURN_CUT_SECONDS;
+      this.addSparks(2, hud.COLORS.sp, 50);
+    } else {
+      this.gainSp(GRAZE_HOLD_SP_PER_SECOND * this.grazeMultiplier * this.grazeSpBonus * dt);
+    }
+    this.soul.graze();
   }
 
-  win(spared) {
-    this.result = spared ? 'spared' : 'victory';
-    const exp = spared ? 0 : this.enemy.rewards.exp;
-    this.showMessage(`* You won!\n* Got ${exp} EXP and ${this.enemy.rewards.money} D$.`, 'exit');
+  addSparks(count, color, speed) {
+    for (let i = 0; i < count; i++) {
+      this.sparks.push({
+        x: this.soul.x + (Math.random() - 0.5) * 6,
+        y: this.soul.y + (Math.random() - 0.5) * 6,
+        vx: (Math.random() - 0.5) * speed,
+        vy: (Math.random() - 0.5) * speed - 15,
+        life: SPARK_SECONDS,
+        color,
+      });
+    }
+  }
+
+  hurt(bullet) {
+    const soul = this.soul;
+    if (soul.iframes > 0 || soul.untouchable > 0) return;
+    let damage = bullet.dmg ?? this.foes[0].data.damage;
+    if (this.defending) damage = Math.ceil(damage / 2);
+    this.hero.hp = Math.max(0, this.hero.hp - damage);
+    sfx('hurt');
+    this.addPopup(`${damage}`, PARTY_FEET.x, PARTY_FEET.y - 46, hud.COLORS.danger);
+    this.shake = SHAKE_SECONDS;
+    this.heroFlinch = SHAKE_SECONDS;
+    soul.iframes = BASE_IFRAMES + skillBonus('iframes');
+    // Last Stand: the first knockout of the battle leaves you hanging on at 1 HP.
+    if (this.hero.hp <= 0 && this.lastStandReady) {
+      this.lastStandReady = false;
+      this.hero.hp = 1;
+      this.addPopup('LAST STAND!', soul.x, soul.y - 18, hud.COLORS.calm);
+    }
+    if (this.hero.hp <= 0) {
+      // The soul shatters into shards.
+      soul.shattered = true;
+      for (let i = 0; i < 4; i++) this.addSparks(3, soul.mode.color, 140);
+      this.setPhase('defeat');
+    }
+  }
+
+  // Every enemy is beaten or pacified: hand out what they left behind.
+  win() {
+    this.result = 'won';
+    const { exp, coins } = this.earned;
+    HERO_STATE.gold += coins;
+    let text = `You won!\nGot ${exp} EXP and ${coins} gold.`;
+    if (exp && gainExp(exp)) {
+      sfx('levelUp');
+      text += `\nLEVEL UP! Now LV ${HERO_STATE.level}. Press C to spend skill points.`;
+    }
+    this.showMessage(text, 'exit');
   }
 
   draw(ctx) {
-    ctx.font = FONT;
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'left';
+    this.backdrop(ctx, this.time, hud.STAGE_HEIGHT);
 
-    this.drawEnemy(ctx);
-    this.drawBox(ctx);
-    this.drawBoxContents(ctx);
-    if (this.phase === 'dialogue') this.drawBubble(ctx);
-    this.drawUi(ctx);
-    if (this.popup) this.drawPopup(ctx);
-  }
-
-  drawEnemy(ctx) {
-    const w = this.sprite.width * ENEMY.scale;
-    const h = this.sprite.height * ENEMY.scale;
-    let x = ENEMY.x;
-    if (this.phase === 'attackResult') {
-      x += Math.round(Math.sin(this.phaseTime * 40) * 3 * (1 - this.phaseTime));
-    }
-    const bob = this.result ? 0 : Math.round(Math.sin(this.time * 2) * 2);
-
+    // The stage shakes when you're hit; the UI stays put.
     ctx.save();
-    // A beaten enemy fades out behind the victory message.
-    if (this.result === 'victory') ctx.globalAlpha = Math.max(0, 1 - this.phaseTime);
-    ctx.drawImage(this.sprite, x, ENEMY.y + bob, w, h);
+    if (this.shake > 0) ctx.translate(Math.round((Math.random() - 0.5) * 4), Math.round((Math.random() - 0.5) * 4));
+    this.drawParty(ctx);
+    for (const foe of this.foes) this.drawFoe(ctx, foe);
+    this.drawBox(ctx);
     ctx.restore();
 
-    if (this.phase === 'attackResult') {
-      ctx.fillStyle = '#404040';
-      ctx.fillRect(ENEMY.x, ENEMY.y - 8, w, 5);
-      ctx.fillStyle = '#00c000';
-      ctx.fillRect(ENEMY.x, ENEMY.y - 8, Math.round((w * this.enemyHp) / this.enemy.maxHp), 5);
-    }
+    inUiSpace(ctx, () => {
+      this.drawSlash(ctx);
+      if (this.strike) this.strike.draw(ctx);
+      if (this.phase === 'taunt') {
+        const { pos } = this.speaker;
+        hud.drawSpeech(ctx, this.taunt.slice(0, this.visibleTauntChars()), pos.x * S - 4, (pos.y + 14) * S);
+      }
+      hud.drawSpGauge(ctx, this.sp, this.time);
+      this.drawFoeStatus(ctx);
+      hud.drawPanel(ctx);
+      const choosing = ['command', 'talk', 'spells', 'items', 'target'].includes(this.phase);
+      hud.drawPartyCard(ctx, this.hero, choosing);
+      const anyCalm = this.activeFoes().some((foe) => foe.calm >= 100);
+      hud.drawCommands(ctx, COMMANDS, this.selected, this.phase === 'command', anyCalm ? ['SPELLS'] : [], this.time);
+      this.drawPanelText(ctx);
+      this.drawPopups(ctx);
+    });
+  }
 
-    if (this.mercy > 0 && !this.result) {
-      const y = ENEMY.y + h + 4;
-      ctx.fillStyle = '#404040';
-      ctx.fillRect(ENEMY.x, y, w, 4);
-      ctx.fillStyle = '#ffe020';
-      ctx.fillRect(ENEMY.x, y, Math.round((w * this.mercy) / 100), 4);
-      ctx.fillText(`MERCY ${this.mercy}%`, ENEMY.x + w + 6, y - 2);
+  // One enemy: full name and bars under it; with several, a compact set beside each.
+  drawFoeStatus(ctx) {
+    if (this.foes.length === 1) {
+      const foe = this.foes[0];
+      if (foe.state !== 'active') return;
+      const top = (foe.pos.y + foe.sprite.height * SCALE + ENEMY_STATUS_GAP) * S;
+      hud.drawEnemyStatus(ctx, foe.name, foe.hp, foe.maxHp, foe.calm, foe.center.x * S, top, this.time);
+      return;
+    }
+    // Hidden while dodging, so the box stays clear.
+    if (this.phase === 'dodge' || this.phase === 'defeat') return;
+    for (const foe of this.activeFoes()) {
+      hud.drawEnemyMini(ctx, foe.name, foe.hp, foe.maxHp, foe.calm, foe.pos.x * S - 8, foe.pos.y * S + 6, this.time);
     }
   }
 
+  drawParty(ctx) {
+    this.party.forEach((member, i) => {
+      const sprite = member.sprite;
+      const w = sprite.width * SCALE;
+      const h = sprite.height * SCALE;
+      const feetX = PARTY_FEET.x - i * 10;
+      const feetY = PARTY_FEET.y + i * 30;
+
+      if (this.phase === 'defeat' && member === this.hero) {
+        // Collapsed onto their side.
+        ctx.save();
+        ctx.translate(feetX, feetY - 6);
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(sprite, -w / 2, -h, w, h);
+        ctx.restore();
+        return;
+      }
+
+      this.drawAura(ctx, feetX, feetY, h, member.color);
+
+      let x = feetX - w / 2;
+      const lunging = this.phase === 'fight' || this.phase === 'fightResult';
+      if (lunging) x += 12;
+      if (this.heroFlinch > 0) x += Math.round(Math.sin(this.heroFlinch * 60) * 2);
+      const y = feetY - h + Math.round(Math.sin(this.time * 2.5 + i));
+
+      // Afterimages trail behind a lunge.
+      if (lunging) {
+        for (const [offset, alpha] of [[-10, 0.25], [-20, 0.1]]) {
+          ctx.globalAlpha = alpha;
+          ctx.drawImage(sprite, x + offset, y, w, h);
+        }
+        ctx.globalAlpha = 1;
+      }
+      ctx.drawImage(sprite, x, y, w, h);
+    });
+  }
+
+  // A soft pulsing glow behind the hero, a shadow at their feet, and rising motes.
+  drawAura(ctx, feetX, feetY, height, color) {
+    const pulse = 0.75 + 0.25 * Math.sin(this.time * 2);
+    const cx = feetX;
+    const cy = feetY - height / 2;
+    const radius = 28;
+    const glow = ctx.createRadialGradient(cx, cy, 2, cx, cy, radius);
+    glow.addColorStop(0, `rgba(79, 227, 208, ${(0.3 * pulse).toFixed(3)})`);
+    glow.addColorStop(1, 'rgba(79, 227, 208, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(feetX, feetY - 1, 13, 3, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    for (const mote of this.motes) {
+      ctx.globalAlpha = Math.min(1, mote.life / AURA_MOTE_LIFE) * 0.8;
+      ctx.fillStyle = mote.life > AURA_MOTE_LIFE * 0.6 ? '#ffffff' : color;
+      ctx.fillRect(Math.round(mote.x), Math.round(mote.y), 1, 1);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // A white crescent sweeping across the enemy when a hit lands.
+  drawSlash(ctx) {
+    if (this.slashTime <= 0 || !this.slashFoe) return;
+    const progress = 1 - this.slashTime / SLASH_SECONDS;
+    const cx = this.slashFoe.center.x * S;
+    const cy = this.slashFoe.center.y * S;
+    ctx.save();
+    ctx.globalAlpha = 1 - progress;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 8 * (1 - progress) + 1;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.arc(cx - 30, cy - 30, 70, Math.PI * 0.05, Math.PI * (0.05 + 0.5 * Math.min(1, progress * 2)));
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // An enemy bobbing in place; shaking after a hit; fading away once beaten
+  // (or drifting up and away once pacified).
+  drawFoe(ctx, foe) {
+    const w = foe.sprite.width * SCALE;
+    const h = foe.sprite.height * SCALE;
+    let x = foe.pos.x;
+    let y = foe.pos.y + Math.round(Math.sin(this.time * 2 + foe.pos.y) * 2);
+    let alpha = 1;
+    if (this.phase === 'fightResult' && foe === this.target) {
+      x += Math.round(Math.sin(this.phaseTime * 40) * 3 * Math.max(0, 1 - this.phaseTime));
+    }
+    if (foe.state !== 'active') {
+      const gone = this.time - foe.leftAt;
+      if (gone >= FOE_FADE_SECONDS) return;
+      alpha = 1 - gone / FOE_FADE_SECONDS;
+      if (foe.state === 'pacified') y -= Math.round(gone * 16);
+    }
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(foe.flash > 0 ? foe.flashSprite : foe.sprite, x, y, w, h);
+    ctx.restore();
+  }
+
+  // The box and soul are drawn in UI space (fine outline, detailed heart);
+  // the bullets in world space (pixel art).
   drawBox(ctx) {
-    const b = this.box;
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(Math.round(b.x) - 2, Math.round(b.y) - 2, Math.round(b.w) + 4, Math.round(b.h) + 4);
-    ctx.fillStyle = '#000';
-    ctx.fillRect(Math.round(b.x), Math.round(b.y), Math.round(b.w), Math.round(b.h));
-  }
+    if (this.phase !== 'dodge' && this.phase !== 'defeat') return;
+    const box = hud.BOX;
+    const open = this.phase === 'dodge' ? Math.min(1, this.phaseTime / BOX_OPEN_SECONDS) : 1;
+    inUiSpace(ctx, () => hud.drawBoxBack(ctx, open));
 
-  drawBoxContents(ctx) {
-    const b = this.box;
-    if (this.phase === 'menu') {
-      ctx.fillStyle = '#fff';
-      this.drawLines(ctx, this.flavor, b.x + 8, b.y + 8);
-    } else if (this.phase === 'message') {
-      ctx.fillStyle = '#fff';
-      this.drawLines(ctx, this.message.text, b.x + 8, b.y + 8);
-    } else if (this.phase === 'act') {
-      this.enemy.acts.forEach((act, i) => {
-        const affordable = !act.tp || this.tp >= act.tp;
-        ctx.fillStyle = affordable ? '#fff' : '#707070';
-        const label = act.tp ? `${act.name} (${act.tp} TP)` : act.name;
-        ctx.fillText(label, b.x + 26, b.y + 8 + i * 14);
-        if (i === this.cursor) ctx.drawImage(HEART_SPRITE, Math.round(b.x) + 12, Math.round(b.y) + 9 + i * 14);
-      });
-    } else if (this.phase === 'item') {
-      ctx.fillStyle = '#fff';
-      this.items.forEach((item, i) => {
-        ctx.fillText(item, b.x + 26, b.y + 8 + i * 14);
-        if (i === this.cursor) ctx.drawImage(HEART_SPRITE, Math.round(b.x) + 12, Math.round(b.y) + 9 + i * 14);
-      });
-    } else if (this.phase === 'attack') {
-      this.attackBar.draw(ctx, Math.round(b.x + (b.w - 200) / 2), Math.round(b.y + b.h / 2 - 8), 16);
-    } else if (this.phase === 'dodge' || this.phase === 'death') {
+    if (open >= 1) {
       ctx.save();
       ctx.beginPath();
-      ctx.rect(Math.round(b.x), Math.round(b.y), Math.round(b.w), Math.round(b.h));
+      ctx.rect(box.x, box.y, box.w, box.h);
       ctx.clip();
       for (const bullet of this.bullets) bullet.draw(ctx);
-      for (const p of this.particles) {
-        ctx.globalAlpha = p.life / GRAZE_SPARK_LIFE;
-        ctx.fillStyle = '#ffe020';
-        ctx.fillRect(Math.round(p.x), Math.round(p.y), 2, 2);
+      for (const spark of this.sparks) {
+        ctx.globalAlpha = spark.life / SPARK_SECONDS;
+        ctx.fillStyle = spark.color;
+        ctx.fillRect(Math.round(spark.x), Math.round(spark.y), 1, 1);
       }
       ctx.globalAlpha = 1;
-      // The soul winks out shortly after death.
-      if (!(this.phase === 'death' && this.phaseTime > 0.5)) this.soul.draw(ctx);
       ctx.restore();
+
+      inUiSpace(ctx, () => {
+        const r = hud.boxRect();
+        ctx.beginPath();
+        ctx.rect(r.x, r.y, r.w, r.h);
+        ctx.clip();
+        if (this.ability) {
+          this.ability.drawAlways?.(ctx, this);
+          if (this.abilityLeft > 0) this.ability.draw?.(ctx, this, this.abilityLeft);
+        }
+        this.soul.draw(ctx);
+      });
+    }
+
+    inUiSpace(ctx, () => {
+      hud.drawBoxBorder(ctx, open);
+      if (this.ability && this.phase === 'dodge' && open >= 1) {
+        const { label, readiness } = this.abilityStatus();
+        hud.drawAbility(ctx, label, readiness);
+      }
+    });
+  }
+
+  drawPanelText(ctx) {
+    switch (this.phase) {
+      case 'message':
+        hud.drawTextBox(ctx, this.message.text);
+        break;
+      case 'command':
+        hud.drawTextBox(ctx, this.flavor);
+        break;
+      case 'target':
+        hud.drawTargets(ctx, this.activeFoes(), this.cursor, this.time);
+        break;
+      case 'talk':
+        hud.drawOptions(ctx, this.target.data.talk.map((option) => ({ label: option.name, enabled: true })), this.cursor);
+        break;
+      case 'spells': {
+        const anyCalm = this.activeFoes().some((foe) => foe.calm >= 100);
+        hud.drawOptions(ctx, this.spells.map((spell) => ({
+          label: spell.name,
+          note: `${spell.sp}% SP`,
+          enabled: this.sp >= spell.sp && (spell.id !== 'pacify' || anyCalm),
+        })), this.cursor);
+        break;
+      }
+      case 'items':
+        hud.drawOptions(ctx, this.items.map((item) => ({
+          label: item,
+          note: `+${ITEM_HEAL} HP`,
+          noteColor: hud.COLORS.enemyHp,
+          enabled: true,
+        })), this.cursor);
+        break;
+      case 'fight':
+      case 'fightResult':
+        if (this.strike) hud.drawTextBox(ctx, 'Press Z as each ring meets the target!');
+        break;
+      case 'dodge':
+        if (this.dodgeHint) hud.drawTextBox(ctx, this.dodgeHint);
+        break;
     }
   }
 
-  drawLines(ctx, text, x, y) {
-    text.split('\n').forEach((line, i) => ctx.fillText(line, Math.round(x), Math.round(y) + i * LINE_HEIGHT));
-  }
-
-  drawBubble(ctx) {
-    const x = 192;
-    const y = 14;
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(x, y, 118, 50);
-    // Tail pointing at the enemy.
-    ctx.beginPath();
-    ctx.moveTo(x, y + 18);
-    ctx.lineTo(x - 8, y + 22);
-    ctx.lineTo(x, y + 26);
-    ctx.fill();
-    ctx.fillStyle = '#000';
-    const visible = this.quipDone ? this.quip.length : Math.floor(this.phaseTime * QUIP_SPEED);
-    this.drawLines(ctx, this.quip.slice(0, visible), x + 6, y + 6);
-  }
-
-  drawUi(ctx) {
-    BUTTONS.forEach((label, i) => {
-      const x = BUTTONS_X + i * (BUTTON.w + BUTTON.gap);
-      const active = this.phase === 'menu' && i === this.selected;
-      const spareReady = label === 'SPARE' && this.mercy >= 100;
-      ctx.fillStyle = active ? '#ffb020' : spareReady ? '#ffe020' : '#c85a00';
-      ctx.fillRect(x, BUTTON.y, BUTTON.w, BUTTON.h);
-      ctx.fillStyle = '#000';
-      ctx.fillRect(x + 2, BUTTON.y + 2, BUTTON.w - 4, BUTTON.h - 4);
-      ctx.textAlign = 'center';
-      ctx.fillStyle = active ? '#fff' : spareReady ? '#ffe020' : '#ffa040';
-      ctx.fillText(label, x + BUTTON.w / 2 + (active ? 4 : 0), BUTTON.y + 10);
-      if (active) ctx.drawImage(HEART_SPRITE, x + 5, BUTTON.y + 10);
-    });
-    ctx.textAlign = 'left';
-
-    // Name, LV and HP along the bottom.
-    ctx.fillStyle = '#fff';
-    ctx.fillText(`${PLAYER.name}  LV ${PLAYER.lv}`, 48, 190);
-    ctx.fillText('HP', 150, 190);
-    ctx.fillStyle = '#802020';
-    ctx.fillRect(166, 189, 54, 9);
-    ctx.fillStyle = '#ffe000';
-    ctx.fillRect(166, 189, Math.round((54 * this.hp) / PLAYER.maxHp), 9);
-    ctx.fillStyle = '#fff';
-    ctx.fillText(`${this.hp}/${PLAYER.maxHp}`, 226, 190);
-
-    // TP gauge on the left, charged by grazing and defending.
-    ctx.fillText('TP', 20, 84);
-    ctx.fillStyle = '#802020';
-    ctx.fillRect(22, 96, 8, 88);
-    const tpHeight = Math.round((88 * this.tp) / 100);
-    ctx.fillStyle = '#ff8020';
-    ctx.fillRect(22, 96 + 88 - tpHeight, 8, tpHeight);
-    ctx.fillStyle = '#fff';
-    ctx.fillText(`${Math.round(this.tp)}%`, 14, 188);
-  }
-
-  drawPopup(ctx) {
-    ctx.textAlign = 'center';
-    ctx.font = 'bold 10px monospace';
-    ctx.fillStyle = '#ff4040';
-    ctx.fillText(this.popup.text, 160, Math.round(ENEMY.y + 20 - this.popup.t * 14));
-    ctx.font = FONT;
-    ctx.textAlign = 'left';
+  drawPopups(ctx) {
+    for (const popup of this.popups) {
+      ctx.globalAlpha = 1 - popup.t / POPUP_SECONDS;
+      drawText(ctx, popup.text, popup.x, popup.y - popup.t * 30, { size: 32, color: popup.color, align: 'center', outline: hud.COLORS.outline });
+    }
+    ctx.globalAlpha = 1;
   }
 }

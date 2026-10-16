@@ -1,0 +1,50 @@
+# ROGUE DUMMY
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/dummy.js.
+
+[intro]
+ROGUE DUMMY lurches out of the rubble!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The dummy sways in a wind that isn't there.
+
+Dust drifts down from the broken ceiling.
+
+The dummy practices a menacing glare.
+
+Somewhere in the ruins, a stone settles.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Feel my cotton wrath!
+
+You can't dodge forever!
+
+My stuffing is my strength!
+
+Threads of fury!
+
+I was built for this!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/dummy.js.
+[talk: Inspect]
+ROGUE DUMMY - HP 120
+A training dummy that went freelance. Full of malice. And stuffing.
+
+[talk: Chat]
+You chat about the weather. It nods along, stiffly.
+
+[talk: Praise]
+You praise its stitching. It blushes through the burlap.
+
+[talk: Hum]
+You hum something calm. Its stuffing settles.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+ROGUE DUMMY comes apart at the seams!
+
+[pacified]
+ROGUE DUMMY was pacified and drifts away.

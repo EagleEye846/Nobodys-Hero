@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ruins Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+  <header class="topbar">
+    <button type="button" class="brand" id="brand" data-tip="Home">RUINS STUDIO</button>
+    <nav id="tabs" class="tabs" aria-label="Tools"></nav>
+    <div class="topbar-right">
+      <div id="file" class="file-chip" hidden></div>
+      <label class="switch" data-tip="Show the code and the extra settings">
+        <input type="checkbox" id="advanced">
+        <span class="switch-track"></span>
+        <span>Advanced</span>
+      </label>
+      <div id="save-area" class="save-area"></div>
+    </div>
+  </header>
+  <div id="server-hint" class="server-hint" hidden></div>
+  <main id="panels"></main>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

@@ -96,3 +96,71 @@ export const PLAYER_SPRITES = {
   leftIdle: [...HEAD_LEFT, ...BODY_LEFT, ...LEGS_LEFT_IDLE],
   leftStep: [...HEAD_LEFT, ...BODY_LEFT, ...LEGS_LEFT_STEP],
 };
+
+// Running: a long stride with the arms pumping, then a "pass" frame with the
+// legs tucked under (drawn a pixel higher, for a bounce). Facing sideways, the
+// head leans forward and the scarf streams out behind.
+
+// One arm swung forward (up), the other back (down).
+const RUN_BODY_FRONT = [
+  '..kffffffk..',
+  '.kcffffffck.',
+  'ksccccccccck',
+  'kcccccccccck',
+  'kcccccccccsk',
+  '.kcccccccck.',
+];
+
+const RUN_LEGS_FRONT_STRIDE = [
+  '.kppppppppk.',
+  '.kbbk..kppk.',
+  '.......kbbk.',
+];
+
+const RUN_LEGS_FRONT_PASS = [
+  '.kppppppppk.',
+  '..kppkkppk..',
+  '..kbbkkbbk..',
+];
+
+// The head pushed a pixel forward, leaning into the run.
+const HEAD_LEFT_LEANING = HEAD_LEFT.map((row) => `${row.slice(1)}.`);
+
+const RUN_BODY_LEFT_REACH = [
+  '..kffffffk..',
+  '..kccccffffk',
+  '..kccccccck.',
+  '.skccccccck.',
+  '..kccccccck.',
+  '..kccccccck.',
+];
+
+const RUN_BODY_LEFT_SWING = [
+  '..kffffffk..',
+  '..kccccfffk.',
+  '..kccccccck.',
+  '..kcccccsck.',
+  '..kcccccsck.',
+  '..kccccccck.',
+];
+
+const RUN_LEGS_LEFT_STRIDE = [
+  '..kpppppppk.',
+  '.kppk...kppk',
+  'kbbk....kbbk',
+];
+
+const RUN_LEGS_LEFT_PASS = [
+  '..kpppppppk.',
+  '....kpppk...',
+  '....kbbbk...',
+];
+
+export const PLAYER_RUN_SPRITES = {
+  downStride: [...HEAD_DOWN, ...RUN_BODY_FRONT, ...RUN_LEGS_FRONT_STRIDE],
+  downPass: [...HEAD_DOWN, ...BODY_FRONT, ...RUN_LEGS_FRONT_PASS],
+  upStride: [...HEAD_UP, ...RUN_BODY_FRONT, ...RUN_LEGS_FRONT_STRIDE],
+  upPass: [...HEAD_UP, ...BODY_FRONT, ...RUN_LEGS_FRONT_PASS],
+  leftStride: [...HEAD_LEFT_LEANING, ...RUN_BODY_LEFT_REACH, ...RUN_LEGS_LEFT_STRIDE],
+  leftPass: [...HEAD_LEFT_LEANING, ...RUN_BODY_LEFT_SWING, ...RUN_LEGS_LEFT_PASS],
+};

@@ -1,0 +1,50 @@
+# SHADE
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/shade.js.
+
+[intro]
+A SHADE peels itself off the wall and turns to face you!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The shade stretches whenever the lanterns flicker.
+
+It's hard to tell where it ends and the dark begins.
+
+Its eyes follow you, never blinking.
+
+The air goes cold around it.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Nowhere to run...
+
+The dark is closing in.
+
+Stay. Stay in the shadow.
+
+I'm all around you.
+
+Hush now.
+
+# One section per TALK option. The names after "talk:" must match
+# src/data/enemies/shade.js.
+[talk: Inspect]
+SHADE - HP 130
+A shadow that got left behind when its owner walked away. It's been waiting ever since.
+
+[talk: Stand in its shadow]
+You step into its shadow. It shivers, like it hasn't been noticed in a long time.
+
+[talk: Share a secret]
+You whisper a secret to the shade. Its eyes soften.
+
+[talk: Say its name]
+You don't know its name, so you make one up. It seems to like it.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SHADE breaks apart into wisps, and the wisps fade into the dark.
+
+[pacified]
+SHADE drifts back to the wall, a little lighter than before.

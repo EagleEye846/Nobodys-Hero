@@ -1,0 +1,33 @@
+# THE RUINS: signs and other things you can inspect, in every room of the Ruins.
+# Each entry (separated by a blank line) is one page of the textbox.
+# Section names match the `text` of each prop in src/data/rooms/.
+
+[welcome_sign]
+Welcome to the Ruins.
+Use the arrow keys to walk.
+
+Hold X or Shift to run.
+Press Z to read signs, and C to open your menu.
+
+The old floor here is fragile. Careful where you jump.
+
+[east_sign]
+This is the east room.
+A rogue dummy haunts it. Touch it and it attacks!
+
+The doorway to the north leads to the Lantern Hall.
+
+[hall_plaque]
+LANTERN HALL
+The lanterns here were lit by the first Keeper, and have never once gone out.
+
+Something with wings has been circling them lately.
+
+# Shown at save points (the floating crystals).
+[save_point]
+The crystal's warm light washes over you.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)

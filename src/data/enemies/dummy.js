@@ -1,38 +1,37 @@
 import { DUMMY_PALETTE, DUMMY_SPRITE } from '../art/dummy.js';
 
-// Lines are pre-wrapped: battle box text fits ~45 characters, speech bubbles ~22.
+// The ROGUE DUMMY's numbers. Everything it says is in text/enemies/rogue_dummy.txt.
 export const ROGUE_DUMMY = {
   name: 'ROGUE DUMMY',
+  textFile: 'enemies/rogue_dummy.txt',
   sprite: { rows: DUMMY_SPRITE, palette: DUMMY_PALETTE },
   maxHp: 120,
-  bulletDamage: 8,
+  damage: 6,
 
-  // One pattern per enemy turn, in this order (see src/battle/bullets.js).
-  patterns: ['rain', 'aimed', 'spiral', 'bounce'],
+  // The first enemy you meet, so its attacks are a little gentler: fewer bullets (density)
+  // that fly slower (speed). 1 is full strength.
+  difficulty: { density: 0.8, speed: 0.85 },
 
-  // Box text at the start of each of your turns.
-  flavor: [
-    '* The rogue dummy sways in a wind\n  that isn\'t there.',
-    '* Smells like fresh cotton.',
-    '* The dummy practices its menacing\n  glare.',
-    '* Loose threads drift across the\n  floor.',
+  // Each enemy turn picks one at random (never the same twice in a row).
+  // Higher weight = more likely. Its attacks live in src/battle/attacks/dummy.js;
+  // every enemy needs at least three. Patterns that change the soul mode (like
+  // 'pillars') need `boss: true`.
+  patterns: [
+    { name: 'pinCushion', weight: 3 },
+    { name: 'buttonBounce', weight: 2 },
+    { name: 'stitchLine', weight: 2 },
+    { name: 'stuffingBurst', weight: 2 },
+    { name: 'trainingTargets', weight: 2 },
   ],
 
-  // Speech bubble lines before each attack.
-  quips: [
-    'Feel the wrath of\n100% cotton!',
-    'You can\'t dodge\nforever!',
-    'My stuffing is\nmy strength!',
-    'Threads of fury!',
-    'I was built\nfor this!',
+  // TALK options. Each name needs a [talk: Name] section in the text file.
+  // `calm` raises the enemy's MERCY meter; at 100% the Pacify spell ends the fight peacefully.
+  talk: [
+    { name: 'Inspect' },
+    { name: 'Chat', calm: 30 },
+    { name: 'Praise', calm: 35 },
+    { name: 'Hum', calm: 40 },
   ],
 
-  acts: [
-    { name: 'Check', text: '* ROGUE DUMMY - AT 5 DF 2\n* A training dummy that went\n  freelance. Full of malice. And\n  cotton.' },
-    { name: 'Talk', mercy: 30, text: '* You make small talk.\n* The dummy nods along politely.' },
-    { name: 'Compliment', mercy: 30, text: '* You praise its stitching.\n* It blushes through the burlap.' },
-    { name: 'Soothe', tp: 32, mercy: 45, text: '* You channel calm energy.\n* The dummy\'s stuffing settles.' },
-  ],
-
-  rewards: { exp: 40, money: 31 },
+  rewards: { exp: 40, coins: 31 },
 };

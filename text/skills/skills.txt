@@ -1,0 +1,38 @@
+# Skill descriptions for the SKILLS menu (C in the overworld).
+# One section per skill id in src/data/skills.js.
+
+[sharpened]
+FIGHT does 15% more damage.
+
+[keen_eye]
+The strike rings' hit window is wider, so PERFECT hits come easier.
+
+[rend]
+Learn the spell Rend: 40% SP for a guaranteed 30 damage.
+
+[flurry]
+FIGHT gets a fourth ring to hit.
+
+[focus]
+Grazing builds 25% more SP.
+
+[lull]
+Learn the spell Lull: 24% SP to raise an enemy's MERCY by 30%.
+
+[wide_graze]
+Your graze area grows, so near misses are easier to catch.
+
+[starfall]
+Learn the spell Starfall: 70% SP for 45 damage.
+
+[tough]
++15 max HP.
+
+[steady_soul]
+Stay invincible a little longer after you're hit.
+
+[guard_up]
+DEFEND also heals 8 HP.
+
+[last_stand]
+Once per battle, survive a hit that would knock you out, with 1 HP.

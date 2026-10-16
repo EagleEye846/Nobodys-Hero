@@ -66,10 +66,52 @@ function drawPlant(ctx, x, y, tx, ty, room) {
   ctx.fillRect(x + 9, y + 5, 2, 2);
 }
 
+// A stone pillar with a small lantern burning in a niche.
+function drawPillar(ctx, x, y, tx, ty, room) {
+  drawFloor(ctx, x, y, tx, ty, room);
+  ctx.fillStyle = '#120c1c';
+  ctx.fillRect(x + 3, y, 10, T);
+  ctx.fillStyle = '#5a4884';
+  ctx.fillRect(x + 4, y, 8, T);
+  ctx.fillStyle = '#7a66a8';
+  ctx.fillRect(x + 4, y, 2, T);
+  ctx.fillStyle = '#3a2a5e';
+  ctx.fillRect(x + 4, y + 3, 8, 1);
+  ctx.fillRect(x + 4, y + 13, 8, 1);
+  ctx.fillStyle = '#120c1c';
+  ctx.fillRect(x + 5, y + 5, 6, 6);
+  ctx.fillStyle = '#ffcc66';
+  ctx.fillRect(x + 6, y + 6, 4, 4);
+  ctx.fillStyle = '#fff2c0';
+  ctx.fillRect(x + 7, y + 7, 2, 2);
+}
+
+// A dark doorway with faint steps. The top of a doorway gets rounded arch corners.
+function drawDoorway(ctx, x, y, tx, ty, room) {
+  ctx.fillStyle = '#07040f';
+  ctx.fillRect(x, y, T, T);
+  ctx.fillStyle = '#140b26';
+  for (let step = 4; step < T; step += 4) ctx.fillRect(x + 2, y + step, T - 4, 1);
+
+  if (room.tileAt(tx, ty - 1) !== 'D') {
+    ctx.fillStyle = '#4b3d78';
+    if (room.tileAt(tx - 1, ty) !== 'D') {
+      ctx.fillRect(x, y, 4, 2);
+      ctx.fillRect(x, y + 2, 2, 2);
+    }
+    if (room.tileAt(tx + 1, ty) !== 'D') {
+      ctx.fillRect(x + T - 4, y, 4, 2);
+      ctx.fillRect(x + T - 2, y + 2, 2, 2);
+    }
+  }
+}
+
 export const TILES = {
   '#': { solid: true, draw: drawWallTop },
   W: { solid: true, draw: drawWallFace },
   '.': { solid: false, draw: drawFloor },
   r: { solid: false, draw: drawRug },
   p: { solid: true, draw: drawPlant },
+  P: { solid: true, draw: drawPillar },
+  D: { solid: false, draw: drawDoorway },
 };
