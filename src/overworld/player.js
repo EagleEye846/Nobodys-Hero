@@ -1,3 +1,4 @@
+import { TILE_SIZE as T } from '../config.js';
 import { makeSprite, flipHorizontal } from '../engine/sprite.js';
 import { PLAYER_PALETTE, PLAYER_SPRITES } from '../data/art/player.js';
 
@@ -5,6 +6,15 @@ const WALK_SPEED = 70; // pixels per second
 const RUN_SPEED = 130;
 const SECONDS_PER_FRAME = 0.15;
 const RUN_ANIMATION_RATE = 1.6;
+
+const JUMP_SPEED = 150; // pixels per second, upwards
+const GRAVITY = 700; // pixels per second squared
+// Pressing jump this long before landing still counts, so mashing feels responsive.
+const JUMP_BUFFER = 0.12;
+
+// After the floor breaks, the player hangs in the air this long before dropping.
+const FALL_PAUSE = 0.25;
+const FALL_GRAVITY = 500;
 
 // Collision box around the feet, so the head can overlap walls like in Deltarune.
 const HITBOX_HALF_WIDTH = 5;
@@ -18,7 +28,7 @@ const upStep = sprite('upStep');
 const leftIdle = sprite('leftIdle');
 const leftStep = sprite('leftStep');
 
-// 4-frame walk cycles. Frame 0 doubles as the standing pose.
+// 4-frame walk cycles. Frame 0 doubles as the standing pose and frame 1 as the jump pose.
 // Front and back views mirror the step frame to alternate legs.
 const ANIMATIONS = {
   down: [downIdle, downStep, downIdle, flipHorizontal(downStep)],
@@ -37,31 +47,77 @@ export class Player {
     this.facing = 'down';
     this.moving = false;
     this.animationTime = 0;
+
+    // Height above the ground. Jumping is visual only; collision stays at the feet.
+    this.z = 0;
+    this.velocityZ = 0;
+    this.jumpBufferTime = 0;
+    this.landedThisFrame = false;
+
+    this.hole = null; // set once the player is falling into a broken tile
+    this.fallTime = 0;
   }
 
   get sortY() {
     return this.y;
   }
 
+  get isAirborne() {
+    return this.z > 0 || this.velocityZ > 0;
+  }
+
+  get isFalling() {
+    return this.hole !== null;
+  }
+
   update(dt, input, room) {
+    this.landedThisFrame = false;
+
+    if (this.isFalling) {
+      this.fallTime += dt;
+      return;
+    }
+
     const dx = (input.isDown('right') ? 1 : 0) - (input.isDown('left') ? 1 : 0);
     const dy = (input.isDown('down') ? 1 : 0) - (input.isDown('up') ? 1 : 0);
     this.moving = dx !== 0 || dy !== 0;
 
-    if (!this.moving) {
+    if (this.moving) {
+      this.facing = chooseFacing(dx, dy, this.facing);
+
+      // Diagonals aren't normalised, matching Deltarune's movement feel.
+      const running = input.isDown('cancel');
+      const speed = running ? RUN_SPEED : WALK_SPEED;
+      this.moveAxis(room, 'x', dx * speed * dt);
+      this.moveAxis(room, 'y', dy * speed * dt);
+
+      this.animationTime += dt * (running ? RUN_ANIMATION_RATE : 1);
+    } else {
       this.animationTime = 0;
+    }
+
+    this.updateJump(dt, input);
+  }
+
+  updateJump(dt, input) {
+    this.jumpBufferTime = Math.max(0, this.jumpBufferTime - dt);
+
+    if (this.isAirborne) {
+      if (input.wasPressed('jump')) this.jumpBufferTime = JUMP_BUFFER;
+      this.velocityZ -= GRAVITY * dt;
+      this.z += this.velocityZ * dt;
+      if (this.z <= 0) {
+        this.z = 0;
+        this.velocityZ = 0;
+        this.landedThisFrame = true;
+      }
       return;
     }
 
-    this.facing = chooseFacing(dx, dy, this.facing);
-
-    // Diagonals aren't normalised, matching Deltarune's movement feel.
-    const running = input.isDown('cancel');
-    const speed = running ? RUN_SPEED : WALK_SPEED;
-    this.moveAxis(room, 'x', dx * speed * dt);
-    this.moveAxis(room, 'y', dy * speed * dt);
-
-    this.animationTime += dt * (running ? RUN_ANIMATION_RATE : 1);
+    if (input.wasPressed('jump') || this.jumpBufferTime > 0) {
+      this.jumpBufferTime = 0;
+      this.velocityZ = JUMP_SPEED;
+    }
   }
 
   // Moves one pixel at a time and stops at the first solid pixel. Fractional
@@ -90,6 +146,11 @@ export class Player {
     return room.collides(x - HITBOX_HALF_WIDTH, y - HITBOX_HEIGHT, x + HITBOX_HALF_WIDTH, y);
   }
 
+  // The tile under the player's feet.
+  tilePosition() {
+    return [Math.floor(this.x / T), Math.floor((this.y - 1) / T)];
+  }
+
   // The point just in front of the player, checked when they press confirm.
   interactionPoint() {
     switch (this.facing) {
@@ -100,10 +161,61 @@ export class Player {
     }
   }
 
+  // Centres the player over the broken tile and starts the fall.
+  fallInto(tx, ty) {
+    this.hole = { x: tx * T, y: ty * T };
+    this.x = this.hole.x + T / 2;
+    this.y = this.hole.y + T - 4;
+    this.facing = 'down';
+    this.moving = false;
+    this.z = 0;
+    this.velocityZ = 0;
+    this.fallTime = 0;
+  }
+
   draw(ctx, camera) {
+    if (this.isFalling) {
+      this.drawFalling(ctx, camera);
+      return;
+    }
+
     const frames = ANIMATIONS[this.facing];
-    const frame = this.moving ? frames[Math.floor(this.animationTime / SECONDS_PER_FRAME) % frames.length] : frames[0];
-    ctx.drawImage(frame, this.x - Math.floor(frame.width / 2) - camera.x, this.y - frame.height - camera.y);
+    let frame = frames[0];
+    if (this.isAirborne) {
+      frame = frames[1];
+      this.drawShadow(ctx, camera);
+    } else if (this.moving) {
+      frame = frames[Math.floor(this.animationTime / SECONDS_PER_FRAME) % frames.length];
+    }
+    this.drawFrame(ctx, camera, frame, this.y - Math.round(this.z));
+  }
+
+  drawShadow(ctx, camera) {
+    const x = this.x - camera.x;
+    const y = this.y - camera.y;
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(x - 4, y - 3, 8, 3);
+    ctx.fillRect(x - 5, y - 2, 10, 1);
+  }
+
+  // Drops the sprite into the hole, hiding whatever has passed below the hole's near edge.
+  drawFalling(ctx, camera) {
+    const dropTime = Math.max(0, this.fallTime - FALL_PAUSE);
+    const drop = Math.round(0.5 * FALL_GRAVITY * dropTime * dropTime);
+    const holeX = this.hole.x - camera.x;
+    const holeY = this.hole.y - camera.y;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, ctx.canvas.width, holeY);
+    ctx.rect(holeX, holeY, T, T);
+    ctx.clip();
+    this.drawFrame(ctx, camera, ANIMATIONS.down[0], this.y + drop);
+    ctx.restore();
+  }
+
+  drawFrame(ctx, camera, frame, feetY) {
+    ctx.drawImage(frame, this.x - Math.floor(frame.width / 2) - camera.x, feetY - frame.height - camera.y);
   }
 }
 

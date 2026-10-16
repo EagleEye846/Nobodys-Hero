@@ -1,6 +1,8 @@
 // Maps physical keys to game actions, following Deltarune's defaults:
 // arrows to move, Z/Enter to confirm, X/Shift to cancel (and run), C/Ctrl for the menu.
+// Space to jump is our own addition.
 const KEY_BINDINGS = {
+  Space: 'jump',
   ArrowUp: 'up', KeyW: 'up',
   ArrowDown: 'down', KeyS: 'down',
   ArrowLeft: 'left', KeyA: 'left',

@@ -44,7 +44,11 @@ export const START_ROOM = {
       sprite: 'sign',
       x: 21,
       y: 3,
-      text: ['This is the east room.\nThe battle system will start\nfrom here someday.'],
+      text: ['This is the east room.\nA rogue dummy haunts it.\nTouch it and it attacks!'],
     },
   ],
+
+  // Enemies wandering the room. Touching one starts a battle.
+  // x/y and the patrol bounds are tile coordinates; `enemy` picks the battle stats.
+  npcs: [{ art: 'dummy', enemy: 'dummy', x: 21, y: 11, patrol: [18, 24] }],
 };
