@@ -1,0 +1,19 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Keep pixel art crisp when the canvas is scaled up. */
+canvas {
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
