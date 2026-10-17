@@ -28,7 +28,14 @@ export class Prop {
   constructor({
     sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
     gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
+    walkable = false, light = null, seenInLight = false,
   }) {
+    // In a dark room: how far it lights (pixels), and whether it can only be
+    // seen (and used) inside your own light, like writing on a wall.
+    this.light = light;
+    this.seenInLight = seenInLight;
+    // Something flat on the floor (a puddle, a rug) that you walk over, but can still look at.
+    this.walkable = walkable;
     this.gives = gives;
     this.takenLook = taken;
     this.lever = lever;
@@ -94,6 +101,11 @@ export class Prop {
     return left < this.x + this.width && right > this.x && top < this.y + this.height && bottom > this.y;
   }
 
+  // Whether it stands in the way of something in that box.
+  blocks(left, top, right, bottom) {
+    return !this.walkable && this.overlaps(left, top, right, bottom);
+  }
+
   draw(ctx, camera) {
     if (this.hidden || this.isOpen) return;
     const seconds = performance.now() / 1000;
@@ -104,7 +116,8 @@ export class Prop {
     if (this.save) bob = Math.round(Math.sin(seconds * 2.5) * 2);
 
     const x = this.x + Math.floor((this.width - frame.width) / 2) - camera.x;
-    const y = this.y + T - frame.height - bob - camera.y;
+    // Standing on a raised block (`raise`, set by the room): drawn on top of it.
+    const y = this.y + T - (this.raise ?? 0) - frame.height - bob - camera.y;
     if (this.save) {
       const cx = x + this.sprite.width / 2;
       const cy = y + 6;

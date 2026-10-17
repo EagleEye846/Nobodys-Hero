@@ -1,7 +1,7 @@
 import { UI_WIDTH, UI_HEIGHT } from '../config.js';
 import { textSection } from '../engine/textLoader.js';
 import { WEAPONS } from '../data/weapons.js';
-import { ITEMS, healLabel } from '../data/items.js';
+import { ITEMS, healLabel, lightLabel } from '../data/items.js';
 import { SOUL_ABILITIES } from '../battle/soulAbilities.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines } from './text.js';
@@ -25,7 +25,8 @@ export const MENU_COLORS = {
 
 const BORDER = 4;
 const LIST = { x: MENU.x + 24, y: MENU.y + 78, width: 272, rowHeight: 30, rows: 8 };
-const DETAILS = { x: MENU.x + 320, y: MENU.y + 78, w: 216 };
+// `h` is how tall the panel is: a description too long for it shrinks to fit.
+const DETAILS = { x: MENU.x + 320, y: MENU.y + 78, w: 216, h: MENU.h - 78 - 42 };
 
 // Where the title row sits, for menus that add their own header text.
 export const HEADER_Y = MENU.y + 16;
@@ -94,12 +95,23 @@ export function drawWeaponDetails(ctx, id, area = DETAILS) {
   y += 34;
   drawText(ctx, `FIGHT x${weapon.fightPower}`, area.x, y, { size: 24, color: MENU_COLORS.fight });
   y += 26;
-  const abilityLabel = ability ? `${ability.hold ? 'HOLD SHIFT' : 'SHIFT'}: ${ability.name}` : 'No soul ability';
+  const abilityLabel = ability ? `${ability.hold ? 'HOLD SHIFT' : 'SHIFT'}: ${ability.name}` : 'No shadow ability';
   drawText(ctx, abilityLabel, area.x, y, { size: 24, color: ability ? MENU_COLORS.ability : MENU_COLORS.dim });
   y += 34;
 
-  const lines = wrapLines(ctx, textSection(WEAPON_TEXT, id)[0], area.w, 22);
-  drawText(ctx, lines.join('\n'), area.x, y, { size: 22, lineHeight: 22, color: MENU_COLORS.description });
+  drawDescription(ctx, textSection(WEAPON_TEXT, id)[0], area, y);
+}
+
+// A description under the details, in the space left: smaller if it needs to be.
+function drawDescription(ctx, text, area, y) {
+  const room = area.h ? area.y + area.h - y : Infinity;
+  let size = 22;
+  let lines = wrapLines(ctx, text, area.w, size);
+  while (size > 14 && lines.length * size > room) {
+    size -= 1;
+    lines = wrapLines(ctx, text, area.w, size);
+  }
+  drawText(ctx, lines.join('\n'), area.x, y, { size, lineHeight: size, color: MENU_COLORS.description });
 }
 
 // Name, how much it heals, and the description of one item. `area` is { x, y, w }.
@@ -109,8 +121,13 @@ export function drawItemDetails(ctx, id, area = DETAILS) {
   y += 34;
   drawText(ctx, healLabel(id), area.x, y, { size: 24, color: MENU_COLORS.ability });
   y += 34;
-  const lines = wrapLines(ctx, textSection(ITEM_TEXT, id)[0], area.w, 22);
-  drawText(ctx, lines.join('\n'), area.x, y, { size: 22, lineHeight: 22, color: MENU_COLORS.description });
+  // A candle also says how it lights the dark.
+  const light = lightLabel(id);
+  if (light) {
+    drawText(ctx, light, area.x, y - 6, { size: 20, color: MENU_COLORS.highlight });
+    y += 24;
+  }
+  drawDescription(ctx, textSection(ITEM_TEXT, id)[0], area, y);
 }
 
 export function drawControls(ctx, text) {

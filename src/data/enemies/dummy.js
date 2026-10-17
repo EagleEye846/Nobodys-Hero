@@ -37,4 +37,6 @@ export const ROGUE_DUMMY = {
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'cotton_candy', chance: 0.4 }],
+  // Candle-making materials it leaves behind (see src/data/candles.js), beaten or spared.
+  materials: [{ id: 'thread', chance: 0.7, amount: 2 }],
 };

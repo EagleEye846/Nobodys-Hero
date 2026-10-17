@@ -18,11 +18,11 @@ export const TAPER_BLOCKS = {
   // What happens, in order (see STEP_TYPES in src/overworld/scenePlayer.js).
   steps: [
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', who: 'taper', text: 'You followed me. Of course you did.\n\nGrowing things always lean toward the open air.' },
-    { do: 'say', who: 'taper', text: 'I\'ve watched six heroes walk out this door. I fed every one of them first.\n\nNot one of them ever came home.' },
+    { do: 'say', who: 'taper', face: 'sad', text: 'You followed me. Of course you did.\n\nGrowing things always lean toward the open air.' },
+    { do: 'say', who: 'taper', face: 'sad', text: 'I\'ve watched six heroes walk out this door. I fed every one of them first.\n\nNot one of them ever came home.' },
     { do: 'emote', who: 'taper', emote: '...' },
-    { do: 'say', who: 'taper', text: 'There\'s a light out there that calls to people. It called them, one by one.\n\nI can\'t bear for it to call you too.' },
-    { do: 'say', who: 'taper', text: 'So I\'m sorry, sprout. Truly.\n\nIf you want to go, show me you\'re strong enough to come back.' },
-    { do: 'battle', enemy: 'taper', spared: 'taper_spared', defeated: 'taper_defeated' },
+    { do: 'say', who: 'taper', text: '{worried}There\'s a light out there that calls to people. It called them, one by one.\n\n{crying}I can\'t bear for it to call you too.' },
+    { do: 'say', who: 'taper', text: '{sad}So I\'m sorry, sprout. Truly.\n\n{angry}If you want to go, show me you\'re strong enough to come back.' },
+    { do: 'battle', enemy: 'taper', who: 'taper', spared: 'taper_spared', defeated: 'taper_defeated' },
   ],
 };

@@ -34,4 +34,6 @@ export const LANTERN_MOTH = {
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'glow_jam', chance: 0.35 }],
+  // Candle-making materials it leaves behind (see src/data/candles.js), beaten or spared.
+  materials: [{ id: 'glow_dust', chance: 0.6, amount: 1 }],
 };

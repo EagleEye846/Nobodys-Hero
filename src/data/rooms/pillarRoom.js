@@ -18,8 +18,8 @@ export const PILLAR_ROOM = {
     '####################',
     '#WWWWWWWWDDDWWWWWWW#',
     '#WWWWWWWWDDDWWWWWWW#',
-    '#.......I...I......#',
-    '#..................#',
+    '#.......I...I..BBBB#',
+    '#..............bb..#',
     '#..................#',
     '#....I....I...I....#',
     '#..................#',
@@ -49,7 +49,8 @@ export const PILLAR_ROOM = {
   textFile: 'interactions/the_ruins.txt',
   props: [
     { sprite: 'gate_wide', x: 9, y: 3, text: 'pillar_gate', opensWith: ['lever_east', 'lever_hidden'], openText: 'pillar_gate_open' },
-    { sprite: 'lever', x: 17, y: 4, text: 'pillar_lever', lever: 'lever_east' },
+    // Up on the high ledge in the corner: jump onto the low blocks, then up again.
+    { sprite: 'lever', x: 17, y: 3, text: 'pillar_lever', lever: 'lever_east' },
     { sprite: 'lever', x: 14, y: 10, text: 'pillar_lever', lever: 'lever_hidden' },
   ],
 
@@ -57,7 +58,7 @@ export const PILLAR_ROOM = {
   // `tileTexts` for every tile of a kind (by its letter). Both name sections
   // of the text file, like signs.
   looks: [],
-  tileTexts: { I: 'ruins_pillars' },
+  tileTexts: { I: 'ruins_pillars', b: 'stone_block', B: 'tall_block' },
 
   // Enemies wandering the room, by their file name in src/data/enemies/.
   // patrol is the leftmost and rightmost tile they walk between. `behaviour`

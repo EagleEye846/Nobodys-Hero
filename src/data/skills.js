@@ -13,6 +13,9 @@
 //   iframes          extra seconds of invincibility after a hit
 //   defendHeal       HP healed when you DEFEND
 //   lastStand        once per battle, survive a knockout hit with 1 HP
+//   runSpeed         faster running in the overworld (0.25 = +25%)
+//   jumpHeight       extra jump height, in world pixels (12 is one block step)
+//   softLanding      landings crack the floor only every other time
 export const SKILL_BRANCHES = [
   {
     name: 'VALOR',
@@ -39,9 +42,19 @@ export const SKILL_BRANCHES = [
     color: '#4fe3d0',
     skills: [
       { id: 'tough', name: 'Tough', cost: 1, effect: { maxHp: 15 } },
-      { id: 'steady_soul', name: 'Steady Soul', cost: 1, effect: { iframes: 0.4 } },
+      { id: 'steady_soul', name: 'Steady Shadow', cost: 1, effect: { iframes: 0.4 } },
       { id: 'guard_up', name: 'Guard Up', cost: 1, effect: { defendHeal: 8 } },
       { id: 'last_stand', name: 'Last Stand', cost: 2, effect: { lastStand: true } },
+    ],
+  },
+  {
+    // Getting around: running, jumping higher, landing lightly.
+    name: 'STRIDE',
+    color: '#5fc27a',
+    skills: [
+      { id: 'sprinter', name: 'Sprinter', cost: 1, effect: { runSpeed: 0.25 } },
+      { id: 'acrobat', name: 'Acrobat', cost: 2, effect: { jumpHeight: 12 } },
+      { id: 'sure_foot', name: 'Sure Foot', cost: 2, effect: { softLanding: true } },
     ],
   },
 ];

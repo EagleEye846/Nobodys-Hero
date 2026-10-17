@@ -40,7 +40,7 @@ export const SOUL_MODES = {
   // Boss only. Falls to the floor of the box and jumps; hold jump to go higher.
   heavy: {
     color: '#b07cff',
-    hint: 'Your SOUL turns HEAVY and falls.\nPress UP to jump. Hold it to jump higher.',
+    hint: 'Your SHADOW turns HEAVY and falls.\nPress UP to jump. Hold it to jump higher.',
     update(soul, dt, input, box) {
       soul.focused = false;
       soul.x += axis(input, 'left', 'right') * HEAVY_SPEED * dt;

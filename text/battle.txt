@@ -1,0 +1,7 @@
+# Lines the battle screen says by itself (not any one enemy's).
+
+# The very first time you fight: your shadow stands up to take the hits.
+# Shown once, before the enemy's own intro line.
+[first_shadow]
+Danger! Your shadow peels up off the floor and stands between you and the enemy.
+It doesn't look like you. It looks like a Hero.

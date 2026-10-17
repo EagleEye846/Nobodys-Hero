@@ -16,8 +16,8 @@ import { drawText, wrapLines } from './text.js';
 // needs the one above), X goes back. It has its own slow song.
 
 const DESCRIPTIONS = 'skills/skills.txt';
-const BRANCH_ICONS = ['fight', 'spells', 'defend'];
-const COLUMN_X = [130, 320, 510];
+const BRANCH_ICONS = ['fight', 'spells', 'defend', 'run'];
+const COLUMN_X = [92, 244, 396, 548];
 // Small sideways offsets so each branch looks like a constellation, not a list.
 const ZIGZAG = [0, -16, 14, -6];
 const NODE_TOP = 162;
@@ -310,7 +310,8 @@ export class SkillsMenu {
     }
 
     const labelColor = learned ? branch.color : available ? COLORS.text : COLORS.dim;
-    drawText(ctx, skill.name, x + NODE_RADIUS + 10, y - 11, { size: 22, color: selected ? COLORS.gold : labelColor, shadow: '#05030f' });
+    // Its name under the star (four branches leave no room beside it).
+    drawText(ctx, skill.name, x, y + NODE_RADIUS + 1, { size: 18, color: selected ? COLORS.gold : labelColor, align: 'center', shadow: '#05030f' });
   }
 
   drawSparkles(ctx) {

@@ -9,6 +9,8 @@ export const TAPER_BOSS = {
   name: 'TAPER',
   textFile: 'enemies/taper.txt',
   sprite: { rows: PROP_SPRITES.taper, palette: PROP_PALETTE },
+  // Beaten, she doesn't fade away: she sinks to one knee, and stays there.
+  beatenSprite: { rows: PROP_SPRITES.taper_kneel, palette: PROP_PALETTE },
   boss: true,
   gentle: true,
   music: 'taperBattle',

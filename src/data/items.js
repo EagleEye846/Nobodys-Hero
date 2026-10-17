@@ -1,8 +1,14 @@
 import { HERO_STATE } from '../characters/heroState.js';
 
-// Things you can carry and eat in battle (ITEMS). Descriptions live in
+// Things you can carry and use in battle (ITEMS). Descriptions live in
 // text/items/items.txt, one section per id. `heal` is HP restored (a big
 // number heals you fully); `price` is what shops charge, if they sell it.
+//
+// Candles (made from materials, see src/data/candles.js) can do other things
+// in battle (`use`: 'calm' raises every enemy's MERCY by `amount`, 'sp' fills
+// SP by `amount` percent, 'guard' halves the next attack's damage), and give
+// `light` in dark places: how far it reaches (`radius`, pixels) and how many
+// seconds it burns (`burn`).
 export const ITEMS = {
   trail_mix: { name: 'Trail Mix', heal: 40, price: 12 },
   lantern_tea: { name: 'Lantern Tea', heal: 60, price: 25 },
@@ -16,7 +22,14 @@ export const ITEMS = {
   pillar_mint: { name: 'Pillar Mint', heal: 30 },
   // Found and given.
   candle_cake: { name: 'Candle Cake', heal: 70 },
-  taper_stub: { name: "Taper's Candle", heal: 999 },
+  // Taper's candle "won't go out on you": it lights the dark forever.
+  taper_stub: { name: "Taper's Candle", heal: 999, light: { radius: 72, burn: Infinity } },
+  // Candles you make.
+  plain_candle: { name: 'Plain Candle', heal: 25, light: { radius: 44, burn: 180 } },
+  hearth_candle: { name: 'Hearth Candle', heal: 60, light: { radius: 54, burn: 240 } },
+  moonbell_candle: { name: 'Moonbell Candle', use: 'calm', amount: 20, light: { radius: 52, burn: 200 } },
+  glow_candle: { name: 'Glow Candle', use: 'sp', amount: 35, light: { radius: 84, burn: 360 } },
+  ash_candle: { name: 'Ash Candle', use: 'guard', light: { radius: 36, burn: 420 } },
 };
 
 // How many items you can carry.
@@ -30,5 +43,20 @@ export function giveItem(id) {
   return true;
 }
 
-// "+40 HP", or "Full HP" for the ones that heal everything.
-export const healLabel = (id) => (ITEMS[id].heal >= 999 ? 'Full HP' : `+${ITEMS[id].heal} HP`);
+// What it does in battle: "+40 HP", "Full HP", "MERCY +20%", "SP +35%" or "Guard".
+export function healLabel(id) {
+  const item = ITEMS[id];
+  if (item.use === 'calm') return `MERCY +${item.amount}%`;
+  if (item.use === 'sp') return `SP +${item.amount}%`;
+  if (item.use === 'guard') return 'Guard';
+  return item.heal >= 999 ? 'Full HP' : `+${item.heal} HP`;
+}
+
+// How a candle lights the dark: "Light: wide, burns 6 min" (null if it doesn't).
+export function lightLabel(id) {
+  const light = ITEMS[id].light;
+  if (!light) return null;
+  const reach = light.radius >= 70 ? 'wide' : light.radius >= 50 ? 'fair' : 'small';
+  const burn = light.burn === Infinity ? 'never goes out' : `burns ${Math.round(light.burn / 60)} min`;
+  return `Light: ${reach}, ${burn}`;
+}

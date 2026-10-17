@@ -38,6 +38,16 @@ const SFX = {
     { midi: 76, wave: 'square', length: 0.06, volume: 0.05 },
     { midi: 88, wave: 'square', length: 0.12, volume: 0.05, delay: 0.06, slide: 4 },
   ],
+  // Your soul coming out of you before a story battle, once per blink.
+  soul: [
+    { midi: 81, wave: 'square', length: 0.07, volume: 0.05 },
+    { midi: 93, wave: 'square', length: 0.14, volume: 0.04, delay: 0.05 },
+  ],
+  // A flame flaring up: a low rush rising.
+  flare: [
+    { midi: 38, wave: 'sawtooth', length: 1.1, volume: 0.06, slide: 14 },
+    { midi: 50, wave: 'triangle', length: 0.9, volume: 0.05, delay: 0.1, slide: 12 },
+  ],
   // A soft blip as cutscene text types out.
   type: [{ midi: 67, wave: 'triangle', length: 0.03, volume: 0.04 }],
 };
@@ -122,10 +132,13 @@ function periodicWave(ctx, harmonics) {
 //   sweep      { from, to, time, q }: a lowpass that opens as the note starts (brass)
 //   bend       { cents, time }: starts sharp and slides onto the note (timpani)
 //   click      a little burst of noise at the start, this loud (a hammer, a bow)
+//   breath     { level, frequency, q }: air or bow noise under the whole note (flute, violin)
+// A vibrato can have a `delay` (seconds): it blooms in after the note starts,
+// the way a real player's does.
 function playTone(ctx, channel, instrument, midi, time, seconds, noise) {
   const {
     wave = 'square', volume, attack = 0.005, decay = 0.1, sustain = 0.7, release = 0.08, gate = 0.9,
-    vibrato, voices, harmonics, sweep, bend, click,
+    vibrato, voices, harmonics, sweep, bend, click, breath,
   } = instrument;
   const end = time + seconds * gate;
   const stopAt = end + release * 2 + 0.05;
@@ -166,13 +179,29 @@ function playTone(ctx, channel, instrument, midi, time, seconds, noise) {
       const lfo = ctx.createOscillator();
       const depth = ctx.createGain();
       lfo.frequency.value = vibrato.rate;
-      depth.gain.value = vibrato.depth;
+      depth.gain.setValueAtTime(vibrato.delay ? 0 : vibrato.depth, time);
+      if (vibrato.delay) depth.gain.linearRampToValueAtTime(vibrato.depth, time + vibrato.delay);
       lfo.connect(depth).connect(osc.detune);
       lfo.start(time);
       lfo.stop(stopAt);
     }
     osc.start(time);
     osc.stop(stopAt);
+  }
+
+  if (breath && noise) {
+    const source = ctx.createBufferSource();
+    const filter = ctx.createBiquadFilter();
+    const level = ctx.createGain();
+    source.buffer = noise;
+    source.loop = true;
+    filter.type = 'bandpass';
+    filter.frequency.value = breath.frequency ?? 1800;
+    filter.Q.value = breath.q ?? 1;
+    level.gain.value = breath.level;
+    source.connect(filter).connect(level).connect(input);
+    source.start(time, Math.random() * 0.5);
+    source.stop(stopAt);
   }
 
   if (click && noise) {
@@ -315,6 +344,13 @@ function buildChannels(ctx, bus, instruments) {
   let hall = null;
   for (const [name, instrument] of Object.entries(instruments)) {
     const channel = ctx.createGain();
+    // `pan` places it left (-1) or right (1), like seats in an orchestra.
+    let out = channel;
+    if (instrument.pan) {
+      out = ctx.createStereoPanner();
+      out.pan.value = instrument.pan;
+      channel.connect(out);
+    }
     if (instrument.reverb) {
       if (!hall) {
         hall = makeHall(ctx);
@@ -322,16 +358,16 @@ function buildChannels(ctx, bus, instruments) {
       }
       const send = ctx.createGain();
       send.gain.value = instrument.reverb;
-      channel.connect(send).connect(hall);
+      out.connect(send).connect(hall);
     }
     if (instrument.filter) {
       const filter = ctx.createBiquadFilter();
       filter.type = instrument.filter.type;
       filter.frequency.value = instrument.filter.frequency;
       if (instrument.filter.q) filter.Q.value = instrument.filter.q;
-      channel.connect(filter).connect(bus);
+      out.connect(filter).connect(bus);
     } else {
-      channel.connect(bus);
+      out.connect(bus);
     }
     if (instrument.echo) {
       const delay = ctx.createDelay(2);
@@ -340,7 +376,7 @@ function buildChannels(ctx, bus, instruments) {
       delay.delayTime.value = instrument.echo.time;
       feedback.gain.value = instrument.echo.feedback;
       wet.gain.value = instrument.echo.mix;
-      channel.connect(delay);
+      out.connect(delay);
       delay.connect(feedback).connect(delay);
       delay.connect(wet).connect(bus);
     }
@@ -363,6 +399,8 @@ class SongPlayback {
     this.stepSeconds = 60 / song.bpm / song.stepsPerBeat;
     this.index = 0;
     this.nextTime = ctx.currentTime + 0.05;
+    this.startTime = this.nextTime;
+    this.ended = false;
     this.timer = setInterval(() => this.schedule(), TICK_MS);
     this.schedule();
   }
@@ -371,16 +409,26 @@ class SongPlayback {
     const now = this.ctx.currentTime;
     // If the tab was in the background, skip ahead rather than playing a backlog.
     if (this.nextTime < now - 0.2) this.nextTime = now;
-    while (this.nextTime < now + LOOKAHEAD_SECONDS) {
+    while (!this.ended && this.nextTime < now + LOOKAHEAD_SECONDS) {
       for (const event of this.steps[this.index]) this.play(event, this.nextTime);
       this.nextTime += this.stepSeconds;
-      this.index = this.index + 1 >= this.steps.length ? this.loopStart : this.index + 1;
+      if (this.index + 1 < this.steps.length) this.index++;
+      // A song with `loop: false` plays once, then lets its last notes ring out.
+      else if (this.song.loop === false) this.ended = true;
+      else this.index = this.loopStart;
     }
   }
 
   play(event, time) {
-    const instrument = this.song.instruments[event.track];
+    let instrument = this.song.instruments[event.track];
     const channel = this.channels[event.track];
+    // `humanize` { time, volume }: each note lands a touch late and a little
+    // softer, at random, up to these amounts, like a person playing.
+    const human = instrument.humanize;
+    if (human) {
+      time += Math.random() * (human.time ?? 0);
+      instrument = { ...instrument, volume: instrument.volume * (1 - Math.random() * (human.volume ?? 0)) };
+    }
     if (instrument.drum) DRUMS[instrument.drum](this.ctx, channel, this.noise, time, instrument.volume);
     else playTone(this.ctx, channel, instrument, event.midi, time, event.length * this.stepSeconds, this.noise);
   }
@@ -441,6 +489,13 @@ class MusicPlayer {
     this.sfxBus.connect(this.master);
     this.noise = makeNoise(this.ctx);
     if (this.wanted) this.start(this.wanted);
+  }
+
+  // How far into the current song we are, in seconds (null if nothing's
+  // playing, or sound isn't allowed yet). For timing things to the music.
+  get songTime() {
+    if (!this.current) return null;
+    return Math.max(0, this.ctx.currentTime - this.current.startTime);
   }
 
   // The name of the song that's playing (or should be, once sound is allowed).

@@ -51,10 +51,16 @@ function framesOf(name) {
   return canvases.get(name);
 }
 
-// The frame to show `seconds` into a looping animation, or null if there's no
-// animation by that name.
-export function animationFrame(name, seconds, frameSeconds = DEFAULT_FRAME_SECONDS) {
+// The frame to show `seconds` into an animation, or null if there's no
+// animation by that name. It loops, unless `once`: then it stops on its last frame.
+export function animationFrame(name, seconds, frameSeconds = DEFAULT_FRAME_SECONDS, once = false) {
   const frames = framesOf(name);
   if (!frames) return null;
-  return frames[Math.floor(seconds / frameSeconds) % frames.length];
+  const index = Math.floor(seconds / frameSeconds);
+  return frames[once ? Math.min(index, frames.length - 1) : index % frames.length];
+}
+
+// How many frames an animation has (0 if there's no such animation).
+export function animationLength(name) {
+  return framesOf(name)?.length ?? 0;
 }

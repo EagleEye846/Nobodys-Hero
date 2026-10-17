@@ -36,3 +36,12 @@ DEFEND also heals 8 HP.
 
 [last_stand]
 Once per battle, survive a hit that would knock you out, with 1 HP.
+
+[sprinter]
+Hold X to run 25% faster through the halls.
+
+[acrobat]
+Jump a whole step higher: straight up onto tall blocks, no low step needed.
+
+[sure_foot]
+You land lightly. The floor only cracks on every other landing.

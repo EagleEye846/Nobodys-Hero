@@ -1,5 +1,5 @@
 // LEAVE THE RUINS: you step through the old door for the first time. Chapter
-// One is complete, and you go on into the world beyond. (After this, the door
+// One is complete: the credits roll, and you go on into the world beyond. (After this, the door
 // is just a door, both ways.)
 export const LEAVE_RUINS = {
   // Triggers in rooms name the scene by this id.
@@ -19,6 +19,6 @@ export const LEAVE_RUINS = {
     { do: 'sound', name: 'door' },
     { do: 'walk', who: 'player', to: { x: 32, y: 2 } },
     { do: 'wait', seconds: 0.6 },
-    { do: 'end_chapter', room: 'beyond_ruins', spawn: { x: 10, y: 12 } },
+    { do: 'end_chapter', room: 'beyond_ruins', spawn: { x: 10, y: 12 }, credits: true },
   ],
 };

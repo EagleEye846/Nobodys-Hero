@@ -11,7 +11,8 @@ import * as player from './art/player.js';
 import * as portraits from './art/portraits.js';
 import * as props from './art/props.js';
 import * as shade from './art/shade.js';
+import * as taperDeath from './art/taperDeath.js';
 import * as taperWatering from './art/taperWatering.js';
 import * as waxling from './art/waxling.js';
 
-export const ART_MODULES = { 'bunny': bunny, 'columneon': columneon, 'cutscenes': cutscenes, 'dummy': dummy, 'fireplace': fireplace, 'icons': icons, 'moth': moth, 'player': player, 'portraits': portraits, 'props': props, 'shade': shade, 'taperWatering': taperWatering, 'waxling': waxling };
+export const ART_MODULES = { 'bunny': bunny, 'columneon': columneon, 'cutscenes': cutscenes, 'dummy': dummy, 'fireplace': fireplace, 'icons': icons, 'moth': moth, 'player': player, 'portraits': portraits, 'props': props, 'shade': shade, 'taperDeath': taperDeath, 'taperWatering': taperWatering, 'waxling': waxling };

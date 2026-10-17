@@ -224,3 +224,12 @@ Pick an existing enemy at the top left to change it instead.
 - `source.js` rewrites one `export const NAME = ...` in a file and leaves the
   rest alone; `textfile.js` does the same for one `[section]` of a text file.
 - `rooms.js` has the room helpers the Room Editor and Enemy Maker share.
+
+## Text Check
+
+Open http://localhost:8000/tools/textCheck.html (with `python tools/serve.py` running) to measure every line of the game's text against the box it's shown in, with the game's own fonts. Run it after writing or changing any text.
+
+- **Dialogue boxes page by themselves**: the overworld textbox, the battle panel and the shop's box carry a page that's too long onto the next one (`paginate` in `src/ui/text.js`). The check lists those for information, in case one splits mid-thought and would read better split by hand (a blank line in a text file starts a new page).
+- **Everything else has a hard limit** and is listed under Problems if it doesn't fit: battle flavour text (3 lines), speech bubbles (3 lines each), skill descriptions (2 lines), intro pages (5 lines), the chapter card (3 lines), shop TALK topics (list width), and descriptions and credits lines too long to read even shrunk.
+- Lists scroll (the shop's TALK topics, battle options), and descriptions and credits lines shrink to fit their space.
+- Adding a new kind of text box? Give it a rule in `tools/textCheck.html`.

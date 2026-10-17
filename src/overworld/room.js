@@ -37,7 +37,12 @@ const PROP_LIGHTS = {
   side_table: [24, 0.12],
   table: [26, 0.1],
   counter_cake: [18, 0.08],
+  lantern_post_on: [26, 0.12],
 };
+
+// How far light reaches in a dark room (`dark`, see overworldScene.js), for
+// lantern pillars and candle stands; props use PROP_LIGHTS, or their own `light`.
+const DARK_TILE_LIGHTS = { P: 64, C: 56 };
 
 export class Room {
   constructor(data) {
@@ -54,6 +59,8 @@ export class Room {
       // Gifts are remembered by room, look and spot, so they're only given once.
       prop.key = `${data.id}:${info.sprite}:${info.x},${info.y}`;
       if (info.gives && (WORLD_STATE.taken ?? []).includes(prop.key)) prop.markTaken();
+      // Up on a block: drawn standing on top of it, and only in reach from up there.
+      prop.raise = TILES[data.tiles[info.y]?.[info.x]]?.raise ?? 0;
       return prop;
     });
     this.refreshShowsUp();
@@ -146,14 +153,34 @@ export class Room {
     return tile === null || TILES[tile].solid;
   }
 
+  // How high a tile's floor is: 0, or a block's `raise`.
+  raiseAt(tx, ty) {
+    const tile = this.tileAt(tx, ty);
+    return tile === null ? 0 : TILES[tile].raise ?? 0;
+  }
+
   // Whether the box (right and bottom exclusive) overlaps a solid tile or prop.
-  collides(left, top, right, bottom) {
+  // Raised blocks count as solid too, unless `climbing` (the player, who can
+  // jump; they check the block's height themselves with floorHeight).
+  collides(left, top, right, bottom, climbing = false) {
     for (let ty = Math.floor(top / T); ty <= Math.floor((bottom - 1) / T); ty++) {
       for (let tx = Math.floor(left / T); tx <= Math.floor((right - 1) / T); tx++) {
         if (this.isSolidTile(tx, ty)) return true;
+        if (!climbing && this.raiseAt(tx, ty) > 0) return true;
       }
     }
-    return this.props.some((prop) => prop.overlaps(left, top, right, bottom));
+    return this.props.some((prop) => prop.blocks(left, top, right, bottom));
+  }
+
+  // The highest floor under the box: where something standing there would stand.
+  floorHeight(left, top, right, bottom) {
+    let height = 0;
+    for (let ty = Math.floor(top / T); ty <= Math.floor((bottom - 1) / T); ty++) {
+      for (let tx = Math.floor(left / T); tx <= Math.floor((right - 1) / T); tx++) {
+        height = Math.max(height, this.raiseAt(tx, ty));
+      }
+    }
+    return height;
   }
 
   propAt(x, y) {
@@ -217,6 +244,21 @@ export class Room {
   // the moment a scene ends, instead of popping in later).
   refreshShowsUp() {
     this.props = this.allProps.filter((prop) => showsUpNow(prop.showsUp));
+  }
+
+  // Everything giving off light, for dark rooms: { x, y, radius } in world
+  // pixels. Lantern pillars and candle stands, lit props (and lantern posts
+  // once they're lit), save crystals, and any prop with its own `light`.
+  lightSources() {
+    this.tileLights ??= this.tiles.flatMap((row, ty) => [...row].flatMap((char, tx) => (
+      DARK_TILE_LIGHTS[char] ? [{ x: tx * T + T / 2, y: ty * T, radius: DARK_TILE_LIGHTS[char] }] : []
+    )));
+    const props = this.props.flatMap((prop) => {
+      if (prop.hidden) return [];
+      const radius = prop.light ?? (prop.save ? 44 : PROP_LIGHTS[prop.look] ? PROP_LIGHTS[prop.look][0] * 1.4 : 0);
+      return radius ? [{ x: prop.x + prop.width / 2, y: prop.y + T / 2 - (prop.raise ?? 0), radius }] : [];
+    });
+    return [...this.tileLights, ...props];
   }
 
   // Warm pools of light on the stone around lanterns, candles and save crystals.

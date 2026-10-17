@@ -1,6 +1,6 @@
 import { UI_WIDTH, UI_HEIGHT, UI_SCALE as S } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
-import { drawText, textWidth, wrapLines, layoutDialogue, drawDialogue } from '../ui/text.js';
+import { drawText, textWidth, wrapLines, layoutDialogue, drawDialogue, paginate } from '../ui/text.js';
 import { ICONS } from '../data/art/icons.js';
 import { soulSprite } from './soul.js';
 
@@ -213,6 +213,15 @@ export function drawCommands(ctx, commands, selected, active, glowing, time) {
   });
 }
 
+// How many lines of dialogue fit in the panel, and `text` split into pages
+// that fit (so a long message carries on onto another page).
+export const TEXT_LINES = 3;
+let measuring = null;
+export function textPages(text) {
+  measuring ??= document.createElement('canvas').getContext('2d');
+  return paginate(measuring, text, TEXT.w, TEXT.size, TEXT_LINES);
+}
+
 // Dialogue in the panel, Deltarune style ("* " before each paragraph).
 export function drawTextBox(ctx, text) {
   const lines = layoutDialogue(ctx, text, TEXT.w, TEXT.size);
@@ -220,15 +229,26 @@ export function drawTextBox(ctx, text) {
 }
 
 // A two-column pick list with the soul as the cursor. Each option is { label, note, noteColor, enabled }.
+// Three rows fit in the panel; a longer list scrolls with the cursor. A label
+// too long for its column shrinks to fit.
+const OPTION_ROWS = 3;
+const OPTION_WIDTH = 258;
 export function drawOptions(ctx, options, cursor) {
-  options.forEach((option, i) => {
+  const rows = Math.ceil(options.length / 2);
+  const firstRow = Math.max(0, Math.min(Math.floor(cursor / 2) - 1, rows - OPTION_ROWS));
+  options.slice(firstRow * 2, (firstRow + OPTION_ROWS) * 2).forEach((option, n) => {
+    const i = firstRow * 2 + n;
     const x = TEXT.x + 36 + (i % 2) * 300;
-    const y = TEXT.y + Math.floor(i / 2) * 30;
+    const y = TEXT.y + (Math.floor(i / 2) - firstRow) * 30;
     if (i === cursor) ctx.drawImage(soulSprite(), x - 28, y + 4);
-    drawText(ctx, option.label, x, y, { size: TEXT.size, color: option.enabled ? COLORS.text : COLORS.dim });
+    const noteWidth = option.note ? textWidth(ctx, option.note, 22) + 12 : 0;
+    const size = Math.min(TEXT.size, Math.floor((TEXT.size * (OPTION_WIDTH - noteWidth)) / textWidth(ctx, option.label, TEXT.size)));
+    drawText(ctx, option.label, x, y + (TEXT.size - size), { size, color: option.enabled ? COLORS.text : COLORS.dim });
     if (option.note) {
-      const noteX = x + textWidth(ctx, option.label, TEXT.size) + 12;
+      const noteX = x + textWidth(ctx, option.label, size) + 12;
       drawText(ctx, option.note, noteX, y + 4, { size: 22, color: option.noteColor ?? COLORS.sp });
     }
   });
+  if (firstRow > 0) drawText(ctx, '▲', TEXT.x + TEXT.w - 14, TEXT.y - 4, { size: 18, color: COLORS.dim });
+  if (firstRow + OPTION_ROWS < rows) drawText(ctx, '▼', TEXT.x + TEXT.w - 14, TEXT.y + 64, { size: 18, color: COLORS.dim });
 }

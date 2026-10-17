@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- The game loads its text relative to the page, so act as if we're in the game's folder. -->
+<base href="../">
+<title>Text Check</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@700&display=swap">
+<style>
+  body { background: #0b0614; color: #e8e4f4; font: 15px/1.5 system-ui, sans-serif; margin: 24px; }
+  h1 { font-size: 20px; } h2 { font-size: 16px; margin-top: 24px; }
+  .ok { color: #5fc27a; } .bad { color: #ff7a8a; } .note { color: #8a82b0; }
+  li { margin: 2px 0; } code { color: #ffe14d; }
+</style>
+</head>
+<body>
+<h1>Text Check</h1>
+<p class="note">Measures every line of the game's text against the box it's shown in, with the game's own fonts.
+Dialogue boxes carry long pages onto the next page by themselves, so those are listed only for information;
+anything under <b>Problems</b> won't fit and needs shortening.</p>
+<div id="report">Checking...</div>
+<script type="module">
+// The text checker: run it after writing or changing any text (see tools/README.md).
+// Every box that can't page has its limit here; if you add a new kind of box, add its rule.
+import { loadTextFiles, textFile } from './src/engine/textLoader.js';
+import { TEXT_FILES } from './src/data/textManifest.js';
+import { loadUiFont, layoutDialogue, wrapLines, textWidth } from './src/ui/text.js';
+import { pageLineCount, splitFace } from './src/ui/textbox.js';
+import { SCENES } from './src/data/scenes/index.js';
+import { PORTRAITS } from './src/data/art/portraits.js';
+
+const report = document.getElementById('report');
+const problems = [];
+const pages = [];
+try {
+  await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
+  const ctx = document.createElement('canvas').getContext('2d');
+  const dlg = (text, w, size) => layoutDialogue(ctx, text, w, size).length;
+  const wrap = (text, w, size, font) => wrapLines(ctx, text, w, size, font).length;
+  const width = (text, size) => textWidth(ctx, text, size);
+  const short = (text) => text.replace(/\n/g, ' / ').slice(0, 90);
+  const bad = (where, what, text) => problems.push(`${where}: ${what}  "${short(text)}"`);
+  const paged = (where, lines) => pages.push(`${where}: ${lines} lines, carries onto another page`);
+  // A label that shrinks to fit: a problem only once it would get too small to read.
+  const shrinks = (text, size, room, smallest) => (size * room) / width(text, size) < smallest;
+
+  for (const path of TEXT_FILES) {
+    const folder = path.split('/')[0];
+    const id = path.split('/').pop().replace('.txt', '');
+    for (const [section, entries] of Object.entries(textFile(path))) entries.forEach((entry, i) => {
+      const where = `${path} [${section}]${entries.length > 1 ? ` #${i + 1}` : ''}`;
+      if (folder === 'interactions' || folder === 'npcs') {
+        const n = pageLineCount(ctx, entry, folder === 'npcs' && PORTRAITS[id] ? id : null);
+        if (n > 3) paged(where, n);
+      } else if (folder === 'enemies') {
+        if (section === 'flavor') {
+          if (dlg(entry, 596, 28) > 3) bad(where, `flavour text is ${dlg(entry, 596, 28)} lines; 3 fit`, entry);
+        } else if (section === 'taunts' || section === 'boss_intro') {
+          for (const line of entry.split('\n')) if (wrap(line, 142, 14, 'speech') > 3) bad(where, `speech bubble is ${wrap(line, 142, 14, 'speech')} lines; 3 fit (break it onto another line)`, line);
+        } else {
+          if (dlg(entry, 596, 28) > 3) paged(where, dlg(entry, 596, 28));
+          if (section.startsWith('talk: ') && shrinks(section.slice(6), 28, 258, 20)) bad(where, 'TALK option is too long to read in its column', section);
+        }
+      } else if (folder === 'shops') {
+        if (dlg(entry, 272, 28) > 7) paged(where, dlg(entry, 272, 28));
+        if (section.startsWith('talk: ') && width(section.slice(6), 28) > 214) bad(where, 'TALK topic is too wide for the list', section);
+      } else if (folder === 'items') {
+        // Descriptions shrink to fit their panel, down to 14px.
+        const shopRoom = path.endsWith('weapons.txt') ? 102 : 128;
+        let size = 22;
+        while (size > 14 && wrap(entry, 276, size) * size > shopRoom) size--;
+        if (wrap(entry, 276, size) * size > shopRoom) bad(where, 'description is too long for the shop panel, even small', entry);
+      } else if (folder === 'skills') {
+        if (wrap(entry, 556, 22) > 2) bad(where, `skill description is ${wrap(entry, 556, 22)} lines; 2 fit`, entry);
+      } else if (folder === 'cutscenes') {
+        if (wrap(entry, 480, 32) > 5) bad(where, `intro page is ${wrap(entry, 480, 32)} lines; 5 fit`, entry);
+      } else if (path === 'chapter_end.txt' && section !== 'title' && section !== 'subtitle') {
+        if (wrap(entry, 520, 30) > 3) bad(where, `chapter card line is ${wrap(entry, 520, 30)} lines; 3 fit`, entry);
+      } else if (path === 'credits.txt') {
+        const room = entry.includes('\n@') ? 400 : 600;
+        entry.split('\n').filter((l) => !l.startsWith('@')).forEach((line, j) => {
+          if (shrinks(line, j ? 44 : 30, room, 22)) bad(where, 'credits line is too long to read on its card', line);
+        });
+      }
+    });
+  }
+  for (const scene of Object.values(SCENES)) {
+    for (const step of scene.steps.filter((s) => s.do === 'say')) {
+      const speaker = scene.actors?.find((a) => a.id === step.who)?.portrait ?? null;
+      String(step.text ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).forEach((page) => {
+        const n = pageLineCount(ctx, page, PORTRAITS[speaker] ? speaker : null);
+        if (n > 3) paged(`scene ${scene.id}: "${splitFace(page).text.slice(0, 40)}..."`, n);
+      });
+    }
+  }
+  const list = (items) => `<ul>${items.map((t) => `<li>${t.replace(/</g, '&lt;')}</li>`).join('')}</ul>`;
+  report.innerHTML = `<h2 class="${problems.length ? 'bad' : 'ok'}">Problems: ${problems.length}</h2>${problems.length ? list(problems) : '<p class="ok">Everything fits.</p>'}
+    <h2>Carries onto another page: ${pages.length}</h2><p class="note">Fine, but a page that splits mid-thought may read better split by hand (a blank line in the text file starts a new page).</p>${list(pages)}`;
+} catch (error) {
+  report.innerHTML = `<p class="bad">The check stopped: ${String(error.stack).replace(/</g, '&lt;')}</p>`;
+}
+document.title = `Text Check: ${problems.length} problems`;
+</script>
+</body>
+</html>

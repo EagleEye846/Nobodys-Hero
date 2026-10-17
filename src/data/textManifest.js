@@ -2,7 +2,9 @@
 // The game loads them all at startup. Run the Studio server, or
 // `python tools/serve.py --generate`, after adding a text file by hand.
 export const TEXT_FILES = [
+  'battle.txt',
   'chapter_end.txt',
+  'credits.txt',
   'cutscenes/intro.txt',
   'enemies/columneon.txt',
   'enemies/dust_bunny.txt',

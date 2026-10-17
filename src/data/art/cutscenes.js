@@ -218,81 +218,93 @@ export const PANELS = {
     rect(ctx, W / 2 + 1, 15, 2, 3, C.ink);
   },
 
-  // Everyone in the Ruins at the foot of the stair, looking up at the figure
-  // in the doorway, holding their breath.
+  // Seen from behind them: everyone in the Ruins at the foot of the stair, dark
+  // shapes against the light pouring down from the figure in the doorway,
+  // while the lanterns burn their brightest. Nobody moves.
   breath(ctx, t) {
     PANELS.stranger(ctx, t);
-    // The doorway glimmers.
-    glow(ctx, W / 2, 10, 22, t, 3);
-    if (Math.sin(t * 3) > 0) {
-      rect(ctx, W / 2 + 10, 2, 1, 5, C.flame);
-      rect(ctx, W / 2 + 8, 4, 5, 1, C.flame);
-    }
-    rect(ctx, 0, 96, W, H - 96, C.floor);
-    rect(ctx, 0, 96, W, 1, C.stoneHi);
 
-    // Their eyes, all turned up to the doorway.
-    const eyes = (x, y, gap, color = C.glow) => {
-      rect(ctx, x, y, 1, 1, color);
-      rect(ctx, x + gap, y, 1, 1, color);
+    // The light spilling down the stair, with dust drifting in it.
+    ctx.fillStyle = C.glow;
+    for (const [spread, alpha] of [[78, 0.05], [48, 0.07], [26, 0.08]]) {
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      ctx.moveTo(W / 2 - 11, 18);
+      ctx.lineTo(W / 2 + 11, 18);
+      ctx.lineTo(W / 2 + spread, H);
+      ctx.lineTo(W / 2 - spread, H);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    for (let i = 0; i < 14; i++) {
+      const fall = (t * (3 + (i % 4)) + i * 9) % 80;
+      const y = 22 + fall;
+      const x = W / 2 + Math.sin(i * 7.1) * (6 + fall * 0.45) + Math.sin(t + i) * 1.5;
+      ctx.globalAlpha = 0.5 * Math.sin((fall / 80) * Math.PI);
+      rect(ctx, x, y, 1, 1, C.flame);
+    }
+    ctx.globalAlpha = 1;
+
+    // The lanterns down both sides, flaring.
+    [[18, 20], [46, 34], [154, 34], [182, 20]].forEach(([x, drop], i) => {
+      rect(ctx, x, 0, 1, drop, C.ink);
+      glow(ctx, x, drop + 7, 34 + Math.sin(t * 2 + i) * 3, t, i + 5);
+      lantern(ctx, x, drop, t, i + 5);
+    });
+
+    // The ones who waited, from behind: shadows, rimmed with light from above.
+    const rim = (x, y, w) => {
+      ctx.globalAlpha = 0.75;
+      rect(ctx, x, y, w, 1, C.glow);
+      ctx.globalAlpha = 1;
+    };
+    // A shape with a head (w x h, its top at y) on a body that widens to the floor.
+    const figure = (x, head, top, bodyTop, bodyTopWidth, baseWidth) => {
+      for (let y = bodyTop; y < H; y++) {
+        const width = bodyTopWidth + ((baseWidth - bodyTopWidth) * (y - bodyTop)) / (H - bodyTop);
+        rect(ctx, x - width / 2, y, width, 1, C.ink);
+      }
+      rect(ctx, x - head / 2, top, head, bodyTop - top + 1, C.ink);
+      rim(x - head / 2 + 1, top, head - 2);
     };
 
-    // The Keeper, lantern on their staff.
-    let x = 26;
-    for (let i = 0; i < 22; i++) rect(ctx, x - 4 - i * 0.3, 86 + i, 8 + i * 0.6, 1, C.robe);
-    rect(ctx, x - 6, 76, 12, 11, C.robe);
-    rect(ctx, x - 6, 76, 12, 1, C.robeHi);
-    rect(ctx, x - 4, 79, 8, 7, C.ink);
-    eyes(x - 3, 80, 5);
-    rect(ctx, x + 9, 68, 2, 42, C.wood);
-    rect(ctx, x + 9, 68, 7, 2, C.wood);
-    lantern(ctx, x + 15, 70, t, 1);
-
-    // The training dummy.
-    x = 62;
-    rect(ctx, x - 1, 98, 3, 12, C.wood);
-    rect(ctx, x - 13, 88, 27, 3, C.cloth);
-    rect(ctx, x - 7, 84, 15, 15, C.cloth);
-    rect(ctx, x - 5, 72, 11, 11, C.cloth);
-    rect(ctx, x - 5, 72, 11, 1, C.wax);
-    eyes(x - 3, 74, 5, C.stitch);
-    rect(ctx, x - 1, 79, 3, 1, C.stitch);
-
+    // The Keeper, hooded, tallest, his lantern held up on its staff.
+    figure(40, 8, 70, 77, 11, 22);
+    rect(ctx, 32, 68, 2, H - 68, C.ink);
+    rect(ctx, 26, 68, 8, 2, C.ink);
+    lantern(ctx, 26, 70, t, 9);
+    // The training dummy, arms out.
+    figure(72, 8, 80, 87, 9, 13);
+    rect(ctx, 60, 89, 25, 3, C.ink);
+    rim(61, 89, 4);
+    rim(80, 89, 4);
     // A dust bunny, ears up.
-    x = 90;
-    rect(ctx, x - 4, 91, 2, 8, C.dust);
-    rect(ctx, x + 3, 91, 2, 8, C.dust);
-    rect(ctx, x - 6, 99, 13, 9, C.dust);
-    rect(ctx, x - 7, 102, 15, 6, C.dust);
-    eyes(x - 3, 101, 5, C.ink);
-
-    // The lantern moth, hovering for a better look.
-    x = 116;
-    const y = 64 + Math.round(Math.sin(t * 4) * 2);
-    const flap = Math.sin(t * 14) > 0 ? 7 : 4;
-    rect(ctx, x - 1 - flap, y + 1, flap, 6, C.cloth);
-    rect(ctx, x + 2, y + 1, flap, 6, C.cloth);
-    rect(ctx, x - 1, y, 3, 9, C.stitch);
-    eyes(x - 1, y + 1, 2);
-
-    // Moss, pack and all.
-    x = 148;
-    rect(ctx, x - 12, 88, 24, 22, C.pack);
-    rect(ctx, x - 8, 82, 16, 8, C.wax);
-    rect(ctx, x - 14, 76, 28, 6, C.cap);
-    rect(ctx, x - 10, 73, 20, 3, C.cap);
-    rect(ctx, x - 8, 75, 3, 2, C.wax);
-    rect(ctx, x + 5, 77, 3, 2, C.wax);
-    eyes(x - 4, 84, 7, C.ink);
-
-    // A waxling, flame flickering.
-    x = 178;
-    glow(ctx, x, 86, 12, t, 4);
-    rect(ctx, x - 5, 92, 10, 18, C.wax);
-    rect(ctx, x - 6, 94, 2, 6, C.wax);
-    rect(ctx, x + 4, 96, 2, 7, C.wax);
-    rect(ctx, x, 88, 1, 4, C.ink);
-    rect(ctx, x - 1, 84 - (Math.sin(t * 13) > 0.3 ? 1 : 0), 3, 5, C.flame);
-    eyes(x - 3, 96, 5, C.ink);
+    figure(96, 7, 101, 104, 9, 12);
+    rect(ctx, 93, 94, 2, 8, C.ink);
+    rect(ctx, 98, 94, 2, 8, C.ink);
+    rim(93, 94, 2);
+    rim(98, 94, 2);
+    // Moss, under that wide cap.
+    figure(126, 8, 86, 92, 12, 18);
+    rect(ctx, 116, 82, 20, 5, C.ink);
+    rect(ctx, 119, 80, 14, 2, C.ink);
+    rim(120, 80, 12);
+    rim(116, 82, 3);
+    rim(133, 82, 3);
+    // A waxling, its little flame the only thing in colour.
+    figure(158, 7, 88, 92, 8, 11);
+    glow(ctx, 158, 85, 10, t, 7);
+    rect(ctx, 157, 83 - (Math.sin(t * 13) > 0.3 ? 1 : 0), 3, 5, C.flame);
+    // Another bunny at the edge, smaller.
+    figure(182, 6, 103, 106, 7, 10);
+    rect(ctx, 179, 98, 2, 6, C.ink);
+    rect(ctx, 184, 98, 2, 6, C.ink);
+    // And the lantern moth, hovering above them all for a better look.
+    const my = 58 + Math.round(Math.sin(t * 3) * 1.5);
+    const flap = Math.sin(t * 10) > 0 ? 6 : 4;
+    rect(ctx, 108 - flap, my + 1, flap, 5, C.ink);
+    rect(ctx, 111, my + 1, flap, 5, C.ink);
+    rect(ctx, 108, my, 3, 8, C.ink);
+    rim(108 - flap, my + 1, flap * 2 + 3);
   },
 };

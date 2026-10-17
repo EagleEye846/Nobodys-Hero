@@ -2,7 +2,7 @@
 
 # The game's name. Put it on two lines to split it. It shrinks to fit if it's long.
 [title]
-THE HERO WHO DIDN'T COME
+NOBODY'S HERO
 
 # Blinks under the title on a new game...
 [new_game]

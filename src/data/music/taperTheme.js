@@ -5,10 +5,11 @@ import { melody, arpeggio, sustained } from '../../audio/notation.js';
 // way a kind voice warms a cold room. A music box carries the tune over a
 // rocking harp and soft held chords. 70 BPM, one step is an 8th note.
 
-// Two halves: the first asks, the second answers and comes home.
-const CHORDS = 'Bm G D A Bm G Em F# G A F#m Bm G Em F# Bm';
+// Two halves: the first asks, the second answers and comes home. (Shared with
+// her farewell, taperFarewellTheme.js.)
+export const TAPER_LULLABY_CHORDS = 'Bm G D A Bm G Em F# G A F#m Bm G Em F# Bm';
 
-const TUNE = melody(`
+export const TAPER_LULLABY = melody(`
   F#5 - - - D5 - E5 - | F#5 - - - B4 - - - | A4 - - - F#4 - A4 - | E5 - - - - - . . |
   F#5 - - - D5 - E5 - | G5 - - - F#5 - E5 - | D5 - - - E5 - B4 - | C#5 - - - - - . . |
   D5 - - - E5 - F#5 - | E5 - - - C#5 - A4 - | C#5 - - - A4 - F#4 - | B4 - - - - - D5 - |
@@ -44,11 +45,11 @@ export const TAPER_THEME = {
 
   sections: {
     main: {
-      musicBox: TUNE,
-      harp: arpeggio(CHORDS, 8, 3, [0, 7, 12, 'third', 12, 7, 'third', 7]),
-      padThird: sustained(CHORDS, 8, 1, 4),
-      padFifth: sustained(CHORDS, 8, 2, 4),
-      bass: sustained(CHORDS, 8, 0, 2),
+      musicBox: TAPER_LULLABY,
+      harp: arpeggio(TAPER_LULLABY_CHORDS, 8, 3, [0, 7, 12, 'third', 12, 7, 'third', 7]),
+      padThird: sustained(TAPER_LULLABY_CHORDS, 8, 1, 4),
+      padFifth: sustained(TAPER_LULLABY_CHORDS, 8, 2, 4),
+      bass: sustained(TAPER_LULLABY_CHORDS, 8, 0, 2),
     },
   },
 

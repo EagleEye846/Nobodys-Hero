@@ -49,11 +49,13 @@ function eachChord(chords, build) {
 const noteIn = (octave, pitchClass) => 12 * (octave + 1) + pitchClass;
 
 // One pattern per chord, written as semitones above the chord's root, or
-// 'third' for the chord's own third ('-' and '.' work as in melody()). One
+// 'third' for the chord's own third and 'tenth' for that third an octave up
+// ('-' and '.' work as in melody()). One
 // pattern entry per step. Good for basslines and chord stabs.
 export function chordLine(chords, pattern, octave = 2) {
   return eachChord(chords, ({ root, third }) => pattern.map((p) => {
     if (p === 'third') return noteIn(octave, root) + third;
+    if (p === 'tenth') return noteIn(octave, root) + third + 12;
     return typeof p === 'number' ? noteIn(octave, root) + p : p;
   }));
 }
@@ -68,7 +70,7 @@ export function transpose(steps, semitones) {
 export function arpeggio(chords, steps, octave = 4, shape = [0, 'third', 7, 12]) {
   return eachChord(chords, ({ root, third }) => Array.from({ length: steps }, (_, i) => {
     const interval = shape[i % shape.length];
-    return noteIn(octave, root) + (interval === 'third' ? third : interval);
+    return noteIn(octave, root) + (interval === 'third' ? third : interval === 'tenth' ? third + 12 : interval);
   }));
 }
 
@@ -88,4 +90,24 @@ export function hits(text) {
 
 export function repeat(steps, times) {
   return Array.from({ length: times }, () => steps).flat();
+}
+
+// A tune with lyrics, for songs whose words show on screen (the credits). Like
+// melody(), but a note can carry a syllable after a colon: 'D5:light' or
+// 'F#5:lit-' (a syllable ending in '-' joins the next one, "lit-tle"). Notes
+// without one are just played. Returns the notes, and each syllable with the
+// step it starts on.
+export function sung(text, steps = 1) {
+  const syllables = [];
+  let at = 0;
+  const plain = text.split(/\s+/).filter((token) => token && token !== '|').map((token) => {
+    const parts = token.split('/');
+    return parts.map((part) => {
+      const [note, syllable] = part.split(':');
+      if (syllable) syllables.push({ step: at, text: syllable });
+      at += steps / parts.length;
+      return note;
+    }).join('/');
+  });
+  return { notes: melody(plain.join(' '), steps), syllables };
 }

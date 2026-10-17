@@ -73,8 +73,9 @@ function blankForm() {
 
 // Settings the Enemy Maker has no controls for yet, carried over untouched
 // when you open and save an enemy (so saving Taper keeps her own battle song,
-// her `gentle` attacks, her `secondWind`, her `lullCalm` and any item drops).
-const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'lullCalm'];
+// her `gentle` attacks, her `secondWind`, her `lullCalm`, her `beatenSprite`
+// and any item drops).
+const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'materials', 'lullCalm', 'beatenSprite'];
 
 // The enemy module, in the same shape as the game's own enemy files.
 function enemyModule(f, id, constName) {

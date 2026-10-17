@@ -7,7 +7,7 @@ import { HERO_STATE } from '../characters/heroState.js';
 import { SHOPS } from '../data/shops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { soulSprite } from '../battle/soul.js';
-import { drawText, wrapLines, layoutDialogue, drawDialogue } from '../ui/text.js';
+import { drawText, wrapLines, layoutDialogue, drawDialogue, paginate } from '../ui/text.js';
 import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawItemDetails } from '../ui/menuFrame.js';
 import { ITEMS, MAX_ITEMS, giveItem } from '../data/items.js';
 import { WEAPONS } from '../data/weapons.js';
@@ -28,7 +28,12 @@ const RIGHT_BOX = { x: 316, y: 250, w: 316, h: 222 };
 const BUBBLE = { x: 404, y: 26, w: 222, h: 84 };
 const BORDER = 4;
 const LIST_AREA = { x: LEFT_BOX.x + 18, y: LEFT_BOX.y + 18, width: LEFT_BOX.w - 40, rowHeight: 32, rows: 6 };
-const DETAILS_AREA = { x: RIGHT_BOX.x + 20, y: RIGHT_BOX.y + 16, w: RIGHT_BOX.w - 40 };
+// The shopkeeper's words in the right box: how wide, how big, and how many lines fit.
+const TALK_WIDTH = RIGHT_BOX.w - 44;
+const TALK_SIZE = 28;
+const TALK_LINES = 7;
+let measuring = null;
+const DETAILS_AREA = { x: RIGHT_BOX.x + 20, y: RIGHT_BOX.y + 16, w: RIGHT_BOX.w - 40, h: RIGHT_BOX.h - 26 };
 
 const MENU_OPTIONS = ['BUY', 'TALK', 'EXIT'];
 const TEXT_SPEED = 50; // characters per second
@@ -71,14 +76,34 @@ export class ShopScene {
     music.play(this.shop.music ?? null);
   }
 
+  // Everything a section says, as pages that fit the box (Z shows the next).
   say(section) {
-    this.line = textSection(this.shop.textFile, section)[0];
+    measuring ??= document.createElement('canvas').getContext('2d');
+    this.pages = textSection(this.shop.textFile, section)
+      .flatMap((entry) => paginate(measuring, entry, TALK_WIDTH, TALK_SIZE, TALK_LINES));
+    this.pageIndex = 0;
+    this.line = this.pages[0];
     this.lineTime = 0;
+  }
+
+  get morePages() {
+    return this.pageIndex < this.pages.length - 1;
   }
 
   update(dt, input) {
     this.time += dt;
     this.lineTime += dt;
+
+    // A long line carries on: Z finishes the page, then shows the next.
+    if (this.morePages && this.mode !== 'buy' && input.wasPressed('confirm')) {
+      if (this.visibleCharacters() < this.line.length) this.lineTime = Infinity;
+      else {
+        this.pageIndex++;
+        this.line = this.pages[this.pageIndex];
+        this.lineTime = 0;
+      }
+      return;
+    }
 
     switch (this.mode) {
       case 'menu':
@@ -300,12 +325,18 @@ export class ShopScene {
     const options = this.mode === 'talk' ? this.topics.map((topic) => topic.label) : MENU_OPTIONS;
     const cursor = this.mode === 'talk' ? this.talkCursor : this.menuCursor;
     const rowHeight = this.mode === 'talk' ? 36 : 44;
-    options.forEach((label, i) => {
-      const y = LEFT_BOX.y + 24 + i * rowHeight;
+    // More topics than fit scroll with the cursor, with arrows at the ends.
+    const rows = Math.floor((LEFT_BOX.h - 34) / rowHeight);
+    const first = Math.max(0, Math.min(cursor - rows + 1, options.length - rows));
+    options.slice(first, first + rows).forEach((label, row) => {
+      const i = first + row;
+      const y = LEFT_BOX.y + 24 + row * rowHeight;
       const selected = i === cursor && this.mode !== 'leaving';
       if (selected) ctx.drawImage(soulSprite(), LEFT_BOX.x + 24, y + 7);
       drawText(ctx, label, LEFT_BOX.x + 52, y, { size: this.mode === 'talk' ? 28 : 34, color: selected ? MENU_COLORS.highlight : MENU_COLORS.text });
     });
+    if (first > 0) drawText(ctx, '▲', LEFT_BOX.x + LEFT_BOX.w - 30, LEFT_BOX.y + 12, { size: 20, color: MENU_COLORS.dim });
+    if (first + rows < options.length) drawText(ctx, '▼', LEFT_BOX.x + LEFT_BOX.w - 30, LEFT_BOX.y + LEFT_BOX.h - 32, { size: 20, color: MENU_COLORS.dim });
   }
 
   drawRightBox(ctx) {
@@ -314,8 +345,12 @@ export class ShopScene {
       if (entry.item) drawItemDetails(ctx, entry.item, DETAILS_AREA);
       else drawWeaponDetails(ctx, entry.weapon, DETAILS_AREA);
     } else {
-      const lines = layoutDialogue(ctx, this.line, RIGHT_BOX.w - 44, 28);
-      drawDialogue(ctx, lines, RIGHT_BOX.x + 22, RIGHT_BOX.y + 20, { size: 28, lineHeight: 27, visible: this.visibleCharacters() });
+      const lines = layoutDialogue(ctx, this.line, TALK_WIDTH, TALK_SIZE);
+      drawDialogue(ctx, lines, RIGHT_BOX.x + 22, RIGHT_BOX.y + 20, { size: TALK_SIZE, lineHeight: 27, visible: this.visibleCharacters() });
+      // There's more to come: press Z.
+      if (this.morePages && this.visibleCharacters() >= this.line.length && Math.floor(this.time * 2) % 2 === 0) {
+        drawText(ctx, '▼', RIGHT_BOX.x + RIGHT_BOX.w - 30, RIGHT_BOX.y + RIGHT_BOX.h - 30, { size: 20, color: MENU_COLORS.highlight });
+      }
     }
     // Your gold sits in the room's bottom-left corner, clear of both boxes.
     drawText(ctx, `${HERO_STATE.gold} G`, 16, ROOM_HEIGHT * 2 - 30, { size: 28, color: MENU_COLORS.highlight, outline: '#000' });

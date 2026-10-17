@@ -17,7 +17,7 @@ const MARGIN = 28;
 const SCALE = 3;
 const IFRAME_SECONDS = 1;
 const MAX_DT = 1 / 20;
-const SOUL_CENTER = { x: 8, y: 8 };
+const SOUL_CENTER = { x: 8, y: 10 };
 const KEYS = {
   ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right',
   ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', KeyX: 'focus', ShiftLeft: 'focus', Space: 'jump',

@@ -535,8 +535,45 @@ function drawCandelabra(ctx, x, y) {
   }
 }
 
+// Raised stone blocks you can jump up onto (see `raise` below). Each is drawn
+// as a block standing on its tile: a front face as tall as it rises, and its
+// top face above that, lit, reaching up into the tile behind. Rows are drawn
+// top to bottom, so the block in front always covers the one behind it.
+const BLOCK_TOP = ['#5d4f8e', '#594b88', '#615293', '#564884'];
+function drawBlock(raise) {
+  return (ctx, x, y, tx, ty, room) => {
+    drawBaseFloor(ctx, x, y, tx, ty, room);
+    const top = y - raise;
+    const raiseAt = (dx, dy) => TILES[room?.tileAt(tx + dx, ty + dy)]?.raise ?? 0;
+    // The front face: courses of darker stone, as tall as the block rises.
+    px(ctx, '#2a2148', x, top + T, T, raise);
+    for (let row = 0; row * 4 < raise; row++) {
+      const offset = (row + tx) % 2 ? 4 : 0;
+      for (let bx = -offset; bx < T; bx += 8) {
+        const left = Math.max(0, bx);
+        const width = Math.min(bx + 7, T) - left;
+        if (width > 0) px(ctx, pick(BRICK_STONE, hash(tx * 3 + bx, ty * 5 + row, 31)), x + left, top + T + row * 4 + 1, width, 3);
+      }
+    }
+    px(ctx, '#120c1c', x, y + T - 1, T, 1);
+    // The top face: worn slabs, a lit near edge, and dark sides where it drops away.
+    px(ctx, pick(BLOCK_TOP, hash(tx, ty, 33)), x, top, T, T);
+    if (hash(tx, ty, 34) < 0.5) px(ctx, '#4f427c', x + 7, top + 1, 1, T - 2);
+    if (hash(tx, ty, 35) < 0.4) px(ctx, '#4f427c', x + 1, top + 9, T - 2, 1);
+    if (hash(tx, ty, 36) < 0.3) px(ctx, '#7a6ab0', x + 3 + Math.floor(hash(tx, ty, 37) * 9), top + 3 + Math.floor(hash(tx, ty, 38) * 8), 2, 1);
+    if (raiseAt(0, 1) < raise) px(ctx, '#8a7ac0', x, top + T - 1, T, 1);
+    if (raiseAt(0, -1) < raise) px(ctx, '#120c1c', x, top, T, 1);
+    if (raiseAt(-1, 0) < raise) px(ctx, '#120c1c', x, top, 1, T + raise);
+    if (raiseAt(1, 0) < raise) px(ctx, '#120c1c', x + T - 1, top, 1, T + raise);
+  };
+}
+
 // `standing` tiles are drawn with the characters (see above); `height` is how
 // tall they stand in pixels, for previews.
+// `raise` tiles are blocks that stand that many pixels above the floor: you
+// can walk on top of them, and get up there by jumping from something no more
+// than JUMP_REACH lower (see player.js). Enemies can't jump, so to them
+// they're walls.
 export const TILES = {
   '#': { solid: true, draw: drawWallTop },
   W: { solid: true, draw: drawWallFace },
@@ -559,6 +596,8 @@ export const TILES = {
   J: { solid: true, standing: true, height: 30, draw: drawBrokenPillar },
   S: { solid: true, standing: true, height: 49, draw: drawStatue },
   C: { solid: true, standing: true, height: 40, draw: drawCandelabra },
+  b: { solid: false, raise: 12, draw: drawBlock(12) },
+  B: { solid: false, raise: 24, draw: drawBlock(24) },
 };
 
 // What's drawn under a standing tile.

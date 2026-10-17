@@ -77,7 +77,8 @@ You pull the lever. Stone grinds somewhere nearby.
 
 [pillar_gate]
 A wide iron gate. Two lever-shaped marks are carved into the stone beside it.
-One of the levers must be hiding somewhere.
+
+One lever must be hiding somewhere. The other is up high, out of easy reach.
 
 [pillar_gate_open]
 Clunk. The gate rattles open.
@@ -87,3 +88,20 @@ The air is different out here. Fresher.
 The Ruins are behind you now.
 
 (This region is still being built. Make it yours in the Room Editor!)
+
+# What's left of Mother Taper by the way out, if you fought her until her flame went out.
+[taper_remains]
+A pool of cooled wax, with her shawl folded over it, as if she'd only sat down to rest.
+
+The wick is cold.
+
+# Pressing Z on something that's up on a raised block, from down on the floor.
+[out_of_reach]
+It's up out of reach. Maybe you could jump up there.
+
+# Raised stone blocks you can jump onto (Space). Shown when you press Z on one.
+[stone_block]
+A block of old stone, about knee-high. You could jump up onto it.
+
+[tall_block]
+A tall block of stone, too high to jump onto from the floor. Something lower might get you halfway.

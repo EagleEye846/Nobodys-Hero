@@ -51,6 +51,7 @@ export const WAY_OUT = {
   props: [
     { sprite: 'savepoint', x: 4, y: 6, save: true },
     { sprite: 'taper', x: 32, y: 4, npc: 'mother_taper', after: 'taper_follows', until: 'taper_blocks' },
+    { sprite: 'taper_remains', x: 32, y: 4, text: 'taper_remains', after: 'taper_defeated', walkable: true },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

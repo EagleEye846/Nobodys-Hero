@@ -1,4 +1,5 @@
-import { TILE_SIZE as T, UI_SCALE } from '../config.js';
+import { TILE_SIZE as T, UI_SCALE, UI_WIDTH, UI_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../config.js';
+import { soulSprite } from '../battle/soul.js';
 import { makeSprite, flipHorizontal } from '../engine/sprite.js';
 import { inUiSpace } from '../engine/screen.js';
 import { chooseFacing } from '../characters/hero.js';
@@ -39,6 +40,19 @@ const CAMERA_SPEED = 180;
 const EMOTE_SECONDS = 0.8;
 const BOB_SECONDS = 0.6;
 const FADE_MS = 300; // how long actors take to fade in or out
+
+// Before a story battle (in seconds from its start): the music cuts out, the
+// room closes in to a spotlight on you and the enemy (`who`) while their light
+// flares, your shadow stands up out of you and blinks three times, then
+// everything goes black and it drops away into the fight.
+const ENCOUNTER = {
+  darken: 1.2,
+  blinks: [1.3, 1.6, 1.9], // each blink lasts BLINK_SECONDS, with a ding
+  blackout: 2.25,
+  drop: 2.4,
+  end: 2.9,
+};
+const BLINK_SECONDS = 0.2;
 
 const spriteCache = new Map();
 // The sprite for an actor's `look`: 'prop:keeper' or 'enemy:columneon'.
@@ -104,7 +118,10 @@ class Actor {
     const alpha = this.alpha;
     if (alpha <= 0) return;
     const seconds = performance.now() / 1000;
-    const animated = this.animation && animationFrame(this.animation, seconds, this.speed);
+    // An animation played `once` runs from its start and stays on its last frame.
+    const animated = this.animation && (this.once
+      ? animationFrame(this.animation, seconds - this.animationStart, this.speed, true)
+      : animationFrame(this.animation, seconds, this.speed));
     const sprite = animated
       || (this.facing === 'up' && this.sprites.back)
       || (this.facing === 'left' ? this.sprites.left : this.sprites.right);
@@ -178,7 +195,8 @@ export class ScenePlayer {
         const speaker = step.who && step.who !== 'player' ? this.body(step.who) : null;
         const pages = String(step.text ?? '').split(/\n\s*\n/).map((page) => page.trim()).filter(Boolean);
         if (!pages.length) return true;
-        this.overworld.textbox.open(pages, speaker?.portrait ?? null);
+        // `face` is the speaker's expression (see portraits.js); a page can change it with {sad} and so on.
+        this.overworld.textbox.open(pages, speaker?.portrait ?? null, step.face ?? null);
         return false;
       }
       case 'walk':
@@ -218,11 +236,14 @@ export class ScenePlayer {
       }
       case 'animate': {
         // Starts (or with no animation, stops) an animation. With `seconds`,
-        // the scene waits that long, then the animation stops.
+        // the scene waits that long, then the animation stops. With `once`, it
+        // plays through one time and stays on its last frame.
         const body = this.body(step.who);
         if (body === this.overworld.player) return true;
         body.animation = step.animation || null;
         body.speed = step.speed ?? DEFAULT_FRAME_SECONDS;
+        body.once = Boolean(step.once);
+        body.animationStart = performance.now() / 1000;
         return !(step.animation && step.seconds > 0);
       }
       case 'sound':
@@ -237,10 +258,10 @@ export class ScenePlayer {
         return false;
       }
       case 'battle':
-        // The scene ends here; the overworld runs the battle, then plays the
-        // `spared` or `defeated` scene after it (see OverworldScene.storyBattle).
-        this.battle = step;
-        this.finish();
+        // The encounter plays first (see ENCOUNTER), then the scene ends there.
+        music.play(null);
+        sfx('flare');
+        step.dings = 0;
         return false;
       case 'end_chapter':
         // A card between chapters; then on into `room` (at `spawn`), or the title screen without one.
@@ -280,11 +301,24 @@ export class ScenePlayer {
         break;
       case 'animate':
         finished = step.t >= step.seconds;
-        if (finished) this.body(step.who).animation = null;
+        // One played `once` keeps its last frame; a looping one stops.
+        if (finished && !step.once) this.body(step.who).animation = null;
         break;
       case 'camera':
         finished = this.pan(step, dt);
         break;
+      case 'battle':
+        while (step.dings < ENCOUNTER.blinks.length && step.t >= ENCOUNTER.blinks[step.dings]) {
+          sfx('soul');
+          step.dings++;
+        }
+        if (step.t >= ENCOUNTER.end) {
+          // The scene ends here; the overworld runs the battle, then plays the
+          // `spared` or `defeated` scene after it (see OverworldScene.storyBattle).
+          this.battle = step;
+          this.finish();
+        }
+        return;
       default:
         finished = true;
     }
@@ -379,8 +413,84 @@ export class ScenePlayer {
     for (const actor of this.actors.values()) actor.hidden = true;
   }
 
+  // The lead-in to a story battle (see ENCOUNTER), over the whole room.
+  drawEncounter(ctx, camera, step) {
+    const t = step.t;
+    const ease = (x) => 1 - (1 - Math.min(1, Math.max(0, x))) ** 3;
+    const { player } = this.overworld;
+    const chest = { x: player.x - camera.x, y: player.y - 10 - camera.y };
+    const foe = step.who ? this.body(step.who) : null;
+    const flame = foe && { x: foe.x - camera.x, y: foe.y - (foe.sprites?.right.height ?? 24) * 0.6 - camera.y };
+
+    // The dark closing in to a spotlight around you both.
+    const close = ease(t / ENCOUNTER.darken);
+    const cx = flame ? (chest.x + flame.x) / 2 : chest.x;
+    const cy = flame ? (chest.y + flame.y) / 2 : chest.y;
+    const tight = (flame ? Math.hypot(flame.x - chest.x, flame.y - chest.y) / 2 : 0) + 30;
+    const radius = 420 + (tight - 420) * close;
+    const dark = ctx.createRadialGradient(cx, cy, radius * 0.55, cx, cy, radius);
+    dark.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    dark.addColorStop(1, `rgba(0, 0, 0, ${(0.94 * close).toFixed(3)})`);
+    ctx.fillStyle = dark;
+    ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    // Their light flaring up, with embers rising off it.
+    const lit = Math.min(1, t / 0.8) * (1 - ease((t - ENCOUNTER.blackout) / 0.15));
+    if (flame && lit > 0) {
+      const glowRadius = (16 + 14 * close) * (0.9 + 0.1 * Math.sin(t * 17));
+      const glow = ctx.createRadialGradient(flame.x, flame.y, 1, flame.x, flame.y, glowRadius);
+      glow.addColorStop(0, `rgba(255, 200, 110, ${(0.55 * lit).toFixed(3)})`);
+      glow.addColorStop(1, 'rgba(255, 200, 110, 0)');
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = glow;
+      ctx.fillRect(flame.x - glowRadius, flame.y - glowRadius, glowRadius * 2, glowRadius * 2);
+      ctx.restore();
+      for (let i = 0; i < 14; i++) {
+        const rise = (t * 0.8 + i / 14) % 1;
+        ctx.fillStyle = i % 3 ? `rgba(255, 190, 90, ${((1 - rise) * lit).toFixed(3)})` : `rgba(255, 240, 200, ${((1 - rise) * lit).toFixed(3)})`;
+        ctx.fillRect(Math.round(flame.x + Math.sin(i * 12.9) * 9 + Math.sin(t * 3 + i) * 2), Math.round(flame.y + 8 - rise * 36), 1, 1);
+      }
+    }
+
+    // Then nothing but black.
+    const black = ease((t - ENCOUNTER.blackout) / 0.15);
+    if (black > 0) {
+      ctx.fillStyle = `rgba(0, 0, 0, ${black.toFixed(3)})`;
+      ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
+
+    // Your soul: it blinks out of your chest, then drops away into the fight.
+    const blinking = ENCOUNTER.blinks.some((start) => t >= start && t < start + BLINK_SECONDS);
+    const held = t >= ENCOUNTER.blinks.at(-1) + BLINK_SECONDS;
+    if (!blinking && !held) return;
+    const fall = ease((t - ENCOUNTER.drop) / (ENCOUNTER.end - ENCOUNTER.drop));
+    const sprite = soulSprite();
+    const x = chest.x * UI_SCALE + (UI_WIDTH / 2 - chest.x * UI_SCALE) * fall;
+    const y = chest.y * UI_SCALE + (UI_HEIGHT * 0.78 - chest.y * UI_SCALE) * fall;
+    // A ring bursting out of it on each ding.
+    const since = t - ENCOUNTER.blinks.filter((start) => t >= start).at(-1);
+    inUiSpace(ctx, () => {
+      ctx.globalAlpha = 1 - fall * 0.7;
+      // Your shadow, standing up out of you, glowing at the edges.
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 6;
+      ctx.drawImage(sprite, Math.round(x - sprite.width / 2), Math.round(y - sprite.height / 2));
+      ctx.shadowBlur = 0;
+      if (since < 0.3 && fall === 0) {
+        ctx.globalAlpha = 1 - since / 0.3;
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 10 + since * 90, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    });
+  }
+
   // Emote bubbles above heads, drawn over everything else in the room.
   drawOverlay(ctx, camera) {
+    if (this.step?.do === 'battle' && !this.done) this.drawEncounter(ctx, camera, this.step);
     for (const { body, text, t } of this.emotes) {
       const pop = Math.min(1, t / 0.12);
       const headY = body.y - (body.sprites?.right.height ?? 24) - 8 - camera.y;

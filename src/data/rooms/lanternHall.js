@@ -24,8 +24,8 @@ export const LANTERN_HALL = {
     '#....................#',
     '#.....rrrrrrrrrr.....#',
     '#..P..rrrrrrrrrr..P..#',
-    '#.....rrrrrrrrrr.....#',
-    '#.....rrrrrrrrrr.....#',
+    '#.....rrrrbbrrrr.....#',
+    '#.....rrrrbbrrrr.....#',
     '#..P..rrrrrrrrrr..P..#',
     '#.....rrrrrrrrrr.....#',
     '#....................#',
@@ -56,14 +56,15 @@ export const LANTERN_HALL = {
     { sprite: 'sign', x: 13, y: 3, text: 'hall_riddle' },
     { sprite: 'lantern_post', x: 5, y: 11, text: 'hall_lantern', lever: 'west' },
     { sprite: 'lantern_post', x: 16, y: 11, text: 'hall_lantern', lever: 'east' },
-    { sprite: 'lantern_post', x: 10, y: 13, text: 'hall_lantern', lever: 'heart' },
+    // The heart of the hall: up on a stone dais in the middle (jump up to it).
+    { sprite: 'lantern_post', x: 10, y: 8, text: 'hall_lantern', lever: 'heart' },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,
   // `tileTexts` for every tile of a kind (by its letter). Both name sections
   // of the text file, like signs.
   looks: [],
-  tileTexts: { F: 'flower_beds' },
+  tileTexts: { F: 'flower_beds', b: 'stone_block' },
 
   // Enemies wandering the room, by their file name in src/data/enemies/.
   // patrol is the leftmost and rightmost tile they walk between. `behaviour`

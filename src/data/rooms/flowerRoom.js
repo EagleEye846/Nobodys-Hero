@@ -4,8 +4,8 @@
 //   H  wall face with a faded banner (solid)    .  floor
 //   r  rug                                      p  potted plant (solid)
 //   F  flower bed (solid)                       ~  water (solid)
-//   D  doorway (walk through it; see `doors`)   C  candle stand (walk or hide behind) (solid)
-//   U  stairs up (walk through it; see `doors`)
+//   D  doorway (walk through it; see `doors`)   U  stairs up (walk through it; see `doors`)
+//   C  candle stand (walk or hide behind) (solid)
 export const FLOWER_ROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'flower_room',

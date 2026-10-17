@@ -79,11 +79,49 @@ export function layoutDialogue(ctx, text, maxWidth, size) {
   const indent = ctx.measureText('* ').width;
   const lines = [];
   for (const paragraph of text.split('\n')) {
-    wrapParagraph(ctx, paragraph, maxWidth - indent).forEach((line, i) => {
-      lines.push({ text: line, bullet: i === 0, indent });
+    // A paragraph carried over from the page before carries on without a new "* ".
+    const continued = paragraph.startsWith(CONTINUED);
+    wrapParagraph(ctx, continued ? paragraph.slice(1) : paragraph, maxWidth - indent).forEach((line, i) => {
+      lines.push({ text: line, bullet: i === 0 && !continued, indent });
     });
   }
   return lines;
+}
+
+// Starts a paragraph that carries on from the page before (see paginate).
+export const CONTINUED = '\u2060';
+
+// Splits dialogue into pages of at most `maxLines` lines each, so nothing ever
+// runs off the bottom of its box: between paragraphs where it can, between
+// words when one paragraph is too long for a page on its own.
+export function paginate(ctx, text, maxWidth, size, maxLines) {
+  const fits = (page) => layoutDialogue(ctx, page, maxWidth, size).length <= maxLines;
+  if (fits(text)) return [text];
+  const pages = [];
+  let page = '';
+  for (const paragraph of text.split('\n')) {
+    const together = page ? `${page}\n${paragraph}` : paragraph;
+    if (fits(together)) {
+      page = together;
+      continue;
+    }
+    if (page) pages.push(page);
+    page = '';
+    let words = paragraph.split(' ');
+    let prefix = '';
+    while (words.length) {
+      let count = 1;
+      while (count < words.length && fits(prefix + words.slice(0, count + 1).join(' '))) count++;
+      const chunk = prefix + words.slice(0, count).join(' ');
+      words = words.slice(count);
+      prefix = CONTINUED;
+      // The last piece can share its page with the next paragraph.
+      if (words.length) pages.push(chunk);
+      else page = chunk;
+    }
+  }
+  if (page) pages.push(page);
+  return pages;
 }
 
 // Draws laid-out dialogue, revealing only the first `visible` characters (for typewriter text).

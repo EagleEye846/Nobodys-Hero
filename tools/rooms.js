@@ -34,6 +34,8 @@ export const TILE_INFO = {
   J: { name: 'Broken pillar', note: 'broken pillar (walk or hide behind)' },
   S: { name: 'Hero statue', note: 'statue (walk or hide behind)' },
   C: { name: 'Candelabra', note: 'candle stand (walk or hide behind)' },
+  b: { name: 'Low block', note: 'low stone block (jump up onto it)' },
+  B: { name: 'Tall block', note: 'tall stone block (jump onto it from a low block)' },
 };
 export const tileName = (char) => TILE_INFO[char]?.name ?? `Tile "${char}"`;
 
@@ -190,6 +192,9 @@ const propLiteral = (prop) => {
   if (prop.gives && prop.taken) out.taken = prop.taken;
   if (prop.until) out.until = prop.until;
   if (prop.after) out.after = prop.after;
+  if (prop.walkable) out.walkable = true;
+  if (prop.light) out.light = prop.light;
+  if (prop.seenInLight) out.seenInLight = true;
   return inline(out);
 };
 const doorLiteral = ({ x, y, w, h, to, spawn }) => inline({ x, y, w, h, to, spawn: { x: spawn.x, y: spawn.y } });
@@ -217,6 +222,7 @@ export function roomModule(room, constName, header) {
     `  area: ${quote(room.area ?? 'ruins')},`,
     '  // The song that plays here (a file in src/data/music/).',
     `  music: ${room.music ? quote(room.music) : 'null'},`,
+    ...(room.dark ? ['  // Dark: you only see what light reaches (your candle, lanterns). 0 to 1, how dark.', `  dark: ${room.dark},`] : []),
     '',
     '  tiles: [',
     tiles.map((row) => `    ${quote(row)},`).join('\n'),

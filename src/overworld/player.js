@@ -1,5 +1,6 @@
 import { TILE_SIZE as T } from '../config.js';
 import { HERO_ANIMATIONS, chooseFacing, heroFrame, heroBounce } from '../characters/hero.js';
+import { skillBonus } from '../characters/progress.js';
 
 const WALK_SPEED = 70; // pixels per second
 const RUN_SPEED = 130;
@@ -8,6 +9,11 @@ const JUMP_SPEED = 150; // pixels per second, upwards
 const GRAVITY = 700; // pixels per second squared
 // Pressing jump this long before landing still counts, so mashing feels responsive.
 const JUMP_BUFFER = 0.12;
+// How high a jump reaches (about 16 pixels): enough to get up onto a block one
+// step higher (a `raise` of 12, see tileset.js), but not two (24). The Acrobat
+// skill (`jumpHeight`) adds a step.
+export const JUMP_REACH = (JUMP_SPEED * JUMP_SPEED) / (2 * GRAVITY);
+const jumpSpeed = () => Math.sqrt(2 * GRAVITY * (JUMP_REACH + skillBonus('jumpHeight')));
 
 // After the floor breaks, the player hangs in the air this long before dropping.
 const FALL_PAUSE = 0.25;
@@ -29,7 +35,10 @@ export class Player {
     this.running = false;
     this.animationTime = 0;
 
-    // Height above the ground. Jumping is visual only; collision stays at the feet.
+    // Height above what they're standing on (`ground`: the floor, or the top
+    // of a raised block). Walking into a block works only when they're up as
+    // high as its top; walking off one drops them down.
+    this.ground = 0;
     this.z = 0;
     this.velocityZ = 0;
     this.jumpBufferTime = 0;
@@ -68,7 +77,7 @@ export class Player {
 
       // Diagonals aren't normalised, matching Deltarune's movement feel.
       this.running = input.isDown('cancel');
-      const speed = this.running ? RUN_SPEED : WALK_SPEED;
+      const speed = this.running ? RUN_SPEED * (1 + skillBonus('runSpeed')) : WALK_SPEED;
       this.moveAxis(room, 'x', dx * speed * dt);
       this.moveAxis(room, 'y', dy * speed * dt);
 
@@ -97,7 +106,7 @@ export class Player {
 
     if (input.wasPressed('jump') || this.jumpBufferTime > 0) {
       this.jumpBufferTime = 0;
-      this.velocityZ = JUMP_SPEED;
+      this.velocityZ = jumpSpeed();
     }
   }
 
@@ -117,14 +126,31 @@ export class Player {
         this[remainderKey] = 0;
         return;
       }
+      // A block's side is a wall unless they're up as high as its top.
+      const height = this.ground + this.z;
+      const floor = this.floorAt(room, nextX, nextY);
+      if (floor > height + 0.5) {
+        this[remainderKey] = 0;
+        return;
+      }
       this.x = nextX;
       this.y = nextY;
       pixels -= step;
+      // Stepping up onto a block, or off one (and dropping down to the floor below).
+      if (floor !== this.ground) {
+        this.ground = floor;
+        this.z = Math.max(0, height - floor);
+      }
     }
   }
 
   collidesAt(room, x, y) {
-    return room.collides(x - HITBOX_HALF_WIDTH, y - HITBOX_HEIGHT, x + HITBOX_HALF_WIDTH, y);
+    return room.collides(x - HITBOX_HALF_WIDTH, y - HITBOX_HEIGHT, x + HITBOX_HALF_WIDTH, y, true);
+  }
+
+  // The highest floor under the feet at (x, y): 0, or a block's top.
+  floorAt(room, x, y) {
+    return room.floorHeight(x - HITBOX_HALF_WIDTH, y - HITBOX_HEIGHT, x + HITBOX_HALF_WIDTH, y);
   }
 
   // The tile under the player's feet.
@@ -149,6 +175,7 @@ export class Player {
     this.y = this.hole.y + T - 4;
     this.facing = 'down';
     this.moving = false;
+    this.ground = 0;
     this.z = 0;
     this.velocityZ = 0;
     this.fallTime = 0;
@@ -164,12 +191,12 @@ export class Player {
     // Running has its own frames and a little bounce.
     const frame = heroFrame(this.facing, this.moving, this.isAirborne, this.animationTime, this.running);
     const bounce = heroBounce(this.moving, this.isAirborne, this.animationTime, this.running);
-    this.drawFrame(ctx, camera, frame, this.y - Math.round(this.z) - bounce);
+    this.drawFrame(ctx, camera, frame, this.y - this.ground - Math.round(this.z) - bounce);
   }
 
   drawShadow(ctx, camera) {
     const x = this.x - camera.x;
-    const y = this.y - camera.y;
+    const y = this.y - this.ground - camera.y;
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.fillRect(x - 4, y - 3, 8, 3);
     ctx.fillRect(x - 5, y - 2, 10, 1);

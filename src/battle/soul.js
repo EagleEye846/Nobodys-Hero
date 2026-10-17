@@ -10,33 +10,49 @@ export const GRAZE_RADIUS = 12;
 const MODE_FLASH_SECONDS = 0.4;
 const GRAZE_GLOW_SECONDS = 0.15;
 
-// The soul: a heart, half filled, with a sparkle. 17x16, drawn in UI space at
-// 1:1 so it keeps its detail. Modes recolour it.
+// The soul is your SHADOW: when danger comes, it stands up out of you to take
+// the hits, and what you steer in the battle box is it. It doesn't look like
+// you, though. It looks like a Hero: a knight's plumed helmet with a visor slit,
+// fraying into smoke at the bottom where it's lifted off you. 17x17, drawn in
+// UI space at 1:1 so it keeps its detail. Modes recolour its rim and its glow.
 const SOUL_ROWS = [
-  '...###.....###...',
-  '..#...#...#...#..',
-  '.#.....#.#.....#.',
-  '#.......#...#...#',
-  '#..........#.#..#',
-  '#...........#...#',
-  '#.........#.....#',
-  '.#.............#.',
-  '.#..#########..#.',
-  '..#..#.#####..#..',
-  '...#..#.###..#...',
-  '....#..###..#....',
-  '.....#..#..#.....',
-  '......#...#......',
-  '.......#.#.......',
-  '........#........',
+  '..........##.....',
+  '.........#o#.....',
+  '......####o#.....',
+  '.....#ooooo##....',
+  '....#ooooooo#....',
+  '....#ggggggg#....',
+  '....#ooooooo#....',
+  '.....#ooooo#.....',
+  '..###ooooooo###..',
+  '.#oooooooooooooo#',
+  '#oooooooooooooooo',
+  '#ooooooooooooooo#',
+  '.#ooooooooooooo#.',
+  '..##ooooooooo##..',
+  '....##ooooo##.#..',
+  '......#ooo#..#...',
+  '.......#o#.......',
 ];
-const CENTER = { x: 8, y: 8 };
+// The point that gets hit: its chest, not the middle of the picture.
+const CENTER = { x: 8, y: 10 };
+const BODY = '#221636';
 
 const sprites = new Map();
-// The soul sprite in a mode's colour. Also used as the menu cursor.
+// The shadow in a mode's colour. Also used as the menu cursor.
 export function soulSprite(modeName = 'normal') {
-  if (!sprites.has(modeName)) sprites.set(modeName, makeSprite(SOUL_ROWS, { '#': SOUL_MODES[modeName].color }));
+  if (!sprites.has(modeName)) {
+    const color = SOUL_MODES[modeName].color;
+    sprites.set(modeName, makeSprite(SOUL_ROWS, { '#': color, o: BODY, g: dim(color) }));
+  }
   return sprites.get(modeName);
+}
+
+// The light through the visor: the rim's colour, faded into the dark.
+function dim(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const mix = (c) => Math.round(c * 0.45 + 0x22 * 0.55).toString(16).padStart(2, '0');
+  return `#${mix(n >> 16)}${mix((n >> 8) & 255)}${mix(n & 255)}`;
 }
 
 // The player's soul: what you steer inside the battle box while the enemy
@@ -102,7 +118,7 @@ export class Soul {
     const y = Math.round(this.y * S);
     const sprite = soulSprite(this.modeName);
 
-    // While grazing, a larger faint heart shows the graze area.
+    // While grazing, a larger faint shadow shows the graze area.
     if (this.grazeGlow > 0) {
       ctx.globalAlpha = (this.grazeGlow / GRAZE_GLOW_SECONDS) * 0.5;
       ctx.drawImage(sprite, x - CENTER.x * 2, y - CENTER.y * 2, sprite.width * 2, sprite.height * 2);
@@ -111,7 +127,12 @@ export class Soul {
 
     // Blink while invincible after a hit.
     if (this.iframes > 0 && Math.floor(this.iframes * 12) % 2 === 0) return;
+    // A soft glow around its rim, so the shadow stands out against the dark box.
+    ctx.save();
+    ctx.shadowColor = this.mode.color;
+    ctx.shadowBlur = 6;
     ctx.drawImage(sprite, x - CENTER.x, y - CENTER.y);
+    ctx.restore();
 
     if (this.focused) {
       ctx.fillStyle = '#4fe3d0';

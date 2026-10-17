@@ -12,6 +12,7 @@ import { drawText } from './text.js';
 import { EquipMenu } from './equipMenu.js';
 import { SkillsMenu } from './skillsMenu.js';
 import { ItemsMenu } from './itemsMenu.js';
+import { CandleMenu } from './candleMenu.js';
 
 // The menu on C in the overworld, laid out like Deltarune's: a bar of buttons
 // across the top and the hero's status card along the bottom. Left/right picks
@@ -21,9 +22,10 @@ const TABS = [
   { label: 'ITEMS', icon: 'items' },
   { label: 'EQUIP', icon: 'fight' },
   { label: 'SKILLS', icon: 'spells' },
+  { label: 'CANDLES', icon: 'candle' },
 ];
 const BAR_HEIGHT = 84;
-const BUTTON = { w: 120, h: 58, gap: 24, y: 13 };
+const BUTTON = { w: 130, h: 58, gap: 16, y: 13 };
 const CARD = { x: 100, y: 352, w: 440, h: 112 };
 const COLORS = {
   orange: '#ff8c1a',
@@ -54,7 +56,7 @@ export class PauseMenu {
   constructor() {
     this.isOpen = false;
     this.tab = 0;
-    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu()];
+    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu(), new CandleMenu()];
   }
 
   open() {
@@ -142,11 +144,11 @@ export class PauseMenu {
     drawText(ctx, `HP ${heroMaxHp()}`, left + 170, y + 14, { size: 26 });
 
     drawText(ctx, 'EXP', left, y + 50, { size: 22, color: COLORS.exp });
-    bar(ctx, left + 40, y + 56, 160, 10, HERO_STATE.exp / need, COLORS.exp, COLORS.expBack);
-    drawText(ctx, `${HERO_STATE.exp}/${need}`, left + 210, y + 50, { size: 22, color: COLORS.dim });
+    bar(ctx, left + 40, y + 56, 110, 10, HERO_STATE.exp / need, COLORS.exp, COLORS.expBack);
+    drawText(ctx, `${HERO_STATE.exp}/${need}`, left + 158, y + 50, { size: 22, color: COLORS.dim });
 
     const points = HERO_STATE.skillPoints;
-    drawText(ctx, `${points} SKILL POINT${points === 1 ? '' : 'S'}`, x + w - 16, y + 50, {
+    drawText(ctx, `${points} POINT${points === 1 ? '' : 'S'}`, x + w - 16, y + 50, {
       size: 22,
       color: points ? COLORS.yellow : COLORS.dim,
       align: 'right',

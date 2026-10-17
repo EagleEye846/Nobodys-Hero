@@ -32,4 +32,6 @@ export const WAXLING = {
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'wax_drop', chance: 0.45 }],
+  // Candle-making materials it leaves behind (see src/data/candles.js), beaten or spared.
+  materials: [{ id: 'wax', chance: 0.8, amount: 2 }],
 };

@@ -13,7 +13,7 @@
 #   waiting       a melted candle, dust, and tally marks on the wall
 #   stair         an empty staircase under a lit doorway
 #   stranger      the same staircase, with someone in the doorway
-#   breath        everyone at the foot of the stair, looking up at them
+#   breath        everyone at the foot of the stair, seen from behind as shadows, looking up
 #   black        nothing, just text
 #
 # To show a picture twice, add a word after its name: [stair again].

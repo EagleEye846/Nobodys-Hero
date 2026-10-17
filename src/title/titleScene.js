@@ -69,7 +69,11 @@ export class TitleScene {
 
   enter(game) {
     this.game = game;
-    music.play('prophecy');
+    // Once the Ruins are behind you (Taper spared or beaten), the title has
+    // its own song; before that, the prophecy's.
+    const seen = this.save?.world?.seenScenes ?? [];
+    const leftRuins = seen.includes('taper_spared') || seen.includes('taper_defeated');
+    music.play(leftRuins ? 'title' : 'prophecy');
   }
 
   update(dt, input) {

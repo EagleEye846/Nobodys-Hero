@@ -31,4 +31,6 @@ export const SHADE = {
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'dark_chocolate', chance: 0.3 }],
+  // Candle-making materials it leaves behind (see src/data/candles.js), beaten or spared.
+  materials: [{ id: 'shadow_ash', chance: 0.6, amount: 1 }],
 };

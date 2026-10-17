@@ -90,3 +90,103 @@ export const ORGAN = {
   vibrato: { rate: 6, depth: 3 },
   reverb: 0.5,
 };
+
+// --- Soloists and a concert hall. These lean on the touches that make a synth
+// sound played rather than programmed: vibrato that blooms in after the note
+// starts, bow or breath noise under the tone, a tone that darkens as it rings,
+// seats across the stage (`pan`), and a little human unevenness (`humanize`).
+
+// A concert grand: two strings per note slightly out of tune, bright when
+// struck and mellowing as it rings, with the pedal down.
+const GRAND = [1, 0.6, 0.4, 0.28, 0.16, 0.11, 0.07, 0.05, 0.03, 0.02];
+export const CONCERT_PIANO = {
+  voices: [{ harmonics: GRAND, detune: -2 }, { harmonics: GRAND, detune: 2 }],
+  sweep: { from: 5200, to: 1300, time: 1.6, q: 0.4 },
+  attack: 0.002, decay: 1.6, sustain: 0, release: 1.1, gate: 1,
+  click: 0.04,
+  humanize: { time: 0.012, volume: 0.2 },
+  reverb: 0.45,
+};
+
+// One violin, singing: a bowed edge that settles, and vibrato that blooms.
+export const SOLO_VIOLIN = {
+  voices: [{ wave: 'sawtooth', detune: -3 }, { wave: 'sawtooth', detune: 3 }, { wave: 'sine', level: 0.3 }],
+  sweep: { from: 1400, to: 3600, time: 0.18, q: 0.6 },
+  filter: { type: 'lowpass', frequency: 4200 },
+  attack: 0.09, decay: 0.8, sustain: 0.85, release: 0.35, gate: 1,
+  vibrato: { rate: 5.6, depth: 16, delay: 0.4 },
+  breath: { level: 0.04, frequency: 3200, q: 0.8 },
+  humanize: { time: 0.01, volume: 0.12 },
+  pan: 0.2,
+  reverb: 0.5,
+};
+
+// A cello: the same bowing, lower and darker.
+export const CELLO = {
+  voices: [{ wave: 'sawtooth', detune: -3 }, { wave: 'sawtooth', detune: 3 }, { wave: 'sine', octave: -1, level: 0.25 }],
+  sweep: { from: 600, to: 1800, time: 0.22, q: 0.6 },
+  filter: { type: 'lowpass', frequency: 2000 },
+  attack: 0.1, decay: 0.8, sustain: 0.85, release: 0.4, gate: 1,
+  vibrato: { rate: 5, depth: 12, delay: 0.45 },
+  breath: { level: 0.03, frequency: 1600, q: 0.8 },
+  humanize: { time: 0.012, volume: 0.12 },
+  pan: -0.35,
+  reverb: 0.45,
+};
+
+// A flute: nearly pure, with air around it.
+export const FLUTE = {
+  harmonics: [1, 0.22, 0.07, 0.03],
+  attack: 0.07, decay: 0.6, sustain: 0.85, release: 0.25, gate: 0.97,
+  vibrato: { rate: 5, depth: 9, delay: 0.3 },
+  breath: { level: 0.1, frequency: 2400, q: 0.7 },
+  humanize: { time: 0.01, volume: 0.12 },
+  pan: 0.15,
+  reverb: 0.5,
+};
+
+// A concert harp: plucked, ringing, softening as it fades.
+export const HARP = {
+  harmonics: [1, 0.45, 0.22, 0.12, 0.06, 0.03],
+  sweep: { from: 4200, to: 1100, time: 0.8, q: 0.4 },
+  attack: 0.003, decay: 1.3, sustain: 0, release: 1.2, gate: 1,
+  click: 0.03,
+  humanize: { time: 0.015, volume: 0.25 },
+  pan: -0.25,
+  reverb: 0.55,
+};
+
+// A French horn, played softly: round and far away.
+export const HORN = {
+  voices: [{ wave: 'sawtooth', detune: -4 }, { wave: 'sawtooth', detune: 4 }, { wave: 'sine', octave: -1, level: 0.3 }],
+  sweep: { from: 300, to: 1300, time: 0.35, q: 0.7 },
+  attack: 0.12, decay: 0.8, sustain: 0.8, release: 0.5, gate: 1,
+  vibrato: { rate: 4.5, depth: 5, delay: 0.5 },
+  humanize: { time: 0.015, volume: 0.1 },
+  pan: -0.15,
+  reverb: 0.6,
+};
+
+// A full string section, warmer and wider than STRINGS, swelling into each chord.
+export const STRING_SECTION = {
+  voices: [
+    { wave: 'sawtooth', detune: -11 }, { wave: 'sawtooth', detune: -4 },
+    { wave: 'sawtooth', detune: 4 }, { wave: 'sawtooth', detune: 11 },
+  ],
+  filter: { type: 'lowpass', frequency: 2200 },
+  attack: 0.5, decay: 1, sustain: 0.9, release: 0.8, gate: 1,
+  vibrato: { rate: 5.2, depth: 8, delay: 0.5 },
+  breath: { level: 0.02, frequency: 2600, q: 0.6 },
+  reverb: 0.55,
+};
+
+// Double basses plucked (pizzicato): a soft, round thump.
+export const PIZZICATO_BASS = {
+  harmonics: [1, 0.5, 0.2, 0.08],
+  sweep: { from: 1500, to: 400, time: 0.25, q: 0.5 },
+  attack: 0.004, decay: 0.35, sustain: 0, release: 0.4, gate: 1,
+  click: 0.05,
+  humanize: { time: 0.01, volume: 0.2 },
+  pan: -0.1,
+  reverb: 0.35,
+};

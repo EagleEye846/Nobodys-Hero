@@ -1,0 +1,67 @@
+# THE CREDITS: they roll after you leave the Ruins, while "The Morning Past
+# the Hill" plays (src/data/music/creditsTheme.js), with its words glowing
+# at the bottom.
+#
+# Each [section] is one card, shown in the order they're written and spread
+# evenly through the song. Inside a card:
+#   the first line is the heading (what they did),
+#   the lines after it are the names,
+#   and a line starting with @ shows a character beside the card:
+#   @prop:taper, @prop:keeper, @enemy:dummy and so on (any cutscene look).
+#
+# A section's name is just a label; it isn't shown.
+
+[title]
+Chapter One: The Ruins
+NOBODY'S HERO
+
+[created]
+Created by
+EagleEye846
+
+[story]
+Story and Writing
+EagleEye846
+@prop:keeper
+
+[characters]
+Characters
+EagleEye846
+@enemy:columneon
+
+[art]
+Art and Animation
+EagleEye846
+@enemy:dummy
+
+[music]
+Music and Sound
+EagleEye846
+@enemy:moth
+
+[song]
+"The Morning Past the Hill"
+Music and lyrics by EagleEye846
+
+[programming]
+Programming
+EagleEye846
+@enemy:waxling
+
+[world]
+Level Design
+EagleEye846
+@enemy:bunny
+
+[battles]
+Battle and Bullet Design
+EagleEye846
+@enemy:shade
+
+[thanks]
+Special Thanks
+You, for playing
+
+[end]
+Thank you for playing
+Chapter One

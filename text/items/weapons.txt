@@ -7,11 +7,11 @@ A dependable old blade. No tricks, full damage.
 
 [old_shield]
 Dented, but sturdy.
-Raise a barrier around your SOUL that destroys bullets. Takes a few seconds to recharge.
+Raise a barrier around your SHADOW that destroys bullets. Takes a few seconds to recharge.
 
 [duelist_blade]
 Thin, quick and very sharp.
-A fast slash around your SOUL. Parry a bullet just before it hits and it recharges instantly.
+A fast slash around your SHADOW. Parry a bullet just before it hits and it recharges instantly.
 
 [ash_spear]
 Light enough to throw yourself after.

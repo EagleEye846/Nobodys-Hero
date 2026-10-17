@@ -32,4 +32,6 @@ export const DUST_BUNNY = {
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'wild_carrot', chance: 0.4 }],
+  // Candle-making materials it leaves behind (see src/data/candles.js), beaten or spared.
+  materials: [{ id: 'moonbell', chance: 0.6, amount: 1 }],
 };

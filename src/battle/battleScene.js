@@ -7,6 +7,7 @@ import { drawText } from '../ui/text.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { ITEMS, giveItem, healLabel } from '../data/items.js';
+import { MATERIALS, giveMaterial } from '../data/candles.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { gainExp, heroMaxHp, knownSpells, skillBonus } from '../characters/progress.js';
 import { WEAPONS } from '../data/weapons.js';
@@ -124,7 +125,7 @@ export class BattleScene {
     this.turn = 0;
     this.defending = false;
     this.seenModes = new Set(['normal']);
-    this.earned = { exp: 0, coins: 0, items: [] };
+    this.earned = { exp: 0, coins: 0, items: [], materials: {} };
     this.target = this.foes[0];
     this.slashFoe = null;
 
@@ -159,7 +160,7 @@ export class BattleScene {
     // A boss with an `introCard` makes an entrance first.
     const boss = this.foes.find((foe) => foe.data.introCard);
     if (boss) this.startBossIntro(boss);
-    else this.showMessage(this.introText(), 'command');
+    else this.showIntro();
   }
 
   // A boss makes an entrance: the stage opens out of the dark, it flares up, a
@@ -180,7 +181,7 @@ export class BattleScene {
     const next = () => {
       if (!this.tauntBubbles.length) {
         this.taunt = null;
-        this.showMessage(this.introText(), 'command');
+        this.showIntro();
         return;
       }
       this.taunt = this.tauntBubbles.shift();
@@ -261,6 +262,8 @@ export class BattleScene {
       name: data.name,
       sprite,
       flashSprite: makeSprite(data.sprite.rows, white),
+      // A boss can have a `beatenSprite` to show instead of fading away when beaten.
+      beatenSprite: data.beatenSprite ? makeSprite(data.beatenSprite.rows, data.beatenSprite.palette) : null,
       pos,
       center: { x: pos.x + (sprite.width * SCALE) / 2, y: pos.y + (sprite.height * SCALE) / 2 },
       hp: data.maxHp,
@@ -284,6 +287,17 @@ export class BattleScene {
 
   foeLine(foe, section) {
     return this.foeLines(foe, section)[0];
+  }
+
+  // The opening message. The very first time you ever fight, your shadow
+  // stands up out of you first (text/battle.txt), and it's remembered.
+  showIntro() {
+    if (WORLD_STATE.metShadow) {
+      this.showMessage(this.introText(), 'command');
+      return;
+    }
+    WORLD_STATE.metShadow = true;
+    this.showMessage(textSection('battle.txt', 'first_shadow')[0], () => this.showMessage(this.introText(), 'command'));
   }
 
   introText() {
@@ -312,8 +326,10 @@ export class BattleScene {
     music.play(this.foes[0].data.music ?? 'battle');
   }
 
+  // A message too long for the panel carries on over several pages.
   showMessage(text, next) {
-    this.message = { text, next };
+    const pages = hud.textPages(text);
+    this.message = { text: pages[0], pages, page: 0, next };
     this.setPhase('message');
   }
 
@@ -534,6 +550,11 @@ export class BattleScene {
 
   // `next` is a phase name, 'exit' to end the battle, or a function to run.
   advanceMessage() {
+    if (this.message.page < this.message.pages.length - 1) {
+      this.message.page++;
+      this.message.text = this.message.pages[this.message.page];
+      return;
+    }
     const { next } = this.message;
     if (typeof next === 'function') next();
     else if (next === 'exit') this.finish(this.result);
@@ -722,11 +743,27 @@ export class BattleScene {
 
     const [id] = this.items.splice(index, 1);
     const item = ITEMS[id];
+    sfx('heal');
+    // Candles burn rather than get eaten: each does its own thing (see items.js).
+    if (item.use === 'calm') {
+      const calmed = this.activeFoes().map((foe) => this.calmFoe(foe, item.amount, '').trim());
+      this.showMessage(`You light the ${item.name}. A soft, sweet scent fills the air.\n${calmed.join('\n')}`, 'taunt');
+      return;
+    }
+    if (item.use === 'sp') {
+      this.gainSp(item.amount);
+      this.showMessage(`You light the ${item.name}. Its glow fills you with power. SP +${item.amount}%!`, 'taunt');
+      return;
+    }
+    if (item.use === 'guard') {
+      this.defending = true;
+      this.showMessage(`You light the ${item.name}. Its smoke wraps around you like a cloak.\nThe next attack will do half the damage.`, 'taunt');
+      return;
+    }
     const before = this.hero.hp;
     this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + item.heal);
-    sfx('heal');
     const healed = this.hero.hp === this.hero.maxHp && item.heal >= 999 ? 'Your HP was maxed out!' : `Recovered ${this.hero.hp - before} HP!`;
-    this.showMessage(`You ate the ${item.name}. ${healed}`, 'taunt');
+    this.showMessage(`You ${item.light ? 'light' : 'ate'} the ${item.name}. ${healed}`, 'taunt');
   }
 
   resolveStrike(damage) {
@@ -753,6 +790,10 @@ export class BattleScene {
     // Sometimes they leave something behind.
     for (const { item, chance } of foe.data.drops ?? []) {
       if (Math.random() < chance) this.earned.items.push(item);
+    }
+    // And candle-making materials, spared or beaten alike.
+    for (const { id, chance, amount = 1 } of foe.data.materials ?? []) {
+      if (Math.random() < chance) this.earned.materials[id] = (this.earned.materials[id] ?? 0) + amount;
     }
     const line = this.foeLine(foe, how === 'defeated' ? 'victory' : 'pacified');
     const text = prefix ? `${prefix}\n${line}` : line;
@@ -972,6 +1013,10 @@ export class BattleScene {
     for (const id of this.earned.items) {
       text += giveItem(id) ? `\nGot a ${ITEMS[id].name}!` : `\nYou couldn't carry the ${ITEMS[id].name}.`;
     }
+    for (const [id, amount] of Object.entries(this.earned.materials)) {
+      giveMaterial(id, amount);
+      text += `\nGot ${amount} ${MATERIALS[id].name}${amount > 1 ? 's' : ''}.`;
+    }
     if (exp && gainExp(exp)) {
       sfx('levelUp');
       text += `\nLEVEL UP! Now LV ${HERO_STATE.level}. Press C to spend skill points.`;
@@ -1108,8 +1153,17 @@ export class BattleScene {
   }
 
   // An enemy bobbing in place; shaking after a hit; fading away once beaten
-  // (or drifting up and away once pacified).
+  // (or drifting up and away once pacified). One with a `beatenSprite` sinks
+  // into that instead, and stays, still.
   drawFoe(ctx, foe) {
+    if (foe.state === 'defeated' && foe.beatenSprite) {
+      const sprite = foe.beatenSprite;
+      const bottom = foe.pos.y + foe.sprite.height * SCALE;
+      // A shudder as she goes down.
+      const shake = Math.round(Math.sin((this.time - foe.leftAt) * 50) * 2 * Math.max(0, 1 - (this.time - foe.leftAt) * 2));
+      ctx.drawImage(sprite, foe.pos.x + shake, bottom - sprite.height * SCALE, sprite.width * SCALE, sprite.height * SCALE);
+      return;
+    }
     const w = foe.sprite.width * SCALE;
     const h = foe.sprite.height * SCALE;
     let x = foe.pos.x;

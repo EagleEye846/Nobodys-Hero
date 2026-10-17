@@ -21,6 +21,10 @@ import { SCENES } from '../data/scenes/index.js';
 import { ScenePlayer } from './scenePlayer.js';
 import { ITEMS, giveItem } from '../data/items.js';
 import { ChapterEndScene } from '../title/chapterEndScene.js';
+import { burnCandle, lightRadius } from '../data/candles.js';
+import { HERO_STATE } from '../characters/heroState.js';
+import { skillBonus } from '../characters/progress.js';
+import { CreditsScene } from '../title/creditsScene.js';
 
 // Enemies this close (in world pixels) to the one you touch join the fight, up to MAX_GROUP in all.
 const GROUP_RADIUS = 64;
@@ -35,6 +39,9 @@ const FADE_SECONDS = 0.8;
 
 // The screen flashes this long before a battle starts.
 const BATTLE_FLASH_SECONDS = 0.7;
+
+// Dark rooms: the darkness is drawn onto this, with holes cut where light reaches.
+let darkCanvas = null;
 
 // The area's name card fades in, holds, then fades out.
 const TITLE_FADE_SECONDS = 0.6;
@@ -76,6 +83,7 @@ export class OverworldScene {
     this.roomData = roomData;
     this.room = new Room(roomData);
     this.player = new Player(spawn.x * T + T / 2, (spawn.y + 1) * T);
+    this.unstick();
     // Each enemy has a key, so a beaten one stays gone even after leaving the room.
     this.npcs = (roomData.npcs ?? [])
       .map((data, i) => Object.assign(new Npc(data), { key: `${roomData.id}:${i}` }))
@@ -136,10 +144,14 @@ export class OverworldScene {
         }
         if (endChapter) {
           const next = ROOMS[endChapter.room];
+          // The end of a chapter saves by itself, ready to start the next one.
+          if (next) saveGame(next.id, endChapter.spawn ?? next.playerStart);
           const goOn = next
             ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, this.roomData.area)
             : this.game.home;
-          this.game.changeScene(new ChapterEndScene(goOn));
+          // With `credits`, the credits roll first.
+          const card = () => new ChapterEndScene(goOn);
+          this.game.changeScene(endChapter.credits ? new CreditsScene(card) : card());
           return;
         }
       }
@@ -158,6 +170,7 @@ export class OverworldScene {
       this.pauseMenu.open();
     } else {
       this.player.update(dt, input, this.room);
+      if (this.roomData.dark) this.burnCandle(dt);
       for (const npc of this.npcs) npc.update(dt, this.player, this.room);
       if (this.player.landedThisFrame) this.handleLanding();
       if (input.wasPressed('confirm') && !this.player.isAirborne) this.interact();
@@ -214,6 +227,29 @@ export class OverworldScene {
     }, this.roomData.area));
   }
 
+  // Never leave the player stuck where they arrive (say, a door that opens onto
+  // something that's appeared since): move them to the nearest open floor.
+  unstick() {
+    const { player, room } = this;
+    const free = (x, y) => !player.collidesAt(room, x, y) && player.floorAt(room, x, y) === 0;
+    if (free(player.x, player.y)) return;
+    const [tx, ty] = player.tilePosition();
+    for (let r = 1; r < Math.max(room.width, room.height); r++) {
+      for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+          const x = (tx + dx) * T + T / 2;
+          const y = (ty + dy + 1) * T;
+          if (free(x, y)) {
+            player.x = x;
+            player.y = y;
+            return;
+          }
+        }
+      }
+    }
+  }
+
   // Plays a scene (from src/data/scenes/) here and now.
   playCutscene(scene) {
     this.player.moving = false;
@@ -234,6 +270,11 @@ export class OverworldScene {
 
   // Every landing cracks the tile underfoot; a fully cracked tile gives way.
   handleLanding() {
+    // Stone blocks are solid all the way through: only the floor cracks.
+    if (this.player.ground > 0) return;
+    // Sure Foot: only every other landing cracks it.
+    this.landings = (this.landings ?? 0) + 1;
+    if (skillBonus('softLanding') && this.landings % 2) return;
     const [tx, ty] = this.player.tilePosition();
     if (this.room.landOn(tx, ty) === 'broken') this.player.fallInto(tx, ty);
   }
@@ -272,9 +313,16 @@ export class OverworldScene {
 
   interact() {
     const [px, py] = this.player.interactionPoint();
-    const prop = this.room.propAt(px, py);
+    let prop = this.room.propAt(px, py);
+    // Something only seen in the light isn't there for you until your light reaches it.
+    if (prop && !this.inLight(prop)) prop = null;
     if (!prop) {
       this.inspectTile(Math.floor(px / T), Math.floor(py / T));
+      return;
+    }
+    // Something up on a block is out of reach from down below.
+    if (prop.raise > this.player.ground) {
+      this.textbox.open([textSection('interactions/the_ruins.txt', 'out_of_reach')[0]]);
       return;
     }
     // Shops are their own screen; leaving comes back here (and to the room's music).
@@ -354,8 +402,10 @@ export class OverworldScene {
     this.room.drawDamage(ctx, this.camera);
 
     // Draw lower things last so the player can stand in front of or behind others.
-    const entities = [...this.room.props, ...this.room.standing, ...this.npcs, ...(this.cutscene?.drawables ?? []), this.player].sort((a, b) => a.sortY - b.sortY);
+    const props = this.room.props.filter((prop) => this.inLight(prop));
+    const entities = [...props, ...this.room.standing, ...this.npcs, ...(this.cutscene?.drawables ?? []), this.player].sort((a, b) => a.sortY - b.sortY);
     for (const entity of entities) entity.draw(ctx, this.camera);
+    if (this.roomData.dark) this.drawDarkness(ctx);
     this.cutscene?.drawOverlay(ctx, this.camera);
     ctx.drawImage(vignette(), 0, 0);
 
@@ -374,6 +424,89 @@ export class OverworldScene {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
       ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
+  }
+
+  // --- Dark rooms (`dark` in the room's data: how dark, 0 to 1). ---
+
+  // Your candle burns while you're in the dark (see src/data/candles.js).
+  burnCandle(dt) {
+    const event = burnCandle(dt);
+    if (!event || this.textbox.isOpen) return;
+    const name = (id) => ITEMS[id].name;
+    if (event.lit) this.textbox.open([`It's dark here. You light the ${name(event.lit)}.`]);
+    else if (event.out) {
+      this.textbox.open([event.next
+        ? `Your ${name(event.out)} burns down to nothing. You light the ${name(event.next)}.`
+        : `Your ${name(event.out)} burns down to nothing. Only your own faint glow is left.`]);
+    }
+  }
+
+  // Where your light comes from: just above your head.
+  get lightPoint() {
+    return { x: this.player.x, y: this.player.y - this.player.ground - Math.round(this.player.z) - 12 };
+  }
+
+  // Whether a prop can be seen: always, unless it's only `seenInLight` in a
+  // dark room and your light doesn't reach it.
+  inLight(prop) {
+    if (!prop.seenInLight || !this.roomData.dark) return true;
+    const { x, y } = this.lightPoint;
+    return Math.hypot(prop.x + prop.width / 2 - x, prop.y + T / 2 - y) < lightRadius() * 0.8;
+  }
+
+  // The dark, with soft holes where light reaches: your own (flickering), and
+  // every lantern, fire and crystal in the room.
+  drawDarkness(ctx) {
+    darkCanvas ??= Object.assign(document.createElement('canvas'), { width: SCREEN_WIDTH, height: SCREEN_HEIGHT });
+    const dark = darkCanvas.getContext('2d');
+    dark.globalCompositeOperation = 'source-over';
+    dark.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    dark.fillStyle = `rgba(4, 2, 10, ${this.roomData.dark})`;
+    dark.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    dark.globalCompositeOperation = 'destination-out';
+    const t = performance.now() / 1000;
+    const flicker = 1 + Math.sin(t * 9) * 0.03 + Math.sin(t * 23) * 0.02;
+    const lights = [...this.room.lightSources(), { ...this.lightPoint, radius: lightRadius() * flicker }];
+    for (const { x, y, radius } of lights) {
+      const cx = x - this.camera.x;
+      const cy = y - this.camera.y;
+      const hole = dark.createRadialGradient(cx, cy, radius * 0.3, cx, cy, radius);
+      hole.addColorStop(0, 'rgba(0, 0, 0, 1)');
+      hole.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      dark.fillStyle = hole;
+      dark.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+    }
+    ctx.drawImage(darkCanvas, 0, 0);
+    // Your candle's warm glow on everything near you.
+    const { x, y } = this.lightPoint;
+    const radius = lightRadius() * flicker;
+    const cx = x - this.camera.x;
+    const cy = y - this.camera.y;
+    const warm = ctx.createRadialGradient(cx, cy, 2, cx, cy, radius);
+    warm.addColorStop(0, 'rgba(255, 190, 110, 0.22)');
+    warm.addColorStop(1, 'rgba(255, 190, 110, 0)');
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = warm;
+    ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+    ctx.restore();
+    this.drawCandleGauge(ctx);
+  }
+
+  // Your lit candle and how much of it is left, in the corner.
+  drawCandleGauge(ctx) {
+    const lit = HERO_STATE.lit && HERO_STATE.items.includes(HERO_STATE.lit.id) ? HERO_STATE.lit : null;
+    inUiSpace(ctx, () => {
+      const label = lit ? ITEMS[lit.id].name : 'No candle';
+      drawText(ctx, label, 16, 12, { size: 22, color: lit ? '#ffd27a' : '#8a82b0', outline: '#000' });
+      if (!lit) return;
+      const burn = ITEMS[lit.id].light.burn;
+      const left = burn === Infinity ? 1 : Math.max(0, lit.left / burn);
+      ctx.fillStyle = '#3a2a1a';
+      ctx.fillRect(16, 38, 100, 6);
+      ctx.fillStyle = '#ffcc66';
+      ctx.fillRect(16, 38, Math.round(100 * left), 6);
+    });
   }
 
   drawBlack(ctx, alpha) {

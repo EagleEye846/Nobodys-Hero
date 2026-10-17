@@ -34,3 +34,21 @@ A cake shaped like a candle, from Taper's kitchen. "FOR OUR GUEST."
 
 [taper_stub]
 The candle Taper gave you. It's still warm. It always will be.
+
+# --- Candles you make (CANDLES, in the C menu). In battle, lighting one does
+# what the menu says; in dark places, the brightest one you carry lights your way.
+
+[plain_candle]
+A plain wax candle on a cotton wick. Nothing special, which is sometimes exactly what you need.
+
+[hearth_candle]
+A thick, slow candle that smells like a warm kitchen. Lighting it feels like coming home.
+
+[moonbell_candle]
+Wax pressed with moonbell petals. Its scent is so gentle that even angry things calm down a little.
+
+[glow_candle]
+Glow dust stirred into the wax. It burns bright and long, and makes you feel braver.
+
+[ash_candle]
+Shadow ash in dark wax. It gives off more smoke than light, and the smoke hides you well.

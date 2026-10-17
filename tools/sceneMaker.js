@@ -24,7 +24,7 @@ import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from '../src/config.js';
 
 // The fields each kind of step keeps when it's saved.
 const STEP_FIELDS = {
-  say: ['who', 'text'],
+  say: ['who', 'face', 'text'],
   walk: ['who', 'to', 'fast'],
   face: ['who', 'dir'],
   emote: ['who', 'emote'],
@@ -32,12 +32,12 @@ const STEP_FIELDS = {
   camera: ['who', 'to'],
   appear: ['who', 'at'],
   leave: ['who'],
-  animate: ['who', 'animation', 'speed', 'seconds'],
+  animate: ['who', 'animation', 'speed', 'seconds', 'once'],
   sound: ['name'],
   music: ['song'],
   give: ['item'],
-  battle: ['enemy', 'spared', 'defeated'],
-  end_chapter: ['room', 'spawn'],
+  battle: ['enemy', 'who', 'spared', 'defeated'],
+  end_chapter: ['room', 'spawn', 'credits'],
 };
 const STEP_ICONS = { say: 'chat', walk: 'person', face: 'eye', emote: 'star', wait: 'pause', camera: 'fit', appear: 'plus', leave: 'minus', animate: 'play', sound: 'note', music: 'note', give: 'heart', battle: 'enemy', end_chapter: 'flag' };
 
@@ -391,7 +391,14 @@ export async function mount(root, studio) {
         };
         const area = el('textarea', { value: step.text ?? '', placeholder: 'What do they say? Leave a blank line to start a new page.', oninput: (e) => { step.text = e.target.value; measure(); changed(); } });
         measure();
-        return [who(step, { nobody: true }), el('div', { class: 'field wide' }, el('span', { class: 'field-label' }, 'Words'), area, warning)];
+        // Their expression, if their portrait has any (a page can also start with {sad} and so on).
+        const portrait = PORTRAITS[scene.actors.find((a) => a.id === step.who)?.portrait];
+        const faces = Object.keys(portrait?.expressions ?? {});
+        const face = faces.length
+          ? field('Face', select([['', 'Normal'], ...faces.map((f) => [f, friendly(f)])], step.face ?? '', (v) => { if (v) step.face = v; else delete step.face; changed(); }))
+          : null;
+        return [who(step, { nobody: true }), face, el('div', { class: 'field wide' }, el('span', { class: 'field-label' }, 'Words'), area, warning,
+          faces.length ? hint(`Start a page with {${faces[0]}} (or ${faces.slice(1, 4).map((f) => `{${f}}`).join(', ')}...) to change their face for that page.`) : null)];
       }
       case 'walk':
         return [who(step), tilePicker('Walks to', step.to, (spot) => { step.to = spot; changed({ steps: true }); }),
@@ -403,9 +410,10 @@ export async function mount(root, studio) {
         const sceneOptions = [['', 'Nothing'], ...Object.keys(scenes).map((id) => [id, friendly(id)])];
         return [
           field('Enemy', select(Object.keys(enemies).map((id) => [id, friendly(enemies[id].enemy.name ?? id)]), step.enemy, (v) => { step.enemy = v; changed(); })),
+          field('Spotlight on', select([['', 'Just you'], ...whoOptions({ actorsOnly: true })], step.who ?? '', (v) => { if (v) step.who = v; else delete step.who; changed({ steps: true }); })),
           field('Then, if spared, play', select(sceneOptions, step.spared ?? '', (v) => { if (v) step.spared = v; else delete step.spared; changed(); })),
           field('Then, if beaten, play', select(sceneOptions, step.defeated ?? '', (v) => { if (v) step.defeated = v; else delete step.defeated; changed(); })),
-          el('div', { class: 'field wide' }, hint('The cutscene ends here and the battle starts. Afterwards the matching scene plays, and counts as seen, so "Shows up" settings in rooms can change with it.')),
+          el('div', { class: 'field wide' }, hint('First the music cuts out, the room goes dark around you and the one in the spotlight, and your shadow stands up out of you. Then the cutscene ends here and the battle starts. Afterwards the matching scene plays, and counts as seen, so "Shows up" settings in rooms can change with it.')),
         ];
       }
       case 'end_chapter': {
@@ -422,6 +430,7 @@ export async function mount(root, studio) {
                 if (spot) { step.spawn = spot; changed({ steps: true }); }
               }, { kind: 'ghost' }))));
         }
+        fields.push(checkbox(Boolean(step.credits), (v) => { if (v) step.credits = true; else delete step.credits; changed(); }, 'Roll the credits first (text/credits.txt)'));
         fields.push(el('div', { class: 'field wide' }, hint('Shows a card between chapters (its words are in text/chapter_end.txt), then carries on into that room.')));
         return fields;
       }
@@ -455,6 +464,7 @@ export async function mount(root, studio) {
           field('Animation', select([['', 'Stop animating'], ...ANIMATION_NAMES.map((a) => [a, friendly(a)])], step.animation ?? '', (v) => { step.animation = v; changed({ steps: true }); })),
           step.animation ? field('Seconds a frame', el('input', { type: 'number', min: 0.05, max: 2, step: 0.05, value: step.speed ?? DEFAULT_FRAME_SECONDS, onchange: (e) => { step.speed = Math.max(0.05, Number(e.target.value) || DEFAULT_FRAME_SECONDS); changed(); } })) : null,
           step.animation ? field('For how long', el('input', { type: 'number', min: 0, max: 30, step: 0.5, value: step.seconds ?? 0, onchange: (e) => { const v = Math.max(0, Number(e.target.value) || 0); if (v) step.seconds = v; else delete step.seconds; changed(); } }), '0 keeps it going while the next steps play. Walking stops it.') : null,
+          step.animation ? checkbox(Boolean(step.once), (v) => { if (v) step.once = true; else delete step.once; changed(); }, 'Play it once and stay on the last frame') : null,
           el('div', { class: 'field wide' }, hint('Animations are sprites with several frames: draw your own in the Sprite Editor.')),
         ];
       case 'sound':

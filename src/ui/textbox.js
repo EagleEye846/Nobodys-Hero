@@ -1,7 +1,7 @@
 import { inUiSpace } from '../engine/screen.js';
 import { makeSprite } from '../engine/sprite.js';
-import { PORTRAITS } from '../data/art/portraits.js';
-import { layoutDialogue, drawDialogue } from './text.js';
+import { PORTRAITS, expressionRows } from '../data/art/portraits.js';
+import { layoutDialogue, drawDialogue, paginate } from './text.js';
 
 // In UI pixels (640x480).
 const BOX = { x: 32, y: 318, w: 576, h: 146 };
@@ -18,16 +18,27 @@ const PORTRAIT_GAP = 18;
 const BLINK_PERIOD = 3.4;
 const BLINK_SECONDS = 0.14;
 
+// A face for `id` in an expression (see `expressions` in portraits.js).
 const portraitCache = new Map();
-function portraitSprites(id) {
-  if (!portraitCache.has(id)) {
+function portraitSprites(id, expression = null) {
+  const key = `${id}:${expression ?? ''}`;
+  if (!portraitCache.has(key)) {
     const art = PORTRAITS[id];
-    portraitCache.set(id, art && {
-      idle: makeSprite(art.idle, art.palette),
-      blink: makeSprite(art.blink, art.palette),
+    const rows = art && expressionRows(art, expression);
+    portraitCache.set(key, art && {
+      idle: makeSprite(rows.idle, art.palette),
+      blink: makeSprite(rows.blink, art.palette),
     });
   }
-  return portraitCache.get(id);
+  return portraitCache.get(key);
+}
+
+// A page can start with an expression in braces, "{sad}I miss them.", to
+// change the speaker's face for that page.
+const FACE_TAG = /^\{([a-z_]+)\}\s*/;
+export function splitFace(page) {
+  const match = page.match(FACE_TAG);
+  return match ? { face: match[1], text: page.slice(match[0].length) } : { face: null, text: page };
 }
 
 // Where the words go: beside the portrait, if there is one.
@@ -37,21 +48,27 @@ function textArea(portrait) {
   return { x, width: BOX.x + BOX.w - PADDING_X - x };
 }
 
+// For measuring text outside of drawing.
+let measuring = null;
+const measureCtx = () => (measuring ??= document.createElement('canvas').getContext('2d'));
+
 // How many lines fit in the box, and how many a page needs (the Studio warns
 // about pages that run off the bottom). `speaker` is an NPC id, as in open().
 export const TEXTBOX_LINES = 3;
 export function pageLineCount(ctx, page, speaker = null) {
-  return layoutDialogue(ctx, page, textArea(speaker ? portraitSprites(speaker) : null).width, TEXT_SIZE).length;
+  return layoutDialogue(ctx, splitFace(page).text, textArea(speaker ? portraitSprites(speaker) : null).width, TEXT_SIZE).length;
 }
 
 // Overworld dialogue box. Text types out a character at a time;
 // cancel skips to the end of the page and confirm advances to the next page.
-// NPCs with an entry in PORTRAITS show their face beside the text, Undertale style.
+// NPCs with an entry in PORTRAITS show their face beside the text, in the
+// expression a page asks for ({sad}, {glee}...) or the one given to open().
 export class TextBox {
   constructor() {
     this.pages = null;
     this.pageIndex = 0;
     this.visibleCharacters = 0;
+    this.speaker = null;
     this.portrait = null;
   }
 
@@ -59,16 +76,29 @@ export class TextBox {
     return this.pages !== null;
   }
 
-  // `speaker` is an NPC id; their portrait shows if they have one.
-  open(pages, speaker = null) {
-    this.pages = pages;
+  // `speaker` is an NPC id; their portrait shows if they have one, in the
+  // expression `face` (unless a page asks for another).
+  open(pages, speaker = null, face = null) {
+    this.speaker = speaker;
+    // A page too long for the box carries on onto the next one.
+    this.pages = pages.flatMap((page) => {
+      const split = splitFace(page);
+      const pageFace = split.face ?? face;
+      const { width } = textArea(speaker ? portraitSprites(speaker, pageFace) : null);
+      return paginate(measureCtx(), split.text, width, TEXT_SIZE, TEXTBOX_LINES).map((text) => ({ text, face: pageFace }));
+    });
     this.pageIndex = 0;
     this.visibleCharacters = 0;
-    this.portrait = speaker ? portraitSprites(speaker) : null;
+    this.showPage();
+  }
+
+  showPage() {
+    const page = this.pages?.[this.pageIndex];
+    this.portrait = this.speaker && page ? portraitSprites(this.speaker, page.face) : null;
   }
 
   update(dt, input) {
-    const page = this.pages[this.pageIndex];
+    const page = this.pages[this.pageIndex].text;
 
     if (this.visibleCharacters < page.length) {
       this.visibleCharacters = Math.min(page.length, this.visibleCharacters + CHARACTERS_PER_SECOND * dt);
@@ -80,6 +110,7 @@ export class TextBox {
       this.pageIndex++;
       this.visibleCharacters = 0;
       if (this.pageIndex >= this.pages.length) this.pages = null;
+      else this.showPage();
     }
   }
 
@@ -100,7 +131,7 @@ export class TextBox {
       }
 
       const { x, width } = textArea(this.portrait);
-      const lines = layoutDialogue(ctx, this.pages[this.pageIndex], width, TEXT_SIZE);
+      const lines = layoutDialogue(ctx, this.pages[this.pageIndex].text, width, TEXT_SIZE);
       drawDialogue(ctx, lines, x, BOX.y + PADDING_Y, {
         size: TEXT_SIZE,
         lineHeight: LINE_HEIGHT,
