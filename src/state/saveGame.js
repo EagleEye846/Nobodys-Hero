@@ -4,12 +4,16 @@ import { HERO_STATE } from '../characters/heroState.js';
 // where you stood, which enemies are gone for good, and which cutscenes have
 // played. Saved together with HERO_STATE to the browser's localStorage at save points.
 export const WORLD_STATE = {
+  // The chapter you're on: 1 in the Ruins, then up one at each chapter's end.
+  chapter: 1,
   room: null,
   spawn: null,
   defeated: [],
   seenScenes: [],
   // Gifts already picked up (see Prop.markTaken), and play time in seconds.
   taken: [],
+  // Things with a "!" over them that you've read (see Prop's `notice`).
+  read: [],
   // Puzzle switches that are on, as "room:name".
   levers: [],
   playSeconds: 0,

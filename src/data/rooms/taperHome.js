@@ -63,6 +63,8 @@ export const TAPER_HOME = {
     { sprite: 'watering_can', x: 2, y: 10, text: 'home_can_left', after: 'taper_defeated' },
     { sprite: 'watering_can', x: 5, y: 10, text: 'home_can' },
     { sprite: 'savepoint', x: 16, y: 12, save: true },
+    // Taper's candle-making notes, by the stairs, with a "!" until you've read them.
+    { sprite: 'book_stand', x: 13, y: 11, text: 'candle_book', notice: true },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -28,8 +28,12 @@ export class Prop {
   constructor({
     sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
     gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
-    walkable = false, light = null, seenInLight = false,
+    walkable = false, light = null, seenInLight = false, notice = false,
   }) {
+    // Something the player should read: a bobbing "!" floats over it until
+    // they have (the room sets `noticed` from the save).
+    this.notice = notice;
+    this.noticed = false;
     // In a dark room: how far it lights (pixels), and whether it can only be
     // seen (and used) inside your own light, like writing on a wall.
     this.light = light;
@@ -128,5 +132,18 @@ export class Prop {
       ctx.fillRect(cx - 14, cy - 14, 28, 28);
     }
     ctx.drawImage(frame, x, y);
+    if (this.notice && !this.noticed) this.drawNotice(ctx, x + frame.width / 2, y - 3, seconds);
+  }
+
+  // A yellow "!" with a dark edge, bobbing above it.
+  drawNotice(ctx, cx, bottom, seconds) {
+    const left = Math.round(cx) - 1;
+    const top = Math.round(bottom - 9 - Math.abs(Math.sin(seconds * 4)) * 3);
+    ctx.fillStyle = '#120c1c';
+    ctx.fillRect(left - 1, top - 1, 4, 7);
+    ctx.fillRect(left - 1, top + 6, 4, 4);
+    ctx.fillStyle = '#ffe14d';
+    ctx.fillRect(left, top, 2, 5);
+    ctx.fillRect(left, top + 7, 2, 2);
   }
 }

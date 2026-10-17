@@ -109,3 +109,35 @@ There's a tiny cactus on top. It seems to be thriving.
 [home_flowers]
 Taper's flowers. Each one has a tiny name tag.
 One of them says "GUEST."
+
+# Taper's candle-making notebook, on its stand by the stairs (it has a "!" over
+# it until you've read it). Each entry is a page. The enemies are riddles.
+[candle_book]
+A well-thumbed notebook, open on a little stand. The handwriting is round and careful.
+
+HOW TO MAKE A CANDLE, by T.
+Every candle needs Wax, and Thread for its wick. The rest is just for flavour.
+
+WAX: shed by the little candles that wander about on their own.
+
+THREAD: pulled from a sack of fluff, come to life.
+
+MOONBELL PETALS: carried off by the dusty, long-eared things that nibble my flowers.
+
+GLOW DUST: left behind by the winged things that can't stay away from a flame.
+
+SHADOW ASH: what's left when something from the dark between the lanterns fades away.
+
+PLAIN: 2 Wax, 1 Thread. Nothing fancy.
+HEARTH: 4 Wax, 2 Thread. Warms you right through.
+
+MOONBELL: add 2 petals. Its scent calms even angry things.
+
+GLOW: add 2 Glow Dust. Bright and long, and it makes you braver.
+
+ASH: add 2 Shadow Ash. More smoke than light, and the smoke hides you.
+
+Light a candle when you need it most.
+And never follow a light you didn't make yourself.
+
+(You can make candles from CANDLES in your menu. Press C.)

@@ -72,8 +72,10 @@ export const LANTERN_HALL = {
   // just above a tall pillar or statue, and `reach` is how many tiles away they
   // leap from.
   npcs: [
-    { art: 'moth', enemy: 'moth', x: 10, y: 8, patrol: [7, 14] },
+    // Up on the rug, clear of the stone dais in the middle (enemies can't climb).
+    { art: 'moth', enemy: 'moth', x: 10, y: 6, patrol: [7, 14] },
     { art: 'waxling', enemy: 'waxling', x: 9, y: 11, patrol: [6, 13] },
     { art: 'shade', enemy: 'shade', x: 16, y: 5, patrol: [13, 19] },
+    { art: 'waxling', enemy: 'waxling', x: 5, y: 12, patrol: [2, 8] },
   ],
 };

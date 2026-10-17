@@ -30,7 +30,7 @@ export function gainExp(amount) {
 }
 
 export function heroMaxHp() {
-  return BASE_MAX_HP + (HERO_STATE.level - 1) * HP_PER_LEVEL + skillBonus('maxHp');
+  return BASE_MAX_HP + (HERO_STATE.level - 1) * HP_PER_LEVEL;
 }
 
 export function hasSkill(id) {

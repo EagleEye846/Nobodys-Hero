@@ -298,6 +298,28 @@ export const PROP_SPRITES = {
     '..kkkkkkkkkkkk..',
   ],
 
+  // An open notebook on a little wooden stand (Taper's candle-making notes).
+  book_stand: [
+    '..kkkkkk.kkkkkk.',
+    '.kxxxxxxkxxxxxxk',
+    '.kxddddxkxdddxxk',
+    '.kxxxxxxkxxxxxxk',
+    '.kxdddxxkxddddxk',
+    '.kxxxxxxkxxxxxxk',
+    '.kxddxxxkxdddxxk',
+    '.kqqqqqqkqqqqqqk',
+    '..kkkkkkkkkkkkk.',
+    '....kwwwwwwwk...',
+    '.....kddddddk...',
+    '.......kttk.....',
+    '.......kttk.....',
+    '.......kttk.....',
+    '.......kttk.....',
+    '.....kkwwwwkk...',
+    '....kwwwwwwwwk..',
+    '....kkkkkkkkkk..',
+  ],
+
   // A worn velvet armchair.
   armchair: [
     '................',

@@ -3,8 +3,8 @@
 export const HERO_STATE = {
   level: 1,
   exp: 0,
-  // A few points to start with, so the skill tree can be tried straight away.
-  skillPoints: 3,
+  // Skill points only come from levelling up (see progress.js).
+  skillPoints: 0,
   skills: [],
   gold: 0,
   // Item ids (see src/data/items.js), eaten in battle with ITEMS.

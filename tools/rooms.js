@@ -195,6 +195,7 @@ const propLiteral = (prop) => {
   if (prop.walkable) out.walkable = true;
   if (prop.light) out.light = prop.light;
   if (prop.seenInLight) out.seenInLight = true;
+  if (prop.notice) out.notice = true;
   return inline(out);
 };
 const doorLiteral = ({ x, y, w, h, to, spawn }) => inline({ x, y, w, h, to, spawn: { x: spawn.x, y: spawn.y } });

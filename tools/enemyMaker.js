@@ -75,7 +75,7 @@ function blankForm() {
 // when you open and save an enemy (so saving Taper keeps her own battle song,
 // her `gentle` attacks, her `secondWind`, her `lullCalm`, her `beatenSprite`
 // and any item drops).
-const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'materials', 'lullCalm', 'beatenSprite'];
+const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'materials', 'lullCalm', 'beatenSprite', 'backdrop'];
 
 // The enemy module, in the same shape as the game's own enemy files.
 function enemyModule(f, id, constName) {

@@ -26,7 +26,7 @@ Your graze area grows, so near misses are easier to catch.
 Learn the spell Starfall: 70% SP for 45 damage.
 
 [tough]
-+15 max HP.
+Your skin's toughened up. Every hit does 1 less damage.
 
 [steady_soul]
 Stay invincible a little longer after you're hit.

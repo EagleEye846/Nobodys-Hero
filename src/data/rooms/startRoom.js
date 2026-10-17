@@ -76,5 +76,7 @@ export const START_ROOM = {
   npcs: [
     { art: 'dummy', enemy: 'dummy', x: 21, y: 11, patrol: [18, 24] },
     { art: 'bunny', enemy: 'bunny', x: 20, y: 16, patrol: [16, 26] },
+    { art: 'waxling', enemy: 'waxling', x: 21, y: 5, patrol: [16, 26] },
+    { art: 'bunny', enemy: 'bunny', x: 24, y: 8, patrol: [16, 27] },
   ],
 };

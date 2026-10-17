@@ -67,5 +67,9 @@ export const PILLAR_ROOM = {
   // leap from.
   npcs: [
     { enemy: 'columneon', x: 10, y: 6, patrol: [8, 12], behaviour: 'disguise', reach: 3 },
+    { art: 'waxling', enemy: 'waxling', x: 5, y: 9, patrol: [2, 8] },
+    { art: 'bunny', enemy: 'bunny', x: 15, y: 8, patrol: [13, 18] },
+    // Lurking behind the pillar by the east wall.
+    { art: 'shade', enemy: 'shade', x: 14, y: 5, patrol: [12, 17], behaviour: 'ambush', reach: 3 },
   ],
 };

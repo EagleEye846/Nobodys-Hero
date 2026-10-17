@@ -61,6 +61,8 @@ export class Room {
       if (info.gives && (WORLD_STATE.taken ?? []).includes(prop.key)) prop.markTaken();
       // Up on a block: drawn standing on top of it, and only in reach from up there.
       prop.raise = TILES[data.tiles[info.y]?.[info.x]]?.raise ?? 0;
+      // Already read: no more "!" over it.
+      if (info.notice && (WORLD_STATE.read ?? []).includes(prop.key)) prop.noticed = true;
       return prop;
     });
     this.refreshShowsUp();

@@ -105,7 +105,8 @@ export class BattleScene {
     const layout = FOE_LAYOUTS[list.length];
     if (!layout) throw new Error(`A battle needs 1 to 3 enemies, not ${list.length}`);
     this.onEnd = onEnd;
-    this.backdrop = BACKDROPS[area] ?? BACKDROPS.ruins;
+    // A boss can bring its own background; otherwise it's the area's.
+    this.backdrop = BACKDROPS[list.find((data) => data.backdrop)?.backdrop] ?? BACKDROPS[area] ?? BACKDROPS.ruins;
     this.foes = list.map((data, i) => this.makeFoe(data, layout[i]));
     for (const foe of this.foes) this.checkPatterns(foe.data);
 
@@ -984,6 +985,8 @@ export class BattleScene {
     if (soul.iframes > 0 || soul.untouchable > 0) return;
     let damage = bullet.dmg ?? this.foes[0].data.damage;
     if (this.defending) damage = Math.ceil(damage / 2);
+    // Thick Skin takes a little off every hit (but a hit always hurts a bit).
+    damage = Math.max(1, damage - skillBonus('damageReduction'));
     this.hero.hp = Math.max(0, this.hero.hp - damage);
     sfx('hurt');
     this.addPopup(`${damage}`, PARTY_FEET.x, PARTY_FEET.y - 46, hud.COLORS.danger);

@@ -14,6 +14,8 @@ export const TAPER_BOSS = {
   boss: true,
   gentle: true,
   music: 'taperBattle',
+  // Her own battle background: the door out, and her candles (src/battle/backdrops.js).
+  backdrop: 'taper_stand',
   maxHp: 320,
   damage: 6,
 

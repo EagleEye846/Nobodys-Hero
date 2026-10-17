@@ -144,7 +144,9 @@ export class OverworldScene {
         }
         if (endChapter) {
           const next = ROOMS[endChapter.room];
-          // The end of a chapter saves by itself, ready to start the next one.
+          // On to the next chapter (the skill tree grows with it), and the
+          // end of a chapter saves by itself, ready to start the next one.
+          WORLD_STATE.chapter = (WORLD_STATE.chapter ?? 1) + 1;
           if (next) saveGame(next.id, endChapter.spawn ?? next.playerStart);
           const goOn = next
             ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, this.roomData.area)
@@ -324,6 +326,12 @@ export class OverworldScene {
     if (prop.raise > this.player.ground) {
       this.textbox.open([textSection('interactions/the_ruins.txt', 'out_of_reach')[0]]);
       return;
+    }
+    // Reading something with a "!" over it puts the "!" away, for good.
+    if (prop.notice && !prop.noticed) {
+      prop.noticed = true;
+      WORLD_STATE.read ??= [];
+      WORLD_STATE.read.push(prop.key);
     }
     // Shops are their own screen; leaving comes back here (and to the room's music).
     if (prop.shop) this.game.changeScene(new ShopScene(prop.shop, () => this.game.changeScene(this)));

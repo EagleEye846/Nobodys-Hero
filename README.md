@@ -117,13 +117,13 @@ Down the stairs at the end of Taper's hallway is the way out. Taper won't let yo
 
 ### Levels and skills
 
-Winning a fight earns EXP (pacifying earns gold but no EXP). The EXP needed grows every level: 20, 40, 70, 110, 160 and so on. Each level gives +8 max HP and 1 skill point, and you start with 3 points to try the tree.
+Winning a fight earns EXP (pacifying earns gold but no EXP). The EXP needed grows every level: 20, 40, 70, 110, 160 and so on. Each level gives +8 max HP and 1 skill point; that's the only way to get either. The tree grows with the story: each skill has a `chapter`, and the SKILLS screen shows only the ones up to the chapter you're on, so every chapter adds more (roughly doubling the tree).
 
 Press C and choose SKILLS to spend points. The tree is drawn as three constellations in a drifting night sky, with its own slow song; learned stars glow and light up the line to the next. Each skill needs the one above it:
 
 | VALOR | SPIRIT | RESOLVE | STRIDE |
 | --- | --- | --- | --- |
-| Sharpened (1): FIGHT +15% | Focus (1): grazing +25% SP | Tough (1): +15 max HP | Sprinter (1): run 25% faster |
+| Sharpened (1): FIGHT +15% | Focus (1): grazing +25% SP | Thick Skin (1): every hit does 1 less damage | Sprinter (1): run 25% faster |
 | Keen Eye (1): wider strike window | Lull (1): spell, +30% MERCY | Steady Shadow (1): longer invincibility after a hit | Acrobat (2): jump a step higher, onto tall blocks |
 | Rend (2): spell, 30 damage | Wide Graze (2): bigger graze area | Guard Up (1): DEFEND heals 8 HP | Sure Foot (2): landings crack the floor half as often |
 | Flurry (2): a fourth FIGHT slash | Starfall (2): spell, 45 damage | Last Stand (2): survive one knockout per battle | |

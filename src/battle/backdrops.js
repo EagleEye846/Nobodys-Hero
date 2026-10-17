@@ -113,6 +113,137 @@ function drawRuins(ctx, time, height) {
   ctx.globalAlpha = 1;
 }
 
+// --- Taper's: the way out of the Ruins, where she makes her stand. ---
+// The great old door in the middle, with the light from outside seeping
+// through its cracks; tiers of her candles on both sides, flickering and
+// dripping; embers drifting up through the warm dark.
+const TAPER_SKY = ['#110712', '#170a16', '#1e0d19', '#25111c', '#2c141f', '#331722', '#3a1a24', '#411d26'];
+const TAPER_EMBERS = Array.from({ length: 34 }, (_, i) => ({
+  x: hash(i + 300) * W,
+  y: hash(i + 350) * 164,
+  speed: 6 + hash(i + 400) * 10,
+  sway: hash(i + 450) * Math.PI * 2,
+  size: hash(i + 500) < 0.3 ? 2 : 1,
+}));
+// Each tier of candles: how high its shelf stands, and where its candles are.
+const CANDLE_TIERS = [0, 1, 2].map((tier) => ({
+  rise: 8 + tier * 18,
+  candles: Array.from({ length: 6 - tier }, (_, i) => ({
+    x: 6 + tier * 10 + i * 17 + Math.round(hash(tier * 10 + i) * 4),
+    tall: 6 + Math.round(hash(tier * 10 + i + 60) * 10),
+    seed: tier * 10 + i,
+  })),
+}));
+
+function drawCandle(ctx, x, base, tall, time, seed) {
+  // A soft glow first, so the wax sits in its own light.
+  const flick = Math.sin(time * 9 + seed * 1.7) * 0.5 + Math.sin(time * 23 + seed) * 0.3;
+  const glow = ctx.createRadialGradient(x + 1.5, base - tall - 3, 1, x + 1.5, base - tall - 3, 14 + flick * 2);
+  glow.addColorStop(0, 'rgba(255, 190, 100, 0.28)');
+  glow.addColorStop(1, 'rgba(255, 190, 100, 0)');
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = glow;
+  ctx.fillRect(x - 14, base - tall - 18, 32, 32);
+  ctx.restore();
+  ctx.fillStyle = '#cdb98f';
+  ctx.fillRect(x, base - tall, 4, tall);
+  ctx.fillStyle = '#f2e6c8';
+  ctx.fillRect(x, base - tall, 3, tall);
+  // A drip running down one side.
+  if (hash(seed + 90) < 0.6) ctx.fillRect(x + 3, base - tall + 1, 1, 2 + Math.round(hash(seed + 91) * 4));
+  ctx.fillStyle = '#3a2a2a';
+  ctx.fillRect(x + 1, base - tall - 2, 1, 2);
+  const lean = flick > 0.4 ? 1 : 0;
+  ctx.fillStyle = '#ffcc66';
+  ctx.fillRect(x + lean, base - tall - 6, 3, 4);
+  ctx.fillStyle = '#fff2c0';
+  ctx.fillRect(x + 1 + lean, base - tall - 5, 1, 2);
+}
+
+function drawTaperStand(ctx, time, height) {
+  const band = Math.ceil(height / TAPER_SKY.length);
+  TAPER_SKY.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * band, W, band);
+  });
+  const baseY = height - FLOOR_HEIGHT;
+
+  // The back wall: big old stones.
+  ctx.fillStyle = '#1c0f16';
+  for (let row = 0; row * 14 < baseY; row++) {
+    for (let x = -(row % 2) * 16; x < W; x += 32) ctx.fillRect(x + 1, row * 14 + 1, 30, 12);
+  }
+
+  // The door out, tall and arched, shut, with light from outside at its seams.
+  const doorX = W / 2 - 34;
+  const doorTop = 26;
+  const pulse = 0.55 + 0.25 * Math.sin(time * 1.3);
+  const outside = ctx.createRadialGradient(W / 2, baseY - 40, 4, W / 2, baseY - 40, 90);
+  outside.addColorStop(0, `rgba(255, 236, 190, ${(0.14 * pulse).toFixed(3)})`);
+  outside.addColorStop(1, 'rgba(255, 236, 190, 0)');
+  ctx.fillStyle = outside;
+  ctx.fillRect(W / 2 - 90, baseY - 130, 180, 130);
+  ctx.fillStyle = '#0c060a';
+  ctx.fillRect(doorX - 6, doorTop + 14, 80, baseY - doorTop - 14);
+  ctx.beginPath();
+  ctx.arc(W / 2, doorTop + 18, 40, Math.PI, 0);
+  ctx.fill();
+  ctx.fillStyle = '#2a1712';
+  ctx.fillRect(doorX, doorTop + 18, 68, baseY - doorTop - 18);
+  ctx.beginPath();
+  ctx.arc(W / 2, doorTop + 18, 34, Math.PI, 0);
+  ctx.fill();
+  // Planks and iron bands.
+  ctx.fillStyle = '#20110e';
+  for (let x = doorX + 8; x < doorX + 68; x += 11) ctx.fillRect(x, doorTop + 4, 1, baseY - doorTop - 4);
+  ctx.fillStyle = '#3a2c2c';
+  ctx.fillRect(doorX, doorTop + 34, 68, 3);
+  ctx.fillRect(doorX, baseY - 26, 68, 3);
+  ctx.fillRect(W / 2 + 14, baseY - 50, 4, 6);
+  // The light getting in: down the middle, and under the door.
+  ctx.fillStyle = `rgba(255, 236, 190, ${pulse.toFixed(3)})`;
+  ctx.fillRect(W / 2, doorTop - 14, 1, baseY - doorTop + 14);
+  ctx.fillRect(doorX, baseY - 1, 68, 1);
+
+  // Her candles, on stepped shelves either side of the door.
+  for (const side of [0, 1]) {
+    for (const tier of CANDLE_TIERS) {
+      const shelfY = baseY - tier.rise;
+      const left = side ? W - 112 : 0;
+      ctx.fillStyle = '#2a1418';
+      ctx.fillRect(left, shelfY, 112, tier.rise);
+      ctx.fillStyle = '#3d1e22';
+      ctx.fillRect(left, shelfY, 112, 1);
+      for (const candle of tier.candles) {
+        const x = side ? W - 4 - candle.x : candle.x;
+        drawCandle(ctx, x, shelfY, candle.tall, time, candle.seed + side * 50);
+      }
+    }
+  }
+
+  // The floor, with old wax pooled on it.
+  ctx.fillStyle = '#24100f';
+  ctx.fillRect(0, baseY, W, FLOOR_HEIGHT);
+  ctx.fillStyle = '#3d1e22';
+  ctx.fillRect(0, baseY, W, 1);
+  ctx.fillStyle = '#cdb98f';
+  for (let i = 0; i < 7; i++) ctx.fillRect(Math.round(hash(i + 700) * W), baseY + 4 + Math.round(hash(i + 710) * 10), 4 + Math.round(hash(i + 720) * 8), 1);
+
+  // Embers drifting up.
+  for (const ember of TAPER_EMBERS) {
+    const y = (((ember.y - time * ember.speed) % height) + height) % height;
+    const x = (ember.x + Math.sin(time + ember.sway) * 5 + W) % W;
+    ctx.globalAlpha = 0.35 + 0.45 * Math.sin(time * 2.4 + ember.sway);
+    ctx.fillStyle = ember.size > 1 ? '#ffcc66' : '#ff9a4a';
+    ctx.fillRect(Math.round(x), Math.round(y), ember.size, ember.size);
+  }
+  ctx.globalAlpha = 1;
+}
+
+// By area (a room's `area`), plus special ones a boss can ask for with its
+// own `backdrop` (Taper's 'taper_stand').
 export const BACKDROPS = {
   ruins: drawRuins,
+  taper_stand: drawTaperStand,
 };

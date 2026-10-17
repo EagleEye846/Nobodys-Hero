@@ -5,7 +5,8 @@ import { textSection } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { expToNext, hasSkill, learnSkill, skillBlocker } from '../characters/progress.js';
-import { SKILL_BRANCHES } from '../data/skills.js';
+import { skillTree } from '../data/skills.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 import { ICONS } from '../data/art/icons.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines } from './text.js';
@@ -16,8 +17,8 @@ import { drawText, wrapLines } from './text.js';
 // needs the one above), X goes back. It has its own slow song.
 
 const DESCRIPTIONS = 'skills/skills.txt';
-const BRANCH_ICONS = ['fight', 'spells', 'defend', 'run'];
-const COLUMN_X = [92, 244, 396, 548];
+// The branches spread evenly across the sky, however many there are by now.
+const columnX = (index, count) => Math.round((W / count) * (index + 0.38));
 // Small sideways offsets so each branch looks like a constellation, not a list.
 const ZIGZAG = [0, -16, 14, -6];
 const NODE_TOP = 162;
@@ -79,6 +80,8 @@ export class SkillsMenu {
 
   open() {
     this.isOpen = true;
+    // The tree grows chapter by chapter (see `chapter` in src/data/skills.js).
+    this.branches = skillTree(WORLD_STATE.chapter ?? 1);
     this.message = '';
     this.lastFrame = null;
     this.returnSong = music.songName;
@@ -98,10 +101,10 @@ export class SkillsMenu {
     }
 
     const before = `${this.branch},${this.index}`;
-    const branches = SKILL_BRANCHES.length;
+    const branches = this.branches.length;
     if (input.wasPressed('right')) this.branch = (this.branch + 1) % branches;
     if (input.wasPressed('left')) this.branch = (this.branch - 1 + branches) % branches;
-    const last = SKILL_BRANCHES[this.branch].skills.length - 1;
+    const last = this.branches[this.branch].skills.length - 1;
     this.index = Math.min(this.index, last);
     if (input.wasPressed('down')) this.index = Math.min(last, this.index + 1);
     if (input.wasPressed('up')) this.index = Math.max(0, this.index - 1);
@@ -111,7 +114,7 @@ export class SkillsMenu {
     }
 
     if (input.wasPressed('confirm')) {
-      const branch = SKILL_BRANCHES[this.branch];
+      const branch = this.branches[this.branch];
       const blocker = skillBlocker(branch, this.index);
       if (blocker) {
         sfx('error');
@@ -125,7 +128,7 @@ export class SkillsMenu {
   }
 
   nodePosition(branchIndex, index) {
-    return { x: COLUMN_X[branchIndex] + ZIGZAG[index % ZIGZAG.length], y: NODE_TOP + index * NODE_SPACING };
+    return { x: columnX(branchIndex, this.branches.length) + ZIGZAG[index % ZIGZAG.length], y: NODE_TOP + index * NODE_SPACING };
   }
 
   // A shower of sparkles from a star you've just learned.
@@ -158,7 +161,7 @@ export class SkillsMenu {
     inUiSpace(ctx, () => {
       this.drawSky(ctx);
       this.drawHeader(ctx);
-      SKILL_BRANCHES.forEach((branch, b) => this.drawBranch(ctx, branch, b));
+      this.branches.forEach((branch, b) => this.drawBranch(ctx, branch, b));
       this.drawSparkles(ctx);
       this.drawPanel(ctx);
     });
@@ -224,8 +227,8 @@ export class SkillsMenu {
   }
 
   drawBranch(ctx, branch, b) {
-    const cx = COLUMN_X[b];
-    ctx.drawImage(icon(BRANCH_ICONS[b], branch.color), cx - 9, 98, 18, 18);
+    const cx = columnX(b, this.branches.length);
+    ctx.drawImage(icon(branch.icon, branch.color), cx - 9, 98, 18, 18);
     drawText(ctx, branch.name, cx, 118, { size: 28, color: branch.color, align: 'center', shadow: '#05030f' });
 
     // Lines between the stars: bright once the lower star is learned, dashed and dim before.
@@ -325,7 +328,7 @@ export class SkillsMenu {
 
   // The selected skill's name, description, and whether (or why not) it can be learned.
   drawPanel(ctx) {
-    const branch = SKILL_BRANCHES[this.branch];
+    const branch = this.branches[this.branch];
     const skill = branch.skills[this.index];
     const { x, y, w, h } = PANEL;
 

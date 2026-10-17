@@ -40,7 +40,7 @@ export const FLOWER_ROOM = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 9, y: 14, w: 3, h: 1, to: 'pillar_room', spawn: { x: 10, y: 12 } },
+    { x: 9, y: 14, w: 3, h: 1, to: 'pillar_room', spawn: { x: 10, y: 4 } },
     { x: 9, y: 1, w: 3, h: 2, to: 'taper_home', spawn: { x: 10, y: 12 } },
   ],
 
@@ -67,5 +67,10 @@ export const FLOWER_ROOM = {
   // is how they move (see BEHAVIOURS in src/overworld/npc.js); hiding ones go
   // just above a tall pillar or statue, and `reach` is how many tiles away they
   // leap from.
-  npcs: [],
+  npcs: [
+    // Dust bunnies nibbling at Taper's moonbells, and a moth drawn to the light.
+    { art: 'bunny', enemy: 'bunny', x: 5, y: 9, patrol: [2, 8] },
+    { art: 'bunny', enemy: 'bunny', x: 15, y: 10, patrol: [12, 18] },
+    { art: 'moth', enemy: 'moth', x: 10, y: 8, patrol: [4, 15] },
+  ],
 };
