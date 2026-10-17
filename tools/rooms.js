@@ -3,8 +3,8 @@
 // a "click a tile" picker.
 import { TILE_SIZE as T } from '../src/config.js';
 import { makeSprite } from '../src/engine/sprite.js';
-import { TILES } from '../src/overworld/tileset.js';
-import { PROP_PALETTE, PROP_SPRITES } from '../src/data/art/props.js';
+import { TILES, floorUnder } from '../src/overworld/tileset.js';
+import { PROP_PALETTE, PROP_SPRITES, PROP_FOOTPRINTS } from '../src/data/art/props.js';
 import { PLAYER_PALETTE, PLAYER_SPRITES } from '../src/data/art/player.js';
 import { quote, inline, comment, headerComment } from './source.js';
 import { el, modal, pixelCanvas, hint, deepClone } from './ui.js';
@@ -20,6 +20,20 @@ export const TILE_INFO = {
   P: { name: 'Lantern pillar', note: 'pillar with a lantern' },
   p: { name: 'Plant', note: 'potted plant' },
   D: { name: 'Doorway', note: 'doorway (walk through it; see `doors`)' },
+  V: { name: 'Ivy wall', note: 'wall face with ivy' },
+  H: { name: 'Banner wall', note: 'wall face with a faded banner' },
+  c: { name: 'Cracked floor', note: 'cracked floor (safe)' },
+  R: { name: 'Rubble', note: 'fallen stones' },
+  F: { name: 'Flower bed', note: 'flower bed' },
+  o: { name: 'Wood floor', note: 'wooden floorboards' },
+  h: { name: 'Home wall', note: 'papered wall with wood panelling' },
+  U: { name: 'Stairs up', note: 'stairs up (walk through it; see `doors`)' },
+  u: { name: 'Stairs down', note: 'stairs down (walk through it; see `doors`)' },
+  '~': { name: 'Water', note: 'water' },
+  I: { name: 'Tall pillar', note: 'tall pillar (walk or hide behind)' },
+  J: { name: 'Broken pillar', note: 'broken pillar (walk or hide behind)' },
+  S: { name: 'Hero statue', note: 'statue (walk or hide behind)' },
+  C: { name: 'Candelabra', note: 'candle stand (walk or hide behind)' },
 };
 export const tileName = (char) => TILE_INFO[char]?.name ?? `Tile "${char}"`;
 
@@ -34,13 +48,22 @@ export function drawTile(ctx, char, x, y, tx, ty, tileAt) {
     ctx.fillRect(x, y, T, T);
     return;
   }
+  // Standing tiles (tall pillars, statues) paint only themselves, over floor.
+  if (tile.standing) TILES[floorUnder({ tileAt }, tx, ty)].draw(ctx, x, y, tx, ty, { tileAt });
   tile.draw(ctx, x, y, tx, ty, { tileAt });
 }
 
-// A tile on its own, for swatches.
+// A tile on its own, for swatches. Tall standing tiles are shrunk to fit.
 export function tileSwatch(char, size = T) {
   const canvas = pixelCanvas(T, T, { class: 'tile-swatch', style: `width:${size}px;height:${size}px` });
-  drawTile(canvas.getContext('2d'), char, 0, 0, 0, 0, (tx, ty) => (tx === 0 && ty === 0 ? char : char === 'W' ? '#' : null));
+  const ctx = canvas.getContext('2d');
+  const height = TILES[char]?.height ?? T;
+  if (height > T) {
+    const scale = T / height;
+    ctx.translate((T - T * scale) / 2, T - T * scale);
+    ctx.scale(scale, scale);
+  }
+  drawTile(ctx, char, 0, 0, 0, 0, (tx, ty) => (tx === 0 && ty === 0 ? char : char === 'W' ? '#' : null));
   return canvas;
 }
 
@@ -58,12 +81,14 @@ export function renderTiles(room) {
   return canvas;
 }
 
-// Pixel bounds (world units) of a prop: it stands on its tile's bottom edge, centred.
+// Pixel bounds (world units) of a prop: it stands on its tile's bottom edge,
+// centred over its footprint (big furniture covers tiles to the right too).
 export function propBounds(prop) {
   const sprite = propSprites[prop.sprite];
   const w = sprite?.width ?? T;
   const h = sprite?.height ?? T;
-  return { x: prop.x * T + Math.floor((T - w) / 2), y: prop.y * T + T - h, w, h, sprite };
+  const footprint = (PROP_FOOTPRINTS[prop.sprite] ?? 1) * T;
+  return { x: prop.x * T + Math.floor((footprint - w) / 2), y: prop.y * T + T - h, w, h, sprite };
 }
 
 // Like Npc in the game, (x, y) is the tile under the feet.
@@ -110,6 +135,9 @@ export function editableRoom(room) {
   const copy = deepClone(room);
   copy.tiles = room.tiles.map((row) => [...row]);
   copy.doors ??= [];
+  copy.cutscenes ??= [];
+  copy.looks ??= [];
+  copy.tileTexts ??= {};
   copy.props ??= [];
   copy.npcs ??= [];
   copy.playerStart ??= { x: 1, y: 1 };
@@ -151,10 +179,18 @@ const propLiteral = (prop) => {
   if (prop.npc) out.npc = prop.npc;
   if (prop.shop) out.shop = prop.shop;
   if (prop.save) out.save = true;
+  if (prop.animation) out.animation = prop.animation;
+  if (prop.animation && prop.speed) out.speed = prop.speed;
+  if (prop.until) out.until = prop.until;
+  if (prop.after) out.after = prop.after;
   return inline(out);
 };
 const doorLiteral = ({ x, y, w, h, to, spawn }) => inline({ x, y, w, h, to, spawn: { x: spawn.x, y: spawn.y } });
-const npcLiteral = ({ art, enemy, x, y, patrol }) => inline({ art, enemy, x, y, patrol: [patrol[0], patrol[1]] });
+const cutsceneLiteral = ({ x, y, w, h, scene }) => inline({ x, y, w, h, scene });
+const npcLiteral = ({ art, enemy, x, y, patrol, behaviour, ambush, reach }) => {
+  const how = behaviour ?? (ambush ? 'ambush' : 'patrol');
+  return inline({ art, enemy, x, y, patrol: [patrol[0], patrol[1]], behaviour: how === 'patrol' ? undefined : how, reach });
+};
 
 // room: tiles as strings or arrays. header: the file's comment block to keep.
 export function roomModule(room, constName, header) {
@@ -167,9 +203,10 @@ export function roomModule(room, constName, header) {
     `export const ${constName} = {`,
     '  // Used to remember things about this room (like beaten enemies) and for doors.',
     `  id: ${quote(room.id)},`,
-    '  // Shown on a title card when you arrive.',
+    '  // The room\'s name, for the Room Editor.',
     `  name: ${quote(room.name ?? '')},`,
-    '  // Picks the battle background (see src/battle/backdrops.js).',
+    '  // The region it\'s in (see src/data/areas.js): names the title card you see',
+    '  // on arriving from another region, and picks the battle background.',
     `  area: ${quote(room.area ?? 'ruins')},`,
     '  // The song that plays here (a file in src/data/music/).',
     `  music: ${room.music ? quote(room.music) : 'null'},`,
@@ -184,13 +221,25 @@ export function roomModule(room, constName, header) {
     '  // Walking onto a door\'s tiles takes you to another room; `spawn` is where you arrive.',
     list('doors', room.doors ?? [], doorLiteral),
     '',
+    '  // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).',
+    list('cutscenes', room.cutscenes ?? [], cutsceneLiteral),
+    '',
     '  // Things you can press Z on. `text` names a section of this room\'s text file;',
     '  // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.',
     `  textFile: ${quote(room.textFile)},`,
     list('props', room.props ?? [], propLiteral),
     '',
+    '  // Words for tiles, shown when you press Z on them: `looks` for one spot,',
+    '  // `tileTexts` for every tile of a kind (by its letter). Both name sections',
+    '  // of the text file, like signs.',
+    list('looks', room.looks ?? [], ({ x, y, text }) => inline({ x, y, text })),
+    `  tileTexts: ${inline(room.tileTexts ?? {})},`,
+    '',
     '  // Enemies wandering the room, by their file name in src/data/enemies/.',
-    '  // patrol is the leftmost and rightmost tile they walk between.',
+    '  // patrol is the leftmost and rightmost tile they walk between. `behaviour`',
+    '  // is how they move (see BEHAVIOURS in src/overworld/npc.js); hiding ones go',
+    '  // just above a tall pillar or statue, and `reach` is how many tiles away they',
+    '  // leap from.',
     list('npcs', room.npcs ?? [], npcLiteral),
     '};',
   ];

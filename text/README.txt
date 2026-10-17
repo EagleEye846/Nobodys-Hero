@@ -32,13 +32,21 @@ FOLDERS
 -------
 
 enemies/        One file per enemy: battle intro, flavour text, taunts,
-                TALK replies, and how the fight ends.
+                TALK replies, and how the fight ends. A taunt written over
+                several lines (no blank line between) is said one speech
+                bubble at a time.
 
 interactions/   One file per area: signs and other things you can inspect.
                 Each entry is one page of the textbox.
 
 npcs/           One file per NPC. [first] is said the first time you talk to
                 them, [repeat] every time after that.
+
+cutscenes/      Story scenes, like the intro. Each [section] names a picture
+                to show, and each entry under it is a page of text. See the
+                comments at the top of intro.txt.
+
+title.txt       The game's name and the title screen prompts.
 
 
 ADDING A NEW FILE

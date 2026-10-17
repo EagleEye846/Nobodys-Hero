@@ -3,6 +3,7 @@ import { BUNNY_ATTACKS } from './bunny.js';
 import { MOTH_ATTACKS } from './moth.js';
 import { WAXLING_ATTACKS } from './waxling.js';
 import { SHADE_ATTACKS } from './shade.js';
+import { COLUMNEON_ATTACKS } from './columneon.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -17,4 +18,5 @@ export const ENEMY_ATTACKS = {
   ...MOTH_ATTACKS,
   ...WAXLING_ATTACKS,
   ...SHADE_ATTACKS,
+  ...COLUMNEON_ATTACKS,
 };

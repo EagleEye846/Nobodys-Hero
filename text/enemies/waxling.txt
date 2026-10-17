@@ -27,6 +27,8 @@ Melt, melt, MELT!
 
 Stand still so I can drip on you!
 
+I melted a CENTURY for this?
+
 # One section per TALK option. The names after "talk:" must match
 # src/data/enemies/waxling.js.
 [talk: Inspect]

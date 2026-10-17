@@ -1,6 +1,7 @@
 import { TILE_SIZE as T } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
-import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
+import { PROP_PALETTE, PROP_SPRITES, PROP_FOOTPRINTS } from '../data/art/props.js';
+import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
 
 const sprites = Object.fromEntries(
   Object.entries(PROP_SPRITES).map(([name, rows]) => [name, makeSprite(rows, PROP_PALETTE)]),
@@ -13,20 +14,37 @@ const BOB_SECONDS = 0.6;
 // (a section of the room's text file), talk to its `npc` (a file in text/npcs/),
 // browse its `shop` (an id in src/data/shops.js), or save if it's a `save`
 // point. Its sprite can be bigger than the tile: it stands on the tile's
-// bottom edge, centred.
+// bottom edge, centred. With an `animation` (see src/engine/animations.js) it
+// plays that instead, `speed` seconds a frame.
 export class Prop {
-  constructor({ sprite, x, y, text = null, npc = null, shop = null, save = false }) {
+  constructor({ sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS }) {
+    this.animation = animation;
+    this.speed = speed;
     this.sprite = sprites[sprite];
     if (!this.sprite) throw new Error(`Unknown prop sprite '${sprite}'`);
+    this.look = sprite;
     this.x = x * T;
     this.y = y * T;
-    this.width = T;
+    // Big furniture stands on several tiles, starting at its own and going right.
+    this.width = (PROP_FOOTPRINTS[sprite] ?? 1) * T;
     this.height = T;
     this.text = text;
     this.npc = npc;
     this.shop = shop;
     this.save = save;
     this.talkedTo = false;
+    // A cutscene can hide a character while an actor plays them (see scenePlayer.js).
+    this.hidden = false;
+  }
+
+  // Who this is, for cutscenes that cast a room's character: their NPC or shop id.
+  get character() {
+    return this.npc ?? this.shop;
+  }
+
+  moveToTile(tx, ty) {
+    this.x = tx * T;
+    this.y = ty * T;
   }
 
   get sortY() {
@@ -34,18 +52,21 @@ export class Prop {
   }
 
   overlaps(left, top, right, bottom) {
+    if (this.hidden) return false;
     return left < this.x + this.width && right > this.x && top < this.y + this.height && bottom > this.y;
   }
 
   draw(ctx, camera) {
+    if (this.hidden) return;
     const seconds = performance.now() / 1000;
-    const isCharacter = this.npc || this.shop;
+    const frame = (this.animation && animationFrame(this.animation, seconds, this.speed)) || this.sprite;
+    const isCharacter = (this.npc || this.shop) && frame === this.sprite;
     let bob = isCharacter && Math.floor(seconds / BOB_SECONDS) % 2 ? 1 : 0;
     // Save points float smoothly and glow.
     if (this.save) bob = Math.round(Math.sin(seconds * 2.5) * 2);
 
-    const x = this.x + Math.floor((T - this.sprite.width) / 2) - camera.x;
-    const y = this.y + T - this.sprite.height - bob - camera.y;
+    const x = this.x + Math.floor((this.width - frame.width) / 2) - camera.x;
+    const y = this.y + T - frame.height - bob - camera.y;
     if (this.save) {
       const cx = x + this.sprite.width / 2;
       const cy = y + 6;
@@ -55,6 +76,6 @@ export class Prop {
       ctx.fillStyle = glow;
       ctx.fillRect(cx - 14, cy - 14, 28, 28);
     }
-    ctx.drawImage(this.sprite, x, y);
+    ctx.drawImage(frame, x, y);
   }
 }

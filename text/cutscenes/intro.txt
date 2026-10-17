@@ -1,0 +1,60 @@
+# THE INTRO: plays when the game starts, like Undertale's. Z skips it.
+#
+# Each [section] shows a picture, and each entry under it (entries are
+# separated by blank lines) is one page of text, typed out slowly under the
+# picture. Your line breaks are kept; long lines wrap by themselves. Sections
+# play in the order they're written.
+#
+# Pictures (drawn in src/data/art/cutscenes.js):
+#   ruins         a hall of pillars and hanging lanterns
+#   prophecy      a carved stone tablet with a star and a stair
+#   preparations  the training dummy, a weapon rack and Moss's pack
+#   beacon        the Keeper on a ledge, holding a lantern high
+#   waiting       a melted candle, dust, and tally marks on the wall
+#   stair         an empty staircase under a lit doorway
+#   stranger      the same staircase, with someone in the doorway
+#   breath        everyone at the foot of the stair, looking up at them
+#   black        nothing, just text
+#
+# To show a picture twice, add a word after its name: [stair again].
+#
+# This is a first draft. Write over it!
+
+[ruins]
+Long ago, deep beneath the earth, there were the Ruins.
+
+[prophecy]
+Carved into their oldest stone was a promise.
+
+"When the lanterns burn their brightest, a Hero will descend the stair, and the Ruins will wake."
+
+[preparations]
+So the Ruins got ready.
+
+They built a dummy to train the Hero.
+They stocked a shop to arm them.
+
+[beacon]
+And the Keeper lit a lantern, so the Hero could find the way.
+
+[waiting]
+Then they waited.
+
+And waited.
+
+[stair]
+One hundred years passed.
+
+No Hero came.
+
+[stranger]
+Until today?
+
+A glimmer came from above the stairs.
+
+And a shadowy figure stepped forth.
+
+[breath]
+The entire world held their breath,
+
+Had their hero finally arrived?

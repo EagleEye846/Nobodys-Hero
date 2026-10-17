@@ -55,6 +55,21 @@ file; everything else in the file stays as it was. New sprites become a new file
 in `src/data/art/`. New portraits are added to `PORTRAITS` in `portraits.js`
 (the portrait id is its name, e.g. `old_keeper`, matching `text/npcs/<id>.txt`).
 
+### Animations
+
+Any sprite with a few frames of the same size is an **animation** the game
+can play, named after the sprite (Taper watering her flowers is
+`taper_watering`, from `src/data/art/taperWatering.js`). To make one: **New**,
+pick **Character** or **Custom size**, draw the first frame, then **Add frame**
+for each next one and save. Then:
+
+- In the **Room Editor**, select a character or object and pick it under
+  **Animation** (with a **Speed**): it plays over and over in the room.
+- In the **Cutscene Maker**, give someone an animation under **Doing at the
+  start**, or use a **Play an animation** step (walking stops it).
+
+New animations show up after you refresh the Studio (Ctrl+F5).
+
 ## Room Editor
 
 Choose a room at the top, or **New room** (pick a name, a size, and start empty
@@ -62,17 +77,79 @@ or from a copy of another room).
 
 - **Paint** (**1**): pick a tile (Floor, Wall, Rug, Lantern pillar, Doorway...)
   and drag with the Brush, Box or Fill. Right-click picks up a tile.
-- **Place** (**2**): pick a thing (Player start, Door, Sign, Save point,
-  Keeper / NPC, Shop, or any enemy) and click the map. Click things to select
+- **Place** (**2**): pick a thing (Player start, Door, Cutscene, Sign, Save point,
+  Keeper / NPC, Shop, Object like a watering can, or any enemy) and click the map. Click things to select
   them, drag to move, Delete to remove. A selected enemy shows yellow handles:
   drag them to set how far it walks.
 - The panel on the right edits the selected thing: a sign's words, where a door
   leads (and **Pick on the map** for where you arrive), which shop or NPC...
-  With nothing selected it shows the room's name, music, battle background and size.
+  With nothing selected it shows the room's name, music, region and size.
 - **Check** lists problems in plain words (a door to nowhere, a start inside a wall...).
+- **Flavour text:** select any Object and write in **When you press Z on it**
+  (Undertale's "It's you!"). Each line is a "*" line; an empty line starts a
+  new page. Leave it empty and it's just for looks. Furniture (fireplace,
+  armchair, bookshelves, beds, tables...) is in the Object's **Looks like** list;
+  the big pieces cover two or three tiles to the right of where you place them.
+- **Words for tiles:** in **Place** mode, click a flower bed, pillar, rubble,
+  water or any other tile (not plain floor) to give it words. Choose **Just this
+  one**, or **Every flower bed in this room** (or whatever it is). A little
+  yellow speech mark shows on tiles that have words.
+- **Homes:** paint **Wood floor** and **Home wall** (papered, with panelling;
+  two tiles tall like the stone walls) for inside a house. Plants, flower beds
+  and other decorations sit on wood when they're surrounded by it.
+- **Shows up:** a character or object can be there *always*, only *until* a
+  cutscene has played, or only *after* it has. That's how Taper waters her
+  flowers in the Flower Room until you meet her, then waits at home.
+- **Stairs up / Stairs down** tiles work like doorways: paint them, then put a
+  Door on them.
+- **Tall tiles** (Tall pillar, Broken pillar, Hero statue, Candelabra) rise above
+  their tile, and in the game you can walk behind them. Their base blocks walking.
+- **How enemies move:** select an enemy and pick from **How it moves**: walks back
+  and forth, stays put, wanders about, chases you when it sees you, hides and jumps
+  out then chases, hides then pounces on you (the battle starts as it lands), or
+  in disguise then pounces. For the hiding and disguised ones, **Leaps from** sets
+  how many tiles away they spring (shown as a dashed circle on the map). Hiding ones go on the tile just above a tall tile, and
+  peek out now and then so sharp-eyed players can spot them. Chasers are slower
+  than you walk, so you can always escape. Disguised enemies wear their `disguise`
+  art if they have some (the Columneon looks like a pillar).
 
 Saving writes the room file in `src/data/rooms/` and, if signs changed, their
 sections in the room's text file (every other section is kept as it was).
+
+## Dialogue Maker
+
+Pick someone on the left (or **New person**) and write what they say: **First
+time** is said the first time you talk to them, **After that** every time after.
+Each page is one box of text, and each line starts with "* " in the game. The
+preview on the right is the game's own text box, with their portrait if they
+have one (make one in the Sprite Editor: New, Portrait, named like the person).
+Pages too long for the box turn red. **Play it all** types them out like the
+game does. Saves to `text/npcs/<name>.txt`; put the person in a room with the
+Room Editor (Place, Keeper / NPC).
+
+## Cutscene Maker
+
+Script a scene that plays in a room. Pick a cutscene at the top left or make a
+**New cutscene** (name it and choose its room).
+
+- **Who's in it:** you (the player) always are. **Add someone** for anyone else:
+  how they look (any prop or enemy), their portrait when they talk, where they
+  start, and whether they're off-stage until an **Appear** step. To use someone
+  who's already standing in the room (like the Keeper), set **Already in the
+  room?** to them: they step out from where they stand (no double), and stay
+  wherever the scene leaves them. If they **Leave**, they're gone until you
+  come back into the room.
+- **Steps** play top to bottom: say something, walk to a spot, turn to face, show
+  an emote (! ? ... or a heart), wait, move the camera, appear, leave, play a
+  sound, change the music. Click a step to select it; new steps go after it.
+  Leave a blank line in someone's words to start a new page.
+- **Preview** plays it in the real game engine. Press **Next (Z)** (or click the
+  preview and press Z) to go on when someone is talking.
+- **To play it in the game**, put a **Cutscene** trigger in the room with the
+  Room Editor (Place, Cutscene, then click or drag an area). Stepping there
+  plays it, only the first time unless you untick "Only plays the first time".
+
+Scenes save to `src/data/scenes/<name>.js`. `exampleScene.js` shows the format.
 
 ## Music Maker
 

@@ -246,8 +246,11 @@ export class BattleScene {
         this.strike = null;
         this.attackers = this.chooseAttackers();
         this.speaker = this.attackers[Math.floor(Math.random() * this.attackers.length)];
+        // A taunt written over several lines is said one bubble at a time.
         const taunts = this.foeLines(this.speaker, 'taunts');
-        this.taunt = taunts[Math.floor(Math.random() * taunts.length)];
+        this.tauntBubbles = taunts[Math.floor(Math.random() * taunts.length)].split('\n');
+        this.taunt = this.tauntBubbles.shift();
+        this.tauntStart = 0;
         this.tauntSkipped = false;
         break;
       }
@@ -631,12 +634,19 @@ export class BattleScene {
 
   updateTaunt(input) {
     if (!input.wasPressed('confirm')) return;
-    if (this.tauntSkipped || this.visibleTauntChars() >= this.taunt.length) this.setPhase('dodge');
-    else this.tauntSkipped = true;
+    if (!this.tauntSkipped && this.visibleTauntChars() < this.taunt.length) {
+      this.tauntSkipped = true;
+    } else if (this.tauntBubbles.length) {
+      this.taunt = this.tauntBubbles.shift();
+      this.tauntStart = this.phaseTime;
+      this.tauntSkipped = false;
+    } else {
+      this.setPhase('dodge');
+    }
   }
 
   visibleTauntChars() {
-    return this.tauntSkipped ? this.taunt.length : Math.floor(this.phaseTime * TAUNT_SPEED);
+    return this.tauntSkipped ? this.taunt.length : Math.floor((this.phaseTime - this.tauntStart) * TAUNT_SPEED);
   }
 
   updateDodge(dt, input) {

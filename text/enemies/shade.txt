@@ -27,6 +27,10 @@ I'm all around you.
 
 Hush now.
 
+You're not the one.
+
+Nobody's coming. Not even you.
+
 # One section per TALK option. The names after "talk:" must match
 # src/data/enemies/shade.js.
 [talk: Inspect]
