@@ -14,6 +14,21 @@ const KEEPER_PALETTE = {
   R: '#33265a', // robe folds
 };
 
+const TAPER_PALETTE = {
+  k: '#120c1c', // outline
+  x: '#f2e6c8', // wax
+  X: '#cdb98f', // wax in shadow
+  j: '#fff8e6', // wax, catching the light
+  n: '#ffcc66', // flame
+  N: '#fff2c0', // flame's heart
+  e: '#3a2a3a', // eyes
+  E: '#ffffff', // eye shine
+  u: '#f0a8a0', // blush
+  m: '#8a4a4a', // smile
+  q: '#7a3a5e', // shawl
+  Q: '#5a2846', // shawl folds
+};
+
 export const PORTRAITS = {
   old_keeper: {
     palette: KEEPER_PALETTE,
@@ -84,6 +99,77 @@ export const PORTRAITS = {
       '..krrrrrrRrrrrrrrrrrrrRrrrrrrk..',
       '..krrrrrrRrrrrrrrrrrrrRrrrrrrk..',
       '.krrrrrrrRrrrrrrrrrrrrRrrrrrrrk.',
+    ],
+  },
+  mother_taper: {
+    palette: TAPER_PALETTE,
+    idle: [
+      '...............knk..............',
+      '..............knnk..............',
+      '.............knnnnk.............',
+      '.............knNNnk.............',
+      '.............knNNnk.............',
+      '.............knNNnk.............',
+      '.............kknnkk.............',
+      '...........kkxxkkxxkk...........',
+      '..........kxxxxxxxxXXk..........',
+      '.........kxjjxxxxxxXXXk.........',
+      '.........kxjxxxxxxxxXXk.........',
+      '........kxjxxxxxxxxxxXXk........',
+      '........kxjxxxxxxxxxxXXk........',
+      '........kxxxxxxxxxxxxxXXk.......',
+      '.......kxxxxEexxxxxEexXXk.......',
+      '........kxxxeexxxxxeexXXk.......',
+      '........kxxxxxxxxxxxxxXXk.......',
+      '........kxxuuxxxxxxxuuXXk.......',
+      '........kxxxxxmxxxmxxXkk........',
+      '........kxxxxxxmmmxxXXk.........',
+      '.........kkxxxxxxxxXXk..........',
+      '........kkkkxxxxxxxXkkkk........',
+      '.......kqqqqxxxxxxxXqqqqk.......',
+      '......kqqqqqxxxxxxxxqqqqqk......',
+      '.....kqqqQqqxxxxxxxxqqQqqqk.....',
+      '....kqqqqQqqqqqqqqqqqqQqqqqk....',
+      '...kqqqqqQqqqqqqqqqqqqQqqqqqk...',
+      '..kqqqqqQqqqqqqqqqqqqqqQqqqqqk..',
+      '.kqqqqqqQqqqqqqqqqqqqqqQqqqqqqk.',
+      'kqqqqqqqQqqqqqqqqqqqqqqQqqqqqqqk',
+      'qqqqqqqQqqqqqqqqqqqqqqqqQqqqqqqq',
+      'qqqqqqqQqqqqqqqqqqqqqqqqQqqqqqqq',
+    ],
+    blink: [
+      '...............knk..............',
+      '..............knnk..............',
+      '.............knnnnk.............',
+      '.............knNNnk.............',
+      '.............knNNnk.............',
+      '.............knNNnk.............',
+      '.............kknnkk.............',
+      '...........kkxxkkxxkk...........',
+      '..........kxxxxxxxxXXk..........',
+      '.........kxjjxxxxxxXXXk.........',
+      '.........kxjxxxxxxxxXXk.........',
+      '........kxjxxxxxxxxxxXXk........',
+      '........kxjxxxxxxxxxxXXk........',
+      '........kxxxxxxxxxxxxxXXk.......',
+      '.......kxxxxxxxxxxxxxxXXk.......',
+      '........kxxxeeexxxeeexXXk.......',
+      '........kxxxxxxxxxxxxxXXk.......',
+      '........kxxuuxxxxxxxuuXXk.......',
+      '........kxxxxxmxxxmxxXkk........',
+      '........kxxxxxxmmmxxXXk.........',
+      '.........kkxxxxxxxxXXk..........',
+      '........kkkkxxxxxxxXkkkk........',
+      '.......kqqqqxxxxxxxXqqqqk.......',
+      '......kqqqqqxxxxxxxxqqqqqk......',
+      '.....kqqqQqqxxxxxxxxqqQqqqk.....',
+      '....kqqqqQqqqqqqqqqqqqQqqqqk....',
+      '...kqqqqqQqqqqqqqqqqqqQqqqqqk...',
+      '..kqqqqqQqqqqqqqqqqqqqqQqqqqqk..',
+      '.kqqqqqqQqqqqqqqqqqqqqqQqqqqqqk.',
+      'kqqqqqqqQqqqqqqqqqqqqqqQqqqqqqqk',
+      'qqqqqqqQqqqqqqqqqqqqqqqqQqqqqqqq',
+      'qqqqqqqQqqqqqqqqqqqqqqqqQqqqqqqq',
     ],
   },
 };

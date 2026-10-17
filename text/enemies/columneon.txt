@@ -1,0 +1,47 @@
+# COLUMNEON
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/columneon.js.
+
+[intro]
+COLUMNEON leaps out at you!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+COLUMNEON is grinning at its deceit.
+
+COLUMNEON looks around for a place to disguise.
+
+The air smells like dust and candle wax.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+You can't see me!
+
+I spy with my little eyes, something...
+Uhh.....
+It doesn't matter!
+
+Try and dodge THIS!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/columneon.js.
+[talk: Inspect]
+COLUMNEON - HP 120
+They pride themselves on their mastery of disguise of columns and pillars. Best not to tell them.
+
+[talk: Chat]
+You chat with COLUMNEON. It seems to relax a little.
+
+[talk: Compliment]
+You tell COLUMNEON you never saw it coming. It puffs out its chest.
+
+[talk: Disguise]
+You hide next to rubble. COLUMNEON laughs at your attempt.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+COLUMNEON scurries to a new pillar!
+
+[pacified]
+COLUMNEON peacefully resumes its hiding.

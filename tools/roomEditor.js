@@ -1,6 +1,8 @@
 import { BACKDROPS } from '../src/battle/backdrops.js';
+import { BEHAVIOURS, DEFAULT_REACH } from '../src/overworld/npc.js';
+import { ANIMATION_NAMES, DEFAULT_FRAME_SECONDS } from '../src/engine/animations.js';
 import { SHOPS } from '../src/data/shops.js';
-import { loadRooms, roomFiles, loadEnemies, enemySprite, loadSongs, npcIds } from './library.js';
+import { loadRooms, roomFiles, loadEnemies, enemySprite, loadSongs, npcIds, loadScenes } from './library.js';
 import { listDir, readText } from './api.js';
 import { setSection, sectionText, freeSectionName, parseTextFile } from './textfile.js';
 import {
@@ -28,19 +30,48 @@ const TILE_HELP = {
   P: 'A pillar with a lantern',
   p: 'A potted plant',
   D: 'Dark doorway: put a Door on it',
+  V: 'A wall face overgrown with ivy',
+  H: 'A wall face with a faded banner (use it on the lower wall row)',
+  c: 'Cracked, but safe to walk on',
+  R: 'Fallen stones that block the way',
+  F: 'A bed of flowers (paint a row of them for a long bed)',
+  o: 'Warm wooden floorboards, for inside a home',
+  h: 'A papered wall with wood panelling, for inside a home (two tiles tall, like the stone walls)',
+  U: 'Stairs climbing up through a wall: paint them 2 tiles tall in the wall, then put a Door on them',
+  u: 'Stairs going down: paint them along the bottom edge, then put a Door on them',
+  '~': 'Dark water you can\'t walk on',
+  I: 'A tall column; you can walk and hide behind it',
+  J: 'A broken column; you can walk and hide behind it',
+  S: 'A statue of a hero; you can walk and hide behind it',
+  C: 'A candle stand; you can walk and hide behind it',
+};
+// What each enemy behaviour does, shown under the "How it moves" choice.
+const BEHAVIOUR_HINTS = {
+  patrol: 'Walks back and forth between the yellow handles.',
+  still: 'Stays on its tile, bobbing.',
+  wander: 'Strolls to random spots between the handles (and a tile or so up and down), pausing in between.',
+  chase: 'Walks back and forth until you come near, then chases you (slower than you walk).',
+  ambush: 'Waits hidden until you come close, leaps out with a "!" and chases you. Put it on the tile just above a tall pillar, statue or candelabra.',
+  pounce: 'Waits hidden, then leaps straight at you to start the battle (dodge it and it chases you). Put it just above a tall pillar, statue or candelabra.',
+  disguise: 'Stands still in its disguise until you come close, then pounces. Enemies with disguise art (like the Columneon) wear it; others just stand still.',
 };
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
+// Whether an enemy walks between its patrol handles (rather than hiding or standing still).
+const walksAbout = (npc) => ['patrol', 'wander', 'chase'].includes(npc.behaviour ?? (npc.ambush ? 'ambush' : 'patrol'));
+
 // What a prop is, from its fields.
-const propType = (prop) => (prop.save ? 'save' : prop.shop ? 'shop' : prop.npc ? 'npc' : prop.text ? 'sign' : 'decor');
+// (Any other object can have words too, shown when you press Z on it.)
+const propType = (prop) => (prop.save ? 'save' : prop.shop ? 'shop' : prop.npc ? 'npc' : prop.text && prop.sprite === 'sign' ? 'sign' : 'decor');
 const TYPE_INFO = {
   start: { label: 'Player start', icon: 'person' },
   door: { label: 'Door', icon: 'door' },
+  cutscene: { label: 'Cutscene trigger', icon: 'film' },
   sign: { label: 'Sign', sprite: 'sign' },
   save: { label: 'Save point', sprite: 'savepoint' },
   npc: { label: 'Keeper / NPC', sprite: 'keeper' },
   shop: { label: 'Shop', sprite: 'merchant' },
-  decor: { label: 'Object' },
+  decor: { label: 'Object', sprite: 'watering_can' },
 };
 
 export async function mount(root, studio) {
@@ -50,6 +81,7 @@ export async function mount(root, studio) {
   const enemySprites = Object.fromEntries(Object.entries(enemies).map(([id, info]) => [id, enemySprite(info.enemy)]));
   const songs = Object.keys(await loadSongs());
   const npcs = await npcIds();
+  let scenes = await loadScenes();
   const shops = Object.keys(SHOPS);
   const areas = Object.keys(BACKDROPS);
 
@@ -80,6 +112,14 @@ export async function mount(root, studio) {
     const r = id === room?.id ? room : rooms[id];
     return r ? friendly(r.name || id) : id;
   };
+
+  // Every text-file section the room uses: signs and objects, single tiles
+  // (`looks`), and kinds of tile (`tileTexts`).
+  const textRefs = () => new Set([
+    ...room.props.map((p) => p.text),
+    ...(room.looks ?? []).map((l) => l.text),
+    ...Object.values(room.tileTexts ?? {}),
+  ].filter(Boolean));
 
   // --- Undo ---
   const snapshot = () => JSON.stringify({ room, signs, selected });
@@ -171,9 +211,7 @@ export async function mount(root, studio) {
     textSource = await readText(`text/${room.textFile}`);
     const parsed = parseTextFile(textSource);
     signs = {};
-    for (const prop of room.props) {
-      if (prop.text) signs[prop.text] = signText?.[prop.text] ?? (parsed[prop.text] ?? []).join('\n\n');
-    }
+    for (const name of textRefs()) signs[name] = signText?.[name] ?? (parsed[name] ?? []).join('\n\n');
     originalSigns = info.isNew ? {} : { ...signs };
     studio.setDirty(Boolean(info.isNew));
     renderRoomSelect();
@@ -192,7 +230,7 @@ export async function mount(root, studio) {
     const result = await modal({
       title: 'New room',
       body: el('div', {},
-        field('Room name', nameInput, 'Shown on a title card when the player walks in.'),
+        field('Room name', nameInput, 'Just for you, to tell rooms apart. The title card shows the region\'s name.'),
         el('div', { class: 'field' }, el('span', { class: 'field-label' }, 'Size'), sizePick, hint('Small 16 x 12, Medium 20 x 15, Large 30 x 20 tiles. You can change it later.')),
         field('Start from', fromSelect)),
       actions: [{ label: 'Cancel', value: null }, {
@@ -278,12 +316,15 @@ export async function mount(root, studio) {
       section('Things', el('div', { class: 'place-grid' },
         card('start', 'Player start', thumbnail(playerSprite, 40), 'Where the player appears'),
         card('door', 'Door', icon('door', 32), 'Click or drag on the map: walking in takes you to another room'),
+        card('cutscene', 'Cutscene', icon('film', 32), 'Click or drag on the map: stepping there plays a cutscene'),
         card('sign', 'Sign', sprite('sign'), 'Something to read'),
         card('save', 'Save point', sprite('savepoint'), 'A crystal the player can save at'),
         card('npc', 'Keeper / NPC', sprite('keeper'), 'Someone to talk to'),
-        card('shop', 'Shop', sprite('merchant'), 'A shopkeeper'))),
+        card('shop', 'Shop', sprite('merchant'), 'A shopkeeper'),
+        card('decor', 'Object', sprite('watering_can'), 'Something just for looks, like a watering can'))),
       section('Enemies', el('div', { class: 'place-grid' }, Object.keys(enemies).map((id) => card(`enemy:${id}`, enemyName(id), enemySprites[id] ? thumbnail(enemySprites[id], 40) : icon('enemy', 28), 'Wanders left and right; touching it starts a battle')))),
-      hint(armed ? 'Now click on the map. Esc cancels.' : 'Pick a thing, then click the map. Click things on the map to select them, drag to move.'));
+      hint(armed ? 'Now click on the map. Esc cancels.' : 'Pick a thing, then click the map. Click things on the map to select them, drag to move.'),
+      hint('Click a flower bed, pillar, rubble, water or any other tile to give it words for when you press Z on it.'));
   }
 
   // --- Drawing ---
@@ -310,6 +351,8 @@ export async function mount(root, studio) {
     if (sel.type === 'start') return startBounds(room.playerStart);
     if (sel.type === 'prop') return room.props[sel.index] && propBounds(room.props[sel.index]);
     if (sel.type === 'npc') return room.npcs[sel.index] && npcBounds(room.npcs[sel.index], spriteForNpc(room.npcs[sel.index]));
+    if (sel.type === 'cutscene') return room.cutscenes[sel.index] && doorRect(room.cutscenes[sel.index]);
+    if (sel.type === 'tile') return tileAt(sel.x, sel.y) === null ? null : { x: sel.x * T, y: sel.y * T, w: T, h: T };
     return room.doors[sel.index] && doorRect(room.doors[sel.index]);
   }
   const spriteForNpc = (npc) => enemySprites[npc.art] ?? enemySprites[npc.enemy];
@@ -318,7 +361,7 @@ export async function mount(root, studio) {
   function patrolHandles() {
     if (selected?.type !== 'npc') return [];
     const npc = room.npcs[selected.index];
-    if (!npc) return [];
+    if (!npc || !walksAbout(npc)) return [];
     const s = T * zoom;
     const y = (npc.y + 1) * s - zoom * 2;
     return npc.patrol.map((p, i) => ({ i, x: (p + 0.5) * s, y }));
@@ -341,6 +384,11 @@ export async function mount(root, studio) {
       const r = doorRect(door);
       ctx.fillRect(r.x, r.y, r.w, r.h);
     }
+    for (const trigger of room.cutscenes) {
+      ctx.fillStyle = 'rgba(200, 120, 255, 0.25)';
+      const r = doorRect(trigger);
+      ctx.fillRect(r.x, r.y, r.w, r.h);
+    }
     if (mode === 'paint') ctx.globalAlpha = 0.55;
     drawThings(ctx, room, enemySprites);
     ctx.globalAlpha = 1;
@@ -361,8 +409,41 @@ export async function mount(root, studio) {
       ctx.fillStyle = '#4fe3d0';
       ctx.fillText(`to ${roomLabel(door.to)}`, door.x * s + 3, door.y * s - 4 < 10 ? door.y * s + 14 : door.y * s - 4);
     });
+    // A little speech mark on every tile with words (in Place mode).
+    if (mode === 'place') {
+      for (let ty = 0; ty < height(); ty++) {
+        for (let tx = 0; tx < width(); tx++) {
+          const { scope } = tileWords(tx, ty);
+          if (!scope) continue;
+          ctx.fillStyle = scope === 'one' ? '#ffe14d' : 'rgba(255, 225, 77, 0.55)';
+          ctx.fillRect((tx + 1) * s - 7, ty * s + 2, 5, 4);
+          ctx.fillRect((tx + 1) * s - 6, ty * s + 6, 2, 2);
+        }
+      }
+    }
+    room.cutscenes.forEach((trigger) => {
+      ctx.strokeStyle = '#c878ff';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 3]);
+      ctx.strokeRect(trigger.x * s + 1, trigger.y * s + 1, trigger.w * s - 2, trigger.h * s - 2);
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#c878ff';
+      ctx.fillText(`plays ${friendly(trigger.scene)}`, trigger.x * s + 3, trigger.y * s - 4 < 10 ? trigger.y * s + 14 : trigger.y * s - 4);
+    });
     room.npcs.forEach((npc, i) => {
       const sel = selected?.type === 'npc' && selected.index === i;
+      // A hidden or disguised enemy's leap range, measured from its feet like in the game.
+      const behaviour = npc.behaviour ?? (npc.ambush ? 'ambush' : 'patrol');
+      if (sel && DEFAULT_REACH[behaviour]) {
+        ctx.strokeStyle = '#ff8c5a';
+        ctx.setLineDash([6, 4]);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc((npc.x + 0.5) * s, (npc.y + 1) * s, (npc.reach ?? DEFAULT_REACH[behaviour]) * s, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      if (!walksAbout(npc)) return;
       const y = (npc.y + 1) * s - zoom * 2;
       const [x0, x1] = npc.patrol.map((p) => (p + 0.5) * s);
       ctx.fillStyle = sel ? '#ffe14d' : 'rgba(255, 225, 77, 0.45)';
@@ -382,9 +463,9 @@ export async function mount(root, studio) {
       ctx.strokeRect(sel.x * zoom - 2, sel.y * zoom - 2, sel.w * zoom + 4, sel.h * zoom + 4);
       ctx.setLineDash([]);
     }
-    if (drag?.kind === 'box' || drag?.kind === 'door') {
+    if (drag?.kind === 'box' || drag?.kind === 'door' || drag?.kind === 'cutscene') {
       const r = dragRect();
-      ctx.strokeStyle = drag.kind === 'door' ? '#4fe3d0' : '#ffe14d';
+      ctx.strokeStyle = { door: '#4fe3d0', cutscene: '#c878ff' }[drag.kind] ?? '#ffe14d';
       ctx.lineWidth = 2;
       ctx.strokeRect(r.x * s + 1, r.y * s + 1, r.w * s - 2, r.h * s - 2);
     } else if (hover && tileAt(hover.x, hover.y) !== null) {
@@ -421,12 +502,28 @@ export async function mount(root, studio) {
     for (let i = room.npcs.length - 1; i >= 0; i--) if (inside(npcBounds(room.npcs[i], spriteForNpc(room.npcs[i])), px, py)) return { type: 'npc', index: i };
     for (let i = room.props.length - 1; i >= 0; i--) if (inside(propBounds(room.props[i]), px, py)) return { type: 'prop', index: i };
     if (inside(startBounds(room.playerStart), px, py)) return { type: 'start', index: 0 };
+    for (let i = room.cutscenes.length - 1; i >= 0; i--) if (inside(doorRect(room.cutscenes[i]), px, py)) return { type: 'cutscene', index: i };
     for (let i = room.doors.length - 1; i >= 0; i--) if (inside(doorRect(room.doors[i]), px, py)) return { type: 'door', index: i };
+    return tileSpotAt(px, py);
+  }
+
+  // A tile you could give words to (a flower bed, a pillar, water...). Clicking
+  // the top of a tall pillar or statue picks the tile it stands on.
+  const canInspect = (c) => c !== null && !['.', 'o', 'r', 'c', '#', 'D', 'U', 'u'].includes(c);
+  function tileSpotAt(px, py) {
+    const tx = Math.floor(px / T);
+    const ty = Math.floor(py / T);
+    for (let below = 0; below <= 3; below++) {
+      const c = tileAt(tx, ty + below);
+      if (below === 0 && canInspect(c)) return { type: 'tile', x: tx, y: ty, index: 0 };
+      if (below > 0 && TILES[c]?.standing && (ty + below + 1) * T - TILES[c].height <= py) return { type: 'tile', x: tx, y: ty + below, index: 0 };
+    }
     return null;
   }
+  const spotAt = (x, y) => room.looks.find((l) => l.x === x && l.y === y);
   function positionOf(sel) {
     if (sel.type === 'start') return room.playerStart;
-    return { door: room.doors, prop: room.props, npc: room.npcs }[sel.type][sel.index];
+    return { door: room.doors, cutscene: room.cutscenes, prop: room.props, npc: room.npcs }[sel.type][sel.index];
   }
 
   function cellOf(e) {
@@ -454,12 +551,36 @@ export async function mount(root, studio) {
     }
   }
 
+  // Where a door into room `to` should drop the player: just outside that
+  // room's door back to this one (below it, else above, left or right), so you
+  // come out of the doorway you'd expect. Falls back to the room's start.
+  function arrivalSpot(to) {
+    const target = rooms[to];
+    const open = (x, y) => {
+      const t = target?.tiles[y]?.[x];
+      return t !== undefined && t !== 'D' && !TILES[t]?.solid;
+    };
+    for (const d of target?.doors ?? []) {
+      if (d.to !== room.id) continue;
+      const midX = d.x + Math.floor(d.w / 2);
+      const midY = d.y + Math.floor(d.h / 2);
+      const spot = [[midX, d.y + d.h], [midX, d.y - 1], [d.x - 1, midY], [d.x + d.w, midY]].find(([x, y]) => open(x, y));
+      if (spot) return { x: spot[0], y: spot[1] };
+    }
+    return { ...(target?.playerStart ?? { x: 1, y: 1 }) };
+  }
+
   function place(kind, x, y) {
     if (kind === 'start') { room.playerStart = { x, y }; return { type: 'start', index: 0 }; }
     if (kind === 'door') {
       const to = Object.keys(rooms).find((id) => id !== room.id) ?? room.id;
-      room.doors.push({ x, y, w: 1, h: 1, to, spawn: { ...(rooms[to]?.playerStart ?? { x: 1, y: 1 }) } });
+      room.doors.push({ x, y, w: 1, h: 1, to, spawn: arrivalSpot(to) });
       return { type: 'door', index: room.doors.length - 1 };
+    }
+    if (kind === 'cutscene') {
+      const ids = Object.keys(scenes);
+      room.cutscenes.push({ x, y, w: 1, h: 1, scene: ids.find((id) => scenes[id].room === room.id) ?? ids[0] ?? 'example_scene' });
+      return { type: 'cutscene', index: room.cutscenes.length - 1 };
     }
     if (kind.startsWith('enemy:')) {
       room.npcs.push({ enemy: kind.slice(6), x, y, patrol: [clamp(x - 2, 1, width() - 2), clamp(x + 2, 1, width() - 2)] });
@@ -503,8 +624,8 @@ export async function mount(root, studio) {
     if (e.button === 2) { armed = null; renderLeft(); draw(); return; }
     if (armed) {
       beginEdit();
-      if (armed === 'door') {
-        drag = { kind: 'door', from: { x, y }, to: { x, y } };
+      if (armed === 'door' || armed === 'cutscene') {
+        drag = { kind: armed, from: { x, y }, to: { x, y } };
         draw();
         return;
       }
@@ -523,7 +644,7 @@ export async function mount(root, studio) {
       return;
     }
     selected = objectAt(px / zoom, py / zoom);
-    if (selected) {
+    if (selected && selected.type !== 'tile') {
       beginEdit();
       const pos = positionOf(selected);
       drag = { kind: 'move', offset: { x: x - pos.x, y: y - pos.y }, moved: false };
@@ -545,7 +666,7 @@ export async function mount(root, studio) {
       drag.last = { x, y };
       if (any) renderBackground();
       draw();
-    } else if (drag.kind === 'box' || drag.kind === 'door') {
+    } else if (drag.kind === 'box' || drag.kind === 'door' || drag.kind === 'cutscene') {
       drag.to = { x: cx, y: cy };
       draw();
     } else if (drag.kind === 'patrol') {
@@ -575,10 +696,10 @@ export async function mount(root, studio) {
       for (let ty = r.y; ty < r.y + r.h; ty++) for (let tx = r.x; tx < r.x + r.w; tx++) room.tiles[ty][tx] = tileChar;
       changed();
       renderBackground();
-    } else if (finished.kind === 'door') {
+    } else if (finished.kind === 'door' || finished.kind === 'cutscene') {
       const r = dragRect(finished);
-      selected = place('door', r.x, r.y);
-      Object.assign(room.doors[selected.index], { w: r.w, h: r.h });
+      selected = place(finished.kind, r.x, r.y);
+      Object.assign(positionOf(selected), { w: r.w, h: r.h });
       armed = null;
       changed();
       renderLeft();
@@ -628,8 +749,12 @@ export async function mount(root, studio) {
 
   function deleteSelected() {
     if (!selected || selected.type === 'start') return;
+    if (selected.type === 'tile') {
+      edit(() => { clearTileWords(selected.x, selected.y); selected = null; });
+      return;
+    }
     edit(() => {
-      const list = { door: room.doors, prop: room.props, npc: room.npcs }[selected.type];
+      const list = { door: room.doors, cutscene: room.cutscenes, prop: room.props, npc: room.npcs }[selected.type];
       const [removed] = list.splice(selected.index, 1);
       if (removed?.text && !room.props.some((p) => p.text === removed.text) && !(removed.text in originalSigns)) delete signs[removed.text];
       selected = null;
@@ -650,9 +775,81 @@ export async function mount(root, studio) {
   const describe = (sel) => {
     if (sel.type === 'start') return TYPE_INFO.start;
     if (sel.type === 'door') return TYPE_INFO.door;
+    if (sel.type === 'cutscene') return TYPE_INFO.cutscene;
+    if (sel.type === 'tile') return { label: tileName(room.tiles[sel.y][sel.x]), icon: 'eye' };
     if (sel.type === 'npc') return { label: enemyName(room.npcs[sel.index].enemy), icon: 'enemy' };
     return TYPE_INFO[propType(room.props[sel.index])];
   };
+
+  // --- Words for tiles ---
+  // A tile's words come from its own spot (`looks`) if it has one, otherwise
+  // from its kind (`tileTexts`, every flower bed in the room, say).
+  function tileWords(x, y) {
+    const spot = spotAt(x, y);
+    if (spot) return { scope: 'one', section: spot.text };
+    const kind = room.tileTexts[room.tiles[y][x]];
+    return kind ? { scope: 'all', section: kind } : { scope: null, section: null };
+  }
+
+  function clearTileWords(x, y) {
+    const { scope, section } = tileWords(x, y);
+    if (scope === 'one') room.looks = room.looks.filter((l) => !(l.x === x && l.y === y));
+    if (scope === 'all') delete room.tileTexts[room.tiles[y][x]];
+    if (section && !textRefs().has(section) && !(section in originalSigns)) delete signs[section];
+  }
+
+  function tileWordsInspector(sel) {
+    const char = room.tiles[sel.y][sel.x];
+    const name = tileName(char);
+    const { scope, section } = tileWords(sel.x, sel.y);
+    sel.scope ??= scope ?? 'one';
+    const newSection = (suffix = '') => freeSectionName(textSource, `${room.id}_${snakeCase(name)}${suffix}`, Object.keys(signs));
+    // Where typing goes, making the section the first time.
+    const ensureSection = () => {
+      const current = tileWords(sel.x, sel.y);
+      if (sel.scope === 'one') {
+        if (current.scope === 'one') return current.section;
+        const text = newSection();
+        room.looks.push({ x: sel.x, y: sel.y, text });
+        signs[text] = current.section ? signs[current.section] ?? '' : '';
+        return text;
+      }
+      if (room.tileTexts[char]) {
+        if (current.scope === 'one') clearTileWords(sel.x, sel.y);
+        return room.tileTexts[char];
+      }
+      const text = current.section ?? newSection('s');
+      if (current.scope === 'one') room.looks = room.looks.filter((l) => !(l.x === sel.x && l.y === sel.y));
+      room.tileTexts[char] = text;
+      return text;
+    };
+    const words = el('textarea', {
+      rows: 5,
+      value: section ? signs[section] ?? '' : '',
+      placeholder: `What you see when you press Z on this ${name.toLowerCase()}. Leave it empty and nothing happens.`,
+      onfocus: () => beginEdit(),
+      oninput: (e) => {
+        const text = ensureSection();
+        signs[text] = e.target.value;
+        studio.setDirty(true);
+        renderChecks();
+      },
+      onchange: () => {
+        const now = tileWords(sel.x, sel.y);
+        if (now.section && !(signs[now.section] ?? '').trim()) clearTileWords(sel.x, sel.y);
+        changed();
+      },
+    });
+    const scopePick = select([['one', 'Just this one'], ['all', `Every ${name.toLowerCase()} in this room`]], sel.scope, (v) => edit(() => {
+      sel.scope = v;
+      if (tileWords(sel.x, sel.y).section) ensureSection();
+    }));
+    return [
+      field('When you press Z on it', words, 'Each line is a new "*" line; an empty line starts a new page.'),
+      field('These words are for', scopePick, sel.scope === 'all' ? `Every ${name.toLowerCase()} here says this, except ones with words of their own.` : null),
+      hint(`Tile ${sel.x}, ${sel.y}. Paint it in Paint mode; click any tile here in Place mode to give it words.`),
+    ];
+  }
 
   function focusWords() {
     const area = inspector.querySelector('textarea');
@@ -675,7 +872,7 @@ export async function mount(root, studio) {
       body.push(
         field('Leads to', select(Object.keys(rooms).map((id) => [id, roomLabel(id)]), door.to, (v) => edit(() => {
           door.to = v;
-          door.spawn = { ...(rooms[v]?.playerStart ?? door.spawn) };
+          door.spawn = arrivalSpot(v);
         }))),
         el('div', { class: 'field' },
           el('span', { class: 'field-label' }, 'You arrive at'),
@@ -689,14 +886,40 @@ export async function mount(root, studio) {
         slider({ label: 'Width', min: 1, max: 8, value: door.w, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { door.w = v; }) }),
         slider({ label: 'Height', min: 1, max: 8, value: door.h, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { door.h = v; }) }),
         hint('Paint Doorway tiles under it so it looks like a way out.'));
+    } else if (selected.type === 'tile') {
+      body.push(...tileWordsInspector(selected));
+    } else if (selected.type === 'cutscene') {
+      const trigger = room.cutscenes[selected.index];
+      const ids = Object.keys(scenes);
+      body.push(
+        field('Plays', select(ids.length ? ids.map((id) => [id, friendly(id)]) : [[trigger.scene, friendly(trigger.scene)]], trigger.scene, (v) => edit(() => { trigger.scene = v; }))),
+        slider({ label: 'Width', min: 1, max: 12, value: trigger.w, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { trigger.w = v; }) }),
+        slider({ label: 'Height', min: 1, max: 12, value: trigger.h, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { trigger.h = v; }) }),
+        hint('Stepping onto these tiles plays the cutscene. Players can\'t see the area. Most scenes play only the first time.'),
+        btn('film', 'Open in the Cutscene Maker', () => studio.open('scenes', { scene: trigger.scene }), { kind: 'ghost' }));
     } else if (selected.type === 'npc') {
       const npc = room.npcs[selected.index];
+      const behaviour = npc.behaviour ?? (npc.ambush ? 'ambush' : 'patrol');
+      const walks = walksAbout(npc);
       body.push(
         field('Which enemy', select(Object.keys(enemies).map((id) => [id, enemyName(id)]), npc.enemy, (v) => edit(() => { npc.enemy = v; delete npc.art; }, { all: true }))),
-        slider({ label: 'Walks from', min: 0, max: width() - 1, value: npc.patrol[0], format: (v) => `tile ${v}`, onChange: (v) => edit(() => { npc.patrol = [Math.min(v, npc.patrol[1]), Math.max(v, npc.patrol[1])]; }) }),
-        slider({ label: 'Walks to', min: 0, max: width() - 1, value: npc.patrol[1], format: (v) => `tile ${v}`, onChange: (v) => edit(() => { npc.patrol = [Math.min(v, npc.patrol[0]), Math.max(v, npc.patrol[0])]; }) }),
-        hint('Or drag the yellow handles on the map. Touching it starts a battle; enemies close together fight as a group.'),
-        coords(npc));
+        field('How it moves', select(Object.entries(BEHAVIOURS), behaviour, (v) => edit(() => {
+          delete npc.ambush;
+          delete npc.reach;
+          if (v === 'patrol') delete npc.behaviour; else npc.behaviour = v;
+        }, { all: true })), BEHAVIOUR_HINTS[behaviour]));
+      if (DEFAULT_REACH[behaviour]) {
+        body.push(
+          slider({ label: 'Leaps from', min: 1, max: 8, step: 0.5, value: npc.reach ?? DEFAULT_REACH[behaviour], format: (v) => `${v} tiles away`, onChange: (v) => edit(() => { npc.reach = v; }) }),
+          hint('It springs when you come this close, from any side. The circle on the map shows how far.'));
+      }
+      if (walks) {
+        body.push(
+          slider({ label: behaviour === 'wander' ? 'Wanders from' : 'Walks from', min: 0, max: width() - 1, value: npc.patrol[0], format: (v) => `tile ${v}`, onChange: (v) => edit(() => { npc.patrol = [Math.min(v, npc.patrol[1]), Math.max(v, npc.patrol[1])]; }) }),
+          slider({ label: behaviour === 'wander' ? 'Wanders to' : 'Walks to', min: 0, max: width() - 1, value: npc.patrol[1], format: (v) => `tile ${v}`, onChange: (v) => edit(() => { npc.patrol = [Math.min(v, npc.patrol[0]), Math.max(v, npc.patrol[0])]; }) }),
+          hint('Or drag the yellow handles on the map.'));
+      }
+      body.push(hint('Touching it starts a battle; enemies close together fight as a group.'), coords(npc));
     } else {
       const prop = room.props[selected.index];
       const type = propType(prop);
@@ -733,9 +956,53 @@ export async function mount(root, studio) {
       } else if (type === 'shop') {
         body.push(field('Which shop', select(shops.map((s) => [s, friendly(s)]), prop.shop, (v) => edit(() => { prop.shop = v; }))), spritePick);
       } else {
-        body.push(spritePick, hint('Just for looks: nothing happens when you press Z on it.'));
+        // Flavour text, Undertale style: what you see when you press Z on it.
+        const words = el('textarea', {
+          rows: 5,
+          value: prop.text ? signs[prop.text] ?? '' : '',
+          placeholder: 'e.g. "It\'s a comfy armchair. It smells like candle wax." Leave it empty and nothing happens.',
+          onfocus: () => beginEdit(),
+          oninput: (e) => {
+            if (!prop.text) {
+              prop.text = freeSectionName(textSource, `${room.id}_${prop.sprite}`, Object.keys(signs));
+            }
+            signs[prop.text] = e.target.value;
+            studio.setDirty(true);
+            renderChecks();
+          },
+          onchange: () => {
+            // Emptied: it goes back to being just for looks.
+            if (prop.text && !(signs[prop.text] ?? '').trim()) {
+              if (!(prop.text in originalSigns)) delete signs[prop.text];
+              delete prop.text;
+            }
+            changed();
+          },
+        });
+        body.push(spritePick, field('When you press Z on it', words, 'Each line is a new "*" line; an empty line starts a new page. Leave it empty and nothing happens.'));
       }
       if (type !== 'decor' && type !== 'npc' && type !== 'shop') body.push(el('div', { class: 'adv' }, spritePick));
+      if (type === 'npc' || type === 'shop' || type === 'decor') {
+        const when = prop.until ? `until:${prop.until}` : prop.after ? `after:${prop.after}` : '';
+        body.push(field('Shows up', select([
+          ['', 'Always'],
+          ...Object.keys(scenes).map((id) => [`until:${id}`, `Until "${friendly(id)}" has played`]),
+          ...Object.keys(scenes).map((id) => [`after:${id}`, `After "${friendly(id)}" has played`]),
+        ], when, (v) => edit(() => {
+          delete prop.until;
+          delete prop.after;
+          const [kind, id] = v.split(':');
+          if (id) prop[kind] = id;
+        })), 'Lets people move with the story: Taper waters her flowers until you meet her, then she\'s at home.'));
+      }
+      if (type !== 'save') {
+        body.push(field('Animation', select([['', 'None (stands still)'], ...ANIMATION_NAMES.map((a) => [a, friendly(a)])], prop.animation ?? '', (v) => edit(() => {
+          if (v) prop.animation = v; else { delete prop.animation; delete prop.speed; }
+        })), 'Plays over and over. Make your own in the Sprite Editor: any sprite with a few frames.'));
+        if (prop.animation) {
+          body.push(slider({ label: 'Speed', min: 0.05, max: 1, step: 0.05, value: prop.speed ?? DEFAULT_FRAME_SECONDS, format: (v) => `${v.toFixed(2)} s a frame`, onChange: (v) => edit(() => { prop.speed = v; }) }));
+        }
+      }
       body.push(coords(prop));
     }
     setChildren(inspector,
@@ -749,9 +1016,9 @@ export async function mount(root, studio) {
     const sizeTarget = { w: width(), h: height() };
     setChildren(inspector,
       el('div', { class: 'inspector-head' }, icon('room', 22), el('h2', {}, 'This room')),
-      field('Name', el('input', { type: 'text', value: room.name ?? '', onchange: (e) => edit(() => { room.name = e.target.value.trim().toUpperCase(); }, { all: true }) }), 'Shown on a title card when you walk in.'),
+      field('Name', el('input', { type: 'text', value: room.name ?? '', onchange: (e) => edit(() => { room.name = e.target.value.trim().toUpperCase(); }, { all: true }) }), 'Just for you, to tell rooms apart. The title card shows the region\'s name.'),
       field('Music', select([['', 'No music'], ...songs.map((s) => [s, friendly(s)])], room.music ?? '', (v) => edit(() => { room.music = v || null; }))),
-      field('Battle background', select(areas.map((a) => [a, friendly(a)]), room.area, (v) => edit(() => { room.area = v; }))),
+      field('Region', select(areas.map((a) => [a, friendly(a)]), room.area, (v) => edit(() => { room.area = v; })), 'Its name card shows when you walk in from another region, and its battles use its background.'),
       el('div', { class: 'field' },
         el('span', { class: 'field-label' }, 'Size in tiles'),
         el('div', { class: 'row' },
@@ -804,6 +1071,9 @@ export async function mount(root, studio) {
       if (!target) list.push({ text: `A door leads to "${d.to}", but there's no room called that.`, sel: { type: 'door', index: i } });
       else if (solid(target, d.spawn.x, d.spawn.y)) list.push({ text: `A door drops the player inside a wall in ${roomLabel(d.to)}. Pick another arrival spot.`, sel: { type: 'door', index: i } });
     });
+    room.cutscenes.forEach((c, i) => {
+      if (!scenes[c.scene]) list.push({ text: `A cutscene trigger plays "${c.scene}", but there's no cutscene called that. Make it in the Cutscene Maker.`, sel: { type: 'cutscene', index: i } });
+    });
     room.props.forEach((p, i) => {
       if (!propSprites[p.sprite]) list.push({ text: `Something uses a picture called "${p.sprite}" that doesn't exist.`, sel: { type: 'prop', index: i }, fatal: true });
       if (p.text && !(signs[p.text] ?? '').trim()) list.push({ text: 'A sign has no words yet.', sel: { type: 'prop', index: i } });
@@ -812,7 +1082,7 @@ export async function mount(root, studio) {
     });
     room.npcs.forEach((n, i) => {
       if (!enemies[n.enemy]) list.push({ text: `An enemy is "${n.enemy}", which isn't one of the game's enemies.`, sel: { type: 'npc', index: i }, fatal: true });
-      const [a, b] = n.patrol;
+      const [a, b] = walksAbout(n) ? n.patrol : [n.x, n.x];
       for (let x = Math.min(a, b); x <= Math.max(a, b); x++) {
         if (solid(room, x, n.y)) { list.push({ text: `${enemyName(n.enemy)} walks through a wall. Shorten its walk.`, sel: { type: 'npc', index: i } }); break; }
       }
@@ -867,7 +1137,8 @@ export async function mount(root, studio) {
       if (existing.includes(meta.file)) throw new Error(`There's already a file called ${meta.file}. Rename the room (Advanced) and try again.`);
     }
     out.push({ path, content: roomModule(room, meta.constName, meta.header) });
-    const changedSigns = Object.entries(signs).filter(([name, words]) => room.props.some((p) => p.text === name) && words.trim() !== (originalSigns[name] ?? '').trim());
+    const used = textRefs();
+    const changedSigns = Object.entries(signs).filter(([name, words]) => used.has(name) && words.trim() !== (originalSigns[name] ?? '').trim());
     if (changedSigns.length) {
       let text = await readText(`text/${room.textFile}`);
       if (!text) text = `# ${room.name || room.id}: signs and other things you can inspect.\n# Each entry (separated by a blank line) is one page of the textbox.\n`;
@@ -894,5 +1165,12 @@ export async function mount(root, studio) {
   if (startId) await openRoom(startId);
   setMode('paint');
 
-  return { getFiles, afterSave, onShow: () => requestAnimationFrame(fit) };
+  // Coming back from the Cutscene Maker: pick up any scenes saved there.
+  async function onShow() {
+    requestAnimationFrame(fit);
+    scenes = await loadScenes(true);
+    if (selected?.type === 'cutscene') renderInspector();
+  }
+
+  return { getFiles, afterSave, onShow };
 }

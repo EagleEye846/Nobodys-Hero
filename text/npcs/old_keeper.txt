@@ -1,11 +1,11 @@
 # OLD KEEPER: a hooded figure with a lantern, in the west room of the Ruins.
+# He introduces himself in a cutscene when you arrive
+# (src/data/scenes/meetingTheKeeper.js), so these pick up from there.
 # Each entry (separated by a blank line) is one page of the textbox.
 
 # Said the first time you talk to them.
 [first]
-Oh! A visitor. It has been a long time since anyone walked these halls.
-
-They call me the Keeper. I tend the lantern, and the lantern tends the dark.
+Ah, you came back to the light. Good. A lantern gets lonely, you know.
 
 That dummy in the east room was built to train heroes. Now it trains itself to hate them.
 
@@ -16,5 +16,9 @@ The floating crystals are older than me. Touch one, and the Ruins will remember 
 # Said every time after that.
 [repeat]
 The lantern still burns. That is enough for today.
+
+The others will say you are not the Hero. Let them talk.
+
+They have had a long time to decide what a Hero looks like.
 
 North of here is the Lantern Hall. Lately a moth has taken a liking to the light. A big one.

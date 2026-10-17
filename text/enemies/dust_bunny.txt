@@ -27,6 +27,8 @@ I'm fluffy AND fearsome!
 
 Dust to dust!
 
+The Hero wouldn't trip on me!
+
 # One section per TALK option. The names after "talk:" must match
 # src/data/enemies/bunny.js.
 [talk: Inspect]

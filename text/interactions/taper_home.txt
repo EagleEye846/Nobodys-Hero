@@ -1,0 +1,99 @@
+# TAPER'S HOME: the things you can press Z on in her living room, kitchen,
+# hallway and the bedroom she made up for you. Each entry (separated by a
+# blank line) is one page of the textbox.
+
+# --- Living room ---
+
+[home_fireplace]
+A warm fire crackles in the hearth.
+It smells of cinnamon and candle wax.
+
+Taper says she keeps it lit "for company." The flames lean toward her when she passes.
+
+[home_books]
+A shelf of well-read books.
+"A Hundred Recipes Without Fire."
+"So You've Become A Candle: A Guide."
+
+[home_books_2]
+More books.
+"Waiting: A Hobby."
+"Prophecies For Beginners." The spine has never been cracked.
+
+[home_armchair]
+A comfy velvet armchair, pressed into the shape of a tall candle.
+
+There's a ring of old wax on the cushion.
+
+[home_candle]
+A candle stub burns on a saucer.
+It's Taper's spare. You decide not to ask.
+
+[home_can]
+Taper's watering can. Still a little damp.
+
+[save_point]
+The crystal's light mixes with the firelight.
+You feel at home. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Kitchen ---
+
+[kitchen_counter]
+A spotless counter. Everything has been put away just so.
+
+[kitchen_stove]
+The stove is cold. Taper never cooks with fire.
+"Too much like family," she says.
+
+[kitchen_cake]
+A cake shaped like a candle. Or a candle shaped like a cake.
+
+A little card reads: "FOR OUR GUEST." You'll save it for later.
+
+[kitchen_table]
+A table set for two.
+The second plate has a hundred years of dust on it. Until today, it's been wiped clean.
+
+[kitchen_chair]
+A small wooden chair. It's just your size.
+
+# --- Hallway ---
+
+[hall_mirror]
+It's you!
+
+...Not much of a Hero. But it's you.
+
+[hall_door]
+It's locked. A wax seal reads: TAPER.
+You can hear a clock ticking inside.
+
+# --- Your room ---
+
+[room_bed]
+A bed made up with fresh sheets and a blue blanket.
+
+It looks like it's been waiting a long time for someone.
+
+[room_toys]
+A chest of old toys. A wooden sword. A cardboard crown. A little red cape.
+
+They're all Hero costumes.
+
+[room_lamp]
+A candle lamp with a paper shade. Its light is soft and steady.
+
+[room_drawer]
+A drawer full of mittens. Every pair is a different size.
+
+There's a tiny cactus on top. It seems to be thriving.
+
+# --- Tiles ---
+
+[home_flowers]
+Taper's flowers. Each one has a tiny name tag.
+One of them says "GUEST."

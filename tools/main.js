@@ -14,6 +14,8 @@ const TOOLS = [
   { id: 'music', label: 'Music', name: 'Music Maker', icon: 'note', module: './musicMaker.js', blurb: 'Write tunes on a piano roll and a drum grid.' },
   { id: 'patterns', label: 'Patterns', name: 'Pattern Lab', icon: 'pattern', module: './patternLab.js', blurb: 'Build bullet attacks from blocks, then dodge them yourself.' },
   { id: 'enemies', label: 'Enemies', name: 'Enemy Maker', icon: 'enemy', module: './enemyMaker.js', blurb: 'Make a new foe step by step: look, stats, attacks and words.' },
+  { id: 'dialogue', label: 'Dialogue', name: 'Dialogue Maker', icon: 'chat', module: './dialogueMaker.js', blurb: 'Write what people say, page by page, and see it in the game\'s text box.' },
+  { id: 'scenes', label: 'Cutscenes', name: 'Cutscene Maker', icon: 'film', module: './sceneMaker.js', blurb: 'Script scenes in a room: walking, talking, emotes and camera moves.' },
 ];
 const GAME_URL = '../';
 const SERVER_HINT = 'Start the Studio with `python tools/serve.py` to save.';

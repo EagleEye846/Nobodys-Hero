@@ -7,7 +7,7 @@ import { paletteNotes, valueText } from './source.js';
 import { friendly } from './ui.js';
 
 // Used when the Studio runs without its server (no folder listing).
-const KNOWN_ART_FILES = ['player.js', 'props.js', 'portraits.js', 'icons.js', 'dummy.js', 'moth.js', 'bunny.js', 'waxling.js', 'shade.js'];
+const KNOWN_ART_FILES = ['player.js', 'props.js', 'portraits.js', 'icons.js', 'dummy.js', 'moth.js', 'bunny.js', 'waxling.js', 'shade.js', 'columneon.js'];
 
 const isRows = (v) => Array.isArray(v) && v.length > 0 && v.every((r) => typeof r === 'string');
 const isFrameSet = (v) => v && typeof v === 'object' && !Array.isArray(v) && Object.values(v).length > 0 && Object.values(v).every(isRows);
@@ -142,6 +142,12 @@ export function enemySprite(enemy) {
 export async function loadRooms(fresh = false) {
   const module = fresh ? await importFresh('src/data/rooms/index.js') : await import('../src/data/rooms/index.js');
   return module.ROOMS;
+}
+
+// Every cutscene, by id (src/data/scenes/).
+export async function loadScenes(fresh = false) {
+  const module = fresh ? await importFresh('src/data/scenes/index.js') : await import('../src/data/scenes/index.js');
+  return module.SCENES;
 }
 
 // Which file each room lives in: { id: { file, constName, header } }.

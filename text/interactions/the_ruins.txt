@@ -31,3 +31,21 @@ Your progress is saved.
 [save_failed]
 The crystal flickers, but nothing happens...
 (Your browser isn't letting the game save.)
+
+# Tiles you can press Z on (see `tileTexts` in the rooms).
+[flower_beds]
+Neat rows of flowers, freshly watered.
+Someone loves these very much.
+
+[ruins_water]
+Still, dark water.
+Your reflection looks unsure of itself.
+
+[ruins_pillars]
+An old stone pillar. Someone has scratched tally marks into it.
+
+They stop at one hundred.
+
+[ruins_statue]
+A statue of a hero, sword raised.
+The face has been worn smooth by a hundred years of waiting.

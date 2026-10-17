@@ -16,6 +16,9 @@ import { GameOverScene } from '../gameOver/gameOverScene.js';
 import { ROOMS } from '../data/rooms/index.js';
 // Every enemy by id (its file name in src/data/enemies/); rooms' `enemy` refers to these.
 import { ENEMIES } from '../data/enemies/index.js';
+import { AREA_NAMES } from '../data/areas.js';
+import { SCENES } from '../data/scenes/index.js';
+import { ScenePlayer } from './scenePlayer.js';
 
 // Enemies this close (in world pixels) to the one you touch join the fight, up to MAX_GROUP in all.
 const GROUP_RADIUS = 64;
@@ -38,6 +41,25 @@ const TITLE_HOLD_SECONDS = 1.8;
 // Going through a door fades to black and back.
 const DOOR_FADE_SECONDS = 0.3;
 
+// A soft darkening toward the screen's edges, so the Ruins feel close and old.
+let vignetteCanvas = null;
+function vignette() {
+  if (!vignetteCanvas) {
+    vignetteCanvas = document.createElement('canvas');
+    vignetteCanvas.width = SCREEN_WIDTH;
+    vignetteCanvas.height = SCREEN_HEIGHT;
+    const ctx = vignetteCanvas.getContext('2d');
+    const cx = SCREEN_WIDTH / 2;
+    const cy = SCREEN_HEIGHT / 2;
+    const shade = ctx.createRadialGradient(cx, cy, SCREEN_HEIGHT * 0.45, cx, cy, SCREEN_WIDTH * 0.62);
+    shade.addColorStop(0, 'rgba(6, 3, 14, 0)');
+    shade.addColorStop(1, 'rgba(6, 3, 14, 0.42)');
+    ctx.fillStyle = shade;
+    ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+  }
+  return vignetteCanvas;
+}
+
 // Picks up from the last save, or starts fresh in `fallbackRoom` if there isn't one.
 export function continueGame(fallbackRoom) {
   if (loadGame() && ROOMS[WORLD_STATE.room]) return new OverworldScene(ROOMS[WORLD_STATE.room], WORLD_STATE.spawn);
@@ -45,9 +67,10 @@ export function continueGame(fallbackRoom) {
 }
 
 // Free-roam exploration: walk around a room, read things, and get ambushed.
-// `spawn` is where the player appears, in tile coordinates.
+// `spawn` is where the player appears, in tile coordinates. `fromArea` is the
+// region of the room you came from, if any.
 export class OverworldScene {
-  constructor(roomData, spawn = roomData.playerStart) {
+  constructor(roomData, spawn = roomData.playerStart, fromArea = null) {
     this.roomData = roomData;
     this.room = new Room(roomData);
     this.player = new Player(spawn.x * T + T / 2, (spawn.y + 1) * T);
@@ -62,6 +85,8 @@ export class OverworldScene {
     this.doorway = null;
     this.fadeIn = DOOR_FADE_SECONDS;
     this.titleTime = 0;
+    // The region's name card, only when arriving from a different region.
+    this.areaName = roomData.area !== fromArea ? AREA_NAMES[roomData.area] : null;
   }
 
   enter(game) {
@@ -76,7 +101,7 @@ export class OverworldScene {
     if (this.doorway) {
       this.doorway.t += dt;
       if (this.doorway.t >= DOOR_FADE_SECONDS) {
-        this.game.changeScene(new OverworldScene(ROOMS[this.doorway.door.to], this.doorway.door.spawn));
+        this.game.changeScene(new OverworldScene(ROOMS[this.doorway.door.to], this.doorway.door.spawn, this.roomData.area));
       }
       return;
     }
@@ -95,6 +120,15 @@ export class OverworldScene {
       return;
     }
 
+    // A cutscene takes over completely until it ends.
+    if (this.cutscene) {
+      this.cutscene.update(dt, input);
+      if (this.cutscene.done) this.cutscene = null;
+      const focus = this.cutscene?.cameraPoint ?? this.player;
+      this.camera.follow(focus.x, focus.y + CAMERA_OFFSET_Y, this.room.pixelWidth, this.room.pixelHeight);
+      return;
+    }
+
     // Menus and the textbox take over input while open, so the player stands still.
     if (this.pauseMenu.isOpen) {
       this.pauseMenu.update(input);
@@ -105,16 +139,45 @@ export class OverworldScene {
       this.pauseMenu.open();
     } else {
       this.player.update(dt, input, this.room);
-      for (const npc of this.npcs) npc.update(dt);
+      for (const npc of this.npcs) npc.update(dt, this.player, this.room);
       if (this.player.landedThisFrame) this.handleLanding();
       if (input.wasPressed('confirm') && !this.player.isAirborne) this.interact();
       this.checkDoors();
+      this.checkCutscenes();
 
       const foe = this.npcs.find((npc) => npc.touches(this.player));
       if (foe && !this.player.isAirborne && !this.doorway) this.battleFlash = { group: this.groupAround(foe), t: 0 };
     }
 
     this.camera.follow(this.player.x, this.player.y + CAMERA_OFFSET_Y, this.room.pixelWidth, this.room.pixelHeight);
+  }
+
+  // Stepping into a cutscene trigger plays its scene (just the first time,
+  // unless the scene says `once: false`).
+  checkCutscenes() {
+    if (this.player.isAirborne || this.doorway || this.cutscene) return;
+    const [tx, ty] = this.player.tilePosition();
+    const trigger = (this.roomData.cutscenes ?? []).find((c) => tx >= c.x && tx < c.x + c.w && ty >= c.y && ty < c.y + c.h);
+    if (!trigger) {
+      this.lastTrigger = null;
+      return;
+    }
+    const scene = SCENES[trigger.scene];
+    if (!scene) throw new Error(`A cutscene trigger in ${this.roomData.id} plays unknown scene '${trigger.scene}'`);
+    WORLD_STATE.seenScenes ??= [];
+    if (scene.once !== false && WORLD_STATE.seenScenes.includes(scene.id)) return;
+    // Stepping off and back on doesn't replay a repeatable scene straight away.
+    if (this.lastTrigger === trigger) return;
+    this.lastTrigger = trigger;
+    if (!WORLD_STATE.seenScenes.includes(scene.id)) WORLD_STATE.seenScenes.push(scene.id);
+    this.playCutscene(scene);
+  }
+
+  // Plays a scene (from src/data/scenes/) here and now.
+  playCutscene(scene) {
+    this.player.moving = false;
+    this.player.animationTime = 0;
+    this.cutscene = new ScenePlayer(scene, this);
   }
 
   // Stepping onto a door's tiles starts the fade into the next room.
@@ -167,13 +230,25 @@ export class OverworldScene {
   }
 
   interact() {
-    const prop = this.room.propAt(...this.player.interactionPoint());
-    if (!prop) return;
+    const [px, py] = this.player.interactionPoint();
+    const prop = this.room.propAt(px, py);
+    if (!prop) {
+      this.inspectTile(Math.floor(px / T), Math.floor(py / T));
+      return;
+    }
     // Shops are their own screen; leaving comes back here (and to the room's music).
     if (prop.shop) this.game.changeScene(new ShopScene(prop.shop, () => this.game.changeScene(this)));
     else if (prop.save) this.useSavePoint();
     else if (prop.npc) this.textbox.open(this.npcPages(prop), prop.npc);
     else if (prop.text) this.textbox.open(textSection(this.roomData.textFile, prop.text));
+  }
+
+  // Tiles can have words too (a flower bed, a pillar, a pool of water): words
+  // for that one spot (`looks`), or for every tile of its kind in the room (`tileTexts`).
+  inspectTile(tx, ty) {
+    const spot = (this.roomData.looks ?? []).find((look) => look.x === tx && look.y === ty);
+    const section = spot?.text ?? this.roomData.tileTexts?.[this.room.tileAt(tx, ty)];
+    if (section) this.textbox.open(textSection(this.roomData.textFile, section));
   }
 
   // Saves the game where the player is standing.
@@ -198,8 +273,10 @@ export class OverworldScene {
     this.room.drawDamage(ctx, this.camera);
 
     // Draw lower things last so the player can stand in front of or behind others.
-    const entities = [...this.room.props, ...this.npcs, this.player].sort((a, b) => a.sortY - b.sortY);
+    const entities = [...this.room.props, ...this.room.standing, ...this.npcs, ...(this.cutscene?.drawables ?? []), this.player].sort((a, b) => a.sortY - b.sortY);
     for (const entity of entities) entity.draw(ctx, this.camera);
+    this.cutscene?.drawOverlay(ctx, this.camera);
+    ctx.drawImage(vignette(), 0, 0);
 
     this.textbox.draw(ctx);
     this.pauseMenu.draw(ctx);
@@ -224,7 +301,7 @@ export class OverworldScene {
   }
 
   drawTitleCard(ctx) {
-    const name = this.roomData.name;
+    const name = this.areaName;
     const fadeOutStart = TITLE_FADE_SECONDS + TITLE_HOLD_SECONDS;
     if (!name || this.titleTime >= fadeOutStart + TITLE_FADE_SECONDS) return;
 

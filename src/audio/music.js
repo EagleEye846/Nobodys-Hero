@@ -33,7 +33,17 @@ const SFX = {
     { midi: 95, wave: 'sine', length: 0.6, volume: 0.06, delay: 0.12 },
   ],
   door: [{ midi: 43, wave: 'triangle', length: 0.25, volume: 0.12, slide: -5 }],
+  // An enemy jumping out of hiding.
+  ambush: [
+    { midi: 76, wave: 'square', length: 0.06, volume: 0.05 },
+    { midi: 88, wave: 'square', length: 0.12, volume: 0.05, delay: 0.06, slide: 4 },
+  ],
+  // A soft blip as cutscene text types out.
+  type: [{ midi: 67, wave: 'triangle', length: 0.03, volume: 0.04 }],
 };
+
+// The sound effect names, for the Studio's pickers.
+export const SOUND_NAMES = Object.keys(SFX);
 
 const frequency = (midi) => 440 * 2 ** ((midi - 69) / 12);
 

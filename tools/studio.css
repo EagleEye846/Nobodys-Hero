@@ -60,12 +60,13 @@ h3 { font-size: 21px; color: var(--yellow); }
   padding: 0;
   white-space: nowrap;
 }
-.tabs { display: flex; gap: 4px; flex: 1; min-width: 0; overflow-x: auto; }
+.tabs { display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
+  gap: 6px;
+  padding: 7px 11px;
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -512,3 +513,36 @@ body.advanced .not-adv { display: none !important; }
   .wizard { grid-template-columns: 300px minmax(0, 1fr); }
   .tab span:not(.tab-dot):not(.icon) { display: none; }
 }
+
+/* --- Dialogue Maker and Cutscene Maker --- */
+.list-buttons { display: flex; flex-direction: column; gap: 4px; }
+.list-button { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 8px 10px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--text); font: 21px var(--pixel); cursor: pointer; }
+.list-button:hover { background: var(--surface-2); }
+.list-button.active { background: var(--surface-3); border-color: var(--teal); }
+.list-button canvas { flex: none; }
+.scroll-column { overflow: auto; padding: 18px 22px 60px; }
+.page-card, .step-card { position: relative; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); padding: 12px 14px; margin-bottom: 10px; }
+.page-card.selected, .step-card.selected { border-color: var(--teal); }
+.page-card.too-long { border-color: var(--danger); }
+.card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.card-head .num { font: 22px var(--pixel); color: var(--yellow); min-width: 26px; }
+.card-head .grow { font: 20px var(--pixel); color: var(--dim); }
+.page-card textarea, .step-card textarea { width: 100%; min-height: 74px; resize: vertical; }
+.step-fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0 12px; }
+.step-fields .field.wide { grid-column: 1 / -1; }
+.add-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 18px; }
+.warn-text { color: var(--danger); font-size: 13px; margin: 6px 0 0; }
+.preview-box { background: var(--bg-deep); border-radius: 12px; padding: 10px; }
+.preview-box canvas { width: 100%; height: auto; display: block; image-rendering: pixelated; border-radius: 6px; }
+.preview-box canvas:focus { outline: 2px solid var(--teal); }
+.section-title { font: 26px var(--pixel); color: var(--yellow); margin: 6px 0 4px; }
+/* With every tool open there isn't room for every tab's name: the others show their icon (hover for the name). */
+@media (max-width: 1650px) {
+  .tab:not(.active) span:not(.tab-dot):not(.icon) { display: none; }
+}
+.workspace.wide-right { grid-template-columns: 272px minmax(0, 1fr) 420px; }
+@media (max-width: 1300px) {
+  .workspace.wide-right { grid-template-columns: 230px minmax(0, 1fr) 340px; }
+}
+.tile-label { white-space: nowrap; }
+.tile-label.grow { flex: 1 0 auto; }

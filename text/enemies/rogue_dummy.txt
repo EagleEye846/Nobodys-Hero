@@ -3,7 +3,7 @@
 # src/data/enemies/dummy.js.
 
 [intro]
-ROGUE DUMMY lurches out of the rubble!
+ROGUE DUMMY lurches out of the rubble! It looks you up and down, unimpressed.
 
 # Shown at the start of each of your turns, in order, then repeating.
 [flavor]
@@ -26,6 +26,10 @@ My stuffing is my strength!
 Threads of fury!
 
 I was built for this!
+
+A hundred years for YOU?
+
+You're no Hero!
 
 # One section per TALK option. The names after "talk:" must match the
 # TALK options in src/data/enemies/dummy.js.

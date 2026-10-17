@@ -1,12 +1,13 @@
 import { HERO_STATE } from '../characters/heroState.js';
 
 // Everything about the world that should be remembered: the room you saved in,
-// where you stood, and which enemies are gone for good. Saved together with
-// HERO_STATE to the browser's localStorage at save points.
+// where you stood, which enemies are gone for good, and which cutscenes have
+// played. Saved together with HERO_STATE to the browser's localStorage at save points.
 export const WORLD_STATE = {
   room: null,
   spawn: null,
   defeated: [],
+  seenScenes: [],
 };
 
 const SAVE_KEY = 'ruins-rpg-save-v1';

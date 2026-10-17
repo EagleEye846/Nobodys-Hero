@@ -27,6 +27,8 @@ Dust and flame!
 
 Shine for me!
 
+The Hero would glow brighter!
+
 # One section per TALK option. The names after "talk:" must match the
 # TALK options in src/data/enemies/moth.js.
 [talk: Inspect]

@@ -1,6 +1,7 @@
 import { TILE_SIZE as T } from '../config.js';
-import { TILES } from './tileset.js';
+import { TILES, floorUnder } from './tileset.js';
 import { Prop } from './prop.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 
 // Crack pixels as [x, y, width, height] within a tile. Each crack level shows more of the list.
 const CRACKS = [
@@ -19,6 +20,25 @@ function drawHole(ctx, x, y) {
   ctx.fillRect(x + 2, y + 2, T - 4, 2);
 }
 
+// Whether a prop is in the room right now. Props can come and go with the
+// story: `until` a cutscene has played (Taper waters her flowers until you meet
+// her), or only `after` one has (then she's at home).
+function showsUpNow({ until = null, after = null }) {
+  const seen = WORLD_STATE.seenScenes ?? [];
+  if (until && seen.includes(until)) return false;
+  if (after && !seen.includes(after)) return false;
+  return true;
+}
+
+// Objects that give off light: [radius in pixels, strength].
+const PROP_LIGHTS = {
+  fireplace: [56, 0.26],
+  lamp: [30, 0.14],
+  side_table: [24, 0.12],
+  table: [26, 0.1],
+  counter_cake: [18, 0.08],
+};
+
 export class Room {
   constructor(data) {
     this.tiles = data.tiles;
@@ -27,7 +47,7 @@ export class Room {
     this.pixelWidth = this.width * T;
     this.pixelHeight = this.height * T;
     this.playerStart = data.playerStart;
-    this.props = data.props.map((prop) => new Prop(prop));
+    this.props = data.props.filter(showsUpNow).map((prop) => new Prop(prop));
     // Cracked and broken floor, keyed by "tx,ty". Kept apart from the tile data
     // so restarting the room brings the floor back.
     this.damage = new Map();
@@ -39,7 +59,24 @@ export class Room {
     });
 
     // Tiles never change, so draw them once and reuse the image every frame.
+    // Standing tiles (tall pillars, statues) are drawn with the characters instead.
     this.background = this.renderBackground();
+    this.standing = this.findStandingTiles();
+  }
+
+  // One drawable per standing tile, sorted with the characters by its base,
+  // so the player and enemies can pass (or hide) behind it.
+  findStandingTiles() {
+    const pieces = [];
+    this.tiles.forEach((row, ty) => [...row].forEach((char, tx) => {
+      const tile = TILES[char];
+      if (!tile?.standing) return;
+      pieces.push({
+        sortY: (ty + 1) * T,
+        draw: (ctx, camera) => tile.draw(ctx, tx * T - camera.x, ty * T - camera.y, tx, ty, this),
+      });
+    }));
+    return pieces;
   }
 
   // Tile character at (tx, ty), or null outside the room.
@@ -112,10 +149,34 @@ export class Room {
         const char = this.tiles[ty][tx];
         const tile = TILES[char];
         if (!tile) throw new Error(`Unknown tile '${char}' at (${tx}, ${ty})`);
-        tile.draw(ctx, tx * T, ty * T, tx, ty, this);
+        (tile.standing ? TILES[floorUnder(this, tx, ty)] : tile).draw(ctx, tx * T, ty * T, tx, ty, this);
       }
     }
-
+    this.paintLight(ctx);
     return canvas;
+  }
+
+  // Warm pools of light on the stone around lanterns, candles and save crystals.
+  paintLight(ctx) {
+    const lights = [];
+    this.tiles.forEach((row, ty) => [...row].forEach((char, tx) => {
+      if (char === 'P') lights.push([tx, ty, 38, 0.16]);
+      if (char === 'C') lights.push([tx, ty, 34, 0.14]);
+    }));
+    for (const prop of this.props) {
+      const [radius, strength] = prop.save ? [30, 0.12] : PROP_LIGHTS[prop.look] ?? [];
+      if (radius) lights.push([(prop.x + prop.width / 2) / T - 0.5, prop.y / T, radius, strength]);
+    }
+    ctx.globalCompositeOperation = 'lighter';
+    for (const [tx, ty, radius, strength] of lights) {
+      const cx = tx * T + T / 2;
+      const cy = ty * T + T / 2;
+      const glow = ctx.createRadialGradient(cx, cy, 2, cx, cy, radius);
+      glow.addColorStop(0, `rgba(255, 190, 110, ${strength})`);
+      glow.addColorStop(1, 'rgba(255, 190, 110, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+    }
+    ctx.globalCompositeOperation = 'source-over';
   }
 }

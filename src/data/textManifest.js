@@ -2,14 +2,19 @@
 // The game loads them all at startup. Run the Studio server, or
 // `python tools/serve.py --generate`, after adding a text file by hand.
 export const TEXT_FILES = [
+  'cutscenes/intro.txt',
+  'enemies/columneon.txt',
   'enemies/dust_bunny.txt',
   'enemies/lantern_moth.txt',
   'enemies/rogue_dummy.txt',
   'enemies/shade.txt',
   'enemies/waxling.txt',
+  'interactions/taper_home.txt',
   'interactions/the_ruins.txt',
   'items/weapons.txt',
+  'npcs/mother_taper.txt',
   'npcs/old_keeper.txt',
   'shops/ruins_shop.txt',
   'skills/skills.txt',
+  'title.txt',
 ];

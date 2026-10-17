@@ -30,6 +30,20 @@ function portraitSprites(id) {
   return portraitCache.get(id);
 }
 
+// Where the words go: beside the portrait, if there is one.
+function textArea(portrait) {
+  if (!portrait) return { x: BOX.x + PADDING_X, width: BOX.w - PADDING_X * 2 };
+  const x = BOX.x + PADDING_X - 6 + portrait.idle.width * PORTRAIT_SCALE + PORTRAIT_GAP;
+  return { x, width: BOX.x + BOX.w - PADDING_X - x };
+}
+
+// How many lines fit in the box, and how many a page needs (the Studio warns
+// about pages that run off the bottom). `speaker` is an NPC id, as in open().
+export const TEXTBOX_LINES = 3;
+export function pageLineCount(ctx, page, speaker = null) {
+  return layoutDialogue(ctx, page, textArea(speaker ? portraitSprites(speaker) : null).width, TEXT_SIZE).length;
+}
+
 // Overworld dialogue box. Text types out a character at a time;
 // cancel skips to the end of the page and confirm advances to the next page.
 // NPCs with an entry in PORTRAITS show their face beside the text, Undertale style.
@@ -78,19 +92,16 @@ export class TextBox {
       ctx.fillStyle = '#000';
       ctx.fillRect(BOX.x + BORDER, BOX.y + BORDER, BOX.w - BORDER * 2, BOX.h - BORDER * 2);
 
-      let textX = BOX.x + PADDING_X;
       if (this.portrait) {
         const blinking = (performance.now() / 1000) % BLINK_PERIOD < BLINK_SECONDS;
         const face = blinking ? this.portrait.blink : this.portrait.idle;
         const size = face.width * PORTRAIT_SCALE;
-        const faceX = BOX.x + PADDING_X - 6;
-        ctx.drawImage(face, faceX, BOX.y + (BOX.h - size) / 2, size, size);
-        textX = faceX + size + PORTRAIT_GAP;
+        ctx.drawImage(face, BOX.x + PADDING_X - 6, BOX.y + (BOX.h - size) / 2, size, size);
       }
 
-      const width = BOX.x + BOX.w - PADDING_X - textX;
+      const { x, width } = textArea(this.portrait);
       const lines = layoutDialogue(ctx, this.pages[this.pageIndex], width, TEXT_SIZE);
-      drawDialogue(ctx, lines, textX, BOX.y + PADDING_Y, {
+      drawDialogue(ctx, lines, x, BOX.y + PADDING_Y, {
         size: TEXT_SIZE,
         lineHeight: LINE_HEIGHT,
         visible: Math.floor(this.visibleCharacters),

@@ -1,0 +1,22 @@
+# MOTHER TAPER: the oldest waxling, a tall candle in a shawl. She finds you in
+# the Flower Room (src/data/scenes/meetTaper.js), then waits at her home up
+# the stairs (src/data/rooms/taperHome.js).
+# Each entry (separated by a blank line) is one page of the textbox.
+
+# Said the first time you talk to her at home.
+[first]
+There you are, little one. Welcome home. Well... my home. Yours too, for now.
+
+These halls are cold. Stay near the lanterns. Well... most of them.
+
+The waxlings may snap at you. Don't be cross. They're only frightened.
+
+If you're hurt, come back to me. A warm flame mends most things.
+
+# Said every time after that.
+[repeat]
+Still in one piece? Good. Let me look at you.
+
+Hero or not, you are welcome by my flame.
+
+The Keeper's lantern... I never liked how it pulls at you. Mind yourself.

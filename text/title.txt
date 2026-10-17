@@ -1,0 +1,18 @@
+# THE TITLE SCREEN, shown after the intro.
+
+# The game's name. Put it on two lines to split it. It shrinks to fit if it's long.
+[title]
+THE HERO WHO DIDN'T COME
+
+# Blinks under the title on a new game...
+[new_game]
+Press Z to begin
+
+# ...or when there's a save to pick up from.
+[continue]
+Press Z to continue
+
+# The very first screen. (Browsers only allow sound after a key press, so the
+# game waits for one before the intro and its music.)
+[press_start]
+Press Z to start
