@@ -3,8 +3,13 @@ import { PANELS, PANEL_WIDTH, PANEL_HEIGHT } from '../data/art/cutscenes.js';
 import { inUiSpace } from '../engine/screen.js';
 import { textSection } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
-import { hasSave } from '../state/saveGame.js';
+import { peekSave, eraseSave, formatPlayTime } from '../state/saveGame.js';
+import { ROOMS } from '../data/rooms/index.js';
+import { soulSprite } from '../battle/soul.js';
 import { drawText, textWidth } from '../ui/text.js';
+
+// "LANTERN HALL" or "taper_home" -> "Lantern Hall"
+const friendlyName = (name) => String(name).toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
 const TEXT_FILE = 'title.txt';
 
@@ -47,11 +52,19 @@ export class PressStartScene {
 // The title screen, after the intro. Confirm starts the game, or continues
 // from the last save point. Its words live in text/title.txt.
 export class TitleScene {
-  constructor(startGame) {
+  // `startGame()` continues from the save (or starts fresh without one);
+  // `newGame()` starts over from the beginning.
+  constructor(startGame, newGame = startGame) {
     this.startGame = startGame;
+    this.newGame = newGame;
     this.time = 0;
     this.title = textSection(TEXT_FILE, 'title')[0];
-    this.prompt = textSection(TEXT_FILE, hasSave() ? 'continue' : 'new_game')[0];
+    this.prompt = textSection(TEXT_FILE, 'new_game')[0];
+    // With a save there's a card for it, and a choice: carry on, or start over.
+    this.save = peekSave();
+    this.options = ['CONTINUE', 'NEW GAME'];
+    this.cursor = 0;
+    this.confirming = false;
   }
 
   enter(game) {
@@ -61,10 +74,67 @@ export class TitleScene {
 
   update(dt, input) {
     this.time += dt;
-    if (this.time >= PROMPT_DELAY && input.wasPressed('confirm')) {
-      sfx('select');
-      this.game.changeScene(this.startGame());
+    if (this.time < PROMPT_DELAY) return;
+    if (!this.save) {
+      if (input.wasPressed('confirm')) this.begin(this.startGame);
+      return;
     }
+    if (this.confirming) {
+      if (input.wasPressed('confirm')) {
+        eraseSave();
+        this.begin(this.newGame);
+      } else if (input.wasPressed('cancel')) {
+        sfx('back');
+        this.confirming = false;
+      }
+      return;
+    }
+    const before = this.cursor;
+    if (input.wasPressed('down') || input.wasPressed('right')) this.cursor = (this.cursor + 1) % this.options.length;
+    if (input.wasPressed('up') || input.wasPressed('left')) this.cursor = (this.cursor - 1 + this.options.length) % this.options.length;
+    if (this.cursor !== before) sfx('move');
+    if (input.wasPressed('confirm')) {
+      if (this.cursor === 0) this.begin(this.startGame);
+      else {
+        sfx('select');
+        this.confirming = true;
+      }
+    }
+  }
+
+  begin(start) {
+    sfx('select');
+    this.game.changeScene(start());
+  }
+
+  // Where you saved, your level, and how long you've played.
+  drawSaveCard(ctx) {
+    const { hero, world } = this.save;
+    const card = { x: UI_WIDTH / 2 - 190, y: 236, w: 380, h: 96 };
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(card.x - 3, card.y - 3, card.w + 6, card.h + 6);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(card.x, card.y, card.w, card.h);
+    const room = ROOMS[world.room];
+    const place = room ? friendlyName(room.name || room.id) : 'Somewhere in the Ruins';
+    drawText(ctx, 'HERO', card.x + 20, card.y + 12, { size: 30, color: '#4fe3d0' });
+    drawText(ctx, `LV ${hero.level ?? 1}`, card.x + 120, card.y + 14, { size: 28 });
+    drawText(ctx, formatPlayTime(world.playSeconds), card.x + card.w - 20, card.y + 14, { size: 28, align: 'right' });
+    drawText(ctx, place, card.x + 20, card.y + 52, { size: 28, color: '#ffcc66' });
+    drawText(ctx, `${hero.gold ?? 0} G`, card.x + card.w - 20, card.y + 54, { size: 24, color: '#ffe14d', align: 'right' });
+
+    const optionsY = card.y + card.h + 36;
+    if (this.confirming) {
+      drawText(ctx, 'Erase your save and start over?', UI_WIDTH / 2, optionsY - 6, { size: 30, align: 'center', color: '#ff5470', outline: '#07040c' });
+      drawText(ctx, 'Z: yes, start over     X: no', UI_WIDTH / 2, optionsY + 30, { size: 24, align: 'center', color: '#c9c2e0', outline: '#07040c' });
+      return;
+    }
+    this.options.forEach((label, i) => {
+      const x = UI_WIDTH / 2 + (i === 0 ? -150 : 40);
+      const selected = i === this.cursor;
+      if (selected) ctx.drawImage(soulSprite(), x - 26, optionsY + 8);
+      drawText(ctx, label, x, optionsY, { size: 32, color: selected ? '#ffe14d' : '#ffffff', outline: '#07040c' });
+    });
   }
 
   draw(ctx) {
@@ -83,7 +153,12 @@ export class TitleScene {
       });
       ctx.globalAlpha = 1;
 
-      if (this.time >= PROMPT_DELAY && blinkOn(this.time - PROMPT_DELAY)) {
+      if (this.time < PROMPT_DELAY) return;
+      if (this.save) {
+        ctx.globalAlpha = Math.min(1, (this.time - PROMPT_DELAY) / 0.4);
+        this.drawSaveCard(ctx);
+        ctx.globalAlpha = 1;
+      } else if (blinkOn(this.time - PROMPT_DELAY)) {
         drawText(ctx, this.prompt, cx, UI_HEIGHT - 46, { size: 30, align: 'center', outline: '#07040c' });
       }
     });

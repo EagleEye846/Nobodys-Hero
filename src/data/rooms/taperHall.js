@@ -4,6 +4,7 @@
 //   #  wall top (solid)                            h  home wall (solid)
 //   o  wooden floor                                r  rug
 //   p  potted plant (solid)                        D  doorway (walk through it; see `doors`)
+//   u  stairs down (walk through it; see `doors`)
 export const TAPER_HALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'taper_hall',
@@ -24,7 +25,7 @@ export const TAPER_HALL = {
     'Dorrrrrrrrrrrrrrrrroo#',
     '#oooooooooooooooooooo#',
     '#oooooooooooooooooooo#',
-    '######################',
+    '##################uu##',
   ],
 
   // Where the player starts, in tile coordinates.
@@ -34,6 +35,7 @@ export const TAPER_HALL = {
   doors: [
     { x: 0, y: 4, w: 1, h: 2, to: 'taper_home', spawn: { x: 18, y: 7 } },
     { x: 8, y: 1, w: 2, h: 2, to: 'your_room', spawn: { x: 6, y: 9 } },
+    { x: 18, y: 8, w: 2, h: 1, to: 'way_out', spawn: { x: 3, y: 4 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).

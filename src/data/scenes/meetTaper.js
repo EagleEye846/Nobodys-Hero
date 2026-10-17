@@ -1,5 +1,5 @@
 // MEET TAPER: Mother Taper is watering her flowers in the Flower Room when you
-// come in, like Toriel finding you. Her song plays while she talks. Then she
+// come in, and takes you in hand. Her song plays while she talks. Then she
 // goes up the stairs to her home, where she waits (text/npcs/mother_taper.txt).
 export const MEET_TAPER = {
   // Triggers in rooms name the scene by this id.
@@ -24,11 +24,11 @@ export const MEET_TAPER = {
     { do: 'animate', who: 'taper' },
     { do: 'emote', who: 'taper', emote: '!' },
     { do: 'walk', who: 'taper', to: { x: 10, y: 11 } },
-    { do: 'say', who: 'taper', text: 'Oh! Oh, my. A little one, all alone down here.\n\nAre you hurt? Come, let me look at you.' },
+    { do: 'say', who: 'taper', text: 'Oh! Oh, goodness, mind the moonbells... No, no, you\'re alright.\n\nCome here. Let me look at you.' },
     { do: 'emote', who: 'taper', emote: '...' },
-    { do: 'say', who: 'taper', text: 'You\'re not the Hero, are you? No... the Hero would have come long ago.\n\nNever mind that. Hero or not, you\'re cold, and that\'s enough for me.' },
-    { do: 'say', who: 'taper', text: 'I\'m Taper. I look after the little candles of these halls. And my flowers.\n\nI suppose I\'ll look after you, too.' },
-    { do: 'say', who: 'taper', text: 'The halls ahead can be unkind. Come home with me first, and get warm.\n\nIt\'s just up those stairs. I\'ll put the kettle on.' },
+    { do: 'say', who: 'taper', text: 'Not a scratch. Just cold, and a little lost. That I can fix.\n\nYou\'re not the Hero, are you? That\'s alright. I\'ve a soft spot for strays.' },
+    { do: 'say', who: 'taper', text: 'I\'m Taper. I tend the flowers down here, and the little candles.\n\nAnd now, it seems, you. Hello, sprout.' },
+    { do: 'say', who: 'taper', text: 'Come up to my house and get warm. There\'s soup on, and a spare blanket.\n\nUp those stairs. I\'ll go ahead and stoke the fire.' },
     { do: 'walk', who: 'taper', to: { x: 10, y: 3 } },
     { do: 'leave', who: 'taper' },
     { do: 'music', song: 'ruins' },

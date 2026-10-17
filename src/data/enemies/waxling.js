@@ -29,4 +29,7 @@ export const WAXLING = {
   ],
 
   rewards: { exp: 45, coins: 30 },
+
+  // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
+  drops: [{ item: 'wax_drop', chance: 0.45 }],
 };

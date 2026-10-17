@@ -16,8 +16,28 @@ const BOB_SECONDS = 0.6;
 // point. Its sprite can be bigger than the tile: it stands on the tile's
 // bottom edge, centred. With an `animation` (see src/engine/animations.js) it
 // plays that instead, `speed` seconds a frame.
+//
+// An object that `gives` an item hands it over the first time you press Z on
+// it; after that it changes to its `taken` look and words, if it has them
+// (the cake on Taper's counter becomes just a counter).
 export class Prop {
-  constructor({ sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS }) {
+  //
+  // Puzzles: a `lever` is a switch with a name, flipped with Z (it shows its
+  // NAME_on sprite while on). A gate (`opensWith` a list of switch names) opens
+  // once they're all on; with `inOrder`, they must be turned on in that order.
+  constructor({
+    sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
+    gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
+  }) {
+    this.gives = gives;
+    this.takenLook = taken;
+    this.lever = lever;
+    this.opensWith = opensWith;
+    this.inOrder = inOrder;
+    this.openText = openText;
+    this.resetText = resetText;
+    this.isOpen = false;
+    this.baseLook = sprite;
     this.animation = animation;
     this.speed = speed;
     this.sprite = sprites[sprite];
@@ -42,6 +62,24 @@ export class Prop {
     return this.npc ?? this.shop;
   }
 
+  // A switch shows its NAME_on sprite while it's on, if it has one.
+  setOn(on) {
+    this.on = on;
+    const look = on && sprites[`${this.baseLook}_on`] ? `${this.baseLook}_on` : this.baseLook;
+    this.sprite = sprites[look];
+    this.look = look;
+  }
+
+  // Its item has been taken: no more giving, and on to its `taken` look.
+  markTaken() {
+    this.gives = null;
+    if (this.takenLook?.sprite && sprites[this.takenLook.sprite]) {
+      this.sprite = sprites[this.takenLook.sprite];
+      this.look = this.takenLook.sprite;
+    }
+    if (this.takenLook?.text) this.text = this.takenLook.text;
+  }
+
   moveToTile(tx, ty) {
     this.x = tx * T;
     this.y = ty * T;
@@ -52,12 +90,12 @@ export class Prop {
   }
 
   overlaps(left, top, right, bottom) {
-    if (this.hidden) return false;
+    if (this.hidden || this.isOpen) return false;
     return left < this.x + this.width && right > this.x && top < this.y + this.height && bottom > this.y;
   }
 
   draw(ctx, camera) {
-    if (this.hidden) return;
+    if (this.hidden || this.isOpen) return;
     const seconds = performance.now() / 1000;
     const frame = (this.animation && animationFrame(this.animation, seconds, this.speed)) || this.sprite;
     const isCharacter = (this.npc || this.shop) && frame === this.sprite;

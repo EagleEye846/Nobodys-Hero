@@ -8,6 +8,11 @@ export const WORLD_STATE = {
   spawn: null,
   defeated: [],
   seenScenes: [],
+  // Gifts already picked up (see Prop.markTaken), and play time in seconds.
+  taken: [],
+  // Puzzle switches that are on, as "room:name".
+  levers: [],
+  playSeconds: 0,
 };
 
 const SAVE_KEY = 'ruins-rpg-save-v1';
@@ -35,6 +40,30 @@ export function loadGame() {
   } catch {
     return false;
   }
+}
+
+// The saved game without loading it, for the title screen's save card: null if there isn't one.
+export function peekSave() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVE_KEY));
+    return saved?.hero && saved?.world ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
+export function eraseSave() {
+  try {
+    localStorage.removeItem(SAVE_KEY);
+  } catch {
+    // Storage is blocked; there was nothing to erase anyway.
+  }
+}
+
+// "1:05" or "12:40": hours and minutes.
+export function formatPlayTime(seconds = 0) {
+  const minutes = Math.floor(seconds / 60);
+  return `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}`;
 }
 
 export function hasSave() {

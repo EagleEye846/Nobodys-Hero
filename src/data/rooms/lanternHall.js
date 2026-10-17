@@ -52,6 +52,11 @@ export const LANTERN_HALL = {
   props: [
     { sprite: 'sign', x: 5, y: 3, text: 'hall_plaque' },
     { sprite: 'savepoint', x: 16, y: 13, save: true },
+    { sprite: 'gate', x: 10, y: 3, text: 'hall_gate', opensWith: ['west', 'east', 'heart'], inOrder: true, openText: 'hall_gate_open', resetText: 'hall_gate_reset' },
+    { sprite: 'sign', x: 13, y: 3, text: 'hall_riddle' },
+    { sprite: 'lantern_post', x: 5, y: 11, text: 'hall_lantern', lever: 'west' },
+    { sprite: 'lantern_post', x: 16, y: 11, text: 'hall_lantern', lever: 'east' },
+    { sprite: 'lantern_post', x: 10, y: 13, text: 'hall_lantern', lever: 'heart' },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

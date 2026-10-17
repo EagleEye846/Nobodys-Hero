@@ -5,9 +5,10 @@ import * as columneon from './columneon.js';
 import * as dummy from './dummy.js';
 import * as moth from './moth.js';
 import * as shade from './shade.js';
+import * as taper from './taper.js';
 import * as waxling from './waxling.js';
 
-const MODULES = { 'bunny': bunny, 'columneon': columneon, 'dummy': dummy, 'moth': moth, 'shade': shade, 'waxling': waxling };
+const MODULES = { 'bunny': bunny, 'columneon': columneon, 'dummy': dummy, 'moth': moth, 'shade': shade, 'taper': taper, 'waxling': waxling };
 
 // Every enemy, keyed by its file name. Rooms refer to enemies by this id.
 export const ENEMIES = Object.fromEntries(

@@ -19,6 +19,8 @@ import { ENEMIES } from '../data/enemies/index.js';
 import { AREA_NAMES } from '../data/areas.js';
 import { SCENES } from '../data/scenes/index.js';
 import { ScenePlayer } from './scenePlayer.js';
+import { ITEMS, giveItem } from '../data/items.js';
+import { ChapterEndScene } from '../title/chapterEndScene.js';
 
 // Enemies this close (in world pixels) to the one you touch join the fight, up to MAX_GROUP in all.
 const GROUP_RADIUS = 64;
@@ -96,6 +98,7 @@ export class OverworldScene {
 
   update(dt, input) {
     this.titleTime += dt;
+    WORLD_STATE.playSeconds = (WORLD_STATE.playSeconds ?? 0) + dt;
     this.fadeIn = Math.max(0, this.fadeIn - dt);
 
     if (this.doorway) {
@@ -123,7 +126,23 @@ export class OverworldScene {
     // A cutscene takes over completely until it ends.
     if (this.cutscene) {
       this.cutscene.update(dt, input);
-      if (this.cutscene.done) this.cutscene = null;
+      if (this.cutscene.done) {
+        const { battle, endChapter } = this.cutscene;
+        this.cutscene = null;
+        this.room.refreshShowsUp();
+        if (battle) {
+          this.storyBattle(battle);
+          return;
+        }
+        if (endChapter) {
+          const next = ROOMS[endChapter.room];
+          const goOn = next
+            ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, this.roomData.area)
+            : this.game.home;
+          this.game.changeScene(new ChapterEndScene(goOn));
+          return;
+        }
+      }
       const focus = this.cutscene?.cameraPoint ?? this.player;
       this.camera.follow(focus.x, focus.y + CAMERA_OFFSET_Y, this.room.pixelWidth, this.room.pixelHeight);
       return;
@@ -171,6 +190,28 @@ export class OverworldScene {
     this.lastTrigger = trigger;
     if (!WORLD_STATE.seenScenes.includes(scene.id)) WORLD_STATE.seenScenes.push(scene.id);
     this.playCutscene(scene);
+  }
+
+  // A battle started by a cutscene (a boss, say). Afterwards, the scene named
+  // by the step's `spared` or `defeated` plays, depending on how it ended, and
+  // is remembered as seen, so rooms can change with it ("Shows up").
+  storyBattle(step) {
+    const enemy = ENEMIES[step.enemy];
+    if (!enemy) throw new Error(`A cutscene starts a battle with unknown enemy '${step.enemy}'`);
+    const game = this.game;
+    game.changeScene(new BattleScene([enemy], (result, outcomes) => {
+      if (result === 'death') {
+        game.changeScene(new GameOverScene(() => continueGame(this.roomData), 'Your light flickered out.'));
+        return;
+      }
+      game.changeScene(this);
+      const state = outcomes?.[0]?.state;
+      const next = state === 'pacified' ? step.spared : state === 'defeated' ? step.defeated : null;
+      if (!next) return;
+      WORLD_STATE.seenScenes ??= [];
+      if (!WORLD_STATE.seenScenes.includes(next)) WORLD_STATE.seenScenes.push(next);
+      if (SCENES[next]) this.playCutscene(SCENES[next]);
+    }, this.roomData.area));
   }
 
   // Plays a scene (from src/data/scenes/) here and now.
@@ -240,7 +281,47 @@ export class OverworldScene {
     if (prop.shop) this.game.changeScene(new ShopScene(prop.shop, () => this.game.changeScene(this)));
     else if (prop.save) this.useSavePoint();
     else if (prop.npc) this.textbox.open(this.npcPages(prop), prop.npc);
+    else if (prop.lever) this.useLever(prop);
+    else if (prop.gives) this.takeGift(prop);
     else if (prop.text) this.textbox.open(textSection(this.roomData.textFile, prop.text));
+  }
+
+  // A switch: flip it, unless the gate it belongs to is already open. Gates can
+  // say something when they open (`openText`) or when you get the order wrong
+  // (`resetText`), from the room's text file.
+  useLever(prop) {
+    const say = (section, fallback) => this.textbox.open(section ? textSection(this.roomData.textFile, section) : [fallback]);
+    if (this.room.props.some((gate) => gate.isOpen && gate.opensWith?.includes(prop.lever))) {
+      if (prop.text) say(prop.text);
+      return;
+    }
+    const { opened, reset } = this.room.flipLever(prop.lever);
+    if (reset.length) {
+      sfx('error');
+      say(reset[0].resetText, 'Click... Everything resets.');
+    } else if (opened.length) {
+      sfx('door');
+      say(opened[0].openText, 'Somewhere nearby, something grinds open.');
+    } else {
+      sfx(prop.on ? 'select' : 'back');
+      if (prop.on && prop.text) say(prop.text);
+    }
+  }
+
+  // Something with an item for you: its words, then you take it (if there's room).
+  takeGift(prop) {
+    const pages = prop.text ? [...textSection(this.roomData.textFile, prop.text)] : [];
+    const { name } = ITEMS[prop.gives];
+    if (giveItem(prop.gives)) {
+      sfx('heal');
+      pages.push(`You got the ${name}.`);
+      WORLD_STATE.taken ??= [];
+      WORLD_STATE.taken.push(prop.key);
+      prop.markTaken();
+    } else {
+      pages.push(`You'd take the ${name}, but your bag is full.`);
+    }
+    this.textbox.open(pages);
   }
 
   // Tiles can have words too (a flower bed, a pillar, a pool of water): words

@@ -1,6 +1,7 @@
 import { BACKDROPS } from '../src/battle/backdrops.js';
 import { BEHAVIOURS, DEFAULT_REACH } from '../src/overworld/npc.js';
 import { ANIMATION_NAMES, DEFAULT_FRAME_SECONDS } from '../src/engine/animations.js';
+import { ITEMS } from '../src/data/items.js';
 import { SHOPS } from '../src/data/shops.js';
 import { loadRooms, roomFiles, loadEnemies, enemySprite, loadSongs, npcIds, loadScenes } from './library.js';
 import { listDir, readText } from './api.js';
@@ -979,7 +980,42 @@ export async function mount(root, studio) {
             changed();
           },
         });
-        body.push(spritePick, field('When you press Z on it', words, 'Each line is a new "*" line; an empty line starts a new page. Leave it empty and nothing happens.'));
+        body.push(spritePick, field('When you press Z on it', words, 'Each line is a new "*" line; an empty line starts a new page. Leave it empty and nothing happens.'),
+          field('Gives you', select([['', 'Nothing'], ...Object.entries(ITEMS).map(([id, item]) => [id, item.name])], prop.gives ?? '', (v) => edit(() => {
+            if (v) prop.gives = v; else { delete prop.gives; delete prop.taken; }
+          })), 'An item you get the first time you press Z on it (if your bag has room).'));
+        // Puzzles: switches, and gates that open when their switches are on.
+        const role = prop.lever ? 'switch' : prop.opensWith ? 'gate' : '';
+        body.push(field('Puzzle', select([['', 'None'], ['switch', 'A switch (Z flips it)'], ['gate', 'A gate (opens when switches are on)']], role, (v) => edit(() => {
+          delete prop.lever;
+          delete prop.opensWith;
+          delete prop.inOrder;
+          if (v === 'switch') prop.lever = `switch_${room.props.filter((p) => p.lever).length + 1}`;
+          if (v === 'gate') prop.opensWith = room.props.filter((p) => p.lever).map((p) => p.lever);
+        }))));
+        if (prop.lever) {
+          body.push(field('Switch name', el('input', { type: 'text', value: prop.lever, onchange: (e) => edit(() => {
+            const name = snakeCase(e.target.value) || prop.lever;
+            for (const gate of room.props) if (gate.opensWith) gate.opensWith = gate.opensWith.map((n) => (n === prop.lever ? name : n));
+            prop.lever = name;
+          }) }), `A gate lists its switches by name. It shows its "${prop.sprite}_on" look while it's on, if there is one (lantern_post and lever have them).`));
+        }
+        if (prop.opensWith) {
+          const switches = room.props.filter((p) => p.lever).map((p) => p.lever);
+          body.push(field('Opens when these are on, in this order', el('input', {
+            type: 'text',
+            value: prop.opensWith.join(', '),
+            onchange: (e) => edit(() => { prop.opensWith = e.target.value.split(',').map((n) => snakeCase(n)).filter(Boolean); }),
+          }), switches.length ? `Switches in this room: ${switches.join(', ')}. Separate names with commas.` : 'Make some objects switches first.'),
+          el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: Boolean(prop.inOrder), onchange: (e) => edit(() => { if (e.target.checked) prop.inOrder = true; else delete prop.inOrder; }) }), el('span', {}, 'Must be done in that order (a wrong one resets them all)')));
+        }
+        if (prop.gives) {
+          body.push(field('Looks like, once taken', select([['', 'The same'], ...Object.keys(propSprites).map((n) => [n, friendly(n)])], prop.taken?.sprite ?? '', (v) => edit(() => {
+            prop.taken = { ...(prop.taken ?? {}) };
+            if (v) prop.taken.sprite = v; else delete prop.taken.sprite;
+            if (!Object.keys(prop.taken).length) delete prop.taken;
+          }))));
+        }
       }
       if (type !== 'decor' && type !== 'npc' && type !== 'shop') body.push(el('div', { class: 'adv' }, spritePick));
       if (type === 'npc' || type === 'shop' || type === 'decor') {

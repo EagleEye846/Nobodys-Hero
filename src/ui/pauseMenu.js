@@ -11,12 +11,14 @@ import { soulSprite } from '../battle/soul.js';
 import { drawText } from './text.js';
 import { EquipMenu } from './equipMenu.js';
 import { SkillsMenu } from './skillsMenu.js';
+import { ItemsMenu } from './itemsMenu.js';
 
 // The menu on C in the overworld, laid out like Deltarune's: a bar of buttons
 // across the top and the hero's status card along the bottom. Left/right picks
 // a button, Z opens it, X or C closes.
 
 const TABS = [
+  { label: 'ITEMS', icon: 'items' },
   { label: 'EQUIP', icon: 'fight' },
   { label: 'SKILLS', icon: 'spells' },
 ];
@@ -52,7 +54,7 @@ export class PauseMenu {
   constructor() {
     this.isOpen = false;
     this.tab = 0;
-    this.screens = [new EquipMenu(), new SkillsMenu()];
+    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu()];
   }
 
   open() {

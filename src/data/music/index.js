@@ -5,10 +5,11 @@ import * as prophecyTheme from './prophecyTheme.js';
 import * as ruinsTheme from './ruinsTheme.js';
 import * as shopTheme from './shopTheme.js';
 import * as skillsTheme from './skillsTheme.js';
+import * as taperBattleTheme from './taperBattleTheme.js';
 import * as taperTheme from './taperTheme.js';
 import * as waltzTheme from './waltzTheme.js';
 
-const MODULES = { 'battle': battleTheme, 'prophecy': prophecyTheme, 'ruins': ruinsTheme, 'shop': shopTheme, 'skills': skillsTheme, 'taper': taperTheme, 'waltz': waltzTheme };
+const MODULES = { 'battle': battleTheme, 'prophecy': prophecyTheme, 'ruins': ruinsTheme, 'shop': shopTheme, 'skills': skillsTheme, 'taperBattle': taperBattleTheme, 'taper': taperTheme, 'waltz': waltzTheme };
 
 // Every song, keyed by its file name without "Theme" (battleTheme.js is 'battle').
 export const SONGS = Object.fromEntries(

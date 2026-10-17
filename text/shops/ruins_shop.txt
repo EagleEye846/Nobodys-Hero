@@ -3,13 +3,13 @@
 # Sections starting with "talk:" become topics under TALK, in this order.
 
 [greeting]
-Oh! A customer! Are you the Hero? ...No cape. Hm. Well, everything's free anyway. Don't ask why.
+Oh! A customer! Are you the Hero? ...No cape. Hm. Then I'm afraid it's full price.
 
 [menu_prompt]
 Anything else catch your eye?
 
 [buy_prompt]
-Take a look! Sharp things on the left, shiny things on the right.
+Take a look! Snacks up top, sharp things below.
 
 [talk_prompt]
 Oh, you want to chat? I love to chat.
@@ -17,11 +17,17 @@ Oh, you want to chat? I love to chat.
 [bought]
 A fine choice! Press C out there to equip it.
 
+[bought_item]
+Thank you kindly! Eat it in a pinch. In a fight, I mean.
+
 [owned]
 You already have that one, friend.
 
 [too_poor]
-Ah... you can't quite afford that.
+Ah... you can't quite afford that. Come back with more gold!
+
+[bag_full]
+Your bag's stuffed! Eat something first. Or throw something out.
 
 [farewell]
 Come back soon! Mind the dummy.
@@ -39,4 +45,7 @@ It used to train heroes. Then one day it decided it would rather fight them. Can
 I stocked this shop for the Hero! Swords, shields, the works. The Hero was supposed to have a cape. And a chin. A really good chin. No offence.
 
 [talk: Free stuff?]
-Business has been slow for about a hundred years. Giving things away is the only way anyone visits!
+Everything was free for the Hero. You're not the Hero, so... business is business! A hundred years of rent, you know.
+
+[talk: Gold?]
+Monsters drop gold when you beat them. And when you spare them! Kindness pays, sometimes.

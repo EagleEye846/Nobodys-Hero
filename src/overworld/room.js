@@ -47,7 +47,18 @@ export class Room {
     this.pixelWidth = this.width * T;
     this.pixelHeight = this.height * T;
     this.playerStart = data.playerStart;
-    this.props = data.props.filter(showsUpNow).map((prop) => new Prop(prop));
+    // Every prop the room has; `props` is the ones here right now.
+    this.allProps = data.props.map((info) => {
+      const prop = new Prop(info);
+      prop.showsUp = { until: info.until, after: info.after };
+      // Gifts are remembered by room, look and spot, so they're only given once.
+      prop.key = `${data.id}:${info.sprite}:${info.x},${info.y}`;
+      if (info.gives && (WORLD_STATE.taken ?? []).includes(prop.key)) prop.markTaken();
+      return prop;
+    });
+    this.refreshShowsUp();
+    this.id = data.id;
+    this.refreshPuzzles();
     // Cracked and broken floor, keyed by "tx,ty". Kept apart from the tile data
     // so restarting the room brings the floor back.
     this.damage = new Map();
@@ -77,6 +88,51 @@ export class Room {
       });
     }));
     return pieces;
+  }
+
+  // --- Puzzles: switches and gates (see Prop) ---
+  // Switches remember whether they're on, by room and name, in the save.
+  leverKey(name) {
+    return `${this.id}:${name}`;
+  }
+
+  isLeverOn(name) {
+    return (WORLD_STATE.levers ?? []).includes(this.leverKey(name));
+  }
+
+  // Shows each switch on or off, and opens the gates whose switches are all on.
+  // Returns the gates that just opened.
+  refreshPuzzles() {
+    const opened = [];
+    for (const prop of this.props) {
+      if (prop.lever) prop.setOn(this.isLeverOn(prop.lever));
+      if (prop.opensWith) {
+        const open = prop.opensWith.every((name) => this.isLeverOn(name));
+        if (open && !prop.isOpen) opened.push(prop);
+        prop.isOpen = open;
+      }
+    }
+    return opened;
+  }
+
+  // Flips a switch. An in-order gate whose switches are no longer being turned
+  // on in its order resets them all. Returns { opened, reset } gates.
+  flipLever(name) {
+    WORLD_STATE.levers ??= [];
+    const key = this.leverKey(name);
+    const on = !this.isLeverOn(name);
+    if (on) WORLD_STATE.levers.push(key);
+    else WORLD_STATE.levers.splice(WORLD_STATE.levers.indexOf(key), 1);
+    const reset = [];
+    for (const gate of this.props.filter((p) => p.inOrder && p.opensWith?.includes(name) && !p.isOpen)) {
+      const lit = gate.opensWith.filter((n) => this.isLeverOn(n));
+      const inOrder = lit.every((n, i) => n === gate.opensWith[i]);
+      if (!inOrder) {
+        WORLD_STATE.levers = WORLD_STATE.levers.filter((k) => !gate.opensWith.some((n) => k === this.leverKey(n)));
+        reset.push(gate);
+      }
+    }
+    return { opened: this.refreshPuzzles(), reset };
   }
 
   // Tile character at (tx, ty), or null outside the room.
@@ -154,6 +210,13 @@ export class Room {
     }
     this.paintLight(ctx);
     return canvas;
+  }
+
+  // Brings props in or out of the room as the story moves on: called when the
+  // room is made and after every cutscene (so Taper can be waiting somewhere
+  // the moment a scene ends, instead of popping in later).
+  refreshShowsUp() {
+    this.props = this.allProps.filter((prop) => showsUpNow(prop.showsUp));
   }
 
   // Warm pools of light on the stone around lanterns, candles and save crystals.

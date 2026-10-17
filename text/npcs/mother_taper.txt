@@ -5,18 +5,18 @@
 
 # Said the first time you talk to her at home.
 [first]
-There you are, little one. Welcome home. Well... my home. Yours too, for now.
+There you are, sprout. Come in, come in. Sit by the fire and thaw out.
 
-These halls are cold. Stay near the lanterns. Well... most of them.
+Stay near the lanterns out there. Most of them, anyway.
 
-The waxlings may snap at you. Don't be cross. They're only frightened.
+The waxlings may snap at you. Be gentle with them. They're only frightened.
 
-If you're hurt, come back to me. A warm flame mends most things.
+If you get hurt, come straight home. Warm wax mends most things.
 
 # Said every time after that.
 [repeat]
-Still in one piece? Good. Let me look at you.
+Back again? Good. Let me look at you. ...Yes, still all there.
 
-Hero or not, you are welcome by my flame.
+Hero or not, there's always a seat by my fire for you.
 
-The Keeper's lantern... I never liked how it pulls at you. Mind yourself.
+The Keeper's lantern... I don't like how it leans toward people. Do be careful, sprout.

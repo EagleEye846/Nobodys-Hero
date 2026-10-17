@@ -10,6 +10,14 @@ It smells of cinnamon and candle wax.
 
 Taper says she keeps it lit "for company." The flames lean toward her when she passes.
 
+[home_fireplace_cold]
+The fire has gone out.
+The ashes are still a little warm.
+
+[home_can_left]
+Taper's watering can, left where she always stood.
+The flowers are already starting to droop.
+
 [home_books]
 A shelf of well-read books.
 "A Hundred Recipes Without Fire."
@@ -52,7 +60,11 @@ The stove is cold. Taper never cooks with fire.
 [kitchen_cake]
 A cake shaped like a candle. Or a candle shaped like a cake.
 
-A little card reads: "FOR OUR GUEST." You'll save it for later.
+A little card reads: "FOR OUR GUEST."
+
+[kitchen_cake_gone]
+Where the cake used to be, there's a note in neat, waxy handwriting:
+"Eat it all up, sprout. Even the crusts. Love, T."
 
 [kitchen_table]
 A table set for two.

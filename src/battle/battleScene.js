@@ -1,11 +1,13 @@
-import { UI_SCALE as S } from '../config.js';
+import { UI_SCALE as S, UI_WIDTH } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
 import { inUiSpace } from '../engine/screen.js';
 import { music, sfx } from '../audio/music.js';
-import { textSection } from '../engine/textLoader.js';
+import { textFile, textSection } from '../engine/textLoader.js';
 import { drawText } from '../ui/text.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
 import { HERO_STATE } from '../characters/heroState.js';
+import { ITEMS, giveItem, healLabel } from '../data/items.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 import { gainExp, heroMaxHp, knownSpells, skillBonus } from '../characters/progress.js';
 import { WEAPONS } from '../data/weapons.js';
 import { SPELLS } from '../data/spells.js';
@@ -19,8 +21,6 @@ import * as hud from './hud.js';
 // The party fights from the left. Only the hero for now; max HP and level come
 // from their progress (src/characters/progress.js).
 const PARTY = [{ name: 'HERO', color: '#4fe3d0', sprite: HERO_ANIMATIONS.right[0] }];
-const STARTING_ITEMS = ['Trail Mix', 'Trail Mix'];
-const ITEM_HEAL = 40;
 const DEFEND_SP = 16;
 const BASE_IFRAMES = 1;
 // Fights refuse enemies with fewer different attacks than this.
@@ -52,6 +52,12 @@ const RUN_MAX_CHANCE = 0.9;
 const MAX_ATTACKERS = 2;
 const COMBINED_DENSITY = 0.8;
 const SECOND_ATTACKER_DELAY = 0.6;
+// A boss's entrance: the stage opens out of the dark, then its title card
+// fades in, holds and fades out (all in seconds from the start).
+const INTRO_DARK_SECONDS = 1.4;
+const INTRO_CARD_IN = 1.6;
+const INTRO_CARD_OUT = 4.2;
+const INTRO_CARD_SECONDS = 4.8;
 
 const COMMANDS = [
   { label: 'FIGHT', icon: 'fight' },
@@ -113,11 +119,12 @@ export class BattleScene {
     this.lastStandReady = skillBonus('lastStand') > 0;
 
     this.sp = 0;
-    this.items = [...STARTING_ITEMS];
+    // Your bag: what you eat here is gone for good.
+    this.items = HERO_STATE.items;
     this.turn = 0;
     this.defending = false;
     this.seenModes = new Set(['normal']);
-    this.earned = { exp: 0, coins: 0 };
+    this.earned = { exp: 0, coins: 0, items: [] };
     this.target = this.foes[0];
     this.slashFoe = null;
 
@@ -149,7 +156,100 @@ export class BattleScene {
     this.shake = 0;
     this.heroFlinch = 0;
 
-    this.showMessage(this.introText(), 'command');
+    // A boss with an `introCard` makes an entrance first.
+    const boss = this.foes.find((foe) => foe.data.introCard);
+    if (boss) this.startBossIntro(boss);
+    else this.showMessage(this.introText(), 'command');
+  }
+
+  // A boss makes an entrance: the stage opens out of the dark, it flares up, a
+  // title card names it, and it says a few lines (the [boss_intro] section of
+  // its text file) while the opening of its song plays. Then the battle starts.
+  startBossIntro(foe) {
+    this.speaker = foe;
+    this.tauntBubbles = this.foeLines(foe, 'boss_intro').flatMap((line) => line.split('\n'));
+    this.setPhase('bossIntro');
+  }
+
+  updateBossIntro(input) {
+    if (this.phaseTime < INTRO_CARD_SECONDS) {
+      // Z skips the title card (after a moment, so a held key doesn't).
+      if (this.phaseTime > 1 && input.wasPressed('confirm')) this.phaseTime = INTRO_CARD_SECONDS;
+      return;
+    }
+    const next = () => {
+      if (!this.tauntBubbles.length) {
+        this.taunt = null;
+        this.showMessage(this.introText(), 'command');
+        return;
+      }
+      this.taunt = this.tauntBubbles.shift();
+      this.tauntStart = this.phaseTime;
+      this.tauntSkipped = false;
+    };
+    if (!this.taunt) next();
+    else if (!input.wasPressed('confirm')) return;
+    else if (!this.tauntSkipped && this.visibleTauntChars() < this.taunt.length) this.tauntSkipped = true;
+    else next();
+  }
+
+  // The boss's flare (0 to 1) and the title card's fade (0 to 1) during its entrance.
+  introGlow() {
+    const t = this.phaseTime;
+    const rise = Math.min(1, Math.max(0, (t - 0.6) / 1.2));
+    return rise * (0.75 + 0.25 * Math.sin(t * 3));
+  }
+
+  introCardAlpha() {
+    const t = this.phaseTime;
+    if (t < INTRO_CARD_IN || t > INTRO_CARD_SECONDS) return 0;
+    if (t < INTRO_CARD_IN + 0.5) return (t - INTRO_CARD_IN) / 0.5;
+    if (t > INTRO_CARD_OUT) return 1 - (t - INTRO_CARD_OUT) / (INTRO_CARD_SECONDS - INTRO_CARD_OUT);
+    return 1;
+  }
+
+  drawBossIntro(ctx) {
+    const foe = this.speaker;
+    // Her light swelling around her.
+    const glow = this.introGlow();
+    if (glow > 0) {
+      const cx = foe.center.x;
+      const cy = foe.pos.y + foe.sprite.height * SCALE * 0.3;
+      const radius = 30 + glow * 40;
+      const light = ctx.createRadialGradient(cx, cy, 2, cx, cy, radius);
+      light.addColorStop(0, `rgba(255, 200, 110, ${0.45 * glow})`);
+      light.addColorStop(1, 'rgba(255, 200, 110, 0)');
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = light;
+      ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+      ctx.restore();
+    }
+  }
+
+  drawBossIntroOverlay(ctx) {
+    // Opening out of the dark.
+    const dark = 1 - Math.min(1, this.phaseTime / INTRO_DARK_SECONDS);
+    if (dark > 0) {
+      ctx.fillStyle = `rgba(0, 0, 0, ${dark})`;
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+    const alpha = this.introCardAlpha();
+    if (alpha <= 0) return;
+    const { title, subtitle } = this.speaker.data.introCard;
+    inUiSpace(ctx, () => {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      // A band across the top of the stage, above the boss.
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.fillRect(0, 8, UI_WIDTH, 112);
+      ctx.fillStyle = '#ffd27a';
+      ctx.fillRect(UI_WIDTH / 2 - 160, 18, 320, 2);
+      ctx.fillRect(UI_WIDTH / 2 - 160, 108, 320, 2);
+      drawText(ctx, title, UI_WIDTH / 2, 28, { size: 56, color: '#fff2cf', align: 'center', shadow: '#7a3a10' });
+      if (subtitle) drawText(ctx, subtitle, UI_WIDTH / 2, 78, { size: 24, color: '#ffd27a', align: 'center' });
+      ctx.restore();
+    });
   }
 
   makeFoe(data, pos) {
@@ -221,6 +321,9 @@ export class BattleScene {
     this.phase = phase;
     this.phaseTime = 0;
     switch (phase) {
+      case 'bossIntro':
+        this.taunt = null;
+        break;
       case 'command': {
         // Each turn, a different enemy sets the scene.
         const active = this.activeFoes();
@@ -281,11 +384,27 @@ export class BattleScene {
 
   startAttack() {
     const crowd = this.attackers.length > 1 ? COMBINED_DENSITY : 1;
-    let attacks = this.attackers.map((foe, i) => {
+    let attacks = this.attackers.flatMap((foe, i) => {
       const name = this.pickPattern(foe);
       foe.lastPattern = name;
       const { density = 1, speed = 1 } = foe.data.difficulty ?? {};
-      return { foe, pattern: createPattern(name, hud.BOX, { density: density * crowd, speed }), delay: i * SECOND_ATTACKER_DELAY };
+      // A `gentle` foe doesn't really want to hurt you: its attacks thin out a
+      // little as its MERCY rises, and when you're nearly out of HP.
+      let kindness = 1;
+      if (foe.data.gentle) {
+        kindness = 1 - (foe.calm / 100) * 0.4;
+        if (this.hero.hp < this.hero.maxHp * 0.3) kindness *= 0.65;
+      }
+      const tuning = { density: density * crowd * kindness, speed };
+      const attack = { foe, pattern: createPattern(name, hud.BOX, tuning), delay: i * SECOND_ATTACKER_DELAY };
+      // A boss with `secondWind` gets desperate when its HP drops below that
+      // share of its max: it layers a second, different attack on top of the first.
+      const { secondWind } = foe.data;
+      if (!secondWind || foe.hp >= foe.maxHp * secondWind.below) return [attack];
+      const others = foe.data.patterns.filter((p) => p.name !== name);
+      const extra = others[Math.floor(Math.random() * others.length)].name;
+      const layered = createPattern(extra, hud.BOX, { density: tuning.density * (secondWind.density ?? 0.6), speed });
+      return [attack, { foe, pattern: layered, delay: attack.delay + (secondWind.delay ?? 1) }];
     });
     // A boss's special soul mode takes the whole turn to itself.
     const special = attacks.find((attack) => attack.pattern.mode !== 'normal');
@@ -319,14 +438,17 @@ export class BattleScene {
     this.seenModes.add(mode);
   }
 
+  // Ends the battle. onEnd also hears how each enemy left: [{ enemy, state }],
+  // where state is 'defeated', 'pacified' or (fled, or lost) 'active'.
   finish(result) {
     if (this.finished) return;
     this.finished = true;
-    this.onEnd(result);
+    this.onEnd(result, this.foes.map((foe) => ({ enemy: foe.data, state: foe.state })));
   }
 
   update(dt, input) {
     this.time += dt;
+    WORLD_STATE.playSeconds = (WORLD_STATE.playSeconds ?? 0) + dt;
     this.phaseTime += dt;
     this.shake = Math.max(0, this.shake - dt);
     this.heroFlinch = Math.max(0, this.heroFlinch - dt);
@@ -367,6 +489,9 @@ export class BattleScene {
         break;
       case 'taunt':
         this.updateTaunt(input);
+        break;
+      case 'bossIntro':
+        this.updateBossIntro(input);
         break;
       case 'dodge':
         this.updateDodge(dt, input);
@@ -488,6 +613,12 @@ export class BattleScene {
   }
 
   tryToRun() {
+    // There's no running from a boss.
+    const boss = this.activeFoes().find((foe) => foe.data.boss);
+    if (boss) {
+      this.showMessage(textFile(boss.data.textFile).no_escape?.[0] ?? `You can't run from ${boss.name}.`, 'taunt');
+      return;
+    }
     const chance = Math.min(RUN_MAX_CHANCE, RUN_BASE_CHANCE + this.turn * RUN_CHANCE_PER_TURN);
     if (Math.random() < chance) {
       this.result = 'fled';
@@ -577,7 +708,7 @@ export class BattleScene {
         }
         break;
       case 'lull':
-        this.showMessage(this.calmFoe(foe, LULL_CALM, `${name} cast Lull. A soft hush settles over the room.`), 'taunt');
+        this.showMessage(this.calmFoe(foe, foe.data.lullCalm ?? LULL_CALM, `${name} cast Lull. A soft hush settles over the room.`), 'taunt');
         break;
       case 'starfall':
         this.showMessage(`${name} cast Starfall! Light pours down from above.`, () => this.resolveStrike(STARFALL_DAMAGE));
@@ -589,10 +720,13 @@ export class BattleScene {
     const index = this.pickFromList(input, this.items.length);
     if (index === null) return;
 
-    const [item] = this.items.splice(index, 1);
-    this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + ITEM_HEAL);
+    const [id] = this.items.splice(index, 1);
+    const item = ITEMS[id];
+    const before = this.hero.hp;
+    this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + item.heal);
     sfx('heal');
-    this.showMessage(`You ate the ${item}. Recovered ${ITEM_HEAL} HP!`, 'taunt');
+    const healed = this.hero.hp === this.hero.maxHp && item.heal >= 999 ? 'Your HP was maxed out!' : `Recovered ${this.hero.hp - before} HP!`;
+    this.showMessage(`You ate the ${item.name}. ${healed}`, 'taunt');
   }
 
   resolveStrike(damage) {
@@ -616,6 +750,10 @@ export class BattleScene {
     this.earned.coins += foe.data.rewards.coins;
     // Like Deltarune, sparing an enemy earns gold but no EXP.
     if (how === 'defeated') this.earned.exp += foe.data.rewards.exp;
+    // Sometimes they leave something behind.
+    for (const { item, chance } of foe.data.drops ?? []) {
+      if (Math.random() < chance) this.earned.items.push(item);
+    }
     const line = this.foeLine(foe, how === 'defeated' ? 'victory' : 'pacified');
     const text = prefix ? `${prefix}\n${line}` : line;
     this.showMessage(text, () => {
@@ -831,6 +969,9 @@ export class BattleScene {
     const { exp, coins } = this.earned;
     HERO_STATE.gold += coins;
     let text = `You won!\nGot ${exp} EXP and ${coins} gold.`;
+    for (const id of this.earned.items) {
+      text += giveItem(id) ? `\nGot a ${ITEMS[id].name}!` : `\nYou couldn't carry the ${ITEMS[id].name}.`;
+    }
     if (exp && gainExp(exp)) {
       sfx('levelUp');
       text += `\nLEVEL UP! Now LV ${HERO_STATE.level}. Press C to spend skill points.`;
@@ -845,6 +986,7 @@ export class BattleScene {
     ctx.save();
     if (this.shake > 0) ctx.translate(Math.round((Math.random() - 0.5) * 4), Math.round((Math.random() - 0.5) * 4));
     this.drawParty(ctx);
+    if (this.phase === 'bossIntro') this.drawBossIntro(ctx);
     for (const foe of this.foes) this.drawFoe(ctx, foe);
     this.drawBox(ctx);
     ctx.restore();
@@ -852,7 +994,7 @@ export class BattleScene {
     inUiSpace(ctx, () => {
       this.drawSlash(ctx);
       this.strike?.drawLabels(ctx);
-      if (this.phase === 'taunt') {
+      if ((this.phase === 'taunt' || this.phase === 'bossIntro') && this.taunt) {
         const { pos } = this.speaker;
         hud.drawSpeech(ctx, this.taunt.slice(0, this.visibleTauntChars()), pos.x * S - 4, (pos.y + 14) * S);
       }
@@ -866,6 +1008,7 @@ export class BattleScene {
       this.drawPanelText(ctx);
       this.drawPopups(ctx);
     });
+    if (this.phase === 'bossIntro') this.drawBossIntroOverlay(ctx);
   }
 
   // One enemy: full name and bars under it; with several, a compact set beside each.
@@ -1060,9 +1203,9 @@ export class BattleScene {
         break;
       }
       case 'items':
-        hud.drawOptions(ctx, this.items.map((item) => ({
-          label: item,
-          note: `+${ITEM_HEAL} HP`,
+        hud.drawOptions(ctx, this.items.map((id) => ({
+          label: ITEMS[id].name,
+          note: healLabel(id),
           noteColor: hud.COLORS.enemyHp,
           enabled: true,
         })), this.cursor);

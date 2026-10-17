@@ -1,0 +1,79 @@
+# MOTHER TAPER, blocking the way out of the Ruins.
+# Numbers (HP, damage, how much each TALK option calms her) live in
+# src/data/enemies/taper.js.
+
+# Said in speech bubbles during her entrance, after her title card. Lines
+# written together (no blank line between) are said one bubble at a time.
+[boss_intro]
+Alright, sprout.
+I'll be as gentle as I can.
+
+But I won't make it easy.
+Not when it's you.
+
+[intro]
+TAPER stands before the door, her flame trembling.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+Taper's flame leans toward you, then away.
+
+Taper is humming under her breath. It sounds like a lullaby.
+
+Wax runs down Taper's face. It might be tears.
+
+Smells like candle smoke and warm soup.
+
+Taper keeps glancing at your scraped knees.
+
+Taper's flame is the smallest you've seen it.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) are said one bubble at a time.
+[taunts]
+Please, sprout.
+Just come home.
+
+I fed six of them at my table.
+I can't lose a seventh.
+
+Out there isn't a garden.
+Nobody will tend you out there.
+
+There's a light out there that calls.
+It called them all.
+
+I'm not angry, sprout.
+I'm frightened.
+
+Duck, sprout!
+...Sorry. Sorry. Habit.
+
+# One section per TALK option. The names after "talk:" must match the TALK
+# options in src/data/enemies/taper.js.
+[talk: Check]
+TAPER - HP 320
+The oldest candle in the Ruins. She's burning herself down to keep you safe.
+
+[talk: Ask about the garden]
+You ask what she's planting next spring.
+Her flame brightens. "Moonbells... You could help me plant them..."
+
+[talk: Stand your ground]
+You don't step back. Not one inch.
+Taper's flame flickers. "...When did you get so tall?"
+
+[talk: Take her hand]
+You take her hand. It's warm, like a cup of tea.
+She squeezes back, and for a moment she doesn't let go.
+
+# Said when you try to RUN.
+[no_escape]
+Taper is standing in front of the only door.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+Taper's flame gutters... and goes out.
+
+[pacified]
+Taper's flame settles. "...Alright, sprout. Alright. Go and grow."

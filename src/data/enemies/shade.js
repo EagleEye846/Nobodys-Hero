@@ -28,4 +28,7 @@ export const SHADE = {
   ],
 
   rewards: { exp: 55, coins: 35 },
+
+  // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
+  drops: [{ item: 'dark_chocolate', chance: 0.3 }],
 };

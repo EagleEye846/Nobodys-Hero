@@ -47,7 +47,11 @@ export const PILLAR_ROOM = {
   // Things you can press Z on. `text` names a section of this room's text file;
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/the_ruins.txt',
-  props: [],
+  props: [
+    { sprite: 'gate_wide', x: 9, y: 3, text: 'pillar_gate', opensWith: ['lever_east', 'lever_hidden'], openText: 'pillar_gate_open' },
+    { sprite: 'lever', x: 17, y: 4, text: 'pillar_lever', lever: 'lever_east' },
+    { sprite: 'lever', x: 14, y: 10, text: 'pillar_lever', lever: 'lever_hidden' },
+  ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,
   // `tileTexts` for every tile of a kind (by its letter). Both name sections

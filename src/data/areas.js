@@ -4,4 +4,6 @@
 // backdrop of the same name in src/battle/backdrops.js.
 export const AREA_NAMES = {
   ruins: 'THE RUINS',
+  // The next region, past the Ruins' door. Rename it when you know what it is.
+  beyond: 'BEYOND THE RUINS',
 };

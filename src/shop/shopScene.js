@@ -8,7 +8,9 @@ import { SHOPS } from '../data/shops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines, layoutDialogue, drawDialogue } from '../ui/text.js';
-import { MENU_COLORS, drawWeaponList, drawWeaponDetails } from '../ui/menuFrame.js';
+import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawItemDetails } from '../ui/menuFrame.js';
+import { ITEMS, MAX_ITEMS, giveItem } from '../data/items.js';
+import { WEAPONS } from '../data/weapons.js';
 
 // A shop, laid out like Deltarune's: the shopkeeper behind their counter up
 // top, and two boxes below. The left box is the menu (BUY, TALK, EXIT) or the
@@ -134,7 +136,22 @@ export class ShopScene {
     if (input.wasPressed('confirm')) this.buy(this.shop.stock[this.buyCursor]);
   }
 
-  buy({ weapon, price }) {
+  buy({ weapon, item, price }) {
+    if (item) {
+      if (HERO_STATE.gold < price) {
+        sfx('error');
+        this.say('too_poor');
+      } else if (HERO_STATE.items.length >= MAX_ITEMS) {
+        sfx('error');
+        this.say('bag_full');
+      } else {
+        sfx('heal');
+        HERO_STATE.gold -= price;
+        giveItem(item);
+        this.say('bought_item');
+      }
+      return;
+    }
     if (HERO_STATE.weapons.includes(weapon)) {
       sfx('error');
       this.say('owned');
@@ -268,12 +285,14 @@ export class ShopScene {
 
   drawLeftBox(ctx) {
     if (this.mode === 'buy') {
-      const prices = Object.fromEntries(this.shop.stock.map(({ weapon, price }) => [weapon, price]));
-      const owned = (id) => HERO_STATE.weapons.includes(id);
-      drawWeaponList(ctx, this.shop.stock.map(({ weapon }) => weapon), this.buyCursor, {
+      // Rows are stock entries: food you can buy again and again, weapons once.
+      const stock = this.shop.stock;
+      const owned = (i) => stock[i].weapon && HERO_STATE.weapons.includes(stock[i].weapon);
+      drawWeaponList(ctx, stock.map((_, i) => i), this.buyCursor, {
         area: LIST_AREA,
-        nameColor: (id) => (owned(id) ? MENU_COLORS.dim : MENU_COLORS.text),
-        tag: (id) => (owned(id) ? { text: 'OWNED', color: MENU_COLORS.dim } : { text: `${prices[id]}G`, color: MENU_COLORS.highlight }),
+        name: (i) => (stock[i].item ? ITEMS[stock[i].item].name : WEAPONS[stock[i].weapon].name),
+        nameColor: (i) => (owned(i) ? MENU_COLORS.dim : MENU_COLORS.text),
+        tag: (i) => (owned(i) ? { text: 'OWNED', color: MENU_COLORS.dim } : { text: `${stock[i].price}G`, color: MENU_COLORS.highlight }),
       });
       return;
     }
@@ -291,7 +310,9 @@ export class ShopScene {
 
   drawRightBox(ctx) {
     if (this.mode === 'buy') {
-      drawWeaponDetails(ctx, this.shop.stock[this.buyCursor].weapon, DETAILS_AREA);
+      const entry = this.shop.stock[this.buyCursor];
+      if (entry.item) drawItemDetails(ctx, entry.item, DETAILS_AREA);
+      else drawWeaponDetails(ctx, entry.weapon, DETAILS_AREA);
     } else {
       const lines = layoutDialogue(ctx, this.line, RIGHT_BOX.w - 44, 28);
       drawDialogue(ctx, lines, RIGHT_BOX.x + 22, RIGHT_BOX.y + 20, { size: 28, lineHeight: 27, visible: this.visibleCharacters() });

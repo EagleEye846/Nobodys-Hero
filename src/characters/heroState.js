@@ -7,6 +7,8 @@ export const HERO_STATE = {
   skillPoints: 3,
   skills: [],
   gold: 0,
+  // Item ids (see src/data/items.js), eaten in battle with ITEMS.
+  items: ['trail_mix', 'trail_mix'],
   weapon: 'worn_sword',
   weapons: ['worn_sword', 'old_shield'],
 };

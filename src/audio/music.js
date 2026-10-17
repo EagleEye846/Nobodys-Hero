@@ -99,33 +99,95 @@ function makeNoise(ctx) {
   return buffer;
 }
 
-function playTone(ctx, channel, instrument, midi, time, seconds) {
-  const { wave = 'square', volume, attack = 0.005, decay = 0.1, sustain = 0.7, release = 0.08, gate = 0.9, vibrato } = instrument;
-  const end = time + seconds * gate;
+// Custom waveforms from a list of harmonic strengths (1st, 2nd, 3rd...), for
+// richer tones like piano, choir and bells. Made once per sound and reused.
+const periodicWaves = new WeakMap();
+function periodicWave(ctx, harmonics) {
+  if (!periodicWaves.has(ctx)) periodicWaves.set(ctx, new Map());
+  const cache = periodicWaves.get(ctx);
+  const key = harmonics.join(',');
+  if (!cache.has(key)) {
+    const real = new Float32Array(harmonics.length + 1);
+    const imag = new Float32Array([0, ...harmonics]);
+    cache.set(key, ctx.createPeriodicWave(real, imag));
+  }
+  return cache.get(key);
+}
 
-  const osc = ctx.createOscillator();
-  osc.type = wave;
-  osc.frequency.value = 440 * 2 ** ((midi - 69) / 12);
+// Plays one note. Besides the basics (wave, volume, envelope, gate, vibrato),
+// an instrument can have:
+//   voices     layered oscillators [{ wave, harmonics, detune (cents), octave, level }],
+//              detuned against each other for a full section of strings or brass
+//   harmonics  a custom waveform (see periodicWave) instead of `wave`
+//   sweep      { from, to, time, q }: a lowpass that opens as the note starts (brass)
+//   bend       { cents, time }: starts sharp and slides onto the note (timpani)
+//   click      a little burst of noise at the start, this loud (a hammer, a bow)
+function playTone(ctx, channel, instrument, midi, time, seconds, noise) {
+  const {
+    wave = 'square', volume, attack = 0.005, decay = 0.1, sustain = 0.7, release = 0.08, gate = 0.9,
+    vibrato, voices, harmonics, sweep, bend, click,
+  } = instrument;
+  const end = time + seconds * gate;
+  const stopAt = end + release * 2 + 0.05;
 
   const envelope = ctx.createGain();
   envelope.gain.setValueAtTime(0, time);
   envelope.gain.linearRampToValueAtTime(volume, time + attack);
   envelope.gain.setTargetAtTime(volume * sustain, time + attack, decay);
   envelope.gain.setTargetAtTime(0, end, release / 3);
-  osc.connect(envelope).connect(channel);
+  envelope.connect(channel);
 
-  if (vibrato) {
-    const lfo = ctx.createOscillator();
-    const depth = ctx.createGain();
-    lfo.frequency.value = vibrato.rate;
-    depth.gain.value = vibrato.depth;
-    lfo.connect(depth).connect(osc.detune);
-    lfo.start(time);
-    lfo.stop(end + release * 2);
+  let input = envelope;
+  if (sweep) {
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.Q.value = sweep.q ?? 1;
+    filter.frequency.setValueAtTime(sweep.from, time);
+    filter.frequency.exponentialRampToValueAtTime(sweep.to, time + sweep.time);
+    filter.connect(envelope);
+    input = filter;
   }
 
-  osc.start(time);
-  osc.stop(end + release * 2);
+  const layers = voices ?? [{ wave, harmonics, level: 1 }];
+  for (const layer of layers) {
+    const osc = ctx.createOscillator();
+    const shape = layer.harmonics ?? (voices ? null : harmonics);
+    if (shape) osc.setPeriodicWave(periodicWave(ctx, shape));
+    else osc.type = layer.wave ?? wave;
+    osc.frequency.value = 440 * 2 ** ((midi + 12 * (layer.octave ?? 0) - 69) / 12);
+    const detune = layer.detune ?? 0;
+    osc.detune.setValueAtTime(detune + (bend?.cents ?? 0), time);
+    if (bend) osc.detune.linearRampToValueAtTime(detune, time + bend.time);
+    const level = ctx.createGain();
+    level.gain.value = layer.level ?? 1 / layers.length;
+    osc.connect(level).connect(input);
+
+    if (vibrato) {
+      const lfo = ctx.createOscillator();
+      const depth = ctx.createGain();
+      lfo.frequency.value = vibrato.rate;
+      depth.gain.value = vibrato.depth;
+      lfo.connect(depth).connect(osc.detune);
+      lfo.start(time);
+      lfo.stop(stopAt);
+    }
+    osc.start(time);
+    osc.stop(stopAt);
+  }
+
+  if (click && noise) {
+    const source = ctx.createBufferSource();
+    const filter = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    source.buffer = noise;
+    filter.type = 'bandpass';
+    filter.frequency.value = 2400;
+    gain.gain.setValueAtTime(volume * click, time);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.03);
+    source.connect(filter).connect(gain).connect(channel);
+    source.start(time);
+    source.stop(time + 0.04);
+  }
 }
 
 const DRUMS = {
@@ -179,6 +241,44 @@ const DRUMS = {
     source.start(time);
     source.stop(time + 0.17);
   },
+  // A big orchestral bass drum: a deep, booming thud.
+  boom(ctx, channel, noise, time, volume) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.setValueAtTime(90, time);
+    osc.frequency.exponentialRampToValueAtTime(38, time + 0.35);
+    gain.gain.setValueAtTime(volume, time);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.9);
+    osc.connect(gain).connect(channel);
+    osc.start(time);
+    osc.stop(time + 0.95);
+    const source = ctx.createBufferSource();
+    const filter = ctx.createBiquadFilter();
+    const thud = ctx.createGain();
+    source.buffer = noise;
+    filter.type = 'lowpass';
+    filter.frequency.value = 400;
+    thud.gain.setValueAtTime(volume * 0.8, time);
+    thud.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+    source.connect(filter).connect(thud).connect(channel);
+    source.start(time);
+    source.stop(time + 0.16);
+  },
+  // A crash cymbal, washing away for a couple of seconds.
+  crash(ctx, channel, noise, time, volume) {
+    const source = ctx.createBufferSource();
+    const filter = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    source.buffer = noise;
+    source.loop = true;
+    filter.type = 'highpass';
+    filter.frequency.value = 4500;
+    gain.gain.setValueAtTime(volume, time);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 2.2);
+    source.connect(filter).connect(gain).connect(channel);
+    source.start(time);
+    source.stop(time + 2.3);
+  },
   // A tiny tick of bright noise.
   hat(ctx, channel, noise, time, volume) {
     const source = ctx.createBufferSource();
@@ -195,16 +295,40 @@ const DRUMS = {
   },
 };
 
-// One channel per instrument, with an optional filter (to soften harsh waves)
-// and echo, all into the song's bus.
+// A concert hall's reverb: a convolver with a few seconds of decaying noise.
+function makeHall(ctx, seconds = 2.6) {
+  const length = Math.floor(ctx.sampleRate * seconds);
+  const impulse = ctx.createBuffer(2, length, ctx.sampleRate);
+  for (let channel = 0; channel < 2; channel++) {
+    const data = impulse.getChannelData(channel);
+    for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 3;
+  }
+  const hall = ctx.createConvolver();
+  hall.buffer = impulse;
+  return hall;
+}
+
+// One channel per instrument, with an optional filter (to soften harsh waves),
+// echo and `reverb` (how much goes into the hall), all into the song's bus.
 function buildChannels(ctx, bus, instruments) {
   const channels = {};
+  let hall = null;
   for (const [name, instrument] of Object.entries(instruments)) {
     const channel = ctx.createGain();
+    if (instrument.reverb) {
+      if (!hall) {
+        hall = makeHall(ctx);
+        hall.connect(bus);
+      }
+      const send = ctx.createGain();
+      send.gain.value = instrument.reverb;
+      channel.connect(send).connect(hall);
+    }
     if (instrument.filter) {
       const filter = ctx.createBiquadFilter();
       filter.type = instrument.filter.type;
       filter.frequency.value = instrument.filter.frequency;
+      if (instrument.filter.q) filter.Q.value = instrument.filter.q;
       channel.connect(filter).connect(bus);
     } else {
       channel.connect(bus);
@@ -258,7 +382,7 @@ class SongPlayback {
     const instrument = this.song.instruments[event.track];
     const channel = this.channels[event.track];
     if (instrument.drum) DRUMS[instrument.drum](this.ctx, channel, this.noise, time, instrument.volume);
-    else playTone(this.ctx, channel, instrument, event.midi, time, event.length * this.stepSeconds);
+    else playTone(this.ctx, channel, instrument, event.midi, time, event.length * this.stepSeconds, this.noise);
   }
 
   stop() {
@@ -266,6 +390,26 @@ class SongPlayback {
     this.bus.gain.setTargetAtTime(0, this.ctx.currentTime, FADE_SECONDS / 3);
     setTimeout(() => this.bus.disconnect(), (FADE_SECONDS + 1) * 1000);
   }
+}
+
+// Plays the first `seconds` of a song into an offline recording, without
+// making a sound, and resolves with the AudioBuffer. For tests and tools
+// (checking a song for errors, or how loud it gets).
+export function renderSong(song, seconds, sampleRate = 44100) {
+  const ctx = new OfflineAudioContext(2, Math.ceil(sampleRate * seconds), sampleRate);
+  const master = ctx.createGain();
+  master.gain.value = MASTER_VOLUME;
+  master.connect(ctx.destination);
+  const playback = Object.create(SongPlayback.prototype);
+  Object.assign(playback, { ctx, song, noise: makeNoise(ctx), bus: master });
+  playback.channels = buildChannels(ctx, master, song.instruments);
+  ({ steps: playback.steps, loopStart: playback.loopStart } = compile(song));
+  playback.stepSeconds = 60 / song.bpm / song.stepsPerBeat;
+  for (let time = 0, index = 0; time < seconds; time += playback.stepSeconds) {
+    for (const event of playback.steps[index]) playback.play(event, time);
+    index = index + 1 >= playback.steps.length ? playback.loopStart : index + 1;
+  }
+  return ctx.startRendering();
 }
 
 // Browsers only allow sound after the player presses something, so music

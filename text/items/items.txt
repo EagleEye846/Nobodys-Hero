@@ -1,0 +1,36 @@
+# Item descriptions for the ITEMS menu (C in the overworld) and shops.
+# One section per item id in src/data/items.js. The menus show how much it
+# heals by themselves, so these are just flavour.
+
+[trail_mix]
+Nuts, seeds and the odd raisin. Good for long walks through old halls.
+
+[lantern_tea]
+Tea brewed over a lantern flame. It tastes faintly of smoke and honey.
+
+[ember_toffee]
+Toffee cooked on an ember for a hundred years. Chewy enough to last another hundred.
+
+[cotton_candy]
+A tuft of the Rogue Dummy's stuffing, spun into candy. Surprisingly sweet.
+
+[wild_carrot]
+A Dust Bunny's prized carrot. Slightly dusty.
+
+[glow_jam]
+Jam that glows faintly in the dark. The Lantern Moth was saving it.
+
+[wax_drop]
+A drop of a Waxling's wax, set like a sweet. It tastes like candles. Of course it does.
+
+[dark_chocolate]
+Chocolate as dark as a Shade. It's gone if you look away.
+
+[pillar_mint]
+A Columneon's breath mint, shaped like a tiny pillar. Very convincing.
+
+[candle_cake]
+A cake shaped like a candle, from Taper's kitchen. "FOR OUR GUEST."
+
+[taper_stub]
+The candle Taper gave you. It's still warm. It always will be.

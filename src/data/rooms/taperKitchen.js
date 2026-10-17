@@ -46,7 +46,7 @@ export const TAPER_KITCHEN = {
   props: [
     { sprite: 'counter', x: 2, y: 3, text: 'kitchen_counter' },
     { sprite: 'stove', x: 3, y: 3, text: 'kitchen_stove' },
-    { sprite: 'counter_cake', x: 4, y: 3, text: 'kitchen_cake' },
+    { sprite: 'counter_cake', x: 4, y: 3, text: 'kitchen_cake', gives: 'candle_cake', taken: { sprite: 'counter', text: 'kitchen_cake_gone' } },
     { sprite: 'counter', x: 5, y: 3, text: 'kitchen_counter' },
     { sprite: 'chair', x: 4, y: 7, text: 'kitchen_chair' },
     { sprite: 'table', x: 5, y: 7, text: 'kitchen_table' },

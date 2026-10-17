@@ -62,6 +62,12 @@ export const START_ROOM = {
     { sprite: 'keeper', x: 9, y: 15, npc: 'old_keeper' },
   ],
 
+  // Words for tiles, shown when you press Z on them: `looks` for one spot,
+  // `tileTexts` for every tile of a kind (by its letter). Both name sections
+  // of the text file, like signs.
+  looks: [],
+  tileTexts: {},
+
   // Enemies wandering the room, by their file name in src/data/enemies/.
   // patrol is the leftmost and rightmost tile they walk between. `behaviour`
   // is how they move (see BEHAVIOURS in src/overworld/npc.js); hiding ones go

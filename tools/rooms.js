@@ -181,6 +181,13 @@ const propLiteral = (prop) => {
   if (prop.save) out.save = true;
   if (prop.animation) out.animation = prop.animation;
   if (prop.animation && prop.speed) out.speed = prop.speed;
+  if (prop.lever) out.lever = prop.lever;
+  if (prop.opensWith?.length) out.opensWith = prop.opensWith;
+  if (prop.opensWith?.length && prop.inOrder) out.inOrder = true;
+  if (prop.opensWith?.length && prop.openText) out.openText = prop.openText;
+  if (prop.opensWith?.length && prop.resetText) out.resetText = prop.resetText;
+  if (prop.gives) out.gives = prop.gives;
+  if (prop.gives && prop.taken) out.taken = prop.taken;
   if (prop.until) out.until = prop.until;
   if (prop.after) out.after = prop.after;
   return inline(out);

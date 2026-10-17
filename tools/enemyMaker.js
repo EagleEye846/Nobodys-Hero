@@ -62,6 +62,7 @@ function blankForm() {
     art: null, // { file, base }
     ...PRESETS.normal,
     boss: false,
+    kept: {},
     patterns: {},
     acts: defaultActs(name, PRESETS.normal.maxHp).map((a) => ({ ...a, edited: false })),
     words: defaultWords(name),
@@ -69,6 +70,11 @@ function blankForm() {
     place: { on: false, room: null, x: null, y: null, walk: 2 },
   };
 }
+
+// Settings the Enemy Maker has no controls for yet, carried over untouched
+// when you open and save an enemy (so saving Taper keeps her own battle song,
+// her `gentle` attacks, her `secondWind`, her `lullCalm` and any item drops).
+const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'lullCalm'];
 
 // The enemy module, in the same shape as the game's own enemy files.
 function enemyModule(f, id, constName) {
@@ -104,6 +110,8 @@ function enemyModule(f, id, constName) {
     `  rewards: { exp: ${f.exp}, coins: ${f.coins} },`,
   ];
   if (f.boss) lines.push('', '  // A boss: its attacks may change how the soul moves.', '  boss: true,');
+  const kept = Object.entries(f.kept ?? {});
+  if (kept.length) lines.push('', '  // Set by hand in this file (the Enemy Maker keeps them as they are).', ...kept.map(([key, value]) => `  ${key}: ${inline(value)},`));
   lines.push('};');
   return `${lines.join('\n')}\n`;
 }
@@ -222,6 +230,7 @@ export async function mount(root, studio) {
       exp: e.rewards?.exp ?? 0,
       coins: e.rewards?.coins ?? 0,
       boss: Boolean(e.boss),
+      kept: Object.fromEntries(KEPT_FIELDS.filter((key) => e[key] !== undefined).map((key) => [key, e[key]])),
       patterns: Object.fromEntries(e.patterns.map((p) => [p.name, p.weight ?? 1])),
       acts: e.talk.map((t) => ({ name: t.name, calm: t.calm ?? 0, text: words(`talk: ${t.name}`), edited: true })),
       words: Object.fromEntries(WORDS.map(([key]) => [key, words(key)])),

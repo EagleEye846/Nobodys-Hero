@@ -5,7 +5,7 @@ import { Game } from './engine/game.js';
 import { loadTextFiles } from './engine/textLoader.js';
 import { loadUiFont } from './ui/text.js';
 import { TEXT_FILES } from './data/textManifest.js';
-import { continueGame } from './overworld/overworldScene.js';
+import { continueGame, OverworldScene } from './overworld/overworldScene.js';
 import { START_ROOM } from './data/rooms/index.js';
 import { CutsceneScene } from './cutscene/cutsceneScene.js';
 import { PressStartScene, TitleScene } from './title/titleScene.js';
@@ -17,9 +17,12 @@ const game = new Game(ctx, new Input());
 await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
 
 // The intro, then the title screen, then the game: picking up from the last
-// save point, or starting at the Ruins entrance.
+// save point, or (NEW GAME, or no save) starting at the Ruins entrance.
 const startGame = () => continueGame(START_ROOM);
-const titleScreen = () => new TitleScene(startGame);
+const newGame = () => new OverworldScene(START_ROOM);
+const titleScreen = () => new TitleScene(startGame, newGame);
+// Where the end of a chapter sends you back to.
+game.home = titleScreen;
 const intro = () => new CutsceneScene('cutscenes/intro.txt', titleScreen, { song: 'prophecy' });
 game.changeScene(new PressStartScene(intro));
 game.start();

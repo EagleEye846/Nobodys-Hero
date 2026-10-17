@@ -22,7 +22,7 @@ Then open http://localhost:8000 for the game, or http://localhost:8000/tools/ fo
 | Z / Enter | Read signs, talk | Confirm, strike as slashes cross the notch |
 | X | Hold to run, skip text | Back out of lists; hold to focus (slower soul) |
 | Shift | Hold to run, skip text | Back out of lists; use your weapon's soul ability |
-| C / Ctrl | Open the menu (EQUIP, SKILLS, status) | |
+| C / Ctrl | Open the menu (ITEMS, EQUIP, SKILLS, status) | |
 | M | Mute or unmute music and sound | Mute or unmute music and sound |
 | Space | Jump | Jump, in a boss's HEAVY mode |
 
@@ -100,7 +100,7 @@ On your turn, pick a command:
   - Heal Pulse (32%) heals 35 HP.
   - Rend (40%) is a guaranteed 30 damage.
   - Pacify (16%) sends an enemy away peacefully, but only once its MERCY is full. The SPELLS button flashes when one is ready.
-- **ITEMS**: eat Trail Mix to heal 40 HP.
+- **ITEMS**: eat something from your bag to heal. What you eat is gone for good.
 - **DEFEND**: halves damage for the next enemy turn and builds SP.
 - **RUN**: try to escape. It gets more likely the longer the fight goes on. The enemy stays in the room, but ignores you for a moment.
 
@@ -111,9 +111,21 @@ On the enemy's turn, a box opens in the middle of the screen and you steer your 
 - Standing still is never safe: every enemy's attacks are built to find a soul that stops moving.
 - **Grazing**, like Deltarune: letting bullets pass close by lights up a larger outline around your soul and fills **SP** (the purple gauge on the left). Each new bullet you graze gives a burst of SP and shortens the enemy's turn slightly; staying close keeps SP trickling in.
 
-Each enemy has a `difficulty` in its data file: `density` scales how often bullets spawn and `speed` how fast they fly. The rogue dummy, the first enemy you meet, uses the gentlest settings.
+Each enemy has a `difficulty` in its data file: `density` scales how often bullets spawn and `speed` how fast they fly. The rogue dummy, the first enemy you meet, uses the gentlest settings. A boss can also have a `secondWind` (below that share of its HP it layers a lighter second attack on top of the first; Taper does this below a third) and an `introCard` (an entrance before the fight: the stage opens from black, a title card names it, and it says the lines in its text file's `[boss_intro]` section).
 
 Beaten and pacified enemies stay gone, even after you leave the room and come back.
+
+### Items, gold and the shop
+
+You carry up to 8 items (`src/data/items.js`, descriptions in `text/items/items.txt`), and keep them between battles: look at them (or throw one away) under ITEMS in the C menu. Enemies sometimes drop a snack themed after them (`drops` in their data file), Moss sells food and weapons for gold (`src/data/shops.js`), and some things in the world give you an item the first time you press Z on them (the cake in Taper's kitchen).
+
+### Puzzles
+
+Any object can be a **switch** (a lantern to light, a lever to pull) and a **gate** opens when its switches are all on, optionally only if they're turned on in order (a wrong one resets them). Set them up in the Room Editor. The Lantern Hall's gate needs its lanterns lit in the right order (read the sign); the Pillar Room's needs two levers, one hidden behind a pillar.
+
+### The end of the Ruins
+
+Down the stairs at the end of Taper's hallway is the way out. Taper won't let you leave without a fight: she's the Ruins' boss, you can't run, she makes a grand entrance, her attacks are busy, and when she's low she adds a second one. They ease off as you spare her (TALK until her MERCY is full, then Pacify). Spare her and she gives you her candle and goes home; beat her and her home goes cold. Leaving through the door completes Chapter One, and the game carries on into the next region (Beyond the Ruins, waiting to be built). The title screen shows your save (where you are, level, gold and play time) with CONTINUE and NEW GAME.
 
 ### Levels and skills
 
@@ -167,6 +179,7 @@ Original songs are synthesised live, chiptune style, with the Web Audio API, so 
 - **Starlight Study** (`src/data/music/skillsTheme.js`) plays in the SKILLS menu: slow and dreamy, E major, soft chords and a gentle music box.
 - **Old Halls Waltz** (`src/data/music/waltzTheme.js`) isn't used yet, saved for a brighter area: a waltz in 3/4, F major, with an "oom-pah-pah" accompaniment. Play it with `music: 'waltz'`.
 - **Dust and Lanterns** (`src/data/music/shopTheme.js`) plays in the RUINS SHOP: slow and wistful, A minor, an echoing lead over soft chords. It's inspired by "Ruins".
+- **Last Waltz by Candlelight** (`src/data/music/taperBattleTheme.js`) plays in the fight with Taper: a dark waltz in 3/4, B minor, with church organ, choir, "oom-pah-pah" strings and timpani and no drum kit. Its slow opening plays under her entrance; in the middle a music box plays the opening of her lullaby. The instrument presets it uses (organ, strings, piano, choir, timpani, bells, brass) are in `src/audio/instruments.js`, ready for any song.
 - **Cotton Clash** (`src/data/music/battleTheme.js`) plays in battle: 160 BPM, E minor lifting to a hopeful second half, a brassy lead over a syncopated bass, off-beat stabs and a busy kit. It leans into the style of "Rude Buster" and "From Now On".
 
 Menus, battles, saving and doors also have little synthesised sound effects (`SFX` in `src/audio/music.js`).

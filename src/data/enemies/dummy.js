@@ -34,4 +34,7 @@ export const ROGUE_DUMMY = {
   ],
 
   rewards: { exp: 40, coins: 31 },
+
+  // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
+  drops: [{ item: 'cotton_candy', chance: 0.4 }],
 };

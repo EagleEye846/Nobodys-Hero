@@ -7,6 +7,7 @@ import { ENEMIES } from '../data/enemies/index.js';
 import { music, sfx } from '../audio/music.js';
 import { drawText, textWidth } from '../ui/text.js';
 import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
+import { ITEMS, giveItem } from '../data/items.js';
 
 // Plays a cutscene (src/data/scenes/) in the overworld: actors walk, face,
 // talk and emote, and the camera pans, one step at a time. The overworld
@@ -25,6 +26,9 @@ export const STEP_TYPES = {
   animate: 'Play an animation',
   sound: 'Play a sound',
   music: 'Change the music',
+  give: 'Give an item',
+  battle: 'Start a battle',
+  end_chapter: 'End the chapter',
 };
 export const EMOTES = ['!', '?', '...', '<3'];
 export const FACINGS = ['down', 'up', 'left', 'right'];
@@ -34,6 +38,7 @@ const PLAYER_SPEED = 70;
 const CAMERA_SPEED = 180;
 const EMOTE_SECONDS = 0.8;
 const BOB_SECONDS = 0.6;
+const FADE_MS = 300; // how long actors take to fade in or out
 
 const spriteCache = new Map();
 // The sprite for an actor's `look`: 'prop:keeper' or 'enemy:columneon'.
@@ -78,15 +83,35 @@ class Actor {
     return this.y;
   }
 
+  // Fades in when they appear and out when they leave, rather than blinking.
+  show() {
+    this.hidden = false;
+    this.fade = { from: 0, to: 1, at: performance.now() };
+  }
+
+  hide() {
+    this.fade = { from: 1, to: 0, at: performance.now() };
+  }
+
+  get alpha() {
+    if (!this.fade) return 1;
+    const t = Math.min(1, (performance.now() - this.fade.at) / FADE_MS);
+    return this.fade.from + (this.fade.to - this.fade.from) * t;
+  }
+
   draw(ctx, camera) {
     if (this.hidden) return;
+    const alpha = this.alpha;
+    if (alpha <= 0) return;
     const seconds = performance.now() / 1000;
     const animated = this.animation && animationFrame(this.animation, seconds, this.speed);
     const sprite = animated
       || (this.facing === 'up' && this.sprites.back)
       || (this.facing === 'left' ? this.sprites.left : this.sprites.right);
     const bob = this.walking && Math.floor(seconds / (BOB_SECONDS / 3)) % 2 ? 1 : 0;
+    ctx.globalAlpha = alpha;
     ctx.drawImage(sprite, Math.round(this.x) - Math.floor(sprite.width / 2) - camera.x, Math.round(this.y) - sprite.height - bob - camera.y);
+    ctx.globalAlpha = 1;
   }
 }
 
@@ -181,12 +206,16 @@ export class ScenePlayer {
           body.x = (step.at.x + 0.5) * T;
           body.y = (step.at.y + 1) * T;
         }
-        body.hidden = false;
+        if (body.show) body.show();
+        else body.hidden = false;
         return true;
       }
-      case 'leave':
-        this.body(step.who).hidden = true;
+      case 'leave': {
+        const body = this.body(step.who);
+        if (body.hide) body.hide();
+        else body.hidden = true;
         return true;
+      }
       case 'animate': {
         // Starts (or with no animation, stops) an animation. With `seconds`,
         // the scene waits that long, then the animation stops.
@@ -199,6 +228,25 @@ export class ScenePlayer {
       case 'sound':
         if (step.name) sfx(step.name);
         return true;
+      case 'give': {
+        const item = ITEMS[step.item];
+        if (!item) return true;
+        const got = giveItem(step.item);
+        if (got) sfx('heal');
+        this.overworld.textbox.open([got ? `You got ${item.name}.` : `You'd take the ${item.name}, but your bag is full.`]);
+        return false;
+      }
+      case 'battle':
+        // The scene ends here; the overworld runs the battle, then plays the
+        // `spared` or `defeated` scene after it (see OverworldScene.storyBattle).
+        this.battle = step;
+        this.finish();
+        return false;
+      case 'end_chapter':
+        // A card between chapters; then on into `room` (at `spawn`), or the title screen without one.
+        this.endChapter = step;
+        this.finish();
+        return false;
       case 'music':
         music.play(step.song || null);
         return true;
@@ -217,6 +265,7 @@ export class ScenePlayer {
     let finished = false;
     switch (step.do) {
       case 'say':
+      case 'give':
         this.overworld.textbox.update(dt, input);
         finished = !this.overworld.textbox.isOpen;
         break;
@@ -252,7 +301,8 @@ export class ScenePlayer {
     const dx = goalX - body.x;
     const dy = goalY - body.y;
     const distance = Math.hypot(dx, dy);
-    const stride = (isPlayer ? PLAYER_SPEED : ACTOR_SPEED) * dt;
+    // `fast` hurries: twice the pace.
+    const stride = (isPlayer ? PLAYER_SPEED : ACTOR_SPEED) * (step.fast ? 2 : 1) * dt;
     // Whatever they were doing, they stop to walk.
     if (!isPlayer) body.animation = null;
     if (distance <= stride) {
@@ -317,7 +367,7 @@ export class ScenePlayer {
     // (until you come back into the room).
     const { player } = this.overworld;
     for (const { actor, prop } of this.standIns) {
-      if (actor.hidden) continue;
+      if (actor.hidden || actor.fade?.to === 0) continue;
       const [fromX, fromY] = [prop.x / T, prop.y / T];
       prop.hidden = false;
       prop.animation = actor.animation;

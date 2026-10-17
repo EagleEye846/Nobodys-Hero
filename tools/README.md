@@ -97,9 +97,16 @@ or from a copy of another room).
 - **Homes:** paint **Wood floor** and **Home wall** (papered, with panelling;
   two tiles tall like the stone walls) for inside a house. Plants, flower beds
   and other decorations sit on wood when they're surrounded by it.
+- **Gives you:** an Object can give an item the first time you press Z on it,
+  and change its look afterwards (**Looks like, once taken**).
+- **Puzzle:** make an Object a **switch** (give it a name; lantern posts and
+  levers light up or flip when on) or a **gate** (list the switch names that
+  open it, and tick **in that order** for an order puzzle).
 - **Shows up:** a character or object can be there *always*, only *until* a
   cutscene has played, or only *after* it has. That's how Taper waters her
-  flowers in the Flower Room until you meet her, then waits at home.
+  flowers in the Flower Room until you meet her, then waits at home. Rooms
+  check this again whenever a cutscene ends, so someone can already be waiting
+  further along (Taper at the door in The Way Out) instead of popping in.
 - **Stairs up / Stairs down** tiles work like doorways: paint them, then put a
   Door on them.
 - **Tall tiles** (Tall pillar, Broken pillar, Hero statue, Candelabra) rise above
@@ -139,9 +146,11 @@ Script a scene that plays in a room. Pick a cutscene at the top left or make a
   room?** to them: they step out from where they stand (no double), and stay
   wherever the scene leaves them. If they **Leave**, they're gone until you
   come back into the room.
-- **Steps** play top to bottom: say something, walk to a spot, turn to face, show
-  an emote (! ? ... or a heart), wait, move the camera, appear, leave, play a
-  sound, change the music. Click a step to select it; new steps go after it.
+- **Steps** play top to bottom: say something, walk to a spot (or hurry), turn
+  to face, show an emote (! ? ... or a heart), wait, move the camera, appear,
+  leave, play an animation, play a sound, change the music, give an item,
+  start a battle (then play one scene if the enemy was spared and another if
+  it was beaten), or end the chapter. Click a step to select it; new steps go after it.
   Leave a blank line in someone's words to start a new page.
 - **Preview** plays it in the real game engine. Press **Next (Z)** (or click the
   preview and press Z) to go on when someone is talking.

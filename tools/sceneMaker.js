@@ -8,6 +8,7 @@ import {
 import { quote, inline, comment, headerComment } from './source.js';
 import { STEP_TYPES, EMOTES, FACINGS, lookSprite } from '../src/overworld/scenePlayer.js';
 import { ANIMATION_NAMES, DEFAULT_FRAME_SECONDS } from '../src/engine/animations.js';
+import { ITEMS } from '../src/data/items.js';
 import { OverworldScene } from '../src/overworld/overworldScene.js';
 import { PORTRAITS } from '../src/data/art/portraits.js';
 import { PROP_SPRITES } from '../src/data/art/props.js';
@@ -24,7 +25,7 @@ import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from '../src/config.js';
 // The fields each kind of step keeps when it's saved.
 const STEP_FIELDS = {
   say: ['who', 'text'],
-  walk: ['who', 'to'],
+  walk: ['who', 'to', 'fast'],
   face: ['who', 'dir'],
   emote: ['who', 'emote'],
   wait: ['seconds'],
@@ -34,8 +35,11 @@ const STEP_FIELDS = {
   animate: ['who', 'animation', 'speed', 'seconds'],
   sound: ['name'],
   music: ['song'],
+  give: ['item'],
+  battle: ['enemy', 'spared', 'defeated'],
+  end_chapter: ['room', 'spawn'],
 };
-const STEP_ICONS = { say: 'chat', walk: 'person', face: 'eye', emote: 'star', wait: 'pause', camera: 'fit', appear: 'plus', leave: 'minus', animate: 'play', sound: 'note', music: 'note' };
+const STEP_ICONS = { say: 'chat', walk: 'person', face: 'eye', emote: 'star', wait: 'pause', camera: 'fit', appear: 'plus', leave: 'minus', animate: 'play', sound: 'note', music: 'note', give: 'heart', battle: 'enemy', end_chapter: 'flag' };
 
 function list(name, items, format) {
   if (!items.length) return `  ${name}: [],`;
@@ -308,6 +312,9 @@ export async function mount(root, studio) {
       animate: { do: 'animate', who: first, animation: ANIMATION_NAMES[0] ?? '' },
       sound: { do: 'sound', name: SOUND_NAMES[0] },
       music: { do: 'music', song: rooms[scene.room]?.music ?? null },
+      give: { do: 'give', item: Object.keys(ITEMS)[0] },
+      battle: { do: 'battle', enemy: Object.keys(enemies)[0] },
+      end_chapter: { do: 'end_chapter' },
     }[kind];
   }
 
@@ -387,7 +394,37 @@ export async function mount(root, studio) {
         return [who(step, { nobody: true }), el('div', { class: 'field wide' }, el('span', { class: 'field-label' }, 'Words'), area, warning)];
       }
       case 'walk':
-        return [who(step), tilePicker('Walks to', step.to, (spot) => { step.to = spot; changed({ steps: true }); })];
+        return [who(step), tilePicker('Walks to', step.to, (spot) => { step.to = spot; changed({ steps: true }); }),
+          checkbox(Boolean(step.fast), (v) => { if (v) step.fast = true; else delete step.fast; changed(); }, 'Hurry (twice as fast)')];
+      case 'give':
+        return [field('Item', select(Object.entries(ITEMS).map(([id, item]) => [id, item.name]), step.item, (v) => { step.item = v; changed(); })),
+          el('div', { class: 'field wide' }, hint('Goes in your bag, with a "You got..." box (or "your bag is full").'))];
+      case 'battle': {
+        const sceneOptions = [['', 'Nothing'], ...Object.keys(scenes).map((id) => [id, friendly(id)])];
+        return [
+          field('Enemy', select(Object.keys(enemies).map((id) => [id, friendly(enemies[id].enemy.name ?? id)]), step.enemy, (v) => { step.enemy = v; changed(); })),
+          field('Then, if spared, play', select(sceneOptions, step.spared ?? '', (v) => { if (v) step.spared = v; else delete step.spared; changed(); })),
+          field('Then, if beaten, play', select(sceneOptions, step.defeated ?? '', (v) => { if (v) step.defeated = v; else delete step.defeated; changed(); })),
+          el('div', { class: 'field wide' }, hint('The cutscene ends here and the battle starts. Afterwards the matching scene plays, and counts as seen, so "Shows up" settings in rooms can change with it.')),
+        ];
+      }
+      case 'end_chapter': {
+        const fields = [field('Then go on to', select([['', 'The title screen'], ...Object.keys(rooms).map((id) => [id, roomName(id)])], step.room ?? '', (v) => {
+          if (v) { step.room = v; step.spawn = { ...(rooms[v]?.playerStart ?? { x: 1, y: 1 }) }; } else { delete step.room; delete step.spawn; }
+          changed({ steps: true });
+        }))];
+        if (step.room) {
+          fields.push(el('div', { class: 'field' },
+            el('span', { class: 'field-label' }, 'Arriving at'),
+            el('div', { class: 'row' }, el('span', { class: 'grow tile-label' }, step.spawn ? `tile ${step.spawn.x}, ${step.spawn.y}` : 'its start'),
+              btn('flag', 'Pick on the map', async () => {
+                const spot = await pickTile(rooms[step.room], { title: `Where do you arrive in ${roomName(step.room)}?`, text: 'Click a tile.', current: step.spawn });
+                if (spot) { step.spawn = spot; changed({ steps: true }); }
+              }, { kind: 'ghost' }))));
+        }
+        fields.push(el('div', { class: 'field wide' }, hint('Shows a card between chapters (its words are in text/chapter_end.txt), then carries on into that room.')));
+        return fields;
+      }
       case 'face':
         return [who(step), field('Faces', select(FACINGS.map((f) => [f, friendly(f)]), step.dir ?? 'down', (v) => { step.dir = v; changed(); }))];
       case 'emote':

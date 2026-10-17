@@ -31,4 +31,7 @@ export const LANTERN_MOTH = {
   ],
 
   rewards: { exp: 60, coins: 45 },
+
+  // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
+  drops: [{ item: 'glow_jam', chance: 0.35 }],
 };
