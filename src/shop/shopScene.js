@@ -13,6 +13,7 @@ import { ITEMS, MAX_ITEMS, giveItem } from '../data/items.js';
 import { WEAPONS } from '../data/weapons.js';
 import { ARMOR } from '../data/armor.js';
 import { skillBonus } from '../characters/progress.js';
+import { isWorn } from '../characters/equipment.js';
 
 // A shop, laid out like Deltarune's: the shopkeeper behind their counter up
 // top, and two boxes below. The left box is the menu (BUY, TALK, EXIT) or the
@@ -50,12 +51,13 @@ export function sellValue(entry) {
   return Math.max(1, Math.floor((prices.length ? Math.max(...prices) : 60) / 2));
 }
 
-// Everything you could sell right now: the bag, and weapons and armor you aren't wearing.
+// Everything you could sell right now: the bag, and weapons and armor nobody
+// in the party is wearing.
 function sellables() {
   return [
     ...HERO_STATE.items.map((item, index) => ({ item, index })),
-    ...HERO_STATE.weapons.filter((w) => w !== HERO_STATE.weapon).map((weapon) => ({ weapon })),
-    ...HERO_STATE.armors.filter((a) => a !== HERO_STATE.armor).map((armor) => ({ armor })),
+    ...HERO_STATE.weapons.filter((w) => !isWorn('weapon', w)).map((weapon) => ({ weapon })),
+    ...HERO_STATE.armors.filter((a) => !isWorn('armor', a)).map((armor) => ({ armor })),
   ];
 }
 const TEXT_SPEED = 50; // characters per second

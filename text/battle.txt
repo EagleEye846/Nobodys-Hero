@@ -5,3 +5,34 @@
 [first_shadow]
 Danger! Your shadow peels up off the floor and stands between you and the enemy.
 It doesn't look like you. It looks like a Hero.
+
+# --- VES, on her own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
+
+# Shown in the panel while she picks what to do. One is picked at random.
+# Keep each to a line or two: it isn't split into pages.
+[vesper_turn]
+Ves shakes the snow off her umbrella. Her turn.
+
+Ves taps the brass handle twice, for luck. Her turn.
+
+Ves plants her feet. "Right. My go."
+
+Ves peers out from under her umbrella. Her turn.
+
+# Her TALK: a kind word to one enemy, which raises its MERCY a little.
+# {foe} is the enemy's name. One is picked at random. An enemy's own text
+# file can have a [vesper_talk] section of its own instead.
+[vesper_talk]
+Ves tells {foe} it's doing very well, considering.
+
+Ves asks {foe} if it's eaten. It hasn't thought about it in years.
+
+Ves holds her umbrella over {foe} for a moment. Just to keep the snow off.
+
+Ves says sorry to {foe}, for everything. It isn't sure what for. Neither is she.
+
+Ves hums a few bars of an old village song at {foe}.
+
+# Her DEFEND: the plain version of SHELTER.
+[vesper_defend]
+Ves plants her umbrella in front of you like a little wall.

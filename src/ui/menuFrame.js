@@ -5,7 +5,9 @@ import { ARMOR, armorLabels } from '../data/armor.js';
 import { ITEMS, healLabel, lightLabel } from '../data/items.js';
 import { SOUL_ABILITIES } from '../battle/soulAbilities.js';
 import { soulSprite } from '../battle/soul.js';
-import { drawText, wrapLines } from './text.js';
+import { MEMBERS } from '../characters/party.js';
+import { HERO, wielderOf, memberGearLabels } from '../characters/equipment.js';
+import { drawText, wrapLines, textWidth } from './text.js';
 
 // Shared layout for full-screen menus (EQUIP, SKILLS), in UI pixels (640x480):
 // a header, a scrolling weapon list on the left, details on the right, and a
@@ -27,6 +29,9 @@ export const MENU_COLORS = {
   magic: '#b07cff',
   spGain: '#4fe3d0',
   bad: '#ff7a8a',
+  // A party member's gear stats (see src/characters/equipment.js).
+  calm: '#ffd25e',
+  heal: '#5fc27a',
 };
 
 const BORDER = 4;
@@ -94,6 +99,10 @@ function triangle(ctx, x, y, direction) {
 
 // Name, FIGHT power, SHIFT ability and description of one weapon. `area` is { x, y, w }.
 export function drawWeaponDetails(ctx, id, area = DETAILS) {
+  if (wielderOf('weapon', id) !== HERO) {
+    drawMemberGearDetails(ctx, 'weapon', id, WEAPONS[id].name, WEAPON_TEXT, area);
+    return;
+  }
   const weapon = WEAPONS[id];
   const ability = weapon.ability ? SOUL_ABILITIES[weapon.ability] : null;
   let y = area.y;
@@ -111,6 +120,10 @@ export function drawWeaponDetails(ctx, id, area = DETAILS) {
 
 // Name, stats (DEF, MAG, SP) and description of a piece of armor. `area` is { x, y, w }.
 export function drawArmorDetails(ctx, id, area = DETAILS) {
+  if (wielderOf('armor', id) !== HERO) {
+    drawMemberGearDetails(ctx, 'armor', id, ARMOR[id].name, ARMOR_TEXT, area);
+    return;
+  }
   let y = area.y;
   drawText(ctx, ARMOR[id].name, area.x, y, { size: 30 });
   y += 34;
@@ -125,6 +138,29 @@ export function drawArmorDetails(ctx, id, area = DETAILS) {
   }
   y += 8;
   drawDescription(ctx, textSection(ARMOR_TEXT, id)[0], area, y);
+}
+
+// A party member's weapon or armor: its name, its stats (one a line, with
+// who it's for beside the first, in their colour) and its description.
+function drawMemberGearDetails(ctx, slot, id, name, textPath, area) {
+  const member = MEMBERS[wielderOf(slot, id)];
+  let y = area.y;
+  // A long name shrinks to fit the panel.
+  const size = Math.min(30, Math.floor((30 * area.w) / textWidth(ctx, name, 30)));
+  drawText(ctx, name, area.x, y + (30 - size), { size });
+  y += 34;
+  drawText(ctx, member.name, area.x + area.w, y, { size: 24, color: member.color, align: 'right' });
+  const labels = memberGearLabels(slot, id);
+  if (!labels.length) {
+    drawText(ctx, 'No bonus', area.x, y, { size: 24, color: MENU_COLORS.dim });
+    y += 26;
+  }
+  for (const label of labels) {
+    drawText(ctx, label.text, area.x, y, { size: 24, color: label.bad ? MENU_COLORS.bad : MENU_COLORS[label.color] });
+    y += 26;
+  }
+  y += 8;
+  drawDescription(ctx, textSection(textPath, id)[0], area, y);
 }
 
 // A description under the details, in the space left: smaller if it needs to be.

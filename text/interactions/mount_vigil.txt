@@ -262,3 +262,7 @@ A red banner with a golden trumpet on it, snapping in the wind. The gold is a li
 
 [cloud_lamp_night]
 A lamp, lit. Above the clouds, under the stars, its light looks very small and very brave.
+
+# A second chest on the Cloud Walk, at the top of the stair by the bridge.
+[cloud_vane_chest]
+A chest at the top of the stair, half buried. Inside, wrapped in sacking: an iron weathercock on a short handle, the kind that might fit an umbrella.

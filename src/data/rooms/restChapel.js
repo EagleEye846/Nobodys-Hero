@@ -4,7 +4,8 @@
 // candles, and a great round window over it, its middle pane left clear
 // (nobody knew what the Hero's face would look like). The spot at the head
 // of the runner, before the altar, is where Ves kneels, praying
-// (text/npcs/vesper.txt). Talk to her and she joins you.
+// for her mother. Walking up the aisle plays her scene
+// (src/data/scenes/vesInTheChapel.js), and she joins you.
 // Tile key (see src/overworld/tileset.js):
 //   #  wall top (solid)                           h  papered wall with wood panelling (solid)
 //   o  wooden floorboards                         r  rug
@@ -18,9 +19,12 @@ export const REST_CHAPEL = {
   // on arriving from another region, and picks the battle background.
   area: 'rest',
   // The song that plays here (a file in src/data/music/).
-  music: 'rest',
+  music: 'chapel',
   // Indoors.
   indoors: true,
+  // Lit by candles (see src/overworld/lamplight.js), and dimmer between them
+  // than the village's houses, so the altar and the windows glow.
+  lamplight: { shade: 0.44 },
 
   tiles: [
     '###############',
@@ -51,7 +55,10 @@ export const REST_CHAPEL = {
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
-  cutscenes: [],
+  cutscenes: [
+    // Partway up the aisle: Ves, praying (src/data/scenes/vesInTheChapel.js).
+    { x: 1, y: 13, w: 13, h: 1, scene: 'ves_in_the_chapel' },
+  ],
 
   // Things you can press Z on. `text` names a section of this room's text file;
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
@@ -67,7 +74,7 @@ export const REST_CHAPEL = {
     { sprite: 'book_stand', x: 2, y: 4, text: 'chapel_prayers' },
     { sprite: 'hymn_board', x: 12, y: 4, text: 'chapel_hymns' },
     // Ves, kneeling at the head of the runner before the altar, in the middle
-    // of the front row, praying. Talk to her and she joins the party.
+    // of the front row, praying. The scene up the aisle has her join you.
     { sprite: 'vesper', x: 7, y: 5, npc: 'vesper', join: 'vesper' },
     // The pews, either side of the aisle; the front row is reserved.
     { sprite: 'pew_reserved', x: 2, y: 6, text: 'chapel_pew_front' },

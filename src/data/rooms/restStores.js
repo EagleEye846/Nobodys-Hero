@@ -16,6 +16,9 @@ export const REST_STORES = {
   music: 'rest',
   // Indoors.
   indoors: true,
+  // No fire in here (the stock would catch), so it's only a little dim, even
+  // at night (see src/overworld/lamplight.js).
+  lamplight: { shade: 0.12, nightShade: 0.08 },
 
   tiles: [
     '##############',

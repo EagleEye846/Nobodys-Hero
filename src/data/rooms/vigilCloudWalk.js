@@ -101,6 +101,8 @@ export const VIGIL_CLOUD_WALK = {
     { sprite: 'banner_pole', x: 5, y: 16, text: 'cloud_banner' },
     { sprite: 'banner_pole', x: 15, y: 16, text: 'cloud_banner' },
     { sprite: 'chough', x: 22, y: 14, text: 'ridge_chough', walkable: true },
+    // An umbrella handle for Ves, at the top of the stair by the bridge.
+    { sprite: 'chest', x: 42, y: 22, text: 'cloud_vane_chest', gives: 'weathervane_hilt', taken: { sprite: 'chest_open', text: 'chest_empty' } },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

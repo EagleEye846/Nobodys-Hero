@@ -23,10 +23,12 @@ import { Climb, findClimb } from './climbing.js';
 import { drawVista } from './vista.js';
 import { drawSnow, drawCirclingBirds, drawWisps } from './weather.js';
 import { daylight } from './daylight.js';
+import { isLamplit, roomLights, ambientFor, flickerAt, skyColor, holeSprite, glowSprite } from './lamplight.js';
 import { heroFrame } from '../characters/hero.js';
 import { healHeroFully } from '../characters/progress.js';
 import { Follower } from './follower.js';
-import { MEMBERS, partyIds, joinParty } from '../characters/party.js';
+import { MEMBERS, partyIds, joinParty, inParty } from '../characters/party.js';
+import { wielderOf, HERO } from '../characters/equipment.js';
 import { ITEMS, giveItem } from '../data/items.js';
 import { ARMOR } from '../data/armor.js';
 import { WEAPONS } from '../data/weapons.js';
@@ -36,6 +38,15 @@ import { burnCandle, lightRadius } from '../data/candles.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { skillBonus } from '../characters/progress.js';
 import { CreditsScene } from '../title/creditsScene.js';
+import { recordChapterStart } from '../state/chapters.js';
+import { WindGeyser, Updraft, GeyserRide, canRide, hopPath, hopAt, VES } from './windGeyser.js';
+
+// Without Ves, a wind geyser holds you off: within this many pixels of it the
+// wind pushes you away, from gently (min) to harder than you can walk (max),
+// in pixels a second.
+const WIND_HOLD_RADIUS = 28;
+const WIND_HOLD_MIN = 25;
+const WIND_HOLD_MAX = 210;
 
 // Enemies this close (in world pixels) to the one you touch join the fight, up to MAX_GROUP in all.
 const GROUP_RADIUS = 64;
@@ -79,6 +90,9 @@ const REST_SLEEP_SECONDS = 1.6;
 // exists in src/data/scenes/ (a bed can name its own with `dream`).
 const DEFAULT_DREAM = 'inn_dream';
 
+// Whether a light at a screen point, `r` wide, shows on screen at all.
+const onScreen = ({ x, y, r }) => x + r > 0 && x - r < SCREEN_WIDTH && y + r > 0 && y - r < SCREEN_HEIGHT;
+
 // A soft darkening toward the screen's edges, so the Ruins feel close and old.
 let vignetteCanvas = null;
 function vignette() {
@@ -121,6 +135,13 @@ export class OverworldScene {
     }
     // Whoever's in the party arrives with you.
     this.followers = partyIds().map((id) => new Follower(id, this.player.x, this.player.y));
+    // Wind geysers (windGeyser.js). Carried up one into this room, you drift
+    // down onto your spawn, hanging off Ves's boot.
+    this.geysers = (roomData.geysers ?? []).map((data) => new WindGeyser(data));
+    // Updrafts: small ones that toss you to another tile in this room.
+    this.updrafts = (roomData.gusts ?? []).map((data) => new Updraft(data));
+    this.hop = null;
+    this.ride = arrival.geyser && canRide() ? new GeyserRide({ landing: { x: this.player.x, y: this.player.y } }) : null;
     // Weather and the view off the mountain are drawn from the room's data.
     this.time = 0;
     // Small things that make the cold feel cold: footprints you leave in the
@@ -173,6 +194,29 @@ export class OverworldScene {
 
     if (this.resting) {
       this.updateRest(dt, input);
+      return;
+    }
+
+    // On the wind: nobody does anything until it sets you down (or carries
+    // you off into the room above).
+    if (this.ride) {
+      this.ride.update(dt);
+      this.followCamera(this.ride.focus);
+      if (!this.ride.done) return;
+      const geyser = this.ride.geyser;
+      this.ride = null;
+      if (geyser) {
+        if (!ROOMS[geyser.to]) throw new Error(`A wind geyser in ${this.roomData.id} blows to unknown room '${geyser.to}'`);
+        this.game.changeScene(new OverworldScene(ROOMS[geyser.to], geyser.spawn, this.roomData.area, { geyser: true }));
+        return;
+      }
+      for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y + 2);
+    }
+
+    // Tossed by an updraft: carried along the arc until you land.
+    if (this.hop) {
+      this.updateHop(dt);
+      this.followCamera(this.player);
       return;
     }
 
@@ -236,6 +280,8 @@ export class OverworldScene {
           // end of a chapter saves by itself, ready to start the next one.
           WORLD_STATE.chapter = (WORLD_STATE.chapter ?? 1) + 1;
           if (next) saveGame(next.id, endChapter.spawn ?? next.playerStart);
+          // Remembered for chapter select, to start this chapter again later.
+          recordChapterStart(WORLD_STATE.chapter);
           const goOn = next
             ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, this.roomData.area)
             : this.game.home;
@@ -276,6 +322,7 @@ export class OverworldScene {
       if (this.player.landedThisFrame) this.handleLanding();
       if (input.wasPressed('confirm') && !this.player.isAirborne) this.interact();
       this.checkDoors();
+      this.checkGeysers(dt);
       this.checkCutscenes();
 
       const foe = this.npcs.find((npc) => npc.touches(this.player));
@@ -573,6 +620,78 @@ export class OverworldScene {
     this.cutscene = new ScenePlayer(scene, this);
   }
 
+  // Stepping into a wind geyser: with Ves, up you go; without her, it shoves
+  // you straight back out (and says why, the first time).
+  checkGeysers(dt) {
+    if (this.player.isAirborne || this.doorway || this.ride || this.hop) return;
+    // An updraft takes anyone, Ves or not.
+    const [ux, uy] = this.player.tilePosition();
+    const updraft = this.updrafts.find((u) => u.covers(ux, uy));
+    if (updraft) {
+      const to = { x: updraft.drop.x * T + T / 2, y: (updraft.drop.y + 1) * T - 2 };
+      this.hop = hopPath({ x: this.player.x, y: this.player.y }, to, this.player.ground, this.room.raiseAt(updraft.drop.x, updraft.drop.y));
+      sfx('flare');
+      return;
+    }
+    if (canRide()) {
+      const [tx, ty] = this.player.tilePosition();
+      const geyser = this.geysers.find((g) => g.covers(tx, ty));
+      if (geyser) this.ride = new GeyserRide({ geyser, from: { x: this.player.x, y: this.player.y } });
+      return;
+    }
+    // Without her, the wind holds you off: a gentle push away from the column
+    // that grows the closer you get, until it's stronger than you can walk,
+    // and snow blowing past your boots. No words: you just can't get in.
+    for (const geyser of this.geysers) {
+      const dx = this.player.x - geyser.x;
+      const dy = this.player.y - geyser.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance >= WIND_HOLD_RADIUS) continue;
+      const k = 1 - distance / WIND_HOLD_RADIUS;
+      const speed = WIND_HOLD_MIN + (WIND_HOLD_MAX - WIND_HOLD_MIN) * k * k;
+      const [ux, uy] = distance > 1 ? [dx / distance, dy / distance] : [0, 1];
+      // The hero moves in whole pixels, so the push builds up between frames.
+      this.windCarry ??= { x: 0, y: 0 };
+      this.windCarry.x += ux * speed * dt;
+      this.windCarry.y += uy * speed * dt;
+      const stepX = Math.trunc(this.windCarry.x);
+      const stepY = Math.trunc(this.windCarry.y);
+      this.windCarry.x -= stepX;
+      this.windCarry.y -= stepY;
+      if (stepX && !this.player.collidesAt(this.room, this.player.x + stepX, this.player.y)) this.player.x += stepX;
+      if (stepY && !this.player.collidesAt(this.room, this.player.x, this.player.y + stepY)) this.player.y += stepY;
+      this.windSnowIn = (this.windSnowIn ?? 0) - dt;
+      if (this.windSnowIn <= 0) {
+        this.windSnowIn = 0.1;
+        for (let i = 0; i < 2; i++) {
+          const spread = (Math.random() - 0.5) * 1.2;
+          const vx = (ux * Math.cos(spread) - uy * Math.sin(spread)) * (40 + Math.random() * 30);
+          const vy = (ux * Math.sin(spread) + uy * Math.cos(spread)) * (40 + Math.random() * 30) - 6;
+          this.particles.push({ kind: 'snow', x: this.player.x, y: this.player.y - 2, vx, vy, life: 0.4 + Math.random() * 0.3, age: 0 });
+        }
+      }
+    }
+  }
+
+  // Along the updraft's arc. The hero's own height (`z`, as in a jump) does
+  // the drawing; landing puts them on whatever floor is at the far end.
+  updateHop(dt) {
+    this.hop.t += dt;
+    const at = hopAt(this.hop);
+    this.player.x = Math.round(at.x);
+    this.player.y = Math.round(at.y);
+    this.player.ground = at.base;
+    this.player.z = Math.max(0.01, at.z);
+    this.player.velocityZ = 0;
+    if (!at.done) return;
+    this.player.ground = this.hop.floorTo;
+    this.player.z = 0;
+    this.player.landedThisFrame = true;
+    this.hop = null;
+    for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y + 2);
+    if (this.onSnow()) this.kickSnow();
+  }
+
   // Stepping onto a door's tiles starts the fade into the next room.
   checkDoors() {
     if (this.player.isAirborne) return;
@@ -707,7 +826,16 @@ export class OverworldScene {
     if (!thing) throw new Error(`${this.roomData.id}: a ${prop.look} gives unknown thing '${id}'`);
     const { name } = thing;
     let got = true;
-    if (gear) {
+    // A party member's own weapon or armor (Ves's umbrella parts) says who it's for.
+    const slot = armor ? 'armor' : weapon ? 'weapon' : null;
+    const wielder = slot ? wielderOf(slot, id) : HERO;
+    if (wielder !== HERO) {
+      const list = slot === 'armor' ? HERO_STATE.armors : HERO_STATE.weapons;
+      if (!list.includes(id)) list.push(id);
+      pages.push(inParty(wielder)
+        ? `You got the ${name}! It's for ${MEMBERS[wielder].name}. Put it on from EQUIP (press C).`
+        : `You got the ${name}. It isn't made for you, but somebody might have a use for it.`);
+    } else if (gear) {
       giveGear(id);
       pages.push(...textSection(GEAR_TEXT, `got_${id}`));
     } else if (armor) {
@@ -862,7 +990,9 @@ export class OverworldScene {
     // Draw lower things last so the player can stand in front of or behind
     // others (footprints lowest of all).
     const props = this.room.props.filter((prop) => this.inLight(prop));
-    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.followers, ...(this.cutscene?.drawables ?? []), this.player].sort((a, b) => a.sortY - b.sortY);
+    // On a geyser ride, the ride draws the hero and Ves itself.
+    const people = this.ride ? [this.ride, ...this.followers.filter((follower) => follower.id !== VES)] : [...this.followers, this.player];
+    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.geysers, ...this.updrafts, ...(this.cutscene?.drawables ?? []), ...people].sort((a, b) => a.sortY - b.sortY);
     if (this.spire) {
       this.drawSpire(ctx);
       for (const entity of entities) this.drawOnSpire(ctx, entity);
@@ -881,6 +1011,7 @@ export class OverworldScene {
     // High up, wisps of cloud blow across between you and everything.
     if (this.roomData.vista && (this.roomData.vista.altitude ?? 0) > 0.55) drawWisps(ctx, this.time, Math.min(1, ((this.roomData.vista.altitude ?? 0) - 0.55) * 2.5));
     if (this.underSky) this.drawTimeOfDay(ctx);
+    else if (this.lamplit) this.drawLamplight(ctx, false);
     if (this.roomData.weather) drawSnow(ctx, this.roomData.weather, this.time, this.roomData.wind ?? 1);
     if (this.roomData.dark) this.drawDarkness(ctx);
     this.cutscene?.drawOverlay(ctx, this.camera);
@@ -898,6 +1029,7 @@ export class OverworldScene {
     }
     if (this.doorway) this.drawBlack(ctx, this.doorway.t / DOOR_FADE_SECONDS);
     if (this.fadeIn > 0) this.drawBlack(ctx, this.fadeIn / DOOR_FADE_SECONDS);
+    if (this.ride) this.drawBlack(ctx, this.ride.blackout);
 
     if (this.battleFlash && Math.floor(this.battleFlash.t / 0.12) % 2 === 0) {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
@@ -1029,45 +1161,100 @@ export class OverworldScene {
 
   // Dusk and night, outdoors: the light goes gold, then the dark comes down
   // in a blue, and every lamp, window, fire and crystal keeps a pool of light.
+  // A lamplit place (the village) does it its own way: see drawLamplight.
   drawTimeOfDay(ctx) {
     const { night, dusk } = daylight();
     if (dusk > 0.02) {
       ctx.fillStyle = `rgba(255, 168, 90, ${(dusk * 0.11).toFixed(3)})`;
       ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
-    if (night > 0.02) this.drawShade(ctx, night * NIGHT_SHADE, NIGHT_TINT, 26);
+    if (this.lamplit) this.drawLamplight(ctx, true);
+    else if (night > 0.02) this.drawShade(ctx, night * NIGHT_SHADE, NIGHT_TINT, 26);
+  }
+
+  // Whether this room is lit by its own lamps and fires (see lamplight.js).
+  // Never a dark room: lamplight doesn't burn your candle.
+  get lamplit() {
+    this.isLamplit ??= isLamplit(this.roomData);
+    return this.isLamplit;
+  }
+
+  // Where a point in the room lands on screen, and how big a light of
+  // `radius` there looks. Round the spire, lights sit where the rock bends to
+  // (null if it's round the back).
+  toScreen(x, y, radius) {
+    if (!this.spire) return { x: x - this.camera.x, y: y - this.camera.y, r: radius };
+    const point = this.project(x);
+    if (point.scale <= 0) return null;
+    return { x: point.x, y: y - this.camera.y, r: radius * (0.5 + 0.5 * point.scale) };
   }
 
   // Shade over the whole screen (`alpha` of the colour `tint`), with soft holes
-  // where light reaches: the room's lights, and a hole `ownRadius` wide round
-  // you. Round the spire, the lights sit where the rock bends to.
-  drawShade(ctx, alpha, tint, ownRadius) {
+  // where light reaches: the room's lights (or the `lights` given, each as
+  // { x, y, radius } and how much of the shade it lifts, `cut`), and a hole
+  // `ownRadius` wide round you. The hole is one picture, drawn once and
+  // scaled, so a room full of lights costs next to nothing.
+  drawShade(ctx, alpha, tint, ownRadius, lights = this.room.lightSources()) {
     darkCanvas ??= Object.assign(document.createElement('canvas'), { width: SCREEN_WIDTH, height: SCREEN_HEIGHT });
     const dark = darkCanvas.getContext('2d');
     dark.globalCompositeOperation = 'source-over';
+    dark.globalAlpha = 1;
     dark.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     dark.fillStyle = `rgba(${tint}, ${alpha.toFixed(3)})`;
     dark.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     dark.globalCompositeOperation = 'destination-out';
-    const lights = [...this.room.lightSources(), { ...this.lightPoint, radius: ownRadius }];
-    for (const { x, y, radius } of lights) {
-      let cx = x - this.camera.x;
-      let r = radius;
-      if (this.spire) {
-        const point = this.project(x);
-        if (point.scale <= 0) continue;
-        cx = point.x;
-        r = radius * (0.5 + 0.5 * point.scale);
-      }
-      const cy = y - this.camera.y;
-      const hole = dark.createRadialGradient(cx, cy, r * 0.15, cx, cy, r);
-      hole.addColorStop(0, 'rgba(0, 0, 0, 1)');
-      hole.addColorStop(0.45, 'rgba(0, 0, 0, 0.75)');
-      hole.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      dark.fillStyle = hole;
-      dark.fillRect(cx - r, cy - r, r * 2, r * 2);
+    const hole = holeSprite();
+    for (const { x, y, radius, cut = 1 } of [...lights, { ...this.lightPoint, radius: ownRadius }]) {
+      const point = radius > 0 && this.toScreen(x, y, radius);
+      if (!point || !onScreen(point)) continue;
+      dark.globalAlpha = Math.min(1, cut);
+      dark.drawImage(hole, point.x - point.r, point.y - point.r, point.r * 2, point.r * 2);
     }
+    dark.globalAlpha = 1;
     ctx.drawImage(darkCanvas, 0, 0);
+  }
+
+  // Lamplight (see lamplight.js): the room dimmed between its lights (by
+  // night outdoors, always a little indoors), then each light drawn in. A
+  // pool lifts the shade and tints what it falls on with its colour
+  // (multiplied, so white snow goes gold rather than just brighter); a bloom
+  // is the flame's own glow, added on top. Flames waver; glass doesn't.
+  drawLamplight(ctx, outdoors) {
+    const { night } = daylight();
+    const { shade, tint, lit } = ambientFor(this.roomData, outdoors, night);
+    const lights = roomLights(this.room, outdoors);
+    const sky = skyColor(night);
+    // Sky windows let in more by night (moonlight off the snow) than they
+    // seem to by day, against a room lit by fires.
+    const strengthOf = (l) => l.strength * flickerAt(l, this.time) * (l.sky ? 0.5 + night : lit);
+    if (shade > 0.01) {
+      const holes = lights.filter((l) => l.pool).map((l) => ({ x: l.x, y: l.y, radius: l.pool * 0.9, cut: strengthOf(l) * 1.1 }));
+      // Your own little light (so you never vanish in the dark) is faint here:
+      // the lamps do the lighting.
+      holes.push({ ...this.lightPoint, radius: 20, cut: 0.3 });
+      this.drawShade(ctx, shade, tint, 0, holes);
+    }
+    ctx.save();
+    // Light is soft: let the round pictures blend as they're scaled.
+    ctx.imageSmoothingEnabled = true;
+    for (const l of lights) {
+      const strength = strengthOf(l);
+      if (strength < 0.01) continue;
+      const point = this.toScreen(l.x, l.y, l.pool ?? l.bloom);
+      if (!point || !onScreen(point)) continue;
+      const sprite = glowSprite(l.sky ? sky : l.color);
+      const { x, y, r } = point;
+      if (l.pool && !l.sky) {
+        // Firelight tints what it falls on; moonlight only brightens it.
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.globalAlpha = Math.min(1, strength);
+        ctx.drawImage(sprite, x - r, y - r, r * 2, r * 2);
+      }
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = Math.min(1, strength * (!l.pool ? 0.6 : l.sky ? 0.7 : 0.16));
+      ctx.drawImage(sprite, x - r, y - r, r * 2, r * 2);
+    }
+    ctx.restore();
   }
 
   // The dark, with soft holes where light reaches: your own (flickering), and

@@ -9,8 +9,9 @@ import * as taperBlocks from './taperBlocks.js';
 import * as taperDefeated from './taperDefeated.js';
 import * as taperFollows from './taperFollows.js';
 import * as taperSpared from './taperSpared.js';
+import * as vesInTheChapel from './vesInTheChapel.js';
 
-const MODULES = [exampleScene, keeperOnTheShoulder, leaveRuins, meetTaper, meetingTheKeeper, taperBlocks, taperDefeated, taperFollows, taperSpared];
+const MODULES = [exampleScene, keeperOnTheShoulder, leaveRuins, meetTaper, meetingTheKeeper, taperBlocks, taperDefeated, taperFollows, taperSpared, vesInTheChapel];
 
 // Every cutscene, by its id. Rooms' cutscene triggers refer to them by these ids.
 export const SCENES = Object.fromEntries(

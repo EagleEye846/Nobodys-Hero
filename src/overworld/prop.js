@@ -29,8 +29,11 @@ export class Prop {
     sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
     gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
     walkable = false, solidSides = 0, light = null, seenInLight = false, notice = false, grapple = false,
-    rest = false, dream = null, sound = null, join = null, nightText = null, wrath = null,
+    rest = false, dream = null, sound = null, join = null, nightText = null, wrath = null, glow = undefined,
   }) {
+    // In a lamplit room (see src/overworld/lamplight.js): the light it gives
+    // off, if not the usual for its sprite (PROP_GLOWS), or `false` for none.
+    this.glow = glow === false ? [] : glow;
     // Something you may only use once a visit (the great bell: ONE ring). Use it
     // again and these words (a section of the room's text file) play, then it's
     // game over.

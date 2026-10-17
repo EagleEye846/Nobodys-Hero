@@ -2,6 +2,7 @@
 // hand. Add or remove files here and the Studio server rebuilds it.
 import * as battleTheme from './battleTheme.js';
 import * as cavesTheme from './cavesTheme.js';
+import * as chapelTheme from './chapelTheme.js';
 import * as creditsTheme from './creditsTheme.js';
 import * as prophecyTheme from './prophecyTheme.js';
 import * as restTheme from './restTheme.js';
@@ -13,10 +14,11 @@ import * as taperBattleTheme from './taperBattleTheme.js';
 import * as taperFarewellTheme from './taperFarewellTheme.js';
 import * as taperTheme from './taperTheme.js';
 import * as titleTheme from './titleTheme.js';
+import * as vesTheme from './vesTheme.js';
 import * as vigilTheme from './vigilTheme.js';
 import * as waltzTheme from './waltzTheme.js';
 
-const MODULES = { 'battle': battleTheme, 'caves': cavesTheme, 'credits': creditsTheme, 'prophecy': prophecyTheme, 'rest': restTheme, 'ruins': ruinsTheme, 'shop': shopTheme, 'skills': skillsTheme, 'stair': stairTheme, 'taperBattle': taperBattleTheme, 'taperFarewell': taperFarewellTheme, 'taper': taperTheme, 'title': titleTheme, 'vigil': vigilTheme, 'waltz': waltzTheme };
+const MODULES = { 'battle': battleTheme, 'caves': cavesTheme, 'chapel': chapelTheme, 'credits': creditsTheme, 'prophecy': prophecyTheme, 'rest': restTheme, 'ruins': ruinsTheme, 'shop': shopTheme, 'skills': skillsTheme, 'stair': stairTheme, 'taperBattle': taperBattleTheme, 'taperFarewell': taperFarewellTheme, 'taper': taperTheme, 'title': titleTheme, 'ves': vesTheme, 'vigil': vigilTheme, 'waltz': waltzTheme };
 
 // Every song, keyed by its file name without "Theme" (battleTheme.js is 'battle').
 export const SONGS = Object.fromEntries(

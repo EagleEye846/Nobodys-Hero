@@ -1,5 +1,5 @@
 import { TILE_SIZE as T } from '../config.js';
-import { MEMBERS, memberSprites } from '../characters/party.js';
+import { MEMBERS, memberSprites, memberFrames } from '../characters/party.js';
 
 // A party member following the hero round the world. They walk the path the
 // hero walked, a little way behind, so they come round corners rather than
@@ -13,12 +13,21 @@ const GAP = 22;
 // Points closer together than this aren't worth remembering.
 const TRAIL_STEP = 2;
 const BOB_SECONDS = 0.2;
+// With walking frames: how long each step frame shows, walking and running.
+const STEP_SECONDS = 0.18;
+const RUN_STEP_SECONDS = 0.12;
+// Faster than this (pixels a second) and they're running to keep up.
+const RUN_PACE = 85;
 
 export class Follower {
   constructor(id, x, y) {
     this.id = id;
     this.member = MEMBERS[id];
     this.sprites = memberSprites(id);
+    this.frames = memberFrames(id);
+    // Which way they're heading, for members with frames for each way.
+    this.dir = 'down';
+    this.running = false;
     this.x = x;
     this.y = y;
     this.facing = 1;
@@ -84,14 +93,30 @@ export class Follower {
       this.y += (dy / distance) * pace;
       this.walking = true;
     }
+    this.running = this.walking && (hero.running || pace / dt > RUN_PACE);
     if (Math.abs(dx) > 0.5) this.facing = Math.sign(dx);
+    if (distance > 0.5) this.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+  }
+
+  // The frame to show: with walking frames, the way they're heading, stepping
+  // or running; otherwise their one sprite, turned left or right.
+  get frame() {
+    if (!this.frames) return this.facing < 0 ? this.sprites.left : this.sprites.right;
+    if (!this.walking) return this.frames[`${this.dir}Idle`];
+    if (this.running) {
+      const pass = Math.floor(this.time / RUN_STEP_SECONDS) % 2;
+      return this.frames[`${this.dir}${pass ? 'Pass' : 'Stride'}`];
+    }
+    const step = Math.floor(this.time / STEP_SECONDS) % 2;
+    return this.frames[`${this.dir}${step ? 'Step' : 'Idle'}`];
   }
 
   draw(ctx, camera) {
     if (this.hidden) return;
-    const sprite = this.facing < 0 ? this.sprites.left : this.sprites.right;
+    const sprite = this.frame;
     const x = Math.round(this.x) - Math.floor(sprite.width / 2) - camera.x;
-    const bob = this.walking && Math.floor(this.time / BOB_SECONDS) % 2 ? 1 : 0;
+    // Members without step frames bob along instead.
+    const bob = !this.frames && this.walking && Math.floor(this.time / BOB_SECONDS) % 2 ? 1 : 0;
     const y = Math.round(this.y) - sprite.height - bob - camera.y;
     ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
     ctx.fillRect(Math.round(this.x) - 5 - camera.x, Math.round(this.y) - 3 - camera.y, 10, 3);

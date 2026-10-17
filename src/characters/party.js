@@ -1,6 +1,8 @@
 import { makeSprite, flipHorizontal } from '../engine/sprite.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { HERO_STATE } from './heroState.js';
+import { giveStartingGear } from './equipment.js';
+import { VES_FRAMES } from '../data/art/vesper.js';
 
 // Friends who travel with the hero. A member who's joined (HERO_STATE.party)
 // follows you round the world (src/overworld/follower.js: they vanish while
@@ -21,8 +23,10 @@ export const MEMBERS = {
     id: 'vesper',
     name: 'VES',
     color: '#9a7ad8',
-    // Their prop sprite (src/data/art/props.js), used in the world and in battle.
-    look: 'vesper',
+    // Their prop sprite (src/data/art/props.js), used where there's no frame for it.
+    look: 'vesper_stand',
+    // Walking and running frames, like the hero's (see memberFrames).
+    frames: VES_FRAMES,
     // A portrait id from src/data/art/portraits.js, when they have one.
     portrait: 'vesper',
     // HP: for show, for now. Enemies only ever aim at the hero's shadow.
@@ -30,15 +34,18 @@ export const MEMBERS = {
     hpPerLevel: 5,
     // Skill points they get with every level the hero gains.
     skillPointsPerLevel: 1,
-    // What they can do on their turn. Each has a label, what it does, and
-    // what the panel says. Effects: calmAll (MERCY for every enemy), sp
-    // (spell power for the hero), heal (hero HP), guard (halves the next
-    // attack), strikeAll (damage to every enemy).
+    // On their turn they get a menu like yours (FIGHT, TALK, SPELLS, ITEMS,
+    // DEFEND; see battleScene.js). FIGHT's power comes from their own weapon
+    // (src/characters/equipment.js). These are their SPELLS: each has a label,
+    // a `cost` in the SP you share (0 for none), what it does, and what the
+    // panel says. Effects: calmAll (MERCY for every enemy), sp (spell power
+    // for the hero), heal (hero HP), guard (halves the next attack, and takes
+    // a little more off each hit), strikeAll (damage to every enemy).
     commands: [
-      { label: 'SHELTER', guard: true, text: 'Ves opens her umbrella over you and holds it steady.\nThe next attack will do half the damage.' },
-      { label: 'FLURRY', calmAll: 10, text: 'Ves twirls her umbrella. Snow swirls round everyone, soft and slow.' },
-      { label: 'SLEET', strikeAll: 8, text: 'Ves points her umbrella. A sting of sleet sweeps across the room!' },
-      { label: 'ZEPHYR', heal: 8, sp: 10, text: 'Ves calls a warm wind. It smells of hearths and spring.' },
+      { label: 'SHELTER', cost: 6, guard: true, text: 'Ves opens her umbrella over you and holds it steady.\nThe next attack will do half the damage.' },
+      { label: 'FLURRY', cost: 12, calmAll: 10, text: 'Ves twirls her umbrella. Snow swirls round everyone, soft and slow.' },
+      { label: 'SLEET', cost: 16, strikeAll: 8, text: 'Ves points her umbrella. A sting of sleet sweeps across the room!' },
+      { label: 'ZEPHYR', cost: 0, heal: 8, sp: 10, text: 'Ves calls a warm wind. It smells of hearths and spring.' },
     ],
   },
 };
@@ -58,6 +65,8 @@ export function joinParty(id) {
   if (HERO_STATE.party.includes(id)) return false;
   HERO_STATE.party.push(id);
   HERO_STATE.memberPoints[id] ??= 1;
+  // They come with their own weapon and armor, already on.
+  giveStartingGear(id);
   return true;
 }
 
@@ -81,11 +90,31 @@ export function spendMemberPoints(id, cost) {
 }
 
 const sprites = new Map();
-// A member's sprite, facing right and left.
+// A member's sprite, facing right and left (in battle they face right).
 export function memberSprites(id) {
   if (!sprites.has(id)) {
-    const right = makeSprite(PROP_SPRITES[MEMBERS[id].look], PROP_PALETTE);
-    sprites.set(id, { right, left: flipHorizontal(right) });
+    const frames = memberFrames(id);
+    const right = frames?.rightIdle ?? makeSprite(PROP_SPRITES[MEMBERS[id].look], PROP_PALETTE);
+    sprites.set(id, { right, left: frames?.leftIdle ?? flipHorizontal(right) });
   }
   return sprites.get(id);
+}
+
+const frameSets = new Map();
+// A member's walking and running frames, if they have them (`frames`: rows
+// in the prop palette, named like the hero's: downIdle, leftStep, upStride...),
+// with the right-facing ones made by mirroring the left. Null if they don't.
+export function memberFrames(id) {
+  if (!frameSets.has(id)) {
+    const rows = MEMBERS[id].frames;
+    let set = null;
+    if (rows) {
+      set = Object.fromEntries(Object.entries(rows).map(([name, frame]) => [name, makeSprite(frame, PROP_PALETTE)]));
+      for (const [name, sprite] of Object.entries(set)) {
+        if (name.startsWith('left')) set[`right${name.slice(4)}`] = flipHorizontal(sprite);
+      }
+    }
+    frameSets.set(id, set);
+  }
+  return frameSets.get(id);
 }

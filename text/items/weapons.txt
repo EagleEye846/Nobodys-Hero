@@ -55,3 +55,18 @@ A climber's pick with a worn leather grip, found in the caves inside the spire. 
 
 [herald_trumpet]
 A herald's brass trumpet, polished for a hundred years. One blast and everything stops to listen (Toll).
+
+# Ves's umbrella parts. Only she can use them (see `wielder` in
+# src/data/weapons.js); the menus show her stats by themselves.
+[lamplighters_handle]
+The umbrella that came down on the wind: a brass hook worn smooth by her mother's hand, and the patched plum canopy. Ves won't hear a word against either.
+
+[bellwire_ribs]
+Umbrella ribs restrung with old wire from the belltower. They ring when she swings, and the sleet comes off them meaning it. Snow gets in the way.
+
+[hearthwood_crook]
+A handle carved from an offcut of the inn's hearth beam. Greta swears it's still warm. The wind it calls certainly is.
+
+[weathervane_hilt]
+An iron weathercock off a long-gone roof. It always turns into the wind.
+With it, SHELTER brings a gust that slows the next attack.

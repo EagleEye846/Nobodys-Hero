@@ -7,6 +7,7 @@ import { peekSave, eraseSave, formatPlayTime } from '../state/saveGame.js';
 import { ROOMS } from '../data/rooms/index.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, textWidth } from '../ui/text.js';
+import { ChapterSelectScene } from './chapterSelectScene.js';
 
 // "LANTERN HALL" or "taper_home" -> "Lantern Hall"
 const friendlyName = (name) => String(name).toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
@@ -53,16 +54,19 @@ export class PressStartScene {
 // from the last save point. Its words live in text/title.txt.
 export class TitleScene {
   // `startGame()` continues from the save (or starts fresh without one);
-  // `newGame()` starts over from the beginning.
-  constructor(startGame, newGame = startGame) {
+  // `newGame()` starts over from the beginning; `playChapter(room, spawn)`
+  // starts a chapter picked from CHAPTERS.
+  constructor(startGame, newGame = startGame, playChapter = null) {
     this.startGame = startGame;
     this.newGame = newGame;
+    this.playChapter = playChapter;
     this.time = 0;
     this.title = textSection(TEXT_FILE, 'title')[0];
     this.prompt = textSection(TEXT_FILE, 'new_game')[0];
     // With a save there's a card for it, and a choice: carry on, or start over.
     this.save = peekSave();
-    this.options = ['CONTINUE', 'NEW GAME'];
+    // CHAPTERS: start any chapter you've reached again (src/state/chapters.js).
+    this.options = playChapter ? ['CONTINUE', 'NEW GAME', 'CHAPTERS'] : ['CONTINUE', 'NEW GAME'];
     this.cursor = 0;
     this.confirming = false;
   }
@@ -99,7 +103,11 @@ export class TitleScene {
     if (this.cursor !== before) sfx('move');
     if (input.wasPressed('confirm')) {
       if (this.cursor === 0) this.begin(this.startGame);
-      else {
+      else if (this.options[this.cursor] === 'CHAPTERS') {
+        sfx('select');
+        const title = () => new TitleScene(this.startGame, this.newGame, this.playChapter);
+        this.game.changeScene(new ChapterSelectScene(title, this.playChapter));
+      } else {
         sfx('select');
         this.confirming = true;
       }
@@ -133,8 +141,10 @@ export class TitleScene {
       drawText(ctx, 'Z: yes, start over     X: no', UI_WIDTH / 2, optionsY + 30, { size: 24, align: 'center', color: '#c9c2e0', outline: '#07040c' });
       return;
     }
+    // Where each option starts, from the middle: two side by side, or three across.
+    const spots = this.options.length > 2 ? [-250, -70, 110] : [-150, 40];
     this.options.forEach((label, i) => {
-      const x = UI_WIDTH / 2 + (i === 0 ? -150 : 40);
+      const x = UI_WIDTH / 2 + spots[i];
       const selected = i === this.cursor;
       if (selected) ctx.drawImage(soulSprite(), x - 26, optionsY + 8);
       drawText(ctx, label, x, optionsY, { size: 32, color: selected ? '#ffe14d' : '#ffffff', outline: '#07040c' });

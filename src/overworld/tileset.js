@@ -277,6 +277,12 @@ function drawPillar(ctx, x, y, tx, ty, room) {
 
 // A dark doorway with faint steps. The top of a doorway gets rounded arch corners.
 function drawDoorway(ctx, x, y, tx, ty, room) {
+  // In a log cabin's wall, it's a cabin door.
+  const log = (c) => c === 'a' || c === 'w';
+  if (room && (log(room.tileAt(tx - 1, ty)) || log(room.tileAt(tx + 1, ty)))) {
+    drawCabinDoor(ctx, x, y, tx, ty, room);
+    return;
+  }
   ctx.fillStyle = '#07040f';
   ctx.fillRect(x, y, T, T);
   ctx.fillStyle = '#140b26';
@@ -756,133 +762,190 @@ function drawBlock(raise) {
 // (see vista.js). You can't walk on air.
 function drawSky() {}
 
-// Fresh snow: soft white with blue in its hollows, a sparkle here and there,
-// and now and then the tracks of something small.
-const SNOW = ['#eef3fa', '#e9eff8', '#f3f7fc', '#ecf1f9'];
-function drawSnow(ctx, x, y, tx, ty, room) {
-  px(ctx, pick(SNOW, hash(tx, ty, 201)), x, y, T, T);
-  // Drifts and hollows.
-  if (hash(tx, ty, 202) < 0.6) px(ctx, '#dde6f2', x + Math.floor(hash(tx, ty, 203) * 9), y + Math.floor(hash(tx, ty, 204) * 9), 5 + Math.floor(hash(tx, ty, 205) * 4), 3);
-  if (hash(tx, ty, 206) < 0.4) px(ctx, '#cfdcee', x + Math.floor(hash(tx, ty, 207) * 12), y + Math.floor(hash(tx, ty, 208) * 12), 3, 1);
-  if (hash(tx, ty, 209) < 0.5) px(ctx, '#f8fbff', x + 2 + Math.floor(hash(tx, ty, 210) * 11), y + 2 + Math.floor(hash(tx, ty, 211) * 11), 2, 1);
-  // Sparkle.
-  for (let i = 0; i < 2; i++) if (hash(tx, ty, 212 + i) < 0.3) px(ctx, '#ffffff', x + Math.floor(hash(tx, ty, 214 + i) * 15), y + Math.floor(hash(tx, ty, 216 + i) * 15));
-  // Bird tracks.
-  if (hash(tx, ty, 218) < 0.06) {
-    const bx = x + 3 + Math.floor(hash(tx, ty, 219) * 7);
-    const by = y + 3 + Math.floor(hash(tx, ty, 220) * 8);
-    for (let i = 0; i < 3; i++) { px(ctx, '#b8c8de', bx + i * 3, by + (i % 2) * 2, 1, 1); px(ctx, '#b8c8de', bx + i * 3 - 1, by + (i % 2) * 2 + 1, 3, 1); }
-  }
-  if (!room) return;
-  // Blue shade under a cliff or wall above.
-  const above = room.tileAt(tx, ty - 1);
-  if (above !== null && TILES[above]?.solid && above !== '_' && above !== 'f') {
-    ctx.fillStyle = 'rgba(60, 80, 130, 0.28)';
-    ctx.fillRect(x, y, T, 3);
-    ctx.fillStyle = 'rgba(60, 80, 130, 0.12)';
-    ctx.fillRect(x, y + 3, T, 2);
+// Snow, everywhere on the mountain, is one even white (with a little blue in
+// its shadows), so a field of it reads as a field and not as a grid of tiles.
+// Its details are few and deliberate: a soft drift now and then, a glint, the
+// tracks of something small. Where it meets a path, a lane or the ice it
+// banks up in a clean lip along the edge (drawBank), and the lip's ups and
+// downs are laid in world coordinates so they run on from tile to tile.
+const SNOW_BASE = '#edf2f9';
+const SNOW_LIGHT = '#f7fafd';
+const SNOW_SHADE = '#dde5f0';
+const SNOW_HOLLOW = '#e4eaf4';
+const PATH_BASE = '#d9e1ed';
+const isSnowGround = (c) => c === 'n' || c === 'A';
+
+// A little drift: a lit crest with a blue hollow under it, `w` wide.
+function drawDrift(ctx, x, y, w) {
+  px(ctx, SNOW_LIGHT, x + 1, y, w - 2, 1);
+  px(ctx, SNOW_SHADE, x, y + 1, w, 1);
+  px(ctx, SNOW_HOLLOW, x + 2, y + 2, w - 4, 1);
+}
+
+// Snow banked along one edge of a tile, `color` on top and a soft `shadow`
+// where it gives way. The bank is 1 or 2 pixels deep in steps of 4 pixels,
+// chosen by where the step is in the world, so neighbouring tiles agree.
+// side: 'top', 'bottom', 'left' or 'right'.
+function drawBank(ctx, x, y, tx, ty, side, color, shadow) {
+  const across = side === 'top' || side === 'bottom';
+  for (let i = 0; i < T; i += 4) {
+    const along = (across ? tx : ty) * T + i;
+    const edge = across ? ty * 2 + (side === 'bottom') : tx * 2 + (side === 'right');
+    const depth = hash(Math.floor(along / 4), edge, 335) < 0.45 ? 2 : 1;
+    if (side === 'top') { px(ctx, color, x + i, y, 4, depth); px(ctx, shadow, x + i, y + depth, 4, 1); }
+    if (side === 'bottom') { px(ctx, shadow, x + i, y + T - depth - 1, 4, 1); px(ctx, color, x + i, y + T - depth, 4, depth); }
+    if (side === 'left') { px(ctx, color, x, y + i, depth, 4); px(ctx, shadow, x + depth, y + i, 1, 4); }
+    if (side === 'right') { px(ctx, shadow, x + T - depth - 1, y + i, 1, 4); px(ctx, color, x + T - depth, y + i, depth, 4); }
   }
 }
 
-// Snow trodden into a path: packed and grey-blue, with boot prints, and
-// fresh snow creeping in from either side.
-function drawSnowPath(ctx, x, y, tx, ty, room) {
-  px(ctx, '#d3dce9', x, y, T, T);
-  for (let i = 0; i < 6; i++) px(ctx, i % 2 ? '#c2cdde' : '#dde6f2', x + Math.floor(hash(tx, ty, 230 + i) * 15), y + Math.floor(hash(tx, ty, 240 + i) * 15), 2, 1);
-  // Boot prints, two by two.
-  if (hash(tx, ty, 250) < 0.5) {
-    const bx = x + 2 + Math.floor(hash(tx, ty, 251) * 8);
-    const by = y + 1 + Math.floor(hash(tx, ty, 252) * 9);
-    px(ctx, '#aab8cf', bx, by, 2, 3);
-    px(ctx, '#aab8cf', bx + 4, by + 3, 2, 3);
-  }
-  const snowy = (dx, dy) => room && room.tileAt(tx + dx, ty + dy) === 'n';
-  for (let i = 0; i < T; i += 2) {
-    const tuft = hash(tx * 3 + i, ty, 253) < 0.6 ? 1 : 2;
-    if (snowy(0, -1)) px(ctx, '#eef3fa', x + i, y, 2, tuft);
-    if (snowy(0, 1)) px(ctx, '#eef3fa', x + i, y + T - tuft, 2, tuft);
-    if (snowy(-1, 0)) px(ctx, '#eef3fa', x, y + i, tuft, 2);
-    if (snowy(1, 0)) px(ctx, '#eef3fa', x + T - tuft, y + i, tuft, 2);
-  }
+// Banks on every side of a tile where `bankOf` names a colour for the ground
+// next door (or null for none). Where two banks meet at an outside corner, the
+// corner fills in round; where the ground only touches at a corner, a little
+// heap sits in it.
+function drawBanks(ctx, x, y, tx, ty, room, bankOf, shadow) {
+  if (!room) return;
+  const at = (dx, dy) => bankOf(room.tileAt(tx + dx, ty + dy));
+  const top = at(0, -1);
+  const bottom = at(0, 1);
+  const left = at(-1, 0);
+  const right = at(1, 0);
+  if (top) drawBank(ctx, x, y, tx, ty, 'top', top, shadow);
+  if (bottom) drawBank(ctx, x, y, tx, ty, 'bottom', bottom, shadow);
+  if (left) drawBank(ctx, x, y, tx, ty, 'left', left, shadow);
+  if (right) drawBank(ctx, x, y, tx, ty, 'right', right, shadow);
+  const corner = (cx, cy, color, sx, sy) => { px(ctx, color, x + cx, y + cy, 3, 3); px(ctx, shadow, x + sx, y + sy, 1, 1); };
+  if (top && left) corner(0, 0, top, 3, 3);
+  if (top && right) corner(T - 3, 0, top, T - 4, 3);
+  if (bottom && left) corner(0, T - 3, bottom, 3, T - 4);
+  if (bottom && right) corner(T - 3, T - 3, bottom, T - 4, T - 4);
+  // Inside corners: only the diagonal is snow.
+  const heap = (cx, cy, color, sx, sy) => { px(ctx, color, x + cx, y + cy, 2, 2); px(ctx, shadow, x + sx, y + sy, 1, 1); };
+  if (!top && !left && at(-1, -1)) heap(0, 0, at(-1, -1), 2, 1);
+  if (!top && !right && at(1, -1)) heap(T - 2, 0, at(1, -1), T - 3, 1);
+  if (!bottom && !left && at(-1, 1)) heap(0, T - 2, at(-1, 1), 2, T - 2);
+  if (!bottom && !right && at(1, 1)) heap(T - 2, T - 2, at(1, 1), T - 3, T - 2);
+}
+
+// The blue shade a cliff or wall casts on the ground at its foot.
+function drawFootShade(ctx, x, y, tx, ty, room, strength = 1) {
   const above = room?.tileAt(tx, ty - 1);
-  if (above && TILES[above]?.solid && above !== '_') {
-    ctx.fillStyle = 'rgba(60, 80, 130, 0.25)';
-    ctx.fillRect(x, y, T, 3);
+  if (above === null || above === undefined || !TILES[above]?.solid || above === '_' || above === 'f') return;
+  ctx.fillStyle = `rgba(60, 80, 130, ${(0.26 * strength).toFixed(3)})`;
+  ctx.fillRect(x, y, T, 2);
+  ctx.fillStyle = `rgba(60, 80, 130, ${(0.12 * strength).toFixed(3)})`;
+  ctx.fillRect(x, y + 2, T, 2);
+}
+
+// Fresh snow.
+function drawSnow(ctx, x, y, tx, ty, room) {
+  px(ctx, SNOW_BASE, x, y, T, T);
+  const roll = hash(tx, ty, 202);
+  if (roll < 0.18) {
+    drawDrift(ctx, x + 2 + Math.floor(hash(tx, ty, 203) * 5), y + 3 + Math.floor(hash(tx, ty, 204) * 9), 6 + Math.floor(hash(tx, ty, 205) * 4));
+  } else if (roll < 0.22) {
+    // Bird tracks, a little trail of arrows.
+    const bx = x + 3 + Math.floor(hash(tx, ty, 219) * 6);
+    const by = y + 4 + Math.floor(hash(tx, ty, 220) * 7);
+    for (let i = 0; i < 3; i++) { px(ctx, '#c6d1e2', bx + i * 3, by + (i % 2) * 2, 1, 1); px(ctx, '#c6d1e2', bx + i * 3 - 1, by + (i % 2) * 2 + 1, 3, 1); }
   }
+  // A glint where the light catches a crystal.
+  if (hash(tx, ty, 212) < 0.12) px(ctx, '#ffffff', x + 2 + Math.floor(hash(tx, ty, 214) * 12), y + 2 + Math.floor(hash(tx, ty, 216) * 12));
+  drawFootShade(ctx, x, y, tx, ty, room);
+}
+
+// Snow trodden into a path: packed a little greyer, a boot print here and
+// there, and fresh snow banked along its edges.
+function drawSnowPath(ctx, x, y, tx, ty, room) {
+  px(ctx, PATH_BASE, x, y, T, T);
+  if (hash(tx, ty, 230) < 0.35) px(ctx, '#d1dae7', x + 2 + Math.floor(hash(tx, ty, 231) * 7), y + 3 + Math.floor(hash(tx, ty, 232) * 9), 6, 2);
+  // Boot prints, a pair.
+  if (hash(tx, ty, 250) < 0.3) {
+    const bx = x + 3 + Math.floor(hash(tx, ty, 251) * 6);
+    const by = y + 2 + Math.floor(hash(tx, ty, 252) * 7);
+    px(ctx, '#c3cddd', bx, by, 2, 3);
+    px(ctx, '#c3cddd', bx + 4, by + 3, 2, 3);
+  }
+  drawBanks(ctx, x, y, tx, ty, room, (c) => (c === 'n' ? SNOW_BASE : null), '#ccd6e5');
+  drawFootShade(ctx, x, y, tx, ty, room);
 }
 
 // A village lane, swept down to its cobbles every morning (in case the Hero
-// comes today): rows of rounded grey-brown stones, snow lodged in the joints,
-// and fresh snow banked along its edges. Darker than the snow round it, so the
-// way to every door reads at a glance. The stones are laid in world
-// coordinates, so the courses run on unbroken from tile to tile.
-const COBBLE = ['#9b8f86', '#a3978c', '#8f847c', '#ab9f92', '#968a80'];
+// comes today): neat courses of rounded grey-brown stones in pale mortar, and
+// fresh snow banked in a clean lip wherever it meets unswept ground. Darker
+// than the snow round it, so the way to every door reads at a glance. The
+// stones are laid in world coordinates, so the courses run on unbroken from
+// tile to tile: each is 7 by 4 pixels, its corners rounded off, lit along its
+// top and shaded along its bottom, and every other course is offset by half
+// a stone.
+const COBBLE = ['#a69a8c', '#9f9386', '#ab9f92'];
+const COBBLE_LIT = '#c2b7a9';
+const COBBLE_SHADE = '#8c8177';
+const MORTAR = '#807a84';
 function drawSnowLane(ctx, x, y, tx, ty, room) {
-  px(ctx, '#7d7a86', x, y, T, T);
+  px(ctx, MORTAR, x, y, T, T);
   const left = tx * T;
   const top = ty * T;
-  const ROW = 5;
-  for (let row = Math.floor(top / ROW); row * ROW < top + T; row++) {
-    const offset = Math.floor(hash(row, 7, 320) * 7);
-    for (let k = Math.floor((left - offset) / 7) - 1; offset + k * 7 < left + T; k++) {
-      // One stone, in world pixels, clipped to this tile.
-      const sx = offset + k * 7;
-      const sy = row * ROW;
-      const x0 = Math.max(sx, left);
-      const x1 = Math.min(sx + 6, left + T);
-      const y0 = Math.max(sy, top);
-      const y1 = Math.min(sy + ROW - 1, top + T);
-      if (x1 <= x0 || y1 <= y0) continue;
-      const lx = x + x0 - left;
-      const ly = y + y0 - top;
-      px(ctx, pick(COBBLE, hash(k, row, 321)), lx, ly, x1 - x0, y1 - y0);
-      // Lit on top, shadowed underneath; the corners rounded off.
-      if (sy >= top) px(ctx, '#c2b7aa', x + Math.max(sx + 1, left) - left, y + sy - top, Math.max(0, Math.min(sx + 5, left + T) - Math.max(sx + 1, left)), 1);
-      if (sy + ROW - 2 < top + T && sy + ROW - 2 >= top) px(ctx, '#7a6f68', lx, y + sy + ROW - 2 - top, x1 - x0, 1);
-      // Snow still lodged on this one.
-      if (hash(k, row, 322) < 0.12) px(ctx, '#e3eaf4', lx, ly, Math.min(3, x1 - x0), 1);
+  // A rectangle in world pixels, clipped to this tile.
+  const clip = (color, wx, wy, w, h) => {
+    const x0 = Math.max(wx, left);
+    const y0 = Math.max(wy, top);
+    const x1 = Math.min(wx + w, left + T);
+    const y1 = Math.min(wy + h, top + T);
+    if (x1 > x0 && y1 > y0) px(ctx, color, x + x0 - left, y + y0 - top, x1 - x0, y1 - y0);
+  };
+  for (let row = Math.floor(top / 5); row * 5 < top + T; row++) {
+    const offset = row % 2 ? 4 : 0;
+    for (let k = Math.floor((left - offset) / 8) - 1; offset + k * 8 < left + T; k++) {
+      const sx = offset + k * 8;
+      const sy = row * 5;
+      clip(pick(COBBLE, hash(k, row, 321)), sx, sy + 1, 7, 2);
+      clip(COBBLE_LIT, sx + 1, sy, 5, 1);
+      clip(COBBLE_SHADE, sx + 1, sy + 3, 5, 1);
+      // Now and then, a pinch of snow left in a joint.
+      if (hash(k, row, 322) < 0.05) clip('#dde4ee', sx + 7, sy + 1, 1, 2);
     }
   }
-  // Snow in the joints, here and there.
-  for (let i = 0; i < 3; i++) if (hash(tx, ty, 323 + i) < 0.5) px(ctx, '#dfe7f2', x + Math.floor(hash(tx, ty, 326 + i) * 14), y + 4 + Math.floor(hash(tx, ty, 329 + i) * 3) * 5, 2, 1);
-  // Fresh snow banked along any edge that meets unswept ground.
-  const banked = (dx, dy) => { const c = room?.tileAt(tx + dx, ty + dy); return c === 'n' || c === 'i'; };
-  for (let i = 0; i < T; i += 2) {
-    const tuft = hash(tx * 3 + i, ty, 333) < 0.5 ? 1 : 2;
-    if (banked(0, -1)) { px(ctx, '#eef3fa', x + i, y, 2, tuft); px(ctx, '#c9d4e4', x + i, y + tuft, 2, 1); }
-    if (banked(0, 1)) { px(ctx, '#c9d4e4', x + i, y + T - tuft - 1, 2, 1); px(ctx, '#eef3fa', x + i, y + T - tuft, 2, tuft); }
-    if (banked(-1, 0)) { px(ctx, '#eef3fa', x, y + i, tuft, 2); px(ctx, '#c9d4e4', x + tuft, y + i, 1, 2); }
-    if (banked(1, 0)) { px(ctx, '#c9d4e4', x + T - tuft - 1, y + i, 1, 2); px(ctx, '#eef3fa', x + T - tuft, y + i, tuft, 2); }
-  }
+  drawBanks(ctx, x, y, tx, ty, room, (c) => (isSnowGround(c) ? SNOW_BASE : c === 'i' ? PATH_BASE : null), '#b4bfcf');
   const above = room?.tileAt(tx, ty - 1);
-  if (above && TILES[above]?.solid && above !== '_') {
-    ctx.fillStyle = 'rgba(40, 50, 90, 0.3)';
-    ctx.fillRect(x, y, T, 3);
+  if (above && TILES[above]?.solid && above !== '_' && !isSnowGround(above)) {
+    ctx.fillStyle = 'rgba(40, 50, 90, 0.28)';
+    ctx.fillRect(x, y, T, 2);
+    ctx.fillStyle = 'rgba(40, 50, 90, 0.12)';
+    ctx.fillRect(x, y + 2, T, 2);
   }
 }
 
-// Ice over a frozen pool: pale blue, with cracks and the odd trapped bubble.
+// Ice over a frozen pool: one clear pale blue, with long streaks of shine
+// running diagonally across it (laid in world coordinates, so they cross from
+// tile to tile), the odd crack, and a bank of snow round its edge.
+const ICE = '#c3e3f1';
 function drawIce(ctx, x, y, tx, ty, room) {
-  px(ctx, '#bfe3f2', x, y, T, T);
-  if (hash(tx, ty, 260) < 0.7) px(ctx, '#a9d6ea', x + Math.floor(hash(tx, ty, 261) * 8), y + Math.floor(hash(tx, ty, 262) * 10), 8, 4);
-  px(ctx, '#e8f7fc', x + 2 + Math.floor(hash(tx, ty, 263) * 8), y + 2 + Math.floor(hash(tx, ty, 264) * 6), 4, 1);
-  px(ctx, '#e8f7fc', x + 1 + Math.floor(hash(tx, ty, 265) * 10), y + 9 + Math.floor(hash(tx, ty, 266) * 5), 2, 1);
-  // A crack wandering across.
-  if (hash(tx, ty, 267) < 0.3) {
-    let cx = Math.floor(hash(tx, ty, 268) * 12);
-    for (let cy = 0; cy < T; cy++) {
-      px(ctx, '#8fbcd6', x + cx, y + cy);
-      if (hash(tx, ty, 270 + cy) < 0.4) cx = Math.max(0, Math.min(15, cx + (hash(tx, ty, 290 + cy) < 0.5 ? -1 : 1)));
+  px(ctx, ICE, x, y, T, T);
+  for (let r = 0; r < T; r++) {
+    const wy = ty * T + r;
+    for (let c = 0; c < T; c++) {
+      const d = tx * T + c + wy;
+      if (d % 29 !== 0) continue;
+      // The streak shows in some stretches and not others.
+      const line = Math.floor(d / 29);
+      if (hash(line, Math.floor(wy / 10), 302) < 0.55) {
+        px(ctx, '#e2f3fa', x + c, y + r, 1, 1);
+        if (c + 1 < T) px(ctx, '#d4ecf6', x + c + 1, y + r, 1, 1);
+      }
     }
   }
-  if (hash(tx, ty, 269) < 0.2) px(ctx, '#ffffff', x + 4 + Math.floor(hash(tx, ty, 300) * 8), y + 4 + Math.floor(hash(tx, ty, 301) * 8), 1, 1);
-  if (!room) return;
-  // A snowy bank where the ice meets snow.
-  const edge = (dx, dy) => room.tileAt(tx + dx, ty + dy) === 'n';
-  if (edge(0, -1)) px(ctx, '#eef3fa', x, y, T, 2);
-  if (edge(0, 1)) px(ctx, '#eef3fa', x, y + T - 2, T, 2);
-  if (edge(-1, 0)) px(ctx, '#eef3fa', x, y, 2, T);
-  if (edge(1, 0)) px(ctx, '#eef3fa', x + T - 2, y, 2, T);
+  // A crack wandering across.
+  if (hash(tx, ty, 267) < 0.12) {
+    let cx = 2 + Math.floor(hash(tx, ty, 268) * 11);
+    for (let cy = 2; cy < T - 2; cy++) {
+      px(ctx, '#9ec7dc', x + cx, y + cy);
+      if (hash(tx, ty, 270 + cy) < 0.35) cx = Math.max(1, Math.min(14, cx + (hash(tx, ty, 290 + cy) < 0.5 ? -1 : 1)));
+    }
+  }
+  if (hash(tx, ty, 269) < 0.1) px(ctx, '#ffffff', x + 4 + Math.floor(hash(tx, ty, 300) * 8), y + 4 + Math.floor(hash(tx, ty, 301) * 8), 1, 1);
+  // A snowy bank where the ice meets snow or a path.
+  drawBanks(ctx, x, y, tx, ty, room, (c) => (isSnowGround(c) ? SNOW_BASE : c === 'i' ? PATH_BASE : c === 'l' ? SNOW_BASE : null), '#a7cde1');
 }
 
 // A plank bridge slung across a gap: boards with daylight between them, rope
@@ -902,29 +965,47 @@ function drawBridge(ctx, x, y, tx, ty, room) {
   if (open(0, 1)) { rope(y + T - 2); if (room.tileAt(tx - 1, ty) !== 'g') px(ctx, '#5a3a1e', x, y + T - 5, 2, 5); if (room.tileAt(tx + 1, ty) !== 'g') px(ctx, '#5a3a1e', x + T - 2, y + T - 5, 2, 5); }
 }
 
-// The top of a snowy cliff, seen from above: snow over rock.
+// The top of a snowy cliff, seen from above: deep snow over rock, a shade
+// darker than the snow you walk on, with a clean rim where it drops away and
+// now and then a rock showing through.
 function drawSnowCliffTop(ctx, x, y, tx, ty, room) {
-  px(ctx, '#dfe8f3', x, y, T, T);
-  for (let i = 0; i < 4; i++) px(ctx, i % 2 ? '#c3d2e6' : '#7a7484', x + Math.floor(hash(tx, ty, 320 + i) * 14), y + Math.floor(hash(tx, ty, 330 + i) * 14), 2, i % 2 ? 1 : 2);
-  if (hash(tx, ty, 340) < 0.3) px(ctx, '#f6f9fc', x + Math.floor(hash(tx, ty, 341) * 10), y + Math.floor(hash(tx, ty, 342) * 12), 4, 1);
+  px(ctx, '#e2e9f3', x, y, T, T);
+  const roll = hash(tx, ty, 320);
+  if (roll < 0.05) {
+    const rx = x + 3 + Math.floor(hash(tx, ty, 321) * 8);
+    const ry = y + 4 + Math.floor(hash(tx, ty, 322) * 7);
+    px(ctx, '#9a95a6', rx, ry + 1, 4, 1);
+    px(ctx, '#7e7890', rx + 1, ry + 2, 3, 1);
+    px(ctx, '#f4f7fb', rx, ry, 4, 1);
+  } else if (roll < 0.26) {
+    drawDrift(ctx, x + 2 + Math.floor(hash(tx, ty, 323) * 5), y + 3 + Math.floor(hash(tx, ty, 324) * 9), 6 + Math.floor(hash(tx, ty, 325) * 3));
+  }
   if (!room) return;
   if (!isCliff(room.tileAt(tx, ty + 1) ?? 'A')) px(ctx, '#8c9bb0', x, y + T - 1, T, 1);
+  // A soft rim on any side that looks down onto open ground.
+  const open = (c) => c !== null && !TILES[c]?.solid;
+  if (open(room.tileAt(tx - 1, ty))) px(ctx, '#ccd6e4', x, y, 1, T);
+  if (open(room.tileAt(tx + 1, ty))) px(ctx, '#ccd6e4', x + T - 1, y, 1, T);
+  if (open(room.tileAt(tx, ty - 1))) px(ctx, '#f6f9fc', x, y, T, 1);
 }
 
-// A cliff face high on the mountain: colder rock, veined with ice.
+// A cliff face high on the mountain: colder rock, veined with ice. The rock
+// lies in layers that run the whole way along the face (each layer's stone is
+// picked by its height, not by the tile), so a long wall reads as strata and
+// not as a patchwork of tiles.
 const ICE_ROCK = ['#6f7a94', '#78849e', '#66718a', '#737e98'];
 function drawIceCliffFace(ctx, x, y, tx, ty, room) {
   for (let band = 0; band < 4; band++) {
-    px(ctx, pick(ICE_ROCK, hash(tx, ty * 4 + band, 350)), x, y + band * 4, T, 4);
-    px(ctx, '#8e9ab4', x + Math.floor(hash(tx, ty * 4 + band, 351) * 6), y + band * 4, 6 + Math.floor(hash(tx, ty * 4 + band, 352) * 8), 1);
+    px(ctx, pick(ICE_ROCK, hash(7, ty * 4 + band, 350)), x, y + band * 4, T, 4);
+    if (hash(tx, ty * 4 + band, 351) < 0.5) px(ctx, '#8a96b0', x + Math.floor(hash(tx, ty * 4 + band, 352) * 6), y + band * 4, 6 + Math.floor(hash(tx, ty * 4 + band, 353) * 8), 1);
   }
-  if (hash(tx, ty, 353) < 0.5) {
+  if (hash(tx, ty, 353) < 0.3) {
     const cx = x + 2 + Math.floor(hash(tx, ty, 354) * 11);
-    px(ctx, '#4a5068', cx, y + 2, 1, 5);
-    px(ctx, '#4a5068', cx + 1, y + 7, 1, 4);
+    px(ctx, '#4f566e', cx, y + 2, 1, 5);
+    px(ctx, '#4f566e', cx + 1, y + 7, 1, 4);
   }
   // A streak of ice running down the rock.
-  if (hash(tx, ty, 355) < 0.35) {
+  if (hash(tx, ty, 355) < 0.25) {
     const ix = x + 1 + Math.floor(hash(tx, ty, 356) * 13);
     px(ctx, '#cfe6f5', ix, y, 1, T);
     px(ctx, '#ffffff', ix, y + Math.floor(hash(tx, ty, 357) * 10), 1, 3);
@@ -933,8 +1014,15 @@ function drawIceCliffFace(ctx, x, y, tx, ty, room) {
   if (isSnowTop(room.tileAt(tx, ty - 1)) || room.tileAt(tx, ty - 1) === 'm') drawSnowLip(ctx, x, y, tx, ty);
   const below = room.tileAt(tx, ty + 1);
   if (below !== null && below !== '_' && !isCliff(below)) {
-    px(ctx, '#474d62', x, y + T - 2, T, 2);
-    for (let i = 0; i < 4; i++) if (hash(tx, ty, 358 + i) < 0.5) px(ctx, '#eef3fa', x + i * 4 + 1, y + T - 3, 2, 2);
+    // The foot of the face, with snow drifted against it.
+    px(ctx, '#4c536a', x, y + T - 3, T, 1);
+    px(ctx, '#5a6178', x, y + T - 2, T, 2);
+    if (SNOW_FLOORS.has(below)) {
+      for (let i = 0; i < T; i += 4) {
+        const depth = hash(Math.floor((tx * T + i) / 4), ty, 358) < 0.45 ? 3 : 2;
+        px(ctx, SNOW_BASE, x + i, y + T - depth, 4, depth);
+      }
+    }
   }
 }
 
@@ -995,49 +1083,86 @@ function drawSnowBoulder(ctx, x, y, tx, ty, room) {
 
 // --- Heralds' Rest: the village's cabins. ---
 
-// A log wall: round logs stacked up, chinked with pale mortar.
-const LOGS = ['#9a6a3a', '#a06f3e', '#946536', '#9c6c3c'];
+// A log wall: round logs stacked up, each lit along its top and shaded under,
+// with a dark seam between. Every log runs the whole length of the wall (its
+// wood is picked by its height, not by the tile), so there are no seams where
+// one tile meets the next, and at the building's corners the log ends show.
+const LOGS = ['#9a6a3a', '#a06f3e', '#966738', '#9d6d3c'];
+const isCabin = (c) => c === 'a' || c === 'w' || c === 'D';
 function drawCabinWall(ctx, x, y, tx, ty, room) {
   for (let row = 0; row < 4; row++) {
     const py = y + row * 4;
-    px(ctx, pick(LOGS, hash(tx, ty * 4 + row, 400)), x, py, T, 4);
-    px(ctx, '#b8804a', x, py, T, 1);
-    px(ctx, '#5a3a1e', x, py + 2, T, 1);
-    px(ctx, '#d8c8a8', x, py + 3, T, 1);
-    // Knots and grain.
-    if (hash(tx, ty * 4 + row, 401) < 0.3) px(ctx, '#6b4423', x + Math.floor(hash(tx, ty * 4 + row, 402) * 13), py + 1, 2, 1);
+    px(ctx, pick(LOGS, hash(3, ty * 4 + row, 400)), x, py, T, 4);
+    px(ctx, '#b98451', x, py, T, 1);
+    px(ctx, '#80542f', x, py + 2, T, 1);
+    px(ctx, '#4e321b', x, py + 3, T, 1);
+    // A knot, here and there.
+    if (hash(tx, ty * 4 + row, 401) < 0.1) px(ctx, '#6b4423', x + 2 + Math.floor(hash(tx, ty * 4 + row, 402) * 11), py + 1, 2, 1);
   }
   if (!room) return;
-  // A stone footing, and snow piled against it, where it meets the ground.
+  // The log ends, where the wall turns a corner.
+  const end = (ex) => {
+    for (let row = 0; row < 4; row++) {
+      px(ctx, '#c99c68', ex, y + row * 4, 2, 3);
+      px(ctx, '#9a6a3a', ex + (ex === x ? 0 : 1), y + row * 4 + 1, 1, 1);
+    }
+  };
+  if (!isCabin(room.tileAt(tx - 1, ty))) end(x);
+  if (!isCabin(room.tileAt(tx + 1, ty))) end(x + T - 2);
+  // Icicles hanging off the eaves above.
+  if (room.tileAt(tx, ty - 1) === 'e') {
+    for (let i = 0; i < T; i++) {
+      const wx = tx * T + i;
+      // Icicles at most every other pixel, some long, most short.
+      if (wx % 2 || hash(wx, ty, 404) > 0.3) continue;
+      const length = 1 + Math.floor(hash(wx, ty, 405) ** 2 * 4);
+      px(ctx, '#d6ecf7', x + i, y, 1, length);
+      px(ctx, '#ffffff', x + i, y, 1, 1);
+    }
+    px(ctx, 'rgba(30, 16, 8, 0.35)', x, y, T, 1);
+  }
+  // A stone footing where it meets the ground, with snow drifted against it.
   const below = room.tileAt(tx, ty + 1);
-  if (below !== null && !TILES[below]?.solid) {
-    px(ctx, '#8a8296', x, y + T - 3, T, 3);
-    px(ctx, '#5a5468', x, y + T - 1, T, 1);
+  if (below !== null && !TILES[below]?.solid && below !== 'D') {
+    px(ctx, '#8d8699', x, y + T - 4, T, 3);
+    px(ctx, '#a49db0', x, y + T - 4, T, 1);
+    for (let i = 0; i < T; i++) if ((tx * T + i) % 6 === 0) px(ctx, '#6e687c', x + i, y + T - 3, 1, 2);
+    px(ctx, '#5f596d', x, y + T - 1, T, 1);
     if (SNOW_FLOORS.has(below)) {
-      px(ctx, '#eef3fa', x, y + T - 4, T, 2);
-      if (hash(tx, ty, 403) < 0.5) px(ctx, '#eef3fa', x + Math.floor(hash(tx, ty, 404) * 8), y + T - 6, 6, 2);
+      for (let i = 0; i < T; i += 4) {
+        const depth = hash(Math.floor((tx * T + i) / 4), ty, 403) < 0.4 ? 3 : 2;
+        px(ctx, SNOW_BASE, x + i, y + T - depth, 4, depth);
+      }
+      px(ctx, SNOW_LIGHT, x, y + T - 2, T, 1);
     }
   }
 }
 
-// The same wall with a lit window: warm light, a cross of frame, a sill of snow.
+// The same wall with a lit window: four little panes of lamplight in a dark
+// frame, brighter at the top, and a sill of snow.
 function drawCabinWindow(ctx, x, y, tx, ty, room) {
   drawCabinWall(ctx, x, y, tx, ty, room);
-  px(ctx, '#5a3a1e', x + 3, y + 1, 10, 11);
-  px(ctx, '#ffcc66', x + 4, y + 2, 8, 9);
-  px(ctx, '#fff2c0', x + 5, y + 3, 2, 3);
-  px(ctx, '#5a3a1e', x + 7, y + 2, 1, 9);
+  px(ctx, '#4e321b', x + 3, y + 1, 10, 11);
+  px(ctx, '#ffc65c', x + 4, y + 2, 8, 9);
+  px(ctx, '#ffdb8a', x + 4, y + 2, 8, 3);
+  px(ctx, '#f4ad45', x + 4, y + 9, 8, 2);
+  // The frame's cross, and a glint on each upper pane.
+  px(ctx, '#5a3a1e', x + 7, y + 2, 2, 9);
   px(ctx, '#5a3a1e', x + 4, y + 6, 8, 1);
-  px(ctx, '#eef3fa', x + 2, y + 12, 12, 2);
-  px(ctx, '#cfdcee', x + 2, y + 14, 12, 1);
+  px(ctx, '#fff4cc', x + 4, y + 2, 2, 1);
+  px(ctx, '#fff4cc', x + 9, y + 2, 2, 1);
+  px(ctx, SNOW_LIGHT, x + 2, y + 12, 12, 1);
+  px(ctx, SNOW_BASE, x + 2, y + 13, 12, 1);
+  px(ctx, '#c4cfdf', x + 2, y + 14, 12, 1);
 }
 
-// A roof deep in snow, its shingles showing at the eaves, icicles hanging off them.
-const ROOF_SNOW = ['#e6edf6', '#e2eaf4', '#eaf0f8'];
+// A roof deep in snow: one smooth white with the odd soft lump, a dark ridge
+// along the top, a gable edge either end, and the shingles showing under the
+// overhang at the eaves (the icicles hang off it onto the wall below).
+const ROOF_SNOW = '#e8eef7';
 function drawCabinRoof(ctx, x, y, tx, ty, room) {
-  px(ctx, pick(ROOF_SNOW, hash(tx, ty, 410)), x, y, T, T);
-  for (let sy = 3; sy < T; sy += 4) px(ctx, '#d4deec', x, y + sy, T, 1);
-  if (hash(tx, ty, 411) < 0.4) px(ctx, '#f6f9fc', x + Math.floor(hash(tx, ty, 412) * 10), y + Math.floor(hash(tx, ty, 413) * 12), 5, 1);
+  px(ctx, ROOF_SNOW, x, y, T, T);
+  if (hash(tx, ty, 411) < 0.22) drawDrift(ctx, x + 2 + Math.floor(hash(tx, ty, 412) * 5), y + 4 + Math.floor(hash(tx, ty, 413) * 5), 7);
   if (!room) return;
   const above = room.tileAt(tx, ty - 1);
   const below = room.tileAt(tx, ty + 1);
@@ -1045,43 +1170,68 @@ function drawCabinRoof(ctx, x, y, tx, ty, room) {
   if (above !== 'e') {
     px(ctx, '#5a2e22', x, y, T, 1);
     px(ctx, '#8a4a34', x, y + 1, T, 1);
-    px(ctx, '#f6f9fc', x, y + 2, T, 1);
+    px(ctx, SNOW_LIGHT, x, y + 2, T, 1);
   }
-  // The eaves, with shingles and icicles.
+  // The eaves: the snow's rounded edge, then the shingles in its shadow.
   if (below !== 'e') {
-    px(ctx, '#6b3a2a', x, y + T - 4, T, 2);
+    px(ctx, SNOW_LIGHT, x, y + T - 7, T, 1);
+    px(ctx, '#d3dcea', x, y + T - 5, T, 1);
     px(ctx, '#8a4a34', x, y + T - 4, T, 1);
-    for (let i = 1; i < T; i += 5) px(ctx, '#5a2e22', x + i, y + T - 4, 1, 2);
-    px(ctx, '#3a2416', x, y + T - 2, T, 1);
-    px(ctx, '#cfe6f5', x + 3 + Math.floor(hash(tx, ty, 414) * 4), y + T - 1, 1, 1);
-    px(ctx, '#cfe6f5', x + 10 + Math.floor(hash(tx, ty, 415) * 4), y + T - 1, 1, 1);
-    px(ctx, '#cfe6f5', x + 2 + Math.floor(hash(tx, ty, 416) * 11), y + T - 2, 1, 2);
+    px(ctx, '#6b3a2a', x, y + T - 3, T, 2);
+    for (let i = 0; i < T; i++) if ((tx * T + i) % 4 === 1) px(ctx, '#55291d', x + i, y + T - 3, 1, 2);
+    px(ctx, '#2e1a10', x, y + T - 1, T, 1);
   }
   // Gable ends.
-  if (room.tileAt(tx - 1, ty) !== 'e') px(ctx, '#8a4a34', x, y, 1, T);
-  if (room.tileAt(tx + 1, ty) !== 'e') px(ctx, '#8a4a34', x + T - 1, y, 1, T);
+  if (room.tileAt(tx - 1, ty) !== 'e') { px(ctx, '#6b3a2a', x, y, 1, T); px(ctx, '#d3dcea', x + 1, y, 1, T); }
+  if (room.tileAt(tx + 1, ty) !== 'e') { px(ctx, '#6b3a2a', x + T - 1, y, 1, T); px(ctx, '#d3dcea', x + T - 2, y, 1, T); }
 }
 
-// A picket fence, every post capped with snow. Low enough to see over.
+// A cabin's door, standing open: a plank frame and lintel, firelight on the
+// floor inside, and a stone step. (Doorways anywhere else are the Ruins' kind.)
+function drawCabinDoor(ctx, x, y, tx, ty, room) {
+  px(ctx, '#20130b', x, y, T, T);
+  px(ctx, '#3a2414', x + 2, y + 2, T - 4, T - 4);
+  // Firelight on the boards inside.
+  px(ctx, '#5a3218', x + 3, y + 8, T - 6, 2);
+  px(ctx, '#7a4520', x + 3, y + 10, T - 6, 2);
+  px(ctx, '#9a5a28', x + 4, y + 12, T - 8, 1);
+  // The frame.
+  px(ctx, '#5a3a1e', x, y, 2, T);
+  px(ctx, '#5a3a1e', x + T - 2, y, 2, T);
+  px(ctx, '#8a5a32', x, y, 1, T);
+  px(ctx, '#4e321b', x, y, T, 2);
+  px(ctx, '#8a5a32', x, y, T, 1);
+  // The step.
+  px(ctx, '#8d8699', x + 1, y + T - 3, T - 2, 2);
+  px(ctx, '#a49db0', x + 1, y + T - 3, T - 2, 1);
+  px(ctx, '#5f596d', x + 1, y + T - 1, T - 2, 1);
+}
+
+// A picket fence, every post capped with snow, the posts evenly spaced along
+// the world so a long fence keeps its rhythm. Low enough to see over.
 function drawFence(ctx, x, y, tx, ty, room) {
   drawBaseFloor(ctx, x, y, tx, ty, room);
-  ctx.fillStyle = 'rgba(40, 60, 110, 0.2)';
+  ctx.fillStyle = 'rgba(40, 60, 110, 0.18)';
   ctx.fillRect(x, y + 12, T, 2);
   const across = room && (room.tileAt(tx - 1, ty) === 'f' || room.tileAt(tx + 1, ty) === 'f');
   const down = room && (room.tileAt(tx, ty - 1) === 'f' || room.tileAt(tx, ty + 1) === 'f');
   if (across || !down) {
-    px(ctx, '#a06a3a', x, y + 5, T, 2);
-    px(ctx, '#a06a3a', x, y + 9, T, 2);
-    for (const fx of [2, 8, 13]) {
-      px(ctx, '#8a5a32', x + fx, y + 3, 2, 10);
-      px(ctx, '#c08a4e', x + fx, y + 3, 1, 10);
-      px(ctx, '#eef3fa', x + fx - 1, y + 2, 4, 2);
+    for (const ry of [5, 9]) {
+      px(ctx, '#9a643a', x, y + ry, T, 2);
+      px(ctx, '#b67e48', x, y + ry, T, 1);
+    }
+    px(ctx, SNOW_BASE, x, y + 4, T, 1);
+    for (const fx of [3, 11]) {
+      px(ctx, '#7c5030', x + fx, y + 3, 2, 10);
+      px(ctx, '#b67e48', x + fx, y + 3, 1, 10);
+      px(ctx, SNOW_LIGHT, x + fx - 1, y + 2, 4, 1);
+      px(ctx, SNOW_BASE, x + fx - 1, y + 3, 4, 1);
     }
   }
   if (down && !across) {
-    px(ctx, '#a06a3a', x + 6, y, 2, T);
-    px(ctx, '#8a5a32', x + 7, y, 1, T);
-    for (const fy of [2, 9]) { px(ctx, '#8a5a32', x + 5, y + fy, 5, 2); px(ctx, '#eef3fa', x + 4, y + fy - 1, 7, 1); }
+    px(ctx, '#9a643a', x + 6, y, 2, T);
+    px(ctx, '#7c5030', x + 7, y, 1, T);
+    for (const fy of [2, 9]) { px(ctx, '#7c5030', x + 5, y + fy, 5, 2); px(ctx, SNOW_LIGHT, x + 4, y + fy - 1, 7, 1); }
   }
 }
 

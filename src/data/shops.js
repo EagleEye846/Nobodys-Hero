@@ -6,8 +6,9 @@
 // tree, `limit` times per shop; see HERO_STATE.boughtSkillPoints).
 //
 // Every shop also buys (SELL): items for half their price, and weapons and
-// armor you aren't wearing for half of what a shop would charge (see
-// sellValue in src/shop/shopScene.js).
+// armor nobody's wearing for half of what a shop would charge (see
+// sellValue in src/shop/shopScene.js). A weapon or armor with a `wielder`
+// (Ves's umbrella parts and coats) is sold the same way, for them.
 //
 // `keeper` is the shopkeeper's prop sprite, with the pixels of their `eyes`
 // (to blink); `look` is the colours of the shop's room (see shopScene.js).
@@ -61,6 +62,12 @@ export const SHOPS = {
       { armor: 'fur_lined_hood', price: 90 },
       { armor: 'ringers_mittens', price: 110 },
       { armor: 'snow_mantle', price: 160 },
+      // For Ves: umbrella parts, and things to wrap up in.
+      { weapon: 'bellwire_ribs', price: 85 },
+      { weapon: 'hearthwood_crook', price: 100 },
+      { armor: 'goosedown_mittens', price: 75 },
+      { armor: 'ember_knit_scarf', price: 80 },
+      { armor: 'oilskin_greatcoat', price: 135 },
     ],
   },
 };

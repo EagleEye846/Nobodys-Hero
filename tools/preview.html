@@ -26,6 +26,10 @@ ERROR: ${m}`; };
 // A still of any room, as the game draws it, for checking rooms without
 // playing to them: tools/preview.html?room=rest_square&x=20&y=16&facing=up&t=2
 // Or ?check=1 to build every room and compile every song, and report.
+// ?equip=hero or ?equip=vesper shows the EQUIP menu on that person's tabs
+// (&slot=armor for armor, &index=2 for the cursor), with Ves in the party
+// and all her gear owned. ?allyturn=vesper shows a battle on her turn
+// (&phase=spells for her SPELLS list).
 import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from './src/config.js';
 import { createScreen } from './src/engine/screen.js';
 import { loadTextFiles } from './src/engine/textLoader.js';
@@ -110,6 +114,47 @@ if (params.get('check')) {
   menu.draw(ctx);
   menu.draw(ctx);
   report.textContent = 'SKILLS DONE';
+} else if (params.get('equip')) {
+  const { EquipMenu } = await import('./src/ui/equipMenu.js');
+  const { HERO_STATE } = await import('./src/characters/heroState.js');
+  const { joinParty } = await import('./src/characters/party.js');
+  const { WEAPONS } = await import('./src/data/weapons.js');
+  const { ARMOR } = await import('./src/data/armor.js');
+  HERO_STATE.gold = 240;
+  if (params.get('party') !== '0') joinParty('vesper');
+  HERO_STATE.weapons = Object.keys(WEAPONS);
+  HERO_STATE.armors = Object.keys(ARMOR);
+  const menu = new EquipMenu();
+  menu.open();
+  const tab = menu.tabs().findIndex((t) => t.who === (params.get('equip') === 'vesper' ? 'vesper' : 'hero') && t.slot === (params.get('slot') ?? 'weapon'));
+  menu.showTab(Math.max(0, tab));
+  if (params.has('index')) menu.cursor = Number(params.get('index'));
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  menu.draw(ctx);
+  report.textContent = 'EQUIP DONE';
+} else if (params.get('allyturn')) {
+  const { BattleScene } = await import('./src/battle/battleScene.js');
+  const { ENEMIES } = await import('./src/data/enemies/index.js');
+  const { joinParty } = await import('./src/characters/party.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  WORLD_STATE.metShadow = true;
+  joinParty(params.get('allyturn'));
+  const battle = new BattleScene([ENEMIES[params.get('enemy') ?? 'craghorn']], () => {}, params.get('area') ?? 'vigil');
+  battle.sp = 30;
+  battle.setPhase('command');
+  battle.ally = battle.pendingAllies.shift();
+  battle.setPhase('ally');
+  battle.allySelected = Number(params.get('button') ?? 0);
+  if (params.get('phase')) battle.setPhase(params.get('phase'));
+  for (let t = 0; t < 1; t += 1 / 60) battle.update(1 / 60, noInput);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  battle.draw(ctx);
+  report.textContent = 'ALLYTURN DONE';
 } else if (params.get('poke')) {
   // Presses Z on every prop in every room (or one room), reading through what
   // it says, and reports anything that throws.

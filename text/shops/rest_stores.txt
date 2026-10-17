@@ -70,4 +70,7 @@ The Head Herald's idea. The heralds have a store of... I don't know what to call
 I buy. Half what it's worth, since I'll never sell it on. Can't buy what you're wearing; take it off first. And I don't buy soup. The inn would know.
 
 [talk: What's up there?]
-Past the Lookout? Cloud, then stair, then more cloud, then, they say, the top. Nobody from here has been. One of ours got to the second cairn and came back quiet. I sold her the mittens. Didn't help.
+Past the Lookout? Cloud, then stair, then more cloud, then, they say, the top. Nobody from here has been and come back. One of ours got to the second cairn and came back quiet. I sold her the mittens. Didn't help.
+
+[talk: Umbrella parts]
+Ribs, handles, canopies. The lamplighter bought her spares here every autumn for twenty years. I kept ordering them after. Habit. Somebody's bound to need them, I said. And look.

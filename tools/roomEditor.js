@@ -79,6 +79,8 @@ const TYPE_INFO = {
   start: { label: 'Player start', icon: 'person' },
   door: { label: 'Door', icon: 'door' },
   cutscene: { label: 'Cutscene trigger', icon: 'film' },
+  geyser: { label: 'Wind geyser', icon: 'wind' },
+  gust: { label: 'Updraft', icon: 'gust' },
   sign: { label: 'Sign', sprite: 'sign' },
   save: { label: 'Save point', sprite: 'savepoint' },
   npc: { label: 'Keeper / NPC', sprite: 'keeper' },
@@ -329,6 +331,8 @@ export async function mount(root, studio) {
         card('start', 'Player start', thumbnail(playerSprite, 40), 'Where the player appears'),
         card('door', 'Door', icon('door', 32), 'Click or drag on the map: walking in takes you to another room'),
         card('cutscene', 'Cutscene', icon('film', 32), 'Click or drag on the map: stepping there plays a cutscene'),
+        card('geyser', 'Wind geyser', icon('wind', 32), 'A column of wind: with Ves in the party it floats you up into another room'),
+        card('gust', 'Updraft', icon('gust', 32), 'A small puff of wind: tosses you to a tile you pick in this room'),
         card('sign', 'Sign', sprite('sign'), 'Something to read'),
         card('save', 'Save point', sprite('savepoint'), 'A crystal the player can save at'),
         card('npc', 'Keeper / NPC', sprite('keeper'), 'Someone to talk to'),
@@ -357,6 +361,8 @@ export async function mount(root, studio) {
   }
 
   function doorRect(door) { return { x: door.x * T, y: door.y * T, w: door.w * T, h: door.h * T }; }
+  // A geyser blows from one tile; it's shown (and clicked) a tile taller, like its column.
+  function geyserRect(g) { return { x: g.x * T, y: (g.y - 1) * T, w: T, h: 2 * T }; }
 
   function boundsOf(sel) {
     if (!sel) return null;
@@ -364,6 +370,8 @@ export async function mount(root, studio) {
     if (sel.type === 'prop') return room.props[sel.index] && propBounds(room.props[sel.index]);
     if (sel.type === 'npc') return room.npcs[sel.index] && npcBounds(room.npcs[sel.index], spriteForNpc(room.npcs[sel.index]));
     if (sel.type === 'cutscene') return room.cutscenes[sel.index] && doorRect(room.cutscenes[sel.index]);
+    if (sel.type === 'geyser') return room.geysers[sel.index] && geyserRect(room.geysers[sel.index]);
+    if (sel.type === 'gust') return room.gusts[sel.index] && { x: room.gusts[sel.index].x * T, y: room.gusts[sel.index].y * T, w: T, h: T };
     if (sel.type === 'tile') return tileAt(sel.x, sel.y) === null ? null : { x: sel.x * T, y: sel.y * T, w: T, h: T };
     return room.doors[sel.index] && doorRect(room.doors[sel.index]);
   }
@@ -377,6 +385,44 @@ export async function mount(root, studio) {
     const s = T * zoom;
     const y = (npc.y + 1) * s - zoom * 2;
     return npc.patrol.map((p, i) => ({ i, x: (p + 0.5) * s, y }));
+  }
+
+  // An updraft on the map: a small swirl, and a dotted arc to where it drops you.
+  function drawGustMark(ctx, g) {
+    const x = g.x * T;
+    const y = g.y * T;
+    ctx.fillStyle = 'rgba(190, 225, 255, 0.35)';
+    ctx.fillRect(x + 4, y + 2, T - 8, T - 3);
+    ctx.fillStyle = 'rgba(240, 248, 255, 0.95)';
+    for (let k = 0; k < T; k += 2) ctx.fillRect(x + T / 2 - 1 + Math.round(Math.sin(k * 0.6) * 3), y + T - k - 1, 2, 1);
+    const fx = x + T / 2;
+    const fy = y + T / 2;
+    const tx = g.to.x * T + T / 2;
+    const ty = g.to.y * T + T / 2;
+    const lift = 10 + Math.hypot(tx - fx, ty - fy) * 0.25;
+    ctx.fillStyle = 'rgba(191, 230, 255, 0.9)';
+    for (let i = 1; i < 16; i++) {
+      const k = i / 16;
+      ctx.fillRect(Math.round(fx + (tx - fx) * k), Math.round(fy + (ty - fy) * k - Math.sin(Math.PI * k) * lift), 1, 1);
+    }
+    ctx.strokeStyle = 'rgba(191, 230, 255, 0.9)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(g.to.x * T + 2.5, g.to.y * T + 2.5, T - 5, T - 5);
+  }
+
+  // A wind geyser on the map: a pale column with a swirl, so it reads at a glance.
+  function drawGeyserMark(ctx, g) {
+    const x = g.x * T;
+    const y = (g.y - 1) * T;
+    ctx.fillStyle = 'rgba(190, 225, 255, 0.28)';
+    ctx.fillRect(x + 3, y, T - 6, 2 * T);
+    ctx.fillStyle = 'rgba(240, 248, 255, 0.95)';
+    for (let k = 0; k < 2 * T; k += 2) {
+      const swing = Math.round(Math.sin(k * 0.45) * (2 + k * 0.12));
+      ctx.fillRect(x + T / 2 - 1 + swing, y + 2 * T - k - 1, 2, 1);
+    }
+    ctx.fillStyle = 'rgba(96, 132, 172, 0.9)';
+    ctx.fillRect(x + 2, y + 2 * T - 2, T - 4, 1);
   }
 
   function draw() {
@@ -401,6 +447,8 @@ export async function mount(root, studio) {
       const r = doorRect(trigger);
       ctx.fillRect(r.x, r.y, r.w, r.h);
     }
+    for (const g of room.geysers) drawGeyserMark(ctx, g);
+    for (const g of room.gusts) drawGustMark(ctx, g);
     if (mode === 'paint') ctx.globalAlpha = 0.55;
     drawThings(ctx, room, enemySprites);
     ctx.globalAlpha = 1;
@@ -441,6 +489,10 @@ export async function mount(root, studio) {
       ctx.setLineDash([]);
       ctx.fillStyle = '#c878ff';
       ctx.fillText(`plays ${friendly(trigger.scene)}`, trigger.x * s + 3, trigger.y * s - 4 < 10 ? trigger.y * s + 14 : trigger.y * s - 4);
+    });
+    room.geysers.forEach((g) => {
+      ctx.fillStyle = '#bfe6ff';
+      ctx.fillText(`wind up to ${roomLabel(g.to)}`, g.x * s + 3, (g.y - 1) * s - 4 < 10 ? (g.y + 1) * s + 14 : (g.y - 1) * s - 4);
     });
     room.npcs.forEach((npc, i) => {
       const sel = selected?.type === 'npc' && selected.index === i;
@@ -514,6 +566,8 @@ export async function mount(root, studio) {
     for (let i = room.npcs.length - 1; i >= 0; i--) if (inside(npcBounds(room.npcs[i], spriteForNpc(room.npcs[i])), px, py)) return { type: 'npc', index: i };
     for (let i = room.props.length - 1; i >= 0; i--) if (inside(propBounds(room.props[i]), px, py)) return { type: 'prop', index: i };
     if (inside(startBounds(room.playerStart), px, py)) return { type: 'start', index: 0 };
+    for (let i = room.gusts.length - 1; i >= 0; i--) if (inside({ x: room.gusts[i].x * T, y: room.gusts[i].y * T, w: T, h: T }, px, py)) return { type: 'gust', index: i };
+    for (let i = room.geysers.length - 1; i >= 0; i--) if (inside(geyserRect(room.geysers[i]), px, py)) return { type: 'geyser', index: i };
     for (let i = room.cutscenes.length - 1; i >= 0; i--) if (inside(doorRect(room.cutscenes[i]), px, py)) return { type: 'cutscene', index: i };
     for (let i = room.doors.length - 1; i >= 0; i--) if (inside(doorRect(room.doors[i]), px, py)) return { type: 'door', index: i };
     return tileSpotAt(px, py);
@@ -535,7 +589,7 @@ export async function mount(root, studio) {
   const spotAt = (x, y) => room.looks.find((l) => l.x === x && l.y === y);
   function positionOf(sel) {
     if (sel.type === 'start') return room.playerStart;
-    return { door: room.doors, cutscene: room.cutscenes, prop: room.props, npc: room.npcs }[sel.type][sel.index];
+    return { door: room.doors, cutscene: room.cutscenes, geyser: room.geysers, gust: room.gusts, prop: room.props, npc: room.npcs }[sel.type][sel.index];
   }
 
   function cellOf(e) {
@@ -593,6 +647,15 @@ export async function mount(root, studio) {
       const ids = Object.keys(scenes);
       room.cutscenes.push({ x, y, w: 1, h: 1, scene: ids.find((id) => scenes[id].room === room.id) ?? ids[0] ?? 'example_scene' });
       return { type: 'cutscene', index: room.cutscenes.length - 1 };
+    }
+    if (kind === 'gust') {
+      room.gusts.push({ x, y, to: { x, y: Math.max(0, y - 3) } });
+      return { type: 'gust', index: room.gusts.length - 1 };
+    }
+    if (kind === 'geyser') {
+      const to = Object.keys(rooms).find((id) => id !== room.id) ?? room.id;
+      room.geysers.push({ x, y, to, spawn: { ...(rooms[to]?.playerStart ?? { x: 1, y: 1 }) } });
+      return { type: 'geyser', index: room.geysers.length - 1 };
     }
     if (kind.startsWith('enemy:')) {
       room.npcs.push({ enemy: kind.slice(6), x, y, patrol: [clamp(x - 2, 1, width() - 2), clamp(x + 2, 1, width() - 2)] });
@@ -766,7 +829,7 @@ export async function mount(root, studio) {
       return;
     }
     edit(() => {
-      const list = { door: room.doors, cutscene: room.cutscenes, prop: room.props, npc: room.npcs }[selected.type];
+      const list = { door: room.doors, cutscene: room.cutscenes, geyser: room.geysers, gust: room.gusts, prop: room.props, npc: room.npcs }[selected.type];
       const [removed] = list.splice(selected.index, 1);
       if (removed?.text && !room.props.some((p) => p.text === removed.text) && !(removed.text in originalSigns)) delete signs[removed.text];
       selected = null;
@@ -788,6 +851,8 @@ export async function mount(root, studio) {
     if (sel.type === 'start') return TYPE_INFO.start;
     if (sel.type === 'door') return TYPE_INFO.door;
     if (sel.type === 'cutscene') return TYPE_INFO.cutscene;
+    if (sel.type === 'geyser') return TYPE_INFO.geyser;
+    if (sel.type === 'gust') return TYPE_INFO.gust;
     if (sel.type === 'tile') return { label: tileName(room.tiles[sel.y][sel.x]), icon: 'eye' };
     if (sel.type === 'npc') return { label: enemyName(room.npcs[sel.index].enemy), icon: 'enemy' };
     return TYPE_INFO[propType(room.props[sel.index])];
@@ -898,6 +963,36 @@ export async function mount(root, studio) {
         slider({ label: 'Width', min: 1, max: 8, value: door.w, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { door.w = v; }) }),
         slider({ label: 'Height', min: 1, max: 8, value: door.h, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { door.h = v; }) }),
         hint('Paint Doorway tiles under it so it looks like a way out.'));
+    } else if (selected.type === 'gust') {
+      const g = room.gusts[selected.index];
+      body.push(
+        el('div', { class: 'field' },
+          el('span', { class: 'field-label' }, 'Drops you at'),
+          el('div', { class: 'row' }, el('span', { class: 'grow' }, `tile ${g.to.x}, ${g.to.y}`),
+            btn('flag', 'Pick on the map', async () => {
+              const spot = await pickTile(room, { title: 'Where does the updraft drop you?', text: 'Click the tile to land on. A raised block is fine: you land on top of it.', current: g.to, enemySprites });
+              if (spot) edit(() => { g.to = spot; });
+            }, { kind: 'ghost' }))),
+        coords(g),
+        hint('Stepping on it tosses the player up in an arc and drops them on that tile, Ves or not. Good for getting onto blocks, across gaps, or past a wall in a puzzle.'));
+    } else if (selected.type === 'geyser') {
+      const g = room.geysers[selected.index];
+      body.push(
+        field('Floats you up to', select(Object.keys(rooms).map((id) => [id, roomLabel(id)]), g.to, (v) => edit(() => {
+          g.to = v;
+          g.spawn = { ...(rooms[v]?.playerStart ?? { x: 1, y: 1 }) };
+        }))),
+        el('div', { class: 'field' },
+          el('span', { class: 'field-label' }, 'You land at'),
+          el('div', { class: 'row' }, el('span', { class: 'grow' }, `tile ${g.spawn.x}, ${g.spawn.y}`),
+            btn('flag', 'Pick on the map', async () => {
+              const target = g.to === room.id ? room : rooms[g.to];
+              if (!target) { toast('That room does not exist yet.', { kind: 'error' }); return; }
+              const spot = await pickTile(target, { title: `Where do you land in ${roomLabel(g.to)}?`, text: 'Click the tile the hero and Ves drift down onto (open ground, not on a door).', current: g.spawn, enemySprites });
+              if (spot) edit(() => { g.spawn = spot; });
+            }, { kind: 'ghost' }))),
+        coords(g),
+        hint('With Ves in the party, stepping in floats you both up on her umbrella. Without her, the wind gently holds you off, so put it somewhere the player will come back to.'));
     } else if (selected.type === 'tile') {
       body.push(...tileWordsInspector(selected));
     } else if (selected.type === 'cutscene') {
@@ -1119,6 +1214,17 @@ export async function mount(root, studio) {
       const target = d.to === room.id ? room : rooms[d.to];
       if (!target) list.push({ text: `A door leads to "${d.to}", but there's no room called that.`, sel: { type: 'door', index: i } });
       else if (solid(target, d.spawn.x, d.spawn.y)) list.push({ text: `A door drops the player inside a wall in ${roomLabel(d.to)}. Pick another arrival spot.`, sel: { type: 'door', index: i } });
+    });
+    room.gusts.forEach((g, i) => {
+      if (solid(room, g.x, g.y)) list.push({ text: 'An updraft is on a solid tile, so nobody can step into it.', sel: { type: 'gust', index: i } });
+      const landing = room.tiles[g.to.y]?.[g.to.x];
+      if (landing === undefined || (solid(room, g.to.x, g.to.y) && !(TILES[landing]?.raise > 0))) list.push({ text: 'An updraft drops the player inside a wall. Pick another landing tile.', sel: { type: 'gust', index: i } });
+    });
+    room.geysers.forEach((g, i) => {
+      const target = g.to === room.id ? room : rooms[g.to];
+      if (!target) list.push({ text: `A wind geyser blows up to "${g.to}", but there's no room called that.`, sel: { type: 'geyser', index: i } });
+      else if (solid(target, g.spawn.x, g.spawn.y)) list.push({ text: `A wind geyser lands the player inside a wall in ${roomLabel(g.to)}. Pick another landing spot.`, sel: { type: 'geyser', index: i } });
+      if (solid(room, g.x, g.y)) list.push({ text: 'A wind geyser is on a solid tile, so nobody can step into it.', sel: { type: 'geyser', index: i } });
     });
     room.cutscenes.forEach((c, i) => {
       if (!scenes[c.scene]) list.push({ text: `A cutscene trigger plays "${c.scene}", but there's no cutscene called that. Make it in the Cutscene Maker.`, sel: { type: 'cutscene', index: i } });

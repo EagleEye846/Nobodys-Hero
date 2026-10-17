@@ -3,6 +3,7 @@ import { TILES, floorUnder } from './tileset.js';
 import { Prop } from './prop.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { inParty } from '../characters/party.js';
+import { isLamplit, PROP_GLOWS } from './lamplight.js';
 
 // Crack pixels as [x, y, width, height] within a tile. Each crack level shows more of the list.
 const CRACKS = [
@@ -63,6 +64,9 @@ export class Room {
     // Up in the snow, or underground: what shows under blocks and boulders.
     this.snowy = Boolean(data.snowy);
     this.cave = Boolean(data.cave);
+    // Lit by its own lamps and fires (see lamplight.js): those lights are
+    // drawn live over the room, so they aren't painted into its floor.
+    this.lamplit = isLamplit(data);
     this.width = data.tiles[0].length;
     this.height = data.tiles.length;
     this.pixelWidth = this.width * T;
@@ -297,10 +301,11 @@ export class Room {
       if (char === 'P') lights.push([tx, ty, 38, 0.16]);
       if (char === 'C') lights.push([tx, ty, 34, 0.14]);
       // Cabin windows spill warm light; ice crystals a cold blue one.
-      if (char === 'w') lights.push([tx, ty + 0.5, 30, 0.14]);
+      if (char === 'w' && !this.lamplit) lights.push([tx, ty + 0.5, 30, 0.14]);
       if (char === 'x') lights.push([tx, ty, 30, 0.16, '120, 200, 255']);
     }));
     for (const prop of this.props) {
+      if (this.lamplit && (prop.glow ?? PROP_GLOWS[prop.look])) continue;
       const [radius, strength] = prop.save ? [30, 0.12] : PROP_LIGHTS[prop.look] ?? [];
       if (radius) lights.push([(prop.x + prop.width / 2) / T - 0.5, prop.y / T, radius, strength]);
     }

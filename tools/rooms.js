@@ -169,6 +169,8 @@ export function editableRoom(room) {
   copy.tiles = room.tiles.map((row) => [...row]);
   copy.doors ??= [];
   copy.cutscenes ??= [];
+  copy.geysers ??= [];
+  copy.gusts ??= [];
   copy.looks ??= [];
   copy.tileTexts ??= {};
   copy.props ??= [];
@@ -232,6 +234,7 @@ const propLiteral = (prop) => {
   if (prop.sound) out.sound = prop.sound;
   if (prop.wrath) out.wrath = prop.wrath;
   if (prop.light) out.light = prop.light;
+  if (prop.glow !== undefined) out.glow = prop.glow;
   if (prop.seenInLight) out.seenInLight = true;
   if (prop.notice) out.notice = true;
   if (prop.grapple) out.grapple = true;
@@ -239,6 +242,8 @@ const propLiteral = (prop) => {
 };
 const doorLiteral = ({ x, y, w, h, to, spawn }) => inline({ x, y, w, h, to, spawn: { x: spawn.x, y: spawn.y } });
 const cutsceneLiteral = ({ x, y, w, h, scene }) => inline({ x, y, w, h, scene });
+const gustLiteral = ({ x, y, to }) => inline({ x, y, to: { x: to.x, y: to.y } });
+const geyserLiteral = ({ x, y, to, spawn }) => inline({ x, y, to, spawn: { x: spawn.x, y: spawn.y } });
 const npcLiteral = ({ art, enemy, x, y, patrol, behaviour, ambush, reach }) => {
   const how = behaviour ?? (ambush ? 'ambush' : 'patrol');
   return inline({ art, enemy, x, y, patrol: [patrol[0], patrol[1]], behaviour: how === 'patrol' ? undefined : how, reach });
@@ -277,6 +282,17 @@ export function roomModule(room, constName, header) {
     '  // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).',
     list('cutscenes', room.cutscenes ?? [], cutsceneLiteral),
     '',
+    ...(room.geysers?.length ? [
+      '  // Wind geysers (src/overworld/windGeyser.js): with Ves, stepping in floats',
+      '  // you up into the room `to`, landing at `spawn`. Without her the wind holds you off.',
+      list('geysers', room.geysers, geyserLiteral),
+      '',
+    ] : []),
+    ...(room.gusts?.length ? [
+      '  // Updrafts: small wind geysers that toss you to tile `to` in this room (anyone, Ves or not).',
+      list('gusts', room.gusts, gustLiteral),
+      '',
+    ] : []),
     '  // Things you can press Z on. `text` names a section of this room\'s text file;',
     '  // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.',
     `  textFile: ${quote(room.textFile)},`,

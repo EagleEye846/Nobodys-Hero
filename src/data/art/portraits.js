@@ -124,47 +124,91 @@ const KEEPER_EXPRESSIONS = {
 };
 
 const VES_PALETTE = {
-  k: '#120c1c', // outline
-  u: '#7a3a6e', // umbrella
-  U: '#552650', // umbrella ribs and shade
-  p: '#d0a050', // the patch on it, and her mittens
-  P: '#a87a34', // mitten, in shadow
+  k: '#1a1020', // outline
+  u: '#8a3f78', // umbrella
+  U: '#5e2852', // umbrella ribs and shade
+  p: '#e0aa48', // mittens and the patch on the umbrella
+  P: '#b07c2c', // mitten, in shadow
   g: '#5a3e2e', // umbrella shaft
-  h: '#2e2244', // hair
-  H: '#4e4072', // hair, catching the light
-  n: '#ffffff', // a snowflake in her hair
-  s: '#f4d6bc', // skin
-  S: '#d8aa92', // skin in shadow
-  e: '#2a2040', // eyes
+  h: '#4a2a26', // hair, warm chestnut
+  H: '#7c4a36', // hair, catching the light
+  r: '#e8685a', // her coral ribbon
+  R: '#b84a44', // ribbon, in shadow
+  s: '#f7d4b4', // skin
+  S: '#e0ae90', // skin in shadow
+  e: '#2a1a2a', // eyes
   E: '#ffffff', // eye shine
-  i: '#6f9fdc', // irises, winter blue
-  b: '#f0a0a8', // blush
-  m: '#8a4a5a', // mouth
-  o: '#4a2a3a', // open mouth
-  t: '#8fd0ff', // tears
-  c: '#3e4c80', // coat, evening blue
-  C: '#2a3462', // coat folds
-  w: '#ece4f4', // scarf
-  W: '#b8b0d4', // scarf folds
+  i: '#4f8fd8', // irises, winter blue
+  I: '#9cc8f4', // irises, lit
+  b: '#f29a9a', // blush
+  m: '#a8485a', // mouth
+  o: '#5a2a36', // open mouth
+  t: '#9ad8ff', // tears
+  T: '#e6f6ff', // tears, welling
+  c: '#3e4f8e', // coat, evening blue
+  C: '#2c3868', // coat folds
+  w: '#f4ecdc', // scarf, cream
+  W: '#e0705a', // scarf stripe, coral
+  n: '#ffffff', // snow
 };
-// Ves's face, under her umbrella. Her eyes and mouth do the talking; her
-// brows (none at rest) come out for the big feelings.
+
+// Ves's face: a girl of about sixteen under her umbrella. She feels things
+// strongly, so her face goes a long way either side of her gentle smile:
+// beaming and laughing, tender, resolute, furious, sobbing.
 const VES_EXPRESSIONS = {
-  glee: { closed: true, patches: [[15, 9, 'ssss'], [15, 19, 'ssss'], [16, 9, 'skks'], [16, 19, 'skks'], [17, 9, 'kssk'], [17, 19, 'kssk'], [20, 12, 'smmmms'], [21, 12, 'smooms']] },
-  laughing: { closed: true, patches: [[15, 9, 'ssss'], [15, 19, 'ssss'], [16, 9, 'skks'], [16, 19, 'skks'], [17, 9, 'kssk'], [17, 19, 'kssk'], [20, 12, 'mmmmmm'], [21, 12, 'moooom'], [18, 8, 'bbbb'], [18, 20, 'bbbb']] },
-  sad: { patches: [[13, 11, 'hh'], [14, 9, 'hh'], [13, 19, 'hh'], [14, 21, 'hh'], [16, 9, 'eeie'], [16, 19, 'eeie'], [20, 12, 'ssmmss'], [21, 12, 'smssms']] },
-  crying: { patches: [[13, 11, 'hh'], [14, 9, 'hh'], [13, 19, 'hh'], [14, 21, 'hh'], [16, 9, 'eeie'], [16, 19, 'eeie'], [18, 9, 't'], [19, 9, 't'], [18, 22, 't'], [19, 22, 't'], [22, 9, 't'], [20, 12, 'smmmms'], [21, 12, 'smooms']] },
-  worried: { patches: [[13, 11, 'hh'], [14, 9, 'hh'], [13, 19, 'hh'], [14, 21, 'hh'], [20, 12, 'ssssss'], [21, 12, 'smsmms']] },
-  surprised: { patches: [[14, 9, 'kkkk'], [14, 19, 'kkkk'], [15, 9, 'eEie'], [15, 19, 'eEie'], [16, 9, 'eiie'], [16, 19, 'eiie'], [17, 9, 'eiie'], [17, 19, 'eiie'], [20, 12, 'ssmmss'], [21, 12, 'ssooss']] },
-  scared: { patches: [[14, 9, 'kkkk'], [14, 19, 'kkkk'], [15, 9, 'eEie'], [15, 19, 'eEie'], [16, 9, 'eiie'], [16, 19, 'eiie'], [17, 9, 'eiie'], [17, 19, 'eiie'], [13, 11, 'hh'], [13, 19, 'hh'], [20, 12, 'ssssss'], [21, 12, 'msmsms']] },
-  determined: { patches: [[13, 9, 'hh'], [14, 11, 'hh'], [13, 21, 'hh'], [14, 19, 'hh'], [20, 12, 'ssssss'], [21, 12, 'smmmms']] },
-  angry: { patches: [[13, 9, 'hh'], [14, 11, 'hh'], [13, 21, 'hh'], [14, 19, 'hh'], [15, 9, 'kkkk'], [15, 19, 'kkkk'], [16, 9, 'keik'], [16, 19, 'keik'], [17, 9, 'eiie'], [17, 19, 'eiie'], [18, 8, 'bbbb'], [18, 20, 'bbbb'], [20, 12, 'smmmms'], [21, 12, 'mssssm']] },
-  praying: { closed: true, patches: [[15, 9, 'ssss'], [15, 19, 'ssss'], [16, 9, 'ssss'], [16, 19, 'ssss'], [17, 9, 'kkkk'], [17, 19, 'kkkk'], [20, 12, 'ssssss'], [21, 12, 'ssmmss']] },
-  shy: { patches: [[16, 9, 'eeEi'], [16, 19, 'eeEi'], [17, 9, 'eeii'], [17, 19, 'eeii'], [18, 8, 'bbbb'], [18, 20, 'bbbb'], [20, 12, 'ssssss'], [21, 12, 'ssmmss']] },
-  thoughtful: { patches: [[16, 9, 'eeEi'], [16, 19, 'eeEi'], [17, 9, 'eeii'], [17, 19, 'eeii'], [20, 12, 'ssssss'], [21, 12, 'sssmms']] },
-  hopeful: { patches: [[13, 9, 'hhhh'], [13, 19, 'hhhh'], [16, 9, 'eEEe'], [16, 19, 'eEEe'], [20, 12, 'smssms'], [21, 12, 'ssmmss']] },
-  exhausted: { patches: [[15, 9, 'ssss'], [15, 19, 'ssss'], [16, 9, 'kkkk'], [16, 19, 'kkkk'], [17, 9, 'eiie'], [17, 19, 'eiie'], [20, 12, 'ssssss'], [21, 12, 'smmmms']] },
-  cold: { closed: true, patches: [[15, 9, 'ssss'], [15, 19, 'ssss'], [16, 9, 'kssk'], [16, 19, 'kssk'], [17, 9, 'skks'], [17, 19, 'skks'], [18, 8, 'bbbb'], [18, 20, 'bbbb'], [19, 15, 'bb'], [20, 12, 'ssssss'], [21, 12, 'msmsms']] },
+  smile: { patches: [[16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'smssms'], [20, 13, 'ssmmss']] },
+  glee: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'kkk'], [14, 18, 'kkk'], [15, 11, 'sss'], [15, 18, 'sss'], [15, 10, 'k'], [15, 14, 'k'], [15, 17, 'k'], [15, 21, 'k'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'mmmmmm'], [20, 13, 'smooms']] },
+  laughing: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'kkk'], [14, 18, 'kkk'], [15, 11, 'sss'], [15, 18, 'sss'], [15, 10, 'k'], [15, 14, 'k'], [15, 17, 'k'], [15, 21, 'k'], [11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'mmmmmm'], [20, 13, 'moooom']] },
+  tender: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'smssms'], [20, 13, 'ssmmss']] },
+  sad: { patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [14, 11, 'eii'], [14, 18, 'eii'], [19, 13, 'ssmmss'], [20, 13, 'smssms']] },
+  crying: { patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [14, 11, 'eTi'], [14, 18, 'eTi'], [16, 11, 't'], [17, 11, 't'], [16, 20, 't'], [17, 20, 't'], [18, 10, 't'], [18, 21, 't'], [19, 13, 'smmmms'], [20, 13, 'mossom']] },
+  sobbing: { closed: true, patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'sss'], [14, 18, 'sss'], [15, 10, 'kkkk'], [15, 18, 'kkkk'], [16, 10, 'tt'], [17, 11, 't'], [18, 11, 't'], [16, 20, 'tt'], [17, 20, 't'], [18, 20, 't'], [19, 10, 't'], [19, 21, 't'], [19, 13, 'smmmms'], [20, 13, 'moooom']] },
+  worried: { patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [19, 13, 'ssssss'], [20, 13, 'smsmms']] },
+  surprised: { patches: [[12, 10, 'kkkk'], [12, 18, 'kkkk'], [13, 10, 'seEi'], [13, 18, 'eEis'], [14, 11, 'eii'], [14, 18, 'eii'], [11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [19, 13, 'ssmmss'], [20, 13, 'smooms']] },
+  scared: { patches: [[12, 10, 'kkkk'], [12, 18, 'kkkk'], [13, 10, 'seEi'], [13, 18, 'eEis'], [14, 11, 'eii'], [14, 18, 'eii'], [11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [19, 13, 'msmsms'], [20, 13, 'ssssss']] },
+  determined: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [19, 13, 'ssssss'], [20, 13, 'smmmms']] },
+  resolute: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [13, 10, 'skkk'], [13, 18, 'kkks'], [14, 11, 'kEi'], [14, 18, 'eEk'], [19, 13, 'ssssss'], [20, 13, 'smmmms']] },
+  angry: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [14, 11, 'kEi'], [14, 18, 'eEk'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'smmmms'], [20, 13, 'mssssm']] },
+  furious: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [12, 11, 'khh'], [12, 18, 'hhk'], [14, 11, 'kik'], [14, 18, 'kik'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'mmmmmm'], [20, 13, 'mommom']] },
+  praying: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'sss'], [14, 18, 'sss'], [15, 10, 'kkkk'], [15, 18, 'kkkk'], [19, 13, 'ssssss'], [20, 13, 'ssmmss']] },
+  shy: { patches: [[14, 11, 'eeE'], [14, 18, 'eeE'], [15, 11, 'eei'], [15, 18, 'eei'], [16, 10, 'bbb'], [16, 19, 'bbb'], [17, 10, 'bb'], [17, 20, 'bb'], [19, 13, 'ssssss'], [20, 13, 'sssmms']] },
+  thoughtful: { patches: [[14, 11, 'Eie'], [14, 18, 'Eie'], [11, 18, 'sss'], [10, 18, 'hhh'], [19, 13, 'ssssss'], [20, 13, 'ssmmms']] },
+  hopeful: { patches: [[11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [14, 11, 'EEi'], [14, 18, 'EEi'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'msssms'], [20, 13, 'smmmms']] },
+  exhausted: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [19, 13, 'ssssss'], [20, 13, 'smmmms']] },
+  cold: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'kss'], [14, 18, 'ssk'], [15, 10, 'sskk'], [15, 18, 'kkss'], [17, 16, 'b'], [18, 15, 'bb'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'ssssss'], [20, 13, 'msmsms']] },
+};
+
+const GRETA_PALETTE = {
+  k: '#1a1020', // outline
+  '1': '#b08858', // fur
+  D: '#7a5a3a', // dark fur
+  '2': '#e2c69c', // muzzle and cheeks
+  N: '#d08a8a', // nose
+  e: '#1e1420', // eyes
+  E: '#ffffff', // eye shine
+  W: '#f4f1ea', // flour
+  r: '#c43b3b', // dress, herald red
+  R: '#8e2a2e', // dress folds
+  a: '#ece4d4', // apron
+  A: '#c8bfae', // apron creases
+  m: '#5a3a2e', // mouth
+  o: '#3a2224', // open mouth
+  b: '#e89a8a', // blush
+  t: '#9ad8ff', // tears
+  L: '#9a9aa8', // ladle
+};
+
+// Greta, who keeps the inn and has kept Ves fed for eight years: kind,
+// floury, and not to be argued with.
+const GRETA_EXPRESSIONS = {
+  smile: { patches: [[20, 13, 'm2222m'], [21, 14, 'mmmm']] },
+  glee: { closed: true, patches: [[13, 11, '11'], [13, 19, '11'], [14, 11, 'kk'], [14, 19, 'kk'], [15, 10, 'k11k'], [15, 18, 'k11k'], [20, 13, 'mmmmmm'], [21, 14, 'moom']] },
+  surprised: { patches: [[12, 11, 'kk'], [12, 19, 'kk'], [13, 11, 'eE'], [13, 19, 'eE'], [20, 13, '2mm222'], [21, 14, 'moom']] },
+  worried: { patches: [[11, 12, 'D'], [12, 11, 'D'], [11, 19, 'D'], [12, 20, 'D'], [20, 13, '222222'], [21, 14, 'mmmm']] },
+  sad: { patches: [[11, 12, 'D'], [12, 11, 'D'], [11, 19, 'D'], [12, 20, 'D'], [14, 11, 'ee'], [14, 19, 'ee'], [20, 13, '22mm22'], [21, 13, 'm2222m']] },
+  crying: { patches: [[11, 12, 'D'], [12, 11, 'D'], [11, 19, 'D'], [12, 20, 'D'], [14, 11, 'ee'], [14, 19, 'ee'], [16, 11, 't'], [17, 11, 't'], [16, 20, 't'], [17, 20, 't'], [20, 13, '2mmmm2'], [21, 13, 'mooomm']] },
+  stern: { patches: [[11, 10, 'DD'], [12, 12, 'D'], [11, 20, 'DD'], [12, 19, 'D'], [13, 11, 'kk'], [13, 19, 'kk'], [20, 13, '222222'], [21, 14, 'mmmm']] },
+  tender: { closed: true, patches: [[13, 11, '11'], [13, 19, '11'], [14, 11, '11'], [14, 19, '11'], [15, 11, 'kk'], [15, 19, 'kk'], [20, 13, 'm2222m'], [21, 14, 'mmmm']] },
 };
 
 export const PORTRAITS = {
@@ -316,75 +360,148 @@ export const PORTRAITS = {
   },
   vesper: {
     palette: VES_PALETTE,
-    eyes: [15, 16, 17],
+    eyes: [13, 14, 15],
     expressions: VES_EXPRESSIONS,
     idle: [
-      '........................kk......',
-      '...............kkkkkkkkkuukkkkkk',
-      '.............kkuuuuuuUuuuuuuUuuu',
-      '...........kkppuuuuuUuuuuuuuuUuu',
-      '..........kuuppuuuUuuuuuuuuuuuuU',
-      '..........kuuuuuUUuuuuuuuuuuuuuu',
-      '..........kUUkUUUkUUUkUUUkUUUkUU',
-      '..........kkkkkkkkkkkk......g...',
-      '.........khhhHHhhhhhhhk.....g...',
-      '........khhhHHhhhhhhhhhk....g...',
-      '.......khhhHhhhhhhhhhhhhk...g...',
-      '......khhhhhhhhhhhhhhnhhhk..g...',
-      '.....khhhhsshhhhhhhhsshhhhk.g...',
-      '.....khhsssssshhhhsssssshhk.g...',
-      '.....khsssssssssssssssssshk.g...',
-      '.....khsskkkksssssskkkksshk.g...',
-      '.....khsseEiesssssseEiesshk.g...',
-      '.....khsseiiesssssseiiesshk.g...',
-      '.....khsbbsssssssssssssbbhk.g...',
-      '.....khsssssssssssssssssshk.g...',
-      '.....khsssssssmssmssssssshk.g...',
-      '.....khssssssssmmsssssssshk.g...',
-      '.....khhSssssssssssssssShhk.g...',
-      '.....khhkSssssssssssssSkhhkkpk..',
-      '.....khhhkkkkSSSSSSkkkkhhhkpppk.',
-      '....kchhhkwwwwwWwwwwwwkhhhkpPpk.',
-      '...kccchhkwwwwwWWwwwwwkhhcckkk..',
-      '..kcccccckwwwwwWWwwwwwkcccccck..',
-      '.kccccccCckwwWwwwwWwwkcCccccccck',
-      '.kcccccccCCkwwwWwwwwkCCcccccccck',
-      'kccccccccCCCkwwWwwwkCCCcccccccck',
-      'cccccccccCCCkwwwwwkCCCcccccccccc',
+      '...................kkkkuuuUuuuuu',
+      '................kkkuuuuuUUuuuuuu',
+      '..............kkuuuuuuuUuuuuuuuu',
+      '............kkuuuuuppUUuuuuuuuuu',
+      '..........kkhuuuuuuuUuuuuuuuuuuu',
+      '.........khhUuuUuuUUuUuuUuuUuuUu',
+      '........khhhhHHHHHhhrRkRrkkgkkkk',
+      '........khhHHHhhhhhhhhrkk.kgk...',
+      '.......khhhhhhhhhhhhhhhhk.kgk...',
+      '......khhhhhhhhhhhhsshhhhkkgk...',
+      '......khhhhhhhhhhhhshhhhhkkgk...',
+      '......khhhhhhhsssshhhhhhhkkgk...',
+      '......khhhssssssssssshhhhkkgk...',
+      '......khhhkkkksssskkkkhhhkkgk...',
+      '......khhhseEisssseEishhhkkgk...',
+      '......khhhseiIsssseiIshhhkkgk...',
+      '......khhhsbbssssssbbshhhkkgk...',
+      '......khhhssssssSssssshhhkkgk...',
+      '......khhhsssssSsssssshhhkkgk...',
+      '......khhhhsssmssmssshhhhkkgk...',
+      '......khhhhssssmmsssshhhhkkgk...',
+      '......khhhhhsssssssshhhhhkkgk...',
+      '......khhhhhhSSSSSShhhhhhkkgk...',
+      '......khhhkkhsssssshkkhhhkpppk..',
+      '......khhhwwwwwwwwwwwwhhhkpPpk..',
+      '...kkkhhhhwWwwwwwwwwWwhhhhkkk...',
+      '..kcccchhhcwwwwwwwwwwchhhcccck..',
+      '..kcccchhhcccccccwwWcchhhcccck..',
+      '..kcccccccccccccccwWCcccccccck..',
+      '..kcCcccccccccccccwwCccccccCck..',
+      '..kccCcccccccccccccWwcccccccck..',
+      '..kcccccccccccccccccccccccccck..',
     ],
     blink: [
-      '........................kk......',
-      '...............kkkkkkkkkuukkkkkk',
-      '.............kkuuuuuuUuuuuuuUuuu',
-      '...........kkppuuuuuUuuuuuuuuUuu',
-      '..........kuuppuuuUuuuuuuuuuuuuU',
-      '..........kuuuuuUUuuuuuuuuuuuuuu',
-      '..........kUUkUUUkUUUkUUUkUUUkUU',
-      '..........kkkkkkkkkkkk......g...',
-      '.........khhhHHhhhhhhhk.....g...',
-      '........khhhHHhhhhhhhhhk....g...',
-      '.......khhhHhhhhhhhhhhhhk...g...',
-      '......khhhhhhhhhhhhhhnhhhk..g...',
-      '.....khhhhsshhhhhhhhsshhhhk.g...',
-      '.....khhsssssshhhhsssssshhk.g...',
-      '.....khsssssssssssssssssshk.g...',
-      '.....khsssssssssssssssssshk.g...',
-      '.....khsskkkksssssskkkksshk.g...',
-      '.....khsssssssssssssssssshk.g...',
-      '.....khsbbsssssssssssssbbhk.g...',
-      '.....khsssssssssssssssssshk.g...',
-      '.....khsssssssmssmssssssshk.g...',
-      '.....khssssssssmmsssssssshk.g...',
-      '.....khhSssssssssssssssShhk.g...',
-      '.....khhkSssssssssssssSkhhkkpk..',
-      '.....khhhkkkkSSSSSSkkkkhhhkpppk.',
-      '....kchhhkwwwwwWwwwwwwkhhhkpPpk.',
-      '...kccchhkwwwwwWWwwwwwkhhcckkk..',
-      '..kcccccckwwwwwWWwwwwwkcccccck..',
-      '.kccccccCckwwWwwwwWwwkcCccccccck',
-      '.kcccccccCCkwwwWwwwwkCCcccccccck',
-      'kccccccccCCCkwwWwwwkCCCcccccccck',
-      'cccccccccCCCkwwwwwkCCCcccccccccc',
+      '...................kkkkuuuUuuuuu',
+      '................kkkuuuuuUUuuuuuu',
+      '..............kkuuuuuuuUuuuuuuuu',
+      '............kkuuuuuppUUuuuuuuuuu',
+      '..........kkhuuuuuuuUuuuuuuuuuuu',
+      '.........khhUuuUuuUUuUuuUuuUuuUu',
+      '........khhhhHHHHHhhrRkRrkkgkkkk',
+      '........khhHHHhhhhhhhhrkk.kgk...',
+      '.......khhhhhhhhhhhhhhhhk.kgk...',
+      '......khhhhhhhhhhhhsshhhhkkgk...',
+      '......khhhhhhhhhhhhshhhhhkkgk...',
+      '......khhhhhhhsssshhhhhhhkkgk...',
+      '......khhhssssssssssshhhhkkgk...',
+      '......khhhsssssssssssshhhkkgk...',
+      '......khhhsssssssssssshhhkkgk...',
+      '......khhhkkkksssskkkkhhhkkgk...',
+      '......khhhsbbssssssbbshhhkkgk...',
+      '......khhhssssssSssssshhhkkgk...',
+      '......khhhsssssSsssssshhhkkgk...',
+      '......khhhhsssmssmssshhhhkkgk...',
+      '......khhhhssssmmsssshhhhkkgk...',
+      '......khhhhhsssssssshhhhhkkgk...',
+      '......khhhhhhSSSSSShhhhhhkkgk...',
+      '......khhhkkhsssssshkkhhhkpppk..',
+      '......khhhwwwwwwwwwwwwhhhkpPpk..',
+      '...kkkhhhhwWwwwwwwwwWwhhhhkkk...',
+      '..kcccchhhcwwwwwwwwwwchhhcccck..',
+      '..kcccchhhcccccccwwWcchhhcccck..',
+      '..kcccccccccccccccwWCcccccccck..',
+      '..kcCcccccccccccccwwCccccccCck..',
+      '..kccCcccccccccccccWwcccccccck..',
+      '..kcccccccccccccccccccccccccck..',
+    ],
+  },
+  herald_greta: {
+    palette: GRETA_PALETTE,
+    eyes: [13, 14, 15],
+    expressions: GRETA_EXPRESSIONS,
+    idle: [
+      '................................',
+      '................................',
+      '................................',
+      '........kk.....kk.....kk........',
+      '.......k11kkkkk11kkkkk11k.......',
+      '......k1111DDDDDDDDDD1111k......',
+      '.....k1111DDDDDDDDDDWW1111k.....',
+      '.....k111DDDDDDDDDDDDWDD11k.....',
+      '......k11DDDDDDDDDDDDDD11k......',
+      '......k111DDDDDDDDDDDD111k......',
+      '......k111111111111111111k......',
+      '.....k11111111111111111111k.....',
+      '.....k11111111111111111111k.....',
+      '.....k11111kk111111kk11111k.....',
+      '.....k11111eE222222eE11111k.....',
+      '.....k11111ee222222ee11111k.....',
+      '.....k11111D22222222D11111k.....',
+      '......k1W122222NN22222111k......',
+      '......k11WW2222kk22222211k......',
+      '.......k1bb2222222222bb1k.......',
+      '........k1222m2222m2221k........',
+      '.........k1222mmmm2221k.........',
+      '..........k1222222221k..........',
+      '...........kkkk11kkkk...........',
+      '........kkkrrrrrrrrrrkkk........',
+      '......kkrrrrraaaaaarrrrrkk......',
+      '.....krrrrrraaaaaaaarrrrrrk.....',
+      '....krrrrraaAaaaaaaaaarrrrrk....',
+      '...krrrrrraaaaaaaaaAaarrrrrrk...',
+      '..krrrrrrRaaaaaaaaaaaaaRrrrrrk..',
+      '..krrrrrraaaaaaaaaaaaaarrrrrrk..',
+      '.krrrrrraaaaaaaaaaaaaaaarrrrrrk.',
+    ],
+    blink: [
+      '................................',
+      '................................',
+      '................................',
+      '........kk.....kk.....kk........',
+      '.......k11kkkkk11kkkkk11k.......',
+      '......k1111DDDDDDDDDD1111k......',
+      '.....k1111DDDDDDDDDDWW1111k.....',
+      '.....k111DDDDDDDDDDDDWDD11k.....',
+      '......k11DDDDDDDDDDDDDD11k......',
+      '......k111DDDDDDDDDDDD111k......',
+      '......k111111111111111111k......',
+      '.....k11111111111111111111k.....',
+      '.....k11111111111111111111k.....',
+      '.....k11111111111111111111k.....',
+      '.....k11111112222221111111k.....',
+      '.....k11111kk222222kk11111k.....',
+      '.....k11111D22222222D11111k.....',
+      '......k1W122222NN22222111k......',
+      '......k11WW2222kk22222211k......',
+      '.......k1bb2222222222bb1k.......',
+      '........k1222m2222m2221k........',
+      '.........k1222mmmm2221k.........',
+      '..........k1222222221k..........',
+      '...........kkkk11kkkk...........',
+      '........kkkrrrrrrrrrrkkk........',
+      '......kkrrrrraaaaaarrrrrkk......',
+      '.....krrrrrraaaaaaaarrrrrrk.....',
+      '....krrrrraaAaaaaaaaaarrrrrk....',
+      '...krrrrrraaaaaaaaaAaarrrrrrk...',
+      '..krrrrrrRaaaaaaaaaaaaaRrrrrrk..',
+      '..krrrrrraaaaaaaaaaaaaarrrrrrk..',
+      '.krrrrrraaaaaaaaaaaaaaaarrrrrrk.',
     ],
   },
 };

@@ -38,3 +38,17 @@ Mail forged for the Hero and carried most of the way up the mountain. It weighs 
 
 [snow_mantle]
 A white mantle quilted from a hundred winters' worth of patience. Sold at Rest Stores to anyone who makes it that far.
+
+# Ves's coats, scarves and mittens. Only she can wear them (see `wielder` in
+# src/data/armor.js). Enemies never aim at her, so they look after you.
+[evening_coat]
+Her evening-blue coat and the cream scarf with the coral stripe. Mended at both elbows. Good for standing in front of people.
+
+[ember_knit_scarf]
+A long scarf knitted in lamp-soot grey and ember orange. Wrapped round twice, it keeps whoever's nearest warm. That's usually you.
+
+[goosedown_mittens]
+Big puffy mittens. Ves claps them every time you graze a bullet, which shouldn't help as much as it does.
+
+[oilskin_greatcoat]
+A herald's oilskin, made for keeping watch on the Lookout in all weathers. Heavy as a door, and about as good at being stood behind.

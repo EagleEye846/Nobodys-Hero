@@ -18,6 +18,9 @@ export const REST_BELLTOWER = {
   music: 'rest',
   // Indoors.
   indoors: true,
+  // Lit by its one lamp, and daylight down the stairwell (see
+  // src/overworld/lamplight.js): dim, but not dark.
+  lamplight: { shade: 0.2, nightShade: 0.14 },
 
   tiles: [
     '############',

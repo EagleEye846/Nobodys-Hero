@@ -118,6 +118,20 @@ things). Fifteen NPCs each with first and repeat lines (`text/npcs/`).
   indoors (`ambience` per room).
 - The **cylinder** is drawn per pixel column (no shimmer when turning), lit on
   the sun side and shaded on the other, with a bright rim.
+- **Lamplight in the village** (`src/overworld/lamplight.js`): after dark the
+  square goes deeper blue than the open mountain and every street lamp,
+  brazier, lit window and open cabin door pools warm, flickering light on the
+  snow (by day only a faint warmth). Indoors, the houses are dim and warm
+  between their fires and candles, darker at night, and the chapel's stained
+  glass lets in daylight, then moonlight. It's never a dark room: your candle
+  doesn't burn.
+- **Cleaner village tiles**: snow is one even white with a few soft drifts
+  (no more patchwork of tiles or speckles), lanes are neat courses of rounded
+  cobbles with a clean snow bank along their edges, the pond is clear ice with
+  long streaks of shine, log walls run unbroken with log ends at the corners,
+  roofs are smooth snow with tidy eaves and icicles, and cabin doors are
+  wooden doors with firelight inside. The cliff tops and faces up the mountain
+  are calmer too.
 
 ## Music
 

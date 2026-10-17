@@ -153,6 +153,21 @@ shooting star, and everything outdoors (`underSky`) is shaded in a blue with
 pools of light round every lamp, lit window, fire and crystal
 (`drawTimeOfDay`, `drawShade`). Caves and houses don't notice.
 
+Heralds' Rest is **lamplit** (`src/overworld/lamplight.js`; `LAMPLIT_AREAS`
+in `src/data/areas.js`, or `lamplight: true`/`false` on a room). Outdoors,
+the night comes down deeper there (`lamplight: { night: 0.72 }` to change it)
+and every light pools warm on the snow: a pool lifts the shade and tints what
+it falls on with the light's colour, and a bloom is the flame's own glow on
+top, both wavering a little. Indoors the room is always a little dim and warm
+between its lights, more so at night (`lamplight: { shade, nightShade }`).
+What glows is `PROP_GLOWS` (by sprite: street lamps, braziers, fireplaces,
+stoves, candles, the chapel's candles, altar, votive rack and stained glass),
+or a prop's own `glow` (a list in the same form, or `false`), plus lit cabin
+windows `w` and doorways in a cabin wall. Windows with `sky: true` let in
+daylight, then moonlight. A lamplit room is never a `dark` one: no candle
+burns and nothing is hidden. The round light pictures are drawn once and
+scaled, so a square full of lamps costs next to nothing.
+
 ### Weather, wildlife and the small things
 
 - `weather: 'flurry' | 'snow' | 'blizzard'` (and `wind`) draws snow across the
@@ -222,8 +237,13 @@ Ruins prop leaves (`until`) when that scene has played.
 `src/characters/party.js` defines who can join (Ves, for now). A member
 follows you (`src/overworld/follower.js`; they vanish on the rope and
 reappear when you're off it), takes a turn after yours in battle (the
-`ally` phase: their commands are data in `MEMBERS`), and has a branch in the
-skill tree paid with their own points (`MEMBER_SKILL_BRANCHES`). Someone
+`ally` phase: a menu like yours, FIGHT, TALK, SPELLS, ITEMS and DEFEND; their
+SPELLS are the `commands` in `MEMBERS`, paid from the shared SP), and has a
+branch in the skill tree paid with their own points (`MEMBER_SKILL_BRANCHES`).
+They wear their own weapon and armor (`src/characters/equipment.js`): gear
+with a `wielder` in `weapons.js`/`armor.js` is theirs alone, switched in EQUIP
+(left/right goes on to their tabs), and saved in `HERO_STATE.memberGear`.
+Since enemies only aim at you, their armor looks after you. Someone
 joins through a cutscene step `{ do: 'join', who: 'vesper' }` or by talking to a
 room character with `join: 'vesper'` (Ves, in the chapel, for now). Ideas for
 who else, and how: [party-member-ideas.md](party-member-ideas.md).
@@ -234,7 +254,9 @@ who else, and how: [party-member-ideas.md](party-member-ideas.md).
 - `tools/preview.html?room=<id>&x=&y=&facing=&day=` draws a still of any
   room; `?check=1&songs=1` builds every room and compiles every song;
   `?poke=all` presses Z on every interactable in the game and reports
-  anything that throws; `?skills=2&party=1` draws the skill tree.
+  anything that throws; `?skills=2&party=1` draws the skill tree;
+  `?equip=vesper&slot=armor` draws the EQUIP menu on Ves's tabs;
+  `?allyturn=vesper&phase=spells` draws a battle on her turn.
 
 ### Levels and skills
 

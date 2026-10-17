@@ -1,4 +1,5 @@
 import { HERO_STATE } from '../characters/heroState.js';
+import { giveStartingGear } from '../characters/equipment.js';
 
 // Everything about the world that should be remembered: the room you saved in,
 // where you stood, which enemies are gone for good, and which cutscenes have
@@ -36,17 +37,24 @@ export function saveGame(roomId, spawn) {
   }
 }
 
-// Saves from before Ves replaced Pip: she takes Pip's place in the party,
-// with the points spent on Pip's old skills given back to her.
+// Brings an older save (`saved`, as it was read) up to date.
 const PIP_SKILL_COSTS = { pip_loud: 1, pip_brave: 1, pip_encore: 2, pip_lucky: 2 };
-function upgradeSave() {
-  if (!HERO_STATE.party?.includes('pip')) return;
-  HERO_STATE.party = HERO_STATE.party.map((id) => (id === 'pip' ? 'vesper' : id));
-  const refund = (HERO_STATE.skills ?? []).reduce((sum, id) => sum + (PIP_SKILL_COSTS[id] ?? 0), 0);
-  HERO_STATE.skills = (HERO_STATE.skills ?? []).filter((id) => !(id in PIP_SKILL_COSTS));
-  HERO_STATE.memberPoints ??= {};
-  HERO_STATE.memberPoints.vesper = (HERO_STATE.memberPoints.pip ?? 0) + refund;
-  delete HERO_STATE.memberPoints.pip;
+function upgradeSave(saved) {
+  // From before Ves replaced Pip: she takes Pip's place in the party, with
+  // the points spent on Pip's old skills given back to her.
+  if (HERO_STATE.party?.includes('pip')) {
+    HERO_STATE.party = HERO_STATE.party.map((id) => (id === 'pip' ? 'vesper' : id));
+    const refund = (HERO_STATE.skills ?? []).reduce((sum, id) => sum + (PIP_SKILL_COSTS[id] ?? 0), 0);
+    HERO_STATE.skills = (HERO_STATE.skills ?? []).filter((id) => !(id in PIP_SKILL_COSTS));
+    HERO_STATE.memberPoints ??= {};
+    HERO_STATE.memberPoints.vesper = (HERO_STATE.memberPoints.pip ?? 0) + refund;
+    delete HERO_STATE.memberPoints.pip;
+  }
+  // From before members had gear of their own: nobody's wearing anything
+  // (not even what this session had on), so everyone in the party gets
+  // their starting kit.
+  if (!saved.hero.memberGear) HERO_STATE.memberGear = {};
+  for (const id of HERO_STATE.party ?? []) giveStartingGear(id);
 }
 
 // Loads the last save into HERO_STATE and WORLD_STATE. Returns whether there was one.
@@ -56,7 +64,7 @@ export function loadGame() {
     if (!saved?.hero || !saved?.world) return false;
     Object.assign(HERO_STATE, saved.hero);
     Object.assign(WORLD_STATE, saved.world);
-    upgradeSave();
+    upgradeSave(saved);
     return true;
   } catch {
     return false;

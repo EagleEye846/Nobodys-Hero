@@ -20,7 +20,9 @@ await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
 // save point, or (NEW GAME, or no save) starting at the Ruins entrance.
 const startGame = () => continueGame(START_ROOM);
 const newGame = () => new OverworldScene(START_ROOM);
-const titleScreen = () => new TitleScene(startGame, newGame);
+// Chapter select: start a chapter you've reached again, from its first room.
+const playChapter = (room, spawn) => new OverworldScene(room, spawn);
+const titleScreen = () => new TitleScene(startGame, newGame, playChapter);
 // Where the end of a chapter sends you back to.
 game.home = titleScreen;
 const intro = () => new CutsceneScene('cutscenes/intro.txt', titleScreen, { song: 'prophecy' });

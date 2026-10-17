@@ -1,150 +1,170 @@
-import { melody, chordLine, sustained, arpeggio, transpose, hits, repeat } from '../../audio/notation.js';
+import { melody, chordLine, sustained, arpeggio, hits, repeat } from '../../audio/notation.js';
 import {
-  BELLS, FLUTE, HARP, HORN, BRASS, SOLO_VIOLIN, CELLO, STRING_SECTION, CHOIR, TIMPANI, PIZZICATO_BASS,
+  BELLS, CONCERT_PIANO, HORN, CELLO, STRING_SECTION, CHOIR,
 } from '../../audio/instruments.js';
 
-// "Lamplight and Snowfall": the theme of Heralds' Rest, the snowy village
-// that's been ready for a hundred years. Warm windows in deep snow: a celesta
-// tune over plucked basses and a rippling harp, sleigh bells shaking softly
-// on the off-beats, a music box and a glockenspiel catching the light like
-// flakes, strings and a far choir lying over it all like a blanket of snow.
-// In the middle the heralds rehearse their fanfare, which is the tune from
-// the prophecy (prophecyTheme.js), played gently on a pair of horns, because
-// they've been practising it all this time. Then the snow comes down harder
-// and everything hushes to a music box, before the village warms up again.
-// F major, 84 BPM, one step is a 16th note. About two and a half minutes,
-// then it loops from the hearth (the snowfall intro plays once).
+// "A Light Left On": the theme of Heralds' Rest, the snowy village that's
+// kept a lamp in the window for a hundred years for a Hero who never came.
+// Sitting by the hearth while the snow comes down outside: a fingerpicked
+// guitar rocking under a plain folk tune on a soft, felted piano, an ocarina
+// answering it, a warm bed of strings, and the fire crackling now and then.
+// A celesta catches the snowlight at the ends of phrases, and a sleigh bell
+// shivers once, far off, when the music turns a corner. In the quiet middle a
+// muted horn remembers the prophecy's tune (prophecyTheme.js), slowly, the
+// way you'd hum something your grandmother sang, not as a fanfare.
+// G major (the middle in E minor), 3/4 at 68 BPM, one step is a 16th note.
+// About three minutes; the embers intro plays once, then it loops from the
+// hearth.
 //
-//   snowfall      4 bars   celesta flakes falling, a horn call far off
-//   hearth        8 bars   the tune on the celesta, bells and pizzicato
-//   hearthAnswer  8 bars   the flute takes it, the glockenspiel replies
-//   lanterns      8 bars   a warmer tune on the violin, the cello under it
-//   heralds       8 bars   the prophecy's tune on soft horns, as a fanfare
-//   hush          8 bars   heavy snow: the music box alone, slowed, choir
-//   hearthReturn  8 bars   the tune again, everyone in, violin over it
-//   tag           4 bars   a little herald call, and round again
+//   embers        4 bars   the guitar alone, the fire, flakes on the celesta
+//   hearth       16 bars   the tune on the piano
+//   hearthAnswer 16 bars   the ocarina takes it, the piano answers
+//   longWinter   16 bars   E minor, sadder: piano and cello, then the ocarina
+//   snowfall      8 bars   hushed: the prophecy's tune on a muted horn
+//   hearthReturn  8 bars   the tune's second half, piano and ocarina together
 
-const BAR = 16;
+const BAR = 12;
+const _ = '.';
+const H = '-';
+const silence = (bars) => Array(bars * BAR).fill(_);
 
 // --- Chords: one a bar. ---
-const SNOWFALL_CHORDS = 'F Bb F C';
-const HEARTH_CHORDS = 'F Am Bb F Dm Gm C C';
-const ANSWER_CHORDS = 'F Am Bb F Dm Bb C F';
-const LANTERN_CHORDS = 'Bb C Am Dm Gm Am Bb C';
-const HERALD_CHORDS = 'F Bb F C F Bb C F';
-const HUSH_CHORDS = 'Dm Dm Am Am Bb Bb F C';
-const TAG_CHORDS = 'Bb C F C';
+const EMBER_CHORDS = 'G Em C D';
+const HEARTH_CHORDS = 'G Em C D G Bm C D Em C G D C D G D';
+const WINTER_CHORDS = 'Em C Am B Em C D G C D Bm Em Am C B B';
+const SNOWFALL_CHORDS = 'Em C G D Em C B Em';
+const RETURN_CHORDS = 'Em C G D C D G D';
 
 // --- Patterns, as semitones above each chord's root, one entry a 16th. ---
-const _ = '.';
-// Snowflakes: the celesta falling down the chord.
-const FALLING = [24, _, _, _, 19, _, _, _, 'tenth', _, _, _, 12, _, 7, _];
-const FLAKES = [_, _, _, _, _, _, 24, _, _, _, _, _, _, _, 19, _];
-const FLAKES_LATE = [_, _, _, _, _, _, _, _, _, _, 'tenth', _, _, _, 24, _];
-// The harp rippling up and down in 8ths.
-const RIPPLE = [0, _, 7, _, 12, _, 'tenth', _, 19, _, 'tenth', _, 12, _, 7, _];
-const RIPPLE_SLOW = [0, _, _, _, 7, _, _, _, 12, _, _, _, 'tenth', _, _, _];
-const ONE_DROP = [_, _, _, _, _, _, _, _, 19, _, _, _, _, _, _, _];
-// Plucked basses: boots in the snow.
-const PLUCK = [0, _, _, _, _, _, _, _, 7, _, _, _, _, _, _, _];
-const PLUCK_WALK = [0, _, _, _, 7, _, _, _, 12, _, _, _, 7, _, _, _];
-const PLUCK_ONE = [0, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _];
-// Soft timpani on the one, for the heralds.
-const DRUM_ONE = [0, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _];
+// Fingerpicking in 8ths: the root, up through the chord, and back.
+const PICK = [0, H, 7, H, 'tenth', H, 12, H, 'tenth', H, 7, H];
+// Slower, in quarters, for the hush.
+const PICK_SLOW = [0, H, H, H, 7, H, H, H, 'tenth', H, H, H];
+// The piano's broken chord in the sad middle, in place of the guitar.
+const PIANO_BED = [0, H, H, H, 7, H, 'tenth', H, 12, H, H, H];
+// The bass: one soft note a bar, sometimes leaning onto the fifth.
+const BASS_ONE = [0, H, H, H, H, H, H, H, H, H, H, H];
+const BASS_LEAN = [0, H, H, H, H, H, H, H, 7, H, H, H];
+// Snowlight on the celesta, high up (written from octave 5).
+const NO_TWINKLE = Array(BAR).fill(_);
+const TWINKLE = [_, _, _, _, _, _, _, _, _, _, 12, H];
+const TWINKLE_HIGH = [_, _, _, _, _, _, 'tenth', H, _, _, 19, H];
+const TWINKLE_LATE = [_, _, _, _, _, _, _, _, 19, H, 12, H];
+// Flakes drifting down the chord (written from octave 4), for the intro.
+const FALLING = [24, H, H, H, 19, H, H, H, 'tenth', H, 12, H];
 
-// --- Sleigh bells and shaker. ---
-const SLEIGH_SOFT = hits('....xx......xx..');
-const SLEIGH = hits('..x.xx....x.xx..');
-const SLEIGH_FULL = hits('..x.xx.x..x.xx.x');
-const SLEIGH_CUE = hits('........x.x.xxxx');
-const QUIET = hits('................');
-const SHAKER = hits('x.x.x.x.x.x.x.x.');
-const SHAKER_SOFT = hits('..x...x...x...x.');
+// Applies a different pattern to each bar in turn (cycling), so the twinkles
+// come only where the tune breathes.
+const sprinkle = (chords, octave, patterns) => chords.split(/\s+/).filter(Boolean)
+  .flatMap((symbol, i) => chordLine(symbol, patterns[i % patterns.length], octave));
 
-// The jingles are pitched, so each 'x' becomes a little bell, never the same
-// one twice running, so they shimmer.
-const JINGLE_NOTES = [98, 103, 100, 105, 99, 102];
-const jingle = (pattern) => {
-  let i = 0;
-  return pattern.map((step) => (step === 'x' ? JINGLE_NOTES[i++ % JINGLE_NOTES.length] : step));
+// --- The fire: a tiny tick of noise now and then, never on a beat you could
+// count (each lands a random fraction of a second late, at a random level).
+const CRACKLE = hits(`
+  ...x........ | ......x..... | x........... | .....x....x.
+`);
+const CRACKLE_FAR = hits(`
+  .......x.... | ..x......x.. | ............ | ....x.......
+`);
+const fire = (bars) => ({
+  crackle: repeat(CRACKLE, bars / 4),
+  crackleFar: repeat(CRACKLE_FAR, bars / 4),
+});
+
+// --- One shiver of sleigh bells, far off, at the start of a section. ---
+const SHIVER = [98, 103, 100, 105, 101, _, _, _, _, _, _, _];
+const shiver = (bars) => [...SHIVER, ...silence(bars - 1)];
+
+// --- Tunes. Each token is an 8th note (two steps); six to a bar. ---
+// The hearth: the village's tune. A rise of a sixth and a sigh down.
+const HEARTH = melody(`
+  D5 - B5 - - -  | A5 - G5 - E5 -  | G5 - - - E5 -  | D5 - - - - .  |
+  D5 - B5 - - -  | A5 - F#5 - D5 - | E5 - G5 - C6 - | A5 - - - - .  |
+  B5 - - - A5 G5 | E5 - - - G5 -   | D5 - - - B4 -  | A4 - - - - .  |
+  E5 - G5 - C6 - | A5 - - G5 F#5 - | G5 - - - - -   | . . . . . .   |
+`, 2);
+
+// The answer: the ocarina's turn, reaching a little higher.
+const ANSWER = melody(`
+  D5 - B5 - - -  | A5 - G5 - E5 -  | G5 - - - E5 -  | D5 - - - - .  |
+  D5 - B5 - - -  | A5 - F#5 - D5 - | E5 - G5 - C6 - | D6 - - - - .  |
+  B5 - - - A5 G5 | E5 - - - G5 -   | B5 - - - D6 -  | A5 - - - - .  |
+  E6 - D6 - C6 - | A5 - - G5 F#5 - | G5 - - - - -   | . . . . . .   |
+`, 2);
+// The piano, answering in the ocarina's long notes.
+const PIANO_REPLY = melody(`
+  . . . . . .    | . . . . . .     | . . . . . .    | . . A4 - F#4 - |
+  . . . . . .    | . . . . . .     | . . . . . .    | . . F#5 - A5 - |
+  . . . . . .    | . . . . . .     | . . . . . .    | . . D5 - F#5 - |
+  . . . . . .    | . . . . . .     | . . B4 - D5 -  | A5 - - - F#5 - |
+`, 2);
+
+// The long winter: E minor, slower-feeling, a hundred years of waiting. It
+// turns warm for a moment (into G) and then back to the cold.
+const WINTER = melody(`
+  E5 - - - B5 -  | C6 - - B5 A5 -  | A5 - - - E5 -  | D#5 - - - - . |
+  E5 - - - B5 -  | C6 - - B5 A5 -  | A5 - - G5 F#5 - | G5 - - - - .  |
+  E5 - - - G5 -  | F#5 - - - A5 -  | B5 - - - D6 -  | B5 - - - - .  |
+  C6 - - - B5 A5 | G5 - - - E5 -   | F#5 - - - D#5 - | B4 - - - - .  |
+`, 2);
+const WINTER_FIRST = [...WINTER.slice(0, 8 * BAR), ...silence(8)];
+const WINTER_SECOND = [...silence(8), ...WINTER.slice(8 * BAR)];
+// The cello, low and long under it.
+const CELLO_LINE = melody(`
+  G3 - - - - -   | G3 - - - E3 -   | C4 - - - - -   | B3 - - - A3 -  |
+  G3 - - - - -   | E3 - - - G3 -   | A3 - - - - -   | B3 - - - D4 -  |
+  C4 - - - - -   | A3 - - - - -    | D4 - - - - -   | E4 - - - B3 -  |
+  A3 - - - C4 -  | E4 - - - - -    | D#4 - - - - -  | F#3 - - - - -  |
+`, 2);
+
+// The snowfall: the prophecy's tune, slow, in E minor and in three, on a
+// muted horn, the way the village half-remembers it.
+const PROPHECY = melody(`
+  . . B4 - E5 -  | G5 - - F#5 E5 - | D5 - - - - -   | B4 - D5 - G5 - |
+  F#5 - - E5 B4 - | C5 - - - E5 -  | D#5 - - - F#5 - | E5 - - - - -  |
+`, 2);
+
+// The return: the second half of the tune, the piano and the ocarina in two
+// voices, then the celesta lets a last flake fall back into the hearth.
+const RETURN_PIANO = HEARTH.slice(8 * BAR);
+const RETURN_OCARINA = ANSWER.slice(8 * BAR);
+const LAST_FLAKE = melody(`
+  . . . . . .    | . . . . . .     | . . . . . .    | . . . . . .   |
+  . . . . . .    | . . . . . .     | . . . . . .    | D6 - A5 - F#5 - |
+`, 2);
+
+const warmth = (chords) => ({
+  strings: sustained(chords, BAR, 0, 3),
+  stringsHigh: sustained(chords, BAR, 1, 4),
+});
+const snowyWarmth = (chords) => ({
+  ...warmth(chords),
+  snow: sustained(chords, BAR, 2, 4),
+});
+
+// A nylon-string guitar, fingerpicked: two strings' worth of tone, a soft
+// pluck, ringing and mellowing.
+const GUITAR_TONE = [1, 0.5, 0.33, 0.2, 0.1, 0.06, 0.03];
+const GUITAR = {
+  voices: [{ harmonics: GUITAR_TONE, detune: -3 }, { harmonics: GUITAR_TONE, detune: 3 }],
+  sweep: { from: 3200, to: 900, time: 0.5, q: 0.5 },
+  attack: 0.003, decay: 0.9, sustain: 0, release: 1, gate: 1,
+  click: 0.04,
+  humanize: { time: 0.018, volume: 0.28 },
+  pan: -0.2,
+  reverb: 0.4,
 };
 
-// --- Tunes. Each token is an 8th note (two steps) unless it says otherwise. ---
-// A herald's call, far off across the snow.
-const CALL = melody(`
-  . . . . . . . . | . . . . . . . . | . . . . C5 - F5 - | A5 - - - G5 - - - |
-`, 2);
-
-// The hearth: the village's tune, cosy, boots squeaking round the square.
-const HEARTH = melody(`
-  A5 - C6 - A5 G5 F5 - | E5 - G5 - E5 - C5 - | D5 F5 Bb5 - A5 - G5 - | A5 - - - F5 - . . |
-  D5 F5 A5 - D6 - C6 - | Bb5 - A5 - G5 - D5 - | E5 G5 C6 - Bb5 - G5 - | C6 - - - - - . . |
-`, 2);
-
-// The answer: the same tune, coming home to F.
-const ANSWER = melody(`
-  A5 - C6 - A5 G5 F5 - | E5 - G5 - E5 - C5 - | D5 F5 Bb5 - A5 - G5 - | A5 - - - F5 - . . |
-  D6 - C6 - A5 - F5 - | G5 - Bb5 - D6 - C6 - | Bb5 - A5 - G5 - E5 - | F5 - - - - - . . |
-`, 2);
-// The glockenspiel, replying in the answer's gaps.
-const GLOCK_REPLY = melody(`
-  . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . A6/G6 F6 |
-  . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . F6 - D6 Bb5 |
-`, 2);
-// Over the return, the violin lies long notes under the tune.
-const VIOLIN_UNDER = melody(`
-  C5 - - - - - - - | C5 - - - E5 - - - | D5 - - - - - - - | C5 - - - A4 - - - |
-  F5 - - - - - - - | D5 - - - F5 - - - | E5 - - - C5 - - - | A4 - - - C5 - F5 - |
-`, 2);
-
-// The lanterns: a warmer tune, lamps lit in every window.
-const LANTERNS = melody(`
-  D5 - - - F5 - Bb5 - | C6 - - - Bb5 - G5 - | A5 - - - E5 - C5 - | D5 - - - - - . . |
-  Bb4 - D5 - G5 - Bb5 - | A5 - - - G5 - E5 - | F5 - - - D5 - Bb4 - | C5 - - - E5 - G5 - |
-`, 2);
-// The celesta answers the lantern tune where it breathes.
-const LANTERN_REPLY = melody(`
-  . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . A6 F6 D6 A5 |
-  . . . . . . . . | . . . . . . . . | . . . . . . . . | . . . . . . . . |
-`, 2);
-
-// The heralds' fanfare: the prophecy's tune (prophecyTheme.js), written here
-// in C as the village always had it, and played down in F on soft horns.
-const FANFARE_C = melody(`
-  . . G5 - - - C6 - | E6 - - - D6 - C6 - | B5 - - - - - . . | . . G5 - B5 - E6 - |
-  D6 - - - C6 - G5 - | A5 - - - C6 - - - | B5 - - - - - D6 - | C6 - - - - - . . |
-`, 2);
-const FANFARE_LOW_C = melody(`
-  . . E5 - - - G5 - | C6 - - - B5 - A5 - | G5 - - - - - . . | . . E5 - G5 - C6 - |
-  B5 - - - A5 - E5 - | F5 - - - A5 - - - | G5 - - - - - B5 - | E5 - - - - - . . |
-`, 2);
-const FANFARE = transpose(FANFARE_C, -7);
-const FANFARE_LOW = transpose(FANFARE_LOW_C, -7);
-
-// The hush: the snow coming down hard. The hearth tune on the music box, at
-// half speed (each token here is a quarter note).
-const HUSH = melody(`
-  A5 - C6 - | A5 G5 F5 - | E5 - G5 - | E5 - C5 - |
-  D5 F5 Bb5 - | A5 - G5 - | A5 - - - | G5 - E5 - |
-`, 4);
-
-// The tag: a little bow, and the herald's call answered close by.
-const TAG = melody(`
-  D5 - F5 - Bb5 - A5 - | G5 - - - E5 - C5 - | F5 - - - - - - - | . . . . . . . . |
-`, 2);
-const TAG_CALL = melody(`
-  . . . . . . . . | . . . . . . . . | . . . . C5 - F5 - | A5 - - - G5 - - - |
-`, 2);
-
-const pad = (chords) => ({
-  strings: sustained(chords, BAR, 0, 3),
-  stringsHigh: sustained(chords, BAR, 2, 4),
-});
-const blanket = (chords) => ({
-  ...pad(chords),
-  choir: sustained(chords, BAR, 1, 4),
-  snow: sustained(chords, BAR, 0, 4),
-});
+// An ocarina: round and hollow, more breath than a flute, vibrato blooming late.
+const OCARINA = {
+  harmonics: [1, 0.1, 0.04, 0.015],
+  attack: 0.08, decay: 0.8, sustain: 0.85, release: 0.35, gate: 0.96,
+  vibrato: { rate: 4.8, depth: 11, delay: 0.35 },
+  breath: { level: 0.14, frequency: 1600, q: 0.6 },
+  humanize: { time: 0.012, volume: 0.1 },
+  pan: 0.15,
+  reverb: 0.55,
+};
 
 // A celesta: a bell with a little hammer and a bright octave shimmering above.
 const CELESTA = {
@@ -168,147 +188,130 @@ const SLEIGH_BELLS = {
   ],
   attack: 0.001, decay: 0.08, sustain: 0, release: 0.12, gate: 1,
   click: 0.5,
-  humanize: { time: 0.012, volume: 0.45 },
-  pan: 0.3,
-  reverb: 0.3,
+  humanize: { time: 0.04, volume: 0.45 },
+  pan: 0.35,
+  reverb: 0.6,
 };
 
-// Falling snow: a soft, slow pad with a hiss of air through it.
+// Falling snow outside: a soft, slow pad with a hiss of air through it.
 const SNOW_PAD = {
   voices: [{ wave: 'sine', level: 1 }, { wave: 'triangle', octave: 1, detune: 6, level: 0.18 }],
   attack: 1.6, decay: 2, sustain: 0.85, release: 2, gate: 1,
   breath: { level: 0.3, frequency: 7000, q: 0.4 },
-  pan: -0.1,
+  pan: 0.25,
   reverb: 0.6,
 };
 
+// A felted piano: the concert grand, softened, close by.
+const FELT_PIANO = { ...CONCERT_PIANO, filter: { type: 'lowpass', frequency: 2400 } };
+
+// A warm upright bass, plucked gently and left to ring.
+const SOFT_BASS = {
+  harmonics: [1, 0.4, 0.12, 0.04],
+  attack: 0.01, decay: 0.9, sustain: 0.3, release: 0.9, gate: 1,
+  humanize: { time: 0.01, volume: 0.12 },
+  pan: -0.1,
+  reverb: 0.3,
+};
+
+// The fire: a little tick of bright noise, landing whenever it likes.
+const CRACKLE_TICK = { drum: 'hat', humanize: { time: 0.35, volume: 0.9 } };
+
 export const REST_THEME = {
-  title: 'Lamplight and Snowfall',
-  bpm: 84,
+  title: 'A Light Left On',
+  bpm: 68,
   stepsPerBeat: 4,
   loopFrom: 1,
 
   instruments: {
-    celesta: { ...CELESTA, volume: 0.075, pan: 0.1, echo: { time: 0.536, feedback: 0.25, mix: 0.25 } },
-    flakes: { ...CELESTA, volume: 0.035, pan: -0.3, echo: { time: 0.714, feedback: 0.35, mix: 0.35 } },
-    musicBox: { ...BELLS, volume: 0.075, echo: { time: 0.714, feedback: 0.45, mix: 0.4 } },
-    musicBoxLow: { ...BELLS, volume: 0.022, pan: -0.3, echo: { time: 1.07, feedback: 0.4, mix: 0.35 } },
-    glock: { ...BELLS, volume: 0.045, pan: 0.35, echo: { time: 0.536, feedback: 0.3, mix: 0.3 } },
-    flute: { ...FLUTE, volume: 0.07, echo: { time: 0.714, feedback: 0.25, mix: 0.25 } },
-    violin: { ...SOLO_VIOLIN, volume: 0.072 },
-    horn: { ...HORN, volume: 0.07 },
-    hornLow: { ...HORN, volume: 0.045, pan: -0.3 },
-    // The herald's own trumpet, muted, for the call at the end.
-    trumpet: { ...BRASS, volume: 0.022, pan: 0.2, filter: { type: 'lowpass', frequency: 2200 }, echo: { time: 0.714, feedback: 0.3, mix: 0.3 } },
-    harp: { ...HARP, volume: 0.035 },
-    cello: { ...CELLO, volume: 0.035 },
-    strings: { ...STRING_SECTION, volume: 0.024, pan: -0.3 },
-    stringsHigh: { ...STRING_SECTION, volume: 0.018, pan: 0.3 },
-    choir: { ...CHOIR, volume: 0.022 },
-    snow: { ...SNOW_PAD, volume: 0.03 },
-    bass: { ...PIZZICATO_BASS, volume: 0.11 },
-    timpani: { ...TIMPANI, volume: 0.05 },
-    sleigh: { ...SLEIGH_BELLS, volume: 0.025 },
-    shaker: { drum: 'hat', volume: 0.04 },
+    piano: { ...FELT_PIANO, volume: 0.1, pan: 0.05, echo: { time: 0.882, feedback: 0.2, mix: 0.15 } },
+    pianoBed: { ...FELT_PIANO, volume: 0.05, pan: -0.15 },
+    ocarina: { ...OCARINA, volume: 0.07, echo: { time: 0.882, feedback: 0.25, mix: 0.22 } },
+    guitar: { ...GUITAR, volume: 0.07 },
+    bass: { ...SOFT_BASS, volume: 0.075 },
+    cello: { ...CELLO, volume: 0.04 },
+    // The muted horn, far off and soft, for the prophecy's tune.
+    horn: { ...HORN, volume: 0.06, filter: { type: 'lowpass', frequency: 1500 }, echo: { time: 0.882, feedback: 0.3, mix: 0.25 } },
+    celesta: { ...CELESTA, volume: 0.032, pan: 0.3, echo: { time: 0.882, feedback: 0.35, mix: 0.35 } },
+    flakes: { ...BELLS, volume: 0.03, pan: -0.3, echo: { time: 1.323, feedback: 0.35, mix: 0.3 } },
+    strings: { ...STRING_SECTION, volume: 0.02, pan: -0.3 },
+    stringsHigh: { ...STRING_SECTION, volume: 0.013, pan: 0.3 },
+    snow: { ...SNOW_PAD, volume: 0.024 },
+    choir: { ...CHOIR, volume: 0.016 },
+    sleigh: { ...SLEIGH_BELLS, volume: 0.016 },
+    crackle: { ...CRACKLE_TICK, volume: 0.014, pan: -0.4 },
+    crackleFar: { ...CRACKLE_TICK, volume: 0.009, pan: 0.3 },
   },
 
   sections: {
-    // Snowfall: flakes coming down past the lamps, a horn call far off.
-    snowfall: {
-      celesta: arpeggio(SNOWFALL_CHORDS, BAR, 4, FALLING),
-      musicBox: chordLine(SNOWFALL_CHORDS, FLAKES_LATE, 5),
-      horn: CALL,
-      snow: sustained(SNOWFALL_CHORDS, BAR, 0, 4),
-      strings: sustained(SNOWFALL_CHORDS, BAR, 0, 3),
-      stringsHigh: sustained(SNOWFALL_CHORDS, BAR, 2, 4),
-      harp: chordLine(SNOWFALL_CHORDS, ONE_DROP, 4),
-      sleigh: jingle([...repeat(QUIET, 3), ...SLEIGH_CUE]),
+    // Embers: the guitar alone by the fire, snow drifting past the window.
+    embers: {
+      guitar: arpeggio(EMBER_CHORDS, BAR, 3, PICK),
+      flakes: sprinkle(EMBER_CHORDS, 4, [FALLING, NO_TWINKLE]),
+      bass: chordLine(EMBER_CHORDS, BASS_ONE, 2),
+      snow: sustained(EMBER_CHORDS, BAR, 2, 4),
+      stringsHigh: sustained(EMBER_CHORDS, BAR, 1, 4),
+      sleigh: shiver(4),
+      ...fire(4),
     },
-    // The hearth: the tune on the celesta, the village round it.
+    // The hearth: the tune on the piano.
     hearth: {
-      celesta: HEARTH,
-      musicBox: chordLine(HEARTH_CHORDS, FLAKES, 5),
-      harp: arpeggio(HEARTH_CHORDS, BAR, 3, RIPPLE),
-      bass: chordLine(HEARTH_CHORDS, PLUCK, 2),
-      ...pad(HEARTH_CHORDS),
-      snow: sustained(HEARTH_CHORDS, BAR, 0, 4),
-      sleigh: jingle(repeat(SLEIGH_SOFT, 8)),
-      shaker: repeat(SHAKER_SOFT, 8),
+      piano: HEARTH,
+      guitar: arpeggio(HEARTH_CHORDS, BAR, 3, PICK),
+      bass: chordLine(HEARTH_CHORDS, BASS_ONE, 2),
+      celesta: sprinkle(HEARTH_CHORDS, 5, [NO_TWINKLE, NO_TWINKLE, NO_TWINKLE, TWINKLE]),
+      ...warmth(HEARTH_CHORDS),
+      ...fire(16),
     },
-    // The answer: the flute takes the tune, the glockenspiel replies.
+    // The answer: the ocarina takes the tune, the piano answers it.
     hearthAnswer: {
-      flute: ANSWER,
-      flakes: transpose(ANSWER, 12),
-      glock: GLOCK_REPLY,
-      celesta: chordLine(ANSWER_CHORDS, FLAKES_LATE, 5),
-      harp: arpeggio(ANSWER_CHORDS, BAR, 3, RIPPLE),
-      bass: chordLine(ANSWER_CHORDS, PLUCK_WALK, 2),
-      ...blanket(ANSWER_CHORDS),
-      sleigh: jingle(repeat(SLEIGH, 8)),
-      shaker: repeat(SHAKER, 8),
+      ocarina: ANSWER,
+      piano: PIANO_REPLY,
+      guitar: arpeggio(HEARTH_CHORDS, BAR, 3, PICK),
+      bass: chordLine(HEARTH_CHORDS, BASS_LEAN, 2),
+      celesta: sprinkle(HEARTH_CHORDS, 5, [NO_TWINKLE, NO_TWINKLE, NO_TWINKLE, TWINKLE_HIGH]),
+      ...snowyWarmth(HEARTH_CHORDS),
+      ...fire(16),
     },
-    // The lanterns: the violin, warm, with the cello under it.
-    lanterns: {
-      violin: LANTERNS,
-      celesta: LANTERN_REPLY,
-      flakes: chordLine(LANTERN_CHORDS, FLAKES, 5),
-      harp: arpeggio(LANTERN_CHORDS, BAR, 3, RIPPLE),
-      cello: sustained(LANTERN_CHORDS, BAR, 0, 3),
-      bass: chordLine(LANTERN_CHORDS, PLUCK_WALK, 2),
-      ...blanket(LANTERN_CHORDS),
-      sleigh: jingle(repeat(SLEIGH_SOFT, 8)),
-      shaker: repeat(SHAKER_SOFT, 8),
+    // The long winter: the piano and the cello alone at first, then the
+    // ocarina and the guitar come back in.
+    longWinter: {
+      piano: WINTER_FIRST,
+      ocarina: WINTER_SECOND,
+      pianoBed: arpeggio(WINTER_CHORDS, BAR, 3, PIANO_BED),
+      guitar: [...silence(8), ...arpeggio(WINTER_CHORDS, BAR, 3, PICK).slice(8 * BAR)],
+      cello: CELLO_LINE,
+      bass: chordLine(WINTER_CHORDS, BASS_ONE, 2),
+      celesta: sprinkle(WINTER_CHORDS, 5, [NO_TWINKLE, NO_TWINKLE, NO_TWINKLE, TWINKLE_LATE]),
+      strings: sustained(WINTER_CHORDS, BAR, 0, 3),
+      snow: sustained(WINTER_CHORDS, BAR, 2, 4),
+      ...fire(16),
     },
-    // The heralds: the prophecy's tune on two soft horns, the bells doubling.
-    heralds: {
-      horn: FANFARE,
-      hornLow: FANFARE_LOW,
-      glock: transpose(FANFARE_C, 5),
-      flakes: chordLine(HERALD_CHORDS, FLAKES_LATE, 5),
-      harp: arpeggio(HERALD_CHORDS, BAR, 3, RIPPLE),
-      bass: chordLine(HERALD_CHORDS, PLUCK_WALK, 2),
-      timpani: chordLine(HERALD_CHORDS, DRUM_ONE, 2),
-      ...blanket(HERALD_CHORDS),
-      sleigh: jingle(repeat(SLEIGH_FULL, 8)),
-      shaker: repeat(SHAKER, 8),
+    // The snowfall: everything hushes; the prophecy's tune on a muted horn.
+    snowfall: {
+      horn: PROPHECY,
+      guitar: arpeggio(SNOWFALL_CHORDS, BAR, 3, PICK_SLOW),
+      bass: chordLine(SNOWFALL_CHORDS, BASS_ONE, 2),
+      flakes: sprinkle(SNOWFALL_CHORDS, 5, [NO_TWINKLE, NO_TWINKLE, TWINKLE_LATE, NO_TWINKLE, NO_TWINKLE, NO_TWINKLE, NO_TWINKLE, TWINKLE]),
+      choir: sustained(SNOWFALL_CHORDS, BAR, 1, 4),
+      snow: sustained(SNOWFALL_CHORDS, BAR, 2, 4),
+      strings: sustained(SNOWFALL_CHORDS, BAR, 0, 3),
+      sleigh: shiver(8),
+      ...fire(8),
     },
-    // The hush: the snow coming down hard, the music box alone and slow.
-    hush: {
-      musicBox: HUSH,
-      musicBoxLow: transpose(HUSH, -12),
-      harp: chordLine(HUSH_CHORDS, ONE_DROP, 4),
-      cello: sustained(HUSH_CHORDS, BAR, 0, 3),
-      bass: chordLine(HUSH_CHORDS, PLUCK_ONE, 2),
-      choir: sustained(HUSH_CHORDS, BAR, 1, 4),
-      snow: sustained(HUSH_CHORDS, BAR, 0, 4),
-      stringsHigh: sustained(HUSH_CHORDS, BAR, 2, 4),
-      sleigh: jingle([...repeat(QUIET, 7), ...SLEIGH_CUE]),
-    },
-    // The return: the tune with everyone in, the violin under it.
+    // The return: the tune's second half in two voices, and back to the hearth.
     hearthReturn: {
-      flute: ANSWER,
-      flakes: transpose(ANSWER, 12),
-      violin: VIOLIN_UNDER,
-      glock: GLOCK_REPLY,
-      musicBox: chordLine(ANSWER_CHORDS, FLAKES, 5),
-      harp: arpeggio(ANSWER_CHORDS, BAR, 3, RIPPLE),
-      cello: sustained(ANSWER_CHORDS, BAR, 0, 3),
-      bass: chordLine(ANSWER_CHORDS, PLUCK_WALK, 2),
-      ...blanket(ANSWER_CHORDS),
-      sleigh: jingle(repeat(SLEIGH_FULL, 8)),
-      shaker: repeat(SHAKER, 8),
-    },
-    // The tag: a bow, and the herald's call, close by now.
-    tag: {
-      celesta: TAG,
-      trumpet: TAG_CALL,
-      flakes: arpeggio(TAG_CHORDS, BAR, 4, FALLING),
-      harp: arpeggio(TAG_CHORDS, BAR, 3, RIPPLE_SLOW),
-      bass: chordLine(TAG_CHORDS, PLUCK, 2),
-      ...blanket(TAG_CHORDS),
-      sleigh: jingle([...repeat(SLEIGH_SOFT, 3), ...SLEIGH_CUE]),
+      piano: RETURN_PIANO,
+      ocarina: RETURN_OCARINA,
+      guitar: arpeggio(RETURN_CHORDS, BAR, 3, PICK),
+      bass: chordLine(RETURN_CHORDS, BASS_LEAN, 2),
+      cello: sustained(RETURN_CHORDS, BAR, 1, 3),
+      celesta: LAST_FLAKE,
+      sleigh: shiver(8),
+      ...snowyWarmth(RETURN_CHORDS),
+      ...fire(8),
     },
   },
 
-  order: ['snowfall', 'hearth', 'hearthAnswer', 'lanterns', 'heralds', 'hush', 'hearthReturn', 'tag'],
+  order: ['embers', 'hearth', 'hearthAnswer', 'longWinter', 'snowfall', 'hearthReturn'],
 };

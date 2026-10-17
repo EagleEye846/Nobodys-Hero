@@ -7,6 +7,11 @@ import { COLUMNEON_ATTACKS } from './columneon.js';
 import { TAPER_ATTACKS } from './taper.js';
 import { STEP_ATTACKS } from './step.js';
 import { CRAGHORN_ATTACKS } from './craghorn.js';
+import { CHOUGH_ATTACKS } from './chough.js';
+import { FROSTBITE_ATTACKS } from './frostbite.js';
+import { RINGER_ATTACKS } from './ringer.js';
+import { RIMEWING_ATTACKS } from './rimewing.js';
+import { ICE_STEP_ATTACKS } from './iceStep.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -25,4 +30,9 @@ export const ENEMY_ATTACKS = {
   ...TAPER_ATTACKS,
   ...STEP_ATTACKS,
   ...CRAGHORN_ATTACKS,
+  ...CHOUGH_ATTACKS,
+  ...FROSTBITE_ATTACKS,
+  ...RINGER_ATTACKS,
+  ...RIMEWING_ATTACKS,
+  ...ICE_STEP_ATTACKS,
 };

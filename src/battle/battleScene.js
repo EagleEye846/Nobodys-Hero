@@ -6,6 +6,7 @@ import { textFile, textSection } from '../engine/textLoader.js';
 import { drawText } from '../ui/text.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
 import { MEMBERS, partyIds, memberSprites, memberMaxHp } from '../characters/party.js';
+import { memberGearBonus, memberFightPower } from '../characters/equipment.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { ITEMS, giveItem, healLabel } from '../data/items.js';
 import { MATERIALS, giveMaterial } from '../data/candles.js';
@@ -76,6 +77,18 @@ const COMMANDS = [
   { label: 'DEFEND', icon: 'defend' },
   { label: 'RUN', icon: 'run' },
 ];
+// A friend's turn has the same menu, less RUN (you decide when to run). Their
+// SPELLS are their own `commands` (src/characters/party.js), paid for from
+// the SP you share; FIGHT hits as hard as their weapon allows.
+const ALLY_COMMANDS = COMMANDS.filter((command) => command.label !== 'RUN');
+// An ally's kind word (TALK) raises one enemy's MERCY this much.
+const ALLY_TALK_CALM = 12;
+// SHELTER is DEFEND's stronger form: as well as halving the next attack, it
+// takes this much (plus the ally's coat's SHELTER DEF) off every hit.
+const SHELTER_DEF = 1;
+// A weapon with `gust` makes SHELTER slow the next attack's bullets to this
+// speed, for that many seconds.
+const GUST_SPEED = 0.45;
 
 // World positions: party on the left, enemies on the right, both side-on at
 // double size. FOE_LAYOUTS gives each enemy's top-left for 1, 2 or 3 enemies.
@@ -131,6 +144,14 @@ export class BattleScene {
     // Allies still to take their turn this round (see setPhase).
     this.pendingAllies = [];
     this.ally = null;
+    // Whoever is choosing what to do right now: the hero, or `ally`. The
+    // menus and their submenus (target, spells, items) act for them.
+    this.actor = this.hero;
+    // The ally's command button, kept between turns like yours.
+    this.allySelected = 0;
+    // SHELTER over you until the end of the next enemy turn: { def, gust }.
+    this.shelter = null;
+    this.gustLeft = 0;
 
     // Learned skills shape the whole battle.
     // Thrift and Gentle Hands make spells cheaper.
@@ -140,7 +161,10 @@ export class BattleScene {
     });
     this.fightPowerBonus = 1 + skillBonus('fightPower');
     this.grazeRadius = GRAZE_RADIUS + skillBonus('grazeRadius');
-    this.grazeSpBonus = 1 + skillBonus('grazeSp') + armorSpGain();
+    // Friends' gear (src/characters/equipment.js) looks after you too: more
+    // SP from grazes, and a little HP back after every enemy turn.
+    const allies = this.party.filter((member) => member.ally);
+    this.grazeSpBonus = 1 + skillBonus('grazeSp') + armorSpGain() + allies.reduce((sum, ally) => sum + memberGearBonus(ally.id, 'grazeSp'), 0);
     // The armor: DEF takes something off every hit, MAG strengthens spells.
     this.defense = heroDefense();
     this.potency = spellPotency();
@@ -372,13 +396,19 @@ export class BattleScene {
     this.phase = phase;
     this.phaseTime = 0;
     switch (phase) {
-      case 'ally':
+      case 'ally': {
+        this.actor = this.ally;
         this.cursor = 0;
+        // What the panel says while they choose.
+        const lines = textSection('battle.txt', `${this.ally.id}_turn`);
+        this.allyPrompt = lines.length ? lines[Math.floor(Math.random() * lines.length)] : `${this.ally.name}'s turn.`;
         break;
+      }
       case 'bossIntro':
         this.taunt = null;
         break;
       case 'command': {
+        this.actor = this.hero;
         // A new round: every ally gets a turn after yours.
         this.pendingAllies = this.party.filter((member) => member.ally && member.hp > 0);
         // Each turn, a different enemy sets the scene.
@@ -395,7 +425,10 @@ export class BattleScene {
         this.cursor = 0;
         break;
       case 'fight':
-        this.strike = new StrikeBar(this.target.center.x * S, this.target.center.y * S, {
+        // An ally swings with the same bar, in their own colour; your FIGHT
+        // skills are yours alone.
+        this.striker = this.actor;
+        this.strike = new StrikeBar(this.target.center.x * S, this.target.center.y * S, this.actor.ally ? { color: this.actor.color } : {
           extraSlashes: skillBonus('strikeSlashes'),
           toleranceScale: 1 + skillBonus('strikeTolerance'),
           color: this.hero.color,
@@ -472,6 +505,9 @@ export class BattleScene {
     this.bullets = [];
     this.sparks = [];
     this.dodgeTime = 0;
+    // SHELTER with a `gust` weapon: the bullets start out slowed.
+    this.gustLeft = this.shelter?.gust ?? 0;
+    this.gustShown = false;
     // The weapon ability starts every enemy turn ready and fully charged.
     this.abilityCooldown = 0;
     this.abilityLeft = 0;
@@ -540,7 +576,7 @@ export class BattleScene {
         break;
       case 'fight': {
         const result = this.strike.update(dt, input);
-        if (result) this.resolveStrike(Math.round(result.damage * this.weapon.fightPower * this.fightPowerBonus));
+        if (result) this.resolveStrike(Math.round(result.damage * this.strikePower()));
         break;
       }
       case 'fightResult':
@@ -612,6 +648,24 @@ export class BattleScene {
     this.sp = Math.min(100, this.sp + amount);
   }
 
+  // The command bar of whoever is choosing: yours, or the ally's.
+  menuPhase() {
+    return this.actor?.ally ? 'ally' : 'command';
+  }
+
+  // FIGHT's multiplier for whoever is swinging: your weapon and skills, or
+  // the ally's own weapon (src/characters/equipment.js).
+  strikePower() {
+    if (this.actor?.ally) return memberFightPower(this.actor.id);
+    return this.weapon.fightPower * this.fightPowerBonus;
+  }
+
+  // An ally's move made stronger by their skills (skillBonus) and their own
+  // weapon and armor (memberGearBonus).
+  allyBonus(ally, effect) {
+    return skillBonus(effect) + memberGearBonus(ally.id, effect);
+  }
+
   updateCommand(input) {
     const dir = (input.wasPressed('right') ? 1 : 0) - (input.wasPressed('left') ? 1 : 0);
     if (dir) sfx('move');
@@ -667,7 +721,7 @@ export class BattleScene {
     const active = this.activeFoes();
     if (input.wasPressed('cancel')) {
       sfx('back');
-      this.setPhase('command');
+      this.setPhase(this.menuPhase());
       return;
     }
     const before = this.cursor;
@@ -717,7 +771,7 @@ export class BattleScene {
   pickFromList(input, length) {
     if (input.wasPressed('cancel')) {
       sfx('back');
-      this.setPhase('command');
+      this.setPhase(this.menuPhase());
       return null;
     }
     const before = this.cursor;
@@ -738,38 +792,90 @@ export class BattleScene {
     return result;
   }
 
-  // An ally's turn: pick one of their commands (no backing out; it's their go).
+  // An ally's turn: their own command bar, like yours (ALLY_COMMANDS). Its
+  // submenus back out to here; the bar itself is their go, so no backing out.
   updateAlly(input) {
-    const commands = this.ally.commands;
-    const before = this.cursor;
-    this.moveGridCursor(input, commands.length);
-    if (this.cursor !== before) sfx('move');
+    const dir = (input.wasPressed('right') ? 1 : 0) - (input.wasPressed('left') ? 1 : 0);
+    if (dir) sfx('move');
+    this.allySelected = (this.allySelected + dir + ALLY_COMMANDS.length) % ALLY_COMMANDS.length;
     if (!input.wasPressed('confirm')) return;
     sfx('select');
-    this.allyAct(this.ally, commands[this.cursor]);
+    const ally = this.ally;
+
+    switch (ALLY_COMMANDS[this.allySelected].label) {
+      case 'FIGHT':
+        this.chooseTarget(() => this.setPhase('fight'));
+        break;
+      case 'TALK':
+        this.chooseTarget((foe) => this.allyTalk(ally, foe));
+        break;
+      case 'SPELLS':
+        this.setPhase('spells');
+        break;
+      case 'ITEMS':
+        if (this.items.length) this.setPhase('items');
+        else this.showMessage('Your bag is empty.', 'ally');
+        break;
+      case 'DEFEND': {
+        this.defending = true;
+        const lines = textSection('battle.txt', `${ally.id}_defend`);
+        this.showMessage(`${lines[0] ?? `${ally.name} braces.`}\nDamage is halved this turn.`, 'taunt');
+        break;
+      }
+    }
   }
 
+  // An ally's kind word to one enemy: their own line for it if the enemy's
+  // text file has one ([vesper_talk]), or one of their general ones from
+  // text/battle.txt, with {foe} for its name. It raises MERCY a little.
+  allyTalk(ally, foe) {
+    const own = textFile(foe.data.textFile)[`${ally.id}_talk`] ?? [];
+    const lines = own.length ? own : textSection('battle.txt', `${ally.id}_talk`);
+    const line = (lines[Math.floor(Math.random() * lines.length)] ?? `${ally.name} talks to {foe}.`).replaceAll('{foe}', foe.name);
+    this.showMessage(this.calmFoe(foe, ALLY_TALK_CALM, line), 'taunt');
+  }
+
+  // Their SPELLS list: each of their `commands`, at its SP cost.
+  updateAllySpells(input) {
+    const commands = this.actor.commands;
+    const index = this.pickFromList(input, commands.length);
+    if (index === null) return;
+    const command = commands[index];
+    if (this.sp < (command.cost ?? 0)) {
+      this.showMessage('Not enough SP.\nGraze past bullets to build spell power.', 'spells');
+      return;
+    }
+    this.sp -= command.cost ?? 0;
+    this.allyAct(this.actor, command);
+  }
+
+  // One of an ally's spells, made stronger by their skills and gear.
   allyAct(ally, command) {
     const lines = [command.text];
     if (command.calmAll) {
-      const amount = this.potent(command.calmAll + skillBonus('allyCalm'));
+      const amount = this.potent(command.calmAll + this.allyBonus(ally, 'allyCalm'));
       for (const foe of this.activeFoes()) lines.push(this.calmFoe(foe, amount, '').trim());
     }
     if (command.sp) {
-      const amount = command.sp + skillBonus('allySp');
+      const amount = Math.max(0, command.sp + this.allyBonus(ally, 'allySp'));
       this.gainSp(amount);
       lines.push(`SP +${amount}%`);
     }
     if (command.heal) {
       const before = this.hero.hp;
-      this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + command.heal + skillBonus('allyHeal'));
+      this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + Math.max(0, command.heal + this.allyBonus(ally, 'allyHeal')));
       sfx('heal');
       lines.push(`${this.hero.name} recovered ${this.hero.hp - before} HP.`);
     }
-    if (command.guard) this.defending = true;
+    if (command.guard) {
+      // SHELTER: DEFEND's stronger form, with whatever the ally's gear adds.
+      this.defending = true;
+      this.shelter = { def: SHELTER_DEF + Math.max(0, this.allyBonus(ally, 'shelterDef')), gust: Math.max(0, this.allyBonus(ally, 'gust')) };
+      lines.push(`Every hit does ${this.shelter.def} less, too.${this.shelter.gust ? ' A gust will slow the bullets.' : ''}`);
+    }
     // A hit on every enemy (Sleet) lands after the words.
     if (command.strikeAll) {
-      const damage = command.strikeAll + skillBonus('allyStrike');
+      const damage = Math.max(1, command.strikeAll + this.allyBonus(ally, 'allyStrike'));
       this.showMessage(lines.join('\n'), () => this.strikeAll(damage));
       return;
     }
@@ -788,6 +894,10 @@ export class BattleScene {
   }
 
   updateSpells(input) {
+    if (this.actor.ally) {
+      this.updateAllySpells(input);
+      return;
+    }
     const index = this.pickFromList(input, this.spells.length);
     if (index === null) return;
 
@@ -883,20 +993,23 @@ export class BattleScene {
     const [id] = this.items.splice(index, 1);
     const item = ITEMS[id];
     sfx('heal');
+    // An ally uses it on you: they light the candle, or hand you the food.
+    const ally = this.actor.ally ? this.actor.name : null;
+    const light = ally ? `${ally} lights` : 'You light';
     // Candles burn rather than get eaten: each does its own thing (see items.js).
     if (item.use === 'calm') {
       const calmed = this.activeFoes().map((foe) => this.calmFoe(foe, item.amount, '').trim());
-      this.showMessage(`You light the ${item.name}. A soft, sweet scent fills the air.\n${calmed.join('\n')}`, 'taunt');
+      this.showMessage(`${light} the ${item.name}. A soft, sweet scent fills the air.\n${calmed.join('\n')}`, 'taunt');
       return;
     }
     if (item.use === 'sp') {
       this.gainSp(item.amount);
-      this.showMessage(`You light the ${item.name}. Its glow fills you with power. SP +${item.amount}%!`, 'taunt');
+      this.showMessage(`${light} the ${item.name}. Its glow fills you with power. SP +${item.amount}%!`, 'taunt');
       return;
     }
     if (item.use === 'guard') {
       this.defending = true;
-      this.showMessage(`You light the ${item.name}. Its smoke wraps around you like a cloak.\nThe next attack will do half the damage.`, 'taunt');
+      this.showMessage(`${light} the ${item.name}. Its smoke wraps around you like a cloak.\nThe next attack will do half the damage.`, 'taunt');
       return;
     }
     const before = this.hero.hp;
@@ -904,11 +1017,14 @@ export class BattleScene {
     const heal = item.heal >= 999 ? item.heal : Math.round(item.heal * (1 + skillBonus('itemBoost')));
     this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + heal);
     const healed = this.hero.hp === this.hero.maxHp && item.heal >= 999 ? 'Your HP was maxed out!' : `Recovered ${this.hero.hp - before} HP!`;
-    this.showMessage(`You ${item.light ? 'light' : 'ate'} the ${item.name}. ${healed}`, 'taunt');
+    if (ally && !item.light) this.showMessage(`${ally} hands you the ${item.name}. ${healed}`, 'taunt');
+    else this.showMessage(`${item.light ? light : 'You ate'} the ${item.name}. ${healed}`, 'taunt');
   }
 
   resolveStrike(damage) {
     const foe = this.target;
+    // Who lunges, and whose colour the slash is.
+    this.striker = this.actor ?? this.hero;
     foe.hp = Math.max(0, foe.hp - damage);
     this.addPopup(damage ? `${damage}` : 'MISS', foe.center.x, foe.pos.y - 4, hud.COLORS.danger);
     if (damage) {
@@ -973,6 +1089,11 @@ export class BattleScene {
     if (this.phaseTime < BOX_OPEN_SECONDS) return;
 
     this.dodgeTime += dt;
+    if (this.gustLeft > 0) {
+      if (!this.gustShown) this.addPopup('GUST', this.soul.x, this.soul.y - 18, hud.COLORS.teal);
+      this.gustShown = true;
+      this.gustLeft = Math.max(0, this.gustLeft - dt);
+    }
     for (const attack of this.attacks) {
       if (this.dodgeTime < attack.delay) continue;
       const before = this.bullets.length;
@@ -995,6 +1116,14 @@ export class BattleScene {
   endEnemyTurn() {
     this.bullets = [];
     this.defending = false;
+    this.shelter = null;
+    this.gustLeft = 0;
+    // A friend's warm scarf: a little HP back after every enemy turn.
+    const regen = this.party.filter((member) => member.ally && member.hp > 0).reduce((sum, ally) => sum + memberGearBonus(ally.id, 'regen'), 0);
+    if (regen > 0 && this.hero.hp > 0 && this.hero.hp < this.hero.maxHp) {
+      this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + regen);
+      this.addPopup(`+${regen}`, PARTY_FEET.x, PARTY_FEET.y - 46, hud.COLORS.enemyHp);
+    }
     if (this.wardTurns > 0) this.wardTurns--;
     this.soul.locked = false;
     this.turn++;
@@ -1005,9 +1134,11 @@ export class BattleScene {
   }
 
   // Abilities like the lantern and bell slow or freeze bullets while active.
+  // SHELTER's gust slows them all for a moment too.
   bulletTimeScale(bullet) {
-    if (this.abilityLeft <= 0 || !this.ability?.bulletTimeScale) return 1;
-    return this.ability.bulletTimeScale(this, bullet);
+    const gust = this.gustLeft > 0 ? GUST_SPEED : 1;
+    if (this.abilityLeft <= 0 || !this.ability?.bulletTimeScale) return gust;
+    return gust * this.ability.bulletTimeScale(this, bullet);
   }
 
   // SHIFT uses the equipped weapon's soul ability, then it recharges.
@@ -1128,7 +1259,8 @@ export class BattleScene {
     if (this.defending || this.wardTurns > 0) damage = Math.ceil(damage / 2);
     // Thick Skin and the armor's DEF take a little off every hit (but a hit
     // always hurts a bit; armor that lowers DEF makes hits hurt more).
-    damage = Math.max(1, damage - skillBonus('damageReduction') - this.defense);
+    // SHELTER takes a little more off.
+    damage = Math.max(1, damage - skillBonus('damageReduction') - this.defense - (this.shelter?.def ?? 0));
     this.hero.hp = Math.max(0, this.hero.hp - damage);
     sfx('hurt');
     this.addPopup(`${damage}`, PARTY_FEET.x, PARTY_FEET.y - 46, hud.COLORS.danger);
@@ -1197,11 +1329,14 @@ export class BattleScene {
       this.drawFoeStatus(ctx);
       hud.drawPanel(ctx);
       const choosing = ['command', 'talk', 'spells', 'items', 'target', 'ally'].includes(this.phase);
-      // The card shows whoever's acting: you, or the ally taking their turn.
-      hud.drawPartyCard(ctx, this.phase === 'ally' ? this.ally : this.hero, choosing);
+      // The card and the buttons are whoever's acting: you, or the ally
+      // taking their turn (until the enemies' turn starts).
+      const allyTurn = this.actor?.ally && !['taunt', 'dodge', 'defeat', 'command'].includes(this.phase);
+      hud.drawPartyCard(ctx, allyTurn ? this.actor : this.hero, choosing);
       const anyCalm = this.activeFoes().some((foe) => foe.calm >= 100);
       const noRun = this.bossFight() ? ['RUN'] : [];
-      hud.drawCommands(ctx, COMMANDS, this.selected, this.phase === 'command', anyCalm ? ['SPELLS'] : [], this.time, noRun);
+      if (allyTurn) hud.drawCommands(ctx, ALLY_COMMANDS, this.allySelected, this.phase === 'ally', [], this.time);
+      else hud.drawCommands(ctx, COMMANDS, this.selected, this.phase === 'command', anyCalm ? ['SPELLS'] : [], this.time, noRun);
       this.drawPanelText(ctx);
       this.drawPopups(ctx);
     });
@@ -1246,7 +1381,7 @@ export class BattleScene {
       this.drawAura(ctx, feetX, feetY, h, member.color);
 
       let x = feetX - w / 2;
-      const lunging = this.phase === 'fight' || this.phase === 'fightResult';
+      const lunging = (this.phase === 'fight' || this.phase === 'fightResult') && member === (this.striker ?? this.hero);
       if (lunging) x += 12;
       if (this.heroFlinch > 0) x += Math.round(Math.sin(this.heroFlinch * 60) * 2);
       const y = feetY - h + Math.round(Math.sin(this.time * 2.5 + i));
@@ -1296,7 +1431,8 @@ export class BattleScene {
     const cy = this.slashFoe.center.y * S;
     ctx.save();
     ctx.globalAlpha = 1 - progress;
-    ctx.strokeStyle = '#ffffff';
+    // An ally's slash is in their colour.
+    ctx.strokeStyle = this.striker?.ally ? this.striker.color : '#ffffff';
     ctx.lineWidth = 8 * (1 - progress) + 1;
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -1401,9 +1537,17 @@ export class BattleScene {
         hud.drawOptions(ctx, this.target.data.talk.map((option) => ({ label: option.name, enabled: true })), this.cursor);
         break;
       case 'ally':
-        hud.drawOptions(ctx, this.ally.commands.map((command) => ({ label: command.label, enabled: true })), this.cursor);
+        hud.drawTextBox(ctx, this.allyPrompt);
         break;
       case 'spells': {
+        if (this.actor.ally) {
+          hud.drawOptions(ctx, this.actor.commands.map((command) => ({
+            label: command.label,
+            note: command.cost ? `${command.cost}% SP` : 'FREE',
+            enabled: this.sp >= (command.cost ?? 0),
+          })), this.cursor);
+          break;
+        }
         const anyCalm = this.activeFoes().some((foe) => foe.calm >= 100);
         hud.drawOptions(ctx, this.spells.map((spell) => ({
           label: spell.name,

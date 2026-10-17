@@ -8,6 +8,11 @@
 //   spGain   extra SP from grazing (0.2 = +20%)
 // A stat can be negative: heavy armor can weigh on your magic. Armor never
 // adds max HP; that only comes from levelling up.
+//
+// Armor with a `wielder` (a party member id, src/characters/party.js) is
+// theirs alone, and has their stats instead (see MEMBER_GEAR_STATS in
+// src/characters/equipment.js): since enemies only aim at you, a friend's
+// coat looks after you.
 export const ARMOR = {
   travel_clothes: { name: 'Travel Clothes' },
   padded_vest: { name: 'Padded Vest', defense: 1 },
@@ -24,6 +29,11 @@ export const ARMOR = {
   // The Hero's own armour, carried up the mountain and left in the caves.
   vigil_mail: { name: 'Vigil Mail', defense: 4, magic: -0.3, spGain: -0.1 },
   snow_mantle: { name: 'Snow Mantle', defense: 3, magic: 0.1 },
+  // Ves's coats, scarves and mittens.
+  evening_coat: { name: 'Evening Coat', wielder: 'vesper', shelterDef: 1 },
+  ember_knit_scarf: { name: 'Ember-Knit Scarf', wielder: 'vesper', regen: 2 },
+  goosedown_mittens: { name: 'Goose-Down Mittens', wielder: 'vesper', grazeSp: 0.15 },
+  oilskin_greatcoat: { name: 'Oilskin Greatcoat', wielder: 'vesper', shelterDef: 2, regen: 1 },
 };
 
 // One stat of a piece of armor, 0 if it hasn't got it.

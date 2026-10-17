@@ -24,4 +24,7 @@ export const HERO_STATE = {
   // skill points (earned, less spent).
   party: [],
   memberPoints: {},
+  // Each member's own weapon and armor, as { vesper: { weapon, armor } }
+  // (see src/characters/equipment.js). What they own sits with yours, above.
+  memberGear: {},
 };

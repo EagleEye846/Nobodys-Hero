@@ -28,6 +28,7 @@ import { loadUiFont, layoutDialogue, wrapLines, textWidth } from './src/ui/text.
 import { pageLineCount, splitFace } from './src/ui/textbox.js';
 import { SCENES } from './src/data/scenes/index.js';
 import { PORTRAITS } from './src/data/art/portraits.js';
+import { HERO, wielderOf, memberGearLabels } from './src/characters/equipment.js';
 
 const report = document.getElementById('report');
 const problems = [];
@@ -67,7 +68,11 @@ try {
       } else if (folder === 'items') {
         // Descriptions shrink to fit their panel, down to 14px.
         // Weapons and armor show two or three stat lines above it, so have less room.
-        const shopRoom = path.endsWith('weapons.txt') || path.endsWith('armor.txt') ? 102 : 128;
+        // A party member's gear (`wielder`) has a line per stat: 196 is the
+        // shop panel's height, less the name and the gap under the stats.
+        const slot = path.endsWith('weapons.txt') ? 'weapon' : path.endsWith('armor.txt') ? 'armor' : null;
+        const memberStats = slot && wielderOf(slot, section) !== HERO ? Math.max(1, memberGearLabels(slot, section).length) : 0;
+        const shopRoom = memberStats ? 196 - (34 + memberStats * 26 + 8) : slot ? 102 : 128;
         let size = 22;
         while (size > 14 && wrap(entry, 276, size) * size > shopRoom) size--;
         if (wrap(entry, 276, size) * size > shopRoom) bad(where, 'description is too long for the shop panel, even small', entry);
@@ -75,6 +80,9 @@ try {
         if (wrap(entry, 556, 22) > 2) bad(where, `skill description is ${wrap(entry, 556, 22)} lines; 2 fit`, entry);
       } else if (folder === 'cutscenes') {
         if (wrap(entry, 480, 32) > 5) bad(where, `intro page is ${wrap(entry, 480, 32)} lines; 5 fit`, entry);
+      } else if (path === 'battle.txt' && section.endsWith('_turn')) {
+        // A party member's turn prompt sits in the battle panel without paging.
+        if (dlg(entry, 596, 28) > 3) bad(where, `turn prompt is ${dlg(entry, 596, 28)} lines; 3 fit`, entry);
       } else if (path === 'chapter_end.txt' && section !== 'title' && section !== 'subtitle') {
         if (wrap(entry, 520, 30) > 3) bad(where, `chapter card line is ${wrap(entry, 520, 30)} lines; 3 fit`, entry);
       } else if (path === 'credits.txt') {

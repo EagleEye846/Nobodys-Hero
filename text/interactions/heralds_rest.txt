@@ -424,7 +424,7 @@ A bench at the edge of everything. Below it, the cloud sea goes on forever. Abov
 THE LOOKOUT. A herald watches here from dawn to dusk, for the Hero. The shift is popular. The view is the reason.
 
 [lookout_waymark]
-HERO! Here is the end of us and the start of the rest. The stair goes on north to the summit. Nobody from the village has been past the second cairn. Come back and tell us.
+HERO! Here is the end of us and the start of the rest. The stair goes on north to the summit. Nobody from the village has gone past the second cairn and come back. Come back and tell us.
 
 [lookout_chest]
 A chest at the edge of the platform, roped to a post so the wind can't take it. Fudge inside, and a note: "for the last bit".
