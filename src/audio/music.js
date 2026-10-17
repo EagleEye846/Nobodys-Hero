@@ -50,6 +50,21 @@ const SFX = {
   ],
   // A soft blip as cutscene text types out.
   type: [{ midi: 67, wave: 'triangle', length: 0.03, volume: 0.04 }],
+  // A great bronze bell, struck once, ringing on.
+  bell: [
+    { midi: 57, wave: 'sine', length: 2.6, volume: 0.12 },
+    { midi: 64, wave: 'sine', length: 2.2, volume: 0.07, delay: 0.01 },
+    { midi: 76, wave: 'triangle', length: 1.2, volume: 0.05, delay: 0.01 },
+    { midi: 83, wave: 'sine', length: 0.5, volume: 0.04, delay: 0.02 },
+  ],
+  // Settling into a bed: a soft falling chime.
+  rest: [88, 83, 79, 76].map((midi, i) => ({ midi, wave: 'sine', length: 0.35, volume: 0.06, delay: i * 0.18 })),
+  // A grappling hook: the whoosh of the throw, then the clink as it catches.
+  hook: [
+    { midi: 79, wave: 'triangle', length: 0.18, volume: 0.05, slide: 14 },
+    { midi: 100, wave: 'square', length: 0.05, volume: 0.04, delay: 0.26 },
+    { midi: 95, wave: 'square', length: 0.04, volume: 0.03, delay: 0.31 },
+  ],
 };
 
 // The sound effect names, for the Studio's pickers.
@@ -64,8 +79,9 @@ const FADE_SECONDS = 0.4;
 const MUTE_KEY = 'KeyM';
 
 // Flattens a song's sections (in order) into one list of steps, each holding
-// the notes and drum hits that start on it.
-function compile(song) {
+// the notes and drum hits that start on it. Exported for the tools, which use
+// it to check a song for mistakes without playing it.
+export function compile(song) {
   const steps = [];
   let loopStart = 0;
 
@@ -87,6 +103,9 @@ function compile(song) {
       const starting = [];
       for (const [track, events] of tracks) {
         const event = events[i];
+        const drum = Boolean(song.instruments[track].drum);
+        if (typeof event === 'number' && drum) throw new Error(`${song.title}, section ${name}: '${track}' is a drum but has a note at step ${i}`);
+        if (event === HIT && !drum) throw new Error(`${song.title}, section ${name}: '${track}' plays notes but has a drum hit ('x') at step ${i}`);
         if (typeof event === 'number') {
           let length = 1;
           while (events[i + length] === HOLD) length++;
@@ -410,7 +429,15 @@ class SongPlayback {
     // If the tab was in the background, skip ahead rather than playing a backlog.
     if (this.nextTime < now - 0.2) this.nextTime = now;
     while (!this.ended && this.nextTime < now + LOOKAHEAD_SECONDS) {
-      for (const event of this.steps[this.index]) this.play(event, this.nextTime);
+      for (const event of this.steps[this.index]) {
+        try {
+          this.play(event, this.nextTime);
+        } catch (error) {
+          // A broken note mustn't stop the music: skip it, and say so once.
+          if (!this.warned) console.error(`${this.song.title}: skipped a note on '${event.track}':`, error);
+          this.warned = true;
+        }
+      }
       this.nextTime += this.stepSeconds;
       if (this.index + 1 < this.steps.length) this.index++;
       // A song with `loop: false` plays once, then lets its last notes ring out.
@@ -455,9 +482,216 @@ export function renderSong(song, seconds, sampleRate = 44100) {
   playback.stepSeconds = 60 / song.bpm / song.stepsPerBeat;
   for (let time = 0, index = 0; time < seconds; time += playback.stepSeconds) {
     for (const event of playback.steps[index]) playback.play(event, time);
-    index = index + 1 >= playback.steps.length ? playback.loopStart : index + 1;
+    if (index + 1 < playback.steps.length) index++;
+    // A song with `loop: false` plays once; the rest of the recording is its last notes ringing out.
+    else if (song.loop === false) break;
+    else index = playback.loopStart;
   }
   return ctx.startRendering();
+}
+
+// --- Ambience: the sounds of a place, under the music. ---
+// A room asks for one by name (`ambience` in its data). Each is a mix of
+// layers: `wind` (filtered noise that gusts and dies), `birds` (little
+// chirps, now and then, from one side or the other), `drips` (water falling
+// in a cave, with an echo), `hum` (the low note of a big hollow space) and
+// `fire` (a crackle). Levels are 0 to 1.
+const AMBIENCES = {
+  mountain: { wind: 0.55, birds: 0.6 },
+  summit: { wind: 0.9, birds: 0.25 },
+  village: { wind: 0.3, birds: 0.4 },
+  cave: { wind: 0.12, drips: 0.8, hum: 0.5 },
+  hearth: { fire: 0.6 },
+};
+export const AMBIENCE_NAMES = Object.keys(AMBIENCES);
+
+class Ambience {
+  constructor(ctx, destination, noise, spec) {
+    this.ctx = ctx;
+    this.noise = noise;
+    this.spec = spec;
+    this.bus = ctx.createGain();
+    this.bus.gain.setValueAtTime(0, ctx.currentTime);
+    this.bus.gain.linearRampToValueAtTime(1, ctx.currentTime + 1.5);
+    this.bus.connect(destination);
+    this.timers = [];
+    this.nodes = [];
+    if (spec.wind) this.startWind(spec.wind);
+    if (spec.hum) this.startHum(spec.hum);
+    if (spec.fire) this.startFire(spec.fire);
+    if (spec.birds) this.every(() => this.chirp(spec.birds), 2.5 / spec.birds, 7 / spec.birds);
+    if (spec.drips) this.every(() => this.drip(spec.drips), 0.8 / spec.drips, 3.5 / spec.drips);
+  }
+
+  // Calls `fn` again and again, a random `min` to `max` seconds apart.
+  every(fn, min, max) {
+    const tick = () => {
+      fn();
+      this.timers.push(setTimeout(tick, (min + Math.random() * (max - min)) * 1000));
+    };
+    this.timers.push(setTimeout(tick, Math.random() * max * 500));
+  }
+
+  // Wind: noise through a low band, rising and falling in long gusts.
+  startWind(level) {
+    const { ctx } = this;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 320;
+    filter.Q.value = 0.6;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.02 * level;
+    source.connect(filter).connect(gain).connect(this.bus);
+    source.start();
+    this.nodes.push(source);
+    // Gusts: the level and the pitch of the wind wander.
+    const gust = () => {
+      const now = ctx.currentTime;
+      const strength = 0.012 + Math.random() * 0.045 * level;
+      const seconds = 2 + Math.random() * 4;
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setTargetAtTime(strength, now, seconds / 3);
+      filter.frequency.cancelScheduledValues(now);
+      filter.frequency.setTargetAtTime(220 + Math.random() * 400, now, seconds / 2);
+    };
+    this.every(gust, 1.5, 4);
+    // A thin whistle over the top, for the high places.
+    if (level > 0.6) {
+      const whistle = ctx.createBiquadFilter();
+      whistle.type = 'bandpass';
+      whistle.frequency.value = 1400;
+      whistle.Q.value = 12;
+      const wgain = ctx.createGain();
+      wgain.gain.value = 0.006 * level;
+      const src2 = ctx.createBufferSource();
+      src2.buffer = this.noise;
+      src2.loop = true;
+      src2.connect(whistle).connect(wgain).connect(this.bus);
+      src2.start();
+      this.nodes.push(src2);
+      this.every(() => {
+        const now = ctx.currentTime;
+        whistle.frequency.setTargetAtTime(900 + Math.random() * 1200, now, 1.2);
+        wgain.gain.setTargetAtTime(Math.random() * 0.012 * level, now, 1.5);
+      }, 2, 6);
+    }
+  }
+
+  // The low note of a hollow mountain, swelling and fading.
+  startHum(level) {
+    const { ctx } = this;
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = 55;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.02 * level;
+    osc.connect(gain).connect(this.bus);
+    osc.start();
+    this.nodes.push(osc);
+    this.every(() => {
+      const now = ctx.currentTime;
+      gain.gain.setTargetAtTime((0.008 + Math.random() * 0.03) * level, now, 3);
+      osc.frequency.setTargetAtTime(50 + Math.random() * 14, now, 4);
+    }, 4, 9);
+  }
+
+  // A fire: crackles of noise over a soft roar.
+  startFire(level) {
+    const { ctx } = this;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 500;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.012 * level;
+    source.connect(filter).connect(gain).connect(this.bus);
+    source.start();
+    this.nodes.push(source);
+    this.every(() => {
+      const now = ctx.currentTime;
+      const pop = ctx.createBufferSource();
+      const hp = ctx.createBiquadFilter();
+      const g = ctx.createGain();
+      pop.buffer = this.noise;
+      hp.type = 'highpass';
+      hp.frequency.value = 2500;
+      g.gain.setValueAtTime(0.05 * level, now);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+      pop.connect(hp).connect(g).connect(this.bus);
+      pop.start(now);
+      pop.stop(now + 0.04);
+    }, 0.08, 0.6);
+  }
+
+  // A bird somewhere off to one side: two or three quick rising notes.
+  chirp(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.6 - 0.8;
+    pan.connect(this.bus);
+    const notes = 2 + Math.floor(Math.random() * 3);
+    const base = 2200 + Math.random() * 1400;
+    for (let i = 0; i < notes; i++) {
+      const t = now + i * (0.09 + Math.random() * 0.06);
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(base * (0.9 + Math.random() * 0.2), t);
+      osc.frequency.exponentialRampToValueAtTime(base * 1.4, t + 0.05);
+      osc.frequency.exponentialRampToValueAtTime(base * 1.1, t + 0.09);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.028 * level, t + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+      osc.connect(gain).connect(pan);
+      osc.start(t);
+      osc.stop(t + 0.12);
+    }
+  }
+
+  // A drop of water landing in a cave, and its echo.
+  drip(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.4 - 0.7;
+    const delay = ctx.createDelay(1);
+    delay.delayTime.value = 0.21;
+    const feedback = ctx.createGain();
+    feedback.gain.value = 0.42;
+    pan.connect(this.bus);
+    pan.connect(delay);
+    delay.connect(feedback).connect(delay);
+    delay.connect(this.bus);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    const pitch = 900 + Math.random() * 900;
+    osc.frequency.setValueAtTime(pitch, now);
+    osc.frequency.exponentialRampToValueAtTime(pitch * 1.6, now + 0.02);
+    osc.frequency.exponentialRampToValueAtTime(pitch * 0.7, now + 0.12);
+    gain.gain.setValueAtTime(0.05 * level, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+    osc.connect(gain).connect(pan);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  stop() {
+    for (const timer of this.timers) clearTimeout(timer);
+    const now = this.ctx.currentTime;
+    this.bus.gain.cancelScheduledValues(now);
+    this.bus.gain.setTargetAtTime(0, now, 0.4);
+    setTimeout(() => {
+      for (const node of this.nodes) { try { node.stop(); } catch { /* already stopped */ } }
+      this.bus.disconnect();
+    }, 2000);
+  }
 }
 
 // Browsers only allow sound after the player presses something, so music
@@ -468,6 +702,8 @@ class MusicPlayer {
     this.master = null;
     this.current = null;
     this.wanted = null;
+    this.ambience = null;
+    this.ambienceWanted = null;
     this.muted = false;
     window.addEventListener('keydown', (event) => {
       this.unlock();
@@ -489,6 +725,28 @@ class MusicPlayer {
     this.sfxBus.connect(this.master);
     this.noise = makeNoise(this.ctx);
     if (this.wanted) this.start(this.wanted);
+    if (this.ambienceWanted) this.startAmbience(this.ambienceWanted);
+  }
+
+  // The ambience that's playing (or should be, once sound is allowed).
+  get ambienceName() {
+    return this.ambienceWanted;
+  }
+
+  // Plays the sounds of a place under the music (see AMBIENCES), or none.
+  setAmbience(name) {
+    if (name === this.ambienceWanted) return;
+    this.ambienceWanted = name;
+    if (this.ctx) this.startAmbience(name);
+  }
+
+  startAmbience(name) {
+    this.ambience?.stop();
+    this.ambience = null;
+    if (!name) return;
+    const spec = AMBIENCES[name];
+    if (!spec) throw new Error(`Unknown ambience '${name}'`);
+    this.ambience = new Ambience(this.ctx, this.master, this.noise, spec);
   }
 
   // How far into the current song we are, in seconds (null if nothing's
@@ -534,9 +792,12 @@ class MusicPlayer {
     }
   }
 
-  // Plays a song by name (looping), or stops the music with null.
-  // Asking for the song that's already playing does nothing.
-  play(name) {
+  // Plays a song by name (looping), or stops the music with null, with the
+  // `ambience` of the place under it (none, if left out: battles and menus
+  // are quiet places). Asking for the song that's already playing just
+  // changes the ambience.
+  play(name, ambience = null) {
+    this.setAmbience(ambience);
     if (name === this.wanted && (this.current || !this.ctx)) return;
     this.wanted = name;
     if (this.ctx) this.start(name);

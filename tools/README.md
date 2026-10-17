@@ -36,6 +36,16 @@ or download the file, and put it where the file name at the top says.
   letters, raw instrument settings). Everything works without it.
 - Hover over a button to see what it does and its shortcut.
 
+## Checking (no Studio needed)
+
+- **textCheck.html** measures every line of the game's text against the box
+  it's shown in. Run it after writing any text.
+- **preview.html** draws a still of any room without playing to it
+  (`preview.html?room=rest_square&x=20&y=17&facing=down&day=0.75`), builds
+  every room and compiles every song (`?check=1&songs=1`), presses Z on every
+  interactable in the game and reports anything that throws (`?poke=all`),
+  and draws the skill tree (`?skills=2&party=1`).
+
 ## Sprite Editor
 
 Pick a sprite on the left, or press **New** and choose a kind: *Enemy* (16x16),
@@ -178,6 +188,15 @@ Pick a song at the top or start a **New song**.
 
 Songs save as `src/data/music/<name>Theme.js`. Rooms play a song by its short
 name (shown under the song's name).
+
+## Music Export
+
+`tools/exportMusic.html` (<http://localhost:8000/tools/exportMusic.html> with the
+server running) records the game's songs to **MP3** or **WAV** files, played on
+the same instruments as in the game. Press **Export** beside a song, or **Export
+all** to pick a folder for every song at once. Looping songs play through, go
+round the loop the number of times you choose, then fade out. MP3 needs the
+internet the first time (it loads the encoder); WAV always works.
 
 ## Pattern Lab
 

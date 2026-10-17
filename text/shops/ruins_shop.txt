@@ -49,3 +49,21 @@ Everything was free for the Hero. You're not the Hero, so... business is busines
 
 [talk: Gold?]
 Monsters drop gold when you beat them. And when you spare them! Kindness pays, sometimes.
+
+[sell_prompt]
+Selling? Oh, I do love a swap. Half what it's worth, mind. A hundred years of rent.
+
+[bought_skill]
+A skill point! I've had that in the back since the Hero was due. It's yours now. Spend it from the SKILLS screen. Press C!
+
+[skill_sold_out]
+That was my only one! I'm a merchant, not a miracle.
+
+[sold]
+Lovely! I'll find a corner of the pack for it. The pack has opinions.
+
+[nothing_to_sell]
+Your bag's empty, friend. Come back when you've found treasure. Or carrots. I'll take carrots.
+
+[cant_sell]
+You're wearing that one! Take it off first. Press C out there.

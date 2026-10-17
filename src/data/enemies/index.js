@@ -2,13 +2,15 @@
 // hand. Add or remove files here and the Studio server rebuilds it.
 import * as bunny from './bunny.js';
 import * as columneon from './columneon.js';
+import * as craghorn from './craghorn.js';
 import * as dummy from './dummy.js';
 import * as moth from './moth.js';
 import * as shade from './shade.js';
+import * as step from './step.js';
 import * as taper from './taper.js';
 import * as waxling from './waxling.js';
 
-const MODULES = { 'bunny': bunny, 'columneon': columneon, 'dummy': dummy, 'moth': moth, 'shade': shade, 'taper': taper, 'waxling': waxling };
+const MODULES = { 'bunny': bunny, 'columneon': columneon, 'craghorn': craghorn, 'dummy': dummy, 'moth': moth, 'shade': shade, 'step': step, 'taper': taper, 'waxling': waxling };
 
 // Every enemy, keyed by its file name. Rooms refer to enemies by this id.
 export const ENEMIES = Object.fromEntries(

@@ -15,4 +15,13 @@ export const HERO_STATE = {
   lit: null,
   weapon: 'worn_sword',
   weapons: ['worn_sword', 'old_shield'],
+  // Armor worn and owned (see src/data/armor.js).
+  armor: 'travel_clothes',
+  armors: ['travel_clothes'],
+  // Gear for getting around, kept for good (see src/data/gear.js).
+  gear: [],
+  // Friends who've joined (ids in src/characters/party.js), and their own
+  // skill points (earned, less spent).
+  party: [],
+  memberPoints: {},
 };

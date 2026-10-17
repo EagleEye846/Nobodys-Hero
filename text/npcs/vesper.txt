@@ -1,0 +1,26 @@
+# VES (Vesper): a girl of Heralds' Rest, with a patched plum umbrella she is
+# never without. You find her in the chapel, kneeling at the front, praying.
+# Talking to her the first time, she joins the party (`join: 'vesper'` on her
+# prop, see src/characters/party.js). Her portrait is `vesper` in
+# src/data/art/portraits.js: start a page with {praying}, {shy}, {hopeful}...
+# Each entry (separated by a blank line) is one page of the textbox.
+
+# Said the first time you talk to her.
+[first]
+{praying}...and please, if anyone up there is listening, let it be soon.
+
+{surprised}Oh! I didn't hear the door. Nobody comes in here but me.
+
+{shy}Sorry. I'm Vesper. Ves. Everyone calls me Ves.
+
+{thoughtful}You came up the stair, didn't you. You've got the mountain all over your boots.
+
+{determined}And you're going on. Past the Lookout, into the cloud.
+
+{hopeful}Take me with you. Please. I know the wind up there, and I've got my umbrella.
+
+{glee}It's a very good umbrella.
+
+# Said every time after that.
+[repeat]
+{shy}I'll just finish here. I'm right behind you.

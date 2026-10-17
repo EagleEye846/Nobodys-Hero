@@ -1,0 +1,472 @@
+# HERALDS' REST: things you can read and look at in the village and its
+# houses (Chapter 2, high on Mount Vigil).
+
+# What a save point says when you save here.
+[save_point]
+The crystal hums along with the wind in the lamp posts.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+An empty chest. Someone will have refilled it by next week; that's how things go here.
+
+# What you're told on waking at the inn.
+[rested]
+You slept like a stone under a mountain. Your HP is fully restored.
+
+[rest_snow]
+Snow, trodden into paths by small busy feet.
+
+[rest_lane]
+A lane, swept down to the cobbles before breakfast. The Hero should not have to wade.
+
+# --- THE GATE ---
+
+[gate_arch]
+An arch of old timber over the stair, and across it, in letters a hundred years old and repainted every spring:
+
+"HERALDS' REST. WELCOME, HERO."
+
+Bunting hangs from it, red and blue and gold. It's been there so long the wind has given up on it.
+
+[gate_lamp]
+An iron lamp, lit, with a cap of snow on it.
+
+[gate_banner]
+A banner on a pole, a golden trumpet on red. The heralds' colours.
+
+[gate_sign]
+PLEASE WIPE YOUR FEET. (There is a mat. It is under the snow.)
+
+[gate_board]
+THE NOTICE BOARD. Every notice ever pinned here is still pinned here, underneath the next one.
+
+The top one: "HERO EXPECTED ANY DAY NOW. Please keep the square tidy. - H. Horace, Head Herald"
+
+Under it, older: "HERO EXPECTED ANY DAY NOW. Please keep the square tidy. - H. Horace, Head Herald (the first)"
+
+[gate_snowman]
+A snowman on lookout duty at the gate. Somebody gave it a herald's hat. It's taking the job very seriously.
+
+[gate_bench]
+A bench with a view of the whole stair, all the way down into the cloud. Someone has sat here every day and looked.
+
+[gate_stair]
+The last of the great stair, swept and salted. A hundred years of being ready wore a groove in the middle step.
+
+# --- THE SQUARE ---
+
+[square_fountain]
+The fountain, frozen mid-splash a long time ago. The water never fell. It's quite beautiful, if you don't mind the cold.
+
+A plaque: "FOR THE HERO, WHO WILL DRINK HERE FIRST."
+
+[square_ice_hero]
+A statue of the Hero carved from ice, plumed helmet and all. The heralds carve a new one every winter, from a guess.
+
+This year's guess is a bit taller than you. Last year's, judging by the lump beside it, was shorter.
+
+[square_lamp]
+A lamp post. The heralds light them at dusk. Nobody is quite sure who the light is for any more, and nobody will say it.
+
+[square_board]
+THE SQUARE NOTICE BOARD (overflow). "LOST: one trumpet. If found, it's Bram's. He knows what he did."
+
+"CHOIR PRACTICE: Thursday. Fanfare practice: every other day. Hero practice: cancelled until we have one."
+
+[square_bench]
+A bench, cleared of snow this morning. Everything here is cleared of snow this morning.
+
+[square_snowman]
+A snowman the kids built. It has a herald's tabard, a trumpet made of a stick, and an expression of great responsibility.
+
+[square_brazier]
+A brazier, glowing. The heralds keep one lit in the square for whoever comes in off the stair cold. That's you, today.
+
+[square_barrels]
+Barrels and crates stacked by the stores, stamped FOR THE WELCOME FEAST in letters that have been repainted a few times.
+
+[square_skis]
+A pair of skis leaning on the wall, waxed and ready. Nobody in the village has ever used them. They're for the Hero.
+
+[square_pond]
+Ice over the pond, swept clear for skating. Small scratched circles all over it where somebody practised and practised.
+
+[square_roof]
+A roof deep in snow, icicles along the eaves. Smoke from the chimney.
+
+[square_wall]
+Log walls, snug and warm, the gaps stuffed with moss.
+
+[square_window]
+A lit window. Inside, the shadow of someone moving about, and the smell of something baking.
+
+[square_fence]
+A picket fence, every post wearing a hat of snow.
+
+[square_chough]
+A chough on the fence post. It's watching the brazier. It might be warming its feet from here.
+
+[square_inn_sign]
+THE SOFT BEDS. Inn. Soup always on. Beds always made. Dreams not guaranteed but very likely.
+
+[square_hall_sign]
+THE HALL OF HERALDS. Feast laid. Fanfare rehearsed. Please do not sit in the big chair.
+
+[square_stores_sign]
+REST STORES. Prop. F. Fennick. Everything a climber needs, and a lot of things they don't.
+
+[square_tower_sign]
+THE BELL TOWER. Rung once at dawn, for the Hero. DO NOT ring after dark. We've all heard the story.
+
+[square_marta_sign]
+MARTA. Knitting, mending, and no opinions about the Hero at all, thank you.
+
+[square_pottle_sign]
+THE POTTLES. Please knock. Please knock LOUDLY. The children are drumming.
+
+[square_lookout_sign]
+THE LOOKOUT, and the stair to the summit. Beyond here the mountain is the mountain's business.
+
+[square_chapel_sign]
+THE CHAPEL. Prayers at dusk, every dusk. Please come in quietly, in case anyone is listening.
+
+[square_chapel_spire]
+A little spire, a gold star on top, and a bell no bigger than a teapot. It rings softly, so as not to upset the big one.
+
+Over the door, a round window of coloured glass. Candlelight glows through it, red and blue.
+
+# --- THE SOFT BEDS (the inn) ---
+
+[inn_fire]
+A fire that's been fed for a hundred years and has got very good at being a fire.
+
+[inn_counter]
+The inn's counter, polished by elbows. A bell on it says "RING FOR GRETA". Greta is standing right there.
+
+[inn_soup]
+The soup pot, which is never off and never empty. Greta ladles some into a jar for you without being asked.
+
+[inn_soup_empty]
+The soup pot, which is never off and never empty, except that Greta would like you to have a wash before the next one.
+
+[inn_books]
+Books left behind by guests: "KNOTS FOR CLIMBERS", "A HUNDRED SOUPS", and "WHAT TO SAY TO A HERO" (unread, spine uncracked).
+
+[inn_bed]
+A bed, made this morning with sheets that smell of pine and wind. You could sleep in it.
+
+[inn_bed_made]
+The Hero's bed. It has been turned down every night for a hundred years. Greta says you may as well, it's getting silly.
+
+[inn_side_table]
+A candle, a glass of water, and a note: "if you need anything in the night, ring the bell. no, the little one."
+
+[inn_table]
+A table by the fire, set for one, with a second place half laid just in case.
+
+[inn_chair]
+A chair worn smooth by a hundred years of guests who were mostly the same three heralds.
+
+[inn_mug]
+A mug of cocoa on the table, going cold. Greta nods at it: "Go on."
+
+[inn_mug_empty]
+Your empty mug. Greta's already taken it to wash.
+
+[inn_skis]
+A guest's skis, left behind long ago and kept, because they might come back for them.
+
+[inn_rules]
+HOUSE RULES: 1. No snow indoors. 2. No trumpets after supper. 3. The Hero's bed is for the Hero (or whoever needs it, honestly, it's a bed).
+
+[inn_rug]
+A thick rug, warm underfoot, with a trumpet woven into the middle of it.
+
+[inn_wall]
+Log walls hung with pictures of the stair in every season. Someone painted them all from the same bench.
+
+# --- REST STORES ---
+
+[stores_counter]
+A counter with a brass scale on it, a ledger a foot thick, and a jar of pine candies with a sign: "TAKE ONE. ONE."
+
+[stores_shelves]
+Shelves of everything: rope, candles, tins, lamp oil, mittens by the dozen, and a single, dusty, enormous cape labelled HERO (XL).
+
+[stores_crates]
+Crates stamped with places you've never heard of, carried up the stair on small backs over a very long time.
+
+[stores_barrel]
+A barrel of salted something. The lid is nailed down. Fennick says it's "for the feast" in a voice that ends the conversation.
+
+[stores_skis]
+Skis for sale. Fennick has never sold a pair and keeps them in stock out of principle.
+
+[stores_sign]
+PRICES FIRM. PRICES FAIR. PRICES FOR THE HERO: ALSO FIRM, SORRY.
+
+[stores_trumpet]
+A herald's trumpet on a stand, with a price tag. Fennick will tell you it's for display. It isn't; everything in here has a price.
+
+[stores_wall]
+Shelves to the ceiling. Fennick knows where everything is, and tests himself on it most evenings.
+
+# --- THE HALL OF HERALDS ---
+
+[hall_chair]
+The Hero's chair at the head of the table: carved, cushioned, dusted daily, and never once sat in.
+
+There's a small sign on the seat: "RESERVED." You could move it. You don't.
+
+[hall_table]
+The feast table, laid end to end: plates, cups, candles, a honeycake under a cloth. Everything is relaid every week, and the cake is fresh.
+
+Somewhere down the table is a place card with your name on it. No. You looked twice. It says HERO.
+
+[hall_chairs]
+Chairs for all the heralds. They've eaten the welcome feast about five thousand times, as practice.
+
+[hall_trumpets]
+A rack of trumpets, polished every morning until you can see the whole hall in them, upside down.
+
+[hall_book]
+THE BOOK OF ARRIVALS. Six names, six stories, in six different inks. The seventh line is blank and the pen is beside it.
+
+A note from the Head Herald: you may write in it when you decide what you are.
+
+[hall_fire]
+A great hearth, roaring. The hall is the warmest room on the mountain and knows it.
+
+[hall_banner]
+A banner on a pole, red and gold, the trumpet in the middle. The heralds' colours, bright as the day they were dyed. They re-dye them.
+
+[hall_sign]
+TODAY'S REHEARSAL: the Fanfare of Welcome (full), the Fanfare of Welcome (short, for if the Hero is tired), and the Lament (in case). Please don't practise the Lament where the kids can hear.
+
+[hall_rug]
+A long rug down the middle of the hall, so the Hero's boots never touch cold stone. Yours are allowed on it; the Head Herald said so, after thinking it over.
+
+[hall_wall]
+The hall's walls are hung with a hundred years of banners, each a little brighter than the last.
+
+# --- THE BELL TOWER ---
+
+[tower_bell]
+The great bell of Heralds' Rest. Dunstan rings it once at dawn, so the Hero will know which way is up.
+
+You give the rope a pull. The bell says BONNNG, enormously. Somewhere below, a herald drops a plate.
+
+[tower_sign]
+UP: the bell. The blocks in the corner are the stairs; the real stairs rotted in year forty and nobody minded.
+
+[tower_rules]
+BELL RULES: ONE ring at dawn. NO rings after dark. (In year sixty-two somebody rang it at midnight and three heralds ran out onto the stair in their nightshirts to welcome a goat.)
+
+[tower_barrel]
+A barrel of bell polish. Dunstan goes through one a year.
+
+[tower_crates]
+Crates of spare rope, in case the bell rope ever wears through. It has, twice. Both ropes are kept, in a box, with labels.
+
+[tower_log]
+THE BELL LOG. One line a day, for a hundred years: "Dawn. Rang once. No Hero."
+
+Today's line is still blank. Dunstan is waiting to see what to write.
+
+[tower_lamp]
+A lamp by the ladder, lit, so Dunstan can see the rope at dawn.
+
+[tower_wall]
+The tower's walls are hung with ropes, old and new, and one very old pair of ear muffs on a nail.
+
+[tower_blocks]
+Blocks of stone, stacked into steps up to the bell platform. Jump up them.
+
+# --- MARTA'S ---
+
+[marta_fire]
+A small fire, just enough. Marta knits by it and has for a hundred years, minus the days she knitted in the square.
+
+[marta_chair]
+Marta's chair, with a scarf trailing off it that goes under the door and, as far as you can tell, all the way round the village.
+
+[marta_bed]
+A neat bed with a knitted blanket in every colour the heralds have. It took sixty years. She says she rushed the end.
+
+[marta_patterns]
+Pattern books, hand-written. "MITTENS FOR HEROES" has a lot of crossings out where she kept guessing at the hand size.
+
+[marta_drawer]
+A drawer full of balls of wool, and, under them, a paper bag of pine candies. Marta says help yourself in a voice that means it.
+
+[marta_basket]
+A basket of mending: everything in the village with a hole in it ends up here, and leaves without one.
+
+[marta_table]
+A side table with a cup of tea on it, exactly the right temperature. Marta's tea is always exactly the right temperature. Nobody knows how.
+
+[marta_rug]
+A rag rug made from a hundred years of worn-out scarves. If you look closely you can find every colour.
+
+[marta_wall]
+The walls are hung with scarves, mittens and socks, drying, or waiting, or just there to be looked at.
+
+# --- THE POTTLES' ---
+
+[pottle_stove]
+A stove with a tray of honeycake in it. There is always a tray of honeycake in it. The recipe is on the wall, worn illegible with use.
+
+[pottle_counter]
+A counter dusted with flour, and two small flour handprints where the kids helped.
+
+[pottle_cake]
+A honeycake on the counter, cooling, with a note: "DO NOT TOUCH - Mum". Mrs Pottle sees you looking and cuts you a slice anyway.
+
+[pottle_cake_gone]
+The cooling rack, minus your slice. Mrs Pottle has already put another cake in.
+
+[pottle_table]
+The kitchen table, covered in drawings of the Hero. The Hero has, variously, a cape, two capes, wings, a dog and a very large hat.
+
+[pottle_chair]
+A small chair with a cushion that says POTTLE on both sides, in case anyone forgets whose chair it is.
+
+[pottle_bed_big]
+Mrs Pottle's bed, made with corners you could cut yourself on.
+
+[pottle_bed_small]
+The kids' bed, unmade, with a toy trumpet under the pillow and a drawing of a goat on the headboard.
+
+[pottle_toys]
+A toy chest: wooden trumpets, a rope with a hook made of a bent spoon, and a doll with a plumed helmet that has clearly been to war.
+
+[pottle_drawings]
+Drawings pinned to the wall: POTTLE MEETS THE HERO, POTTLE BEATS THE HERO, THE HERO MEETS A GOAT. In the last one the goat is winning.
+
+[pottle_book]
+A storybook on a stand, open at the last page: "...and the Hero came up the stair, and everyone cheered, and there was cake. THE END."
+
+Someone small has added, in crayon: "AND THEN WHAT".
+
+[pottle_rug]
+A rug with a hopscotch grid drawn on it in chalk. The chalk is not coming out.
+
+[pottle_wall]
+The walls are covered in drawings, up to exactly the height a small herald can reach, and then a few higher where one stood on the other.
+
+# --- THE CHAPEL ---
+
+[chapel_window]
+The great round window: petals of red and blue and gold, all around one clear pane in the middle.
+
+The Hero was meant to go there. Nobody knew what they looked like, so the glass was left clear. Now it's just sky.
+
+[chapel_lancet_left]
+A tall window. In the glass, a row of heralds blow their trumpets down a stair. The stair is empty.
+
+[chapel_lancet_right]
+A tall window: someone climbing the stair to the heralds. Their face is a yellow blob. The glassmaker was being honest.
+
+[chapel_altar]
+The altar, under a cloth stitched with a golden trumpet. On it, a book of prayers for the Hero's safe arrival.
+
+They have been prayed so often that the pages have gone soft as cloth.
+
+[chapel_candles]
+A candle stand, three candles burning. New ones are lit every evening, so the Hero will know someone is still up.
+
+[chapel_prayers]
+THE BOOK OF PRAYERS. Every page is the same prayer in a different hand: "Let it be today."
+
+Near the back, in small careful letters: "Or tomorrow. Tomorrow is also fine."
+
+[chapel_hymns]
+The hymn board. Today's hymns: 1, 1 and 1.
+
+There is only one hymn. It's called "Any Day Now". Everybody knows all eleven verses.
+
+[chapel_pew_front]
+The front pew. A card on it says RESERVED, in case the Hero wants a sit. Under it, an older card says RESERVED.
+
+[chapel_pew]
+A pew, polished by a hundred years of heralds sitting very still and hoping.
+
+[chapel_pew_back]
+The back pew. Carved very small into the wood: "WHAT IF THEY'RE NOT COMING". Carved under it, in another hand: "HUSH."
+
+[chapel_votives]
+Little candles, one lit for each prayer. Most are for the Hero. One, labelled in a child's hand, is for Old Nan's knees.
+
+[chapel_sign]
+PRAYERS AT DUSK. If the Hero arrives during prayers, please let them in and carry on as normal. (Nobody will.)
+
+[chapel_runner]
+A red runner up the aisle, worn pale down the middle by a hundred years of heralds walking up it to ask.
+
+[chapel_wall]
+Pine walls, scrubbed. The whole chapel smells of candle wax and cold air.
+
+# --- THE LOOKOUT ---
+
+[lookout_telescope]
+A brass telescope, pointed at the summit. You look through it.
+
+Cloud. Then, for a moment, the cloud parts: a stair, very far up, climbing to a point where the sky is the wrong colour. Then cloud again.
+
+[lookout_bench]
+A bench at the edge of everything. Below it, the cloud sea goes on forever. Above it, the mountain does.
+
+[lookout_sign]
+THE LOOKOUT. A herald watches here from dawn to dusk, for the Hero. The shift is popular. The view is the reason.
+
+[lookout_waymark]
+HERO! Here is the end of us and the start of the rest. The stair goes on north to the summit. Nobody from the village has been past the second cairn. Come back and tell us.
+
+[lookout_chest]
+A chest at the edge of the platform, roped to a post so the wind can't take it. Fudge inside, and a note: "for the last bit".
+
+[lookout_stair]
+The stair goes on north, up into the cloud, towards the top of Mount Vigil.
+
+[lookout_onward]
+The stair climbs on into the cloud. You can't see where it goes yet.
+
+(The way to the summit is still being built. Come back and see.)
+
+# --- After dark ---
+
+# Ringing the great bell a second time, against the BELL RULES: game over.
+[tower_bell_wrath]
+You give the rope a second pull. BONNNG.
+
+The tower goes very quiet. Dunstan puts down his pen.
+
+Every door in Heralds' Rest opens at once. A hundred years of patience come up the stair, carrying trumpets.
+
+ONE RING. THE RULES SAID ONE RING.
+
+[tower_bell_night]
+It's after dark. The sign was very clear about this.
+
+...You give the rope a pull anyway. BONNNG.
+
+Far below, a door bangs. Then another. Then three heralds in nightshirts run out onto the stair with a lantern, a trumpet and a cake, shouting "WELCOME!" at a goat.
+
+Dunstan is looking at you. He's not angry. He's writing it in the log.
+
+[square_lamp_night]
+A lamp post, lit against the dark. Moths would come, if there were moths up here. There's one. It looks very cold.
+
+[gate_lamp_night]
+The lamps are lit for the night, as they've been lit every night for a hundred years, so the Hero never arrives in the dark. Tonight somebody did arrive. The lamps don't seem to have noticed.
+
+[lookout_telescope_night]
+You look through the telescope, at night.
+
+Stars. More stars than you've ever seen, right down to where the ground should be.
+
+And, at the very top of the mountain, one light that isn't a star. It's warm-coloured. It flickers, like a lantern. Then the cloud closes.

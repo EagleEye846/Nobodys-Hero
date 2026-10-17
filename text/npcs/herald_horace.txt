@@ -1,0 +1,28 @@
+# HORACE: Head Herald of Heralds' Rest (the fourth to hold the title; they
+# were all called Horace), in the square by the brazier. A sash, a hat with a
+# feather, a moustache you could hang a coat on, and a speech he has been
+# practising since before he was born.
+
+[first]
+Ahem. AHEM. Positions, everyone! Positions!
+
+...Where is everyone. Never mind. I, Horace, shall do it myself.
+
+HERO! WELCOME TO HERALDS' REST, where for one hundred years we have kept the soup hot, the beds made and the trumpets... hm.
+
+You're not quite... that is to say... the prophecy mentioned a cape. And a certain height.
+
+No matter! NO MATTER. You came up the stair, and that's more than anyone's done in a very long time, and I for one say WELCOME.
+
+The Hall is open, the inn is warm, the stores' prices are what they are. And if you'd like to be announced at the feast, I have a speech. It's about four hours.
+
+Oh, and do look in at the chapel. Young Ves is in there, praying, as ever. She has been asking about the stair.
+
+[repeat]
+I've been Head Herald for thirty years. My father before me, and his before him. All called Horace. It saves repainting the sign.
+
+The speech, if you're wondering, begins "O HERO" and ends, some time later, with a fanfare. I've never had a chance to say the middle bit aloud.
+
+Between you and me: I don't mind if you're the Hero or not. I'd just like to say the speech to somebody, once.
+
+Mind Nan, the old goat. She bites. Affectionately.

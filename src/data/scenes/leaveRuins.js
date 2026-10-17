@@ -19,6 +19,6 @@ export const LEAVE_RUINS = {
     { do: 'sound', name: 'door' },
     { do: 'walk', who: 'player', to: { x: 32, y: 2 } },
     { do: 'wait', seconds: 0.6 },
-    { do: 'end_chapter', room: 'beyond_ruins', spawn: { x: 10, y: 12 }, credits: true },
+    { do: 'end_chapter', room: 'beyond_ruins', spawn: { x: 11, y: 12 }, credits: true },
   ],
 };

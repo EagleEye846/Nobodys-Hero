@@ -45,3 +45,66 @@ Jump a whole step higher: straight up onto tall blocks, no low step needed.
 
 [sure_foot]
 You land lightly. The floor only cracks on every other landing.
+
+# Chapter 2: Mount Vigil.
+[ember]
+Learn the spell Ember Flare: 36% SP for 20 damage to every enemy at once.
+
+[heavy_hand]
+FIGHT does another 25% more damage.
+
+[comet]
+Learn the spell Comet: 90% SP for a colossal 80 damage.
+
+[kindling]
+Every battle starts with 25% SP already in the gauge.
+
+[thrift]
+Every spell costs 20% less SP.
+
+[mending_light]
+Learn the spell Mend (18% SP, heals 20 HP), and Heal Pulse and Mend heal 50% more.
+
+[bright_ward]
+Learn the spell Bright Ward: 30% SP to halve the damage you take for two enemy turns.
+
+[warm_heart]
+Food heals 30% more. Cocoa especially.
+
+[iron_will]
+Every hit does another 1 less damage.
+
+[strong_arms]
+On the rope, your swing builds 50% faster.
+
+[mountain_legs]
+Run another 25% faster. The mountain's been good for you.
+
+[lucky_pockets]
+Fights pay 25% more gold.
+
+[kind_word]
+TALK, Lull and Hush raise MERCY 25% more.
+
+[hush]
+Learn the spell Hush: 45% SP to raise every enemy's MERCY by 20%.
+
+[gentle_hands]
+Pacify costs half as much SP.
+
+[haggler]
+Shops charge you 15% less.
+
+# --- VES's branch (UMBRELLA), paid for with her own points ---
+
+[ves_drift]
+Ves's FLURRY raises every enemy's MERCY 5% more.
+
+[ves_hail]
+Ves's SLEET does 4 more damage to every enemy.
+
+[ves_warm]
+Ves's ZEPHYR heals 6 more HP and gives 5% more SP.
+
+[ves_brim]
+Ves keeps her umbrella tilted your way: every hit does 1 less damage.

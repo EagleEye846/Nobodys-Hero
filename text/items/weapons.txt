@@ -48,3 +48,10 @@ Ring it to freeze every bullet for a moment.
 [old_tome]
 The pages remember what you forgot.
 Spend 20% SP to heal 12 HP, right in the middle of an attack.
+
+# Mount Vigil and Heralds' Rest.
+[ice_pick]
+A climber's pick with a worn leather grip, found in the caves inside the spire. It bites deep, and it's made for lunging.
+
+[herald_trumpet]
+A herald's brass trumpet, polished for a hundred years. One blast and everything stops to listen (Toll).

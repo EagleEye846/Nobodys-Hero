@@ -28,8 +28,29 @@ export class Prop {
   constructor({
     sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
     gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
-    walkable = false, light = null, seenInLight = false, notice = false,
+    walkable = false, solidSides = 0, light = null, seenInLight = false, notice = false, grapple = false,
+    rest = false, dream = null, sound = null, join = null, nightText = null, wrath = null,
   }) {
+    // Something you may only use once a visit (the great bell: ONE ring). Use it
+    // again and these words (a section of the room's text file) play, then it's
+    // game over.
+    this.wrath = wrath;
+    this.uses = 0;
+    // Other words for it after dark, outdoors (a section of the room's text file).
+    this.nightText = nightText;
+    // A character who joins the party when you talk to them (a member id in
+    // src/characters/party.js). After that they walk with you instead.
+    this.join = join;
+    // A sound effect played when you press Z on it (the bell: 'bell').
+    this.sound = sound;
+    // A bed at an inn: sleep in it to restore your HP (see OverworldScene.useBed).
+    this.rest = rest;
+    this.dream = dream;
+    // Rings for the Climbing Rope (see src/overworld/climbing.js): a
+    // grapple_ring at the top of a cliff, which you can stand on, and a
+    // swing_ring hammered into a steep face, to swing from on the way up.
+    this.grapple = grapple || sprite === 'grapple_ring';
+    this.swing = sprite === 'swing_ring';
     // Something the player should read: a bobbing "!" floats over it until
     // they have (the room sets `noticed` from the save).
     this.notice = notice;
@@ -39,7 +60,10 @@ export class Prop {
     this.light = light;
     this.seenInLight = seenInLight;
     // Something flat on the floor (a puddle, a rug) that you walk over, but can still look at.
-    this.walkable = walkable;
+    this.walkable = walkable || this.grapple || this.swing;
+    // Something you walk through the middle of, but not its ends (an arch's
+    // posts): this many pixels at each side still block.
+    this.solidSides = solidSides;
     this.gives = gives;
     this.takenLook = taken;
     this.lever = lever;
@@ -107,7 +131,9 @@ export class Prop {
 
   // Whether it stands in the way of something in that box.
   blocks(left, top, right, bottom) {
-    return !this.walkable && this.overlaps(left, top, right, bottom);
+    if (!this.walkable) return this.overlaps(left, top, right, bottom);
+    if (!this.solidSides || !this.overlaps(left, top, right, bottom)) return false;
+    return left < this.x + this.solidSides || right > this.x + this.width - this.solidSides;
   }
 
   draw(ctx, camera) {

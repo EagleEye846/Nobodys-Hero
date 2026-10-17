@@ -26,3 +26,27 @@ The others will say you are not the Hero. Let them talk.
 They have had a long time to decide what a Hero looks like.
 
 North of here is the Lantern Hall. Lately a moth has taken a liking to the light. A big one.
+
+# In Heralds' Rest, once he's met you on the Shoulder
+# (src/data/scenes/keeperOnTheShoulder.js): by the frozen fountain.
+[first after keeper_on_the_shoulder]
+There you are. You made it up the ice.
+
+{glee}I told them you would. They didn't believe me; they've been let down before.
+
+{sly}Lovely people, the heralds. A hundred years of practising a welcome. Don't tell them you're tired of it before they've finished.
+
+The old goat, Nan, remembers me. Don't let that worry you. I remember her too.
+
+The stair goes on from the Lookout. I'd rest first, if I were you. A proper bed, a proper sleep. The mountain will keep.
+
+{worried}And whatever you dream up here... it's only the thin air. Don't go looking for it when you wake.
+
+[repeat after keeper_on_the_shoulder]
+The fountain's lovely, isn't it. Frozen in the middle of giving.
+
+{sly}I know how it feels.
+
+Sleep at the inn before you go on. The soup, the beds. You won't find either above the clouds.
+
+{glee}Stay where the light can find you, little one. Up here, that's harder than it sounds.

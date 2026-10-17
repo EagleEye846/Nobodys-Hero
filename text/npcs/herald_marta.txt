@@ -1,0 +1,20 @@
+# MARTA: a herald who knits, on the bench in the square. Her scarf is longer
+# than the square. She has no opinions about the Hero, and will tell you so.
+
+[first]
+Mm. Hello, dear. Mind the scarf.
+
+You'll be the one from the stair. Everyone's very excited. I'm knitting.
+
+Are you the Hero? I've no opinion. I've knitted for six so far and not one of them wanted a scarf. Big heroic types. Cold necks, every one.
+
+Here. Marta measures your neck with her eyes. Mm. Give me a day.
+
+Have you met Ves yet? The girl in the chapel, with the umbrella. Go and say hello, dear.
+
+[repeat]
+Knit one, purl one, a hundred years. You get a rhythm.
+
+If you go up past the Lookout, dear, take mittens. The Hero's meant to be above all that. You are not, no offence.
+
+That scarf of mine? Goes round the square twice and into the inn. The innkeeper uses the end for the soup pot handle.

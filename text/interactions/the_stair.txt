@@ -1,0 +1,120 @@
+# THE LONG STAIR: things you can read and look at on the mountain (Chapter 2).
+
+# What a save point says when you save here.
+[save_point]
+The crystal's light is pale in the daylight, but warm all the same.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# The sign at the bottom of the stair.
+[stair_tally]
+Carved into the bottom step: six tally marks, worn almost smooth by the weather.
+
+Beneath them, in fresh chalk, someone has added a seventh.
+And a question mark.
+
+# The old pack on the ledge (it gives you a Climber's Ration).
+[stair_pack]
+A weathered pack, wedged up on the ledge long ago. Someone left in a hurry.
+
+Inside, still sealed in waxed paper: a climber's ration.
+
+[stair_rockslide]
+A rockslide has buried the stair here. Boulders, packed tight.
+
+Hoofprints lead off east, along the foot of the cliff.
+
+[stair_boulder]
+A boulder, mossy on top. It looks like it's been here longer than the stair.
+
+[stair_pine]
+A mountain pine. It smells sharp and clean, nothing like the Ruins.
+
+[stair_cliff]
+Sheer rock, layered like the pages of a very old book.
+
+[stair_block]
+A fallen block of the stair, about knee-high. You could jump up onto it.
+
+[stair_tall_block]
+A tall block of the old stair, too high to jump onto from the grass. Something lower might help.
+
+# --- THE GOAT TRACK ---
+
+[goat_rockslide]
+The rockslide, piled higher than your head. Something with hooves has been over it, somehow.
+
+[goat_fallen_stair]
+A whole run of the stair came down with the slide and landed on top of it. You could climb onto it, a block at a time.
+
+# The old pack on the end of the fallen stair (it gives you a Climber's Jacket).
+[goat_pack]
+Another pack, wedged between the blocks. The same make as the one at the bottom.
+
+Folded inside: a padded jacket, patched at the elbows. Whoever wore it meant to go a long way.
+
+[goat_cairn]
+Six flat stones stacked on the boulder, one on top of another.
+
+There's room on top for one more.
+
+# --- THE START OF THE CLIMB ---
+
+# The herald's waymark at the top of the lower stair.
+[climb_waymark]
+WELCOME, HERO, TO MOUNT VIGIL!
+
+The Long Stair climbs from here to the summit, where the sun first touches the world.
+
+Halfway up waits HERALDS' REST: hot soup, soft beds, and a fanfare in your honour.
+(Please do not ring the bell after dark.)
+
+Underneath, scratched into the post in a different hand:
+"stair's gone above here. use the rings."
+
+[climb_tent]
+A small tent, patched in three colours. The flap is tied shut from outside.
+
+Whoever pitched it meant to come back.
+
+[climb_campfire]
+A ring of stones round a fire that went out a long time ago. The ash is cold all the way through.
+
+# The pack by the tent (it gives you the Climbing Rope).
+[climb_pack]
+A third pack, the same make as the others. This one was left on purpose, propped against the tent.
+
+Inside, coiled neatly: a long rope with an iron hook. A single tally mark is scratched into the hook.
+
+[climb_pack_empty]
+The empty pack. Someone packed it for a long climb, and then didn't take it.
+
+[climb_broken_stair]
+The great stair just stops here, snapped off at the foot of the cliff. The rest of it is somewhere up above.
+
+[climb_cliff]
+Sheer rock, too smooth to climb by hand.
+
+[climb_stair_onward]
+The stair winds on up the mountain. Somewhere above, a bell rings once.
+
+# --- THE SHEER FACE ---
+
+# The notice at the foot of the face (how swinging works).
+[face_notice]
+CLIMBERS, TAKE NOTE!
+This face is too high for one throw. Hook the lowest ring and swing.
+
+Hold left or right along with your swing to swing higher. The higher you swing, the farther you can reach.
+
+Press Z at the right moment to catch the next ring.
+
+For a ring off to the side, wait for the top of your swing. For one straight above, catch it as you pass the bottom.
+
+Miss, and you'll be starting over from the grass. (X lets go, if you'd rather.)
+
+[face_rock]
+A sheer wall of rock. Iron rings are hammered into it here and there, all the way up.

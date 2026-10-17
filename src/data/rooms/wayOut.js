@@ -35,7 +35,7 @@ export const WAY_OUT = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 2, y: 1, w: 2, h: 2, to: 'taper_hall', spawn: { x: 18, y: 7 } },
-    { x: 31, y: 1, w: 3, h: 2, to: 'beyond_ruins', spawn: { x: 10, y: 12 } },
+    { x: 31, y: 1, w: 3, h: 2, to: 'beyond_ruins', spawn: { x: 11, y: 12 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).

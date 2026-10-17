@@ -5,6 +5,8 @@ import { WAXLING_ATTACKS } from './waxling.js';
 import { SHADE_ATTACKS } from './shade.js';
 import { COLUMNEON_ATTACKS } from './columneon.js';
 import { TAPER_ATTACKS } from './taper.js';
+import { STEP_ATTACKS } from './step.js';
+import { CRAGHORN_ATTACKS } from './craghorn.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -21,4 +23,6 @@ export const ENEMY_ATTACKS = {
   ...SHADE_ATTACKS,
   ...COLUMNEON_ATTACKS,
   ...TAPER_ATTACKS,
+  ...STEP_ATTACKS,
+  ...CRAGHORN_ATTACKS,
 };

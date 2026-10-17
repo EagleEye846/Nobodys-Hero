@@ -9,6 +9,7 @@ import { music, sfx } from '../audio/music.js';
 import { drawText, textWidth } from '../ui/text.js';
 import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
 import { ITEMS, giveItem } from '../data/items.js';
+import { joinParty, leaveParty } from '../characters/party.js';
 
 // Plays a cutscene (src/data/scenes/) in the overworld: actors walk, face,
 // talk and emote, and the camera pans, one step at a time. The overworld
@@ -30,6 +31,8 @@ export const STEP_TYPES = {
   give: 'Give an item',
   battle: 'Start a battle',
   end_chapter: 'End the chapter',
+  join: 'Join the party',
+  leave_party: 'Leave the party',
 };
 export const EMOTES = ['!', '?', '...', '<3'];
 export const FACINGS = ['down', 'up', 'left', 'right'];
@@ -270,6 +273,14 @@ export class ScenePlayer {
         return false;
       case 'music':
         music.play(step.song || null);
+        return true;
+      case 'join':
+        // `who` is a party member id (src/characters/party.js), not a scene actor.
+        if (joinParty(step.who)) this.overworld.addFollower?.(step.who);
+        return true;
+      case 'leave_party':
+        leaveParty(step.who);
+        this.overworld.removeFollower?.(step.who);
         return true;
       default:
         throw new Error(`Cutscene '${this.scene.id}' has a step it doesn't know: '${step.do}'`);

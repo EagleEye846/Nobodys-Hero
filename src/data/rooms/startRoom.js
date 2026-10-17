@@ -59,7 +59,8 @@ export const START_ROOM = {
     { sprite: 'sign', x: 21, y: 3, text: 'east_sign' },
     { sprite: 'merchant', x: 11, y: 5, shop: 'ruins_shop' },
     { sprite: 'savepoint', x: 3, y: 12, save: true },
-    { sprite: 'keeper', x: 9, y: 15, npc: 'old_keeper' },
+    // He's gone on ahead of you once you meet him again up Mount Vigil.
+    { sprite: 'keeper', x: 9, y: 15, npc: 'old_keeper', until: 'keeper_on_the_shoulder' },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

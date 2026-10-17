@@ -1,0 +1,40 @@
+# Armor descriptions for the EQUIP menu (C in the overworld) and shops.
+# One section per armor id in src/data/armor.js. The menus show DEF, MAG and
+# SP by themselves, so these are just flavour.
+
+[travel_clothes]
+The clothes you wandered in wearing. Comfortable, and no use at all in a fight.
+
+[padded_vest]
+Quilted cotton, a little lumpy. Takes the edge off a hit.
+
+[moth_silk_shawl]
+Woven from the silk of Lantern Moth cocoons. Spells come more easily wrapped in it.
+
+[waxed_coat]
+Leather hardened in candle wax. Stiff, warm, and surprisingly tough.
+
+[candlewick_robe]
+Threaded through with old wicks. It hums with magic, and catches every blow.
+
+[chain_shirt]
+Heavy rings of old iron. Hard to hurt you in it, and hard to think straight.
+
+[climbers_jacket]
+Patched and padded, made for long climbs. One of the six who came before must have left it.
+
+# Mount Vigil and Heralds' Rest.
+[herald_cloak]
+A herald's red cloak, trimmed in gold thread. Warm, and it makes you feel announced.
+
+[fur_lined_hood]
+A hood lined with snow-hare fur (shed, not taken, Marta insists). The cold stays out and your thoughts stay in.
+
+[ringers_mittens]
+Thick knitted mittens, the kind the bell-ringer wears. Hard to hold a sword in; easy to hold a spell.
+
+[vigil_mail]
+Mail forged for the Hero and carried most of the way up the mountain. It weighs as much as a promise. It's hard to think in it.
+
+[snow_mantle]
+A white mantle quilted from a hundred winters' worth of patience. Sold at Rest Stores to anyone who makes it that far.

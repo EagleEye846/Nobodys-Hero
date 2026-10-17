@@ -66,7 +66,8 @@ try {
         if (section.startsWith('talk: ') && width(section.slice(6), 28) > 214) bad(where, 'TALK topic is too wide for the list', section);
       } else if (folder === 'items') {
         // Descriptions shrink to fit their panel, down to 14px.
-        const shopRoom = path.endsWith('weapons.txt') ? 102 : 128;
+        // Weapons and armor show two or three stat lines above it, so have less room.
+        const shopRoom = path.endsWith('weapons.txt') || path.endsWith('armor.txt') ? 102 : 128;
         let size = 22;
         while (size > 14 && wrap(entry, 276, size) * size > shopRoom) size--;
         if (wrap(entry, 276, size) * size > shopRoom) bad(where, 'description is too long for the shop panel, even small', entry);

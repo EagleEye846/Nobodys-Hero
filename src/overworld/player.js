@@ -15,6 +15,13 @@ const JUMP_BUFFER = 0.12;
 export const JUMP_REACH = (JUMP_SPEED * JUMP_SPEED) / (2 * GRAVITY);
 const jumpSpeed = () => Math.sqrt(2 * GRAVITY * (JUMP_REACH + skillBonus('jumpHeight')));
 
+// On ice (`z` tiles) you slide: pushing builds speed slowly, and it bleeds
+// away slowly, so you skate, overshoot, and bump into things.
+const ICE_ACCEL = 260; // pixels per second squared
+const ICE_MAX_SPEED = 120;
+const ICE_FRICTION = 0.28; // speed left after a second of coasting
+const ICE_BOUNCE = 0.3; // speed kept, reversed, when you hit something
+
 // After the floor breaks, the player hangs in the air this long before dropping.
 const FALL_PAUSE = 0.25;
 const FALL_GRAVITY = 500;
@@ -70,6 +77,14 @@ export class Player {
 
     const dx = (input.isDown('right') ? 1 : 0) - (input.isDown('left') ? 1 : 0);
     const dy = (input.isDown('down') ? 1 : 0) - (input.isDown('up') ? 1 : 0);
+
+    // On ice, the ground has other ideas about where you're going.
+    if (this.onIce(room) && !this.isAirborne) {
+      this.slideOn(dt, room, dx, dy);
+      this.updateJump(dt, input);
+      return;
+    }
+    this.slide = null;
     this.moving = dx !== 0 || dy !== 0;
 
     if (this.moving) {
@@ -87,6 +102,45 @@ export class Player {
     }
 
     this.updateJump(dt, input);
+  }
+
+  // Standing on ice (a `z` tile), at floor level.
+  onIce(room) {
+    const [tx, ty] = this.tilePosition();
+    return this.ground === 0 && room.tileAt(tx, ty) === 'z';
+  }
+
+  get isSliding() {
+    return Boolean(this.slide) && Math.hypot(this.slide.vx, this.slide.vy) > 8;
+  }
+
+  // Skating: input pushes, the ice keeps you going, walls take it out of you.
+  slideOn(dt, room, dx, dy) {
+    this.slide ??= { vx: 0, vy: 0 };
+    const slide = this.slide;
+    slide.vx += dx * ICE_ACCEL * dt;
+    slide.vy += dy * ICE_ACCEL * dt;
+    const keep = ICE_FRICTION ** dt;
+    slide.vx *= keep;
+    slide.vy *= keep;
+    const speed = Math.hypot(slide.vx, slide.vy);
+    if (speed > ICE_MAX_SPEED) {
+      slide.vx *= ICE_MAX_SPEED / speed;
+      slide.vy *= ICE_MAX_SPEED / speed;
+    }
+    if (dx || dy) this.facing = chooseFacing(dx, dy, this.facing);
+    else if (speed > 20) this.facing = chooseFacing(Math.sign(Math.round(slide.vx)), Math.sign(Math.round(slide.vy)), this.facing);
+    const wasX = this.x;
+    const wasY = this.y;
+    this.moveAxis(room, 'x', slide.vx * dt);
+    this.moveAxis(room, 'y', slide.vy * dt);
+    if (Math.abs(slide.vx * dt) >= 1 && this.x === wasX) slide.vx = -slide.vx * ICE_BOUNCE;
+    if (Math.abs(slide.vy * dt) >= 1 && this.y === wasY) slide.vy = -slide.vy * ICE_BOUNCE;
+    this.running = false;
+    this.moving = speed > 12;
+    // Feet going, but slowly: you're gliding, not walking.
+    if (this.moving) this.animationTime += dt * 0.45;
+    else this.animationTime = 0;
   }
 
   updateJump(dt, input) {

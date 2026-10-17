@@ -14,6 +14,9 @@ export const WORLD_STATE = {
   taken: [],
   // Things with a "!" over them that you've read (see Prop's `notice`).
   read: [],
+  // NPCs' lines for after a cutscene that you've already heard, as "npc:scene"
+  // (see OverworldScene.npcPages).
+  talked: [],
   // Puzzle switches that are on, as "room:name".
   levers: [],
   playSeconds: 0,
@@ -33,6 +36,19 @@ export function saveGame(roomId, spawn) {
   }
 }
 
+// Saves from before Ves replaced Pip: she takes Pip's place in the party,
+// with the points spent on Pip's old skills given back to her.
+const PIP_SKILL_COSTS = { pip_loud: 1, pip_brave: 1, pip_encore: 2, pip_lucky: 2 };
+function upgradeSave() {
+  if (!HERO_STATE.party?.includes('pip')) return;
+  HERO_STATE.party = HERO_STATE.party.map((id) => (id === 'pip' ? 'vesper' : id));
+  const refund = (HERO_STATE.skills ?? []).reduce((sum, id) => sum + (PIP_SKILL_COSTS[id] ?? 0), 0);
+  HERO_STATE.skills = (HERO_STATE.skills ?? []).filter((id) => !(id in PIP_SKILL_COSTS));
+  HERO_STATE.memberPoints ??= {};
+  HERO_STATE.memberPoints.vesper = (HERO_STATE.memberPoints.pip ?? 0) + refund;
+  delete HERO_STATE.memberPoints.pip;
+}
+
 // Loads the last save into HERO_STATE and WORLD_STATE. Returns whether there was one.
 export function loadGame() {
   try {
@@ -40,6 +56,7 @@ export function loadGame() {
     if (!saved?.hero || !saved?.world) return false;
     Object.assign(HERO_STATE, saved.hero);
     Object.assign(WORLD_STATE, saved.world);
+    upgradeSave();
     return true;
   } catch {
     return false;

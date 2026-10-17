@@ -1,0 +1,55 @@
+# LOOSE STEP
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/step.js.
+
+[intro]
+That wasn't a fallen block. A LOOSE STEP rolls over and glares at you!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+LOOSE STEP is trying very hard to look load-bearing.
+
+There's a bootprint-shaped hollow worn into LOOSE STEP's top. Nothing has ever filled it.
+
+Moss is growing in LOOSE STEP's cracks. It's pretending not to notice.
+
+The wind whistles down the mountain.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+A hundred years!
+Not ONE foot!
+
+I was step forty-three!
+Do you know how important that is?!
+
+Hold still.
+I'm stepping on YOU this time.
+
+Mind the gap!
+
+The Hero was supposed to walk down me...
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/step.js.
+[talk: Inspect]
+LOOSE STEP - HP 160
+Fell off the Long Stair in the rockslide. Still waiting for the Hero to walk down it.
+
+[talk: Step on it]
+You step up onto LOOSE STEP. It goes very quiet.
+...Then it creaks, happily.
+
+[talk: Brush off moss]
+You brush the moss off LOOSE STEP. Underneath, it looks almost new.
+
+[talk: Read the carving]
+A number is carved in its side: 43. You read it out loud. LOOSE STEP sits up straighter.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+LOOSE STEP cracks down the middle and rolls off down the slope.
+
+[pacified]
+LOOSE STEP settles into the grass, happy to be a step again.

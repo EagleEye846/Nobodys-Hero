@@ -1,0 +1,16 @@
+# MRS POTTLE: Pottle's mother, in her kitchen, baking. She has made a
+# welcome cake every week for a hundred years and is, by now, extremely good at it.
+
+[first]
+Boots! Oh, you've wiped them. Good. Sit. No, sit. There's cake.
+
+I'm Mrs Pottle. You'll have met my Pottle, I expect. He argues with people. He gets it from his father, who got it from me.
+
+Hero or not, you'll eat. The cake's for the Hero's welcome, but there's always another cake, so that's never really been a reason not to cut it.
+
+[repeat]
+A hundred years of practice cakes. The first few were terrible, my grandmother said. By year ten they were good. By year fifty they were famous as far as the Shoulder.
+
+If my Pottle gives you any cheek, you tell him his mother said the Hero would have better manners. That usually works. Once.
+
+Take a slice for the road. Take two. The road up from here is long and nobody's measured it.

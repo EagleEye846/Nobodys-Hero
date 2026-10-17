@@ -70,6 +70,7 @@ export function transpose(steps, semitones) {
 export function arpeggio(chords, steps, octave = 4, shape = [0, 'third', 7, 12]) {
   return eachChord(chords, ({ root, third }) => Array.from({ length: steps }, (_, i) => {
     const interval = shape[i % shape.length];
+    if (interval === REST || interval === HOLD) return interval;
     return noteIn(octave, root) + (interval === 'third' ? third : interval === 'tenth' ? third + 12 : interval);
   }));
 }

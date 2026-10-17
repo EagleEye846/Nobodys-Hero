@@ -1,6 +1,7 @@
 import { UI_WIDTH, UI_HEIGHT } from '../config.js';
 import { textSection } from '../engine/textLoader.js';
 import { WEAPONS } from '../data/weapons.js';
+import { ARMOR, armorLabels } from '../data/armor.js';
 import { ITEMS, healLabel, lightLabel } from '../data/items.js';
 import { SOUL_ABILITIES } from '../battle/soulAbilities.js';
 import { soulSprite } from '../battle/soul.js';
@@ -21,6 +22,11 @@ export const MENU_COLORS = {
   divider: '#33304a',
   fight: '#ff8c1a',
   ability: '#4fe3d0',
+  // Armor stats, and a stat that's a drawback.
+  defense: '#7fb0ff',
+  magic: '#b07cff',
+  spGain: '#4fe3d0',
+  bad: '#ff7a8a',
 };
 
 const BORDER = 4;
@@ -31,6 +37,7 @@ const DETAILS = { x: MENU.x + 320, y: MENU.y + 78, w: 216, h: MENU.h - 78 - 42 }
 // Where the title row sits, for menus that add their own header text.
 export const HEADER_Y = MENU.y + 16;
 const WEAPON_TEXT = 'items/weapons.txt';
+const ARMOR_TEXT = 'items/armor.txt';
 const ITEM_TEXT = 'items/items.txt';
 
 function divider(ctx, x, y, w, h) {
@@ -100,6 +107,24 @@ export function drawWeaponDetails(ctx, id, area = DETAILS) {
   y += 34;
 
   drawDescription(ctx, textSection(WEAPON_TEXT, id)[0], area, y);
+}
+
+// Name, stats (DEF, MAG, SP) and description of a piece of armor. `area` is { x, y, w }.
+export function drawArmorDetails(ctx, id, area = DETAILS) {
+  let y = area.y;
+  drawText(ctx, ARMOR[id].name, area.x, y, { size: 30 });
+  y += 34;
+  const labels = armorLabels(id);
+  if (!labels.length) {
+    drawText(ctx, 'No protection', area.x, y, { size: 24, color: MENU_COLORS.dim });
+    y += 26;
+  }
+  for (const label of labels) {
+    drawText(ctx, label.text, area.x, y, { size: 24, color: label.bad ? MENU_COLORS.bad : MENU_COLORS[label.stat] });
+    y += 26;
+  }
+  y += 8;
+  drawDescription(ctx, textSection(ARMOR_TEXT, id)[0], area, y);
 }
 
 // A description under the details, in the space left: smaller if it needs to be.

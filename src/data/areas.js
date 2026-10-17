@@ -4,6 +4,14 @@
 // backdrop of the same name in src/battle/backdrops.js.
 export const AREA_NAMES = {
   ruins: 'THE RUINS',
-  // The next region, past the Ruins' door. Rename it when you know what it is.
-  beyond: 'BEYOND THE RUINS',
+  // Chapter 2: the great ruined stair up the mountain, past the Ruins' door.
+  stair: 'THE LONG STAIR',
+  // The spire above the stair: climbs round its outside, caves through its inside.
+  vigil: 'MOUNT VIGIL',
+  // The village on the spire's shoulder, waiting for the Hero.
+  rest: "HERALDS' REST",
 };
+
+// Regions out under the open sky: no dark vignette around the screen's edges
+// (a room can ask for one back with `indoors: true`).
+export const OUTDOOR_AREAS = new Set(['stair', 'vigil', 'rest']);

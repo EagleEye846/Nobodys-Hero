@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- The game loads its text relative to the page, so act as if we're in the game's folder. -->
+<base href="../">
+<title>Room Preview</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@700&display=swap">
+<style>
+  body { background: #000; color: #e8e4f4; font: 14px system-ui, sans-serif; margin: 0; }
+  canvas { display: block; image-rendering: pixelated; }
+  #report { padding: 12px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="game" width="640" height="480"></canvas>
+<div id="report"></div>
+<script>
+  // Any error (including one loading the modules) goes into the report, for headless runs.
+  const show = (m) => { document.getElementById('report').textContent += `
+ERROR: ${m}`; };
+  window.addEventListener('error', (e) => show(`${e.message} (${e.filename}:${e.lineno})`));
+  window.addEventListener('unhandledrejection', (e) => show(e.reason?.stack ?? e.reason));
+</script>
+<script type="module">
+// A still of any room, as the game draws it, for checking rooms without
+// playing to them: tools/preview.html?room=rest_square&x=20&y=16&facing=up&t=2
+// Or ?check=1 to build every room and compile every song, and report.
+import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from './src/config.js';
+import { createScreen } from './src/engine/screen.js';
+import { loadTextFiles } from './src/engine/textLoader.js';
+import { loadUiFont } from './src/ui/text.js';
+import { TEXT_FILES } from './src/data/textManifest.js';
+import { OverworldScene } from './src/overworld/overworldScene.js';
+import { Room } from './src/overworld/room.js';
+import { ROOMS } from './src/data/rooms/index.js';
+import { SONGS } from './src/data/music/index.js';
+import { renderSong, compile } from './src/audio/music.js';
+
+const params = new URLSearchParams(location.search);
+const report = document.getElementById('report');
+const ctx = createScreen(document.getElementById('game'), UI_WIDTH, UI_HEIGHT);
+await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
+
+const noInput = { isDown: () => false, wasPressed: () => false, endFrame() {} };
+
+if (params.get('check')) {
+  // Reported line by line, so a headless run shows how far it got.
+  const lines = { push(line) { report.textContent += `${line}\n`; } };
+  report.textContent = 'CHECK START\n';
+  for (const [id, data] of Object.entries(ROOMS)) {
+    try {
+      const room = new Room(data);
+      // Every door leads somewhere real, onto walkable ground.
+      for (const door of data.doors ?? []) {
+        const to = ROOMS[door.to];
+        if (!to) throw new Error(`door to unknown room ${door.to}`);
+        const target = new Room(to);
+        if (target.isSolidTile(door.spawn.x, door.spawn.y)) throw new Error(`door to ${door.to} spawns in a wall at ${door.spawn.x},${door.spawn.y}`);
+      }
+      lines.push(`room ok: ${id} (${room.width}x${room.height}, ${room.props.length} props)`);
+    } catch (e) {
+      lines.push(`ROOM FAIL: ${id}: ${e.message}`);
+    }
+  }
+  for (const [name, song] of Object.entries(params.get('songs') ? SONGS : {})) {
+    try {
+      // Compiling catches mistakes (tracks of different lengths, missing
+      // instruments); rendering a little of the one named by ?song= gives its level.
+      const { steps } = compile(song);
+      if (params.get('song') !== name) {
+        lines.push(`song ok: ${name} "${song.title}" ${steps.length} steps, ${Math.round(steps.length * 60 / song.bpm / song.stepsPerBeat)}s`);
+        continue;
+      }
+      // Loudness over time: the RMS of each window, so a song that goes quiet
+      // (or silent, which would be a bug) shows where.
+      const seconds = Number(params.get('seconds') ?? 6);
+      const rate = 8000;
+      const buffer = await renderSong(song, seconds, rate);
+      const data = buffer.getChannelData(0);
+      const windowSeconds = Number(params.get('window') ?? 8);
+      const size = Math.round(windowSeconds * rate);
+      const levels = [];
+      for (let start = 0; start < data.length; start += size) {
+        let sum = 0;
+        const end = Math.min(data.length, start + size);
+        for (let i = start; i < end; i++) sum += data[i] * data[i];
+        levels.push(Math.sqrt(sum / (end - start)));
+      }
+      lines.push(`song ok: ${name} "${song.title}" rms by ${windowSeconds}s: ${levels.map((l) => l.toFixed(3)).join(' ')}`);
+    } catch (e) {
+      lines.push(`SONG FAIL: ${name}: ${e.message}`);
+    }
+  }
+  lines.push('CHECK DONE');
+} else if (params.get('skills')) {
+  // The skill tree as it looks in chapter `skills`, with a few skills learned.
+  const { SkillsMenu } = await import('./src/ui/skillsMenu.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  const { HERO_STATE } = await import('./src/characters/heroState.js');
+  WORLD_STATE.chapter = Number(params.get('skills'));
+  HERO_STATE.skillPoints = 3;
+  HERO_STATE.skills = ['sharpened', 'keen_eye', 'focus', 'tough', 'sprinter'];
+  if (params.get('party')) { HERO_STATE.party = ['vesper']; HERO_STATE.memberPoints = { vesper: 2 }; }
+  const menu = new SkillsMenu();
+  menu.open();
+  menu.branch = Number(params.get('branch') ?? 1);
+  menu.index = Number(params.get('index') ?? 2);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  menu.draw(ctx);
+  menu.draw(ctx);
+  report.textContent = 'SKILLS DONE';
+} else if (params.get('poke')) {
+  // Presses Z on every prop in every room (or one room), reading through what
+  // it says, and reports anything that throws.
+  const lines = { push(line) { report.textContent += `${line}\n`; } };
+  report.textContent = 'POKE START\n';
+  const ids = params.get('poke') === 'all' ? Object.keys(ROOMS) : [params.get('poke')];
+  const confirmInput = { isDown: () => false, wasPressed: (a) => a === 'confirm', endFrame() {} };
+  for (const id of ids) {
+    const data = ROOMS[id];
+    const scene = new OverworldScene(data, data.playerStart, data.area);
+    scene.enter?.({ changeScene() {}, home: null });
+    const room = scene.room;
+    for (const prop of room.allProps) {
+      const label = `${id}: ${prop.look} at ${prop.x / 16},${prop.y / 16}`;
+      try {
+        scene.textbox.pages = null;
+        scene.resting = null;
+        scene.climb = null;
+        scene.cutscene = null;
+        // Standing below something that hangs over a door (the chapel's window)
+        // puts you in the doorway: don't let that fade swallow every poke after it.
+        scene.doorway = null;
+        scene.player.x = prop.x + 8;
+        scene.player.y = prop.y + 16 + 16;
+        scene.player.facing = 'up';
+        scene.player.ground = prop.raise ?? 0;
+        scene.interact();
+        for (let i = 0; i < 400; i++) {
+          scene.update(1 / 60, i % 2 === 0 ? confirmInput : noInput);
+          if (i % 20 === 0) scene.draw(ctx);
+          if (!scene.textbox.isOpen && !scene.resting && !scene.climb) break;
+        }
+        // Any screen it opened (a shop) is fine; a rest is fine; make sure nothing is stuck.
+        if (scene.textbox.isOpen) throw new Error('text never closes');
+        lines.push(`ok: ${label}`);
+      } catch (e) {
+        lines.push(`POKE FAIL: ${label}: ${e.message}`);
+      }
+    }
+  }
+  lines.push('POKE DONE');
+} else {
+  const id = params.get('room') ?? 'rest_square';
+  const data = ROOMS[id];
+  // ?day=0.75 sets the time of day (0 sunrise, 0.25 noon, 0.5 sunset, 0.75 midnight).
+  if (params.has('day')) {
+    const { WORLD_STATE } = await import('./src/state/saveGame.js');
+    const { DAY_SECONDS } = await import('./src/overworld/daylight.js');
+    WORLD_STATE.playSeconds = (((Number(params.get('day')) - 0.08) % 1 + 1) % 1) * DAY_SECONDS;
+  }
+  if (!data) throw new Error(`No room '${id}'`);
+  const spawn = params.has('x') ? { x: Number(params.get('x')), y: Number(params.get('y')) } : data.playerStart;
+  const scene = new OverworldScene(data, spawn, data.area);
+  const game = { changeScene() {}, home: null };
+  scene.enter?.(game);
+  if (params.get('facing')) scene.player.facing = params.get('facing');
+  // Let the room settle (title card fades, animations run) for `t` seconds.
+  const seconds = Number(params.get('t') ?? 2.5);
+  for (let t = 0; t < seconds; t += 1 / 60) scene.update(1 / 60, noInput);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  scene.draw(ctx);
+  report.textContent = `PREVIEW DONE ${id}`;
+}
+</script>
+</body>
+</html>

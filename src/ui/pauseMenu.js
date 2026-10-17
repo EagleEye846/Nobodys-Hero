@@ -4,8 +4,9 @@ import { inUiSpace } from '../engine/screen.js';
 import { sfx } from '../audio/music.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
-import { expToNext, heroMaxHp } from '../characters/progress.js';
+import { expToNext, heroMaxHp, heroHp } from '../characters/progress.js';
 import { WEAPONS } from '../data/weapons.js';
+import { ARMOR } from '../data/armor.js';
 import { ICONS } from '../data/art/icons.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText } from './text.js';
@@ -26,7 +27,7 @@ const TABS = [
 ];
 const BAR_HEIGHT = 84;
 const BUTTON = { w: 130, h: 58, gap: 16, y: 13 };
-const CARD = { x: 100, y: 352, w: 440, h: 112 };
+const CARD = { x: 100, y: 330, w: 440, h: 134 };
 const COLORS = {
   orange: '#ff8c1a',
   yellow: '#ffe14d',
@@ -125,7 +126,8 @@ export class PauseMenu {
     });
   }
 
-  // HERO's face, level, HP, EXP towards the next level, skill points, gold and weapon.
+  // HERO's face, level, HP, EXP towards the next level, skill points, gold,
+  // weapon and armor.
   drawStatusCard(ctx) {
     const { x, y, w, h } = CARD;
     ctx.fillStyle = COLORS.text;
@@ -141,7 +143,7 @@ export class PauseMenu {
     const left = x + 72;
     drawText(ctx, 'HERO', left, y + 10, { size: 32, color: COLORS.hero });
     drawText(ctx, `LV ${level}`, left + 90, y + 14, { size: 26 });
-    drawText(ctx, `HP ${heroMaxHp()}`, left + 170, y + 14, { size: 26 });
+    drawText(ctx, `HP ${heroHp()}/${heroMaxHp()}`, left + 170, y + 14, { size: 26 });
 
     drawText(ctx, 'EXP', left, y + 50, { size: 22, color: COLORS.exp });
     bar(ctx, left + 40, y + 56, 110, 10, HERO_STATE.exp / need, COLORS.exp, COLORS.expBack);
@@ -154,6 +156,7 @@ export class PauseMenu {
       align: 'right',
     });
     drawText(ctx, WEAPONS[HERO_STATE.weapon].name, left, y + 80, { size: 22, color: COLORS.dim });
+    drawText(ctx, ARMOR[HERO_STATE.armor]?.name ?? '', left, y + 104, { size: 22, color: COLORS.dim });
     drawText(ctx, `${HERO_STATE.gold} G`, x + w - 16, y + 80, { size: 22, color: COLORS.yellow, align: 'right' });
 
     drawText(ctx, 'Z: open     X: close', UI_WIDTH / 2, BAR_HEIGHT + 12, { size: 20, color: COLORS.dim, align: 'center', outline: '#000' });

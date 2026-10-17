@@ -20,8 +20,19 @@ export const ITEMS = {
   wax_drop: { name: 'Wax Drop', heal: 20 },
   dark_chocolate: { name: 'Dark Chocolate', heal: 45 },
   pillar_mint: { name: 'Pillar Mint', heal: 30 },
+  step_shortbread: { name: 'Step Shortbread', heal: 35 },
+  crag_cheese: { name: 'Craghorn Cheese', heal: 40 },
   // Found and given.
   candle_cake: { name: 'Candle Cake', heal: 70 },
+  climbers_ration: { name: "Climber's Ration", heal: 50 },
+  // Mount Vigil and Heralds' Rest: sold at Rest Stores, or found in chests.
+  pine_candy: { name: 'Pine Candy', heal: 30, price: 10 },
+  snowmelt_tea: { name: 'Snowmelt Tea', heal: 55, price: 30 },
+  frostberry_jam: { name: 'Frostberry Jam', heal: 45, price: 22 },
+  hot_cocoa: { name: 'Hot Cocoa', heal: 65, price: 35 },
+  herald_honeycake: { name: 'Herald Honeycake', heal: 80, price: 48 },
+  fanfare_fudge: { name: 'Fanfare Fudge', heal: 100, price: 70 },
+  rest_soup: { name: "Heralds' Soup", heal: 999, price: 120 },
   // Taper's candle "won't go out on you": it lights the dark forever.
   taper_stub: { name: "Taper's Candle", heal: 999, light: { radius: 72, burn: Infinity } },
   // Candles you make.

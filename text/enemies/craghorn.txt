@@ -1,0 +1,55 @@
+# CRAGHORN
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/craghorn.js.
+
+[intro]
+A CRAGHORN leaps down from a ledge, and lands perfectly!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CRAGHORN is chewing something. It might have been a map.
+
+CRAGHORN has climbed this mountain every morning for a hundred years. It wants you to know that.
+
+CRAGHORN's horns curl around like two question marks.
+
+Somewhere far above, a bell rings once.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+MEHHH!
+Too slow!
+
+Up and down! Up and down!
+Every day for a HUNDRED years!
+
+The Hero would've kept up.
+
+Bet you can't dodge THIS!
+
+Last one to the top is a...
+...is you. It's always you.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/craghorn.js.
+[talk: Inspect]
+CRAGHORN - HP 180
+A mountain goat who meant to show the Hero the way up. It got very good at climbing while it waited.
+
+[talk: Race]
+You challenge CRAGHORN to a race. It's at the finish line before you say go. It looks delighted.
+
+[talk: Bleat]
+You bleat. CRAGHORN tilts its head.
+Then it bleats back, much louder.
+
+[talk: Offer grass]
+You offer CRAGHORN a tuft of mountain grass. It eats it, and then a little of your sleeve.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+CRAGHORN bounds away up the cliff, bleating something rude.
+
+[pacified]
+CRAGHORN trots off to wait for you at the top. It's sure you'll be slow.

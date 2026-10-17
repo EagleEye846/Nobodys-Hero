@@ -8,9 +8,11 @@ import { SHOPS } from '../data/shops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines, layoutDialogue, drawDialogue, paginate } from '../ui/text.js';
-import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawItemDetails } from '../ui/menuFrame.js';
+import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawItemDetails } from '../ui/menuFrame.js';
 import { ITEMS, MAX_ITEMS, giveItem } from '../data/items.js';
 import { WEAPONS } from '../data/weapons.js';
+import { ARMOR } from '../data/armor.js';
+import { skillBonus } from '../characters/progress.js';
 
 // A shop, laid out like Deltarune's: the shopkeeper behind their counter up
 // top, and two boxes below. The left box is the menu (BUY, TALK, EXIT) or the
@@ -35,15 +37,45 @@ const TALK_LINES = 7;
 let measuring = null;
 const DETAILS_AREA = { x: RIGHT_BOX.x + 20, y: RIGHT_BOX.y + 16, w: RIGHT_BOX.w - 40, h: RIGHT_BOX.h - 26 };
 
-const MENU_OPTIONS = ['BUY', 'TALK', 'EXIT'];
+const MENU_OPTIONS = ['BUY', 'SELL', 'TALK', 'EXIT'];
+
+// What a shop pays for something: half an item's price, or half the most any
+// shop charges for a weapon or piece of armor (or a flat rate for ones no
+// shop sells). Never less than a coin.
+export function sellValue(entry) {
+  if (entry.item) return Math.max(1, Math.floor((ITEMS[entry.item].price ?? 20) / 2));
+  const id = entry.weapon ?? entry.armor;
+  const key = entry.weapon ? 'weapon' : 'armor';
+  const prices = Object.values(SHOPS).flatMap((shop) => shop.stock.filter((s) => s[key] === id).map((s) => s.price));
+  return Math.max(1, Math.floor((prices.length ? Math.max(...prices) : 60) / 2));
+}
+
+// Everything you could sell right now: the bag, and weapons and armor you aren't wearing.
+function sellables() {
+  return [
+    ...HERO_STATE.items.map((item, index) => ({ item, index })),
+    ...HERO_STATE.weapons.filter((w) => w !== HERO_STATE.weapon).map((weapon) => ({ weapon })),
+    ...HERO_STATE.armors.filter((a) => a !== HERO_STATE.armor).map((armor) => ({ armor })),
+  ];
+}
 const TEXT_SPEED = 50; // characters per second
 const LEAVE_SECONDS = 1.6;
 const BLINK_PERIOD = 3.2;
 const BLINK_SECONDS = 0.12;
 
-const keeperSprite = makeSprite(PROP_SPRITES.merchant, PROP_PALETTE);
-// Where the merchant's eyes are in their sprite, to close them when they blink.
-const EYES = [{ x: 3, y: 11 }, { x: 8, y: 11 }];
+// Each shop has its own keeper (`keeper` in src/data/shops.js, a prop sprite;
+// Moss if left out) with `eyes` to close when they blink, and a `look`: the
+// colours of its room.
+const DEFAULT_KEEPER = { sprite: 'merchant', eyes: [{ x: 3, y: 11 }, { x: 8, y: 11 }], eyeColor: PROP_PALETTE.m };
+const DEFAULT_LOOK = {
+  wall: '#2a1f45', wallLine: '#211838', shelf: '#6b4423', shelfTop: '#8a5a2a',
+  counter: '#5a3a1a', counterTop: '#8a5a2a', counterGrain: '#4a2e14', lantern: '#ffcc66',
+};
+const keeperSprites = new Map();
+function keeperSprite(name) {
+  if (!keeperSprites.has(name)) keeperSprites.set(name, makeSprite(PROP_SPRITES[name], PROP_PALETTE));
+  return keeperSprites.get(name);
+}
 
 // Bottles on the shelves: a fixed arrangement so the room looks the same every visit.
 const BOTTLE_COLORS = ['#5fc27a', '#ff5470', '#4fe3d0', '#ffd25e', '#b07cff', '#ff8c1a'];
@@ -56,8 +88,13 @@ const SHELVES = [
 
 export class ShopScene {
   constructor(shopId, onExit) {
+    this.shopId = shopId;
     this.shop = SHOPS[shopId];
     if (!this.shop) throw new Error(`Unknown shop '${shopId}'`);
+    this.sellCursor = 0;
+    this.sellList = [];
+    this.keeper = { ...DEFAULT_KEEPER, ...(this.shop.keeper ?? {}) };
+    this.look = { ...DEFAULT_LOOK, ...(this.shop.look ?? {}) };
     this.onExit = onExit;
     this.mode = 'menu';
     this.menuCursor = 0;
@@ -112,6 +149,9 @@ export class ShopScene {
       case 'buy':
         this.updateBuy(input);
         break;
+      case 'sell':
+        this.updateSell(input);
+        break;
       case 'talk':
         this.updateTalk(input);
         break;
@@ -133,6 +173,16 @@ export class ShopScene {
     if (choice === 'BUY') {
       this.mode = 'buy';
       this.say('buy_prompt');
+    } else if (choice === 'SELL') {
+      this.sellList = sellables();
+      if (!this.sellList.length) {
+        sfx('error');
+        this.say('nothing_to_sell');
+      } else {
+        this.mode = 'sell';
+        this.sellCursor = 0;
+        this.say('sell_prompt');
+      }
     } else if (choice === 'TALK') {
       this.mode = 'talk';
       this.say('talk_prompt');
@@ -161,7 +211,37 @@ export class ShopScene {
     if (input.wasPressed('confirm')) this.buy(this.shop.stock[this.buyCursor]);
   }
 
-  buy({ weapon, item, price }) {
+  // What something costs you, after Haggler.
+  priceOf(entry) {
+    if (entry.skillPoint) return entry.price;
+    return Math.max(1, Math.round(entry.price * (1 - skillBonus('bargain'))));
+  }
+
+  // How many of this shop's skill points you've bought.
+  skillPointsBought() {
+    return HERO_STATE.boughtSkillPoints?.[this.shopId] ?? 0;
+  }
+
+  buy(entry) {
+    const { weapon, armor, item, skillPoint } = entry;
+    const price = this.priceOf(entry);
+    if (skillPoint) {
+      if (this.skillPointsBought() >= (entry.limit ?? 1)) {
+        sfx('error');
+        this.say('skill_sold_out');
+      } else if (HERO_STATE.gold < price) {
+        sfx('error');
+        this.say('too_poor');
+      } else {
+        sfx('levelUp');
+        HERO_STATE.gold -= price;
+        HERO_STATE.skillPoints += 1;
+        HERO_STATE.boughtSkillPoints ??= {};
+        HERO_STATE.boughtSkillPoints[this.shopId] = this.skillPointsBought() + 1;
+        this.say('bought_skill');
+      }
+      return;
+    }
     if (item) {
       if (HERO_STATE.gold < price) {
         sfx('error');
@@ -177,7 +257,10 @@ export class ShopScene {
       }
       return;
     }
-    if (HERO_STATE.weapons.includes(weapon)) {
+    // Weapons and armor are bought once each.
+    const owned = weapon ? HERO_STATE.weapons : HERO_STATE.armors;
+    const id = weapon ?? armor;
+    if (owned.includes(id)) {
       sfx('error');
       this.say('owned');
     } else if (HERO_STATE.gold < price) {
@@ -186,9 +269,34 @@ export class ShopScene {
     } else {
       sfx('heal');
       HERO_STATE.gold -= price;
-      HERO_STATE.weapons.push(weapon);
+      owned.push(id);
       this.say('bought');
     }
+  }
+
+  updateSell(input) {
+    if (input.wasPressed('cancel') || !this.sellList.length) {
+      this.backToMenu();
+      return;
+    }
+    const count = this.sellList.length;
+    const before = this.sellCursor;
+    if (input.wasPressed('down')) this.sellCursor = (this.sellCursor + 1) % count;
+    if (input.wasPressed('up')) this.sellCursor = (this.sellCursor - 1 + count) % count;
+    if (this.sellCursor !== before) sfx('move');
+    if (input.wasPressed('confirm')) this.sell(this.sellList[this.sellCursor]);
+  }
+
+  sell(entry) {
+    sfx('heal');
+    HERO_STATE.gold += sellValue(entry);
+    if (entry.item) HERO_STATE.items.splice(entry.index, 1);
+    else if (entry.weapon) HERO_STATE.weapons.splice(HERO_STATE.weapons.indexOf(entry.weapon), 1);
+    else HERO_STATE.armors.splice(HERO_STATE.armors.indexOf(entry.armor), 1);
+    this.say('sold');
+    this.sellList = sellables();
+    this.sellCursor = Math.min(this.sellCursor, Math.max(0, this.sellList.length - 1));
+    if (!this.sellList.length) this.mode = 'menu';
   }
 
   updateTalk(input) {
@@ -221,15 +329,16 @@ export class ShopScene {
       this.drawLeftBox(ctx);
       this.drawRightBox(ctx);
       // While browsing, the shopkeeper talks in a bubble so the item info has the right box.
-      if (this.mode === 'buy') this.drawBubble(ctx);
+      if (this.mode === 'buy' || this.mode === 'sell') this.drawBubble(ctx);
     });
   }
 
   // The shop room, in world units: wall, shelves, lanterns, the shopkeeper and the counter.
   drawRoom(ctx) {
-    ctx.fillStyle = '#2a1f45';
+    const look = this.look;
+    ctx.fillStyle = look.wall;
     ctx.fillRect(0, 0, SCREEN_WIDTH, ROOM_HEIGHT);
-    ctx.fillStyle = '#211838';
+    ctx.fillStyle = look.wallLine;
     for (let row = 0; row * 8 < COUNTER_Y; row++) {
       const y = row * 8;
       ctx.fillRect(0, y + 7, SCREEN_WIDTH, 1);
@@ -247,9 +356,9 @@ export class ShopScene {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         ctx.fillRect(x + 1, shelf.y - height + 2, 1, 3);
       }
-      ctx.fillStyle = '#6b4423';
+      ctx.fillStyle = look.shelf;
       ctx.fillRect(shelf.x, shelf.y, shelf.w, 4);
-      ctx.fillStyle = '#8a5a2a';
+      ctx.fillStyle = look.shelfTop;
       ctx.fillRect(shelf.x, shelf.y, shelf.w, 1);
     });
 
@@ -265,7 +374,7 @@ export class ShopScene {
       ctx.fillRect(x - 23, -9, 52, 52);
       ctx.fillStyle = '#120c1c';
       ctx.fillRect(x - 1, 11, 9, 11);
-      ctx.fillStyle = '#ffcc66';
+      ctx.fillStyle = look.lantern;
       ctx.fillRect(x, 12, 7, 9);
       ctx.fillStyle = '#fff2c0';
       ctx.fillRect(x + 2, 14, 3, 5);
@@ -273,11 +382,11 @@ export class ShopScene {
 
     this.drawKeeper(ctx);
 
-    ctx.fillStyle = '#5a3a1a';
+    ctx.fillStyle = look.counter;
     ctx.fillRect(0, COUNTER_Y, SCREEN_WIDTH, ROOM_HEIGHT - COUNTER_Y);
-    ctx.fillStyle = '#8a5a2a';
+    ctx.fillStyle = look.counterTop;
     ctx.fillRect(0, COUNTER_Y, SCREEN_WIDTH, 3);
-    ctx.fillStyle = '#4a2e14';
+    ctx.fillStyle = look.counterGrain;
     for (let x = 10; x < SCREEN_WIDTH; x += 24) ctx.fillRect(x, COUNTER_Y + 3, 1, ROOM_HEIGHT - COUNTER_Y - 3);
     // A little stack of coins on the counter.
     ctx.fillStyle = '#ffd25e';
@@ -288,16 +397,17 @@ export class ShopScene {
 
   // The shopkeeper, big, behind the counter: bobbing gently and blinking now and then.
   drawKeeper(ctx) {
-    const w = keeperSprite.width * KEEPER_SCALE;
-    const h = keeperSprite.height * KEEPER_SCALE;
-    const x = Math.round(SCREEN_WIDTH / 2 - 6 * KEEPER_SCALE);
+    const sprite = keeperSprite(this.keeper.sprite);
+    const w = sprite.width * KEEPER_SCALE;
+    const h = sprite.height * KEEPER_SCALE;
+    const x = Math.round(SCREEN_WIDTH / 2 - (sprite.width / 2) * KEEPER_SCALE);
     const bob = Math.sin(this.time * 2) > 0 ? 1 : 0;
     const y = COUNTER_Y - h + 6 * KEEPER_SCALE - bob;
-    ctx.drawImage(keeperSprite, x, y, w, h);
+    ctx.drawImage(sprite, x, y, w, h);
 
     if (this.time % BLINK_PERIOD < BLINK_SECONDS) {
-      ctx.fillStyle = PROP_PALETTE.m;
-      for (const eye of EYES) ctx.fillRect(x + eye.x * KEEPER_SCALE, y + eye.y * KEEPER_SCALE, KEEPER_SCALE, KEEPER_SCALE);
+      ctx.fillStyle = this.keeper.eyeColor;
+      for (const eye of this.keeper.eyes) ctx.fillRect(x + eye.x * KEEPER_SCALE, y + eye.y * KEEPER_SCALE, KEEPER_SCALE, KEEPER_SCALE);
     }
   }
 
@@ -310,14 +420,27 @@ export class ShopScene {
 
   drawLeftBox(ctx) {
     if (this.mode === 'buy') {
-      // Rows are stock entries: food you can buy again and again, weapons once.
+      // Rows are stock entries: food you can buy again and again, weapons,
+      // armor and skill points a limited number of times.
       const stock = this.shop.stock;
-      const owned = (i) => stock[i].weapon && HERO_STATE.weapons.includes(stock[i].weapon);
+      const gone = (i) => (stock[i].weapon && HERO_STATE.weapons.includes(stock[i].weapon))
+        || (stock[i].armor && HERO_STATE.armors.includes(stock[i].armor))
+        || (stock[i].skillPoint && this.skillPointsBought() >= (stock[i].limit ?? 1));
       drawWeaponList(ctx, stock.map((_, i) => i), this.buyCursor, {
         area: LIST_AREA,
-        name: (i) => (stock[i].item ? ITEMS[stock[i].item].name : WEAPONS[stock[i].weapon].name),
-        nameColor: (i) => (owned(i) ? MENU_COLORS.dim : MENU_COLORS.text),
-        tag: (i) => (owned(i) ? { text: 'OWNED', color: MENU_COLORS.dim } : { text: `${stock[i].price}G`, color: MENU_COLORS.highlight }),
+        name: (i) => (stock[i].skillPoint ? 'Skill Point' : stock[i].item ? ITEMS[stock[i].item].name : stock[i].armor ? ARMOR[stock[i].armor].name : WEAPONS[stock[i].weapon].name),
+        nameColor: (i) => (gone(i) ? MENU_COLORS.dim : stock[i].skillPoint ? '#ffe14d' : MENU_COLORS.text),
+        tag: (i) => (gone(i) ? { text: stock[i].skillPoint ? 'SOLD OUT' : 'OWNED', color: MENU_COLORS.dim } : { text: `${this.priceOf(stock[i])}G`, color: MENU_COLORS.highlight }),
+      });
+      return;
+    }
+    if (this.mode === 'sell') {
+      const list = this.sellList;
+      drawWeaponList(ctx, list.map((_, i) => i), this.sellCursor, {
+        area: LIST_AREA,
+        name: (i) => (list[i].item ? ITEMS[list[i].item].name : list[i].armor ? ARMOR[list[i].armor].name : WEAPONS[list[i].weapon].name),
+        nameColor: () => MENU_COLORS.text,
+        tag: (i) => ({ text: `+${sellValue(list[i])}G`, color: '#5fc27a' }),
       });
       return;
     }
@@ -340,9 +463,12 @@ export class ShopScene {
   }
 
   drawRightBox(ctx) {
-    if (this.mode === 'buy') {
-      const entry = this.shop.stock[this.buyCursor];
-      if (entry.item) drawItemDetails(ctx, entry.item, DETAILS_AREA);
+    if (this.mode === 'buy' || this.mode === 'sell') {
+      const entry = this.mode === 'buy' ? this.shop.stock[this.buyCursor] : this.sellList[this.sellCursor];
+      if (!entry) return;
+      if (entry.skillPoint) this.drawSkillPointDetails(ctx, entry);
+      else if (entry.item) drawItemDetails(ctx, entry.item, DETAILS_AREA);
+      else if (entry.armor) drawArmorDetails(ctx, entry.armor, DETAILS_AREA);
       else drawWeaponDetails(ctx, entry.weapon, DETAILS_AREA);
     } else {
       const lines = layoutDialogue(ctx, this.line, TALK_WIDTH, TALK_SIZE);
@@ -354,6 +480,16 @@ export class ShopScene {
     }
     // Your gold sits in the room's bottom-left corner, clear of both boxes.
     drawText(ctx, `${HERO_STATE.gold} G`, 16, ROOM_HEIGHT * 2 - 30, { size: 28, color: MENU_COLORS.highlight, outline: '#000' });
+  }
+
+  // A skill point for sale: what it is, and how many are left here.
+  drawSkillPointDetails(ctx, entry) {
+    const { x, y, w } = DETAILS_AREA;
+    const left = (entry.limit ?? 1) - this.skillPointsBought();
+    drawText(ctx, 'Skill Point', x, y, { size: 30, color: '#ffe14d' });
+    drawText(ctx, `${left} left here`, x, y + 34, { size: 24, color: left ? MENU_COLORS.highlight : MENU_COLORS.dim });
+    const lines = wrapLines(ctx, 'A point for the skill tree, saved up by someone who never got to spend it. Press C out there and choose SKILLS to use it.', w, 22);
+    drawText(ctx, lines.join('\n'), x, y + 70, { size: 22, lineHeight: 24, color: MENU_COLORS.text });
   }
 
   drawBubble(ctx) {

@@ -17,4 +17,7 @@ export const WEAPONS = {
   iron_gauntlets: { name: 'Iron Gauntlets', fightPower: 0.8, ability: 'reflect' },
   chapel_bell: { name: 'Chapel Bell', fightPower: 0.4, ability: 'toll' },
   old_tome: { name: 'Old Tome', fightPower: 0.5, ability: 'recall' },
+  // Mount Vigil and Heralds' Rest.
+  ice_pick: { name: 'Ice Pick', fightPower: 1.05, ability: 'lunge' },
+  herald_trumpet: { name: "Herald's Trumpet", fightPower: 0.55, ability: 'toll' },
 };

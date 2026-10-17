@@ -34,16 +34,46 @@ export const TILE_INFO = {
   J: { name: 'Broken pillar', note: 'broken pillar (walk or hide behind)' },
   S: { name: 'Hero statue', note: 'statue (walk or hide behind)' },
   C: { name: 'Candelabra', note: 'candle stand (walk or hide behind)' },
+  ',': { name: 'Grass', note: 'grass' },
+  ':': { name: 'Dirt path', note: 'dirt path' },
+  s: { name: 'Great stair', note: 'the great stair' },
+  M: { name: 'Cliff face', note: 'cliff face' },
+  m: { name: 'Cliff top', note: 'cliff top' },
+  O: { name: 'Boulder', note: 'boulder' },
+  T: { name: 'Pine tree', note: 'pine tree (walk or hide behind)' },
   b: { name: 'Low block', note: 'low stone block (jump up onto it)' },
   B: { name: 'Tall block', note: 'tall stone block (jump onto it from a low block)' },
+  // Mount Vigil and Heralds' Rest.
+  _: { name: 'Open sky', note: 'open sky (the view shows through)' },
+  n: { name: 'Snow', note: 'snow' },
+  i: { name: 'Snow path', note: 'trodden snow path' },
+  l: { name: 'Swept lane', note: 'swept cobble lane' },
+  z: { name: 'Ice', note: 'ice' },
+  g: { name: 'Plank bridge', note: 'plank bridge' },
+  A: { name: 'Snowy cliff top', note: 'snowy cliff top' },
+  E: { name: 'Ice cliff face', note: 'ice-veined cliff face' },
+  Y: { name: 'Snow pine', note: 'snow pine (walk or hide behind)' },
+  Q: { name: 'Snowy boulder', note: 'snowy boulder' },
+  a: { name: 'Cabin wall', note: 'log cabin wall' },
+  w: { name: 'Cabin window', note: 'cabin wall with a lit window' },
+  e: { name: 'Cabin roof', note: 'snowy cabin roof' },
+  f: { name: 'Fence', note: 'picket fence' },
+  k: { name: 'Cave rock', note: 'cave rock overhead' },
+  K: { name: 'Cave wall', note: 'cave wall' },
+  q: { name: 'Cave floor', note: 'cave floor' },
+  v: { name: 'Stalactite', note: 'stalactite (walk under it)' },
+  '^': { name: 'Stalagmite', note: 'stalagmite' },
+  x: { name: 'Ice crystals', note: 'ice crystals (they glow)' },
+  t: { name: 'Cave mouth', note: 'cave mouth (walk through it; see `doors`)' },
 };
 export const tileName = (char) => TILE_INFO[char]?.name ?? `Tile "${char}"`;
 
 export const propSprites = Object.fromEntries(Object.entries(PROP_SPRITES).map(([name, rows]) => [name, makeSprite(rows, PROP_PALETTE)]));
 export const playerSprite = makeSprite(PLAYER_SPRITES.downIdle, PLAYER_PALETTE);
 
-// Draws one tile as the game does.
-export function drawTile(ctx, char, x, y, tx, ty, tileAt) {
+// Draws one tile as the game does. `area` is the room's region (outdoor ones
+// floor hidden corners with grass).
+export function drawTile(ctx, char, x, y, tx, ty, tileAt, area = null) {
   const tile = TILES[char];
   if (!tile) {
     ctx.fillStyle = '#ff3d9a';
@@ -51,8 +81,9 @@ export function drawTile(ctx, char, x, y, tx, ty, tileAt) {
     return;
   }
   // Standing tiles (tall pillars, statues) paint only themselves, over floor.
-  if (tile.standing) TILES[floorUnder({ tileAt }, tx, ty)].draw(ctx, x, y, tx, ty, { tileAt });
-  tile.draw(ctx, x, y, tx, ty, { tileAt });
+  const room = { tileAt, area };
+  if (tile.standing) TILES[floorUnder(room, tx, ty)].draw(ctx, x, y, tx, ty, room);
+  tile.draw(ctx, x, y, tx, ty, room);
 }
 
 // A tile on its own, for swatches. Tall standing tiles are shrunk to fit.
@@ -79,7 +110,7 @@ export function renderTiles(room) {
   const canvas = pixelCanvas(w * T, h * T);
   const ctx = canvas.getContext('2d');
   const tileAt = (tx, ty) => (tx < 0 || ty < 0 || tx >= w || ty >= h ? null : tiles[ty][tx]);
-  for (let ty = 0; ty < h; ty++) for (let tx = 0; tx < w; tx++) drawTile(ctx, tiles[ty][tx], tx * T, ty * T, tx, ty, tileAt);
+  for (let ty = 0; ty < h; ty++) for (let tx = 0; tx < w; tx++) drawTile(ctx, tiles[ty][tx], tx * T, ty * T, tx, ty, tileAt, room.area);
   return canvas;
 }
 
@@ -193,9 +224,17 @@ const propLiteral = (prop) => {
   if (prop.until) out.until = prop.until;
   if (prop.after) out.after = prop.after;
   if (prop.walkable) out.walkable = true;
+  if (prop.solidSides) out.solidSides = prop.solidSides;
+  if (prop.nightText) out.nightText = prop.nightText;
+  if (prop.join) out.join = prop.join;
+  if (prop.rest) out.rest = true;
+  if (prop.dream) out.dream = prop.dream;
+  if (prop.sound) out.sound = prop.sound;
+  if (prop.wrath) out.wrath = prop.wrath;
   if (prop.light) out.light = prop.light;
   if (prop.seenInLight) out.seenInLight = true;
   if (prop.notice) out.notice = true;
+  if (prop.grapple) out.grapple = true;
   return inline(out);
 };
 const doorLiteral = ({ x, y, w, h, to, spawn }) => inline({ x, y, w, h, to, spawn: { x: spawn.x, y: spawn.y } });

@@ -2,6 +2,8 @@ import { BACKDROPS } from '../src/battle/backdrops.js';
 import { BEHAVIOURS, DEFAULT_REACH } from '../src/overworld/npc.js';
 import { ANIMATION_NAMES, DEFAULT_FRAME_SECONDS } from '../src/engine/animations.js';
 import { ITEMS } from '../src/data/items.js';
+import { ARMOR } from '../src/data/armor.js';
+import { GEAR } from '../src/data/gear.js';
 import { SHOPS } from '../src/data/shops.js';
 import { loadRooms, roomFiles, loadEnemies, enemySprite, loadSongs, npcIds, loadScenes } from './library.js';
 import { listDir, readText } from './api.js';
@@ -42,6 +44,13 @@ const TILE_HELP = {
   u: 'Stairs going down: paint them along the bottom edge, then put a Door on them',
   '~': 'Dark water you can\'t walk on',
   I: 'A tall column; you can walk and hide behind it',
+  ',': 'Mountain grass, with the odd flower (outdoors)',
+  ':': 'A worn dirt path; grass creeps in at its edges',
+  s: 'The great stair: wide old stone steps, walls along its sides',
+  M: 'A rock cliff face. Put cliff tops above it',
+  m: 'The top of a cliff, seen from above',
+  O: 'A mossy boulder',
+  T: 'A mountain pine; you can walk and hide behind it',
   b: 'A knee-high stone block. Jump (Space) onto it and walk along the top. Enemies cannot climb it. Anything you put on it can only be reached from up there',
   B: 'A tall stone block, too high to jump onto from the floor: put a low block next to it as a step. Good for hiding a lever or lantern up high',
   J: 'A broken column; you can walk and hide behind it',
@@ -983,7 +992,7 @@ export async function mount(root, studio) {
           },
         });
         body.push(spritePick, field('When you press Z on it', words, 'Each line is a new "*" line; an empty line starts a new page. Leave it empty and nothing happens.'),
-          field('Gives you', select([['', 'Nothing'], ...Object.entries(ITEMS).map(([id, item]) => [id, item.name])], prop.gives ?? '', (v) => edit(() => {
+          field('Gives you', select([['', 'Nothing'], ...Object.entries(ITEMS).map(([id, item]) => [id, item.name]), ...Object.entries(ARMOR).map(([id, armor]) => [id, `${armor.name} (armor)`]), ...Object.entries(GEAR).map(([id, gear]) => [id, `${gear.name} (gear)`])], prop.gives ?? '', (v) => edit(() => {
             if (v) prop.gives = v; else { delete prop.gives; delete prop.taken; }
           })), 'An item you get the first time you press Z on it (if your bag has room).'));
         // Puzzles: switches, and gates that open when their switches are on.

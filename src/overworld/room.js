@@ -2,6 +2,7 @@ import { TILE_SIZE as T } from '../config.js';
 import { TILES, floorUnder } from './tileset.js';
 import { Prop } from './prop.js';
 import { WORLD_STATE } from '../state/saveGame.js';
+import { inParty } from '../characters/party.js';
 
 // Crack pixels as [x, y, width, height] within a tile. Each crack level shows more of the list.
 const CRACKS = [
@@ -23,10 +24,12 @@ function drawHole(ctx, x, y) {
 // Whether a prop is in the room right now. Props can come and go with the
 // story: `until` a cutscene has played (Taper waters her flowers until you meet
 // her), or only `after` one has (then she's at home).
-function showsUpNow({ until = null, after = null }) {
+function showsUpNow({ until = null, after = null, join = null }) {
   const seen = WORLD_STATE.seenScenes ?? [];
   if (until && seen.includes(until)) return false;
   if (after && !seen.includes(after)) return false;
+  // Someone who's joined the party is with you, not here.
+  if (join && inParty(join)) return false;
   return true;
 }
 
@@ -38,15 +41,28 @@ const PROP_LIGHTS = {
   table: [26, 0.1],
   counter_cake: [18, 0.08],
   lantern_post_on: [26, 0.12],
+  campfire: [40, 0.2],
+  brazier: [34, 0.18],
+  stove_pot: [22, 0.1],
+  street_lamp: [34, 0.14],
 };
 
 // How far light reaches in a dark room (`dark`, see overworldScene.js), for
 // lantern pillars and candle stands; props use PROP_LIGHTS, or their own `light`.
-const DARK_TILE_LIGHTS = { P: 64, C: 56 };
+const DARK_TILE_LIGHTS = { P: 64, C: 56, x: 46, w: 40 };
 
 export class Room {
   constructor(data) {
     this.tiles = data.tiles;
+    // The region it's in (src/data/areas.js); outdoor regions floor their
+    // hidden corners with grass instead of Ruins stone.
+    this.area = data.area;
+    // A spire room is the outside of a round mountain: its left and right
+    // edges join up, so walking off one side brings you round to the other.
+    this.wraps = Boolean(data.wraps);
+    // Up in the snow, or underground: what shows under blocks and boulders.
+    this.snowy = Boolean(data.snowy);
+    this.cave = Boolean(data.cave);
     this.width = data.tiles[0].length;
     this.height = data.tiles.length;
     this.pixelWidth = this.width * T;
@@ -55,7 +71,7 @@ export class Room {
     // Every prop the room has; `props` is the ones here right now.
     this.allProps = data.props.map((info) => {
       const prop = new Prop(info);
-      prop.showsUp = { until: info.until, after: info.after };
+      prop.showsUp = { until: info.until, after: info.after, join: info.join };
       // Gifts are remembered by room, look and spot, so they're only given once.
       prop.key = `${data.id}:${info.sprite}:${info.x},${info.y}`;
       if (info.gives && (WORLD_STATE.taken ?? []).includes(prop.key)) prop.markTaken();
@@ -146,8 +162,17 @@ export class Room {
 
   // Tile character at (tx, ty), or null outside the room.
   tileAt(tx, ty) {
+    if (this.wraps) tx = ((tx % this.width) + this.width) % this.width;
     if (tx < 0 || ty < 0 || tx >= this.width || ty >= this.height) return null;
     return this.tiles[ty][tx];
+  }
+
+  // In a spire room, a box near one edge is also next to the props at the other.
+  propBlocks(prop, left, top, right, bottom) {
+    if (prop.blocks(left, top, right, bottom)) return true;
+    if (!this.wraps) return false;
+    const w = this.pixelWidth;
+    return prop.blocks(left + w, top, right + w, bottom) || prop.blocks(left - w, top, right - w, bottom);
   }
 
   isSolidTile(tx, ty) {
@@ -171,7 +196,7 @@ export class Room {
         if (!climbing && this.raiseAt(tx, ty) > 0) return true;
       }
     }
-    return this.props.some((prop) => prop.blocks(left, top, right, bottom));
+    return this.props.some((prop) => this.propBlocks(prop, left, top, right, bottom));
   }
 
   // The highest floor under the box: where something standing there would stand.
@@ -186,7 +211,9 @@ export class Room {
   }
 
   propAt(x, y) {
-    return this.props.find((prop) => prop.overlaps(x, y, x + 1, y + 1)) ?? null;
+    const w = this.pixelWidth;
+    const shifts = this.wraps ? [0, w, -w] : [0];
+    return this.props.find((prop) => shifts.some((s) => prop.overlaps(x + s, y, x + s + 1, y + 1))) ?? null;
   }
 
   // Each landing cracks the tile under the player a little more, and the tile
@@ -269,18 +296,21 @@ export class Room {
     this.tiles.forEach((row, ty) => [...row].forEach((char, tx) => {
       if (char === 'P') lights.push([tx, ty, 38, 0.16]);
       if (char === 'C') lights.push([tx, ty, 34, 0.14]);
+      // Cabin windows spill warm light; ice crystals a cold blue one.
+      if (char === 'w') lights.push([tx, ty + 0.5, 30, 0.14]);
+      if (char === 'x') lights.push([tx, ty, 30, 0.16, '120, 200, 255']);
     }));
     for (const prop of this.props) {
       const [radius, strength] = prop.save ? [30, 0.12] : PROP_LIGHTS[prop.look] ?? [];
       if (radius) lights.push([(prop.x + prop.width / 2) / T - 0.5, prop.y / T, radius, strength]);
     }
     ctx.globalCompositeOperation = 'lighter';
-    for (const [tx, ty, radius, strength] of lights) {
+    for (const [tx, ty, radius, strength, tint = '255, 190, 110'] of lights) {
       const cx = tx * T + T / 2;
       const cy = ty * T + T / 2;
       const glow = ctx.createRadialGradient(cx, cy, 2, cx, cy, radius);
-      glow.addColorStop(0, `rgba(255, 190, 110, ${strength})`);
-      glow.addColorStop(1, 'rgba(255, 190, 110, 0)');
+      glow.addColorStop(0, `rgba(${tint}, ${strength})`);
+      glow.addColorStop(1, `rgba(${tint}, 0)`);
       ctx.fillStyle = glow;
       ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
     }

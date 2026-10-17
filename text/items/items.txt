@@ -29,8 +29,17 @@ Chocolate as dark as a Shade. It's gone if you look away.
 [pillar_mint]
 A Columneon's breath mint, shaped like a tiny pillar. Very convincing.
 
+[step_shortbread]
+Crumbly shortbread pressed into the shape of a stair step. A Loose Step gave it up, a little grudgingly.
+
+[crag_cheese]
+Sharp goat's cheese wrapped in a dock leaf, aged on a mountain for longer than you'd think.
+
 [candle_cake]
 A cake shaped like a candle, from Taper's kitchen. "FOR OUR GUEST."
+
+[climbers_ration]
+Hard biscuit, dried fruit and a strip of salted something, sealed in waxed paper. Made to last a long climb.
 
 [taper_stub]
 The candle Taper gave you. It's still warm. It always will be.
@@ -52,3 +61,28 @@ Glow dust stirred into the wax. It burns bright and long, and makes you feel bra
 
 [ash_candle]
 Shadow ash in dark wax. It gives off more smoke than light, and the smoke hides you well.
+
+[climbers_ration]
+Hard biscuit, dried fruit and a square of chocolate, sealed in waxed paper. Made for a long way up.
+
+# Mount Vigil and Heralds' Rest.
+[pine_candy]
+Boiled sweets that taste of pine needles and sugar. The heralds make them for the kids. And the kids make them for the heralds.
+
+[snowmelt_tea]
+Tea brewed from snow melted over a fire. It tastes of nothing at all, and warms you right down to your boots.
+
+[frostberry_jam]
+Frostberries only ripen after the first hard frost. The jam is sharp, red and a little bit sparkly.
+
+[hot_cocoa]
+A mug of cocoa, still steaming somehow. There's a marshmallow in it shaped like a trumpet.
+
+[herald_honeycake]
+Dense, sticky honeycake, baked for the Hero's welcome and eaten by everyone else. A herald family's recipe. They've had time to perfect it.
+
+[fanfare_fudge]
+Fudge so rich the heralds only cut it for special occasions. You, apparently, are one.
+
+[rest_soup]
+Greta's soup, in a jar with a cloth over the top. Whatever is in it, it fixes everything.

@@ -1,0 +1,264 @@
+# MOUNT VIGIL: things you can read and look at on the spire and in its caves
+# (Chapter 2, above the Long Stair). The spire rooms wrap round the mountain.
+
+# What a save point says when you save here.
+[save_point]
+The crystal glows against the snow. The wind drops for a moment.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# What an emptied chest says.
+[chest_empty]
+An empty chest. The snow is already getting into it.
+
+# --- Shared, across the mountain ---
+
+[vigil_pine]
+A mountain pine, leaning away from the wind. All of them lean the same way.
+
+[vigil_snow_pine]
+A pine bowed under snow. Now and then a branch lets go of its load with a soft whump.
+
+[vigil_rock]
+The spire's rock, cold and grey. Iron rings are hammered into it here and there, wherever the heralds' route goes up.
+
+[vigil_ice_rock]
+Rock veined with ice. Touch it and your fingers stick for a second.
+
+[vigil_boulder]
+A boulder that rolled this far round the mountain and no further.
+
+[vigil_snow_boulder]
+A boulder wearing a hat of snow. It looks quite pleased about it.
+
+[vigil_bridge]
+Planks slung across a gap on two ropes. They creak. The drop under them goes all the way down to the valley.
+
+[vigil_drop]
+The ledge fell away here. A long way down, the clouds are thinking about weather.
+
+[vigil_block]
+Fallen blocks of the stair, heaped where they landed. Jump up them.
+
+[vigil_first_snow]
+A patch of snow, the first you've seen. It hasn't melted. It isn't going to.
+
+[vigil_snow]
+Snow, deep and dry and squeaking under your boots.
+
+# --- THE RIDGE ---
+
+[ridge_waymark]
+HERO! The stair pauses here, but the mountain does not.
+
+Round and up: the heralds' route follows the rings. Trust the rings.
+
+Scratched underneath: "and don't look down. or do. it's quite something."
+
+[ridge_notice]
+TO ALL CLIMBERS: a ledge goes round the mountain, not across it. Keep walking and you'll come back to where you started, a little dizzy.
+
+[ridge_chest]
+A wooden chest, iron-banded, left where the ledge widens. Someone stacked stones on it to keep the lid down against the wind.
+
+[ridge_cairn]
+Six stones, stacked. Someone's added a seventh, smaller, on top. It wobbles when you look at it.
+
+[ridge_chough]
+A chough, glossy black with a red beak. It looks at you sideways, says "chee-ow", and goes back to looking at the view.
+
+[ridge_gap]
+The ledge gave way here once. Planks cross it now, roped at both ends by someone who knew knots.
+
+# --- THE SPIRAL STAIR ---
+
+[spiral_stair]
+The great stair again: wide steps winding up and round the spire. Whoever built it carved the mountain to fit.
+
+[spiral_tally]
+A standing stone by the stair. Six tally marks, deep and old. Under them, in chalk that's almost gone: "7?"
+
+Under that, in different chalk: "8".
+
+[spiral_sign]
+LAST STAIR BEFORE HERALDS' REST (not counting the other stairs).
+
+[spiral_gap]
+A run of the stair sheared off and went down the mountain. The heralds bridged it with planks and a prayer.
+
+[spiral_chest]
+A chest wedged on a shelf above the ledge. Getting up here took some jumping. The cloak inside is folded with care.
+
+[spiral_waymark]
+HERO! Round once more. The way goes into the mountain here; the heralds dug it when the outside got too steep.
+
+"Mind the drips." has been added, and underlined twice.
+
+# --- THE HOLLOW ---
+
+[hollow_sign]
+THE HOLLOW. The route goes inside from here. It is dark, it drips, and it hums. The humming is normal.
+
+[hollow_mouth]
+A cave mouth in the face of the spire, with icicles for teeth. Cold air breathes out of it.
+
+[hollow_chest]
+A chest tucked on a spur of rock, reached by one throw of the rope. There's frost on the inside of the lid.
+
+[hollow_waymark]
+HERO! Through the mountain and out on the Shoulder. Soup at the Shoulder. Keep going.
+
+[hollow_fire]
+A fire ring, long cold. Someone sat here a while, facing the cave mouth, deciding.
+
+[hollow_pack]
+A pack propped against the rock, the same make as the ones on the stair below. Inside, wrapped in cloth: honeycake, somehow still soft.
+
+# --- THE ICE CAVES and THE SINGING GALLERY ---
+
+[cave_sign]
+Chalked on the wall, in a herald's neat hand: "FOLLOW THE BLUE LIGHT. Crystals are friendly. Stalactites are not."
+
+[cave_wall]
+Cave rock, cold and wet. Threads of ice run through it like silver in a vein.
+
+[cave_stalactite]
+A stalactite, as long as your arm, pointing straight down at the top of your head. A drop of water gathers at its tip.
+
+[cave_stalagmite]
+A stalagmite, as tall as you, built up one drip at a time over longer than anyone's been counting.
+
+[cave_crystals]
+A cluster of ice crystals, glowing a soft blue from somewhere inside. Warm to look at. Cold to touch.
+
+[cave_pool]
+A pool frozen clear as glass. Far down under the ice, something pale and round. A stone, probably.
+
+[cave_chest]
+A heavy chest beyond the frozen pool. Inside it: mail, forged for someone the Hero's size, carried this far and set down.
+
+[cave_pack]
+A pack left against the wall. A mug inside, with a lid. Still warm? No. But it will be.
+
+[cave_cairn]
+A cairn in the middle of the passage, so nobody takes the wrong fork. Both forks go the same way, but it's the thought.
+
+[gallery_sign]
+THE SINGING GALLERY. When the wind is right, the mountain sings here. Climbers have mistaken it for the bell. The bell is louder.
+
+[gallery_lake]
+A frozen lake under the mountain. Your footsteps ring on it like a drum.
+
+[gallery_chest]
+A chest in a walled alcove, up on fallen blocks. An ice pick inside, its grip worn to the shape of a hand.
+
+[gallery_book]
+THE BOOK OF ARRIVALS (travelling copy). A list of everyone who came up the stair, kept by the heralds.
+
+"1. A knight. Very tall. Left at the Shoulder, said the air was thin."
+"2. A scholar with a lantern. Went up further than any. Came back down alone, and very quiet."
+
+"3. Two sisters. Only one went on above the ice. She didn't say why."
+"4. A goat. We're not sure the goat counts."
+
+"5. A singer. Sang in the Gallery for three days. The mountain sang back."
+"6. A child, no older than the Hero was meant to be. Left her rope by her tent and walked back down the stair."
+
+"7."
+
+[gallery_fire]
+A fire ring under the mountain. The smoke went up a crack in the roof. The crack is still black with it.
+
+[gallery_pack]
+A pack by the cold fire, with a cloth bundle in it. Fudge. A hundred years is nothing to fudge.
+
+[gallery_cairn]
+A cairn built on the lake shore out of stones carried in from outside, since all the stones in here are stuck to the floor.
+
+# --- THE SHOULDER ---
+
+[shoulder_mouth]
+The cave mouth you came out of. From here it just looks like a shadow in the rock.
+
+[shoulder_tent]
+A good tent, pitched tight, with a herald's red pennant on it. The heralds keep it for climbers. Nobody has slept in it for a very long time.
+
+[shoulder_fire]
+A fire that doesn't go out. One of the heralds comes down every few days to feed it, in case.
+
+[shoulder_mug]
+A mug of cocoa sitting on a stone by the fire, with a lid on it and a note under it: "FOR WHOEVER. drink it while it's hot."
+
+[shoulder_mug_empty]
+The mug, empty. You've left the note where it was, for the next whoever.
+
+[shoulder_cairn]
+A cairn with a trumpet carved into its top stone. The heralds' mark. From here on, the route is theirs.
+
+[shoulder_waymark]
+HERO! You are on the Shoulder. Above: the Ice Face, the Knife Edge, the Cloud Walk, and then us. Nearly there. (A hundred years of nearly there.)
+
+[shoulder_snowman]
+A snowman with a trumpet of its own. Whoever built it gave it a very determined expression.
+
+[shoulder_chest]
+A chest beyond the bridge, on the far end of the ledge. Inside, folded small, a hood lined with soft white fur.
+
+[shoulder_sign]
+ICE ABOVE. Swing high, catch late, and don't let go for anything but a ring.
+
+# --- THE ICE FACE and THE KNIFE EDGE ---
+
+[iceface_sign]
+THE ICE FACE. Three pitches. The third one goes over the top. Don't stop at the top; there isn't one.
+
+[iceface_chest]
+A chest at the end of the high ledge, nearly buried. Mittens inside, thick and warm and useless for swords.
+
+[knife_sign]
+THE KNIFE EDGE. Named by someone who'd just climbed it. From here it's mostly walking. Mostly.
+
+[knife_waymark]
+HERO! Above the clouds now. If you can hear the bell, you're close. If you can't, you're closer than you think; it only rings at dawn.
+
+[knife_chest]
+A chest wedged between two rocks, out of the wind. Honeycake again. Somebody up here has been baking for a hundred years.
+
+[knife_cairn]
+A cairn so tall someone must have stood on another cairn to finish it.
+
+[knife_tally]
+A stone with the tally. Six marks. Then, carved very recently and very neatly: a seventh.
+
+You didn't carve it. Somebody up here is counting you.
+
+# --- THE CLOUD WALK ---
+
+[cloud_waymark]
+HERO! Welcome to the Cloud Walk. Everything below you is weather. Everything above you is us.
+
+[cloud_sign]
+Someone has written "YOU'RE DOING GREAT" on this sign in paint, and then, smaller, "sorry about the ice face".
+
+[cloud_snowman]
+A snowman in a herald's tabard. The tabard is real. The snowman seems very proud of it.
+
+[cloud_chest]
+A chest on the last ledge before the gate, with a jar in it, wrapped in cloth. Soup. It's still warm. That isn't possible, and here it is.
+
+[cloud_stair]
+A stair swept clear of snow, between lamps. Somebody sweeps it every morning. Somebody has swept it every morning for a hundred years.
+
+[cloud_lamp]
+An iron lamp, lit. The heralds light them at dusk and put them out at dawn, so the Hero never arrives in the dark.
+
+[cloud_banner]
+A red banner with a golden trumpet on it, snapping in the wind. The gold is a little faded. The red is not.
+
+# --- After dark ---
+
+[cloud_lamp_night]
+A lamp, lit. Above the clouds, under the stars, its light looks very small and very brave.

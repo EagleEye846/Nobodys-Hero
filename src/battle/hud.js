@@ -120,11 +120,12 @@ export function drawEnemyStatus(ctx, name, hp, maxHp, calm, cx, top, time) {
 }
 
 // The speaking enemy's taunt in a white speech bubble, in a smaller, smoother
-// font. The bubble sits to the left of (tipX, tipY), with its tail pointing there.
-export function drawSpeech(ctx, text, tipX, tipY) {
+// font. The bubble sits to the left of (tipX, tipY), with its tail pointing
+// there, and keeps above `clearBelow` (the top of the enemy's name and bars).
+export function drawSpeech(ctx, text, tipX, tipY, clearBelow = PANEL_TOP) {
   const { w, h } = BUBBLE;
   const x = Math.max(8, tipX - 16 - w);
-  const y = Math.min(Math.max(8, tipY - 30), PANEL_TOP - h - 8);
+  const y = Math.min(Math.max(8, tipY - 30), PANEL_TOP - h - 8, clearBelow - h - 6);
   const tailY = Math.min(Math.max(tipY, y + 12), y + h - 12);
   ctx.fillStyle = COLORS.text;
   ctx.beginPath();
@@ -191,12 +192,14 @@ export function drawPartyCard(ctx, member, active) {
 }
 
 // The command buttons. The selected one swaps its icon for the soul, like Deltarune.
-export function drawCommands(ctx, commands, selected, active, glowing, time) {
+// `glowing` ones blink to draw your eye; `disabled` ones (like RUN in a boss
+// fight) stay dim.
+export function drawCommands(ctx, commands, selected, active, glowing, time, disabled = []) {
   commands.forEach((command, i) => {
     const x = BUTTON.x + i * (BUTTON.w + BUTTON.gap);
     const y = BUTTON.y;
     const isSelected = active && i === selected;
-    let color = active ? COLORS.orange : COLORS.orangeDim;
+    let color = active && !disabled.includes(command.label) ? COLORS.orange : COLORS.orangeDim;
     if (glowing.includes(command.label) && blink(time)) color = COLORS.yellow;
     if (isSelected) color = COLORS.yellow;
 

@@ -1,0 +1,28 @@
+# Gear: things for getting around that you keep for good (src/data/gear.js).
+# [got_<id>] is what you see when you get it, after the words of whatever it
+# was in. The other sections are shared by every room.
+
+[got_climbing_rope]
+You got the CLIMBING ROPE!
+
+Face a cliff with an iron ring at the top and press Z to climb up to it.
+
+Stand on a ring and face down the cliff to climb back down.
+
+On a face too tall for one throw, hook the lowest ring and swing.
+
+Hold left or right with the swing to swing higher and reach farther.
+
+Press Z at the right moment to catch the next ring. X lets go.
+
+# Facing a cliff with a ring at the top, before you have the rope.
+[ring_no_rope]
+High above, an iron ring is hammered into the top of the cliff.
+
+With a rope, you could get up there.
+
+# Facing a steep face with rings hammered into it, before you have the rope.
+[swing_no_rope]
+Iron rings are hammered into the rock above you, one after another, all the way up.
+
+With a rope, you could swing from one to the next.
