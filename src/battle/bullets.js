@@ -24,10 +24,13 @@ export const PATTERN_TOOLS = { Shot, Line, Pillar, defineBulletArt, rand, pick, 
 
 // `difficulty` tunes a pattern for an enemy. density < 1 spawns bullets less
 // often (and slows moving emitters); speed < 1 makes each bullet fly slower.
-export function createPattern(name, box, { density = 1, speed = 1 } = {}) {
+// `flame` is a thing in the box the bullets are after this turn ({ x, y };
+// the Usurper's lantern), handed to the pattern as `tools.flame`.
+export function createPattern(name, box, { density = 1, speed = 1, flame = null } = {}) {
   const make = ENEMY_ATTACKS[name] ?? PATTERNS[name] ?? CUSTOM_PATTERNS[name];
   if (!make) throw new Error(`Unknown attack pattern '${name}'`);
-  const pattern = { mode: 'normal', ...make(box, density, PATTERN_TOOLS) };
+  const tools = flame ? { ...PATTERN_TOOLS, flame } : PATTERN_TOOLS;
+  const pattern = { mode: 'normal', ...make(box, density, tools) };
   const spawn = pattern.update;
   pattern.update = (dt, bullets, soul) => {
     const before = bullets.length;
@@ -241,7 +244,7 @@ const PATTERNS = {
     return { duration: 6, update: (dt, bullets) => spawn(dt, bullets) };
   },
 
-  // The shade: a ring of shadow forms around you and closes in. Slip out
+  // The duskling: a ring of shadow forms around you and closes in. Slip out
   // through the gap before it shuts.
   orbit(a) {
     const count = 12;

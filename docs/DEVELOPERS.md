@@ -64,7 +64,7 @@ Walk into an enemy to start a battle. The Old Keeper in the west room has advice
 | Dust Bunny | Entrance, east room (lower) | Dust sneezes, hopping baby bunnies, a broom sweeping a wall of lint, falling carrots, cobweb strands |
 | Lantern Moth | Lantern Hall | Moths drawn to your light, lantern beams, a swinging lantern shedding sparks, cocoons that hatch, spirals of wing dust |
 | Waxling | Lantern Hall | Wax drips that splash, candles that shoot up columns of flame, tossed matches, a creeping curtain of flames, curls of smoke |
-| Shade | Lantern Hall | Eyes that open and stare beams, grasping hands, curving crescent blades, a cage of tendrils, wisps that follow then lose interest |
+| Duskling | Lantern Hall | Eyes that open and stare beams, grasping hands, curving crescent blades, a cage of tendrils, wisps that follow then lose interest |
 
 Every enemy has its own set of attacks (at least three, and the game refuses to start a fight otherwise), with bullets drawn as things from that enemy. They live in `src/battle/attacks/<enemy>.js`: each file draws its bullet art with `defineBulletArt` and exports its attacks, and the enemy's data file lists which ones it uses. `dummy.js` is the example to copy.
 

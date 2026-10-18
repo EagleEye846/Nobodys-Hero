@@ -184,7 +184,8 @@ export function makeStepAttacks({ names, art, crack }) {
 
       // A crack starting at (x, y) heading `angle`, zigzagging `segments` times.
       // Each piece starts splitting open when the one before it gets there.
-      const crack = (bullets, x, y, angle, segments, delay = 0) => {
+      // (Not called `crack`: that's the colour the cracks are drawn in.)
+      const runCrack = (bullets, x, y, angle, segments, delay = 0) => {
         let heading = angle;
         for (let i = 0; i < segments; i++) {
           heading = angle + (i % 2 ? 1 : -1) * rand(0.35, 0.6);
@@ -192,7 +193,7 @@ export function makeStepAttacks({ names, art, crack }) {
           x += Math.cos(heading) * segment;
           y += Math.sin(heading) * segment;
           delay += segment / grow;
-          if (i === 1 && Math.random() < 0.5) crack(bullets, x, y, angle + (Math.random() < 0.5 ? 0.9 : -0.9), 2, delay);
+          if (i === 1 && Math.random() < 0.5) runCrack(bullets, x, y, angle + (Math.random() < 0.5 ? 0.9 : -0.9), 2, delay);
         }
       };
 
@@ -206,7 +207,7 @@ export function makeStepAttacks({ names, art, crack }) {
           bottom: { x: box.x + box.w * along, y: box.y + box.h, angle: -Math.PI / 2 },
         };
         const start = starts[from];
-        crack(bullets, start.x, start.y, start.angle, 5);
+        runCrack(bullets, start.x, start.y, start.angle, 5);
       });
       const crumble = every(0.55, 0.8, (bullets) => {
         bullets.push(new Shot({ x: pebbleX(), y: box.y - 3, vx: rand(-6, 6), vy: rand(28, 38), art: art.pebble }));

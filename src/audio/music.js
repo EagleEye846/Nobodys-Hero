@@ -33,6 +33,11 @@ const SFX = {
     { midi: 95, wave: 'sine', length: 0.6, volume: 0.06, delay: 0.12 },
   ],
   door: [{ midi: 43, wave: 'triangle', length: 0.25, volume: 0.12, slide: -5 }],
+  // A bat (or a lot of bats): two quick, very high chirps.
+  squeak: [
+    { midi: 100, wave: 'square', length: 0.04, volume: 0.03, slide: 5 },
+    { midi: 104, wave: 'square', length: 0.05, volume: 0.03, delay: 0.07, slide: 6 },
+  ],
   // An enemy jumping out of hiding.
   ambush: [
     { midi: 76, wave: 'square', length: 0.06, volume: 0.05 },
@@ -56,6 +61,14 @@ const SFX = {
     { midi: 64, wave: 'sine', length: 2.2, volume: 0.07, delay: 0.01 },
     { midi: 76, wave: 'triangle', length: 1.2, volume: 0.05, delay: 0.01 },
     { midi: 83, wave: 'sine', length: 0.5, volume: 0.04, delay: 0.02 },
+  ],
+  // Riding a green updraft somewhere else (src/data/travel.js): a bright
+  // little jingle climbing up and away, with a breath of wind under it.
+  travel: [
+    ...[72, 76, 79, 84, 88, 91].map((midi, i) => ({ midi, wave: 'triangle', length: 0.14, volume: 0.06, delay: i * 0.07 })),
+    { midi: 96, wave: 'sine', length: 0.9, volume: 0.05, delay: 0.45 },
+    { midi: 103, wave: 'sine', length: 0.7, volume: 0.03, delay: 0.55 },
+    { midi: 48, wave: 'triangle', length: 0.8, volume: 0.04, slide: 12 },
   ],
   // Settling into a bed: a soft falling chime.
   rest: [88, 83, 79, 76].map((midi, i) => ({ midi, wave: 'sine', length: 0.35, volume: 0.06, delay: i * 0.18 })),
@@ -494,11 +507,14 @@ export function renderSong(song, seconds, sampleRate = 44100) {
 // A room asks for one by name (`ambience` in its data). Each is a mix of
 // layers: `wind` (filtered noise that gusts and dies), `birds` (little
 // chirps, now and then, from one side or the other), `drips` (water falling
-// in a cave, with an echo), `hum` (the low note of a big hollow space) and
-// `fire` (a crackle). Levels are 0 to 1.
+// in a cave, with an echo), `hum` (the low note of a big hollow space),
+// `fire` (a crackle) and `whoosh` (great gusts that rush past from one side
+// to the other, for the very top). Levels are 0 to 1 (wind can go higher).
+// `peak` is the summit: no song there, only the wind.
 const AMBIENCES = {
   mountain: { wind: 0.55, birds: 0.6 },
   summit: { wind: 0.9, birds: 0.25 },
+  peak: { wind: 1.6, whoosh: 1 },
   village: { wind: 0.3, birds: 0.4 },
   cave: { wind: 0.12, drips: 0.8, hum: 0.5 },
   hearth: { fire: 0.6 },
@@ -519,6 +535,7 @@ class Ambience {
     if (spec.wind) this.startWind(spec.wind);
     if (spec.hum) this.startHum(spec.hum);
     if (spec.fire) this.startFire(spec.fire);
+    if (spec.whoosh) this.every(() => this.whoosh(spec.whoosh), 3 / spec.whoosh, 8 / spec.whoosh);
     if (spec.birds) this.every(() => this.chirp(spec.birds), 2.5 / spec.birds, 7 / spec.birds);
     if (spec.drips) this.every(() => this.drip(spec.drips), 0.8 / spec.drips, 3.5 / spec.drips);
   }
@@ -578,6 +595,34 @@ class Ambience {
         wgain.gain.setTargetAtTime(Math.random() * 0.012 * level, now, 1.5);
       }, 2, 6);
     }
+  }
+
+  // A great gust rushing past: noise that swells and falls away over a few
+  // seconds, its pitch sweeping up then down, crossing from one ear to the other.
+  whoosh(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const seconds = 1.8 + Math.random() * 2.2;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.Q.value = 0.9;
+    filter.frequency.setValueAtTime(250, now);
+    filter.frequency.linearRampToValueAtTime(900 + Math.random() * 700, now + seconds * 0.45);
+    filter.frequency.linearRampToValueAtTime(200, now + seconds);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime((0.05 + Math.random() * 0.05) * level, now + seconds * 0.4);
+    gain.gain.linearRampToValueAtTime(0, now + seconds);
+    const pan = ctx.createStereoPanner();
+    const from = Math.random() < 0.5 ? -0.9 : 0.9;
+    pan.pan.setValueAtTime(from, now);
+    pan.pan.linearRampToValueAtTime(-from, now + seconds);
+    source.connect(filter).connect(gain).connect(pan).connect(this.bus);
+    source.start(now, Math.random() * 1);
+    source.stop(now + seconds + 0.1);
   }
 
   // The low note of a hollow mountain, swelling and fading.

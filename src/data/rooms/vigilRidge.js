@@ -92,8 +92,6 @@ export const VIGIL_RIDGE = {
     { sprite: 'swing_ring', x: 32, y: 27 },
     { sprite: 'swing_ring', x: 30, y: 26 },
     { sprite: 'grapple_ring', x: 30, y: 24, grapple: true },
-    // A chest at the west end of the ledge, past the boulder.
-    { sprite: 'chest', x: 7, y: 24, text: 'ridge_chest', gives: 'frostberry_jam', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     // Face 2: a single throw.
     { sprite: 'grapple_ring', x: 8, y: 18, grapple: true },
     { sprite: 'savepoint', x: 14, y: 18, save: true },
@@ -117,5 +115,9 @@ export const VIGIL_RIDGE = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // Choughs along the ridge, and a craghorn on the lower path.
+  npcs: [
+    { enemy: 'chough', x: 34, y: 17, patrol: [29, 40] },
+    { enemy: 'craghorn', x: 20, y: 24, patrol: [12, 27] },
+  ],
 };

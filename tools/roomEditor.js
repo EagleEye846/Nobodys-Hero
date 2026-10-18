@@ -7,13 +7,14 @@ import { GEAR } from '../src/data/gear.js';
 import { SHOPS } from '../src/data/shops.js';
 import { loadRooms, roomFiles, loadEnemies, enemySprite, loadSongs, npcIds, loadScenes } from './library.js';
 import { listDir, readText } from './api.js';
+import { loadOrder, areaName } from './order.js';
 import { setSection, sectionText, freeSectionName, parseTextFile } from './textfile.js';
 import {
   T, TILES, TILE_INFO, tileName, tileSwatch, renderTiles, propSprites, propBounds, npcBounds, startBounds,
   drawThings, editableRoom, roomModule, roomHeader, pickTile, playerSprite,
 } from './rooms.js';
 import {
-  el, setChildren, icon, btn, hint, field, select, slider, section, segmented, modal, confirmBox, pixelCanvas, thumbnail,
+  el, setChildren, icon, btn, hint, field, select, optionNodes, slider, section, segmented, modal, confirmBox, pixelCanvas, thumbnail,
   isTyping, deepClone, lineCells, camelCase, constCase, snakeCase, friendly, codeView, toast,
 } from './ui.js';
 
@@ -97,6 +98,14 @@ export async function mount(root, studio) {
   const npcs = await npcIds();
   let scenes = await loadScenes();
   const shops = Object.keys(SHOPS);
+  // Every list below is under area headings, in the order the player meets things.
+  let order = await loadOrder();
+  // Regions in the order you reach them, then any other battle backdrops.
+  const regionOptions = () => {
+    const reached = order.areas().filter((a) => a in BACKDROPS);
+    const others = Object.keys(BACKDROPS).filter((a) => !reached.includes(a));
+    return [...reached.map((a) => [a, areaName(a)]), ...(others.length ? [{ group: 'Other backdrops', options: others.map((a) => [a, friendly(a)]) }] : [])];
+  };
   const areas = Object.keys(BACKDROPS);
 
   let room = null;
@@ -126,6 +135,7 @@ export async function mount(root, studio) {
     const r = id === room?.id ? room : rooms[id];
     return r ? friendly(r.name || id) : id;
   };
+  const roomOptions = () => order.options('rooms', Object.keys(rooms), roomLabel);
 
   // Every text-file section the room uses: signs and objects, single tiles
   // (`looks`), and kinds of tile (`tileTexts`).
@@ -191,8 +201,7 @@ export async function mount(root, studio) {
 
   // --- Opening rooms ---
   function renderRoomSelect() {
-    const ids = Object.keys(rooms);
-    const options = ids.map((id) => el('option', { value: id }, `${friendly(rooms[id].name || id)}`));
+    const options = optionNodes(order.options('rooms', Object.keys(rooms), (id) => friendly(rooms[id].name || id)));
     if (meta?.isNew) options.push(el('option', { value: room.id }, `${friendly(room.name || room.id)} (new)`));
     setChildren(roomSelect, options);
     roomSelect.value = room?.id ?? '';
@@ -239,7 +248,7 @@ export async function mount(root, studio) {
     const nameInput = el('input', { type: 'text', placeholder: 'e.g. Crystal Cave' });
     let sizeKey = 'medium';
     const sizePick = segmented([['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']], sizeKey, (v) => { sizeKey = v; });
-    const fromSelect = select([['', 'An empty room (walls and floor)'], ...Object.keys(rooms).map((id) => [id, `A copy of ${friendly(rooms[id].name || id)}`])], '', () => {});
+    const fromSelect = select([['', 'An empty room (walls and floor)'], ...order.options('rooms', Object.keys(rooms), (id) => `A copy of ${friendly(rooms[id].name || id)}`)], '', () => {});
     const existing = (await listDir('src/data/rooms')) ?? Object.values(files).map((f) => f.file);
     const result = await modal({
       title: 'New room',
@@ -338,7 +347,9 @@ export async function mount(root, studio) {
         card('npc', 'Keeper / NPC', sprite('keeper'), 'Someone to talk to'),
         card('shop', 'Shop', sprite('merchant'), 'A shopkeeper'),
         card('decor', 'Object', sprite('watering_can'), 'Something just for looks, like a watering can'))),
-      section('Enemies', el('div', { class: 'place-grid' }, Object.keys(enemies).map((id) => card(`enemy:${id}`, enemyName(id), enemySprites[id] ? thumbnail(enemySprites[id], 40) : icon('enemy', 28), 'Wanders left and right; touching it starts a battle')))),
+      section('Enemies', order.groups('enemies', Object.keys(enemies)).map(({ group, ids }) => [
+        el('div', { class: 'group-label' }, group),
+        el('div', { class: 'place-grid' }, ids.map((id) => card(`enemy:${id}`, enemyName(id), enemySprites[id] ? thumbnail(enemySprites[id], 40) : icon('enemy', 28), 'Wanders left and right; touching it starts a battle')))])),
       hint(armed ? 'Now click on the map. Esc cancels.' : 'Pick a thing, then click the map. Click things on the map to select them, drag to move.'),
       hint('Click a flower bed, pillar, rubble, water or any other tile to give it words for when you press Z on it.'));
   }
@@ -947,7 +958,7 @@ export async function mount(root, studio) {
     } else if (selected.type === 'door') {
       const door = room.doors[selected.index];
       body.push(
-        field('Leads to', select(Object.keys(rooms).map((id) => [id, roomLabel(id)]), door.to, (v) => edit(() => {
+        field('Leads to', select(roomOptions(), door.to, (v) => edit(() => {
           door.to = v;
           door.spawn = arrivalSpot(v);
         }))),
@@ -978,7 +989,7 @@ export async function mount(root, studio) {
     } else if (selected.type === 'geyser') {
       const g = room.geysers[selected.index];
       body.push(
-        field('Floats you up to', select(Object.keys(rooms).map((id) => [id, roomLabel(id)]), g.to, (v) => edit(() => {
+        field('Floats you up to', select(roomOptions(), g.to, (v) => edit(() => {
           g.to = v;
           g.spawn = { ...(rooms[v]?.playerStart ?? { x: 1, y: 1 }) };
         }))),
@@ -999,7 +1010,7 @@ export async function mount(root, studio) {
       const trigger = room.cutscenes[selected.index];
       const ids = Object.keys(scenes);
       body.push(
-        field('Plays', select(ids.length ? ids.map((id) => [id, friendly(id)]) : [[trigger.scene, friendly(trigger.scene)]], trigger.scene, (v) => edit(() => { trigger.scene = v; }))),
+        field('Plays', select(ids.length ? order.options('scenes', ids, friendly) : [[trigger.scene, friendly(trigger.scene)]], trigger.scene, (v) => edit(() => { trigger.scene = v; }))),
         slider({ label: 'Width', min: 1, max: 12, value: trigger.w, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { trigger.w = v; }) }),
         slider({ label: 'Height', min: 1, max: 12, value: trigger.h, format: (v) => `${v} tiles`, onChange: (v) => edit(() => { trigger.h = v; }) }),
         hint('Stepping onto these tiles plays the cutscene. Players can\'t see the area. Most scenes play only the first time.'),
@@ -1009,7 +1020,7 @@ export async function mount(root, studio) {
       const behaviour = npc.behaviour ?? (npc.ambush ? 'ambush' : 'patrol');
       const walks = walksAbout(npc);
       body.push(
-        field('Which enemy', select(Object.keys(enemies).map((id) => [id, enemyName(id)]), npc.enemy, (v) => edit(() => { npc.enemy = v; delete npc.art; }, { all: true }))),
+        field('Which enemy', select(order.options('enemies', Object.keys(enemies), enemyName), npc.enemy, (v) => edit(() => { npc.enemy = v; delete npc.art; }, { all: true }))),
         field('How it moves', select(Object.entries(BEHAVIOURS), behaviour, (v) => edit(() => {
           delete npc.ambush;
           delete npc.reach;
@@ -1030,7 +1041,7 @@ export async function mount(root, studio) {
     } else {
       const prop = room.props[selected.index];
       const type = propType(prop);
-      const spritePick = field('Looks like', select(Object.keys(propSprites).map((n) => [n, friendly(n)]), prop.sprite, (v) => edit(() => { prop.sprite = v; })));
+      const spritePick = field('Looks like', select(order.options('props', Object.keys(propSprites), friendly), prop.sprite, (v) => edit(() => { prop.sprite = v; })));
       if (type === 'sign') {
         const words = el('textarea', {
           rows: 7,
@@ -1058,10 +1069,10 @@ export async function mount(root, studio) {
       } else if (type === 'save') {
         body.push(hint('Players press Z here to save. It shows the [save_point] words from this area\'s text file.'));
       } else if (type === 'npc') {
-        body.push(field('Who is it', select(npcs.map((n) => [n, friendly(n)]), prop.npc, (v) => edit(() => { prop.npc = v; }))), spritePick,
+        body.push(field('Who is it', select(order.options('npcs', npcs, friendly), prop.npc, (v) => edit(() => { prop.npc = v; }))), spritePick,
           hint(`What they say is in text/npcs/${prop.npc}.txt.`));
       } else if (type === 'shop') {
-        body.push(field('Which shop', select(shops.map((s) => [s, friendly(s)]), prop.shop, (v) => edit(() => { prop.shop = v; }))), spritePick);
+        body.push(field('Which shop', select(order.options('shops', shops, friendly), prop.shop, (v) => edit(() => { prop.shop = v; }))), spritePick);
       } else {
         // Flavour text, Undertale style: what you see when you press Z on it.
         const words = el('textarea', {
@@ -1116,7 +1127,7 @@ export async function mount(root, studio) {
           el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: Boolean(prop.inOrder), onchange: (e) => edit(() => { if (e.target.checked) prop.inOrder = true; else delete prop.inOrder; }) }), el('span', {}, 'Must be done in that order (a wrong one resets them all)')));
         }
         if (prop.gives) {
-          body.push(field('Looks like, once taken', select([['', 'The same'], ...Object.keys(propSprites).map((n) => [n, friendly(n)])], prop.taken?.sprite ?? '', (v) => edit(() => {
+          body.push(field('Looks like, once taken', select([['', 'The same'], ...order.options('props', Object.keys(propSprites), friendly)], prop.taken?.sprite ?? '', (v) => edit(() => {
             prop.taken = { ...(prop.taken ?? {}) };
             if (v) prop.taken.sprite = v; else delete prop.taken.sprite;
             if (!Object.keys(prop.taken).length) delete prop.taken;
@@ -1138,7 +1149,7 @@ export async function mount(root, studio) {
         })), 'Lets people move with the story: Taper waters her flowers until you meet her, then she\'s at home.'));
       }
       if (type !== 'save') {
-        body.push(field('Animation', select([['', 'None (stands still)'], ...ANIMATION_NAMES.map((a) => [a, friendly(a)])], prop.animation ?? '', (v) => edit(() => {
+        body.push(field('Animation', select([['', 'None (stands still)'], ...order.options('animations', ANIMATION_NAMES, friendly)], prop.animation ?? '', (v) => edit(() => {
           if (v) prop.animation = v; else { delete prop.animation; delete prop.speed; }
         })), 'Plays over and over. Make your own in the Sprite Editor: any sprite with a few frames.'));
         if (prop.animation) {
@@ -1159,8 +1170,8 @@ export async function mount(root, studio) {
     setChildren(inspector,
       el('div', { class: 'inspector-head' }, icon('room', 22), el('h2', {}, 'This room')),
       field('Name', el('input', { type: 'text', value: room.name ?? '', onchange: (e) => edit(() => { room.name = e.target.value.trim().toUpperCase(); }, { all: true }) }), 'Just for you, to tell rooms apart. The title card shows the region\'s name.'),
-      field('Music', select([['', 'No music'], ...songs.map((s) => [s, friendly(s)])], room.music ?? '', (v) => edit(() => { room.music = v || null; }))),
-      field('Region', select(areas.map((a) => [a, friendly(a)]), room.area, (v) => edit(() => { room.area = v; })), 'Its name card shows when you walk in from another region, and its battles use its background.'),
+      field('Music', select([['', 'No music'], ...order.options('songs', songs, friendly)], room.music ?? '', (v) => edit(() => { room.music = v || null; }))),
+      field('Region', select(regionOptions(), room.area, (v) => edit(() => { room.area = v; })), 'Its name card shows when you walk in from another region, and its battles use its background.'),
       field('Darkness', select([['', 'Lit (normal)'], ['0.75', 'Dim'], ['0.9', 'Dark'], ['0.97', 'Pitch black']], room.dark ? String(room.dark) : '', (v) => edit(() => { if (v) room.dark = Number(v); else delete room.dark; })),
         'In a dark room you only see what light reaches: your candle (the brightest one you carry burns down while you\'re here), lantern pillars, candle stands, fires and save crystals. The editor shows it lit.'),
       el('div', { class: 'field' },
@@ -1310,6 +1321,7 @@ export async function mount(root, studio) {
     textSource = await readText(`text/${room.textFile}`);
     rooms = await loadRooms(true);
     files = await roomFiles();
+    order = await loadOrder(true);
     studio.setDirty(false);
     if (!rooms[id]) toast('Saved, but the game did not list the room yet: refresh the Studio.', { kind: 'info' });
     refreshAll();
@@ -1324,6 +1336,8 @@ export async function mount(root, studio) {
   async function onShow() {
     requestAnimationFrame(fit);
     scenes = await loadScenes(true);
+    order = await loadOrder(true);
+    if (mode === 'place') renderLeft();
     if (selected?.type === 'cutscene') renderInspector();
   }
 

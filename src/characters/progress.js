@@ -109,6 +109,16 @@ export function learnSkill(branch, index) {
   return true;
 }
 
+// A member's SPELLS in battle: their own `commands`, then any `learnable`
+// ones a skill on their branches has taught them (a `command` effect).
+export function memberCommands(id) {
+  const member = MEMBERS[id];
+  const learned = ALL_SKILLS
+    .filter((skill) => hasSkill(skill.id) && skill.effect.command && member.learnable?.[skill.effect.command])
+    .map((skill) => member.learnable[skill.effect.command]);
+  return [...member.commands, ...learned];
+}
+
 // Spell ids the hero can cast: the starting ones, then any learned from skills.
 export function knownSpells() {
   const learned = ALL_SKILLS.filter((skill) => hasSkill(skill.id) && skill.effect.spell).map((skill) => skill.effect.spell);

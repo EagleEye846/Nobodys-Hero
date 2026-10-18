@@ -9,6 +9,8 @@ export const HERO_STATE = {
   gold: 0,
   // Item ids (see src/data/items.js), eaten in battle with ITEMS.
   items: ['trail_mix', 'trail_mix'],
+  // What's in the storage chests by the save points (see storageMenu.js).
+  storage: [],
   // Candle-making materials by id, and how many (see src/data/candles.js).
   materials: {},
   // The candle burning in the dark: { id, left (seconds) }, or null.

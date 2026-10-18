@@ -56,6 +56,16 @@ A climber's pick with a worn leather grip, found in the caves inside the spire. 
 [herald_trumpet]
 A herald's brass trumpet, polished for a hundred years. One blast and everything stops to listen (Toll).
 
+# Sold by Rimble, the goblin in the ice caves.
+[glintstone_sling]
+A leather sling and a pouch of pebbles that glitter in the dark. Rimble picked them up somewhere he won't say. Fire them straight up (Shoot).
+
+[coldlight_lantern]
+A lantern with an ice crystal in it instead of a flame. It glows a cold, steady blue, and never goes out. Hold it up to slow the bullets in its light (Light).
+
+[golem_knuckle]
+A fist of cave stone, hollowed out to fit a hand. It still twitches sometimes. Slam the ground with it to clear the bullets around you (Quake).
+
 # Ves's umbrella parts. Only she can use them (see `wielder` in
 # src/data/weapons.js); the menus show her stats by themselves.
 [lamplighters_handle]
@@ -70,3 +80,15 @@ A handle carved from an offcut of the inn's hearth beam. Greta swears it's still
 [weathervane_hilt]
 An iron weathercock off a long-gone roof. It always turns into the wind.
 With it, SHELTER brings a gust that slows the next attack.
+
+[tempered_ferrule]
+A steel tip for the end of an umbrella, hammered out and quenched in snow at Tilda's forge. Ves says it's for walking. It isn't for walking.
+
+[skyiron_blade]
+A long blade of dark iron that fell from the sky, Hollis says, and was found in the snow. It's light, it's sharp, and it rings when it parries.
+
+[owlfeather_canopy]
+A canopy of white owl feathers laid over each other like snow on a roof. It turns the wind, and Ves swears it's quieter inside.
+
+[frostglass_canopy]
+An umbrella canopy of paper-thin ice-glass panes, stitched on with goblin thread. It never melts. Its wind soothes, and it mends a little too.

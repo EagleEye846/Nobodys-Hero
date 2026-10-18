@@ -1,0 +1,58 @@
+# RIMEWING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/rimewing.js.
+
+[intro]
+Something huge and pale drifts out of the snow. A RIMEWING circles your light!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+RIMEWING beats its wings slowly. Frost falls off them like dust.
+
+RIMEWING's eyes are fixed on the brightest thing nearby. Right now, that's you.
+
+The frost on its wings is patterned like a window on a cold night.
+
+Far below, the village lamps are lit. RIMEWING keeps turning to look.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+Light...
+light...
+
+So warm.
+So far up.
+
+Stand still.
+Let me look at you.
+
+The lamps are lit
+down there.
+Who are they lit for?
+
+I followed a light
+all the way up here.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/rimewing.js.
+[talk: Inspect]
+RIMEWING - HP 260
+A lantern moth, grown huge in the cold. It can't keep away from a light. It has been trying.
+
+[talk: Shade the lamp]
+You cup your hands round your light. RIMEWING slows, blinks, and drifts a little lower.
+
+[talk: Hum]
+You hum something soft. RIMEWING's wings slow to the tune, the way they would by a warm window.
+
+[talk: Mention the Keeper]
+You mention the old Keeper and his lantern. RIMEWING goes very still.
+For a moment, it doesn't look at any light at all.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+RIMEWING tumbles away on the wind like a snowflake, and is gone.
+
+[pacified]
+RIMEWING drifts off down the mountain toward the village lamps, slowly, as if it's in no hurry now.

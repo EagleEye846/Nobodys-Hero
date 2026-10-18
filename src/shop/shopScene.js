@@ -9,11 +9,12 @@ import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines, layoutDialogue, drawDialogue, paginate } from '../ui/text.js';
 import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawItemDetails } from '../ui/menuFrame.js';
-import { ITEMS, MAX_ITEMS, giveItem } from '../data/items.js';
+import { ITEMS, giveItem, roomForItem } from '../data/items.js';
 import { WEAPONS } from '../data/weapons.js';
 import { ARMOR } from '../data/armor.js';
 import { skillBonus } from '../characters/progress.js';
-import { isWorn } from '../characters/equipment.js';
+import { isWorn, wielderOf, HERO } from '../characters/equipment.js';
+import { inParty } from '../characters/party.js';
 
 // A shop, laid out like Deltarune's: the shopkeeper behind their counter up
 // top, and two boxes below. The left box is the menu (BUY, TALK, EXIT) or the
@@ -40,15 +41,16 @@ const DETAILS_AREA = { x: RIGHT_BOX.x + 20, y: RIGHT_BOX.y + 16, w: RIGHT_BOX.w 
 
 const MENU_OPTIONS = ['BUY', 'SELL', 'TALK', 'EXIT'];
 
-// What a shop pays for something: half an item's price, or half the most any
-// shop charges for a weapon or piece of armor (or a flat rate for ones no
-// shop sells). Never less than a coin.
+// What a shop pays for something: SELL_SHARE of an item's price, or of the
+// most any shop charges for a weapon or piece of armor (or a flat rate for
+// ones no shop sells). Never less than a coin.
+const SELL_SHARE = 0.75;
 export function sellValue(entry) {
-  if (entry.item) return Math.max(1, Math.floor((ITEMS[entry.item].price ?? 20) / 2));
+  if (entry.item) return Math.max(1, Math.floor((ITEMS[entry.item].price ?? 20) * SELL_SHARE));
   const id = entry.weapon ?? entry.armor;
   const key = entry.weapon ? 'weapon' : 'armor';
   const prices = Object.values(SHOPS).flatMap((shop) => shop.stock.filter((s) => s[key] === id).map((s) => s.price));
-  return Math.max(1, Math.floor((prices.length ? Math.max(...prices) : 60) / 2));
+  return Math.max(1, Math.floor((prices.length ? Math.max(...prices) : 60) * SELL_SHARE));
 }
 
 // Everything you could sell right now: the bag, and weapons and armor nobody
@@ -248,23 +250,29 @@ export class ShopScene {
       if (HERO_STATE.gold < price) {
         sfx('error');
         this.say('too_poor');
-      } else if (HERO_STATE.items.length >= MAX_ITEMS) {
+      } else if (!roomForItem()) {
         sfx('error');
         this.say('bag_full');
       } else {
         sfx('heal');
         HERO_STATE.gold -= price;
-        giveItem(item);
-        this.say('bought_item');
+        // With your bag full, it goes to storage, and they say so.
+        const stored = giveItem(item) === 'stored';
+        this.say(stored && textSection(this.shop.textFile, 'bought_stored').length ? 'bought_stored' : 'bought_item');
       }
       return;
     }
     // Weapons and armor are bought once each.
     const owned = weapon ? HERO_STATE.weapons : HERO_STATE.armors;
     const id = weapon ?? armor;
+    // A party member's gear can't be bought before they've joined.
+    const wielder = wielderOf(weapon ? 'weapon' : 'armor', id);
     if (owned.includes(id)) {
       sfx('error');
       this.say('owned');
+    } else if (wielder !== HERO && !inParty(wielder)) {
+      sfx('error');
+      this.say('wont_fit');
     } else if (HERO_STATE.gold < price) {
       sfx('error');
       this.say('too_poor');

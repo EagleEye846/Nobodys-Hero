@@ -243,6 +243,14 @@ Pick an existing enemy at the top left to change it instead.
 - `source.js` rewrites one `export const NAME = ...` in a file and leaves the
   rest alone; `textfile.js` does the same for one `[section]` of a text file.
 - `rooms.js` has the room helpers the Room Editor and Enemy Maker share.
+- `order.js` sorts every list (rooms, enemies, songs, cutscenes, people,
+  sprites, patterns...) under area headings ("Ruins Rooms", "Mount Vigil
+  Enemies") in the order the player meets them. It works this out from the
+  game data (a walk through the doors from the start room), so new things slot
+  in by themselves. An enemy that isn't in any room yet can say where it
+  belongs with `area: 'vigil'` (or `home: '<room id>'`) in its data; the game
+  ignores it. `select()` in `ui.js` takes `{ group, options }` for headed
+  drop-downs.
 
 ## Text Check
 

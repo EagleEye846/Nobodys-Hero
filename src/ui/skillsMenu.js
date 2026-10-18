@@ -5,12 +5,13 @@ import { textSection } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { expToNext, hasSkill, learnSkill, skillBlocker, pointsFor } from '../characters/progress.js';
-import { skillTree } from '../data/skills.js';
-import { MEMBERS, partyIds } from '../characters/party.js';
+import { skillPages } from '../data/skills.js';
+import { partyIds } from '../characters/party.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { ICONS } from '../data/art/icons.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines, textWidth } from './text.js';
+import { drawOwnerTag, ownerLook } from './menuFrame.js';
 
 // The skill tree, drawn as constellations in a night sky. Each branch is a
 // chain of stars under a tab across the top; learned stars burn in the
@@ -20,8 +21,10 @@ import { drawText, wrapLines, textWidth } from './text.js';
 // the one above), X goes back. It has its own slow song.
 //
 // The tree grows chapter by chapter (see `chapter` in src/data/skills.js), and
-// party members bring branches of their own (MEMBER_SKILL_BRANCHES), paid for
-// with their own points; the layout fits however many there are by now.
+// party members bring pages of their own (MEMBER_SKILL_BRANCHES), paid for
+// with their own points: SPACE flips between the hero's page and theirs,
+// shown as pills beside the title. The layout fits however many branches a
+// page has by now.
 
 const DESCRIPTIONS = 'skills/skills.txt';
 
@@ -101,12 +104,13 @@ function sparkle(ctx, x, y, size, color) {
   ctx.fill();
 }
 
-// What a branch's tab says: the branch's name, or its owner's for a party member's.
-const tabLabel = (branch) => (branch.member ? MEMBERS[branch.member].name : branch.name);
+// Whose page it is: 'hero' or a member id (see ownerLook in menuFrame.js).
+const pageOwner = (page) => page.member ?? 'hero';
 
 export class SkillsMenu {
   constructor() {
     this.isOpen = false;
+    this.page = 0;
     this.branch = 0;
     this.index = 0;
     this.scroll = 0;
@@ -120,7 +124,9 @@ export class SkillsMenu {
   open() {
     this.isOpen = true;
     // The tree grows chapter by chapter, and with the party (see src/data/skills.js).
-    this.branches = skillTree(WORLD_STATE.chapter ?? 1, partyIds());
+    this.pages = skillPages(WORLD_STATE.chapter ?? 1, partyIds());
+    this.page = Math.min(this.page, this.pages.length - 1);
+    this.branches = this.pages[this.page].branches;
     this.branch = Math.min(this.branch, this.branches.length - 1);
     this.message = '';
     this.lastFrame = null;
@@ -138,6 +144,18 @@ export class SkillsMenu {
     if (input.wasPressed('cancel') || input.wasPressed('menu')) {
       sfx('back');
       this.close();
+      return;
+    }
+
+    // SPACE: the next page (the hero's, then each party member's).
+    if (input.wasPressed('jump') && this.pages.length > 1) {
+      this.page = (this.page + 1) % this.pages.length;
+      this.branches = this.pages[this.page].branches;
+      this.branch = Math.min(this.branch, this.branches.length - 1);
+      this.index = 0;
+      this.scroll = 0;
+      this.message = '';
+      sfx('move');
       return;
     }
 
@@ -229,6 +247,7 @@ export class SkillsMenu {
       ctx.restore();
       this.drawScrollArrows(ctx);
       this.drawPanel(ctx);
+      this.drawPageFrame(ctx);
     });
   }
 
@@ -291,12 +310,11 @@ export class SkillsMenu {
     ctx.fill();
     drawText(ctx, `${HERO_STATE.exp}/${need} EXP`, 524, 47, { size: 17, color: COLORS.dim });
 
-    // Whose points you're spending (the hero's, or the selected member's), in a
-    // capsule with a golden orb.
+    // The points you're spending (the hero's, or the member's whose page this
+    // is: the pills beside the title say whose), in a capsule with a golden orb.
     const branch = this.branches[this.branch];
     const points = pointsFor(branch);
-    const owner = branch.member ? `${MEMBERS[branch.member].name}: ` : '';
-    const label = `${owner}${points} SKILL POINT${points === 1 ? '' : 'S'}`;
+    const label = `${points} SKILL POINT${points === 1 ? '' : 'S'}`;
     const width = textWidth(ctx, label, 20) + 54;
     const x = W - 20 - width;
     const y = 8;
@@ -318,7 +336,40 @@ export class SkillsMenu {
     ctx.restore();
     drawText(ctx, label, x + 34, y + 6, { size: 20, color: points ? COLORS.gold : COLORS.dim });
 
-    drawText(ctx, 'Z learn    X back    ←→ branch    ↑↓ skill', 30, 46, { size: 18, color: COLORS.dim });
+    // Under the title: whose page it is (with friends along) and SPACE to
+    // switch; or, alone, the keys. Kept clear of the level and EXP on the right.
+    if (this.pages.length > 1) {
+      const right = this.drawPagePills(ctx, 26);
+      drawText(ctx, 'SPACE: switch', right + 6, 46, { size: 18, color: COLORS.dim });
+    } else {
+      drawText(ctx, 'Z learn   X back   ←→↑↓ move', 30, 46, { size: 18, color: COLORS.dim });
+    }
+  }
+
+  // Whose page you're on: a tag with their face for each, the current one
+  // filled in their colour. Returns where they end.
+  drawPagePills(ctx, left) {
+    let x = left;
+    this.pages.forEach((page, p) => {
+      x += drawOwnerTag(ctx, pageOwner(page), x, 40, { selected: p === this.page, size: 16 }) + 6;
+    });
+    return x;
+  }
+
+  // With more than one page, a glowing edge round the sky in the colour of
+  // whoever's page it is.
+  drawPageFrame(ctx) {
+    if (this.pages.length < 2) return;
+    const { color } = ownerLook(pageOwner(this.pages[this.page]));
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = 0.75 + 0.2 * Math.sin(this.time * 2);
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 14;
+    ctx.lineWidth = 4;
+    roundRect(ctx, 3, 3, W - 6, H - 6, 10);
+    ctx.stroke();
+    ctx.restore();
   }
 
   // The branches, as tabs across the top of the sky.
@@ -328,7 +379,7 @@ export class SkillsMenu {
     this.branches.forEach((branch, b) => {
       const cx = this.columnX(b);
       const selected = b === this.branch;
-      const label = tabLabel(branch);
+      const label = branch.name;
       const width = textWidth(ctx, label, size) + (many ? 34 : 42);
       const x = cx - width / 2;
       roundRect(ctx, x, TABS_Y, width, TAB_H, 14);
@@ -503,7 +554,8 @@ export class SkillsMenu {
     ctx.fill();
     ctx.restore();
 
-    const title = branch.member ? `${MEMBERS[branch.member].name}: ${skill.name}` : skill.name;
+    // With more than one page, whose skill it is, before its name.
+    const title = this.pages.length > 1 ? `${ownerLook(pageOwner(this.pages[this.page])).name}: ${skill.name}` : skill.name;
     drawText(ctx, title, x + 22, y + 8, { size: 30, color: branch.color });
     // The cost, as a little chip after the name.
     const nameWidth = textWidth(ctx, title, 30);

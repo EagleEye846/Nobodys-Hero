@@ -2,7 +2,7 @@ import { DUMMY_ATTACKS } from './dummy.js';
 import { BUNNY_ATTACKS } from './bunny.js';
 import { MOTH_ATTACKS } from './moth.js';
 import { WAXLING_ATTACKS } from './waxling.js';
-import { SHADE_ATTACKS } from './shade.js';
+import { DUSKLING_ATTACKS } from './duskling.js';
 import { COLUMNEON_ATTACKS } from './columneon.js';
 import { TAPER_ATTACKS } from './taper.js';
 import { STEP_ATTACKS } from './step.js';
@@ -12,6 +12,11 @@ import { FROSTBITE_ATTACKS } from './frostbite.js';
 import { RINGER_ATTACKS } from './ringer.js';
 import { RIMEWING_ATTACKS } from './rimewing.js';
 import { ICE_STEP_ATTACKS } from './iceStep.js';
+import { STONE_GOLEM_ATTACKS } from './stone_golem.js';
+import { ICE_MOTH_ATTACKS } from './ice_moth.js';
+import { GLINTLING_ATTACKS } from './glintling.js';
+import { GREAT_BAT_ATTACKS } from './great_bat.js';
+import { USURPER_ATTACKS } from './usurper.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -25,7 +30,7 @@ export const ENEMY_ATTACKS = {
   ...BUNNY_ATTACKS,
   ...MOTH_ATTACKS,
   ...WAXLING_ATTACKS,
-  ...SHADE_ATTACKS,
+  ...DUSKLING_ATTACKS,
   ...COLUMNEON_ATTACKS,
   ...TAPER_ATTACKS,
   ...STEP_ATTACKS,
@@ -35,4 +40,9 @@ export const ENEMY_ATTACKS = {
   ...RINGER_ATTACKS,
   ...RIMEWING_ATTACKS,
   ...ICE_STEP_ATTACKS,
+  ...STONE_GOLEM_ATTACKS,
+  ...ICE_MOTH_ATTACKS,
+  ...GLINTLING_ATTACKS,
+  ...GREAT_BAT_ATTACKS,
+  ...USURPER_ATTACKS,
 };

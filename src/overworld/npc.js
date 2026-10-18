@@ -46,6 +46,36 @@ const PEEK_DISTANCE = 5;
 // blink) flash by this often, for this long.
 const TELL_EVERY_SECONDS = 2.6;
 const TELL_SECONDS = 0.35;
+// How each kind of enemy gets about (its `gait`, in its file in
+// src/data/enemies/), for when it's out walking in a room. `cycle` is one
+// stride in seconds, `moving` the share of it spent moving (and `pace` how
+// fast, as a multiple of the usual speed; the rest is a pause), `height` how
+// high a hop goes, in pixels. Drawing is in Npc.drawBody.
+//   walk    the usual: a gentle bob
+//   fly     hovers well off the ground, bobbing, its shadow below
+//   hop     little hops with a pause between (the bunny)
+//   bound   big leaps and longer pauses (the craghorn, a goat)
+//   roll    tumbles over and over as it goes (boulders: the stone golem)
+//   stomp   heavy shuffles that thud down (stone steps, the pillar)
+//   ooze    slow, squashing and stretching like a heap of snow (the frostbite)
+//   dash    darts, then freezes (the glintling)
+//   swing   rocks back and forth like a hanging ring (the ringer)
+//   float   drifts, and flickers (the shade)
+//   waddle  rocks side to side as it walks (the dummy, the waxling)
+export const GAITS = {
+  walk: { cycle: 1, moving: 1, pace: 1 },
+  fly: { cycle: 1, moving: 1, pace: 1.1 },
+  hop: { cycle: 0.7, moving: 0.45, pace: 1.8, height: 6 },
+  bound: { cycle: 1.2, moving: 0.5, pace: 2.2, height: 12 },
+  roll: { cycle: 1, moving: 1, pace: 1 },
+  stomp: { cycle: 0.7, moving: 0.3, pace: 2.6, height: 3 },
+  ooze: { cycle: 1, moving: 1, pace: 0.65 },
+  dash: { cycle: 1.5, moving: 0.25, pace: 4 },
+  swing: { cycle: 1, moving: 1, pace: 0.9 },
+  float: { cycle: 1, moving: 1, pace: 0.8 },
+  waddle: { cycle: 1, moving: 1, pace: 0.9 },
+};
+
 // Wanderers pause between strolls, and stay within this many tiles up or down.
 const WANDER_PAUSE = [0.8, 2.2];
 const WANDER_RANGE_Y = 1.5;
@@ -67,6 +97,12 @@ export class Npc {
     const { rows, palette } = source.sprite;
     this.sprite = makeSprite(rows, palette);
     this.enemy = enemy;
+    // How it gets about (GAITS): its own way of walking.
+    this.gait = GAITS[ENEMIES[enemy]?.gait] ? ENEMIES[enemy].gait : 'walk';
+    // How far into its stride it is, how far it's rolled, and whether it moved this frame.
+    this.stride = Math.random();
+    this.roll = 0;
+    this.moving = false;
     this.behaviour = behaviour ?? (ambush ? 'ambush' : 'patrol');
     if (!BEHAVIOURS[this.behaviour]) throw new Error(`Unknown behaviour '${this.behaviour}' for ${enemy}`);
     // A disguised enemy wears its `disguise` art if it has some (see columneon.js).
@@ -100,7 +136,24 @@ export class Npc {
     return this.y;
   }
 
+  // How fast it's going right now, as a multiple of its speed: hoppers and
+  // darters move in bursts with pauses between, oozers slowly, and so on.
+  pace(dt) {
+    const gait = GAITS[this.gait];
+    this.stride = (this.stride + dt / gait.cycle) % 1;
+    return this.stride < gait.moving ? gait.pace : 0;
+  }
+
   update(dt, player, room) {
+    const before = { x: this.x, y: this.y };
+    this.updateMovement(dt, player, room);
+    const moved = Math.hypot(this.x - before.x, this.y - before.y);
+    this.moving = moved > 0.01;
+    // A roller turns over as it goes: once round for every lap of its edge.
+    if (this.gait === 'roll' && this.moving) this.roll += (moved / Math.max(4, this.sprite.width / 2)) * Math.sign(this.x - before.x || 1);
+  }
+
+  updateMovement(dt, player, room) {
     this.time += dt;
     this.cooldown = Math.max(0, this.cooldown - dt);
     this.alert = Math.max(0, this.alert - dt);
@@ -131,7 +184,7 @@ export class Npc {
   }
 
   patrol(dt) {
-    this.x += this.direction * SPEED * dt;
+    this.x += this.direction * SPEED * this.pace(dt) * dt;
     if (this.x > this.maxX) {
       this.x = this.maxX;
       this.direction = -1;
@@ -152,7 +205,13 @@ export class Npc {
     const dx = wander.target.x - this.x;
     const dy = wander.target.y - this.y;
     const distance = Math.hypot(dx, dy);
-    if (distance < 1 || !this.step(room, (dx / distance) * SPEED * dt, (dy / distance) * SPEED * dt)) {
+    const speed = SPEED * this.pace(dt);
+    if (distance < 1) {
+      wander.target = null;
+      wander.pause = rand(...WANDER_PAUSE);
+      return;
+    }
+    if (speed > 0 && !this.step(room, (dx / distance) * speed * dt, (dy / distance) * speed * dt)) {
       wander.target = null;
       wander.pause = rand(...WANDER_PAUSE);
     }
@@ -200,7 +259,10 @@ export class Npc {
     const dy = player.y - this.y;
     const distance = Math.hypot(dx, dy);
     if (distance < 1) return;
-    this.step(room, (dx / distance) * CHASE_SPEED * dt, (dy / distance) * CHASE_SPEED * dt);
+    // Bursty gaits keep their rhythm in a chase, at the same average speed.
+    const gait = GAITS[this.gait];
+    const speed = CHASE_SPEED * this.pace(dt) / (gait.moving * gait.pace || 1) * Math.min(1, gait.pace);
+    this.step(room, (dx / distance) * speed * dt, (dy / distance) * speed * dt);
   }
 
   // Moves by (dx, dy) one axis at a time, stopping at walls. Returns whether it moved.
@@ -226,6 +288,12 @@ export class Npc {
     return Math.hypot(this.x - player.x, this.y - player.y) < TOUCH_DISTANCE;
   }
 
+  // Its shadow in the sun (see shadows.js): in disguise, the disguise's.
+  shadow() {
+    const disguised = this.lurking && this.behaviour === 'disguise' && this.disguiseFrames;
+    return { image: disguised ? this.disguiseFrames[0] : this.sprite, x: this.x, y: this.y };
+  }
+
   draw(ctx, camera) {
     if (this.cooldown > 0 && Math.floor(this.cooldown * 10) % 2 === 0) return;
     let x = Math.round(this.x) - camera.x;
@@ -243,12 +311,96 @@ export class Npc {
     }
 
     if (this.lurking && this.time % PEEK_EVERY_SECONDS < PEEK_SECONDS) x += this.peekSide * PEEK_DISTANCE;
-    const bob = Math.round(Math.sin(this.time * 3) * 2);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-    ctx.fillRect(x - 5, y - 3, 10, 3);
-    const top = y - this.sprite.height - 2 + bob - this.z;
-    ctx.drawImage(this.sprite, x - Math.floor(this.sprite.width / 2), top);
+    const top = this.drawBody(ctx, x, y);
     if (this.alert > 0) drawAlert(ctx, x, top - 12);
+  }
+
+  // The enemy itself, its own way (GAITS), standing at (x, y): its shadow on
+  // the ground, then the sprite lifted, turned or squashed. Returns the top of it.
+  drawBody(ctx, x, y) {
+    const t = this.time;
+    const gait = GAITS[this.gait];
+    const w = this.sprite.width;
+    const h = this.sprite.height;
+    // How far off the ground, turned (radians, about `pivot`), stretched and see-through.
+    let lift = Math.round(Math.sin(t * 3) * 2) + 2;
+    let angle = 0;
+    let pivot = 'feet';
+    let sx = 1;
+    let sy = 1;
+    let alpha = 1;
+    let shadow = 1;
+    const hopping = this.moving && this.stride < gait.moving;
+    const hopArc = Math.sin((this.stride / gait.moving) * Math.PI);
+    switch (this.gait) {
+      case 'fly':
+        lift = 12 + Math.round(Math.sin(t * 4) * 3);
+        shadow = 0.6;
+        break;
+      case 'hop':
+      case 'bound':
+        lift = hopping ? Math.round(hopArc * gait.height) : 0;
+        // Squashed for a moment as it lands.
+        if (!hopping && this.moving && this.stride < gait.moving + 0.08) { sx = 1.15; sy = 0.87; }
+        shadow = 1 - lift / 40;
+        break;
+      case 'roll':
+        lift = 0;
+        angle = Math.round(this.roll * 4 / Math.PI) * (Math.PI / 4);
+        pivot = 'middle';
+        break;
+      case 'stomp':
+        lift = hopping ? Math.round(hopArc * gait.height) : 0;
+        if (!hopping && this.moving && this.stride < gait.moving + 0.1) { sx = 1.08; sy = 0.92; }
+        break;
+      case 'ooze':
+        lift = 0;
+        sx = 1 + Math.sin(t * 4) * 0.12;
+        sy = 1 / sx;
+        break;
+      case 'dash':
+        lift = 0;
+        // Leaning into the dart.
+        if (hopping) angle = 0.18 * this.direction;
+        break;
+      case 'swing':
+        lift = 4;
+        angle = Math.sin(t * 2.6) * 0.35;
+        pivot = 'top';
+        break;
+      case 'float':
+        lift = 6 + Math.round(Math.sin(t * 1.8) * 3);
+        alpha = 0.7 + Math.sin(t * 5) * 0.2;
+        shadow = 0.7;
+        break;
+      case 'waddle':
+        angle = this.moving ? Math.sin(t * 7) * 0.14 : 0;
+        lift = 0;
+        break;
+      default:
+        break;
+    }
+    lift += this.z;
+    // The shadow stays on the ground, smaller the higher it is.
+    const sw = Math.max(4, Math.round(10 * shadow));
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(x - Math.floor(sw / 2), y - 3, sw, 3);
+
+    const bottom = y - 2 - lift;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    if (!angle && sx === 1 && sy === 1) {
+      ctx.drawImage(this.sprite, x - Math.floor(w / 2), bottom - h);
+    } else {
+      const py = pivot === 'top' ? bottom - h : pivot === 'middle' ? bottom - h / 2 : bottom;
+      ctx.translate(x, py);
+      ctx.rotate(angle);
+      ctx.scale(sx, sy);
+      const oy = pivot === 'top' ? 0 : pivot === 'middle' ? -h / 2 : -h;
+      ctx.drawImage(this.sprite, -Math.floor(w / 2), oy);
+    }
+    ctx.restore();
+    return bottom - h;
   }
 }
 

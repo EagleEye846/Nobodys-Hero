@@ -5,6 +5,8 @@ import { STEP_PALETTE, STEP_SPRITE, STEP_DISGUISE_SPRITES } from '../art/step.js
 // Everything it says is in text/enemies/loose_step.txt.
 export const LOOSE_STEP = {
   name: 'LOOSE STEP',
+  // How it gets about in a room (GAITS in src/overworld/npc.js): it shuffles and thuds down.
+  gait: 'stomp',
   textFile: 'enemies/loose_step.txt',
   sprite: { rows: STEP_SPRITE, palette: STEP_PALETTE },
   // In a room it lies in the grass looking like a fallen block (the "In

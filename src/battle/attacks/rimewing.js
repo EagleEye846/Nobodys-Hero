@@ -14,7 +14,7 @@ const RIME = { k: '#2a2a4a', w: '#e6eef8', W: '#9fd0e8', d: '#5a8ab8', b: '#c8c0
 
 // A frost scale off its wing, pointing the way it flies.
 defineBulletArt('rimeScale', {
-  frames: [['.Ww.', 'Wwww', '.Ww.']],
+  frames: [['.dW..', 'dWwww', '.dW..']],
   palette: RIME,
   radius: 1.5,
   rotate: true,
@@ -41,9 +41,12 @@ defineBulletArt('rimeMoth', {
 
 // The light you leave where you last stood still.
 defineBulletArt('rimeLamp', {
-  frames: [['.y.', 'ygy', '.y.'], ['y.y', '.g.', 'y.y']],
+  frames: [
+    ['..y..', '.ygy.', 'ygwgy', '.ygy.', '..y..'],
+    ['y.y.y', '.ygy.', 'ygwgy', '.ygy.', 'y.y.y'],
+  ],
   palette: RIME,
-  radius: 1.5,
+  radius: 2,
   frameSeconds: 0.2,
 });
 
@@ -207,7 +210,7 @@ export const RIMEWING_ATTACKS = {
     let way = Math.random() < 0.5 ? 1 : -1;
     let scales = [];
     let beat = null;
-    const fall = every(0.13, 0.18, (bullets) => {
+    const fall = every(0.1, 0.14, (bullets) => {
       const shot = new Shot({ x: fallX(), y: box.y - 3, vy: rand(26, 34), art: 'rimeScale' });
       bullets.push(shot);
       scales.push(shot);

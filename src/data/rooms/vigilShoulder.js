@@ -118,5 +118,8 @@ export const VIGIL_SHOULDER = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // A frostbite disguised as a snow heap, well up from the Keeper's walk (rows 27 to 29).
+  npcs: [
+    { enemy: 'frostbite', x: 28, y: 20, patrol: [28, 28], behaviour: 'disguise', reach: 3 },
+  ],
 };

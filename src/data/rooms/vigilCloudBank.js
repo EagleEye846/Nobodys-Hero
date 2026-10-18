@@ -45,16 +45,16 @@ export const VIGIL_CLOUD_BANK = {
     'AEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE___EEEEA',
     'AEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE___EEEEA',
     'AEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE___EEEEA',
-    'Annnnnnnnnnnnnnnnnnnnnnnnnnnnnnn___nnnn_',
-    'AnnnnnnnnnnnnnnnnnnnnnnnQnnnnnnn___nnnn_',
-    'Annnnnnnnnnnnnzzzzzznnnnnnnnnnnnnnnnnnn_',
-    'AnnYnnnnnnnnnzzzzzzzznnnnnnnnnnnnnnnnnn_',
-    'Annnnnnnnnnnnzzzzzzzznnnnnnnnnnnnnnnnnn_',
-    'AnnnnnnnnnnnnnzzzzzznnnnnnnnQnnnnnnnnnn_',
-    'Annnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn_',
-    'A__nnnnnnYnnnnnnnnnnnnnnnnnnnnnnn_______',
-    'A___nnnnnnnnnnnnnnnnnnnnnnnnnnnn________',
-    'A____nnnnnnnnnnnnnnnnnnnnnnnnnn_________',
+    'Annnnnnnnnnnnnnnniiinnnnnnnnnnnnnnnnnnn_',
+    'AnnnnnnnnnnnnnnnniiinnnnQnnnnnnnnnnnnnn_',
+    'Annnnnnnnnnnnnnnniiinnnnnzzzzzznnnnnnnn_',
+    'AnnYnnnnnnnnnnnnniiinnnnzzzzzzzznnnnnnn_',
+    'AnnnnnnnnnnnQnnnniiinnnnzzzzzzzznnnnnnn_',
+    'Annnnnnnnnnnnnnnniiinnnnnzzzzzznnnnnnnn_',
+    'Annnnnnnnnnnnnnnniiinnnnnnnnnnnnnnnnnnn_',
+    'A__nnnnnnYnnnnnnniiinnnnnnnnnnYnn_______',
+    'A___nnnnnnnnnnnnniiinnnnnnnnnnnn________',
+    'A____nnnnnnnnnnnniiinnnnnnnnnnn_________',
     'AAAAAAAAAAAAAAAAsssssAAAAAAAAAAAAAAAAAAA',
     'EEEEEEEEEEEEEEEEsssssEEEEEEEEEEEEEEEEEEE',
   ],
@@ -86,7 +86,7 @@ export const VIGIL_CLOUD_BANK = {
   props: [
     // Two winds: the one with her mark goes up to the High Shelf; the other only
     // reaches a pocket of the shelf cut off by a crack, with a chest and a ring down.
-    { sprite: 'chalk_mark', x: 6, y: 11, text: 'bank_chalk', notice: true },
+    { sprite: 'chalk_mark', x: 8, y: 11, text: 'bank_chalk', notice: true },
     { sprite: 'chest', x: 37, y: 2, text: 'bank_chest', gives: 'snowmelt_tea', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'grapple_ring', x: 36, y: 6, grapple: true },
     // Back down from the shelf by rope; the great stair goes on from it.
@@ -106,5 +106,8 @@ export const VIGIL_CLOUD_BANK = {
   // is how they move (see BEHAVIOURS in src/overworld/npc.js).
   npcs: [
     { enemy: 'craghorn', x: 16, y: 18, patrol: [5, 27] },
+    // A frostbite on the middle shelf, and a chough on the ledge above.
+    { enemy: 'frostbite', x: 24, y: 12, patrol: [24, 24], behaviour: 'disguise', reach: 3 },
+    { enemy: 'chough', x: 22, y: 6, patrol: [15, 30] },
   ],
 };

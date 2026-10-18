@@ -9,7 +9,7 @@ import { music, sfx } from '../audio/music.js';
 import { drawText, textWidth } from '../ui/text.js';
 import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
 import { ITEMS, giveItem } from '../data/items.js';
-import { joinParty, leaveParty } from '../characters/party.js';
+import { joinParty, leaveParty, memberFrames } from '../characters/party.js';
 
 // Plays a cutscene (src/data/scenes/) in the overworld: actors walk, face,
 // talk and emote, and the camera pans, one step at a time. The overworld
@@ -33,11 +33,19 @@ export const STEP_TYPES = {
   end_chapter: 'End the chapter',
   join: 'Join the party',
   leave_party: 'Leave the party',
+  vision: 'Show a vision (dreams)',
+  bed: 'In bed: sit up, lie down, get up',
+  toss: 'Throw something, with bounces',
+  weather: "Fade the room's snow and fog",
 };
-export const EMOTES = ['!', '?', '...', '<3'];
+// 'sweat' isn't a bubble: drops of cold sweat run down beside their head.
+export const EMOTES = ['!', '?', '...', '<3', 'sweat'];
 export const FACINGS = ['down', 'up', 'left', 'right'];
 
 const ACTOR_SPEED = 48; // pixels per second
+// Actors with walking frames step this often (seconds a frame), walking and running.
+const STEP_SECONDS = 0.18;
+const RUN_STEP_SECONDS = 0.12;
 const PLAYER_SPEED = 70;
 const CAMERA_SPEED = 180;
 const EMOTE_SECONDS = 0.8;
@@ -70,6 +78,9 @@ export function lookSprite(look) {
       if (PROP_SPRITES[`${name}_back`]) back = makeSprite(PROP_SPRITES[`${name}_back`], PROP_PALETTE);
     }
     if (kind === 'enemy' && ENEMIES[name]) sprite = makeSprite(ENEMIES[name].sprite.rows, ENEMIES[name].sprite.palette);
+    // An animation's first frame (src/engine/animations.js): for someone who
+    // is only ever seen animated, like the Usurper ('anim:usurper_idle').
+    if (kind === 'anim') sprite = animationFrame(name, 0);
     spriteCache.set(look, sprite && { right: sprite, left: flipHorizontal(sprite), back });
   }
   return spriteCache.get(look);
@@ -80,20 +91,32 @@ export function lookSprite(look) {
 // that character's place: they start where the character stands, and the
 // character hides until the scene ends.
 class Actor {
-  constructor({ id, look, x, y, portrait = null, hidden = false, plays = null, animation = null, speed = DEFAULT_FRAME_SECONDS }) {
+  constructor({ id, look, x, y, portrait = null, hidden = false, plays = null, ahead = false, animation = null, speed = DEFAULT_FRAME_SECONDS, glow = 0 }) {
+    // In a dark room, the light they give off themselves (a radius in pixels),
+    // so they can be seen in it: the great bat's eyes, say.
+    this.glow = glow;
     this.plays = plays;
+    // Playing a party member who ran on ahead (see `leavesAhead`): they're
+    // already here at (x, y), rather than stepping out from behind you.
+    this.ahead = ahead;
     // An animation they're playing (see src/engine/animations.js), or null.
     this.animation = animation;
     this.speed = speed;
     this.id = id;
     this.sprites = lookSprite(look);
     if (!this.sprites) throw new Error(`A cutscene actor '${id}' has an unknown look '${look}'`);
+    // Standing in for a party member with walking frames (Ves, following
+    // you): set by the ScenePlayer, so they walk, run and turn with those.
+    this.frames = null;
+    this.running = false;
     this.x = (x + 0.5) * T;
     this.y = (y + 1) * T;
     this.portrait = portrait;
     this.hidden = hidden;
     this.facing = 'right';
     this.walking = false;
+    // How high off the ground they are, in pixels (a thrown thing in flight).
+    this.lift = 0;
   }
 
   get sortY() {
@@ -116,21 +139,47 @@ class Actor {
     return this.fade.from + (this.fade.to - this.fade.from) * t;
   }
 
+  // With walking frames: the way they face, stepping (or running, on a
+  // `fast` walk) while they move.
+  walkFrame(seconds) {
+    const dir = ['up', 'down', 'left', 'right'].includes(this.facing) ? this.facing : 'down';
+    if (!this.walking) return this.frames[`${dir}Idle`];
+    if (this.running) return this.frames[`${dir}${Math.floor(seconds / RUN_STEP_SECONDS) % 2 ? 'Pass' : 'Stride'}`];
+    return this.frames[`${dir}${Math.floor(seconds / STEP_SECONDS) % 2 ? 'Step' : 'Idle'}`];
+  }
+
+  // What they look like right now.
+  currentSprite(seconds) {
+    // An animation played `once` runs from its start and stays on its last frame.
+    const animated = this.animation && (this.once
+      ? animationFrame(this.animation, seconds - this.animationStart, this.speed, true)
+      : animationFrame(this.animation, seconds, this.speed));
+    return animated
+      || (this.frames && this.walkFrame(seconds))
+      || (this.facing === 'up' && this.sprites.back)
+      || (this.facing === 'left' ? this.sprites.left : this.sprites.right);
+  }
+
+  // Their shadow in the sun (see shadows.js).
+  shadow() {
+    if (this.hidden || this.alpha <= 0) return null;
+    return { image: this.currentSprite(performance.now() / 1000), x: this.x, y: this.y };
+  }
+
   draw(ctx, camera) {
     if (this.hidden) return;
     const alpha = this.alpha;
     if (alpha <= 0) return;
     const seconds = performance.now() / 1000;
-    // An animation played `once` runs from its start and stays on its last frame.
-    const animated = this.animation && (this.once
-      ? animationFrame(this.animation, seconds - this.animationStart, this.speed, true)
-      : animationFrame(this.animation, seconds, this.speed));
-    const sprite = animated
-      || (this.facing === 'up' && this.sprites.back)
-      || (this.facing === 'left' ? this.sprites.left : this.sprites.right);
-    const bob = this.walking && Math.floor(seconds / (BOB_SECONDS / 3)) % 2 ? 1 : 0;
+    const sprite = this.currentSprite(seconds);
+    const bob = !this.frames && this.walking && Math.floor(seconds / (BOB_SECONDS / 3)) % 2 ? 1 : 0;
     ctx.globalAlpha = alpha;
-    ctx.drawImage(sprite, Math.round(this.x) - Math.floor(sprite.width / 2) - camera.x, Math.round(this.y) - sprite.height - bob - camera.y);
+    // In the air, a shadow stays on the ground under it.
+    if (this.lift > 1) {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.fillRect(Math.round(this.x) - 4 - camera.x, Math.round(this.y) - 2 - camera.y, 8, 2);
+    }
+    ctx.drawImage(sprite, Math.round(this.x) - Math.floor(sprite.width / 2) - camera.x, Math.round(this.y) - sprite.height - bob - Math.round(this.lift) - camera.y);
     ctx.globalAlpha = 1;
   }
 }
@@ -143,8 +192,24 @@ export class ScenePlayer {
     this.actors = new Map((scene.actors ?? []).map((data) => [data.id, new Actor(data)]));
     // Actors playing someone already in the room step into their place.
     this.standIns = [];
+    // Or someone in the party (`plays: 'vesper'`): the actor takes over from
+    // the one following you, who steps back in where the scene leaves them.
+    this.memberStandIns = [];
     for (const actor of this.actors.values()) {
       const prop = actor.plays && overworld.room.props.find((p) => p.character === actor.plays && !p.hidden);
+      const follower = !prop && actor.plays && overworld.followers?.find((f) => f.id === actor.plays);
+      if (follower) {
+        if (!actor.ahead) {
+          actor.x = follower.x;
+          actor.y = follower.y;
+        }
+        follower.hidden = true;
+        // Already here as part of the room (a prop with `member`): the actor
+        // takes over from it, and it's gone once they move.
+        for (const stayed of overworld.room.props.filter((p) => p.member === actor.plays)) stayed.hidden = true;
+        actor.frames = memberFrames(actor.plays);
+        this.memberStandIns.push({ actor, follower });
+      }
       if (!prop) continue;
       actor.x = prop.x + T / 2;
       actor.y = prop.y + T;
@@ -162,6 +227,13 @@ export class ScenePlayer {
     this.index = -1;
     this.done = false;
     this.advance();
+  }
+
+  // Light from actors who glow (`glow`), for a dark room (see drawDarkness).
+  get lights() {
+    return [...this.actors.values()]
+      .filter((actor) => actor.glow > 0 && !actor.hidden && actor.alpha > 0)
+      .map((actor) => ({ x: actor.x, y: actor.y - (actor.sprites.right.height / 2), radius: actor.glow }));
   }
 
   // The things to draw sorted with the room's characters.
@@ -199,11 +271,35 @@ export class ScenePlayer {
         const pages = String(step.text ?? '').split(/\n\s*\n/).map((page) => page.trim()).filter(Boolean);
         if (!pages.length) return true;
         // `face` is the speaker's expression (see portraits.js); a page can change it with {sad} and so on.
-        this.overworld.textbox.open(pages, speaker?.portrait ?? null, step.face ?? null);
+        // `shake`: the words tremble (a scream, a shout).
+        this.overworld.textbox.open(pages, speaker?.portrait ?? null, step.face ?? null, { shake: Boolean(step.shake) });
         return false;
       }
       case 'walk':
         return false;
+      case 'toss': {
+        // A throw: up in an arc to `to`, then `bounces` smaller hops on from
+        // there (each a third as high and half as far), sliding to a stop.
+        // `height` is how high the first arc goes (pixels).
+        const body = this.body(step.who);
+        const start = { x: body.x, y: body.y };
+        const end = { x: (step.to.x + 0.5) * T, y: (step.to.y + 1) * T };
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const bounces = step.bounces ?? 2;
+        const hops = [{ from: 0, to: 1, height: step.height ?? 40 }];
+        let at = 1;
+        let height = step.height ?? 40;
+        let reach = 0.35;
+        for (let i = 0; i < bounces; i++) {
+          height /= 3;
+          hops.push({ from: at, to: at + reach, height });
+          at += reach;
+          reach /= 2;
+        }
+        step.flight = { start, dx, dy, hops, hop: 0, t: 0, slide: 0 };
+        return false;
+      }
       case 'face': {
         const body = this.body(step.who);
         body.facing = step.dir ?? 'down';
@@ -219,7 +315,9 @@ export class ScenePlayer {
         if (!step.to && (!step.who || step.who === 'player')) step.target = () => this.overworld.player;
         else if (step.to) step.target = () => ({ x: (step.to.x + 0.5) * T, y: (step.to.y + 1) * T });
         else step.target = () => this.body(step.who);
-        this.focus ??= { x: this.overworld.player.x, y: this.overworld.player.y };
+        // Start from wherever the camera is now (a copy, so moving it never moves anyone).
+        const from = this.focus ?? this.overworld.player;
+        this.focus = { x: from.x, y: from.y };
         return false;
       case 'appear': {
         const body = this.body(step.who);
@@ -240,24 +338,59 @@ export class ScenePlayer {
       case 'animate': {
         // Starts (or with no animation, stops) an animation. With `seconds`,
         // the scene waits that long, then the animation stops. With `once`, it
-        // plays through one time and stays on its last frame.
+        // plays through one time and stays on its last frame. With `glow`,
+        // the light they give off in the dark changes to that (0 for none:
+        // the light going out of the Roost Mother's eyes); with only `glow`
+        // and no `animation`, just the light changes and the animation goes on.
         const body = this.body(step.who);
-        if (body === this.overworld.player) return true;
+        if (body === this.overworld.player) {
+          // The hero plays one too (src/engine/animations.js), drawn in place of
+          // their walking frames until another `animate` with no animation.
+          body.sceneAnimation = step.animation
+            ? { name: step.animation, start: performance.now() / 1000, speed: step.speed ?? DEFAULT_FRAME_SECONDS, once: Boolean(step.once) }
+            : null;
+          return true;
+        }
+        if (step.glow !== undefined) body.glow = step.glow;
+        if (step.glow !== undefined && step.animation === undefined) return true;
         body.animation = step.animation || null;
         body.speed = step.speed ?? DEFAULT_FRAME_SECONDS;
         body.once = Boolean(step.once);
         body.animationStart = performance.now() / 1000;
         return !(step.animation && step.seconds > 0);
       }
+      case 'vision': {
+        // A whole-screen picture in the dark (see visions.js), for dreams:
+        // `name` starts one, `mood` changes how it is, and no name ends it.
+        // `fade` (seconds) fades it in over what's there, rather than cutting.
+        const now = performance.now() / 1000;
+        const current = this.overworld.vision;
+        if (!step.name) this.overworld.vision = null;
+        else if (current?.name === step.name) Object.assign(current, { mood: step.mood ?? 'calm', moodStart: now });
+        else this.overworld.vision = { name: step.name, mood: step.mood ?? 'calm', start: now, moodStart: now, fade: step.fade ?? 0 };
+        return true;
+      }
+      case 'bed':
+        // You, in the bed you slept in (see tuckIn in overworldScene.js):
+        // `pose` 'sitting', 'lying', or 'up' to get out of it.
+        if (step.pose === 'up') this.overworld.getUp?.();
+        else this.overworld.sitUp?.(step.pose !== 'lying');
+        return true;
       case 'sound':
         if (step.name) sfx(step.name);
+        return true;
+      case 'weather':
+        // The room's snow and fog fade to `to` (0 gone, 1 as the room has
+        // them) over `seconds`; the scene goes straight on while it fades.
+        this.overworld.fadeWeather?.(step.to ?? 0, step.seconds ?? 2);
         return true;
       case 'give': {
         const item = ITEMS[step.item];
         if (!item) return true;
         const got = giveItem(step.item);
         if (got) sfx('heal');
-        this.overworld.textbox.open([got ? `You got ${item.name}.` : `You'd take the ${item.name}, but your bag is full.`]);
+        this.overworld.textbox.open([got === 'stored' ? `You got ${item.name}. Your bag is full, so it went to storage.`
+          : got ? `You got ${item.name}.` : `You'd take the ${item.name}, but you've nowhere to put it.`]);
         return false;
       }
       case 'battle':
@@ -304,6 +437,9 @@ export class ScenePlayer {
       case 'walk':
         finished = this.walk(step, dt);
         break;
+      case 'toss':
+        finished = this.toss(step, dt);
+        break;
       case 'emote':
         finished = step.t >= EMOTE_SECONDS;
         break;
@@ -338,6 +474,36 @@ export class ScenePlayer {
 
   // Walks in a straight line to the tile, at walking pace. Scripted walks go
   // where they're told, through anything in the way.
+  // A thrown thing in flight (the `toss` step). Returns true once it's come to rest.
+  toss(step, dt) {
+    const body = this.body(step.who);
+    const f = step.flight;
+    const hop = f.hops[f.hop];
+    if (!hop) {
+      // Skidding the last little way in the snow, then still.
+      body.lift = 0;
+      return true;
+    }
+    // Higher hops take longer: like falling under gravity.
+    const seconds = 0.18 + Math.sqrt(hop.height) * 0.07;
+    f.t = Math.min(seconds, f.t + dt);
+    const k = f.t / seconds;
+    const along = hop.from + (hop.to - hop.from) * k;
+    const total = f.hops[f.hops.length - 1].to;
+    body.x = f.start.x + f.dx * (along / total);
+    body.y = f.start.y + f.dy * (along / total);
+    body.lift = Math.sin(k * Math.PI) * hop.height;
+    if (k >= 1) {
+      body.lift = 0;
+      sfx(f.hop === 0 ? 'hit' : 'type');
+      f.hop++;
+      f.t = 0;
+      // Settled: it stops spinning.
+      if (f.hop >= f.hops.length) body.animation = null;
+    }
+    return false;
+  }
+
   walk(step, dt) {
     const body = this.body(step.who);
     const isPlayer = body === this.overworld.player;
@@ -348,8 +514,9 @@ export class ScenePlayer {
     const distance = Math.hypot(dx, dy);
     // `fast` hurries: twice the pace.
     const stride = (isPlayer ? PLAYER_SPEED : ACTOR_SPEED) * (step.fast ? 2 : 1) * dt;
-    // Whatever they were doing, they stop to walk.
-    if (!isPlayer) body.animation = null;
+    // Whatever they were doing, they stop to walk, unless the walk says to
+    // `keep` it (the Roost Mother falling, frozen in her last frame).
+    if (!isPlayer && !step.keep) body.animation = null;
     if (distance <= stride) {
       body.x = goalX;
       body.y = goalY;
@@ -381,6 +548,7 @@ export class ScenePlayer {
       }
     } else {
       body.walking = walking;
+      body.running = walking && Boolean(this.step?.fast);
     }
   }
 
@@ -392,7 +560,10 @@ export class ScenePlayer {
     const distance = Math.hypot(dx, dy);
     const stride = CAMERA_SPEED * dt;
     if (distance <= stride) {
-      this.focus = target === this.overworld.player ? null : { x: target.x, y: target.y };
+      // Back on the player: follow them again. On someone in the scene: keep
+      // following them as they move. On a spot: stay there.
+      if (target === this.overworld.player) this.focus = null;
+      else this.focus = step.who && !step.to ? target : { x: target.x, y: target.y };
       return true;
     }
     this.focus.x += (dx / distance) * stride;
@@ -407,7 +578,9 @@ export class ScenePlayer {
 
   finish() {
     this.done = true;
+    this.overworld.vision = null;
     this.overworld.player.moving = false;
+    this.overworld.player.sceneAnimation = null;
     // Room characters stay where the scene left them, or stay gone if they left
     // (until you come back into the room).
     const { player } = this.overworld;
@@ -420,6 +593,13 @@ export class ScenePlayer {
       prop.moveToTile(Math.floor(actor.x / T), Math.floor((actor.y - 1) / T));
       // Never leave them standing on the player (they'd be stuck): back to their spot.
       if (prop.overlaps(player.x - 5, player.y - 6, player.x + 5, player.y)) prop.moveToTile(fromX, fromY);
+    }
+    for (const { actor, follower } of this.memberStandIns) {
+      // One who left in the scene has gone on ahead, or stays somewhere in the
+      // room as part of it (see `leavesAhead`): out of sight as a follower.
+      if (actor.hidden || actor.fade?.to === 0 || this.scene.leavesAhead?.who === follower.id) continue;
+      follower.hidden = false;
+      follower.warpTo(actor.x, actor.y);
     }
     for (const actor of this.actors.values()) actor.hidden = true;
   }
@@ -499,6 +679,22 @@ export class ScenePlayer {
     });
   }
 
+  // Drops of cold sweat: two, running down either side of a head, in turn.
+  drawSweat(ctx, x, headY, t) {
+    for (const [side, delay] of [[-1, 0], [1, 0.35]]) {
+      const run = ((t - delay) % 0.9 + 0.9) % 0.9;
+      if (t < delay) continue;
+      const dx = Math.round(x + side * 7);
+      const dy = Math.round(headY + run * 9);
+      ctx.fillStyle = '#120c1c';
+      ctx.fillRect(dx - 1, dy - 1, 3, 4);
+      ctx.fillStyle = '#9fd4ff';
+      ctx.fillRect(dx, dy, 1, 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(dx, dy, 1, 1);
+    }
+  }
+
   // Emote bubbles above heads, drawn over everything else in the room.
   drawOverlay(ctx, camera) {
     if (this.step?.do === 'battle' && !this.done) this.drawEncounter(ctx, camera, this.step);
@@ -506,6 +702,10 @@ export class ScenePlayer {
       const pop = Math.min(1, t / 0.12);
       const headY = body.y - (body.sprites?.right.height ?? 24) - 8 - camera.y;
       const x = body.x - camera.x;
+      if (text === 'sweat') {
+        this.drawSweat(ctx, x, headY + 8, t);
+        continue;
+      }
       inUiSpace(ctx, () => {
         const size = Math.round(24 * pop);
         if (size < 4) return;

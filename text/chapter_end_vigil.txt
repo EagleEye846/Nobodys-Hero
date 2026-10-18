@@ -1,0 +1,11 @@
+# Between chapters: shown after the Chapter Two credits, once you've fallen
+# from the summit of Mount Vigil.
+
+[title]
+THE LONG STAIR
+
+[subtitle]
+Chapter Two complete
+
+[neutral]
+Somewhere below the clouds, the wind is still carrying a plum umbrella.

@@ -171,6 +171,7 @@ const VES_EXPRESSIONS = {
   angry: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [14, 11, 'kEi'], [14, 18, 'eEk'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'smmmms'], [20, 13, 'mssssm']] },
   furious: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [12, 11, 'khh'], [12, 18, 'hhk'], [14, 11, 'kik'], [14, 18, 'kik'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'mmmmmm'], [20, 13, 'mommom']] },
   praying: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'sss'], [14, 18, 'sss'], [15, 10, 'kkkk'], [15, 18, 'kkkk'], [19, 13, 'ssssss'], [20, 13, 'ssmmss']] },
+  bored: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [15, 11, 'eei'], [15, 18, 'eei'], [19, 13, 'ssssss'], [20, 13, 'sssmms']] },
   shy: { patches: [[14, 11, 'eeE'], [14, 18, 'eeE'], [15, 11, 'eei'], [15, 18, 'eei'], [16, 10, 'bbb'], [16, 19, 'bbb'], [17, 10, 'bb'], [17, 20, 'bb'], [19, 13, 'ssssss'], [20, 13, 'sssmms']] },
   thoughtful: { patches: [[14, 11, 'Eie'], [14, 18, 'Eie'], [11, 18, 'sss'], [10, 18, 'hhh'], [19, 13, 'ssssss'], [20, 13, 'ssmmms']] },
   hopeful: { patches: [[11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [14, 11, 'EEi'], [14, 18, 'EEi'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'msssms'], [20, 13, 'smmmms']] },

@@ -1,6 +1,6 @@
 import { UI_WIDTH, UI_HEIGHT } from '../config.js';
 import { inUiSpace } from '../engine/screen.js';
-import { textSection } from '../engine/textLoader.js';
+import { textFile, textSection } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { drawText, wrapLines } from '../ui/text.js';
@@ -11,15 +11,17 @@ const PROMPT_DELAY = 4;
 
 // Between chapters: the chapter's name, and a line that depends on how it went
 // (text/chapter_end.txt). Z goes on to `next()`: the next region's first room.
+// `text` picks another chapter's card; a card without [spared] and [defeated]
+// always shows its [neutral] line.
 export class ChapterEndScene {
-  constructor(next) {
+  constructor(next, text = TEXT_FILE) {
     this.home = next;
     this.time = 0;
     const seen = WORLD_STATE.seenScenes ?? [];
     const ending = seen.includes('taper_defeated') ? 'defeated' : seen.includes('taper_spared') ? 'spared' : 'neutral';
-    this.title = textSection(TEXT_FILE, 'title')[0];
-    this.subtitle = textSection(TEXT_FILE, 'subtitle')[0];
-    this.line = textSection(TEXT_FILE, ending)[0];
+    this.title = textSection(text, 'title')[0];
+    this.subtitle = textSection(text, 'subtitle')[0];
+    this.line = textSection(text, textFile(text)[ending] ? ending : 'neutral')[0];
   }
 
   enter(game) {

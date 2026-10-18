@@ -1,5 +1,5 @@
-// The shade, 16x16: a shadowy wisp with glowing eyes and trailing wisps.
-export const SHADE_PALETTE = {
+// The duskling, 16x16: a shadowy wisp with glowing eyes and trailing wisps.
+export const DUSKLING_PALETTE = {
   k: '#05020a', // outline
   s: '#2a1a48', // shadow
   S: '#4a3478', // lighter shadow
@@ -7,7 +7,7 @@ export const SHADE_PALETTE = {
   E: '#ffffff', // eye shine
 };
 
-export const SHADE_SPRITE = [
+export const DUSKLING_SPRITE = [
   '.....kkkkkk.....',
   '...kksssssskk...',
   '..ksSSsssssssk..',

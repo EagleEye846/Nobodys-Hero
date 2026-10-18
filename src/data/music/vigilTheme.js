@@ -31,24 +31,27 @@ import {
 
 const BAR = 8;
 
+// Its tunes, chords and patterns are exported for "Thin Air (Summit Push)"
+// (vigilEpicTheme.js), the epic version for the last climbs.
+
 // --- Patterns, as semitones above each chord's root (one chord per bar). ---
 // Boots in snow: a pluck on one and three, soft.
 const STEPS = [0, '.', '.', '.', 7, '.', '.', '.'];
 const STEPS_SLOW = [0, '.', '.', '.', '.', '.', '.', '.'];
 // The harp turning over, like light on ice, and running up when it climbs.
-const TURN = [0, 7, 12, 'tenth', 19, 'tenth', 12, 7];
+export const TURN = [0, 7, 12, 'tenth', 19, 'tenth', 12, 7];
 const TURN_SLOW = [0, '.', 7, '.', 12, '.', 'tenth', '.'];
-const RUN_UP = [0, 7, 12, 'tenth', 19, 24, 'tenth', 24];
+export const RUN_UP = [0, 7, 12, 'tenth', 19, 24, 'tenth', 24];
 // Bells: one high note a bar, somewhere in it.
 const CHIME = ['.', '.', '.', '.', '.', '.', 19, '.'];
 const CHIME_TWO = [12, '.', '.', '.', '.', '.', 19, '.'];
 // Strings ticking on the off-beats, like the pulse quickening.
 const TICK = ['.', '.', 'third', '.', '.', '.', 7, '.'];
-const TICK_BUSY = ['.', 12, '.', 'tenth', '.', 12, '.', 7];
+export const TICK_BUSY = ['.', 12, '.', 'tenth', '.', 12, '.', 7];
 // Low strings driving the climb.
-const DRIVE = [0, '.', 0, '.', 0, 7, '.', 0];
+export const DRIVE = [0, '.', 0, '.', 0, 7, '.', 0];
 // Brass: a low swell held through the bar.
-const SWELL = [0, '-', '-', '-', '-', '-', '-', '-'];
+export const SWELL = [0, '-', '-', '-', '-', '-', '-', '-'];
 // The piano, alone on the ice: a note on the one and a reply.
 const PIANO_ICE = [12, '.', '.', '.', '.', 'tenth', '.', '.'];
 // Drums.
@@ -64,30 +67,30 @@ const CRASH = hits('x.......');
 
 // --- Chords: one a bar. ---
 const WIND_CHORDS = 'Em Em C C G G D D';
-const ASCENT_CHORDS = 'Em C G D Em C Am B';
-const LEDGE_CHORDS = 'C G D Em C G Am D';
-const BREATH_CHORDS = 'B B B B';
-const STAIR_CHORDS = 'D A Bm G D A G A';
+export const ASCENT_CHORDS = 'Em C G D Em C Am B';
+export const LEDGE_CHORDS = 'C G D Em C G Am D';
+export const BREATH_CHORDS = 'B B B B';
+export const STAIR_CHORDS = 'D A Bm G D A G A';
 const ICE_CHORDS = 'Em Em C C Em Em D D';
-const CLIMB_CHORDS = 'Em C G D Em C D B';
-const PEAK_CHORDS = 'G D Em C G D C D';
-const PEAK_TWICE = `${PEAK_CHORDS} ${PEAK_CHORDS}`;
+export const CLIMB_CHORDS = 'Em C G D Em C D B';
+export const PEAK_CHORDS = 'G D Em C G D C D';
+export const PEAK_TWICE = `${PEAK_CHORDS} ${PEAK_CHORDS}`;
 const THIN_CHORDS = 'Em C G D Em C Em Em';
 
 // --- Tunes. Each token is an 8th note. ---
 // The flute, setting off: long notes, a long way up.
-const ASCENT = melody(`
+export const ASCENT = melody(`
   . . . . B4 - E5 - | G5 - - - F#5 - E5 - | D5 - - - - - B4 - | E5 - - - - - - - |
   . . . . E5 - G5 - | B5 - - - A5 - G5 - | F#5 - - - E5 - D5 - | D#5 - - - - - - - |
 `, 1);
 
 // The ledge: the second phrase, wider, looking out.
-const LEDGE = melody(`
+export const LEDGE = melody(`
   G5 - - - E5 - G5 - | B5 - - - - - A5 - | A5 - - - F#5 - A5 - | B5 - - - - - - - |
   C6 - - - B5 - G5 - | D6 - - - - - B5 - | C6 - - - A5 - E5 - | F#5 - - - - - . . |
 `, 1);
 // The violin answers in the ledge's gaps.
-const LEDGE_VIOLIN = melody(`
+export const LEDGE_VIOLIN = melody(`
   . . . . . . . . | . . . . . . E5 F#5 | G5 - - - - - . . | . . . . G5 - A5 - |
   . . . . . . . . | . . . . . . G5 A5 | B5 - - - - - . . | A5 - - - - - - - |
 `, 1);
@@ -98,43 +101,43 @@ const BREATH = melody(`
 `, 1);
 
 // The Long Stair's tune (stairTheme.js), on the horn.
-const STAIR = melody(`
+export const STAIR = melody(`
   A4 - D5 - F#5 - A5 - | G5 - - E5 C#5 - E5 - | F#5 - - - D5 - B4 - | D5 - - - - - . . |
   A4 - D5 - F#5 - A5 - | B5 - A5 - G5 - E5 - | G5 - F#5 - E5 - D5 - | E5 - - - - - . . |
 `, 1);
 // Over the stair, the violin lies a long line above the horn.
-const STAIR_VIOLIN = melody(`
+export const STAIR_VIOLIN = melody(`
   . . . . . . . . | . . . . . . . . | A5 - - - - - - - | F#5 - - - - - - - |
   . . . . . . . . | D6 - - - - - - - | B5 - - - - - - - | A5 - - - - - - - |
 `, 1);
 
 // The climb: the flute in short, rising phrases, each a step higher.
-const CLIMB = melody(`
+export const CLIMB = melody(`
   E5 - - - G5 - B5 - | - - - - . . . . | G5 - - - B5 - D6 - | - - - - . . . . |
   B5 - - - D6 - E6 - | - - - - . . . . | F#6 - - - - - G6 - | A#6 - - - B6 - - - |
 `, 1);
 // The violin climbs with it, a third below, then takes the top.
-const CLIMB_VIOLIN = melody(`
+export const CLIMB_VIOLIN = melody(`
   . . . . . . . . | B4 - - - E5 - G5 - | . . . . . . . . | D5 - - - G5 - B5 - |
   . . . . . . . . | G5 - - - B5 - D6 - | D#6 - - - - - - - | F#6 - - - - - - - |
 `, 1);
 
 // The peak: the ascent's tune, up high, with room to breathe between phrases.
-const PEAK = melody(`
+export const PEAK = melody(`
   . . . . B5 - E6 - | G6 - - - F#6 - E6 - | D6 - - - - - B5 - | E6 - - - - - - - |
   . . . . E6 - G6 - | B6 - - - A6 - G6 - | F#6 - - - E6 - D6 - | D6 - - - - - - - |
   G6 - - - E6 - G6 - | B6 - - - - - A6 - | A6 - - - F#6 - A6 - | B6 - - - - - - - |
   C7 - - - B6 - G6 - | D7 - - - - - B6 - | C7 - - - A6 - E6 - | G6 - - - - - - - |
 `, 1);
 // The violin, a third under the flute at the peak.
-const PEAK_VIOLIN = melody(`
+export const PEAK_VIOLIN = melody(`
   . . . . G5 - B5 - | E6 - - - D6 - B5 - | B5 - - - - - G5 - | B5 - - - - - - - |
   . . . . B5 - D6 - | G6 - - - F#6 - D6 - | D6 - - - B5 - A5 - | B5 - - - - - - - |
   E6 - - - B5 - E6 - | G6 - - - - - F#6 - | F#6 - - - D6 - F#6 - | G6 - - - - - - - |
   A6 - - - G6 - E6 - | B6 - - - - - G6 - | A6 - - - F#6 - C6 - | B5 - - - - - - - |
 `, 1);
 // Under the peak, the horn answers with the stair's tune, slower.
-const PEAK_HORN = melody(`
+export const PEAK_HORN = melody(`
   . . . . . . . . | . . . . . . . . | A4 - - - D5 - F#5 - | A5 - - - - - - - |
   G5 - - - E5 - C#5 - | E5 - - - - - - - | F#5 - - - D5 - B4 - | D5 - - - - - - - |
   . . . . . . . . | . . . . . . . . | A4 - - - D5 - F#5 - | A5 - - - - - - - |

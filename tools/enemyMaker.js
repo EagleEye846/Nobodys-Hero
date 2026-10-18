@@ -2,11 +2,12 @@ import { makeSprite } from '../src/engine/sprite.js';
 import { BACKDROPS } from '../src/battle/backdrops.js';
 import { loadEnemies, loadEnemyArt, loadPatterns, makePattern, loadRooms, roomFiles, enemySprite, PATTERN_INFO } from './library.js';
 import { listDir, readText } from './api.js';
+import { loadOrder } from './order.js';
 import { quote, inline } from './source.js';
 import { parseTextFile, normaliseBody } from './textfile.js';
 import { T, TILES, renderTiles, drawThings, editableRoom, roomModule, roomHeader } from './rooms.js';
 import {
-  el, setChildren, icon, btn, hint, field, select, slider, segmented, confirmBox, pixelCanvas, thumbnail,
+  el, setChildren, icon, btn, hint, field, select, optionNodes, slider, segmented, confirmBox, pixelCanvas, thumbnail,
   deepClone, snakeCase, constCase, friendly, codeView, toast, checkbox,
 } from './ui.js';
 
@@ -74,8 +75,9 @@ function blankForm() {
 // Settings the Enemy Maker has no controls for yet, carried over untouched
 // when you open and save an enemy (so saving Taper keeps her own battle song,
 // her `gentle` attacks, her `secondWind`, her `lullCalm`, her `beatenSprite`
-// and any item drops).
-const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'materials', 'lullCalm', 'beatenSprite', 'backdrop'];
+// and any item drops). `area` and `home` say where an enemy not yet placed in
+// a room belongs, for the Studio's area headings (tools/order.js).
+const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'materials', 'lullCalm', 'noMercy', 'gait', 'beatenSprite', 'backdrop', 'area', 'home', 'disguise'];
 
 // The enemy module, in the same shape as the game's own enemy files.
 function enemyModule(f, id, constName) {
@@ -153,6 +155,8 @@ export async function mount(root, studio) {
   let art = await loadEnemyArt();
   let patterns = await loadPatterns();
   let rooms = await loadRooms();
+  // Lists under area headings, in the order the player meets things.
+  let order = await loadOrder();
   const enemySprites = () => Object.fromEntries(Object.entries(enemies).map(([id, info]) => [id, enemySprite(info.enemy)]));
   const allPatterns = () => [...patterns.builtin, ...Object.keys(patterns.custom)];
   const modeOf = {};
@@ -191,7 +195,7 @@ export async function mount(root, studio) {
   function renderOpen() {
     setChildren(openSelect,
       form.isNew ? el('option', { value: '' }, 'New enemy') : null,
-      Object.entries(enemies).map(([id, info]) => el('option', { value: id }, friendly(info.enemy.name))));
+      optionNodes(order.options('enemies', Object.keys(enemies), (id) => friendly(enemies[id].enemy.name))));
     openSelect.value = form.isNew ? '' : form.id;
   }
 
@@ -348,14 +352,23 @@ export async function mount(root, studio) {
       type: 'text', value: friendly(form.name), style: 'font-size:18px;max-width:420px',
       oninput: (e) => { rename(e.target.value.trim().toUpperCase() || 'NEW FOE'); changed(); },
     });
-    const cards = art.map((a) => {
+    // Pictures under their enemy's area heading; any others after.
+    const artPlace = (a) => {
+      const owner = Object.keys(enemies).find((id) => enemies[id].artFile === a.file && enemies[id].artBase === a.base)
+        ?? Object.keys(enemies).find((id) => enemies[id].artFile === a.file);
+      return owner ? order.where('enemies', owner) : null;
+    };
+    const keyOf = (a) => `${a.file}:${a.base}`;
+    const artByKey = Object.fromEntries(art.map((a) => [keyOf(a), a]));
+    const artGroups = order.groups('enemies', art.map(keyOf), { placeOf: (key) => artPlace(artByKey[key]), fallback: 'Other pictures' });
+    const card = (a) => {
       const active = form.art && form.art.file === a.file && form.art.base === a.base;
       return el('button', {
         type: 'button', class: `art-card${active ? ' active' : ''}`,
         onclick: () => { form.art = { file: a.file, base: a.base }; updateSprite(); changed(); stepLook(); },
         tip: `src/data/art/${a.file}`,
       }, el('span', { class: 'thumb-box' }, thumbnail(makeSprite(a.rows, a.palette), 64)), el('span', {}, a.label));
-    });
+    };
     setChildren(body,
       el('h2', {}, 'What does it look like?'),
       hint('Give it a name and pick a picture, or draw a brand new one.'),
@@ -364,8 +377,10 @@ export async function mount(root, studio) {
         el('button', {
           type: 'button', class: 'art-card new',
           onclick: () => studio.open('sprites', { type: 'new', preset: 'enemy', name: friendly(form.name), returnTo: 'enemies' }),
-        }, el('span', { class: 'thumb-box' }, icon('pencil', 36)), el('span', {}, 'Draw a new one')),
-        cards));
+        }, el('span', { class: 'thumb-box' }, icon('pencil', 36)), el('span', {}, 'Draw a new one'))),
+      artGroups.map(({ group, ids }) => [
+        el('h3', { style: 'margin:18px 0 8px' }, group),
+        el('div', { class: 'art-grid' }, ids.map((key) => card(artByKey[key])))]));
   }
 
   // 2: Stats
@@ -458,7 +473,8 @@ export async function mount(root, studio) {
       el('h2', {}, 'How does it attack?'),
       hint(`Turn on at least ${MIN_ATTACKS} different attacks and how often each is used. Hover a card to watch it. Make your own in the Pattern Lab.`),
       count >= MIN_ATTACKS ? null : el('div', { class: 'notice warn' }, icon('warn', 16), `Pick at least ${MIN_ATTACKS} attacks (${count} so far). Every enemy needs a few different ones.`),
-      ...group("Enemies' own attacks", themed),
+      // The enemies' own attacks, under the area of the first enemy using each.
+      ...order.groups('patterns', themed, { fallback: "Other enemies' attacks" }).flatMap(({ group: title, ids }) => group(title, ids)),
       ...group('Made in the Pattern Lab', yours),
       ...group('Plain patterns (simple orbs, best for testing)', plain));
   }
@@ -514,7 +530,7 @@ export async function mount(root, studio) {
   function stepSave() {
     const id = idFor();
     const ready = problems();
-    const roomIds = Object.keys(rooms);
+    const roomIds = order.sorted('rooms', Object.keys(rooms));
     form.place.room ??= roomIds[0] ?? null;
     const mapCanvas = el('div', { class: 'pick-stage', style: 'max-height:340px' });
     setChildren(body,
@@ -528,7 +544,7 @@ export async function mount(root, studio) {
       el('div', { style: 'margin:6px 0 18px' }, checkbox(form.place.on, (v) => { form.place.on = v; changed(); stepSave(); }, 'Also put it in a room')),
       form.place.on && form.place.room ? el('div', { style: 'margin-bottom:18px' },
         el('div', { class: 'row', style: 'align-items:flex-end;gap:18px' },
-          field('Room', select(roomIds.map((r) => [r, friendly(rooms[r].name || r)]), form.place.room, (v) => { form.place.room = v; form.place.x = null; changed(); stepSave(); })),
+          field('Room', select(order.options('rooms', roomIds, (r) => friendly(rooms[r].name || r)), form.place.room, (v) => { form.place.room = v; form.place.x = null; changed(); stepSave(); })),
           el('div', { style: 'width:220px' }, slider({ label: 'Walks', min: 0, max: 6, value: form.place.walk, format: (v) => (v ? `${v} tiles each way` : 'stays put'), onInput: (v) => { form.place.walk = v; drawMap(); } }))),
         hint(form.place.x === null ? 'Click a floor tile where it should wander.' : `It will wander around tile ${form.place.x}, ${form.place.y}.`),
         mapCanvas) : null,
@@ -636,6 +652,7 @@ export async function mount(root, studio) {
     form.place.x = null;
     enemies = await loadEnemies(true);
     if (placed) rooms = await loadRooms(true);
+    order = await loadOrder(true);
     studio.setDirty(false);
     if (placed) toast('It\'s in the room too. If the Room Editor has that room open, reopen it to see the enemy.', { kind: 'info' });
     refresh();

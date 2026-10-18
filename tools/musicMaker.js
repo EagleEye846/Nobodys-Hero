@@ -1,10 +1,11 @@
 import { music } from '../src/audio/music.js';
 import { HOLD, REST, HIT } from '../src/audio/notation.js';
 import { loadSongs } from './library.js';
+import { loadOrder } from './order.js';
 import { listDir } from './api.js';
 import { quote, inline, objectKey } from './source.js';
 import {
-  el, setChildren, icon, btn, hint, field, select, slider, section, segmented, modal, confirmBox, popupMenu, checkbox,
+  el, setChildren, icon, btn, hint, field, select, optionNodes, slider, section, segmented, modal, confirmBox, popupMenu, checkbox,
   pixelCanvas, isTyping, deepClone, camelCase, constCase, friendly, codeView, toast,
 } from './ui.js';
 
@@ -154,6 +155,8 @@ function songModule(song, constName, beatsPerBar) {
 
 export async function mount(root, studio) {
   let songs = await loadSongs();
+  // Songs under area headings, in the order the player first hears them.
+  let order = await loadOrder();
   let song = null;
   let meta = null; // { name, file, constName, isNew }
   let beatsPerBar = 4;
@@ -261,7 +264,7 @@ export async function mount(root, studio) {
 
   // --- Opening songs ---
   function renderSongSelect() {
-    const options = Object.entries(songs).map(([name, s]) => el('option', { value: name }, s.song.title || friendly(name)));
+    const options = optionNodes(order.options('songs', Object.keys(songs), (name) => songs[name].song.title || friendly(name)));
     if (meta?.isNew) options.push(el('option', { value: '' }, `${song.title} (new)`));
     setChildren(songSelect, options);
     songSelect.value = meta?.isNew ? '' : meta?.name ?? '';
@@ -935,6 +938,7 @@ export async function mount(root, studio) {
     meta.isNew = false;
     studio.setDirty(false);
     songs = await loadSongs(true);
+    order = await loadOrder(true);
     refreshAll();
   }
 

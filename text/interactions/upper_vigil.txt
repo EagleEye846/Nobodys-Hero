@@ -1,0 +1,365 @@
+# THE SECOND STAIR: things you can read and look at on Mount Vigil above
+# Heralds' Rest (Chapter 2): past the Lookout and the second cairn, up into
+# the cloud, as far as the lamplighter's hut. Ves is always with you up here
+# (the rope across the Lookout stair stays up until she joins), so the words
+# can mention her. She doesn't speak in these; her lines are in the scenes.
+
+# What a save point says when you save here.
+[save_point]
+The crystal glows against the cloud. For a moment the wind holds its breath.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+
+(Your browser isn't letting the game save.)
+
+# What an emptied chest says.
+[chest_empty]
+An empty chest. The wind is already trying to get into it.
+
+# What you're told on waking in the lamplighter's hut.
+[rested]
+You slept under the lamplighter's blankets. They smell of lamp oil and cold. Your HP is fully restored.
+
+# --- Shared, up the second stair ---
+
+[upper_pine]
+A pine, this high up. It's small, and bent flat by the wind, and absolutely refusing to give up.
+
+[upper_rock]
+Rock and ice in layers, like a cake nobody would want a slice of.
+
+[upper_boulder]
+A boulder in a cap of snow, sitting very still, as if the wind might not notice it.
+
+[upper_snow]
+Snow as fine and dry as flour. The wind writes in it, and rubs it out, and writes in it again.
+
+[upper_stair]
+The great stair, still going. Whoever built it didn't believe in the word "enough".
+
+[upper_cloud]
+Cloud, all the way down. Somewhere under it is the whole world, and none of it can see you.
+
+[upper_chough]
+A chough, sitting on the wind as if it were a fence. It watches you go by with professional interest.
+
+# --- THE SECOND CAIRN ---
+
+[cairn_ribbons]
+THE SECOND CAIRN. Ribbons are tied all over it, faded to every colour of almost-red.
+
+Every herald who climbed this far tied one on, and turned round.
+
+There are a lot of ribbons. There was a lot of turning round.
+
+Near the top, a newer one, knotted twice. Chalked on the stone under it: "TAMSIN. SORRY. TOO QUIET."
+
+[cairn_waymark]
+HERO! The second cairn. The heralds' route ends here now. The first heralds went further, and not all of them came back. So this is as far as we go, and so far that has worked.
+
+Beyond is beyond. If you go on, keep to the stair. If the stair stops, so should you.
+
+Scratched underneath, in a different hand: "or don't."
+
+[cairn_lamp]
+A lamp on an iron crook, like a shepherd's, with a lantern hung off it.
+
+Not one of the village's. Somebody carried this one past the cairn, on purpose.
+
+It's cold. Frost has grown on the inside of the glass, in ferns.
+
+Ves wipes a circle in the frost with her mitten and looks in at nothing for a while.
+
+[cairn_lamp_top]
+Another crook lamp, at the top of the face, where there's no stair to climb.
+
+Whoever hung it got up here without one. Ves looks down the face, then at her umbrella, and doesn't say anything.
+
+[cairn_chest]
+A chest on the terrace above the face, out of reach of anyone without wings or an umbrella.
+
+A climber's ration inside, in oiled paper.
+
+[cairn_sheared]
+The stair runs straight into the face and carries on at the top, as if it climbed the rock and nobody told it it couldn't.
+
+The steps in between are gone, sheared off clean. No rings. Nothing to throw a rope to.
+
+[cairn_look_back]
+You look back down the stair, like Tamsin asked.
+
+Far below, through a gap in the cloud: Heralds' Rest, small as a handful of dropped coins, every chimney smoking.
+
+It looks warm. It looks like somewhere to come back to.
+
+# --- THE CLOUD BANK ---
+
+[bank_chalk]
+Chalk on the rock above where the snow blows upward: a little lamp in four strokes, and an arrow pointing up.
+
+Ves puts her mitten flat over it. "That's how she drew lamps," she says. "On everything. Mostly Greta's tablecloths."
+
+[bank_chest]
+A chest in a pocket of the shelf that the crack cut off. Snowmelt tea inside, in a flask that has somehow kept it hot.
+
+[bank_lamp]
+A crook lamp at the foot of the great stair, leaning a little into the wind.
+
+Someone stood here once with a ladder, in weather like this, and lit it.
+
+[bank_cairn]
+A cairn of three stones, put up in a hurry. The top one has been put back on at least once.
+
+[bank_pond]
+A pond, frozen solid. The cloud lies on it so thick that crossing it feels like walking on the sky.
+
+# --- THE HIGH SHELF ---
+
+[shelf_lamp]
+A crook lamp on the High Shelf, where nobody would ever see it but someone coming up on the wind.
+
+Lit for exactly that someone, once.
+
+[shelf_sign]
+A board nailed to a stake, in neat round letters: TO THE HERO, OR WHOEVER.
+
+OVER THE BLOCKS, THEN DOWN. THE CRAG HAS A CHEST.
+
+Ves runs a finger under the letters. Her mouth goes a funny shape. She doesn't say whose writing it is.
+
+[shelf_chest]
+A chest on the crag, wrapped in oilcloth against the weather. A honeycake inside.
+
+And a note: "FOR THE HERO. YOU'RE DOING WELL."
+
+[shelf_rockfall]
+Blocks of the stair, fallen from somewhere higher and stacked by the fall into a wall. Jump up them.
+
+# --- THE BROKEN SPAN ---
+
+[span_stair]
+The great stair, built out over the gorge on one span of stone. Whoever built it really wanted to get to the top.
+
+[span_gap]
+The middle of the span is gone, all of it, down into the cloud. It broke clean, like a loaf cut with a knife.
+
+[span_blocks]
+Blocks fallen from the span, heaped where they landed. One of them seems to be looking at you. No. Probably not.
+
+[span_sign]
+A board on a stake, in neat round letters: ACROSS IS UP. TRUST THE WIND.
+
+Underneath, smaller and less neat: "(really)".
+
+[span_lamp]
+A crook lamp at the edge of the ledge, facing out over the gorge.
+
+The way you'd leave a lamp in a window, for someone.
+
+[span_scorch]
+The broken end of the span is scorched black in a splash, as if something burned here once, quick and hot.
+
+Ves crouches and touches it, and looks at her mitten. Only soot.
+
+The heralds never got this far. Their fudge did.
+
+[span_marker]
+A cairn at the end of the span, every stone chosen with care.
+
+Someone stood here a long while, with nothing to do but wait for the wind.
+
+# --- THE WIND STAIR ---
+
+[windstair_sign]
+A board under a skin of frost. Beneath it, in neat round letters: UP BY THE WIND, DOWN BY THE RINGS.
+
+THE LONG WAY ROUND IS THE ONLY WAY ROUND.
+
+[windstair_lamp_low]
+A crook lamp hammered into the ice. The snow has piled up against one side of it, in the shape of the wind.
+
+[windstair_lamp]
+A crook lamp at the foot of the stair, up out of the wind.
+
+Ves counts on her mittens, under her breath. "Seven."
+
+[vanes_chest]
+A chest beside the weathervane, lashed down against the wind. A coral ribbon scarf inside, already trying to blow away.
+
+[gale_chest]
+A chest at the very top of the Gale Face, weighed down with stones. Inside, a poncho big enough for two.
+
+[windstair_chest]
+A chest in a notch in the ice, one throw above the ledge. Hot cocoa, in a jar, in a sock, in a mitten. Very well insulated.
+
+# --- THE LAMPLIGHTER'S LEDGE ---
+
+[ledge_lamp]
+The last crook lamp, by the door of the hut. Under the frost there's still a little oil in the bottom of it.
+
+Ves says "eight", very quietly, to nobody.
+
+[ledge_hut]
+A little log hut on a ledge in the cloud. Its door has been left open a crack, the way you'd leave it for someone.
+
+[ledge_roof]
+A roof of split shingles under a thick hat of snow, with icicles along the eaves as long as your arm.
+
+[ledge_woodpile]
+Firewood, split small and stacked under the eaves. Enough for a long winter. Most of it is still here.
+
+[ledge_sign]
+A signpost, iced over so thickly that nothing on it can be read.
+
+The arrow points up the stair. Everything up here points up.
+
+[ledge_snowman]
+A snowman, very old, worn by the wind into a lump with a lean. Two buttons for eyes. Someone built it for company.
+
+Ves straightens one of its buttons, which had slipped.
+
+# Trying to go back down the stair while Ves is in the hut (vesSeesTheHut.js).
+[ledge_not_without_her]
+You didn't feel comfortable leaving her here.
+
+# Ves, sitting by the hut door after she cries (vigilLamplightersHut.js).
+[hut_ves_thinking]
+Ves is sitting by the door with her knees pulled up, watching the cold stove.
+
+Without looking round, she points at the cot.
+
+# Trying to leave the hut before you've slept (vesInTheHut.js).
+[hut_rest_first]
+You should get some rest.
+
+Somewhere above, the cloud glows a little, like a lamp behind a curtain.
+
+(The way to the summit is still being built. Come back and see.)
+
+# --- THE LAMPLIGHTER'S HUT ---
+
+[hut_wall]
+Logs, chinked with moss and rags. Somebody patched the draughts one at a time, carefully, as if it mattered.
+
+[hut_floor]
+Floorboards, swept. There's a broom in the corner. Of course there is.
+
+[hut_window]
+A little window, iced over on both sides. The light through it is the colour of cloud.
+
+[hut_hook]
+An iron hook by the door, at just the right height for a lantern. Nothing on it.
+
+[hut_stove]
+A little hearth of flat stones, cold a long time. Kindling is laid in it, ready, and never lit.
+
+[hut_chalk]
+Chalk on the logs: a row of little lamps, four strokes each, the way you'd draw one after drawing a thousand.
+
+Eight of them. Then a ninth, only the top half drawn.
+
+The chalk is still wedged in a crack in the log, worn down to a stub.
+
+[hut_ladder]
+A lamplighter's ladder, leaning where it was left. The rungs are worn pale in the middle.
+
+Ves puts both hands on it and holds it steady, the way you hold a ladder for someone at the top.
+
+Then she lets go.
+
+[hut_oil]
+A tin of lamp oil, nearly empty. Enough for one lamp, maybe.
+
+[hut_crates]
+Crates of lamp glass packed in straw, spare wicks, and a box of matches with three left in it.
+
+Enough for a great many lamps.
+
+[hut_cot]
+A cot with two blankets, tucked in tight at the corners. You could sleep here. Ves says you should.
+
+# --- The Gale Face (vigilGaleFace.js) ---
+
+[gale_sign]
+THE GALE FACE. The wind comes in gusts here. Swing with it, not against it.
+
+Below, in smaller letters: "Or don't. See if I care. - The Wind"
+
+[gale_waymark]
+HERO! Nearly there. The weathervanes are just up the stair. They know which way to go, even if you don't.
+
+# --- The Weathervane Shelf (vigilWeathervanes.js) ---
+
+[shelf_sign]
+THE WEATHERVANE SHELF. Turn a vane, and the wind turns with it. All of them. Every time.
+
+The heralds who put these up have carved a little arrow under the words. It points straight down.
+
+# The first time you turn a weathervane.
+[vane_first]
+You put your weight against the weathervane, and it swings round a quarter turn with a groan.
+
+Across the shelf, every other vane swings round with it. So does the wind.
+
+# The first time a whirlwind won't take you where it's blowing.
+[whirl_refuses]
+The whirlwind lifts you off your feet, spins you round, and sets you back down where you were.
+
+It won't carry you that way. There's nothing over there but sky.
+
+# --- The Vane Gardens ---
+
+[gardens_sign]
+THE VANE GARDENS. Planted by the first heralds, one vane for every wind they wanted. Turn one, turn them all.
+
+[gardens_cave]
+The mouth of the Ice Chimney, breathing cold air out onto the snow.
+
+[gardens_chest]
+A chest on the top terrace, lashed to a stake against the wind. Hot cocoa inside, still warm, somehow.
+
+# --- The Spire's Neck ---
+
+[neck_sign]
+THE SPIRE'S NECK. Last climb. The wind gusts east: swing with it.
+
+[neck_chest]
+A chest up on the stone blocks. A pot of stew inside, wrapped in sacking. It smells of goblin cooking.
+
+[neck_waymark]
+A waymark of stacked stones, taller than you. Someone built it here so you'd know: nearly there.
+
+[neck_crack]
+A crack right through the spire, wide enough to fall down and deep enough that you'd have time to think about it.
+
+[upper_block]
+A square block of stone, frost-furred. Somebody set these here as steps.
+
+# --- The Last Shelf ---
+
+[last_shelf_sign]
+THE LAST SHELF. Summit: up the stair.
+
+[last_shelf_cairn]
+A little cairn, with a feather tucked between the stones. White, and very soft.
+
+[shelf_crates]
+Crates of whatever Hollis has found on the mountain, sorted, labelled, and stacked very neatly.
+
+# --- The Summit ---
+
+[summit_beacon]
+The beacon at the top of the mountain: a great iron lamp cage on a tower of stone.
+
+It's cold. Frost has grown over every pane.
+
+[summit_cairn]
+A cairn of stones at the top of the world. Every climber who reached the summit added one.
+
+[summit_sky]
+Nothing but sky, all the way round. Every other mountain is below you.
+
+[summit_lantern]
+Her mother's lantern, lying in the snow where he threw it. The brass is dented. One pane is cracked. It's cold.

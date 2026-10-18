@@ -25,19 +25,41 @@ export class Game {
   }
 
   frame = (now) => {
+    // Always ask for the next frame first, so a mistake in a scene can't stop
+    // the loop dead (which looks like the game freezing).
+    requestAnimationFrame(this.frame);
     const dt = Math.min(Math.max(0, (now - this.lastTime) / 1000), MAX_FRAME_SECONDS);
     this.lastTime = now;
-
-    this.scene.update(dt, this.input);
-    this.input.endFrame();
-
     const { ctx } = this;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
-    this.scene.draw(ctx);
+    try {
+      if (!this.error) this.scene.update(dt, this.input);
+      this.input.endFrame();
 
-    requestAnimationFrame(this.frame);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+      this.scene.draw(ctx);
+    } catch (error) {
+      // Stop the scene where it is and say what went wrong, on screen, so it
+      // can be reported rather than just freezing.
+      if (!this.error) console.error(error);
+      this.error ??= error;
+    }
+    if (this.error) this.drawError(ctx);
   };
+
+  drawError(ctx) {
+    // The first line of the stack in the game's own code: where it broke.
+    const at = String(this.error?.stack ?? '').split('\n').find((line) => line.includes('/src/')) ?? '';
+    const where = at.match(/src\/[^)\s]+/)?.[0] ?? '';
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = 'rgba(40, 0, 10, 0.92)';
+    ctx.fillRect(0, 0, ctx.canvas.width, 96);
+    ctx.fillStyle = '#ffd0d8';
+    ctx.font = '20px monospace';
+    ctx.fillText('Something broke. Please report this:', 12, 28);
+    ctx.fillText(String(this.error?.message ?? this.error).slice(0, 90), 12, 56);
+    ctx.fillText(where.slice(0, 90), 12, 84);
+  }
 }

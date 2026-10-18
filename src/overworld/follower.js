@@ -36,10 +36,13 @@ export class Follower {
     this.time = 0;
     // The hero's recent path, newest last.
     this.trail = [{ x, y }];
+    // Up on a block (the hero's `ground` where they walked): drawn up there,
+    // and after the block (see Player.sortY).
+    this.ground = 0;
   }
 
   get sortY() {
-    return this.y;
+    return this.ground > 0 ? this.y + T - 1 : this.y;
   }
 
   // Put them at a spot, forgetting the path (arriving in a room, or off the rope).
@@ -47,6 +50,7 @@ export class Follower {
     this.x = x;
     this.y = y;
     this.trail = [{ x, y }];
+    this.ground = 0;
     this.walking = false;
   }
 
@@ -59,7 +63,7 @@ export class Follower {
   update(dt, hero) {
     this.time += dt;
     const last = this.trail[this.trail.length - 1];
-    if (Math.hypot(hero.x - last.x, hero.y - last.y) >= TRAIL_STEP) this.trail.push({ x: hero.x, y: hero.y });
+    if (Math.hypot(hero.x - last.x, hero.y - last.y) >= TRAIL_STEP) this.trail.push({ x: hero.x, y: hero.y, ground: hero.ground });
     // Walk back along the path from the hero until we're GAP behind.
     let remaining = GAP;
     let target = this.trail[this.trail.length - 1];
@@ -69,7 +73,7 @@ export class Follower {
       const seg = Math.hypot(a.x - b.x, a.y - b.y);
       if (seg >= remaining) {
         const k = remaining / seg;
-        target = { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k };
+        target = { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k, ground: (k < 0.5 ? a : b).ground };
         // Everything before this point is history.
         this.trail.splice(0, i - 1);
         remaining = 0;
@@ -79,6 +83,7 @@ export class Follower {
       }
     }
     if (this.trail.length > 400) this.trail.splice(0, this.trail.length - 400);
+    this.ground = target.ground ?? 0;
     const dx = target.x - this.x;
     const dy = target.y - this.y;
     const distance = Math.hypot(dx, dy);
@@ -111,15 +116,21 @@ export class Follower {
     return this.frames[`${this.dir}${step ? 'Step' : 'Idle'}`];
   }
 
+  // Their shadow in the sun (see shadows.js).
+  shadow() {
+    return this.hidden ? null : { image: this.frame, x: this.x, y: this.y - this.ground };
+  }
+
   draw(ctx, camera) {
     if (this.hidden) return;
     const sprite = this.frame;
     const x = Math.round(this.x) - Math.floor(sprite.width / 2) - camera.x;
     // Members without step frames bob along instead.
     const bob = !this.frames && this.walking && Math.floor(this.time / BOB_SECONDS) % 2 ? 1 : 0;
-    const y = Math.round(this.y) - sprite.height - bob - camera.y;
+    const feet = Math.round(this.y) - this.ground;
+    const y = feet - sprite.height - bob - camera.y;
     ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-    ctx.fillRect(Math.round(this.x) - 5 - camera.x, Math.round(this.y) - 3 - camera.y, 10, 3);
+    ctx.fillRect(Math.round(this.x) - 5 - camera.x, feet - 3 - camera.y, 10, 3);
     ctx.drawImage(sprite, x, y);
   }
 }

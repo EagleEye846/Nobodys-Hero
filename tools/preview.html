@@ -29,7 +29,10 @@ ERROR: ${m}`; };
 // ?equip=hero or ?equip=vesper shows the EQUIP menu on that person's tabs
 // (&slot=armor for armor, &index=2 for the cursor), with Ves in the party
 // and all her gear owned. ?allyturn=vesper shows a battle on her turn
-// (&phase=spells for her SPELLS list).
+// (&phase=spells for her SPELLS list). ?bossphase=usurper&stage=1 (0, 1, 2)
+// puts a boss with `phases` in that phase, plays every one of its attacks
+// for that phase through, then its turn's end, and draws the box mid-attack
+// (&pattern=<name> to draw that one, &t=3 seconds in).
 import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from './src/config.js';
 import { createScreen } from './src/engine/screen.js';
 import { loadTextFiles } from './src/engine/textLoader.js';
@@ -155,6 +158,39 @@ if (params.get('check')) {
   ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
   battle.draw(ctx);
   report.textContent = 'ALLYTURN DONE';
+} else if (params.get('bossphase')) {
+  const { BattleScene } = await import('./src/battle/battleScene.js');
+  const { ENEMIES } = await import('./src/data/enemies/index.js');
+  const { joinParty } = await import('./src/characters/party.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  WORLD_STATE.metShadow = true;
+  joinParty('vesper');
+  const battle = new BattleScene([ENEMIES[params.get('bossphase')]], () => {}, 'vigil');
+  const foe = battle.phased;
+  const stage = Number(params.get('stage') ?? 0);
+  for (let i = 1; i <= stage; i++) battle.enterPhase(foe, i);
+  if (battle.flame && stage > 1) battle.flame.stage = battle.flame.stages;
+  battle.hero.hp = battle.hero.maxHp = 9999;
+  const names = battle.bossPhase().patterns.map((p) => p.name);
+  const step = (seconds) => { for (let t = 0; t < seconds; t += 1 / 60) battle.update(1 / 60, noInput); };
+  const lines = [];
+  for (const name of [...names, params.get('pattern') ?? names[0]]) {
+    foe.lastPattern = null;
+    battle.attackers = [foe];
+    battle.pickPattern = () => name;
+    battle.phase = 'dodge';
+    battle.phaseTime = 0;
+    battle.startAttack();
+    const last = name === (params.get('pattern') ?? names[0]) && lines.length === names.length;
+    step(last ? Number(params.get('t') ?? 3) : battle.turnLength + 0.5);
+    if (!last) lines.push(`${name}: ok, hero HP ${battle.hero.hp}, flame ${battle.flame ? `${battle.flame.stage} guard ${battle.flame.guard}` : '-'}`);
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  battle.draw(ctx);
+  report.textContent = `${lines.join('\n')}\nBOSSPHASE DONE ${battle.bossPhase().id}`;
 } else if (params.get('poke')) {
   // Presses Z on every prop in every room (or one room), reading through what
   // it says, and reports anything that throws.

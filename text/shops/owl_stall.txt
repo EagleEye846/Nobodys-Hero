@@ -1,0 +1,73 @@
+# HOLLIS'S STALL: Hollis, an old snowy owl, on the Last Shelf just below the
+# summit. Big, round, white, with yellow eyes that have watched the mountain
+# a very long time. Speaks slowly, says little, misses nothing. Trades with
+# the few climbers who get this high, and doesn't ask why they've come.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Hoo. Two of you. Sit, if you like. I am Hollis. This is the last stall on the mountain.
+
+[menu_prompt]
+Take your time. I have plenty.
+
+[buy_prompt]
+Food, up top. It's cold, where you're going. Then iron, and feathers.
+
+[sell_prompt]
+I'll take what you don't need. You'll want to travel light.
+
+[talk_prompt]
+Talk, then. I listen better than I talk.
+
+[bought]
+Yours. Wear it well.
+
+[bought_item]
+Eat it before you need it, not after.
+
+[bought_skill]
+Hold still. There. You'll feel it at the top.
+
+[skill_sold_out]
+That was the last one. I only ever had the one.
+
+[sold]
+Hoo. Thank you.
+
+[nothing_to_sell]
+Nothing to sell? Good. You've packed well.
+
+[cant_sell]
+You're still wearing that. Take it off first, out there.
+
+[owned]
+You have one already. One is enough.
+
+[wont_fit]
+Not for you. For the girl with the umbrella. Bring her close.
+
+[too_poor]
+Not enough. I'm sorry. Owls don't haggle.
+
+# Bought with your bag full: it went to storage.
+[bought_stored]
+Your bag is full. It's gone to the storage chest. It will be at the next save crystal.
+
+[bag_full]
+Your bag is full. Eat something, or sell me something.
+
+[farewell]
+Go carefully. Hoo.
+
+[talk: Who are you?]
+Hollis. An owl. I have kept this shelf a long time, longer than the village below has had a name. Climbers come. I sell them supper.
+
+[talk: The summit]
+Up the stair. Not far now. The wind up there is too strong for wings, so I keep to the shelf, and listen to it.
+
+[talk: An owl shop?]
+Things fall up here. Iron, from the sky. Feathers. Nuts, from somewhere. I tidy them up. Somebody may as well have them.
+
+[talk: Ves]
+Hoo. She holds on to that umbrella the way I hold on to this perch. Keep close to her.

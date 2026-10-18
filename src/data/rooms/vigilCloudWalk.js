@@ -95,7 +95,6 @@ export const VIGIL_CLOUD_WALK = {
     { sprite: 'swing_ring', x: 26, y: 20 },
     { sprite: 'swing_ring', x: 24, y: 18 },
     { sprite: 'grapple_ring', x: 24, y: 16, grapple: true },
-    { sprite: 'chest', x: 40, y: 16, text: 'cloud_chest', gives: 'rest_soup', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'street_lamp', x: 6, y: 13, text: 'cloud_lamp', nightText: 'cloud_lamp_night' },
     { sprite: 'street_lamp', x: 14, y: 13, text: 'cloud_lamp', nightText: 'cloud_lamp_night' },
     { sprite: 'banner_pole', x: 5, y: 16, text: 'cloud_banner' },
@@ -117,5 +116,9 @@ export const VIGIL_CLOUD_WALK = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // A frostbite in the snow, and a craghorn on the lower walk.
+  npcs: [
+    { enemy: 'frostbite', x: 34, y: 15, patrol: [34, 34], behaviour: 'disguise', reach: 3 },
+    { enemy: 'craghorn', x: 30, y: 28, patrol: [22, 39] },
+  ],
 };

@@ -1,0 +1,97 @@
+# THE ICE CAVES: things you can read and look at in the caves behind the
+# Weathervane Shelf (iceCaveThroat.js, iceCaveGrotto.js, iceCaveHall.js).
+# Ves is with you; she doesn't speak in these.
+
+# What a save point says when you save here.
+[save_point]
+The crystal's glow fills the cave, and every ice crystal in the walls answers it.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+
+(Your browser isn't letting the game save.)
+
+# What an emptied chest says.
+[chest_empty]
+An empty chest, rimed with frost on the inside.
+
+# --- Shared ---
+
+[ice_wall]
+Cold rock, with ice running through it in veins. It's slightly see-through, if you look long enough. You'd rather not.
+
+[ice_stalactite]
+An icicle as long as you are, hanging from the roof. It drips, very slowly, onto the exact spot where you're standing.
+
+[ice_stalagmite]
+A spike of ice grown up from the floor, one drip at a time, for longer than anyone has been alive.
+
+[ice_crystals]
+A cluster of ice crystals, glowing a soft blue from the inside. Nobody knows why they glow. They hum, a little, if you put your ear to them.
+
+[ice_floor]
+Frozen solid and smooth as glass. Mind your feet.
+
+[ice_block]
+A block of stone that fell from the roof long ago. Ice has glued it to the floor.
+
+# --- The Glittering Throat ---
+
+[throat_sign]
+THE ICE CAVES. TURN BACK. THE HERO WILL NOT NEED TO COME THIS WAY.
+
+Underneath, scratched in later: "Turned out we did. Mind the boulders. - L."
+
+[throat_chest]
+A chest tucked in a hidden alcove, behind a wall that wasn't. Somebody hid it here on purpose.
+
+# --- The Goblin's Grotto ---
+
+[grotto_stall]
+Crates, stacked into a counter. Prices are chalked on the side, then rubbed out, then chalked on again, higher.
+
+[grotto_barrel]
+A barrel of something that smells sweet and very strong. There's a ladle hanging on it, and a sign: NOT FOR CLIMBERS.
+
+[grotto_lamp]
+A little lamp, burning with a steady, greenish flame. Whatever it burns, it isn't oil.
+
+[grotto_chest]
+A chest in the darkest corner of the grotto. You'd never have seen it without a light.
+
+# --- The Hall of Glass ---
+
+[hall_sign]
+THE HALL OF GLASS. Walk soft. The walls listen.
+
+[hall_upper_chest]
+A chest at the dead end of the upper hall, furred with frost. Inside, a muff of white fur, far too small for you.
+
+[hall_chest]
+Another chest behind another wall that wasn't. Somebody in these caves likes their secrets.
+
+# --- The Roost ---
+
+[roost_bat]
+A little bat, hanging from the ice, wrapped up in its own wings. It opens one eye at you, and closes it again.
+
+[roost_remains]
+The ROOST MOTHER, frozen where she fell. Frost has filled in every fold of her wings.
+
+[roost_pup]
+One of her little ones, pressed up against her. It doesn't fly off when you come close. It doesn't want to leave her.
+
+[roost_onward]
+A tunnel climbing up out of the roof of the Roost, plugged with ice. Cold air whistles down through the cracks, from somewhere very high above.
+
+# --- The Ice Chimney ---
+
+[chimney_daylight]
+Daylight, at the top of the shaft. Real daylight. Cold air pours down out of it, and it smells of snow.
+
+[chimney_ice]
+A waterfall that froze halfway down and never finished falling. Rings are hammered into it, a long time ago.
+
+[chimney_chest]
+A chest up on the ice blocks, out of reach of anything that can't jump. Something sweet inside.

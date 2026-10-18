@@ -26,3 +26,19 @@ The speech, if you're wondering, begins "O HERO" and ends, some time later, with
 Between you and me: I don't mind if you're the Hero or not. I'd just like to say the speech to somebody, once.
 
 Mind Nan, the old goat. She bites. Affectionately.
+
+[first after ves_in_the_chapel]
+Ahem! HERO! And... young Ves! Together! Splendid. SPLENDID.
+
+Horace, Head Herald, at your service. I always said that girl would go up the stair one day. Well. I said it to Nan. Nan bit me.
+
+Keep each other warm up there. And do come back down for the speech. It's still about four hours.
+
+[repeat after ves_in_the_chapel]
+I've been Head Herald for thirty years. My father before me, and his before him. All called Horace. It saves repainting the sign.
+
+The speech, if you're wondering, begins "O HERO" and ends, some time later, with a fanfare. I've never had a chance to say the middle bit aloud.
+
+Between you and me: I don't mind if you're the Hero or not. I'd just like to say the speech to somebody, once.
+
+Mind Nan, the old goat. She bites. Affectionately.

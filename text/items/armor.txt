@@ -39,6 +39,25 @@ Mail forged for the Hero and carried most of the way up the mountain. It weighs 
 [snow_mantle]
 A white mantle quilted from a hundred winters' worth of patience. Sold at Rest Stores to anyone who makes it that far.
 
+[smiths_apron]
+A heavy leather apron, scorched in a hundred places. Tilda had a spare. Tilda has a spare of everything.
+
+[riveted_gambeson]
+A quilted coat with iron plates riveted inside. Warm, solid, and a little hard to think in.
+
+# Sold by Rimble, the goblin in the ice caves.
+[crystal_cuirass]
+A breastplate of clear ice crystal, grown rather than forged. It's lighter than it looks, and warm, somehow.
+
+[aurora_scarf]
+A long scarf that shimmers green and violet when it moves, like the sky on the coldest nights. It's made for Ves.
+
+[rimemoth_shawl]
+A shawl woven from the frosty silk ice moths leave on the cave walls. It glitters when you cast.
+
+[patchwork_parka]
+A huge parka, patched by Rimble with forty-one other coats. Warm, thick, and somehow always a little bit too long.
+
 # Ves's coats, scarves and mittens. Only she can wear them (see `wielder` in
 # src/data/armor.js). Enemies never aim at her, so they look after you.
 [evening_coat]
@@ -52,3 +71,27 @@ Big puffy mittens. Ves claps them every time you graze a bullet, which shouldn't
 
 [oilskin_greatcoat]
 A herald's oilskin, made for keeping watch on the Lookout in all weathers. Heavy as a door, and about as good at being stood behind.
+
+[spark_proof_cape]
+A short cape of felted wool, the kind Tilda wears at the forge. Sparks bounce off it. So do snowballs, and so, Ves hopes, will everything else.
+
+[gale_ribbon_scarf]
+A long scarf of coral ribbon that streams out in the slightest wind. Ves says it tells her which way to dodge. It mostly tells her it's windy.
+
+[cragwool_poncho]
+A heavy poncho of grey mountain-goat wool, cut wide enough to hide two people behind. That's the idea.
+
+[icefox_muff]
+A muff of soft white fur, still warm from somewhere. Ves keeps one hand in it and the other on your sleeve.
+
+[cavers_hood]
+A stiff leather hood with a brim, the kind cavers wear so nothing can drop on their heads. Ves wears it with the brim pulled very low.
+
+[owl_down_coat]
+A long coat quilted with owl down, the warmest thing you've ever worn. Spells seem to come easier with your hands warm.
+
+[snowfeather_shawl]
+A shawl of snowy feathers, soft as a cloud and heavier than it looks. Ves wraps it round you both when the wind gets up.
+
+[rimeweave_cloak]
+A cloak woven from frost-silk and lined with fleece. It sheds snow, ice and bad news, and it's warm enough to share.

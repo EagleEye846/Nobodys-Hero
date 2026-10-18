@@ -1,0 +1,59 @@
+# GLINTLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/glintling.js.
+
+[intro]
+A crystal in the wall winks at you. Then it hops down. A GLINTLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+GLINTLING is shining a little rainbow right in your eyes. On purpose.
+
+GLINTLING giggles. It sounds like icicles tinkling.
+
+GLINTLING has stuck itself to the wall and is pretending to be a crystal. It's not very good at it.
+
+GLINTLING is making shapes on the cave roof with the light. One of them is rude.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+Hee hee!
+
+Look!
+It's YOU!
+...Backwards!
+
+Bet you can't
+catch the light!
+
+Sparkle sparkle!
+
+Over here!
+No, here!
+Hee!
+
+I'm not a rock.
+I'm a PRISM.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/glintling.js.
+[talk: Inspect]
+GLINTLING - HP 140
+A little cluster of living ice crystal. It plays with the light, and with anyone it can find.
+
+[talk: Make a funny face]
+You make the silliest face you can. GLINTLING laughs so hard it falls over and has to be picked back up.
+
+[talk: Cover the light]
+You cup your hands over GLINTLING. Without any light it goes dull and grumpy, but it does stop.
+
+[talk: Admire the colours]
+You gaze at the colours GLINTLING throws on the wall. It glows so proudly it makes a whole rainbow.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+GLINTLING shatters into glitter that tinkles across the floor, still giggling as it goes.
+
+[pacified]
+GLINTLING hops back up the wall and settles in with the crystals, throwing little rainbows after you as you go.

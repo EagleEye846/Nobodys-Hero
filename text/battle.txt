@@ -6,6 +6,41 @@
 Danger! Your shadow peels up off the floor and stands between you and the enemy.
 It doesn't look like you. It looks like a Hero.
 
+# Running away (RUN), and getting away: a line about where you are. The
+# section is the area the fight is in (see battleArea in overworldScene.js):
+# ruins, stair (the green lower mountain), vigil (the snowy heights), cave
+# (any cave), rest (Heralds' Rest). One is picked at random.
+[escape: ruins]
+You slipped away into the ruins!
+
+You ducked behind a pillar and kept going!
+
+[escape: stair]
+You slipped away behind the rocks!
+
+You ducked into the long grass and didn't look back!
+
+You scrambled off down the path and out of sight!
+
+[escape: vigil]
+You slipped away into the snow!
+
+You ducked behind a drift and kept low until it gave up!
+
+The wind threw snow between you, and you were gone!
+
+[escape: cave]
+You slipped away into the dark!
+
+You ducked behind a stalagmite and held your breath!
+
+You squeezed into a crack in the ice until it went away!
+
+[escape: rest]
+You slipped away down a side street!
+
+You ducked behind a snowman. It worked!
+
 # --- VES, on her own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
 
 # Shown in the panel while she picks what to do. One is picked at random.

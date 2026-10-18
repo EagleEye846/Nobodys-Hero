@@ -54,11 +54,14 @@ export const VIGIL_LAMPLIGHTERS_HUT = {
     { sprite: 'fireplace_cold', x: 1, y: 2, text: 'hut_stove' },
     { sprite: 'chalk_tally', x: 5, y: 2, text: 'hut_chalk', notice: true },
     { sprite: 'lamp_ladder', x: 8, y: 2, text: 'hut_ladder' },
-    // A cot: sleep in it to restore your HP (and a dream, once there's one written).
+    // A cot: sleep in it to restore your HP. The first night, you dream (hutDream.js).
     { sprite: 'bed', x: 9, y: 4, text: 'hut_cot', rest: true, dream: 'hut_dream' },
     { sprite: 'oil_can', x: 4, y: 3, text: 'hut_oil' },
     { sprite: 'crates', x: 1, y: 6, text: 'hut_crates' },
     { sprite: 'savepoint', x: 9, y: 7, save: true },
+    // Ves, sitting up by the door to think, from when she cries over the tally
+    // (vesInTheHut.js) until you've slept (hutDream.js).
+    { sprite: 'vesper_sit', x: 3, y: 7, text: 'hut_ves_thinking', animation: 'ves_sit', speed: 1.2, member: 'vesper', after: 'ves_in_the_hut', until: 'hut_dream' },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

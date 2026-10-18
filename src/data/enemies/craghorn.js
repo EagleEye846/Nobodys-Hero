@@ -5,6 +5,8 @@ import { CRAGHORN_PALETTE, CRAGHORN_SPRITE } from '../art/craghorn.js';
 // Everything it says is in text/enemies/craghorn.txt.
 export const CRAGHORN = {
   name: 'CRAGHORN',
+  // How it gets about in a room (GAITS in src/overworld/npc.js): it leaps, like a goat.
+  gait: 'bound',
   textFile: 'enemies/craghorn.txt',
   sprite: { rows: CRAGHORN_SPRITE, palette: CRAGHORN_PALETTE },
   maxHp: 180,

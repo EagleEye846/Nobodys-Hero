@@ -6,10 +6,15 @@ import * as caveGallery from './caveGallery.js';
 import * as climbStart from './climbStart.js';
 import * as flowerRoom from './flowerRoom.js';
 import * as goatTrack from './goatTrack.js';
+import * as iceCaveGrotto from './iceCaveGrotto.js';
+import * as iceCaveHall from './iceCaveHall.js';
+import * as iceCaveRoost from './iceCaveRoost.js';
+import * as iceCaveThroat from './iceCaveThroat.js';
 import * as lanternHall from './lanternHall.js';
 import * as pillarRoom from './pillarRoom.js';
 import * as restBelltower from './restBelltower.js';
 import * as restChapel from './restChapel.js';
+import * as restForge from './restForge.js';
 import * as restGate from './restGate.js';
 import * as restHall from './restHall.js';
 import * as restHouseMarta from './restHouseMarta.js';
@@ -23,17 +28,31 @@ import * as startRoom from './startRoom.js';
 import * as taperHall from './taperHall.js';
 import * as taperHome from './taperHome.js';
 import * as taperKitchen from './taperKitchen.js';
+import * as vigilBrokenSpan from './vigilBrokenSpan.js';
+import * as vigilCloudBank from './vigilCloudBank.js';
 import * as vigilCloudWalk from './vigilCloudWalk.js';
+import * as vigilGaleFace from './vigilGaleFace.js';
+import * as vigilHighShelf from './vigilHighShelf.js';
 import * as vigilHollow from './vigilHollow.js';
+import * as vigilIceChimney from './vigilIceChimney.js';
 import * as vigilIceFace from './vigilIceFace.js';
 import * as vigilKnifeEdge from './vigilKnifeEdge.js';
+import * as vigilLamplightersHut from './vigilLamplightersHut.js';
+import * as vigilLamplightersLedge from './vigilLamplightersLedge.js';
+import * as vigilOwlShelf from './vigilOwlShelf.js';
 import * as vigilRidge from './vigilRidge.js';
+import * as vigilSecondCairn from './vigilSecondCairn.js';
 import * as vigilShoulder from './vigilShoulder.js';
 import * as vigilSpiral from './vigilSpiral.js';
+import * as vigilSpireNeck from './vigilSpireNeck.js';
+import * as vigilSummit from './vigilSummit.js';
+import * as vigilVaneGardens from './vigilVaneGardens.js';
+import * as vigilWeathervanes from './vigilWeathervanes.js';
+import * as vigilWindStair from './vigilWindStair.js';
 import * as wayOut from './wayOut.js';
 import * as yourRoom from './yourRoom.js';
 
-const MODULES = [beyondRuins, caveEntry, caveGallery, climbStart, flowerRoom, goatTrack, lanternHall, pillarRoom, restBelltower, restChapel, restGate, restHall, restHouseMarta, restHousePottle, restInn, restLookout, restSquare, restStores, sheerFace, startRoom, taperHall, taperHome, taperKitchen, vigilCloudWalk, vigilHollow, vigilIceFace, vigilKnifeEdge, vigilRidge, vigilShoulder, vigilSpiral, wayOut, yourRoom];
+const MODULES = [beyondRuins, caveEntry, caveGallery, climbStart, flowerRoom, goatTrack, iceCaveGrotto, iceCaveHall, iceCaveRoost, iceCaveThroat, lanternHall, pillarRoom, restBelltower, restChapel, restForge, restGate, restHall, restHouseMarta, restHousePottle, restInn, restLookout, restSquare, restStores, sheerFace, startRoom, taperHall, taperHome, taperKitchen, vigilBrokenSpan, vigilCloudBank, vigilCloudWalk, vigilGaleFace, vigilHighShelf, vigilHollow, vigilIceChimney, vigilIceFace, vigilKnifeEdge, vigilLamplightersHut, vigilLamplightersLedge, vigilOwlShelf, vigilRidge, vigilSecondCairn, vigilShoulder, vigilSpiral, vigilSpireNeck, vigilSummit, vigilVaneGardens, vigilWeathervanes, vigilWindStair, wayOut, yourRoom];
 
 // Every room, by its id. Doors and saves refer to rooms by these ids.
 export const ROOMS = Object.fromEntries(

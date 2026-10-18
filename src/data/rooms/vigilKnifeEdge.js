@@ -105,7 +105,6 @@ export const VIGIL_KNIFE_EDGE = {
     { sprite: 'swing_ring', x: 26, y: 18 },
     { sprite: 'grapple_ring', x: 26, y: 16, grapple: true },
     { sprite: 'waymark', x: 10, y: 15, text: 'knife_waymark' },
-    { sprite: 'chest', x: 7, y: 16, text: 'knife_chest', gives: 'herald_honeycake', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'cairn', x: 36, y: 14, text: 'knife_cairn' },
     { sprite: 'chough', x: 34, y: 10, text: 'ridge_chough', walkable: true },
     { sprite: 'tally_stone', x: 28, y: 10, text: 'knife_tally' },
@@ -119,5 +118,8 @@ export const VIGIL_KNIFE_EDGE = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // A ringer, disguised as a climbing ring on the edge.
+  npcs: [
+    { enemy: 'ringer', x: 18, y: 15, patrol: [18, 18], behaviour: 'disguise', reach: 3 },
+  ],
 };

@@ -6,6 +6,7 @@ import { SONGS } from '../data/music/index.js';
 import { lookSprite } from '../overworld/scenePlayer.js';
 import { drawText, textWidth } from '../ui/text.js';
 
+// The Ruins' credits, unless the end of a chapter names its own.
 const TEXT_FILE = 'credits.txt';
 const SONG = 'credits';
 
@@ -31,11 +32,13 @@ const STARS = 70;
 // reaches them, like a karaoke line. Nobody sings; the words just glow.
 // Behind them, a night sky slowly turns to dawn over the length of the song,
 // like the end of a long walk. When it's over, `next()` gives the scene to go on to.
+// `song` and `text` pick another chapter's credits song and cards.
 export class CreditsScene {
-  constructor(next) {
+  constructor(next, { song = SONG, text = TEXT_FILE } = {}) {
     this.next = next;
     this.time = 0;
-    this.song = SONGS[SONG];
+    this.songName = song;
+    this.song = SONGS[song];
     const stepSeconds = 60 / this.song.bpm / this.song.stepsPerBeat;
     const steps = this.song.order.reduce((sum, name) => sum + Object.values(this.song.sections[name])[0].length, 0);
     this.duration = steps * stepSeconds;
@@ -53,7 +56,7 @@ export class CreditsScene {
 
     // Each section of the text file is a card: a heading, names, and maybe a
     // character (@look) beside it.
-    const sections = Object.values(textFile(TEXT_FILE));
+    const sections = Object.values(textFile(text));
     const span = (this.duration - CARDS_END_BEFORE - FIRST_CARD_AT) / sections.length;
     this.cards = sections.map(([entry = ''], i) => {
       const lines = entry.split('\n');
@@ -73,13 +76,13 @@ export class CreditsScene {
 
   enter(game) {
     this.game = game;
-    music.play(SONG);
+    music.play(this.songName);
   }
 
   // Where we are in the song: its own clock while it plays (so the words land
   // on the notes), or the scene's if sound isn't allowed.
   get clock() {
-    return music.songName === SONG && music.songTime !== null ? music.songTime : this.time;
+    return music.songName === this.songName && music.songTime !== null ? music.songTime : this.time;
   }
 
   update(dt, input) {

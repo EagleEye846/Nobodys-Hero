@@ -24,7 +24,7 @@ Jam that glows faintly in the dark. The Lantern Moth was saving it.
 A drop of a Waxling's wax, set like a sweet. It tastes like candles. Of course it does.
 
 [dark_chocolate]
-Chocolate as dark as a Shade. It's gone if you look away.
+Chocolate as dark as a Duskling. It's gone if you look away.
 
 [pillar_mint]
 A Columneon's breath mint, shaped like a tiny pillar. Very convincing.
@@ -34,6 +34,33 @@ Crumbly shortbread pressed into the shape of a stair step. A Loose Step gave it 
 
 [crag_cheese]
 Sharp goat's cheese wrapped in a dock leaf, aged on a mountain for longer than you'd think.
+
+[shiny_button]
+A butterscotch sweet pressed in the shape of a brass button, polished to a shine. The Chough insisted you have it. It was laughing.
+
+[snow_cone]
+A cone of a Frostbite's very best snow, packed tight, with frostberry syrup on top. It gave you a little of itself. That's practically a hug.
+
+[filings_toffee]
+Dark treacle toffee with something grey flecked through it. Surprisingly chewy. The Ringer swears it's good for the joints.
+
+[rime_jam]
+Pale jam that glitters like frost on a window. A Rimewing was keeping it by a lamp, to stay warm.
+
+[ice_shortbread]
+Shortbread in the shape of a stair step, iced in pale blue. Its brother's recipe, but colder.
+
+[geode_candy]
+A lump of plain grey sugar that cracks open to show blue crystal candy inside. The Stone Golem grew it. Slowly.
+
+[frost_nectar]
+A thimble of nectar from the flowers that grow by the cave crystals, frozen into a pale blue bead. Ice Moths sip it by the glow.
+
+[glint_drop]
+A clear boiled sweet that throws little rainbows when you hold it up. A Glintling swapped it for nothing at all.
+
+[roost_plum]
+A plum from the Roost Mother's winter store, frozen sweet as jam. Her pup brought it to Ves, after. Ves couldn't keep it.
 
 [candle_cake]
 A cake shaped like a candle, from Taper's kitchen. "FOR OUR GUEST."
@@ -62,6 +89,9 @@ Glow dust stirred into the wax. It burns bright and long, and makes you feel bra
 [ash_candle]
 Shadow ash in dark wax. It gives off more smoke than light, and the smoke hides you well.
 
+[lamplight_candle]
+Lit from the lamplighter's lantern on the summit. Shadows lean away from it.
+
 [climbers_ration]
 Hard biscuit, dried fruit and a square of chocolate, sealed in waxed paper. Made for a long way up.
 
@@ -86,3 +116,32 @@ Fudge so rich the heralds only cut it for special occasions. You, apparently, ar
 
 [rest_soup]
 Greta's soup, in a jar with a cloth over the top. Whatever is in it, it fixes everything.
+
+# Sold at Tilda's forge, cooked on the same fire as the iron.
+[forge_loaf]
+A round loaf baked on the forge's back shelf. The crust rings when you tap it. The middle is soft and still warm.
+
+[mulled_cider]
+Apple cider heated with a hot poker straight out of the coals. It hisses when she does it. So will you, if you drink it too fast.
+
+[smiths_pasty]
+A fat pasty with a crimped edge, made to be eaten one-handed while the other hand holds a hammer.
+
+[iron_pot_stew]
+Root stew that has been simmering in the same iron pot since before Tilda was born. Nobody has ever got to the bottom of it.
+
+# Rimble's cave cooking, sold in the ice caves.
+[lichen_crisps]
+Cave lichen, fried crisp in a pan over a candle. Salty and crunchy, and only a little bit purple.
+
+[mystery_jerky]
+Chewy, smoky, and salty. Rimble won't say what it is. "Meat," he says. "From an animal. Probably."
+
+[glowcap_skewer]
+Glowing cave mushrooms roasted on a stick. They keep glowing after you eat them, which is fine. Rimble says it's fine.
+
+[seed_cake]
+A dense round cake of seeds, nuts and frozen berries, pressed together by Hollis. It keeps forever. So does the owl.
+
+[goblin_hotpot]
+A hot pot of everything Rimble found that week, stewed for days. It's lumpy, it's brown, and it's delicious.

@@ -60,6 +60,7 @@ export const TILE_INFO = {
   f: { name: 'Fence', note: 'picket fence' },
   k: { name: 'Cave rock', note: 'cave rock overhead' },
   K: { name: 'Cave wall', note: 'cave wall' },
+  G: { name: 'False cave wall', note: 'a cave wall you can walk through (a secret)' },
   q: { name: 'Cave floor', note: 'cave floor' },
   v: { name: 'Stalactite', note: 'stalactite (walk under it)' },
   '^': { name: 'Stalagmite', note: 'stalagmite' },
@@ -238,6 +239,9 @@ const propLiteral = (prop) => {
   if (prop.seenInLight) out.seenInLight = true;
   if (prop.notice) out.notice = true;
   if (prop.grapple) out.grapple = true;
+  if (prop.member) out.member = prop.member;
+  if (prop.vane) out.vane = true;
+  if (prop.drift) out.drift = prop.drift;
   return inline(out);
 };
 const doorLiteral = ({ x, y, w, h, to, spawn }) => inline({ x, y, w, h, to, spawn: { x: spawn.x, y: spawn.y } });
@@ -248,6 +252,26 @@ const npcLiteral = ({ art, enemy, x, y, patrol, behaviour, ambush, reach }) => {
   const how = behaviour ?? (ambush ? 'ambush' : 'patrol');
   return inline({ art, enemy, x, y, patrol: [patrol[0], patrol[1]], behaviour: how === 'patrol' ? undefined : how, reach });
 };
+
+// Room settings the editor doesn't edit itself, written back as they were
+// (with their usual comment) so saving a room never loses them. Any other
+// setting it doesn't know is kept too, after these.
+const ROOM_SETTINGS = [
+  ['ambience', 'The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).'],
+  ['indoors', "Indoors: the screen's edges darken, like the Ruins."],
+  ['lamplight', "Lit only by what's lit in it (see src/overworld/lamplight.js)."],
+  ['cave', 'Underground: cave floor shows under anything standing here.'],
+  ['wraps', 'The outside of the spire: the left and right edges join up, and the room is drawn bent round the mountain.'],
+  ['vista', 'The view off the mountain (see src/overworld/vista.js): how high up it is, and which way you look.'],
+  ['snowy', 'Snow lies under anything that stands here.'],
+  ['weather', 'The weather over the room (see src/overworld/weather.js).'],
+  ['wind', 'How hard the wind blows the snow sideways.'],
+  ['birds', 'Birds circling the spire.'],
+  ['climbWind', 'Gusts that shove you while you hang from a ring (see climbing.js): which way, how often, how long.'],
+  ['vaneWind', 'Which way the wind blows before anyone turns a weathervane (see weathervanes.js).'],
+];
+// Everything roomModule writes itself.
+const WRITTEN = new Set(['id', 'name', 'area', 'music', 'dark', 'tiles', 'playerStart', 'doors', 'cutscenes', 'geysers', 'gusts', 'whirls', 'textFile', 'props', 'looks', 'tileTexts', 'npcs', ...ROOM_SETTINGS.map(([key]) => key)]);
 
 // room: tiles as strings or arrays. header: the file's comment block to keep.
 export function roomModule(room, constName, header) {
@@ -268,6 +292,8 @@ export function roomModule(room, constName, header) {
     '  // The song that plays here (a file in src/data/music/).',
     `  music: ${room.music ? quote(room.music) : 'null'},`,
     ...(room.dark ? ['  // Dark: you only see what light reaches (your candle, lanterns). 0 to 1, how dark.', `  dark: ${room.dark},`] : []),
+    ...ROOM_SETTINGS.filter(([key]) => room[key] !== undefined && room[key] !== null).flatMap(([key, note]) => [`  // ${note}`, `  ${key}: ${inline(room[key])},`]),
+    ...Object.keys(room).filter((key) => !WRITTEN.has(key) && room[key] !== undefined).map((key) => `  ${key}: ${inline(room[key])},`),
     '',
     '  tiles: [',
     tiles.map((row) => `    ${quote(row)},`).join('\n'),
@@ -291,6 +317,12 @@ export function roomModule(room, constName, header) {
     ...(room.gusts?.length ? [
       '  // Updrafts: small wind geysers that toss you to tile `to` in this room (anyone, Ves or not).',
       list('gusts', room.gusts, gustLiteral),
+      '',
+    ] : []),
+    ...(room.whirls?.length ? [
+      "  // Whirlwinds (src/overworld/weathervanes.js): step in and you're flung downwind",
+      '  // until something solid stops you. The weathervanes turn the wind.',
+      list('whirls', room.whirls, ({ x, y }) => inline({ x, y })),
       '',
     ] : []),
     '  // Things you can press Z on. `text` names a section of this room\'s text file;',

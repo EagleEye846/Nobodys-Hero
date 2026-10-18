@@ -1,0 +1,58 @@
+# CHOUGH
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/chough.js.
+
+[intro]
+A CHOUGH drops out of the sky, lands on a rock, and laughs at you!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CHOUGH is pretending to preen. It's watching you out of the corner of its eye.
+
+CHOUGH has watched six climbers come up this way. It's still laughing about the third one.
+
+CHOUGH's beak is the exact red of a warning sign.
+
+The wind tugs at your coat. CHOUGH rides it without flapping once.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+Chee-OW!
+
+Ha! Hahaha!
+Sorry. It's your face.
+
+You climb like
+a dropped sock!
+
+Ooh, what's that?
+Is it shiny?
+Give it.
+
+The last lot went up too.
+Never saw them again! Ha!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/chough.js.
+[talk: Inspect]
+CHOUGH - HP 120
+A mountain crow with a wicked sense of humour. It watched six climbers fail, and loved it.
+
+[talk: Wave arms]
+You wave your arms about. CHOUGH falls off its rock laughing.
+It hops back up, still giggling.
+
+[talk: Offer shiny thing]
+You hold out the shiniest thing in your pocket. CHOUGH's eyes go wide. It takes it very, very gently.
+
+[talk: Caw back]
+You caw. CHOUGH stares at you.
+Then it caws back, and the two of you have a short, rude conversation.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+CHOUGH tumbles away on the wind, cackling all the way down.
+
+[pacified]
+CHOUGH flaps up onto a ledge to watch you climb. It's hoping you'll do something funny.

@@ -9,7 +9,7 @@ export const RINGER_PALETTE = {
   M: '#8a8296', // iron
   O: '#5a5468', // iron in shadow
   r: '#a8603a', // rust
-  y: '#ffb347', // eyes
+  y: '#ffd25e', // eyes
   p: '#120c1c', // pupils
   R: '#c8a06a', // rope
   Y: '#8a6a3a', // rope in shadow
@@ -32,9 +32,9 @@ export const RINGER_SPRITE = [
   'kLLMk.......kRRRk',
   'kMMMMk.....kOOrOk',
   '.kMMMkk...kkOOOk.',
-  '.kMrMMOkkkOOOOOk.',
-  '..kMMMkkkkkOOOk..',
-  '...kMkOOOOOkOk...',
+  '.kMrMMMkkkMMOOOk.',
+  '..kMMMkkkkkMOOk..',
+  '...kMkMMMMMkOk...',
   '....kkOOrOOkkR...',
   '......kkkkk..RY..',
   '..............R..',

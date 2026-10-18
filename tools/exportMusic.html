@@ -29,6 +29,7 @@
   table { width: 100%; border-collapse: collapse; }
   td { padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
   td.title { font-family: var(--pixel); font-size: 22px; color: var(--text); }
+  tr.group td { font: 17px var(--pixel); color: var(--dim); text-transform: uppercase; letter-spacing: 1px; padding: 18px 8px 6px; }
   td.title small { display: block; font: 12px system-ui, sans-serif; color: var(--dim); }
   td.length { color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
   td.actions { text-align: right; white-space: nowrap; }
@@ -42,6 +43,7 @@
     td.title { grid-column: 1 / -1; padding-top: 12px; }
     td.status { width: auto; }
     tr { border-bottom: 1px solid var(--line); }
+    tr.group td { grid-column: 1 / -1; }
     .all { margin-left: 0; }
   }
 </style>
@@ -69,6 +71,8 @@
 </main>
 <script type="module">
 import { SONGS } from './src/data/music/index.js';
+// Songs under area headings, in the order the player first hears them.
+import { loadOrder } from './tools/order.js';
 import { renderSong, compile } from './src/audio/music.js';
 
 const SAMPLE_RATE = 44100;
@@ -226,7 +230,18 @@ function updateLengths() {
   }
 }
 
-for (const [name, song] of Object.entries(SONGS)) {
+const songGroups = (await loadOrder()).groups('songs', Object.keys(SONGS).filter((name) => SONGS[name]));
+const songOrder = songGroups.flatMap((g) => g.ids);
+for (const { group, ids } of songGroups) {
+  const head = document.createElement('tr');
+  head.className = 'group';
+  head.innerHTML = '<td colspan="4"></td>';
+  head.firstChild.textContent = group;
+  $('songs').append(head);
+  for (const name of ids) addRow(name, SONGS[name]);
+}
+
+function addRow(name, song) {
   const tr = document.createElement('tr');
   tr.innerHTML = `<td class="title"></td><td class="length" id="len-${name}"></td><td class="status"></td><td class="actions"><button type="button" class="ghost">Export</button></td>`;
   const title = tr.querySelector('.title');
@@ -265,7 +280,7 @@ $('all').addEventListener('click', async () => {
     };
   }
   setBusy(true);
-  for (const name of Object.keys(SONGS)) await run(name, save);
+  for (const name of songOrder) await run(name, save);
   setBusy(false);
 });
 </script>

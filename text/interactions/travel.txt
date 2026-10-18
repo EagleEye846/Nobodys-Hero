@@ -1,0 +1,49 @@
+# The green updrafts you travel by (src/data/travel.js): find them, then
+# travel from any save point. Shown in a plain box, or with Ves's portrait
+# where a line starts with her {face}.
+
+# The first time you find one, with Ves along: she knows what it is.
+[found]
+A warm green updraft curls up out of the ground. It smells of grass, here of all places.
+
+# Then Ves, with her portrait.
+[found_ves]
+{surprised}Oh! A green wind. Mum used to say those always find their way back to anywhere they've been.
+
+{smile}It'll remember this place now. Next time we rest at a save point, we can ride the wind back here.
+
+# The first time you find one, before Ves has joined.
+[found_alone]
+A warm green updraft curls up out of the ground. It tugs at your sleeves, as if it wants to take you somewhere.
+
+You've nothing to catch it with. Still, it feels like it will remember you.
+
+# Pressing Z on one later, without Ves.
+[no_ves]
+The green updraft tugs at your sleeves. You'd need something to catch it with.
+
+# Pressing Z on one you've already found, with Ves.
+[from_saves]
+The green wind curls round you, and settles. It remembers this place. You can ride it back here from any save point.
+
+# On the TRAVEL list: a line for staying, and one for each place.
+[stay]
+Stay where you are.
+
+[spiral]
+The great stair round the mountain, below the Hollow.
+
+[heralds_rest]
+The village of the heralds, with its inn, its shops and its chapel.
+
+[wind_stair]
+The windy steps between the second cairn and the Lamplighter's Ledge.
+
+[weathervanes]
+The shelf of turning weathervanes, at the mouth of the ice caves.
+
+[grotto]
+Deep in the ice caves, where Rimble keeps his stall.
+
+[owl_shelf]
+The quiet shelf below the summit, where Hollis the owl keeps the last stall.

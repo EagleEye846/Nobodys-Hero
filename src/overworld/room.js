@@ -1,5 +1,6 @@
 import { TILE_SIZE as T } from '../config.js';
-import { TILES, floorUnder } from './tileset.js';
+import { TILES, floorUnder, drawDrops } from './tileset.js';
+import { standingPicture } from './shadows.js';
 import { Prop } from './prop.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { inParty } from '../characters/party.js';
@@ -61,6 +62,8 @@ export class Room {
     // A spire room is the outside of a round mountain: its left and right
     // edges join up, so walking off one side brings you round to the other.
     this.wraps = Boolean(data.wraps);
+    // Gusts that shove you while you hang from a ring here (see climbing.js).
+    this.climbWind = data.climbWind ?? null;
     // Up in the snow, or underground: what shows under blocks and boulders.
     this.snowy = Boolean(data.snowy);
     this.cave = Boolean(data.cave);
@@ -85,8 +88,9 @@ export class Room {
       if (info.notice && (WORLD_STATE.read ?? []).includes(prop.key)) prop.noticed = true;
       return prop;
     });
-    this.refreshShowsUp();
     this.id = data.id;
+    this.placeStorage(data);
+    this.refreshShowsUp();
     this.refreshPuzzles();
     // Cracked and broken floor, keyed by "tx,ty". Kept apart from the tile data
     // so restarting the room brings the floor back.
@@ -110,10 +114,30 @@ export class Room {
     const pieces = [];
     this.tiles.forEach((row, ty) => [...row].forEach((char, tx) => {
       const tile = TILES[char];
+      // A raised block's top reaches up over the tile behind it, so whoever
+      // stands back there is hidden behind it, not drawn on top of it. Just
+      // that strip is drawn again (copied from the room's picture, lights and
+      // all), sorted a hair before anything standing up on the block (props
+      // up there, or you: see Player.sortY).
+      if (tile?.raise) {
+        const top = Math.max(0, ty * T - tile.raise);
+        pieces.push({
+          x: tx * T + T / 2,
+          sortY: (ty + 1) * T - 0.5,
+          draw: (ctx, camera) => ctx.drawImage(this.background, tx * T, top, T, ty * T - top, tx * T - camera.x, top - camera.y, T, ty * T - top),
+        });
+        return;
+      }
       if (!tile?.standing) return;
+      let picture = null;
       pieces.push({
         sortY: (ty + 1) * T,
         draw: (ctx, camera) => tile.draw(ctx, tx * T - camera.x, ty * T - camera.y, tx, ty, this),
+        // Its shadow in the sun (see shadows.js), from a picture of it drawn once.
+        shadow: () => {
+          picture ??= standingPicture(tile, tx, ty, this);
+          return { image: picture, x: tx * T + T / 2, y: (ty + 1) * T };
+        },
       });
     }));
     return pieces;
@@ -268,8 +292,59 @@ export class Room {
         (tile.standing ? TILES[floorUnder(this, tx, ty)] : tile).draw(ctx, tx * T, ty * T, tx, ty, this);
       }
     }
+    // Depth where the ground ends at open sky (see drawDrops in tileset.js).
+    drawDrops(ctx, this);
     this.paintLight(ctx);
     return canvas;
+  }
+
+  // A storage chest by every save point (see storageMenu.js), on a free tile
+  // beside it: plain floor, not a door, a cutscene trigger or a wind geyser,
+  // and never where it would cut off any of the room you could reach.
+  placeStorage(data) {
+    const saves = this.allProps.filter((prop) => prop.save);
+    if (!saves.length) return;
+    const busy = new Set();
+    const mark = (x, y, w = 1, h = 1) => { for (let i = 0; i < w; i++) for (let j = 0; j < h; j++) busy.add(`${x + i},${y + j}`); };
+    for (const d of data.doors ?? []) { mark(d.x, d.y, d.w, d.h); mark(d.spawn.x, d.spawn.y); }
+    for (const c of data.cutscenes ?? []) mark(c.x, c.y, c.w, c.h);
+    for (const g of [...(data.geysers ?? []), ...(data.gusts ?? []), ...(data.whirls ?? [])]) mark(g.x, g.y, g.w ?? 1, g.h ?? 1);
+    for (const prop of this.allProps) mark(prop.x / T, prop.y / T, prop.width / T, 1);
+    mark(data.playerStart.x, data.playerStart.y);
+    const open = (x, y) => !this.isSolidTile(x, y) && !busy.has(`${x},${y}`);
+    const reachable = (blocked) => {
+      const key = (x, y) => `${this.wraps ? ((x % this.width) + this.width) % this.width : x},${y}`;
+      const seen = new Set([key(data.playerStart.x, data.playerStart.y)]);
+      const queue = [[data.playerStart.x, data.playerStart.y]];
+      while (queue.length) {
+        const [x, y] = queue.pop();
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = x + dx;
+          const ny = y + dy;
+          const k = key(nx, ny);
+          if (seen.has(k) || k === blocked || this.isSolidTile(nx, ny)) continue;
+          if (this.allProps.some((p) => !p.walkable && nx * T >= p.x && nx * T < p.x + p.width && ny * T === p.y)) continue;
+          seen.add(k);
+          queue.push([nx, ny]);
+        }
+      }
+      return seen.size;
+    };
+    const everywhere = reachable(null);
+    for (const save of saves) {
+      const sx = save.x / T;
+      const sy = save.y / T;
+      const spot = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]]
+        .map(([dx, dy]) => [sx + dx, sy + dy])
+        .find(([x, y]) => open(x, y) && reachable(`${x},${y}`) >= everywhere - 1);
+      if (!spot) continue;
+      const chest = new Prop({ sprite: 'storage_chest', x: spot[0], y: spot[1], text: null, storage: true });
+      chest.showsUp = {};
+      chest.key = `${data.id}:storage:${spot[0]},${spot[1]}`;
+      chest.raise = TILES[data.tiles[spot[1]]?.[spot[0]]]?.raise ?? 0;
+      this.allProps.push(chest);
+      mark(spot[0], spot[1]);
+    }
   }
 
   // Brings props in or out of the room as the story moves on: called when the

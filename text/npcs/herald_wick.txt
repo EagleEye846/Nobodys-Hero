@@ -18,3 +18,17 @@ That scholar. I think about him. Everyone else in the book went up and didn't co
 Kept his lantern lit the whole way down. Day and night. Like he was afraid of what'd happen if it went out.
 
 You'll be going up past the Lookout, I expect. They all do. Just... come back down past me, afterwards. I'd like to see what the mountain does to a kind face.
+
+[first after ves_in_the_chapel]
+Hm? Oh. It's you. And you found Ves. Good. Sit down, the pair of you, you're making the square look untidy.
+
+Wick. Oldest herald. I've watched a lot of folk go up past the Lookout on their own. Nicer, seeing two.
+
+Mind she eats. And mind you both come back down past me, afterwards.
+
+[repeat after ves_in_the_chapel]
+That scholar. I think about him. Everyone else in the book went up and didn't come back, or turned round early. He's the only one who came back from the top and kept walking.
+
+Kept his lantern lit the whole way down. Day and night. Like he was afraid of what'd happen if it went out.
+
+You'll be going up past the Lookout, I expect. They all do. Just... come back down past me, afterwards. I'd like to see what the mountain does to a kind face.

@@ -1,5 +1,6 @@
 import { makeSprite } from '../src/engine/sprite.js';
-import { loadArt } from './library.js';
+import { loadArt, loadEnemies } from './library.js';
+import { loadOrder } from './order.js';
 import { listDir, readText, importFresh } from './api.js';
 import {
   findDeclaration, replaceValue, valueText, paletteLiteral, rowsLiteral, framesLiteral, entryComments,
@@ -134,16 +135,44 @@ export async function mount(root, studio) {
   root.append(el('div', { class: 'workspace' }, left, work, right));
 
   // --- Library ---
+  // Sprites tied to a place in the game (an enemy's art, someone's portrait,
+  // an animation or object first seen in a room) go under that area's heading,
+  // in the order the player meets them. The rest (the player, the room object
+  // sheet, battle icons...) keep their usual headings, first.
+  let order = null;
+  let enemies = {};
   async function refreshLibrary(fresh = false) {
-    library = await loadArt(fresh);
+    [library, order, enemies] = await Promise.all([loadArt(fresh), loadOrder(fresh), loadEnemies(fresh)]);
     renderLibrary();
   }
 
+  function placeOfEntry(entry) {
+    if (entry.kind === 'portrait') return order.where('portraits', entry.portraitId) ?? order.where('npcs', entry.portraitId);
+    if (entry.kind === 'icons' || entry.spritesExport === 'PROP_SPRITES') return null;
+    const base = (entry.spriteExport ?? entry.spritesExport ?? '').replace(/_SPRITES?$/, '');
+    const owner = Object.keys(enemies).find((id) => enemies[id].artFile === entry.file && enemies[id].artBase === base)
+      ?? Object.keys(enemies).find((id) => enemies[id].artFile === entry.file && entry.file !== 'props.js');
+    if (owner) return order.where('enemies', owner);
+    const name = base.toLowerCase();
+    return order.where('animations', name) ?? order.where('props', name) ?? order.where('npcs', name);
+  }
+
+  function libraryGroups() {
+    const byId = Object.fromEntries(library.map((e) => [e.id, e]));
+    const placed = order.groups('sprites', library.map((e) => e.id), { placeOf: (id) => placeOfEntry(byId[id]), fallback: null })
+      .filter((g) => g.group !== null)
+      .map(({ group, ids }) => ({ group, entries: ids.map((id) => byId[id]) }));
+    const placedIds = new Set(placed.flatMap((g) => g.entries.map((e) => e.id)));
+    const rest = library.filter((e) => !placedIds.has(e.id));
+    const general = [...new Set(rest.map((e) => e.group))].map((group) => ({ group, entries: rest.filter((e) => e.group === group) }));
+    return [...general, ...placed];
+  }
+
   function renderLibrary() {
-    const groups = [...new Set(library.map((e) => e.group))];
-    setChildren(libraryList, ...groups.flatMap((group) => [
+    if (!order) return;
+    setChildren(libraryList, ...libraryGroups().flatMap(({ group, entries }) => [
       el('div', { class: 'group-label' }, group),
-      ...library.filter((e) => e.group === group).map((entry) => {
+      ...entries.map((entry) => {
         const first = entry.frames[0];
         const sprite = makeSprite(first.rows, entry.palette);
         return el('button', {

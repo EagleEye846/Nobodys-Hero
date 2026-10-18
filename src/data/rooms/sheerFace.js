@@ -98,5 +98,8 @@ export const SHEER_FACE = {
   tileTexts: { T: 'stair_pine', M: 'face_rock' },
 
   // No enemies: the climb is the challenge here.
-  npcs: [],
+  // A chough on the ledge at the foot of the face.
+  npcs: [
+    { enemy: 'chough', x: 16, y: 23, patrol: [14, 18] },
+  ],
 };

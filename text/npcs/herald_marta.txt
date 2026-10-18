@@ -18,3 +18,19 @@ Knit one, purl one, a hundred years. You get a rhythm.
 If you go up past the Lookout, dear, take mittens. The Hero's meant to be above all that. You are not, no offence.
 
 That scarf of mine? Goes round the square twice and into the inn. The innkeeper uses the end for the soup pot handle.
+
+[first after ves_in_the_chapel]
+Mm. Hello, dears. Mind the scarf.
+
+So you found Ves. Good. She's sat in that chapel long enough to take root.
+
+Marta measures your neck with her eyes, then looks at Ves's scarf and nods. Her mum's work. Good wool.
+
+Yours is next, dear. Give me a day.
+
+[repeat after ves_in_the_chapel]
+Knit one, purl one, a hundred years. You get a rhythm.
+
+If you go up past the Lookout, dear, take mittens. The Hero's meant to be above all that. You are not, no offence.
+
+That scarf of mine? Goes round the square twice and into the inn. The innkeeper uses the end for the soup pot handle.

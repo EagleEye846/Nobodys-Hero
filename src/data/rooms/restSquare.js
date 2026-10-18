@@ -3,10 +3,10 @@
 // frozen fountain, an ice statue of the Hero (carved fresh every winter from
 // a guess), lamps, benches, a brazier; the inn to the west, the Hall of
 // Heralds in the middle, the stores to the east, the bell tower in the
-// south-east corner, the chapel to the west, and two little houses. Swept
-// lanes run from the gate to every door. Everyone who lives here is out
-// in the square, and the Keeper, once you've met him on the Shoulder, is by
-// the fountain warming his hands. East past the tower is the Lookout.
+// south-east corner, the chapel to the west, Tilda's forge in the south, and
+// two little houses. Swept lanes run from the gate to every door. Everyone
+// who lives here is out in the square, and the Keeper, once you've met him on
+// the Shoulder, is by the fountain warming his hands. East past the tower is the Lookout.
 // Tile key (see src/overworld/tileset.js):
 //   D  doorway (walk through it; see `doors`)    n  snow
 //   l  swept cobble lane                         z  ice
@@ -47,10 +47,10 @@ export const REST_SQUARE = {
     'AnnlllllllllllllllllllllllllllllllllllnA',
     'AnnlllllllllllllllllllllllllllllllllllnA',
     'AnnnnnnnllnnnnnnnnnnnnllnnnnnnnnnnnnnnnA',
-    'AnneeeeellnnnnnnnnnnnnllnnnnneeeeeennnnA',
-    'AnneeeeellnnnnnnnnnnnnllnnnnneeeeeennnnA',
-    'AnnawwwallnnnnnnnnnnnnllnnnnnawwaawnnnnA',
-    'AnnaaDaallnnnnnnnnnnnnllnnnnnaaDaaannnnA',
+    'AnneeeeellnnnneeeeeennllnnnnneeeeeennnnA',
+    'AnneeeeellnnnneeeeeennllnnnnneeeeeennnnA',
+    'AnnawwwallnnnnawwaawnnllnnnnnawwaawnnnnA',
+    'AnnaaDaallnnnnaaDaaannllnnnnnaaDaaannnnA',
     'Annnnlllllllllllllllllllllllllllllllllll',
     'Annnnlllllllllllllllllllllllllllllllllll',
     'AnYnnnnnnnnnnnnnnnnnnnllnnnffffffnnnnnnA',
@@ -73,6 +73,7 @@ export const REST_SQUARE = {
     { x: 31, y: 24, w: 1, h: 1, to: 'rest_house_pottle', spawn: { x: 5, y: 8 } },
     { x: 39, y: 25, w: 1, h: 2, to: 'rest_lookout', spawn: { x: 1, y: 10 } },
     { x: 4, y: 16, w: 1, h: 1, to: 'rest_chapel', spawn: { x: 7, y: 14 } },
+    { x: 16, y: 24, w: 1, h: 1, to: 'rest_forge', spawn: { x: 6, y: 10 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -85,6 +86,8 @@ export const REST_SQUARE = {
     { sprite: 'fountain_frozen', x: 16, y: 15, text: 'square_fountain' },
     { sprite: 'ice_hero', x: 13, y: 16, text: 'square_ice_hero' },
     { sprite: 'savepoint', x: 24, y: 16, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 27, y: 16, travel: 'heralds_rest', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'street_lamp', x: 11, y: 12, text: 'square_lamp', nightText: 'square_lamp_night' },
     { sprite: 'street_lamp', x: 27, y: 12, text: 'square_lamp', nightText: 'square_lamp_night' },
     { sprite: 'street_lamp', x: 11, y: 20, text: 'square_lamp', nightText: 'square_lamp_night' },
@@ -114,6 +117,8 @@ export const REST_SQUARE = {
     { sprite: 'sign', x: 36, y: 24, text: 'square_pottle_sign' },
     { sprite: 'sign', x: 38, y: 24, text: 'square_lookout_sign' },
     { sprite: 'sign', x: 6, y: 17, text: 'square_chapel_sign' },
+    { sprite: 'sign', x: 20, y: 24, text: 'square_forge_sign' },
+    { sprite: 'anvil', x: 13, y: 24, text: 'square_anvil' },
     { sprite: 'chapel_spire', x: 4, y: 15, text: 'square_chapel_spire' },
     { sprite: 'street_lamp', x: 21, y: 28, text: 'square_lamp', nightText: 'square_lamp_night' },
     { sprite: 'street_lamp', x: 24, y: 28, text: 'square_lamp', nightText: 'square_lamp_night' },

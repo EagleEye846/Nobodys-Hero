@@ -68,7 +68,8 @@ Where the cake used to be, there's a note in neat, waxy handwriting:
 
 [kitchen_table]
 A table set for two.
-The second plate has a hundred years of dust on it. Until today, it's been wiped clean.
+Faded rings mark the cloth where other plates have sat, over the years. Six of them, if you count.
+This one has been wiped clean, just for you.
 
 [kitchen_chair]
 A small wooden chair. It's just your size.

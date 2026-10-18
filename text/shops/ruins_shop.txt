@@ -26,6 +26,10 @@ You already have that one, friend.
 [too_poor]
 Ah... you can't quite afford that. Come back with more gold!
 
+# Bought with your bag full: it went to storage.
+[bought_stored]
+Oh, your bag's stuffed! I'll slip it into storage for you. Any chest by a save point, friend.
+
 [bag_full]
 Your bag's stuffed! Eat something first. Or throw something out.
 

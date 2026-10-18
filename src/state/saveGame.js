@@ -20,6 +20,8 @@ export const WORLD_STATE = {
   talked: [],
   // Puzzle switches that are on, as "room:name".
   levers: [],
+  // Green updrafts you've found and can travel between (src/data/travel.js).
+  travelDrafts: [],
   playSeconds: 0,
 };
 

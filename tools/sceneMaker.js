@@ -1,12 +1,15 @@
 import { readText, listDir } from './api.js';
 import { loadRooms, loadScenes, loadEnemies, loadSongs } from './library.js';
+import { loadOrder } from './order.js';
 import { pickTile } from './rooms.js';
 import {
-  el, setChildren, icon, btn, hint, field, select, section, checkbox, modal, toast, pixelCanvas, thumbnail,
+  el, setChildren, icon, btn, hint, field, select, optionNodes, section, checkbox, modal, toast, pixelCanvas, thumbnail,
   snakeCase, camelCase, constCase, friendly, emptyState, deepClone, codeView,
 } from './ui.js';
 import { quote, inline, comment, headerComment } from './source.js';
 import { STEP_TYPES, EMOTES, FACINGS, lookSprite } from '../src/overworld/scenePlayer.js';
+import { VISIONS } from '../src/overworld/visions.js';
+import { MEMBERS } from '../src/characters/party.js';
 import { ANIMATION_NAMES, DEFAULT_FRAME_SECONDS } from '../src/engine/animations.js';
 import { ITEMS } from '../src/data/items.js';
 import { OverworldScene } from '../src/overworld/overworldScene.js';
@@ -24,19 +27,23 @@ import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from '../src/config.js';
 
 // The fields each kind of step keeps when it's saved.
 const STEP_FIELDS = {
-  say: ['who', 'face', 'text'],
-  walk: ['who', 'to', 'fast'],
+  say: ['who', 'face', 'text', 'shake'],
+  walk: ['who', 'to', 'fast', 'keep'],
   face: ['who', 'dir'],
   emote: ['who', 'emote'],
   wait: ['seconds'],
   camera: ['who', 'to'],
   appear: ['who', 'at'],
   leave: ['who'],
-  animate: ['who', 'animation', 'speed', 'seconds', 'once'],
+  animate: ['who', 'animation', 'speed', 'seconds', 'once', 'glow'],
   sound: ['name'],
   music: ['song'],
   give: ['item'],
   battle: ['enemy', 'who', 'spared', 'defeated'],
+  vision: ['name', 'mood', 'fade'],
+  toss: ['who', 'to', 'height', 'bounces'],
+  bed: ['pose'],
+  weather: ['to', 'seconds'],
   end_chapter: ['room', 'spawn', 'credits'],
 };
 const STEP_ICONS = { say: 'chat', walk: 'person', face: 'eye', emote: 'star', wait: 'pause', camera: 'fit', appear: 'plus', leave: 'minus', animate: 'play', sound: 'note', music: 'note', give: 'heart', battle: 'enemy', end_chapter: 'flag' };
@@ -46,9 +53,9 @@ function list(name, items, format) {
   return `  ${name}: [\n${items.map((item) => `    ${format(item)},`).join('\n')}\n  ],`;
 }
 
-const cleanActor = ({ id, look, x, y, portrait, hidden, plays, animation, speed }) => ({
-  id, look, x, y, portrait: portrait || undefined, hidden: hidden || undefined, plays: plays || undefined,
-  animation: animation || undefined, speed: animation && speed ? speed : undefined,
+const cleanActor = ({ id, look, x, y, portrait, hidden, plays, ahead, animation, speed, glow }) => ({
+  id, look, x, y, portrait: portrait || undefined, hidden: hidden || undefined, plays: plays || undefined, ahead: ahead || undefined,
+  animation: animation || undefined, speed: animation && speed ? speed : undefined, glow: glow || undefined,
 });
 function cleanStep(step) {
   const out = { do: step.do };
@@ -70,6 +77,10 @@ export function sceneModule(scene, constName, header) {
     `  room: ${quote(scene.room)},`,
     '  // false: it plays every time you step on its trigger, not just the first time.',
     `  once: ${scene.once !== false},`,
+    // A dream's scene for waking up from it (see updateRest in overworldScene.js).
+    ...(scene.wakeScene ? ['  // The scene for waking up from this dream.', `  wakeScene: ${quote(scene.wakeScene)},`] : []),
+    // Someone who runs on ahead in it (see wentAhead in overworldScene.js).
+    ...(scene.leavesAhead ? ['  // Someone runs on ahead, hidden until the `until` scene finds them.', `  leavesAhead: ${inline(scene.leavesAhead)},`] : []),
     '',
     '  // People who appear only in this scene, besides the player (see exampleScene.js).',
     list('actors', scene.actors, (actor) => inline(cleanActor(actor))),
@@ -101,17 +112,23 @@ export async function mount(root, studio) {
   let files = await sceneFiles();
   const enemies = await loadEnemies();
   const songs = Object.keys(await loadSongs());
+  // Lists under area headings, in the order the player meets things.
+  let order = await loadOrder(true);
 
   let scene = null; // the scene being edited (a copy)
   let meta = null; // { file, constName, header, isNew }
   let selectedStep = null;
   let run = null; // the running preview
 
-  const looks = [
-    ...Object.keys(PROP_SPRITES).filter((name) => !['sign', 'savepoint'].includes(name) && !name.endsWith('_back')).map((name) => [`prop:${name}`, friendly(name)]),
-    ...Object.keys(enemies).map((name) => [`enemy:${name}`, `${friendly(enemies[name].enemy.name ?? name)} (enemy)`]),
+  const looks = () => [
+    ...order.groups('props', Object.keys(PROP_SPRITES).filter((name) => !['sign', 'savepoint'].includes(name) && !name.endsWith('_back')))
+      .map(({ group, ids }) => ({ group, options: ids.map((name) => [`prop:${name}`, friendly(name)]) })),
+    ...order.groups('enemies', Object.keys(enemies))
+      .map(({ group, ids }) => ({ group, options: ids.map((name) => [`enemy:${name}`, `${friendly(enemies[name].enemy.name ?? name)} (enemy)`]) })),
   ];
   const roomName = (id) => friendly(rooms[id]?.name || id);
+  const roomOptions = () => order.options('rooms', Object.keys(rooms), roomName);
+  const sceneOptions = () => order.options('scenes', Object.keys(scenes), friendly);
   const actorIds = () => scene.actors.map((a) => a.id);
   const whoOptions = ({ nobody = false, actorsOnly = false } = {}) => [
     ...(nobody ? [['', 'Nobody (a narrator)']] : []),
@@ -145,8 +162,7 @@ export async function mount(root, studio) {
 
   // --- Opening ---
   function renderSceneSelect() {
-    const ids = Object.keys(scenes);
-    const options = ids.map((id) => el('option', { value: id }, friendly(id)));
+    const options = optionNodes(sceneOptions());
     if (meta?.isNew) options.push(el('option', { value: scene.id }, `${friendly(scene.id)} (new)`));
     setChildren(sceneSelect, options);
     sceneSelect.value = scene?.id ?? '';
@@ -174,7 +190,7 @@ export async function mount(root, studio) {
   async function newScene() {
     if (!(await okToLeave())) return;
     const name = el('input', { type: 'text', placeholder: 'e.g. Keeper says hello' });
-    const roomPick = select(Object.keys(rooms).map((id) => [id, roomName(id)]), Object.keys(rooms)[0]);
+    const roomPick = select(roomOptions(), order.sorted('rooms', Object.keys(rooms))[0]);
     const answer = await modal({
       title: 'New cutscene',
       body: el('div', {}, field('Name it', name, 'Just for you, to tell cutscenes apart.'), field('Which room is it in?', roomPick)),
@@ -233,7 +249,7 @@ export async function mount(root, studio) {
     }
     setChildren(leftBody,
       section('This cutscene',
-        field('Room', select(Object.keys(rooms).map((id) => [id, roomName(id)]), scene.room, (v) => { scene.room = v; changed(); })),
+        field('Room', select(roomOptions(), scene.room, (v) => { scene.room = v; changed(); })),
         checkbox(scene.once !== false, (v) => { scene.once = v; changed(); }, 'Only plays the first time'),
         hint('To play it in the game, put a Cutscene trigger in the room (Room Editor, Place).')),
       section('Who\'s in it',
@@ -288,11 +304,11 @@ export async function mount(root, studio) {
           changed({ actors: true });
         }, { iconOnly: true, kind: 'ghost danger', title: 'Remove them (and their steps)' })),
       characters.length ? castAs : null,
-      playing ? null : field('Looks like', select(looks, actor.look, (v) => { actor.look = v; changed({ actors: true }); })),
-      field('Portrait when talking', select([['', 'None'], ...Object.keys(PORTRAITS).map((p) => [p, friendly(p)])], actor.portrait ?? '', (v) => { actor.portrait = v || undefined; changed(); })),
+      playing ? null : field('Looks like', select(looks(), actor.look, (v) => { actor.look = v; changed({ actors: true }); })),
+      field('Portrait when talking', select([['', 'None'], ...order.options('portraits', Object.keys(PORTRAITS), friendly)], actor.portrait ?? '', (v) => { actor.portrait = v || undefined; changed(); })),
       playing ? null : tilePicker('Starts on', actor, (spot) => { actor.x = spot.x; actor.y = spot.y; changed({ actors: true }); }),
       playing ? null : checkbox(Boolean(actor.hidden), (v) => { actor.hidden = v || undefined; changed(); }, 'Off-stage until an Appear step'),
-      field('Doing at the start', select([['', 'Nothing (standing)'], ...ANIMATION_NAMES.map((a) => [a, friendly(a)])], actor.animation ?? '', (v) => { actor.animation = v || undefined; changed(); }), 'An animation they play until a step changes it, or they walk.'));
+      field('Doing at the start', select([['', 'Nothing (standing)'], ...order.options('animations', ANIMATION_NAMES, friendly)], actor.animation ?? '', (v) => { actor.animation = v || undefined; changed(); }), 'An animation they play until a step changes it, or they walk.'));
   }
 
   // --- Steps ---
@@ -398,7 +414,8 @@ export async function mount(root, studio) {
           ? field('Face', select([['', 'Normal'], ...faces.map((f) => [f, friendly(f)])], step.face ?? '', (v) => { if (v) step.face = v; else delete step.face; changed(); }))
           : null;
         return [who(step, { nobody: true }), face, el('div', { class: 'field wide' }, el('span', { class: 'field-label' }, 'Words'), area, warning,
-          faces.length ? hint(`Start a page with {${faces[0]}} (or ${faces.slice(1, 4).map((f) => `{${f}}`).join(', ')}...) to change their face for that page.`) : null)];
+          faces.length ? hint(`Start a page with {${faces[0]}} (or ${faces.slice(1, 4).map((f) => `{${f}}`).join(', ')}...) to change their face for that page.`) : null),
+          checkbox(Boolean(step.shake), (v) => { if (v) step.shake = true; else delete step.shake; changed(); }, 'Trembling words (a scream, a shout)')];
       }
       case 'walk':
         return [who(step), tilePicker('Walks to', step.to, (spot) => { step.to = spot; changed({ steps: true }); }),
@@ -407,17 +424,17 @@ export async function mount(root, studio) {
         return [field('Item', select(Object.entries(ITEMS).map(([id, item]) => [id, item.name]), step.item, (v) => { step.item = v; changed(); })),
           el('div', { class: 'field wide' }, hint('Goes in your bag, with a "You got..." box (or "your bag is full").'))];
       case 'battle': {
-        const sceneOptions = [['', 'Nothing'], ...Object.keys(scenes).map((id) => [id, friendly(id)])];
+        const thenOptions = [['', 'Nothing'], ...sceneOptions()];
         return [
-          field('Enemy', select(Object.keys(enemies).map((id) => [id, friendly(enemies[id].enemy.name ?? id)]), step.enemy, (v) => { step.enemy = v; changed(); })),
+          field('Enemy', select(order.options('enemies', Object.keys(enemies), (id) => friendly(enemies[id].enemy.name ?? id)), step.enemy, (v) => { step.enemy = v; changed(); })),
           field('Spotlight on', select([['', 'Just you'], ...whoOptions({ actorsOnly: true })], step.who ?? '', (v) => { if (v) step.who = v; else delete step.who; changed({ steps: true }); })),
-          field('Then, if spared, play', select(sceneOptions, step.spared ?? '', (v) => { if (v) step.spared = v; else delete step.spared; changed(); })),
-          field('Then, if beaten, play', select(sceneOptions, step.defeated ?? '', (v) => { if (v) step.defeated = v; else delete step.defeated; changed(); })),
+          field('Then, if spared, play', select(thenOptions, step.spared ?? '', (v) => { if (v) step.spared = v; else delete step.spared; changed(); })),
+          field('Then, if beaten, play', select(thenOptions, step.defeated ?? '', (v) => { if (v) step.defeated = v; else delete step.defeated; changed(); })),
           el('div', { class: 'field wide' }, hint('First the music cuts out, the room goes dark around you and the one in the spotlight, and your shadow stands up out of you. Then the cutscene ends here and the battle starts. Afterwards the matching scene plays, and counts as seen, so "Shows up" settings in rooms can change with it.')),
         ];
       }
       case 'end_chapter': {
-        const fields = [field('Then go on to', select([['', 'The title screen'], ...Object.keys(rooms).map((id) => [id, roomName(id)])], step.room ?? '', (v) => {
+        const fields = [field('Then go on to', select([['', 'The title screen'], ...roomOptions()], step.room ?? '', (v) => {
           if (v) { step.room = v; step.spawn = { ...(rooms[v]?.playerStart ?? { x: 1, y: 1 }) }; } else { delete step.room; delete step.spawn; }
           changed({ steps: true });
         }))];
@@ -461,7 +478,7 @@ export async function mount(root, studio) {
       case 'animate':
         return [
           who(step, { actorsOnly: true }),
-          field('Animation', select([['', 'Stop animating'], ...ANIMATION_NAMES.map((a) => [a, friendly(a)])], step.animation ?? '', (v) => { step.animation = v; changed({ steps: true }); })),
+          field('Animation', select([['', 'Stop animating'], ...order.options('animations', ANIMATION_NAMES, friendly)], step.animation ?? '', (v) => { step.animation = v; changed({ steps: true }); })),
           step.animation ? field('Seconds a frame', el('input', { type: 'number', min: 0.05, max: 2, step: 0.05, value: step.speed ?? DEFAULT_FRAME_SECONDS, onchange: (e) => { step.speed = Math.max(0.05, Number(e.target.value) || DEFAULT_FRAME_SECONDS); changed(); } })) : null,
           step.animation ? field('For how long', el('input', { type: 'number', min: 0, max: 30, step: 0.5, value: step.seconds ?? 0, onchange: (e) => { const v = Math.max(0, Number(e.target.value) || 0); if (v) step.seconds = v; else delete step.seconds; changed(); } }), '0 keeps it going while the next steps play. Walking stops it.') : null,
           step.animation ? checkbox(Boolean(step.once), (v) => { if (v) step.once = true; else delete step.once; changed(); }, 'Play it once and stay on the last frame') : null,
@@ -469,8 +486,19 @@ export async function mount(root, studio) {
         ];
       case 'sound':
         return [field('Sound', select(SOUND_NAMES.map((s) => [s, friendly(s)]), step.name, (v) => { step.name = v; changed(); }))];
+      case 'vision':
+        return [
+          field('Vision', select([['', 'None (it ends)'], ...Object.keys(VISIONS).map((v) => [v, friendly(v)])], step.name ?? '', (v) => { if (v) step.name = v; else delete step.name; changed(); })),
+          step.name ? field('Mood', select([['calm', 'Calm'], ['violent', 'Violent (shakes, gutters)'], ['flare', 'Flare (blazes up to white)']], step.mood ?? 'calm', (v) => { step.mood = v; changed(); })) : null,
+          el('div', { class: 'field wide' }, hint('A whole-screen picture drawn in the dark, for dreams (src/overworld/visions.js). Picking the one already showing just changes its mood.')),
+        ];
+      case 'bed':
+        return [
+          field('You', select([['sitting', 'Sit up'], ['lying', 'Lie back down'], ['up', 'Get up']], step.pose ?? 'sitting', (v) => { step.pose = v; changed(); })),
+          el('div', { class: 'field wide' }, hint('Only after sleeping: you in the bed you slept in. For waking up from a dream.')),
+        ];
       case 'music':
-        return [field('Song', select([['', 'Silence'], ...songs.map((s) => [s, friendly(s)])], step.song ?? '', (v) => { step.song = v || null; changed(); }))];
+        return [field('Song', select([['', 'Silence'], ...order.options('songs', songs, friendly)], step.song ?? '', (v) => { step.song = v || null; changed(); }))];
       default:
         return [hint(`This step (${step.do}) can only be edited in the code.`)];
     }
@@ -484,7 +512,7 @@ export async function mount(root, studio) {
     if (!rooms[scene.room]) out.push(`It's set in "${scene.room}", which isn't a room.`);
     scene.actors.forEach((a) => {
       if (!lookSprite(a.look)) out.push(`${friendly(a.id)} has no look picked.`);
-      if (a.plays && !roomCharacters().some((p) => (p.npc ?? p.shop) === a.plays)) out.push(`${friendly(a.id)} plays the ${friendly(a.plays)}, who isn't in ${roomName(scene.room)} any more. Put them back with the Room Editor, or pick "No, someone new".`);
+      if (a.plays && !MEMBERS[a.plays] && !roomCharacters().some((p) => (p.npc ?? p.shop) === a.plays)) out.push(`${friendly(a.id)} plays the ${friendly(a.plays)}, who isn't in ${roomName(scene.room)} any more. Put them back with the Room Editor, or pick "No, someone new".`);
     });
     scene.steps.forEach((step, i) => {
       const n = i + 1;
@@ -611,6 +639,7 @@ export async function mount(root, studio) {
     scenes = await loadScenes(true);
     files = await sceneFiles();
     rooms = await loadRooms(true);
+    order = await loadOrder(true);
     meta.isNew = false;
     studio.setFile(`src/data/scenes/${meta.file}`);
     renderSceneSelect();
@@ -624,10 +653,12 @@ export async function mount(root, studio) {
   async function onShow() {
     // Rooms may have new cutscene triggers from the Room Editor.
     rooms = await loadRooms(true);
+    order = await loadOrder(true);
+    renderSceneSelect();
     if (scene) { renderLeft(); renderChecks(); if (!run) drawStill(); }
   }
 
-  const firstId = Object.keys(scenes)[0];
+  const firstId = order.sorted('scenes', Object.keys(scenes))[0];
   if (firstId) await openScene(firstId);
   else renderAll();
 

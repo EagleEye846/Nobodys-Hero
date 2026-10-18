@@ -3,6 +3,7 @@ import { makeSprite } from '../engine/sprite.js';
 import { PLAYER_PALETTE, PLAYER_SPRITES, PLAYER_HANG_SPRITES } from '../data/art/player.js';
 import { memberFrames, inParty } from '../characters/party.js';
 import { sfx } from '../audio/music.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 
 // Wind geysers: columns of wind roaring up out of the ground, for puzzles
 // and for getting somewhere you can't climb to. A room lists them in
@@ -50,22 +51,28 @@ export class WindGeyser {
   }
 
   // `strength` scales it down: an updraft is a small, short puff of a thing.
-  draw(ctx, camera, time = performance.now() / 1000, strength = this.small ? 0.5 : 1) {
+  // `lean` ([dx, dy]) bends it the way the wind blows (a whirlwind's): over
+  // to the side, taller blowing up, curling towards you blowing down.
+  draw(ctx, camera, time = performance.now() / 1000, strength = this.small ? 0.5 : 1, lean = null) {
     const cx = this.x - camera.x;
     const base = this.y - camera.y;
+    const height = COLUMN_HEIGHT * (0.6 + 0.4 * strength) * (lean && lean[1] < 0 ? 1.3 : 1);
+    // How far a point `up` pixels up the column is bent over: more the higher it is.
+    const bendX = (up) => (lean ? lean[0] * 16 * (up / height) ** 2 : 0);
+    const bendY = (up) => (lean && lean[1] > 0 ? 10 * (up / height) ** 2 : 0);
     const dot = (x, y, a, shade = false, w = 1) => {
       if (a <= 0.02) return;
-      const px = Math.round(x);
-      const py = Math.round(y);
+      const up = base - y;
+      const px = Math.round(x + bendX(up));
+      const py = Math.round(y + bendY(up));
       ctx.fillStyle = `rgba(${AIR_EDGE}, ${Math.min(1, a * 0.55).toFixed(3)})`;
       ctx.fillRect(px, py + 1, w, 1);
       ctx.fillStyle = `rgba(${shade ? AIR_SHADE : AIR}, ${Math.min(1, a).toFixed(3)})`;
       ctx.fillRect(px, py, w, 1);
     };
-    const height = COLUMN_HEIGHT * (0.6 + 0.4 * strength);
     // A soft glow of churned-up air inside the column, so it reads as a column
     // and not just streaks: a funnel, narrow at the ground and wide at the top.
-    glowColumn(ctx, cx, base, height, strength, time);
+    glowColumn(ctx, cx, base, height, strength, time, bendX, bendY);
     // A ring of wind spinning flat on the ground, brighter on the near side.
     for (let i = 0; i < 24; i++) {
       const a = time * 4.2 + (i / 24) * Math.PI * 2;
@@ -103,13 +110,13 @@ export class WindGeyser {
 }
 
 // The column's glow, swelling a little as the wind gusts.
-function glowColumn(ctx, cx, base, height, strength, time) {
+function glowColumn(ctx, cx, base, height, strength, time, bendX = () => 0, bendY = () => 0) {
   const gust = 0.8 + 0.2 * Math.sin(time * 2.3);
   for (let k = 0; k < height; k += 2) {
     const half = 4 + k * 0.13;
     const a = 0.16 * (1 - k / height) * strength * gust;
     ctx.fillStyle = `rgba(${AIR}, ${a.toFixed(3)})`;
-    ctx.fillRect(Math.round(cx - half), Math.round(base - k - 1), Math.round(half * 2), 2);
+    ctx.fillRect(Math.round(cx - half + bendX(k)), Math.round(base - k - 1 + bendY(k)), Math.round(half * 2), 2);
   }
 }
 
@@ -153,6 +160,17 @@ export function hopAt(hop) {
 }
 
 // When you step on a geyser: with Ves, the ride up; without her, a shove back.
+export { heroFrames };
+
+// Once Ves has offered you her hand (vesHoldsYourHand.js), you don't hang
+// off her boot any more: the two of you float up side by side, holding hands.
+export function holdingHands() {
+  return (WORLD_STATE.seenScenes ?? []).includes('ves_holds_your_hand');
+}
+// Holding hands: where you float, from the top-left of her frame (her hand
+// out at her right edge, yours out at your left).
+export const HOLD_OFFSET = { x: 16, y: 7 };
+
 export function canRide() {
   return inParty(VES) && Boolean(memberFrames(VES)?.floatA);
 }
@@ -161,6 +179,7 @@ let heroSprites = null;
 function heroFrames() {
   heroSprites ??= {
     hang: [makeSprite(PLAYER_HANG_SPRITES.hangA, PLAYER_PALETTE), makeSprite(PLAYER_HANG_SPRITES.hangB, PLAYER_PALETTE)],
+    hold: [makeSprite(PLAYER_HANG_SPRITES.holdA, PLAYER_PALETTE), makeSprite(PLAYER_HANG_SPRITES.holdB, PLAYER_PALETTE)],
     stand: makeSprite(PLAYER_SPRITES.leftIdle, PLAYER_PALETTE),
     step: makeSprite(PLAYER_SPRITES.leftStep, PLAYER_PALETTE),
   };
@@ -272,7 +291,9 @@ export class GeyserRide {
     }
     const height = this.height;
     const floating = height > 0.5;
-    const ves = floating ? this.ves[Math.floor(t / 0.25) % 2 ? 'floatB' : 'floatA']
+    const hands = holdingHands();
+    const float = hands ? ['floatHandA', 'floatHandB'] : ['floatA', 'floatB'];
+    const ves = floating ? this.ves[Math.floor(t / 0.25) % 2 ? float[1] : float[0]]
       : walking ? this.ves[Math.floor(t / 0.15) % 2 ? 'downStep' : 'downIdle'] : this.ves.downIdle;
     const vesLeft = Math.round(x) - Math.floor(ves.width / 2) + sway - camera.x;
     const vesTop = Math.round(feet - height) - ves.height - camera.y;
@@ -288,9 +309,10 @@ export class GeyserRide {
     // is, flapping faster as the wind picks up) and where they stand (just
     // beside her); the leap and the drop go between the two in an arc.
     const flapSeconds = 0.16 - 0.07 * gust;
-    const hang = this.hero.hang[Math.floor(t / flapSeconds) % 2];
-    const swing = Math.round(Math.sin(t / SWAY_SECONDS + 0.9) * 4 * gust);
-    const hangAt = { x: vesLeft + BOOT_X - HAND_X + swing, y: vesTop + ves.height - 1 };
+    // Holding hands, you float level with her, swaying as she does.
+    const hang = (hands ? this.hero.hold : this.hero.hang)[Math.floor(t / (hands ? 0.3 : flapSeconds)) % 2];
+    const swing = hands ? 0 : Math.round(Math.sin(t / SWAY_SECONDS + 0.9) * 4 * gust);
+    const hangAt = hands ? { x: vesLeft + HOLD_OFFSET.x, y: vesTop + HOLD_OFFSET.y } : { x: vesLeft + BOOT_X - HAND_X + swing, y: vesTop + ves.height - 1 };
     const stand = walking && Math.floor(t / 0.15) % 2 ? this.hero.step : this.hero.stand;
     const standAt = { x: Math.round(x) + BESIDE - Math.floor(stand.width / 2) - camera.x, y: Math.round(feet) - stand.height - camera.y };
     // 0 standing, 1 hanging, in between mid-leap.
@@ -303,7 +325,7 @@ export class GeyserRide {
       ctx.drawImage(hang, hangAt.x, hangAt.y);
     } else {
       const arc = Math.sin(Math.PI * k) * 10;
-      const frame = this.hero.hang[0];
+      const frame = (hands ? this.hero.hold : this.hero.hang)[0];
       ctx.drawImage(frame, Math.round(standAt.x + (hangAt.x - standAt.x) * k), Math.round(standAt.y + (hangAt.y - standAt.y) * k - arc));
     }
   }

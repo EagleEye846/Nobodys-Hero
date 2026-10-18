@@ -2,21 +2,34 @@
 // hand. src/engine/animations.js finds the animations in them.
 import * as bunny from './art/bunny.js';
 import * as campfire from './art/campfire.js';
+import * as chough from './art/chough.js';
 import * as columneon from './art/columneon.js';
 import * as craghorn from './art/craghorn.js';
 import * as cutscenes from './art/cutscenes.js';
 import * as dummy from './art/dummy.js';
+import * as duskling from './art/duskling.js';
 import * as fireplace from './art/fireplace.js';
+import * as frostbite from './art/frostbite.js';
+import * as glintling from './art/glintling.js';
+import * as greatBat from './art/greatBat.js';
+import * as greatBatDeath from './art/greatBatDeath.js';
+import * as iceStep from './art/iceStep.js';
+import * as ice_moth from './art/ice_moth.js';
 import * as icons from './art/icons.js';
 import * as moth from './art/moth.js';
 import * as player from './art/player.js';
 import * as portraits from './art/portraits.js';
 import * as props from './art/props.js';
-import * as shade from './art/shade.js';
+import * as rimewing from './art/rimewing.js';
+import * as ringer from './art/ringer.js';
+import * as smallBat from './art/smallBat.js';
 import * as step from './art/step.js';
+import * as stone_golem from './art/stone_golem.js';
 import * as taperDeath from './art/taperDeath.js';
 import * as taperWatering from './art/taperWatering.js';
+import * as travelDraft from './art/travelDraft.js';
+import * as usurper from './art/usurper.js';
 import * as vesper from './art/vesper.js';
 import * as waxling from './art/waxling.js';
 
-export const ART_MODULES = { 'bunny': bunny, 'campfire': campfire, 'columneon': columneon, 'craghorn': craghorn, 'cutscenes': cutscenes, 'dummy': dummy, 'fireplace': fireplace, 'icons': icons, 'moth': moth, 'player': player, 'portraits': portraits, 'props': props, 'shade': shade, 'step': step, 'taperDeath': taperDeath, 'taperWatering': taperWatering, 'vesper': vesper, 'waxling': waxling };
+export const ART_MODULES = { 'bunny': bunny, 'campfire': campfire, 'chough': chough, 'columneon': columneon, 'craghorn': craghorn, 'cutscenes': cutscenes, 'dummy': dummy, 'duskling': duskling, 'fireplace': fireplace, 'frostbite': frostbite, 'glintling': glintling, 'greatBat': greatBat, 'greatBatDeath': greatBatDeath, 'iceStep': iceStep, 'ice_moth': ice_moth, 'icons': icons, 'moth': moth, 'player': player, 'portraits': portraits, 'props': props, 'rimewing': rimewing, 'ringer': ringer, 'smallBat': smallBat, 'step': step, 'stone_golem': stone_golem, 'taperDeath': taperDeath, 'taperWatering': taperWatering, 'travelDraft': travelDraft, 'usurper': usurper, 'vesper': vesper, 'waxling': waxling };

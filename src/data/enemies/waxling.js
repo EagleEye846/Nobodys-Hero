@@ -3,6 +3,8 @@ import { WAXLING_PALETTE, WAXLING_SPRITE } from '../art/waxling.js';
 // The WAXLING's numbers. Everything it says is in text/enemies/waxling.txt.
 export const WAXLING = {
   name: 'WAXLING',
+  // How it gets about in a room (GAITS in src/overworld/npc.js): it rocks side to side.
+  gait: 'waddle',
   textFile: 'enemies/waxling.txt',
   sprite: { rows: WAXLING_SPRITE, palette: WAXLING_PALETTE },
   maxHp: 110,

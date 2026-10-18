@@ -24,10 +24,22 @@ export const WEAPONS = {
   // Mount Vigil and Heralds' Rest.
   ice_pick: { name: 'Ice Pick', fightPower: 1.05, ability: 'lunge' },
   herald_trumpet: { name: "Herald's Trumpet", fightPower: 0.55, ability: 'toll' },
+  // Sold by Rimble, the goblin in the ice caves.
+  glintstone_sling: { name: 'Glintstone Sling', fightPower: 0.75, ability: 'shoot' },
+  // Hidden behind a false wall in the Glittering Throat.
+  coldlight_lantern: { name: 'Cold-Light Lantern', fightPower: 0.7, ability: 'light' },
+  golem_knuckle: { name: 'Golem Knuckle', fightPower: 1.15, ability: 'quake' },
   // Ves's umbrella parts: handles, ribs and canopies, fitted to her mother's
   // umbrella. fightPower scales her FIGHT; the rest strengthen her spells.
   lamplighters_handle: { name: "Lamplighter's Hook", wielder: 'vesper', fightPower: 0.7, allyStrike: 2, allyHeal: 2 },
   bellwire_ribs: { name: 'Bell-Wire Ribs', wielder: 'vesper', fightPower: 0.85, allyStrike: 6, allyCalm: -3 },
   hearthwood_crook: { name: 'Hearthwood Crook', wielder: 'vesper', fightPower: 0.6, allyHeal: 5, allySp: 5 },
   weathervane_hilt: { name: 'Weathervane Hilt', wielder: 'vesper', fightPower: 0.65, allyCalm: 4, gust: 2 },
+  // Forged at Tilda's: the hardest-hitting umbrella on the mountain.
+  tempered_ferrule: { name: 'Tempered Ferrule', wielder: 'vesper', fightPower: 1, allyStrike: 3 },
+  // Traded from Rimble in the ice caves.
+  frostglass_canopy: { name: 'Frost-Glass Canopy', wielder: 'vesper', fightPower: 0.8, allyCalm: 5, allyHeal: 3 },
+  // Hollis's, on the Last Shelf below the summit: the best on the mountain.
+  skyiron_blade: { name: 'Skyiron Blade', fightPower: 1.2, ability: 'parry' },
+  owlfeather_canopy: { name: 'Owl-Feather Canopy', wielder: 'vesper', fightPower: 0.95, allyStrike: 5, allyCalm: 4, allyHeal: 4 },
 };

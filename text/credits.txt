@@ -56,7 +56,7 @@ EagleEye846
 [battles]
 Battle and Bullet Design
 EagleEye846
-@enemy:shade
+@enemy:duskling
 
 [thanks]
 Special Thanks

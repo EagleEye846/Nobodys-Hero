@@ -1,5 +1,5 @@
 import { HERO_STATE } from '../characters/heroState.js';
-import { ITEMS, MAX_ITEMS, giveItem } from './items.js';
+import { ITEMS, giveItem, roomForItem } from './items.js';
 
 // Candle making. Enemies leave MATERIALS behind (their `materials` in
 // src/data/enemies/), kept in a pouch that doesn't use up bag space; the
@@ -38,14 +38,14 @@ export function canMake(recipe) {
   return Object.entries(recipe.needs).every(([id, amount]) => materialCount(id) >= amount);
 }
 
-// Makes the candle, if you have what it takes and room in your bag. Returns
-// 'made', 'missing' (not enough materials) or 'full' (no room in the bag).
+// Makes the candle, if you have what it takes and room for it (in your bag,
+// or in storage). Returns 'made', 'stored' (made, and sent to storage, your
+// bag being full), 'missing' (not enough materials) or 'full' (no room).
 export function makeCandle(recipe) {
   if (!canMake(recipe)) return 'missing';
-  if (HERO_STATE.items.length >= MAX_ITEMS) return 'full';
+  if (!roomForItem()) return 'full';
   for (const [id, amount] of Object.entries(recipe.needs)) HERO_STATE.materials[id] -= amount;
-  giveItem(recipe.candle);
-  return 'made';
+  return giveItem(recipe.candle) === 'stored' ? 'stored' : 'made';
 }
 
 // --- Light, for dark places (rooms with `dark`, see overworldScene.js). ---

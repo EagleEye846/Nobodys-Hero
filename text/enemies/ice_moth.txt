@@ -1,0 +1,59 @@
+# ICE MOTH
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/ice_moth.js.
+
+[intro]
+Something cold flutters out of the glow. An ICE MOTH!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+ICE MOTH keeps glancing at the crystals in the wall. It's trying to concentrate.
+
+ICE MOTH's wings chime faintly when they beat, like ice on a window.
+
+Frost is forming on everything ICE MOTH flies past, including you.
+
+ICE MOTH has forgotten what it was doing. It's looking at the crystals again.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+Ooh. Shiny.
+
+Glow...
+so pretty...
+
+Don't block
+the light!
+
+We go round
+and round
+and round...
+
+Everything's better
+by the crystals.
+
+You glow a little.
+Did you know that?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/ice_moth.js.
+[talk: Inspect]
+ICE MOTH - HP 170
+A moth of frost from the ice caves. Drawn to the glowing crystals, it can't think of anything else.
+
+[talk: Hold still]
+You hold very still. ICE MOTH lands on your shoulder for a moment, decides you're not a crystal, and takes off again.
+
+[talk: Point at a crystal]
+You point at the brightest crystal in the cave. ICE MOTH turns to look, and forgets all about fighting.
+
+[talk: Breathe on it]
+You breathe gently on ICE MOTH. Its wings mist over and it flutters about, offended but much calmer.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+ICE MOTH crumbles into a puff of frost that glitters as it falls.
+
+[pacified]
+ICE MOTH flutters off to the nearest crystal and settles on it, glowing softly, perfectly content.

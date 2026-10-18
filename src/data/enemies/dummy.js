@@ -3,6 +3,8 @@ import { DUMMY_PALETTE, DUMMY_SPRITE } from '../art/dummy.js';
 // The ROGUE DUMMY's numbers. Everything it says is in text/enemies/rogue_dummy.txt.
 export const ROGUE_DUMMY = {
   name: 'ROGUE DUMMY',
+  // How it gets about in a room (GAITS in src/overworld/npc.js): it rocks side to side.
+  gait: 'waddle',
   textFile: 'enemies/rogue_dummy.txt',
   sprite: { rows: DUMMY_SPRITE, palette: DUMMY_PALETTE },
   maxHp: 120,

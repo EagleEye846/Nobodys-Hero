@@ -6,7 +6,7 @@ import { COLORS } from './hud.js';
 // the bottom panel where the dialogue usually goes.
 const TRACK = { x: 150, y: 404, w: 340, h: 44 };
 const NOTCH_X = TRACK.x + 40;
-const BASE_SLASH_COUNT = 3;
+export const BASE_SLASH_COUNT = 3;
 const SLIDE_SPEED = 260; // pixels per second
 const FIRST_GAP = 30; // how far past the right end the first slash starts
 const MIN_SPACING = 100;
@@ -17,6 +17,12 @@ const SLASH_INSET = 6; // gap between a slash and the top/bottom of the track
 const TRAIL_STEP = 9;
 const BURST_SECONDS = 0.4;
 const LABEL_SECONDS = 1.2;
+
+// A PERFECT slash does this much more; the best a slash can ever do is
+// PERFECT_SLASH_DAMAGE (spells are measured against it, see bestStrike in
+// battleScene.js).
+const PERFECT_BONUS = 1.3;
+export const PERFECT_SLASH_DAMAGE = Math.round(20 * PERFECT_BONUS);
 
 // The FIGHT minigame: slash marks slide in from the right, one after another,
 // toward a notch at the left of the bar. Press confirm as each one crosses the
@@ -80,7 +86,7 @@ export class StrikeBar {
     let text = 'OK';
     let color = COLORS.text;
     if (closeness > 0.85) {
-      damage = Math.round(damage * 1.3);
+      damage = Math.round(damage * PERFECT_BONUS);
       text = 'PERFECT';
       color = COLORS.yellow;
     } else if (closeness > 0.4) {

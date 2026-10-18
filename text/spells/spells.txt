@@ -1,0 +1,78 @@
+# Spell descriptions, shown on one line under the SPELLS list in battle for
+# the spell the soul is on. The list shows each spell's SP cost by itself.
+# One section per spell id in src/data/spells.js; a party member's spells are
+# <member id>_<label> (their `commands` in src/characters/party.js).
+# {amount} (and Ves's {def}, {calm}, {damage}, {heal}, {sp}) is the number it
+# will do right now, after your armor's MAG, your skills and their gear.
+# Keep each to one short line.
+
+[heal]
+A warm pulse of light. Heals {amount} HP.
+
+[pacify]
+Spares one enemy, but only once its MERCY is full.
+
+[rend]
+A blade of light that never misses: {amount} damage to one enemy.
+
+[lull]
+A soft hush. Raises one enemy's MERCY by {amount}%.
+
+[starfall]
+Light pours down on one enemy for {amount} damage.
+
+[mend]
+A quick patch-up. Heals {amount} HP.
+
+[ember]
+A ring of fire: {amount} damage to every enemy.
+
+[ward]
+A shell of light. Halves the damage you take for {amount} enemy turns.
+
+[hush]
+Snow falls indoors. Every enemy's MERCY rises by {amount}%.
+
+[comet]
+The sky itself comes down on one enemy for {amount} damage.
+
+[spark]
+A quick bolt of light: {amount} damage to one enemy.
+
+[siphon]
+{amount} damage to one enemy, and half of it comes back to you as HP.
+
+[chain]
+Lightning leaps through every enemy: {amount} damage to each.
+
+[nova]
+Everything goes white: {amount} damage to one enemy.
+
+# --- VES ---
+
+[vesper_shelter]
+Her umbrella over you. The next attack is halved; each hit {def} less.
+
+[vesper_flurry]
+Soft, slow snow. Every enemy's MERCY rises by {calm}%.
+
+[vesper_sleet]
+A sting of sleet across the room: {damage} damage to every enemy.
+
+[vesper_zephyr]
+A warm wind. You recover {heal} HP, and SP fills by {sp}%.
+
+[vesper_downdraft]
+The wind slammed straight down: {damage} damage to one enemy.
+
+[vesper_whiteout]
+A blizzard fills the room: {damage} damage to every enemy.
+
+[vesper_aurora]
+The northern lights pour down. You recover {heal} HP.
+
+[vesper_blade]
+The Hero's blade, brought down in both hands: {damage} damage to one enemy.
+
+[vesper_together]
+You and Ves, both at once, one from each side: {damage} damage.

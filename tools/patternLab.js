@@ -2,6 +2,7 @@ import { SOUL_MODES, SOUL_INSET } from '../src/battle/soulModes.js';
 import { SOUL_RADIUS, GRAZE_RADIUS, soulSprite } from '../src/battle/soul.js';
 import { loadPatterns, makePattern, wrapFactory, PATTERN_INFO } from './library.js';
 import { listDir, readText } from './api.js';
+import { loadOrder } from './order.js';
 import { isIdentifier } from './source.js';
 import {
   el, setChildren, icon, btn, hint, field, slider, section, segmented, popupMenu, confirmBox, pixelCanvas, thumbnail,
@@ -259,6 +260,8 @@ function compile(code) {
 
 export async function mount(root, studio) {
   let patterns = await loadPatterns();
+  // Built-in attacks under the area of the first enemy that uses them.
+  let order = await loadOrder();
   const { bullets: game } = patterns;
   const TOOLS = game.PATTERN_TOOLS;
   const SIZES = game.SHOT_SIZES ?? ['small', 'puff', 'yarn', 'dust', 'ember'];
@@ -266,7 +269,7 @@ export async function mount(root, studio) {
   try { box = { ...(await import('../src/battle/hud.js')).BOX }; } catch { /* use the copy */ }
 
   let mode = 'try';
-  let tryName = patterns.builtin[0];
+  let tryName = order.sorted('patterns', patterns.builtin)[0];
   let design = { duration: 6, blocks: [newBlock('rain'), newBlock('aimed')] };
   let name = 'myPattern';
   let editingSaved = null; // name of the saved pattern being edited
@@ -336,14 +339,25 @@ export async function mount(root, studio) {
     const pill = (pname, custom) => el('button', {
       type: 'button', class: `pattern-pill${pname === tryName ? ' active' : ''}`,
       onclick: () => { tryName = pname; renderTry(); restart(); },
-    }, pname, el('small', {}, custom ? 'Made in the Pattern Lab' : PATTERN_INFO[pname] ?? ''));
+    }, pname, el('small', {}, custom ? 'Made in the Pattern Lab' : PATTERN_INFO[pname] ?? usedBy(pname)));
     const customNames = Object.keys(patterns.custom);
+    const builtinGroups = order.groups('patterns', patterns.builtin, { fallback: null }).flatMap(({ group, ids }) => (group !== null ? [{ group, ids }] : [
+      { group: "Other enemies' attacks", ids: ids.filter((p) => patterns.themed.has(p)) },
+      { group: 'Basic patterns', ids: ids.filter((p) => !patterns.themed.has(p)) },
+    ])).filter((g) => g.ids.length);
     setChildren(side,
-      section('Built into the game', el('div', { class: 'pattern-list' }, patterns.builtin.map((p) => pill(p, false)))),
+      builtinGroups.map(({ group, ids }) => section(group, el('div', { class: 'pattern-list' }, ids.map((p) => pill(p, false))))),
       section('Made in the Pattern Lab', customNames.length
         ? [el('div', { class: 'pattern-list' }, customNames.map((p) => pill(p, true))),
           customNames.includes(tryName) ? el('div', { class: 'row', style: 'margin-top:10px' }, btn('pencil', `Change "${tryName}"`, () => editSaved(tryName), { kind: 'ghost' })) : null]
         : hint('None yet. Switch to "Build your own" to make one.')));
+  }
+
+  // "Lantern Moth": the first enemy that uses a pattern, for its pill.
+  function usedBy(pname) {
+    const id = order.sorted('enemies', Object.keys(order.enemies)).find((e) => order.enemies[e]?.patterns?.some((p) => (p?.name ?? p) === pname));
+    const enemy = order.enemies[id];
+    return enemy ? friendly(enemy.name) : '';
   }
 
   async function editSaved(pname) {
@@ -621,6 +635,12 @@ export async function mount(root, studio) {
     patterns = await loadPatterns(true);
   }
 
+  // Enemies saved in the Enemy Maker may use patterns differently now.
+  async function onShow() {
+    order = await loadOrder(true);
+    if (mode === 'try') renderTry();
+  }
+
   setMode('try');
-  return { getFiles, afterSave };
+  return { getFiles, afterSave, onShow };
 }

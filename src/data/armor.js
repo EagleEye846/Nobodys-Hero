@@ -29,11 +29,33 @@ export const ARMOR = {
   // The Hero's own armour, carried up the mountain and left in the caves.
   vigil_mail: { name: 'Vigil Mail', defense: 4, magic: -0.3, spGain: -0.1 },
   snow_mantle: { name: 'Snow Mantle', defense: 3, magic: 0.1 },
+  // Sold at Tilda's forge.
+  smiths_apron: { name: "Smith's Apron", defense: 2, spGain: 0.1 },
+  riveted_gambeson: { name: 'Riveted Gambeson', defense: 3, spGain: 0.1, magic: -0.1 },
+  // Sold by Rimble, the goblin in the ice caves.
+  rimemoth_shawl: { name: 'Rimemoth Shawl', defense: 1, magic: 0.35, spGain: 0.15 },
+  // Hidden behind a false wall in the Hall of Glass.
+  crystal_cuirass: { name: 'Crystal Cuirass', defense: 4, magic: 0.15 },
+  patchwork_parka: { name: 'Patchwork Parka', defense: 3, spGain: 0.2 },
   // Ves's coats, scarves and mittens.
   evening_coat: { name: 'Evening Coat', wielder: 'vesper', shelterDef: 1 },
   ember_knit_scarf: { name: 'Ember-Knit Scarf', wielder: 'vesper', regen: 2 },
+  // In the darkest corner of the Goblin's Grotto.
+  aurora_scarf: { name: 'Aurora Scarf', wielder: 'vesper', regen: 2, shelterDef: 1 },
   goosedown_mittens: { name: 'Goose-Down Mittens', wielder: 'vesper', grazeSp: 0.15 },
   oilskin_greatcoat: { name: 'Oilskin Greatcoat', wielder: 'vesper', shelterDef: 2, regen: 1 },
+  spark_proof_cape: { name: 'Spark-Proof Cape', wielder: 'vesper', shelterDef: 1, grazeSp: 0.1 },
+  // Up the mountain, in chests: on the Weathervane Shelf, at the top of the
+  // Gale Face, and up in the Hall of Glass.
+  gale_ribbon_scarf: { name: 'Gale-Ribbon Scarf', wielder: 'vesper', grazeSp: 0.2, regen: 1 },
+  cragwool_poncho: { name: 'Cragwool Poncho', wielder: 'vesper', shelterDef: 2, grazeSp: 0.1 },
+  icefox_muff: { name: 'Ice-Fox Muff', wielder: 'vesper', regen: 3 },
+  // Sold by Rimble, the goblin in the ice caves.
+  cavers_hood: { name: "Caver's Hood", wielder: 'vesper', shelterDef: 1, grazeSp: 0.2, regen: 1 },
+  rimeweave_cloak: { name: 'Rimeweave Cloak', wielder: 'vesper', shelterDef: 2, regen: 2 },
+  // Hollis's, on the Last Shelf below the summit.
+  owl_down_coat: { name: 'Owl-Down Coat', defense: 4, magic: 0.2 },
+  snowfeather_shawl: { name: 'Snowfeather Shawl', wielder: 'vesper', shelterDef: 2, regen: 2, grazeSp: 0.15 },
 };
 
 // One stat of a piece of armor, 0 if it hasn't got it.

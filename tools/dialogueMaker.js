@@ -1,5 +1,6 @@
 import { readText, listDir } from './api.js';
 import { npcIds } from './library.js';
+import { loadOrder } from './order.js';
 import { setSection, parseTextFile } from './textfile.js';
 import { el, setChildren, icon, btn, hint, field, section, modal, toast, pixelCanvas, thumbnail, snakeCase, friendly, emptyState } from './ui.js';
 import { TextBox, TEXTBOX_LINES, pageLineCount } from '../src/ui/textbox.js';
@@ -33,6 +34,8 @@ const newFileText = (id) => `# ${friendly(id).toUpperCase()}: made in Ruins Stud
 export async function mount(root, studio) {
   await loadUiFont();
   let ids = await npcIds();
+  // People under the area of the first room they stand in, in the order you meet them.
+  let order = await loadOrder();
   let id = null; // the NPC being edited
   let source = ''; // its file as it was loaded
   let isNew = false;
@@ -61,10 +64,11 @@ export async function mount(root, studio) {
 
   // --- Opening ---
   function renderList() {
-    setChildren(list, ids.map((npc) => {
+    const button = (npc) => {
       const face = PORTRAITS[npc] ? thumbnail(makeSprite(PORTRAITS[npc].idle, PORTRAITS[npc].palette), 28) : icon('person', 22);
       return el('button', { type: 'button', class: `list-button${npc === id ? ' active' : ''}`, onclick: () => openNpc(npc) }, face, el('span', {}, friendly(npc)));
-    }));
+    };
+    setChildren(list, order.groups('npcs', ids).map(({ group, ids: people }) => [el('div', { class: 'group-label' }, group), people.map(button)]));
   }
 
   async function okToLeave() {
@@ -260,10 +264,16 @@ export async function mount(root, studio) {
     if (request?.npc) await openNpc(request.npc);
   }
 
+  // Back from the Room Editor: someone may stand somewhere new.
+  async function onShow() {
+    order = await loadOrder(true);
+    renderList();
+  }
+
   renderList();
   renderEditor();
-  if (ids.length) await openNpc(ids[0]);
+  if (ids.length) await openNpc(order.sorted('npcs', ids)[0]);
   else render();
 
-  return { getFiles, afterSave, handle, onHide: stop };
+  return { getFiles, afterSave, handle, onShow, onHide: stop };
 }

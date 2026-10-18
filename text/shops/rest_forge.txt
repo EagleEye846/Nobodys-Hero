@@ -1,0 +1,72 @@
+# TILDA'S FORGE: Tilda, the smith of Heralds' Rest. A red kerchief, soot to
+# the elbows, and a hammer she never quite puts down. She cooks on the forge,
+# because why light two fires.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Mind the sparks! Come in, come in, shut the door. Tilda. Smith. The fire's always lit, so there's always something hot: iron or pastry.
+
+[menu_prompt]
+What else? Speak up. The bellows are loud.
+
+[buy_prompt]
+Food off the fire up top. Iron below. Ves's things at the bottom.
+
+[sell_prompt]
+Selling? Let's see it. I'll melt down most of it, so don't get attached.
+
+[talk_prompt]
+Talk? Go on. I can hammer and listen.
+
+[bought]
+Hammered it straight while you weren't looking. Press C out there to put it on.
+
+[bought_item]
+Straight off the fire. Blow on it first.
+
+[sold]
+Good iron. Or good enough. Into the pile it goes.
+
+[nothing_to_sell]
+Empty-handed? Fine by me. Less to melt.
+
+[cant_sell]
+You're wearing that. Take it off out there first, with C. I don't buy things off people's backs.
+
+[owned]
+You've got that one already. I never make the same thing twice for anyone.
+
+[wont_fit]
+These won't fit you. I made them to Ves's measure. Bring her by.
+
+[too_poor]
+Not enough. Iron costs what iron costs. Come back with more.
+
+# Bought with your bag full: it went to storage.
+[bought_stored]
+Your bag's stuffed, so I've put it by for you. It'll be in the storage chest by the next crystal you find.
+
+[bag_full]
+Your bag's full. Eat something. I'd recommend the pasty.
+
+[farewell]
+Off you go, then. Stay warm. Don't touch the anvil, it bites.
+
+[talk: Who are you?]
+Tilda. My grandad was the smith before me, and his mother before him. One of us has kept this fire going every day for a hundred years. Hot enough to forge a sword at a moment's notice.
+
+[talk: The forge]
+Why do I cook on it? Because it's lit. You don't heat two fires on a mountain. Bread on the back shelf, stew on the hook, iron in the middle. Never mixed them up. Nearly, once.
+
+[talk: The Hero's sword]
+Grandad forged a sword for the Hero. A hundred springs we've sharpened it. Then one night, door bolted, fire lit, and by morning the hooks were bare. Only a black smudge on the stone where it hung. Shaped like a hand.
+
+[talk: The Hero?]
+Prophecy said the Hero would need a blade at the top. So we waited with one. A hundred years of sharpening, and now it's gone. Whoever has it, they'll find it very sharp.
+
+[talk: Daggers?]
+A merchant came up the stair once with a pack bigger than my anvil. Traded me the glass dagger and the iron gauntlets for a week of stew. Fair trade. That pack ate most of the stew.
+
+[talk: Ves]
+The girl from the chapel? She brings me that umbrella whenever a rib bends. Her mother's. Won't let anyone else touch it. I've made her a steel tip for it and a cape for the sparks, if she ever goes anywhere that needs them.

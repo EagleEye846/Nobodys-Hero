@@ -26,6 +26,7 @@ import { loadTextFiles, textFile } from './src/engine/textLoader.js';
 import { TEXT_FILES } from './src/data/textManifest.js';
 import { loadUiFont, layoutDialogue, wrapLines, textWidth } from './src/ui/text.js';
 import { pageLineCount, splitFace } from './src/ui/textbox.js';
+import { speechBubbles } from './src/battle/hud.js';
 import { SCENES } from './src/data/scenes/index.js';
 import { PORTRAITS } from './src/data/art/portraits.js';
 import { HERO, wielderOf, memberGearLabels } from './src/characters/equipment.js';
@@ -54,10 +55,16 @@ try {
         const n = pageLineCount(ctx, entry, folder === 'npcs' && PORTRAITS[id] ? id : null);
         if (n > 3) paged(where, n);
       } else if (folder === 'enemies') {
-        if (section === 'flavor') {
+        // A boss's phase can have its own of each (`flavor: lit`; see foeLines in battleScene.js).
+        if (section === 'flavor' || section.startsWith('flavor: ') || section === 'flame_hint') {
           if (dlg(entry, 596, 28) > 3) bad(where, `flavour text is ${dlg(entry, 596, 28)} lines; 3 fit`, entry);
-        } else if (section === 'taunts' || section === 'boss_intro') {
-          for (const line of entry.split('\n')) if (wrap(line, 142, 14, 'speech') > 3) bad(where, `speech bubble is ${wrap(line, 142, 14, 'speech')} lines; 3 fit (break it onto another line)`, line);
+        } else if (section.startsWith('no_mercy') || (section.startsWith('phase: ') && section.endsWith(' vesper'))) {
+          // Said by a party member (Ves) in the overworld-style box, with her portrait (refuseMercy in battleScene.js).
+          const n = pageLineCount(ctx, entry, 'vesper');
+          if (n > 3) paged(where, n);
+        } else if (section === 'taunts' || section.startsWith('taunts: ') || section === 'boss_intro' || section.startsWith('mercy_mock') || (section.startsWith('phase: ') && section.endsWith(' foe'))) {
+          // Split into bubbles the way the battle does (speechBubbles in hud.js).
+          for (const line of speechBubbles(entry)) if (wrap(line, 142, 14, 'speech') > 3) bad(where, `speech bubble is ${wrap(line, 142, 14, 'speech')} lines; 3 fit (end a sentence sooner, so the rest gets its own bubble)`, line);
         } else {
           if (dlg(entry, 596, 28) > 3) paged(where, dlg(entry, 596, 28));
           if (section.startsWith('talk: ') && shrinks(section.slice(6), 28, 258, 20)) bad(where, 'TALK option is too long to read in its column', section);
@@ -78,14 +85,18 @@ try {
         if (wrap(entry, 276, size) * size > shopRoom) bad(where, 'description is too long for the shop panel, even small', entry);
       } else if (folder === 'skills') {
         if (wrap(entry, 556, 22) > 2) bad(where, `skill description is ${wrap(entry, 556, 22)} lines; 2 fit`, entry);
+      } else if (folder === 'spells') {
+        // One line under the battle's SPELLS list; numbers filled in at up to three digits.
+        const filled = entry.replace(/\{\w+\}/g, '999');
+        if (wrap(filled, 580, 20) > 1) bad(where, `spell description is ${wrap(filled, 580, 20)} lines; 1 fits`, entry);
       } else if (folder === 'cutscenes') {
         if (wrap(entry, 480, 32) > 5) bad(where, `intro page is ${wrap(entry, 480, 32)} lines; 5 fit`, entry);
       } else if (path === 'battle.txt' && section.endsWith('_turn')) {
         // A party member's turn prompt sits in the battle panel without paging.
         if (dlg(entry, 596, 28) > 3) bad(where, `turn prompt is ${dlg(entry, 596, 28)} lines; 3 fit`, entry);
-      } else if (path === 'chapter_end.txt' && section !== 'title' && section !== 'subtitle') {
+      } else if (path.startsWith('chapter_end') && section !== 'title' && section !== 'subtitle') {
         if (wrap(entry, 520, 30) > 3) bad(where, `chapter card line is ${wrap(entry, 520, 30)} lines; 3 fit`, entry);
-      } else if (path === 'credits.txt') {
+      } else if (path.startsWith('credits')) {
         const room = entry.includes('\n@') ? 400 : 600;
         entry.split('\n').filter((l) => !l.startsWith('@')).forEach((line, j) => {
           if (shrinks(line, j ? 44 : 30, room, 22)) bad(where, 'credits line is too long to read on its card', line);

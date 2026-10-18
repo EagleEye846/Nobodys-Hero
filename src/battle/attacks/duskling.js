@@ -1,6 +1,6 @@
 import { defineBulletArt } from '../projectiles.js';
 
-// The Shade's attacks. It's a shadow that got left behind, so everything it
+// The Duskling's attacks. It's a shadow that got left behind, so everything it
 // throws is made of the dark: eyes that open in the walls and stare, hands that
 // reach in to grab you, crescents of shadow, tendrils that close in like a
 // cage, and little wisps of itself that follow you for a while.
@@ -9,7 +9,7 @@ import { defineBulletArt } from '../projectiles.js';
 // `tools` holds the bullet classes and helpers (see PATTERN_TOOLS in
 // src/battle/bullets.js).
 
-const SHADE_COLOURS = {
+const DUSKLING_COLOURS = {
   k: '#05020a', // outline
   s: '#2a1a48', // shadow
   S: '#4a3478', // lighter shadow
@@ -31,17 +31,17 @@ function turnRowsClockwise(rows) {
 }
 
 // An eye in the dark, shut, then open (both harmless; the open one stares).
-defineBulletArt('shadeEyeShut', {
+defineBulletArt('dusklingEyeShut', {
   frames: [[
     '.......',
     '.LLLLL.',
     'L.....L',
   ]],
-  palette: SHADE_COLOURS,
+  palette: DUSKLING_COLOURS,
   radius: 3,
 });
 
-defineBulletArt('shadeEyeOpen', {
+defineBulletArt('dusklingEyeOpen', {
   frames: [[
     '..LLL..',
     '.LsesL.',
@@ -49,7 +49,7 @@ defineBulletArt('shadeEyeOpen', {
     '.LsesL.',
     '..LLL..',
   ]],
-  palette: SHADE_COLOURS,
+  palette: DUSKLING_COLOURS,
   radius: 3,
 });
 
@@ -67,13 +67,13 @@ const HAND_REACHING_RIGHT = [
 const HAND_REACHING_DOWN = turnRowsClockwise(HAND_REACHING_RIGHT);
 const HAND_REACHING_LEFT = turnRowsClockwise(HAND_REACHING_DOWN);
 const HAND_REACHING_UP = turnRowsClockwise(HAND_REACHING_LEFT);
-defineBulletArt('shadeHandRight', { frames: [HAND_REACHING_RIGHT], palette: SHADE_COLOURS, radius: 3 });
-defineBulletArt('shadeHandDown', { frames: [HAND_REACHING_DOWN], palette: SHADE_COLOURS, radius: 3 });
-defineBulletArt('shadeHandLeft', { frames: [HAND_REACHING_LEFT], palette: SHADE_COLOURS, radius: 3 });
-defineBulletArt('shadeHandUp', { frames: [HAND_REACHING_UP], palette: SHADE_COLOURS, radius: 3 });
+defineBulletArt('dusklingHandRight', { frames: [HAND_REACHING_RIGHT], palette: DUSKLING_COLOURS, radius: 3 });
+defineBulletArt('dusklingHandDown', { frames: [HAND_REACHING_DOWN], palette: DUSKLING_COLOURS, radius: 3 });
+defineBulletArt('dusklingHandLeft', { frames: [HAND_REACHING_LEFT], palette: DUSKLING_COLOURS, radius: 3 });
+defineBulletArt('dusklingHandUp', { frames: [HAND_REACHING_UP], palette: DUSKLING_COLOURS, radius: 3 });
 
 // A crescent blade of shadow, spinning.
-defineBulletArt('shadeCrescent', {
+defineBulletArt('dusklingCrescent', {
   frames: [[
     '..LLL..',
     '.LSs...',
@@ -83,14 +83,14 @@ defineBulletArt('shadeCrescent', {
     '.LSs...',
     '..LLL..',
   ]],
-  palette: SHADE_COLOURS,
+  palette: DUSKLING_COLOURS,
   radius: 2.5,
   spin: 7,
 });
 
 // The thorny tip of a tendril, riding the front of it as it grows (harmless
 // itself; the tendril behind it is what hurts).
-defineBulletArt('shadeTendrilTip', {
+defineBulletArt('dusklingTendrilTip', {
   frames: [[
     'L.L..',
     '.SSL.',
@@ -98,35 +98,35 @@ defineBulletArt('shadeTendrilTip', {
     '.SSL.',
     'L.L..',
   ]],
-  palette: SHADE_COLOURS,
+  palette: DUSKLING_COLOURS,
   radius: 2,
   rotate: true,
 });
 
-// A little wisp of the shade, with its eyes, its tail wriggling.
-defineBulletArt('shadeWisp', {
+// A little wisp of the duskling, with its eyes, its tail wriggling.
+defineBulletArt('dusklingWisp', {
   frames: [
     ['.LLLL.', 'LsssSL', 'LeSeSL', 'LsssSL', 'Ls.sL.', 'L...L.'],
     ['.LLLL.', 'LsssSL', 'LeSeSL', 'LsssSL', '.Ls.sL', '.L...L'],
   ],
-  palette: SHADE_COLOURS,
+  palette: DUSKLING_COLOURS,
   radius: 2.5,
   frameSeconds: 0.18,
 });
 
 // Which hand art reaches in from each side of the box.
 const HAND_FROM_SIDE = {
-  left: { art: 'shadeHandRight', dx: 1, dy: 0 },
-  right: { art: 'shadeHandLeft', dx: -1, dy: 0 },
-  top: { art: 'shadeHandDown', dx: 0, dy: 1 },
-  bottom: { art: 'shadeHandUp', dx: 0, dy: -1 },
+  left: { art: 'dusklingHandRight', dx: 1, dy: 0 },
+  right: { art: 'dusklingHandLeft', dx: -1, dy: 0 },
+  top: { art: 'dusklingHandDown', dx: 0, dy: 1 },
+  bottom: { art: 'dusklingHandUp', dx: 0, dy: -1 },
 };
 
-export const SHADE_ATTACKS = {
+export const DUSKLING_ATTACKS = {
   // Eyes open along the walls of the box. Each one blinks awake, looks at
   // you, and a moment later stares a beam straight through where you were.
   // The flashing preview shows the beam's path; step off it.
-  shadeWatchingEyes(box, density, { Shot, Line, every, rand, angleTo, shuffleBag }) {
+  dusklingWatchingEyes(box, density, { Shot, Line, every, rand, angleTo, shuffleBag }) {
     const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
     const shutSeconds = 0.4;
     const stareWarn = 0.7;
@@ -142,7 +142,7 @@ export const SHADE_ATTACKS = {
         x = side === 'left' ? box.x + 4 : box.x + box.w - 4;
         y = rand(box.y + 10, box.y + box.h - 10);
       }
-      bullets.push(new Shot({ x, y, art: 'shadeEyeShut', harmless: true, life: shutSeconds }));
+      bullets.push(new Shot({ x, y, art: 'dusklingEyeShut', harmless: true, life: shutSeconds }));
       waking.push({ x, y, t: shutSeconds });
     });
     return {
@@ -152,7 +152,7 @@ export const SHADE_ATTACKS = {
         for (const eye of waking) {
           eye.t -= dt;
           if (eye.t > 0) continue;
-          bullets.push(new Shot({ x: eye.x, y: eye.y, art: 'shadeEyeOpen', harmless: true, life: stareWarn + 0.4 }));
+          bullets.push(new Shot({ x: eye.x, y: eye.y, art: 'dusklingEyeOpen', harmless: true, life: stareWarn + 0.4 }));
           bullets.push(new Line({
             x: eye.x,
             y: eye.y,
@@ -173,7 +173,7 @@ export const SHADE_ATTACKS = {
 
   // Shadow hands lunge in from the sides of the box, level with you, stop to
   // grab at the air, then slowly pull back out. Later on, two reach in at once.
-  shadeGraspingHands(box, density, { Shot, every, rand, clamp, shuffleBag }) {
+  dusklingGraspingHands(box, density, { Shot, every, rand, clamp, shuffleBag }) {
     const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
     const lungeSpeed = 90;
     const slowing = 70; // the hand stops about 50 px in
@@ -242,7 +242,7 @@ export const SHADE_ATTACKS = {
   // Crescents of shadow are flung in from the edges, slow at first, then
   // pick up speed while their path bends, so they sweep around instead of
   // flying straight. Each one curves the opposite way to the last.
-  shadeCrescentBlades(box, density, { Shot, every, rand, edgePoint, angleTo, shuffleBag }) {
+  dusklingCrescentBlades(box, density, { Shot, every, rand, edgePoint, angleTo, shuffleBag }) {
     const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
     let crescents = [];
     let bendWay = 1;
@@ -258,7 +258,7 @@ export const SHADE_ATTACKS = {
         vx: Math.cos(aim) * 30,
         vy: Math.sin(aim) * 30,
         accel: 30,
-        art: 'shadeCrescent',
+        art: 'dusklingCrescent',
         warn: 0.55,
       });
       bullets.push(shot);
@@ -285,7 +285,7 @@ export const SHADE_ATTACKS = {
   // Rows of thorny tendrils creep across the box from one wall, leaving one
   // gap to squeeze through. Then the next rows come the other way, crossways,
   // closing in like the bars of a cage.
-  shadeTendrilCage(box, density, { Shot, Line, every, rand, shuffleBag, spreadAcross }) {
+  dusklingTendrilCage(box, density, { Shot, Line, every, rand, shuffleBag, spreadAcross }) {
     const startSide = shuffleBag([true, false]);
     const gapAlong = { width: spreadAcross(0, 1, 3), height: spreadAcross(0, 1, 3) };
     const spacing = 10;
@@ -324,7 +324,7 @@ export const SHADE_ATTACKS = {
           y,
           vx: Math.cos(angle) * growSpeed,
           vy: Math.sin(angle) * growSpeed,
-          art: 'shadeTendrilTip',
+          art: 'dusklingTendrilTip',
           harmless: true,
           warn,
           life: length / growSpeed,
@@ -334,10 +334,10 @@ export const SHADE_ATTACKS = {
     return { duration: 7, update: (dt, bullets) => close(dt, bullets) };
   },
 
-  // Little wisps of the shade peel off the walls and drift after you, but
+  // Little wisps of the duskling peel off the walls and drift after you, but
   // they lose interest after a moment, veer off to one side and wander away,
   // speeding up. Don't stand where they wander.
-  shadeLostWisps(box, density, { Shot, every, rand, pick, edgePoint, angleTo, shuffleBag }) {
+  dusklingLostWisps(box, density, { Shot, every, rand, pick, edgePoint, angleTo, shuffleBag }) {
     const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
     const followSeconds = 1.1;
     let wisps = [];
@@ -349,7 +349,7 @@ export const SHADE_ATTACKS = {
         y: start.y,
         vx: Math.cos(aim) * 38,
         vy: Math.sin(aim) * 38,
-        art: 'shadeWisp',
+        art: 'dusklingWisp',
         warn: 0.55,
         homing: { target: soul, turn: 1.1 },
       });

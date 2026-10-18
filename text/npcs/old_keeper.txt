@@ -13,7 +13,9 @@ If it attacks, don't just run from the bullets. Brushing close past them fills y
 
 The floating crystals are older than me. Touch one, and the Ruins will remember you.
 
-And up the hall, past me, is Moss. A merchant with a shop full of things meant for the Hero.
+And up the hall, past me, is Moss.
+
+He is one of many merchants with a shop full of things meant for the Hero.
 
 {sly}Tell him the Keeper sent you. He may even give you a fair price.
 

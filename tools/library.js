@@ -7,7 +7,7 @@ import { paletteNotes, valueText } from './source.js';
 import { friendly } from './ui.js';
 
 // Used when the Studio runs without its server (no folder listing).
-const KNOWN_ART_FILES = ['player.js', 'props.js', 'portraits.js', 'icons.js', 'dummy.js', 'moth.js', 'bunny.js', 'waxling.js', 'shade.js', 'columneon.js'];
+const KNOWN_ART_FILES = ['player.js', 'props.js', 'portraits.js', 'icons.js', 'dummy.js', 'moth.js', 'bunny.js', 'waxling.js', 'duskling.js', 'columneon.js'];
 
 const isRows = (v) => Array.isArray(v) && v.length > 0 && v.every((r) => typeof r === 'string');
 const isFrameSet = (v) => v && typeof v === 'object' && !Array.isArray(v) && Object.values(v).length > 0 && Object.values(v).every(isRows);

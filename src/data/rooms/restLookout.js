@@ -1,7 +1,9 @@
 // THE LOOKOUT: a platform off the east side of the village, hanging over the
 // cloud sea, with a telescope trained on the summit. The stair goes on north
-// from here, up into the cloud, towards the top of Mount Vigil (still to be
-// built). A herald keeps watch here for the Hero, as one always has.
+// from here, up into the cloud, to the second cairn (vigilSecondCairn.js) and
+// on towards the top of Mount Vigil. A rope is strung across it until Ves has
+// joined you: nobody from the village goes up alone. A herald keeps watch
+// here for the Hero, as one always has.
 // Tile key (see src/overworld/tileset.js):
 //   A  snowy cliff top (solid)                    s  the great stair
 //   E  ice-veined cliff face (solid)              n  snow
@@ -54,6 +56,7 @@ export const REST_LOOKOUT = {
   // A door with `climb: true` carries a rope climb on into the next room.
   doors: [
     { x: 0, y: 10, w: 1, h: 2, to: 'rest_square', spawn: { x: 38, y: 25 } },
+    { x: 12, y: 0, w: 5, h: 1, to: 'vigil_second_cairn', spawn: { x: 12, y: 22 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -74,6 +77,8 @@ export const REST_LOOKOUT = {
     { sprite: 'herald', x: 6, y: 9, npc: 'herald_lookout' },
     { sprite: 'chough', x: 20, y: 8, text: 'ridge_chough', walkable: true },
     { sprite: 'chough', x: 3, y: 12, text: 'ridge_chough', walkable: true },
+    // Across the stair north, until Ves joins you in the chapel.
+    { sprite: 'stair_rope', x: 12, y: 1, text: 'lookout_rope', until: 'ves_in_the_chapel' },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

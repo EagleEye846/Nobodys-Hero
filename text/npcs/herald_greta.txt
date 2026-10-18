@@ -18,3 +18,19 @@ Sleep when you need to, love. The mountain doesn't care how tired you are, but I
 A night in a proper bed puts you back together. HP and all. And you'll dream, like as not. Everyone dreams up here. It's the thin air.
 
 Second helpings are free. Thirds are free. Fourths, I start to worry about you.
+
+[first after ves_in_the_chapel]
+In you come, the both of you. Boots by the door. Soup's on, it's always on.
+
+Greta puts a bowl in your hands, and another in Ves's before she can say she isn't hungry.
+
+You've got her, then. Good. Somebody's got to make sure she eats.
+
+Scarves ON, the both of you. The mountain's colder than it looks, and it looks very cold.
+
+[repeat after ves_in_the_chapel]
+Sleep when you need to, love. The mountain doesn't care how tired you are, but I do.
+
+A night in a proper bed puts you back together. HP and all. And you'll dream, like as not. Everyone dreams up here. It's the thin air.
+
+Second helpings are free. Thirds are free. Fourths, I start to worry about you.

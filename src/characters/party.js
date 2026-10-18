@@ -29,9 +29,14 @@ export const MEMBERS = {
     frames: VES_FRAMES,
     // A portrait id from src/data/art/portraits.js, when they have one.
     portrait: 'vesper',
-    // HP: for show, for now. Enemies only ever aim at the hero's shadow.
+    // HP at level 1, and how much more with every level the hero gains (they
+    // level up together).
     baseHp: 44,
-    hpPerLevel: 5,
+    hpPerLevel: 9,
+    // How much stronger they get with every level after the first: FIGHT power
+    // (as a share: 0.1 is 10% more a level), and what their spells add (the
+    // same effects their gear adds to: see equipment.js).
+    growth: { fight: 0.1, allyStrike: 2, allyHeal: 3, allyCalm: 1 },
     // Skill points they get with every level the hero gains.
     skillPointsPerLevel: 1,
     // On their turn they get a menu like yours (FIGHT, TALK, SPELLS, ITEMS,
@@ -40,13 +45,22 @@ export const MEMBERS = {
     // a `cost` in the SP you share (0 for none), what it does, and what the
     // panel says. Effects: calmAll (MERCY for every enemy), sp (spell power
     // for the hero), heal (hero HP), guard (halves the next attack, and takes
-    // a little more off each hit), strikeAll (damage to every enemy).
+    // a little more off each hit), strikeAll and strikeOne (damage to every
+    // enemy, or to one: a multiple of the most their own FIGHT could do, plus
+    // their allyStrike; see bestStrike in battleScene.js).
     commands: [
       { label: 'SHELTER', cost: 6, guard: true, text: 'Ves opens her umbrella over you and holds it steady.\nThe next attack will do half the damage.' },
       { label: 'FLURRY', cost: 12, calmAll: 10, text: 'Ves twirls her umbrella. Snow swirls round everyone, soft and slow.' },
-      { label: 'SLEET', cost: 16, strikeAll: 8, text: 'Ves points her umbrella. A sting of sleet sweeps across the room!' },
+      { label: 'SLEET', cost: 20, strikeAll: 0.6, text: 'Ves points her umbrella. A sting of sleet sweeps across the room!' },
       { label: 'ZEPHYR', cost: 0, heal: 8, sp: 10, text: 'Ves calls a warm wind. It smells of hearths and spring.' },
     ],
+    // SPELLS learned from their branches of the skill tree (a skill's
+    // `command` effect, src/data/skills.js), added after the ones above.
+    learnable: {
+      downdraft: { label: 'DOWNDRAFT', cost: 30, strikeOne: 1.4, text: 'Ves snaps her umbrella shut and brings the wind straight down!' },
+      whiteout: { label: 'WHITEOUT', cost: 60, strikeAll: 1.1, text: 'Ves spins her umbrella over her head. The whole room goes white!' },
+      aurora: { label: 'AURORA', cost: 40, heal: 40, text: 'Ves lifts her umbrella, and the light of the northern sky pours down it.' },
+    },
   },
 };
 
@@ -72,6 +86,11 @@ export function joinParty(id) {
 
 export function leaveParty(id) {
   HERO_STATE.party = partyIds().filter((member) => member !== id);
+}
+
+// What `effect` (a key of a member's `growth`) adds at the hero's level now.
+export function memberGrowth(id, effect) {
+  return (MEMBERS[id]?.growth?.[effect] ?? 0) * (HERO_STATE.level - 1);
 }
 
 export function memberMaxHp(id) {

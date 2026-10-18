@@ -3,6 +3,8 @@ import { MOTH_PALETTE, MOTH_SPRITE } from '../art/moth.js';
 // The LANTERN MOTH's numbers. Everything it says is in text/enemies/lantern_moth.txt.
 export const LANTERN_MOTH = {
   name: 'LANTERN MOTH',
+  // How it gets about in a room (GAITS in src/overworld/npc.js): it flies.
+  gait: 'fly',
   textFile: 'enemies/lantern_moth.txt',
   sprite: { rows: MOTH_SPRITE, palette: MOTH_PALETTE },
   maxHp: 150,

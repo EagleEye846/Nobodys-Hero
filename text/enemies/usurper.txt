@@ -1,0 +1,253 @@
+# THE USURPER, the shade on the summit of Mount Vigil who thinks he's the Hero.
+# Numbers (HP, damage, his phases) live in src/data/enemies/usurper.js.
+# He can't be spared: nothing here builds MERCY, and there's no ending but
+# beating him.
+#
+# A section with ": smoke", ": flame" or ": lit" after its name is used in
+# that phase of his fight instead of the plain one ([flavor: lit] instead of
+# [flavor]). [phase: ...] sections are what's said as a phase starts: plain
+# ones in the battle panel, "vesper" ones by Ves in her box, "foe" ones by him
+# in speech bubbles.
+
+# Said in speech bubbles during his entrance, after his title card. Lines
+# written together (no blank line between) are said one bubble at a time.
+[boss_intro]
+Look at you.
+Is this what they sent?
+
+A hundred years I waited.
+The mountain never called me Hero.
+
+It never did.
+So I took the name.
+
+Come, then, nobody.
+Take it back.
+
+[intro]
+The USURPER comes at you out of the stilled storm, the village's blade raised high.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The USURPER's edges smoke and blur. It's hard to tell where he stops.
+
+The stolen blade is the only thing about him that casts a shadow.
+
+# While the flame is in the box these talk to the player straight: how to
+# defend it.
+[flavor: flame]
+Defend the lantern! Touch the pale blue bullets with your shadow to catch them. Catching them doesn't hurt you.
+
+Pale blue bullets trail a thread to the flame. Stay low near the flame and meet them on the way in.
+
+The dots under the flame show how many more it can take. Run out and it's snuffed back a stage.
+
+Each turn the flame survives, the lantern meter grows. Fill all four to light it.
+
+A rough turn ahead? TALK: Guard the lantern lets the flame take 2 more this turn.
+
+TALK: Stare him down turns this turn's snuffers on you instead. The flame is safe, but they'll hurt.
+
+[flavor: lit]
+The lantern blazes in the snow. In its light, the USURPER has a shadow at last. It's small.
+
+His mask is cracking. Under it, there's nothing much at all.
+
+Ves holds the Hero's blade like it weighs nothing. Her hands are shaking. Her blade isn't.
+
+The USURPER keeps his face turned from the light.
+
+The summit is warm, for the first time in eight years.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) are said one bubble at a time.
+[taunts]
+Swing all you like.
+You can't cut smoke.
+
+I am the Hero.
+I have the sword. I have the crown.
+What have you got?
+
+The village waited a hundred years.
+I was HERE.
+They never once looked up.
+
+Not one word out of you.
+Not even a name.
+
+[taunts: flame]
+Light it?
+With WHAT?
+There's nothing left in it.
+
+I pinched that wick out myself.
+It's still cold, girl.
+
+Eight years in the dark.
+You get used to it.
+
+Keep your back to me, little lamp.
+Your mother did.
+
+Put it OUT.
+PUT IT OUT!
+
+[taunts: lit]
+Don't look at me.
+DON'T LOOK AT ME!
+
+That's MINE.
+The blade is MINE!
+
+I am the Hero.
+I am the Hero.
+I am...
+
+Turn it off.
+I said turn it OFF!
+
+So the light finds me at last.
+Fine. Then it finds us both.
+
+# What happens as each phase starts (see `beat` in usurper.js).
+[phase: flame]
+Behind you, Ves isn't looking at him. She's looking at the snow.
+
+Her mother's lantern lies where he threw it. Cold. A crack across one pane.
+
+[phase: flame vesper]
+{resolute}The lantern. Mum's lantern. I can light it. I know I can.
+
+{furious}I'll light it! Keep him off me! Don't let him put it out!
+
+[phase: flame foe]
+Light it?
+Oh, please. Try.
+
+# Ves, kneeling at the lantern: her turn while the flame is in the box, one
+# line for each stage it's at (0 to 3).
+[relight]
+Ves strikes a match in the wind, and it goes out. She strikes another, cupping it close.
+
+Ves breathes on the wick, slow and steady. It catches, a little.
+
+Ves trims the wick with her thumbnail, the way her mother showed her. The flame stands up taller.
+
+Ves whispers something to the lantern. The flame leans toward her, like it knows her voice.
+
+# Shown the first time the flame is in the box (in the panel, while you dodge).
+[flame_hint]
+The flame is in the box! Catch the pale things he sends after it with your shadow. They won't hurt you.
+
+# After each of his turns while the flame is in the box: it grew, or it was
+# snuffed back. {stage} and {stages} are filled in.
+[flame_grows]
+The flame holds, and grows. The lantern is {stage}/{stages} lit.
+
+The flame stands up straighter in the wind. The lantern is {stage}/{stages} lit.
+
+[flame_snuffed]
+The flame gutters and shrinks. Ves leans over it with her umbrella. The lantern is {stage}/{stages} lit.
+
+The cold reaches the wick, and the flame sinks low. Ves shields it closer. The lantern is {stage}/{stages} lit.
+
+[phase: lit]
+The lantern BLAZES. Light pours over the summit, and it burns him!
+
+He is now corporeal!
+
+In the light, the USURPER is solid. Iron, and a mask, and a crown he made himself. Nothing else.
+
+The blade drops from his burning hand, into the snow.
+
+[phase: lit vesper]
+{furious}...This was made for the Hero.
+
+{resolute}There isn't one. There never was. So it's us.
+
+{resolute}Together. Now!
+
+[phase: lit foe]
+Put that DOWN.
+That's MINE!
+
+# After he's had his say: what the blade gives her.
+[phase: lit spells]
+Ves unlocked new spells! BLADE and TOGETHER are in her SPELLS.
+
+# Ves's turn prompt once she has the blade.
+[vesper_turn: lit]
+Ves lifts the Hero's blade. Its red ribbon flies in the lantern light. Her turn.
+
+# When a hit passes through him, while he's still smoke.
+[smoke_fight]
+Your blade passes through smoke.
+
+It's like cutting fog. Nothing there to hit.
+
+[smoke_spell]
+The spell passes through him. It barely singes the smoke.
+
+He laughs, and the smoke closes up behind it.
+
+# He mocks any try at mercy (a kind TALK, a calming spell, Pacify, a sweet
+# candle, Ves's kind word): the first time, all of [mercy_mock]; after that,
+# one of [mercy_mock_again]. In his speech bubbles.
+[mercy_mock]
+Mercy?
+From NOBODY?
+Ha!
+
+I'm the one who decides who lives up here.
+I decided about her mother.
+
+[mercy_mock_again]
+Mercy, again?
+Pathetic.
+
+Save it.
+Mercy from nobody is worth nothing.
+
+What a Hero.
+Begging, with a sword in your hand.
+
+# One section per TALK option. The names after "talk:" must match the TALK
+# options in src/data/enemies/usurper.js. None of them calm him.
+[talk: Check]
+USURPER - HP 1400
+A shade who wants to be the Hero. While the light's out, he's smoke.
+
+[talk: Check: lit]
+USURPER - HP 1400
+Solid in the lantern's light. Everything lands now. He's never been this afraid.
+
+[talk: Stare him down]
+You stare right at him, at the eye behind the mask, and you don't look away.
+He flinches. "What are you looking at?"
+
+[talk: Stare him down: flame]
+You stare right at him. He hates it. "Eyes on ME, then!"
+He forgets the lantern. His next attack comes at you.
+
+[talk: Stare him down: lit]
+You stare at him, in the full light of the lantern.
+He turns his mask away. He can't bear being seen.
+
+[talk: Guard the lantern]
+You glance back at the lantern, cold in the snow. Not yet.
+
+[talk: Guard the lantern: flame]
+You step back between him and the lantern, and plant your feet.
+The flame can shrug off two more this turn.
+
+[talk: Guard the lantern: lit]
+The lantern burns on behind you. It doesn't need guarding now. He does.
+
+# Said when you try to RUN.
+[no_escape]
+There's nowhere to go. Behind you is the stair, and he's faster on it than you are.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The USURPER staggers in the light, and doubles over. Ves lets the blade fall into the snow, shaking.

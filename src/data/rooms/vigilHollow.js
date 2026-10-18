@@ -97,5 +97,8 @@ export const VIGIL_HOLLOW = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // A craghorn grazing in the bottom of the hollow.
+  npcs: [
+    { enemy: 'craghorn', x: 5, y: 27, patrol: [3, 8] },
+  ],
 };

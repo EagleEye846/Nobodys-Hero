@@ -8,7 +8,7 @@ FIGHT does 15% more damage.
 The FIGHT bar's notch is wider, so PERFECT hits come easier.
 
 [rend]
-Learn the spell Rend: 40% SP for a guaranteed 30 damage.
+Learn the spell Rend: 40% SP for a hit that never misses, harder than your best FIGHT.
 
 [flurry]
 FIGHT gets a fourth slash to hit.
@@ -23,7 +23,7 @@ Learn the spell Lull: 24% SP to raise an enemy's MERCY by 30%.
 Your graze area grows, so near misses are easier to catch.
 
 [starfall]
-Learn the spell Starfall: 70% SP for 45 damage.
+Learn the spell Starfall: 70% SP for a hit half again as hard as your best FIGHT.
 
 [tough]
 Your skin's toughened up. Every hit does 1 less damage.
@@ -48,13 +48,13 @@ You land lightly. The floor only cracks on every other landing.
 
 # Chapter 2: Mount Vigil.
 [ember]
-Learn the spell Ember Flare: 36% SP for 20 damage to every enemy at once.
+Learn the spell Ember Flare: 36% SP to burn every enemy at once.
 
 [heavy_hand]
 FIGHT does another 25% more damage.
 
 [comet]
-Learn the spell Comet: 90% SP for a colossal 80 damage.
+Learn the spell Comet: 90% SP for over twice your best FIGHT, all at once.
 
 [kindling]
 Every battle starts with 25% SP already in the gauge.
@@ -108,3 +108,48 @@ Ves's ZEPHYR heals 6 more HP and gives 5% more SP.
 
 [ves_brim]
 Ves keeps her umbrella tilted your way: every hit does 1 less damage.
+
+# --- ARCANA (the hero's spells) ---
+
+[spark]
+Learn the spell Spark: 22% SP for a quick bolt that beats a perfect FIGHT.
+
+[arcane_focus]
+Every attack spell hits 20% harder.
+
+[siphon]
+Learn the spell Siphon: 48% SP to hit one enemy hard and drink back half of it as HP.
+
+[chain_bolt]
+Learn the spell Chain Bolt: 60% SP for lightning through every enemy, each as hard as your best FIGHT.
+
+[nova]
+Learn the spell Nova: all your SP for three times your best FIGHT. Everything goes white.
+
+# --- Ves: GALE ---
+
+[ves_squall]
+Ves's attack spells do 5 more damage.
+
+[ves_downdraft]
+Ves learns DOWNDRAFT: 30% SP to slam the wind down on one enemy, harder than her best FIGHT.
+
+[ves_tailwind]
+Ves's SHELTER also whips up a gust, slowing the next attack's bullets for 2 seconds.
+
+[ves_whiteout]
+Ves learns WHITEOUT: 60% SP for a blizzard that hits every enemy harder than her best FIGHT.
+
+# --- Ves: HEARTH ---
+
+[ves_cocoa]
+Ves's healing spells give back 6 more HP.
+
+[ves_canopy]
+A second canopy under the first: while Ves's SHELTER is up, every hit does 1 less.
+
+[ves_aurora]
+Ves learns AURORA: 40% SP to pour the northern lights down on you, healing a lot of HP.
+
+[ves_steadfast]
+Ves's ZEPHYR fills 10% more SP.

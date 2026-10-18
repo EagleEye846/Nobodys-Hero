@@ -80,5 +80,8 @@ export const CLIMB_START = {
   tileTexts: { T: 'stair_pine', M: 'climb_cliff' },
 
   // No enemies here: a quiet place to catch your breath before the climb.
-  npcs: [],
+  // A chough on the path up, watching for someone to laugh at.
+  npcs: [
+    { enemy: 'chough', x: 10, y: 4, patrol: [3, 16] },
+  ],
 };

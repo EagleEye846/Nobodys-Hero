@@ -38,11 +38,11 @@ export const VIGIL_HIGH_SHELF = {
     'EEEEEEEEEEEAAAAAEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
-    '_nYnnnnnnnnnnnnnnbBBBBbnnnnYn_',
-    '_nnnnnnnnnnnnnnnnBBBBBBnnnnnn_',
-    '_nnnnnnnnnnnnnnnnBBBBBBnnnssn_',
-    '_nnnnn_nnnnnnnnnnBBBBBBnnnssn_',
-    '_nnnn___nnnnnnnnnbBBBBbnnnssn_',
+    '_nYnnnnnnnnnnnnnnbBbBbnnnnnYn_',
+    '_nnnnnnnnnnnnnnnbBbBbBbnnnnnn_',
+    '_nnnnnnnnnnnnnnnnbBbBbnnnnssn_',
+    '_nnnnn_nnnnnnnnnbBbBbBbnnnssn_',
+    '_nnnn___nnnnnnnnnbBbBbnnnnssn_',
     '__________________________ss__',
     '__________________________ss__',
   ],
@@ -67,8 +67,8 @@ export const VIGIL_HIGH_SHELF = {
     // Over the rockfall by jumping; up the crag by one throw of the rope.
     { sprite: 'grapple_ring', x: 13, y: 3, grapple: true },
     { sprite: 'chest', x: 12, y: 2, text: 'shelf_chest', gives: 'herald_honeycake', taken: { sprite: 'chest_open', text: 'chest_empty' } },
-    { sprite: 'sign', x: 24, y: 8, text: 'shelf_sign' },
-    { sprite: 'chough', x: 9, y: 8, text: 'upper_chough', walkable: true },
+    { sprite: 'sign', x: 9, y: 8, text: 'shelf_sign' },
+    { sprite: 'chough', x: 25, y: 10, text: 'upper_chough', walkable: true },
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,
@@ -78,5 +78,8 @@ export const VIGIL_HIGH_SHELF = {
   tileTexts: { Y: 'upper_pine', E: 'upper_rock', Q: 'upper_boulder', n: 'upper_snow', s: 'upper_stair', _: 'upper_cloud', b: 'shelf_rockfall', B: 'shelf_rockfall' },
 
   // No enemies here: the mountain itself is the challenge.
-  npcs: [],
+  // An upper loose step on the shelf.
+  npcs: [
+    { enemy: 'iceStep', x: 11, y: 10, patrol: [11, 11], behaviour: 'disguise', reach: 3 },
+  ],
 };

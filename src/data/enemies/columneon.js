@@ -4,6 +4,8 @@ import { COLUMNEON_PALETTE, COLUMNEON_SPRITE, COLUMNEON_DISGUISE_SPRITES } from 
 // says is in text/enemies/columneon.txt.
 export const COLUMNEON = {
   name: 'COLUMNEON',
+  // How it gets about in a room (GAITS in src/overworld/npc.js): it shuffles and thuds down.
+  gait: 'stomp',
   textFile: 'enemies/columneon.txt',
   sprite: { rows: COLUMNEON_SPRITE, palette: COLUMNEON_PALETTE },
   // What it looks like in a room while it's pretending (the "In disguise"

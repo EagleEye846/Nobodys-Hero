@@ -77,9 +77,11 @@ export class TextBox {
   }
 
   // `speaker` is an NPC id; their portrait shows if they have one, in the
-  // expression `face` (unless a page asks for another).
-  open(pages, speaker = null, face = null) {
+  // expression `face` (unless a page asks for another). With `shake`, the
+  // words tremble, for a scream or a shout.
+  open(pages, speaker = null, face = null, { shake = false } = {}) {
     this.speaker = speaker;
+    this.shake = shake;
     // A page too long for the box carries on onto the next one.
     this.pages = pages.flatMap((page) => {
       const split = splitFace(page);
@@ -132,7 +134,11 @@ export class TextBox {
 
       const { x, width } = textArea(this.portrait);
       const lines = layoutDialogue(ctx, this.pages[this.pageIndex].text, width, TEXT_SIZE);
-      drawDialogue(ctx, lines, x, BOX.y + PADDING_Y, {
+      // Trembling words jump a pixel or two every few frames.
+      const jolt = this.shake ? Math.floor(performance.now() / 50) : 0;
+      const dx = this.shake ? ((jolt * 7) % 5) - 2 : 0;
+      const dy = this.shake ? ((jolt * 3) % 5) - 2 : 0;
+      drawDialogue(ctx, lines, x + dx, BOX.y + PADDING_Y + dy, {
         size: TEXT_SIZE,
         lineHeight: LINE_HEIGHT,
         visible: Math.floor(this.visibleCharacters),

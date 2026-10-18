@@ -190,8 +190,9 @@ export const CHOUGH_ATTACKS = {
     const run = every(1.75, 2.05, (bullets, soul) => {
       const yours = clamp(Math.floor((soul.x - box.x) / width), 0, columns - 1);
       const others = [...Array(columns).keys()].filter((c) => c !== yours).sort(() => Math.random() - 0.5);
+      // Yours lands right where you're standing.
       const drops = [yours, ...others.slice(0, 3)].map((column) => {
-        const x = box.x + (column + 0.5) * width;
+        const x = column === yours ? clamp(soul.x, box.x + 3, box.x + box.w - 3) : box.x + (column + 0.5) * width;
         const shadow = new Shot({ x, y: floor, art: 'choughShadow', harmless: true, life: 4 });
         bullets.push(shadow);
         return { x, shadow, dropped: false };

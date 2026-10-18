@@ -115,5 +115,9 @@ export const VIGIL_ICE_FACE = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // A ringer hanging about as a climbing ring, and a frostbite at the foot of the face.
+  npcs: [
+    { enemy: 'ringer', x: 26, y: 12, patrol: [26, 26], behaviour: 'disguise', reach: 3 },
+    { enemy: 'frostbite', x: 14, y: 31, patrol: [14, 14], behaviour: 'disguise', reach: 2 },
+  ],
 };

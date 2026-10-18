@@ -61,10 +61,10 @@ export const VIGIL_BROKEN_SPAN = {
     'AEEEEEEEEnnsssssnnnnnbbnnA',
     'AEEEEEEEEnnsssssnnnnnnnnnA',
     'AEEEEEEEEnnsssssnnnnnnnnnA',
-    'AEEEEEEEEnnsssssnnbnnnnnnA',
-    'AnnnnnnnBnnsssssnnnnnnnnnA',
+    'AnnnnnnnBnnsssssnnbnnnnnnA',
+    'AnnnnnnnBbnsssssnnnnnnnnnA',
     'AnbnnnnnBnnsssssnnnnnnnQnA',
-    'ABBBBBBBBbnsssssnnnnnnnnnA',
+    'ABBBBBBBBnnsssssnnnnnnnnnA',
     'AnnnnbnnnnnsssssnnnnnnnnnA',
     'AnYnnnnnnnnsssssnnnnnnnnnA',
     'AAAAAAAAAAAsssssAAAAAAAAAA',
@@ -96,8 +96,8 @@ export const VIGIL_BROKEN_SPAN = {
   props: [
     // The near side: jump the fallen blocks into the pocket, swing up the face
     // to the high ledge, and ride the wind over the gorge to the far side.
-    { sprite: 'swing_ring', x: 4, y: 26 },
-    { sprite: 'swing_ring', x: 6, y: 24 },
+    { sprite: 'swing_ring', x: 4, y: 25 },
+    { sprite: 'swing_ring', x: 6, y: 23 },
     { sprite: 'swing_ring', x: 4, y: 22 },
     { sprite: 'grapple_ring', x: 4, y: 20, grapple: true },
     { sprite: 'lamp_cold', x: 2, y: 19, text: 'span_lamp' },
@@ -106,7 +106,6 @@ export const VIGIL_BROKEN_SPAN = {
     { sprite: 'scorch_mark', x: 13, y: 17, text: 'span_scorch', walkable: true },
     // The far side, and a ring to rope down its cliff, back to the near side.
     { sprite: 'grapple_ring', x: 21, y: 10, grapple: true },
-    { sprite: 'chest', x: 23, y: 3, text: 'span_chest', gives: 'fanfare_fudge', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'cairn', x: 9, y: 3, text: 'span_marker' },
   ],
 
@@ -132,5 +131,8 @@ export const VIGIL_BROKEN_SPAN = {
   // is how they move (see BEHAVIOURS in src/overworld/npc.js).
   npcs: [
     { enemy: 'step', x: 19, y: 28, patrol: [19, 19], behaviour: 'disguise', reach: 2 },
+    // Its frozen brother from the top, on the upper span, and a chough.
+    { enemy: 'iceStep', x: 10, y: 9, patrol: [10, 10], behaviour: 'disguise', reach: 3 },
+    { enemy: 'chough', x: 16, y: 21, patrol: [10, 23] },
   ],
 };

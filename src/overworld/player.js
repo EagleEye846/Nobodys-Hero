@@ -1,5 +1,6 @@
 import { TILE_SIZE as T } from '../config.js';
 import { HERO_ANIMATIONS, chooseFacing, heroFrame, heroBounce } from '../characters/hero.js';
+import { animationFrame } from '../engine/animations.js';
 import { skillBonus } from '../characters/progress.js';
 
 const WALK_SPEED = 70; // pixels per second
@@ -55,8 +56,10 @@ export class Player {
     this.fallTime = 0;
   }
 
+  // Up on a block, drawn after it (see Room.findStandingTiles), but still
+  // before a block in front, which can hide your feet.
   get sortY() {
-    return this.y;
+    return this.ground > 0 ? this.y + T - 1 : this.y;
   }
 
   get isAirborne() {
@@ -222,6 +225,17 @@ export class Player {
     }
   }
 
+  // That point, then the two ends of the side you're facing: whatever stops
+  // you there is in reach, even if it only catches a corner of you (stepped
+  // up onto a block with your feet still over its front edge, say).
+  interactionPoints() {
+    const [x, y] = this.interactionPoint();
+    const across = this.facing === 'up' || this.facing === 'down'
+      ? [[this.x - HITBOX_HALF_WIDTH, y], [this.x + HITBOX_HALF_WIDTH - 1, y]]
+      : [[x, this.y - HITBOX_HEIGHT], [x, this.y - 1]];
+    return [[x, y], ...across];
+  }
+
   // Centres the player over the broken tile and starts the fall.
   fallInto(tx, ty) {
     this.hole = { x: tx * T, y: ty * T };
@@ -235,12 +249,31 @@ export class Player {
     this.fallTime = 0;
   }
 
+  // Your shadow in the sun (see shadows.js): on the ground under you, even
+  // mid-jump.
+  shadow() {
+    if (this.hidden || this.isFalling) return null;
+    const frame = heroFrame(this.facing, this.moving, this.isAirborne, this.animationTime, this.running);
+    return { image: frame, x: this.x, y: this.y - this.ground };
+  }
+
   draw(ctx, camera) {
+    // Hidden while you're drawn as part of something else (asleep in a bed).
+    if (this.hidden) return;
     if (this.isFalling) {
       this.drawFalling(ctx, camera);
       return;
     }
 
+    // A cutscene can have you play an animation (the dive off the summit).
+    if (this.sceneAnimation) {
+      const a = this.sceneAnimation;
+      const frame = animationFrame(a.name, performance.now() / 1000 - a.start, a.speed, a.once);
+      if (frame) {
+        this.drawFrame(ctx, camera, frame, this.y);
+        return;
+      }
+    }
     if (this.isAirborne) this.drawShadow(ctx, camera);
     // Running has its own frames and a little bounce.
     const frame = heroFrame(this.facing, this.moving, this.isAirborne, this.animationTime, this.running);

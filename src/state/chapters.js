@@ -2,6 +2,8 @@ import { HERO_STATE } from '../characters/heroState.js';
 import { WORLD_STATE, saveGame, peekSave } from './saveGame.js';
 import { ROOMS, START_ROOM } from '../data/rooms/index.js';
 import { SCENES } from '../data/scenes/index.js';
+import { SHOPS } from '../data/shops.js';
+import { ENEMIES } from '../data/enemies/index.js';
 
 // Chapter select (on the title screen): start any chapter you've reached
 // again, from its beginning, to replay it or to try out something new in it.
@@ -66,10 +68,30 @@ export function recordChapterStart(number) {
 const ruinsRoom = (id) => ROOMS[id]?.area === 'ruins';
 const fromRuins = (key) => ruinsRoom(String(key).split(':')[0]);
 
+// Everything you can get outside the Ruins and not in them: from chests and
+// other gifts, shops, and what enemies drop. A chapter worked out from a save
+// (below) takes these away again, so a replay starts empty-handed.
+function laterThings() {
+  const found = { ruins: new Set(), later: new Set() };
+  for (const room of Object.values(ROOMS)) {
+    const into = room.area === 'ruins' ? found.ruins : found.later;
+    for (const prop of room.props ?? []) {
+      if (prop.gives) into.add(prop.gives);
+      for (const entry of SHOPS[prop.shop]?.stock ?? []) {
+        const id = entry.item ?? entry.weapon ?? entry.armor;
+        if (id) into.add(id);
+      }
+    }
+    for (const npc of room.npcs ?? []) for (const drop of ENEMIES[npc.enemy]?.drops ?? []) into.add(drop.item);
+  }
+  return new Set([...found.later].filter((id) => !found.ruins.has(id)));
+}
+
 // How a chapter starts. Its recorded start if there is one; otherwise, for a
 // chapter you reached before chapter select existed, it's worked out from
-// your save: the hero as they are, with the world put back to just what
-// happened in the chapters before (here, the Ruins), and nobody in the party yet.
+// your save: the hero as they are, less anything they could only have got
+// since (laterThings), with the world put back to just what happened in the
+// chapters before (here, the Ruins), and nobody in the party yet.
 function startOf(chapter) {
   if (chapter.number === 1) return copy(FRESH);
   const recorded = chapterProgress().starts[chapter.number];
@@ -78,6 +100,15 @@ function startOf(chapter) {
   if (!save) return null;
   const hero = copy(save.hero);
   hero.party = [];
+  const later = laterThings();
+  hero.items = (hero.items ?? []).filter((id) => !later.has(id));
+  hero.weapons = (hero.weapons ?? []).filter((id) => !later.has(id));
+  hero.armors = (hero.armors ?? []).filter((id) => !later.has(id));
+  hero.gear = (hero.gear ?? []).filter((id) => !later.has(id));
+  hero.storage = [];
+  hero.memberGear = {};
+  if (!hero.weapons.includes(hero.weapon)) hero.weapon = hero.weapons[0] ?? FRESH.hero.weapon;
+  if (!hero.armors.includes(hero.armor)) hero.armor = hero.armors[0] ?? FRESH.hero.armor;
   const world = copy(save.world);
   world.chapter = chapter.number;
   world.seenScenes = (world.seenScenes ?? []).filter((id) => ruinsRoom(SCENES[id]?.room));
@@ -107,6 +138,7 @@ export function beginChapter(chapter) {
   Object.assign(HERO_STATE, copy(FRESH.hero), start.hero);
   Object.assign(WORLD_STATE, copy(FRESH.world), start.world, { chapter: chapter.number });
   saveGame(chapter.room, chapter.spawn);
-  if (chapter.number === 1) recordChapterStart(1);
+  // Remembered from now on, so every replay of it starts the same way.
+  if (chapter.number === 1 || !chapterProgress().starts[chapter.number]) recordChapterStart(chapter.number);
   return { room: ROOMS[chapter.room], spawn: chapter.spawn };
 }

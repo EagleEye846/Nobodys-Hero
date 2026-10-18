@@ -8,9 +8,9 @@
 // lamplighter's lamps begin here, cold.
 // Tile key (see src/overworld/tileset.js):
 //   A  snowy cliff top (solid)                    E  ice-veined cliff face (solid)
-//   n  snow                                       s  the great stair
-//   Y  snow pine (walk or hide behind) (solid)    Q  snowy boulder (solid)
-//   _  open sky (the view shows through) (solid)
+//   n  snow                                       i  trodden snow path
+//   s  the great stair                            Y  snow pine (walk or hide behind) (solid)
+//   Q  snowy boulder (solid)                      _  open sky (the view shows through) (solid)
 export const VIGIL_SECOND_CAIRN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_second_cairn',
@@ -52,8 +52,8 @@ export const VIGIL_SECOND_CAIRN = {
     'Annnnnnnnnsssssnnnnnnnn_',
     'AnnnnnnQnnsssssnnnnnnnn_',
     'Annnnnnnnnsssssnnnnnnnn_',
-    'Annnnnnnnnsssssnnnnnnnn_',
-    'AnYnnnnnnnsssssnnnnnnnn_',
+    'Annnnnnnnnsssssinnnnnnn_',
+    'AnYnnnnnnnsssssiiinnnnn_',
     'Annnnnnnnnsssssnnnn_____',
     'Annnnnnnnnsssssnnn______',
     'AnnnQnnnnnsssssnn_______',
@@ -112,5 +112,8 @@ export const VIGIL_SECOND_CAIRN = {
   tileTexts: { Y: 'upper_pine', E: 'upper_rock', Q: 'upper_boulder', n: 'upper_snow', s: 'upper_stair', _: 'cairn_look_back' },
 
   // No enemies here: the mountain itself is the challenge.
-  npcs: [],
+  // An upper loose step, frozen in ice, on the terrace path: far from Ves's walk (5, 12 to 14).
+  npcs: [
+    { enemy: 'iceStep', x: 16, y: 12, patrol: [16, 16], behaviour: 'disguise', reach: 2.5 },
+  ],
 };

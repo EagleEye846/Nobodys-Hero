@@ -30,7 +30,19 @@ export class Prop {
     gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
     walkable = false, solidSides = 0, light = null, seenInLight = false, notice = false, grapple = false,
     rest = false, dream = null, sound = null, join = null, nightText = null, wrath = null, glow = undefined,
+    member = null, storage = false, vane = false, drift = null, travel = null,
   }) {
+    // A green updraft you can travel by: its id in src/data/travel.js.
+    this.travel = travel;
+    // A weathervane (turn it to turn the wind), or a snowdrift that's only
+    // there in some winds (the ones listed): see weathervanes.js.
+    this.vane = vane;
+    this.drift = drift;
+    // A storage chest: opens STORAGE (see storageMenu.js).
+    this.storage = storage;
+    // A party member staying put here for a while (Ves sitting by the hut
+    // door): a cutscene actor who `plays` them `ahead` takes this one's place.
+    this.member = member;
     // In a lamplit room (see src/overworld/lamplight.js): the light it gives
     // off, if not the usual for its sprite (PROP_GLOWS), or `false` for none.
     this.glow = glow === false ? [] : glow;
@@ -118,6 +130,14 @@ export class Prop {
     if (this.takenLook?.text) this.text = this.takenLook.text;
   }
 
+  // Shows another of its sprites for a while (a bed with you in it, say), or
+  // its own again with no name. Only sprites that exist.
+  setLook(name = null) {
+    const look = name && sprites[name] ? name : this.baseLook;
+    this.sprite = sprites[look];
+    this.look = look;
+  }
+
   moveToTile(tx, ty) {
     this.x = tx * T;
     this.y = ty * T;
@@ -137,6 +157,14 @@ export class Prop {
     if (!this.walkable) return this.overlaps(left, top, right, bottom);
     if (!this.solidSides || !this.overlaps(left, top, right, bottom)) return false;
     return left < this.x + this.solidSides || right > this.x + this.width - this.solidSides;
+  }
+
+  // Its shadow in the sun (see shadows.js): not for things lying flat on the
+  // floor, or the floating save crystal (it has its own glow).
+  shadow() {
+    if (this.hidden || this.isOpen || this.walkable || this.save) return null;
+    const frame = (this.animation && animationFrame(this.animation, performance.now() / 1000, this.speed)) || this.sprite;
+    return { image: frame, x: this.x + this.width / 2, y: this.y + T - (this.raise ?? 0) };
   }
 
   draw(ctx, camera) {

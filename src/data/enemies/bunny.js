@@ -3,6 +3,8 @@ import { BUNNY_PALETTE, BUNNY_SPRITE } from '../art/bunny.js';
 // The DUST BUNNY's numbers. Everything it says is in text/enemies/dust_bunny.txt.
 export const DUST_BUNNY = {
   name: 'DUST BUNNY',
+  // How it gets about in a room (GAITS in src/overworld/npc.js): it hops.
+  gait: 'hop',
   textFile: 'enemies/dust_bunny.txt',
   sprite: { rows: BUNNY_SPRITE, palette: BUNNY_PALETTE },
   maxHp: 80,

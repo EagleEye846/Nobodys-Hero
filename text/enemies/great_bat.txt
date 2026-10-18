@@ -1,0 +1,130 @@
+# THE ROOST MOTHER, the great bat in the roost of ice beyond the Hall of Glass.
+# Numbers (HP, damage, how much each TALK option calms her) live in
+# src/data/enemies/great_bat.js.
+
+# Said in speech bubbles during her entrance, after her title card. Lines
+# written together (no blank line between) are said one bubble at a time.
+[boss_intro]
+Who brought a light
+into my roost?
+
+You woke them.
+All of them.
+
+Do you know how long
+it takes to get them down?
+
+[intro]
+The ROOST MOTHER unfolds from the ceiling. Her wings fill the cave.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The roost is full of tiny eyes. Ves holds her umbrella up, as if it could keep them off.
+
+Hundreds of small wings rustle overhead. Ves has stopped breathing. She starts again.
+
+The ROOST MOTHER's screech rings off the ice. You feel it in your teeth.
+
+Behind you, Ves is whispering. It might be a prayer. It might be counting.
+
+Little faces peek out from under their mother's wings.
+
+Something pale is frozen into the ice under the ROOST MOTHER. You'd rather not look closer.
+
+Ves's hands are shaking. Her umbrella isn't.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) are said one bubble at a time.
+[taunts]
+Put that light out.
+They're sleeping.
+
+Shh.
+Shhhh.
+SHHHHHH!
+
+I can hear your heart.
+It's very loud.
+
+I hear you breathing.
+I hear the other one shaking.
+
+Every one of them is mine.
+Every single one.
+
+The dark isn't empty,
+little lights.
+It's full.
+
+The last ones who came up here
+had lights too.
+
+They're growing.
+They need feeding.
+
+# One section per TALK option. The names after "talk:" must match the TALK
+# options in src/data/enemies/great_bat.js.
+[talk: Check]
+ROOST MOTHER - HP 900
+Every bat in these caves is one of hers. The floor under her is littered with things that aren't rock.
+
+[talk: Shade your light]
+You cup your hand round your light. The roost goes nearly dark.
+Her ears stop twitching. Somewhere above, a little one yawns.
+
+[talk: Be very quiet]
+You stand very, very still, and don't make a sound.
+The ROOST MOTHER tilts her head, listening. All she hears is the ice.
+
+[talk: Stand by Ves]
+You stand in front of Ves. She's shaking, but her umbrella stays up.
+She knows that look: someone keeping a small one safe.
+
+# Ves's TALK, instead of her general lines: kind words, when she can find them.
+[vesper_talk]
+Ves opens her mouth to say something kind. Nothing comes out. She tries again, quieter, and this time it does.
+
+Ves lowers her umbrella a little, so {foe} can see her face. Her knees are shaking. She keeps it lowered.
+
+Ves whispers that she's sorry they woke the little ones. She means it. {foe}'s ears turn toward her.
+
+# Said by Ves, with her portrait, when you try to calm her in any way (TALK,
+# Lull, Hush, Flurry, a sweet candle). The first time, every page below, one
+# after another; after that, one of [no_mercy_again]. The {face} is Ves's.
+[no_mercy]
+{furious}No. I won't be kind to her. And neither will you.
+
+{scared}Look down. Under her. Those aren't stones in the ice.
+
+{crying}They're bones. Boots, and rope, and a herald's horn. A mitten. A little one.
+
+{scared}...Mum came this way. Is she... is Mum down there?
+
+{resolute}No. Not now. I can't look now.
+
+{sobbing}This is where they went. Everyone who never came back past the second cairn.
+
+{sobbing}She carried them up here. For her little ones.
+
+{resolute}If she lives, the next people up the mountain end up down there too.
+
+{resolute}I'm sorry. We can't spare her. We can't.
+
+[no_mercy_again]
+{angry}No. Not her. Look at the floor again and tell me she should go free.
+
+{resolute}I want to be kind too. But somebody else is going to climb this mountain. We finish this.
+
+{crying}Please. Don't make me look down there again.
+
+# Said when you try to RUN.
+[no_escape]
+The way back is a cloud of wings. There's no getting through that.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The ROOST MOTHER gives one last thin screech, and crashes down onto the ice. Overhead, a hundred small wings go still.
+
+# Never seen: Ves won't let you spare her (see [no_mercy]).
+[pacified]
+The ROOST MOTHER folds her wings and settles onto the ice.

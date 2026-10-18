@@ -251,19 +251,22 @@ export const FROSTBITE_ATTACKS = {
   // Icicles grow down from the top of the box, a row at a time, each row
   // longer than the last. Once they've grown they shiver and drop, one after
   // another in no particular order, and burst into chips on the floor.
-  frostIcicles(box, density, { Shot, every, rand }) {
+  frostIcicles(box, density, { Shot, every, rand, clamp }) {
     const columns = 8;
     const width = box.w / columns;
     const floor = box.y + box.h - 2;
     let wave = 0;
     let icicles = [];
-    const grow = every(2.2, 2.6, (bullets) => {
-      const picked = [...Array(columns).keys()].sort(() => Math.random() - 0.5).slice(0, 5);
+    const grow = every(2.2, 2.6, (bullets, soul) => {
+      // One always grows right over you; the rest wherever there's room.
+      const yours = clamp(Math.floor((soul.x - box.x) / width), 0, columns - 1);
+      const others = [...Array(columns).keys()].filter((c) => c !== yours).sort(() => Math.random() - 0.5);
+      const picked = [yours, ...others.slice(0, 4)];
       const order = [...picked].sort(() => Math.random() - 0.5);
       const longest = 12 + Math.min(wave, 4) * 5;
       for (const column of picked) {
         const icicle = new Icicle({
-          x: box.x + (column + 0.5) * width + rand(-1.5, 1.5),
+          x: column === yours ? clamp(soul.x, box.x + 3, box.x + box.w - 3) : box.x + (column + 0.5) * width + rand(-1.5, 1.5),
           top: box.y + 1,
           length: rand(longest - 8, longest),
           growFor: 1.0,
@@ -276,8 +279,8 @@ export const FROSTBITE_ATTACKS = {
     }, { first: 0.1 });
     return {
       duration: 7,
-      update: (dt, bullets) => {
-        grow(dt, bullets);
+      update: (dt, bullets, soul) => {
+        grow(dt, bullets, soul);
         for (const icicle of icicles) {
           if (icicle.tip < floor) continue;
           icicle.gone = true;

@@ -5,6 +5,9 @@ import { Player } from './player.js';
 import { Npc } from './npc.js';
 import { TextBox } from '../ui/textbox.js';
 import { PauseMenu } from '../ui/pauseMenu.js';
+import { StorageMenu } from '../ui/storageMenu.js';
+import { TravelMenu } from '../ui/travelMenu.js';
+import { catchUpDrafts, foundDrafts, draftIn } from '../data/travel.js';
 import { drawText } from '../ui/text.js';
 import { textFile, textSection } from '../engine/textLoader.js';
 import { inUiSpace } from '../engine/screen.js';
@@ -21,7 +24,11 @@ import { SCENES } from '../data/scenes/index.js';
 import { ScenePlayer } from './scenePlayer.js';
 import { Climb, findClimb } from './climbing.js';
 import { drawVista } from './vista.js';
-import { drawSnow, drawCirclingBirds, drawWisps } from './weather.js';
+import { drawSnow, drawCirclingBirds, drawWisps, drawFog } from './weather.js';
+import { drawVision } from './visions.js';
+import { drawShadows, drawBlockShadows, sunShadows } from './shadows.js';
+import { Whirl, WhirlRide, windIn, turnWind, applyWind, whirlLanding, WIND_STEP } from './weathervanes.js';
+import { PROP_SPRITES } from '../data/art/props.js';
 import { daylight } from './daylight.js';
 import { isLamplit, roomLights, ambientFor, flickerAt, skyColor, holeSprite, glowSprite } from './lamplight.js';
 import { heroFrame } from '../characters/hero.js';
@@ -118,6 +125,22 @@ export function continueGame(fallbackRoom) {
   return new OverworldScene(fallbackRoom);
 }
 
+// The cutscene party member `id` ran on ahead in, if they aren't with you in
+// this room (or null). A scene says so with `leavesAhead: { who, until, blocked }`:
+// from when it plays until the `until` scene does, they're out of sight in the
+// scene's own room and in the `until` scene's room (where that scene finds
+// them). You won't leave the scene's room without them, except through the
+// door to theirs: `blocked` names the words you get instead (a section of the
+// room's text file). Anywhere else they've caught you up and follow as usual.
+function wentAhead(id, roomId) {
+  const seen = WORLD_STATE.seenScenes ?? [];
+  return Object.values(SCENES).find(({ id: sceneId, room, leavesAhead }) => leavesAhead?.who === id
+    && seen.includes(sceneId) && !seen.includes(leavesAhead.until)
+    && (roomId === room || roomId === SCENES[leavesAhead.until]?.room)) ?? null;
+}
+// Stepping back off a door you won't go through: the opposite way to the one you face.
+const BACK_STEP = { up: [0, 1], down: [0, -1], left: [1, 0], right: [-1, 0] };
+
 // Free-roam exploration: walk around a room, read things, and get ambushed.
 // `spawn` is where the player appears, in tile coordinates. `fromArea` is the
 // region of the room you came from, if any.
@@ -127,6 +150,8 @@ export class OverworldScene {
   constructor(roomData, spawn = roomData.playerStart, fromArea = null, arrival = {}) {
     this.roomData = roomData;
     this.room = new Room(roomData);
+    // Getting here finds the green updrafts on the way (src/data/travel.js).
+    if (catchUpDrafts(roomData.id).length) sfx('heal');
     this.player = new Player(spawn.x * T + T / 2, (spawn.y + 1) * T);
     this.unstick();
     if (arrival.climb) {
@@ -135,15 +160,30 @@ export class OverworldScene {
     }
     // Whoever's in the party arrives with you.
     this.followers = partyIds().map((id) => new Follower(id, this.player.x, this.player.y));
+    // Except someone who ran on ahead in a cutscene, until you catch them up.
+    for (const follower of this.followers) if (wentAhead(follower.id, roomData.id)) follower.hidden = true;
     // Wind geysers (windGeyser.js). Carried up one into this room, you drift
     // down onto your spawn, hanging off Ves's boot.
     this.geysers = (roomData.geysers ?? []).map((data) => new WindGeyser(data));
     // Updrafts: small ones that toss you to another tile in this room.
     this.updrafts = (roomData.gusts ?? []).map((data) => new Updraft(data));
+    // Whirlwinds, and the wind the weathervanes set (see weathervanes.js).
+    this.whirls = (roomData.whirls ?? []).map((data) => new Whirl(data));
+    this.wind = windIn(roomData);
+    if (this.wind) applyWind(this.room, this.wind);
+    for (const whirl of this.whirls) whirl.wind = this.wind;
+    // The whirlwind you're standing in that's already had its go: it won't
+    // take you again until you step off it.
+    this.spentWhirl = null;
     this.hop = null;
     this.ride = arrival.geyser && canRide() ? new GeyserRide({ landing: { x: this.player.x, y: this.player.y } }) : null;
     // Weather and the view off the mountain are drawn from the room's data.
     this.time = 0;
+    // How much of the room's weather (snow and `fog`) there is, 0 to 1: all
+    // of it, unless a cutscene has stilled it for good (`weatherUntil`, a
+    // scene id) or is fading it now (fadeWeather).
+    this.weatherAmount = roomData.weatherUntil && (WORLD_STATE.seenScenes ?? []).includes(roomData.weatherUntil) ? 0 : 1;
+    this.weatherFade = null;
     // Small things that make the cold feel cold: footprints you leave in the
     // snow, your breath, snow kicked up when you land, pebbles knocked loose
     // on a climb, and snow settling on you if you stand still in it.
@@ -161,6 +201,11 @@ export class OverworldScene {
     this.camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
     this.textbox = new TextBox();
     this.pauseMenu = new PauseMenu();
+    this.storageMenu = new StorageMenu();
+    // TRAVEL, from a green updraft (src/data/travel.js).
+    this.travelMenu = new TravelMenu();
+    // Something to do once the textbox closes (a second speaker's lines).
+    this.afterText = null;
     this.battleFlash = null;
     this.doorway = null;
     this.fadeIn = DOOR_FADE_SECONDS;
@@ -178,6 +223,9 @@ export class OverworldScene {
   update(dt, input) {
     this.titleTime += dt;
     this.time += dt;
+    // A gusty face (`climbWind`): the wind comes in gusts, every so often.
+    const gusts = this.room.climbWind;
+    this.gusting = Boolean(gusts) && (this.time % gusts.every) < gusts.lasts;
     WORLD_STATE.playSeconds = (WORLD_STATE.playSeconds ?? 0) + dt;
     this.fadeIn = Math.max(0, this.fadeIn - dt);
     this.updateParticles(dt);
@@ -246,6 +294,7 @@ export class OverworldScene {
     // party waits out of sight and catches up when you're off the rope.
     if (this.climb) {
       for (const follower of this.followers) follower.hidden = true;
+      this.climb.gust = this.gusting ? this.room.climbWind : null;
       this.climb.update(dt, input);
       this.knockPebbles(dt);
       if (this.climb.done) {
@@ -263,6 +312,7 @@ export class OverworldScene {
       return;
     }
 
+    this.tickWeather(dt);
     // A cutscene takes over completely until it ends.
     if (this.cutscene) {
       this.cutscene.update(dt, input);
@@ -285,9 +335,11 @@ export class OverworldScene {
           const goOn = next
             ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, this.roomData.area)
             : this.game.home;
-          // With `credits`, the credits roll first.
-          const card = () => new ChapterEndScene(goOn);
-          this.game.changeScene(endChapter.credits ? new CreditsScene(card) : card());
+          // With `credits`, the credits roll first (`credits: { song, text }`
+          // for a chapter's own song and cards); `card` names its chapter card.
+          const card = () => new ChapterEndScene(goOn, endChapter.card);
+          const credits = endChapter.credits === true ? {} : endChapter.credits;
+          this.game.changeScene(credits ? new CreditsScene(card, credits) : card());
           return;
         }
       }
@@ -298,10 +350,19 @@ export class OverworldScene {
     }
 
     // Menus and the textbox take over input while open, so the player stands still.
-    if (this.pauseMenu.isOpen) {
+    if (this.storageMenu.isOpen) {
+      this.storageMenu.update(input);
+    } else if (this.travelMenu.isOpen) {
+      this.travelMenu.update(input);
+    } else if (this.pauseMenu.isOpen) {
       this.pauseMenu.update(input);
     } else if (this.textbox.isOpen) {
       this.textbox.update(dt, input);
+      if (!this.textbox.isOpen && this.afterText) {
+        const next = this.afterText;
+        this.afterText = null;
+        next();
+      }
     } else if (this.wrathfulEnd) {
       sfx('hurt');
       this.game.changeScene(new GameOverScene(() => continueGame(this.roomData), "The heralds' wrath descended upon you."));
@@ -568,6 +629,17 @@ export class OverworldScene {
     this.playCutscene(scene);
   }
 
+  // Where a fight here takes place, for its background (and its song): a
+  // cave's own crystal cavern, or the room's area. The lower mountain's green,
+  // sunny rooms (out under the sky, no snow) fight under the Long Stair's sky,
+  // not the snowy heights.
+  get battleArea() {
+    const data = this.roomData;
+    if (data.cave) return 'cave';
+    if (data.area === 'vigil' && !data.snowy && !data.indoors) return 'stair';
+    return data.area;
+  }
+
   // A battle started by a cutscene (a boss, say). Afterwards, the scene named
   // by the step's `spared` or `defeated` plays, depending on how it ended, and
   // is remembered as seen, so rooms can change with it ("Shows up").
@@ -587,14 +659,18 @@ export class OverworldScene {
       WORLD_STATE.seenScenes ??= [];
       if (!WORLD_STATE.seenScenes.includes(next)) WORLD_STATE.seenScenes.push(next);
       if (SCENES[next]) this.playCutscene(SCENES[next]);
-    }, this.roomData.area));
+    }, this.battleArea));
   }
 
   // Never leave the player stuck where they arrive (say, a door that opens onto
   // something that's appeared since): move them to the nearest open floor.
   unstick() {
     const { player, room } = this;
-    const free = (x, y) => !player.collidesAt(room, x, y) && player.floorAt(room, x, y) === 0;
+    const free = (x, y, ground = 0) => !player.collidesAt(room, x, y) && player.floorAt(room, x, y) === ground;
+    // Up on a block is fine, as long as it's the block they think they're on.
+    if (free(player.x, player.y, player.ground)) return;
+    player.ground = 0;
+    player.z = 0;
     if (free(player.x, player.y)) return;
     const [tx, ty] = player.tilePosition();
     for (let r = 1; r < Math.max(room.width, room.height); r++) {
@@ -624,8 +700,16 @@ export class OverworldScene {
   // you straight back out (and says why, the first time).
   checkGeysers(dt) {
     if (this.player.isAirborne || this.doorway || this.ride || this.hop) return;
-    // An updraft takes anyone, Ves or not.
     const [ux, uy] = this.player.tilePosition();
+    // A whirlwind flings you downwind (anyone, Ves or not), or sets you back.
+    const whirl = this.whirls.find((w) => w.covers(ux, uy));
+    this.whirlRest = Math.max(0, (this.whirlRest ?? 0) - dt);
+    if (!whirl) this.spentWhirl = null;
+    else if (whirl !== this.spentWhirl && this.whirlRest <= 0) {
+      this.rideWhirl(whirl);
+      return;
+    }
+    // An updraft takes anyone, Ves or not.
     const updraft = this.updrafts.find((u) => u.covers(ux, uy));
     if (updraft) {
       const to = { x: updraft.drop.x * T + T / 2, y: (updraft.drop.y + 1) * T - 2 };
@@ -643,7 +727,12 @@ export class OverworldScene {
     // that grows the closer you get, until it's stronger than you can walk,
     // and snow blowing past your boots. No words: you just can't get in.
     for (const geyser of this.geysers) {
-      const dx = this.player.x - geyser.x;
+      let dx = this.player.x - geyser.x;
+      // Round a spire, the short way to it may be across the seam.
+      if (this.spire) {
+        const w = this.room.pixelWidth;
+        dx = ((dx % w) + w + w / 2) % w - w / 2;
+      }
       const dy = this.player.y - geyser.y;
       const distance = Math.hypot(dx, dy);
       if (distance >= WIND_HOLD_RADIUS) continue;
@@ -673,6 +762,70 @@ export class OverworldScene {
     }
   }
 
+  // Into a whirlwind: up and away downwind, to wherever something solid
+  // stops you. If that's over the drop it won't take you: it spins you round
+  // and puts you back where you stepped in from (and says so, the first time).
+  rideWhirl(whirl) {
+    this.spentWhirl = whirl;
+    const land = whirlLanding(this.room, whirl.tx, whirl.ty, this.wind);
+    if (!land) {
+      sfx('back');
+      // A moment before it'll try again, if you walk straight back in.
+      this.whirlRest = 0.6;
+      const [dx, dy] = WIND_STEP[this.player.facing] ?? [0, 1];
+      this.player.x -= dx * T;
+      this.player.y -= dy * T;
+      this.unstick();
+      this.player.moving = false;
+      this.spentWhirl = null;
+      WORLD_STATE.whirlRefused ??= false;
+      if (!WORLD_STATE.whirlRefused && textSection(this.roomData.textFile, 'whirl_refuses').length) {
+        WORLD_STATE.whirlRefused = true;
+        this.textbox.open(textSection(this.roomData.textFile, 'whirl_refuses'));
+      }
+      return;
+    }
+    // Along the wind (round a spire, the short way it blows, not the long way back).
+    const to = { x: land.alongX * T + T / 2, y: (land.y + 1) * T - 2 };
+    // With Ves: she opens her umbrella to it and you hang off her boot, the
+    // two of you carried off together (WhirlRide). You're already where it
+    // sets you down; the ride is drawn in your place.
+    if (canRide()) {
+      this.ride = new WhirlRide({ from: { x: this.player.x, y: this.player.y }, at: { x: whirl.x, y: whirl.y }, to });
+      this.player.x = to.x;
+      this.player.y = to.y;
+      this.wrapPlayer();
+      this.spentWhirl = this.whirls.find((w) => w.covers(land.x, land.y)) ?? null;
+      sfx('flare');
+      return;
+    }
+    this.hop = hopPath({ x: this.player.x, y: this.player.y }, to, this.player.ground, this.room.raiseAt(land.x, land.y));
+    this.hop.seconds *= 0.8;
+    this.hop.peak += 10;
+    // Landing in another whirlwind doesn't set it off: you'd have to step off and back in.
+    this.spentWhirl = this.whirls.find((w) => w.covers(land.x, land.y)) ?? null;
+    this.landingWhirl = true;
+    sfx('flare');
+  }
+
+  // A weathervane: a quarter turn, and the wind, the other vanes and the
+  // drifts all go round with it.
+  turnVane() {
+    this.wind = turnWind(this.roomData);
+    applyWind(this.room, this.wind);
+    for (const whirl of this.whirls) whirl.wind = this.wind;
+    sfx('door');
+    // A drift heaped up where you're standing (or where Ves is) pushes you clear.
+    this.unstick();
+    for (const follower of this.followers) {
+      if (this.room.props.some((p) => p.drift && !p.hidden && p.overlaps(follower.x - 4, follower.y - 4, follower.x + 4, follower.y))) follower.warpTo(this.player.x, this.player.y + 2);
+    }
+    if (!WORLD_STATE.turnedVane && textSection(this.roomData.textFile, 'vane_first').length) {
+      WORLD_STATE.turnedVane = true;
+      this.textbox.open(textSection(this.roomData.textFile, 'vane_first'));
+    }
+  }
+
   // Along the updraft's arc. The hero's own height (`z`, as in a jump) does
   // the drawing; landing puts them on whatever floor is at the far end.
   updateHop(dt) {
@@ -688,6 +841,11 @@ export class OverworldScene {
     this.player.z = 0;
     this.player.landedThisFrame = true;
     this.hop = null;
+    // Round a spire, a whirlwind may have carried you past the seam.
+    if (this.landingWhirl) {
+      this.landingWhirl = false;
+      this.wrapPlayer();
+    }
     for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y + 2);
     if (this.onSnow()) this.kickSnow();
   }
@@ -699,6 +857,17 @@ export class OverworldScene {
     const door = (this.roomData.doors ?? []).find((d) => tx >= d.x && tx < d.x + d.w && ty >= d.y && ty < d.y + d.h);
     if (!door) return;
     if (!ROOMS[door.to]) throw new Error(`A door in ${this.roomData.id} leads to unknown room '${door.to}'`);
+    // Someone ran on ahead from here (see wentAhead): only their door will do.
+    const ahead = this.followers.map((follower) => wentAhead(follower.id, this.roomData.id)).find(Boolean);
+    if (ahead && ahead.room === this.roomData.id && door.to !== SCENES[ahead.leavesAhead.until]?.room) {
+      const [bx, by] = BACK_STEP[this.player.facing] ?? [0, -1];
+      this.player.x += bx * T;
+      this.player.y += by * T;
+      this.unstick();
+      this.player.moving = false;
+      if (ahead.leavesAhead.blocked) this.textbox.open(textSection(this.roomData.textFile, ahead.leavesAhead.blocked));
+      return;
+    }
     sfx('door');
     this.doorway = { door, t: 0 };
   }
@@ -745,14 +914,13 @@ export class OverworldScene {
       this.battleFlash = null;
       game.changeScene(this);
     };
-    game.changeScene(new BattleScene(group.map((npc) => ENEMIES[npc.enemy]), onEnd, this.roomData.area));
+    game.changeScene(new BattleScene(group.map((npc) => ENEMIES[npc.enemy]), onEnd, this.battleArea));
   }
 
   interact() {
     const [px, py] = this.player.interactionPoint();
-    let prop = this.room.propAt(px, py);
     // Something only seen in the light isn't there for you until your light reaches it.
-    if (prop && !this.inLight(prop)) prop = null;
+    const prop = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y)).find((p) => p && this.inLight(p));
     if (!prop) {
       if (!this.tryClimb()) this.inspectTile(Math.floor(px / T), Math.floor(py / T));
       return;
@@ -783,7 +951,13 @@ export class OverworldScene {
     // Shops are their own screen; leaving comes back here (and to the room's music).
     if (prop.shop) this.game.changeScene(new ShopScene(prop.shop, () => this.game.changeScene(this)));
     else if (prop.save) this.useSavePoint();
+    else if (prop.vane) this.turnVane();
+    else if (prop.storage) {
+      sfx('select');
+      this.storageMenu.open();
+    }
     else if (prop.rest) this.useBed(prop);
+    else if (prop.travel) this.useTravelDraft(prop);
     else if (prop.join && MEMBERS[prop.join]) this.recruit(prop);
     else if (prop.npc) this.textbox.open(this.npcPages(prop), prop.npc);
     else if (prop.lever) this.useLever(prop);
@@ -844,11 +1018,15 @@ export class OverworldScene {
     } else if (weapon) {
       if (!HERO_STATE.weapons.includes(id)) HERO_STATE.weapons.push(id);
       pages.push(`You got the ${name}! Equip it from EQUIP (press C).`);
-    } else if (giveItem(id)) {
-      pages.push(`You got the ${name}.`);
     } else {
-      got = false;
-      pages.push(`You'd take the ${name}, but your bag is full.`);
+      // Into your bag, or with that full, into storage.
+      const placed = giveItem(id);
+      if (placed === 'stored') pages.push(`You got the ${name}. Your bag is full, so it went to storage (the chests by the save points).`);
+      else if (placed) pages.push(`You got the ${name}.`);
+      else {
+        got = false;
+        pages.push(`You'd take the ${name}, but your bag and storage are both full.`);
+      }
     }
     if (got) {
       sfx('heal');
@@ -877,7 +1055,7 @@ export class OverworldScene {
   // there's a dream to be had), and wake with your HP restored.
   useBed(prop) {
     this.textbox.open(prop.text ? textSection(this.roomData.textFile, prop.text) : ['A soft bed. You could sleep for a week.']);
-    this.resting = { phase: 'words', t: 0, dream: prop.dream ?? DEFAULT_DREAM };
+    this.resting = { phase: 'words', t: 0, dream: prop.dream ?? DEFAULT_DREAM, bed: prop };
   }
 
   updateRest(dt, input) {
@@ -894,15 +1072,24 @@ export class OverworldScene {
       if (rest.t < REST_FADE_SECONDS) return;
       rest.phase = 'sleep';
       rest.t = 0;
+      this.tuckIn(rest.bed);
       // The dream, when there is one, plays in the dark (see DEFAULT_DREAM).
-      if (SCENES[rest.dream]) {
+      // Most are only dreamt once (unless the scene says `once: false`).
+      const dream = SCENES[rest.dream];
+      WORLD_STATE.seenScenes ??= [];
+      if (dream && (dream.once === false || !WORLD_STATE.seenScenes.includes(dream.id))) {
+        if (!WORLD_STATE.seenScenes.includes(dream.id)) WORLD_STATE.seenScenes.push(dream.id);
         rest.phase = 'dream';
-        this.playCutscene(SCENES[rest.dream]);
+        rest.dreamt = dream;
+        this.playCutscene(dream);
       }
     } else if (rest.phase === 'dream') {
       this.cutscene.update(dt, input);
       if (!this.cutscene.done) return;
       this.cutscene = null;
+      // The dream counts as seen, so the room can change with it while it's
+      // dark; unless it has a scene for waking up, which changes it after.
+      if (!rest.dreamt?.wakeScene) this.room.refreshShowsUp();
       rest.phase = 'sleep';
       rest.t = 0;
     } else if (rest.phase === 'sleep') {
@@ -914,9 +1101,47 @@ export class OverworldScene {
     } else if (rest.phase === 'wake') {
       if (rest.t < REST_FADE_SECONDS) return;
       this.resting = null;
+      // A dream can have a scene for waking up from it (`wakeScene`), which
+      // plays instead of the usual words.
+      const wake = SCENES[rest.dreamt?.wakeScene];
+      if (wake) {
+        WORLD_STATE.seenScenes ??= [];
+        if (!WORLD_STATE.seenScenes.includes(wake.id)) WORLD_STATE.seenScenes.push(wake.id);
+        this.playCutscene(wake);
+        return;
+      }
+      this.getUp();
       sfx('heal');
       this.textbox.open([textFile(this.roomData.textFile).rested?.[0] ?? 'You slept like a stone. Your HP is fully restored.']);
     }
+  }
+
+  // Into bed: if the bed has a NAME_sleeping sprite, it shows you asleep in
+  // it, and you (the standing you) are hidden until you get up. You're kept
+  // where your head is, so emotes show over it.
+  tuckIn(bed) {
+    if (!bed || !PROP_SPRITES[`${bed.baseLook}_sleeping`]) return;
+    this.sleeper = { bed, from: { x: this.player.x, y: this.player.y, facing: this.player.facing } };
+    bed.setLook(`${bed.baseLook}_sleeping`);
+    this.player.hidden = true;
+    this.player.x = bed.x + 12;
+    this.player.y = bed.y + T + 6;
+  }
+
+  // Sitting up in bed (NAME_sitting), or lying back down.
+  sitUp(sitting = true) {
+    const bed = this.sleeper?.bed;
+    if (bed) bed.setLook(`${bed.baseLook}_${sitting ? 'sitting' : 'sleeping'}`);
+  }
+
+  // Out of bed, back where you were standing.
+  getUp() {
+    if (!this.sleeper) return;
+    const { bed, from } = this.sleeper;
+    bed.setLook();
+    Object.assign(this.player, from);
+    this.player.hidden = false;
+    this.sleeper = null;
   }
 
   // How dark the room is while you rest, 0 to 1.
@@ -952,6 +1177,41 @@ export class OverworldScene {
   }
 
   // Saves the game where the player is standing.
+  // A green updraft (src/data/travel.js); getting to its room already found
+  // it. The first time you press Z on one, it's explained (by Ves, if she's
+  // with you); after that it reminds you that you travel from save points.
+  useTravelDraft(prop) {
+    const say = (section, speaker = null) => this.textbox.open(textSection('interactions/travel.txt', section), speaker);
+    const explained = canRide() ? 'travel_explained' : 'travel_seen';
+    if (!(WORLD_STATE.read ?? []).includes(explained)) {
+      WORLD_STATE.read ??= [];
+      WORLD_STATE.read.push(explained);
+      if (canRide()) {
+        say('found');
+        this.afterText = () => say('found_ves', VES);
+      } else {
+        say('found_alone');
+      }
+      return;
+    }
+    say(canRide() ? 'from_saves' : 'no_ves');
+  }
+
+  // A cutscene stilling the weather (or bringing it back): the snow and fog
+  // go to `to` over `seconds`.
+  fadeWeather(to, seconds) {
+    this.weatherFade = { from: this.weatherAmount, to, seconds: Math.max(0.01, seconds), t: 0 };
+  }
+
+  tickWeather(dt) {
+    const fade = this.weatherFade;
+    if (!fade) return;
+    fade.t = Math.min(fade.seconds, fade.t + dt);
+    const k = fade.t / fade.seconds;
+    this.weatherAmount = fade.from + (fade.to - fade.from) * (k * k * (3 - 2 * k));
+    if (k >= 1) this.weatherFade = null;
+  }
+
   useSavePoint() {
     const [x, y] = this.player.tilePosition();
     const saved = saveGame(this.roomData.id, { x, y });
@@ -959,6 +1219,24 @@ export class OverworldScene {
     // The room's own words for it, or the Ruins' if its text file hasn't any.
     const section = saved ? 'save_point' : 'save_failed';
     this.textbox.open(textFile(this.roomData.textFile)[section] ?? textSection('interactions/the_ruins.txt', section));
+    // Then, with Ves along and somewhere else found in this chapter to go,
+    // TRAVEL (Stay here first, so tapping through the save doesn't send you off).
+    const here = draftIn(this.roomData.id);
+    if (canRide() && foundDrafts().some((draft) => draft.id !== here?.id)) {
+      this.afterText = () => this.offerTravel(here?.id ?? null);
+    }
+  }
+
+  // TRAVEL from a save point: pick a place and Ves rides the wind there with
+  // you, as up a wind geyser (GeyserRide), from where you're standing.
+  offerTravel(here) {
+    sfx('select');
+    this.travelMenu.open(here, (draft) => {
+      sfx('travel');
+      const from = { x: this.player.x, y: this.player.y };
+      const wind = { x: this.player.x, y: this.player.y, to: draft.room, spawn: { x: draft.x, y: draft.y } };
+      this.ride = new GeyserRide({ geyser: wind, from });
+    });
   }
 
   // An NPC says their [first] lines once, then their [repeat] lines (if they have any).
@@ -992,13 +1270,19 @@ export class OverworldScene {
     const props = this.room.props.filter((prop) => this.inLight(prop));
     // On a geyser ride, the ride draws the hero and Ves itself.
     const people = this.ride ? [this.ride, ...this.followers.filter((follower) => follower.id !== VES)] : [...this.followers, this.player];
-    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.geysers, ...this.updrafts, ...(this.cutscene?.drawables ?? []), ...people].sort((a, b) => a.sortY - b.sortY);
+    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.geysers, ...this.updrafts, ...this.whirls, ...(this.cutscene?.drawables ?? []), ...people].sort((a, b) => a.sortY - b.sortY);
     if (this.spire) {
       this.drawSpire(ctx);
       for (const entity of entities) this.drawOnSpire(ctx, entity);
     } else {
       ctx.drawImage(this.room.background, -this.camera.x, -this.camera.y);
       this.room.drawDamage(ctx, this.camera);
+      // Outdoors by day, everything standing casts a shadow (see shadows.js).
+      if (this.underSky) {
+        const sun = sunShadows(WORLD_STATE.playSeconds);
+        drawBlockShadows(ctx, this.camera, this.room, sun);
+        drawShadows(ctx, this.camera, entities, sun);
+      }
       for (const entity of entities) entity.draw(ctx, this.camera);
     }
     const project = this.spire ? (x) => this.project(x).x : (x) => x - this.camera.x;
@@ -1012,15 +1296,22 @@ export class OverworldScene {
     if (this.roomData.vista && (this.roomData.vista.altitude ?? 0) > 0.55) drawWisps(ctx, this.time, Math.min(1, ((this.roomData.vista.altitude ?? 0) - 0.55) * 2.5));
     if (this.underSky) this.drawTimeOfDay(ctx);
     else if (this.lamplit) this.drawLamplight(ctx, false);
-    if (this.roomData.weather) drawSnow(ctx, this.roomData.weather, this.time, this.roomData.wind ?? 1);
+    // The snow blows the way the weathervanes say, if there are any; on a
+    // gusty face it blows harder during a gust.
+    if (this.roomData.weather && this.weatherAmount > 0) drawSnow(ctx, this.roomData.weather, this.time, (this.roomData.wind ?? 1) * (this.gusting ? 2.6 : 1), this.wind ? WIND_STEP[this.wind] : null, this.weatherAmount);
+    if (this.roomData.fog && this.weatherAmount > 0) drawFog(ctx, this.time, this.roomData.fog * this.weatherAmount);
     if (this.roomData.dark) this.drawDarkness(ctx);
     this.cutscene?.drawOverlay(ctx, this.camera);
     // Underground, the edges of the screen sink into shadow; outdoors they don't.
     if (!OUTDOOR_AREAS.has(this.roomData.area) || this.roomData.indoors) ctx.drawImage(vignette(), 0, 0);
     if (this.resting) this.drawBlack(ctx, this.restDarkness);
+    // A dream's vision, over the dark (see visions.js).
+    if (this.vision) drawVision(ctx, this.vision, performance.now() / 1000);
 
     this.textbox.draw(ctx);
     this.pauseMenu.draw(ctx);
+    this.storageMenu.draw(ctx);
+    this.travelMenu.draw(ctx);
     this.drawTitleCard(ctx);
 
     if (this.player.isFalling) {
@@ -1262,7 +1553,8 @@ export class OverworldScene {
   drawDarkness(ctx) {
     const t = performance.now() / 1000;
     const flicker = 1 + Math.sin(t * 9) * 0.03 + Math.sin(t * 23) * 0.02;
-    this.drawShade(ctx, this.roomData.dark, '4, 2, 10', lightRadius() * flicker);
+    // Lit by the room's lights, your own, and any cutscene character who glows.
+    this.drawShade(ctx, this.roomData.dark, '4, 2, 10', lightRadius() * flicker, [...this.room.lightSources(), ...(this.cutscene?.lights ?? [])]);
     // Your candle's warm glow on everything near you.
     const { x, y } = this.lightPoint;
     const radius = lightRadius() * flicker;

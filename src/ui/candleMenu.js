@@ -44,10 +44,11 @@ export class CandleMenu {
       const recipe = RECIPES[this.cursor];
       const result = makeCandle(recipe);
       const name = ITEMS[recipe.candle].name;
-      if (result === 'made') sfx('heal');
+      if (result === 'made' || result === 'stored') sfx('heal');
       else sfx('error');
       this.message = result === 'made' ? `You made a ${name}.`
-        : result === 'full' ? 'Your bag is full.'
+        : result === 'stored' ? `You made a ${name}. (Bag full: it went to storage.)`
+        : result === 'full' ? 'Your bag and storage are full.'
           : 'You need more materials.';
     }
   }

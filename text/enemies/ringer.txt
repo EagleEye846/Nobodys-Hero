@@ -1,0 +1,55 @@
+# RINGER
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/ringer.js.
+
+[intro]
+That ring just winked at you. A RINGER drops off the rock with a CLANG!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+RINGER is muttering about bad hammering.
+
+RINGER is a little rusty on one side. Don't mention it.
+
+A frayed end of somebody's rope is still knotted round RINGER. It won't say whose.
+
+RINGER hums faintly, like a bell somebody touched a long time ago.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+Who hammered ME in?
+An AMATEUR, that's who!
+
+A hundred years on that rock!
+Crooked! The WHOLE time!
+
+CLANG!
+
+You call that a grip?
+
+Iron doesn't bend.
+Iron doesn't BUDGE.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/ringer.js.
+[talk: Inspect]
+RINGER - HP 150
+A climbing ring with strong opinions about who hammered it in. Hits hard. Doesn't stay cross.
+
+[talk: Tighten it]
+You give RINGER's peg a good firm turn. It stops wobbling, and stands up a little straighter.
+
+[talk: Compliment the forging]
+You admire RINGER's forging: the even band, the clean weld. It rings, very softly, all by itself.
+
+[talk: Swing on it]
+You grab RINGER and swing your whole weight from it. It holds.
+It approves of your technique.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+RINGER rolls away down the slope, clanging crossly at every bounce.
+
+[pacified]
+RINGER hops back up the rock and hangs itself, perfectly, exactly where a ring should be.

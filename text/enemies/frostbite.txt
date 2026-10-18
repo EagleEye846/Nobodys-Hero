@@ -1,0 +1,56 @@
+# FROSTBITE
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/frostbite.js.
+
+[intro]
+That wasn't a snowdrift. A FROSTBITE sits up and opens its arms!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+FROSTBITE is holding its arms out. It's been holding them out for a very long time.
+
+Little flakes keep falling off FROSTBITE. It doesn't seem to notice.
+
+FROSTBITE's grin is made of icicles. It means it kindly.
+
+The air round FROSTBITE is so cold your breath just hangs there.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+Hug?
+
+C'mere!
+Just a little one!
+
+Nobody's hugged me
+since the first snow.
+
+You look COLD.
+I can help with that!
+...Wait. No.
+
+Brrr!
+Was that you or me?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/frostbite.js.
+[talk: Inspect]
+FROSTBITE - HP 220
+A snowdrift that got up and walked. It wants a hug. Its hugs are very, very cold.
+
+[talk: Hug it]
+You hug FROSTBITE. It's like hugging a snowdrift, because it is one. FROSTBITE melts a little. Not in a bad way.
+
+[talk: Build a snowman]
+You roll a little snowman beside FROSTBITE. It looks at it for a long time, then pats it on the head.
+
+[talk: Shiver dramatically]
+You shiver as hard as you can. FROSTBITE looks so worried it nearly falls apart.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+FROSTBITE slumps back into an ordinary drift. It's still smiling.
+
+[pacified]
+FROSTBITE settles into the snow by the path, arms still open, for whoever comes by next.

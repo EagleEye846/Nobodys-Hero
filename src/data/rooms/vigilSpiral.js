@@ -94,6 +94,8 @@ export const VIGIL_SPIRAL = {
     { sprite: 'tally_stone', x: 9, y: 37, text: 'spiral_tally' },
     { sprite: 'sign', x: 16, y: 34, text: 'spiral_sign' },
     { sprite: 'savepoint', x: 33, y: 24, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 35, y: 25, travel: 'spiral', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     // From the landing, the face is sheer: swing up to the top ledge.
     { sprite: 'swing_ring', x: 38, y: 21 },
     { sprite: 'swing_ring', x: 40, y: 19 },
@@ -116,5 +118,10 @@ export const VIGIL_SPIRAL = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // A chough on the long ledge, and a loose step pretending to be stair on the
+  // bridge path (no snow creatures here: it's green and sunny this low down).
+  npcs: [
+    { enemy: 'chough', x: 12, y: 16, patrol: [4, 22] },
+    { enemy: 'step', x: 25, y: 31, patrol: [25, 25], behaviour: 'disguise', reach: 3 },
+  ],
 };

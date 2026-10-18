@@ -61,9 +61,6 @@ Scratched underneath: "and don't look down. or do. it's quite something."
 [ridge_notice]
 TO ALL CLIMBERS: a ledge goes round the mountain, not across it. Keep walking and you'll come back to where you started, a little dizzy.
 
-[ridge_chest]
-A wooden chest, iron-banded, left where the ledge widens. Someone stacked stones on it to keep the lid down against the wind.
-
 [ridge_cairn]
 Six stones, stacked. Someone's added a seventh, smaller, on top. It wobbles when you look at it.
 
@@ -224,9 +221,6 @@ THE KNIFE EDGE. Named by someone who'd just climbed it. From here it's mostly wa
 [knife_waymark]
 HERO! Above the clouds now. If you can hear the bell, you're close. If you can't, you're closer than you think; it only rings at dawn.
 
-[knife_chest]
-A chest wedged between two rocks, out of the wind. Honeycake again. Somebody up here has been baking for a hundred years.
-
 [knife_cairn]
 A cairn so tall someone must have stood on another cairn to finish it.
 
@@ -245,9 +239,6 @@ Someone has written "YOU'RE DOING GREAT" on this sign in paint, and then, smalle
 
 [cloud_snowman]
 A snowman in a herald's tabard. The tabard is real. The snowman seems very proud of it.
-
-[cloud_chest]
-A chest on the last ledge before the gate, with a jar in it, wrapped in cloth. Soup. It's still warm. That isn't possible, and here it is.
 
 [cloud_stair]
 A stair swept clear of snow, between lamps. Somebody sweeps it every morning. Somebody has swept it every morning for a hundred years.

@@ -1,0 +1,70 @@
+# RIMBLE'S STALL: Rimble, a cave goblin, in the ice caves past the
+# Weathervane Shelf. Small, green, all ears, with yellow eyes that see in the
+# dark. Hoards whatever the mountain drops, cleans it up, and sells it back to
+# the few climbers who come through. Chatty, cheerful, and a terrible haggler.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+A customer! A real one! Hello, hello. Rimble. Welcome to Rimble's Stall, the only shop for a mile in any direction. Mostly down.
+
+[menu_prompt]
+What else? Rimble's got all day. Rimble's got all year, really.
+
+[buy_prompt]
+Snacks up top, all cooked by Rimble. Pokey things and coats below. Umbrella bits at the bottom.
+
+[sell_prompt]
+Ooh, selling? Rimble loves selling. Buying. You know what Rimble means.
+
+[talk_prompt]
+Talk? Nobody wants to talk to Rimble! Ask anything. Ask two things.
+
+[bought]
+It's yours! Press C out there to put it on. No refunds. Rimble doesn't know what a refund is.
+
+[bought_item]
+Enjoy! Don't ask what's in it. Rimble doesn't.
+
+[sold]
+Shiny! Into the pile. Rimble has a pile. It's a good pile.
+
+[nothing_to_sell]
+Nothing? Not a button? Not a pebble? Rimble would've bought a pebble.
+
+[cant_sell]
+You're still wearing that! Take it off out there with C first. Rimble isn't a pickpocket. Anymore.
+
+[owned]
+You've got one of those already. Rimble only ever finds one of anything.
+
+[wont_fit]
+That's for the girl with the umbrella. Too big for you, and too pretty. Bring her by.
+
+[too_poor]
+Not enough gold! Rimble is sorry. Rimble is a businessman. Rimble is mostly sorry.
+
+# Bought with your bag full: it went to storage.
+[bought_stored]
+Your bag's stuffed, so Rimble sent it to the storage chest. It'll be there at the next crystal. Don't ask how. Goblin trick.
+
+[bag_full]
+Your bag's full! Eat something. Rimble recommends the jerky. Rimble always recommends the jerky.
+
+[farewell]
+Come back soon! Bring gold. Bring friends with gold. Mind the icicles.
+
+[talk: Who are you?]
+Rimble! Goblin, merchant, finder of things. Rimble lives down here where it's dark and quiet, and once in a long, long while somebody climbs past. Big day, every time.
+
+[talk: The caves]
+Cold, dark, and full of lovely things people drop. Mittens. Buttons. Whole climbers' packs. Rimble cleans them up and sells them back. Everybody wins!
+
+[talk: The Hero?]
+Everyone sat up top for a hundred years waiting for the Hero. Rimble set up down here. Figured a Hero would get hungry halfway. Lots of jerky went stale.
+
+[talk: Things in the dark]
+Some of the stones down here get up and walk, when nobody's looking. And moths, and little shiny things. Leave them be, they leave Rimble be. Mostly.
+
+[talk: Ves]
+Your friend with the umbrella! Rimble likes her. She said "please" to Rimble. Nobody says please to a goblin. The canopy's for her. Ice glass, very fancy.

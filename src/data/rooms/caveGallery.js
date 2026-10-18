@@ -94,5 +94,10 @@ export const CAVE_GALLERY = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // The Singing Gallery: the rimewing circling the crystals (the only one), a glintling lying in wait, and an ice moth.
+  npcs: [
+    { enemy: 'rimewing', x: 18, y: 13, patrol: [8, 28] },
+    { enemy: 'glintling', x: 28, y: 20, patrol: [28, 28], behaviour: 'pounce', reach: 3 },
+    { enemy: 'ice_moth', x: 20, y: 24, patrol: [12, 30] },
+  ],
 };

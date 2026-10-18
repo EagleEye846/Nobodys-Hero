@@ -30,6 +30,7 @@ export const COLORS = {
   spBack: '#24153d',
   box: '#35d46c',
   teal: '#4fe3d0',
+  description: '#c8bfe0',
   outline: '#000000',
 };
 
@@ -95,6 +96,26 @@ export function drawAbility(ctx, label, readiness) {
   drawText(ctx, label, x + w / 2, y + 8, { size: 20, color, align: 'center', outline: COLORS.outline });
 }
 
+// A boss's lantern (the Usurper's), under the box: a flame for each stage it
+// needs to blaze, lit as it grows.
+export function drawLanternMeter(ctx, stage, stages, time) {
+  const cx = (BOX.x + BOX.w / 2) * S;
+  const y = (BOX.y + BOX.h) * S + 40;
+  drawText(ctx, 'LANTERN', cx - 50, y, { size: 20, color: COLORS.orange, align: 'right', outline: COLORS.outline });
+  for (let i = 0; i < stages; i++) {
+    const x = cx - 40 + i * 24;
+    const lit = i < stage;
+    const sway = lit ? Math.round(Math.sin(time * 8 + i)) : 0;
+    ctx.fillStyle = lit ? COLORS.orange : COLORS.cardIdle;
+    ctx.fillRect(x + 4 + sway, y + 4, 8, 14);
+    ctx.fillRect(x + 6 + sway, y, 4, 4);
+    if (lit) {
+      ctx.fillStyle = COLORS.yellow;
+      ctx.fillRect(x + 6 + sway, y + 8, 4, 8);
+    }
+  }
+}
+
 // The SP (spell power) gauge down the left edge, filling from the bottom.
 export function drawSpGauge(ctx, sp, time) {
   const { x, y, w, h } = SP_GAUGE;
@@ -110,11 +131,13 @@ export function drawSpGauge(ctx, sp, time) {
 }
 
 // Name, HP and MERCY under the enemy, centred on cx. (MERCY is stored as `calm`.)
-export function drawEnemyStatus(ctx, name, hp, maxHp, calm, cx, top, time) {
+// One that can't be spared at all (`showMercy` false) has no MERCY bar.
+export function drawEnemyStatus(ctx, name, hp, maxHp, calm, cx, top, time, showMercy = true) {
   const w = 100;
   const x = Math.round(cx - w / 2);
   drawText(ctx, name, cx, top, { size: 24, align: 'center', outline: COLORS.outline });
   bar(ctx, x, top + 26, w, 8, hp / maxHp, COLORS.enemyHp, COLORS.hpBack);
+  if (!showMercy) return;
   bar(ctx, x, top + 40, w, 8, calm / 100, calm >= 100 && blink(time) ? COLORS.text : COLORS.calm, COLORS.calmBack);
   drawText(ctx, `MERCY ${calm}%`, cx, top + 52, { size: 20, color: COLORS.calm, align: 'center', outline: COLORS.outline });
 }
@@ -122,6 +145,25 @@ export function drawEnemyStatus(ctx, name, hp, maxHp, calm, cx, top, time) {
 // The speaking enemy's taunt in a white speech bubble, in a smaller, smoother
 // font. The bubble sits to the left of (tipX, tipY), with its tail pointing
 // there, and keeps above `clearBelow` (the top of the enemy's name and bars).
+// A taunt as speech bubbles. Lines run on into one bubble until one finishes
+// a sentence (ends in . ! ? and so on): "YOU WALKED / ON MY FACE." is one
+// bubble, wrapped to fit, while "... / ...STILL THINKING." is two, one after
+// the other.
+const SENTENCE_END = /[.!?…)"'~*]$/;
+export function speechBubbles(text) {
+  const bubbles = [];
+  let current = [];
+  for (const line of String(text).split('\n').map((l) => l.trim()).filter(Boolean)) {
+    current.push(line);
+    if (SENTENCE_END.test(line)) {
+      bubbles.push(current.join(' '));
+      current = [];
+    }
+  }
+  if (current.length) bubbles.push(current.join(' '));
+  return bubbles;
+}
+
 export function drawSpeech(ctx, text, tipX, tipY, clearBelow = PANEL_TOP) {
   const { w, h } = BUBBLE;
   const x = Math.max(8, tipX - 16 - w);
@@ -231,15 +273,20 @@ export function drawTextBox(ctx, text) {
   drawDialogue(ctx, lines, TEXT.x, TEXT.y, { size: TEXT.size, lineHeight: TEXT.lineHeight });
 }
 
-// A two-column pick list with the soul as the cursor. Each option is { label, note, noteColor, enabled }.
-// Three rows fit in the panel; a longer list scrolls with the cursor. A label
-// too long for its column shrinks to fit.
+// A two-column pick list with the soul as the cursor. Each option is
+// { label, note, noteColor, enabled, description }. Three rows fit in the
+// panel; a longer list scrolls with the cursor. A label too long for its
+// column shrinks to fit. When the options have a `description` (like SPELLS),
+// only two rows show, and the chosen one's description sits on a line below.
 const OPTION_ROWS = 3;
 const OPTION_WIDTH = 258;
+const DESCRIPTION_SIZE = 20;
 export function drawOptions(ctx, options, cursor) {
+  const described = options.some((option) => option.description);
+  const shown = described ? OPTION_ROWS - 1 : OPTION_ROWS;
   const rows = Math.ceil(options.length / 2);
-  const firstRow = Math.max(0, Math.min(Math.floor(cursor / 2) - 1, rows - OPTION_ROWS));
-  options.slice(firstRow * 2, (firstRow + OPTION_ROWS) * 2).forEach((option, n) => {
+  const firstRow = Math.max(0, Math.min(Math.floor(cursor / 2) - Math.floor((shown - 1) / 2), rows - shown));
+  options.slice(firstRow * 2, (firstRow + shown) * 2).forEach((option, n) => {
     const i = firstRow * 2 + n;
     const x = TEXT.x + 36 + (i % 2) * 300;
     const y = TEXT.y + (Math.floor(i / 2) - firstRow) * 30;
@@ -253,5 +300,8 @@ export function drawOptions(ctx, options, cursor) {
     }
   });
   if (firstRow > 0) drawText(ctx, '▲', TEXT.x + TEXT.w - 14, TEXT.y - 4, { size: 18, color: COLORS.dim });
-  if (firstRow + OPTION_ROWS < rows) drawText(ctx, '▼', TEXT.x + TEXT.w - 14, TEXT.y + 64, { size: 18, color: COLORS.dim });
+  if (firstRow + shown < rows) drawText(ctx, '▼', TEXT.x + TEXT.w - 14, TEXT.y + shown * 30 - 26, { size: 18, color: COLORS.dim });
+  // What the chosen option does, on one line under the list.
+  const description = options[cursor]?.description;
+  if (description) drawText(ctx, description, TEXT.x + 8, TEXT.y + shown * 30 + 2, { size: DESCRIPTION_SIZE, color: COLORS.description });
 }

@@ -99,10 +99,16 @@ export function findClimb(room, player) {
   let y = ty + step;
   if (!room.isSolidTile(tx, y)) return null;
   let tiles = 0;
+  // Rock all the way to the edge of the room: nothing to haul up to or down
+  // onto, but a steep face can still have rings in it.
+  let edge = false;
   for (; room.isSolidTile(tx, y); tiles++, y += step) {
-    if (room.tileAt(tx, y) === null) return null;
+    if (room.tileAt(tx, y) === null) {
+      edge = true;
+      break;
+    }
   }
-  const open = room.raiseAt(tx, y) === 0;
+  const open = !edge && room.raiseAt(tx, y) === 0;
   const topRing = (rx, ry) => room.props.find((prop) => prop.grapple && !prop.swing && tileOf(prop).x === rx && tileOf(prop).y === ry);
 
   if (!up) {
@@ -198,6 +204,18 @@ export class Climb {
     state.swing = Math.max(MIN_SWING, Math.min(MAX_SWING, state.swing + change * dt));
   }
 
+  // On a gusty face (the room's `climbWind`: { dir, every, lasts, strength }),
+  // a gust (`this.gust`, set by the overworld while one blows) shoves your
+  // swing: swinging the way it blows (dir 1 right, -1 left) it carries you
+  // higher, for free; swinging into it, it pushes you back down.
+  blow(dt) {
+    if (!this.gust) return;
+    const state = this.state;
+    const moving = Math.sign(Math.cos(state.phase));
+    const push = moving === this.gust.dir ? this.gust.strength : -this.gust.strength * 0.6;
+    state.swing = Math.max(MIN_SWING, Math.min(MAX_SWING, state.swing + push * dt));
+  }
+
   placeHanging() {
     const point = this.hangPoint(this.state.ring, this.swingAngle, this.state.swing);
     this.player.x = Math.round(point.x);
@@ -231,6 +249,7 @@ export class Climb {
     if (state.name === 'hang') {
       state.phase += (Math.PI * 2 / SWING_SECONDS) * dt;
       this.pump(dt, input);
+      this.blow(dt);
       this.placeHanging();
       if (input.wasPressed('confirm')) this.grab();
       else if (input.wasPressed('cancel')) this.fall();

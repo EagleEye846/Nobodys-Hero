@@ -1,0 +1,60 @@
+# THE CHAPTER TWO CREDITS: they roll after the fall from the summit, while
+# "Nobody's Hero" plays (src/data/music/creditsVigilTheme.js), with its words
+# glowing at the bottom. Cards work just like text/credits.txt: the first
+# line is the heading, the lines after it are names, and a line starting
+# with @ shows a character beside the card.
+
+[title]
+Chapter Two: The Long Stair
+NOBODY'S HERO
+
+[created]
+Created by
+EagleEye846
+
+[story]
+Story and Writing
+EagleEye846
+@prop:vesper_stand
+
+[characters]
+Characters
+EagleEye846
+@enemy:chough
+
+[art]
+Art and Animation
+EagleEye846
+@enemy:rimewing
+
+[music]
+Music and Sound
+EagleEye846
+@enemy:frostbite
+
+[song]
+"Nobody's Hero"
+Music and lyrics by EagleEye846
+
+[programming]
+Programming
+EagleEye846
+@enemy:stone_golem
+
+[world]
+Level Design
+EagleEye846
+@enemy:iceStep
+
+[battles]
+Battle and Bullet Design
+EagleEye846
+@enemy:great_bat
+
+[thanks]
+Special Thanks
+You, for climbing
+
+[end]
+To be continued
+in Chapter Three

@@ -1,4 +1,6 @@
 import { SCREEN_WIDTH as W } from '../config.js';
+import { makeSprite } from '../engine/sprite.js';
+import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 
 // Animated battle backgrounds, one per area. Each draws the stage from y = 0
 // down to `height`; the battle panel covers the rest of the screen.
@@ -537,10 +539,231 @@ function drawRestSquare(ctx, time, height) {
 
 // By area (a room's `area`), plus special ones a boss can ask for with its
 // own `backdrop` (Taper's 'taper_stand').
+
+// --- The ice caves: a crystal cavern, glowing blue. ---
+// Layers of rock going back into the dark, icicles hanging from the roof
+// (now and then one drips, and the drop splashes on the floor), clusters of
+// ice crystal on the floor and the walls that pulse with their own light,
+// slow beams of that light sweeping through the air, sparkles drifting
+// in it, and a glassy floor that reflects the crystals.
+const CAVE_SKY = ['#06040e', '#080614', '#0a0819', '#0c0b1f', '#0e0e25', '#10112b', '#121531', '#141837'];
+const CAVE_ICICLES = Array.from({ length: 22 }, (_, i) => ({
+  x: Math.round(hash(i + 1500) * W),
+  len: 8 + Math.round(hash(i + 1510) * 26),
+  w: 2 + Math.round(hash(i + 1520) * 3),
+  drip: hash(i + 1530) * 7,
+  every: 4 + hash(i + 1540) * 6,
+}));
+const CAVE_CRYSTALS = Array.from({ length: 9 }, (_, i) => ({
+  x: 10 + Math.round(((i + 0.5) / 9) * (W - 20) + (hash(i + 1600) - 0.5) * 24),
+  size: 8 + Math.round(hash(i + 1610) * 14),
+  wall: i % 3 === 1,
+  y: hash(i + 1620),
+  pulse: hash(i + 1630) * Math.PI * 2,
+}));
+const CAVE_MOTES = Array.from({ length: 40 }, (_, i) => ({
+  x: hash(i + 1700) * W, y: hash(i + 1710), speed: 2 + hash(i + 1720) * 5, sway: hash(i + 1730) * Math.PI * 2,
+}));
+
+// A cluster of crystal shards growing up from (x, y), `size` tall, lit `glow` (0 to 1).
+function drawCrystalCluster(ctx, x, y, size, glow) {
+  const shards = [[-0.5, 0.6, -0.25], [0, 1, 0], [0.45, 0.75, 0.2], [0.9, 0.45, 0.35], [-0.95, 0.4, -0.4]];
+  for (const [dx, tall, lean] of shards) {
+    const h = size * tall;
+    const bx = x + dx * size * 0.5;
+    const w = Math.max(2, size * 0.22);
+    ctx.fillStyle = `rgba(${Math.round(120 + 80 * glow)}, ${Math.round(190 + 50 * glow)}, 255, 0.95)`;
+    ctx.beginPath();
+    ctx.moveTo(bx - w / 2, y);
+    ctx.lineTo(bx + w / 2, y);
+    ctx.lineTo(bx + lean * h * 0.4, y - h);
+    ctx.closePath();
+    ctx.fill();
+    // A bright edge down one side.
+    ctx.fillStyle = `rgba(235, 250, 255, ${(0.5 + 0.4 * glow).toFixed(3)})`;
+    ctx.fillRect(Math.round(bx - w / 2 + 1), Math.round(y - h * 0.7), 1, Math.round(h * 0.6));
+  }
+}
+
+function drawCrystalCave(ctx, time, height) {
+  const band = Math.ceil(height / CAVE_SKY.length);
+  CAVE_SKY.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * band, W, band);
+  });
+  const floorY = height - FLOOR_HEIGHT - 6;
+  const crystalY = (c) => (c.wall ? 30 + c.y * (floorY - 70) : floorY);
+  const glowOf = (c) => 0.6 + 0.4 * Math.sin(time * 1.3 + c.pulse);
+
+  // The crystals' light, pulsing, washing the whole cave blue.
+  for (const c of CAVE_CRYSTALS) {
+    const cy = crystalY(c) - c.size * 0.5;
+    const light = ctx.createRadialGradient(c.x, cy, 2, c.x, cy, 34 + c.size * 2);
+    light.addColorStop(0, `rgba(110, 200, 255, ${(0.22 * glowOf(c)).toFixed(3)})`);
+    light.addColorStop(1, 'rgba(110, 200, 255, 0)');
+    ctx.fillStyle = light;
+    ctx.fillRect(c.x - 80, cy - 80, 160, 160);
+  }
+
+  // Rock going back into the dark: two layers of cave wall, the far one fainter.
+  for (const [layer, color, top] of [[0, '#151a33', 0.35], [1, '#1c2140', 0.55]]) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(0, floorY);
+    for (let x = 0; x <= W; x += 16) {
+      const h = (top + hash(Math.floor(x / 16) + layer * 50 + 1800) * 0.25) * floorY;
+      ctx.lineTo(x, floorY - h * (layer ? 0.55 : 1));
+    }
+    ctx.lineTo(W, floorY);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Beams of crystal light sweeping slowly through the air.
+  for (let i = 0; i < 3; i++) {
+    const x = ((time * (6 + i * 3) + i * 110) % (W + 120)) - 60;
+    const a = 0.05 + 0.03 * Math.sin(time * 0.8 + i * 2);
+    const beam = ctx.createLinearGradient(x, 0, x + 40, 0);
+    beam.addColorStop(0, 'rgba(170, 225, 255, 0)');
+    beam.addColorStop(0.5, `rgba(170, 225, 255, ${a.toFixed(3)})`);
+    beam.addColorStop(1, 'rgba(170, 225, 255, 0)');
+    ctx.fillStyle = beam;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x + 26, 0);
+    ctx.lineTo(x + 60, floorY);
+    ctx.lineTo(x + 20, floorY);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Crystals in the walls, and on the floor.
+  for (const c of CAVE_CRYSTALS) drawCrystalCluster(ctx, c.x, crystalY(c), c.wall ? c.size * 0.6 : c.size, glowOf(c));
+
+  // The roof, and its icicles; now and then one drips.
+  ctx.fillStyle = '#0b0d1c';
+  ctx.fillRect(0, 0, W, 6);
+  for (const ice of CAVE_ICICLES) {
+    ctx.fillStyle = '#8fb8d8';
+    ctx.beginPath();
+    ctx.moveTo(ice.x - ice.w / 2, 4);
+    ctx.lineTo(ice.x + ice.w / 2, 4);
+    ctx.lineTo(ice.x, 4 + ice.len);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#e8f6ff';
+    ctx.fillRect(ice.x - 1, 5, 1, Math.round(ice.len * 0.6));
+    // The drop: forms at the tip, falls, and splashes.
+    const k = ((time + ice.drip) % ice.every) / ice.every;
+    const tip = 4 + ice.len;
+    ctx.fillStyle = 'rgba(220, 245, 255, 0.9)';
+    if (k < 0.15) {
+      ctx.fillRect(ice.x, tip, 1, 1 + Math.round(k * 10));
+    } else if (k < 0.35) {
+      const f = (k - 0.15) / 0.2;
+      ctx.fillRect(ice.x, Math.round(tip + (floorY - tip) * f * f), 1, 2);
+    } else if (k < 0.45) {
+      const f = (k - 0.35) / 0.1;
+      ctx.fillStyle = `rgba(220, 245, 255, ${(0.8 * (1 - f)).toFixed(3)})`;
+      ctx.fillRect(Math.round(ice.x - 2 - f * 3), floorY - 1 - Math.round(f * 2), 1, 1);
+      ctx.fillRect(Math.round(ice.x + 2 + f * 3), floorY - 1 - Math.round(f * 2), 1, 1);
+    }
+  }
+
+  // Sparkles drifting in the light.
+  for (const mote of CAVE_MOTES) {
+    const y = ((mote.y * floorY - time * mote.speed) % floorY + floorY) % floorY;
+    const x = mote.x + Math.sin(time * 0.7 + mote.sway) * 6;
+    const twinkle = 0.3 + 0.7 * Math.max(0, Math.sin(time * 3 + mote.sway * 5));
+    ctx.fillStyle = `rgba(220, 245, 255, ${(0.6 * twinkle).toFixed(3)})`;
+    ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+  }
+
+  // The frozen floor: glassy, with the crystals' glow reflected in it.
+  ctx.fillStyle = '#1b2a48';
+  ctx.fillRect(0, floorY, W, height - floorY);
+  ctx.fillStyle = '#2c4470';
+  ctx.fillRect(0, floorY, W, 1);
+  for (const c of CAVE_CRYSTALS) {
+    if (c.wall) continue;
+    ctx.fillStyle = `rgba(150, 215, 255, ${(0.18 * glowOf(c)).toFixed(3)})`;
+    ctx.fillRect(c.x - c.size * 0.6, floorY + 2, c.size * 1.2, Math.min(height - floorY - 2, c.size * 0.6));
+  }
+  for (let x = 0; x < W; x += 23) {
+    ctx.fillStyle = 'rgba(200, 235, 255, 0.12)';
+    ctx.fillRect(x + Math.round(hash(x + 1900) * 12), floorY + 4 + Math.round(hash(x + 1910) * 10), 8, 1);
+  }
+}
+
+// --- The summit of Mount Vigil, where the Usurper makes his stand. ---
+// Nothing higher anywhere: a dusk sky going to night, the first stars, the
+// sea of cloud far below, and the crown of snow with the old beacon on it,
+// cold. The storm he stopped hangs in the air, flakes barely drifting.
+const SUMMIT_SKY = ['#0d0a24', '#14102f', '#1c153a', '#271b46', '#352252', '#4a2a5a', '#6a3a5e', '#8a4e5e'];
+const SUMMIT_STARS = Array.from({ length: 30 }, (_, i) => ({
+  x: hash(i + 2600) * W,
+  y: hash(i + 2650) * 70,
+  twinkle: hash(i + 2700) * Math.PI * 2,
+}));
+const SUMMIT_FLAKES = Array.from({ length: 40 }, (_, i) => ({
+  x: hash(i + 2800) * W,
+  y: hash(i + 2850) * 150,
+  bob: hash(i + 2900) * Math.PI * 2,
+}));
+let summitBeacon = null;
+let summitCairn = null;
+function drawSummit(ctx, time, height) {
+  const band = Math.ceil(height / SUMMIT_SKY.length);
+  SUMMIT_SKY.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * band, W, band);
+  });
+  const baseY = height - FLOOR_HEIGHT - 6;
+  for (const star of SUMMIT_STARS) {
+    ctx.fillStyle = `rgba(255, 246, 230, ${(0.35 + 0.35 * Math.sin(time * 1.5 + star.twinkle)).toFixed(3)})`;
+    ctx.fillRect(Math.round(star.x), Math.round(star.y), 1, 1);
+  }
+  // Far peaks, and the sea of cloud far below, rolling very slowly.
+  drawRange(ctx, baseY - 14, [20, 34, 26, 40, 30, 36, 22], '#3a2f5a', '#b8b0d0');
+  ctx.fillStyle = 'rgba(190, 170, 200, 0.85)';
+  for (const mound of CLOUD_MOUNDS) {
+    const x = ((mound.x + time * 2) % (W + 80) + (W + 80)) % (W + 80) - 40;
+    ctx.fillRect(Math.round(x), baseY - 12 + Math.round(Math.sin(time * 0.4 + mound.bob)), Math.round(mound.w), 8);
+  }
+  // The crown of snow.
+  ctx.fillStyle = '#d8dcec';
+  ctx.beginPath();
+  ctx.moveTo(0, height);
+  ctx.lineTo(0, baseY + 4);
+  ctx.quadraticCurveTo(W / 2, baseY - 10, W, baseY + 4);
+  ctx.lineTo(W, height);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#f2f4fa';
+  ctx.fillRect(0, baseY + 8, W, 1);
+  ctx.fillStyle = '#b4bcd4';
+  for (let x = 0; x < W; x += 9) ctx.fillRect(x + Math.round(hash(x + 2950) * 5), baseY + 10 + Math.round(hash(x + 2960) * 14), 3, 1);
+  // The beacon, cold, and the cairns of those who made it this far.
+  summitBeacon ??= makeSprite(PROP_SPRITES.beacon_cold, PROP_PALETTE);
+  summitCairn ??= makeSprite(PROP_SPRITES.cairn, PROP_PALETTE);
+  ctx.drawImage(summitBeacon, 136, baseY + 4 - summitBeacon.height);
+  ctx.drawImage(summitCairn, 18, baseY + 2 - summitCairn.height);
+  ctx.drawImage(summitCairn, 300, baseY + 4 - summitCairn.height);
+  // The stilled storm: flakes hanging in the air, barely moving.
+  for (const flake of SUMMIT_FLAKES) {
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.fillRect(Math.round(flake.x + Math.sin(time * 0.3 + flake.bob) * 3), Math.round(flake.y + Math.sin(time * 0.2 + flake.bob) * 2), 1, 1);
+  }
+}
+
 export const BACKDROPS = {
   ruins: drawRuins,
   stair: drawStairSky,
   vigil: drawVigilHeights,
+  // Any room with `cave: true` fights here (see battleArea in overworldScene.js).
+  cave: drawCrystalCave,
   rest: drawRestSquare,
   taper_stand: drawTaperStand,
+  // The Usurper's (src/data/enemies/usurper.js).
+  summit: drawSummit,
 };

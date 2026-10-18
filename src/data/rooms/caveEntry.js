@@ -86,5 +86,9 @@ export const CAVE_ENTRY = {
 
   // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
   // for the ones designed for it).
-  npcs: [],
+  // The first cave: a golem pretending to be a boulder, and an ice moth.
+  npcs: [
+    { enemy: 'stone_golem', x: 20, y: 15, patrol: [20, 20], behaviour: 'disguise', reach: 3 },
+    { enemy: 'ice_moth', x: 10, y: 11, patrol: [5, 16], behaviour: 'wander' },
+  ],
 };

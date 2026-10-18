@@ -1,0 +1,59 @@
+# STONE GOLEM
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/stone_golem.js.
+
+[intro]
+That boulder just stood up. A STONE GOLEM unfolds out of the rock!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+STONE GOLEM creaks as it turns to look at you. It takes a while.
+
+Little crystals of ice are growing on STONE GOLEM's shoulders. It's very proud of them.
+
+STONE GOLEM's chest glows blue, very faintly, like a lamp behind frosted glass.
+
+Grit trickles off STONE GOLEM every time it moves. There's a lot less of it than there used to be.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+...MOVE.
+
+THIS. IS. MY. CAVE.
+
+I WAS A ROCK
+FOR A THOUSAND YEARS.
+IT WAS NICE.
+
+DO NOT
+TOUCH
+THE CRYSTALS.
+
+...
+...STILL THINKING.
+
+YOU WALKED
+ON MY FACE.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/stone_golem.js.
+[talk: Inspect]
+STONE GOLEM - HP 300
+A heap of cave stone that got up. Slow, heavy, and in no hurry. Its ice took centuries to grow.
+
+[talk: Stand very still]
+You stand as still as a stone. STONE GOLEM looks at you for a long, long time, and slowly nods. It respects that.
+
+[talk: Admire crystals]
+You admire the crystals on STONE GOLEM's shoulders. It turns, ever so slowly, so you can see the best one.
+
+[talk: Knock politely]
+You knock on STONE GOLEM, twice. After a very long pause, something deep inside it knocks back.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+STONE GOLEM crumbles back into a heap of rubble. One crystal is still glowing on top.
+
+[pacified]
+STONE GOLEM curls back up into a boulder with a sigh like a rockfall, and goes back to being a rock. It seems relieved.

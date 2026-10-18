@@ -125,6 +125,12 @@ THE BELL TOWER. Rung once at dawn, for the Hero. DO NOT ring after dark. We've a
 [square_marta_sign]
 MARTA. Knitting, mending, and no opinions about the Hero at all, thank you.
 
+[square_forge_sign]
+TILDA'S FORGE. Ironwork, mending, hot food. The fire has not gone out in a hundred years. Please do not try.
+
+[square_anvil]
+A spare anvil outside the forge, with snow on it. Someone has drawn a face in the snow. The face looks determined.
+
 [square_pottle_sign]
 THE POTTLES. Please knock. Please knock LOUDLY. The children are drumming.
 
@@ -214,6 +220,34 @@ A herald's trumpet on a stand, with a price tag. Fennick will tell you it's for 
 
 [stores_wall]
 Shelves to the ceiling. Fennick knows where everything is, and tests himself on it most evenings.
+
+# --- TILDA'S FORGE ---
+
+[forge_fire]
+The forge, roaring. Loaves bake at the back, a horseshoe glows at the front, and neither seems to mind.
+
+[forge_counter]
+Thick planks, scorched in rings where hot things were set down. A sign says HOT. Several signs say HOT.
+
+[forge_anvil]
+The anvil, worn bright by a hundred years of hammering. Above it, two iron hooks hold nothing at all.
+
+On the stone between them, a black smudge. It's shaped like a hand.
+
+[forge_pot]
+A pot of stew on a hook, simmering since before Tilda was born. Nobody has got to the bottom of it.
+
+[forge_barrel]
+A barrel of snowmelt for cooling hot iron. It steams quietly. Somebody has floated an apple in it.
+
+[forge_crates]
+Crates of iron bars, horseshoes and flour, packed together. One crate is labelled "HERO: SPARES".
+
+[forge_sign]
+IF IT GLOWS, DON'T TOUCH IT. IF IT DOESN'T GLOW, ASK FIRST.
+
+[forge_wall]
+Hammers, tongs and pans hang along the wall in order of size. One hook is empty, for the hammer Tilda never puts down.
 
 # --- THE HALL OF HERALDS ---
 
@@ -433,9 +467,13 @@ A chest at the edge of the platform, roped to a post so the wind can't take it. 
 The stair goes on north, up into the cloud, towards the top of Mount Vigil.
 
 [lookout_onward]
-The stair climbs on into the cloud. You can't see where it goes yet.
+The stair climbs on into the cloud, towards the second cairn and whatever is past it.
 
-(The way to the summit is still being built. Come back and see.)
+# The rope across the stair north, until Ves has joined you.
+[lookout_rope]
+A rope strung across the stair, with a board hung off it: NOBODY GOES UP ALONE.
+
+Underneath, in smaller letters: "Not after last time."
 
 # --- After dark ---
 

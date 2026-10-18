@@ -223,6 +223,9 @@ export class Line {
     x, y, angle = 0, length = 80, thickness = 3, warn = 0.5, life = 1, grow = 0,
     vx = 0, vy = 0, color = '#f2ecff', dash = null, glow = null, dmg = null,
   }) {
+    // Anything but a colour string draws in the canvas's default black, which
+    // can't be seen in the box but still hurts.
+    if (typeof color !== 'string') throw new Error(`A Line's color should be a colour string, not ${typeof color}`);
     this.x = x;
     this.y = y;
     this.angle = angle;

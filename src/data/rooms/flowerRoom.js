@@ -71,6 +71,7 @@ export const FLOWER_ROOM = {
     // Dust bunnies nibbling at Taper's moonbells, and a moth drawn to the light.
     { art: 'bunny', enemy: 'bunny', x: 5, y: 9, patrol: [2, 8] },
     { art: 'bunny', enemy: 'bunny', x: 15, y: 10, patrol: [12, 18] },
-    { art: 'moth', enemy: 'moth', x: 10, y: 8, patrol: [4, 15] },
+    // Kept off x 10, where Taper walks down to you and back in meetTaper.js.
+    { art: 'moth', enemy: 'moth', x: 14, y: 8, patrol: [12, 17] },
   ],
 };

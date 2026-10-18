@@ -1,0 +1,57 @@
+# FROZEN STEP
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/iceStep.js. Its brother is the Loose Step, at the bottom.
+
+[intro]
+That block just blinked. A FROZEN STEP cracks out of the snow and glares at you!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+FROZEN STEP is frozen solid. It has a lot of feelings about that.
+
+There's a bootprint-shaped hollow in FROZEN STEP's top, full of snow. Nothing has ever filled it.
+
+Icicles hang off FROZEN STEP's chin like a beard.
+
+FROZEN STEP keeps glancing down the mountain, as if it's expecting someone.
+
+# Said in a speech bubble before each attack, picked at random. Lines
+# written together (no blank line between) are said one bubble at a time.
+[taunts]
+The TOP step!
+Do you know how
+important that is?!
+
+My brother's at the bottom.
+He's fine. Probably.
+
+A hundred years up here!
+In the SNOW!
+
+Hold still.
+I'm stepping on YOU.
+
+Mind the ice!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/iceStep.js.
+[talk: Inspect]
+FROZEN STEP - HP 190
+The top step of the Long Stair, frozen solid, waiting up here for its brother at the bottom.
+
+[talk: Chip off the ice]
+You chip the ice off FROZEN STEP's face. Underneath, it looks a lot like someone you've met.
+
+[talk: Mention step 43]
+You tell FROZEN STEP that step forty-three is down at the bottom, still waiting. It cracks a smile. So does the ice.
+
+[talk: Sit on it]
+You sit on FROZEN STEP. It's freezing. It goes very quiet...
+Then it creaks, happily.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+FROZEN STEP cracks clean in half and slides away down the mountain, toward its brother.
+
+[pacified]
+FROZEN STEP settles back into the snow at the top of the stair, where it belongs. It looks warmer, somehow.

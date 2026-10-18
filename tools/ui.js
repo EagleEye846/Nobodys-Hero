@@ -144,13 +144,23 @@ export function numberInput(value, onChange, props = {}) {
   });
 }
 
-// `options` is a list of values, or of [value, label] pairs.
-export function select(options, value, onChange, props = {}) {
-  const items = options.map((option) => {
+// <option>s (and <optgroup>s) for a <select>. `options` is a list of values,
+// of [value, label] pairs, or of headed groups { group: 'Ruins Rooms',
+// options: [...] } (any mix; empty groups are left out).
+export function optionNodes(options) {
+  return options.map((option) => {
+    if (option && !Array.isArray(option) && typeof option === 'object' && 'group' in option) {
+      return option.options.length ? el('optgroup', { label: option.group }, optionNodes(option.options)) : null;
+    }
     const [optionValue, label] = Array.isArray(option) ? option : [option, option];
     return el('option', { value: optionValue }, label);
   });
-  return el('select', { value, onchange: (e) => onChange(e.target.value), ...props }, items);
+}
+
+// `options` is a list of values, of [value, label] pairs, or of headed groups
+// { group, options } (see optionNodes).
+export function select(options, value, onChange, props = {}) {
+  return el('select', { value, onchange: (e) => onChange(e.target.value), ...props }, optionNodes(options));
 }
 
 export function checkbox(checked, onChange, label, props = {}) {

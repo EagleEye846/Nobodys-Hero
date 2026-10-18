@@ -42,8 +42,15 @@ You're wearing that. Take it off first, out there, with C. I'm not buying anythi
 [owned]
 You've already got one of those. I remember. I remember all of it.
 
+[wont_fit]
+Those won't fit you. Ves's sizes. Bring her along and I'll wrap them.
+
 [too_poor]
 Short. Sorry. Prices firm, even for heroes. ESPECIALLY for heroes; it's the principle.
+
+# Bought with your bag full: it went to storage.
+[bought_stored]
+Your bag's full. I'll send it up to storage, then. The chest by any save crystal. Don't ask how.
 
 [bag_full]
 Your bag's full. Eat something, or sell me something. Preferably something small.
@@ -61,13 +68,13 @@ Built to welcome the Hero. A hundred years ago. Every herald you've met is the g
 Prophecy says a Hero climbs the stair and the sun touches the summit and so on. Didn't say when. We assumed "soon". We assumed wrong. The Head Herald still assumes.
 
 [talk: The Keeper]
-The old man with the lantern? Came in off the stair an hour before you did, calm as you like, and asked for a cup of tea. Said he'd walked. Walked! Up the ICE! Didn't have a snowflake on him.
+The old man with the lantern? Turned up at the fountain an hour before you did, and nobody saw him come in. Calm as you like, and asked for a cup of tea. Said he'd walked. Walked! Up the ICE! Didn't have a snowflake on him.
 
 [talk: Skill points]
 The Head Herald's idea. The heralds have a store of... I don't know what to call it. Pluck. Saved up a hundred years with nothing to spend it on. Five hundred gold a point, and only a couple each, so the village has some left for the Hero. Whoever that turns out to be.
 
 [talk: Selling]
-I buy. Half what it's worth, since I'll never sell it on. Can't buy what you're wearing; take it off first. And I don't buy soup. The inn would know.
+I buy. Three quarters of what it's worth, since gold's no use to me in a drawer. Can't buy what you're wearing; take it off first. And I don't buy soup. The inn would know.
 
 [talk: What's up there?]
 Past the Lookout? Cloud, then stair, then more cloud, then, they say, the top. Nobody from here has been and come back. One of ours got to the second cairn and came back quiet. I sold her the mittens. Didn't help.

@@ -5,7 +5,8 @@
 // ropes back down. A notch one throw above the middle band has a chest.
 // Tile key (see src/overworld/tileset.js):
 //   A  snowy cliff top (solid)                    E  ice-veined cliff face (solid)
-//   n  snow                                       s  the great stair
+//   n  snow                                       i  trodden snow path
+//   s  the great stair                            Y  snow pine (walk or hide behind) (solid)
 //   Q  snowy boulder (solid)
 export const VIGIL_WIND_STAIR = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -39,8 +40,8 @@ export const VIGIL_WIND_STAIR = {
     'EEEEEEEEEEEEEEEEEEEEEEEEEEsssEEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEsssEEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEsssEEEEEEEEEEEEEEE',
-    'nnnnnnnnnQnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
-    'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
+    'nnnYnnnnnQnnnnnnnnYnnnnnnnnnnnnnnYnnnnnnnnnn',
+    'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
     'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnQnnnnnnnn',
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
@@ -48,8 +49,8 @@ export const VIGIL_WIND_STAIR = {
     'EEEEEEEEEEEEEEEEEEEEEEEnnnEEEEEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEAAAEEEEEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
-    'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnQQnnnn',
-    'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnQQnnnn',
+    'nnnnnYnnnnnnnnnnnnnnnnnnnnnnnYnnnnnnnnQQnnnn',
+    'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiQQiiii',
     'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnQQnnnn',
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
@@ -58,9 +59,9 @@ export const VIGIL_WIND_STAIR = {
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
     'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE',
-    'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnQnnn',
+    'nnnQnnnnnYnnnnnnnnnnnnnnnnnnnnnnnnnnYnnnQnnn',
     'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
-    'nnnQnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
+    'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
     'nnnnnnnnnnnnnQnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
     'AAAAAAAAAAAAAAAAAAAAsssAAAAAAAAAAAAAAAAAAAAA',
     'EEEEEEEEEEEEEEEEEEEEsssEEEEEEEEEEEEEEEEEEEEE',
@@ -102,6 +103,8 @@ export const VIGIL_WIND_STAIR = {
     { sprite: 'grapple_ring', x: 24, y: 12, grapple: true },
     { sprite: 'chest', x: 25, y: 11, text: 'windstair_chest', gives: 'hot_cocoa', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'savepoint', x: 19, y: 15, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 22, y: 15, travel: 'wind_stair', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'lamp_cold', x: 25, y: 6, text: 'windstair_lamp' },
     { sprite: 'lamp_cold', x: 17, y: 25, text: 'windstair_lamp_low' },
     { sprite: 'sign', x: 23, y: 26, text: 'windstair_sign' },
@@ -114,5 +117,9 @@ export const VIGIL_WIND_STAIR = {
   tileTexts: { Y: 'upper_pine', E: 'upper_rock', Q: 'upper_boulder', n: 'upper_snow', s: 'upper_stair', _: 'upper_cloud' },
 
   // No enemies here: the mountain itself is the challenge.
-  npcs: [],
+  // A chough on the top ledge, and a frostbite on the long lower path.
+  npcs: [
+    { enemy: 'chough', x: 25, y: 8, patrol: [17, 33] },
+    { enemy: 'frostbite', x: 10, y: 27, patrol: [10, 10], behaviour: 'disguise', reach: 3 },
+  ],
 };

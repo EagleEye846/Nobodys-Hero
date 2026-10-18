@@ -1280,6 +1280,15 @@ function drawCaveWall(ctx, x, y, tx, ty, room) {
   }
 }
 
+// A false cave wall: just the same as the real thing, except you can walk
+// straight through it to whatever's hidden behind (a secret). The only tell
+// is a thin pale crack down it, if you look closely.
+function drawFalseCaveWall(ctx, x, y, tx, ty, room) {
+  drawCaveWall(ctx, x, y, tx, ty, room);
+  px(ctx, '#6a6488', x + 7, y + 3, 1, 4);
+  px(ctx, '#6a6488', x + 8, y + 7, 1, 5);
+}
+
 // A cave floor: cold flagstones of living rock, frost in the hollows.
 const CAVE_FLOOR = ['#2d2a3c', '#312e41', '#2a2738', '#343047'];
 function drawCaveFloor(ctx, x, y, tx, ty, room) {
@@ -1374,6 +1383,196 @@ function drawIceCrystals(ctx, x, y, tx, ty, room) {
   }
 }
 
+// --- Drops: where the ground ends at open sky. ---
+// Without this, ground next to the sky just stops at a tile's straight edge,
+// like it was bitten off. So after every tile is drawn, each edge over the
+// drop gets some depth: the ground's underside hangs down into the sky below
+// it (a snowy overhang, then rock that tapers off into shadow, an icicle or
+// two; under a bridge, its beams and a sagging rope), the outer corners are
+// rounded off, the rims along the sides and far edge are made a little
+// uneven, and a bridge that ends in the air ends in splintered planks. All of
+// it is laid in world pixels, so it runs on unbroken from tile to tile.
+const DROP_ROCK = ['#6f7a94', '#78849e', '#66718a', '#737e98'];
+const isLand = (c) => c !== null && c !== undefined && c !== '_';
+const isRockFace = (c) => c === 'E' || c === 'M' || c === 'k' || c === 'K';
+// What hangs over the edge on top of the rock: snow (on snowy ground and the
+// stair), turf (on a grassy cliff top), or nothing (bare rock, stone blocks).
+const SNOWY_EDGES = new Set(['n', 'i', 'l', 'z', 'A', 's']);
+function lipOf(c) {
+  if (SNOWY_EDGES.has(c)) return { top: '#eef3fa', under: '#cfdcee' };
+  if (c === 'm') return { top: '#3a6638', under: '#2f5530' };
+  return null;
+}
+
+// A smooth wobble along a line: a value between lo and hi that eases from one
+// random height to the next every `span` pixels.
+function wobble(along, row, salt, span, lo, hi) {
+  const i = Math.floor(along / span);
+  const f = (along - i * span) / span;
+  const a = hash(i, row, salt);
+  const b = hash(i + 1, row, salt);
+  const eased = f * f * (3 - 2 * f);
+  return lo + (a + (b - a) * eased) * (hi - lo);
+}
+
+// The underside of the ground at (tx, ty - 1), hanging into the sky tile (tx, ty).
+function drawUnderside(ctx, room, tx, ty) {
+  const above = room.tileAt(tx, ty - 1);
+  const x = tx * T;
+  const y = ty * T;
+  // Room below for it: the rest of this tile, and the next if that's sky too.
+  const room2 = room.tileAt(tx, ty + 1) === '_' ? T * 2 : T - 2;
+  // Ground that carries on to either side keeps its full depth (where it
+  // steps down, the rock meets the lower ground); only where the ground itself
+  // ends does the underside taper away, so its corner reads as rounded.
+  const goesOnLeft = isLand(room.tileAt(tx - 1, ty - 1)) || isLand(room.tileAt(tx - 1, ty));
+  const goesOnRight = isLand(room.tileAt(tx + 1, ty - 1)) || isLand(room.tileAt(tx + 1, ty));
+  const bridge = above === 'g';
+  const rock = isRockFace(above);
+  const lipColor = lipOf(above);
+  for (let c = 0; c < T; c++) {
+    const wx = x + c;
+    let taper = 1;
+    if (!goesOnLeft && c < 6) taper = Math.min(taper, (c + 1) / 7);
+    if (!goesOnRight && c > T - 7) taper = Math.min(taper, (T - c) / 7);
+    if (bridge) {
+      // Two dark joists under the boards and a rope sagging between posts.
+      px(ctx, 'rgba(20, 12, 8, 0.85)', wx, y, 1, 2);
+      const sag = Math.round(Math.sin(((wx % 48) / 48) * Math.PI) * 4);
+      px(ctx, '#3a2410', wx, y + 3 + sag, 1, 1);
+      if (wx % 24 < 2) px(ctx, '#5a3a1e', wx, y + 2, 1, 4);
+      ctx.fillStyle = 'rgba(8, 12, 30, 0.22)';
+      ctx.fillRect(wx, y + 2, 1, 6);
+      continue;
+    }
+    // A snowy lip first (not under bare rock), then the rock, then shadow.
+    const lip = lipColor ? Math.round(wobble(wx, ty, 901, 5, 1, 3.4)) : 0;
+    const depth = Math.min(room2 - 6, Math.round(wobble(wx, ty, 902, 7, rock ? 6 : 12, rock ? 13 : 22) * taper));
+    if (depth <= 0) continue;
+    if (lip) {
+      px(ctx, lipColor.top, wx, y, 1, lip);
+      px(ctx, lipColor.under, wx, y + lip, 1, 1);
+    }
+    for (let r = lip + (lip ? 1 : 0); r < depth; r++) {
+      const band = Math.floor((y + r) / 3);
+      px(ctx, pick(DROP_ROCK, hash(Math.floor(wx / 9), band, 903)), wx, y + r, 1, 1);
+    }
+    // It darkens the further down it goes, into the cold.
+    const top = lip + (lip ? 1 : 0);
+    if (depth > top) {
+      const shade = ctx.createLinearGradient(0, y + top, 0, y + depth);
+      shade.addColorStop(0, 'rgba(20, 26, 52, 0.1)');
+      shade.addColorStop(1, 'rgba(20, 26, 52, 0.6)');
+      ctx.fillStyle = shade;
+      ctx.fillRect(wx, y + top, 1, depth - top);
+    }
+    // Light catches the odd ledge in the rock.
+    if (hash(Math.floor(wx / 4), ty, 904) < 0.18) px(ctx, '#8a96b0', wx, y + top + 2, 1, 1);
+    // A ragged bottom edge, and below it the shadow fading into the drop.
+    px(ctx, '#3e4560', wx, y + depth - 1, 1, 1);
+    const fall = ctx.createLinearGradient(0, y + depth, 0, y + depth + 7);
+    fall.addColorStop(0, 'rgba(8, 12, 30, 0.32)');
+    fall.addColorStop(1, 'rgba(8, 12, 30, 0)');
+    ctx.fillStyle = fall;
+    ctx.fillRect(wx, y + depth, 1, Math.min(7, room2 - depth));
+    // Now and then an icicle under the overhang.
+    if (SNOWY_EDGES.has(above) && hash(wx, ty, 905) < 0.07) {
+      const long = 2 + Math.floor(hash(wx, ty, 906) * 4);
+      px(ctx, '#cfe6f5', wx, y + depth, 1, Math.min(long, room2 - depth));
+      px(ctx, '#ffffff', wx, y + depth, 1, 1);
+    }
+  }
+}
+
+// Where ground has the sky beside it (`dir` -1: sky to its left, 1: to its
+// right), the rim isn't a ruler-straight line: snow bulges a pixel or two out
+// over the drop, with a shadow down its side.
+function drawSideRim(ctx, room, tx, ty, dir) {
+  const x = dir < 0 ? tx * T : tx * T + T;
+  const y = ty * T;
+  const char = room.tileAt(tx, ty);
+  if (char === 'g') {
+    // A bridge ending in the air: splintered plank ends and a dangling rope.
+    for (let row = 0; row < 4; row++) {
+      const len = 1 + Math.floor(hash(tx * 4 + row, ty, 907) * 4);
+      const px0 = dir < 0 ? x - len : x;
+      px(ctx, row % 2 ? '#9a6436' : '#a86f3c', px0, y + row * 4, len, 3);
+      px(ctx, '#5a3a1e', dir < 0 ? px0 : px0 + len - 1, y + row * 4 + 1, 1, 2);
+    }
+    const rx = dir < 0 ? x - 2 : x + 1;
+    px(ctx, '#3a2410', rx, y + T - 2, 1, 6 + Math.floor(hash(tx, ty, 908) * 6));
+    return;
+  }
+  // Snow bulges over the side; any other ground just casts its shadow.
+  for (let r = 0; SNOWY_EDGES.has(char) && r < T; r++) {
+    const wy = y + r;
+    const out = Math.round(wobble(wy, tx * 2 + (dir > 0 ? 1 : 0), 909, 5, 0, 2.4));
+    if (out <= 0) continue;
+    const ox = dir < 0 ? x - out : x;
+    px(ctx, '#eef3fa', ox, wy, out, 1);
+    px(ctx, '#aab6c9', dir < 0 ? ox - 1 : ox + out, wy, 1, 1);
+  }
+  // A soft shadow off the side, so the edge stands above the drop.
+  ctx.fillStyle = edgeShadow(ctx, x, x + dir * 5);
+  ctx.fillRect(dir < 0 ? x - 5 : x, y, 5, T);
+}
+
+// A shadow falling away from an edge at `from` towards `to` (x positions).
+function edgeShadow(ctx, from, to) {
+  const shade = ctx.createLinearGradient(from, 0, to, 0);
+  shade.addColorStop(0, 'rgba(8, 12, 30, 0.22)');
+  shade.addColorStop(1, 'rgba(8, 12, 30, 0)');
+  return shade;
+}
+
+// The far edge of ground, with the sky beyond it (above it on screen): a
+// crest of snow, uneven, lit along its top.
+function drawFarRim(ctx, room, tx, ty) {
+  const char = room.tileAt(tx, ty);
+  if (!SNOWY_EDGES.has(char) || char === 's') return;
+  const x = tx * T;
+  const y = ty * T;
+  for (let c = 0; c < T; c++) {
+    const wx = x + c;
+    const up = Math.round(wobble(wx, ty, 910, 6, 0, 2.4));
+    if (up <= 0) continue;
+    px(ctx, '#f7fafd', wx, y - up, 1, up);
+  }
+}
+
+// Rounds off a corner of ground with the sky on both sides of it, by clearing
+// a little quarter-circle of pixels so the view shows through.
+function roundCorner(ctx, tx, ty, right, bottom) {
+  const steps = [3, 2, 1, 1];
+  for (let i = 0; i < steps.length; i++) {
+    const w = steps[i];
+    const cx = right ? tx * T + T - w : tx * T;
+    const cy = bottom ? ty * T + T - 1 - i : ty * T + i;
+    ctx.clearRect(cx, cy, w, 1);
+  }
+}
+
+export function drawDrops(ctx, room) {
+  for (let ty = 0; ty < room.height; ty++) {
+    for (let tx = 0; tx < room.width; tx++) {
+      const char = room.tileAt(tx, ty);
+      if (char === '_') {
+        if (isLand(room.tileAt(tx, ty - 1))) drawUnderside(ctx, room, tx, ty);
+        continue;
+      }
+      const sky = (dx, dy) => room.tileAt(tx + dx, ty + dy) === '_';
+      // Round the outer corners on the near side, where the underside tapers.
+      if (SNOWY_EDGES.has(char) && char !== 's') {
+        if (sky(-1, 0) && sky(0, -1)) roundCorner(ctx, tx, ty, false, false);
+        if (sky(1, 0) && sky(0, -1)) roundCorner(ctx, tx, ty, true, false);
+      }
+      if (sky(-1, 0)) drawSideRim(ctx, room, tx, ty, -1);
+      if (sky(1, 0)) drawSideRim(ctx, room, tx, ty, 1);
+      if (sky(0, -1)) drawFarRim(ctx, room, tx, ty);
+    }
+  }
+}
+
 // `standing` tiles are drawn with the characters (see above); `height` is how
 // tall they stand in pixels, for previews.
 // `raise` tiles are blocks that stand that many pixels above the floor: you
@@ -1429,6 +1628,7 @@ export const TILES = {
   // The caves inside the spire.
   k: { solid: true, draw: drawCaveRock },
   K: { solid: true, draw: drawCaveWall },
+  G: { solid: false, draw: drawFalseCaveWall },
   q: { solid: false, draw: drawCaveFloor },
   v: { solid: false, standing: true, height: 26, draw: drawStalactite },
   '^': { solid: true, standing: true, height: 26, draw: drawStalagmite },
