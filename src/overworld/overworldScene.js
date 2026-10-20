@@ -22,7 +22,7 @@ import { ENEMIES } from '../data/enemies/index.js';
 import { AREA_NAMES, OUTDOOR_AREAS } from '../data/areas.js';
 import { SCENES } from '../data/scenes/index.js';
 import { ScenePlayer } from './scenePlayer.js';
-import { Climb, findClimb } from './climbing.js';
+import { Climb, findClimb, ringNear } from './climbing.js';
 import { drawVista } from './vista.js';
 import { drawSnow, drawCirclingBirds, drawWisps, drawFog } from './weather.js';
 import { drawVision } from './visions.js';
@@ -919,8 +919,11 @@ export class OverworldScene {
 
   interact() {
     const [px, py] = this.player.interactionPoint();
-    // Something only seen in the light isn't there for you until your light reaches it.
-    const prop = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y)).find((p) => p && this.inLight(p));
+    // Something only seen in the light isn't there for you until your light
+    // reaches it. The iron rings aren't pressed, they're climbed with the rope
+    // (tryClimb): one hammered into the tile right in front of you must not
+    // swallow the press, or Z at the foot of the face does nothing at all.
+    const prop = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y)).find((p) => p && this.inLight(p) && !p.grapple && !p.swing);
     if (!prop) {
       if (!this.tryClimb()) this.inspectTile(Math.floor(px / T), Math.floor(py / T));
       return;
@@ -1159,7 +1162,13 @@ export class OverworldScene {
   // ring to climb to (with no rope yet, you just see it out of reach).
   tryClimb() {
     const plan = findClimb(this.room, this.player);
-    if (!plan) return false;
+    if (!plan) {
+      // A ring close by that you can't throw to from here: say why, rather
+      // than nothing (standing up on a block, or not close enough under it).
+      const near = hasGear('climbing_rope') && ringNear(this.room, this.player);
+      if (near) this.textbox.open(textSection(GEAR_TEXT, this.player.ground > 0 ? 'ring_from_block' : 'ring_too_far'));
+      return Boolean(near);
+    }
     if (!hasGear('climbing_rope')) {
       this.textbox.open(textSection(GEAR_TEXT, plan.kind === 'swing' ? 'swing_no_rope' : 'ring_no_rope'));
       return true;

@@ -91,11 +91,33 @@ const tileOf = (prop) => ({ x: Math.round(prop.x / T), y: Math.round(prop.y / T)
 // The climb you could start from where the player stands and faces, or null:
 //   { kind: 'haul', ring, to (tile), up }  one throw up a short cliff, or down any cliff
 //   { kind: 'swing', ring }                the first ring of a steep face
+// The throw is forgiving about where you stand: the ring's own column first,
+// then one column either side (the rope swings you in under it).
 export function findClimb(room, player) {
   if (player.ground > 0 || (player.facing !== 'up' && player.facing !== 'down')) return null;
-  const up = player.facing === 'up';
-  const step = up ? -1 : 1;
   const [tx, ty] = player.tilePosition();
+  for (const column of [tx, tx - 1, tx + 1]) {
+    const plan = findClimbIn(room, player.facing === 'up', column, ty);
+    if (plan) return plan;
+  }
+  return null;
+}
+
+// Whether a ring is close above the player (within a few tiles, a column or
+// two to the side) that findClimb didn't give a climb to: for telling the
+// player why Z did nothing.
+export function ringNear(room, player) {
+  if (player.facing !== 'up') return false;
+  const [tx, ty] = player.tilePosition();
+  return room.props.some((prop) => {
+    if (!prop.swing && !prop.grapple) return false;
+    const ring = tileOf(prop);
+    return Math.abs(ring.x - tx) <= 2 && ty - ring.y >= 1 && ty - ring.y <= MAX_THROW_TILES + 2;
+  });
+}
+
+function findClimbIn(room, up, tx, ty) {
+  const step = up ? -1 : 1;
   let y = ty + step;
   if (!room.isSolidTile(tx, y)) return null;
   let tiles = 0;

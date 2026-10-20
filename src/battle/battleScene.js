@@ -429,6 +429,8 @@ export class BattleScene {
     foe.phase = index;
     foe.phaseTurns = 0;
     const phase = foe.data.phases[index];
+    // A phase can bring its own music in (the Usurper's three movements).
+    if (phase.music) music.play(phase.music);
     if (phase.sprite) {
       const white = Object.fromEntries(Object.keys(phase.sprite.palette).map((key) => [key, '#ffffff']));
       foe.sprite = makeSprite(phase.sprite.rows, phase.sprite.palette);

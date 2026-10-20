@@ -53,7 +53,9 @@
   <h1>Music Export</h1>
   <p>Records the game's songs to audio files, with the same instruments the game plays them on.
     Looping songs play through, go round the loop again as many times as you choose, then fade out.
-    Recording happens silently and takes a few seconds per song.</p>
+    Recording happens silently, at about three times the song's own speed: a
+    three-minute song takes about a minute at CD quality, half that at 32 kHz.
+    Export all records three songs at once.</p>
   <div id="message" hidden></div>
   <div class="options">
     <label>Format
@@ -62,7 +64,14 @@
         <option value="wav">WAV (lossless, bigger)</option>
       </select>
     </label>
-    <label>Times round the loop <input type="number" id="loops" min="1" max="8" value="2"></label>
+    <label>Quality
+      <select id="rate">
+        <option value="44100">CD (44.1 kHz, slowest)</option>
+        <option value="32000" selected>Good (32 kHz)</option>
+        <option value="22050">Quick (22 kHz)</option>
+      </select>
+    </label>
+    <label>Times round the loop <input type="number" id="loops" min="1" max="8" value="1"></label>
     <label>Fade out (s) <input type="number" id="fade" min="0" max="30" value="8"></label>
     <label><input type="checkbox" id="normalize" checked> Make it louder (normalise)</label>
     <button type="button" class="all" id="all">Export all</button>
@@ -75,14 +84,17 @@ import { SONGS } from './src/data/music/index.js';
 import { loadOrder } from './tools/order.js';
 import { renderSong, compile } from './src/audio/music.js';
 
-const SAMPLE_RATE = 44100;
 // How long a song that doesn't loop is left ringing after its last note (reverb, echoes).
 const TAIL_SECONDS = 5;
 const LAME_URL = 'https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js';
+// Export all records this many songs at the same time (each offline render
+// gets its own thread, so this is nearly this many times faster).
+const AT_ONCE = 3;
 
 const $ = (id) => document.getElementById(id);
 const options = () => ({
   format: $('format').value,
+  rate: Number($('rate').value) || 44100,
   loops: Math.max(1, Number($('loops').value) || 1),
   fade: Math.max(0, Number($('fade').value) || 0),
   normalize: $('normalize').checked,
@@ -177,14 +189,14 @@ async function exportSong(name, setStatus) {
   const opts = options();
   const { seconds, fadeSeconds } = recordingLength(song, opts);
   setStatus('Recording...');
-  const buffer = await renderSong(song, seconds, SAMPLE_RATE);
+  const buffer = await renderSong(song, seconds, opts.rate);
   const channels = finish(buffer, fadeSeconds, opts.normalize);
   let blob;
   if (opts.format === 'mp3') {
-    blob = await encodeMp3(channels, SAMPLE_RATE, (p) => setStatus(`Encoding ${Math.round(p * 100)}%`));
+    blob = await encodeMp3(channels, opts.rate, (p) => setStatus(`Encoding ${Math.round(p * 100)}%`));
   } else {
     setStatus('Encoding...');
-    blob = encodeWav(channels, SAMPLE_RATE);
+    blob = encodeWav(channels, opts.rate);
   }
   return { blob, file: fileName(name, song, opts.format) };
 }
@@ -280,7 +292,12 @@ $('all').addEventListener('click', async () => {
     };
   }
   setBusy(true);
-  for (const name of songOrder) await run(name, save);
+  // A few at a time: each one's recording runs on its own thread.
+  const queue = [...songOrder];
+  const worker = async () => {
+    while (queue.length) await run(queue.shift(), save);
+  };
+  await Promise.all(Array.from({ length: AT_ONCE }, worker));
   setBusy(false);
 });
 </script>

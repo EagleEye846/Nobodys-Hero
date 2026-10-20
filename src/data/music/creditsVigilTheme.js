@@ -142,10 +142,10 @@ play(8, {
   ...groove(8, KICK),
   crash: [...CRASH, ...rest(7)],
 }, verse(
-  'and Moth-er Ta-per let you go',
-  'up the long and brok-en stair,',
-  'where a girl knelt in the chap-el,',
-  'and the wind was in her hair.',
+  'and a can-dle in the dark-ness',
+  'let you climb a-bove the snow,',
+  'where a bell rang in the still-ness',
+  'and a prayer was on the wind.',
 ));
 
 // Everything: nobody's hero.
@@ -157,7 +157,7 @@ play(8, {
 }, chorus([
   'No, you were no-bod-y\'s He-ro,',
   'not the one the sto-ries told,',
-  'but you climbed in-to the stor-y,',
+  'but you climbed when no one else would,',
   'and you made it all your own.',
 ]));
 
@@ -200,10 +200,10 @@ play(8, {
   snare: [...rest(4), ...hits('....x... x...x... x.x.x.x. xxxxxxxx')],
   crash: [...CRASH, ...rest(7)],
 }, [
-  lyricLine('. . A4 D5 F5 - E5 F5 | G5 - D5 - Bb4 - . .', 'Then the shad-ow at the sum-mit'),
-  lyricLine('. . A4 C5 F5 - E5 F5 | G5 - - - - - . .', 'pulled her o-ver the edge,'),
-  lyricLine('G5 A5 Bb5 - G5 A5 Bb5 - | A5 Bb5 D6 - - - . .', 'and you ran, and you dove, and you reached,'),
-  lyricLine('. . C6 Bb5 A5 - G5 A5 | F#5 - - - D5 - - -', 'and her fin-gers slipped a-way.'),
+  lyricLine('. . A4 D5 F5 - E5 F5 | G5 - D5 - Bb4 - . .', 'Then the cold came down the moun-tain'),
+  lyricLine('. . A4 C5 F5 - E5 F5 | G5 - - - - - . .', 'and it tore you a-part,'),
+  lyricLine('G5 A5 Bb5 - G5 A5 Bb5 - | A5 Bb5 D6 - - - . .', 'and you reached, and you reached, and you reached,'),
+  lyricLine('. . C6 Bb5 A5 - G5 A5 | F#5 - - - D5 - - -', 'and the wind took her a-way.'),
 ]);
 
 // One chord ringing, and nothing.

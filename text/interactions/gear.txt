@@ -21,6 +21,15 @@ High above, an iron ring is hammered into the top of the cliff.
 
 With a rope, you could get up there.
 
+# With the rope, facing a ring you can't throw to from where you stand.
+[ring_from_block]
+Not from up here. You need both feet on the ground under a ring to throw.
+
+[ring_too_far]
+There's a ring up there, but it's not a throw from here.
+
+Stand straight under it, as close in to the rock as you can.
+
 # Facing a steep face with rings hammered into it, before you have the rope.
 [swing_no_rope]
 Iron rings are hammered into the rock above you, one after another, all the way up.

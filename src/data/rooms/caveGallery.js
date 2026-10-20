@@ -2,7 +2,8 @@
 // through the cracks makes the rock hum (that's the "bell" every climber
 // hears, or one of them). A frozen lake in the middle, a forest of
 // stalagmites, and a walled alcove reached by jumping up fallen blocks, with
-// the Ice Pick in it. The heralds' Book of Arrivals waits on a stand by the
+// the Ice Pick in it (low blocks inside too, so you can jump back out: a
+// jump clears one step, not a tall block from the floor). The heralds' Book of Arrivals waits on a stand by the
 // way in. The way out is a cave mouth high on the far side, onto the Shoulder.
 // Tile key (see src/overworld/tileset.js):
 //   k  cave rock overhead (solid)                 t  cave mouth (walk through it; see `doors`)
@@ -41,7 +42,7 @@ export const CAVE_GALLERY = {
     'kqqqqqxqqqqqqqkKKKKKKKKkqqqqqqqqqqqk',
     'kqqqqqqqqqqqqqkKqqqqqqKkqqq^qqqqqqqk',
     'kqqvqqqqqqqqqqkKqqxqqqKkqqqqqqqvqqqk',
-    'kqqqqqqqqq^qqqkKqqqqqqKkqqqqqqqqqqqk',
+    'kqqqqqqqqq^qqqkKqqbbqqKkqqqqqqqqqqqk',
     'kqqqqqqqqqqqqqkKKBBBBKKkqqqqqqqqqqqk',
     'kqqqqqqqqqqqqqkkkkbbkkkkqqqqqxqqqqqk',
     'kqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk',

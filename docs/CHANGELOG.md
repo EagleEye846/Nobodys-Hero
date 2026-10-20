@@ -1,5 +1,25 @@
 # What's new
 
+## Fixes (20 October 2026)
+
+- **Z at the foot of a face sometimes did nothing.** Where a face's first ring
+  is in the tile right in front of you (the Shoulder, the Broken Span),
+  pressing Z picked up the ring prop instead of throwing the rope, and ring
+  props have nothing to say. Rings are now skipped by the press and left to
+  the climb (`OverworldScene.interact`).
+- **The throw is more forgiving**: it works from the ring's column or one
+  column either side (`findClimb` in `src/overworld/climbing.js`), and when
+  a ring is near but you can't throw (up on a block, not close enough under
+  it) it says so instead of nothing (`ring_from_block`, `ring_too_far` in
+  `text/interactions/gear.txt`).
+- **The Ice Pick alcove** in the Singing Gallery could be jumped into but
+  not out of (nothing low inside to jump up from). Two low blocks added.
+- **New tool**: `python tools/headless.py <url>` runs a preview/textCheck page
+  in headless Edge and waits for it to finish (song renders take real time).
+- The Usurper's fight plays a new, all-orchestra theme, "Who Would Be Hero"
+  (`usurperHeroTheme.js`); the three unused movements and the mix stay in
+  the music list.
+
 Everything that changed in the big Mount Vigil session (17 October 2026),
 grouped so you can find it again. Files are named where it helps.
 

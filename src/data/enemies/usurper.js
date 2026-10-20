@@ -76,7 +76,10 @@ export const USURPER_BOSS = {
   // He's tall (50x58), so he stands at the top of the stage, right of the box.
   battlePos: { x: 206, y: -2 },
   boss: true,
-  music: 'usurperBattle',
+  // "Who Would Be Hero" (usurperHeroTheme.js), a real orchestra. The older
+  // themes are still in the music list: 'usurperBattle' (the synth
+  // original), 'usurperBattleMix' (that with an orchestra layered under it).
+  music: 'usurperHero',
   // The summit, the cold beacon behind (src/battle/backdrops.js).
   backdrop: 'summit',
   // Clearly above the Roost Mother (900 HP, 11 damage, density 1.2), but
