@@ -1,10 +1,11 @@
 // USURPER FALLS: after you beat the Usurper on the summit (the `defeated` of
 // his battle step). He's dropped the stolen blade in the snow, and he's
-// hunched over, clutching his sides, laughing. He lunges, grabs Ves, and
-// drags her to the very edge. He looks back at you once; then, dying, he
-// slumps over backwards off the mountain with her in his grip, and the
-// camera watches them go. A beat of silence. Then "Reach": the hero sprints
-// for the edge, crouches, and dives. The fall fades in (the 'fall' vision in
+// hunched over, clutching his sides, laughing. He lunges, grabs Ves (a
+// `hold`: she's still her own actor, playing 'ves_held' and then
+// 'ves_held_over' in step with him), and drags her to the very edge. He
+// looks back at you once; then, dying, he slumps over backwards off the
+// mountain with her in his grip, and the camera watches them go. A beat of
+// silence. Then "Reach": the hero sprints for the edge, crouches, and dives. The fall fades in (the 'fall' vision in
 // src/overworld/visions.js, in the spirit of the opening of Tears of the
 // Kingdom): the plunge, the reach, her fingers an inch from yours, the miss,
 // her umbrella slipping free; then the trees rushing up. Black. Credits.
@@ -40,8 +41,9 @@ export const USURPER_FALLS = {
     { do: 'animate', who: 'usurper', animation: 'usurper_lunge', speed: 0.1 },
     { do: 'walk', who: 'usurper', to: { x: 17, y: 13 }, fast: true, keep: true },
     { do: 'sound', name: 'hit' },
-    { do: 'leave', who: 'ves' },
+    { do: 'hold', who: 'usurper', what: 'ves' },
     { do: 'animate', who: 'usurper', animation: 'usurper_grab', speed: 0.12 },
+    { do: 'animate', who: 'ves', animation: 'ves_held', speed: 0.12 },
     { do: 'say', who: 'ves', text: '{scared}Let go! LET GO OF ME!', shake: true },
     { do: 'emote', who: 'player', emote: '!' },
     // He drags her to the very edge, slow, dying, the camera on them.
@@ -54,11 +56,13 @@ export const USURPER_FALLS = {
     // He slumps over backwards off the mountain, with her in his grip.
     { do: 'camera', to: { x: 27, y: 11 } },
     { do: 'animate', who: 'usurper', animation: 'usurper_slump', speed: 0.2, once: true },
+    { do: 'animate', who: 'ves', animation: 'ves_held_over', speed: 0.2, once: true },
     { do: 'wait', seconds: 1.2 },
     { do: 'sound', name: 'flare' },
     { do: 'walk', who: 'usurper', to: { x: 30, y: 12 }, fast: true, keep: true },
     { do: 'walk', who: 'usurper', to: { x: 31, y: 18 }, fast: true, keep: true },
     { do: 'leave', who: 'usurper' },
+    { do: 'leave', who: 'ves' },
     // A beat of nothing.
     { do: 'wait', seconds: 1.2 },
     // Then the hero runs, and dives.

@@ -22,6 +22,7 @@ import * as taperBattleTheme from './taperBattleTheme.js';
 import * as taperFarewellTheme from './taperFarewellTheme.js';
 import * as taperTheme from './taperTheme.js';
 import * as titleTheme from './titleTheme.js';
+import * as trailerTheme from './trailerTheme.js';
 import * as usurperBattleTheme from './usurperBattleTheme.js';
 import * as usurperTheme from './usurperTheme.js';
 import * as vesTheme from './vesTheme.js';
@@ -29,7 +30,7 @@ import * as vigilEpicTheme from './vigilEpicTheme.js';
 import * as vigilTheme from './vigilTheme.js';
 import * as waltzTheme from './waltzTheme.js';
 
-const MODULES = { 'batBattle': batBattleTheme, 'battle': battleTheme, 'caveBattle': caveBattleTheme, 'caves': cavesTheme, 'chapel': chapelTheme, 'credits': creditsTheme, 'creditsVigil': creditsVigilTheme, 'freefall': freefallTheme, 'lantern': lanternTheme, 'mountainBattle': mountainBattleTheme, 'prophecy': prophecyTheme, 'remorse': remorseTheme, 'rest': restTheme, 'ruins': ruinsTheme, 'shelf': shelfTheme, 'shop': shopTheme, 'skills': skillsTheme, 'stair': stairTheme, 'taperBattle': taperBattleTheme, 'taperFarewell': taperFarewellTheme, 'taper': taperTheme, 'title': titleTheme, 'usurperBattle': usurperBattleTheme, 'usurper': usurperTheme, 'ves': vesTheme, 'vigilEpic': vigilEpicTheme, 'vigil': vigilTheme, 'waltz': waltzTheme };
+const MODULES = { 'batBattle': batBattleTheme, 'battle': battleTheme, 'caveBattle': caveBattleTheme, 'caves': cavesTheme, 'chapel': chapelTheme, 'credits': creditsTheme, 'creditsVigil': creditsVigilTheme, 'freefall': freefallTheme, 'lantern': lanternTheme, 'mountainBattle': mountainBattleTheme, 'prophecy': prophecyTheme, 'remorse': remorseTheme, 'rest': restTheme, 'ruins': ruinsTheme, 'shelf': shelfTheme, 'shop': shopTheme, 'skills': skillsTheme, 'stair': stairTheme, 'taperBattle': taperBattleTheme, 'taperFarewell': taperFarewellTheme, 'taper': taperTheme, 'title': titleTheme, 'trailer': trailerTheme, 'usurperBattle': usurperBattleTheme, 'usurper': usurperTheme, 'ves': vesTheme, 'vigilEpic': vigilEpicTheme, 'vigil': vigilTheme, 'waltz': waltzTheme };
 
 // Every song, keyed by its file name without "Theme" (battleTheme.js is 'battle').
 export const SONGS = Object.fromEntries(

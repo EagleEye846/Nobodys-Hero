@@ -37,6 +37,7 @@ export const STEP_TYPES = {
   bed: 'In bed: sit up, lie down, get up',
   toss: 'Throw something, with bounces',
   weather: "Fade the room's snow and fog",
+  hold: 'Hold someone (they go where you go)',
 };
 // 'sweat' isn't a bubble: drops of cold sweat run down beside their head.
 export const EMOTES = ['!', '?', '...', '<3', 'sweat'];
@@ -117,10 +118,19 @@ class Actor {
     this.walking = false;
     // How high off the ground they are, in pixels (a thrown thing in flight).
     this.lift = 0;
+    // Who has hold of them (the `hold` step).
+    this.heldBy = null;
   }
 
+  // Held, they're drawn just in front of whoever holds them.
   get sortY() {
-    return this.y;
+    return this.heldBy ? this.heldBy.sortY + 0.01 : this.y;
+  }
+
+  // Bobbing a pixel as they walk; held, they bob with whoever holds them.
+  bob(seconds) {
+    if (this.heldBy?.bob) return this.heldBy.bob(seconds);
+    return !this.frames && this.walking && Math.floor(seconds / (BOB_SECONDS / 3)) % 2 ? 1 : 0;
   }
 
   // Fades in when they appear and out when they leave, rather than blinking.
@@ -172,7 +182,7 @@ class Actor {
     if (alpha <= 0) return;
     const seconds = performance.now() / 1000;
     const sprite = this.currentSprite(seconds);
-    const bob = !this.frames && this.walking && Math.floor(seconds / (BOB_SECONDS / 3)) % 2 ? 1 : 0;
+    const bob = this.bob(seconds);
     ctx.globalAlpha = alpha;
     // In the air, a shadow stays on the ground under it.
     if (this.lift > 1) {
@@ -407,6 +417,18 @@ export class ScenePlayer {
       case 'music':
         music.play(step.song || null);
         return true;
+      case 'hold': {
+        // `who` takes hold of `what` (someone else in the scene): from now on
+        // `what` stands right where `who` does, goes wherever they go, and is
+        // drawn just in front of them. Give them animations made to line up
+        // (the Usurper's 'usurper_grab' and Ves's 'ves_held': each in their
+        // own sprite, so she's never part of his). With no `what`, `who` lets go.
+        const holder = this.body(step.who);
+        for (const actor of this.actors.values()) if (actor.heldBy === holder) actor.heldBy = null;
+        if (step.what) this.body(step.what).heldBy = holder;
+        this.carry();
+        return true;
+      }
       case 'join':
         // `who` is a party member id (src/characters/party.js), not a scene actor.
         if (joinParty(step.who)) this.overworld.addFollower?.(step.who);
@@ -469,7 +491,19 @@ export class ScenePlayer {
       default:
         finished = true;
     }
+    this.carry();
     if (finished) this.advance();
+  }
+
+  // Whoever is held (the `hold` step) moves with whoever holds them.
+  carry() {
+    for (const actor of this.actors.values()) {
+      const holder = actor.heldBy;
+      if (!holder) continue;
+      actor.x = holder.x;
+      actor.y = holder.y;
+      actor.lift = holder.lift ?? 0;
+    }
   }
 
   // Walks in a straight line to the tile, at walking pace. Scripted walks go

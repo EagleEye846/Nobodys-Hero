@@ -65,7 +65,8 @@ export const SUMMIT_ARRIVAL = {
     { do: 'toss', who: 'lantern', to: { x: 18, y: 9 }, height: 46, bounces: 2 },
     { do: 'wait', seconds: 0.6 },
     { do: 'say', who: 'ves', text: '{furious}That\'s... that\'s MUM\'S!' },
-    { do: 'animate', who: 'usurper', animation: 'usurper_idle', speed: 0.3 },
+    // Empty-handed now: the lantern stays where it landed, into the fight.
+    { do: 'animate', who: 'usurper', animation: 'usurper_empty', speed: 0.3 },
     { do: 'camera' },
     // And he comes at you.
     { do: 'animate', who: 'usurper', animation: 'usurper_charge', speed: 0.1 },

@@ -44,6 +44,7 @@ const STEP_FIELDS = {
   toss: ['who', 'to', 'height', 'bounces'],
   bed: ['pose'],
   weather: ['to', 'seconds'],
+  hold: ['who', 'what'],
   end_chapter: ['room', 'spawn', 'credits'],
 };
 const STEP_ICONS = { say: 'chat', walk: 'person', face: 'eye', emote: 'star', wait: 'pause', camera: 'fit', appear: 'plus', leave: 'minus', animate: 'play', sound: 'note', music: 'note', give: 'heart', battle: 'enemy', end_chapter: 'flag' };

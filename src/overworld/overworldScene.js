@@ -69,7 +69,7 @@ const GEAR_TEXT = 'interactions/gear.txt';
 const FALL_SECONDS = 0.9;
 const FADE_SECONDS = 0.8;
 
-// The screen flashes this long before a battle starts.
+// The lead-in before a battle starts lasts this long (see drawBattleLeadIn).
 const BATTLE_FLASH_SECONDS = 0.7;
 
 // Dark rooms: the darkness is drawn onto this, with holes cut where light reaches.
@@ -1322,8 +1322,27 @@ export class OverworldScene {
     if (this.fadeIn > 0) this.drawBlack(ctx, this.fadeIn / DOOR_FADE_SECONDS);
     if (this.ride) this.drawBlack(ctx, this.ride.blackout);
 
-    if (this.battleFlash && Math.floor(this.battleFlash.t / 0.12) % 2 === 0) {
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    if (this.battleFlash) this.drawBattleLeadIn(ctx, this.battleFlash.t);
+  }
+
+  // Before an ordinary battle: a quicker take on a story battle's lead-in
+  // (scenePlayer.js). The dark closes in to a spotlight on you, then
+  // everything eases to black. No white, no strobing.
+  drawBattleLeadIn(ctx, t) {
+    const ease = (x) => 1 - (1 - Math.min(1, Math.max(0, x))) ** 3;
+    const { player } = this;
+    const x = this.spire ? this.project(player.x).x : player.x - this.camera.x;
+    const y = player.y - player.ground - 10 - this.camera.y;
+    const close = ease(t / (BATTLE_FLASH_SECONDS * 0.6));
+    const radius = 420 + (34 - 420) * close;
+    const dark = ctx.createRadialGradient(x, y, radius * 0.55, x, y, radius);
+    dark.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    dark.addColorStop(1, `rgba(0, 0, 0, ${(0.92 * close).toFixed(3)})`);
+    ctx.fillStyle = dark;
+    ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    const black = ease((t - BATTLE_FLASH_SECONDS * 0.65) / (BATTLE_FLASH_SECONDS * 0.3));
+    if (black > 0) {
+      ctx.fillStyle = `rgba(0, 0, 0, ${black.toFixed(3)})`;
       ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
   }

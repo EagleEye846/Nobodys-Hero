@@ -177,6 +177,9 @@ export class BattleScene {
     // them can put in the box (see enterPhase).
     this.phased = this.foes.find((foe) => foe.data.phases) ?? null;
     this.flame = null;
+    // Her lantern is on the stage from the start, cold in the snow where he
+    // threw it (summit_arrival), before Ves starts to relight it.
+    this.stageLantern = Boolean(this.phased?.data.phases.some((phase) => phase.flame));
     this.provoked = false;
     this.flameGuardBonus = 0;
 
@@ -1838,7 +1841,7 @@ export class BattleScene {
     ctx.save();
     if (this.shake > 0) ctx.translate(Math.round((Math.random() - 0.5) * 4), Math.round((Math.random() - 0.5) * 4));
     this.drawParty(ctx);
-    if (this.flame) this.drawStageLantern(ctx);
+    if (this.stageLantern) this.drawStageLantern(ctx);
     if (this.phase === 'bossIntro') this.drawBossIntro(ctx);
     for (const foe of this.foes) this.drawFoe(ctx, foe);
     this.drawBox(ctx);
@@ -2109,14 +2112,14 @@ export class BattleScene {
     for (let i = 0; i < flame.guard; i++) ctx.fillRect(Math.round(flame.x - flame.guard + i * 2), Math.round(flame.y + 8), 1, 1);
   }
 
-  // Her lantern on the stage, by Ves: cold, catching, then blazing, its
-  // light washing over everything once it's lit.
+  // Her lantern on the stage, by Ves: cold where it landed, then catching,
+  // then blazing, its light washing over everything once it's lit.
   drawStageLantern(ctx) {
     const ves = this.party.find((member) => member.ally) ?? this.hero;
     const feet = this.memberFeet(ves);
     const x = feet.x + 16;
     const y = feet.y;
-    const lit = this.flame.stage / this.flame.stages;
+    const lit = this.flame ? this.flame.stage / this.flame.stages : 0;
     lanternSprite ??= makeSprite(PROP_SPRITES.mothers_lantern, PROP_PALETTE);
     const radius = 10 + lit * 50 + (lit >= 1 ? 30 + Math.sin(this.time * 3) * 6 : 0);
     if (lit > 0) {

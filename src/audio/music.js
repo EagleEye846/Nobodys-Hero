@@ -1,5 +1,6 @@
 import { SONGS } from '../data/music/index.js';
 import { HOLD, HIT } from './notation.js';
+import { SAMPLE_SETS } from './sampleSets.js';
 
 // Songs are synthesised live with the Web Audio API, chiptune style, from the
 // note data in src/data/music/. Rooms, shops, menus and enemies pick a song by
@@ -251,6 +252,77 @@ function playTone(ctx, channel, instrument, midi, time, seconds, noise) {
   }
 }
 
+// --- Real instruments: recordings from assets/audio/samples/ (see
+// sampleSets.js). An instrument with `sample: 'violins'` plays them instead of
+// a synth. Notes between the recorded ones play the nearest one, retuned. Its
+// own settings:
+//   volume     as for a synth
+//   attack     seconds to fade in (default: none, the recording's own attack)
+//   release    seconds to fade out after the note ends (default 0.25)
+//   ring       true to let every note ring out to the end of its recording
+//              (a piano with the pedal down, a harp, drums), ignoring its length
+//   offset     seconds to skip at the start of each recording (a slow bow)
+//   octave     plays everything this many octaves up or down
+// An unpitched set (a drum, a cymbal) goes on a drum track: give it
+// `drum: 'sample'` and write its hits with 'x'.
+const SAMPLE_ROOT = new URL('../../assets/audio/samples/', import.meta.url);
+const sampleBuffers = new WeakMap();
+
+const sampleSetsIn = (song) => [...new Set(Object.values(song.instruments).map((i) => i.sample).filter(Boolean))];
+
+// Loads (once per audio context) every recording a song needs. Resolves when
+// they're ready; returns null if they already are, so playback can start
+// straight away.
+export function loadSamples(ctx, song) {
+  if (!sampleBuffers.has(ctx)) sampleBuffers.set(ctx, { ready: new Map(), loading: new Map() });
+  const cache = sampleBuffers.get(ctx);
+  const needed = sampleSetsIn(song).filter((name) => !cache.ready.has(name));
+  if (!needed.length) return null;
+  return Promise.all(needed.map((name) => {
+    if (!cache.loading.has(name)) {
+      const set = SAMPLE_SETS[name];
+      if (!set) throw new Error(`${song.title}: no sample set called '${name}'`);
+      cache.loading.set(name, Promise.all(set.notes.map(async (midi) => {
+        const response = await fetch(new URL(`${name}/${midi}.ogg`, SAMPLE_ROOT));
+        if (!response.ok) throw new Error(`Couldn't load the ${name} sample ${midi}.ogg`);
+        return [midi, await ctx.decodeAudioData(await response.arrayBuffer())];
+      })).then((buffers) => cache.ready.set(name, new Map(buffers))));
+    }
+    return cache.loading.get(name);
+  }));
+}
+
+// The recorded note nearest `midi` in a set.
+function nearestNote(notes, midi) {
+  return notes.reduce((best, note) => (Math.abs(note - midi) < Math.abs(best - midi) ? note : best), notes[0]);
+}
+
+// Plays one note (or, with no `midi`, one hit) from an instrument's recordings.
+function playSample(ctx, channel, instrument, midi, time, seconds) {
+  const buffers = sampleBuffers.get(ctx)?.ready.get(instrument.sample);
+  if (!buffers) return;
+  const { volume, attack = 0, release = 0.25, gate = 1, ring = false, offset = 0, octave = 0 } = instrument;
+  const set = SAMPLE_SETS[instrument.sample];
+  const note = midi == null ? set.notes[0] : nearestNote(set.notes, midi + 12 * octave);
+  const buffer = buffers.get(note);
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  if (midi != null) source.playbackRate.value = 2 ** ((midi + 12 * octave - note) / 12);
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(attack ? 0 : volume, time);
+  if (attack) gain.gain.linearRampToValueAtTime(volume, time + attack);
+  const length = (buffer.duration - offset) / source.playbackRate.value;
+  let stopAt = time + length;
+  if (!ring) {
+    const end = time + seconds * gate;
+    gain.gain.setTargetAtTime(0, end, release / 3);
+    stopAt = Math.min(stopAt, end + release * 2 + 0.05);
+  }
+  source.connect(gain).connect(channel);
+  source.start(time, offset);
+  source.stop(stopAt);
+}
+
 const DRUMS = {
   // A sine wave that drops in pitch.
   kick(ctx, channel, noise, time, volume) {
@@ -425,16 +497,31 @@ class SongPlayback {
     this.noise = noise;
     this.song = song;
     this.bus = ctx.createGain();
+    // A song can turn itself down (or up) as a whole with `volume`.
+    this.bus.gain.value = song.volume ?? 1;
     this.bus.connect(destination);
     this.channels = buildChannels(ctx, this.bus, song.instruments);
     ({ steps: this.steps, loopStart: this.loopStart } = compile(song));
     this.stepSeconds = 60 / song.bpm / song.stepsPerBeat;
     this.index = 0;
-    this.nextTime = ctx.currentTime + 0.05;
-    this.startTime = this.nextTime;
     this.ended = false;
-    this.timer = setInterval(() => this.schedule(), TICK_MS);
-    this.schedule();
+    // Until it starts, it's at the very beginning (see songTime).
+    this.startTime = Infinity;
+    const begin = () => {
+      if (this.stopped) return;
+      this.nextTime = ctx.currentTime + 0.05;
+      this.startTime = this.nextTime;
+      this.timer = setInterval(() => this.schedule(), TICK_MS);
+      this.schedule();
+    };
+    // A song with real instruments waits for their recordings to load (only
+    // the first time); one without starts straight away.
+    const loading = loadSamples(ctx, song);
+    if (loading) {
+      loading.catch((error) => console.error(`${song.title}: couldn't load its instruments:`, error)).then(begin);
+    } else {
+      begin();
+    }
   }
 
   schedule() {
@@ -469,11 +556,13 @@ class SongPlayback {
       time += Math.random() * (human.time ?? 0);
       instrument = { ...instrument, volume: instrument.volume * (1 - Math.random() * (human.volume ?? 0)) };
     }
-    if (instrument.drum) DRUMS[instrument.drum](this.ctx, channel, this.noise, time, instrument.volume);
+    if (instrument.sample) playSample(this.ctx, channel, instrument, event.midi, time, (event.length ?? 1) * this.stepSeconds);
+    else if (instrument.drum) DRUMS[instrument.drum](this.ctx, channel, this.noise, time, instrument.volume);
     else playTone(this.ctx, channel, instrument, event.midi, time, event.length * this.stepSeconds, this.noise);
   }
 
   stop() {
+    this.stopped = true;
     clearInterval(this.timer);
     this.bus.gain.setTargetAtTime(0, this.ctx.currentTime, FADE_SECONDS / 3);
     setTimeout(() => this.bus.disconnect(), (FADE_SECONDS + 1) * 1000);
@@ -483,10 +572,11 @@ class SongPlayback {
 // Plays the first `seconds` of a song into an offline recording, without
 // making a sound, and resolves with the AudioBuffer. For tests and tools
 // (checking a song for errors, or how loud it gets).
-export function renderSong(song, seconds, sampleRate = 44100) {
+export async function renderSong(song, seconds, sampleRate = 44100) {
   const ctx = new OfflineAudioContext(2, Math.ceil(sampleRate * seconds), sampleRate);
+  await loadSamples(ctx, song);
   const master = ctx.createGain();
-  master.gain.value = MASTER_VOLUME;
+  master.gain.value = MASTER_VOLUME * (song.volume ?? 1);
   master.connect(ctx.destination);
   const playback = Object.create(SongPlayback.prototype);
   Object.assign(playback, { ctx, song, noise: makeNoise(ctx), bus: master });

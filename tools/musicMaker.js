@@ -555,7 +555,10 @@ export async function mount(root, studio) {
 
   function playhead() {
     if (!playback) return null;
-    let step = Math.floor((performance.now() - playback.start) / 1000 / playback.stepSeconds);
+    // The game's own clock when it has one: a song with real instruments
+    // starts once their recordings have loaded, not straight away.
+    const elapsed = music.songTime ?? (performance.now() - playback.start) / 1000;
+    let step = Math.floor(elapsed / playback.stepSeconds);
     if (step < 0) return null;
     if (step >= playback.total) step = playback.loopStart + ((step - playback.total) % Math.max(1, playback.total - playback.loopStart));
     const part = playback.layout.find((p) => step >= p.start && step < p.start + p.length);
