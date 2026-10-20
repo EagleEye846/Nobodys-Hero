@@ -1,5 +1,31 @@
 # Chapter 3: The Search (design brainstorm)
 
+> **Built so far (20 October 2026): the Pinefall's rooms, no enemies.** The
+> forest is a scarlet autumn wood in the spirit of Deltarune's Scarlet Forest
+> (the user's reference): dark leaf litter (`d`), pale paths (`y`), scarlet
+> trees (`L`) and bramble hedges (`Z`), and a run of small rooms with one idea
+> each. In order: `pinefall_landing` (where you fell; Ves's mitten; save) →
+> `pinefall_bramble_gate` (three levers, pulled as the sun goes) →
+> `pinefall_deadfall` (stumps up onto fallen trunks; her ribbon) →
+> `pinefall_brook` (ring climb to the only bridge, rope down) →
+> `pinefall_camp` (the woodcutters' camp and its sale stall, nobody home;
+> save) → `pinefall_maze` (a bramble maze, a pack in the far dead end) →
+> `pinefall_tatters` (claw marks, scraps of her coat: the midboss clearing) →
+> `pinefall_ravine` (rope down in shelves to the mist; no door on yet).
+> Chapter 2's ending now leads here (Ves leaves the party as she falls), and
+> chapter select has Chapter 3. Words: `text/interactions/pinefall.txt`. The
+> rooms were generated and checked for reachability and soft locks by a
+> script (kept in the session scratchpad, not the repo). Still to come: the
+> Pinefall's enemies, the woodcutters, the companion, the wake-up scene,
+> and the Lantern Marsh.
+>
+> **Also built:** the Keeper meets you at the woodcutters' fire
+> (`keeper_at_the_fire`, triggered walking into the camp) and points you
+> south; he stays by the fire after. The forest is silent (only its
+> ambience) until that scene, then plays **"The Scarlet Waltz"**
+> (`pinefallTheme.js`, song `pinefall`, a mysterious 3/4 waltz with Ves's
+> motif in its middle): rooms use `musicAfter: { scene, song }`.
+
 Where Chapter 2 left us: the Usurper went over the summit's edge with Ves in
 his grip, the hero dived after them, missed her hand by an inch, and the last
 thing we saw was trees rushing up. "Somewhere below the clouds, the wind is
@@ -349,7 +375,7 @@ different kind of weight.
 |---|---|---|
 | Rooms | ~30 | Pinefall 8, Marsh 8, Lasthome 7, ruins 6, boss 1 |
 | Enemies | 9 regulars + 1 midboss + 1 boss | 3 per region; each 3+ themed attacks, unique drop |
-| Music | ~9 | Pinefall, Marsh, Lasthome, ruins, boss (orchestral, like "Who Would Be Hero"), the hound, Ves hurt, a dream, credits |
+| Music | ~9 | Pinefall, Marsh, Lasthome, ruins, boss (orchestral, like "Who Would Be Hero"), the hound, Ves hurt, a dream, credits. Area themes are in the style of Hollow Knight's City of Tears (user, 21 October 2026): a fixed stack-of-fifths "rain" ostinato that never changes while the bass moves under it, long tunes on colour notes, rolling 12/8 near 60, inside/outside swells (helpers in `parts/chapter3.js`) |
 | Skills | ~30 hero + ~12 Ves | Doubling the tree again (`chapter: 3`); Ves gets a branch about fighting without her umbrella, then with it |
 | Items / gear | ~15 | Pine candy etc., forest and marsh weapons (hatchet, punt pole, lantern staff), armor |
 | Scenes | ~14 | Waking, each trace (4), companion joins, finding Ves, Keeper in the marsh, the healer, the dream, companion leaves, umbrella returns, boss, ending |

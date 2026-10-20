@@ -15,6 +15,16 @@ Hold left or right with the swing to swing higher and reach farther.
 
 Press Z at the right moment to catch the next ring. X lets go.
 
+[got_ves_mitten]
+You picked up VES'S MITTEN.
+
+You'll hold onto it for her.
+
+[got_ves_ribbon]
+You took down VES'S RIBBON.
+
+She came this way.
+
 # Facing a cliff with a ring at the top, before you have the rope.
 [ring_no_rope]
 High above, an iron ring is hammered into the top of the cliff.

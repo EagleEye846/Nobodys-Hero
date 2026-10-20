@@ -7,6 +7,10 @@ import { HERO_STATE } from '../characters/heroState.js';
 export const GEAR = {
   // Climb cliffs that have an iron ring at the top (`grapple` props).
   climbing_rope: { name: 'Climbing Rope' },
+  // Chapter 3: what Ves left on the way down, found as you search for her.
+  // Keepsakes: they don't do anything, but you keep them.
+  ves_mitten: { name: "Ves's Mitten" },
+  ves_ribbon: { name: "Ves's Ribbon" },
 };
 
 export function hasGear(id) {

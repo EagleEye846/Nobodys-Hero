@@ -6,6 +6,7 @@ import * as batsInTheRoost from './batsInTheRoost.js';
 import * as exampleScene from './exampleScene.js';
 import * as hutDream from './hutDream.js';
 import * as hutWake from './hutWake.js';
+import * as keeperAtTheFire from './keeperAtTheFire.js';
 import * as keeperOnTheShoulder from './keeperOnTheShoulder.js';
 import * as leaveRuins from './leaveRuins.js';
 import * as meetTaper from './meetTaper.js';
@@ -22,7 +23,7 @@ import * as vesInTheChapel from './vesInTheChapel.js';
 import * as vesInTheHut from './vesInTheHut.js';
 import * as vesSeesTheHut from './vesSeesTheHut.js';
 
-const MODULES = [batDefeated, batSpared, batsInTheRoost, exampleScene, hutDream, hutWake, keeperOnTheShoulder, leaveRuins, meetTaper, meetingTheKeeper, summitArrival, taperBlocks, taperDefeated, taperFollows, taperSpared, usurperFalls, vesAndTheWind, vesHoldsYourHand, vesInTheChapel, vesInTheHut, vesSeesTheHut];
+const MODULES = [batDefeated, batSpared, batsInTheRoost, exampleScene, hutDream, hutWake, keeperAtTheFire, keeperOnTheShoulder, leaveRuins, meetTaper, meetingTheKeeper, summitArrival, taperBlocks, taperDefeated, taperFollows, taperSpared, usurperFalls, vesAndTheWind, vesHoldsYourHand, vesInTheChapel, vesInTheHut, vesSeesTheHut];
 
 // Every cutscene, by its id. Rooms' cutscene triggers refer to them by these ids.
 export const SCENES = Object.fromEntries(

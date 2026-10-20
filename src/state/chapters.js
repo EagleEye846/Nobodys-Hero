@@ -17,6 +17,9 @@ import { ENEMIES } from '../data/enemies/index.js';
 export const CHAPTERS = [
   { number: 1, name: 'The Ruins', room: START_ROOM.id, spawn: START_ROOM.playerStart },
   { number: 2, name: 'Mount Vigil', room: 'beyond_ruins', spawn: { x: 11, y: 12 } },
+  // `party`: who's with you when it starts, whatever its recorded start says
+  // (Ves went over the summit's edge: chapter 3 begins alone).
+  { number: 3, name: 'The Search', room: 'pinefall_landing', spawn: { x: 10, y: 9 }, party: [] },
 ];
 
 const PROGRESS_KEY = 'ruins-rpg-chapters-v1';
@@ -127,6 +130,7 @@ export function canPlay(chapter) {
 export function beginChapter(chapter) {
   const start = startOf(chapter);
   if (!start) return null;
+  if (chapter.party) start.hero.party = [...chapter.party];
   try {
     const current = peekSave();
     if (current) localStorage.setItem(BACKUP_KEY, JSON.stringify(current));

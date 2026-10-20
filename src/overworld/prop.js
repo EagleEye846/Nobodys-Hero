@@ -128,6 +128,9 @@ export class Prop {
       this.look = this.takenLook.sprite;
     }
     if (this.takenLook?.text) this.text = this.takenLook.text;
+    // Something picked up and carried off (a mitten in the leaves), not
+    // something emptied: `taken: { gone: true }` and it's no longer there.
+    if (this.takenLook?.gone) this.hidden = true;
   }
 
   // Shows another of its sprites for a while (a bed with you in it, say), or

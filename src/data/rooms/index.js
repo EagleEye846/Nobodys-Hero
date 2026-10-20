@@ -12,6 +12,14 @@ import * as iceCaveRoost from './iceCaveRoost.js';
 import * as iceCaveThroat from './iceCaveThroat.js';
 import * as lanternHall from './lanternHall.js';
 import * as pillarRoom from './pillarRoom.js';
+import * as pinefallBrambleGate from './pinefallBrambleGate.js';
+import * as pinefallBrook from './pinefallBrook.js';
+import * as pinefallCamp from './pinefallCamp.js';
+import * as pinefallDeadfall from './pinefallDeadfall.js';
+import * as pinefallLanding from './pinefallLanding.js';
+import * as pinefallMaze from './pinefallMaze.js';
+import * as pinefallRavine from './pinefallRavine.js';
+import * as pinefallTatters from './pinefallTatters.js';
 import * as restBelltower from './restBelltower.js';
 import * as restChapel from './restChapel.js';
 import * as restForge from './restForge.js';
@@ -52,7 +60,7 @@ import * as vigilWindStair from './vigilWindStair.js';
 import * as wayOut from './wayOut.js';
 import * as yourRoom from './yourRoom.js';
 
-const MODULES = [beyondRuins, caveEntry, caveGallery, climbStart, flowerRoom, goatTrack, iceCaveGrotto, iceCaveHall, iceCaveRoost, iceCaveThroat, lanternHall, pillarRoom, restBelltower, restChapel, restForge, restGate, restHall, restHouseMarta, restHousePottle, restInn, restLookout, restSquare, restStores, sheerFace, startRoom, taperHall, taperHome, taperKitchen, vigilBrokenSpan, vigilCloudBank, vigilCloudWalk, vigilGaleFace, vigilHighShelf, vigilHollow, vigilIceChimney, vigilIceFace, vigilKnifeEdge, vigilLamplightersHut, vigilLamplightersLedge, vigilOwlShelf, vigilRidge, vigilSecondCairn, vigilShoulder, vigilSpiral, vigilSpireNeck, vigilSummit, vigilVaneGardens, vigilWeathervanes, vigilWindStair, wayOut, yourRoom];
+const MODULES = [beyondRuins, caveEntry, caveGallery, climbStart, flowerRoom, goatTrack, iceCaveGrotto, iceCaveHall, iceCaveRoost, iceCaveThroat, lanternHall, pillarRoom, pinefallBrambleGate, pinefallBrook, pinefallCamp, pinefallDeadfall, pinefallLanding, pinefallMaze, pinefallRavine, pinefallTatters, restBelltower, restChapel, restForge, restGate, restHall, restHouseMarta, restHousePottle, restInn, restLookout, restSquare, restStores, sheerFace, startRoom, taperHall, taperHome, taperKitchen, vigilBrokenSpan, vigilCloudBank, vigilCloudWalk, vigilGaleFace, vigilHighShelf, vigilHollow, vigilIceChimney, vigilIceFace, vigilKnifeEdge, vigilLamplightersHut, vigilLamplightersLedge, vigilOwlShelf, vigilRidge, vigilSecondCairn, vigilShoulder, vigilSpiral, vigilSpireNeck, vigilSummit, vigilVaneGardens, vigilWeathervanes, vigilWindStair, wayOut, yourRoom];
 
 // Every room, by its id. Doors and saves refer to rooms by these ids.
 export const ROOMS = Object.fromEntries(

@@ -42,15 +42,27 @@ const DETAILS_AREA = { x: RIGHT_BOX.x + 20, y: RIGHT_BOX.y + 16, w: RIGHT_BOX.w 
 const MENU_OPTIONS = ['BUY', 'SELL', 'TALK', 'EXIT'];
 
 // What a shop pays for something: SELL_SHARE of an item's price, or of the
-// most any shop charges for a weapon or piece of armor (or a flat rate for
-// ones no shop sells). Never less than a coin.
-const SELL_SHARE = 0.75;
+// most any shop charges for a weapon or piece of armor. Never less than a coin.
+// SELL_SHARE matches Haggler's discount (bargain 0.15), so buying something
+// cheap and selling it straight back never makes money.
+const SELL_SHARE = 0.85;
+// Things no shop sells have no price, so they're worth what they'd cost:
+// a drop by how much it heals (shops charge a little under a coin per HP),
+// capped for the ones that heal you fully; gear at a flat rate.
+const VALUE_PER_HP = 0.8;
+const MOST_HP_VALUED = 150;
+const UNPRICED_ITEM = 30;
+const UNPRICED_GEAR = 100;
+function itemValue(item) {
+  if (item.price) return item.price;
+  return item.heal ? Math.min(item.heal, MOST_HP_VALUED) * VALUE_PER_HP : UNPRICED_ITEM;
+}
 export function sellValue(entry) {
-  if (entry.item) return Math.max(1, Math.floor((ITEMS[entry.item].price ?? 20) * SELL_SHARE));
+  if (entry.item) return Math.max(1, Math.floor(itemValue(ITEMS[entry.item]) * SELL_SHARE));
   const id = entry.weapon ?? entry.armor;
   const key = entry.weapon ? 'weapon' : 'armor';
   const prices = Object.values(SHOPS).flatMap((shop) => shop.stock.filter((s) => s[key] === id).map((s) => s.price));
-  return Math.max(1, Math.floor((prices.length ? Math.max(...prices) : 60) * SELL_SHARE));
+  return Math.max(1, Math.floor((prices.length ? Math.max(...prices) : UNPRICED_GEAR) * SELL_SHARE));
 }
 
 // Everything you could sell right now: the bag, and weapons and armor nobody

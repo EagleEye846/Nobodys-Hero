@@ -44,6 +44,16 @@ The stair goes on from the Lookout. I'd rest first, if I were you. A proper bed,
 
 {worried}And whatever you dream up here... it's only the thin air. Don't go looking for it when you wake.
 
+# Chapter 3: by the woodcutters' fire in the Pinefall, after he's told you
+# where the wind took Ves (src/data/scenes/keeperAtTheFire.js).
+[first after keeper_at_the_fire]
+The fire's warm. Sit as long as you like.
+
+South, through the turning wood. {sly}Mind the brambles. They're more patient than they look.
+
+[repeat after keeper_at_the_fire]
+{glee}Stay where the light can find you, little one. Under all this red, it's easy to lose.
+
 [repeat after keeper_on_the_shoulder]
 The fountain's lovely, isn't it. Frozen in the middle of giving.
 

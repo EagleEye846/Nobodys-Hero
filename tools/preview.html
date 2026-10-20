@@ -43,6 +43,7 @@ import { Room } from './src/overworld/room.js';
 import { ROOMS } from './src/data/rooms/index.js';
 import { SONGS } from './src/data/music/index.js';
 import { renderSong, compile } from './src/audio/music.js';
+import { SAMPLE_SETS } from './src/audio/sampleSets.js';
 
 const params = new URLSearchParams(location.search);
 const report = document.getElementById('report');
@@ -78,6 +79,16 @@ if (params.get('check')) {
       if (params.get('song') !== name) {
         lines.push(`song ok: ${name} "${song.title}" ${steps.length} steps, ${Math.round(steps.length * 60 / song.bpm / song.stepsPerBeat)}s`);
         continue;
+      }
+      // A sampled instrument retunes its nearest recording, and a note far
+      // from every recording sounds strained: say where one is played.
+      for (const [track, instrument] of Object.entries(song.instruments)) {
+        if (!instrument.sample || instrument.drum) continue;
+        const notes = SAMPLE_SETS[instrument.sample].notes;
+        const played = Object.values(song.sections).flatMap((section) => section[track] ?? []).filter((step) => typeof step === 'number');
+        if (!played.length) continue;
+        const far = Math.max(...played.map((note) => Math.min(...notes.map((n) => Math.abs(n - note)))));
+        if (far > 2) lines.push(`  range: ${track} (${instrument.sample} ${Math.min(...notes)}-${Math.max(...notes)}) plays ${Math.min(...played)}-${Math.max(...played)}, up to ${far} semitones from a recording`);
       }
       // Loudness over time: the RMS of each window, so a song that goes quiet
       // (or silent, which would be a bug) shows where.

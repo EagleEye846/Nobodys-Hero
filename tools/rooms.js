@@ -66,6 +66,10 @@ export const TILE_INFO = {
   '^': { name: 'Stalagmite', note: 'stalagmite' },
   x: { name: 'Ice crystals', note: 'ice crystals (they glow)' },
   t: { name: 'Cave mouth', note: 'cave mouth (walk through it; see `doors`)' },
+  L: { name: 'Scarlet tree', note: 'scarlet autumn tree (walk or hide behind)' },
+  d: { name: 'Leaf litter', note: 'dark forest floor, thick with red leaves' },
+  y: { name: 'Leaf path', note: 'pale path through the leaves' },
+  Z: { name: 'Bramble', note: 'bramble hedge' },
 };
 export const tileName = (char) => TILE_INFO[char]?.name ?? `Tile "${char}"`;
 

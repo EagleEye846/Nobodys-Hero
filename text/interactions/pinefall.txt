@@ -1,0 +1,223 @@
+# THE PINEFALL: things you can read and look at in the scarlet forest below
+# the clouds (Chapter 3).
+
+# What a save point says when you save here.
+[save_point]
+The crystal's light is warm against all this red.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Shared, across the forest ---
+
+[scarlet_tree]
+A tall tree in full autumn. Every leaf on it is red.
+
+Every few seconds, one lets go.
+
+[bramble]
+A wall of bramble, thick as a hedge and twice as rude about it.
+
+There are berries in it. They look like they'd bite back.
+
+# --- WHERE YOU FELL ---
+
+# Ves's mitten (it gives you the mitten, then the [got_ves_mitten] words).
+[landing_mitten]
+Something mustard-yellow in the red leaves.
+
+A mitten. Hand-knitted, a little lopsided. Still a bit warm.
+
+[landing_great_tree]
+The great tree you came down through. Its crown is gone, snapped off and
+lying in a heap.
+
+The branches broke your fall. Most of them, anyway.
+
+[landing_crown]
+The tree's snapped crown, in a tangle of red branches.
+
+You can see the hole you made in it.
+
+# --- THE BRAMBLE GATE ---
+
+[gate_gate]
+An old gate of woven branches, tied shut with a rope that runs off to three
+levers in the leaves.
+
+[gate_open]
+The rope goes taut, and the gate creaks open.
+
+[gate_reset]
+Clunk. The levers all drop back, and the rope goes slack.
+
+That wasn't the order.
+
+[gate_sign]
+A board nailed to a tree, the letters burnt in:
+
+WOODCUTTERS' GATE. PULL AS THE SUN GOES.
+
+Underneath, smaller: "it comes up in the east. at noon it stands in the
+south. it goes down in the west. honestly, it's not hard."
+
+[gate_lever]
+A wooden lever, worn smooth by a lot of hands.
+
+# --- THE DEADFALL ---
+
+# Ves's ribbon, caught on a branch up on the fallen trunks.
+[deadfall_ribbon]
+A coral ribbon, snagged on a branch where the wind dropped it.
+
+You've seen it in her hair the whole way up the mountain.
+
+[deadfall_pack]
+An old pack under a tree, half buried in leaves. Inside, a bag of pine
+candy, still sealed.
+
+[deadfall_pack_empty]
+The old pack. Empty now, apart from leaves.
+
+[deadfall_trunk]
+A fallen giant, lying where it came down. Far too tall to climb straight up.
+
+A stump might help.
+
+[deadfall_stump]
+A stump, about knee high. A good step up.
+
+# --- THE COLD BROOK ---
+
+[brook_sign]
+A sign by the water:
+
+NO BRIDGE DOWN HERE. NEVER WAS. USE THE ONE UP TOP.
+(YES, YOU HAVE TO CLIMB. NO, WE'RE NOT SORRY.)
+
+[brook_water]
+Snowmelt off the mountain, fast and clear and very, very cold.
+
+It's not something you'd want to wade.
+
+[brook_cliff]
+A shelf of grey rock. There's a ring hammered in at the top, for a rope.
+
+[brook_bridge]
+A plank bridge across the brook. It sways, but it holds.
+
+# --- WOODCUTTERS' CAMP ---
+
+[camp_fire]
+A campfire. Someone's been feeding it a stick at a time, just enough to keep
+it going.
+
+[camp_bench]
+A bench made of half a log. The bark's been worn off where people sit.
+
+[camp_tent]
+A canvas tent, patched in three colours. The flap's tied shut.
+
+[camp_table]
+A long table, set for eight. Seven bowls are clean.
+
+The eighth has had a very small amount of porridge in it for a while.
+
+[camp_stall]
+A little stall, made from crates and a door laid flat. On it: pinecones,
+painted red. A jar of something sticky. A carved wooden owl.
+
+None of it has a price. All of it has a little card that says "ask".
+
+[camp_stall_sign]
+A hand-painted sign, very cheerful:
+
+THE GREAT PINEFALL SALE!!
+EVERYTHING MUST GO!!
+(NOTHING HAS GONE YET.)
+
+[camp_crates]
+Crates of split wood, stacked neat. Each one is labelled with a name.
+
+[camp_barrel]
+A rain barrel. There's a ladle tied to it, and a cup with a chip in it.
+
+[camp_notices]
+A notice board. Most of the notes are about firewood.
+
+One, newer than the rest, in big letters: "SOMETHING BIG IN THE WOOD
+AGAIN. GO ROUND BY THE CAMP. DON'T GO TO THE CLEARING."
+
+[camp_fence]
+A rail fence. It keeps the camp in rather than anything out.
+
+# --- THE TURNING WOOD ---
+
+[maze_tree]
+A scarlet tree, taller than the brambles. You've seen this one before.
+
+Haven't you?
+
+[maze_pack]
+An old pack, tucked in the brambles where nobody would find it. Somebody
+did. Inside, a climber's ration, wrapped in wax paper.
+
+[maze_pack_empty]
+The old pack. Empty now. Whoever hid it was good at hiding.
+
+# --- THE TORN CLEARING ---
+
+[tatters_scrap]
+A scrap of evening-blue wool, caught on a branch.
+
+It's the blue of her coat.
+
+[tatters_scrap_2]
+Another scrap of blue wool, torn at the edges.
+
+The leaves round it are trampled flat, in a circle, like something big went
+round and round here.
+
+[tatters_scrap_3]
+A last scrap of blue, and beside it, in the soft ground, a single footprint
+going south. Small. Running.
+
+She got away from whatever it was.
+
+[tatters_claws]
+Claw marks in the bark, four deep grooves, one above the other.
+
+The sap in them is still wet.
+
+[tatters_claws_high]
+More claw marks, higher up the trunk than you could reach on tiptoe.
+
+You decide not to think about that.
+
+[tatters_brush]
+A thicket, crushed flat on one side, as if something heavy pushed straight
+through it.
+
+# --- THE LONG DROP ---
+
+[ravine_cliff]
+The ravine wall, grey rock in shelves. Each shelf has a ring at its edge.
+
+Someone has done this climb before. A lot of someones.
+
+[ravine_end]
+A post at the bottom of the ravine, with a sign hung off it:
+
+THE LANTERN MARSH. KEEP TO THE LIGHTS.
+
+Somebody has scratched underneath: "which ones?"
+
+[ravine_mist]
+Below the last of the trees, the ground goes flat and grey, and then it
+stops being ground at all. Mist, as far as you can see.
+
+There are lights out in it. Small ones, swinging.
+
+(The way on isn't open yet.)

@@ -221,7 +221,7 @@ Ruins prop leaves (`until`) when that scene has played.
 - **HP carries between battles** (`heroHp` in `src/characters/progress.js`).
   Food, Heal Pulse, Mend, levelling up and a night at the inn bring it back;
   a fall brings you back whole.
-- Shops **SELL** (half price; nothing you're wearing) and sell **skill
+- Shops **SELL** (85% of the price, or by how much a drop heals; nothing you're wearing) and sell **skill
   points** (`{ skillPoint: true, price, limit }` in `src/data/shops.js`),
   and each shop has its own `keeper` sprite and `look` (room colours).
 - The tree's Chapter 2 skills (`chapter: 2` in `src/data/skills.js`) roughly

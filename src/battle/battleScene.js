@@ -6,11 +6,14 @@ import { SONGS } from '../data/music/index.js';
 
 // In a cave, fights have their own song ("Glass Hollows", caveBattleTheme.js).
 // On the mountain, once Ves is with you, they have another, with her motif in
-// it (mountainBattleTheme.js). Enemies with their own `music` (bosses) keep
-// it. Everywhere else, and before she joins, it's the usual battle song.
+// it (mountainBattleTheme.js). In the Pinefall, where the hero fights alone,
+// it's "Bramble Rush" (pinefallBattleTheme.js). Enemies with their own
+// `music` (bosses) keep it. Everywhere else, and before she joins, it's the
+// usual battle song.
 const MOUNTAIN_AREAS = new Set(['stair', 'vigil', 'rest']);
 function battleSong(area) {
   if (area === 'cave' && SONGS.caveBattle) return 'caveBattle';
+  if (area === 'pinefall' && SONGS.pinefallBattle) return 'pinefallBattle';
   const together = partyIds().includes('vesper');
   return together && MOUNTAIN_AREAS.has(area) && SONGS.mountainBattle ? 'mountainBattle' : 'battle';
 }

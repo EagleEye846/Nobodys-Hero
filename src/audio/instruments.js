@@ -145,6 +145,23 @@ export const FLUTE = {
   reverb: 0.5,
 };
 
+// A soprano singing "ah", far off (City of Tears' voice): one singer, so no
+// detuned pair; the lower harmonics strong the way an open vowel's are, a
+// slow swell, breath under the tone and a wide vibrato that blooms late.
+export const SOPRANO = {
+  voices: [
+    { harmonics: [1, 0.6, 0.34, 0.16, 0.09, 0.05, 0.03], level: 0.9 },
+    { wave: 'sine', octave: 1, level: 0.05 },
+  ],
+  filter: { type: 'lowpass', frequency: 3000, q: 1.2 },
+  attack: 0.25, decay: 0.6, sustain: 0.92, release: 0.9, gate: 1,
+  vibrato: { rate: 5.3, depth: 26, delay: 0.4 },
+  breath: { level: 0.025, frequency: 2600, q: 0.9 },
+  humanize: { time: 0.02, volume: 0.08 },
+  pan: 0.05,
+  reverb: 0.75,
+};
+
 // A concert harp: plucked, ringing, softening as it fades.
 export const HARP = {
   harmonics: [1, 0.45, 0.22, 0.12, 0.06, 0.03],

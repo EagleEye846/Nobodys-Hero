@@ -126,22 +126,24 @@ function drawHomeWall(ctx, x, y, tx, ty, room) {
 export function floorUnder(room, tx, ty) {
   for (const [dx, dy] of [[0, 1], [-1, 0], [1, 0], [0, -1]]) {
     const c = room.tileAt(tx + dx, ty + dy);
-    if (c === 'o' || c === ',' || c === ':' || c === 's' || c === 'n' || c === 'i' || c === 'l' || c === 'z' || c === 'q' || c === 'g') return c;
+    if (c === 'o' || c === ',' || c === ':' || c === 's' || c === 'n' || c === 'i' || c === 'l' || c === 'z' || c === 'q' || c === 'g' || c === 'd' || c === 'y') return c;
     if (c === '.' || c === 'c') return '.';
   }
   // Nothing to go by (a block or boulder surrounded by others): outdoors it's
-  // grass, or snow up the mountain, or cave floor underground.
+  // grass, or snow up the mountain, or leaves in the scarlet forest, or cave
+  // floor underground.
   if (room.snowy) return 'n';
+  if (room.leafy) return 'd';
   if (room.cave) return 'q';
   return OUTDOOR_AREAS.has(room.area) ? ',' : '.';
 }
 function drawBaseFloor(ctx, x, y, tx, ty, room) {
   const under = floorUnder(room, tx, ty);
-  const draw = { o: drawWoodFloor, ',': drawGrass, ':': drawPath, s: drawStair, n: drawSnow, i: drawSnowPath, l: drawSnowLane, z: drawIce, q: drawCaveFloor, g: drawBridge }[under] ?? drawFloor;
+  const draw = { o: drawWoodFloor, ',': drawGrass, ':': drawPath, s: drawStair, n: drawSnow, i: drawSnowPath, l: drawSnowLane, z: drawIce, q: drawCaveFloor, g: drawBridge, d: drawLeafLitter, y: drawLeafPath }[under] ?? drawFloor;
   draw(ctx, x, y, tx, ty, room);
 }
-// Whether a floor is out in the open air (grass, a path, the stair, snow, ice).
-const OUTDOOR_FLOORS = new Set([',', ':', 's', 'n', 'i', 'l', 'z', 'g']);
+// Whether a floor is out in the open air (grass, a path, the stair, snow, ice, the scarlet forest's leaves).
+const OUTDOOR_FLOORS = new Set([',', ':', 's', 'n', 'i', 'l', 'z', 'g', 'd', 'y']);
 const SNOW_FLOORS = new Set(['n', 'i', 'l', 'z']);
 
 // The dark above a wall: rough stone with a faint lit rim where it meets the room.
@@ -609,15 +611,15 @@ function drawCliffFace(ctx, x, y, tx, ty, room) {
   if (!room) return;
   const above = room.tileAt(tx, ty - 1);
   if (above === 'm') {
-    px(ctx, '#4f8a4a', x, y, T, 2);
-    for (let i = 0; i < T; i += 3) if (hash(tx * 5 + i, ty, 115) < 0.5) px(ctx, '#3b6d38', x + i, y + 2, 1, 2);
+    px(ctx, room.leafy ? '#8a1a2e' : '#4f8a4a', x, y, T, 2);
+    for (let i = 0; i < T; i += 3) if (hash(tx * 5 + i, ty, 115) < 0.5) px(ctx, room.leafy ? '#c0283a' : '#3b6d38', x + i, y + 2, 1, 2);
   }
   // Under a snowy top: a lip of snow, with the odd drip of ice.
   if (isSnowTop(above)) drawSnowLip(ctx, x, y, tx, ty);
   const below = room.tileAt(tx, ty + 1);
   if (below !== null && below !== '_' && !isCliff(below)) {
     px(ctx, '#3f3946', x, y + T - 2, T, 2);
-    const tuft = SNOW_FLOORS.has(below) ? '#eef3fa' : '#4f8a4a';
+    const tuft = SNOW_FLOORS.has(below) ? '#eef3fa' : room.leafy ? '#c0283a' : '#4f8a4a';
     for (let i = 0; i < 4; i++) if (hash(tx, ty, 116 + i) < 0.4) px(ctx, tuft, x + i * 4 + 1, y + T - 3, 2, 2);
   }
 }
@@ -635,10 +637,12 @@ function drawSnowLip(ctx, x, y, tx, ty) {
 
 // The top of a cliff, seen from above: turf and rock, dark against the light.
 function drawCliffTop(ctx, x, y, tx, ty, room) {
-  px(ctx, '#3a6638', x, y, T, T);
-  for (let i = 0; i < 5; i++) px(ctx, i % 2 ? '#2f5530' : '#5a5462', x + Math.floor(hash(tx, ty, 120 + i) * 14), y + Math.floor(hash(tx, ty, 130 + i) * 14), 2, i % 2 ? 1 : 2);
+  // In the scarlet forest the clifftops are deep in red leaves, not grass.
+  const leafy = room?.leafy;
+  px(ctx, leafy ? '#4a1626' : '#3a6638', x, y, T, T);
+  for (let i = 0; i < 5; i++) px(ctx, i % 2 ? (leafy ? '#c0283a' : '#2f5530') : '#5a5462', x + Math.floor(hash(tx, ty, 120 + i) * 14), y + Math.floor(hash(tx, ty, 130 + i) * 14), 2, i % 2 ? 1 : 2);
   if (!room) return;
-  if (!isCliff(room.tileAt(tx, ty + 1) ?? 'm')) px(ctx, '#243f24', x, y + T - 1, T, 1);
+  if (!isCliff(room.tileAt(tx, ty + 1) ?? 'm')) px(ctx, leafy ? '#2a0c16' : '#243f24', x, y + T - 1, T, 1);
 }
 
 // The great stair: wide old stone steps, two to a tile, worn in the middle.
@@ -1056,6 +1060,116 @@ function drawSnowPine(ctx, x, y) {
   ctx.fillStyle = '#eef3fa';
   ctx.fillRect(x + 3, y + 13, 3, 1);
   ctx.fillRect(x + 10, y + 14, 4, 1);
+}
+
+// --- The Pinefall (Chapter 3): an autumn forest under the clouds, gone
+// scarlet. Dark leaf litter underfoot, pale paths that glow against it, red
+// trees, and bramble hedges for walls. ---
+const LITTER = ['#2a1420', '#2e1622', '#26121e', '#30182a'];
+const LEAVES = ['#c0283a', '#e0483e', '#ff7a4a', '#8a1a2e', '#f0a040'];
+
+// Dark forest floor, thick with fallen red leaves. Kept quiet (a few muted
+// leaves a tile, close in value to the ground) so a whole screen of it is
+// easy on the eyes and the scarlet trees stand out against it.
+const LITTER_LEAVES = ['#5e1a28', '#6a2030', '#74282c', '#5a1e30'];
+function drawLeafLitter(ctx, x, y, tx, ty) {
+  px(ctx, pick(LITTER, hash(tx, ty, 141)), x, y, T, T);
+  if (hash(tx, ty, 142) < 0.5) px(ctx, pick(LITTER, hash(tx, ty, 143)), x + Math.floor(hash(tx, ty, 144) * 8), y + Math.floor(hash(tx, ty, 145) * 8), 8, 8);
+  for (let i = 0; i < 3; i++) {
+    const lx = x + Math.floor(hash(tx, ty, 150 + i) * 14);
+    const ly = y + Math.floor(hash(tx, ty, 160 + i) * 15);
+    px(ctx, pick(LITTER_LEAVES, hash(tx, ty, 170 + i)), lx, ly, 2, 1);
+  }
+  // Now and then one brighter leaf, fallen recently.
+  if (hash(tx, ty, 176) < 0.18) px(ctx, '#a8323a', x + Math.floor(hash(tx, ty, 177) * 14), y + Math.floor(hash(tx, ty, 175) * 15), 2, 1);
+  // Now and then a pale toadstool.
+  if (hash(tx, ty, 178) < 0.05) {
+    const mx = x + 4 + Math.floor(hash(tx, ty, 179) * 8);
+    const my = y + 5 + Math.floor(hash(tx, ty, 180) * 7);
+    px(ctx, '#d8ccb0', mx, my + 1, 1, 2);
+    px(ctx, '#c84a4a', mx - 1, my, 3, 1);
+  }
+}
+
+// A pale path through the leaves, softly lit, with a few leaves blown across it.
+function drawLeafPath(ctx, x, y, tx, ty, room) {
+  px(ctx, '#c8a888', x, y, T, T);
+  for (let i = 0; i < 6; i++) {
+    px(ctx, i % 2 ? '#dcc0a0' : '#b08e70', x + Math.floor(hash(tx, ty, 181 + i) * 15), y + Math.floor(hash(tx, ty, 187 + i) * 15), i % 2 ? 2 : 1, 1);
+  }
+  if (hash(tx, ty, 193) < 0.25) px(ctx, pick(LITTER_LEAVES, hash(tx, ty, 194)), x + Math.floor(hash(tx, ty, 195) * 13), y + Math.floor(hash(tx, ty, 196) * 14), 2, 1);
+  // Where it meets the litter, the edge frays into dark leaves.
+  const litter = (dx, dy) => room && room.tileAt(tx + dx, ty + dy) === 'd';
+  for (let i = 0; i < T; i += 2) {
+    const fray = hash(tx * 3 + i, ty, 197) < 0.6 ? 1 : 2;
+    if (litter(0, -1)) px(ctx, '#3a1a26', x + i, y, 2, fray);
+    if (litter(0, 1)) px(ctx, '#3a1a26', x + i, y + T - fray, 2, fray);
+    if (litter(-1, 0)) px(ctx, '#3a1a26', x, y + i, fray, 2);
+    if (litter(1, 0)) px(ctx, '#3a1a26', x + T - fray, y + i, fray, 2);
+  }
+}
+
+// A tall tree in full autumn: a dark trunk and a round crown of scarlet,
+// lit on one side, with a few leaves always falling.
+function drawScarletTree(ctx, x, y, tx = 0, ty = 0) {
+  drawStandingShadow(ctx, x, y);
+  ctx.fillStyle = '#1e0f14';
+  ctx.fillRect(x + 6, y - 2, 4, 17);
+  ctx.fillStyle = '#3a1e22';
+  ctx.fillRect(x + 7, y - 2, 2, 17);
+  // The crown: overlapping rounds, darkest underneath, brightest on top.
+  const blobs = [[8, -14, 9], [3, -20, 6], [13, -20, 6], [8, -25, 7], [4, -10, 5], [12, -10, 5]];
+  for (const [cx, cy, r] of blobs) {
+    for (let dy = -r; dy <= r; dy++) {
+      const w = Math.round(Math.sqrt(r * r - dy * dy));
+      px(ctx, '#4a0c1a', x + cx - w - 1, y + cy + dy, 2 * w + 2, 1);
+    }
+  }
+  for (const [cx, cy, r] of blobs) {
+    for (let dy = -r + 1; dy <= r - 1; dy++) {
+      const w = Math.round(Math.sqrt((r - 1) * (r - 1) - dy * dy));
+      const shade = dy > r / 3 ? '#8a1426' : dy < -r / 3 ? '#e0383e' : '#b81e30';
+      px(ctx, shade, x + cx - w, y + cy + dy, 2 * w, 1);
+    }
+  }
+  // Light catching the top-left of the crown.
+  for (let i = 0; i < 9; i++) {
+    px(ctx, i % 3 ? '#ff6a4a' : '#ffb070', x + 2 + Math.floor(hash(tx, ty, 200 + i) * 9), y - 30 + Math.floor(hash(tx, ty, 210 + i) * 14), 1, 1);
+  }
+  // A couple of leaves on their way down.
+  px(ctx, '#ff7a4a', x + 1 + Math.floor(hash(tx, ty, 220) * 14), y - 4 + Math.floor(hash(tx, ty, 221) * 8), 2, 1);
+  px(ctx, '#f0a040', x + 1 + Math.floor(hash(tx, ty, 222) * 14), y + 2 + Math.floor(hash(tx, ty, 223) * 6), 1, 1);
+}
+
+// A bramble hedge: a solid tangle of dark thorny stems, red berries in it.
+function drawBramble(ctx, x, y, tx, ty, room) {
+  drawBaseFloor(ctx, x, y, tx, ty, room);
+  px(ctx, 'rgba(0, 0, 0, 0.35)', x, y + 13, T, 3);
+  // A dark mass of stems, a little lighter towards the top where the light gets in.
+  px(ctx, '#1e0a12', x, y + 1, T, 13);
+  px(ctx, '#3a1222', x + 1, y + 1, T - 2, 6);
+  px(ctx, '#2c0e1a', x + 1, y + 7, T - 2, 6);
+  // Thorny stems looping through it.
+  for (let i = 0; i < 6; i++) {
+    const sx = x + 1 + Math.floor(hash(tx, ty, 230 + i) * 12);
+    const sy = y + 2 + Math.floor(hash(tx, ty, 240 + i) * 10);
+    px(ctx, '#6a2438', sx, sy, 4, 1);
+    px(ctx, '#8a3448', sx + 1, sy - 1, 2, 1);
+    px(ctx, '#d8c0a8', sx + 3, sy - 1, 1, 1);
+  }
+  // Leaves, the same reds as the trees.
+  for (let i = 0; i < 6; i++) {
+    px(ctx, i % 2 ? '#a01e30' : '#c8303c', x + 1 + Math.floor(hash(tx, ty, 262 + i) * 13), y + 1 + Math.floor(hash(tx, ty, 268 + i) * 8), 2, 1);
+  }
+  // Bright berries.
+  for (let i = 0; i < 3; i++) {
+    const bx = x + 2 + Math.floor(hash(tx, ty, 250 + i) * 11);
+    const by = y + 3 + Math.floor(hash(tx, ty, 255 + i) * 8);
+    px(ctx, '#ff4a5a', bx, by, 2, 2);
+    px(ctx, '#ffb0b0', bx, by, 1, 1);
+  }
+  // A ragged top edge, so it reads as a hedge and not a wall.
+  for (let i = 0; i < T; i += 3) px(ctx, '#3a1222', x + i, y + (hash(tx * 5 + i, ty, 260) < 0.5 ? 0 : 1), 2, 1);
 }
 
 // A boulder with a cap of snow.
@@ -1634,6 +1748,11 @@ export const TILES = {
   '^': { solid: true, standing: true, height: 26, draw: drawStalagmite },
   x: { solid: true, draw: drawIceCrystals },
   t: { solid: false, draw: drawCaveMouth },
+  // The Pinefall (Chapter 3): an autumn forest gone scarlet under the clouds.
+  L: { solid: true, standing: true, height: 46, draw: drawScarletTree },
+  d: { solid: false, draw: drawLeafLitter },
+  y: { solid: false, draw: drawLeafPath },
+  Z: { solid: true, draw: drawBramble },
 };
 
 // What's drawn under a standing tile.

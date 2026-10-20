@@ -10,11 +10,13 @@ export const AREA_NAMES = {
   vigil: 'MOUNT VIGIL',
   // The village on the spire's shoulder, waiting for the Hero.
   rest: "HERALDS' REST",
+  // Chapter 3: the scarlet forest below the clouds, on the mountain's far side.
+  pinefall: 'THE PINEFALL',
 };
 
 // Regions out under the open sky: no dark vignette around the screen's edges
 // (a room can ask for one back with `indoors: true`).
-export const OUTDOOR_AREAS = new Set(['stair', 'vigil', 'rest']);
+export const OUTDOOR_AREAS = new Set(['stair', 'vigil', 'rest', 'pinefall']);
 
 // Regions lit by their own lamps and fires (see src/overworld/lamplight.js):
 // outdoors the night comes down deeper and every lamp and lit window keeps a

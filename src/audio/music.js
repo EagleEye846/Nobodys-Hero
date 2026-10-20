@@ -608,6 +608,11 @@ const AMBIENCES = {
   village: { wind: 0.3, birds: 0.4 },
   cave: { wind: 0.12, drips: 0.8, hum: 0.5 },
   hearth: { fire: 0.6 },
+  // The Pinefall: a soft wind in the leaves, and a lot of birds.
+  forest: { wind: 0.3, birds: 0.9 },
+  // The Lantern Marsh: low wind over flat water, the hum of the fog, a drip
+  // now and then, no birds.
+  marsh: { wind: 0.25, hum: 0.35, drips: 0.3 },
 };
 export const AMBIENCE_NAMES = Object.keys(AMBIENCES);
 

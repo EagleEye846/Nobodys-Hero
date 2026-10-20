@@ -67,6 +67,8 @@ export class Room {
     // Up in the snow, or underground: what shows under blocks and boulders.
     this.snowy = Boolean(data.snowy);
     this.cave = Boolean(data.cave);
+    // The scarlet forest: leaf litter under blocks and trees with nothing else to go by.
+    this.leafy = Boolean(data.leafy);
     // Lit by its own lamps and fires (see lamplight.js): those lights are
     // drawn live over the room, so they aren't painted into its floor.
     this.lamplit = isLamplit(data);

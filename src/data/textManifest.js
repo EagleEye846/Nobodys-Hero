@@ -31,6 +31,7 @@ export const TEXT_FILES = [
   'interactions/heralds_rest.txt',
   'interactions/ice_caves.txt',
   'interactions/mount_vigil.txt',
+  'interactions/pinefall.txt',
   'interactions/taper_home.txt',
   'interactions/the_ruins.txt',
   'interactions/the_stair.txt',

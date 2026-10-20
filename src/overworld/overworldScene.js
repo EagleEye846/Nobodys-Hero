@@ -217,7 +217,16 @@ export class OverworldScene {
   enter(game) {
     this.game = game;
     // The room's song, and its ambience (wind, birds, dripping caves: see music.js).
-    music.play(this.roomData.music ?? null, this.roomData.ambience ?? null);
+    music.play(this.song, this.roomData.ambience ?? null);
+  }
+
+  // The room's song: its `music`, or, once a scene has played, the song of
+  // its `musicAfter` ({ scene, song }: the Pinefall is quiet until you've
+  // met the Keeper at the woodcutters' fire, and waltzes after).
+  get song() {
+    const after = this.roomData.musicAfter;
+    if (after && (WORLD_STATE.seenScenes ?? []).includes(after.scene)) return after.song;
+    return this.roomData.music ?? null;
   }
 
   update(dt, input) {
@@ -1098,7 +1107,7 @@ export class OverworldScene {
     } else if (rest.phase === 'sleep') {
       if (rest.t < REST_SLEEP_SECONDS) return;
       healHeroFully();
-      music.play(this.roomData.music ?? null);
+      music.play(this.song);
       rest.phase = 'wake';
       rest.t = 0;
     } else if (rest.phase === 'wake') {
