@@ -1,4 +1,4 @@
-/* Ruins Studio: dark Deltarune look, lots of air, few borders. */
+/* Nobody's Hero Studio: dark Deltarune look, lots of air, few borders. */
 :root {
   --bg: #0b0614;
   --bg-deep: #07040e;
@@ -546,3 +546,18 @@ body.advanced .not-adv { display: none !important; }
 }
 .tile-label { white-space: nowrap; }
 .tile-label.grow { flex: 1 0 auto; }
+
+/* Music Maker: uploading real instrument recordings. */
+.drop-zone {
+  margin: 12px 0;
+  padding: 22px 16px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--dim);
+  text-align: center;
+  cursor: pointer;
+}
+.drop-zone:hover, .drop-zone.over { border-color: var(--teal); color: var(--text); }
+.upload-list { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; }
+.upload-row { display: flex; align-items: center; gap: 10px; }
+.upload-file { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

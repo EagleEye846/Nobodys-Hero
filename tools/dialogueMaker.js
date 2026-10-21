@@ -21,7 +21,7 @@ const SECTIONS = [
 // The part of the 640x480 screen the text box sits in.
 const BOX_AREA = { y: 300, h: 180 };
 
-const newFileText = (id) => `# ${friendly(id).toUpperCase()}: made in Ruins Studio (tools/).
+const newFileText = (id) => `# ${friendly(id).toUpperCase()}: made in Nobody's Hero Studio (tools/).
 # Each entry (separated by a blank line) is one page of the textbox.
 
 # Said the first time you talk to them.

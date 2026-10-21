@@ -1,5 +1,4 @@
-import { sustained, arpeggio } from '../../audio/notation.js';
-import { CHOIR, SOPRANO } from '../../audio/instruments.js';
+import { sustained } from '../../audio/notation.js';
 import {
   BAR_128 as BAR, slow, eighths, rest as restBars, held, until as untilBars, transpose, midi,
   onNotes, heldNotes, patter, cells, drops,
@@ -85,17 +84,6 @@ const HURT = eighths(`
 // keeps slipping a half step.
 const DREAM_BOX = slow('G5 - Bb5 Ab5 | G5 - - . | D5 - F5 Eb5 | D5 - - . ');
 
-// A music box left somewhere damp: two tines a little out of tune with each
-// other, a slow warble, and a long echo.
-const TINE = [1, 0, 0.45, 0, 0.25, 0, 0.12];
-const WARPED_BOX = {
-  voices: [{ harmonics: TINE, detune: -9 }, { harmonics: TINE, detune: 8 }],
-  attack: 0.002, decay: 0.6, sustain: 0.05, release: 0.9, gate: 1,
-  vibrato: { rate: 0.7, depth: 22, delay: 0.1 },
-  echo: { time: 0.75, feedback: 0.42, mix: 0.4 },
-  pan: 0.3,
-  reverb: 0.55,
-};
 
 export const MARSH_THEME = {
   title: 'The Quiet Way',
@@ -106,19 +94,24 @@ export const MARSH_THEME = {
 
   instruments: {
     rain: { sample: 'harp', volume: 0.24, ring: true, reverb: 0.6, pan: -0.25, humanize: { time: 0.012, volume: 0.22 } },
-    // The lament, low on the solo violin: a viola's voice. Slow bow, long tail.
-    viola: { sample: 'soloViolin', volume: 0.4, attack: 0.12, release: 0.8, reverb: 0.55, pan: 0.1, humanize: { time: 0.015, volume: 0.1 } },
-    soprano: { ...SOPRANO, volume: 0.11, pan: 0.35, reverb: 0.85 },
+    // The lament, low on the violas. Slow bow, long tail.
+    viola: { sample: 'violas', volume: 0.36, attack: 0.12, release: 0.8, reverb: 0.55, pan: 0.1, humanize: { time: 0.015, volume: 0.1 } },
+    // The far voice in the fog: a solo violin high up, slow bow, mostly hall.
+    soprano: { sample: 'soloViolin', volume: 0.2, attack: 0.5, release: 1.4, reverb: 0.9, pan: 0.35 },
     violins: { sample: 'violins', volume: 0.22, attack: 0.4, release: 1, reverb: 0.55, pan: 0.3 },
     violinsHigh: { sample: 'violins', volume: 0.09, attack: 1.4, release: 1.6, reverb: 0.65, pan: -0.3 },
     cellos: { sample: 'cellos', volume: 0.32, attack: 0.25, release: 1, reverb: 0.5, pan: -0.2, humanize: { time: 0.015, volume: 0.1 } },
     low: { sample: 'cellos', volume: 0.22, attack: 0.8, release: 1.4, reverb: 0.5, pan: -0.1 },
     drone: { sample: 'cellos', volume: 0.28, attack: 1.5, release: 2, reverb: 0.5, pan: -0.1 },
     basses: { sample: 'bassSpic', volume: 0.28, release: 0.6, reverb: 0.45, humanize: { time: 0.01, volume: 0.15 } },
-    piano: { sample: 'piano', volume: 0.32, ring: true, reverb: 0.6, pan: 0.15, humanize: { time: 0.015, volume: 0.15 } },
-    drops: { sample: 'piano', volume: 0.17, ring: true, reverb: 0.7, pan: 0.4, humanize: { time: 0.03, volume: 0.3 } },
-    choir: { ...CHOIR, volume: 0.04, attack: 1.4, release: 1.8, reverb: 0.7 },
-    musicBox: { ...WARPED_BOX, volume: 0.06 },
+    piano: { sample: 'grandPiano', volume: 0.2, ring: true, reverb: 0.6, pan: 0.15, humanize: { time: 0.015, volume: 0.15 } },
+    drops: { sample: 'grandPiano', volume: 0.1, ring: true, reverb: 0.7, pan: 0.4, humanize: { time: 0.03, volume: 0.3 } },
+// Where a choir would breathe: the viola section, bowed so softly it's mostly air.
+    choir: { sample: 'violas', volume: 0.13, attack: 1.4, release: 1.8, reverb: 0.75, pan: -0.15 },
+    // A music box left somewhere damp: a glockenspiel, soft, with a long echo.
+    musicBox: { sample: 'glock', volume: 0.16, ring: true, reverb: 0.6, pan: 0.3, echo: { time: 0.75, feedback: 0.42, mix: 0.4 } },
+    // The rain stops, and a wine glass sings the tritone over the drone.
+    glass: { sample: 'glass', volume: 0.1, attack: 1.2, release: 2, reverb: 0.8, pan: -0.3 },
     timpani: { sample: 'timpani', volume: 0.24, ring: true, reverb: 0.5 },
   },
 
@@ -172,7 +165,7 @@ export const MARSH_THEME = {
       musicBox: DREAM_BOX,
       soprano: DREAM_BOX,
       drone: held(midi('G2'), 4 * BAR),
-      violinsHigh: held(midi('C#6'), 4 * BAR),
+      glass: held(midi('C#6'), 4 * BAR),
       drops: drops('Gm Gm Gm Gm', BAR, 0.08, 11, 1),
     },
 

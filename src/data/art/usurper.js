@@ -6,7 +6,7 @@
 // heralds' stolen banners (their crest slashed), a cracked white half-mask
 // and one red eye. Only two things on him are solid: the stolen blade, and
 // her lantern. They're real; he isn't.
-// Designed in docs/concept-art/ (shade_ghost.png). The palette has
+// Designed in notes/docs/concept-art/ (shade_ghost.png). The palette has
 // see-through colours (#rrggbbaa). Every USURPER_NAME_SPRITES is an
 // animation 'usurper_name' (src/engine/animations.js); a cutscene actor can
 // wear one with look 'anim:usurper_idle'.

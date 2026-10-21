@@ -116,7 +116,7 @@ export const VIGIL_KNIFE_EDGE = {
   looks: [],
   tileTexts: { Y: 'vigil_snow_pine', E: 'vigil_ice_rock', Q: 'vigil_snow_boulder', n: 'vigil_snow', b: 'vigil_block' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // A ringer, disguised as a climbing ring on the edge.
   npcs: [

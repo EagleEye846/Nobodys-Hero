@@ -46,13 +46,14 @@ const MENU_OPTIONS = ['BUY', 'SELL', 'TALK', 'EXIT'];
 // SELL_SHARE matches Haggler's discount (bargain 0.15), so buying something
 // cheap and selling it straight back never makes money.
 const SELL_SHARE = 0.85;
-// Things no shop sells have no price, so they're worth what they'd cost:
-// a drop by how much it heals (shops charge a little under a coin per HP),
-// capped for the ones that heal you fully; gear at a flat rate.
-const VALUE_PER_HP = 0.8;
+// Things no shop sells (monster loot, mostly) have no price, so shops pay
+// generously for them: a drop by how much it heals (more than a shop charges
+// per HP, since nobody else sells it), capped for the ones that heal you
+// fully; gear at a flat rate.
+const VALUE_PER_HP = 1.2;
 const MOST_HP_VALUED = 150;
-const UNPRICED_ITEM = 30;
-const UNPRICED_GEAR = 100;
+const UNPRICED_ITEM = 45;
+const UNPRICED_GEAR = 150;
 function itemValue(item) {
   if (item.price) return item.price;
   return item.heal ? Math.min(item.heal, MOST_HP_VALUED) * VALUE_PER_HP : UNPRICED_ITEM;

@@ -3,21 +3,26 @@ import { MEMBERS, partyIds, memberPoints, spendMemberPoints } from './party.js';
 import { ALL_SKILL_BRANCHES } from '../data/skills.js';
 import { STARTING_SPELLS } from '../data/spells.js';
 import { armorStat } from '../data/armor.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 
 // Levelling and the skill tree: how EXP turns into levels, and what learned
 // skills add up to.
 
 const BASE_MAX_HP = 90;
 const HP_PER_LEVEL = 10;
-const SKILL_POINTS_PER_LEVEL = 1;
+// Each level is worth more skill points the further the story's got: 1 a
+// level in chapter 1, 2 in chapter 2, 3 in chapter 3... (the tree roughly
+// doubles each chapter, so the points keep up with it).
+const skillPointsPerLevel = () => WORLD_STATE.chapter ?? 1;
 
 const ALL_SKILLS = ALL_SKILL_BRANCHES.flatMap((branch) => branch.skills);
 
 // EXP needed to go from `level` to the next. It climbs steeply, so levels come
-// every few fights rather than every one: 50, 100, 160, 230, 310, 400, 500...
+// every few fights rather than every one: 46, 92, 147, 212, 285, 368, 460...
 // (a full clear of the Ruins, Taper included, reaches about LV 5).
+const EXP_EASE = 0.92;
 export function expToNext(level) {
-  return 50 * level + 5 * (level - 1) * (level - 2);
+  return Math.round(EXP_EASE * (50 * level + 5 * (level - 1) * (level - 2)));
 }
 
 // Adds EXP, levelling up as many times as it covers. Returns the levels gained.
@@ -27,10 +32,10 @@ export function gainExp(amount) {
   while (HERO_STATE.exp >= expToNext(HERO_STATE.level)) {
     HERO_STATE.exp -= expToNext(HERO_STATE.level);
     HERO_STATE.level++;
-    HERO_STATE.skillPoints += SKILL_POINTS_PER_LEVEL;
+    HERO_STATE.skillPoints += skillPointsPerLevel();
     // Everyone in the party grows with you.
     HERO_STATE.memberPoints ??= {};
-    for (const id of partyIds()) HERO_STATE.memberPoints[id] = (HERO_STATE.memberPoints[id] ?? 0) + MEMBERS[id].skillPointsPerLevel;
+    for (const id of partyIds()) HERO_STATE.memberPoints[id] = (HERO_STATE.memberPoints[id] ?? 0) + MEMBERS[id].skillPointsPerLevel * skillPointsPerLevel();
     levels++;
   }
   // A new level comes with a full recovery.

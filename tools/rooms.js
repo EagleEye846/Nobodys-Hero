@@ -281,7 +281,7 @@ const WRITTEN = new Set(['id', 'name', 'area', 'music', 'dark', 'tiles', 'player
 export function roomModule(room, constName, header) {
   const tiles = room.tiles.map((row) => (typeof row === 'string' ? row : row.join('')));
   const data = { ...room, tiles };
-  const top = header?.trim() ? header.trim() : comment(`${room.name || room.id}: made in Ruins Studio (tools/).`);
+  const top = header?.trim() ? header.trim() : comment(`${room.name || room.id}: made in Nobody's Hero Studio (tools/).`);
   const lines = [
     top,
     tileKey(data),

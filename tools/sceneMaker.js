@@ -68,7 +68,7 @@ function cleanStep(step) {
 }
 
 export function sceneModule(scene, constName, header) {
-  const top = header?.trim() ? header.trim() : comment(`${friendly(scene.id).toUpperCase()}: made in Ruins Studio (tools/).`);
+  const top = header?.trim() ? header.trim() : comment(`${friendly(scene.id).toUpperCase()}: made in Nobody's Hero Studio (tools/).`);
   return [
     top,
     `export const ${constName} = {`,

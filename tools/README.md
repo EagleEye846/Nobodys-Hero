@@ -1,4 +1,4 @@
-# Ruins Studio
+# Nobody's Hero Studio
 
 Tools for making things for the game: sprites, rooms, music, attack patterns
 and enemies. Press **Save** and your work goes straight into the game's files.
@@ -172,10 +172,21 @@ Scenes save to `src/data/scenes/<name>.js`. `exampleScene.js` shows the format.
 
 ## Music Maker
 
-Pick a song at the top or start a **New song**.
+Pick a song at the top or start a **New song** (choose **Pixel** for chiptune
+synths or **Orchestra** for real recorded instruments).
 
 - **Tracks** on the left: click one to write its notes, choose its instrument and
   volume, mute it, or **Add a track** (Melody, Harmony, Bass, Pad, Sparkle).
+  Each track has two tabs: **Pixel** (synth presets) and **Orchestra** (every
+  set in src/audio/sampleSets.js, by family); the play button next to it lets
+  you hear the instrument. **Add a real drum** puts a recorded drum or cymbal
+  on the drum grid.
+- **Upload samples**: drop in wav/ogg/mp3 files, name the instrument, and give
+  each file its note (guessed from names like `C4`, `A#3` or `60`). One file
+  with no note is a drum hit. The server saves them to
+  assets/audio/samples/<name>/ (as .ogg when the `soundfile` package is
+  installed), adds the set to sampleSets.js, and it shows up in the Orchestra
+  tab straight away.
 - **Piano roll**: click to add a note of the chosen **Note length**, drag to make
   it longer, click it again (or right-click) to remove it. Click the keyboard on
   the left to hear a note. Pick a **Key** and scale: in-key rows are lighter, and

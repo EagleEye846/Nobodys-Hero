@@ -1,5 +1,4 @@
 import { sustained, hits } from '../../audio/notation.js';
-import { FLUTE, BELLS, CHOIR } from '../../audio/instruments.js';
 import {
   BAR_128 as BAR, slow, rest as restBars, held, repeat, transpose, midi,
   onNotes, heldNotes, patter, cells, drops,
@@ -77,18 +76,19 @@ export const LASTHOME_THEME = {
 
   instruments: {
     // The rain: a felted piano, close, soft.
-    rain: { sample: 'piano', volume: 0.2, release: 1, reverb: 0.45, pan: 0.2, humanize: { time: 0.012, volume: 0.25 } },
-    left: { sample: 'piano', volume: 0.28, ring: true, reverb: 0.45, pan: -0.1, humanize: { time: 0.012, volume: 0.12 } },
+    rain: { sample: 'grandPiano', volume: 0.12, release: 1, reverb: 0.45, pan: 0.2, humanize: { time: 0.012, volume: 0.25 } },
+    left: { sample: 'grandPiano', volume: 0.17, ring: true, reverb: 0.45, pan: -0.1, humanize: { time: 0.012, volume: 0.12 } },
     // The tune, close by.
-    piano: { sample: 'piano', volume: 0.32, ring: true, reverb: 0.45, humanize: { time: 0.014, volume: 0.15 } },
+    piano: { sample: 'grandPiano', volume: 0.19, ring: true, reverb: 0.45, humanize: { time: 0.014, volume: 0.15 } },
     fiddle: { sample: 'soloViolin', volume: 0.34, attack: 0.06, release: 0.6, reverb: 0.5, pan: 0.15, humanize: { time: 0.012, volume: 0.12 } },
     // A low whistle, answering.
-    whistle: { ...FLUTE, volume: 0.05, pan: 0.3 },
+    whistle: { sample: 'recorder', volume: 0.2, attack: 0.08, release: 0.6, reverb: 0.55, pan: 0.3, humanize: { time: 0.012, volume: 0.1 } },
     cellos: { sample: 'cellos', volume: 0.26, attack: 0.35, release: 1, reverb: 0.5, pan: -0.25 },
     horn: { sample: 'hornsSoft', volume: 0.26, attack: 0.3, release: 0.8, reverb: 0.55, pan: -0.1 },
-    choir: { ...CHOIR, volume: 0.035, attack: 1.2, release: 1.5, reverb: 0.65 },
-    bells: { ...BELLS, volume: 0.04, pan: 0.35, reverb: 0.55 },
-    musicBox: { ...BELLS, volume: 0.07, echo: { time: 0.5, feedback: 0.3, mix: 0.3 } },
+// Where a choir would breathe: the viola section, bowed so softly it's mostly air.
+    choir: { sample: 'violas', volume: 0.11, attack: 1.4, release: 1.8, reverb: 0.75, pan: -0.15 },
+    bells: { sample: 'glock', volume: 0.1, ring: true, pan: 0.35, reverb: 0.6 },
+    musicBox: { sample: 'glock', volume: 0.15, ring: true, reverb: 0.55, echo: { time: 0.5, feedback: 0.3, mix: 0.3 } },
     knock: { sample: 'snareSoft', drum: 'sample', volume: 0.1, ring: true, reverb: 0.35, humanize: { time: 0.006, volume: 0.3 } },
   },
 

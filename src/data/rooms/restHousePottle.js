@@ -69,7 +69,7 @@ export const REST_HOUSE_POTTLE = {
   looks: [],
   tileTexts: { r: 'pottle_rug', h: 'pottle_wall' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   npcs: [],
 };

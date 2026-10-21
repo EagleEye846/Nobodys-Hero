@@ -1,5 +1,4 @@
 import { melody, chordLine, sustained, transpose, midi } from '../../audio/notation.js';
-import { BELLS, CHOIR } from '../../audio/instruments.js';
 import { patter, cellsFor } from './parts/chapter3.js';
 
 // "The Scarlet Waltz": the Pinefall, Chapter 3's forest of red leaves, in the
@@ -12,7 +11,7 @@ import { patter, cellsFor } from './parts/chapter3.js';
 // Only on the A chords does one note step aside (D to C#), and on the
 // Neapolitan E flat. The harp's 8ths fall in threes, the waltz's bass in
 // twos, so the leaves never land quite on the beat. The tune is the waltz in
-// D minor on a viola's voice (the solo violin, low); in the middle, Ves's
+// D minor on the violas; in the middle, Ves's
 // motif ("Carried on the Wind", vesTheme.js) re-barred into the waltz on the
 // piano, because the whole chapter is looking for her; then lost in the wood,
 // a music box falling a semitone a bar over the leaves; and the waltz again
@@ -98,18 +97,19 @@ export const PINEFALL_THEME = {
   instruments: {
     leaves: { sample: 'harp', volume: 0.26, ring: true, reverb: 0.55, pan: -0.25, humanize: { time: 0.012, volume: 0.22 } },
     // The piano catching the leaves an octave up, for the outside part.
-    highLeaves: { sample: 'piano', volume: 0.12, release: 0.9, reverb: 0.6, pan: 0.3, humanize: { time: 0.012, volume: 0.25 } },
-    // The tune on a viola's voice: the solo violin, slow bow, long tail.
-    viola: { sample: 'soloViolin', volume: 0.4, attack: 0.05, release: 0.6, reverb: 0.5, pan: 0.15, humanize: { time: 0.01, volume: 0.1 } },
+    highLeaves: { sample: 'grandPiano', volume: 0.07, release: 0.9, reverb: 0.6, pan: 0.3, humanize: { time: 0.012, volume: 0.25 } },
+    // The tune on the violas, slow bow, long tail.
+    viola: { sample: 'violas', volume: 0.36, attack: 0.05, release: 0.6, reverb: 0.5, pan: 0.15, humanize: { time: 0.01, volume: 0.1 } },
     violins: { sample: 'violins', volume: 0.26, attack: 0.15, release: 0.7, reverb: 0.5, pan: 0.25 },
     cellos: { sample: 'cellos', volume: 0.3, attack: 0.2, release: 0.8, reverb: 0.45, pan: -0.2 },
     basses: { sample: 'bassSpic', volume: 0.3, release: 0.5, reverb: 0.4, humanize: { time: 0.008, volume: 0.12 } },
     low: { sample: 'cellos', volume: 0.2, attack: 0.5, release: 1, reverb: 0.45, pan: -0.1 },
-    piano: { sample: 'piano', volume: 0.34, ring: true, reverb: 0.5, pan: 0.1, humanize: { time: 0.01, volume: 0.15 } },
+    piano: { sample: 'grandPiano', volume: 0.2, ring: true, reverb: 0.5, pan: 0.1, humanize: { time: 0.01, volume: 0.15 } },
     hornsSoft: { sample: 'hornsSoft', volume: 0.26, attack: 0.25, release: 0.7, reverb: 0.55, pan: -0.1 },
-    choir: { ...CHOIR, volume: 0.035, attack: 1.2, release: 1.6, reverb: 0.7 },
+// Where a choir would breathe: the viola section, bowed so softly it's mostly air.
+    choir: { sample: 'violas', volume: 0.12, attack: 1.4, release: 1.8, reverb: 0.75, pan: -0.15 },
     // The strange part: a music box, with an echo.
-    musicBox: { ...BELLS, volume: 0.07, echo: { time: 0.45, feedback: 0.35, mix: 0.3 } },
+    musicBox: { sample: 'glock', volume: 0.15, ring: true, reverb: 0.55, echo: { time: 0.45, feedback: 0.35, mix: 0.3 } },
     drone: { sample: 'cellos', volume: 0.26, attack: 0.8, release: 1.2, reverb: 0.45 },
     timpani: { sample: 'timpani', volume: 0.3, ring: true, reverb: 0.4 },
   },

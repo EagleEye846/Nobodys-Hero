@@ -14,7 +14,7 @@ import { VES_FRAMES } from '../data/art/vesper.js';
 // Someone joins through a cutscene step ({ do: 'join', who: 'vesper' }) or by
 // talking to a room character with `join: 'vesper'` (see OverworldScene.interact).
 // Nobody joins yet by default: Ves is the first one built (see
-// docs/party-member-ideas.md).
+// notes/docs/party-member-ideas.md).
 export const MEMBERS = {
   // VES (Vesper): a girl from Heralds' Rest, found praying in the chapel. She
   // fights with her umbrella: it shelters you, and it catches the snow and

@@ -1,5 +1,4 @@
 import { chordLine, sustained, arpeggio, melody } from '../../audio/notation.js';
-import { CHOIR, SOPRANO } from '../../audio/instruments.js';
 import {
   BAR_128 as BAR, slow, rest as restBars, held, until as untilBars, FANFARE_D, repeat, transpose, midi,
   onNotes, heldNotes, patter, cells, drops,
@@ -26,9 +25,9 @@ import {
 // it loops from A, 40 bars, 2m40s:
 //
 //   rain      4 bars  the piano rain alone, water dripping, a low D
-//   A         8 bars  inside: the tune low on a viola's voice (the solo
-//                     violin), the harp on the beats, the bass walking
-//   A2        8 bars  outside: the soprano sings the tune's second verse,
+//   A         8 bars  inside: the tune low on the violas, the harp on
+//                     the beats, the bass walking
+//   A2        8 bars  outside: a solo violin sings the second verse high,
 //                     violins and choir swell, the cellos answer
 //   fallen    8 bars  the fanfare on a far trumpet, a heartbeat under it
 //   glimpse   8 bars  its answer in D major, soprano and violins, the harp
@@ -91,20 +90,22 @@ export const VALLEY_THEME = {
 
   instruments: {
     // The rain: a close piano, soft, pedal half down.
-    rain: { sample: 'piano', volume: 0.24, release: 1.1, reverb: 0.55, pan: 0.15, humanize: { time: 0.01, volume: 0.22 } },
-    left: { sample: 'piano', volume: 0.3, ring: true, reverb: 0.5, pan: -0.1, humanize: { time: 0.01, volume: 0.12 } },
-    drops: { sample: 'piano', volume: 0.16, ring: true, reverb: 0.7, pan: -0.45, humanize: { time: 0.03, volume: 0.3 } },
+    rain: { sample: 'grandPiano', volume: 0.14, release: 1.1, reverb: 0.55, pan: 0.15, humanize: { time: 0.01, volume: 0.22 } },
+    left: { sample: 'grandPiano', volume: 0.18, ring: true, reverb: 0.5, pan: -0.1, humanize: { time: 0.01, volume: 0.12 } },
+    drops: { sample: 'grandPiano', volume: 0.1, ring: true, reverb: 0.7, pan: -0.45, humanize: { time: 0.03, volume: 0.3 } },
     harp: { sample: 'harp', volume: 0.26, ring: true, reverb: 0.55, pan: -0.3, humanize: { time: 0.015, volume: 0.2 } },
-    // A viola's voice: the solo violin, low, slow bow.
-    viola: { sample: 'soloViolin', volume: 0.36, attack: 0.12, release: 0.8, reverb: 0.55, pan: 0.1, humanize: { time: 0.015, volume: 0.1 } },
-    soprano: { ...SOPRANO, volume: 0.13 },
+    // The violas, low, slow bow.
+    viola: { sample: 'violas', volume: 0.32, attack: 0.12, release: 0.8, reverb: 0.55, pan: 0.1, humanize: { time: 0.015, volume: 0.1 } },
+    // The high voice: a solo violin up over everything, slow bow, a long hall.
+    soprano: { sample: 'soloViolin', volume: 0.22, attack: 0.45, release: 1.3, reverb: 0.85, pan: 0.05 },
     violins: { sample: 'violins', volume: 0.24, attack: 0.35, release: 1, reverb: 0.55, pan: 0.25 },
     cellos: { sample: 'cellos', volume: 0.3, attack: 0.25, release: 1, reverb: 0.5, pan: -0.25, humanize: { time: 0.015, volume: 0.1 } },
     drone: { sample: 'cellos', volume: 0.24, attack: 1.5, release: 2, reverb: 0.5, pan: -0.1 },
     basses: { sample: 'bassSpic', volume: 0.26, release: 0.6, reverb: 0.4, humanize: { time: 0.01, volume: 0.15 } },
     // The fanfare, from far off: a trumpet, soft, mostly hall.
     trumpet: { sample: 'trumpet', volume: 0.2, attack: 0.08, release: 0.8, reverb: 0.7, pan: 0.35, humanize: { time: 0.01, volume: 0.1 } },
-    choir: { ...CHOIR, volume: 0.04, attack: 1.4, release: 1.8, reverb: 0.7 },
+// Where a choir would breathe: the viola section, bowed so softly it's mostly air.
+    choir: { sample: 'violas', volume: 0.13, attack: 1.4, release: 1.8, reverb: 0.75, pan: -0.15 },
     timpani: { sample: 'timpani', volume: 0.26, ring: true, reverb: 0.45 },
   },
 

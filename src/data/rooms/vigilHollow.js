@@ -95,7 +95,7 @@ export const VIGIL_HOLLOW = {
   looks: [],
   tileTexts: { T: 'vigil_pine', M: 'vigil_rock', n: 'vigil_first_snow', t: 'hollow_mouth', O: 'vigil_boulder' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // A craghorn grazing in the bottom of the hollow.
   npcs: [

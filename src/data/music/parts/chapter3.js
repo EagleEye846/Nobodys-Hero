@@ -1,7 +1,7 @@
 // Shared pieces of Chapter 3's songs (not songs themselves: tools/serve.py
 // only lists the files directly in src/data/music/). The chapter's motifs,
 // and the little helpers its songs are written with. Chapter 3 is "The
-// Search" (docs/chapter-3-the-search.md): the hero, alone, looking for Ves
+// Search" (notes/docs/chapter-3-the-search.md): the hero, alone, looking for Ves
 // across the Pinefall, the Lantern Marsh and the Hollow Valley. So its
 // music keeps reaching for tunes the player already knows and finding them
 // changed, or missing:

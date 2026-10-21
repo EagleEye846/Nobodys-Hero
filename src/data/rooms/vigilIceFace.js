@@ -113,7 +113,7 @@ export const VIGIL_ICE_FACE = {
   looks: [],
   tileTexts: { Y: 'vigil_snow_pine', E: 'vigil_ice_rock', Q: 'vigil_snow_boulder', n: 'vigil_snow' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // A ringer hanging about as a climbing ring, and a frostbite at the foot of the face.
   npcs: [

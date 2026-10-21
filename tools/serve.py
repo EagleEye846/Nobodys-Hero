@@ -1,4 +1,4 @@
-"""Ruins Studio dev server: serves the game and lets the Studio save files.
+"""Nobody's Hero Studio dev server: serves the game and lets the Studio save files.
 
 Run it from anywhere:
 
@@ -21,9 +21,16 @@ picked up by the game without editing any code:
     src/data/artManifest.js      every art file (the game finds animations in them)
     src/data/textManifest.js     every .txt file under text/
 
+The Music Maker uploads real instrument recordings with POST /api/sample:
+they go in assets/audio/samples/<name>/<midi>.ogg (converted with the
+soundfile package when it's installed; otherwise kept as they came, and the
+set records its file type), and the set is added to src/audio/sampleSets.js.
+
 Run `python tools/serve.py --generate` to rebuild those files without serving.
 """
 
+import base64
+import io
 import json
 import re
 import shutil
@@ -52,6 +59,106 @@ def project_path(relative):
     if path != ROOT and ROOT not in path.parents:
         raise ValueError(f"{relative} is outside the project")
     return path, relative
+
+
+SAMPLES = ROOT / "assets" / "audio" / "samples"
+SAMPLE_SETS_JS = "src/audio/sampleSets.js"
+UPLOADED_NOTE = "  // Uploaded in the music maker (tools/): see POST /api/sample in tools/serve.py."
+AUDIO_TYPES = ("wav", "ogg", "mp3", "flac")
+
+
+def backup(relative):
+    path = ROOT / relative
+    if path.exists():
+        copy = BACKUPS / time.strftime("%Y-%m-%d_%H-%M-%S") / relative
+        copy.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, copy)
+
+
+def to_ogg(data):
+    """Audio bytes as Ogg Vorbis bytes (trimmed, stereo, levelled), or None without soundfile."""
+    try:
+        import numpy as np
+        import soundfile as sf
+    except ImportError:
+        return None
+    audio, rate = sf.read(io.BytesIO(data), always_2d=True)
+    audio = audio[:, :2] if audio.shape[1] > 1 else np.repeat(audio, 2, axis=1)
+    loud = np.abs(audio).max()
+    if loud > 0:
+        start = max(0, int(np.argmax(np.abs(audio).max(axis=1) > loud * 0.02)) - int(0.005 * rate))
+        audio = audio[start:] * (0.6 / loud)
+    out = io.BytesIO()
+    sf.write(out, audio.astype("float32"), rate, format="OGG", subtype="VORBIS")
+    return out.getvalue()
+
+
+def add_sample_set(name, entry):
+    """Adds or replaces an uploaded set in sampleSets.js, under the uploaded note at the end."""
+    path = ROOT / SAMPLE_SETS_JS
+    text = path.read_text(encoding="utf-8")
+    newline = "\r\n" if "\r\n" in text else "\n"
+    lines = text.replace("\r\n", "\n").split("\n")
+    start = next(i for i, line in enumerate(lines) if line.startswith("export const SAMPLE_SETS"))
+    end = next(i for i in range(start, len(lines)) if lines[i].startswith("};"))
+    pattern = re.compile(rf"^  {re.escape(name)}: \{{")
+    existing = [i for i in range(start, end) if pattern.match(lines[i])]
+    note = next((i for i in range(start, end) if lines[i] == UPLOADED_NOTE), None)
+    if existing and (note is None or existing[0] < note):
+        raise ValueError(f"'{name}' is one of the game's own sets: pick another name")
+    line = f"  {name}: {entry},"
+    if existing:
+        lines[existing[0]] = line
+    else:
+        if note is None:
+            lines[end:end] = ["", UPLOADED_NOTE]
+            end += 2
+        lines.insert(end, line)
+    backup(SAMPLE_SETS_JS)
+    path.write_text(newline.join(lines), encoding="utf-8", newline="")
+
+
+def save_samples(request):
+    name = request.get("name", "")
+    if not re.fullmatch(r"[a-z][A-Za-z0-9]*", name):
+        raise ValueError("The name must be letters and numbers, starting with a small letter")
+    files = request.get("files") or []
+    if not files:
+        raise ValueError("No recordings were sent")
+    if (SAMPLES / name).is_dir() and not (SAMPLES / name / ".uploaded").exists():
+        raise ValueError(f"'{name}' is one of the game's own sets: pick another name")
+    folder = SAMPLES / name
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / ".uploaded").touch()
+    for item in files:
+        midi = int(item["midi"])
+        ext = str(item.get("ext", "")).lower()
+        if not 0 <= midi <= 127 or ext not in AUDIO_TYPES:
+            raise ValueError(f"Can't use a .{ext} file for note {midi}")
+        data = base64.b64decode(item["data"])
+        ogg = data if ext == "ogg" else to_ogg(data)
+        if ogg is not None:
+            ext, data = "ogg", ogg
+        for old in folder.glob(f"{midi}.*"):
+            old.unlink()
+        (folder / f"{midi}.{ext}").write_bytes(data)
+    found = {}
+    for f in folder.iterdir():
+        if f.stem.isdigit() and f.suffix[1:] in AUDIO_TYPES:
+            found.setdefault(f.suffix[1:], set()).add(int(f.stem))
+    if len(found) > 1:
+        raise ValueError(f"{name} now has a mix of file types ({', '.join(sorted(found))}); install soundfile (pip install soundfile) to convert them")
+    ext, notes = next(iter(found.items()))
+    notes = sorted(notes)
+    entry = f"{{ notes: [{', '.join(map(str, notes))}]"
+    if ext != "ogg":
+        entry += f", ext: '{ext}'"
+    if request.get("unpitched"):
+        entry += ", unpitched: true"
+    entry += " }"
+    add_sample_set(name, entry)
+    print(f"uploaded {len(files)} recording(s) to assets/audio/samples/{name}/")
+    return notes
 
 
 def is_writable(relative):
@@ -229,6 +336,16 @@ class StudioHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
+        if urlparse(self.path).path == "/api/sample":
+            try:
+                length = int(self.headers.get("Content-Length", 0))
+                notes = save_samples(json.loads(self.rfile.read(length).decode("utf-8")))
+                self.send_json(200, {"ok": True, "notes": notes})
+            except (KeyError, ValueError, StopIteration, json.JSONDecodeError) as error:
+                self.send_json(400, {"ok": False, "error": str(error)})
+            except Exception as error:  # a file soundfile can't read, a full disk...
+                self.send_json(500, {"ok": False, "error": str(error)})
+            return
         if urlparse(self.path).path != "/api/save":
             self.send_json(404, {"ok": False, "error": "Unknown endpoint"})
             return

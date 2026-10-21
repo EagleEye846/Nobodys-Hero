@@ -113,7 +113,7 @@ export const VIGIL_RIDGE = {
   ],
   tileTexts: { T: 'vigil_pine', M: 'vigil_rock', g: 'vigil_bridge', O: 'vigil_boulder' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // Choughs along the ridge, and a craghorn on the lower path.
   npcs: [

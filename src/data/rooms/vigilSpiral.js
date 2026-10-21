@@ -116,7 +116,7 @@ export const VIGIL_SPIRAL = {
   ],
   tileTexts: { T: 'vigil_pine', M: 'vigil_rock', g: 'vigil_bridge', s: 'spiral_stair', b: 'vigil_block', B: 'vigil_block' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // A chough on the long ledge, and a loose step pretending to be stair on the
   // bridge path (no snow creatures here: it's green and sunny this low down).

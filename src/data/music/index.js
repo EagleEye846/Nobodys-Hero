@@ -9,6 +9,7 @@ import * as chapelTheme from './chapelTheme.js';
 import * as creditsTheme from './creditsTheme.js';
 import * as creditsVigilTheme from './creditsVigilTheme.js';
 import * as freefallTheme from './freefallTheme.js';
+import * as keeperTheme from './keeperTheme.js';
 import * as lanternTheme from './lanternTheme.js';
 import * as lasthomeTheme from './lasthomeTheme.js';
 import * as marshTheme from './marshTheme.js';
@@ -45,7 +46,7 @@ import * as vigilTheme from './vigilTheme.js';
 import * as waltzTheme from './waltzTheme.js';
 import * as wardenTheme from './wardenTheme.js';
 
-const MODULES = { 'batBattleOrchestra': batBattleOrchestraTheme, 'batBattle': batBattleTheme, 'battle': battleTheme, 'caveBattle': caveBattleTheme, 'caves': cavesTheme, 'chapel': chapelTheme, 'credits': creditsTheme, 'creditsVigil': creditsVigilTheme, 'freefall': freefallTheme, 'lantern': lanternTheme, 'lasthome': lasthomeTheme, 'marsh': marshTheme, 'mountainBattle': mountainBattleTheme, 'nobodysDawn': nobodysDawnTheme, 'pinefallBattle': pinefallBattleTheme, 'pinefallBeast': pinefallBeastTheme, 'pinefall': pinefallTheme, 'prophecy': prophecyTheme, 'remorse': remorseTheme, 'rest': restTheme, 'ruins': ruinsTheme, 'shelf': shelfTheme, 'shop': shopTheme, 'skills': skillsTheme, 'stair': stairTheme, 'taperBattleOrchestra': taperBattleOrchestraTheme, 'taperBattle': taperBattleTheme, 'taperFarewell': taperFarewellTheme, 'taper': taperTheme, 'title': titleTheme, 'trailer': trailerTheme, 'usurperBattleMix': usurperBattleMixTheme, 'usurperBattleOrchestra': usurperBattleOrchestraTheme, 'usurperBattle': usurperBattleTheme, 'usurperHero': usurperHeroTheme, 'usurperLantern': usurperLanternTheme, 'usurperSmoke': usurperSmokeTheme, 'usurper': usurperTheme, 'valley': valleyTheme, 'ves': vesTheme, 'vigilEpic': vigilEpicTheme, 'vigil': vigilTheme, 'waltz': waltzTheme, 'warden': wardenTheme };
+const MODULES = { 'batBattleOrchestra': batBattleOrchestraTheme, 'batBattle': batBattleTheme, 'battle': battleTheme, 'caveBattle': caveBattleTheme, 'caves': cavesTheme, 'chapel': chapelTheme, 'credits': creditsTheme, 'creditsVigil': creditsVigilTheme, 'freefall': freefallTheme, 'keeper': keeperTheme, 'lantern': lanternTheme, 'lasthome': lasthomeTheme, 'marsh': marshTheme, 'mountainBattle': mountainBattleTheme, 'nobodysDawn': nobodysDawnTheme, 'pinefallBattle': pinefallBattleTheme, 'pinefallBeast': pinefallBeastTheme, 'pinefall': pinefallTheme, 'prophecy': prophecyTheme, 'remorse': remorseTheme, 'rest': restTheme, 'ruins': ruinsTheme, 'shelf': shelfTheme, 'shop': shopTheme, 'skills': skillsTheme, 'stair': stairTheme, 'taperBattleOrchestra': taperBattleOrchestraTheme, 'taperBattle': taperBattleTheme, 'taperFarewell': taperFarewellTheme, 'taper': taperTheme, 'title': titleTheme, 'trailer': trailerTheme, 'usurperBattleMix': usurperBattleMixTheme, 'usurperBattleOrchestra': usurperBattleOrchestraTheme, 'usurperBattle': usurperBattleTheme, 'usurperHero': usurperHeroTheme, 'usurperLantern': usurperLanternTheme, 'usurperSmoke': usurperSmokeTheme, 'usurper': usurperTheme, 'valley': valleyTheme, 'ves': vesTheme, 'vigilEpic': vigilEpicTheme, 'vigil': vigilTheme, 'waltz': waltzTheme, 'warden': wardenTheme };
 
 // Every song, keyed by its file name without "Theme" (battleTheme.js is 'battle').
 export const SONGS = Object.fromEntries(

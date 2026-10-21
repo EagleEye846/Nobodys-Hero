@@ -56,7 +56,7 @@ Press **Z** on the first screen to begin.
 | Z / Enter | Talk, read, climb, confirm |
 | X / Shift | Hold to run; back out of menus |
 | Space | Jump |
-| C / Ctrl | Open the menu (items, equipment, skills, candles) |
+| C / Ctrl | Open the menu (items, equipment, skills, candles); hold C to skip through dialogue |
 | M | Mute |
 
 ### Getting an update
@@ -79,6 +79,5 @@ browser at the same address (http://localhost:8000).
 
 ---
 
-Making things for the game (rooms, enemies, songs, dialogue) and how the code
-fits together: see [docs/DEVELOPERS.md](docs/DEVELOPERS.md). What's changed
-lately: [docs/CHANGELOG.md](docs/CHANGELOG.md).
+Making things for the game (rooms, enemies, songs, dialogue): the Studio tools,
+described in [tools/README.md](tools/README.md).

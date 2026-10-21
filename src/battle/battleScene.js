@@ -44,8 +44,12 @@ const PARTY = [{ name: 'HERO', color: '#4fe3d0', sprite: HERO_ANIMATIONS.right[0
 const DEFEND_SP = 16;
 const BASE_IFRAMES = 1;
 
-// Gold won from a fight, as a multiple of the enemies' `coins` rewards.
+// Gold won from a fight, as a multiple of the enemies' `coins` rewards. Later
+// chapters' fights are harder, so they pay more: half as much again for each
+// chapter after the first (x1.5 in chapter 1, x2.25 in 2, x3 in 3).
 const GOLD_REWARD = 1.5;
+const GOLD_PER_CHAPTER = 0.5;
+const goldReward = () => GOLD_REWARD * (1 + GOLD_PER_CHAPTER * ((WORLD_STATE.chapter ?? 1) - 1));
 // Fights refuse enemies with fewer different attacks than this.
 const MIN_ATTACKS = 3;
 
@@ -1817,9 +1821,9 @@ export class BattleScene {
   win() {
     this.result = 'won';
     const { exp } = this.earned;
-    // Every fight pays a bit better than the enemies' own `coins` (GOLD_REWARD),
-    // and Lucky Pockets pays more again.
-    const coins = Math.round(this.earned.coins * GOLD_REWARD * (1 + skillBonus('goldBonus')));
+    // Every fight pays better than the enemies' own `coins` (goldReward, more
+    // each chapter), and Lucky Pockets pays more again.
+    const coins = Math.round(this.earned.coins * goldReward() * (1 + skillBonus('goldBonus')));
     HERO_STATE.gold += coins;
     let text = `You won!\nGot ${exp} EXP and ${coins} gold.`;
     for (const id of this.earned.items) {

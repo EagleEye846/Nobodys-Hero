@@ -84,7 +84,7 @@ export const CAVE_ENTRY = {
   looks: [],
   tileTexts: { K: 'cave_wall', v: 'cave_stalactite', '^': 'cave_stalagmite', x: 'cave_crystals', z: 'cave_pool' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // The first cave: a golem pretending to be a boulder, and an ice moth.
   npcs: [

@@ -283,8 +283,10 @@ export function loadSamples(ctx, song) {
       const set = SAMPLE_SETS[name];
       if (!set) throw new Error(`${song.title}: no sample set called '${name}'`);
       cache.loading.set(name, Promise.all(set.notes.map(async (midi) => {
-        const response = await fetch(new URL(`${name}/${midi}.ogg`, SAMPLE_ROOT));
-        if (!response.ok) throw new Error(`Couldn't load the ${name} sample ${midi}.ogg`);
+        // Recordings are .ogg, unless an uploaded set says otherwise (`ext`).
+        const file = `${midi}.${set.ext ?? 'ogg'}`;
+        const response = await fetch(new URL(`${name}/${file}`, SAMPLE_ROOT));
+        if (!response.ok) throw new Error(`Couldn't load the ${name} sample ${file}`);
         return [midi, await ctx.decodeAudioData(await response.arrayBuffer())];
       })).then((buffers) => cache.ready.set(name, new Map(buffers))));
     }

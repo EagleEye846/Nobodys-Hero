@@ -230,7 +230,7 @@ function newBlock(type) {
 function generate(name, design) {
   const parts = design.blocks.filter((b) => b.on).map((b) => `  // ${BLOCKS[b.type].label}\n  ${BLOCKS[b.type].code(b.params)}`);
   return [
-    `// ${name}: an attack pattern made in the Ruins Studio Pattern Lab (tools/).`,
+    `// ${name}: an attack pattern made in the Nobody's Hero Studio Pattern Lab (tools/).`,
     `// Enemies use it by name, e.g. { name: '${name}', weight: 2 } in their patterns.`,
     `// studio-blocks: ${JSON.stringify(design)}`,
     `export default function ${name}(box, density, { Shot, Pillar, every, rand, pick, clamp }) {`,
@@ -624,7 +624,7 @@ export async function mount(root, studio) {
       if (!(await confirmBox('Replace pattern', `There's already a pattern called "${name}". Replace it?`, 'Replace', 'danger'))) throw new Error('Not saved.');
     }
     let content = currentCode();
-    if (!/export\s+default/.test(content)) content = `// ${name}: written in the Ruins Studio Pattern Lab (tools/).\nexport default ${content.trim().replace(/;+\s*$/, '')};\n`;
+    if (!/export\s+default/.test(content)) content = `// ${name}: written in the Nobody's Hero Studio Pattern Lab (tools/).\nexport default ${content.trim().replace(/;+\s*$/, '')};\n`;
     return [{ path: `src/data/patterns/${name}.js`, content }];
   }
 

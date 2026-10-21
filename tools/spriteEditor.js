@@ -814,7 +814,7 @@ export async function mount(root, studio) {
   function newSpriteFile(frames) {
     const { w, h } = size();
     const parts = [
-      comment(`${doc.label}, ${w}x${h}: drawn in the Ruins Studio Sprite Editor (tools/).`),
+      comment(`${doc.label}, ${w}x${h}: drawn in the Nobody's Hero Studio Sprite Editor (tools/).`),
       `export const ${doc.base}_PALETTE = ${paletteLiteral(usedPalette(frames))};`,
       '',
     ];

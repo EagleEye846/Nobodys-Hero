@@ -87,7 +87,7 @@ function enemyModule(f, id, constName) {
     `import { ${f.art.base}_PALETTE, ${f.art.base}_SPRITE } from '../art/${f.art.file}';`,
     '',
     `// The ${f.name}'s numbers. Everything it says is in text/${f.textFile || `enemies/${id}.txt`}.`,
-    '// Made in the Ruins Studio Enemy Maker (tools/).',
+    "// Made in the Nobody's Hero Studio Enemy Maker (tools/).",
     `export const ${constName} = {`,
     `  name: ${quote(f.name)},`,
     `  textFile: ${quote(f.textFile || `enemies/${id}.txt`)},`,

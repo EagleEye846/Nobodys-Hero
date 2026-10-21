@@ -93,7 +93,7 @@ export const CAVE_GALLERY = {
   looks: [],
   tileTexts: { K: 'cave_wall', v: 'cave_stalactite', '^': 'cave_stalagmite', x: 'cave_crystals', z: 'gallery_lake', b: 'vigil_block', B: 'vigil_block' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // The Singing Gallery: the rimewing circling the crystals (the only one), a glintling lying in wait, and an ice moth.
   npcs: [

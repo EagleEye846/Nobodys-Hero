@@ -4,6 +4,7 @@ import { loadSongs } from './library.js';
 import { loadOrder } from './order.js';
 import { listDir } from './api.js';
 import { quote, inline, objectKey } from './source.js';
+import { sampleSets, sampleOptions, sampleInstrument, setLabel, isUnpitched, previewSample, uploadSamples } from './sampleLibrary.js';
 import {
   el, setChildren, icon, btn, hint, field, select, optionNodes, slider, section, segmented, modal, confirmBox, popupMenu, checkbox,
   pixelCanvas, isTyping, deepClone, camelCase, constCase, friendly, codeView, toast,
@@ -25,7 +26,8 @@ const LOW = 36; // C2
 const HIGH = 96; // C7
 const TRACK_COLORS = ['#ff8c1a', '#4fe3d0', '#b07cff', '#ffe14d', '#ff5470', '#5fc27a', '#6aa8ff', '#f2a6d8'];
 
-// Instruments by friendly name (taken from the game's own songs).
+// Pixel instruments: synth presets by friendly name (taken from the game's
+// own songs). The Orchestra tab is the real recordings in sampleSets.js.
 const INSTRUMENTS = {
   'Chiptune lead': { wave: 'square', volume: 0.03, attack: 0.01, decay: 0.15, sustain: 0.7, release: 0.06, gate: 0.9, filter: { type: 'lowpass', frequency: 2500 } },
   'Soft flute': { wave: 'triangle', volume: 0.16, attack: 0.03, decay: 0.4, sustain: 0.6, release: 0.4, gate: 0.95, vibrato: { rate: 4.5, depth: 12 }, echo: { time: 0.45, feedback: 0.35, mix: 0.3 } },
@@ -44,6 +46,15 @@ const ROLES = [
   ['pad', 'Pad', 'Warm pad', 'Soft long notes underneath'],
   ['sparkle', 'Sparkle', 'Music box', 'Little high notes'],
 ];
+// The same parts played by real instruments (the first set here that exists).
+const ORCHESTRA_ROLES = {
+  melody: ['soloViolin', 'violins'],
+  harmony: ['piano', 'harp'],
+  bass: ['cellos', 'bassSpic'],
+  pad: ['violins', 'violas', 'cellos'],
+  sparkle: ['glock', 'harp', 'piano'],
+};
+const orchestraFor = (role) => ORCHESTRA_ROLES[role].find((n) => sampleSets()[n]) ?? Object.keys(sampleSets()).find((n) => !isUnpitched(n));
 const DRUMS = [['kick', 'Kick', 0.6], ['snare', 'Snare', 0.3], ['hat', 'Hat', 0.05], ['openHat', 'Open hat', 0.07]];
 const SCALES = {
   Major: [0, 2, 4, 5, 7, 9, 11],
@@ -76,11 +87,15 @@ function clearOrphanHolds(steps, from) {
   for (let i = from; i < steps.length && steps[i] === HOLD; i++) steps[i] = REST;
 }
 
-function blankSong(title) {
+function blankSong(title, style = 'pixel') {
   const steps = () => Array(32).fill(REST);
   const instruments = {};
-  for (const [name, , preset] of ROLES.slice(0, 3)) instruments[name] = deepClone(INSTRUMENTS[preset]);
-  for (const [kind, , volume] of DRUMS.slice(0, 3)) instruments[kind] = { drum: kind, volume };
+  for (const [name, , preset] of ROLES.slice(0, 3)) instruments[name] = style === 'orchestra' ? sampleInstrument(orchestraFor(name)) : deepClone(INSTRUMENTS[preset]);
+  if (style === 'orchestra') {
+    for (const drum of ['timpani', 'bassDrum', 'snareSoft']) {
+      if (sampleSets()[drum]) instruments[drum] = { ...sampleInstrument(drum), drum: 'sample' };
+    }
+  } else for (const [kind, , volume] of DRUMS.slice(0, 3)) instruments[kind] = { drum: kind, volume };
   return {
     title,
     bpm: 120,
@@ -127,7 +142,7 @@ function songModule(song, constName, beatsPerBar) {
     return lines.join('\n');
   };
   const lines = [
-    `// "${song.title}": made in the Ruins Studio Music Maker (tools/).`,
+    `// "${song.title}": made in the Nobody's Hero Studio Music Maker (tools/).`,
     `// ${song.bpm} BPM, ${song.stepsPerBeat} steps per beat, ${beatsPerBar} beats per bar.`,
     '// Each step is a MIDI note number (60 is middle C), \'-\' to hold the note',
     '// before, \'.\' for silence, or \'x\' for a drum hit.',
@@ -306,10 +321,12 @@ export async function mount(root, studio) {
   async function newSong() {
     if (!(await okToLeave())) return;
     const input = el('input', { type: 'text', placeholder: 'e.g. Crystal Caves' });
+    let style = 'pixel';
+    const stylePick = segmented([['pixel', 'Pixel', null, 'Chiptune synths'], ['orchestra', 'Orchestra', null, 'Real recorded instruments: strings, piano, harp, drums']], style, (v) => { style = v; });
     const existing = (await listDir('src/data/music')) ?? Object.values(songs).map((s) => s.file);
     const title = await modal({
       title: 'New song',
-      body: field('Song name', input, 'Rooms play it by a short name made from this.'),
+      body: el('div', {}, field('Song name', input, 'Rooms play it by a short name made from this.'), field('Sound', stylePick, 'What the starting tracks play. You can change any track later.')),
       actions: [{ label: 'Cancel', value: null }, {
         label: 'Start',
         kind: 'primary',
@@ -326,7 +343,7 @@ export async function mount(root, studio) {
     stop();
     beatsPerBar = 4;
     const name = camelCase(title);
-    load(blankSong(title), { name, file: `${name}Theme.js`, constName: `${constCase(name)}_THEME`, isNew: true });
+    load(blankSong(title, style), { name, file: `${name}Theme.js`, constName: `${constCase(name)}_THEME`, isNew: true });
   }
 
   // --- Song + tracks panel ---
@@ -337,6 +354,7 @@ export async function mount(root, studio) {
   }
 
   function instrumentName(inst) {
+    if (inst.sample) return inst.sample;
     // Volume is its own slider, so it doesn't change which instrument it is.
     return Object.keys(INSTRUMENTS).find((n) => same({ ...INSTRUMENTS[n], volume: 0 }, { ...inst, volume: 0 })) ?? '';
   }
@@ -345,7 +363,25 @@ export async function mount(root, studio) {
     const cards = melodic().map((name) => {
       const inst = song.instruments[name];
       const preset = instrumentName(inst);
-      const options = [...(preset ? [] : [['', 'Its own sound']]), ...Object.keys(INSTRUMENTS).map((n) => [n, n])];
+      const kind = inst.sample ? 'orchestra' : 'pixel';
+      const options = kind === 'orchestra'
+        ? [...(sampleSets()[preset] ? [] : [['', `Missing: ${preset}`]]), ...sampleOptions()]
+        : [...(preset ? [] : [['', 'Its own sound']]), ...Object.keys(INSTRUMENTS).map((n) => [n, n])];
+      const choose = (v) => {
+        if (!v) return;
+        edit(() => { song.instruments[name] = kind === 'orchestra' ? sampleInstrument(v) : deepClone(INSTRUMENTS[v]); });
+        previewNote(60, name);
+      };
+      // Switching tabs swaps in a matching instrument from the other side.
+      const switchKind = (v) => {
+        if (v === kind) return;
+        const role = ROLES.find(([id]) => name.startsWith(id))?.[0] ?? 'melody';
+        const pick = v === 'orchestra' ? orchestraFor(role) : ROLES.find(([id]) => id === role)[2];
+        if (!pick) { toast('No real instruments yet: upload some first.', { kind: 'error' }); renderTracks(); return; }
+        edit(() => { song.instruments[name] = v === 'orchestra' ? sampleInstrument(pick) : deepClone(INSTRUMENTS[pick]); });
+        previewNote(60, name);
+      };
+      const volumeMax = inst.sample ? 0.6 : 0.25;
       const card = el('div', {
         class: `track-card${name === trackName ? ' active' : ''}`,
         style: `--track:${colorOf(name)}`,
@@ -356,27 +392,56 @@ export async function mount(root, studio) {
         el('span', { class: 'track-name' }, friendly(name)),
         btn(muted.has(name) ? 'stop' : 'note', muted.has(name) ? 'Unmute' : 'Mute', () => { if (muted.has(name)) muted.delete(name); else muted.add(name); renderTracks(); if (playback) play(); }, { iconOnly: true, kind: muted.has(name) ? 'active' : 'ghost', title: muted.has(name) ? 'Muted: click to hear it again' : 'Mute this track while playing' }),
         btn('trash', 'Remove track', () => removeTrack(name), { iconOnly: true, kind: 'ghost danger' })),
-      select(options, preset, (v) => { if (v) edit(() => { song.instruments[name] = { ...deepClone(INSTRUMENTS[v]), volume: INSTRUMENTS[v].volume }; }); }, { tip: 'Instrument' }),
+      segmented([['pixel', 'Pixel', null, 'Chiptune synth sounds'], ['orchestra', 'Orchestra', null, 'Real recorded instruments']], kind, switchKind, { small: true }),
+      el('div', { class: 'row' },
+        select(options, preset, choose, { tip: kind === 'orchestra' ? 'Real instrument, by family' : 'Synth sound' }),
+        btn('play', 'Hear it', () => previewNote(60, name), { iconOnly: true, kind: 'ghost', title: 'Hear this instrument (middle C)' })),
       slider({
-        label: 'Volume', min: 0, max: 100, value: Math.round(clamp((inst.volume ?? 0.1) / 0.25, 0, 1) * 100), format: (v) => `${v}%`,
-        onInput: (v) => { inst.volume = Math.round((v / 100) * 0.25 * 1000) / 1000; studio.setDirty(true); },
+        label: 'Volume', min: 0, max: 100, value: Math.round(clamp((inst.volume ?? 0.1) / volumeMax, 0, 1) * 100), format: (v) => `${v}%`,
+        onInput: (v) => { inst.volume = Math.round((v / 100) * volumeMax * 1000) / 1000; studio.setDirty(true); },
         onChange: () => { if (playback) play(); renderAdvanced(); },
       }));
       return card;
     });
     setChildren(trackPanel, section('Tracks',
       cards,
-      btn('plus', 'Add a track', (e) => popupMenu(e.currentTarget, ROLES.map(([id, label, preset, text]) => ({ icon: 'note', label, hint: `${text} (${preset})`, onClick: () => addTrack(id, preset) }))), { kind: 'ghost' }),
-      hint('Click a track to write its notes. Drums are the grid under the piano roll.')));
+      el('div', { class: 'row' },
+        btn('plus', 'Add a track', (e) => popupMenu(e.currentTarget, [
+          ...ROLES.map(([id, label, preset, text]) => ({ icon: 'note', label: `${label} (pixel)`, hint: `${text}: ${preset}`, onClick: () => addTrack(id, deepClone(INSTRUMENTS[preset])) })),
+          '-',
+          ...ROLES.filter(([id]) => orchestraFor(id)).map(([id, label, , text]) => ({ icon: 'note', label: `${label} (orchestra)`, hint: `${text}: ${setLabel(orchestraFor(id))}`, onClick: () => addTrack(id, sampleInstrument(orchestraFor(id))) })),
+        ]), { kind: 'ghost' }),
+        btn('plus', 'Add a real drum', (e) => addRealDrum(e.currentTarget), { kind: 'ghost', title: 'Timpani, bass drum, snare, cymbals... real recordings, on the drum grid' })),
+      btn('box', 'Upload samples', () => uploadAndUse(), { kind: 'ghost', title: 'Add your own recordings (wav, ogg, mp3) as a new Orchestra instrument' }),
+      hint('Click a track to write its notes. Pixel tracks are synths; Orchestra tracks are real recordings. Drums are the grid under the piano roll.')));
   }
 
-  function addTrack(base, preset) {
+  function addRealDrum(anchor) {
+    const items = sampleOptions(true).flatMap(({ options }) => options).map(([set, label]) => ({ icon: 'note', label, onClick: () => addTrack(set, sampleInstrument(set)) }));
+    if (!items.length) { toast('No real drums yet: upload a recording first.', { kind: 'error' }); return; }
+    popupMenu(anchor, items);
+  }
+
+  // Uploads recordings, then puts them to use: a drum hit gets its own row on
+  // the drum grid; a tuned instrument can take over the selected track.
+  async function uploadAndUse() {
+    const name = await uploadSamples();
+    if (!name) return;
+    if (isUnpitched(name)) { addTrack(name, sampleInstrument(name)); return; }
+    const track = song.instruments[trackName] && !song.instruments[trackName].drum ? trackName : null;
+    if (track && await confirmBox('Use it now?', `Play the ${friendly(track)} track on ${setLabel(name)}? (Otherwise it waits in the Orchestra tab.)`, 'Use it')) {
+      edit(() => { song.instruments[track] = sampleInstrument(name); });
+      previewNote(60, track);
+    } else renderTracks();
+  }
+
+  function addTrack(base, instrument) {
     let name = base;
     for (let n = 2; song.instruments[name]; n++) name = `${base}${n}`;
     edit(() => {
-      song.instruments[name] = deepClone(INSTRUMENTS[preset]);
+      song.instruments[name] = instrument;
       for (const sec of Object.values(song.sections)) sec[name] = Array(Object.values(sec)[0]?.length ?? 32).fill(REST);
-      trackName = name;
+      if (!instrument.drum) trackName = name;
     });
   }
 
@@ -490,6 +555,7 @@ export async function mount(root, studio) {
   function previewNote(midi, name = trackName) {
     const inst = song.instruments[name];
     const ctx = ensureAudio();
+    if (inst?.sample && ctx) { previewSample(ctx, inst, midi); return; }
     if (!inst || inst.drum || !ctx) return;
     const t = ctx.currentTime;
     const osc = ctx.createOscillator();
@@ -750,6 +816,10 @@ export async function mount(root, studio) {
       if (!tracks.length) rows.push({ kind, label, volume, track: null });
       tracks.forEach((track, i) => rows.push({ kind, label: i ? `${label} ${i + 1}` : label, volume, track }));
     }
+    // Real drums: a row per track, named after its recording.
+    for (const track of drumTracks().filter((n) => song.instruments[n].drum === 'sample')) {
+      rows.push({ kind: 'sample', label: setLabel(song.instruments[track].sample ?? track).slice(0, 7), volume: song.instruments[track].volume, track });
+    }
     return rows;
   }
 
@@ -812,6 +882,7 @@ export async function mount(root, studio) {
       row.track = name;
     }
     const steps = section_()[row.track];
+    if (steps[cell.step] !== HIT) previewNote(60, row.track);
     drumPaint = { track: row.track, value: steps[cell.step] === HIT ? REST : HIT };
     steps[cell.step] = drumPaint.value;
     try { drumCanvas.setPointerCapture(e.pointerId); } catch { /* synthetic */ }
@@ -873,7 +944,16 @@ export async function mount(root, studio) {
         }), 'Sections in the order they play, separated by spaces.'),
         field('Loop back to', select(song.order.map((n, i) => [String(i), `${i + 1}. ${n}`]), String(song.loopFrom ?? 0), (v) => edit(() => { if (Number(v)) song.loopFrom = Number(v); else delete song.loopFrom; })), 'Where the song jumps back to after the last section.')),
       inst ? section(`Sound: ${friendly(trackName)}`,
-        inst.drum
+        inst.sample
+          ? [
+            hint(`Real recordings: ${setLabel(inst.sample)}${isUnpitched(inst.sample) ? ' (a drum hit)' : ''}.`),
+            el('div', { class: 'row' }, num(inst, 'volume', 'Volume'), num(inst, 'reverb', 'Reverb')),
+            el('div', { class: 'row' }, num(inst, 'attack', 'Fade in (s)'), num(inst, 'release', 'Fade out (s)')),
+            el('div', { class: 'row' }, num(inst, 'octave', 'Octave shift', 1), num(inst, 'pan', 'Pan (-1 to 1)')),
+            checkbox(Boolean(inst.ring), (on) => edit(() => { if (on) inst.ring = true; else delete inst.ring; }), 'Let notes ring out (piano pedal, harp, drums)'),
+            field('Track name', el('input', { type: 'text', value: trackName, onchange: (e) => renameTrack(e.target.value.trim()) })),
+          ]
+          : inst.drum
           ? [field('Drum', select(DRUMS.map(([k, l]) => [k, l]), inst.drum, (v) => edit(() => { inst.drum = v; }))), num(inst, 'volume', 'Volume')]
           : [
             field('Wave', select(WAVES, inst.wave ?? 'square', (v) => edit(() => { inst.wave = v; }))),

@@ -53,9 +53,9 @@
   <h1>Music Export</h1>
   <p>Records the game's songs to audio files, with the same instruments the game plays them on.
     Looping songs play through, go round the loop again as many times as you choose, then fade out.
-    Recording happens silently, at about three times the song's own speed: a
-    three-minute song takes about a minute at CD quality, half that at 32 kHz.
-    Export all records three songs at once.</p>
+    Every song starts recording silently in the background as soon as this page opens
+    (three at a time), and is kept in this browser, so once a song says <b>Ready</b> its
+    Export is instant, even next time. Edit a song or change an option and it's recorded again.</p>
   <div id="message" hidden></div>
   <div class="options">
     <label>Format
@@ -184,9 +184,8 @@ async function encodeMp3(channels, sampleRate, onProgress) {
   return new Blob(parts, { type: 'audio/mpeg' });
 }
 
-async function exportSong(name, setStatus) {
+async function exportSong(name, setStatus, opts = options()) {
   const song = SONGS[name];
-  const opts = options();
   const { seconds, fadeSeconds } = recordingLength(song, opts);
   setStatus('Recording...');
   const buffer = await renderSong(song, seconds, opts.rate);
@@ -216,11 +215,114 @@ function setBusy(value) {
   document.querySelectorAll('button').forEach((b) => { b.disabled = value; });
 }
 
+// --- Instant downloads: every song is recorded in the background as soon as
+// the page opens, and kept (in this browser, across visits) until the song or
+// the options change. Export then just hands over the finished file.
+const DB_NAME = 'nobodys-hero-music-export';
+let dbPromise = null;
+function db() {
+  dbPromise ??= new Promise((resolve) => {
+    try {
+      const request = indexedDB.open(DB_NAME, 1);
+      request.onupgradeneeded = () => request.result.createObjectStore('files');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => resolve(null);
+    } catch {
+      resolve(null);
+    }
+  });
+  return dbPromise;
+}
+async function stored(key, value) {
+  const database = await db();
+  if (!database) return null;
+  return new Promise((resolve) => {
+    try {
+      const store = database.transaction('files', value ? 'readwrite' : 'readonly').objectStore('files');
+      const request = value ? store.put(value, key) : store.get(key);
+      request.onsuccess = () => resolve(request.result ?? null);
+      request.onerror = () => resolve(null);
+    } catch {
+      resolve(null);
+    }
+  });
+}
+
+// A fingerprint of the song's notes and instruments, so an edited song is recorded again.
+function fingerprint(song) {
+  const text = JSON.stringify(song);
+  let hash = 2166136261;
+  for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 16777619);
+  return (hash >>> 0).toString(36);
+}
+const cacheKey = (name, opts) => [name, fingerprint(SONGS[name]), opts.format, opts.rate, opts.loops, opts.fade, opts.normalize].join('|');
+
+// Throws away files recorded from older versions of the songs.
+async function pruneStored() {
+  const database = await db();
+  if (!database) return;
+  try {
+    const store = database.transaction('files', 'readwrite').objectStore('files');
+    store.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (!cursor) return;
+      const [name, print] = String(cursor.key).split('|');
+      if (!SONGS[name] || fingerprint(SONGS[name]) !== print) cursor.delete();
+      cursor.continue();
+    };
+  } catch {
+    // Nothing kept: every song is just recorded again.
+  }
+}
+
+// key -> promise of { blob, file }: finished, or still recording.
+const ready = new Map();
+// Gets a song's file: from memory, from the browser's store, or by recording it now.
+function getExport(name, setStatus, opts = options()) {
+  const key = cacheKey(name, opts);
+  if (!ready.has(key)) {
+    const job = (async () => {
+      const saved = await stored(key);
+      if (saved) return saved;
+      const result = await exportSong(name, setStatus, opts);
+      await stored(key, result);
+      return result;
+    })();
+    job.catch(() => ready.delete(key));
+    ready.set(key, job);
+  }
+  return ready.get(key);
+}
+
+// The background recorder: works down the list a few at a time, and starts
+// over (keeping what it already has) whenever the options change.
+let preparing = 0;
+async function prepareAll() {
+  const run = ++preparing;
+  const opts = options();
+  const queue = [...songOrder];
+  const worker = async () => {
+    while (queue.length && run === preparing) {
+      const name = queue.shift();
+      const status = rows[name];
+      const setStatus = (text) => { status.textContent = text; status.className = 'status'; };
+      try {
+        await getExport(name, setStatus, opts);
+        if (run === preparing) { status.textContent = 'Ready'; status.className = 'status done'; }
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Failed'; status.className = 'status fail';
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: AT_ONCE }, worker));
+}
+
 async function run(name, save) {
   const status = rows[name];
   const setStatus = (text, kind = '') => { status.textContent = text; status.className = `status ${kind}`; };
   try {
-    const result = await exportSong(name, setStatus);
+    const result = await getExport(name, setStatus);
     await save(result);
     setStatus(`Saved ${(result.blob.size / 1e6).toFixed(1)} MB`, 'done');
     return true;
@@ -271,6 +373,14 @@ function addRow(name, song) {
 }
 updateLengths();
 ['loops', 'fade'].forEach((id) => $(id).addEventListener('input', updateLengths));
+// Any option changed: record the songs again with it (the old files are kept,
+// so changing back is instant too).
+let restart = null;
+['format', 'rate', 'loops', 'fade', 'normalize'].forEach((id) => $(id).addEventListener('change', () => {
+  clearTimeout(restart);
+  restart = setTimeout(prepareAll, 400);
+}));
+pruneStored().then(prepareAll);
 
 // Export all: into a folder you pick (Chrome and Edge), or as separate downloads.
 $('all').addEventListener('click', async () => {

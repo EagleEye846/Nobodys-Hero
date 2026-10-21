@@ -89,7 +89,7 @@ export const REST_GATE = {
   looks: [],
   tileTexts: { Y: 'vigil_snow_pine', E: 'vigil_ice_rock', Q: 'vigil_snow_boulder', n: 'rest_snow', s: 'gate_stair', l: 'rest_lane' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   npcs: [],
 };

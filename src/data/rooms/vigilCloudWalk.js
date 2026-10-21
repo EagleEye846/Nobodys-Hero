@@ -114,7 +114,7 @@ export const VIGIL_CLOUD_WALK = {
   ],
   tileTexts: { Y: 'vigil_snow_pine', E: 'vigil_ice_rock', Q: 'vigil_snow_boulder', n: 'vigil_snow', g: 'vigil_bridge', s: 'cloud_stair' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // A frostbite in the snow, and a craghorn on the lower walk.
   npcs: [

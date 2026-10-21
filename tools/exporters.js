@@ -99,7 +99,7 @@ const npcLiteral = ({ art, enemy, x, y, patrol }) => inline({ art, enemy, x, y, 
 // room: the game's room object, with tiles as strings. `tiles` is TILES from tileset.js.
 export function roomModule(room, constName, tiles, notes) {
   const lines = [
-    `// ${room.name || room.id}: made in Ruins Studio (tools/).`,
+    `// ${room.name || room.id}: made in Nobody's Hero Studio (tools/).`,
     tileKey(tiles, notes),
     `export const ${constName} = {`,
     `  id: ${quote(room.id)},`,
@@ -144,7 +144,7 @@ export function songModule(song, constName, stepsPerBar) {
     return `    ${objectKey(name)}: {\n${trackLines.join('\n')}\n    },`;
   });
   const lines = [
-    `// "${song.title}": made in the Ruins Studio Music Maker (tools/).`,
+    `// "${song.title}": made in the Nobody's Hero Studio Music Maker (tools/).`,
     `// ${song.bpm} BPM, ${song.stepsPerBeat} steps per beat.`,
     `export const ${constName} = {`,
     `  title: ${quote(song.title)},`,

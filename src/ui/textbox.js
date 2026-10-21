@@ -11,6 +11,8 @@ const PADDING_Y = 20;
 const TEXT_SIZE = 30;
 const LINE_HEIGHT = 34;
 const CHARACTERS_PER_SECOND = 45;
+// Holding C skips: each page shows whole, and turns after this long.
+const SKIP_PAGE_SECONDS = 0.06;
 
 // Portraits sit on the left of the box, drawn at 3x, with the text beside them.
 const PORTRAIT_SCALE = 3;
@@ -60,7 +62,8 @@ export function pageLineCount(ctx, page, speaker = null) {
 }
 
 // Overworld dialogue box. Text types out a character at a time;
-// cancel skips to the end of the page and confirm advances to the next page.
+// cancel skips to the end of the page and confirm advances to the next page;
+// holding C (skip) flicks through the pages on its own.
 // NPCs with an entry in PORTRAITS show their face beside the text, in the
 // expression a page asks for ({sad}, {glee}...) or the one given to open().
 export class TextBox {
@@ -68,6 +71,7 @@ export class TextBox {
     this.pages = null;
     this.pageIndex = 0;
     this.visibleCharacters = 0;
+    this.skipTimer = 0;
     this.speaker = null;
     this.portrait = null;
   }
@@ -102,18 +106,29 @@ export class TextBox {
   update(dt, input) {
     const page = this.pages[this.pageIndex].text;
 
+    if (input.isDown('skip')) {
+      this.visibleCharacters = page.length;
+      this.skipTimer += dt;
+      if (this.skipTimer >= SKIP_PAGE_SECONDS) this.nextPage();
+      return;
+    }
+    this.skipTimer = 0;
+
     if (this.visibleCharacters < page.length) {
       this.visibleCharacters = Math.min(page.length, this.visibleCharacters + CHARACTERS_PER_SECOND * dt);
       if (input.wasPressed('cancel')) this.visibleCharacters = page.length;
       return;
     }
 
-    if (input.wasPressed('confirm')) {
-      this.pageIndex++;
-      this.visibleCharacters = 0;
-      if (this.pageIndex >= this.pages.length) this.pages = null;
-      else this.showPage();
-    }
+    if (input.wasPressed('confirm')) this.nextPage();
+  }
+
+  nextPage() {
+    this.pageIndex++;
+    this.visibleCharacters = 0;
+    this.skipTimer = 0;
+    if (this.pageIndex >= this.pages.length) this.pages = null;
+    else this.showPage();
   }
 
   draw(ctx) {

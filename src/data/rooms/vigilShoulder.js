@@ -116,7 +116,7 @@ export const VIGIL_SHOULDER = {
   ],
   tileTexts: { Y: 'vigil_snow_pine', E: 'vigil_ice_rock', Q: 'vigil_snow_boulder', g: 'vigil_bridge', t: 'shoulder_mouth', n: 'vigil_snow' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   // A frostbite disguised as a snow heap, well up from the Keeper's walk (rows 27 to 29).
   npcs: [

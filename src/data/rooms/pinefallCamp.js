@@ -16,9 +16,9 @@ export const PINEFALL_CAMP = {
   // on arriving from another region, and picks the battle background.
   area: 'pinefall',
   // The song that plays here: none at first, only the forest; once you've
-  // met the Keeper at the woodcutters' fire, the Pinefall's waltz.
+  // met the Keeper at the woodcutters' fire, his theme, while he minds it.
   music: null,
-  musicAfter: { scene: 'keeper_at_the_fire', song: 'pinefall' },
+  musicAfter: { scene: 'keeper_at_the_fire', song: 'keeper' },
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'forest',
   // Leaf litter shows under blocks and boulders with nothing else to go by.

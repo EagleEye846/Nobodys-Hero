@@ -80,7 +80,7 @@ export const REST_INN = {
   looks: [],
   tileTexts: { r: 'inn_rug', h: 'inn_wall' },
 
-  // No enemies here: the mountain itself is the challenge (see docs/mountain-enemies.md
+  // No enemies here: the mountain itself is the challenge (see notes/docs/mountain-enemies.md
   // for the ones designed for it).
   npcs: [],
 };

@@ -7,7 +7,7 @@ import {
 
 // KEPT FOR CHAPTER 3: this plays in chapter 3's boss fight, as its last
 // phase's music, the moment Ves gets her umbrella back (see
-// docs/chapter-3-the-search.md). Written first as below:
+// notes/docs/chapter-3-the-search.md). Written first as below:
 //
 // "Nobody's Dawn": the Usurper's fight, phase three. Her mother's lantern
 // has caught, its light has made him solid, and Ves has taken up the stolen

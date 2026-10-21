@@ -85,7 +85,7 @@ export const USURPER_BOSS = {
   // Clearly above the Roost Mother (900 HP, 11 damage, density 1.2), but
   // only phase 3 can hurt him, and the lantern catching burns off a quarter,
   // so it's about 1050 HP of real fighting, with Ves's blade and the team
-  // attack to do it with (see docs/mountain-enemies.md for the sums).
+  // attack to do it with (see notes/docs/mountain-enemies.md for the sums).
   maxHp: 1400,
   damage: 14,
   difficulty: { density: 1.35, speed: 1.18 },
