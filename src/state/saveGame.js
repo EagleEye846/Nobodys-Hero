@@ -27,6 +27,15 @@ export const WORLD_STATE = {
 
 const SAVE_KEY = 'ruins-rpg-save-v1';
 
+// Both as they are at the start of a new game, so a load can clear out
+// anything set since the save (a skill point bought, a vane turned).
+const FRESH = JSON.parse(JSON.stringify({ hero: HERO_STATE, world: WORLD_STATE }));
+
+function resetTo(state, fresh, saved) {
+  for (const key of Object.keys(state)) delete state[key];
+  Object.assign(state, JSON.parse(JSON.stringify(fresh)), saved);
+}
+
 // Returns whether the save worked (storage can be blocked, e.g. in private windows).
 export function saveGame(roomId, spawn) {
   WORLD_STATE.room = roomId;
@@ -64,8 +73,8 @@ export function loadGame() {
   try {
     const saved = JSON.parse(localStorage.getItem(SAVE_KEY));
     if (!saved?.hero || !saved?.world) return false;
-    Object.assign(HERO_STATE, saved.hero);
-    Object.assign(WORLD_STATE, saved.world);
+    resetTo(HERO_STATE, FRESH.hero, saved.hero);
+    resetTo(WORLD_STATE, FRESH.world, saved.world);
     upgradeSave(saved);
     return true;
   } catch {

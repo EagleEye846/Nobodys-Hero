@@ -120,8 +120,12 @@ function vignette() {
 }
 
 // Picks up from the last save, or starts fresh in `fallbackRoom` if there isn't one.
-export function continueGame(fallbackRoom) {
-  if (loadGame() && ROOMS[WORLD_STATE.room]) return new OverworldScene(ROOMS[WORLD_STATE.room], WORLD_STATE.spawn);
+// After a game over (`whole`) you come back at full HP, not the HP you saved
+// with, so a low save before a boss can't trap you.
+export function continueGame(fallbackRoom, { whole = false } = {}) {
+  const loaded = loadGame();
+  if (whole) healHeroFully();
+  if (loaded && ROOMS[WORLD_STATE.room]) return new OverworldScene(ROOMS[WORLD_STATE.room], WORLD_STATE.spawn);
   return new OverworldScene(fallbackRoom);
 }
 
@@ -294,7 +298,7 @@ export class OverworldScene {
     if (this.player.isFalling) {
       this.player.update(dt, input, this.room);
       if (this.player.fallTime >= FALL_SECONDS + FADE_SECONDS) {
-        this.game.changeScene(new GameOverScene(() => continueGame(this.roomData)));
+        this.game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true })));
       }
       return;
     }
@@ -374,7 +378,7 @@ export class OverworldScene {
       }
     } else if (this.wrathfulEnd) {
       sfx('hurt');
-      this.game.changeScene(new GameOverScene(() => continueGame(this.roomData), "The heralds' wrath descended upon you."));
+      this.game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true }), "The heralds' wrath descended upon you."));
     } else if (input.wasPressed('menu') && !this.player.isAirborne) {
       sfx('select');
       this.pauseMenu.open();
@@ -658,7 +662,7 @@ export class OverworldScene {
     const game = this.game;
     game.changeScene(new BattleScene([enemy], (result, outcomes) => {
       if (result === 'death') {
-        game.changeScene(new GameOverScene(() => continueGame(this.roomData), 'Your light flickered out.'));
+        game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true }), 'Your light flickered out.'));
         return;
       }
       game.changeScene(this);
@@ -906,7 +910,7 @@ export class OverworldScene {
     const game = this.game;
     const onEnd = (result) => {
       if (result === 'death') {
-        game.changeScene(new GameOverScene(() => continueGame(this.roomData), 'Your light flickered out.'));
+        game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true }), 'Your light flickered out.'));
         return;
       }
       // Fled: the enemies stay, but can't start another fight straight away.

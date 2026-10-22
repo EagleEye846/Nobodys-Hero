@@ -5,6 +5,7 @@ import { partyIds } from '../characters/party.js';
 import { HERO, ownedGear, equippedGear, equipGear } from '../characters/equipment.js';
 import { ARMOR } from '../data/armor.js';
 import { drawText } from './text.js';
+import { maybeScream } from './scream.js';
 import { drawMenuFrame, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawControls, drawOwnerTag, ownerLook, MENU, HEADER_Y, FOOTER_Y, MENU_COLORS } from './menuFrame.js';
 
 // What you can equip, one tab each: the weapon (FIGHT power and a shadow
@@ -73,6 +74,7 @@ export class EquipMenu {
     if (input.wasPressed('confirm')) {
       sfx('select');
       equipGear(tab.who, tab.slot, owned[this.cursor]);
+      if (owned[this.cursor] === 'ash_spear') maybeScream();
     }
   }
 

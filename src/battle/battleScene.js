@@ -1461,18 +1461,16 @@ export class BattleScene {
     }
     sfx('hit');
     this.shake = SHAKE_SECONDS;
-    const leave = (fallen) => {
-      if (!fallen.length) {
-        const smoke = this.smokeLine;
-        this.smokeLine = null;
-        if (smoke) this.showMessage(smoke, 'taunt');
-        else this.setPhase('taunt');
-        return;
-      }
-      const [first, ...rest] = fallen;
-      this.foeLeaves(first, 'defeated', () => leave(rest));
+    const goOn = () => {
+      const smoke = this.smokeLine;
+      this.smokeLine = null;
+      if (smoke) this.showMessage(smoke, 'taunt');
+      else this.setPhase('taunt');
     };
-    leave(active.filter((foe) => foe.hp <= 0));
+    // foeLeaves sees the rest of the fallen off itself, then runs goOn.
+    const fallen = active.find((foe) => foe.hp <= 0);
+    if (fallen) this.foeLeaves(fallen, 'defeated', goOn);
+    else goOn();
   }
 
   updateItems(input) {
@@ -1542,7 +1540,8 @@ export class BattleScene {
   }
 
   // An enemy is beaten or pacified: it fades away, its rewards are banked, and
-  // the battle carries on (to `next`) or is won if it was the last one.
+  // the battle carries on (to `next`, a phase name or a function) or is won if
+  // it was the last one.
   foeLeaves(foe, how, next, prefix = '') {
     foe.state = how;
     foe.leftAt = this.time;
@@ -1563,8 +1562,9 @@ export class BattleScene {
       // Another enemy may have been knocked out at the same time.
       const alsoFallen = this.activeFoes().find((other) => other.hp <= 0);
       if (alsoFallen) this.foeLeaves(alsoFallen, 'defeated', next);
-      else if (this.activeFoes().length) this.setPhase(next);
-      else this.win();
+      else if (!this.activeFoes().length) this.win();
+      else if (typeof next === 'function') next();
+      else this.setPhase(next);
     });
   }
 

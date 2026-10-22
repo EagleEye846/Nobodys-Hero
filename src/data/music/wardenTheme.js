@@ -133,7 +133,7 @@ const E_BASS_UP = 'G3 Ab3 G3 D3 G3 F3 Eb3 D3 G3 Ab3 G3 D3 G3 F3 D3 G3';
 const RUIN = transpose(HOOK, -7);
 const RUIN_HIGH = transpose(HOOK, 5);
 // The fanfare in G minor at half speed, low, for the trombones.
-const FANFARE_UNDER = repeat(melody('D3 - G3 - Bb3 - D4 - | C4 - - A3 F#3 - A3 -', 4), 2);
+const FANFARE_UNDER = repeat(melody('D3 - G3 - Bb3 - D4 - | C4 - - A3 F#3 - A3 -', 4), 4);
 const PROPHECY_GM = transpose(PROPHECY_DM, 5);
 const NO_G = tune('Ab4 - - - G4 - - -');
 const CRACK = [
@@ -353,7 +353,7 @@ export const WARDEN_THEME = {
       trombones: [...FANFARE_UNDER, ...transpose(CRACK, -12)],
       horns: [...sustained(E_CHORDS, BAR, 0, 3), ...transpose(CRACK, -12)],
       tuba: [...sustained(E_CHORDS, BAR, 0, 2), ...heldNotes(CRACK_BASS, BAR)],
-      chant: [...PROPHECY_GM, ...rest(8)],
+      chant: [...repeat(PROPHECY_GM, 2), ...rest(8)],
       choir: [...sustained(E_CHORDS, BAR, 1, 3), ...transpose(CRACK, -12)],
       organ: [...transpose(RUIN, -12), ...heldNotes(CRACK_BASS, BAR, 1)],
       organQuartal: [...transpose(RUIN, -17), ...rest(8)],

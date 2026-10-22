@@ -14,7 +14,7 @@ Thin, quick and very sharp.
 A fast slash around your SHADOW. Parry a bullet just before it hits and it recharges instantly.
 
 [ash_spear]
-Light enough to throw yourself after.
+Made of Ash wood, this spear is known to dash through attacks like a Phantom. Some say to hear the screams of wielders before them wailing from this spear.
 Dash the way you're moving. Nothing can hurt you mid-dash.
 
 [hunting_bow]
