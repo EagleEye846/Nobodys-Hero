@@ -99,7 +99,7 @@ export const VIGIL_WEATHERVANES = {
     { sprite: 'sign', x: 17, y: 21, text: 'shelf_sign' },
     { sprite: 'savepoint', x: 9, y: 20, save: true },
     // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
-    { sprite: 'travel_draft', x: 7, y: 21, travel: 'weathervanes', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
+    { sprite: 'travel_draft', x: 5, y: 20, travel: 'weathervanes', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     // The weathervanes: turn any one, and they all turn, and the wind with them.
     { sprite: 'weathervane_up', x: 12, y: 19, vane: true },
     { sprite: 'weathervane_up', x: 4, y: 11, vane: true },

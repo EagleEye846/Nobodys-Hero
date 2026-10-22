@@ -66,7 +66,7 @@ export const VIGIL_OWL_SHELF = {
     { sprite: 'crates', x: 18, y: 6, text: 'shelf_crates' },
     { sprite: 'savepoint', x: 8, y: 8, save: true },
     // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
-    { sprite: 'travel_draft', x: 10, y: 8, travel: 'owl_shelf', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
+    { sprite: 'travel_draft', x: 11, y: 10, travel: 'owl_shelf', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'sign', x: 15, y: 11, text: 'last_shelf_sign' },
     { sprite: 'cairn', x: 6, y: 5, text: 'last_shelf_cairn' },
   ],

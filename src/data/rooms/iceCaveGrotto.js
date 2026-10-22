@@ -66,7 +66,7 @@ export const ICE_CAVE_GROTTO = {
   props: [
     { sprite: 'savepoint', x: 12, y: 13, save: true },
     // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
-    { sprite: 'travel_draft', x: 14, y: 13, travel: 'grotto', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true, light: 30 },
+    { sprite: 'travel_draft', x: 9, y: 13, travel: 'grotto', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true, light: 30 },
     // The goblin's stall: crates for a counter, a lamp, and the goblin behind it.
     { sprite: 'crates', x: 21, y: 12, text: 'grotto_stall' },
     { sprite: 'crates', x: 23, y: 12, text: 'grotto_stall' },

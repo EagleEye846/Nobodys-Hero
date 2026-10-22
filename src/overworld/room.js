@@ -133,6 +133,8 @@ export class Room {
       if (!tile?.standing) return;
       let picture = null;
       pieces.push({
+        // Its middle, for placing it round a spire (OverworldScene.drawOnSpire).
+        x: tx * T + T / 2,
         sortY: (ty + 1) * T,
         draw: (ctx, camera) => tile.draw(ctx, tx * T - camera.x, ty * T - camera.y, tx, ty, this),
         // Its shadow in the sun (see shadows.js), from a picture of it drawn once.

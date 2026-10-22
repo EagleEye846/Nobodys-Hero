@@ -16,12 +16,12 @@ import { WORLD_STATE } from '../state/saveGame.js';
 // shows them in this order. Their descriptions are in
 // text/interactions/travel.txt, one section per id.
 export const TRAVEL_DRAFTS = [
-  { id: 'spiral', name: 'Spiral Stair', room: 'vigil_spiral', x: 35, y: 25, chapter: 2 },
+  { id: 'spiral', name: 'Spiral Stair', room: 'vigil_spiral', x: 40, y: 25, chapter: 2 },
   { id: 'heralds_rest', name: "Heralds' Rest", room: 'rest_square', x: 27, y: 16, chapter: 2 },
   { id: 'wind_stair', name: 'Wind Stair', room: 'vigil_wind_stair', x: 22, y: 15, chapter: 2 },
-  { id: 'weathervanes', name: 'Weathervanes', room: 'vigil_weathervanes', x: 7, y: 21, chapter: 2 },
-  { id: 'grotto', name: "Goblin's Grotto", room: 'ice_cave_grotto', x: 14, y: 13, chapter: 2 },
-  { id: 'owl_shelf', name: 'Last Shelf', room: 'vigil_owl_shelf', x: 10, y: 8, chapter: 2 },
+  { id: 'weathervanes', name: 'Weathervanes', room: 'vigil_weathervanes', x: 5, y: 20, chapter: 2 },
+  { id: 'grotto', name: "Goblin's Grotto", room: 'ice_cave_grotto', x: 9, y: 13, chapter: 2 },
+  { id: 'owl_shelf', name: 'Last Shelf', room: 'vigil_owl_shelf', x: 11, y: 10, chapter: 2 },
 ];
 
 // Each chapter's rooms in the order you climb through them, for working out

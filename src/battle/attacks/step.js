@@ -83,31 +83,44 @@ defineBulletArt('stepBoot', {
 export function makeStepAttacks({ names, art, crack }) {
   return {
     // Little steps tumble in from the top corners, end over end, and bounce
-    // down the box like they're falling down a stair. When one hits the floor
-    // it shatters into a spray of pebbles.
-    [names.tumble](box, density, { Shot, every, rand, shuffleBag }) {
-      const side = shuffleBag(['left', 'right']);
+    // down the box like they're falling down a stair. Every third one drops
+    // straight in through the top, over where you are, so hiding up there
+    // doesn't work. When one hits the floor it shatters into a spray of
+    // pebbles that flies most of the way back up the box.
+    [names.tumble](box, density, { Shot, every, rand, clamp, shuffleBag }) {
+      const side = shuffleBag(['left', 'right', 'top']);
       const floor = box.y + box.h - 4;
       const gravity = 150;
       let steps = [];
-      const tumble = every(0.85, 1.15, (bullets) => {
-        const fromLeft = side() === 'left';
-        const step = new Shot({
-          x: fromLeft ? box.x + 5 : box.x + box.w - 5,
-          y: box.y + rand(5, 22),
-          vx: (fromLeft ? 1 : -1) * rand(28, 48),
-          vy: rand(-30, 0),
-          gravity,
-          warn: 0.55,
-          art: art.block,
-        });
+      const tumble = every(0.85, 1.15, (bullets, soul) => {
+        const from = side();
+        const fromLeft = from === 'left';
+        const step = from === 'top'
+          ? new Shot({
+            x: clamp(soul.x + rand(-8, 8), box.x + 5, box.x + box.w - 5),
+            y: box.y + 4,
+            vx: rand(-12, 12),
+            vy: rand(10, 25),
+            gravity,
+            warn: 0.6,
+            art: art.block,
+          })
+          : new Shot({
+            x: fromLeft ? box.x + 5 : box.x + box.w - 5,
+            y: box.y + rand(5, 22),
+            vx: (fromLeft ? 1 : -1) * rand(28, 48),
+            vy: rand(-30, 0),
+            gravity,
+            warn: 0.55,
+            art: art.block,
+          });
         bullets.push(step);
         steps.push(step);
       });
       return {
         duration: 6.5,
-        update: (dt, bullets) => {
-          tumble(dt, bullets);
+        update: (dt, bullets, soul) => {
+          tumble(dt, bullets, soul);
           for (const step of steps) {
             if (step.age < step.warn || step.y < floor) continue;
             // Smash: the step is gone and its pieces fly up and out.
@@ -118,7 +131,7 @@ export function makeStepAttacks({ names, art, crack }) {
                 x: step.x,
                 y: floor - 1,
                 vx: rand(-45, 45),
-                vy: -rand(70, 105),
+                vy: -rand(85, 135),
                 gravity,
                 life: 1.4,
                 art: art.pebble,

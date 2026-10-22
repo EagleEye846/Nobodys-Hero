@@ -95,7 +95,7 @@ export const VIGIL_SPIRAL = {
     { sprite: 'sign', x: 16, y: 34, text: 'spiral_sign' },
     { sprite: 'savepoint', x: 33, y: 24, save: true },
     // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
-    { sprite: 'travel_draft', x: 35, y: 25, travel: 'spiral', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
+    { sprite: 'travel_draft', x: 40, y: 25, travel: 'spiral', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     // From the landing, the face is sheer: swing up to the top ledge.
     { sprite: 'swing_ring', x: 38, y: 21 },
     { sprite: 'swing_ring', x: 40, y: 19 },
