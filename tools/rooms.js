@@ -70,6 +70,13 @@ export const TILE_INFO = {
   d: { name: 'Leaf litter', note: 'dark forest floor, thick with red leaves' },
   y: { name: 'Leaf path', note: 'pale path through the leaves' },
   Z: { name: 'Bramble', note: 'bramble hedge' },
+  N: { name: 'Thin bramble', note: 'a bramble you can push through (a secret)' },
+  j: { name: 'Dry channel', note: 'dry stone channel (sluice water can fill it)' },
+  X: { name: 'Cobbles', note: "Hollin's cobbles" },
+  5: { name: 'Cottage wall', note: 'Hollin cottage wall' },
+  6: { name: 'Cottage window', note: 'boarded cottage window' },
+  7: { name: 'Cottage roof', note: 'mossy cottage roof' },
+  8: { name: 'Cottage door', note: 'shut cottage door' },
 };
 export const tileName = (char) => TILE_INFO[char]?.name ?? `Tile "${char}"`;
 
@@ -213,6 +220,17 @@ function list(name, items, format) {
   return `  ${name}: [\n${items.map((item) => `    ${format(item)},`).join('\n')}\n  ],`;
 }
 
+// Anything on a thing that the editor doesn't know about itself (a current's
+// `flow`, a purse's `gold`, a rock, a log, a high lever...) is written back
+// just as it was, after the parts the editor writes, so saving a room never
+// loses it.
+const keepRest = (thing, out) => {
+  for (const [key, value] of Object.entries(thing)) {
+    if (key in out || key.startsWith('_') || value === undefined) continue;
+    out[key] = value;
+  }
+  return out;
+};
 const propLiteral = (prop) => {
   const out = { sprite: prop.sprite, x: prop.x, y: prop.y };
   if (prop.text) out.text = prop.text;
@@ -246,15 +264,25 @@ const propLiteral = (prop) => {
   if (prop.member) out.member = prop.member;
   if (prop.vane) out.vane = true;
   if (prop.drift) out.drift = prop.drift;
-  return inline(out);
+  // (Not an empty list of switches, though: that's a gate the editor took away.)
+  const rest = Object.fromEntries(Object.entries(prop).filter(([key, value]) => !(key === 'opensWith' && !value?.length)));
+  return inline(keepRest(rest, out));
 };
-const doorLiteral = ({ x, y, w, h, to, spawn }) => inline({ x, y, w, h, to, spawn: { x: spawn.x, y: spawn.y } });
-const cutsceneLiteral = ({ x, y, w, h, scene }) => inline({ x, y, w, h, scene });
+const doorLiteral = (door) => inline(keepRest(door, { x: door.x, y: door.y, w: door.w, h: door.h, to: door.to, spawn: { x: door.spawn.x, y: door.spawn.y } }));
+const cutsceneLiteral = (trigger) => inline(keepRest(trigger, { x: trigger.x, y: trigger.y, w: trigger.w, h: trigger.h, scene: trigger.scene }));
 const gustLiteral = ({ x, y, to }) => inline({ x, y, to: { x: to.x, y: to.y } });
 const geyserLiteral = ({ x, y, to, spawn }) => inline({ x, y, to, spawn: { x: spawn.x, y: spawn.y } });
 const npcLiteral = ({ art, enemy, x, y, patrol, behaviour, ambush, reach }) => {
   const how = behaviour ?? (ambush ? 'ambush' : 'patrol');
   return inline({ art, enemy, x, y, patrol: [patrol[0], patrol[1]], behaviour: how === 'patrol' ? undefined : how, reach });
+};
+const npcLiteralKeeping = (npc) => {
+  const base = { art: npc.art, enemy: npc.enemy, x: npc.x, y: npc.y, patrol: [npc.patrol[0], npc.patrol[1]] };
+  const how = npc.behaviour ?? (npc.ambush ? 'ambush' : 'patrol');
+  if (how !== 'patrol') base.behaviour = how;
+  if (npc.reach !== undefined) base.reach = npc.reach;
+  const rest = Object.fromEntries(Object.entries(npc).filter(([key]) => key !== 'ambush' && key !== 'behaviour'));
+  return inline(keepRest(rest, base));
 };
 
 // Room settings the editor doesn't edit itself, written back as they were
@@ -345,7 +373,7 @@ export function roomModule(room, constName, header) {
     '  // is how they move (see BEHAVIOURS in src/overworld/npc.js); hiding ones go',
     '  // just above a tall pillar or statue, and `reach` is how many tiles away they',
     '  // leap from.',
-    list('npcs', room.npcs ?? [], npcLiteral),
+    list('npcs', room.npcs ?? [], npcLiteralKeeping),
     '};',
   ];
   return `${lines.join('\n')}\n`;

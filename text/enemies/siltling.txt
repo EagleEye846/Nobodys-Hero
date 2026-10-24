@@ -1,0 +1,78 @@
+# SILTLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/siltling.js.
+
+[intro]
+The silt on the culvert floor heaves up. Two red buttons blink open. A SILTLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SILTLING counts its buttons. It gets to eleven, loses its place, and starts again.
+
+SILTLING polishes its thimble on itself. The thimble gets muddier.
+
+SILTLING is keeping an eye on your pockets. Both eyes. Both buttons.
+
+Somewhere in SILTLING, a penny from fifty years ago catches the light.
+
+Smells like a wet cellar and old pennies.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Look. LOOK.
+That's a thimble.
+
+Everything down
+the well
+comes to me.
+
+Are you lost?
+Lost things
+are mine.
+
+Have you got
+a button?
+I like buttons.
+
+Don't touch.
+That's sorted.
+
+Nobody comes
+back for them.
+So I keep them.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/siltling.js.
+[talk: Inspect]
+SILTLING - HP 480
+Fifty years of drain silt, and everything that fell down the well. It wants to keep it all.
+
+[talk: Admire its collection]
+You look very closely at the spoon. SILTLING swells up with pride. Nobody has ever looked at the spoon before.
+
+[talk: Give it a button]
+You find a button on your coat and hold it out. SILTLING goes very still. Then it takes it, very gently, and puts it somewhere safe.
+
+[talk: Help it sort]
+You put the pennies with the pennies and the keys with the key. SILTLING watches every move. It decides you're doing it right.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SILTLING slumps flat. It sinks back into the culvert floor, and its buttons go under last.
+
+[pacified]
+SILTLING pushes a little wrapped sweet out of itself and leaves it on the ledge for you. Then it settles back down to count.
+
+# Bramble's own TALK lines for it ({foe} is its name). He's never been down
+# a drain before, and he thinks the mud is the best thing so far.
+[bramble_talk]
+Bramble asks {foe} if it's got his Ma's lost thimble. {foe} has nine thimbles. None of them are for sharing.
+
+Bramble tells {foe} there's a penny in it. {foe} knows. {foe} knows where every penny is.
+
+Bramble asks {foe} if a girl with a plum umbrella came by. {foe} wishes she'd dropped something.
+
+Bramble offers {foe} a conker. {foe} has never seen a conker. It takes a long time deciding where to put it.

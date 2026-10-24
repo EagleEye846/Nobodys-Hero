@@ -15,8 +15,10 @@ Frost is forming on everything ICE MOTH flies past, including you.
 
 ICE MOTH has forgotten what it was doing. It's looking at the crystals again.
 
-# Said in a speech bubble before each attack, picked at random. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 Ooh. Shiny.
 

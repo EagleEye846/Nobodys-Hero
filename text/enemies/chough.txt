@@ -15,8 +15,10 @@ CHOUGH's beak is the exact red of a warning sign.
 
 The wind tugs at your coat. CHOUGH rides it without flapping once.
 
-# Said in a speech bubble before each attack, picked at random. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 Chee-OW!
 

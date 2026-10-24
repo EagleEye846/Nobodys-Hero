@@ -1,0 +1,107 @@
+# TEASEL'S FORGE: in Lasthome's square, its front open on the market, next
+# to the healer's. Teasel is the town's smith, an old square marmot in a
+# leather cap, one ear singed short. Her gran melted the chapel bell down
+# into pots when the town stopped waiting, and Teasel has mended every pot
+# since. She'd never made a weapon in her life until Thistle told her you'd
+# come off the fen. Short, dry, and not interested in heroes.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Mind the sparks. Teasel. I mend pots. This week I'm doing swords, because Thistle says you came off the fen, and nobody comes off the fen for nothing.
+
+[menu_prompt]
+What else? Say it slow. The bellows have made me deaf on this side.
+
+[buy_prompt]
+Candles at the top. Then the iron. The last two are for your friend.
+
+[sell_prompt]
+Selling? Put it on the anvil. If it's iron, I'll weigh it. If it's not, I'll be polite about it.
+
+[talk_prompt]
+Talk? Go on. The fire minds itself.
+
+[bought]
+It's yours. It was the city's before that, so look after it. Press C out there to put it on.
+
+[bought_item]
+Light it when it's dark. It'll be dark.
+
+[sold]
+Into the scrap pile. Everything's scrap in the end. Then it's something else.
+
+[nothing_to_sell]
+Nothing to weigh. Fair enough.
+
+[cant_sell]
+You're wearing that. Take it off out there first, with C. I don't buy things off people's backs.
+
+[owned]
+You've got that one already. I only made the one.
+
+[wont_fit]
+Those are to Ves's measure, for her umbrella, when she's got it back. Bring her round.
+
+[too_poor]
+Not enough. I don't do tabs. Gran did tabs, and look what happened to the bell.
+
+[bought_stored]
+Your bag's full, so I've put it by for you. It'll be in the chest by the next crystal you find.
+
+[bag_full]
+Your bag's full and so's the chest. Eat something. Pell's got pie.
+
+[farewell]
+Mind how you go. Don't touch the anvil. It's warmer than it looks.
+
+[talk: Who are you?]
+Teasel. Smith. My gran was the smith, and before her, hers. Lasthome's always had one. Mostly for the pots.
+
+[talk: The bell]
+My gran melted the chapel bell down. The town asked her to. A bell's for calling somebody, and nobody was coming.
+
+She made it into pots. Every pot in Lasthome's got a bit of bell in it. I've mended all of them twice.
+
+[talk: The iron]
+Never made a weapon in my life till this week. Nobody needed one. Then Thistle came in and said somebody'd come off the fen, and might be going further.
+
+So I went out there first, a little way, and came back with hinges. The old city's got more iron in its doors than we've got in the whole town.
+
+[talk: The far door]
+Dark out there. The lamps all died a hundred years ago, and nobody's been out to light them. Take candles. Take more than you think.
+
+[talk: Ves]
+Your friend. Bryony says she's been asking if I mend umbrellas. One that isn't here. Tell her to bring it and I'll see.
+
+Bryony says she asks like it's a fact it'll turn up.
+
+# The star sword (the Fallen Star: src/data/fallenStar.js). Not a "talk:"
+# section: the topic only shows once you've got the sword.
+[forge_ask]
+Let me see that. ...Huh. That's not iron. That's not anything I've got a name for. It's warm.
+
+There's a bit missing off the edge, look. Snapped off when it came down. Old Tam says a star went over the city when his gran was a girl, low enough to chip the old steps along the street, and came down in the Hushwood. Bring me the piece and I'll put it back where it goes.
+
+[forge_now]
+That's it. That's the bit. Give it here.
+
+(Teasel works the shard back into the blade over the fire for a long time, very carefully, and doesn't say a word the whole while.)
+
+There. Stronger than it was. And it'll call down two now, if you ask it. Don't ask me how I know that. It told me.
+
+[forge_done]
+It's as good as I can make it. Somebody else'll have to take it further. Somebody with a bigger fire.
+
+[forge_later]
+Somebody's got to do the work before me first. I only mend what's in front of me.
+
+[forge_hint]
+Star-metal? Never seen any. Heard of it, though. Old Tam swears a star went over the city when his gran was a girl, low enough to chip the steps, and came down in the Hushwood, somewhere past the old mill-leat.
+
+The woodcutters fenced it in and wrote LET IT BE on a sign. Tam says there's a sword stuck in it. Tam says a lot of things. But the way in's meant to be through a tree that isn't one.
+
+[forge_shard_only]
+Pretty. Warm, too. Hums when I hold it near the fire.
+
+...I don't know what to do with this. It's a bit of something. You'd need the rest of whatever it broke off.

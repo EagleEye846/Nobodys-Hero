@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Save Editor</title>
+<style>
+  body { background: #120c1c; color: #e8e4f4; font: 15px system-ui, sans-serif; margin: 24px; max-width: 860px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  p { color: #b8b0cc; margin: 6px 0 14px; }
+  button { font: inherit; padding: 8px 14px; margin: 4px 8px 4px 0; background: #3a2a5e; color: #fff; border: 1px solid #5a4890; border-radius: 6px; cursor: pointer; }
+  button:hover { background: #4a3a7a; }
+  .row { margin: 14px 0; }
+  #status { color: #ffd25e; min-height: 1.4em; }
+  textarea { width: 100%; height: 340px; background: #0a0612; color: #d8f0fa; font: 12px ui-monospace, monospace; border: 1px solid #3a2a5e; }
+  code { color: #9ad8ff; }
+</style>
+</head>
+<body>
+<h1>Save Editor</h1>
+<p>Edits the game's save in this browser. Open it from the same address and port as the game (a save on <code>localhost:8001</code> is only seen from <code>localhost:8001</code>): this one is <code id="here"></code>. Close or reload the game tab after changing anything, then CONTINUE.</p>
+
+<div class="row">
+  <strong>The Fallen Star</strong><br>
+  <button id="unstar">Put the Fallen Star back in its stone</button>
+  <button id="star">Give me the Fallen Star</button>
+  <button id="forge">Reforge it once more</button>
+  <p>Putting it back also takes away the star shard and its forging, re-bars the gate round the stone, and lets the drawing scene play again. Its stone is in the Starfall Glade, through a false tree on the west edge of the Millrace.</p>
+</div>
+
+<div class="row">
+  <button id="reload">Reload from the save</button>
+  <button id="write">Save the text below</button>
+  <div id="status"></div>
+</div>
+<textarea id="raw" spellcheck="false"></textarea>
+
+<script>
+const KEY = 'ruins-rpg-save-v1';
+document.getElementById('here').textContent = location.host;
+const raw = document.getElementById('raw');
+const status = (text) => { document.getElementById('status').textContent = text; };
+const read = () => JSON.parse(localStorage.getItem(KEY) ?? 'null');
+const write = (save) => { localStorage.setItem(KEY, JSON.stringify(save)); show(); };
+function show() {
+  const save = read();
+  raw.value = save ? JSON.stringify(save, null, 2) : '(no save in this browser)';
+}
+const without = (list, ...gone) => (list ?? []).filter((x) => !gone.includes(x));
+
+document.getElementById('unstar').onclick = () => {
+  const save = read();
+  if (!save) return status('There is no save here yet.');
+  const { hero, world } = save;
+  hero.weapons = without(hero.weapons, 'fallen_star');
+  if (hero.weapon === 'fallen_star') hero.weapon = hero.weapons[0] ?? 'worn_sword';
+  hero.gear = without(hero.gear, 'star_shard');
+  delete hero.starForged;
+  world.taken = without(world.taken, 'hush_starfall:star_stone_sword:11,8', 'city_old_street:star_shard:24,4');
+  world.seenScenes = without(world.seenScenes, 'fallen_star_drawn');
+  world.levers = without(world.levers, 'hush_starfall:star');
+  write(save);
+  status('Done: the Fallen Star is back in its stone, and the gate round it is barred again.');
+};
+document.getElementById('star').onclick = () => {
+  const save = read();
+  if (!save) return status('There is no save here yet.');
+  save.hero.weapons ??= [];
+  if (!save.hero.weapons.includes('fallen_star')) save.hero.weapons.push('fallen_star');
+  write(save);
+  status('Done: the Fallen Star is in your weapons. Equip it from EQUIP.');
+};
+document.getElementById('forge').onclick = () => {
+  const save = read();
+  if (!save) return status('There is no save here yet.');
+  save.hero.starForged = (save.hero.starForged ?? 0) + 1;
+  write(save);
+  status(`Done: it has been reforged ${save.hero.starForged} time(s).`);
+};
+document.getElementById('reload').onclick = () => { show(); status('Reloaded.'); };
+document.getElementById('write').onclick = () => {
+  try {
+    write(JSON.parse(raw.value));
+    status('Saved.');
+  } catch (e) {
+    status(`That isn't valid JSON: ${e.message}`);
+  }
+};
+show();
+</script>
+</body>
+</html>

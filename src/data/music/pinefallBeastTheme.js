@@ -6,8 +6,11 @@ import {
 } from './parts/chapter3.js';
 import { WALTZ } from './pinefallTheme.js';
 
-// "Tooth and Tatter": the Pinefall Beast, the thing that hurt Ves, fought
-// in the clearing of shredded plum fabric (pinefall_tatters). A hunt, by a
+// "Tooth and Tatter": the Tatterwight, Chapter 3's midboss (tatterwight.js),
+// the wind of the night Ves was hurt, still going round the Torn Clearing
+// (pinefall_tatters) in the shape of the beast that tore the trees. (Written
+// for the beast itself, before the beast became the Hush; the claws are the
+// marks it copies off the bark.) A hunt, by a
 // real orchestra (the recordings in assets/audio/samples/) with a square wave
 // over the brass, in 6/8 at a lope: the first midboss of Chapter 3, so
 // shorter and leaner than the chapter's boss, but it has to bite. The beast's

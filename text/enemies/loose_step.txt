@@ -15,8 +15,10 @@ Moss is growing in LOOSE STEP's cracks. It's pretending not to notice.
 
 The wind whistles down the mountain.
 
-# Said in a speech bubble before each attack, picked at random. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 A hundred years!
 Not ONE foot!

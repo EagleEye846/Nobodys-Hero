@@ -64,7 +64,7 @@ Go carefully. Hoo.
 Hollis. An owl. I have kept this shelf a long time, longer than the village below has had a name. Climbers come. I sell them supper.
 
 [talk: The summit]
-Up the stair. Not far now. The wind up there is too strong for wings, so I keep to the shelf, and listen to it.
+Up the stairs. Not far now. The wind up there is too strong for wings, so I keep to the shelf, and listen to it.
 
 [talk: An owl shop?]
 Things fall up here. Iron, from the sky. Feathers. Nuts, from somewhere. I tidy them up. Somebody may as well have them.

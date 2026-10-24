@@ -1,0 +1,26 @@
+# WREN: a marmot kid, about Bramble's age, very nosy, who has never met
+# anybody from outside the valley before and has a great many questions.
+
+[first]
+Who are YOU? Where'd you come from? Is that a real sword? Can I hold it? Can I hold HER?
+
+...Sorry. Mum says I ask too much.
+
+[repeat]
+Are you staying? Are you staying for the bean harvest? Everybody has to help with the bean harvest. It's the law. It isn't really the law.
+
+[first after ves_on_her_feet]
+Your friend with the hatchet says he's the best chopper in the whole forest under eleven.
+
+I'm the best bean-picker in the whole town under eleven. So.
+
+[repeat after ves_on_her_feet]
+Is the girl a hero? She LOOKS like one. Is she?
+
+[first after bramble_goes_home]
+He went home? He said he'd show me how to chop!
+
+...He said he'd come back and show me. He PROMISED.
+
+[repeat after bramble_goes_home]
+I'm practising chopping. On beans. It isn't going well.

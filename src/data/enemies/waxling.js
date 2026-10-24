@@ -8,7 +8,7 @@ export const WAXLING = {
   textFile: 'enemies/waxling.txt',
   sprite: { rows: WAXLING_SPRITE, palette: WAXLING_PALETTE },
   maxHp: 110,
-  damage: 7,
+  damage: 9,
 
   difficulty: { density: 0.95, speed: 0.9 },
 

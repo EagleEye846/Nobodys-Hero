@@ -26,6 +26,9 @@ export const HERO_STATE = {
   // skill points (earned, less spent).
   party: [],
   memberPoints: {},
+  // Members who are hurt (ids): Ves, after the Lantern Marsh, riding on your
+  // back. See isHurt in party.js.
+  hurt: [],
   // Each member's own weapon and armor, as { vesper: { weapon, armor } }
   // (see src/characters/equipment.js). What they own sits with yours, above.
   memberGear: {},

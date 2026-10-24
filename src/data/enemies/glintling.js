@@ -13,7 +13,7 @@ export const GLINTLING = {
   area: 'vigil',
   sprite: { rows: GLINTLING_SPRITE, palette: GLINTLING_PALETTE },
   maxHp: 140,
-  damage: 8,
+  damage: 11,
 
   // A Chapter 2 enemy: small, but its tricks come thick and fast.
   difficulty: { density: 1.2, speed: 1.1 },

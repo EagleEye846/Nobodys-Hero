@@ -5,7 +5,7 @@ import { ARMOR, armorLabels } from '../data/armor.js';
 import { ITEMS, healLabel, lightLabel } from '../data/items.js';
 import { SOUL_ABILITIES } from '../battle/soulAbilities.js';
 import { soulSprite } from '../battle/soul.js';
-import { MEMBERS, partyIds, memberSprites } from '../characters/party.js';
+import { MEMBERS, partyIds, memberSprites, hurtState } from '../characters/party.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
 import { PORTRAITS } from '../data/art/portraits.js';
 import { makeSprite } from '../engine/sprite.js';
@@ -61,13 +61,16 @@ export const HERO_COLOR = '#4fe3d0';
 const FACE_ROWS = 9;
 const faces = new Map();
 function faceOf(who) {
-  if (!faces.has(who)) {
-    const art = who === HERO ? null : PORTRAITS[MEMBERS[who].portrait];
+  // While they're hurt, their `hurt` block can give another portrait.
+  const portrait = who === HERO ? null : hurtState(who)?.portrait ?? MEMBERS[who].portrait;
+  const key = portrait ?? who;
+  if (!faces.has(key)) {
+    const art = portrait ? PORTRAITS[portrait] : null;
     const sprite = art ? makeSprite(art.idle, art.palette) : who === HERO ? HERO_ANIMATIONS.right[0] : memberSprites(who).right;
     // The part of the image that's the face: all of a portrait, or the top of a sprite.
-    faces.set(who, { image: sprite, sw: sprite.width, sh: art ? sprite.height : FACE_ROWS });
+    faces.set(key, { image: sprite, sw: sprite.width, sh: art ? sprite.height : FACE_ROWS });
   }
-  return faces.get(who);
+  return faces.get(key);
 }
 export function ownerLook(who) {
   if (who === HERO) return { name: 'HERO', color: HERO_COLOR };

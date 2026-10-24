@@ -64,7 +64,7 @@ try {
           if (n > 3) paged(where, n);
         } else if (section === 'taunts' || section.startsWith('taunts: ') || section === 'boss_intro' || section.startsWith('mercy_mock') || (section.startsWith('phase: ') && section.endsWith(' foe'))) {
           // Split into bubbles the way the battle does (speechBubbles in hud.js).
-          for (const line of speechBubbles(entry)) if (wrap(line, 142, 14, 'speech') > 3) bad(where, `speech bubble is ${wrap(line, 142, 14, 'speech')} lines; 3 fit (end a sentence sooner, so the rest gets its own bubble)`, line);
+          for (const line of speechBubbles(entry)) if (wrap(line, 142, 14, 'speech') > 3) bad(where, `speech bubble is ${wrap(line, 142, 14, 'speech')} lines; 3 fit (speechBubbles in hud.js should have split it)`, line);
         } else {
           if (dlg(entry, 596, 28) > 3) paged(where, dlg(entry, 596, 28));
           if (section.startsWith('talk: ') && shrinks(section.slice(6), 28, 258, 20)) bad(where, 'TALK option is too long to read in its column', section);

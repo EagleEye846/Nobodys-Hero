@@ -54,7 +54,7 @@ export const PINEFALL_DEADFALL = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 6, y: 17, w: 2, h: 1, to: 'pinefall_bramble_gate', spawn: { x: 12, y: 1 } },
-    { x: 29, y: 12, w: 1, h: 2, to: 'pinefall_brook', spawn: { x: 1, y: 14 } },
+    { x: 29, y: 12, w: 1, h: 2, to: 'pinefall_tumbled', spawn: { x: 1, y: 10 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -68,6 +68,10 @@ export const PINEFALL_DEADFALL = {
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', B: 'deadfall_trunk', b: 'deadfall_stump' },
 
-  // No enemies in the Pinefall yet.
-  npcs: [],
+  // A Russet lurks by the tree beside the path up from the gate; a Burrhog
+  // rolls about the open ground past the trunks, below the ribbon.
+  npcs: [
+    { enemy: 'russet', x: 10, y: 8, patrol: [10, 10], behaviour: 'pounce' },
+    { enemy: 'burrhog', x: 23, y: 7, patrol: [21, 27] },
+  ],
 };

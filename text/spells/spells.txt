@@ -48,6 +48,32 @@ Lightning leaps through every enemy: {amount} damage to each.
 [nova]
 Everything goes white: {amount} damage to one enemy.
 
+# Chapter 3.
+[sunder]
+A blow that splits the air: {amount} damage to one enemy.
+
+[balm]
+A warmth over everyone. The whole party recovers {amount} HP.
+
+[lance]
+A lance of light, thrown straight: {amount} damage to one enemy.
+
+# Chapter 4.
+[sunburst]
+Light bursts out of you: {amount} damage to every enemy.
+
+[renew]
+Light that puts someone right. Heals {amount} HP.
+
+[aegis]
+A shell that holds. Halves the damage you take for {amount} enemy turns.
+
+[serenade]
+A song nobody taught you. Every enemy's MERCY rises by {amount}%.
+
+[tempest]
+The whole sky turns and comes down: {amount} damage to one enemy.
+
 # --- VES ---
 
 [vesper_shelter]
@@ -74,5 +100,76 @@ The northern lights pour down. You recover {heal} HP.
 [vesper_blade]
 The Hero's blade, brought down in both hands: {damage} damage to one enemy.
 
+# While she's hurt (no umbrella), these are her only two.
+[vesper_cover]
+Her coat over you. The next attack is halved; each hit {def} less.
+
+[vesper_call out]
+She shouts what's coming: the next attack starts out slow.
+
 [vesper_together]
 You and Ves, both at once, one from each side: {damage} damage.
+
+# Chapter 3: her mother's umbrella back.
+[vesper_updraft]
+Everyone knocked back a step: the next attack is cut short. SP +{sp}%.
+
+[vesper_headwind]
+The air goes thick. The next attack's bullets are slowed for {seconds}s.
+
+[vesper_thunderclap]
+A CRACK like thunder: {damage} damage, and the next attack is cut short.
+
+[vesper_rain dance]
+Warm rain: {heal} HP back after each of the next {turns} enemy turns.
+
+[vesper_brace]
+She braces the umbrella. The next hit on you does nothing at all.
+
+[vesper_parasol spin]
+The umbrella spins. The next hit is thrown back for {damage} damage.
+
+[vesper_hailstorm]
+The sky throws hail: {damage} damage to every enemy.
+
+# Chapter 4.
+[vesper_cyclone]
+{damage} damage to every enemy, and the next attack is cut short.
+
+[vesper_daybreak]
+Morning through the canopy. Everyone in the party recovers {heal} HP.
+
+[vesper_monsoon]
+Rain in sheets. {heal} HP after each of the next {turns} enemy turns; SP +{sp}%.
+
+# Bramble's.
+[bramble_holler]
+A big yell. MERCY +{calm}% for all, and the next attack stops short.
+
+[bramble_hide]
+Into the leaves: safe this turn, and his next hit is a sneak attack.
+
+[bramble_chop]
+Both hands, whole weight: {damage} damage to one enemy.
+
+[bramble_biscuit]
+A slightly fluffy biscuit. Whoever he gives it to recovers {heal} HP.
+
+[bramble_slingshot]
+An acorn, very fast: {damage} damage to one enemy, and SP fills by {sp}%.
+
+[bramble_war cry]
+A woodcutters' song, yelled. SP +{sp}%, and MERCY +{calm}% for all.
+
+[bramble_timber!]
+TIMBER! A whole tree comes down: {damage} damage to every enemy.
+
+# Chapter 4.
+[bramble_fell]
+Wound up like he's felling an oak: {damage} damage to one enemy.
+
+[bramble_whistle]
+Two fingers, very loud. SP +{sp}%, and the next attack stops short.
+
+[bramble_marbles]
+A pocketful across the floor: {damage} damage to every enemy.

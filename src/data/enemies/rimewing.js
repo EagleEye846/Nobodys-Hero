@@ -13,7 +13,7 @@ export const RIMEWING = {
   area: 'vigil',
   sprite: { rows: RIMEWING_SPRITE, palette: RIMEWING_PALETTE },
   maxHp: 260,
-  damage: 9,
+  damage: 12,
 
   // A Chapter 2 enemy, and the toughest of the regulars.
   difficulty: { density: 1.15, speed: 1.1 },

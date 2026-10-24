@@ -1,0 +1,230 @@
+# THE WARDEN OF THE GATE: the colossal stone statue of the Hero before the
+# Hero's Gate, built by the old city to greet him. It has waited three
+# hundred years, and it has decided you are not him.
+# Numbers (HP, damage, its phases) live in src/data/enemies/warden.js.
+# It can't be spared: nothing here builds MERCY. It has to break.
+#
+# It speaks in capitals, slowly and formally, like something carved. It
+# isn't cruel. It's doing what it was made to do.
+#
+# A section with ": welcome", ": judgement" or ": ruin" after its name is
+# used in that phase of its fight instead of the plain one ([flavor: ruin]
+# instead of [flavor]). [phase: ...] sections are what's said as a phase
+# starts: plain ones in the battle panel, "vesper" ones by Ves in her box,
+# "foe" ones by it in speech bubbles.
+
+# Said in speech bubbles during its entrance, after its title card. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[boss_intro]
+I WAS RAISED TO WELCOME HIM.
+I WILL KNOW HIM WHEN I SEE HIM.
+
+YOU ARE NOT HIM.
+
+THEN I WILL DO
+THE OTHER THING I WAS RAISED FOR.
+
+NONE PASS BUT THE HERO.
+
+[intro]
+The WARDEN OF THE GATE lifts its foot from its plinth. The whole court shakes.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The WARDEN holds its stone sword high, the way it has for three hundred years.
+
+Moss falls from the WARDEN's shoulders every time it moves.
+
+The WARDEN's eyes are pale, and steady, and fixed on you.
+
+Carved flowers hang round the WARDEN's neck. Someone painted them pink, a long time ago.
+
+Ves leans on her crutch behind you, and doesn't look away from it.
+
+[flavor: judgement]
+The WARDEN looks you up and down, and up and down again.
+
+A crack runs across the WARDEN's chest, through the carved sun.
+
+The WARDEN's garland has come half away. The petals lie all round your feet.
+
+The WARDEN holds out its open hand, measuring. You come up to its knee.
+
+[flavor: ruin]
+The WARDEN's sword is broken off at the hilt. It's still holding it up.
+
+Stones fall from the Gate behind it, one at a time, like a slow clock.
+
+One of the WARDEN's eyes has gone dark.
+
+The WARDEN is coming apart, and it still won't move out of the way.
+
+Dust pours from the WARDEN's cracks every time it breathes. It doesn't breathe. It's stone.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+WELCOME.
+WELCOME, HERO.
+...THAT IS WHAT I WAS TO SAY.
+
+THE CITY CARVED ME
+TO GREET HIM.
+YOU WILL BE GREETED INSTEAD.
+
+THREE HUNDRED YEARS
+I HAVE HELD UP THIS SWORD.
+MY ARM DOES NOT TIRE.
+
+SPEAK YOUR NAME.
+...NO?
+
+[taunts: judgement]
+STAND STILL.
+I MUST MEASURE YOU.
+
+HE WAS TO BE TALL.
+YOU ARE NOT.
+
+HE WAS TO HAVE
+A FACE THE CITY KNEW.
+I DO NOT KNOW YOURS.
+
+STAND IN HIS PLACE.
+...YOU DO NOT FILL IT.
+
+[taunts: ruin]
+I WILL NOT
+STEP ASIDE.
+
+NONE PASS.
+NONE PASS.
+NONE...
+
+THE GATE WAS TO OPEN
+FOR HIM.
+IT WILL NOT OPEN FOR YOU.
+
+I WAS RAISED TO GREET HIM.
+I DO NOT KNOW
+HOW TO STOP.
+
+# What happens as each phase starts (see `beat` in warden.js).
+[phase: judgement]
+A crack runs up the WARDEN, from its plinth to its chest, with a sound like ice on a pond.
+
+The WARDEN stoops, slowly, and looks at you properly for the first time.
+
+[phase: judgement vesper]
+{determined}It's measuring you. Like a tailor.
+
+{grin}Bad news, statue. They don't come in hero size.
+
+[phase: judgement foe]
+I WILL MEASURE YOU
+AGAINST THE ONE I WAIT FOR.
+
+[phase: ruin]
+The WARDEN's sword snaps at the hilt, and the blade comes down across the court.
+
+Behind it, the Hero's Gate groans. Stones begin to fall from the arch.
+
+[phase: ruin vesper]
+{scared}The Gate! It's coming down with it!
+
+{resolute}...Then let it. We'll climb over the bits. Keep going!
+
+[phase: ruin foe]
+I AM BREAKING.
+I WILL STAND
+UNTIL I AM BROKEN.
+
+# Ves's turn prompt, in each phase. She's hurt: her turn is COVER and CALL OUT.
+[vesper_turn: welcome]
+Ves grips her crutch and squints up at the WARDEN. "It's so big." Her turn.
+
+Ves keeps right behind you, where its sword can't reach her. Her turn.
+
+[vesper_turn: judgement]
+Ves glares up at the WARDEN, like she's daring it to measure her too. Her turn.
+
+Ves shifts her bad leg. "Nobody's the right size for a statue." Her turn.
+
+[vesper_turn: ruin]
+Ves covers her head as dust comes down. "Nearly! It's nearly done!" Her turn.
+
+Ves holds on to your shoulder. She's shaking, but she's grinning. Her turn.
+
+# Any try at mercy (a kind TALK, a calming spell, Pacify, a sweet candle,
+# Ves's kind word): the first time, all of [mercy_mock]; after that, one of
+# [mercy_mock_again]. In its speech bubbles. It isn't mocking: it's sorry.
+[mercy_mock]
+I THANK YOU.
+IT IS KIND.
+
+BUT I WAS NOT MADE
+TO BE KIND TO.
+I WAS MADE TO WAIT.
+
+[mercy_mock_again]
+NO.
+I AM SORRY.
+
+I CANNOT STEP DOWN.
+THERE IS NO ONE
+TO TELL ME I MAY.
+
+KINDNESS IS FOR THE HERO.
+I KEEP IT FOR HIM.
+
+# One section per TALK option. The names after "talk:" must match the TALK
+# options in src/data/enemies/warden.js. None of them help.
+[talk: Check]
+WARDEN - HP 2400
+A statue of the Hero, carved to greet him. It can't be talked round. It has to break.
+
+[talk: Check: judgement]
+WARDEN - HP 2400
+Cracked from plinth to chest. It's measuring you, and it doesn't like the numbers.
+
+[talk: Check: ruin]
+WARDEN - HP 2400
+Crumbling, and the Gate with it. It will stand until it falls.
+
+[talk: Stand up straight]
+You stand up as tall as you can. The WARDEN's eyes don't move. You're still the same size.
+
+[talk: Stand up straight: judgement]
+You stand up as tall as you can, on tiptoe.
+"NO TALLER," says the WARDEN, gravely, as if it's sorry to say it.
+
+[talk: Stand up straight: ruin]
+You stand up straight in the falling dust. The WARDEN looks down at you for a long moment, and says nothing at all.
+
+[talk: Bow]
+You bow to the WARDEN.
+
+[talk: Point at Ves]
+You point back at Ves, on her crutch, who came all this way with you.
+"I SEE HER," says the WARDEN. "SHE IS NOT HIM EITHER."
+
+[talk: Point at Ves: judgement]
+You point at Ves. Ves points right back at you, fiercely.
+The WARDEN looks from one of you to the other, and doesn't understand.
+
+[talk: Point at Ves: ruin]
+You point at Ves. She lifts her chin at the WARDEN.
+"WE got here," she says. "Nobody else did."
+The WARDEN is quiet. A stone falls from its shoulder.
+
+# Said when you try to RUN.
+[no_escape]
+There's nowhere to run. The court is walled in, and the only way on is through the Gate, behind it.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The WARDEN stops. Its broken sword arm, held up for three hundred years, begins to shake.

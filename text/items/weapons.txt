@@ -14,7 +14,7 @@ Thin, quick and very sharp.
 A fast slash around your SHADOW. Parry a bullet just before it hits and it recharges instantly.
 
 [ash_spear]
-Made of Ash wood, this spear is known to dash through attacks like a Phantom. Some say to hear the screams of wielders before them wailing from this spear.
+Made of ash wood, this spear is known to dash through attacks like a phantom. Some say you can hear the screams of its past wielders wailing from it.
 Dash the way you're moving. Nothing can hurt you mid-dash.
 
 [hunting_bow]
@@ -92,3 +92,104 @@ A canopy of white owl feathers laid over each other like snow on a roof. It turn
 
 [frostglass_canopy]
 An umbrella canopy of paper-thin ice-glass panes, stitched on with goblin thread. It never melts. Its wind soothes, and it mends a little too.
+
+# Chapter 3, below the clouds.
+[woodcutters_hatchet]
+A woodcutter's hatchet, the handle dark with years of hands. No tricks. It just hits very, very hard.
+
+[pinewood_bow]
+A bow cut from a red pine and strung with gut. It smells of sap, and it shoots straight up like the trees grow.
+
+[punt_pole]
+A long ash pole for pushing a boat through the marsh. Push it through a fight instead: you go where it points, and fast.
+
+[reed_knife]
+A knife of sharpened reed, so light you forget you're holding it. So do the bullets, for a moment.
+
+[cistern_maul]
+A great iron mallet from the drowned city's waterworks, made for knocking stuck valves loose. It knocks other things loose too.
+
+[statue_buckler]
+A round stone shield, broken off the arm of one of the city's statues. It was made to greet a hero. It'll do to guard a nobody.
+
+[hollow_blade]
+A sword found in the ruined city, plain and perfectly balanced, with no name on it anywhere. It rings like a bell when it parries.
+
+[scarlet_silk_canopy]
+An umbrella canopy of red silk from the woodcutters' good chest, the colour of the Pinefall in autumn. It hits like a slammed door.
+
+[forum_bronze_ferrule]
+A heavy bronze tip off one of the forum's railings, cut down to fit an umbrella. For when Ves has hers back. It'll hit like a church bell.
+
+[vellum_canopy]
+An umbrella canopy of old vellum pages from the library, waxed and stitched together. The writing's still on them. Things go quiet under it.
+
+[fountain_brass_handle]
+A curved brass handle off a dry fountain, polished smooth by a hundred years of hands. It feels warm, somehow.
+
+[bog_oak_handle]
+A handle of black bog-oak, a thousand years in the marsh and hard as iron. The wind it calls smells of rain, and it mends.
+
+# The Hushwood.
+[fallen_star]
+A sword of pale star-metal, pulled out of the stone that brought it down. It's warm. It glows in the dark like it remembers being up there.
+
+[tidemark]
+A sword out of the old city, kept dry in its vault for longer than Hollin stood. A line runs along the blade like the mark water leaves on a wall, and it turns a blow aside the way a weir turns water.
+
+[bookmark]
+A thin old blade, left in a book to keep somebody's place, three hundred years ago. It was a very long book. It's light as a page and it slips through things like a page through fingers.
+
+[sculptors_mallet]
+The mallet the old city's sculptor carved all the Hero's statues with. Its head is worn into a shape that fits stone exactly. Swing it, and stone remembers it.
+
+[reedcutter]
+The old city's toll-keepers kept the causeway clear with this: a long, curved blade on a short haft, for cutting back the reeds. It still goes through them like a breath. It goes through other things, too, and it wants to go forward.
+
+[sled_runner_sabre]
+A herald's sled runner, ground down to an edge and given a grip of twine. Rummage swears it went downhill faster than anything alive. So do you, now.
+
+[clock_hand_pike]
+The minute hand off a great clock, on a broom handle. Hold it right and you're somewhere else for a second. It's always five to something.
+
+[kettle_shield]
+A huge iron kettle lid with a strap riveted on. It's taken worse than bullets. It's taken a woodcutters' breakfast.
+
+[grandads_hatchet]
+Bramble's grandad's hatchet, far too big for him. The handle's worn to the shape of a much bigger hand. He holds it where his grandad did anyway.
+
+[mas_felling_axe]
+Ma's spare felling axe, left at the trap. Twice as heavy as Bramble's. He says she'd want him to have it. She would also want him at camp.
+
+[twin_hatchets]
+Two little hatchets, one for each hand. Bramble insists he's always been ambidextrous. He found out today.
+
+[splitting_maul]
+A woodsplitter's maul, all head and no manners. Bramble can barely lift it, but when it comes down, everything flinches.
+
+[heartwood_axe]
+An axe with a head of black heartwood, harder than iron, from the oldest tree in the wood. It never needs sharpening. It never needs anything.
+
+# Teasel's forge, in Lasthome's square: the old city's iron and the bell's
+# last bronze, made into weapons for the first time in anyone's memory.
+[hinge_cleaver]
+A hinge off one of the old city's doors, ground to an edge and hafted. It isn't pretty. It's very heavy. No tricks, full damage.
+
+[bell_bronze_gauntlets]
+Cast from the last ingot of the chapel bell. They still ring when they're struck.
+Punch the nearest bullet back at the enemy for damage. It has to be close!
+
+[forge_lantern]
+An iron lantern with a coal from Teasel's forge in it. It never goes out, and it's too hot to hold for long.
+Leave a pool of light. Bullets inside it slow to a crawl.
+
+[stokers_staff]
+The iron bar Teasel stirs the fire with. It's warm all the way up.
+Hold SHIFT to stand still and channel. Grazing builds SP three times as fast.
+
+[bell_shard]
+A piece of the chapel bell that never went into the pots, on a leather thong. Teasel kept it. She won't say why.
+Ring it to freeze every bullet for a moment.
+
+[iron_shod_ferrule]
+A heavy iron tip for the end of Ves's umbrella, for when she has it back. Teasel made it without ever seeing the umbrella. "Bring it and I'll see."

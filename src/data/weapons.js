@@ -1,3 +1,5 @@
+import { starForging } from './fallenStar.js';
+
 // Weapons the hero can equip from the EQUIP menu (C in the overworld).
 // Descriptions live in text/items/weapons.txt, one section per id.
 //
@@ -11,7 +13,7 @@
 export const WEAPONS = {
   worn_sword: { name: 'Worn Sword', fightPower: 1, ability: null },
   old_shield: { name: 'Old Shield', fightPower: 0.7, ability: 'block' },
-  duelist_blade: { name: "Duelist's Blade", fightPower: 0.9, ability: 'parry' },
+  duelist_blade: { name: "Duellist's Blade", fightPower: 0.9, ability: 'parry' },
   ash_spear: { name: 'Ash Spear', fightPower: 0.85, ability: 'lunge' },
   hunting_bow: { name: 'Hunting Bow', fightPower: 0.6, ability: 'shoot' },
   oak_staff: { name: 'Oak Staff', fightPower: 0.5, ability: 'channel' },
@@ -42,4 +44,58 @@ export const WEAPONS = {
   // Hollis's, on the Last Shelf below the summit: the best on the mountain.
   skyiron_blade: { name: 'Skyiron Blade', fightPower: 1.2, ability: 'parry' },
   owlfeather_canopy: { name: 'Owl-Feather Canopy', wielder: 'vesper', fightPower: 0.95, allyStrike: 5, allyCalm: 4, allyHeal: 4 },
+  // Chapter 3, below the clouds: each beats the best of Mount Vigil in its
+  // role, and they climb region by region.
+  // The Pinefall: the woodcutters' tools, and what the forest gives.
+  woodcutters_hatchet: { name: "Woodcutter's Hatchet", fightPower: 1.45, ability: null },
+  pinewood_bow: { name: 'Pinewood Bow', fightPower: 1, ability: 'shoot' },
+  // The Lantern Marsh.
+  punt_pole: { name: 'Punt Pole', fightPower: 1.35, ability: 'lunge' },
+  reed_knife: { name: 'Reed Knife', fightPower: 1.15, ability: 'phase' },
+  // The Hollow Valley: out of the ruined city.
+  cistern_maul: { name: 'Cistern Maul', fightPower: 1.6, ability: 'quake' },
+  statue_buckler: { name: "Statue's Buckler", fightPower: 1.2, ability: 'block' },
+  hollow_blade: { name: 'Hollow Blade', fightPower: 1.65, ability: 'parry' },
+  // Teasel's forge in Lasthome: the old city's iron and the bell's last
+  // bronze, made into weapons for the first time in anyone's memory. Each
+  // beats the mountain's best in its role.
+  hinge_cleaver: { name: 'Hinge Cleaver', fightPower: 1.7, ability: null },
+  bell_bronze_gauntlets: { name: 'Bell-Bronze Gauntlets', fightPower: 1.2, ability: 'reflect' },
+  forge_lantern: { name: 'Forge Lantern', fightPower: 1, ability: 'light' },
+  stokers_staff: { name: "Stoker's Staff", fightPower: 0.9, ability: 'channel' },
+  bell_shard: { name: 'Bell Shard', fightPower: 0.9, ability: 'toll' },
+  // Ves's, for when her umbrella's back in her hands: kept for chapter 4.
+  scarlet_silk_canopy: { name: 'Scarlet-Silk Canopy', wielder: 'vesper', fightPower: 1.2, allyStrike: 8, allyCalm: 6, allyHeal: 5 },
+  bog_oak_handle: { name: 'Bog-Oak Handle', wielder: 'vesper', fightPower: 1.05, allyStrike: 3, allyHeal: 9, allySp: 7 },
+  // Ves's, in the Dead City's chests (for when she has her umbrella back):
+  // the hardest hitter, the calmest, and the kindest she's had.
+  forum_bronze_ferrule: { name: 'Forum-Bronze Ferrule', wielder: 'vesper', fightPower: 1.45, allyStrike: 5 },
+  vellum_canopy: { name: 'Vellum Canopy', wielder: 'vesper', fightPower: 1.1, allyCalm: 9, allyHeal: 7 },
+  fountain_brass_handle: { name: 'Fountain-Brass Handle', wielder: 'vesper', fightPower: 1.15, allyStrike: 4, allyHeal: 12, allySp: 9 },
+  // From Teasel's forge in Lasthome, made without ever seeing the umbrella.
+  iron_shod_ferrule: { name: 'Iron-Shod Ferrule', wielder: 'vesper', fightPower: 1.3, allyStrike: 6 },
+  // The Hushwood. The hero's: secrets, and Rummage's junk shop.
+  // The Fallen Star grows: each chapter's smith can reforge it (see
+  // src/data/fallenStar.js), so its name and FIGHT come from how far it's got.
+  fallen_star: {
+    get name() { return starForging().name; },
+    get fightPower() { return starForging().fightPower; },
+    ability: 'starfall',
+  },
+  sled_runner_sabre: { name: 'Sled-Runner Sabre', fightPower: 1.5, ability: 'lunge' },
+  clock_hand_pike: { name: 'Clock-Hand Pike', fightPower: 1.35, ability: 'phase' },
+  kettle_shield: { name: 'Kettle Shield', fightPower: 1.25, ability: 'block' },
+  // The Old Drains: the secret in the old city's drowned vault.
+  tidemark: { name: 'Tidemark', fightPower: 1.55, ability: 'parry' },
+  // The Lantern Marsh: the secret in the old city's tollhouse, off the dark spur.
+  reedcutter: { name: 'Reedcutter', fightPower: 1.6, ability: 'lunge' },
+  // The Dead City's two secrets: the Reading Room, and the Sculptor's Yard.
+  bookmark: { name: 'Bookmark', fightPower: 1.7, ability: 'phase' },
+  sculptors_mallet: { name: "Sculptor's Mallet", fightPower: 1.75, ability: 'quake' },
+  // Bramble's hatchets (fightPower scales his FIGHT; the rest his spells).
+  grandads_hatchet: { name: "Grandad's Hatchet", wielder: 'bramble', fightPower: 1, allyStrike: 3 },
+  mas_felling_axe: { name: "Ma's Felling Axe", wielder: 'bramble', fightPower: 1.25, allyStrike: 6, sneak: 0.25 },
+  twin_hatchets: { name: 'Twin Hatchets', wielder: 'bramble', fightPower: 1.15, allyStrike: 8, sneak: 0.5 },
+  splitting_maul: { name: 'Splitting Maul', wielder: 'bramble', fightPower: 1.35, allyStrike: 4, shorten: 0.1, allyCalm: -2 },
+  heartwood_axe: { name: 'Heartwood Axe', wielder: 'bramble', fightPower: 1.4, allyStrike: 7, allyCalm: 3 },
 };

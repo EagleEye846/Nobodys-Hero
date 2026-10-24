@@ -4,7 +4,7 @@
 # Sections starting with "talk:" become topics under TALK, in this order.
 
 [greeting]
-Welcome to Rest Stores. Fennick's the name. Prices firm, prices fair. You'll be the one from the stair. Everything's in stock. Everything's ALWAYS in stock. That's rather the problem.
+Welcome to Rest Stores. Fennick's the name. Prices firm, prices fair. You'll be the one from the stairs. Everything's in stock. Everything's ALWAYS in stock. That's rather the problem.
 
 [menu_prompt]
 Anything else? I've a ledger to balance.
@@ -65,7 +65,7 @@ Fennick. Stores. Third generation. My grandmother opened this shop the week the 
 Built to welcome the Hero. A hundred years ago. Every herald you've met is the grandchild of someone who came up here to blow a trumpet once and then had to find something to do with the rest of their life.
 
 [talk: The Hero?]
-Prophecy says a Hero climbs the stair and the sun touches the summit and so on. Didn't say when. We assumed "soon". We assumed wrong. The Head Herald still assumes.
+Prophecy says a Hero climbs the stairs and the sun touches the summit and so on. Didn't say when. We assumed "soon". We assumed wrong. The Head Herald still assumes.
 
 [talk: The Keeper]
 The old man with the lantern? Turned up at the fountain an hour before you did, and nobody saw him come in. Calm as you like, and asked for a cup of tea. Said he'd walked. Walked! Up the ICE! Didn't have a snowflake on him.

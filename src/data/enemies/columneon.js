@@ -16,7 +16,7 @@ export const COLUMNEON = {
     palette: COLUMNEON_PALETTE,
   },
   maxHp: 120,
-  damage: 6,
+  damage: 8,
 
   // An early Ruins enemy, so a little gentler than full strength.
   difficulty: { density: 0.85, speed: 0.85 },

@@ -1,0 +1,65 @@
+# BURRHOG
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/burrhog.js.
+
+[intro]
+A pinecone rolls out of the leaves, uncurls, and is a BURRHOG!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+BURRHOG is sniffing at your boots. Every scale on its back is standing up.
+
+BURRHOG twitches its nose. It smells like toasted nuts and bad decisions.
+
+A leaf lands on BURRHOG. It curls up into a ball in case the leaf attacks again.
+
+BURRHOG is trying very hard to look fierce. Its cheeks are pink.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Huff! Huff!
+
+Don't touch!
+Nobody touches!
+
+I'm a pinecone.
+You didn't see a face.
+
+Roll roll roll!
+
+Sorry! Sorry.
+That was on purpose.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/burrhog.js.
+[talk: Inspect]
+BURRHOG - HP 330
+A hedgehog whose back is a pinecone. Soft from the front. Only from the front.
+
+[talk: Pet it]
+You pet BURRHOG very carefully. Not carefully enough. Ow.
+But it's making a happy little huffing noise.
+
+[talk: Curl up too]
+You curl up in a ball. BURRHOG peeks out at you, then uncurls a little, interested.
+
+[talk: Roll it an apple]
+You roll an apple over. BURRHOG rolls onto it and wears it on its back like a hat. It's thrilled.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+BURRHOG curls up and rolls away downhill, bumping off every tree on the way.
+
+[pacified]
+BURRHOG uncurls, sneezes, and trundles off into the leaves, looking pleased with itself.
+
+# What Bramble says to it, on his turn (TALK).
+[bramble_talk]
+Bramble tells BURRHOG he once sat on one of its cousins by accident. They're even now.
+
+Bramble rolls a conker at BURRHOG. It curls up round it, delighted.
+
+Bramble shows BURRHOG how he curls up in a ball when Ma's cross. BURRHOG is impressed.

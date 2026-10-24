@@ -32,6 +32,65 @@ export const ITEMS = {
   glint_drop: { name: 'Glint Drop', heal: 35 },
   // The Roost Mother's: from her winter store, beaten or spared.
   roost_plum: { name: 'Roost Plum', heal: 120 },
+  // The Pinefall's (Chapter 3).
+  roast_chestnut: { name: 'Roast Chestnut', heal: 60 },
+  scarlet_syrup: { name: 'Scarlet Syrup', heal: 70 },
+  stolen_pie: { name: 'Stolen Pie', heal: 65 },
+  // The Hushwood's.
+  stump_honey: { name: 'Stump Honey', heal: 75 },
+  hollin_apple: { name: 'Hollin Apple', heal: 75 },
+  gloam_honeydew: { name: 'Gloam Honeydew', heal: 80 },
+  hob_scone: { name: 'Hob Scone', heal: 85 },
+  millers_bannock: { name: "Miller's Bannock", heal: 90 },
+  // The Old Drains'.
+  culvert_cress: { name: 'Culvert Cress', heal: 85 },
+  // The Old Drains'.
+  mug_barley_sugar: { name: 'Barley Sugar', heal: 85 },
+  // The Old Drains'.
+  fifty_year_humbug: { name: 'Fifty-Year Humbug', heal: 85 },
+  // The Lantern Marsh's.
+  wisp_cordial: { name: 'Wisp Cordial', heal: 90 },
+  bog_pudding: { name: 'Bog Pudding', heal: 95 },
+  bulrush_bread: { name: 'Bulrush Bread', heal: 100 },
+  toadstool_toast: { name: 'Toadstool Toast', heal: 70 },
+  // The Dead City's (the old city in the Hollow Valley, past Lasthome).
+  dust_meringue: { name: 'Dust Meringue', heal: 105 },
+  cairn_biscuit: { name: 'Cairn Biscuit', heal: 115 },
+  welcome_cake: { name: 'Welcome Cake', heal: 125 },
+  // The Tatterwight's, in the Torn Clearing: a leaf that never stops turning.
+  turning_leaf: { name: 'Turning Leaf', use: 'sp', amount: 70 },
+  // The Warden of the Gate's: the offering left in its open hand.
+  heros_offering: { name: "Hero's Offering", heal: 240 },
+  // Slowly's, in the Old Baths of the Dead City.
+  city_hardtack: { name: 'Old City Hardtack', heal: 190, price: 130 },
+  spring_water: { name: 'Spring Water', use: 'sp', amount: 100, price: 160 },
+  dandelion_salad: { name: 'Dandelion Salad', heal: 150, price: 100 },
+  // Lasthome's: Pell's market stall, and Mabb's kettle at the inn.
+  valley_apple: { name: 'Valley Apple', heal: 60, price: 30 },
+  eel_pie: { name: 'Eel Pie', heal: 170, price: 120 },
+  honey_oatcake: { name: 'Honey Oatcake', heal: 120, price: 80 },
+  willow_tonic: { name: 'Willow Tonic', use: 'sp', amount: 80, price: 140 },
+  lasthome_stew: { name: "Mabb's Stew", heal: 220, price: 150 },
+  // Baked in Nan Cinder's kiln, and sold at her stall.
+  soot_bun: { name: 'Soot Bun', heal: 55, price: 28 },
+  ember_potato: { name: 'Ember Potato', heal: 80, price: 44 },
+  charcoal_toffee: { name: 'Charcoal Toffee', heal: 105, price: 66 },
+  kiln_stew: { name: 'Kiln Stew', heal: 140, price: 92 },
+  // Hollin Stores: what Mags left on her shelves fifty years ago (only the
+  // things that keep).
+  hardtack: { name: 'Hollin Hardtack', heal: 60, price: 30 },
+  pickled_onions: { name: 'Pickled Onions', heal: 90, price: 55 },
+  crock_of_honey: { name: 'Crock of Honey', heal: 130, price: 85 },
+  mags_jam: { name: "Mags's Blackberry Jam", heal: 175, price: 130 },
+  // Old Ladle's, in his nook in the Old Drains: what a cistern hob keeps.
+  sweet_water: { name: 'Ladle of Sweet Water', heal: 65, price: 32 },
+  penny_bun: { name: 'Penny Bun', heal: 95, price: 58 },
+  hob_porridge: { name: 'Hob Porridge', heal: 135, price: 88 },
+  // Rummage's: things that fell off the mountain, and were caught.
+  lost_lunch: { name: "A Herald's Lost Lunch", heal: 160, price: 110 },
+  bottled_updraft: { name: 'Bottled Updraft', use: 'sp', amount: 60, price: 120 },
+  music_box: { name: 'Fallen Music Box', use: 'calm', amount: 30, price: 105 },
+  herald_helmet: { name: "Herald's Helmet", use: 'guard', price: 70 },
   // Found and given.
   candle_cake: { name: 'Candle Cake', heal: 70 },
   climbers_ration: { name: "Climber's Ration", heal: 50 },
@@ -65,6 +124,8 @@ export const ITEMS = {
   ash_candle: { name: 'Ash Candle', use: 'guard', light: { radius: 36, burn: 420 } },
   // The Usurper's: a candle lit from Ves's mother's lantern, once it blazed again.
   lamplight_candle: { name: 'Lamplight Candle', use: 'sp', amount: 50, light: { radius: 88, burn: 900 } },
+  // The Hush's: a tuft of its fur, left on your sleeve at the Hero's Gate.
+  hush_fur: { name: 'Hush Bristles', use: 'guard' },
 };
 
 // How many items you can carry.

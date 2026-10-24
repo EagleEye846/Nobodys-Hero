@@ -9,17 +9,19 @@ COLUMNEON leaps out at you!
 [flavor]
 COLUMNEON is grinning at its deceit.
 
-COLUMNEON looks around for a place to disguise.
+COLUMNEON looks around for a place to disguise itself.
 
 The air smells like dust and candle wax.
 
-# Said in a speech bubble before each attack, picked at random. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 You can't see me!
 
 I spy with my little eyes, something...
-Uhh.....
+...Uhh...
 It doesn't matter!
 
 Try and dodge THIS!
@@ -28,7 +30,7 @@ Try and dodge THIS!
 # TALK options in src/data/enemies/columneon.js.
 [talk: Inspect]
 COLUMNEON - HP 120
-They pride themselves on their mastery of disguise of columns and pillars. Best not to tell them.
+They pride themselves on their mastery of disguise as columns and pillars. Best not to tell them.
 
 [talk: Chat]
 You chat with COLUMNEON. It seems to relax a little.

@@ -16,7 +16,7 @@ export const TAPER_SPARED = {
   // What happens, in order (see STEP_TYPES in src/overworld/scenePlayer.js).
   steps: [
     { do: 'music', song: 'taper' },
-    { do: 'say', who: 'taper', text: '{surprised}You won\'t raise a hand to me. Not even now.\n\n{crying}Oh, sprout. You\'re kinder than this place deserves.' },
+    { do: 'say', who: 'taper', text: '{surprised}You put your hands down. Even now.\n\n{crying}Oh, sprout. You\'re kinder than this place deserves.' },
     { do: 'walk', who: 'taper', to: { x: 29, y: 5 } },
     { do: 'emote', who: 'taper', emote: '<3' },
     { do: 'say', who: 'taper', face: 'sad', text: 'I can\'t keep you in a pot forever. Things that grow need sky.\n\nI think I always knew that.' },

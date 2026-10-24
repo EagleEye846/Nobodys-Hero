@@ -15,8 +15,10 @@ Icicles hang off FROZEN STEP's chin like a beard.
 
 FROZEN STEP keeps glancing down the mountain, as if it's expecting someone.
 
-# Said in a speech bubble before each attack, picked at random. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 The TOP step!
 Do you know how
@@ -54,4 +56,4 @@ Then it creaks, happily.
 FROZEN STEP cracks clean in half and slides away down the mountain, toward its brother.
 
 [pacified]
-FROZEN STEP settles back into the snow at the top of the stair, where it belongs. It looks warmer, somehow.
+FROZEN STEP settles back into the snow at the top of the stairs, where it belongs. It looks warmer, somehow.

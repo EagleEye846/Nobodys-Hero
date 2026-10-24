@@ -18,11 +18,12 @@ const TRAIL_STEP = 9;
 const BURST_SECONDS = 0.4;
 const LABEL_SECONDS = 1.2;
 
-// A PERFECT slash does this much more; the best a slash can ever do is
-// PERFECT_SLASH_DAMAGE (spells are measured against it, see bestStrike in
-// battleScene.js).
+// The most a slash short of PERFECT does (attack spells are measured against
+// it, see spellStrike in battleScene.js). A PERFECT slash does PERFECT_BONUS
+// more, up to PERFECT_SLASH_DAMAGE.
+export const SLASH_DAMAGE = 20;
 const PERFECT_BONUS = 1.3;
-export const PERFECT_SLASH_DAMAGE = Math.round(20 * PERFECT_BONUS);
+export const PERFECT_SLASH_DAMAGE = Math.round(SLASH_DAMAGE * PERFECT_BONUS);
 
 // The FIGHT minigame: slash marks slide in from the right, one after another,
 // toward a notch at the left of the bar. Press confirm as each one crosses the
@@ -82,7 +83,7 @@ export class StrikeBar {
     slash.state = 'hit';
     slash.x = NOTCH_X;
     sfx('slash');
-    let damage = Math.round(5 + closeness * closeness * 15);
+    let damage = Math.round(5 + closeness * closeness * (SLASH_DAMAGE - 5));
     let text = 'OK';
     let color = COLORS.text;
     if (closeness > 0.85) {

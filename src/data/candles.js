@@ -8,11 +8,12 @@ import { ITEMS, giveItem, roomForItem } from './items.js';
 // `light` in dark places). Descriptions live in text/items/materials.txt.
 
 export const MATERIALS = {
-  wax: { name: 'Wax' },
+  // `plural` is for "Got 2 ..." after a battle, where adding an s is wrong.
+  wax: { name: 'Wax', plural: 'lumps of Wax' },
   thread: { name: 'Thread' },
   moonbell: { name: 'Moonbell Petal' },
-  glow_dust: { name: 'Glow Dust' },
-  shadow_ash: { name: 'Shadow Ash' },
+  glow_dust: { name: 'Glow Dust', plural: 'pinches of Glow Dust' },
+  shadow_ash: { name: 'Shadow Ash', plural: 'handfuls of Shadow Ash' },
 };
 
 // What each candle takes to make, in the order the CANDLES screen lists them.

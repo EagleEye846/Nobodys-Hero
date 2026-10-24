@@ -1,3 +1,4 @@
+import { SettingsMenu } from '../ui/settingsMenu.js';
 import { UI_WIDTH, UI_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../config.js';
 import { PANELS, PANEL_WIDTH, PANEL_HEIGHT } from '../data/art/cutscenes.js';
 import { inUiSpace } from '../engine/screen.js';
@@ -66,7 +67,9 @@ export class TitleScene {
     // With a save there's a card for it, and a choice: carry on, or start over.
     this.save = peekSave();
     // CHAPTERS: start any chapter you've reached again (src/state/chapters.js).
-    this.options = playChapter ? ['CONTINUE', 'NEW GAME', 'CHAPTERS'] : ['CONTINUE', 'NEW GAME'];
+    // SETTINGS: the music and sound effects volume (src/ui/settingsMenu.js).
+    this.options = playChapter ? ['CONTINUE', 'NEW GAME', 'CHAPTERS', 'SETTINGS'] : ['CONTINUE', 'NEW GAME', 'SETTINGS'];
+    this.settings = new SettingsMenu();
     this.cursor = 0;
     this.confirming = false;
   }
@@ -85,6 +88,10 @@ export class TitleScene {
     if (this.time < PROMPT_DELAY) return;
     if (!this.save) {
       if (input.wasPressed('confirm')) this.begin(this.startGame);
+      return;
+    }
+    if (this.settings.isOpen) {
+      this.settings.update(input);
       return;
     }
     if (this.confirming) {
@@ -107,6 +114,9 @@ export class TitleScene {
         sfx('select');
         const title = () => new TitleScene(this.startGame, this.newGame, this.playChapter);
         this.game.changeScene(new ChapterSelectScene(title, this.playChapter));
+      } else if (this.options[this.cursor] === 'SETTINGS') {
+        sfx('select');
+        this.settings.open();
       } else {
         sfx('select');
         this.confirming = true;
@@ -141,13 +151,14 @@ export class TitleScene {
       drawText(ctx, 'Z: yes, start over     X: no', UI_WIDTH / 2, optionsY + 30, { size: 24, align: 'center', color: '#c9c2e0', outline: '#07040c' });
       return;
     }
-    // Where each option starts, from the middle: two side by side, or three across.
-    const spots = this.options.length > 2 ? [-250, -70, 110] : [-150, 40];
+    // Where each option starts, from the middle: three across, or four.
+    const spots = this.options.length > 3 ? [-280, -134, 12, 158] : [-250, -70, 110];
+    const size = this.options.length > 3 ? 28 : 32;
     this.options.forEach((label, i) => {
       const x = UI_WIDTH / 2 + spots[i];
       const selected = i === this.cursor;
-      if (selected) ctx.drawImage(soulSprite(), x - 26, optionsY + 8);
-      drawText(ctx, label, x, optionsY, { size: 32, color: selected ? '#ffe14d' : '#ffffff', outline: '#07040c' });
+      if (selected) ctx.drawImage(soulSprite(), x - 26, optionsY + 6);
+      drawText(ctx, label, x, optionsY, { size, color: selected ? '#ffe14d' : '#ffffff', outline: '#07040c' });
     });
   }
 
@@ -176,6 +187,8 @@ export class TitleScene {
         drawText(ctx, this.prompt, cx, UI_HEIGHT - 46, { size: 30, align: 'center', outline: '#07040c' });
       }
     });
+    // SETTINGS, over everything, while it's open.
+    this.settings.draw(ctx);
   }
 
   // The Hero's stair from the intro, glowing faintly under the title, with

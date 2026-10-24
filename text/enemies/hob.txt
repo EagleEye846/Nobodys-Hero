@@ -1,0 +1,75 @@
+# HOB
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/hob.js.
+
+[intro]
+A little someone with a big broom blocks the doorway. It's a HOB! It looks at your boots.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+HOB is sweeping up while it fights. It has swept the same step four times.
+
+HOB straightens a picture on a wall that isn't there.
+
+HOB looks at the mud on your boots. Then at you. Then at the mud.
+
+HOB's apron is spotless. It is the cleanest thing for miles.
+
+Smells like soap, warm bread and fifty years of dust.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Boots!
+BOOTS!
+
+I've only just
+swept that.
+
+Supper's at six.
+It's always at six.
+
+Kettle's on!
+...For nobody.
+
+Every floor.
+Every day.
+Fifty years.
+
+They'll want it nice
+when they come home.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/hob.js.
+[talk: Inspect]
+HOB - HP 420
+Hollin's house-hob. Fifty years of keeping house with nobody home.
+
+[talk: Wipe your feet]
+You wipe your feet very carefully on the step. HOB gasps. Nobody has wiped their feet in fifty years.
+
+[talk: Praise the floor]
+You tell HOB the floor is lovely. It is. HOB goes pink to the tips of its ears.
+
+[talk: Ask about the family]
+You ask who lives here. "The Ashbys. Six of them. They'll be back." HOB sweeps on, a bit slower.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+HOB sits down hard on the clean floor. It sweeps a little circle round itself, then lies down in it.
+
+[pacified]
+HOB puts its broom over its shoulder. "Mind the step on your way out. And come back for supper."
+
+# Bramble's own TALK lines for it ({foe} is its name). His grandad was born
+# in Hollin, and used to tell him about the hob that kept the houses.
+[bramble_talk]
+Bramble wipes his feet so hard he nearly falls over. {foe} is delighted.
+
+Bramble says his grandad was an Oakley, from the end house. {foe} remembers. "Muddiest boy in Hollin."
+
+Bramble asks {foe} if it's lonely. {foe} says it's much too busy. It sweeps the same spot again.
+
+Bramble says the families are at the woodcutters' camp now. {foe} stops sweeping. "...All of them?"

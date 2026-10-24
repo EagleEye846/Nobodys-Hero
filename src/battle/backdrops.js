@@ -756,7 +756,677 @@ function drawSummit(ctx, time, height) {
   }
 }
 
+// --- The Pinefall: the scarlet wood below the clouds (Chapter 3). ---
+// A dim wine-dark sky between the trunks, two rows of scarlet trees (the far
+// ones dark and hazy, the near ones lit), light coming down in slanting
+// bars, leaves drifting across, and a floor of dark leaf litter kept quiet
+// so the trees carry the colour.
+const PINEFALL_SKY = ['#1a0a12', '#210c15', '#290f18', '#31121b', '#3a161e', '#431a21', '#4c1e23', '#552325'];
+const FAR_PINES = Array.from({ length: 11 }, (_, i) => ({ x: i * 32 + hash(i + 3000) * 18, w: 22 + hash(i + 3010) * 10, h: 58 + hash(i + 3020) * 26 }));
+const NEAR_PINES = Array.from({ length: 6 }, (_, i) => ({ x: i * 60 + hash(i + 3030) * 30 - 10, w: 34 + hash(i + 3040) * 12, h: 86 + hash(i + 3050) * 30 }));
+const PINEFALL_LEAVES = Array.from({ length: 26 }, (_, i) => ({
+  x: hash(i + 3100) * W,
+  y: hash(i + 3150) * 164,
+  speed: 8 + hash(i + 3200) * 10,
+  drift: 6 + hash(i + 3250) * 12,
+  sway: hash(i + 3300) * Math.PI * 2,
+  bright: hash(i + 3350) < 0.4,
+}));
+// A scarlet tree: a trunk, and a crown of three stacked, ragged tiers.
+function drawScarletTree(ctx, x, baseY, w, h, trunk, crown, lit) {
+  ctx.fillStyle = trunk;
+  ctx.fillRect(Math.round(x + w / 2 - 2), Math.round(baseY - h * 0.45), 4, Math.round(h * 0.45));
+  for (let tier = 0; tier < 3; tier++) {
+    const tw = w * (1 - tier * 0.22);
+    const ty = baseY - h * 0.38 - tier * h * 0.2;
+    ctx.fillStyle = crown;
+    ctx.fillRect(Math.round(x + (w - tw) / 2), Math.round(ty - h * 0.24), Math.round(tw), Math.round(h * 0.26));
+    if (lit) {
+      ctx.fillStyle = lit;
+      ctx.fillRect(Math.round(x + (w - tw) / 2 + 2), Math.round(ty - h * 0.24), Math.round(tw * 0.4), 2);
+    }
+  }
+}
+function drawPinefall(ctx, time, height) {
+  const band = Math.ceil(height / PINEFALL_SKY.length);
+  PINEFALL_SKY.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * band, W, band);
+  });
+  const baseY = height - FLOOR_HEIGHT;
+  for (const tree of FAR_PINES) drawScarletTree(ctx, tree.x, baseY - 6, tree.w, tree.h, '#24100f', '#5a1a1c', null);
+  // Light in slanting bars, breathing slowly.
+  ctx.save();
+  for (let i = 0; i < 4; i++) {
+    ctx.globalAlpha = 0.05 + 0.03 * Math.sin(time * 0.5 + i * 1.7);
+    ctx.fillStyle = '#ffc890';
+    const x = 30 + i * 80;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x + 14, 0);
+    ctx.lineTo(x + 44, baseY);
+    ctx.lineTo(x + 26, baseY);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+  for (const tree of NEAR_PINES) drawScarletTree(ctx, tree.x, baseY + 2, tree.w, tree.h, '#3a1c12', '#a8281e', '#d8402a');
+  // Leaf litter underfoot: dark, low-contrast.
+  ctx.fillStyle = '#2c1418';
+  ctx.fillRect(0, baseY, W, FLOOR_HEIGHT);
+  ctx.fillStyle = '#3c1a1c';
+  ctx.fillRect(0, baseY, W, 1);
+  ctx.fillStyle = '#4a1e1e';
+  for (let x = 0; x < W; x += 6) ctx.fillRect(x + Math.round(hash(x + 3400) * 4), baseY + 3 + Math.round(hash(x + 3410) * 12), 2, 1);
+  // Leaves coming down.
+  for (const leaf of PINEFALL_LEAVES) {
+    const y = (leaf.y + time * leaf.speed) % (height + 10) - 5;
+    const x = (leaf.x + Math.sin(time * 0.9 + leaf.sway) * leaf.drift + W) % W;
+    ctx.fillStyle = leaf.bright ? '#e0502e' : '#9a2a1e';
+    ctx.fillRect(Math.round(x), Math.round(y), 2, 1);
+  }
+}
+
+// --- The Old Drains: under Hollin's well (Chapter 3). ---
+// Looking down a brick culvert into the dark: its arches go back and back,
+// each a little dimmer, until at the far end the brick gives way to the old
+// city's great carved stone. A grating somewhere above lets down one pale
+// shaft of daylight. Black water runs along the channel underfoot, slowly,
+// and drips come down from the vault into it. Kept dark and low so the
+// bullets stand out.
+const DRAINS_SKY = ['#08070b', '#0b090e', '#0e0b11', '#110d14', '#130f16', '#151118', '#17131a', '#19141b'];
+// Arches from the far end of the culvert to the near: how far each is (0 far,
+// 1 near).
+const DRAINS_ARCHES = [0.12, 0.26, 0.42, 0.6, 0.8, 1];
+const DRAINS_DRIPS = Array.from({ length: 7 }, (_, i) => ({
+  x: 20 + hash(i + 3500) * (W - 40),
+  every: 2.4 + hash(i + 3510) * 2.6,
+  at: hash(i + 3520) * 5,
+}));
+const DRAINS_RIPPLES = Array.from({ length: 22 }, (_, i) => ({
+  x: hash(i + 3600) * W,
+  y: hash(i + 3610),
+  w: 4 + Math.round(hash(i + 3620) * 8),
+  speed: 5 + hash(i + 3630) * 6,
+}));
+const DRAINS_MOTES = Array.from({ length: 16 }, (_, i) => ({
+  x: hash(i + 3700), y: hash(i + 3710), sway: hash(i + 3720) * Math.PI * 2,
+}));
+
+// One brick arch of the culvert, centred, `k` of the way from the far end to
+// the near: a ring of brick round the dark of the next arch along.
+function drawDrainArch(ctx, k, floorY) {
+  const cx = W / 2;
+  const half = 26 + k * (W / 2 + 30 - 26);
+  const spring = floorY - (14 + k * 40);
+  const ring = 2 + Math.round(k * 7);
+  const shade = Math.round(18 + k * 22);
+  const brick = `rgb(${shade + 10}, ${shade}, ${shade - 4})`;
+  const mortar = `rgb(${shade - 6}, ${shade - 10}, ${shade - 12})`;
+  ctx.fillStyle = brick;
+  ctx.beginPath();
+  ctx.moveTo(cx - half - ring, floorY);
+  ctx.lineTo(cx - half - ring, spring);
+  ctx.arc(cx, spring, half + ring, Math.PI, 0);
+  ctx.lineTo(cx + half + ring, floorY);
+  ctx.lineTo(cx + half, floorY);
+  ctx.lineTo(cx + half, spring);
+  ctx.arc(cx, spring, half, 0, Math.PI, true);
+  ctx.lineTo(cx - half, floorY);
+  ctx.closePath();
+  ctx.fill();
+  // Mortar lines between the bricks of the ring.
+  if (ring >= 4) {
+    ctx.fillStyle = mortar;
+    const n = Math.round(10 + k * 14);
+    for (let i = 1; i < n; i++) {
+      const a = Math.PI + (i / n) * Math.PI;
+      const r0 = half + 1;
+      ctx.fillRect(Math.round(cx + Math.cos(a) * r0), Math.round(spring + Math.sin(a) * r0), 1, Math.max(1, ring - 2));
+    }
+    for (let y = spring + 4; y < floorY; y += 5) {
+      ctx.fillRect(Math.round(cx - half - ring), y, ring, 1);
+      ctx.fillRect(Math.round(cx + half), y, ring, 1);
+    }
+  }
+}
+
+function drawDrains(ctx, time, height) {
+  const band = Math.ceil(height / DRAINS_SKY.length);
+  DRAINS_SKY.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * band, W, band);
+  });
+  const floorY = height - FLOOR_HEIGHT;
+  const cx = W / 2;
+
+  // At the far end: the old city's conduit, big pale-grey blocks with a band
+  // of carving across them, faint in the dark.
+  const farTop = floorY - 64;
+  ctx.fillStyle = '#1e1d24';
+  ctx.fillRect(cx - 30, farTop, 60, floorY - farTop);
+  ctx.fillStyle = '#25242c';
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col < 3; col++) {
+      const bx = cx - 30 + col * 20 + (row % 2 ? 10 : 0);
+      ctx.fillRect(bx + 1, farTop + row * 12 + 1, 18, 10);
+    }
+  }
+  ctx.fillStyle = '#2e2c36';
+  for (let x = cx - 28; x < cx + 28; x += 4) ctx.fillRect(x, farTop + 26 + ((x / 4) % 2), 2, 2);
+  // The conduit's own great arch, black, with a glint of water at its foot.
+  ctx.fillStyle = '#060508';
+  ctx.beginPath();
+  ctx.moveTo(cx - 14, floorY);
+  ctx.lineTo(cx - 14, floorY - 18);
+  ctx.arc(cx, floorY - 18, 14, Math.PI, 0);
+  ctx.lineTo(cx + 14, floorY);
+  ctx.closePath();
+  ctx.fill();
+
+  // The culvert's arches, far to near.
+  for (const k of DRAINS_ARCHES) drawDrainArch(ctx, k, floorY);
+
+  // Daylight through a grating, far above: a pale slanting shaft, breathing,
+  // with dust turning in it.
+  ctx.save();
+  ctx.globalAlpha = 0.07 + 0.025 * Math.sin(time * 0.6);
+  ctx.fillStyle = '#c8d0c0';
+  ctx.beginPath();
+  ctx.moveTo(78, 0);
+  ctx.lineTo(100, 0);
+  ctx.lineTo(132, floorY);
+  ctx.lineTo(96, floorY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+  // The grating's bars, where it comes in at the top.
+  ctx.fillStyle = '#2a2a2c';
+  ctx.fillRect(74, 0, 30, 3);
+  ctx.fillStyle = '#5e6260';
+  for (let x = 76; x < 104; x += 5) ctx.fillRect(x, 0, 2, 3);
+  for (const mote of DRAINS_MOTES) {
+    const k = (mote.y + time * 0.03) % 1;
+    const x = 82 + k * 32 + mote.x * 18 + Math.sin(time * 0.8 + mote.sway) * 2;
+    ctx.fillStyle = `rgba(220, 226, 210, ${(0.25 + 0.2 * Math.sin(time * 2 + mote.sway)).toFixed(3)})`;
+    ctx.fillRect(Math.round(x), Math.round(k * floorY), 1, 1);
+  }
+
+  // Underfoot: a brick walkway, and the channel of black water running along
+  // it, slowly, left to right.
+  ctx.fillStyle = '#1c1618';
+  ctx.fillRect(0, floorY, W, FLOOR_HEIGHT);
+  ctx.fillStyle = '#2a2224';
+  ctx.fillRect(0, floorY, W, 1);
+  ctx.fillStyle = '#141012';
+  for (let x = 0; x < W; x += 12) ctx.fillRect(x + (hash(x + 3800) < 0.5 ? 0 : 6), floorY + 3, 1, 4);
+  ctx.fillRect(0, floorY + 7, W, 1);
+  const waterY = floorY + 9;
+  ctx.fillStyle = '#07090d';
+  ctx.fillRect(0, waterY, W, FLOOR_HEIGHT - 9);
+  ctx.fillStyle = '#0e1218';
+  ctx.fillRect(0, waterY, W, 1);
+  for (const r of DRAINS_RIPPLES) {
+    const x = ((r.x + time * r.speed) % (W + 20)) - 10;
+    const y = waterY + 2 + Math.round(r.y * (FLOOR_HEIGHT - 12));
+    ctx.fillStyle = 'rgba(70, 84, 96, 0.35)';
+    ctx.fillRect(Math.round(x), y, r.w, 1);
+  }
+  // The shaft's light on the water.
+  ctx.fillStyle = `rgba(200, 210, 196, ${(0.06 + 0.03 * Math.sin(time * 1.4)).toFixed(3)})`;
+  ctx.fillRect(98, waterY + 1, 32, FLOOR_HEIGHT - 10);
+
+  // Drips from the vault: a drop forms, falls, and rings out on the water.
+  for (const drip of DRAINS_DRIPS) {
+    const k = ((time + drip.at) % drip.every) / drip.every;
+    const x = Math.round(drip.x);
+    const fallTo = waterY + 3;
+    if (k < 0.12) {
+      ctx.fillStyle = 'rgba(150, 160, 170, 0.7)';
+      ctx.fillRect(x, 2, 1, 1 + Math.round(k * 12));
+    } else if (k < 0.3) {
+      const f = (k - 0.12) / 0.18;
+      ctx.fillStyle = 'rgba(160, 170, 180, 0.8)';
+      ctx.fillRect(x, Math.round(2 + (fallTo - 2) * f * f), 1, 2);
+    } else if (k < 0.5) {
+      const f = (k - 0.3) / 0.2;
+      const r = 1 + Math.round(f * 5);
+      ctx.fillStyle = `rgba(110, 124, 136, ${(0.6 * (1 - f)).toFixed(3)})`;
+      ctx.fillRect(x - r, fallTo, r * 2 + 1, 1);
+    }
+  }
+}
+
+// --- The Lantern Marsh: below where the old city's conduit spills out
+// under the trees (Chapter 3). ---
+// A flat grey fen under a flat grey sky. Far off, the dark edge of the wood,
+// and the broken end of the old stone conduit with its water still falling.
+// A line of lanterns on poles goes away across the bog (the one safe path),
+// each with its light on the black water under it; and out in the fog,
+// off the path, a few more lights drift about that look just like them.
+// Bands of mist roll slowly across, a low one hangs over the water, and
+// reeds stand up close on either side, swaying.
+const MARSH_SKY = ['#2a2e32', '#2e3236', '#32363a', '#363a3d', '#393d40', '#3b3f41', '#3a3e40', '#363a3c'];
+const MARSH_TREES = Array.from({ length: 16 }, (_, i) => ({ x: i * 22 + hash(i + 4000) * 14 - 8, w: 12 + hash(i + 4010) * 10, h: 14 + hash(i + 4020) * 16 }));
+// The lanterns on the path, far to near: x across the screen, and how far
+// off (0 far, 1 near).
+const MARSH_LANTERNS = [
+  { x: 86, k: 0.04 }, { x: 104, k: 0.14 }, { x: 210, k: 0.3 }, { x: 228, k: 0.44 }, { x: 306, k: 0.7 },
+];
+// The lights that aren't lanterns, out in the fog.
+const MARSH_WISPS = Array.from({ length: 4 }, (_, i) => ({
+  x: 24 + hash(i + 4100) * 120, y: 0.25 + hash(i + 4110) * 0.5, sway: hash(i + 4120) * Math.PI * 2, every: 7 + hash(i + 4130) * 5,
+}));
+const MARSH_MIST = Array.from({ length: 5 }, (_, i) => ({
+  y: 0.3 + i * 0.13, speed: 3 + hash(i + 4200) * 4, w: 90 + hash(i + 4210) * 80, at: hash(i + 4220) * W,
+}));
+const MARSH_REEDS = [
+  ...Array.from({ length: 9 }, (_, i) => ({ x: 2 + i * 4 + hash(i + 4300) * 3, h: 26 + hash(i + 4310) * 26, sway: hash(i + 4320) * 6, cattail: hash(i + 4330) < 0.45 })),
+  ...Array.from({ length: 9 }, (_, i) => ({ x: W - 38 + i * 4 + hash(i + 4340) * 3, h: 24 + hash(i + 4350) * 28, sway: hash(i + 4360) * 6, cattail: hash(i + 4370) < 0.45 })),
+];
+const MARSH_RIPPLES = Array.from({ length: 10 }, (_, i) => ({
+  x: hash(i + 4400) * W, y: hash(i + 4410), every: 3 + hash(i + 4420) * 3, at: hash(i + 4430) * 6,
+}));
+
+// A soft round glow: rings of light, fading out.
+function drawGlow(ctx, x, y, radius, color, strength) {
+  for (let r = radius; r >= 1; r -= Math.max(1, radius / 4)) {
+    ctx.fillStyle = color;
+    ctx.globalAlpha = strength * (1 - r / (radius + 1)) * 0.6;
+    ctx.fillRect(Math.round(x - r), Math.round(y - r * 0.8), Math.round(r * 2), Math.round(r * 1.6));
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawMarsh(ctx, time, height) {
+  const band = Math.ceil(height / MARSH_SKY.length);
+  MARSH_SKY.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * band, W, band);
+  });
+  const floorY = height - FLOOR_HEIGHT;
+  const horizon = floorY - 54;
+
+  // The edge of the wood, far off and dim, and the old conduit coming out
+  // of it on broken stone arches, with its water still pouring off the end.
+  ctx.fillStyle = '#25292c';
+  for (const tree of MARSH_TREES) {
+    ctx.fillRect(Math.round(tree.x), Math.round(horizon - tree.h), Math.round(tree.w), Math.round(tree.h) + 1);
+    ctx.fillRect(Math.round(tree.x + tree.w / 2 - 1), Math.round(horizon - tree.h - 4), 3, 4);
+  }
+  ctx.fillStyle = '#2c3033';
+  ctx.fillRect(0, horizon - 22, 74, 6);
+  for (const x of [6, 30, 54]) {
+    ctx.fillRect(x, horizon - 16, 5, 16);
+    ctx.fillStyle = '#25292c';
+    ctx.fillRect(x + 5, horizon - 14, 19, 14);
+    ctx.fillStyle = '#2c3033';
+  }
+  // Its broken end: a jagged lip, and the water falling from it.
+  ctx.fillRect(74, horizon - 20, 3, 3);
+  ctx.fillStyle = '#4a5258';
+  for (let y = horizon - 16; y < horizon; y += 1) {
+    const wobble = Math.round(Math.sin(time * 6 + y * 0.7));
+    ctx.fillRect(73 + wobble, y, 2, 1);
+  }
+  ctx.fillStyle = 'rgba(160, 172, 178, 0.35)';
+  ctx.fillRect(70, horizon - 1, 9, 1);
+
+  // The flat fen running out to the horizon, grey-green, with darker pools.
+  ctx.fillStyle = '#30362f';
+  ctx.fillRect(0, horizon, W, floorY - horizon);
+  ctx.fillStyle = '#2a302a';
+  for (let row = 0; row < 6; row++) {
+    const y = horizon + 3 + row * row * 1.4;
+    for (let x = (row * 37) % 50; x < W; x += 50 + row * 6) ctx.fillRect(x, Math.round(y), 14 + row * 5, 1 + Math.floor(row / 2));
+  }
+  ctx.fillStyle = '#181c1e';
+  for (let row = 1; row < 6; row++) {
+    const y = horizon + 2 + row * row * 1.4;
+    for (let x = (row * 61) % 70; x < W; x += 70 + row * 10) ctx.fillRect(x + 8, Math.round(y), 8 + row * 4, 1);
+  }
+
+  // Lights in the fog that aren't lanterns: they drift and bob, fade out,
+  // and come back somewhere else.
+  for (const wisp of MARSH_WISPS) {
+    const phase = (time / wisp.every + wisp.sway) % 1;
+    const fade = Math.min(1, phase * 5, (1 - phase) * 5);
+    const x = wisp.x + Math.sin(time * 0.4 + wisp.sway) * 14;
+    const y = horizon + 4 + wisp.y * 30 + Math.sin(time * 1.3 + wisp.sway) * 2;
+    drawGlow(ctx, x, y, 5, '#c8e8a0', 0.5 * fade);
+    ctx.globalAlpha = fade;
+    ctx.fillStyle = '#e8f4c0';
+    ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+    ctx.globalAlpha = 1;
+  }
+
+  // The lanterns on their poles, going off across the bog: the far ones
+  // small, the near ones tall. Each burns steady, with its light on the water.
+  for (const lantern of MARSH_LANTERNS) {
+    const k = lantern.k;
+    const base = horizon + 4 + k * k * 40;
+    const pole = 10 + k * 34;
+    const top = base - pole;
+    ctx.fillStyle = '#1e1a16';
+    ctx.fillRect(lantern.x, Math.round(top), k > 0.4 ? 2 : 1, Math.round(pole));
+    ctx.fillRect(lantern.x, Math.round(top), Math.round(3 + k * 4), 1);
+    const lx = lantern.x + Math.round(2 + k * 4);
+    const ly = top + 2 + k * 3;
+    drawGlow(ctx, lx, ly, 3 + k * 6, '#ffd890', 0.7);
+    ctx.fillStyle = '#2a2420';
+    ctx.fillRect(Math.round(lx - 1 - k), Math.round(ly - 2 - k * 2), Math.round(2 + k * 2) + 1, 1);
+    ctx.fillStyle = '#ffe8a8';
+    ctx.fillRect(Math.round(lx - k), Math.round(ly - 1 - k), Math.max(1, Math.round(1 + k * 2)), Math.max(1, Math.round(1 + k * 3)));
+    // Its light, wavering on the water below.
+    ctx.fillStyle = 'rgba(255, 216, 144, 0.18)';
+    for (let i = 0; i < 3 + k * 4; i++) {
+      const shake = Math.round(Math.sin(time * 2 + i + lantern.x) * (1 + k));
+      ctx.fillRect(Math.round(lx - 1 + shake), Math.round(base + 2 + i * 2), Math.round(2 + k * 3), 1);
+    }
+  }
+
+  // Mist, rolling slowly across in long soft bands.
+  for (const mist of MARSH_MIST) {
+    const y = Math.round(horizon - 30 + mist.y * 80);
+    const x = ((mist.at + time * mist.speed) % (W + mist.w)) - mist.w;
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = `rgba(170, 180, 182, ${(0.05 - i * 0.012).toFixed(3)})`;
+      ctx.fillRect(Math.round(x - i * 12), y - i * 2, Math.round(mist.w + i * 24), 5 + i * 4);
+    }
+  }
+
+  // Underfoot: black still water, with the sky's grey lying flat on it and a
+  // ring spreading now and then where something moved underneath.
+  ctx.fillStyle = '#121618';
+  ctx.fillRect(0, floorY, W, FLOOR_HEIGHT);
+  ctx.fillStyle = '#3a4042';
+  ctx.fillRect(0, floorY, W, 1);
+  ctx.fillStyle = '#1c2224';
+  for (let y = floorY + 3; y < height; y += 4) ctx.fillRect(0, y, W, 1);
+  for (const ripple of MARSH_RIPPLES) {
+    const k = ((time + ripple.at) % ripple.every) / ripple.every;
+    if (k > 0.5) continue;
+    const r = 1 + Math.round(k * 16);
+    ctx.fillStyle = `rgba(150, 162, 166, ${(0.4 * (1 - k * 2)).toFixed(3)})`;
+    ctx.fillRect(Math.round(ripple.x - r), Math.round(floorY + 3 + ripple.y * (FLOOR_HEIGHT - 6)), r * 2 + 1, 1);
+  }
+  // The waist-deep mist, lying low over everything.
+  ctx.fillStyle = `rgba(180, 190, 192, ${(0.08 + 0.02 * Math.sin(time * 0.5)).toFixed(3)})`;
+  ctx.fillRect(0, floorY - 12, W, 16);
+  ctx.fillStyle = 'rgba(180, 190, 192, 0.06)';
+  ctx.fillRect(0, floorY - 20, W, 8);
+
+  // Reeds close by on both sides, dark against the fog, swaying a little.
+  for (const reed of MARSH_REEDS) {
+    const lean = Math.sin(time * 0.9 + reed.sway) * 1.5;
+    const top = height - reed.h;
+    for (let y = Math.round(top); y < height; y++) {
+      const along = (height - y) / reed.h;
+      ctx.fillStyle = along > 0.7 ? '#2a3226' : '#1e241c';
+      ctx.fillRect(Math.round(reed.x + lean * along), y, 1, 1);
+    }
+    if (reed.cattail) {
+      ctx.fillStyle = '#3a2618';
+      ctx.fillRect(Math.round(reed.x + lean - 1), Math.round(top + 2), 3, 6);
+      ctx.fillStyle = '#2a3226';
+      ctx.fillRect(Math.round(reed.x + lean), Math.round(top), 1, 2);
+    }
+  }
+}
+
+// --- The Dead City (the Hollow Valley, past Lasthome) ---
+// The half-sunk old city at dusk. A rose-and-violet sky with the first
+// stars out; far off down the middle, the great Hero's Gate, shut, with
+// the last of the sun behind it; the city's broken towers and domes either
+// side, standing in the flood, and the old aqueduct fallen across the left.
+// Nearer, the drowned forum: a broken colonnade up to its knees in still
+// water, every column with its reflection, and a toppled statue of the
+// Hero lying on its side in the shallows. Up close, two dead street lamps,
+// with tiny moths fussing round their dark glass, and dust drifting.
+const VALLEY_SKY = ['#1c1430', '#271a3c', '#352046', '#48284e', '#5e3252', '#7a3e54', '#9a4e54', '#b86a5a'];
+const VALLEY_STARS = Array.from({ length: 22 }, (_, i) => ({
+  x: hash(i + 5000) * W, y: hash(i + 5010) * 40, twinkle: hash(i + 5020) * Math.PI * 2,
+}));
+// The city's ruins far off on either side of the gate: x, width, height, and
+// what's on top (0 a flat broken top, 1 a dome, 2 a snapped spire).
+const VALLEY_TOWERS = [
+  { x: 4, w: 14, h: 26, top: 2 }, { x: 22, w: 20, h: 16, top: 1 }, { x: 48, w: 10, h: 34, top: 0 },
+  { x: 92, w: 16, h: 22, top: 1 }, { x: 206, w: 12, h: 28, top: 2 }, { x: 222, w: 22, h: 18, top: 1 },
+  { x: 252, w: 10, h: 30, top: 0 }, { x: 270, w: 18, h: 14, top: 1 }, { x: 296, w: 12, h: 24, top: 2 },
+];
+// The drowned colonnade: x, height, and whether it's snapped off.
+const VALLEY_COLUMNS = [
+  { x: 30, h: 46, broken: false }, { x: 62, h: 30, broken: true }, { x: 94, h: 46, broken: false },
+  { x: 226, h: 38, broken: true }, { x: 258, h: 46, broken: false }, { x: 290, h: 24, broken: true },
+];
+const VALLEY_MITES = Array.from({ length: 8 }, (_, i) => ({
+  lamp: i % 2, phase: hash(i + 5100) * Math.PI * 2, speed: 2 + hash(i + 5110) * 2, r: 4 + hash(i + 5120) * 5,
+}));
+const VALLEY_DUST = Array.from({ length: 26 }, (_, i) => ({
+  x: hash(i + 5200) * W, y: hash(i + 5210), speed: 2 + hash(i + 5220) * 4, sway: hash(i + 5230) * Math.PI * 2,
+}));
+const VALLEY_RIPPLES = Array.from({ length: 9 }, (_, i) => ({
+  x: hash(i + 5300) * W, y: hash(i + 5310), every: 3 + hash(i + 5320) * 4, at: hash(i + 5330) * 6,
+}));
+
+// A dead street lamp, up close: an iron post with a crossbar and a cage of
+// dark glass on top. Its foot is at (x, baseY).
+function drawDeadLamp(ctx, x, baseY, tall) {
+  const top = baseY - tall;
+  ctx.fillStyle = '#16121e';
+  ctx.fillRect(x - 1, top, 3, tall);
+  ctx.fillRect(x - 3, baseY - 4, 7, 4);
+  ctx.fillRect(x - 5, top + 12, 11, 2);
+  // The lamp's cage, and its glass, gone dark and dusty.
+  ctx.fillRect(x - 5, top - 14, 11, 14);
+  ctx.fillRect(x - 3, top - 17, 7, 3);
+  ctx.fillRect(x - 1, top - 19, 3, 2);
+  ctx.fillStyle = '#2a3038';
+  ctx.fillRect(x - 4, top - 12, 9, 10);
+  ctx.fillStyle = '#16121e';
+  ctx.fillRect(x, top - 12, 1, 10);
+  ctx.fillStyle = '#5a6a70';
+  ctx.fillRect(x - 3, top - 11, 1, 3);
+  ctx.fillRect(x + 2, top - 11, 1, 2);
+  // Its edge, catching the last of the light.
+  ctx.fillStyle = '#4a3a50';
+  ctx.fillRect(x + 1, top, 1, tall - 4);
+}
+
+function drawValley(ctx, time, height) {
+  const floorY = height - FLOOR_HEIGHT;
+  const horizon = floorY - 40;
+  const mid = W / 2;
+  // The sky's bands run down to the horizon, so the warmest is lowest.
+  const band = Math.ceil(horizon / VALLEY_SKY.length);
+  VALLEY_SKY.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * band, W, band);
+  });
+
+  // The first stars, coming out.
+  for (const star of VALLEY_STARS) {
+    ctx.globalAlpha = 0.35 + 0.35 * Math.sin(time * 1.5 + star.twinkle);
+    ctx.fillStyle = '#f4e8f0';
+    ctx.fillRect(Math.round(star.x), Math.round(star.y), 1, 1);
+  }
+  ctx.globalAlpha = 1;
+
+  // The low sun, going down behind the gate.
+  drawGlow(ctx, mid, horizon - 6, 40, '#f0a070', 0.5);
+  drawGlow(ctx, mid, horizon - 4, 18, '#ffd8a0', 0.6);
+
+  // The city's ruins far off, in the haze, each with a dark window or two.
+  for (const tower of VALLEY_TOWERS) {
+    const top = horizon - tower.h;
+    ctx.fillStyle = '#4a3050';
+    ctx.fillRect(tower.x, top, tower.w, tower.h + 1);
+    if (tower.top === 1) {
+      ctx.fillRect(tower.x + 2, top - 3, tower.w - 4, 3);
+      ctx.fillRect(tower.x + 4, top - 5, tower.w - 8, 2);
+    } else if (tower.top === 2) {
+      ctx.fillRect(tower.x + Math.floor(tower.w / 2) - 1, top - 9, 3, 9);
+      ctx.fillRect(tower.x + Math.floor(tower.w / 2) + 2, top - 6, 2, 2);
+    } else {
+      ctx.fillRect(tower.x, top - 3, 3, 3);
+      ctx.fillRect(tower.x + tower.w - 5, top - 2, 5, 2);
+    }
+    ctx.fillStyle = '#32223e';
+    for (let y = top + 4; y < horizon - 4; y += 8) ctx.fillRect(tower.x + 3, y, 2, 3);
+  }
+
+  // The old aqueduct, coming across the left on its arches, and broken off
+  // partway, with its fallen piece lying in the water.
+  ctx.fillStyle = '#3e2a48';
+  ctx.fillRect(0, horizon - 30, 108, 5);
+  for (let x = 2; x < 108; x += 18) {
+    ctx.fillRect(x, horizon - 25, 4, 25);
+    ctx.fillRect(x + 4, horizon - 25, 14, 3);
+  }
+  ctx.fillRect(108, horizon - 30, 3, 3);
+  ctx.fillRect(116, horizon - 4, 22, 4);
+  ctx.fillRect(120, horizon - 7, 8, 3);
+
+  // The Hero's Gate, far off but enormous: two great towers either side of
+  // the battle box, and the arch over the top of it, so you fight in its
+  // gateway. The sunset shows round the edges of its shut doors.
+  ctx.fillStyle = '#2a1e36';
+  for (const side of [-1, 1]) {
+    const x = side < 0 ? mid - 62 : mid + 44;
+    ctx.fillRect(x, horizon - 86, 18, 86);
+    ctx.fillRect(x - 2, horizon - 90, 22, 4);
+    for (let i = 0; i < 3; i++) ctx.fillRect(x - 2 + i * 8, horizon - 94, 5, 4);
+    // Slit windows, and a line of light down the tower's sunward edge.
+    ctx.fillStyle = '#1c1428';
+    for (let y = horizon - 80; y < horizon - 10; y += 16) ctx.fillRect(x + 8, y, 2, 6);
+    ctx.fillStyle = '#5a3a50';
+    ctx.fillRect(side < 0 ? x + 17 : x, horizon - 86, 1, 86);
+    ctx.fillStyle = '#2a1e36';
+  }
+  // The arch: a great lintel, stepping down into a curve at each end.
+  ctx.fillRect(mid - 46, horizon - 84, 92, 10);
+  ctx.fillRect(mid - 46, horizon - 74, 10, 4);
+  ctx.fillRect(mid + 36, horizon - 74, 10, 4);
+  ctx.fillRect(mid - 46, horizon - 70, 5, 4);
+  ctx.fillRect(mid + 41, horizon - 70, 5, 4);
+  ctx.fillStyle = '#5a3a50';
+  ctx.fillRect(mid - 46, horizon - 74, 92, 1);
+  // The shut doors, and the thread of sunset at the crack between them.
+  ctx.fillStyle = '#1c1428';
+  ctx.fillRect(mid - 44, horizon - 66, 88, 66);
+  ctx.fillStyle = `rgba(255, 200, 140, ${(0.5 + 0.15 * Math.sin(time * 0.7)).toFixed(3)})`;
+  ctx.fillRect(mid - 44, horizon - 67, 88, 1);
+  ctx.fillRect(mid, horizon - 66, 1, 66);
+  // A star over the arch, carved for the Hero, catching the light.
+  ctx.fillStyle = '#c88a78';
+  ctx.fillRect(mid - 2, horizon - 80, 5, 1);
+  ctx.fillRect(mid, horizon - 82, 1, 5);
+  ctx.fillRect(mid - 1, horizon - 81, 3, 3);
+
+  // The flood, from the horizon in: still water with the sky in it, and the
+  // sun's light lying on it in a long, broken streak.
+  ctx.fillStyle = '#3a2440';
+  ctx.fillRect(0, horizon, W, floorY - horizon);
+  ctx.fillStyle = '#48304e';
+  for (let row = 0; row < 7; row++) {
+    const y = horizon + 2 + row * 5;
+    for (let x = (row * 41) % 60; x < W; x += 60 + row * 7) ctx.fillRect(x, y, 12 + row * 3, 1);
+  }
+  for (let i = 0; i < 9; i++) {
+    const y = horizon + 1 + i * 4;
+    const w = 6 + i * 2 + Math.round(Math.sin(time * 2 + i) * 2);
+    ctx.fillStyle = `rgba(255, 200, 150, ${(0.32 - i * 0.03).toFixed(3)})`;
+    ctx.fillRect(Math.round(mid - w / 2 + Math.sin(time * 1.3 + i * 1.7) * 2), y, w, 1);
+  }
+
+  // The drowned colonnade, standing in it, each column with its reflection.
+  const waterY = floorY - 6;
+  for (const column of VALLEY_COLUMNS) {
+    const top = waterY - column.h;
+    ctx.fillStyle = '#4e4260';
+    ctx.fillRect(column.x, top, 9, column.h);
+    if (column.broken) {
+      ctx.fillRect(column.x, top - 3, 4, 3);
+      ctx.fillRect(column.x + 6, top - 1, 3, 1);
+    } else {
+      ctx.fillRect(column.x - 2, top - 4, 13, 4);
+    }
+    ctx.fillStyle = '#6a6278';
+    ctx.fillRect(column.x + 1, top, 1, column.h);
+    // Its reflection, upside down and shaking a little.
+    ctx.fillStyle = 'rgba(78, 66, 96, 0.5)';
+    for (let y = 0; y < 6; y++) ctx.fillRect(column.x + Math.round(Math.sin(time * 3 + y + column.x)), waterY + y, 9, 1);
+  }
+  // A lintel still across two of them on the right.
+  ctx.fillStyle = '#4e4260';
+  ctx.fillRect(254, waterY - 50, 46, 4);
+
+  // The fallen statue of the Hero, on its side in the shallows: the great
+  // stone head (worn smooth, no face left to speak of), a shoulder, and an
+  // arm still holding up half a sword.
+  ctx.fillStyle = '#5a4e6a';
+  ctx.fillRect(150, waterY - 12, 20, 12);
+  ctx.fillRect(152, waterY - 15, 16, 3);
+  ctx.fillRect(170, waterY - 9, 22, 9);
+  ctx.fillRect(186, waterY - 22, 5, 14);
+  ctx.fillRect(184, waterY - 25, 9, 3);
+  ctx.fillStyle = '#8a8098';
+  ctx.fillRect(187, waterY - 38, 3, 13);
+  ctx.fillRect(152, waterY - 15, 16, 1);
+  ctx.fillRect(170, waterY - 9, 22, 1);
+  ctx.fillStyle = 'rgba(90, 78, 106, 0.45)';
+  ctx.fillRect(150, waterY, 42, 3);
+
+  // Underfoot: the forum's flagstones, a hand deep under the flood.
+  ctx.fillStyle = '#241c30';
+  ctx.fillRect(0, floorY, W, FLOOR_HEIGHT);
+  ctx.fillStyle = '#5a4a62';
+  ctx.fillRect(0, floorY, W, 1);
+  ctx.fillStyle = '#2e2438';
+  for (let x = 0; x < W; x += 26) ctx.fillRect(x, floorY + 1, 1, FLOOR_HEIGHT - 1);
+  ctx.fillRect(0, floorY + 9, W, 1);
+  ctx.fillStyle = 'rgba(184, 106, 90, 0.08)';
+  for (let y = floorY + 3; y < height; y += 4) ctx.fillRect(0, y, W, 1);
+  for (const ripple of VALLEY_RIPPLES) {
+    const k = ((time + ripple.at) % ripple.every) / ripple.every;
+    if (k > 0.5) continue;
+    const r = 1 + Math.round(k * 14);
+    ctx.fillStyle = `rgba(200, 170, 190, ${(0.35 * (1 - k * 2)).toFixed(3)})`;
+    ctx.fillRect(Math.round(ripple.x - r), Math.round(floorY + 3 + ripple.y * (FLOOR_HEIGHT - 6)), r * 2 + 1, 1);
+  }
+
+  // The two dead street lamps up close, one each side, and the tiny moths
+  // that live in them, fussing round the glass.
+  const lamps = [{ x: 12, tall: 92 }, { x: W - 12, tall: 84 }];
+  for (const lamp of lamps) drawDeadLamp(ctx, lamp.x, height, lamp.tall);
+  ctx.fillStyle = '#e8dcc0';
+  for (const mite of VALLEY_MITES) {
+    const lamp = lamps[mite.lamp];
+    const a = time * mite.speed + mite.phase;
+    const x = lamp.x + Math.cos(a) * mite.r;
+    const y = height - lamp.tall - 7 + Math.sin(a * 1.3) * mite.r * 0.7;
+    ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+  }
+
+  // Dust, drifting in the last light.
+  for (const mote of VALLEY_DUST) {
+    const y = (((mote.y * height - time * mote.speed) % height) + height) % height;
+    const x = (mote.x + Math.sin(time * 0.7 + mote.sway) * 5 + W) % W;
+    ctx.globalAlpha = 0.25 + 0.25 * Math.sin(time * 1.8 + mote.sway);
+    ctx.fillStyle = '#f0d8b8';
+    ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+  }
+  ctx.globalAlpha = 1;
+}
+
 export const BACKDROPS = {
+  pinefall: drawPinefall,
+  // The Lantern Marsh (rooms with `area: 'marsh'`).
+  marsh: drawMarsh,
+  // The Dead City (rooms with `area: 'valley'`).
+  valley: drawValley,
+  // Under Hollin's well (rooms with `area: 'drains'`).
+  drains: drawDrains,
   ruins: drawRuins,
   stair: drawStairSky,
   vigil: drawVigilHeights,

@@ -8,7 +8,7 @@ export const LANTERN_MOTH = {
   textFile: 'enemies/lantern_moth.txt',
   sprite: { rows: MOTH_SPRITE, palette: MOTH_PALETTE },
   maxHp: 150,
-  damage: 7,
+  damage: 9,
 
   // The second enemy: a step up from the dummy, but still gentle.
   difficulty: { density: 1, speed: 0.9 },

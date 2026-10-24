@@ -1,4 +1,5 @@
 import { TILE_SIZE as T } from '../config.js';
+import { drawFootShadow } from './shadows.js';
 import { makeSprite } from '../engine/sprite.js';
 import { PROP_PALETTE, PROP_SPRITES, PROP_FOOTPRINTS } from '../data/art/props.js';
 import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
@@ -7,7 +8,8 @@ const sprites = Object.fromEntries(
   Object.entries(PROP_SPRITES).map(([name, rows]) => [name, makeSprite(rows, PROP_PALETTE)]),
 );
 
-// Characters (NPCs and shopkeepers) gently bob, so they read as alive.
+// Characters (NPCs and shopkeepers) breathe, so they read as alive: in for
+// two of these, out for two.
 const BOB_SECONDS = 0.6;
 
 // A solid, one-tile object in a room. Press confirm on it to read its `text`
@@ -20,6 +22,9 @@ const BOB_SECONDS = 0.6;
 // An object that `gives` an item hands it over the first time you press Z on
 // it; after that it changes to its `taken` look and words, if it has them
 // (the cake on Taper's counter becomes just a counter).
+// The `gap` props that lie flat on the floor, rather than being holes in a wall.
+const FLOOR_GAPS = new Set(['rotten_planks', 'drain_grate']);
+
 export class Prop {
   //
   // Puzzles: a `lever` is a switch with a name, flipped with Z (it shows its
@@ -31,7 +36,49 @@ export class Prop {
     walkable = false, solidSides = 0, light = null, seenInLight = false, notice = false, grapple = false,
     rest = false, dream = null, sound = null, join = null, nightText = null, wrath = null, glow = undefined,
     member = null, storage = false, vane = false, drift = null, travel = null,
+    rock = false, button = null, rockReset = false,
+    gap = false, treadle = null, log = false, chop = null, hide = false, wet = null, gold = 0,
+    flow = null, cast = null, high = false, drawScene = null,
   }) {
+    // Something drawn out of it (the Fallen Star from its stone): a scene to
+    // play when you take it, instead of the usual words (see drawFromStone).
+    this.drawScene = drawScene;
+    // The Hushwood (Chapter 3), with Bramble. A `gap` is a hole too small
+    // for you and just right for him: it stops the hero, and anyone else who
+    // isn't small. A `treadle` (a name, like a button's) is held down by
+    // anyone or anything standing on it, and lets up when they step off. A
+    // `log` slides when pushed until something stops it, and sinks into
+    // brook water as a bridge. A thin tree to `chop` falls the way the
+    // chopper faces ('fell'), or a hollow one splits open to walk into
+    // ('open'). A `hide` (a leaf pile) is somewhere to keep still in while
+    // the Hush goes over. A `wet` prop is water in a channel: it's only there
+    // while its sluice levers say so (names that must be on, or '!name' off).
+    // `gold` is a purse of that many coins. See src/overworld/hushwood.js.
+    this.gap = gap;
+    this.treadle = treadle;
+    this.log = log;
+    this.sunk = false;
+    this.chop = chop === true ? 'fell' : chop;
+    this.felled = false;
+    this.hide = hide;
+    this.wet = wet;
+    this.gold = gold;
+    // The Old Drains: a `flow` is a current, fast shallow water running one
+    // way ('up', 'down', 'left' or 'right'). Step in and it carries you (and
+    // logs and casks) along till something stops you or it runs out; you
+    // can't walk up one. With a `wet` too, it only runs while its sluice
+    // wheels say so. See Player.rideCurrent.
+    this.flow = flow;
+    // Push puzzles (Chapter 3): a `rock` you shove a tile at a time by walking
+    // into it, a `button` (a switch with a name, like a lever's) that's held
+    // down while a rock sits on it, and a `rockReset` that rolls every rock
+    // in the room back to where it started. See Room's push puzzle section
+    // and OverworldScene.pushRocks.
+    this.rock = rock;
+    this.home = rock || log ? { x: x * T, y: y * T } : null;
+    this.slide = null;
+    this.button = button;
+    this.rockReset = rockReset;
     // A green updraft you can travel by: its id in src/data/travel.js.
     this.travel = travel;
     // A weathervane (turn it to turn the wind), or a snowdrift that's only
@@ -75,7 +122,8 @@ export class Prop {
     this.light = light;
     this.seenInLight = seenInLight;
     // Something flat on the floor (a puddle, a rug) that you walk over, but can still look at.
-    this.walkable = walkable || this.grapple || this.swing;
+    this.walkable = walkable || this.grapple || this.swing || Boolean(button) || Boolean(treadle) || hide || Boolean(flow);
+    this.baseWalkable = this.walkable;
     // Something you walk through the middle of, but not its ends (an arch's
     // posts): this many pixels at each side still block.
     this.solidSides = solidSides;
@@ -91,6 +139,7 @@ export class Prop {
     this.animation = animation;
     this.speed = speed;
     this.sprite = sprites[sprite];
+    this.floorGap = gap && FLOOR_GAPS.has(sprite);
     if (!this.sprite) throw new Error(`Unknown prop sprite '${sprite}'`);
     this.look = sprite;
     this.x = x * T;
@@ -101,15 +150,22 @@ export class Prop {
     this.text = text;
     this.npc = npc;
     this.shop = shop;
+    // A name for a cutscene actor to `plays`, for someone in the room who
+    // isn't an NPC or a shop (Ves, hurt, in the stilt hut).
+    this.cast = cast;
+    // A lever up out of reach (the Dead City): only Ves, with her crutch, can
+    // pull it (see OverworldScene.useLever).
+    this.high = high;
     this.save = save;
     this.talkedTo = false;
     // A cutscene can hide a character while an actor plays them (see scenePlayer.js).
     this.hidden = false;
   }
 
-  // Who this is, for cutscenes that cast a room's character: their NPC or shop id.
+  // Who this is, for cutscenes that cast a room's character: their NPC or
+  // shop id, or their `cast` name.
   get character() {
-    return this.npc ?? this.shop;
+    return this.npc ?? this.shop ?? this.cast;
   }
 
   // A switch shows its NAME_on sprite while it's on, if it has one.
@@ -123,6 +179,7 @@ export class Prop {
   // Its item has been taken: no more giving, and on to its `taken` look.
   markTaken() {
     this.gives = null;
+    this.gold = 0;
     if (this.takenLook?.sprite && sprites[this.takenLook.sprite]) {
       this.sprite = sprites[this.takenLook.sprite];
       this.look = this.takenLook.sprite;
@@ -146,8 +203,15 @@ export class Prop {
     this.y = ty * T;
   }
 
+  // A current is flat water on the floor: under everyone, even someone
+  // standing in it (and under a cask riding it). So is a log or a rock sunk
+  // in the water as a stepping-stone: you stand up on top of it. And a `gap`
+  // lying on the floor (rotten planks, a grate) that someone small walks
+  // across: they're on it, not behind it.
   get sortY() {
-    return this.y + this.height;
+    // (A grating or planks lying over a current go over its water, not under it.)
+    if (this.floorGap) return this.y - 1e6 + 0.5;
+    return this.flow || this.sunk ? this.y - 1e6 : this.y + this.height;
   }
 
   overlaps(left, top, right, bottom) {
@@ -175,9 +239,21 @@ export class Prop {
     const seconds = performance.now() / 1000;
     const frame = (this.animation && animationFrame(this.animation, seconds, this.speed)) || this.sprite;
     const isCharacter = (this.npc || this.shop) && frame === this.sprite;
-    let bob = isCharacter && Math.floor(seconds / BOB_SECONDS) % 2 ? 1 : 0;
+    let bob = 0;
     // Save points float smoothly and glow.
     if (this.save) bob = Math.round(Math.sin(seconds * 2.5) * 2);
+    // Starlight on the leaves (the way to the Starfall Glade): a soft blue
+    // glow round it, slowly breathing, so it catches your eye in the dark wood.
+    if (this.look === 'star_glint') {
+      const gx = this.x + this.width / 2 - camera.x;
+      const gy = this.y + T / 2 - camera.y;
+      const pulse = 0.3 + 0.15 * Math.sin(seconds * 2.2);
+      const halo = ctx.createRadialGradient(gx, gy, 1, gx, gy, 18);
+      halo.addColorStop(0, `rgba(154, 216, 255, ${pulse.toFixed(3)})`);
+      halo.addColorStop(1, 'rgba(154, 216, 255, 0)');
+      ctx.fillStyle = halo;
+      ctx.fillRect(gx - 18, gy - 18, 36, 36);
+    }
 
     const x = this.x + Math.floor((this.width - frame.width) / 2) - camera.x;
     // Standing on a raised block (`raise`, set by the room): drawn on top of it.
@@ -191,7 +267,19 @@ export class Prop {
       ctx.fillStyle = glow;
       ctx.fillRect(cx - 14, cy - 14, 28, 28);
     }
-    ctx.drawImage(frame, x, y);
+    if (this.npc || this.shop) drawFootShadow(ctx, this.x + Math.floor(this.width / 2) - camera.x, this.y + T - (this.raise ?? 0) - camera.y);
+    // Breathing: their shoulders and head rise a pixel and settle, feet
+    // planted, each on their own time (from where they stand). The top is
+    // drawn a pixel higher, and the row at the waist fills the gap.
+    if (isCharacter && Math.floor(seconds / BOB_SECONDS + this.x / 37) % 4 < 2) {
+      const { width: w, height: h } = frame;
+      const waist = Math.floor(h * 0.6);
+      ctx.drawImage(frame, 0, waist, w, h - waist, x, y + waist, w, h - waist);
+      ctx.drawImage(frame, 0, waist - 1, w, 1, x, y + waist - 1, w, 1);
+      ctx.drawImage(frame, 0, 0, w, waist, x, y - 1, w, waist);
+    } else {
+      ctx.drawImage(frame, x, y);
+    }
     if (this.notice && !this.noticed) this.drawNotice(ctx, x + frame.width / 2, y - 3, seconds);
   }
 

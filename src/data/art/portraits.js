@@ -7,6 +7,11 @@
 // rows of the eyes: blinking shows the blink face there, unless the expression
 // is `closed` (its eyes are already shut). Dialogue picks one by starting a
 // page with its name in braces: "{sad}I miss them." (see src/ui/textbox.js).
+import { BRAMBLE_PORTRAIT } from './bramble.js';
+import { CINDER_PORTRAIT } from './hushwood.js';
+import { LADLE_PORTRAIT } from './ladle.js';
+import { BRYONY_PORTRAIT, THISTLE_PORTRAIT } from './lasthome.js';
+import { SLOWLY_PORTRAIT } from './deadcity.js';
 
 const KEEPER_PALETTE = {
   k: '#120c1c', // outline
@@ -432,6 +437,81 @@ export const PORTRAITS = {
       '..kcccccccccccccccccccccccccck..',
     ],
   },
+  // Ves without her umbrella (lost in the Lantern Marsh, chapter 3): the same
+  // face and moods, her hair and coral bow showing instead.
+  vesper_bare: {
+    palette: VES_PALETTE,
+    eyes: [13, 14, 15],
+    expressions: VES_EXPRESSIONS,
+    idle: [
+      '................................',
+      '...........kkkkkkkkkk...........',
+      '.........kkhhhhhhhhhhkk.........',
+      '........khhhhHHHHHhhhhhk........',
+      '.......khhhHHHhhhhHHhhhhkkk.kk..',
+      '.......khhhhhhhhhhhhhhhkrrRkRrk.',
+      '.......khhhhhhhhhhhhhhhkrRRkRRk.',
+      '......khhhhhhhhhhhhhhhhhkkkrk.k.',
+      '......khhhhhhhhhhhhhhhhhhk.krk..',
+      '......khhhhhhhhhhhhsshhhhk......',
+      '......khhhhhhhhhhhhshhhhhk......',
+      '......khhhhhhhsssshhhhhhhk......',
+      '......khhhssssssssssshhhhk......',
+      '......khhhkkkksssskkkkhhhk......',
+      '......khhhseEisssseEishhhk......',
+      '......khhhseiIsssseiIshhhk......',
+      '......khhhsbbssssssbbshhhk......',
+      '......khhhssssssSssssshhhk......',
+      '......khhhsssssSsssssshhhk......',
+      '......khhhhsssmssmssshhhhk......',
+      '......khhhhssssmmsssshhhhk......',
+      '......khhhhhsssssssshhhhhk......',
+      '......khhhhhhSSSSSShhhhhhk......',
+      '......khhhkkhsssssshkkhhhk......',
+      '......khhhwwwwwwwwwwwwhhhk......',
+      '...kkkhhhhwWwwwwwwwwWwhhhhkkk...',
+      '..kcccchhhcwwwwwwwwwwchhhcccck..',
+      '..kcccchhhcccccccwwWcchhhcccck..',
+      '..kcccccccccccccccwWCcccccccck..',
+      '..kcCcccccccccccccwwCccccccCck..',
+      '..kccCcccccccccccccWwcccccccck..',
+      '..kcccccccccccccccccccccccccck..',
+    ],
+    blink: [
+      '................................',
+      '...........kkkkkkkkkk...........',
+      '.........kkhhhhhhhhhhkk.........',
+      '........khhhhHHHHHhhhhhk........',
+      '.......khhhHHHhhhhHHhhhhkkk.kk..',
+      '.......khhhhhhhhhhhhhhhkrrRkRrk.',
+      '.......khhhhhhhhhhhhhhhkrRRkRRk.',
+      '......khhhhhhhhhhhhhhhhhkkkrk.k.',
+      '......khhhhhhhhhhhhhhhhhhk.krk..',
+      '......khhhhhhhhhhhhsshhhhk......',
+      '......khhhhhhhhhhhhshhhhhk......',
+      '......khhhhhhhsssshhhhhhhk......',
+      '......khhhssssssssssshhhhk......',
+      '......khhhsssssssssssshhhk......',
+      '......khhhsssssssssssshhhk......',
+      '......khhhkkkksssskkkkhhhk......',
+      '......khhhsbbssssssbbshhhk......',
+      '......khhhssssssSssssshhhk......',
+      '......khhhsssssSsssssshhhk......',
+      '......khhhhsssmssmssshhhhk......',
+      '......khhhhssssmmsssshhhhk......',
+      '......khhhhhsssssssshhhhhk......',
+      '......khhhhhhSSSSSShhhhhhk......',
+      '......khhhkkhsssssshkkhhhk......',
+      '......khhhwwwwwwwwwwwwhhhk......',
+      '...kkkhhhhwWwwwwwwwwWwhhhhkkk...',
+      '..kcccchhhcwwwwwwwwwwchhhcccck..',
+      '..kcccchhhcccccccwwWcchhhcccck..',
+      '..kcccccccccccccccwWCcccccccck..',
+      '..kcCcccccccccccccwwCccccccCck..',
+      '..kccCcccccccccccccWwcccccccck..',
+      '..kcccccccccccccccccccccccccck..',
+    ],
+  },
   herald_greta: {
     palette: GRETA_PALETTE,
     eyes: [13, 14, 15],
@@ -505,6 +585,17 @@ export const PORTRAITS = {
       '.krrrrrraaaaaaaaaaaaaaaarrrrrrk.',
     ],
   },
+  // Bramble, the woodcutters' kid (src/data/art/bramble.js).
+  bramble: BRAMBLE_PORTRAIT,
+  // Nan Cinder, the charcoal burner (src/data/art/hushwood.js).
+  nan_cinder: CINDER_PORTRAIT,
+  // Old Ladle, the cistern's hob in the Old Drains (src/data/art/ladle.js).
+  ladle: LADLE_PORTRAIT,
+  // Bryony, Lasthome's healer, and Thistle, who keeps its gate (src/data/art/lasthome.js).
+  bryony: BRYONY_PORTRAIT,
+  thistle: THISTLE_PORTRAIT,
+  // Slowly, the old tortoise of the Dead City's bathhouse (src/data/art/deadcity.js).
+  slowly: SLOWLY_PORTRAIT,
 };
 
 // The names of every expression any portrait has, for the Studio's pickers.

@@ -1,0 +1,264 @@
+# THE HUSH, the beast of the Hushwood, lying on the Warden statue's shoulder at the Hero's Gate
+# with Ves's umbrella in its jaws.
+# Numbers (HP, damage, its phases, how much each TALK option calms it) live
+# in src/data/enemies/the_hush.js.
+# It never says a word: it's an animal. What's in its speech bubbles is the
+# sound it makes, or doesn't.
+#
+# A section with ": hunt", ": loose", ": rage" or ": dawn" after its name is used in
+# that phase of its fight instead of the plain one ([flavor: dawn] instead of
+# [flavor]). [phase: ...] sections are what's said as a phase starts: plain
+# ones in the battle panel, "vesper" ones by Ves in her box.
+
+# In its speech bubbles during its entrance, after its title card. Lines
+# written together (no blank line between) share a bubble; a line starting
+# with ... waits for a bubble of its own, and words that won't fit run on.
+[boss_intro]
+...
+
+(Not a sound.)
+
+(The birds have stopped.)
+
+[intro]
+The HUSH gets up. It's bigger standing. The umbrella swings from its jaws.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The HUSH circles you without a sound. Its hooves don't make a sound on the stone.
+
+Ves sits on the flagstones, her crutch across her knees. She hasn't taken her eyes off the umbrella.
+
+There isn't a bird left singing anywhere. You can hear your own heart.
+
+The umbrella swings from its jaws, furled. Ves's knuckles are white.
+
+The HUSH's eyes are two small embers under its brow, very still. It's watching the both of you.
+
+Dust drifts down from the Gate. Round the HUSH it hangs in the air, as if it's listening too.
+
+[flavor: loose]
+The umbrella lies on the stones, an arm's length from Ves.
+
+[flavor: rage]
+The HUSH rakes at the paving. Its eyes never leave the umbrella.
+
+Every hair on it is standing up. It's twice the size it was.
+
+It's screaming. It hasn't stopped screaming.
+
+[flavor: dawn]
+The HUSH keeps looking at the umbrella. Not at Ves. At the umbrella.
+
+It edges closer, and stops, and edges closer. Like something that's forgotten how.
+
+Its ears are up now. It looks a lot smaller with its ears up.
+
+It isn't circling any more. It's just following you.
+
+Ves holds her umbrella over the both of you. The HUSH watches the dust land on it.
+
+There's a bird singing, somewhere, far off. The HUSH turns to listen.
+
+# In a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting
+# with ... waits for a bubble of its own, and words that won't fit run on.
+[taunts]
+...
+
+(Silence.)
+
+(It breathes out.
+Frost on the air.)
+
+(Its ears go flat.)
+
+(Not a sound.
+Not one.)
+
+[taunts: loose]
+(It looks round
+for the umbrella.)
+
+(A low noise,
+deep in its chest.)
+
+[taunts: rage]
+(A scream like tearing metal.)
+
+(It doesn't stop.
+It doesn't stop.)
+
+(Its eyes burn.)
+
+(It wants it BACK.)
+
+[taunts: dawn]
+(It sniffs at you.)
+
+(A small, high whine.)
+
+(It looks at Ves.
+Then at you.)
+
+(It takes a step.
+And another.)
+
+(It lies down.
+Then gets up again.)
+
+# What happens as the umbrella comes loose (see `beat` in the_hush.js).
+[phase: loose]
+The HUSH shakes its head, hard, and the umbrella flies out of its jaws!
+
+It skids across the stones and stops by Ves, just out of her reach.
+
+[phase: loose vesper]
+{surprised}Mum's umbrella!
+
+{determined}I can reach it. I can reach it!
+
+# The same, if she's knocked out: in the panel.
+[phase: loose vesper down]
+Ves stirs on the stones. Her eyes open, and find the umbrella.
+
+# Ves's turn while it's on the stones: she goes for it (that turn ends the phase).
+[catch]
+Ves lets go of her crutch and drags herself across the stones on her elbows. Her fingers close round the handle.
+
+# What happens as she opens it (see `beat` in the_hush.js).
+[phase: dawn]
+Ves plants the umbrella's tip between the flagstones, and pulls herself up on it, and stands.
+
+She opens it.
+
+[phase: dawn vesper]
+{crying}...Hi, Mum.
+
+{resolute}Okay. I've got it. I've got it now.
+
+# As it sees the umbrella open over her: the rage (see `beat` in the_hush.js).
+[phase: rage]
+Ves is back on her feet! Her umbrella's SPELLS are back: SHELTER, FLURRY, SLEET, ZEPHYR, and the rest.
+
+The HUSH sees the umbrella open over her. Its mane stands up all along its back, every bristle. Its eyes catch, like coals blown on.
+
+It screams. The whole Gate rings with it.
+
+[phase: rage vesper]
+{scared}It wants it back. It wants it back so badly...
+
+{resolute}Well, it can't have it. Stay close to me!
+
+# The line under GAME OVER if you fall once Ves has her umbrella back
+# (its rage and after, with "Nobody's Dawn" playing).
+[game_over: dawn]
+Imagine dying at the climactic hopeful moment. That's more cinematic 😭
+
+# When the rage burns out of it (the last phase).
+[phase: dawn after]
+The HUSH staggers. The fire goes out of its eyes all at once.
+
+It stops. It's looking at the empty stones where the umbrella was.
+
+[phase: dawn look]
+{surprised}Wait. Look at it.
+
+{thoughtful}It's not angry. It's... it looks like I took something off it.
+
+# Any try at being kind to it while it's in its rage.
+[no_mercy: rage]
+{scared}Not now! It'd tear you in half!
+
+{determined}Let it wear itself out first. Keep your head down.
+
+[no_mercy_again: rage]
+{scared}Not while it's like this!
+
+{determined}Wait. It can't keep this up for ever.
+
+# Ves's turn prompt while it's in its rage.
+[vesper_turn: rage]
+Ves holds her umbrella up against the storm of it. Her turn.
+
+# Ves's turn prompt once she has her umbrella back.
+[vesper_turn: dawn]
+Ves holds her umbrella steady. Her leg's shaking. The umbrella isn't. Her turn.
+
+# Any try at being kind to it before she has her umbrella back (a calming
+# TALK or spell, Pacify, a sweet candle, her own kind word): Ves stops you.
+# The first time, all of [no_mercy]; after that, one of [no_mercy_again].
+# The {face} is Ves's.
+# MERCY while the umbrella's lying on the stones.
+[no_mercy: loose]
+{angry}Not yet. It's still between me and Mum's umbrella.
+
+[no_mercy_again: loose]
+{determined}Umbrella first. Then we'll see.
+
+# MERCY while Ves is knocked out, in the panel.
+[no_mercy_down]
+Not now. Not with Ves down.
+
+[no_mercy]
+{furious}No. It's got Mum's umbrella in its MOUTH.
+
+{angry}It followed us all this way for it. I'm not asking it nicely.
+
+[no_mercy_again]
+{furious}Not while it's got her umbrella.
+
+{angry}Get it back first. Then we'll see.
+
+{scared}It's not listening. Look at its eyes. It's hunting.
+
+# Ves's kind word (TALK) once she has her umbrella back: her working out what
+# it is. {foe} is its name.
+[vesper_talk]
+Ves lowers her umbrella, so the HUSH can see her face. It stops dead, like nobody's ever done that.
+
+Ves asks the HUSH how long it's been on its own out here. It lies down on the stones, as if that's an answer.
+
+Ves says it didn't take her umbrella to keep it. It took it because she let it go. It was the first thing anyone ever left it.
+
+Ves tells the HUSH it can come closer. It does, one hoof at a time, and stops when she flinches, and waits. The HUSH's ears come round to her.
+
+Ves says she's sorry about its hundred years. She means it. The HUSH makes a small noise, like a dog in its sleep.
+
+# One section per TALK option. The names after "talk:" must match the TALK
+# options in src/data/enemies/the_hush.js.
+[talk: Check]
+HUSH - HP 7200
+The beast of the Hushwood. Quiet as snow. It has Ves's umbrella in its jaws.
+
+[talk: Check: loose]
+HUSH - HP 7200
+It's lost the umbrella. It keeps looking for it.
+
+[talk: Check: rage]
+HUSH - HP 7200
+It's lost its mind. Don't try to calm it yet. Hold on till it burns out.
+
+[talk: Check: dawn]
+HUSH - HP 7200
+It isn't hunting you. Maybe it never was. Its MERCY can fill now.
+
+[talk: Keep still]
+You keep very still. The HUSH comes close, and sniffs at your hair, and sneezes.
+
+[talk: Kneel down]
+You kneel on the stones, so you're smaller than it is. It tilts its huge head, one way, then the other.
+
+[talk: Hold out a hand]
+You hold out a hand. The HUSH looks at it a long time, then pushes its nose into your palm. It's so cold it burns.
+
+# Said when you try to RUN.
+[no_escape]
+Behind you is the whole Dead City, and it's followed you through all of it already.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The HUSH staggers, and stands there swaying, its head down nearly to the paving. It doesn't run. It can't.
+
+[pacified]
+Ves holds her umbrella over the HUSH, the way she does over you. It goes still. Then it turns, and goes off into the dark, quieter.

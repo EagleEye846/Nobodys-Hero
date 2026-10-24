@@ -1,0 +1,19 @@
+# THE EEL-FISHER: a woman in waders with a basket, who goes out into the
+# Lantern Marsh every morning and comes back every evening, and knows its
+# paths better than anyone living.
+
+[first]
+You came across the fen? On the boards? In the mist?
+
+Huh. Most people don't. Most people follow the wrong lights, out there.
+
+[repeat]
+Eels. Fresh this morning. Well. This afternoon. They don't mind.
+
+[first after ves_on_her_feet]
+I go out on the fen every day. I know every board of it.
+
+Your friend came across it alone, hurt, in the dark? Then she's tougher than I am. Tell her I said so.
+
+[repeat after ves_on_her_feet]
+Stay on the boards. Follow the ones on poles. Don't follow anything that moves.

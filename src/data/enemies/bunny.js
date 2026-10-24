@@ -8,7 +8,7 @@ export const DUST_BUNNY = {
   textFile: 'enemies/dust_bunny.txt',
   sprite: { rows: BUNNY_SPRITE, palette: BUNNY_PALETTE },
   maxHp: 80,
-  damage: 5,
+  damage: 7,
 
   // Small and skittish: an easy fight.
   difficulty: { density: 0.85, speed: 0.85 },

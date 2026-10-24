@@ -1,4 +1,5 @@
 import { TILE_SIZE as T, UI_SCALE, UI_WIDTH, UI_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../config.js';
+import { drawFootShadow } from './shadows.js';
 import { soulSprite } from '../battle/soul.js';
 import { makeSprite, flipHorizontal } from '../engine/sprite.js';
 import { inUiSpace } from '../engine/screen.js';
@@ -9,7 +10,19 @@ import { music, sfx } from '../audio/music.js';
 import { drawText, textWidth } from '../ui/text.js';
 import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
 import { ITEMS, giveItem } from '../data/items.js';
-import { joinParty, leaveParty, memberFrames } from '../characters/party.js';
+import { GEAR, giveGear } from '../data/gear.js';
+import { ARMOR } from '../data/armor.js';
+import { WEAPONS } from '../data/weapons.js';
+import { HERO_STATE } from '../characters/heroState.js';
+import { wielderOf, HERO } from '../characters/equipment.js';
+import { saveGame } from '../state/saveGame.js';
+import { textSection } from '../engine/textLoader.js';
+import { MEMBERS, joinParty, leaveParty, setHurt, memberFrames, inParty } from '../characters/party.js';
+import { hushFigureSprite, hushShadowSprite } from './hushwood.js';
+import { ACTS, actLength, actPose, poseOffset, drawPosed, startAct } from './acts.js';
+
+// The acts an `act` step can play (see acts.js), for the Cutscene Maker.
+export { ACTS };
 
 // Plays a cutscene (src/data/scenes/) in the overworld: actors walk, face,
 // talk and emote, and the camera pans, one step at a time. The overworld
@@ -21,23 +34,29 @@ export const STEP_TYPES = {
   walk: 'Walk to a spot',
   face: 'Turn to face',
   emote: 'Show an emote',
+  act: 'Do something (hop, nod, look about...)',
   wait: 'Wait',
   camera: 'Move the camera',
   appear: 'Appear',
   leave: 'Leave',
   animate: 'Play an animation',
   sound: 'Play a sound',
+  quake: 'Shake the screen',
   music: 'Change the music',
   give: 'Give an item',
   battle: 'Start a battle',
   end_chapter: 'End the chapter',
   join: 'Join the party',
   leave_party: 'Leave the party',
+  hurt: 'Hurt (or heal) a party member',
+  piggyback: 'Carry a party member on your back (or put them down)',
+  save: 'Save the game here',
   vision: 'Show a vision (dreams)',
   bed: 'In bed: sit up, lie down, get up',
   toss: 'Throw something, with bounces',
   weather: "Fade the room's snow and fog",
   hold: 'Hold someone (they go where you go)',
+  goto: 'Go to another room',
 };
 // 'sweat' isn't a bubble: drops of cold sweat run down beside their head.
 export const EMOTES = ['!', '?', '...', '<3', 'sweat'];
@@ -65,6 +84,9 @@ const ENCOUNTER = {
   end: 2.9,
 };
 const BLINK_SECONDS = 0.2;
+// And first, the one in the spotlight lunges at you (unless the step says
+// `still`), and the screen jolts as it comes.
+const LUNGE_JOLT = 0.24;
 
 const spriteCache = new Map();
 // The sprite for an actor's `look`: 'prop:keeper' or 'enemy:columneon'.
@@ -82,6 +104,11 @@ export function lookSprite(look) {
     // An animation's first frame (src/engine/animations.js): for someone who
     // is only ever seen animated, like the Usurper ('anim:usurper_idle').
     if (kind === 'anim') sprite = animationFrame(name, 0);
+    // Something drawn in code rather than in rows: the Hush rising over the
+    // rooftops (src/overworld/hushwood.js).
+    if (kind === 'proc' && name === 'hush') sprite = hushFigureSprite();
+    // And its shadow going over the trees.
+    if (kind === 'proc' && name === 'shadow') sprite = hushShadowSprite();
     spriteCache.set(look, sprite && { right: sprite, left: flipHorizontal(sprite), back });
   }
   return spriteCache.get(look);
@@ -120,11 +147,27 @@ class Actor {
     this.lift = 0;
     // Who has hold of them (the `hold` step).
     this.heldBy = null;
+    // Something they're doing (an `act` step: see acts.js), and how far a
+    // bridge has sagged under them (set by the overworld: bridges.js).
+    this.act = null;
+    this.sag = 0;
   }
 
-  // Held, they're drawn just in front of whoever holds them.
+  perform(name, toward = null) {
+    this.act = startAct(name, performance.now() / 1000, this.facing, toward);
+  }
+
+  // Held, they're drawn just in front of whoever holds them. Up on a raised
+  // block (the crier's stone), they're drawn after it, like the player
+  // (Player.sortY), not hidden behind the top of the block in front.
   get sortY() {
-    return this.heldBy ? this.heldBy.sortY + 0.01 : this.y;
+    if (this.heldBy) return this.heldBy.sortY + 0.01;
+    return this.ground > 0 ? this.y + T - 1 : this.y;
+  }
+
+  // How high the floor under their feet is: a raised block's height, or 0.
+  get ground() {
+    return this.room?.raiseAt(Math.floor(this.x / T), Math.floor((this.y - 1) / T)) ?? 0;
   }
 
   // Bobbing a pixel as they walk; held, they bob with whoever holds them.
@@ -158,16 +201,18 @@ class Actor {
     return this.frames[`${dir}${Math.floor(seconds / STEP_SECONDS) % 2 ? 'Step' : 'Idle'}`];
   }
 
-  // What they look like right now.
-  currentSprite(seconds) {
+  // What they look like right now (facing `look` for the moment, if given:
+  // glancing about).
+  currentSprite(seconds, look = null) {
     // An animation played `once` runs from its start and stays on its last frame.
     const animated = this.animation && (this.once
       ? animationFrame(this.animation, seconds - this.animationStart, this.speed, true)
       : animationFrame(this.animation, seconds, this.speed));
+    const facing = look ?? this.facing;
     return animated
-      || (this.frames && this.walkFrame(seconds))
-      || (this.facing === 'up' && this.sprites.back)
-      || (this.facing === 'left' ? this.sprites.left : this.sprites.right);
+      || (this.frames && (look ? this.frames[`${look}Idle`] : this.walkFrame(seconds)))
+      || (facing === 'up' && this.sprites.back)
+      || (facing === 'left' ? this.sprites.left : this.sprites.right);
   }
 
   // Their shadow in the sun (see shadows.js).
@@ -181,15 +226,17 @@ class Actor {
     const alpha = this.alpha;
     if (alpha <= 0) return;
     const seconds = performance.now() / 1000;
-    const sprite = this.currentSprite(seconds);
+    const pose = actPose(this.act, seconds);
+    if (this.act && !pose) this.act = null;
+    const sprite = this.currentSprite(seconds, pose?.look ?? null);
+    const off = poseOffset(pose, this.facing);
     const bob = this.bob(seconds);
     ctx.globalAlpha = alpha;
-    // In the air, a shadow stays on the ground under it.
-    if (this.lift > 1) {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-      ctx.fillRect(Math.round(this.x) - 4 - camera.x, Math.round(this.y) - 2 - camera.y, 8, 2);
-    }
-    ctx.drawImage(sprite, Math.round(this.x) - Math.floor(sprite.width / 2) - camera.x, Math.round(this.y) - sprite.height - bob - Math.round(this.lift) - camera.y);
+    // A shadow at their feet, that stays on the ground when they're in the
+    // air (or hopping). Only for people: not a statue or a beast.
+    if (sprite && sprite.width <= 24) drawFootShadow(ctx, Math.round(this.x) - camera.x, Math.round(this.y) - this.ground + this.sag - camera.y);
+    const feet = Math.round(this.y) - this.ground - bob - Math.round(this.lift) + this.sag + off.y;
+    drawPosed(ctx, sprite, Math.round(this.x) + off.x - camera.x, feet - camera.y, pose?.sx ?? 1, pose?.sy ?? 1);
     ctx.globalAlpha = 1;
   }
 }
@@ -200,6 +247,8 @@ export class ScenePlayer {
     this.scene = scene;
     this.overworld = overworld;
     this.actors = new Map((scene.actors ?? []).map((data) => [data.id, new Actor(data)]));
+    // So they know when they're standing up on a block (Actor.sortY).
+    for (const actor of this.actors.values()) actor.room = overworld.room;
     // Actors playing someone already in the room step into their place.
     this.standIns = [];
     // Or someone in the party (`plays: 'vesper'`): the actor takes over from
@@ -318,6 +367,20 @@ export class ScenePlayer {
       case 'emote':
         this.emotes.push({ body: this.body(step.who), text: step.emote ?? '!', t: 0 });
         return false;
+      case 'act': {
+        // Someone does something with their whole body (see ACTS in
+        // acts.js): a hop, a start (with a "!"), a look about, a nod, a shake
+        // of the head, a shiver, a sigh, a lunge, a crouch (they stay down
+        // until a `stand`). The scene waits for it, unless `wait: false`:
+        // then the next step starts with it (two people nodding together).
+        const body = this.body(step.who);
+        body.perform(step.act ?? 'hop');
+        if (step.act === 'startle') {
+          this.emotes.push({ body, text: '!', t: 0 });
+          sfx('ambush');
+        }
+        return step.wait === false;
+      }
       case 'wait':
         return false;
       case 'camera':
@@ -389,12 +452,36 @@ export class ScenePlayer {
       case 'sound':
         if (step.name) sfx(step.name);
         return true;
+      case 'quake':
+        // The screen shakes, `amount` pixels for `seconds` (the Warden coming down).
+        this.overworld.shakeCamera?.(step.amount ?? 3, step.seconds ?? 0.5);
+        return true;
       case 'weather':
         // The room's snow and fog fade to `to` (0 gone, 1 as the room has
         // them) over `seconds`; the scene goes straight on while it fades.
         this.overworld.fadeWeather?.(step.to ?? 0, step.seconds ?? 2);
         return true;
       case 'give': {
+        // A keepsake or a tool (src/data/gear.js), with its own words in
+        // interactions/gear.txt, or an item for your bag.
+        if (GEAR[step.item]) {
+          giveGear(step.item);
+          sfx('heal');
+          this.overworld.textbox.open(textSection('interactions/gear.txt', `got_${step.item}`));
+          return false;
+        }
+        // A weapon or armor (Ves's mended coat, from Bryony), as from a chest.
+        const slot = ARMOR[step.item] ? 'armor' : WEAPONS[step.item] ? 'weapon' : null;
+        if (slot) {
+          const list = slot === 'armor' ? HERO_STATE.armors : HERO_STATE.weapons;
+          if (!list.includes(step.item)) list.push(step.item);
+          sfx('heal');
+          const { name } = (slot === 'armor' ? ARMOR : WEAPONS)[step.item];
+          const wielder = wielderOf(slot, step.item);
+          const forWhom = wielder !== HERO && inParty(wielder) ? ` It's for ${MEMBERS[wielder].name}.` : '';
+          this.overworld.textbox.open([`You got the ${name}!${forWhom} Put it on from EQUIP (press C).`]);
+          return false;
+        }
         const item = ITEMS[step.item];
         if (!item) return true;
         const got = giveItem(step.item);
@@ -403,15 +490,31 @@ export class ScenePlayer {
           : got ? `You got ${item.name}.` : `You'd take the ${item.name}, but you've nowhere to put it.`]);
         return false;
       }
-      case 'battle':
+      case 'battle': {
         // The encounter plays first (see ENCOUNTER), then the scene ends there.
         music.play(null);
         sfx('flare');
         step.dings = 0;
+        // The one in the spotlight comes at you, and you start.
+        const foe = step.who && !step.still ? this.body(step.who) : null;
+        if (foe && foe !== this.overworld.player) {
+          const { player } = this.overworld;
+          const d = Math.hypot(player.x - foe.x, player.y - foe.y) || 1;
+          foe.perform('lunge', { x: (player.x - foe.x) / d, y: (player.y - foe.y) / d });
+          player.perform?.('startle');
+          step.lunged = true;
+        }
         return false;
+      }
       case 'end_chapter':
         // A card between chapters; then on into `room` (at `spawn`), or the title screen without one.
         this.endChapter = step;
+        this.finish();
+        return false;
+      case 'goto':
+        // Off into another room (`room`, at `spawn`), as through a door: the
+        // scene ends here. Jumping down a well, say.
+        this.goto = step;
         this.finish();
         return false;
       case 'music':
@@ -436,6 +539,24 @@ export class ScenePlayer {
       case 'leave_party':
         leaveParty(step.who);
         this.overworld.removeFollower?.(step.who);
+        return true;
+      case 'hurt':
+        // `who` is a party member id, like 'join'. { on: true } and they're
+        // hurt (half their HP, and their own SPELLS for it: see `hurt` on
+        // MEMBERS in party.js) until a { on: false } step heals them.
+        setHurt(step.who, step.on !== false);
+        return true;
+      case 'save':
+        // Saves where you're standing, like a save point (between the two
+        // fights at the Hero's Gate, so losing the second doesn't mean the
+        // first all over again).
+        saveGame(this.overworld.roomData.id, { x: Math.floor(this.overworld.player.x / T), y: Math.floor((this.overworld.player.y - 1) / T) });
+        return true;
+      case 'piggyback':
+        // `who` is a party member id to carry on your back from now on (Ves,
+        // hurt, in the Lantern Marsh), or null to put them down: see
+        // Player.carrying. You walk slower, and can't run, jump or climb.
+        this.overworld.carry?.(step.who ?? null);
         return true;
       default:
         throw new Error(`Cutscene '${this.scene.id}' has a step it doesn't know: '${step.do}'`);
@@ -465,6 +586,9 @@ export class ScenePlayer {
       case 'emote':
         finished = step.t >= EMOTE_SECONDS;
         break;
+      case 'act':
+        finished = step.t >= actLength(step.act ?? 'hop');
+        break;
       case 'wait':
         finished = step.t >= (step.seconds ?? 0.5);
         break;
@@ -477,6 +601,11 @@ export class ScenePlayer {
         finished = this.pan(step, dt);
         break;
       case 'battle':
+        if (step.lunged && !step.jolted && step.t >= LUNGE_JOLT) {
+          step.jolted = true;
+          sfx('pounce');
+          this.overworld.shakeCamera?.(2, 0.25);
+        }
         while (step.dings < ENCOUNTER.blinks.length && step.t >= ENCOUNTER.blinks[step.dings]) {
           sfx('soul');
           step.dings++;

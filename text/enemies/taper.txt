@@ -2,8 +2,10 @@
 # Numbers (HP, damage, how much each TALK option calms her) live in
 # src/data/enemies/taper.js.
 
-# Said in speech bubbles during her entrance, after her title card. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in speech bubbles during her entrance, after her title card. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [boss_intro]
 Alright, sprout.
 I'll be as gentle as I can.
@@ -29,7 +31,9 @@ Taper keeps glancing at your scraped knees.
 Taper's flame is the smallest you've seen it.
 
 # Said in a speech bubble before each attack, picked at random. Lines written
-# together (no blank line between) are said one bubble at a time.
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 Please, sprout.
 Just come home.
@@ -64,8 +68,8 @@ You don't step back. Not one inch.
 Taper's flame flickers. "...When did you get so tall?"
 
 [talk: Take her hand]
-You take her hand. It's warm, like a cup of tea.
-She squeezes back, and for a moment she doesn't let go.
+You reach for her hand... but she's a candle. She hasn't got one.
+Her flame goes pink. "...Oh, sprout. Just stay close, then."
 
 # Said when you try to RUN.
 [no_escape]

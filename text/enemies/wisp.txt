@@ -1,0 +1,86 @@
+# WISP
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/wisp.js.
+
+[intro]
+One of the lanterns wasn't a lantern. A WISP!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+WISP bobs in front of you, just out of reach. This way, it seems to say.
+
+WISP straightens the tin lid on its head. It makes it look more like a lantern. It thinks.
+
+The real lights burn steady and gold. WISP's flicker. It's trying its best.
+
+WISP drifts a little way off, then stops and looks back to see if you're coming.
+
+Smells like wet reeds and a candle just blown out.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+This way!
+This way!
+
+Come and see.
+Just for a bit.
+
+Nobody ever
+stays.
+
+I'm a lantern.
+Look.
+...See?
+
+Follow me!
+Not far.
+Hardly far.
+
+Don't go back
+to the path.
+It's boring.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/wisp.js.
+[talk: Inspect]
+WISP - HP 540
+A marsh light that copies the lanterns to lead people off the path. It just wants company.
+
+[talk: Keep it company]
+You stay where you are and let the WISP float beside you for a while. It doesn't say anything. It glows a little warmer.
+
+[talk: Wave back]
+You wave at the WISP. It wobbles, astonished, then tries to wave back. It doesn't have hands. It waves its whole self.
+
+[talk: Say it glows nicely]
+You tell the WISP it glows very nicely. It goes so bright with pride its lid nearly falls off.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+WISP flickers, smaller and smaller, and goes out. Out in the fog, another light comes on. It might be the same one.
+
+[pacified]
+WISP circles you twice, happily. Then it drifts off into the fog, looking back the whole way, as if you might still follow.
+
+# Bramble's own TALK lines for it ({foe} is its name). He's been told all
+# about marsh lights, and he's not falling for one. Probably.
+[bramble_talk]
+Bramble tells {foe} he knows it's not a real lantern, because real lanterns don't have faces. {foe} quickly turns its face away.
+
+Bramble tells {foe} it can come on the path with them if it wants. {foe} doesn't know what to do. Nobody's asked it before.
+
+Bramble asks {foe} if it's hot. He pokes it to find out. It's not. It's a bit cold, actually.
+
+Bramble tells {foe} that Sword never gets lost, so it's wasting its time. {foe} is very impressed with Sword.
+
+# Ves's own TALK lines for it ({foe} is its name). She's hurt, riding on
+# your back, so she talks to it over your shoulder.
+[vesper_hurt_talk]
+Ves, from over your shoulder, tells {foe} it can stay and talk, as long as it doesn't lead anyone anywhere. {foe} glows, thinking about it.
+
+Ves holds out her hand, and {foe} comes and sits in it for a moment. It's cold, like a snowflake. She doesn't pull away.
+
+Ves tells {foe} she knows what it's like, waiting for someone who doesn't come. {foe} goes very quiet.

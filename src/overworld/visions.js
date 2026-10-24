@@ -1,7 +1,7 @@
 import { SCREEN_WIDTH as W, SCREEN_HEIGHT as H } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
-import { PROP_PALETTE } from '../data/art/props.js';
+import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { VES_FRAMES } from '../data/art/vesper.js';
 import { animationFrame } from '../engine/animations.js';
 
@@ -298,9 +298,181 @@ function drawFall(ctx, t, mood, moodTime) {
   }
 }
 
+// --- Down the well (theWell.js): the hero and Bramble jump, hand in hand.
+// Moods, one after the other:
+//   'drop'   the shaft from inside: old stone rushing up past faster and
+//            faster, the grey daylight from the top thinning to nothing, red
+//            leaves from the square falling with them, and for a moment the
+//            Hush's shadow over the opening
+//   'water'  black water coming up out of the dark, a splash, and bubbles
+//            rising, until there's nothing but black
+let wellSprites = null;
+function wellArt() {
+  wellSprites ??= {
+    hero: HERO_ANIMATIONS.down[0],
+    bramble: makeSprite(PROP_SPRITES.bramble_jump, PROP_PALETTE),
+  };
+  return wellSprites;
+}
+
+const WELL_WALL = 74; // how wide each side of the shaft is, in pixels
+
+// The shaft's stone walls, `scroll` pixels down, lit by `light` (0 to 1).
+function wellShaft(ctx, scroll, light) {
+  ctx.fillStyle = '#07060a';
+  ctx.fillRect(0, 0, W, H);
+  // The daylight coming down the middle, thinner the further you've fallen.
+  const beam = ctx.createLinearGradient(0, 0, 0, H);
+  beam.addColorStop(0, `rgba(150, 156, 170, ${(0.32 * light).toFixed(3)})`);
+  beam.addColorStop(1, 'rgba(150, 156, 170, 0)');
+  ctx.fillStyle = beam;
+  ctx.fillRect(WELL_WALL, 0, W - WELL_WALL * 2, H);
+  // Courses of stone, offset every other row, with the odd one mossy or dark.
+  const ROW = 9;
+  const first = Math.floor(scroll / ROW);
+  for (let r = first; r <= first + Math.ceil(H / ROW) + 1; r++) {
+    const y = Math.round(r * ROW - scroll);
+    for (const side of [0, 1]) {
+      const x0 = side ? W - WELL_WALL : 0;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x0, 0, WELL_WALL, H);
+      ctx.clip();
+      for (let c = -1; c < WELL_WALL / 18 + 1; c++) {
+        const x = x0 + c * 18 + (r % 2) * 9;
+        const n = hash(r * 31 + c * 7 + side * 1000);
+        // Lit from above and from the middle of the shaft.
+        const near = side ? (x - x0) / WELL_WALL : 1 - (x - x0) / WELL_WALL;
+        const lit = light * (1 - (y / H) * 0.55) * (0.35 + 0.65 * (1 - near));
+        const base = n < 0.12 ? [52, 74, 50] : n < 0.22 ? [40, 36, 44] : [84, 78, 90];
+        const k = 0.18 + lit * 0.82;
+        ctx.fillStyle = `rgb(${base.map((v) => Math.round(v * k)).join(',')})`;
+        ctx.fillRect(x, y, 17, ROW - 1);
+      }
+      ctx.restore();
+    }
+  }
+  // The inner edges of the walls, catching what light there is.
+  ctx.fillStyle = `rgba(160, 156, 170, ${(0.35 * light).toFixed(3)})`;
+  ctx.fillRect(WELL_WALL - 1, 0, 1, H);
+  ctx.fillRect(W - WELL_WALL, 0, 1, H);
+}
+
+// The two of them, hand in hand: the hero, and Bramble holding on, at (x, y).
+function wellPair(ctx, x, y, angle, scale = 2) {
+  const art = wellArt();
+  ctx.save();
+  ctx.translate(Math.round(x), Math.round(y));
+  ctx.rotate(angle);
+  ctx.scale(scale, scale);
+  ctx.drawImage(art.hero, -art.hero.width - 1, -art.hero.height / 2);
+  ctx.drawImage(art.bramble, -4, -art.bramble.height / 2 - 1);
+  ctx.restore();
+}
+
+function drawWell(ctx, t, mood, moodTime) {
+  if (mood === 'drop') {
+    // Falling faster and faster, and the light going.
+    const scroll = moodTime * 70 + moodTime * moodTime * 120;
+    const light = Math.max(0.06, 1 - moodTime / 2.4);
+    wellShaft(ctx, scroll, light);
+    // The air rushing past: streaks going up.
+    for (let i = 0; i < 18; i++) {
+      const x = WELL_WALL + 6 + hash(i + 700) * (W - WELL_WALL * 2 - 12);
+      const len = 12 + hash(i + 710) * 30;
+      const y = H - ((moodTime * (180 + moodTime * 160) * (0.6 + hash(i + 720)) + hash(i + 730) * H) % (H + len));
+      ctx.fillStyle = `rgba(210, 214, 230, ${((0.08 + hash(i + 740) * 0.12) * (0.4 + light)).toFixed(3)})`;
+      ctx.fillRect(Math.round(x), Math.round(y), 1, Math.round(len));
+    }
+    // Red leaves from the square, coming down the shaft with them (slower: they flutter).
+    for (let i = 0; i < 7; i++) {
+      const lx = WELL_WALL + 12 + hash(i + 800) * (W - WELL_WALL * 2 - 24) + Math.sin(t * 3 + i) * 6;
+      const ly = -10 + ((hash(i + 810) * 60 + moodTime * (30 + hash(i + 820) * 40)) % (H + 20));
+      ctx.fillStyle = i % 2 ? '#b8362a' : '#e0663a';
+      ctx.fillRect(Math.round(lx), Math.round(ly), 2 + (Math.floor(t * 8 + i) % 2), 2);
+    }
+    // For a moment, the Hush leaning over the top, blotting out the light.
+    if (moodTime < 1.1) {
+      const k = Math.sin((moodTime / 1.1) * Math.PI);
+      const g = ctx.createRadialGradient(W / 2, -30, 10, W / 2, -30, 140);
+      g.addColorStop(0, `rgba(0, 0, 0, ${(0.85 * k).toFixed(3)})`);
+      g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+    // The two of them: dropping into view from the top, then falling with
+    // the camera, swinging a little on each other's hands.
+    const y = 40 + Math.min(1, moodTime / 0.6) * 70 + Math.sin(t * 5) * 2;
+    wellPair(ctx, W / 2 + Math.sin(t * 2.2) * 5, y, Math.sin(t * 3.1) * 0.12);
+    // The deeper, the darker.
+    ctx.fillStyle = `rgba(0, 0, 0, ${(Math.min(0.7, moodTime / 3.4)).toFixed(3)})`;
+    ctx.fillRect(0, 0, W, H);
+    return;
+  }
+  if (mood === 'water') {
+    // Black water coming up fast, and the two of them hitting it.
+    const hit = 0.3;
+    const pairY = 110;
+    const surface = moodTime < hit ? H + 10 - (H + 10 - (pairY + 18)) * (moodTime / hit) : pairY + 18;
+    wellShaft(ctx, 700 + moodTime * (moodTime < hit ? 460 : 0), 0.06);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(0, 0, W, H);
+    if (moodTime < hit) wellPair(ctx, W / 2, pairY, 0);
+    else if (moodTime < hit + 0.25) {
+      // Going under: only the top of them left above the water.
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, W, surface);
+      ctx.clip();
+      wellPair(ctx, W / 2, pairY + ((moodTime - hit) / 0.25) * 50, 0);
+      ctx.restore();
+    }
+    // The water: black, with a faint sheen on top.
+    ctx.fillStyle = '#05070c';
+    ctx.fillRect(WELL_WALL, Math.round(surface), W - WELL_WALL * 2, H);
+    ctx.fillStyle = 'rgba(120, 140, 170, 0.35)';
+    ctx.fillRect(WELL_WALL, Math.round(surface), W - WELL_WALL * 2, 1);
+    if (moodTime >= hit) {
+      const s = moodTime - hit;
+      // A flash on impact, a ring spreading out, and spray thrown up.
+      if (s < 0.1) {
+        ctx.fillStyle = `rgba(220, 230, 255, ${(0.5 * (1 - s / 0.1)).toFixed(3)})`;
+        ctx.fillRect(0, 0, W, H);
+      }
+      const ring = Math.min(W / 2 - WELL_WALL, 10 + s * 140);
+      ctx.fillStyle = `rgba(190, 210, 240, ${Math.max(0, 0.6 - s * 0.6).toFixed(3)})`;
+      ctx.fillRect(Math.round(W / 2 - ring), Math.round(surface), 3, 1);
+      ctx.fillRect(Math.round(W / 2 + ring - 3), Math.round(surface), 3, 1);
+      for (let i = 0; i < 26; i++) {
+        const vx = (hash(i + 900) - 0.5) * 140;
+        const vy = 90 + hash(i + 910) * 120;
+        const dx = vx * s;
+        const dy = -vy * s + 260 * s * s;
+        if (dy > 0) continue;
+        ctx.fillStyle = i % 3 ? 'rgba(170, 196, 232, 0.8)' : 'rgba(240, 246, 255, 0.9)';
+        ctx.fillRect(Math.round(W / 2 + dx), Math.round(surface + dy), 2, 2);
+      }
+      // Under: bubbles going up out of the dark.
+      for (let i = 0; i < 12; i++) {
+        const bx = W / 2 + (hash(i + 950) - 0.5) * 40 + Math.sin(t * 6 + i) * 2;
+        const by = H - ((s * (50 + hash(i + 960) * 40) + hash(i + 970) * 60) % (H - surface));
+        if (by <= surface + 2) continue;
+        ctx.fillStyle = 'rgba(140, 170, 210, 0.5)';
+        ctx.fillRect(Math.round(bx), Math.round(by), 2, 2);
+      }
+      // Then nothing but black.
+      if (s > 0.7) {
+        ctx.fillStyle = `rgba(0, 0, 0, ${Math.min(1, (s - 0.7) / 0.6).toFixed(3)})`;
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+  }
+}
+
 export const VISIONS = {
   lantern: drawLantern,
   fall: drawFall,
+  well: drawWell,
 };
 
 // Draws vision `vision` ({ name, mood, start, moodStart }) at time `now` (seconds).

@@ -19,7 +19,7 @@ export const MEETING_THE_KEEPER = {
     { do: 'face', who: 'keeper', dir: 'left' },
     { do: 'face', who: 'player', dir: 'right' },
     { do: 'emote', who: 'keeper', emote: '!' },
-    { do: 'say', who: 'keeper', text: 'Ah... there you are.\n\n{surprised}I saw a light flicker at the top of the stair. I thought perhaps... no. Never mind.' },
+    { do: 'say', who: 'keeper', text: 'Ah... there you are.\n\n{surprised}I saw a light flicker at the top of the stairs. I thought perhaps... no. Never mind.' },
     { do: 'emote', who: 'keeper', emote: '...' },
     { do: 'say', who: 'keeper', text: 'Let me look at you. Small. Lost. A little singed around the edges.\n\n{glee}Not quite what the old stone promised. But you\'re here, and that is something.' },
     { do: 'say', who: 'keeper', text: 'Forgive my manners. They call me the Keeper.\n\nI tend the lantern, and the lantern tends the dark.\n\nIt has been that way for a hundred years.' },

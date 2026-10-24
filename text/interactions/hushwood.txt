@@ -1,0 +1,1086 @@
+# THE HUSHWOOD: the old, quiet wood below the Long Drop, and Hollin, the
+# woodcutters' village nobody lives in any more (Chapter 3). Things you can
+# read and look at, and the words for Bramble's tricks.
+#
+# A section with `_bramble` on the end of its name is what Bramble says
+# after the section of that name, if he's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal glows steady in the dark under the trees. It's the only thing here that isn't holding its breath.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Switching to Bramble, and splitting up ---
+
+# The first time you press Q.
+[swap_first]
+{grin}Me? My turn? Brilliant. Watch this. I fit through EVERYTHING.
+
+{proud}(You're steering Bramble now. Q switches back. Walk him up to you and press Z, and he'll fall in behind you again.)
+
+[split_door]
+Not without Bramble. Go and get him first.
+
+[split_door_kid]
+{worried}I'm not going off on my own. That's how kids get eaten, Sword. Everyone knows that.
+
+[split_save]
+Not with Bramble off somewhere. Get him back first.
+
+[kid_rope]
+{scared}Up THAT? On a rope? No. No no no. I'll go round.
+
+[kid_rock]
+{angry}Nngh... hhhnnng... It's not moving, Sword. I think it's stuck to the ground. You do rocks.
+
+# --- Chopping ---
+
+[chop_alone]
+It's thin enough to chop, if you had a proper axe. And knew how.
+
+[chop_first]
+{grin}Stand back! Ma says you always cut on the side you want it to fall. So it goes THAT way. The way I'm facing.
+
+{proud}TIMBERRR!
+
+[chop_timber]
+{grin}Timber!
+
+[chop_splash]
+{glee}Ha! Right in. That's a bridge, that is. Ma says I'm a natural.
+
+[chop_no_room]
+{thinking}It's got nowhere to fall that way. Trees need room, Sword. Face it the other way.
+
+[hollow_open]
+{surprised}It's hollow! There's a whole hole in it. You could fit a whole... you could fit me. And you, probably.
+
+# --- The Hush ---
+
+# The first time its shadow finds you.
+[hush_caught]
+{scared}...
+
+{scared}It saw us. It SAW us. It just looked, and went on.
+
+{worried}Why didn't it... Never mind. Back to the start, quick. And keep in the leaf piles when it comes over. Keep STILL.
+
+[hush_caught_again]
+{scared}Back! Back! In the leaves, and don't move a hair.
+
+# --- Shared, across the Hushwood ---
+
+[scarlet_tree]
+An old tree, older than the ones above. Its red has gone dark, nearly brown.
+
+It's very quiet up in its branches.
+
+[scarlet_tree_bramble]
+{thinking}Ma says the trees down here are older than the woodcutters. Older than anyone.
+
+[bramble]
+A wall of bramble, black with age.
+
+[pen_hedge]
+A hedge of bramble, grown round like a wall.
+
+[roll_log]
+A felled log, round and heavy. It'd roll a long way, given a push.
+
+(Walk into it to push it. It keeps going till something stops it. Into water, it's a bridge.)
+
+[roll_log_bramble]
+{grin}Logs are easy. Even I can do logs. Just push and get out of the way.
+
+[thin_pine]
+A thin young tree, growing where the light gets through. There's an old axe-notch in its trunk.
+
+[thin_pine_bramble]
+{proud}That's a chopper. I can do that one. Face it the way you want it to fall and I'll do the rest.
+
+[kid_gap]
+A small round hole low in the bramble. Something small has been going through it a lot.
+
+You won't fit.
+
+[kid_gap_bramble]
+{glee}I will, though. (Press Q.)
+
+[treadle]
+An old wooden treadle, set in the ground. Stand on it and it goes down. Step off and it comes back up.
+
+The woodcutters used them to hold gates open. One to stand on it, one to go through.
+
+[treadle_bramble]
+{grin}You stand on it and I go through. Or I stand on it and you go through. Teamwork. Ma says it's the best kind of work.
+
+[leaf_pile]
+A deep, soft heap of leaves. Deep enough to get right down into.
+
+[leaf_pile_bramble]
+{sly}Good hiding spot. Best in the wood. Keep still in it and nothing'll ever find you. That's a fact.
+
+[paw_print]
+A print in the mud, as long as your forearm. A hoof, split down the middle, sunk deep.
+
+It's fresh.
+
+[paw_print_bramble]
+{scared}...That's it. That's the Hush.
+
+{determined}It's not that big. Probably.
+
+[boot_print]
+A small boot print in the mud, toe deep, running.
+
+[chalk_rock]
+A boulder with a chalk arrow on it.
+
+[notched_post]
+An old post with a notch cut in it: three cuts and a tick.
+
+[notched_post_bramble]
+{proud}That's Ma's notch. Three cuts and a tick. Nobody else does the tick.
+
+[sluice]
+A wooden sluice gate in a stone channel. Pull the lever and it lifts.
+
+[rock_stump]
+A stump with a hand carved into the top, worn smooth.
+
+You press the hand, and everything goes back to how it was: rocks, logs, trees and all.
+
+[rock_stump_bramble]
+{grin}It puts it all back! Ma says the old woodcutters were lazy, so they made everything put itself away.
+
+[gold_pouch_empty]
+An empty purse. Someone's lucky day was a long time ago.
+
+[chest_empty]
+An empty chest. The leaves are already filling it back up.
+
+[sluice_blocked]
+The sluice judders and won't lift. Something's sitting in the channel it would fill.
+
+# Roping off somewhere Bramble has another way round (a room's `ropeSplit`).
+[kid_rope_split]
+{scared}On a ROPE? Down THERE? No. You go. I'll go round. There's always a way round for someone my size.
+
+{grin}(Bramble stays put. Press Q to steer him.)
+
+[sluice_someone]
+The sluice judders and won't lift. Somebody's standing in the channel it would fill, and the old woodcutters made their sluices careful.
+
+# Rocks, in the Hushwood's rooms (Z twice on one puts everything back).
+[push_rock]
+A mossy boulder about as big as you. It rocks a little when you lean on it.
+
+(Walk into it to push it. Press Z on it again to put everything back how it was.)
+
+[push_rock_bramble]
+{proud}You do rocks. I do logs. And trees. And holes. I do most things, really.
+
+[rock_home]
+You give it a shove the wrong way. Everything shivers and goes back to where it started.
+
+# --- THE MIST'S EDGE ---
+
+[mist_sign]
+A post at the edge of the wood, its sign half rotted away:
+
+...LLIN. MIND THE ...ROOK. ROLL A LOG, DON'T ...ADE.
+
+[mist_chalk]
+A boulder with an arrow on it in fresh white chalk, pointing west along the brook. Neat, quick lines.
+
+Ves had chalk in her coat pocket the whole way up the mountain. Her mother's, for marking the lamps.
+
+[mist_mist]
+Past the last trees the ground goes soft and grey, and then it isn't ground at all. Mist, as far as you can see.
+
+Nothing moves in it. Not even the lights.
+
+[mist_brook]
+A brook off the ravine, fast and black and cold. There's no wading it.
+
+[mist_brook_bramble]
+{thinking}Don't go in the brook. Nobody comes out of the brook the same temperature they went in.
+
+[mist_boulder]
+A boulder, green with moss. It's not going anywhere, and neither is anything that rolls into it.
+
+[mist_pouch]
+A little leather purse, half buried in leaves behind the trees. Somebody hid it here a long time ago and forgot.
+
+[mist_chest]
+An old woodcutters' chest, wedged between the roots where nobody would trip on it. Something's still inside.
+
+# --- THE FELLED RUN ---
+
+[felled_sign]
+An old board, the letters burnt in:
+
+THE FELLED RUN. LOGS TO THE BROOK. ONE AT A TIME, AND MIND YOUR TOES.
+
+Underneath, scratched in: "the far one's no good on its own. Ask the near one."
+
+[felled_chest]
+A chest at the end of the woodcutters' old run, where the logs used to pile up. Still a treat in it, for whoever got the logs across.
+
+# --- THE HOLLOW OAK ---
+
+[oak_ring]
+All that's left of a great oak: a ring of trunks grown together around a hollow you could hold a party in.
+
+[oak_ring_bramble]
+{proud}This is the Hollow Oak. It's mine. Well. It's everybody's. But it's mostly mine.
+
+[oak_pack]
+A pack stuffed under the roots, with a blanket rolled up in it, three conkers, a very good stick, and a bag of pine candy.
+
+You take the pine candy. You leave the stick. It's a very good stick.
+
+[oak_pack_bramble]
+{sheepish}...That's my pack. You can have the candy. NOT the stick.
+
+[oak_pack_empty]
+Bramble's pack. Blanket, conkers, the very good stick.
+
+[oak_cap]
+A small green knitted cap in the leaves, knocked off in a hurry.
+
+[oak_cap_bramble]
+{grin}My hat! I thought the foxes ate it. ...I'll get it later. When I'm older.
+
+[oak_chest]
+An old chest against a tree, the woodcutters' marks on the lid. Inside, wrapped in a cloth: a honeycake, still soft.
+
+[oak_no_run]
+Bramble's backed against the oak with nowhere to go. You're not leaving him.
+
+# --- THE KID GAP ---
+
+[kidgap_sign]
+A board on a post:
+
+GATES TIED FROM THE FAR SIDE. ASK A SMALL PERSON.
+
+Underneath, smaller: "or a fox. foxes are no help."
+
+[kidgap_gate]
+A gate of woven branches, tied shut from the far side. There's a lever over there, through the hedge.
+
+[kidgap_gate_open]
+Somewhere through the hedge a rope goes taut, and the gate creaks open.
+
+[kidgap_lever]
+A wooden lever. Somebody's carved "B" on the handle, quite badly.
+
+[kidgap_lever_bramble]
+{proud}That's my B. I did that. Two summers ago. Ma was furious.
+
+[kidgap_rock]
+A rock rolled in front of the little hole in the hedge, as if somebody didn't want the little hole used.
+
+(Walk into it to push it. Press Z on it again to put everything back.)
+
+[kidgap_rock_bramble]
+{angry}Somebody's put a ROCK in front of my hole. That's sabotage, that is.
+
+[kidgap_chalk]
+Another chalk arrow, pointing north. Under it, smaller, the chalk pressed hard:
+
+"it's following me"
+
+[kidgap_chalk_bramble]
+{thinking}That's not Ma's. Ma cuts notches, she never uses chalk. And it's pointing north, the way your friend ran. It's hers.
+
+{worried}...She knew. She knew it was coming after her.
+
+{determined}Then we'd better be quicker than it.
+
+[kidgap_pouch]
+A purse in a little hollow inside the bramble, where nobody grown-up could ever reach.
+
+[kidgap_pouch_bramble]
+{sly}I didn't put it there. But I knew it was there. That's different.
+
+# --- THE LEANING PINES ---
+
+[pines_sign]
+A board nailed to a tree:
+
+LEANING PINES. FELL WITH CARE. A TREE GOES THE WAY YOU FACE IT.
+
+Underneath: "a stump's a step. a log's a bridge. a tree in the wrong place is a nuisance."
+
+[pines_chest]
+A chest on the far bank of the deep brook, where only somebody who'd crossed it would find it. Inside, a woolly cap the colour of an acorn.
+
+[pines_chest_bramble]
+{awed}My acorn cap! I lost that last summer! ...How did it get over here?
+
+{thinking}...I might have been over here last summer.
+
+[pines_pouch]
+A purse hung on a nail in a tree, a woodcutter's spare money for a rainy day. It's been raining for years.
+
+# --- THE TREADLES ---
+
+[treadles_sign]
+A board on a post:
+
+TREADLE GATES. ONE STANDS, ONE GOES. THEN SWAP.
+
+Underneath, smaller: "and if there's nobody to swap with, think of something heavy."
+
+[treadle_gate]
+A narrow gate in the hedge, on a rope that runs off under the ground to a treadle.
+
+[den_gap]
+A small hole in the bramble, well hidden behind a fern.
+
+[den_gap_bramble]
+{scared}That's not anything. Don't look at that. That's just a hole.
+
+{sheepish}...It's my den. Don't tell anyone.
+
+[den_wall]
+A thick wall of bramble. There's a sign hung on it at about knee height:
+
+"KEEP OWT. THIS MEANS YOU. AND YOU."
+
+[den_box]
+A wooden box with "TRESURE" painted on the lid. Inside: two little hatchets, wrapped in a flannel, very carefully.
+
+[den_box_bramble]
+{proud}My best ones. One for each hand. I've been practising. On trees. And on a bucket. Mostly the bucket.
+
+[den_box_empty]
+The treasure box. Empty, apart from a very old biscuit Bramble says he's saving.
+
+[den_jar]
+A jam jar full of coins, buried up to its neck. Somebody's been saving for a long time.
+
+[den_jar_bramble]
+{proud}That's my savings. Two summers of finding things and selling them to Rummage. You can have it. For the girl.
+
+[den_jar_empty]
+The jam jar, empty. There's a note inside: "FOR SOMTHING IMPORTANT."
+
+[den_bed]
+A nest of leaves and a folded blanket, just the right size for somebody small.
+
+[den_bed_bramble]
+{sheepish}I sleep here sometimes. When it's hot. Or when I've done something.
+
+# --- CINDER'S KILN ---
+
+[kiln_kiln]
+A charcoal kiln: an earth mound with a little iron door, smoking gently from a dozen places. It's warm all the way round.
+
+[kiln_charcoal]
+A heap of charcoal, black and glittering. It snaps like biscuits underfoot.
+
+[kiln_kettle]
+A sooty kettle on a hook, just off the boil. There's always tea at Nan Cinder's, Bramble says. It's always terrible.
+
+[kiln_fire]
+A cooking fire, banked low. It smells of pine and potatoes.
+
+[kiln_awning]
+A canvas awning on poles, patched with sacking. Under it, a cot with a grey blanket.
+
+[kiln_cot]
+A narrow cot with a grey blanket, warm from the kiln. Bramble's already on the end of it.
+
+[kiln_barrel]
+A rain barrel with a ladle. There's a frog in it. It looks very at home.
+
+[kiln_crates]
+Crates of charcoal, labelled for forges that haven't sent for it in years.
+
+[kiln_chalk]
+A chalk arrow on the trunk of Nan Cinder's tree, pointing west towards the dark under the dead giant.
+
+Under it: "for the one coming after."
+
+[kiln_chalk_bramble]
+{thinking}"For the one coming after." That's you, Sword.
+
+{sad}...Nobody draws arrows for me.
+
+[rested]
+You sleep like a stone by the warm kiln. Your HP is fully restored.
+
+# --- THE UNDERROOT ---
+
+[underroot_sign]
+A board at the mouth of the tunnels, black with age:
+
+THE UNDERROOT. KEEP A LIGHT. KEEP LEFT. NO, RIGHT. JUST KEEP A LIGHT.
+
+[underroot_wall]
+Earth and roots, a giant's roots, thick as you are and tangled through everything.
+
+[underroot_chalk]
+A chalk arrow on the root wall, quick and neat, showing up white in your light.
+
+[underroot_chalk_bramble]
+{awed}She came through here in the dark. With no light. Drawing arrows.
+
+{determined}She's braver than me. Don't tell her I said that.
+
+[underroot_chest]
+A chest at the end of a dead end, half swallowed by roots. Inside, a leather jerkin baked hard and stiff, Bramble-sized.
+
+[underroot_chest_bramble]
+{glee}That's one of Nan Cinder's! She bakes them in the kiln. She must have lost it down here.
+
+{sly}Finders keepers.
+
+[underroot_pouch]
+A purse in the roots, where someone dropped it feeling their way along the wall.
+
+# --- THE GORGE ---
+
+[gorge_sign]
+A sign at the cliff edge:
+
+ROPE DOWN AT THE RING. THE CRACK IS FOR SQUIRRELS AND CHILDREN.
+
+[gorge_sign_bramble]
+{proud}Squirrels and children. That's me. I'm both.
+
+[gorge_cliff]
+A sheer drop of grey rock to the gorge floor. Too far to jump. Just far enough to rope.
+
+[gorge_crack]
+A crack in the cliff, no wider than your shoulder. Something small could get down it.
+
+[gorge_crack_bramble]
+{grin}That's my way down. You take the rope. I'll see you at the bottom.
+
+[gorge_rock]
+A rock jammed at the foot of the crack in the cliff. From down here, you could shift it.
+
+(Walk into it to push it. Press Z on it again to put everything back.)
+
+[gorge_gate]
+A woven gate across the gorge floor, tied off to a lever in a pocket of bramble nearby.
+
+[gorge_gate_open]
+Over in the bramble a rope pulls tight, and the gate swings open.
+
+[gorge_lever]
+An old lever in a pocket of the bramble, its handle worn by small hands.
+
+[gorge_trunk]
+A fat old hollow trunk at the end of the gorge. Scratched in the bark, small and neat: a raccoon's paw print.
+
+[gorge_trunk_bramble]
+{sly}Ooh. I know what that means. Chop it. Go on. Trust me.
+
+[gorge_trunk_open]
+{glee}It's Rummage's! I KNEW it. Don't tell anyone where it is. He'll be furious. And then he'll give you buttons.
+
+[gorge_chest]
+A chest on the clifftop, at the very edge, where the view's best. Inside, a twist of paper with charcoal toffee in it.
+
+[gorge_pouch]
+A purse in a pocket of bramble, out of reach of anybody with sense.
+
+[gorge_chalk]
+A chalk arrow on a boulder at the cliff edge, pointing straight down.
+
+Under it: "sorry. it's the only way."
+
+# --- THE NOTCHED TREES ---
+
+[notched_sign]
+A board on the gatepost:
+
+THE ORDER IS IN THE WOOD. WRONG ORDER, START AGAIN.
+
+[notched_sign_bramble]
+{thinking}"The order is in the wood." That's a riddle. Ma loves riddles. I hate riddles.
+
+{grin}...Look at the posts, though.
+
+[notched_gate]
+A narrow gate, roped to four levers about the clearing. The rope's knotted in a particular way.
+
+[notched_gate_open]
+The fourth lever goes over, the rope pulls taut through all four, and the gate creaks open.
+
+[notched_gate_reset]
+Clunk. Every lever drops back.
+
+That wasn't the order.
+
+[notched_lever]
+A wooden lever, with a carved post beside it.
+
+[notched_post_1]
+A post beside the lever, with a notch cut in it: three cuts and a tick. Just the once.
+
+[notched_post_2]
+A post beside the lever, with the same notch cut twice, one above the other.
+
+[notched_post_3]
+A post beside the lever, with the same notch cut three times.
+
+[notched_post_4]
+A post beside the lever, with the same notch cut four times, one above another.
+
+[notched_post_4_bramble]
+{proud}Ma's notch! Ma's counting. One, two, three, four. She always counts in notches. She counted my birthdays on the door like that.
+
+[notched_chalk]
+A chalk arrow, pointing north at the gate. Under it, quick and smudged:
+
+"keep up!"
+
+[notched_chalk_bramble]
+{grin}That's your friend's again, not Ma's. Ma doesn't leave notes. Ma just expects you to keep up.
+
+[notched_ma]
+A post at the edge of the thicket, with a fresh notch in it, the wood still pale. Three cuts and a tick, and an arrow pointing east, into trees too thick to walk.
+
+[notched_ma_bramble]
+{worried}That's Ma's. Fresh. They went that way, into the thick.
+
+{determined}...She's got six woodcutters and an axe. Your friend's got chalk. We go north.
+
+[notched_thicket]
+Trees so close together you couldn't get an arm between them. Somebody's cut a few branches back, with an axe, in a hurry.
+
+[notched_chest]
+A chest tucked behind the gatepost on the far side. Inside, a twist of paper with toffee in it.
+
+[notched_pouch]
+A purse in the pocket of bramble, beside the lever.
+
+# --- THE WINDFALL ---
+
+[windfall_trunk]
+A tree that came down in a storm, lying right across the wood. It's taller lying down than you are standing up.
+
+You'd need a step to get up on it.
+
+[windfall_trunk_bramble]
+{awed}The big storm did this. Before I was born. Ma says the whole wood shouted.
+
+[windfall_stump]
+A stump about knee high: a step up onto the fallen trunk.
+
+[windfall_chest]
+A chest in the lee of a fallen trunk, kept dry all these years. Inside: an ember potato, wrapped in a cloth, still warm somehow.
+
+[windfall_pouch]
+A purse caught in the roots of the fallen tree, lifted out of the ground when it came down.
+
+# --- THE MILLRACE ---
+
+[millrace_sign]
+A post by the old leat:
+
+HOLLIN MILLRACE. EAST SLUICE: SOUTH RUN AND THE NORTH RACE. WEST SLUICE: THE CROSS RACE. BOTH UP, BOTH BANKS MEET.
+
+Underneath, scratched: "and then you'll want one down again. ha."
+
+[millrace_lever_a]
+The east sluice lever. It lifts a board in the leat, and the water goes another way.
+
+[millrace_lever_b]
+The west sluice lever, stiff with age.
+
+[millrace_water]
+The millrace, running fast in its stone channel. It'd knock you off your feet.
+
+[millrace_channel]
+A stone channel, dry for now, its slabs green with moss. When the sluice sends water down it, it fills in a moment.
+
+[millrace_channel_bramble]
+{thinking}Don't stand in the channel when the water's coming. Ma says that's how Uncle Ash lost his boots.
+
+[millrace_glint]
+Little points of pale blue light on the leaves at the foot of a tree, coming and going. Nothing up there is that colour.
+
+[millrace_glint_bramble]
+{thinking}That's not a firefly. Fireflies are yellow.
+
+{grin}...That tree's funny. Go on. Walk into it.
+
+[millrace_chalk]
+A chalk arrow on a rock in the north-west, pointing north. Under it, in a hurry:
+
+"don't come this way"
+
+It's been crossed out. Under that: "ok come this way but QUICKLY"
+
+[millrace_chalk_bramble]
+{worried}"Quickly." Sword... I don't think she meant us. I think she meant herself.
+
+[millrace_chest]
+A chest in the corner of the north-east bank, under a tarpaulin. Inside, a jar of stew with a cloth on top.
+
+[millrace_pouch]
+A purse on the east bank, by the sluice house wall.
+
+# --- THE QUIET ---
+
+[quiet_tree]
+An old tree. Nothing sings in it.
+
+[quiet_chalk]
+A chalk arrow, pointing north. It's crooked, drawn fast, and the last line skids off the rock.
+
+[quiet_chalk_bramble]
+{scared}...She was running.
+
+[quiet_pouch]
+A purse in the far corner, where nobody would go who had any sense.
+
+# --- HOLLIN GATE ---
+
+[hollin_sign]
+The village sign, weathered grey, still standing: HOLLIN.
+
+Somebody's added, much later, in paint: "GONE TO THE CAMP. TAKE WHAT YOU NEED."
+
+[hollin_sign_bramble]
+{awed}Hollin. Grandad was born here. He used to tell me all about it.
+
+{sad}...It was bigger in his stories.
+
+[hollin_palisade]
+The village palisade, sharpened stakes in a ring, grey and leaning.
+
+[hollin_gate_gate]
+The village gate, barred from the inside. The bar is on a rope, and the rope runs to a lever by the green.
+
+[hollin_gate_open]
+On the far side a bar lifts, a rope creaks, and Hollin's gate swings open for the first time in fifty years.
+
+[hollin_board]
+A gap in the palisade where a stake has rotted away. Too small for you.
+
+[hollin_board_bramble]
+{grin}Grandad said they never fixed it, 'cos all the kids used it. ME. I'm all the kids.
+
+[hollin_bar]
+The lever for the village gate's bar. Somebody wrapped its handle in cloth so it wouldn't creak.
+
+[hollin_door]
+A cottage door, shut. Fifty years of leaves are heaped against it.
+
+[hollin_door_bramble]
+{sad}Nobody's coming out of there. Nobody's come out of anywhere here for a long time.
+
+[hollin_wall]
+A cottage wall, fieldstone and old plaster. Moss is having it, slowly.
+
+[hollin_window]
+A window, boarded up from the inside. Somebody meant to come back for whatever's in there.
+
+[hollin_roof]
+A roof of old slates gone green with moss, sagging in the middle.
+
+[hollin_cart]
+A cart with a broken wheel, left where it stopped. The harness is still on the shaft. Whatever was pulling it got away.
+
+[hollin_washing]
+A washing line with clothes still pegged on it, faded grey. Fifty years of drying.
+
+[hollin_chalk]
+A chalk arrow on a stone in the green, pointing north up the lane.
+
+[hollin_ladder]
+A rope ladder hanging off the old lookout tree, swaying a little. Up there, something like a platform.
+
+[hollin_lookout_tree]
+The lookout tree: the tallest in Hollin, with a platform built into its crown.
+
+[hollin_lookout_stump]
+A stump at the foot of the lookout tree: a step up to the ladder.
+
+[hollin_log]
+A log rolled against the lookout stump so nobody little could climb it.
+
+[hollin_log_bramble]
+{sly}Grandad said they did that so the kids couldn't get up the lookout. Grandad got up the lookout every day.
+
+[hollin_gate_pouch]
+A purse in the long grass outside the palisade, by the old fields. A farmer's, maybe.
+
+# --- THE LOOKOUT ---
+
+[lookout_rail]
+The lookout's rail, worn smooth where a lot of elbows leaned.
+
+[lookout_branches]
+The crown of the old tree, all round the platform. Red leaves, close enough to touch.
+
+[lookout_view]
+You can see the whole Hushwood from here: red, then darker red, then nearly black where the oldest trees are.
+
+Beyond it, south, the mist. Far out in it, lights, swinging.
+
+[lookout_view_bramble]
+{awed}I can see the camp! There's the smoke! ...There's nobody at it.
+
+[lookout_view_west]
+West, the wood goes on and on. North, Hollin's roofs, and in the middle of them a little square, and a well.
+
+[lookout_telescope]
+An old brass telescope on a swivel, green with age. Through it, everything is very far away and slightly purple.
+
+[lookout_bench]
+A bench for whoever was on watch. Somebody carved a tally into it: forty-one marks. Forty-one nights of nothing.
+
+[lookout_chest]
+A sea chest, of all things, roped to the platform. Inside, a long oilskin coat, still dry, smelling of rain.
+
+[lookout_axe]
+A long box with a woodcutter's name burnt into the lid: OAKLEY. Inside, an axe with a head of black heartwood.
+
+[lookout_axe_bramble]
+{awed}...Oakley. That's Grandad. That's GRANDAD'S.
+
+{sad}He said he left his best axe somewhere high up, where the Hush couldn't reach it.
+
+[lookout_pouch]
+A purse hung from a nail, the lookout's pay, never collected.
+
+# --- HOLLIN LANE ---
+
+[lane_cobbles]
+Hollin's lane, cobbled, with weeds in every crack. Something big has walked up it, and the weeds haven't stood back up.
+
+[lane_gate]
+The gate at the top of the lane, shut and barred. The bar's lever is round the back somewhere, in the gardens.
+
+[lane_gate_open]
+Somewhere behind the cottages a lever goes over, and the bar on the lane gate lifts.
+
+[lane_flap]
+A cat flap in the garden fence. A very determined cat once lived here.
+
+[lane_flap_bramble]
+{proud}I'm better than a cat. I can do levers.
+
+[lane_lever]
+A lever in a back garden, among the weeds, for the lane gate's bar.
+
+[lane_chest]
+A chest in a back garden, under the washing line. Charcoal toffee, wrapped in paper.
+
+[lane_pouch]
+A purse under a garden bench, where somebody sat and counted it fifty years ago.
+
+[lane_chalk]
+A chalk arrow on a doorstep, pointing up the lane. Very small and quick, with a shake in it.
+
+# --- HOLLIN WELL ---
+
+[well_well]
+The village well, with a little slate roof and a crank. Its rope is gone.
+
+On the rim, in chalk, an arrow pointing straight down. And one word, written small:
+
+"sorry"
+
+[well_blocked]
+A cart on its side across the way out, with a cottage's worth of furniture piled behind it. Nobody's getting past that.
+
+[well_sign]
+A notice board by the well, the notices long since rotted. One is still readable, carved, not written:
+
+THE HUSH CAME UP THE LANE AND STOPPED AT THE WELL. IT LOOKED DOWN IT FOR A LONG TIME. THEN IT WENT BACK.
+
+WE ARE GOING UP TO THE CAMP. DON'T DRINK THE WATER.
+
+# --- UNDER THE WELL ---
+
+[well_bottom_up]
+Far, far above, a little round of grey sky, and the edge of the well's roof.
+
+Nothing is looking down. Not now.
+
+[well_bottom_water]
+Black water, still and very cold. You came up out of it.
+
+[well_bottom_wall]
+Old stone, wet, and older than the well. The well was built down onto something.
+
+[well_bottom_chalk]
+A chalk arrow on the wall, pointing on into the dark. It's fresh.
+
+[well_bottom_chalk_bramble]
+{awed}She's ALIVE. She came down here, and she drew an arrow, and she went on.
+
+{determined}Then so do we.
+
+[well_bottom_end]
+A tunnel goes on into the dark, east, the way the arrow points. You can hear water moving somewhere along it.
+
+# --- RUMMAGE'S HOLLOW ---
+
+[rummage_wall]
+Earth and roots, with things pushed into every nook: spoons, keys, a bell, a boot.
+
+[rummage_junk]
+A heap of things that fell off the mountain: a herald's trumpet, a teapot, a boot, a clock that's stopped at five to three.
+
+[rummage_junk_2]
+More things that fell off the mountain: the runner of a sled, a ring of keys, a teacup, a little framed picture of nobody you know.
+
+[rummage_lanterns]
+A string of lanterns, none of them alike, all of them lit. Every one fell off the mountain, Rummage says. Lit.
+
+[rummage_crates]
+Crates labelled in a raccoon's careful hand: "SPOONS (GOOD)", "SPOONS (BETTER)", "SPOONS (?)".
+
+[rummage_barrel]
+A barrel of buttons. Hundreds of them. Bramble has very obviously had his hands in it.
+
+# --- THE STARFALL GLADE ---
+
+[starfall_sign]
+A sign at the glade's edge, painted carefully, a long time ago:
+
+HERE A STAR FELL. LET IT BE.
+
+Underneath, scratched much later: "or don't. it's been fifty years. it's not doing anything."
+
+[starfall_sword]
+A dark stone in a scorched hollow, veined with pale light. Stuck into it, to the hilt: a sword of pale metal that isn't quite any colour.
+
+It comes out of the stone like it was waiting to.
+
+[starfall_sword_bramble]
+{awed}...WHOA.
+
+{glee}Sword! Sword's got a new sword! That's the best thing I've ever seen in my whole life!
+
+[starfall_stone]
+The fallen star, dark and cold now, with a sword-shaped slot in it.
+
+[starfall_brambles]
+Brambles, grown up thick all round the stone in fifty years, as if the wood wanted to keep it.
+
+[starfall_gate]
+An old woodcutters' gate in the brambles, barred from the inside. Through the slats you can see a stone glowing, and something standing up out of it.
+
+[starfall_gate_bramble]
+{thinking}Barred from inside. Who bars a gate from INSIDE?
+
+{grin}...There's a hole round the side, though. Just my size. Swap to me with Q.
+
+[starfall_gate_open]
+Somewhere in the brambles a bar lifts with a clunk, and the old gate swings in.
+
+[starfall_lever]
+The bar on the old gate, on a lever. Pull it and the gate's free.
+
+[starfall_lever_bramble]
+{awed}Sword. SWORD. There's a sword in it. Stuck in the star.
+
+{determined}I'll let you in. You pull it. I'm not tall enough to pull swords out of things yet.
+
+[starfall_pouch]
+A purse dropped at the glade's edge, by somebody who saw the stone glow and ran.
+
+# --- THE SAWPIT ---
+
+[sawpit_sign]
+A board at the head of the pit, the letters burnt deep:
+
+THE SAWPIT. GATE WANTS BOTH TREADLES. LOGS ROLL. BENCHES DON'T.
+
+Underneath, smaller: "you can hop a bench. a log can't. that's the whole trick."
+
+[sawpit_gate]
+A gate in the pit's west wall, roped to two treadles at once. Both, or nothing.
+
+[sawpit_bench]
+An old sawing bench, black with years of sawdust. A log would stop dead against it. You could hop up on it.
+
+[sawpit_bench_bramble]
+{proud}Ma can saw a whole log on one of those in the time it takes me to eat my lunch. I eat my lunch very slowly, though.
+
+[sawpit_axe]
+A woodcutter's axe, stuck in a chopping block and left. Rusted in. It's been here longer than Bramble.
+
+[sawpit_chest]
+A chest in the corner by the pit's gate, under a sheet of bark. Inside, a herald's packed lunch: how did that get down here?
+
+[sawpit_pouch]
+A purse on a nail on the outside of the pit wall, where a sawyer hung his wages and forgot them.
+
+# --- THE SPRUNG TRAP ---
+
+[trap_cage]
+A great cage of sharpened stakes, lashed together with rope. It's been smashed open from the inside. Stakes lie everywhere, snapped like twigs.
+
+[trap_cage_bramble]
+{scared}...They caught it. They actually caught it.
+
+{worried}And it just... got out.
+
+[trap_stakes]
+A stake of the grown-ups' trap pen, sharpened, driven deep. A lot of work went into this.
+
+[trap_inner_gate]
+A narrow gate in the middle of the pen, on a treadle on the far side. One holds, one goes.
+
+[trap_plate]
+A stone plate set in the ground, part of the trap. It wants something heavy. You're not heavy enough.
+
+[trap_gate]
+The pen's north gate, on a rope to two stone plates. Both down, and it'll open.
+
+[trap_gate_open]
+The second plate sinks. Somewhere a rope pulls tight, and the pen's north gate drags open.
+
+[trap_axe]
+A felling axe, driven into the ground up to the head and left there. The handle's been carved with three cuts and a tick.
+
+[trap_axe_bramble]
+{awed}That's Ma's! Her spare. She'd never leave it.
+
+{determined}...She'd want me to have it. She'd also want me at camp, but she'd want me to have it MORE.
+
+[trap_axes]
+Two more axes left in the ground, as if their owners dropped them and ran. Or got carried.
+
+[trap_axes_bramble]
+{scared}Don't. Don't say anything. I'm thinking.
+
+[trap_notch]
+A post past the trap, the far side of all the wreckage, with a fresh notch in it: three cuts and a tick. The wood is still pale. And an arrow, pointing on.
+
+[trap_notch_bramble]
+{crying}...That's Ma's. That's FRESH. She cut that after.
+
+{glee}She's alright! She cut a NOTCH! You don't cut a notch if you're not alright!
+
+[trap_pack]
+A woodcutter's pack, dropped in the trampled ground. Inside, wrapped round a flask: a red scarf.
+
+[trap_pack_bramble]
+{sad}Ma's scarf. She knitted it. It's a bit wonky at one end. That's my end. I helped.
+
+{determined}I'll keep it for her. I'll give it back when we find her.
+
+[trap_pack_empty]
+Ma's pack. A flask, a whetstone, and a picture drawn in charcoal, folded small, of somebody small with a very big axe.
+
+[trap_pouch]
+A purse in the long grass at the edge of the trap camp. Somebody's dinner money.
+
+# --- THE CLAWED BRIDGE ---
+
+[bridge_sign]
+A sign on what's left of the bridge post, half of it torn away with the post:
+
+HOLLIN BRI...
+
+Four deep grooves run right through the letters.
+
+[bridge_sign_bramble]
+{scared}It did that. With its claws. Just... in passing.
+
+[bridge_plank]
+The last plank of the old bridge, on the near side. Walk on it, roll a log on it, but don't trust it with both.
+
+[bridge_chalk]
+A chalk arrow on a rock on the far bank, pointing north. Under it, big:
+
+"KEEP UP!"
+
+[bridge_chalk_bramble]
+{grin}She's bossy. I like her.
+
+[bridge_chest]
+A chest pushed under the far bank's roots. Inside, a jar of stew, still sealed.
+
+[bridge_pouch]
+A purse stuffed in a crack in a tree, away from the water.
+
+# --- THE OLD MILL ---
+
+[mill_sign]
+A painted board on the mill wall, the paint flaking:
+
+HOLLIN MILL. THE LEAT RUNS TILL THE STONE. FIRST STONE BY THE YARD, SECOND IN THE SACK STORE.
+
+[mill_wheel]
+The mill's great wheel, still turning in what's left of the water. Nobody's ground anything on it in fifty years. It doesn't seem to mind.
+
+[mill_wheel_bramble]
+{awed}Grandad said he used to ride on that. All the way round. He said he only fell off twice.
+
+[mill_lever_a]
+The yard sluice. It drops a stone into the leat by the first chute, and the water backs up behind it.
+
+[mill_lever_b]
+The sack-store sluice, for the second stone further along the leat.
+
+[mill_water]
+Water backed up in the leat, deep and quick. A log would stop dead against it.
+
+[mill_leat]
+The mill's leat, a stone channel, dry where the sluices have stopped it. A log would roll along it a long way.
+
+[mill_gate]
+The mill gate, through the leat's north wall, on two treadles in the bed of the leat. Both, or nothing.
+
+[mill_chalk]
+A chalk arrow on the mill yard wall, pointing north, towards the square. It's very small.
+
+[mill_chalk_bramble]
+{worried}It's getting smaller. Her arrows. Like she's running out of chalk.
+
+{scared}...Or out of time.
+
+[mill_chest]
+A chest in the corner of the yard, under a cart cover. A jar of stew.
+
+[mill_pouch]
+A purse on a hook by the mill's back door. The miller's float, never banked.
+
+# --- Hollin Stores (hollin_stores), the village shop, and its sign at Hollin Gate.
+
+[hstores_sign]
+A hanging sign: a loaf and a candle, the paint mostly gone. HOLLIN STORES. The door's open.
+
+[hstores_counter]
+Mags's counter. Your finger leaves a clean line in the dust. There's a scale, but nothing to weigh.
+
+[hstores_shelves]
+Mags lent out books as well. Each one has a card inside with names on it. The last name on every card was written the same week.
+
+[hstores_notices]
+Notices for a dance on the green, a lost cat, and "Don't go up to the old hollow." Somebody's written "Too late" under it.
+
+[hstores_lamp]
+An oil lamp, dry. A box of matches beside it, every one used.
+
+[hstores_crates]
+Crates of candles, rope, nails, and string. The woodcutters' everyday things, waiting for the woodcutters.
+
+[hstores_barrel]
+A barrel of apples, gone to dust. One stalk left on top.
+
+[hstores_chair]
+Mags's chair, by the counter, where she could see the lane. The cushion still has the dent in it.
+
+[hstores_wall]
+Faded paper with little sprigs of heather on it. A row of nails where coats were hung.
+

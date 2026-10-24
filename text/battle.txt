@@ -71,3 +71,65 @@ Ves hums a few bars of an old village song at {foe}.
 # Her DEFEND: the plain version of SHELTER.
 [vesper_defend]
 Ves plants her umbrella in front of you like a little wall.
+
+# --- VES, HURT (after the Lantern Marsh: her leg's bad, her umbrella's lost) ---
+# While she's hurt these take the place of the ones above. She sits on the
+# ground to fight.
+[vesper_hurt_turn]
+Ves shifts her bad leg and winces. "I'm fine. My turn."
+
+Ves pushes her hair out of her eyes. Her turn.
+
+Ves holds her coat tight round her. "Right. What can I do?"
+
+[vesper_hurt_talk]
+Ves tells {foe} it's doing very well, considering.
+
+Ves asks {foe} if it's eaten. It hasn't thought about it in years.
+
+Ves asks {foe}, very politely, to leave her leg alone.
+
+Ves hums a few bars of an old village song at {foe}.
+
+[vesper_hurt_defend]
+Ves ducks down behind you and holds on.
+
+# Her CALL OUT: what she shouts as the next attack starts, in the panel
+# under the box. {foe} is the name of the enemy attacking. Keep each to a line.
+[vesper_call_out]
+Ves shouts: "{foe}'s winding up! Get ready!"
+
+Ves shouts: "Here it comes! Watch it, watch it!"
+
+Ves shouts: "{foe}! Now! Move!"
+
+# --- BRAMBLE, on his own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
+
+# Shown in the panel while he picks what to do. One is picked at random.
+[bramble_turn]
+Bramble spits on his hands like the grown-ups do. His turn.
+
+Bramble hefts his hatchet. It hefts him back a bit. His turn.
+
+Bramble bounces on his toes. "Me! Me! My go!"
+
+Bramble wipes his nose on his sleeve. His turn.
+
+Bramble squints at the enemy like Ma does at logs. His turn.
+
+# His TALK: a word to one enemy, which raises its MERCY a little. {foe} is
+# the enemy's name. An enemy's own text file can have [bramble_talk] instead.
+[bramble_talk]
+Bramble tells {foe} it's not allowed in this bit of the wood. It looks confused.
+
+Bramble asks {foe} if it wants to see a frog he found. It sort of does.
+
+Bramble tells {foe} his Ma could beat it up. {foe} believes him.
+
+Bramble offers {foe} half a biscuit. It's the smaller half, but still.
+
+Bramble pulls a face at {foe}. It's a really good face.
+
+# His DEFEND.
+[bramble_defend]
+Bramble gets behind his hatchet and makes himself very small.

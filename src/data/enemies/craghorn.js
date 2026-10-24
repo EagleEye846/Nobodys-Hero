@@ -10,7 +10,7 @@ export const CRAGHORN = {
   textFile: 'enemies/craghorn.txt',
   sprite: { rows: CRAGHORN_SPRITE, palette: CRAGHORN_PALETTE },
   maxHp: 180,
-  damage: 9,
+  damage: 12,
 
   // A Chapter 2 enemy: busier and quicker than anything in the Ruins.
   difficulty: { density: 1.15, speed: 1.15 },

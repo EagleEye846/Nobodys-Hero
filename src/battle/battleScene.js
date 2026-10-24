@@ -7,13 +7,18 @@ import { SONGS } from '../data/music/index.js';
 // In a cave, fights have their own song ("Glass Hollows", caveBattleTheme.js).
 // On the mountain, once Ves is with you, they have another, with her motif in
 // it (mountainBattleTheme.js). In the Pinefall, where the hero fights alone,
-// it's "Bramble Rush" (pinefallBattleTheme.js). Enemies with their own
-// `music` (bosses) keep it. Everywhere else, and before she joins, it's the
-// usual battle song.
+// it's "Bramble Rush" (pinefallBattleTheme.js), and the same under Hollin's
+// well, in the Old Drains, where Bramble's still with you. In the Dead City
+// (the Hollow Valley) Bramble's gone home and it's just you and Ves again,
+// she on her crutch: "Still Here" (valleyBattleTheme.js), the city's rain
+// with her motif limping back in. Enemies with their own `music`
+// (bosses) keep it. Everywhere else, and before she joins, it's the usual
+// battle song.
 const MOUNTAIN_AREAS = new Set(['stair', 'vigil', 'rest']);
 function battleSong(area) {
   if (area === 'cave' && SONGS.caveBattle) return 'caveBattle';
-  if (area === 'pinefall' && SONGS.pinefallBattle) return 'pinefallBattle';
+  if ((area === 'pinefall' || area === 'drains' || area === 'marsh') && SONGS.pinefallBattle) return 'pinefallBattle';
+  if (area === 'valley' && SONGS.valleyBattle) return 'valleyBattle';
   const together = partyIds().includes('vesper');
   return together && MOUNTAIN_AREAS.has(area) && SONGS.mountainBattle ? 'mountainBattle' : 'battle';
 }
@@ -21,22 +26,24 @@ import { textFile, textSection } from '../engine/textLoader.js';
 import { drawText } from '../ui/text.js';
 import { TextBox } from '../ui/textbox.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
-import { MEMBERS, partyIds, memberSprites, memberMaxHp, memberGrowth } from '../characters/party.js';
+import { MEMBERS, partyIds, memberSprites, memberMaxHp, memberGrowth, hurtState, isHurt, setHurt } from '../characters/party.js';
 import { memberGearBonus, memberFightPower } from '../characters/equipment.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { ITEMS, giveItem, healLabel } from '../data/items.js';
 import { MATERIALS, giveMaterial } from '../data/candles.js';
 import { WORLD_STATE } from '../state/saveGame.js';
-import { gainExp, heroMaxHp, heroHp, setHeroHp, healHeroFully, knownSpells, memberCommands, skillBonus, heroDefense, spellPotency, armorSpGain } from '../characters/progress.js';
+import { gainExp, heroMaxHp, heroHp, setHeroHp, healHeroFully, knownSpells, memberCommands, skillBonus, memberSkillBonus, heroDefense, spellPotency, armorSpGain } from '../characters/progress.js';
 import { WEAPONS } from '../data/weapons.js';
-import { SPELLS } from '../data/spells.js';
+import { SPELLS, SPELL_WEAPON_CAP } from '../data/spells.js';
 import { Soul, SOUL_RADIUS, GRAZE_RADIUS } from './soul.js';
 import { SOUL_ABILITIES } from './soulAbilities.js';
 import { createPattern } from './bullets.js';
-import { StrikeBar, BASE_SLASH_COUNT, PERFECT_SLASH_DAMAGE } from './strikeBar.js';
+import { StrikeBar, BASE_SLASH_COUNT, SLASH_DAMAGE, PERFECT_SLASH_DAMAGE } from './strikeBar.js';
 import { BACKDROPS } from './backdrops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import * as hud from './hud.js';
+import { SpellEffects } from './spellEffects.js';
+import { StageBits, entranceOffset, bitColors, ENTER_LANDS } from './stageBits.js';
 
 // The party fights from the left. Only the hero for now; max HP and level come
 // from their progress (src/characters/progress.js).
@@ -63,7 +70,10 @@ const LULL_CALM = 30;
 const MEND_HP = 20;
 const HUSH_CALM = 20;
 const WARD_TURNS = 2;
-const TARGETED_SPELLS = new Set(['rend', 'lull', 'pacify', 'starfall', 'comet', 'spark', 'siphon', 'nova']);
+// Chapters 3 and 4: Balm and Renew heal by their `heals` (src/data/spells.js),
+// Aegis is a ward of `turns`, Serenade calms everyone by its `calm`.
+const TARGETED_SPELLS = new Set(['rend', 'lull', 'pacify', 'starfall', 'comet', 'spark', 'siphon', 'sunder', 'lance', 'tempest', 'nova']);
+const HEALING_SPELLS = new Set(['heal', 'mend', 'renew']);
 // What the attack spells say as they're cast.
 const ATTACK_SPELL_LINES = {
   rend: 'A blade of light cuts through.',
@@ -73,8 +83,15 @@ const ATTACK_SPELL_LINES = {
   spark: 'A crackle of light leaps from your hand.',
   siphon: 'Light pulls loose, and flows back into you.',
   chain: 'Lightning leaps from one enemy to the next.',
+  sunder: 'A blow that splits the air.',
+  lance: 'A lance of light, thrown straight.',
+  sunburst: 'The light bursts out of you in every direction.',
+  tempest: 'The whole sky turns, and comes down.',
   nova: 'Everything goes white.',
 };
+// What each attack spell looks like (a kind from src/battle/spellEffects.js),
+// where it isn't a kind of its own.
+const ATTACK_SPELL_FX = { rend: 'slash', sunder: 'slash', lance: 'spark', tempest: 'comet' };
 
 // A spell's one-line description from text/spells/spells.txt, with its
 // {placeholders} filled in from `values`. Empty if it hasn't got one.
@@ -101,12 +118,21 @@ const RUN_MAX_CHANCE = 0.9;
 const MAX_ATTACKERS = 2;
 const COMBINED_DENSITY = 0.8;
 const SECOND_ATTACKER_DELAY = 0.6;
-// A boss's entrance: the stage opens out of the dark, then its title card
+// A boss's entrance: the stage opens out of the dark as it arrives (its
+// `entrance`, landing at ENTER_LANDS: see stageBits.js), then its title card
 // fades in, holds and fades out (all in seconds from the start).
 const INTRO_DARK_SECONDS = 1.4;
-const INTRO_CARD_IN = 1.6;
-const INTRO_CARD_OUT = 4.2;
-const INTRO_CARD_SECONDS = 4.8;
+const INTRO_CARD_IN = 1.9;
+const INTRO_CARD_OUT = 4.5;
+const INTRO_CARD_SECONDS = 5.1;
+// A boss beaten: the last blow stops everything dead for a moment (the hit
+// stop), then it's rocked by bursts all over for FINALE_SECONDS, a burst
+// every FINALE_BURST_EVERY, before the last great flash. Then its death plays.
+const HIT_STOP_SECONDS = 0.3;
+const FINALE_SECONDS = 1.7;
+const FINALE_BURST_EVERY = 0.11;
+// Spared, soft lights rise off it for this long instead.
+const SPARED_GLOW_SECONDS = 1.8;
 
 const COMMANDS = [
   { label: 'FIGHT', icon: 'fight' },
@@ -128,6 +154,16 @@ const SHELTER_DEF = 1;
 // A weapon with `gust` makes SHELTER slow the next attack's bullets to this
 // speed, for that many seconds.
 const GUST_SPEED = 0.45;
+// After Bramble HIDES, his next FIGHT or attack spell is a sneak attack: this
+// many times as hard (plus his `sneak` from skills and gear).
+const SNEAK_POWER = 2;
+// HOLLER cuts the next enemy attack short, but never by more than this.
+const MAX_FLINCH = 0.6;
+// Ves's CALL OUT, while she's hurt: she shouts what's coming, and the next
+// attack's bullets move at this speed for its first this-many seconds, while
+// you get ready.
+const CALL_OUT_SPEED = 0.55;
+const CALL_OUT_SECONDS = 2.5;
 
 // World positions: party on the left, enemies on the right, both side-on at
 // double size. FOE_LAYOUTS gives each enemy's top-left for 1, 2 or 3 enemies.
@@ -141,6 +177,14 @@ const FOE_LAYOUTS = {
 const ENEMY_STATUS_GAP = 4;
 
 const BOX_OPEN_SECONDS = 0.25;
+// Where the battle box belongs. An attack can pick the box up and move it
+// (the Bog Toad's GULP); it's always put back here when the turn ends.
+const BOX_HOME = { x: hud.BOX.x, y: hud.BOX.y };
+function boxHome() {
+  hud.BOX.x = BOX_HOME.x;
+  hud.BOX.y = BOX_HOME.y;
+  delete hud.BOX.heldBy;
+}
 
 // The hero's aura: a pulsing glow behind them and motes rising from their feet.
 const AURA_MOTE_INTERVAL = 0.08;
@@ -148,6 +192,36 @@ const AURA_MOTE_LIFE = 1.2;
 const SLASH_SECONDS = 0.25;
 const ENEMY_FLASH_SECONDS = 0.12;
 const FOE_FADE_SECONDS = 1;
+
+// A boss can have an `anim` (or one per phase, a phase's `anim`): frames in
+// its sprite's palette, each a list of rows the same size as the sprite.
+//   idle    loops all the time (at `fps`)
+//   windup  plays once as its attack starts
+//   hurt    plays once when it's hit
+//   death   plays once when it's beaten, then its last frame holds (or, if
+//           it has no `beatenSprite`, fades after)
+//   spared  the same, when it's spared
+// And `chips`: colours of the bits that fly off it when it's hit (stone, for
+// the Warden), and that fall all through its death.
+const ANIM_FPS = 6;
+const CHIP_LIFE = 0.9;
+function compileAnim(anim, palette) {
+  if (!anim) return null;
+  const out = { chips: anim.chips ?? null };
+  for (const [name, clip] of Object.entries(anim)) {
+    if (name === 'chips' || !clip?.frames) continue;
+    out[name] = { sprites: clip.frames.map((rows) => makeSprite(rows, palette)), fps: clip.fps ?? ANIM_FPS };
+  }
+  return out;
+}
+// The frame of `clip` at `t` seconds in (holding the last), or null once it's over and doesn't hold.
+function clipFrame(clip, t, hold = false) {
+  if (!clip || t < 0) return null;
+  const i = Math.floor(t * clip.fps);
+  if (i < clip.sprites.length) return clip.sprites[i];
+  return hold ? clip.sprites[clip.sprites.length - 1] : null;
+}
+const clipLength = (clip) => (clip ? clip.sprites.length / clip.fps : 0);
 
 const TAUNT_SPEED = 35; // characters per second
 const SHAKE_SECONDS = 0.25;
@@ -161,6 +235,8 @@ const FLAME_RADIUS = 5;
 const CATCH_SP = 2;
 let lanternSprite = null;
 const POPUP_SECONDS = 0.9;
+// How long a boss phase's `flash` takes to fade.
+const STAGE_FLASH_SECONDS = 1.2;
 const DEFEAT_SECONDS = 1.8;
 
 // A turn-based battle against one to three enemies. On your turn you pick a
@@ -168,8 +244,10 @@ const DEFEAT_SECONDS = 1.8;
 // your soul around a fixed box while their attacks play. The scene ends
 // through onEnd with 'won' (every enemy beaten or pacified), 'fled' or 'death'.
 export class BattleScene {
-  constructor(enemies, onEnd, area = 'ruins') {
+  // `noRun`: a fight you can't run from (true, or the words for why not).
+  constructor(enemies, onEnd, area = 'ruins', { noRun = null } = {}) {
     const list = Array.isArray(enemies) ? enemies : [enemies];
+    this.noRun = noRun;
     // A big boss fought alone can stand somewhere of its own (`battlePos`, its
     // top-left), to fit sprites wider or taller than the usual spot allows.
     const layout = list.length === 1 && list[0].battlePos ? [list[0].battlePos] : FOE_LAYOUTS[list.length];
@@ -195,8 +273,9 @@ export class BattleScene {
     // each after yours.
     this.party = [
       ...PARTY.map((member) => ({ ...member, level: HERO_STATE.level, maxHp: heroMaxHp(), hp: heroHp() })),
+      // (A hurt friend sits on the ground for the fight: their `hurt` look.)
       ...partyIds().map((id) => ({
-        id, ...MEMBERS[id], commands: memberCommands(id), sprite: memberSprites(id).right, level: HERO_STATE.level, maxHp: memberMaxHp(id), hp: memberMaxHp(id), ally: true,
+        id, ...MEMBERS[id], commands: memberCommands(id), sprite: this.memberSprite(id), level: HERO_STATE.level, maxHp: memberMaxHp(id), hp: memberMaxHp(id), ally: true, hurt: Boolean(hurtState(id)),
       })),
     ];
     this.hero = this.party[0];
@@ -211,6 +290,17 @@ export class BattleScene {
     // SHELTER over you until the end of the next enemy turn: { def, gust }.
     this.shelter = null;
     this.gustLeft = 0;
+    // CALL OUT: who's shouting about the next attack (an ally), and how long
+    // its bullets are still slowed.
+    this.callOut = null;
+    this.callOutLeft = 0;
+    // Ves's BRACE (the next hit on you does nothing), PARASOL SPIN (the next
+    // hit is thrown back: { ally, power }), both till the end of the next
+    // enemy turn; and her RAIN DANCE: { member, amount, turns } of HP back
+    // after each enemy turn.
+    this.absorb = false;
+    this.riposte = null;
+    this.rain = null;
 
     // Learned skills shape the whole battle.
     // Thrift and Gentle Hands make spells cheaper.
@@ -251,6 +341,7 @@ export class BattleScene {
     this.abilityState = {};
     this.abilityHintShown = false;
     this.grazeMultiplier = 1;
+    boxHome();
     this.box = hud.BOX;
 
     this.selected = 0; // command button
@@ -262,6 +353,11 @@ export class BattleScene {
     this.motes = [];
     this.moteTimer = 0;
     this.popups = [];
+    // Spells' bursts over the stage (src/battle/spellEffects.js).
+    this.fx = new SpellEffects();
+    // Dust, sparks and lights over the stage (src/battle/stageBits.js).
+    this.bits = new StageBits();
+    this.hitStop = 0;
     this.strike = null;
     this.slashTime = 0;
     this.result = null;
@@ -283,11 +379,56 @@ export class BattleScene {
   // its text file) while the opening of its song plays. Then the battle starts.
   startBossIntro(foe) {
     this.speaker = foe;
+    this.landed = false;
     this.tauntBubbles = this.foeLines(foe, 'boss_intro').flatMap(hud.speechBubbles);
     this.setPhase('bossIntro');
   }
 
+  // Where it is, `t` seconds into its entrance.
+  entrance(foe, t = this.phaseTime) {
+    const size = { w: foe.sprite.width * SCALE, h: foe.sprite.height * SCALE };
+    return entranceOffset(foe.data.entrance, t, foe.pos, size);
+  }
+
+  // It arrives: the stage shakes, dust or light goes out from it, and it
+  // shows itself (its `intro` clip if it has one, else its windup).
+  bossLands(foe) {
+    this.landed = true;
+    const w = foe.sprite.width * SCALE;
+    const feet = { x: foe.center.x, y: Math.min(hud.STAGE_HEIGHT - 6, foe.pos.y + foe.sprite.height * SCALE) };
+    foe.introAt = this.time;
+    if (!foe.anim?.intro) foe.attackAt = this.time;
+    switch (foe.data.entrance) {
+      case 'charge':
+        this.shake = SHAKE_SECONDS * 2;
+        this.bits.dust(feet.x + w * 0.2, feet.y, w * 0.6, 16, { spray: 1 });
+        this.bits.ring(feet.x, feet.y, { squash: 0.25, speed: 160, color: '#e8dcc4' });
+        sfx('thud');
+        break;
+      case 'swoop':
+        this.shake = SHAKE_SECONDS;
+        this.bits.dust(feet.x, feet.y, w * 0.8, 10, { color: '#9aa4c8' });
+        this.bits.ring(foe.center.x, foe.center.y, { speed: 140, color: '#9aa4c8' });
+        sfx('whoosh');
+        break;
+      case 'rise':
+      case 'whirl':
+        this.bits.ring(foe.center.x, foe.center.y, { speed: 150, color: '#fff2cf', width: 3 });
+        this.bits.ring(foe.center.x, foe.center.y, { speed: 90, color: '#ffd27a', life: 0.6 });
+        for (let i = 0; i < 14; i++) this.bits.mote(foe.center.x + (Math.random() - 0.5) * w * 0.8, foe.center.y + Math.random() * 30, { vy: -20 - Math.random() * 30, color: foe.bitColors[i % foe.bitColors.length] });
+        sfx('whoosh');
+        break;
+      default: // slam
+        this.shake = SHAKE_SECONDS * 3;
+        this.bits.dust(feet.x, feet.y, w * 0.7, 18);
+        this.bits.ring(feet.x, feet.y, { squash: 0.25, speed: 190, color: '#e8dcc4', width: 3 });
+        this.bits.scatter(feet.x, feet.y - 2, 10, ['#8a7d6a', '#5c5248', '#cbbfa8'], { speed: 70, up: 60, gravity: 260 });
+        sfx('thud');
+    }
+  }
+
   updateBossIntro(input) {
+    if (!this.landed && this.phaseTime >= ENTER_LANDS) this.bossLands(this.speaker);
     if (this.phaseTime < INTRO_CARD_SECONDS) {
       // Z skips the title card (after a moment, so a held key doesn't).
       if (this.phaseTime > 1 && input.wasPressed('confirm')) this.phaseTime = INTRO_CARD_SECONDS;
@@ -312,7 +453,7 @@ export class BattleScene {
   // The boss's flare (0 to 1) and the title card's fade (0 to 1) during its entrance.
   introGlow() {
     const t = this.phaseTime;
-    const rise = Math.min(1, Math.max(0, (t - 0.6) / 1.2));
+    const rise = Math.min(1, Math.max(0, (t - ENTER_LANDS) / 0.8));
     return rise * (0.75 + 0.25 * Math.sin(t * 3));
   }
 
@@ -391,6 +532,16 @@ export class BattleScene {
       lastPattern: null,
       state: 'active', // then 'defeated' or 'pacified'
       leftAt: 0,
+      // Its `anim`, and when it was last hit and last attacked, and the
+      // chips flying off it (see compileAnim).
+      anim: compileAnim(data.anim, data.sprite.palette),
+      hitAt: -99,
+      attackAt: -99,
+      introAt: -99,
+      // What flies off it when it goes (see stageBits.js).
+      bitColors: bitColors(data.sprite.palette),
+      seenFlash: 0,
+      chips: [],
     };
   }
 
@@ -400,10 +551,24 @@ export class BattleScene {
 
   // Each enemy's lines come from its file in /text. A boss in `phases` can
   // have its own for the phase it's in: [flavor: lit] before [flavor].
+  // Lines about a friend who's knocked out ("Ves sits on the flagstones...")
+  // are left out till they're back up, unless that leaves none.
   foeLines(foe, section) {
     const phase = this.bossPhase(foe);
     const own = phase ? textFile(foe.data.textFile)[`${section}: ${phase.id}`] : null;
-    return own?.length ? own : textSection(foe.data.textFile, section);
+    const lines = own?.length ? own : textSection(foe.data.textFile, section);
+    const awake = lines.filter((line) => !this.aboutDownAlly(line));
+    return awake.length ? awake : lines;
+  }
+
+  // Friends knocked out (HP 0) right now: they don't speak till they're up.
+  downAllies() {
+    return this.party.filter((member) => member.ally && member.hp <= 0);
+  }
+
+  // Whether a line or a TALK option names one of them ("Point at Ves").
+  aboutDownAlly(text) {
+    return this.downAllies().some((member) => text.includes(member.name));
   }
 
   // --- Boss phases ---
@@ -412,13 +577,28 @@ export class BattleScene {
   // in stages, each a phase with its own attacks (`patterns`, `difficulty`)
   // and lines ([section: id] in its text file), and any of:
   //   smoke         { fight, spell }: what share of FIGHT and spell damage lands
-  //   until         { turns: n } or { flame: true }: when to go on to the next
+  //   until         when to go on to the next: { turns: n }, { flame: true },
+  //                 { below: share } (its HP down to that share of its max),
+  //                 or { allyTurn: true } (straight after an `allyTurn`);
+  //                 with several, whichever comes first; `atLeast: n` holds
+  //                 any of them back till the phase has had n of its turns
   //   flame         { stages, guard, maxHelp }: a flame in the box to defend
   //   allyTurn      { <member>: section }: that member's turn is a line from it
   //   allyFight     { <member>: { power, color } }: their FIGHT's weapon power
   //   allyCommands  { <member>: { keep, add } }: their SPELLS, changed
   //   burn          share of max HP it loses as the phase starts
   //   sprite        how it looks now
+  //   floor         share of max HP it can't be brought below in this phase
+  //   noMercy       like the enemy's own `noMercy`, for this phase only
+  //                 (its lines can be [no_mercy: <phase id>] for this phase)
+  //   damage        how much its bullets hurt now, instead of its own `damage`
+  //   gentle        like the enemy's own `gentle`, for this phase only
+  //   gameOver      a section of its text file: the line under GAME OVER if
+  //                 you fall in this phase, instead of the usual one
+  //   unhurt        [<member>, ...]: they stop being hurt as it starts, for
+  //                 good (full HP, their own SPELLS and look back)
+  //   flash         the stage flashes white as it starts
+  //   dropped       a prop sprite lying on the stage in front of Ves
   //   beat          what's said as the phase starts: [{ who?, say }], `say` a
   //                 section; with no `who`, in the panel; with a party
   //                 member's id, in their box; with 'foe', in its bubble
@@ -443,6 +623,7 @@ export class BattleScene {
       foe.sprite = makeSprite(phase.sprite.rows, phase.sprite.palette);
       foe.flashSprite = makeSprite(phase.sprite.rows, white);
     }
+    if (phase.anim) foe.anim = compileAnim(phase.anim, phase.sprite?.palette ?? foe.data.sprite.palette);
     if (phase.flame) {
       const box = hud.BOX;
       this.flame = {
@@ -456,6 +637,22 @@ export class BattleScene {
       foe.flash = ENEMY_FLASH_SECONDS * 3;
       this.addPopup(`${burn}`, foe.center.x, foe.pos.y + 10, hud.COLORS.danger);
       this.shake = SHAKE_SECONDS * 2;
+      sfx('flare');
+    }
+    // Someone gets back on their feet (Ves, her umbrella back in her hands):
+    // well for good, at full HP, with their own SPELLS and their own look.
+    for (const id of phase.unhurt ?? []) {
+      setHurt(id, false);
+      const member = this.party.find((other) => other.id === id);
+      if (!member) continue;
+      member.hurt = false;
+      member.commands = memberCommands(id);
+      member.maxHp = memberMaxHp(id);
+      member.hp = member.maxHp;
+      member.sprite = this.memberSprite(id);
+    }
+    if (phase.flash) {
+      this.stageFlash = STAGE_FLASH_SECONDS;
       sfx('flare');
     }
   }
@@ -497,14 +694,18 @@ export class BattleScene {
     return lines[Math.floor(Math.random() * lines.length)].replaceAll('{stage}', flame.stage).replaceAll('{stages}', flame.stages);
   }
 
-  nextBossPhase(foe) {
+  // `then` is where the battle goes after the new phase's beat; `force` goes
+  // on whatever `until` says (after an `allyTurn` that ends the phase).
+  nextBossPhase(foe, then = 'command', force = false) {
     const until = this.bossPhase(foe)?.until;
     const next = foe.data.phases[foe.phase + 1];
     if (!until || !next) return false;
-    const done = (until.turns && foe.phaseTurns >= until.turns) || (until.flame && this.flame?.stage >= this.flame.stages);
+    const met = (until.turns && foe.phaseTurns >= until.turns) || (until.flame && this.flame?.stage >= this.flame.stages)
+      || (until.below && foe.hp <= foe.maxHp * until.below);
+    const done = force || (met && foe.phaseTurns >= (until.atLeast ?? 0));
     if (!done) return false;
     this.enterPhase(foe, foe.phase + 1);
-    this.playBeat(foe, next.beat ?? [], () => this.setPhase('command'));
+    this.playBeat(foe, next.beat ?? [], () => this.setPhase(then));
     return true;
   }
 
@@ -516,6 +717,13 @@ export class BattleScene {
       return;
     }
     const go = () => this.playBeat(foe, rest, done);
+    // A friend who's knocked out says nothing: the panel can say what they do
+    // instead ([<section> down]), or it's skipped.
+    if (step.who && this.downAllies().some((member) => member.id === step.who)) {
+      const instead = textFile(foe.data.textFile)[`${step.say} down`] ?? [];
+      this.playBeat(foe, [...(instead.length ? [{ say: `${step.say} down` }] : []), ...rest], done);
+      return;
+    }
     const lines = textFile(foe.data.textFile)[step.say] ?? [];
     if (!lines.length) {
       go();
@@ -551,6 +759,10 @@ export class BattleScene {
   // A phase with `smoke` lets only that share of a hit through (`kind` is
   // 'fight' or 'spell'), and the panel says so after.
   resist(foe, damage, kind) {
+    // A phase with a `floor` can't be brought below that share of its max
+    // HP: there's more of the fight to come (the Hush, before the umbrella's free).
+    const floor = this.bossPhase(foe)?.floor;
+    if (floor) damage = Math.min(damage, Math.max(0, foe.hp - Math.ceil(foe.maxHp * floor)));
     const smoke = this.bossPhase(foe)?.smoke;
     if (!smoke || damage <= 0) return damage;
     const lines = this.foeLines(foe, kind === 'fight' ? 'smoke_fight' : 'smoke_spell');
@@ -658,6 +870,10 @@ export class BattleScene {
     if (phase === 'taunt' && this.pendingAllies.length && this.activeFoes().length) {
       this.ally = this.pendingAllies.shift();
       phase = 'ally';
+      // Someone hurt can't FIGHT (Ves, with no umbrella): their turn starts on SPELLS.
+      if (isHurt(this.ally.id) && ALLY_COMMANDS[this.allySelected]?.label === 'FIGHT') {
+        this.allySelected = ALLY_COMMANDS.findIndex((command) => command.label === 'SPELLS');
+      }
     }
     this.phase = phase;
     this.phaseTime = 0;
@@ -670,12 +886,16 @@ export class BattleScene {
         const auto = this.bossPhase()?.allyTurn?.[this.ally.id];
         if (auto && this.hero.hp > 0) {
           const said = this.foeLines(this.phased, auto);
-          this.showMessage(said[Math.min(this.flame?.stage ?? 0, said.length - 1)], 'taunt');
+          // A phase that ends with their turn (`until: { allyTurn: true }`:
+          // Ves catching her umbrella) goes on to the next one straight after.
+          const ends = this.bossPhase().until?.allyTurn;
+          const next = ends ? () => this.nextBossPhase(this.phased, 'taunt', true) || this.setPhase('taunt') : 'taunt';
+          this.showMessage(said[Math.min(this.flame?.stage ?? 0, said.length - 1)], next);
           return;
         }
         // What the panel says while they choose (a boss's phase can have its own).
         const own = this.phased ? textFile(this.phased.data.textFile)[`${this.ally.id}_turn: ${this.bossPhase().id}`] : null;
-        const lines = own?.length ? own : textSection('battle.txt', `${this.ally.id}_turn`);
+        const lines = own?.length ? own : this.allyLines(this.ally, 'turn');
         this.allyPrompt = lines.length ? lines[Math.floor(Math.random() * lines.length)] : `${this.ally.name}'s turn.`;
         break;
       }
@@ -753,6 +973,8 @@ export class BattleScene {
   }
 
   startAttack() {
+    boxHome();
+    for (const foe of this.attackers) foe.attackAt = this.time;
     const crowd = this.attackers.length > 1 ? COMBINED_DENSITY : 1;
     let attacks = this.attackers.flatMap((foe, i) => {
       const name = this.pickPattern(foe);
@@ -761,7 +983,7 @@ export class BattleScene {
       // A `gentle` foe doesn't really want to hurt you: its attacks thin out a
       // little as its MERCY rises, and when you're nearly out of HP.
       let kindness = 1;
-      if (foe.data.gentle) {
+      if (this.bossPhase(foe)?.gentle ?? foe.data.gentle) {
         kindness = 1 - (foe.calm / 100) * 0.4;
         if (this.hero.hp < this.hero.maxHp * 0.3) kindness *= 0.65;
       }
@@ -782,8 +1004,13 @@ export class BattleScene {
     this.attacks = attacks;
     // Each enemy turn is aimed at one of you still standing, the hero or a
     // friend, and its hits land on them (see hurt).
+    // (Not whoever's hiding in the leaves: Bramble's HIDE. Nor anyone hurt,
+    // like Ves riding on your back in the Lantern Marsh: they get at her
+    // through you, unless there's nobody else left.)
     const standing = this.party.filter((member) => member.hp > 0);
-    this.victim = standing[Math.floor(Math.random() * standing.length)];
+    const findable = standing.filter((member) => member.id !== this.hiding && !(member.ally && isHurt(member.id)));
+    const aimable = findable.length ? findable : standing;
+    this.victim = aimable[Math.floor(Math.random() * aimable.length)];
     // The lantern's flame: fresh guard for the turn (more each time it's been
     // snuffed, and from guarding it); while it's in the box, Ves is out of
     // reach at the lantern, so it's all aimed at you. Staring him down
@@ -797,6 +1024,11 @@ export class BattleScene {
     }
     this.flameGuardBonus = 0;
     this.turnLength = Math.max(...attacks.map((attack) => attack.delay + attack.pattern.duration));
+    // Bramble's HOLLER: they flinch, and the attack stops short.
+    if (this.flinch) {
+      this.turnLength *= 1 - this.flinch;
+      this.flinch = 0;
+    }
     const mode = attacks[0].pattern.mode;
 
     this.bullets = [];
@@ -805,6 +1037,10 @@ export class BattleScene {
     // SHELTER with a `gust` weapon: the bullets start out slowed.
     this.gustLeft = this.shelter?.gust ?? 0;
     this.gustShown = false;
+    // CALL OUT: slowed at the start, and the panel says what she shouted.
+    const caller = this.callOut?.hp > 0 ? this.callOut : null;
+    this.callOut = null;
+    this.callOutLeft = caller ? CALL_OUT_SECONDS : 0;
     // The weapon ability starts every enemy turn ready and fully charged.
     this.abilityCooldown = 0;
     this.abilityLeft = 0;
@@ -828,10 +1064,17 @@ export class BattleScene {
       this.abilityHintShown = true;
     }
     this.seenModes.add(mode);
+    // What she shouted (unless a new soul mode needs explaining).
+    if (caller && !(this.dodgeHint && this.dodgeHint === this.soul.mode.hint)) {
+      const shouts = this.allyLines(caller, 'call_out');
+      const shout = shouts[Math.floor(Math.random() * shouts.length)] ?? `${caller.name} shouts a warning!`;
+      this.dodgeHint = shout.replaceAll('{foe}', this.attackers[0]?.name ?? 'it');
+    }
   }
 
   // Ends the battle. onEnd also hears how each enemy left: [{ enemy, state }],
-  // where state is 'defeated', 'pacified' or (fled, or lost) 'active'.
+  // where state is 'defeated', 'pacified' or (fled, or lost) 'active'; and,
+  // after a fall, the boss phase's own GAME OVER line if it has one.
   finish(result) {
     if (this.finished) return;
     this.finished = true;
@@ -839,17 +1082,41 @@ export class BattleScene {
     // back whole (unless a level-up already did).
     if (result === 'death') healHeroFully();
     else if (!this.levelledUp) setHeroHp(Math.max(1, this.hero.hp));
-    this.onEnd(result, this.foes.map((foe) => ({ enemy: foe.data, state: foe.state })));
+    const phase = this.bossPhase();
+    const gameOver = result === 'death' && phase?.gameOver ? textSection(this.phased.data.textFile, phase.gameOver)[0] : undefined;
+    this.onEnd(result, this.foes.map((foe) => ({ enemy: foe.data, state: foe.state })), gameOver);
   }
 
   update(dt, input) {
-    this.time += dt;
     WORLD_STATE.playSeconds = (WORLD_STATE.playSeconds ?? 0) + dt;
+    // The hit stop on a boss's last blow: everything holds still.
+    if (this.hitStop > 0) {
+      this.hitStop -= dt;
+      return;
+    }
+    this.time += dt;
     this.phaseTime += dt;
     this.shake = Math.max(0, this.shake - dt);
+    if (this.fx.update(dt)) this.shake = SHAKE_SECONDS * 2;
     this.heroFlinch = Math.max(0, this.heroFlinch - dt);
+    this.stageFlash = Math.max(0, (this.stageFlash ?? 0) - dt);
     this.slashTime = Math.max(0, this.slashTime - dt);
-    for (const foe of this.foes) foe.flash = Math.max(0, foe.flash - dt);
+    for (const foe of this.foes) {
+      // A new flash is a new hit: its hurt frames, and chips off it.
+      if (foe.flash > foe.seenFlash + 1e-6) this.foeHit(foe);
+      foe.flash = Math.max(0, foe.flash - dt);
+      foe.seenFlash = foe.flash;
+      foe.chips = foe.chips.filter((chip) => this.time - chip.at < CHIP_LIFE);
+      // All through its death, bits keep falling off it.
+      if (foe.state === 'defeated' && foe.anim?.chips && this.time - foe.leftAt < clipLength(foe.anim.death) && Math.random() < dt * 14) this.addChips(foe, 1, true);
+      // Spared, soft lights rise off it a while.
+      if (foe.state === 'pacified' && this.time < foe.glowUntil && Math.random() < dt * (foe.data.boss ? 22 : 10)) {
+        const w = foe.sprite.width * SCALE;
+        const h = foe.sprite.height * SCALE;
+        this.bits.mote(foe.pos.x + w * (0.15 + Math.random() * 0.7), Math.max(8, foe.pos.y + h * (0.3 + Math.random() * 0.6)), { vy: -16 - Math.random() * 20, life: 1.2 + Math.random() * 0.8 });
+      }
+    }
+    this.bits.update(dt);
     this.updateEffects(dt);
 
     switch (this.phase) {
@@ -907,6 +1174,9 @@ export class BattleScene {
         break;
       case 'bossIntro':
         this.updateBossIntro(input);
+        break;
+      case 'bossFinale':
+        this.updateBossFinale();
         break;
       case 'dodge':
         this.updateDodge(dt, input);
@@ -982,14 +1252,33 @@ export class BattleScene {
   // the ally's own weapon (src/characters/equipment.js).
   strikePower() {
     // An ally's weapon, and how far they've grown with the hero's levels.
-    if (this.actor?.ally) return this.allyWeaponPower(this.actor) * (1 + memberGrowth(this.actor.id, 'fight'));
+    if (this.actor?.ally) {
+      const power = this.allyWeaponPower(this.actor) * (1 + memberGrowth(this.actor.id, 'fight')) * (1 + this.allyBonus(this.actor, 'allyFight'));
+      const sneak = this.sneakPower(this.actor);
+      this.spendSneak(this.actor);
+      return power * sneak;
+    }
     return this.weapon.fightPower * this.fightPowerBonus;
   }
 
   // An ally's move made stronger by their skills (skillBonus) and their own
   // weapon and armor (memberGearBonus).
   allyBonus(ally, effect) {
-    return skillBonus(effect) + memberGearBonus(ally.id, effect) + memberGrowth(ally.id, effect);
+    return memberSkillBonus(ally.id, effect) + memberGearBonus(ally.id, effect) + memberGrowth(ally.id, effect);
+  }
+
+  // Bramble's sneak attack, after he HIDES: his next hit is SNEAK_POWER times
+  // as hard (more with his skills and gear), once. 1 for anyone else.
+  sneakPower(member) {
+    if (!member?.ally || this.sneaking !== member.id) return 1;
+    return SNEAK_POWER + this.allyBonus(member, 'sneak');
+  }
+
+  // Spends the sneak attack, with a cheer over the target.
+  spendSneak(member) {
+    if (!member?.ally || this.sneaking !== member.id) return;
+    this.sneaking = null;
+    this.addPopup('SNEAK ATTACK!', this.target?.center?.x ?? 200, (this.target?.pos?.y ?? 60) - 18, hud.COLORS.calm);
   }
 
   updateCommand(input) {
@@ -1101,6 +1390,10 @@ export class BattleScene {
       this.showMessage(textFile(boss.data.textFile).no_escape?.[0] ?? `You can't run from ${boss.name}.`, 'command');
       return;
     }
+    if (this.noRun) {
+      this.showMessage(typeof this.noRun === 'string' ? this.noRun : "You can't run from this one.", 'command');
+      return;
+    }
     const chance = Math.min(RUN_MAX_CHANCE, RUN_BASE_CHANCE + this.turn * RUN_CHANCE_PER_TURN);
     if (Math.random() < chance) {
       this.result = 'fled';
@@ -1155,9 +1448,17 @@ export class BattleScene {
   // [no_mercy_again]. Then whoever was choosing chooses again. Returns
   // whether it stepped in.
   refuseMercy(foe) {
-    const rule = foe?.data.noMercy;
+    const rule = foe ? this.mercyRule(foe) : null;
     if (!rule) return false;
     const lines = textFile(foe.data.textFile);
+    // Whoever would stop you is knocked out: the panel says no instead
+    // ([no_mercy_down]).
+    if (this.downAllies().some((member) => member.id === rule.who)) {
+      sfx('back');
+      const back = this.menuPhase();
+      this.showMessage(lines.no_mercy_down?.[0] ?? `${foe.name} isn't ready for that. Not yet.`, back);
+      return true;
+    }
     // `who: 'foe'`: it mocks you itself, in its bubbles ([mercy_mock], then
     // one of [mercy_mock_again]).
     if (rule.who === 'foe') {
@@ -1170,8 +1471,9 @@ export class BattleScene {
       this.sayAloud(foe, said, () => this.setPhase(back));
       return true;
     }
-    const again = lines.no_mercy_again ?? [];
-    const pages = this.mercyRefused && again.length ? [again[Math.floor(Math.random() * again.length)]] : (lines.no_mercy ?? []);
+    const id = this.bossPhase(foe)?.id;
+    const again = lines[`no_mercy_again: ${id}`] ?? lines.no_mercy_again ?? [];
+    const pages = this.mercyRefused && again.length ? [again[Math.floor(Math.random() * again.length)]] : (lines[`no_mercy: ${id}`] ?? lines.no_mercy ?? []);
     if (!pages.length) return false;
     this.mercyRefused = true;
     const box = new TextBox();
@@ -1182,18 +1484,34 @@ export class BattleScene {
     return true;
   }
 
+  // Whether `foe` can't be shown mercy right now: its phase's `noMercy`, or
+  // its own (the Hush, until Ves has her umbrella back).
+  mercyRule(foe) {
+    return this.bossPhase(foe)?.noMercy ?? foe.data.noMercy ?? null;
+  }
+
   // An ally's turn: their own command bar, like yours (ALLY_COMMANDS). Its
   // submenus back out to here; the bar itself is their go, so no backing out.
   updateAlly(input) {
     const dir = (input.wasPressed('right') ? 1 : 0) - (input.wasPressed('left') ? 1 : 0);
     if (dir) sfx('move');
     this.allySelected = (this.allySelected + dir + ALLY_COMMANDS.length) % ALLY_COMMANDS.length;
+    // (Hurt, there's no FIGHT for them: the cursor goes past it.)
+    if (isHurt(this.ally.id) && ALLY_COMMANDS[this.allySelected].label === 'FIGHT') {
+      this.allySelected = (this.allySelected + (dir || 1) + ALLY_COMMANDS.length) % ALLY_COMMANDS.length;
+    }
     if (!input.wasPressed('confirm')) return;
-    sfx('select');
     const ally = this.ally;
+    if (ALLY_COMMANDS[this.allySelected].label !== 'FIGHT' || !isHurt(ally.id)) sfx('select');
 
     switch (ALLY_COMMANDS[this.allySelected].label) {
       case 'FIGHT':
+        // Hurt, with no umbrella (Ves in the Lantern Marsh and the Dead City),
+        // she can't fight: only COVER you and CALL OUT, under SPELLS.
+        if (isHurt(ally.id)) {
+          sfx('error');
+          break;
+        }
         this.chooseTarget(() => this.setPhase('fight'));
         break;
       case 'TALK':
@@ -1208,20 +1526,36 @@ export class BattleScene {
         break;
       case 'DEFEND': {
         this.defending = true;
-        const lines = textSection('battle.txt', `${ally.id}_defend`);
+        const lines = this.allyLines(ally, 'defend');
         this.showMessage(`${lines[0] ?? `${ally.name} braces.`}\nDamage is halved this turn.`, 'taunt');
         break;
       }
     }
   }
 
+  // An ally's lines from text/battle.txt: [<id>_<kind>] (vesper_turn), or
+  // while they're hurt [<id>_hurt_<kind>] if there is one (no umbrella to
+  // shake the snow off).
+  allyLines(ally, kind) {
+    const hurt = ally.hurt ? textFile('battle.txt')[`${ally.id}_hurt_${kind}`] ?? [] : [];
+    return hurt.length ? hurt : textSection('battle.txt', `${ally.id}_${kind}`);
+  }
+
+  // A member's battle sprite: their own, or sitting down hurt (their `hurt` look).
+  memberSprite(id) {
+    const look = hurtState(id)?.look;
+    if (look && PROP_SPRITES[look]) return makeSprite(PROP_SPRITES[look], PROP_PALETTE);
+    return memberSprites(id).right;
+  }
+
   // An ally's kind word to one enemy: their own line for it if the enemy's
-  // text file has one ([vesper_talk]), or one of their general ones from
-  // text/battle.txt, with {foe} for its name. It raises MERCY a little.
+  // text file has one ([vesper_talk], or [vesper_hurt_talk] while she's
+  // hurt), or one of their general ones from text/battle.txt, with {foe} for
+  // its name. It raises MERCY a little.
   allyTalk(ally, foe) {
     if (this.refuseMercy(foe)) return;
-    const own = textFile(foe.data.textFile)[`${ally.id}_talk`] ?? [];
-    const lines = own.length ? own : textSection('battle.txt', `${ally.id}_talk`);
+    const own = textFile(foe.data.textFile)[ally.hurt ? `${ally.id}_hurt_talk` : `${ally.id}_talk`] ?? [];
+    const lines = own.length ? own : this.allyLines(ally, 'talk');
     const line = (lines[Math.floor(Math.random() * lines.length)] ?? `${ally.name} talks to {foe}.`).replaceAll('{foe}', foe.name);
     this.showMessage(this.calmFoe(foe, ALLY_TALK_CALM, line), 'taunt');
   }
@@ -1236,7 +1570,7 @@ export class BattleScene {
       this.showMessage('Not enough SP.\nGraze past bullets to build spell power.', 'spells');
       return;
     }
-    if (command.calmAll && this.refuseMercy(this.activeFoes().find((foe) => foe.data.noMercy))) return;
+    if (command.calmAll && this.refuseMercy(this.activeFoes().find((foe) => this.mercyRule(foe)))) return;
     // A hit on one enemy asks which; SP is only spent once it's cast.
     if (command.strikeOne || command.team) {
       this.chooseTarget(() => {
@@ -1246,7 +1580,7 @@ export class BattleScene {
       return;
     }
     // A healing spell asks who it's for; SP is only spent once it's cast.
-    if (command.heal && this.party.length > 1) {
+    if ((command.heal || command.regen) && this.party.length > 1) {
       this.chooseMember((member) => {
         this.healTarget = member;
         this.sp -= command.cost ?? 0;
@@ -1261,6 +1595,7 @@ export class BattleScene {
   // One of an ally's spells, made stronger by their skills and gear.
   allyAct(ally, command) {
     const lines = [command.text];
+    this.allyFx(ally, command);
     if (command.calmAll) {
       const amount = this.potent(command.calmAll + this.allyBonus(ally, 'allyCalm'));
       for (const foe of this.activeFoes()) lines.push(this.calmFoe(foe, amount, '').trim());
@@ -1276,23 +1611,86 @@ export class BattleScene {
       this.healTarget = null;
       const healed = this.healMember(member, command.heal + this.allyBonus(ally, 'allyHeal'));
       sfx('heal');
+      this.healFx(member, healed, command.label === 'AURORA' ? 'aurora' : 'heal');
       lines.push(`${member.name} recovered ${healed} HP.`);
+    }
+    // DAYBREAK: everyone still standing, at once.
+    if (command.healAll) {
+      sfx('heal');
+      for (const member of this.party.filter((other) => other.hp > 0)) {
+        const healed = this.healMember(member, command.healAll + this.allyBonus(ally, 'allyHeal'));
+        this.healFx(member, healed);
+        lines.push(`${member.name} recovered ${healed} HP.`);
+      }
+    }
+    // RAIN DANCE: HP back for whoever they chose (or you) after each of the
+    // next few enemy turns. A new rain takes the old one's place.
+    if (command.regen) {
+      const member = this.healTarget ?? this.hero;
+      this.healTarget = null;
+      const amount = command.regen + this.allyBonus(ally, 'allyHeal');
+      this.rain = { member, amount, turns: command.turns ?? 3 };
+      lines.push(`${member.name} will recover ${amount} HP after each of the next ${this.rain.turns} enemy turns.`);
+    }
+    // HOLLER: the enemies flinch, and their next attack is cut short.
+    if (command.shorten) {
+      this.flinch = Math.min(MAX_FLINCH, (this.flinch ?? 0) + command.shorten + Math.max(0, this.allyBonus(ally, 'shorten')));
+      lines.push('Their next attack will be shorter.');
+    }
+    // HIDE: out of reach this enemy turn, and a sneak attack ready after.
+    if (command.hide) {
+      this.hiding = ally.id;
+      this.sneaking = ally.id;
+      lines.push(`Nothing will aim at ${ally.name} this turn. His next hit is a sneak attack!`);
+    }
+    // COVER (Ves, hurt): her coat held over you. Like SHELTER (the next
+    // attack is halved, and every hit does a little less, more with a thick
+    // coat), but there's no umbrella to catch a gust.
+    if (command.cover) {
+      this.defending = true;
+      this.shelter = { def: SHELTER_DEF + Math.max(0, this.allyBonus(ally, 'shelterDef')), gust: 0 };
+      lines.push(`Every hit does ${this.shelter.def} less, too.`);
+    }
+    // CALL OUT (Ves, hurt): she'll shout what's coming as it starts, and its
+    // bullets start out slowed (see startAttack).
+    if (command.callOut) {
+      this.callOut = ally;
+      lines.push('The next attack will start out slow.');
     }
     if (command.guard) {
       // SHELTER: DEFEND's stronger form, with whatever the ally's gear adds.
       this.defending = true;
-      this.shelter = { def: SHELTER_DEF + Math.max(0, this.allyBonus(ally, 'shelterDef')), gust: Math.max(0, this.allyBonus(ally, 'gust')) };
+      this.shelter = { def: SHELTER_DEF + Math.max(0, this.allyBonus(ally, 'shelterDef')), gust: Math.max(0, this.allyBonus(ally, 'gust')) + (this.shelter?.gust ?? 0) };
       lines.push(`Every hit does ${this.shelter.def} less, too.${this.shelter.gust ? ' A gust will slow the bullets.' : ''}`);
+    }
+    // HEADWIND: the next attack's bullets start out slowed, as SHELTER's gust
+    // does, without the umbrella over you (her gust skills add to it).
+    if (command.headwind) {
+      const seconds = command.headwind + Math.max(0, this.allyBonus(ally, 'gust')) + (this.shelter?.gust ?? 0);
+      this.shelter = { def: this.shelter?.def ?? 0, gust: seconds };
+      lines.push(`The next attack's bullets will be slowed for ${seconds} seconds.`);
+    }
+    // BRACE: the next hit on the hero this enemy turn does nothing (see hurt).
+    if (command.absorb) {
+      this.absorb = true;
+    }
+    // PARASOL SPIN: the next hit on anyone this enemy turn is thrown back at
+    // an attacker (see hurt), as hard as one of her attack spells.
+    if (command.riposte) {
+      this.riposte = { ally, damage: this.allyStrikeDamage(ally, command.riposte) };
+      lines.push(`The next hit will be thrown back for ${this.riposte.damage} damage.`);
     }
     // A hit on every enemy (Sleet), or on the one they chose (Downdraft),
     // lands after the words.
     if (command.strikeAll) {
-      const damage = this.allyStrikeDamage(ally, command.strikeAll);
+      const damage = Math.round(this.allyStrikeDamage(ally, command.strikeAll) * this.sneakPower(ally));
+      this.spendSneak(ally);
       this.showMessage(lines.join('\n'), () => this.strikeAll(damage));
       return;
     }
     if (command.strikeOne) {
-      const damage = this.allyStrikeDamage(ally, command.strikeOne);
+      const damage = Math.round(this.allyStrikeDamage(ally, command.strikeOne) * this.sneakPower(ally));
+      this.spendSneak(ally);
       this.showMessage(lines.join('\n'), () => this.resolveStrike(damage, 'spell'));
       return;
     }
@@ -1311,6 +1709,11 @@ export class BattleScene {
     if (index === null) return;
 
     const option = foe.data.talk[index];
+    // Nothing to do with a friend who's knocked out ("Stand by Ves").
+    if (this.aboutDownAlly(option.name)) {
+      sfx('back');
+      return;
+    }
     if (option.calm && this.refuseMercy(foe)) return;
     let text = this.foeLine(foe, `talk: ${option.name}`);
     if (option.calm) text = this.calmFoe(foe, option.calm, text);
@@ -1343,7 +1746,7 @@ export class BattleScene {
       return;
     }
     if (TARGETED_SPELLS.has(spell.id)) this.chooseTarget((foe) => this.castSpell(spell, foe));
-    else if (spell.id === 'heal' || spell.id === 'mend') this.chooseMember((member) => this.castSpell(spell, null, member));
+    else if (HEALING_SPELLS.has(spell.id)) this.chooseMember((member) => this.castSpell(spell, null, member));
     else this.castSpell(spell, null);
   }
 
@@ -1352,19 +1755,33 @@ export class BattleScene {
     // A calming spell on someone who can't be calmed is stopped before it costs anything.
     if (spell.id === 'lull' || spell.id === 'pacify') {
       if (this.refuseMercy(foe)) return;
-    } else if (spell.id === 'hush' && this.refuseMercy(this.activeFoes().find((other) => other.data.noMercy))) {
+    } else if ((spell.id === 'hush' || spell.id === 'serenade') && this.refuseMercy(this.activeFoes().find((other) => this.mercyRule(other)))) {
       return;
     }
     this.sp -= spell.sp;
     const name = this.hero.name;
     switch (spell.id) {
       case 'heal':
-      case 'mend': {
-        const base = spell.id === 'heal' ? HEAL_PULSE_HP : MEND_HP;
+      case 'mend':
+      case 'renew': {
+        const base = spell.id === 'heal' ? HEAL_PULSE_HP : spell.id === 'mend' ? MEND_HP : SPELLS[spell.id].heals;
         const healed = this.healMember(member, this.potent(base * (1 + skillBonus('healBoost'))));
         sfx('heal');
+        this.healFx(member, healed);
         const who = member === this.hero ? 'Recovered' : `${member.name} recovered`;
         this.showMessage(`${name} cast ${spell.name}! ${who} ${healed} HP.`, 'taunt');
+        break;
+      }
+      // Balm: the whole party at once, whoever's still standing.
+      case 'balm': {
+        sfx('heal');
+        const amount = this.potent(SPELLS.balm.heals * (1 + skillBonus('healBoost')));
+        const lines = this.party.filter((other) => other.hp > 0).map((other) => {
+          const healed = this.healMember(other, amount);
+          this.healFx(other, healed);
+          return `${other === this.hero ? 'Recovered' : `${other.name} recovered`} ${healed} HP.`;
+        });
+        this.showMessage(`${name} cast Balm! A warmth settles over everyone.\n${lines.join('\n')}`, 'taunt');
         break;
       }
       case 'ember':
@@ -1374,20 +1791,34 @@ export class BattleScene {
       case 'starfall':
       case 'spark':
       case 'siphon':
+      case 'sunder':
+      case 'lance':
+      case 'sunburst':
+      case 'tempest':
       case 'nova':
         this.castAttackSpell(spell);
         break;
       case 'ward':
-        this.wardTurns = WARD_TURNS;
+      case 'aegis': {
+        const turns = spell.id === 'ward' ? WARD_TURNS : SPELLS.aegis.turns;
+        this.fx.add('shell', { ...this.partyMiddle(), style: 'ward' });
+        this.wardTurns = Math.max(this.wardTurns, turns);
         sfx('heal');
-        this.showMessage(`${name} cast Bright Ward! A shell of light closes round you.\nDamage is halved for the next ${WARD_TURNS} enemy turns.`, 'taunt');
+        this.showMessage(`${name} cast ${spell.name}! A shell of light closes round you.\nDamage is halved for the next ${turns} enemy turns.`, 'taunt');
         break;
-      case 'hush': {
-        const calmed = this.activeFoes().map((other) => this.calmFoe(other, this.potent(HUSH_CALM), '').trim());
-        this.showMessage(`${name} cast Hush. Snow seems to fall inside the room.\n${calmed.join('\n')}`, 'taunt');
+      }
+      case 'hush':
+      case 'serenade': {
+        this.fx.add('snow', { style: 'flurry' });
+        for (const other of this.activeFoes()) this.fx.add('calm', other.center);
+        const calm = spell.id === 'hush' ? HUSH_CALM : SPELLS.serenade.calm;
+        const calmed = this.activeFoes().map((other) => this.calmFoe(other, this.potent(calm), '').trim());
+        const words = spell.id === 'hush' ? 'Snow seems to fall inside the room.' : 'A song nobody taught you fills the room.';
+        this.showMessage(`${name} cast ${spell.name}. ${words}\n${calmed.join('\n')}`, 'taunt');
         break;
       }
       case 'pacify':
+        this.fx.add('calm', { ...foe.center, style: 'pacify' });
         if (foe.calm >= 100) {
           this.foeLeaves(foe, 'pacified', 'taunt', `${name} cast Pacify!`);
         } else {
@@ -1395,9 +1826,87 @@ export class BattleScene {
         }
         break;
       case 'lull':
+        this.fx.add('calm', foe.center);
         this.showMessage(this.calmFoe(foe, this.potent(foe.data.lullCalm ?? LULL_CALM), `${name} cast Lull. A soft hush settles over the room.`), 'taunt');
         break;
     }
+  }
+
+  // Where someone in the party is, for a spell's effect: the middle of them,
+  // and how tall they are.
+  memberAt(member) {
+    const feet = this.memberFeet(member);
+    const h = member.sprite.height * SCALE;
+    return { x: feet.x, y: feet.y - h / 2, h };
+  }
+
+  // The middle of the whole party, and the top of the tallest, for a shell
+  // or a canopy over all of them.
+  partyMiddle() {
+    const at = (this.party.length ? this.party : [this.hero]).map((member) => this.memberAt(member));
+    const mean = (pick) => at.reduce((sum, p) => sum + pick(p), 0) / at.length;
+    return { x: mean((p) => p.x), y: mean((p) => p.y), top: Math.min(...at.map((p) => p.y - p.h / 2)) };
+  }
+
+  // Motes rising off whoever's healed (or Aurora's lights), and the HP, floating up.
+  healFx(member, healed, kind = 'heal') {
+    const at = this.memberAt(member);
+    this.fx.add(kind, kind === 'aurora' ? { ...this.partyMiddle(), h: at.h } : at);
+    if (healed > 0) this.addPopup(`+${healed}`, at.x, at.y - at.h / 2 - 6, hud.COLORS.enemyHp);
+  }
+
+  // One of the hero's attack spells, on the target (or every enemy).
+  attackFx(id) {
+    const foe = this.target;
+    const hero = this.memberAt(this.hero);
+    if (id === 'ember' || id === 'sunburst') this.fx.add('embers', { points: this.activeFoes().map((other) => other.center) });
+    else if (id === 'chain') this.fx.add('chain', { points: [hero, ...this.activeFoes().map((other) => other.center)] });
+    else if (!foe) return;
+    else if (id === 'siphon') this.fx.add('siphon', { ...foe.center, to: hero });
+    else this.fx.add(ATTACK_SPELL_FX[id] ?? id, foe.center);
+  }
+
+  // An ally's spell: Ves's wind and snow and umbrella, Bramble's shouts and leaves and axe.
+  allyFx(ally, command) {
+    const foe = this.target ?? this.activeFoes()[0];
+    const me = this.memberAt(ally);
+    const all = () => this.activeFoes().map((other) => other.center);
+    switch (command.label) {
+      case 'SHELTER': this.fx.add('shell', { ...this.partyMiddle(), style: 'umbrella' }); return;
+      case 'COVER': this.fx.add('shell', { ...this.partyMiddle(), style: 'coat' }); return;
+      case 'FLURRY': this.fx.add('snow', { style: 'flurry' }); return;
+      case 'SLEET': this.fx.add('snow', { style: 'sleet' }); return;
+      case 'WHITEOUT': this.fx.add('snow', { style: 'whiteout' }); return;
+      case 'ZEPHYR':
+      case 'UPDRAFT':
+      case 'HEADWIND': this.fx.add('wind', this.partyMiddle()); return;
+      case 'DOWNDRAFT':
+      case 'THUNDERCLAP': if (foe) this.fx.add('downdraft', foe.center); return;
+      case 'RAIN DANCE':
+      case 'MONSOON': this.fx.add('snow', { style: 'flurry' }); return;
+      case 'BRACE':
+      case 'PARASOL SPIN': this.fx.add('shell', { ...this.partyMiddle(), style: 'umbrella' }); return;
+      case 'HAILSTORM': this.fx.add('snow', { style: 'sleet' }); return;
+      case 'CYCLONE': this.fx.add('snow', { style: 'whiteout' }); return;
+      case 'DAYBREAK': this.fx.add('aurora', { ...this.partyMiddle(), h: me.h }); return;
+      case 'FELL': if (foe) this.fx.add('slash', { ...foe.center, colors: ['#ffffff', '#ff8c1a'] }); return;
+      case 'MARBLES': for (const point of all()) this.fx.add('pebble', point); return;
+      case 'CALL OUT':
+      case 'HOLLER':
+      case 'WHISTLE':
+      case 'WAR CRY': this.fx.add('shout', me); return;
+      case 'HIDE': this.fx.add('leaves', me); return;
+      case 'CHOP': if (foe) this.fx.add('slash', { ...foe.center, colors: ['#ffffff', '#ff8c1a'] }); return;
+      case 'SLINGSHOT': if (foe) this.fx.add('pebble', foe.center); return;
+      case 'TIMBER!': for (const point of all()) this.fx.add('comet', { ...point, colors: ['#e0b888', '#c08a4e', '#7a4f2a', '#5a3a1e'], style: 'log' }); return;
+      default:
+    }
+    // Anything else, by what it does.
+    if (command.team && foe) this.fx.add('comet', { ...foe.center, colors: ['#ffffff', '#ffe14d', '#4fe3d0', '#b07cff'] });
+    else if (command.strikeAll) this.fx.add('snow', { style: 'sleet' });
+    else if (command.strikeOne && foe) this.fx.add('slash', foe.center);
+    else if (command.guard || command.cover) this.fx.add('shell', { ...this.partyMiddle(), style: 'ward' });
+    else if (command.calmAll) for (const point of all()) this.fx.add('calm', point);
   }
 
   // A spell's strength after the armor's MAG.
@@ -1407,22 +1916,32 @@ export class BattleScene {
 
   // The most a FIGHT could do right now, every slash PERFECT: the hero's, with
   // their weapon and skills, or an ally's, with theirs and how far they've
-  // grown. Attack spells are measured against it, so they always hit harder
-  // than swinging. A weapon weaker than a plain sword (a staff, a lantern)
+  // grown. Allies' attack spells and team attacks are measured against it. A weapon weaker than a plain sword (a staff, a lantern)
   // doesn't make spells weaker: it counts as 1.
   bestStrike(member) {
     if (member.ally) {
-      return BASE_SLASH_COUNT * PERFECT_SLASH_DAMAGE * Math.max(1, this.allyWeaponPower(member)) * (1 + memberGrowth(member.id, 'fight'));
+      return BASE_SLASH_COUNT * PERFECT_SLASH_DAMAGE * Math.max(1, this.allyWeaponPower(member)) * (1 + memberGrowth(member.id, 'fight')) * (1 + this.allyBonus(member, 'allyFight'));
     }
     return (BASE_SLASH_COUNT + skillBonus('strikeSlashes')) * PERFECT_SLASH_DAMAGE * Math.max(1, this.weapon.fightPower) * this.fightPowerBonus;
   }
 
-  // What one of your attack spells does: its `power` (src/data/spells.js)
-  // times your best FIGHT, then the armor's MAG and Arcane Focus. Heavy armor
-  // that weighs on your magic (MAG below 0) can't drag one below that, so a
-  // spell always beats a FIGHT.
+  // The FIGHT an attack spell is measured against: every slash landed (not
+  // PERFECT), with only the skills and as good a sword as the spell's
+  // chapter had, so old spells stop growing (see src/data/spells.js).
+  spellStrike(id) {
+    const chapter = SPELLS[id].chapter ?? 1;
+    const slashes = BASE_SLASH_COUNT + skillBonus('strikeSlashes', chapter);
+    const weapon = Math.max(1, Math.min(this.weapon.fightPower, SPELL_WEAPON_CAP[chapter] ?? Infinity));
+    return slashes * SLASH_DAMAGE * weapon * (1 + skillBonus('fightPower', chapter));
+  }
+
+  // What one of your attack spells does: that FIGHT times its `power`, plus a
+  // quarter of the armor's MAG and half of Arcane Focus. They add rather
+  // than multiply, so spells stay in line with FIGHT. Heavy armor (MAG
+  // below 0) doesn't take any away.
   spellDamage(id) {
-    return Math.max(1, Math.round(this.bestStrike(this.hero) * (SPELLS[id].power ?? 1) * Math.max(1, this.potency) * (1 + skillBonus('spellPower'))));
+    const boost = Math.max(0, this.potency - 1) / 4 + skillBonus('spellPower') / 2;
+    return Math.max(1, Math.round(this.spellStrike(id) * ((SPELLS[id].power ?? 1) + boost)));
   }
 
   // An ally's attack spell: `power` times their best FIGHT, plus their allyStrike.
@@ -1435,6 +1954,7 @@ export class BattleScene {
   // Siphon heals you for its share of the damage.
   castAttackSpell(spell) {
     const damage = this.spellDamage(spell.id);
+    this.attackFx(spell.id);
     const words = `${this.hero.name} cast ${spell.name}! ${ATTACK_SPELL_LINES[spell.id] ?? ''}`.trim();
     if (SPELLS[spell.id].all) {
       this.showMessage(words, () => this.strikeAll(damage));
@@ -1487,7 +2007,7 @@ export class BattleScene {
 
   // Uses the item at `index` in the bag; food heals `member`.
   useItem(index, member) {
-    if (ITEMS[this.items[index]].use === 'calm' && this.refuseMercy(this.activeFoes().find((foe) => foe.data.noMercy))) return;
+    if (ITEMS[this.items[index]].use === 'calm' && this.refuseMercy(this.activeFoes().find((foe) => this.mercyRule(foe)))) return;
     const [id] = this.items.splice(index, 1);
     const item = ITEMS[id];
     sfx('heal');
@@ -1507,7 +2027,9 @@ export class BattleScene {
     }
     if (item.use === 'guard') {
       this.defending = true;
-      this.showMessage(`${light} the ${item.name}. Its smoke wraps around you like a cloak.\nThe next attack will do half the damage.`, 'taunt');
+      // (A candle's smoke; anything else, you hide behind.)
+      const cover = item.light ? `${light} the ${item.name}. Its smoke wraps around you like a cloak.` : `${ally ? `${ally} holds up` : 'You hold up'} the ${item.name}, and hide behind it.`;
+      this.showMessage(`${cover}\nThe next attack will do half the damage.`, 'taunt');
       return;
     }
     // Warm Heart: food goes further.
@@ -1558,7 +2080,7 @@ export class BattleScene {
     }
     const line = this.foeLine(foe, how === 'defeated' ? 'victory' : 'pacified');
     const text = prefix ? `${prefix}\n${line}` : line;
-    this.showMessage(text, () => {
+    const say = () => this.showMessage(text, () => {
       // Another enemy may have been knocked out at the same time.
       const alsoFallen = this.activeFoes().find((other) => other.hp <= 0);
       if (alsoFallen) this.foeLeaves(alsoFallen, 'defeated', next);
@@ -1566,6 +2088,63 @@ export class BattleScene {
       else if (typeof next === 'function') next();
       else this.setPhase(next);
     });
+    // A boss beaten goes out big (and the panel waits for it); anything else
+    // goes with a pop of sparks, or, spared, a few soft lights.
+    if (foe.data.boss && how === 'defeated') {
+      this.startBossFinale(foe, say);
+      return;
+    }
+    if (how === 'defeated') {
+      this.bits.star(foe.center.x, foe.center.y, { size: 14 });
+      this.bits.ring(foe.center.x, foe.center.y, { speed: 90, life: 0.35 });
+      this.bits.scatter(foe.center.x, foe.center.y, 12, foe.bitColors, { speed: 70 });
+      for (let i = 0; i < 4; i++) this.bits.puff(foe.center.x + (Math.random() - 0.5) * 20, foe.center.y + (Math.random() - 0.5) * 16, { color: foe.bitColors[0], life: 0.5 });
+    } else {
+      foe.glowUntil = this.time + (foe.data.boss ? SPARED_GLOW_SECONDS : SPARED_GLOW_SECONDS / 3);
+      if (foe.data.boss) this.bits.ring(foe.center.x, foe.center.y, { speed: 60, life: 0.9, color: '#fff2cf' });
+    }
+    say();
+  }
+
+  // The last blow on a boss: everything stops dead, then it's rocked by bursts
+  // of light all over, harder and harder, the stage shaking, to one last great
+  // flash. Only then does its death play out and the panel say it's beaten.
+  startBossFinale(foe, then) {
+    this.finale = { foe, then, burstAt: 0, bursts: 0 };
+    this.hitStop = HIT_STOP_SECONDS;
+    foe.leftAt = this.time + FINALE_SECONDS;
+    this.bits.star(foe.center.x, foe.center.y, { size: 34, life: 0.4 });
+    sfx('burst');
+    this.setPhase('bossFinale');
+  }
+
+  updateBossFinale() {
+    const { foe } = this.finale;
+    const w = foe.sprite.width * SCALE;
+    const h = foe.sprite.height * SCALE;
+    this.shake = Math.max(this.shake, 0.08);
+    while (this.finale.burstAt <= this.phaseTime && this.phaseTime < FINALE_SECONDS) {
+      this.finale.burstAt += FINALE_BURST_EVERY * (1 - 0.4 * (this.phaseTime / FINALE_SECONDS));
+      // Somewhere on it (on the stage, for one that stands half off the top).
+      const x = foe.pos.x + w * (0.15 + Math.random() * 0.7);
+      const y = Math.max(6, foe.pos.y + h * (0.15 + Math.random() * 0.7));
+      this.bits.star(x, y, { size: 8 + Math.random() * 10 });
+      this.bits.scatter(x, y, 5, foe.bitColors, { speed: 80, life: 0.6 });
+      if (this.finale.bursts++ % 2 === 0) sfx('burst');
+    }
+    if (this.phaseTime < FINALE_SECONDS) return;
+    // The last great flash.
+    const cx = foe.center.x;
+    const cy = Math.max(10, foe.center.y);
+    this.stageFlash = STAGE_FLASH_SECONDS * 0.85;
+    this.shake = SHAKE_SECONDS * 3;
+    this.bits.ring(cx, cy, { speed: 220, life: 0.6, width: 3 });
+    this.bits.ring(cx, cy, { speed: 130, life: 0.7, color: foe.bitColors[0] });
+    this.bits.scatter(cx, cy, 28, foe.bitColors, { speed: 150, life: 1.1 });
+    sfx('boom');
+    const { then } = this.finale;
+    this.finale = null;
+    then();
   }
 
   // Popups are positioned in world units and drawn in UI space.
@@ -1596,6 +2175,7 @@ export class BattleScene {
     if (this.phaseTime < BOX_OPEN_SECONDS) return;
 
     this.dodgeTime += dt;
+    this.callOutLeft = Math.max(0, this.callOutLeft - dt);
     if (this.gustLeft > 0) {
       if (!this.gustShown) this.addPopup('GUST', this.soul.x, this.soul.y - 18, hud.COLORS.teal);
       this.gustShown = true;
@@ -1608,7 +2188,7 @@ export class BattleScene {
       // Bullets hurt as much as the enemy that fired them.
       for (let i = before; i < this.bullets.length; i++) {
         const bullet = this.bullets[i];
-        if (bullet.dmg === null) bullet.dmg = attack.foe.data.damage;
+        if (bullet.dmg === null) bullet.dmg = this.bossPhase(attack.foe)?.damage ?? attack.foe.data.damage;
         // Stared down, he forgets the flame and comes for you.
         if (bullet.snuffs && (this.provokedTurn || !this.flameInBox())) {
           bullet.snuffs = false;
@@ -1629,14 +2209,28 @@ export class BattleScene {
 
   endEnemyTurn() {
     this.bullets = [];
+    boxHome();
     this.defending = false;
+    this.hiding = null;
     this.shelter = null;
     this.gustLeft = 0;
+    this.callOutLeft = 0;
+    this.absorb = false;
+    this.riposte = null;
     // A friend's warm scarf: a little HP back after every enemy turn.
     const regen = this.party.filter((member) => member.ally && member.hp > 0).reduce((sum, ally) => sum + memberGearBonus(ally.id, 'regen'), 0);
     if (regen > 0 && this.hero.hp > 0 && this.hero.hp < this.hero.maxHp) {
       this.hero.hp = Math.min(this.hero.maxHp, this.hero.hp + regen);
       this.addPopup(`+${regen}`, PARTY_FEET.x, PARTY_FEET.y - 46, hud.COLORS.enemyHp);
+    }
+    // Ves's rain, still falling: HP back for whoever it's over.
+    if (this.rain) {
+      const { member, amount } = this.rain;
+      if (member.hp > 0) {
+        const healed = this.healMember(member, amount);
+        this.healFx(member, healed);
+      }
+      if (--this.rain.turns <= 0) this.rain = null;
     }
     if (this.wardTurns > 0) this.wardTurns--;
     this.soul.locked = false;
@@ -1648,9 +2242,9 @@ export class BattleScene {
   }
 
   // Abilities like the lantern and bell slow or freeze bullets while active.
-  // SHELTER's gust slows them all for a moment too.
+  // SHELTER's gust slows them all for a moment too, and so does CALL OUT.
   bulletTimeScale(bullet) {
-    const gust = this.gustLeft > 0 ? GUST_SPEED : 1;
+    const gust = (this.gustLeft > 0 ? GUST_SPEED : 1) * (this.callOutLeft > 0 ? CALL_OUT_SPEED : 1);
     if (this.abilityLeft <= 0 || !this.ability?.bulletTimeScale) return gust;
     return gust * this.ability.bulletTimeScale(this, bullet);
   }
@@ -1717,6 +2311,19 @@ export class BattleScene {
     sfx('heal');
   }
 
+  // Touched a healing bullet: whoever this turn is aimed at gets `heals` HP
+  // back (or you, if they're down), with a little burst of green.
+  catchHeal(bullet) {
+    bullet.spent = true;
+    const member = this.victim?.hp > 0 ? this.victim : this.hero;
+    if (member.hp <= 0) return;
+    const healed = this.healMember(member, bullet.heals);
+    const feet = this.memberFeet(member);
+    this.addPopup(`+${healed}`, feet.x, feet.y - 46, hud.COLORS.enemyHp);
+    this.addSparks(5, hud.COLORS.enemyHp, 60);
+    sfx('heal');
+  }
+
   // Called by abilities that destroy a bullet.
   onBlocked(bullet) {
     this.gainSp(BLOCK_SP);
@@ -1737,6 +2344,12 @@ export class BattleScene {
     for (const bullet of this.bullets) {
       if (bullet.snuffs) {
         if (!bullet.spent && this.flameInBox()) this.checkSnuffer(bullet);
+        continue;
+      }
+      // A friendly bullet (the Wisp's one real light): touching it heals
+      // instead of hurting, and it's used up.
+      if (bullet.heals) {
+        if (!bullet.spent && bullet.edgeDistance(soul.x, soul.y) < SOUL_RADIUS) this.catchHeal(bullet);
         continue;
       }
       const gap = bullet.edgeDistance(soul.x, soul.y);
@@ -1780,7 +2393,24 @@ export class BattleScene {
     // Whoever this turn is aimed at, or whoever's still standing once they're down.
     const victim = this.victim?.hp > 0 ? this.victim : this.party.find((member) => member.hp > 0);
     if (!victim) return;
-    let damage = bullet.dmg ?? this.foes[0].data.damage;
+    // Ves's PARASOL SPIN: the first hit this turn goes straight back at them.
+    if (this.riposte) {
+      const { damage: thrown } = this.riposte;
+      this.riposte = null;
+      this.damageEnemy(thrown);
+      this.addPopup('RETURNED!', soul.x, soul.y - 18, hud.COLORS.teal);
+      soul.iframes = BASE_IFRAMES + skillBonus('iframes');
+      return;
+    }
+    // Her BRACE: the first hit on you this turn does nothing at all.
+    if (this.absorb && victim === this.hero) {
+      this.absorb = false;
+      this.addPopup('BRACED!', soul.x, soul.y - 18, hud.COLORS.teal);
+      this.addSparks(5, hud.COLORS.teal, 60);
+      soul.iframes = BASE_IFRAMES + skillBonus('iframes');
+      return;
+    }
+    let damage = bullet.dmg ?? this.bossPhase(this.foes[0])?.damage ?? this.foes[0].data.damage;
     if (this.defending || this.wardTurns > 0) damage = Math.ceil(damage / 2);
     // Thick Skin and the armor's DEF take a little off every hit on the hero
     // (but a hit always hurts a bit; armor that lowers DEF makes hits hurt
@@ -1828,12 +2458,16 @@ export class BattleScene {
     let text = `You won!\nGot ${exp} EXP and ${coins} gold.`;
     for (const id of this.earned.items) {
       const got = giveItem(id);
-      text += got === 'stored' ? `\nGot a ${ITEMS[id].name}! (Your bag's full: it went to storage.)`
-        : got ? `\nGot a ${ITEMS[id].name}!` : `\nYou couldn't carry the ${ITEMS[id].name}.`;
+      // "a Wild Carrot", "an Ice Shortbread", and no "a" before a plural like "Hush Bristles".
+      const name = ITEMS[id].name;
+      const aName = /[^s]s$/.test(name) ? name : `${/^[AEIOU]/i.test(name) ? 'an' : 'a'} ${name}`;
+      text += got === 'stored' ? `\nGot ${aName}! (Your bag's full: it went to storage.)`
+        : got ? `\nGot ${aName}!` : `\nYou couldn't carry the ${name}.`;
     }
     for (const [id, amount] of Object.entries(this.earned.materials)) {
       giveMaterial(id, amount);
-      text += `\nGot ${amount} ${MATERIALS[id].name}${amount > 1 ? 's' : ''}.`;
+      const material = MATERIALS[id];
+      text += `\nGot ${amount} ${amount > 1 ? material.plural ?? `${material.name}s` : material.name}.`;
     }
     if (exp && gainExp(exp)) {
       this.levelledUp = true;
@@ -1851,9 +2485,12 @@ export class BattleScene {
     if (this.shake > 0) ctx.translate(Math.round((Math.random() - 0.5) * 4), Math.round((Math.random() - 0.5) * 4));
     this.drawParty(ctx);
     if (this.stageLantern) this.drawStageLantern(ctx);
+    if (this.bossPhase()?.dropped) this.drawDropped(ctx, this.bossPhase().dropped);
     if (this.phase === 'bossIntro') this.drawBossIntro(ctx);
     for (const foe of this.foes) this.drawFoe(ctx, foe);
+    this.bits.draw(ctx);
     this.drawBox(ctx);
+    this.fx.drawStage(ctx);
     ctx.restore();
 
     inUiSpace(ctx, () => {
@@ -1877,14 +2514,24 @@ export class BattleScene {
       const aimedAt = this.phase === 'dodge' && this.victim?.hp > 0 ? this.victim : this.hero;
       hud.drawPartyCard(ctx, allyTurn ? this.actor : aimedAt, choosing);
       const anyCalm = this.activeFoes().some((foe) => foe.calm >= 100);
-      const noRun = this.bossFight() ? ['RUN'] : [];
-      if (allyTurn) hud.drawCommands(ctx, ALLY_COMMANDS, this.allySelected, this.phase === 'ally', [], this.time);
+      const noRun = this.bossFight() || this.noRun ? ['RUN'] : [];
+      if (allyTurn) hud.drawCommands(ctx, ALLY_COMMANDS, this.allySelected, this.phase === 'ally', [], this.time, this.ally && isHurt(this.ally.id) ? ['FIGHT'] : []);
       else hud.drawCommands(ctx, COMMANDS, this.selected, this.phase === 'command', anyCalm ? ['SPELLS'] : [], this.time, noRun);
       this.drawPanelText(ctx);
       this.drawPopups(ctx);
     });
     if (this.phase === 'bossIntro') this.drawBossIntroOverlay(ctx);
     if (this.phase === 'interject') this.interjection.box.draw(ctx);
+    // A phase's `flash`: everything white, fading.
+    if (this.stageFlash > 0) {
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = `rgba(255, 255, 255, ${(this.stageFlash / STAGE_FLASH_SECONDS).toFixed(3)})`;
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      ctx.restore();
+    }
+    // Nova: everything goes white.
+    this.fx.drawScreen(ctx);
   }
 
   // One enemy: full name and bars under it; with several, a compact set beside each.
@@ -2006,7 +2653,73 @@ export class BattleScene {
   // An enemy bobbing in place; shaking after a hit; fading away once beaten
   // (or drifting up and away once pacified). One with a `beatenSprite` sinks
   // into that instead, and stays, still.
+  foeHit(foe) {
+    foe.hitAt = this.time;
+    if (foe.anim?.chips) this.addChips(foe, 7, false);
+  }
+
+  // Bits flying off it: from its middle when it's hit, from anywhere on it
+  // (and only falling) as it breaks.
+  addChips(foe, count, falling) {
+    const w = foe.sprite.width * SCALE;
+    const h = foe.sprite.height * SCALE;
+    for (let i = 0; i < count; i++) {
+      foe.chips.push({
+        at: this.time,
+        x: foe.pos.x + w * (falling ? 0.15 + Math.random() * 0.7 : 0.35 + Math.random() * 0.3),
+        y: foe.pos.y + h * (falling ? 0.2 + Math.random() * 0.5 : 0.4 + Math.random() * 0.2),
+        vx: falling ? (Math.random() - 0.5) * 20 : (Math.random() - 0.5) * 160,
+        vy: falling ? Math.random() * 20 : -40 - Math.random() * 90,
+        size: Math.random() < 0.3 ? 4 : 2,
+        color: foe.anim.chips[Math.floor(Math.random() * foe.anim.chips.length)],
+      });
+    }
+  }
+
+  drawChips(ctx, foe) {
+    for (const chip of foe.chips) {
+      const t = this.time - chip.at;
+      ctx.fillStyle = chip.color;
+      ctx.fillRect(Math.round(chip.x + chip.vx * t), Math.round(chip.y + chip.vy * t + 260 * t * t), chip.size, chip.size);
+    }
+  }
+
+  // The sprite its `anim` says to show now, or null for its usual one.
+  animFrame(foe) {
+    const anim = foe.anim;
+    if (!anim) return null;
+    if (foe.state === 'defeated') return clipFrame(anim.death, this.time - foe.leftAt, true);
+    if (foe.state === 'pacified') return clipFrame(anim.spared, this.time - foe.leftAt, true);
+    return clipFrame(anim.hurt, this.time - foe.hitAt)
+      ?? clipFrame(anim.intro, this.time - foe.introAt)
+      ?? clipFrame(anim.windup, this.time - foe.attackAt)
+      ?? (anim.idle ? anim.idle.sprites[Math.floor(this.time * anim.idle.fps) % anim.idle.sprites.length] : null);
+  }
+
   drawFoe(ctx, foe) {
+    // A boss beaten, rocked by its finale (see bossFinale) before its death
+    // plays: shaking harder and harder, flashing white, in its hurt look.
+    if (foe.state === 'defeated' && this.time < foe.leftAt) {
+      const t = FINALE_SECONDS - (foe.leftAt - this.time);
+      const hard = 1 + 2 * Math.max(0, t / FINALE_SECONDS);
+      const dx = Math.round(Math.sin(this.time * 61) * hard);
+      const dy = Math.round(Math.cos(this.time * 47) * hard * 0.6);
+      const white = this.hitStop > 0 || Math.floor(t / 0.07) % 3 === 0;
+      const look = foe.anim?.hurt ? clipFrame(foe.anim.hurt, 0) : foe.sprite;
+      ctx.drawImage(white ? foe.flashSprite : look, foe.pos.x + dx, foe.pos.y + dy, foe.sprite.width * SCALE, foe.sprite.height * SCALE);
+      this.drawChips(ctx, foe);
+      return;
+    }
+    // Its death or sparing, played out, before it's left broken or fades.
+    const leaving = foe.state === 'defeated' ? foe.anim?.death : foe.state === 'pacified' ? foe.anim?.spared : null;
+    if (leaving && (foe.beatenSprite || this.time - foe.leftAt < clipLength(leaving))) {
+      const sprite = this.animFrame(foe);
+      const bottom = foe.pos.y + foe.sprite.height * SCALE;
+      const shake = Math.round(Math.sin((this.time - foe.leftAt) * 47) * 2 * Math.max(0, 1 - (this.time - foe.leftAt) / clipLength(leaving)));
+      ctx.drawImage(sprite, foe.pos.x + shake, bottom - sprite.height * SCALE, sprite.width * SCALE, sprite.height * SCALE);
+      this.drawChips(ctx, foe);
+      return;
+    }
     if (foe.state === 'defeated' && foe.beatenSprite) {
       const sprite = foe.beatenSprite;
       const bottom = foe.pos.y + foe.sprite.height * SCALE;
@@ -2015,18 +2728,31 @@ export class BattleScene {
       ctx.drawImage(sprite, foe.pos.x + shake, bottom - sprite.height * SCALE, sprite.width * SCALE, sprite.height * SCALE);
       return;
     }
-    const w = foe.sprite.width * SCALE;
-    const h = foe.sprite.height * SCALE;
+    let w = foe.sprite.width * SCALE;
+    let h = foe.sprite.height * SCALE;
     let x = foe.pos.x;
-    let y = foe.pos.y + Math.round(Math.sin(this.time * 2 + foe.pos.y) * 2);
+    // (Unless it's `still`: a statue stands.)
+    let y = foe.pos.y + (foe.data.still ? 0 : Math.round(Math.sin(this.time * 2 + foe.pos.y) * 2));
     let alpha = 1;
+    // A boss on its way in (its `entrance`), squashing down as it lands.
+    if (this.phase === 'bossIntro' && foe === this.speaker) {
+      const e = this.entrance(foe);
+      const sw = Math.round(w * e.sx);
+      const sh = Math.round(h * e.sy);
+      x += Math.round(e.x) + Math.round((w - sw) / 2);
+      y += Math.round(e.y) + (h - sh);
+      w = sw;
+      h = sh;
+      alpha *= e.alpha;
+    }
     // Made of smoke, he wavers.
     if (this.bossPhase(foe)?.smoke) alpha = 0.78 + 0.22 * Math.sin(this.time * 5);
     if (this.phase === 'fightResult' && foe === this.target) {
       x += Math.round(Math.sin(this.phaseTime * 40) * 3 * Math.max(0, 1 - this.phaseTime));
     }
     if (foe.state !== 'active') {
-      const gone = this.time - foe.leftAt;
+      // (After its death or sparing has played, if it has one.)
+      const gone = this.time - foe.leftAt - clipLength(leaving);
       if (gone >= FOE_FADE_SECONDS) return;
       alpha *= 1 - gone / FOE_FADE_SECONDS;
       if (foe.state === 'pacified') y -= Math.round(gone * 16);
@@ -2034,8 +2760,12 @@ export class BattleScene {
 
     ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.drawImage(foe.flash > 0 ? foe.flashSprite : foe.sprite, x, y, w, h);
+    // A hurt frame flinches instead of flashing white, if it has one.
+    const frame = this.animFrame(foe);
+    const hurting = frame && foe.anim.hurt && this.time - foe.hitAt < clipLength(foe.anim.hurt);
+    ctx.drawImage(foe.flash > 0 && !hurting ? foe.flashSprite : frame ?? foe.sprite, x, y, w, h);
     ctx.restore();
+    this.drawChips(ctx, foe);
   }
 
   // The box and soul are drawn in UI space (fine outline, detailed heart);
@@ -2121,6 +2851,18 @@ export class BattleScene {
     for (let i = 0; i < flame.guard; i++) ctx.fillRect(Math.round(flame.x - flame.guard + i * 2), Math.round(flame.y + 8), 1, 1);
   }
 
+  // Something a boss dropped, lying on the stage in front of Ves (a phase's
+  // `dropped`, a prop sprite: the Hush losing her umbrella).
+  drawDropped(ctx, look) {
+    if (!PROP_SPRITES[look]) return;
+    this.droppedSprites ??= {};
+    this.droppedSprites[look] ??= makeSprite(PROP_SPRITES[look], PROP_PALETTE);
+    const sprite = this.droppedSprites[look];
+    const ves = this.party.find((member) => member.ally) ?? this.hero;
+    const feet = this.memberFeet(ves);
+    ctx.drawImage(sprite, Math.round(feet.x + 14), Math.round(feet.y - sprite.height));
+  }
+
   // Her lantern on the stage, by Ves: cold where it landed, then catching,
   // then blazing, its light washing over everything once it's lit.
   drawStageLantern(ctx) {
@@ -2157,9 +2899,10 @@ export class BattleScene {
   // text/spells/spells.txt, with {amount} the number it would do right now.
   spellDescription(spell) {
     const healBoost = 1 + skillBonus('healBoost');
-    const amounts = { heal: HEAL_PULSE_HP * healBoost, mend: MEND_HP * healBoost, lull: LULL_CALM, hush: HUSH_CALM };
-    let amount = this.potent(amounts[spell.id] ?? 0);
+    const amounts = { heal: HEAL_PULSE_HP * healBoost, mend: MEND_HP * healBoost, lull: LULL_CALM, hush: HUSH_CALM, serenade: SPELLS.serenade.calm };
+    let amount = this.potent(amounts[spell.id] ?? (SPELLS[spell.id].heals ?? 0) * healBoost);
     if (spell.id === 'ward') amount = WARD_TURNS;
+    else if (SPELLS[spell.id].turns) amount = SPELLS[spell.id].turns;
     else if (SPELLS[spell.id].power) amount = this.spellDamage(spell.id);
     return spellText(spell.id, { amount });
   }
@@ -2171,9 +2914,11 @@ export class BattleScene {
     return spellText(`${ally.id}_${command.label.toLowerCase()}`, {
       def: SHELTER_DEF + Math.max(0, bonus('shelterDef')),
       calm: this.potent((command.calmAll ?? 0) + bonus('allyCalm')),
-      damage: command.team ? this.teamDamage(ally, command.team) : this.allyStrikeDamage(ally, command.strikeAll ?? command.strikeOne ?? 0),
-      heal: Math.max(0, (command.heal ?? 0) + bonus('allyHeal')),
+      damage: command.team ? this.teamDamage(ally, command.team) : this.allyStrikeDamage(ally, command.strikeAll ?? command.strikeOne ?? command.riposte ?? 0),
+      heal: Math.max(0, (command.heal ?? command.healAll ?? command.regen ?? 0) + bonus('allyHeal')),
       sp: Math.max(0, (command.sp ?? 0) + bonus('allySp')),
+      turns: command.turns ?? 0,
+      seconds: (command.headwind ?? 0) + Math.max(0, bonus('gust')),
     });
   }
 
@@ -2200,7 +2945,7 @@ export class BattleScene {
         })), this.cursor);
         break;
       case 'talk':
-        hud.drawOptions(ctx, this.target.data.talk.map((option) => ({ label: option.name, enabled: true })), this.cursor);
+        hud.drawOptions(ctx, this.target.data.talk.map((option) => ({ label: option.name, enabled: !this.aboutDownAlly(option.name) })), this.cursor);
         break;
       case 'ally':
         hud.drawTextBox(ctx, this.allyPrompt);

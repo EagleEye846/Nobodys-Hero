@@ -40,7 +40,7 @@ There you are. You made it up the ice.
 
 The old goat, Nan, remembers me. Don't let that worry you. I remember her too.
 
-The stair goes on from the Lookout. I'd rest first, if I were you. A proper bed, a proper sleep. The mountain will keep.
+The stairs go on from the Lookout. I'd rest first, if I were you. A proper bed, a proper sleep. The mountain will keep.
 
 {worried}And whatever you dream up here... it's only the thin air. Don't go looking for it when you wake.
 
@@ -62,3 +62,17 @@ The fountain's lovely, isn't it. Frozen in the middle of giving.
 Sleep at the inn before you go on. The soup, the beds. You won't find either above the clouds.
 
 {glee}Stay where the light can find you, little one. Up here, that's harder than it sounds.
+
+# On the Old Street in the dead city, by the lamp he lit
+# (src/data/scenes/keeperLightsALamp.js).
+[first after keeper_lights_a_lamp]
+Mind the boards in the forum. They'll take her weight, but not yours.
+
+{thoughtful}Strange place, this. Built for a Hero, and every lamp lit for him the night they thought he'd come.
+
+{sad}They burned all night. And the next. Then one by one they went out, and nobody had the heart to light them again.
+
+[repeat after keeper_lights_a_lamp]
+{glee}One more lit. It's slow work, but I've the time.
+
+Go on. Get her umbrella back.

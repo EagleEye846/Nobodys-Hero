@@ -1,0 +1,66 @@
+# LAMP MITES
+# Numbers (HP, damage, how much each TALK option calms them) live in
+# src/data/enemies/lamp_mite.js.
+
+[intro]
+The dead street lamp rattles. LAMP MITES pour out of it!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+LAMP MITES flutter round your head. Round and round and round.
+
+LAMP MITES bump into each other. Then into you. Then into each other again.
+
+One LAMP MITE lands on your nose. It looks you in the eye. It's very excited.
+
+The LAMP MITES go quiet all at once. Then they don't.
+
+Smells like dust and old glass.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Ooh! Ooh! Light!
+
+Shiny!
+
+Mine! No, mine! MINE!
+
+Flutter. Flutter. Flutter.
+
+Is it you? Are you the glow?
+
+Bzzt.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/lamp_mite.js.
+[talk: Inspect]
+LAMP MITES - HP 580
+Tiny dusty moths that nest in the dead street lamps. Never, ever alone.
+
+[talk: Polish a lamp]
+You rub the dust off the glass of the old lamp with your sleeve. The LAMP MITES crowd round to look at their home, all shiny. They're very proud of it.
+
+[talk: Share your pocket fluff]
+You turn out your pockets. The LAMP MITES fall on the fluff like it's a feast. It is, for them.
+
+[talk: Flutter your hands]
+You flap your hands about like a moth. The LAMP MITES flap back. Now you're all flapping. It's a lot of flapping.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The LAMP MITES scatter in a puff of dust and go back into their lamp. The glass rattles a while, crossly.
+
+[pacified]
+The LAMP MITES settle on your shoulders for a moment, like a scarf. Then they all go home to their lamp at once.
+
+# Ves's own TALK lines for them ({foe} is their name). She's hurt, on her
+# crutch, so she can't run about after them.
+[vesper_hurt_talk]
+Ves leans on her crutch and holds very still, and {foe} land all along it, one after another, like birds on a branch. She tries not to laugh.
+
+Ves tells {foe} their lamp is the nicest one on the street. {foe} buzz, delighted. She can't see it from here.
+
+Ves blows a little dust off her sleeve for {foe}, gently. They go after it, happy as anything.

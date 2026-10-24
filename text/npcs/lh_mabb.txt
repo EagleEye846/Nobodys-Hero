@@ -1,0 +1,26 @@
+# MABB: keeps the Kettle and Straw, Lasthome's inn. A stout marmot with a
+# ladle, who believes most things can be fixed with stew and the rest with
+# more stew.
+
+[first]
+Sit. Eat. Stew's in the kettle, bowls are on the shelf, spoons are in the drawer, and if you want bread you'll have to fight Corran for it.
+
+You're off the mountain, aren't you. You've got the look. Everybody who comes off the mountain looks like they're waiting for somebody to make a speech.
+
+Nobody makes speeches here. Eat your stew.
+
+[repeat]
+The beds are straw and the straw's clean. Sleep in any of them. Your HP'll thank you, whatever that is.
+
+[first after ves_on_her_feet]
+There she is! On a crutch and all. Sit her down, sit her down, she needs feeding up.
+
+Stew. Don't argue. Nobody's ever won an argument with my stew.
+
+[repeat after ves_on_her_feet]
+Second bowl's free. Third's free. Fourth, I start to worry.
+
+[first after bramble_goes_home]
+Gone home, has he, the little loud one? He ate four bowls. I liked him.
+
+I've wrapped some oatcakes for him. Corran's got them. He'll find them halfway up and he'll eat them all at once.

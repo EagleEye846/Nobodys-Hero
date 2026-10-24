@@ -8,7 +8,7 @@ export const DUSKLING = {
   textFile: 'enemies/duskling.txt',
   sprite: { rows: DUSKLING_SPRITE, palette: DUSKLING_PALETTE },
   maxHp: 130,
-  damage: 7,
+  damage: 9,
 
   difficulty: { density: 0.95, speed: 0.9 },
 

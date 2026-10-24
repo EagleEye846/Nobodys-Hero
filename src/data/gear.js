@@ -11,6 +11,12 @@ export const GEAR = {
   // Keepsakes: they don't do anything, but you keep them.
   ves_mitten: { name: "Ves's Mitten" },
   ves_ribbon: { name: "Ves's Ribbon" },
+  ves_scarf: { name: "Ves's Scarf" },
+  // Bramble gives you this when he goes home from Lasthome.
+  bramble_whistle: { name: "Bramble's Whistle" },
+  // A piece of the Fallen Star that broke off as it came down, on the Old
+  // Street's raised steps, just through Lasthome's far door. Teasel can reforge the sword with it (fallenStar.js).
+  star_shard: { name: 'Star Shard' },
 };
 
 export function hasGear(id) {

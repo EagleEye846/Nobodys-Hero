@@ -1,5 +1,6 @@
 import { UI_SCALE as S } from '../config.js';
 import { soulSprite } from './soul.js';
+import { starForging } from '../data/fallenStar.js';
 
 // Soul abilities come from the equipped weapon and are used with SHIFT while
 // dodging. Positions are in world units; draw functions run in UI space.
@@ -38,6 +39,14 @@ const REFLECT_RANGE = 20;
 const REFLECT_DAMAGE = 3;
 const RECALL_SP = 20;
 const RECALL_HP = 12;
+// Starfall: how fast a star falls, how wide a path it burns, how far its
+// landing reaches, SP for every bullet it takes, and how far apart the stars
+// fall when there's more than one (the sword's forging: src/data/fallenStar.js).
+const STAR_SPEED = 260;
+const STAR_PATH = 7;
+const STAR_BURST = 13;
+const STAR_SP = 2;
+const STAR_SPREAD = 20;
 
 function axis(input, negative, positive) {
   return (input.isDown(positive) ? 1 : 0) - (input.isDown(negative) ? 1 : 0);
@@ -332,6 +341,82 @@ export const SOUL_ABILITIES = {
       for (const offset of [0, 0.3]) {
         const p = Math.min(1, progress + offset);
         circle(ctx, battle.soul.x, battle.soul.y, 6 + p * 40, { stroke: '#ffe14d', width: 2, alpha: 1 - p });
+      }
+    },
+  },
+
+  // Fallen Star: call down stars. Each falls from the top of the box down
+  // through your column, burning every bullet in its path, and bursts where
+  // it lands. Every bullet it takes gives a little SP. One star at first; one
+  // more for every time a smith reforges the sword.
+  starfall: {
+    name: 'STARFALL',
+    hint: 'Press SHIFT to call down a falling star. It burns through every bullet in its path, and each one fills your SP a little.',
+    cooldown: 6,
+    duration: 0,
+    activate(battle) {
+      const count = starForging().stars;
+      const box = battle.box;
+      battle.abilityState.stars ??= [];
+      for (let i = 0; i < count; i++) {
+        const x = Math.max(box.x + 4, Math.min(box.x + box.w - 4, battle.soul.x + (i - (count - 1) / 2) * STAR_SPREAD));
+        // Side stars come a beat later, like a shower.
+        battle.abilityState.stars.push({ x, y: box.y - 10 - Math.abs(i - (count - 1) / 2) * 18, landed: 0, trail: [] });
+      }
+    },
+    tick(battle, dt) {
+      const box = battle.box;
+      const burn = (x, y, radius) => {
+        const { count } = destroyWithin(battle, x, y, radius);
+        if (count) battle.gainSp(count * STAR_SP);
+      };
+      battle.abilityState.stars = (battle.abilityState.stars ?? []).filter((star) => {
+        if (star.landed) {
+          star.landed += dt;
+          return star.landed < 0.45;
+        }
+        star.trail.push(star.y);
+        if (star.trail.length > 7) star.trail.shift();
+        star.y += STAR_SPEED * dt;
+        if (star.y >= box.y) burn(star.x, star.y, STAR_PATH);
+        if (star.y >= box.y + box.h - 3) {
+          star.y = box.y + box.h - 3;
+          star.landed = 0.0001;
+          burn(star.x, star.y, STAR_BURST);
+          battle.shake = Math.max(battle.shake ?? 0, 0.12);
+        }
+        return true;
+      });
+    },
+    drawAlways(ctx, battle) {
+      for (const star of battle.abilityState.stars ?? []) {
+        const x = Math.round(star.x * S);
+        const y = Math.round(star.y * S);
+        if (star.landed) {
+          const p = star.landed / 0.45;
+          circle(ctx, star.x, star.y, 4 + p * STAR_BURST, { stroke: '#9ad8ff', width: 5 * (1 - p) + 1, alpha: 1 - p });
+          circle(ctx, star.x, star.y, 2 + p * STAR_BURST * 0.6, { stroke: '#ffffff', width: 2, alpha: 1 - p });
+          continue;
+        }
+        // Its tail, fading up behind it.
+        star.trail.forEach((ty, i) => {
+          ctx.globalAlpha = (i + 1) / star.trail.length * 0.5;
+          ctx.fillStyle = '#9ad8ff';
+          const w = 2 + Math.round((i / star.trail.length) * 4);
+          ctx.fillRect(x - w / 2, Math.round(ty * S), w, 10);
+        });
+        ctx.globalAlpha = 1;
+        // The star: a bright cross with a pale blue glow.
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, 18);
+        glow.addColorStop(0, 'rgba(154, 216, 255, 0.7)');
+        glow.addColorStop(1, 'rgba(154, 216, 255, 0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(x - 18, y - 18, 36, 36);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x - 2, y - 8, 4, 16);
+        ctx.fillRect(x - 8, y - 2, 16, 4);
+        ctx.fillStyle = '#e8f6ff';
+        ctx.fillRect(x - 4, y - 4, 8, 8);
       }
     },
   },

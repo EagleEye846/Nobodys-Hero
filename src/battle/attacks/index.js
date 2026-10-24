@@ -17,6 +17,27 @@ import { ICE_MOTH_ATTACKS } from './ice_moth.js';
 import { GLINTLING_ATTACKS } from './glintling.js';
 import { GREAT_BAT_ATTACKS } from './great_bat.js';
 import { USURPER_ATTACKS } from './usurper.js';
+import { BURRHOG_ATTACKS } from './burrhog.js';
+import { SAPLING_ATTACKS } from './sapling.js';
+import { RUSSET_ATTACKS } from './russet.js';
+import { KNOTLING_ATTACKS } from './knotling.js';
+import { PUFFCAP_ATTACKS } from './puffcap.js';
+import { HAYWARD_ATTACKS } from './hayward.js';
+import { GLOAMWORM_ATTACKS } from './gloamworm.js';
+import { SLIPJACK_ATTACKS } from './slipjack.js';
+import { CLINKER_ATTACKS } from './clinker.js';
+import { HOB_ATTACKS } from './hob.js';
+import { GRIST_ATTACKS } from './grist.js';
+import { SILTLING_ATTACKS } from './siltling.js';
+import { WISP_ATTACKS } from './wisp.js';
+import { BOG_TOAD_ATTACKS } from './bog_toad.js';
+import { REED_STALKER_ATTACKS } from './reed_stalker.js';
+import { LAMP_MITE_ATTACKS } from './lamp_mite.js';
+import { CAIRN_HOUND_ATTACKS } from './cairn_hound.js';
+import { HERALDS_ECHO_ATTACKS } from './heralds_echo.js';
+import { HUSH_ATTACKS } from './the_hush.js';
+import { WARDEN_ATTACKS } from './warden.js';
+import { TATTERWIGHT_ATTACKS } from './tatterwight.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -45,4 +66,25 @@ export const ENEMY_ATTACKS = {
   ...GLINTLING_ATTACKS,
   ...GREAT_BAT_ATTACKS,
   ...USURPER_ATTACKS,
+  ...BURRHOG_ATTACKS,
+  ...SAPLING_ATTACKS,
+  ...RUSSET_ATTACKS,
+  ...KNOTLING_ATTACKS,
+  ...PUFFCAP_ATTACKS,
+  ...HAYWARD_ATTACKS,
+  ...GLOAMWORM_ATTACKS,
+  ...SLIPJACK_ATTACKS,
+  ...CLINKER_ATTACKS,
+  ...SILTLING_ATTACKS,
+  ...HOB_ATTACKS,
+  ...GRIST_ATTACKS,
+  ...WISP_ATTACKS,
+  ...BOG_TOAD_ATTACKS,
+  ...REED_STALKER_ATTACKS,
+  ...LAMP_MITE_ATTACKS,
+  ...CAIRN_HOUND_ATTACKS,
+  ...HERALDS_ECHO_ATTACKS,
+  ...HUSH_ATTACKS,
+  ...WARDEN_ATTACKS,
+  ...TATTERWIGHT_ATTACKS,
 };

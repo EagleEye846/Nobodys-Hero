@@ -18,7 +18,7 @@ export const FROSTBITE = {
     palette: FROSTBITE_PALETTE,
   },
   maxHp: 220,
-  damage: 9,
+  damage: 12,
 
   // A Chapter 2 enemy: slow things, but a lot of them.
   difficulty: { density: 1.15, speed: 1.05 },

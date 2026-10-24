@@ -172,7 +172,8 @@ export function holdingHands() {
 export const HOLD_OFFSET = { x: 16, y: 7 };
 
 export function canRide() {
-  return inParty(VES) && Boolean(memberFrames(VES)?.floatA);
+  // (Not while she's hurt and riding on your back, with no umbrella.)
+  return inParty(VES) && WORLD_STATE.carrying !== VES && Boolean(memberFrames(VES)?.floatA);
 }
 
 let heroSprites = null;

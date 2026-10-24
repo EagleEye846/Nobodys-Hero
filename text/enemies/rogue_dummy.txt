@@ -11,7 +11,7 @@ The dummy sways in a wind that isn't there.
 
 Dust drifts down from the broken ceiling.
 
-The dummy practices a menacing glare.
+The dummy practises a menacing glare.
 
 Somewhere in the ruins, a stone settles.
 
@@ -51,4 +51,4 @@ You hum something calm. Its stuffing settles.
 ROGUE DUMMY comes apart at the seams!
 
 [pacified]
-ROGUE DUMMY was pacified and drifts away.
+ROGUE DUMMY is pacified and drifts away.

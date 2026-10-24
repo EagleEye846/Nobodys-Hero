@@ -1,0 +1,419 @@
+# THE LANTERN MARSH (Chapter 3): the fen below the Outfall, where the old
+# conduit's water spreads out under the mist. Old lanterns on poles mark the
+# one safe way. Where Ves came down. Things you can read and look at. See
+# notes/docs/chapter-3-marsh.md.
+#
+# A section with `_bramble` on the end of its name is what Bramble says
+# after the section of that name, if he's with you; `_ves` is what Ves says
+# after that, once she's with you again (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal's light goes out a long way into the mist. Further than the lanterns'.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Things all over the marsh ---
+
+[reeds]
+Reeds and bulrushes, taller than you, packed so close you can't see through.
+
+[reeds_ves]
+{worried}Anything could be standing in there. Don't look. I'm not looking.
+
+[bog]
+Black mud, wet and shining. It looks like you could walk on it.
+
+You couldn't.
+
+[bog_bramble]
+{scared}That's the kind that keeps your boots. And then the rest of you.
+
+[fen_water]
+Still, dark water. You can't see the bottom. You can't see if there is one.
+
+[duckboards]
+Old planks laid across the fen on sunk posts, grey and soft and green at the edges. Somebody laid these, a long time ago, and somebody's mended them since.
+
+[marsh_lantern]
+An old lantern hung on a crooked pole, still burning. Its glass is clean.
+
+They go on across the fen in a line, one after another, as far as the mist lets you see.
+
+[marsh_lantern_bramble]
+{thinking}Who keeps these lit, all the way out here?
+
+{bored}...Probably nobody. Probably they just burn.
+
+[marsh_lantern_out]
+A lantern on a pole, gone out. It's cold. The wick's burnt right down.
+
+[marsh_lantern_out_ves]
+{worried}Stay where the lit ones are. That's the rule out here. I worked that out the hard way.
+
+[drag_print]
+A boot print in the mud. Then, beside it, a long smear, where the other foot dragged.
+
+Then another boot print.
+
+[drag_print_bramble]
+{worried}That's her. One foot walking. One foot... not.
+
+[drag_print_2]
+More of them. One print, one drag. They don't go wandering. They go straight on.
+
+[drag_print_2_bramble]
+{determined}She's still going, Sword. Hurt, and she's still going.
+
+[drag_print_3]
+The prints stop where the turf gets firm. Somebody stood here a while. Then they went on, toward the light.
+
+[reed_gap]
+Reeds, thinner here, parted at the bottom. Something small could wriggle through.
+
+You won't fit.
+
+[reed_gap_bramble]
+{proud}I will. (Press Q.)
+
+[bog_log]
+A drift log, grey and smooth, washed down out of the forest and left on the bank.
+
+(Walk into it to push it. It rolls till something stops it, and sinks into bog or water as a bridge.)
+
+[bog_log_bramble]
+{grin}Logs! The forest's still looking after us.
+
+[bog_rock]
+A big stone.
+
+(Walk into it to push it. Shoved into the bog, it sinks in up to its shoulders: something to step on.)
+
+[rock_home]
+Everything you've pushed comes back out of the mud and goes back to where it was. Somehow.
+
+[chest_empty]
+Empty.
+
+[gold_pouch_empty]
+An empty purse.
+
+[treadle]
+A stone plate in the floor, the old city's kind. It goes down under anyone standing on it.
+
+[drain_grate]
+An iron grating, rusted through at the bottom, the bars bent apart. Something small has been squeezing through.
+
+[drain_grate_bramble]
+{proud}Something small. That's me. (Press Q.)
+
+[rubble]
+Fallen stone from the old city. Nothing goes past it.
+
+# Sinking in the bog: you (or Bramble) come back out at the door you came in by.
+[bog_sunk_you]
+The mud takes your feet, and then your knees, and it doesn't let go.
+
+...You come to back where you came in, black to the waist.
+
+[bog_sunk_you_bramble]
+{scared}I grabbed you! I grabbed you and I PULLED and you came out like a cork!
+
+{sheepish}...Stay on the boards. Please.
+
+[bog_again_you_ves]
+{furious}I am NOT going in there a second time! Third time! Whatever it is!
+
+[bog_sunk_kid]
+Bramble goes in up to his middle with a yell, and then he's out again somehow, and you're both back where you came in.
+
+[bog_sunk_kid_bramble]
+{angry}It took my boot! It took my BOOT, Sword!
+
+{sheepish}...No, it's there. It's on my foot. Never mind.
+
+[bog_again_you]
+The bog takes you again. Again, you're hauled out back where you came in.
+
+[bog_again_kid]
+The bog takes Bramble again. Again, he's hauled out back where you came in.
+
+[carry_rope]
+Not with Ves on your back. You'd need both hands for the rope, and she'd need both of hers for you.
+
+[carry_rope_ves]
+{angry}Don't even think about it.
+
+# --- 1. THE FALLS FOOT ---
+
+[falls]
+The conduit's water comes down off the broken edge high above, all of it, and goes into the pool with a long roar.
+
+[falls_cliff]
+The old stone of the conduit, high overhead, with the falls coming off it.
+
+[falls_stone]
+An old stone post, sunk crooked in the turf. Words are cut in it, worn nearly smooth:
+
+KEEP TO THE LIGHTS
+
+[falls_stone_bramble]
+{thinking}Keep to the lights. That's easy.
+
+{worried}...It's easy, isn't it?
+
+[falls_purse]
+A purse, dropped in the sedge by the pool.
+
+# --- 2. THE LANTERN PATH ---
+
+[lantern_strip]
+A strip of evening-blue wool, knotted tight round a reed beside the boards. It's been torn off something. Something with a hem.
+
+[lantern_strip_bramble]
+{surprised}That's her coat! Same blue as the bits you picked up in the Tatters.
+
+{thinking}She tied it. That's not torn off, that's TIED. She's marking her way.
+
+[lantern_purse]
+A purse, out on a tussock where the boards stop.
+
+[lantern_spur_end]
+The boards just stop here. There's a post with nothing on it, and the bog all round.
+
+Somebody started a way off this way, once, and gave up.
+
+# --- 3. THE RUSHES ---
+
+[rushes_scarf]
+A scarf, trodden into the mud. You lift it out. It's cream, with a stripe of coral, and it's soaked through.
+
+[rushes_channel]
+A channel of fen water across the way, too wide to jump. On the far bank, a drift log. At the top end, the rushes have grown right across the water, thick.
+
+[rushes_channel_bramble]
+{sly}Too thick for you. Not for me.
+
+[rushes_chest]
+A chest on the far bank, half sunk in the turf.
+
+[rushes_knife_chest]
+A chest tucked in the corner of the reeds. Inside: a short blade for cutting rushes, its handle wound with twine.
+
+# --- 4. THE SUNKEN ROAD ---
+
+[road_milestone]
+An old milestone, half sunk. The words on it are the old city's, and most have worn away. One line's left:
+
+...TO THE GATE
+
+[road_milestone_bramble]
+{thinking}The gate of what? There's nothing out here but out here.
+
+[road_block]
+A block of the old road's stone, fallen out of the causeway. It's heavy, but it'll shift.
+
+(Walk into it to push it. Shoved into the bog, it sinks in up to its shoulders: something to step on. Z on it twice and everything goes back.)
+
+[road_strip]
+Another strip of blue, knotted round the old pillar.
+
+[road_strip_bramble]
+{proud}She's leaving us a trail. On PURPOSE. Like in a story.
+
+[road_purse]
+A purse on the bank.
+
+[road_slump]
+The causeway's slumped into the bog here, a long way down. You can see the road's stones under the mud, going on.
+
+[road_pillar]
+An old pillar of the city's stone, sunk to its knees in the fen.
+
+# --- 5. THE STILT HUT ---
+
+[hut_post]
+A post by the landing, with a hook on it for a lantern. Nothing hangs from it.
+
+[hut_old_fire]
+A ring of stones with old, old ash in it. Somebody used to sit out here, once.
+
+[hut_island_chest]
+A little chest in the nook by the reeds, under the hut. Inside, folded small: a coat woven from dry rushes, light as anything.
+
+[hut_log]
+A log for sitting on, worn smooth on top.
+
+[hut_outside]
+The hut's walls: grey boards, weathered soft. Warmth comes through the cracks.
+
+[hut_thatch]
+Reed thatch, gone green. Smoke is coming out through it.
+
+[hut_window]
+Firelight, in the window. Someone's in there.
+
+[hut_stilts]
+The hut stands up on stilts, over the water.
+
+# --- INSIDE THE STILT HUT ---
+
+[hut_stove]
+A little iron stove, with a fire in it, made of whatever was in reach. Reed stalks, mostly. And a chair leg.
+
+[hut_stove_ves]
+{bored}The chair had three legs left. It still has two. It's fine.
+
+[hut_cot]
+A cot against the wall, with an old blanket on it. You could lie down a while.
+
+[hut_table]
+A little table, with nothing on it but a ring where a cup stood, a long time ago.
+
+[hut_chair]
+The chair. It's down to two legs.
+
+[hut_hooks]
+Hooks along the wall, a row of them, for hanging things. They're all empty.
+
+[hut_wall]
+The hut's boards, from the inside. Somebody's patched every crack with moss.
+
+[hut_barrel]
+A water barrel. The water in it is clean.
+
+[hut_barrel_ves]
+{exhausted}I filled it. It took most of a day.
+
+[hut_crates]
+Old crates. Nothing in them but straw.
+
+# --- THE OLD TOLLHOUSE (a secret) ---
+
+[toll_board]
+A board on the wall, the old city's writing cut into it. You can make out a list of things, and numbers beside them. Carts. Goats. People.
+
+It cost something to cross the fen, once.
+
+[toll_rack]
+A rack on the wall, and in it, the toll-keeper's blade, left where they hung it.
+
+[toll_box]
+The strongbox, its lid rusted open. The last of the tolls are still in it.
+
+[toll_wall]
+The old city's stone, damp and close.
+
+# --- 6. THE FAR JETTY ---
+
+[jetty_post]
+A post on the jetty, with a painted hand on it pointing on across the fen. The paint's nearly gone.
+
+[jetty_post_ves]
+{thoughtful}I came this way in the dark. I didn't see much of it.
+
+{determined}But it's got to go somewhere. Everything does.
+
+[jetty_purse]
+A purse, down among the reeds at the end of the jetty.
+
+[jetty_chest]
+A boat chest, lashed to the jetty post. The boat's long gone. The pole that pushed it isn't.
+
+[jetty_chest_ves]
+{thoughtful}Somebody used to punt out here. Lanterns, a jetty, a boat... They must have liked it, once.
+
+# --- 7. THE WISP HOLLOW ---
+
+[hollow_strip]
+A strip of blue wool knotted round a reed: one of hers.
+
+[hollow_strip_ves]
+{shy}I tied them so I'd know I'd been somewhere. In case I went round in a circle.
+
+{bored}...Didn't think anybody'd be daft enough to follow them.
+
+[hollow_purse]
+A purse, on a tussock just off the boards.
+
+# --- 8. THE HERON FLATS ---
+
+[flats_stone]
+A big stone, sunk a little into the mud, but not stuck.
+
+(Walk into it to push it. Shoved into the bog, it sinks in up to its shoulders: something to step on. Z on it twice and everything goes back.)
+
+[flats_stone_ves]
+{worried}Push from your legs. Not your back. Your back's busy.
+
+[flats_strip]
+A strip of blue, knotted round a reed, on the far side of the bog.
+
+[flats_strip_ves]
+{thoughtful}I crossed this in the dark. Twice. On one leg.
+
+{smile}I'd like that written down somewhere.
+
+[flats_chest]
+A chest in the reeds, old and green.
+
+[flats_down_chest]
+A chest on the dry corner of the flats, grey feathers caught round its lid. Inside: a soft coat lined with heron down.
+
+[flats_down_chest_ves]
+{smile}That's warm. Is that for me? That's for me.
+
+# --- 9. THE WATERGATE ---
+
+[watergate]
+An old watergate of the city's, a door in the wall for letting the fen in and out. It's held shut, until something holds it open.
+
+[watergate_sign]
+Cut in the stone, very old:
+
+ONE HOLDS, ONE PASSES
+
+[watergate_sign_bramble]
+{grin}That's us! I hold, you pass. Or you hold. Somebody holds.
+
+[watergate_sign_ves]
+{smile}I didn't have anyone to hold it. I squeezed through the grating instead. Both ways.
+
+{bored}I'm smaller than I look.
+
+[watergate_carving]
+A carving in the wall: the road, going on out of the fen and up a long valley to a city with a great gate, and people walking along it.
+
+[watergate_carving_ves]
+{surprised}There's a city. Down there. Look, there's people on the road.
+
+[watergate_purse]
+A purse on the ledge, in the sluice room.
+
+[watergate_wall]
+The old city's stone, wet to the height of a man.
+
+# --- 10. THE FAR SHORE ---
+
+[shore_grass]
+Dry grass. Real, dry, ordinary grass.
+
+[shore_path]
+A path, going on east and down.
+
+[shore_cairn]
+A little cairn of stones, the kind you build to show a way. Someone's put a strip of blue on top, under a stone.
+
+[shore_cairn_ves]
+{smile}That's the last one I tied. I saw the lights from here, and then I turned round.
+
+{bored}Worst walk of my life. Back to the hut, on one leg.
+
+[shore_view]
+Far off to the east, past the end of the fen, a long valley, and in it, broken towers, and lights in some of the windows.
+
+[shore_end]
+A path goes on east, down toward the valley and the lights.

@@ -15,6 +15,8 @@ import { ARMOR } from '../data/armor.js';
 import { skillBonus } from '../characters/progress.js';
 import { isWorn, wielderOf, HERO } from '../characters/equipment.js';
 import { inParty } from '../characters/party.js';
+import { STAR_FORGINGS, starLevel } from '../data/fallenStar.js';
+import { hasGear } from '../data/gear.js';
 
 // A shop, laid out like Deltarune's: the shopkeeper behind their counter up
 // top, and two boxes below. The left box is the menu (BUY, TALK, EXIT) or the
@@ -54,12 +56,17 @@ const VALUE_PER_HP = 1.2;
 const MOST_HP_VALUED = 150;
 const UNPRICED_ITEM = 45;
 const UNPRICED_GEAR = 150;
-function itemValue(item) {
+// An item a shop stocks is worth the least any shop charges for it (so the
+// Hearth Candle, 55 G at the Ruins shop, can't be sold back for more).
+function itemValue(id) {
+  const item = ITEMS[id];
+  const prices = Object.values(SHOPS).flatMap((shop) => shop.stock.filter((s) => s.item === id).map((s) => s.price));
+  if (prices.length) return Math.min(...prices);
   if (item.price) return item.price;
   return item.heal ? Math.min(item.heal, MOST_HP_VALUED) * VALUE_PER_HP : UNPRICED_ITEM;
 }
 export function sellValue(entry) {
-  if (entry.item) return Math.max(1, Math.floor(itemValue(ITEMS[entry.item]) * SELL_SHARE));
+  if (entry.item) return Math.max(1, Math.floor(itemValue(entry.item) * SELL_SHARE));
   const id = entry.weapon ?? entry.armor;
   const key = entry.weapon ? 'weapon' : 'armor';
   const prices = Object.values(SHOPS).flatMap((shop) => shop.stock.filter((s) => s[key] === id).map((s) => s.price));
@@ -81,7 +88,8 @@ const BLINK_PERIOD = 3.2;
 const BLINK_SECONDS = 0.12;
 
 // Each shop has its own keeper (`keeper` in src/data/shops.js, a prop sprite;
-// Moss if left out) with `eyes` to close when they blink, and a `look`: the
+// Moss if left out) with `eyes` to close when they blink (none, and `still`,
+// for a shop with nobody minding it), and a `look`: the
 // colours of its room.
 const DEFAULT_KEEPER = { sprite: 'merchant', eyes: [{ x: 3, y: 11 }, { x: 8, y: 11 }], eyeColor: PROP_PALETTE.m };
 const DEFAULT_LOOK = {
@@ -122,6 +130,11 @@ export class ShopScene {
     this.topics = Object.keys(textFile(this.shop.textFile))
       .filter((section) => section.startsWith('talk: '))
       .map((section) => ({ section, label: section.slice('talk: '.length) }));
+    // A smith who can reforge the Fallen Star (src/data/fallenStar.js), once
+    // you've got it: a topic of their own, last.
+    this.forging = STAR_FORGINGS.findIndex((f) => f.smith === shopId);
+    // Without the sword, they've heard of it, and say where to look.
+    if (this.forging > 0) this.topics.push({ section: null, label: HERO_STATE.weapons.includes('fallen_star') ? 'The star sword' : 'Star-metal', forge: true });
     this.say('greeting');
   }
 
@@ -334,8 +347,40 @@ export class ShopScene {
     if (this.talkCursor !== before) sfx('move');
     if (input.wasPressed('confirm')) {
       sfx('select');
-      this.say(this.topics[this.talkCursor].section);
+      const topic = this.topics[this.talkCursor];
+      if (topic.forge) this.forge();
+      else this.say(topic.section);
     }
+  }
+
+  // The star sword: they say what they'd need ([forge_ask]), or, if you've
+  // brought it, reforge it on the spot ([forge_now]), or say it's done
+  // ([forge_done]). An earlier forging still to do comes first ([forge_later]).
+  forge() {
+    const forging = STAR_FORGINGS[this.forging];
+    const level = starLevel();
+    // No sword yet: a hint where it is ([forge_hint]); or, holding the piece
+    // with nothing to put it in, a shrug ([forge_shard_only]).
+    if (!HERO_STATE.weapons.includes('fallen_star')) {
+      this.say(hasGear(forging.needs) ? 'forge_shard_only' : 'forge_hint');
+      return;
+    }
+    if (level >= this.forging) {
+      this.say('forge_done');
+      return;
+    }
+    if (level < this.forging - 1) {
+      this.say('forge_later');
+      return;
+    }
+    if (!hasGear(forging.needs)) {
+      this.say('forge_ask');
+      return;
+    }
+    HERO_STATE.gear = HERO_STATE.gear.filter((id) => id !== forging.needs);
+    HERO_STATE.starForged = this.forging;
+    sfx('levelUp');
+    this.say('forge_now');
   }
 
   visibleCharacters() {
@@ -424,7 +469,8 @@ export class ShopScene {
     const w = sprite.width * KEEPER_SCALE;
     const h = sprite.height * KEEPER_SCALE;
     const x = Math.round(SCREEN_WIDTH / 2 - (sprite.width / 2) * KEEPER_SCALE);
-    const bob = Math.sin(this.time * 2) > 0 ? 1 : 0;
+    // A keeper that isn't alive (`still`) doesn't bob.
+    const bob = !this.keeper.still && Math.sin(this.time * 2) > 0 ? 1 : 0;
     const y = COUNTER_Y - h + 6 * KEEPER_SCALE - bob;
     ctx.drawImage(sprite, x, y, w, h);
 

@@ -1,8 +1,9 @@
 // Maps physical keys to game actions, following Deltarune's defaults:
 // arrows to move, Z/Enter to confirm, X/Shift to cancel (and run), C/Ctrl for the menu
 // (and holding C skips through dialogue).
-// Our own additions: Space jumps, X held is focus while dodging, and Shift uses
-// your equipped weapon's soul ability. A key can trigger several actions.
+// Our own additions: Space jumps, X held is focus while dodging, Shift uses
+// your equipped weapon's soul ability, and Q (or Tab) switches between you and
+// Bramble in the Hushwood. A key can trigger several actions.
 const KEY_BINDINGS = {
   Space: ['jump'],
   ArrowUp: ['up'], KeyW: ['up'],
@@ -13,6 +14,7 @@ const KEY_BINDINGS = {
   KeyX: ['cancel', 'focus'],
   ShiftLeft: ['cancel', 'ability'], ShiftRight: ['cancel', 'ability'],
   KeyC: ['menu', 'skip'], ControlLeft: ['menu'], ControlRight: ['menu'],
+  KeyQ: ['swap'], Tab: ['swap'],
 };
 
 export class Input {

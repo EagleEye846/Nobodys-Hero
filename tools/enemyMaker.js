@@ -72,17 +72,17 @@ function blankForm() {
   };
 }
 
-// Settings the Enemy Maker has no controls for yet, carried over untouched
-// when you open and save an enemy (so saving Taper keeps her own battle song,
-// her `gentle` attacks, her `secondWind`, her `lullCalm`, her `beatenSprite`
-// and any item drops). `area` and `home` say where an enemy not yet placed in
-// a room belongs, for the Studio's area headings (tools/order.js).
-const KEPT_FIELDS = ['gentle', 'music', 'secondWind', 'introCard', 'drops', 'materials', 'lullCalm', 'noMercy', 'gait', 'beatenSprite', 'backdrop', 'area', 'home', 'disguise'];
+// Settings the Enemy Maker has no controls for yet (a boss's `phases`, its
+// battle song, `noMercy`, item drops, `battlePos`...), carried over untouched
+// when you open and save an enemy: everything but the fields below, which the
+// form edits itself. So a field added to the game later is never lost.
+const FORM_FIELDS = ['name', 'textFile', 'sprite', 'maxHp', 'damage', 'difficulty', 'patterns', 'talk', 'rewards', 'boss'];
 
 // The enemy module, in the same shape as the game's own enemy files.
 function enemyModule(f, id, constName) {
   const patterns = Object.entries(f.patterns).filter(([, w]) => w > 0).map(([name, weight]) => `    ${inline({ name, weight })},`);
-  const talk = f.acts.map(({ name, calm }) => `    ${inline(calm ? { name, calm } : { name })},`);
+  // (An option's other settings, like `hurt` or `provoke`, are kept as they were.)
+  const talk = f.acts.map(({ name, calm, kept = {} }) => `    ${inline(calm ? { name, calm, ...kept } : { name, ...kept })},`);
   const lines = [
     `import { ${f.art.base}_PALETTE, ${f.art.base}_SPRITE } from '../art/${f.art.file}';`,
     '',
@@ -235,9 +235,9 @@ export async function mount(root, studio) {
       exp: e.rewards?.exp ?? 0,
       coins: e.rewards?.coins ?? 0,
       boss: Boolean(e.boss),
-      kept: Object.fromEntries(KEPT_FIELDS.filter((key) => e[key] !== undefined).map((key) => [key, e[key]])),
+      kept: Object.fromEntries(Object.entries(e).filter(([key, value]) => !FORM_FIELDS.includes(key) && value !== undefined)),
       patterns: Object.fromEntries(e.patterns.map((p) => [p.name, p.weight ?? 1])),
-      acts: e.talk.map((t) => ({ name: t.name, calm: t.calm ?? 0, text: words(`talk: ${t.name}`), edited: true })),
+      acts: e.talk.map(({ name, calm = 0, ...kept }) => ({ name, calm, kept, text: words(`talk: ${name}`), edited: true })),
       words: Object.fromEntries(WORDS.map(([key]) => [key, words(key)])),
       edited: Object.fromEntries(WORDS.map(([key]) => [key, true])),
       place: { on: false, room: null, x: null, y: null, walk: 2 },

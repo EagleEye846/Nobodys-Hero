@@ -1,0 +1,73 @@
+# HOLLIN STORES: the village shop in Hollin, left fifty years ago when the
+# Hush came up the lane. Nobody minds it now. Mags, who kept it, left notes:
+# a slate on the counter and the honesty tin in front of it. Every line here
+# is something written down (on the slate, in the ledger, on scraps pinned up)
+# or what you find when you look.
+# Each section is one line of the shop's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Dust, and the smell of old candles. A slate on the counter says: BACK IN FIVE MINUTES. PAY IN THE TIN. - MAGS
+
+[menu_prompt]
+The tin waits. It's very patient. It's had practice.
+
+[buy_prompt]
+Prices are chalked on the shelf edges. Everything that would go off went off long ago. What's left keeps.
+
+[sell_prompt]
+A card pinned by the tin: SWAPS WELCOME. LEAVE IT ON THE COUNTER, TAKE WHAT'S FAIR. BE HONEST.
+
+[talk_prompt]
+There's a ledger under the counter, and papers pinned up behind it.
+
+[bought]
+You drop the coins in the tin. They're the first in it for fifty years.
+
+[bought_item]
+You drop the coins in the tin. Clink. It sounds very loud in here.
+
+[bought_skill]
+You drop the coins in the tin.
+
+[skill_sold_out]
+That shelf's empty.
+
+[sold]
+You leave it on the counter and take what's fair from the tin. You were honest. Mostly.
+
+[nothing_to_sell]
+You've nothing to leave on the counter.
+
+[cant_sell]
+You're wearing it. Take it off first.
+
+[owned]
+You've already got one of those.
+
+[wont_fit]
+That's not for you. Someone else would have to try it on.
+
+[too_poor]
+You haven't got enough for the tin. The slate says BE HONEST. You are, sadly.
+
+[bought_stored]
+Your bag's full, so you leave it by the save point to come back for.
+
+[bag_full]
+Your bag's full. There's nowhere to put it.
+
+[farewell]
+You pull the door to behind you, the way you found it.
+
+[talk: The slate]
+BACK IN FIVE MINUTES. PAY IN THE TIN. - MAGS. The chalk's gone pale. Someone has gone over the letters once, a long time after, very carefully.
+
+[talk: The ledger]
+Mags wrote down who owed what. Near the bottom: "Little Oakley, one sherbet lemon, owes a penny. (He'll pay. He's a good lad.)"
+
+[talk: The last page]
+The last entry is half a line: "Hush seen at the top of the lane. Shutting early. Leave the tin out in case anyone"
+
+[talk: The notices]
+A lost cat. A dance on the green, Saturday. "Don't go up to the old hollow, whatever you hear." Underneath, in a child's hand: "Too late."

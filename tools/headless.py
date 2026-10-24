@@ -4,11 +4,17 @@ render songs and so take real time (`--dump-dom` gives up before they finish).
 
     python tools/headless.py "http://localhost:8000/tools/preview.html?check=1&songs=1&song=usurperHero&seconds=190&window=10"
 
+It stops at any "... DONE" line (CHECK DONE, ATTACKS DONE...). A third
+argument saves a screenshot of the page there once it's done:
+
+    python tools/headless.py "<url>" 60 shot.png
+
 Needs the game's server running (tools/serve.py). Talks to the browser over
 the DevTools protocol with nothing but the standard library.
 """
 
 import base64
+import re
 import json
 import os
 import socket
@@ -25,8 +31,16 @@ BROWSERS = [
     r"C:\Program Files\Google\Chrome\Application\chrome.exe",
     r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
 ]
-PORT = 9333
-DONE = "CHECK DONE"
+def free_port():
+    """A port nothing else is using, so two checks can run at once without
+    one talking to the other's browser."""
+    with socket.socket() as probe:
+        probe.bind(("127.0.0.1", 0))
+        return probe.getsockname()[1]
+
+
+PORT = free_port()
+DONE = re.compile(r"\b[A-Z]+ DONE\b")
 
 
 class WebSocket:
@@ -128,11 +142,20 @@ def main():
             time.sleep(0.5)
             call_id += 1
             report = evaluate(ws, "document.getElementById('report') ? document.getElementById('report').textContent : ''", call_id) or ""
-            if DONE in report or "ERROR:" in report:
+            if DONE.search(report) or "ERROR:" in report:
                 break
         else:
             print(f"TIMED OUT after {timeout:.0f}s; report so far:")
         print(report.strip())
+        if len(sys.argv) > 3:
+            call_id += 1
+            ws.send(json.dumps({"id": call_id, "method": "Page.captureScreenshot", "params": {"format": "png"}}))
+            while True:
+                message = json.loads(ws.receive())
+                if message.get("id") == call_id:
+                    break
+            with open(sys.argv[3], "wb") as shot:
+                shot.write(base64.b64decode(message["result"]["data"]))
     finally:
         process.kill()
 

@@ -26,7 +26,7 @@ A lane, swept down to the cobbles before breakfast. The Hero should not have to 
 # --- THE GATE ---
 
 [gate_arch]
-An arch of old timber over the stair, and across it, in letters a hundred years old and repainted every spring:
+An arch of old timber over the stairs, and across it, in letters a hundred years old and repainted every spring:
 
 "HERALDS' REST. WELCOME, HERO."
 
@@ -84,7 +84,7 @@ A bench, cleared of snow this morning. Everything here is cleared of snow this m
 A snowman the kids built. It has a herald's tabard, a trumpet made of a stick, and an expression of great responsibility.
 
 [square_brazier]
-A brazier, glowing. The heralds keep one lit in the square for whoever comes in off the stair cold. That's you, today.
+A brazier, glowing. The heralds keep one lit in the square for whoever comes in off the stairs cold. That's you, today.
 
 [square_barrels]
 Barrels and crates stacked by the stores, stamped FOR THE WELCOME FEAST in letters that have been repainted a few times.
@@ -135,7 +135,7 @@ A spare anvil outside the forge, with snow on it. Someone has drawn a face in th
 THE POTTLES. Please knock. Please knock LOUDLY. The children are drumming.
 
 [square_lookout_sign]
-THE LOOKOUT, and the stair to the summit. Beyond here the mountain is the mountain's business.
+THE LOOKOUT, and the stairs to the summit. Beyond here the mountain is the mountain's business.
 
 [square_chapel_sign]
 THE CHAPEL. Prayers at dusk, every dusk. Please come in quietly, in case anyone is listening.
@@ -193,7 +193,7 @@ HOUSE RULES: 1. No snow indoors. 2. No trumpets after supper. 3. The Hero's bed 
 A thick rug, warm underfoot, with a trumpet woven into the middle of it.
 
 [inn_wall]
-Log walls hung with pictures of the stair in every season. Someone painted them all from the same bench.
+Log walls hung with pictures of the stairs in every season. Someone painted them all from the same bench.
 
 # --- REST STORES ---
 
@@ -204,7 +204,7 @@ A counter with a brass scale on it, a ledger a foot thick, and a jar of pine can
 Shelves of everything: rope, candles, tins, lamp oil, mittens by the dozen, and a single, dusty, enormous cape labelled HERO (XL).
 
 [stores_crates]
-Crates stamped with places you've never heard of, carried up the stair on small backs over a very long time.
+Crates stamped with places you've never heard of, carried up the stairs on small backs over a very long time.
 
 [stores_barrel]
 A barrel of salted something. The lid is nailed down. Fennick says it's "for the feast" in a voice that ends the conversation.
@@ -298,7 +298,7 @@ You give the rope a pull. The bell says BONNNG, enormously. Somewhere below, a h
 UP: the bell. The blocks in the corner are the stairs; the real stairs rotted in year forty and nobody minded.
 
 [tower_rules]
-BELL RULES: ONE ring at dawn. NO rings after dark. (In year sixty-two somebody rang it at midnight and three heralds ran out onto the stair in their nightshirts to welcome a goat.)
+BELL RULES: ONE ring at dawn. NO rings after dark. (In year sixty-two somebody rang it at midnight and three heralds ran out onto the stairs in their nightshirts to welcome a goat.)
 
 [tower_barrel]
 A barrel of bell polish. Dunstan goes through one a year.
@@ -382,7 +382,7 @@ A toy chest: wooden trumpets, a rope with a hook made of a bent spoon, and a dol
 Drawings pinned to the wall: POTTLE MEETS THE HERO, POTTLE BEATS THE HERO, THE HERO MEETS A GOAT. In the last one the goat is winning.
 
 [pottle_book]
-A storybook on a stand, open at the last page: "...and the Hero came up the stair, and everyone cheered, and there was cake. THE END."
+A storybook on a stand, open at the last page: "...and the Hero came up the stairs, and everyone cheered, and there was cake. THE END."
 
 Someone small has added, in crayon: "AND THEN WHAT".
 
@@ -400,10 +400,10 @@ The great round window: petals of red and blue and gold, all around one clear pa
 The Hero was meant to go there. Nobody knew what they looked like, so the glass was left clear. Now it's just sky.
 
 [chapel_lancet_left]
-A tall window. In the glass, a row of heralds blow their trumpets down a stair. The stair is empty.
+A tall window. In the glass, a row of heralds blow their trumpets down a flight of stairs. The stairs are empty.
 
 [chapel_lancet_right]
-A tall window: someone climbing the stair to the heralds. Their face is a yellow blob. The glassmaker was being honest.
+A tall window: someone climbing the stairs to the heralds. Their face is a yellow blob. The glassmaker was being honest.
 
 [chapel_altar]
 The altar, under a cloth stitched with a golden trumpet. On it, a book of prayers for the Hero's safe arrival.
@@ -449,7 +449,7 @@ Pine walls, scrubbed. The whole chapel smells of candle wax and cold air.
 [lookout_telescope]
 A brass telescope, pointed at the summit. You look through it.
 
-Cloud. Then, for a moment, the cloud parts: a stair, very far up, climbing to a point where the sky is the wrong colour. Then cloud again.
+Cloud. Then, for a moment, the cloud parts: stairs, very far up, climbing to a point where the sky is the wrong colour. Then cloud again.
 
 [lookout_bench]
 A bench at the edge of everything. Below it, the cloud sea goes on forever. Above it, the mountain does.
@@ -458,20 +458,20 @@ A bench at the edge of everything. Below it, the cloud sea goes on forever. Abov
 THE LOOKOUT. A herald watches here from dawn to dusk, for the Hero. The shift is popular. The view is the reason.
 
 [lookout_waymark]
-HERO! Here is the end of us and the start of the rest. The stair goes on north to the summit. Nobody from the village has gone past the second cairn and come back. Come back and tell us.
+HERO! Here is the end of us and the start of the rest. The stairs go on north to the summit. Nobody from the village has gone past the second cairn and come back. Come back and tell us.
 
 [lookout_chest]
 A chest at the edge of the platform, roped to a post so the wind can't take it. Fudge inside, and a note: "for the last bit".
 
 [lookout_stair]
-The stair goes on north, up into the cloud, towards the top of Mount Vigil.
+The stairs go on north, up into the cloud, towards the top of Mount Vigil.
 
 [lookout_onward]
-The stair climbs on into the cloud, towards the second cairn and whatever is past it.
+The stairs climb on into the cloud, towards the second cairn and whatever is past it.
 
-# The rope across the stair north, until Ves has joined you.
+# The rope across the stairs north, until Ves has joined you.
 [lookout_rope]
-A rope strung across the stair, with a board hung off it: NOBODY GOES UP ALONE.
+A rope strung across the stairs, with a board hung off it: NOBODY GOES UP ALONE.
 
 Underneath, in smaller letters: "Not after last time."
 
@@ -483,7 +483,7 @@ You give the rope a second pull. BONNNG.
 
 The tower goes very quiet. Dunstan puts down his pen.
 
-Every door in Heralds' Rest opens at once. A hundred years of patience come up the stair, carrying trumpets.
+Every door in Heralds' Rest opens at once. A hundred years of patience come up the stairs, carrying trumpets.
 
 ONE RING. THE RULES SAID ONE RING.
 
@@ -492,7 +492,7 @@ It's after dark. The sign was very clear about this.
 
 ...You give the rope a pull anyway. BONNNG.
 
-Far below, a door bangs. Then another. Then three heralds in nightshirts run out onto the stair with a lantern, a trumpet and a cake, shouting "WELCOME!" at a goat.
+Far below, a door bangs. Then another. Then three heralds in nightshirts run out onto the stairs with a lantern, a trumpet and a cake, shouting "WELCOME!" at a goat.
 
 Dunstan is looking at you. He's not angry. He's writing it in the log.
 

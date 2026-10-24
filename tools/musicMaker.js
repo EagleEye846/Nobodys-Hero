@@ -164,6 +164,11 @@ function songModule(song, constName, beatsPerBar) {
     `  order: ${inline(song.order)},`,
   ];
   if (song.loopFrom) lines.push(`  loopFrom: ${song.loopFrom},`);
+  // Anything else set by hand in the song's file, kept as it was.
+  const own = new Set(['title', 'bpm', 'stepsPerBeat', 'beatsPerBar', 'instruments', 'sections', 'order', 'loopFrom']);
+  for (const [key, value] of Object.entries(song)) {
+    if (!own.has(key) && value !== undefined) lines.push(`  ${objectKey(key)}: ${inline(value)},`);
+  }
   lines.push('};');
   return `${lines.join('\n')}\n`;
 }

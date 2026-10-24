@@ -29,7 +29,8 @@ ERROR: ${m}`; };
 // ?equip=hero or ?equip=vesper shows the EQUIP menu on that person's tabs
 // (&slot=armor for armor, &index=2 for the cursor), with Ves in the party
 // and all her gear owned. ?allyturn=vesper shows a battle on her turn
-// (&phase=spells for her SPELLS list). ?bossphase=usurper&stage=1 (0, 1, 2)
+// (&phase=spells for her SPELLS list; &hurt=vesper with either, for her hurt). ?bossphase=usurper&stage=1 (0, 1, 2;
+// &hurt=vesper and &area=valley for the_hush)
 // puts a boss with `phases` in that phase, plays every one of its attacks
 // for that phase through, then its turn's end, and draws the box mid-attack
 // (&pattern=<name> to draw that one, &t=3 seconds in).
@@ -122,15 +123,63 @@ if (params.get('check')) {
   WORLD_STATE.chapter = Number(params.get('skills'));
   HERO_STATE.skillPoints = 3;
   HERO_STATE.skills = ['sharpened', 'keen_eye', 'focus', 'tough', 'sprinter'];
-  if (params.get('party')) { HERO_STATE.party = ['vesper']; HERO_STATE.memberPoints = { vesper: 2 }; }
+  // &party=1 (Ves) or &party=bramble,vesper; &page=1 shows the first member's page.
+  if (params.get('party')) {
+    HERO_STATE.party = params.get('party') === '1' ? ['vesper'] : params.get('party').split(',');
+    HERO_STATE.memberPoints = Object.fromEntries(HERO_STATE.party.map((id) => [id, 4]));
+  }
   const menu = new SkillsMenu();
   menu.open();
+  if (params.get('page')) {
+    menu.page = Number(params.get('page'));
+    menu.branches = menu.pages[menu.page].branches;
+  }
   menu.branch = Number(params.get('branch') ?? 1);
   menu.index = Number(params.get('index') ?? 2);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   menu.draw(ctx);
   menu.draw(ctx);
   report.textContent = 'SKILLS DONE';
+} else if (params.get('bubbles')) {
+  // ?bubbles=1: every enemy's speech-bubble lines, split into bubbles the way
+  // a battle splits them (speechBubbles in src/battle/hud.js), one per line.
+  const { speechBubbles } = await import('./src/battle/hud.js');
+  const { textFile } = await import('./src/engine/textLoader.js');
+  const out = [];
+  for (const file of TEXT_FILES.filter((f) => f.startsWith('enemies/'))) {
+    for (const [section, entries] of Object.entries(textFile(file))) {
+      if (!/^(taunts|boss_intro|mercy_mock|smoke_)/.test(section) && !section.endsWith(' foe')) continue;
+      for (const entry of entries) out.push(`${file} [${section}] ${speechBubbles(entry).map((b) => `(${b})`).join(' ')}`);
+    }
+  }
+  report.textContent = `${out.join('\n')}\nBUBBLES DONE`;
+} else if (params.get('pausemenu')) {
+  // ?pausemenu=bar draws the C menu's bar; ?pausemenu=settings its SETTINGS screen.
+  const { PauseMenu } = await import('./src/ui/pauseMenu.js');
+  const menu = new PauseMenu();
+  menu.open();
+  if (params.get('pausemenu') === 'settings') {
+    menu.tab = 4;
+    menu.screens[4].open();
+  }
+  // ?pausemenu=items: the ITEMS screen, hurt, with a bag of food and a
+  // candle; &press=confirm,confirm presses keys on it in order.
+  if (params.get('pausemenu') === 'items') {
+    const { HERO_STATE } = await import('./src/characters/heroState.js');
+    const { setHeroHp } = await import('./src/characters/progress.js');
+    HERO_STATE.items = ['trail_mix', 'lantern_tea', 'glow_candle', 'ember_toffee'];
+    setHeroHp(Number(params.get('hp') ?? 20));
+    menu.tab = 0;
+    menu.screens[0].open();
+    for (const key of (params.get('press') ?? '').split(',').filter(Boolean)) {
+      menu.screens[0].update({ isDown: () => false, wasPressed: (a) => a === key, endFrame() {} });
+    }
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  menu.draw(ctx);
+  report.textContent = 'PAUSEMENU DONE';
 } else if (params.get('equip')) {
   const { EquipMenu } = await import('./src/ui/equipMenu.js');
   const { HERO_STATE } = await import('./src/characters/heroState.js');
@@ -139,11 +188,15 @@ if (params.get('check')) {
   const { ARMOR } = await import('./src/data/armor.js');
   HERO_STATE.gold = 240;
   if (params.get('party') !== '0') joinParty('vesper');
+  if (params.get('equip') === 'bramble') joinParty('bramble');
+  const { setHurt } = await import('./src/characters/party.js');
+  for (const id of (params.get('hurt') ?? '').split(',').filter(Boolean)) setHurt(id, true);
   HERO_STATE.weapons = Object.keys(WEAPONS);
   HERO_STATE.armors = Object.keys(ARMOR);
   const menu = new EquipMenu();
   menu.open();
-  const tab = menu.tabs().findIndex((t) => t.who === (params.get('equip') === 'vesper' ? 'vesper' : 'hero') && t.slot === (params.get('slot') ?? 'weapon'));
+  const who = ['vesper', 'bramble'].includes(params.get('equip')) ? params.get('equip') : 'hero';
+  const tab = menu.tabs().findIndex((t) => t.who === who && t.slot === (params.get('slot') ?? 'weapon'));
   menu.showTab(Math.max(0, tab));
   if (params.has('index')) menu.cursor = Number(params.get('index'));
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -158,6 +211,9 @@ if (params.get('check')) {
   const { WORLD_STATE } = await import('./src/state/saveGame.js');
   WORLD_STATE.metShadow = true;
   joinParty(params.get('allyturn'));
+  // &hurt=vesper: she's hurt (half HP, her hurt SPELLS, sitting down).
+  const { setHurt } = await import('./src/characters/party.js');
+  for (const id of (params.get('hurt') ?? '').split(',').filter(Boolean)) setHurt(id, true);
   const battle = new BattleScene([ENEMIES[params.get('enemy') ?? 'craghorn']], () => {}, params.get('area') ?? 'vigil');
   battle.sp = 30;
   battle.setPhase('command');
@@ -165,13 +221,100 @@ if (params.get('check')) {
   battle.setPhase('ally');
   battle.allySelected = Number(params.get('button') ?? 0);
   if (params.get('phase')) battle.setPhase(params.get('phase'));
+  // &act=HOLLER,HIDE... casts each of the member's spells in turn (with the
+  // enemy's turn after each), to check they all go through.
+  for (const label of (params.get('act') ?? '').split(',').filter(Boolean)) {
+    const { MEMBERS } = await import('./src/characters/party.js');
+    const member = MEMBERS[params.get('allyturn')];
+    const command = [...member.commands, ...Object.values(member.learnable ?? {}), ...(member.hurt?.commands ?? [])].find((c) => c.label === label);
+    battle.target = battle.foes[0];
+    battle.actor = battle.ally;
+    battle.allyAct(battle.ally, command);
+    // (What the panel said as the enemy's turn began, and how slowed it was.)
+    let opening = null;
+    for (let t = 0; t < 12; t += 1 / 60) {
+      battle.update(1 / 60, t % 0.2 < 0.02 ? { isDown: () => false, wasPressed: (a) => a === 'confirm', endFrame() {} } : noInput);
+      if (!opening && battle.phase === 'dodge') opening = `slowed ${battle.callOutLeft.toFixed(1)}s, panel "${battle.dodgeHint ?? ''}"`;
+    }
+    report.textContent += `cast ${label}: phase ${battle.phase}, foe HP ${battle.foes[0].hp}, hiding ${battle.hiding ?? '-'}, sneaking ${battle.sneaking ?? '-'}, ${battle.ally.name} HP ${battle.ally.hp}/${battle.ally.maxHp}, first enemy turn: ${opening ?? '-'}
+`;
+    battle.setPhase('command');
+    battle.ally = battle.pendingAllies.shift() ?? battle.party.find((m) => m.ally);
+    battle.setPhase('ally');
+  }
   for (let t = 0; t < 1; t += 1 / 60) battle.update(1 / 60, noInput);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
   ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
   battle.draw(ctx);
-  report.textContent = 'ALLYTURN DONE';
+  report.textContent += 'ALLYTURN DONE';
+} else if (params.get('spellfx')) {
+  // ?spellfx=nova&t=0.4 casts one of the hero's spells (or &ally=vesper and
+  // spellfx=<a SPELLS label>, like SHELTER) and draws the battle `t` seconds
+  // in, to see its effect (src/battle/spellEffects.js). &foes=2 for two enemies.
+  const { BattleScene } = await import('./src/battle/battleScene.js');
+  const { ENEMIES } = await import('./src/data/enemies/index.js');
+  const { SPELLS } = await import('./src/data/spells.js');
+  const { joinParty, MEMBERS } = await import('./src/characters/party.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  WORLD_STATE.metShadow = true;
+  const allyId = params.get('ally');
+  joinParty(allyId ?? 'vesper');
+  const enemy = ENEMIES[params.get('enemy') ?? 'craghorn'];
+  const battle = new BattleScene(Array(Number(params.get('foes') ?? 1)).fill(enemy), () => {}, params.get('area') ?? 'vigil');
+  battle.sp = 999;
+  battle.hero.hp = Math.ceil(battle.hero.maxHp / 3);
+  battle.setPhase('command');
+  battle.target = battle.activeFoes()[0];
+  const id = params.get('spellfx');
+  if (allyId) {
+    const member = MEMBERS[allyId];
+    const command = [...member.commands, ...Object.values(member.learnable ?? {}), ...(member.hurt?.commands ?? [])].find((c) => c.label === id);
+    battle.ally = battle.party.find((m) => m.id === allyId);
+    battle.actor = battle.ally;
+    battle.allyAct(battle.ally, command);
+  } else {
+    battle.castSpell({ id, ...SPELLS[id] }, battle.target, battle.hero);
+  }
+  for (let t = 0; t < Number(params.get('t') ?? 0.3); t += 1 / 60) battle.update(1 / 60, noInput);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  battle.draw(ctx);
+  report.textContent = `effects ${battle.fx.effects.map((e) => `${e.kind} ${e.t.toFixed(2)}/${e.life}`).join(', ')}\nSPELLFX DONE`;
+} else if (params.get('attacks')) {
+  // ?attacks=<enemy> runs each of a regular enemy's attacks once, with the
+  // soul standing still, and reports how much each took off the hero. Then it
+  // draws `pattern` (default the first) `t` seconds in.
+  const { BattleScene } = await import('./src/battle/battleScene.js');
+  const { ENEMIES } = await import('./src/data/enemies/index.js');
+  const battle = new BattleScene([ENEMIES[params.get('attacks')]], () => {}, params.get('area') ?? 'pinefall');
+  const foe = battle.activeFoes()[0];
+  battle.hero.hp = battle.hero.maxHp = 9999;
+  const names = foe.data.patterns.map((p) => p.name);
+  const step = (seconds) => { for (let t = 0; t < seconds; t += 1 / 60) battle.update(1 / 60, noInput); };
+  const lines = [];
+  const shown = params.get('pattern') ?? names[0];
+  for (const name of [...names, shown]) {
+    const last = lines.length === names.length;
+    const before = battle.hero.hp;
+    battle.attackers = [foe];
+    battle.pickPattern = () => name;
+    battle.phase = 'dodge';
+    battle.phaseTime = 0;
+    battle.startAttack();
+    step(last ? Number(params.get('t') ?? 3) : battle.turnLength + 0.5);
+    if (!last) lines.push(`${name}: ok, ${battle.turnLength.toFixed(1)}s, standing still took ${before - battle.hero.hp} HP`);
+    battle.hero.hp = 9999;
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  battle.draw(ctx);
+  report.textContent = `${lines.join('\n')}\nATTACKS DONE`;
 } else if (params.get('bossphase')) {
   const { BattleScene } = await import('./src/battle/battleScene.js');
   const { ENEMIES } = await import('./src/data/enemies/index.js');
@@ -179,7 +322,11 @@ if (params.get('check')) {
   const { WORLD_STATE } = await import('./src/state/saveGame.js');
   WORLD_STATE.metShadow = true;
   joinParty('vesper');
-  const battle = new BattleScene([ENEMIES[params.get('bossphase')]], () => {}, 'vigil');
+  // &hurt=vesper: she starts the fight hurt (the Hush's fight; its last
+  // phase gets her back on her feet).
+  const { setHurt } = await import('./src/characters/party.js');
+  for (const id of (params.get('hurt') ?? '').split(',').filter(Boolean)) setHurt(id, true);
+  const battle = new BattleScene([ENEMIES[params.get('bossphase')]], () => {}, params.get('area') ?? 'vigil');
   const foe = battle.phased;
   const stage = Number(params.get('stage') ?? 0);
   for (let i = 1; i <= stage; i++) battle.enterPhase(foe, i);
@@ -205,18 +352,222 @@ if (params.get('check')) {
   ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
   battle.draw(ctx);
   report.textContent = `${lines.join('\n')}\nBOSSPHASE DONE ${battle.bossPhase().id}`;
+} else if (params.get('play')) {
+  // ?play=<room>&with=bramble&script=at:20,11;hold:L:30;z;q;... plays a room
+  // through the real game, one command at a time (separated by ;):
+  //   at:x,y        put whoever you're steering on that tile
+  //   face:D        face U, D, L or R
+  //   hold:D:n      hold an arrow for n frames (60 a second)
+  //   push:D        hold an arrow until a log or rock in front moves and stops
+  //   z, q, jump    press Z (then read through whatever it says), Q, Space
+  //   wait:n        n frames of nothing
+  //   expect:what   check something, and fail if it's not so: gate:N:open|shut,
+  //                 bridged:x,y, log:x,y, split, together, lever:name, at:x,y,
+  //                 flow:x,y,way (the current there runs that way, or 'none'),
+  //                 sinking (the bog has you), carrying, notcarrying,
+  //                 party:id or party:!id
+  // and reports where everything is at the end. &carry=vesper starts you
+  // carrying her (the Lantern Marsh, after the stilt hut), hurt.
+  const lines = { push(line) { report.textContent += `${line}\n`; } };
+  report.textContent = 'PLAY START\n';
+  const { joinParty, partyIds } = await import('./src/characters/party.js');
+  const { giveGear } = await import('./src/data/gear.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  giveGear('climbing_rope');
+  for (const id of (params.get('with') ?? '').split(',').filter(Boolean)) joinParty(id);
+  // &seen=a,b: those scenes have already played.
+  if (params.get('seen')) {
+    const { WORLD_STATE } = await import('./src/state/saveGame.js');
+    WORLD_STATE.seenScenes = params.get('seen').split(',');
+  }
+  if (params.get('hurt')) {
+    const { setHurt } = await import('./src/characters/party.js');
+    for (const id of params.get('hurt').split(',')) setHurt(id, true);
+  }
+  if (params.get('carry')) {
+    const { setHurt } = await import('./src/characters/party.js');
+    joinParty(params.get('carry'));
+    setHurt(params.get('carry'), true);
+    WORLD_STATE.carrying = params.get('carry');
+  }
+  const data = ROOMS[params.get('play')];
+  const scene = new OverworldScene(data, data.playerStart, data.area);
+  scene.enter?.({ changeScene() {}, home: null });
+  if (!params.get('enemies')) scene.npcs = [];
+  const keys = { U: 'up', D: 'down', L: 'left', R: 'right' };
+  const press = (action) => ({ isDown: (a) => a === action, wasPressed: (a) => a === action, endFrame() {} });
+  const tile = (b) => `${Math.floor(b.x / 16)},${Math.floor((b.y - 1) / 16)}`;
+  const readThrough = () => {
+    for (let i = 0; i < 2000 && (scene.textbox.isOpen || scene.cutscene || scene.climb || scene.hop); i++) scene.update(1 / 60, i % 2 ? press('confirm') : noInput);
+  };
+  const state = () => {
+    const logs = scene.room.props.filter((p) => p.log && !p.hidden).map((p) => `${p.x / 16},${p.y / 16}${p.sunk ? 's' : ''}`);
+    const gates = scene.room.props.filter((p) => p.opensWith).map((g) => (g.isOpen ? 'OPEN' : 'shut'));
+    return `you ${tile(scene.player)}${scene.partner ? ` other ${tile(scene.partner)}` : ''} | logs ${logs.join(' ')} | bridged ${[...scene.room.bridged].join(' ')} | gates ${gates.join(',')} | treadles ${[...scene.room.treadlesDown].join(',')}${scene.textbox.isOpen ? ' | TEXT OPEN' : ''}${scene.caught ? ' | CAUGHT' : ''}${scene.cutscene ? ' | CUTSCENE' : ''}${scene.reaching ? ' | REACHING' : ''}${scene.followers.length ? ` | followers ${scene.followers.map((f) => `${f.id}@${f.x.toFixed(1)},${f.y.toFixed(1)}${f.hidden ? "(hidden)" : ""}${f.walking ? "(walking)" : "(still)"}`).join(' ')}` : ''}`;
+  };
+  try {
+    for (const cmd of (params.get('script') ?? '').split(';').filter(Boolean)) {
+      const [op, a, b] = cmd.split(':');
+      if (op === 'at') {
+        const [x, y] = a.split(',').map(Number);
+        scene.player.x = x * 16 + 8;
+        scene.player.y = (y + 1) * 16 - 1;
+        scene.player.ground = scene.room.raiseAt(x, y);
+      } else if (op === 'face') scene.player.facing = keys[a];
+      else if (op === 'hold') for (let i = 0; i < Number(b); i++) scene.update(1 / 60, { isDown: (k) => k === keys[a], wasPressed: () => false, endFrame() {} });
+      else if (op === 'push') {
+        const hold = { isDown: (k) => k === keys[a], wasPressed: () => false, endFrame() {} };
+        let started = false;
+        for (let i = 0; i < 240; i++) {
+          scene.update(1 / 60, hold);
+          const sliding = scene.room.props.some((p) => p.slide);
+          if (sliding) started = true;
+          if (started && !sliding) break;
+        }
+        if (!started) throw new Error(`nothing moved pushing ${a} from ${tile(scene.player)}`);
+        for (let i = 0; i < 10; i++) scene.update(1 / 60, noInput);
+      } else if (op === 'z') { scene.update(1 / 60, press('confirm')); readThrough(); }
+      // anims:a,b: whether those animations exist (src/engine/animations.js).
+      else if (op === 'anims') {
+        const { ANIMATION_NAMES } = await import('./src/engine/animations.js');
+        report.textContent += `anims: ${a.split(',').map((n) => `${n}=${ANIMATION_NAMES.includes(n) ? 'ok' : 'MISSING'}`).join(' ')}
+`;
+      }
+      // tap: one press of Z, without reading anything through (to catch a scene mid-way).
+      else if (op === 'tap') scene.update(1 / 60, press('confirm'));
+      else if (op === 'q') { scene.update(1 / 60, press('swap')); readThrough(); }
+      else if (op === 'jump') scene.update(1 / 60, press('jump'));
+      else if (op === 'scene') {
+        // Plays a cutscene right here (one that follows a fight, say).
+        const { SCENES } = await import('./src/data/scenes/index.js');
+        scene.playCutscene(SCENES[a]);
+        readThrough();
+      }
+      else if (op === 'wait') for (let i = 0; i < Number(a); i++) scene.update(1 / 60, noInput);
+      // trace:dir:n: walk n frames, printing each follower every frame.
+      else if (op === 'trace') {
+        for (let i = 0; i < Number(b); i++) {
+          scene.update(1 / 60, { isDown: (k) => k === keys[a], wasPressed: () => false, endFrame() {} });
+          report.textContent += `t${i} you ${scene.player.x.toFixed(1)},${scene.player.y.toFixed(1)} ${scene.player.facing} | ${scene.followers.map((f) => `${f.id} ${f.x.toFixed(1)},${f.y.toFixed(1)} ${f.dir}${f.walking ? ' W' : ' S'}${f.running ? 'R' : ''}${f.glanceDir ? " g" + f.glanceDir : ""} sag${f.sag}`).join(' ')}
+`;
+        }
+      }
+      // walkcheck:dir:n: walk n frames, and count the frames each follower's walking or still.
+      else if (op === 'walkcheck') {
+        const counts = {};
+        for (let i = 0; i < Number(b); i++) {
+          scene.update(1 / 60, { isDown: (k) => k === keys[a], wasPressed: () => false, endFrame() {} });
+          for (const f of scene.followers) {
+            counts[f.id] ??= { walking: 0, still: 0, flips: 0, last: null };
+            const c = counts[f.id];
+            c[f.walking ? 'walking' : 'still']++;
+            if (c.last !== null && c.last !== f.walking) c.flips++;
+            c.last = f.walking;
+          }
+        }
+        report.textContent += `walkcheck: ${Object.entries(counts).map(([id, c]) => `${id} walking ${c.walking} still ${c.still} flips ${c.flips}`).join('; ')}
+`;
+      }
+      // probe: what Z would land on from here.
+      else if (op === 'probe') {
+        const pts = scene.player.interactionPoints();
+        report.textContent += `probe: points ${pts.map(([x, y]) => `${Math.floor(x / 16)},${Math.floor(y / 16)}`).join(' ')} -> ${pts.map(([x, y]) => scene.room.propAt(x, y) ? `${scene.room.propAt(x, y).look}[gives=${scene.room.propAt(x, y).gives},draw=${scene.room.propAt(x, y).drawScene}]` : "-").join(" ")}
+`;
+      }
+      else if (op === 'expect') {
+        const gates = scene.room.props.filter((p) => p.opensWith);
+        const ok = {
+          gate: () => (gates[Number(b?.split(',')[0] ?? 0)]?.isOpen ? 'open' : 'shut') === (b?.split(',')[1] ?? 'open'),
+          bridged: () => scene.room.bridged.has(b),
+          log: () => scene.room.props.some((p) => p.log && `${p.x / 16},${p.y / 16}` === b),
+          split: () => Boolean(scene.partner),
+          together: () => !scene.partner,
+          lever: () => scene.room.isLeverOn(b),
+          at: () => tile(scene.player) === b,
+          seen: () => (WORLD_STATE.seenScenes ?? []).includes(b),
+          sinking: () => Boolean(scene.caught?.bog),
+          carrying: () => Boolean(scene.heroBody.carrying),
+          look: () => scene.room.props.some((p) => p.look === b && !p.hidden),
+          notcarrying: () => !scene.heroBody.carrying,
+          // party:id (they're in the party) or party:!id (they aren't).
+          party: () => (b.startsWith('!') ? !partyIds().includes(b.slice(1)) : partyIds().includes(b)),
+          // flow:x,y,way: the current on that tile runs that way ('none' for no current).
+          flow: () => {
+            const [fx, fy, way] = b.split(',');
+            return (scene.room.flowAt(Number(fx), Number(fy)) ?? 'none') === way;
+          },
+        }[a];
+        if (!ok) throw new Error(`unknown expect '${a}'`);
+        if (!ok()) throw new Error(`expected ${a}${b ? ` ${b}` : ''}; ${state()}`);
+        lines.push(`ok: ${a} ${b ?? ''}`);
+        continue;
+      } else throw new Error(`unknown command '${cmd}'`);
+      lines.push(`${cmd}  ->  ${state()}`);
+    }
+  } catch (e) {
+    lines.push(`PLAY FAIL: ${e.message}`);
+  }
+  scene.draw(ctx);
+  lines.push('PLAY DONE');
+} else if (params.get('push')) {
+  // ?push=<room>&moves=x,y,R;x,y,D... plays a push puzzle through: for each
+  // move it stands the hero behind the rock at (x, y), holds that arrow until
+  // the rock slides a tile, and at the end reports whether the gates opened.
+  const lines = { push(line) { report.textContent += `${line}\n`; } };
+  report.textContent = 'PUSH START\n';
+  const data = ROOMS[params.get('push')];
+  const scene = new OverworldScene(data, data.playerStart, data.area);
+  scene.enter?.({ changeScene() {}, home: null });
+  scene.npcs = [];
+  const keys = { U: 'up', D: 'down', L: 'left', R: 'right' };
+  const steps = { U: [0, -1], D: [0, 1], L: [-1, 0], R: [1, 0] };
+  try {
+    for (const move of (params.get('moves') ?? '').split(';').filter(Boolean)) {
+      const [x, y, dir] = move.split(',');
+      const [dx, dy] = steps[dir];
+      const rock = scene.room.rocks.find((r) => r.x === Number(x) * 16 && r.y === Number(y) * 16);
+      if (!rock) throw new Error(`no rock at ${x},${y}`);
+      scene.textbox.pages = null;
+      scene.player.ground = 0;
+      scene.player.x = (Number(x) - dx) * 16 + 8;
+      scene.player.y = (Number(y) - dy) * 16 + 16 - (dy < 0 ? 0 : dy > 0 ? 6 : 4);
+      const hold = { isDown: (a) => a === keys[dir], wasPressed: () => false, endFrame() {} };
+      let moved = false;
+      for (let i = 0; i < 120 && !moved; i++) {
+        scene.update(1 / 60, hold);
+        moved = !rock.slide && (rock.x !== Number(x) * 16 || rock.y !== Number(y) * 16);
+      }
+      if (!moved) throw new Error(`rock at ${x},${y} wouldn't go ${dir}`);
+      lines.push(`pushed ${x},${y} ${dir}`);
+    }
+    for (let i = 0; i < 30; i++) scene.update(1 / 60, noInput);
+    const gates = scene.room.props.filter((p) => p.opensWith);
+    lines.push(`gates: ${gates.map((g) => (g.isOpen ? 'OPEN' : 'shut')).join(', ')}`);
+  } catch (e) {
+    lines.push(`PUSH FAIL: ${e.message}`);
+  }
+  scene.draw(ctx);
+  lines.push('PUSH DONE');
 } else if (params.get('poke')) {
   // Presses Z on every prop in every room (or one room), reading through what
   // it says, and reports anything that throws.
   const lines = { push(line) { report.textContent += `${line}\n`; } };
   report.textContent = 'POKE START\n';
   const ids = params.get('poke') === 'all' ? Object.keys(ROOMS) : [params.get('poke')];
+  // &with=bramble pokes with a party member along (their comments, Bramble's chopping).
+  if (params.get('with')) {
+    const { joinParty } = await import('./src/characters/party.js');
+    for (const id of params.get('with').split(',')) joinParty(id);
+  }
   const confirmInput = { isDown: () => false, wasPressed: (a) => a === 'confirm', endFrame() {} };
   for (const id of ids) {
     const data = ROOMS[id];
     const scene = new OverworldScene(data, data.playerStart, data.area);
     scene.enter?.({ changeScene() {}, home: null });
     const room = scene.room;
+    // Only the words are being checked: monsters wandering into you would
+    // start a fight and leave the text hanging.
+    scene.npcs = [];
     for (const prop of room.allProps) {
       const label = `${id}: ${prop.look} at ${prop.x / 16},${prop.y / 16}`;
       try {
@@ -238,7 +589,12 @@ if (params.get('check')) {
           if (!scene.textbox.isOpen && !scene.resting && !scene.climb) break;
         }
         // Any screen it opened (a shop) is fine; a rest is fine; make sure nothing is stuck.
-        if (scene.textbox.isOpen) throw new Error('text never closes');
+        if (scene.textbox.isOpen) {
+          const page = scene.textbox.pages[scene.textbox.pageIndex];
+          const busy = ['cutscene', 'hop', 'ride', 'battleFlash', 'doorway'].filter((key) => scene[key]);
+          if (scene.player.isFalling) busy.push('falling');
+          throw new Error(`text never closes (page ${scene.textbox.pageIndex + 1}/${scene.textbox.pages.length}: "${String(page?.text ?? page).slice(0, 40)}"${busy.length ? `; busy: ${busy.join(', ')}` : ''})`);
+        }
         lines.push(`ok: ${label}`);
       } catch (e) {
         lines.push(`POKE FAIL: ${label}: ${e.message}`);

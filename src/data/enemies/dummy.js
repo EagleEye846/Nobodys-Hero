@@ -8,7 +8,7 @@ export const ROGUE_DUMMY = {
   textFile: 'enemies/rogue_dummy.txt',
   sprite: { rows: DUMMY_SPRITE, palette: DUMMY_PALETTE },
   maxHp: 120,
-  damage: 6,
+  damage: 8,
 
   // The first enemy you meet, so its attacks are a little gentler: fewer bullets (density)
   // that fly slower (speed). 1 is full strength.

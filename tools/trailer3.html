@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- The game's modules and text load relative to the page, so act as if we're in the game's folder. -->
+<base href="../">
+<title>Nobody's Hero: Chapter 3 Trailer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@700&display=swap">
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  canvas { display: block; position: absolute; inset: 0; margin: auto; max-width: 100vw; max-height: 100vh; aspect-ratio: 16 / 9; width: 100vw; height: auto; image-rendering: pixelated; }
+  body.playing { cursor: none; }
+  #start { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; font: 26px 'VT323', monospace; color: #ffcc66; }
+  #start h1 { font-weight: normal; font-size: 72px; margin: 0; }
+  #start p { color: #9a90b3; margin: 0; font-size: 22px; max-width: 760px; text-align: center; line-height: 1.3; }
+  #start button { font: 30px 'VT323', monospace; background: #ffcc66; color: #1a0d00; border: 0; padding: 8px 26px; cursor: pointer; }
+  #start button:disabled { opacity: 0.4; cursor: wait; }
+  #start button.ghost { background: transparent; color: #ffcc66; border: 2px solid #ffcc66; }
+  #status { position: absolute; left: 12px; bottom: 10px; font: 20px 'VT323', monospace; color: #9a90b3; }
+  #report { position: absolute; left: 12px; top: 10px; margin: 0; font: 18px monospace; color: #ff8080; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="trailer" width="3840" height="2160"></canvas>
+<div id="start">
+  <h1>CHAPTER 3: THE SEARCH</h1>
+  <p>Press F11 for full screen first. "Play" just plays it. "Export video" makes the file for
+     YouTube: 4K, 60 frames a second, rendered frame by frame (no dropped frames), with the song.
+     It takes a few minutes and saves nobodys-hero-chapter-3.webm to your Downloads.</p>
+  <div><button id="play" disabled>Play</button> <button id="export" class="ghost" disabled>Export video</button></div>
+</div>
+<div id="status"></div>
+<pre id="report"></pre>
+<script>
+  // Anything that goes wrong shows on the page (and tools/headless.py reads it).
+  const show = (m) => { document.getElementById('report').textContent += `
+ERROR: ${m}`; };
+  window.addEventListener('error', (e) => show(`${e.message} (${e.filename}:${e.lineno})`));
+  window.addEventListener('unhandledrejection', (e) => show(e.reason?.stack ?? e.reason));
+</script>
+<script type="module">
+// The chapter 3 trailer: the search for Ves, below the clouds, cut on the
+// beat of "They'll Come" (src/data/music/trailerSearchTheme.js). No
+// spoilers: nothing past the town. She isn't found, the beast is only ever a
+// shadow, and the chapter's end stays unseen. Everything that happens is in
+// TEXT and SHOTS below, timed in bars of the song (one bar is 1.76 seconds
+// at 136 BPM; 12.5 means half way through bar 12). The machine that plays
+// and exports it is tools/trailerKit.js, shared with trailer.html. Change
+// the words, swap rooms or enemies, and refresh.
+//
+// For checking without sound: ?at=30 draws the moment 30 seconds in and stops.
+// ?seconds=5 makes Export video do only the first 5 seconds.
+import { runTrailer } from './tools/trailerKit.js';
+import { SONGS } from './src/data/music/index.js';
+import { WORLD_STATE } from './src/state/saveGame.js';
+
+// The song's shape, in bars: fall 0, search 4, build 16, (silence 19.75),
+// drop 20, rise 28, hush 36, the hit and finale 40, the tag 48, end 50.
+
+// --- The words. `line` is white text on black; `big` is one large line on
+// black; `caption` sits along the bottom over the picture. Everything else
+// anyone says is the game's own scenes talking. `from`/`to` are bars.
+const TEXT = [
+  { from: 0.6, to: 2.1, line: 'She fell.' },
+  { from: 2.3, to: 3.9, line: 'And you went after her.' },
+  { from: 19.5, to: 20, big: 'FIND HER.' },
+  { from: 22.2, to: 27.4, caption: 'Chapter 3: a whole new world below the clouds' },
+];
+
+// --- The shots, each from bar `from` until the next one starts (what each
+// key does is explained in trailerKit.js and trailer.html). `scene` plays
+// one of the game's own cutscenes, from `pre` seconds in; walks are routed
+// along the rooms' real paths; `party` is who's with the hero (Bramble,
+// mostly, this chapter).
+const BRAMBLE = ['bramble'];
+const SHOTS = [
+  { from: 0, black: true },
+
+  // The search: the fall, the red wood, the boy, the dark wood, the well.
+  // The fall, as he dreams it: reaching for her.
+  { from: 4, room: 'pinefall_landing', vision: { name: 'fall', mood: 'reach' } },
+  // Where he fell: a run through the red leaves to her mitten, and he picks it up.
+  { from: 5.5, room: 'pinefall_landing', at: { x: 2, y: 10 }, facing: 'right', day: 0.12, pre: 0.2,
+    keys: [
+      { hold: ['right', 'cancel'], until: (p) => p.x >= 11 * 16 + 6 },
+      // The last step up to it at a walk, then Z.
+      { hold: ['right'], seconds: 0.3 },
+      { press: ['confirm'], seconds: 9 },
+    ] },
+  // The torn clearing: the wind comes back, goes round, and stands up.
+  { from: 7, scene: 'the_tatterwight', pre: 5.5 },
+  // Bramble, cornered in the Hollow Oak, with his hatchet...
+  { from: 9.5, scene: 'bramble_cornered', pre: 1.8 },
+  // ...the fight for him...
+  { from: 12, battle: 'russet', area: 'pinefall', fight: true },
+  // ...and, the monsters run off, "HA! Did you SEE that?", and his name.
+  { from: 13, scene: 'bramble_rescued', at: { x: 15, y: 9 }, pre: 0.8, pause: 0.95 },
+  // The Quiet: no birds, and a shadow going round the wood.
+  { from: 15.5, scene: 'the_quiet', pre: 0.9, pause: 0.85 },
+  // The fen: no trees anywhere, and a light out in the mist.
+  { from: 17, scene: 'into_the_marsh', pre: 2.3 },
+  { from: 19.5, black: true },
+
+  // THE DROP: a fight or a ride on every bar, and the chapter's spells.
+  // (`spell` is cast on his turn; `fight` is his slashes; otherwise he's
+  // dodging their busiest attack, with the weapon's SHIFT ability.)
+  { from: 20, battle: 'tatterwight', area: 'pinefall', party: BRAMBLE },
+  { from: 21, battle: 'russet', spell: 'ember', pre: 0.1, pause: 0.8 },
+  // Bramble's turn: his hatchet.
+  { from: 22, battle: 'gloamworm', party: BRAMBLE, ally: { who: 'bramble', act: 'CHOP' }, pause: 0.8 },
+  { from: 23, battle: 'slipjack', party: BRAMBLE, ally: { who: 'bramble', act: 'FELL' }, pause: 0.8 },
+  // The old drains: a Clinker, and the Cistern Maul's quake.
+  { from: 24, battle: 'clinker', weapon: 'cistern_maul', party: BRAMBLE },
+  { from: 25, battle: 'wisp', spell: 'sunder', party: BRAMBLE, pre: 0.1, pause: 0.8 },
+  // The lantern path, at night, along the boards in the mist.
+  { from: 26, room: 'marsh_lantern_path', party: BRAMBLE, at: { x: 1, y: 8 }, facing: 'right', day: 0.78, pre: 0.4,
+    keys: [
+      { hold: ['right', 'cancel'], until: (p) => p.x >= 6 * 16 + 8 },
+      { hold: ['up', 'cancel'], until: (p) => p.y <= 5 * 16 + 8 },
+      { hold: ['right', 'cancel'], seconds: 9 },
+    ] },
+  { from: 27, battle: 'reed_stalker', weapon: 'reed_knife', fight: true },
+
+  // The rise: out of the fen, and the town with lights in it.
+  { from: 28, room: 'valley_road', at: { x: 1, y: 7 }, facing: 'right', day: 0.5,
+    keys: [
+      { hold: ['right', 'cancel'], until: (p) => p.x >= 9 * 16 + 8 },
+      { hold: ['down', 'cancel'], until: (p) => p.y >= 10 * 16 + 8 },
+      { hold: ['right', 'cancel'], seconds: 9 },
+    ] },
+  // Thistle at the gate, who doesn't ask if you're the Hero.
+  { from: 29, room: 'lasthome_gate', at: { x: 1, y: 9 }, facing: 'right', day: 0.55, pre: 1.2,
+    keys: [
+      { hold: ['right', 'cancel'], until: (p) => p.x >= 14 * 16 + 8 },
+      { hold: ['up', 'cancel'], until: (p) => p.y <= 6 * 16 + 14 },
+      { seconds: 0.15 },
+      { press: ['confirm'], seconds: 9 },
+    ] },
+  // Up through the town on the real controls (round the people, not through them).
+  { from: 30, room: 'lasthome_square', facing: 'up', day: 0.6,
+    keys: [
+      { hold: ['up', 'cancel'], until: (p) => p.y <= 16 * 16 + 8 },
+      { hold: ['left', 'cancel'], until: (p) => p.x <= 12 * 16 + 8 },
+      { hold: ['up', 'cancel'], until: (p) => p.y <= 11 * 16 },
+      { hold: ['left', 'cancel'], seconds: 9 },
+    ] },
+  { from: 31, shop: 'lasthome_market', pre: 0.3, presses: [0.9, 1.5] },
+  { from: 32, battle: 'lamp_mite', area: 'valley', spell: 'comet', pre: 0.1, pause: 0.8 },
+  { from: 33, battle: 'cairn_hound', weapon: 'hollow_blade', fight: true },
+  // The crier on its stone, still crying the Hero's coming to nobody.
+  { from: 34, battle: 'heralds_echo', area: 'valley', spell: 'starfall', pre: 0.1, pause: 0.8 },
+  { from: 35, room: 'city_old_street', at: { x: 1, y: 6 }, facing: 'right', day: 0.75,
+    keys: [{ hold: ['right', 'cancel'], seconds: 9 }] },
+
+  // The hush: at the well in the empty village, something very large
+  // breathes out behind the rooftops, and stands up.
+  { from: 36, scene: 'the_well', pre: 10.3 },
+  // The sword in the stone: the spin, and the Fallen Star held high as the
+  // last hit lands.
+  // The spin (player_sword_spin, player.js): the blade swept right round him
+  // twice with a slash of light behind it, 16 frames at 0.075s, then the
+  // sword comes up on the hit on bar 40.
+  { from: 39.3, room: 'hush_starfall', at: { x: 11, y: 9 }, facing: 'down', take: 'fallen_star_drawn',
+    script: [{ do: 'animate', who: 'player', animation: 'player_sword_spin', speed: 0.075, once: true }, { do: 'wait', seconds: 9 }] },
+
+  // NOBODY'S HERO, over the finale.
+  { from: 40.6, title: true },
+  { from: 48, black: true },
+];
+const END = 50.6;
+
+// Big hits: a white flash and a shake (the drop, the rise, the last hit).
+const HITS = [20, 28, 40];
+
+runTrailer({
+  bpm: 136,
+  song: SONGS.trailerSearch,
+  end: END,
+  text: TEXT,
+  shots: SHOTS,
+  hits: HITS,
+  // Every cut in the drop and rise gets a small flash too.
+  flashes: [20, 36],
+  title: { at: 40.6, name: "NOBODY'S HERO", sub: 'CHAPTER 3: THE SEARCH', subAt: 42, to: 48 },
+  filename: 'nobodys-hero-chapter-3.webm',
+  // Shots without their own `day` are in daylight, not whenever the clock
+  // has got to by then.
+  day: 0.2,
+  setup() {
+    WORLD_STATE.chapter = 3;
+    WORLD_STATE.seenScenes = [];
+  },
+});
+</script>
+</body>
+</html>

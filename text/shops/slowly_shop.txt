@@ -1,0 +1,76 @@
+# SLOWLY'S: in the Old Baths of the Dead City. Slowly is a tortoise three
+# hundred years old, who came to the baths for the warm when the city was
+# alive and never saw a reason to leave. Kindly, very slow, a little deaf,
+# spectacles on his nose, moss on his shell. He remembers the city full.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Ah. Visitors. How... nice. Take your time. I always do.
+
+[menu_prompt]
+Anything else? There's no hurry. There's never been a hurry.
+
+[buy_prompt]
+Salad, from the cracks in the streets. Biscuits, from the feast. Water, from the spring. Pie, from Lasthome, when Pell remembers to bring it.
+
+[sell_prompt]
+Selling? Let me see. Let me... see.
+
+[talk_prompt]
+Talk? Oh, I'd like that. I'll listen very carefully. And very slowly.
+
+[bought]
+There. Mind how you go.
+
+[bought_item]
+Eat it slowly. Things last longer, slowly.
+
+[sold]
+I'll keep it. I keep everything. I've got three hundred years of things in here.
+
+[nothing_to_sell]
+Nothing to sell? That's all right. You've got your company. That's worth more.
+
+[cant_sell]
+Oh, no. You'll want that. I can tell.
+
+[owned]
+You've got one of those already, dear.
+
+[wont_fit]
+That's not for you, dear. That's for your friend. Bring her by.
+
+[too_poor]
+Not quite enough. Never mind. Next time. There's always a next time, when you're me.
+
+[bought_stored]
+Your bag was full, so it's gone to your storage chests. Don't ask me how. I stopped asking how about a hundred years ago.
+
+[bag_full]
+No room anywhere. Oh dear. Eat something first.
+
+[farewell]
+Goodbye. Come back. I'll be here. I'm always here.
+
+[talk: The city]
+When I was young, this city was full. Bells every morning, in case it was the day. Flags on every roof. Everyone in their best, waiting.
+
+They waited two hundred years. Then they stopped lighting the lamps.
+
+Then one morning they didn't ring the bells. And then, one by one, they all went somewhere else.
+
+[talk: The Hero]
+I saw the statues go up. Hundreds of them. The sculptor never knew his face, so he left them blank, every one.
+
+He said: when the Hero comes, I'll carve the face in. He waited a long time. Longer than most.
+
+[talk: The Gate]
+The Gate's at the end of the Last Street. It's never opened. Not once in three hundred years.
+
+There's a great statue before it, waiting with its sword up. I used to think it was the saddest thing in the city. Now I think it might be me.
+
+[talk: Something big]
+Something came through the city last night. Over the roofs. Very quiet. The birds all stopped.
+
+It went down the Last Street to the Gate. It had something in its mouth. Something purple.

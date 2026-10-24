@@ -1,0 +1,69 @@
+# CINDER'S KILN: Nan Cinder, the charcoal burner, at her kiln deep in the
+# Hushwood. Small, old, sooty and tough as a boot, with a pipe she never
+# lights. Lives alone out here by choice, sells what she bakes in the ashes,
+# and has known every woodcutter in the wood since they were Bramble's size.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Well? Don't stand there letting the smoke out. What'll it be?
+
+[menu_prompt]
+Anything else, or are you just admiring my kiln?
+
+[buy_prompt]
+Baked in the ashes, every one. Candles for the dark under the old root. And the woodcutters' spares, if you've the gold.
+
+[sell_prompt]
+Selling to me? Bold. Let's see it.
+
+[talk_prompt]
+Talk, is it. I've had nobody to talk to for a month but the kiln, and it only ticks.
+
+[bought]
+There. Wear it out, it's what it's for.
+
+[bought_item]
+Eat it hot. Eat it now, if you've any sense.
+
+[sold]
+Hm. I'll find a use for it. I always do.
+
+[nothing_to_sell]
+Nothing? Then stop rattling your pockets at me.
+
+[cant_sell]
+You're wearing that. Take it off first, out there.
+
+[owned]
+You've already got one. What do you want two for?
+
+[wont_fit]
+That's for the boy. It won't go near you.
+
+[too_poor]
+You're short. I don't do credit. I did credit once. Once.
+
+[bought_stored]
+Your bag's full, so it's gone in the storage chest by the crystal. Don't ask me how that works. I don't.
+
+[bag_full]
+Your bag's full to bursting. Eat something first.
+
+[farewell]
+Go on, then. Mind the root, it's dark under there. And Bramble, mind HIM.
+
+[talk: The kiln]
+Charcoal for the forges up the valley, once. Nobody comes for it now. I burn it anyway. A kiln wants burning, the same as a person wants work.
+
+[talk: The Hush]
+Old as the wood, and quieter than it. It keeps to its hollow down past Hollin and leaves folk be. Always has. Something's stirred it up. Something it wants.
+
+[talk: Hollin]
+The old village, at the bottom of the wood. Bramble's grandad was born there. They left the year the Hush came out of its hollow and walked down the lane. Nobody was hurt. Nobody stayed, either.
+
+[talk: Bramble]
+His mother's the best feller in the wood and the worst at sitting still, and he's her all over. Keep him out of trouble. You'll fail, but keep him out of the worst of it.
+
+[talk: The girl]
+Dark coat, plum umbrella under her arm, a face set like she'd decided something. She drew an arrow on my tree and said, "for the one coming after." I said, who's coming after? She said, "they'll come."

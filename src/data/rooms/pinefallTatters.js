@@ -1,7 +1,8 @@
 // THE TORN CLEARING: a ring of trees round trampled leaves. Deep claw marks
 // in the bark, some higher than a person. Scraps of evening-blue wool from
-// Ves's coat. Something big was here, and so was she. (The midboss's
-// clearing, when there is one.) South, the wood ends.
+// Ves's coat. Something big was here, and so was she. And the wind that
+// came through that night is still here, going round: the Tatterwight, the
+// midboss (the_tatterwight). South, the wood ends.
 // Tile key (see src/overworld/tileset.js):
 //   L  scarlet tree (walk or hide behind) (solid)
 //   Z  bramble hedge (solid)
@@ -51,11 +52,14 @@ export const PINEFALL_TATTERS = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 0, y: 8, w: 1, h: 2, to: 'pinefall_maze', spawn: { x: 33, y: 11 } },
-    { x: 13, y: 17, w: 2, h: 1, to: 'pinefall_ravine', spawn: { x: 11, y: 1 } },
+    { x: 13, y: 17, w: 2, h: 1, to: 'pinefall_quarry', spawn: { x: 11, y: 1 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
-  cutscenes: [],
+  cutscenes: [
+    // Across the clearing a few steps in from the maze: the Tatterwight.
+    { x: 6, y: 1, w: 1, h: 16, scene: 'the_tatterwight' },
+  ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/pinefall.txt',
@@ -73,6 +77,6 @@ export const PINEFALL_TATTERS = {
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'tatters_brush' },
 
-  // No enemies in the Pinefall yet.
+  // None: the Tatterwight's the only thing here.
   npcs: [],
 };

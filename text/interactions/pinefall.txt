@@ -31,8 +31,7 @@ Something mustard-yellow in the red leaves.
 A mitten. Hand-knitted, a little lopsided. Still a bit warm.
 
 [landing_great_tree]
-The great tree you came down through. Its crown is gone, snapped off and
-lying in a heap.
+The great tree you came down through. Its crown is gone, snapped off and lying in a heap.
 
 The branches broke your fall. Most of them, anyway.
 
@@ -44,8 +43,7 @@ You can see the hole you made in it.
 # --- THE BRAMBLE GATE ---
 
 [gate_gate]
-An old gate of woven branches, tied shut with a rope that runs off to three
-levers in the leaves.
+An old gate of woven branches, tied shut with a rope that runs off to three levers in the leaves.
 
 [gate_open]
 The rope goes taut, and the gate creaks open.
@@ -60,8 +58,7 @@ A board nailed to a tree, the letters burnt in:
 
 WOODCUTTERS' GATE. PULL AS THE SUN GOES.
 
-Underneath, smaller: "it comes up in the east. at noon it stands in the
-south. it goes down in the west. honestly, it's not hard."
+Underneath, smaller: "it comes up in the east. at noon it stands in the south. it goes down in the west. honestly, it's not hard."
 
 [gate_lever]
 A wooden lever, worn smooth by a lot of hands.
@@ -75,8 +72,7 @@ A coral ribbon, snagged on a branch where the wind dropped it.
 You've seen it in her hair the whole way up the mountain.
 
 [deadfall_pack]
-An old pack under a tree, half buried in leaves. Inside, a bag of pine
-candy, still sealed.
+An old pack under a tree, half buried in leaves. Inside, a bag of pine candy, still sealed.
 
 [deadfall_pack_empty]
 The old pack. Empty now, apart from leaves.
@@ -111,8 +107,7 @@ A plank bridge across the brook. It sways, but it holds.
 # --- WOODCUTTERS' CAMP ---
 
 [camp_fire]
-A campfire. Someone's been feeding it a stick at a time, just enough to keep
-it going.
+A campfire. Someone's been feeding it a stick at a time, just enough to keep it going.
 
 [camp_bench]
 A bench made of half a log. The bark's been worn off where people sit.
@@ -126,8 +121,7 @@ A long table, set for eight. Seven bowls are clean.
 The eighth has had a very small amount of porridge in it for a while.
 
 [camp_stall]
-A little stall, made from crates and a door laid flat. On it: pinecones,
-painted red. A jar of something sticky. A carved wooden owl.
+A little stall, made from crates and a door laid flat. On it: pinecones, painted red. A jar of something sticky. A carved wooden owl.
 
 None of it has a price. All of it has a little card that says "ask".
 
@@ -147,8 +141,7 @@ A rain barrel. There's a ladle tied to it, and a cup with a chip in it.
 [camp_notices]
 A notice board. Most of the notes are about firewood.
 
-One, newer than the rest, in big letters: "SOMETHING BIG IN THE WOOD
-AGAIN. GO ROUND BY THE CAMP. DON'T GO TO THE CLEARING."
+One, newer than the rest, in big letters: "SOMETHING BIG IN THE WOOD AGAIN. GO ROUND BY THE CAMP. DON'T GO TO THE CLEARING."
 
 [camp_fence]
 A rail fence. It keeps the camp in rather than anything out.
@@ -161,8 +154,7 @@ A scarlet tree, taller than the brambles. You've seen this one before.
 Haven't you?
 
 [maze_pack]
-An old pack, tucked in the brambles where nobody would find it. Somebody
-did. Inside, a climber's ration, wrapped in wax paper.
+An old pack, tucked in the brambles where nobody would find it. Somebody did. Inside, a climber's ration, wrapped in wax paper.
 
 [maze_pack_empty]
 The old pack. Empty now. Whoever hid it was good at hiding.
@@ -177,12 +169,10 @@ It's the blue of her coat.
 [tatters_scrap_2]
 Another scrap of blue wool, torn at the edges.
 
-The leaves round it are trampled flat, in a circle, like something big went
-round and round here.
+The leaves round it are trampled flat, in a circle, like something big went round and round here.
 
 [tatters_scrap_3]
-A last scrap of blue, and beside it, in the soft ground, a single footprint
-going south. Small. Running.
+A last scrap of blue. No footprints anywhere. Whatever tore her coat, she was still in the air.
 
 She got away from whatever it was.
 
@@ -197,8 +187,7 @@ More claw marks, higher up the trunk than you could reach on tiptoe.
 You decide not to think about that.
 
 [tatters_brush]
-A thicket, crushed flat on one side, as if something heavy pushed straight
-through it.
+A thicket, crushed flat on one side, as if something heavy pushed straight through it.
 
 # --- THE LONG DROP ---
 
@@ -207,6 +196,13 @@ The ravine wall, grey rock in shelves. Each shelf has a ring at its edge.
 
 Someone has done this climb before. A lot of someones.
 
+# A chest on the bottom shelf (it gives you the Fallen-Leaf Cloak).
+[ravine_chest]
+An old chest wedged into the corner of the shelf, half buried in red leaves. Inside, folded neatly: a cloak made of leaves.
+
+[chest_empty]
+An empty chest. The leaves are already filling it back up.
+
 [ravine_end]
 A post at the bottom of the ravine, with a sign hung off it:
 
@@ -214,10 +210,123 @@ THE LANTERN MARSH. KEEP TO THE LIGHTS.
 
 Somebody has scratched underneath: "which ones?"
 
+[ravine_west]
+A sign on a post, pointing west along the foot of the cliffs:
+
+OLD ROAD TO HOLLIN. (NOBODY LIVES THERE.)
+
+Underneath, scratched with a knife: "the hush does."
+
 [ravine_mist]
-Below the last of the trees, the ground goes flat and grey, and then it
-stops being ground at all. Mist, as far as you can see.
+Below the last of the trees, the ground goes flat and grey, and then it stops being ground at all. Mist, as far as you can see.
 
 There are lights out in it. Small ones, swinging.
 
-(The way on isn't open yet.)
+Nothing's going to walk into that and come out again. Not today.
+
+# --- Push puzzles: shared across the rock rooms ---
+
+[push_rock]
+A mossy boulder, about as big as you are. It rocks a little when you lean on it.
+
+(Walk into it to push it. It only goes where there's room behind it. Press Z on it again to roll every rock back to where it started.)
+
+[rock_home]
+You give it a shove the wrong way. Every rock in the pen shivers and rolls back to where it started.
+
+[stone_plate]
+A round stone plate set flat in the ground, with a ring carved round it. It gives a little underfoot.
+
+You're not heavy enough. Something heavier might be.
+
+[rock_stump]
+A mossy stump with a hand carved into the top. The rocks here have scraped trails back to it.
+
+You press the hand. Every rock in the pen shivers and rolls back to where it started.
+
+[pen_gate]
+A gate of woven branches, set in the hedge. No lever, no lock. The rope runs off under the ground towards the stone plates.
+
+[pen_gate_open]
+The last plate sinks. Under the ground, something pulls taut... and the gate creaks open.
+
+[pen_stump]
+A stump, about knee high. The way into the stone pen is up and over it.
+
+[pen_hedge]
+A hedge of bramble, grown round the pen like a wall. Something big has been kept out of here, or in.
+
+# --- THE TUMBLED STONES ---
+
+[tumbled_sign]
+A board on a post, the letters burnt in:
+
+PLATES WANT ROCKS. ROCKS GO WHERE THEY'RE PUSHED. A ROCK IN A CORNER STAYS IN A CORNER.
+
+Underneath, smaller: "if you get it stuck, the stump puts them back. it's fine. we've all done it."
+
+# --- THE ROLLING STONES ---
+
+[rolling_sign]
+A board on a post:
+
+TWO ROCKS, TWO PLATES. THINK FIRST.
+
+Underneath, in a child's writing: "i did it in four goes"
+
+# --- THE OLD QUARRY ---
+
+[quarry_sign]
+An old board, half rotten, nailed to a tree at the quarry's edge:
+
+THREE. AND MIND WHICH ONE GOES FIRST.
+
+[quarry_cut]
+The quarry wall, cut in neat steps. Someone took a lot of stone out of here, a long time ago, and left the leftovers lying about.
+
+# --- What Bramble says about the Pinefall, if you come back this way with
+# him (a section's `_bramble` twin, see OverworldScene.say) ---
+
+[scarlet_tree_bramble]
+{proud}That one's a good climbing tree. That one isn't. That one's a good climbing tree but don't tell Ma.
+
+[gate_sign_bramble]
+{sly}"Honestly, it's not hard." Ma wrote that bit. She says it to me every single time.
+
+[brook_sign_bramble]
+{grin}"No, we're not sorry." That's Uncle Ash. He's never sorry about anything.
+
+[camp_fire_bramble]
+{sad}...Somebody's kept it going. It's never gone out, not since before I was born.
+
+[camp_tent_bramble]
+{thinking}That's our tent. Ma's and mine. Don't go in, it's a mess. I didn't make the mess. Some of the mess.
+
+[camp_table_bramble]
+{sheepish}...That's my bowl. The one with the porridge. I was going to finish it.
+
+[camp_stall_sign_bramble]
+{proud}I did the sign! I did all the exclamation marks. Ma said that was too many. There's no such thing.
+
+[camp_notices_bramble]
+{scared}"Don't go to the clearing." ...I went to the clearing.
+
+[maze_pack_bramble]
+{sly}That's MY pack. I hid it. Nobody ever finds it. ...Except you, apparently.
+
+[maze_pack_empty_bramble]
+{sly}Whoever hid it was very good at hiding. That's me. I'm very good at hiding.
+
+[tatters_scrap_3_bramble]
+{determined}That's her footprint. I saw her running. She was fast. Faster than me, and I'm the fastest in the camp.
+
+[ravine_end_bramble]
+{scared}Don't go in the mist. Everybody knows. You go in, and the lights take you round and round till you're a light too.
+
+{thinking}...That's what Uncle Ash says, anyway. He also says he's got a tail.
+
+[rolling_sign_bramble]
+{glee}"I did it in four goes." That's me! I wrote that! Four goes! Ma took eleven.
+
+[quarry_sign_bramble]
+{thinking}Three's hard. I did it in nineteen goes. I'm not writing that on a sign.

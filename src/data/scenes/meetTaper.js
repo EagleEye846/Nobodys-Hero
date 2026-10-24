@@ -28,7 +28,7 @@ export const MEET_TAPER = {
     { do: 'emote', who: 'taper', emote: '...' },
     { do: 'say', who: 'taper', text: 'Not a scratch. Just cold, and a little lost. That I can fix.\n\nYou\'re not the Hero, are you? That\'s alright. I\'ve a soft spot for strays.' },
     { do: 'say', who: 'taper', text: 'I\'m Taper. I tend the flowers down here, and the little candles.\n\n{glee}And now, it seems, you. Hello, sprout.' },
-    { do: 'say', who: 'taper', text: 'Come up to my house and get warm. There\'s soup on, and a spare blanket.\n\nUp those stairs. I\'ll go ahead and stoke the fire.' },
+    { do: 'say', who: 'taper', text: 'Come up to my house and get warm. There\'s soup on the fire, and a spare blanket.\n\nUp those stairs. I\'ll go ahead and stoke the fire.' },
     { do: 'walk', who: 'taper', to: { x: 10, y: 3 } },
     { do: 'leave', who: 'taper' },
     { do: 'music', song: 'ruins' },

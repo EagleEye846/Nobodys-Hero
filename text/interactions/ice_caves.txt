@@ -91,7 +91,7 @@ A tunnel climbing up out of the roof of the Roost, plugged with ice. Cold air wh
 Daylight, at the top of the shaft. Real daylight. Cold air pours down out of it, and it smells of snow.
 
 [chimney_ice]
-A waterfall that froze halfway down and never finished falling. Rings are hammered into it, a long time ago.
+A waterfall that froze halfway down and never finished falling. Rings were hammered into it, a long time ago.
 
 [chimney_chest]
 A chest up on the ice blocks, out of reach of anything that can't jump. Something sweet inside.

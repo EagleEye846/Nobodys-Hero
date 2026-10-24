@@ -68,6 +68,10 @@ export const PINEFALL_BRAMBLE_GATE = {
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble' },
 
-  // No enemies in the Pinefall yet.
-  npcs: [],
+  // A Burrhog trundles the low ground east of the path, below the east
+  // lever; a Sapling stands among the trees up past the gate, pretending.
+  npcs: [
+    { enemy: 'burrhog', x: 18, y: 14, patrol: [15, 23] },
+    { enemy: 'sapling', x: 17, y: 3, patrol: [17, 17], behaviour: 'disguise' },
+  ],
 };

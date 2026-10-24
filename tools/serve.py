@@ -58,7 +58,8 @@ def project_path(relative):
     path = (ROOT / relative).resolve()
     if path != ROOT and ROOT not in path.parents:
         raise ValueError(f"{relative} is outside the project")
-    return path, relative
+    # The resolved path, so "src/data/../../tools/serve.py" isn't taken for one in src/data/.
+    return path, path.relative_to(ROOT).as_posix() if path != ROOT else ""
 
 
 SAMPLES = ROOT / "assets" / "audio" / "samples"

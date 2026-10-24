@@ -15,13 +15,34 @@ function hash(tx, ty, salt = 0) {
 const pick = (list, roll) => list[Math.floor(roll * list.length)];
 const px = (ctx, color, x, y, w = 1, h = 1) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); };
 
+// A soft, lumpy patch of a second tone on a ground tile (grass, leaves, fen
+// turf): three rects overlapping, so it never shows as a square. `size` is
+// how big across; it stays inside the tile.
+function mottle(ctx, color, x, y, tx, ty, salt, size = 6) {
+  const mx = Math.floor(hash(tx, ty, salt) * (T - size));
+  const my = Math.floor(hash(tx, ty, salt + 1) * (T - size));
+  const lean = Math.floor(hash(tx, ty, salt + 2) * 3) - 1;
+  px(ctx, color, x + mx, y + my + 1, size, size - 2);
+  px(ctx, color, x + mx + 1, y + my, size - 2, size);
+  px(ctx, color, x + Math.max(0, Math.min(T - size - 1, mx + lean)), y + my + Math.floor(size / 2) - 1, size + 1, 2);
+}
+
 const isWallFace = (c) => c === 'W' || c === 'V' || c === 'H' || c === 'h';
 const isWall = (c) => c === '#' || isWallFace(c);
+// The Old Drains under Hollin (Chapter 3) draw some old tiles their own way:
+// see the drains section, near the end. The old city's stone out in the
+// Lantern Marsh is the same drowned stone.
+const isDrains = (room) => room?.area === 'drains' || room?.area === 'marsh';
 
 // Old flagstones: worn slabs of a few sizes in slightly different stone, with
 // cracks, chips, and now and then a fallen red leaf.
 const SLAB_STONE = ['#2f2752', '#332a58', '#2c244d', '#362c5d', '#30285a'];
+// Out in the Hollow Valley (Chapter 3) the same flagstones lie under the open
+// sky in the dead city: see drawRuinedFloor.
+const isValley = (room) => room?.area === 'valley';
 function drawFloor(ctx, x, y, tx, ty, room) {
+  if (isDrains(room)) return drawDrownedFloor(ctx, x, y, tx, ty, room);
+  if (isValley(room)) return drawRuinedFloor(ctx, x, y, tx, ty, room);
   const layout = hash(tx, ty, 1);
   // One big slab, two long ones, or four small ones.
   const slabs = layout < 0.5 ? [[0, 0, 16, 16]]
@@ -62,6 +83,90 @@ function drawFloor(ctx, x, y, tx, ty, room) {
     ctx.fillStyle = 'rgba(10, 6, 20, 0.55)';
     ctx.fillRect(x, y, T, 3);
     ctx.fillStyle = 'rgba(10, 6, 20, 0.25)';
+    ctx.fillRect(x, y + 3, T, 2);
+  }
+}
+
+// The dead city's flagstones: the Ruins' slabs, a little paler in the
+// daylight, split by frost and heaved by roots, with grass and weeds coming
+// up through every joint, moss in the shade, and rain standing in the hollows.
+// Where they meet the valley's grass, the grass creeps in over them.
+const RUINED_SLAB = ['#3a3160', '#3e3566', '#372e5b', '#413869', '#3b3262'];
+function drawRuinedFloor(ctx, x, y, tx, ty, room) {
+  const layout = hash(tx, ty, 1);
+  const slabs = layout < 0.5 ? [[0, 0, 16, 16]]
+    : layout < 0.85 ? (hash(tx, ty, 2) < 0.5 ? [[0, 0, 16, 8], [0, 8, 16, 8]] : [[0, 0, 8, 16], [8, 0, 8, 16]])
+      : [[0, 0, 8, 8], [8, 0, 8, 8], [0, 8, 8, 8], [8, 8, 8, 8]];
+  slabs.forEach(([sx, sy, w, h], i) => {
+    const roll = hash(tx, ty, 10 + i);
+    px(ctx, pick(RUINED_SLAB, roll), x + sx, y + sy, w, h);
+    px(ctx, '#4a4078', x + sx + 1, y + sy, w - 2, 1);
+    px(ctx, '#2a2448', x + sx, y + sy + h - 1, w, 1);
+    px(ctx, '#2a2448', x + sx + w - 1, y + sy, 1, h);
+    // A slab heaved up at one end: its lower half in shadow, its top edge lit.
+    if (roll < 0.1) {
+      px(ctx, '#322a54', x + sx + 1, y + sy + Math.floor(h / 2), w - 2, Math.floor(h / 2) - 1);
+      px(ctx, '#5a4e8c', x + sx + 1, y + sy, w - 2, 1);
+    }
+    // A corner broken off, the earth showing.
+    if (hash(tx, ty, 20 + i) < 0.14) px(ctx, '#241e3e', x + sx + w - 3, y + sy + h - 3, 2, 2);
+  });
+  // Cracks: more of them, and wider, than indoors, lit along one side.
+  if (hash(tx, ty, 3) < 0.22) {
+    let cx = 3 + Math.floor(hash(tx, ty, 4) * 9);
+    const from = Math.floor(hash(tx, ty, 29) * 4);
+    for (let cy = from; cy < from + 9 + Math.floor(hash(tx, ty, 28) * 4) && cy < T; cy++) {
+      px(ctx, '#1e1838', x + cx, y + cy);
+      px(ctx, '#4a4078', x + cx + 1, y + cy);
+      if (hash(tx, ty, 30 + cy) < 0.3) px(ctx, '#1e1838', x + cx - 1, y + cy);
+      cx += hash(tx, ty, 30 + cy) < 0.5 ? -1 : 1;
+      cx = Math.max(1, Math.min(13, cx));
+    }
+  }
+  // Grit, and moss where the slabs stay damp.
+  for (let i = 0; i < 3; i++) {
+    if (hash(tx, ty, 40 + i) < 0.5) px(ctx, '#4a4080', x + 1 + Math.floor(hash(tx, ty, 50 + i) * 14), y + 1 + Math.floor(hash(tx, ty, 60 + i) * 14));
+  }
+  if (hash(tx, ty, 5) < 0.18) {
+    const mx = x + 1 + Math.floor(hash(tx, ty, 6) * 10);
+    const my = y + 1 + Math.floor(hash(tx, ty, 7) * 10);
+    px(ctx, '#3f6b4a', mx, my, 4, 2);
+    px(ctx, '#3f6b4a', mx + 1, my + 2, 2, 1);
+    px(ctx, '#4f8a5a', mx + 1, my, 1, 1);
+  }
+  // Weeds up through the joints: grass, and now and then a flower.
+  if (hash(tx, ty, 8) < 0.22) {
+    const joint = slabs.length === 1 ? [7 + Math.floor(hash(tx, ty, 9) * 2), 1 + Math.floor(hash(tx, ty, 11) * 13)]
+      : [slabs[1][0] === 8 ? 7 : 1 + Math.floor(hash(tx, ty, 9) * 13), slabs[1][1] === 8 ? 7 : 1 + Math.floor(hash(tx, ty, 11) * 13)];
+    const [wx, wy] = [x + joint[0], y + joint[1]];
+    px(ctx, '#3b6d38', wx, wy - 1, 1, 3);
+    px(ctx, '#4f8a4a', wx + 1, wy - 2, 1, 2);
+    px(ctx, '#3b6d38', wx - 1, wy, 1, 2);
+    if (hash(tx, ty, 12) < 0.25) px(ctx, pick(FLOWERS, hash(tx, ty, 13)), wx + 1, wy - 3, 1, 1);
+  }
+  // Rain standing in a worn hollow.
+  if (hash(tx, ty, 14) < 0.06) {
+    const pxx = x + 3 + Math.floor(hash(tx, ty, 15) * 7);
+    const pyy = y + 4 + Math.floor(hash(tx, ty, 16) * 8);
+    px(ctx, '#26305a', pxx, pyy, 6, 2);
+    px(ctx, '#26305a', pxx + 1, pyy - 1, 4, 1);
+    px(ctx, '#6a7ab0', pxx + 2, pyy - 1, 2, 1);
+  }
+  // Grass creeping in over the edge from the turf beside it.
+  const grassy = (dx, dy) => room.tileAt(tx + dx, ty + dy) === ',';
+  for (let i = 0; i < T; i += 2) {
+    const tuft = hash(tx * 3 + i, ty, 17) < 0.6 ? 1 : 2;
+    const c = hash(tx * 3 + i, ty, 18) < 0.5 ? '#4f8a4a' : '#46803f';
+    if (grassy(0, -1)) px(ctx, c, x + i, y, 2, tuft);
+    if (grassy(0, 1)) px(ctx, c, x + i, y + T - tuft, 2, tuft);
+    if (grassy(-1, 0)) px(ctx, c, x, y + i, tuft, 2);
+    if (grassy(1, 0)) px(ctx, c, x + T - tuft, y + i, tuft, 2);
+  }
+  // Shadow cast by a wall directly above.
+  if (isWall(room.tileAt(tx, ty - 1))) {
+    ctx.fillStyle = 'rgba(10, 6, 20, 0.5)';
+    ctx.fillRect(x, y, T, 3);
+    ctx.fillStyle = 'rgba(10, 6, 20, 0.22)';
     ctx.fillRect(x, y + 3, T, 2);
   }
 }
@@ -123,11 +228,27 @@ function drawHomeWall(ctx, x, y, tx, ty, room) {
 
 // What a decoration (a flower bed, a plant, a pillar...) stands on: wooden
 // boards if it's in a house, stone otherwise.
+function floorFor(c) {
+  if (c === 'o' || c === ',' || c === ':' || c === 's' || c === 'n' || c === 'i' || c === 'l' || c === 'z' || c === 'q' || c === 'g' || c === 'd' || c === 'y' || c === 'X' || c === 'j') return c;
+  if (c === '.' || c === 'c') return '.';
+  if (c === ';' || c === '=') return ';';
+  return null;
+}
 export function floorUnder(room, tx, ty) {
   for (const [dx, dy] of [[0, 1], [-1, 0], [1, 0], [0, -1]]) {
-    const c = room.tileAt(tx + dx, ty + dy);
-    if (c === 'o' || c === ',' || c === ':' || c === 's' || c === 'n' || c === 'i' || c === 'l' || c === 'z' || c === 'q' || c === 'g' || c === 'd' || c === 'y') return c;
-    if (c === '.' || c === 'c') return '.';
+    const floor = floorFor(room.tileAt(tx + dx, ty + dy));
+    if (floor) return floor;
+  }
+  // In the middle of a big block (the crier's stone): the nearest floor
+  // further out, so its middle matches its edges.
+  for (let r = 2; r <= 4; r++) {
+    for (let dy = -r; dy <= r; dy++) {
+      for (let dx = -r; dx <= r; dx++) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+        const floor = floorFor(room.tileAt(tx + dx, ty + dy));
+        if (floor) return floor;
+      }
+    }
   }
   // Nothing to go by (a block or boulder surrounded by others): outdoors it's
   // grass, or snow up the mountain, or leaves in the scarlet forest, or cave
@@ -135,19 +256,21 @@ export function floorUnder(room, tx, ty) {
   if (room.snowy) return 'n';
   if (room.leafy) return 'd';
   if (room.cave) return 'q';
+  if (isMarsh(room)) return ';';
   return OUTDOOR_AREAS.has(room.area) ? ',' : '.';
 }
 function drawBaseFloor(ctx, x, y, tx, ty, room) {
   const under = floorUnder(room, tx, ty);
-  const draw = { o: drawWoodFloor, ',': drawGrass, ':': drawPath, s: drawStair, n: drawSnow, i: drawSnowPath, l: drawSnowLane, z: drawIce, q: drawCaveFloor, g: drawBridge, d: drawLeafLitter, y: drawLeafPath }[under] ?? drawFloor;
+  const draw = { o: drawWoodFloor, ',': drawGrass, ':': drawPath, s: drawStair, n: drawSnow, i: drawSnowPath, l: drawSnowLane, z: drawIce, q: drawCaveFloor, g: drawBridge, d: drawLeafLitter, y: drawLeafPath, X: drawCobbles, j: drawDryChannel, ';': drawFenTurf }[under] ?? drawFloor;
   draw(ctx, x, y, tx, ty, room);
 }
 // Whether a floor is out in the open air (grass, a path, the stair, snow, ice, the scarlet forest's leaves).
-const OUTDOOR_FLOORS = new Set([',', ':', 's', 'n', 'i', 'l', 'z', 'g', 'd', 'y']);
+const OUTDOOR_FLOORS = new Set([',', ':', 's', 'n', 'i', 'l', 'z', 'g', 'd', 'y', 'X', 'j', 'N', ';', '%', '=']);
 const SNOW_FLOORS = new Set(['n', 'i', 'l', 'z']);
 
 // The dark above a wall: rough stone with a faint lit rim where it meets the room.
 function drawWallTop(ctx, x, y, tx = 0, ty = 0, room = null) {
+  if (isDrains(room)) return drawDrownedWallTop(ctx, x, y, tx, ty, room);
   px(ctx, '#120c1c', x, y, T, T);
   if (hash(tx, ty, 1) < 0.5) px(ctx, '#170f24', x + Math.floor(hash(tx, ty, 2) * 10), y + Math.floor(hash(tx, ty, 3) * 10), 5, 4);
   if (hash(tx, ty, 4) < 0.3) px(ctx, '#1a1228', x + Math.floor(hash(tx, ty, 5) * 12), y + Math.floor(hash(tx, ty, 6) * 12), 3, 2);
@@ -169,6 +292,7 @@ function drawWallTop(ctx, x, y, tx = 0, ty = 0, room = null) {
 // carved ledge under the wall top and moss where the wall meets the floor.
 const BRICK_STONE = ['#4b3d78', '#47396f', '#504182', '#43366a', '#4d3f7c'];
 function drawWallFace(ctx, x, y, tx = 0, ty = 0, room = null) {
+  if (isDrains(room)) return drawDrownedWallFace(ctx, x, y, tx, ty, room);
   px(ctx, '#2f2650', x, y, T, T);
   for (let row = 0; row < 4; row++) {
     const rowY = y + row * 4;
@@ -191,11 +315,34 @@ function drawWallFace(ctx, x, y, tx = 0, ty = 0, room = null) {
     ctx.fillStyle = 'rgba(20, 12, 40, 0.35)';
     ctx.fillRect(sx, y, 1, 6 + Math.floor(hash(tx, ty, 9) * 10));
   }
+  // Out in the dead city the walls have weathered: more bricks gone, lichen
+  // on the stone, and ivy climbing it.
+  if (isValley(room)) {
+    if (hash(tx, ty, 10) < 0.2) {
+      const gx = x + Math.floor(hash(tx, ty, 11) * 3) * 4 + ((tx + Math.floor(hash(tx, ty, 11) * 3)) % 2 ? 4 : 0);
+      const gy = y + Math.floor(hash(tx, ty, 12) * 4) * 4;
+      px(ctx, '#241c40', gx, gy, 7, 3);
+      px(ctx, '#1a1430', gx + 1, gy + 1, 5, 1);
+    }
+    for (let i = 0; i < 3; i++) {
+      if (hash(tx, ty, 13 + i) < 0.3) px(ctx, i % 2 ? '#8a86a0' : '#9a9870', x + 1 + Math.floor(hash(tx, ty, 16 + i) * 14), y + 1 + Math.floor(hash(tx, ty, 19 + i) * 14), 2, 1);
+    }
+    if (hash(tx, ty, 22) < 0.28) {
+      let vx = 2 + Math.floor(hash(tx, ty, 23) * 11);
+      for (let vy = 0; vy < T; vy++) {
+        px(ctx, '#2e5038', x + vx, y + vy);
+        if (hash(tx, ty, 24 + vy) < 0.4) px(ctx, vy % 2 ? '#3f6b4a' : '#4f8a5a', x + vx + (hash(tx, ty, 40 + vy) < 0.5 ? -1 : 1), y + vy, 1, 1);
+        if (hash(tx, ty, 60 + vy) < 0.3) vx = Math.max(1, Math.min(14, vx + (hash(tx, ty, 80 + vy) < 0.5 ? -1 : 1)));
+      }
+    }
+  }
   if (!room) return;
   // A carved ledge under the wall top.
   if (room.tileAt(tx, ty - 1) === '#') {
     px(ctx, '#2a2148', x, y, T, 2);
     px(ctx, '#6a5a9c', x, y + 2, T, 1);
+    // Grass has seeded along the broken top of the dead city's walls.
+    if (isValley(room)) for (let i = 0; i < T; i += 3) if (hash(tx * 5 + i, ty, 100) < 0.45) px(ctx, i % 2 ? '#4f8a4a' : '#3b6d38', x + i, y, 1, 2 + Math.floor(hash(tx * 5 + i, ty, 101) * 2));
   }
   // Where the wall meets the floor: a dark base, and moss now and then.
   const below = room.tileAt(tx, ty + 1);
@@ -285,6 +432,11 @@ function drawDoorway(ctx, x, y, tx, ty, room) {
     drawCabinDoor(ctx, x, y, tx, ty, room);
     return;
   }
+  // In a Hollin cottage's front, it's that cottage's door, standing open.
+  if (room && (isCottage(room.tileAt(tx - 1, ty)) || isCottage(room.tileAt(tx + 1, ty)))) {
+    drawCottageDoorOpen(ctx, x, y, tx, ty, room);
+    return;
+  }
   ctx.fillStyle = '#07040f';
   ctx.fillRect(x, y, T, T);
   ctx.fillStyle = '#140b26';
@@ -360,18 +512,34 @@ function drawRubble(ctx, x, y, tx, ty, room) {
 
 // A still, dark channel of water. You can't walk on it.
 function drawWater(ctx, x, y, tx, ty, room) {
-  ctx.fillStyle = '#1b2350';
-  ctx.fillRect(x, y, T, T);
-  ctx.fillStyle = '#2c3a78';
+  if (isDrains(room)) return drawDrainWater(ctx, x, y, tx, ty, room);
+  // Under the valley's open sky the water's a shade lighter, and the sky
+  // glints in it; in the Ruins it's dark.
+  const open = isValley(room);
+  px(ctx, open ? '#1e2858' : '#1b2350', x, y, T, T);
+  if (open) mottle(ctx, '#1a2450', x, y, tx, ty, 120, 7);
   const shift = (tx * 7 + ty * 3) % 8;
-  ctx.fillRect(x + shift, y + 6, 5, 1);
-  ctx.fillRect(x + ((shift + 6) % 12), y + 11, 4, 1);
+  px(ctx, open ? '#34448a' : '#2c3a78', x + shift, y + 6, 5, 1);
+  px(ctx, open ? '#34448a' : '#2c3a78', x + ((shift + 6) % 12), y + 11, 4, 1);
+  if (open) {
+    px(ctx, '#4a5aa0', x + shift + 1, y + 6, 2, 1);
+    if (hash(tx, ty, 121) < 0.35) px(ctx, '#8a9ad8', x + 2 + Math.floor(hash(tx, ty, 122) * 12), y + 2 + Math.floor(hash(tx, ty, 123) * 12), 2, 1);
+    // A lily pad, or a drowned slab showing under the surface.
+    if (hash(tx, ty, 124) < 0.08) {
+      const lx = x + 3 + Math.floor(hash(tx, ty, 125) * 8);
+      const ly = y + 3 + Math.floor(hash(tx, ty, 126) * 8);
+      px(ctx, '#3a6a48', lx, ly, 4, 3);
+      px(ctx, '#1e2858', lx + 2, ly, 1, 1);
+      px(ctx, '#4f8a5a', lx, ly, 2, 1);
+    } else if (hash(tx, ty, 127) < 0.1) {
+      px(ctx, '#283468', x + 2 + Math.floor(hash(tx, ty, 128) * 6), y + 3 + Math.floor(hash(tx, ty, 129) * 7), 7, 5);
+    }
+  }
   // A stone lip where the water meets the floor above.
   if (room.tileAt(tx, ty - 1) !== '~') {
-    ctx.fillStyle = '#4b3d78';
-    ctx.fillRect(x, y, T, 3);
-    ctx.fillStyle = '#120c1c';
-    ctx.fillRect(x, y + 3, T, 1);
+    px(ctx, '#4b3d78', x, y, T, 3);
+    px(ctx, '#120c1c', x, y + 3, T, 1);
+    if (open) for (let i = 0; i < T; i += 4) if (hash(tx * 3 + i, ty, 130) < 0.4) px(ctx, '#3f6b4a', x + i + 1, y + 1, 2, 2);
   }
 }
 
@@ -560,11 +728,26 @@ const GRASS = ['#4a8446', '#4f8a4a', '#548f4e', '#46803f'];
 const FLOWERS = ['#f2e6c8', '#ffd25e', '#f0a8c8', '#a8c8f0'];
 function drawGrass(ctx, x, y, tx, ty) {
   px(ctx, pick(GRASS, hash(tx, ty, 41)), x, y, T, T);
-  if (hash(tx, ty, 42) < 0.5) px(ctx, pick(GRASS, hash(tx, ty, 43)), x + Math.floor(hash(tx, ty, 44) * 8), y + Math.floor(hash(tx, ty, 45) * 8), 8, 8);
+  // Other greens mottled in, soft-edged, so no squares show across a field.
+  mottle(ctx, pick(GRASS, hash(tx, ty, 43)), x, y, tx, ty, 44, 7);
+  if (hash(tx, ty, 42) < 0.6) mottle(ctx, pick(GRASS, hash(tx, ty, 47)), x, y, tx, ty, 48, 4);
   for (let i = 0; i < 6; i++) {
     const bx = x + Math.floor(hash(tx, ty, 50 + i) * 15);
     const by = y + Math.floor(hash(tx, ty, 60 + i) * 14);
     px(ctx, i % 2 ? '#3b6d38' : '#6aa65c', bx, by, 1, i % 2 ? 2 : 1);
+  }
+  // A clover leaf, or a small stone half sunk in the turf.
+  if (hash(tx, ty, 74) < 0.1) {
+    const cx = x + 2 + Math.floor(hash(tx, ty, 75) * 11);
+    const cy = y + 2 + Math.floor(hash(tx, ty, 76) * 11);
+    px(ctx, '#3b6d38', cx, cy, 3, 2);
+    px(ctx, '#6aa65c', cx + 1, cy, 1, 1);
+  } else if (hash(tx, ty, 77) < 0.06) {
+    const sx = x + 2 + Math.floor(hash(tx, ty, 78) * 11);
+    const sy = y + 3 + Math.floor(hash(tx, ty, 79) * 10);
+    px(ctx, '#5e5a6a', sx, sy, 3, 2);
+    px(ctx, '#8a8698', sx, sy, 2, 1);
+    px(ctx, '#3b6d38', sx, sy + 2, 3, 1);
   }
   if (hash(tx, ty, 70) < 0.14) {
     const fx = x + 3 + Math.floor(hash(tx, ty, 71) * 10);
@@ -579,8 +762,17 @@ function drawGrass(ctx, x, y, tx, ty) {
 // A worn dirt path, pebbly, with grass creeping in at its edges.
 function drawPath(ctx, x, y, tx, ty, room) {
   px(ctx, '#8f6f48', x, y, T, T);
+  // Trodden patches, a little paler or darker, and the odd rut.
+  mottle(ctx, hash(tx, ty, 100) < 0.5 ? '#967650' : '#866842', x, y, tx, ty, 101, 6);
   for (let i = 0; i < 7; i++) {
     px(ctx, i % 3 ? '#a5845a' : '#76583a', x + Math.floor(hash(tx, ty, 80 + i) * 15), y + Math.floor(hash(tx, ty, 90 + i) * 15), i % 3 ? 1 : 2, 1);
+  }
+  // A pebble, lit on top with a shadow under it.
+  if (hash(tx, ty, 104) < 0.3) {
+    const sx = x + 2 + Math.floor(hash(tx, ty, 105) * 11);
+    const sy = y + 2 + Math.floor(hash(tx, ty, 106) * 11);
+    px(ctx, '#6a5a52', sx, sy + 1, 3, 1);
+    px(ctx, '#b0a090', sx, sy, 2, 1);
   }
   const grassy = (dx, dy) => room && room.tileAt(tx + dx, ty + dy) === ',';
   for (let i = 0; i < T; i += 2) {
@@ -1072,40 +1264,84 @@ const LEAVES = ['#c0283a', '#e0483e', '#ff7a4a', '#8a1a2e', '#f0a040'];
 // leaves a tile, close in value to the ground) so a whole screen of it is
 // easy on the eyes and the scarlet trees stand out against it.
 const LITTER_LEAVES = ['#5e1a28', '#6a2030', '#74282c', '#5a1e30'];
-function drawLeafLitter(ctx, x, y, tx, ty) {
-  px(ctx, pick(LITTER, hash(tx, ty, 141)), x, y, T, T);
-  if (hash(tx, ty, 142) < 0.5) px(ctx, pick(LITTER, hash(tx, ty, 143)), x + Math.floor(hash(tx, ty, 144) * 8), y + Math.floor(hash(tx, ty, 145) * 8), 8, 8);
-  for (let i = 0; i < 3; i++) {
+// Below the Long Drop the leaves have rotted down into dark loam: browner,
+// fewer red leaves, more roots, and pale mushrooms coming up through it.
+const LOAM = ['#261a1e', '#2a1c20', '#22171b', '#2c1e24'];
+const LOAM_LEAVES = ['#4a1a24', '#52202a', '#3e1820', '#48202c'];
+const isHushwood = (room) => room?.area === 'hushwood';
+function drawLeafLitter(ctx, x, y, tx, ty, room) {
+  const loam = isHushwood(room);
+  const ground = loam ? LOAM : LITTER;
+  const leaves = loam ? LOAM_LEAVES : LITTER_LEAVES;
+  px(ctx, pick(ground, hash(tx, ty, 141)), x, y, T, T);
+  // Other tones mottled in, soft-edged, so no squares show across the floor.
+  mottle(ctx, pick(ground, hash(tx, ty, 143)), x, y, tx, ty, 144, 7);
+  if (hash(tx, ty, 142) < 0.6) mottle(ctx, pick(ground, hash(tx, ty, 147)), x, y, tx, ty, 148, 4);
+  // A root breaking the surface, running across the tile.
+  if (hash(tx, ty, 185) < (loam ? 0.14 : 0.07)) {
+    const ry = y + 3 + Math.floor(hash(tx, ty, 186) * 9);
+    const bend = hash(tx, ty, 187) < 0.5 ? 1 : -1;
+    px(ctx, '#3e2a2e', x, ry + 1, 8, 1);
+    px(ctx, '#3e2a2e', x + 7, ry + 1 + bend, 9, 1);
+    px(ctx, '#5a3e40', x + 1, ry, 6, 1);
+    px(ctx, '#5a3e40', x + 8, ry + bend, 7, 1);
+  }
+  // Leaves, lying every way: flat, on edge, and curled.
+  for (let i = 0; i < 4; i++) {
     const lx = x + Math.floor(hash(tx, ty, 150 + i) * 14);
-    const ly = y + Math.floor(hash(tx, ty, 160 + i) * 15);
-    px(ctx, pick(LITTER_LEAVES, hash(tx, ty, 170 + i)), lx, ly, 2, 1);
+    const ly = y + Math.floor(hash(tx, ty, 160 + i) * 14);
+    const c = pick(leaves, hash(tx, ty, 170 + i));
+    const shape = hash(tx, ty, 190 + i);
+    if (shape < 0.5) px(ctx, c, lx, ly, 2, 1);
+    else if (shape < 0.75) px(ctx, c, lx, ly, 1, 2);
+    else { px(ctx, c, lx, ly, 2, 1); px(ctx, c, lx + 1, ly + 1, 1, 1); }
+  }
+  // A twig.
+  if (hash(tx, ty, 198) < 0.1) {
+    const wx = x + 1 + Math.floor(hash(tx, ty, 199) * 10);
+    const wy = y + 1 + Math.floor(hash(tx, ty, 200) * 13);
+    px(ctx, '#4a2e28', wx, wy, 5, 1);
+    px(ctx, '#4a2e28', wx + 3, wy - 1, 1, 1);
   }
   // Now and then one brighter leaf, fallen recently.
-  if (hash(tx, ty, 176) < 0.18) px(ctx, '#a8323a', x + Math.floor(hash(tx, ty, 177) * 14), y + Math.floor(hash(tx, ty, 175) * 15), 2, 1);
-  // Now and then a pale toadstool.
-  if (hash(tx, ty, 178) < 0.05) {
+  if (hash(tx, ty, 176) < (loam ? 0.08 : 0.18)) px(ctx, '#a8323a', x + Math.floor(hash(tx, ty, 177) * 14), y + Math.floor(hash(tx, ty, 175) * 15), 2, 1);
+  // Now and then a pale toadstool (a clump of them, in the loam).
+  if (hash(tx, ty, 178) < (loam ? 0.08 : 0.05)) {
     const mx = x + 4 + Math.floor(hash(tx, ty, 179) * 8);
     const my = y + 5 + Math.floor(hash(tx, ty, 180) * 7);
     px(ctx, '#d8ccb0', mx, my + 1, 1, 2);
-    px(ctx, '#c84a4a', mx - 1, my, 3, 1);
+    px(ctx, loam ? '#e0d8c0' : '#c84a4a', mx - 1, my, 3, 1);
+    if (loam) {
+      px(ctx, '#b8ac90', mx + 3, my + 2, 1, 1);
+      px(ctx, '#d8ccb0', mx + 2, my + 1, 3, 1);
+    }
   }
 }
 
 // A pale path through the leaves, softly lit, with a few leaves blown across it.
 function drawLeafPath(ctx, x, y, tx, ty, room) {
   px(ctx, '#c8a888', x, y, T, T);
+  // Worn a little lighter and darker in patches, with pebbles trodden in.
+  mottle(ctx, hash(tx, ty, 201) < 0.5 ? '#d0b090' : '#bfa080', x, y, tx, ty, 202, 6);
   for (let i = 0; i < 6; i++) {
     px(ctx, i % 2 ? '#dcc0a0' : '#b08e70', x + Math.floor(hash(tx, ty, 181 + i) * 15), y + Math.floor(hash(tx, ty, 187 + i) * 15), i % 2 ? 2 : 1, 1);
   }
-  if (hash(tx, ty, 193) < 0.25) px(ctx, pick(LITTER_LEAVES, hash(tx, ty, 194)), x + Math.floor(hash(tx, ty, 195) * 13), y + Math.floor(hash(tx, ty, 196) * 14), 2, 1);
+  if (hash(tx, ty, 205) < 0.3) {
+    const sx = x + 2 + Math.floor(hash(tx, ty, 206) * 11);
+    const sy = y + 2 + Math.floor(hash(tx, ty, 207) * 11);
+    px(ctx, '#9a7e64', sx, sy + 1, 3, 1);
+    px(ctx, '#e8d4b8', sx, sy, 2, 1);
+  }
+  if (hash(tx, ty, 193) < 0.25) px(ctx, pick(isHushwood(room) ? LOAM_LEAVES : LITTER_LEAVES, hash(tx, ty, 194)), x + Math.floor(hash(tx, ty, 195) * 13), y + Math.floor(hash(tx, ty, 196) * 14), 2, 1);
   // Where it meets the litter, the edge frays into dark leaves.
   const litter = (dx, dy) => room && room.tileAt(tx + dx, ty + dy) === 'd';
+  const edge = isHushwood(room) ? '#32201e' : '#3a1a26';
   for (let i = 0; i < T; i += 2) {
     const fray = hash(tx * 3 + i, ty, 197) < 0.6 ? 1 : 2;
-    if (litter(0, -1)) px(ctx, '#3a1a26', x + i, y, 2, fray);
-    if (litter(0, 1)) px(ctx, '#3a1a26', x + i, y + T - fray, 2, fray);
-    if (litter(-1, 0)) px(ctx, '#3a1a26', x, y + i, fray, 2);
-    if (litter(1, 0)) px(ctx, '#3a1a26', x + T - fray, y + i, fray, 2);
+    if (litter(0, -1)) px(ctx, edge, x + i, y, 2, fray);
+    if (litter(0, 1)) px(ctx, edge, x + i, y + T - fray, 2, fray);
+    if (litter(-1, 0)) px(ctx, edge, x, y + i, fray, 2);
+    if (litter(1, 0)) px(ctx, edge, x + T - fray, y + i, fray, 2);
   }
 }
 
@@ -1141,6 +1377,17 @@ function drawScarletTree(ctx, x, y, tx = 0, ty = 0) {
   px(ctx, '#f0a040', x + 1 + Math.floor(hash(tx, ty, 222) * 14), y + 2 + Math.floor(hash(tx, ty, 223) * 6), 1, 1);
 }
 
+// A false scarlet tree: just the same as the real ones, except you can walk
+// straight through it, and up in its crown, if you look, one leaf has a
+// pale blue glint to it that isn't any colour of autumn (the way to the
+// Starfall Glade).
+function drawFalseTree(ctx, x, y, tx = 0, ty = 0) {
+  drawScarletTree(ctx, x, y, tx, ty);
+  px(ctx, '#9ad8ff', x + 10, y - 21, 3, 1);
+  px(ctx, '#9ad8ff', x + 11, y - 22, 1, 3);
+  px(ctx, '#e8f6ff', x + 11, y - 21, 1, 1);
+}
+
 // A bramble hedge: a solid tangle of dark thorny stems, red berries in it.
 function drawBramble(ctx, x, y, tx, ty, room) {
   drawBaseFloor(ctx, x, y, tx, ty, room);
@@ -1170,6 +1417,190 @@ function drawBramble(ctx, x, y, tx, ty, room) {
   }
   // A ragged top edge, so it reads as a hedge and not a wall.
   for (let i = 0; i < T; i += 3) px(ctx, '#3a1222', x + i, y + (hash(tx * 5 + i, ty, 260) < 0.5 ? 0 : 1), 2, 1);
+}
+
+// --- The Hushwood (Chapter 3): the old wood below the Long Drop, and Hollin. ---
+
+// A bramble so thin and old you can push straight through it: it looks like
+// the rest of the hedge, nearly. Its top is a little more ragged and there's
+// a darker gap at its foot, for anyone looking closely. (A secret way.)
+function drawThinBramble(ctx, x, y, tx, ty, room) {
+  drawBramble(ctx, x, y, tx, ty, room);
+  px(ctx, '#12060c', x + 5, y + 9, 6, 4);
+  px(ctx, '#2c0e1a', x + 6, y + 8, 4, 1);
+  for (let i = 1; i < T; i += 4) px(ctx, '#1e0a12', x + i, y, 1, 2);
+}
+
+// A dry stone channel, where water ran once (or will, if the sluices send
+// it): mossy slabs in a sunken bed, darker at the edges, a little damp.
+function drawDryChannel(ctx, x, y, tx, ty, room) {
+  if (isDrains(room)) return drawDrainGutter(ctx, x, y, tx, ty, room);
+  px(ctx, '#3a3440', x, y, T, T);
+  for (let i = 0; i < 4; i++) {
+    const sx = x + (i % 2) * 8 + (ty % 2 ? 2 : 0);
+    const sy = y + Math.floor(i / 2) * 8;
+    px(ctx, hash(tx * 2 + (i % 2), ty * 2 + Math.floor(i / 2), 610) < 0.5 ? '#4a4452' : '#443e4c', sx, sy, 7, 7);
+    px(ctx, '#56505e', sx, sy, 7, 1);
+  }
+  if (hash(tx, ty, 611) < 0.4) px(ctx, '#3e5a3a', x + Math.floor(hash(tx, ty, 612) * 12), y + Math.floor(hash(tx, ty, 613) * 12), 3, 2);
+  if (hash(tx, ty, 614) < 0.3) px(ctx, '#2a3048', x + 3 + Math.floor(hash(tx, ty, 615) * 8), y + 10, 4, 2);
+  if (!room) return;
+  // The channel's banks, where it meets the ground either side.
+  const bank = (c) => c !== 'j' && c !== '~' && c !== null;
+  if (bank(room.tileAt(tx - 1, ty))) px(ctx, '#1e1824', x, y, 2, T);
+  if (bank(room.tileAt(tx + 1, ty))) px(ctx, '#1e1824', x + T - 2, y, 2, T);
+  if (bank(room.tileAt(tx, ty - 1))) { px(ctx, '#1e1824', x, y, T, 2); px(ctx, '#5e5868', x, y + 2, T, 1); }
+}
+
+// Hollin's cobbles: rounded grey stones, worn smooth, with weeds and fallen
+// red leaves in the cracks. Nobody's swept them in fifty years.
+// The stones come in a few sizes, laid as they came to hand: one of these
+// layouts a tile (each a list of [x, y, w, h], leaving the tile's last row
+// and column as grout, so the joints run on into the next tile).
+const COBBLE_LAYOUTS = [
+  [[0, 0, 5, 4], [6, 0, 4, 4], [11, 0, 4, 4], [0, 5, 4, 5], [5, 5, 6, 5], [12, 5, 3, 5], [0, 11, 6, 4], [7, 11, 4, 4], [12, 11, 3, 4]],
+  [[0, 0, 4, 5], [5, 0, 6, 5], [12, 0, 3, 5], [0, 6, 6, 4], [7, 6, 4, 4], [12, 6, 3, 4], [0, 11, 5, 4], [6, 11, 5, 4], [12, 11, 3, 4]],
+  [[0, 0, 6, 4], [7, 0, 3, 4], [11, 0, 4, 4], [0, 5, 3, 6], [4, 5, 5, 6], [10, 5, 5, 6], [0, 12, 5, 3], [6, 12, 6, 3], [13, 12, 2, 3]],
+  [[0, 0, 3, 4], [4, 0, 5, 4], [10, 0, 5, 4], [0, 5, 5, 5], [6, 5, 4, 5], [11, 5, 4, 5], [0, 11, 4, 4], [5, 11, 6, 4], [12, 11, 3, 4]],
+];
+const HOLLIN_COBBLE = ['#6a6270', '#5e5664', '#726a78', '#66606c', '#746c7a'];
+function drawCobbles(ctx, x, y, tx, ty, room) {
+  px(ctx, '#262028', x, y, T, T);
+  const layout = pick(COBBLE_LAYOUTS, hash(tx, ty, 619));
+  layout.forEach(([sx, sy, w, h], i) => {
+    const roll = hash(tx, ty, 620 + i);
+    px(ctx, pick(HOLLIN_COBBLE, roll), x + sx, y + sy, w, h);
+    // Each stone's rounded: light along its top and left, shadow under it.
+    px(ctx, '#867e8c', x + sx, y + sy, w - 1, 1);
+    px(ctx, '#7e7684', x + sx, y + sy, 1, h - 1);
+    px(ctx, '#4a444e', x + sx + 1, y + sy + h - 1, w - 1, 1);
+    px(ctx, '#4a444e', x + sx + w - 1, y + sy + 1, 1, h - 1);
+    // A worn hollow, or a stone gone (mud in its place).
+    if (roll < 0.08) px(ctx, '#56505c', x + sx + 1, y + sy + 1, Math.max(1, w - 2), Math.max(1, h - 2));
+    else if (roll > 0.96) px(ctx, '#3a3028', x + sx, y + sy, w, h);
+  });
+  // Weeds in the joints, and water standing in a hollow.
+  if (hash(tx, ty, 625) < 0.3) {
+    const wx = x + Math.floor(hash(tx, ty, 626) * 14);
+    const wy = y + 3 + Math.floor(hash(tx, ty, 627) * 11);
+    px(ctx, '#3e5a3a', wx, wy, 1, 2);
+    px(ctx, '#5a7a4a', wx + 1, wy - 1, 1, 2);
+  }
+  if (hash(tx, ty, 634) < 0.08) {
+    const pxx = x + 3 + Math.floor(hash(tx, ty, 635) * 8);
+    const pyy = y + 4 + Math.floor(hash(tx, ty, 636) * 8);
+    px(ctx, '#2a3040', pxx, pyy, 5, 2);
+    px(ctx, '#5a6a80', pxx + 1, pyy, 2, 1);
+  }
+  // Fallen red leaves, where the wood's trees reach over (Hollin, not Lasthome).
+  if (room?.leafy) {
+    if (hash(tx, ty, 621) < 0.3) px(ctx, pick(LITTER_LEAVES, hash(tx, ty, 622)), x + Math.floor(hash(tx, ty, 623) * 13), y + Math.floor(hash(tx, ty, 624) * 13), 2, 1);
+    // Leaves drifted along the edge where the cobbles meet the litter.
+    const litter = (dx, dy) => room.tileAt(tx + dx, ty + dy) === 'd';
+    for (let i = 0; i < T; i += 3) {
+      if (hash(tx * 3 + i, ty, 637) > 0.55) continue;
+      const c = pick(LITTER_LEAVES, hash(tx * 5 + i, ty, 638));
+      if (litter(0, -1)) px(ctx, c, x + i, y, 2, 1);
+      if (litter(0, 1)) px(ctx, c, x + i, y + T - 1, 2, 1);
+      if (litter(-1, 0)) px(ctx, c, x, y + i, 1, 2);
+      if (litter(1, 0)) px(ctx, c, x + T - 1, y + i, 1, 2);
+    }
+  }
+}
+
+// A Hollin cottage's wall: grey fieldstone below, dark timbers and pale old
+// plaster above, all of it gone green at the foot.
+const isCottage = (c) => c === '5' || c === '6' || c === '8';
+function drawCottageWall(ctx, x, y, tx, ty, room) {
+  px(ctx, '#bdb2a0', x, y, T, 9);
+  px(ctx, '#a89c8a', x, y + 6, T, 3);
+  px(ctx, '#3a2418', x, y, T, 1);
+  px(ctx, '#3a2418', x, y + 8, T, 1);
+  if ((tx % 3) === 0) px(ctx, '#3a2418', x + 7, y, 2, 9);
+  if (hash(tx, ty, 630) < 0.4) px(ctx, '#9a8e7c', x + 2 + Math.floor(hash(tx, ty, 631) * 10), y + 2, 3, 2);
+  for (let i = 0; i < 3; i++) {
+    px(ctx, i % 2 ? '#6a6270' : '#5e5664', x + i * 6 - (ty % 2 ? 2 : 0), y + 9, 6, 3);
+    px(ctx, i % 2 ? '#5e5664' : '#6a6270', x + i * 6 - (ty % 2 ? 0 : 3), y + 12, 6, 4);
+  }
+  px(ctx, '#2e2830', x, y + 12, T, 1);
+  px(ctx, '#3e5a3a', x, y + T - 2, T, 2);
+  if (!room) return;
+  if (!isCottage(room.tileAt(tx - 1, ty))) px(ctx, '#2a1810', x, y, 2, T);
+  if (!isCottage(room.tileAt(tx + 1, ty))) px(ctx, '#2a1810', x + T - 2, y, 2, T);
+}
+
+// The same wall with a window, boarded up when they left.
+function drawCottageWindow(ctx, x, y, tx, ty, room) {
+  drawCottageWall(ctx, x, y, tx, ty, room);
+  px(ctx, '#120c14', x + 3, y + 1, 10, 9);
+  px(ctx, '#7a5a3a', x + 2, y + 2, 12, 2);
+  px(ctx, '#6b4c30', x + 2, y + 6, 12, 2);
+  px(ctx, '#9a7a52', x + 2, y + 2, 12, 1);
+  px(ctx, '#c8c0b0', x + 4, y + 3, 1, 1);
+  px(ctx, '#c8c0b0', x + 11, y + 7, 1, 1);
+}
+
+// A shut cottage door: old planks, an iron ring, and leaves drifted against it.
+function drawCottageDoor(ctx, x, y, tx, ty, room) {
+  drawCottageWall(ctx, x, y, tx, ty, room);
+  px(ctx, '#2a1810', x + 3, y, 10, T);
+  px(ctx, '#5a3a22', x + 4, y + 1, 8, T - 1);
+  for (const dx of [6, 9]) px(ctx, '#4a2e1a', x + dx, y + 1, 1, T - 1);
+  px(ctx, '#3a3440', x + 9, y + 8, 2, 2);
+  px(ctx, '#8a8296', x + 9, y + 8, 1, 1);
+  px(ctx, '#6a2030', x + 4, y + T - 2, 8, 2);
+  px(ctx, '#a8323a', x + 6, y + T - 3, 2, 1);
+}
+
+// A cottage door left open: the dark of the room inside, the door swung back
+// against the wall on its hinges, and a worn step.
+function drawCottageDoorOpen(ctx, x, y, tx, ty, room) {
+  drawCottageWall(ctx, x, y, tx, ty, room);
+  px(ctx, '#2a1810', x + 3, y, 10, T);
+  px(ctx, '#0c0810', x + 4, y + 1, 8, T - 1);
+  px(ctx, '#1a1218', x + 4, y + 9, 8, 1);
+  // The door, swung in, edge-on against the jamb.
+  px(ctx, '#5a3a22', x + 4, y + 1, 2, T - 1);
+  px(ctx, '#7a5434', x + 4, y + 1, 1, T - 1);
+  px(ctx, '#8a8296', x + 5, y + 8, 1, 1);
+  px(ctx, '#8a8296', x + 4, y + T - 2, 8, 2);
+  px(ctx, '#a8a0b0', x + 4, y + T - 2, 8, 1);
+}
+
+// A cottage roof: dark slates under thick moss, with fallen leaves on it, a
+// ridge on top and the eaves' shadow along the bottom.
+function drawCottageRoof(ctx, x, y, tx, ty, room) {
+  px(ctx, '#30303a', x, y, T, T);
+  // Slates in overlapping courses, each lit along its lower edge where it
+  // stands proud of the one below, a few cracked or slipped.
+  for (let row = 0; row < 4; row++) {
+    const offset = (row + tx) % 2 ? 3 : 0;
+    for (let bx = -offset; bx < T; bx += 6) {
+      const left = Math.max(0, bx);
+      const width = Math.min(bx + 5, T) - left;
+      if (width <= 0) continue;
+      const roll = hash(tx * 3 + Math.floor((bx + offset) / 6), ty * 4 + row, 640);
+      const slipped = roll > 0.9 ? 1 : 0;
+      px(ctx, roll < 0.5 ? '#4a4a56' : '#44444e', x + left, y + row * 4 + slipped, width, 3);
+      px(ctx, '#565664', x + left, y + row * 4 + 2 + slipped, width, 1);
+      if (roll < 0.08) px(ctx, '#30303a', x + left + Math.floor(width / 2), y + row * 4 + slipped, 1, 3);
+    }
+  }
+  for (let i = 0; i < 4; i++) {
+    if (hash(tx, ty, 641 + i) < 0.55) px(ctx, i % 2 ? '#3e5a3a' : '#4a6a40', x + Math.floor(hash(tx, ty, 650 + i) * 12), y + Math.floor(hash(tx, ty, 655 + i) * 12), 4, 3);
+  }
+  if (hash(tx, ty, 660) < 0.5) px(ctx, pick(LITTER_LEAVES, hash(tx, ty, 661)), x + Math.floor(hash(tx, ty, 662) * 13), y + Math.floor(hash(tx, ty, 663) * 13), 2, 1);
+  if (!room) return;
+  if (room.tileAt(tx, ty - 1) !== '7') {
+    px(ctx, '#22222a', x, y, T, 2);
+    px(ctx, '#5a5a66', x, y + 2, T, 1);
+  }
+  if (room.tileAt(tx, ty + 1) !== '7') {
+    px(ctx, '#22222a', x, y + T - 3, T, 3);
+    px(ctx, '#56565e', x, y + T - 4, T, 1);
+  }
+  if (room.tileAt(tx - 1, ty) !== '7') px(ctx, '#22222a', x, y, 1, T);
+  if (room.tileAt(tx + 1, ty) !== '7') px(ctx, '#22222a', x + T - 1, y, 1, T);
 }
 
 // A boulder with a cap of snow.
@@ -1329,23 +1760,34 @@ function drawFence(ctx, x, y, tx, ty, room) {
   ctx.fillRect(x, y + 12, T, 2);
   const across = room && (room.tileAt(tx - 1, ty) === 'f' || room.tileAt(tx + 1, ty) === 'f');
   const down = room && (room.tileAt(tx, ty - 1) === 'f' || room.tileAt(tx, ty + 1) === 'f');
+  // Down in the scarlet forest there's no snow on the posts, just the odd red leaf.
+  const snow = !room?.leafy;
   if (across || !down) {
     for (const ry of [5, 9]) {
       px(ctx, '#9a643a', x, y + ry, T, 2);
       px(ctx, '#b67e48', x, y + ry, T, 1);
     }
-    px(ctx, SNOW_BASE, x, y + 4, T, 1);
+    if (snow) px(ctx, SNOW_BASE, x, y + 4, T, 1);
     for (const fx of [3, 11]) {
       px(ctx, '#7c5030', x + fx, y + 3, 2, 10);
       px(ctx, '#b67e48', x + fx, y + 3, 1, 10);
-      px(ctx, SNOW_LIGHT, x + fx - 1, y + 2, 4, 1);
-      px(ctx, SNOW_BASE, x + fx - 1, y + 3, 4, 1);
+      if (snow) {
+        px(ctx, SNOW_LIGHT, x + fx - 1, y + 2, 4, 1);
+        px(ctx, SNOW_BASE, x + fx - 1, y + 3, 4, 1);
+      } else {
+        px(ctx, '#5a3a22', x + fx, y + 2, 2, 1);
+      }
     }
+    if (!snow && hash(tx, ty, 700) < 0.3) px(ctx, '#a8323a', x + 6 + Math.floor(hash(tx, ty, 701) * 4), y + 4, 2, 1);
   }
   if (down && !across) {
     px(ctx, '#9a643a', x + 6, y, 2, T);
     px(ctx, '#7c5030', x + 7, y, 1, T);
-    for (const fy of [2, 9]) { px(ctx, '#7c5030', x + 5, y + fy, 5, 2); px(ctx, SNOW_LIGHT, x + 4, y + fy - 1, 7, 1); }
+    for (const fy of [2, 9]) {
+      px(ctx, '#7c5030', x + 5, y + fy, 5, 2);
+      if (snow) px(ctx, SNOW_LIGHT, x + 4, y + fy - 1, 7, 1);
+      else px(ctx, '#b67e48', x + 5, y + fy, 5, 1);
+    }
   }
 }
 
@@ -1353,6 +1795,7 @@ function drawFence(ctx, x, y, tx, ty, room) {
 
 // Cave rock overhead (the dark above a cave wall), like a wall top.
 function drawCaveRock(ctx, x, y, tx, ty, room) {
+  if (isDrains(room)) return drawVaultDark(ctx, x, y, tx, ty, room);
   px(ctx, '#15121f', x, y, T, T);
   if (hash(tx, ty, 420) < 0.5) px(ctx, '#1c1829', x + Math.floor(hash(tx, ty, 421) * 10), y + Math.floor(hash(tx, ty, 422) * 10), 5, 4);
   if (hash(tx, ty, 423) < 0.3) px(ctx, '#201b30', x + Math.floor(hash(tx, ty, 424) * 12), y + Math.floor(hash(tx, ty, 425) * 12), 3, 2);
@@ -1371,7 +1814,34 @@ function drawCaveRock(ctx, x, y, tx, ty, room) {
 
 // A cave wall: craggy cold rock, glittering with ice in its cracks.
 const CAVE_ROCK = ['#3e3a52', '#46415c', '#39354c', '#433e58'];
+// The same under the Hushwood: an earth bank, roots hanging out of it.
+function drawEarthWall(ctx, x, y, tx, ty, room) {
+  for (let band = 0; band < 4; band++) {
+    px(ctx, pick(EARTH_ROCK, hash(tx, ty * 4 + band, 430)), x, y + band * 4, T, 4);
+    px(ctx, '#56423a', x + Math.floor(hash(tx, ty * 4 + band, 431) * 7), y + band * 4, 5 + Math.floor(hash(tx, ty * 4 + band, 432) * 8), 1);
+  }
+  for (let i = 0; i < 2; i++) {
+    if (hash(tx, ty, 433 + i) < 0.55) {
+      const rx = x + 2 + Math.floor(hash(tx, ty, 434 + i) * 11);
+      const len = 5 + Math.floor(hash(tx, ty, 436 + i) * 9);
+      px(ctx, '#7a5e48', rx, y, 1, len);
+      px(ctx, '#5a4434', rx + 1, y + 2, 1, len - 2);
+    }
+  }
+  if (!room) return;
+  if (room.tileAt(tx, ty - 1) === 'k') {
+    px(ctx, '#1e1612', x, y, T, 2);
+    px(ctx, '#5a463a', x, y + 2, T, 1);
+  }
+  const below = room.tileAt(tx, ty + 1);
+  if (below !== null && below !== 'K' && below !== 'k') px(ctx, '#1e1612', x, y + T - 2, T, 2);
+}
 function drawCaveWall(ctx, x, y, tx, ty, room) {
+  if (isDrains(room)) return drawCulvertBrick(ctx, x, y, tx, ty, room);
+  if (isEarthy(room)) {
+    drawEarthWall(ctx, x, y, tx, ty, room);
+    return;
+  }
   for (let band = 0; band < 4; band++) {
     px(ctx, pick(CAVE_ROCK, hash(tx, ty * 4 + band, 430)), x, y + band * 4, T, 4);
     px(ctx, '#56506e', x + Math.floor(hash(tx, ty * 4 + band, 431) * 7), y + band * 4, 5 + Math.floor(hash(tx, ty * 4 + band, 432) * 8), 1);
@@ -1398,6 +1868,7 @@ function drawCaveWall(ctx, x, y, tx, ty, room) {
 // straight through it to whatever's hidden behind (a secret). The only tell
 // is a thin pale crack down it, if you look closely.
 function drawFalseCaveWall(ctx, x, y, tx, ty, room) {
+  if (isDrains(room)) return drawFalseCulvertBrick(ctx, x, y, tx, ty, room);
   drawCaveWall(ctx, x, y, tx, ty, room);
   px(ctx, '#6a6488', x + 7, y + 3, 1, 4);
   px(ctx, '#6a6488', x + 8, y + 7, 1, 5);
@@ -1405,7 +1876,37 @@ function drawFalseCaveWall(ctx, x, y, tx, ty, room) {
 
 // A cave floor: cold flagstones of living rock, frost in the hollows.
 const CAVE_FLOOR = ['#2d2a3c', '#312e41', '#2a2738', '#343047'];
+// Under the Hushwood the tunnels aren't ice but earth: dark soil, roots and
+// stones, no frost (the Underroot, Rummage's burrow, under Hollin's well).
+const EARTH_FLOOR = ['#2a1e1c', '#2e2220', '#261a1a', '#30241e'];
+const EARTH_ROCK = ['#3a2a24', '#34261f', '#40302a', '#2e221c'];
+const isEarthy = (room) => room && (room.area === 'hushwood' || room.area === 'hollin');
+function drawEarthFloor(ctx, x, y, tx, ty, room) {
+  px(ctx, pick(EARTH_FLOOR, hash(tx, ty, 440)), x, y, T, T);
+  if (hash(tx, ty, 441) < 0.6) px(ctx, pick(EARTH_FLOOR, hash(tx, ty, 442)), x + Math.floor(hash(tx, ty, 443) * 8), y + Math.floor(hash(tx, ty, 444) * 8), 8, 8);
+  px(ctx, '#4a3830', x + Math.floor(hash(tx, ty, 445) * 14), y + Math.floor(hash(tx, ty, 446) * 14), 2, 1);
+  // A pale root across the floor now and then, and a pebble.
+  if (hash(tx, ty, 449) < 0.25) {
+    const ry = y + 3 + Math.floor(hash(tx, ty, 450) * 10);
+    px(ctx, '#6a5040', x, ry, T, 1);
+    px(ctx, '#4e3a2e', x, ry + 1, T, 1);
+  }
+  if (hash(tx, ty, 452) < 0.2) px(ctx, '#5e5664', x + Math.floor(hash(tx, ty, 453) * 14), y + Math.floor(hash(tx, ty, 454) * 14), 2, 2);
+  if (!room) return;
+  const above = room.tileAt(tx, ty - 1);
+  if (above === 'K' || above === 'k') {
+    ctx.fillStyle = 'rgba(5, 3, 12, 0.6)';
+    ctx.fillRect(x, y, T, 3);
+    ctx.fillStyle = 'rgba(5, 3, 12, 0.3)';
+    ctx.fillRect(x, y + 3, T, 2);
+  }
+}
 function drawCaveFloor(ctx, x, y, tx, ty, room) {
+  if (isDrains(room)) return drawCulvertFloor(ctx, x, y, tx, ty, room);
+  if (isEarthy(room)) {
+    drawEarthFloor(ctx, x, y, tx, ty, room);
+    return;
+  }
   px(ctx, pick(CAVE_FLOOR, hash(tx, ty, 440)), x, y, T, T);
   if (hash(tx, ty, 441) < 0.6) px(ctx, pick(CAVE_FLOOR, hash(tx, ty, 442)), x + Math.floor(hash(tx, ty, 443) * 8), y + Math.floor(hash(tx, ty, 444) * 8), 8, 8);
   px(ctx, '#3d394f', x + Math.floor(hash(tx, ty, 445) * 14), y + Math.floor(hash(tx, ty, 446) * 14), 2, 1);
@@ -1687,6 +2188,481 @@ export function drawDrops(ctx, room) {
   }
 }
 
+// --- The Old Drains (Chapter 3): under Hollin's well. ---
+// In rooms of the 'drains' area the cave tiles are Hollin's brickwork (K a
+// culvert wall, k the dark of the vault over it, q the wet walkway, G a
+// false wall), and the Ruins' stone (#, W, .) is the old city's conduit,
+// drowned for ages: the same ancient stone, gone green and silty. Water is
+// black-green and still, and the dry gutters are silted. All of it is kept
+// dark, so the currents, wheels, gratings and chalk are what you see.
+
+// Hollin's culvert bricks: dark wet red-brown in courses, the mortar gone
+// green, a tide-line where the water stood, slime and drips below it.
+const CULVERT_BRICK = ['#3e231e', '#45281f', '#4a2a24', '#3a201c', '#43261f'];
+const CULVERT_BRICK_WET = ['#2e1a18', '#33201b', '#36201c', '#2b1816', '#311d19'];
+const isBrickWall = (c) => c === 'K' || c === 'k' || c === 'G';
+function drawCulvertBrick(ctx, x, y, tx, ty, room) {
+  // Where the water stood once, a little way down this tile (the same height
+  // along a whole wall).
+  const tide = 7 + Math.floor(hash(0, ty, 700) * 4);
+  px(ctx, '#1a1012', x, y, T, T);
+  for (let row = 0; row < 4; row++) {
+    const rowY = y + row * 4;
+    const offset = (row + tx) % 2 ? 4 : 0;
+    for (let bx = -offset; bx < T; bx += 8) {
+      const left = Math.max(0, bx);
+      const width = Math.min(bx + 7, T) - left;
+      if (width <= 0) continue;
+      const roll = hash(tx * 4 + Math.floor((bx + offset) / 8), ty * 4 + row, 701);
+      const wet = row * 4 >= tide;
+      px(ctx, pick(wet ? CULVERT_BRICK_WET : CULVERT_BRICK, roll), x + left, rowY, width, 3);
+      if (!wet) px(ctx, '#52302a', x + left, rowY, width, 1);
+      if (roll < 0.1) px(ctx, '#1a1012', x + left + Math.floor(width / 2), rowY + 1, 2, 2);
+    }
+  }
+  // The tide-line, and green slime in the mortar under it.
+  px(ctx, '#2e3a2c', x, y + tide, T, 1);
+  for (let i = 0; i < 3; i++) {
+    if (hash(tx, ty, 702 + i) < 0.5) px(ctx, '#24382a', x + Math.floor(hash(tx, ty, 705 + i) * 13), y + tide + 1, 3, 1 + Math.floor(hash(tx, ty, 708 + i) * 4));
+  }
+  // A drip running down, catching what light there is.
+  if (hash(tx, ty, 711) < 0.3) {
+    const dx = x + 2 + Math.floor(hash(tx, ty, 712) * 12);
+    px(ctx, '#2a2a30', dx, y, 1, 6 + Math.floor(hash(tx, ty, 713) * 8));
+    px(ctx, '#5a7078', dx, y + 13, 1, 1);
+  }
+  if (!room) return;
+  // Under the vault's dark: the springing of the arch.
+  if (room.tileAt(tx, ty - 1) === 'k') {
+    px(ctx, '#140c0e', x, y, T, 2);
+    px(ctx, '#56342c', x, y + 2, T, 1);
+  }
+  // Where it meets the walkway: a slimy foot.
+  const below = room.tileAt(tx, ty + 1);
+  if (below !== null && !isBrickWall(below)) {
+    px(ctx, '#1c2a20', x, y + T - 2, T, 2);
+    for (let i = 0; i < 4; i++) if (hash(tx, ty, 714 + i) < 0.45) px(ctx, '#2e4a34', x + i * 4 + Math.floor(hash(tx, ty, 718 + i) * 3), y + T - 3, 2, 2);
+  }
+}
+
+// The same brick, but loose: a draught comes through it, and the mortar's
+// gone from one joint in a thin dark seam (walk straight through: a secret).
+function drawFalseCulvertBrick(ctx, x, y, tx, ty, room) {
+  drawCulvertBrick(ctx, x, y, tx, ty, room);
+  px(ctx, '#0a0608', x + 7, y + 1, 1, 6);
+  px(ctx, '#0a0608', x + 8, y + 6, 1, 6);
+  px(ctx, '#5e3a30', x + 9, y + 2, 1, 1);
+  px(ctx, '#5e3a30', x + 6, y + 9, 1, 1);
+}
+
+// The dark over a brick vault; where it comes down to a wall or the walkway,
+// the arch's edge: a course of brick ends.
+function drawVaultDark(ctx, x, y, tx, ty, room) {
+  px(ctx, '#0e090b', x, y, T, T);
+  if (hash(tx, ty, 720) < 0.4) px(ctx, '#140d0f', x + Math.floor(hash(tx, ty, 721) * 9), y + Math.floor(hash(tx, ty, 722) * 10), 7, 3);
+  if (!room) return;
+  const below = room.tileAt(tx, ty + 1);
+  if (below !== null && below !== 'k') {
+    for (let bx = 0; bx < T; bx += 4) {
+      px(ctx, hash(tx * 4 + bx, ty, 723) < 0.5 ? '#3a221c' : '#42261f', x + bx, y + T - 4, 3, 3);
+      px(ctx, '#4e2e26', x + bx, y + T - 4, 3, 1);
+    }
+    px(ctx, '#060405', x, y + T - 1, T, 1);
+  }
+  const left = room.tileAt(tx - 1, ty);
+  const right = room.tileAt(tx + 1, ty);
+  if (left !== null && !isBrickWall(left)) px(ctx, '#2a1814', x, y, 1, T);
+  if (right !== null && !isBrickWall(right)) px(ctx, '#2a1814', x + T - 1, y, 1, T);
+}
+
+// The culvert walkway: wet pavers in the brick's colours, a puddle here and
+// there with a glint in it, and silt.
+const CULVERT_PAVER = ['#231b1b', '#271e1d', '#211919', '#2a2020'];
+function drawCulvertFloor(ctx, x, y, tx, ty, room) {
+  px(ctx, '#171111', x, y, T, T);
+  // Pavers in rows, every other row shifted half a paver, like brick bond.
+  for (let row = 0; row < 2; row++) {
+    const shift = row % 2 ? 4 : 0;
+    for (let bx = -shift; bx < T; bx += 8) {
+      const left = Math.max(0, bx);
+      const width = Math.min(bx + 7, T) - left;
+      if (width <= 0) continue;
+      px(ctx, pick(CULVERT_PAVER, hash(tx * 2 + Math.floor((bx + shift) / 8), ty * 2 + row, 730)), x + left, y + row * 8, width, 7);
+      px(ctx, '#2e2423', x + left, y + row * 8, width, 1);
+    }
+  }
+  // A puddle.
+  if (hash(tx, ty, 731) < 0.22) {
+    const pxx = x + 2 + Math.floor(hash(tx, ty, 732) * 7);
+    const pyy = y + 4 + Math.floor(hash(tx, ty, 733) * 7);
+    px(ctx, '#18222a', pxx, pyy, 6, 3);
+    px(ctx, '#18222a', pxx + 1, pyy - 1, 4, 1);
+    px(ctx, '#3a4e58', pxx + 1, pyy, 2, 1);
+  }
+  // Silt.
+  if (hash(tx, ty, 734) < 0.35) px(ctx, '#3a3028', x + Math.floor(hash(tx, ty, 735) * 12), y + Math.floor(hash(tx, ty, 736) * 13), 4, 2);
+  if (hash(tx, ty, 737) < 0.2) px(ctx, '#2e4a34', x + Math.floor(hash(tx, ty, 738) * 14), y + Math.floor(hash(tx, ty, 739) * 14), 2, 1);
+  if (!room) return;
+  const above = room.tileAt(tx, ty - 1);
+  if (above === 'K' || above === 'k' || above === 'G' || above === 'W' || above === '#') {
+    ctx.fillStyle = 'rgba(4, 2, 6, 0.6)';
+    ctx.fillRect(x, y, T, 3);
+    ctx.fillStyle = 'rgba(4, 2, 6, 0.3)';
+    ctx.fillRect(x, y + 3, T, 2);
+  }
+}
+
+// Deep drain water: black-green, still, a slow ripple or two; a stone lip
+// where it meets the floor above.
+function drawDrainWater(ctx, x, y, tx, ty, room) {
+  px(ctx, '#0c1614', x, y, T, T);
+  const shift = (tx * 5 + ty * 3) % 9;
+  px(ctx, '#1a2a26', x + shift, y + 6, 5, 1);
+  px(ctx, '#1a2a26', x + ((shift + 7) % 11), y + 11, 4, 1);
+  if (hash(tx, ty, 740) < 0.25) px(ctx, '#2a3e38', x + 3 + Math.floor(hash(tx, ty, 741) * 10), y + 9, 1, 1);
+  if (room.tileAt(tx, ty - 1) !== '~') {
+    px(ctx, '#2e2624', x, y, T, 3);
+    px(ctx, '#3a302c', x, y, T, 1);
+    px(ctx, '#050807', x, y + 3, T, 1);
+  }
+}
+
+// A dry gutter: a sunken bed of old stone slabs, silted up, dark at the banks.
+function drawDrainGutter(ctx, x, y, tx, ty, room) {
+  px(ctx, '#0e0c0e', x, y, T, T);
+  for (let i = 0; i < 4; i++) {
+    const sx = x + (i % 2) * 8 + (ty % 2 ? 2 : 0);
+    const sy = y + Math.floor(i / 2) * 8;
+    px(ctx, hash(tx * 2 + (i % 2), ty * 2 + Math.floor(i / 2), 750) < 0.5 ? '#161314' : '#141112', sx, sy, 7, 7);
+    px(ctx, '#1c1819', sx, sy, 7, 1);
+  }
+  // Silt drifted along the bed.
+  px(ctx, '#2a231e', x + Math.floor(hash(tx, ty, 751) * 8), y + 9 + Math.floor(hash(tx, ty, 752) * 4), 6 + Math.floor(hash(tx, ty, 753) * 4), 2);
+  if (hash(tx, ty, 754) < 0.3) px(ctx, '#2e4a34', x + Math.floor(hash(tx, ty, 755) * 12), y + Math.floor(hash(tx, ty, 756) * 12), 3, 1);
+  if (!room) return;
+  const bank = (c) => c !== 'j' && c !== '~' && c !== null;
+  if (bank(room.tileAt(tx - 1, ty))) px(ctx, '#060405', x, y, 2, T);
+  if (bank(room.tileAt(tx + 1, ty))) px(ctx, '#060405', x + T - 2, y, 2, T);
+  if (bank(room.tileAt(tx, ty - 1))) { px(ctx, '#060405', x, y, T, 3); px(ctx, '#2a2426', x, y + 3, T, 1); }
+}
+
+// The old city's conduit: the Ruins' stone, drowned. The dark above its
+// walls, with a faint green-grey rim.
+function drawDrownedWallTop(ctx, x, y, tx, ty, room) {
+  px(ctx, '#0c0b10', x, y, T, T);
+  if (hash(tx, ty, 1) < 0.5) px(ctx, '#111016', x + Math.floor(hash(tx, ty, 2) * 10), y + Math.floor(hash(tx, ty, 3) * 10), 5, 4);
+  if (!room) return;
+  const below = room.tileAt(tx, ty + 1);
+  if (below !== null && below !== '#') {
+    px(ctx, '#24283a', x, y + T - 3, T, 2);
+    px(ctx, '#30364a', x, y + T - 3, T, 1);
+    px(ctx, '#050408', x, y + T - 1, T, 1);
+  }
+  const left = room.tileAt(tx - 1, ty);
+  const right = room.tileAt(tx + 1, ty);
+  if (left !== null && !isWall(left)) px(ctx, '#20243a', x, y, 1, T);
+  if (right !== null && !isWall(right)) px(ctx, '#20243a', x + T - 1, y, 1, T);
+}
+
+// Its walls: the Ruins' great dressed blocks, gone grey-green, darker below
+// the old water-line, streaked with slime, and mossy at the foot.
+const DROWNED_STONE = ['#34344a', '#313146', '#38384e', '#2e2e42', '#353550'];
+const DROWNED_STONE_WET = ['#272a36', '#252832', '#2a2d3a', '#23262f', '#282b37'];
+function drawDrownedWallFace(ctx, x, y, tx, ty, room) {
+  const tide = 8 + Math.floor(hash(0, ty, 760) * 3);
+  px(ctx, '#1c1c2a', x, y, T, T);
+  for (let row = 0; row < 4; row++) {
+    const rowY = y + row * 4;
+    const offset = (row + tx) % 2 ? 4 : 0;
+    for (let bx = -offset; bx < T; bx += 8) {
+      const left = Math.max(0, bx);
+      const width = Math.min(bx + 7, T) - left;
+      if (width <= 0) continue;
+      const roll = hash(tx * 4 + Math.floor((bx + offset) / 8), ty * 4 + row, 1);
+      const wet = row * 4 >= tide;
+      px(ctx, pick(wet ? DROWNED_STONE_WET : DROWNED_STONE, roll), x + left, rowY, width, 3);
+      if (!wet) px(ctx, '#42445c', x + left, rowY, width, 1);
+      if (roll < 0.12) px(ctx, '#1c1c2a', x + left + Math.floor(width / 2), rowY + 1, 2, 2);
+    }
+  }
+  px(ctx, '#2c3a34', x, y + tide, T, 1);
+  // Slime and silt streaks running down from the water-line.
+  for (let i = 0; i < 2; i++) {
+    if (hash(tx, ty, 761 + i) < 0.55) px(ctx, i ? '#24382e' : '#2a3a2c', x + 1 + Math.floor(hash(tx, ty, 763 + i) * 13), y + tide + 1, 2, 2 + Math.floor(hash(tx, ty, 765 + i) * 5));
+  }
+  if (hash(tx, ty, 7) < 0.3) {
+    ctx.fillStyle = 'rgba(8, 14, 12, 0.4)';
+    ctx.fillRect(x + 2 + Math.floor(hash(tx, ty, 8) * 12), y, 1, 6 + Math.floor(hash(tx, ty, 9) * 10));
+  }
+  if (!room) return;
+  if (room.tileAt(tx, ty - 1) === '#') {
+    px(ctx, '#20243a', x, y, T, 2);
+    px(ctx, '#4a5068', x, y + 2, T, 1);
+  }
+  const below = room.tileAt(tx, ty + 1);
+  if (below !== null && !isWall(below)) {
+    px(ctx, '#18201e', x, y + T - 2, T, 2);
+    for (let i = 0; i < 4; i++) {
+      if (hash(tx, ty, 70 + i) < 0.45) px(ctx, i % 2 ? '#2e4a34' : '#3a5a3e', x + i * 4 + Math.floor(hash(tx, ty, 80 + i) * 3), y + T - 3, 2, 2);
+    }
+  }
+}
+
+// Its flagstones: the Ruins' slabs, drowned and drained again, dull and
+// silty, with puddles in the hollows. No red leaves reach down here.
+const DROWNED_SLAB = ['#22222c', '#25242f', '#20202a', '#272632', '#23232e'];
+function drawDrownedFloor(ctx, x, y, tx, ty, room) {
+  const layout = hash(tx, ty, 1);
+  const slabs = layout < 0.5 ? [[0, 0, 16, 16]]
+    : layout < 0.85 ? (hash(tx, ty, 2) < 0.5 ? [[0, 0, 16, 8], [0, 8, 16, 8]] : [[0, 0, 8, 16], [8, 0, 8, 16]])
+      : [[0, 0, 8, 8], [8, 0, 8, 8], [0, 8, 8, 8], [8, 8, 8, 8]];
+  slabs.forEach(([sx, sy, w, h], i) => {
+    px(ctx, pick(DROWNED_SLAB, hash(tx, ty, 10 + i)), x + sx, y + sy, w, h);
+    px(ctx, '#2c2b38', x + sx + 1, y + sy, w - 2, 1);
+    px(ctx, '#17161e', x + sx, y + sy + h - 1, w, 1);
+    px(ctx, '#17161e', x + sx + w - 1, y + sy, 1, h);
+  });
+  if (hash(tx, ty, 770) < 0.18) {
+    const pxx = x + 2 + Math.floor(hash(tx, ty, 771) * 8);
+    const pyy = y + 3 + Math.floor(hash(tx, ty, 772) * 9);
+    px(ctx, '#161e26', pxx, pyy, 6, 2);
+    px(ctx, '#34485a', pxx + 1, pyy, 2, 1);
+  }
+  if (hash(tx, ty, 773) < 0.35) px(ctx, '#332c26', x + Math.floor(hash(tx, ty, 774) * 12), y + Math.floor(hash(tx, ty, 775) * 13), 4, 2);
+  if (hash(tx, ty, 776) < 0.15) px(ctx, '#2e4a34', x + Math.floor(hash(tx, ty, 777) * 14), y + Math.floor(hash(tx, ty, 778) * 14), 2, 1);
+  if (!room) return;
+  if (isWall(room.tileAt(tx, ty - 1)) || room.tileAt(tx, ty - 1) === 'K') {
+    ctx.fillStyle = 'rgba(4, 4, 8, 0.6)';
+    ctx.fillRect(x, y, T, 3);
+    ctx.fillStyle = 'rgba(4, 4, 8, 0.3)';
+    ctx.fillRect(x, y + 3, T, 2);
+  }
+}
+
+// --- The Lantern Marsh (Chapter 3): the fen where the old conduit spills out. ---
+// Everything here is grey-green and soft, low in contrast: the mist does the
+// rest. Fen turf to stand on, old duckboards laid across it, black bog that
+// swallows you (see OverworldScene.checkBog), still fen water, tall reeds,
+// and the stilt hut out on its island.
+const isMarsh = (room) => room?.area === 'marsh';
+const FEN = ['#363c34', '#383e35', '#343a32', '#3a4036'];
+const SEDGE = ['#4a5244', '#525a48', '#46503e', '#5a6250'];
+
+// Fen turf: tussocky sedge, damp and dull, with a seed-head or a puddle now and then.
+function drawFenTurf(ctx, x, y, tx, ty) {
+  px(ctx, pick(FEN, hash(tx, ty, 800)), x, y, T, T);
+  // Wetter and drier ground mottled together, soft-edged.
+  mottle(ctx, pick(FEN, hash(tx, ty, 802)), x, y, tx, ty, 803, 7);
+  if (hash(tx, ty, 801) < 0.5) mottle(ctx, '#323830', x, y, tx, ty, 826, 4);
+  // Tufts of sedge: a few blades leaning the same way, dark at the root.
+  for (let i = 0; i < 4; i++) {
+    const sx = x + 1 + Math.floor(hash(tx, ty, 805 + i) * 13);
+    const sy = y + 3 + Math.floor(hash(tx, ty, 810 + i) * 11);
+    const c = pick(SEDGE, hash(tx, ty, 815 + i));
+    px(ctx, '#2c3230', sx, sy + 1, 3, 1);
+    px(ctx, c, sx, sy - 2, 1, 3);
+    px(ctx, c, sx + 1, sy - 3, 1, 3);
+    px(ctx, c, sx + 2, sy - 1, 1, 2);
+  }
+  // A seed-head, or a tuft of cotton-grass, white in the mist.
+  if (hash(tx, ty, 820) < 0.12) px(ctx, '#7a7c64', x + 2 + Math.floor(hash(tx, ty, 821) * 11), y + 2 + Math.floor(hash(tx, ty, 822) * 10), 1, 1);
+  else if (hash(tx, ty, 827) < 0.07) {
+    const cx = x + 3 + Math.floor(hash(tx, ty, 828) * 10);
+    const cy = y + 4 + Math.floor(hash(tx, ty, 829) * 8);
+    px(ctx, '#5a6250', cx + 1, cy, 1, 3);
+    px(ctx, '#d8d8cc', cx, cy - 1, 3, 1);
+    px(ctx, '#f0f0e8', cx + 1, cy - 2, 1, 1);
+  }
+  // Water standing in a hollow, with a glint of the grey sky in it.
+  if (hash(tx, ty, 823) < 0.12) {
+    const pxx = x + 3 + Math.floor(hash(tx, ty, 824) * 7);
+    const pyy = y + 4 + Math.floor(hash(tx, ty, 825) * 8);
+    px(ctx, '#222a2a', pxx, pyy, 5, 2);
+    px(ctx, '#222a2a', pxx + 1, pyy - 1, 3, 1);
+    px(ctx, '#3e4c4c', pxx + 1, pyy, 2, 1);
+    px(ctx, '#6a7a7a', pxx + 2, pyy - 1, 1, 1);
+  }
+}
+
+// Bog: black, wet, sucking mud with an oily sheen and the odd slow bubble.
+// The sedge creeps over its edges, so in the mist it's easy to miss.
+function drawBog(ctx, x, y, tx, ty, room) {
+  px(ctx, '#1e201c', x, y, T, T);
+  px(ctx, '#23261f', x + Math.floor(hash(tx, ty, 830) * 6), y + Math.floor(hash(tx, ty, 831) * 6), 10, 9);
+  // The sheen: a couple of smears of grey light on the wet.
+  px(ctx, '#2e3230', x + 2 + Math.floor(hash(tx, ty, 832) * 8), y + 4 + Math.floor(hash(tx, ty, 833) * 3), 4, 1);
+  px(ctx, '#2a2e2c', x + 5 + Math.floor(hash(tx, ty, 834) * 6), y + 10 + Math.floor(hash(tx, ty, 835) * 3), 3, 1);
+  if (hash(tx, ty, 836) < 0.4) {
+    const bx = x + 3 + Math.floor(hash(tx, ty, 837) * 9);
+    const by = y + 3 + Math.floor(hash(tx, ty, 838) * 9);
+    px(ctx, '#3a3e36', bx, by, 2, 1);
+    px(ctx, '#3a3e36', bx - 1, by + 1, 1, 1);
+    px(ctx, '#3a3e36', bx + 2, by + 1, 1, 1);
+    px(ctx, '#3a3e36', bx, by + 2, 2, 1);
+  }
+  if (!room) return;
+  // Sedge creeping in over the edges where it meets the turf.
+  const turf = (dx, dy) => { const c = room.tileAt(tx + dx, ty + dy); return c !== '%' && c !== '$' && c !== null; };
+  for (let i = 0; i < T; i += 3) {
+    const n = hash(tx * 5 + i, ty, 839) < 0.5 ? 1 : 2;
+    if (turf(0, -1)) px(ctx, '#363c34', x + i, y, 2, n);
+    if (turf(0, 1)) px(ctx, '#363c34', x + i, y + T - n, 2, n);
+    if (turf(-1, 0)) px(ctx, '#363c34', x, y + i, n, 2);
+    if (turf(1, 0)) px(ctx, '#363c34', x + T - n, y + i, n, 2);
+  }
+}
+
+// Old duckboards: grey, warped planks laid across the fen on sunk posts,
+// gapped and mossy, with a rusty nail or two. They run the way the walk does.
+function drawDuckboards(ctx, x, y, tx, ty, room) {
+  drawFenTurf(ctx, x, y, tx, ty);
+  const along = (dx, dy) => room?.tileAt(tx + dx, ty + dy) === '=';
+  const upright = (along(0, -1) || along(0, 1)) && !(along(-1, 0) || along(1, 0));
+  const plank = ['#5e584c', '#625c50', '#58534a', '#66604f'];
+  for (let i = 0; i < 4; i++) {
+    const c = pick(plank, hash(tx, ty, 840 + i));
+    if (upright) {
+      px(ctx, '#24221e', x + 2, y + i * 4, 12, 4);
+      px(ctx, c, x + 3 + (hash(tx, ty, 845 + i) < 0.3 ? 1 : 0), y + i * 4, 10, 3);
+      px(ctx, '#6e6858', x + 3, y + i * 4, 10, 1);
+    } else {
+      px(ctx, '#24221e', x + i * 4, y + 2, 4, 12);
+      px(ctx, c, x + i * 4, y + 3 + (hash(tx, ty, 845 + i) < 0.3 ? 1 : 0), 3, 10);
+      px(ctx, '#6e6858', x + i * 4, y + 3, 1, 10);
+    }
+  }
+  if (hash(tx, ty, 850) < 0.4) px(ctx, '#4a5a40', x + 2 + Math.floor(hash(tx, ty, 851) * 10), y + 3 + Math.floor(hash(tx, ty, 852) * 9), 3, 1);
+  if (hash(tx, ty, 853) < 0.3) px(ctx, '#6a4a34', x + 4 + Math.floor(hash(tx, ty, 854) * 8), y + 5 + Math.floor(hash(tx, ty, 855) * 6), 1, 1);
+}
+
+// Fen water: dark, still, grey-green, a ripple, now and then a lily pad.
+// Too deep to wade.
+function drawFenWater(ctx, x, y, tx, ty, room) {
+  px(ctx, '#1c2628', x, y, T, T);
+  // A darker, deeper patch, and ripples catching what light there is.
+  mottle(ctx, '#192224', x, y, tx, ty, 863, 7);
+  const shift = (tx * 5 + ty * 7) % 9;
+  px(ctx, '#283438', x + shift, y + 5, 5, 1);
+  px(ctx, '#324044', x + shift + 1, y + 5, 2, 1);
+  px(ctx, '#283438', x + ((shift + 6) % 11), y + 11, 4, 1);
+  if (hash(tx, ty, 866) < 0.4) px(ctx, '#243034', x + ((shift + 3) % 12), y + 8, 3, 1);
+  // Duckweed, a green scum on the still water, in places.
+  if (hash(tx, ty, 867) < 0.15) {
+    const dx = x + Math.floor(hash(tx, ty, 868) * 10);
+    const dy = y + Math.floor(hash(tx, ty, 869) * 12);
+    px(ctx, '#2e4030', dx, dy, 5, 2);
+    px(ctx, '#2e4030', dx + 2, dy + 2, 3, 1);
+    px(ctx, '#3a5038', dx + 1, dy, 2, 1);
+  }
+  if (hash(tx, ty, 860) < 0.12) {
+    const lx = x + 3 + Math.floor(hash(tx, ty, 861) * 8);
+    const ly = y + 3 + Math.floor(hash(tx, ty, 862) * 8);
+    px(ctx, '#34483a', lx, ly, 4, 3);
+    px(ctx, '#1c2628', lx + 2, ly, 1, 1);
+    px(ctx, '#40583e', lx, ly, 2, 1);
+  }
+  if (!room) return;
+  // A soft bank where the water meets the turf above.
+  const above = room.tileAt(tx, ty - 1);
+  if (above !== '$' && above !== null && above !== '9') {
+    px(ctx, '#2e3430', x, y, T, 2);
+    px(ctx, '#121816', x, y + 2, T, 1);
+  }
+}
+
+// Reeds: a tall clump of reeds and bulrushes, taller than you (drawn
+// standing, so you can walk behind them).
+function drawReeds(ctx, x, y, tx, ty) {
+  drawStandingShadow(ctx, x, y);
+  const stalks = 7;
+  for (let i = 0; i < stalks; i++) {
+    const sx = x + 1 + Math.floor((i * 14) / stalks) + Math.floor(hash(tx, ty, 870 + i) * 2);
+    const h = 16 + Math.floor(hash(tx, ty, 880 + i) * 14);
+    const lean = hash(tx, ty, 890 + i) < 0.5 ? -1 : 1;
+    const c = i % 2 ? '#5a6448' : '#4e5840';
+    px(ctx, '#262c22', sx, y + 15 - h, 1, h);
+    px(ctx, c, sx, y + 15 - h + 4, 1, h - 4);
+    px(ctx, c, sx + lean, y + 15 - h, 1, 5);
+    // Bulrush heads on some.
+    if (hash(tx, ty, 900 + i) < 0.35) {
+      px(ctx, '#3a2a1e', sx - 1 + lean, y + 15 - h + 2, 3, 5);
+      px(ctx, '#5a4030', sx + lean, y + 15 - h + 2, 1, 4);
+    }
+  }
+  // A long leaf or two, bent over.
+  px(ctx, '#66704e', x + 3, y + 2, 5, 1);
+  px(ctx, '#66704e', x + 9 + Math.floor(hash(tx, ty, 910) * 3), y + 5, 4, 1);
+}
+
+// The stilt hut, out on its island: walls of grey, weathered boards...
+const isHut = (c) => c === '1' || c === '3' || c === '4';
+function drawHutWall(ctx, x, y, tx, ty, room) {
+  px(ctx, '#4a443c', x, y, T, T);
+  for (let i = 0; i < 4; i++) {
+    px(ctx, hash(tx * 4 + i, ty, 920) < 0.5 ? '#5a5248' : '#544c42', x + i * 4, y, 3, T);
+    px(ctx, '#6a6256', x + i * 4, y, 1, T);
+  }
+  px(ctx, '#2a2620', x, y + T - 2, T, 2);
+  if (hash(tx, ty, 921) < 0.3) px(ctx, '#3e4a36', x + Math.floor(hash(tx, ty, 922) * 12), y + 10, 4, 3);
+  if (!room) return;
+  if (!isHut(room.tileAt(tx - 1, ty))) px(ctx, '#2a2620', x, y, 2, T);
+  if (!isHut(room.tileAt(tx + 1, ty))) px(ctx, '#2a2620', x + T - 2, y, 2, T);
+}
+
+// ...a window, with a little warm firelight in it...
+function drawHutWindow(ctx, x, y, tx, ty, room) {
+  drawHutWall(ctx, x, y, tx, ty, room);
+  px(ctx, '#2a2620', x + 3, y + 3, 10, 8);
+  px(ctx, '#c08440', x + 4, y + 4, 8, 6);
+  px(ctx, '#e0a858', x + 5, y + 6, 3, 3);
+  px(ctx, '#2a2620', x + 8, y + 4, 1, 6);
+  px(ctx, '#2a2620', x + 4, y + 7, 8, 1);
+}
+
+// ...its door, standing open a crack...
+function drawHutDoor(ctx, x, y, tx, ty, room) {
+  drawHutWall(ctx, x, y, tx, ty, room);
+  px(ctx, '#2a2620', x + 3, y, 10, T);
+  px(ctx, '#140e0c', x + 4, y + 1, 8, T - 1);
+  px(ctx, '#3a2a1c', x + 4, y + 6, 8, 1);
+  px(ctx, '#6a5a44', x + 9, y + 1, 3, T - 1);
+  px(ctx, '#7a6a52', x + 9, y + 1, 1, T - 1);
+  px(ctx, '#6e6858', x + 2, y + T - 2, 12, 2);
+}
+
+// ...a roof of reed thatch, gone grey and green...
+function drawHutThatch(ctx, x, y, tx, ty, room) {
+  px(ctx, '#5a5440', x, y, T, T);
+  for (let row = 0; row < 5; row++) {
+    for (let i = 0; i < 8; i++) {
+      const c = hash(tx * 8 + i, ty * 5 + row, 930) < 0.5 ? '#6a6248' : '#625a42';
+      px(ctx, c, x + i * 2, y + row * 3, 1, 3);
+    }
+    px(ctx, '#46402e', x, y + row * 3 + 2, T, 1);
+  }
+  if (hash(tx, ty, 931) < 0.4) px(ctx, '#4a5a3a', x + Math.floor(hash(tx, ty, 932) * 11), y + Math.floor(hash(tx, ty, 933) * 11), 5, 3);
+  if (!room) return;
+  if (room.tileAt(tx, ty - 1) !== '2') px(ctx, '#3a3424', x, y, T, 2);
+  if (room.tileAt(tx, ty + 1) !== '2') {
+    px(ctx, '#2a2418', x, y + T - 2, T, 2);
+    for (let i = 0; i < T; i += 2) px(ctx, '#6a6248', x + i, y + T - 2 + (hash(tx * 3 + i, ty, 934) < 0.5 ? 0 : 1), 1, 2);
+  }
+  if (room.tileAt(tx - 1, ty) !== '2') px(ctx, '#3a3424', x, y, 1, T);
+  if (room.tileAt(tx + 1, ty) !== '2') px(ctx, '#3a3424', x + T - 1, y, 1, T);
+}
+
+// ...and the stilts it stands on, sunk in the fen water.
+function drawHutStilts(ctx, x, y, tx, ty, room) {
+  drawFenWater(ctx, x, y, tx, ty, room);
+  px(ctx, 'rgba(0, 0, 0, 0.35)', x, y, T, 6);
+  for (const sx of [3, 11]) {
+    px(ctx, '#2a2620', x + sx, y, 3, T - 3);
+    px(ctx, '#4a443c', x + sx, y, 1, T - 3);
+    px(ctx, '#283438', x + sx - 1, y + T - 4, 5, 1);
+  }
+  px(ctx, '#3a342c', x, y + 4, T, 1);
+}
+
 // `standing` tiles are drawn with the characters (see above); `height` is how
 // tall they stand in pixels, for previews.
 // `raise` tiles are blocks that stand that many pixels above the floor: you
@@ -1714,7 +2690,7 @@ export const TILES = {
   I: { solid: true, standing: true, height: 47, draw: drawTallPillar },
   J: { solid: true, standing: true, height: 30, draw: drawBrokenPillar },
   S: { solid: true, standing: true, height: 49, draw: drawStatue },
-  C: { solid: true, standing: true, height: 40, draw: drawCandelabra },
+  C: { solid: true, standing: true, animated: true, height: 40, draw: drawCandelabra },
   ',': { solid: false, draw: drawGrass },
   ':': { solid: false, draw: drawPath },
   s: { solid: false, draw: drawStair },
@@ -1744,16 +2720,74 @@ export const TILES = {
   K: { solid: true, draw: drawCaveWall },
   G: { solid: false, draw: drawFalseCaveWall },
   q: { solid: false, draw: drawCaveFloor },
-  v: { solid: false, standing: true, height: 26, draw: drawStalactite },
+  v: { solid: false, standing: true, animated: true, height: 26, draw: drawStalactite },
   '^': { solid: true, standing: true, height: 26, draw: drawStalagmite },
   x: { solid: true, draw: drawIceCrystals },
   t: { solid: false, draw: drawCaveMouth },
   // The Pinefall (Chapter 3): an autumn forest gone scarlet under the clouds.
   L: { solid: true, standing: true, height: 46, draw: drawScarletTree },
+  // A false scarlet tree: walk through it (a secret).
+  '&': { solid: false, standing: true, height: 46, draw: drawFalseTree },
   d: { solid: false, draw: drawLeafLitter },
   y: { solid: false, draw: drawLeafPath },
   Z: { solid: true, draw: drawBramble },
+  // The Hushwood (see the section above): a bramble you can walk through, a
+  // dry sluice channel, Hollin's cobbles, and its cottages (wall, boarded
+  // window, roof, shut door).
+  N: { solid: false, draw: drawThinBramble },
+  j: { solid: false, draw: drawDryChannel },
+  X: { solid: false, draw: drawCobbles },
+  5: { solid: true, draw: drawCottageWall },
+  6: { solid: true, draw: drawCottageWindow },
+  7: { solid: true, draw: drawCottageRoof },
+  8: { solid: true, draw: drawCottageDoor },
+  // The Lantern Marsh (see the section above): fen turf, bog (walk on it and
+  // it swallows you), old duckboards, fen water, tall reeds, and the stilt
+  // hut (wall, window, door, thatch, and the stilts under it).
+  ';': { solid: false, draw: drawFenTurf },
+  '%': { solid: false, draw: drawBog },
+  '=': { solid: false, draw: drawDuckboards },
+  $: { solid: true, draw: drawFenWater },
+  '"': { solid: true, standing: true, height: 30, draw: drawReeds },
+  1: { solid: true, draw: drawHutWall },
+  3: { solid: true, draw: drawHutWindow },
+  4: { solid: false, draw: drawHutDoor },
+  2: { solid: true, draw: drawHutThatch },
+  9: { solid: true, draw: drawHutStilts },
 };
 
 // What's drawn under a standing tile.
 export const FLOOR_TILE = '.';
+
+// --- Crumbling floor (the Dead City, Chapter 3: see crumble.js). ---
+// A flagstone split right through: the city's floor, sunk a little below
+// its neighbours (a dark seam round it), with a web of cracks over it and
+// grit in them. It gives way under you.
+function drawCrumblingFloor(ctx, x, y, tx, ty, room) {
+  drawFloor(ctx, x, y, tx, ty, room);
+  // Sunk: a seam of shadow along its top and left, where it's dropped.
+  px(ctx, '#1e1838', x, y, T, 1);
+  px(ctx, '#1e1838', x, y, 1, T);
+  px(ctx, '#2a2448', x + 1, y + 1, T - 2, 1);
+  // The web: three or four cracks out from a point, each lit on one side.
+  const ox = 5 + Math.floor(hash(tx, ty, 900) * 6);
+  const oy = 5 + Math.floor(hash(tx, ty, 901) * 6);
+  const arms = [[1, 1], [-1, 0], [0, -1], [1, -1], [-1, 1]];
+  const count = 3 + Math.floor(hash(tx, ty, 902) * 2);
+  for (let i = 0; i < count; i++) {
+    const [ax, ay] = arms[(i + Math.floor(hash(tx, ty, 903) * 5)) % arms.length];
+    let cx = ox;
+    let cy = oy;
+    for (let k = 0; k < 5 + Math.floor(hash(tx, ty, 904 + i) * 4); k++) {
+      if (cx < 1 || cy < 1 || cx > T - 2 || cy > T - 2) break;
+      px(ctx, '#1e1838', x + cx, y + cy);
+      if (hash(tx, ty, 910 + i * 9 + k) < 0.5) px(ctx, '#4a4078', x + cx + 1, y + cy);
+      const wobble = hash(tx, ty, 940 + i * 9 + k);
+      cx += ax || (wobble < 0.5 ? -1 : 1) * (wobble < 0.25 || wobble > 0.75 ? 1 : 0);
+      cy += ay || (wobble < 0.5 ? 1 : -1) * (wobble > 0.4 && wobble < 0.6 ? 1 : 0);
+    }
+  }
+  // Grit shaken out of the joints.
+  for (let i = 0; i < 3; i++) px(ctx, '#2a2448', x + 2 + Math.floor(hash(tx, ty, 950 + i) * 12), y + 2 + Math.floor(hash(tx, ty, 955 + i) * 12));
+}
+TILES['!'] = { solid: false, draw: drawCrumblingFloor };

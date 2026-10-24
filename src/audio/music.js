@@ -1,3 +1,4 @@
+import { SETTINGS } from '../state/settings.js';
 import { SONGS } from '../data/music/index.js';
 import { HOLD, HIT } from './notation.js';
 import { SAMPLE_SETS } from './sampleSets.js';
@@ -54,6 +55,29 @@ const SFX = {
     { midi: 38, wave: 'sawtooth', length: 1.1, volume: 0.06, slide: 14 },
     { midi: 50, wave: 'triangle', length: 0.9, volume: 0.05, delay: 0.1, slide: 12 },
   ],
+  // Something huge landing: a deep thump, and the ground giving.
+  thud: [
+    { midi: 33, wave: 'sine', length: 0.5, volume: 0.22, slide: -10 },
+    { midi: 40, wave: 'triangle', length: 0.25, volume: 0.1, slide: -12 },
+    { midi: 28, wave: 'sawtooth', length: 0.18, volume: 0.05, slide: -6 },
+  ],
+  // Something sweeping in on the air.
+  whoosh: [
+    { midi: 60, wave: 'triangle', length: 0.45, volume: 0.05, slide: 15 },
+    { midi: 79, wave: 'sine', length: 0.4, volume: 0.03, delay: 0.1, slide: -10 },
+  ],
+  // One of the bursts as a boss goes down.
+  burst: [
+    { midi: 55, wave: 'square', length: 0.09, volume: 0.05, slide: -20 },
+    { midi: 86, wave: 'sawtooth', length: 0.06, volume: 0.03, slide: -24 },
+  ],
+  // And the last great one.
+  boom: [
+    { midi: 31, wave: 'sine', length: 1.2, volume: 0.24, slide: -8 },
+    { midi: 43, wave: 'sawtooth', length: 0.5, volume: 0.07, slide: -18 },
+    { midi: 74, wave: 'square', length: 0.25, volume: 0.04, slide: -30 },
+    { midi: 91, wave: 'triangle', length: 0.8, volume: 0.03, delay: 0.05, slide: -12 },
+  ],
   // A soft blip as cutscene text types out.
   type: [{ midi: 67, wave: 'triangle', length: 0.03, volume: 0.04 }],
   // A great bronze bell, struck once, ringing on.
@@ -74,10 +98,58 @@ const SFX = {
   // Settling into a bed: a soft falling chime.
   rest: [88, 83, 79, 76].map((midi, i) => ({ midi, wave: 'sine', length: 0.35, volume: 0.06, delay: i * 0.18 })),
   // A grappling hook: the whoosh of the throw, then the clink as it catches.
+  // A rock scraping a tile along the ground, and a stone button going down.
+  // The Hushwood: Bramble's hatchet biting into a trunk, and a log going into a brook.
+  chop: [
+    { midi: 52, wave: 'square', length: 0.06, volume: 0.07, slide: -10 },
+    { midi: 40, wave: 'triangle', length: 0.18, volume: 0.1, slide: -6, delay: 0.05 },
+  ],
+  splash: [
+    { midi: 84, wave: 'sawtooth', length: 0.16, volume: 0.025, slide: -30 },
+    { midi: 45, wave: 'triangle', length: 0.2, volume: 0.08, slide: -8, delay: 0.04 },
+  ],
+  push: [
+    { midi: 36, wave: 'sawtooth', length: 0.2, volume: 0.05, slide: -3 },
+    { midi: 31, wave: 'triangle', length: 0.18, volume: 0.08, delay: 0.04 },
+  ],
+  click: [
+    { midi: 60, wave: 'square', length: 0.05, volume: 0.05 },
+    { midi: 79, wave: 'triangle', length: 0.12, volume: 0.05, delay: 0.05 },
+  ],
+  // An old plank bridge taking your weight: a low, dry creak.
+  creak: [
+    { midi: 47, wave: 'sawtooth', length: 0.16, volume: 0.018, slide: 4 },
+    { midi: 54, wave: 'triangle', length: 0.1, volume: 0.02, delay: 0.07, slide: -5 },
+  ],
+  // An enemy throwing itself at you: a quick rush, and the thump as it hits.
+  pounce: [
+    { midi: 72, wave: 'sawtooth', length: 0.08, volume: 0.025, slide: -18 },
+    { midi: 38, wave: 'triangle', length: 0.16, volume: 0.09, delay: 0.05, slide: -7 },
+  ],
   hook: [
     { midi: 79, wave: 'triangle', length: 0.18, volume: 0.05, slide: 14 },
     { midi: 100, wave: 'square', length: 0.05, volume: 0.04, delay: 0.26 },
     { midi: 95, wave: 'square', length: 0.04, volume: 0.03, delay: 0.31 },
+  ],
+  // A flagstone dropping away under you (the Dead City): a crack, then the
+  // stone going down into the dark, and a rattle of grit after it.
+  crumble: [
+    { midi: 57, wave: 'square', length: 0.05, volume: 0.05, slide: -12 },
+    { midi: 34, wave: 'sawtooth', length: 0.26, volume: 0.07, slide: -9, delay: 0.04 },
+    { midi: 44, wave: 'triangle', length: 0.1, volume: 0.04, slide: -6, delay: 0.2 },
+    { midi: 49, wave: 'triangle', length: 0.08, volume: 0.03, slide: -4, delay: 0.3 },
+  ],
+  // The game over's words coming up one letter at a time: a low, dull tone.
+  toll: [{ midi: 41, wave: 'triangle', length: 0.09, volume: 0.035, slide: -2 }],
+  // Pulling the Fallen Star out of its stone: our own little jingle. A
+  // rising run that turns at the top (D, F#, A, then G, B up to a long D),
+  // a low D under it, and the star's glints after.
+  starGet: [
+    ...[62, 66, 69, 67, 71].map((midi, i) => ({ midi, wave: 'square', length: 0.1, volume: 0.045, delay: i * 0.11 })),
+    { midi: 74, wave: 'square', length: 0.75, volume: 0.05, delay: 0.55 },
+    { midi: 74, wave: 'triangle', length: 0.8, volume: 0.06, delay: 0.55, slide: 0.3 },
+    { midi: 50, wave: 'triangle', length: 0.9, volume: 0.08, delay: 0.55 },
+    ...[98, 102, 105, 103].map((midi, i) => ({ midi, wave: 'sine', length: 0.12, volume: 0.03, delay: 0.8 + i * 0.12 })),
   ],
 };
 
@@ -176,10 +248,15 @@ function playTone(ctx, channel, instrument, midi, time, seconds, noise) {
   const end = time + seconds * gate;
   const stopAt = end + release * 2 + 0.05;
 
+  // A note shorter than its attack only swells part of the way before it
+  // lets go (otherwise the release would land inside the ramp, and the
+  // note would swell up after it ended, never fade, and click off).
   const envelope = ctx.createGain();
+  const attackEnd = Math.min(time + attack, end);
+  const reached = attack > 0 ? volume * Math.min(1, (attackEnd - time) / attack) : volume;
   envelope.gain.setValueAtTime(0, time);
-  envelope.gain.linearRampToValueAtTime(volume, time + attack);
-  envelope.gain.setTargetAtTime(volume * sustain, time + attack, decay);
+  envelope.gain.linearRampToValueAtTime(reached, attackEnd);
+  if (attackEnd < end) envelope.gain.setTargetAtTime(volume * sustain, attackEnd, decay);
   envelope.gain.setTargetAtTime(0, end, release / 3);
   envelope.connect(channel);
 
@@ -311,12 +388,15 @@ function playSample(ctx, channel, instrument, midi, time, seconds) {
   source.buffer = buffer;
   if (midi != null) source.playbackRate.value = 2 ** ((midi + 12 * octave - note) / 12);
   const gain = ctx.createGain();
-  gain.gain.setValueAtTime(attack ? 0 : volume, time);
-  if (attack) gain.gain.linearRampToValueAtTime(volume, time + attack);
   const length = (buffer.duration - offset) / source.playbackRate.value;
+  // A note that lets go before its attack is done only swells part way
+  // (as in playTone), so the release doesn't land inside the ramp.
+  const end = time + seconds * gate;
+  const attackEnd = ring ? time + attack : Math.min(time + attack, end);
+  gain.gain.setValueAtTime(attack ? 0 : volume, time);
+  if (attack) gain.gain.linearRampToValueAtTime(volume * Math.min(1, (attackEnd - time) / attack), attackEnd);
   let stopAt = time + length;
   if (!ring) {
-    const end = time + seconds * gate;
     gain.gain.setTargetAtTime(0, end, release / 3);
     stopAt = Math.min(stopAt, end + release * 2 + 0.05);
   }
@@ -457,6 +537,17 @@ function buildChannels(ctx, bus, instruments) {
       out.pan.value = instrument.pan;
       channel.connect(out);
     }
+    // The channel's tone filter comes first, so its reverb and echo are
+    // the filtered sound too (a muffled instrument has a muffled echo).
+    if (instrument.filter) {
+      const filter = ctx.createBiquadFilter();
+      filter.type = instrument.filter.type;
+      filter.frequency.value = instrument.filter.frequency;
+      if (instrument.filter.q) filter.Q.value = instrument.filter.q;
+      out.connect(filter);
+      out = filter;
+    }
+    out.connect(bus);
     if (instrument.reverb) {
       if (!hall) {
         hall = makeHall(ctx);
@@ -465,15 +556,6 @@ function buildChannels(ctx, bus, instruments) {
       const send = ctx.createGain();
       send.gain.value = instrument.reverb;
       out.connect(send).connect(hall);
-    }
-    if (instrument.filter) {
-      const filter = ctx.createBiquadFilter();
-      filter.type = instrument.filter.type;
-      filter.frequency.value = instrument.filter.frequency;
-      if (instrument.filter.q) filter.Q.value = instrument.filter.q;
-      out.connect(filter).connect(bus);
-    } else {
-      out.connect(bus);
     }
     if (instrument.echo) {
       const delay = ctx.createDelay(2);
@@ -501,7 +583,7 @@ class SongPlayback {
     this.bus = ctx.createGain();
     // A song can turn itself down (or up) as a whole with `volume`.
     this.bus.gain.value = song.volume ?? 1;
-    this.bus.connect(destination);
+    this.bus.connect(songOutput(ctx, song, destination));
     this.channels = buildChannels(ctx, this.bus, song.instruments);
     ({ steps: this.steps, loopStart: this.loopStart } = compile(song));
     this.stepSeconds = 60 / song.bpm / song.stepsPerBeat;
@@ -573,13 +655,44 @@ class SongPlayback {
 
 // Plays the first `seconds` of a song into an offline recording, without
 // making a sound, and resolves with the AudioBuffer. For tests and tools
+// Where a song's bus goes: straight out, or, for a song with `limit` (the
+// trailers' songs), through a compressor that squashes its loudest moments,
+// a gain that brings the rest up to meet them, and a soft clipper that
+// rounds off whatever still pokes over, so the whole thing can be loud and
+// dense without the hits ever clipping. The same for playing and for rendering.
+function songOutput(ctx, song, destination) {
+  if (!song.limit) return destination;
+  const squash = ctx.createDynamicsCompressor();
+  squash.threshold.value = -8;
+  squash.knee.value = 4;
+  squash.ratio.value = 8;
+  squash.attack.value = 0.001;
+  squash.release.value = 0.1;
+  const makeup = ctx.createGain();
+  makeup.gain.value = song.limit === true ? 1.2 : song.limit;
+  // The clipper: a tanh curve over twice the full range (its input is
+  // halved first), so a peak twice full scale still comes out just under 1.
+  const half = ctx.createGain();
+  half.gain.value = 0.5;
+  const clip = ctx.createWaveShaper();
+  const curve = new Float32Array(4097);
+  for (let i = 0; i < curve.length; i++) curve[i] = Math.tanh(2.5 * ((i / (curve.length - 1)) * 2 - 1));
+  clip.curve = curve;
+  clip.oversample = '4x';
+  squash.connect(makeup);
+  makeup.connect(half);
+  half.connect(clip);
+  clip.connect(destination);
+  return squash;
+}
+
 // (checking a song for errors, or how loud it gets).
 export async function renderSong(song, seconds, sampleRate = 44100) {
   const ctx = new OfflineAudioContext(2, Math.ceil(sampleRate * seconds), sampleRate);
   await loadSamples(ctx, song);
   const master = ctx.createGain();
   master.gain.value = MASTER_VOLUME * (song.volume ?? 1);
-  master.connect(ctx.destination);
+  master.connect(songOutput(ctx, song, ctx.destination));
   const playback = Object.create(SongPlayback.prototype);
   Object.assign(playback, { ctx, song, noise: makeNoise(ctx), bus: master });
   playback.channels = buildChannels(ctx, master, song.instruments);
@@ -615,6 +728,10 @@ const AMBIENCES = {
   // The Lantern Marsh: low wind over flat water, the hum of the fog, a drip
   // now and then, no birds.
   marsh: { wind: 0.25, hum: 0.35, drips: 0.3 },
+  // The Hushwood: the old wood, where the birds have mostly stopped. And
+  // `hush`, where the beast is near: no birds at all, just a low hum.
+  hushwood: { wind: 0.22, birds: 0.18, drips: 0.12 },
+  hush: { wind: 0.12, hum: 0.3 },
 };
 export const AMBIENCE_NAMES = Object.keys(AMBIENCES);
 
@@ -844,6 +961,9 @@ class MusicPlayer {
     this.master = null;
     this.current = null;
     this.wanted = null;
+    // The song that last started, for the "now playing" label (src/ui/nowPlaying.js):
+    // { title, at } with `at` from performance.now().
+    this.nowPlaying = null;
     this.ambience = null;
     this.ambienceWanted = null;
     this.muted = false;
@@ -863,7 +983,13 @@ class MusicPlayer {
     this.master = this.ctx.createGain();
     this.master.gain.value = this.muted ? 0 : MASTER_VOLUME;
     this.master.connect(this.ctx.destination);
+    // Songs and ambience go through the music volume, sound effects through
+    // their own (both set in SETTINGS: see src/ui/settingsMenu.js).
+    this.musicBus = this.ctx.createGain();
+    this.musicBus.gain.value = SETTINGS.music;
+    this.musicBus.connect(this.master);
     this.sfxBus = this.ctx.createGain();
+    this.sfxBus.gain.value = SETTINGS.sounds;
     this.sfxBus.connect(this.master);
     this.noise = makeNoise(this.ctx);
     if (this.wanted) this.start(this.wanted);
@@ -888,7 +1014,7 @@ class MusicPlayer {
     if (!name) return;
     const spec = AMBIENCES[name];
     if (!spec) throw new Error(`Unknown ambience '${name}'`);
-    this.ambience = new Ambience(this.ctx, this.master, this.noise, spec);
+    this.ambience = new Ambience(this.ctx, this.musicBus, this.noise, spec);
   }
 
   // How far into the current song we are, in seconds (null if nothing's
@@ -910,7 +1036,7 @@ class MusicPlayer {
     this.unlock();
     this.wanted = null;
     this.current?.stop();
-    this.current = song ? new SongPlayback(this.ctx, this.master, this.noise, song) : null;
+    this.current = song ? new SongPlayback(this.ctx, this.musicBus, this.noise, song) : null;
   }
 
   // Plays a sound effect from SFX. Silent until the first key press, like the music.
@@ -951,7 +1077,16 @@ class MusicPlayer {
     if (!name) return;
     const song = SONGS[name];
     if (!song) throw new Error(`Unknown song '${name}'`);
-    this.current = new SongPlayback(this.ctx, this.master, this.noise, song);
+    this.current = new SongPlayback(this.ctx, this.musicBus, this.noise, song);
+    this.nowPlaying = { title: song.title, at: performance.now() };
+  }
+
+  // Turns the music or the sound effects up or down (`kind` is 'music' or
+  // 'sounds', `value` 0 to 1), straight away.
+  setVolume(kind, value) {
+    SETTINGS[kind] = Math.max(0, Math.min(1, value));
+    const bus = kind === 'music' ? this.musicBus : this.sfxBus;
+    bus?.gain.setTargetAtTime(SETTINGS[kind], this.ctx.currentTime, 0.03);
   }
 
   toggleMute() {

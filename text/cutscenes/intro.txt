@@ -26,7 +26,7 @@ Long ago, deep beneath the earth, there were the Ruins.
 [prophecy]
 Carved into their oldest stone was a promise.
 
-"When the lanterns burn their brightest, a Hero will descend the stair, and the Ruins will wake."
+"When the lanterns burn their brightest, a Hero will descend the stairs, and the Ruins will wake."
 
 [preparations]
 So the Ruins got ready.
@@ -56,6 +56,6 @@ A glimmer came from above the stairs.
 And a shadowy figure stepped forth.
 
 [breath]
-The entire world held their breath,
+The entire world held its breath.
 
-Had their hero finally arrived?
+Had its Hero finally arrived?

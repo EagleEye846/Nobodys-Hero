@@ -1,0 +1,63 @@
+# THE CHAPTER THREE CREDITS: they roll after you walk through the Hero's
+# Gate with Ves, her umbrella up, while the chapter's credits song plays
+# (src/data/music/creditsSearchTheme.js). Cards work just like
+# text/credits.txt: the first line is the heading, the lines after it are
+# names, and a line starting with @ shows a character beside the card.
+
+[title]
+Chapter Three: The Search
+NOBODY'S HERO
+
+[created]
+Created by
+EagleEye846
+
+[story]
+Story and Writing
+EagleEye846
+@prop:vesper_stand
+
+[characters]
+Characters
+EagleEye846
+@prop:bramble_stand
+
+[art]
+Art and Animation
+EagleEye846
+@enemy:russet
+
+[music]
+Music and Sound
+EagleEye846
+@enemy:wisp
+
+[programming]
+Programming
+EagleEye846
+@enemy:clinker
+
+[world]
+Level Design
+EagleEye846
+@enemy:bog_toad
+
+[battles]
+Battle and Bullet Design
+EagleEye846
+@enemy:cairn_hound
+
+[town]
+The People of Lasthome
+Thistle, Bryony, Mabb, Pell
+Corran, Old Tam, Wren
+@prop:lh_thistle
+
+[thanks]
+Special Thanks
+Everyone who waited, and everyone who stopped
+@prop:slowly
+
+[end]
+To be continued
+in Chapter Four

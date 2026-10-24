@@ -1,4 +1,5 @@
 import { UI_SCALE } from '../config.js';
+import { drawNowPlaying } from '../ui/nowPlaying.js';
 
 // Longest frame step we simulate, so a stalled tab doesn't teleport the player.
 const MAX_FRAME_SECONDS = 1 / 20;
@@ -40,6 +41,8 @@ export class Game {
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
       this.scene.draw(ctx);
+      // A new song's name, top left, for a few seconds.
+      drawNowPlaying(ctx, now);
     } catch (error) {
       // Stop the scene where it is and say what went wrong, on screen, so it
       // can be reported rather than just freezing.

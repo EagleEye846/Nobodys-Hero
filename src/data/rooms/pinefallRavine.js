@@ -1,7 +1,8 @@
 // THE LONG DROP: the wood ends at a ravine that falls away in shelves. Rope
 // down shelf by shelf (stand on a ring and face down). At the bottom the
 // trees stop and there's only mist, flat and grey, with lights in it: the
-// Lantern Marsh, which isn't built yet (no door south for now).
+// Lantern Marsh, which isn't built yet. The way on is west, along the foot
+// of the ravine, into the Hushwood (hush_mist_edge).
 // Tile key (see src/overworld/tileset.js):
 //   L  scarlet tree (walk or hide behind) (solid)
 //   M  cliff face (solid)
@@ -51,10 +52,10 @@ export const PINEFALL_RAVINE = {
     'LddddddddddddddddydddddL',
     'LddddddddddddddddydddddL',
     'LddddddddyyyyyyyyydddddL',
-    'LddLdddddddddddddddddddL',
-    'LddddddddddddddddddddddL',
-    'LdddddddddddddddddddLddL',
-    'LddddddddddddddddddddddL',
+    'LddLdddddydddddddddddddL',
+    'LddddddddydddddddddddddL',
+    'yddddddddyddddddddddLddL',
+    'yyyyyyyyyydddddddddddddL',
     'LddddddddddddddddddddddL',
     'LdddddLddddddddddddddddL',
     'LdddddddddddddddLddddddL',
@@ -67,7 +68,9 @@ export const PINEFALL_RAVINE = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 11, y: 0, w: 2, h: 1, to: 'pinefall_tatters', spawn: { x: 13, y: 16 } },
+    { x: 11, y: 0, w: 2, h: 1, to: 'pinefall_quarry', spawn: { x: 11, y: 16 } },
+    // West along the foot of the ravine, into the Hushwood.
+    { x: 0, y: 27, w: 1, h: 2, to: 'hush_mist_edge', spawn: { x: 26, y: 12 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -79,6 +82,9 @@ export const PINEFALL_RAVINE = {
     { sprite: 'grapple_ring', x: 8, y: 6, grapple: true },
     { sprite: 'grapple_ring', x: 17, y: 17, grapple: true },
     { sprite: 'sign', x: 12, y: 28, text: 'ravine_end' },
+    { sprite: 'sign', x: 4, y: 27, text: 'ravine_west' },
+    // Tucked in the far corner of the bottom shelf, off the way down.
+    { sprite: 'chest', x: 21, y: 23, text: 'ravine_chest', gives: 'fallen_leaf_cloak', taken: { sprite: 'chest_open', text: 'chest_empty' } },
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.
@@ -108,6 +114,10 @@ export const PINEFALL_RAVINE = {
   ],
   tileTexts: { L: 'scarlet_tree', M: 'ravine_cliff' },
 
-  // No enemies in the Pinefall yet.
-  npcs: [],
+  // A Burrhog rolls along the middle shelf; at the bottom, a Sapling waits
+  // among the last trees.
+  npcs: [
+    { enemy: 'burrhog', x: 6, y: 14, patrol: [2, 15] },
+    { enemy: 'sapling', x: 19, y: 28, patrol: [19, 19], behaviour: 'disguise' },
+  ],
 };

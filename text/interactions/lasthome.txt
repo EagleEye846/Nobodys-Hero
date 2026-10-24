@@ -1,0 +1,331 @@
+# LASTHOME (Chapter 3's hub) and the Valley Road: the living town built
+# inside the old city's biggest hall, by the people who stopped waiting for
+# the Hero. Things you can read and look at. See notes/docs/chapter-3-lasthome.md.
+#
+# A section with `_bramble` on the end of its name is what Bramble says
+# after the section of that name, if he's with you; `_ves` is what Ves says
+# after that (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal glows warm and steady, like the lamps.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+Empty.
+
+[gold_pouch_empty]
+An empty purse.
+
+# --- THE VALLEY ROAD ---
+
+[road_notice]
+A notice, nailed to a post, in big careful letters:
+
+BIRDS GONE QUIET ON THE NORTH RIDGE. TWO DAYS NOW. KEEP YOUR DOORS SHUT AT NIGHT. -- THISTLE
+
+[road_notice_bramble]
+{scared}Birds gone quiet.
+
+{worried}...Sword. That's how you know it's near. That's what everyone at camp says.
+
+[road_notice_ves]
+{worried}It came down after us. Didn't it.
+
+[road_signpost]
+An old signpost, its arms broken off. Someone's nailed a plank across it and written on it in chalk:
+
+LASTHOME. YOU'RE NEARLY THERE.
+
+[road_signpost_ves]
+{smile}Nearly. Ha.
+
+[road_statue]
+A great stone statue, toppled on its face in the weeds long ago, and broken in three. You can see a hand, bigger than you are, still holding the hilt of a stone sword.
+
+[road_statue_bramble]
+{awed}It's a giant! A stone giant!
+
+{thinking}...It's a statue. I knew that.
+
+[road_statue_ves]
+{thoughtful}Somebody built that for the Hero, I think. To say hello.
+
+{sad}I wonder how long it stood there saying hello before it fell over.
+
+[road_cairn]
+A little cairn by the old paving. Travellers have left things on it: a button, a ribbon, a pebble with a face drawn on.
+
+[road_lamp]
+A lamp on a post, lit. Someone comes out this far every evening to light it.
+
+[road_trees]
+Pines, dark and quiet in the dusk.
+
+[road_pillar]
+One of the old city's pillars, standing all on its own in the grass.
+
+[road_boulder]
+A boulder, mossy, warm from the day.
+
+[road_rubble]
+Fallen stone from the statue, half sunk in the grass.
+
+[road_paving]
+The old city's paving, under the grass. It goes on and on, under everything.
+
+# --- LASTHOME GATE ---
+
+[hall_front]
+The front of the old city's great hall: a wall of dressed stone as tall as a cliff, carved all over with things too worn to make out.
+
+[hall_pillar]
+A pillar of the great hall, taller than a pine.
+
+[gate_brazier]
+A brazier, burning. Thistle's warming his paws at it. He's put potatoes in the ashes.
+
+[gate_washing]
+A washing line, strung between the old pillars. Shirts, socks, a baby's blanket. Somebody's knitted a cover for the peg bag.
+
+[gate_washing_bramble]
+{grin}Socks! Ma would have a fit, putting the washing out at dusk.
+
+[gate_lamp]
+A lamp on a post by the gate, newly filled.
+
+[gate_flowers]
+Flower beds, along the hall's foot, with marigolds and beans in them. Mostly beans.
+
+[gate_cart]
+A cart heaped high with sacks of charcoal, and a shaggy pony in the shafts, eating somebody's beans.
+
+[gate_sign]
+A painted board by the gate:
+
+LASTHOME. ALL WELCOME. WIPE YOUR FEET.
+
+[gate_sign_ves]
+{surprised}All welcome. That's all? No trumpets? No speeches?
+
+{laughing}...I think I'm going to like it here.
+
+# --- LASTHOME (the square) ---
+
+[hall_wall]
+The great hall's inner wall. People have built right up against it: chimneys, shelves, a window box.
+
+[square_house]
+A cottage, built inside the hall, out of its own fallen stone and some new timber. A curl of smoke goes up to the holes in the roof.
+
+[square_window]
+A lit window. Somebody inside is singing, badly.
+
+[square_roof]
+Cottage roofs, inside a roof. The rain doesn't get in, mostly. The pigeons do.
+
+[square_flowers]
+A long flower bed in front of the old fountain wall. Somebody's grown sunflowers in it, as high as they'll go, reaching for the holes in the roof.
+
+[square_stall]
+Pell's market stall: apples, oatcakes, and pies under a striped awning.
+
+[square_fish_stall]
+A fish stall: eels from the fen, laid out on reeds, and baskets of something that's still wriggling.
+
+[square_fish_stall_bramble]
+{scared}It moved. Sword. It MOVED.
+
+[square_well]
+A well, in the middle of the square. Its bucket is new. Its rope is new. The well is very, very old.
+
+[square_well_bramble]
+{worried}I'm not going down another well.
+
+[square_well_ves]
+{bored}Nobody's going down another well.
+
+[square_notices]
+The town notice board:
+
+LOST: one goat (Fennel). ANSWERS TO "FENNEL", SOMETIMES.
+WANTED: help with the bean harvest. Pay in beans.
+BIRDS GONE QUIET ON THE NORTH RIDGE. KEEP DOORS SHUT. -- THISTLE
+CHOIR PRACTICE CANCELLED (no bell to start it with). -- TAM
+
+[square_pots]
+A heap of pots and pans by a doorway, all of the same dark, ringing bronze. Tap one and it hums.
+
+[square_pots_ves]
+{thoughtful}That's bell metal. I'd know it anywhere. Every pan in this heap was a bell once.
+
+[square_far_door]
+A great door in the far wall of the hall, barred with a beam as thick as you are. Past it is the rest of the old city: the dead part.
+
+(The way on isn't open yet.)
+
+[square_far_door_bramble]
+{worried}Why's it got such a big bar on it?
+
+[square_light]
+A long shaft of evening light, coming down through a hole in the great roof, with dust going round and round in it.
+
+[square_lamp]
+A street lamp, lit. There are lamps all over the square, at every corner.
+
+[square_lamp_ves]
+{tender}Somebody lights all these. Every evening.
+
+{sad}...Mum would have liked it here.
+
+[square_bench]
+A bench by the square, worn smooth by a lot of sitting.
+
+[square_barrel]
+A rain barrel, under a gutter that runs down from a hole in the hall's roof.
+
+[square_crates]
+Crates of apples, waiting to go to market.
+
+# --- THE HEALER'S ---
+
+[healer_wall]
+The healer's walls: whitewashed, with bunches of herbs hung everywhere it's possible to hang something.
+
+[healer_rug]
+A rag rug, plaited out of old clothes. You can see a sleeve in it.
+
+[healer_herbs]
+Bunches of herbs, hung up to dry. Willow, yarrow, comfrey, and some you've never seen.
+
+[healer_kettle]
+A kettle on the stove, always just about to boil.
+
+[healer_jars]
+Shelves of jars, all labelled in tidy writing. FOR BRUISES. FOR COUGHS. FOR WHEN YOU'VE DONE SOMETHING SILLY.
+
+[healer_table]
+A scrubbed table, with a pestle and mortar on it, and a cup of tea gone cold.
+
+[healer_chair]
+Bryony's chair. It's got a cushion with a cat embroidered on it. The cat is cross-eyed.
+
+[healer_ves_bed]
+Ves, asleep, her leg splinted and up on a pillow. She's frowning in her sleep like she's arguing with someone.
+
+[healer_empty_bed]
+Ves's cot, made up again, the blanket folded square.
+
+[healer_your_bed]
+A cot by the wall, made up for you. You could lie down. You could sleep for a week.
+
+# --- THE KETTLE AND STRAW ---
+
+[inn_wall]
+The inn's walls, hung with everyone's coats.
+
+[inn_rug]
+A rug in front of the fire, with a cat-shaped hollow in the middle of it. No cat.
+
+[inn_fire]
+A big fire, roaring. Somebody's socks are drying in front of it.
+
+[inn_counter]
+The counter, and behind it, Mabb.
+
+[inn_kettle]
+The kettle that never comes off the hook, and the stew in it. Mabb ladles you a bowl without asking.
+
+[inn_kettle_empty]
+The kettle. You've had a bowl. Mabb's watching to see you don't have a second.
+
+[inn_table]
+A long table, scrubbed white. Everyone eats at it together, Mabb says, whether they like each other or not.
+
+[inn_bench]
+A bench along the long table.
+
+[inn_bed]
+A bed of clean straw with a blanket on it. You could sleep here.
+
+[inn_barrel]
+A barrel of cider. There's a sign on it: NOT FOR CHILDREN, BRAMBLE.
+
+[inn_barrel_bramble]
+{surprised}How do they know my NAME?
+
+[inn_rules]
+A sign on the wall:
+
+RULES OF THE HOUSE
+1. Boots off.
+2. No arguing at the table. Arguing in the yard.
+3. Nobody is turned away. Nobody.
+
+# --- THE CHAPEL WITH NO BELL ---
+
+[chapel_wall]
+The chapel's walls: the great hall's own stone, and on it, painted long ago, a figure with a sword, walking toward the light. Someone's painted over its face.
+
+[chapel_bell_frame]
+A bell frame over the altar, oak, carved with leaves. There's no bell in it. There hasn't been for a long time.
+
+[chapel_bell_frame_ves]
+{sad}The chapel at home has a bell. Everyone rings it whenever anybody comes up the stairs, in case it's the Hero.
+
+{thoughtful}...These people took theirs down. I don't know which is sadder.
+
+[chapel_altar]
+The altar, with a clean cloth on it, and on the cloth a jar of sunflowers.
+
+[chapel_candles]
+Candles in a rack, a few of them lit. People come in and light one, Tam says. For whatever they like.
+
+[chapel_candles_ves]
+{tender}I used to light one every night. For Mum.
+
+{smile}...I don't think I need to, any more. I know where she is.
+
+[chapel_pew]
+A pew, polished by a long time of people sitting.
+
+[chapel_board]
+A board by the door, in old Tam's handwriting:
+
+THE BELL. Taken down in the year the waiting stopped, and given to the town. It made forty-one pots, nine pans, and a kettle. Every one of them still rings.
+
+# --- THE SQUARE'S HOUSES, AND TEASEL'S FORGE YARD ---
+
+[square_healer_house]
+Bryony's: pale plaster and black timbers, herbs hung under the eaves to dry, a green door, and steam off the chimney. The kettle's never off.
+
+[square_smithy]
+Teasel's forge: squat and stone, soot up the front, and the fire going in the back of it. Horseshoes over the arch, for luck. She says she doesn't believe in luck. She hasn't taken them down.
+
+[square_inn_house]
+The Kettle and Straw: the biggest house in the square, with a straw roof and a kettle on the sign. Every window's lit. Somebody inside is singing, badly.
+
+[square_carter_house]
+Soot round the door and sacks of charcoal under the lean-to. Corran's. The window's the cleanest thing on it, and that's not saying much.
+
+[square_bakehouse]
+A squat house with a round oven chimney and a loaf on the sign. Pell's mum's. It smells of oatcakes from here. From everywhere, really.
+
+[square_coal]
+A heap of charcoal for the forge. Corran brings it down from the Pinefall, a cart at a time.
+
+[square_anvil]
+Teasel's anvil, the face worn bright. Don't touch it. It's warmer than it looks.
+
+[square_quench]
+A tub of black water for cooling hot iron. It hisses when she dips something in. Wren comes to listen.
+
+[square_grindstone]
+A grindstone on a treadle, with a bucket under it to catch the sparks. The bucket's melted a bit.
+
+[square_washing]
+Washing on a line between Corran's and the square. The sheets have gone grey. Everything near Corran goes grey.

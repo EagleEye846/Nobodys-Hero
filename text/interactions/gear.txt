@@ -25,6 +25,11 @@ You took down VES'S RIBBON.
 
 She came this way.
 
+[got_ves_scarf]
+You picked up VES'S SCARF.
+
+You wring the mud out of it as well as you can.
+
 # Facing a cliff with a ring at the top, before you have the rope.
 [ring_no_rope]
 High above, an iron ring is hammered into the top of the cliff.
@@ -45,3 +50,13 @@ Stand straight under it, as close in to the rock as you can.
 Iron rings are hammered into the rock above you, one after another, all the way up.
 
 With a rope, you could swing from one to the next.
+
+[got_bramble_whistle]
+You got BRAMBLE'S WHISTLE.
+
+A whistle carved out of a bit of elder, with his name scratched on it, spelt wrong.
+
+[got_star_shard]
+You got a STAR SHARD.
+
+A splinter of pale star-metal as long as your hand, still warm, struck deep into the old stone. It hums at the same note as the sword.

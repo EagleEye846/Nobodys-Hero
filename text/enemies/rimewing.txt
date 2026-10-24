@@ -15,8 +15,10 @@ The frost on its wings is patterned like a window on a cold night.
 
 Far below, the village lamps are lit. RIMEWING keeps turning to look.
 
-# Said in a speech bubble before each attack, picked at random. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 Light...
 light...

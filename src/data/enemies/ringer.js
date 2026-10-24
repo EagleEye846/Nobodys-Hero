@@ -20,7 +20,7 @@ export const RINGER = {
     palette: RINGER_PALETTE,
   },
   maxHp: 150,
-  damage: 10,
+  damage: 13,
 
   // A Chapter 2 enemy, and a heavy hitter.
   difficulty: { density: 1.15, speed: 1.15 },

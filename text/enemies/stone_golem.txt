@@ -15,8 +15,10 @@ STONE GOLEM's chest glows blue, very faintly, like a lamp behind frosted glass.
 
 Grit trickles off STONE GOLEM every time it moves. There's a lot less of it than there used to be.
 
-# Said in a speech bubble before each attack, picked at random. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 ...MOVE.
 

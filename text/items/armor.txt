@@ -95,3 +95,72 @@ A shawl of snowy feathers, soft as a cloud and heavier than it looks. Ves wraps 
 
 [rimeweave_cloak]
 A cloak woven from frost-silk and lined with fleece. It sheds snow, ice and bad news, and it's warm enough to share.
+
+# Chapter 3, below the clouds.
+[woodcutters_flannel]
+A thick red-and-black flannel shirt, patched at both elbows. It smells of woodsmoke and it's warm all the way through.
+
+[fallen_leaf_cloak]
+A cloak of scarlet leaves pressed and stitched together. You can disappear into the forest floor in it. Spells come easily in the quiet.
+
+[barkplate]
+Plates of seasoned bark laced over a leather shirt. It stops nearly anything. It also creaks when you think.
+
+[reedwoven_coat]
+A coat of woven marsh reeds, light and dry inside however wet it gets out. Your spells carry further in it, the way sound does over water.
+
+[eelskin_waders]
+Waders of tough, slippery eelskin, all the way up to the chest. Things slide off you, and you slide out of their way.
+
+[mosaic_mail]
+Mail made of the old city's mosaic tiles, each one sewn on, a picture you can't see while you're wearing it.
+
+[woodsmoke_shawl]
+A grey shawl that's sat by the woodcutters' fire for years. It still holds the warmth. Ves wraps herself in it and won't give it back.
+
+[heron_down_coat]
+A long coat quilted with heron down, waterproof and warm. When Ves holds it over you, the rain doesn't get through.
+
+[mended_coat]
+Ves's own evening coat, the one the beast tore, mended with careful stitches. The patches don't match. She wouldn't have it any other way.
+
+[lamp_soot_shawl]
+A lamplighter's shawl, left on a hook by a dead lamp. It still smells of smoke and oil. Warm all the way through.
+
+[herald_banner_cloak]
+A herald's banner, cut and hemmed into a cloak. Held up over you, it's as good as a wall.
+
+[criers_mittens]
+The town crier's mittens, red wool with the fingers worn thin. Good for grabbing things out of the air.
+
+# The Hushwood.
+[lookouts_oilskin]
+A long oilskin coat left up the old lookout tree, still dry inside after all these years. It's watched a lot of weather.
+
+[herald_greatcoat]
+A herald's red-and-gold greatcoat that came down the mountain on the wind, according to Rummage. Nobody's worn it since. It's never been needed.
+
+[hand_me_down_flannel]
+A red flannel shirt that belonged to three cousins first. It comes down past Bramble's knees. He says it's a coat.
+
+[kiln_jerkin]
+A leather jerkin, baked hard by Nan Cinder's kiln and soft on the inside. It smells of charcoal. Bramble says it smells of winning.
+
+[acorn_cap]
+A woolly cap the colour of an acorn, with a stalk on top. Bramble wore it to his den every day last summer. It's lucky. It's been proven.
+
+[mas_scarf]
+Ma's red scarf, found at the trap. Bramble won't say anything about it. He just wears it, tight.
+
+[oilcloth_poncho]
+A poncho cut from an old oilcloth tent. It crackles when Bramble moves, which he says makes him sound bigger.
+
+# Teasel's forge, in Lasthome's square.
+[bell_bronze_breastplate]
+A breastplate hammered out of bell bronze. It takes a great deal of hitting. It weighs on your spells a little. It weighs on everything a little.
+
+[smiths_leathers]
+Teasel's own leathers, the spare set, scorched down the front. Not much gets through them in a hurry, and you can still move in them.
+
+[tin_lined_cape]
+A short cape lined with hammered tin, against sparks. Ves says it crinkles. It does. It also stops a great deal.

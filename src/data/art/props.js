@@ -1,5 +1,14 @@
 // Prop and NPC art. Signs are one tile (16x16); characters can be taller or
 // wider and are drawn standing on their tile.
+import { BRAMBLE_PALETTE_EXTRA, BRAMBLE_PROP_SPRITES } from './bramble.js';
+import { HUSHWOOD_PALETTE_EXTRA, HUSHWOOD_PROP_SPRITES, HUSHWOOD_FOOTPRINTS } from './hushwood.js';
+import { DRAINS_PALETTE_EXTRA, DRAINS_PROP_SPRITES, DRAINS_FOOTPRINTS } from './drains.js';
+import { LADLE_PROP_SPRITES } from './ladle.js';
+import { VES_HURT_SPRITES, VES_CRUTCH_FRAMES } from './vesper.js';
+import { MARSH_PALETTE_EXTRA, MARSH_PROP_SPRITES } from './marsh.js';
+import { LASTHOME_PROP_SPRITES, LASTHOME_FOOTPRINTS } from './lasthome.js';
+import { DEADCITY_PALETTE_EXTRA, DEADCITY_PROP_SPRITES, DEADCITY_FOOTPRINTS } from './deadcity.js';
+
 export const PROP_PALETTE = {
   k: '#120c1c', // outline
   // Sign
@@ -71,6 +80,16 @@ export const PROP_PALETTE = {
   S: '#b8c0d0', // steel and spectacles
   U: '#8a2a2a', // dark red
   Z: '#2a2630', // iron and feathers
+  // Bramble's hair, freckles and boots.
+  ...BRAMBLE_PALETTE_EXTRA,
+  // The Hushwood's bark, cut wood, brook water, soot and starlight.
+  ...HUSHWOOD_PALETTE_EXTRA,
+  // The Old Drains' deep water, rust, silt and slime.
+  ...DRAINS_PALETTE_EXTRA,
+  // The Lantern Marsh's fen turf, bog and reeds.
+  ...MARSH_PALETTE_EXTRA,
+  // The Dead City's lit slab stone.
+  ...DEADCITY_PALETTE_EXTRA,
 };
 
 export const PROP_SPRITES = {
@@ -3081,6 +3100,125 @@ export const PROP_SPRITES = {
     '...........kk...',
     '................',
   ],
+  // Chapter 3, the Lantern Marsh: Ves hurt, sitting against the wall (the
+  // first frame of VES_HURT_SPRITES in vesper.js, which room props can play
+  // as 'ves_hurt'), and curled up asleep on the floor under her coat.
+  vesper_hurt: VES_HURT_SPRITES.still,
+  vesper_hurt_sleep: [
+    '....................',
+    '....................',
+    '....................',
+    '....................',
+    '....................',
+    '....................',
+    '....................',
+    '....................',
+    '.........kkkkkkk....',
+    '...kkkkkkGGGGGGGkk..',
+    '..kLLLLkGGGGJGGGGGk.',
+    '.kLLlllLkGGGJGGGGGGk',
+    '.kLLLLLLLkGGJGGGGGGk',
+    'kLLCkkCLLkGGJGGGGGkk',
+    'kLuCCCCLk4GGJGGGGkZk',
+    'kLLkCCkLLk4GGGGGkEZk',
+    '.kkLLLLkkGGGGGGGkXZk',
+    '..kkkkkkkkkkkkkkkkk.',
+  ],
+  // Her scarf (cream, with the coral stripe), trampled into the marsh mud.
+  ves_scarf: [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '....||||||||....',
+    '..||||||||||||..',
+    '.||kkkkkkkkkk||.',
+    '.|kEETEEttEEEk|.',
+    '.|kEETEtttEEEEk|',
+    '.|kkkkkkkktkEEk|',
+    '.|kEkEk|||kTEEk|',
+    '..kEkEk||kEEEk|.',
+    '..|k|k||||kkk||.',
+  ],
+  // Chapter 3 push puzzles (see Prop: `rock`, `button`, `rockReset`).
+  // A mossy boulder you can push, with red leaves caught on top.
+  push_rock: [
+    '................',
+    '................',
+    '.....kkkkkk.....',
+    '....kUc8MMMk....',
+    '...kc88MMMMMk...',
+    '..k888MMEMMMOk..',
+    '..k88MMMMMMMOk..',
+    '.kMMMMMMMMMMMOk.',
+    '.kMMEMMMMMMMOOk.',
+    '.kMMMMMMMMMOOOk.',
+    '.kMMMMMMMMOOOOk.',
+    '.kOMMMMMMOOOO8k.',
+    '..kOOMMOOOO88k..',
+    '...kkOOOOO8kk...',
+    '.....kkkkkk.....',
+    '................',
+  ],
+  // A round stone plate set in the floor, with a carved ring. Up, then held down.
+  stone_button: [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '.....kkkkkk.....',
+    '...kkMMMMMMkk...',
+    '..kMMMOOOOMMMk..',
+    '..kMMOMMMMOMMk..',
+    '..kMMOMMMMOMMk..',
+    '..kMMMOOOOMMMk..',
+    '..kOMMMMMMMMOk..',
+    '...kkOOOOOOkk...',
+    '.....kkkkkk.....',
+    '................',
+  ],
+  stone_button_on: [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '.....kkkkkk.....',
+    '...kkOOOOOOkk...',
+    '..kOOOAAAAOOOk..',
+    '..kOOAaaaaAOOk..',
+    '..kOOOAAAAOOOk..',
+    '..kOOOOOOOOOOk..',
+    '...kkkkkkkkkk...',
+    '................',
+    '................',
+  ],
+  // A mossy stump with a hand carved in its top: press it and the rocks roll home.
+  rock_stump: [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '....kkkkkkkk....',
+    '...kwwwwwwwwk...',
+    '..kwwddwwddwwk..',
+    '..kwwdddddwwwk..',
+    '..ktwwdddwwwtk..',
+    '..kt8wwwwww8tk..',
+    '..kttt8tttt8tk..',
+    '..ktttttttttLk..',
+    '.k8tttLtttttL8k.',
+    '.kkkkkkkkkkkkkk.',
+    '................',
+  ],
   // A scrap of evening-blue wool, torn from her coat.
   wool_scrap: [
     '................',
@@ -3100,6 +3238,29 @@ export const PROP_SPRITES = {
     '................',
     '................',
   ],
+  // Bramble, in his cutscene poses.
+  ...BRAMBLE_PROP_SPRITES,
+  // The Hushwood and Hollin (src/data/art/hushwood.js): logs, treadles,
+  // chalk, the well, Nan Cinder and Rummage.
+  ...HUSHWOOD_PROP_SPRITES,
+  // The Old Drains (src/data/art/drains.js): valve wheels, gratings, casks,
+  // roots, currents and the old city's carving.
+  ...DRAINS_PROP_SPRITES,
+  // The Lantern Marsh (src/data/art/marsh.js): lanterns on poles, Ves's trail, reeds.
+  ...MARSH_PROP_SPRITES,
+  // Old Ladle, the cistern's hob, who keeps the drains' rest stop (src/data/art/ladle.js).
+  ...LADLE_PROP_SPRITES,
+  // Lasthome (src/data/art/lasthome.js): its townsfolk, market stalls, the
+  // pots that were its bell, Corran's cart, and Ves in the healer's cot.
+  ...LASTHOME_PROP_SPRITES,
+  // Ves on her crutch, after the healer, standing (facing you, and facing left):
+  // the first frames of VES_CRUTCH_FRAMES in vesper.js, for cutscenes.
+  vesper_crutch: VES_CRUTCH_FRAMES.downIdle,
+  vesper_crutch_left: VES_CRUTCH_FRAMES.leftIdle,
+  // The Dead City (src/data/art/deadcity.js): its high levers, inscriptions,
+  // dead lamps, broken statues of the Hero, the bathhouse, the gate and its
+  // Warden, Slowly the tortoise, and Ves reaching up with her crutch.
+  ...DEADCITY_PROP_SPRITES,
 };
 
 // How many tiles wide a prop stands, for the big ones. It stands on its tile
@@ -3130,4 +3291,8 @@ export const PROP_FOOTPRINTS = {
   votive_rack: 2,
   stair_rope: 5,
   chalk_tally: 3,
+  ...HUSHWOOD_FOOTPRINTS,
+  ...DRAINS_FOOTPRINTS,
+  ...LASTHOME_FOOTPRINTS,
+  ...DEADCITY_FOOTPRINTS,
 };

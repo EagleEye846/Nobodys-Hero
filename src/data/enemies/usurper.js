@@ -87,13 +87,14 @@ export const USURPER_BOSS = {
   // so it's about 1050 HP of real fighting, with Ves's blade and the team
   // attack to do it with (see notes/docs/mountain-enemies.md for the sums).
   maxHp: 1400,
-  damage: 14,
+  damage: 19,
   difficulty: { density: 1.35, speed: 1.18 },
 
   // In his last stand, below a third of his HP, he layers a lighter second
   // attack on top of the first.
   secondWind: { below: 0.34, density: 0.3, delay: 2.5 },
-
+  // He rises out of the smoke (see stageBits.js).
+  entrance: 'rise',
   // His entrance: a title card before the fight (his lines are [boss_intro]).
   introCard: { title: 'THE USURPER', subtitle: 'Who Would Be Hero' },
 

@@ -53,7 +53,7 @@ export const PINEFALL_CAMP = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 0, y: 9, w: 1, h: 2, to: 'pinefall_brook', spawn: { x: 28, y: 14 } },
-    { x: 31, y: 9, w: 1, h: 2, to: 'pinefall_maze', spawn: { x: 1, y: 11 } },
+    { x: 31, y: 9, w: 1, h: 2, to: 'pinefall_rolling', spawn: { x: 1, y: 9 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).

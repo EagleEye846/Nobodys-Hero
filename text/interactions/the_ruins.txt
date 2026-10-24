@@ -19,7 +19,7 @@ The doorway to the north leads to the Lantern Hall.
 
 [hall_plaque]
 LANTERN HALL
-The lanterns here were lit by the first Keeper, and have never once gone out.
+The lanterns here were lit by the first Keeper, and were never to go out.
 
 Something with wings has been circling them lately.
 
@@ -86,8 +86,6 @@ Clunk. The gate rattles open.
 [beyond_sign]
 The air is different out here. Fresher.
 The Ruins are behind you now.
-
-(This region is still being built. Make it yours in the Room Editor!)
 
 # What's left of Mother Taper by the way out, if you fought her until her flame went out.
 [taper_remains]

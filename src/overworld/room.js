@@ -1,6 +1,7 @@
 import { TILE_SIZE as T } from '../config.js';
 import { TILES, floorUnder, drawDrops } from './tileset.js';
 import { standingPicture } from './shadows.js';
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../config.js';
 import { Prop } from './prop.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { inParty } from '../characters/party.js';
@@ -43,11 +44,19 @@ const PROP_LIGHTS = {
   table: [26, 0.1],
   counter_cake: [18, 0.08],
   lantern_post_on: [26, 0.12],
+  // The Lantern Marsh's old lanterns on poles, still burning.
+  marsh_lantern: [40, 0.14],
   campfire: [40, 0.2],
   brazier: [34, 0.18],
   stove_pot: [22, 0.1],
   street_lamp: [34, 0.14],
 };
+
+// What sinks into what: logs (and casks) into brook water, and out in the
+// Lantern Marsh, logs and rocks both into its bog and its fen water, where
+// they settle in the soft bottom as somewhere to step.
+const LOG_SINKS = new Set(['~', '%', '$']);
+const ROCK_SINKS = new Set(['%', '$']);
 
 // How far light reaches in a dark room (`dark`, see overworldScene.js), for
 // lantern pillars and candle stands; props use PROP_LIGHTS, or their own `light`.
@@ -83,7 +92,7 @@ export class Room {
       prop.showsUp = { until: info.until, after: info.after, join: info.join };
       // Gifts are remembered by room, look and spot, so they're only given once.
       prop.key = `${data.id}:${info.sprite}:${info.x},${info.y}`;
-      if (info.gives && (WORLD_STATE.taken ?? []).includes(prop.key)) prop.markTaken();
+      if ((info.gives || info.gold) && (WORLD_STATE.taken ?? []).includes(prop.key)) prop.markTaken();
       // Up on a block: drawn standing on top of it, and only in reach from up there.
       prop.raise = TILES[data.tiles[info.y]?.[info.x]]?.raise ?? 0;
       // Already read: no more "!" over it.
@@ -91,8 +100,21 @@ export class Room {
       return prop;
     });
     this.id = data.id;
+    this.doors = data.doors ?? [];
+    // The Hushwood's puzzles (see hushwood.js): brook tiles bridged by sunk
+    // logs ("x,y"), and the treadles held down right now. Both start fresh
+    // every time you come in, until the room's been got through (`passed`,
+    // in the save): then its bridges and fallen trees stay, and its treadle
+    // gates stay open.
+    this.bridged = new Set();
+    // What sank there, for a room you've got through ("x,y" to its look).
+    this.bridgeLooks = new Map();
+    this.treadlesDown = new Set();
+    this.passed = WORLD_STATE.passed?.[data.id] ?? null;
+    this.applyPassed();
     this.placeStorage(data);
     this.refreshShowsUp();
+    this.clearUnsolvedButtons();
     this.refreshPuzzles();
     // Cracked and broken floor, keyed by "tx,ty". Kept apart from the tile data
     // so restarting the room brings the floor back.
@@ -132,11 +154,28 @@ export class Room {
       }
       if (!tile?.standing) return;
       let picture = null;
+      let sprite = null;
+      const height = tile.height ?? T;
       pieces.push({
         // Its middle, for placing it round a spire (OverworldScene.drawOnSpire).
         x: tx * T + T / 2,
         sortY: (ty + 1) * T,
-        draw: (ctx, camera) => tile.draw(ctx, tx * T - camera.x, ty * T - camera.y, tx, ty, this),
+        // Off the screen, it isn't drawn at all. On it, a tile that never
+        // changes (a tree, a pillar) is drawn once into a little picture and
+        // that's reused every frame: a wood of a hundred scarlet trees is
+        // thousands of tiny rectangles otherwise. Ones that move (a
+        // candelabra's flames, a dripping stalactite) are drawn live.
+        draw: (ctx, camera) => {
+          const sx = tx * T - camera.x;
+          const sy = ty * T - camera.y;
+          if (sx < -2 * T || sx > SCREEN_WIDTH + T || sy < -T || sy - height > SCREEN_HEIGHT) return;
+          if (tile.animated) {
+            tile.draw(ctx, sx, sy, tx, ty, this);
+            return;
+          }
+          sprite ??= standingSprite(tile, tx, ty, this);
+          ctx.drawImage(sprite, sx - T, sy - height);
+        },
         // Its shadow in the sun (see shadows.js), from a picture of it drawn once.
         shadow: () => {
           picture ??= standingPicture(tile, tx, ty, this);
@@ -154,17 +193,33 @@ export class Room {
   }
 
   isLeverOn(name) {
-    return (WORLD_STATE.levers ?? []).includes(this.leverKey(name));
+    return this.treadlesDown.has(name) || (WORLD_STATE.levers ?? []).includes(this.leverKey(name));
+  }
+
+  // Whether a prop's `wet` says it has water in it now: every name listed is
+  // a lever that's on, or (with a '!') off.
+  isWet(prop) {
+    return prop.wet.every((name) => (name.startsWith('!') ? !this.isLeverOn(name.slice(1)) : this.isLeverOn(name)));
   }
 
   // Shows each switch on or off, and opens the gates whose switches are all on.
   // Returns the gates that just opened.
-  refreshPuzzles() {
+  //
+  // A gate held open by a treadle (`held`) won't shut on anyone standing in
+  // it (`bodies`, each { x, y } under the feet): it waits till they're clear.
+  // In a room you've got through, it stays open. Water in a channel (`wet`)
+  // comes and goes with its sluice levers.
+  refreshPuzzles(bodies = []) {
     const opened = [];
     for (const prop of this.props) {
       if (prop.lever) prop.setOn(this.isLeverOn(prop.lever));
+      if (prop.button) prop.setOn(this.isLeverOn(prop.button));
+      if (prop.treadle) prop.setOn(this.treadlesDown.has(prop.treadle));
+      if (prop.wet) prop.hidden = !this.isWet(prop);
       if (prop.opensWith) {
-        const open = prop.opensWith.every((name) => this.isLeverOn(name));
+        let open = prop.opensWith.every((name) => this.isLeverOn(name));
+        if (prop.held && this.passed) open = true;
+        if (!open && prop.isOpen && bodies.some((b) => b.x + 5 > prop.x && b.x - 5 < prop.x + prop.width && b.y > prop.y && b.y - 6 < prop.y + T)) open = true;
         if (open && !prop.isOpen) opened.push(prop);
         prop.isOpen = open;
       }
@@ -192,6 +247,233 @@ export class Room {
     return { opened: this.refreshPuzzles(), reset };
   }
 
+  // --- Push puzzles: rocks and buttons (see Prop) ---
+  // Rocks start where the room puts them every time you come in, so a button
+  // only stays down in the save once its gate has opened: the rest are let
+  // up when the room is built.
+  clearUnsolvedButtons() {
+    if (!WORLD_STATE.levers) return;
+    const open = (name) => this.allProps.some((gate) => gate.opensWith?.includes(name) && gate.opensWith.every((n) => this.isLeverOn(n)));
+    for (const button of this.allProps.filter((p) => p.button && !open(p.button))) {
+      WORLD_STATE.levers = WORLD_STATE.levers.filter((k) => k !== this.leverKey(button.button));
+    }
+  }
+
+  get rocks() {
+    return this.props.filter((prop) => prop.rock);
+  }
+
+  // Whether a log (or with `rock`, a rock) shoved into tile (tx, ty) would
+  // sink there: open water or bog nothing's sunk into yet, and nothing in it.
+  sinksAt(tx, ty, rock = false) {
+    if (!(rock ? ROCK_SINKS : LOG_SINKS).has(this.tileAt(tx, ty)) || this.bridged.has(`${tx},${ty}`)) return false;
+    // Not at the room's very edge: out there it's open water, and a log
+    // just bumps against the bank and stops.
+    if (this.onEdge(tx, ty)) return false;
+    const box = [tx * T + 1, ty * T + 1, (tx + 1) * T - 1, (ty + 1) * T - 1];
+    return !this.props.some((prop) => !prop.walkable && prop.overlaps(...box));
+  }
+
+  onEdge(tx, ty) {
+    return tx <= 0 || ty <= 0 || tx >= this.width - 1 || ty >= this.height - 1;
+  }
+
+  // Whether (tx, ty) is water or bog with something sunk in it (a log, a
+  // rock, a cask) that you're stepping on: you balance on it (see
+  // OverworldScene.balance).
+  isSteppingStone(tx, ty) {
+    return LOG_SINKS.has(this.tileAt(tx, ty)) && this.bridged.has(`${tx},${ty}`);
+  }
+
+  // Bog under (tx, ty) that would swallow you: nothing sunk into it.
+  isBog(tx, ty) {
+    return this.tileAt(tx, ty) === '%' && !this.bridged.has(`${tx},${ty}`);
+  }
+
+  // Whether a rock could be shoved into tile (tx, ty): open floor (not up on
+  // a block), not a doorway, and nothing solid there but a button.
+  rockCanEnter(tx, ty, log = false) {
+    // Out in the marsh, a rock shoved into the bog or the water sinks.
+    if (!log && ROCK_SINKS.has(this.tileAt(tx, ty)) && !this.bridged.has(`${tx},${ty}`)) return this.sinksAt(tx, ty, true) ? 'sink' : false;
+    if (this.isSolidTile(tx, ty) || this.raiseAt(tx, ty) > 0) return false;
+    // A rock won't go into a current (it'd only sit there); a log or a cask
+    // will, and rides it.
+    if (!log && this.flowAt(tx, ty)) return false;
+    if (this.doors.some((d) => tx >= d.x && tx < d.x + (d.w ?? 1) && ty >= d.y && ty < d.y + (d.h ?? 1))) return false;
+    const box = [tx * T + 1, ty * T + 1, (tx + 1) * T - 1, (ty + 1) * T - 1];
+    return !this.props.some((prop) => !prop.walkable && prop.overlaps(...box));
+  }
+
+  // Presses the buttons with a rock on them and lets the others up, except
+  // where their gate has already opened (it stays open). Returns
+  // { opened, pressed }: the gates that just opened, and whether any button
+  // went down.
+  settleButtons() {
+    WORLD_STATE.levers ??= [];
+    let pressed = false;
+    for (const button of this.props.filter((p) => p.button)) {
+      if (this.props.some((gate) => gate.isOpen && gate.opensWith?.includes(button.button))) continue;
+      const down = this.rocks.some((rock) => !rock.slide && rock.x === button.x && rock.y === button.y);
+      const key = this.leverKey(button.button);
+      const was = this.isLeverOn(button.button);
+      if (down && !was) {
+        WORLD_STATE.levers.push(key);
+        pressed = true;
+      } else if (!down && was) {
+        WORLD_STATE.levers = WORLD_STATE.levers.filter((k) => k !== key);
+      }
+    }
+    return { opened: this.refreshPuzzles(), pressed };
+  }
+
+  // Every rock back where it started.
+  resetRocks() {
+    return this.resetPuzzle();
+  }
+
+  // --- The Hushwood's logs, trees and treadles (see hushwood.js) ---
+  get logs() {
+    return this.props.filter((prop) => prop.log);
+  }
+
+  // A log sinks into a brook tile and bridges it: walk across on its back.
+  // (A cask in the drains wedges there the same way: its `_sunk` look.)
+  sinkLog(log, tx, ty) {
+    log.slide = null;
+    log.moveToTile(tx, ty);
+    log.sunk = true;
+    log.walkable = true;
+    // (A log in the marsh's bog or fen water sits in mud, not brook water.)
+    const marshy = ROCK_SINKS.has(this.tileAt(tx, ty));
+    log.setLook(marshy && log.baseLook === 'roll_log' ? 'roll_log_bog' : `${log.baseLook}_sunk`);
+    this.bridged.add(`${tx},${ty}`);
+    this.bridgeLooks.set(`${tx},${ty}`, log.baseLook);
+  }
+
+  // A log that came from a felled tree, lying where it fell (or sunk there).
+  addLog(tx, ty, sunk = false, look = 'roll_log') {
+    const log = new Prop({ sprite: look, x: tx, y: ty, text: look === 'roll_log' ? 'roll_log' : null, log: true });
+    log.showsUp = {};
+    log.made = true;
+    log.key = `${this.id}:log:${tx},${ty}`;
+    this.allProps.push(log);
+    this.props?.push(log);
+    if (sunk) this.sinkLog(log, tx, ty);
+    return log;
+  }
+
+  // A thin tree, felled (a stump now, which you can walk over), or a hollow
+  // trunk split open.
+  fell(tree) {
+    tree.felled = true;
+    tree.walkable = true;
+    // (Roots grown through a culvert mouth split the same way: their `_open` look.)
+    tree.setLook(tree.chop === 'open' ? `${tree.baseLook}_open` : 'thin_pine_stump');
+  }
+
+  // A room you've got through comes back as you left it: bridges where its
+  // logs sank, its trees down. Hollow trunks you split stay split anywhere.
+  applyPassed() {
+    const opened = WORLD_STATE.chopped ?? [];
+    for (const prop of this.allProps) if (prop.chop === 'open' && opened.includes(prop.key)) this.fell(prop);
+    const passed = this.passed;
+    if (!passed) return;
+    for (const prop of this.allProps) {
+      if (prop.chop === 'fell' && passed.felled?.includes(prop.key)) this.fell(prop);
+      if ((prop.log || prop.rock) && passed.usedLogs?.includes(prop.key)) prop.hidden = true;
+    }
+    for (const at of passed.bridges ?? []) {
+      // ("x,y", or "x,y,look" for something other than a log: a rock in the bog.)
+      const [tx, ty, look] = at.split(',');
+      this.addLog(Number(tx), Number(ty), true, look || 'roll_log');
+    }
+  }
+
+  // What to remember once you've got through: the bridges, the felled trees,
+  // and which of the room's own logs ended up in the water.
+  passedState() {
+    return {
+      bridges: [...this.bridged].map((at) => {
+        const look = this.bridgeLooks.get(at);
+        return look && look !== 'roll_log' ? `${at},${look}` : at;
+      }),
+      felled: this.allProps.filter((p) => p.chop === 'fell' && p.felled).map((p) => p.key),
+      usedLogs: this.allProps.filter((p) => (p.log || p.rock) && !p.made && (p.sunk || p.hidden)).map((p) => p.key),
+    };
+  }
+
+  // Everything back as it was when you came in: rocks and logs home, logs
+  // out of the water, felled trees standing again. In a room you've got
+  // through, only its rocks (the rest has settled for good).
+  resetPuzzle() {
+    for (const rock of this.rocks) {
+      // (In a room you've got through, a rock sunk in the bog stays sunk.)
+      if (rock.sunk && this.passed) continue;
+      rock.slide = null;
+      rock.x = rock.home.x;
+      rock.y = rock.home.y;
+      if (rock.sunk) {
+        rock.sunk = false;
+        rock.walkable = false;
+        rock.setLook();
+      }
+    }
+    if (!this.passed) {
+      this.allProps = this.allProps.filter((p) => !p.made);
+      for (const log of this.allProps.filter((p) => p.log)) {
+        log.slide = null;
+        log.x = log.home.x;
+        log.y = log.home.y;
+        log.sunk = false;
+        log.walkable = false;
+        log.hidden = false;
+        log.setLook();
+      }
+      for (const tree of this.allProps.filter((p) => p.chop === 'fell' && p.felled)) {
+        tree.felled = false;
+        tree.walkable = false;
+        tree.setLook();
+      }
+      this.bridged.clear();
+      this.bridgeLooks.clear();
+      this.refreshShowsUp();
+    }
+    this.treadlesDown.clear();
+    return this.settleButtons();
+  }
+
+  // Treadles go down under anyone standing on them (`bodies`, feet points)
+  // or a rock or log at rest on them, and come up when they're clear.
+  // Returns whether any went up or down.
+  settleTreadles(bodies) {
+    const down = new Set();
+    for (const treadle of this.props.filter((p) => p.treadle)) {
+      const tx = treadle.x / T;
+      const ty = treadle.y / T;
+      const stood = bodies.some((b) => Math.floor(b.x / T) === tx && Math.floor((b.y - 1) / T) === ty);
+      const weighed = this.props.some((p) => (p.rock || p.log) && !p.sunk && !p.slide && !p.hidden && p.x === treadle.x && p.y === treadle.y);
+      if (stood || weighed) down.add(treadle.treadle);
+    }
+    const changed = down.size !== this.treadlesDown.size || [...down].some((name) => !this.treadlesDown.has(name));
+    this.treadlesDown = down;
+    return changed;
+  }
+
+  // Where a sliding log can go next: 'sink' into open brook water, true onto
+  // open floor (as a rock could), false if it's stopped.
+  logCanEnter(tx, ty) {
+    if (LOG_SINKS.has(this.tileAt(tx, ty)) && !this.bridged.has(`${tx},${ty}`)) return this.sinksAt(tx, ty) ? 'sink' : false;
+    return this.rockCanEnter(tx, ty, true);
+  }
+
+  // The way the current runs on a tile ('up', 'down', 'left', 'right'), or
+  // null: a `flow` prop there that's running now (see Prop).
+  flowAt(tx, ty) {
+    const x = tx * T;
+    const y = ty * T;
+    return this.props.find((prop) => prop.flow && !prop.hidden && prop.x === x && prop.y === y)?.flow ?? null;
+  }
+
   // Tile character at (tx, ty), or null outside the room.
   tileAt(tx, ty) {
     if (this.wraps) tx = ((tx % this.width) + this.width) % this.width;
@@ -209,7 +491,8 @@ export class Room {
 
   isSolidTile(tx, ty) {
     const tile = this.tileAt(tx, ty);
-    return tile === null || TILES[tile].solid;
+    if (tile === null) return true;
+    return TILES[tile].solid && !this.bridged.has(`${tx},${ty}`);
   }
 
   // How high a tile's floor is: 0, or a block's `raise`.
@@ -221,14 +504,18 @@ export class Room {
   // Whether the box (right and bottom exclusive) overlaps a solid tile or prop.
   // Raised blocks count as solid too, unless `climbing` (the player, who can
   // jump; they check the block's height themselves with floorHeight).
-  collides(left, top, right, bottom, climbing = false) {
+  // A `small` mover (Bramble, on his own) goes through kid gaps.
+  collides(left, top, right, bottom, climbing = false, small = false) {
     for (let ty = Math.floor(top / T); ty <= Math.floor((bottom - 1) / T); ty++) {
       for (let tx = Math.floor(left / T); tx <= Math.floor((right - 1) / T); tx++) {
         if (this.isSolidTile(tx, ty)) return true;
         if (!climbing && this.raiseAt(tx, ty) > 0) return true;
       }
     }
-    return this.props.some((prop) => this.propBlocks(prop, left, top, right, bottom));
+    // Whoever's standing still while the other of you goes off (`blockers`,
+    // set by OverworldScene) is in the way too: nobody walks through a friend.
+    if ((this.blockers ?? []).some((b) => left < b.x + 5 && right > b.x - 5 && top < b.y && bottom > b.y - 6)) return true;
+    return this.props.some((prop) => !(small && prop.gap) && this.propBlocks(prop, left, top, right, bottom));
   }
 
   // The highest floor under the box: where something standing there would stand.
@@ -400,4 +687,16 @@ export class Room {
     }
     ctx.globalCompositeOperation = 'source-over';
   }
+}
+
+// A standing tile drawn once into its own picture, three tiles wide (it can
+// spread past its tile) and tall enough for its height, standing on the
+// middle tile of the bottom row: the same drawing as tile.draw, kept.
+function standingSprite(tile, tx, ty, room) {
+  const height = tile.height ?? T;
+  const canvas = document.createElement('canvas');
+  canvas.width = T * 3;
+  canvas.height = height + T;
+  tile.draw(canvas.getContext('2d'), T, height, tx, ty, room);
+  return canvas;
 }

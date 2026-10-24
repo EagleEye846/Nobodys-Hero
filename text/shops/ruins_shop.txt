@@ -55,7 +55,7 @@ Everything was free for the Hero. You're not the Hero, so... business is busines
 Monsters drop gold when you beat them. And when you spare them! Kindness pays, sometimes.
 
 [sell_prompt]
-Selling? Oh, I do love a swap. Half what it's worth, mind. A hundred years of rent.
+Selling? Oh, I do love a swap. Three quarters of what it's worth, mind. A hundred years of rent.
 
 [bought_skill]
 A skill point! I've had that in the back since the Hero was due. It's yours now. Spend it from the SKILLS screen. Press C!

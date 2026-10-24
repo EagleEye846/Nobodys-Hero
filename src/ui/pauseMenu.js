@@ -14,6 +14,7 @@ import { EquipMenu } from './equipMenu.js';
 import { SkillsMenu } from './skillsMenu.js';
 import { ItemsMenu } from './itemsMenu.js';
 import { CandleMenu } from './candleMenu.js';
+import { SettingsMenu } from './settingsMenu.js';
 
 // The menu on C in the overworld, laid out like Deltarune's: a bar of buttons
 // across the top and the hero's status card along the bottom. Left/right picks
@@ -24,9 +25,13 @@ const TABS = [
   { label: 'EQUIP', icon: 'fight' },
   { label: 'SKILLS', icon: 'spells' },
   { label: 'CANDLES', icon: 'candle' },
+  { label: 'SETTINGS', icon: 'sound' },
 ];
 const BAR_HEIGHT = 84;
-const BUTTON = { w: 130, h: 58, gap: 16, y: 13 };
+// Five buttons across the bar, so they're a little narrower than they were
+// with four, and their labels a little smaller.
+const BUTTON = { w: 118, h: 58, gap: 6, y: 13 };
+const LABEL_SIZE = 24;
 const CARD = { x: 100, y: 330, w: 440, h: 134 };
 const COLORS = {
   orange: '#ff8c1a',
@@ -57,7 +62,7 @@ export class PauseMenu {
   constructor() {
     this.isOpen = false;
     this.tab = 0;
-    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu(), new CandleMenu()];
+    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu(), new CandleMenu(), new SettingsMenu()];
   }
 
   open() {
@@ -121,8 +126,8 @@ export class PauseMenu {
       ctx.strokeRect(x, BUTTON.y, BUTTON.w, BUTTON.h);
       const image = selected ? soulSprite() : icon(tab.icon, color);
       const size = selected ? image.width : 18;
-      ctx.drawImage(image, x + 14, BUTTON.y + (BUTTON.h - size) / 2, size, selected ? image.height : 18);
-      drawText(ctx, tab.label, x + 42, BUTTON.y + 15, { size: 30, color });
+      ctx.drawImage(image, x + 10, BUTTON.y + (BUTTON.h - size) / 2, size, selected ? image.height : 18);
+      drawText(ctx, tab.label, x + 34, BUTTON.y + 17, { size: LABEL_SIZE, color });
     });
   }
 

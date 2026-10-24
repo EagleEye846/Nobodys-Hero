@@ -22,6 +22,11 @@ export const WORLD_STATE = {
   levers: [],
   // Green updrafts you've found and can travel between (src/data/travel.js).
   travelDrafts: [],
+  // The Hushwood's puzzle rooms you've got through, by room id, with their
+  // bridges and felled trees (see Room.passedState), and the hollow trunks
+  // you've split open (secret ways), as prop keys.
+  passed: {},
+  chopped: [],
   playSeconds: 0,
 };
 

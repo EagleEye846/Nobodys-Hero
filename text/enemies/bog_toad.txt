@@ -1,0 +1,84 @@
+# BOG TOAD
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/bog_toad.js.
+
+[intro]
+The mossy rock opens one eye. Then the other. It's a BOG TOAD, and you woke it up.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+BOG TOAD glares at you through half-shut eyes. It's thinking about going back to sleep.
+
+BOG TOAD yawns so wide you can see its supper. Some of its supper is still buzzing.
+
+BOG TOAD's eyes slide shut. Then open. It's not asleep. It's resting its eyes.
+
+BOG TOAD shifts on its lily pad. The whole pool sloshes.
+
+Smells like pond weed and a warm, wet blanket.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Grrrumph.
+
+Go away.
+I was ASLEEP.
+
+Five more
+minutes.
+
+Croak.
+...That means
+go away.
+
+I'll eat you.
+Later.
+After my nap.
+
+Who's making
+all that
+NOISE?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/bog_toad.js.
+[talk: Inspect]
+BOG TOAD - HP 620
+A huge old toad, asleep in this pool for years. Now it's awake. It is NOT a morning toad.
+
+[talk: Let it sleep]
+You tiptoe. You whisper. You stop moving altogether. BOG TOAD's eyes droop... droop... It's very nearly asleep.
+
+[talk: Catch it a fly]
+You catch a fly and hold it out. BOG TOAD's tongue takes it so fast you don't see it go. It looks a little less grumpy.
+
+[talk: Croak at it]
+You croak at BOG TOAD. It's not a very good croak. BOG TOAD croaks back, slowly, to show you how it's done.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+BOG TOAD sinks down into its pool until only its eyes are showing. Then those go too, with a huffy little bubble.
+
+[pacified]
+BOG TOAD settles back on its lily pad, tucks its feet in, and is snoring before you've even gone.
+
+# Bramble's own TALK lines for it ({foe} is its name). He wants to keep it.
+[bramble_talk]
+Bramble asks {foe} if he can take it home and keep it in a bucket. {foe} looks at the size of Bramble. Then the size of itself.
+
+Bramble does his best frog noise at {foe}. {foe} tells him that was a frog noise, and it is a TOAD.
+
+Bramble tells {foe} his Ma snores louder than it does. {foe} is offended, and snores louder to prove him wrong.
+
+Bramble whispers to Sword that it's the biggest toad in the world. {foe} hears, and sits up a little taller.
+
+# Ves's own TALK lines for it ({foe} is its name). She's hurt, riding on
+# your back, so she talks to it over your shoulder.
+[vesper_hurt_talk]
+Ves, from over your shoulder, sings {foe} a lullaby, very softly. {foe}'s eyes droop. So do hers, a bit.
+
+Ves tells {foe} she's sorry they woke it, and they'll be gone in a minute. {foe} grumbles. It's a gentler grumble.
+
+Ves tells {foe} she'd like a nap too, honestly. {foe} looks at her, and nods, slowly, one tired thing to another.

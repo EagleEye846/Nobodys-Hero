@@ -6,8 +6,8 @@ import {
   el, setChildren, icon, btn, hint, field, select, optionNodes, section, checkbox, modal, toast, pixelCanvas, thumbnail,
   snakeCase, camelCase, constCase, friendly, emptyState, deepClone, codeView,
 } from './ui.js';
-import { quote, inline, comment, headerComment } from './source.js';
-import { STEP_TYPES, EMOTES, FACINGS, lookSprite } from '../src/overworld/scenePlayer.js';
+import { quote, inline, objectKey, comment, headerComment } from './source.js';
+import { STEP_TYPES, EMOTES, FACINGS, ACTS, lookSprite } from '../src/overworld/scenePlayer.js';
 import { VISIONS } from '../src/overworld/visions.js';
 import { MEMBERS } from '../src/characters/party.js';
 import { ANIMATION_NAMES, DEFAULT_FRAME_SECONDS } from '../src/engine/animations.js';
@@ -31,6 +31,7 @@ const STEP_FIELDS = {
   walk: ['who', 'to', 'fast', 'keep'],
   face: ['who', 'dir'],
   emote: ['who', 'emote'],
+  act: ['who', 'act', 'wait'],
   wait: ['seconds'],
   camera: ['who', 'to'],
   appear: ['who', 'at'],
@@ -39,33 +40,50 @@ const STEP_FIELDS = {
   sound: ['name'],
   music: ['song'],
   give: ['item'],
-  battle: ['enemy', 'who', 'spared', 'defeated'],
+  battle: ['enemy', 'who', 'still', 'spared', 'defeated'],
   vision: ['name', 'mood', 'fade'],
   toss: ['who', 'to', 'height', 'bounces'],
   bed: ['pose'],
   weather: ['to', 'seconds'],
   hold: ['who', 'what'],
+  // These three are about a party member (an id in party.js), not an actor.
+  join: ['who'],
+  leave_party: ['who'],
+  hurt: ['who', 'on'],
+  piggyback: ['who'],
+  save: [],
   end_chapter: ['room', 'spawn', 'credits'],
+  goto: ['room', 'spawn', 'save'],
 };
-const STEP_ICONS = { say: 'chat', walk: 'person', face: 'eye', emote: 'star', wait: 'pause', camera: 'fit', appear: 'plus', leave: 'minus', animate: 'play', sound: 'note', music: 'note', give: 'heart', battle: 'enemy', end_chapter: 'flag' };
+const PARTY_STEPS = new Set(['join', 'leave_party', 'hurt', 'piggyback']);
+const STEP_ICONS = { say: 'chat', walk: 'person', face: 'eye', emote: 'star', act: 'person', wait: 'pause', camera: 'fit', appear: 'plus', leave: 'minus', animate: 'play', sound: 'note', music: 'note', give: 'heart', battle: 'enemy', end_chapter: 'flag' };
 
 function list(name, items, format) {
   if (!items.length) return `  ${name}: [],`;
   return `  ${name}: [\n${items.map((item) => `    ${format(item)},`).join('\n')}\n  ],`;
 }
 
-const cleanActor = ({ id, look, x, y, portrait, hidden, plays, ahead, animation, speed, glow }) => ({
+// Anything set by hand in a scene file that the maker has no control for
+// (an actor's or a step's extra settings, a `goto` step's room) is saved as it was.
+const cleanActor = ({ id, look, x, y, portrait, hidden, plays, ahead, animation, speed, glow, ...rest }) => ({
   id, look, x, y, portrait: portrait || undefined, hidden: hidden || undefined, plays: plays || undefined, ahead: ahead || undefined,
-  animation: animation || undefined, speed: animation && speed ? speed : undefined, glow: glow || undefined,
+  animation: animation || undefined, speed: animation && speed ? speed : undefined, glow: glow || undefined, ...rest,
 });
+// Every field some kind of step has a control for: a step keeps only its own
+// kind's (so changing a step's kind drops the old kind's), plus any the maker doesn't know.
+const KNOWN_STEP_FIELDS = new Set(Object.values(STEP_FIELDS).flat());
 function cleanStep(step) {
   const out = { do: step.do };
-  for (const key of STEP_FIELDS[step.do] ?? []) {
-    if (step[key] !== undefined && step[key] !== '') out[key] = step[key];
+  const own = STEP_FIELDS[step.do] ?? [];
+  for (const [key, value] of Object.entries(step)) {
+    if (key === 'do' || (KNOWN_STEP_FIELDS.has(key) && !own.includes(key))) continue;
+    if (value !== undefined && value !== '') out[key] = value;
   }
   if (step.do === 'music' && !out.song) out.song = null;
   return out;
 }
+// The scene's own fields that sceneModule writes out itself.
+const SCENE_FIELDS = new Set(['id', 'room', 'once', 'wakeScene', 'leavesAhead', 'actors', 'steps']);
 
 export function sceneModule(scene, constName, header) {
   const top = header?.trim() ? header.trim() : comment(`${friendly(scene.id).toUpperCase()}: made in Nobody's Hero Studio (tools/).`);
@@ -82,6 +100,8 @@ export function sceneModule(scene, constName, header) {
     ...(scene.wakeScene ? ['  // The scene for waking up from this dream.', `  wakeScene: ${quote(scene.wakeScene)},`] : []),
     // Someone who runs on ahead in it (see wentAhead in overworldScene.js).
     ...(scene.leavesAhead ? ['  // Someone runs on ahead, hidden until the `until` scene finds them.', `  leavesAhead: ${inline(scene.leavesAhead)},`] : []),
+    // Anything else set by hand in the file.
+    ...Object.entries(scene).filter(([key, value]) => !SCENE_FIELDS.has(key) && value !== undefined).map(([key, value]) => `  ${objectKey(key)}: ${inline(value)},`),
     '',
     '  // People who appear only in this scene, besides the player (see exampleScene.js).',
     list('actors', scene.actors, (actor) => inline(cleanActor(actor))),
@@ -322,6 +342,7 @@ export async function mount(root, studio) {
       walk: { do: 'walk', who: first ?? 'player', to: { ...start } },
       face: { do: 'face', who: 'player', dir: 'down' },
       emote: { do: 'emote', who: first ?? 'player', emote: '!' },
+      act: { do: 'act', who: first ?? 'player', act: 'hop' },
       wait: { do: 'wait', seconds: 0.5 },
       camera: { do: 'camera', who: 'player' },
       appear: { do: 'appear', who: first },
@@ -429,9 +450,10 @@ export async function mount(root, studio) {
         return [
           field('Enemy', select(order.options('enemies', Object.keys(enemies), (id) => friendly(enemies[id].enemy.name ?? id)), step.enemy, (v) => { step.enemy = v; changed(); })),
           field('Spotlight on', select([['', 'Just you'], ...whoOptions({ actorsOnly: true })], step.who ?? '', (v) => { if (v) step.who = v; else delete step.who; changed({ steps: true }); })),
+          step.who ? checkbox(Boolean(step.still), (v) => { if (v) step.still = true; else delete step.still; changed(); }, "They don't lunge at you (a statue, say)") : null,
           field('Then, if spared, play', select(thenOptions, step.spared ?? '', (v) => { if (v) step.spared = v; else delete step.spared; changed(); })),
           field('Then, if beaten, play', select(thenOptions, step.defeated ?? '', (v) => { if (v) step.defeated = v; else delete step.defeated; changed(); })),
-          el('div', { class: 'field wide' }, hint('First the music cuts out, the room goes dark around you and the one in the spotlight, and your shadow stands up out of you. Then the cutscene ends here and the battle starts. Afterwards the matching scene plays, and counts as seen, so "Shows up" settings in rooms can change with it.')),
+          el('div', { class: 'field wide' }, hint('First the music cuts out and the one in the spotlight lunges at you, the room goes dark around you both, and your shadow stands up out of you. Then the cutscene ends here and the battle starts. Afterwards the matching scene plays, and counts as seen, so "Shows up" settings in rooms can change with it.')),
         ];
       }
       case 'end_chapter': {
@@ -454,6 +476,13 @@ export async function mount(root, studio) {
       }
       case 'face':
         return [who(step), field('Faces', select(FACINGS.map((f) => [f, friendly(f)]), step.dir ?? 'down', (v) => { step.dir = v; changed(); }))];
+      case 'act':
+        return [
+          who(step),
+          field('Does', select(Object.entries(ACTS), step.act ?? 'hop', (v) => { step.act = v; changed(); })),
+          checkbox(step.wait === false, (v) => { if (v) step.wait = false; else delete step.wait; changed(); }, "Don't wait for it (the next step starts with it)"),
+          el('div', { class: 'field wide' }, hint('Moves, lifts or squashes whatever they look like now: no new frames needed. A crouch stays down until a "Stand back up".')),
+        ];
       case 'emote':
         return [who(step), field('Emote', select(EMOTES.map((e) => [e, e === '<3' ? 'Heart (<3)' : e]), step.emote ?? '!', (v) => { step.emote = v; changed(); }))];
       case 'wait':
@@ -517,7 +546,7 @@ export async function mount(root, studio) {
     });
     scene.steps.forEach((step, i) => {
       const n = i + 1;
-      if (STEP_FIELDS[step.do]?.includes('who') && step.who && !known.has(step.who)) out.push(`Step ${n} is about "${step.who}", who isn't in the cutscene.`);
+      if (STEP_FIELDS[step.do]?.includes('who') && step.who && !known.has(step.who) && !(PARTY_STEPS.has(step.do) && MEMBERS[step.who])) out.push(`Step ${n} is about "${step.who}", who isn't in the cutscene.`);
       if ((step.do === 'appear' || step.do === 'leave') && !scene.actors.some((a) => a.id === step.who)) out.push(`Step ${n} needs someone from "Who's in it".`);
       if (step.do === 'say' && !String(step.text ?? '').trim()) out.push(`Step ${n} doesn't say anything yet.`);
     });

@@ -1,0 +1,28 @@
+# BRYONY: Lasthome's healer. Middle-aged, sleeves rolled up, herbs on her
+# apron and spectacles on a cord, a pencil through her hair. Brisk, kind,
+# not to be argued with. She's seen everything the fen and the old streets
+# can do to a person, and she isn't impressed by any of it.
+
+[first]
+Mind the rug. Mind the cat. There isn't a cat. Mind it anyway.
+
+[repeat]
+Sit down if you're staying. Go away if you're not. Either is fine.
+
+[first after the_healer]
+She's asleep. Good. Sleep's half of what I do.
+
+That leg's had two days and a fen, when it shouldn't have been walked on for two minutes. She'll keep it. But she won't be running anywhere this side of winter.
+
+That cot's yours. Lie down before you fall down.
+
+[repeat after the_healer]
+She's asleep. Don't wake her. If you wake her I'll know.
+
+[first after ves_on_her_feet]
+She'll do. Keep her off that leg what you can. When she tells you it's fine, it isn't.
+
+And when she tells you she doesn't need anyone looking after her, that's when she does.
+
+[repeat after ves_on_her_feet]
+You can rest in that cot whenever you like. It's paid for. By whom? By nobody. That's how it's paid for.

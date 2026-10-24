@@ -1,0 +1,74 @@
+# KNOTLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/knotling.js.
+
+[intro]
+You trip over a stump. The stump says "OW." A KNOTLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+KNOTLING glares out of its knot-hole. It's been glaring since before you were born.
+
+KNOTLING creaks. It might be its roots. It might be a very long sigh.
+
+A woodpecker lands on KNOTLING, takes one look at its face, and leaves.
+
+KNOTLING's little red shoot is trying very hard to grow. KNOTLING pretends not to notice it.
+
+Smells like sap and sawdust. KNOTLING would rather you didn't mention the sawdust.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+I was a TREE once.
+A big one.
+
+Off my lawn.
+I am the lawn.
+
+Two hundred rings!
+Count 'em!
+Don't touch 'em.
+
+I know that axe.
+I know ALL the axes.
+
+Creeeeak.
+That was on purpose.
+
+Timber yourself.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/knotling.js.
+[talk: Inspect]
+KNOTLING - HP 420
+A cross old stump. Cut down once, and it has never, ever let it go.
+
+[talk: Count its rings]
+You count KNOTLING's rings. It puffs up proudly. You lose count at ninety. It tells you the rest. All of them.
+
+[talk: Say sorry]
+You say sorry for the woodcutters, and the saw, and all of it. KNOTLING goes quiet. "...Nobody ever says sorry."
+
+[talk: Sit on it]
+You sit on KNOTLING. It's appalled. You get a splinter. Then it sighs. Nobody's sat on it in years. It missed this.
+
+# Bramble's TALK, instead of his general lines. He's a woodcutter's kid, and
+# KNOTLING knows it.
+[bramble_talk]
+Bramble tells {foe} it'd make a great chopping block. {foe} goes a deeper shade of brown.
+
+Bramble says his Ma's never cut a tree that didn't deserve it. {foe} says that's what they ALL say.
+
+Bramble offers {foe} a sandwich. {foe} says it can smell the axe oil on his fingers. He wipes them on his jerkin. It helps a bit.
+
+Bramble knocks on {foe} to see if anyone's home. Somebody is. They're FURIOUS.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+KNOTLING creaks over on its side, mutters something about woodcutters, and goes back to being a stump. Just a stump.
+
+[pacified]
+KNOTLING stomps off into the dark on its roots, grumbling. Its little shoot waves goodbye.

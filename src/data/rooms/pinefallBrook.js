@@ -54,7 +54,7 @@ export const PINEFALL_BROOK = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 0, y: 13, w: 1, h: 3, to: 'pinefall_deadfall', spawn: { x: 28, y: 13 } },
+    { x: 0, y: 13, w: 1, h: 3, to: 'pinefall_tumbled', spawn: { x: 22, y: 3 } },
     { x: 29, y: 13, w: 1, h: 3, to: 'pinefall_camp', spawn: { x: 1, y: 10 } },
   ],
 
@@ -70,6 +70,10 @@ export const PINEFALL_BROOK = {
   ],
   tileTexts: { L: 'scarlet_tree', '~': 'brook_water', M: 'brook_cliff', g: 'brook_bridge' },
 
-  // No enemies in the Pinefall yet.
-  npcs: [],
+  // A Sapling passes for a tree on the west bank; a Russet wanders the
+  // east bank, below the path to the camp.
+  npcs: [
+    { enemy: 'sapling', x: 4, y: 12, patrol: [4, 4], behaviour: 'disguise' },
+    { enemy: 'russet', x: 22, y: 17, patrol: [17, 27], behaviour: 'wander' },
+  ],
 };

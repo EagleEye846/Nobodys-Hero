@@ -1,0 +1,472 @@
+# THE DEAD CITY (Chapter 3): the half-sunk old city past Lasthome's far door,
+# built to greet a Hero who never came, from the Old Street to the Hero's
+# Gate. Things you can read and look at. See notes/docs/chapter-3-deadcity.md.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say). Ves can
+# read the old city's writing; the hero can't.
+
+# What a save point says when you save here.
+[save_point]
+The crystal's light goes up the old stone a long way. It's the only warm thing for streets.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+Empty.
+
+[gold_pouch_empty]
+An empty purse.
+
+[rested]
+You soak in the hot spring until you can't remember being cold. Your HP is fully restored.
+
+# --- Steering Ves (Q) ---
+
+[swap_first_vesper]
+{bored}Me? On my own? ...Fine.
+
+{smile}I've got a long crutch and I'm light. I can reach things you can't, and old boards hold me. Point me at something.
+
+(Press Q to switch between you. Z on the other one to go together again.)
+
+[split_door_ves]
+{worried}I'm not going through there without you.
+
+[split_door_hero_ves]
+You can't leave Ves behind. Go back for her (Z on her to go together).
+
+[ves_rope]
+{angry}A rope. With one leg. Do I look like a squirrel?
+
+[ves_rope_split]
+{bored}I'll wait here, then. Take your time.
+
+{smile}Not too much time. Don't fall off.
+
+[ves_push]
+{bored}That's a pushing job. You're the pusher.
+
+[ves_stays]
+{bored}Off you go, then. I'll find another way round.
+
+{smile}Press Q when you need the clever one.
+
+[ves_cant_reach]
+{bored}I'm not coming up there. Come down.
+
+[high_lever_no]
+A lever, high on the wall, well out of reach. You jump for it. You don't get anywhere near.
+
+[high_lever]
+A bronze lever on a bracket high up on the wall, far out of your reach.
+
+[high_lever_ves]
+{smile}Out of the way.
+
+[treadle]
+A stone plate in the floor. It goes down under anyone standing on it, and comes back up when they step off.
+
+[stone_button]
+A round stone plate in the paving, with a ring carved in it. Something heavy would hold it down.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and everything you've moved goes back where it started.
+
+[rock_home]
+Everything you've pushed grinds back to where it started.
+
+[rotten_planks]
+Old floorboards over a dark drop, rotten through. They creak just looking at them. They'd never hold you.
+
+[rotten_planks_ves]
+{thoughtful}They'd hold me. I'm lighter than I look.
+
+{shy}...Don't say anything.
+
+[city_gate]
+An old iron gate, shut.
+
+[city_block]
+A fallen block of the old city's stone. Walk into it to push it.
+
+[dead_lamp]
+An old street lamp, gone cold a very long time ago. Its glass is cracked and grey with dust. Something is living in it: you can hear it rustle.
+
+[dead_lamp_ves]
+{sad}All these lamps. Nobody to light them.
+
+[water_mark]
+A tide line on the flagstones, and a puddle. The water came up this far, once, and went down again.
+
+[city_wall]
+The old city's stone, dressed and fitted, carved with leaves and suns. Weeds in every crack.
+
+[city_pillar]
+A pillar of the old city, holding up nothing.
+
+[city_step]
+A raised step of the old stone. You could jump up onto it. Ves couldn't.
+
+[alcove]
+A dark doorway, deep in the wall. You could tuck yourself into it, and keep still.
+
+[claw_gouges]
+Four gouges across the flagstones, each as wide as your hand, running the length of the street. Whatever made them wasn't walking. It was pacing.
+
+[fallen_lamp]
+A street lamp knocked flat, its iron post bent like a reed. The glass is everywhere. Something very big leaned on it, once, and didn't notice.
+
+[bristle_tuft]
+A tuft of black bristles caught on the doorpost, stiff as wire and longer than your arm. They smell of old smoke.
+
+[hush_caught]
+{scared}It saw us.
+
+{scared}It looked right at us, and it didn't do anything. It just looked, and went on.
+
+{determined}Back to the start. Into the doorways when it comes over, and keep STILL. Even me.
+
+[hush_caught_again]
+{scared}Back! Into the doorways, and don't move!
+
+# --- 1. THE OLD STREET ---
+
+[old_street_sign]
+A street sign, in the old city's writing, carved over a doorway.
+
+[old_street_sign_ves]
+{thoughtful}"THE ROAD OF WELCOME." I think. Mum taught me the old letters off the lamp makers' marks.
+
+{sad}...All the way to the Gate. They named a whole street for him.
+
+[old_shutter]
+An iron shutter, down across the whole street, rusted into place.
+
+[old_shutter_lever]
+The shutter's lever, on a bracket high up on the wall.
+
+[old_shutter_lever_ves]
+{determined}I've got it. Hold on.
+
+[old_purse]
+A purse, up on the raised walk by the wall.
+
+# --- 2. THE DROWNED FORUM ---
+
+[forum_water]
+The forum's water: still, and very clear. You can see the paving at the bottom, and coins on it, and a lot of hand-breadths of nothing.
+
+[forum_inscription]
+A stone tablet, covered in the old city's writing. You can't read it.
+
+[forum_inscription_ves]
+{thoughtful}"HERE THE CITY WILL GATHER, ON THE DAY HE COMES, AND SING."
+
+{sad}...They built the whole square for one morning. And then it never came.
+
+[forum_statue]
+A statue of the Hero, toppled, broken into pieces in the grass. His head's gone.
+
+[forum_lever]
+The forum gate's lever, up on the wall on the south side of the pool.
+
+[forum_purse]
+A purse in the gate's alcove.
+
+# --- 3. THE COLONNADE ---
+
+[colonnade_sign]
+Words cut in the wall, by a little door into a little room:
+
+ONE STANDS, ONE GOES. THEN THE OTHER WAY ROUND.
+
+[colonnade_sign_ves]
+{smile}I'll stand. I'm good at standing. It's walking I'm bad at.
+
+[colonnade_stone]
+A fallen block of the colonnade. Walk into it to push it. There's a stone plate in the paving by the south gate.
+
+# --- 4. THE DROWNED LIBRARY ---
+
+[library_shelves]
+Shelves, floor to ceiling, of swollen, ruined books.
+
+[library_shelf]
+Books, fat with old water, stuck together in a block.
+
+[book_heap]
+Books and scrolls, heaped up and mouldering. You open one. The pages are blank with damp.
+
+[library_loose_shelf]
+This shelf isn't fixed to the wall. It rocks when you lean on it.
+
+(Walk into it to push it.)
+
+[library_inscription]
+A stone tablet over the reading desks, covered in the old city's writing. You can't read it.
+
+[library_inscription_ves]
+{thoughtful}"THE DOOR OF THE DAY OPENS AS THE DAY DOES. FIRST THE SUN COMES UP. THEN THE SUN STANDS HIGH. THEN THE MOON."
+
+{smile}It's the levers by the door. Rising sun, high sun, moon. In that order.
+
+[lever_dawn]
+A lever, and carved over it, a sun half-risen over a line of hills.
+
+[lever_noon]
+A lever, and carved over it, a sun high up, all its rays out.
+
+[lever_night]
+A lever, and carved over it, a moon and three stars.
+
+[library_gate]
+A gate of bronze bars, with a sun carved on it.
+
+[library_gate_open]
+The bronze gate swings open, all by itself, with a long creak like a yawn.
+
+[library_gate_reset]
+Clunk. All three levers spring back up. Wrong order.
+
+[library_purse]
+A purse, dropped between the stacks.
+
+# --- THE READING ROOM ---
+
+[reading_wall]
+The reading room's walls: dry, and painted with a sky, stars and all, gone faint.
+
+[reading_shelves]
+Shelves of books, dry, every one. The water never got in here.
+
+[reading_lamp]
+A reading lamp. Cold.
+
+[reading_chair]
+A big old reading chair, worn into the shape of whoever sat in it.
+
+[reading_desk]
+A reading desk, and on it a great book, open, where somebody stopped reading. There's a blade in it, keeping the place.
+
+[reading_purse]
+A purse, on the floor by the chair.
+
+# --- THE OLD BATHS ---
+
+[baths_wall]
+The bathhouse walls, tiled in blue and gold, mostly fallen off. Steam rolls along them.
+
+[baths_pool]
+Hot water, coming up from somewhere deep, smelling of iron.
+
+[baths_tub]
+A great stone tub, full of hot spring water. You could get in. You could stay in.
+
+[baths_pots]
+Pots and pans. Slowly says he has no idea where they came from. He says it slowly.
+
+[baths_sign]
+Carved over the door, worn smooth:
+
+REST, TRAVELLER. YOU ARE NEARLY THERE.
+
+[baths_sign_ves]
+{laughing}Everybody keeps saying that.
+
+# --- THE CRIER'S SQUARE ---
+
+[crier_stone]
+The crier's stone: a great block in the middle of the square, worn into a dip on top where a hundred criers stood.
+
+[crier_plinth]
+A plinth, with only a statue's feet left on it.
+
+[crier_board]
+The old notice board. Every notice on it is the same, in the old city's writing, over and over, sun-faded.
+
+[crier_board_ves]
+{sad}"HE COMES TODAY." All of them.
+
+{thoughtful}Somebody put a new one up every single morning.
+
+[crier_inscription]
+A tablet set in the paving, in the old city's writing.
+
+[crier_inscription_ves]
+{thoughtful}"LET THE NEWS BE CRIED EACH MORNING, UNTIL THE MORNING IT IS TRUE."
+
+[crier_purse]
+A purse, in the gutter.
+
+# --- UNDER THE AQUEDUCT ---
+
+[aqueduct_wall]
+A wall across the street, built later than the rest, out of whatever was lying about.
+
+[aqueduct_top]
+The top of the old aqueduct: a stone channel, dry, wide enough to walk along.
+
+[aqueduct_sign]
+Somebody's chalked on the wall, a long time ago: LEVER'S UP TOP. GOOD LUCK.
+
+[aqueduct_sign_ves]
+{bored}Up top. Of course it is.
+
+[aqueduct_lever]
+A lever, up on the aqueduct, with a chain running down over the wall to the gate below.
+
+[aqueduct_gate]
+A gate in the wall, its chain running up to the aqueduct.
+
+[aqueduct_gate_open]
+Far below, the chain rattles, and the gate in the wall grinds up.
+
+[aqueduct_purse]
+A purse, on the street below the aqueduct.
+
+# --- THE COURT OF STATUES ---
+
+[court_statue]
+A statue of the Hero. Sword raised, cloak flying, and no face at all: just smooth stone where it should be.
+
+[court_statue_ves]
+{worried}They're all the same. And none of them's got a face.
+
+[court_gate]
+The great gate out of the court, north. Two things hold it: a plate in the paving, and a lever high on the far wall.
+
+[court_gate_open]
+With a groan like something waking, the great gate goes up.
+
+[court_stone]
+A fallen block, big as a cart. Walk into it to push it.
+
+[court_lever]
+A lever, high on the east wall, over the channel.
+
+[court_head]
+A great stone head, a statue's, rolled against the south wall. Behind it, there's a doorway.
+
+(Walk into it to push it.)
+
+[court_inscription]
+A tablet in the old city's writing, at the foot of the biggest statue.
+
+[court_inscription_ves]
+{thoughtful}"WE DO NOT KNOW YOUR FACE. WE WILL KNOW IT WHEN WE SEE IT."
+
+[court_purse]
+A purse at the foot of a statue.
+
+# --- THE SCULPTOR'S YARD ---
+
+[yard_unfinished]
+A statue's plinth, and on it, a statue only begun: a pair of boots, and a sword's point, and the rest still stone.
+
+[yard_heads]
+Heads. Dozens of them, all smooth-faced, waiting to be put on statues.
+
+[yard_chest]
+The sculptor's chest. His tools, and his best mallet.
+
+[yard_purse]
+The sculptor's savings, in a purse.
+
+# --- THE LAST STREET ---
+
+[last_sign]
+A sign at the end of the street, in the old writing.
+
+[last_sign_ves]
+{thoughtful}"THE GATE." That's all it says.
+
+# --- THE HERO'S GATE ---
+
+[gate_wall]
+The wall the Gate is in: smooth, sheer, as tall as a cliff. Nobody could climb it.
+
+[gate_doors]
+The Hero's Gate: two great stone doors, shut, carved all over with a figure walking toward the light. They've never been opened.
+
+[gate_warden]
+A colossal statue of the Hero, standing before the Gate with its stone sword raised in welcome. Its eyes are shut. It looks like it's asleep.
+
+[gate_claws]
+Claw marks, gouged deep into the paving. Fresh.
+
+[gate_broken]
+Where the Gate was: the great doors fallen in, and through the gap, grey dawn on the far side.
+
+[gate_warden_broken]
+The Warden, fallen, in great blocks across the court. Its stone sword lies across the Gate's threshold. Its face is turned up, eyes closed.
+
+[gate_warden_broken_ves]
+{sad}...I hope it's resting, now.
+
+[street_chest]
+A chest by the wall, under a dead lamp. Something soft's folded inside.
+
+[forum_chest]
+A chest in the corner, half under the flagstones' moss. Something heavy rolls about inside it.
+
+[colonnade_chest]
+A chest tucked in behind the columns. Someone packed it carefully and never came back for it.
+
+[library_chest]
+A chest of the library's, for the books too precious for the shelves. There aren't any books in it now: something else has been packed in instead.
+
+[crier_chest]
+The crier's chest, by the wall where he stood every morning.
+
+[aqueduct_chest]
+A chest down by the water, out of the drip of the aqueduct.
+
+[keeper_lamp]
+The lamp the Keeper lit. It burns small and steady, and the street around it looks almost like a street again.
+
+# --- CRUMBLING FLOORS (see src/overworld/crumble.js) ---
+
+[cracked_floor]
+The flagstones here are split right through, and they rock when you put your weight on them. Whatever's under them, it isn't stone.
+
+[cracked_floor_ves]
+{worried}Don't stand about on those. Cross them, or don't.
+
+# Ves, steered onto one: she steps straight back off.
+[cracked_floor_no]
+{determined}Not on this leg. I'm not putting a crutch through that.
+
+{thoughtful}Find me something to walk on.
+
+# --- THE STACKS (under the library: a secret) ---
+
+[stacks_wall]
+The library's cellar: the stacks, where they kept the books nobody asked for. The water never got down this far.
+
+[stacks_stair]
+Stairs up, back into the library. Somebody propped the hatch open with a book, a long time ago.
+
+[stacks_shelf]
+Ledgers, shelved by year. Three hundred years of them.
+
+[stacks_heap]
+Books, to the ceiling. Account books, mostly. Somebody wrote down every flag they bought for him.
+
+[stacks_heap_ves]
+{thoughtful}Three hundred years of receipts for bunting.
+
+[stacks_chest]
+A chest pushed under the bottom shelf, where you'd only find it by falling on it.
+
+[stacks_purse]
+A purse, flat under a heap of ledgers.
+
+[stacks_purse_ves]
+{smile}So that's where the library's money went.
+
+[old_street_shard]
+Something pale is struck deep into the old stone step, glowing faintly blue. It comes free in your hand.

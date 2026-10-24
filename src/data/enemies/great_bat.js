@@ -26,7 +26,7 @@ export const GREAT_BAT_BOSS = {
   // than the last: well above Taper (320 HP, 6 damage) and the caves' toughest
   // regulars (300 HP), with spells now hitting harder than any FIGHT.
   maxHp: 900,
-  damage: 11,
+  damage: 15,
 
   // A good step above the caves' regulars.
   difficulty: { density: 1.2, speed: 1.12 },
@@ -34,7 +34,8 @@ export const GREAT_BAT_BOSS = {
   // Below a third of her HP she adds a second attack on top of the first,
   // two seconds later, at a third of the density.
   secondWind: { below: 0.34, density: 0.35, delay: 2 },
-
+  // She sweeps down out of the dark on her wings (see stageBits.js).
+  entrance: 'swoop',
   // Her entrance: a title card before the fight (her lines are [boss_intro]).
   introCard: { title: 'THE ROOST MOTHER', subtitle: 'Who Sings in the Dark' },
 

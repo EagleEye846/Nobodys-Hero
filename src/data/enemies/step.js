@@ -16,7 +16,7 @@ export const LOOSE_STEP = {
     palette: STEP_PALETTE,
   },
   maxHp: 160,
-  damage: 9,
+  damage: 12,
 
   // A Chapter 2 enemy: busier and quicker than anything in the Ruins.
   difficulty: { density: 1.15, speed: 1.1 },

@@ -1,0 +1,21 @@
+# OLD TAM: keeps the Chapel with No Bell. A very old man with a broom, who
+# sweeps the chapel every morning though hardly anyone comes, because
+# somebody should.
+
+[first]
+Come in, come in. It's not much of a chapel any more. It's a nice room, though. I keep it nice.
+
+You're looking at the bell frame. Everyone does.
+
+[repeat]
+When my gran was a girl, they rang that bell every morning, in case today was the day the Hero came.
+
+Then one morning they didn't. Nobody said anything. They just didn't.
+
+[first after ves_on_her_feet]
+Your friend was in here earlier, with her crutch. She lit a candle. She didn't say who for.
+
+She said thank you to the room, after. I liked that.
+
+[repeat after ves_on_her_feet]
+A chapel doesn't need a bell. A bell's just for telling people to come. People come anyway, if you keep the place nice.

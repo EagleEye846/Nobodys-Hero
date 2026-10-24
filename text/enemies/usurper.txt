@@ -9,8 +9,10 @@
 # ones in the battle panel, "vesper" ones by Ves in her box, "foe" ones by him
 # in speech bubbles.
 
-# Said in speech bubbles during his entrance, after his title card. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in speech bubbles during his entrance, after his title card. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [boss_intro]
 Look at you.
 Is this what they sent?
@@ -60,7 +62,9 @@ The USURPER keeps his face turned from the light.
 The summit is warm, for the first time in eight years.
 
 # Said in a speech bubble before each attack, picked at random. Lines written
-# together (no blank line between) are said one bubble at a time.
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 Swing all you like.
 You can't cut smoke.
@@ -246,7 +250,7 @@ The lantern burns on behind you. It doesn't need guarding now. He does.
 
 # Said when you try to RUN.
 [no_escape]
-There's nowhere to go. Behind you is the stair, and he's faster on it than you are.
+There's nowhere to go. Behind you are the stairs, and he's faster on them than you are.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

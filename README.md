@@ -56,8 +56,12 @@ Press **Z** on the first screen to begin.
 | Z / Enter | Talk, read, climb, confirm |
 | X / Shift | Hold to run; back out of menus |
 | Space | Jump |
-| C / Ctrl | Open the menu (items, equipment, skills, candles); hold C to skip through dialogue |
+| C / Ctrl | Open the menu (items, equipment, skills, candles, settings); hold C to skip through dialogue |
+| Q / Tab | In Chapter 3: switch between you and Bramble (or, later, Ves) |
 | M | Mute |
+
+To turn the music or the sound effects up or down, open the menu (C) and
+pick **SETTINGS** (it's on the title screen too). Your volume is remembered.
 
 ### Getting an update
 
@@ -75,7 +79,8 @@ browser at the same address (http://localhost:8000).
 - **The page is blank:** the game has to be opened through
   http://localhost:8000. Opening `index.html` by double-clicking it won't work.
 - **No sound:** press a key on the first screen (browsers wait for a key press
-  before playing sound), and check you haven't muted it with **M**.
+  before playing sound), check you haven't muted it with **M**, and check
+  the volume in **SETTINGS** (in the C menu).
 
 ---
 

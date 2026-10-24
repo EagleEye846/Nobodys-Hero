@@ -2,8 +2,10 @@
 # Numbers (HP, damage, how much each TALK option calms her) live in
 # src/data/enemies/great_bat.js.
 
-# Said in speech bubbles during her entrance, after her title card. Lines
-# written together (no blank line between) are said one bubble at a time.
+# Said in speech bubbles during her entrance, after her title card. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [boss_intro]
 Who brought a light
 into my roost?
@@ -34,7 +36,9 @@ Something pale is frozen into the ice under the ROOST MOTHER. You'd rather not l
 Ves's hands are shaking. Her umbrella isn't.
 
 # Said in a speech bubble before each attack, picked at random. Lines written
-# together (no blank line between) are said one bubble at a time.
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
 [taunts]
 Put that light out.
 They're sleeping.
@@ -91,6 +95,10 @@ Ves whispers that she's sorry they woke the little ones. She means it. {foe}'s e
 # Said by Ves, with her portrait, when you try to calm her in any way (TALK,
 # Lull, Hush, Flurry, a sweet candle). The first time, every page below, one
 # after another; after that, one of [no_mercy_again]. The {face} is Ves's.
+# MERCY while Ves is knocked out, in the panel.
+[no_mercy_down]
+Ves is down, and the bones are still under the ROOST MOTHER. Not yet.
+
 [no_mercy]
 {furious}No. I won't be kind to her. And neither will you.
 

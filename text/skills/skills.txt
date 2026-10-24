@@ -8,7 +8,7 @@ FIGHT does 15% more damage.
 The FIGHT bar's notch is wider, so PERFECT hits come easier.
 
 [rend]
-Learn the spell Rend: 40% SP for a hit that never misses, harder than your best FIGHT.
+Learn the spell Rend: 40% SP for a hit that never misses, harder than a good FIGHT.
 
 [flurry]
 FIGHT gets a fourth slash to hit.
@@ -23,7 +23,7 @@ Learn the spell Lull: 24% SP to raise an enemy's MERCY by 30%.
 Your graze area grows, so near misses are easier to catch.
 
 [starfall]
-Learn the spell Starfall: 70% SP for a hit half again as hard as your best FIGHT.
+Learn the spell Starfall: 70% SP for a hit half again as hard as a good FIGHT.
 
 [tough]
 Your skin's toughened up. Every hit does 1 less damage.
@@ -54,7 +54,7 @@ Learn the spell Ember Flare: 36% SP to burn every enemy at once.
 FIGHT does another 25% more damage.
 
 [comet]
-Learn the spell Comet: 90% SP for over twice your best FIGHT, all at once.
+Learn the spell Comet: 90% SP for over twice a good FIGHT, all at once.
 
 [kindling]
 Every battle starts with 25% SP already in the gauge.
@@ -121,10 +121,86 @@ Every attack spell hits 20% harder.
 Learn the spell Siphon: 48% SP to hit one enemy hard and drink back half of it as HP.
 
 [chain_bolt]
-Learn the spell Chain Bolt: 60% SP for lightning through every enemy, each as hard as your best FIGHT.
+Learn the spell Chain Bolt: 60% SP for lightning through every enemy, each as hard as a good FIGHT.
 
 [nova]
-Learn the spell Nova: all your SP for three times your best FIGHT. Everything goes white.
+Learn the spell Nova: all your SP for three times a good FIGHT. Everything goes white.
+
+# --- Chapter 3: the Hushwood, Lasthome and the Dead City ---
+
+[follow_through]
+FIGHT gets a fifth slash to hit.
+
+[sunder]
+Learn the spell Sunder: 75% SP for a blow half again as hard as a good FIGHT.
+
+[deep_breath]
+Every battle starts with 15% more SP, and grazing builds 25% more.
+
+[balm]
+Learn the spell Balm: 48% SP to heal everyone in the party at once.
+
+[set_jaw]
+DEFEND heals 10 HP more, and every hit does another 1 less.
+
+[stubborn]
+Stay invincible a little longer still after you're hit.
+
+[light_step]
+Run another 20% faster. The road to Lasthome is long.
+
+[pathfinder]
+Fights pay 15% more gold, and shops charge 5% less.
+
+[soft_voice]
+TALK, Lull and Hush raise MERCY another 25% more.
+
+[patience]
+Pacify costs a quarter less, and calming works 10% better.
+
+[lance]
+Learn the spell Light Lance: 55% SP for a thrown bolt, a quarter harder than a good FIGHT.
+
+[second_focus]
+Every attack spell hits another 20% harder.
+
+# --- Chapter 4: past the Hero's Gate ---
+
+[heros_hand]
+FIGHT does another 30% more damage. Your hand's steady now.
+
+[sunburst]
+Learn the spell Sunburst: 85% SP to burn every enemy, each harder than a good FIGHT.
+
+[overflow]
+Grazing builds 50% more SP.
+
+[renew]
+Learn the spell Renew: 55% SP to heal one person a great deal.
+
+[aegis]
+Learn the spell Aegis: 50% SP to halve the damage you take for three enemy turns.
+
+[unbroken]
+Every hit does another 2 less damage.
+
+[wayfarer]
+Run another 25% faster, and swing on ropes 50% faster.
+
+[packed_lunch]
+Food heals another 30% more.
+
+[serenade]
+Learn the spell Serenade: 65% SP to raise every enemy's MERCY by 35%.
+
+[open_hand]
+Shops charge 15% less, and calming works 15% better.
+
+[spellthrift]
+Every spell costs another 15% less SP.
+
+[tempest]
+Learn the spell Tempest: 95% SP for more than twice a good FIGHT, on one enemy.
 
 # --- Ves: GALE ---
 
@@ -153,3 +229,126 @@ Ves learns AURORA: 40% SP to pour the northern lights down on you, healing a lot
 
 [ves_steadfast]
 Ves's ZEPHYR fills 10% more SP.
+
+# --- Ves, chapter 3: her mother's umbrella, back in her hands ---
+
+[ves_mothers]
+Her mother's umbrella. Ves's attacks, healing and calming all do a little more.
+
+[ves_ribs]
+Steel ribs in the canopy. Ves's FIGHT hits 20% harder.
+
+[ves_updraft]
+Ves learns UPDRAFT: a gust that knocks everyone back, cutting the next attack short.
+
+[ves_headwind]
+Ves learns HEADWIND: the next attack's bullets fight the wind, slowed for 3 seconds.
+
+[ves_thunderclap]
+Ves learns THUNDERCLAP: one hard hit, and the crack makes the next attack shorter.
+
+[ves_rain_dance]
+Ves learns RAIN DANCE: warm rain that heals someone after each of the next 3 enemy turns.
+
+[ves_brace]
+Ves learns BRACE: she braces the umbrella, and the next hit on you does nothing.
+
+[ves_hot_water]
+Ves's healing spells give back 8 more HP. She warms the bottle on the campfire.
+
+[ves_after_rain]
+Ves's spells that calm or fill SP do a little more. The air's clear after rain.
+
+[ves_parasol_spin]
+Ves learns PARASOL SPIN: the next hit is thrown straight back at whoever sent it.
+
+[ves_hailstorm]
+Ves learns HAILSTORM: the sky throws hail at every enemy, nearly her best FIGHT each.
+
+[ves_eye]
+Ves's SHELTER whips up a gust a second longer, and every hit under it does 1 less.
+
+# --- Ves, chapter 4 ---
+
+[ves_silver]
+Ves's healing gives 10 more HP, and her ZEPHYR fills 8% more SP.
+
+[ves_full_canopy]
+The whole canopy over you: every hit does 1 less, and 1 less again under SHELTER.
+
+[ves_crosswind]
+Ves's attack spells do 10 more damage.
+
+[ves_cyclone]
+Ves learns CYCLONE: the wind picks up the whole room. Hits everyone, and cuts the next attack short.
+
+[ves_kettle]
+Ves's healing spells give back 12 more HP. The kettle's always on.
+
+[ves_daybreak]
+Ves learns DAYBREAK: morning light through the canopy heals everyone in the party.
+
+[ves_lightning_rod]
+Ves's attack spells do 6 more damage, and SHELTER's gust lasts a second longer.
+
+[ves_monsoon]
+Ves learns MONSOON: rain in sheets. Heals someone after each of the next 4 enemy turns, and fills SP.
+
+# Bramble's branches (chapter 3).
+[bram_edge]
+Bramble sharpens his hatchet on a rock. His CHOP and TIMBER! hit harder.
+
+[bram_swing]
+Bramble learns to swing from his boots. His FIGHT hits 20% harder.
+
+[bram_timber]
+Bramble learns TIMBER!: he chops a tree down on every enemy at once.
+
+[bram_woodsman]
+Bramble chops like a grown-up. His FIGHT, CHOP and TIMBER! all hit harder.
+
+[bram_loud]
+Bramble's HOLLER raises every enemy's MERCY 4% more.
+
+[bram_flinch]
+Bramble's HOLLER makes the next attack stop even sooner.
+
+[bram_war_cry]
+Bramble learns WAR CRY: a woodcutters' song, yelled. Builds SP and calms.
+
+[bram_echo]
+Bramble's WAR CRY gives more SP, and his voice calms enemies more.
+
+[bram_pockets]
+Bramble learns BISCUIT: he finds a biscuit in a pocket and shares it.
+
+[bram_sneak]
+Bramble's sneak attack, after he HIDES, hits 50% harder.
+
+[bram_slingshot]
+Bramble learns SLINGSHOT: a cheap shot with an acorn that gets SP back.
+
+[bram_crumbs]
+Bramble's BISCUIT heals 12 HP more. He's been saving the good ones.
+
+[bram_scavenger]
+Bramble picks pockets, politely. Every fight pays 15% more gold.
+
+# Bramble, chapter 4 (for when he's back).
+[bram_two_hands]
+Bramble's grown into the hatchet. His FIGHT hits 25% harder.
+
+[bram_fell]
+Bramble learns FELL: he winds up like he's felling an oak. Twice his best FIGHT.
+
+[bram_bellow]
+Bramble's HOLLER calms 5% more, and stops the next attack a little sooner.
+
+[bram_whistle]
+Bramble learns WHISTLE: two fingers, very loud. Fills SP, and the next attack stops short.
+
+[bram_marbles]
+Bramble learns MARBLES: a pocketful across the floor. Every enemy goes over.
+
+[bram_lucky_stone]
+Bramble's sneak attack hits 50% harder, and fights pay 10% more gold.

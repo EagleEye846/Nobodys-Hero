@@ -41,7 +41,7 @@ Planks slung across a gap on two ropes. They creak. The drop under them goes all
 The ledge fell away here. A long way down, the clouds are thinking about weather.
 
 [vigil_block]
-Fallen blocks of the stair, heaped where they landed. Jump up them.
+Fallen blocks of the stairs, heaped where they landed. Jump up them.
 
 [vigil_first_snow]
 A patch of snow, the first you've seen. It hasn't melted. It isn't going to.
@@ -52,7 +52,7 @@ Snow, deep and dry and squeaking under your boots.
 # --- THE RIDGE ---
 
 [ridge_waymark]
-HERO! The stair pauses here, but the mountain does not.
+HERO! The stairs pause here, but the mountain does not.
 
 Round and up: the heralds' route follows the rings. Trust the rings.
 
@@ -76,7 +76,7 @@ The ledge gave way here once. Planks cross it now, roped at both ends by someone
 The great stair again: wide steps winding up and round the spire. Whoever built it carved the mountain to fit.
 
 [spiral_tally]
-A standing stone by the stair. Six tally marks, deep and old. Under them, in chalk that's almost gone: "7?"
+A standing stone by the stairs. Six tally marks, deep and old. Under them, in chalk that's almost gone: "7?"
 
 Under that, in different chalk: "8".
 
@@ -84,7 +84,7 @@ Under that, in different chalk: "8".
 LAST STAIR BEFORE HERALDS' REST (not counting the other stairs).
 
 [spiral_gap]
-A run of the stair sheared off and went down the mountain. The heralds bridged it with planks and a prayer.
+A run of the stairs sheared off and went down the mountain. The heralds bridged it with planks and a prayer.
 
 [spiral_chest]
 A chest wedged on a shelf above the ledge. Getting up here took some jumping. The cloak inside is folded with care.
@@ -112,7 +112,7 @@ HERO! Through the mountain and out on the Shoulder. Soup at the Shoulder. Keep g
 A fire ring, long cold. Someone sat here a while, facing the cave mouth, deciding.
 
 [hollow_pack]
-A pack propped against the rock, the same make as the ones on the stair below. Inside, wrapped in cloth: honeycake, somehow still soft.
+A pack propped against the rock, the same make as the ones on the stairs below. Inside, wrapped in cloth: honeycake, somehow still soft.
 
 # --- THE ICE CAVES and THE SINGING GALLERY ---
 
@@ -153,7 +153,7 @@ A frozen lake under the mountain. Your footsteps ring on it like a drum.
 A chest in a walled alcove, up on fallen blocks. An ice pick inside, its grip worn to the shape of a hand.
 
 [gallery_book]
-THE BOOK OF ARRIVALS (travelling copy). A list of everyone who came up the stair, kept by the heralds.
+THE BOOK OF ARRIVALS (travelling copy). A list of everyone who came up the stairs, kept by the heralds.
 
 "1. A knight. Very tall. Left at the Shoulder, said the air was thin."
 "2. A scholar with a lantern. Went up further than any. Came back down alone, and very quiet."
@@ -162,7 +162,7 @@ THE BOOK OF ARRIVALS (travelling copy). A list of everyone who came up the stair
 "4. A goat. We're not sure the goat counts."
 
 "5. A singer. Sang in the Gallery for three days. The mountain sang back."
-"6. A child, no older than the Hero was meant to be. Left her rope by her tent and walked back down the stair."
+"6. A child, no older than the Hero was meant to be. Left her rope by her tent and walked back down the stairs."
 
 "7."
 
@@ -241,7 +241,7 @@ Someone has written "YOU'RE DOING GREAT" on this sign in paint, and then, smalle
 A snowman in a herald's tabard. The tabard is real. The snowman seems very proud of it.
 
 [cloud_stair]
-A stair swept clear of snow, between lamps. Somebody sweeps it every morning. Somebody has swept it every morning for a hundred years.
+Stairs swept clear of snow, between lamps. Somebody sweeps them every morning. Somebody has swept them every morning for a hundred years.
 
 [cloud_lamp]
 An iron lamp, lit. The heralds light them at dusk and put them out at dawn, so the Hero never arrives in the dark.
@@ -254,6 +254,6 @@ A red banner with a golden trumpet on it, snapping in the wind. The gold is a li
 [cloud_lamp_night]
 A lamp, lit. Above the clouds, under the stars, its light looks very small and very brave.
 
-# A second chest on the Cloud Walk, at the top of the stair by the bridge.
+# A second chest on the Cloud Walk, at the top of the stairs by the bridge.
 [cloud_vane_chest]
-A chest at the top of the stair, half buried. Inside, wrapped in sacking: an iron weathercock on a short handle, the kind that might fit an umbrella.
+A chest at the top of the stairs, half buried. Inside, wrapped in sacking: an iron weathercock on a short handle, the kind that might fit an umbrella.

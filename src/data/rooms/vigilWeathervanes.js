@@ -8,7 +8,7 @@
 // blows up); the east vane round to blow left, and the long ride west; the
 // west vane to blow up, and up to the north-west island; its vane to blow
 // right, and across to the cave, stopped by the snow the wind heaps there.
-// Every island has a way back (checked by a solver: no soft-locks).
+// Every island has a way back (no soft-locks).
 // Tile key (see src/overworld/tileset.js):
 //   E  ice-veined cliff face (solid)              t  a cave mouth
 //   n  snow                                       s  the great stair
@@ -96,7 +96,7 @@ export const VIGIL_WEATHERVANES = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/upper_vigil.txt',
   props: [
-    { sprite: 'sign', x: 17, y: 21, text: 'shelf_sign' },
+    { sprite: 'sign', x: 17, y: 21, text: 'vane_shelf_sign' },
     { sprite: 'savepoint', x: 9, y: 20, save: true },
     // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
     { sprite: 'travel_draft', x: 5, y: 20, travel: 'weathervanes', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },

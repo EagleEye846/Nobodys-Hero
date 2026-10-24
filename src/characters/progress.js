@@ -1,6 +1,6 @@
 import { HERO_STATE } from './heroState.js';
-import { MEMBERS, partyIds, memberPoints, spendMemberPoints } from './party.js';
-import { ALL_SKILL_BRANCHES } from '../data/skills.js';
+import { MEMBERS, partyIds, memberPoints, spendMemberPoints, hurtState } from './party.js';
+import { ALL_SKILL_BRANCHES, MEMBER_SKILL_BRANCHES } from '../data/skills.js';
 import { STARTING_SPELLS } from '../data/spells.js';
 import { armorStat } from '../data/armor.js';
 import { WORLD_STATE } from '../state/saveGame.js';
@@ -82,9 +82,19 @@ export function hasSkill(id) {
   return HERO_STATE.skills.includes(id);
 }
 
-// One effect added up across every learned skill (true counts as 1).
-export function skillBonus(effect) {
+// One effect added up across every learned skill (true counts as 1). With
+// `upToChapter`, only skills from that chapter or earlier count.
+export function skillBonus(effect, upToChapter = Infinity) {
   return ALL_SKILLS
+    .filter((skill) => hasSkill(skill.id) && effect in skill.effect && (skill.chapter ?? 1) <= upToChapter)
+    .reduce((sum, skill) => sum + Number(skill.effect[effect]), 0);
+}
+
+// One effect added up across the skills a party member has learned on their
+// own branches only (see MEMBER_SKILL_BRANCHES): their ally effects are theirs.
+const MEMBER_SKILLS = Object.fromEntries(Object.entries(MEMBER_SKILL_BRANCHES).map(([id, branches]) => [id, branches.flatMap((branch) => branch.skills)]));
+export function memberSkillBonus(id, effect) {
+  return (MEMBER_SKILLS[id] ?? [])
     .filter((skill) => hasSkill(skill.id) && effect in skill.effect)
     .reduce((sum, skill) => sum + Number(skill.effect[effect]), 0);
 }
@@ -118,6 +128,9 @@ export function learnSkill(branch, index) {
 // ones a skill on their branches has taught them (a `command` effect).
 export function memberCommands(id) {
   const member = MEMBERS[id];
+  // Hurt, they've only their `hurt` SPELLS (Ves's need her umbrella).
+  const hurt = hurtState(id);
+  if (hurt) return [...hurt.commands];
   const learned = ALL_SKILLS
     .filter((skill) => hasSkill(skill.id) && skill.effect.command && member.learnable?.[skill.effect.command])
     .map((skill) => member.learnable[skill.effect.command]);

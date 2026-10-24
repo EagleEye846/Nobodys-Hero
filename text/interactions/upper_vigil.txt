@@ -59,7 +59,7 @@ Near the top, a newer one, knotted twice. Chalked on the stone under it: "TAMSIN
 [cairn_waymark]
 HERO! The second cairn. The heralds' route ends here now. The first heralds went further, and not all of them came back. So this is as far as we go, and so far that has worked.
 
-Beyond is beyond. If you go on, keep to the stair. If the stair stops, so should you.
+Beyond is beyond. If you go on, keep to the stairs. If the stairs stop, so should you.
 
 Scratched underneath, in a different hand: "or don't."
 
@@ -83,12 +83,12 @@ A chest on the terrace above the face, out of reach of anyone without wings or a
 A climber's ration inside, in oiled paper.
 
 [cairn_sheared]
-The stair runs straight into the face and carries on at the top, as if it climbed the rock and nobody told it it couldn't.
+The stairs run straight into the face and carry on at the top, as if they climbed the rock and nobody told them they couldn't.
 
 The steps in between are gone, sheared off clean. No rings. Nothing to throw a rope to.
 
 [cairn_look_back]
-You look back down the stair, like Tamsin asked.
+You look back down the stairs, like Tamsin asked.
 
 Far below, through a gap in the cloud: Heralds' Rest, small as a handful of dropped coins, every chimney smoking.
 
@@ -135,7 +135,7 @@ A chest on the crag, wrapped in oilcloth against the weather. A honeycake inside
 And a note: "FOR THE HERO. YOU'RE DOING WELL."
 
 [shelf_rockfall]
-Blocks of the stair, fallen from somewhere higher and stacked by the fall into a wall. Jump up them.
+Blocks of the stairs, fallen from somewhere higher and stacked by the fall into a wall. Jump up them.
 
 # --- THE BROKEN SPAN ---
 
@@ -181,7 +181,7 @@ THE LONG WAY ROUND IS THE ONLY WAY ROUND.
 A crook lamp hammered into the ice. The snow has piled up against one side of it, in the shape of the wind.
 
 [windstair_lamp]
-A crook lamp at the foot of the stair, up out of the wind.
+A crook lamp at the foot of the stairs, up out of the wind.
 
 Ves counts on her mittens, under her breath. "Seven."
 
@@ -213,16 +213,16 @@ Firewood, split small and stacked under the eaves. Enough for a long winter. Mos
 [ledge_sign]
 A signpost, iced over so thickly that nothing on it can be read.
 
-The arrow points up the stair. Everything up here points up.
+The arrow points up the stairs. Everything up here points up.
 
 [ledge_snowman]
 A snowman, very old, worn by the wind into a lump with a lean. Two buttons for eyes. Someone built it for company.
 
 Ves straightens one of its buttons, which had slipped.
 
-# Trying to go back down the stair while Ves is in the hut (vesSeesTheHut.js).
+# Trying to go back down the stairs while Ves is in the hut (vesSeesTheHut.js).
 [ledge_not_without_her]
-You didn't feel comfortable leaving her here.
+You don't feel comfortable leaving her here.
 
 # Ves, sitting by the hut door after she cries (vigilLamplightersHut.js).
 [hut_ves_thinking]
@@ -235,8 +235,6 @@ Without looking round, she points at the cot.
 You should get some rest.
 
 Somewhere above, the cloud glows a little, like a lamp behind a curtain.
-
-(The way to the summit is still being built. Come back and see.)
 
 # --- THE LAMPLIGHTER'S HUT ---
 
@@ -288,11 +286,11 @@ THE GALE FACE. The wind comes in gusts here. Swing with it, not against it.
 Below, in smaller letters: "Or don't. See if I care. - The Wind"
 
 [gale_waymark]
-HERO! Nearly there. The weathervanes are just up the stair. They know which way to go, even if you don't.
+HERO! Nearly there. The weathervanes are just up the stairs. They know which way to go, even if you don't.
 
 # --- The Weathervane Shelf (vigilWeathervanes.js) ---
 
-[shelf_sign]
+[vane_shelf_sign]
 THE WEATHERVANE SHELF. Turn a vane, and the wind turns with it. All of them. Every time.
 
 The heralds who put these up have carved a little arrow under the words. It points straight down.
@@ -340,7 +338,7 @@ A square block of stone, frost-furred. Somebody set these here as steps.
 # --- The Last Shelf ---
 
 [last_shelf_sign]
-THE LAST SHELF. Summit: up the stair.
+THE LAST SHELF. Summit: up the stairs.
 
 [last_shelf_cairn]
 A little cairn, with a feather tucked between the stones. White, and very soft.

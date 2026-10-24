@@ -145,23 +145,55 @@ export function drawEnemyStatus(ctx, name, hp, maxHp, calm, cx, top, time, showM
 // The speaking enemy's taunt in a white speech bubble, in a smaller, smoother
 // font. The bubble sits to the left of (tipX, tipY), with its tail pointing
 // there, and keeps above `clearBelow` (the top of the enemy's name and bars).
-// A taunt as speech bubbles. Lines run on into one bubble until one finishes
-// a sentence (ends in . ! ? and so on): "YOU WALKED / ON MY FACE." is one
-// bubble, wrapped to fit, while "... / ...STILL THINKING." is two, one after
-// the other.
-const SENTENCE_END = /[.!?…)"'~*]$/;
-export function speechBubbles(text) {
+// A taunt as speech bubbles. Its lines all go in one bubble, wrapped to fit:
+// "Go away. / I was ASLEEP." is one bubble. A new bubble starts only where
+// it's meant to, or has to:
+//   - a line that opens with "..." is a pause, so it waits for a bubble of
+//     its own: "... / ...STILL THINKING." is two, one after the other;
+//   - words that won't fit in one bubble (three lines) run on into the next,
+//     split between sentences where they can be.
+const BUBBLE_TEXT = { width: BUBBLE.w - 22, size: 14, lines: 3 };
+let measurer = null;
+const wrappedLines = (text) => {
+  measurer ??= document.createElement('canvas').getContext('2d');
+  return wrapLines(measurer, text, BUBBLE_TEXT.width, BUBBLE_TEXT.size, 'speech');
+};
+const fits = (text) => wrappedLines(text).length <= BUBBLE_TEXT.lines;
+
+// Text too long for one bubble, as several: whole sentences together while
+// they fit; a sentence too long on its own, three lines at a time.
+function fitBubbles(text) {
+  if (fits(text)) return [text];
+  const sentences = text.match(/[^.!?…]+(?:[.!?…]+["')]*|$)\s*/g)?.map((s) => s.trim()).filter(Boolean) ?? [text];
   const bubbles = [];
-  let current = [];
-  for (const line of String(text).split('\n').map((l) => l.trim()).filter(Boolean)) {
-    current.push(line);
-    if (SENTENCE_END.test(line)) {
-      bubbles.push(current.join(' '));
-      current = [];
+  let current = '';
+  for (const sentence of sentences) {
+    const joined = current ? `${current} ${sentence}` : sentence;
+    if (fits(joined)) {
+      current = joined;
+      continue;
     }
+    if (current) bubbles.push(current);
+    if (fits(sentence)) {
+      current = sentence;
+      continue;
+    }
+    const lines = wrappedLines(sentence);
+    for (let i = 0; i < lines.length; i += BUBBLE_TEXT.lines) bubbles.push(lines.slice(i, i + BUBBLE_TEXT.lines).join(' '));
+    current = '';
   }
-  if (current.length) bubbles.push(current.join(' '));
+  if (current) bubbles.push(current);
   return bubbles;
+}
+
+export function speechBubbles(text) {
+  const beats = [];
+  for (const line of String(text).split('\n').map((l) => l.trim()).filter(Boolean)) {
+    const pause = /^(\.\.\.|…)/.test(line);
+    if (pause || !beats.length) beats.push(line);
+    else beats[beats.length - 1] += ` ${line}`;
+  }
+  return beats.flatMap(fitBubbles);
 }
 
 export function drawSpeech(ctx, text, tipX, tipY, clearBelow = PANEL_TOP) {

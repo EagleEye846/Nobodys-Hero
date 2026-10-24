@@ -2,7 +2,7 @@
 # from the summit of Mount Vigil.
 
 [title]
-THE LONG STAIR
+MOUNT VIGIL
 
 [subtitle]
 Chapter Two complete

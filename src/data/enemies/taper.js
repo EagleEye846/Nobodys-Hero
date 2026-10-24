@@ -17,14 +17,15 @@ export const TAPER_BOSS = {
   // Her own battle background: the door out, and her candles (src/battle/backdrops.js).
   backdrop: 'taper_stand',
   maxHp: 320,
-  damage: 6,
+  damage: 8,
 
   difficulty: { density: 1, speed: 1 },
 
   // Below a third of her HP she adds a second attack on top of the first,
   // two seconds later, at a third of the density.
   secondWind: { below: 0.34, density: 0.35, delay: 2 },
-
+  // She rises up out of the wax and the dark (see stageBits.js).
+  entrance: 'rise',
   // Her entrance: a title card before the fight (her lines are [boss_intro]).
   introCard: { title: 'MOTHER TAPER', subtitle: 'Keeper of the Small Flames' },
 

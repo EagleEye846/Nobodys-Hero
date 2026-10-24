@@ -1,7 +1,7 @@
 import { inUiSpace } from '../engine/screen.js';
 import { sfx } from '../audio/music.js';
 import { HERO_STATE } from '../characters/heroState.js';
-import { partyIds } from '../characters/party.js';
+import { partyIds, hurtState } from '../characters/party.js';
 import { HERO, ownedGear, equippedGear, equipGear } from '../characters/equipment.js';
 import { ARMOR } from '../data/armor.js';
 import { drawText } from './text.js';
@@ -13,13 +13,14 @@ import { drawMenuFrame, drawWeaponList, drawWeaponDetails, drawArmorDetails, dra
 // lists what you own and which is equipped.
 const SLOTS = [
   { label: 'WEAPON', slot: 'weapon', details: drawWeaponDetails },
-  { label: 'ARMOR', slot: 'armor', details: drawArmorDetails, name: (id) => ARMOR[id].name },
+  { label: 'ARMOUR', slot: 'armor', details: drawArmorDetails, name: (id) => ARMOR[id].name },
 ];
 // The details panel on a member's tabs: as usual, but stopping at the footer.
 const NOTE_DETAILS = { x: MENU.x + 320, y: MENU.y + 78, w: 216, h: FOOTER_Y - 14 - (MENU.y + 78) };
 // A party member's tabs say a word about what their gear is for.
 const MEMBER_NOTES = {
   vesper: "Ves's gear powers her moves, and looks after you.",
+  bramble: "Bramble's hatchet is his FIGHT. His kit powers his moves.",
 };
 
 // The EQUIP menu, opened with C in the overworld. Left and right switch
@@ -114,12 +115,13 @@ export class EquipMenu {
         ...(tab.name ? { name: tab.name } : {}),
       });
       // A member's tabs keep their details above the footer, where their note goes.
-      const note = MEMBER_NOTES[tab.who];
+      // (While they're hurt, the note says what that changes, like Ves's lost umbrella.)
+      const note = hurtState(tab.who)?.note ?? MEMBER_NOTES[tab.who];
       if (owned.length) tab.details(ctx, owned[this.cursor], note ? NOTE_DETAILS : undefined);
       if (note) drawText(ctx, note, MENU.x + MENU.w / 2, FOOTER_Y + 4, { size: 22, color: MENU_COLORS.description, align: 'center' });
       drawControls(ctx, people.length > 1
         ? 'Z: equip     LEFT/RIGHT: change tab     X: close'
-        : 'Z: equip     LEFT/RIGHT: weapon or armor     X: close');
+        : 'Z: equip     LEFT/RIGHT: weapon or armour     X: close');
     });
   }
 }

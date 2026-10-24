@@ -13,7 +13,7 @@ export const ICE_MOTH = {
   area: 'vigil',
   sprite: { rows: ICE_MOTH_SPRITE, palette: ICE_MOTH_PALETTE },
   maxHp: 170,
-  damage: 8,
+  damage: 11,
 
   // A Chapter 2 enemy, and a flighty one: its moths are quick.
   difficulty: { density: 1.15, speed: 1.15 },

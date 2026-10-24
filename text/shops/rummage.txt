@@ -1,0 +1,77 @@
+# RUMMAGE'S HOLLOW: Rummage, a raccoon, in a hollow behind a split trunk in
+# the Gorge (a secret). Bandit mask, a herald's red-and-gold coat three sizes
+# too big that blew down the mountain, a monocle that's really the bottom of a
+# bottle. Catches everything that falls off the mountain, and everything does,
+# eventually. Fast-talking, delighted, slightly sticky-fingered, honest about
+# it.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Ooh! Customers! Come in, come in, mind the trumpet. Welcome to Rummage's Hollow. Everything falls somewhere, and somewhere is here.
+
+[menu_prompt]
+Take your time. Touch anything. Not that. Or that. Anything else.
+
+[buy_prompt]
+Snacks and bottles up top. Down below: the good stuff. All of it fell off the mountain. All of it is very, very good.
+
+[sell_prompt]
+Selling? To ME? Oh, yes please. Rummage collects.
+
+[talk_prompt]
+Talk! Nobody finds the hollow. Nobody talks to Rummage. Ask, ask, ask.
+
+[bought]
+Yours now! Finders keepers, then payers keepers. That's the law.
+
+[bought_item]
+Enjoy! Fell off the mountain this very year. Probably.
+
+[bought_skill]
+Hold still. There. That fell off a mountain too, in a manner of speaking.
+
+[skill_sold_out]
+That was the only one. Things like that only fall once.
+
+[sold]
+Into the pile! The pile thanks you. Rummage thanks you.
+
+[nothing_to_sell]
+Nothing? Turn out your pockets. ...No? Rummage believes you. Rummage checked.
+
+[cant_sell]
+You're wearing it! Take it off out there first. Rummage doesn't do the undressing.
+
+[owned]
+You've got one of those. Even Rummage only collects one of each. Mostly.
+
+[wont_fit]
+That's for the small one with the big axe. Bring him in where he can see it.
+
+[too_poor]
+Not enough shinies! Rummage is a raccoon of business. Come back richer.
+
+[bought_stored]
+Your bag's full, so Rummage put it in the chest by the crystal. Rummage knows a way. Raccoon secret.
+
+[bag_full]
+Your bag's full! Eat something. Or sell Rummage something. Rummage prefers the second one.
+
+[farewell]
+Come back! Tell nobody! Tell everybody! No, tell nobody.
+
+[talk: Who are you?]
+Rummage! Catcher of things. Things fall off the mountain, see: hats, trumpets, sleds, lunches, whole people once or twice. They roll down the Long Drop and Rummage is at the bottom with a net.
+
+[talk: The coat]
+Came down in a gale years ago, all on its own, still buttoned up. A herald's best. Rummage waited a long time for somebody to come down after it. Nobody did. So now it's Rummage's.
+
+[talk: The umbrella?]
+A plum umbrella? Rummage saw it come down over the trees, with a girl hanging off it like washing. ...Rummage didn't catch it. Rummage was very sad. Rummage would have given it back. Probably.
+
+[talk: The Hush]
+Doesn't bother Rummage, Rummage doesn't bother it. Rummage keeps very still, and very quiet, and very far away. Recommended.
+
+[talk: Bramble]
+The small one comes by sometimes. Trades Rummage acorns for buttons. Very bad at trading. Rummage gives him extra buttons. Don't tell him.

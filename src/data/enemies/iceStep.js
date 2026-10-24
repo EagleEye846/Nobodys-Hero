@@ -20,7 +20,7 @@ export const FROZEN_STEP = {
     palette: ICE_STEP_PALETTE,
   },
   maxHp: 190,
-  damage: 9,
+  damage: 12,
 
   // A little busier than its brother at the bottom.
   difficulty: { density: 1.25, speed: 1.15 },

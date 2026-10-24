@@ -12,11 +12,11 @@ HERO! WELCOME TO HERALDS' REST, where for one hundred years we have kept the sou
 
 You're not quite... that is to say... the prophecy mentioned a cape. And a certain height.
 
-No matter! NO MATTER. You came up the stair, and that's more than anyone's done in a very long time, and I for one say WELCOME.
+No matter! NO MATTER. You came up the stairs, and that's more than anyone's done in a very long time, and I for one say WELCOME.
 
 The Hall is open, the inn is warm, the stores' prices are what they are. And if you'd like to be announced at the feast, I have a speech. It's about four hours.
 
-Oh, and do look in at the chapel. Young Ves is in there, praying, as ever. She has been asking about the stair.
+Oh, and do look in at the chapel. Young Ves is in there, praying, as ever. She has been asking about the stairs.
 
 [repeat]
 I've been Head Herald for thirty years. My father before me, and his before him. All called Horace. It saves repainting the sign.
@@ -30,7 +30,7 @@ Mind Nan, the old goat. She bites. Affectionately.
 [first after ves_in_the_chapel]
 Ahem! HERO! And... young Ves! Together! Splendid. SPLENDID.
 
-Horace, Head Herald, at your service. I always said that girl would go up the stair one day. Well. I said it to Nan. Nan bit me.
+Horace, Head Herald, at your service. I always said that girl would go up the stairs one day. Well. I said it to Nan. Nan bit me.
 
 Keep each other warm up there. And do come back down for the speech. It's still about four hours.
 

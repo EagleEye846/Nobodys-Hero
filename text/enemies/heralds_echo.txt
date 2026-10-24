@@ -1,0 +1,73 @@
+# HERALD'S ECHO
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/heralds_echo.js.
+
+[intro]
+A bell rings down the empty street. A HERALD'S ECHO!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+HERALD'S ECHO unrolls its scroll and clears its throat. It's been clearing it for centuries.
+
+HERALD'S ECHO rings its bell at nobody. Nobody comes.
+
+HERALD'S ECHO cries the news. The street cries it back, fainter.
+
+HERALD'S ECHO checks its scroll. Yes. The Hero is still coming. Any day now.
+
+Smells like old paper and candle smoke.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+HEAR YE!
+HEAR YE!
+
+The Hero
+comes!
+
+Make way!
+Make way
+for the Hero!
+
+Any day
+now!
+
+*ding ding*
+
+All the city
+will turn out
+to greet them!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/heralds_echo.js.
+[talk: Inspect]
+HERALD'S ECHO - HP 680
+The ghost of a town crier, still crying the Hero's coming. Its words hurt. Literally.
+
+[talk: Listen to the news]
+You stand and listen to the whole proclamation, all the way through. HERALD'S ECHO looks surprised. Nobody has listened to the end in a very long time.
+
+[talk: Applaud]
+You clap. HERALD'S ECHO bows, very low, and nearly loses its hat. The street claps back, faintly. That's just the echo.
+
+[talk: Ring its bell for it]
+HERALD'S ECHO lets you ring its bell. The sound goes all the way down the empty street. It seems to like hearing it from out here.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+HERALD'S ECHO fades away mid-shout. A moment later, from far off down the street, you hear it start again: "Hear ye..."
+
+[pacified]
+HERALD'S ECHO rolls up its scroll and tips its hat to you. It drifts off down the street, ringing its bell, a little softer than before.
+
+# Ves's own TALK lines for it ({foe} is its name). She's hurt, on her
+# crutch, and she listens.
+[vesper_hurt_talk]
+Ves asks {foe} to read the proclamation again, slowly. It does, delighted. She nods along at all the best bits.
+
+Ves tells {foe} it has a lovely voice for shouting. {foe} puffs up so much its hat goes crooked.
+
+Ves asks {foe} how long it's been waiting. It checks its scroll. It doesn't say. She leans on her crutch and stays with it a while.

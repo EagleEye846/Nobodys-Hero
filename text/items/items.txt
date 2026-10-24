@@ -62,11 +62,65 @@ A clear boiled sweet that throws little rainbows when you hold it up. A Glintlin
 [roost_plum]
 A plum from the Roost Mother's winter store, frozen sweet as jam. Her pup brought it to Ves, after. Ves couldn't keep it.
 
+[roast_chestnut]
+A chestnut out of a Burrhog's prickles, roasted in its own husk. It rolled it to you. Gently, for once.
+
+[scarlet_syrup]
+A twist of red sap from a Sapling, sweet as maple. It gave it to you when you weren't looking.
+
+[stolen_pie]
+A berry pie with one bite out of it and a paw print in the crust. The woodcutters have been missing this.
+
+[stump_honey]
+Honey from the bees in a Knotling's hollow. It calls them squatters. It has never once asked them to leave.
+
+[hollin_apple]
+An apple off the old tree Hayward still guards. The farmers never came back for it, so it's yours.
+
+[gloam_honeydew]
+A drop of the sweet dew a Gloamworm hangs its threads with. It glows a little on the way down.
+
+[fifty_year_humbug]
+A striped mint humbug in waxed paper, from the bottom of the well. Fifty years old, and somehow still good.
+
+[hob_scone]
+Still warm, though nobody's lit an oven in Hollin for fifty years. A Hob bakes one every morning, just in case.
+
+[millers_bannock]
+A flat oat loaf from the old mill, nibbled round the edges. Grist swears it was like that when it found it.
+
+[mug_barley_sugar]
+A barley sugar that was stuck to the bottom of a Clinker's mug. Fifty years old, and still sweet. Mostly.
+
+[culvert_cress]
+Watercress from under a grating, where a little light gets down. A Slipjack keeps the bed of it to show off in. It's peppery.
+
+[wisp_cordial]
+A thimble of something pale green that a Wisp left behind. It glows a little in the dark, and tastes of cold mint.
+
+[bog_pudding]
+A dark, wobbly pudding a Bog Toad was sitting on to keep warm. Sort of plum. Don't ask what else.
+
+[bulrush_bread]
+Flat bread made from bulrush roots, the old fen way. A Reed Stalker kept it under its foot, very still, for hours.
+
+[toadstool_toast]
+A slice of toast with a Puffcap's spare cap on top, still warm. It insists the spotty ones are fine. Mostly.
+
+[dust_meringue]
+A meringue so light it's mostly air, found in a nest of Lamp Mites. Dusty on the outside. Sweet as anything inside.
+
+[cairn_biscuit]
+A big, hard biscuit a Cairn Hound was keeping safe under a stone. It's a dog biscuit, really. It's very good anyway.
+
+[welcome_cake]
+A slice of the cake the old city baked to welcome the Hero. Nobody came to eat it, so a Herald's Echo kept it. Still fresh, somehow.
+
+[heros_offering]
+A honey cake sealed in wax, left in the Warden's open hand three hundred years ago, for the Hero. Nobody else came for it.
+
 [candle_cake]
 A cake shaped like a candle, from Taper's kitchen. "FOR OUR GUEST."
-
-[climbers_ration]
-Hard biscuit, dried fruit and a strip of salted something, sealed in waxed paper. Made to last a long climb.
 
 [taper_stub]
 The candle Taper gave you. It's still warm. It always will be.
@@ -91,6 +145,9 @@ Shadow ash in dark wax. It gives off more smoke than light, and the smoke hides 
 
 [lamplight_candle]
 Lit from the lamplighter's lantern on the summit. Shadows lean away from it.
+
+[hush_fur]
+A hank of the Hush's bristles, caught on your sleeve. Coarse and black, and very, very quiet. Held up, it hides you like a shadow.
 
 [climbers_ration]
 Hard biscuit, dried fruit and a square of chocolate, sealed in waxed paper. Made for a long way up.
@@ -145,3 +202,78 @@ A dense round cake of seeds, nuts and frozen berries, pressed together by Hollis
 
 [goblin_hotpot]
 A hot pot of everything Rimble found that week, stewed for days. It's lumpy, it's brown, and it's delicious.
+
+# Nan Cinder's baking, sold at her kiln.
+[soot_bun]
+A bun baked in the ashes of a charcoal kiln. Black on the outside, which Bramble says is the best bit, and soft and sweet in the middle.
+
+[ember_potato]
+A potato baked in the embers till its skin cracks. Nan Cinder salts it with something she won't name.
+
+[charcoal_toffee]
+Dark toffee, smoky and very hard. Nan Cinder says it's good for your teeth. Nobody has ever checked.
+
+[kiln_stew]
+A whole pot of stew from the back of the kiln, in a jar with a cloth over the top. It's been cooking for two days.
+
+# Old Ladle's, in the Old Drains.
+[sweet_water]
+A ladleful of the cistern's water, kept sweet for fifty years by a hob who never stopped. Cold, clean, and tastes of nothing at all, which is the point.
+
+[turning_leaf]
+A scarlet leaf off the Tatterwight. Hold it still and it still turns, slowly, round and round, as if there's a wind only it can feel. Holding it makes you want to get going.
+
+[city_hardtack]
+A biscuit baked for the Hero's welcome feast, three hundred years ago, and never eaten. It hasn't gone off. Nothing could make it go off. Soak it first.
+
+[spring_water]
+Hot water from the spring under the Old Baths, in a stoppered jar. It tastes of iron and makes your fingertips tingle.
+
+[dandelion_salad]
+Slowly's favourite. Dandelions from the cracks in the old streets, with a little vinegar. He grew them himself, very slowly.
+
+[valley_apple]
+A small, sharp, red apple from the old orchard by the road. The trees were planted for the Hero's welcome feast. Nobody minds who eats them now.
+
+[eel_pie]
+A pie of fen eels and onions in a thick crust. Better than it sounds. Much better than it sounds.
+
+[honey_oatcake]
+An oatcake with honey baked into it. Pell's mother makes them. Pell says not to tell her you liked it, or she'll make you more.
+
+[willow_tonic]
+Bryony's tonic, made from willow bark. Bitter enough to make your eyes water. It wakes you right up.
+
+[lasthome_stew]
+Mabb's stew, out of the kettle that never comes off the hook. Nobody knows what's in it. Nobody's ever been sorry.
+
+[penny_bun]
+A sticky currant bun. Ladle says it's a penny. He's been saying it's a penny for fifty years.
+
+[hob_porridge]
+A pot of oats Ladle stirs on a hob he calls "the hob". Thick enough to stand the spoon up in. He'd be hurt if you didn't finish it.
+
+# Rummage's: things that fell off the mountain.
+[hardtack]
+Ship's biscuit, from Hollin Stores. Baked to last fifty years. It has. Your teeth might not.
+
+[pickled_onions]
+A jar of Mags's pickled onions, still sealed. Pickles keep. These kept very hard.
+
+[crock_of_honey]
+A crock of Hollin honey off Mags's shelf. Honey never goes off, and this has had fifty years to prove it.
+
+[mags_jam]
+The last jar of Mags's blackberry jam. The label says "NOT FOR SALE - FOR WHEN THEY'RE BACK." Somebody crossed it out.
+
+[lost_lunch]
+A herald's packed lunch, still wrapped, that came down the mountain in a gale. Cheese, bread, a pickled egg and a note: "Good luck, love."
+
+[bottled_updraft]
+A stoppered jar with a gust of mountain wind in it. Open it in a fight and your spirit lifts with it. SP +60%.
+
+[music_box]
+A little music box, dented from the fall, that still plays half a lullaby. Enemies stop to listen. MERCY +30% for everyone.
+
+[herald_helmet]
+A herald's brass parade helmet, much too big. Put it on in a fight and the next attack only does half its damage. It's used up after.

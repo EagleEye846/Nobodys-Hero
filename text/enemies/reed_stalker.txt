@@ -1,0 +1,85 @@
+# REED STALKER
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/reed_stalker.js.
+
+[intro]
+One of the reeds turns its head. A REED STALKER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+REED STALKER stands on one leg and doesn't move. At all. Not even a feather.
+
+REED STALKER watches you down the length of its beak. It's a very long beak.
+
+REED STALKER tucks its other leg up. It could do this all day. It often does.
+
+REED STALKER's eye never leaves you. You'd like it to leave you, a bit.
+
+Smells like cold water and fish.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+...
+
+Be still.
+I am
+always still.
+
+I have waited
+for hours.
+I can wait
+for you.
+
+Patience.
+
+A fish
+moves.
+And then
+it doesn't.
+
+Ssst.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/reed_stalker.js.
+[talk: Inspect]
+REED STALKER - HP 680
+A heron as still as a reed. Slow to strike, and when it does, it hits HARD.
+
+[talk: Stand very still]
+You stand very, very still. So does REED STALKER. Neither of you moves for a long time. It nods, once. You've earned some respect.
+
+[talk: Admire its beak]
+You tell REED STALKER it has a magnificent beak. It turns its head, slowly, so you can see it from the best side.
+
+[talk: Point out a fish]
+You point at the water and say "Fish!" REED STALKER looks. There's no fish. It looks at you. It's not angry. It's disappointed.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+REED STALKER opens its great grey wings and lifts away over the reeds, slowly, without a sound. It doesn't look back.
+
+[pacified]
+REED STALKER bows its long neck to you. Then it turns, and goes back to standing perfectly still, like a reed.
+
+# Bramble's own TALK lines for it ({foe} is its name). He can't keep still
+# for anything, and it's driving the heron mad.
+[bramble_talk]
+Bramble has a staring contest with {foe}. He loses in four seconds. {foe} isn't even trying.
+
+Bramble tries standing on one leg like {foe}. He falls over in the mud. {foe} looks away, politely.
+
+Bramble tells {foe} that Sword's sword is longer than its beak. {foe} looks at the sword. It isn't sure about that.
+
+Bramble asks {foe} if it ever gets bored. {foe} says nothing for so long that Bramble gets bored.
+
+# Ves's own TALK lines for it ({foe} is its name). She's hurt, riding on
+# your back, so she talks to it over your shoulder.
+[vesper_hurt_talk]
+Ves, from over your shoulder, tells {foe} they're only passing through, and they won't touch its fish. {foe} considers this, very slowly.
+
+Ves holds herself still and quiet, the way {foe} holds its beak. {foe} notices. It lowers its beak, just a little.
+
+Ves tells {foe} it's very good at waiting. She says she's been learning. {foe} looks at her for a long time.

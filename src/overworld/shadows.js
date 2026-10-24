@@ -30,6 +30,15 @@ function silhouette(image) {
   return shape;
 }
 
+// The little dark patch on the ground under someone's feet, day or night,
+// so people stand on the floor instead of floating over it. (x, y) is the
+// point at their feet, on screen. The same shape as an enemy's.
+export function drawFootShadow(ctx, x, y, alpha = 0.3) {
+  ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+  ctx.fillRect(x - 4, y - 3, 8, 1);
+  ctx.fillRect(x - 5, y - 2, 10, 2);
+}
+
 // How the sun throws shadows right now: how dark (0 for none), how long (as
 // a share of the thing's height) and how far they lean (pixels sideways for
 // each pixel of height, + right).

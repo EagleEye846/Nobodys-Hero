@@ -1,0 +1,83 @@
+# THE TATTERWIGHT, the wind still going round the Torn Clearing, with
+# everything the night left there caught up in it.
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/tatterwight.js.
+
+# Said in speech bubbles during its entrance, after its title card. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[boss_intro]
+Round and round and round.
+
+Something came through here.
+
+It was so... LOUD.
+
+[intro]
+The leaves stand up off the ground, and the TATTERWIGHT stands up with them.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The TATTERWIGHT goes round and round. Three scraps of blue wool go round with it.
+
+Leaves hiss past your ears. Somewhere in the whirl, a twig cracks.
+
+The claw marks on the trees are fresh. The TATTERWIGHT keeps tracing them, over and over.
+
+A scrap of her coat flies past, close enough to touch.
+
+The TATTERWIGHT's eyes are two knot-holes full of light. They look frightened.
+
+The wind drops for a breath, then picks up again, as if it forgot to stop.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Round and round.
+
+It went THAT way. It went THAT way.
+
+Hush. Hush. Hush.
+
+It tore the trees.
+
+She ran. She ran so fast.
+
+Keep still. Keep STILL.
+
+Nobody came to sweep up.
+
+I'm holding it.
+...I'm holding all of it.
+
+# One section per TALK option. The names after "talk:" must match the TALK
+# options in src/data/enemies/tatterwight.js.
+[talk: Check]
+TATTERWIGHT - HP 1100
+The wind of the night Ves fell, still going round the clearing. It's picked up everything that was left behind.
+
+[talk: Take a scrap]
+You reach into the whirl and close your hand on a scrap of blue wool. It tugs, then lets go.
+The TATTERWIGHT turns a little slower.
+
+[talk: Stand in the wind]
+You plant your feet and let the wind go round you. Leaves catch in your hair.
+The TATTERWIGHT circles you, curious. You didn't run.
+
+[talk: Hold out a hand]
+You hold out your hand, palm up, the way you would to something scared.
+A single leaf settles in it. The whirl goes a little quieter.
+
+# Said when you try to RUN.
+[no_escape]
+The wind closes the way out behind you with a wall of leaves.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The TATTERWIGHT comes apart. Leaves, twigs and dust rain down across the clearing, and lie still.
+
+[pacified]
+With the last scrap of blue in your hand, the TATTERWIGHT has nothing left to hold. It sighs, and lets go.

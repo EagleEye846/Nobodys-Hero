@@ -46,6 +46,12 @@ const PEEK_DISTANCE = 5;
 // blink) flash by this often, for this long.
 const TELL_EVERY_SECONDS = 2.6;
 const TELL_SECONDS = 0.35;
+// Catching you: it rears back, then throws itself at you, this far and this
+// high, over this long (see Npc.pounceOn, and the battle's lead-in in
+// OverworldScene).
+const LUNGE_SECONDS = 0.34;
+const LUNGE_REACH = 7;
+const LUNGE_HOP = 5;
 // How each kind of enemy gets about (its `gait`, in its file in
 // src/data/enemies/), for when it's out walking in a room. `cycle` is one
 // stride in seconds, `moving` the share of it spent moving (and `pace` how
@@ -130,6 +136,28 @@ export class Npc {
 
   startCooldown() {
     this.cooldown = COOLDOWN_SECONDS;
+    this.lunge = null;
+  }
+
+  // It's caught you: a "!" (if it hadn't already seen you), and it lunges.
+  pounceOn(player) {
+    const dx = player.x - this.x;
+    const dy = player.y - this.y;
+    const d = Math.hypot(dx, dy) || 1;
+    const surprised = this.alert <= 0;
+    this.alert = ALERT_SECONDS;
+    this.lunge = { t: 0, dx: dx / d, dy: dy / d };
+    return surprised;
+  }
+
+  // How far along its lunge it is: back a pixel or two, then at you, then
+  // it holds there, right up against you.
+  lungeOffset() {
+    if (!this.lunge) return { x: 0, y: 0, lift: 0 };
+    const k = Math.min(1, this.lunge.t / LUNGE_SECONDS);
+    const reach = k < 0.3 ? -2 * (k / 0.3) : -2 + (LUNGE_REACH + 2) * Math.min(1, (k - 0.3) / 0.4);
+    const lift = k < 0.3 ? 0 : Math.round(Math.sin(Math.min(1, (k - 0.3) / 0.7) * Math.PI) * LUNGE_HOP);
+    return { x: Math.round(this.lunge.dx * reach), y: Math.round(this.lunge.dy * reach), lift };
   }
 
   get sortY() {
@@ -145,6 +173,12 @@ export class Npc {
   }
 
   update(dt, player, room) {
+    if (this.lunge) {
+      this.lunge.t += dt;
+      this.time += dt;
+      this.alert = Math.max(0, this.alert - dt);
+      return;
+    }
     const before = { x: this.x, y: this.y };
     this.updateMovement(dt, player, room);
     const moved = Math.hypot(this.x - before.x, this.y - before.y);
@@ -311,13 +345,14 @@ export class Npc {
     }
 
     if (this.lurking && this.time % PEEK_EVERY_SECONDS < PEEK_SECONDS) x += this.peekSide * PEEK_DISTANCE;
-    const top = this.drawBody(ctx, x, y);
+    const lunge = this.lungeOffset();
+    const top = this.drawBody(ctx, x + lunge.x, y + lunge.y, lunge.lift);
     if (this.alert > 0) drawAlert(ctx, x, top - 12);
   }
 
   // The enemy itself, its own way (GAITS), standing at (x, y): its shadow on
   // the ground, then the sprite lifted, turned or squashed. Returns the top of it.
-  drawBody(ctx, x, y) {
+  drawBody(ctx, x, y, extraLift = 0) {
     const t = this.time;
     const gait = GAITS[this.gait];
     const w = this.sprite.width;
@@ -380,7 +415,9 @@ export class Npc {
       default:
         break;
     }
-    lift += this.z;
+    lift += this.z + extraLift;
+    // Rearing back before a lunge: squashed down, ready to spring.
+    if (this.lunge && this.lunge.t < LUNGE_SECONDS * 0.3) { sx = 1.12; sy = 0.88; }
     // The shadow stays on the ground, smaller the higher it is.
     const sw = Math.max(4, Math.round(10 * shadow));
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';

@@ -21,7 +21,7 @@ export const STONE_GOLEM = {
     palette: STONE_GOLEM_BOULDER_PALETTE,
   },
   maxHp: 300,
-  damage: 10,
+  damage: 13,
 
   // A Chapter 2 enemy: slow, heavy things, but plenty of them.
   difficulty: { density: 1.15, speed: 1.05 },
