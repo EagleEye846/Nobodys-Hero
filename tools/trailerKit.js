@@ -712,7 +712,15 @@ export async function runTrailer(config) {
       audio: { codec: 'A_OPUS', sampleRate: 48000, numberOfChannels: 2 },
     });
     let failed = null;
-    const videoEncoder = new VideoEncoder({ output: (chunk, meta) => muxer.addVideoChunk(chunk, meta), error: (e) => { failed = e; } });
+    // Canvas frames come out tagged with the sRGB curve. Players on a computer
+    // ignore that, but YouTube converts it to the usual video (BT.709) curve,
+    // which crushes the shadows and makes the whole trailer look dark. Tagging
+    // it BT.709 to begin with (the pixels stay the same) means YouTube leaves it alone.
+    const tagBt709 = (meta) => {
+      if (meta?.decoderConfig?.colorSpace) meta.decoderConfig.colorSpace = { ...meta.decoderConfig.colorSpace, transfer: 'bt709' };
+      return meta;
+    };
+    const videoEncoder = new VideoEncoder({ output: (chunk, meta) => muxer.addVideoChunk(chunk, tagBt709(meta)), error: (e) => { failed = e; } });
     videoEncoder.configure(video.config);
     const audioEncoder = new AudioEncoder({ output: (chunk, meta) => muxer.addAudioChunk(chunk, meta), error: (e) => { failed = e; } });
     audioEncoder.configure({ codec: 'opus', sampleRate: 48000, numberOfChannels: 2, bitrate: 256_000 });
