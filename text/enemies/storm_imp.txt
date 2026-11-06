@@ -1,0 +1,83 @@
+# STORM IMP
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/storm_imp.js.
+
+[intro]
+A fat grey cloud drops out of the sky at head height, turns round, and sticks its tongue out. It has a face. It has horns. It has a tail made of lightning. A STORM IMP!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+STORM IMP is making it rain on one specific spot, to see if you'll step in it.
+
+STORM IMP sneezes. A little thunder comes out. It looks around, delighted, in case anyone saw.
+
+STORM IMP tries to look dangerous. A single paper boat falls out of its side and floats away. It pretends that didn't happen.
+
+STORM IMP's tail zigs and zags. It's drawing something. It might be your name. It might be rude.
+
+Smells like wet pavement and a struck match, and a little like a child who's been told to be quiet.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Hee hee!
+
+Zap!
+Zap zap!
+
+Catch me!
+
+It's not a
+storm, it's
+a SURPRISE.
+
+Look at
+THIS one!
+
+Bet you
+can't
+dodge it.
+
+Oops!
+Did that
+hurt?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/storm_imp.js.
+[talk: Inspect]
+STORM IMP - HP 2200
+A bit of the storm with a mind of its own and a very long attention span for one joke. Forks of lightning (each flickers first), rain, gusts that shove, and balls of lightning that bounce. Mind the flicker.
+
+[talk: Play along]
+You jump over a puddle it points at, and then another, and then you pretend to be hit by a very small bolt. STORM IMP howls with laughter and rolls over in the air. It has never had anybody play before. Everyone just ran.
+
+[talk: Hold up an umbrella]
+You hold your coat over your head and walk, very slowly, through its rain. STORM IMP trails after you, a little way above, drizzling politely so that it all falls exactly where you are not.
+
+[talk: Tell it a joke]
+You tell it a joke about a lighthouse. It doesn't understand a word, but it understands you're trying, and it laughs so hard that thunder comes out of its ears. It tells you to do it again. You do not.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+STORM IMP lets out a long, thin wail, and rains itself out, all at once, on the planks. A small, warm puff of static is left floating where it was. It doesn't look like a threat. It looks like a toy.
+
+[pacified]
+STORM IMP tumbles over in the air, giggling, and throws up a tiny, harmless flash for you, like fireworks. Then it zips away over the sea with its tail flickering, to see what else it can spoil. Only a little.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that it is the most irritating cloud she has met, and that she means that as the highest praise. {foe} turns pink with pleasure. For a cloud that is saying something.
+
+Ves opens her umbrella, and {foe} sulks, and she closes it again, and {foe} cheers up, and they do that for a while. She is not sure which of them is winning.
+
+Ves says {foe} should know that someone, somewhere, is very sorry about the weather. {foe} goes quiet. It says it doesn't know who. It says it feels like it ought to.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} it's very small for a storm. {foe} says it's the BEST one. Bramble says that's fair, and that he is also quite small for his size.
+
+Bramble asks {foe} to rain on his boots, only a bit, because they are already wet. {foe} does, with great care. His boots are somehow no wetter.
+
+Bramble says thunder is only loud and he is basically not scared of it. A thunderclap goes off over his head. He sits down, and says it was a good one.

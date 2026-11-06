@@ -1,0 +1,21 @@
+# BT_SQ_LAMPLIGHTER: A glow-worm lamplighter pacing the square with his pole, ever more worried, ever more cheerful about it.
+
+[first]
+I've lit every lamp in the square and the Sunstone STILL looks like a candle. A bad candle.
+
+Sorry. I shouldn't. I'm a lamplighter. We're supposed to be positive.
+
+[repeat]
+Light, light, light. Where's it all gone? Could you look? I'd look but I'm too short.
+
+[first after the_kings_welcome]
+Down to the root of the thing, he said. I'd go, but I have to light the lamps. I'm very dedicated.
+
+[repeat after the_kings_welcome]
+Take care. The Deep's no place for a glow-worm. We hate the dark. It's rude.
+
+[first after the_light_goes_up]
+NOTHING TO LIGHT! Every lamp is on and the Sunstone's doing it all! I'm out of a job and I've never been happier!
+
+[repeat after the_light_goes_up]
+Look at that glow! I'm just a lamp next to it. A good lamp. But a lamp.

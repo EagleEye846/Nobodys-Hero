@@ -1,0 +1,23 @@
+# BT_INNKEEPER: The toad who keeps The Mossy Pillow, with a tuft of moss on her head and a ladle she never puts down. Brisk, kind, a little bit frightening.
+
+[first]
+Don't stand in my door like a draught. Sit down. Have a bed. It's free for heroes, and cheap for everyone else. Which are you?
+
+Oh, don't answer. I can see. Bed's through there.
+
+[repeat]
+Sleep on the left, not the right. The right's the bat's. He pays in snoring.
+
+[first after the_kings_welcome]
+So the KING's sending you down. Well. He's a lovely man. Loud, but lovely. I made his birthday cake. He didn't eat it. I don't know why. He never eats.
+
+[repeat after the_kings_welcome]
+Eat something before you go. Somebody in this town ought to. I've always said so. Nobody listens.
+
+He hasn't aged a day since Tuck found him, you know. Humans keep very well, apparently.
+
+[first after the_light_goes_up]
+I knew it! I told the bat! He slept through the whole thing! Come in, come in, everything's on the house!
+
+[repeat after the_light_goes_up]
+I'm making a stew the size of the Sunstone. It's going to take a week. Stay for the first bowl.

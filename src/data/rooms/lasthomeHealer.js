@@ -55,7 +55,12 @@ export const LASTHOME_HEALER = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/lasthome.txt',
   props: [
-    { sprite: 'lh_bryony', x: 4, y: 4, npc: 'lh_bryony' },
+    { sprite: 'lh_bryony', x: 4, y: 4, npc: 'lh_bryony', quest: [
+      { needs: ['q_cat_done'], text: 'cat_after', append: true },
+      { needs: ['q_cat_asked'], text: 'cat_hint', append: true },
+    ] },
+    // Side quest (Wren's cat): there isn't a cat.
+    { sprite: 'lh_cat', x: 11, y: 9, text: 'healer_cat', gives: 'biscuit', taken: { gone: true } },
     { sprite: 'herb_rack', x: 2, y: 2, text: 'healer_herbs' },
     { sprite: 'herb_rack', x: 4, y: 2, text: 'healer_herbs' },
     { sprite: 'stove_pot', x: 7, y: 2, text: 'healer_kettle' },

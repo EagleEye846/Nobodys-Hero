@@ -1,0 +1,21 @@
+# BT_VENDOR_MOLE: A mole selling very hard cheese, who is a lot happier than the cheese.
+
+[first]
+Cheese! Aged since the old king's day! Won't eat it, wouldn't dare. It's mostly for show.
+
+Buy a wedge? No? Not even to throw?
+
+[repeat]
+The cheese is a family heirloom. We've never actually sold any.
+
+[first after the_kings_welcome]
+Going down? Have some cheese for the road. Throw it at anything that bites.
+
+[repeat after the_kings_welcome]
+It's good for hitting things. It's not good for eating. I can't stress that enough.
+
+[first after the_light_goes_up]
+Business is up! Nobody's buying the cheese, but they're LOOKING at it hopefully!
+
+[repeat after the_light_goes_up]
+I might sell a wedge today. I can feel it. In my gut. Or it's the cheese.

@@ -1,0 +1,21 @@
+# BT_THRONE_KID2: A frog kid with a saucepan helmet in the throne room's audience, who has noticed something about the king and isn't sure if it's rude to mention.
+
+[first]
+Sh! Look at his jaw. It goes up and down. Like a door. Doesn't yours?
+
+Mum says it's polite not to stare. I've been staring for forty minutes.
+
+[repeat]
+He never moves his arms when he talks. Do you think he's shy?
+
+[first after the_kings_welcome]
+I think he's the best king. I also think the curtain wiggles. I haven't said anything. It's not my place.
+
+[repeat after the_kings_welcome]
+I asked the newt about the curtain. He said, 'What curtain?' He said it VERY fast.
+
+[first after the_light_goes_up]
+I knew it'd work. I knew it! I told Mum! I told the newt! They didn't believe me!
+
+[repeat after the_light_goes_up]
+I've decided not to tell anyone about the curtain. It's more fun.

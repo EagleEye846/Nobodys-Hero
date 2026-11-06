@@ -1,0 +1,19 @@
+# HADDOCK (on the slip at the far side of the Wreck Yard, wreck_slip), beside the Bother. Walk down to the end of the slip and he rows you home to Saltcombe (the scene wreck_slip_home, any time). The way here is over the mast, so he nearly always meets you with the star in your pocket.
+
+[first]
+{proud}There you are. Thought the yard had kept you.
+
+{smile}End of the slip when you want fetching. I'll not go deaf on you. Not more than I am.
+
+[repeat]
+{smile}End of the slip, and I'll row you home.
+
+[first after wreck_star_shard]
+{proud}There you are! And you've got her, haven't you? I can see it from here. Shining like a lamp in a pocket.
+
+{determined}That's star-iron, that is. Only one smith on this coast would know what to do with it: Orla Cobb, out on the Beacon Isles. Big grey seal. Bad temper. Best hands I ever saw.
+
+{smile}End of the slip when you want fetching.
+
+[repeat after wreck_star_shard]
+{smile}End of the slip, and I'll row you home. Orla's on the Isles, when you're ready for her.

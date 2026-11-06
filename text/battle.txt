@@ -41,6 +41,133 @@ You slipped away down a side street!
 
 You ducked behind a snowman. It worked!
 
+[escape: pinefall]
+You slipped away between the red trunks!
+
+You ducked into the ferns and kept still!
+
+You were gone into the pines before it turned round!
+
+[escape: drains]
+You slipped away down a side tunnel!
+
+You splashed off round a bend in the dark!
+
+You ducked under a pipe and kept going!
+
+[escape: marsh]
+You slipped away into the mist!
+
+You squelched off through the reeds!
+
+You hid behind a hummock until it gave up!
+
+[escape: lasthome]
+You slipped away down the lane!
+
+You ducked behind a wall and kept low!
+
+[escape: valley]
+You slipped away down a dead street!
+
+You ducked into an empty doorway!
+
+You were gone among the old stones!
+
+[escape: belowtown]
+You slipped away down a side street!
+
+You ducked behind a market stall!
+
+[escape: deep]
+You slipped away into the dark!
+
+You crept off down a low tunnel!
+
+You held your breath until it lost you!
+
+[escape: diggings]
+You slipped away behind a spoil heap!
+
+You ducked behind an old cart!
+
+You scrambled off down a side shaft!
+
+[escape: glimmer]
+You slipped away between the crystals!
+
+You ducked behind a glittering rock!
+
+The light flashed in its eyes, and you were gone!
+
+[escape: stillwater]
+You slipped away along the shore!
+
+You ducked under the overhang and kept still!
+
+[escape: sunnyside]
+You slipped away into the long grass!
+
+You ducked behind a hedge and kept going!
+
+You ran off between the haystacks!
+
+[escape: gullrest]
+You slipped away behind a beach hut!
+
+You ran off up the promenade!
+
+You ducked behind the bunting. It worked!
+
+[escape: saltcombe]
+You slipped away down an alley!
+
+You ducked behind a stack of crab pots!
+
+You ran off up the harbour steps!
+
+[escape: lanes]
+You slipped away down a flooded lane!
+
+You waded off round a corner!
+
+You ducked behind a garden wall!
+
+[escape: wrack]
+You slipped away into the dunes!
+
+You ducked behind a broken hull!
+
+You ran off over the shingle!
+
+[escape: wreck]
+You slipped away between the cargo!
+
+You ducked behind a barrel!
+
+You scrambled off up a ladder!
+
+[escape: soundings]
+You slipped away into the echoes!
+
+You ducked behind a pillar of sea-glass!
+
+You splashed off down a side cave!
+
+[escape: isles]
+You slipped away round the rocks!
+
+You ducked behind the lighthouse wall!
+
+You ran off over the causeway!
+
+[escape: reach]
+You slipped away into the storm!
+
+The rain came down between you, and you were gone!
+
+You ducked behind a rock and held on!
+
 # --- VES, on her own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
 
 # Shown in the panel while she picks what to do. One is picked at random.
@@ -70,7 +197,7 @@ Ves hums a few bars of an old village song at {foe}.
 
 # Her DEFEND: the plain version of SHELTER.
 [vesper_defend]
-Ves plants her umbrella in front of you like a little wall.
+Ves plants her umbrella and ducks behind it like a little wall.
 
 # --- VES, HURT (after the Lantern Marsh: her leg's bad, her umbrella's lost) ---
 # While she's hurt these take the place of the ones above. She sits on the

@@ -1,0 +1,77 @@
+# SHELLAC
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/shellac.js.
+
+[intro]
+A teapot rocks toward you on a great many small legs, and a crab looks out of the spout end, furious. A SHELLAC!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SHELLAC steams gently. It has just remembered you haven't wiped your feet.
+
+SHELLAC adjusts its lid with one claw and glares, as if daring you to say it's a bit big.
+
+A thin whistle comes out of the spout. SHELLAC says it isn't a whistle. It's a tone.
+
+SHELLAC clacks its claw twice. It means: this is a respectable address.
+
+Smells of wet china, hot tea and a crab who has had enough.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+This is
+a private
+residence.
+
+That's the
+good china!
+
+Mind the
+glaze!
+
+You'll
+want to
+wipe those.
+
+I was here
+FIRST.
+
+...Well,
+after the
+tea.
+
+Snap!
+Snap!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/shellac.js.
+[talk: Inspect]
+SHELLAC - HP 1950
+A hermit crab in a teapot, and extremely house-proud. Snaps its claw in fans, tosses cups that bounce, spins the whole pot in rings of china, and lets off steam. Stay off the flat of the floor.
+
+[talk: Wipe your feet]
+You scrape each boot on the sand, slowly, and then the other one, for a good long while. SHELLAC watches every scrape. Its claw drops a little. Nobody has wiped their feet for it in years.
+
+[talk: Admire the pattern]
+You lean in to look at the blue willow pattern, the little bridge, the two birds. SHELLAC turns so you can see the other side. It had forgotten there were birds on it.
+
+[talk: Ask for tea]
+You ask, very politely, whether there is any tea. SHELLAC is stunned. It tips the lid. There isn't. There hasn't been for years. It looks at you as if you're the first person to ask.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The lid pops off with a ping and SHELLAC rolls out of its teapot onto its back, claws up, deeply offended. The pot rocks to a stop. You are not sure which of them is more cracked.
+
+[pacified]
+SHELLAC settles its lid with great dignity and tips a claw to you, the way a person nods at a gate. It lets you by, and watches you all the way down the beach to make sure you wipe your feet.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} she's heard the neighbourhood has gone downhill since the tide stopped coming in properly. {foe} agrees, at length, with a great deal of clacking.
+
+Ves wipes her shoes on the sand, once, with a flourish. {foe} nods slowly. Somebody here has manners.
+
+Ves says the pot is lovely, and the crab in it is a credit to the pot. {foe} steams with pride and can't look at her.

@@ -1,0 +1,9 @@
+# BT_BAND_B: The other frog drummer, a bit behind the first, with a slightly different idea of the beat.
+
+[first]
+*thump thump* *thump-thump-thump*
+
+*We're in time. Mostly. It's a feel thing.*
+
+[repeat]
+*thump* *thump* *thump-a-thump-a-thump* *oops*

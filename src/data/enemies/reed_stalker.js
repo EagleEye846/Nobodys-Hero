@@ -24,9 +24,9 @@ export const REED_STALKER = {
     frames: [REED_STALKER_DISGUISE_SPRITES.still, REED_STALKER_DISGUISE_SPRITES.eye, REED_STALKER_DISGUISE_SPRITES.beak],
     palette: REED_STALKER_PALETTE,
   },
-  maxHp: 680,
+  maxHp: 780,
   // Every hit hurts a lot more than the marsh's other monsters'.
-  damage: 27,
+  damage: 31,
 
   // Not many bullets, and each one slow to come, but big.
   difficulty: { density: 1.2, speed: 1.3 },
@@ -49,7 +49,7 @@ export const REED_STALKER = {
   ],
 
   // The marsh's toughest regular fight, so it pays the best.
-  rewards: { exp: 230, coins: 110 },
+  rewards: { exp: 485, coins: 55 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'bulrush_bread', chance: 0.4 }],

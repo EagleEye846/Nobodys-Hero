@@ -9,8 +9,8 @@ export const CHOUGH = {
   gait: 'fly',
   textFile: 'enemies/chough.txt',
   sprite: { rows: CHOUGH_SPRITE, palette: CHOUGH_PALETTE },
-  maxHp: 120,
-  damage: 10,
+  maxHp: 130,
+  damage: 11,
 
   // A Chapter 2 enemy, and a quick one: its things fly fast.
   difficulty: { density: 1.1, speed: 1.2 },
@@ -31,7 +31,7 @@ export const CHOUGH = {
     { name: 'Caw back', calm: 35 },
   ],
 
-  rewards: { exp: 60, coins: 45 },
+  rewards: { exp: 65, coins: 60 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'shiny_button', chance: 0.4 }],

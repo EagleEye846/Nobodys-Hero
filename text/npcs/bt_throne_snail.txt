@@ -1,0 +1,19 @@
+# BT_THRONE_SNAIL: A very old snail standing very still near the front of the audience, who has been there since the show started and may not have noticed it ending.
+
+[first]
+Hm. A very loud young man. I've seen kings before. They're all loud. It's something to do with the crown.
+
+[repeat]
+It's a nice crown. I wonder if it's heavy. It looks like paper.
+
+[first after the_kings_welcome]
+I knew the old king, you know. A quiet man. He'd have found all this rather loud.
+
+[repeat after the_kings_welcome]
+The old king never spoke much. Never needed to. It was a more peaceable sort of reign.
+
+[first after the_light_goes_up]
+Hm. The light's back. A good day for a show. Do you think they'll do another?
+
+[repeat after the_light_goes_up]
+I'll stay until the next one. I've nothing on.

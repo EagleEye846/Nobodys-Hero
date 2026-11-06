@@ -193,3 +193,75 @@ Ring it to freeze every bullet for a moment.
 
 [iron_shod_ferrule]
 A heavy iron tip for the end of Ves's umbrella, for when she has it back. Teasel made it without ever seeing the umbrella. "Bring it and I'll see."
+
+# Chapter 4, under the fields.
+# Sold by Marigold at her lemonade stand in Sunnyside.
+[hayfork]
+A hayfork, for hay. Also for anything that looks at you funny. Marigold says it came with the stand. Lunge straight ahead and nothing in the way gets a say.
+
+# In a quartz nook in the Glimmering, if you know where to look.
+[quartz_edge]
+A blade of clear quartz, chipped to an edge by something very patient. It lets the light right through, and it lets you right through bullets, too. Slip through them for a moment.
+
+# Sold by Hobnail.
+[miners_pick]
+Hobnail's own pick, from before the mine was a mine. The head is as wide as your face and the handle is mostly dents. Slam it down and the ground hops.
+
+# In a chest in the Stillwater.
+[ferry_pole]
+A long punting pole, polished by a hundred years of hands. It's for pushing off the bottom, and for pushing off everything else. Plant it and bullets stop at the pole.
+
+# In the Deep, past a lot of dark.
+[deepglass_blade]
+A blade of black glass that formed in the dark, slowly, around nothing. It rings very quietly. It catches a blow and hands it back with interest.
+
+# Ves's.
+# In a chest in Sunnyside.
+[daisy_ferrule]
+A brass tip for Ves's umbrella, with a daisy stamped in it. Ves says it's embarrassing. She hasn't taken it off.
+
+# In a chest in the Glimmering.
+[prism_canopy]
+Ves's umbrella, re-covered in thin panes of crystal. Rain doesn't fall on it, it shines. It calms things down just by being pretty.
+
+# In a chest in the Diggings.
+[rivet_handle]
+A handle riveted together out of mine-cart scrap. It's heavy, ugly and exactly the right shape for a hand. Ves hits things with it and calls it "persuasion".
+
+# In a chest in the Deep.
+[glowcap_canopy]
+Glowing caps grew right on Ves's umbrella. They hum, and they're warm. It mends you a little every turn.
+
+# CHAPTER 5, the drowned coast.
+# Mrs. Wrasse's Chandlery, in Saltcombe.
+[driftwood_cutlass]
+A cutlass whittled from a ship's rib that washed up smooth as a bone. It's light, and quick, and slightly damp forever. Lunge ahead and nothing in the way gets a say.
+
+[brine_harpoon]
+A harpoon with a barbed tip and a salted shaft. Mrs. Wrasse sells it with a coil of rope and a warning not to throw it at anything you'd like to keep.
+
+# In a chest in the Wreck Yard.
+[anchor_maul]
+A ship's anchor on a driftwood haft. It was never meant to be swung. Slam it down and the ground, the deck and the sea all hop.
+
+# In a chest in the Soundings.
+[glass_float_staff]
+A fisher's glass float on a crook of bleached wood. Something shifts inside it, slow and green. It's calm in your hand.
+
+# Dropped by Corrie, the Tidecaller.
+[stormglass_blade]
+A blade of storm-green glass with lightning frozen in it. It was the storm, once. Now it's yours, and it catches a blow and hands it back, with a roll of thunder.
+
+# Ves's.
+[sailcloth_umbrella]
+Ves's umbrella in patched sailcloth. It smells of salt and tar, and mends you a little every turn.
+
+[storm_umbrella]
+Orla built a canopy frame for Ves out of iron ribs and old lamp-brass. It sings in the wind, and the wind does what it says. SHELTER holds the bullets back for longer.
+
+# Bramble's.
+[boat_axe]
+An axe for cutting boat ropes in a hurry, cut down to his size. Bramble says it's his now. Mrs. Wrasse says it's still on the tag.
+
+[ships_cleaver]
+A short, heavy cleaver off a wreck. It's rusted in the shape of a ship's wheel. Orla reground it on the forge, and it goes in quiet.

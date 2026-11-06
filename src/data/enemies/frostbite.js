@@ -17,8 +17,8 @@ export const FROSTBITE = {
     frames: [FROSTBITE_DISGUISE_SPRITES.still, FROSTBITE_DISGUISE_SPRITES.look, FROSTBITE_DISGUISE_SPRITES.grin],
     palette: FROSTBITE_PALETTE,
   },
-  maxHp: 220,
-  damage: 12,
+  maxHp: 240,
+  damage: 13,
 
   // A Chapter 2 enemy: slow things, but a lot of them.
   difficulty: { density: 1.15, speed: 1.05 },
@@ -41,7 +41,7 @@ export const FROSTBITE = {
     { name: 'Shiver dramatically', calm: 25 },
   ],
 
-  rewards: { exp: 95, coins: 55 },
+  rewards: { exp: 105, coins: 70 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'snow_cone', chance: 0.4 }],

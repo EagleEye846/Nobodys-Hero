@@ -1,0 +1,228 @@
+# THE STORM REACH (Chapter 5): the open sea past Haddock's Light, crossed in the Bother from
+# stop to stop: the first rock, the reef, the wreck, the eye of the storm, and the foot of the
+# Last Light. A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums. Out here it's the only steady thing for miles.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[rock_stump]
+An old iron mooring post, worn smooth on top. Press on it, and the water and everything you've pushed goes back where it started.
+
+[reach_rock]
+Black rock, running with rain.
+
+[reach_cliff]
+A face of black rock, slick with weed at the bottom and bare at the top, where the sea can't reach. Mostly can't.
+
+[reach_sea]
+The open sea, green-black and heaving, white where it breaks. There's a lot of it.
+
+[reach_sea_bramble]
+{scared}Don't look at it. If you look at it, it looks back.
+
+[reach_barnacles]
+A knuckle of rock crusted with barnacles. They've done well out here. Nobody else has.
+
+[reach_planks]
+Old planks spiked into the rock, slippery as soap.
+
+[reach_pool]
+A rock pool. Inside it the water is perfectly calm, as if it hadn't heard.
+
+[reach_weed]
+A heap of weed the sea has thrown up and forgotten.
+
+[reach_driftwood]
+A length of driftwood, bleached grey, with a rusted nail still in it.
+
+[reach_bollard]
+A mooring post with a chain round it, sunk into the rock. Somebody used to tie up here. Haddock still does.
+
+# --- THE FIRST ROCK --------------------------------------------------------------
+
+[rock_sign]
+A board nailed to a stake, the letters nearly washed off: GULLY. WAIT FOR THE SWELL TO DROP. DON'T BE CLEVER.
+
+[rock_sign_ves]
+{bored}That last line's for you, Bramble.
+
+[rock_sign_bramble]
+{worried}I'm never clever near water. I'm just wet.
+
+[rock_bar]
+A bar of shingle across the gully. Every few breaths the sea pulls off it, and every few breaths it comes back.
+
+[rock_dial]
+A post with a round face: a blue arc for the swell in, a sandy arc for the swell out, and a hand going round. Out here the sea keeps time like a clock.
+
+[rock_buoy]
+A red buoy hauled up onto the shelf, its bell long gone.
+
+[rock_coil]
+A coil of rope, flaked down neatly and weighted with a stone.
+
+[rock_pouch]
+A purse wedged deep in a crack in the rock, out of the rain.
+
+# --- THE REEF ----------------------------------------------------------------------
+
+[reef_sign]
+A plank with a tide wheel painted on it, and an arrow: TURN FOR LOW. TURN AGAIN FOR HIGH. MIND THE CUT.
+
+[reef_wheel]
+A tide wheel bolted to the rock, green with weed, its brass rings scoured bright by the rain.
+
+[reef_wheel_turn]
+You heave the wheel round. Out on the reef the sea stops, thinks about it, and starts to move.
+
+[reef_wheel_busy]
+The wheel won't budge. The water's still moving.
+
+[reef_crate]
+A sea chest, nailed shut and tarred. It floats when the reef is drowned and sits like a rock when it isn't.
+
+[reef_crate_bramble]
+{thinking}If it falls in the cut, we can walk on it. If I fall in the cut, nobody walks on me.
+
+[reef_coral]
+Coral, brittle and grey, with little red bits still alive in the cracks.
+
+[reef_rock]
+Wet rock and coral, full of holes that suck and bubble.
+
+[reef_buoys]
+A heap of old buoys, lashed together so the sea can't have them.
+
+[reef_pouch]
+A purse caught in the weed at the foot of the rock.
+
+# --- THE WRECK ---------------------------------------------------------------------
+
+[wreck_sign]
+Somebody has painted on a broken oar: ALL HANDS LOST. KEEP OFF HER DECK. DON'T GO IN THE DECKHOUSE.
+
+[wreck_sign_ves]
+{bored}Two out of three's not bad.
+
+[wreck_shingle]
+Black shingle in the lee of the wreck, the only bit of this rock the sea doesn't go over.
+
+[wreck_side]
+The ship's side, leaning over you, plate after rusted plate. Barnacles have got as far as halfway up.
+
+[wreck_rail]
+The ship's rail, bent where the sea came over it.
+
+[wreck_deck]
+The deck, tilted a little, wet and slippery. Water runs off it in sheets with every wave.
+
+[wreck_gangway]
+A gangway down the ship's far side to the rock.
+
+[wreck_house]
+The deckhouse. Its door is stove in and jammed with wreckage. Nothing bigger than a cat is getting in that way.
+
+[wreck_porthole]
+A porthole, the glass cracked in a star. Inside, a wheel on the wall, and a bolt running from it out to the gangway.
+
+[wreck_gap]
+A gap low in the deckhouse wall where a plate has rusted through. It's about the size of a ten-year-old.
+
+[wreck_gap_bramble]
+{sheepish}Why is it always me and a hole?
+
+[wreck_gap_ves]
+{bored}Because it's always you and a hole.
+
+[wreck_bolt]
+A bolt wheel on the deckhouse wall. Bramble hangs off it with all his weight, and it squeals round, and out on the gangway something goes CLUNK.
+
+[wreck_bolt_not_you]
+It's inside the deckhouse, and the deckhouse door is jammed solid.
+
+[wreck_gate]
+A gate across the gangway, bolted. The bolt runs back into the deckhouse.
+
+[wreck_gate_open]
+The gangway gates swing open with a long, rusty groan.
+
+[wreck_wheel]
+The ship's wheel, three spokes snapped off. Somebody tied it hard over, a long time ago, and it's stayed that way.
+
+[wreck_sail]
+A sail on a broken spar, more hole than sail.
+
+[wreck_flag]
+A flag on the stump of a mast. Whatever was on it has been rained off.
+
+[wreck_figurehead]
+The figurehead, broken off and lying on the shingle: a woman with her hand up to her eyes, looking out to sea. She's still looking.
+
+[wreck_anchor]
+The ship's anchor, dropped on the rock and never weighed. It didn't help.
+
+[wreck_crate]
+A cargo crate, burst. Whatever was in it went with the sea.
+
+[wreck_pouch]
+A purse in the lee of the deckhouse, dry, which out here is close to a miracle.
+
+# --- THE EYE -------------------------------------------------------------------------
+
+[eye_sea]
+The sea, lying flat. It's so still that the rock is in it upside down.
+
+[eye_sea_bramble]
+{thinking}It's much nicer when it's asleep.
+
+[eye_rock]
+Dry rock. Actually dry. You'd forgotten.
+
+[eye_turf]
+Thin turf in the cracks, and in it a few tiny white flowers, shut tight like fists.
+
+[eye_pool]
+A rock pool with a crab in it. The crab is having a lovely time.
+
+[eye_driftwood]
+A log of driftwood, just right for sitting on.
+
+[eye_driftwood_ves]
+{bored}Don't get comfortable. It's a hole in the weather, not a holiday.
+
+[eye_coil]
+The Bother's spare rope, coiled and dry.
+
+[eye_bother]
+The Bother, pulled in snug at the jetty. Somebody has bailed her out, and the bailing tin is upside down on the thwart to dry.
+
+[eye_pouch]
+A purse tucked under the driftwood.
+
+# --- THE FOOT OF THE LAST LIGHT ------------------------------------------------------
+
+[foot_sign]
+An iron plate bolted to the rock, letters raised in rust: THE LAST LIGHT. The rest has been scraped off, one letter at a time, by the sea.
+
+[foot_plinth]
+The rock the tower stands on, cut flat and faced with black stone. The sea has had a go at it for years and got nowhere.
+
+[foot_wall]
+The foot of the tower: black brick, every course as wide as you are tall. You can't see the top from here. You can't see much of anything from here except the tower.
+
+[foot_wall_ves]
+{thoughtful}...Somebody built this. On purpose.
+
+[foot_chain]
+A chain as thick as your arm, run from the rock out into the sea. Whatever's on the other end, it isn't saying.
+
+[foot_pouch]
+A purse wedged in behind the chain, where the sea couldn't pull it loose.

@@ -1,0 +1,19 @@
+# BT_HALL_KID: A frog kid on a school visit of one, standing in front of the mural with a saucepan helmet and a notebook.
+
+[first]
+I'm doing a project. On the Hero. I've got a list: one, tall. Two, sword. Three... I've run out. What else did they do?
+
+[repeat]
+My teacher says the Hero was nine feet tall. I measured. That's like fifty of me, sitting on each other.
+
+[first after the_kings_welcome]
+The king says the Hero was his best friend. I put it in the project. My teacher crossed it out.
+
+[repeat after the_kings_welcome]
+She wrote 'CHECK THIS' in the margin. In capitals. It's very serious.
+
+[first after the_light_goes_up]
+I'm going to put YOU in the project! The Hero's friends! You don't have to be nine feet tall!
+
+[repeat after the_light_goes_up]
+I need a quote. Can you say something Heroic? Quickly? Before the bell?

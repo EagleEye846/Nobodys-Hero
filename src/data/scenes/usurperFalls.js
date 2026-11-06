@@ -87,6 +87,6 @@ export const USURPER_FALLS = {
     { do: 'wait', seconds: 1.5 },
     // Black, and the credits: "Nobody's Hero", then Chapter Two's card; then
     // Chapter 3, waking where you fell, in the scarlet forest below.
-    { do: 'end_chapter', credits: { song: 'creditsVigil', text: 'credits_vigil.txt' }, card: 'chapter_end_vigil.txt', room: 'pinefall_landing', spawn: { x: 10, y: 9 } },
+    { do: 'end_chapter', chapter: 2, credits: { song: 'creditsVigil', text: 'credits_vigil.txt' }, card: 'chapter_end_vigil.txt', room: 'pinefall_landing', spawn: { x: 10, y: 9 } },
   ],
 };

@@ -1,0 +1,21 @@
+# BT_GATE_SNAIL: A very old snail with spectacles and a cane, who has come to the gate to see the visitors and has been on the way since the morning before.
+
+[first]
+Oh. Good. I got here. I was starting to think I wouldn't.
+
+Is it... the Hero? I set off to see the Hero last time, too. I got there just as they left.
+
+[repeat]
+I left home the morning before last. It's four doors down. I'd like to be back by the weekend.
+
+[first after the_kings_welcome]
+You're to go down, I hear. Well. It's always down. It was down last time too, I'm told.
+
+[repeat after the_kings_welcome]
+Bring back a bit of the light, will you? A bit. A snail's pace of it. I'll wait.
+
+[first after the_light_goes_up]
+I saw it flare. I was even facing the right way. I started turning round at breakfast, just in case.
+
+[repeat after the_light_goes_up]
+I think I'll just sit here and look at it for a hundred years or so.

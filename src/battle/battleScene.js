@@ -19,14 +19,40 @@ function battleSong(area) {
   if (area === 'cave' && SONGS.caveBattle) return 'caveBattle';
   if ((area === 'pinefall' || area === 'drains' || area === 'marsh') && SONGS.pinefallBattle) return 'pinefallBattle';
   if (area === 'valley' && SONGS.valleyBattle) return 'valleyBattle';
+  // Sunnyside's fights are bright and silly (sunnyBattleTheme.js).
+  if (area === 'sunnyside' && SONGS.sunnyBattle) return 'sunnyBattle';
   const together = partyIds().includes('vesper');
   return together && MOUNTAIN_AREAS.has(area) && SONGS.mountainBattle ? 'mountainBattle' : 'battle';
+}
+// Some areas swap an enemy's own song for one of their own: in the mines
+// (the Diggings), the underground fights' "Scurry" becomes "Uneven Rails"
+// (diggingsBattleTheme.js), carts on crooked track; on the Stillwater's lake
+// it becomes "Black Ripples" (stillwaterBattleTheme.js), a harp rippling out
+// of time over black water; in the Deep it becomes "Rain on the Roots"
+// (deepBattleTheme.js), the Counting Days rain turned into a fight.
+// Chapter 5's coast monsters ask for 'coastBattleStorm' ("Salt in the
+// Wound (Storm)", the tune of Corrie's boss song), so every coast area swaps it: the
+// happy beach (Gullrest) has its own jolly pirate fight, "Shore Leave"
+// (gullrestBattleTheme.js); everywhere else on the coast it's "Cutlass Weather"
+// (pirateBattleTheme.js).
+// The longest BILLOW (Ves's sail) can keep the party untouchable, in seconds.
+const SAIL_CAP_SECONDS = 5;
+const COAST_FIGHT = { coastBattleStorm: 'pirateBattle' };
+const AREA_SONGS = {
+  diggings: { belowBattle: 'diggingsBattle' }, stillwater: { belowBattle: 'stillwaterBattle' }, deep: { belowBattle: 'deepBattle' },
+  gullrest: { coastBattleStorm: 'gullrestBattle' },
+  wrack: COAST_FIGHT, saltcombe: COAST_FIGHT, lanes: COAST_FIGHT, wreck: COAST_FIGHT, merrow: COAST_FIGHT, soundings: COAST_FIGHT,
+  isles: COAST_FIGHT, haddock_light: COAST_FIGHT, reach: COAST_FIGHT, lastlight: COAST_FIGHT,
+};
+function songFor(enemySong, area) {
+  const swap = AREA_SONGS[area]?.[enemySong];
+  return swap && SONGS[swap] ? swap : enemySong;
 }
 import { textFile, textSection } from '../engine/textLoader.js';
 import { drawText } from '../ui/text.js';
 import { TextBox } from '../ui/textbox.js';
 import { HERO_ANIMATIONS } from '../characters/hero.js';
-import { MEMBERS, partyIds, memberSprites, memberMaxHp, memberGrowth, hurtState, isHurt, setHurt } from '../characters/party.js';
+import { MEMBERS, partyIds, memberSprites, memberMaxHp, memberHp, setMemberHp, memberGrowth, hurtState, isHurt, setHurt } from '../characters/party.js';
 import { memberGearBonus, memberFightPower } from '../characters/equipment.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { ITEMS, giveItem, healLabel } from '../data/items.js';
@@ -43,12 +69,21 @@ import { BACKDROPS } from './backdrops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import * as hud from './hud.js';
 import { SpellEffects } from './spellEffects.js';
-import { StageBits, entranceOffset, bitColors, ENTER_LANDS } from './stageBits.js';
+import { StageBits, entranceOffset, bitColors, ENTER_LANDS, CURTAIN_PARTS, CURTAIN_OPEN } from './stageBits.js';
+import { drawCurtains } from './theatreBackdrop.js';
+import { STAGE_EFFECTS } from './stageEffects.js';
+import { PORTRAITS } from '../data/art/portraits.js';
+import { SETTINGS } from '../state/settings.js';
+import { noteMet, noteLeft } from '../data/journal.js';
+import { stealCheck, giveBack } from './steals.js';
+import { hasGear } from '../data/gear.js';
 
 // The party fights from the left. Only the hero for now; max HP and level come
 // from their progress (src/characters/progress.js).
 const PARTY = [{ name: 'HERO', color: '#4fe3d0', sprite: HERO_ANIMATIONS.right[0] }];
 const DEFEND_SP = 16;
+// A friend's DEFEND, which covers only them.
+const ALLY_DEFEND_SP = 8;
 const BASE_IFRAMES = 1;
 
 // Gold won from a fight, as a multiple of the enemies' `coins` rewards. Later
@@ -72,7 +107,7 @@ const HUSH_CALM = 20;
 const WARD_TURNS = 2;
 // Chapters 3 and 4: Balm and Renew heal by their `heals` (src/data/spells.js),
 // Aegis is a ward of `turns`, Serenade calms everyone by its `calm`.
-const TARGETED_SPELLS = new Set(['rend', 'lull', 'pacify', 'starfall', 'comet', 'spark', 'siphon', 'sunder', 'lance', 'tempest', 'nova']);
+const TARGETED_SPELLS = new Set(['rend', 'lull', 'pacify', 'starfall', 'comet', 'spark', 'siphon', 'sunder', 'lance', 'tempest', 'nova', 'undertow', 'brine', 'low_water', 'cleave', 'undercut', 'overwhelm']);
 const HEALING_SPELLS = new Set(['heal', 'mend', 'renew']);
 // What the attack spells say as they're cast.
 const ATTACK_SPELL_LINES = {
@@ -88,10 +123,16 @@ const ATTACK_SPELL_LINES = {
   sunburst: 'The light bursts out of you in every direction.',
   tempest: 'The whole sky turns, and comes down.',
   nova: 'Everything goes white.',
+  undertow: 'The water drags back, and takes them with it.',
+  brine: 'A splash of sea water, thick with salt.',
+  cleave: 'One stroke, straight through.',
+  starstorm: 'Stars come down on everyone at once.',
+  undercut: 'A blow from underneath that knocks them back, and stings after.',
+  overwhelm: 'Everything you have, all at once.',
 };
 // What each attack spell looks like (a kind from src/battle/spellEffects.js),
 // where it isn't a kind of its own.
-const ATTACK_SPELL_FX = { rend: 'slash', sunder: 'slash', lance: 'spark', tempest: 'comet' };
+const ATTACK_SPELL_FX = { rend: 'slash', sunder: 'slash', lance: 'spark', tempest: 'comet', undertow: 'downdraft', brine: 'pebble', cleave: 'slash', undercut: 'downdraft', overwhelm: 'comet' };
 
 // A spell's one-line description from text/spells/spells.txt, with its
 // {placeholders} filled in from `values`. Empty if it hasn't got one.
@@ -133,6 +174,11 @@ const FINALE_SECONDS = 1.7;
 const FINALE_BURST_EVERY = 0.11;
 // Spared, soft lights rise off it for this long instead.
 const SPARED_GLOW_SECONDS = 1.8;
+// The MERCY bar snapped (snapMercy): lifted into his hands until `grab`,
+// bent until `snap`, held broken until `throw`, then the halves are thrown at
+// the screen until `hit` (they smack the glass), and slide off it until
+// `done`.
+const MERCY_SNAP = { grab: 0.55, bend: 0.8, snap: 1.9, throw: 2.5, hit: 3.0, done: 4.5 };
 
 const COMMANDS = [
   { label: 'FIGHT', icon: 'fight' },
@@ -175,15 +221,118 @@ const FOE_LAYOUTS = {
   3: [{ x: 234, y: 4 }, { x: 270, y: 54 }, { x: 234, y: 104 }],
 };
 const ENEMY_STATUS_GAP = 4;
+// How tall a lone enemy's name, HP and MERCY are, together (hud.drawEnemyStatus).
+const ENEMY_STATUS_HEIGHT = 76;
+
+// One half of the MERCY bar, drawn small and pixel by pixel (so it scales
+// up with hard edges): the bar's own dark back and yellow fill, white
+// lettering ("MER" or "CY"), a jagged splintered end where it broke, a few
+// loose splinters, all on a black outline. The left half's break is on its
+// right; the right half's, on its left.
+const HALF_PAD = 6;
+function makeHalf(side, calm) {
+  const W = 50;
+  const H = 12;
+  const c = document.createElement('canvas');
+  c.width = W + HALF_PAD * 2;
+  c.height = H + HALF_PAD * 2;
+  const g = c.getContext('2d');
+  g.imageSmoothingEnabled = false;
+  const ox = HALF_PAD;
+  const oy = HALF_PAD;
+  g.fillStyle = hud.COLORS.calmBack;
+  g.fillRect(ox, oy, W, H);
+  // (Where the bar was filled: the yellow runs from its left end to `calm`.)
+  const from = side ? 50 : 0;
+  const filled = Math.max(0, Math.min(W, calm - from));
+  g.fillStyle = hud.COLORS.calm;
+  g.fillRect(ox, oy, filled, H);
+  g.fillStyle = 'rgba(255, 255, 255, 0.35)';
+  g.fillRect(ox, oy, W, 2);
+  g.fillStyle = '#ffffff';
+  g.font = '14px VT323, monospace';
+  g.textBaseline = 'middle';
+  g.textAlign = 'center';
+  g.lineWidth = 3;
+  g.strokeStyle = '#000000';
+  const word = side ? 'CY' : 'MER';
+  const lx = ox + W / 2 + (side ? 4 : -6);
+  g.strokeText(word, lx, oy + H / 2 + 1);
+  g.fillText(word, lx, oy + H / 2 + 1);
+  // The jagged break: bites out of the end, a different depth each row.
+  let depth = 3;
+  for (let y = 0; y < H; y++) {
+    depth = Math.max(1, Math.min(8, depth + Math.floor(Math.random() * 5) - 2));
+    if (side) g.clearRect(ox, oy + y, depth, 1);
+    else g.clearRect(ox + W - depth, oy + y, depth, 1);
+  }
+  // A few loose splinters off it, in the bar's colours.
+  for (let i = 0; i < 4; i++) {
+    const x = side ? ox - 1 - Math.floor(Math.random() * 4) : ox + W + Math.floor(Math.random() * 4);
+    const y = oy + Math.floor(Math.random() * (H + 2)) - 1;
+    g.fillStyle = i % 2 ? hud.COLORS.calm : hud.COLORS.calmBack;
+    g.fillRect(x, y, 2, 1 + (i % 2));
+  }
+  // The black outline: every empty pixel touching a drawn one.
+  const img = g.getImageData(0, 0, c.width, c.height);
+  const a = img.data;
+  const solid = (x, y) => x >= 0 && y >= 0 && x < c.width && y < c.height && a[(y * c.width + x) * 4 + 3] > 40;
+  const edge = [];
+  for (let y = 0; y < c.height; y++) {
+    for (let x = 0; x < c.width; x++) {
+      if (!solid(x, y) && (solid(x - 1, y) || solid(x + 1, y) || solid(x, y - 1) || solid(x, y + 1))) edge.push([x, y]);
+    }
+  }
+  g.fillStyle = '#000000';
+  for (const [x, y] of edge) g.fillRect(x, y, 1, 1);
+  return c;
+}
+
+// Cracks in the glass round a point: jagged lines going out, and a ring
+// of broken spans across them (UI pixels).
+function glassCracks({ x, y }) {
+  const lines = [];
+  const angles = [];
+  const count = 10 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+    angles.push(angle);
+    const length = 70 + Math.random() * 150;
+    const line = [[x, y]];
+    let a = angle;
+    for (let d = 14; d < length; d += 12 + Math.random() * 12) {
+      a += (Math.random() - 0.5) * 0.5;
+      line.push([x + Math.cos(a) * d, y + Math.sin(a) * d]);
+    }
+    lines.push(line);
+  }
+  // Two uneven rings, each only a few spans of the way round.
+  const rings = [];
+  for (const r of [30, 62]) {
+    for (let i = 0; i < count; i += 2) {
+      if (Math.random() < 0.3) continue;
+      const pts = [angles[i], angles[(i + 1) % count] + (i + 1 >= count ? Math.PI * 2 : 0)].map((a) => {
+        const d = r * (0.85 + Math.random() * 0.3);
+        return [x + Math.cos(a) * d, y + Math.sin(a) * d];
+      });
+      rings.push(pts);
+    }
+  }
+  return { x, y, lines, rings };
+}
 
 const BOX_OPEN_SECONDS = 0.25;
 // Where the battle box belongs. An attack can pick the box up and move it
-// (the Bog Toad's GULP); it's always put back here when the turn ends.
-const BOX_HOME = { x: hud.BOX.x, y: hud.BOX.y };
+// (the Bog Toad's GULP), or tear it open over the whole stage (King
+// Peptup's finale, which leaves `tear` on it for his stage to draw); it's
+// always put back here when the turn ends.
+const BOX_HOME = { x: hud.BOX.x, y: hud.BOX.y, w: hud.BOX.w, h: hud.BOX.h };
 function boxHome() {
-  hud.BOX.x = BOX_HOME.x;
-  hud.BOX.y = BOX_HOME.y;
+  Object.assign(hud.BOX, BOX_HOME);
   delete hud.BOX.heldBy;
+  delete hud.BOX.tear;
+  delete hud.BOX.platforms;
+  delete hud.BOX.hint;
 }
 
 // The hero's aura: a pulsing glow behind them and motes rising from their feet.
@@ -210,9 +359,22 @@ function compileAnim(anim, palette) {
   const out = { chips: anim.chips ?? null };
   for (const [name, clip] of Object.entries(anim)) {
     if (name === 'chips' || !clip?.frames) continue;
-    out[name] = { sprites: clip.frames.map((rows) => makeSprite(rows, palette)), fps: clip.fps ?? ANIM_FPS };
+    out[name] = { sprites: clip.frames.map((rows) => makeSprite(rows, palette)), fps: clip.fps ?? ANIM_FPS, holds: clip.holds ?? null };
   }
   return out;
+}
+// The frame of a looping clip (idle, talk) `t` seconds in. With `holds`
+// (how many frames' time each one stays up), it can linger on some and
+// flick through others: a stop-motion jerk.
+function loopFrame(clip, t) {
+  if (!clip.holds) return clip.sprites[Math.floor(t * clip.fps) % clip.sprites.length];
+  const total = clip.holds.reduce((sum, h) => sum + h, 0);
+  let left = (t * clip.fps) % total;
+  for (let i = 0; i < clip.sprites.length; i++) {
+    left -= clip.holds[i] ?? 1;
+    if (left < 0) return clip.sprites[i];
+  }
+  return clip.sprites[clip.sprites.length - 1];
 }
 // The frame of `clip` at `t` seconds in (holding the last), or null once it's over and doesn't hold.
 function clipFrame(clip, t, hold = false) {
@@ -225,6 +387,8 @@ const clipLength = (clip) => (clip ? clip.sprites.length / clip.fps : 0);
 
 const TAUNT_SPEED = 35; // characters per second
 const SHAKE_SECONDS = 0.25;
+// How long two letters of an `anagram` name take to trade places.
+const NAME_SWAP_SECONDS = 0.9;
 const SPARK_SECONDS = 0.35;
 
 // A boss's lantern flame (a phase with `flame`, the Usurper's): how close a
@@ -256,8 +420,12 @@ export class BattleScene {
     this.area = area;
     // A boss can bring its own background; otherwise it's the area's.
     this.backdrop = BACKDROPS[list.find((data) => data.backdrop)?.backdrop] ?? BACKDROPS[area] ?? BACKDROPS.ruins;
+    // The theatre's boards start lower than other floors: the one at the back
+    // of the line (you) steps down onto them rather than stand on the wall.
+    this.backRowDrop = list.some((data) => data.backdrop === 'theatre') ? 9 : 0;
     this.foes = list.map((data, i) => this.makeFoe(data, layout[i]));
     for (const foe of this.foes) this.checkPatterns(foe.data);
+    for (const foe of this.foes) noteMet(foe.data);
     // A boss fought in `phases` (the Usurper), and the lantern flame one of
     // them can put in the box (see enterPhase).
     this.phased = this.foes.find((foe) => foe.data.phases) ?? null;
@@ -265,17 +433,21 @@ export class BattleScene {
     // Her lantern is on the stage from the start, cold in the snow where he
     // threw it (summit_arrival), before Ves starts to relight it.
     this.stageLantern = Boolean(this.phased?.data.phases.some((phase) => phase.flame));
+    // A phase's `stage` effects (see stageEffects.js), and what they keep.
+    this.stageFx = null;
+    this.stageState = null;
     this.provoked = false;
     this.flameGuardBonus = 0;
 
-    // HP carries over from the last fight (see heroHp in progress.js). Friends
+    // HP carries over from the last fight (see heroHp in progress.js, and
+    // memberHp in party.js). Friends
     // in the party (src/characters/party.js) stand behind you and take a turn
     // each after yours.
     this.party = [
       ...PARTY.map((member) => ({ ...member, level: HERO_STATE.level, maxHp: heroMaxHp(), hp: heroHp() })),
       // (A hurt friend sits on the ground for the fight: their `hurt` look.)
       ...partyIds().map((id) => ({
-        id, ...MEMBERS[id], commands: memberCommands(id), sprite: this.memberSprite(id), level: HERO_STATE.level, maxHp: memberMaxHp(id), hp: memberMaxHp(id), ally: true, hurt: Boolean(hurtState(id)),
+        id, ...MEMBERS[id], commands: memberCommands(id), sprite: this.memberSprite(id), level: HERO_STATE.level, maxHp: memberMaxHp(id), hp: memberHp(id), ally: true, hurt: Boolean(hurtState(id)),
       })),
     ];
     this.hero = this.party[0];
@@ -301,6 +473,16 @@ export class BattleScene {
     this.absorb = false;
     this.riposte = null;
     this.rain = null;
+    // Chapter 5. Ves's SAIL (seconds the whole party can't be hit at the start
+    // of the next enemy turn), Bramble's WADE IN (his id: he takes the hits
+    // meant for his friends this enemy turn), the hero's EBB AND FLOW
+    // ({ attack, defence, turns }: hits you land are stronger and hits you take
+    // are too, until `turns` enemy turns have passed). A foe can also carry
+    // `brine` ({ damage, turns }: it burns after every enemy turn) and
+    // `exposed` ({ bonus, turns }: LOW WATER, every hit on it lands harder).
+    this.sailSeconds = 0;
+    this.wading = null;
+    this.tideSwap = null;
 
     // Learned skills shape the whole battle.
     // Thrift and Gentle Hands make spells cheaper.
@@ -334,12 +516,12 @@ export class BattleScene {
 
     // The equipped weapon sets FIGHT power and may give the soul a SHIFT ability.
     this.weapon = WEAPONS[HERO_STATE.weapon];
-    this.ability = this.weapon.ability ? SOUL_ABILITIES[this.weapon.ability] : null;
-    this.abilityCooldown = 0;
-    this.abilityLeft = 0;
-    this.abilityUses = 0;
-    this.abilityState = {};
-    this.abilityHintShown = false;
+    // (A boss can give your shadow a power of its own for the fight, in place
+    // of the weapon's: the enemy's `soulAbility`, from soulAbilities.js. A
+    // phase can hold it back, or bring it in: see enterPhase.)
+    const giver = this.foes.find((foe) => foe.data.soulAbility);
+    const first = giver?.data.phases?.[0];
+    this.giveAbility(first && 'soulAbility' in first ? first.soulAbility : giver?.data.soulAbility);
     this.grazeMultiplier = 1;
     boxHome();
     this.box = hud.BOX;
@@ -405,6 +587,15 @@ export class BattleScene {
         this.bits.ring(feet.x, feet.y, { squash: 0.25, speed: 160, color: '#e8dcc4' });
         sfx('thud');
         break;
+      case 'curtain': {
+        // The curtains are open: a spotlight snaps on, and confetti.
+        this.shake = SHAKE_SECONDS;
+        this.bits.star(foe.center.x, foe.pos.y + 20, { size: 30, life: 0.5 });
+        this.bits.ring(foe.center.x, foe.center.y, { speed: 170, color: '#ffe48a', width: 3 });
+        this.bits.scatter(foe.center.x, foe.pos.y + 6, 46, ['#ff5470', '#ffd25e', '#4fe3d0', '#7ab8ff', '#ffffff', '#c78bff'], { speed: 130, up: 70, gravity: 70, life: 1.6 });
+        sfx('flare');
+        break;
+      }
       case 'swoop':
         this.shake = SHAKE_SECONDS;
         this.bits.dust(feet.x, feet.y, w * 0.8, 10, { color: '#9aa4c8' });
@@ -428,7 +619,8 @@ export class BattleScene {
   }
 
   updateBossIntro(input) {
-    if (!this.landed && this.phaseTime >= ENTER_LANDS) this.bossLands(this.speaker);
+    const landsAt = this.speaker.data.entrance === 'curtain' ? CURTAIN_OPEN : ENTER_LANDS;
+    if (!this.landed && this.phaseTime >= landsAt) this.bossLands(this.speaker);
     if (this.phaseTime < INTRO_CARD_SECONDS) {
       // Z skips the title card (after a moment, so a held key doesn't).
       if (this.phaseTime > 1 && input.wasPressed('confirm')) this.phaseTime = INTRO_CARD_SECONDS;
@@ -484,6 +676,15 @@ export class BattleScene {
     }
   }
 
+  // A showman's entrance: the stage curtains part on him. (Over the stage,
+  // under his speech bubble and the panel, so the curtain's top never hides
+  // what he says.)
+  drawBossIntroCurtains(ctx) {
+    if (this.speaker.data.entrance !== 'curtain') return;
+    const u = Math.min(1, Math.max(0, (this.phaseTime - CURTAIN_PARTS) / (CURTAIN_OPEN - CURTAIN_PARTS)));
+    drawCurtains(ctx, u, this.time, hud.STAGE_HEIGHT, { x: this.speaker.center.x, y: this.speaker.pos.y + 14 });
+  }
+
   drawBossIntroOverlay(ctx) {
     // Opening out of the dark.
     const dark = 1 - Math.min(1, this.phaseTime / INTRO_DARK_SECONDS);
@@ -537,7 +738,8 @@ export class BattleScene {
       anim: compileAnim(data.anim, data.sprite.palette),
       hitAt: -99,
       attackAt: -99,
-      introAt: -99,
+      // (A regular enemy with an `intro` clip plays it as the fight starts.)
+      introAt: data.anim?.intro && !data.boss ? 0 : -99,
       // What flies off it when it goes (see stageBits.js).
       bitColors: bitColors(data.sprite.palette),
       seenFlash: 0,
@@ -597,11 +799,41 @@ export class BattleScene {
   //                 you fall in this phase, instead of the usual one
   //   unhurt        [<member>, ...]: they stop being hurt as it starts, for
   //                 good (full HP, their own SPELLS and look back)
+  //   hitCalm       MERCY lost (a negative number) each time it's hit
+  //   talk          its TALK options in this phase, instead of its usual ones
   //   flash         the stage flashes white as it starts
   //   dropped       a prop sprite lying on the stage in front of Ves
   //   beat          what's said as the phase starts: [{ who?, say }], `say` a
   //                 section; with no `who`, in the panel; with a party
-  //                 member's id, in their box; with 'foe', in its bubble
+  //                 member's id (or anyone with a portrait, like 'tuck'), in
+  //                 their box; with 'foe', in its bubble. A step can also be
+  //                 { pause: s } (the stage holds, nothing said, for s
+  //                 seconds), { music: true } (the phase's `music` starts
+  //                 now; or { music: null } for silence), { cue: name } (its
+  //                 `stage` effects do something: see stageEffects.js),
+  //                 { renew: true } (its HP climbs back: `renew`) or
+  //                 { anagram: true } (its name starts changing: `anagram`)
+  //   quiet         the music stops as it starts, and the phase's own `music`
+  //                 waits for a { music: true } step of its beat
+  //   calm          its MERCY is set to this as the phase starts
+  //   renew         { to, seconds }: its HP climbs back up to that share of
+  //                 its max over that many seconds (a { renew: true } beat step)
+  //   anagram       its name runs through this list (see shuffleName), with
+  //                 `nameSwap` seconds a swap and `nameJitter` to shake it
+  //   stage         stage effects for the phase, by name (stageEffects.js):
+  //                 lights, the box swaying, the buttons on strings...
+  //   lowHp         below this share of its max HP, its taunts are often from
+  //                 [low_hp] (or [low_hp: <phase id>]) instead
+  //   leaveBeat     { pacified, defeated }: a beat (as `beat`) played as it's
+  //                 spared or beaten, before the panel says so
+  // `until` can also have `calm: n` (its MERCY up to n). A phase whose
+  // `until` has `now: true` goes on as soon as your side's turn is over, not
+  // after its attack.
+  //
+  // TALK options can have, as well as `calm`: `once` (gone once it's been
+  // said), `after` (an option's name, or a list of them: it's only there once
+  // those have been said), `atCalm` (only there with MERCY at least that)
+  // and `spare` (it spares the foe, as Pacify does).
   // The phase it's in now, or null.
   bossPhase(foe = this.phased) {
     return foe?.data.phases?.[foe.phase] ?? null;
@@ -612,18 +844,53 @@ export class BattleScene {
     return Boolean(this.flame && this.bossPhase()?.flame);
   }
 
+  // Your shadow's SHIFT power: `id` from soulAbilities.js, or null for the
+  // weapon's own. Fresh each time (its hint shows again on the next dodge).
+  giveAbility(id) {
+    this.ability = id ? SOUL_ABILITIES[id] : this.weapon.ability ? SOUL_ABILITIES[this.weapon.ability] : null;
+    this.abilityCooldown = 0;
+    this.abilityLeft = 0;
+    this.abilityUses = 0;
+    this.abilityState = {};
+    this.abilityHintShown = false;
+  }
+
   enterPhase(foe, index) {
     foe.phase = index;
     foe.phaseTurns = 0;
     const phase = foe.data.phases[index];
-    // A phase can bring its own music in (the Usurper's three movements).
-    if (phase.music) music.play(phase.music);
+    // A phase's `soulAbility` changes your shadow's power from here on
+    // (the king's scissors only come once you know there are strings).
+    if (index > 0 && 'soulAbility' in phase) this.giveAbility(phase.soulAbility);
+    // A phase can bring its own music in (the Usurper's three movements), or
+    // (`quiet`) cut it, and bring its own in later in its beat.
+    if (phase.quiet) music.play(null);
+    // (`musicFrom`: start that song at one of its sections, even if it's
+    // already playing: Corrie's phases each cut to their own part.)
+    else if (phase.music) music.play(phase.music, null, phase.musicFrom ?? null);
+    if (phase.calm !== undefined) foe.calm = phase.calm;
+    // Its own anagram starts from its first spelling, when the beat says.
+    if (phase.anagram) {
+      foe.nameStep = 0;
+      foe.nameGo = false;
+      foe.name = phase.anagram[0];
+    }
+    // Its stage effects, fresh.
+    this.stageFx = phase.stage ? STAGE_EFFECTS[phase.stage] ?? null : null;
+    this.stageState = this.stageFx?.start?.(this, foe) ?? null;
     if (phase.sprite) {
       const white = Object.fromEntries(Object.keys(phase.sprite.palette).map((key) => [key, '#ffffff']));
       foe.sprite = makeSprite(phase.sprite.rows, phase.sprite.palette);
       foe.flashSprite = makeSprite(phase.sprite.rows, white);
     }
     if (phase.anim) foe.anim = compileAnim(phase.anim, phase.sprite?.palette ?? foe.data.sprite.palette);
+    // A later phase with an `intro` clip plays it as it starts (the jam).
+    if (index > 0 && phase.anim?.intro) {
+      foe.introAt = this.time;
+      this.shake = SHAKE_SECONDS * 2;
+      this.bits.ring(foe.center.x, foe.center.y, { speed: 110, color: '#ffe48a', width: 2 });
+      sfx(phase.introSfx ?? 'thud');
+    }
     if (phase.flame) {
       const box = hud.BOX;
       this.flame = {
@@ -694,6 +961,37 @@ export class BattleScene {
     return lines[Math.floor(Math.random() * lines.length)].replaceAll('{stage}', flame.stage).replaceAll('{stages}', flame.stages);
   }
 
+  // A boss with an `anagram` (Peptup) moves its name one spelling along as
+  // its first phase wears on (by HP lost or turns taken, whichever is further),
+  // one swap at a time, and reaches the last spelling only when that phase ends.
+  // A later phase can have an `anagram` of its own: the name runs straight
+  // through that list once the phase's beat says so (a `{ anagram: true }`
+  // step), each swap taking `nameSwap` seconds, the letters shaking if the
+  // phase has `nameJitter` (Peptup taking his name back, PUPPET to PEPTUP).
+  shuffleName(foe) {
+    const own = this.bossPhase(foe)?.anagram;
+    const steps = own ?? foe.data.anagram;
+    if (!steps || foe.state !== 'active') return;
+    if (own && !foe.nameGo) return;
+    foe.nameStep ??= 0;
+    const swap = this.bossPhase(foe)?.nameSwap ?? NAME_SWAP_SECONDS;
+    if (this.time - (foe.nameAt ?? -99) < swap + (own ? 0.08 : 0.5)) return;
+    const last = steps.length - 1;
+    let want = last;
+    if (!foe.phase) {
+      const until = foe.data.phases?.[0]?.until ?? {};
+      const lost = until.below ? (1 - foe.hp / foe.maxHp) / (1 - until.below) : 0;
+      const turns = until.turns ? foe.phaseTurns / until.turns : 0;
+      want = Math.min(last - 1, Math.floor(Math.max(lost, turns) * last));
+    }
+    if (want <= foe.nameStep) return;
+    foe.nameFrom = steps[foe.nameStep];
+    foe.nameStep += 1;
+    foe.name = steps[foe.nameStep];
+    foe.nameAt = this.time;
+    sfx('creak');
+  }
+
   // `then` is where the battle goes after the new phase's beat; `force` goes
   // on whatever `until` says (after an `allyTurn` that ends the phase).
   nextBossPhase(foe, then = 'command', force = false) {
@@ -701,7 +999,7 @@ export class BattleScene {
     const next = foe.data.phases[foe.phase + 1];
     if (!until || !next) return false;
     const met = (until.turns && foe.phaseTurns >= until.turns) || (until.flame && this.flame?.stage >= this.flame.stages)
-      || (until.below && foe.hp <= foe.maxHp * until.below);
+      || (until.below && foe.hp <= foe.maxHp * until.below) || (until.calm && foe.calm >= until.calm);
     const done = force || (met && foe.phaseTurns >= (until.atLeast ?? 0));
     if (!done) return false;
     this.enterPhase(foe, foe.phase + 1);
@@ -717,6 +1015,33 @@ export class BattleScene {
       return;
     }
     const go = () => this.playBeat(foe, rest, done);
+    if (step.pause !== undefined) {
+      this.holdFor = step.pause;
+      this.holdNext = go;
+      this.setPhase('hold');
+      return;
+    }
+    if (step.music !== undefined) {
+      music.play(step.music === true ? this.bossPhase(foe)?.music ?? null : step.music);
+      go();
+      return;
+    }
+    if (step.cue) {
+      this.stageFx?.cue?.(this, foe, step.cue);
+      go();
+      return;
+    }
+    if (step.renew) {
+      const { to = 0.5, seconds = 2 } = this.bossPhase(foe)?.renew ?? {};
+      foe.renew = { to: Math.round(foe.maxHp * to), rate: Math.max(1, (foe.maxHp * to - foe.hp) / seconds) };
+      go();
+      return;
+    }
+    if (step.anagram) {
+      foe.nameGo = true;
+      go();
+      return;
+    }
     // A friend who's knocked out says nothing: the panel can say what they do
     // instead ([<section> down]), or it's skipped.
     if (step.who && this.downAllies().some((member) => member.id === step.who)) {
@@ -735,7 +1060,7 @@ export class BattleScene {
     }
     if (step.who) {
       const box = new TextBox();
-      box.open(lines, partyIds().includes(step.who) ? step.who : null);
+      box.open(lines, partyIds().includes(step.who) || PORTRAITS[step.who] ? step.who : null);
       this.interjection = { box, next: go };
       this.setPhase('interject');
       return;
@@ -759,9 +1084,14 @@ export class BattleScene {
   // A phase with `smoke` lets only that share of a hit through (`kind` is
   // 'fight' or 'spell'), and the panel says so after.
   resist(foe, damage, kind) {
+    // LOW WATER: its weak spots show, and every hit lands harder.
+    if (foe.exposed && damage > 0) damage = Math.round(damage * (1 + foe.exposed.bonus));
     // A phase with a `floor` can't be brought below that share of its max
     // HP: there's more of the fight to come (the Hush, before the umbrella's free).
-    const floor = this.bossPhase(foe)?.floor;
+    // A `finale` with a `hold` is a floor too, until it's played, so a big hit
+    // can't skip past it.
+    const finale = this.bossPhase(foe)?.finale;
+    const floor = Math.max(this.bossPhase(foe)?.floor ?? 0, finale?.hold && !foe.finaleDone ? finale.hold : 0);
     if (floor) damage = Math.min(damage, Math.max(0, foe.hp - Math.ceil(foe.maxHp * floor)));
     const smoke = this.bossPhase(foe)?.smoke;
     if (!smoke || damage <= 0) return damage;
@@ -855,7 +1185,8 @@ export class BattleScene {
 
   enter(game) {
     this.game = game;
-    music.play(this.foes[0].data.music ?? battleSong(this.area));
+    const own = this.foes[0].data.music;
+    music.play(own ? songFor(own, this.area) : battleSong(this.area));
   }
 
   // A message too long for the panel carries on over several pages.
@@ -875,6 +1206,9 @@ export class BattleScene {
         this.allySelected = ALLY_COMMANDS.findIndex((command) => command.label === 'SPELLS');
       }
     }
+    // A phase that ends `now` (Tuck letting go of the levers) goes on the
+    // moment your side's turn is done, before its attack.
+    if (phase === 'taunt' && this.phased?.state === 'active' && this.bossPhase()?.until?.now && this.nextBossPhase(this.phased, 'taunt')) return;
     this.phase = phase;
     this.phaseTime = 0;
     switch (phase) {
@@ -938,9 +1272,11 @@ export class BattleScene {
       case 'taunt': {
         this.strike = null;
         this.attackers = this.chooseAttackers();
+        // Each picks its attack now, so what it says can be about it.
+        for (const foe of this.attackers) foe.nextPattern = this.pickPattern(foe);
         this.speaker = this.attackers[Math.floor(Math.random() * this.attackers.length)];
         // A taunt written over several lines is said one bubble at a time.
-        const taunts = this.foeLines(this.speaker, 'taunts');
+        const taunts = this.tauntLines(this.speaker);
         this.tauntBubbles = hud.speechBubbles(taunts[Math.floor(Math.random() * taunts.length)]);
         this.taunt = this.tauntBubbles.shift();
         this.tauntStart = 0;
@@ -953,6 +1289,34 @@ export class BattleScene {
     }
   }
 
+  // What it says before its attack: its [taunts]; but often, low on HP
+  // (below its phase's `lowHp`), one of its [low_hp]; or a line for the
+  // attack it's about to make ([taunt: <attack name>]); or, with its MERCY at
+  // half or more, one of [mercy_high]; or, hit since its last attack, one of
+  // [hurt]. Each can be per phase, as ever ([hurt: alive]).
+  tauntLines(foe) {
+    const wasHit = foe.hitSince;
+    foe.hitSince = false;
+    // (Most enemies have none of these sections, and asking for a missing
+    // one is an error; so only ask when it's there.)
+    const file = textFile(foe.data.textFile);
+    const phaseId = this.bossPhase(foe)?.id;
+    const has = (section) => Boolean(file[section]?.length || (phaseId && file[`${section}: ${phaseId}`]?.length));
+    const low = this.bossPhase(foe)?.lowHp ?? foe.data.lowHp;
+    const tries = [
+      [low && foe.hp <= foe.maxHp * low, 0.45, 'low_hp'],
+      [foe.nextPattern, 0.6, `taunt: ${foe.nextPattern}`],
+      [foe.calm >= 50, 0.4, 'mercy_high'],
+      [wasHit, 0.5, 'hurt'],
+    ];
+    for (const [when, chance, section] of tries) {
+      if (!when || !has(section) || Math.random() >= chance) continue;
+      const lines = this.foeLines(foe, section);
+      if (lines.length) return lines;
+    }
+    return this.foeLines(foe, 'taunts');
+  }
+
   // Up to MAX_ATTACKERS of the enemies still standing, in a random order.
   chooseAttackers() {
     const shuffled = [...this.activeFoes()].sort(() => Math.random() - 0.5);
@@ -961,6 +1325,13 @@ export class BattleScene {
 
   // Picks a weighted random attack for one enemy, never the same one twice in a row.
   pickPattern(foe) {
+    // A phase's `finale` ({ below, pattern }): the attack it saves for when
+    // the boss's HP drops below that share, played once.
+    const finale = this.bossPhase(foe)?.finale;
+    if (finale && !foe.finaleDone && foe.hp < foe.maxHp * finale.below) {
+      foe.finaleDone = true;
+      return finale.pattern;
+    }
     const all = this.bossPhase(foe)?.patterns ?? foe.data.patterns;
     const options = all.length > 1 ? all.filter((p) => p.name !== foe.lastPattern) : all;
     const total = options.reduce((sum, p) => sum + (p.weight ?? 1), 0);
@@ -976,10 +1347,21 @@ export class BattleScene {
     boxHome();
     for (const foe of this.attackers) foe.attackAt = this.time;
     const crowd = this.attackers.length > 1 ? COMBINED_DENSITY : 1;
+    // A TALK with `soothe` (Haddock's bell) makes this attack gentler.
+    const soothe = this.calmNext ?? null;
+    this.calmNext = null;
+    // A phase's stage effects can put the sea in the box (Corrie's tide):
+    // handed to the attack as `tools.sea`, once a turn.
+    const sea = this.stageFx?.sea?.(this, Boolean(soothe)) ?? null;
     let attacks = this.attackers.flatMap((foe, i) => {
-      const name = this.pickPattern(foe);
+      const name = foe.nextPattern ?? this.pickPattern(foe);
+      foe.nextPattern = null;
       foe.lastPattern = name;
-      const { density = 1, speed = 1 } = this.bossPhase(foe)?.difficulty ?? foe.data.difficulty ?? {};
+      // (A phase's finale can keep its own `difficulty`, tuned apart from the
+      // phase's other attacks.)
+      const finale = this.bossPhase(foe)?.finale;
+      const pinned = name === finale?.pattern ? finale.difficulty : null;
+      const { density = 1, speed = 1 } = pinned ?? this.bossPhase(foe)?.difficulty ?? foe.data.difficulty ?? {};
       // A `gentle` foe doesn't really want to hurt you: its attacks thin out a
       // little as its MERCY rises, and when you're nearly out of HP.
       let kindness = 1;
@@ -987,12 +1369,18 @@ export class BattleScene {
         kindness = 1 - (foe.calm / 100) * 0.4;
         if (this.hero.hp < this.hero.maxHp * 0.3) kindness *= 0.65;
       }
-      const tuning = { density: density * crowd * kindness, speed, flame: this.flameInBox() ? this.flame : null };
+      const tuning = {
+        density: density * crowd * kindness * (soothe?.density ?? 1), speed: speed * (soothe?.speed ?? 1), flame: this.flameInBox() ? this.flame : null, sea,
+      };
       const attack = { foe, pattern: createPattern(name, hud.BOX, tuning), delay: i * SECOND_ATTACKER_DELAY };
       // A boss with `secondWind` gets desperate when its HP drops below that
       // share of its max: it layers a second, different attack on top of the first.
-      const { secondWind } = foe.data;
-      if (!secondWind || foe.hp >= foe.maxHp * secondWind.below) return [attack];
+      // (A phase can have its own, or `secondWind: null` for none.)
+      const phase = this.bossPhase(foe);
+      const secondWind = phase && 'secondWind' in phase ? phase.secondWind : foe.data.secondWind;
+      if (!secondWind || soothe || foe.hp >= foe.maxHp * secondWind.below) return [attack];
+      // (Nothing is layered on a finale: it has the stage to itself.)
+      if (name === this.bossPhase(foe)?.finale?.pattern) return [attack];
       const others = (this.bossPhase(foe)?.patterns ?? foe.data.patterns).filter((p) => p.name !== name);
       const extra = others[Math.floor(Math.random() * others.length)].name;
       const layered = createPattern(extra, hud.BOX, { ...tuning, density: tuning.density * (secondWind.density ?? 0.6) });
@@ -1051,6 +1439,11 @@ export class BattleScene {
     const box = hud.BOX;
     const startY = mode === 'heavy' ? box.y + box.h : box.y + box.h / 2;
     this.soul.reset(box.x + box.w / 2, startY, mode);
+    // SAIL: the wind carries the party past the first part of the attack.
+    if (this.sailSeconds > 0) {
+      this.soul.untouchable = this.sailSeconds;
+      this.sailSeconds = 0;
+    }
 
     // Explain a soul mode or weapon ability the first time it shows up.
     this.dodgeHint = '';
@@ -1081,7 +1474,11 @@ export class BattleScene {
     // What you leave with is what you'll have next time; a fall brings you
     // back whole (unless a level-up already did).
     if (result === 'death') healHeroFully();
-    else if (!this.levelledUp) setHeroHp(Math.max(1, this.hero.hp));
+    else if (!this.levelledUp) {
+      setHeroHp(Math.max(1, this.hero.hp));
+      // A friend who was knocked down gets up with 1 HP.
+      for (const member of this.party.filter((other) => other.ally)) setMemberHp(member.id, Math.max(1, member.hp));
+    }
     const phase = this.bossPhase();
     const gameOver = result === 'death' && phase?.gameOver ? textSection(this.phased.data.textFile, phase.gameOver)[0] : undefined;
     this.onEnd(result, this.foes.map((foe) => ({ enemy: foe.data, state: foe.state })), gameOver);
@@ -1107,6 +1504,13 @@ export class BattleScene {
       foe.flash = Math.max(0, foe.flash - dt);
       foe.seenFlash = foe.flash;
       foe.chips = foe.chips.filter((chip) => this.time - chip.at < CHIP_LIFE);
+      this.shuffleName(foe);
+      // HP climbing back (a phase's `renew`).
+      if (foe.renew) {
+        foe.renew.at = Math.min(foe.renew.to, (foe.renew.at ?? foe.hp) + foe.renew.rate * dt);
+        foe.hp = Math.max(foe.hp, Math.round(foe.renew.at));
+        if (foe.renew.at >= foe.renew.to) foe.renew = null;
+      }
       // All through its death, bits keep falling off it.
       if (foe.state === 'defeated' && foe.anim?.chips && this.time - foe.leftAt < clipLength(foe.anim.death) && Math.random() < dt * 14) this.addChips(foe, 1, true);
       // Spared, soft lights rise off it a while.
@@ -1118,8 +1522,13 @@ export class BattleScene {
     }
     this.bits.update(dt);
     this.updateEffects(dt);
+    this.stageFx?.update?.(this, dt);
 
     switch (this.phase) {
+      case 'hold':
+        // A beat's pause: the stage holds a moment, nothing said.
+        if (this.phaseTime >= this.holdFor) this.holdNext();
+        break;
       case 'message':
         if (input.wasPressed('confirm')) this.advanceMessage();
         break;
@@ -1177,6 +1586,9 @@ export class BattleScene {
         break;
       case 'bossFinale':
         this.updateBossFinale();
+        break;
+      case 'snap':
+        this.updateSnap();
         break;
       case 'dodge':
         this.updateDodge(dt, input);
@@ -1238,8 +1650,8 @@ export class BattleScene {
   // in text/battle.txt, the area being where the fight is: 'cave', 'stair',
   // 'vigil' and so on), one picked at random.
   escapeLine() {
-    const lines = textSection('battle.txt', `escape: ${this.area}`);
-    const pool = lines.length ? lines : textSection('battle.txt', 'escape: ruins');
+    // (An area without its own lines yet gets the ruins' ones, not a crash.)
+    const pool = textFile('battle.txt')[`escape: ${this.area}`]?.length ? textSection('battle.txt', `escape: ${this.area}`) : textSection('battle.txt', 'escape: ruins');
     return pool[Math.floor(Math.random() * pool.length)] ?? 'You got away!';
   }
 
@@ -1462,8 +1874,15 @@ export class BattleScene {
     // `who: 'foe'`: it mocks you itself, in its bubbles ([mercy_mock], then
     // one of [mercy_mock_again]).
     if (rule.who === 'foe') {
-      const mocks = lines.mercy_mock_again ?? [];
-      const said = this.mercyRefused && mocks.length ? [mocks[Math.floor(Math.random() * mocks.length)]] : (lines.mercy_mock ?? []);
+      // `snap`: the first try, it reaches down, takes the MERCY bar, and
+      // breaks it in two (Peptup's last act). There's no bar after that.
+      if (rule.snap && !foe.mercySnapped) {
+        this.snapMercy(foe);
+        return true;
+      }
+      const id = this.bossPhase(foe)?.id;
+      const mocks = lines[`mercy_mock_again: ${id}`] ?? lines.mercy_mock_again ?? [];
+      const said = this.mercyRefused && mocks.length ? [mocks[Math.floor(Math.random() * mocks.length)]] : (lines[`mercy_mock: ${id}`] ?? lines.mercy_mock ?? []);
       if (!said.length) return false;
       this.mercyRefused = true;
       sfx('back');
@@ -1482,6 +1901,318 @@ export class BattleScene {
     this.interjection = { box, next: this.menuPhase() };
     this.setPhase('interject');
     return true;
+  }
+
+  // The MERCY bar snapped (a `noMercy` with `snap`): it lifts off from under
+  // the foe, is held up, bends, and breaks, and the halves are flung away
+  // (drawn by drawMercySnap). Then [mercy_snap] in its bubbles, and back to
+  // the menu.
+  snapMercy(foe) {
+    foe.mercySnapped = true;
+    this.mercyRefused = true;
+    this.snap = {
+      foe, calm: foe.calm, from: { x: foe.center.x * S, y: this.foeStatusTop(foe) + 44 },
+      // Where on the glass the two halves land (UI pixels).
+      targets: [{ x: UI_WIDTH * 0.27 + Math.random() * 20, y: 170 + Math.random() * 30 }, { x: UI_WIDTH * 0.73 - Math.random() * 20, y: 270 + Math.random() * 30 }],
+      creaked: false, broke: false,
+    };
+    foe.calm = 0;
+    sfx('back');
+    this.setPhase('snap');
+  }
+
+  updateSnap() {
+    const snap = this.snap;
+    const t = this.phaseTime;
+    const hold = { x: snap.foe.center.x, y: snap.foe.center.y - 20 / S };
+    if (t >= MERCY_SNAP.grab && !snap.grabbed) {
+      snap.grabbed = true;
+      sfx('clack');
+    }
+    if (t >= MERCY_SNAP.bend && !snap.creaked) {
+      snap.creaked = true;
+      sfx('creak');
+    }
+    if (t >= (MERCY_SNAP.bend + MERCY_SNAP.snap) / 2 && !snap.creaked2) {
+      snap.creaked2 = true;
+      sfx('creak');
+    }
+    // THE SNAP: a flash, a knock, and the bar bursts into yellow splinters.
+    if (t >= MERCY_SNAP.snap && !snap.broke) {
+      snap.broke = true;
+      sfx('chop');
+      sfx('crumble');
+      this.shake = 0.3;
+      this.stageFlash = 0.12;
+      this.bits.star(hold.x, hold.y, { size: 22, life: 0.25 });
+      this.bits.ring(hold.x, hold.y, { speed: 120, life: 0.35, color: hud.COLORS.calm, width: 2 });
+      for (let i = 0; i < 18; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const v = 40 + Math.random() * 90;
+        this.bits.chip(hold.x, hold.y, { vx: Math.cos(a) * v, vy: Math.sin(a) * v - 40, color: i % 3 ? hud.COLORS.calm : hud.COLORS.calmBack, w: 2 + Math.floor(Math.random() * 3), h: 2, floor: hold.y + 60, spin: (Math.random() - 0.5) * 24 });
+      }
+    }
+    if (t >= MERCY_SNAP.throw && !snap.thrown) {
+      snap.thrown = true;
+      sfx('whoosh');
+    }
+    // SMACK: the halves hit the glass.
+    if (t >= MERCY_SNAP.hit && !snap.hit) {
+      snap.hit = true;
+      sfx('crumble');
+      sfx('thud');
+      this.shake = 0.28;
+      this.stageFlash = 0.18;
+      snap.glass = snap.targets.map((target) => glassCracks(target));
+    }
+    if (t < MERCY_SNAP.done) return;
+    const back = this.menuPhase();
+    const lines = textFile(snap.foe.data.textFile).mercy_snap ?? [];
+    this.snap = null;
+    if (lines.length) this.sayAloud(snap.foe, lines, () => this.setPhase(back));
+    else this.setPhase(back);
+  }
+
+  // In UI space: the bar lifted up into his wooden hands, bent till it
+  // creaks, snapped; then he hurls the halves at you: they come at the
+  // screen, bigger and bigger, smack the glass (cracks, a yellow smear), and
+  // slide down it.
+  drawMercySnap(ctx) {
+    const snap = this.snap;
+    if (!snap) return;
+    const t = this.phaseTime;
+    const M = MERCY_SNAP;
+    const hold = { x: snap.foe.center.x * S, y: snap.foe.center.y * S - 20 };
+    const w = 100;
+    const h = 8;
+    const ease = (k) => 1 - (1 - Math.min(1, Math.max(0, k))) ** 2;
+    const rot = (x, y, a) => [x * Math.cos(a) - y * Math.sin(a), x * Math.sin(a) + y * Math.cos(a)];
+    // A length of the bar drawn from `from` to `to` (0 to w along it), about
+    // (cx, cy) turned `angle`, its yellow where the MERCY was; `scale` blows
+    // it up for the throw.
+    const piece = (cx, cy, angle, from, to, scale = 1, squash = 1) => {
+      ctx.save();
+      ctx.translate(Math.round(cx), Math.round(cy));
+      ctx.rotate(angle);
+      ctx.scale(scale, scale * squash);
+      const left = -w / 2 + from;
+      ctx.fillStyle = hud.COLORS.outline;
+      ctx.fillRect(left - 2, -h / 2 - 2, to - from + 4, h + 4);
+      ctx.fillStyle = hud.COLORS.calmBack;
+      ctx.fillRect(left, -h / 2, to - from, h);
+      const filled = Math.max(0, Math.min(to, (w * snap.calm) / 100) - from);
+      ctx.fillStyle = hud.COLORS.calm;
+      ctx.fillRect(left, -h / 2, filled, h);
+      // A pale lip along the top, so it shines.
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.fillRect(left, -h / 2, to - from, 2);
+      ctx.restore();
+    };
+    // One of the broken halves (0 left, 1 right) as the pixel-art canvas:
+    // its centre at (cx, cy), turned `angle`, blown up `scale` with hard
+    // pixels and no blur.
+    const half = (i, cx, cy, angle, scale = 1, squash = 1, alpha = 1) => {
+      snap.halves ??= [makeHalf(0, snap.calm), makeHalf(1, snap.calm)];
+      const img = snap.halves[i];
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      ctx.globalAlpha *= alpha;
+      ctx.translate(Math.round(cx), Math.round(cy));
+      ctx.rotate(angle);
+      ctx.scale(scale, scale * squash);
+      ctx.drawImage(img, -25 - HALF_PAD, -6 - HALF_PAD);
+      ctx.restore();
+    };
+    // A wooden hand (a fist, knuckles up) and the arm it's on, from his
+    // shoulder.
+    const shoulders = [[hold.x - 34, hold.y + 40], [hold.x + 34, hold.y + 40]];
+    const hand = (side, x, y, shut = 1) => {
+      const [sx, sy] = shoulders[side];
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      const ex = (sx + x) / 2 + (side ? 18 : -18);
+      const ey = Math.max(sy, y) + 16;
+      for (const [width, color] of [[9, '#0a0710'], [5, '#c9a06a']]) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(ex, ey);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#0a0710';
+      ctx.fillRect(Math.round(x) - 8, Math.round(y) - 7, 16, 14);
+      ctx.fillStyle = '#c9a06a';
+      ctx.fillRect(Math.round(x) - 7, Math.round(y) - 6, 14, 12);
+      ctx.fillStyle = '#e6c896';
+      ctx.fillRect(Math.round(x) - 7, Math.round(y) - 6, 14, 3);
+      ctx.fillStyle = '#8e6844';
+      for (let i = 0; i < 3; i++) ctx.fillRect(Math.round(x) - 5 + i * 4 + (shut ? 0 : 1), Math.round(y) + 1, 2, 4);
+      ctx.restore();
+    };
+    // Where the bar's two ends are, for a bar about (cx, cy), the halves
+    // turned `a` (the left one by -a, the right by +a).
+    const ends = (cx, cy, a, gap = 0) => {
+      const [lx, ly] = rot(-w / 2, 0, -a);
+      const [rx, ry] = rot(w / 2, 0, a);
+      return [[cx + lx - gap, cy + ly], [cx + rx + gap, cy + ry]];
+    };
+
+    if (t < M.bend) {
+      // Lifted up (and his hands come in to grab either end of it).
+      const k = Math.min(1, t / M.grab);
+      const e = ease(k);
+      const bx = snap.from.x + (hold.x - snap.from.x) * e;
+      const by = snap.from.y + (hold.y - snap.from.y) * e - Math.sin(k * Math.PI) * 30;
+      piece(bx, by, 0, 0, w);
+      const reach = ease(t / M.bend);
+      const [l, r] = ends(bx, by, 0);
+      hand(0, l[0] - 70 * (1 - reach), l[1] - 30 * (1 - reach));
+      hand(1, r[0] + 70 * (1 - reach), r[1] - 30 * (1 - reach));
+      return;
+    }
+    if (t < M.snap) {
+      // Bent over his knee: both ends pushed down, the middle bowing up,
+      // shaking more and more, stress lines white in the middle.
+      const k = (t - M.bend) / (M.snap - M.bend);
+      const bend = k * k * 0.5;
+      const jitter = SETTINGS.shake ? 1 : 0;
+      const x = hold.x + (Math.random() - 0.5) * 5 * k * jitter;
+      const y = hold.y - 8 * k + (Math.random() - 0.5) * 5 * k * jitter;
+      piece(x, y, -bend, 0, w / 2);
+      piece(x, y, bend, w / 2, w);
+      const [l, r] = ends(x, y, bend);
+      hand(0, l[0], l[1], 1);
+      hand(1, r[0], r[1], 1);
+      if (k > 0.45) {
+        ctx.save();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 0.4 + 0.6 * k;
+        const n = Math.floor(3 + k * 6);
+        for (let i = 0; i < n; i++) {
+          const dy = (i % 2 ? -1 : 1) * (2 + i);
+          ctx.beginPath();
+          ctx.moveTo(x - 1 + (i % 3), y - h / 2 - 1);
+          ctx.lineTo(x + 3 - (i % 4) * 2, y + dy * 0.3);
+          ctx.lineTo(x - 2 + (i % 2) * 4, y + h / 2 + 1);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+      return;
+    }
+    // SNAPPED. For a breath the halves stay in his fists, flung apart by it
+    // (a hard white flash at the break); then he winds his arms back and
+    // throws them at you.
+    const since = t - M.snap;
+    const apart = 6 + 12 * ease(since / 0.15);
+    const wind = ease((t - (M.throw - 0.35)) / 0.35);
+    const go = (t - M.throw) / (M.hit - M.throw);
+    if (t < M.throw) {
+      const a = 0.5 + 0.2 * ease(since / 0.2);
+      const x = hold.x;
+      const y = hold.y - 8 + 6 * wind - 12 * wind;
+      half(0, x - apart - 25 * Math.cos(a), y + 25 * Math.sin(a), -a);
+      half(1, x + apart + 25 * Math.cos(a), y + 25 * Math.sin(a), a);
+      const [l, r] = ends(x, y, a, apart);
+      hand(0, l[0], l[1], 1);
+      hand(1, r[0], r[1], 1);
+      if (since < 0.2) {
+        ctx.save();
+        ctx.globalAlpha = 1 - since / 0.2;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(Math.round(x - 3), Math.round(y - 22), 6, 44);
+        ctx.restore();
+      }
+      return;
+    }
+    // THROWN: from his hands out at the glass. Each half grows as it comes
+    // (to about five times its size), turning end over end.
+    if (go < 1) {
+      // A short trail of where each half just was, fainter and smaller.
+      for (let k = 4; k >= 0; k--) {
+        const gk = Math.max(0, go - k * 0.035);
+        const e = gk * gk * (3 - 2 * gk);
+        snap.targets.forEach((target, i) => {
+          const sx = hold.x + (i ? 18 : -18);
+          const sy = hold.y - 20;
+          const px = sx + (target.x - sx) * e;
+          const py = sy + (target.y - sy) * e - Math.sin(gk * Math.PI) * 26;
+          const size = 1 + 4.2 * gk * gk;
+          // (The half's break is its centre: it turns about that.)
+          half(i, px, py, (i ? 1 : -1) * (0.5 + 5.5 * gk), size, 1, k ? 0.16 * (5 - k) / 4 : 1);
+        });
+      }
+      // His hands let go, flung open, and he swings them back out of sight.
+      const away = ease((t - M.throw) / 0.3);
+      hand(0, hold.x - 40 - 20 * away, hold.y - 20 + 20 * away, 0);
+      hand(1, hold.x + 40 + 20 * away, hold.y - 20 + 20 * away, 0);
+      return;
+    }
+    // SMACK, and then it slides down the glass.
+    const after = t - M.hit;
+    const fade = Math.max(0, 1 - Math.max(0, after - 1.1) / (M.done - M.hit - 1.1));
+    // The cracks first (under what hit), going out from each impact, fading
+    // at the end.
+    const glass = snap.glass ?? [];
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    glass.forEach((g) => {
+      const spread = Math.min(1, after / 0.12);
+      ctx.globalAlpha = fade;
+      for (const [width, color] of [[3, 'rgba(0, 0, 0, 0.55)'], [1, '#f4f8ff']]) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        for (const line of g.lines) {
+          ctx.beginPath();
+          const reach = Math.max(1, Math.floor(line.length * spread));
+          for (let i = 0; i < reach; i++) (i ? ctx.lineTo(line[i][0], line[i][1]) : ctx.moveTo(line[i][0], line[i][1]));
+          ctx.stroke();
+        }
+        if (spread >= 1) {
+          for (const ring of g.rings) {
+            ctx.beginPath();
+            ring.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+            ctx.stroke();
+          }
+        }
+      }
+      // A white burst where it hit, there and gone.
+      ctx.globalAlpha = Math.max(0, 1 - after * 5) * 0.8;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(g.x, g.y, 10 + after * 90, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+    snap.targets.forEach((target, i) => {
+      // The half, flattened on the glass (a squash springing back), then
+      // sliding down it, leaving a yellow streak and a smear round where
+      // it hit.
+      const squash = 0.55 + 0.45 * ease(after / 0.25);
+      const slide = Math.max(0, after - 0.5);
+      const drop = 300 * slide * slide;
+      ctx.save();
+      if (drop > 1) {
+        ctx.fillStyle = hud.COLORS.calm;
+        ctx.globalAlpha = 0.5 * fade;
+        ctx.fillRect(Math.round(target.x - 6), Math.round(target.y), 12, Math.round(drop));
+      }
+      if (after < 0.7) {
+        ctx.fillStyle = hud.COLORS.calm;
+        ctx.globalAlpha = 0.45 * (1 - after / 0.7);
+        ctx.beginPath();
+        ctx.ellipse(target.x, target.y, 70 + after * 40, 26 + after * 14, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = fade;
+      half(i, target.x, target.y + drop, (i ? 1 : -1) * 0.1, 5.2, squash);
+      ctx.restore();
+    });
   }
 
   // Whether `foe` can't be shown mercy right now: its phase's `noMercy`, or
@@ -1525,9 +2256,12 @@ export class BattleScene {
         else this.showMessage('Your bag is empty.', 'ally');
         break;
       case 'DEFEND': {
-        this.defending = true;
+        // A friend's DEFEND covers only them (SHELTER is how they cover
+        // you), and builds a little SP.
+        this.braced = (this.braced ?? new Set()).add(ally.id);
+        this.gainSp(ALLY_DEFEND_SP);
         const lines = this.allyLines(ally, 'defend');
-        this.showMessage(`${lines[0] ?? `${ally.name} braces.`}\nDamage is halved this turn.`, 'taunt');
+        this.showMessage(`${lines[0] ?? `${ally.name} braces.`}\nHits on ${ally.name} are halved this turn. SP +${ALLY_DEFEND_SP}%`, 'taunt');
         break;
       }
     }
@@ -1554,7 +2288,10 @@ export class BattleScene {
   // its name. It raises MERCY a little.
   allyTalk(ally, foe) {
     if (this.refuseMercy(foe)) return;
-    const own = textFile(foe.data.textFile)[ally.hurt ? `${ally.id}_hurt_talk` : `${ally.id}_talk`] ?? [];
+    const kind = ally.hurt ? `${ally.id}_hurt_talk` : `${ally.id}_talk`;
+    const id = this.bossPhase(foe)?.id;
+    const file = textFile(foe.data.textFile);
+    const own = (id && file[`${kind}: ${id}`]?.length ? file[`${kind}: ${id}`] : file[kind]) ?? [];
     const lines = own.length ? own : this.allyLines(ally, 'talk');
     const line = (lines[Math.floor(Math.random() * lines.length)] ?? `${ally.name} talks to {foe}.`).replaceAll('{foe}', foe.name);
     this.showMessage(this.calmFoe(foe, ALLY_TALK_CALM, line), 'taunt');
@@ -1597,7 +2334,7 @@ export class BattleScene {
     const lines = [command.text];
     this.allyFx(ally, command);
     if (command.calmAll) {
-      const amount = this.potent(command.calmAll + this.allyBonus(ally, 'allyCalm'));
+      const amount = this.allyPotent(ally, this.potent(command.calmAll + this.allyBonus(ally, 'allyCalm')));
       for (const foe of this.activeFoes()) lines.push(this.calmFoe(foe, amount, '').trim());
     }
     if (command.sp) {
@@ -1609,7 +2346,7 @@ export class BattleScene {
       // Whoever they chose (see updateAlly), or you.
       const member = this.healTarget ?? this.hero;
       this.healTarget = null;
-      const healed = this.healMember(member, command.heal + this.allyBonus(ally, 'allyHeal'));
+      const healed = this.healMember(member, this.allyPotent(ally, command.heal + this.allyBonus(ally, 'allyHeal')));
       sfx('heal');
       this.healFx(member, healed, command.label === 'AURORA' ? 'aurora' : 'heal');
       lines.push(`${member.name} recovered ${healed} HP.`);
@@ -1618,7 +2355,7 @@ export class BattleScene {
     if (command.healAll) {
       sfx('heal');
       for (const member of this.party.filter((other) => other.hp > 0)) {
-        const healed = this.healMember(member, command.healAll + this.allyBonus(ally, 'allyHeal'));
+        const healed = this.healMember(member, this.allyPotent(ally, command.healAll + this.allyBonus(ally, 'allyHeal')));
         this.healFx(member, healed);
         lines.push(`${member.name} recovered ${healed} HP.`);
       }
@@ -1628,9 +2365,20 @@ export class BattleScene {
     if (command.regen) {
       const member = this.healTarget ?? this.hero;
       this.healTarget = null;
-      const amount = command.regen + this.allyBonus(ally, 'allyHeal');
+      const amount = this.allyPotent(ally, command.regen + this.allyBonus(ally, 'allyHeal'));
       this.rain = { member, amount, turns: command.turns ?? 3 };
       lines.push(`${member.name} will recover ${amount} HP after each of the next ${this.rain.turns} enemy turns.`);
+    }
+    // SAIL: the wind carries the whole party past the start of the next attack.
+    if (command.sail) {
+      // Capped: with every gust skill it would cover a whole attack.
+      this.sailSeconds = Math.min(SAIL_CAP_SECONDS, command.sail + Math.max(0, this.allyBonus(ally, 'gust')) + (this.shelter?.gust ?? 0));
+      lines.push(`Nothing can touch you for the first ${this.sailSeconds} seconds of the next attack.`);
+    }
+    // WADE IN: Bramble steps in front of his friends for the next enemy turn.
+    if (command.wade) {
+      this.wading = ally.id;
+      lines.push(`Hits meant for anyone else land on ${ally.name} instead, and do half the damage.`);
     }
     // HOLLER: the enemies flinch, and their next attack is cut short.
     if (command.shorten) {
@@ -1683,7 +2431,9 @@ export class BattleScene {
     // A hit on every enemy (Sleet), or on the one they chose (Downdraft),
     // lands after the words.
     if (command.strikeAll) {
-      const damage = Math.round(this.allyStrikeDamage(ally, command.strikeAll) * this.sneakPower(ally));
+      // RIP CURRENT drags them together: the more enemies there are, the harder it hits each.
+      const crowd = 1 + (command.pull ?? 0) * Math.max(0, this.activeFoes().length - 1);
+      const damage = Math.round(this.allyStrikeDamage(ally, command.strikeAll) * this.sneakPower(ally) * crowd);
       this.spendSneak(ally);
       this.showMessage(lines.join('\n'), () => this.strikeAll(damage));
       return;
@@ -1703,20 +2453,82 @@ export class BattleScene {
     this.showMessage(lines.join('\n'), 'taunt');
   }
 
+  // The TALK options it has now: its phase's own (`talk` on a phase), or its
+  // usual ones.
+  // (Those it has `once` and that have been said are gone; those `after`
+  // others wait for them; those `atCalm` wait for its MERCY.)
+  talkOptions(foe) {
+    const all = this.bossPhase(foe)?.talk ?? foe.data.talk;
+    const said = foe.said ?? new Set();
+    return all.filter((option) => !(option.once && said.has(option.name))
+      && [option.after ?? []].flat().every((name) => said.has(name))
+      && foe.calm >= (option.atCalm ?? 0)
+      // (Only with that `gear` in your pockets, and with every friend it
+      // `needs` in the party: Haddock's bell, rung with Bramble.)
+      && (!option.gear || hasGear(option.gear))
+      && (option.needs ?? []).every((id) => this.party.some((member) => member.id === id)));
+  }
+
+  // A TALK that's a deed done together (`needs`, Haddock's bell): those
+  // friends must be on their feet and not have had their turn this round,
+  // and doing it takes their turns too, so only the rest of the party acts
+  // after you. It can cost SP (`sp`), make the next attack gentler (`soothe`:
+  // { density, speed }, see startAttack) and cue the phase's stage effects
+  // (`cue`). Returns what's wrong if it can't be done now, or null.
+  teamTalkProblem(option) {
+    if (option.sp && this.sp < option.sp) return `Not enough SP. It takes ${option.sp}% SP.\nGraze past bullets to build spell power.`;
+    for (const id of option.needs ?? []) {
+      const member = this.party.find((other) => other.id === id);
+      if (!member || member.hp <= 0) return `${member?.name ?? 'Your friend'} is down. You can't do this one alone.`;
+      if (!this.pendingAllies.includes(member)) return `${member.name} has already had a turn.`;
+    }
+    return null;
+  }
+
+  teamTalk(option, foe) {
+    this.sp -= option.sp ?? 0;
+    const helpers = (option.needs ?? []).map((id) => this.party.find((member) => member.id === id));
+    this.pendingAllies = this.pendingAllies.filter((member) => !helpers.includes(member));
+    if (option.soothe) this.calmNext = option.soothe;
+    if (option.cue) this.stageFx?.cue?.(this, foe, option.cue);
+    const middle = this.partyMiddle();
+    this.bits.ring(middle.x, middle.y - 20, { speed: 120, color: '#ffe48a', width: 2 });
+    this.bits.ring(middle.x, middle.y - 20, { speed: 70, color: '#fff2cf', life: 0.7 });
+    sfx(option.sfx ?? 'bell');
+  }
+
   updateTalk(input) {
     const foe = this.target;
-    const index = this.pickFromList(input, foe.data.talk.length);
+    const talks = this.talkOptions(foe);
+    const index = this.pickFromList(input, talks.length);
     if (index === null) return;
 
-    const option = foe.data.talk[index];
+    const option = talks[index];
     // Nothing to do with a friend who's knocked out ("Stand by Ves").
     if (this.aboutDownAlly(option.name)) {
       sfx('back');
       return;
     }
-    if (option.calm && this.refuseMercy(foe)) return;
+    if ((option.calm || option.spare) && this.refuseMercy(foe)) return;
+    const together = option.needs || option.sp;
+    if (together) {
+      const problem = this.teamTalkProblem(option);
+      if (problem) {
+        sfx('error');
+        this.showMessage(problem, 'talk');
+        return;
+      }
+      this.teamTalk(option, foe);
+    }
+    (foe.said ??= new Set()).add(option.name);
     let text = this.foeLine(foe, `talk: ${option.name}`);
+    // A TALK that spares it, like Pacify.
+    if (option.spare) {
+      this.spareFoe(foe, text);
+      return;
+    }
     if (option.calm) text = this.calmFoe(foe, option.calm, text);
+    if (option.giveBack) text += `\n${giveBack(this, foe)}`.trimEnd();
     // Options that help defend a boss's flame (the Usurper's lantern).
     if (option.provoke && this.flameInBox()) this.provoked = true;
     if (option.flameGuard && this.flameInBox()) this.flameGuardBonus += option.flameGuard;
@@ -1755,7 +2567,7 @@ export class BattleScene {
     // A calming spell on someone who can't be calmed is stopped before it costs anything.
     if (spell.id === 'lull' || spell.id === 'pacify') {
       if (this.refuseMercy(foe)) return;
-    } else if ((spell.id === 'hush' || spell.id === 'serenade') && this.refuseMercy(this.activeFoes().find((other) => this.mercyRule(other)))) {
+    } else if ((spell.id === 'hush' || spell.id === 'serenade' || spell.id === 'soothe') && this.refuseMercy(this.activeFoes().find((other) => this.mercyRule(other)))) {
       return;
     }
     this.sp -= spell.sp;
@@ -1773,15 +2585,16 @@ export class BattleScene {
         break;
       }
       // Balm: the whole party at once, whoever's still standing.
-      case 'balm': {
+      case 'balm':
+      case 'restore': {
         sfx('heal');
-        const amount = this.potent(SPELLS.balm.heals * (1 + skillBonus('healBoost')));
+        const amount = this.potent(SPELLS[spell.id].heals * (1 + skillBonus('healBoost')));
         const lines = this.party.filter((other) => other.hp > 0).map((other) => {
           const healed = this.healMember(other, amount);
           this.healFx(other, healed);
           return `${other === this.hero ? 'Recovered' : `${other.name} recovered`} ${healed} HP.`;
         });
-        this.showMessage(`${name} cast Balm! A warmth settles over everyone.\n${lines.join('\n')}`, 'taunt');
+        this.showMessage(`${name} cast ${spell.name}! A warmth settles over everyone.\n${lines.join('\n')}`, 'taunt');
         break;
       }
       case 'ember':
@@ -1796,11 +2609,36 @@ export class BattleScene {
       case 'sunburst':
       case 'tempest':
       case 'nova':
+      case 'undertow':
+      case 'brine':
+      case 'cleave':
+      case 'starstorm':
+      case 'undercut':
+      case 'overwhelm':
         this.castAttackSpell(spell);
         break;
+      // EBB AND FLOW: attack and defence swap. Your hits land harder, theirs
+      // do too, until two enemy turns have passed.
+      case 'ebb_flow': {
+        const swap = SPELLS.ebb_flow.swap;
+        this.tideSwap = { attack: swap.attack, defence: swap.defence, turns: swap.turns };
+        this.fx.add('shell', { ...this.partyMiddle(), style: 'ward' });
+        sfx('heal');
+        this.showMessage(`${name} cast Ebb and Flow! The tide turns inside you.\nYour hits land ${swap.attack}x as hard, but so do theirs (${swap.defence}x), for ${swap.turns} enemy turns.`, 'taunt');
+        break;
+      }
+      // LOW WATER: the tide goes out and shows what it was hiding.
+      case 'low_water': {
+        const { bonus, turns } = SPELLS.low_water.expose;
+        foe.exposed = { bonus, turns };
+        this.fx.add('calm', foe.center);
+        this.showMessage(`${name} cast Low Water! The tide goes out, and the weak spots show.\n${foe.name} takes ${Math.round(bonus * 100)}% more from every hit for ${turns} enemy turns.`, 'taunt');
+        break;
+      }
       case 'ward':
-      case 'aegis': {
-        const turns = spell.id === 'ward' ? WARD_TURNS : SPELLS.aegis.turns;
+      case 'aegis':
+      case 'bastion': {
+        const turns = spell.id === 'ward' ? WARD_TURNS : SPELLS[spell.id].turns;
         this.fx.add('shell', { ...this.partyMiddle(), style: 'ward' });
         this.wardTurns = Math.max(this.wardTurns, turns);
         sfx('heal');
@@ -1808,21 +2646,24 @@ export class BattleScene {
         break;
       }
       case 'hush':
-      case 'serenade': {
+      case 'serenade':
+      case 'soothe': {
         this.fx.add('snow', { style: 'flurry' });
         for (const other of this.activeFoes()) this.fx.add('calm', other.center);
-        const calm = spell.id === 'hush' ? HUSH_CALM : SPELLS.serenade.calm;
+        const calm = spell.id === 'hush' ? HUSH_CALM : SPELLS[spell.id].calm;
         const calmed = this.activeFoes().map((other) => this.calmFoe(other, this.potent(calm), '').trim());
-        const words = spell.id === 'hush' ? 'Snow seems to fall inside the room.' : 'A song nobody taught you fills the room.';
+        const words = spell.id === 'hush' ? 'Snow seems to fall inside the room.' : spell.id === 'soothe' ? 'Everything in the room goes quiet and still.' : 'A song nobody taught you fills the room.';
         this.showMessage(`${name} cast ${spell.name}. ${words}\n${calmed.join('\n')}`, 'taunt');
         break;
       }
       case 'pacify':
         this.fx.add('calm', { ...foe.center, style: 'pacify' });
         if (foe.calm >= 100) {
-          this.foeLeaves(foe, 'pacified', 'taunt', `${name} cast Pacify!`);
+          this.spareFoe(foe, `${name} cast Pacify!`);
         } else {
-          this.showMessage(`${name} cast Pacify...\nBut ${foe.name} isn't calm enough yet.`, 'taunt');
+          // (A phase can say its own why not: [pacify: <phase>].)
+          const why = textFile(foe.data.textFile)[`pacify: ${this.bossPhase(foe)?.id}`]?.[0] ?? `But ${foe.name} isn't calm enough yet.`;
+          this.showMessage(`${name} cast Pacify...\n${why}`, 'taunt');
         }
         break;
       case 'lull':
@@ -1860,6 +2701,7 @@ export class BattleScene {
     const foe = this.target;
     const hero = this.memberAt(this.hero);
     if (id === 'ember' || id === 'sunburst') this.fx.add('embers', { points: this.activeFoes().map((other) => other.center) });
+    else if (id === 'starstorm') for (const other of this.activeFoes()) this.fx.add('starfall', other.center);
     else if (id === 'chain') this.fx.add('chain', { points: [hero, ...this.activeFoes().map((other) => other.center)] });
     else if (!foe) return;
     else if (id === 'siphon') this.fx.add('siphon', { ...foe.center, to: hero });
@@ -1887,6 +2729,28 @@ export class BattleScene {
       case 'BRACE':
       case 'PARASOL SPIN': this.fx.add('shell', { ...this.partyMiddle(), style: 'umbrella' }); return;
       case 'HAILSTORM': this.fx.add('snow', { style: 'sleet' }); return;
+      case 'COOL CHANGE':
+      case 'BILLOW': this.fx.add('wind', this.partyMiddle()); return;
+      case 'DOWNPOUR': this.fx.add('snow', { style: 'sleet' }); return;
+      case 'WHIRL': this.fx.add('snow', { style: 'whiteout' }); return;
+      case 'COUNT TO TEN': for (const point of all()) this.fx.add('calm', point); return;
+      case 'CANNONBALL': if (foe) this.fx.add('comet', { ...foe.center, colors: ['#ffffff', '#bfe8ff', '#5fb8ff', '#2a6fb0'] }); return;
+      case 'STAND FIRM': this.fx.add('shell', { ...this.partyMiddle(), style: 'ward' }); return;
+      // Chapter 5's second half.
+      case 'HOLD FAST': this.fx.add('shell', { ...this.partyMiddle(), style: 'umbrella' }); return;
+      case 'WINDSHEAR':
+      case 'SUPERCELL': if (foe) this.fx.add('downdraft', foe.center); return;
+      case 'HURRICANE': this.fx.add('snow', { style: 'whiteout' }); return;
+      case 'SHEET LIGHTNING': this.fx.add('chain', { points: [me, ...all()] }); return;
+      case 'STILL AIR': for (const point of all()) this.fx.add('calm', point); return;
+      case 'FIRESIDE':
+      case 'CLEAR SKIES': this.fx.add('aurora', { ...this.partyMiddle(), h: me.h }); return;
+      case 'SPLINTERS': for (const point of all()) this.fx.add('slash', { ...point, colors: ['#ffffff', '#ff8c1a'] }); return;
+      case 'THE BIG ONE': if (foe) this.fx.add('slash', { ...foe.center, colors: ['#ffffff', '#ff8c1a'] }); return;
+      case 'THREE CHEERS':
+      case 'SING-ALONG': this.fx.add('shout', me); return;
+      case 'CONKERS': for (const point of all()) this.fx.add('pebble', point); return;
+      case "I'VE GOT YOU": this.fx.add('shell', { ...this.partyMiddle(), style: 'ward' }); return;
       case 'CYCLONE': this.fx.add('snow', { style: 'whiteout' }); return;
       case 'DAYBREAK': this.fx.add('aurora', { ...this.partyMiddle(), h: me.h }); return;
       case 'FELL': if (foe) this.fx.add('slash', { ...foe.center, colors: ['#ffffff', '#ff8c1a'] }); return;
@@ -1914,6 +2778,13 @@ export class BattleScene {
     return Math.max(1, Math.round(amount * this.potency));
   }
 
+  // The same for one of an ally's healing or calming spells, after their
+  // outfit's MAG.
+  allyPotent(ally, amount) {
+    if (amount <= 0) return 0;
+    return Math.max(1, Math.round(amount * Math.max(0.25, 1 + this.allyBonus(ally, 'magic'))));
+  }
+
   // The most a FIGHT could do right now, every slash PERFECT: the hero's, with
   // their weapon and skills, or an ally's, with theirs and how far they've
   // grown. Allies' attack spells and team attacks are measured against it. A weapon weaker than a plain sword (a staff, a lantern)
@@ -1939,14 +2810,17 @@ export class BattleScene {
   // quarter of the armor's MAG and half of Arcane Focus. They add rather
   // than multiply, so spells stay in line with FIGHT. Heavy armor (MAG
   // below 0) doesn't take any away.
-  spellDamage(id) {
+  spellDamage(id, power = SPELLS[id].power ?? 1) {
     const boost = Math.max(0, this.potency - 1) / 4 + skillBonus('spellPower') / 2;
-    return Math.max(1, Math.round(this.spellStrike(id) * ((SPELLS[id].power ?? 1) + boost)));
+    return Math.max(1, Math.round(this.spellStrike(id) * (power + boost)));
   }
 
-  // An ally's attack spell: `power` times their best FIGHT, plus their allyStrike.
+  // An ally's attack spell: `power` times their best FIGHT, plus their
+  // allyStrike. Their outfit's MAG adds a quarter of itself to the power, as
+  // yours does to your spells (spellDamage).
   allyStrikeDamage(ally, power) {
-    return Math.max(1, Math.round(this.bestStrike(ally) * power) + this.allyBonus(ally, 'allyStrike'));
+    const boost = power ? Math.max(0, this.allyBonus(ally, 'magic')) / 4 : 0;
+    return Math.max(1, Math.round(this.bestStrike(ally) * (power + boost)) + this.allyBonus(ally, 'allyStrike'));
   }
 
   // Rend, Starfall, Ember Flare and the rest: a hit on the target (shown with
@@ -1958,6 +2832,24 @@ export class BattleScene {
     const words = `${this.hero.name} cast ${spell.name}! ${ATTACK_SPELL_LINES[spell.id] ?? ''}`.trim();
     if (SPELLS[spell.id].all) {
       this.showMessage(words, () => this.strikeAll(damage));
+      return;
+    }
+    // UNDERTOW: the water drags them back; their next attack is shorter.
+    const shove = SPELLS[spell.id].shove ?? 0;
+    // BRINE: it keeps burning, after every enemy turn, for a few turns.
+    const dot = SPELLS[spell.id].dot;
+    if (shove || dot) {
+      const foe = this.target;
+      const extra = [];
+      if (shove) {
+        this.flinch = Math.min(MAX_FLINCH, (this.flinch ?? 0) + shove);
+        extra.push('Their next attack will be shorter.');
+      }
+      if (dot) {
+        foe.brine = { damage: this.spellDamage(spell.id, dot.power), turns: dot.turns };
+        extra.push(`${foe.name} is salted: ${foe.brine.damage} damage after each of the next ${dot.turns} enemy turns.`);
+      }
+      this.showMessage(`${words}\n${extra.join('\n')}`, () => this.resolveStrike(damage, 'spell'));
       return;
     }
     const share = SPELLS[spell.id].siphon ?? 0;
@@ -1973,11 +2865,13 @@ export class BattleScene {
   // leave one after another, then the turn goes on as after any attack.
   strikeAll(damage) {
     const active = this.activeFoes();
+    if (this.tideSwap) damage = Math.round(damage * this.tideSwap.attack);
     for (const foe of active) {
       const dealt = this.resist(foe, damage, 'spell');
       foe.hp = Math.max(0, foe.hp - dealt);
       this.addPopup(`${dealt}`, foe.center.x, foe.pos.y - 4, hud.COLORS.danger);
       foe.flash = ENEMY_FLASH_SECONDS;
+      if (dealt) foe.hitSince = true;
     }
     sfx('hit');
     this.shake = SHAKE_SECONDS;
@@ -2049,6 +2943,7 @@ export class BattleScene {
     const foe = this.target;
     // Who lunges, and whose colour the slash is.
     this.striker = this.actor ?? this.hero;
+    if (this.tideSwap) damage = Math.round(damage * this.tideSwap.attack);
     damage = this.resist(foe, damage, kind);
     foe.hp = Math.max(0, foe.hp - damage);
     this.addPopup(damage ? `${damage}` : 'MISS', foe.center.x, foe.pos.y - 4, hud.COLORS.danger);
@@ -2056,9 +2951,37 @@ export class BattleScene {
       this.slashFoe = foe;
       this.slashTime = SLASH_SECONDS;
       foe.flash = ENEMY_FLASH_SECONDS;
+      foe.hitSince = true;
       sfx('hit');
+      // A phase with `hitCalm`: hitting it costs MERCY (Peptup's show, louder).
+      const lost = this.bossPhase(foe)?.hitCalm;
+      if (lost && foe.calm > 0) {
+        foe.calm = Math.max(0, foe.calm + lost);
+        this.addPopup('MERCY ' + lost, foe.center.x, foe.pos.y + 14, hud.COLORS.calm);
+      }
     }
     this.setPhase('fightResult');
+  }
+
+  // Spares it (Pacify, or a TALK with `spare`): its phase's `leaveBeat`
+  // first, if it has one, then it goes, with `prefix` over its line.
+  spareFoe(foe, prefix) {
+    const beat = this.bossPhase(foe)?.leaveBeat?.pacified;
+    if (!beat) {
+      this.foeLeaves(foe, 'pacified', 'taunt', prefix);
+      return;
+    }
+    this.showMessage(prefix, () => this.playBeat(foe, beat, () => this.foeLeaves(foe, 'pacified', 'taunt')));
+  }
+
+  // MERCY raised during its attack (a bullet that's a kindness to cut: the
+  // strings Tuck hangs from), with a popup where it happened.
+  addMercy(foe, amount, x, y) {
+    if (!foe || foe.state !== 'active' || this.mercyRule(foe)) return;
+    amount = Math.round(amount * (1 + skillBonus('mercyBoost')));
+    const before = foe.calm;
+    foe.calm = Math.min(100, foe.calm + amount);
+    if (foe.calm > before) this.addPopup(`MERCY +${foe.calm - before}`, x, y, hud.COLORS.calm);
   }
 
   // An enemy is beaten or pacified: it fades away, its rewards are banked, and
@@ -2071,16 +2994,23 @@ export class BattleScene {
     // Like Deltarune, sparing an enemy earns gold but no EXP.
     if (how === 'defeated') this.earned.exp += foe.data.rewards.exp;
     // Sometimes they leave something behind.
+    let dropped = false;
     for (const { item, chance } of foe.data.drops ?? []) {
-      if (Math.random() < chance) this.earned.items.push(item);
+      if (Math.random() < chance) { this.earned.items.push(item); dropped = true; }
     }
+    noteLeft(foe.data, how, dropped);
     // And candle-making materials, spared or beaten alike.
     for (const { id, chance, amount = 1 } of foe.data.materials ?? []) {
       if (Math.random() < chance) this.earned.materials[id] = (this.earned.materials[id] ?? 0) + amount;
     }
-    const line = this.foeLine(foe, how === 'defeated' ? 'victory' : 'pacified');
+    const back = giveBack(this, foe);
+    const line = this.foeLine(foe, how === 'defeated' ? 'victory' : 'pacified') + (back ? `\n${back}` : '');
     const text = prefix ? `${prefix}\n${line}` : line;
-    const say = () => this.showMessage(text, () => {
+    this.stageFx?.leave?.(this, foe, how);
+    // Beaten, a phase's `leaveBeat` plays once it's come apart.
+    const lastWords = how === 'defeated' ? this.bossPhase(foe)?.leaveBeat?.defeated : null;
+    const say = () => (lastWords ? this.playBeat(foe, lastWords, sayLine) : sayLine());
+    const sayLine = () => this.showMessage(text, () => {
       // Another enemy may have been knocked out at the same time.
       const alsoFallen = this.activeFoes().find((other) => other.hp <= 0);
       if (alsoFallen) this.foeLeaves(alsoFallen, 'defeated', next);
@@ -2211,6 +3141,7 @@ export class BattleScene {
     this.bullets = [];
     boxHome();
     this.defending = false;
+    this.braced = null;
     this.hiding = null;
     this.shelter = null;
     this.gustLeft = 0;
@@ -2233,11 +3164,29 @@ export class BattleScene {
       if (--this.rain.turns <= 0) this.rain = null;
     }
     if (this.wardTurns > 0) this.wardTurns--;
+    this.sailSeconds = 0;
+    this.wading = null;
+    if (this.tideSwap && --this.tideSwap.turns <= 0) this.tideSwap = null;
+    // BRINE burns, LOW WATER wears off.
+    for (const foe of this.activeFoes()) {
+      if (foe.brine) {
+        const burn = Math.min(foe.brine.damage, foe.hp);
+        foe.hp = Math.max(0, foe.hp - burn);
+        foe.flash = ENEMY_FLASH_SECONDS;
+        this.addPopup(`${burn}`, foe.center.x, foe.pos.y - 4, hud.COLORS.danger);
+        if (--foe.brine.turns <= 0) foe.brine = null;
+      }
+      if (foe.exposed && --foe.exposed.turns <= 0) foe.exposed = null;
+    }
     this.soul.locked = false;
     this.turn++;
     // A weapon ability can knock an enemy out during its own turn.
     const fallen = this.activeFoes().find((foe) => foe.hp <= 0);
+    // A thief takes something from the bag if it landed a hit (see steals.js).
+    const stolen = this.hitThisTurn ? this.attackers?.map((foe) => stealCheck(this, foe, true)).find(Boolean) : null;
+    this.hitThisTurn = false;
     if (fallen) this.foeLeaves(fallen, 'defeated', 'command');
+    else if (stolen) this.showMessage(stolen, () => this.afterEnemyTurn());
     else this.afterEnemyTurn();
   }
 
@@ -2391,8 +3340,12 @@ export class BattleScene {
     const soul = this.soul;
     if (soul.iframes > 0 || soul.untouchable > 0) return;
     // Whoever this turn is aimed at, or whoever's still standing once they're down.
-    const victim = this.victim?.hp > 0 ? this.victim : this.party.find((member) => member.hp > 0);
+    let victim = this.victim?.hp > 0 ? this.victim : this.party.find((member) => member.hp > 0);
     if (!victim) return;
+    // Bramble's WADE IN: he steps in front, and takes the hit for his friend (halved).
+    const wader = this.wading ? this.party.find((member) => member.ally && member.id === this.wading && member.hp > 0) : null;
+    const waded = Boolean(wader && wader !== victim);
+    if (waded) victim = wader;
     // Ves's PARASOL SPIN: the first hit this turn goes straight back at them.
     if (this.riposte) {
       const { damage: thrown } = this.riposte;
@@ -2410,12 +3363,22 @@ export class BattleScene {
       soul.iframes = BASE_IFRAMES + skillBonus('iframes');
       return;
     }
+    this.hitThisTurn = true;
     let damage = bullet.dmg ?? this.bossPhase(this.foes[0])?.damage ?? this.foes[0].data.damage;
-    if (this.defending || this.wardTurns > 0) damage = Math.ceil(damage / 2);
-    // Thick Skin and the armor's DEF take a little off every hit on the hero
-    // (but a hit always hurts a bit; armor that lowers DEF makes hits hurt
-    // more). SHELTER takes a little more off, whoever it lands on.
-    const guard = victim === this.hero ? skillBonus('damageReduction') + this.defense : 0;
+    if (this.defending || this.wardTurns > 0 || this.braced?.has(victim.id) || waded) damage = Math.ceil(damage / 2);
+    // EBB AND FLOW: the tide that carries your hits carries theirs.
+    if (this.tideSwap) damage = Math.ceil(damage * this.tideSwap.defence);
+    // A fright (a bullet with `scare`: n% of your SP) takes the wind out of you,
+    // unless Bramble's Chillin' has taught the party to stay cool.
+    if (bullet.scare && !skillBonus('fearless')) {
+      this.sp = Math.max(0, this.sp - bullet.scare);
+      this.addPopup(`SCARED -${bullet.scare}% SP`, soul.x, soul.y - 30, hud.COLORS.calm);
+    }
+    // Thick Skin and the armor's DEF take a little off every hit on the hero,
+    // and a friend's outfit's DEF off hits on them (but a hit always hurts a
+    // bit; armor that lowers DEF makes hits hurt more). SHELTER takes a
+    // little more off, whoever it lands on.
+    const guard = victim === this.hero ? skillBonus('damageReduction') + this.defense : victim.ally ? memberGearBonus(victim.id, 'defense') : 0;
     damage = Math.max(1, damage - guard - (this.shelter?.def ?? 0));
     victim.hp = Math.max(0, victim.hp - damage);
     sfx('hurt');
@@ -2478,20 +3441,26 @@ export class BattleScene {
   }
 
   draw(ctx) {
-    this.backdrop(ctx, this.time, hud.STAGE_HEIGHT);
+    this.backdrop(ctx, this.time, hud.STAGE_HEIGHT, this);
+    // A phase's stage effects can change the set behind everything (the
+    // house lights going), and draw over the stage and the panel (see
+    // stageEffects.js).
+    this.stageFx?.drawBack?.(ctx, this);
 
     // The stage shakes when you're hit; the UI stays put.
     ctx.save();
-    if (this.shake > 0) ctx.translate(Math.round((Math.random() - 0.5) * 4), Math.round((Math.random() - 0.5) * 4));
+    if (this.shake > 0 && SETTINGS.shake) ctx.translate(Math.round((Math.random() - 0.5) * 4), Math.round((Math.random() - 0.5) * 4));
     this.drawParty(ctx);
     if (this.stageLantern) this.drawStageLantern(ctx);
     if (this.bossPhase()?.dropped) this.drawDropped(ctx, this.bossPhase().dropped);
     if (this.phase === 'bossIntro') this.drawBossIntro(ctx);
     for (const foe of this.foes) this.drawFoe(ctx, foe);
     this.bits.draw(ctx);
+    this.stageFx?.drawOver?.(ctx, this);
     this.drawBox(ctx);
     this.fx.drawStage(ctx);
     ctx.restore();
+    if (this.phase === 'bossIntro') this.drawBossIntroCurtains(ctx);
 
     inUiSpace(ctx, () => {
       this.drawSlash(ctx);
@@ -2499,11 +3468,14 @@ export class BattleScene {
       if ((this.phase === 'taunt' || this.phase === 'bossIntro' || this.phase === 'speech') && this.taunt) {
         const { pos } = this.speaker;
         // Keep the bubble clear of the name and bars under a lone enemy.
-        const statusTop = this.foes.length === 1 ? (pos.y + this.speaker.sprite.height * SCALE + ENEMY_STATUS_GAP) * S : hud.STAGE_HEIGHT * S;
+        const statusTop = this.foes.length === 1 ? this.foeStatusTop(this.speaker) : hud.STAGE_HEIGHT * S;
         hud.drawSpeech(ctx, this.taunt.slice(0, this.visibleTauntChars()), pos.x * S - 4, (pos.y + 14) * S, statusTop);
       }
-      hud.drawSpGauge(ctx, this.sp, this.time);
-      this.drawFoeStatus(ctx);
+      // (Not over a phase's own set, when it takes the whole stage.)
+      if (!this.stageFx?.ownsStage?.(this)) {
+        hud.drawSpGauge(ctx, this.sp, this.time);
+        this.drawFoeStatus(ctx);
+      }
       if (this.flameInBox()) hud.drawLanternMeter(ctx, this.flame.stage, this.flame.stages, this.time);
       hud.drawPanel(ctx);
       const choosing = ['command', 'talk', 'spells', 'items', 'target', 'member', 'ally'].includes(this.phase);
@@ -2515,10 +3487,15 @@ export class BattleScene {
       hud.drawPartyCard(ctx, allyTurn ? this.actor : aimedAt, choosing);
       const anyCalm = this.activeFoes().some((foe) => foe.calm >= 100);
       const noRun = this.bossFight() || this.noRun ? ['RUN'] : [];
-      if (allyTurn) hud.drawCommands(ctx, ALLY_COMMANDS, this.allySelected, this.phase === 'ally', [], this.time, this.ally && isHurt(this.ally.id) ? ['FIGHT'] : []);
-      else hud.drawCommands(ctx, COMMANDS, this.selected, this.phase === 'command', anyCalm ? ['SPELLS'] : [], this.time, noRun);
+      const commands = allyTurn ? ALLY_COMMANDS : COMMANDS;
+      const sway = this.stageFx?.buttons?.(this, commands) ?? null;
+      this.stageFx?.drawStrings?.(ctx, this, commands, sway);
+      if (allyTurn) hud.drawCommands(ctx, ALLY_COMMANDS, this.allySelected, this.phase === 'ally', [], this.time, this.ally && isHurt(this.ally.id) ? ['FIGHT'] : [], sway);
+      else hud.drawCommands(ctx, COMMANDS, this.selected, this.phase === 'command', anyCalm ? ['SPELLS'] : [], this.time, noRun, sway);
       this.drawPanelText(ctx);
       this.drawPopups(ctx);
+      this.stageFx?.drawUi?.(ctx, this);
+      if (this.phase === 'snap') this.drawMercySnap(ctx);
     });
     if (this.phase === 'bossIntro') this.drawBossIntroOverlay(ctx);
     if (this.phase === 'interject') this.interjection.box.draw(ctx);
@@ -2535,12 +3512,24 @@ export class BattleScene {
   }
 
   // One enemy: full name and bars under it; with several, a compact set beside each.
+  // Where a lone enemy's name and bars go: under it, or, for one that
+  // reaches the boards (the king on his stage), as low as they still show.
+  foeStatusTop(foe) {
+    return Math.min((foe.pos.y + foe.sprite.height * SCALE + ENEMY_STATUS_GAP) * S, hud.STAGE_HEIGHT * S - ENEMY_STATUS_HEIGHT);
+  }
+
   drawFoeStatus(ctx) {
     if (this.foes.length === 1) {
       const foe = this.foes[0];
       if (foe.state !== 'active') return;
-      const top = (foe.pos.y + foe.sprite.height * SCALE + ENEMY_STATUS_GAP) * S;
-      hud.drawEnemyStatus(ctx, foe.name, foe.hp, foe.maxHp, foe.calm, foe.center.x * S, top, this.time, foe.data.noMercy?.meter !== false);
+      const top = this.foeStatusTop(foe);
+      const phase = this.bossPhase(foe);
+      const swapT = (this.time - (foe.nameAt ?? -99)) / (phase?.anagram ? phase.nameSwap ?? NAME_SWAP_SECONDS : NAME_SWAP_SECONDS);
+      // (A phase with `nameJitter` shakes the letters while they swap, and for
+      // a moment after.)
+      const jitter = phase?.nameJitter && foe.nameGo && this.time - (foe.nameAt ?? -99) < 1.2 ? 1 : 0;
+      const swap = swapT < 1 ? { from: foe.nameFrom, t: swapT, jitter } : jitter ? { from: foe.name, t: 1, jitter } : null;
+      hud.drawEnemyStatus(ctx, foe.name, foe.hp, foe.maxHp, foe.calm, foe.center.x * S, top, this.time, (phase?.noMercy ?? foe.data.noMercy)?.meter !== false && !foe.mercySnapped, swap);
       return;
     }
     // Hidden while dodging, so the box stays clear, and while an enemy is
@@ -2554,7 +3543,13 @@ export class BattleScene {
   // Where a party member stands: each one a little behind and below the last.
   memberFeet(member) {
     const i = Math.max(0, this.party.indexOf(member));
-    return { x: PARTY_FEET.x - i * 10, y: PARTY_FEET.y + i * 30 };
+    // Three (or more) stand closer and start higher, so the last one's feet
+    // stay on the stage (it's STAGE_HEIGHT tall).
+    const crowded = this.party.length >= 3;
+    const top = crowded ? PARTY_FEET.y - 16 : PARTY_FEET.y;
+    const step = crowded ? 24 : 30;
+    const left = crowded ? PARTY_FEET.x + 16 : PARTY_FEET.x;
+    return { x: left - i * 10, y: top + i * step + (i === 0 && this.party.length > 1 ? this.backRowDrop : 0) };
   }
 
   drawParty(ctx) {
@@ -2562,8 +3557,7 @@ export class BattleScene {
       const sprite = member.sprite;
       const w = sprite.width * SCALE;
       const h = sprite.height * SCALE;
-      const feetX = PARTY_FEET.x - i * 10;
-      const feetY = PARTY_FEET.y + i * 30;
+      const { x: feetX, y: feetY } = this.memberFeet(member);
 
       // A red arrow beside whoever the enemies' turn is aimed at, pointing at them.
       if (this.phase === 'dodge' && member === this.victim && member.hp > 0) {
@@ -2684,6 +3678,11 @@ export class BattleScene {
     }
   }
 
+  // Whether it's mid-sentence in a speech bubble (its `talk` clip plays then).
+  isTalking(foe) {
+    return foe === this.speaker && Boolean(this.taunt) && ['taunt', 'speech', 'bossIntro'].includes(this.phase) && this.visibleTauntChars() < this.taunt.length;
+  }
+
   // The sprite its `anim` says to show now, or null for its usual one.
   animFrame(foe) {
     const anim = foe.anim;
@@ -2693,7 +3692,8 @@ export class BattleScene {
     return clipFrame(anim.hurt, this.time - foe.hitAt)
       ?? clipFrame(anim.intro, this.time - foe.introAt)
       ?? clipFrame(anim.windup, this.time - foe.attackAt)
-      ?? (anim.idle ? anim.idle.sprites[Math.floor(this.time * anim.idle.fps) % anim.idle.sprites.length] : null);
+      ?? (anim.talk && this.isTalking(foe) ? loopFrame(anim.talk, this.time) : null)
+      ?? (anim.idle ? loopFrame(anim.idle, this.time) : null);
   }
 
   drawFoe(ctx, foe) {
@@ -2713,6 +3713,10 @@ export class BattleScene {
     // Its death or sparing, played out, before it's left broken or fades.
     const leaving = foe.state === 'defeated' ? foe.anim?.death : foe.state === 'pacified' ? foe.anim?.spared : null;
     if (leaving && (foe.beatenSprite || this.time - foe.leftAt < clipLength(leaving))) {
+      if (foe === this.phased && this.stageFx?.drawFoe?.(ctx, this, foe, foe.pos.x, foe.pos.y, foe.sprite.width * SCALE, foe.sprite.height * SCALE)) {
+        this.drawChips(ctx, foe);
+        return;
+      }
       const sprite = this.animFrame(foe);
       const bottom = foe.pos.y + foe.sprite.height * SCALE;
       const shake = Math.round(Math.sin((this.time - foe.leftAt) * 47) * 2 * Math.max(0, 1 - (this.time - foe.leftAt) / clipLength(leaving)));
@@ -2758,6 +3762,11 @@ export class BattleScene {
       if (foe.state === 'pacified') y -= Math.round(gone * 16);
     }
 
+    // A phase's stage effects can draw it themselves (the puppet coming alive).
+    if (foe === this.phased && this.stageFx?.drawFoe?.(ctx, this, foe, x, y, w, h)) {
+      this.drawChips(ctx, foe);
+      return;
+    }
     ctx.save();
     ctx.globalAlpha = alpha;
     // A hurt frame flinches instead of flashing white, if it has one.
@@ -2774,15 +3783,45 @@ export class BattleScene {
     if (this.phase !== 'dodge' && this.phase !== 'defeat') return;
     const box = hud.BOX;
     const open = this.phase === 'dodge' ? Math.min(1, this.phaseTime / BOX_OPEN_SECONDS) : 1;
-    inUiSpace(ctx, () => hud.drawBoxBack(ctx, open));
+    // A phase's stage effects can hang the box from the rigging: the whole
+    // box, bullets and soul swing together (only how it looks: nothing in
+    // it moves against anything else). `sway` is in world units.
+    const sway = this.stageFx?.boxSway?.(this) ?? null;
+    if (sway) this.stageFx.drawRigging?.(ctx, this, sway);
+    // Or turn it about its middle (`boxTurn`, radians: Corrie's whirlpool).
+    // Like the sway, only how it looks: everything in it turns together.
+    const turn = this.stageFx?.boxTurn?.(this) ?? 0;
+    const spin = (scale) => {
+      if (!turn) return;
+      const cx = (box.x + box.w / 2) * scale;
+      const cy = (box.y + box.h / 2) * scale;
+      ctx.translate(cx, cy);
+      ctx.rotate(turn);
+      ctx.translate(-cx, -cy);
+    };
+    const ui = (draw, turned = true) => inUiSpace(ctx, () => {
+      if (sway) ctx.translate(Math.round(sway.x * S), Math.round(sway.y * S));
+      if (turned) spin(S);
+      draw();
+    });
+    // (A phase's stage effects can draw the box themselves: King Peptup's
+    // finale tears it open.)
+    ui(() => this.stageFx?.drawBoxBack?.(ctx, this, open) || hud.drawBoxBack(ctx, open));
 
     if (open >= 1) {
       ctx.save();
+      if (sway) ctx.translate(Math.round(sway.x), Math.round(sway.y));
+      spin(1);
       ctx.beginPath();
       ctx.rect(box.x, box.y, box.w, box.h);
       ctx.clip();
       if (this.flameInBox()) this.drawFlame(ctx);
+      // (In Peptup's torn-open finale every bullet gets a dark halo, so it
+      // never melts into the set behind.)
+      if (box.tear) { ctx.shadowColor = '#000'; ctx.shadowBlur = 6; }
       for (const bullet of this.bullets) bullet.draw(ctx);
+      ctx.shadowBlur = 0;
+      ctx.shadowColor = 'transparent';
       for (const spark of this.sparks) {
         ctx.globalAlpha = spark.life / SPARK_SECONDS;
         ctx.fillStyle = spark.color;
@@ -2791,7 +3830,7 @@ export class BattleScene {
       ctx.globalAlpha = 1;
       ctx.restore();
 
-      inUiSpace(ctx, () => {
+      ui(() => {
         const r = hud.boxRect();
         ctx.beginPath();
         ctx.rect(r.x, r.y, r.w, r.h);
@@ -2804,13 +3843,15 @@ export class BattleScene {
       });
     }
 
-    inUiSpace(ctx, () => {
-      hud.drawBoxBorder(ctx, open);
+    ui(() => {
+      if (!this.stageFx?.drawBoxBorder?.(ctx, this, open)) hud.drawBoxBorder(ctx, open);
+    });
+    ui(() => {
       if (this.ability && this.phase === 'dodge' && open >= 1) {
         const { label, readiness } = this.abilityStatus();
         hud.drawAbility(ctx, label, readiness);
       }
-    });
+    }, false);
   }
 
   // The lantern's flame in the box, growing with each stage, flickering when
@@ -2899,7 +3940,7 @@ export class BattleScene {
   // text/spells/spells.txt, with {amount} the number it would do right now.
   spellDescription(spell) {
     const healBoost = 1 + skillBonus('healBoost');
-    const amounts = { heal: HEAL_PULSE_HP * healBoost, mend: MEND_HP * healBoost, lull: LULL_CALM, hush: HUSH_CALM, serenade: SPELLS.serenade.calm };
+    const amounts = { heal: HEAL_PULSE_HP * healBoost, mend: MEND_HP * healBoost, lull: LULL_CALM, hush: HUSH_CALM, serenade: SPELLS.serenade.calm, soothe: SPELLS.soothe.calm };
     let amount = this.potent(amounts[spell.id] ?? (SPELLS[spell.id].heals ?? 0) * healBoost);
     if (spell.id === 'ward') amount = WARD_TURNS;
     else if (SPELLS[spell.id].turns) amount = SPELLS[spell.id].turns;
@@ -2913,12 +3954,12 @@ export class BattleScene {
     const bonus = (effect) => this.allyBonus(ally, effect);
     return spellText(`${ally.id}_${command.label.toLowerCase()}`, {
       def: SHELTER_DEF + Math.max(0, bonus('shelterDef')),
-      calm: this.potent((command.calmAll ?? 0) + bonus('allyCalm')),
+      calm: this.allyPotent(ally, this.potent((command.calmAll ?? 0) + bonus('allyCalm'))),
       damage: command.team ? this.teamDamage(ally, command.team) : this.allyStrikeDamage(ally, command.strikeAll ?? command.strikeOne ?? command.riposte ?? 0),
-      heal: Math.max(0, (command.heal ?? command.healAll ?? command.regen ?? 0) + bonus('allyHeal')),
+      heal: this.allyPotent(ally, Math.max(0, (command.heal ?? command.healAll ?? command.regen ?? 0) + bonus('allyHeal'))),
       sp: Math.max(0, (command.sp ?? 0) + bonus('allySp')),
       turns: command.turns ?? 0,
-      seconds: (command.headwind ?? 0) + Math.max(0, bonus('gust')),
+      seconds: (command.headwind ?? command.sail ?? 0) + Math.max(0, bonus('gust')),
     });
   }
 
@@ -2945,7 +3986,11 @@ export class BattleScene {
         })), this.cursor);
         break;
       case 'talk':
-        hud.drawOptions(ctx, this.target.data.talk.map((option) => ({ label: option.name, enabled: !this.aboutDownAlly(option.name) })), this.cursor);
+        hud.drawOptions(ctx, this.talkOptions(this.target).map((option) => ({
+          label: option.name,
+          ...(option.sp ? { note: `${option.sp}% SP` } : {}),
+          enabled: !this.aboutDownAlly(option.name) && (!option.sp || this.sp >= option.sp),
+        })), this.cursor);
         break;
       case 'ally':
         hud.drawTextBox(ctx, this.allyPrompt);
@@ -2978,7 +4023,9 @@ export class BattleScene {
         })), this.cursor);
         break;
       case 'dodge':
-        if (this.dodgeHint) hud.drawTextBox(ctx, this.dodgeHint);
+        // (An attack can put up a hint of its own partway through: `hint` on
+        // the box, as Peptup's finale does when your shadow turns heavy.)
+        if (hud.BOX.hint || this.dodgeHint) hud.drawTextBox(ctx, hud.BOX.hint || this.dodgeHint);
         break;
     }
   }

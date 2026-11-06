@@ -19,3 +19,35 @@ She said thank you to the room, after. I liked that.
 
 [repeat after ves_on_her_feet]
 A chapel doesn't need a bell. A bell's just for telling people to come. People come anyway, if you keep the place nice.
+
+# --- SIDE QUEST: the bell's clapper (it's in the inn, in the stew) ---
+
+[bell_ask]
+Tam leans on his broom and looks up at the bell frame the way other people look at the sky.
+
+Forty-one pots, nine pans and a kettle. I know the count by heart. What I don't know is where the clapper went.
+
+The tongue. The iron bit that does the talking. Nobody melts a clapper; it's the wrong iron. Somebody took it home on the last day, someone who needed a thing that was heavy and handy.
+
+I'd like to hold it once. Not to hang it up. Just so I can say I've held the part of the bell that did the ringing.
+
+[bell_wait]
+The clapper. Iron, long as your arm, a knob on one end. Somebody in this town is using it for something and doesn't know what it is. I'd start with whoever has the biggest pot.
+
+[bell_done]
+Tam takes the clapper in both hands and says nothing for some time.
+
+It's heavier than he thought. He weighs it. He turns it over. He smells it.
+
+Mabb's been STIRRING with it? For years? Hm. Well. That explains the stew. Every spoonful's been blessed.
+
+He holds it up under the empty frame, just for a moment, and flicks the knob with a fingernail. Nothing rings. It's a clapper without a bell, and he laughs until he has to sit down on a pew.
+
+...Right. Right. Mabb can have a good ladle in exchange. I'll say it's a swap. Mabb says yes to anything that comes with stew.
+
+And you, take this. It's the last scrap of the bell, the bit left over when they made the pots. My gran had it made into a spoon.
+
+My gran stood in that doorway until noon, the last morning, so that if the Hero did come, someone would be here to see. Nobody came. She said it was the best morning of her life. She'd had nothing to do but stand in the sun.
+
+[bell_after]
+Tam hums a note, low and round, and nods at your pocket where the spoon is. "Same one," he says.

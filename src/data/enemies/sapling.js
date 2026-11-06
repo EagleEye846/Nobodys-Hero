@@ -20,8 +20,8 @@ export const SAPLING = {
     frames: [SAPLING_DISGUISE_SPRITES.still, SAPLING_DISGUISE_SPRITES.peek, SAPLING_DISGUISE_SPRITES.twitch],
     palette: SAPLING_PALETTE,
   },
-  maxHp: 380,
-  damage: 16,
+  maxHp: 435,
+  damage: 18,
 
   // A Chapter 3 enemy: slow things, but they close in.
   difficulty: { density: 1.2, speed: 1.1 },
@@ -42,7 +42,7 @@ export const SAPLING = {
     { name: 'Stand like a tree', calm: 35 },
   ],
 
-  rewards: { exp: 135, coins: 65 },
+  rewards: { exp: 285, coins: 30 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'scarlet_syrup', chance: 0.4 }],

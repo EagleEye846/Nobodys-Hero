@@ -1,0 +1,19 @@
+# BT_SWEEPER: A mole with a straw broom who sweeps the market every day and has never once finished.
+
+[first]
+Dust, dust, dust. I sweep it here, it goes there. I sweep it there, it comes back. We have an understanding.
+
+[repeat]
+Mind your boots. Not for my sake. For the dust's.
+
+[first after the_kings_welcome]
+Confetti! Eleven kinds! I'll be sweeping till spring and I've never been so pleased.
+
+[repeat after the_kings_welcome]
+Found a streamer behind a barrel. I'm keeping it. For the floor's morale.
+
+[first after the_light_goes_up]
+Even the dust is sparkling. I almost don't want to sweep it. Almost.
+
+[repeat after the_light_goes_up]
+Look at it all, shining. Nobody tell the broom.

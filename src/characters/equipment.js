@@ -44,6 +44,9 @@ export const STARTING_GEAR = {
 const percent = (value) => `${value > 0 ? '+' : ''}${Math.round(value * 100)}%`;
 const plus = (value) => `${value > 0 ? '+' : ''}${value}`;
 export const MEMBER_GEAR_STATS = [
+  // Their outfit's DEF and MAG first, worded like yours (armorLabels).
+  { stat: 'defense', color: 'defense', label: (v) => `DEF ${plus(v)}` },
+  { stat: 'magic', color: 'magic', label: (v) => `MAG ${percent(v)}` },
   { stat: 'fightPower', color: 'fight', label: (v) => `FIGHT x${v}` },
   { stat: 'allyStrike', color: 'fight', label: (v, names) => `${names.allyStrike ?? 'STRIKE'} ${plus(v)}` },
   { stat: 'allyCalm', color: 'calm', label: (v, names) => `${names.allyCalm ?? 'CALM'} ${plus(v)}` },
@@ -133,7 +136,13 @@ export function memberGearBonus(who, stat) {
 export function memberGearLabels(slot, id) {
   const gear = entry(slot, id) ?? {};
   const names = MEMBERS[gear.wielder]?.statNames ?? {};
-  return MEMBER_GEAR_STATS
+  const labels = MEMBER_GEAR_STATS
     .filter(({ stat }) => gear[stat])
     .map(({ stat, color, label }) => ({ stat, text: label(gear[stat], names), color, bad: gear[stat] < 0 }));
+  // An outfit's DEF and MAG share a line, to leave room for the rest.
+  if (labels[0]?.stat === 'defense' && labels[1]?.stat === 'magic') {
+    const [def, mag] = labels.splice(0, 2);
+    labels.unshift({ ...def, text: `${def.text}  ${mag.text}`, bad: def.bad && mag.bad });
+  }
+  return labels;
 }

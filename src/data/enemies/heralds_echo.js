@@ -17,8 +17,8 @@ export const HERALDS_ECHO = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'valley',
   sprite: { rows: HERALDS_ECHO_SPRITE, palette: HERALDS_ECHO_PALETTE },
-  maxHp: 680,
-  damage: 24,
+  maxHp: 780,
+  damage: 28,
 
   // Lots of words, at a good clip.
   difficulty: { density: 1.4, speed: 1.3 },
@@ -42,7 +42,7 @@ export const HERALDS_ECHO = {
   ],
 
   // The hardest of the Dead City's regulars, so it pays the best.
-  rewards: { exp: 260, coins: 120 },
+  rewards: { exp: 550, coins: 60 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'welcome_cake', chance: 0.4 }],

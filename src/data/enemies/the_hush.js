@@ -82,15 +82,16 @@ export const THE_HUSH_BOSS = {
   boss: true,
   // It comes in at a charge from the right and skids to a stop (stageBits.js).
   entrance: 'charge',
-  // "Tooth and Tatter" (pinefallBeastTheme.js), written for the beast that
-  // hurt Ves, until she has her umbrella back; then "Nobody's Dawn".
-  music: 'pinefallBeast',
+  // "Nobody Gets Away" (hushTheme.js), built on the claws and the prowl the
+  // Hush has been making all chapter, until she has her umbrella back; then
+  // "Nobody's Dawn".
+  music: 'hush',
   // Chapter 3's last boss: well above the Usurper (1400 HP, 19 damage,
   // density 1.35) and far above the Warden just before it (2400 HP, 30 damage).
   // Half of it is out of reach until the umbrella's free (`floor`), and you
   // needn't take the rest: MERCY fills in the last phase whatever its HP.
-  maxHp: 7200,
-  damage: 40,
+  maxHp: 8280,
+  damage: 46,
   difficulty: { density: 1.6, speed: 1.2 },
   // It doesn't really want to hurt you: as MERCY rises its attacks thin out.
   gentle: true,
@@ -144,7 +145,7 @@ export const THE_HUSH_BOSS = {
       // Every attack starts with it flinging its head up and roaring.
       anim: hushAnim(HUSH_FREE_SPRITE, { rear: HUSH_ROAR_SPRITE, roaring: true }),
       patterns: RAGE_ATTACKS,
-      damage: 50,
+      damage: 57,
       gentle: false,
       // Falling now, with her song playing: its own GAME OVER line.
       gameOver: 'game_over: dawn',
@@ -179,7 +180,7 @@ export const THE_HUSH_BOSS = {
   ],
 
   // Well above the Usurper's 600: most of a level at the Gate.
-  rewards: { exp: 1200, coins: 300 },
+  rewards: { exp: 3470, coins: 300 },
 
   // Spared or beaten, a hank of its bristles is left on your sleeve.
   drops: [{ item: 'hush_fur', chance: 1 }],

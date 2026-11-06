@@ -1,0 +1,230 @@
+# THE JOURNAL: one or two lines for each monster's page, under [<enemy id>]
+# (the id is the file name in src/data/enemies/). The page itself (name, area,
+# HP, loot, and how many you've beaten or spared) is filled in by the game from
+# the enemy's data. Keep each to a line or two. Nothing here should give away
+# what the story hasn't told yet.
+
+[bunny]
+Every speck that was ever swept under something. It would like very much to be left in its corner.
+
+[dummy]
+Went freelance and never got over it. Gives a firm handshake. Then the stuffing.
+
+[waxling]
+Always in a hurry, and for good reason. Do not hold it near a flame.
+
+[moth]
+It will follow any light anywhere, yours included, which makes you the best thing that has happened to it all week.
+
+[columneon]
+Convinced it passes for a pillar. The pillars have never said otherwise, out of politeness.
+
+[duskling]
+What's left when somebody walks off and doesn't look back. It is not angry. It is just still waiting.
+
+[taper]
+The oldest candle in the Ruins, and the kindest thing in them. She kept the door shut for a very good reason.
+
+[step]
+Loose, mossy and patient. It has been a step for a very long time and has opinions about being stood on.
+
+[chough]
+Likes shiny things, likes watching climbers fail, and sees no conflict between the two.
+
+[craghorn]
+A goat who meant to show somebody the way up. Years of waiting made it good at climbing and bad at manners.
+
+[frostbite]
+A snowdrift with a heart of gold and arms of ice. All it wants is a hug. Mind the hug.
+
+[glintling]
+A small bright fidget of ice. Plays with the light, and with you, until one of you stops finding it funny.
+
+[iceStep]
+The same sort of step as the ones below, only colder and a little smug about it.
+
+[ice_moth]
+Drawn to glowing crystal and quite unable to think about anything else. You know someone like that.
+
+[rimewing]
+A moth that grew very large in the cold, and has been trying to get close to a light ever since.
+
+[ringer]
+Hammered in once, and holds a grudge about it. Hits hard. Gets over it quickly.
+
+[stone_golem]
+A heap of cave stone that decided to get up. In no hurry whatsoever, and neither is its ice.
+
+[great_bat]
+Every bat in the dark is one of hers. She is not cross with you. She is cross, generally, and you're nearest.
+
+[usurper]
+Wants the name more than he wants anything else. He has had a hundred years to think about it. It shows.
+
+[sapling]
+A young tree spirit with terrible timing. It only moves when you're not looking, and gets caught every time.
+
+[russet]
+A fox the colour of the leaves, playing hide and seek with the whole wood. Currently winning.
+
+[burrhog]
+Soft from the front. Sharp from everywhere else. It would like you to know that this is not its fault.
+
+[knotling]
+A cross old stump that has never forgiven the axe. Fair enough, really.
+
+[puffcap]
+Startled by everything, which makes it very good at startling other things back.
+
+[tatterwight]
+The wind from a bad night, still going round the clearing, still carrying what it picked up. It means no harm. It just doesn't know how to stop.
+
+[gloamworm]
+Fishes with a light on a string. Lonely, a bit sticky, and delighted by company.
+
+[grist]
+A rat who took over the empty mill and gave itself a job title. Very good at the job. There is no one to tell.
+
+[hob]
+Fifty years of tidying a house with nobody in it. The house has never been cleaner. The hob has never been lonelier.
+
+[hayward]
+The scarecrow of Hollin. Its people left. Nobody told it to, so it stayed, and it has kept the crows out ever since.
+
+[siltling]
+A heap of drain silt and fifty years of lost things, mostly buttons. It is very proud of the collection.
+
+[slipjack]
+The fastest thing in the drains, and it will tell you so. Loudly, and while going past.
+
+[clinker]
+A crayfish in a mug that fell down a well. A bit deaf and very cross, and has made a home of it anyway.
+
+[bog_toad]
+A big old toad who had settled in for a very long nap. It is not a morning toad.
+
+[reed_stalker]
+A heron, as still as a reed. Slow to strike, and the strike is not slow.
+
+[wisp]
+A little marsh light that copies whatever glows nearby. It means it kindly. It would just like some company.
+
+[cairn_hound]
+A dog of stacked stones that guards a city nobody comes to. Loyal, heavy, and very good at it.
+
+[lamp_mite]
+Tiny dusty moths that nest in the old street lamps. Never alone, and never, ever quiet.
+
+[heralds_echo]
+A town crier's last cry, still going. It has the news of the day. The day was a long time ago.
+
+[warden]
+A statue of a hero, carved to greet one. It cannot be talked round. It does its job, and its job is the Gate.
+
+[the_hush]
+Quiet as snow and about as heavy. It has been in the wood a very long time, and the wood has got used to it.
+
+[bunting]
+A round little bird in a string of party flags. Every party it throws is a bit slower than it looks.
+
+[dandylion]
+Terribly vain about the mane. Blows apart when it roars and puffs back together when it sulks.
+
+[haybob]
+A hay bale that got loose and has been enjoying it. Rolls a great deal. Does not discuss the mouse.
+
+[gleamsnail]
+Carries a cracked geode for a house and keeps it spotless. Slow, shiny, and a little bit smug.
+
+[prismoth]
+Wings of coloured glass, bending every light that comes near. Pretty to look at. Less pretty to be under.
+
+[quartzling]
+A small crystal creature standing among crystals and doing its best impression of one. It's a good one.
+
+[rumbold]
+Loud, bright, and very pleased with himself, and he's known the Hero longer than anyone, he says. He says it often.
+
+[drillbug]
+A beetle with a drill for a nose and a lamp on its hat. Proud of every tunnel, however pointless.
+
+[magpiemole]
+A mole with a sack of everything shiny. Pops up wherever you stand. Never quite sure why it carries so much.
+
+[slagling]
+Furnace leftovers, crusty outside and molten in the middle. Spits sparks when it's nervous, which is always.
+
+[blindfish]
+Pale, eyeless, and rather good at knowing where you are. It can hear you stop, and it takes that personally.
+
+[fiddler]
+A blind cave cricket that plays the dark like an instrument. A fine ear, a bad habit of leaping at applause.
+
+[olm]
+Long, pale and terribly polite, and a good deal older than the stair. Hates being looked at. Be considerate.
+
+[gnawer]
+Blind, old, and generous with its teeth. Hears everything, up to and including you thinking about running.
+
+[murk]
+A patch of the dark that got up and followed a light. It is frightened of it and hungry for it, which is a hard way to live.
+
+# Chapter 5's first coast monsters (batch 1).
+[shellac]
+A hermit crab who has moved into a teapot and will not be moved out. House-proud, snappish, sorry about the state of the beach. Wipe your feet.
+
+[moonjelly]
+Drifts through the tidepools and the sea caves like a moon in cloud. It isn't angry. It just goes everywhere it goes, and trails things.
+
+[limpet_knight]
+A limpet in tiny armour who holds a rock against all comers. It takes this very seriously, and so should you, up to a point.
+
+[dunlin_dancer]
+Five sandpipers that behave as one very quick bird. They run in rows, peck in diagonals and drop shells from the sky. Keep in step.
+
+[bellbuoy]
+A buoy that slipped its mooring and goes on ringing for ships that aren't there. Nobody has seen who rings the bell, and the bell is keeping quiet.
+
+[salt_shade]
+A drowned sailor still on watch, waiting for a ship that was meant to come back. He means no harm. He just throws what sailors throw.
+
+[sandcastle]
+A living sandcastle, sure the tide isn't coming. Only found on sand, where it can keep its flag up. Very proud of the moat.
+
+# Chapter 5's coast monsters, batch 2.
+[wrackeel]
+A teal eel wired wrong, in the half-drowned lanes. It crackles when it's startled, and it's always startled. Keep off the wet, and bring a rubber boot.
+
+[pinwheel]
+A violet sea urchin, round and cross, whose spines turn like a pinwheel when it's upset. It rolls along the shingle in a bad temper. Sit down a good way off.
+
+[old_diver]
+An empty brass diving suit that walks the wrecks as if somebody were still inside it. Throws a harpoon on a line, and means well. Salute, if you can.
+
+[storm_imp]
+A thundercloud with a face and a lightning tail, who thinks the whole storm is a game. It is very pleased with itself. So, for once, is the storm.
+
+[net_wraith]
+A fishing net that drowned with its boat and still hangs as if in water. Very sad, entirely tangled, and wants only to be hauled in. A knot undone goes a long way.
+
+[gullion]
+A scruffy brawler gull with a sack of other people's things. He steals, but he always gives it back in the end. Offer him a chip.
+
+[kelpie_foal]
+A young water-horse, all knees and kelp, practising to be frightening. It's getting there. Pretend, politely, that it already has.
+
+[seed_sheep]
+A placid sheep whose fleece is a dandelion clock. It baas, a few seeds float off, and it looks pleased. Scratch it behind the ears.
+
+[capbee]
+A bumblebee in a tweed flat cap who has worked the same clover patch for forty years. He has opinions about the new flowers. Ask him about the clover and brace yourself.
+
+[clover_snail]
+A slow green snail with a four-leaf clover for a shell, always about to fall asleep. It is not dangerous so much as drowsy. Sit down beside it, if you have the time.
+
+[dowager_crab]
+A hermit crab the size of a cart who lives in a bathtub with a ship's bell on it. She is very polite and very angry about your boots. Mind the mat.
+
+# (draft)
+[corrie]
+A boy in a coat far too big for him, who went out to stop the sea and became the storm. He wanted to be like the Hero. He can't stop now.

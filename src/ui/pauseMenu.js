@@ -15,6 +15,7 @@ import { SkillsMenu } from './skillsMenu.js';
 import { ItemsMenu } from './itemsMenu.js';
 import { CandleMenu } from './candleMenu.js';
 import { SettingsMenu } from './settingsMenu.js';
+import { JournalMenu } from './journalMenu.js';
 
 // The menu on C in the overworld, laid out like Deltarune's: a bar of buttons
 // across the top and the hero's status card along the bottom. Left/right picks
@@ -25,13 +26,15 @@ const TABS = [
   { label: 'EQUIP', icon: 'fight' },
   { label: 'SKILLS', icon: 'spells' },
   { label: 'CANDLES', icon: 'candle' },
-  { label: 'SETTINGS', icon: 'sound' },
+  { label: 'JOURNAL', icon: 'talk' },
+  { label: 'OPTIONS', icon: 'sound' },
 ];
-const BAR_HEIGHT = 84;
-// Five buttons across the bar, so they're a little narrower than they were
-// with four, and their labels a little smaller.
-const BUTTON = { w: 118, h: 58, gap: 6, y: 13 };
-const LABEL_SIZE = 24;
+const BAR_HEIGHT = 96;
+// Six buttons across the bar with room between them: the icon sits centred
+// above the label, so the labels don't crowd the icons.
+const BUTTON = { w: 90, h: 72, gap: 12, y: 12 };
+const ICON_SIZE = 20;
+const LABEL_SIZE = 18;
 const CARD = { x: 100, y: 330, w: 440, h: 134 };
 const COLORS = {
   orange: '#ff8c1a',
@@ -62,7 +65,7 @@ export class PauseMenu {
   constructor() {
     this.isOpen = false;
     this.tab = 0;
-    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu(), new CandleMenu(), new SettingsMenu()];
+    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu(), new CandleMenu(), new JournalMenu(), new SettingsMenu()];
   }
 
   open() {
@@ -125,9 +128,10 @@ export class PauseMenu {
       ctx.lineWidth = 3;
       ctx.strokeRect(x, BUTTON.y, BUTTON.w, BUTTON.h);
       const image = selected ? soulSprite() : icon(tab.icon, color);
-      const size = selected ? image.width : 18;
-      ctx.drawImage(image, x + 10, BUTTON.y + (BUTTON.h - size) / 2, size, selected ? image.height : 18);
-      drawText(ctx, tab.label, x + 34, BUTTON.y + 17, { size: LABEL_SIZE, color });
+      const w = selected ? image.width : ICON_SIZE;
+      const h = selected ? image.height : ICON_SIZE;
+      ctx.drawImage(image, x + (BUTTON.w - w) / 2, BUTTON.y + 12 + (ICON_SIZE - h) / 2, w, h);
+      drawText(ctx, tab.label, x + BUTTON.w / 2, BUTTON.y + 42, { size: LABEL_SIZE, color, align: 'center' });
     });
   }
 

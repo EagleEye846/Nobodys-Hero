@@ -24,9 +24,9 @@ export const CAIRN_HOUND = {
     frames: [CAIRN_HOUND_DISGUISE_SPRITES.still, CAIRN_HOUND_DISGUISE_SPRITES.eyes, CAIRN_HOUND_DISGUISE_SPRITES.wag],
     palette: CAIRN_HOUND_PALETTE,
   },
-  maxHp: 760,
+  maxHp: 875,
   // It's made of rocks. Being hit by it is being hit by rocks.
-  damage: 28,
+  damage: 32,
 
   // Heavy things, not too many of them, coming in fast.
   difficulty: { density: 1.25, speed: 1.35 },
@@ -49,7 +49,7 @@ export const CAIRN_HOUND = {
   ],
 
   // The Dead City's heavy, so it pays a little more.
-  rewards: { exp: 245, coins: 115 },
+  rewards: { exp: 520, coins: 60 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'cairn_biscuit', chance: 0.4 }],

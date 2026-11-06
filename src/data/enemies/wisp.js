@@ -24,8 +24,8 @@ export const WISP = {
     frames: [WISP_DISGUISE_SPRITES.still, WISP_DISGUISE_SPRITES.eyes, WISP_DISGUISE_SPRITES.flicker],
     palette: WISP_PALETTE,
   },
-  maxHp: 540,
-  damage: 20,
+  maxHp: 620,
+  damage: 23,
 
   // The Lantern Marsh, past the Old Drains: a step up again.
   difficulty: { density: 1.35, speed: 1.25 },
@@ -48,7 +48,7 @@ export const WISP = {
     { name: 'Say it glows nicely', calm: 30 },
   ],
 
-  rewards: { exp: 195, coins: 100 },
+  rewards: { exp: 415, coins: 50 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'wisp_cordial', chance: 0.4 }],

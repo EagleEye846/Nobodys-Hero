@@ -1,0 +1,18 @@
+# MRS. TANSY (on the quay, saltcombe_quay): a stubby ginger tabby in a navy coat and a flat
+# cap, Saltcombe's lamplighter, with a pole as tall as two of her. She does the quay. Only the
+# quay. Lantern 3: the lamps up the hill are lit too, and she didn't light them. She has a plain
+# excuse and is not at all curious. Nobody says who, and nobody goes to look.
+
+[first]
+{smug}Evening. Mind the ladder.
+
+{smug}Every lamp on this quay is mine. Trimmed, filled, lit, every night, rain or worse. And it's always worse.
+
+{smug}Forty years, that last one. Never once gone out on my watch.
+
+{huffy}And before you ask: the ones up the hill aren't mine. Must be someone else. The quay's plenty.
+
+[repeat]
+{smile}You can see the quay from the boats, from the point, from right out past the wrecks. That's the idea.
+
+{huffy}Up the hill? Not my lamps. Not my business.

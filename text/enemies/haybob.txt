@@ -1,0 +1,78 @@
+# HAYBOB
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/haybob.js.
+
+[intro]
+A hay bale at the roadside rolls itself upright, straightens its hat, and beams. A HAYBOB!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+HAYBOB rocks gently on its base. It has the air of a bale who has Seen Things, mostly fields.
+
+HAYBOB tips its hat at you. The hat tips back, a little late.
+
+Something small squeaks inside HAYBOB. HAYBOB says nothing. Neither of them has been consulted.
+
+HAYBOB sheds a bit of straw and kicks it under itself, hoping you didn't see.
+
+Smells like warm hay and a very good afternoon.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Watch me
+ROLL!
+
+Isn't it
+a lovely
+hat?
+
+I'm a
+free bale!
+
+No fences!
+
+Mind the
+fork. It's
+not mine.
+
+...I think
+I'm lost.
+It's great!
+
+Squeak.
+(That one
+was the
+mouse.)
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/haybob.js.
+[talk: Inspect]
+HAYBOB - HP 800
+A hay bale that got loose and likes it. Rolls a lot. Has a pitchfork it didn't ask for, and a mouse it doesn't mention. Easy, if you keep moving.
+
+[talk: Compliment the hat]
+You tell HAYBOB it's a very fine hat. HAYBOB goes pink in the places where hay can. It adjusts the brim. It was, in fact, already perfect.
+
+[talk: Ask about the mouse]
+You ask HAYBOB about the mouse. HAYBOB goes very still. The mouse goes very still. Then, from somewhere in the bale, a very small voice says "Hello." HAYBOB looks astonished.
+
+[talk: Roll along with it]
+You lie down and roll a little way beside HAYBOB, down the lane. It's much more fun than it looks. HAYBOB is so pleased it nearly comes undone.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+HAYBOB comes unwound in a long, golden spill, with the hat on top. A tiny mouse crawls out, looks around, and says "Finally." It goes home to the field.
+
+[pacified]
+HAYBOB tips its hat to you, and the mouse tips its ear. It rolls aside, gently, to let you past. It leaves a trail of straw, in case you want to follow.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves examines {foe}'s hat very carefully, then says it's the best hat she's ever seen on a hay bale. It's also the only one. {foe} doesn't care to be told that part.
+
+Ves bends down to the little hole in {foe} and asks the mouse, politely, whether it's all right in there. A squeak. She says that sounds like a yes. {foe} looks relieved.
+
+Ves asks {foe} to please stop being so happy. It can't. She gives up and smiles, very briefly, at the hay.

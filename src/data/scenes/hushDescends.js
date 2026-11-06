@@ -17,8 +17,12 @@ export const HUSH_DESCENDS = {
   ],
 
   steps: [
+    // Wherever you stepped in, you go to stand before the gateway first,
+    // facing where the Hush comes out, and Ves comes up beside you.
+    { do: 'walk', who: 'player', to: { x: 12, y: 11 } },
     { do: 'face', who: 'player', dir: 'up' },
-    { do: 'face', who: 'ves', dir: 'up' },
+    { do: 'walk', who: 'ves', to: { x: 10, y: 11 } },
+    { do: 'face', who: 'ves', dir: 'right' },
     { do: 'wait', seconds: 1 },
     { do: 'appear', who: 'hush' },
     // It walks down out of the gateway, slowly, its walk kept going.

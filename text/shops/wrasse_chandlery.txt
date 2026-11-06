@@ -1,0 +1,79 @@
+# MRS. WRASSE'S CHANDLERY: Mrs. Wrasse, a dry, brisk heron in round
+# spectacles and a cream apron, runs Saltcombe's chandlery: rope, oilskin, lamp oil,
+# candles, and anything else a boat or a person might need to get through a
+# wet week. She knows the price of everything and does not haggle. She is
+# kind the way a good coil of rope is kind: reliably, and not out loud.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Wrasse's. If it floats, ties, or keeps the rain off, I've got it. If it does none of those, I've got that too, and it's cheaper.
+
+[menu_prompt]
+Yes?
+
+[buy_prompt]
+Blades, coats, candles. Pieces for the tall one and the small one too. The tags are right.
+
+[sell_prompt]
+Something to sell? Put it on the counter. Don't tell me its story. Tell me its condition.
+
+[talk_prompt]
+I can talk and count at the same time. Go on.
+
+[bought]
+Good. Mind the edges.
+
+[bought_item]
+Right. Keep it dry.
+
+[bought_skill]
+Hm. Not a chandlery product, strictly. But I've a shelf of sense nobody's collected. There you are.
+
+[skill_sold_out]
+That's the last of that shelf. I don't restock sense. It doesn't sell.
+
+[sold]
+Fair price. Don't look so hurt, it's a good price.
+
+[nothing_to_sell]
+Nothing? Then you're wasting my counter.
+
+[cant_sell]
+You're wearing it. Take it off first, with C. Not at the counter, I've only just wiped it.
+
+[owned]
+You have one already. Two won't float any better.
+
+[wont_fit]
+That's cut for someone else, and they aren't here. Fit isn't a suggestion.
+
+[too_poor]
+You're short. I don't do tabs. Tabs are how boats get sold.
+
+[bought_stored]
+Your bag's full, so I've coiled it in your chest. It'll be there when you find a lamp.
+
+[bag_full]
+Bag full. Chest full. Sell something, or eat something, or stop shopping.
+
+[farewell]
+Mind the rain. It's coming in sideways.
+
+[talk: Who are you?]
+Wrasse. The Chandlery. My mother had it, her mother had it, and her mother's mother is the reason we have the lease. I count the stock on Sundays. I'd count it on Mondays too, if it weren't my day off.
+
+[talk: The oilskin]
+Waxed twice a year, the old way. The new stuff is cheaper and wears out quicker, and I don't sell it. I like my customers to come back alive.
+
+[talk: The lamplight]
+That's Mrs. Tansy's work, on the quay. She has her rounds, I have mine. Nobody lights the ones up the hill. She isn't fussed about it. I'm not fussed about it. Mind the oil, that's all.
+
+[talk: Bramble]
+The small one with the axe. A boat axe, for ropes. I'm told he's afraid of the sea. Good, sensible lad. I'm afraid of the sea. It keeps my customers coming in.
+
+[talk: Ves]
+She asked if I stock umbrellas. I stock sailcloth. Same thing, if you're serious about it. She nodded as if I'd said something clever.
+
+[talk: The Hero]
+They came through here once. Small. Bought a coil of rope and nothing else, and paid in coppers, one at a time. It's in the ledger. I don't throw out ledgers.

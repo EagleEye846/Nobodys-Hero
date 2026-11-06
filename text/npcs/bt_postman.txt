@@ -1,0 +1,21 @@
+# BT_POSTMAN: The beetle postman, in a blue cap, with a satchel of letters nobody collects. He walks the same route every day.
+
+[first]
+Post! Any post? Anyone expecting post? No? No one? Right.
+
+I deliver to the Hero, you know. Every year. I leave it at the statue. They've never written back.
+
+[repeat]
+My route's twelve doors. Eleven don't answer. The twelfth answers 'GO AWAY'. It's a friendly house.
+
+[first after the_kings_welcome]
+A quest, eh? I'll pop a letter in your pocket. For the Diggings. If you see a mole called Mattock.
+
+[repeat after the_kings_welcome]
+Remember: Mattock. A mole. At the pithead. He has a hat.
+
+[first after the_light_goes_up]
+Post! So much post! Letters to everyone! It's like the old days!
+
+[repeat after the_light_goes_up]
+I've run out of satchel! I'm delighted! Don't tell the union!

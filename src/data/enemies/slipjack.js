@@ -15,8 +15,8 @@ export const SLIPJACK = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: SLIPJACK_SPRITE, palette: SLIPJACK_PALETTE },
-  maxHp: 470,
-  damage: 20,
+  maxHp: 540,
+  damage: 23,
 
   // Quick, as it'll tell you: a step past the Hushwood's worst.
   difficulty: { density: 1.3, speed: 1.3 },
@@ -38,7 +38,7 @@ export const SLIPJACK = {
     { name: 'Count how fast', calm: 30 },
   ],
 
-  rewards: { exp: 180, coins: 90 },
+  rewards: { exp: 380, coins: 45 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'culvert_cress', chance: 0.4 }],

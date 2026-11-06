@@ -149,7 +149,12 @@ def main():
         print(report.strip())
         if len(sys.argv) > 3:
             call_id += 1
-            ws.send(json.dumps({"id": call_id, "method": "Page.captureScreenshot", "params": {"format": "png"}}))
+            shot_params = {"format": "png"}
+            # HEADLESS_CLIP=x,y,w,h takes a picture of that part of the page, even past the window (the scene sheets).
+            if os.environ.get("HEADLESS_CLIP"):
+                x, y, w, h = (float(v) for v in os.environ["HEADLESS_CLIP"].split(","))
+                shot_params.update({"captureBeyondViewport": True, "clip": {"x": x, "y": y, "width": w, "height": h, "scale": 1}})
+            ws.send(json.dumps({"id": call_id, "method": "Page.captureScreenshot", "params": shot_params}))
             while True:
                 message = json.loads(ws.receive())
                 if message.get("id") == call_id:

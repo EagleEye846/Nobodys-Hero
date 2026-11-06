@@ -62,7 +62,12 @@ export const LASTHOME_GATE = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/lasthome.txt',
   props: [
-    { sprite: 'lh_thistle', x: 14, y: 5, npc: 'lh_thistle' },
+    { sprite: 'lh_thistle', x: 14, y: 5, npc: 'lh_thistle', quest: [
+      { needs: ['has:thistle_hat'], take: 'thistle_hat', set: ['q_hat_asked', 'q_hat_done'], give: 'herald_button', text: 'hat_done' },
+      { needs: ['q_hat_done'], text: 'hat_after', append: true },
+      { needs: ['q_hat_asked'], text: 'hat_wait' },
+      { needs: ['!q_hat_asked'], set: 'q_hat_asked', text: 'hat_ask', append: true },
+    ] },
     { sprite: 'brazier', x: 9, y: 5, text: 'gate_brazier' },
     { sprite: 'washing_line', x: 5, y: 6, text: 'gate_washing' },
     { sprite: 'washing_line', x: 16, y: 9, text: 'gate_washing' },

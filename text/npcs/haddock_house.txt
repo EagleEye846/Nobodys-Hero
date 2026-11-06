@@ -1,0 +1,17 @@
+# HADDOCK (in the lifeboat house, gullrest_lifeboat_house): still offended about the lightman gag, for the whole of this room. Sections after the scene lantern_at_noon.
+
+[first]
+{offended}Kettle's on. Mugs on the hook.
+
+[repeat]
+{offended}Tide table's on the wall. Read it. Don't rub it.
+
+[first after lantern_at_noon]
+{offended}Kettle's on. Mugs on the hook. Mind the biscuits; they're for emergencies.
+
+{offended}Been minding that kettle since dawn, I have. Does it thank me? It does not.
+
+[repeat after lantern_at_noon]
+{offended}Tide table's on the wall. Chalked it myself. Read it. Don't rub it.
+
+{eh}Eh? No, miss. The lantern's none of mine.

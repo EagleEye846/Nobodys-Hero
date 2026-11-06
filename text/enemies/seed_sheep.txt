@@ -1,0 +1,79 @@
+# SEED SHEEP
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/seed_sheep.js.
+
+[intro]
+Something round and white ambles out of the grass, chewing. Its fleece is one huge dandelion clock. A SEED SHEEP!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SEED SHEEP chews, thoughtfully. A few seeds drift off its back and it does not look round.
+
+SEED SHEEP baas at nothing. Five more seeds leave. It is getting a bit see-through at the edges.
+
+A seed lands on your shoulder. SEED SHEEP looks at it, and at you, and seems to say you may keep it.
+
+SEED SHEEP nibbles a dandelion that looks very much like its own hat.
+
+Smells like warm grass, and clean wool, and Sunday.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Baaa!
+
+Baaaaa?
+
+Make a
+wish!
+
+Mind the
+fluff.
+
+Don't
+sneeze.
+
+Maa-aa!
+
+...Was that
+my hat?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/seed_sheep.js.
+[talk: Inspect]
+SEED SHEEP - HP 1850
+A sheep with a dandelion clock for a fleece. Blows drifts of seeds across the field, charges with a woolly head, and floats big seed clocks that burst into rings. Mind the gaps.
+
+[talk: Scratch behind the ears]
+You scratch SEED SHEEP behind both ears, slowly. Its eyes close. Its whole fleece loosens by half an inch and about forty seeds sigh off into the air. It leans into your hand with all its weight.
+
+[talk: Count its seeds]
+You start to count its seeds out loud. SEED SHEEP waits politely until you lose your place around three hundred, and then starts again from the top, to be helpful. You both give up at the same time.
+
+[talk: Make a wish]
+You hold a seed up and make a wish. SEED SHEEP watches you very seriously. You blow, and the seed goes up past the hedge, and the sheep gives a small, satisfied baa, as if it were the one who'd asked.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SEED SHEEP sits down in the grass with a soft whump. Its seeds all go at once, a slow white cloud lifting off the field. What is left is small and round and rather surprised, and very pink.
+
+[pacified]
+SEED SHEEP fluffs back up to twice its size, shakes itself, and sends a whole sky of seeds up over your head. It gives you a slow, sleepy baa, and wanders off, a little less round and rather happier.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says that {foe} is the only sheep she has ever met that is also a weather forecast. {foe} baas. She says that's probably a yes to sun.
+
+Ves asks {foe} if it minds being blown on by every child in the county. {foe} says only the ones who don't make a wish. She makes a very quick wish.
+
+Ves tells {foe} that she has an umbrella that is also quite fluffy, if you squint. {foe} squints. It says it'll allow it.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble asks {foe} if he can have just one seed. {foe} gives him four. Bramble puts three in his pocket for later, and one in his mouth by mistake.
+
+Bramble tells {foe} that it is the best sheep. {foe} says it is the only sheep. Bramble says that still counts.
+
+Bramble hugs {foe}. He is gone to the shoulders. {foe} stands very still and makes a noise like a kettle.

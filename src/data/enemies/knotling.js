@@ -21,8 +21,8 @@ export const KNOTLING = {
     frames: [KNOTLING_DISGUISE_SPRITES.still, KNOTLING_DISGUISE_SPRITES.glare, KNOTLING_DISGUISE_SPRITES.grumble],
     palette: KNOTLING_PALETTE,
   },
-  maxHp: 420,
-  damage: 17,
+  maxHp: 485,
+  damage: 20,
 
   // A Chapter 3 enemy from the deep wood: a touch tougher than the Burrhog.
   difficulty: { density: 1.25, speed: 1.2 },
@@ -46,7 +46,7 @@ export const KNOTLING = {
     { name: 'Sit on it', calm: 20, hurt: 5 },
   ],
 
-  rewards: { exp: 145, coins: 75 },
+  rewards: { exp: 310, coins: 40 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'stump_honey', chance: 0.4 }],

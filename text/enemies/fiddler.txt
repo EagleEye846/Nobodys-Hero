@@ -1,0 +1,73 @@
+# FIDDLER
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/fiddler.js.
+
+[intro]
+A single, clear note drifts out of the dark, then another, then a long pale cricket steps out, feeling the way with its feelers. A FIDDLER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+FIDDLER draws its back leg across its wing, and a long, sweet note fills the cave. It doesn't have eyes, but it somehow looks very serious about it.
+
+FIDDLER tilts its head. It's listening to your footsteps. It hums them back, a little flat.
+
+FIDDLER's feelers curl, one then the other, to see where you've got to. It's very polite about it.
+
+FIDDLER plays a short phrase, waits, and nods. It's very glad somebody's there to hear it.
+
+Smells like cold rock and a waxed bow.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Shhh. I'm
+listening.
+
+Do you
+hear that?
+
+A little
+louder.
+
+Again,
+from the
+top.
+
+...I hear
+you. Over
+THERE.
+
+Play with
+me.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/fiddler.js.
+[talk: Inspect]
+FIDDLER - HP 1200
+A blind cave cricket that fiddles with its leg. It hears you, not sees you. Notes, strings and feelers, and leaps down on the sound of your feet. Move, and mind the echoes.
+
+[talk: Applaud]
+You clap, softly, three times. FIDDLER freezes. Then it bows so low its feelers touch the floor. It says nobody has ever clapped. They mostly ran. It plays an encore, with its whole heart.
+
+[talk: Hum along]
+You hum along with the tune. It's not the right note. FIDDLER tilts its head, and adjusts, ever so slightly, and then you're in harmony, and neither of you knows quite how it happened.
+
+[talk: Keep very quiet]
+You stand perfectly still, and don't breathe. FIDDLER sweeps its feelers across you, and finds nothing. It says "...Hello?" very gently, to the dark. Then, quietly, it relaxes. It isn't alone, and it knows.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+FIDDLER lies down, folds its long legs under it, and plays one last, soft note that fades out. The cave is a lot quieter now than you remember.
+
+[pacified]
+FIDDLER plays a slow, lovely tune just for you, and it sounds like every place you've been. Then it bows, and feels its way off into the dark, still playing.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} it plays beautifully. {foe} says that's easy when you're not distracted by looking at things. She decides not to take that personally.
+
+Ves asks {foe} if it knows any requests. {foe} says it knows one, and plays it. It's the sound of an umbrella opening. She isn't sure how it knows. It's perfect.
+
+Ves says {foe} is very good at hearing people coming. {foe} says it's the only thing it's ever really been good at. She stays quiet for a moment, out of respect.

@@ -1,4 +1,5 @@
 import { HERO_STATE } from '../characters/heroState.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 
 // Things you can carry and use in battle (ITEMS). Descriptions live in
 // text/items/items.txt, one section per id. `heal` is HP restored (a big
@@ -91,6 +92,43 @@ export const ITEMS = {
   bottled_updraft: { name: 'Bottled Updraft', use: 'sp', amount: 60, price: 120 },
   music_box: { name: 'Fallen Music Box', use: 'calm', amount: 30, price: 105 },
   herald_helmet: { name: "Herald's Helmet", use: 'guard', price: 70 },
+  // Marigold's lemonade stand, in Sunnyside (Chapter 4).
+  lemonade: { name: 'Lemonade', heal: 120, price: 70 },
+  cucumber_sandwich: { name: 'Cuke Sarnie', heal: 165, price: 105 },
+  jam_tart: { name: 'Jam Tart', heal: 240, price: 160 },
+  // Belowtown's market: Pebble's stall (Chapter 4).
+  mushroom_pasty: { name: 'Mushroom Pasty', heal: 150, price: 95 },
+  glowworm_honey: { name: 'Glow-Worm Honey', heal: 210, price: 140 },
+  frog_toffee: { name: 'Cave-Frog Toffee', use: 'sp', amount: 80, price: 150 },
+  // Hobnail's forge: something to eat while he doesn't talk (Chapter 4).
+  slag_bread: { name: 'Slag Bread', heal: 190, price: 120 },
+  // Grig's pack, the last stall before the root (Chapter 4, the Deep).
+  cricket_cake: { name: 'Cricket Cake', heal: 230, price: 150 },
+  cave_dew: { name: 'Cave Dew', use: 'sp', amount: 100, price: 175 },
+  cricket_candle: { name: 'Cricket Candle', use: 'sp', amount: 40, light: { radius: 100, burn: 600 }, price: 80 },
+  // Chapter 4's first monsters' (Sunnyside, the Glimmering, the Diggings).
+  dandelion_tea: { name: 'Dandelion Tea', heal: 130 },
+  hay_biscuit: { name: 'Hay Biscuit', heal: 135 },
+  glint_sugar: { name: 'Glint Sugar', use: 'sp', amount: 80 },
+  rock_candy: { name: 'Rock Candy', heal: 160 },
+  pit_pasty: { name: 'Pit Pasty', heal: 180 },
+  // The second wave of Chapter 4's monsters' (Sunnyside, the Glimmering, the Diggings, the Stillwater).
+  party_ring: { name: 'Party Ring', heal: 125 },
+  spectrum_wafer: { name: 'Spectrum Wafer', heal: 165 },
+  molehill_muffin: { name: 'Molehill Muffin', heal: 185 },
+  rosin_toffee: { name: 'Rosin Toffee', heal: 205 },
+  // Chapter 5's monsters, batch 2 (the Lanes, the Wrack Shore, the Wreck Yard, the Reach, Sunnyside).
+  eel_skin: { name: 'Eel Skin', heal: 245 },
+  urchin_spine: { name: 'Urchin Spine', use: 'sp', amount: 100 },
+  brass_helmet: { name: 'Brass Helmet', use: 'guard' },
+  static_puff: { name: 'Static Puff', use: 'sp', amount: 120 },
+  net_float: { name: 'Net Float', use: 'calm', amount: 35 },
+  stolen_chip: { name: 'Stolen Chip', heal: 250 },
+  kelp_mane: { name: 'Kelp Mane', heal: 275 },
+  // Chapter 5's Sunnyside monsters (the Seed Sheep, the Flatcap Bee, the Clover Snail).
+  clock_wool: { name: 'Clock Wool', use: 'sp', amount: 80 },
+  flatcap_honey: { name: 'Flatcap Honey', heal: 260 },
+  lucky_clover: { name: 'Lucky Clover', use: 'calm', amount: 30 },
   // Found and given.
   candle_cake: { name: 'Candle Cake', heal: 70 },
   climbers_ration: { name: "Climber's Ration", heal: 50 },
@@ -126,13 +164,47 @@ export const ITEMS = {
   lamplight_candle: { name: 'Lamplight Candle', use: 'sp', amount: 50, light: { radius: 88, burn: 900 } },
   // The Hush's: a tuft of its fur, left on your sleeve at the Hero's Gate.
   hush_fur: { name: 'Hush Bristles', use: 'guard' },
+  // Chapter 4's deeper monsters' (the Diggings, the Stillwater, the Deep).
+  cinder_toffee: { name: 'Cinder Toffee', heal: 170 },
+  smoked_blindfish: { name: 'Smoked Blindfish', heal: 185 },
+  olm_tea: { name: 'Olm Tea', use: 'sp', amount: 90 },
+  lightless_jelly: { name: 'Lightless Jelly', heal: 200 },
+  gnawbone_broth: { name: 'Gnawbone Broth', heal: 220 },
+  // Chapter 5's first coast monsters (batch 1): each beats chapter 4's best heal by a little.
+  teapot_shell: { name: 'Teapot Shell', heal: 245 },
+  jelly_bell: { name: 'Jelly Bell', use: 'sp', amount: 90 },
+  limpet_plate: { name: 'Limpet Plate', heal: 265 },
+  sandpiper_feather: { name: 'Sandpiper Feather', use: 'sp', amount: 80 },
+  buoy_bell: { name: 'Buoy Bell', heal: 270 },
+  ghost_rope: { name: 'Ghost Rope', heal: 280 },
+  pail_and_spade: { name: 'Pail and Spade', heal: 255 },
+  // Fished off the Shore's jetty with Gubb's rod (src/ui/fishingScene.js). They
+  // sell for next to nothing (`price`), so the lake never pays in gold, and none
+  // heals more than the best food of the chapter.
+  moonblind_minnow: { name: 'Moonblind Minnow', heal: 120, price: 8 },
+  grumbling_olm: { name: 'Grumbling Olm', heal: 150, price: 10 },
+  lantern_gudgeon: { name: 'Lantern Gudgeon', heal: 190, price: 12 },
+  boiled_boot: { name: 'Boiled Boot', heal: 45, price: 2 },
+  ancient_sweet: { name: 'Ancient Sweet', heal: 85, price: 6 },
+  slowfin_carp: { name: 'Slowfin Carp', heal: 215, price: 14 },
+  // Saltcombe's Cockle Stall and Orla's Forge (Chapter 5). The best food of
+  // chapter 4 heals 240; these climb a little past it.
+  sea_biscuit: { name: 'Sea Biscuit', heal: 160, price: 90 },
+  kelp_crisps: { name: 'Kelp Crisps', heal: 190, price: 115 },
+  winkle_skewer: { name: 'Winkle Skewer', heal: 230, price: 140 },
+  cockle_chowder: { name: 'Cockle Chowder', heal: 285, price: 185 },
+  brine_tonic: { name: 'Brine Tonic', use: 'sp', amount: 110, price: 190 },
+  tinder_bun: { name: 'Tinder Bun', heal: 250, price: 160 },
 };
 
 // How many items you can carry.
 export const MAX_ITEMS = 12;
 // The storage chests by every save point (see storageMenu.js) all hold the
 // same things: whatever won't fit in your bag goes there, up to this many.
-export const MAX_STORAGE = 60;
+// There's more room each chapter: 60 in chapter 1, 80 in 2, 100 in 3...
+export function maxStorage() {
+  return 40 + 20 * (WORLD_STATE.chapter ?? 1);
+}
 
 // Puts an item in your bag, or if that's full, in storage. Returns true (in
 // your bag), 'stored' (sent to storage), or false (no room anywhere).
@@ -143,14 +215,14 @@ export function giveItem(id) {
     return true;
   }
   HERO_STATE.storage ??= [];
-  if (HERO_STATE.storage.length >= MAX_STORAGE) return false;
+  if (HERO_STATE.storage.length >= maxStorage()) return false;
   HERO_STATE.storage.push(id);
   return 'stored';
 }
 
 // Whether there's room for one more item, in your bag or in storage.
 export function roomForItem() {
-  return HERO_STATE.items.length < MAX_ITEMS || (HERO_STATE.storage ?? []).length < MAX_STORAGE;
+  return HERO_STATE.items.length < MAX_ITEMS || (HERO_STATE.storage ?? []).length < maxStorage();
 }
 
 // What it does in battle: "+40 HP", "Full HP", "MERCY +20%", "SP +35%" or "Guard".

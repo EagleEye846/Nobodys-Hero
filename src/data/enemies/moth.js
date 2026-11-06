@@ -32,7 +32,7 @@ export const LANTERN_MOTH = {
     { name: 'Hum softly', calm: 40 },
   ],
 
-  rewards: { exp: 60, coins: 45 },
+  rewards: { exp: 60, coins: 90 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'glow_jam', chance: 0.35 }],

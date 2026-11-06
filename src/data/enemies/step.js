@@ -15,8 +15,8 @@ export const LOOSE_STEP = {
     frames: [STEP_DISGUISE_SPRITES.still, STEP_DISGUISE_SPRITES.glare, STEP_DISGUISE_SPRITES.glance],
     palette: STEP_PALETTE,
   },
-  maxHp: 160,
-  damage: 12,
+  maxHp: 175,
+  damage: 13,
 
   // A Chapter 2 enemy: busier and quicker than anything in the Ruins.
   difficulty: { density: 1.15, speed: 1.1 },
@@ -37,7 +37,7 @@ export const LOOSE_STEP = {
     { name: 'Read the carving', calm: 35 },
   ],
 
-  rewards: { exp: 70, coins: 40 },
+  rewards: { exp: 75, coins: 50 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'step_shortbread', chance: 0.4 }],

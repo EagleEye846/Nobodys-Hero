@@ -20,6 +20,12 @@ import { HUSH_SHAPES } from '../data/art/hushBeast.js';
 // `start` how far along its loop it begins (0 to 1). If it passes over you
 // and you aren't keeping still in a leaf pile, it's seen you: the room starts
 // again from the door you came in by. You can't fight it. Not yet.
+//
+// `sound: true` (the Deep's Crawl) makes it a blind thing that hunts by
+// ear: no beast's shape, just rings of sound spreading over the floor from
+// where it is, drawn over the dark so you can read them from far off. The
+// outer ring is exactly how far it hears. `caught` names the text sections
+// ({ first, again } in the room's own text file) said when it finds you.
 
 const DEFAULT_SPEED = 34;
 const DEFAULT_RADIUS = 30;
@@ -62,8 +68,9 @@ function drawShape(ctx, frame, scale, dir, alpha) {
 }
 
 export class HushShadow {
-  constructor({ path, speed = DEFAULT_SPEED, radius = DEFAULT_RADIUS, start = 0, across = null }) {
+  constructor({ path, speed = DEFAULT_SPEED, radius = DEFAULT_RADIUS, start = 0, across = null, sound = false }) {
     this.across = across;
+    this.sound = sound;
     this.points = path.map(([x, y, pause = 0]) => ({ x: (x + 0.5) * T, y: (y + 0.5) * T, pause }));
     this.speed = speed;
     this.radius = radius;
@@ -152,6 +159,7 @@ export class HushShadow {
   // bigger than a cart, hunched, hackles up, walking. When it stops to
   // listen it stands, breathes, and the ember of its eye opens.
   draw(ctx, camera) {
+    if (this.sound) return;
     const cx = this.x - camera.x;
     const cy = this.y - camera.y;
     const breathe = this.listening ? 1 + Math.sin(this.time * 3) * 0.05 : 1;
@@ -198,9 +206,160 @@ export class HushShadow {
     }
   }
 
+  // The blind hunter's sound, drawn over the dark: rings spreading out from
+  // it, quick and small when it pads along, slow and wide when it stops to
+  // listen. The edge of the widest ring is the edge of what it hears.
+  drawSound(ctx, camera) {
+    if (!this.sound) return;
+    const cx = this.x - camera.x;
+    const cy = this.y - camera.y;
+    const reach = this.radius * (this.listening ? 1.15 : 1);
+    const period = this.listening ? 1.6 : 0.8;
+    ctx.save();
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 3; i++) {
+      const k = ((this.time / period + i / 3) % 1);
+      ctx.strokeStyle = `rgba(150, 190, 235, ${(0.5 * (1 - k)).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, reach * (0.15 + 0.85 * k), reach * (0.15 + 0.85 * k) * 0.8, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    // A pale smudge at the middle: where it is.
+    const glow = ctx.createRadialGradient(cx, cy, 1, cx, cy, 9);
+    glow.addColorStop(0, `rgba(190, 215, 245, ${this.listening ? 0.5 : 0.3})`);
+    glow.addColorStop(1, 'rgba(190, 215, 245, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(cx - 9, cy - 9, 18, 18);
+    ctx.restore();
+  }
+
   // Drawn over everything on the floor (it's a shadow from above).
   get sortY() {
     return Infinity;
+  }
+}
+
+// THE SENTRY (the Deep's Crawl): the same blind hunter, but one that stands
+// guard instead of walking its loop. It waits on its `post` (an index into
+// `path`) listening, and only moves when something makes a noise:
+//
+//   hush: { sound: true, post: 3, path: [[x, y], ...], speed, radius, caught }
+//
+// A prop with `lure: { to: <index into path>, hold: <seconds> }` (loose scree
+// you can kick, see OverworldScene.kickScree) sends it off round the loop the
+// short way to that waypoint, where it stands listening for `hold` seconds,
+// and then it walks back to its post. With `stay: true` instead of `hold` it
+// stays where the noise was until something else is kicked (or you're caught). A ring of sound shows on the floor
+// where the noise was made, so you can see what it heard. Nothing else about
+// it changes: same rings, same reach, same hollows to hide in.
+export class SoundHunter extends HushShadow {
+  constructor(data) {
+    super({ ...data, sound: true });
+    this.post = data.post ?? 0;
+    this.pings = [];
+    this.reset();
+  }
+
+  // Cumulative distance round the loop to each waypoint.
+  get marks() {
+    if (!this.cum) {
+      let at = 0;
+      this.cum = this.legs.map((len) => { const here = at; at += len; return here; });
+    }
+    return this.cum;
+  }
+
+  reset() {
+    this.s = this.marks[this.post ?? 0] ?? 0;
+    this.mode = 'post';
+    this.target = this.post ?? 0;
+    this.hold = 0;
+    this.waiting = 0;
+    this.pings = [];
+    this.placeAt();
+  }
+
+  // Put it where `s` (distance round the loop) says.
+  placeAt() {
+    const loop = this.loop;
+    this.s = ((this.s % loop) + loop) % loop;
+    let leg = 0;
+    while (leg < this.legs.length - 1 && this.s >= this.marks[leg] + this.legs[leg]) leg++;
+    const along = this.s - this.marks[leg];
+    const p = this.points[leg];
+    const q = this.points[(leg + 1) % this.points.length];
+    const k = this.legs[leg] ? along / this.legs[leg] : 0;
+    this.x = p.x + (q.x - p.x) * k;
+    this.y = p.y + (q.y - p.y) * k;
+    this.heading = Math.atan2(q.y - p.y, q.x - p.x);
+  }
+
+  // Something clinked at waypoint `index`: go and listen there for `hold` seconds.
+  lure(index, hold) {
+    // (A new noise breaks off whatever it was listening to.)
+    this.waiting = 0;
+    this.mode = 'going';
+    this.target = index;
+    this.hold = hold;
+  }
+
+  // A ring on the floor where a noise was made (world pixels).
+  ping(x, y) {
+    this.pings.push({ x, y, t: 0 });
+  }
+
+  // Walk `step` pixels the short way round to loop distance `goal`; true on arrival.
+  walkTo(goal, step) {
+    const loop = this.loop;
+    let ahead = (((goal - this.s) % loop) + loop) % loop;
+    const way = ahead <= loop / 2 ? 1 : -1;
+    const left = way === 1 ? ahead : loop - ahead;
+    if (left <= step) {
+      this.s = goal;
+      return true;
+    }
+    this.s += way * step;
+    return false;
+  }
+
+  update(dt) {
+    this.time += dt;
+    for (const ping of this.pings) ping.t += dt;
+    this.pings = this.pings.filter((ping) => ping.t < 1.4);
+    if (this.waiting > 0) {
+      this.waiting -= dt;
+      if (this.waiting <= 0 && this.mode === 'holding') this.mode = 'back';
+      return;
+    }
+    if (this.mode === 'going') {
+      if (this.walkTo(this.marks[this.target], this.speed * dt)) {
+        this.mode = 'holding';
+        this.waiting = this.hold;
+      }
+    } else if (this.mode === 'back') {
+      if (this.walkTo(this.marks[this.post], this.speed * dt)) this.mode = 'post';
+    }
+    this.placeAt();
+  }
+
+  // Standing still at its post, or at the end of a lure, it listens.
+  get listening() {
+    return this.mode === 'post' || this.mode === 'holding';
+  }
+
+  drawSound(ctx, camera) {
+    super.drawSound(ctx, camera);
+    // The noise that sent it: a ring spreading from the spot, then gone.
+    ctx.save();
+    ctx.lineWidth = 1;
+    for (const ping of this.pings) {
+      const k = Math.min(1, ping.t / 1.2);
+      ctx.strokeStyle = `rgba(235, 215, 170, ${(0.7 * (1 - k)).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.ellipse(ping.x - camera.x, ping.y - camera.y, 3 + 26 * k, (3 + 26 * k) * 0.8, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
   }
 }
 

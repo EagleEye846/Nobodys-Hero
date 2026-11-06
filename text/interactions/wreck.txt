@@ -1,0 +1,437 @@
+# THE WRECK YARD (Chapter 5): the ship graveyard under the full green storm. The gate,
+# the hull, the pumps, the fog deck, the galley, the mast, the slip, and the pocket under
+# the fog deck. Black wrecks, green sky, rain on everything, and one ghost who cooks.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums on the shingle, small and steady, the only thing in the yard that isn't broken.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[chest_empty]
+An empty chest, rusted open.
+
+[rock_stump]
+A cleat, bolted to the deck and worn smooth. Press on it, and everything you've pushed goes back where it started.
+
+# --- THE GATE ---------------------------------------------------------------------
+
+[gate_jetty_post]
+The jetty's mooring post, iron, with a chain still looped round it. The chain goes down into the water and doesn't come back up.
+
+[gate_sign]
+A board nailed to the bridge's first post. Somebody has painted on it, a long time ago: WRECK YARD. NO LANDING. NO SALVAGE. NO.
+Under it, scratched in with a knife: ALL RIGHT, A BIT OF SALVAGE.
+
+[gate_sign_ves]
+{bored}They held out for one whole line.
+
+[gate_bollard]
+A squat iron bollard at the bridge's end. A chain runs off it along the rail, keeping the bridge from going anywhere. Mostly.
+
+[gate_hulk]
+A hulk lying over on her side, half out of the water, her plates rusted the colour of old blood. The rain drums on her like a roof.
+
+[gate_mast]
+A mast standing up out of the water on its own, snapped off at the top. Whatever it belonged to is underneath.
+
+[gate_mast_bramble]
+{worried}Where's the rest of the boat?
+
+[gate_mast_ves]
+{bored}Downstairs, Bramble.
+
+[gate_ribs]
+The ribs of a ship, bare, sticking up out of the water like a hand that's given up waving.
+
+[gate_sail]
+A sail on a broken spar, lashed to its post with three turns of rope. It's more hole than sail now. It still flaps like it's going somewhere.
+
+[gate_flag]
+A flag on a staff jammed into the shingle. The colours are long gone. It snaps in the wind anyway, very sure of itself.
+
+[gate_figurehead]
+A ship's figurehead, wedged upright in the shingle: a lady with her arms folded, looking out to sea with an expression of tremendous disappointment.
+
+[gate_figurehead_ves]
+{thoughtful}Somebody carved that face on purpose. I'd like to meet them.
+
+[gate_anchor]
+An anchor, bigger than Bramble, rusted fast to the stones. It held something here once. It's still holding on.
+
+[gate_crate]
+A crate, washed up and split. Inside: straw, and the smell of oranges, and no oranges.
+
+[gate_pouch]
+A purse under the shingle by the anchor, buttoned shut. Somebody's salvage.
+
+[gate_edge]
+Rusted iron and black rock, slick with rain.
+
+[gate_water]
+Green-black water, heaving slowly between the wrecks. There's no telling how deep it is. There's no wanting to know.
+
+[gate_rail]
+The bridge's rail: a rope, tarred, threaded through iron stanchions. It's the most trustworthy thing here.
+
+[gate_bridge]
+The plank bridge. Every board is a different wood, nailed down by a different hand.
+
+[gate_bridge_bramble]
+{scared}It bends. Why does it BEND.
+
+# --- THE HULL ---------------------------------------------------------------------
+
+[hull_crate]
+A loose crate of ship's biscuit, light enough to shove. It's about as high as a step.
+
+[hull_crate_ves]
+{thoughtful}About as high as a step. I'm just saying it out loud.
+
+[hull_sign]
+A board hung by a nail on the walkway's post, in a tidy hand: MIDDLE DECK. MIND THE BILGE. STEPS WASHED AWAY 4TH MARCH.
+Nobody ever put them back.
+
+[hull_chest]
+A sea chest, up on top of the cargo where the bilge couldn't reach it. Inside, wrapped in oilcloth: a short, heavy maul with an anchor's fluke for a head.
+
+[hull_pouch]
+A purse, tucked between two crates where only somebody climbing would find it.
+
+[hull_barrels]
+Barrels, strapped down with iron hoops. Rain water, in the top one. Something worse in the others.
+
+[hull_rope]
+A coil of rope, wet through and heavier than it looks.
+
+[hull_anchor]
+A spare anchor, lashed to the deck, waiting forty years for somebody to need it.
+
+[hull_cargo]
+Cargo crates, stamped with a harbour's name that's been washed off.
+
+[hull_pots]
+Lobster pots, stacked up. One of them has a crab in it, who looks at you as if you've come to the wrong house.
+
+[hull_figurehead]
+Another figurehead, lying on her back: a man with a magnificent beard, staring up at the holes in the deck as if somebody owes him money.
+
+[hull_plate]
+The ship's iron plates, rivets as big as buttons, rust running down them in long stripes.
+
+[hull_porthole]
+A porthole, the glass salted over. Out there the sea heaves grey-green, and the rain hits it sideways.
+
+[hull_bilge]
+Bilge water. Black, still, and it smells like the inside of a boot.
+
+[hull_net]
+A heap of old net, tangled and stiff with salt.
+
+[hull_barnacles]
+Barnacles, thick as a crust.
+
+[hull_walkway]
+The middle deck, a walkway two good steps above the hold. The steps up to it are gone. The bilge laps at its foot.
+
+[hull_lowcargo]
+Cargo, stacked up a step high.
+
+# --- THE PUMPS --------------------------------------------------------------------
+
+[pumps_sign]
+A notice, nailed to a beam: BILGE PUMPS. ONE ON EVERY DECK. WORK ALL THREE OR DON'T BOTHER.
+Somebody has underlined BOTHER twice.
+
+[pumps_sign_bramble]
+{grin}BOTHER! That's what Haddock's boat is called!
+
+[pumps_sign_ves]
+{bored}It was a word first, Bramble.
+
+[pumps_main_pump]
+An iron bilge pump bolted to the deck, the handle worked by a treadle at its foot. A hose runs off it over the side.
+
+[pumps_plate_hero]
+The main deck pump's treadle. Stand on it and work it, and the pump sucks and gurgles.
+
+[pumps_hole]
+A torn plate low in the hull's side. Behind it, a narrow crawl goes down between the hull and the decks into the dark.
+
+[pumps_hole_bramble]
+{grin}I fit in that. Bet I fit in that.
+
+[pumps_bilge_pump]
+The bilge pump, right at the bottom of the ship. It's rusted, but somebody kept it greased.
+
+[pumps_plate_bramble]
+The bilge pump's treadle, small and stiff, down where only somebody small can get to it.
+
+[pumps_companionway]
+The stairs down to the 'tween deck, full to the top step with black water. Something has to pump it out.
+
+[pumps_companionway_open]
+Two pumps going, and the companionway gurgles and drains, the water going down the stairs one step at a time.
+
+[pumps_tween_pump]
+The 'tween deck pump, its handle stuck up on a beam where the water left it. Only something with a hook on the end would reach it.
+
+[pumps_tween_pump_ves]
+{proud}Something with a hook on the end. How fortunate.
+
+[pumps_hatch]
+The way into the forecastle, full of bilge water to the brim. It isn't going anywhere by itself.
+
+[pumps_hatch_open]
+The third pump coughs, and gulps, and keeps going. In the forecastle, the black water sinks away down the hatch with a long sucking noise, and stays gone.
+
+[pumps_stump]
+A cleat on the deck, worn smooth. Press on it, and everyone is back together at the door.
+
+[pumps_barrels]
+Barrels marked FRESH WATER. They are not.
+
+[pumps_pouch]
+A purse, floating in the bilge on its own, buttoned tight. Lucky purse.
+
+[pumps_buoys]
+A heap of old buoys, painted in colours that used to mean something.
+
+[pumps_shallows]
+Bilge water, ankle deep, cold as a cellar.
+
+[pumps_shallows_bramble]
+{worried}It's in my boots. It's IN them.
+
+# --- THE FOG DECK -----------------------------------------------------------------
+
+[fog_bell]
+A ship's bell on a frame bolted to the deck, green with age. The wind leans on it now and then, and it rings once into the fog, and nothing rings back.
+
+[fog_bell_bramble]
+{scared}Who's it ringing FOR?
+
+[fog_bell_ves]
+{thoughtful}Nobody. That's what makes it a fog bell.
+
+[fog_wheel]
+The ship's wheel, still on its post. It turns if you push it. Nothing else turns with it.
+
+[fog_sail]
+A sail, on a spar lashed to a stump of mast. The fog goes through it like it's not there.
+
+[fog_bollard]
+An iron bollard, with a chain round it that disappears into the fog.
+
+[fog_flag]
+A flag on a staff jammed in a hole in the deck, flapping hard at nothing.
+
+[fog_net]
+A net hung out to dry on its frame, forty years ago. It's still not dry.
+
+[fog_log]
+A board nailed to the mast, the ship's notice of the day, in chalk that the rain hasn't quite got to yet:
+FOG. ALL HANDS STAY AWAY FROM THE RAIL. COOK SAYS SOUP.
+
+[fog_pouch]
+A purse in a coil of rope on the deck, where somebody meant to come back for it.
+
+[fog_gap]
+The rail's broken here, and the gap's choked with weed. There's a little room under it, about the size of a ten-year-old.
+
+[fog_gap_bramble]
+{proud}I'm a ten-year-old!
+
+[fog_gap_ves]
+{bored}We're aware.
+
+[fog_bolt]
+A bolt wheel on the inside of the foredeck gate. Bramble hangs off it with all his weight, and it squeals round, and the bolt shoots back.
+
+[fog_bolt_not_you]
+It's on the far side of the gate, and the gate is bolted. Somebody would have to be on that side already.
+
+[fog_gate]
+An iron gate in the rail, bolted on the inside. Somebody wanted the foredeck to themselves.
+
+[fog_gate_open]
+The gate swings open with a long, rusty complaint.
+
+[fog_hatch]
+An open hatch in the foredeck, a ladder going down into the dark. It smells dry. Nothing else here does.
+
+[fog_sea]
+Holes in the deck, and the green sea heaving under them. Mind your feet.
+
+[fog_mast]
+A mast, going up into the fog until there isn't any more of it to see.
+
+[fog_stump]
+The stump of a mast, sawn off neat. Somebody needed the wood more than the ship did.
+
+# --- THE GALLEY -------------------------------------------------------------------
+
+[galley_stove]
+The galley stove. It's iron, and stone cold, and the firebox is full of seawater.
+
+[galley_stove_ves]
+{bored}Cooking with confidence, if nothing else.
+
+[galley_cook]
+The ghost cook floats over his cold stove, stirring a pot with a ladle and humming. He beams at you. "More soup? There's always more soup."
+
+[galley_cook_bramble]
+{smile}Thanks, Mister Cook!
+
+[galley_cook_ves]
+{bored}There isn't any soup, Bramble.
+
+[galley_pot]
+The cook's great iron pot. You lift the lid, braced for nothing, and find chowder: a real bowl of it, thick and hot. The cook beams. "Told you."
+
+[galley_pot_empty]
+The pot is empty now. The cook keeps stirring it anyway.
+
+[galley_menu]
+A slate on a post by the stove, the chalk written over and over:
+TODAY: SOUP.
+TOMORROW: SOUP.
+SUNDAY: SOUP (SPECIAL).
+
+[galley_menu_ves]
+{thoughtful}What makes Sunday's special?
+
+[galley_menu_bramble]
+{grin}Bigger spoons.
+
+[galley_table]
+The crew's table, laid for twelve. Every bowl is full of rain.
+
+[galley_bench]
+A long bench, worn smooth by forty years of nobody sitting on it.
+
+[galley_barrels]
+Barrels of salt pork. The salt has won.
+
+[galley_stores]
+The cook's stores, labelled in a careful hand: FLOUR. MORE FLOUR. DO NOT TOUCH (THIS MEANS YOU, PIKE).
+
+[galley_porthole]
+A porthole. Through it, the fog, and a long way off, a tall black tower.
+
+[galley_pans]
+Pans and ladles, hung on hooks along the beam.
+
+# --- THE MAST ---------------------------------------------------------------------
+
+[mast_sign]
+A board on a post by the basin, the paint nearly gone: HIGH WATER FLOATS THE RAFT. LOW WATER BARES THE FLATS. THE MAST IS NOT FOR CLIMBING.
+The last line has been crossed out.
+
+[mast_sign_ves]
+{thoughtful}High for the raft, low for the mud. Right.
+
+[mast_wheel]
+A tide wheel, its rim green with brass and salt. Out in the basin, the water waits to see what you'll do.
+
+[mast_wheel_turn]
+You heave the wheel round. Out in the basin, the water starts to move.
+
+[mast_wheel_busy]
+The wheel won't budge. The water's still moving.
+
+[mast_dial]
+A tide dial on a post, its hand pointing at what the basin's doing now.
+
+[mast_raft_post]
+An iron post, with a chain running out from it into the moat. At the other end, under the water, something wooden bumps against the bank.
+
+[mast_raft_post_bramble]
+{thinking}A raft that sinks on purpose?
+
+[mast_raft_post_ves]
+{bored}It's waiting for the tide. Like the rest of us.
+
+[mast_mast]
+The great mast, snapped high up. Its rigging hangs down it in ropes as thick as your arm, and at the very top, where the wood splits, something shines.
+
+[wreck_shard]
+Wedged in the split at the top of the mast, a splinter of star-metal, shining in the rain without any light to shine with.
+
+[mast_halyard]
+The halyard, an old rope run down the mast to the deck. You could slide down it, if you didn't value your hands.
+
+[mast_flag]
+A flag at the very top of the yard, black and torn. It's been flying the whole time. Nobody saw.
+
+[mast_yard_end]
+The yard's end, lashed to an iron post sunk in the rock of the cliff.
+
+[mast_pouch]
+A purse on the sandbar, half buried, where the tide dropped it.
+
+[mast_water]
+The basin. Green, black, and patient.
+
+[mast_hulk]
+The hulk's side, all rivets and weed, stood up out of the basin like a wall.
+
+[mast_yard]
+The main yard: a spar as wide as a bench, running out over the water to the cliff. The rain beads along it.
+
+[mast_yard_bramble]
+{scared}Don't think about it. Don't think about it.
+
+# --- THE SLIP ---------------------------------------------------------------------
+
+[slip_bother]
+The Bother, rocking at the end of the slip with her oars shipped. Rain pools in the bottom of her. She looks pleased to see you, which for a boat is saying something.
+
+[slip_bother_bramble]
+{worried}...Still very small.
+
+[slip_sign]
+A board on a post at the head of the slip, newer than anything else here: SLIP. FERRY BY ARRANGEMENT. RING LOUDLY.
+There's no bell.
+
+[slip_sign_ves]
+{bored}Shout loudly, then. He'll hear you eventually.
+
+[slip_nets]
+Nets on a drying frame, two poles and a line between them. These ones are dry. Somebody comes here.
+
+[slip_bollard]
+A bollard at the head of the slip, its iron worn bright by ropes.
+
+[slip_pouch]
+A purse, wedged in the cliff's foot above the tide line.
+
+[slip_cliff]
+The cliff, black and running with rain.
+
+[slip_planks]
+Planks laid over an old stone slip, running down into the water.
+
+# --- THE POCKET (secret) ----------------------------------------------------------
+
+[pocket_chest]
+The bosun's chest, padlocked, with the padlock rusted through. Inside, folded in a sail: a breastplate of brass, from a diving suit, heavy as a door.
+
+[pocket_pouch]
+A swear jar, tucked against the wall and full to the lid with coins. Whoever ran this ship had a lot to say.
+
+[pocket_barrels]
+Barrels of rum, empty. All of them. Every single one.
+
+[pocket_note]
+A note pinned to a post, in pencil: BOSUN'S. KEEP OUT. THIS MEANS YOU, COOK.
+Under it, in a different hand: I WASN'T GOING TO.
+
+[pocket_note_bramble]
+{grin}He was going to.

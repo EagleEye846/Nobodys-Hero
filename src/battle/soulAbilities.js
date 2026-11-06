@@ -47,6 +47,9 @@ const STAR_PATH = 7;
 const STAR_BURST = 13;
 const STAR_SP = 2;
 const STAR_SPREAD = 20;
+// Cut the String: how far the scissors reach, and the SP for every string cut.
+const SNIP_RADIUS = 15;
+const SNIP_SP = 2;
 
 function axis(input, negative, positive) {
   return (input.isDown(positive) ? 1 : 0) - (input.isDown(negative) ? 1 : 0);
@@ -438,6 +441,54 @@ export const SOUL_ABILITIES = {
     },
     draw(ctx, battle, left) {
       circle(ctx, battle.soul.x, battle.soul.y, 6 + (1 - left / 0.4) * 10, { stroke: '#5ef08a', width: 2, alpha: left / 0.4 });
+    },
+  },
+
+  // CUT THE STRING: King Peptup's gift for his duel (the enemy's
+  // `soulAbility`, not a weapon's). A pair of silver scissors snaps shut round
+  // your shadow and cuts any string within reach: the puppet strings that
+  // tug you about, the cords the prop swords hang from. A bullet that can be
+  // cut has `cuttable` (true while it still can be), `cutDistance(x, y)` and
+  // `cut(battle)`. Every string cut builds a little SP.
+  snip: {
+    name: 'CUT THE STRING',
+    hint: 'Your shadow finds a pair of SCISSORS!\nPress SHIFT to SNIP any string near you. Cut a puppet string and you are free.',
+    cooldown: 1.1,
+    duration: 0.3,
+    update(battle) {
+      const { soul } = battle;
+      for (const bullet of battle.bullets) {
+        if (!bullet.cuttable || bullet.cutDistance(soul.x, soul.y) > SNIP_RADIUS) continue;
+        bullet.cut(battle);
+        battle.gainSp(SNIP_SP);
+        battle.addPopup('SNIP!', soul.x, soul.y - 14, '#ffe14d');
+      }
+    },
+    draw(ctx, battle, left) {
+      // Two blades, snapping shut.
+      const progress = 1 - left / 0.3;
+      const open = Math.max(0, 0.9 - progress * 1.6);
+      const x = battle.soul.x * S;
+      const y = battle.soul.y * S;
+      ctx.save();
+      ctx.translate(x, y - 6 * S);
+      ctx.strokeStyle = '#e6eef8';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      for (const side of [-1, 1]) {
+        ctx.save();
+        ctx.rotate(side * open);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(side * 3, -17);
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.fillStyle = '#ffe14d';
+      ctx.fillRect(-5, 3, 4, 4);
+      ctx.fillRect(1, 3, 4, 4);
+      ctx.restore();
+      circle(ctx, battle.soul.x, battle.soul.y, SNIP_RADIUS, { stroke: '#e6eef8', width: 1, alpha: 0.4 * (left / 0.3) });
     },
   },
 };

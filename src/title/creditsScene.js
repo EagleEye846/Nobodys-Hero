@@ -4,6 +4,8 @@ import { textFile } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
 import { SONGS } from '../data/music/index.js';
 import { lookSprite } from '../overworld/scenePlayer.js';
+import { heroFrame } from '../characters/hero.js';
+import { memberFrames } from '../characters/party.js';
 import { drawText, textWidth } from '../ui/text.js';
 
 // The Ruins' credits, unless the end of a chapter names its own.
@@ -21,11 +23,20 @@ const FADE_OUT_SECONDS = 2;
 
 const LYRIC_SIZE = 32;
 const LYRIC_MAX_WIDTH = UI_WIDTH - 80;
-const LYRIC_Y = UI_HEIGHT - 72;
+const LYRIC_Y = UI_HEIGHT - 100;
 const LYRIC_FADE = 0.35;
 // A syllable's glow sweeps across it over this long at most.
 const SYLLABLE_SWEEP = 0.5;
 const STARS = 70;
+// The procession along the bottom: the section named [walkers] in the text
+// file lists who (one look per line: 'hero', 'member:vesper', or any card
+// look like 'enemy:moth'). They stroll left to right over the whole song.
+const WALKER_SECTION = 'walkers';
+const WALKER_SCALE = 3;
+const WALKER_GAP = 120;
+const GROUND_Y = UI_HEIGHT - 16;
+// The song fades up out of black over this long.
+const OPEN_FADE = 2;
 
 // The end credits: cards (text/credits.txt) fading in and out while the
 // credits song plays, with its words at the bottom lighting up as the tune
@@ -56,7 +67,9 @@ export class CreditsScene {
 
     // Each section of the text file is a card: a heading, names, and maybe a
     // character (@look) beside it.
-    const sections = Object.values(textFile(text));
+    const file = textFile(text);
+    this.walkers = (file[WALKER_SECTION]?.[0] ?? '').split('\n').map((l) => l.trim()).filter(Boolean);
+    const sections = Object.entries(file).filter(([name]) => name !== WALKER_SECTION).map(([, entries]) => entries);
     const span = (this.duration - CARDS_END_BEFORE - FIRST_CARD_AT) / sections.length;
     this.cards = sections.map(([entry = ''], i) => {
       const lines = entry.split('\n');
@@ -122,8 +135,13 @@ export class CreditsScene {
     const t = this.clock;
     inUiSpace(ctx, () => {
       this.drawSky(ctx, Math.min(1, t / this.duration));
-      for (const card of this.cards) this.drawCard(ctx, card, t);
+      this.drawWalkers(ctx, t);
+      this.cards.forEach((card, i) => this.drawCard(ctx, card, t, i === 0 || i === this.cards.length - 1));
       this.drawLyrics(ctx, t);
+      if (t < OPEN_FADE) {
+        ctx.fillStyle = `rgba(0, 0, 0, ${(1 - t / OPEN_FADE).toFixed(3)})`;
+        ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+      }
       const fade = (t - this.duration - RING_SECONDS) / FADE_OUT_SECONDS;
       if (fade > 0) {
         ctx.fillStyle = `rgba(0, 0, 0, ${Math.min(1, fade).toFixed(3)})`;
@@ -172,13 +190,16 @@ export class CreditsScene {
     }
   }
 
-  drawCard(ctx, card, t) {
+  drawCard(ctx, card, t, bookend = false) {
     if (t < card.from || t > card.to) return;
     const alpha = Math.min(1, (t - card.from) / CARD_FADE, (card.to - t) / CARD_FADE);
     if (alpha <= 0) return;
     const cx = UI_WIDTH / 2;
     ctx.save();
     ctx.globalAlpha = alpha;
+    // Cards drift up into place as they fade in, and on a little as they leave.
+    const drift = Math.round((t < (card.from + card.to) / 2 ? 1 - alpha : -(1 - alpha)) * 14);
+    ctx.translate(0, drift);
     // A character beside the card, bobbing gently.
     if (card.sprite) {
       const sprite = card.sprite.right;
@@ -191,12 +212,65 @@ export class CreditsScene {
     // A line too wide for the card (beside its character, or the screen) shrinks to fit.
     const room = card.sprite ? 400 : UI_WIDTH - 40;
     const fit = (text, size) => Math.min(size, Math.floor((size * room) / textWidth(ctx, text, size)));
-    drawText(ctx, card.heading, textX, 120, { size: fit(card.heading, 30), color: '#aeb8e8', align: 'center', shadow: '#141633' });
+    // The first and last cards (the chapter, and what comes next) are bigger and gold.
+    const headSize = fit(card.heading, bookend ? 36 : 30);
+    drawText(ctx, card.heading, textX, bookend ? 108 : 120, { size: headSize, color: bookend ? '#ffcc66' : '#aeb8e8', align: 'center', shadow: '#141633' });
+    // A thin rule under the heading, fading out at both ends.
+    const ruleW = Math.min(room, textWidth(ctx, card.heading, headSize) + 60);
+    const rule = ctx.createLinearGradient(textX - ruleW / 2, 0, textX + ruleW / 2, 0);
+    rule.addColorStop(0, 'rgba(174, 184, 232, 0)');
+    rule.addColorStop(0.5, 'rgba(174, 184, 232, 0.7)');
+    rule.addColorStop(1, 'rgba(174, 184, 232, 0)');
+    ctx.fillStyle = rule;
+    ctx.fillRect(Math.round(textX - ruleW / 2), bookend ? 152 : 156, Math.round(ruleW), 2);
+    const nameSize = bookend ? 56 : 44;
     card.names.forEach((name, i) => {
-      const size = fit(name, 44);
-      drawText(ctx, name, textX, 164 + i * 44 + (44 - size) / 2, { size, color: '#f4f6ff', align: 'center', shadow: '#141633' });
+      const size = fit(name, nameSize);
+      drawText(ctx, name, textX, (bookend ? 176 : 172) + i * nameSize + (nameSize - size) / 2, { size, color: bookend ? '#fff2c0' : '#f4f6ff', align: 'center', shadow: '#141633' });
     });
     ctx.restore();
+  }
+
+  // Everyone who walked this chapter with you, strolling along the bottom in
+  // a line, one slow crossing of the screen over the whole song.
+  walkerSprite(look, t, index) {
+    const step = Math.floor(t * 3 + index) % 2;
+    if (look === 'hero') return { img: heroFrame('right', true, false, t + index), bob: 0 };
+    if (look.startsWith('member:')) {
+      const frames = memberFrames(look.slice(7));
+      if (frames) return { img: step ? frames.rightStep ?? frames.rightIdle : frames.rightIdle, bob: 0 };
+    }
+    const sprites = lookSprite(look);
+    // Ones with no walking frames hop along instead.
+    return sprites ? { img: sprites.right, bob: Math.abs(Math.sin(t * 5 + index * 1.3)) * 4 } : null;
+  }
+
+  drawWalkers(ctx, t) {
+    if (!this.walkers.length) return;
+    const count = this.walkers.length;
+    const lineLength = count * WALKER_GAP;
+    const progress = Math.min(1, t / (this.duration + RING_SECONDS));
+    // Start with the last of them just off the left edge; end with the first just off the right.
+    const lead = -lineLength + (UI_WIDTH + lineLength + WALKER_GAP) * progress;
+    // The ground they walk on, catching the dawn light.
+    const ground = ctx.createLinearGradient(0, GROUND_Y - 6, 0, UI_HEIGHT);
+    ground.addColorStop(0, 'rgba(10, 8, 24, 0)');
+    ground.addColorStop(1, 'rgba(10, 8, 24, 0.8)');
+    ctx.fillStyle = ground;
+    ctx.fillRect(0, GROUND_Y - 6, UI_WIDTH, UI_HEIGHT - GROUND_Y + 6);
+    this.walkers.forEach((look, i) => {
+      const walker = this.walkerSprite(look, t, i);
+      if (!walker) return;
+      const { img, bob } = walker;
+      const w = img.width * WALKER_SCALE;
+      const h = img.height * WALKER_SCALE;
+      // The first in the list leads.
+      const x = lead + (count - 1 - i) * WALKER_GAP;
+      if (x < -w || x > UI_WIDTH + w) return;
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+      ctx.fillRect(Math.round(x - w / 2 + 4), GROUND_Y - 3, Math.round(w - 8), 5);
+      ctx.drawImage(img, Math.round(x - w / 2), Math.round(GROUND_Y - h + 2 - bob), w, h);
+    });
   }
 
   // The line being sung, at the bottom: dim at first, each syllable glowing

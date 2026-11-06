@@ -37,7 +37,7 @@ export const COLUMNEON = {
     { name: 'Disguise', calm: 40 },
   ],
 
-  rewards: { exp: 36, coins: 26 },
+  rewards: { exp: 36, coins: 50 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'pillar_mint', chance: 0.4 }],

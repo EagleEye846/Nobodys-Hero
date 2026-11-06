@@ -11,6 +11,22 @@
 #
 # A section's name is just a label; it isn't shown.
 
+# The procession along the bottom of the screen, one look per line, leader
+# first: 'hero', 'member:vesper', or any card look (@prop:, @enemy:).
+# Voice credits: none yet. If voices are ever added, put each actor's name
+# here, exactly as they want it written, in a card of its own, e.g.
+#   [voices]
+#   Voices
+#   (name, as they want it written)
+
+[walkers]
+hero
+enemy:dummy
+enemy:bunny
+enemy:moth
+enemy:waxling
+enemy:duskling
+
 [title]
 Chapter One: The Ruins
 NOBODY'S HERO

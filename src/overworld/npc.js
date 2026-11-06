@@ -84,6 +84,10 @@ export const GAITS = {
 
 // Wanderers pause between strolls, and stay within this many tiles up or down.
 const WANDER_PAUSE = [0.8, 2.2];
+// Held up this long by something in the way (seconds), it tries another way:
+// a new spot to wander to, or round the side of it in a chase.
+const STUCK_SECONDS = 0.4;
+const DETOUR_SECONDS = 0.7;
 const WANDER_RANGE_Y = 1.5;
 
 // The feet-level box used to keep a moving enemy out of walls.
@@ -91,6 +95,44 @@ const BODY_HALF_WIDTH = 5;
 const BODY_HEIGHT = 5;
 
 const rand = (min, max) => min + Math.random() * (max - min);
+
+// The biggest an enemy is drawn out in a room, in pixels, either way.
+const OVERWORLD_MAX = 30;
+
+// Battle art made smaller for a room, staying crisp: each new pixel takes the
+// colour most of its patch of the old art has (empty if most of it is empty),
+// and at an edge, where the patch is part empty, its outline (k) if it has one,
+// so the outline doesn't break up. Art that already fits comes back as it is.
+function shrinkRows(rows, palette, max) {
+  const w = Math.max(...rows.map((row) => row.length));
+  const h = rows.length;
+  const scale = Math.min(1, max / Math.max(w, h));
+  if (scale >= 1) return rows;
+  const tw = Math.max(1, Math.round(w * scale));
+  const th = Math.max(1, Math.round(h * scale));
+  const out = [];
+  for (let ty = 0; ty < th; ty++) {
+    let line = '';
+    for (let tx = 0; tx < tw; tx++) {
+      const counts = new Map();
+      let empty = 0;
+      let total = 0;
+      for (let y = Math.floor((ty * h) / th); y < Math.max(Math.floor((ty * h) / th) + 1, Math.floor(((ty + 1) * h) / th)); y++) {
+        for (let x = Math.floor((tx * w) / tw); x < Math.max(Math.floor((tx * w) / tw) + 1, Math.floor(((tx + 1) * w) / tw)); x++) {
+          const char = rows[y]?.[x];
+          total++;
+          if (!char || !palette[char]) empty++;
+          else counts.set(char, (counts.get(char) ?? 0) + 1);
+        }
+      }
+      if (empty * 2 > total || !counts.size) line += '.';
+      else if (empty && counts.has('k')) line += 'k';
+      else line += [...counts.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    }
+    out.push(line);
+  }
+  return out;
+}
 
 // An enemy out in a room. Touching it starts a battle. How it moves is its
 // `behaviour` (see BEHAVIOURS); older rooms may say `ambush: true` instead.
@@ -101,10 +143,14 @@ export class Npc {
     const source = ENEMIES[art] ?? ENEMIES[enemy];
     if (!source) throw new Error(`Unknown enemy '${enemy}' in a room's npcs`);
     const { rows, palette } = source.sprite;
-    this.sprite = makeSprite(rows, palette);
+    // Out in a room nobody is bigger than OVERWORLD_MAX pixels across or tall
+    // (about two tiles): bigger battle art is shrunk for the room (see shrinkRows).
+    this.sprite = makeSprite(shrinkRows(rows, palette, OVERWORLD_MAX), palette);
     this.enemy = enemy;
     // How it gets about (GAITS): its own way of walking.
     this.gait = GAITS[ENEMIES[enemy]?.gait] ? ENEMIES[enemy].gait : 'walk';
+    // Whether it moves through water (`swims: true` in the enemy's data).
+    this.swims = Boolean(ENEMIES[enemy]?.swims);
     // How far into its stride it is, how far it's rolled, and whether it moved this frame.
     this.stride = Math.random();
     this.roll = 0;
@@ -245,8 +291,13 @@ export class Npc {
       wander.pause = rand(...WANDER_PAUSE);
       return;
     }
-    if (speed > 0 && !this.step(room, (dx / distance) * speed * dt, (dy / distance) * speed * dt)) {
+    // Blocked (pressed up against a tree, say) for a moment: give up on that
+    // spot and pick another.
+    const moved = speed > 0 && this.step(room, (dx / distance) * speed * dt, (dy / distance) * speed * dt);
+    wander.blocked = speed > 0 && !moved ? (wander.blocked ?? 0) + dt : 0;
+    if (wander.blocked > STUCK_SECONDS) {
       wander.target = null;
+      wander.blocked = 0;
       wander.pause = rand(...WANDER_PAUSE);
     }
   }
@@ -296,18 +347,52 @@ export class Npc {
     // Bursty gaits keep their rhythm in a chase, at the same average speed.
     const gait = GAITS[this.gait];
     const speed = CHASE_SPEED * this.pace(dt) / (gait.moving * gait.pace || 1) * Math.min(1, gait.pace);
+    if (speed <= 0) return;
+    // Going round something in the way (a tree between you): sideways for a bit.
+    if (this.detour) {
+      this.detour.t -= dt;
+      if (!this.step(room, this.detour.x * speed * dt, this.detour.y * speed * dt)) {
+        this.detour.x *= -1;
+        this.detour.y *= -1;
+      }
+      if (this.detour.t <= 0) this.detour = null;
+      return;
+    }
+    const before = distance;
     this.step(room, (dx / distance) * speed * dt, (dy / distance) * speed * dt);
+    const gained = before - Math.hypot(player.x - this.x, player.y - this.y);
+    this.blocked = gained < speed * dt * 0.3 ? (this.blocked ?? 0) + dt : 0;
+    if (this.blocked > STUCK_SECONDS) {
+      // Step out to whichever side is clear, at right angles to you.
+      const side = Math.random() < 0.5 ? 1 : -1;
+      const sides = [side, -side].map((k) => ({ x: (-dy / distance) * k, y: (dx / distance) * k }));
+      const free = sides.find((d) => !this.blockedAt(room, this.x + d.x * T, this.y + d.y * T)) ?? sides[0];
+      this.detour = { ...free, t: DETOUR_SECONDS };
+      this.blocked = 0;
+    }
   }
 
   // Moves by (dx, dy) one axis at a time, stopping at walls. Returns whether it moved.
+  // (Not moving on an axis doesn't count as moving: slid up against a tree
+  // until it's level with where it's going, it's stuck, not walking.)
   step(room, dx, dy) {
     let moved = false;
-    if (!this.blockedAt(room, this.x + dx, this.y)) { this.x += dx; moved = true; }
-    if (!this.blockedAt(room, this.x, this.y + dy)) { this.y += dy; moved = true; }
+    if (Math.abs(dx) > 0.001 && !this.blockedAt(room, this.x + dx, this.y)) { this.x += dx; moved = true; }
+    if (Math.abs(dy) > 0.001 && !this.blockedAt(room, this.x, this.y + dy)) { this.y += dy; moved = true; }
     return moved;
   }
 
   blockedAt(room, x, y) {
+    // A swimmer (blindfish, olm) goes through the open water that stops everyone else.
+    if (this.swims) {
+      const left = Math.round(x) - BODY_HALF_WIDTH, top = Math.round(y) - BODY_HEIGHT, right = Math.round(x) + BODY_HALF_WIDTH, bottom = Math.round(y);
+      for (let ty = Math.floor(top / T); ty <= Math.floor((bottom - 1) / T); ty++) {
+        for (let tx = Math.floor(left / T); tx <= Math.floor((right - 1) / T); tx++) {
+          if (room.isSolidTile(tx, ty) && room.tileAt(tx, ty) !== '~') return true;
+        }
+      }
+      return room.props.some((prop) => room.propBlocks(prop, left, top, right, bottom));
+    }
     return room.collides(Math.round(x) - BODY_HALF_WIDTH, Math.round(y) - BODY_HEIGHT, Math.round(x) + BODY_HALF_WIDTH, Math.round(y));
   }
 

@@ -1,0 +1,78 @@
+# GLEAMSNAIL
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/gleamsnail.js.
+
+[intro]
+A shell full of crystals comes round the corner, very slowly, nose up. A GLEAMSNAIL!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+GLEAMSNAIL lifts its head high. It has never in its life been late, and it would like that known.
+
+A little chimney on GLEAMSNAIL's shell puffs a ring of smoke. Somebody's making tea in there.
+
+GLEAMSNAIL straightens the doormat with one tentacle. It was already straight.
+
+GLEAMSNAIL gleams. It doesn't need to say so. It says so.
+
+Smells like cold stone and clean laundry.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Mind my
+floors.
+
+Do wipe
+your feet.
+
+It's a
+GEODE.
+Not a rock.
+
+Home is
+where I am.
+
+Everything
+in its
+place.
+
+...Oh. You
+knocked it
+over.
+
+Tea?
+...No.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/gleamsnail.js.
+[talk: Inspect]
+GLEAMSNAIL - HP 950
+A snail with a cracked geode for a shell. Carries its house, and keeps it spotless. Slow, but its crystals ring and its light bends. Mind the slime.
+
+[talk: Admire the house]
+You tell GLEAMSNAIL it's a lovely house. A truly fine one. GLEAMSNAIL's eyestalks rise as high as they'll go. It points out the chimney. And the door. And the doormat.
+
+[talk: Wipe your feet]
+You stop, and wipe your feet on its mat, carefully, one then the other. GLEAMSNAIL watches every bit of it. Then it has to go inside for a moment, to be alone with its feelings.
+
+[talk: Offer to dust]
+You offer to dust the crystals. GLEAMSNAIL considers this for a long time, with its whole body. Then it lets you, one crystal at a time, and says "Not THAT one" about four times.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+GLEAMSNAIL draws into its shell and the door clicks shut. Nothing comes out. After a while you notice the little sign on the door says BACK SOON. You think it means it.
+
+[pacified]
+GLEAMSNAIL lifts its head, rings its crystals once, and slides aside to let you by. The doormat has been swept. For you.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says she's never seen a house with such a good view of everything it's already walked past. {foe} agrees. It asks if she'd like a tour. She says she can see all of it from here.
+
+Ves notes, to nobody, that {foe} carries its whole house and has still never lost its keys. {foe} says "Mm." It's smug, in a very small way.
+
+Ves asks {foe} if the door is purely decorative. {foe} opens the door. There's a very small armchair in there. She shuts it again, gently, in case it needs a moment.
+

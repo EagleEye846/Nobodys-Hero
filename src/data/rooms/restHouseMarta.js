@@ -51,7 +51,7 @@ export const REST_HOUSE_MARTA = {
   props: [
     { sprite: 'fireplace', x: 4, y: 2, text: 'marta_fire', animation: 'fireplace', speed: 0.2 },
     { sprite: 'armchair', x: 3, y: 5, text: 'marta_chair' },
-    { sprite: 'bed', x: 8, y: 3, text: 'marta_bed' },
+    { sprite: 'bed', x: 7, y: 3, text: 'marta_bed' },
     { sprite: 'bookshelf', x: 1, y: 2, text: 'marta_patterns' },
     { sprite: 'drawer', x: 9, y: 2, text: 'marta_drawer', gives: 'pine_candy' },
     { sprite: 'toy_chest', x: 1, y: 7, text: 'marta_basket' },

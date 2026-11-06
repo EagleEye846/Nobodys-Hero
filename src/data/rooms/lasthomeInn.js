@@ -62,6 +62,8 @@ export const LASTHOME_INN = {
     { sprite: 'bed', x: 1, y: 11, text: 'inn_bed', rest: true },
     { sprite: 'bed', x: 13, y: 9, text: 'inn_bed', rest: true },
     { sprite: 'barrel', x: 14, y: 4, text: 'inn_barrel' },
+    // Side quest (Tam's bell): the clapper, in use as a stirring pole.
+    { sprite: 'bell_clapper', x: 9, y: 2, text: 'inn_stirrer', gives: 'bell_clapper', taken: { gone: true } },
     { sprite: 'sign', x: 10, y: 11, text: 'inn_rules' },
   ],
   tileTexts: { h: 'inn_wall', r: 'inn_rug' },

@@ -1,0 +1,21 @@
+# BT_SQ_SNAIL: A very old snail on a square bench, with a long white beard and spectacles, who remembers the last time the Sunstone dimmed.
+
+[first]
+Hm. You've come down from the top. How unusual. Last time, it was a... small person.
+
+With a sword. And not much else. Sat on that bench, they did. Didn't say a word.
+
+[repeat]
+I was only a hatchling then. Everything was taller. Even the Hero.
+
+[first after the_kings_welcome]
+The king's version is quite grand, isn't it? It wasn't like that. It was quieter. And the Hero had no cloak.
+
+[repeat after the_kings_welcome]
+You'll want to ask the diggers. They remember the real thing. It's a rough sort of story.
+
+[first after the_light_goes_up]
+Oh. Oh, it's lovely. It's just like last time. Only I'm older. And the bench is the same.
+
+[repeat after the_light_goes_up]
+I've got a good view of the Sunstone from here. I've had it for sixty years. It's my favourite thing.

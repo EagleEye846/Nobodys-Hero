@@ -1,0 +1,21 @@
+# BT_GATE_FROGKID: A cave-frog kid with a red ball, waiting at the gate with the rest of the crowd.
+
+[first]
+Is it them? Is it the Hero come back?
+
+My dad says the Hero could lift a house. Can you lift a house? Not even a small one?
+
+[repeat]
+Can I hold the sword? I'll be careful. I'll only hold it a little bit.
+
+[first after the_kings_welcome]
+You got a quest! I wanted a quest! They gave me a bedtime.
+
+[repeat after the_kings_welcome]
+Bounce! Bounce! The ball's better than a quest. A bit.
+
+[first after the_light_goes_up]
+The Sunstone's BRIGHT! It's like a thousand balls! All at once!
+
+[repeat after the_light_goes_up]
+We're having a party. I'm not allowed to be sick on the cake. I'm going to try.

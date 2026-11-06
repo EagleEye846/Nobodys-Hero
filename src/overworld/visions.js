@@ -4,6 +4,7 @@ import { HERO_ANIMATIONS } from '../characters/hero.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { VES_FRAMES } from '../data/art/vesper.js';
 import { animationFrame } from '../engine/animations.js';
+import { drawShaft } from './shaftVision.js';
 
 // Visions: whole-screen pictures a cutscene can show in the dark, for dreams
 // (a scene step { do: 'vision', name: 'lantern' }; with no name, it goes).
@@ -473,6 +474,8 @@ export const VISIONS = {
   lantern: drawLantern,
   fall: drawFall,
   well: drawWell,
+  // The fall into the Glimmering (shaftVision.js): moods 'drop' and 'rush'.
+  shaft: drawShaft,
 };
 
 // Draws vision `vision` ({ name, mood, start, moodStart }) at time `now` (seconds).

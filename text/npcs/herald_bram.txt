@@ -16,3 +16,25 @@ Still no trumpet. I've started whistling the fanfare instead. The Head Herald sa
 If you go up the Lookout stair, could you keep an eye out? I may have left it on a cairn. Or in a cairn. Or built a cairn on it.
 
 The fanfare goes BRAAP, BRAAP, ba-da-da-DAAA. The DAAA is the hard bit. A hundred years and I still rush it.
+
+# --- SIDE QUEST: the trumpet (it's in the cairn at the Lookout) ---
+
+[trumpet_found]
+Bram's face goes through three expressions and settles on the biggest one.
+
+THAT'S IT. That's my trumpet! It was IN a cairn. I said cairn! I said it to everybody and nobody wrote it down!
+
+He puts it to his lips and gives the fanfare. BRAAP, BRAAP, ba-da-da-DAAAAA. Snow slides off the nearest roof. He rushed the last note. He is delighted anyway.
+
+Right. A deal's a deal, and I didn't make one, so I'm making one now. Take this. It's my first herald's pin, from when I was small and sure I'd be somebody's hero. I'd like it to go up the mountain with someone.
+
+Do you know why the last note is so long? The first Head Herald wrote it that way. He said it should last as long as it takes to climb the last stair, so that however late the Hero is, the fanfare hasn't finished yet.
+
+That's what we're doing, you know. All of us. Taking turns holding the last note. We just keep stopping to breathe.
+
+[trumpet_after]
+Bram is polishing his trumpet on his sleeve, which is making it worse.
+
+I haven't lost it since. It's been two days. That's a record. Please don't look at the soup.
+
+Go on, Hero. Or whoever you are. The last note's still going. Take your time.

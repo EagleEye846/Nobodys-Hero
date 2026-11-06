@@ -65,7 +65,9 @@ export const REST_BELLTOWER = {
   props: [
     // The bell, up on the platform: jump up the blocks in the corner to reach it.
     { sprite: 'bell_frame', x: 4, y: 3, text: 'tower_bell', nightText: 'tower_bell_night', sound: 'bell', wrath: 'tower_bell_wrath' },
-    { sprite: 'herald_bell', x: 2, y: 4, npc: 'herald_dunstan' },
+    { sprite: 'herald_bell', x: 2, y: 4, npc: 'herald_dunstan', quest: [
+      { needs: ['has:marta_mittens'], take: 'marta_mittens', set: 'q_mittens_asked', give: 'dunstan_note', text: 'mittens_in' },
+    ] },
     { sprite: 'sign', x: 2, y: 8, text: 'tower_sign' },
     { sprite: 'sign', x: 8, y: 12, text: 'tower_rules' },
     { sprite: 'barrel', x: 1, y: 18, text: 'tower_barrel' },

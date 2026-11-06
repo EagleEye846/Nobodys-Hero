@@ -12,6 +12,9 @@ import { CINDER_PORTRAIT } from './hushwood.js';
 import { LADLE_PORTRAIT } from './ladle.js';
 import { BRYONY_PORTRAIT, THISTLE_PORTRAIT } from './lasthome.js';
 import { SLOWLY_PORTRAIT } from './deadcity.js';
+import { TUCK_PORTRAIT, RUMBOLD_PORTRAIT, HOBNAIL_PORTRAIT, MARIGOLD_PORTRAIT, GUBB_PORTRAIT } from './belowFolk.js';
+import { HADDOCK_PORTRAIT, ORLA_PORTRAIT, CORRIE_PORTRAIT, TANSY_PORTRAIT, WRASSE_PORTRAIT, CRAB_PORTRAIT, RAT_PORTRAIT, PUFFIN_PORTRAIT } from './coastFolk.js';
+import { WY_COOK_PORTRAIT } from './wreckYard.js';
 
 const KEEPER_PALETTE = {
   k: '#120c1c', // outline
@@ -179,6 +182,8 @@ const VES_EXPRESSIONS = {
   bored: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [15, 11, 'eei'], [15, 18, 'eei'], [19, 13, 'ssssss'], [20, 13, 'sssmms']] },
   shy: { patches: [[14, 11, 'eeE'], [14, 18, 'eeE'], [15, 11, 'eei'], [15, 18, 'eei'], [16, 10, 'bbb'], [16, 19, 'bbb'], [17, 10, 'bb'], [17, 20, 'bb'], [19, 13, 'ssssss'], [20, 13, 'sssmms']] },
   thoughtful: { patches: [[14, 11, 'Eie'], [14, 18, 'Eie'], [11, 18, 'sss'], [10, 18, 'hhh'], [19, 13, 'ssssss'], [20, 13, 'ssmmms']] },
+  // Smug and pleased with herself, never gushing: lids half down, one brow up, a closed smirk that climbs on one side. ({proud} is written all through her lines.)
+  proud: { patches: [[12, 11, 'hhh'], [13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [19, 13, 'ssssms'], [20, 13, 'smmmss']] },
   hopeful: { patches: [[11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [14, 11, 'EEi'], [14, 18, 'EEi'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'msssms'], [20, 13, 'smmmms']] },
   exhausted: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [19, 13, 'ssssss'], [20, 13, 'smmmms']] },
   cold: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'kss'], [14, 18, 'ssk'], [15, 10, 'sskk'], [15, 18, 'kkss'], [17, 16, 'b'], [18, 15, 'bb'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'ssssss'], [20, 13, 'msmsms']] },
@@ -596,6 +601,38 @@ export const PORTRAITS = {
   thistle: THISTLE_PORTRAIT,
   // Slowly, the old tortoise of the Dead City's bathhouse (src/data/art/deadcity.js).
   slowly: SLOWLY_PORTRAIT,
+  // The Below Folk (Chapter 4: src/data/art/belowFolk.js): Tuck the page, King Peptup,
+  // Hobnail the smith, Marigold the hare and Ferryman Gubb.
+  tuck: TUCK_PORTRAIT,
+  rumbold: RUMBOLD_PORTRAIT,
+  hobnail: HOBNAIL_PORTRAIT,
+  marigold: MARIGOLD_PORTRAIT,
+  gubb: GUBB_PORTRAIT,
+  // The Coast Folk (Chapter 5: src/data/art/coastFolk.js): Haddock the lightman, Orla
+  // the smith, Corrie, Mrs. Tansy, Mrs. Wrasse, the Cockle Stall's crab, the Drowned
+  // Rat's innkeeper and the harbour clerk.
+  haddock: HADDOCK_PORTRAIT,
+  // The same face for Haddock's other places (one NPC id per room, so each room has its own words).
+  haddock_house: HADDOCK_PORTRAIT,
+  haddock_cove: HADDOCK_PORTRAIT,
+  haddock_jetty: HADDOCK_PORTRAIT,
+  haddock_wrack: HADDOCK_PORTRAIT,
+  haddock_wreck: HADDOCK_PORTRAIT,
+  haddock_inn: HADDOCK_PORTRAIT,
+  haddock_lagoon: HADDOCK_PORTRAIT,
+  haddock_lookout: HADDOCK_PORTRAIT,
+  haddock_reach: HADDOCK_PORTRAIT,
+  haddock_reach_foot: HADDOCK_PORTRAIT,
+  haddock_light: HADDOCK_PORTRAIT,
+  orla: ORLA_PORTRAIT,
+  corrie: CORRIE_PORTRAIT,
+  tansy: TANSY_PORTRAIT,
+  wrasse: WRASSE_PORTRAIT,
+  cockle: CRAB_PORTRAIT,
+  rat_innkeeper: RAT_PORTRAIT,
+  harbour_clerk: PUFFIN_PORTRAIT,
+  // The ghost cook in the Wreck Yard's galley (src/data/art/wreckYard.js).
+  ghost_cook: WY_COOK_PORTRAIT,
 };
 
 // The names of every expression any portrait has, for the Studio's pickers.

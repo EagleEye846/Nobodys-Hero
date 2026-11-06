@@ -124,7 +124,7 @@ export class SkillsMenu {
   open() {
     this.isOpen = true;
     // The tree grows chapter by chapter, and with the party (see src/data/skills.js).
-    this.pages = skillPages(WORLD_STATE.chapter ?? 1, partyIds());
+    this.pages = skillPages(WORLD_STATE.chapter ?? 1, partyIds(), WORLD_STATE.seenScenes ?? []);
     this.page = Math.min(this.page, this.pages.length - 1);
     this.branches = this.pages[this.page].branches;
     this.branch = Math.min(this.branch, this.branches.length - 1);
@@ -340,7 +340,7 @@ export class SkillsMenu {
     // switch; or, alone, the keys. Kept clear of the level and EXP on the right.
     if (this.pages.length > 1) {
       const right = this.drawPagePills(ctx, 26);
-      drawText(ctx, 'SPACE: switch', right + 6, 46, { size: 18, color: COLORS.dim });
+      drawText(ctx, this.pages.length > 2 ? 'SPACE' : 'SPACE: switch', right + 6, 46, { size: 18, color: COLORS.dim });
     } else {
       drawText(ctx, 'Z learn   X back   ←→↑↓ move', 30, 46, { size: 18, color: COLORS.dim });
     }
@@ -447,6 +447,8 @@ export class SkillsMenu {
   }
 
   drawStar(ctx, branch, b, skill, i) {
+    // Scrolled out of the sky: not drawn, or its name peeks out under the tabs.
+    if (i < this.scroll || i > this.scroll + ROWS - 1) return;
     const { x, y } = this.nodePosition(b, i);
     const learned = hasSkill(skill.id);
     const available = !learned && !skillBlocker(branch, i);
@@ -498,7 +500,8 @@ export class SkillsMenu {
 
     // Its name under the star, in the column.
     const labelColor = learned ? branch.color : available ? COLORS.text : COLORS.dim;
-    drawText(ctx, skill.name, x, y + NODE_RADIUS + 1, { size: 15, color: selected ? COLORS.gold : labelColor, align: 'center', shadow: '#05030f' });
+    // Outlined in the night's colour, so the line on to the next star runs behind the name.
+    drawText(ctx, skill.name, x, y + NODE_RADIUS + 1, { size: 15, color: selected ? COLORS.gold : labelColor, align: 'center', shadow: '#05030f', outline: '#0a0618' });
   }
 
   // Arrows when a branch runs off the top or bottom of the sky.

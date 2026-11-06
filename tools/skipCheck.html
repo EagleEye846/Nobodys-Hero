@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Skip Check</title>
+<style>
+  body { background: #000; color: #e8e4f4; font: 12px monospace; margin: 0; }
+  #report { padding: 6px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div id="report"></div>
+<script>
+  const show = (m) => { document.getElementById('report').textContent += `\nERROR: ${m}`; };
+  window.addEventListener('error', (e) => show(`${e.message} (${e.filename}:${e.lineno})`));
+  window.addEventListener('unhandledrejection', (e) => show(e.reason?.stack ?? e.reason));
+  // A clock the page owns, so a scene can be run faster than real time.
+  window.simNow = 1000;
+  performance.now = () => window.simNow;
+  const realFetch = window.fetch.bind(window);
+  window.fetch = async (...args) => {
+    for (let tries = 0; ; tries++) {
+      try { return await realFetch(...args); } catch (e) { if (tries >= 6) throw e; await new Promise((done) => setTimeout(done, 300 * (tries + 1))); }
+    }
+  };
+</script>
+<script type="module">
+// Proves that skipping a cutscene you've seen ends in the same place as
+// watching it: every scene (or ?scene=a,b) is played twice from the same
+// start, once by pressing through it and once by holding the skip key, and
+// everything that matters afterwards is compared: the hero's and the world's
+// saved state, the party, where everybody stands, the song, which props and
+// people are hidden, and where the scene sent the game next (a battle, a
+// room, the end of a chapter).
+//   python tools/headless.py "http://localhost:8000/tools/skipCheck.html" 900
+import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from './src/config.js';
+import { createScreen } from './src/engine/screen.js';
+import { loadUiFont } from './src/ui/text.js';
+import { loadTextFiles } from './src/engine/textLoader.js';
+import { TEXT_FILES } from './src/data/textManifest.js';
+import { OverworldScene } from './src/overworld/overworldScene.js';
+import { ROOMS } from './src/data/rooms/index.js';
+import { SCENES } from './src/data/scenes/index.js';
+import { MEMBERS, joinParty } from './src/characters/party.js';
+import { WORLD_STATE } from './src/state/saveGame.js';
+import { HERO_STATE } from './src/characters/heroState.js';
+import { music } from './src/audio/music.js';
+
+const params = new URLSearchParams(location.search);
+const report = document.getElementById('report');
+const say = (line) => { report.textContent += `${line}\n`; };
+await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
+
+const DT = 1 / 30;
+const MAX_FRAMES = 30 * 60 * 12;
+const noInput = { isDown: () => false, wasPressed: () => false, endFrame() {} };
+const press = { isDown: (a) => a === 'confirm', wasPressed: (a) => a === 'confirm', endFrame() {} };
+const hold = { isDown: (a) => a === 'skip', wasPressed: () => false, endFrame() {} };
+const shotCtx = createScreen(document.createElement('canvas'), UI_WIDTH, UI_HEIGHT);
+
+const FRESH = JSON.stringify({ hero: HERO_STATE, world: WORLD_STATE });
+function restore() {
+  const fresh = JSON.parse(FRESH);
+  for (const [state, data] of [[HERO_STATE, fresh.hero], [WORLD_STATE, fresh.world]]) {
+    for (const key of Object.keys(state)) delete state[key];
+    Object.assign(state, data);
+  }
+}
+
+// Where each scene starts: on its trigger in the room that has one.
+function startOf(scene) {
+  for (const room of Object.values(ROOMS)) {
+    const trigger = (room.cutscenes ?? []).find((c) => c.scene === scene.id);
+    if (trigger) return { room, at: { x: trigger.x, y: trigger.y } };
+  }
+  const room = ROOMS[scene.room];
+  return room ? { room, at: room.playerStart } : null;
+}
+
+function snapshot(world, outcome, left) {
+  const hero = JSON.parse(JSON.stringify(HERO_STATE));
+  if (hero.lit) delete hero.lit.left;
+  const state = JSON.parse(JSON.stringify(WORLD_STATE));
+  delete state.playSeconds;
+  const out = { hero, state, outcome, music: music.wanted, ambience: music.ambienceWanted };
+  if (left) return out;
+  const p = world.player;
+  out.player = { x: Math.round(p.x), y: Math.round(p.y), z: Math.round(p.z ?? 0), facing: p.facing, ground: p.ground ?? 0 };
+  out.room = world.roomData.id;
+  out.followers = world.followers.map((f) => ({ id: f.id, hidden: Boolean(f.hidden) }));
+  out.props = world.room.props.map((prop) => `${prop.character ?? prop.look ?? prop.baseLook ?? '?'}@${Math.round(prop.x)},${Math.round(prop.y)}${prop.hidden ? ' hidden' : ''}`);
+  out.npcs = (world.npcs ?? []).map((n) => `${n.id ?? n.character}@${Math.round(n.x)},${Math.round(n.y)}${n.hidden ? ' hidden' : ''}`);
+  out.textbox = world.textbox.isOpen;
+  out.weather = Math.round((world.weatherAmount ?? 1) * 100) / 100;
+  out.weatherFading = Boolean(world.weatherFade);
+  out.vision = world.vision?.name ?? null;
+  return out;
+}
+
+// Plays one scene; `skip` holds the skip key instead of pressing through.
+async function play(sceneData, skip) {
+  restore();
+  localStorage.removeItem('ruins-rpg-watched-scenes-v1');
+  const start = startOf(sceneData);
+  if (!start) return { error: 'no room' };
+  for (const actor of sceneData.actors ?? []) if (MEMBERS[actor.plays]) joinParty(actor.plays);
+  for (const id of (params.get('with') ?? '').split(',').filter(Boolean)) joinParty(id);
+  if (skip) localStorage.setItem('ruins-rpg-watched-scenes-v1', JSON.stringify([sceneData.id]));
+  music.wanted = null;
+  music.ambienceWanted = null;
+  let outcome = null;
+  let left = false;
+  const game = {
+    home: () => null,
+    changeScene(next) { left = true; outcome = { ...(outcome ?? {}), changed: next?.roomData?.id ?? next?.constructor?.name }; },
+  };
+  const world = new OverworldScene(start.room, start.at, start.room.area);
+  world.enter?.(game);
+  world.game = game;
+  world.storyBattle = (step) => { left = true; outcome = { ...(outcome ?? {}), battle: step.enemies ?? step.enemy, after: step.after ?? null, spared: step.spared ?? null, defeated: step.defeated ?? null, noRun: Boolean(step.noRun) }; };
+  world.playCutscene(sceneData);
+  const player = world.cutscene;
+  if (skip && !player.skippable) return { error: 'not skippable' };
+  const sampleDraw = () => { shotCtx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0); world.draw(shotCtx); };
+  let frames = 0;
+  let open = 0;
+  let holdFrames = 0;
+  let sawHint = false;
+  while (world.cutscene && !left && frames < MAX_FRAMES) {
+    frames++;
+    window.simNow += DT * 1000;
+    if (world.textbox.isOpen) open += DT; else open = 0;
+    let input = noInput;
+    if (skip) {
+      // One frame with the key up (arming it), then hold for a couple of seconds.
+      if (frames > 3) { input = hold; holdFrames++; }
+      if (frames === 2) sampleDraw();
+      if (frames === 2) sawHint = true;
+      if (holdFrames === 15) sampleDraw();
+    } else if (world.textbox.isOpen && open > 0.3) {
+      input = press;
+      open = 0;
+    }
+    const cutscene = world.cutscene;
+    world.update(DT, input);
+    if (cutscene.done) {
+      outcome = { ...(outcome ?? {}), battle: outcome?.battle ?? (cutscene.battle ? 'yes' : null), endChapter: cutscene.endChapter ? `${cutscene.endChapter.room}` : null, goto: cutscene.goto ? `${cutscene.goto.room}@${JSON.stringify(cutscene.goto.spawn)}` : null, goOn: Boolean(cutscene.goOn) };
+      // Let the game carry on a frame, as it would, so a room change or the end
+      // of a chapter happens the way it would after watching.
+      if (left) break;
+    }
+    if (frames % 400 === 0) await new Promise((done) => setTimeout(done, 0));
+  }
+  if (frames >= MAX_FRAMES) return { error: 'never ended' };
+  const snap = snapshot(world, outcome, left);
+  snap.frames = frames;
+  snap.sawHint = sawHint;
+  return snap;
+}
+
+function diff(a, b, path = '', out = []) {
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) diff(a[key], b[key], `${path}.${key}`, out);
+  } else if (a !== b) out.push(`${path}: watched ${JSON.stringify(a)} vs skipped ${JSON.stringify(b)}`);
+  return out;
+}
+
+const only = (params.get('scene') ?? '').split(',').filter(Boolean);
+const ids = only.length ? only : Object.keys(SCENES);
+let bad = 0;
+let checked = 0;
+let notSkippable = [];
+for (const id of ids) {
+  const sceneData = SCENES[id];
+  if (!sceneData) { say(`NO SCENE ${id}`); bad++; continue; }
+  if (sceneData.steps.some((s) => s.do === 'choice' || s.do === 'prompt')) { notSkippable.push(id); continue; }
+  try {
+    const watched = await play(sceneData, false);
+    const skipped = await play(sceneData, true);
+    if (watched.error || skipped.error) {
+      say(`SKIP ${id}: ${watched.error ?? ''} ${skipped.error ?? ''}`);
+      continue;
+    }
+    checked++;
+    const problems = diff({ ...watched, frames: 0, sawHint: 0 }, { ...skipped, frames: 0, sawHint: 0 });
+    if (problems.length) {
+      bad++;
+      say(`DIFF ${id} (${watched.frames} frames watched, ${skipped.frames} skipped):\n  ${problems.slice(0, 8).join('\n  ')}`);
+    } else say(`same ${id} (${(watched.frames / 30).toFixed(0)}s watched, ${(skipped.frames / 30).toFixed(1)}s skipped)${watched.outcome?.battle ? ' [battle]' : ''}${watched.outcome?.endChapter ? ' [chapter end]' : ''}`);
+  } catch (e) {
+    bad++;
+    say(`THROW ${id}: ${e.stack ?? e}`);
+  }
+  await new Promise((done) => setTimeout(done, 0));
+}
+say(`SKIP CHECK DONE: ${checked} scenes compared, ${bad} problems, ${notSkippable.length} left out (${notSkippable.join(', ')})`);
+</script>
+</body>
+</html>

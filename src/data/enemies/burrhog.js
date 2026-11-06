@@ -12,8 +12,8 @@ export const BURRHOG = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: BURRHOG_SPRITE, palette: BURRHOG_PALETTE },
-  maxHp: 330,
-  damage: 15,
+  maxHp: 380,
+  damage: 17,
 
   // A Chapter 3 enemy: a step busier than the mountain's.
   difficulty: { density: 1.2, speed: 1.15 },
@@ -35,7 +35,7 @@ export const BURRHOG = {
     { name: 'Roll it an apple', calm: 35 },
   ],
 
-  rewards: { exp: 115, coins: 60 },
+  rewards: { exp: 240, coins: 30 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'roast_chestnut', chance: 0.4 }],

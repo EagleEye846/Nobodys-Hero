@@ -8,6 +8,25 @@ import { VES_HURT_SPRITES, VES_CRUTCH_FRAMES } from './vesper.js';
 import { MARSH_PALETTE_EXTRA, MARSH_PROP_SPRITES } from './marsh.js';
 import { LASTHOME_PROP_SPRITES, LASTHOME_FOOTPRINTS } from './lasthome.js';
 import { DEADCITY_PALETTE_EXTRA, DEADCITY_PROP_SPRITES, DEADCITY_FOOTPRINTS } from './deadcity.js';
+import { BF_PALETTE_EXTRA, BF_PROP_SPRITES, BF_FOOTPRINTS } from './belowFolk.js';
+import { CF_PALETTE, CF_PROP_LOOKS, CF_FOOTPRINTS } from './coastFolk.js';
+import { DEEP_PALETTE_EXTRA, DEEP_PROP_SPRITES, DEEP_FOOTPRINTS } from './deepProps.js';
+import { CARTS_PROP_SPRITES } from './carts.js';
+import { BEAM_PALETTE_EXTRA, BEAM_PROP_SPRITES } from './beams.js';
+import { BRIGHT_PALETTE_EXTRA, BRIGHT_PROP_SPRITES, BRIGHT_FOOTPRINTS } from './brightProps.js';
+import { COAST_PALETTE_EXTRA, COAST_PROP_SPRITES, COAST_FOOTPRINTS } from './coastProps.js';
+import { SY_PALETTE_EXTRA, SY_PROP_SPRITES, SY_FOOTPRINTS } from './sunnyAutumn.js';
+import { LN_PALETTE_EXTRA, LN_PROP_SPRITES, LN_FOOTPRINTS } from './lanesProps.js';
+import { IL_PALETTE_EXTRA, IL_PROP_SPRITES, IL_FOOTPRINTS } from './islesProps.js';
+import { LL_PALETTE_EXTRA, LL_PROP_SPRITES, LL_FOOTPRINTS } from './lastLightProps.js';
+import { SC_PALETTE_EXTRA, SC_PROP_SPRITES, SC_FOOTPRINTS } from './saltcombeProps.js';
+import { HS_PALETTE_EXTRA, HS_PROP_SPRITES, HS_FOOTPRINTS } from './haddockShed.js';
+import { GLIMMER_FALLS_PALETTE_EXTRA, GLIMMER_FALLS_PROP_SPRITES, GLIMMER_FALLS_FOOTPRINTS } from './glimmerFalls.js';
+import { SUNNY_SCENE_PALETTE_EXTRA, SUNNY_SCENE_PROP_SPRITES } from './sunnyScenes.js';
+import { BT_SCENE_PALETTE_EXTRA, BT_SCENE_PROP_SPRITES, BT_SCENE_FOOTPRINTS } from './belowtownScenes.js';
+import { SIDEQUEST_PROP_SPRITES } from './sideQuests.js';
+import { WY_PALETTE, WY_PROP_SPRITES, WY_FOOTPRINTS } from './wreckYard.js';
+import { SD_PALETTE_EXTRA, SD_PROP_SPRITES, SD_FOOTPRINTS } from './soundingsProps.js';
 
 export const PROP_PALETTE = {
   k: '#120c1c', // outline
@@ -90,6 +109,39 @@ export const PROP_PALETTE = {
   ...MARSH_PALETTE_EXTRA,
   // The Dead City's lit slab stone.
   ...DEADCITY_PALETTE_EXTRA,
+  // The Below Folk's colours, on private characters (src/data/art/belowFolk.js).
+  ...BF_PALETTE_EXTRA,
+  // The Coast Folk's colours, on private characters (src/data/art/coastFolk.js).
+  ...CF_PALETTE,
+  ...DEEP_PALETTE_EXTRA,
+  // The light-beam puzzles' teals and golds (Greek letters: src/data/art/beams.js).
+  ...BEAM_PALETTE_EXTRA,
+  // Sunnyside, the Glimmering and Belowtown (accented letters: src/data/art/brightProps.js).
+  ...BRIGHT_PALETTE_EXTRA,
+  // Chapter 5's coast (private-use letters: src/data/art/coastProps.js).
+  ...COAST_PALETTE_EXTRA,
+  // Chapter 5's Sunnyside (src/data/art/sunnyAutumn.js).
+  ...SY_PALETTE_EXTRA,
+  // Chapter 5's Sunken Lanes (src/data/art/lanesProps.js).
+  ...LN_PALETTE_EXTRA,
+  // Chapter 5's Beacon Isles (src/data/art/islesProps.js).
+  ...IL_PALETTE_EXTRA,
+  // Chapter 5's Last Light, inside (src/data/art/lastLightProps.js).
+  ...LL_PALETTE_EXTRA,
+  // The Wreck Yard's own props (src/data/art/wreckYard.js).
+  ...WY_PALETTE,
+  // The Soundings' chart, windlasses, weight frame, counterweight and diving bell (src/data/art/soundingsProps.js).
+  ...SD_PALETTE_EXTRA,
+  // Saltcombe's bunk, ledger, chart, board, painting and the two in the lagoon (src/data/art/saltcombeProps.js).
+  ...SC_PALETTE_EXTRA,
+  // Haddock's shed (src/data/art/haddockShed.js).
+  ...HS_PALETTE_EXTRA,
+  // The Echo Falls (src/data/art/glimmerFalls.js).
+  ...GLIMMER_FALLS_PALETTE_EXTRA,
+  // The shrub in Sunnyside's hedge (src/data/art/sunnyScenes.js).
+  ...SUNNY_SCENE_PALETTE_EXTRA,
+  // Belowtown's set pieces: the Sunstone, relic cases, the show (src/data/art/belowtownScenes.js).
+  ...BT_SCENE_PALETTE_EXTRA,
 };
 
 export const PROP_SPRITES = {
@@ -1801,13 +1853,13 @@ export const PROP_SPRITES = {
     '...kLuCCCCuLk.d.',
     '...kLLkCCkLLk.d.',
     '...kLLkEEkLLk.d.',
-    '..kGLEEEEEELGk4k',
-    '..kGGGEETEGGGk4k',
-    '..kGGGGETGGGGkk.',
-    '..kGGGGGEGGGGk..',
+    '...kLEEEEEELkk4k',
+    '...kGGEETEGGkk4k',
+    '...kGGGETGGGkk..',
+    '...kGGGGEGGGk...',
+    '...kGJGGGGJGk...',
     '..kGJGGGGGGJGk..',
-    '..kGJGGGGGGJGk..',
-    '...kJGGGGGGJk...',
+    '..kJGGGGGGGGJk..',
     '...kkkkkkkkkk...',
     '....kZk..kZk....',
     '....kZk..kZk....',
@@ -1828,14 +1880,14 @@ export const PROP_SPRITES = {
     '...kLLLLLLLLk.d.',
     '...kLLLLLLLLk.d.',
     '...kLLLLLLLLk.d.',
-    '...kEEEEEEEEk.d.',
-    '..kGLLLLLLLLGk4k',
-    '..kGGLLLLLLGGk4k',
-    '..kGGGLLLLGGGkk.',
-    '..kGGGGGGGGGGk..',
+    '....kEEEEEEk..d.',
+    '...kGLLLLLLGkk4k',
+    '...kGLLLLLLGkk4k',
+    '...kGGLLLLGGkk..',
+    '...kGGGGGGGGk...',
+    '...kGJGGGGJGk...',
     '..kGJGGGGGGJGk..',
-    '..kGJGGGGGGJGk..',
-    '...kJGGGGGGJk...',
+    '..kJGGGGGGGGJk..',
     '...kkkkkkkkkk...',
     '....kZk..kZk....',
     '....kZk..kZk....',
@@ -3261,12 +3313,46 @@ export const PROP_SPRITES = {
   // dead lamps, broken statues of the Hero, the bathhouse, the gate and its
   // Warden, Slowly the tortoise, and Ves reaching up with her crutch.
   ...DEADCITY_PROP_SPRITES,
+  // Chapter 4's creature folk: Tuck, King Peptup and his throne, Hobnail,
+  // Marigold, Gubb and his punt, the Belowtown crowd (src/data/art/belowFolk.js).
+  ...BF_PROP_SPRITES,
+  // Chapter 5's people: Haddock, Orla, Corrie, Saltcombe's folk (src/data/art/coastFolk.js).
+  ...CF_PROP_LOOKS,
+  // The Diggings, the Stillwater and the Deep (src/data/art/deepProps.js).
+  ...DEEP_PROP_SPRITES,
+  // The Diggings (src/data/art/carts.js): mine carts, the rail lever, the barricade.
+  ...CARTS_PROP_SPRITES,
+  // The light-beam puzzles (src/data/art/beams.js): sun-crystals, prisms, crystal eyes.
+  ...BEAM_PROP_SPRITES,
+  // Sunnyside's fields, the Glimmering's crystals and mushrooms, Belowtown's streets
+  // (src/data/art/brightProps.js).
+  ...BRIGHT_PROP_SPRITES,
+  // Chapter 5's coast: beach, storm shore, Saltcombe, lanes, wreck yard, caves, isles, tower.
+  ...COAST_PROP_SPRITES,
+  // Chapter 5's Sunnyside: seed clocks, the windmill, Farmer Tolliver, the slipped path.
+  ...SY_PROP_SPRITES,
+  ...LN_PROP_SPRITES,
+  // The Beacon Isles: little lighthouses, the old lightroom, the shutter cranks.
+  ...IL_PROP_SPRITES,
+  ...LL_PROP_SPRITES,
+  // Saltcombe (src/data/art/saltcombeProps.js).
+  ...SC_PROP_SPRITES,
+  ...HS_PROP_SPRITES,
+  ...GLIMMER_FALLS_PROP_SPRITES,
+  // The shrub the crutch lands in (src/data/art/sunnyScenes.js).
+  ...SUNNY_SCENE_PROP_SPRITES,
+  ...BT_SCENE_PROP_SPRITES,
+  // The side quests' cat and bell clapper (src/data/art/sideQuests.js).
+  ...SIDEQUEST_PROP_SPRITES,
+  ...WY_PROP_SPRITES,
+  ...SD_PROP_SPRITES,
 };
 
 // How many tiles wide a prop stands, for the big ones. It stands on its tile
 // and the ones to the right of it, and blocks all of them.
 export const PROP_FOOTPRINTS = {
   beacon_cold: 3,
+  field_hole: 3,
   bookshelf: 2,
   fireplace: 3,
   fireplace_cold: 3,
@@ -3295,4 +3381,19 @@ export const PROP_FOOTPRINTS = {
   ...DRAINS_FOOTPRINTS,
   ...LASTHOME_FOOTPRINTS,
   ...DEADCITY_FOOTPRINTS,
+  ...BF_FOOTPRINTS,
+  ...CF_FOOTPRINTS,
+  ...DEEP_FOOTPRINTS,
+  ...BRIGHT_FOOTPRINTS,
+  ...COAST_FOOTPRINTS,
+  ...SY_FOOTPRINTS,
+  ...LN_FOOTPRINTS,
+  ...IL_FOOTPRINTS,
+  ...LL_FOOTPRINTS,
+  ...SC_FOOTPRINTS,
+  ...HS_FOOTPRINTS,
+  ...GLIMMER_FALLS_FOOTPRINTS,
+  ...BT_SCENE_FOOTPRINTS,
+  ...WY_FOOTPRINTS,
+  ...SD_FOOTPRINTS,
 };

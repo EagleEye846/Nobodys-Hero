@@ -15,8 +15,8 @@ export const HOB = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hollin',
   sprite: { rows: HOB_SPRITE, palette: HOB_PALETTE },
-  maxHp: 420,
-  damage: 18,
+  maxHp: 485,
+  damage: 21,
 
   // A Chapter 3 enemy from the village at the end of the wood: about as busy
   // as the Knotling.
@@ -39,7 +39,7 @@ export const HOB = {
     { name: 'Ask about the family', calm: 30 },
   ],
 
-  rewards: { exp: 155, coins: 90 },
+  rewards: { exp: 325, coins: 45 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'hob_scone', chance: 0.4 }],

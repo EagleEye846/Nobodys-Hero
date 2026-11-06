@@ -173,3 +173,104 @@ Two fingers, very loud. SP +{sp}%, and the next attack stops short.
 
 [bramble_marbles]
 A pocketful across the floor: {damage} damage to every enemy.
+
+# Chapter 5.
+[undertow]
+Drags one enemy back: {amount} damage, next attack shorter.
+
+[brine]
+Salts one enemy: a little now, then a burn for 3 turns.
+
+[ebb_flow]
+Swap attack and defence: hits 1.75x, theirs 1.5x, 2 turns.
+
+[low_water]
+Shows weak spots: one enemy takes 40% more for 3 turns.
+
+[vesper_cool change]
+A cool wind off the sea. Whoever you choose recovers {heal} HP.
+
+[vesper_billow]
+Safe for the first {seconds} seconds of the next attack.
+
+[vesper_downpour]
+{damage} damage to every enemy; next attack stops short.
+
+[vesper_whirl]
+{damage} damage to each, more the more enemies there are.
+
+[bramble_count to ten]
+A big, slow breath. MERCY +{calm}% for all, and SP +{sp}%.
+
+[bramble_cannonball]
+SPLASH: {damage} damage to one enemy, and the next attack stops short.
+
+[bramble_hand up]
+Heals a friend {heal} HP, even one who's down.
+
+[bramble_stand firm]
+Hits meant for friends land on him, halved, this turn.
+
+# Chapter 5, the second half of the tree.
+[cleave]
+One stroke, straight through: {amount} damage to one enemy.
+
+[restore]
+Light for everyone. The whole party recovers {amount} HP.
+
+[bastion]
+A wall of light. Halves the damage you take for {amount} enemy turns.
+
+[soothe]
+The room goes still. Every enemy's MERCY rises by {amount}%.
+
+[starstorm]
+Stars on everyone: {amount} damage to every enemy.
+
+[undercut]
+{amount} damage, a shove back, and a sting for 3 turns.
+
+[overwhelm]
+Everything at once: {amount} damage, next attack shorter.
+
+[vesper_hold fast]
+Next attack halved, each hit {def} less, and the first hit does nothing.
+
+[vesper_windshear]
+A cutting wind: {damage} damage, and the next attack stops short.
+
+[vesper_hurricane]
+{damage} damage to every enemy; the next attack is cut well short.
+
+[vesper_fireside]
+Warm and dry. Everyone in the party recovers {heal} HP.
+
+[vesper_sheet lightning]
+{damage} damage to each, more the more enemies there are.
+
+[vesper_supercell]
+A storm cloud: {damage} damage, and the next attack stops short.
+
+[vesper_still air]
+The wind stops. MERCY +{calm}% for all; next attack stops short.
+
+[vesper_clear skies]
+Everyone recovers {heal} HP; next attack short; first hit does nothing.
+
+[bramble_splinters]
+Chips everywhere: {damage} damage to every enemy.
+
+[bramble_the big one]
+The biggest swing: {damage} damage, and the next attack stops short.
+
+[bramble_three cheers]
+Hip hip! Everyone recovers {heal} HP, and MERCY +{calm}% for all.
+
+[bramble_sing-along]
+Everyone recovers {heal} HP, MERCY +{calm}% for all, SP +{sp}%.
+
+[bramble_conkers]
+Conkers for everyone: {damage} damage to every enemy.
+
+[bramble_i've got you]
+Everyone recovers {heal} HP; friends' hits land on him, halved.

@@ -23,9 +23,9 @@ export const LAMP_MITE = {
     frames: [LAMP_MITE_DISGUISE_SPRITES.still, LAMP_MITE_DISGUISE_SPRITES.eyes, LAMP_MITE_DISGUISE_SPRITES.peek],
     palette: LAMP_MITE_PALETTE,
   },
-  maxHp: 580,
+  maxHp: 665,
   // Each mite hardly stings, but there are a LOT of them.
-  damage: 20,
+  damage: 23,
 
   // The Dead City, past Lasthome: a notch up from the marsh. Swarms: lots of
   // tiny, quick bullets.
@@ -48,7 +48,7 @@ export const LAMP_MITE = {
     { name: 'Flutter your hands', calm: 30 },
   ],
 
-  rewards: { exp: 225, coins: 110 },
+  rewards: { exp: 470, coins: 55 },
 
   // Snacks they sometimes leave behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'dust_meringue', chance: 0.4 }],

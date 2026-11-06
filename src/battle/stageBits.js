@@ -9,6 +9,8 @@
 //   swoop   sweeps down out of the dark on its wings
 //   rise    rises up out of the floor, out of nothing
 //   whirl   spins in out of the air, gathering itself
+//   curtain stays where it is while the stage curtains part on it, a spotlight
+//           snapping on (the showman's; drawn by drawCurtains in battleScene.js)
 
 const TAU = Math.PI * 2;
 const rand = (lo, hi) => lo + Math.random() * (hi - lo);
@@ -19,6 +21,10 @@ const pick = (list) => list[Math.floor(Math.random() * list.length)];
 export const ENTER_FROM = 0.35;
 export const ENTER_LANDS = 1.15;
 const SQUASH_SECONDS = 0.3;
+// The `curtain` entrance: the stage curtains stay shut while the stage fades
+// up, then part (from CURTAIN_PARTS to CURTAIN_OPEN), and he is revealed.
+export const CURTAIN_PARTS = 1.0;
+export const CURTAIN_OPEN = 2.1;
 
 // How far off its spot it is, how squashed, and how see-through, `t` seconds
 // into its entrance. `size` is its drawn size; `pos`, its spot.
@@ -33,6 +39,9 @@ export function entranceOffset(style, t, pos, size) {
       if (after < 0) return { ...home, x: (330 - pos.x) * (1 - u) ** 3 };
       // The skid: a lurch past its spot, then back.
       return { ...home, x: -6 * squash, sx: 1 + 0.05 * squash, sy: 1 - 0.05 * squash };
+    case 'curtain':
+      // He's there all along; the curtains hide him till they part.
+      return home;
     case 'swoop':
       if (after < 0) return { ...home, x: 160 * (1 - u) ** 2, y: -140 * (1 - u) ** 2 + 12 * Math.sin(u * Math.PI) };
       return { ...home, y: 4 * squash };
@@ -97,6 +106,23 @@ export class StageBits {
     this.add({ kind: 'mote', x, y, vy, life, color, size, sway: rand(0, TAU) });
   }
 
+  // A chip of wood (or paint, or gold) flung off a broken thing: it spins,
+  // falls, bounces on the boards at `floor` and settles, then fades.
+  chip(x, y, { vx = 0, vy = 0, gravity = 300, life = 2.4, color = '#c9a06a', w = 3, h = 2, spin = 9, floor = 160, bounce = 0.35 } = {}) {
+    this.add({ kind: 'chip', x, y, vx, vy, gravity, life, color, w, h, spin, floor, bounce, rot: rand(0, TAU) });
+  }
+
+  // A string let go: it whips from where it was tied (`x, y`) out along
+  // `dx, dy` and curls away, fading.
+  lash(x, y, { dx = 0, dy = 60, life = 0.55, color = '#e6e0d0', sway = 14 } = {}) {
+    this.add({ kind: 'lash', x, y, dx, dy, life, color, sway: sway * (Math.random() < 0.5 ? -1 : 1) });
+  }
+
+  // A column of light going straight up out of `x, y`, from `y` to the top.
+  beam(x, y, { life = 1.4, width = 12, color = '255, 236, 170' } = {}) {
+    this.add({ kind: 'beam', x, y, life, width, color });
+  }
+
   // Sparks flying out of `x, y` every way, in `colors`.
   scatter(x, y, count, colors, { speed = 90, gravity = 160, life = 0.7, up = 30 } = {}) {
     for (let i = 0; i < count; i++) {
@@ -126,6 +152,16 @@ export class StageBits {
       }
       bit.x += bit.vx * dt;
       bit.y += bit.vy * dt;
+      if (bit.kind === 'chip') {
+        bit.rot += bit.spin * dt;
+        if (bit.y > bit.floor) {
+          bit.y = bit.floor;
+          bit.vy = -Math.abs(bit.vy) * bit.bounce;
+          bit.vx *= 0.6;
+          bit.spin *= 0.5;
+          if (Math.abs(bit.vy) < 14) { bit.vy = 0; bit.vx = 0; bit.gravity = 0; bit.spin = 0; }
+        }
+      }
     }
     this.bits = this.bits.filter((bit) => bit.age < bit.life);
   }
@@ -171,6 +207,45 @@ export class StageBits {
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(Math.round(bit.x - s), Math.round(bit.y), Math.round(s * 2), 1);
           ctx.fillRect(Math.round(bit.x), Math.round(bit.y - s), 1, Math.round(s * 2));
+          break;
+        }
+        case 'chip':
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.globalAlpha = Math.min(1, left * 3);
+          ctx.save();
+          ctx.translate(Math.round(bit.x), Math.round(bit.y));
+          ctx.rotate(bit.rot);
+          // (A dark edge, so it reads on the boards and against the dark.)
+          ctx.fillStyle = '#0a0710';
+          ctx.fillRect(-bit.w / 2 - 1, -bit.h / 2 - 1, bit.w + 2, bit.h + 2);
+          ctx.fillStyle = bit.color;
+          ctx.fillRect(-bit.w / 2, -bit.h / 2, bit.w, bit.h);
+          ctx.restore();
+          break;
+        case 'lash': {
+          const k = 1 - left;
+          const reach = Math.min(1, k * 4);
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.globalAlpha = Math.min(1, left * 2.5);
+          ctx.strokeStyle = bit.color;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(bit.x, bit.y);
+          ctx.quadraticCurveTo(bit.x + bit.dx * 0.5 * reach + Math.sin(k * 14) * bit.sway * left, bit.y + bit.dy * 0.5 * reach, bit.x + bit.dx * reach + bit.sway * k * 2, bit.y + bit.dy * reach - k * 30);
+          ctx.stroke();
+          break;
+        }
+        case 'beam': {
+          ctx.globalCompositeOperation = 'lighter';
+          const grow = Math.min(1, (1 - left) * 5);
+          const w = bit.width * (0.4 + 0.6 * left) * (0.6 + 0.4 * grow);
+          const g = ctx.createLinearGradient(0, bit.y, 0, 0);
+          g.addColorStop(0, `rgba(${bit.color}, ${(0.75 * left).toFixed(3)})`);
+          g.addColorStop(1, `rgba(${bit.color}, 0)`);
+          ctx.fillStyle = g;
+          ctx.fillRect(Math.round(bit.x - w / 2), 0, Math.round(w), Math.round(bit.y));
+          ctx.fillStyle = `rgba(255, 255, 255, ${(0.5 * left).toFixed(3)})`;
+          ctx.fillRect(Math.round(bit.x - w / 6), 0, Math.max(1, Math.round(w / 3)), Math.round(bit.y));
           break;
         }
         case 'mote': {

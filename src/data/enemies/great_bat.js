@@ -25,8 +25,8 @@ export const GREAT_BAT_BOSS = {
   // Chapter 2's bosses are its hardest fights, and each chapter's are harder
   // than the last: well above Taper (320 HP, 6 damage) and the caves' toughest
   // regulars (300 HP), with spells now hitting harder than any FIGHT.
-  maxHp: 900,
-  damage: 15,
+  maxHp: 970,
+  damage: 16,
 
   // A good step above the caves' regulars.
   difficulty: { density: 1.2, speed: 1.12 },
@@ -62,7 +62,7 @@ export const GREAT_BAT_BOSS = {
     { name: 'Stand by Ves', calm: 16 },
   ],
 
-  rewards: { exp: 380, coins: 110 },
+  rewards: { exp: 730, coins: 110 },
 
   // No drop: her plum comes from her pup, after (bat_defeated).
   drops: [],

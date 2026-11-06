@@ -1,0 +1,72 @@
+# MAGPIE MOLE
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/magpiemole.js.
+
+[intro]
+The ground heaves, and a pink nose and a burlap sack come out of it, jingling. "Lost property," says a MAGPIE MOLE, looking at your boots.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+MAGPIE MOLE peers into its sack, and fishes out a spoon. It looks at it for a while, and puts it back, with great respect.
+
+MAGPIE MOLE can't stop looking at your buttons. It says it isn't looking at your buttons.
+
+Something in MAGPIE MOLE's sack goes "tink". It pats the sack soothingly, and says "Not yet."
+
+MAGPIE MOLE polishes a coin on its waistcoat, and holds it up to the light. It doesn't look at you, particularly, while it does it.
+
+Smells like dirt, brass and a very full pocket.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Finders
+keepers!
+
+Is this
+yours?
+
+Lost
+property!
+
+Ooh,
+shiny!
+
+I'll just
+hold on to
+this.
+
+...That's
+MINE now.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/magpiemole.js.
+[talk: Inspect]
+MAGPIE MOLE - HP 1050
+A mole with a sack of everything shiny. Throws it, swings it, and pops up through the floor wherever you stand. Don't stay put; it's quick, and so is the sack.
+
+[talk: Describe a lost thing]
+You describe something you've lost: a brass button, a bit bent. MAGPIE MOLE rummages for a long, long time, and produces a button that is nothing like it. It insists it's the same one. You say thank you.
+
+[talk: Hand over a button]
+You hold out a spare button. MAGPIE MOLE trembles. Nobody has ever just given it one. It holds it up to the light, and then it puts it in a special pocket, at the very back of the sack.
+
+[talk: Fill in a form]
+You ask for a form. MAGPIE MOLE has one. It's mostly dirt, but it has a box on it for NAME, and a box for ITEM, and a box for HOW YOU FEEL ABOUT IT. It's the most official thing it has ever done.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+MAGPIE MOLE slumps over its sack, with its pink hands over the top, to keep everything safe. Something inside goes "tink", once, quietly, and doesn't go again.
+
+[pacified]
+MAGPIE MOLE stands, and gives a small, solemn bow. It pulls something shiny out of the sack, a ring-pull from a very old tin, and presses it into your hand. "Found it," it says. "Keep it. It was lost."
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves checks that her umbrella is still on her. {foe} says it was only looking. She says that's what it was doing to the umbrella. It says, quickly, that nobody could prove that.
+
+Ves asks {foe} if it has an office. {foe} says the sack is the office. She asks who's in charge of it. It says "Me," and puffs up, and a spoon falls out. Neither of them mention it.
+
+Ves tells {foe} that she saw it eyeing her spare hairpin. {foe} says that's not eyeing, that's appraising. She hands it over. It's honestly the happiest she's seen it.

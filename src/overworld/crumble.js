@@ -194,7 +194,7 @@ export class Crumble {
     // Tiles with somebody standing still on them (the one of you who isn't
     // being steered) hold, till they're off.
     const held = new Set();
-    if (scene.partner) held.add(this.key(...scene.partner.tilePosition()));
+    for (const other of scene.others) held.add(this.key(...other.tilePosition()));
 
     // The ones going, going.
     for (const tile of [...this.state.values()]) {

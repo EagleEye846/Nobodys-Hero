@@ -28,6 +28,10 @@ Something with wings has been circling them lately.
 The crystal's warm light washes over you.
 Your progress is saved.
 
+# Added after the save words when the crystal healed you.
+[save_healed]
+Your HP is fully restored.
+
 [save_failed]
 The crystal flickers, but nothing happens...
 (Your browser isn't letting the game save.)
@@ -53,9 +57,12 @@ The face has been worn smooth by a hundred years of waiting.
 # --- Lantern Hall puzzle: light the lanterns in the old order ---
 [hall_riddle]
 The lanterns of this hall were lit in the old way:
-First the west, where the sun goes to sleep.
-Then the east, where it wakes.
-And last of all, the heart.
+First the east, where the sun wakes.
+Then the heart.
+And last of all, the west, where it goes to sleep.
+
+Scrawled underneath, in a different hand:
+...or something, I don't know.
 
 [hall_lantern]
 You light the lantern. Its flame is small, but steady.

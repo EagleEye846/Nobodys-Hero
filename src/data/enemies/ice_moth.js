@@ -12,8 +12,8 @@ export const ICE_MOTH = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'vigil',
   sprite: { rows: ICE_MOTH_SPRITE, palette: ICE_MOTH_PALETTE },
-  maxHp: 170,
-  damage: 11,
+  maxHp: 185,
+  damage: 12,
 
   // A Chapter 2 enemy, and a flighty one: its moths are quick.
   difficulty: { density: 1.15, speed: 1.15 },
@@ -33,7 +33,7 @@ export const ICE_MOTH = {
     { name: 'Breathe on it', calm: 30 },
   ],
 
-  rewards: { exp: 85, coins: 50 },
+  rewards: { exp: 90, coins: 65 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'frost_nectar', chance: 0.4 }],

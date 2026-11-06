@@ -12,5 +12,5 @@ end), levelled within each instrument, and compressed to Ogg Vorbis.
 like `{ sample: 'violins', volume: 0.5 }` (see `playSample` in src/audio/music.js).
 
 Some sets (the recorder, ocarina, saxophone, the grand piano, glockenspiel, bowed vibraphone,
-wine glasses, chimes, claps, frame drum, tom and concert bass drum) come from the
+wine glasses, chimes, claps, frame drum, tom, concert bass drum and anvil) come from the
 **Versilian Community Sample Library** (https://github.com/sgossner/VCSL), also **CC0 1.0**.

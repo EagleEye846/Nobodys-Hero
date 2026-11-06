@@ -71,8 +71,8 @@ export const WARDEN_BOSS = {
   // Clearly the hardest fight so far: above the Usurper (1400 HP, damage
   // 19, density 1.3 to 1.45) and every Chapter 3 regular (540 to 760 HP,
   // damage 20 to 28), and everything lands, start to finish.
-  maxHp: 2400,
-  damage: 30,
+  maxHp: 2760,
+  damage: 34,
   difficulty: { density: 1.4, speed: 1.2 },
 
   // At the very end, below a fifth of its HP, it layers a lighter second
@@ -134,7 +134,7 @@ export const WARDEN_BOSS = {
   ],
 
   // Well above the Usurper's 600: most of a level, at the Gate.
-  rewards: { exp: 900, coins: 250 },
+  rewards: { exp: 3130, coins: 250 },
 
   // The city's offering to the Hero, left in its open hand.
   drops: [{ item: 'heros_offering', chance: 1 }],

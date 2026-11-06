@@ -136,8 +136,6 @@ export const SHOPS = {
       { armor: 'rimeweave_cloak', price: 190 },
     ],
   },
-  // Nan Cinder's stall at her kiln in the Hushwood: things baked in the
-  // ashes, candles for the Underroot, and a jerkin for Bramble.
   // Hollin Stores, the abandoned village shop: nobody minds it, so you pay
   // in the honesty tin. What Mags left that keeps, two old candles, and the
   // woodcutters' bow and bark armour nobody came back for.
@@ -162,10 +160,13 @@ export const SHOPS = {
       { armor: 'barkplate', price: 300 },
     ],
   },
+  // Nan Cinder's stall at her kiln in the Hushwood: things baked in the
+  // ashes, candles for the Underroot, and a jerkin for Bramble.
   cinder_stall: {
     title: "CINDER'S KILN",
     textFile: 'shops/cinder_stall.txt',
     music: 'hushwood',
+    keeper: { sprite: 'cinder', eyes: [] },
     look: {
       wall: '#2e2228', wallLine: '#22181e', shelf: '#4a3022', shelfTop: '#7a5038',
       counter: '#3a2a24', counterTop: '#5e4434', counterGrain: '#241812', lantern: '#ff8a3a',
@@ -339,6 +340,173 @@ export const SHOPS = {
       // For Ves: a canopy of owl feathers, and a shawl of them.
       { weapon: 'owlfeather_canopy', price: 230 },
       { armor: 'snowfeather_shawl', price: 250 },
+    ],
+  },
+  // Chapter 4: under the fields.
+  // Marigold's lemonade stand at the edge of Sunnyside: a cheerful hare who
+  // is quite sure the fields are perfectly safe. Picnic food, a hayfork and a
+  // sun hat.
+  marigold_stand: {
+    title: "MARIGOLD'S STAND",
+    textFile: 'shops/marigold_stand.txt',
+    music: 'sunnyside',
+    keeper: { sprite: 'bf_marigold', eyes: [] },
+    look: {
+      wall: '#c8a060', wallLine: '#b08848', shelf: '#e0c890', shelfTop: '#f6e6b0',
+      counter: '#d8a858', counterTop: '#f4d890', counterGrain: '#b08040', lantern: '#fff2a0',
+    },
+    stock: [
+      { item: 'lemonade', price: 70 },
+      { item: 'cucumber_sandwich', price: 105 },
+      { item: 'jam_tart', price: 160 },
+      { weapon: 'hayfork', price: 560 },
+      { armor: 'sun_hat', price: 520 },
+    ],
+  },
+  // Pebble's stall in Belowtown's market: a shrew who sells what grows and
+  // gets baked underground, a skill point, and a cloak the shrews weave.
+  belowtown_market: {
+    title: "PEBBLE'S STALL",
+    textFile: 'shops/belowtown_market.txt',
+    music: 'belowtown',
+    keeper: { sprite: 'bf_shrew_stallkeeper', eyes: [] },
+    look: {
+      wall: '#2a3a3a', wallLine: '#1f2e2e', shelf: '#3e5048', shelfTop: '#6a8a70',
+      counter: '#35403a', counterTop: '#5a7260', counterGrain: '#24302a', lantern: '#b8ff80',
+    },
+    stock: [
+      { skillPoint: true, price: 800, limit: 1 },
+      { item: 'mushroom_pasty', price: 95 },
+      { item: 'glowworm_honey', price: 140 },
+      { item: 'frog_toffee', price: 150 },
+      // Candles: the Deep is dark.
+      { item: 'hearth_candle', price: 60 },
+      { item: 'glow_candle', price: 95 },
+      { armor: 'mossweave_cloak', price: 640 },
+    ],
+  },
+  // Hobnail's forge at the heat vent in Belowtown: a grumpy old mole who
+  // grunts. His pick, his spare goggles, and he reforges the Fallen Star
+  // (src/data/fallenStar.js) once you bring him the shard from the Diggings.
+  hobnail_forge: {
+    title: "HOBNAIL'S FORGE",
+    textFile: 'shops/hobnail_forge.txt',
+    music: 'forge',   // "Hn.": the hammer is the rhythm (src/data/music/forgeTheme.js)
+    keeper: { sprite: 'bf_hobnail', eyes: [] },
+    look: {
+      wall: '#3a2a26', wallLine: '#2c201c', shelf: '#4a3022', shelfTop: '#7a5038',
+      counter: '#3a3440', counterTop: '#6a6478', counterGrain: '#2a2630', lantern: '#ff7a2a',
+    },
+    stock: [
+      { item: 'slag_bread', price: 120 },
+      { item: 'ash_candle', price: 75 },
+      { weapon: 'miners_pick', price: 720 },
+      { armor: 'forge_goggles', price: 600 },
+    ],
+  },
+  // Grig's pack, in the Hero's camp in the Deep: a cave cricket who walks the
+  // tunnels with her whole shop on her back and sets it down wherever the
+  // heroes stopped. The last stall before the root: a cake, a candle, a tonic,
+  // and a hood. (Chapter 4's gold: keep it near 1.3 to 1.6 times the shops' total.)
+  deep_grig: {
+    title: "GRIG'S PACK",
+    textFile: 'shops/deep_grig.txt',
+    music: 'shop',
+    keeper: { sprite: 'bf_grig', eyes: [] },
+    look: {
+      wall: '#1c2630', wallLine: '#141c24', shelf: '#2c3c48', shelfTop: '#4a6a78',
+      counter: '#34303a', counterTop: '#5c566a', counterGrain: '#26222c', lantern: '#ffd884',
+    },
+    stock: [
+      { item: 'cricket_cake', price: 150 },
+      { item: 'cave_dew', price: 175 },
+      { item: 'cricket_candle', price: 80 },
+      { armor: 'feeler_hood', price: 290 },
+    ],
+  },
+
+  // Chapter 5: the drowned coast.
+  // The Cockle Stall in Saltcombe's market: a crab who sells what the tide
+  // leaves, cooked. Bramble's snacks. (Chapter 5's gold: keep it near 1.4 times
+  // the shops' total, 13,445 G.)
+  cockle_stall: {
+    title: 'THE COCKLE STALL',
+    textFile: 'shops/cockle_stall.txt',
+    music: 'saltcombe',
+    keeper: { sprite: 'cf_crab_cockle', eyes: [] },
+    look: {
+      wall: '#2a4046', wallLine: '#1f323a', shelf: '#4a5a58', shelfTop: '#8aa8a0',
+      counter: '#4a3a30', counterTop: '#8a6a4a', counterGrain: '#32261e', lantern: '#ffc864',
+    },
+    stock: [
+      { item: 'sea_biscuit', price: 90 },
+      { item: 'kelp_crisps', price: 115 },
+      { item: 'winkle_skewer', price: 140 },
+      { item: 'cockle_chowder', price: 185 },
+      { item: 'brine_tonic', price: 190 },
+    ],
+  },
+  // Mrs. Wrasse's Chandlery in Saltcombe: rope, oilskin and everything else a
+  // boat or a person might need. The chapter's shop gear for the hero, Ves
+  // and Bramble, candles, and a skill point.
+  wrasse_chandlery: {
+    title: "WRASSE'S CHANDLERY",
+    textFile: 'shops/wrasse_chandlery.txt',
+    music: 'saltcombe',
+    keeper: { sprite: 'cf_wrasse', eyes: [] },
+    look: {
+      wall: '#3a3830', wallLine: '#2c2a24', shelf: '#5a4630', shelfTop: '#9a7a4e',
+      counter: '#4a3828', counterTop: '#7e6244', counterGrain: '#2e2218', lantern: '#ffc864',
+    },
+    stock: [
+      // Prices back to their first numbers (8,590 in all) since the balance
+      // pass cut the coast fights' gold: you reach the town with about 4.9k and
+      // leave the Soundings with about 9.2k, so this shop and the Cockle Stall
+      // can't both be bought out before the Isles. The maths is in
+      // chapter-5-builders-guide.md, "Chapter 5 balance pass".
+      { skillPoint: true, price: 900, limit: 1 },
+      { item: 'hearth_candle', price: 60 },
+      { item: 'ash_candle', price: 75 },
+      { item: 'glow_candle', price: 95 },
+      { weapon: 'driftwood_cutlass', price: 900 },
+      { weapon: 'brine_harpoon', price: 960 },
+      { armor: 'oilskin_coat', price: 840 },
+      { armor: 'sailcloth_vest', price: 880 },
+      // For Ves: a sailcloth canopy, a hat and a belt.
+      { weapon: 'sailcloth_umbrella', price: 760 },
+      { armor: 'gull_feather_hat', price: 640 },
+      { armor: 'rope_belt', price: 620 },
+      // For Bramble: his first full set.
+      { weapon: 'boat_axe', price: 700 },
+      { armor: 'small_oilskin', price: 600 },
+      { armor: 'sea_boots', price: 560 },
+    ],
+  },
+  // Orla Cobb's Forge in the Beacon Isles: a grey seal smith who works with
+  // the lamp oil of the biggest light. A small stock, and she reforges the
+  // Fallen Star (src/data/fallenStar.js) once you bring her the shard from the
+  // Wreck Yard.
+  orla_forge: {
+    title: "ORLA'S FORGE",
+    textFile: 'shops/orla_forge.txt',
+    music: 'forge',
+    keeper: { sprite: 'cf_orla', eyes: [] },
+    // The reforge ends out in the forge: the hero holds the sword up in the big light's shaft
+    // (src/data/scenes/islesStarHeld.js), the first time only.
+    forgeScene: 'isles_star_held',
+    look: {
+      wall: '#2a3038', wallLine: '#20262e', shelf: '#403a38', shelfTop: '#6a5e58',
+      counter: '#34383e', counterTop: '#5e6874', counterGrain: '#242a30', lantern: '#ffb84a',
+    },
+    stock: [
+      // The chapter's late gold sink (4,135 in all): most of the chapter's
+      // spare gold comes after the Soundings, so her prices are the highest.
+      { skillPoint: true, price: 1250, limit: 1 },
+      { item: 'tinder_bun', price: 160 },
+      { item: 'ash_candle', price: 75 },
+      // For Ves, and for Bramble.
+      { weapon: 'storm_umbrella', price: 1500 },
+      { weapon: 'ships_cleaver', price: 1150 },
     ],
   },
 };

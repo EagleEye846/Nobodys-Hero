@@ -71,7 +71,7 @@ try {
         }
       } else if (folder === 'shops') {
         if (dlg(entry, 272, 28) > 7) paged(where, dlg(entry, 272, 28));
-        if (section.startsWith('talk: ') && width(section.slice(6), 28) > 214) bad(where, 'TALK topic is too wide for the list', section);
+        if (section.startsWith('talk: ') && width(section.slice(6).split(' after ')[0], 28) > 214) bad(where, 'TALK topic is too wide for the list', section);
       } else if (folder === 'items') {
         // Descriptions shrink to fit their panel, down to 14px.
         // Weapons and armor show two or three stat lines above it, so have less room.
@@ -91,6 +91,9 @@ try {
         if (wrap(filled, 580, 20) > 1) bad(where, `spell description is ${wrap(filled, 580, 20)} lines; 1 fits`, entry);
       } else if (folder === 'cutscenes') {
         if (wrap(entry, 480, 32) > 5) bad(where, `intro page is ${wrap(entry, 480, 32)} lines; 5 fit`, entry);
+      } else if (path === 'journal.txt') {
+        // A monster's page: two lines under the details, shrinking to 15px (journalMenu.js).
+        if (wrap(entry.replace(/\n/g, ' '), 512, 15) > 2) bad(where, `journal text is ${wrap(entry.replace(/\n/g, ' '), 512, 15)} lines; 2 fit`, entry);
       } else if (path === 'battle.txt' && section.endsWith('_turn')) {
         // A party member's turn prompt sits in the battle panel without paging.
         if (dlg(entry, 596, 28) > 3) bad(where, `turn prompt is ${dlg(entry, 596, 28)} lines; 3 fit`, entry);

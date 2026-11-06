@@ -4,6 +4,7 @@ import { PLAYER_PALETTE, PLAYER_SPRITES, PLAYER_HANG_SPRITES } from '../data/art
 import { memberFrames, inParty } from '../characters/party.js';
 import { sfx } from '../audio/music.js';
 import { WORLD_STATE } from '../state/saveGame.js';
+import { brambleHere, drawDangle, BRAMBLE_DROP } from './trioFloat.js';
 
 // Wind geysers: columns of wind roaring up out of the ground, for puzzles
 // and for getting somewhere you can't climb to. A room lists them in
@@ -222,6 +223,9 @@ export class GeyserRide {
     this.done = false;
     this.ves = memberFrames(VES);
     this.hero = heroFrames();
+    // With Bramble along he hangs off her boot too (trioFloat.js), and he's
+    // hidden from the room while they ride (the scene checks `trio`).
+    this.trio = brambleHere();
     if (geyser) {
       this.start = from;
       this.x = geyser.x;
@@ -292,7 +296,8 @@ export class GeyserRide {
     }
     const height = this.height;
     const floating = height > 0.5;
-    const hands = holdingHands();
+    // (With Bramble along, it's always the hand-in-hand float, so the three of them match.)
+    const hands = holdingHands() || this.trio;
     const float = hands ? ['floatHandA', 'floatHandB'] : ['floatA', 'floatB'];
     const ves = floating ? this.ves[Math.floor(t / 0.25) % 2 ? float[1] : float[0]]
       : walking ? this.ves[Math.floor(t / 0.15) % 2 ? 'downStep' : 'downIdle'] : this.ves.downIdle;
@@ -305,6 +310,15 @@ export class GeyserRide {
       ctx.fillRect(Math.round(x) - 5 - camera.x, Math.round(feet) - 3 - camera.y, 10, 3);
     }
     ctx.drawImage(ves, vesLeft, vesTop);
+    // Bramble, dangling off her boot once she's high enough for his boots to
+    // clear the ground; standing by her left side until then.
+    if (this.trio) {
+      if (height >= BRAMBLE_DROP) drawDangle(ctx, vesLeft, vesTop + ves.height, t, Math.floor(t / 0.25) % 2);
+      else {
+        const kid = memberFrames('bramble').downIdle;
+        ctx.drawImage(kid, Math.round(x) - BESIDE + 2 - Math.floor(kid.width / 2) - camera.x, Math.round(feet) - kid.height - camera.y);
+      }
+    }
 
     // The hero. Where they'd hang (off her boot, swung about more than she
     // is, flapping faster as the wind picks up) and where they stand (just

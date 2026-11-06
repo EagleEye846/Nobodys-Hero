@@ -1,0 +1,21 @@
+# BT_SQ_MOLE: A mole miner sitting by the plaza with his hat in his hands, worried about the Sunstone like everyone else, but louder.
+
+[first]
+It's going out, you know. Everyone says it's fine. It's not fine. I've worked in the dark all my life. I know when a light's going.
+
+Is it you? Are you the Hero, come back? We need one.
+
+[repeat]
+I've been counting the cracks in it. Forty-one now. Used to be twelve.
+
+[first after the_kings_welcome]
+Down through the Diggings, is it? I know them. Don't take the left tunnel at the cart yard.
+
+[repeat after the_kings_welcome]
+Left tunnel's bad. Rotten timber. I'd go right. Everyone goes right. That's why the left's rotten.
+
+[first after the_light_goes_up]
+Forty-one cracks and not one's dark. Not one! I'll have to find something else to count. I've never not been counting.
+
+[repeat after the_light_goes_up]
+I'm going back down. To work. First time in months I've wanted to.

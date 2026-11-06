@@ -1,0 +1,475 @@
+# THE GLIMMERING, past the Landing (Chapter 4): the Shelf, the Prism Hall,
+# the Geode, the Echo Falls, the grotto where Tuck finds you, the Crystal
+# Bridge, the King's Road and the Vug. Things you can read and look at. The
+# Landing's own words are in glimmer.txt.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal rings softly, like a glass someone's run a finger round. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. It sparkles, anyway.
+
+[chest_empty]
+An empty chest, glittering with crystal dust.
+
+# --- The light: sun-crystals, prisms and eyes (all the rooms) ---
+
+[sun_crystal]
+A sun-crystal, so full of light it can't help leaking it. It throws a beam in a straight line and doesn't care what's in the way.
+
+[sun_crystal_asleep]
+A sun-crystal, dark and cold. Something has to wake it first.
+
+[sun_crystal_high]
+A sun-crystal on top of a high block. Its beam runs level with the block tops and flies right over anything lower.
+
+[sun_crystal_island]
+A sun-crystal on the island, dark and cold. Something on the near side has to wake it.
+
+[prism]
+A prism on a stand. Press Z beside it to turn it over: it bends a beam a quarter turn, this way or that.
+
+[prism_first]
+A prism of clear crystal on a stand. A beam that hits it turns a corner.
+
+Press Z beside it and it turns over, and the corner goes the other way.
+
+[prism_first_ves]
+{smile}It's a very polite mirror. It bends the light and asks for nothing in return.
+
+[prism_clamped]
+A prism set into the stone. It won't turn. It has been doing the same job for a very long time and sees no reason to change.
+
+[prism_high]
+A prism on top of a block. You have to climb up beside it to turn it.
+
+[crystal_eye]
+A crystal eye, dark and patient. When a beam finds it, something somewhere wakes up.
+
+[crystal_eye_ves]
+{bored}An eye that wants a beam. We all have our hobbies.
+
+[crystal_eye_wake]
+A crystal eye. When a beam finds it, it stays awake for good, and wakes something else.
+
+[crystal_eye_hold]
+A crystal eye. It only stays awake while a beam is on it. Take the light away and it goes back to sleep.
+
+# --- What the cave is made of (tiles) ---
+
+[cave_rock]
+The cavern roof, high overhead, with the odd crystal winking in it.
+
+[cave_wall]
+Rock, laced with veins of crystal that pulse very slowly, like the wall's breathing.
+
+[cave_vein]
+A fat vein of crystal running up the wall, glowing like a stained-glass window with someone behind it.
+
+[cave_moss_wall]
+Glowing moss, hanging from the rock in long strands, like a curtain the wall hasn't made up its mind about.
+
+[cave_pool]
+Glowing water, clear and teal, with tiny lights drifting in it. You can't tell how deep. You don't want to find out.
+
+[cave_cluster]
+A cluster of crystal in every colour, growing out of the rock like a bouquet nobody picked.
+
+[cave_column]
+A crystal column, floor to roof, thick as a tree. It has been growing since before there was anybody to look at it.
+
+[cave_spires]
+Tall crystal spires, all leaning very slightly the same way, like they're listening.
+
+[cave_spike]
+A single crystal spike. It looks like it has opinions about being stood on.
+
+[cave_mushrooms]
+Small glowing mushrooms in a ring. A ring that small is not for you.
+
+# --- THE SHELF ---
+
+[shelf_edge]
+Air. A very great deal of it, and then, far down, a town in a haze under a crystal the size of a mountain.
+
+[shelf_edge_ves]
+{surprised}Still there. {bored}Good. I'd hate to have fallen all that way for nothing.
+
+[shelf_sign]
+A sign hammered into a crack in the rock: MIND THE GAP.
+
+Underneath, in smaller, shakier paint: (the gap is ahead). And underneath that, smaller still: (sorry).
+
+[shelf_sign_ves]
+{bored}Which gap? {surprised}...Oh. That gap.
+
+[shelf_bloom]
+A great bloom of crystals in every colour, growing out of one spot. Someone has swept the floor round it.
+
+[shelf_crystal]
+A crystal, warm to the touch, one clear colour all the way through. It hums when you stand near it.
+
+[shelf_glowcap]
+A glowing mushroom, big enough to sit under. There's a small dent in the dirt beside it where someone has.
+
+[shelf_trio]
+Three small glowing mushrooms, a teal, a violet and a pink, standing in a row. The pink one is looking at you.
+
+[prism_loose]
+A prism on a stand, but the stand isn't fixed to anything. It slides if you lean on it, one step at a time, and Z turns it over like the others.
+
+[prism_loose_ves]
+{bored}A mirror on wheels. {smile}I like it. It's the first one that's wanted to meet me halfway.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and every loose thing in here goes back where it started.
+
+[rock_home]
+Everything you've moved slides back to where it started.
+
+[shelf_sign_slide]
+A sign, newer than the other: THE PRISM ON THE FLOOR IS LOOSE. LEAN ON IT AND IT MOVES. THE STUMP BY THE WALL PUTS IT BACK IF YOU PUSH IT SOMEWHERE SILLY.
+
+[shelf_sign_slide_ves]
+{bored}"Somewhere silly." {smile}They've met you, then.
+
+[shelf_purse]
+A purse left on the high block by someone who was clearly planning to come back for it. They didn't.
+
+# --- THE PRISM HALL ---
+
+[hall_water]
+A long pool of glowing water straight across the hall, like a moat for a castle that isn't there.
+
+[hall_sign]
+A sign: THE PRISM HALL. THE BEAMS GO IN STRAIGHT LINES. PLEASE DO NOT STAND IN THE LIGHT. IT STOPS.
+
+Underneath, in smaller paint: (the loose prism slides. a prism will catch two beams at once, if you stand it where they meet. the stump by the wall puts it back. sorry).
+
+[hall_sign_ves]
+{bored}"Where they meet." {smile}So the answer is in the sign, and I'm supposed to be impressed that it's small print.
+
+[hall_gate]
+A gate of crystal bars across the hall, set into a frame that has been waiting a very long time. The light stops here. It opens when the first eye, by the south wall, is awake.
+
+[hall_gate_ves]
+{bored}A gate that opens when an eye wakes up. {smile}Somebody had fun with this.
+
+[hall_gate_open]
+The crystal bars slide apart, quietly, as if they'd been waiting to be asked.
+
+[hall_giant]
+A giant glowing mushroom, the size of a hut, with a violet cap and moss round the foot. Under it, someone has left a very small chair.
+
+[hall_bloom]
+A great bloom of crystals, all growing from a single point. The glints go round it slowly, one colour after another.
+
+[hall_crystal]
+A crystal as tall as you, humming. Underneath the hum you can almost hear a tune.
+
+[hall_trio]
+Three glowing mushrooms in a row, the tall one in the middle looking as if it's in charge. It isn't.
+
+[hall_glowcap]
+A glowing mushroom. It gives off about as much light as a candle and takes itself about as seriously as a king.
+
+[hall_pool]
+A little pool of glowing water, no deeper than a plate, with lights going round in it in no hurry.
+
+[hall_purse]
+A purse in the corner of the hall on a high block. Whoever left it here thought you'd need to climb.
+
+# --- THE GEODE ---
+
+[geode_crack]
+A crack right across the floor of the geode, wide as a road, with a great deal of light at the bottom of it. Far down, a very faint town.
+
+[geode_crack_ves]
+{surprised}It goes all the way down. {smile}I'm going to stand a bit further from the edge.
+
+[geode_block]
+A block of cut amethyst, with crystal threads in the joints. The corners are worn round by a lot of people jumping up.
+
+[geode_sign]
+A sign: THE GEODE. MIND YOUR HEAD. ALSO YOUR FEET. ALSO THE POINTY ONES.
+
+Underneath, in a hand that's trying to be braver than it is: (you can climb up the blocks. press the jump button. a jump gets you up one step, never two. the flat stones roll if you lean on them, and a stone is a step too. the stump puts them back if you push one somewhere silly. there's another stone somewhere. I couldn't get at it. I think the hill is hiding it. sorry).
+
+[geode_chest]
+At the top of the stairs of blocks, in a nest of crystal, sits a chest. Inside it, folded like a wing, is an umbrella canopy of glass and silk.
+
+[geode_purse]
+A purse on a high block in the corner of the geode. Somebody climbed up here for the view, and left their money behind.
+
+[geode_bloom]
+A great bloom of crystals in every colour, with a seat worn into the rock in front of it. People have sat here and looked at it for a long time.
+
+[geode_crystal]
+A crystal, humming faintly. Inside it, a very small, very slow light goes round and round.
+
+[geode_trio]
+Three glowing mushrooms side by side, the smallest in the middle. It looks like a family portrait.
+
+[geode_glowcap]
+A glowing mushroom, big and blue, and as warm as a bowl of soup.
+
+[geode_sign_ves]
+{bored}"Press the jump button." {smile}I like whoever wrote that already. {proud}"The hill is hiding it." Then the hill is the thing to get on top of.
+
+[geode_rock]
+A flat-topped stone about as high as a stool, standing on the floor as if somebody set it there on purpose. It rolls if you lean on it, a tile at a time, and it's just the height to jump up onto.
+
+[geode_rock_ves]
+{smile}A step that moves. {proud}That's the best kind: you can put it exactly where you need it, and exactly where you don't.
+
+[geode_rock_yard]
+Another of the flat stones, shut in among the walls where nobody could get at it from the floor. Somebody put it away in here and left it. It would roll, if you leaned on it from the right side.
+
+[geode_rock_yard_ves]
+{surprised}There's one shut in up here, like a pet. {proud}I don't know who put it away and I'd like a word.
+
+# --- THE ECHO FALLS ---
+
+[falls_lake]
+Glowing water, deep and still, lit from underneath. The waterfall's voice goes out across it and comes back late.
+
+[falls_water]
+A waterfall of glowing water pouring from a lip in the cave roof, and the sound of it keeps coming back from the walls as if it couldn't make up its mind. Behind it the ledge runs on, dry.
+
+[falls_water_ves]
+{smile}HELLO. {bored}...hello. hello. {laughing}Fine. I won't do that again.
+
+[falls_sign]
+A sign: THE ECHO FALLS. PLEASE KEEP YOUR VOICE DOWN. (don't shout. it comes back.)
+
+Underneath, in different paint: (it comes back worse).
+
+[falls_sign_water]
+A sign: THE LAKE DRAINS. THE WATER WILL TAKE YOU, SO CHOOSE YOUR WATER.
+
+Underneath, in smaller paint: (the far bank is in plain sight from the second islet. the water does not go there. one of the islets you can see you can't walk to. follow the arrows, not your eyes. sorry).
+
+[falls_sign_water_ves]
+{bored}"Follow the arrows, not your eyes." {smile}I've had worse advice from people who charged more.
+
+[falls_current]
+Shallow glowing water, racing along a channel through the deep. It will carry you where it's going, and there's no arguing with it.
+
+[falls_current_ves]
+{bored}It's pointing the wrong way. {smile}I'm choosing to believe that's on purpose.
+
+[falls_vein_crystal]
+A small violet crystal, humming. It sits at the foot of the wall, and the wall above it is a slightly different colour, thinner and brighter, as if the rock there were only pretending.
+
+[falls_vein_crystal_ves]
+{surprised}That bit of wall is flickering. {bored}Walls don't flicker.
+
+[falls_vein]
+A vein of crystal in the wall, glowing a little brighter than the rest. It seems thin, here.
+
+[falls_purse]
+A purse in the dry nook behind the falls, with a note tucked in: YOURS IF YOU CAN READ THIS OVER THE NOISE.
+
+[falls_purse_high]
+A purse on a high block by the far bank. Whoever put it here was either very brave or very bored.
+
+[falls_bloom]
+A great bloom of crystals, mixed colours, growing out of a rock the water has worn smooth. The light off it goes shivering across the lake.
+
+[falls_crystal]
+A crystal, humming. If you hold your ear to it you can hear the falls, from inside.
+
+[falls_trio]
+Three small glowing mushrooms, huddled up out of the spray, the way people do under a porch.
+
+[falls_glowcap]
+A glowing mushroom, wet through, glowing anyway.
+
+[falls_pool]
+A small pool of glowing water, fed by a trickle off the rock. A tiny light goes round it, over and over, like a lap of honour.
+
+# --- THE QUIET GROTTO (Tuck) ---
+
+[tuck_crystal]
+A great violet crystal, taller than you, wider than it looks. A little way behind it the floor is churned, as if someone's been shuffling their feet.
+
+[tuck_crystal_ves]
+{bored}That crystal is breathing.
+
+[tuck_bloom]
+A bloom of crystals in every colour, sprouting from one point. There are small footprints in the dust in front of it, and then a lot of smaller ones going the other way, quickly.
+
+[tuck_crystal_other]
+A crystal, humming. Warm. Perfectly innocent. Nobody's behind this one.
+
+[tuck_glowcap]
+A glowing mushroom, which looks after itself.
+
+[tuck_trio]
+Three little glowing mushrooms in a row, with a small teal one on the end looking nervous.
+
+[tuck_pool]
+A pool of glowing water. There's a smudge of tabard-red on the rim, as if someone's had a drink and run off.
+
+[tuck_sign]
+A sign, in a very neat, very small hand: THIS WAY TO BELOWTOWN. (not the crystal.)
+
+[tuck_sign_ves]
+{smile}That's an oddly specific thing to put on a sign.
+
+[tuck_purse]
+A purse, left under the crystal at the back of the grotto, with a note: FOR WHOEVER COMES. (sorry for the state of the grotto.)
+
+# --- THE CRYSTAL BRIDGE ---
+
+[bridge_gap]
+A wide gap of nothing, with a lot of light at the bottom of it. The bridge across is a bridge of light, and it only stands while the light does.
+
+[bridge_gap_ves]
+{glee}Light, across a gap, holding up two people. {bored}I'll walk quickly.
+
+[bridge_sign]
+A sign: THE CRYSTAL BRIDGE. IT ONLY STANDS WHILE THE LIGHT DOES. IF IT GOES OUT, IT'S YOUR FAULT.
+
+Underneath, in tiny paint: (the mirror by the wall has two roads: the low one goes out to the island, the high one goes all the way across. the high road has a gate in it. the gate wants weight on the plate. you can't be in two places. one of you can be somewhere else. sorry).
+
+[bridge_sign_ves]
+{bored}"You can't be in two places. One of you can be somewhere else." {smile}I'm going to assume that's me.
+
+[prism_road]
+A prism on a stand, the only one on this ledge that turns. Set one way it sends the light down and out to the island. Set the other it sends it up and away across the top of the cave.
+
+[prism_road_ves]
+{smile}Two roads. {bored}And one mirror. That's always how it goes.
+
+[bridge_gate]
+A gate of crystal bars across the top of the ledge, with a groove in the stone beside it where a plate should be. It is shut. The light, on the high road, stops here.
+
+[bridge_gate_ves]
+{bored}A gate. {smile}A gate always wants something from the other side of the room.
+
+[bridge_gate_open]
+Somewhere, the crystal bars slide apart without a sound. The way is clear.
+
+[bridge_plate]
+A plate set into the floor of the island. It sinks a little under your weight, and across the gap, a very long way off, something in the rock goes click.
+
+[bridge_plate_ves]
+{smile}A plate. Somebody has to stand on it. {bored}I'll get the mirror.
+
+[crystal_eye_wake_ves]
+{bored}That one stays lit. {smile}I like a reliable eye.
+
+[bridge_island_purse]
+A purse on the little island, in the middle of everything. Somebody got all the way out here and stopped to put their money down.
+
+[bridge_bloom]
+A great bloom of crystals, mixed colours. Some of the shards lean toward the bridge as if they're watching it.
+
+[bridge_crystal]
+A crystal, humming. It's warm, and every so often it gives a small, hopeful flash.
+
+[bridge_trio]
+Three small glowing mushrooms in a row, as far from the edge as they can get.
+
+[bridge_glowcap]
+A glowing mushroom, big and calm, and wholly unbothered by the drop.
+
+[bridge_purse_high]
+A purse at the top of a flight of blocks on the far ledge. The only thing between it and you is the climb.
+
+# --- THE KING'S ROAD ---
+
+[road_edge]
+The edge of the road, and then nothing, and then the whole kingdom a long way down.
+
+[road_edge_ves]
+{surprised}Look at it. {glee}All of it, all at once.
+
+[road_sign]
+A sign, newly painted: BELOWTOWN. DOWN. TWENTY MINUTES IF YOU DON'T DAWDLE. FORTY IF YOU LOOK AT THE VIEW.
+
+Underneath, in smaller letters: (you'll look at the view).
+
+[road_signpost]
+A signpost: WELCOME TO BELOWTOWN. PLEASE WIPE YOUR FEET. A small paw has added, with a stub of chalk, underneath: (THEY WON'T).
+
+[road_lamp]
+A glow-worm lamp on a pole. The glow-worm inside is very happy to be a lamp, and does not want to talk about it.
+
+[road_lamp_ves]
+{smile}He looks proud. {bored}Don't tell him it's a job.
+
+[road_bloom]
+A great bloom of crystals, mixed colours, where the road bends. Someone has hung a little ribbon on it, for luck.
+
+[road_crystal]
+A crystal, humming faintly. The light it throws goes out over the edge and falls for a long time.
+
+[road_trio]
+Three small glowing mushrooms along the wall, in a row, like they're queueing for the view.
+
+[road_glowcap]
+A glowing mushroom, as high as your knee, with a worn patch on the cap where people have stopped for a rest.
+
+[road_purse]
+A purse on a high block at the end of the road, with a note on it: YOU'RE ALMOST THERE. HAVE SOME MONEY. (sorry about the climb.)
+
+# --- THE SINGING CRYSTALS (a secret on the road) ---
+
+[singing_crystal]
+A tall crystal in a row of four, standing in steps, each one a little taller than the last. When you lay a hand on it, it rings: one clear note, and then a long hum that dies away on its own.
+
+[singing_crystal_ves]
+{bored}They're not bells. {smile}They just think they are.
+
+[stave_stone]
+A flat stone worn smooth by weather, and cut into it, so faintly you'd miss it in a worse light, five lines and four dots. Underneath, in letters hardly there: THE OLD SONG OPENS THINGS.
+
+The dots go low, up, up higher, and back down a step. You've heard that before. You've heard it all the way down.
+
+[stave_stone_ves]
+{surprised}Huh. {smile}That's the tune. The one in everything.
+
+[sealed_geode]
+A grey, plain geode tucked into the corner of the wall, with a hairline crack down it. It hums very faintly. It doesn't seem to be in a hurry.
+
+[chime_answered]
+The last note hangs, and then the whole cavern sings the tune back to you, fuller than you gave it, from the road and the rock and a long way down. Over in the corner, something splits with a sound like a glass being set down.
+
+[chime_answered_ves]
+{surprised}It answered. {proud}Good manners, for a rock.
+
+[singing_chest]
+A chest, set into the heart of the geode, and packed round with sparkle. Inside, a sliver of crystal that hums when you pick it up, and keeps humming.
+
+# --- THE VUG (the secret) ---
+
+[vug_wall]
+Rock with crystal studded in it like raisins in a cake. Every one of them is lit from inside.
+
+[vug_chest]
+The chest at the heart of the vug is packed round with crystal that has grown over its lid, and the lid has opened anyway. Inside: a sword, pale and clear as ice, with a faint hum in it. It looks as if it were made from the same stuff as the wall.
+
+[vug_bloom]
+A great bloom of crystals, so thick you can't see where one stops and the next begins. It makes a sound like very small bells.
+
+[vug_crystal]
+A crystal, humming. This is the quietest, brightest place in the whole cave, and it knows it.
+
+[vug_pool]
+A pool of glowing water in a hollow of the rock, perfectly still. There's a tiny star in the bottom of it.
+
+[vug_glowcap]
+A small glowing mushroom, sitting in the middle of the treasure like it owns the place.
+
+[vug_purse]
+A purse set right at the back of the vug, with a pebble on it to keep it down. Under the pebble is a note: WELL DONE. (you found it.)

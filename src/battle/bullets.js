@@ -26,10 +26,12 @@ export const PATTERN_TOOLS = { Shot, Line, Pillar, defineBulletArt, rand, pick, 
 // often (and slows moving emitters); speed < 1 makes each bullet fly slower.
 // `flame` is a thing in the box the bullets are after this turn ({ x, y };
 // the Usurper's lantern), handed to the pattern as `tools.flame`.
-export function createPattern(name, box, { density = 1, speed = 1, flame = null } = {}) {
+// `sea` is the water a boss's stage puts in the box this turn (Corrie's tide:
+// { level, soothed, ... }, see corrieStage.js), handed over as `tools.sea`.
+export function createPattern(name, box, { density = 1, speed = 1, flame = null, sea = null } = {}) {
   const make = ENEMY_ATTACKS[name] ?? PATTERNS[name] ?? CUSTOM_PATTERNS[name];
   if (!make) throw new Error(`Unknown attack pattern '${name}'`);
-  const tools = flame ? { ...PATTERN_TOOLS, flame } : PATTERN_TOOLS;
+  const tools = flame || sea ? { ...PATTERN_TOOLS, ...(flame ? { flame } : {}), ...(sea ? { sea } : {}) } : PATTERN_TOOLS;
   const pattern = { mode: 'normal', ...make(box, density, tools) };
   const spawn = pattern.update;
   pattern.update = (dt, bullets, soul) => {

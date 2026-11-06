@@ -26,3 +26,13 @@ And when she tells you she doesn't need anyone looking after her, that's when sh
 
 [repeat after ves_on_her_feet]
 You can rest in that cot whenever you like. It's paid for. By whom? By nobody. That's how it's paid for.
+
+# --- SIDE QUEST: Biscuit the cat ---
+
+[cat_hint]
+There isn't a cat.
+
+She says it to the room in general, and a little too loudly.
+
+[cat_after]
+There isn't a cat. ...There WAS a cat. She's gone to a better class of lap. Don't tell the cushion.

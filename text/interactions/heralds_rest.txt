@@ -463,6 +463,14 @@ HERO! Here is the end of us and the start of the rest. The stairs go on north to
 [lookout_chest]
 A chest at the edge of the platform, roped to a post so the wind can't take it. Fudge inside, and a note: "for the last bit".
 
+[lookout_cairn]
+A cairn at the edge of the platform, built much tidier than the rest. Someone has stacked a great many stones on one particular thing.
+
+You move the top three. Brass. A trumpet, dented, frozen into the bottom of the pile, with a label tied to it in a hopeful hand: "B. (HIS.)"
+
+[lookout_cairn_bare]
+A cairn with a hole in the middle where a trumpet used to be. Someone has politely put the top stones back.
+
 [lookout_stair]
 The stairs go on north, up into the cloud, towards the top of Mount Vigil.
 

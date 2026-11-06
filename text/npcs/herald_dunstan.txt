@@ -16,3 +16,18 @@ Once, at dawn. Never after dark. You've heard about the goat.
 Some mornings, when the wind is right, the mountain rings back. Low, from inside. The Gallery, they say. I say it's keeping me company.
 
 When the Hero comes, I'm to ring it three times. I've never rung it three times. I've practised in my head. One, two, three. It'll be loud.
+
+# --- SIDE QUEST: Marta's mittens ---
+
+[mittens_in]
+Dunstan takes the mittens in both paws as if they might ring.
+
+...They're warm. They're WARM. Marta. Oh, Marta. Forty years I've told that woman I'm fine.
+
+He puts them on. He takes hold of the bell rope. His shoulders come down an inch.
+
+Do you know, I always thought the rope was cold. I thought that was the rope.
+
+I'll write to her. I'm better at writing than at saying. He scribbles on a scrap, tongue between his teeth, and it takes him a long while. He folds it small and hands it over.
+
+Take that back down, would you? And tell her... no. It's all in the note.

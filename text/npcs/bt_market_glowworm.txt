@@ -1,0 +1,21 @@
+# BT_MARKET_GLOWWORM: A glow-worm who lights the market's far end, gloomy by nature and cheerful on this one subject.
+
+[first]
+Lamps, lamps, lamps. Always lamps. Do you know it's not easy to be a lamp when the big lamp's gone dim?
+
+I keep thinking: it's me. It isn't. It's the Sunstone. But it feels like me.
+
+[repeat]
+I'm all right. I'm just a little bit lit.
+
+[first after the_kings_welcome]
+It's not you, you know. Whatever he said. The Sunstone's just tired. Like me.
+
+[repeat after the_kings_welcome]
+Do go down. Tell it we said thank you. For all the years.
+
+[first after the_light_goes_up]
+Oh no. I'm glowing. I'm not even trying. I don't know what to do with my face.
+
+[repeat after the_light_goes_up]
+I keep waiting to feel tired. It hasn't happened. It's very unsettling.

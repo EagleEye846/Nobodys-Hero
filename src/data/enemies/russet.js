@@ -13,8 +13,8 @@ export const RUSSET = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: RUSSET_SPRITE, palette: RUSSET_PALETTE },
-  maxHp: 280,
-  damage: 16,
+  maxHp: 320,
+  damage: 18,
 
   // A Chapter 3 enemy, and a quick one.
   difficulty: { density: 1.15, speed: 1.25 },
@@ -35,7 +35,7 @@ export const RUSSET = {
     { name: 'Play dead', calm: 35 },
   ],
 
-  rewards: { exp: 110, coins: 70 },
+  rewards: { exp: 235, coins: 35 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'stolen_pie', chance: 0.4 }],

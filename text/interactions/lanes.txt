@@ -1,0 +1,365 @@
+# THE SUNKEN LANES (Chapter 5): the half-drowned roads and hamlet past Saltcombe. The fork, the
+# causeway, the sluices, the drowned hamlet and its half a church, the mill, the dry pocket under
+# the water, the way down, and the attic in the hamlet. Hedges with their feet in the flood, and
+# every road going on under the water as if nothing had happened.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums on the last dry stone of the Lanes, small and steady, like a lamp in a window.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[chest_empty]
+An empty chest, green at the hinges.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and the water and everything you've moved go back where they started.
+
+[lanes_rock]
+Old stone, mossy and running with rain.
+
+[lanes_hedge]
+A hedge so tangled with weed that the flood has made it its own. Something small rustles in it, and thinks better of it.
+
+[lanes_stone]
+A stone with barnacles on it, a long way from any sea it would have chosen.
+
+# --- THE FORK ------------------------------------------------------------------
+
+[fork_signpost]
+A signpost, leaning. Three arms. SALTCOMBE, back the way you came. THE CHURCH, to the north-east. The third arm points down the lane into the water, and says MERROW. The water has reached the R.
+
+[fork_signpost_ves]
+{bored}Merrow's that way. Under the lane. Under all the lanes.
+
+[fork_lamp]
+A lamp on an iron post, hissing in the rain. The glass is cracked, and the flame doesn't seem to care.
+
+[fork_cottage]
+A cottage stands in the flood up to its windowsills. The curtains are still drawn. A cat sits on the roof with the patience of something that has decided this is fine.
+
+[fork_cottage_bramble]
+{worried}Do they still live in it? ...Do they live upstairs?
+
+[fork_sign]
+A board on a post: THE SUNKEN LANES. KEEP TO THE ROAD. THE ROAD IS UNDER HERE SOMEWHERE.
+
+[fork_buoy]
+A buoy, washed up a long way from the sea, in a field.
+
+[fork_barrel]
+A barrel, bobbing a little whenever the wind hits it, even on dry land. It has spent too long in the water to stop.
+
+[fork_weed]
+A heap of weed, glossy and green, and moving very slightly in a way that's probably the wind.
+
+[fork_pouch]
+A purse in the long grass by the hedge, on the dry side, where somebody left it to keep.
+
+[fork_flood]
+Brown-green water, flat and quiet over the fields. Hedge tops stick out of it in lines, the way the lanes went.
+
+[fork_flood_bramble]
+{scared}It's in the FIELD. It's not meant to be in the field.
+
+[fork_shallows]
+Shallow water over cobbles. Your boots go in to the ankle and the cold comes in after them.
+
+[fork_gatepost]
+A gatepost, standing up out of the water with nothing to hold.
+
+# --- THE CAUSEWAY --------------------------------------------------------------
+
+[causeway_dial]
+A post with a round face, crusted with rust. A blue arc for the water in, a sandy arc for the water out, and a hand that goes round whether anybody's watching or not.
+
+[causeway_crate]
+A crate, sealed with tar. When the water's in it bobs about. When the water's out it sits in the mud like it's always lived there. Two deep drains cut the fields, and they never empty.
+
+[causeway_crate_ves]
+{thoughtful}A drain. A crate. You know, I think the people who lived here just didn't build bridges.
+
+[causeway_signpost]
+A signpost on the island, its arms gone. Someone has chalked an arrow on it pointing east, and under the arrow, SOON.
+
+[causeway_pouch]
+A purse wedged in the signpost's crack, above the waterline.
+
+[causeway_sign]
+A board: THE CAUSEWAY. AT LOW WATER, CROSS. AT HIGH WATER, DON'T. A line under DON'T.
+
+[causeway_sign_bramble]
+{worried}Which one is it now? ...How do you know?
+
+[causeway_water]
+The fields are under water. Somewhere down there is a road, and a hedge, and a farm gate, all keeping very still.
+
+[causeway_puddle]
+A puddle in the mud. Tiny crabs scatter as you look at it, as if you'd said something.
+
+# --- THE SLUICES ---------------------------------------------------------------
+
+[sluice_drain]
+A sluice wheel with DRAIN painted on its rim, worn down to DR N. It turns one way only.
+
+[sluice_drain_turn]
+You heave the wheel round. Somewhere under the quay a paddle groans, and the basin starts to drain out through it.
+
+[sluice_drain_already]
+The water's already down. The wheel won't go any further that way.
+
+[sluice_busy]
+The wheel won't budge. The water's still moving.
+
+[sluice_fill]
+A sluice wheel with FILL painted on its rim. It turns one way only.
+
+[sluice_fill_turn]
+You heave the wheel round. Out past the weir the pool lifts, and comes over into the basin, and keeps coming.
+
+[sluice_fill_already]
+The water's already up. The wheel won't go any further that way.
+
+[sluice_sign]
+A board: SLUICES. DRAIN TO WALK. FILL TO FORD. DO NOT DO BOTH AT ONCE, YOU KNOW WHO YOU ARE.
+
+[sluice_sign_ves]
+{proud}That's a direct accusation, and I respect it.
+
+[sluice_house]
+The sluice house: a stone hut on the quay with a paddle gate under it. The door's rusted shut, but you can hear the water talking to itself inside.
+
+[sluice_pouch]
+A purse on a kitchen shelf that is now in the middle of a field. The rest of the kitchen's gone. The shelf held on.
+
+[sluice_buoys]
+A pile of buoys, painted with house numbers. A whole lane's worth.
+
+[sluice_rope]
+A coil of rope on the quay, tarred, and coiled the way someone who was proud of it would coil it.
+
+[sluice_water]
+The basin. Its water is the colour of strong tea, and about as warm as the sea.
+
+[sluice_ford]
+The weir, under the water. The stones of its crest are flat enough to wade along, if the water is up and you go slowly.
+
+[sluice_ford_bramble]
+{scared}It's touching my KNEES.
+
+[sluice_teeth]
+The weir's crest, out of the water: broken stones like a row of teeth. Nobody is getting over those.
+
+[sluice_post]
+A post at the corner of the quay, with a ring in it for a boat that isn't coming back.
+
+# --- THE DROWNED HAMLET --------------------------------------------------------
+
+[hamlet_sign]
+A board on the green: SAINT ELMS, AND THE LANES. PLEASE CLOSE ALL GATES. The gates are under the water.
+
+[hamlet_church_wall]
+What's left of the church's north wall: good grey stone, a pointed window with its tracery still in it, and above the window, nothing. The roof went the way of the east end.
+
+[hamlet_church_window]
+A pointed window, and in it a little of the old glass: a blue piece, a green piece, and the corner of a red one. The rain runs down the glass on both sides.
+
+[hamlet_church_window_ves]
+{thoughtful}Someone fitted every piece of that by hand. ...And the sea took the other half anyway.
+
+[hamlet_pillar]
+A church pillar, standing. The one beside it isn't. The water is up to the second step of the altar, and the altar's under it.
+
+[hamlet_font]
+The font, a stone bowl on a stem, full to the brim with rain. It's the only water in the hamlet that's where it's meant to be.
+
+[hamlet_rubble]
+The east end of the church, tumbled into the flood, block on block.
+
+[hamlet_flood]
+The lanes go on under the water between the hedge tops. A gate, a pump, a bench. The bench has a little brass plate on it.
+
+[hamlet_cottage]
+A cottage, half under the water. The upstairs curtains are drawn, as if whoever lives there is having a lie-in until it all goes down.
+
+[hamlet_cottage_bramble]
+{worried}Should we knock? ...Not me. Somebody.
+
+[hamlet_signpost]
+A signpost out in the shallows, its arms just clear of the water: SALTCOMBE. MERROW. SAINT ELMS. All three point a little down.
+
+[hamlet_pots]
+Lobster pots, stacked against the terrace wall where the tide brought them.
+
+[hamlet_pouch]
+A purse on the altar step, in an inch of water. Collection, perhaps.
+
+[hamlet_gable]
+A cottage built into the bank, the old way, so its attic window opens straight onto the top of it.
+
+[hamlet_terrace_sign]
+A board at the foot of the wall: CHURCHYARD. THE STEPS ARE GONE. THERE IS A RING. PLEASE USE THE RING.
+
+# --- THE MILL ------------------------------------------------------------------
+
+[mill_sign]
+A board: SAINT ELMS MILL. TAIL GATE ON THE THREE WHEELS. ALL THREE AT ONCE, OR NOT AT ALL.
+
+[mill_gate_sign]
+A board by the gate: HOLD THEM ALL, THEN GO. DO NOT LET GO WHILE YOU ARE UNDER IT.
+
+[mill_gate]
+The tail gate, a slab of oak in an iron frame. It hangs from three paddles, and the paddles hang from three wheels.
+
+[mill_gate_open]
+All three wheels hold, and the tail gate rises on its chains, dripping.
+
+[mill_wheel_hero]
+A big iron wheel beside the gate, stiff. Stand at it and lean, and it will hold.
+
+[mill_plate_hero]
+The step in front of the gate wheel, worn hollow by a hundred years of millers leaning.
+
+[mill_wheel_bramble]
+A little wheel down in the sluice pit, set low for a boy to turn. There's a boy-sized dip in the step in front of it.
+
+[mill_plate_bramble]
+The step in front of the pit wheel, worn down by small boots.
+
+[mill_wheel_ves]
+A wheel beside the old mill wheel, rusted stiff. Its spokes want something hooked through them and pulled, like the crook of an umbrella.
+
+[mill_wheel_ves_ves]
+{proud}Finally. A job that calls for an umbrella.
+
+[mill_plate_ves]
+The step in front of the stiff wheel, slick with spray from the mill wheel.
+
+[mill_hole]
+A hole low in the wall of the sluice pit, where the old drain went through. Too small for you.
+
+[mill_hole_bramble]
+{proud}I fit. I always fit. It's my best thing.
+
+[mill_chest]
+A chest at the bottom of the sluice pit, dry, under a ledge. Inside, wrapped in a flour sack: a WINKLE SKEWER.
+
+[mill_millwheel]
+The old mill wheel, half in the race, going round and round with nothing to grind. It doesn't seem to mind.
+
+[mill_stump]
+An old stone post by the door. Press on it, and all three of you are back here together.
+
+[mill_sacks]
+Barrels of flour that the flood got to first. They've set like stone.
+
+[mill_pouch]
+A purse on the far side of the gate, on a nail, where the miller kept the takings.
+
+[mill_race]
+The mill race, deep and fast, the colour of a puddle in a coal yard.
+
+[mill_race_bramble]
+{scared}Nobody fall in. That's a rule now. I just made it.
+
+[mill_house]
+The mill house: stone below, slate above, its door shut tight against the wet.
+
+[mill_window]
+A window. Inside, the millstones stand in a foot of water.
+
+[mill_door]
+The mill house door, swollen in its frame. It hasn't opened in a long time.
+
+[mill_bridge]
+A footbridge over the race, a little springy in the middle.
+
+# --- THE DRY POCKET ------------------------------------------------------------
+
+[bubble_lantern]
+A lantern on an iron post, on the old lane, under the water. It's lit. The glass is clean and dry, and the flame stands straight up, the way flames do in a room with the door shut.
+
+[bubble_rim]
+The edge of the pocket, where the water stands up like a wall of glass. You could put your hand in it. You don't.
+
+[bubble_water]
+The flood, seen from inside. Bubbles go up through it in threads, toward a roof of rain you can't see.
+
+[bubble_water_bramble]
+{scared}We're UNDER it. We are under the water. I want that written down.
+
+[bubble_fish]
+A fish, nosing at the outside of the pocket. It looks at the lantern for a while, then goes off as if it's seen it before.
+
+[bubble_culvert]
+The culvert's stone, slick and cold. The whole weight of the flood is on the other side of it.
+
+[bubble_deep]
+Deep water, dark green, going down further than the lane did.
+
+# --- THE WAY DOWN --------------------------------------------------------------
+
+[down_signpost]
+A signpost at the crossroads. One arm: MERROW, pointing down the stair. The other arm points along the cliff and has been painted over so many times you can't read it.
+
+[down_wall]
+A wall of the old chapel at the crossroads, with a pointed window looking out over the water.
+
+[down_pouch]
+A purse tucked behind a stone on the cliff lane, out of the rain.
+
+[down_stair]
+A broad stone stair, going down. Every step is a little wetter than the last, and then they're under the water, and they keep going.
+
+[down_stair_rope]
+A rope across the head of the stair, between two posts.
+
+[down_stair_sign]
+A board on the rope: MERROW. CLOSED. (The way down to Merrow isn't open yet.)
+
+[down_stair_sign_ves]
+{bored}Closed. A whole town. That's commitment.
+
+[down_east_sign]
+A board by the cliff lane: THE SOUNDINGS. ALONG THE CLIFF, AND IN. MIND THE SEA, IT COMES INDOORS.
+
+[down_flood]
+The flood, wide and still, the rain hissing on it. Far out, a church spire stands up out of the water like a finger saying "shh".
+
+# --- THE ATTIC (secret) --------------------------------------------------------
+
+[attic_chest]
+A sea chest under the eaves, painted with a blue bell. Inside, folded with lavender that has long since given up: the BELLBUOY MANTLE.
+
+[attic_pouch]
+A teapot on the floor with its lid on. Inside it, a purse. The oldest bank there is.
+
+[attic_trunks]
+Barrels and boxes, carried up the stairs one at a time, the last ones in a hurry.
+
+[attic_rope]
+A coil of rope by the window. Somebody climbed out this way too.
+
+[attic_buoy]
+A red buoy with a child's name painted on it in careful letters. It has been kept somewhere dry on purpose.
+
+[attic_lamp]
+A lamp on an iron crook, put out a long time ago. Dry, and ready, for whenever.
+
+[attic_beams]
+The roof beams, black with age. Rain on the slates just over your head.
+
+[attic_wall]
+Board walls, papered once, with a pattern of little ships.
+
+[attic_stairwell]
+The top of the stairs, and three steps down, black water. The rest of the house is down there.
+
+[attic_stairwell_bramble]
+{worried}I'm not looking at it. You can't make me look at it.

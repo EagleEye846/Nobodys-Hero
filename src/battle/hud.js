@@ -132,14 +132,42 @@ export function drawSpGauge(ctx, sp, time) {
 
 // Name, HP and MERCY under the enemy, centred on cx. (MERCY is stored as `calm`.)
 // One that can't be spared at all (`showMercy` false) has no MERCY bar.
-export function drawEnemyStatus(ctx, name, hp, maxHp, calm, cx, top, time, showMercy = true) {
+// `swap` ({ from, t }) draws the name mid-anagram: the letters of `from`
+// sliding into `name`, the two that trade places hopping past each other.
+export function drawEnemyStatus(ctx, name, hp, maxHp, calm, cx, top, time, showMercy = true, swap = null) {
   const w = 100;
   const x = Math.round(cx - w / 2);
-  drawText(ctx, name, cx, top, { size: 24, align: 'center', outline: COLORS.outline });
+  if (swap) drawSwappingName(ctx, swap.from, name, swap.t, cx, top, swap.jitter);
+  else drawText(ctx, name, cx, top, { size: 24, align: 'center', outline: COLORS.outline });
   bar(ctx, x, top + 26, w, 8, hp / maxHp, COLORS.enemyHp, COLORS.hpBack);
   if (!showMercy) return;
   bar(ctx, x, top + 40, w, 8, calm / 100, calm >= 100 && blink(time) ? COLORS.text : COLORS.calm, COLORS.calmBack);
   drawText(ctx, `MERCY ${calm}%`, cx, top + 52, { size: 20, color: COLORS.calm, align: 'center', outline: COLORS.outline });
+}
+
+// `jitter` shakes every letter as it goes (Peptup's name rattling back).
+function drawSwappingName(ctx, from, to, t, cx, top, jitter = 0) {
+  const size = 24;
+  const lefts = (word) => {
+    const start = cx - textWidth(ctx, word, size) / 2;
+    return [...word].map((_, i) => start + textWidth(ctx, word.slice(0, i), size));
+  };
+  const a = lefts(from);
+  const b = lefts(to);
+  const moved = [...from].map((letter, i) => letter !== to[i]);
+  const [first, second] = moved.flatMap((m, i) => (m ? [i] : []));
+  const ease = t * t * (3 - 2 * t);
+  [...from].forEach((letter, i) => {
+    const end = i === first ? second : i === second ? first : i;
+    const lx = a[i] + (b[end] - a[i]) * ease;
+    // One hops over, the other ducks under.
+    const lift = i === first ? -14 : i === second ? 10 : 0;
+    const ly = top + lift * Math.sin(Math.PI * t);
+    const jx = jitter ? Math.round((Math.random() - 0.5) * 5 * jitter) : 0;
+    const jy = jitter ? Math.round((Math.random() - 0.5) * 5 * jitter) : 0;
+    const color = moved[i] || jitter ? (jitter && Math.random() < 0.3 ? COLORS.danger : COLORS.yellow) : COLORS.text;
+    drawText(ctx, letter, lx + jx, ly + jy, { size, color, outline: COLORS.outline });
+  });
 }
 
 // The speaking enemy's taunt in a white speech bubble, in a smaller, smoother
@@ -268,10 +296,23 @@ export function drawPartyCard(ctx, member, active) {
 // The command buttons. The selected one swaps its icon for the soul, like Deltarune.
 // `glowing` ones blink to draw your eye; `disabled` ones (like RUN in a boss
 // fight) stay dim.
-export function drawCommands(ctx, commands, selected, active, glowing, time, disabled = []) {
+// `sway` (optional) moves and turns each button: [{ dx, dy, turn, label }]
+// by index, and `label` shows instead of the button's own for a moment (the
+// buttons on strings in Peptup's last act; see puppetStage.js).
+export function drawCommands(ctx, commands, selected, active, glowing, time, disabled = [], sway = null) {
   commands.forEach((command, i) => {
-    const x = BUTTON.x + i * (BUTTON.w + BUTTON.gap);
-    const y = BUTTON.y;
+    const bx = BUTTON.x + i * (BUTTON.w + BUTTON.gap);
+    const by = BUTTON.y;
+    const moved = sway?.[i];
+    let x = bx;
+    let y = by;
+    if (moved) {
+      ctx.save();
+      ctx.translate(bx + BUTTON.w / 2 + (moved.dx ?? 0), by + (moved.dy ?? 0));
+      ctx.rotate(moved.turn ?? 0);
+      x = -BUTTON.w / 2;
+      y = 0;
+    }
     const isSelected = active && i === selected;
     let color = active && !disabled.includes(command.label) ? COLORS.orange : COLORS.orangeDim;
     if (glowing.includes(command.label) && blink(time)) color = COLORS.yellow;
@@ -286,8 +327,15 @@ export function drawCommands(ctx, commands, selected, active, glowing, time, dis
     } else {
       ctx.drawImage(icon(command.icon, color), x + (BUTTON.w - ICON_SIZE) / 2, y + 4, ICON_SIZE, ICON_SIZE);
     }
-    drawText(ctx, command.label, x + BUTTON.w / 2, y + 22, { size: 20, color, align: 'center' });
+    drawText(ctx, moved?.label ?? command.label, x + BUTTON.w / 2, y + 22, { size: 20, color: moved?.label ? COLORS.yellow : color, align: 'center' });
+    if (moved) ctx.restore();
   });
+}
+
+// Where each command button hangs from (its top middle, in UI space), for
+// anything drawn tied to them.
+export function buttonTop(i) {
+  return { x: BUTTON.x + i * (BUTTON.w + BUTTON.gap) + BUTTON.w / 2, y: BUTTON.y };
 }
 
 // How many lines of dialogue fit in the panel, and `text` split into pages

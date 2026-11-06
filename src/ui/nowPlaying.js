@@ -42,3 +42,12 @@ export function drawNowPlaying(ctx, now = performance.now()) {
   drawText(ctx, playing.title, x + PAD + 16, AT.y + 3, { size: SIZE, color: COLORS.text });
   ctx.restore();
 }
+
+// Whether the label is on screen, so other top-left corner text can wait below it.
+export function nowPlayingShowing(now = performance.now()) {
+  const playing = music.nowPlaying;
+  if (!playing) return false;
+  const age = (now - playing.at) / 1000;
+  return age >= 0 && age <= SHOW_SECONDS + FADE_SECONDS;
+}
+export const NOW_PLAYING_DROP = AT.y + HEIGHT + 4;

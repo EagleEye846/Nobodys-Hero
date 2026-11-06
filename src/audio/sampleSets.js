@@ -53,4 +53,9 @@ export const SAMPLE_SETS = {
   frameDrum: { notes: [60], unpitched: true },
   tom: { notes: [60], unpitched: true },
   concertBassDrum: { notes: [60], unpitched: true },
+  // VCSL's anvil, one mid-strength hit: a pickaxe on rock in the mines.
+  anvil: { notes: [60], unpitched: true },
+  // Made for this game, not from a library: a soft "ah" choir, eight voices
+  // to a note (tenor and bass shape low, alto and soprano high).
+  choir: { notes: [45, 48, 52, 55, 58, 62, 65, 69, 72, 76, 79, 83] },
 };

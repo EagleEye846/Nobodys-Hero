@@ -1,0 +1,19 @@
+# BT_MARKET_BAT: A bat asleep from a beam in the market roof, who has slept through every announcement for ten years. Z puts him in a mutter.
+
+[first]
+...zzz... not the Sunstone... zzz... five more minutes... zzz...
+
+[repeat]
+...zzz... is it morning... zzz... no... zzz...
+
+[first after the_kings_welcome]
+...zzz... a king... zzz... very loud... zzz... tell him... zzz... shh...
+
+[repeat after the_kings_welcome]
+...zzz... mm... Peptup... zzz... too much... zzz...
+
+[first after the_light_goes_up]
+...zzz... bright... zzz... turn it down... zzz...
+
+[repeat after the_light_goes_up]
+...zzz... party... zzz... can't... sleeping...

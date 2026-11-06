@@ -9,12 +9,14 @@ import { StorageMenu } from '../ui/storageMenu.js';
 import { TravelMenu } from '../ui/travelMenu.js';
 import { catchUpDrafts, foundDrafts, draftIn } from '../data/travel.js';
 import { drawText } from '../ui/text.js';
+import { nowPlayingShowing, NOW_PLAYING_DROP } from '../ui/nowPlaying.js';
 import { textFile, textSection } from '../engine/textLoader.js';
 import { inUiSpace } from '../engine/screen.js';
 import { music, sfx } from '../audio/music.js';
 import { WORLD_STATE, saveGame, loadGame } from '../state/saveGame.js';
 import { BattleScene } from '../battle/battleScene.js';
 import { ShopScene } from '../shop/shopScene.js';
+import { FishingScene } from '../ui/fishingScene.js';
 import { GameOverScene } from '../gameOver/gameOverScene.js';
 import { ROOMS } from '../data/rooms/index.js';
 // Every enemy by id (its file name in src/data/enemies/); rooms' `enemy` refers to these.
@@ -23,16 +25,22 @@ import { AREA_NAMES, OUTDOOR_AREAS } from '../data/areas.js';
 import { SCENES } from '../data/scenes/index.js';
 import { ScenePlayer } from './scenePlayer.js';
 import { Climb, findClimb, ringNear } from './climbing.js';
+import { RopeClimb, atRopeFoot, drawHangingRope, drawDaylightFromAbove } from './ropeClimb.js';
 import { drawVista } from './vista.js';
 import { drawSnow, drawCirclingBirds, drawWisps, drawFog } from './weather.js';
 import { drawVision } from './visions.js';
-import { drawShadows, drawBlockShadows, sunShadows } from './shadows.js';
+import { Stage } from './stageShow.js';
+import { makeAtmosphere } from './atmosphere.js';
+import { beatPulse } from './beatPulse.js';
+import { makeTouches } from './touches.js';
+import { updateFolk } from './folk.js';
+import { drawShadows, drawBlockShadows, sunShadows, drawPropFootShadows, setShadowDepth } from './shadows.js';
 import { Whirl, WhirlRide, windIn, turnWind, applyWind, whirlLanding, WIND_STEP } from './weathervanes.js';
 import { PROP_SPRITES } from '../data/art/props.js';
 import { daylight } from './daylight.js';
-import { isLamplit, roomLights, ambientFor, flickerAt, skyColor, holeSprite, glowSprite } from './lamplight.js';
+import { isLamplit, isRelit, roomLights, ambientFor, flickerAt, skyColor, holeSprite, glowSprite } from './lamplight.js';
 import { heroFrame } from '../characters/hero.js';
-import { healHeroFully } from '../characters/progress.js';
+import { healHeroFully, heroMaxHp } from '../characters/progress.js';
 import { Follower } from './follower.js';
 import { MEMBERS, partyIds, joinParty, inParty, isHurt } from '../characters/party.js';
 import { wielderOf, HERO } from '../characters/equipment.js';
@@ -40,21 +48,35 @@ import { ITEMS, giveItem } from '../data/items.js';
 import { ARMOR } from '../data/armor.js';
 import { WEAPONS } from '../data/weapons.js';
 import { GEAR, hasGear, giveGear } from '../data/gear.js';
+import { questRuleHolds, applyQuestRule } from '../data/quests.js';
 import { ChapterEndScene } from '../title/chapterEndScene.js';
 import { burnCandle, lightRadius } from '../data/candles.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { skillBonus } from '../characters/progress.js';
 import { CreditsScene } from '../title/creditsScene.js';
-import { recordChapterStart } from '../state/chapters.js';
+import { recordChapterStart, settleChapter, LAST_CHAPTER } from '../state/chapters.js';
+import { roomForChapter } from './chapterRooms.js';
+import { SeedCloud } from './seedCloud.js';
+import { FloatTrio, brambleHere } from './trioFloat.js';
 import { WindGeyser, Updraft, GeyserRide, canRide, hopPath, hopAt, VES } from './windGeyser.js';
-import { HushShadow } from './hushwood.js';
+import { HushShadow, SoundHunter } from './hushwood.js';
 import { Bridges } from './bridges.js';
+import { Carts } from './carts.js';
+import { Tides } from './tides.js';
 import { crumbleIn } from './crumble.js';
+import { BeamField, makeVesWell } from './beams.js';
+import { LampField } from './lamps.js';
+import { Chimes } from './chimes.js';
 import { STRIDE, RUN_STRIDE, groundUnder, footfall, landing, moveParticle, drawParticle } from './footfall.js';
+import { SETTINGS } from '../state/settings.js';
+import { keyName, keyFor } from '../engine/input.js';
 
 // Without Ves, a wind geyser holds you off: within this many pixels of it the
 // wind pushes you away, from gently (min) to harder than you can walk (max),
 // in pixels a second.
+// How many times the bell tower's heralds' wrath has ended you (its game over
+// has other words after the first).
+const WRATH_KEY = 'ruins-rpg-wrath-deaths-v1';
 const WIND_HOLD_RADIUS = 28;
 const WIND_HOLD_MIN = 25;
 const WIND_HOLD_MAX = 210;
@@ -67,12 +89,16 @@ const LOG_SLIDE_SECONDS = 0.12;
 const HUSH_TEXT = 'interactions/hushwood.txt';
 // Bramble, the woodcutters' kid (src/characters/party.js).
 const BRAMBLE = 'bramble';
+// Seen by a sweeping lamp: how long the white lasts before you're back at the stop.
+const LAMP_SECONDS = 0.8;
 // Seen by the Hush: how long the dark holds before you're back at the door.
 const CAUGHT_SECONDS = 1.4;
 // The Lantern Marsh's own words (the bog, the mist).
 const MARSH_TEXT = 'interactions/marsh.txt';
 // The Dead City's: steering Ves on her crutch, and the high levers.
 const DEAD_TEXT = 'interactions/deadcity.txt';
+// Ves well again (Chapter 4), and the light beams: see beams.js.
+const BEAM_TEXT = 'interactions/beams.txt';
 // Standing in bog this long (a moment's grace, for catching an edge) and it
 // has you: you sink, slowly, and the room starts again from the door.
 const BOG_GRACE = 0.12;
@@ -80,6 +106,8 @@ const SINK_SECONDS = 1.8;
 // The mist's colour, and how far you can see through it round yourself.
 const MIST_TINT = '176, 186, 188';
 const MIST_SIGHT = 30;
+// How long a follower can be held up at a gap before they catch you up anyway.
+const FOLLOWER_STRANDED = 1.5;
 // How fast you settle onto the middle of a stepping-stone, pixels a second.
 const SETTLE_SPEED = 30;
 // A tile's step in each direction you can face.
@@ -113,6 +141,9 @@ let darkCanvas = null;
 const PRINT_SECONDS = 70;
 const PRINT_STRIDE = 7;
 const MAX_PRINTS = 160;
+// Where Q doesn't swap who you steer: the Ruins and the mountain (chapters 1
+// and 2). Splitting up with a friend starts below the clouds, in chapter 3.
+const NO_SWAP_AREAS = new Set(['ruins', 'stair', 'vigil', 'rest']);
 // Night darkens the outdoors this much at most, in a blue, not a black.
 const NIGHT_SHADE = 0.44;
 const NIGHT_TINT = '8, 12, 40';
@@ -132,6 +163,9 @@ const REST_SLEEP_SECONDS = 1.6;
 const DEFAULT_DREAM = 'inn_dream';
 
 // Whether a light at a screen point, `r` wide, shows on screen at all.
+// Where the light breathes with the music (see `swell` in update).
+const DARK_GROUND = new Set(['diggings', 'stillwater', 'deep']);
+const SINGING_AREAS = new Set(['deep', 'glimmer', 'stillwater', 'belowtown']);
 const onScreen = ({ x, y, r }) => x + r > 0 && x - r < SCREEN_WIDTH && y + r > 0 && y - r < SCREEN_HEIGHT;
 
 // A soft darkening toward the screen's edges, so the Ruins feel close and old.
@@ -158,6 +192,9 @@ function vignette() {
 // with, so a low save before a boss can't trap you.
 export function continueGame(fallbackRoom, { whole = false } = {}) {
   const loaded = loadGame();
+  // (A save from before the end of a chapter stopped moving you on into one
+  // that isn't built yet: back to the last chapter there is.)
+  if (loaded && settleChapter()) saveGame(WORLD_STATE.room, WORLD_STATE.spawn);
   if (whole) healHeroFully();
   if (loaded && ROOMS[WORLD_STATE.room]) return new OverworldScene(ROOMS[WORLD_STATE.room], WORLD_STATE.spawn);
   return new OverworldScene(fallbackRoom);
@@ -186,13 +223,23 @@ export class OverworldScene {
   // `arrival` says how you came in: through a door marked `climb`, the rope
   // hooks the next ring straight away, with the `swing` you had (see tryClimb).
   constructor(roomData, spawn = roomData.playerStart, fromArea = null, arrival = {}) {
+    // Sunnyside's first rooms read differently in Chapter 5 (chapterRooms.js).
+    roomData = roomForChapter(roomData);
     this.roomData = roomData;
+    // Darker foot shadows on the dark ground underground (shadows.js).
+    setShadowDepth(DARK_GROUND.has(roomData.area) ? 1.45 : 1);
     this.room = new Room(roomData);
     // Where you came in (the room you came from, and the spot): leaving by
     // another door means you've got through (see checkDoors), and the Hush
     // sends you back here (see catchUp).
     this.cameFrom = arrival.from ?? null;
     this.arrival = { ...spawn };
+    // A scene to play on arriving, and what comes after it (see enter, `postCredits`).
+    this.opening = arrival.scene ?? null;
+    this.afterOpening = arrival.then ?? null;
+    // A room that starts Ves off well (the first of Chapter 4): no crutch, no
+    // carrying. So is all of the mountain: she isn't hurt till she falls off it.
+    if (roomData.vesWell || NO_SWAP_AREAS.has(roomData.area)) makeVesWell();
     // Getting here finds the green updrafts on the way (src/data/travel.js).
     if (catchUpDrafts(roomData.id).length) sfx('heal');
     this.player = new Player(spawn.x * T + T / 2, (spawn.y + 1) * T);
@@ -202,8 +249,13 @@ export class OverworldScene {
     this.heroBody = this.player;
     // Carrying Ves (the Lantern Marsh): she rides on your back, not behind.
     this.player.carrying = WORLD_STATE.carrying ?? null;
-    this.kid = null;
-    this.partner = null;
+    // Everyone split off from the party: the bodies you aren't steering,
+    // standing where they were left (`partner` is the first of them; `kid`
+    // is the member you steer or the first one waiting). With the whole party
+    // along (Chapter 5) E steers Bramble and Q steers Ves, and up to three
+    // of you can be on the field at once (see steer).
+    this.kids = {};
+    this.others = [];
     this.unstick();
     if (arrival.climb) {
       this.player.facing = 'up';
@@ -217,12 +269,12 @@ export class OverworldScene {
     // down onto your spawn, hanging off Ves's boot.
     this.geysers = (roomData.geysers ?? []).map((data) => new WindGeyser(data));
     // Updrafts: small ones that toss you to another tile in this room.
-    this.updrafts = (roomData.gusts ?? []).map((data) => new Updraft(data));
+    this.updrafts = (roomData.gusts ?? []).map((data) => (data.seeds ? new SeedCloud(data, this.room) : new Updraft(data)));
     // Whirlwinds, and the wind the weathervanes set (see weathervanes.js).
     this.whirls = (roomData.whirls ?? []).map((data) => new Whirl(data));
     // The Hush's shadow going over (see hushwood.js), and how much the room
     // has darkened under the old trees (`gloom`, 0 to 1).
-    this.hush = roomData.hush ? new HushShadow(roomData.hush) : null;
+    this.hush = roomData.hush ? (roomData.hush.post !== undefined ? new SoundHunter(roomData.hush) : new HushShadow(roomData.hush)) : null;
     // The Dead City's floors that give way under you (`!` tiles: crumble.js).
     this.crumble = crumbleIn(roomData, this.room);
     this.caught = null;
@@ -242,6 +294,8 @@ export class OverworldScene {
     // How much of the room's weather (snow and `fog`) there is, 0 to 1: all
     // of it, unless a cutscene has stilled it for good (`weatherUntil`, a
     // scene id) or is fading it now (fadeWeather).
+    // Away from the Stillwater, Gubb's rod is yours to borrow again (fishingScene.js).
+    if (roomData.area !== 'stillwater' && WORLD_STATE.fishing) WORLD_STATE.fishing.thisVisit = 0;
     this.weatherAmount = roomData.weatherUntil && (WORLD_STATE.seenScenes ?? []).includes(roomData.weatherUntil) ? 0 : 1;
     this.weatherFade = null;
     // Small things that make the cold feel cold: footprints you leave in the
@@ -262,7 +316,7 @@ export class OverworldScene {
     this.shake = null;
     // Each enemy has a key, so a beaten one stays gone even after leaving the room.
     this.npcs = (roomData.npcs ?? [])
-      .map((data, i) => Object.assign(new Npc(data), { key: `${roomData.id}:${i}`, light: data.light ?? ENEMIES[data.enemy]?.light ?? null }))
+      .map((data, i) => Object.assign(new Npc(data), { key: data.key ?? `${roomData.id}:${i}`, light: data.light ?? ENEMIES[data.enemy]?.light ?? null }))
       .filter((npc) => !WORLD_STATE.defeated.includes(npc.key));
     this.camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
     this.textbox = new TextBox();
@@ -278,12 +332,36 @@ export class OverworldScene {
     this.titleTime = 0;
     // The region's name card, only when arriving from a different region.
     this.areaName = roomData.area !== fromArea ? AREA_NAMES[roomData.area] : null;
+    // Mine carts and their rails (carts.js); arriving through a door in a cart rolls on.
+    this.carts = new Carts(this, arrival.cart ?? null);
+    // Light beams, prisms, crystal eyes and light bridges (beams.js).
+    this.beams = new BeamField(this);
+    // Sweeping lighthouse lamps (lamps.js): seen by one, you're sent back to the last safe stop.
+    this.lamps = new LampField(this);
+    this.lampBack = null;
+    this.lampGrace = 0;
+    this.lampFade = 0;
+    // Singing crystals (chimes.js).
+    this.chimes = new Chimes(this);
+    // The tide: clock, wheels, bells, gauge (tides.js).
+    this.tides = new Tides(this);
+    // Dust, glints, embers, mist and the like (atmosphere.js).
+    this.atmosphere = makeAtmosphere(this);
+    // The room's own little extras: bees, a kite, washing, eyes in the dark (touches.js).
+    this.touches = makeTouches(this);
   }
 
   enter(game) {
     this.game = game;
     // The room's song, and its ambience (wind, birds, dripping caves: see music.js).
-    music.play(this.song, this.roomData.ambience ?? null);
+    // `musicFrom`: start the room's song at one of its sections (the Storm Reach's calm eye).
+    music.play(this.song, this.roomData.ambience ?? null, this.roomData.musicFrom ?? null);
+    // A scene played on its own as soon as we arrive (see end_chapter's
+    // `postCredits`): nobody else is in it, so the party waits out of sight.
+    if (this.opening) {
+      for (const follower of this.followers) follower.hidden = true;
+      this.playCutscene(SCENES[this.opening]);
+    }
   }
 
   // The room's song: its `music`, or, once a scene has played, the song of
@@ -305,6 +383,16 @@ export class OverworldScene {
     this.fadeIn = Math.max(0, this.fadeIn - dt);
     this.updateParticles(dt);
     this.updateFeet(dt);
+    this.chimes.update(dt);
+    this.tides.update(dt);
+    // Underground, the light breathes with the song: `swell` follows how loud
+    // the music is (0 in a hush, 1 at the top of a wave), smoothed. The
+    // Deep's crystals, the Glimmering's and the Stillwater's glowing reeds
+    // swell with it (lights marked `sings`, and the Deep's crystals below).
+    if (SINGING_AREAS.has(this.roomData.area)) {
+      const target = Math.max(0, Math.min(1, (music.loudness() - 0.008) / 0.04));
+      this.swell = (this.swell ?? 0) + (target - (this.swell ?? 0)) * Math.min(1, dt * 1.6);
+    } else this.swell = null;
     this.crumble?.update(dt, this);
     if (this.shake) {
       this.shake.left -= dt;
@@ -317,6 +405,7 @@ export class OverworldScene {
         const { door } = this.doorway;
         const arrival = door.climb ? { climb: true, swing: this.climbMomentum ?? null } : {};
         arrival.from = this.roomData.id;
+        if (this.carts.rideInfo) arrival.cart = this.carts.rideInfo;
         this.game.changeScene(new OverworldScene(ROOMS[door.to], door.spawn, this.roomData.area, arrival));
       }
       return;
@@ -359,10 +448,34 @@ export class OverworldScene {
       for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y + 2);
     }
 
+    // Mine carts: rolling ones move on, and a ride takes over completely (carts.js).
+    if (this.carts.update(dt, input)) return;
+
     // Tossed by an updraft: carried along the arc until you land.
     if (this.hop) {
       this.updateHop(dt);
       this.followCamera(this.player);
+      return;
+    }
+
+    // Up the long rope, all of you (ropeClimb.js): it takes over until you
+    // let go at the foot, or climb out at the top.
+    if (this.rope) {
+      if (this.textbox.isOpen) this.textbox.update(dt, input);
+      else this.rope.update(dt, input, this.textbox);
+      this.followCamera(this.player);
+      if (this.rope.done === 'top') {
+        const { to, spawn } = this.roomData.rope;
+        if (!ROOMS[to]) throw new Error(`The rope in ${this.roomData.id} goes up to unknown room '${to}'`);
+        this.game.changeScene(new OverworldScene(ROOMS[to], spawn, this.roomData.area, { from: this.roomData.id }));
+      } else if (this.rope.done === 'foot') {
+        this.rope = null;
+        this.player.y = Math.round(this.player.y);
+        for (const follower of this.followers) {
+          follower.warpTo(this.player.x, this.player.y + 2);
+          follower.hidden = false;
+        }
+      }
       return;
     }
 
@@ -411,7 +524,7 @@ export class OverworldScene {
         this.wrapPlayer();
         for (const follower of this.followers) {
           // (Not Bramble, if he's off on his own: he isn't following.)
-          if (this.partner && follower.id === this.kid?.skin) continue;
+          if (this.isSplitOff(follower.id)) continue;
           follower.warpTo(this.player.x, this.player.y);
           follower.hidden = false;
         }
@@ -426,7 +539,7 @@ export class OverworldScene {
     if (this.cutscene) {
       this.cutscene.update(dt, input);
       if (this.cutscene.done) {
-        const { battle, endChapter, goto } = this.cutscene;
+        const { battle, endChapter, goto, goOn } = this.cutscene;
         this.cutscene = null;
         this.room.refreshShowsUp();
         if (battle) {
@@ -441,17 +554,46 @@ export class OverworldScene {
           this.game.changeScene(new OverworldScene(next, goto.spawn ?? next.playerStart, this.roomData.area, { from: this.roomData.id }));
           return;
         }
+        // A stinger played on its own ends with `go_on`: on to what was waiting behind it.
+        if (goOn && this.afterOpening) {
+          this.game.changeScene(this.afterOpening());
+          return;
+        }
         if (endChapter) {
           const next = ROOMS[endChapter.room];
           // On to the next chapter (the skill tree grows with it), and the
           // end of a chapter saves by itself, ready to start the next one.
-          WORLD_STATE.chapter = (WORLD_STATE.chapter ?? 1) + 1;
+          // With no next room yet (the next chapter isn't built), you stay in
+          // this one: its skills only come when it's really there to play.
+          // The chapter after the one this ending belongs to (`chapter` on the
+          // step), never past the last one built: playing an ending again from
+          // a later chapter mustn't push you on a chapter too far (or back one).
+          const now = WORLD_STATE.chapter ?? 1;
+          const reached = Math.min(LAST_CHAPTER, Math.max(now, (endChapter.chapter ?? now) + 1));
+          if (next) WORLD_STATE.chapter = reached;
+          else WORLD_STATE.chapterDone = reached - 1;
+          // With no next room yet, `saveIn: { room, spawn }` is where Continue
+          // picks up instead (somewhere safe in the chapter just finished).
           if (next) saveGame(next.id, endChapter.spawn ?? next.playerStart);
-          // Remembered for chapter select, to start this chapter again later.
-          recordChapterStart(WORLD_STATE.chapter);
-          const goOn = next
+          else if (endChapter.saveIn) saveGame(endChapter.saveIn.room, endChapter.saveIn.spawn);
+          // Remembered for chapter select, to start the next chapter later
+          // (and the one just finished counts as beaten).
+          recordChapterStart(reached);
+          let goOn = next
             ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, this.roomData.area)
             : this.game.home;
+          // With `postCredits: '<scene id>'`, that scene plays last, after the
+          // card and the credits, alone in its own room (the scene names its
+          // `room`, and ends with `go_on`), before the game goes on as above.
+          const stinger = SCENES[endChapter.postCredits];
+          if (endChapter.postCredits && !stinger) throw new Error(`end_chapter in ${this.roomData.id} has a postCredits scene '${endChapter.postCredits}' that doesn't exist`);
+          if (stinger) {
+            const afterIt = goOn;
+            goOn = () => {
+              const room = ROOMS[stinger.room];
+              return new OverworldScene(room, stinger.spawn ?? room.playerStart, room.area, { scene: stinger.id, then: afterIt });
+            };
+          }
           // With `credits`, the credits roll first (`credits: { song, text }`
           // for a chapter's own song and cards); `card` names its chapter card.
           const card = () => new ChapterEndScene(goOn, endChapter.card);
@@ -482,46 +624,65 @@ export class OverworldScene {
       }
     } else if (this.wrathfulEnd) {
       sfx('hurt');
-      this.game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true }), "The heralds' wrath descended upon you."));
+      // Kept outside the save (dying reloads it), so a second time is remembered.
+      let times = 0;
+      try {
+        times = Number(localStorage.getItem(WRATH_KEY)) || 0;
+        localStorage.setItem(WRATH_KEY, String(times + 1));
+      } catch { /* no storage: always the first time */ }
+      const words = times ? "You really don't learn your damn lesson, do you?" : "The heralds' wrath descended upon you.";
+      this.game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true }), words));
     } else if (this.caught) {
       this.updateCaught(dt);
     } else if (input.wasPressed('menu') && !this.player.isAirborne) {
       sfx('select');
       this.pauseMenu.open();
-    } else if (input.wasPressed('swap') && !this.player.isAirborne && this.canSwap()) {
-      this.swap();
+    } else if (input.wasPressed('swap') && !this.player.isAirborne && this.canSwap(this.qTarget())) {
+      this.steer(this.qTarget());
+    } else if (input.wasPressed('swapB') && !this.player.isAirborne && this.canSwap(this.eTarget())) {
+      this.steer(this.eTarget());
+    } else if (input.wasPressed('regroup') && this.others.length && !this.player.isAirborne && !this.climb && !this.hop && !this.ride) {
+      this.rejoin();
     } else {
       // The one of you standing still is in your way, unless you're already
       // overlapping (a current can carry you both to the same spot): then you
       // can walk apart.
       const p = this.partner;
-      const overlapping = p && Math.abs(p.x - this.player.x) < 10 && Math.abs(p.y - this.player.y) < 6;
-      this.room.blockers = p && !overlapping ? [p] : [];
+      this.room.blockers = this.others.filter((o) => !(Math.abs(o.x - this.player.x) < 10 && Math.abs(o.y - this.player.y) < 6));
       const wasGround = this.player.ground;
       this.player.update(dt, input, this.room);
       if (this.player.ground > wasGround) this.leaveVesBelow();
       this.pushRocks(dt, input);
+      this.carts.push(dt, input);
       this.settleTreadles();
       this.updateHush(dt);
+      this.updateLamps(dt);
       this.checkBog(dt);
       this.balance(dt, input);
       if (this.player.moving) this.climbMomentum = null;
       this.wrapPlayer();
       this.updateFollowers(dt);
+      this.beams.update(dt, input);
       this.leaveFootprints();
       this.breathe(dt);
       if (this.player.landedThisFrame && this.onSnow()) this.kickSnow();
       this.idleTime = this.player.moving || this.player.isAirborne ? 0 : this.idleTime + dt;
       if (this.roomData.dark) this.burnCandle(dt);
       for (const npc of this.npcs) npc.update(dt, this.player, this.room);
+      updateFolk(this, dt);
       if (this.player.landedThisFrame) this.handleLanding();
       if (input.wasPressed('confirm') && !this.player.isAirborne) this.interact();
       this.checkDoors();
       this.checkGeysers(dt);
       this.checkCutscenes();
+      // Walking up into the face at the foot of a long rope: take hold.
+      const rope = this.roomData.rope;
+      if (rope && !this.cutscene && !this.player.isAirborne && input.isDown('up') && atRopeFoot(rope, this.player)) {
+        this.rope = new RopeClimb(rope, this.player, this.followers.filter((f) => !f.hidden));
+      }
 
       // Either of you, if you've split up.
-      const foe = this.npcs.find((npc) => npc.touches(this.player) || (this.partner && npc.touches(this.partner)));
+      const foe = this.npcs.find((npc) => npc.touches(this.player) || this.others.some((o) => npc.touches(o)));
       if (foe && !this.player.isAirborne && !this.doorway) this.caughtBy(foe);
     }
 
@@ -735,6 +896,7 @@ export class OverworldScene {
 
   // The screen jolts, `amount` pixels, dying away over `seconds`.
   shakeCamera(amount, seconds) {
+    if (!SETTINGS.shake) return;
     this.shake = { amount, seconds, left: seconds };
   }
 
@@ -743,7 +905,7 @@ export class OverworldScene {
   // Everyone who walks about here: you (and whichever of you is standing
   // apart), the party, and anyone walking in a cutscene.
   walkers() {
-    const list = [this.player, ...(this.partner ? [this.partner] : []), ...this.followers];
+    const list = [this.player, ...this.others, ...this.followers];
     if (this.cutscene) list.push(...this.cutscene.drawables.filter((actor) => !actor.heldBy));
     return list;
   }
@@ -774,6 +936,7 @@ export class OverworldScene {
       const way = facing === 'left' || facing === -1 ? -1 : facing === 'right' || facing === 1 ? 1 : 0;
       const under = this.bridges.step(body, body.running ? 1.3 : 1);
       if (under && body === this.player && Math.random() < 0.3) sfx('creak');
+      if (body === this.player) this.chimes.footstep();
       footfall(this.particles, groundUnder(this.room, body), body, { running: Boolean(body.running), light: body !== this.player, under, way });
     }
   }
@@ -799,7 +962,7 @@ export class OverworldScene {
     const yaw = (vista.heading ?? 0) + (this.spire ? ((this.camera.x + SCREEN_WIDTH / 2) % w) / w : 0);
     const rise = Math.max(0, this.room.pixelHeight - SCREEN_HEIGHT - this.camera.y);
     const { night, dusk } = daylight();
-    return { yaw, rise, altitude: vista.altitude ?? 0, driftX: this.spire ? 0 : this.camera.x, night, dusk };
+    return { kind: vista.kind, yaw, rise, altitude: vista.altitude ?? 0, driftX: this.spire ? 0 : this.camera.x, night, dusk };
   }
 
   // Whether the time of day shows here: outdoors, under the sky.
@@ -811,13 +974,22 @@ export class OverworldScene {
   // unless the scene says `once: false`).
   checkCutscenes() {
     // Scenes wait till you're together again.
-    if (this.player.isAirborne || this.doorway || this.cutscene || this.partner) return;
+    if (this.player.isAirborne || this.doorway || this.cutscene) return;
+    if (this.partner) {
+      this.nudgeWhileSplit();
+      return;
+    }
     const [tx, ty] = this.player.tilePosition();
     // A trigger can wait for a scene to have played (`after`), or stop once
     // one has (`until`), like a prop.
     const seen = WORLD_STATE.seenScenes ?? [];
-    const trigger = (this.roomData.cutscenes ?? []).find((c) => tx >= c.x && tx < c.x + c.w && ty >= c.y && ty < c.y + c.h
-      && (!c.after || seen.includes(c.after)) && (!c.until || !seen.includes(c.until)));
+    const trigger = (this.roomData.cutscenes ?? []).find((c) => !c.nudge && tx >= c.x && tx < c.x + c.w && ty >= c.y && ty < c.y + c.h
+      && (!c.after || seen.includes(c.after)) && (!c.until || !seen.includes(c.until))
+      // `when`: a room switch (a lever, a crystal eye) that has to be on, for a scene a
+      // beam sets off (the light going up the root).
+      && (!c.when || this.room.isLeverOn(c.when))
+      // A scene already watched (once) doesn't hide the next one on the same tiles (an `after` chain).
+      && (SCENES[c.scene]?.once === false || !seen.includes(c.scene)));
     if (!trigger) {
       this.lastTrigger = null;
       return;
@@ -831,6 +1003,19 @@ export class OverworldScene {
     this.lastTrigger = trigger;
     if (!WORLD_STATE.seenScenes.includes(scene.id)) WORLD_STATE.seenScenes.push(scene.id);
     this.playCutscene(scene);
+  }
+
+  // A cutscene entry with `nudge: '<section>'` is Ves speaking up, once, while
+  // you're split and its `when` switch is on (the root is lit and the light is
+  // waiting for you both to be together). The section is in the room's text file.
+  nudgeWhileSplit() {
+    const nudge = (this.roomData.cutscenes ?? []).find((c) => c.nudge && (!c.when || this.room.isLeverOn(c.when)));
+    if (!nudge) return;
+    WORLD_STATE.seenScenes ??= [];
+    const key = `${this.roomData.id}:${nudge.nudge}`;
+    if (WORLD_STATE.seenScenes.includes(key)) return;
+    WORLD_STATE.seenScenes.push(key);
+    this.say(this.roomData.textFile, nudge.nudge, VES);
   }
 
   // Where a fight here takes place, for its background (and its song): a
@@ -904,6 +1089,33 @@ export class OverworldScene {
     }
   }
 
+  // Turned back from a door but still standing on it (facing along it, or
+  // dropped on it when you split up): to the nearest free tile off every
+  // door, or the door would turn them back again every frame.
+  stepOffDoor() {
+    const { player, room } = this;
+    const doors = this.roomData.doors ?? [];
+    const onDoor = (tx, ty) => doors.some((d) => tx >= d.x && tx < d.x + d.w && ty >= d.y && ty < d.y + d.h);
+    const [tx, ty] = player.tilePosition();
+    if (!onDoor(tx, ty)) return;
+    for (let r = 1; r < Math.max(room.width, room.height); r++) {
+      for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || onDoor(tx + dx, ty + dy)) continue;
+          const x = (tx + dx) * T + T / 2;
+          const y = (ty + dy + 1) * T;
+          if (!player.collidesAt(room, x, y) && player.floorAt(room, x, y) === 0) {
+            player.x = x;
+            player.y = y;
+            player.ground = 0;
+            player.z = 0;
+            return;
+          }
+        }
+      }
+    }
+  }
+
   // Plays a scene (from src/data/scenes/) here and now.
   playCutscene(scene) {
     this.player.moving = false;
@@ -925,10 +1137,14 @@ export class OverworldScene {
       return;
     }
     // An updraft takes anyone, Ves or not.
-    const updraft = this.updrafts.find((u) => u.covers(ux, uy));
+    const updraft = this.updrafts.find((u) => u.covers(ux, uy) && u.isOn !== false);
     if (updraft) {
       const to = { x: updraft.drop.x * T + T / 2, y: (updraft.drop.y + 1) * T - 2 };
       this.hop = hopPath({ x: this.player.x, y: this.player.y }, to, this.player.ground, this.room.raiseAt(updraft.drop.x, updraft.drop.y));
+      // A seed cloud lifts the whole party on Ves's umbrella (trioFloat.js): you
+      // hold her hand, and Bramble, if he's with you, hangs on her boot.
+      const together = !this.others.length && !this.player.skin && !this.player.carrying && this.followers.some((f) => f.id === VES && !f.hidden);
+      this.hopTrio = updraft instanceof SeedCloud && together && canRide() ? new FloatTrio(this.player, this.hop, brambleHere()) : null;
       sfx('flare');
       return;
     }
@@ -1056,12 +1272,13 @@ export class OverworldScene {
     this.player.z = 0;
     this.player.landedThisFrame = true;
     this.hop = null;
+    this.hopTrio = null;
     // Round a spire, a whirlwind may have carried you past the seam.
     if (this.landingWhirl) {
       this.landingWhirl = false;
       this.wrapPlayer();
     }
-    for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y + 2);
+    for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y + 2, this.player.ground);
     if (this.onSnow()) this.kickSnow();
   }
 
@@ -1069,7 +1286,9 @@ export class OverworldScene {
   checkDoors() {
     if (this.player.isAirborne) return;
     const [tx, ty] = this.player.tilePosition();
-    const door = (this.roomData.doors ?? []).find((d) => tx >= d.x && tx < d.x + d.w && ty >= d.y && ty < d.y + d.h);
+    // A door can wait for a scene to have played (`after`): until then it isn't one.
+    const door = (this.roomData.doors ?? []).find((d) => tx >= d.x && tx < d.x + d.w && ty >= d.y && ty < d.y + d.h
+      && (!d.after || (WORLD_STATE.seenScenes ?? []).includes(d.after)));
     if (!door) return;
     if (!ROOMS[door.to]) throw new Error(`A door in ${this.roomData.id} leads to unknown room '${door.to}'`);
     // Split up, nobody leaves without the other.
@@ -1078,15 +1297,16 @@ export class OverworldScene {
       this.player.x += bx * T;
       this.player.y += by * T;
       this.unstick();
+      this.stepOffDoor();
       this.player.moving = false;
-      const kidVes = this.kid?.skin === VES;
+      const kidVes = this.kid?.skin === VES && this.kid?.skin !== BRAMBLE;
       const section = this.player === this.kid ? (kidVes ? 'split_door_ves' : 'split_door_kid') : (kidVes ? 'split_door_hero_ves' : 'split_door');
       this.textbox.open(textSection(kidVes ? DEAD_TEXT : HUSH_TEXT, section), this.player === this.kid ? this.kid.skin : null);
       return;
     }
     // Out by a door you didn't come in by: you've got through. A puzzle
     // room's bridges and fallen trees stay as they are now, for good.
-    if (door.to !== this.cameFrom && this.room.allProps.some((p) => p.log || p.chop === 'fell' || p.treadle || (p.rock && p.sunk))) {
+    if (door.to !== this.cameFrom && !this.room.tide && this.room.allProps.some((p) => p.log || p.chop === 'fell' || p.treadle || (p.rock && p.sunk))) {
       WORLD_STATE.passed ??= {};
       WORLD_STATE.passed[this.roomData.id] ??= this.room.passedState();
     }
@@ -1169,15 +1389,22 @@ export class OverworldScene {
   }
 
   interact() {
+    // Ves holding a beam on her umbrella: Z turns her a quarter (beams.js),
+    // unless she's facing a prism she can turn, right in front of her: then Z
+    // turns that, so standing in a beam never takes the prism away from her.
+    const facing = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y));
+    if (!facing.some((p) => p?.mirror && !p.fixed) && this.beams.turnUmbrella()) return;
     const [px, py] = this.player.interactionPoint();
     // Z on the one of you standing still: together again.
-    if (this.partner && this.player.interactionPoints().some(([x, y]) => Math.abs(x - this.partner.x) <= 8 && y <= this.partner.y + 2 && y >= this.partner.y - 16)) {
+    const waiting = this.others.find((o) => (this.player === this.heroBody || o === this.heroBody) && this.player.interactionPoints().some(([x, y]) => Math.abs(x - o.x) <= 8 && y <= o.y + 2 && y >= o.y - 16));
+    if (waiting) {
       // (Ves can't get up onto a block to you, on her crutch.)
-      if (this.kid?.skin === VES && this.kid.ground !== this.heroBody.ground) {
+      const ves = [this.player, waiting].find((b) => b.skin === VES);
+      if (ves && isHurt(VES) && ves.ground !== this.heroBody.ground) {
         this.textbox.open(textSection(DEAD_TEXT, 'ves_cant_reach'), VES);
         return;
       }
-      this.rejoin();
+      this.rejoin(waiting);
       return;
     }
     // Something only seen in the light isn't there for you until your light
@@ -1213,7 +1440,17 @@ export class OverworldScene {
       return;
     }
     // Shops are their own screen; leaving comes back here (and to the room's music).
-    if (prop.shop) this.game.changeScene(new ShopScene(prop.shop, () => this.game.changeScene(this)));
+    // A reforge can hand back a scene to play in the room (the shop's `forgeScene`): once only.
+    if (prop.shop) {
+      this.game.changeScene(new ShopScene(prop.shop, (after) => {
+        this.game.changeScene(this);
+        WORLD_STATE.seenScenes ??= [];
+        if (after && SCENES[after] && !WORLD_STATE.seenScenes.includes(after)) {
+          WORLD_STATE.seenScenes.push(after);
+          this.playCutscene(SCENES[after]);
+        }
+      }));
+    }
     else if (prop.save) this.useSavePoint();
     else if (prop.vane) this.turnVane();
     else if (prop.storage) {
@@ -1223,8 +1460,14 @@ export class OverworldScene {
     else if (prop.rest) this.useBed(prop);
     else if (prop.travel) this.useTravelDraft(prop);
     else if (prop.join && MEMBERS[prop.join]) this.recruit(prop);
+    else if (prop.fishing && (WORLD_STATE.seenScenes ?? []).includes(prop.fishing)) this.offerFishing(prop);
     else if (prop.npc) this.textbox.open(this.npcPages(prop), prop.npc);
+    else if ((prop.tideWheel || prop.tideBell || prop.tideDial) && this.tides.use(prop)) { /* the tide answered */ }
     else if (prop.lever) this.useLever(prop);
+    else if (prop.chime) this.chimes.ring(prop);
+    else if (prop.cart) this.carts.use(prop);
+    else if (prop.mirror && this.beams.interact(prop)) { /* a prism, turned over */ }
+    else if (prop.lure && this.hush?.lure) this.kickScree(prop);
     else if (prop.rockReset) this.resetRocks(prop);
     else if (prop.rock || prop.log) this.pokeRock(prop);
     else if (prop.chop && !prop.felled) this.chopTree(prop);
@@ -1234,11 +1477,44 @@ export class OverworldScene {
     else if (prop.text) this.say(this.roomData.textFile, prop.text);
   }
 
+  // Loose scree (the Deep's Crawl): kick it and the pebbles clatter off down
+  // the tunnel, to where the blind hunter will go and listen. As often as you
+  // like (so a kick at the wrong moment never strands you).
+  kickScree(prop) {
+    // The first Z only looks at it; the next kicks.
+    if (!prop.examined) {
+      prop.examined = true;
+      this.say(this.roomData.textFile, prop.text);
+      return;
+    }
+    const again = prop.lureUsed;
+    prop.lureUsed = true;
+    prop.setLook(`${prop.baseLook}_kicked`);
+    sfx('push');
+    const point = this.hush.points[prop.lure.to];
+    this.hush.lure(prop.lure.to, prop.lure.stay ? Infinity : (prop.lure.hold ?? 6));
+    this.hush.ping(point.x, point.y);
+    this.say(this.roomData.textFile, again ? `${prop.text}_again` : `${prop.text}_kick`);
+  }
+
+  // Knocking on Gubb's post once the ferry has run: his words, then the offer
+  // of his rod, on a screen of its own (fishingScene.js). Leaving comes back here.
+  offerFishing(prop) {
+    this.textbox.open(this.npcPages(prop), prop.npc);
+    this.afterText = () => this.game.changeScene(new FishingScene(() => this.game.changeScene(this)));
+  }
+
   // A section of words, then Bramble's say on it, if he's with you and has one
   // (a section of the same name with `_bramble` on the end), with his face;
   // then Ves's (`_ves`), if she's with you.
   say(file, section, speaker = null) {
     this.textbox.open(textSection(file, section), speaker);
+    this.queueReactions(file, section);
+  }
+
+  // After a box of words: whoever is with you answers, if the text file has
+  // `<section>_bramble` and/or `<section>_ves`.
+  queueReactions(file, section) {
     const words = textFile(file);
     const after = [[BRAMBLE, '_bramble'], [VES, '_ves']]
       .filter(([who, end]) => inParty(who) && words[`${section}${end}`]?.length)
@@ -1253,78 +1529,161 @@ export class OverworldScene {
 
   // --- Bramble (Chapter 3): switching, chopping, gold, the Hush. ---
 
-  // Whether Q can switch you over: Bramble's with you (not off in a scene),
-  // and nothing else is going on.
-  canSwap() {
-    const id = this.swapperId();
+  // Whether a switch key can take you over to `id` (Bramble or Ves): they're
+  // with you or waiting where you left them (not off in a scene), and
+  // nothing else is going on. With nobody to switch to there's no `id`.
+  canSwap(id = this.qTarget()) {
     if (!id || this.climb || this.hop || this.ride) return false;
-    return this.partner || this.followers.some((f) => f.id === id && !f.hidden);
+    // Steering them already: the key hands you back to the hero.
+    if (this.player.skin === id) return true;
+    return this.others.some((b) => b.skin === id) || this.followers.some((f) => f.id === id && !f.hidden);
   }
 
   // Who steps out from behind you when you press Q: Bramble, while he's with
   // you; after he's gone home, Ves, once she's walking again (on her crutch:
   // she can't jump, climb or push, but she can reach the high levers, and
   // she's light enough for rotten boards).
+  // Not up the mountain (chapters 1 and 2): there, Ves just follows.
   swapperId() {
+    if (NO_SWAP_AREAS.has(this.roomData.area)) return null;
     if (inParty(BRAMBLE)) return BRAMBLE;
     if (inParty(VES) && this.heroBody.carrying !== VES) return VES;
     return null;
   }
 
+  // Q's friend. With both of them in the party (Chapter 5) Q is Ves, and E is
+  // Bramble; with only one of them along, Q is that one, as it always was.
+  qTarget() {
+    if (!NO_SWAP_AREAS.has(this.roomData.area) && inParty(BRAMBLE) && inParty(VES) && this.heroBody.carrying !== VES) return VES;
+    return this.swapperId();
+  }
+
+  // E's friend: Bramble, whenever he's in the party. (It does nothing before
+  // he joins, and in the Ruins and on the mountain.)
+  eTarget() {
+    return !NO_SWAP_AREAS.has(this.roomData.area) && inParty(BRAMBLE) ? BRAMBLE : null;
+  }
+
+  // Every body on the field you could stand on a plate with: the one you
+  // steer and the ones waiting (followers trailing the hero don't count).
+  bodies() {
+    return [this.player, ...this.others];
+  }
+
+  // The first one waiting where you left them; the member split off (the one
+  // you steer, or else the first one waiting).
+  get partner() {
+    return this.others[0] ?? null;
+  }
+
+  get kid() {
+    return this.player.skin ? this.player : this.others.find((b) => b.skin) ?? null;
+  }
+
+  // Whether a member is off on their own body just now.
+  isSplitOff(id) {
+    return this.bodies().some((b) => b.skin === id) && this.others.length > 0;
+  }
+
+  // Hero, Ves and Bramble all on the field, with a say each.
+  trio() {
+    return this.qTarget() === VES && this.eTarget() === BRAMBLE;
+  }
+
   // The body you steer when you split up, for that member.
   kidFor(follower) {
-    if (this.kid?.skin !== follower.id) {
-      this.kid = new Player(follower.x, follower.y, { skin: follower.id, small: true, crutch: follower.id === VES });
-    }
-    return this.kid;
+    let kid = this.kids[follower.id];
+    if (!kid) kid = this.kids[follower.id] = new Player(follower.x, follower.y, { skin: follower.id, small: follower.id === BRAMBLE });
+    // On a crutch only while she's hurt: well again, Ves walks, jumps and climbs.
+    kid.crutch = follower.id === VES && isHurt(VES);
+    return kid;
   }
 
-  // Q: Bramble steps out from behind you and you steer him (the hero waits
-  // where they are); with you split up, Q swaps who you're steering.
-  swap() {
+  // Q (Ves, or Bramble if he's the only one) or E (Bramble): you take over
+  // `id`'s body, and whoever you were steering stays put where they are. If you're
+  // steering them already, you're back in the hero (who waits where they are).
+  // Friends still trailing the hero are left where they stand: pressing their
+  // key later splits them off from there.
+  steer(id) {
     sfx('select');
-    if (!this.partner) {
-      const follower = this.followers.find((f) => f.id === this.swapperId());
-      this.kidFor(follower);
-      this.kid.x = Math.round(follower.x);
-      this.kid.y = Math.round(follower.y);
-      this.kid.ground = follower.ground ?? 0;
-      this.kid.z = 0;
-      this.kid.facing = this.player.facing;
-      this.kid.moving = false;
-      // Wedged somewhere a body can't stand (the trail cuts corners): at your feet instead.
-      if (this.kid.collidesAt(this.room, this.kid.x, this.kid.y) || this.kid.floorAt(this.room, this.kid.x, this.kid.y) !== this.kid.ground) {
-        this.kid.x = this.player.x;
-        this.kid.y = this.player.y;
-        this.kid.ground = this.player.ground;
-      }
-      follower.hidden = true;
-      this.player.moving = false;
-      this.partner = this.heroBody;
-      this.player = this.kid;
-      // The first time with each of them, they say what they can do.
-      const first = follower.id === BRAMBLE ? 'swap_first' : `swap_first_${follower.id}`;
-      if (!(WORLD_STATE.read ?? []).includes(first)) {
-        WORLD_STATE.read ??= [];
-        WORLD_STATE.read.push(first);
-        this.textbox.open(textSection(follower.id === BRAMBLE ? HUSH_TEXT : DEAD_TEXT, first), follower.id);
-      }
+    if (this.player.skin === id) {
+      this.takeControl(this.heroBody);
       return;
     }
+    const waiting = this.others.find((b) => b.skin === id);
+    if (waiting) {
+      this.takeControl(waiting);
+      return;
+    }
+    const follower = this.followers.find((f) => f.id === id && !f.hidden);
+    if (!follower) return;
+    const kid = this.kidFor(follower);
+    kid.x = Math.round(follower.x);
+    kid.y = Math.round(follower.y);
+    kid.ground = follower.ground ?? 0;
+    kid.z = 0;
+    kid.facing = this.player.facing;
+    kid.moving = false;
+    // Wedged somewhere a body can't stand (the trail cuts corners): at the hero's feet, whom they
+    // trail (not the friend you were steering: Bramble may be in a pocket only he fits).
+    if (kid.collidesAt(this.room, kid.x, kid.y) || kid.floorAt(this.room, kid.x, kid.y) !== kid.ground) {
+      kid.x = this.heroBody.x;
+      kid.y = this.heroBody.y;
+      kid.ground = this.heroBody.ground;
+    }
+    follower.hidden = true;
     this.player.moving = false;
-    [this.player, this.partner] = [this.partner, this.player];
+    this.others.push(this.player);
+    this.player = kid;
+    // Still trailing in through the door you came by: off it first.
+    this.stepOffDoor();
+    // The first time with each of them, they say what they can do.
+    // (Ves well again, in Chapter 4, has her own words: no crutch.)
+    const well = follower.id === VES && !isHurt(VES);
+    const first = follower.id === BRAMBLE ? 'swap_first' : `swap_first_${follower.id}${well ? '_well' : ''}`;
+    if (!(WORLD_STATE.read ?? []).includes(first)) {
+      WORLD_STATE.read ??= [];
+      WORLD_STATE.read.push(first);
+      this.textbox.open(textSection(follower.id === BRAMBLE ? HUSH_TEXT : well ? BEAM_TEXT : DEAD_TEXT, first), follower.id);
+    }
   }
 
-  // Together again: Bramble (or Ves) falls in behind you, from wherever they were.
-  rejoin() {
-    if (!this.partner) return;
-    const kid = this.kid;
+  // Q on its own: the friend Q is for (see qTarget).
+  swap() {
+    this.steer(this.qTarget());
+  }
+
+  // Take over a body that's already out (the others wait where they stand).
+  takeControl(body) {
+    this.player.moving = false;
+    this.others = this.others.filter((b) => b !== body);
+    this.others.push(this.player);
+    this.player = body;
+    body.moving = false;
+  }
+
+  // Together again: Bramble (or Ves) falls in behind you, from wherever they
+  // were. With a body named, only that one comes back (Z next to them);
+  // otherwise everyone does, and you're the hero again.
+  rejoin(only = null) {
+    if (!this.others.length) return;
+    const all = this.bodies();
+    let back;
+    let rest = [];
+    if (only) {
+      back = [this.player === this.heroBody ? only : this.player];
+      rest = all.filter((b) => b !== this.heroBody && !back.includes(b));
+    } else {
+      back = all.filter((b) => b.skin);
+    }
     this.player = this.heroBody;
-    this.partner = null;
-    const follower = this.followers.find((f) => f.id === kid.skin);
-    if (follower) {
-      follower.warpTo(kid.x, kid.y);
-      follower.hidden = false;
+    this.others = rest;
+    for (const kid of back) {
+      const follower = this.followers.find((f) => f.id === kid.skin);
+      if (follower) {
+        follower.warpTo(kid.x, kid.y);
+        follower.hidden = false;
+      }
     }
     sfx('select');
   }
@@ -1372,7 +1731,7 @@ export class OverworldScene {
   // Whether anyone (you, the other of you, or an enemy) is standing on a tile.
   somebodyAt(tx, ty) {
     const on = (b) => b && Math.floor(b.x / T) === tx && Math.floor((b.y - 1) / T) === ty;
-    return on(this.player) || on(this.partner) || this.npcs.some((npc) => Math.floor(npc.x / T) === tx && Math.floor((npc.y - 1) / T) === ty);
+    return on(this.player) || this.others.some(on) || this.npcs.some((npc) => Math.floor(npc.x / T) === tx && Math.floor((npc.y - 1) / T) === ty);
   }
 
   // A purse of coins: its words, then the gold.
@@ -1391,12 +1750,19 @@ export class OverworldScene {
   // rock or log; their gates open and shut with them.
   settleTreadles() {
     if (!this.hasTreadles) return;
-    const bodies = [this.player, this.partner].filter(Boolean);
+    const bodies = this.bodies();
     const was = this.room.props.filter((p) => p.opensWith && p.isOpen).length;
     this.room.settleTreadles(bodies);
     // A gate won't shut on a rock or log sitting in its way, either.
-    const things = this.room.props.filter((p) => (p.rock || p.log) && !p.sunk && !p.hidden).map((p) => ({ x: p.x + T / 2, y: p.y + T }));
+    const things = this.room.props.filter((p) => (p.rock || p.log || p.cart) && !p.sunk && !p.hidden).map((p) => ({ x: p.x + T / 2, y: p.y + T }));
     this.room.refreshPuzzles([...bodies, ...things]);
+    // Standing on a plate that's someone else's: say so, once.
+    const wrong = this.room.props.find((p) => p.treadle && p.who && !p.toldWrong && bodies.some((b) => (b.skin ?? 'hero') !== p.who && Math.floor(b.x / T) === p.x / T && Math.floor((b.y - 1) / T) === p.y / T));
+    if (wrong && !this.textbox.isOpen) {
+      wrong.toldWrong = true;
+      sfx('error');
+      this.textbox.open([`This scale is only for ${wrong.who === 'hero' ? 'the hero' : wrong.who === 'bramble' ? 'Bramble' : 'Ves'}. It does not move for anyone else.`]);
+    }
     const now = this.room.props.filter((p) => p.opensWith && p.isOpen).length;
     if (now !== was) sfx(now > was ? 'door' : 'back');
   }
@@ -1406,7 +1772,7 @@ export class OverworldScene {
   updateHush(dt) {
     if (!this.hush) return;
     this.hush.update(dt);
-    const bodies = [this.player, this.partner].filter(Boolean);
+    const bodies = this.bodies();
     for (const body of bodies) {
       const pile = this.room.props.find((p) => p.hide && !p.hidden && p.overlaps(body.x - 1, body.y - 2, body.x + 1, body.y));
       const tucked = Boolean(pile) && !body.moving && !body.isAirborne;
@@ -1433,8 +1799,13 @@ export class OverworldScene {
     this.caught.t += dt;
     const bog = this.caught.bog;
     if (bog) bog.body.sinking = Math.min(1, this.caught.t / (SINK_SECONDS * 0.7));
-    if (this.caught.t < (bog ? SINK_SECONDS : CAUGHT_SECONDS)) return;
+    if (this.caught.t < (bog ? SINK_SECONDS : this.caught.lamp ? LAMP_SECONDS : CAUGHT_SECONDS)) return;
+    const lamp = this.caught.lamp;
     this.caught = null;
+    if (lamp) {
+      this.sentBackByLamp();
+      return;
+    }
     if (bog) {
       this.climbOutOfBog(bog.body);
       return;
@@ -1451,6 +1822,11 @@ export class OverworldScene {
       follower.tucked = false;
     }
     this.room.resetPuzzle();
+    // (Kicked scree is loose again.)
+    for (const prop of this.room.props.filter((p) => p.lure)) {
+      prop.lureUsed = false;
+      prop.setLook(null);
+    }
     this.hush?.reset(this.roomData.hush.start ?? 0);
     const first = !(WORLD_STATE.read ?? []).includes('hush_caught');
     if (first) {
@@ -1458,6 +1834,11 @@ export class OverworldScene {
       WORLD_STATE.read.push('hush_caught');
     }
     // (Bramble says so in the Hushwood; Ves, in the Dead City.)
+    const own = this.roomData.hush?.caught;
+    if (own) {
+      this.textbox.open(textSection(this.roomData.textFile, first ? own.first : own.again), inParty(VES) ? VES : null);
+      return;
+    }
     const ves = !inParty(BRAMBLE) && inParty(VES);
     this.textbox.open(textSection(ves ? DEAD_TEXT : HUSH_TEXT, first ? 'hush_caught' : 'hush_caught_again'), ves ? VES : inParty(BRAMBLE) ? BRAMBLE : null);
   }
@@ -1469,7 +1850,7 @@ export class OverworldScene {
   // there's water all round).
   balance(dt, input) {
     const still = !(input.isDown('left') || input.isDown('right') || input.isDown('up') || input.isDown('down'));
-    for (const body of [this.player, this.partner, ...this.followers].filter(Boolean)) {
+    for (const body of [...this.bodies(), ...this.followers]) {
       const tx = Math.floor(body.x / T);
       const ty = Math.floor((body.y - 1) / T);
       const on = (body.ground ?? 0) === 0 && !body.isAirborne && this.room.isSteppingStone(tx, ty);
@@ -1491,7 +1872,7 @@ export class OverworldScene {
   // Step into the bog (at floor level, not mid-jump, and not where a log or
   // a rock has sunk to make a step) and after a moment it has you.
   checkBog(dt) {
-    for (const body of [this.player, this.partner].filter(Boolean)) {
+    for (const body of this.bodies()) {
       const [tx, ty] = body.tilePosition();
       const stuck = body.ground === 0 && !body.isAirborne && this.room.isBog(tx, ty);
       body.inBog = stuck ? (body.inBog ?? 0) + dt : 0;
@@ -1502,6 +1883,48 @@ export class OverworldScene {
         return;
       }
     }
+  }
+
+  // The sweeping lamps (lamps.js): somebody in a beam is seen, and you're all
+  // back at the last safe stop (see sentBackByLamp). Nothing hurts.
+  updateLamps(dt) {
+    if (this.lampFade > 0) this.lampFade = Math.max(0, this.lampFade - dt);
+    if (!this.lamps.active) return;
+    // The last safe zone you stood in is where you come back to.
+    const [tx, ty] = this.player.tilePosition();
+    const zone = (this.roomData.lampSafe ?? []).find((z) => tx >= z.x && tx < z.x + (z.w ?? 1) && ty >= z.y && ty < z.y + (z.h ?? 1));
+    if (zone) this.lampBack = { x: zone.x, y: zone.y };
+    this.lamps.update(dt);
+    this.lampGrace = Math.max(0, this.lampGrace - dt);
+    if (this.caught || this.cutscene || this.lampGrace > 0) return;
+    const party = [...this.bodies(), ...this.followers.filter((f) => !f.hidden)];
+    if (this.lamps.seen(party)) {
+      this.caught = { t: 0, lamp: true };
+      sfx('back');
+    }
+  }
+
+  // Back at the safe stop, everyone together; the room as it was.
+  sentBackByLamp() {
+    this.rejoin();
+    const at = this.lampBack ?? this.arrival;
+    this.player.x = at.x * T + T / 2;
+    this.player.y = (at.y + 1) * T;
+    this.player.ground = this.room.raiseAt(at.x, at.y);
+    this.player.z = 0;
+    this.unstick();
+    for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y);
+    this.lampGrace = 1.2;
+    this.lampFade = 0.6;
+    const words = this.roomData.lampText;
+    if (!words) return;
+    const key = `${this.roomData.id}:lamp_seen`;
+    const first = !(WORLD_STATE.read ?? []).includes(key);
+    if (first) {
+      WORLD_STATE.read ??= [];
+      WORLD_STATE.read.push(key);
+    }
+    this.textbox.open(textSection(this.roomData.textFile, first ? words.first : words.again ?? words.first), inParty(VES) ? VES : null);
   }
 
   // Sunk: back at the door you came in by, muddy to the knees, with Bramble,
@@ -1592,7 +2015,7 @@ export class OverworldScene {
     if (this.pushing.t < ROCK_PUSH_SECONDS) return;
     this.pushing.t = 0;
     // Ves can't push anything, on a crutch. She says so, once.
-    if (player.crutch) {
+    if (player.crutch || player.skin === VES) {
       if (!this.vesLeaned) {
         this.vesLeaned = true;
         this.textbox.open(textSection(DEAD_TEXT, 'ves_push'), VES);
@@ -1609,7 +2032,7 @@ export class OverworldScene {
     }
     const tx = rock.x / T + dx;
     const ty = rock.y / T + dy;
-    const into = rock.log ? room.logCanEnter(tx, ty) : room.rockCanEnter(tx, ty);
+    const into = rock.log ? room.logCanEnter(tx, ty) : room.rockCanEnter(tx, ty, false, rock.float);
     if (!into || this.somebodyAt(tx, ty)) return;
     sfx('push');
     this.pokedRock = null;
@@ -1663,6 +2086,7 @@ export class OverworldScene {
     const split = Boolean(this.partner);
     this.rejoin();
     this.room.resetRocks();
+    this.carts.reset();
     sfx('push');
     // Or standing out on a log bridge that's just gone: back to the door,
     // rather than onto whichever bank is nearer (which could be the far one).
@@ -1681,10 +2105,16 @@ export class OverworldScene {
   // (`resetText`), from the room's text file.
   useLever(prop, reached = false) {
     const say = (section, fallback) => this.textbox.open(section ? textSection(this.roomData.textFile, section) : [fallback]);
+    // A wheel or lever that only one of the party can turn (`by`).
+    if (prop.by && (this.player.skin ?? 'hero') !== prop.by && !reached) {
+      sfx('error');
+      say(prop.byText, 'It will not budge for you.');
+      return;
+    }
     // A `high` lever (the Dead City's) is up out of reach: only Ves can hook
     // it down with her crutch, whether you're steering her or she's with you.
     if (prop.high) {
-      const vesHere = this.player.skin === VES || (!this.partner && this.followers.some((f) => f.id === VES && !f.hidden) && this.heroBody.carrying !== VES);
+      const vesHere = this.player.skin === VES || (this.player === this.heroBody && this.followers.some((f) => f.id === VES && !f.hidden) && this.heroBody.carrying !== VES);
       if (!vesHere) {
         this.textbox.open(textSection(DEAD_TEXT, 'high_lever_no'));
         return;
@@ -1701,9 +2131,11 @@ export class OverworldScene {
           // Following you: you step back out of her way, and she comes up to
           // where you were, under the lever, before she reaches for it.
           const spot = { x: this.player.x, y: this.player.y };
+          // (Up on a block, the step aside stays on the block: not off its edge.)
+          const up = this.player.ground;
           const aside = [[0, T], [-T, 0], [T, 0], [0, 0]].map(([dx, dy]) => ({ x: spot.x + dx, y: spot.y + dy }))
-            .find((p) => (p.x === spot.x && p.y === spot.y) || !this.room.collides(p.x - 5, p.y - 6, p.x + 5, p.y));
-          reach.walk = { t: 0, seconds: 0.45, hero: { from: { ...spot }, to: aside }, ves: { from: { x: body.x, y: body.y }, to: spot } };
+            .find((p) => (p.x === spot.x && p.y === spot.y) || (!this.room.collides(p.x - 5, p.y - 6, p.x + 5, p.y, true) && Math.abs(this.room.floorHeight(p.x - 5, p.y - 6, p.x + 5, p.y) - up) < 0.5));
+          reach.walk = { t: 0, seconds: 0.45, hero: { from: { ...spot }, to: aside }, ves: { from: { x: body.x, y: body.y, ground: body.ground ?? 0 }, to: { ...spot, ground: up } } };
         }
         this.reaching = reach;
         if (!reach.walk) this.startReach();
@@ -1720,10 +2152,10 @@ export class OverworldScene {
     // (It checks after the flip, and flips back.)
     const flooded = (thing) => this.room.props.some((w) => w.wet && !w.hidden && w.x === thing.x && w.y === thing.y);
     const under = (body) => body && this.room.props.some((w) => w.wet && !w.hidden && w.overlaps(body.x - 5, body.y - 6, body.x + 5, body.y));
-    if (this.room.props.some((p) => (p.rock || (p.log && !p.sunk)) && !p.hidden && flooded(p)) || under(this.player) || under(this.partner)) {
+    if (this.room.props.some((p) => (p.rock || (p.log && !p.sunk)) && !p.hidden && flooded(p)) || this.bodies().some(under)) {
       this.room.flipLever(prop.lever);
       sfx('error');
-      this.textbox.open(textSection(HUSH_TEXT, under(this.player) || under(this.partner) ? 'sluice_someone' : 'sluice_blocked'));
+      this.textbox.open(textSection(HUSH_TEXT, this.bodies().some(under) ? 'sluice_someone' : 'sluice_blocked'));
       return;
     }
     if (reset.length) {
@@ -1754,6 +2186,7 @@ export class OverworldScene {
   }
 
   takeGift(prop) {
+    const section = prop.text;
     const pages = prop.text ? [...textSection(this.roomData.textFile, prop.text)] : [];
     const id = prop.gives;
     const armor = ARMOR[id];
@@ -1770,10 +2203,13 @@ export class OverworldScene {
       const list = slot === 'armor' ? HERO_STATE.armors : HERO_STATE.weapons;
       if (!list.includes(id)) list.push(id);
       // Away from the party (Ves, lost below the clouds): you keep it for her.
+      // Not met yet (anyone who's ever joined has points): no names, no clues.
       const who = MEMBERS[wielder].name[0] + MEMBERS[wielder].name.slice(1).toLowerCase();
+      const met = HERO_STATE.memberPoints?.[wielder] !== undefined;
       pages.push(inParty(wielder)
         ? `You got the ${name}! It's for ${MEMBERS[wielder].name}. Put it on from EQUIP (press C).`
-        : `You pocketed the ${name}. ${who} might like it.`);
+        : met ? `You pocketed the ${name}. ${who} might like it.`
+          : `You pocketed the ${name}. It's no use to you, but you keep it anyway.`);
     } else if (gear) {
       giveGear(id);
       pages.push(...textSection(GEAR_TEXT, `got_${id}`));
@@ -1800,6 +2236,8 @@ export class OverworldScene {
       prop.markTaken();
     }
     this.textbox.open(pages);
+    // `react: true` on the prop: the friends with you answer (`<text>_ves`, `<text>_bramble`).
+    if (prop.react && section && got) this.queueReactions(this.roomData.textFile, section);
   }
 
   // Someone who joins when you talk to them: their words, then they're with you.
@@ -1932,7 +2370,7 @@ export class OverworldScene {
     // Bramble doesn't do ropes. He says so. Nor does Ves, on her crutch.
     if (this.player === this.kid) {
       const near = findClimb(this.room, this.player) || ringNear(this.room, this.player);
-      if (near) this.textbox.open(this.kid.skin === VES ? textSection(DEAD_TEXT, 'ves_rope') : textSection(HUSH_TEXT, 'kid_rope'), this.kid.skin);
+      if (near) this.textbox.open(this.kid.skin === VES ? textSection(isHurt(VES) ? DEAD_TEXT : BEAM_TEXT, isHurt(VES) ? 'ves_rope' : 'ves_rope_well') : textSection(HUSH_TEXT, 'kid_rope'), this.kid.skin);
       return Boolean(near);
     }
     const plan = findClimb(this.room, this.player);
@@ -1965,22 +2403,23 @@ export class OverworldScene {
   // Up onto a block with Ves following: she can't climb on her crutch, so
   // she stays below where she is, and you're split up (Q to steer her).
   leaveVesBelow() {
-    if (this.partner || this.player !== this.heroBody || this.swapperId() !== VES) return;
+    // (Only while she's hurt: well again, she jumps up after you.)
+    if (this.partner || this.player !== this.heroBody || this.swapperId() !== VES || !isHurt(VES)) return;
     const follower = this.followers.find((f) => f.id === VES && !f.hidden);
     if (!follower) return;
-    this.kidFor(follower);
-    this.kid.x = Math.round(follower.x);
-    this.kid.y = Math.round(follower.y);
-    this.kid.ground = 0;
-    this.kid.z = 0;
-    this.kid.facing = 'up';
-    this.kid.moving = false;
-    if (this.kid.collidesAt(this.room, this.kid.x, this.kid.y) || this.kid.floorAt(this.room, this.kid.x, this.kid.y) > 0) {
-      this.kid.y += T;
-      if (this.kid.collidesAt(this.room, this.kid.x, this.kid.y) || this.kid.floorAt(this.room, this.kid.x, this.kid.y) > 0) this.kid.y -= 2 * T;
+    const kid = this.kidFor(follower);
+    kid.x = Math.round(follower.x);
+    kid.y = Math.round(follower.y);
+    kid.ground = 0;
+    kid.z = 0;
+    kid.facing = 'up';
+    kid.moving = false;
+    if (kid.collidesAt(this.room, kid.x, kid.y) || kid.floorAt(this.room, kid.x, kid.y) > 0) {
+      kid.y += T;
+      if (kid.collidesAt(this.room, kid.x, kid.y) || kid.floorAt(this.room, kid.x, kid.y) > 0) kid.y -= 2 * T;
     }
     follower.hidden = true;
-    this.partner = this.kid;
+    this.others.push(kid);
     if (!(WORLD_STATE.read ?? []).includes('ves_stays')) {
       WORLD_STATE.read ??= [];
       WORLD_STATE.read.push('ves_stays');
@@ -1992,15 +2431,15 @@ export class OverworldScene {
   // steering the hero.
   splitOff() {
     const follower = this.followers.find((f) => f.id === this.swapperId());
-    this.kidFor(follower);
-    this.kid.x = this.player.x;
-    this.kid.y = this.player.y;
-    this.kid.ground = this.player.ground;
-    this.kid.z = 0;
-    this.kid.facing = 'down';
-    this.kid.moving = false;
+    const kid = this.kidFor(follower);
+    kid.x = this.player.x;
+    kid.y = this.player.y;
+    kid.ground = this.player.ground;
+    kid.z = 0;
+    kid.facing = 'down';
+    kid.moving = false;
     follower.hidden = true;
-    this.partner = this.kid;
+    this.others.push(kid);
   }
 
   // Tiles can have words too (a flower bed, a pillar, a pool of water): words
@@ -2049,15 +2488,20 @@ export class OverworldScene {
 
   useSavePoint() {
     if (this.partner) {
-      this.textbox.open(textSection(HUSH_TEXT, 'split_save'));
+      // Whoever's off on their own: Bramble in the Hushwood, Ves underground.
+      this.textbox.open(textSection(HUSH_TEXT, this.kid?.skin === VES ? 'split_save_ves' : 'split_save'));
       return;
     }
+    // A save point heals you too (before saving, so the save is healed).
+    const hurt = HERO_STATE.hp < heroMaxHp() || Object.keys(HERO_STATE.memberHp ?? {}).length > 0;
+    healHeroFully();
     const [x, y] = this.player.tilePosition();
     const saved = saveGame(this.roomData.id, { x, y });
-    sfx('save');
+    sfx(hurt ? 'heal' : 'save');
     // The room's own words for it, or the Ruins' if its text file hasn't any.
     const section = saved ? 'save_point' : 'save_failed';
-    this.textbox.open(textFile(this.roomData.textFile)[section] ?? textSection('interactions/the_ruins.txt', section));
+    const pages = textFile(this.roomData.textFile)[section] ?? textSection('interactions/the_ruins.txt', section);
+    this.textbox.open(hurt ? [...pages, textSection('interactions/the_ruins.txt', 'save_healed')[0]] : pages);
     // Then, with Ves along and somewhere else found in this chapter to go,
     // TRAVEL (Stay here first, so tapping through the save doesn't send you off).
     const here = draftIn(this.roomData.id);
@@ -2082,7 +2526,19 @@ export class OverworldScene {
   // Once a cutscene has played, they can have new lines for after it:
   // [first after <scene id>] said once, then [repeat after <scene id>]. The
   // latest cutscene they have lines for wins.
+  // What an NPC says. Someone with a side quest (`quest`, src/data/quests.js)
+  // may say something else, or add to their usual words, depending on what you carry.
   npcPages(prop) {
+    const pages = this.usualPages(prop);
+    if (!prop.quest) return pages;
+    const rule = prop.quest.find((r) => questRuleHolds(r));
+    if (!rule) return pages;
+    const said = [...textSection(`npcs/${prop.npc}.txt`, rule.text)];
+    const effects = applyQuestRule(rule);
+    return [...(rule.append ? pages : []), ...said, ...effects];
+  }
+
+  usualPages(prop) {
     const path = `npcs/${prop.npc}.txt`;
     const sections = textFile(path);
     const scene = [...(WORLD_STATE.seenScenes ?? [])].reverse().find((id) => sections[`first after ${id}`]);
@@ -2108,24 +2564,37 @@ export class OverworldScene {
     // others (footprints lowest of all).
     const props = this.room.props.filter((prop) => this.inLight(prop));
     // On a geyser ride, the ride draws the hero and Ves itself.
-    const people = this.ride ? [this.ride, ...this.followers.filter((follower) => follower.id !== VES)] : [...this.followers, this.player, ...(this.partner ? [this.partner] : [])];
-    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.geysers, ...this.updrafts, ...this.whirls, ...(this.cutscene?.drawables ?? []), ...people].sort((a, b) => a.sortY - b.sortY);
+    // On the long rope, the rope draws all of you.
+    // (Tossed by a seed cloud with Ves, the trio draws all of you: hopTrio.)
+    const people = this.ride ? [this.ride, ...this.followers.filter((follower) => follower.id !== VES && !(follower.id === 'bramble' && this.ride.trio))]
+      : this.hop && this.hopTrio ? [this.hopTrio]
+      : this.rope ? [this.rope]
+        : [...this.followers, this.player, ...this.others];
+    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.geysers, ...this.updrafts, ...this.whirls, ...(this.touches?.things ?? []), ...(this.cutscene?.drawables ?? []), ...people].sort((a, b) => a.sortY - b.sortY);
     if (this.spire) {
       this.drawSpire(ctx);
       for (const entity of entities) this.drawOnSpire(ctx, entity);
     } else {
       ctx.drawImage(this.room.background, -this.camera.x, -this.camera.y);
+      if (this.roomData.rope) drawHangingRope(ctx, this.camera, this.roomData.rope, this.time);
       this.bridges.draw(ctx, this.camera, this.room.background, SCREEN_WIDTH);
       this.room.drawDamage(ctx, this.camera);
+      this.atmosphere?.drawFloor(ctx);
+      this.touches?.drawFloor(ctx);
       this.crumble?.drawFloor(ctx, this.camera);
+      this.carts.drawFloor(ctx, this.camera);
+      this.beams.drawFloor(ctx, this.camera);
       // Outdoors by day, everything standing casts a shadow (see shadows.js).
       if (this.underSky) {
         const sun = sunShadows(WORLD_STATE.playSeconds);
         drawBlockShadows(ctx, this.camera, this.room, sun);
         drawShadows(ctx, this.camera, entities, sun);
+      } else {
+        drawPropFootShadows(ctx, this.camera, props);
       }
       for (const entity of entities) entity.draw(ctx, this.camera);
       this.crumble?.draw(ctx, this.camera);
+      this.beams.draw(ctx, this.camera);
     }
     const project = this.spire ? (x) => this.project(x).x : (x) => x - this.camera.x;
     this.drawReflection(ctx);
@@ -2133,23 +2602,44 @@ export class OverworldScene {
     this.climb?.drawTarget(ctx, this.camera, project);
     this.drawSnowCap(ctx);
     this.drawParticles(ctx);
+    this.carts.drawFx(ctx, this.camera);
+    this.atmosphere?.drawUnder(ctx);
     if (this.roomData.birds) this.drawBirds(ctx);
     // High up, wisps of cloud blow across between you and everything.
     if (this.roomData.vista && (this.roomData.vista.altitude ?? 0) > 0.55) drawWisps(ctx, this.time, Math.min(1, ((this.roomData.vista.altitude ?? 0) - 0.55) * 2.5));
     if (this.underSky) this.drawTimeOfDay(ctx);
     else if (this.lamplit) this.drawLamplight(ctx, false);
+    // Up a long rope: the daylight coming down from the top.
+    if (this.roomData.rope?.daylight) drawDaylightFromAbove(ctx, this.camera, this.roomData.rope);
     // The snow blows the way the weathervanes say, if there are any; on a
     // gusty face it blows harder during a gust.
     if (this.roomData.weather && this.weatherAmount > 0) drawSnow(ctx, this.roomData.weather, this.time, (this.roomData.wind ?? 1) * (this.gusting ? 2.6 : 1), this.wind ? WIND_STEP[this.wind] : null, this.weatherAmount);
     if (this.roomData.fog && this.weatherAmount > 0) drawFog(ctx, this.time, this.roomData.fog * this.weatherAmount);
     // The Hush's shadow, over everything on the floor, and the old wood's gloom.
+    this.lamps?.draw(ctx, this.camera, this.time);
     this.hush?.draw(ctx, this.camera);
     if (this.roomData.gloom) this.drawGloom(ctx);
     if (this.roomData.mist) this.drawMist(ctx);
     if (this.caught) this.drawCaught(ctx);
-    if (this.partner && !this.cutscene) this.drawSplitTag(ctx);
+    else if (this.lampFade > 0) this.drawBlack(ctx, 0, '255, 246, 214', this.lampFade * 1.6);
+    this.tides.drawHud(ctx);
+    if (this.partner && !this.cutscene) {
+      this.drawSplitTag(ctx);
+      if (this.trio()) this.drawSteerMark(ctx);
+    }
     if (this.roomData.dark) this.drawDarkness(ctx);
+    this.hush?.drawSound(ctx, this.camera);
+    this.atmosphere?.drawOver(ctx);
+    this.touches?.drawOver(ctx);
     this.cutscene?.drawOverlay(ctx, this.camera);
+    this.atmosphere?.drawTop(ctx);
+    // A room's own curtains, left drawn open after a show (`openCurtains`).
+    const drapes = this.roomData.openCurtains;
+    if (drapes && !this.cutscene && (WORLD_STATE.seenScenes ?? []).includes(drapes.after)) {
+      this.drapes ??= new Stage();
+      if (!this.drapes.curtain) this.drapes.apply({ curtains: { x: drapes.x, y: drapes.y, w: drapes.w, h: drapes.h, open: 1 } });
+      this.drapes.drawCurtains(ctx, this.camera);
+    }
     // Underground, the edges of the screen sink into shadow; outdoors they don't.
     if (!OUTDOOR_AREAS.has(this.roomData.area) || this.roomData.indoors) ctx.drawImage(vignette(), 0, 0);
     if (this.resting) this.drawBlack(ctx, this.restDarkness);
@@ -2313,8 +2803,20 @@ export class OverworldScene {
   // dark room and your light doesn't reach it.
   inLight(prop) {
     if (!prop.seenInLight || !this.roomData.dark) return true;
+    if (this.beams.litProp(prop)) return true;
     const { x, y } = this.lightPoint;
-    return Math.hypot(prop.x + prop.width / 2 - x, prop.y + T / 2 - y) < lightRadius() * 0.8;
+    return Math.hypot(prop.x + prop.width / 2 - x, prop.y + T / 2 - y) < this.lightReach() * 0.8;
+  }
+
+  // How far your light reaches here: your candle's, or, in a room with
+  // `glowworms` (the Deep) while Ves is with you, at least the glow of the
+  // worms that have settled on her umbrella (see glowworm_umbrella).
+  lightReach() {
+    return Math.max(lightRadius(), this.wormLight());
+  }
+
+  wormLight() {
+    return this.roomData.glowworms && inParty('vesper') ? this.roomData.glowworms : 0;
   }
 
   // Dusk and night, outdoors: the light goes gold, then the dark comes down
@@ -2382,17 +2884,28 @@ export class OverworldScene {
     const { shade, tint, lit } = ambientFor(this.roomData, outdoors, night);
     const lights = roomLights(this.room, outdoors);
     const sky = skyColor(night);
+    const beat = beatPulse(performance.now() / 1000);
     // Sky windows let in more by night (moonlight off the snow) than they
     // seem to by day, against a room lit by fires.
-    const strengthOf = (l) => l.strength * flickerAt(l, this.time) * (l.sky ? 0.5 + night : lit);
+    const strengthOf = (l) => l.strength * flickerAt(l, this.time) * (l.sky ? 0.5 + night : lit) * (l.sings && this.swell !== null ? 0.85 + 0.45 * this.swell : 1) * (l.beat || (l.sings && this.swell !== null) ? 1 + (l.beat ? 0.32 : 0.1) * beat.env + 0.18 * beat.down : 1);
     if (shade > 0.01) {
       const holes = lights.filter((l) => l.pool).map((l) => ({ x: l.x, y: l.y, radius: l.pool * 0.9, cut: strengthOf(l) * 1.1 }));
       // Your own little light (so you never vanish in the dark) is faint here:
       // the lamps do the lighting.
       holes.push({ ...this.lightPoint, radius: 20, cut: 0.3 });
+      // Light beams light their own path (beams.js).
+      holes.push(...this.beams.lights());
       this.drawShade(ctx, shade, tint, 0, holes);
     }
     ctx.save();
+    // A relit town (the Sunstone blazing): a warm golden wash over everything
+    // (kept light, so the town still reads under it).
+    if (!outdoors && isRelit(this.roomData)) {
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = 'rgba(70, 46, 14, 0.3)';
+      ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      ctx.globalCompositeOperation = 'source-over';
+    }
     // Light is soft: let the round pictures blend as they're scaled.
     ctx.imageSmoothingEnabled = true;
     for (const l of lights) {
@@ -2421,10 +2934,14 @@ export class OverworldScene {
     const t = performance.now() / 1000;
     const flicker = 1 + Math.sin(t * 9) * 0.03 + Math.sin(t * 23) * 0.02;
     // Lit by the room's lights, your own, and any cutscene character who glows.
-    this.drawShade(ctx, this.roomData.dark, '4, 2, 10', lightRadius() * flicker, [...this.room.lightSources(), ...(this.cutscene?.lights ?? [])]);
+    // (Crystals reach further into the dark as the Deep's song swells.)
+    const swell = this.swell ?? 0;
+    const sources = this.room.lightSources().map((l) => (l.crystal && swell ? { ...l, radius: l.radius * (0.85 + 0.55 * swell) } : l));
+    this.drawShade(ctx, this.roomData.dark, '4, 2, 10', this.lightReach() * flicker, [...sources, ...this.beams.lights(), ...(this.cutscene?.lights ?? [])]);
+    if (swell) this.drawCrystalSwell(ctx, sources, swell, t);
     // Your candle's warm glow on everything near you.
     const { x, y } = this.lightPoint;
-    const radius = lightRadius() * flicker;
+    const radius = this.lightReach() * flicker;
     const cx = x - this.camera.x;
     const cy = y - this.camera.y;
     const warm = ctx.createRadialGradient(cx, cy, 2, cx, cy, radius);
@@ -2436,6 +2953,27 @@ export class OverworldScene {
     ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
     ctx.restore();
     this.drawCandleGauge(ctx);
+  }
+
+  // A cold glow on each crystal, brighter as the Deep's song swells (and a
+  // slow shimmer of its own, each crystal a little out of step).
+  drawCrystalSwell(ctx, lights, swell, t) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (const l of lights) {
+      if (!l.crystal) continue;
+      const x = l.x - this.camera.x;
+      const y = l.y - this.camera.y + 4;
+      if (x < -40 || y < -40 || x > SCREEN_WIDTH + 40 || y > SCREEN_HEIGHT + 40) continue;
+      const shimmer = 0.85 + 0.15 * Math.sin(t * 1.3 + l.x * 0.05 + l.y * 0.03);
+      const r = 10 + 14 * swell + 5 * beatPulse(performance.now() / 1000).env;
+      const g = ctx.createRadialGradient(x, y, 1, x, y, r);
+      g.addColorStop(0, `rgba(150, 215, 255, ${(0.12 + 0.3 * swell) * shimmer})`);
+      g.addColorStop(1, 'rgba(150, 215, 255, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    ctx.restore();
   }
 
   // Ves reaching a high lever (see useLever): first, if she's following,
@@ -2452,6 +2990,8 @@ export class OverworldScene {
       this.player.moving = k < 1 && (w.hero.from.x !== w.hero.to.x || w.hero.from.y !== w.hero.to.y);
       this.player.animationTime += dt;
       Object.assign(reach.body, lerp(w.ves.from, w.ves.to));
+      // Up on a block, she climbs up to it as she goes (or she'd be drawn behind it).
+      reach.body.ground = w.ves.from.ground + (w.ves.to.ground - w.ves.from.ground) * k;
       reach.body.walking = k < 1;
       reach.body.time += dt;
       if (Math.abs(w.ves.to.x - w.ves.from.x) > Math.abs(w.ves.to.y - w.ves.from.y)) reach.body.dir = w.ves.to.x < w.ves.from.x ? 'left' : 'right';
@@ -2471,7 +3011,7 @@ export class OverworldScene {
     else {
       body.animation = null;
       // She falls in behind you again from here.
-      body.warpTo(body.x, body.y);
+      body.warpTo(body.x, body.y, this.player.ground);
     }
     this.useLever(prop, true);
   }
@@ -2485,13 +3025,35 @@ export class OverworldScene {
     reach.until = this.time + 0.85;
   }
 
+  // Whether a body's feet are on a solid tile (not up a climb, or in a hop or ride).
+  onThinAir(body) {
+    if (this.climb || this.hop || this.ride || this.player.ground) return false;
+    return this.room.isSolidTile(Math.floor(body.x / T), Math.floor((body.y - 1) / T));
+  }
+
   // The party behind you, in a line: each one that's walking with you takes
   // the next place back along your path (one hidden in a scene, or standing
   // still while you're split up, doesn't hold a place).
   updateFollowers(dt) {
     let place = 0;
     for (const follower of this.followers) {
-      follower.update(dt, this.player, place);
+      const [x, y] = [follower.x, follower.y];
+      // (They follow the hero, not whoever you're steering: split up, the rest wait.)
+      follower.update(dt, this.heroBody, place);
+      // The path can cut a corner over a drop (or lead over a bridge of light
+      // that's gone): never walk on thin air, wait at the last firm spot.
+      // Where you jumped it (stone to stone over water), they jump it too.
+      const waiting = !follower.hidden && !follower.ground && !follower.leaping && this.onThinAir(follower) && !this.onThinAir({ x, y });
+      if (waiting) {
+        follower.x = x;
+        follower.y = y;
+      }
+      // Never stranded: held up for long while you've gone on, they catch you up.
+      follower.heldFor = waiting && follower.walking ? (follower.heldFor ?? 0) + dt : 0;
+      if (follower.heldFor > FOLLOWER_STRANDED && !this.onThinAir(this.heroBody)) {
+        follower.warpTo(this.heroBody.x, this.heroBody.y + 2, this.heroBody.ground ?? 0);
+        follower.heldFor = 0;
+      }
       if (!follower.hidden) place++;
     }
   }
@@ -2502,8 +3064,9 @@ export class OverworldScene {
     const lit = HERO_STATE.lit && HERO_STATE.items.includes(HERO_STATE.lit.id) ? HERO_STATE.lit : null;
     inUiSpace(ctx, () => {
       const right = UI_WIDTH - 16;
-      const label = lit ? ITEMS[lit.id].name : 'No candle';
-      drawText(ctx, label, right, 12, { size: 22, color: lit ? '#ffd27a' : '#8a82b0', outline: '#000', align: 'right' });
+      const worms = !lit || lightRadius() < this.wormLight();
+      const label = lit ? ITEMS[lit.id].name : worms && this.wormLight() ? 'Glow-worms' : 'No candle';
+      drawText(ctx, label, right, 12, { size: 22, color: lit ? '#ffd27a' : worms && this.wormLight() ? '#9ff0c8' : '#8a82b0', outline: '#000', align: 'right' });
       if (!lit) return;
       const burn = ITEMS[lit.id].light.burn;
       const left = burn === Infinity ? 1 : Math.max(0, lit.left / burn);
@@ -2549,6 +3112,12 @@ export class OverworldScene {
 
   // Seen by the Hush: the dark closes in, fast, with its eyes in it.
   drawCaught(ctx) {
+    // Seen by a lamp: a soft white wash, no eyes.
+    if (this.caught.lamp) {
+      const k = Math.min(1, this.caught.t / LAMP_SECONDS);
+      this.drawBlack(ctx, 0, '255, 246, 214', k * k * 0.95);
+      return;
+    }
     // Sinking in the bog: a slow fade, no eyes.
     if (this.caught.bog) {
       this.drawBlack(ctx, Math.max(0, (this.caught.t - SINK_SECONDS * 0.45) / (SINK_SECONDS * 0.45)));
@@ -2566,15 +3135,35 @@ export class OverworldScene {
 
   // Split up: who you're steering, in the corner, and how to get back.
   drawSplitTag(ctx) {
+    // Below the song label while that is showing, not under it.
+    const drop = nowPlayingShowing() ? NOW_PLAYING_DROP : 0;
     inUiSpace(ctx, () => {
       const kid = this.player === this.kid ? MEMBERS[this.kid.skin] : null;
-      drawText(ctx, kid ? kid.name : 'YOU', 16, 12, { size: 22, color: kid ? (this.kid.skin === BRAMBLE ? '#ffb07a' : '#c8b0f0') : '#ffffff', outline: '#000' });
-      drawText(ctx, 'Q: switch   Z on the other: together', 16, 38, { size: 16, color: '#c8c0e0', outline: '#000' });
+      drawText(ctx, kid ? kid.name : 'YOU', 16, 12 + drop, { size: 22, color: kid ? (this.kid.skin === BRAMBLE ? '#ffb07a' : '#c8b0f0') : '#ffffff', outline: '#000' });
+      const help = this.trio()
+        ? `${keyName(keyFor('swap'))}: Ves   ${keyName(keyFor('swapB'))}: Bramble   ${keyName(keyFor('regroup'))}: regroup   Z on one: together`
+        : 'Q: switch   Z on the other: together';
+      drawText(ctx, help, 16, 38 + drop, { size: 16, color: '#c8c0e0', outline: '#000' });
     });
   }
 
-  drawBlack(ctx, alpha) {
-    ctx.fillStyle = `rgba(0, 0, 0, ${Math.min(1, Math.max(0, alpha)).toFixed(3)})`;
+  // With all three of you about: a little arrow over the one you're steering,
+  // in their colour, so there's no doubt who's walking.
+  drawSteerMark(ctx) {
+    const who = this.player;
+    const color = who.skin ? MEMBERS[who.skin].color : '#ffffff';
+    const x = Math.round(who.x - this.camera.x);
+    const bob = Math.round(Math.sin(this.time * 6) * 1.5);
+    const y = Math.round(who.y - (who.ground ?? 0) - (who.z ?? 0) - (who.small ? 22 : 30) - this.camera.y) + bob;
+    ctx.fillStyle = '#000';
+    for (let i = 0; i < 4; i++) ctx.fillRect(x - 4 + i - 1, y + i - 1, 9 - 2 * i + 2, 1);
+    ctx.fillRect(x - 5, y - 1, 11, 1);
+    ctx.fillStyle = color;
+    for (let i = 0; i < 4; i++) ctx.fillRect(x - 3 + i, y + i, 7 - 2 * i, 1);
+  }
+
+  drawBlack(ctx, alpha, rgb = '0, 0, 0', override = null) {
+    ctx.fillStyle = `rgba(${rgb}, ${Math.min(1, Math.max(0, override ?? alpha)).toFixed(3)})`;
     ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
   }
 

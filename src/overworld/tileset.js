@@ -1,5 +1,8 @@
 import { TILE_SIZE as T } from '../config.js';
 import { OUTDOOR_AREAS } from '../data/areas.js';
+import { deepBaseFloor, installDeepTiles } from './deepTiles.js';
+import { BRIGHT_AREAS, installBrightTiles } from './brightTiles.js';
+import { COAST_AREAS, installCoastTiles } from './coastTiles.js';
 
 // Tiles drawn in code as pixel art. Each draw function paints one tile at
 // pixel (x, y); tx/ty and room let a tile react to its neighbours. The old
@@ -261,6 +264,13 @@ export function floorUnder(room, tx, ty) {
 }
 function drawBaseFloor(ctx, x, y, tx, ty, room) {
   const under = floorUnder(room, tx, ty);
+  // Sunnyside, the Glimmering and Belowtown floor things their own way (brightTiles.js).
+  if (BRIGHT_AREAS.has(room?.area) && TILES[under]) return TILES[under].draw(ctx, x, y, tx, ty, room);
+  // Chapter 5's coast does the same (coastTiles.js).
+  if (COAST_AREAS.has(room?.area) && TILES[under]) return TILES[under].draw(ctx, x, y, tx, ty, room);
+  // The Diggings, the Stillwater and the Deep floor things their own way (deepTiles.js).
+  const deepFloor = deepBaseFloor(room, under);
+  if (deepFloor) return deepFloor(ctx, x, y, tx, ty, room);
   const draw = { o: drawWoodFloor, ',': drawGrass, ':': drawPath, s: drawStair, n: drawSnow, i: drawSnowPath, l: drawSnowLane, z: drawIce, q: drawCaveFloor, g: drawBridge, d: drawLeafLitter, y: drawLeafPath, X: drawCobbles, j: drawDryChannel, ';': drawFenTurf }[under] ?? drawFloor;
   draw(ctx, x, y, tx, ty, room);
 }
@@ -2008,6 +2018,10 @@ function drawIceCrystals(ctx, x, y, tx, ty, room) {
 // uneven, and a bridge that ends in the air ends in splintered planks. All of
 // it is laid in world pixels, so it runs on unbroken from tile to tile.
 const DROP_ROCK = ['#6f7a94', '#78849e', '#66718a', '#737e98'];
+// The seaside cliffs (Sunnyside's sea view, Gullrest): warm sandstone and earth,
+// not the cold grey rock of the mountain, with turf hanging over the lip.
+const SEA_ROCK = ['#c29a62', '#b88e58', '#ad8450', '#bf9660'];
+const isSeaside = (room) => room.area === 'sunnyside' || room.area === 'gullrest';
 const isLand = (c) => c !== null && c !== undefined && c !== '_';
 const isRockFace = (c) => c === 'E' || c === 'M' || c === 'k' || c === 'K';
 // What hangs over the edge on top of the rock: snow (on snowy ground and the
@@ -2044,7 +2058,10 @@ function drawUnderside(ctx, room, tx, ty) {
   const goesOnRight = isLand(room.tileAt(tx + 1, ty - 1)) || isLand(room.tileAt(tx + 1, ty));
   const bridge = above === 'g';
   const rock = isRockFace(above);
-  const lipColor = lipOf(above);
+  const seaside = isSeaside(room);
+  const lipColor = seaside && !rock ? { top: '#58b04a', under: '#3f8a38' } : lipOf(above);
+  const rockColors = seaside ? SEA_ROCK : DROP_ROCK;
+  const shadeRgb = seaside ? '70, 42, 20' : '20, 26, 52';
   for (let c = 0; c < T; c++) {
     const wx = x + c;
     let taper = 1;
@@ -2070,21 +2087,21 @@ function drawUnderside(ctx, room, tx, ty) {
     }
     for (let r = lip + (lip ? 1 : 0); r < depth; r++) {
       const band = Math.floor((y + r) / 3);
-      px(ctx, pick(DROP_ROCK, hash(Math.floor(wx / 9), band, 903)), wx, y + r, 1, 1);
+      px(ctx, pick(rockColors, hash(Math.floor(wx / 9), band, 903)), wx, y + r, 1, 1);
     }
     // It darkens the further down it goes, into the cold.
     const top = lip + (lip ? 1 : 0);
     if (depth > top) {
       const shade = ctx.createLinearGradient(0, y + top, 0, y + depth);
-      shade.addColorStop(0, 'rgba(20, 26, 52, 0.1)');
-      shade.addColorStop(1, 'rgba(20, 26, 52, 0.6)');
+      shade.addColorStop(0, `rgba(${shadeRgb}, 0.1)`);
+      shade.addColorStop(1, `rgba(${shadeRgb}, ${seaside ? 0.45 : 0.6})`);
       ctx.fillStyle = shade;
       ctx.fillRect(wx, y + top, 1, depth - top);
     }
     // Light catches the odd ledge in the rock.
-    if (hash(Math.floor(wx / 4), ty, 904) < 0.18) px(ctx, '#8a96b0', wx, y + top + 2, 1, 1);
+    if (hash(Math.floor(wx / 4), ty, 904) < 0.18) px(ctx, seaside ? '#e2c48c' : '#8a96b0', wx, y + top + 2, 1, 1);
     // A ragged bottom edge, and below it the shadow fading into the drop.
-    px(ctx, '#3e4560', wx, y + depth - 1, 1, 1);
+    px(ctx, seaside ? '#6a4a2a' : '#3e4560', wx, y + depth - 1, 1, 1);
     const fall = ctx.createLinearGradient(0, y + depth, 0, y + depth + 7);
     fall.addColorStop(0, 'rgba(8, 12, 30, 0.32)');
     fall.addColorStop(1, 'rgba(8, 12, 30, 0)');
@@ -2791,3 +2808,13 @@ function drawCrumblingFloor(ctx, x, y, tx, ty, room) {
   for (let i = 0; i < 3; i++) px(ctx, '#2a2448', x + 2 + Math.floor(hash(tx, ty, 950 + i) * 12), y + 2 + Math.floor(hash(tx, ty, 955 + i) * 12));
 }
 TILES['!'] = { solid: false, draw: drawCrumblingFloor };
+
+// Chapter 4's Diggings, Stillwater and Deep redraw the tiles above for their
+// own rooms, and add `0` (a drop into the dark): see deepTiles.js.
+installDeepTiles(TILES);
+
+// Chapter 4's Sunnyside, Glimmering and Belowtown redraw them too: see brightTiles.js.
+installBrightTiles(TILES, { drawBaseFloor });
+
+// Chapter 5's coast: the sunny beach and the green-storm shore (coastTiles.js).
+installCoastTiles(TILES, { drawBaseFloor });

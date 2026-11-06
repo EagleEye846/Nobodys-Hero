@@ -1,0 +1,21 @@
+# BT_MARKET_KID: A frog kid in a saucepan helmet, bored of the market and looking for anything to do.
+
+[first]
+Hello! Are you the Hero? Have you got a sword? Can I look at your sword? Is it a real one?
+
+Mine's a stick. I mean, my sword. It's a sword.
+
+[repeat]
+I counted the stalls. Then I counted them backwards. There's one more going backwards.
+
+[first after the_kings_welcome]
+You're going on the quest! Can I come? No? I'll hold your coat.
+
+[repeat after the_kings_welcome]
+I'll be here. Practising. I'm getting better at standing.
+
+[first after the_light_goes_up]
+THE LIGHT! THE LIGHT'S BACK! I THOUGHT IT'D NEVER!
+
+[repeat after the_light_goes_up]
+I'm taking the helmet off. It's a party. It's allowed.

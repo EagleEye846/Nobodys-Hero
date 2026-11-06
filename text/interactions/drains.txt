@@ -165,7 +165,7 @@ A chest, lodged where the current left it.
 [gratings_chalk]
 A chalk arrow, pointing on, and a note:
 
-"I can hear water. water goes SOMEWHERE."
+"I can hear water. Water goes SOMEWHERE."
 
 [gratings_chalk_bramble]
 {thinking}That's true. Water always goes somewhere. Ma says if you're ever lost, follow the water and it'll take you out.

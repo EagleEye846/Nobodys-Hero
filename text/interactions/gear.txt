@@ -60,3 +60,155 @@ A whistle carved out of a bit of elder, with his name scratched on it, spelt wro
 You got a STAR SHARD.
 
 A splinter of pale star-metal as long as your hand, still warm, struck deep into the old stone. It hums at the same note as the sword.
+
+[got_star_shard_deep]
+You got a DEEP STAR SHARD.
+
+A second splinter of star-metal, stuck in the rock like a nail in a beam. It's colder than the first one, and it hums lower. The sword hums back.
+
+[got_singing_shard]
+You picked up the SINGING SHARD.
+
+A sliver of crystal as long as a finger, humming one low note, no matter how you hold it. It's warm, and every time you shift it in your hand it sounds like someone in the next room is nearly tuning up.
+
+In the Glimmering, your footsteps will ring the old tune, one note a step.
+
+[got_paper_crown]
+You picked up the SPARE PAPER CROWN.
+
+Gold paper, creased, and much too big. It was never really a king's. It's somebody's idea of one.
+
+[got_pearl_button]
+You fished up the PEARL BUTTON.
+
+A pearl button, smooth as a pebble, with four tiny holes and no coat to go with it. You don't know whose it was. You keep it anyway.
+
+# --- SIDE QUESTS (src/data/quests.js) ---
+# Things carried from one person to another, and the keepsakes the errands pay in.
+
+[got_bram_trumpet]
+You got BRAM'S TRUMPET.
+
+Brass, dented, and very cold. It smells faintly of soup.
+
+[got_fanfare_pin]
+You got the FANFARE PIN.
+
+A tin pin in the shape of a trumpet, rubbed smooth by a child's thumb. The first one Bram ever got.
+
+[got_marta_mittens]
+You got MARTA'S MITTENS.
+
+Thick grey wool, with a small trumpet knitted on the back of each. Still warm from the needles. They're not for you.
+
+[got_dunstan_note]
+You got DUNSTAN'S NOTE.
+
+A scrap of paper, folded small. "Fits. Thank you. -- D." The D is underlined twice.
+
+[got_marta_scarf]
+You got MARTA'S SEVENTH SCARF.
+
+Grey-brown, the colour of a good mountain goat, with a row of stitches for every step of the great stair. It is much too long. It is warm all the way down.
+
+[got_bell_clapper]
+You took the BELL CLAPPER out of the stew.
+
+A long iron pole with a heavy knob on the end, black from years of gravy. It was made to hang inside a bell.
+
+[got_bell_spoon]
+You got the BELL-METAL SPOON.
+
+A spoon cut from the last scrap of the Lasthome bell. Tap it on anything and it says one note, low and round and kind.
+
+[got_biscuit]
+You picked up BISCUIT.
+
+She weighs more than she looks. She doesn't mind being carried, as long as everyone understands it was her idea.
+
+[got_bean_medal]
+You got the BEAN MEDAL.
+
+A dried bean on a string. Scratched on it, in careful letters: BEST BEAN-PICKER IN TOWN, UNDER ELEVEN.
+
+[got_thistle_hat]
+You took THISTLE'S HAT off the line.
+
+Brown felt, a brass trumpet badge on the front, and quite clean for the first time in its life. It's still dripping.
+
+[got_herald_button]
+You got the HERALD'S BUTTON.
+
+A brass button off a herald's coat, stamped with a trumpet. It has been handed down the whole way from Heralds' Rest.
+
+[got_mattock_letter]
+You got the LETTER FOR MATTOCK.
+
+Folded in three, with a smudged postmark and a mole's name on the front in round, firm handwriting.
+
+[got_mattock_reply]
+You got MATTOCK'S REPLY.
+
+A scrap of sacking with a muddy thumbprint on it and a drawing of a hat.
+
+[got_sunstone_stamp]
+You got the SUNSTONE STAMP.
+
+A little square of paper with the Sunstone on it, burning bright, printed in gold ink that has hardly faded. It's for the day the Hero writes back.
+
+[got_slow_toffee]
+You got the SLOW TOFFEE.
+
+A toffee in a wrapper folded into nineteen tiny pleats. It took a long time to make, and you can tell.
+
+[got_warm_teacup]
+You got the SPARE TEACUP.
+
+A small cup with a chip in the rim, kept for visitors who stay. It is warm, and it doesn't seem to be getting any colder.
+
+# --- CHAPTER 5: the drowned coast ---
+[got_star_shard_wreck]
+You got a WRECK STAR SHARD.
+
+A third splinter of star-metal, wedged high in a snapped mast with the fog drifting past it. It's the loudest yet. It hums right through the wood, and the sword answers like it's been waiting.
+
+[got_haddocks_bell]
+You got HADDOCK'S BELL.
+
+A brass handbell on a worn cord, warm from his hand. It rings a small, clear note that makes the sea sound further off than it is.
+
+"Ring it if the sea gets cheeky."
+
+[got_bathtub_bell]
+You got the BATHTUB BELL.
+
+A ship's bell with a bathtub for a shell, and a note on it, in very neat writing: PLEASE WIPE YOUR FEET. It's a key to something in the Wrack Shore.
+
+[got_gulper_tooth]
+You got the GULPER TOOTH.
+
+A curved tooth as long as your arm, pale as a candle, still damp. It fits a lock somewhere in Merrow.
+
+[got_brass_sounding_weight]
+You got the BRASS SOUNDING-WEIGHT.
+
+A big brass weight on a long cord, for measuring how deep. It is deep. In the Soundings, somewhere, there's a hook it fits.
+
+[got_paper_boat]
+You got the PAPER BOAT.
+
+Bramble's. Haddock folded it from a page of an old tide table, after the swimming lesson, and Bramble hasn't put it down. It's a bit soggy. It floats.
+
+[got_haddocks_ledger]
+You found HADDOCK'S LEDGER.
+
+A salt-stained ledger in a lightman's tight hand. Every page is a day: the tide, the weather, how long the lamp burned. You turn to the last page.
+
+[haddocks_ledger_read]
+Tide: out, a long way out.
+Wind: none.
+Lamp: lit.
+
+The last line is only the date, and then, in a different pen, one word.
+
+found

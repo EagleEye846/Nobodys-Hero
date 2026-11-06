@@ -121,6 +121,24 @@ export function paginate(ctx, text, maxWidth, size, maxLines) {
     }
   }
   if (page) pages.push(page);
+  // No page of just a word or two left over ("anything."): bring a few words
+  // over from the end of the page before, so the carried-on page reads as a line.
+  for (let i = 1; i < pages.length; i++) {
+    const rest = pages[i];
+    if (!rest.startsWith(CONTINUED) || rest.includes('\n')) continue;
+    const carried = rest.slice(CONTINUED.length).split(' ');
+    if (carried.length >= 4) continue;
+    const before = pages[i - 1];
+    const cut = before.lastIndexOf('\n') + 1;
+    const tail = before.slice(cut).split(' ');
+    while (carried.length < 4 && tail.length > 4) {
+      const moved = [tail[tail.length - 1], ...carried];
+      if (!fits(CONTINUED + moved.join(' '))) break;
+      carried.unshift(tail.pop());
+    }
+    pages[i - 1] = before.slice(0, cut) + tail.join(' ');
+    pages[i] = CONTINUED + carried.join(' ');
+  }
   return pages;
 }
 

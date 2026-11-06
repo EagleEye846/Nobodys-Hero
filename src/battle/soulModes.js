@@ -38,6 +38,9 @@ export const SOUL_MODES = {
   },
 
   // Boss only. Falls to the floor of the box and jumps; hold jump to go higher.
+  // An attack can give the box `platforms` ({ x, y, w }, which it can move)
+  // to stand on as well: you jump up through them and land on top, and ride
+  // one wherever it goes till you jump or walk off its end.
   heavy: {
     color: '#b07cff',
     hint: 'Your SHADOW turns HEAVY and falls.\nPress UP to jump. Hold it to jump higher.',
@@ -45,20 +48,43 @@ export const SOUL_MODES = {
       soul.focused = false;
       soul.x += axis(input, 'left', 'right') * HEAVY_SPEED * dt;
 
+      const platforms = box.platforms ?? null;
+      const under = (p) => soul.x >= p.x - 2 && soul.x <= p.x + p.w + 2;
+      if (soul.platform && !(platforms?.includes(soul.platform) && under(soul.platform))) soul.platform = null;
+      if (soul.platform) soul.grounded = true;
+
       const jumpPressed = input.wasPressed('up') || input.wasPressed('jump');
       const jumpHeld = input.isDown('up') || input.isDown('jump');
       if (soul.grounded && jumpPressed) {
         soul.vy = -HEAVY_JUMP;
         soul.grounded = false;
+        soul.platform = null;
       }
       if (!jumpHeld && soul.vy < -HEAVY_JUMP * HEAVY_SHORT_HOP) soul.vy = -HEAVY_JUMP * HEAVY_SHORT_HOP;
 
-      soul.vy += HEAVY_GRAVITY * dt;
-      soul.y += soul.vy * dt;
+      if (soul.platform) {
+        soul.y = soul.platform.y - SOUL_INSET;
+        soul.vy = 0;
+      } else {
+        const was = soul.y;
+        soul.vy += HEAVY_GRAVITY * dt;
+        soul.y += soul.vy * dt;
+        // Landing on one, coming down onto its top (a little slack, as it
+        // may have moved down this frame too).
+        if (platforms && soul.vy >= 0) {
+          const landed = platforms.find((p) => under(p) && was <= p.y - SOUL_INSET + 1.5 && soul.y >= p.y - SOUL_INSET);
+          if (landed) {
+            soul.platform = landed;
+            soul.y = landed.y - SOUL_INSET;
+            soul.vy = 0;
+          }
+        }
+      }
 
       const floor = box.y + box.h - SOUL_INSET;
-      soul.grounded = soul.y >= floor;
-      if (soul.grounded) {
+      soul.grounded = Boolean(soul.platform) || soul.y >= floor;
+      if (soul.y >= floor) {
+        soul.platform = null;
         soul.y = floor;
         soul.vy = 0;
       }

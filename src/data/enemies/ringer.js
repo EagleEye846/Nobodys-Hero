@@ -19,8 +19,8 @@ export const RINGER = {
     frames: [RINGER_DISGUISE_SPRITES.still, RINGER_DISGUISE_SPRITES.peek, RINGER_DISGUISE_SPRITES.twitch],
     palette: RINGER_PALETTE,
   },
-  maxHp: 150,
-  damage: 13,
+  maxHp: 160,
+  damage: 14,
 
   // A Chapter 2 enemy, and a heavy hitter.
   difficulty: { density: 1.15, speed: 1.15 },
@@ -41,7 +41,7 @@ export const RINGER = {
     { name: 'Swing on it', calm: 35 },
   ],
 
-  rewards: { exp: 85, coins: 50 },
+  rewards: { exp: 90, coins: 65 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'filings_toffee', chance: 0.4 }],

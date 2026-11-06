@@ -1,0 +1,9 @@
+# BT_BAND_A: A frog drummer who plays his own belly, in the party after the Sunstone relights. Not much conversation: he's busy.
+
+[first]
+*thump* *thump* *thumpa-thump*
+
+*Sorry. Can't talk. It's an important beat.*
+
+[repeat]
+*thump* *thump-thump* *THUMP*

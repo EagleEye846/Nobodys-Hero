@@ -16,8 +16,8 @@ export const SILTLING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: SILTLING_SPRITE, palette: SILTLING_PALETTE },
-  maxHp: 480,
-  damage: 19,
+  maxHp: 550,
+  damage: 22,
 
   // The Old Drains, below Hollin: a step up from the Hushwood's.
   difficulty: { density: 1.3, speed: 1.2 },
@@ -39,7 +39,7 @@ export const SILTLING = {
     { name: 'Help it sort', calm: 30 },
   ],
 
-  rewards: { exp: 175, coins: 90 },
+  rewards: { exp: 375, coins: 45 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'fifty_year_humbug', chance: 0.4 }],

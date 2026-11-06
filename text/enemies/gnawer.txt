@@ -1,0 +1,70 @@
+# GNAWER
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/gnawer.js.
+
+[intro]
+Something clicks in the dark. Then a great many things click. A GNAWER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+GNAWER turns one ear toward you, then the other. It can hear your pulse.
+
+GNAWER's jaw works slowly, chewing nothing. It has been chewing nothing for a very long time.
+
+GNAWER has no eyes, but it looks past your shoulder as though someone is standing there.
+
+Somewhere in GNAWER, a tooth falls out. Another grows in. It doesn't seem to mind.
+
+Smells like old bone and a long time.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+I hear you.
+
+Click click
+click.
+
+Quiet!
+No... louder.
+
+Teeth.
+Teeth.
+
+What's that
+sound? You.
+
+Hungry for
+the quiet.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/gnawer.js.
+[talk: Inspect]
+GNAWER - HP 1250
+Blind, old, and with far too many teeth. It hears everything, including you thinking about running. Gnaws bones, floors, and you.
+
+[talk: Hum something]
+You hum, low and slow. GNAWER's ears swing round to you and stay there. Its jaw stops, mid-chew, and stays stopped until you run out of breath.
+
+[talk: Offer it a bone]
+You hold out a bone you found. GNAWER takes it with surprising delicacy, turns it over, and gnaws it into a very small bone. It's the happiest you've seen anything look down here.
+
+[talk: Tap a slow rhythm]
+You tap a slow beat on the stone. GNAWER listens. Then it taps back with one tooth, a little behind. You do this for a while. It's a duet.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+GNAWER's jaw closes at last, with a click like a lock. The rest of it follows quietly.
+
+[pacified]
+GNAWER lays its big ears down and settles with its chin on a bone. Its jaw goes slack and quiet and, you realise, very tired. It lets you pass.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves keeps absolutely silent, and so does {foe}, and the two of them listen to each other not talking for a very long time.
+
+Ves hums three low notes. {foe}'s ears swivel to her. It hums one back, out of tune, through too many teeth.
+
+Ves offers {foe} the handle of her umbrella to chew. It does, politely. She will be buying a new one.

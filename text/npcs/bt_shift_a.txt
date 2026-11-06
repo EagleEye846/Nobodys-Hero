@@ -1,0 +1,19 @@
+# BT_SHIFT_A: A grey mole on his way to the Diggings for the long shift, lamp already lit, in no hurry.
+
+[first]
+Shift's starting. Well. It's been starting for a while. The Diggings aren't going anywhere.
+
+[repeat]
+Can't stop. If I stop, I'll sit down. If I sit down, that's my day.
+
+[first after the_kings_welcome]
+Below the old seam, is it? Rather you than me. Mind the lower drifts. Not that you will. Nobody does.
+
+[repeat after the_kings_welcome]
+Left lamp's low. It's fine. Moles see perfectly well in the dark. We just like to look busy.
+
+[first after the_light_goes_up]
+It's so bright I put my lamp out. Then I walked into a barrel. Worth it.
+
+[repeat after the_light_goes_up]
+Is it still a shift if there's a party? I'm going to say no.

@@ -16,8 +16,8 @@ export const CLINKER = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: CLINKER_SPRITE, palette: CLINKER_PALETTE },
-  maxHp: 520,
-  damage: 19,
+  maxHp: 600,
+  damage: 22,
 
   // A Chapter 3 enemy from under Hollin's well: a step past the Grist.
   difficulty: { density: 1.3, speed: 1.2 },
@@ -39,7 +39,7 @@ export const CLINKER = {
     { name: 'Say it LOUDER', calm: 30 },
   ],
 
-  rewards: { exp: 185, coins: 95 },
+  rewards: { exp: 390, coins: 50 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'mug_barley_sugar', chance: 0.4 }],

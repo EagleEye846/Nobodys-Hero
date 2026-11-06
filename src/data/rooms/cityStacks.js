@@ -16,8 +16,8 @@ export const CITY_STACKS = {
   // The region it's in (see src/data/areas.js): names the title card you see
   // on arriving from another region, and picks the battle background.
   area: 'valley',
-  // Quiet.
-  music: null,
+  // "A Book Left Open" (src/data/music/openBookTheme.js).
+  music: 'openBook',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'cave',
   // Under cover: no sky, and the edges of the screen sink into shadow.

@@ -10,7 +10,7 @@
 //
 // How it's worked out:
 // - Rooms: a walk from the start room through doors, wind geysers and the
-//   rooms cutscenes send you on to (end_chapter). It finishes each area before
+//   rooms cutscenes send you on to (end_chapter, goto). It finishes each area before
 //   crossing into the next, so the areas come out in the order you reach them.
 //   An area you come back to later (Mount Vigil again, past Heralds' Rest) gets
 //   a heading of its own. Rooms no door reaches go at the end of their area.
@@ -86,7 +86,14 @@ export function loadOrder(fresh = false) {
       const source = await readText(path);
       for (const name of songsNamedIn(source)) if (!engineSongs.includes(name)) engineSongs.push(name);
     }
+    // Battle songs an area swaps in for an enemy's own (AREA_SONGS in the
+    // battle scene: the mines' fights, say): heard in that area.
+    const areaSongs = {};
+    const battle = await readText('src/battle/battleScene.js').catch(() => '');
+    const table = battle.match(/AREA_SONGS\s*=\s*\{([^;]*)\};/);
+    if (table) for (const m of table[1].matchAll(/(\w+):\s*\{([^}]*)\}/g)) areaSongs[m[1]] = [...m[2].matchAll(/'(\w+)'/g)].map((x) => x[1]);
     return computeOrder({
+      areaSongs,
       rooms: rooms.ROOMS,
       startRoom: rooms.START_ROOM?.id,
       scenes: scenes.SCENES,
@@ -124,21 +131,30 @@ function roomSceneIds(room, scenes) {
   return out;
 }
 
-export function computeOrder({ rooms, startRoom, scenes = {}, enemies = {}, songs = {}, shops = {}, engineSongs = [] }) {
+export function computeOrder({ rooms, startRoom, scenes = {}, enemies = {}, songs = {}, shops = {}, engineSongs = [], areaSongs = {} }) {
   // --- Rooms: finish each area before crossing into the next. ---
+  // (A door marked `back` is a way back out of somewhere you reach later,
+  // like the stair up from the Deep into Belowtown: it's followed last.)
+  const later = [];
   const exits = (room) => {
     const out = [];
-    for (const door of room.doors ?? []) out.push(door.to);
+    for (const door of room.doors ?? []) {
+      if (door.back) later.push({ id: door.to, from: room.area ?? null });
+      else out.push(door.to);
+    }
     for (const geyser of room.geysers ?? []) out.push(geyser.to);
     for (const id of roomSceneIds(room, scenes)) {
-      for (const step of scenes[id].steps ?? []) if (step.do === 'end_chapter') out.push(step.room);
+      // (A chapter's end, and a scene that sends you on to another room:
+      // down the well, into the fall, out of the falling hall.)
+      for (const step of scenes[id].steps ?? []) if (step.do === 'end_chapter' || step.do === 'goto') out.push(step.room);
     }
     return out.filter((to) => to && to !== room.id && rooms[to]);
   };
   const segments = []; // { area, from, rooms: [] }
   const seen = new Set();
   let seeds = startRoom && rooms[startRoom] ? [{ id: startRoom, from: null }] : [];
-  while (seeds.length) {
+  while (seeds.length || later.length) {
+    if (!seeds.length) seeds = later.splice(0);
     const next = [];
     for (const seed of seeds) {
       if (seen.has(seed.id)) continue;
@@ -202,6 +218,7 @@ export function computeOrder({ rooms, startRoom, scenes = {}, enemies = {}, song
     const s = sectionOfRoom.get(id);
     put('rooms', id, s);
     put('songs', room.music, s);
+    for (const name of areaSongs[room.area] ?? []) put('songs', name, s);
     for (const npc of room.npcs ?? []) {
       put('enemies', npc.enemy, s);
       put('songs', battleSong(npc.enemy), s);

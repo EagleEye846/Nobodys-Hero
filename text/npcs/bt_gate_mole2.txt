@@ -1,0 +1,21 @@
+# BT_GATE_MOLE2: A mole in a bow tie, who has dressed up for the arrival of the Hero and has not been told it's a false alarm.
+
+[first]
+I put on my bow tie! Is it you? Is it THEM?
+
+Oh. Is it... two of you? Well, the more the merrier.
+
+[repeat]
+I ironed this tie for three hours. I'd like it noticed, please.
+
+[first after the_kings_welcome]
+Off to save us all, I hear. My tie and I are very proud.
+
+[repeat after the_kings_welcome]
+Do give my regards to the Diggings. Tell the lift I said hello.
+
+[first after the_light_goes_up]
+The light's back! I'm in a bow tie! This is the best day of my life!
+
+[repeat after the_light_goes_up]
+Do you think they'd mind if I danced?

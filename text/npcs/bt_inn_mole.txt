@@ -1,0 +1,21 @@
+# BT_INN_MOLE: A mole miner at the inn table, nursing a mug of ginger moss-beer and a long, long grudge against a particular cart.
+
+[first]
+Sit. Drink. Have you met the Cart? No? Count yourself lucky. It's been rolling since Tuesday.
+
+It doesn't stop. It doesn't look. It knows what it's doing, and what it's doing is me.
+
+[repeat]
+That cart and I have a history. Mostly it's the cart hitting me.
+
+[first after the_kings_welcome]
+You're for the Diggings? Right. Mind the Cart. Don't stand on the rails. Don't trust the rails. Don't trust the cart.
+
+[repeat after the_kings_welcome]
+Ah, forget it. Take my hat. It's seen worse. Mostly from the cart.
+
+[first after the_light_goes_up]
+To the Hero's friends! May their carts never roll over them! Hic!
+
+[repeat after the_light_goes_up]
+Drink up! There's another one coming! There's always another one coming!

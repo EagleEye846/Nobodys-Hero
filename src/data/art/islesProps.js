@@ -1,0 +1,483 @@
+// Props for Chapter 5's Beacon Isles. Drawn like lanesProps.js: rows of characters from a small
+// painter, 16 pixels to a tile, standing on the bottom edge and centred over their footprint.
+// Every id starts `il_`. Ones that move are also animations: put the prop's name in the object's
+// `animation` too (and a `speed`).
+//
+//   il_light_tower        a little lighthouse on its own rock: white with a red band, an iron
+//                         gallery, the lantern's glass dark. The lit lamp is drawn over the
+//                         glass by the room's sweeping lamp (lamps.js `art: 'lens'`), so a lamp
+//                         that's shuttered just shows the dark glass. The lantern's middle is
+//                         58 px above the foot: put the lamp three tiles above the prop's tile.
+//   il_light_tower_old    the same tower, long out of use: rust, a cracked pane, a door at the
+//                         foot (a room's door goes on its tile; lay it `walkable`)
+//   il_dead_lens          the old light's great lens on its pedestal, grey with dust (2 wide)
+//   il_tea_table*         a little table under the lightroom window: a lit lantern, and a cup of
+//                         tea with the steam still coming off it (2 wide; speed about 0.3)
+//   il_shutter_crank      a winch on a post with a pulley; its chain runs up to the lamp's
+//   il_shutter_crank_on   shutter. The _on look has the handle round and the chain taut
+//   il_light_shaft*       the big light's beam coming down through the forge's high window:
+//                         a pale column with dust in it (lay it `flat, walkable`; speed 0.3)
+//   il_far_light          Haddock's Light, far off across the water: a white tower, one warm
+//                         window (stands on the sea; no footprint of its own to walk into)
+//   il_note_tidy          a scrap of paper under a pebble (flat)
+//   il_broom              a broom standing in a bucket
+//   il_shell_row          shells set out in a neat row by size (flat)
+//   il_logbook            the old light's logbook on a lectern
+//   il_lantern_glass      the old lightroom's glass, all round: tall panes in an iron frame on a
+//   il_lantern_glass_cracked  brick sill, the storm outside (2 wide; lay them side by side on
+//   il_lantern_glass_salt     the wall row). One pane starred; salt crusted in the corners.
+//   il_lantern_glass_corner   the glass turning the north-west corner (and _corner_r the north-east),
+//                             two panes stepping back to the side wall (2 wide).
+
+const colors = new Map();
+const palette = {};
+function char(hex) {
+  if (!colors.has(hex)) {
+    const c = String.fromCharCode(0xf500 + colors.size);
+    colors.set(hex, c);
+    palette[c] = hex;
+  }
+  return colors.get(hex);
+}
+
+class Grid {
+  constructor(w, h) {
+    this.w = w;
+    this.h = h;
+    this.cells = Array.from({ length: h }, () => Array(w).fill(null));
+  }
+
+  set(x, y, c) {
+    x = Math.round(x);
+    y = Math.round(y);
+    if (x >= 0 && y >= 0 && x < this.w && y < this.h) this.cells[y][x] = c || null;
+  }
+
+  rect(x, y, w, h, c) {
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) this.set(x + i, y + j, c);
+  }
+
+  rows() {
+    return this.cells.map((row) => row.map((c) => (c ? char(c) : '.')).join(''));
+  }
+}
+
+const frames = (fn, n) => Object.fromEntries(Array.from({ length: n }, (_, i) => [`f${i + 1}`, fn(i)]));
+
+const WHITE = ['#8a887c', '#b8b4a4', '#d8d4c4', '#ece8da'];
+const RED = ['#6a2624', '#9a3c34', '#b8524a'];
+const IRON = ['#1c2026', '#2e343c', '#4a5260', '#6a7480'];
+const GLASS = ['#16303a', '#22444e', '#3a6670', '#8ab8b4'];
+const ROCK = ['#26302e', '#3c4a46', '#52625e', '#6a7a74'];
+const WEED = ['#2e5030', '#3c6a38', '#5a8a4a'];
+const RUST = ['#5a3420', '#8a4c2a'];
+const WOOD = ['#3a2a1c', '#5a4430', '#7a6046', '#9a7c5a'];
+const LAMP = ['#c88a30', '#ffc860', '#fff0b0', '#fffbe6'];
+const DUST = ['#9a968a', '#b4b0a2', '#cfcabb'];
+const PAPER = ['#cfc6ae', '#e8e0c8'];
+
+// --- The little lighthouse ---------------------------------------------
+// 28 wide, 76 high. The rock it stands on (the bottom 10 rows), the tower tapering from 14 to 10
+// wide, a red band, the gallery, the lantern (glass at rows 14-24, its middle 58 px above the
+// foot), and the cap.
+function tower(old) {
+  const g = new Grid(28, 76);
+  const cx = 14;
+  // The rock, wet, with weed at the waterline.
+  for (let y = 64; y < 76; y++) {
+    const half = Math.min(13, 7 + (y - 64));
+    for (let x = cx - half; x < cx + half; x++) {
+      const edge = x === cx - half || x === cx + half - 1;
+      g.set(x, y, y > 72 ? WEED[(x + y) % 2] : edge ? ROCK[0] : (x + y) % 5 === 0 ? ROCK[3] : ROCK[(x * 3 + y) % 2 + 1]);
+    }
+  }
+  // The tower: tapering, lit from the left.
+  for (let y = 26; y < 66; y++) {
+    const half = Math.round(5 + ((y - 26) / 40) * 2.5);
+    for (let x = cx - half; x < cx + half; x++) {
+      const t = (x - (cx - half)) / (2 * half);
+      let c = t < 0.25 ? WHITE[3] : t < 0.7 ? WHITE[2] : t < 0.9 ? WHITE[1] : WHITE[0];
+      if (y >= 40 && y < 47) c = t < 0.25 ? RED[2] : t < 0.8 ? RED[1] : RED[0];
+      if (old && ((x * 7 + y * 3) % 23 === 0 || (y > 48 && (x * 5 + y) % 17 === 0))) c = RUST[(x + y) % 2];
+      g.set(x, y, c);
+    }
+  }
+  // Rust weeping down from the gallery on the old one.
+  if (old) for (let y = 27; y < 38; y++) { g.set(cx - 3, y, RUST[1]); if (y < 33) g.set(cx + 2, y, RUST[0]); }
+  // A small window half way up, and the door at the foot.
+  g.rect(cx - 1, 34, 2, 3, old ? IRON[0] : LAMP[0]);
+  g.rect(cx - 2, 56, 4, 9, WOOD[1]);
+  g.rect(cx - 2, 56, 4, 1, WOOD[3]);
+  g.set(cx + 1, 61, old ? RUST[1] : LAMP[1]);
+  // The gallery: a ledge and a rail on posts.
+  g.rect(cx - 8, 25, 16, 2, IRON[1]);
+  g.rect(cx - 8, 25, 16, 1, IRON[3]);
+  g.rect(cx - 8, 21, 16, 1, IRON[2]);
+  for (let x = cx - 8; x <= cx + 7; x += 3) g.rect(x, 21, 1, 4, IRON[2]);
+  // The lantern: iron frame and glass.
+  g.rect(cx - 6, 12, 12, 13, IRON[1]);
+  for (let y = 13; y < 24; y++) {
+    for (let x = cx - 5; x < cx + 5; x++) {
+      const pane = (x - (cx - 5)) % 4 === 3;
+      g.set(x, y, pane ? IRON[0] : y < 16 ? GLASS[2] : GLASS[y % 3 === 0 ? 1 : 0]);
+    }
+  }
+  g.set(cx - 4, 14, GLASS[3]); g.set(cx - 4, 15, GLASS[3]); g.set(cx - 3, 14, GLASS[3]);
+  if (old) { g.set(cx + 2, 17, IRON[0]); g.set(cx + 3, 18, IRON[0]); g.set(cx + 2, 19, GLASS[3]); g.set(cx + 4, 16, IRON[0]); }
+  // The cap: a dome, a ball and a vane rod.
+  for (let y = 6; y < 12; y++) {
+    const half = Math.round(2 + (y - 6) * 0.9);
+    for (let x = cx - half; x < cx + half; x++) g.set(x, y, x < cx - half + 2 ? IRON[3] : old ? (x % 3 ? IRON[1] : RUST[0]) : IRON[2]);
+  }
+  g.rect(cx - 1, 2, 2, 4, IRON[2]);
+  g.rect(cx - 1, 1, 2, 1, IRON[3]);
+  return g.rows();
+}
+
+// --- The dead lens ------------------------------------------------------
+function deadLens() {
+  const g = new Grid(32, 36);
+  // An iron pedestal and its foot.
+  g.rect(6, 32, 20, 4, IRON[1]);
+  g.rect(6, 32, 20, 1, IRON[3]);
+  g.rect(12, 24, 8, 8, IRON[1]);
+  g.rect(12, 24, 2, 8, IRON[2]);
+  // The lens: a barrel of glass rings, brass bands, grey with dust.
+  for (let y = 2; y < 25; y++) {
+    const half = 11 - Math.round(Math.abs(y - 13) * 0.25);
+    for (let x = 16 - half; x < 16 + half; x++) {
+      const ring = (y - 2) % 4 === 0;
+      const t = (x - (16 - half)) / (2 * half);
+      let c = ring ? '#8a7a4a' : t < 0.3 ? '#7a8a86' : t < 0.75 ? '#5e6e6a' : '#46524e';
+      if (!ring && (x * 5 + y * 3) % 7 === 0) c = DUST[(x + y) % 3];
+      g.set(x, y, c);
+    }
+  }
+  // Dust on its top, and a cobweb from the band to the pedestal.
+  g.rect(8, 1, 16, 1, DUST[2]);
+  g.rect(10, 0, 12, 1, DUST[1]);
+  for (let i = 0; i < 6; i++) { g.set(5 + i, 24 + i, DUST[2]); g.set(5 + i, 30 - i, DUST[1]); }
+  return g.rows();
+}
+
+// --- The old lightroom: the corner glass and the tea table -----------------
+// The lantern glass turning a corner (the old lightroom is eight-sided): two
+// panes stepping back and down from the north glass to the side wall, each a
+// little darker than the last as it turns away from the light. 2 wide; stand
+// `il_lantern_glass_corner` on the room's north-west corner and `_corner_r`
+// on the north-east (foot one row below the north glass).
+function cornerGlass(right) {
+  const g = new Grid(32, 50);
+  const pane = (x0, top, w, dark) => {
+    const frame = dark ? IRON[0] : IRON[1];
+    const sillTop = top + 25;
+    // The sill: two courses of brick.
+    for (let r = 0; r < 2; r++) {
+      for (let bx = x0 + (r % 2 ? -4 : 0); bx < x0 + w; bx += 8) {
+        const a = Math.max(x0, bx);
+        const b = Math.min(bx + 7, x0 + w);
+        if (b <= a) continue;
+        g.rect(a, sillTop + 1 + r * 4, b - a, 3, ROCK[dark ? 1 : 2]);
+        g.rect(a, sillTop + 1 + r * 4, b - a, 1, ROCK[dark ? 2 : 3]);
+      }
+    }
+    g.rect(x0, sillTop, w, 1, IRON[0]);
+    // Rails and mullions, and the glass between.
+    g.rect(x0, top, w, 2, frame);
+    g.rect(x0, top, w, 1, IRON[dark ? 2 : 3]);
+    g.rect(x0, top + 23, w, 2, frame);
+    g.rect(x0, top + 12, w, 1, frame);
+    for (let x = x0; x < x0 + w; x += 8) g.rect(x, top + 2, 2, 21, frame);
+    g.rect(x0 + w - 1, top + 2, 1, 21, frame);
+    for (let x = x0; x < x0 + w - 1; x++) {
+      if ((x - x0) % 8 < 2) continue;
+      for (let y = top + 2; y < top + 23; y++) {
+        if (y === top + 12) continue;
+        const streak = (x * 2 + y) % 9 === 0;
+        g.set(x, y, streak ? GLASS[dark ? 1 : 2] : y < top + 7 && !dark ? GLASS[1] : GLASS[0]);
+      }
+    }
+    if (!dark) { g.set(x0 + 2, top + 3, GLASS[3]); g.set(x0 + 3, top + 3, GLASS[2]); }
+    // Salt in the bottom corners.
+    g.rect(x0 + 2, top + 20, 3, 3, DUST[0]);
+  };
+  // The nearer pane (meeting the north glass) and the farther one, lower down.
+  if (right) { pane(0, 4, 16, false); pane(16, 15, 16, true); }
+  else { pane(16, 4, 16, false); pane(0, 15, 16, true); }
+  // The iron post where they meet, down to the sill.
+  const px = 15;
+  g.rect(px, 4, 2, 44, IRON[1]);
+  g.rect(px, 4, 1, 44, IRON[2]);
+  return g.rows();
+}
+
+// The tea table (lantern 5): a little round table under an old lace cloth,
+// its scalloped edge hanging down, on one turned leg. On it the lantern
+// (brass cap and base, the flame inside its glass), and the cup on its saucer
+// with a spoon, the steam still coming off it. 8 frames: the flame licks and
+// the steam rises. 30 x 30, the lantern where it always was, so the room's
+// glow still sits on it.
+function teaTable(i) {
+  const g = new Grid(30, 30);
+  const CLOTH = ['#a8a290', '#cfc8b2', '#e6e0cc', '#f4f0e2'];
+  // The turned leg and its foot, under the cloth.
+  g.rect(14, 24, 3, 4, WOOD[1]);
+  g.rect(14, 24, 1, 4, WOOD[2]);
+  g.rect(13, 26, 5, 1, WOOD[2]);
+  g.rect(10, 28, 11, 2, WOOD[1]);
+  g.rect(10, 28, 11, 1, WOOD[2]);
+  g.set(10, 29, WOOD[0]); g.set(20, 29, WOOD[0]);
+  // The top, round, under the cloth; the cloth hangs down all round in scallops.
+  for (let y = 15; y <= 24; y++) {
+    const dy = (y - 19) / 4.6;
+    const half = Math.round(13 * Math.sqrt(Math.max(0, 1 - Math.min(1, dy * dy))));
+    if (y > 19) {
+      // Below the top's widest line: the drop of the cloth, straight down.
+      for (let x = 2; x < 28; x++) {
+        const scallop = y === 24 ? (x % 4 === 1 || x % 4 === 2) : true;
+        if (!scallop) continue;
+        g.set(x, y, y === 24 ? CLOTH[1] : x < 6 ? CLOTH[2] : x > 23 ? CLOTH[0] : CLOTH[1]);
+      }
+      continue;
+    }
+    for (let x = 15 - half; x < 15 + half; x++) g.set(x, y, y < 17 ? CLOTH[3] : CLOTH[2]);
+  }
+  // Lace: a row of little holes near the hem, and a fold or two.
+  for (let x = 3; x < 27; x += 2) g.set(x, 22, CLOTH[0]);
+  for (let x = 4; x < 27; x += 4) g.set(x, 23, CLOTH[0]);
+  g.rect(9, 20, 1, 3, CLOTH[0]); g.rect(21, 20, 1, 3, CLOTH[0]);
+  g.rect(2, 20, 26, 1, CLOTH[1]);
+  // Its shadow on the boards.
+  g.rect(4, 25, 22, 1, '#00000040');
+  // The lantern, on the left: brass cap and ring, the iron cage, glass, the flame.
+  g.rect(8, 5, 1, 2, IRON[2]);
+  g.rect(7, 4, 3, 1, '#d8a838');
+  g.rect(5, 7, 7, 2, '#a07020');
+  g.rect(5, 7, 7, 1, '#d8a838');
+  g.rect(5, 16, 7, 2, '#a07020');
+  g.rect(4, 17, 9, 1, '#5c3e10');
+  g.rect(5, 9, 1, 7, IRON[1]);
+  g.rect(11, 9, 1, 7, IRON[1]);
+  g.rect(8, 9, 1, 7, IRON[1]);
+  const lick = [0, 1, 0, -1][i % 4];
+  g.rect(6, 9, 2, 7, LAMP[0]);
+  g.rect(9, 9, 2, 7, LAMP[0]);
+  g.rect(6, 11, 2, 5, LAMP[1]);
+  g.rect(9, 11, 2, 5, LAMP[1]);
+  g.set(7 + (lick > 0 ? 2 : 0), 11 + (i % 2), LAMP[3]);
+  g.set(7 + (lick > 0 ? 2 : 0), 12 + (i % 2), LAMP[2]);
+  g.set(9 + lick, 10, LAMP[2]);
+  // The saucer, the cup and its spoon, on the right.
+  g.rect(16, 17, 10, 1, '#b8b4a8');
+  g.rect(17, 16, 8, 1, '#d8d4c8');
+  g.rect(18, 11, 6, 5, '#e4e0d4');
+  g.rect(18, 11, 6, 1, '#f4f2ea');
+  g.rect(19, 12, 4, 1, '#7a4a28');
+  g.rect(24, 12, 1, 3, '#c8c4b8');
+  g.set(25, 13, '#c8c4b8');
+  g.rect(18, 14, 6, 1, '#4a7a8a');
+  g.rect(16, 16, 1, 1, '#c8ccd0'); g.rect(14, 17, 3, 1, '#9aa0a6');
+  // The steam: three wisps rising and swaying.
+  for (let w = 0; w < 3; w++) {
+    for (let k = 0; k < 4; k++) {
+      const y = 9 - ((k * 3 + i + w) % 9);
+      const x = 19 + w * 1.5 + Math.round(Math.sin((y + i + w * 2) / 2) * 1.2);
+      if (y >= 0) g.set(x, y, k > 2 ? '#e8ecec80' : '#f4f8f8b0');
+    }
+  }
+  return g.rows();
+}
+
+// --- The shutter crank --------------------------------------------------
+function shutterCrank(on) {
+  const g = new Grid(20, 36);
+  // A post with a pulley at the top; the chain runs up and away to the shutter.
+  g.rect(3, 4, 3, 30, WOOD[1]);
+  g.rect(3, 4, 1, 30, WOOD[3]);
+  g.rect(1, 34, 18, 2, ROCK[2]);
+  g.rect(2, 3, 5, 1, IRON[2]);
+  g.set(4, 2, IRON[3]); g.set(3, 2, IRON[2]); g.set(5, 2, IRON[2]);
+  for (let y = 0; y < 22; y += 2) g.set(6 + (on ? 0 : y % 4 ? 1 : 0), 3 + y, IRON[3]);
+  // The drum on its frame, bolted to the post.
+  g.rect(6, 22, 10, 8, IRON[1]);
+  g.rect(7, 23, 8, 6, on ? '#5a5248' : IRON[2]);
+  for (let x = 7; x < 15; x += 2) g.rect(x, 24, 1, 4, IRON[0]);
+  g.rect(6, 30, 2, 4, IRON[1]);
+  g.rect(14, 30, 2, 4, IRON[1]);
+  // The handle: down when idle, round the top when wound.
+  if (on) { g.rect(15, 18, 1, 6, IRON[3]); g.rect(15, 17, 3, 2, WOOD[2]); }
+  else { g.rect(15, 26, 1, 6, IRON[3]); g.rect(15, 31, 3, 2, WOOD[2]); }
+  return g.rows();
+}
+
+// --- The light shaft in the forge ---------------------------------------
+function lightShaft(i) {
+  const g = new Grid(32, 72);
+  for (let y = 0; y < 72; y++) {
+    const half = 6 + Math.round(y / 9);
+    const cx = 16 + Math.round((72 - y) / 18);
+    for (let x = cx - half; x < cx + half; x++) {
+      const t = Math.abs(x - cx) / half;
+      g.set(x, y, t < 0.45 ? '#fff4c838' : t < 0.8 ? '#fff0c022' : '#fff0c012');
+    }
+  }
+  // Dust drifting in it.
+  for (let k = 0; k < 9; k++) {
+    const y = (k * 8 + i * 3) % 70;
+    const x = 12 + ((k * 5 + i) % 9) + Math.round(Math.sin((y + k) / 5));
+    g.set(x, y, '#fff8e0a0');
+  }
+  return g.rows();
+}
+
+// --- Haddock's Light, far off -------------------------------------------
+function farLight() {
+  const g = new Grid(14, 44);
+  g.rect(2, 40, 10, 4, ROCK[1]);
+  g.rect(1, 42, 12, 2, ROCK[0]);
+  for (let y = 12; y < 40; y++) {
+    const half = 3 + Math.round((y - 12) / 14);
+    for (let x = 7 - half; x < 7 + half; x++) g.set(x, y, x < 7 - half + 2 ? '#c8c8bc' : '#9a9a90');
+  }
+  g.rect(6, 30, 2, 2, LAMP[1]);
+  g.rect(3, 10, 8, 2, IRON[1]);
+  g.rect(4, 5, 6, 5, '#3a3428');
+  g.rect(5, 6, 4, 3, LAMP[0]);
+  g.rect(5, 3, 4, 2, IRON[1]);
+  g.rect(6, 1, 2, 2, IRON[2]);
+  return g.rows();
+}
+
+// --- The lantern glass, all round the old lightroom ------------------------
+// 32 wide, 34 high (two tiles wide): a low brick sill, then tall panes in an iron frame with the
+// storm outside them, rain running down. Laid side by side along the lightroom's wall row.
+// `cracked` has one pane starred; `salt` has salt crusted in the corners.
+function lanternGlass(kind) {
+  const g = new Grid(32, 34);
+  // The sill: brick, two courses.
+  for (let r = 0; r < 2; r++) {
+    for (let bx = r % 2 ? -4 : 0; bx < 32; bx += 8) {
+      const x0 = Math.max(0, bx);
+      g.rect(x0, 26 + r * 4, Math.min(bx + 7, 32) - x0, 3, ROCK[(bx / 8 + r) & 1 ? 2 : 1]);
+      g.rect(x0, 26 + r * 4, Math.min(bx + 7, 32) - x0, 1, ROCK[3]);
+    }
+  }
+  g.rect(0, 25, 32, 1, IRON[0]);
+  // The frame: a rail top and bottom, and a mullion every 8 px.
+  g.rect(0, 0, 32, 2, IRON[1]);
+  g.rect(0, 0, 32, 1, IRON[3]);
+  g.rect(0, 23, 32, 2, IRON[1]);
+  g.rect(0, 23, 32, 1, IRON[2]);
+  for (let x = 0; x < 32; x += 8) { g.rect(x, 2, 2, 21, IRON[1]); g.set(x, 2, IRON[3]); }
+  g.rect(0, 12, 32, 1, IRON[1]);
+  // The panes: the storm outside, darker low down, rain streaking across them.
+  for (let pane = 0; pane < 4; pane++) {
+    const px0 = pane * 8 + 2;
+    for (let y = 2; y < 23; y++) {
+      if (y === 12) continue;
+      for (let x = px0; x < px0 + 6; x++) {
+        const streak = (x * 2 + y + pane * 3) % 9 === 0;
+        g.set(x, y, streak ? GLASS[2] : y < 7 ? GLASS[1] : GLASS[0]);
+      }
+    }
+    // A cold glint in the top corner of each pane.
+    g.set(px0, 3, GLASS[3]); g.set(px0 + 1, 3, GLASS[2]); g.set(px0, 4, GLASS[2]);
+  }
+  if (kind === 'cracked') {
+    const cx = 19;
+    const cy = 17;
+    for (let k = -3; k <= 3; k++) { g.set(cx + k, cy + Math.round(k * 0.6), GLASS[3]); g.set(cx + Math.round(k * 0.4), cy - k, GLASS[3]); }
+  }
+  if (kind === 'salt') {
+    for (let pane = 0; pane < 4; pane++) {
+      const px0 = pane * 8 + 2;
+      g.rect(px0, 20, 3, 3, DUST[1]); g.rect(px0, 21, 5, 2, DUST[0]); g.set(px0 + 5, 22, DUST[2]);
+    }
+  }
+  return g.rows();
+}
+
+// --- Small things ---------------------------------------------------------
+function noteTidy() {
+  const g = new Grid(14, 9);
+  g.rect(1, 2, 11, 6, PAPER[1]);
+  g.rect(1, 7, 11, 1, PAPER[0]);
+  g.rect(3, 4, 6, 1, '#4a4a52');
+  g.rect(8, 1, 4, 3, ROCK[2]);
+  g.rect(8, 1, 3, 1, ROCK[3]);
+  return g.rows();
+}
+
+function broom() {
+  const g = new Grid(12, 26);
+  g.rect(5, 0, 2, 18, WOOD[2]);
+  g.rect(5, 0, 1, 18, WOOD[3]);
+  // The bucket it stands in.
+  g.rect(2, 18, 8, 8, IRON[2]);
+  g.rect(2, 18, 8, 1, IRON[3]);
+  g.rect(3, 25, 6, 1, IRON[1]);
+  g.rect(3, 15, 6, 3, '#a8904a');
+  for (let x = 3; x < 9; x += 2) g.set(x, 14, '#c8b060');
+  return g.rows();
+}
+
+function shellRow() {
+  const g = new Grid(16, 6);
+  const sizes = [4, 3, 3, 2, 2, 1];
+  let x = 1;
+  for (const s of sizes) {
+    g.rect(x, 5 - s, s, s, '#e0d6c0');
+    g.set(x, 5 - s, '#f4ecd8');
+    x += s + 1;
+  }
+  return g.rows();
+}
+
+function logbook() {
+  const g = new Grid(16, 26);
+  g.rect(7, 10, 2, 14, WOOD[1]);
+  g.rect(4, 23, 8, 3, WOOD[1]);
+  g.rect(2, 6, 12, 5, WOOD[2]);
+  g.rect(3, 4, 10, 4, PAPER[0]);
+  g.rect(3, 4, 5, 4, PAPER[1]);
+  g.rect(8, 4, 1, 4, WOOD[0]);
+  g.rect(2, 3, 12, 1, DUST[2]);
+  return g.rows();
+}
+
+// --- Registry ----------------------------------------------------------
+export const IL_PROP_SPRITES = {
+  il_light_tower: tower(false),
+  il_light_tower_old: tower(true),
+  il_dead_lens: deadLens(),
+  il_tea_table: teaTable(0),
+  il_shutter_crank: shutterCrank(false),
+  il_shutter_crank_on: shutterCrank(true),
+  il_light_shaft: lightShaft(0),
+  il_far_light: farLight(),
+  il_note_tidy: noteTidy(),
+  il_broom: broom(),
+  il_shell_row: shellRow(),
+  il_logbook: logbook(),
+  il_lantern_glass: lanternGlass(''),
+  il_lantern_glass_cracked: lanternGlass('cracked'),
+  il_lantern_glass_salt: lanternGlass('salt'),
+  il_lantern_glass_corner: cornerGlass(false),
+  il_lantern_glass_corner_r: cornerGlass(true),
+};
+
+export const IL_PALETTE = palette;
+export const IL_PALETTE_EXTRA = palette;
+export const IL_TEA_TABLE_SPRITES = frames((i) => teaTable(i), 8);
+export const IL_LIGHT_SHAFT_SPRITES = frames((i) => lightShaft(i), 8);
+
+// How many tiles wide each big one stands.
+export const IL_FOOTPRINTS = {
+  il_dead_lens: 2,
+  il_tea_table: 2,
+  il_lantern_glass: 2,
+  il_lantern_glass_cracked: 2,
+  il_lantern_glass_salt: 2,
+  il_lantern_glass_corner: 2,
+  il_lantern_glass_corner_r: 2,
+};

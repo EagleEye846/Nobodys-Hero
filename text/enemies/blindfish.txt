@@ -1,0 +1,70 @@
+# BLINDFISH
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/blindfish.js.
+
+[intro]
+The black water bulges. Something pale comes up out of it with its mouth open and no eyes at all. A BLINDFISH!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+BLINDFISH turns its blank face toward the sound of you breathing.
+
+BLINDFISH leaps, lands, and listens to the rings it made, like someone checking a clock.
+
+BLINDFISH noses along the water. It's reading it.
+
+A drip falls somewhere. BLINDFISH snaps at it. Misses by a mile.
+
+Smells like cold water and fish. Mostly fish.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Glub.
+
+Where are
+you?
+
+I can hear
+you.
+
+Stop
+fidgeting!
+
+Hold still.
+I'm LISTENING.
+
+Splash?
+SPLASH!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/blindfish.js.
+[talk: Inspect]
+BLINDFISH - HP 1150
+A pale cave fish with no eyes and a very good idea of where you are. It hunts the ripples you make, and it can hear you stop.
+
+[talk: Stay perfectly still]
+You hold absolutely still. The water goes flat. BLINDFISH circles, listening, and can't find you. It looks quite lost, for something with no eyes. It seems to relax a little.
+
+[talk: Ripple the water]
+You trail one finger through the water, slow and gentle. BLINDFISH turns its whole body toward the ripple, and follows it, and follows it, and forgets for a moment what it came up for.
+
+[talk: Drop a pebble for it]
+You drop a pebble in. Plink. BLINDFISH goes after the ring like a dog after a ball, comes back with nothing, and is thrilled anyway.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+BLINDFISH goes belly-up and sinks into the black water without a ripple. For once, nothing hears it go.
+
+[pacified]
+BLINDFISH sinks, slow and calm, and the rings it leaves go out one by one until the lake is flat. It lets you by.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves stands as still as a post and lets {foe} nose about the edge of the water. It can't find her. She finds this extremely satisfying.
+
+Ves tells {foe} it's very good at this. It really is. She has never been located so quickly by anything without eyes.
+
+Ves taps her umbrella on the stones, softly, twice. {foe} taps back, with its tail. They keep it up for a while.

@@ -19,8 +19,8 @@ export const FROZEN_STEP = {
     frames: [ICE_STEP_DISGUISE_SPRITES.still, ICE_STEP_DISGUISE_SPRITES.glare, ICE_STEP_DISGUISE_SPRITES.glance],
     palette: ICE_STEP_PALETTE,
   },
-  maxHp: 190,
-  damage: 12,
+  maxHp: 205,
+  damage: 13,
 
   // A little busier than its brother at the bottom.
   difficulty: { density: 1.25, speed: 1.15 },
@@ -41,7 +41,7 @@ export const FROZEN_STEP = {
     { name: 'Sit on it', calm: 35 },
   ],
 
-  rewards: { exp: 90, coins: 50 },
+  rewards: { exp: 95, coins: 65 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'ice_shortbread', chance: 0.4 }],

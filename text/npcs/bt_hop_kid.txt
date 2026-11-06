@@ -1,0 +1,19 @@
+# BT_HOP_KID: A frog kid who keeps the score at hopscotch and is very strict about it.
+
+[first]
+I'm the judge. You can't hop on the lines. Lines are lava. Chalk lava.
+
+[repeat]
+He went on the line. He always goes on the line. I'm keeping score.
+
+[first after the_kings_welcome]
+Did you see the king? He's got a lot of hat. I'd like a lot of hat.
+
+[repeat after the_kings_welcome]
+Eight to nothing. He's a very bad hopper. We love him.
+
+[first after the_light_goes_up]
+It's SO BRIGHT you can see the lava! Chalk lava! It's everywhere!
+
+[repeat after the_light_goes_up]
+Hop! Hop! Don't look at the ceiling, look at the squares.

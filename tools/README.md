@@ -45,6 +45,21 @@ or download the file, and put it where the file name at the top says.
   every room and compiles every song (`?check=1&songs=1`), presses Z on every
   interactable in the game and reports anything that throws (`?poke=all`),
   and draws the skill tree (`?skills=2&party=1`).
+- **sceneLint.html** reads the cutscenes (all of Chapter 4's, or `?scenes=a,b`)
+  without playing them and reports walks through walls, props and people,
+  speakers off screen or hidden behind the text box, names that don't exist
+  (animations, acts, sounds, songs, faces), and triggers that can be walked
+  round. Run it with `python tools/headless.py "http://localhost:8000/tools/sceneLint.html" 180`.
+- **cheeseCheck.html** plays every attack of an enemy the lazy way (standing
+  still across the box, holding into walls and corners, running along an edge,
+  circling) and flags any attack one of those gets through untouched:
+  `cheeseCheck.html?enemy=olm&trials=6`. **dodgeCheck.html** plays them with a
+  bot that really dodges, to make sure they're still fair. Run both with
+  `python tools/headless.py "<url>" 600`.
+- **sceneSheet.html** plays one cutscene in fast time and draws up to six of its
+  moments into one picture: `sceneSheet.html?scene=tuck_finds_you&steps=1,9,40&x=6&y=7&seen=a,b`
+  (`steps` are step numbers; `x`, `y` is where the hero stands). Run it with
+  `HEADLESS_CLIP=0,0,1440,720 python tools/headless.py "<url>" 90 sheet.png`.
 
 ## Sprite Editor
 

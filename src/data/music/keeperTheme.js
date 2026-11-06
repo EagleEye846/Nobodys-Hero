@@ -78,7 +78,7 @@ export const KEEPER_THEME = {
     violins: { sample: 'violins', volume: 0.18, attack: 0.2, release: 0.8, reverb: 0.55, pan: 0.3 },
     violas: { sample: 'violas', volume: 0.34, attack: 0.12, release: 0.8, reverb: 0.5, pan: -0.05, humanize: { time: 0.014, volume: 0.1 } },
     // The stick: cellos plucked, dry and near.
-    stick: { sample: 'cellosPizz', volume: 0.38, ring: true, reverb: 0.3, pan: -0.2, humanize: { time: 0.01, volume: 0.18 } },
+    stick: { sample: 'cellosPizz', volume: 0.38, ring: true, octave: 1, reverb: 0.3, pan: -0.2, humanize: { time: 0.01, volume: 0.18 } },
     embers: { sample: 'violinsPizz', volume: 0.16, ring: true, reverb: 0.6, pan: 0.4, humanize: { time: 0.02, volume: 0.25 } },
     shimmerLow: { sample: 'violasTrem', volume: 0.12, attack: 0.7, release: 1, reverb: 0.6, pan: -0.3 },
     shimmerHigh: { sample: 'violinsTrem', volume: 0.08, attack: 0.9, release: 1.2, reverb: 0.65, pan: 0.35 },

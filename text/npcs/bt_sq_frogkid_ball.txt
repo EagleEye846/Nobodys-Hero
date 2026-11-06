@@ -1,0 +1,19 @@
+# BT_SQ_FROGKID_BALL: A frog kid with a red ball, always bouncing it, and always at least two seconds from losing it.
+
+[first]
+Bounce... bounce... bounce... Are you staying? Can you do a trick? I can do a trick. It's mostly dropping the ball.
+
+[repeat]
+Bounce. Bounce. Oh, no. I'll get it. Hold on.
+
+[first after the_kings_welcome]
+Mum says the king's always right. Dad says the king's always LOUD. I say he's loud and right.
+
+[repeat after the_kings_welcome]
+Bounce. Bounce. Bounce. Did you see how high that went?
+
+[first after the_light_goes_up]
+Bounce! BOUNCE! IT'S ALL SO BRIGHT!
+
+[repeat after the_light_goes_up]
+I've lost the ball in the sun. Not literally. Metaphorically. Dad says that's allowed.

@@ -36,7 +36,7 @@ export const MEMBERS = {
     // How much stronger they get with every level after the first: FIGHT power
     // (as a share: 0.1 is 10% more a level), and what their spells add (the
     // same effects their gear adds to: see equipment.js).
-    growth: { fight: 0.1, allyStrike: 2, allyHeal: 3, allyCalm: 1 },
+    growth: { fight: 0.05, allyStrike: 2, allyHeal: 3, allyCalm: 1 },
     // Skill points they get with every level the hero gains.
     skillPointsPerLevel: 1,
     // On their turn they get a menu like yours (FIGHT, TALK, SPELLS, ITEMS,
@@ -66,7 +66,7 @@ export const MEMBERS = {
     //   regen     HP back at the end of each of the next `turns` enemy turns
     //   healAll   HP for everyone in the party at once
     learnable: {
-      downdraft: { label: 'DOWNDRAFT', cost: 30, strikeOne: 1.4, text: 'Ves snaps her umbrella shut and brings the wind straight down!' },
+      downdraft: { label: 'DOWNDRAFT', cost: 80, strikeOne: 1.4, text: 'Ves snaps her umbrella shut and brings the wind straight down!' },
       whiteout: { label: 'WHITEOUT', cost: 60, strikeAll: 1.1, text: 'Ves spins her umbrella over her head. The whole room goes white!' },
       aurora: { label: 'AURORA', cost: 40, heal: 40, text: 'Ves lifts her umbrella, and the light of the northern sky pours down it.' },
       // Chapter 3: her mother's umbrella, and the weather that comes with it.
@@ -81,6 +81,24 @@ export const MEMBERS = {
       cyclone: { label: 'CYCLONE', cost: 70, strikeAll: 1.3, shorten: 0.2, text: 'Ves spins and spins until the wind picks the whole room up!' },
       daybreak: { label: 'DAYBREAK', cost: 60, healAll: 45, text: 'Ves opens her umbrella wide, and the first light of morning comes through it.' },
       monsoon: { label: 'MONSOON', cost: 48, regen: 14, turns: 4, sp: 10, text: 'Ves calls the rain down in sheets. It will rain for a while.' },
+      // Chapter 5, the BREEZE branch. Sail is what the party can't be hit for at
+      // the start of the next attack (seconds; her gust skills add to it), and
+      // Rip Current hits every enemy harder the more of them there are (`pull`).
+      sea_breeze: { label: 'COOL CHANGE', cost: 30, heal: 75, text: 'Ves tips her umbrella into a cool wind off the sea. It smells of salt and clean washing.' },
+      sail: { label: 'BILLOW', cost: 36, sail: 3, text: 'Ves opens her umbrella like a sail, and the wind takes all three of you past the worst of it.' },
+      downpour: { label: 'DOWNPOUR', cost: 85, strikeAll: 1.5, shorten: 0.15, text: 'Ves points her umbrella at the green sky, and the sea comes down on everyone!' },
+      rip_current: { label: 'WHIRL', cost: 45, strikeAll: 0.7, pull: 0.5, shorten: 0.1, text: 'Ves sweeps her umbrella round, and the water drags every enemy into a heap.' },
+      // Chapter 5, the second half of the tree. Her attacks are measured
+      // against her own FIGHT, so the hero still hits hardest; her strength is
+      // the wind, looking after everyone, and magic.
+      hold_fast: { label: 'HOLD FAST', cost: 34, guard: true, absorb: true, text: 'Ves digs her heels in and holds the umbrella out in front of you both.\nThe next attack will do half the damage, and the first hit nothing.' },
+      windshear: { label: 'WINDSHEAR', cost: 58, strikeOne: 1.9, shorten: 0.2, text: 'Ves slices the umbrella sideways, and the wind cuts like a blade!' },
+      hurricane: { label: 'HURRICANE', cost: 110, strikeAll: 1.8, shorten: 0.25, text: 'Ves holds her umbrella up and lets the whole storm in. Everything goes round and round!' },
+      fireside: { label: 'FIRESIDE', cost: 75, healAll: 70, text: 'Ves shakes out her umbrella like it\'s been a long day, and somehow everyone feels warm and dry.' },
+      sheet_lightning: { label: 'SHEET LIGHTNING', cost: 55, strikeAll: 1.1, pull: 0.3, text: 'Ves taps the umbrella\'s tip on the floor. The whole sky flashes, and it jumps from one enemy to the next!' },
+      supercell: { label: 'SUPERCELL', cost: 100, strikeOne: 2.4, shorten: 0.2, text: 'Ves points her umbrella at one enemy, and the biggest cloud you\'ve ever seen opens over it.' },
+      still_air: { label: 'STILL AIR', cost: 28, calmAll: 24, shorten: 0.15, text: 'Ves closes her umbrella and the wind just stops. Nobody quite knows what to do with themselves.' },
+      clear_skies: { label: 'CLEAR SKIES', cost: 90, healAll: 55, shorten: 0.2, absorb: true, text: 'Ves opens her umbrella and the clouds pull apart. The sun comes out on all of you.' },
     },
     // What their gear's and skills' stats are called in the menus, after
     // their own SPELLS (see MEMBER_GEAR_STATS in equipment.js).
@@ -129,7 +147,7 @@ export const MEMBERS = {
     baseHp: 70,
     startingPoints: 4,
     hpPerLevel: 9,
-    growth: { fight: 0.1, allyStrike: 2, allyHeal: 2, allyCalm: 1 },
+    growth: { fight: 0.05, allyStrike: 2, allyHeal: 2, allyCalm: 1 },
     skillPointsPerLevel: 1,
     // Effects of his own, besides the ones Ves's spells use:
     //   shorten  the next enemy attack is cut short by this share (they flinch)
@@ -146,9 +164,23 @@ export const MEMBERS = {
       war_cry: { label: 'WAR CRY', cost: 20, calmAll: 6, sp: 18, text: 'Bramble bangs his hatchet on a stump and yells a woodcutters\' song, badly.' },
       timber: { label: 'TIMBER!', cost: 55, strikeAll: 1.15, text: 'Bramble hacks at the nearest tree and yells TIMBER! It comes down on everyone!' },
       // Chapter 4 (for when he's back with you).
-      fell: { label: 'FELL', cost: 40, strikeOne: 2, text: 'Bramble winds up like he\'s felling an oak, and brings the hatchet round!' },
+      fell: { label: 'FELL', cost: 60, strikeOne: 2, text: 'Bramble winds up like he\'s felling an oak, and brings the hatchet round!' },
       whistle: { label: 'WHISTLE', cost: 16, sp: 24, shorten: 0.1, text: 'Bramble puts two fingers in his mouth and whistles. Everybody\'s ears ring.' },
       marbles: { label: 'MARBLES', cost: 30, strikeAll: 0.8, text: 'Bramble empties a pocket of marbles across the floor. Everybody goes over!' },
+      // Chapter 5, the CHILL branch (after the Last Light). Wade In: his friends'
+      // hits land on him instead, halved, for the enemy turn.
+      deep_breath: { label: 'COUNT TO TEN', cost: 10, calmAll: 14, sp: 14, text: 'Bramble takes the biggest breath of his life, and lets it out slowly. Everybody feels calmer, including him.' },
+      cannonball: { label: 'CANNONBALL', cost: 50, strikeOne: 2.3, shorten: 0.2, text: 'Bramble takes a run up and jumps with his knees tucked! SPLASH. Everything nearby is soaked.' },
+      lifeline: { label: 'HAND UP', cost: 22, heal: 75, text: 'Bramble throws a rope, and hauls a friend back up by it, hand over hand.' },
+      wade_in: { label: 'STAND FIRM', cost: 18, wade: true, text: 'Bramble splashes in front of his friends, shaking, with his chin up.' },
+      // Chapter 5, the second half of the tree: chopping, cheering, and sneaking.
+      splinters: { label: 'SPLINTERS', cost: 62, strikeAll: 1.35, shorten: 0.1, text: 'Bramble hacks at everything in reach. Chips fly everywhere!' },
+      big_one: { label: 'THE BIG ONE', cost: 90, strikeOne: 2.2, shorten: 0.25, text: 'Bramble spits on his hands, takes the longest wind-up in history, and SWINGS.' },
+      cheer: { label: 'THREE CHEERS', cost: 28, healAll: 30, calmAll: 6, text: 'Bramble climbs on something and leads three cheers for everybody. Hip hip!' },
+      sing_along: { label: 'SING-ALONG', cost: 45, healAll: 35, calmAll: 16, sp: 10, text: 'Bramble starts a song everybody knows. By the second verse even the enemies are humming.' },
+      conkers: { label: 'CONKERS', cost: 18, strikeAll: 0.7, shorten: 0.05, text: 'Bramble whirls a conker on a string round his head and lets go of the string. Several times.' },
+      // CHILL's last star: he stands in front of everyone and patches them up.
+      got_you: { label: "I'VE GOT YOU", cost: 50, wade: true, healAll: 40, text: 'Bramble plants himself in front of everyone and doesn\'t move. "I\'ve got you."' },
     },
     statNames: { allyStrike: 'CHOP', allyCalm: 'HOLLER', allyHeal: 'BISCUIT', allySp: 'WAR CRY' },
   },
@@ -189,6 +221,8 @@ export function setHurt(id, on) {
   if (!MEMBERS[id]) throw new Error(`Unknown party member '${id}'`);
   const others = (HERO_STATE.hurt ?? []).filter((member) => member !== id);
   HERO_STATE.hurt = on ? [...others, id] : others;
+  // Hurt or well again, they start from full.
+  if (HERO_STATE.memberHp) delete HERO_STATE.memberHp[id];
 }
 
 // Their `hurt` block while they're hurt, or null.
@@ -206,6 +240,19 @@ export function memberMaxHp(id) {
   const member = MEMBERS[id];
   const full = member.baseHp + (HERO_STATE.level - 1) * member.hpPerLevel;
   return isHurt(id) ? Math.ceil(full / 2) : full;
+}
+
+// Their HP now. Like the hero's, it carries between battles (see heroHp in
+// progress.js): food from the ITEMS menu, levelling up, a save point and a
+// night at an inn bring it back. A missing value means full.
+export function memberHp(id) {
+  const max = memberMaxHp(id);
+  return Math.max(0, Math.min(max, HERO_STATE.memberHp?.[id] ?? max));
+}
+
+export function setMemberHp(id, hp) {
+  HERO_STATE.memberHp ??= {};
+  HERO_STATE.memberHp[id] = Math.max(0, Math.min(memberMaxHp(id), Math.round(hp)));
 }
 
 // A member's skill points: the ones they've earned, less the ones they've spent.

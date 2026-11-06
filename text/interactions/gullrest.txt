@@ -1,0 +1,300 @@
+# GULLREST (Chapter 5): the happy beach below the Sea View. Cliff steps, the
+# beach, the lifeboat house, the cove with its tide bell, the jetty and the
+# gulls' hoard. Everything here is sunny, and mostly perfectly fine.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums in the sun, a little drowsy, like a cat on a warm wall.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, with a little sand in the corners.
+
+[chest_empty]
+An empty chest, salted white at the hinges.
+
+# --- THE CLIFF STEPS -------------------------------------------------------
+
+[steps_sign]
+A board at the top of the stair. THE STEPS ARE EXTRA. (THEY ARE ALSO NUMEROUS.) MIND THE BUNTING.
+
+[steps_sign_ves]
+{bored}"Numerous." That's one way of putting it.
+
+[steps_sea]
+The sea, a long way down, lapping the cliff foot as if it had all day. It has.
+
+[steps_sea_bramble]
+{worried}It's very close. And very... wet-looking.
+
+[steps_bunting_post]
+A post with a little red and yellow pennant on top. The bunting runs down the whole stair, one post at a time.
+
+[steps_bunting]
+Flags in red, yellow, blue and white, strung from post to post. They're flapping hard. Somebody takes this seriously.
+
+[steps_deckchair]
+A striped deckchair on the landing, set facing the sea. There is a hat on it, and a note: BACK IN A MINUTE. The hat has been here a while.
+
+[steps_deckchair_ves]
+{bored}It's a lovely spot to be back in a minute from.
+
+[steps_buoys]
+A pile of old buoys, painted in every colour somebody had left. They've been put out as seats.
+
+[steps_lifebuoy]
+A lifebuoy on a post, with a neat little notice. ONLY FOR EMERGENCIES. NOT FOR HATS.
+
+[steps_counter]
+A chalk board by the stair, with a tally scratched under a neat heading. STEPS CLIMBED TODAY: 3. The last mark is very small and a little proud.
+
+[steps_pouch]
+A purse wedged in the dune grass at the top of the stair, where somebody sat down to get their breath back and got up lighter.
+
+[steps_chest]
+A chest on the second landing. Inside, a sea biscuit, hard as a roof tile and labelled: FOR THE CLIMB BACK UP. THERE IS ALWAYS A CLIMB BACK UP.
+
+[steps_foot_sign]
+WELCOME TO GULLREST. PLEASE DO NOT FEED THE GULLS. THEY HAVE ALREADY EATEN.
+
+[steps_foot_sign_ves]
+{bored}That's not a joke. That's a warning.
+
+[steps_rock]
+Sandstone, warm to the touch, with a thin pink vein running through it.
+
+[steps_rail]
+A white-painted rail, sticky with salt. Somebody has painted it so often that it has gone soft at the corners.
+
+[steps_dune]
+A tuft of tough pale grass, bent over by a wind that's been going the same way for years.
+
+# --- THE BEACH -------------------------------------------------------------
+
+[beach_sign]
+A signpost with three arms. GULLREST: POP. 41 AND A WALRUS. (THE GULLS DON'T COUNT, AND THEY KNOW.) The lifeboat house is in the big red doors up the beach.
+
+[beach_sign_east]
+A signpost. THE COVE (TIDE BELL). THE JETTY (MIND THE BOAT). Someone has added, in chalk: AND THE CASTLES ARE NOT FRIENDLY.
+
+[beach_sign_east_ves]
+{thoughtful}I'd like to know what that means. I'd like to know it from a distance.
+
+[beach_hut]
+A little striped beach hut, shut up tight. The sign says: GONE FOR THE DAY. The sign has been up since last week.
+
+[beach_hut_bramble]
+{grin}It's got a tiny porch. I want a tiny porch.
+
+[beach_bunting_post]
+A post with a pennant on top. The bunting between the posts hums in the sea breeze, a thin and cheerful note.
+
+[beach_bunting]
+Flags strung between two posts, rippling. They've been mended in many places, with thread of many colours.
+
+[beach_deckchair]
+A deckchair in the sun, facing the water. There's a book on it, upside down. A gull is sitting on the book. The gull has the look of a reader.
+
+[beach_deckchair_ves]
+{bored}Don't ask him to move. He's got a good page.
+
+[beach_rowboat]
+A little rowboat, pulled up high on the sand and propped on its side. Paint flaking, bright blue underneath. Well loved by somebody who doesn't paint.
+
+[beach_pots]
+Lobster pots, stacked three high and tied with rope, each with a little brass tag. They've all been licked clean by something.
+
+[beach_net]
+A net drying on a frame. It has been mended so often that the mends have been mended.
+
+[beach_buoy]
+A red buoy, sat on the sand as if it were waiting for a bus.
+
+[beach_pouch]
+A purse behind a dune, held down with a shell. There is a very small sandcastle on top of the shell. It's not alive. As far as you can tell.
+
+[beach_anchor]
+A big rusty anchor, lying on its side. Someone has planted flowers in the ring of it.
+
+[beach_barrels]
+Barrels, lined up against the cliff. They smell of salt, tar and long-ago herring.
+
+[beach_lifeboat_doors]
+The lifeboat house: big red doors with a lifebuoy over the lintel. A painted sign: LIFEBOAT. KETTLE. TIDE TABLE. KNOCK. (OR WALK IN, WE'RE NOT PROUD.)
+
+[beach_lifebuoy]
+A lifebuoy on a post, hung with a neat tag. NOT A HAT.
+
+[beach_sea]
+The sea, turquoise at the edges and foaming a little, putting on a show for anyone who'll watch.
+
+[beach_sea_bramble]
+{worried}It keeps coming closer and then pretending it didn't.
+
+[beach_boulder]
+Big pink boulders, polished by the tide. One has a flat dent in the top, just the size of somebody sitting down. A big somebody.
+
+[beach_wall]
+A low sandstone cliff, striped like a cake, with huts built up against its feet.
+
+# --- THE LIFEBOAT HOUSE ----------------------------------------------------
+
+[house_oilskin]
+A child's oilskin, hung on a peg by the door. It's yellow, patched at both elbows and the hem, and far too small for anyone grown. The peg has been dusted.
+
+[house_oilskin_bramble]
+{thinking}...That would fit me.
+
+[house_tide_board]
+A chalk board, big and neat, headed HADDOCK'S TIDES. Under it: HIGH: WHEN IT'S HIGH. LOW: WHEN IT ISN'T. A row of times is chalked below, with a lot of crossing out. Down the side, a line has been rubbed out so hard the board has gone shiny. Underneath, in big letters: LIGHTMAN. LIGHTMAN. LIGHTMAN.
+
+[house_tide_board_ves]
+{bored}I didn't think a board could look offended.
+
+[house_lifeboat]
+The lifeboat itself, on a cradle by the big doors, scrubbed and ready, with a name in white on her bow: DAISY. She has never been launched, by the look of the ropes. She has been polished every week for years.
+
+[house_lifebuoy]
+A lifebuoy on a post, with a neat note: LIFE-SAVING EQUIPMENT. NOT A HAT, A HOOP OR A DISCUS.
+
+[house_kettle]
+A kettle on a little stove, on the boil. It has been on the boil, by the sound of it, since long before you arrived.
+
+[house_kettle_ves]
+{thoughtful}Somebody's very good at kettles.
+
+[house_barrels]
+Spare ropes, a pail of sand and a barrel of something that rattles. A label: BISCUITS. (EMERGENCY.)
+
+[house_buoys]
+Buoys stacked in the corner, each with a number chalked on it, and a gap in the stack where number nine should be.
+
+[house_pouch]
+A purse in a coil of rope, with a note: FOR WHOEVER NEEDS IT MOST. THE ROPE WAS HERE FIRST.
+
+[house_lantern]
+A lantern on a post just inside the big doors, lit, in full daylight. The glass is clean. The wick has been trimmed.
+
+[house_lantern_ves]
+{thoughtful}...It's noon.
+
+[house_rope]
+A coil of rope, laid down flat in a perfect spiral, tidy enough to sit on.
+
+[house_wall]
+Painted boards, white and blue, with a high-water mark drawn on them in a dozen different years.
+
+# --- THE COVE --------------------------------------------------------------
+
+[cove_sign]
+A weathered board. THE COVE. TIDE BELL ON THE ROCK. RING IT TWICE FOR MANNERS. (ONCE IS FINE, IF YOU'RE IN A HURRY.)
+
+[cove_bell_west]
+A tall post with a ship's bell hung from a bracket, and a rope with a worn knot. A tag says: HADDOCK'S TWIN. SAME NOTE AS HIS. SAME PEOPLE LISTEN.
+
+[cove_bell_east]
+A tall post with a ship's bell hung from a bracket, and a rope with a worn knot. A tag says: THE OTHER ONE. IN CASE YOU'RE ON THE WRONG SIDE.
+
+[cove_bell_ring]
+You pull the rope. The bell rings out across the water, one clear note. Somewhere out there, the sea listens, and begins to move.
+
+[cove_bell_busy]
+The water is still moving. It won't hear a bell until it's done.
+
+[cove_crates]
+Fish crates, stacked and lashed, stencilled GULLREST. They're empty, and smell as if they'd very much rather not be.
+
+[cove_pool]
+A rock pool, bright with anemones and a single furious crab. The crab regards you with great dignity.
+
+[cove_pool_bramble]
+{grin}He's the king of the pool. I'd listen to him.
+
+[cove_boulder]
+A big grey boulder, balanced on a smaller one. There's a name scratched into it: HARRY. Another name is scratched underneath: NOT HARRY.
+
+[cove_pouch]
+A purse in a niche at the back of the cove. A note: I'LL BE BACK FOR THIS. (SIGNED, A CRAB.)
+
+[cove_hole]
+A hole at the foot of the cliff, just wider than you are, with a little shingle path leading into it. Something in the dark is glinting. A lot of somethings.
+
+[cove_hole_ves]
+{thoughtful}That's a lot of glinting for one hole.
+
+[cove_sea]
+Deep water, very still and very clear. Small silver fish hang in it like thoughts.
+
+[cove_wall]
+A cliff of pale sandstone, sea-worn and full of holes.
+
+[cove_wall_ves]
+{bored}It looks like the sea tried to eat it and gave up.
+
+# --- THE JETTY -------------------------------------------------------------
+
+[jetty_sign]
+A tall board by the pier. THE JETTY. THE BOTHER. NO DIVING. NO FISHING. NO LOITERING. (THE LAST ONE IS ONLY FOR THE GULLS.)
+
+[jetty_wall]
+Sandstone, shouldered up against the sea, with a ladder of old iron rungs running up it to nowhere.
+
+[jetty_sea]
+Open water beyond the end of the jetty, blue and glittering, running out to a low brown point of rock. Beyond that, on the very edge of the sky, a lid of cloud sits very still.
+
+[jetty_sea_ves]
+{thoughtful}That's not a normal colour for cloud.
+
+[jetty_buoys]
+A pile of buoys, bright as sweets, put out in a neat row on the planks.
+
+[jetty_pots]
+Lobster pots, stacked by the rail, smelling of ancient bait. Some of them have been moved, recently, by something small and cross.
+
+[jetty_net]
+A net hung up to dry on a frame, with a very good knot at the corner. It's the only knot on the jetty that looks like it was tied on purpose.
+
+[jetty_lamp]
+An unlit lantern on a post at the head of the pier, ready for the evening. The wick is new.
+
+[jetty_rope]
+A coil of rope, neat as a snail, with the end tucked in.
+
+[jetty_pouch]
+A purse under the pier rail. A note: PAID FOR. DON'T TELL HADDOCK.
+
+# --- THE GULLS' HOARD (secret) --------------------------------------------
+
+[hoard_wall]
+Pale sandstone, scuffed and pecked. Nothing in this cave was put here by anyone with hands.
+
+[hoard_pile]
+A heap of shiny things, all stolen: spoons, a thimble, a monocle, three buttons, a ship's bell the size of a fist, a christening spoon and a very small trumpet. The gulls are very proud of it.
+
+[hoard_pile_ves]
+{bored}A thief with taste. I'm almost impressed.
+
+[hoard_pile_bramble]
+{grin}That's a whole bell! Where did they even carry that?
+
+[hoard_note]
+A stake of driftwood pushed into the sand, with a scrap of wrapping paper speared on it, scratched with something sharp: NOT STOLEN. BORROWED. (FOR A LONG TIME.)
+
+[hoard_note_ves]
+{bored}I've heard that excuse. I've used that excuse.
+
+[hoard_chest]
+A chest, much dented, with gull-prints all round it and a neat little pile of sardine tins beside it, as a sort of toll. Inside is a packet of kelp crisps, still sealed. Nobody knows who it was stolen from.
+
+[hoard_pouch]
+A purse hung from a hook of driftwood, heavy for its size. Somebody has pecked their initials into it: G. (THIS IS NOT THE ONLY ONE.)
+
+[hoard_mirror]
+A hand mirror propped against the wall, with a gull's careful footprints in front of it. A gull comes here every day to look at itself.
+
+[hoard_tinsel]
+A brass handbell, stood up on the sand like a trophy, with tinsel wound round the handle and three keys and a bit of ribbon threaded on it. It looks quite festive.

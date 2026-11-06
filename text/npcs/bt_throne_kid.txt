@@ -1,0 +1,21 @@
+# BT_THRONE_KID: A frog kid in the throne room's audience, who has been told to cheer on cue and has a tendency to do it a little early.
+
+[first]
+Sh! He's about to say something. Or he's just said something. I'm to cheer. Is it now? Is it NOW?
+
+[repeat]
+I cheered too early last time. I was told to go to the back. I AM the back.
+
+[first after the_kings_welcome]
+He's the BEST king. He says so every day. And he LOOKS best. He's got that jaw.
+
+And he's a HUMAN. Like you! Mum touched his cape once. She hasn't washed that hand since.
+
+[repeat after the_kings_welcome]
+He's never blinked. I counted. I counted for an hour. I got bored.
+
+[first after the_light_goes_up]
+Is it over? Can I stop cheering? ... No? Oh, hooray. Hooray again.
+
+[repeat after the_light_goes_up]
+HOORAY. I'm doing it on purpose this time.

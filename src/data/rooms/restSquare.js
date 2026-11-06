@@ -101,9 +101,19 @@ export const REST_SQUARE = {
     { sprite: 'crates', x: 32, y: 8, text: 'square_barrels' },
     { sprite: 'skis', x: 35, y: 16, text: 'square_skis' },
     { sprite: 'herald_mayor', x: 20, y: 13, npc: 'herald_horace', notice: true },
-    { sprite: 'herald_knit', x: 12, y: 20, npc: 'herald_marta' },
+    // Side quest: mittens to Dunstan in the bell tower, and his note back.
+    { sprite: 'herald_knit', x: 12, y: 20, npc: 'herald_marta', quest: [
+      { needs: ['has:dunstan_note'], take: 'dunstan_note', set: 'q_mittens_done', give: 'marta_scarf', text: 'mittens_done' },
+      { needs: ['q_mittens_done'], text: 'mittens_after' },
+      { needs: ['q_mittens_asked'], text: 'mittens_wait' },
+      { needs: ['!q_mittens_asked'], set: 'q_mittens_asked', give: 'marta_mittens', text: 'mittens_ask', append: true },
+    ] },
     { sprite: 'herald_kid', x: 4, y: 27, npc: 'herald_pottle' },
-    { sprite: 'herald', x: 26, y: 23, npc: 'herald_bram' },
+    // Side quest: the trumpet is in the cairn at the Lookout.
+    { sprite: 'herald', x: 26, y: 23, npc: 'herald_bram', quest: [
+      { needs: ['has:bram_trumpet'], take: 'bram_trumpet', set: 'q_trumpet', give: 'fanfare_pin', text: 'trumpet_found' },
+      { needs: ['q_trumpet'], text: 'trumpet_after' },
+    ] },
     { sprite: 'goat_nan', x: 3, y: 11, npc: 'old_nan' },
     { sprite: 'snow_hare', x: 30, y: 15, npc: 'snow_hare' },
     { sprite: 'chough', x: 5, y: 10, text: 'square_chough', walkable: true },

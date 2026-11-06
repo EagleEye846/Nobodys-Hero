@@ -65,6 +65,8 @@ export const MARSH_SUNKEN_ROAD = {
     { sprite: 'push_rock', x: 6, y: 7, text: 'road_block', rock: true },
     { sprite: 'push_rock', x: 9, y: 6, text: 'road_block', rock: true },
     { sprite: 'push_rock', x: 9, y: 8, text: 'road_block', rock: true },
+    // A fourth block, for the island's purse: it takes two stepping-stones to cross the water to it, and the bog takes two more.
+    { sprite: 'push_rock', x: 5, y: 7, text: 'road_block', rock: true },
     { sprite: 'sign', x: 2, y: 6, text: 'road_milestone' },
     { sprite: 'coat_strip', x: 19, y: 5, text: 'road_strip' },
     { sprite: 'marsh_lantern', x: 11, y: 5, text: 'marsh_lantern', light: 60 },

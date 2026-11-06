@@ -6,6 +6,9 @@ import { Prop } from './prop.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { inParty } from '../characters/party.js';
 import { isLamplit, PROP_GLOWS } from './lamplight.js';
+import { checkBeams, restorePrisms, resetPrisms } from './beams.js';
+import { CHIME_SETS } from './chimes.js';
+import { RoomTide } from './tides.js';
 
 // Crack pixels as [x, y, width, height] within a tile. Each crack level shows more of the list.
 const CRACKS = [
@@ -50,6 +53,14 @@ const PROP_LIGHTS = {
   brazier: [34, 0.18],
   stove_pot: [22, 0.1],
   street_lamp: [34, 0.14],
+  // Chapter 4's underground: dim mine lamps, glowing reeds and crystal roots
+  // (a third number is the light's colour, if it isn't warm).
+  mine_lamp: [34, 0.14],
+  mine_lamp_hung: [34, 0.14],
+  glow_reeds: [34, 0.16, '130, 225, 215'],
+  glow_reeds_tall: [38, 0.16, '130, 225, 215'],
+  fungus_pads: [22, 0.1, '130, 225, 215'],
+  root_vein_lit: [52, 0.3, '140, 205, 255'],
 };
 
 // What sinks into what: logs (and casks) into brook water, and out in the
@@ -57,6 +68,8 @@ const PROP_LIGHTS = {
 // they settle in the soft bottom as somewhere to step.
 const LOG_SINKS = new Set(['~', '%', '$']);
 const ROCK_SINKS = new Set(['%', '$']);
+// How high a `step` rock stands, for whoever climbs onto it (a low block's height).
+const STEP_ROCK_HEIGHT = 12;
 
 // How far light reaches in a dark room (`dark`, see overworldScene.js), for
 // lantern pillars and candle stands; props use PROP_LIGHTS, or their own `light`.
@@ -64,7 +77,13 @@ const DARK_TILE_LIGHTS = { P: 64, C: 56, x: 46, w: 40 };
 
 export class Room {
   constructor(data) {
+    // Mistakes in the light-beam parts show up now (beams.js).
+    checkBeams(data);
     this.tiles = data.tiles;
+    // A tide (Chapter 5, tides.js): the room's tiles are its high-tide map; the
+    // tide swaps them for the low-tide map and back.
+    this.tide = data.tide ? new RoomTide(this, data) : null;
+    if (this.tide) this.tiles = this.tide.currentRows();
     // The region it's in (src/data/areas.js); outdoor regions floor their
     // hidden corners with grass instead of Ruins stone.
     this.area = data.area;
@@ -78,6 +97,8 @@ export class Room {
     this.cave = Boolean(data.cave);
     // The scarlet forest: leaf litter under blocks and trees with nothing else to go by.
     this.leafy = Boolean(data.leafy);
+    // Chapter 5: boxes of b/B tiles drawn as cargo crates (coastTiles.js).
+    this.cargo = data.cargo ?? null;
     // Lit by its own lamps and fires (see lamplight.js): those lights are
     // drawn live over the room, so they aren't painted into its floor.
     this.lamplit = isLamplit(data);
@@ -99,6 +120,12 @@ export class Room {
       if (info.notice && (WORLD_STATE.read ?? []).includes(prop.key)) prop.noticed = true;
       return prop;
     });
+    // Prisms go back the way you left them; the eyes' switches that hold only
+    // while a beam does (`beamSwitches`), and the light bridges' walkable tiles
+    // (`spans`, "x,y"), are kept up to date by BeamField.
+    restorePrisms(this.allProps);
+    this.beamSwitches = new Set();
+    this.spans = new Set();
     this.id = data.id;
     this.doors = data.doors ?? [];
     // The Hushwood's puzzles (see hushwood.js): brook tiles bridged by sunk
@@ -119,6 +146,7 @@ export class Room {
     // Cracked and broken floor, keyed by "tx,ty". Kept apart from the tile data
     // so restarting the room brings the floor back.
     this.damage = new Map();
+    this.tide?.settleCrates();
 
     this.tiles.forEach((row, y) => {
       if (row.length !== this.width) {
@@ -128,7 +156,7 @@ export class Room {
 
     // Tiles never change, so draw them once and reuse the image every frame.
     // Standing tiles (tall pillars, statues) are drawn with the characters instead.
-    this.background = this.renderBackground();
+    this.background = this.tide ? this.tide.renderBackgrounds() : this.renderBackground();
     this.standing = this.findStandingTiles();
   }
 
@@ -193,7 +221,7 @@ export class Room {
   }
 
   isLeverOn(name) {
-    return this.treadlesDown.has(name) || (WORLD_STATE.levers ?? []).includes(this.leverKey(name));
+    return this.treadlesDown.has(name) || this.beamSwitches?.has(name) || (WORLD_STATE.levers ?? []).includes(this.leverKey(name));
   }
 
   // Whether a prop's `wet` says it has water in it now: every name listed is
@@ -214,8 +242,15 @@ export class Room {
     for (const prop of this.props) {
       if (prop.lever) prop.setOn(this.isLeverOn(prop.lever));
       if (prop.button) prop.setOn(this.isLeverOn(prop.button));
+      // A set of singing crystals that has sung stays lit (chimes.js).
+      if (prop.chime && this.isLeverOn(CHIME_SETS[prop.chime.set].opens)) prop.setOn(true);
       if (prop.treadle) prop.setOn(this.treadlesDown.has(prop.treadle));
-      if (prop.wet) prop.hidden = !this.isWet(prop);
+      if (prop.wet) {
+        // Water that a treadle lets go of comes back at once, but not onto anyone
+        // standing in it (or a log at rest there): it waits till they step out.
+        const inIt = prop.hidden && bodies.some((b) => b.x + 5 > prop.x && b.x - 5 < prop.x + prop.width && b.y > prop.y && b.y - 6 < prop.y + T);
+        prop.hidden = inIt || !this.isWet(prop);
+      }
       if (prop.opensWith) {
         let open = prop.opensWith.every((name) => this.isLeverOn(name));
         if (prop.held && this.passed) open = true;
@@ -292,7 +327,16 @@ export class Room {
 
   // Whether a rock could be shoved into tile (tx, ty): open floor (not up on
   // a block), not a doorway, and nothing solid there but a button.
-  rockCanEnter(tx, ty, log = false) {
+  rockCanEnter(tx, ty, log = false, float = false) {
+    // A floating crate (tides.js) rides the water at high tide, and drops into a trench at low.
+    if (float && this.tide) {
+      const into = this.tide.crateCan(tx, ty);
+      if (into) {
+        const box = [tx * T + 1, ty * T + 1, (tx + 1) * T - 1, (ty + 1) * T - 1];
+        if (this.props.some((prop) => !prop.walkable && prop.overlaps(...box))) return false;
+        return into === 'sink' ? 'sink' : true;
+      }
+    }
     // Out in the marsh, a rock shoved into the bog or the water sinks.
     if (!log && ROCK_SINKS.has(this.tileAt(tx, ty)) && !this.bridged.has(`${tx},${ty}`)) return this.sinksAt(tx, ty, true) ? 'sink' : false;
     if (this.isSolidTile(tx, ty) || this.raiseAt(tx, ty) > 0) return false;
@@ -313,7 +357,7 @@ export class Room {
     let pressed = false;
     for (const button of this.props.filter((p) => p.button)) {
       if (this.props.some((gate) => gate.isOpen && gate.opensWith?.includes(button.button))) continue;
-      const down = this.rocks.some((rock) => !rock.slide && rock.x === button.x && rock.y === button.y);
+      const down = [...(button.cartOnly ? [] : this.rocks), ...this.props.filter((p) => p.cart)].some((rock) => !rock.slide && rock.x === button.x && rock.y === button.y);
       const key = this.leverKey(button.button);
       const was = this.isLeverOn(button.button);
       if (down && !was) {
@@ -345,7 +389,9 @@ export class Room {
     log.walkable = true;
     // (A log in the marsh's bog or fen water sits in mud, not brook water.)
     const marshy = ROCK_SINKS.has(this.tileAt(tx, ty));
-    log.setLook(marshy && log.baseLook === 'roll_log' ? 'roll_log_bog' : `${log.baseLook}_sunk`);
+    // (And in the mines' flood water, ripples the colour of that water.)
+    const mine = this.area === 'diggings' && log.baseLook === 'roll_log';
+    log.setLook(marshy && log.baseLook === 'roll_log' ? 'roll_log_bog' : mine ? 'roll_log_mine' : `${log.baseLook}_sunk`);
     this.bridged.add(`${tx},${ty}`);
     this.bridgeLooks.set(`${tx},${ty}`, log.baseLook);
   }
@@ -439,6 +485,10 @@ export class Room {
       this.refreshShowsUp();
     }
     this.treadlesDown.clear();
+    // Prisms back as the room set them.
+    resetPrisms(this.allProps);
+    // The tide goes back to how the room starts (and floating crates with it).
+    this.tide?.resetToStart();
     return this.settleButtons();
   }
 
@@ -450,8 +500,8 @@ export class Room {
     for (const treadle of this.props.filter((p) => p.treadle)) {
       const tx = treadle.x / T;
       const ty = treadle.y / T;
-      const stood = bodies.some((b) => Math.floor(b.x / T) === tx && Math.floor((b.y - 1) / T) === ty);
-      const weighed = this.props.some((p) => (p.rock || p.log) && !p.sunk && !p.slide && !p.hidden && p.x === treadle.x && p.y === treadle.y);
+      const stood = bodies.some((b) => (!treadle.who || (b.skin ?? 'hero') === treadle.who) && Math.floor(b.x / T) === tx && Math.floor((b.y - 1) / T) === ty);
+      const weighed = !treadle.who && this.props.some((p) => (p.rock || p.log || p.cart) && !p.sunk && !p.slide && !p.hidden && p.x === treadle.x && p.y === treadle.y);
       if (stood || weighed) down.add(treadle.treadle);
     }
     const changed = down.size !== this.treadlesDown.size || [...down].some((name) => !this.treadlesDown.has(name));
@@ -492,7 +542,7 @@ export class Room {
   isSolidTile(tx, ty) {
     const tile = this.tileAt(tx, ty);
     if (tile === null) return true;
-    return TILES[tile].solid && !this.bridged.has(`${tx},${ty}`);
+    return TILES[tile].solid && !this.bridged.has(`${tx},${ty}`) && !this.spans?.has(`${tx},${ty}`);
   }
 
   // How high a tile's floor is: 0, or a block's `raise`.
@@ -515,7 +565,12 @@ export class Room {
     // Whoever's standing still while the other of you goes off (`blockers`,
     // set by OverworldScene) is in the way too: nobody walks through a friend.
     if ((this.blockers ?? []).some((b) => left < b.x + 5 && right > b.x - 5 && top < b.y && bottom > b.y - 6)) return true;
-    return this.props.some((prop) => !(small && prop.gap) && this.propBlocks(prop, left, top, right, bottom));
+    return this.props.some((prop) => !(small && prop.gap) && !(climbing && this.isStepping(prop)) && this.propBlocks(prop, left, top, right, bottom));
+  }
+
+  // A `step` rock sitting still: a low block to climb, not a wall.
+  isStepping(prop) {
+    return Boolean(prop.step && prop.rock && !prop.slide && !prop.hidden && !prop.sunk);
   }
 
   // The highest floor under the box: where something standing there would stand.
@@ -525,6 +580,9 @@ export class Room {
       for (let tx = Math.floor(left / T); tx <= Math.floor((right - 1) / T); tx++) {
         height = Math.max(height, this.raiseAt(tx, ty));
       }
+    }
+    for (const prop of this.props) {
+      if (this.isStepping(prop) && prop.overlaps(left, top, right, bottom)) height = Math.max(height, STEP_ROCK_HEIGHT);
     }
     return height;
   }
@@ -650,12 +708,14 @@ export class Room {
   // once they're lit), save crystals, and any prop with its own `light`.
   lightSources() {
     this.tileLights ??= this.tiles.flatMap((row, ty) => [...row].flatMap((char, tx) => (
-      DARK_TILE_LIGHTS[char] ? [{ x: tx * T + T / 2, y: ty * T, radius: DARK_TILE_LIGHTS[char] }] : []
+      DARK_TILE_LIGHTS[char] ? [{ x: tx * T + T / 2, y: ty * T, radius: DARK_TILE_LIGHTS[char], crystal: char === 'x' }] : []
     )));
     const props = this.props.flatMap((prop) => {
       if (prop.hidden) return [];
       const radius = prop.light ?? (prop.save ? 44 : PROP_LIGHTS[prop.look] ? PROP_LIGHTS[prop.look][0] * 1.4 : 0);
-      return radius ? [{ x: prop.x + prop.width / 2, y: prop.y + T / 2 - (prop.raise ?? 0), radius }] : [];
+      // (Crystal roots and sun-crystals count as crystals: they swell with the Deep's song.)
+      const crystal = prop.look === 'root_vein_lit' || prop.look === 'sun_crystal';
+      return radius ? [{ x: prop.x + prop.width / 2, y: prop.y + T / 2 - (prop.raise ?? 0), radius, crystal }] : [];
     });
     return [...this.tileLights, ...props];
   }
@@ -672,8 +732,8 @@ export class Room {
     }));
     for (const prop of this.props) {
       if (this.lamplit && (prop.glow ?? PROP_GLOWS[prop.look])) continue;
-      const [radius, strength] = prop.save ? [30, 0.12] : PROP_LIGHTS[prop.look] ?? [];
-      if (radius) lights.push([(prop.x + prop.width / 2) / T - 0.5, prop.y / T, radius, strength]);
+      const [radius, strength, tint] = prop.save ? [30, 0.12] : PROP_LIGHTS[prop.look] ?? [];
+      if (radius) lights.push([(prop.x + prop.width / 2) / T - 0.5, prop.y / T, radius, strength, tint]);
     }
     ctx.globalCompositeOperation = 'lighter';
     for (const [tx, ty, radius, strength, tint = '255, 190, 110'] of lights) {

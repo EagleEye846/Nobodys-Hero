@@ -83,6 +83,7 @@ export class Soul {
     this.y = y;
     this.vy = 0;
     this.grounded = false;
+    this.platform = null;
     this.focused = false;
     this.iframes = 0;
     this.locked = false;

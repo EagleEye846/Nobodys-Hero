@@ -16,8 +16,8 @@ export const HAYWARD = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: HAYWARD_SPRITE, palette: HAYWARD_PALETTE },
-  maxHp: 400,
-  damage: 17,
+  maxHp: 460,
+  damage: 20,
 
   // A Chapter 3 enemy from the far end of the wood: a touch busier than the
   // Burrhog.
@@ -40,7 +40,7 @@ export const HAYWARD = {
     { name: 'Wave back', calm: 35 },
   ],
 
-  rewards: { exp: 150, coins: 80 },
+  rewards: { exp: 315, coins: 40 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'hollin_apple', chance: 0.4 }],

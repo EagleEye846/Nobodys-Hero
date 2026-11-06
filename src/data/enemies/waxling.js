@@ -30,7 +30,7 @@ export const WAXLING = {
     { name: 'Tell it a story', calm: 40 },
   ],
 
-  rewards: { exp: 45, coins: 30 },
+  rewards: { exp: 45, coins: 60 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'wax_drop', chance: 0.45 }],

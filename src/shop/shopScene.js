@@ -4,6 +4,7 @@ import { inUiSpace } from '../engine/screen.js';
 import { textFile, textSection } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
 import { HERO_STATE } from '../characters/heroState.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 import { SHOPS } from '../data/shops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { soulSprite } from '../battle/soul.js';
@@ -126,9 +127,10 @@ export class ShopScene {
     this.buyCursor = 0;
     this.talkCursor = 0;
     this.time = 0;
-    // TALK topics are the "talk: ..." sections of the shop's text file.
+    // TALK topics are the "talk: ..." sections of the shop's text file
+    // (a "... after <scene>" section is the same topic, later in the story).
     this.topics = Object.keys(textFile(this.shop.textFile))
-      .filter((section) => section.startsWith('talk: '))
+      .filter((section) => section.startsWith('talk: ') && !section.includes(' after '))
       .map((section) => ({ section, label: section.slice('talk: '.length) }));
     // A smith who can reforge the Fallen Star (src/data/fallenStar.js), once
     // you've got it: a topic of their own, last.
@@ -144,9 +146,13 @@ export class ShopScene {
   }
 
   // Everything a section says, as pages that fit the box (Z shows the next).
+  // A "<section> after <scene>" version wins once you've seen that scene (the
+  // latest one seen), the way townsfolk's lines move on with the story.
   say(section) {
     measuring ??= document.createElement('canvas').getContext('2d');
-    this.pages = textSection(this.shop.textFile, section)
+    const sections = textFile(this.shop.textFile);
+    const scene = [...(WORLD_STATE.seenScenes ?? [])].reverse().find((id) => sections[`${section} after ${id}`]);
+    this.pages = textSection(this.shop.textFile, scene ? `${section} after ${scene}` : section)
       .flatMap((entry) => paginate(measuring, entry, TALK_WIDTH, TALK_SIZE, TALK_LINES));
     this.pageIndex = 0;
     this.line = this.pages[0];
@@ -186,7 +192,9 @@ export class ShopScene {
         this.updateTalk(input);
         break;
       case 'leaving':
-        if (this.lineTime >= LEAVE_SECONDS || input.wasPressed('confirm')) this.onExit();
+        // After a reforge that goes on in the room (`afterScene`), only Z leaves: the words matter.
+        if (this.afterScene && input.wasPressed('confirm') && this.visibleCharacters() < this.line.length) this.lineTime = Infinity;
+        else if ((!this.afterScene && this.lineTime >= LEAVE_SECONDS) || input.wasPressed('confirm')) this.onExit(this.afterScene ?? null);
         break;
     }
   }
@@ -381,6 +389,12 @@ export class ShopScene {
     HERO_STATE.starForged = this.forging;
     sfx('levelUp');
     this.say('forge_now');
+    // A smith with a `forgeScene` (src/data/shops.js) finishes the job out in the room: once
+    // [forge_now] has been read, the shop closes and the overworld plays that scene.
+    if (this.shop.forgeScene) {
+      this.afterScene = this.shop.forgeScene;
+      this.mode = 'leaving';
+    }
   }
 
   visibleCharacters() {
@@ -539,6 +553,7 @@ export class ShopScene {
       else if (entry.item) drawItemDetails(ctx, entry.item, DETAILS_AREA);
       else if (entry.armor) drawArmorDetails(ctx, entry.armor, DETAILS_AREA);
       else drawWeaponDetails(ctx, entry.weapon, DETAILS_AREA);
+      this.drawOwnedNote(ctx, entry);
     } else {
       const lines = layoutDialogue(ctx, this.line, TALK_WIDTH, TALK_SIZE);
       drawDialogue(ctx, lines, RIGHT_BOX.x + 22, RIGHT_BOX.y + 20, { size: TALK_SIZE, lineHeight: 27, visible: this.visibleCharacters() });
@@ -549,6 +564,39 @@ export class ShopScene {
     }
     // Your gold sits in the room's bottom-left corner, clear of both boxes.
     drawText(ctx, `${HERO_STATE.gold} G`, 16, ROOM_HEIGHT * 2 - 30, { size: 28, color: MENU_COLORS.highlight, outline: '#000' });
+  }
+
+  // A small line along the bottom of the details: how many of an item you
+  // carry, or whether you own a piece of gear and how it measures up to what
+  // the hero wears (+ better, - worse).
+  drawOwnedNote(ctx, entry) {
+    if (entry.skillPoint) return;
+    let text = '';
+    let color = MENU_COLORS.dim;
+    if (entry.item) {
+      const have = HERO_STATE.items.filter((id) => id === entry.item).length;
+      const stored = HERO_STATE.storage.filter((id) => id === entry.item).length;
+      text = `You have ${have}${stored ? ` (+${stored} stored)` : ''}`;
+    } else {
+      const weapon = !!entry.weapon;
+      const id = entry.weapon ?? entry.armor;
+      if ((weapon ? HERO_STATE.weapon : HERO_STATE.armor) === id) text = 'Wearing it';
+      else if ((weapon ? HERO_STATE.weapons : HERO_STATE.armors).includes(id)) text = 'Already yours';
+      else if (wielderOf(weapon ? 'weapon' : 'armor', id) === HERO) {
+        const mine = weapon ? WEAPONS[HERO_STATE.weapon] : ARMOR[HERO_STATE.armor];
+        const theirs = weapon ? WEAPONS[id] : ARMOR[id];
+        const stats = weapon ? [['FIGHT', 'fightPower']] : [['DEF', 'defense'], ['MAG', 'magic'], ['SP', 'spGain']];
+        const parts = [];
+        for (const [label, key] of stats) {
+          const diff = Math.round(((theirs[key] ?? 0) - (mine?.[key] ?? 0)) * 100) / 100;
+          if (diff) parts.push(`${label} ${diff > 0 ? '▲' : '▼'}${Math.abs(diff)}`);
+        }
+        if (parts.length) text = `Against yours: ${parts.join('  ')}`;
+        color = MENU_COLORS.highlight;
+      }
+    }
+    // Above the details box, level with the gold, where no description can reach it.
+    if (text) drawText(ctx, text, RIGHT_BOX.x + 4, ROOM_HEIGHT * 2 - 26, { size: 22, color, outline: '#000' });
   }
 
   // A skill point for sale: what it is, and how many are left here.

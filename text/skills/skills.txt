@@ -159,7 +159,7 @@ TALK, Lull and Hush raise MERCY another 25% more.
 Pacify costs a quarter less, and calming works 10% better.
 
 [lance]
-Learn the spell Light Lance: 55% SP for a thrown bolt, a quarter harder than a good FIGHT.
+Learn the spell Light Lance: 65% SP for a thrown bolt, a quarter harder than a good FIGHT.
 
 [second_focus]
 Every attack spell hits another 20% harder.
@@ -208,7 +208,7 @@ Learn the spell Tempest: 95% SP for more than twice a good FIGHT, on one enemy.
 Ves's attack spells do 5 more damage.
 
 [ves_downdraft]
-Ves learns DOWNDRAFT: 30% SP to slam the wind down on one enemy, harder than her best FIGHT.
+Ves learns DOWNDRAFT: 80% SP to slam the wind down on one enemy, harder than her best FIGHT.
 
 [ves_tailwind]
 Ves's SHELTER also whips up a gust, slowing the next attack's bullets for 2 seconds.
@@ -268,6 +268,42 @@ Ves learns HAILSTORM: the sky throws hail at every enemy, nearly her best FIGHT 
 [ves_eye]
 Ves's SHELTER whips up a gust a second longer, and every hit under it does 1 less.
 
+[ves_oilcloth]
+Waxed cloth over the canopy. Ves's calming does more, and her healing a little.
+
+[ves_ferrule]
+A brass tip on the umbrella. Ves's attack spells do 5 more damage, and her FIGHT hits 15% harder.
+
+[ves_tidy_fold]
+Furled properly, every time. Ves's spells give back a little SP and calm a little more.
+
+[ves_gale_warning]
+Ves's SHELTER whips up a gust a second longer. She did say it was coming.
+
+[ves_sidewind]
+Ves's attack spells do 6 more damage. The wind comes in from the side.
+
+[ves_rolling_thunder]
+Ves's attack spells do 5 more damage, and SHELTER's gust lasts a second longer.
+
+[ves_wool_socks]
+Ves's healing spells give back 6 more HP. Dry feet fix most things.
+
+[ves_tea_cosy]
+Every hit under Ves's SHELTER does 1 less. Keeps the heat in.
+
+[ves_spare_scarf]
+Ves's spells fill 8 more SP and heal 4 more HP. She always brings a spare.
+
+[ves_petrichor]
+Ves's spells that calm or fill SP do more. That smell, just after the rain starts.
+
+[ves_dew_point]
+Ves's attack spells do 4 more damage.
+
+[ves_black_cloud]
+Ves's attack spells do 7 more damage, and SHELTER's gust lasts a second longer.
+
 # --- Ves, chapter 4 ---
 
 [ves_silver]
@@ -293,6 +329,30 @@ Ves's attack spells do 6 more damage, and SHELTER's gust lasts a second longer.
 
 [ves_monsoon]
 Ves learns MONSOON: rain in sheets. Heals someone after each of the next 4 enemy turns, and fills SP.
+
+[ves_folded_away]
+Ves's healing spells give back 8 more HP. Tucked under her arm, out of the wet.
+
+[ves_dry_humour]
+Ves's FIGHT hits 20% harder. She says it is not a joke.
+
+[ves_trade_winds]
+Ves's attack spells do 8 more damage. Steady, and from a long way off.
+
+[ves_gale_force]
+Ves's attack spells do 8 more damage, and SHELTER's gust lasts a second longer.
+
+[ves_banked_embers]
+Ves's spells give back 10 more SP. Still warm in the morning.
+
+[ves_hearthstone]
+Ves's healing gives 10 more HP, and every hit under SHELTER does 1 less.
+
+[ves_static]
+Ves's attack spells do 8 more damage. The air prickles first.
+
+[ves_rainbow]
+Ves's healing, calming and SP spells all do more. The sky clears, and she pretends not to look.
 
 # Bramble's branches (chapter 3).
 [bram_edge]
@@ -352,3 +412,300 @@ Bramble learns MARBLES: a pocketful across the floor. Every enemy goes over.
 
 [bram_lucky_stone]
 Bramble's sneak attack hits 50% harder, and fights pay 10% more gold.
+
+# --- Chapter 5: the drowned coast ---
+[salt_edge]
+FIGHT does 30% more damage.
+
+[wave_break]
+One more slash in every FIGHT.
+
+[open_water]
+Start every battle with 20% SP, and graze for 50% more SP.
+
+[slack_tide]
+Spells cost 15% less SP.
+
+[oilskin_skin]
+Every hit does another 1 less damage.
+
+[sea_legs]
+A little longer before you can be hit again.
+
+[swift_tide]
+Run another 20% faster.
+
+[ships_biscuit]
+Food heals 30% more.
+
+[calm_waters]
+TALK, Lull and Hush raise MERCY 30% more.
+
+[fair_trade]
+Shops charge 10% less, and MERCY rises 10% more.
+
+[spring_tide]
+Attack spells hit harder, by another 25%.
+
+[neap_tide]
+Attack spells hit harder, by another 15%.
+
+[nova]
+Wakes by itself, when the water comes up the stair. Then: all your SP for three times a good FIGHT. Everything goes white.
+
+[tide_brine]
+Learn the spell Scald: 50% SP for a little damage now, and a burn after each of the next 3 enemy turns.
+
+[tide_undertow]
+Learn the spell Shove: 60% SP for a hard hit on one enemy that drags it back. Its next attack is shorter.
+
+[tide_low_water]
+Learn the spell Lay Bare: 45% SP. One enemy's weak spots show, and every hit on it does 40% more for 3 turns.
+
+[tide_ebb_flow]
+Learn Turnabout: 40% SP. Your hits land 1.75x as hard, and theirs 1.5x, for 2 turns.
+
+# --- Ves, chapter 5 ---
+[ves_tarred_seams]
+Ves's spells hit 8 harder and calm 4 more. Every seam patched.
+
+[ves_sailcloth]
+Ves's healing spells give back 10 more HP, and her ZEPHYR fills 8 more SP.
+
+[ves_sea_gale]
+Ves's attack spells do 10 more damage.
+
+[ves_squall_line]
+Ves's attack spells do 12 more damage.
+
+[ves_chowder_flask]
+Ves's healing spells give back 14 more HP. It's from the Cockle Stall.
+
+[ves_oil_lamp]
+Ves's ZEPHYR fills 10 more SP, and SHELTER takes 1 more off every hit.
+
+[ves_ball_lightning]
+Ves's attack spells do 10 more damage, and SHELTER's gust lasts 1 second longer.
+
+[ves_sea_fog]
+Ves's FLURRY calms 6 more, and her ZEPHYR fills 8 more SP.
+
+[ves_sea_breeze]
+Ves learns COOL CHANGE: a cool wind that heals one friend a lot.
+
+[ves_sail]
+Ves learns BILLOW: she opens her umbrella like a sail, and nobody can be hit for the first few seconds of the next attack.
+
+[ves_salt_spray]
+Ves's attack spells do 6 more damage, and her FLURRY calms 6 more.
+
+[ves_downpour]
+Ves learns DOWNPOUR: the sea comes down on every enemy, hard, and the next attack stops short.
+
+[ves_rip_current]
+Ves learns WHIRL: she drags every enemy into a heap. The more of them there are, the harder it hits.
+
+[ves_storm_umbrella]
+SHELTER takes 2 more off every hit, and its gust lasts 1 second longer.
+
+# --- Bramble, chapter 5 ---
+[bram_boathook]
+Bramble's attack spells do 10 more damage.
+
+[bram_wide_swing]
+Bramble's FIGHT hits 25% harder.
+
+[bram_foghorn]
+Bramble's HOLLER calms 6% more, and stops the next attack a little sooner.
+
+[bram_shanty]
+Bramble's WAR CRY fills 10 more SP, and his HOLLER calms 4% more.
+
+[bram_pocket_crab]
+Bramble's BISCUIT gives back 14 more HP. Only a bit squashed.
+
+[bram_shell_collector]
+Bramble's sneak attack hits 50% harder, and fights pay 10% more gold.
+
+[bram_deep_breath]
+Bramble learns COUNT TO TEN: a big slow breath. Calms every enemy and fills SP.
+
+[bram_cannonball]
+Bramble learns CANNONBALL: he jumps, tucked up, and soaks everything. A big hit, and the next attack stops short.
+
+[bram_lifeline]
+Bramble learns HAND UP: a rope, hand over hand. Heals a friend a lot, even one who's down.
+
+[bram_chillin]
+Nobody in the party is frightened any more, and his HOLLER calms 4% more. (Frights take SP.)
+
+[bram_wade_in]
+Bramble learns STAND FIRM: for one enemy turn, hits meant for his friends land on him instead, halved.
+
+# --- Chapter 5, the second half of the tree ---
+[steady_aim]
+The FIGHT bar's notch is wider again, so PERFECT hits come easier.
+
+[cleave]
+Learn the spell Cleave: 85% SP for one stroke on one enemy, twice as hard as a good FIGHT.
+
+[strong_grip]
+FIGHT does 20% more damage.
+
+[masterstroke]
+FIGHT does 35% more damage, and the notch is a little wider.
+
+[second_wind]
+Heal Pulse and Mend heal 30% more.
+
+[restore]
+Learn the spell Restore: 70% SP, and the whole party recovers a lot of HP.
+
+[wellspring]
+Start every battle with 20% more SP, and graze for 50% more SP. A well that doesn't run dry.
+
+[catch_breath]
+DEFEND heals another 15 HP.
+
+[bastion]
+Learn the spell Bastion: 70% SP. Damage is halved for the next 4 enemy turns.
+
+[immovable]
+Every hit does 2 less damage, and you're safe a little longer after one. You're a wall now.
+
+[rope_hands]
+Pump a rope swing up 50% faster.
+
+[old_hand]
+Food heals 40% more, and you run 15% faster. You've done a lot of walking.
+
+[soothe]
+Learn the spell Soothe: 75% SP. Every enemy's MERCY rises by 50%.
+
+[peacemaker]
+TALK, Lull and Hush raise MERCY 40% more. Most fights don't need to be fights.
+
+[starstorm]
+Learn the spell Starstorm: 100% SP. Stars come down on every enemy, harder than a good FIGHT on each.
+
+[mastery]
+Attack spells hit harder, by another 30%.
+
+[tide_undercut]
+Learn the spell Undercut: 75% SP for a hard hit that knocks one enemy back and stings after each of the next 3 enemy turns.
+
+[tide_overwhelm]
+Learn the spell Overwhelm: 115% SP. Everything you have on one enemy, and its next attack is shorter.
+
+# --- Ves, the second half ---
+[ves_sturdy_handle]
+SHELTER takes 1 more off every hit, and Ves's FLURRY calms 4 more.
+
+[ves_brass_tip]
+Ves's attack spells do 8 more damage.
+
+[ves_hold_fast]
+Ves learns HOLD FAST: the next attack does half the damage, and the first hit on you does nothing at all.
+
+[ves_old_friend]
+Ves's spells do 12 more damage, heal 12 more HP and calm 6 more. It's been through a lot.
+
+[ves_sharp_gusts]
+Ves's attack spells do 10 more damage.
+
+[ves_windshear]
+Ves learns WINDSHEAR: a wind that cuts one enemy like a blade. The next attack stops short.
+
+[ves_hurricane]
+Ves learns HURRICANE: the whole storm, on every enemy, and the next attack is cut well short.
+
+[ves_warm_hands]
+Ves's healing spells give back 12 more HP.
+
+[ves_spare_blanket]
+SHELTER takes 1 more off every hit, and Ves's healing gives back 6 more HP.
+
+[ves_fireside]
+Ves learns FIRESIDE: everyone in the party recovers a lot of HP at once.
+
+[ves_home_fires]
+Ves's healing gives back 16 more HP, her FLURRY calms 6 more, and SHELTER takes 1 more off.
+
+[ves_charged_air]
+Ves's attack spells do 10 more damage.
+
+[ves_sheet_lightning]
+Ves learns SHEET LIGHTNING: lightning jumps through every enemy. The more of them, the harder it hits.
+
+[ves_supercell]
+Ves learns SUPERCELL: the biggest storm cloud there is, over one enemy. The next attack stops short.
+
+[ves_fair_wind]
+Ves's attack spells do 8 more damage, and her healing gives back 8 more HP.
+
+[ves_light_rain]
+Ves's FLURRY calms 6 more, and her healing gives back 8 more HP.
+
+[ves_still_air]
+Ves learns STILL AIR: the wind stops dead. Every enemy calms down, and the next attack stops short.
+
+[ves_clear_skies]
+Ves learns CLEAR SKIES: everyone recovers, the next attack is cut short, and the first hit on you does nothing.
+
+# --- Bramble, the second half ---
+[bram_keen_edge]
+Bramble's attack spells do 10 more damage.
+
+[bram_notched_handle]
+Bramble's attack spells do 10 more damage. He's been counting.
+
+[bram_splinters]
+Bramble learns SPLINTERS: he hacks at everything in reach, and chips fly into every enemy.
+
+[bram_woodpile]
+Bramble's attack spells do 12 more damage.
+
+[bram_big_one]
+Bramble learns THE BIG ONE: the longest wind-up in history, on one enemy. The next attack is cut well short.
+
+[bram_loud_proud]
+Bramble's HOLLER calms 6% more, and his WAR CRY fills 6 more SP.
+
+[bram_good_lungs]
+Bramble's WAR CRY fills 8 more SP, and his HOLLER calms 4% more.
+
+[bram_cheer]
+Bramble learns THREE CHEERS: everyone in the party recovers some HP, and every enemy calms a little.
+
+[bram_bottomless]
+Bramble's WAR CRY fills 6 more SP, and his HOLLER calms 6% more. He never runs out.
+
+[bram_sing_along]
+Bramble learns SING-ALONG: everyone recovers HP, every enemy calms down, and SP fills a bit.
+
+[bram_quiet_feet]
+Bramble's sneak attack hits 25% harder.
+
+[bram_snack_stash]
+Bramble's BISCUIT gives back 12 more HP.
+
+[bram_hand_me_downs]
+Bramble's BISCUIT gives back 10 more HP, and his attack spells do 4 more damage.
+
+[bram_conkers]
+Bramble learns CONKERS: cheap, and every enemy gets one.
+
+[bram_not_there]
+Bramble's sneak attack hits 50% harder, and his attack spells do 8 more damage. Was he ever there?
+
+[bram_brave_face]
+Bramble's HOLLER calms 6% more, and his BISCUIT gives back 6 more HP.
+
+[bram_feet_down]
+Bramble's BISCUIT gives back 10 more HP. His feet can touch the bottom.
+
+[bram_keep_calm]
+Bramble's HOLLER calms 8% more, and his BISCUIT gives back 8 more HP.
+
+[bram_got_you]
+Bramble learns I'VE GOT YOU: everyone recovers HP, and for one enemy turn hits meant for his friends land on him, halved.

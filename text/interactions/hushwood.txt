@@ -31,6 +31,9 @@ Not without Bramble. Go and get him first.
 [split_save]
 Not with Bramble off somewhere. Get him back first.
 
+[split_save_ves]
+Not with Ves off on her own somewhere. Get her back first.
+
 [kid_rope]
 {scared}Up THAT? On a rope? No. No no no. I'll go round.
 

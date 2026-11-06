@@ -1,0 +1,7 @@
+# THE BOTHER: Haddock's rowboat, tied up at the end of the jetty (gullrest_jetty). A prop you can read; the scene the_sky_turns uses it as the boat.
+
+[first]
+A little blue rowboat tied up at the end of the pier, with BOTHER painted on her side in enormous white letters. She bobs on her rope as if she's got somewhere to be.
+
+[repeat]
+The Bother. She's very honest about herself.

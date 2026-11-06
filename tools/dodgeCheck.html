@@ -1,0 +1,200 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><base href="../"><style>body{background:#000;margin:0;color:#fff;font:12px monospace}canvas{display:block;image-rendering:pixelated}#report{white-space:pre}</style></head>
+<body><canvas id="game" width="640" height="480"></canvas><div id="report"></div>
+<script type="module">
+import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from './src/config.js';
+import { createScreen } from './src/engine/screen.js';
+import { loadTextFiles } from './src/engine/textLoader.js';
+import { loadUiFont } from './src/ui/text.js';
+import { TEXT_FILES } from './src/data/textManifest.js';
+const report = document.getElementById('report');
+try {
+const params = new URLSearchParams(location.search);
+let seed = Number(params.get('seed') ?? 1);
+const rng = () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+Math.random = rng;
+const ctx = createScreen(document.getElementById('game'), UI_WIDTH, UI_HEIGHT);
+await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
+const { BattleScene } = await import('./src/battle/battleScene.js');
+const { ENEMIES } = await import('./src/data/enemies/index.js');
+const { joinParty } = await import('./src/characters/party.js');
+const hud = await import('./src/battle/hud.js');
+joinParty('vesper');
+const battle = new BattleScene([ENEMIES[params.get('enemy')]], () => {}, params.get('area') ?? 'below');
+const foe = battle.phased ?? battle.activeFoes()[0];
+const phaseIx = Number(params.get('phase') ?? 0);
+for (let i = 1; i <= phaseIx; i++) battle.enterPhase(foe, i);
+battle.stageFx?.skip?.(battle, foe);
+let patterns = (params.get('patterns') ?? '').split(',').filter(Boolean);
+if (!patterns.length) patterns = foe.data.patterns.map((p) => p.name);
+const trials = Number(params.get('trials') ?? 8);
+const REACT = Number(params.get('react') ?? 0.2);
+const H = Number(params.get('h') ?? 24);
+const STEP = 1 / Number(params.get('hz') ?? 20);
+const SEG = Number(params.get('seg') ?? 6);
+const shotAt = params.get('shot');
+const shotT = Number(params.get('st') ?? 3);
+const showName = params.get('show');
+// What the bot sees: copies of the bullets, stepped ahead, with the soul they
+// chase standing where the soul is now.
+// Things the attack moves by hand (not by their own velocity) the bot reads
+// the way a player does: from how they moved last frame.
+const seen = new WeakMap();
+const observed = new WeakMap();
+const clone = (b, real, proxy) => {
+  const c = Object.create(Object.getPrototypeOf(b));
+  const o = observed.get(b);
+  if (o) {
+    const cl = c;
+    queueMicrotask(() => {});
+    c.__obs = o;
+  }
+  for (const k of Object.keys(b)) {
+    const v = b[k];
+    if (v === real) c[k] = proxy;
+    else if (v && typeof v === 'object' && v.target === real) c[k] = { ...v, target: proxy };
+    else c[k] = v;
+  }
+  // A careful player reads a locked popper: its fan is coming down the
+  // dotted spread once it fires.
+  if (b.constructor.name === 'Popper' && b.locked) {
+    c.edgeDistance = function (px, py) {
+      const t = this.age - this.warn;
+      if (t < -0.05 || t > 0.9) return Infinity;
+      const d = Math.hypot(px - this.x, py - this.y);
+      const off = Math.abs(((Math.atan2(py - this.y, px - this.x) - this.aim + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+      const front = 6 + Math.max(0, t) * 95;
+      if (d > front + 4 || d < front - 30) return Infinity;
+      return off < 0.55 + 4 / Math.max(d, 4) ? 0 : Infinity;
+    };
+  }
+  if (c.__obs && b.constructor.name !== 'Line') {
+    const own = Math.hypot(b.vx ?? 0, b.vy ?? 0);
+    const obs = Math.hypot(c.__obs.vx, c.__obs.vy);
+    if (obs > 6 && Math.abs(obs - own) > 6) {
+      const up = c.update;
+      c.update = function (dt, box) { this.age += dt; this.x += this.__obs.vx * dt; this.y += this.__obs.vy * dt; };
+    }
+  }
+  return c;
+};
+// ?danger=art:radius,... : harmless markers a careful player keeps clear of
+// (a mound with a drill under it), read as hazards of that size.
+const DANGER = Object.fromEntries((params.get('danger') ?? '').split(',').filter(Boolean).map((d) => { const [a, r] = d.split(':'); return [a, Number(r ?? 6)]; }));
+// ?columns=art:halfwidth:from:to,... : things that will sweep their whole
+// column (rows of teeth), read as a column hazard from warn+from to warn+to.
+const COLUMNS = Object.fromEntries((params.get('columns') ?? '').split(',').filter(Boolean).map((d) => { const [a, w, f, t] = d.split(':'); return [a, [Number(w), Number(f), Number(t)]]; }));
+const markers = (c) => {
+  if (COLUMNS[c.artName]) {
+    const [w, f, to] = COLUMNS[c.artName];
+    c.edgeDistance = function (px) { const k = this.age - this.warn; return k > f && k < to ? Math.abs(px - this.x) - w : Infinity; };
+    c.update = function (dt) { this.age += dt; };
+    return c;
+  }
+  if (DANGER[c.artName] !== undefined) {
+    const R = DANGER[c.artName];
+    c.edgeDistance = function (px, py) { const end = this.warn + this.life; return this.age > end - 0.15 && this.age < end + 0.5 ? Math.hypot(px - this.x, py - this.y) - R : Infinity; };
+  }
+  return c;
+};
+const observe = () => {
+  for (const b of battle.bullets) {
+    if (b.x === undefined) continue;
+    const last = seen.get(b);
+    if (last) observed.set(b, { vx: (b.x - last.x) * 60, vy: (b.y - last.y) * 60 });
+    seen.set(b, { x: b.x, y: b.y });
+  }
+};
+const dirs = [[0, 0]];
+for (let i = 0; i < 8; i++) dirs.push([Math.cos(i * Math.PI / 4), Math.sin(i * Math.PI / 4)]);
+const cands = [];
+for (const d of dirs) for (const d2 of dirs) cands.push({ d, d2 });
+const lines = [];
+let totalHits = 0;
+let stopped = null;
+let totalTrials = 0;
+for (const name of patterns) {
+  let hits = 0;
+  const where = {};
+  const times = [];
+  for (let trial = 0; trial < trials; trial++) {
+    battle.hero.hp = battle.hero.maxHp = 99999;
+    for (const m of battle.party ?? []) { m.hp = m.maxHp = 99999; }
+    battle.attackers = [foe];
+    battle.pickPattern = () => name;
+    battle.phase = 'dodge';
+    battle.phaseTime = 0;
+    battle.startAttack();
+    const realHurt = battle.hurt.bind(battle);
+    battle.hurt = (bullet) => {
+      if (battle.soul.iframes > 0 || battle.soul.untouchable > 0) return;
+      hits++;
+      const key = bullet.constructor.name + (bullet.artName ? ':' + bullet.artName : '') + (bullet.target ? ':hunt' : bullet.path ? ':sweep' : '') + (bullet.artName?.startsWith('rumConf') ? (bullet.gravity ? ':fan' : ':rain') : '');
+      where[key] = (where[key] ?? 0) + 1;
+      times.push(trial + ':' + battle.dodgeTime.toFixed(1) + '@' + f);
+      realHurt(bullet);
+      if (params.get('stophit') && hits >= Number(params.get('stophit'))) { stopped = `${name} hit by ${key} at ${battle.dodgeTime.toFixed(2)} soul ${battle.soul.x.toFixed(0)},${battle.soul.y.toFixed(0)}`; }
+    };
+    const held = new Set();
+    const input = { isDown: (k) => held.has(k), wasPressed: () => false, endFrame() {} };
+    let prev = 0;
+    let f = 0;
+    while (battle.phase === 'dodge' && f < 60 * 14) {
+      f++;
+      const soul = battle.soul;
+      const box = hud.BOX;
+      const proxy = { x: soul.x, y: soul.y };
+      let sim = battle.bullets.filter((b) => b.age === undefined || b.age >= REACT).map((b) => markers(clone(b, soul, proxy)));
+      const pos = cands.map(() => ({ x: soul.x, y: soul.y, first: H + 1, clear: 99 }));
+      for (let k = 1; k <= H; k++) {
+        for (const b of sim) b.update(STEP, box);
+        cands.forEach((c, i) => {
+          const p = pos[i];
+          const dd = k <= SEG ? c.d : c.d2;
+          p.x = Math.min(Math.max(p.x + dd[0] * 80 * STEP, box.x + 5), box.x + box.w - 5);
+          p.y = Math.min(Math.max(p.y + dd[1] * 80 * STEP, box.y + 5), box.y + box.h - 5);
+          if (p.first <= H) return;
+          let d = Infinity;
+          for (const b of sim) { const g = b.edgeDistance(p.x, p.y); if (g < d) d = g; }
+          if (d < 3.2) p.first = k;
+          else p.clear = Math.min(p.clear, d - 3.2 + (k > SEG ? 4 : 0));
+        });
+      }
+      let best = 0;
+      let bestScore = -Infinity;
+      cands.forEach((c, i) => {
+        const p = pos[i];
+        const centre = Math.hypot(p.x - (box.x + box.w / 2), p.y - (box.y + box.h / 2));
+        const score = p.first * 100 + Math.min(p.clear, 10) * 3 - centre * Number(params.get('cw') ?? 0.4) + (cands[i].d === cands[prev].d ? 2 : 0);
+        if (score > bestScore) { bestScore = score; best = i; }
+      });
+      prev = best;
+      held.clear();
+      const [dx, dy] = cands[best].d;
+      if (dx > 0.3) held.add('right');
+      if (dx < -0.3) held.add('left');
+      if (dy > 0.3) held.add('down');
+      if (dy < -0.3) held.add('up');
+      battle.update(1 / 60, input);
+      observe();
+      if (stopped) break;
+      if (showName === name && trial === Number(params.get('tr') ?? 0) && f >= shotT * 60) { f = 99999; break; }
+    }
+    battle.hurt = realHurt;
+    if (stopped) break;
+    if (showName === name && trial === Number(params.get('tr') ?? 0)) break;
+  }
+  if (showName === name || stopped) break;
+  totalHits += hits;
+  totalTrials += trials;
+  lines.push(`${name}: ${(hits / trials).toFixed(2)} hits a turn (${hits}/${trials})  ${JSON.stringify(where)}  at ${times.join(' ')}`);
+}
+ctx.setTransform(1, 0, 0, 1, 0, 0);
+ctx.fillStyle = '#000';
+ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+battle.draw(ctx);
+report.textContent = `${stopped ?? ''}
+${lines.join('\n')}\ntotal ${(totalHits / Math.max(1, totalTrials)).toFixed(2)} a turn\nBOT DONE`;
+} catch (e) { report.textContent = 'ERROR ' + e.stack + '\nBOT DONE'; }
+</script></body></html>

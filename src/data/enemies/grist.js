@@ -15,8 +15,8 @@ export const GRIST = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hollin',
   sprite: { rows: GRIST_SPRITE, palette: GRIST_PALETTE },
-  maxHp: 460,
-  damage: 18,
+  maxHp: 530,
+  damage: 21,
 
   // A Chapter 3 enemy from the village at the end of the wood: busier than
   // the Hayward.
@@ -39,7 +39,7 @@ export const GRIST = {
     { name: 'Say "boo"', calm: 30 },
   ],
 
-  rewards: { exp: 165, coins: 95 },
+  rewards: { exp: 345, coins: 50 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'millers_bannock', chance: 0.4 }],

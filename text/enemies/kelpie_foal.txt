@@ -1,0 +1,86 @@
+# KELPIE FOAL
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/kelpie_foal.js.
+
+[intro]
+Water slops over a bank, and a green foal climbs out of it on legs that don't match. It sees you, rears up as high as it can, and falls over. Then it gets up and does it again. A KELPIE FOAL!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+KELPIE FOAL paws the ground, one hoof, then another. It has lost track of which it started with.
+
+Weed drips from KELPIE FOAL's mane. It shakes its head, throws water everywhere, and looks, for a moment, very much like a proper kelpie.
+
+KELPIE FOAL tries a frightening whinny. It comes out as a squeak. It clears its throat and tries again, lower.
+
+KELPIE FOAL gallops in a circle and stops, panting, to check you were watching.
+
+Smells like pond weed, wet horse, and a morning in spring.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+I am
+VERY scary.
+
+Neigh!
+...Ahem.
+NEIGH!
+
+Watch
+this!
+
+Mum says
+I'm
+nearly
+grown.
+
+Gallop,
+gallop,
+gallop!
+
+Run! Go
+on! Run!
+
+Did you
+see THAT?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/kelpie_foal.js.
+[talk: Inspect]
+KELPIE FOAL - HP 1900
+A young water-horse, practising being frightening. Stamps rings of droplets (each with a gap), cracks kelp whips along a line, gallops a wave of foam with a gap in it, and charges along a row. Watch the gap and the line.
+
+[talk: Pretend to be frightened]
+You gasp, and stagger back, and hold your hands up. KELPIE FOAL stares. Then it rears, as high as it can, throws its head back, and lets out a neigh that is only a little squeaky. It trots in a very pleased circle. You've made its whole week.
+
+[talk: Offer a sugar lump]
+You hold out a sugar lump on your flat hand. KELPIE FOAL snorts at it, suspicious. It sniffs again. A warm, whiskery muzzle takes it from you, and its ears go all the way forward, and then it leans its whole wet head against your shoulder.
+
+[talk: Hold still and let it sniff]
+You stand quite still while it sniffs you over, hair, hands, bag. A lot of water ends up on your coat. KELPIE FOAL sneezes, once, and decides you smell like a safe place. It folds its legs under it and sits down. Its legs don't match, even then.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+KELPIE FOAL folds up on the bank with a long wet sigh, a heap of weed with a muzzle. After a moment the weed goes still, and the pond goes quiet, and something small and green slips away under the surface.
+
+[pacified]
+KELPIE FOAL gives you a last, wet, whiskery nudge. Then it wheels round, bolts for the water, and dives in with a splash that soaks everyone, itself included. A green ripple goes away across the pond, whinnying.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that it has very fine legs. {foe} looks down at them. It seems to be counting them, and it's not sure it likes the answer. She says there's time to grow into them.
+
+Ves asks {foe} to try the rearing thing again, slowly, so she can learn it. {foe} does, very proudly, and falls over. She applauds the fall.
+
+Ves tells {foe} that the best kelpies she's heard of were all very polite. {foe} considers that. It bows its head. It might be a start.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} that he is also still learning to be scary. He is not very good at it. {foe} says that's all right, nor is it. They shake on it. It's slightly damp.
+
+Bramble asks {foe} if he can ride it. {foe} says absolutely not. It says it with a look that suggests it would, if it were taller.
+
+Bramble tells {foe} that he is not afraid of water, because he is a big boy. He says it all in one breath, and takes one step back from the bank.

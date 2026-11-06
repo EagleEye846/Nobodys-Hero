@@ -30,7 +30,7 @@ export const DUST_BUNNY = {
     { name: 'Stay very still', calm: 30 },
   ],
 
-  rewards: { exp: 25, coins: 15 },
+  rewards: { exp: 25, coins: 30 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'wild_carrot', chance: 0.4 }],

@@ -1,0 +1,7 @@
+# BT_SQ_CHEER_A: A mole in the party crowd, cheering at nothing in particular.
+
+[first]
+HOORAY! For what? I don't know! Hooray anyway! It's bright!
+
+[repeat]
+HOORAY! Still hooray! Wait, what are we hooraying?

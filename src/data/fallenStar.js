@@ -19,9 +19,13 @@ export const STAR_FORGINGS = [
   // Teasel, in Lasthome, with the shard on the Old Street's raised steps,
   // just through the far door.
   { name: 'Fallen Star +1', fightPower: 2.05, stars: 2, chapter: 3, smith: 'lasthome_smithy', needs: 'star_shard' },
-  // Chapter 4 onward: their smiths and favours aren't built yet.
-  { name: 'Fallen Star +2', fightPower: 2.35, stars: 3, chapter: 4 },
-  { name: 'Fallen Star +3', fightPower: 2.7, stars: 4, chapter: 5 },
+  // Hobnail, at the heat vent in Belowtown, with the shard from the Diggings.
+  // 2.35 beats the best of chapter 4 (the Deepglass Blade is 2.25).
+  { name: 'Fallen Star +2', fightPower: 2.35, stars: 3, chapter: 4, smith: 'hobnail_forge', needs: 'star_shard_deep' },
+  // Orla Cobb, in the Beacon Isles, with the shard from the snapped mast in
+  // the Wreck Yard. 2.7 beats the best of chapter 5 (the Stormglass Blade is 2.55).
+  { name: 'Fallen Star +3', fightPower: 2.7, stars: 4, chapter: 5, smith: 'orla_forge', needs: 'star_shard_wreck' },
+  // Chapter 6 onward: their smiths and favours aren't built yet.
   { name: 'Fallen Star +4', fightPower: 3.1, stars: 5, chapter: 6 },
 ];
 

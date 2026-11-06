@@ -1,0 +1,280 @@
+# THE WRACK SHORE (Chapter 5): the first area under the green storm. The landing, the pools,
+# the gaps, the dunes, the tide clock, the Dowager's bathtub, the boardwalk, and the hulk in
+# the dunes. Wet, grey and green, with rain on everything and one extremely tidy crab.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums in the rain, small and steady, like a lamp in a window.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[chest_empty]
+An empty chest, salted white at the hinges.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and the tide and everything you've moved goes back where it started.
+
+# --- THE LANDING ---------------------------------------------------------------
+
+[landing_bother]
+The Bother, tied up to a stake at the edge of the shallows. Rain beads on BOTHER. She looks like she would quite like to go home.
+
+[landing_bother_bramble]
+{worried}Can she wait here? ...In case.
+
+[landing_sign]
+A board hammered into the shingle, the paint run: THE WRACK. KEEP TO THE SHELL PATH. PLEASE WIPE YOUR FEET. Under it, in different, smaller writing: (SHE MEANS IT.)
+
+[landing_sign_ves]
+{bored}Somebody here has rules. I'm cautiously impressed.
+
+[landing_driftwood]
+A great bleached log, the bark long gone, polished smooth by the sea. A crab has moved into a knot-hole and put a shell over the door.
+
+[landing_pots]
+Lobster pots, stacked and lashed and forgotten. Something has been sleeping in the top one. It left a note: it's a bit of weed.
+
+[landing_flag]
+A tatter of flag on a post, snapping in the wind. It was red once.
+
+[landing_weed]
+A heap of wrack, glossy and green and smelling very strongly of the sea. It moves in the wind as if it were breathing.
+
+[landing_buoy]
+A red buoy, washed up and left. The paint's gone to rust at the seams.
+
+[landing_mast]
+A snapped mast, standing on its end in the shingle like a fencepost for something large. The top has split into splinters.
+
+[landing_mast_ves]
+{thoughtful}That's a long way from where a ship would be.
+
+[landing_barrel]
+A barrel, sealed with tar and empty, or at least very quiet.
+
+[landing_pouch]
+A purse in the shingle, buttoned shut against the rain.
+
+[landing_cliff]
+Wet slate, green with weed, running with rain.
+
+[landing_sea]
+The sea heaves, grey-green and white-capped, and far away along the skyline stands a thin black tower with a crown of spikes.
+
+[landing_sea_ves]
+{bored}Don't stare at it, Bramble. That is advice from me, personally.
+
+[landing_rock]
+Barnacles, packed tight, and every one of them shut.
+
+# --- THE POOLS -----------------------------------------------------------------
+
+[pools_sign]
+A board: LOW WATER. MIND THE TRENCH. PLEASE WIPE YOUR FEET. Someone has crossed out FEET and written FEET again, very neatly.
+
+[pools_sign_bramble]
+{thinking}Why does everyone keep saying it?
+
+[pools_wheel]
+A tide wheel, cranked by hand, with a pair of brass rings round the rim. The sea here listens to it. Mostly.
+
+[pools_wheel_turn]
+You turn the wheel. Out in the inlet, the water thinks about it, and starts to move.
+
+[pools_wheel_busy]
+The wheel won't budge. The water's still moving.
+
+[pools_crate]
+A crate, floating in the middle of the inlet when the tide is in, and sitting on the shingle when it's out. A trench runs down the middle of the bed.
+
+[pools_crate_ves]
+{thoughtful}A trench. And a crate. I'm going to say this once: we could just put one in the other.
+
+[pools_buoys]
+A pile of buoys, half buried in weed, each of them labelled in a neat hand with the date it washed up.
+
+[pools_pouch]
+A purse in a tidepool, a little of the sea inside it.
+
+[pools_sea]
+The inlet, full to the brim and the colour of slate.
+
+[pools_pool]
+A tidepool: anemones like wet red buttons, a very small crab, a shell that has moved a little since you last looked.
+
+# --- THE GAPS ------------------------------------------------------------------
+
+[gaps_sign]
+A board with an arrow pointing up at the ridge, and an arrow pointing down at the gate: NARROW PLACES ARE NARROW. PLEASE WIPE YOUR FEET.
+
+[gaps_weed]
+A great heap of weed packed into a gap in the ridge. There's a tunnel through the bottom of it, just about the size of a boy.
+
+[gaps_weed_bramble]
+{worried}It's wet in there. It's wet ON PURPOSE.
+
+[gaps_wheel]
+A big iron wheel on the ledge, rimed with salt and barnacles. Bramble gets both hands on it and heaves, face screwed up, and the wheel groans round, and somewhere down the ridge a gate begins to lift.
+
+[gaps_wheel_heavy]
+A wheel on a ledge, past a tunnel of weed. You can't get near it. Somebody smaller will have to.
+
+[gaps_gate]
+A timber gate across the pinch, lashed with chain. A wheel somewhere must lift it.
+
+[gaps_gate_open]
+The gate stands open, its chain hanging slack.
+
+[gaps_driftwood]
+A tall piece of driftwood, set upright in the shingle. Someone has hung a coat on it, then forgotten the coat.
+
+[gaps_pouch]
+A purse wedged in the rock, well out of the tide.
+
+[gaps_rock]
+Barnacle rock, wet and sharp, and not interested.
+
+[gaps_shallows]
+Shallows, ankle deep and cold as a bad idea.
+
+[gaps_shallows_bramble]
+{worried}It's up to my KNEES. I'm very small. It's up to my KNEES.
+
+# --- THE DUNES -----------------------------------------------------------------
+
+[dunes_sign]
+A board half buried in the sand: THE RIDGE IS NOT CLIMBABLE. THE WIND IS HELPFUL. PLEASE WIPE YOUR FEET.
+
+[dunes_sign_ves]
+{bored}Good. Practical.
+
+[dunes_gust]
+A column of wind, rising out of the sand in a corkscrew. It smells of rain and salt, and Ves's umbrella, faintly.
+
+[dunes_gust_ves]
+{bored}Stand in it. It does the rest. I'm told it's a bit of a lift.
+
+[dunes_ridge]
+A long wall of barnacle rock, taller than any of you, and not a ledge on it.
+
+[dunes_bank]
+A bank of sand and rock, packed hard by the wind, taller than any of you and with not a foothold on it.
+
+[dunes_hulk]
+The bow of a ship, standing out of the dune on its keel like a dropped spoon, with a dark hole in her side. The planks are wet but sound.
+
+[dunes_crate]
+A crate, tucked into the lee of the old hull where the wind never gets. The lid's loose. Inside, wrapped in sailcloth: a WINKLE SKEWER.
+
+[dunes_crate_empty]
+An empty crate, with a damp circle in the sailcloth where something once was.
+
+[dunes_pouch]
+A purse half buried in the sand under the cliff, where the wind has heaped it. Nobody else comes this way.
+
+[steps_dune]
+Marram grass, rattling in the wind like a hundred tiny whispers.
+
+# --- THE TIDE CLOCK ------------------------------------------------------------
+
+[clock_sign]
+A board: THE SEA KEEPS ITS OWN TIME. SO DOES THE MANAGEMENT. PLEASE WIPE YOUR FEET.
+
+[clock_dial]
+A post with a round face. A blue arc for the tide in, a sandy arc for the tide out, and a hand going slowly round. It's nearly always right.
+
+[clock_lantern]
+A lantern on a post, on a rock out in the bay, and it is lit. The glass is dry. The post below it is crusted white with salt right up to the waterline, and not a hair above.
+
+[clock_lantern_ves]
+{bored}...Right.
+
+[clock_pouch]
+A purse wedged in the rock above the waterline, as dry as the lantern.
+
+[clock_net]
+A fishing net hung out on a frame to dry, which it is not going to do.
+
+[clock_sea]
+The bay, slate-green, with the tide going in and out of it like breath.
+
+# --- THE BATHTUB ---------------------------------------------------------------
+
+[bath_mat]
+A mat, neatly squared up with the tide line. WELCOME, it says, in woven letters, with the faintest possible air of doubt.
+
+[bath_sign]
+A notice on a post, in very small, very upright writing: PRIVATE BEACH. THE MANAGEMENT REGRETS ANY INCONVENIENCE. PLEASE WIPE YOUR FEET.
+
+[bath_sign_east]
+A notice by the gate: THE BOARDS. RING FOR PASSAGE. NO KNOCKING. PLEASE WIPE YOUR FEET ON THE WAY OUT AS WELL.
+
+[bath_gate]
+A timber gate across the pinch, painted white and very straight. There's a bracket on the post beside it, just the size of a ship's bell.
+
+[bath_bell_post]
+A timber frame with a bell-shaped bracket on its crossbeam and nothing on it. A hand-lettered tag: RING FOR PASSAGE (BRING YOUR OWN BELL).
+
+[bath_bell_hung]
+The Dowager's bell, hung on the frame by the gate, still wearing its pink bow. The tag says PLEASE WIPE YOUR FEET.
+
+[bath_spare_tub]
+An old bathtub, cracked and leaning, full of rain. Somebody has scrubbed it anyway.
+
+[bath_pouch]
+A purse in the grass, set down with great care and squared up with the tide line.
+
+# --- THE BOARDWALK -------------------------------------------------------------
+
+[walk_sign]
+A board at the foot of the boards: SALTCOMBE, UP. THE WAY IS WET. THE WAY IS ALSO LONG.
+
+[walk_sign_ves]
+{bored}"Also long." They really do tell you everything.
+
+[walk_sign_top]
+A board at the head of the last flight: SALTCOMBE. WARM INSIDE.
+
+[walk_lamp]
+A lamp on a post, its glass fogged, burning steady behind the rain. It's the first warm light you've seen since the boat.
+
+[walk_pouch]
+A purse caught between two boards, safe from the sea.
+
+[walk_sea]
+The sea batters the stilts below, green and white.
+
+[walk_rail]
+A rail, wet and cold, gone dark with years of hands.
+
+# --- THE HULK ------------------------------------------------------------------
+
+[hulk_wall]
+Ship's planking, curved and black with wet. Somewhere above, rain drums on the hull.
+
+[hulk_wheel]
+A ship's wheel, leaning on the bulkhead where somebody stood it up and walked away.
+
+[hulk_barrels]
+A stack of barrels, lashed against the roll of a ship that is no longer rolling.
+
+[hulk_log]
+A table, bolted down, with a ship's log open on it. The ink has run, but you can read the last lines: SEA WENT OUT AND DID NOT COME BACK. WENT DOWN TO LOOK. WILL RETURN BY DARK.
+
+[hulk_log_ves]
+{thoughtful}...Whoever it was didn't.
+
+[hulk_chest]
+A sea chest under the table, its lid not quite shut. Inside, on a fold of sailcloth: a BRINE TONIC, corked tight.
+
+[hulk_pouch]
+A purse in a corner of the hold, heavier than it looks.
+
+[hulk_rope]
+A coil of rope, stiff with salt, lying where it was last dropped.

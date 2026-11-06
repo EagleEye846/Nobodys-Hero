@@ -75,6 +75,8 @@ export const REST_LOOKOUT = {
     { sprite: 'street_lamp', x: 17, y: 3, text: 'square_lamp' },
     { sprite: 'chest', x: 19, y: 12, text: 'lookout_chest', gives: 'fanfare_fudge', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'herald', x: 6, y: 9, npc: 'herald_lookout' },
+    // Side quest (Bram's trumpet): a cairn built on top of it.
+    { sprite: 'cairn', x: 20, y: 4, text: 'lookout_cairn', gives: 'bram_trumpet', taken: { text: 'lookout_cairn_bare' } },
     { sprite: 'chough', x: 20, y: 8, text: 'ridge_chough', walkable: true },
     { sprite: 'chough', x: 3, y: 12, text: 'ridge_chough', walkable: true },
     // Across the stair north, until Ves joins you in the chapel.

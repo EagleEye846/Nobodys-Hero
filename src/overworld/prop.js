@@ -2,11 +2,18 @@ import { TILE_SIZE as T } from '../config.js';
 import { drawFootShadow } from './shadows.js';
 import { makeSprite } from '../engine/sprite.js';
 import { PROP_PALETTE, PROP_SPRITES, PROP_FOOTPRINTS } from '../data/art/props.js';
+import { beatPulse } from './beatPulse.js';
 import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
 
 const sprites = Object.fromEntries(
   Object.entries(PROP_SPRITES).map(([name, rows]) => [name, makeSprite(rows, PROP_PALETTE)]),
 );
+
+// A picture made while the game runs (the tide dial, tides.js): rooms can name
+// it as a sprite, and its owner repaints it.
+export function registerPropSprite(name, canvas) {
+  sprites[name] = canvas;
+}
 
 // Characters (NPCs and shopkeepers) breathe, so they read as alive: in for
 // two of these, out for two.
@@ -25,21 +32,63 @@ const BOB_SECONDS = 0.6;
 // The `gap` props that lie flat on the floor, rather than being holes in a wall.
 const FLOOR_GAPS = new Set(['rotten_planks', 'drain_grate']);
 
+// The crystals and glowcaps swell with the song without being asked (`pulse:
+// false` turns it off for one).
+const BEAT_SPRITES = /^(crystal_(teal|pink|violet|gold)_[sl]|crystal_bloom|crystal_pool|glowcap_(big|giant|small|tall|trio))$/;
+
 export class Prop {
   //
   // Puzzles: a `lever` is a switch with a name, flipped with Z (it shows its
   // NAME_on sprite while on). A gate (`opensWith` a list of switch names) opens
   // once they're all on; with `inOrder`, they must be turned on in that order.
   constructor({
-    sprite, x, y, text = null, npc = null, shop = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
+    sprite, x, y, text = null, npc = null, shop = null, fishing = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
     gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
     walkable = false, solidSides = 0, light = null, seenInLight = false, notice = false, grapple = false,
     rest = false, dream = null, sound = null, join = null, nightText = null, wrath = null, glow = undefined,
     member = null, storage = false, vane = false, drift = null, travel = null,
-    rock = false, button = null, rockReset = false,
+    rock = false, button = null, rockReset = false, step = false,
     gap = false, treadle = null, log = false, chop = null, hide = false, wet = null, gold = 0,
-    flow = null, cast = null, high = false, drawScene = null,
+    flow = null, tideWheel = null, tideBell = null, tideDial = false, float = false, cast = null, high = false, drawScene = null,
+    cart = false, smash = false, switch: railSwitch = null, dir = null, cartOnly = false,
+    beam = null, beamWhen = null, mirror = null, fixed = false, eye = null, latch = true,
+    stroll = null, flat = false, chime = null, pulse = null, lure = null, quest = null,
+    who = null, by = null, byText = null, react = false,
   }) {
+    // A gift whose friends answer after it (see takeGift in overworldScene.js).
+    this.react = react;
+    // `pulse: 'beat'`: swells with the song (see beatPulse.js). It stretches
+    // up a pixel or two on each beat, brightens, and on the first beat of a
+    // bar sends out a ring of light. Its glow swells with it. It doesn't touch
+    // where it stands or what it blocks.
+    this.pulse = pulse === false ? null : pulse ?? (BEAT_SPRITES.test(sprite) ? 'beat' : null);
+    // Town folk who go about their day (see src/overworld/folk.js): a `stroll`
+    // is where and how they walk. `flat` lies on the floor, under everyone
+    // (chalk squares, confetti). A button is set in the floor too, so a rock
+    // or bale resting on it is drawn on top of it.
+    this.stroll = stroll;
+    // A singing crystal (Chapter 4: src/overworld/chimes.js): Z rings its
+    // note, { set, note }. `shake` and `ringing` are seconds left of the
+    // shiver from a wrong note and the glow of a struck one.
+    this.chime = chime;
+    this.shake = 0;
+    this.ringing = 0;
+    this.flat = flat || Boolean(button);
+    this.walk = null;
+    this.emote = 0;
+    // The light-beam puzzles (Chapter 4: src/overworld/beams.js). A sun-crystal
+    // throws a `beam` ('up', 'down', 'left' or 'right'), only while its
+    // `beamWhen` switch is on if it has one. A prism's `mirror` ('/' or
+    // '\') turns a beam 90 degrees; Z turns it over unless it's `fixed`. A
+    // crystal `eye` lights its switch (a name, like a lever's) when a beam
+    // reaches it, and keeps it on for good unless `latch` is false.
+    this.beam = beam;
+    this.beamWhen = beamWhen;
+    this.mirror = mirror;
+    this.mirrorHome = mirror;
+    this.fixed = fixed;
+    this.eye = eye;
+    this.latch = latch;
     // Something drawn out of it (the Fallen Star from its stone): a scene to
     // play when you take it, instead of the usual words (see drawFromStone).
     this.drawScene = drawScene;
@@ -56,11 +105,23 @@ export class Prop {
     // `gold` is a purse of that many coins. See src/overworld/hushwood.js.
     this.gap = gap;
     this.treadle = treadle;
+    // Trio puzzles (Chapter 5): a treadle with `who` ('hero', 'vesper' or 'bramble')
+    // only goes down under that one; a lever or wheel with `by` only turns
+    // for that one (`byText`: a section of the room's text file, said when
+    // someone else tries it). Without them, any body will do.
+    this.who = who;
+    this.by = by;
+    this.byText = byText;
     this.log = log;
     this.sunk = false;
     this.chop = chop === true ? 'fell' : chop;
     this.felled = false;
     this.hide = hide;
+    // Loose scree you can kick to make a noise (the Deep's Crawl): it sends
+    // the blind hunter off to listen at `lure.to` (a waypoint of its path)
+    // for `lure.hold` seconds. Once. See SoundHunter in hushwood.js.
+    this.lure = lure;
+    this.lureUsed = false;
     this.wet = wet;
     this.gold = gold;
     // The Old Drains: a `flow` is a current, fast shallow water running one
@@ -69,15 +130,27 @@ export class Prop {
     // can't walk up one. With a `wet` too, it only runs while its sluice
     // wheels say so. See Player.rideCurrent.
     this.flow = flow;
+    // The tides (Chapter 5, tides.js): a wheel or a bell post that sets the tide,
+    // a dial that shows it, and a crate (a `rock`) that floats at high tide.
+    this.tideWheel = tideWheel;
+    this.tideBell = tideBell;
+    this.tideDial = tideDial;
+    this.float = float;
+    this.floating = false;
     // Push puzzles (Chapter 3): a `rock` you shove a tile at a time by walking
     // into it, a `button` (a switch with a name, like a lever's) that's held
     // down while a rock sits on it, and a `rockReset` that rolls every rock
     // in the room back to where it started. See Room's push puzzle section
     // and OverworldScene.pushRocks.
     this.rock = rock;
+    // A `step` rock is a low block (12 high) whoever can jump may climb onto, once
+    // it sits still: push it to the foot of a tall block and it's the way up.
+    this.step = step;
     this.home = rock || log ? { x: x * T, y: y * T } : null;
     this.slide = null;
     this.button = button;
+    // A button that only a mine cart's weight presses (a rock sitting on it does nothing).
+    this.cartOnly = cartOnly;
     this.rockReset = rockReset;
     // A green updraft you can travel by: its id in src/data/travel.js.
     this.travel = travel;
@@ -129,7 +202,18 @@ export class Prop {
     this.solidSides = solidSides;
     this.gives = gives;
     this.takenLook = taken;
-    this.lever = lever;
+    // A townsperson's side quest: a list of rules for what they say and do
+    // when they hold or are owed something (see src/data/quests.js).
+    this.quest = quest;
+    // The Diggings' mine carts (see carts.js). A `cart` rolls along rails: true,
+    // or a name for tests to ask after. A `smash` barricade is broken by a cart
+    // sent down the line empty. A `switch` is a lever that throws a track switch
+    // of that name (it's a lever like any other, under another name).
+    this.cart = cart;
+    this.smash = smash;
+    this.smashed = false;
+    this.dir = dir;
+    this.lever = lever ?? railSwitch;
     this.opensWith = opensWith;
     this.inOrder = inOrder;
     this.openText = openText;
@@ -150,6 +234,8 @@ export class Prop {
     this.text = text;
     this.npc = npc;
     this.shop = shop;
+    // A scene id: once it has played, this NPC also lends a fishing rod (fishingScene.js).
+    this.fishing = fishing;
     // A name for a cutscene actor to `plays`, for someone in the room who
     // isn't an NPC or a shop (Ves, hurt, in the stilt hut).
     this.cast = cast;
@@ -211,7 +297,9 @@ export class Prop {
   get sortY() {
     // (A grating or planks lying over a current go over its water, not under it.)
     if (this.floorGap) return this.y - 1e6 + 0.5;
-    return this.flow || this.sunk ? this.y - 1e6 : this.y + this.height;
+    if (this.flat) return this.y - 1e6 + 0.25;
+    // (A gate draws over whatever it's sealing, on the same tile.)
+    return this.flow || this.sunk ? this.y - 1e6 : this.y + this.height + (this.opensWith ? 0.5 : 0);
   }
 
   overlaps(left, top, right, bottom) {
@@ -237,11 +325,25 @@ export class Prop {
   draw(ctx, camera) {
     if (this.hidden || this.isOpen) return;
     const seconds = performance.now() / 1000;
-    const frame = (this.animation && animationFrame(this.animation, seconds, this.speed)) || this.sprite;
-    const isCharacter = (this.npc || this.shop) && frame === this.sprite;
+    let frame = (this.animation && animationFrame(this.animation, seconds, this.speed)) || this.sprite;
+    // Folk on the move: the still front (or back) view, hopping along, unless
+    // their walk keeps its animation (the sweeper sweeps as she goes).
+    const walk = this.walk;
+    let flipped = false;
     let bob = 0;
+    if (walk) {
+      flipped = walk.dir === 'left' && this.stroll?.flip !== false;
+      if (walk.moving) {
+        const back = walk.dir === 'up' && sprites[`${this.baseLook}_back`];
+        if (!this.stroll?.keepAnim) frame = back || this.sprite;
+        bob = Math.round(Math.abs(Math.sin(seconds * (this.stroll?.hop ? 8 : 9) + this.x * 0.3)) * (this.stroll?.hop ? 3 : 1));
+      }
+    }
+    const isCharacter = (this.npc || this.shop) && frame === this.sprite && !walk?.moving;
     // Save points float smoothly and glow.
     if (this.save) bob = Math.round(Math.sin(seconds * 2.5) * 2);
+    // A crate afloat on the tide rocks a pixel up and down.
+    if (this.floating && !this.slide) bob = Math.round(Math.sin(seconds * 2 + this.x * 0.15));
     // Starlight on the leaves (the way to the Starfall Glade): a soft blue
     // glow round it, slowly breathing, so it catches your eye in the dark wood.
     if (this.look === 'star_glint') {
@@ -255,7 +357,18 @@ export class Prop {
       ctx.fillRect(gx - 18, gy - 18, 36, 36);
     }
 
-    const x = this.x + Math.floor((this.width - frame.width) / 2) - camera.x;
+    // A struck crystal: a soft halo that fades. A wrong one shivers.
+    if (this.ringing > 0) {
+      const gx = this.x + this.width / 2 - camera.x;
+      const gy = this.y + T / 2 - camera.y - frame.height / 3;
+      const halo = ctx.createRadialGradient(gx, gy, 1, gx, gy, 22);
+      halo.addColorStop(0, `rgba(230, 250, 255, ${(this.ringing * 0.7).toFixed(3)})`);
+      halo.addColorStop(1, 'rgba(230, 250, 255, 0)');
+      ctx.fillStyle = halo;
+      ctx.fillRect(gx - 22, gy - 22, 44, 44);
+    }
+    const shiver = this.shake > 0 ? Math.round(Math.sin(this.shake * 90) * 1.5) : 0;
+    const x = this.x + Math.floor((this.width - frame.width) / 2) - camera.x + shiver;
     // Standing on a raised block (`raise`, set by the room): drawn on top of it.
     const y = this.y + T - (this.raise ?? 0) - frame.height - bob - camera.y;
     if (this.save) {
@@ -271,6 +384,17 @@ export class Prop {
     // Breathing: their shoulders and head rise a pixel and settle, feet
     // planted, each on their own time (from where they stand). The top is
     // drawn a pixel higher, and the row at the waist fills the gap.
+    // Walking left: the same figure the other way round.
+    if (this.pulse === 'beat') {
+      this.drawPulsing(ctx, frame, x, y, seconds);
+      if (this.notice && !this.noticed) this.drawNotice(ctx, x + frame.width / 2, y - 3, seconds);
+      return;
+    }
+    if (flipped) {
+      ctx.save();
+      ctx.translate(2 * x + frame.width, 0);
+      ctx.scale(-1, 1);
+    }
     if (isCharacter && Math.floor(seconds / BOB_SECONDS + this.x / 37) % 4 < 2) {
       const { width: w, height: h } = frame;
       const waist = Math.floor(h * 0.6);
@@ -280,7 +404,39 @@ export class Prop {
     } else {
       ctx.drawImage(frame, x, y);
     }
+    if (flipped) ctx.restore();
+    if (this.emote > 0) this.drawNotice(ctx, x + frame.width / 2, y - 3, seconds);
     if (this.notice && !this.noticed) this.drawNotice(ctx, x + frame.width / 2, y - 3, seconds);
+  }
+
+  // Swelling with the song: stretched up a pixel (two for a tall one) and
+  // lit a little more on the beat, plus a ring of pixels spreading from its
+  // foot on the first beat of a bar. Drawn at whole pixels, so it stays crisp.
+  drawPulsing(ctx, frame, x, y, seconds) {
+    const { env, down } = beatPulse(seconds);
+    const grow = Math.round(env * (frame.height >= 24 ? 2 : 1));
+    ctx.drawImage(frame, x, y - grow, frame.width, frame.height + grow);
+    if (env > 0.04) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = 0.4 * env;
+      ctx.drawImage(frame, x, y - grow, frame.width, frame.height + grow);
+      ctx.restore();
+    }
+    if (down > 0.05) {
+      // Wide and flat, round the foot: a pixel every so often on an ellipse.
+      const cx = x + frame.width / 2;
+      const cy = y + frame.height - 1;
+      const reach = 6 + (1 - down) * 16;
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = `rgba(200, 240, 255, ${(0.55 * down).toFixed(3)})`;
+      for (let a = 0; a < 20; a++) {
+        const t = (a / 20) * Math.PI * 2;
+        ctx.fillRect(Math.round(cx + Math.cos(t) * reach), Math.round(cy + Math.sin(t) * reach * 0.4), 1, 1);
+      }
+      ctx.restore();
+    }
   }
 
   // A yellow "!" with a dark edge, bobbing above it.

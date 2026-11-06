@@ -28,6 +28,12 @@
 </div>
 
 <div class="row">
+  <strong>King Peptup</strong><br>
+  <button id="peptup">Take me back to just before King Peptup</button>
+  <p>Puts you by the save point in Belowtown Square, after the homecoming, with the throne room door ahead. Unplays the duel and everything after it, and Bramble leaves the party. Your gear, items, gold and level stay as they are.</p>
+</div>
+
+<div class="row">
   <button id="reload">Reload from the save</button>
   <button id="write">Save the text below</button>
   <div id="status"></div>
@@ -53,7 +59,7 @@ document.getElementById('unstar').onclick = () => {
   const { hero, world } = save;
   hero.weapons = without(hero.weapons, 'fallen_star');
   if (hero.weapon === 'fallen_star') hero.weapon = hero.weapons[0] ?? 'worn_sword';
-  hero.gear = without(hero.gear, 'star_shard');
+  hero.gear = without(hero.gear, 'star_shard', 'star_shard_deep', 'star_shard_wreck');
   delete hero.starForged;
   world.taken = without(world.taken, 'hush_starfall:star_stone_sword:11,8', 'city_old_street:star_shard:24,4');
   world.seenScenes = without(world.seenScenes, 'fallen_star_drawn');
@@ -75,6 +81,33 @@ document.getElementById('forge').onclick = () => {
   save.hero.starForged = (save.hero.starForged ?? 0) + 1;
   write(save);
   status(`Done: it has been reforged ${save.hero.starForged} time(s).`);
+};
+// Chapter 4 up to the homecoming, and the duel with everything after it.
+const BEFORE_PEPTUP = [
+  'chapter_four_opens', 'the_ground_gives', 'soft_landing', 'tuck_finds_you', 'tuck_at_the_bridge',
+  'tuck_on_the_road', 'into_belowtown', 'the_kings_welcome', 'tucks_whisper', 'diggings_lift_down',
+  'diggings_quake', 'gubb_crossing', 'the_cold_camp', 'glowworm_umbrella', 'dark_turns_you_round',
+  'something_listening', 'the_heros_camp', 'keeper_in_the_deep', 'the_light_goes_up', 'homecoming',
+];
+const PEPTUP_ON = [
+  'rumbolds_duel', 'rumbold_spared', 'rumbold_defeated', 'the_hall_falls', 'bramble_and_the_log',
+  'the_long_rope', 'out_into_the_light', 'tuck_afterwards',
+];
+document.getElementById('peptup').onclick = () => {
+  const save = read();
+  if (!save) return status('There is no save here yet.');
+  const { hero, world } = save;
+  world.seenScenes = without(world.seenScenes, ...PEPTUP_ON);
+  for (const id of BEFORE_PEPTUP) if (!world.seenScenes.includes(id)) world.seenScenes.push(id);
+  world.talked = (world.talked ?? []).filter((key) => !PEPTUP_ON.some((id) => key.endsWith(`:${id}`)));
+  world.chapter = 4;
+  delete world.chapterDone;
+  world.room = 'belowtown_square';
+  world.spawn = { x: 16, y: 11 };
+  hero.party = without(hero.party, 'bramble');
+  if (!hero.party.includes('vesper')) hero.party.push('vesper');
+  write(save);
+  status('Done: you are by the save point in Belowtown Square. The throne room door is just north.');
 };
 document.getElementById('reload').onclick = () => { show(); status('Reloaded.'); };
 document.getElementById('write').onclick = () => {

@@ -1,0 +1,45 @@
+# BT_VENDOR_BEETLE: A beetle selling letters, sealed and unsealed, mostly from people who wanted to say something and then thought better of it.
+
+[first]
+Letters! Third-hand, second-class, and mostly unread!
+
+A letter for you? ...No. No, I've checked. There's a Hero's one, but it's addressed in a rather old hand.
+
+[repeat]
+Nobody writes back. It's a thing. They're shy. It's the Sunstone.
+
+[first after the_kings_welcome]
+Bound for the Diggings? The postman's got one for down there. He's been trying to get rid of it since spring.
+
+[repeat after the_kings_welcome]
+The letter's for Mattock, at the pithead. He won't know what it says. He can't read.
+
+[first after the_light_goes_up]
+A flood of mail today! People are writing to each other again!
+
+[repeat after the_light_goes_up]
+I've had to buy more stamps. It's been a long time since I had to buy more stamps.
+
+# --- SIDE QUEST: a letter for Mattock (the Diggings pithead) ---
+
+[letter_ask]
+Oh! Hold on, hold on. You're going down, aren't you? To the Diggings?
+
+The postman gave up in the end and left me holding a letter for a mole called Mattock. At the pithead. Brown, red hat, never stops talking. He can't read, so you'll have to read it to him. I'm not asking you to read his post. I'm asking you to be very close to it.
+
+[letter_wait]
+Mattock. The pithead. Hat. Read it TO him; he can't read, but he can listen. He's a mole.
+
+[letter_done]
+The beetle takes Mattock's reply by the corner. It's a scrap of sacking with a muddy thumbprint and a drawing of a hat.
+
+This is the best reply I have ever had delivered. Most people send nothing.
+
+Right. That goes in the satchel, and I'll walk it to his mum's door myself. That makes thirteen doors on the route.
+
+Here. You've earned this. It's a Sunstone stamp. The founders printed one sheet the day the Sunstone was lit, and they put a hundred on it, and we've never used one. They were for the Hero's post, you see. For the day the Hero writes back.
+
+Nobody has, so far. But somebody should hold one. Hang onto it for them.
+
+[letter_after]
+The beetle is sorting letters into thirteen piles. He keeps looking at the thirteenth with a kind of shy pride.

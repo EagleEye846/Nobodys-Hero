@@ -15,8 +15,8 @@ export const BOG_TOAD = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'marsh',
   sprite: { rows: BOG_TOAD_SPRITE, palette: BOG_TOAD_PALETTE },
-  maxHp: 620,
-  damage: 21,
+  maxHp: 715,
+  damage: 24,
 
   // Slow, but there's a lot of it: its bullets come thick but not fast.
   difficulty: { density: 1.3, speed: 1.15 },
@@ -39,7 +39,7 @@ export const BOG_TOAD = {
     { name: 'Croak at it', calm: 30 },
   ],
 
-  rewards: { exp: 205, coins: 100 },
+  rewards: { exp: 430, coins: 50 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'bog_pudding', chance: 0.4 }],

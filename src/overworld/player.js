@@ -5,6 +5,7 @@ import { animationFrame } from '../engine/animations.js';
 import { skillBonus } from '../characters/progress.js';
 import { memberFrames, memberSprites } from '../characters/party.js';
 import { actPose, poseOffset, drawPosed, startAct } from './acts.js';
+import { pickIdle, idleStep, idleLength } from './idles.js';
 
 const WALK_SPEED = 70; // pixels per second
 const RUN_SPEED = 130;
@@ -46,12 +47,16 @@ const HITBOX_HEIGHT = 6;
 
 // Landing squashes you for a moment (wide and short, then a touch tall),
 // and pushing off for a jump stretches you.
-const LAND_SQUASH = [[0.05, 1.18, 0.82], [0.1, 1.08, 0.92], [0.15, 0.96, 1.05]];
+const LAND_SQUASH = [[0.05, 1.07, 0.93], [0.1, 1.03, 0.97], [0.15, 0.99, 1.01]];
 const TAKEOFF_STRETCH = 0.1;
 // Left standing a while, you look about: first after this many seconds, then
 // again every so often.
 const GLANCE_AFTER = 6;
 const GLANCE_EVERY = 9;
+// And a fidget of their own (idles.js: a stretch, a foot tapped...): first
+// after this long standing there, then every so often.
+const FIDGET_FIRST = [10, 16];
+const FIDGET_EVERY = [14, 24];
 const now = () => performance.now() / 1000;
 
 // Standing on a stepping-stone in the water, you're drawn this much higher
@@ -112,6 +117,10 @@ export class Player {
     // landed and last jumped (for squashing), and how far down the bridge
     // they're on has sagged under them (set by the overworld: bridges.js).
     this.stillFor = 0;
+    // A fidget under way ({ name, t }), and when the next is due (in stillFor's time).
+    this.fidget = null;
+    this.fidgetDue = null;
+    this.lastFidget = null;
     this.landedAt = -1;
     this.jumpedAt = -1;
     this.sag = 0;
@@ -183,8 +192,36 @@ export class Player {
     }
     this.stillFor = this.moving || this.isAirborne ? 0 : this.stillFor + dt;
     this.freeAt = now();
+    this.updateFidget(dt);
 
     this.updateJump(dt, input);
+  }
+
+  // Left standing a good while, a stretch or the like (idles.js), not
+  // overlapping a look about, and never when carrying someone, on a stepping
+  // stone, in the bog, or as anyone but the hero.
+  updateFidget(dt) {
+    const free = !this.skin && !this.carrying && !this.balancing && !this.tucked && !this.isAirborne && !this.sinking && !this.act && !this.sceneAnimation;
+    if (!free || this.stillFor === 0) {
+      this.fidget = null;
+      this.fidgetDue = null;
+      return;
+    }
+    if (this.fidget) {
+      this.fidget.t += dt;
+      if (this.fidget.t >= idleLength('hero', this.fidget.name)) {
+        this.fidget = null;
+        this.fidgetDue = this.stillFor + FIDGET_EVERY[0] + Math.random() * (FIDGET_EVERY[1] - FIDGET_EVERY[0]);
+      }
+      return;
+    }
+    this.fidgetDue ??= this.stillFor + FIDGET_FIRST[0] + Math.random() * (FIDGET_FIRST[1] - FIDGET_FIRST[0]);
+    const glancing = this.stillFor >= GLANCE_AFTER && (this.stillFor - GLANCE_AFTER) % GLANCE_EVERY < 1.6;
+    if (this.stillFor < this.fidgetDue || glancing) return;
+    const name = pickIdle('hero', this.lastFidget);
+    if (!name) return;
+    this.lastFidget = name;
+    this.fidget = { name, t: 0 };
   }
 
   // Standing on ice (a `z` tile), at floor level.
@@ -301,6 +338,8 @@ export class Player {
   // movement is carried over between frames so position stays a whole number.
   moveAxis(room, axis, amount) {
     const remainderKey = axis === 'x' ? 'remainderX' : 'remainderY';
+    // (A speed that isn't a number would spin the loop below for ever.)
+    if (!Number.isFinite(amount)) return;
     this[remainderKey] += amount;
     let pixels = Math.round(this[remainderKey]);
     this[remainderKey] -= pixels;
@@ -422,9 +461,16 @@ export class Player {
       ctx.beginPath();
       ctx.rect(-10000, -10000, 20000, 20000);
       // (A few pixels into it too: a hedge's top edge is ragged, with gaps.)
-      ctx.rect(gap.x - camera.x, gap.y - camera.y - 10000, gap.width, 10000 + 4);
+      // Its top is its tile's, or higher for a gap drawn taller than a tile
+      // (the Sunnyside hedge stands two pixels up, so his head clears its arch).
+      const top = Math.min(gap.y, gap.y + gap.height - (gap.sprite?.height ?? gap.height));
+      ctx.rect(gap.x - camera.x, top - camera.y - 10000, gap.width, 10000 + 2);
       ctx.clip('evenodd');
-      this.drawBody(ctx, camera);
+      // Crawling along through it (left or right), his knees and hands are on
+      // its floor, the bottom of the hole, not up in the middle of it.
+      const side = this.facing === 'left' || this.facing === 'right';
+      const drop = side ? Math.max(0, gap.y + gap.height - (this.y - this.ground)) : 0;
+      this.drawBody(ctx, drop ? { x: camera.x, y: camera.y - drop } : camera);
       ctx.restore();
       return;
     }
@@ -447,10 +493,15 @@ export class Player {
     // Running has its own frames and a little bounce. Whatever they're
     // doing (an act, a landing, looking about) moves or squashes it.
     const t = now();
-    const pose = actPose(this.act, t);
+    let pose = actPose(this.act, t);
     if (this.act && !pose) this.act = null;
     if (this.moving) this.stillFor = 0;
-    const frame = this.currentFrame(pose?.look ?? this.glance());
+    // Fidgeting (not if nothing's been updating them: a conversation, say).
+    if (this.fidget && now() - (this.freeAt ?? -1) > 0.1) this.fidget = null;
+    const fidget = this.fidget && !pose ? idleStep('hero', this.fidget.name, this.fidget.t, 1) : null;
+    if (this.fidget && !fidget) this.fidget = null;
+    pose ??= fidget?.pose ?? null;
+    const frame = fidget?.step ? heroFrame(this.facing, true, false, 0.15) : this.currentFrame(pose?.look ?? (fidget ? null : this.glance()));
     const bounce = this.skin ? 0 : heroBounce(this.moving, this.isAirborne, this.animationTime, this.running);
     const off = poseOffset(pose, this.facing);
     const feet = this.y - this.ground - Math.round(this.z) - bounce - (this.balancing ? STONE_LIFT : 0) + this.sag + off.y;

@@ -1,0 +1,25 @@
+# BT_GATE_LAMPLIGHTER: A glow-worm lamplighter with a hooked pole, who lights the gate's lamps every dusk and has noticed they take more lighting lately.
+
+[first]
+Evening! I mean, afternoon. I mean, who can tell, with the Sunstone like it is.
+
+I light these lamps by hand. They used to stay lit all night. Lately I'm going round twice.
+
+[repeat]
+My tail's the lamp, my pole's the lighter. It's a family business. Not much of a family.
+
+Our king's a human, you know. Came down the stair with the Hero! Nobody else down here has got a human.
+
+Mind you, nobody else down here has got a town.
+
+[first after the_kings_welcome]
+All the way to the bottom? Oh, that's brave. Take a little glow with you, in case. I won't miss it.
+
+[repeat after the_kings_welcome]
+It's good that someone's going. It was getting to be a lot of lamp.
+
+[first after the_light_goes_up]
+I lit the lamps anyway, out of habit. They look a bit silly now, next to it. Like candles at noon.
+
+[repeat after the_light_goes_up]
+Do you know, I'd almost forgotten what they look like when it's bright.

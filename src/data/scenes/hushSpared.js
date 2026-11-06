@@ -53,7 +53,16 @@ export const HUSH_SPARED = {
     { do: 'walk', who: 'ves', to: { x: 14, y: 7 } },
     { do: 'walk', who: 'player', to: { x: 13, y: 4 } },
     { do: 'walk', who: 'ves', to: { x: 14, y: 4 } },
+    // At the Gate: a little sun scratched low in the stone, long ago, and an
+    // arrow under it pointing through. (Paid off in chapter_four_opens: why
+    // Ves goes looking for the Hero.)
+    { do: 'face', who: 'ves', dir: 'up' },
+    { do: 'face', who: 'player', dir: 'up' },
+    { do: 'wait', seconds: 0.6 },
+    { do: 'say', text: 'Low on the Gate, about as high as your shoulder, someone has scratched a little sun into the stone. A long time ago. Under it, an arrow points through.' },
+    { do: 'say', who: 'ves', text: '{thoughtful}...Mum used to say the lamps were so the Hero could find the way.\n\n{bored}Funny. Looks like somebody found it.' },
     { do: 'say', text: 'You go through the Hero\'s Gate together, Ves out in front with her umbrella up, into the dawn.' },
-    { do: 'end_chapter', credits: { song: 'creditsSearch', text: 'credits_search.txt' }, card: 'chapter_end_search.txt' },
+    // On through the Gate into the dawn: the first field of Chapter 4 (sunny_gate_field).
+    { do: 'end_chapter', chapter: 3, credits: { song: 'creditsSearch', text: 'credits_search.txt' }, card: 'chapter_end_search.txt', room: 'sunny_gate_field', spawn: { x: 14, y: 4 } },
   ],
 };

@@ -1,0 +1,35 @@
+# BT_INN_SNAIL: A very old snail sipping tea at the inn, who has been at the same table so long a bit of table has grown into her shell.
+
+[first]
+Oh. Visitors. How nice. Sit, sit. I'll be finished with this cup in... let's say... an hour.
+
+[repeat]
+Mm. Tea. I used to take it with sugar. Now I take it with time.
+
+[first after the_kings_welcome]
+A quest? Dear me. In my day we just had... a Tuesday.
+
+[repeat after the_kings_welcome]
+I'd come with you but I'm halfway through the cup.
+
+[first after the_light_goes_up]
+Hm. Brighter. I can see the bottom of the cup. It's disappointing.
+
+[repeat after the_light_goes_up]
+I think I'll have another. In a few hours.
+
+# --- SIDE QUEST: the toffee (from the market snail) ---
+
+[toffee_done]
+The old snail takes the toffee with all the time in the world. She turns it over. She looks at it for what might be a minute or might be a nap.
+
+Ah. Last spring's. Right on time. I ordered it for the next time the light went. I thought, I'll want something sweet for that. I think it went. I might have slept through it.
+
+Well. It's a good toffee. I can tell from the pleats. Nineteen. He does nineteen for the ones he likes.
+
+I'll have it with the next cup. In a while.
+
+Here. Don't look at it, just hold it. A spare cup, for visitors who stay. You won't stay. But you might, one day, and it'll be warm.
+
+[toffee_after]
+The snail is looking at the toffee, in its nineteen pleats, with great satisfaction. She will not be eating it for some time. That is the point of a toffee.

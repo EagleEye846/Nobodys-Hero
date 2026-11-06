@@ -1,0 +1,75 @@
+# DUNLIN DANCER
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/dunlin_dancer.js.
+
+[intro]
+Five small birds run along the tideline as one, stop as one, and turn as one to look at you. A DUNLIN DANCER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+DUNLIN DANCER hops, and all five hop, and the hop goes through them like a ripple.
+
+One of the birds looks at you. All of them look at you.
+
+DUNLIN DANCER pecks at the sand in perfect time. It is not eating. It is rehearsing.
+
+A feather drifts off. Nobody can tell whose.
+
+Smells of wet sand, seaweed and very quick feet.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Left!
+
+Left!
+Left!
+RIGHT!
+
+Together!
+
+Peep
+peep
+peep.
+
+Step,
+step,
+step.
+
+Keep up!
+
+Now,
+now,
+NOW.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/dunlin_dancer.js.
+[talk: Inspect]
+DUNLIN DANCER - HP 1900
+A flock of sandpipers that acts as one bird. Runs at you in rows, pecks down in diagonals, and drops shells from the sky. There is always a gap in the row. Find it early.
+
+[talk: Match their step]
+You hop when they hop, and turn when they turn. You are a beat behind, then half a beat, then a beat ahead. All five of them look at you. Then they do something new, and look to see whether you'll keep up.
+
+[talk: Stand very still]
+You stand so still that a bird lands on your boot. The rest of the flock does not know what to make of it. It watches, with five heads, for a long time, and slowly stops running.
+
+[talk: Scatter some crumbs]
+You break up a biscuit and throw the crumbs in a long line. The flock runs the line as one, picking them up in time. It has never, in its life, been fed in a row.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The five of them go up at once, in a whirl of wings. They come down a long way off. One feather lands by your boot, and stays there.
+
+[pacified]
+The flock bows to you in a wave, head after head, and then runs off along the tide in a long, neat line. It leaves a trail of small footprints that look like writing.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tries a little skip, and then a hop. {foe} watches closely, and does it back, more quickly, and then waits for her to try again.
+
+Ves tells {foe} she's never in her life seen anybody keep time like that. All five birds puff up at once.
+
+Ves opens her umbrella and spins it slowly. {foe} turns round and round in perfect time with it, quite delighted.

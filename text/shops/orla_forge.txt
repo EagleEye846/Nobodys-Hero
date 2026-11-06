@@ -1,0 +1,119 @@
+# ORLA'S FORGE: Orla Cobb, a gruff grey seal smith, forges with the lamp oil
+# in the biggest of the Beacon Isles' lights. Plain talker, big hands, no
+# patience for fuss, very good with fire. Under it she is gentle with
+# anything that might break. (She reforges the Fallen Star.)
+# The hero never speaks: what the hero does is told in brackets.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Forge is lit. Don't touch anything glowing. Most things are glowing.
+
+[menu_prompt]
+Well?
+
+[buy_prompt]
+Not much on the shelf. I make what I make, and when it's gone it's gone. There's a bun, if you need one.
+
+[sell_prompt]
+Show me. I'll tell you what it's worth, then you can be disappointed.
+
+[talk_prompt]
+Sit if you want. Don't lean on the anvil.
+
+[bought]
+Good. It's balanced. Don't drop it.
+
+[bought_item]
+Eat that. Warm it first. Lamp oil, mostly.
+
+[bought_skill]
+Here. I've no idea what that's for. It came with the forge. Take it.
+
+[skill_sold_out]
+That's all I've got in that line. Go and learn something yourself.
+
+[sold]
+Fine. I'll melt it down.
+
+[nothing_to_sell]
+Nothing? Then stand somewhere else.
+
+[cant_sell]
+You've got that on. Take it off first, with C.
+
+[owned]
+You've got that already. I only made the one.
+
+[wont_fit]
+Not cut for you. Whose is it?
+
+[too_poor]
+Not enough. I work by the light, and the light isn't free.
+
+[bought_stored]
+Your bag's full, so it's in the chest. It'll be there by the next lamp.
+
+[bag_full]
+Bag's full. Chest's full. Eat the bun.
+
+[farewell]
+Mind the causeway. Tide's on the turn. It's always on the turn.
+
+[talk: Who are you?]
+Orla Cobb. Smith. I light the forge from the big light's oil, and the big light's lit from my forge. Don't ask which came first. It's a loop. I like it.
+
+[talk: The Isles]
+Little lights, all in a row. Every one of them was somebody's job once. Now they're mine to mind, mostly, when I remember. I don't always remember all of them.
+
+[talk: The lamp oil]
+Burns clean. Burns hot. Burns a long time. Everything I make with it keeps its edge. I don't know why. I used to ask why. Now I just pour it.
+
+[talk: Haddock]
+That walrus owes me a boathook. Tell him when you see him. Tell him I'm not cross. Tell him I'm a little cross.
+
+[talk: Bramble]
+That boy's gripping his axe like it might swim away. Good. Keep a grip. The sea doesn't give things back, as a rule.
+
+[talk: Ves]
+She asked if I do umbrellas. I don't. I do iron. But I had a canopy frame that might do, if she can stand the noise. The storm one. It sings in the wind.
+
+[talk: The Hero]
+Small, once. Came through here years back. Stood at the door looking up at the light. Didn't come in. I think about that more than I'd say. The door was open.
+
+[talk: The old light]
+The one on the shelf? Nobody's used that in years. The draught up there keeps a wick going for days, if somebody's left one. And the tea'll be the crab-pot lot. They go up to look at the weather. They'd leave their own heads up there.
+
+# The star sword (the Fallen Star: src/data/fallenStar.js). Not a "talk:"
+# section: the topic only shows once you've got the sword. After [forge_now]
+# the shop closes and the rest is the scene isles_star_held, out in the forge
+# (src/data/scenes/islesStarHeld.js): the sword held up in the big light.
+[forge_ask]
+Let me see that. (She takes the sword in both hands and turns it in the forge-light. Her face goes very still.)
+
+Hm. There's a piece missing off the edge. Snapped when it fell. There's a shard of it on a snapped mast in the Wreck Yard, up high, where the ship graveyard leans against the sky. I'd know it by the hum.
+
+Bring it. I'll put it back where it goes.
+
+[forge_now]
+That's the one. Give it here.
+
+(Orla sets the shard on the anvil. She stops. She looks at the sword in your hand, and then at you.)
+
+...Before I start. Take it over to the window, where the big light comes down. Hold it up in that. I want to see something.
+
+[forge_done]
+It's as good as I can make it. Somebody with a bigger fire will have to take it further. I'd like to meet them.
+
+[forge_later]
+Not yet. There's an earlier smith's work to be done first. I only finish what someone's started.
+
+[forge_hint]
+Star-metal? I've heard of it. A while back, something came down over the coast and snapped off on a mast in the Wreck Yard. On a still night I can hear it humming from here.
+
+If you ever find a sword that hums the same note, bring both. I'd like to hear that.
+
+[forge_shard_only]
+That hums. Same as the mast does. Same note.
+
+...I don't know what to do with a shard on its own. You'd need the rest of whatever it broke off.

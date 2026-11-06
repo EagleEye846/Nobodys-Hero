@@ -153,7 +153,7 @@ It screams. The whole Gate rings with it.
 # The line under GAME OVER if you fall once Ves has her umbrella back
 # (its rage and after, with "Nobody's Dawn" playing).
 [game_over: dawn]
-Imagine dying at the climactic hopeful moment. That's more cinematic 😭
+Imagine dying with the power of friendship and umbrellas 😭
 
 # When the rage burns out of it (the last phase).
 [phase: dawn after]

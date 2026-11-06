@@ -1,0 +1,402 @@
+# BELOWTOWN (Chapter 4): the creature folk's town under the Sunstone. The
+# gate, the market, the square, Hobnail's forge, the Mossy Pillow inn, the
+# Hall of the Visit and King Peptup's throne hall. Things you can read and
+# look at. A section ending `_ves` is what Ves says after the section of that
+# name, if she's with you (see OverworldScene.say). People have their own
+# files in text/npcs/ (bt_*.txt).
+#
+# The Keeper's moment lives in [mural_lantern] and nowhere else in town. Keep
+# it small.
+
+[save_point]
+The crystal glows warm and steady, like the lamps.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+An empty chest. Not even a spore.
+
+[gold_pouch_empty]
+An empty purse. It still smells faintly of dice.
+
+# --- THE TOWN'S WALLS AND LAMPS (every room) ---
+
+[town_wall]
+Old carved stone, older than the town. Somebody has patched the worst bits with planks, and somebody else has painted the planks to match the stone, not quite.
+
+[town_rock]
+Bare cavern rock, high above. Somewhere up there is the roof of the world.
+
+[town_lamps_wall]
+A string of glow-worm lamps running along the wall, each one with a worm in it, glowing quietly and looking a bit tired.
+
+[town_banner_wall]
+A red-and-gold banner, hung up for the king's last show. It has a little mushroom stitched in the corner, which is the town's mark.
+
+[town_pillar]
+A carved stone pillar with a glow-worm lantern hung from it. The carving is of a lot of little hands, all holding something up.
+
+[town_broken_pillar]
+A pillar snapped off short, with toadstools growing out of the top. Nobody has the heart to tidy it.
+
+[town_barrel]
+A barrel. It says SPORES on it, in the sort of letters you use when you want people to be careful.
+
+[town_house]
+A round-windowed house with a roof of moss and little toadstools. Someone is cooking inside.
+
+[town_house_door]
+A round door, shut. There's a welcome mat on the step that says GO AWAY, WELCOME.
+
+[town_plank]
+A creature-built wall of lashed planks, tight as a drum, with a mushroom-cap roof over it. Warm light comes through the window.
+
+[town_toadstools]
+A bed of toadstools with a stone edge. A sign pushed into the soil says PLEASE DON'T, and then, underneath, in smaller letters, SERIOUSLY.
+
+# --- THE GATE ---
+
+[gate_banner]
+A great banner hung over the gate:
+
+WELLCOME
+
+...Two Ls. Somebody has stitched them in very carefully, so it must be on purpose.
+
+[gate_banner_ves]
+{bored}Wellcome. {smile}Two Ls. They must be very pleased to see us.
+
+[gate_lamp]
+A glow-worm lamp on a post. The worm inside has a very small, very serious face.
+
+[gate_signpost]
+A signpost with a lot of arms:
+
+MARKET, THIS WAY.
+SQUARE, THAT WAY.
+THE KING, SOONER OR LATER.
+THE EDGE OF THE WORLD, UP, BUT DON'T.
+
+[gate_noticeboard]
+A noticeboard, crowded with notices:
+
+LOST: ONE BALL. RED. BOUNCES. IF FOUND, DON'T BOUNCE IT.
+
+THE SUNSTONE IS FINE. -- BY ORDER
+
+PIE CONTEST POSTPONED (THE SUNSTONE). BE HONEST, IT WAS GOING TO BE POSTPONED ANYWAY.
+
+[gate_noticeboard_ves]
+{bored}"The Sunstone is fine." {smile}By order. So it's fine, or else.
+
+[gate_barrels]
+Barrels of pickled glow-cap, stacked by the gatehouse. A newt has written GUARD RATIONS on them and then, lower down, NOT THAT KIND OF GUARD.
+
+[gate_crates]
+Crates stencilled WELLCOME BANNERS, SPARE. There are a great many spares.
+
+[gate_pouch]
+A purse wedged behind the barrels where the guards' dice rolled. It's heavier than it looks.
+
+# --- THE MARKET ---
+
+[market_stall_mole]
+A stall of cheese. Rock-hard cheese, in fact. A sign says TASTES BETTER THAN IT LOOKS, and below it, in a different hand, IT'D HAVE TO.
+
+[market_stall_pebble]
+Pebble's stall: toadstool pasties under a glass dome, honey in jars with the lamp-light caught in them, toffee, candles for the dark, and a rail of mossweave cloaks that look warm enough to live in.
+
+[market_stall_frog]
+A frog's stall of marbles and fishing lines. All the marbles are slightly slimy. There is no explaining it.
+
+[market_stall_snail]
+A snail's stall, selling very small, very slow-to-eat sweets. A sign says BACK IN A MOMENT. The sign has been up a while.
+
+[market_stall_snail_ves]
+{bored}"A moment." {smile}In snail, that's about a week.
+
+[market_stall_beetle]
+A beetle's stall of letters. Folded letters, sealed letters, a pile marked WRITE BACK. Mostly the pile is the one marked WRITE BACK.
+
+[market_burrow_door]
+A round burrow door, shut tight, with a brass knocker the shape of a mushroom and a note: BACK AFTER THE SUNSTONE. Somebody has crossed out AFTER and written IF.
+
+[market_lamp]
+A glow-worm lamp. The worm is humming to itself, a little flat.
+
+[market_barrels]
+Barrels, stacked and tied. One of them is warm and is making a quiet noise like a snore.
+
+[market_crates]
+Crates of spore-bread. The one on top is labelled FRAGILE, HEAVY, DON'T DROP, DON'T LEAN, which narrows it down to nothing.
+
+[market_noticeboard]
+A noticeboard covered in notes:
+
+WANTED: A HEARTY SOUL TO HOLD THE LADDER. (IT'S NOT SAFE.)
+
+WANTED: THE HERO. (APPLY TO HIS MAJESTY. THEY KNOW EACH OTHER PERSONALLY.)
+
+FOR SALE: ONE BOOT. LEFT. ONLY. MAKE AN OFFER.
+
+[market_noticeboard_ves]
+{bored}Everyone's very sure the Hero's coming back. {smile}Nobody's put out a chair for them.
+
+[market_signpost]
+A signpost: THE GATE, WEST. THE SQUARE, EAST. YOU ARE HERE, BUT NOT FOR LONG, IF YOU'RE SENSIBLE. THE MARKET CLOSES AT THE SUNSTONE.
+
+[market_chest]
+A chest tucked into the corner behind a wall of barrels. Whoever hid it forgot, or was waiting for somebody patient.
+
+# --- THE SQUARE ---
+
+[square_well]
+A well with a little stone roof. The bucket comes up full of water and, once, a very small frog. He says he's fine.
+
+[square_statue]
+A statue of the Hero, half-crumbled, standing in the plaza. It was carved a long time ago, by someone who had not seen them. The head is the size of a barrel, the sword is the size of a door, and the feet are missing.
+
+Underneath there's a plaque: NINE FEET TALL, AND WORTH EVERY INCH.
+
+[square_statue_ves]
+{bored}Nine feet. {smile}Somebody was either very excited, or very short.
+
+[square_noticeboard]
+The town noticeboard, mostly about the Sunstone:
+
+THE SUNSTONE IS NOT DIM. IT IS "RESTING". -- HIS MAJESTY
+
+LOST: ONE LAMPLIGHTER'S POLE. IT WAS HERE A MOMENT AGO.
+
+CHOIR PRACTICE: CANCELLED (THE SUNSTONE). ALSO CANCELLED: THE CHOIR.
+
+[square_signpost]
+A signpost: THE INN, THE MOSSY PILLOW (ALWAYS OPEN, NEVER QUIET). THE FORGE (HOT, DON'T TALK). THE KING (TALK, DON'T HOT). THE HALL OF THE VISIT (THE HERO WAS HERE).
+
+[square_bench]
+A bench, polished by a lot of waiting.
+
+[square_lamp]
+A glow-worm lamp. Its worm waves, a bit shyly.
+
+[square_barrels]
+Spare lamp-oil and a dozen jars of glow-worm feed. A tag says PLEASE FEED THEM. THEY'RE TIRED.
+
+[square_pouch]
+A purse in the corner behind the toadstool beds. The toadstools aren't telling.
+
+# --- HOBNAIL'S FORGE ---
+
+[forge_vent]
+A great iron grate over a crack in the rock, with heat pouring up out of it and a glow like a small sunrise. The air above it wobbles. The floor's warm through your boots.
+
+[forge_coal]
+A heap of coal, black and shining. A chest is half-buried behind it, as if it had been shoved there in a hurry.
+
+[forge_anvil]
+An anvil as big as a wheelbarrow, scarred all over. One dent in it is the exact shape of Hobnail's hammer. It was there before the apprentice was born.
+
+[forge_quench]
+A quenching tub. The water in it is black and, if you listen, hisses a little at you.
+
+[forge_grindstone]
+A grindstone, still turning slowly by itself. Nobody's near it. It is better not to ask.
+
+[forge_barrel]
+A barrel of horseshoe nails. Wait, there aren't any horses. They're for something else.
+
+[forge_crates]
+Crates of ore, labelled by a hand that only uses one word: ORE. ORE. ORE. MORE ORE.
+
+[forge_sign]
+A sign hammered into the wall in letters like crowbars:
+
+NO TOUCHING.
+NO ASKING.
+NO.
+-- H.
+
+[forge_sign_ves]
+{bored}Three rules and a signature. I respect anyone who gets to the point.
+
+[forge_chest]
+A chest behind the coal, with a layer of soot on the lid. Whoever put it there wanted it forgotten.
+
+# --- THE MOSSY PILLOW ---
+
+[inn_wall]
+Panelling the colour of strong tea, with a row of little coat hooks. Most of the hooks are holding a hat that has not moved in years.
+
+[inn_rug]
+A round rug, woven in mushroom rings. It's frayed at the edge where someone's been practising their dancing.
+
+[inn_fire]
+A hearth with a fire that never goes out, and a sign over it: THE MOSSY PILLOW. WARM, DRY, AND ONLY MOSTLY MOSSY.
+
+[inn_counter]
+The innkeeper's counter, scrubbed bare. Behind it hang a hundred keys, none of which are for any door in the building.
+
+[inn_pot]
+A pot of toadstool stew, bubbling quietly on the stove. There's one pasty left in a cloth beside it.
+
+[inn_pot_empty]
+An empty pot with a spoon in it and a sign: BACK TOMORROW.
+
+[inn_table]
+A long table with mugs, a half-played game of toadstool-and-ladders, and the great dent where a guest once fell asleep face-first.
+
+[inn_bench]
+A bench, worn smooth. There's a pillow at one end, very mossy, and a sign: DON'T.
+
+[inn_bed]
+A real bed, with a patched quilt and a pillow that looks, frankly, a bit damp, but in a friendly way. You could sleep here.
+
+[inn_barrel]
+A barrel of ginger moss-beer. A sign says IT'S NOT FOR YOU, and somebody has added, THE BAT.
+
+[inn_rules]
+HOUSE RULES, painted on a board:
+
+1. NO SHOUTING (THE BAT).
+2. NO SINGING (THE BAT).
+3. NO BAT.
+4. WE'VE TRIED.
+
+[inn_rules_ves]
+{smile}'We've tried.' I'm beginning to like this town.
+
+[inn_pouch]
+A purse that rolled under the last bed and has been waiting there ever since.
+
+# --- THE HALL OF THE VISIT ---
+
+[hall_wall]
+A long carved wall, covered in little painted panels. Damp has got into most of them.
+
+[hall_bench]
+A bench for sitting and looking at the mural. A tiny sign says PLEASE LOOK RESPECTFULLY. Somebody has scratched in underneath it: AT AN ANGLE.
+
+[hall_noticeboard]
+The curator's notices:
+
+THE HERO CAME DOWN THE OLD STAIR (WHERE THE LONG ROPE HANGS NOW).
+THE HERO WENT BACK UP IT (WE ARE FAIRLY SURE). THE STAIR FELL IN SOON AFTER. NOT OUR FAULT.
+RELICS: SEE THE KING. DON'T ASK.
+THE DAMP: SORRY.
+
+[hall_sign]
+HALL OF THE VISIT. Admission free. Opinions free. A damp patch by the door is free but please do not take it with you.
+
+[hall_lamp]
+A glow-worm lamp. The worm is looking up at the mural as if it had never seen it before.
+
+[hall_chest]
+A chest in the corner, half hidden behind the barrels, with a note on it: DONATIONS. Underneath: IT'S MOSTLY SWEETS.
+
+[hall_barrels]
+Barrels of paste and whitewash. The curator keeps patching the mural, and the damp keeps winning.
+
+[hist_founding]
+A small painting in a frame: three little figures round a lamp, with a stone arch behind them. A label says HOW WE CAME TO BE HERE. A second label, in a different hand, says BY ACCIDENT.
+
+[hist_pie]
+A small painting: a very large mushroom, a very proud toad, and a pie. The label says THE FIRST PIE CONTEST. Under it: "SHE WON. SHE ALWAYS WINS."
+
+[hist_stair]
+A small painting: a long stair going down into the dark, with nothing at the bottom of it. The label says THE WAY. Nobody has finished the picture.
+
+[hist_founding_two]
+A small painting: the same three figures, a few years on, with the lamp now big enough to be a sun. The label says LATER. "WE GOT A LITTLE CARRIED AWAY."
+
+[mural_visit]
+A great painting of the Hero's visit. The Hero stands on the stair with the sword raised, and the dark below them like deep water. Whoever painted it had never seen the Hero. The Hero is about nine feet tall.
+
+[mural_visit_ves]
+{laughing}Look at the size of them. {bored}They'd have had to come down the stair sideways.
+
+[mural_end]
+The plain end of the mural, carved stone with a border of little stars. It's the one part the damp hasn't got to.
+
+[mural_lantern]
+Low down on the stair, almost lost in the cracks of the plaster: a small figure, carrying a lantern.
+
+[mural_lantern_ves]
+{surprised}Huh. Somebody went with them.
+
+{bored}...Or the painter sneezed.
+
+# --- KING PEPTUP'S HALL ---
+
+[throne_chair]
+The throne is hidden behind a curtain, which bulges now and then, and which is very still when you look at it. A tail tip is showing under the hem. It goes back in.
+
+[throne_crowd]
+One of the court, standing very respectfully. They are looking at the king. Now and then they look at the Sunstone. They don't look at each other.
+
+[throne_lamp]
+A glow-worm lamp, turned up high for the show. The worm looks like it wants a lie-down.
+
+[throne_sign]
+A sign at the foot of the aisle, painted in gold:
+
+PLEASE APPLAUD.
+THIS MEANS YOU.
+THANK YOU. -- THE MANAGEMENT
+
+[throne_carpet]
+A long red carpet, thick and soft and a bit worn down the middle where a great many people have walked up to be welcomed.
+
+[throne_pouch]
+A purse someone dropped in the crush at the back of the hall, and nobody had the nerve to pick up with the king looking.
+
+[relic_cloak]
+In a glass case: a small grey-green cloak, much mended, with a tarnished clasp. A card says THE HERO'S CLOAK. DO NOT TOUCH. IT'S NOT BEEN WASHED.
+
+[relic_cup]
+In a glass case: a tin cup, dented, with a handle bent flat. A card says THE HERO'S CUP. THEY DRANK FROM THIS. ALMOST CERTAINLY.
+
+[relic_boot]
+In a glass case: one boot. Brown, worn through at the toe, laced with a bit of string. A card says THE HERO'S BOOT. THE OTHER ONE IS WITH THE HERO.
+
+[relic_boot_ves]
+{thoughtful}...Small, isn't it.
+
+[duel_no_run]
+You can't leave in the middle of a show! The doors are shut.
+
+# --- THE LONG ROPE (the way home, at the end of the chapter) ---
+
+[rope_face]
+Sheer carved stone, going up and up into the dark.
+
+Somewhere at the top there's a little square of daylight.
+
+[rope_tuck]
+{shy}Two pulls when you're up. Don't forget.
+
+{sad}...I'll be listening.
+
+[rope_king_head]
+The king's carved head, paper crown and all, propped against the rock.
+
+Tuck dragged it all the way out. He hasn't let go of it since.
+
+[rope_king_head_ves]
+{thoughtful}He looks smaller with nobody in him.
+
+[rope_mole]
+Mind the fourth knot from the top. It's been loose for a hundred years.
+
+Nobody's ever been up far enough to fix it.
+
+[rope_frog]
+Are you going UP? Is it true there's no roof up there? What holds the sky up, then?
+
+[rope_glowworm]
+I'd light the way for you, but it's a long way, and I'm a short worm.
+
+[bt_tiny_tools]
+A pick, a shovel and a broom, each about as long as your hand, leaned against the wall in order of size. Somebody tidy lives near here.

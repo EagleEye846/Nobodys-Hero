@@ -1,0 +1,23 @@
+# BT_CURATOR: The curator of the Hall of the Visit, a mole in a hard hat who loves the mural and is losing a long war against the damp.
+
+[first]
+Welcome to the Hall of the Visit! Please don't touch the walls. Or breathe on them. Or look at them too hard.
+
+It's damp. I'm sorry. It's always damp. I've tried everything.
+
+[repeat]
+The mural's lovely, isn't it? Nobody knows who painted it. We think it was one of the founders, but they're all long gone.
+
+[first after the_kings_welcome]
+The king's got the relics. Lucky him. We've got the damp. It's a fair swap.
+
+His Majesty's not in the mural, you'll notice. He says he was just out of the picture, holding the Hero's coat.
+
+[repeat after the_kings_welcome]
+Have you seen the lower corner of the mural? Nobody painted that bit. It was just THERE, one day. We think it's damp.
+
+[first after the_light_goes_up]
+The light's improved the plaster! Look! The colours! Oh, I could weep. I might. Excuse me.
+
+[repeat after the_light_goes_up]
+The damp is drying! I've never seen it dry! What will I do with myself?

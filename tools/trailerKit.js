@@ -392,6 +392,12 @@ export async function runTrailer(config) {
       for (const member of battle.party) if (member.hp < member.maxHp * 0.3) member.hp = member.maxHp;
     };
     const pattern = spec.pattern ?? busiestPattern(spec);
+    // `battleLines` (a trailer's option): the text box shows the enemy's own
+    // flavour line (or the shot's `line`) instead of a tutorial hint.
+    if (config.battleLines) {
+      const line = spec.line ?? battle.foeLines(foe, 'flavor')[0] ?? '';
+      Object.defineProperty(battle, 'dodgeHint', { get: () => line, set() {} });
+    }
     battle.pickPattern = () => pattern;
     const input = playing(battle, spec.pause);
     if (spec.fight) {

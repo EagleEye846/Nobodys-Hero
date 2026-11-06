@@ -1,0 +1,9 @@
+# BT_DANCER_B: A second glow-worm, dancing and trying not to fall into the first.
+
+[first]
+Hello! Dancing! Excuse me! Mind my tail!
+
+I haven't glowed like this since I was a grub!
+
+[repeat]
+Left! Right! Left! No! Sorry! Mind my TAIL!

@@ -31,7 +31,7 @@ export const SPELLS = {
   // Chapter 3 (the Hushwood and the Dead City). Balm heals the whole party.
   sunder: { name: 'Sunder', sp: 75, power: 1.55, chapter: 3 },
   balm: { name: 'Balm', sp: 48, heals: 25, all: true },
-  lance: { name: 'Light Lance', sp: 55, power: 1.25, chapter: 3 },
+  lance: { name: 'Light Lance', sp: 65, power: 1.25, chapter: 3 },
   // Chapter 4, past the Hero's Gate. Renew heals one person a lot; Aegis is
   // Bright Ward for a turn longer; Serenade calms every enemy more than Hush.
   sunburst: { name: 'Sunburst', sp: 85, power: 1.3, all: true, chapter: 4 },
@@ -41,6 +41,29 @@ export const SPELLS = {
   tempest: { name: 'Tempest', sp: 95, power: 2.2, chapter: 4 },
   // Chapter 5.
   nova: { name: 'Nova', sp: 100, power: 3, chapter: 5 },
+  // The TIDE branch (see src/data/skills.js). Undertow hits and drags the
+  // enemy back (`shove`: its next attack is that much shorter). Brine hits a
+  // little, then burns for `dot.power` of a good FIGHT after each of the next
+  // `dot.turns` enemy turns. Ebb and Flow swaps attack and defence: your hits
+  // (and your friends') land `attack` times as hard and theirs `defence`
+  // times, until `turns` enemy turns have passed. Low Water shows an enemy's
+  // weak spots: every hit on it does `bonus` more for `turns` enemy turns.
+  undertow: { name: 'Shove', sp: 60, power: 1.4, shove: 0.3, chapter: 5 },
+  brine: { name: 'Scald', sp: 50, power: 0.6, dot: { power: 0.25, turns: 3 }, chapter: 5 },
+  ebb_flow: { name: 'Turnabout', sp: 40, swap: { attack: 1.75, defence: 1.5, turns: 2 } },
+  low_water: { name: 'Lay Bare', sp: 45, expose: { bonus: 0.4, turns: 3 } },
+  // Chapter 5's second wave (the full-size tree). Cleave is VALOR's big single
+  // hit; Restore is Balm for a whole party that's really hurt; Bastion is
+  // Aegis for a turn longer; Soothe calms everyone more than Serenade;
+  // Starstorm is ARCANA's hit on everyone; Undercut and Overwhelm are TIDE's
+  // (Undercut shoves and burns at once, Overwhelm is the branch's last word).
+  cleave: { name: 'Cleave', sp: 85, power: 2, chapter: 5 },
+  restore: { name: 'Restore', sp: 70, heals: 55, all: true },
+  bastion: { name: 'Bastion', sp: 70, turns: 4 },
+  soothe: { name: 'Soothe', sp: 75, calm: 50 },
+  starstorm: { name: 'Starstorm', sp: 100, power: 1.2, all: true, chapter: 5 },
+  undercut: { name: 'Undercut', sp: 75, power: 1, shove: 0.2, dot: { power: 0.15, turns: 3 }, chapter: 5 },
+  overwhelm: { name: 'Overwhelm', sp: 115, power: 2.6, shove: 0.3, chapter: 5 },
 };
 
 // The best FIGHT a hero's weapon gives in each chapter (Worn Sword, Skyiron

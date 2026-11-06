@@ -27,6 +27,9 @@ export const WORLD_STATE = {
   // you've split open (secret ways), as prop keys.
   passed: {},
   chopped: [],
+  // Mine carts: where each has been left, and which barricades are broken,
+  // by room id (see src/overworld/carts.js).
+  carts: {},
   playSeconds: 0,
 };
 

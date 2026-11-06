@@ -1,0 +1,19 @@
+# BT_THRONE_GUARD: A newt guard inside the throne hall's great doors, in a helmet that slips over his eyes. He takes his duties seriously. He can't see his duties.
+
+[first]
+Halt! I mean, welcome! I mean, hold on. I can't see. ... Right. Carry on. His Majesty's in the next room. I mean, THIS room. At the end.
+
+[repeat]
+I have been standing here since the show started. And before. And before that. Please, if you see a chair, I'd cry.
+
+[first after the_kings_welcome]
+His Majesty's own errand! It's an honour. I'm not allowed to say. But I'm honoured.
+
+[repeat after the_kings_welcome]
+The back door's open to you. I'm not allowed to say that either. Please don't tell.
+
+[first after the_light_goes_up]
+The Sunstone's lit! I can tell! Even inside the helmet, it's gone a sort of orange!
+
+[repeat after the_light_goes_up]
+His Majesty's waiting. Do hurry. He's in a very big mood.

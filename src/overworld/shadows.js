@@ -33,10 +33,32 @@ function silhouette(image) {
 // The little dark patch on the ground under someone's feet, day or night,
 // so people stand on the floor instead of floating over it. (x, y) is the
 // point at their feet, on screen. The same shape as an enemy's.
+// On dark ground (the mines' dirt, the Deep) a pale shadow vanishes, so the
+// room can deepen every foot shadow a little (see setShadowDepth).
+let depth = 1;
+export function setShadowDepth(amount) { depth = amount; }
 export function drawFootShadow(ctx, x, y, alpha = 0.3) {
-  ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+  ctx.fillStyle = `rgba(0, 0, 0, ${Math.min(0.75, alpha * depth)})`;
   ctx.fillRect(x - 4, y - 3, 8, 1);
   ctx.fillRect(x - 5, y - 2, 10, 2);
+}
+
+// Underground there's no sun, but things standing on the floor still sit in a
+// little pool of dark so they don't float: signs, lamps, crates, benches and
+// the like. (Hung things, wall things and things with a shadow painted in
+// are left out.) Call it before the props are drawn.
+const GROUNDED = /^(sign|warning_sign|mine_lamp|glowworm_lamp|toolbox|ore_sacks|spoil_heap|town_barrels|barrel|town_crates|crates|town_noticeboard|town_signpost|bench|mushroom_stall|rock_stump|little_cairn|broken_ladder|bed|table|long_table|counter|anvil|grindstone|quench_tub|town_well|chest|chest_open|jetty_post|coal_heap|stove|fireplace|cold_campfire|campfire)$/;
+export function drawPropFootShadows(ctx, camera, props) {
+  for (const prop of props) {
+    if (prop.hidden || prop.isOpen || prop.save || prop.npc || prop.shop || !GROUNDED.test(prop.look ?? '')) continue;
+    const wide = Math.min(prop.sprite?.width ?? 12, 28);
+    const cx = Math.round(prop.x + prop.width / 2 - camera.x);
+    const feet = Math.round(prop.y + T - (prop.raise ?? 0) - camera.y);
+    const half = Math.max(4, Math.floor(wide / 2) - 1);
+    ctx.fillStyle = `rgba(0, 0, 0, ${Math.min(0.75, 0.3 * depth)})`;
+    ctx.fillRect(cx - half + 1, feet - 3, half * 2 - 2, 1);
+    ctx.fillRect(cx - half, feet - 2, half * 2, 2);
+  }
 }
 
 // How the sun throws shadows right now: how dark (0 for none), how long (as

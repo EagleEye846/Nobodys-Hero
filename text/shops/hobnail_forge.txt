@@ -1,0 +1,108 @@
+# HOBNAIL'S FORGE: Hobnail, a grumpy old mole smith at the heat vent in
+# Belowtown, goggles pushed up, tongs and a hammer always in hand. He talks
+# in grunts, three words at most, usually one. Under all the grunting he's
+# the kindest soul in the place, and would die before he'd say so.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Hn.
+
+[menu_prompt]
+Well?
+
+[buy_prompt]
+Pick. Goggles. Bread.
+
+[sell_prompt]
+Show.
+
+[talk_prompt]
+Hn. Talk.
+
+[bought]
+Hn. Good.
+
+[bought_item]
+Eat.
+
+[sold]
+Fine.
+
+[nothing_to_sell]
+Nothing?
+
+[cant_sell]
+Wearing it.
+
+[owned]
+Got one.
+
+[wont_fit]
+Not yours.
+
+[too_poor]
+Short.
+
+[bought_stored]
+Bag's full. Chest.
+
+[bag_full]
+Full. Eat.
+
+[farewell]
+Hn. Go.
+
+[talk: The Hero]
+Small.
+
+Brave.
+
+Gone.
+
+[talk: The Hero after the_light_goes_up]
+Small.
+Brave.
+...Lit it. Hn.
+
+[talk: The king]
+Loud.
+
+[talk: Tuck]
+(Hobnail stops hammering. He doesn't say anything for a very long time.)
+
+...Good lad.
+
+[talk: The forge]
+Hot.
+
+[talk: Ves]
+Sharp. Good.
+
+# The star sword (the Fallen Star: src/data/fallenStar.js). Not a "talk:"
+# section: the topic only shows once you've got the sword.
+[forge_ask]
+Sword. (He holds out a huge hand, and looks at the blade for a long time.) Hn. Good.
+
+Missing. Bring star.
+
+(He jabs a thumb at the floor.) Fell. Down. Old Seam. Hn.
+
+[forge_now]
+Hn!
+
+(Hobnail pulls his goggles down. The shard goes into the fire, then onto the blade, and the whole forge fills with sparks. He hammers for a long, long time without a word.)
+
+...Good.
+
+[forge_done]
+Done. Good.
+
+[forge_later]
+First. Other. Smith.
+
+[forge_hint]
+Star? Hn. Sword. Find.
+
+[forge_shard_only]
+Shard. Pretty. Sword?

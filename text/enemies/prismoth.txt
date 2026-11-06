@@ -1,0 +1,72 @@
+# PRISMOTH
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/prismoth.js.
+
+[intro]
+Light comes through the crystals, and then something is coming through the light, in seven colours, with fuzzy antennae. A PRISMOTH!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+PRISMOTH beats its wings, slowly. The cave goes red, then yellow, then green, in turn. It seems pleased with this.
+
+PRISMOTH lands on a crystal, and the crystal puts a small rainbow on your boots. PRISMOTH waits for you to notice.
+
+A little coloured dust sifts off PRISMOTH. It's sparkling, and it's a bit hard to look at, and it knows.
+
+PRISMOTH turns slightly, to catch the light better. It's not subtle.
+
+Smells like frost on glass and old candy.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Mind the
+light.
+
+Lovely,
+aren't I?
+
+Seven whole
+colours!
+
+Look at
+ME.
+
+Red, and
+orange, and...
+yes.
+
+...Don't
+squint.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/prismoth.js.
+[talk: Inspect]
+PRISMOTH - HP 950
+A fuzzy moth whose wings are panes of coloured glass. It bends every bit of light into beams, glitter and glass shards. Stay out from under its rainbows.
+
+[talk: Hold up a glass]
+You hold up a bit of crystal, so the light goes through it, and PRISMOTH sees itself in the rainbow on the floor. It stares for a long time. It's the most beautiful thing it has ever seen.
+
+[talk: Admire the colours]
+You name every colour on its wings, out loud, in order. PRISMOTH corrects you on the third one, kindly. It says that's indigo, and that most people miss it.
+
+[talk: Turn down the light]
+You shade your eyes, and ask politely if it might dim a little. PRISMOTH is mortified. It folds its wings in at once, glowing a faint, apologetic pink, and perches on your shoulder, ever so softly, to say sorry.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+PRISMOTH's wings go grey, one colour at a time, until they're just glass. It folds them up and sinks down onto the stone. There's still a very small rainbow in the crystal beside it.
+
+[pacified]
+PRISMOTH spreads its wings so the light goes through them, and the whole cave turns every colour at once, slowly, for you. Then it flutters up and off, leaving a faint trail of glitter.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says {foe} is, honestly, the prettiest thing she's seen all day. {foe} shimmers so hard the cave goes pink. She says she meant "down here". It doesn't hear her.
+
+Ves asks {foe} if it can do a different colour. {foe} says it can do seven. She asks for an eighth. It goes very quiet, and does something that she's fairly sure isn't a colour.
+
+Ves points out that {foe} is only pretty when the light's on it. {foe} says that's true of everyone. She'd like to have said it first.

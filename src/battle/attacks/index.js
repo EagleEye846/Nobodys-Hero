@@ -38,6 +38,42 @@ import { HERALDS_ECHO_ATTACKS } from './heralds_echo.js';
 import { HUSH_ATTACKS } from './the_hush.js';
 import { WARDEN_ATTACKS } from './warden.js';
 import { TATTERWIGHT_ATTACKS } from './tatterwight.js';
+import { SLAGLING_ATTACKS } from './slagling.js';
+import { BLINDFISH_ATTACKS } from './blindfish.js';
+import { OLM_ATTACKS } from './olm.js';
+import { MURK_ATTACKS } from './murk.js';
+import { GNAWER_ATTACKS } from './gnawer.js';
+import { DANDY_LION_ATTACKS } from './dandy_lion.js';
+import { HAYBOB_ATTACKS } from './haybob.js';
+import { GLEAMSNAIL_ATTACKS } from './gleamsnail.js';
+import { QUARTZLING_ATTACKS } from './quartzling.js';
+import { DRILLBUG_ATTACKS } from './drillbug.js';
+import { BUNTING_ATTACKS } from './bunting.js';
+import { PRISMOTH_ATTACKS } from './prismoth.js';
+import { MAGPIE_MOLE_ATTACKS } from './magpiemole.js';
+import { FIDDLER_ATTACKS } from './fiddler.js';
+import { KELPIE_FOAL_ATTACKS } from './kelpie_foal.js';
+import { GULLION_ATTACKS } from './gullion.js';
+import { NET_WRAITH_ATTACKS } from './net_wraith.js';
+import { STORM_IMP_ATTACKS } from './storm_imp.js';
+import { OLD_DIVER_ATTACKS } from './old_diver.js';
+import { PINWHEEL_ATTACKS } from './pinwheel.js';
+import { WRACKEEL_ATTACKS } from './wrackeel.js';
+import { SHELLAC_ATTACKS } from './shellac.js';
+import { MOONJELLY_ATTACKS } from './moonjelly.js';
+import { LIMPET_KNIGHT_ATTACKS } from './limpet_knight.js';
+import { DUNLIN_DANCER_ATTACKS } from './dunlin_dancer.js';
+import { BELLBUOY_ATTACKS } from './bellbuoy.js';
+import { SALT_SHADE_ATTACKS } from './salt_shade.js';
+import { SANDCASTLE_ATTACKS } from './sandcastle.js';
+import { DOWAGER_CRAB_ATTACKS } from './dowager_crab.js';
+import { SEED_SHEEP_ATTACKS } from './seed_sheep.js';
+import { CAPBEE_ATTACKS } from './capbee.js';
+import { CLOVER_SNAIL_ATTACKS } from './clover_snail.js';
+import { RUMBOLD_ATTACKS } from './rumbold.js';
+import { RUMBOLD_BROKEN_ATTACKS } from './rumboldBroken.js';
+import { RUMBOLD_ALIVE_ATTACKS } from './rumboldAlive.js';
+import { CORRIE_ATTACKS } from './corrie.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -87,4 +123,40 @@ export const ENEMY_ATTACKS = {
   ...HUSH_ATTACKS,
   ...WARDEN_ATTACKS,
   ...TATTERWIGHT_ATTACKS,
+  ...SLAGLING_ATTACKS,
+  ...BLINDFISH_ATTACKS,
+  ...OLM_ATTACKS,
+  ...MURK_ATTACKS,
+  ...GNAWER_ATTACKS,
+  ...DANDY_LION_ATTACKS,
+  ...HAYBOB_ATTACKS,
+  ...GLEAMSNAIL_ATTACKS,
+  ...QUARTZLING_ATTACKS,
+  ...DRILLBUG_ATTACKS,
+  ...BUNTING_ATTACKS,
+  ...PRISMOTH_ATTACKS,
+  ...MAGPIE_MOLE_ATTACKS,
+  ...FIDDLER_ATTACKS,
+  ...KELPIE_FOAL_ATTACKS,
+  ...GULLION_ATTACKS,
+  ...NET_WRAITH_ATTACKS,
+  ...STORM_IMP_ATTACKS,
+  ...OLD_DIVER_ATTACKS,
+  ...PINWHEEL_ATTACKS,
+  ...WRACKEEL_ATTACKS,
+  ...SHELLAC_ATTACKS,
+  ...MOONJELLY_ATTACKS,
+  ...LIMPET_KNIGHT_ATTACKS,
+  ...DUNLIN_DANCER_ATTACKS,
+  ...BELLBUOY_ATTACKS,
+  ...SALT_SHADE_ATTACKS,
+  ...SANDCASTLE_ATTACKS,
+  ...DOWAGER_CRAB_ATTACKS,
+  ...SEED_SHEEP_ATTACKS,
+  ...CAPBEE_ATTACKS,
+  ...CLOVER_SNAIL_ATTACKS,
+  ...RUMBOLD_ATTACKS,
+  ...RUMBOLD_BROKEN_ATTACKS,
+  ...RUMBOLD_ALIVE_ATTACKS,
+  ...CORRIE_ATTACKS,
 };

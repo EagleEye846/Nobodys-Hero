@@ -4,6 +4,22 @@
 # line is the heading, the lines after it are names, and a line starting
 # with @ shows a character beside the card.
 
+# The procession along the bottom of the screen, one look per line, leader
+# first: 'hero', 'member:vesper', or any card look (@prop:, @enemy:).
+# Voice credits: none yet. If voices are ever added, put each actor's name
+# here, exactly as they want it written, in a card of its own, e.g.
+#   [voices]
+#   Voices
+#   (name, as they want it written)
+
+[walkers]
+hero
+member:vesper
+enemy:chough
+enemy:frostbite
+enemy:rimewing
+enemy:great_bat
+
 [title]
 Chapter Two: The Long Stair
 NOBODY'S HERO

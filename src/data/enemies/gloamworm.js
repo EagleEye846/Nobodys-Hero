@@ -16,8 +16,8 @@ export const GLOAMWORM = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hushwood',
   sprite: { rows: GLOAMWORM_SPRITE, palette: GLOAMWORM_PALETTE },
-  maxHp: 440,
-  damage: 18,
+  maxHp: 505,
+  damage: 21,
 
   // A Chapter 3 enemy from under the deep wood: a touch tougher than the
   // Knotling.
@@ -40,7 +40,7 @@ export const GLOAMWORM = {
     { name: 'Stay very still', calm: 30 },
   ],
 
-  rewards: { exp: 160, coins: 85 },
+  rewards: { exp: 340, coins: 40 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'gloam_honeydew', chance: 0.4 }],

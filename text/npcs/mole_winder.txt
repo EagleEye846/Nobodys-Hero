@@ -1,0 +1,18 @@
+# WINDER: a grey mole in a yellow hard hat, the winchman at the lift. Says
+# very little, all of it exact.
+
+[first]
+Winder. Winchman. I wind. That's the whole job, and I'm very good at it.
+
+The lift wants two weights, one on each plate, same as always. Counterweights. Don't ask me to explain it. I wind.
+
+[repeat]
+The lake's down there. Haven't seen it in thirty years. I'm told it's still wet.
+
+When you go down, hold on to something that's tied to something else. That's my advice. It's also the entire safety manual.
+
+[first after the_light_goes_up]
+The shaft's lit all the way down now. First time in thirty years I've seen the bottom of it. It's shorter than I thought.
+
+[repeat after the_light_goes_up]
+I wind. Light or no light. It's nicer with light.

@@ -1,0 +1,89 @@
+# MARIGOLD'S STAND: Marigold, a hare in a sun bonnet and apron, at her
+# lemonade stand where the lane runs out of Sunnyside. Beaming, chatty, and
+# completely certain the fields are perfectly safe. Nothing has ever
+# happened here. The ground does hum a bit, some days. That's just the
+# weather. She sells the picnic, a hayfork that came with the stand and a
+# hat for the sun.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Well, hello! Travellers! We don't get travellers. We don't get anybody. Marigold! Lemonade?
+
+[menu_prompt]
+Anything else? I've got all afternoon. I've got every afternoon, really.
+
+[buy_prompt]
+Lemonade, sandwiches, tarts. And a hayfork, and a hat. It's a very sunny sort of stand.
+
+[sell_prompt]
+Selling? Oh, I'd love a nice thing to put on the shelf. Let's see.
+
+[talk_prompt]
+A chat! Lovely. Sit, sit, there's a crate.
+
+[bought]
+There you go! Wear it in good health. Or in good weather, which is all we have.
+
+[bought_item]
+Enjoy! Don't gulp, it's all citrus.
+
+[sold]
+Thank you! I'll find it a nice spot by the pitcher.
+
+[nothing_to_sell]
+Nothing? Oh well. Have a lemonade instead.
+
+[cant_sell]
+You're wearing that, silly. Take it off first, with C. Out in the sun, not in front of the lemons.
+
+[owned]
+You've got one already, dear! Two of a hayfork is a lot of hayfork.
+
+[wont_fit]
+Oh, that's for your friend with the umbrella. I'll pour her one too, if she smiles.
+
+[too_poor]
+Oh, I'm so sorry, that's a bit more than you've got. Marigold doesn't do tabs. I did once. It was Thursday. It went badly.
+
+[bought_stored]
+Your bag's full, so I've put it by for you. It'll be in the chest by the next little crystal.
+
+[bag_full]
+Your bag's full and so is the chest! Eat something. Eat it here. I insist.
+
+[farewell]
+Bye now! Mind the fields. Not that there's anything to mind. Safest fields in the world!
+
+[talk: The fields]
+Safest fields in the world, these. Nothing ever happens. Nothing! Ground hums a bit some days. That's just the weather.
+
+...Weather does hum, doesn't it? Nan always said it did.
+
+[farewell after out_into_the_light]
+Bye now! Mind the hole. And the fields. Mostly the hole.
+
+[greeting after out_into_the_light]
+You're back! All three of you, and the right way up! Lemonade? Mind the hole.
+
+[talk: The fields after out_into_the_light]
+Safest fields in the world, these. Well. Safest fields with one hole in. I've put a sign up. Nan would be livid.
+...But I was right about the humming. I'll have that.
+
+[talk: The Hero after out_into_the_light]
+"Down they went and up they came." I always thought it was about a well. ...You went down, and you came up. I'm not saying anything. I'm just humming.
+
+[talk: The Gate]
+That big old gate? Been shut since before my nan. Funny you coming out of it. Hope you wiped your feet.
+
+[talk: The Hero]
+The Hero? Oh, there's an old song. "Down they went and up they came." Nobody knows the rest. Probably about a well.
+
+[talk: The stand]
+It's not much, but it's mine! The awning's from my nan's tent, the pitcher's from my nan's kitchen, and the bee's his own. He pays in company.
+
+[talk: The hayfork]
+It came with the stand. I've never used it. I've never needed to. It's for hay. Also for anything that looks at you funny, I suppose, if anything ever did.
+
+[talk: Ves]
+Your friend! She's got a look, hasn't she. Like she's been to a funeral and wasn't impressed. I'd give her a hat. She'd hate it. Isn't that nice?

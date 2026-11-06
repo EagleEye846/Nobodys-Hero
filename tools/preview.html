@@ -22,7 +22,8 @@ ERROR: ${m}`; };
   window.addEventListener('error', (e) => show(`${e.message} (${e.filename}:${e.lineno})`));
   window.addEventListener('unhandledrejection', (e) => show(e.reason?.stack ?? e.reason));
 </script>
-<script type="module">
+<!-- onerror: a module that failed to load (the server dropped a file) says so at once, so a headless run can try again. -->
+<script type="module" onerror="show('a module failed to load')">
 // A still of any room, as the game draws it, for checking rooms without
 // playing to them: tools/preview.html?room=rest_square&x=20&y=16&facing=up&t=2
 // Or ?check=1 to build every room and compile every song, and report.
@@ -51,6 +52,9 @@ const report = document.getElementById('report');
 const ctx = createScreen(document.getElementById('game'), UI_WIDTH, UI_HEIGHT);
 await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
 
+// &chapter=5 puts the world in that chapter (Sunnyside's first four rooms read differently in 5: chapterRooms.js).
+if (params.get('chapter')) (await import('./src/state/saveGame.js')).WORLD_STATE.chapter = Number(params.get('chapter'));
+
 const noInput = { isDown: () => false, wasPressed: () => false, endFrame() {} };
 
 if (params.get('check')) {
@@ -66,6 +70,23 @@ if (params.get('check')) {
         if (!to) throw new Error(`door to unknown room ${door.to}`);
         const target = new Room(to);
         if (target.isSolidTile(door.spawn.x, door.spawn.y)) throw new Error(`door to ${door.to} spawns in a wall at ${door.spawn.x},${door.spawn.y}`);
+      }
+      // Mine-cart track: no loose ends, carts and barricades on rails, doors that line up.
+      if (data.rails || data.props.some((p) => p.cart || p.smash)) {
+        const { railProblems } = await import('./src/overworld/carts.js');
+        const problems = railProblems(data, ROOMS);
+        if (problems.length) throw new Error(problems.join('; '));
+      }
+      // A room with a Chapter 5 look builds that way too, and its doors lead somewhere real.
+      if (data.chapter5) {
+        const { applyVariant } = await import('./src/overworld/chapterRooms.js');
+        const later = applyVariant(data, data.chapter5);
+        new Room(later);
+        for (const door of later.doors ?? []) {
+          const to = ROOMS[door.to];
+          if (!to) throw new Error(`chapter 5: door to unknown room ${door.to}`);
+          if (new Room(to).isSolidTile(door.spawn.x, door.spawn.y)) throw new Error(`chapter 5: door to ${door.to} spawns in a wall at ${door.spawn.x},${door.spawn.y}`);
+        }
       }
       lines.push(`room ok: ${id} (${room.width}x${room.height}, ${room.props.length} props)`);
     } catch (e) {
@@ -88,8 +109,9 @@ if (params.get('check')) {
         const notes = SAMPLE_SETS[instrument.sample].notes;
         const played = Object.values(song.sections).flatMap((section) => section[track] ?? []).filter((step) => typeof step === 'number');
         if (!played.length) continue;
-        const far = Math.max(...played.map((note) => Math.min(...notes.map((n) => Math.abs(n - note)))));
-        if (far > 2) lines.push(`  range: ${track} (${instrument.sample} ${Math.min(...notes)}-${Math.max(...notes)}) plays ${Math.min(...played)}-${Math.max(...played)}, up to ${far} semitones from a recording`);
+        const shift = 12 * (instrument.octave ?? 0);
+        const far = Math.max(...played.map((note) => Math.min(...notes.map((n) => Math.abs(n - (note + shift))))));
+        if (far > 2) lines.push(`  range: ${track} (${instrument.sample} ${Math.min(...notes)}-${Math.max(...notes)}) plays ${Math.min(...played) + shift}-${Math.max(...played) + shift}, up to ${far} semitones from a recording`);
       }
       // Loudness over time: the RMS of each window, so a song that goes quiet
       // (or silent, which would be a bug) shows where.
@@ -159,16 +181,54 @@ if (params.get('check')) {
   const menu = new PauseMenu();
   menu.open();
   if (params.get('pausemenu') === 'settings') {
+    menu.tab = 5;
+    menu.screens[5].open();
+  }
+  // ?pausemenu=journal: the JOURNAL screen with a few pages filled in;
+  // &cursor=N picks a page, &press=down,down presses keys.
+  if (params.get('pausemenu') === 'journal') {
+    const { HERO_STATE } = await import('./src/characters/heroState.js');
+    if (params.get('chapter')) (await import('./src/state/saveGame.js')).WORLD_STATE.chapter = Number(params.get('chapter'));
+    HERO_STATE.journal = { bunny: { beaten: 3, spared: 1, loot: true }, dummy: { beaten: 1, spared: 0, loot: false }, waxling: { beaten: 0, spared: 2, loot: false }, taper: { beaten: 1, spared: 0, loot: true }, step: { beaten: 2, spared: 0, loot: false }, rimewing: { beaten: 0, spared: 1, loot: false }, the_hush: { beaten: 1, spared: 0, loot: true } };
     menu.tab = 4;
     menu.screens[4].open();
+    menu.screens[4].cursor = Number(params.get('cursor') ?? 0);
+    for (const key of (params.get('press') ?? '').split(',').filter(Boolean)) {
+      menu.screens[4].update({ isDown: () => false, wasPressed: (a) => a === key, endFrame() {} });
+    }
+  }
+  // ?pausemenu=skills: the SKILLS screen in chapter 5 with Ves and Bramble, a few
+  // stars learned; &press=right,down,down presses keys on it in order.
+  if (params.get('pausemenu') === 'skills') {
+    const { HERO_STATE } = await import('./src/characters/heroState.js');
+    const { WORLD_STATE } = await import('./src/state/saveGame.js');
+    const { joinParty } = await import('./src/characters/party.js');
+    WORLD_STATE.chapter = 5;
+    WORLD_STATE.seenScenes = ['ways_of_the_sea'];
+    joinParty('vesper');
+    joinParty('bramble');
+    HERO_STATE.skills = ['sharpened', 'keen_eye', 'ves_crosswind', 'ves_squall', 'ves_downdraft'];
+    menu.tab = 2;
+    menu.screens[2].open();
+    for (const key of (params.get('press') ?? '').split(',').filter(Boolean)) {
+      menu.screens[2].update({ isDown: () => false, wasPressed: (a) => a === key, endFrame() {} });
+    }
   }
   // ?pausemenu=items: the ITEMS screen, hurt, with a bag of food and a
-  // candle; &press=confirm,confirm presses keys on it in order.
+  // candle; &press=confirm,confirm presses keys on it in order. &party=1
+  // brings Ves and Bramble along, hurt too, to pick who eats.
   if (params.get('pausemenu') === 'items') {
     const { HERO_STATE } = await import('./src/characters/heroState.js');
     const { setHeroHp } = await import('./src/characters/progress.js');
     HERO_STATE.items = ['trail_mix', 'lantern_tea', 'glow_candle', 'ember_toffee'];
     setHeroHp(Number(params.get('hp') ?? 20));
+    if (params.get('party')) {
+      const { joinParty, setMemberHp } = await import('./src/characters/party.js');
+      joinParty('vesper');
+      joinParty('bramble');
+      setMemberHp('vesper', 30);
+      setMemberHp('bramble', 10);
+    }
     menu.tab = 0;
     menu.screens[0].open();
     for (const key of (params.get('press') ?? '').split(',').filter(Boolean)) {
@@ -180,6 +240,113 @@ if (params.get('check')) {
   ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
   menu.draw(ctx);
   report.textContent = 'PAUSEMENU DONE';
+} else if (params.get('storage')) {
+  // ?storage=1: a storage chest's screen, with a bag and a store full of
+  // stacks; &press=right,confirm,... pressed in order.
+  const { StorageMenu } = await import('./src/ui/storageMenu.js');
+  const { HERO_STATE } = await import('./src/characters/heroState.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  WORLD_STATE.chapter = Number(params.get('chapter') ?? 3);
+  HERO_STATE.items = ['trail_mix', 'trail_mix', 'lantern_tea', 'glow_candle', 'ember_toffee', 'trail_mix'];
+  HERO_STATE.storage = ['eel_pie', 'eel_pie', 'eel_pie', 'mags_jam', 'spring_water', 'hollin_apple', 'eel_pie', 'boiled_boot', 'music_box', 'hob_scone', 'hob_scone', 'kiln_stew'];
+  const menu = new StorageMenu();
+  menu.open();
+  const out = [];
+  for (const key of (params.get('press') ?? '').split(',').filter(Boolean)) {
+    menu.update({ isDown: () => false, wasPressed: (a) => a === key, endFrame() {} });
+    out.push(`${key}: bag ${HERO_STATE.items.length} storage ${HERO_STATE.storage.length} note ${menu.noteLeft > 0 ? menu.note : '-'}`);
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  menu.draw(ctx);
+  report.textContent = `${out.join('\n')}\nSTORAGE DONE`;
+} else if (params.get('shop')) {
+  // ?shop=<id>: a shop's screen, with &press=confirm,down,... pressed in order
+  // (each press gets a moment for the text to type out).
+  const { ShopScene } = await import('./src/shop/shopScene.js');
+  const { HERO_STATE } = await import('./src/characters/heroState.js');
+  HERO_STATE.gold = 2000;
+  const shop = new ShopScene(params.get('shop'), () => {});
+  const idle = { isDown: () => false, wasPressed: () => false, endFrame() {} };
+  for (let i = 0; i < 120; i++) shop.update(1 / 60, idle);
+  for (const key of (params.get('press') ?? '').split(',').filter(Boolean)) {
+    shop.update(1 / 60, { isDown: () => false, wasPressed: (a) => a === key, endFrame() {} });
+    for (let i = 0; i < 120; i++) shop.update(1 / 60, idle);
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  shop.draw(ctx);
+  report.textContent = 'SHOP DONE';
+} else if (params.get('fishing')) {
+  // ?fishing=<moment>: Gubb's fishing screen (src/ui/fishingScene.js) at a
+  // moment: offer, ready, wait, bite, fight, landed (&fish=<id> picks the catch,
+  // &t=2 seconds in, &hold=1 holds Z in the fight).
+  const { FishingScene, FISH } = await import('./src/ui/fishingScene.js');
+  const mode = params.get('fishing');
+  if (params.get('ves') !== '0') (await import('./src/characters/party.js')).joinParty('vesper');
+  if (mode === 'play') {
+    // The whole thing played by pressing keys: offer, borrow, cast, wait, bite,
+    // tug of war (holding Z only while the marker is under the fish), catch,
+    // read Gubb through, cast again, then X to leave. Prints each step.
+    const { WORLD_STATE } = await import('./src/state/saveGame.js');
+    const { joinParty } = await import('./src/characters/party.js');
+    joinParty('vesper');
+    let left = false;
+    const scene = new FishingScene(() => { left = true; });
+    const out = [];
+    const note = (what) => out.push(`${scene.mode}${scene.talking ? '+text' : ''}: ${what}`);
+    const keyOf = (name, hold = false) => ({ isDown: (a) => hold && a === name, wasPressed: (a) => !hold && a === name, endFrame() {} });
+    const none = { isDown: () => false, wasPressed: () => false, endFrame() {} };
+    const step = (input = none) => scene.update(1 / 60, input);
+    const readText = () => { for (let i = 0; i < 4000 && scene.talking; i++) step(i % 3 === 0 ? keyOf('confirm') : none); };
+    let catches = 0;
+    readText(); note('offer read');
+    step(keyOf('confirm')); note('chose BORROW');
+    readText(); note('how-to read');
+    for (let round = 0; round < 3 && !left; round++) {
+      step(keyOf('confirm')); note('cast');
+      for (let i = 0; i < 60 * 12 && scene.mode !== 'bite'; i++) step();
+      note(`bite (fish ${scene.fish?.id})`);
+      step(keyOf('confirm')); note('struck');
+      for (let i = 0; i < 60 * 60 && scene.mode === 'fight'; i++) {
+        const f = scene.fight;
+        step(keyOf('confirm', !params.get('lose') && f.marker + 18 > f.zoneY + scene.fish.zone / 2));
+      }
+      note(`fight over, progress ${scene.fight?.progress.toFixed(2)}`);
+      for (let i = 0; i < 60 * 4 && scene.mode === 'landed'; i++) step();
+      readText();
+      note(`text read; caught so far ${WORLD_STATE.fishing.caught}`);
+    }
+    step(keyOf('cancel')); note('X (put the rod back)');
+    readText();
+    step(); step();
+    out.push(`left the screen: ${left}`);
+    report.textContent = out.join(String.fromCharCode(10)) + ' FISHING DONE';
+  } else if (mode === 'all') {
+    // Every fish picture in a row, for checking the art.
+    const { drawFish } = await import('./src/ui/fishingScene.js');
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#0a1228';
+    ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+    FISH.forEach((fish, i) => drawFish(ctx, fish.id, 80 + (i % 4) * 150, 100 + Math.floor(i / 4) * 150, 1.5));
+    report.textContent = 'FISHING DONE';
+  } else {
+    const scene = new FishingScene(() => {});
+    const idle = { isDown: () => false, wasPressed: () => false, endFrame() {} };
+    const hold = params.get('hold') === '1' ? { isDown: () => true, wasPressed: () => false, endFrame() {} } : idle;
+    if (mode !== 'offer') scene.debugJump(mode === 'choose' ? 'choose' : mode, params.get('fish') ?? 'moonblind_minnow');
+    if (mode === 'choose') scene.talking = false;
+    const frames = Math.round(Number(params.get('t') ?? 1) * 60);
+    for (let i = 0; i < 40; i++) scene.update(1 / 60, idle);
+    for (let i = 0; i < frames; i++) scene.update(1 / 60, mode === 'fight' ? hold : idle);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+    scene.draw(ctx);
+    report.textContent = `FISHING DONE mode=${scene.mode}`;
+  }
 } else if (params.get('equip')) {
   const { EquipMenu } = await import('./src/ui/equipMenu.js');
   const { HERO_STATE } = await import('./src/characters/heroState.js');
@@ -315,6 +482,186 @@ if (params.get('check')) {
   ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
   battle.draw(ctx);
   report.textContent = `${lines.join('\n')}\nATTACKS DONE`;
+} else if (params.get('sheet') === 'clip') {
+  // ?sheet=clip&anim=alive|jammed|show|king&clip=idle&scale=2&from=0: every
+  // frame of one of King Peptup's clips in a grid, numbered, to check an
+  // animation frame by frame.
+  const { makeSprite } = await import('./src/engine/sprite.js');
+  const P = await import('./src/data/art/peptupPuppet.js');
+  const R = await import('./src/data/art/rumboldBattle.js');
+  const K = await import('./src/data/art/peptupKing.js');
+  const anims = { alive: R.RUMBOLD_ALIVE_ANIM, jammed: R.RUMBOLD_JAMMED_ANIM, show: R.RUMBOLD_SHOW_ANIM, king: K.KING_SHOW_ANIM, reach: R.RUMBOLD_REACH };
+  const palette = { ...R.RUMBOLD_PALETTE, ...P.PUPPET_PALETTE, ...K.KING_PALETTE };
+  const anim = anims[params.get('anim') ?? 'alive'];
+  const clipName = params.get('clip') ?? 'idle';
+  const clip = clipName === 'frames' ? anim : anim[clipName];
+  const scale = Number(params.get('scale') ?? 2);
+  const from = Number(params.get('from') ?? 0);
+  const frames = clip.frames.slice(from);
+  const canvas = ctx.canvas;
+  const cols = Math.max(1, Math.floor(740 / (88 * scale + 4)));
+  canvas.width = cols * (88 * scale + 4);
+  canvas.height = Math.ceil(frames.length / cols) * (82 * scale + 16);
+  canvas.style.width = `${canvas.width}px`;
+  canvas.style.height = `${canvas.height}px`;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  ctx.fillStyle = '#2a2433';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  frames.forEach((rows, i) => {
+    const x = (i % cols) * (88 * scale + 4);
+    const y = Math.floor(i / cols) * (82 * scale + 16) + 14;
+    ctx.fillStyle = '#3a3346';
+    ctx.fillRect(x, y, 88 * scale, 82 * scale);
+    ctx.drawImage(makeSprite(rows, palette), x, y, 88 * scale, 82 * scale);
+    ctx.fillStyle = '#fff';
+    ctx.font = '11px sans-serif';
+    ctx.fillText(String(from + i), x + 2, y - 3);
+  });
+  report.textContent = `${clipName}: ${clip.frames.length} frames at ${clip.fps} fps
+SHEET DONE`;
+} else if (params.get('sheet') === 'puppet') {
+  // ?sheet=puppet: the king's puppet poses side by side, big and labelled, as
+  // reference for redrawing him. &scale= (default 3).
+  const { makeSprite } = await import('./src/engine/sprite.js');
+  const P = await import('./src/data/art/peptupPuppet.js');
+  const R = await import('./src/data/art/rumboldBattle.js');
+  const palette = { ...R.RUMBOLD_PALETTE, ...P.PUPPET_PALETTE };
+  const scale = Number(params.get('scale') ?? 3);
+  const canvas = ctx.canvas;
+  const alive = R.RUMBOLD_ALIVE_ANIM;
+  const sheet = [
+    ['floating (idle)', P.puppetRows('idle')],
+    ['arms out wide', P.puppetRows('gesture')],
+    ['arms half out', P.puppetRows('half')],
+    ['wave, leg kick', P.puppetRows('wave')],
+    ['jammed', P.puppetRows('jam')],
+    ['limp', P.puppetRows('limp')],
+    ['phase 3: floating', alive.idle.frames[0]],
+    ['phase 3: arm snaps up', alive.idle.frames[5]],
+    ['phase 3: arms wide (attack)', alive.windup.frames[3]],
+    ['phase 3: rictus face', alive.idle.frames[14]],
+    ['phase 3: smile too wide', alive.idle.frames[27]],
+    ['phase 3: wide stare', alive.idle.frames[40]],
+    ['phase 3: mid-gouge, hand at face', alive.idle.frames[9]],
+    ['phase 3: head snapped 90 degrees (talking)', alive.talk.frames[2]],
+    ['phase 3: leaning out to the box (no arms: the stage reaches them)', R.RUMBOLD_REACH.frames[0]],
+  ];
+  // &only=N: just that one (numbered from 0), for a big picture of it.
+  if (params.has('only')) sheet.splice(0, sheet.length, sheet[Number(params.get('only'))]);
+  const cols = Math.min(3, sheet.length);
+  const cw = 88 * scale + 24;
+  const ch = 82 * scale + 40;
+  canvas.width = cols * cw;
+  canvas.height = Math.ceil(sheet.length / cols) * ch;
+  canvas.style.width = `${canvas.width}px`;
+  canvas.style.height = `${canvas.height}px`;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  ctx.fillStyle = '#2a2433';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  sheet.forEach(([label, rows], i) => {
+    const x = (i % cols) * cw + 12;
+    const y = Math.floor(i / cols) * ch + 30;
+    ctx.fillStyle = '#3a3346';
+    ctx.fillRect(x, y, 88 * scale, 82 * scale);
+    ctx.drawImage(makeSprite(rows, palette), x, y, 88 * scale, 82 * scale);
+    ctx.fillStyle = '#fff';
+    ctx.font = '18px sans-serif';
+    ctx.fillText(label, x, y - 8);
+  });
+  report.textContent = 'SHEET DONE';
+} else if (params.get('battlestart')) {
+  // ?battlestart=<enemy>&area=&t=2&with=vesper: a fight from its very start
+  // (entrance, intro words), drawn `t` seconds in with nothing pressed.
+  const { BattleScene } = await import('./src/battle/battleScene.js');
+  const { ENEMIES } = await import('./src/data/enemies/index.js');
+  const { joinParty } = await import('./src/characters/party.js');
+  for (const id of (params.get('with') ?? '').split(',').filter(Boolean)) joinParty(id);
+  let foe = ENEMIES[params.get('battlestart')];
+  // &kinglook=1: the human king (peptupKing.js) stands in for the mannequin, one still frame.
+  if (params.get('kinglook')) {
+    const { KING_SPRITE, KING_PALETTE } = await import('./src/data/art/peptupKing.js');
+    const only = { fps: 1, frames: [KING_SPRITE] };
+    foe = { ...foe, sprite: { rows: KING_SPRITE, palette: KING_PALETTE }, anim: { idle: only, talk: only, windup: only, hurt: only, intro: only } };
+  }
+  const battle = new BattleScene([foe], () => {}, params.get('area') ?? 'vigil');
+  battle.enter?.({ changeScene() {}, home: null });
+  for (let t = 0; t < Number(params.get('t') ?? 2); t += 1 / 60) battle.update(1 / 60, noInput);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  battle.draw(ctx);
+  report.textContent = `phase ${battle.phase}
+BATTLESTART DONE`;
+} else if (params.get('pepshots')) {
+  // ?pepshots=tear|snap|death&times=1,2,3&pattern=rumboldAliveTear&cols=3
+  // King Peptup's set pieces as a contact sheet: the battle is stepped to each
+  // of the times (seconds into the attack, the snap, or the defeat) and each
+  // moment is drawn small into one picture. &cheer=1 for the fight with his
+  // jaw jammed already (stage 1). Reported: SHEET DONE.
+  const { BattleScene } = await import('./src/battle/battleScene.js');
+  const { ENEMIES } = await import('./src/data/enemies/index.js');
+  const { joinParty } = await import('./src/characters/party.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  WORLD_STATE.metShadow = true;
+  joinParty('vesper');
+  const battle = new BattleScene([ENEMIES.rumbold], () => {}, 'belowtown');
+  const foe = battle.phased;
+  for (let i = 1; i <= 2; i++) battle.enterPhase(foe, i);
+  battle.stageFx?.skip?.(battle, foe);
+  foe.name = 'PEPTUP';
+  battle.hero.hp = battle.hero.maxHp = 9999;
+  const kind = params.get('pepshots');
+  const times = (params.get('times') ?? '1,2,3,4,5,6').split(',').map(Number);
+  const step = (seconds) => { for (let t = 0; t < seconds; t += 1 / 60) battle.update(1 / 60, noInput); };
+  if (kind === 'tear') {
+    foe.lastPattern = null;
+    battle.attackers = [foe];
+    battle.pickPattern = () => params.get('pattern') ?? 'rumboldAliveTear';
+    battle.phase = 'dodge';
+    battle.phaseTime = 0;
+    battle.startAttack();
+  } else if (kind === 'snap') {
+    battle.bullets = [];
+    foe.calm = 100;
+    battle.setPhase('command');
+    battle.refuseMercy(foe);
+  } else if (kind === 'death') {
+    battle.bullets = [];
+    foe.hp = 0;
+    battle.setPhase('command');
+    battle.foeLeaves(foe, 'defeated', 'taunt');
+  }
+  const cols = Number(params.get('cols') ?? 3);
+  const cw = Number(params.get('cw') ?? 320);
+  const ch = cw * 0.75;
+  const sheet = document.createElement('canvas');
+  sheet.width = cols * cw;
+  sheet.height = Math.ceil(times.length / cols) * ch;
+  const sctx = sheet.getContext('2d');
+  sctx.imageSmoothingEnabled = false;
+  const main = document.getElementById('game');
+  let now = 0;
+  times.forEach((time, i) => {
+    step(Math.max(0, time - now));
+    now = time;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+    ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+    battle.draw(ctx);
+    const x = (i % cols) * cw;
+    const y = Math.floor(i / cols) * ch;
+    sctx.drawImage(main, x, y, cw, ch);
+    sctx.fillStyle = '#fff';
+    sctx.font = '12px sans-serif';
+    sctx.fillText(`${time}s`, x + 4, y + 12);
+  });
+  main.style.display = 'none';
+  document.body.insertBefore(sheet, document.getElementById('report'));
+  report.textContent = `phase ${battle.phase}, HP ${battle.hero.hp}\nSHEET DONE`;
 } else if (params.get('bossphase')) {
   const { BattleScene } = await import('./src/battle/battleScene.js');
   const { ENEMIES } = await import('./src/data/enemies/index.js');
@@ -330,6 +677,9 @@ if (params.get('check')) {
   const foe = battle.phased;
   const stage = Number(params.get('stage') ?? 0);
   for (let i = 1; i <= stage; i++) battle.enterPhase(foe, i);
+  // (As if the phase's beat had played: its stage effects, and its name.)
+  battle.stageFx?.skip?.(battle, foe);
+  if (battle.bossPhase()?.anagram) foe.name = battle.bossPhase().anagram.at(-1);
   if (battle.flame && stage > 1) battle.flame.stage = battle.flame.stages;
   battle.hero.hp = battle.hero.maxHp = 9999;
   const names = battle.bossPhase().patterns.map((p) => p.name);
@@ -346,6 +696,23 @@ if (params.get('check')) {
     step(last ? Number(params.get('t') ?? 3) : battle.turnLength + 0.5);
     if (!last) lines.push(`${name}: ok, hero HP ${battle.hero.hp}, flame ${battle.flame ? `${battle.flame.stage} guard ${battle.flame.guard}` : '-'}`);
   }
+  // &talk=words: then he says them (his taunt bubble), drawn &tt= seconds in.
+  if (params.get('talk')) {
+    battle.speaker = foe;
+    battle.taunt = params.get('talk');
+    battle.setPhase('taunt');
+    step(Number(params.get('tt') ?? 0.4));
+  }
+  // &snap=seconds: then you try to be kind with MERCY full, and it's drawn
+  // that far into a `snap` (Peptup breaking the bar: ?bossphase=rumbold&stage=2).
+  if (params.get('snap')) {
+    battle.bullets = [];
+    foe.calm = 100;
+    battle.setPhase('command');
+    lines.push(`refused: ${battle.refuseMercy(foe)}, phase ${battle.phase}`);
+    step(Number(params.get('snap')));
+    lines.push(`after ${params.get('snap')}s: phase ${battle.phase}, snapped ${!!foe.mercySnapped}, MERCY ${foe.calm}`);
+  }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
@@ -359,21 +726,52 @@ if (params.get('check')) {
   //   face:D        face U, D, L or R
   //   hold:D:n      hold an arrow for n frames (60 a second)
   //   push:D        hold an arrow until a log or rock in front moves and stops
-  //   z, q, jump    press Z (then read through whatever it says), Q, Space
+  //   z, q, e, jump press Z (then read through whatever it says), Q (Ves), E (Bramble), Space
+  //   regroup       press R: everyone falls in behind the hero again
   //   wait:n        n frames of nothing
-  //   expect:what   check something, and fail if it's not so: gate:N:open|shut,
+  //   settle:n      carry on till every cart has stopped (and any ride is over)
+  //   expect:what   check something, and fail if it's not so: gate:N:open|shut, steering:hero|vesper|bramble,
+  //                 waiting:n (bodies standing apart), seen / unseen (a sweeping lamp has you),
   //                 bridged:x,y, log:x,y, split, together, lever:name, at:x,y,
   //                 flow:x,y,way (the current there runs that way, or 'none'),
   //                 sinking (the bog has you), carrying, notcarrying,
-  //                 party:id or party:!id
+  //                 party:id or party:!id,
+  //                 lit:switch (an eye, lever or button has that switch on),
+  //                 beam:x,y (a light beam crosses that tile), nobeam:x,y,
+  //                 prism:x,y,/ (that prism is set that way; '/' or '\'),
+  //                 umbrella (Ves is holding a beam on her umbrella), noumbrella,
+  //                 chime:set,n (n notes of a singing-crystal set's tune rung so far),
+  //                 gear:id, look:sprite (a prop is showing that look),
+  //                 hurt:id / well:id (is / isn't hurt), crutch / nocrutch (the one
+  //                 you're steering is on a crutch)
+  //   saveload      save here, load it back, and carry on from the load
+  //   turn:x,y      turn the prism on that tile (as Z would)
+  //   umbrella:D    turn Ves (while you steer her) to face U, D, L or R
+  //   climb:U       (or climb:D to rope down) press Z at a cliff and play the swing like a careful
+  //                 player; fails if you fall back. where: print your height and jump. &item=a,b
+  //                 starts with those items in the bag (taper_stub for the dark caves). &dbg=1
+  //                 prints the walker's steps.
   // and reports where everything is at the end. &carry=vesper starts you
   // carrying her (the Lantern Marsh, after the stilt hut), hurt.
   const lines = { push(line) { report.textContent += `${line}\n`; } };
   report.textContent = 'PLAY START\n';
-  const { joinParty, partyIds } = await import('./src/characters/party.js');
+  const { joinParty, partyIds, isHurt } = await import('./src/characters/party.js');
   const { giveGear } = await import('./src/data/gear.js');
+  const { HERO_STATE: heroState } = await import('./src/characters/heroState.js');
   const { WORLD_STATE } = await import('./src/state/saveGame.js');
   giveGear('climbing_rope');
+  // &gear=a,b: key items already held (star_shard_wreck, say). &star=n: the hero owns the
+  // Fallen Star, reforged n times already (2 = Hobnail's, ready for Orla's).
+  for (const id of (params.get('gear') ?? '').split(',').filter(Boolean)) giveGear(id);
+  if (params.get('star')) {
+    if (!heroState.weapons.includes('fallen_star')) heroState.weapons.push('fallen_star');
+    heroState.starForged = Number(params.get('star'));
+  }
+  // &item=taper_stub,...: things already in the bag (a candle, for the dark rooms).
+  if (params.get('item')) {
+    const { giveItem } = await import('./src/data/items.js');
+    for (const id of params.get('item').split(',')) giveItem(id);
+  }
   for (const id of (params.get('with') ?? '').split(',').filter(Boolean)) joinParty(id);
   // &seen=a,b: those scenes have already played.
   if (params.get('seen')) {
@@ -391,8 +789,22 @@ if (params.get('check')) {
     WORLD_STATE.carrying = params.get('carry');
   }
   const data = ROOMS[params.get('play')];
-  const scene = new OverworldScene(data, data.playerStart, data.area);
-  scene.enter?.({ changeScene() {}, home: null });
+  let scene = new OverworldScene(data, data.playerStart, data.area);
+  // &doors=1: walking (or riding) through a door carries on into the next room.
+  let openedShop = null;
+  const playGame = {
+    home: null,
+    changeScene(next) {
+      if (next.constructor.name === 'FishingScene') lines.push('FISHING SCREEN OPENED (Gubbs rod offered)');
+      if (next.constructor.name === 'BattleScene') lines.push(`BATTLE OPENED (${(next.foes ?? next.enemies ?? []).map((e) => e.name ?? e.id).join(', ')}; ${(next.foes ?? next.enemies ?? []).length} foes)`);
+      if (next.constructor.name === 'ShopScene') openedShop = next;
+      if (!params.get('doors') || !(next instanceof OverworldScene)) return;
+      scene = next;
+      scene.enter?.(playGame);
+      if (!params.get('enemies')) scene.npcs = [];
+    },
+  };
+  scene.enter?.(playGame);
   if (!params.get('enemies')) scene.npcs = [];
   const keys = { U: 'up', D: 'down', L: 'left', R: 'right' };
   const press = (action) => ({ isDown: (a) => a === action, wasPressed: (a) => a === action, endFrame() {} });
@@ -403,7 +815,101 @@ if (params.get('check')) {
   const state = () => {
     const logs = scene.room.props.filter((p) => p.log && !p.hidden).map((p) => `${p.x / 16},${p.y / 16}${p.sunk ? 's' : ''}`);
     const gates = scene.room.props.filter((p) => p.opensWith).map((g) => (g.isOpen ? 'OPEN' : 'shut'));
-    return `you ${tile(scene.player)}${scene.partner ? ` other ${tile(scene.partner)}` : ''} | logs ${logs.join(' ')} | bridged ${[...scene.room.bridged].join(' ')} | gates ${gates.join(',')} | treadles ${[...scene.room.treadlesDown].join(',')}${scene.textbox.isOpen ? ' | TEXT OPEN' : ''}${scene.caught ? ' | CAUGHT' : ''}${scene.cutscene ? ' | CUTSCENE' : ''}${scene.reaching ? ' | REACHING' : ''}${scene.followers.length ? ` | followers ${scene.followers.map((f) => `${f.id}@${f.x.toFixed(1)},${f.y.toFixed(1)}${f.hidden ? "(hidden)" : ""}${f.walking ? "(walking)" : "(still)"}`).join(' ')}` : ''}`;
+    return `${scene.roomData.id}: you ${tile(scene.player)}${scene.others.length ? ` other ${scene.others.map((o) => `${o.skin ?? 'hero'}@${tile(o)}`).join(' ')}` : ''} | logs ${logs.join(' ')}${scene.room.props.some((p) => p.rock) ? ` | rocks ${scene.room.props.filter((p) => p.rock && !p.sunk).map((p) => `${p.x / 16},${p.y / 16}`).join(' ')}` : ''} | bridged ${[...scene.room.bridged].join(' ')} | gates ${gates.join(',')} | treadles ${[...scene.room.treadlesDown].join(',')}${scene.beams.active ? ` | ${scene.beams.describe()}` : ''}${scene.tides?.active ? ` | ${scene.tides.describe()}` : ''}${scene.carts?.active ? ` | room ${scene.roomData.id} carts ${scene.carts.carts.map((c) => `${c.id}@${c.tx},${c.ty}${c.state === 'rest' ? '' : `(${c.state})`}`).join(' ')}${scene.carts.riding ? ' RIDING' : ''}` : ''}${scene.hush ? ` | hush ${Math.floor(scene.hush.x / 16)},${Math.floor(scene.hush.y / 16)}${scene.hush.mode ? ` ${scene.hush.mode}` : ''}` : ''}${scene.textbox.isOpen ? ' | TEXT OPEN' : ''}${scene.caught ? ' | CAUGHT' : ''}${scene.cutscene ? ' | CUTSCENE' : ''}${scene.reaching ? ' | REACHING' : ''}${scene.followers.length ? ` | followers ${scene.followers.map((f) => `${f.id}@${f.x.toFixed(1)},${f.y.toFixed(1)}${f.hidden ? "(hidden)" : ""}${f.walking ? "(walking)" : "(still)"}`).join(' ')}` : ''}`;
+  };
+  // Finds a way on foot to any of `goals` (tiles) and walks there with the arrow
+  // keys: up blocks one step high with a jump, down any drop, round bogs and
+  // currents. Plans again after a cutscene moves anyone. Returns the tile reached.
+  const walkTo = (goals, cmd, near = false) => {
+    const startRoom = scene.roomData.id;
+    const room = () => scene.room;
+    const body = () => scene.player;
+    const doorAt = (x, y) => (scene.roomData.doors ?? []).some((d) => x >= d.x && x < d.x + d.w && y >= d.y && y < d.y + d.h);
+    const isGoal = (x, y) => goals.some(([gx, gy]) => gx === x && gy === y);
+    const free = (x, y) => !body().collidesAt(room(), x * 16 + 8, y * 16 + 12) && !body().collidesAt(room(), x * 16 + 8, y * 16 + 15);
+    // How high the floor is on a tile: a block, or a stepping rock sitting there.
+    const high = (x, y) => room().floorHeight(x * 16 + 2, y * 16 + 2, x * 16 + 14, y * 16 + 14);
+    const risky = (x, y) => room().isBog?.(x, y) || room().flowAt?.(x, y);
+    const plan = () => {
+      const [sx, sy] = tile(body()).split(',').map(Number);
+      const from = new Map([[`${sx},${sy}`, null]]);
+      const queue = [[sx, sy]];
+      while (queue.length) {
+        const [x, y] = queue.shift();
+        if (isGoal(x, y)) {
+          const path = [];
+          for (let k = `${x},${y}`; k; k = from.get(k)) path.unshift(k.split(',').map(Number));
+          return path;
+        }
+        if (doorAt(x, y) && !(x === sx && y === sy)) continue;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = x + dx;
+          const ny = y + dy;
+          const k = `${nx},${ny}`;
+          if (from.has(k) || !free(nx, ny)) continue;
+          if (high(nx, ny) - high(x, y) > 12) continue;
+          if (risky(nx, ny) && !isGoal(nx, ny)) continue;
+          from.set(k, `${x},${y}`);
+          queue.push([nx, ny]);
+        }
+      }
+      return null;
+    };
+    const way = (dx, dy) => (dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up');
+    let played = false;
+    for (let attempt = 0; attempt < 8; attempt++) {
+      const path = plan();
+      // A cutscene on the way that carried you off somewhere (a ferry, say) is as good as there.
+      if (!path && played) return tile(body()).split(',').map(Number);
+      if (!path) throw new Error(`${cmd}: no way on foot from ${tile(body())}; ${state()}`);
+      let interrupted = false;
+      let prev = path[0];
+      for (const [nx, ny] of path.slice(1)) {
+        const cx = nx * 16 + 8;
+        const cy = ny * 16 + 12;
+        const main = way(nx - prev[0], ny - prev[1]);
+        const across = main === 'left' || main === 'right';
+        // (Land first, so a jump for a block starts from the ground it's measured from.)
+        for (let i = 0; i < 60 && body().isAirborne && !scene.climb; i++) scene.update(1 / 60, noInput);
+        let jumped = false;
+        let jumpedAt = 0;
+        let frames = 0;
+        while (tile(body()) !== `${nx},${ny}` || (across ? Math.abs(body().y - cy) > 3 : Math.abs(body().x - cx) > 3)) {
+          if (scene.roomData.id !== startRoom || scene.doorway) return [nx, ny];
+          if (++frames > 400) throw new Error(`${cmd}: stuck going to ${nx},${ny} (at ${body().x},${body().y}, ground ${body().ground}, z ${body().z.toFixed(1)}); ${state()}`);
+          // Line up across the way you're going first, so you don't catch a corner.
+          let k = main;
+          const still = tile(body()) === `${prev[0]},${prev[1]}`;
+          if (across && still && Math.abs(body().y - cy) > 3) k = body().y < cy ? 'down' : 'up';
+          else if (!across && still && Math.abs(body().x - cx) > 3) k = body().x < cx ? 'right' : 'left';
+          // (A jump that landed short of the block, jumped again.)
+          if (jumped && frames - jumpedAt > 30 && !body().z) jumped = false;
+          // (Measured from where you stand now: a step down onto a lower block changes it.)
+          const jump = high(nx, ny) > body().ground + 0.5 && !body().isAirborne && !jumped && k === main;
+          if (jump) { jumped = true; jumpedAt = frames; }
+          if (params.get('dbg') && frames % 10 === 1) lines.push(`  step ${nx},${ny} f${frames} k=${k} jump=${jump} x=${body().x} y=${body().y} g=${body().ground} z=${body().z.toFixed(1)}`);
+          scene.update(1 / 60, { isDown: (key) => key === k, wasPressed: (key) => jump && key === 'jump', endFrame() {} });
+          if (scene.textbox.isOpen || scene.cutscene) { readThrough(); interrupted = true; played = true; break; }
+        }
+        if (interrupted) break;
+        prev = [nx, ny];
+      }
+      if (scene.roomData.id !== startRoom) return prev;
+      if (!interrupted) {
+        // Settle onto the middle of the last tile, both ways (to line up with a rock, say).
+        const [lx, ly] = prev;
+        for (let i = 0; i < 60; i++) {
+          const ex = lx * 16 + 8 - body().x;
+          const ey = ly * 16 + 12 - body().y;
+          const k = Math.abs(ey) > 2 ? (ey > 0 ? 'down' : 'up') : Math.abs(ex) > 2 ? (ex > 0 ? 'right' : 'left') : null;
+          if (!k) break;
+          scene.update(1 / 60, { isDown: (key) => key === k, wasPressed: () => false, endFrame() {} });
+          if (tile(body()) !== `${lx},${ly}`) break;
+        }
+        return prev;
+      }
+    }
+    throw new Error(`${cmd}: kept being interrupted; ${state()}`);
   };
   try {
     for (const cmd of (params.get('script') ?? '').split(';').filter(Boolean)) {
@@ -436,14 +942,276 @@ if (params.get('check')) {
       // tap: one press of Z, without reading anything through (to catch a scene mid-way).
       else if (op === 'tap') scene.update(1 / 60, press('confirm'));
       else if (op === 'q') { scene.update(1 / 60, press('swap')); readThrough(); }
+      else if (op === 'e') { scene.update(1 / 60, press('swapB')); readThrough(); }
+      else if (op === 'regroup') { scene.update(1 / 60, press('regroup')); readThrough(); }
+      // turn:x,y turns the prism on that tile over (as Z does); umbrella:D turns Ves, steered, to face that way.
+      else if (op === 'turn') {
+        const [tx, ty] = a.split(',').map(Number);
+        const prism = scene.room.props.find((p) => p.mirror && p.x === tx * 16 && p.y === ty * 16);
+        if (!prism) throw new Error(`no prism at ${a}`);
+        if (!scene.beams.interact(prism)) throw new Error(`the prism at ${a} is fixed`);
+        scene.update(1 / 60, noInput);
+      }
+      else if (op === 'umbrella') { scene.player.facing = keys[a]; scene.update(1 / 60, noInput); readThrough(); }
       else if (op === 'jump') scene.update(1 / 60, press('jump'));
+      // climb:U (or climb:D to rope down): face that way and press Z, then play the rope
+      // like a careful player: pump the swing with the way it's going, and press Z when
+      // the ring you want is well inside the grab window. Fails if you fall back.
+      else if (op === 'climb') {
+        scene.player.facing = keys[a ?? 'U'];
+        scene.update(1 / 60, press('confirm'));
+        if (!scene.climb) throw new Error(`climb: nothing to climb from ${tile(scene.player)}; ${state()}`);
+        let fell = false;
+        const visited = new Set();
+        for (let i = 0; i < 6000 && scene.climb; i++) {
+          const st = scene.climb.state;
+          if (st.name === 'fall') fell = true;
+          let dir = null;
+          let grab = false;
+          if (st.name === 'hang') {
+            dir = Math.cos(st.phase) > 0 ? 'right' : 'left';
+            visited.add(st.ring);
+            // (The climb moves a frame on before it looks at Z, so look one frame ahead.)
+            const phase = st.phase;
+            const swing = st.swing;
+            st.phase += (Math.PI * 2 / 1.5) / 60;
+            scene.climb.pump(1 / 60, { isDown: (k) => k === dir });
+            scene.climb.blow(1 / 60);
+            const best = scene.climb.target();
+            const window = scene.climb.grabWindow;
+            st.phase = phase;
+            st.swing = swing;
+            grab = Boolean(best) && !visited.has(best.prop) && best.off < window * 0.6;
+          }
+          scene.update(1 / 60, { isDown: (k) => k === dir, wasPressed: (k) => grab && k === 'confirm', endFrame() {} });
+        }
+        if (scene.climb) { const st = scene.climb.state; const best = st.name === 'hang' ? scene.climb.target() : null; throw new Error(`climb: still on the rope (${st.name}, swing ${st.swing?.toFixed(2)}, window ${st.name === 'hang' ? scene.climb.grabWindow.toFixed(2) : '-'}, nearest ring ${best ? `${best.prop.x / 16},${best.prop.y / 16} off ${best.off.toFixed(2)}` : 'none in reach'}); ${state()}`); }
+        if (fell) throw new Error(`climb: fell back to ${tile(scene.player)}`);
+        for (let i = 0; i < 30; i++) scene.update(1 / 60, noInput);
+      }
+      else if (op === 'where') lines.push(`where: x ${scene.player.x} y ${scene.player.y} ground ${scene.player.ground} z ${scene.player.z.toFixed(1)} vz ${scene.player.velocityZ.toFixed(0)}`);
       else if (op === 'scene') {
         // Plays a cutscene right here (one that follows a fight, say).
         const { SCENES } = await import('./src/data/scenes/index.js');
         scene.playCutscene(SCENES[a]);
         readThrough();
       }
+      // go:x,y finds its own way to that tile on foot (jumping up blocks) and walks
+      // there with the arrow keys, no teleporting. exit:room does the same to a
+      // door into that room and walks through it (with &doors=1, on into it).
+      // use:x,y walks up beside whatever's on that tile, faces it and presses Z.
+      else if (op === 'go' || op === 'exit' || op === 'use') {
+        if (op === 'go') walkTo([a.split(',').map(Number)], cmd);
+        else if (op === 'use') {
+          const [ux, uy] = a.split(',').map(Number);
+          const sides = [[ux, uy + 1, 'up'], [ux - 1, uy, 'right'], [ux + 1, uy, 'left'], [ux, uy - 1, 'down']];
+          const side = walkTo(sides.map(([x, y]) => [x, y]), cmd, true);
+          scene.player.facing = sides.find(([x, y]) => x === side[0] && y === side[1])[2];
+          // Up against it, so the reach finds it.
+          const k = scene.player.facing;
+          for (let i = 0; i < 12; i++) scene.update(1 / 60, { isDown: (key) => key === k, wasPressed: () => false, endFrame() {} });
+          scene.update(1 / 60, press('confirm'));
+          readThrough();
+        } else {
+          const startRoom = scene.roomData.id;
+          const goals = (scene.roomData.doors ?? []).filter((d) => d.to === a).flatMap((d) => {
+            const out = [];
+            for (let dy = 0; dy < d.h; dy++) for (let dx = 0; dx < d.w; dx++) out.push([d.x + dx, d.y + dy]);
+            return out;
+          });
+          if (!goals.length) throw new Error(`no door to ${a} in ${startRoom}`);
+          walkTo(goals, cmd);
+          for (let i = 0; i < 300 && scene.roomData.id === startRoom; i++) scene.update(1 / 60, noInput);
+          if (scene.roomData.id === startRoom) throw new Error(`exit:${a}: still in ${startRoom}; ${state()}`);
+          for (let i = 0; i < 60; i++) scene.update(1 / 60, noInput);
+          readThrough();
+        }
+      }
+      // beamdump: print where every beam turns and what it ends on.
+      else if (op === 'beamdump') {
+        lines.push(JSON.stringify(scene.beams.beams.map((bm) => ({ hits: bm.hits.map((h) => `${h.kind}@${Math.round(h.x / 16 - 0.5)},${Math.round(h.y / 16 - 0.5)}`) }))));
+      }
+      // finish: keep reading through a long cutscene until it has ended (or 60 rounds).
+      else if (op === 'finish') { for (let n = 0; n < 60 && (scene.textbox.isOpen || scene.cutscene); n++) readThrough(); }
+      // rleap:R:n is the same running (holding X), which hops farther.
+      // leap:R:n: hold that arrow for n frames, pressing jump on the first (hopping a bog or a gap
+      // that go: won't plan across); jump hops 1 to 3 tiles when you aren't carrying anyone.
+      else if (op === 'leap' || op === 'rleap') {
+        for (let i = 0; i < Number(b); i++) scene.update(1 / 60, { isDown: (k) => k === keys[a] || (op === 'rleap' && k === 'cancel'), wasPressed: (k) => i === 0 && k === 'jump', endFrame() {} });
+        for (let i = 0; i < 40; i++) scene.update(1 / 60, noInput);
+      }
+      // tiles:RRDDLU...: walk that many single tiles, in those directions (U, D, L, R), holding the
+      // arrow till the body is standing on each next tile. For currents, where go: won't plan
+      // (the BFS keeps off them): the letters come from reading the flow map, so a wrong
+      // letter is a stuck walk. Fails if a tile isn't reached in 400 frames.
+      else if (op === 'tiles') {
+        const startRoomId = scene.roomData.id;
+        for (let li = 0; li < a.length; li++) {
+          const letter = a[li];
+          // A turn coming up (a side exit off a current) is held early, so it's caught as the tile goes by.
+          const next = a[li + 1];
+          const [tx0, ty0] = tile(scene.player).split(',').map(Number);
+          const lane = scene.room.flowAt?.(tx0, ty0);
+          const against = lane && (letter === 'U' || letter === 'D') !== (lane === 'up' || lane === 'down') ? { right: 'left', left: 'right', up: 'down', down: 'up' }[lane] : null;
+          const dx = letter === 'R' ? 1 : letter === 'L' ? -1 : 0;
+          const dy = letter === 'D' ? 1 : letter === 'U' ? -1 : 0;
+          // Off a current, line up across the way first (as go: does), or the lane's mouth is missed.
+          if (!scene.room.flowAt?.(tx0, ty0)) {
+            for (let i = 0; i < 40; i++) {
+              const off = dx ? ty0 * 16 + 12 - scene.player.y : tx0 * 16 + 8 - scene.player.x;
+              if (Math.abs(off) <= 2) break;
+              const k = dx ? (off > 0 ? 'down' : 'up') : (off > 0 ? 'right' : 'left');
+              scene.update(1 / 60, { isDown: (key) => key === k, wasPressed: () => false, endFrame() {} });
+            }
+          }
+          let frames = 0;
+          while (tile(scene.player) !== `${tx0 + dx},${ty0 + dy}`) {
+            if (++frames > 400) throw new Error(`tiles:${a}: stuck going ${letter} from ${tx0},${ty0}; ${state()}`);
+            scene.update(1 / 60, { isDown: (k) => k === keys[letter] || k === against, wasPressed: () => false, endFrame() {} });
+            if (scene.textbox.isOpen || scene.cutscene) readThrough();
+            if (scene.roomData.id !== startRoomId) break;
+          }
+        }
+      }
+      // forge  (after use: on a smith's keeper) asks about the star sword, as the TALK topic
+      // does, and reports what they said and how many times the sword's been forged now.
+      else if (op === 'forge') {
+        const sh = openedShop;
+        openedShop = null;
+        if (!sh) throw new Error(`forge: no shop opened; ${state()}`);
+        const said = [];
+        const say = sh.say.bind(sh);
+        sh.say = (section) => { said.push(section); say(section); };
+        sh.forge();
+        lines.push(`forge ${sh.shopId}: said ${said.join(',')}; starForged ${heroState.starForged}; shard ${heroState.gear.includes('star_shard_wreck') ? 'kept' : 'gone'}`);
+        if (a && String(heroState.starForged) !== a) throw new Error(`forge: starForged is ${heroState.starForged}, not ${a}`);
+        // A smith whose reforge goes on in the room (the shop's forgeScene): Z through [forge_now],
+        // the shop closes, and the room starts that scene (see it with expect:scene:<id> or wait).
+        if (sh.afterScene) {
+          let left = false;
+          const exit = sh.onExit;
+          sh.onExit = (after) => { left = true; exit(after); };
+          const idle = { isDown: () => false, wasPressed: () => false, endFrame() {} };
+          for (let n = 0; n < 60 && !left; n++) { sh.update(1 / 60, press('confirm')); for (let i = 0; i < 30; i++) sh.update(1 / 60, idle); }
+          if (!left) throw new Error(`forge: the shop never closed after ${sh.afterScene}`);
+          lines.push(`forge: shop closed; the room plays ${scene.cutscene?.scene?.id ?? 'nothing'}`);
+        }
+      }
+      // shop:id  (after use: on the keeper) checks the shop that opened is that one, lists its
+      // stock (BUY), draws it, and checks every row has a name and a price.
+      else if (op === 'shop') {
+        const sh = openedShop;
+        openedShop = null;
+        if (!sh) throw new Error(`shop:${a}: no shop opened; ${state()}`);
+        if (sh.shopId !== a) throw new Error(`shop:${a}: opened ${sh.shopId} instead`);
+        const idle = { isDown: () => false, wasPressed: () => false, endFrame() {} };
+        for (let i = 0; i < 120; i++) sh.update(1 / 60, idle);
+        // A long greeting takes a few presses of Z first.
+        for (let n = 0; n < 40 && sh.morePages; n++) { sh.update(1 / 60, press('confirm')); sh.update(1 / 60, press('confirm')); for (let i = 0; i < 90; i++) sh.update(1 / 60, idle); }
+        sh.update(1 / 60, press('confirm'));
+        for (let i = 0; i < 30; i++) sh.update(1 / 60, idle);
+        if (sh.mode !== 'buy') throw new Error(`shop:${a}: BUY did not open the stock list (mode ${sh.mode})`);
+        if (!sh.shop.stock.length) throw new Error(`shop:${a}: nothing in stock`);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+        ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+        sh.draw(ctx);
+        lines.push(`shop ${a}: ${sh.shop.stock.length} things in stock`);
+      }
       else if (op === 'wait') for (let i = 0; i < Number(a); i++) scene.update(1 / 60, noInput);
+      // tide:high|low|toggle sets this room's tide as a wheel would (it creeps); tidesettle
+      // runs on (up to 900 frames) until the water has stopped; tidewait:n waits n seconds of play.
+      else if (op === 'tide') { if (!scene.tides.active) throw new Error('tide: this room has no tide'); scene.tides.call(a); }
+      else if (op === 'tidesettle') {
+        for (let i = 0; i < 900 && scene.room.tide?.busy; i++) scene.update(1 / 60, noInput);
+        if (scene.room.tide?.busy) throw new Error(`tidesettle: the water is still moving; ${state()}`);
+      }
+      else if (op === 'tidewait') for (let i = 0; i < Math.round(Number(a) * 60); i++) scene.update(1 / 60, noInput);
+      // lampat:i,deg  stands still until sweeping lamp i (from 0) points within 4 degrees past deg
+      // (0 east, 90 south), so a script can time a dash the way a player watches the beam.
+      else if (op === 'lampat') {
+        const [index, deg] = a.split(',').map(Number);
+        const lamp = scene.lamps.lamps[index];
+        if (!lamp) throw new Error(`lampat: no lamp ${index}`);
+        const at = () => (((scene.lamps.angle(lamp) - deg) % 360) + 360) % 360;
+        let i = 0;
+        for (; i < 3600 && !(at() < 4); i++) scene.update(1 / 60, noInput);
+        if (i >= 3600) throw new Error(`lampat:${a}: the lamp never pointed there`);
+      }
+      // watch: from here on, count every text box the room opens (expect:said:N, said:text-part,N).
+      else if (op === 'watch') {
+        const said = (scene.said = []);
+        const open = scene.textbox.open.bind(scene.textbox);
+        scene.textbox.open = (...args) => { said.push(JSON.stringify(args[0])); return open(...args); };
+      }
+      // saw: print every text box opened since watch (to see what a stray text was).
+      else if (op === 'saw') lines.push(`saw: ${(scene.said ?? []).join(' | ').slice(0, 900)}`);
+      // hushwait:x,y: wait (up to 3000 frames) till the Hush's shadow (or the Crawl's blind
+      // hunter) is on that tile, so a stealth walk can time itself. Fails if you're caught.
+      else if (op === 'hushwait') {
+        const [hx, hy] = a.split(',').map(Number);
+        let n = 0;
+        while (n++ < 3000 && !(Math.floor(scene.hush.x / 16) === hx && Math.floor(scene.hush.y / 16) === hy)) scene.update(1 / 60, noInput);
+        if (n > 3000) throw new Error(`hushwait:${a}: it never got there`);
+      }
+      // reload: leave and come back to this room, as a saved game would find it.
+      else if (op === 'reload') {
+        const id = scene.roomData.id;
+        const [rx, ry] = tile(scene.player).split(',').map(Number);
+        scene = new OverworldScene(ROOMS[id], { x: rx, y: ry }, ROOMS[id].area);
+        scene.enter?.(playGame);
+        if (!params.get('enemies')) scene.npcs = [];
+      }
+      // park:room,cart,x,y: leave that cart parked on that tile in the room's memory (as if rolled
+      // there earlier); enter:room,x,y then walks in at that spawn tile, as through a door.
+      else if (op === 'park') {
+        const [pr, pc, px, py] = a.split(',');
+        WORLD_STATE.carts ??= {};
+        WORLD_STATE.carts[pr] ??= { carts: {}, smashed: [], made: [] };
+        WORLD_STATE.carts[pr].carts[pc] = [Number(px), Number(py)];
+      }
+      else if (op === 'enter') {
+        const [er, ex, ey] = a.split(',');
+        scene = new OverworldScene(ROOMS[er], { x: Number(ex), y: Number(ey) }, ROOMS[er].area);
+        scene.enter?.(playGame);
+        if (!params.get('enemies')) scene.npcs = [];
+      }
+      // saveload: save here as a crystal would, load that save back (as Continue does,
+      // everything through the browser's storage), and come back into the room from it.
+      else if (op === 'saveload') {
+        const { saveGame, loadGame } = await import('./src/state/saveGame.js');
+        const [sx, sy] = tile(scene.player).split(',').map(Number);
+        saveGame(scene.roomData.id, { x: sx, y: sy });
+        if (!loadGame()) throw new Error('saveload: no save came back');
+        const at = WORLD_STATE.room;
+        scene = new OverworldScene(ROOMS[at], WORLD_STATE.spawn, ROOMS[at].area);
+        scene.enter?.(playGame);
+        if (!params.get('enemies')) scene.npcs = [];
+      }
+      // savedump: what Continue would load right now (room, spot, chapter, and
+      // whether the scenes named after it, comma-separated, are seen).
+      else if (op === 'savedump') {
+        const { loadGame } = await import('./src/state/saveGame.js');
+        if (!loadGame()) throw new Error('savedump: no save');
+        const seen = WORLD_STATE.seenScenes ?? [];
+        report.textContent += `save: ${WORLD_STATE.room} @${JSON.stringify(WORLD_STATE.spawn)} chapter ${WORLD_STATE.chapter} done ${WORLD_STATE.chapterDone ?? '-'} | ${(a ?? '').split(',').filter(Boolean).map((id) => `${id}=${seen.includes(id) ? 'seen' : 'NOT SEEN'}`).join(' ')}
+`;
+      }
+      // cartin:room,x,y,D: arrive in that room by mine cart, as if through a door, heading D
+      // (U, D, L or R) from the tile x,y.
+      else if (op === 'cartin') {
+        const [room, cx, cy, way] = b ? [a, ...b.split(',')] : a.split(',');
+        scene = new OverworldScene(ROOMS[room], { x: Number(cx), y: Number(cy) }, ROOMS[room].area, { cart: { dir: way } });
+        scene.enter?.(playGame);
+        if (!params.get('enemies')) scene.npcs = [];
+      }
+      // settle:n: carry on (up to n frames, 3000 if left out) until every cart has stopped
+      // and any ride, door or fade is over. Fails if they're still going.
+      else if (op === 'settle') {
+        for (let i = 0; i < Number(a ?? 3000) && scene.carts.busy; i++) scene.update(1 / 60, noInput);
+        if (scene.carts.busy) throw new Error(`carts still moving; ${state()}`);
+      }
       // trace:dir:n: walk n frames, printing each follower every frame.
       else if (op === 'trace') {
         for (let i = 0; i < Number(b); i++) {
@@ -482,12 +1250,70 @@ if (params.get('check')) {
           log: () => scene.room.props.some((p) => p.log && `${p.x / 16},${p.y / 16}` === b),
           split: () => Boolean(scene.partner),
           together: () => !scene.partner,
+          // steering:hero|vesper|bramble (who you're walking), waiting:n (n bodies standing apart), seen (the sweeping lamp has you).
+          steering: () => (scene.player.skin ?? 'hero') === b,
+          waiting: () => scene.others.length === Number(b),
+          seen: () => Boolean(scene.caught?.lamp),
+          unseen: () => !scene.caught,
           lever: () => scene.room.isLeverOn(b),
+          // The mine carts: riding, rolling (any cart moving), room:id, cart:id,x,y
+          // (a cart at rest on that tile), switch:name,on|off, barricade:x,y,smashed|whole.
+          riding: () => Boolean(scene.carts.riding),
+          rolling: () => scene.carts.carts.some((c) => c.state === 'roll' || c.state === 'board'),
+          room: () => scene.roomData.id === b,
+          cart: () => {
+            const [id, cx, cy] = b.split(',');
+            const c = scene.carts.cartById(id);
+            return Boolean(c) && c.state === 'rest' && c.tx === Number(cx) && c.ty === Number(cy);
+          },
+          switch: () => {
+            const [name, want] = b.split(',');
+            return (scene.room.isLeverOn(name) ? 'on' : 'off') === want;
+          },
+          barricade: () => {
+            const [bx, by, want] = b.split(',');
+            const prop = scene.room.allProps.find((p) => p.smash && p.x === Number(bx) * 16 && p.y === Number(by) * 16);
+            return Boolean(prop) && (prop.smashed ? 'smashed' : 'whole') === want;
+          },
           at: () => tile(scene.player) === b,
-          seen: () => (WORLD_STATE.seenScenes ?? []).includes(b),
+          // uncaught: the Hush (or the Crawl's hunter) hasn't caught you yet this run.
+          uncaught: () => !(WORLD_STATE.read ?? []).includes('hush_caught'),
+          chapter: () => WORLD_STATE.chapter === Number(b),
+          // (seen / unseen with no scene id are the sweeping lamp's, above: this key wins, so it asks.)
+          unseen: () => (b ? !(WORLD_STATE.seenScenes ?? []).includes(b) : !scene.caught),
+          seen: () => (b ? (WORLD_STATE.seenScenes ?? []).includes(b) : Boolean(scene.caught?.lamp)),
           sinking: () => Boolean(scene.caught?.bog),
           carrying: () => Boolean(scene.heroBody.carrying),
           look: () => scene.room.props.some((p) => p.look === b && !p.hidden),
+          // chime:set,n: n notes of that singing-crystal set's tune have been rung right in a row.
+          chime: () => { const [set, n] = b.split(','); return (scene.chimes.progress.get(set) ?? 0) === Number(n); },
+          // gear:id (you have that gear).
+          gear: () => (heroState.gear ?? []).includes(b),
+          lit: () => scene.room.isLeverOn(b),
+          // The tides: tide:high|low (settled), tile:x,y,c (that letter is there now; not ':'), wet:x,y, dry:x,y,
+          // crate:x,y (a crate rests there), crate:x,y,sunk, crate:x,y,afloat.
+          tide: () => Boolean(scene.room.tide) && !scene.room.tide.busy && scene.room.tide.state === b,
+          tile: () => { const [tx, ty, ch] = b.split(','); return scene.room.tileAt(Number(tx), Number(ty)) === ch; },
+          // wet:x,y (water or any solid tile there now, bridges ignored), dry:x,y (you could stand there).
+          wet: () => scene.room.isSolidTile(...b.split(',').map(Number)),
+          dry: () => !scene.room.isSolidTile(...b.split(',').map(Number)),
+          crate: () => {
+            const [tx, ty, how] = b.split(',');
+            const c = scene.room.allProps.find((p) => p.float && !p.slide && p.x === Number(tx) * 16 && p.y === Number(ty) * 16);
+            return Boolean(c) && (!how || (how === 'sunk' ? c.sunk : how === 'afloat' ? c.floating : false));
+          },
+          said: () => { const [part, n] = b.split(','); return (scene.said ?? []).filter((s) => s.includes(part)).length === Number(n); },
+          beam: () => scene.beams.hasBeamAt(...b.split(',').map(Number)),
+          nobeam: () => !scene.beams.hasBeamAt(...b.split(',').map(Number)),
+          prism: () => { const [px, py, way] = b.split(','); return scene.room.props.some((p) => p.mirror === way && p.x === Number(px) * 16 && p.y === Number(py) * 16); },
+          umbrella: () => Boolean(scene.beams.braced),
+          noumbrella: () => !scene.beams.braced,
+          hurt: () => isHurt(b),
+          // taken:x,y: the purse or chest on that tile has been emptied.
+          taken: () => (WORLD_STATE.taken ?? []).some((k) => k.startsWith(`${scene.roomData.id}:`) && k.endsWith(`:${b}`)),
+          crutch: () => Boolean(scene.player.crutch),
+          nocrutch: () => !scene.player.crutch,
+          well: () => !isHurt(b),
           notcarrying: () => !scene.heroBody.carrying,
           // party:id (they're in the party) or party:!id (they aren't).
           party: () => (b.startsWith('!') ? !partyIds().includes(b.slice(1)) : partyIds().includes(b)),
@@ -507,8 +1333,111 @@ if (params.get('check')) {
   } catch (e) {
     lines.push(`PLAY FAIL: ${e.message}`);
   }
+  // &zoom=1: draw the last frame full size, for a screenshot.
+  if (params.get('zoom')) {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+    ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  }
   scene.draw(ctx);
   lines.push('PLAY DONE');
+} else if (params.get('titlescreen') || params.get('credits')) {
+  // ?titlescreen=1&at=<seconds>[&skip=1] draws the title screen (and its opening) that far in.
+  // &skip=1 presses a key at the start, so you get the menu; &menuat=<seconds> is
+  // how long after that. ?credits=credits_vigil.txt&song=creditsVigil&at=<seconds>
+  // draws the credits roll at that moment in the song.
+  const { TitleScene } = await import('./src/title/titleScene.js');
+  const { CreditsScene } = await import('./src/title/creditsScene.js');
+  const at = Number(params.get('at') ?? 0);
+  const fakeGame = { changeScene() {}, home: null };
+  const press = { isDown: () => false, wasPressed: (a) => a === 'confirm', endFrame() {} };
+  let scene;
+  if (params.get('credits')) {
+    scene = new CreditsScene(() => null, { text: params.get('credits'), song: params.get('song') ?? 'credits' });
+  } else {
+    scene = new TitleScene(() => null, () => null, () => null);
+  }
+  scene.game = fakeGame;
+  if (params.get('skip')) scene.update(0.016, press);
+  for (let t = 0; t < at; t += 0.05) scene.update(0.05, noInput);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+  scene.draw(ctx);
+  report.textContent += 'SCREEN DONE\n';
+} else if (params.get('scene')) {
+  // ?scene=<id>&at=<seconds>&with=vesper&hurt=vesper&x=&y=: plays that cutscene in real time
+  // in its room (&room=<id> to override), pressing Z through any text after a
+  // moment (&hold=2 to wait longer), and draws the screen `at` seconds in: for stills of
+  // a scene's animation. &zoom=1 draws full size. &log=1 reports each text box and step.
+  const { SCENES } = await import('./src/data/scenes/index.js');
+  const { joinParty, setHurt } = await import('./src/characters/party.js');
+  const { WORLD_STATE } = await import('./src/state/saveGame.js');
+  const sceneData = SCENES[params.get('scene')];
+  if (!sceneData) throw new Error(`No scene '${params.get('scene')}'`);
+  for (const id of (params.get('with') ?? '').split(',').filter(Boolean)) joinParty(id);
+  for (const id of (params.get('hurt') ?? '').split(',').filter(Boolean)) setHurt(id, true);
+  if (params.get('seen')) WORLD_STATE.seenScenes = params.get('seen').split(',');
+  // &skip=1: as if watched before, with C held the whole time (skips it).
+  const skipping = Boolean(params.get('skip'));
+  if (skipping) localStorage.setItem('ruins-rpg-watched-scenes-v1', JSON.stringify([sceneData.id]));
+  const roomData = ROOMS[params.get('room') ?? sceneData.room];
+  const at = params.has('x') ? { x: Number(params.get('x')), y: Number(params.get('y')) } : roomData.playerStart;
+  let scene = new OverworldScene(roomData, at, roomData.area);
+  const game = {
+    home: null,
+    changeScene(next) {
+      // A goto or the end of the chapter: report where it went.
+      report.textContent += `SCENE LEFT FOR ${next?.roomData?.id ?? next?.constructor?.name}\n`;
+      if (next instanceof OverworldScene) { scene = next; scene.enter?.(game); }
+    },
+  };
+  scene.enter?.(game);
+  scene.npcs = [];
+  scene.playCutscene(sceneData);
+  const stopAt = Number(params.get('at') ?? 3);
+  const hold = Number(params.get('hold') ?? 0.7);
+  const press = (action) => ({ isDown: (a) => a === action, wasPressed: (a) => a === action, endFrame() {} });
+  let last = performance.now();
+  let start = last;
+  let open = 0;
+  let steps = 0;
+  let reached;
+  const log = [];
+  await new Promise((done) => {
+    const frame = () => {
+      const now = performance.now();
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      const t = (now - start) / 1000;
+      if (scene.textbox.isOpen) {
+        open += dt;
+        if (params.get('log') && open === dt) log.push(`${t.toFixed(1)}s text: ${(scene.textbox.pages?.[scene.textbox.pageIndex ?? 0]?.text ?? '').toString().slice(0, 60)}`);
+      } else open = 0;
+      // &step=N&after=s: stop `after` seconds into step N of the scene (a still of that moment).
+      if (params.has('step') && scene.cutscene && scene.cutscene.index >= Number(params.get('step'))) reached ??= t;
+      const stepDone = reached !== undefined && t - reached >= Number(params.get('after') ?? 0);
+      const confirm = scene.textbox.isOpen && open > hold && !stepDone && t < stopAt;
+      if (confirm) open = 0;
+      const input = confirm ? press('confirm') : noInput;
+      scene.update(dt, skipping ? { ...input, isDown: (a) => a === 'skip' || input.isDown(a) } : input);
+      steps++;
+      if (t >= stopAt || stepDone) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+        ctx.setTransform(UI_SCALE, 0, 0, UI_SCALE, 0, 0);
+        scene.draw(ctx);
+        done();
+        return;
+      }
+      setTimeout(frame, 16);
+    };
+    frame();
+  });
+  report.textContent += `${log.join('\n')}\nin ${scene.roomData.id}${scene.cutscene ? ` (scene still playing, at step ${scene.cutscene.index}: ${JSON.stringify(scene.cutscene.scene?.steps?.[scene.cutscene.index] ?? {}).slice(0, 80)})` : ' (scene over)'}\nSCENE DONE ${params.get('scene')}`;
 } else if (params.get('push')) {
   // ?push=<room>&moves=x,y,R;x,y,D... plays a push puzzle through: for each
   // move it stands the hero behind the rock at (x, y), holds that arrow until
@@ -570,30 +1499,38 @@ if (params.get('check')) {
     scene.npcs = [];
     for (const prop of room.allProps) {
       const label = `${id}: ${prop.look} at ${prop.x / 16},${prop.y / 16}`;
+      // From below first; if another prop sits there (a cairn pair, a post under a
+      // pillar) and the text keeps reopening, try again from each side.
+      const tries = [[0, 1, 'up'], [1, 0, 'left'], [-1, 0, 'right']];
       try {
-        scene.textbox.pages = null;
-        scene.resting = null;
-        scene.climb = null;
-        scene.cutscene = null;
-        // Standing below something that hangs over a door (the chapel's window)
-        // puts you in the doorway: don't let that fade swallow every poke after it.
-        scene.doorway = null;
-        scene.player.x = prop.x + 8;
-        scene.player.y = prop.y + 16 + 16;
-        scene.player.facing = 'up';
-        scene.player.ground = prop.raise ?? 0;
-        scene.interact();
-        for (let i = 0; i < 400; i++) {
-          scene.update(1 / 60, i % 2 === 0 ? confirmInput : noInput);
-          if (i % 20 === 0) scene.draw(ctx);
-          if (!scene.textbox.isOpen && !scene.resting && !scene.climb) break;
-        }
-        // Any screen it opened (a shop) is fine; a rest is fine; make sure nothing is stuck.
-        if (scene.textbox.isOpen) {
-          const page = scene.textbox.pages[scene.textbox.pageIndex];
-          const busy = ['cutscene', 'hop', 'ride', 'battleFlash', 'doorway'].filter((key) => scene[key]);
-          if (scene.player.isFalling) busy.push('falling');
-          throw new Error(`text never closes (page ${scene.textbox.pageIndex + 1}/${scene.textbox.pages.length}: "${String(page?.text ?? page).slice(0, 40)}"${busy.length ? `; busy: ${busy.join(', ')}` : ''})`);
+        for (let t = 0; t < tries.length; t++) {
+          const [dx, dy, facing] = tries[t];
+          scene.textbox.pages = null;
+          scene.resting = null;
+          scene.climb = null;
+          scene.cutscene = null;
+          // Standing below something that hangs over a door (the chapel's window)
+          // puts you in the doorway: don't let that fade swallow every poke after it.
+          scene.doorway = null;
+          scene.player.x = prop.x + dx * 16 + 8;
+          scene.player.y = prop.y + dy * 16 + 16;
+          scene.player.facing = facing;
+          scene.player.ground = prop.raise ?? 0;
+          scene.interact();
+          for (let i = 0; i < 400; i++) {
+            scene.update(1 / 60, i % 2 === 0 ? confirmInput : noInput);
+            if (i % 20 === 0) scene.draw(ctx);
+            if (!scene.textbox.isOpen && !scene.resting && !scene.climb) break;
+          }
+          // Any screen it opened (a shop) is fine; a rest is fine; make sure nothing is stuck.
+          if (scene.textbox.isOpen) {
+            if (t < tries.length - 1) continue;
+            const page = scene.textbox.pages[scene.textbox.pageIndex];
+            const busy = ['cutscene', 'hop', 'ride', 'battleFlash', 'doorway'].filter((key) => scene[key]);
+            if (scene.player.isFalling) busy.push('falling');
+            throw new Error(`text never closes (page ${scene.textbox.pageIndex + 1}/${scene.textbox.pages.length}: "${String(page?.text ?? page).slice(0, 40)}"${busy.length ? `; busy: ${busy.join(', ')}` : ''})`);
+          }
+          break;
         }
         lines.push(`ok: ${label}`);
       } catch (e) {
@@ -612,14 +1549,52 @@ if (params.get('check')) {
     WORLD_STATE.playSeconds = (((Number(params.get('day')) - 0.08) % 1 + 1) % 1) * DAY_SECONDS;
   }
   if (!data) throw new Error(`No room '${id}'`);
+  // ?seen=a,b makes those scenes already seen (things that appear "after" them show up).
+  if (params.get('seen')) {
+    const { WORLD_STATE } = await import('./src/state/saveGame.js');
+    WORLD_STATE.seenScenes = params.get('seen').split(',');
+  }
   const spawn = params.has('x') ? { x: Number(params.get('x')), y: Number(params.get('y')) } : data.playerStart;
+  // &levers=a,b: those switches start on (a beam's eye, say), so its light bridges are there.
+  const levers = (params.get('levers') ?? '').split(',').filter(Boolean);
+  // &with=vesper brings her along; &turn=8,3;11,4 turns the prisms there; &steer=1 steers her (Q)
+  // with &sx=&sy= for where she stands; &facing= then turns whoever you're steering.
+  for (const id of (params.get('with') ?? '').split(',').filter(Boolean)) (await import('./src/characters/party.js')).joinParty(id);
   const scene = new OverworldScene(data, spawn, data.area);
   const game = { changeScene() {}, home: null };
   scene.enter?.(game);
-  if (params.get('facing')) scene.player.facing = params.get('facing');
+  // (Kept in the save, as an eye's switch is once it latches: beamSwitches alone is cleared on the first frame.)
+  const { WORLD_STATE: save } = await import('./src/state/saveGame.js');
+  for (const name of levers) (save.levers ??= []).push(scene.room.leverKey(name));
+  for (const at of (params.get('turn') ?? '').split(';').filter(Boolean)) {
+    const [tx, ty] = at.split(',').map(Number);
+    scene.beams.interact(scene.room.props.find((p) => p.mirror && p.x === tx * 16 && p.y === ty * 16));
+  }
+  if (params.get('steer')) {
+    const { WORLD_STATE } = await import('./src/state/saveGame.js');
+    WORLD_STATE.read = ['swap_first_vesper_well', 'beam_umbrella_first'];
+    scene.swap();
+    if (params.has('sx')) { scene.player.x = Number(params.get('sx')) * 16 + 8; scene.player.y = (Number(params.get('sy')) + 1) * 16 - 3; }
+  }
+  if (params.get('facing')) scene.player.facing = { U: 'up', D: 'down', L: 'left', R: 'right' }[params.get('facing')] ?? params.get('facing');
   // Let the room settle (title card fades, animations run) for `t` seconds.
   const seconds = Number(params.get('t') ?? 2.5);
   for (let t = 0; t < seconds; t += 1 / 60) scene.update(1 / 60, noInput);
+  // &idle=vesper:twirl,hero:stretch&idleat=0.3: the party fidgeting (idles.js), that far in.
+  // (Left alone they start after standing about ten seconds or so: &t=40.)
+  for (const pick of (params.get('idle') ?? '').split(',').filter(Boolean)) {
+    const [who, name] = pick.split(':');
+    const into = Number(params.get('idleat') ?? 0.3);
+    if (who === 'hero') scene.player.fidget = { name, t: into };
+    else {
+      // (Stood in a row beside you, so none hides another.)
+      const friend = scene.followers.find((f) => f.id === who);
+      if (!friend) continue;
+      friend.x = scene.player.x + 24 * (scene.followers.indexOf(friend) + 1);
+      friend.y = scene.player.y;
+      friend.startFidget(name, into);
+    }
+  }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);

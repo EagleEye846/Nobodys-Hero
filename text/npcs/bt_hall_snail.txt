@@ -1,0 +1,23 @@
+# BT_HALL_SNAIL: A very old snail sitting in the Hall of the Visit on a bench, looking at the mural and shaking her head very slowly.
+
+[first]
+Hm. They've got the proportions wrong. And the stair's too steep. And the dark's the wrong dark.
+
+I was there, you know. I was a hatchling. The mural's... generous.
+
+[repeat]
+I saw the Hero. A very small person, covered in mud. The mural's... a flattering likeness.
+
+[first after the_kings_welcome]
+The relics are a lovely touch. The boot's the right size, anyway. The rest, I'm not so sure about.
+
+I don't remember a tall man coming down with the Hero. But I was very small. I expect I was looking at his knees.
+
+[repeat after the_kings_welcome]
+Mind the bench. It wobbles. It has wobbled since the Hero's day, and I've always liked it.
+
+[first after the_light_goes_up]
+It's brighter. The mural looks a bit more honest, now. Funny, how light does that.
+
+[repeat after the_light_goes_up]
+I'll sit here a little longer. I like the colours.

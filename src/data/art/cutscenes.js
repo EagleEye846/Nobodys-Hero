@@ -40,13 +40,15 @@ function rect(ctx, x, y, w, h, color) {
 function glow(ctx, x, y, radius, t, seed = 0) {
   const r = radius * (1 + Math.sin(t * 9 + seed * 2.3) * 0.04 + Math.sin(t * 23 + seed) * 0.03);
   ctx.fillStyle = C.glow;
-  ctx.globalAlpha = 0.07;
+  // Inside whatever fade the panel is drawn with (the title's hall fading out).
+  const base = ctx.globalAlpha;
+  ctx.globalAlpha = base * 0.07;
   for (let ring = 4; ring >= 1; ring--) {
     ctx.beginPath();
     ctx.arc(x, y, (r * ring) / 4, 0, Math.PI * 2);
     ctx.fill();
   }
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha = base;
 }
 
 // A small lantern hanging by its hook from (x, y).

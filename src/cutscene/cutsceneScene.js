@@ -2,6 +2,7 @@ import { SCREEN_WIDTH } from '../config.js';
 import { inUiSpace } from '../engine/screen.js';
 import { textFile } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
+import { SETTINGS } from '../state/settings.js';
 import { drawText, wrapLines } from '../ui/text.js';
 import { PANELS, PANEL_WIDTH, PANEL_HEIGHT } from '../data/art/cutscenes.js';
 
@@ -86,9 +87,10 @@ export class CutsceneScene {
       this.setPhase('typing');
     } else if (this.phase === 'typing') {
       const before = Math.floor(this.visibleCharacters);
-      this.visibleCharacters = Math.min(this.page.length, this.visibleCharacters + CHARACTERS_PER_SECOND * dt);
+      this.visibleCharacters = Math.min(this.page.length, this.visibleCharacters + CHARACTERS_PER_SECOND * SETTINGS.textSpeed * dt);
       const after = Math.floor(this.visibleCharacters);
-      for (let i = before; i < after; i++) {
+      // (One blip a frame at most, so INSTANT text isn't a burst of them.)
+      for (let i = before; i < Math.min(after, before + 3); i++) {
         if (i % BLIP_EVERY === 0 && this.page[i].trim()) sfx('type');
       }
       if (this.visibleCharacters >= this.page.length) this.setPhase('hold');

@@ -1,0 +1,472 @@
+# THE DIGGINGS (Chapter 4): the creature folk's mines, under Belowtown. Things
+# you can read and look at in diggings_pithead, diggings_cart_yard,
+# diggings_switchback, diggings_old_seam, diggings_trestle,
+# diggings_flooded_drift, diggings_cave_in, diggings_lift and the secret
+# diggings_lost_seam. The mole miners' own words are in text/npcs/.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal hums low and steady, a note you feel in your teeth, as if the whole mine were humming along. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. Somebody counted their wages out of it in a hurry.
+
+[chest_empty]
+An empty chest, scuffed from being sat on at lunch.
+
+# --- Things every room shares ---
+
+[d_rock]
+Rough dark rock overhead. A few drips fall from it, taking their time.
+
+[d_face]
+Rock face, brown and banded like a stale cake, with threads of green and copper through it. All the ore is still in the wall. Nobody's had the heart.
+
+[d_timber_wall]
+A timber-framed wall: posts, a beam, a brace. All of it is old, and all of it is holding, out of spite.
+
+[d_ore]
+A lump of rock full of green and orange ore. Too hard to shift and too much trouble to carry.
+
+[d_post]
+A timber post under a cap beam, holding up the mountain. There's a worn groove in it where a hundred shoulders have leaned.
+
+[d_snapped]
+A snapped timber, split down the middle. It did its best.
+
+[d_stalag]
+A stalagmite, brown and pointed. The roof drips on it, and it takes it personally.
+
+[d_drop]
+A drop, black and cold, with a smell of wet stone coming up out of it.
+
+[d_water]
+Brown water, cold and flat as a tabletop. Something under it knocks, once, and thinks better of it.
+
+[d_planks]
+Planks laid over the water, slimy and sound. The kind you walk on with respect.
+
+[d_trestle]
+Trestle planks over the drop, a rail down the middle. Between the gaps you can see a very long way down. You can also not look.
+
+[d_lamp]
+A mine lamp, swinging a little on its hook, its flame as steady as a nervous cat. It's still lit, which is more than you can say for most of the shift.
+
+[d_sacks]
+Sacks of ore, tied at the neck and stacked tidy. Someone has chalked ORE on them. Someone else has added: ALSO ORE.
+
+[d_sacks_ves]
+{bored}'Also ore.' The most honest sign in the mine.
+
+[d_toolbox]
+A toolbox with a dozen hammers in it and a sandwich. The sandwich has been here a very long time and has formed views.
+
+[d_spoil]
+A heap of waste rock with a shovel stuck in the top of it, like a flag on a hill that nobody wanted.
+
+[d_hat]
+A hard hat on a nail. Chalked inside the brim: WHOEVER FINDS THIS, IT'S MINE.
+
+[d_pick]
+A pickaxe left stuck in the rock face at a jaunty angle, as if it were just going to be fetched after tea.
+
+[d_ladder]
+A broken ladder, two rungs short of useful and three short of a joke.
+
+[d_wreck]
+A cart with a wheel off and a lean to it. Someone has painted STOP on the side, in case it was thinking of going anywhere.
+
+[d_tiny_tools]
+A pick, a shovel and a broom, each about as long as your hand, leaned neatly against the rock. Somebody's whole kit. They've gone home and left it ready for tomorrow.
+
+[d_tiny_door]
+A little round door in the rock, with a knocker and a mat. A note on it says ON SHIFT. Underneath, newer: NOT ON SHIFT. SHIFT CANCELLED. GONE UP TO TOWN.
+
+[cart_stuck]
+The cart won't go. Something is in the way along the track, or the track runs out. It wants a clear line.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and every rock goes back where it began, and the carts roll home.
+
+[rock_home]
+Everything you've moved goes back to where it started. The carts rattle back to their places.
+
+[cart_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF IT ALL GOES WRONG. Press on it, and the carts roll themselves back to where they began.
+
+# --- THE PITHEAD ---
+
+[pit_winch]
+The winch over the shaft: an A-frame of black timber, a drum of rope as thick as your arm, and a bucket hanging empty. A plate on the frame says: WEIGHT LIMIT, TEN MOLES OR ONE VERY LARGE BADGER.
+
+[pit_winch_ves]
+{glee}Ten moles, or one large badger. {bored}I'd love to meet whoever did that sum.
+
+[pit_shaft]
+The shaft: a round black hole, boarded over, with a rope round it. Cold air breathes up between the boards, smelling of a very long way down. The sign says the lift is round the back, and would you please stop looking at the hole.
+
+[pit_warning]
+A red warning sign, hand-painted: DANGER. Under that, smaller: DEEP. Under that, smaller still: (VERY).
+
+[pit_tally]
+The shift board: a slate with a peg for every miner. The ON SHIFT column has two pegs in it. The GONE HOME column has all the rest, and under them, in chalk: SINCE THE LIGHT STARTED GOING.
+
+[pit_tally_ves]
+{surprised}Two on shift. {bored}Brave, or stubborn. Down a mine they look the same.
+
+[pit_office]
+PIT OFFICE. CLOSED. Under that, smaller: (OPEN ALTERNATE WEDNESDAYS). Under that, smaller still: (NOT THIS ONE). Somebody is snoring behind the door, and nobody is going to wake him.
+
+[pit_warning_ves]
+{bored}'Very.' Finally, a sign that gives a number.
+
+[pit_hat]
+A hard hat on a nail by the shaft. Chalked on the brim, in a very small hand: FIRST ONE DOWN IS A MOLE. A second hand has added: WE WERE ALL MOLES.
+
+[pit_pouch]
+A wage purse, tucked behind the ladder where somebody hid it from a friend. You found it first.
+
+# --- THE CART YARD ---
+
+[yard_sign]
+CART YARD. ONE CART PER CUSTOMER. Under it: THE CART HAS NO BRAKES. Under that: THIS IS NOT A DEFECT, THIS IS HOW CARTS WORK.
+
+[yard_sign_ves]
+{surprised}I've never been in one of these. {bored}Obviously. There aren't many mine carts in a chapel.
+
+{smile}I'd like it noted that I'm only slightly interested.
+
+[yard_board]
+A slate of carts out and carts back. Out: thirty-six. Back: nineteen. A note in the margin says: THEY KNOW THE WAY HOME. THEY JUST DON'T WANT TO.
+
+Below it, in a tidier hand: SIDING POINTS HAVE NO LEVER. THEY ARE HELD BY THE EAST PLATE. WEIGHT ON THE PLATE, EAST. NO WEIGHT, STRAIGHT ON.
+
+[yard_warning]
+MIND THE POINTS. Someone has scratched out POINTS and written PRICES. Someone else has scratched out PRICES and written POINTS. It's a long-running argument.
+
+[yard_lever]
+A points lever with an iron handle worn bright. The junction up the track shows how it's set: the bright rail with the yellow arrow is the way a cart will go. Z throws it.
+
+[yard_lever_ves]
+{bored}Straight on, or down and round. {smile}I'll take the interesting one.
+
+[yard_hold]
+A round iron plate at the buffer at the east end of the run, with a rod running off under the floor towards the siding. Whatever sits on it holds the siding's second fork turned east. When it's empty, the fork lets go and goes straight on.
+
+[yard_hold_ves]
+{bored}So the first cart is a doorstop. {smile}Everyone's good at something.
+
+[yard_plate]
+A round iron plate set in the floor at the end of the siding. Something heavy sitting on it would press it down. A cart, for instance.
+
+[yard_gate]
+A timber gate across the way east, held shut by a spring and a plate somewhere down the line. And, you suspect, by pride.
+
+[yard_gate_open]
+The plate clunks, a spring lets go in the timbers, and the gate swings wide, creaking like it's been waiting.
+
+[yard_pouch]
+A purse at the end of the dead-end line, half under the spoil heap. Whoever left it has long since stopped remembering where.
+
+# --- THE SWITCHBACK ---
+
+[sb_sign]
+THE SWITCHBACK. Two sets of points with levers, three without. Under it, in a firm hand: SPRUNG POINTS TAKE THE WAY THE WHEELS CAME IN. Under that, in a firmer one: BACKWARDS COUNTS.
+
+[sb_sign_ves]
+{bored}Points with no lever. {smile}So the cart does the pulling, and we do the thinking. It's a fair split.
+
+[sb_board]
+A chalk diagram of the three levels, drawn by someone who only ever thought about the cart going down. Beside it, a second diagram of the cart going round the other way, up the west side and along the bottom, with a ring drawn round the places it passes the sprung points and the words WHEELS REMEMBER. At the bottom he's written ARRIVE, with a smiling face. The face has been scribbled out.
+
+[sb_warning]
+WARNING: CARTS DO NOT STOP FOR LEVELS. Neither, it's said, do the people in them.
+
+[sb_lever_1]
+The top points lever, beside the first fork. Thrown, the cart goes down the west side instead of along the top. The paint has worn off the handle exactly where a hand goes. The junction shows how it's set: the bright rail is the way the cart will go.
+
+[sb_lever_4]
+The points lever by the last fork on the bottom level. A tin tag on it says LAST ONE. Somebody has scratched PROBABLY underneath. Set one way, a cart runs on east to the plate; the other, it turns back along the west side.
+
+[sb_plate]
+The stone plate at the end of the long bottom siding. A cart's wheels would hold it down.
+
+[sb_gate]
+A gate across the way east, with a plate on a long chain somewhere out of sight. It's the kind of gate that opens when you've got everything right and not before.
+
+[sb_gate_open]
+The plate drops with a thump, a chain runs through the timbers, and the gate drags open, grumbling.
+
+[sb_pouch]
+A purse at the end of the middle level's dead end, in the place where a surprised rider would have got out. It's been waiting to be useful.
+
+# --- THE OLD SEAM ---
+
+[seam_sign]
+EMPTY CARTS ONLY BEYOND THIS POINT. Underneath, smaller: FULL CARTS, SEE LAST SENTENCE.
+
+[seam_sign_ves]
+{bored}So the cart goes and we don't. {smile}I like this seam already.
+
+[seam_board]
+The old shift board, in a thinner chalk than the one at the pithead. Nearly all the names are crossed out in one sweep, and under it: ALL HOME EARLY. It doesn't say what for.
+
+Down the side, in a cramped hand: FORK AT THE FOOT OF THE CHAMBER TAKES EVERYTHING FROM THE WEST DOWN TO THE STORE. THE LEVER IS FOR WHAT COMES BACK UP. LEVER IS IN THE STORE. DON'T ASK ME WHY.
+
+In the corner, in older chalk, somebody has drawn a little star, and an arrow from it pointing down the tunnel towards the lever by the BROKEN sign.
+
+[seam_lever]
+A points lever bolted to the store room wall, its handle worn bright by someone with a favourite way. It works the fork at the foot of the west chamber, a long way off. A tag on it says: FOR WHAT COMES UP. Set straight, a cart coming back up the store line goes out west; thrown, it turns east into the tunnel.
+
+[seam_barricade]
+A barricade of nailed planks across the rails, with old nails, the sort that stay in on principle. A cart with someone in it would only bump the planks. Something heavy and empty would go straight through.
+
+[seam_barricade_ves]
+{bored}So we push it, and then run. {smile}I'm not running. I'm following it, quickly.
+
+[seam_nope]
+A hand-painted sign: BROKEN. LEAVE IT. And underneath, in the same hand: THIS MEANS YOU. And underneath that, much smaller: THIS ONE ESPECIALLY.
+
+[seam_nope_ves]
+{bored}It says it three times. {smile}That's practically an invitation.
+
+[seam_nope_lever]
+A lever in the wall with a paper tag tied to the handle: OUT OF ORDER. It's very well oiled for something out of order.
+
+[seam_nope_lever_ves]
+{surprised}Oiled. {smile}Somebody has been looking after something they said was broken.
+
+[seam_gate_secret]
+A small iron gate across a narrow shaft that goes down from the east chamber. It's older than anything else here, and cleaner than it ought to be.
+
+Far down the shaft, something gives off a faint, cold light, like a star at the bottom of a well.
+
+[seam_gate_open]
+Somewhere inside the wall a bolt slides across. The little gate swings open on a shaft that goes down into the dark.
+
+[seam_chest]
+A chest in the store room, marked PROPERTY OF THE SHIFT. It has been the property of the shift for a very long time.
+
+[seam_pouch]
+A purse on the store room floor, right where somebody put it down to take a breather. They must have had a lot of breath to take.
+
+[seam_pouch_east]
+A purse behind a stalagmite. The stalagmite has been guarding it for centuries and seems pleased to be relieved.
+
+[seam_warning]
+WARNING: ROOF. Under it: (AND FLOOR). Under that: (AND ALL THE BITS IN BETWEEN).
+
+# --- THE TRESTLE ---
+
+[tr_sign]
+THE TRESTLE. A HUNDRED PACES OF PLANK AND RAIL OVER NOTHING. KEEP TO THE MIDDLE. Under that, in a different hand: THERE IS NO MIDDLE. IT'S ALL EDGE. Under that, in a third hand: RIDE IT. YOU'LL ONLY LOOK ONCE.
+
+[tr_sign_ves]
+{surprised}...{bored}It's fine. Heights are for people who fall off things.
+
+{smile}Which we won't. Obviously.
+
+[tr_warning]
+DO NOT LEAN OVER THE EDGE TO SEE HOW FAR IT IS. IT'S FAR.
+
+[tr_drop]
+The drop: black, cold and bottomless. A pebble dropped into it in your head never finishes landing.
+
+[tr_pouch]
+A purse in the corner of the west platform, in the one spot where nobody would stand to look over the edge.
+
+[tr_pouch_east]
+A purse on the east platform, left by someone who got over the trestle and decided to celebrate with a sit.
+
+# --- THE FLOODED DRIFT ---
+
+[drift_sign]
+THE DRIFT. FLOODED SINCE THE PUMP GAVE OUT. Under that: THE PUMP GAVE OUT IN THE SPRING. Under that: WHICH SPRING? Under that: (NOBODY KNOWS.) Under that, an arrow: PUMP, ALONG THE FOOTBRIDGE. WHEEL, END OF THE UPPER DECK. PLATE, UPPER DECK. DRAIN WHEEL, EAST BANK. And scratched underneath, in someone's penknife: THE LAKE IS THE SAME SIZE IT ALWAYS WAS. IT JUST MOVES ABOUT.
+
+Under that, smaller: A LOG ROLLS TILL SOMETHING TELLS IT NO. WATER IS VERY GOOD AT NO.
+
+[drift_warning]
+CAUTION: WET. Somebody has drawn a small, worried fish.
+
+[drift_lever]
+The pump's lever, on the pump house, out on the water at the end of a footbridge. Whoever put it there wanted it out of reach of everyone except a bird, or a person with nerve. Pull it and the old pump coughs, grinds and starts to drag the water down off the near causeway.
+
+[drift_lever_ves]
+{smile}A lever, at the end of a rotten bridge, over cold water. {bored}Somebody's idea of a joke, or of security.
+
+{bored}Right. Pump, then. Don't anyone say anything encouraging.
+
+[rotten_planks]
+Footbridge planks, black with wet and rotten through, over dark water. They'd never hold you.
+
+[rotten_planks_ves]
+{smile}They'll hold me. I've been told I'm lighter than I look.
+
+{bored}I wasn't told it kindly.
+
+[drift_valve]
+An iron wheel on a pipe, at the end of the upper causeway, with a red handle. A tag on it says: MIDDLE BASIN. It squeals when it turns. Turned one way, the water comes up over the middle of this deck and, somewhere off along the lower deck, goes down with a long slow gurgle. Turned the other, the lake goes back where it was.
+
+[drift_valve_ves]
+{bored}It drains one deck by filling the other. {smile}Lakes are very fair like that. They never lose anything, they just move it behind you.
+
+[drift_plate]
+A square board set in the planks, with a pipe running off under the lower deck. A tag says: FLOAT PLATE. WEIGHED, THE EAST SLUICE OPENS. UNWEIGHED, IT SHUTS. Somebody standing on it can hear the water go out of the planks a long way off. When they step off, it comes back.
+
+[drift_plate_ves]
+{bored}So somebody stands here and holds the water off. {smile}It's the first time anyone has asked me to be heavy.
+
+[drift_drain]
+An iron wheel, newer than the others, set on the east bank. A tag says: EAST SLUICE, HOLD OPEN. Turn it and the east half of the lower deck stays drained, plate or no plate.
+
+[drift_drain_ves]
+{smile}That's me off the plate, then. {bored}I'll put it on my list, between the rotten planks and the umbrella.
+
+[drift_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF THE LOG GOES WRONG. Press on it and the log goes back to the bank, and you with it. The wheels stay as you left them.
+
+[drift_water]
+Black water, lapping over the planks. It looks shallow, the way a lie looks short.
+
+[drift_log]
+A log, thick and round, left on the bank by the last shift. Lean on it and it rolls.
+
+[drift_start_log]
+A log left lying at the head of the upper deck, round and heavy and perfectly happy to roll. Lean on it and it goes east along the planks until something tells it no.
+
+[drift_chest]
+A chest on the islet, a bit damp, with a fish painted on the lid. The fish looks relieved to be somewhere dry.
+
+[drift_pouch_islet]
+A purse on the islet, next to a bone that probably belongs to a pasty.
+
+[drift_pouch]
+A purse on the pump house, on top of a pile of old pump washers. The washers are worth nothing, but the purse isn't.
+
+# --- THE CAVE-IN ---
+
+[cave_sign]
+ROCKFALL. DO NOT ENTER. Someone has crossed out DO NOT and written PLEASE.
+
+Under it, in a careful hand: LOADS ARE WEIGHED AT THE PLATE BEFORE THE GATE. A LOAD THAT DOES NOT STOP DOES NOT COUNT.
+
+[cave_warning]
+THE ROOF IS NOT YOUR FRIEND. Under it, smaller: THE ROOF IS NOBODY'S FRIEND.
+
+[cave_rock]
+A big rock off the roof, the size of a barrel and about as friendly. Walk into it, steadily, and it will shift a tile at a time.
+
+[cave_hat]
+A hard hat on a ledge, dented in the exact shape of a falling rock. The hat looks smug. (It was empty at the time. The owner is fine. He'll tell you so himself.)
+
+[cave_barricade]
+A heavy barricade across the tunnel: timbers, planks, wedges. The old shift put it up against the fall, and it has held for a hundred years. Nothing alive is going to get through it, but an empty cart at speed might.
+
+[cave_plate]
+A heavy iron plate laid in the line, scored by a hundred years of wheels. It was made to be sat on, not rolled over. A rock would just sit there: this one wants the weight of a cart, and the cart has to stop.
+
+[cave_plate_ves]
+{bored}Weigh it, don't just drive over it. {smile}I do hope that's a figure of speech.
+
+[cave_gate]
+A drop gate across the tunnel, hung from a beam, held shut by a long chain that runs off down the line to the weigh plate. It has the look of something that was shut on purpose, by someone with a grudge against the fall.
+
+[cave_gate_open]
+The plate clunks down, the chain slackens all the way down the line, and the gate drops into its slot overhead with a long relieved groan.
+
+[cave_barricade_ves]
+{bored}A hundred years of holding. {smile}Let's see what it makes of a cart.
+
+[cave_pouch]
+A purse in the corner of the west cavern, a long way from the rocks. A careful sort of person owned it.
+
+[cave_pouch_east]
+A purse beside the east cavern's wall, half-buried in grit. The fall must have missed it by a fraction.
+
+# --- THE LIFT ---
+
+[lift_sign]
+THE LIFT. DOWN ONLY. For up, see LADDERS (NONE).
+
+[lift_winch]
+The lift's winch: a drum, a brake as big as a door, a crank as long as a mole is tall, and a box of counterweights with a slot in the lid. The brake is on. The gate to the cage is on with it.
+
+[lift_winch_ves]
+{bored}Cart, plate, gate, brake. {smile}The diggers did like the long way round.
+
+[lift_board]
+The winchman's log. DOWN: 4. UP: 4. DOWN: 7. UP: 7. Then, in a different pen, one line: DOWN 1. UP --. After that a clean page, and a tidy hand: MAINTENANCE.
+
+At the bottom, in the tidy hand: TWO PLATES. EAST LINE, ONE SHORT OF THE BUFFER. SIDING, END OF THE LINE. BUFFER PLATE WORKS THE SIDING FORK.
+
+[lift_board_ves]
+{bored}Down one. Up none. {surprised}...That's not a slip of the chalk, is it.
+
+[lift_warning]
+STAND CLEAR OF THE ROPE. Under it: STAND CLEAR OF THE CAGE. Under that: STAND CLEAR.
+
+[lift_lever]
+The points lever for the first fork. Set straight, a cart runs out along the east line; thrown, it turns down the siding. The fork at the far end of the siding hasn't got a lever of its own.
+
+[lift_hold]
+A round iron plate at the very end of the east line, with a rod that runs off under the floor towards the siding. It isn't one of the lift's plates: it's the other end of the rod to the siding's second fork. Weight on it holds that fork turned down towards the lower plate. Nothing on it, and the fork lets go and runs straight on.
+
+[lift_hold_ves]
+{bored}Something heavy, left at the end of the line, so another heavy something can turn the corner. {smile}It's the most sensible thing I've heard all week.
+
+[lift_plate]
+A counterweight plate set in the floor, with LIFT stamped on it. It wants a cart's weight on it, and the lift wants both plates held at once. It's a lot to ask of a plate. This one isn't at the buffer: the buffer's a little further on.
+
+[lift_barricade]
+A barricade across the line, nailed up by whoever was last to leave, for reasons nobody wrote down. A cart with someone in it would only bump the planks. An empty one goes through.
+
+[lift_barricade_ves]
+{bored}Another one. {smile}They really didn't want anybody going anywhere.
+
+[lift_gate]
+A gate across the way to the cage, held shut by the winch's brake. It will let go when both plates are down.
+
+[lift_gate_open]
+Both plates clunk down. Somewhere the brake lets go, and the gate to the lift sags open with a groan of relief.
+
+[lift_pouch]
+A purse on the spoil heap above the yard, for whoever is quick on the last day of the line.
+
+# --- SEAM NINE (the secret) ---
+
+[lost_hats]
+A row of hard hats on nails, each with a tin tag: names, in a hand that was in no hurry. They're all brushed clean and ready for the next shift.
+
+[lost_hats_ves]
+{sad}Somebody brushed them. {bored}And then went on a break and never came back from it. I don't like how tidy it is.
+
+[lost_board]
+The tally board of Seam Nine. The last column says, in chalk: BACK AFTER LUNCH. The date next to it is a very long time ago.
+
+[lost_sign]
+SEAM NINE. NOT ON THE MAP. If you've read this sign, you're not supposed to be here. You're welcome to the tea.
+
+[lost_table]
+A table laid for a break: seven tin mugs, a kettle, and a plate of something that was once a pasty. The tea has gone to a ring of dust in each mug. Seven mugs, and one stool pushed back, as if someone had just stood up.
+
+[lost_table_ves]
+{bored}Seven mugs. {surprised}And a stool pushed back. I'd rather we didn't sit down.
+
+[lost_bench]
+A bench worn smooth in seven places. The eighth place is a little less smooth.
+
+[lost_chest]
+A chest under the back wall with a rivet-studded lid. Chalked on it: TO THE NEXT SHIFT.
+
+[lost_shard]
+A sliver of pale metal wedged in a crack in the back wall, giving off a faint, cold light. It hums when you come near, and the sword answers.
+
+[lost_pouch]
+A purse beside the back wall, left by someone who had a good day. It's been the same good day ever since.

@@ -13,16 +13,27 @@ const HP_PER_LEVEL = 10;
 // Each level is worth more skill points the further the story's got: 1 a
 // level in chapter 1, 2 in chapter 2, 3 in chapter 3... (the tree roughly
 // doubles each chapter, so the points keep up with it).
-const skillPointsPerLevel = () => WORLD_STATE.chapter ?? 1;
+// Points a level: the chapter's number, never more than the newest chapter
+// the tree has skills for (a save that thinks it's past the last chapter
+// built mustn't hand out extra).
+const NEWEST_SKILL_CHAPTER = Math.max(...ALL_SKILL_BRANCHES.flatMap((branch) => branch.skills.map((skill) => skill.chapter ?? 1)));
+const skillPointsPerLevel = () => Math.min(WORLD_STATE.chapter ?? 1, NEWEST_SKILL_CHAPTER);
 
 const ALL_SKILLS = ALL_SKILL_BRANCHES.flatMap((branch) => branch.skills);
 
 // EXP needed to go from `level` to the next. It climbs steeply, so levels come
 // every few fights rather than every one: 46, 92, 147, 212, 285, 368, 460...
 // (a full clear of the Ruins, Taper included, reaches about LV 5).
+// In chapter 5 on, past LV 20, each level asks for more again on top, climbing
+// faster the higher you go: +360 at LV 23, +1,000 at 25, +4,000 at 30.
 const EXP_EASE = 0.92;
+const STEEP_FROM = 20;
+const STEEP = 40;
+// Only from chapter 5 on: chapters 1-4 keep the curve they were balanced for.
+const STEEP_CHAPTER = 5;
 export function expToNext(level) {
-  return Math.round(EXP_EASE * (50 * level + 5 * (level - 1) * (level - 2)));
+  const past = (WORLD_STATE.chapter ?? 1) >= STEEP_CHAPTER ? Math.max(0, level - STEEP_FROM) : 0;
+  return Math.round(EXP_EASE * (50 * level + 5 * (level - 1) * (level - 2)) + STEEP * past * past);
 }
 
 // Adds EXP, levelling up as many times as it covers. Returns the levels gained.
@@ -39,7 +50,7 @@ export function gainExp(amount) {
     levels++;
   }
   // A new level comes with a full recovery.
-  if (levels) HERO_STATE.hp = heroMaxHp();
+  if (levels) healHeroFully();
   return levels;
 }
 
@@ -60,8 +71,10 @@ export function setHeroHp(hp) {
   HERO_STATE.hp = Math.max(0, Math.min(heroMaxHp(), Math.round(hp)));
 }
 
+// Brings the hero back to full HP, and the friends with them.
 export function healHeroFully() {
   HERO_STATE.hp = heroMaxHp();
+  HERO_STATE.memberHp = {};
 }
 
 // The equipped armor's stats (src/data/armor.js).
@@ -109,6 +122,8 @@ export function skillBlocker(branch, index) {
   const skill = branch.skills[index];
   const before = branch.skills[index - 1];
   if (hasSkill(skill.id)) return 'Learned.';
+  // Scripted skills (Nova) can't be bought: a cutscene gives them.
+  if (skill.scripted) return 'Wakes by itself, at the end of the chapter.';
   if (before && !hasSkill(before.id)) return `Learn ${before.name} first.`;
   const who = branch.member ? `${MEMBERS[branch.member].name} needs` : 'Needs';
   if (pointsFor(branch) < skill.cost) return `${who} ${skill.cost} skill point${skill.cost === 1 ? '' : 's'}.`;

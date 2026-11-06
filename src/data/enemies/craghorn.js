@@ -9,8 +9,8 @@ export const CRAGHORN = {
   gait: 'bound',
   textFile: 'enemies/craghorn.txt',
   sprite: { rows: CRAGHORN_SPRITE, palette: CRAGHORN_PALETTE },
-  maxHp: 180,
-  damage: 12,
+  maxHp: 195,
+  damage: 13,
 
   // A Chapter 2 enemy: busier and quicker than anything in the Ruins.
   difficulty: { density: 1.15, speed: 1.15 },
@@ -31,7 +31,7 @@ export const CRAGHORN = {
     { name: 'Offer grass', calm: 40 },
   ],
 
-  rewards: { exp: 80, coins: 50 },
+  rewards: { exp: 85, coins: 65 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'crag_cheese', chance: 0.4 }],

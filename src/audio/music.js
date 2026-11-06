@@ -24,6 +24,12 @@ const SFX = {
     { midi: 58, wave: 'square', length: 0.08, volume: 0.035 },
     { midi: 55, wave: 'square', length: 0.1, volume: 0.035, delay: 0.08 },
   ],
+  // A crystal struck wrong (the Glimmering's singing crystals): a short,
+  // dull clink with no ring to it, and a soft low thud under it.
+  clink: [
+    { midi: 61, wave: 'triangle', length: 0.07, volume: 0.05, slide: -3 },
+    { midi: 44, wave: 'sine', length: 0.14, volume: 0.05, slide: -2, delay: 0.01 },
+  ],
   hurt: [{ midi: 50, wave: 'sawtooth', length: 0.2, volume: 0.08, slide: -14 }],
   hit: [{ midi: 64, wave: 'square', length: 0.12, volume: 0.06, slide: -18 }],
   graze: [{ midi: 98, wave: 'triangle', length: 0.03, volume: 0.035 }],
@@ -60,6 +66,34 @@ const SFX = {
     { midi: 33, wave: 'sine', length: 0.5, volume: 0.22, slide: -10 },
     { midi: 40, wave: 'triangle', length: 0.25, volume: 0.1, slide: -12 },
     { midi: 28, wave: 'sawtooth', length: 0.18, volume: 0.05, slide: -6 },
+  ],
+  // Landing flat on your face, cartoon style: a wet squash that sags, then a
+  // rubbery little pop as the shape comes back.
+  squish: [
+    { midi: 52, wave: 'sawtooth', length: 0.16, volume: 0.07, slide: -16 },
+    { midi: 38, wave: 'sine', length: 0.22, volume: 0.12, slide: -8 },
+    { midi: 64, wave: 'triangle', length: 0.14, volume: 0.06, slide: 20, delay: 0.17 },
+    { midi: 88, wave: 'sine', length: 0.08, volume: 0.05, slide: -22, delay: 0.3 },
+  ],
+  // A big log jamming home in a crack: a hard wooden knock, and the rock
+  // taking the weight.
+  thunk: [
+    { midi: 47, wave: 'square', length: 0.07, volume: 0.1, slide: -12 },
+    { midi: 36, wave: 'sine', length: 0.45, volume: 0.24, slide: -9 },
+    { midi: 55, wave: 'triangle', length: 0.12, volume: 0.1, slide: -18 },
+    { midi: 29, wave: 'sawtooth', length: 0.3, volume: 0.05, slide: -5, delay: 0.04 },
+  ],
+  // A long, silly whistle, rising and wobbling, with the echo of it going on
+  // up through the rock after.
+  whistle: [
+    { midi: 84, wave: 'sine', length: 0.55, volume: 0.08, slide: 9 },
+    { midi: 93, wave: 'sine', length: 0.6, volume: 0.07, slide: -4, delay: 0.5 },
+    { midi: 89, wave: 'sine', length: 0.45, volume: 0.07, slide: 10, delay: 1.0 },
+    { midi: 84, wave: 'sine', length: 0.5, volume: 0.035, slide: 9, delay: 1.45 },
+    { midi: 93, wave: 'sine', length: 0.6, volume: 0.03, slide: -4, delay: 1.95 },
+    { midi: 89, wave: 'sine', length: 0.9, volume: 0.025, slide: 10, delay: 2.45 },
+    { midi: 84, wave: 'sine', length: 0.6, volume: 0.012, slide: 9, delay: 3.1 },
+    { midi: 93, wave: 'sine', length: 0.9, volume: 0.01, slide: -4, delay: 3.6 },
   ],
   // Something sweeping in on the air.
   whoosh: [
@@ -112,9 +146,31 @@ const SFX = {
     { midi: 36, wave: 'sawtooth', length: 0.2, volume: 0.05, slide: -3 },
     { midi: 31, wave: 'triangle', length: 0.18, volume: 0.08, delay: 0.04 },
   ],
+  // A cart's wheels over the joints in the rail: dry, short, two pitches.
+  clack: [{ midi: 52, wave: 'square', length: 0.03, volume: 0.022, slide: -6 }],
+  clack2: [{ midi: 57, wave: 'square', length: 0.025, volume: 0.018, slide: -6 }],
   click: [
     { midi: 60, wave: 'square', length: 0.05, volume: 0.05 },
     { midi: 79, wave: 'triangle', length: 0.12, volume: 0.05, delay: 0.05 },
+  ],
+  // Light reaching a prism: a small, high glassy ping.
+  ping: [
+    { midi: 93, wave: 'sine', length: 0.7, volume: 0.05 },
+    { midi: 105, wave: 'sine', length: 0.3, volume: 0.02, delay: 0.005 },
+  ],
+  // Light reaching a crystal eye: a round crystal dong that rings on.
+  dong: [
+    { midi: 69, wave: 'sine', length: 1.8, volume: 0.09 },
+    { midi: 81, wave: 'sine', length: 1.3, volume: 0.05, delay: 0.005 },
+    { midi: 88, wave: 'triangle', length: 0.6, volume: 0.03, delay: 0.01 },
+    { midi: 100, wave: 'sine', length: 0.25, volume: 0.02, delay: 0.01 },
+  ],
+  // A bridge of light forming: a quick shimmer up.
+  shimmer: [
+    { midi: 84, wave: 'sine', length: 0.5, volume: 0.035 },
+    { midi: 88, wave: 'sine', length: 0.5, volume: 0.035, delay: 0.06 },
+    { midi: 91, wave: 'sine', length: 0.5, volume: 0.035, delay: 0.12 },
+    { midi: 96, wave: 'sine', length: 0.8, volume: 0.035, delay: 0.18 },
   ],
   // An old plank bridge taking your weight: a low, dry creak.
   creak: [
@@ -154,7 +210,58 @@ const SFX = {
 };
 
 // The sound effect names, for the Studio's pickers.
-export const SOUND_NAMES = Object.keys(SFX);
+export const SOUND_NAMES = [...Object.keys(SFX), 'farCheer'];
+
+// A crowd cheering a very long way off (the light going up the root): lots of
+// small voices, a breath of filtered noise, swelling and dying away in a big
+// soft hall of echo. Quiet. Built on the spot, so it can't be a list of tones.
+function farCheer(ctx, noise, bus) {
+  const now = ctx.currentTime;
+  const seconds = 3.2;
+  const hall = makeHall(ctx, 2.4);
+  const wet = ctx.createGain();
+  wet.gain.value = 1;
+  hall.connect(wet).connect(bus);
+  const swell = ctx.createGain();
+  swell.gain.setValueAtTime(0.0001, now);
+  swell.gain.exponentialRampToValueAtTime(0.5, now + 1.1);
+  swell.gain.exponentialRampToValueAtTime(0.0001, now + seconds);
+  swell.connect(hall);
+  // The roar of many people: noise through a vowelly band.
+  const source = ctx.createBufferSource();
+  source.buffer = noise;
+  source.loop = true;
+  const band = ctx.createBiquadFilter();
+  band.type = 'bandpass';
+  band.frequency.value = 900;
+  band.Q.value = 1.4;
+  const body = ctx.createGain();
+  body.gain.value = 0.05;
+  source.connect(band).connect(body).connect(swell);
+  source.start(now);
+  source.stop(now + seconds + 0.1);
+  // A scatter of small voices, each a little wobbly whoop that rises.
+  for (let i = 0; i < 16; i++) {
+    const start = now + 0.1 + Math.random() * 1.6;
+    const length = 0.35 + Math.random() * 0.6;
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    const pitch = 330 + Math.random() * 420;
+    osc.frequency.setValueAtTime(pitch, start);
+    osc.frequency.exponentialRampToValueAtTime(pitch * (1.1 + Math.random() * 0.3), start + length * 0.7);
+    const vowel = ctx.createBiquadFilter();
+    vowel.type = 'bandpass';
+    vowel.frequency.value = 700 + Math.random() * 700;
+    vowel.Q.value = 3;
+    const voice = ctx.createGain();
+    voice.gain.setValueAtTime(0.0001, start);
+    voice.gain.exponentialRampToValueAtTime(0.012, start + length * 0.3);
+    voice.gain.exponentialRampToValueAtTime(0.0001, start + length);
+    osc.connect(vowel).connect(voice).connect(swell);
+    osc.start(start);
+    osc.stop(start + length + 0.05);
+  }
+}
 
 const frequency = (midi) => 440 * 2 ** ((midi - 69) / 12);
 
@@ -170,9 +277,12 @@ const MUTE_KEY = 'KeyM';
 export function compile(song) {
   const steps = [];
   let loopStart = 0;
+  // Where each section begins (a scene can start a song part way in).
+  const starts = {};
 
   song.order.forEach((name, orderIndex) => {
     if (orderIndex === (song.loopFrom ?? 0)) loopStart = steps.length;
+    starts[name] ??= steps.length;
     const section = song.sections[name];
     if (!section) throw new Error(`${song.title}: no section called '${name}'`);
 
@@ -204,7 +314,7 @@ export function compile(song) {
     }
   });
 
-  return { steps, loopStart };
+  return { steps, loopStart, starts };
 }
 
 function makeNoise(ctx) {
@@ -340,6 +450,7 @@ function playTone(ctx, channel, instrument, midi, time, seconds, noise) {
 //              (a piano with the pedal down, a harp, drums), ignoring its length
 //   offset     seconds to skip at the start of each recording (a slow bow)
 //   octave     plays everything this many octaves up or down
+//   muffle     a lowpass at this many Hz: dampened, far off (800 is behind a wall)
 // An unpitched set (a drum, a cymbal) goes on a drum track: give it
 // `drum: 'sample'` and write its hits with 'x'.
 const SAMPLE_ROOT = new URL('../../assets/audio/samples/', import.meta.url);
@@ -400,7 +511,14 @@ function playSample(ctx, channel, instrument, midi, time, seconds) {
     gain.gain.setTargetAtTime(0, end, release / 3);
     stopAt = Math.min(stopAt, end + release * 2 + 0.05);
   }
-  source.connect(gain).connect(channel);
+  // `muffle` (Hz): played through a lowpass, dampened, as if from behind a wall.
+  if (instrument.muffle) {
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = instrument.muffle;
+    filter.Q.value = 0.5;
+    source.connect(filter).connect(gain).connect(channel);
+  } else source.connect(gain).connect(channel);
   source.start(time, offset);
   source.stop(stopAt);
 }
@@ -576,7 +694,8 @@ function buildChannels(ctx, bus, instruments) {
 // A song while it plays: schedules notes slightly ahead of time so they land
 // exactly on the beat, and loops forever until stopped.
 class SongPlayback {
-  constructor(ctx, destination, noise, song) {
+  // `from`: the name of a section to start at, instead of the beginning.
+  constructor(ctx, destination, noise, song, from = null) {
     this.ctx = ctx;
     this.noise = noise;
     this.song = song;
@@ -585,9 +704,10 @@ class SongPlayback {
     this.bus.gain.value = song.volume ?? 1;
     this.bus.connect(songOutput(ctx, song, destination));
     this.channels = buildChannels(ctx, this.bus, song.instruments);
-    ({ steps: this.steps, loopStart: this.loopStart } = compile(song));
+    let starts;
+    ({ steps: this.steps, loopStart: this.loopStart, starts } = compile(song));
     this.stepSeconds = 60 / song.bpm / song.stepsPerBeat;
-    this.index = 0;
+    this.index = (from && starts[from]) || 0;
     this.ended = false;
     // Until it starts, it's at the very beginning (see songTime).
     this.startTime = Infinity;
@@ -715,6 +835,12 @@ export async function renderSong(song, seconds, sampleRate = 44100) {
 // in a cave, with an echo), `hum` (the low note of a big hollow space),
 // `fire` (a crackle) and `whoosh` (great gusts that rush past from one side
 // to the other, for the very top). Levels are 0 to 1 (wind can go higher).
+// Chapter 4's underground adds: `picks` (far-off tapping of picks on rock),
+// `creaks` (old timber settling), `grit` (a trickle of dust and chips),
+// `rumble` (something big shifting a long way off), `laps` (water lapping a
+// shore), `slowdrips` (big, slow drops, a long echo), `pressure` (the low
+// drone of a great deal of rock overhead) and `far` (soft sounds from a very
+// long way off).
 // `peak` is the summit: no song there, only the wind.
 const AMBIENCES = {
   mountain: { wind: 0.55, birds: 0.6 },
@@ -732,8 +858,94 @@ const AMBIENCES = {
   // `hush`, where the beast is near: no birds at all, just a low hum.
   hushwood: { wind: 0.22, birds: 0.18, drips: 0.12 },
   hush: { wind: 0.12, hum: 0.3 },
+  // Chapter 4. Sunnyside: a warm breeze, skylarks high up, a bee going by,
+  // a cuckoo somewhere far off. The Glimmering: soft chimes of crystal
+  // ringing, slow drips, a gentle shimmer of a hum. Belowtown: a cosy murmur
+  // of a town underground, small voices, a hammer a long way off, drips,
+  // a fire crackling somewhere.
+  meadow: { wind: 0.2, birds: 0.35, larks: 0.7, bees: 0.6, cuckoo: 0.7 },
+  crystal: { wind: 0.05, chimes: 0.8, drips: 0.3, shimmer: 0.6 },
+  belowtown: { murmur: 0.6, chatter: 0.5, hammer: 0.5, drips: 0.2, fire: 0.18, chimes: 0.15 },
+  // The market: a busier murmur and more chatter, the smith far off. The forge: the hammer close, the fire loud, hardly anyone talking.
+  belowtown_market: { murmur: 0.95, chatter: 0.95, hammer: 0.25, drips: 0.12, fire: 0.1, chimes: 0.15 },
+  belowtown_forge: { murmur: 0.15, hammer: 1.7, drips: 0.1, fire: 0.55 },
+  // The Diggings: picks tapping somewhere far down a drift, timbers creaking
+  // under the weight, grit trickling, a deep rumble now and then.
+  mine: { wind: 0.06, picks: 0.7, creaks: 0.6, grit: 0.5, rumble: 0.5, hum: 0.12 },
+  // The Stillwater: nothing but slow drops falling a long way into the lake,
+  // the faintest lap on the shore, and one deep note holding the whole cavern.
+  lake: { slowdrips: 0.7, laps: 0.5, hum: 0.4, wind: 0.04 },
+  // The Deep: almost nothing. Pressure, one slow drop, and far-off things.
+  deep: { pressure: 0.8, slowdrips: 0.35, far: 0.6 },
+  // Chapter 5, the coast. New layers: `surf` (waves breaking and hissing
+  // back), `gulls` (cries, now and then), `rain` (a steady hiss on water;
+  // `rainRoof` drums it on boards, `rainGlass` ticks it on a window),
+  // `thunder` (rolls a long way off), `bell` (a buoy's bell tolling far over
+  // the water), `boom` (the sea thumping in a cave mouth) and `tavern` (a
+  // muffled room full of folk through a wall).
+  // Gullrest: the happy beach. Gentle surf, a lot of gulls, a light breeze.
+  beach: { surf: 0.5, gulls: 0.9, wind: 0.12 },
+  // The storm shore (Wrack, the Lanes): rain on water, waves, far thunder.
+  storm_shore: { rain: 0.7, surf: 0.7, thunder: 0.6, wind: 0.3 },
+  // Saltcombe's boardwalks: rain on roofs, stilts creaking, a muffled tavern.
+  stilt_town: { rainRoof: 0.6, surf: 0.3, creaks: 0.6, tavern: 0.5, thunder: 0.3, wind: 0.15 },
+  // Inside a Saltcombe house or tavern: the rain only on the roof above.
+  stilt_inside: { rainRoof: 0.25, tavern: 0.8, creaks: 0.35, fire: 0.3 },
+  // The Wreck Yard: hulls groaning, a bell buoy far off, rain.
+  wreck_yard: { rain: 0.6, creaks: 1.1, bell: 0.7, surf: 0.4, thunder: 0.4, wind: 0.25 },
+  // The Soundings: a sea cave. Drips, and the sea booming a long way off.
+  sea_cave: { slowdrips: 0.6, drips: 0.4, boom: 0.8, surf: 0.25, hum: 0.25 },
+  // The Isles and the Reach: open sea. Wind, big waves, rain.
+  open_sea: { wind: 1.1, surf: 1, rain: 0.8, thunder: 0.7 },
+  // Haddock's Light, inside: a fire, rain on glass, the sea below.
+  lighthouse: { rainGlass: 0.5, surf: 0.3, fire: 0.3, wind: 0.2, creaks: 0.25 },
+  // The Last Light: wind howling round the tower, rain on glass, deep surf.
+  last_light: { wind: 1.7, rainGlass: 0.8, surf: 0.9, boom: 0.4, thunder: 0.5 },
 };
 export const AMBIENCE_NAMES = Object.keys(AMBIENCES);
+
+// Set by a room whose lightning is on screen (every frame it draws): while it
+// is fresh, the ambience's random thunder keeps quiet and each flash cues its own.
+let lastLightning = -1e9;
+const lightningOnScreen = () => performance.now() - lastLightning < 600;
+
+// One roll of thunder, `delay` seconds from now. With `crack`, it opens with a
+// sharp clap close by (the lightning's own), then the long roll.
+function rollThunder(ctx, noise, bus, level, delay, crack) {
+  const now = ctx.currentTime + delay;
+  const seconds = 3.5 + Math.random() * 3;
+  const source = ctx.createBufferSource();
+  source.buffer = noise;
+  source.loop = true;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 130;
+  filter.Q.value = 1;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.07 * level, now + (crack ? 0.08 : 0.5));
+  for (let k = 1; k < 4; k++) gain.gain.linearRampToValueAtTime((0.03 + Math.random() * 0.04) * level, now + 0.5 + k * seconds * 0.17);
+  gain.gain.linearRampToValueAtTime(0, now + seconds);
+  const pan = ctx.createStereoPanner();
+  pan.pan.value = Math.random() * 1.2 - 0.6;
+  source.connect(filter).connect(gain).connect(pan).connect(bus);
+  source.start(now, Math.random());
+  source.stop(now + seconds + 0.1);
+  if (crack) {
+    const snap = ctx.createBufferSource();
+    snap.buffer = noise;
+    const band = ctx.createBiquadFilter();
+    band.type = 'lowpass';
+    band.frequency.value = 900;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.22 * level, now + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+    snap.connect(band).connect(g).connect(pan);
+    snap.start(now, Math.random());
+    snap.stop(now + 0.5);
+  }
+}
 
 class Ambience {
   constructor(ctx, destination, noise, spec) {
@@ -752,6 +964,31 @@ class Ambience {
     if (spec.whoosh) this.every(() => this.whoosh(spec.whoosh), 3 / spec.whoosh, 8 / spec.whoosh);
     if (spec.birds) this.every(() => this.chirp(spec.birds), 2.5 / spec.birds, 7 / spec.birds);
     if (spec.drips) this.every(() => this.drip(spec.drips), 0.8 / spec.drips, 3.5 / spec.drips);
+    if (spec.picks) this.every(() => this.pick(spec.picks), 5 / spec.picks, 15 / spec.picks);
+    if (spec.creaks) this.every(() => this.creak(spec.creaks), 7 / spec.creaks, 19 / spec.creaks);
+    if (spec.grit) this.every(() => this.grit(spec.grit), 4 / spec.grit, 12 / spec.grit);
+    if (spec.rumble) this.every(() => this.rumble(spec.rumble), 18 / spec.rumble, 40 / spec.rumble);
+    if (spec.laps) this.every(() => this.lap(spec.laps), 3.5 / spec.laps, 9 / spec.laps);
+    if (spec.slowdrips) this.every(() => this.slowDrip(spec.slowdrips), 3.2 / spec.slowdrips, 8 / spec.slowdrips);
+    if (spec.far) this.every(() => this.farOff(spec.far), 9 / spec.far, 24 / spec.far);
+    if (spec.pressure) this.startPressure(spec.pressure);
+    if (spec.larks) this.every(() => this.lark(spec.larks), 4 / spec.larks, 11 / spec.larks);
+    if (spec.bees) this.every(() => this.bee(spec.bees), 5 / spec.bees, 14 / spec.bees);
+    if (spec.cuckoo) this.every(() => this.cuckoo(spec.cuckoo), 9 / spec.cuckoo, 24 / spec.cuckoo);
+    if (spec.chimes) this.every(() => this.chime(spec.chimes), 1.2 / spec.chimes, 4.5 / spec.chimes);
+    if (spec.shimmer) this.startShimmer(spec.shimmer);
+    if (spec.murmur) this.startMurmur(spec.murmur);
+    if (spec.chatter) this.every(() => this.chatter(spec.chatter), 2 / spec.chatter, 7 / spec.chatter);
+    if (spec.hammer) this.every(() => this.hammer(spec.hammer), 4 / spec.hammer, 11 / spec.hammer);
+    if (spec.surf) this.every(() => this.wave(spec.surf), 3.5 / spec.surf, 8 / spec.surf);
+    if (spec.gulls) this.every(() => this.gull(spec.gulls), 3 / spec.gulls, 9 / spec.gulls);
+    if (spec.rain) this.startRain(spec.rain, 'sea');
+    if (spec.rainRoof) this.startRain(spec.rainRoof, 'roof');
+    if (spec.rainGlass) this.startRain(spec.rainGlass, 'glass');
+    if (spec.thunder) this.every(() => { if (!lightningOnScreen()) this.thunder(spec.thunder); }, 14 / spec.thunder, 34 / spec.thunder);
+    if (spec.bell) this.every(() => this.buoyBell(spec.bell), 6 / spec.bell, 14 / spec.bell);
+    if (spec.boom) this.every(() => this.boom(spec.boom), 5 / spec.boom, 13 / spec.boom);
+    if (spec.tavern) this.startTavern(spec.tavern);
   }
 
   // Calls `fn` again and again, a random `min` to `max` seconds apart.
@@ -941,6 +1178,671 @@ class Ambience {
     osc.stop(now + 0.2);
   }
 
+  // A skylark high overhead: a long, bubbling run of tiny notes that climbs
+  // and wanders, two or three seconds of it.
+  lark(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.4 - 0.7;
+    pan.connect(this.bus);
+    let pitch = 2600 + Math.random() * 600;
+    const seconds = 1.6 + Math.random() * 1.6;
+    for (let t = 0; t < seconds; t += 0.045 + Math.random() * 0.03) {
+      pitch = Math.max(2300, Math.min(4200, pitch + (Math.random() - 0.42) * 420));
+      const at = now + t;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(pitch, at);
+      osc.frequency.linearRampToValueAtTime(pitch * (0.92 + Math.random() * 0.2), at + 0.04);
+      const swell = Math.sin((t / seconds) * Math.PI);
+      gain.gain.setValueAtTime(0, at);
+      gain.gain.linearRampToValueAtTime(0.011 * level * (0.4 + swell), at + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.05);
+      osc.connect(gain).connect(pan);
+      osc.start(at);
+      osc.stop(at + 0.06);
+    }
+  }
+
+  // A bee going by: a low buzz that swells, wavers and fades, crossing from
+  // one side to the other.
+  bee(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const seconds = 2 + Math.random() * 2;
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.value = 150 + Math.random() * 40;
+    const vibrato = ctx.createOscillator();
+    vibrato.frequency.value = 9 + Math.random() * 4;
+    const depth = ctx.createGain();
+    depth.gain.value = 12;
+    vibrato.connect(depth).connect(osc.frequency);
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 520;
+    filter.Q.value = 2.5;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.014 * level, now + seconds * 0.5);
+    gain.gain.linearRampToValueAtTime(0, now + seconds);
+    const pan = ctx.createStereoPanner();
+    const from = Math.random() < 0.5 ? -0.8 : 0.8;
+    pan.pan.setValueAtTime(from, now);
+    pan.pan.linearRampToValueAtTime(-from, now + seconds);
+    osc.connect(filter).connect(gain).connect(pan).connect(this.bus);
+    osc.start(now);
+    vibrato.start(now);
+    osc.stop(now + seconds + 0.1);
+    vibrato.stop(now + seconds + 0.1);
+  }
+
+  // A cuckoo, far off: two soft round notes, the second a minor third down,
+  // and now and then the pair again.
+  cuckoo(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.2 - 0.6;
+    const soften = ctx.createBiquadFilter();
+    soften.type = 'lowpass';
+    soften.frequency.value = 1400;
+    soften.connect(pan).connect(this.bus);
+    const calls = Math.random() < 0.5 ? 2 : 1;
+    for (let c = 0; c < calls; c++) {
+      [[700, 0], [560, 0.3]].forEach(([freq, offset]) => {
+        const t = now + c * 0.95 + offset;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * 1.03, t);
+        osc.frequency.exponentialRampToValueAtTime(freq, t + 0.05);
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.03 * level, t + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
+        osc.connect(gain).connect(soften);
+        osc.start(t);
+        osc.stop(t + 0.3);
+      });
+    }
+  }
+
+  // A crystal ringing: a bell-like note (the partials of a struck glass) from
+  // a bright pentatonic scale, long and soft, with an echo.
+  chime(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.6 - 0.8;
+    const delay = ctx.createDelay(1);
+    delay.delayTime.value = 0.33;
+    const feedback = ctx.createGain();
+    feedback.gain.value = 0.45;
+    pan.connect(this.bus);
+    pan.connect(delay);
+    delay.connect(feedback).connect(delay);
+    delay.connect(this.bus);
+    const scale = [1046.5, 1174.7, 1396.9, 1568, 1760, 2093, 2349.3];
+    const root = scale[Math.floor(Math.random() * scale.length)];
+    [[1, 1], [2.76, 0.4], [5.4, 0.16]].forEach(([ratio, amount]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = root * ratio;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.02 * level * amount, now + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.2 / ratio + 0.4);
+      osc.connect(gain).connect(pan);
+      osc.start(now);
+      osc.stop(now + 2.7);
+    });
+  }
+
+  // The faint glassy hum of a cave full of crystal: slightly different notes
+  // beating against each other, slowly swelling.
+  startShimmer(level) {
+    const { ctx } = this;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.004 * level;
+    gain.connect(this.bus);
+    [[330, 1], [331.6, 1], [494, 0.5]].forEach(([freq, part]) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const g = ctx.createGain();
+      g.gain.value = part;
+      osc.connect(g).connect(gain);
+      osc.start();
+      this.nodes.push(osc);
+    });
+    this.every(() => {
+      gain.gain.setTargetAtTime((0.002 + Math.random() * 0.006) * level, ctx.currentTime, 2.5);
+    }, 3, 8);
+  }
+
+  // The low murmur of a town: noise through a mouth-shaped band, rising and
+  // falling as if many people were talking a long way off.
+  startMurmur(level) {
+    const { ctx } = this;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 480;
+    filter.Q.value = 1.4;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.012 * level;
+    source.connect(filter).connect(gain).connect(this.bus);
+    source.start();
+    this.nodes.push(source);
+    this.every(() => {
+      const now = ctx.currentTime;
+      gain.gain.setTargetAtTime((0.006 + Math.random() * 0.016) * level, now, 0.5);
+      filter.frequency.setTargetAtTime(380 + Math.random() * 320, now, 0.6);
+    }, 0.5, 1.6);
+  }
+
+  // Someone speaking in the distance: two to four soft syllables, each a short
+  // buzz through a vowel-ish band, the pitch drifting.
+  chatter(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.6 - 0.8;
+    const far = ctx.createBiquadFilter();
+    far.type = 'lowpass';
+    far.frequency.value = 1100;
+    far.connect(pan).connect(this.bus);
+    const syllables = 2 + Math.floor(Math.random() * 3);
+    let pitch = 110 + Math.random() * 130;
+    for (let i = 0; i < syllables; i++) {
+      const t = now + i * (0.14 + Math.random() * 0.08);
+      pitch *= 0.92 + Math.random() * 0.2;
+      const osc = ctx.createOscillator();
+      const vowel = ctx.createBiquadFilter();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.value = pitch;
+      vowel.type = 'bandpass';
+      vowel.frequency.value = 500 + Math.random() * 500;
+      vowel.Q.value = 3;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.02 * level, t + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+      osc.connect(vowel).connect(gain).connect(far);
+      osc.start(t);
+      osc.stop(t + 0.15);
+    }
+  }
+
+  // A smith's hammer, a long way off: a few bright clinks on metal, with the
+  // stone of the cavern answering.
+  hammer(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.2 - 0.6;
+    const delay = ctx.createDelay(1);
+    delay.delayTime.value = 0.26;
+    const feedback = ctx.createGain();
+    feedback.gain.value = 0.35;
+    pan.connect(this.bus);
+    pan.connect(delay);
+    delay.connect(feedback).connect(delay);
+    delay.connect(this.bus);
+    const strikes = 2 + Math.floor(Math.random() * 3);
+    const pitch = 1100 + Math.random() * 500;
+    for (let i = 0; i < strikes; i++) {
+      const t = now + i * (0.42 + (i % 2) * 0.05);
+      [[1, 1], [2.4, 0.35]].forEach(([ratio, amount]) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = pitch * ratio * (i === strikes - 1 ? 0.9 : 1);
+        gain.gain.setValueAtTime(0.03 * level * amount, t);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+        osc.connect(gain).connect(pan);
+        osc.start(t);
+        osc.stop(t + 0.3);
+      });
+    }
+  }
+
+  // A tail of echoes behind a sound: `seconds` between them, each `keep` as loud, darkened by a lowpass.
+  echoTail(source, seconds, keep, tone = 2400) {
+    const { ctx } = this;
+    const delay = ctx.createDelay(2);
+    delay.delayTime.value = seconds;
+    const feedback = ctx.createGain();
+    feedback.gain.value = keep;
+    const dark = ctx.createBiquadFilter();
+    dark.type = 'lowpass';
+    dark.frequency.value = tone;
+    source.connect(delay);
+    delay.connect(dark).connect(feedback).connect(delay);
+    dark.connect(this.bus);
+  }
+
+  // Picks on rock, far down some other tunnel: a few dull taps, a pause, an echo.
+  pick(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.6 - 0.8;
+    const tone = ctx.createBiquadFilter();
+    tone.type = 'lowpass';
+    tone.frequency.value = 1900;
+    tone.connect(pan);
+    pan.connect(this.bus);
+    this.echoTail(pan, 0.31, 0.38, 1500);
+    const taps = 2 + Math.floor(Math.random() * 4);
+    const pitch = 1300 + Math.random() * 700;
+    let t = now;
+    for (let i = 0; i < taps; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(pitch * (0.94 + Math.random() * 0.12), t);
+      osc.frequency.exponentialRampToValueAtTime(pitch * 0.55, t + 0.05);
+      gain.gain.setValueAtTime(0.03 * level, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+      osc.connect(gain).connect(tone);
+      osc.start(t);
+      osc.stop(t + 0.09);
+      t += 0.42 + Math.random() * 0.16;
+    }
+  }
+
+  // Old timber taking the weight: a low, slow groan that bends in pitch.
+  creak(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const seconds = 0.9 + Math.random() * 1.3;
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    const base = 70 + Math.random() * 60;
+    osc.frequency.setValueAtTime(base, now);
+    osc.frequency.linearRampToValueAtTime(base * (0.8 + Math.random() * 0.5), now + seconds);
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.Q.value = 7;
+    filter.frequency.setValueAtTime(350, now);
+    filter.frequency.linearRampToValueAtTime(260 + Math.random() * 500, now + seconds);
+    // A shudder in it, as the grain gives.
+    const shake = ctx.createOscillator();
+    const shakeDepth = ctx.createGain();
+    shake.frequency.value = 17 + Math.random() * 12;
+    shakeDepth.gain.value = 7;
+    shake.connect(shakeDepth).connect(osc.frequency);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.02 * level, now + seconds * 0.35);
+    gain.gain.linearRampToValueAtTime(0, now + seconds);
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.2 - 0.6;
+    osc.connect(filter).connect(gain).connect(pan).connect(this.bus);
+    osc.start(now);
+    shake.start(now);
+    osc.stop(now + seconds + 0.05);
+    shake.stop(now + seconds + 0.05);
+  }
+
+  // Grit and little chips of rock running down a wall: a patter of tiny ticks.
+  grit(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.6 - 0.8;
+    pan.connect(this.bus);
+    const ticks = 6 + Math.floor(Math.random() * 12);
+    let t = now;
+    for (let i = 0; i < ticks; i++) {
+      const tick = ctx.createBufferSource();
+      const band = ctx.createBiquadFilter();
+      const g = ctx.createGain();
+      tick.buffer = this.noise;
+      band.type = 'bandpass';
+      band.frequency.value = 2200 + Math.random() * 2600;
+      band.Q.value = 2;
+      g.gain.setValueAtTime((0.012 + Math.random() * 0.02) * level, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.025);
+      tick.connect(band).connect(g).connect(pan);
+      tick.start(t, Math.random());
+      tick.stop(t + 0.03);
+      t += 0.02 + Math.random() * 0.09 * (1 + i / ticks);
+    }
+  }
+
+  // Something very big settling, a long way off: a low swell with no edge to it.
+  rumble(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const seconds = 2.5 + Math.random() * 2.5;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 90;
+    filter.Q.value = 0.8;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime((0.05 + Math.random() * 0.04) * level, now + seconds * 0.4);
+    gain.gain.linearRampToValueAtTime(0, now + seconds);
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.2 - 0.6;
+    source.connect(filter).connect(gain).connect(pan).connect(this.bus);
+    source.start(now, Math.random());
+    source.stop(now + seconds + 0.1);
+  }
+
+  // A lap of water on stone: soft noise swelling and ebbing, once.
+  lap(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const seconds = 1.2 + Math.random() * 1.2;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.Q.value = 0.7;
+    filter.frequency.setValueAtTime(280, now);
+    filter.frequency.linearRampToValueAtTime(520, now + seconds * 0.4);
+    filter.frequency.linearRampToValueAtTime(240, now + seconds);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime((0.014 + Math.random() * 0.01) * level, now + seconds * 0.4);
+    gain.gain.linearRampToValueAtTime(0, now + seconds);
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.6 - 0.8;
+    source.connect(filter).connect(gain).connect(pan).connect(this.bus);
+    source.start(now, Math.random());
+    source.stop(now + seconds + 0.1);
+  }
+
+  // One heavy drop in a huge space: low, round, and a long way to the echo.
+  slowDrip(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.4 - 0.7;
+    pan.connect(this.bus);
+    this.echoTail(pan, 0.52 + Math.random() * 0.2, 0.5, 1400);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    const pitch = 360 + Math.random() * 360;
+    osc.frequency.setValueAtTime(pitch * 1.1, now);
+    osc.frequency.exponentialRampToValueAtTime(pitch * 0.85, now + 0.2);
+    gain.gain.setValueAtTime(0.05 * level, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+    osc.connect(gain).connect(pan);
+    osc.start(now);
+    osc.stop(now + 0.3);
+  }
+
+  // Far-off things: a muffled thud, or a long soft note sliding down and gone.
+  farOff(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() < 0.5 ? -0.85 : 0.85;
+    pan.connect(this.bus);
+    if (Math.random() < 0.5) {
+      const source = ctx.createBufferSource();
+      source.buffer = this.noise;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 130;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.07 * level, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+      source.connect(filter).connect(gain).connect(pan);
+      source.start(now, Math.random());
+      source.stop(now + 0.7);
+      this.echoTail(pan, 0.7, 0.4, 500);
+      return;
+    }
+    const seconds = 3.5 + Math.random() * 2;
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    const from = 150 + Math.random() * 90;
+    osc.frequency.setValueAtTime(from, now);
+    osc.frequency.exponentialRampToValueAtTime(from * 0.94, now + seconds);
+    const vibrato = ctx.createOscillator();
+    const depth = ctx.createGain();
+    vibrato.frequency.value = 4.5;
+    depth.gain.value = 0.6;
+    vibrato.connect(depth).connect(osc.frequency);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.012 * level, now + seconds * 0.45);
+    gain.gain.linearRampToValueAtTime(0, now + seconds);
+    osc.connect(gain).connect(pan);
+    osc.start(now);
+    vibrato.start(now);
+    osc.stop(now + seconds + 0.1);
+    vibrato.stop(now + seconds + 0.1);
+  }
+
+  // A wave: noise that swells as it breaks (bright), then hisses back (dull).
+  wave(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const seconds = 3.2 + Math.random() * 2.2;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.Q.value = 0.5;
+    filter.frequency.setValueAtTime(260, now);
+    filter.frequency.linearRampToValueAtTime(1500, now + seconds * 0.38);
+    filter.frequency.linearRampToValueAtTime(300, now + seconds);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime((0.03 + Math.random() * 0.02) * level, now + seconds * 0.38);
+    gain.gain.linearRampToValueAtTime(0.012 * level, now + seconds * 0.6);
+    gain.gain.linearRampToValueAtTime(0, now + seconds);
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.4 - 0.7;
+    source.connect(filter).connect(gain).connect(pan).connect(this.bus);
+    source.start(now, Math.random());
+    source.stop(now + seconds + 0.1);
+  }
+
+  // A gull: a long falling cry, two or three times, a little nasal.
+  gull(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.8 - 0.9;
+    pan.connect(this.bus);
+    const cries = 2 + Math.floor(Math.random() * 3);
+    const base = 1250 + Math.random() * 500;
+    for (let i = 0; i < cries; i++) {
+      const t = now + i * (0.32 + Math.random() * 0.1);
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const band = ctx.createBiquadFilter();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(base * 0.85, t);
+      osc.frequency.linearRampToValueAtTime(base * 1.25, t + 0.08);
+      osc.frequency.exponentialRampToValueAtTime(base * 0.7, t + 0.3);
+      band.type = 'bandpass';
+      band.frequency.value = base * 1.5;
+      band.Q.value = 2.2;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.02 * level, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
+      osc.connect(band).connect(gain).connect(pan);
+      osc.start(t);
+      osc.stop(t + 0.36);
+    }
+  }
+
+  // Rain, steady: `sea` hisses on water, `roof` drums low on boards, `glass`
+  // ticks high on a window. A slow wander in the level keeps it alive.
+  startRain(level, kind) {
+    const { ctx } = this;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = kind === 'roof' ? 'bandpass' : 'highpass';
+    filter.frequency.value = kind === 'roof' ? 900 : kind === 'glass' ? 3800 : 2200;
+    filter.Q.value = kind === 'roof' ? 0.5 : 0.7;
+    const gain = ctx.createGain();
+    const base = (kind === 'glass' ? 0.011 : 0.016) * level;
+    gain.gain.value = base;
+    source.connect(filter).connect(gain).connect(this.bus);
+    source.start();
+    this.nodes.push(source);
+    this.every(() => gain.gain.setTargetAtTime(base * (0.7 + Math.random() * 0.6), ctx.currentTime, 1.6), 2, 5);
+    // Fat drops on the wood or glass.
+    if (kind !== 'sea') {
+      this.every(() => {
+        const now = ctx.currentTime;
+        const tick = ctx.createBufferSource();
+        const bp = ctx.createBiquadFilter();
+        const g = ctx.createGain();
+        tick.buffer = this.noise;
+        bp.type = 'bandpass';
+        bp.frequency.value = kind === 'glass' ? 4200 : 1300;
+        bp.Q.value = 4;
+        g.gain.setValueAtTime(0.03 * level, now);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+        tick.connect(bp).connect(g).connect(this.bus);
+        tick.start(now, Math.random());
+        tick.stop(now + 0.04);
+      }, 0.08, 0.5);
+    }
+  }
+
+  // Thunder a long way off: a low roll that builds, shudders and dies.
+  // (Rooms with lightning on screen turn this timer off and cue thunder from
+  // each flash instead: see MusicPlayer.thunderCue.)
+  thunder(level) {
+    rollThunder(this.ctx, this.noise, this.bus, level, 0, false);
+  }
+
+  // A buoy's bell, tolled by the swell a long way over the water: a dull
+  // iron note with a wobble, and a long echo.
+  buoyBell(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.4 - 0.7;
+    const far = ctx.createBiquadFilter();
+    far.type = 'lowpass';
+    far.frequency.value = 1500;
+    const delay = ctx.createDelay(1);
+    delay.delayTime.value = 0.46;
+    const feedback = ctx.createGain();
+    feedback.gain.value = 0.4;
+    far.connect(pan).connect(this.bus);
+    pan.connect(delay);
+    delay.connect(feedback).connect(delay);
+    delay.connect(this.bus);
+    const root = 330 + Math.random() * 40;
+    const strikes = 1 + Math.floor(Math.random() * 2);
+    for (let n = 0; n < strikes; n++) {
+      const t = now + n * (0.9 + Math.random() * 0.5);
+      [[1, 1], [2.4, 0.5], [4.1, 0.22]].forEach(([ratio, amount]) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = root * ratio;
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.022 * amount * level, t + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 2.4 / ratio);
+        osc.connect(gain).connect(far);
+        osc.start(t);
+        osc.stop(t + 2.6);
+      });
+    }
+  }
+
+  // The sea thumping into the cave mouth: a low thud, then a washing hiss.
+  boom(level) {
+    const { ctx } = this;
+    const now = ctx.currentTime;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = Math.random() * 1.2 - 0.6;
+    pan.connect(this.bus);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(70, now);
+    osc.frequency.exponentialRampToValueAtTime(34, now + 0.9);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.09 * level, now + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
+    osc.connect(gain).connect(pan);
+    osc.start(now);
+    osc.stop(now + 1.5);
+    const wash = ctx.createBufferSource();
+    wash.buffer = this.noise;
+    wash.loop = true;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(900, now);
+    lp.frequency.linearRampToValueAtTime(240, now + 2.4);
+    const wg = ctx.createGain();
+    wg.gain.setValueAtTime(0, now);
+    wg.gain.linearRampToValueAtTime(0.02 * level, now + 0.25);
+    wg.gain.linearRampToValueAtTime(0, now + 2.6);
+    wash.connect(lp).connect(wg).connect(pan);
+    wash.start(now, Math.random());
+    wash.stop(now + 2.7);
+  }
+
+  // A tavern through the wall: a dull murmur that swells and settles.
+  startTavern(level) {
+    const { ctx } = this;
+    const source = ctx.createBufferSource();
+    source.buffer = this.noise;
+    source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 420;
+    filter.Q.value = 1.1;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.014 * level;
+    source.connect(filter).connect(gain).connect(this.bus);
+    source.start();
+    this.nodes.push(source);
+    this.every(() => {
+      const now = ctx.currentTime;
+      gain.gain.setTargetAtTime((0.007 + Math.random() * 0.016) * level, now, 0.4);
+      filter.frequency.setTargetAtTime(300 + Math.random() * 240, now, 0.5);
+    }, 0.6, 1.8);
+  }
+
+  // The weight of a great deal of rock overhead: two very low notes a hair
+  // apart, so they slowly beat against each other.
+  startPressure(level) {
+    const { ctx } = this;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.02 * level;
+    gain.connect(this.bus);
+    for (const freq of [38, 39.7, 57.3]) {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const g = ctx.createGain();
+      g.gain.value = freq > 50 ? 0.35 : 1;
+      osc.connect(g).connect(gain);
+      osc.start();
+      this.nodes.push(osc);
+    }
+    this.every(() => gain.gain.setTargetAtTime((0.014 + Math.random() * 0.012) * level, ctx.currentTime, 5), 8, 16);
+  }
+
   stop() {
     for (const timer of this.timers) clearTimeout(timer);
     const now = this.ctx.currentTime;
@@ -974,6 +1876,16 @@ class MusicPlayer {
     window.addEventListener('pointerdown', () => this.unlock());
   }
 
+  // How loud the music is this moment (its RMS level, about 0 to 0.1 for our
+  // songs), whatever the music volume is set to. 0 before the sound starts.
+  loudness() {
+    if (!this.meter) return 0;
+    this.meter.getFloatTimeDomainData(this.meterData);
+    let sum = 0;
+    for (const v of this.meterData) sum += v * v;
+    return Math.sqrt(sum / this.meterData.length) / Math.max(0.05, SETTINGS.music);
+  }
+
   unlock() {
     if (this.ctx) {
       if (this.ctx.state === 'suspended') this.ctx.resume();
@@ -988,6 +1900,12 @@ class MusicPlayer {
     this.musicBus = this.ctx.createGain();
     this.musicBus.gain.value = SETTINGS.music;
     this.musicBus.connect(this.master);
+    // A meter on the music, for things in the world that move with it (the
+    // Deep's crystals swell with its song: see loudness()).
+    this.meter = this.ctx.createAnalyser();
+    this.meter.fftSize = 1024;
+    this.meterData = new Float32Array(this.meter.fftSize);
+    this.musicBus.connect(this.meter);
     this.sfxBus = this.ctx.createGain();
     this.sfxBus.gain.value = SETTINGS.sounds;
     this.sfxBus.connect(this.master);
@@ -1008,6 +1926,17 @@ class MusicPlayer {
     if (this.ctx) this.startAmbience(name);
   }
 
+  // Lightning on screen takes over the ambience's thunder: call it each frame
+  // lightning is drawn, and the random rolls stop; each flash cues one instead.
+  syncThunder() {
+    lastLightning = performance.now();
+  }
+
+  thunderCue(delay = 0.5, level = 0.8) {
+    if (!this.ctx || this.muted) return;
+    rollThunder(this.ctx, this.noise, this.sfxBus, level, delay, true);
+  }
+
   startAmbience(name) {
     this.ambience?.stop();
     this.ambience = null;
@@ -1022,6 +1951,18 @@ class MusicPlayer {
   get songTime() {
     if (!this.current) return null;
     return Math.max(0, this.ctx.currentTime - this.current.startTime);
+  }
+
+  // Where we are in the current song's beat: { beats, bpm } with `beats` the
+  // count since it began (a fraction, so 8.5 is half way through the ninth
+  // beat), or null with no song playing or no sound yet. Things that swell
+  // with the music use this (see src/overworld/beatPulse.js).
+  beatPosition() {
+    const song = this.current;
+    if (!song || !this.ctx || this.ctx.state !== 'running' || !Number.isFinite(song.startTime)) return null;
+    const seconds = this.ctx.currentTime - song.startTime;
+    if (seconds < 0) return null;
+    return { beats: (seconds * song.song.bpm) / 60, bpm: song.song.bpm };
   }
 
   // The name of the song that's playing (or should be, once sound is allowed).
@@ -1041,6 +1982,12 @@ class MusicPlayer {
 
   // Plays a sound effect from SFX. Silent until the first key press, like the music.
   sfx(name) {
+    // Quiet while a cutscene is skipped through (ScenePlayer.skipThrough).
+    if (this.hushed) return;
+    if (name === 'farCheer') {
+      if (this.ctx) farCheer(this.ctx, this.noise, this.sfxBus);
+      return;
+    }
     const tones = SFX[name];
     if (!tones) throw new Error(`Unknown sound effect '${name}'`);
     if (!this.ctx) return;
@@ -1060,24 +2007,46 @@ class MusicPlayer {
     }
   }
 
+  // One struck note from a set of real recordings (src/audio/sampleSets.js),
+  // for things in the world that ring: the Glimmering's singing crystals.
+  // `delay` seconds from now, `octave` shifts it, `seconds` is how long it's
+  // held before it lets go. The recordings load the first time (see `warm`).
+  chime(sample, midi, { volume = 0.2, seconds = 1.6, release = 1.2, delay = 0, octave = 0, attack = 0 } = {}) {
+    if (!this.ctx) return;
+    const instrument = { sample, volume, release, octave, attack };
+    const play = () => playSample(this.ctx, this.sfxBus, instrument, midi, this.ctx.currentTime + delay, seconds);
+    const loading = loadSamples(this.ctx, { title: 'chime', instruments: { chime: instrument } });
+    if (loading) loading.then(play, () => {});
+    else play();
+  }
+
+  // Loads recordings ahead of time, so a chime rings the moment it's struck.
+  warm(...samples) {
+    if (!this.ctx) return;
+    const instruments = Object.fromEntries(samples.map((sample, i) => [`warm${i}`, { sample }]));
+    loadSamples(this.ctx, { title: 'warm', instruments })?.catch(() => {});
+  }
+
   // Plays a song by name (looping), or stops the music with null, with the
   // `ambience` of the place under it (none, if left out: battles and menus
   // are quiet places). Asking for the song that's already playing just
   // changes the ambience.
-  play(name, ambience = null) {
+  // With `from`, the name of one of the song's sections, it starts there (and
+  // starts again even if it was already playing): a scene cutting to the best part.
+  play(name, ambience = null, from = null) {
     this.setAmbience(ambience);
-    if (name === this.wanted && (this.current || !this.ctx)) return;
+    if (!from && name === this.wanted && (this.current || !this.ctx)) return;
     this.wanted = name;
-    if (this.ctx) this.start(name);
+    if (this.ctx) this.start(name, from);
   }
 
-  start(name) {
+  start(name, from = null) {
     this.current?.stop();
     this.current = null;
     if (!name) return;
     const song = SONGS[name];
     if (!song) throw new Error(`Unknown song '${name}'`);
-    this.current = new SongPlayback(this.ctx, this.musicBus, this.noise, song);
+    this.current = new SongPlayback(this.ctx, this.musicBus, this.noise, song, from);
     this.nowPlaying = { title: song.title, at: performance.now() };
   }
 

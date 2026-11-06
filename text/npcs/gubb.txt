@@ -1,0 +1,38 @@
+# GUBB: the old cave frog who ferries folk across the Stillwater. Slow, kind,
+# fat, sings the same verse over and over. You can knock on the jetty post
+# to hear him from the water without taking a ride (the sign says "please
+# knock"); the ride itself is the scene gubb_crossing.
+
+[first]
+(You knock on the post. Out on the black water, the humming stops.)
+
+Hm? Someone knocking? That's nice. Nobody knocks.
+
+Whenever you're ready, dear, stand out at the end of the boards. I'll hear you. I hear everything on the lake. It's the only thing that carries.
+
+[repeat]
+Take your time. The lake isn't going anywhere. I've checked.
+
+If you've a song, I'll take it. I'm stuck on a verse.
+
+[first after gubb_crossing]
+(You knock on the post. The humming stops.)
+
+Back already? Or still? Time's slippery out here. It all goes round like the punt.
+
+Stand at the end when you want a ride, either shore. Same fare as before. A sweet, if you've one, but I've plenty.
+
+[repeat after gubb_crossing]
+Mind the edges, dear. Things live in the edges.
+
+Hm-hmm... hm-hm-hmmm... Where was I?
+
+[first after the_light_goes_up]
+(You knock on the post. The humming stops, then starts again, a little higher.)
+
+Did you feel that, dear? The whole lake went warm from underneath, like a bath someone's just run.
+
+Stand at the end of the boards when you want a ride. Either shore. Same fare.
+
+[repeat after the_light_goes_up]
+Warm water and a bit of light. I've found the next verse. Don't ask me what it is. It's about a bath.

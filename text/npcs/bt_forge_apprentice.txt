@@ -1,0 +1,31 @@
+# BT_FORGE_APPRENTICE: Hobnail's apprentice, a young mole who works the bellows. He's picked up Hobnail's habit of not talking and has taken it much too far.
+
+[first]
+...
+
+(He looks at you. He looks at the forge. He gives a very small nod, which seems to mean 'hello', or possibly 'mind the sparks'.)
+
+[repeat]
+...
+
+(He shows you his hands. They're covered in soot. He looks very proud.)
+
+[first after the_kings_welcome]
+...
+
+(He holds up a pickaxe, points at you, and points down. It's the clearest speech you've heard all day.)
+
+[repeat after the_kings_welcome]
+...
+
+(He nods firmly. Whatever he means, he means it very much.)
+
+[first after the_light_goes_up]
+...!
+
+(He grins, so wide his soot cracks. He's been waiting for this his whole working life.)
+
+[repeat after the_light_goes_up]
+...
+
+(He gives you a thumbs-up. Then he pumps the bellows even harder, to show his joy.)

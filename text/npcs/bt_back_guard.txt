@@ -1,0 +1,9 @@
+# BT_BACK_GUARD: A newt guard at the back door of the throne hall, which leads down to the Diggings. He won't let anyone through until the king has given his blessing.
+
+[first]
+Back door. Diggings. Royal business only. His Majesty hasn't given the word yet.
+
+Go and see him. He's expecting you. I mean, he'll BE expecting you. Once you've been announced.
+
+[repeat]
+Sorry. Orders. If it's any comfort, I'd love to let you through. But I'd lose my hat.

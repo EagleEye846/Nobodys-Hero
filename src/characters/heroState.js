@@ -32,4 +32,6 @@ export const HERO_STATE = {
   // Each member's own weapon and armor, as { vesper: { weapon, armor } }
   // (see src/characters/equipment.js). What they own sits with yours, above.
   memberGear: {},
+  // The monster journal: monsters met, by enemy id (see src/data/journal.js).
+  journal: {},
 };

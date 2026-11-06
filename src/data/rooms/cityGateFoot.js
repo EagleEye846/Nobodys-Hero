@@ -54,9 +54,10 @@ export const CITY_GATE_FOOT = {
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
   cutscenes: [
     { x: 6, y: 6, w: 1, h: 10, scene: 'at_the_gate' },
-    // The whole court in front of the Gate: wherever you are, you can't get
-    // past it without the Hush coming down.
-    { x: 2, y: 4, w: 25, h: 13, scene: 'hush_descends', after: 'warden_breaks' },
+    // The court in front of the Gate, from column 9 on: the save point's
+    // corner is left out, so the Hush comes down when you walk up to the
+    // Gate, not the moment you step off the save point.
+    { x: 9, y: 4, w: 18, h: 13, scene: 'hush_descends', after: 'warden_breaks' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.

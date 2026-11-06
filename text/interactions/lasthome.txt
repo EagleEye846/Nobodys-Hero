@@ -214,6 +214,11 @@ A scrubbed table, with a pestle and mortar on it, and a cup of tea gone cold.
 [healer_chair]
 Bryony's chair. It's got a cushion with a cat embroidered on it. The cat is cross-eyed.
 
+[healer_cat]
+A brown cat is curled in the corner by the shelves, in the exact shape of a loaf, one eye open. She looks at you. She looks at the door. She is clearly making a decision.
+
+You pick her up. She lets you. Once. She has decided.
+
 [healer_ves_bed]
 Ves, asleep, her leg splinted and up on a pillow. She's frowning in her sleep like she's arguing with someone.
 
@@ -236,6 +241,11 @@ A big fire, roaring. Somebody's socks are drying in front of it.
 
 [inn_counter]
 The counter, and behind it, Mabb.
+
+[inn_stirrer]
+A long iron pole leaning against the hearth, black from years of stew. This is what Mabb stirs the kettle with. It has a heavy iron knob on one end and a loop on the other, as if it were made to hang from something.
+
+You lift it out of its bucket.
 
 [inn_kettle]
 The kettle that never comes off the hook, and the stew in it. Mabb ladles you a bowl without asking.
@@ -329,3 +339,10 @@ A grindstone on a treadle, with a bucket under it to catch the sparks. The bucke
 
 [square_washing]
 Washing on a line between Corran's and the square. The sheets have gone grey. Everything near Corran goes grey.
+
+Between two nightshirts hangs something that isn't washing: a brown felt hat, pegged by the brim, dripping. Someone has washed a hat. It has a brass trumpet badge on the front, the kind the heralds wear.
+
+[square_washing_bare]
+Washing on a line between Corran's and the square. The sheets have gone grey. Everything near Corran goes grey.
+
+There's a peg on the line with nothing in it, and a damp patch where a hat was.

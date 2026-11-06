@@ -14,8 +14,8 @@ export const PUFFCAP = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: PUFFCAP_SPRITE, palette: PUFFCAP_PALETTE },
-  maxHp: 340,
-  damage: 15,
+  maxHp: 390,
+  damage: 17,
 
   // A Hushwood enemy: a touch busier than the Pinefall's.
   difficulty: { density: 1.25, speed: 1.15 },
@@ -36,7 +36,7 @@ export const PUFFCAP = {
     { name: 'Admire its cap', calm: 35 },
   ],
 
-  rewards: { exp: 125, coins: 65 },
+  rewards: { exp: 260, coins: 30 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'toadstool_toast', chance: 0.4 }],

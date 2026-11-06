@@ -1,0 +1,79 @@
+# QUARTZLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/quartzling.js.
+
+[intro]
+The pale crystal in the middle of the cluster opens two eyes, quite slowly. A QUARTZLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+QUARTZLING stands stock still. It is being a crystal. It is being it very hard.
+
+A glint runs down QUARTZLING's side. It didn't do that on purpose. Probably.
+
+QUARTZLING's eyes drift to the left, to see if you've bought it. You have not.
+
+All the other crystals in the room are perfectly still. QUARTZLING is the one not blinking the hardest.
+
+Smells like a cold cellar and a very still afternoon.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+I'm a
+crystal.
+
+Crystals
+don't
+talk.
+
+...Shh.
+
+Don't
+look at
+me.
+
+I've been
+standing
+here for
+AGES.
+
+Was that
+a blink?
+No.
+
+The rest
+are with
+me.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/quartzling.js.
+[talk: Inspect]
+QUARTZLING - HP 950
+A small crystal creature that stands among crystals and pretends to be one. Any of the crystals round you might be one too. Shards split. Some of them glint.
+
+[talk: Say what a fine crystal it is]
+You tell QUARTZLING it's the finest crystal in the whole cave. It says nothing, in a way that means a great deal. A slow blush spreads through its facets. It is still being a crystal. It's just a pink one.
+
+[talk: Stand still beside it]
+You stand next to QUARTZLING and don't move. It doesn't move. Neither of you moves for a very long time. You are, briefly, the best of friends.
+
+[talk: Pretend not to notice]
+You walk past QUARTZLING, remarking loudly on what a lovely cluster this is. Just crystals. QUARTZLING's whole body trembles with the effort of not saying thank you.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+QUARTZLING cracks and comes apart in a ringing of little bells. When the sound dies, the shards on the floor are, very clearly, just crystals.
+
+[pacified]
+QUARTZLING breathes out. All its facets go pink. It steps aside, still stiff as a post, and waves, once, very small, so no other crystal will see.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} she has no idea there's anything but crystals in this room. {foe} nods, gravely, which is not very crystal of it. She lets that go.
+
+Ves says she respects anyone who can hold a pose that long. {foe} says, in a tiny voice, that it's been practising. She says it shows.
+
+Ves leans her umbrella against {foe} to see what it'll do. It doesn't do anything. She decides it's the best umbrella stand in the Glimmering and takes it back.

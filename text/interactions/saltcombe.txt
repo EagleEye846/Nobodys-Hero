@@ -1,0 +1,542 @@
+# SALTCOMBE (Chapter 5): the stilt town, lit up inside the green storm. The
+# quay, the market, Mrs. Wrasse's chandlery, the Drowned Rat, the harbour
+# office, the bathing lagoon, the town hall and the lookout. Rain outside,
+# warm inside, and nothing here wants to fight you.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal glows by the fire, warm as a mug in your hands.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, damp at the seams.
+
+[chest_empty]
+An empty chest, salted white at the hinges.
+
+# --- THE QUAY --------------------------------------------------------------
+
+[quay_lamp]
+A lamp on an iron post, trimmed and shining, its glass polished so clean the rain runs off it in sheets. Somebody is proud of this lamp.
+
+[quay_lamp_last]
+The last lamp on the quay, just lit. The wick is still settling, and the brass is still warm from somebody's hand.
+
+[quay_ladder]
+A short ladder with a hook at the top for leaning on lamp posts. The rungs are worn pale in the middle, exactly where a small pair of boots would go.
+
+[quay_hill_lamp]
+A lamp beside the hill stair, burning steady. Its glass is clean.
+
+[quay_office_sign]
+HARBOUR OFFICE. LAUNCHES, LANDINGS, LEDGERS. KNOCK, THEN WAIT. (THE CLERK IS ALWAYS IN. HE JUST LIKES YOU TO WAIT.)
+
+[quay_inn_sign]
+A sign on a bracket, swinging on two hooks: a rat in a sou'wester, looking damp but cheerful. THE DROWNED RAT. FIRE, FOOD, BEDS. DRIP ON THE MAT, NOT ON THE CAT.
+
+[quay_inn_sign_ves]
+{bored}I haven't seen a cat. I assume it's dripped on enough.
+
+[quay_bell]
+The harbour bell, in an iron frame bolted to the quay. A rope hangs from it, knotted at the end. A notice says FOR FOG, FIRE OR FISH (BIG ONES ONLY).
+
+[quay_crates]
+Fish crates, stacked high and lashed down. The top one has a gull on it, and the gull has a look that says it got here first.
+
+[quay_barrels]
+Barrels of salt, sealed with tar. Somebody has chalked a face on one. It has been rained on until it looks worried.
+
+[quay_pots]
+Lobster pots, piled up to dry. They are not drying.
+
+[quay_nets]
+Nets hung over a leaning pole, dripping. The pole is braced with a second pole. The second pole looks tired.
+
+[quay_rope]
+A coil of mooring rope, flat on the boards, so neatly wound it looks like it was done to win something.
+
+[quay_anchor]
+An old anchor, bigger than Bramble, sunk into the planks as a seat. A cushion has been tied to it. The cushion is soaked.
+
+[quay_anchor_bramble]
+{thinking}Who sits on an anchor? It's for sinking.
+
+[quay_fisher_a]
+An otter in a red woolly cap, gutting a fish under the eaves. "Off the Wrack, are you? On foot? Hah. Brave. Go on in by the fire, you're steaming."
+
+[quay_fisher_c]
+A stoat with a net over his shoulder, squinting at the sky. "Green again. Been green since the winter it came. You stop noticing." He is noticing.
+
+[quay_pup]
+A seal pup in a bobble hat, sailing a paper boat in a puddle. The puddle is winning.
+
+[quay_pup_bramble]
+{grin}That's a good boat.
+
+{thinking}That's a bad puddle.
+
+[quay_otter]
+An otter girl in a yellow raincoat several sizes too big, standing very straight with a crab bucket. "I'm being a lightman," she says. "You have to stand like this."
+
+[quay_bother]
+The Bother, tied up at the slip, bobbing and bumping the steps. Her oars are shipped and there's a puddle in her bottom with a sea biscuit floating in it. Haddock has gone in out of the rain.
+
+[quay_bother_ves]
+{bored}He's left his biscuit. It's not my business.
+
+[quay_stilt_house]
+A house on stilts out over the harbour, every window gold. Smoke goes out of the chimney sideways, and somebody inside is laughing.
+
+[quay_buoy]
+A buoy, nodding in the harbour, clanking against its chain.
+
+[quay_pouch]
+A purse, tucked behind the crates out of the rain. There's a note in it: FOR WHOEVER STACKS THESE PROPERLY. Nobody has.
+
+[quay_water]
+The harbour, dark and choppy, pocked with rain. The lights of the houses wobble in it.
+
+[quay_water_bramble]
+{worried}It's moving. Why is it always moving?
+
+[quay_wall]
+Tarred boards, black with rain. The hill goes up behind them, all roofs and steps and lamps.
+
+[quay_rail]
+A rail along the quay edge, wet and cold, and smooth from a great many leaning elbows.
+
+[quay_house]
+Painted boards, teal and ochre and rose, peeling politely in the salt.
+
+[quay_window]
+A lit window. Inside, someone's stew, someone's socks on the fender, someone's cat.
+
+[quay_roof]
+A tarred roof, steep for the rain. It's doing its best.
+
+[quay_fisher_door]
+A shut door with a horseshoe nailed over it, upside down to keep the luck in. It isn't working on the weather.
+
+[quay_bank]
+A strip of wet turf beside the hill stair, with a lamp post in it.
+
+# --- THE MARKET ------------------------------------------------------------
+
+[market_fish_stall]
+A fish stall under a dripping awning, with a lantern on its own post. The fish are laid out in neat rows, all looking the same way, all mildly surprised.
+
+[market_fish_stall_b]
+Another fish stall, the same as the first one, run by someone who is not speaking to the first one.
+
+[market_chandler_sign]
+A sign on a post: a coil of rope and a lantern. WRASSE'S CHANDLERY. EVERYTHING FOR THE BOAT, AND THE ONE IN IT.
+
+[market_fish_sign]
+FRESH FISH. (FRESHER THAN NEXT DOOR'S.)
+
+[market_noticeboard]
+The town board. LOST: ONE OAR, LEFT-HANDED. FOUND: ONE OAR, RIGHT-HANDED. WILL SWAP. And, in big letters at the top: STORM SUPPER, TOWN HALL, EVERY NIGHT UNTIL FURTHER NOTICE.
+
+[market_noticeboard_ves]
+{bored}"Until further notice." Bold of them.
+
+[market_lagoon_sign]
+A signpost pointing east. TO THE BATHING LAGOON. (SWIMMING LESSONS BY ARRANGEMENT: ASK AT THE DROWNED RAT.)
+
+[market_lagoon_sign_bramble]
+{worried}Nobody arrange anything.
+
+[market_lamp]
+A lamp on a post over the cobbles, hissing a little in the rain.
+
+[market_garden_lamp]
+A lamp in the little garden at the top of the square, by the bench. It's lit.
+
+[market_bench]
+A bench in the hill garden, looking down over the roofs to the harbour. It is a lovely view of rain.
+
+[market_crates]
+Crates of onions, crates of potatoes, a crate of something with a cloth over it that clinks.
+
+[market_barrels]
+Rain barrels, full to the brim and spilling over. In Saltcombe, nobody has ever had to wait for rain.
+
+[market_pots]
+Crab pots, waiting to go out. Somebody has written NO on one in chalk. The crabs can't read, but it's the thought.
+
+[market_net]
+A net on a drying frame. It is under a roof, and it is still not dry. Nothing here is dry. Nothing here has been dry for years.
+
+[market_buoys]
+A heap of buoys for sale. A card says MIXED COLOURS, MIXED SIZES, MIXED FEELINGS. ALL FLOAT.
+
+[market_fisher_b]
+A vole in a yellow sou'wester, puffing a pipe that keeps going out. "Cockles? Get the chowder. Always get the chowder. The crisps are for people who've given up."
+
+[market_fisher_d]
+An old badger with an unlit tin lantern, waiting by the stall for his supper. "Don't mind me. I'm only here for the smell."
+
+[market_fisher_a]
+An otter with a fish on a string, holding it up to a buyer who isn't there. "Lovely fish. Nobody wants him. He's had a hard day."
+
+[market_otter]
+An otter girl with a crab bucket, peering at Bramble. "Can you swim?" she asks. "Haddock's teaching everybody. He taught me. I can swim to the post and back."
+
+[market_otter_bramble]
+{worried}Which post?
+
+{thinking}...How far is the post?
+
+[market_pouch]
+A purse kicked under the fish stall, smelling very strongly of fish. Still, it's money.
+
+[market_wall]
+Board walls, tarred and pinned with notices that the rain has turned into soup.
+
+[market_rail]
+The rail at the top of the stair. Below it, the quay, the harbour, the boats, all lit.
+
+[market_post]
+A tall post, with a hook for a lantern and a lot of old string.
+
+[market_garden]
+A little hill garden: sea pinks, a lavender bush flattened by the wind, and a bench.
+
+[market_house]
+Painted boards, the paint thick from being done again every spring.
+
+[market_window]
+A warm window, steamed up from inside.
+
+[market_roof]
+A roof of tarred slates, shining in the wet.
+
+# --- THE CHANDLERY ---------------------------------------------------------
+
+[chandler_shelf]
+Shelves from floor to ceiling: pilot books, tide almanacs and charts in rolls, with hooks by the hundred and tins of tar crammed in along the front. Everything is labelled in a small sharp hand.
+
+[chandler_shelf_b]
+More shelves. Blank logbooks, knot books worn soft with thumbs, and one lamp nobody has ever bought, with a ticket on it that says NOT FOR SALE (I LIKE IT).
+
+[chandler_lamps]
+A lantern on a stand by the counter, turned low, its brass polished until it shows your face. A ticket hangs on a peg underneath: DISPLAY ONLY.
+
+[chandler_rope]
+A coil of new rope, smelling of tar. It's the good kind. You can tell, because it costs more.
+
+[chandler_pots]
+Lobster pots for sale, stacked in a tower. One has a ticket that says SECOND-HAND (THE LOBSTER LEFT).
+
+[chandler_anchor]
+A small anchor on the floor, with a price chalked on it. It's being used as a doorstop until someone pays for it.
+
+[chandler_buoys]
+Buoys in a basket, in every colour. A card says PICK ONE. NOT THAT ONE.
+
+[chandler_barrel]
+A barrel of lamp oil with a tap. A drip tray underneath. A second drip tray under that.
+
+[chandler_wall]
+Board walls, every inch hung with something: oars, coats, gaffs, a lifebuoy, a picture of a boat that Mrs. Wrasse says is "a very good boat".
+
+# --- THE DROWNED RAT -------------------------------------------------------
+
+[inn_fire]
+A big fire, roaring up the chimney, with coats and socks steaming on the guard. The warmest thing for miles.
+
+[inn_fire_bramble]
+{grin}It's like a whole summer in a box.
+
+[inn_haddock_mug]
+Haddock's mug, left on his crate by the fire. Half full, gone cold. It says WORLD'S OKAYEST WALRUS.
+
+[inn_haddock_mug_ves]
+{bored}Okayest. That's generous.
+
+[inn_casks]
+Casks of something brown, stacked by the counter, with a sign: NOT FOR CHILDREN, GULLS OR LIGHTMEN ON DUTY.
+
+[inn_table]
+A table, scrubbed white, with a ring on it from every mug that's ever been put down there.
+
+[inn_chair]
+A chair by the table, wobbling on a folded beer mat. The beer mat has given up.
+
+[inn_table_b]
+A table with a game of draughts left half-played on it. Somebody has been losing for about a week.
+
+[inn_fisher_b]
+A vole in a sou'wester, steaming gently by the fire. "Don't stand in the doorway, love. The weather gets ideas."
+
+[inn_fisher_c]
+A stoat at a corner table, staring into a mug of soup. "Third bowl. The rain's in me bones. The soup's chasing it out."
+
+[inn_rope]
+A coil of rope by the hearth, put down there to dry years ago and never picked up.
+
+[inn_bunk]
+A bunk tucked under the stair, so small it can only have been for a child. A flat pillow, a red quilt, a peg with nothing on it. The rail along the front is notched from end to end: four strokes and a slash, four strokes and a slash, neat as stitching.
+
+[inn_bunk_ves]
+{thoughtful}...Somebody stayed a while.
+
+[inn_bunks]
+The inn's own beds, for anyone in from the weather. The blankets smell of woodsmoke and wet dog. They are very warm.
+
+[inn_wall]
+Board walls hung with oars, old nets and a very bad painting of a fish.
+
+# --- THE HARBOUR OFFICE ----------------------------------------------------
+
+[office_ledger]
+The launch-ledger, open on the desk. It falls open at the same page every time: the paper there has gone soft as cloth with handling.
+
+Most of the page is boats: names, crews, cargo, times out and in, in the clerk's tiny hand and the hands of the clerks before him.
+
+One line, in older ink, is not like the others.
+
+ONE SMALL BOAT. ONE PASSENGER.
+NAME: (left blank)
+BOUND: NORTH-EAST, TOWARD THE SMOKE.
+
+There is no time in. The column is empty all the way down.
+
+[office_ledger_bramble]
+{thinking}...What smoke?
+
+[office_shelves]
+Ledgers, shelf on shelf, every year in its own black spine. The oldest have no years on them at all, only tide marks.
+
+[office_tide_board]
+The tide tables for the season, chalked neatly on a board. Most of the squares have a little drawing of a raincloud in them. All of the squares, in fact.
+
+[office_back_door]
+A back door with a painted board nailed to it: HADDOCK'S. KEEP OUT. (THIS MEANS GULLS.) It's locked. Through the crack, a smell of tar and old rope and somebody's very large boots.
+
+[office_back_door_ves]
+{bored}He has a shed. Of course he has a shed.
+
+[office_stove]
+A pot-bellied stove, ticking. A kettle sits on it, and the clerk's spare spectacles sit on the kettle.
+
+[office_chair]
+A visitor's chair, very hard, to keep visits short.
+
+[office_barrel]
+A barrel marked UNCLAIMED. Inside: one boot, a compass that points at the door, and a hat.
+
+[office_wall]
+Board walls, papered with old notices: HIGH WATER, LOW WATER, NO SWIMMING OFF THE QUAY (THIS MEANS YOU, CYRIL).
+
+# --- THE TOWN HALL ---------------------------------------------------------
+
+[hall_winters]
+A long board on two posts, painted in rows: one row a winter, going back further than the paint has lasted. MILD. HARD FROST. HERRING EARLY. GALE, TWO ROOFS OFF. MILD AGAIN.
+
+Then one row is ruled under in red, and every winter after it says the same word.
+
+STORM.
+
+STORM.
+
+STORM.
+
+Somebody has painted a small line beside the red one, in a careful hand: IT CAME THE WINTER THE BOY WENT OUT.
+
+[hall_winters_bramble]
+{thinking}What boy?
+
+[hall_winters_ves]
+{thoughtful}...Nobody's written a name.
+
+[hall_painting]
+A painting on an easel: SALTCOMBE IN SUMMER. A blue sky. A little white sun. The harbour sparkling, red roofs, washing on lines, a boat with a striped sail. It looks like somewhere else entirely.
+
+[hall_painting_ves]
+{bored}Blue. I'd forgotten that was an option.
+
+[hall_notices]
+The hall's notices. STORM SUPPER EVERY NIGHT. BRING A BOWL. KNITTING CIRCLE MOVED TO WEDNESDAYS (THE OLD WEDNESDAY IS TOO WET). LIGHTHOUSE COMMITTEE: MEETING POSTPONED.
+
+[hall_shelf]
+A shelf of minute books, one for every year the town has met. The newer ones are short. There hasn't been much to decide, except whether it's still raining.
+
+[hall_stove]
+A big iron stove, roaring. On top, a tray of biscuits being kept warm by a badger who has appointed himself to it.
+
+[hall_badger]
+An old badger in a grey beanie, minding the stove. "Come in, come in. Biscuit? You'll want the board, I expect. Everybody looks at the board."
+
+"It came the winter the boy went out. That's what we put. We don't say more than that in here."
+
+"Have a biscuit."
+
+[hall_badger_bramble]
+{thinking}...These are good biscuits.
+
+[hall_bench]
+A long bench, worn smooth. The town sits on these for meetings, suppers and, by the look of the cushions, very long naps.
+
+[hall_lamp]
+A lamp on a stand, turned up bright. The hall is the warmest room in town after the Drowned Rat, and everyone in Saltcombe argues about which is first.
+
+[hall_bell]
+The old fog bell, taken down off the quay and kept in here. The card on it says RETIRED. Nobody could hear it over the rain.
+
+[hall_pouch]
+A purse under the last bench, with a label: STORM SUPPER FUND. It's mostly buttons. Some of it isn't.
+
+[hall_wall]
+Board walls, painted cream a long time ago, hung with oars from every boat the town has lost and found again.
+
+# --- THE LAGOON ------------------------------------------------------------
+
+[lagoon_wheel]
+You lean on the sluice wheel. It turns, slow and heavy, and somewhere under the sea wall a gate groans. The lagoon begins to move.
+
+[lagoon_wheel_busy]
+The wheel won't turn while the water's still going. It's thinking about it.
+
+[lagoon_sluice_gate]
+The sluice gate in the sea wall, iron, the plate half up, the sea pushing on the other side of it like a crowd at a door.
+
+[lagoon_stump]
+An old mooring stump with a brass plate: TIDES AND CRATES PUT BACK, NO QUESTIONS ASKED.
+
+[lagoon_rope_anchor]
+An iron ring bolted into the top of the cliff, with the rope knotted through it. It goes straight down the rock to the ledge.
+
+[lagoon_sign]
+BATHING LAGOON. SHALLOW END: HERE. DEEP END: ALSO HERE, A LITTLE FURTHER. NO DIVING OFF THE RAIL.
+
+[lagoon_sign_bramble]
+{worried}Why does it have to have a deep end at all?
+
+[lagoon_rope_sign]
+A sign at the foot of the cliff: TO THE LOOKOUT. ONE AT A TIME. (OR ALL AT ONCE, IF YOU'RE BRAVE.) Walk up into the rope to take hold.
+
+[lagoon_lamp]
+A lamp on the plank walk, its light lying in a long gold stripe on the water.
+
+[lagoon_bench]
+A bench facing the lagoon, for watching lessons. It's got a lot of use.
+
+[lagoon_nets]
+Nets on a leaning pole, put out to dry over the lagoon. Optimistic.
+
+[lagoon_lifebuoy]
+A lifebuoy on a post at the end of the walk, the paint fresh. A label says LESSONS.
+
+[lagoon_pup]
+A seal pup in a bobble hat, sitting on the walk with his feet in the water, swinging them. He is not at all worried about it.
+
+[lagoon_pup_bramble]
+{worried}How is he DOING that?
+
+[lagoon_pouch]
+A purse snagged on a weedy stake out in the lagoon, where somebody lost it in a lesson. Easy enough to pick up, with the water out.
+
+[lagoon_ledge_pouch]
+A purse wedged in a crack at the foot of the cliff, dry as a bone. The only dry thing in Saltcombe.
+
+[lagoon_backs]
+The backs of the market houses, boarded and tarred, with drainpipes running straight into the lagoon.
+
+[lagoon_cliff]
+The cliff, black and wet and streaked with green. The lookout is up there somewhere, in the rain.
+
+[lagoon_rail]
+The rail along the walk. Below it, the shallows by the sea wall, then the lagoon.
+
+[lagoon_water]
+The lagoon, deep and dark and very still under the rain.
+
+[lagoon_water_bramble]
+{worried}It's looking at me.
+
+[lagoon_shallows]
+Shallow water over boards, ankle deep, cold enough to make you yelp.
+
+[lagoon_bed]
+The lagoon bed, all mud and shingle and stranded weed, with little crabs walking about looking put out.
+
+# --- THE LOOKOUT -----------------------------------------------------------
+
+[lookout_map]
+The chart of the coast, pinned to a board on two legs, curling at the corners in the wet.
+
+Gullrest, with a little yellow sun painted on it. Saltcombe, with a lamp. A cluster of grey lines inland marked THE LANES (DROWNED). A scatter of tiny masts out on the water: THE WRECK YARD. Three little isles, each with a light.
+
+And far out, past everything, a black spike of a tower, ringed round and round in red ink.
+
+[lookout_map_ves]
+{thoughtful}...That's where it's all coming from, then.
+
+[lookout_map_bramble]
+{worried}It's very far out. In the sea part.
+
+[lookout_telescope]
+A brass telescope on a post. Through it: rain, rain, a gull, rain, and far out on the green water a black tower with a crown of spikes, and a pale light in it that breathes.
+
+[lookout_telescope_ves]
+{bored}Lovely. Let's go there.
+
+{thoughtful}...We're going there, aren't we.
+
+[lookout_bench]
+A bench at the top of the world, bolted down so the wind can't take it. The wind has taken the cushion.
+
+[lookout_lamp]
+A lamp on a post at the cliff top, swinging a little on its hook in the wind.
+
+[lookout_rope]
+The iron ring at the cliff edge, the rope knotted through it, running down to the lagoon. Step onto the edge beside it to climb back down.
+
+[lookout_rope_coil]
+The spare end of the rope, coiled up neatly by somebody who didn't want to trip on it at the top of a cliff.
+
+[lookout_stair_sign]
+A sign at the head of a steep cliff stair. TO THE LANDING. FERRY TO THE WRECK YARD. (ASK FOR HADDOCK. HE WILL PRETEND NOT TO HEAR.)
+
+[lookout_lanes_sign]
+A signpost pointing east, along the cliff path and down. TO THE LANES. Somebody has added, underneath: WATCH YOUR FEET. AND YOUR BOOTS. AND YOUR SOCKS.
+
+[lookout_bother]
+The Bother, tied up by the landing step, bumping the planks. Step down onto the boards beside her post to go aboard. Haddock has bailed her out and put a fresh sea biscuit on the thwart.
+
+[lookout_ferry_sign]
+FERRY. WRECK YARD, ISLES, AND ANYWHERE ELSE YOU CAN TALK HIM INTO.
+
+[lookout_landing_lamp]
+A lamp on the landing, for boats coming in. Its light makes a little gold road out over the water.
+
+[lookout_buoys]
+A heap of old buoys by the landing, for sitting on while you wait for the boat.
+
+[lookout_pouch]
+A purse in the long grass by the path east, with a note: FOR THE TOLL. There is no toll. There never was a toll.
+
+[lookout_sea]
+The sea from up here: grey-green and endless, ribbed with white, and the rain coming across it in long slanting curtains.
+
+[lookout_sea_bramble]
+{worried}It's so BIG from up here.
+
+{thinking}...It was big from down there too.
+
+[lookout_rail]
+A rail along the cliff edge, salted white. On the other side, a long way down, the sea.
+
+[lookout_drop]
+A long way down, the lagoon, a little dark square with the lights of the town round it.
+
+[lookout_cliff]
+The cliff falls away under the path, black and wet.
+
+[lookout_turf]
+Short, tough grass, flattened by the wind into one direction.

@@ -1,0 +1,81 @@
+# BUNTING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/bunting.js.
+
+[intro]
+Something yellow bounces out of the buttercups, trailing a string of tiny flags, and does a small bow. A BUNTING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+BUNTING straightens its flags, one at a time, and checks that they're all the same height. They aren't. It fixes that.
+
+BUNTING chirps a little tune. It seems to be called "Happy Birthday". It is nobody's birthday.
+
+A flag has come off BUNTING's string. It looks at it, then at you, then slowly puts it back on and pretends that didn't happen.
+
+BUNTING hops in a circle, then a slightly wider circle, to see if the party's started.
+
+Smells like icing and cut grass.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Surprise!
+
+Is it your
+birthday?
+
+It's MY
+birthday!
+
+Cake for
+everybody!
+
+Make a
+wish!
+
+...Oh. Was
+that a
+balloon?
+
+Tweet!
+Tweeeet!
+
+I'm the
+Easter
+bunny!
+...I'm the
+Easter
+bunny!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/bunting.js.
+[talk: Inspect]
+BUNTING - HP 800
+A little round bird wearing a string of party bunting. Throws the party at you: flags, poppers, balloons and streamers. Every one is a bit slower than it looks.
+
+[talk: Wish it well]
+You wish BUNTING a very happy birthday. It's overcome. It says nobody has said that all year, and then it says it's not even its birthday, and then it cries a little with joy anyway.
+
+[talk: Join the party]
+You clap along. BUNTING is thrilled. It starts a conga line of one, and invites you to be the second one. The line goes round a bush, and comes back, and it's still thrilled.
+
+[talk: Fix the flags]
+You straighten its flags, so they hang evenly. BUNTING holds very still, like a bird being painted. When you're done it checks every flag twice, and hugs the string.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+BUNTING flops over with its flags in a heap. A few last bits of confetti come down, slowly, on the grass. It's a very quiet party.
+
+[pacified]
+BUNTING flaps up into the air, scattering confetti, and does a lap of honour above your head. Then it points you cheerfully down the path, and goes to find someone else's birthday.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} she doesn't have a birthday. {foe} gasps, and holds an emergency party, right there, with one balloon. She'd like it noted she didn't ask for it. She doesn't pop the balloon.
+
+Ves asks {foe} how it keeps the flags from tangling. {foe} says it has never once tangled them. A flag is dragging in the grass, behind it, at that very moment. She doesn't say anything.
+
+Ves remarks that she's seen whole towns with less bunting. {foe} says that's exactly the problem with towns. She hates that she can't argue.

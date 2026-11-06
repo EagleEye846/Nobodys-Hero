@@ -1,0 +1,82 @@
+# OLD DIVER
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/old_diver.js.
+
+[intro]
+A heavy clank, then another. A brass helmet turns toward you on a rusted collar, and the porthole is dark. Somebody is still working in there. Nobody is. An OLD DIVER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+OLD DIVER stands very straight. Water runs out of its cuffs. It has been walking for a very long time and is, plainly, not done.
+
+The air hose lifts, sways, and lies down again, like a sleeping snake that's heard its name.
+
+Something faint and green glimmers in the porthole, and goes out. OLD DIVER taps its own helmet, as if checking a gauge.
+
+OLD DIVER pats its breastplate for a pocket. It has no pockets. It pats again, to be sure.
+
+Smells like wet brass, canvas, and a lot of years.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Clank.
+
+Surfacing
+in ten
+minutes.
+
+Check
+your
+gauges.
+
+...Air?
+
+Mind the
+line.
+
+Back to
+work.
+
+Depth
+reached.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/old_diver.js.
+[talk: Inspect]
+OLD DIVER - HP 2300
+An empty diving suit that still thinks it has a job. Throws a harpoon on a line and reels it back, hunts with the loose air hose, lets its last air up in bubbles, and drops an anchor on you. Watch the line and the floor.
+
+[talk: Knock on the helmet]
+You knock on the helmet, twice, politely. A long, low note rings out of it, and rolls round the inside like a bell in a well. OLD DIVER holds quite still while it fades, as if listening for somebody to knock back.
+
+[talk: Salute]
+You salute. OLD DIVER stops. Slowly, with a groan of every joint, it salutes back. For a moment the porthole is full of a steady, kind green light, and you could swear someone was in there, saluting.
+
+[talk: Bow your head]
+You bow your head and hold a hand to your chest. OLD DIVER's own head tips. It has seen that done before, for other divers, on a day that wasn't a good one.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+OLD DIVER's helmet comes off with a clang and rolls across the planks. The suit folds up on itself, empty, with a long sigh of old air. It was never anybody's, any more.
+
+[pacified]
+OLD DIVER sets its harpoon down against a wall, very carefully, the way you'd put down something you won't need. It nods once, and walks off into the rain, boots ringing, towards a job that isn't there.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves asks {foe} how deep it's been. {foe} lifts three fingers, then four, then gives up. She says that's a good deal of coast to have a helmet on for.
+
+Ves tells {foe} its brass is the best-kept thing for a mile, and she means it. {foe} straightens its collar. A little rust falls off, in thanks.
+
+Ves says she'll mind its hose if it minds her umbrella. {foe} considers the deal for a long time. It's the longest conversation she's had all week.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble asks {foe} if there's a person in there. He knocks to check. Nobody answers, and he decides not to knock again, and also to stand a long way back.
+
+Bramble tells {foe} he saw one of these in a book, in a box, with a tiny person in it. He asks if they got out. {foe} doesn't say. The porthole glimmers.
+
+Bramble tells {foe} that he is also a bit scared of the sea, but he's trying. {foe} puts a heavy, gentle glove on his head. It's the nicest thing a haunted suit has ever done.

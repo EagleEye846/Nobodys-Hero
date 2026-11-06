@@ -62,7 +62,13 @@ export const LASTHOME_CHAPEL = {
     { sprite: 'pew', x: 8, y: 6, text: 'chapel_pew' },
     { sprite: 'pew', x: 8, y: 8, text: 'chapel_pew' },
     { sprite: 'pew', x: 8, y: 10, text: 'chapel_pew' },
-    { sprite: 'lh_tam', x: 10, y: 11, npc: 'lh_tam' },
+    // Side quest: the bell's clapper, which is in the inn.
+    { sprite: 'lh_tam', x: 10, y: 11, npc: 'lh_tam', quest: [
+      { needs: ['has:bell_clapper'], take: 'bell_clapper', set: ['q_bell_asked', 'q_bell_done'], give: 'bell_spoon', text: 'bell_done' },
+      { needs: ['q_bell_done'], text: 'bell_after', append: true },
+      { needs: ['q_bell_asked'], text: 'bell_wait' },
+      { needs: ['!q_bell_asked'], set: 'q_bell_asked', text: 'bell_ask', append: true },
+    ] },
     { sprite: 'sign', x: 1, y: 12, text: 'chapel_board' },
   ],
   tileTexts: { W: 'chapel_wall', '#': 'chapel_wall' },

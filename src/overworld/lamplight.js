@@ -1,6 +1,11 @@
 import { TILE_SIZE as T } from '../config.js';
 import { TILES } from './tileset.js';
 import { LAMPLIT_AREAS } from '../data/areas.js';
+import { brightTileLights } from './brightTiles.js';
+import { coastTileLights } from './coastTiles.js';
+import { BRIGHT_GLOWS } from '../data/art/brightProps.js';
+import { COAST_GLOWS } from '../data/art/coastProps.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 
 // Lamplight: how a lived-in place is lit by its own flames. The Ruins' dark
 // rooms (`dark`) are about your candle against the black; this is gentler.
@@ -107,6 +112,40 @@ export const PROP_GLOWS = {
   ],
 };
 
+// The mines' dim old lamps, the lake's glowing reeds, the crystal roots of
+// the Deep: lights for the props in src/data/art/deepProps.js.
+const REED = '150, 230, 220';
+const ROOT = '150, 215, 255';
+Object.assign(PROP_GLOWS, {
+  mine_lamp: [
+    { dy: -14, bloom: 10, strength: 0.55, flicker: 0.35, color: LAMP },
+    { dy: -6, pool: 44, strength: 0.42, flicker: 0.25, color: LAMP },
+  ],
+  mine_lamp_hung: [
+    { dy: -14, bloom: 10, strength: 0.55, flicker: 0.35, color: LAMP },
+    { dy: -2, pool: 44, strength: 0.42, flicker: 0.25, color: LAMP },
+  ],
+  glow_reeds: [
+    { dy: -12, bloom: 14, strength: 0.4, flicker: 0, color: REED, sings: true },
+    { dy: -4, pool: 40, strength: 0.34, flicker: 0, color: REED, sings: true },
+  ],
+  glow_reeds_tall: [
+    { dy: -16, bloom: 16, strength: 0.4, flicker: 0, color: REED, sings: true },
+    { dy: -4, pool: 46, strength: 0.34, flicker: 0, color: REED, sings: true },
+  ],
+  fungus_pads: [{ dy: -2, pool: 26, strength: 0.22, flicker: 0, color: REED, sings: true }],
+  root_vein_lit: [
+    { dy: -14, bloom: 16, strength: 0.5, flicker: 0, color: ROOT },
+    { dy: -6, pool: 60, strength: 0.5, flicker: 0, color: ROOT },
+  ],
+});
+
+// The Glimmering's crystals and mushrooms, Belowtown's glow-worm lamps
+// (src/data/art/brightProps.js).
+Object.assign(PROP_GLOWS, BRIGHT_GLOWS);
+// Chapter 5's coast lamps, forge and great lens (src/data/art/coastProps.js).
+Object.assign(PROP_GLOWS, COAST_GLOWS);
+
 // Lit cabin windows and open doors, outdoors.
 const WINDOW_GLOW = [
   { dy: 6, bloom: 10, strength: 0.55, flicker: 0.15, color: CANDLE },
@@ -159,6 +198,9 @@ function lightsOfTiles(room, outdoors) {
       }
     }));
   }
+  // Crystals, glowing water and lit windows drawn into the Glimmering's and
+  // Belowtown's tiles (see brightTiles.js).
+  lights.push(...brightTileLights(room), ...coastTileLights(room));
   tileLights.set(room, lights);
   return lights;
 }
@@ -173,21 +215,59 @@ export function roomLights(room, outdoors) {
     if (!list) continue;
     const footX = prop.x + prop.width / 2;
     const footY = prop.y + T - (prop.raise ?? 0);
-    for (const l of list) lights.push({ ...l, x: footX + (l.dx ?? 0), y: footY + (l.dy ?? 0) });
+    for (const l of list) lights.push({ ...l, x: footX + (l.dx ?? 0), y: footY + (l.dy ?? 0), ...(prop.pulse ? { beat: true } : {}) });
   }
   for (const l of lights) l.phase ??= (l.x * 0.37 + l.y * 0.61) % (Math.PI * 2);
   return lights;
 }
 
+// Chapter 4's underground regions have their own light: the Diggings are a
+// dusty brown dim, the Stillwater a cool blue one, and neither cares what
+// time it is up top. A room can still say `lamplight: { shade, tint }`.
+const AREA_AMBIENT = {
+  diggings: { shade: 0.36, nightShade: 0, tint: '34, 18, 6' },
+  stillwater: { shade: 0.5, nightShade: 0, tint: '2, 8, 32' },
+  // The Glimmering is lit by its crystals (a soft violet between them);
+  // Belowtown by its lamps, glow-worm strings and the Sunstone overhead.
+  glimmer: { shade: 0.24, nightShade: 0, tint: '28, 10, 64' },
+  // Once the Sunstone is relit (`relit.after` has played) the town isn't
+  // dim any more: a warm noon with hardly any shade. A room opts out with
+  // `lamplight: { relit: false }`.
+  belowtown: { shade: 0.28, nightShade: 0, tint: '30, 14, 8', relit: { after: 'the_light_goes_up', shade: 0.025, tint: '96, 60, 12' } },
+  // Chapter 5's green storm (see src/overworld/coastTiles.js): the tint is a
+  // dark teal-green laid over everything except where a lamp or window lifts
+  // it, and it gets deeper and greener area by area, the Wrack Shore least,
+  // the Last Light most. `inside` is what a room with `indoors: true` uses
+  // instead: still dim, but a warmer hearth brown. The time of day never
+  // changes any of it.
+  wrack: { shade: 0.3, nightShade: 0, tint: '10, 52, 46', inside: { shade: 0.3, tint: '26, 22, 14' } },
+  saltcombe: { shade: 0.42, nightShade: 0, tint: '6, 34, 32', inside: { shade: 0.24, tint: '34, 16, 6' } },
+  lanes: { shade: 0.38, nightShade: 0, tint: '8, 52, 42', inside: { shade: 0.3, tint: '26, 22, 14' } },
+  wreck: { shade: 0.46, nightShade: 0, tint: '8, 50, 38', inside: { shade: 0.4, tint: '14, 28, 20' } },
+  merrow: { shade: 0.5, nightShade: 0, tint: '6, 40, 38', inside: { shade: 0.4, tint: '14, 28, 24' } },
+  soundings: { shade: 0.55, nightShade: 0, tint: '4, 22, 30', inside: { shade: 0.55, tint: '4, 22, 30' } },
+  isles: { shade: 0.5, nightShade: 0, tint: '6, 52, 36', inside: { shade: 0.36, tint: '30, 18, 8' } },
+  haddock_light: { shade: 0.44, nightShade: 0, tint: '6, 46, 38', inside: { shade: 0.26, tint: '36, 18, 6' } },
+  reach: { shade: 0.56, nightShade: 0, tint: '4, 54, 34', inside: { shade: 0.4, tint: '14, 30, 20' } },
+  lastlight: { shade: 0.62, nightShade: 0, tint: '2, 50, 28', inside: { shade: 0.42, tint: '24, 18, 8' } },
+};
+
+// Whether the room's light has been lifted by a scene (see AREA_AMBIENT).
+export function isRelit(data) {
+  const relit = { ...AREA_AMBIENT[data.area], ...(typeof data.lamplight === 'object' ? data.lamplight : {}) }.relit;
+  return Boolean(relit && (WORLD_STATE.seenScenes ?? []).includes(relit.after));
+}
+
 // How dark the room is between its lights, the shade's colour, and how
 // strongly its lights show, for the time of day.
 export function ambientFor(data, outdoors, night) {
-  const own = typeof data.lamplight === 'object' ? data.lamplight : {};
+  const own = { ...AREA_AMBIENT[data.area], ...(data.indoors ? AREA_AMBIENT[data.area]?.inside : null), ...(typeof data.lamplight === 'object' ? data.lamplight : {}) };
+  if (isRelit(data)) Object.assign(own, own.relit);
   if (outdoors) {
     const lit = DAY_GLOW + (1 - DAY_GLOW) * Math.min(1, night * 1.4);
     return { shade: night * (own.night ?? OUTDOOR_NIGHT), tint: NIGHT_TINT, lit };
   }
-  return { shade: (own.shade ?? INDOOR_SHADE) + night * (own.nightShade ?? INDOOR_NIGHT), tint: HEARTH_TINT, lit: 1 };
+  return { shade: (own.shade ?? INDOOR_SHADE) + night * (own.nightShade ?? INDOOR_NIGHT), tint: own.tint ?? HEARTH_TINT, lit: 1 };
 }
 
 // A flame's waver: two slow sines and a quick one, so it never quite repeats.

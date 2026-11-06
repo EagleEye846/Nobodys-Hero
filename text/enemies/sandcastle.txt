@@ -1,0 +1,77 @@
+# SANDCASTLE
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/sandcastle.js.
+
+[intro]
+Three towers and a keep, turned out of a bucket and crowned with a lolly-stick flag, shuffle across the sand toward you. The door opens like a mouth. A SANDCASTLE!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SANDCASTLE trickles a little from its top turret and tidies itself, grain by grain.
+
+The flag snaps in the wind. SANDCASTLE straightens it with a creak.
+
+A shell in the wall falls out and is put back, with great dignity.
+
+SANDCASTLE looks out to sea, and does not see a thing wrong with it.
+
+Smells of sun cream, wet sand and a bucket.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Fear my
+towers!
+
+The moat
+is DEEP.
+
+Tide?
+What tide?
+
+Who
+goes
+there?
+
+I was
+built to
+last.
+
+Hold
+the keep!
+
+...It's
+only a bit
+of damp.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/sandcastle.js.
+[talk: Inspect]
+SANDCASTLE - HP 2000
+A sandcastle that has come to life and is sure it will last. Fires sand from its turrets, sweeps its flag round like a gate, and sends its moat out along the floor in a wave. Always a gap in the wave. Don't count on the tide.
+
+[talk: Admire the towers]
+You walk slowly round it, looking up, and say the towers are very fine. SANDCASTLE swells until a little sand runs off its keep. It has never been so pleased in its life. It will last, it thinks, forever.
+
+[talk: Pat the walls]
+You pat the wall, gently, to firm it up, the way you'd set a sandcastle. SANDCASTLE holds perfectly still. Nobody has ever done this on purpose. A little trickle of sand runs out of its doorway, which is how it cries.
+
+[talk: Mention the tide]
+You say that the tide is coming in. SANDCASTLE says it is not. You say it is, quite soon. SANDCASTLE says, firmly, that it is not, and then looks out to sea for a long time. Its flag droops. It is going to be very brave.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The towers go first, one by one, and then the keep, with the flag still on it, and then a tide of its own sand runs out into the moat. All that's left is a low round heap with a lolly stick in it. It looks like it has been very happy.
+
+[pacified]
+SANDCASTLE straightens its flag, puts its shells in a neat row, and bows from the keep. Then it lets you pass, shuffling over, and holds the door for you, as if there might be a party.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says she's been all over the coast and she's never seen a better castle. {foe} knows this is true, and says so, and thanks her anyway.
+
+Ves wedges one shell back into a wall for it, and pats it flat. {foe} puts a tiny, quite solemn flag up, like a medal.
+
+Ves asks whether it's worried about the tide. {foe} says it has the best moat on the whole beach. She nods. She's decided not to argue with a castle.

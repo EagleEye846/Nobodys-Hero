@@ -23,8 +23,8 @@ export const TATTERWIGHT_BOSS = {
   // Each chapter's bosses climb: past the Roost Mother (900 HP, 15 damage)
   // and well past the Pinefall's regulars (280-380 HP, 15-16 damage), but
   // well short of the Warden at the end of the chapter (2400).
-  maxHp: 1100,
-  damage: 18,
+  maxHp: 1260,
+  damage: 21,
 
   difficulty: { density: 1.15, speed: 1.08 },
 
@@ -52,7 +52,7 @@ export const TATTERWIGHT_BOSS = {
     { name: 'Hold out a hand', calm: 18 },
   ],
 
-  rewards: { exp: 420, coins: 130 },
+  rewards: { exp: 2780, coins: 130 },
 
   // A leaf that's never stopped turning.
   drops: [{ item: 'turning_leaf', chance: 1 }],

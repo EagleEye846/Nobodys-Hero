@@ -1,10 +1,12 @@
 import { inUiSpace } from '../engine/screen.js';
 import { makeSprite } from '../engine/sprite.js';
 import { PORTRAITS, expressionRows } from '../data/art/portraits.js';
+import { SETTINGS } from '../state/settings.js';
 import { layoutDialogue, drawDialogue, paginate } from './text.js';
 
 // In UI pixels (640x480).
 const BOX = { x: 32, y: 318, w: 576, h: 146 };
+const BOX_TOP_Y = 16;
 const BORDER = 4;
 const PADDING_X = 26;
 const PADDING_Y = 20;
@@ -36,11 +38,36 @@ function portraitSprites(id, expression = null) {
 }
 
 // A page can start with an expression in braces, "{sad}I miss them.", to
-// change the speaker's face for that page.
+// change the speaker's face for that page; and one can come part way along,
+// "{thoughtful}Nine feet. {bored}I've seen your sword.", to change it as the
+// words reach it.
 const FACE_TAG = /^\{([a-z_]+)\}\s*/;
+const LATER_TAG = /\{([a-z_]+)\}\s*/g;
 export function splitFace(page) {
   const match = page.match(FACE_TAG);
-  return match ? { face: match[1], text: page.slice(match[0].length) } : { face: null, text: page };
+  const face = match ? match[1] : null;
+  const { text } = faceChanges(match ? page.slice(match[0].length) : page);
+  return { face, text };
+}
+// The tags part way along a page, taken out: its words, and where (how many
+// characters in) the face changes to what. While a page is being split to
+// fit the box, each tag stands as an invisible MARK (no width, stuck to the
+// word after it), with its face in `faces`, in order.
+const MARK = '\u2063';
+function markFaces(page) {
+  const faces = [];
+  const text = page.replace(LATER_TAG, (all, face) => { faces.push(face); return MARK; });
+  return { text, faces };
+}
+function faceChanges(page, faces = null) {
+  if (!faces) ({ text: page, faces } = markFaces(page));
+  const changes = [];
+  let text = '';
+  for (const ch of page) {
+    if (ch === MARK) changes.push({ at: text.length, face: faces.shift() });
+    else text += ch;
+  }
+  return { text, changes };
 }
 
 // Where the words go: beside the portrait, if there is one.
@@ -74,6 +101,9 @@ export class TextBox {
     this.skipTimer = 0;
     this.speaker = null;
     this.portrait = null;
+    // Messages asked for while one is already showing wait their turn, so two
+    // never sit on top of each other.
+    this.queue = [];
   }
 
   get isOpen() {
@@ -83,15 +113,33 @@ export class TextBox {
   // `speaker` is an NPC id; their portrait shows if they have one, in the
   // expression `face` (unless a page asks for another). With `shake`, the
   // words tremble, for a scream or a shout.
-  open(pages, speaker = null, face = null, { shake = false } = {}) {
+  open(pages, speaker = null, face = null, options = {}) {
+    if (this.pages !== null) {
+      this.queue.push([pages, speaker, face, options]);
+      return;
+    }
+    this.start(pages, speaker, face, options);
+  }
+
+  start(pages, speaker, face, { shake = false, top = false } = {}) {
     this.speaker = speaker;
     this.shake = shake;
-    // A page too long for the box carries on onto the next one.
+    // `top`: the box sits at the top of the screen instead, for a scene whose
+    // people are down where it would cover them.
+    this.top = top;
+    // A page too long for the box carries on onto the next one, in whatever
+    // face the last one left it.
     this.pages = pages.flatMap((page) => {
-      const split = splitFace(page);
-      const pageFace = split.face ?? face;
-      const { width } = textArea(speaker ? portraitSprites(speaker, pageFace) : null);
-      return paginate(measureCtx(), split.text, width, TEXT_SIZE, TEXTBOX_LINES).map((text) => ({ text, face: pageFace }));
+      const match = page.match(FACE_TAG);
+      let current = (match ? match[1] : null) ?? face;
+      const { text: words, faces } = markFaces(match ? page.slice(match[0].length) : page);
+      const { width } = textArea(speaker ? portraitSprites(speaker, current) : null);
+      return paginate(measureCtx(), words, width, TEXT_SIZE, TEXTBOX_LINES).map((part) => {
+        const { text, changes } = faceChanges(part, faces);
+        const out = { text, face: current, changes };
+        if (changes.length) current = changes[changes.length - 1].face;
+        return out;
+      });
     });
     this.pageIndex = 0;
     this.visibleCharacters = 0;
@@ -100,11 +148,25 @@ export class TextBox {
 
   showPage() {
     const page = this.pages?.[this.pageIndex];
+    this.shownFace = page?.face;
     this.portrait = this.speaker && page ? portraitSprites(this.speaker, page.face) : null;
+  }
+
+  // The face the words have got to on this page (its later tags).
+  followFace() {
+    const page = this.pages?.[this.pageIndex];
+    if (!this.speaker || !page?.changes?.length) return;
+    let face = page.face;
+    for (const change of page.changes) if (this.visibleCharacters >= change.at) face = change.face;
+    if (face !== this.shownFace) {
+      this.shownFace = face;
+      this.portrait = portraitSprites(this.speaker, face);
+    }
   }
 
   update(dt, input) {
     const page = this.pages[this.pageIndex].text;
+    this.followFace();
 
     if (input.isDown('skip')) {
       this.visibleCharacters = page.length;
@@ -115,7 +177,7 @@ export class TextBox {
     this.skipTimer = 0;
 
     if (this.visibleCharacters < page.length) {
-      this.visibleCharacters = Math.min(page.length, this.visibleCharacters + CHARACTERS_PER_SECOND * dt);
+      this.visibleCharacters = Math.min(page.length, this.visibleCharacters + CHARACTERS_PER_SECOND * SETTINGS.textSpeed * dt);
       if (input.wasPressed('cancel')) this.visibleCharacters = page.length;
       return;
     }
@@ -127,24 +189,27 @@ export class TextBox {
     this.pageIndex++;
     this.visibleCharacters = 0;
     this.skipTimer = 0;
-    if (this.pageIndex >= this.pages.length) this.pages = null;
-    else this.showPage();
+    if (this.pageIndex >= this.pages.length) {
+      this.pages = null;
+      if (this.queue.length) this.start(...this.queue.shift());
+    } else this.showPage();
   }
 
   draw(ctx) {
     if (!this.isOpen) return;
 
+    const y = this.top ? BOX_TOP_Y : BOX.y;
     inUiSpace(ctx, () => {
       ctx.fillStyle = '#fff';
-      ctx.fillRect(BOX.x, BOX.y, BOX.w, BOX.h);
+      ctx.fillRect(BOX.x, y, BOX.w, BOX.h);
       ctx.fillStyle = '#000';
-      ctx.fillRect(BOX.x + BORDER, BOX.y + BORDER, BOX.w - BORDER * 2, BOX.h - BORDER * 2);
+      ctx.fillRect(BOX.x + BORDER, y + BORDER, BOX.w - BORDER * 2, BOX.h - BORDER * 2);
 
       if (this.portrait) {
         const blinking = (performance.now() / 1000) % BLINK_PERIOD < BLINK_SECONDS;
         const face = blinking ? this.portrait.blink : this.portrait.idle;
         const size = face.width * PORTRAIT_SCALE;
-        ctx.drawImage(face, BOX.x + PADDING_X - 6, BOX.y + (BOX.h - size) / 2, size, size);
+        ctx.drawImage(face, BOX.x + PADDING_X - 6, y + (BOX.h - size) / 2, size, size);
       }
 
       const { x, width } = textArea(this.portrait);
@@ -153,7 +218,7 @@ export class TextBox {
       const jolt = this.shake ? Math.floor(performance.now() / 50) : 0;
       const dx = this.shake ? ((jolt * 7) % 5) - 2 : 0;
       const dy = this.shake ? ((jolt * 3) % 5) - 2 : 0;
-      drawDialogue(ctx, lines, x + dx, BOX.y + PADDING_Y + dy, {
+      drawDialogue(ctx, lines, x + dx, y + PADDING_Y + dy, {
         size: TEXT_SIZE,
         lineHeight: LINE_HEIGHT,
         visible: Math.floor(this.visibleCharacters),

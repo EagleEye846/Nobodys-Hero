@@ -1,0 +1,173 @@
+# HADDOCK'S LIGHT (Chapter 5): the end of the causeway. The garden and the jetty at the foot of
+# the tower, Haddock's round parlour, the curving stair with the height marks, and the little
+# room at the top. (draft) story text, for Patrick to review.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal glows under the lamp, steady as a lightman's night.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, salted stiff.
+
+[chest_empty]
+An empty chest. The salt has got into the hinges.
+
+# --- THE GARDEN AND THE JETTY ------------------------------------------------------
+
+[door_sign]
+A board on a post: HADDOCK'S LIGHT. LIGHTMAN IN. KNOCK HARD, HE'S DEAF.
+
+[door_sign_ves]
+{bored}Knock hard. Right.
+
+[door_lantern]
+A lantern on a post by the door, lit. Somebody has trimmed the wick this very evening. Somebody always does.
+
+[door_bottles]
+Bottles on posts, a message in each. They all say COME HOME.
+
+[door_bottles_bramble]
+{sad}...Bit sad for a garden.
+
+[door_buoys]
+A pile of buoys, painted and repainted. HADDOCK, they say, and HADDOCK, and HADDOCK.
+
+[door_pots]
+Crab pots, stacked in a tidy tower. One has a flower growing out of it.
+
+[door_barrel]
+A rain barrel. It is full, because it is always full.
+
+[door_rope]
+A coil of rope on the jetty's approach, flaked down neatly.
+
+[door_lifebuoy]
+A lifebuoy on a post, scrubbed white. The rope on it is new.
+
+[door_bother]
+The Bother, a stout little rowboat with a blue stripe, moored to the jetty. The oars lie shipped, ready, and there is a bailing tin in the bottom.
+
+[door_pouch]
+A purse in the flowerbed, tucked in among the posies where somebody hid it from the gulls.
+
+[door_rock]
+The rock the light stands on, flat as a table and scoured white by the spray.
+
+[door_sea]
+The sea, grey-green and heaving, all the way round the rock.
+
+[door_wall]
+The tower's white brick, whitewashed every year. It curves away overhead into the rain.
+
+[door_window]
+A window low down in the tower, with a warm lamp in it.
+
+[door_niche]
+A little lamp, in a niche in the brick.
+
+[door_turf]
+A garden on a rock: turf, flowers, and a good deal of salt.
+
+[door_path]
+A gravel path, raked.
+
+[door_planks]
+The jetty's planks, scrubbed pale.
+
+# --- THE PARLOUR ---------------------------------------------------------------------
+
+[parlour_cot]
+A cot against the wall, the blanket pulled up tight. A walrus-sized dent in the pillow.
+
+[parlour_stove]
+A round iron stove with a kettle on it, ticking. The kettle is off the boil, as always, in case anybody comes.
+
+[parlour_tides]
+A tide board, chalked up to the day. Underneath, in different chalk: STILL HERE.
+
+[parlour_ledger]
+HADDOCK'S LIGHT. Lit, lit, lit, lit, lit...
+
+One night, nothing is written at all.
+
+[parlour_crate]
+A crate of spare wicks, labelled in careful capitals.
+
+[parlour_barrel]
+A barrel of lamp oil. It smells of paraffin and biscuits.
+
+[parlour_lifebuoy]
+A lifebuoy on a post, and a mug hung on it. Somebody has given up on hooks.
+
+[parlour_wall]
+Round white brick, whitewashed, with a tide board chalked up on it.
+
+[parlour_window]
+A window on the sea. It's too dark out there to see anything but the rain.
+
+[parlour_floor]
+Warm boards, worn pale in a path from the chair to the door.
+
+# --- THE STAIR -----------------------------------------------------------------------
+
+[stair_marks]
+Two sets of marks scratched in the whitewash, side by side, with years beside them.
+
+One climbs higher. The other stops.
+
+[stair_marks_bramble]
+{sad}...He was littler than me.
+
+[stair_crate]
+A crate of lamp-glass, packed in straw.
+
+[stair_barrel]
+A barrel of oil, lashed to the rail so it can't roll down.
+
+[stair_rope]
+A coil of rope, left on the stair. Somebody has been up and down with it, and not put it away.
+
+[stair_wall]
+Whitewashed brick, curving away round the stair.
+
+[stair_window]
+A narrow window on the storm.
+
+[stair_niche]
+A little lamp in a niche, lit, to light the stair.
+
+[stair_floor]
+Worn boards, each step hollowed in the middle.
+
+# --- THE LITTLE ROOM ----------------------------------------------------------------
+
+[room_bed]
+Made. The sheets are new.
+
+[room_drawing]
+A child's drawing. A lighthouse, and two small people under it.
+
+One says ME. The other says THE HERO.
+
+[room_drawing_ves]
+{thoughtful}...Good lighthouse.
+
+[room_boat]
+A little wooden boat. Someone has painted BOTHER II on the side.
+
+[room_chest]
+A sea chest at the foot of the bed. Inside, folded and aired, there is a LIGHTMAN'S COAT: heavy oilskin, patched at both elbows, smelling of paraffin.
+
+[room_wall]
+White brick, curving in. Someone has dusted it.
+
+[room_window]
+A small window, and a clean sill, and the sea.
+
+[room_floor]
+Scrubbed boards. Nothing on them, anywhere, is out of place.

@@ -1,0 +1,16 @@
+# HADDOCK: the coast's lightman, an old walrus in an oilskin and a sou'wester, on his rock on Gullrest's beach (gullrest_beach). He rings a brass handbell at nothing, and is a bit deaf. The meeting is the scene meet_haddock.
+
+[first]
+{proud}Morning! Haddock. Lightman of this coast, and all its tides.
+
+[first after meet_haddock]
+{proud}Lifeboat house is the big red doors, up the beach. Kettle's on. Tide table's on the wall; read it, don't rub it.
+
+{smile}Cove's past that, and the jetty past the cove. Mind the castles, miss. They'll tell you the tide's not coming in.
+
+{eh}It is.
+
+[repeat after meet_haddock]
+{eh}Eh? Oh, it's you. Aye, still here. Somebody's got to ring it.
+
+{proud}Twice a day the sea comes up this beach and goes back down. Manners, mostly.

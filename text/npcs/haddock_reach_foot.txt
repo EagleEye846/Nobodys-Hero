@@ -1,0 +1,7 @@
+# HADDOCK (the foot of the Last Light, reach_foot): tied up at the landing in the Bother, minding the boat while the three go up. The step south of the landing rows back to the eye.
+
+[first]
+{determined}That's the door. I'll be here with the boat.
+
+[repeat]
+{smile}Still here. Still minding the boat. The step by the landing, if you want the quiet bit again.

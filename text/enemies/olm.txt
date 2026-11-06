@@ -1,0 +1,69 @@
+# OLM
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/olm.js.
+
+[intro]
+A pale shape unfolds from the shallows, a good deal longer than it first looked. Its neck rises. It seems to apologise. An OLM!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+OLM turns its blank face aside. It hates being looked at, and you are looking.
+
+OLM fans its red frills, then folds them again, as if it isn't sure it's allowed.
+
+OLM is very old. It has had a long time to practise being polite, and nothing else to do.
+
+A drop of water runs down OLM's snout and falls off the end. It lets it.
+
+Smells like wet stone and a very clean cellar.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Terribly
+sorry.
+
+Do not look
+at me.
+
+If you
+wouldn't mind.
+
+How rude.
+
+I'd rather
+you didn't.
+
+Quite.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/olm.js.
+[talk: Inspect]
+OLM - HP 1180
+A long, pale cave salamander, older than the stair. Blind, terribly polite, and hates being looked at. Hits like cold water, slowly, and a lot.
+
+[talk: Look away]
+You look at the wall with great interest. OLM lets out a long breath it's been holding for about a century. It loosens a coil.
+
+[talk: Apologise for staring]
+You cover your eyes with both hands, by way of apology. OLM says nothing. Then, very quietly, one frill unfolds, which you gather is a thank you.
+
+[talk: Bow]
+You bow. OLM bows back, much lower, and for much longer. You're not sure when you're allowed to stop. Neither is it.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+OLM folds up in the shallows, very neatly, and stops. Even now it hasn't made a mess.
+
+[pacified]
+OLM bows its long neck, thanks you for your consideration, and sinks into the dark water. The ripples don't even reach the shore.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves turns her back on {foe} so firmly it makes a sound. A pause. {foe} comes up out of the water a little to see what she's looking at.
+
+Ves promises {foe} she won't look at it. She studies the ceiling with great concentration. {foe} says nothing, which she takes as a thank you.
+
+Ves bows to {foe}. It bows back, lower. This goes on for some time, and she loses.

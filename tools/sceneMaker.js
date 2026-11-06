@@ -27,7 +27,8 @@ import { UI_WIDTH, UI_HEIGHT, UI_SCALE } from '../src/config.js';
 
 // The fields each kind of step keeps when it's saved.
 const STEP_FIELDS = {
-  say: ['who', 'face', 'text', 'shake'],
+  say: ['who', 'face', 'text', 'shake', 'top'],
+  textbox: ['top'],
   walk: ['who', 'to', 'fast', 'keep'],
   face: ['who', 'dir'],
   emote: ['who', 'emote'],

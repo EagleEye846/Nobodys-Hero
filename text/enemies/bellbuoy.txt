@@ -1,0 +1,73 @@
+# BELLBUOY
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/bellbuoy.js.
+
+[intro]
+Out in the dark a bell begins to ring, and a red-and-white buoy rocks toward you on no tide at all, with two pale lights looking out of the bell. A BELLBUOY!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+BELLBUOY rocks on a swell that isn't there. The bell rings once, to itself.
+
+The two pale lights in the bell turn to look at you, and then past you, at the sea.
+
+Weed drips off the float. It has been a very long time since this buoy had a mooring.
+
+BELLBUOY tolls three times. It is warning something off. It is not clear what.
+
+Smells of rust, weed and cold brass.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+DONG.
+
+...Shoal.
+
+Keep
+clear.
+
+Rocks
+ahead.
+
+...Is
+anyone
+there?
+
+Turn
+back.
+
+Danger!
+Danger!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/bellbuoy.js.
+[talk: Inspect]
+BELLBUOY - HP 2150
+A bell buoy that rings by itself. Tolls rings on a steady beat, swings its chains in a sweep, and blows a foghorn cone. It is warning you off. The beat is the clue.
+
+[talk: Ring back]
+You knock a stone against the nearest post, in time with its toll. BELLBUOY goes quiet to listen. Then it tolls again, and you answer. It has never, in all those years, been answered.
+
+[talk: Hold the clapper]
+You step up to the swinging bell and gently, firmly, put a hand around the clapper. The bell can't ring. BELLBUOY goes very still. A kind of shudder goes through the float, as if someone had been crying for a long time and been let stop.
+
+[talk: Light the lamp]
+You hold up your lantern to the dark lamp at the top of the mast. It doesn't light, but it catches. BELLBUOY looks up at it, and the two pale lights in the bell go warm and green, and then amber.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The float tips, the mast leans, and BELLBUOY goes down by the bell, which rings one last time on the way under, deep and slow, until the water takes the sound too. Just a few bubbles come up.
+
+[pacified]
+BELLBUOY rings once, soft and clear, and the lamp at the top lights up, a small yellow light in the green dark. The bell is quiet. It nods, once, to you, to the sea, and rocks away to see if anyone else needs warning.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says, to the bell, that there's no one in the water, and that it can stop now. {foe} rings once, doubtfully, and waits to be told again.
+
+Ves puts her hand on the float and says she's seen a lot of things that warn people off, and this is the first that she's sorry for. {foe} lowers its bell a little.
+
+Ves counts out the beat of its toll under her breath, and then, on the fourth, doesn't ring. {foe} waits, a long time, and doesn't either.

@@ -1,0 +1,71 @@
+# GRIG'S PACK: Grig, a cave cricket who walks the Deep with her whole shop on
+# her back and sets it down where the Hero once camped. Chirpy, tidy, easily
+# delighted, counts things in threes, and treats the dark like a very large
+# friend who's shy. She has never once had a customer coming back the other
+# way, and has decided not to think about it. Sells what a long walk wants:
+# cake, dew, candles, and a hood.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Oh! A light! Two lights! Well, one light and a friend. Grig. Cakes, dew, candles, hood. Everything's on the blanket. Touch what you like.
+
+[menu_prompt]
+Anything else? Take your time. Nobody's going anywhere. Well. You are. But not yet.
+
+[buy_prompt]
+Cake for the belly, dew for the head, a candle for the dark. And a hood. The feelers are for luck. Grig made them.
+
+[sell_prompt]
+Selling? Lovely. Grig buys anything. It all goes in the pack. The pack has room. The pack always has room.
+
+[talk_prompt]
+Talk? Grig likes talk. It fills up the quiet. Sit on the blanket. Mind the kettle.
+
+[bought]
+Oh, lovely! One, two, three, done. That'll keep you going. Probably.
+
+[bought_item]
+Eat it slowly! It's seeds and root. It sits like a stone and then it's very nice about it.
+
+[sold]
+Thank you! It'll go on the pile. The pile's very tidy. Grig is tidy.
+
+[nothing_to_sell]
+Nothing to sell? That's all right. Grig likes a customer who's just looking. Looking is free.
+
+[cant_sell]
+You're wearing that. Take it off first, with C. Grig doesn't buy things off people. It's rude, and it's cold.
+
+[owned]
+You've got one already. One's enough for a head. Two's a mistake. Grig has seen it.
+
+[wont_fit]
+That's for your friend, I think. Sorry! Grig sizes everyone by eye, and Grig has a great many eyes.
+
+[too_poor]
+Oh, it's a bit more than you've got. That's all right. Grig will be here. Grig is always here. That's rather the idea of a stall.
+
+[bought_stored]
+Your bag's full, so I've put it in the chest by the glow. Grig is tidy like that.
+
+[bag_full]
+Your bag's full, and so's the chest! Eat something. Grig recommends the cake.
+
+[farewell]
+Off you go, then! Light up high, feet down low. Mind the dark. It's only shy.
+
+[talk: The camp]
+The Hero stopped here. It's the only flat bit for miles. Grig never met them, mind. Long before Grig's time. But they left their marks up on the wall, in fives, small and neat, and Grig counts them when it's quiet. It's never the same number twice. Grig is fairly sure that's Grig.
+
+[talk: The dark]
+Oh, it's lovely, the dark. Don't tell it Grig said so, it gets ideas. It's very old, and it's mostly just waiting. Grig talks to it. It never says anything back. Which is good manners, really.
+
+[talk: The long walk]
+Grig's walked every tunnel down here! Three times each. The rock's all different. There's the singing sort, up top, and the quiet sort. The quiet sort is better for sleeping. The singing sort is better for hearing yourself think.
+
+[talk: The pack]
+It's everything! A kettle, a blanket, a rope, and a spare blanket in case the first blanket gets ideas. It's very heavy. Grig likes it that way. Like a house, that goes where you go.
+
+[talk: Ves]
+Oh, she's got a proper stride! Grig could hear her from the top of the tunnel. Brisk. Good for her. Tell her an umbrella's just a hood on a stick, and Grig approves.

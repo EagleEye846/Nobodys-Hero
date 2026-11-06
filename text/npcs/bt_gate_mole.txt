@@ -1,0 +1,21 @@
+# BT_GATE_MOLE: A mole miner at the gate, the loudest of the crowd, who has been told the Hero will be back and has been waiting since Thursday.
+
+[first]
+Down from the TOP? Nobody comes down from the top!
+
+Is it you? Is it the Hero, come back?
+
+[repeat]
+Are you sure you're not the Hero? You've got a sword. It's the right sort of sword.
+
+[first after the_kings_welcome]
+A QUEST! From the king himself! Lucky. I asked for a quest once and got a broom.
+
+[repeat after the_kings_welcome]
+Give the Diggings my regards. I haven't been down since they gave me the broom.
+
+[first after the_light_goes_up]
+THE LIGHT'S BACK! I SAW IT! I SAW IT FROM THE GATE! I CRIED A BIT! DON'T TELL ANYONE!
+
+[repeat after the_light_goes_up]
+I'm going to stare at it till I go blind. Then I'm going to do it again.

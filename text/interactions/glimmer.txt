@@ -1,0 +1,81 @@
+# THE GLIMMERING (Chapter 4): the bright crystal caves at the top of the
+# buried kingdom. Things you can read and look at in the Glimmering's rooms,
+# starting with glimmer_landing (more are added as the rest are built). See
+# notes/docs/chapter-4-the-first.md.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal rings softly, like a glass someone's run a finger round. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. It sparkles, anyway.
+
+[chest_empty]
+An empty chest, glittering with crystal dust.
+
+# --- THE LANDING ---
+
+[landing_cap]
+The giant mushroom, glowing violet: the size of a house, and about as soft as a very good bed. There's a deep dent in the top of the cap, and a faint cloud of spores still going up out of it.
+
+[landing_cap_ves]
+{bored}We don't speak of the mushroom.
+
+{smile}...It was very comfortable, though.
+
+[landing_sign]
+A hand-painted sign, nailed to a crystal: MIND THE PINK ONES. THEY BITE.
+
+And underneath, in a smaller and much shakier hand: (sorry).
+
+[landing_sign_ves]
+{bored}Pink ones bite. Noted. {smile}Apology accepted.
+
+[landing_bloom]
+A great bloom of crystals in every colour, all growing from a single point, like the world's most expensive bouquet.
+
+[landing_pool]
+A little pool of glowing water, no deeper than a plate, full of tiny drifting lights. Your reflection in it is a bit brighter than you are.
+
+[landing_crystal]
+A crystal, humming faintly, warm to the touch and one clear colour all the way through.
+
+[landing_trio]
+Three little glowing mushrooms in a row, teal, violet and pink, standing close together like a family waiting to be let in.
+
+[landing_small]
+A small pink mushroom. It's very cute, and you don't touch it. You have a feeling about it.
+
+[landing_pouch]
+A purse wedged between the crystal spires. Somebody dropped it in a hurry, or hid it with great care. Either way, it's yours now.
+
+[landing_rock]
+The cavern roof, high overhead. You can't see where it ends.
+
+[landing_wall]
+Rock, laced with veins of crystal that pulse very slowly, as if the wall were breathing.
+
+[landing_vein]
+A fat vein of crystal running up the wall, thick as your arm, glowing from the inside.
+
+[landing_moss_wall]
+Glowing moss hanging down the rock in long strands. They sway, though there's no breeze.
+
+[landing_spires]
+Tall crystal spires, three colours, standing very straight, like they were told to wait there and say something important.
+
+[landing_spike]
+A crystal spike, sharp as a pin. The kind of thing you walk around.
+
+[landing_mushrooms]
+Small glowing mushrooms, close together, whispering.
+
+[landing_thicket]
+A thicket of spiky crystal. Nothing's getting through that.

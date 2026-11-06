@@ -12,8 +12,8 @@ export const GLINTLING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'vigil',
   sprite: { rows: GLINTLING_SPRITE, palette: GLINTLING_PALETTE },
-  maxHp: 140,
-  damage: 11,
+  maxHp: 150,
+  damage: 12,
 
   // A Chapter 2 enemy: small, but its tricks come thick and fast.
   difficulty: { density: 1.2, speed: 1.1 },
@@ -34,7 +34,7 @@ export const GLINTLING = {
     { name: 'Admire the colours', calm: 45 },
   ],
 
-  rewards: { exp: 75, coins: 45 },
+  rewards: { exp: 80, coins: 60 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'glint_drop', chance: 0.45 }],

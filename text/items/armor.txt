@@ -157,10 +157,86 @@ A poncho cut from an old oilcloth tent. It crackles when Bramble moves, which he
 
 # Teasel's forge, in Lasthome's square.
 [bell_bronze_breastplate]
-A breastplate hammered out of bell bronze. It takes a great deal of hitting. It weighs on your spells a little. It weighs on everything a little.
+A breastplate hammered out of bell bronze. It takes a great deal of hitting. It rings when a hit just misses, and the ring fills you. It weighs on your spells a little. It weighs on everything a little.
 
 [smiths_leathers]
 Teasel's own leathers, the spare set, scorched down the front. Not much gets through them in a hurry, and you can still move in them.
 
 [tin_lined_cape]
 A short cape lined with hammered tin, against sparks. Ves says it crinkles. It does. It also stops a great deal.
+
+# Chapter 4, under the fields.
+# Sold by Marigold at her lemonade stand.
+[sun_hat]
+A wide straw hat with a ribbon, from Marigold's own peg. It keeps the sun off, and it keeps the bullets off, mostly by being in the way.
+
+# Sold in Belowtown's market.
+[mossweave_cloak]
+A cloak woven from moss and thread by the shrews of Belowtown. It's soft, damp and surprisingly good with spells. It also smells of a very pleasant cellar.
+
+# In a chest in the Diggings.
+[miners_helm]
+A miner's helmet, dented from every direction at once. There's a candle bracket on the front. It weighs a little on your spells and a lot on your neck, and nothing falls on you twice.
+
+# In a chest in the Stillwater.
+[olmskin_vest]
+A vest from skin an olm shed, which they do politely, once a year. Thin, pale, cool, and tougher than it looks. It clings.
+
+# Ves's.
+# In a chest in the Stillwater.
+[reedweave_coat]
+A long coat woven from Stillwater reeds. Rain, spray and bullets all run off it. Ves calls it dashing.
+
+# Sold by Grig.
+[feeler_hood]
+A padded hood with two long feelers stitched on, copied off Grig's own. They don't do anything. They do make the dark feel like it's listening to you, kindly.
+
+# Sold by Hobnail.
+[forge_goggles]
+Hobnail's spare goggles, with a leather strap and a crack in one lens. He hands them over without a word. You get the feeling it's a lot, for him.
+
+# CHAPTER 5, the drowned coast.
+# Mrs. Wrasse's Chandlery, in Saltcombe.
+[oilskin_coat]
+Waxed oilskin, twice a year, the old way. The rain runs off it, and so does most of everything else.
+
+[sailcloth_vest]
+A vest stitched from old sailcloth. Light, quick to move in, and strangely good at gathering up the energy of a close shave.
+
+# In the Wreck Yard's secret pocket.
+[brass_divers_plate]
+A diver's brass breastplate, bolts and all. It weighs a lot, it rattles, and it doesn't let in a thing. It's rather hard to cast in.
+
+# In the Sunken Lanes' attic.
+[bellbuoy_mantle]
+A mantle sewn from the skin of a bellbuoy, with a little bell on each shoulder. It rings when you cast, and the spell goes further than it should.
+
+# In a chest in Corrie's room, in Haddock's Light.
+[lightmans_coat]
+A lightman's greatcoat, heavy oilskin with brass buttons, much too big for you and somehow still warm. The cuffs have been mended more than once, by someone patient.
+
+# Ves's.
+[gull_feather_hat]
+A hat trimmed with gull feathers, tied under the chin. Ves says it's sensible. It makes the near-misses ring.
+
+[sea_silk_shawl]
+A shawl of sea-silk, pale gold and thin as breath. It's warm, and it mends. Ves doesn't ask how it's made.
+
+[rope_belt]
+A thick rope belt, knotted by Mrs. Wrasse in a knot she wouldn't name. It cinches the whole coat tight, and SHELTER holds firmer than anything.
+
+# Bramble's.
+[small_oilskin]
+A sou'wester and coat in a boy's size, bright yellow. Bramble says he looks like a duck. Everyone agrees. He keeps it on.
+
+[haddocks_muffler]
+A long knitted muffler in oilskin yellow, dropped stitches and all, smelling of tar and tea. Wound twice round, it makes the cold sit further off. Spells come easier. Warm.
+
+[ugly_sou_wester]
+A mustard-green sou'wester with a floppy brim and one pink bobble nobody can explain. It is ugly. It is also very dry.
+
+[cork_float]
+A red-striped cork float on a string. It bobs on your chest. Swim proper.
+
+[sea_boots]
+Tall waxed boots that come up to his belt. They stomp in the shallows, and they're surprisingly quiet in the sneaky.

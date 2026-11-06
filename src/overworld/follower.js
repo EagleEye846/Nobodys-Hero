@@ -4,6 +4,7 @@ import { MEMBERS, memberSprites, memberFrames } from '../characters/party.js';
 import { STONE_LIFT, swayAt } from './player.js';
 import { actPose, poseOffset, drawPosed, startAct } from './acts.js';
 import { animationFrame } from '../engine/animations.js';
+import { pickIdle, idleStep, idleLength } from './idles.js';
 
 // A party member following the hero round the world. They walk the path the
 // hero walked, a little way behind, so they come round corners rather than
@@ -31,6 +32,12 @@ const WALK_PACE = 65;
 const TURN_TO_HERO = 0.7;
 const GLANCE_EVERY = [5, 9];
 const GLANCE_SECONDS = 0.8;
+// Stood still long enough, they fidget (idles.js): first after this long, then
+// every so often, never the same one twice running.
+const FIDGET_FIRST = [8, 14];
+const FIDGET_EVERY = [11, 22];
+// How high they're drawn off the ground, jumping a gap you jumped.
+const LEAP_LIFT = 5;
 const now = () => performance.now() / 1000;
 
 export class Follower {
@@ -55,6 +62,12 @@ export class Follower {
     this.stillFor = 0;
     this.nextGlance = GLANCE_EVERY[0];
     this.glanceDir = null;
+    // A fidget under way (idles.js): { name, t } (t in seconds), and when the
+    // next is due (in stillFor's time).
+    this.fidget = null;
+    this.fidgetDue = null;
+    this.lastFidget = null;
+    this.fidgetSeen = 0;
     // An act (see acts.js), and how far a bridge has sagged under them (bridges.js).
     this.act = null;
     this.sag = 0;
@@ -80,11 +93,12 @@ export class Follower {
   }
 
   // Put them at a spot, forgetting the path (arriving in a room, or off the rope).
-  warpTo(x, y) {
+  // (`ground`: how high the block they land on is, if it's a raised one.)
+  warpTo(x, y, ground = 0) {
     this.x = x;
     this.y = y;
-    this.trail = [{ x, y }];
-    this.ground = 0;
+    this.trail = [{ x, y, ground }];
+    this.ground = ground;
     this.walking = false;
   }
 
@@ -100,7 +114,7 @@ export class Follower {
   update(dt, hero, place = 0) {
     this.time += dt;
     const last = this.trail[this.trail.length - 1];
-    if (Math.hypot(hero.x - last.x, hero.y - last.y) >= TRAIL_STEP) this.trail.push({ x: hero.x, y: hero.y, ground: hero.ground });
+    if (Math.hypot(hero.x - last.x, hero.y - last.y) >= TRAIL_STEP) this.trail.push({ x: hero.x, y: hero.y, ground: hero.ground, air: Boolean(hero.isAirborne) });
     // Walk back along the path from the hero until we're GAP behind.
     let remaining = GAP * (place + 1);
     let target = this.trail[this.trail.length - 1];
@@ -110,7 +124,7 @@ export class Follower {
       const seg = Math.hypot(a.x - b.x, a.y - b.y);
       if (seg >= remaining) {
         const k = remaining / seg;
-        target = { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k, ground: (k < 0.5 ? a : b).ground };
+        target = { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k, ground: (k < 0.5 ? a : b).ground, air: a.air || b.air };
         // Everything before this point is history.
         this.trail.splice(0, i - 1);
         remaining = 0;
@@ -121,6 +135,8 @@ export class Follower {
     }
     if (this.trail.length > 400) this.trail.splice(0, this.trail.length - 400);
     this.ground = target.ground ?? 0;
+    // Where you jumped (stone to stone over water, say), they jump too.
+    this.leaping = Boolean(target.air);
     const dx = target.x - this.x;
     const dy = target.y - this.y;
     const distance = Math.hypot(dx, dy);
@@ -142,6 +158,7 @@ export class Follower {
     if (Math.abs(dx) > 0.5) this.facing = Math.sign(dx);
     if (distance > 0.5) this.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
     this.idle(dt, hero);
+    this.updateFidget(dt, hero);
   }
 
   // Stood still: they turn to look at you, and now and then glance about.
@@ -166,6 +183,45 @@ export class Follower {
       this.nextGlance = this.stillFor + GLANCE_EVERY[0] + Math.random() * (GLANCE_EVERY[1] - GLANCE_EVERY[0]);
     }
     if (this.glanceDir && this.stillFor >= this.glanceUntil) this.glanceDir = null;
+  }
+
+  // Now and then, standing about, a little something of their own. Only while
+  // you're free to walk about (not in a cutscene, a conversation, on a cart or
+  // a rope, or steering someone else).
+  updateFidget(dt, hero) {
+    const free = !this.walking && !this.hidden && !this.tucked && !this.balancing && !this.act && !this.animation
+      && !hero.moving && !hero.isAirborne && !hero.carrying && !hero.skin && !hero.balancing && !hero.tucked && !hero.sinking
+      && !this.sag && performance.now() / 1000 - (hero.freeAt ?? -1) < 0.1;
+    if (!free || this.glanceDir) {
+      this.fidget = null;
+      if (!free) this.fidgetDue = null;
+      return;
+    }
+    this.fidgetSeen = now();
+    if (this.fidget) {
+      this.fidget.t += dt;
+      if (this.fidget.t >= idleLength(this.id, this.fidget.name)) {
+        this.fidget = null;
+        this.fidgetDue = this.stillFor + FIDGET_EVERY[0] + Math.random() * (FIDGET_EVERY[1] - FIDGET_EVERY[0]);
+      }
+      return;
+    }
+    this.fidgetDue ??= this.stillFor + FIDGET_FIRST[0] + Math.random() * (FIDGET_FIRST[1] - FIDGET_FIRST[0]);
+    if (this.stillFor < this.fidgetDue) return;
+    const name = pickIdle(this.id, this.lastFidget);
+    if (!name) return;
+    this.lastFidget = name;
+    this.startFidget(name);
+  }
+
+  startFidget(name, t = 0) {
+    this.fidget = { name, t };
+    this.fidgetSeen = now();
+    const face = idleStep(this.id, name, t, this.facing)?.face;
+    if (face) {
+      this.dir = face;
+      if (face === 'left' || face === 'right') this.facing = face === 'left' ? -1 : 1;
+    }
   }
 
   // The frame to show: with walking frames, the way they're heading, stepping
@@ -205,9 +261,14 @@ export class Follower {
         return;
       }
     }
-    const pose = actPose(this.act, now());
+    let pose = actPose(this.act, now());
     if (this.act && !pose) this.act = null;
-    const sprite = this.frameLooking(pose?.look ?? null);
+    // Fidgeting (the scene stopped updating us, in a conversation, say: stop).
+    if (this.fidget && now() - this.fidgetSeen > 0.2) this.fidget = null;
+    const fidget = this.fidget && !pose ? idleStep(this.id, this.fidget.name, this.fidget.t, this.facing) : null;
+    if (this.fidget && !fidget) this.fidget = null;
+    pose ??= fidget?.pose ?? null;
+    const sprite = fidget?.sprite ?? this.frameLooking(pose?.look ?? null);
     const off = poseOffset(pose, this.dir);
     // Up on a stepping-stone in the water, keeping their balance (see OverworldScene.balance).
     const sway = this.balancing && !this.walking ? swayAt(this.balanceTime ?? 0) : 0;
@@ -215,6 +276,7 @@ export class Follower {
     const bob = !this.frames && this.walking && Math.floor(this.time / BOB_SECONDS) % 2 ? 1 : 0;
     const feet = Math.round(this.y) - this.ground - (this.balancing ? STONE_LIFT : 0) + this.sag;
     drawFootShadow(ctx, Math.round(this.x) - camera.x, feet - camera.y);
-    drawPosed(ctx, sprite, Math.round(this.x) + sway + off.x - camera.x, feet - bob + off.y - camera.y, pose?.sx ?? 1, pose?.sy ?? 1);
+    const leap = this.leaping && this.walking ? LEAP_LIFT : 0;
+    drawPosed(ctx, sprite, Math.round(this.x) + sway + off.x - camera.x, feet - bob - leap + off.y - camera.y, pose?.sx ?? 1, pose?.sy ?? 1);
   }
 }

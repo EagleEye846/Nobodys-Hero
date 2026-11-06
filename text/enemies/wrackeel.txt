@@ -1,0 +1,82 @@
+# WRACKEEL
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/wrackeel.js.
+
+[intro]
+The water in the lane goes bright, then a long teal body slides out of it, trailing sparks. A WRACKEEL!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+WRACKEEL coils and uncoils. Every few seconds a spark jumps off its back and goes out in the wet air with a small, sad pop.
+
+WRACKEEL looks you up and down. It hasn't decided if you are a friend or a conductor.
+
+A puddle near WRACKEEL fizzes, all by itself. It pretends it wasn't doing that.
+
+WRACKEEL's sparks are all leaning toward your lantern. It leans too, a little, and then catches itself.
+
+Smells like a struck match and low tide.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Bzzt.
+
+Sorry!
+Reflex.
+
+Hold
+still!
+
+...No,
+don't.
+
+Ooh. A
+good
+conductor.
+
+It wasn't
+me. It was
+the eel.
+
+Static!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/wrackeel.js.
+[talk: Inspect]
+WRACKEEL - HP 2050
+A teal eel wired wrong. Darts in zigzags, links its sparks into a chain, closes in rings with a gap that turns, and lights up whole rows. Keep moving, and keep off the wet.
+
+[talk: Offer a rubber boot]
+You set a rubber boot down in the shallows. WRACKEEL sniffs it, loops round it twice, and gives a long, happy fizz. It is the first thing in years that didn't hurt to touch.
+
+[talk: Hum a low note]
+You hum something low and steady. WRACKEEL's sparks drop into time with it, blink, blink, blink, like a harbour light. It sways. For once it isn't doing anything at all.
+
+[talk: Look away politely]
+You turn your head and study the clouds. WRACKEEL goes very still, then lets out a breath that sizzles. It says no one has ever looked away before. They always stare at the sparks.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+WRACKEEL slumps in the shallows with a last, soft crackle. The water goes dark and ordinary. Something small in the lane starts to breathe again.
+
+[pacified]
+WRACKEEL curls into a loose, glowing ring, bows its blunt head, and slips away under the water. The puddles it leaves behind are warm for a moment.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} she keeps her umbrella well away from it, and thinks that's mature of both of them. {foe} says it appreciates the distance. A spark pops up in agreement.
+
+Ves asks {foe} if the lane was always this wet. {foe} says no. It remembers when you could walk it. It sounds like it misses the walking.
+
+Ves tells {foe} that its sparks are rather beautiful, from a safe place. {foe} glows a shade brighter. She stays exactly where she is.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} he is not scared of eels. He is standing very far back. He says that is just a good view.
+
+Bramble asks {foe} if it can do the sparks on purpose. {foe} shows him. A single, careful spark lands on a pebble. He claps and then wipes his hands on his coat.
+
+Bramble tells {foe} that he is also a bit zappy, mostly in winter, mostly on doorknobs. {foe} nods slowly. It knows exactly what he means.

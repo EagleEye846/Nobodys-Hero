@@ -1,0 +1,82 @@
+# NET WRAITH
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/net_wraith.js.
+
+[intro]
+A fishing net hangs in the air where there is nothing to hang it from. Two holes in the mesh turn toward you, and a pale green light comes on behind them. A NET WRAITH!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+NET WRAITH drifts as though the air were deep water. Its floats bob slowly, long after the tide has turned.
+
+A strand of NET WRAITH catches on a splinter and tugs. It stops and looks at the strand, as if that were somebody else's.
+
+NET WRAITH closes its mesh very slightly, then opens it. It is counting something. It's been counting for a long time.
+
+The hook swings, all by itself. NET WRAITH watches it, with enormous patience.
+
+Smells like salt, tar and a boat that went down without a fuss.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Haul.
+
+Haul it
+in. Haul.
+
+Hold the
+line.
+
+...Catch of
+the day.
+
+Tangled.
+
+Tangled.
+
+Mind the
+floats.
+
+Almost
+home.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/net_wraith.js.
+[talk: Inspect]
+NET WRAITH - HP 2150
+A drowned fishing net that still thinks it's at work. Closes the box to a small window, rolls floats in on the swell, lowers a hook and jerks it up, and lets a curtain of knots fall with a hole in it. Look for the window and the hole.
+
+[talk: Untangle a knot]
+You find a knot in its edge, as big as your fist and hard as a nut, and you work it loose with your thumbs. NET WRAITH goes completely still. Then it lets out a long, thin sigh, and its whole mesh loosens, just a little, like a held breath.
+
+[talk: Tell it the boat got home]
+You tell NET WRAITH the boat got home, and everyone aboard, and there's a hot dinner on the table. You don't know if it's true. NET WRAITH's floats stop bobbing. It says that it knew. It says that it always knew.
+
+[talk: Hum a sea shanty]
+You hum the slow part of a sea shanty, the part where they haul. NET WRAITH's strands lift and fall in time with it, a little behind. A very small, very old pull on a rope, answering you.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+NET WRAITH comes undone, strand by strand, and settles on the planks in a heap of dull, wet rope. There's nothing in it any more. It looks smaller than you expected. It looks like what it is.
+
+[pacified]
+NET WRAITH goes slack and gentle, and spreads itself out on the air like something laid in the sun to dry. Then it drifts off over the water, low and slow, towards a harbour that isn't there anymore, and perhaps is.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that it's very good at being a net. It's the best she's seen. {foe} says it's had practice. It says it has caught a great many things it didn't want.
+
+Ves asks {foe} how long it's been drifting. {foe} says it lost count. She says she knows what that's like. She says it quietly, to the rope, not to the net.
+
+Ves tells {foe} she'll keep her feet out of its mesh if it keeps its hook out of her umbrella. {foe} agrees, a little sadly. It has always wanted to be good at fair deals.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} that he's not going to run, because he is being very brave. He is standing behind Ves. {foe} says that's sensible.
+
+Bramble asks {foe} if it's caught any fish. {foe} says no. It says it's caught boots. Bramble says that's still a catch, and he is pleased for it.
+
+Bramble tells {foe} that he once got stuck in a hedge for three hours, so he knows how it feels. {foe} says that's the nicest thing anyone has said to it in a hundred years.

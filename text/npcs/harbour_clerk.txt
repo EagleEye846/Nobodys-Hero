@@ -1,0 +1,15 @@
+# THE HARBOUR CLERK (at his desk in the harbour office, saltcombe_harbour_office): a puffin in a
+# green eyeshade and round spectacles, ink on his cuffs. Fussy and fond of his books. Trail 4 is the
+# ledger on his desk; he says nothing about that line, except that the book falls open there.
+
+[first]
+{stern}Name? Vessel? Purpose of visit?
+
+{flustered}Oh. On foot. Off the Wrack. On FOOT. Well, there's no column for that. I'll have to rule one.
+
+The ledger? You may look. Don't lick your fingers. It falls open at the same page, I'm afraid. Always has. Some books are like that.
+
+[repeat]
+Everything that leaves this harbour goes in the book, and everything that comes back. Mostly they come back.
+
+{stern}Mostly.

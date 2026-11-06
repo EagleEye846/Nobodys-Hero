@@ -1,0 +1,25 @@
+# SEDGE: a grey mole in a yellow hard hat, the shift foreman at the pithead.
+# Forty years on the job, and he still thinks the shift is on. Brisk, kind,
+# and not easily shaken, except by the dark between the lamps.
+
+[first]
+Mind the rope, mind the edge and mind your head, in that order. Sedge. Foreman. Of a shift. Of two.
+
+...Ah. You'll be the two the king sent. News gets round fast down here. There's nobody left to hold it up.
+
+[repeat]
+The lamps still burn the same, you'll have noticed. It's the dark between them that's got heavier. You feel it on the back of your neck.
+
+I've stopped sending anyone below the old seam. Somebody ought to see to it. Somebody, I'm told, is you.
+
+...Right. Well. Mind the carts. They're free, and they're awful.
+
+And if you're in the Old Seam, leave the lever that says BROKEN alone. That's an order. ...From before my time. I've never been sure who it was for.
+
+[first after the_light_goes_up]
+Well. Would you look at that. The dark between the lamps has gone off somewhere. I can feel the back of my neck again.
+
+I'd say the shift is over. Forty years, and it's over. ...Don't tell Mattock. He'll want to go home.
+
+[repeat after the_light_goes_up]
+Shift's over, officially. I'm going to stand here a bit longer anyway. Somebody ought to.

@@ -1,0 +1,19 @@
+# BT_HAGGLER: A mole in the middle of the street, haggling with himself.
+
+[first]
+I say fifty. You say forty. I say, a-ha, forty-five, and you say... ah, you've gone. Well, I've won again.
+
+[repeat]
+I always win. I'm the only one who plays.
+
+[first after the_kings_welcome]
+A quest! I'd buy one at thirty, but I'd want a discount.
+
+[repeat after the_kings_welcome]
+Best price on a quest I've ever seen. Free. Suspicious, if you ask me.
+
+[first after the_light_goes_up]
+Prices are up! The Sunstone's lit! Everything's worth more with a light on!
+
+[repeat after the_light_goes_up]
+I sold myself a hat. At a loss. I'm thrilled.

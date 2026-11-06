@@ -1,0 +1,14 @@
+# HADDOCK (on the landing under the lookout, saltcombe_lookout), with the Bother, from the
+# swimming_lesson on. Stepping down to the landing's edge by the boat plays to_the_wreck_yard.
+
+[first]
+{proud}There you are. Lad still dripping? Good. Means it took.
+
+{determined}Wreck Yard's out past the point. Step down to the boat when you're ready, and sit still once you're in.
+
+{smile}She's a good boat, the Bother. Doesn't like a fidget.
+
+[repeat]
+{determined}Down to the boat when you're ready.
+
+{eh}Eh? No, miss. You can't steer.

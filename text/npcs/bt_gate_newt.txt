@@ -1,0 +1,21 @@
+# BT_GATE_NEWT: A newt guard at the gate in a helmet too big for him. The spelling of the banner is his fault, though he doesn't know it.
+
+[first]
+Move along! Move... oh, are you the visitors? Welcome. WELLCOME. It's on the banner.
+
+I checked the spelling. Twice. That's where the second L came from.
+
+[repeat]
+The crowd's not usually like this. We usually have one mole and a bat.
+
+[first after the_kings_welcome]
+You're the king's guests! Wonderful. I mean, I always knew. Please don't mention the spelling.
+
+[repeat after the_kings_welcome]
+I've been told to say nothing about the banner. I'll say nothing. The banner's perfect.
+
+[first after the_light_goes_up]
+I've made a new banner! WELLDUN. Two words. I checked.
+
+[repeat after the_light_goes_up]
+Tomorrow's banner says HAPPPY. I checked it three times.

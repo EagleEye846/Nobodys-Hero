@@ -12,8 +12,8 @@ export const RIMEWING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'vigil',
   sprite: { rows: RIMEWING_SPRITE, palette: RIMEWING_PALETTE },
-  maxHp: 260,
-  damage: 12,
+  maxHp: 280,
+  damage: 13,
 
   // A Chapter 2 enemy, and the toughest of the regulars.
   difficulty: { density: 1.15, speed: 1.1 },
@@ -34,7 +34,7 @@ export const RIMEWING = {
     { name: 'Mention the Keeper', calm: 50 },
   ],
 
-  rewards: { exp: 130, coins: 70 },
+  rewards: { exp: 140, coins: 90 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'rime_jam', chance: 0.5 }],

@@ -1022,12 +1022,19 @@ export const DEADCITY_PROP_SPRITES = {
 };
 
 // How many tiles wide the big ones stand (see PROP_FOOTPRINTS in props.js).
+// The broken Gate from its far side (the field at the start of Chapter 4):
+// the same stone, but through the opening it's the dark of the dead city you
+// came out of, not dawn. (gate_foot_broken's light, put out.)
+const DARK_THROUGH = { a: 'k', P: 'k', F: 'R', T: 'r' };
+DEADCITY_PROP_SPRITES.gate_foot_back = DEADCITY_PROP_SPRITES.gate_foot_broken.map((row) => [...row].map((ch) => DARK_THROUGH[ch] ?? ch).join(''));
+
 export const DEADCITY_FOOTPRINTS = {
   hero_statue_broken: 3,
   fallen_column: 2,
   bathhouse_tub: 2,
   gate_foot: 4,
   gate_foot_broken: 4,
+  gate_foot_back: 4,
   warden_asleep: 3,
   warden_awake: 3,
   warden_broken: 4,

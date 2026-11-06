@@ -1,0 +1,21 @@
+# BT_VENDOR_FROG: A frog who sells marbles, fishing line and 'luck', all of which he claims are the same thing.
+
+[first]
+Marbles! Fishing line! Luck! They're the same thing, really: you roll them and hope.
+
+Oh, you're the new ones. The king says you're special. Can't see it myself. Where are the wings?
+
+[repeat]
+The marbles are slimy. I know. The luck is slimy too. That's how you know it's good.
+
+[first after the_kings_welcome]
+Off into the dark, are you? Take a marble. It's luck. If it's slimy, it's working.
+
+[repeat after the_kings_welcome]
+I'd come with you but I'm afraid of the dark, the damp and doing something.
+
+[first after the_light_goes_up]
+Luck's up! I sold four! Four marbles! Two were luck!
+
+[repeat after the_light_goes_up]
+It's a lucky day. I can feel it. I can feel it in my marbles.

@@ -20,8 +20,8 @@ export const STONE_GOLEM = {
     frames: [STONE_GOLEM_DISGUISE_SPRITES.still, STONE_GOLEM_DISGUISE_SPRITES.look, STONE_GOLEM_DISGUISE_SPRITES.glint],
     palette: STONE_GOLEM_BOULDER_PALETTE,
   },
-  maxHp: 300,
-  damage: 13,
+  maxHp: 325,
+  damage: 14,
 
   // A Chapter 2 enemy: slow, heavy things, but plenty of them.
   difficulty: { density: 1.15, speed: 1.05 },
@@ -42,7 +42,7 @@ export const STONE_GOLEM = {
     { name: 'Knock politely', calm: 35 },
   ],
 
-  rewards: { exp: 150, coins: 75 },
+  rewards: { exp: 160, coins: 100 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'geode_candy', chance: 0.45 }],

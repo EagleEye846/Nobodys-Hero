@@ -1,0 +1,20 @@
+# THE INNKEEPER (behind the counter of the Drowned Rat, saltcombe_inn): a fat brown rat with a
+# towel on his shoulder, polishing the same tankard. Tired and kind. The crystal by the fire saves.
+
+[first]
+{smile}Come in, come in, you're letting the weather in. Soup's on, fire's lit, beds are dry. Well. Drier.
+
+{wry}This tankard? Been polishing it since the storm came. I'll stop when it stops.
+
+{smile}The crystal by the fire'll keep you right, if you're staying. Everybody stays a bit.
+
+[repeat]
+{smile}Soup's on. It's always on. It's the same soup, mostly, with more put in.
+
+[first after haddock_hums]
+{smile}He'll have that boy swimming by supper. Or soaked. One of the two.
+
+{wry}He left his mug again. He always leaves his mug. I keep it warm for him, and he never comes back for it till it's cold.
+
+[repeat after haddock_hums]
+{wry}Drip on the mat, love. The mat's paid for.

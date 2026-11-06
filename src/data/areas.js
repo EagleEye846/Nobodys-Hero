@@ -30,14 +30,54 @@ export const AREA_NAMES = {
   // The living town built inside the old city's biggest hall, by the people
   // who stopped waiting for the Hero.
   lasthome: 'LASTHOME',
+  // Chapter 4: the sunny fields just past the Hero's Gate. Buttercups, a
+  // brook, a lemonade stand. Everything is perfectly fine up here.
+  sunnyside: 'SUNNYSIDE',
+  // The bright crystal caves at the top of the buried kingdom: glowing moss,
+  // great mushrooms, crystals in every colour, lit by their own light.
+  glimmer: 'THE GLIMMERING',
+  // The creature folk's town, built inside an old buried human city: carved
+  // stone patched with creature-made wood, glow-worm lamps, and the Sunstone
+  // shining from above.
+  belowtown: 'BELOWTOWN',
+  // Chapter 4: the creature folk's mines below Belowtown. Timber-propped
+  // tunnels, plank walks and trestles, spoil heaps and dim old lamps.
+  diggings: 'THE DIGGINGS',
+  // A vast black lake under the mountain: pale stone shores, islands, glowing
+  // reeds, and a sunken old hall standing in the water.
+  stillwater: 'THE STILLWATER',
+  // The bottom of everything. Black rock, very old, and mostly dark: you see
+  // only as far as your light reaches.
+  deep: 'THE DEEP',
+  // Chapter 5: the coast. Gullrest is the sunny beach; from the Wrack Shore on
+  // the green storm sits over everything (src/overworld/coastTiles.js).
+  gullrest: 'GULLREST',
+  wrack: 'THE WRACK SHORE',
+  saltcombe: 'SALTCOMBE',
+  lanes: 'THE SUNKEN LANES',
+  wreck: 'THE WRECK YARD',
+  merrow: 'MERROW',
+  soundings: 'THE SOUNDINGS',
+  isles: 'THE BEACON ISLES',
+  haddock_light: "HADDOCK'S LIGHT",
+  reach: 'THE STORM REACH',
+  lastlight: 'THE LAST LIGHT',
 };
 
 // Regions out under the open sky: no dark vignette around the screen's edges
 // (a room can ask for one back with `indoors: true`).
-export const OUTDOOR_AREAS = new Set(['stair', 'vigil', 'rest', 'pinefall', 'hushwood', 'hollin', 'marsh', 'valley']);
+export const OUTDOOR_AREAS = new Set(['stair', 'vigil', 'rest', 'pinefall', 'hushwood', 'hollin', 'marsh', 'valley', 'sunnyside', 'gullrest']);
+
+// Chapter 5's storm coast, lightest storm first. The green storm is worked out
+// per area in lamplight.js (AREA_AMBIENT) and atmosphere.js (rain, lightning).
+// They are lamplit rather than "outdoors": the storm hides the sun, so the
+// time of day doesn't change them, and their lamps keep warm pools of light.
+export const STORM_AREAS = ['wrack', 'saltcombe', 'lanes', 'wreck', 'merrow', 'soundings', 'isles', 'haddock_light', 'reach', 'lastlight'];
 
 // Regions lit by their own lamps and fires (see src/overworld/lamplight.js):
 // outdoors the night comes down deeper and every lamp and lit window keeps a
 // warm pool of light; indoors the rooms are lit by their hearths and candles.
 // A room can choose for itself with `lamplight: true` or `false`.
-export const LAMPLIT_AREAS = new Set(['rest', 'lasthome']);
+// (The Glimmering is lamplit so its crystals and mushrooms glow, in a soft
+// violet shade rather than the usual ember brown.)
+export const LAMPLIT_AREAS = new Set(['rest', 'lasthome', 'belowtown', 'glimmer', 'diggings', 'stillwater', ...STORM_AREAS]);

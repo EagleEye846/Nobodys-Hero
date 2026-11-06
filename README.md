@@ -36,15 +36,22 @@ window opens and the game appears in your web browser.
 - If Windows says "Windows protected your PC", click **More info**, then
   **Run anyway**.
 
-**On a Mac:**
+**On a Mac:** double-click **Play.command**. A Terminal window opens and the
+game appears in your web browser.
 
-1. Open the **Terminal** app (press Cmd + Space, type `Terminal`, press Enter).
-2. Type `cd ` (with a space after it), drag the game's folder into the
-   Terminal window, and press Enter.
-3. Type `python3 tools/serve.py` and press Enter.
-4. Open your web browser and go to **http://localhost:8000**.
+- If the Mac says it can't be opened because it's from an unidentified
+  developer, right-click **Play.command**, choose **Open**, then **Open** again.
+- If it still won't run: open the **Terminal** app, type `cd ` (with a space
+  after it), drag the game's folder into the window, press Enter, then type
+  `sh play.sh` and press Enter.
 
-Keep Terminal open while you play. To stop, click it and press Ctrl + C.
+**On Linux:** open a terminal in the game's folder and type `sh play.sh`
+(or make it double-clickable once with `chmod +x play.sh`, then `./play.sh`).
+The game opens in your web browser. If Python is missing, install it with
+your package manager first (for example `sudo apt install python3`).
+
+On a Mac or Linux, keep the terminal open while you play. To stop, click it
+and press Ctrl + C.
 
 Press **Z** on the first screen to begin.
 
