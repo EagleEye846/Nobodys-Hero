@@ -97,6 +97,8 @@ export const DIGGINGS_LOST_SEAM = {
     { x: 12, y: 8, w: 3, h: 3, scene: 'seam_nine_star', after: 'the_two_the_king_sent' },
     // The three pieces of the seventh shift's whistle, carried to the crack: it is blown, and the glass rings open.
     { x: 3, y: 13, w: 1, h: 1, scene: 'whistle_blown', gear: ['whistle_pea', 'whistle_mouth', 'whistle_barrel'] },
+    // With only one or two of the three: the glass hums at them, and Ves says which are missing (whistle_not_yet, every time).
+    { x: 3, y: 13, w: 1, h: 1, scene: 'whistle_not_yet', someGear: ['whistle_pea', 'whistle_mouth', 'whistle_barrel'], until: 'whistle_blown' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.

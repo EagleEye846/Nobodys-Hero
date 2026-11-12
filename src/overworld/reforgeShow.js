@@ -496,15 +496,18 @@ export class ReforgeShow {
     const aRest = -0.2;
     const aRaise = -1.35;
     const aHit = Math.atan2(BLADE.y - BLADE.half - HAND.y, STRIKE_X - HAND.x);
+    // Back up after a blow before lifting for the next (quicker when the
+    // blows come close), so the hammer never jumps.
+    const back = (i) => (i < this.hits.length - 1 ? Math.min(0.32, (this.hits[i + 1] - this.hits[i]) * 0.35) : 0.32);
     let angle = aRest;
     for (let i = 0; i < this.hits.length; i++) {
       const ts = this.hits[i];
-      const lift = ts - s.windup;
+      const lift = i ? Math.max(ts - s.windup, this.hits[i - 1] + back(i - 1)) : ts - s.windup;
       const fall = ts - s.fall;
       if (u < lift) break;
       if (u < fall) angle = lerp(aRest, aRaise, easeOut((u - lift) / Math.max(0.01, fall - lift - 0.05)));
       else if (u < ts) angle = lerp(aRaise, aHit, easeIn((u - fall) / s.fall));
-      else if (u < ts + 0.32) angle = lerp(aHit, aRest, easeOut((u - ts) / 0.32));
+      else if (u < ts + back(i)) angle = lerp(aHit, aRest, easeOut((u - ts) / back(i)));
       else angle = aRest;
     }
     return angle;
