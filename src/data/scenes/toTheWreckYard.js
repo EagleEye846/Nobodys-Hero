@@ -18,10 +18,13 @@ export const TO_THE_WRECK_YARD = {
 
   actors: [
     { id: 'haddock', look: 'prop:cf_haddock', x: 1, y: 1, portrait: 'haddock', hidden: true },
+    { id: 'ves_voice', look: 'prop:vesper_stand', x: 1, y: 1, portrait: 'vesper', hidden: true },
   ],
 
   steps: [
-    { do: 'say', who: 'haddock', text: '{proud}The Wreck Yard, is it? Right. In you get. Sit still, and don\'t touch the oars.' },
+    { do: 'say', who: 'haddock', text: '{proud}The Wreck Yard, is it? Right. In you get. Sit still, and don\'t touch the oars.', until: 'haddock_gone' },
+    // After the chapter, Ves rows ((draft)).
+    { do: 'say', who: 'ves_voice', text: "{bored}The Wreck Yard. In you get. Nobody touch the oars.", after: 'haddock_gone' },
     { do: 'stage', dim: 1, seconds: 1.6 },
     { do: 'sound', name: 'splash' },
     { do: 'wait', seconds: 1.8 },

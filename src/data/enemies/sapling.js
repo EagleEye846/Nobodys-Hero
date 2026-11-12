@@ -20,7 +20,7 @@ export const SAPLING = {
     frames: [SAPLING_DISGUISE_SPRITES.still, SAPLING_DISGUISE_SPRITES.peek, SAPLING_DISGUISE_SPRITES.twitch],
     palette: SAPLING_PALETTE,
   },
-  maxHp: 435,
+  maxHp: 550,
   damage: 18,
 
   // A Chapter 3 enemy: slow things, but they close in.

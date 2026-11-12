@@ -5,7 +5,7 @@
 // (if just anybody can light the Sunstone, who needs a Hero? and who needs the
 // Hero's friend?). The square has been calling you two "the Hero's friends",
 // and the Hero, he says, has ONE friend. (He tells his story again, and it's
-// different again: now he carried their sword, now it was twenty years.)
+// different again: now he carried his sword, now it was fifty-eight years.)
 // Then he calls a ROYAL DECREE: a duel, as a show. Ves points out
 // that he's going to fight you from a chair.
 //
@@ -14,7 +14,8 @@
 // (rumboldAfter.js), and after them the hall comes down (theHallFalls.js).
 //
 // King Peptup may be voice-acted, the only character who is: each of his
-// lines has a `// voice: rumbold_duel_<n>` comment above it.
+// lines has a `voice: 'rumbold_duel_<n>'` on it (src/audio/voiceClips.js
+// says which recording, if any, each one plays).
 import { audienceActors, wave, hush, ON_THE_KING } from './hallFolk.js';
 
 export const RUMBOLDS_DUEL = {
@@ -49,18 +50,15 @@ export const RUMBOLDS_DUEL = {
     { do: 'wait', seconds: 0.6 },
 
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_duel_1
-    { do: 'say', who: 'king', text: '{shouting}MY FRIENDS! What a day! What a SHOW!' },
+    { do: 'say', who: 'king', text: '{shouting}MY FRIENDS! What a day! What a SHOW!', voice: 'rumbold_duel_1' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.35, once: true },
     { do: 'sound', name: 'burst' },
     ...hush(),
     ...wave(0.05),
     { do: 'wait', seconds: 0.8 },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_duel_2
-    { do: 'say', who: 'king', text: '{proud}Two strangers come down from the top... and do what only the Hero could do!' },
-    // voice: rumbold_duel_7
-    { do: 'say', who: 'king', text: '{laughing}I heard them out in the square! "THE HERO\'S FRIENDS!" Ha ha! Ha ha...' },
+    { do: 'say', who: 'king', text: '{proud}Two strangers come down from the top... and do what only the Hero could do!', voice: 'rumbold_duel_2' },
+    { do: 'say', who: 'king', text: '{laughing}I heard them out in the square! "THE HERO\'S FRIENDS!" Ha ha! Ha ha...', voice: 'rumbold_duel_7' },
     { do: 'wait', seconds: 0.5 },
 
     // Quieter, which is worse. The lights narrow; the hall stops cheering.
@@ -70,17 +68,13 @@ export const RUMBOLDS_DUEL = {
     { do: 'animate', who: 'king', animation: 'bf_rumbold', speed: 0.6 },
     { do: 'wait', seconds: 1.4 },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.2 },
-    // voice: rumbold_duel_3
-    { do: 'say', who: 'king', text: '{sly}...What only the Hero could do.' },
+    { do: 'say', who: 'king', text: '{sly}...What only the Hero could do.', voice: 'rumbold_duel_3' },
     { do: 'wait', seconds: 1 },
-    // voice: rumbold_duel_8
-    { do: 'say', who: 'king', text: '{sly}The Hero has ONE friend. I came down that stair with them. I carried their SWORD.\n\nI was lost in the dark for twenty years.' },
+    { do: 'say', who: 'king', text: '{sly}The Hero has ONE friend. I came down that stair with him. I carried his SWORD.\n\nI was lost in the dark for fifty-eight years.', voice: 'rumbold_duel_8' },
     { do: 'wait', seconds: 1 },
-    // voice: rumbold_duel_4
-    { do: 'say', who: 'king', text: '{sly}But if just anybody can light the Sunstone... what does anybody need a Hero for?\n\nAnd if nobody needs a Hero...' },
+    { do: 'say', who: 'king', text: '{sly}But if just anybody can light the Sunstone... what does anybody need a Hero for?\n\nAnd if nobody needs a Hero...', voice: 'rumbold_duel_4' },
     { do: 'wait', seconds: 1.2 },
-    // voice: rumbold_duel_5
-    { do: 'say', who: 'king', text: '{sly}...what does anybody need the Hero\'s FRIEND for?' },
+    { do: 'say', who: 'king', text: '{sly}...what does anybody need the Hero\'s FRIEND for?', voice: 'rumbold_duel_5' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold', speed: 0.6 },
     // (The frog child at the front looks round for an answer; a mole along
     // the row shakes its head at him.)
@@ -92,8 +86,7 @@ export const RUMBOLDS_DUEL = {
     // The roar.
     { do: 'stage', spots: ON_THE_KING, dim: 0.25, seconds: 0.3, confetti: 3 },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.12 },
-    // voice: rumbold_duel_6
-    { do: 'say', who: 'king', text: '{outraged}BY ROYAL DECREE!\n\n{shouting}A DUEL! The finest show Belowtown has ever SEEN!', shake: true },
+    { do: 'say', who: 'king', text: '{outraged}BY ROYAL DECREE!\n\n{shouting}A DUEL! The finest show Belowtown has ever SEEN!', shake: true, voice: 'rumbold_duel_6' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.3, once: true },
     { do: 'sound', name: 'boom' },
     { do: 'quake', amount: 2, seconds: 0.6 },
@@ -101,8 +94,7 @@ export const RUMBOLDS_DUEL = {
     { do: 'wait', seconds: 1 },
     { do: 'say', who: 'ves', text: '{bored}He\'s going to fight us.\n\n{glee}...From a chair.' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_duel_9
-    { do: 'say', who: 'king', text: '{proud}The Hero\'s friend does not GET UP for anybody!' },
+    { do: 'say', who: 'king', text: '{proud}The Hero\'s friend does not GET UP for anybody!', voice: 'rumbold_duel_9' },
     { do: 'stage', spots: ON_THE_KING, dim: 0.4, seconds: 0.8 },
     ...hush(),
     { do: 'animate', who: 'king', animation: 'bf_rumbold', speed: 0.6 },

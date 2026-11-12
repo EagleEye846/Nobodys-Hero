@@ -1,7 +1,11 @@
 import { TILE_SIZE as T, SCREEN_WIDTH as W, SCREEN_HEIGHT as H } from '../config.js';
 import { glowSprite, roomLights, isRelit } from './lamplight.js';
 import { music } from '../audio/music.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 import { drawLastLightNear, drawLastLightNearVeil, drawLastLightNearOver, drawLastLightNearSlit } from './lastLightNear.js';
+import { fract, hash } from '../engine/noise.js';
+import { flashScale } from '../state/settings.js';
+import { shoreShift } from './tileBlend.js';
 
 // ATMOSPHERE: the small, living details of Chapter 4's places. Dust catching a
 // beam, crystals winking, embers off the town's lamps, grit trickling down a
@@ -26,8 +30,9 @@ import { drawLastLightNear, drawLastLightNearVeil, drawLastLightNearOver, drawLa
 // (specks on the walls), seeds (dandelion seeds), butterflies.
 //
 // Chapter 5's coast adds: gulls (gulls wheeling over the beach), rain
-// (slanting rain; 1 is steady, 1.5 a downpour), lightning (a soft flash now
-// and then, never more than every 8 seconds or so), fog (sea fog drifting),
+// (slanting rain; 1 is steady, 1.5 a downpour, blown harder in the gusts),
+// lightning (a soft flash every 20 to 40 seconds, then its thunder; the
+// LIGHTNING FLASHES option can soften it or turn it off), fog (sea fog drifting),
 // spray (white spray thrown up where waves hit the shore), foam (a white line
 // that comes and goes along the water's edge) and drips (water falling in a
 // cave). Rain, lightning, fog, spray and gulls are left out of any room that
@@ -48,12 +53,20 @@ const AREA_LAYERS = {
   diggings: { grit: 1, beamDust: 1 },
   stillwater: { shimmer: 1, rings: 1, haze: 1, beamDust: 1 },
   deep: { glowworms: 1, beamDust: 1 },
+  // Earlier chapters, lightly: dust hanging in the Ruins' halls and the dead
+  // city's streets, Lasthome's lamps sparking, the Old Drains dripping.
+  ruins: { motes: 0.5 },
+  valley: { motes: 0.3 },
+  lasthome: { motes: 0.5, embers: 0.5 },
+  drains: { drips: 0.9, rings: 0.4 },
   // Chapter 5. The storm gets heavier area by area.
   gullrest: { gulls: 1, shimmer: 1, foam: 1, spray: 0.5, motes: 0 },
   wrack: { rain: 0.6, lightning: 0.4, foam: 0.9, spray: 0.4 },
   saltcombe: { rain: 0.7, lightning: 0.4, foam: 0.6, flicker: 0.8 },
   lanes: { rain: 0.8, lightning: 0.5, foam: 0.6, fog: 0.4 },
   wreck: { rain: 0.9, lightning: 0.6, foam: 0.6, fog: 1, spray: 0.4 },
+  // The ghost ship: no rain and no lightning (nothing sudden), a thick still fog, drips.
+  ghostship: { rain: 0, foam: 0.3, fog: 1.8, drips: 0.8, mist: 1 },
   merrow: { rain: 0.9, lightning: 0.5, foam: 0.6, fog: 0.6 },
   soundings: { drips: 1, foam: 0.5, rings: 0.6, haze: 0.5 },
   isles: { rain: 1, lightning: 0.7, foam: 1, spray: 1 },
@@ -62,14 +75,15 @@ const AREA_LAYERS = {
   lastlight: { rain: 1.5, lightning: 1, foam: 0.9, spray: 0.9, fog: 0.3 },
 };
 
+// Dust the colour of the place (the rest drift a pale violet, like the crystal caves').
+const MOTE_COLORS = { ruins: '255, 236, 204', valley: '232, 222, 200', lasthome: '255, 226, 160' };
+
 // Layers that only make sense under the open sky.
 const OUTSIDE_ONLY = ['rain', 'lightning', 'fog', 'spray', 'gulls'];
 
 // The tiles that are crystal, in the Glimmering and the Deep.
 const CRYSTAL_TILES = new Set([...'OxIJ^vZRVp']);
 
-const fract = (x) => x - Math.floor(x);
-const hash = (n) => fract(Math.sin(n * 91.7 + 17.3) * 43758.5453);
 const hash2 = (x, y, k = 0) => hash(x * 12.9898 + y * 78.233 + k * 37.719);
 const wrap = (v, span) => ((v % span) + span) % span;
 
@@ -79,16 +93,27 @@ export function makeAtmosphere(scene) {
   const layers = {};
   // Once the town's relit, gold dust drifts in the light and the lamps' embers calm down.
   const relit = data.area === 'belowtown' && isRelit(data) ? { motes: 1.1, embers: 0.5 } : {};
-  for (const [name, amount] of Object.entries({ ...AREA_LAYERS[data.area], ...relit, ...(data.atmosphere ?? {}) })) if (amount > 0) layers[name] = amount;
-  if (data.indoors) for (const name of OUTSIDE_ONLY) delete layers[name];
-  if (!Object.keys(layers).length && !data.wreck) return null;
-  return new Atmosphere(scene, layers);
+  // `calmAfter: { scene, atmosphere, ambience }`: once that scene has played,
+  // the room's weather is that instead (the storm gone from the foot of the
+  // Last Light at the end of chapter 5). The ambience is OverworldScene's.
+  // With `skyline: true` the wrecks and the far tower stay on the horizon after
+  // the storm, drawn pale in the clearing air instead of black in the rain.
+  const calmNow = Boolean(data.calmAfter && (WORLD_STATE.seenScenes ?? []).includes(data.calmAfter.scene));
+  const calm = calmNow ? data.calmAfter.atmosphere ?? {} : {};
+  for (const [name, amount] of Object.entries({ ...AREA_LAYERS[data.area], ...relit, ...(data.atmosphere ?? {}), ...calm })) if (amount > 0) layers[name] = amount;
+  // (The ghost ship keeps its fog below decks: a thinner bank far off and the low mist near, at two depths.)
+  if (data.indoors && data.area === 'ghostship') { layers.fog = Math.min(layers.fog ?? 0.7, 0.7); delete layers.rain; delete layers.lightning; delete layers.spray; delete layers.gulls; }
+  else if (data.indoors) for (const name of OUTSIDE_ONLY) delete layers[name];
+  const clearSky = calmNow && data.calmAfter.skyline === true && !data.indoors;
+  if (!Object.keys(layers).length && !data.wreck && !clearSky) return null;
+  return new Atmosphere(scene, layers, clearSky);
 }
 
 export class Atmosphere {
-  constructor(scene, layers) {
+  constructor(scene, layers, clearSky = false) {
     this.scene = scene;
     this.layers = layers;
+    this.clearSky = clearSky;
     const { room } = scene;
     const rows = room.tiles;
     const at = (tx, ty) => (rows[ty]?.[tx] ?? null);
@@ -147,9 +172,15 @@ export class Atmosphere {
     this.grass = thin(this.grass, 6);
     this.water = this.water.length ? this.water : [];
     this.wreckCanvas = null;
-    this.skyline = layers.rain && !scene.roomData.indoors ? buildSkyline(rows, scene.roomData, scene.roomData.tide?.low) : null;
+    this.skyline = (layers.rain || clearSky) && !scene.roomData.indoors ? buildSkyline(rows, scene.roomData, scene.roomData.tide?.low) : null;
     this.flashK = 0;
     this.flashN = -1;
+    // The wind (see windGust): how hard it's gusting now (0 to 1), how far the
+    // gusts have pushed the rain so far, and the last gust we heard.
+    this.gust = 0;
+    this.gustX = 0;
+    this.gustT = null;
+    this.gustN = -1;
   }
 
   get camera() {
@@ -198,6 +229,7 @@ export class Atmosphere {
     if (layers.haze) this.drawHaze(ctx, t, layers.haze);
     if (this.skyline) this.drawSkyline(ctx, t);
     if (layers.fog) this.drawSeaFog(ctx, t, layers.fog);
+    if (layers.mist) this.drawNearMist(ctx, t, layers.mist);
     if (this.scene.roomData.lastLightNear) drawLastLightNearVeil(ctx, this.scene.roomData.lastLightNear, this.camera);
     if (layers.spray) this.drawSpray(ctx, t, layers.spray);
     if (layers.gulls) this.drawGulls(ctx, t, layers.gulls);
@@ -239,10 +271,12 @@ export class Atmosphere {
       const wave = 0.5 + 0.5 * Math.sin(t * (0.9 + f.h * 0.5) + f.h * 40);
       ctx.fillStyle = `rgba(${white}, ${((0.22 + 0.34 * wave) * Math.min(1.2, amount)).toFixed(3)})`;
       const reach = Math.round(1 + wave * 3);
+      // The coast's shore is ragged (tileBlend.js): how far it sits from the tile's side, worked out once.
+      f.shift ??= Object.fromEntries(f.sides.map((side) => [side, Array.from({ length: T / 2 }, (_, k) => shoreShift(this.scene.room, f.x / T, f.y / T, side, k * 2))]));
       for (const side of f.sides) {
         for (let i = 0; i < T; i += 2) {
           if (hash2(f.x + i, f.y, side.charCodeAt(0)) < 0.28 + 0.2 * (1 - wave)) continue;
-          const r = reach + ((i >> 1) % 2);
+          const r = reach + ((i >> 1) % 2) + f.shift[side][i >> 1];
           if (side === 'n') ctx.fillRect(x + i, y + r - 1, 2, 1);
           else if (side === 's') ctx.fillRect(x + i, y + T - r, 2, 1);
           else if (side === 'w') ctx.fillRect(x + r - 1, y + i, 1, 2);
@@ -278,7 +312,24 @@ export class Atmosphere {
   }
 
   // Slanting rain: lines falling fast, blown to the left. Two weights so it has depth.
+  // Now and then a gust (windGust) leans it right over and drives it along for a
+  // second or two, and you hear the wind rush with it (music.gustCue).
+  // (Called with no Atmosphere, from a scene's own rain, it simply has no gusts.)
   drawRain(ctx, t, amount) {
+    let gust = 0;
+    let pushed = 0;
+    if (this) {
+      const g = windGust(t, this.seed);
+      gust = g.k;
+      if (this.gustT !== null) this.gustX += gust * Math.max(0, Math.min(0.1, t - this.gustT));
+      this.gustT = t;
+      this.gust = gust;
+      pushed = this.gustX;
+      if (g.k > 0 && g.n !== this.gustN) {
+        this.gustN = g.n;
+        if (g.strength > 0.45) music.gustCue(g.strength * Math.min(1.2, amount));
+      }
+    }
     const count = Math.min(220, Math.round(95 * amount));
     ctx.save();
     ctx.lineWidth = 1;
@@ -286,13 +337,16 @@ export class Atmosphere {
       ctx.strokeStyle = heavy ? 'rgba(205, 240, 228, 0.34)' : 'rgba(165, 210, 200, 0.2)';
       ctx.beginPath();
       for (let i = heavy ? 0 : 1; i < count; i += 2) {
-        const speed = (heavy ? 380 : 270) + hash(i + 400) * 120;
-        const slant = 0.32 + 0.1 * Math.sin(t * 0.3 + i * 0.01);
-        const len = heavy ? 11 + hash(i + 500) * 6 : 6 + hash(i + 500) * 4;
+        const speed = ((heavy ? 380 : 270) + hash(i + 400) * 120) * (1 + 0.2 * gust);
+        // The drift is steady (so the field never lurches); the gusts lean the
+        // streaks over and push the whole lot along.
+        const slant = 0.32 + 0.06 * Math.sin(t * 0.3 + i * 0.01) + 0.42 * gust;
+        const len = (heavy ? 11 + hash(i + 500) * 6 : 6 + hash(i + 500) * 4) * (1 + 0.25 * gust);
         const y = wrap(hash(i + 600) * (H + 40) + t * speed, H + 40) - 20;
-        const x = wrap(hash(i + 700) * (W + 120) - t * speed * slant * 0.5 - y * slant, W + 120) - 40;
+        const x = wrap(hash(i + 700) * (W + 120) - t * speed * 0.16 - pushed * speed * 0.5 - y * 0.32, W + 120) - 40;
         ctx.moveTo(Math.round(x) + 0.5, Math.round(y));
-        ctx.lineTo(Math.round(x - len * slant) + 0.5, Math.round(y - len));
+        // The tail trails up and to the right, where the drop came from.
+        ctx.lineTo(Math.round(x + len * slant) + 0.5, Math.round(y - len));
       }
       ctx.stroke();
     }
@@ -309,27 +363,32 @@ export class Atmosphere {
     ctx.restore();
   }
 
-  // Lightning: one hard white-green frame, then a long fall-off and a fainter
-  // second pulse, never two flashes closer than 8 seconds. Each flash cues a
-  // roll of thunder (the sound arrives a moment after the light, as it should),
-  // and the masts and hulls on the skyline go black against it.
+  // Lightning: a soft green-white glow that rises quickly (never a hard white
+  // frame), falls away, and pulses once more, faintly. One flash every 20 to
+  // 40 seconds (each room has its own timing), so it never strobes. Each flash
+  // cues its thunder a second or few later, the storm being some way off,
+  // and the masts and hulls on the skyline go black against it. The
+  // LIGHTNING FLASHES option (flashScale) dims it or leaves the light out;
+  // the thunder still comes.
   drawLightning(ctx, t, amount) {
     music.syncThunder();
-    // One flash per period (12 to 15 seconds), and never two closer than 8 seconds apart.
-    const period = 15 - 3 * Math.min(1, amount);
+    // A 30 s beat with each flash somewhere in the middle third of its own: never closer than 20 s, never further than 40.
+    const period = 30;
     const clock = t + this.seed * period;
     const n = Math.floor(clock / period);
     const local = clock - n * period;
-    const start = 2 + hash(n * 7.3 + this.seed * 50) * (period - 8.5);
+    const start = 10 + hash(n * 7.3 + this.seed * 50) * 10;
     const dt = local - start;
     this.flashK = 0;
-    if (dt < 0 || dt > 0.9) return;
+    // (Not in a room's first few seconds: a flash right on a door is a jolt.)
+    if (dt < 0 || dt > 0.9 || t < 3) return;
     if (this.flashN !== n) {
       this.flashN = n;
-      music.thunderCue(0.35 + hash(n * 3.1) * 0.9, 0.55 + 0.5 * Math.min(1, amount));
+      music.thunderCue(1.2 + hash(n * 3.1) * 2.8, 0.5 + 0.4 * Math.min(1, amount));
     }
-    const k = lightningLevel(dt);
-    this.flashK = k;
+    const k = lightningLevel(dt) * (0.75 + 0.25 * Math.min(1, amount));
+    // (The skyline and the near Last Light go dark with the flash only as far as it's shown.)
+    this.flashK = k * flashScale();
     paintFlash(ctx, k);
   }
 
@@ -345,12 +404,14 @@ export class Atmosphere {
       const big = s.scale ?? 1;
       if (x < -60 * big || x > W + 60 * big || y < -20 || y > H + 150 * big) continue;
       // The Last Light far off is a shape in the rain; drawn near (`scale`), it's solid.
-      ctx.fillStyle = s.kind === 'light'
+      // After the storm (`clearSky`) they're all grey-blue shapes in the clearing air.
+      if (this.clearSky) ctx.fillStyle = s.kind === 'light' ? 'rgba(14, 22, 32, 0.6)' : 'rgba(16, 26, 36, 0.5)';
+      else ctx.fillStyle = s.kind === 'light'
         ? `rgba(4, 18, 16, ${Math.min(1, (big > 1.5 ? 0.94 : 0.7) + 0.25 * flash).toFixed(3)})`
         : `rgba(3, 14, 13, ${(0.72 + 0.28 * flash).toFixed(3)})`;
       if (s.kind === 'mast') drawMast(ctx, Math.round(x), Math.round(y), s);
       else if (s.kind === 'hull') drawHull(ctx, Math.round(x), Math.round(y), s);
-      else drawLastLight(ctx, Math.round(x), Math.round(y), t, s.scale);
+      else drawLastLight(ctx, Math.round(x), Math.round(y), t, s.scale, this.clearSky);
     }
   }
 
@@ -371,6 +432,25 @@ export class Atmosphere {
       const x = wrap(hash(i + 920) * span + t * (5 + hash(i + 930) * 9) - cx * 0.55, span) - w;
       const y = hash(i + 940) * (H - 20) + 20 + Math.sin(t * 0.06 + i * 2) * 8 - cy * 0.3;
       ctx.globalAlpha = Math.min(0.3, 0.11 * amount + 0.03 * Math.max(0, amount - 1)) * (0.65 + 0.35 * Math.sin(t * 0.13 + i * 1.7));
+      ctx.drawImage(sprite, x - w / 2, y - h / 2, w, h);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // The near mist (the ghost ship): low, slow banks of cold fog that slide past in front of everyone, faster than
+  // the far fog behind, so there are two depths. Thin along the middle of the screen so what you are looking at stays clear.
+  drawNearMist(ctx, t, amount) {
+    const { x: cx, y: cy } = this.camera;
+    const sprite = glowSprite('120, 170, 190');
+    for (let i = 0; i < 5; i++) {
+      const w = 220 + hash(i + 1100) * 160;
+      const h = 34 + hash(i + 1110) * 26;
+      const span = W + w * 2;
+      const x = wrap(hash(i + 1120) * span - t * (7 + hash(i + 1130) * 8) - cx * 1.25, span) - w;
+      // Hugging the floor of the screen and its top edge, not the middle.
+      const edge = i % 2 ? H - 30 - hash(i + 1140) * 40 : 10 + hash(i + 1150) * 40;
+      const y = edge + Math.sin(t * 0.09 + i * 2.4) * 6 - cy * 0.15;
+      ctx.globalAlpha = Math.min(0.2, 0.12 * amount) * (0.6 + 0.4 * Math.sin(t * 0.11 + i * 1.9));
       ctx.drawImage(sprite, x - w / 2, y - h / 2, w, h);
     }
     ctx.globalAlpha = 1;
@@ -401,10 +481,15 @@ export class Atmosphere {
   // Gulls wheeling high over the beach, white against the sky, wings beating.
   drawGulls(ctx, t, amount) {
     const count = Math.round(4 * Math.min(1.5, amount));
+    // Placed in the world, not on the screen, so you walk past them instead
+    // of them keeping pace with you. (High up, so they slide by a touch
+    // slower than the ground: 0.85 of the camera. Side to side only: up and
+    // down they keep to the sky.)
+    const cx = this.camera.x;
     for (let i = 0; i < count; i++) {
       const span = W + 160;
       const dir = i % 2 ? -1 : 1;
-      const x = wrap(hash(i + 1000) * span + dir * t * (14 + hash(i + 1010) * 10), span) - 80;
+      const x = wrap(hash(i + 1000) * span + dir * t * (14 + hash(i + 1010) * 10) - cx * 0.85, span) - 80;
       const y = 18 + hash(i + 1020) * 90 + Math.sin(t * 0.7 + i * 2.3) * 9;
       const flap = Math.sin(t * (4 + hash(i + 1030) * 2) + i * 5);
       const wing = flap > 0.3 ? -2 : flap < -0.3 ? 2 : 0;
@@ -443,7 +528,8 @@ export class Atmosphere {
       const x = wrap(hash(i) * (W + 32) + t * (2 + hash(i + 100) * 4) - cx * 0.9, W + 32) - 16;
       const y = wrap(hash(i + 50) * (H + 32) - t * (1 + hash(i + 200) * 2) + Math.sin(t * 0.5 + i) * 3 - cy * 0.9, H + 32) - 16;
       const a = 0.14 + 0.34 * (0.5 + 0.5 * Math.sin(t * 0.8 + i * 2.1));
-      ctx.fillStyle = this.scene.roomData.area === 'belowtown' ? `rgba(255, 226, 150, ${(a * Math.min(1, amount) * 1.3).toFixed(3)})` : `rgba(232, 214, 255, ${(a * amount).toFixed(3)})`;
+      const dust = MOTE_COLORS[this.scene.roomData.area];
+      ctx.fillStyle = this.scene.roomData.area === 'belowtown' ? `rgba(255, 226, 150, ${(a * Math.min(1, amount) * 1.3).toFixed(3)})` : `rgba(${dust ?? '232, 214, 255'}, ${(a * amount).toFixed(3)})`;
       const s = i % 6 === 0 ? 2 : 1;
       ctx.fillRect(Math.round(x), Math.round(y), s, s);
     }
@@ -905,6 +991,22 @@ function paintWreck(room, wreck) {
   return canvas;
 }
 
+// The wind in a storm: `{ k, n, strength }`, with `k` how hard it's gusting
+// at time `t` (0 between gusts, up to `strength` at the height of one), `n`
+// which gust it is. A gust comes every 5 to 20 seconds and lasts nearly three.
+// The rain leans with it; anything else that blows about (a coat, an umbrella)
+// can read it from the room's atmosphere (`atmosphere.gust`).
+export function windGust(t, seed = 0) {
+  const period = 12.5;
+  const clock = t + seed * 97;
+  const n = Math.floor(clock / period);
+  const d = clock - n * period - (1 + hash(n * 5.7 + seed * 13) * 7.5);
+  const strength = 0.45 + 0.55 * hash(n * 2.3 + 1.1);
+  if (d < 0 || d > 2.8) return { k: 0, n, strength };
+  const s = Math.sin((Math.PI * d) / 2.8);
+  return { k: s * s * strength, n, strength };
+}
+
 // --- The storm's skyline -----------------------------------------------------
 
 // Rain on its own, for scenes that bring the storm in (stageShow's `rain`).
@@ -912,19 +1014,24 @@ export function drawRainLayer(ctx, t, amount) {
   Atmosphere.prototype.drawRain.call(null, ctx, t, amount);
 }
 
-// How bright a flash is `dt` seconds in: full on the first frame or two, falling
-// away fast, with a fainter second pulse at 0.2 s.
+// How bright a flash is `dt` seconds in: up over about a tenth of a second
+// (soft, not a hard white frame), falling away, with a fainter second pulse at
+// a quarter of a second.
 export function lightningLevel(dt) {
-  const first = Math.min(1, dt / 0.03) * Math.exp(-dt * 7);
-  const second = dt > 0.2 ? Math.min(1, (dt - 0.2) / 0.04) * 0.6 * Math.exp(-(dt - 0.2) * 9) : 0;
+  const first = Math.min(1, dt / 0.09) * Math.exp(-Math.max(0, dt - 0.05) * 6);
+  const second = dt > 0.26 ? Math.min(1, (dt - 0.26) / 0.08) * 0.4 * Math.exp(-(dt - 0.26) * 7) : 0;
   return Math.max(first, second);
 }
 
+// The flash over the whole view (kept well short of white: at its brightest it
+// lifts the dark by about a third). The LIGHTNING FLASHES option scales it, so
+// a scene's own bolts (stageShow.js) follow it as well.
 export function paintFlash(ctx, k) {
+  k *= flashScale();
   if (k < 0.01) return;
   const g = ctx.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, `rgba(222, 255, 238, ${(0.5 * k).toFixed(3)})`);
-  g.addColorStop(1, `rgba(160, 232, 206, ${(0.28 * k).toFixed(3)})`);
+  g.addColorStop(0, `rgba(222, 255, 238, ${(0.34 * k).toFixed(3)})`);
+  g.addColorStop(1, `rgba(160, 232, 206, ${(0.18 * k).toFixed(3)})`);
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, W, H);
 }
@@ -1005,7 +1112,7 @@ function drawHull(ctx, x, y, s) {
   ctx.fillRect(x + (lean < 0 ? -2 : 2), y - 24, 2, 14);
 }
 
-function drawLastLight(ctx, x, y, t, scale = 1) {
+function drawLastLight(ctx, x, y, t, scale = 1, clear = false) {
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(0.74 * scale, 0.74 * scale);
@@ -1021,7 +1128,8 @@ function drawLastLight(ctx, x, y, t, scale = 1) {
   for (const [dx, h] of [[-8, 9], [-5, 14], [-2, 8], [2, 13], [5, 8], [8, 11]]) ctx.fillRect(x + dx, y - 83 - h, 1, h);
   ctx.fillRect(x - 11, y - 91, 5, 1);
   ctx.fillRect(x + 6, y - 95, 6, 1);
-  // The only light on it: a pale green slit that never quite goes out.
+  // The only light on it: a pale green slit that never quite goes out (in the storm).
+  if (clear) return ctx.restore();
   const a = 0.55 + 0.25 * Math.sin(t * 0.7);
   ctx.fillStyle = `rgba(190, 255, 215, ${a.toFixed(3)})`;
   ctx.fillRect(x - 1, y - 80, 2, 2);

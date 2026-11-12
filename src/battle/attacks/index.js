@@ -67,6 +67,7 @@ import { BELLBUOY_ATTACKS } from './bellbuoy.js';
 import { SALT_SHADE_ATTACKS } from './salt_shade.js';
 import { SANDCASTLE_ATTACKS } from './sandcastle.js';
 import { DOWAGER_CRAB_ATTACKS } from './dowager_crab.js';
+import { OLD_GULPER_ATTACKS } from './old_gulper.js';
 import { SEED_SHEEP_ATTACKS } from './seed_sheep.js';
 import { CAPBEE_ATTACKS } from './capbee.js';
 import { CLOVER_SNAIL_ATTACKS } from './clover_snail.js';
@@ -74,6 +75,14 @@ import { RUMBOLD_ATTACKS } from './rumbold.js';
 import { RUMBOLD_BROKEN_ATTACKS } from './rumboldBroken.js';
 import { RUMBOLD_ALIVE_ATTACKS } from './rumboldAlive.js';
 import { CORRIE_ATTACKS } from './corrie.js';
+import { BARNACLE_BAT_ATTACKS } from './barnacle_bat.js';
+import { WHELKLING_ATTACKS } from './whelkling.js';
+import { GHOST_DECKHAND_ATTACKS } from './ghost_deckhand.js';
+import { POWDER_MONKEY_ATTACKS } from './powder_monkey.js';
+import { CAPTAIN_TARRY_ATTACKS } from './captain_tarry.js';
+import { TALLY_ATTACKS } from './tally.js';
+import { FAIRWEATHER_ATTACKS } from './fairweather.js';
+import { PUDDING_ATTACKS } from './pudding.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -152,6 +161,7 @@ export const ENEMY_ATTACKS = {
   ...SALT_SHADE_ATTACKS,
   ...SANDCASTLE_ATTACKS,
   ...DOWAGER_CRAB_ATTACKS,
+  ...OLD_GULPER_ATTACKS,
   ...SEED_SHEEP_ATTACKS,
   ...CAPBEE_ATTACKS,
   ...CLOVER_SNAIL_ATTACKS,
@@ -159,4 +169,12 @@ export const ENEMY_ATTACKS = {
   ...RUMBOLD_BROKEN_ATTACKS,
   ...RUMBOLD_ALIVE_ATTACKS,
   ...CORRIE_ATTACKS,
+  ...BARNACLE_BAT_ATTACKS,
+  ...WHELKLING_ATTACKS,
+  ...GHOST_DECKHAND_ATTACKS,
+  ...POWDER_MONKEY_ATTACKS,
+  ...CAPTAIN_TARRY_ATTACKS,
+  ...TALLY_ATTACKS,
+  ...FAIRWEATHER_ATTACKS,
+  ...PUDDING_ATTACKS,
 };

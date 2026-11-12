@@ -21,3 +21,35 @@ The light's improved the plaster! Look! The colours! Oh, I could weep. I might. 
 
 [repeat after the_light_goes_up]
 The damp is drying! I've never seen it dry! What will I do with myself?
+
+# (draft)
+[repeat 2]
+I patch the mural on Mondays. The damp takes it back on Tuesdays. We have an understanding.
+
+# (draft)
+[repeat 3]
+Mind the Hero's left foot. It's been repainted four times. It's a lot of foot now.
+
+# (draft)
+[repeat_ves 3]
+{bored}It was a lot of foot before. {smile}Nine feet tall. Two of them feet.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Low on the stair, the little figure with the lamp? I've scrubbed it twice. It comes back. Damp, as I say.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+I wrote to His Majesty about the damp. He wrote back: PEPTUP SEES ALL. Very reassuring. Very large letters.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+A whole morning and not one thing to patch. I've patched my hat, out of habit.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+You'll be in the next mural, you know. Life-size. Well. Mural-size.
+
+# (draft)
+[repeat_ves 3 after the_light_goes_up]
+{proud}Nine feet, please. {smile}At least.

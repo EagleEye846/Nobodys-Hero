@@ -8,6 +8,7 @@
 // Puzzle-free. No monsters (a shop).
 // Tile key (see src/overworld/coastTiles.js, saltcombe, indoors):
 //   #  wall top (solid)   h  board wall (solid)   o  floor boards
+//   .  the boards behind the counter (crossways)
 
 export const SALTCOMBE_CHANDLERY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -17,8 +18,12 @@ export const SALTCOMBE_CHANDLERY = {
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'saltcombe',
   // "Salt and Rope", with the rain on the roof and the town through the wall.
-  music: 'saltcombe',
+  music: 'saltcombeIndoor',
+  // After chapter 5 (the_light_answers) the town is quiet: "What the Tide Left".
+  musicAfter: { scene: 'the_light_answers', song: 'saltcombeAfterIndoor' },
   ambience: 'stilt_inside',
+  // After chapter 5 the storm is over (`calmAfter`): no rain on the roof, and the room's `_calm` words.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_stilt_inside' },
   vesWell: true,
   indoors: true,
 
@@ -26,14 +31,14 @@ export const SALTCOMBE_CHANDLERY = {
     '################',
     'hhhhhhhhhhhhhhhh',
     'hhhhhhhhhhhhhhhh',
+    '#ooooo.....oooo#',
+    '#ooooo.....oooo#',
     '#oooooooooooooo#',
     '#oooooooooooooo#',
     '#oooooooooooooo#',
     '#oooooooooooooo#',
     '#oooooooooooooo#',
-    '#oooooooooooooo#',
-    '#oooooooooooooo#',
-    '#oooooooooooooo#',
+    '##ooooooooooooo#',
     '#######oo#######',
   ],
 
@@ -62,6 +67,21 @@ export const SALTCOMBE_CHANDLERY = {
     { sprite: 'c5_anchor', x: 2, y: 10, text: 'chandler_anchor' },
     { sprite: 'c5_buoys_pile', x: 13, y: 10, text: 'chandler_buoys' },
     { sprite: 'c5_barrel', x: 11, y: 5, text: 'chandler_barrel' },
+    // Lived in (2026-11-08): a shelf of tins, a chart and a tide table pinned up, an oilskin for
+    // sale on its peg; a net half mended, tins on a crate and a pair of new boots.
+    { sprite: 'in_shelf_tins', x: 3, y: 2, text: 'in_chandler_shelf' },
+    { sprite: 'in_chart', x: 6, y: 2, text: 'in_chandler_chart' },
+    { sprite: 'in_tide_paper', x: 9, y: 2, text: 'in_chandler_tides' },
+    { sprite: 'in_oilskin_peg', x: 14, y: 2, text: 'in_chandler_oilskin' },
+    { sprite: 'in_net_mending', x: 2, y: 6, text: 'in_chandler_net' },
+    { sprite: 'in_tins_crate', x: 14, y: 6, text: 'in_chandler_tins' },
+    { sprite: 'in_boots_dry', x: 10, y: 9, text: 'in_chandler_boots' },
+
+    // (2026-11-09) A doormat that says more than she does, a lamp on a stool for the dark side,
+    // stock stacked by the west wall that nobody has needed since the herring.
+    { sprite: 'c5_doormat', x: 7, y: 10, text: 'in_chandler_mat', walkable: true, flat: true },
+    { sprite: 'in_lamp_stool', x: 5, y: 9, text: 'in_chandler_lamp' },
+    { sprite: 'c5_crates_stack', x: 1, y: 8, text: 'in_chandler_stock' },
   ],
   tileTexts: { h: 'chandler_wall' },
 

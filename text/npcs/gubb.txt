@@ -36,3 +36,47 @@ Stand at the end of the boards when you want a ride. Either shore. Same fare.
 
 [repeat after the_light_goes_up]
 Warm water and a bit of light. I've found the next verse. Don't ask me what it is. It's about a bath.
+
+# More turns (2026-11-09 polish)
+
+# (draft)
+[repeat 2]
+Hm-hmm, hm-hmm... 'Down he went and...' and then I lose it. Every time. Same place. Hundred years.
+
+If you hear the rest anywhere, dear, bring it back. I'll pay in sweets.
+
+# (draft)
+[repeat_ves 2]
+{bored}'Down he went and up he came.' Marigold had that much.
+
+{thoughtful}...She didn't have the rest either. Nobody's got the rest.
+
+# (draft)
+[repeat 3]
+Still here, dear. I'm always still here. It's the main thing about me.
+
+# (draft)
+[repeat 2 after gubb_crossing]
+The last little one sat right where you sat. Dangled his feet over the side, which you mustn't, and asked me if the lake had a bottom.
+
+I said I'd never looked. He said he would.
+
+# (draft)
+[repeat_ves 2 after gubb_crossing]
+{thoughtful}He said he would.
+
+{bored}Of course he did. Small people always say that. Then they go and do it, which is the annoying part.
+
+# (draft)
+[repeat 3 after gubb_crossing]
+Hm-hmm... hm... no, it's gone again. It was right there. Like a fish.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've taken my scarf off. First time since I can't remember. My neck's very surprised.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+The fish are coming up to look at the light. Little white things, blind as buttons. They can't see it. They come anyway.
+
+I know how they feel.

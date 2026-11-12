@@ -51,6 +51,14 @@ The bell clangs without anyone touching it.
 
 DOWAGER CRAB is still, technically, being polite. It is costing her.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+DOWAGER CRAB's monocle has fogged. She wipes it with great dignity, for rather longer than it needs.
+
+[flavor: spareable]
+DOWAGER CRAB inclines her head, very slightly. You have been found, on balance, acceptable.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -107,7 +115,7 @@ KIND.
 # One section per TALK option. The names after "talk:" must match the
 # TALK options in src/data/enemies/dowager_crab.js.
 [talk: Inspect]
-DOWAGER CRAB - HP 3600
+DOWAGER CRAB - HP 7600
 A hermit crab in a bathtub, in pearls. Blows bubbles, tolls her bell, snips her claws and shies ducks. When she loses patience the bath water comes out too. She is not a bully. She is a hostess whose house has been entered. Manners work on her.
 
 [talk: Wipe your feet]
@@ -116,7 +124,7 @@ You drag one boot across the shingle, then the other, and then both again, slowl
 [talk: Admire the tub]
 You walk round the bathtub once and nod at the taps, the blue band, the iron feet. DOWAGER CRAB goes pink under the pearls. "Clawfoot," she says. "Admiralty issue. They don't make the enamel any more."
 
-[talk: Ask about the bell]
+[talk: Point at the bell]
 You point at the ship's bell on her tub and raise your eyebrows. "That," says DOWAGER CRAB, "is my doorbell. The sea sent it in, one winter. Nobody has used it in years." She seems to be waiting for you to ring it. You don't. She approves.
 
 [talk: Curtsey]

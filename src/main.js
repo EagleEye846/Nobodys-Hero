@@ -9,6 +9,7 @@ import { continueGame, OverworldScene } from './overworld/overworldScene.js';
 import { START_ROOM } from './data/rooms/index.js';
 import { CutsceneScene } from './cutscene/cutsceneScene.js';
 import { PressStartScene, TitleScene } from './title/titleScene.js';
+import { hasSave } from './state/saveGame.js';
 
 const ctx = createScreen(document.getElementById('game'), UI_WIDTH, UI_HEIGHT);
 const game = new Game(ctx, new Input());
@@ -18,6 +19,7 @@ await Promise.all([loadUiFont(), loadTextFiles(TEXT_FILES)]);
 
 // The intro, then the title screen, then the game: picking up from the last
 // save point, or (NEW GAME, or no save) starting at the Ruins entrance.
+// (What you were doing is on the pause card, not shown on load: goalLine.js.)
 const startGame = () => continueGame(START_ROOM);
 const newGame = () => new OverworldScene(START_ROOM);
 // Chapter select: start a chapter you've reached again, from its first room.

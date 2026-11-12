@@ -1,7 +1,7 @@
 // THE SONG COMES IN: the upper hall (lastlight_upper) is silent on the way in. Partway across, on the
 // east pocket, the tower's song starts, very faintly, from somewhere above. A music box, running down.
 // One line, then the song stays on in this room (the room's `musicAfter` is this scene).
-// (draft) story text, for Patrick to review.
+// (draft).
 export const LASTLIGHT_SONG = {
   // Triggers in rooms name the scene by this id.
   id: 'lastlight_song',

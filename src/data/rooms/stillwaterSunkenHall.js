@@ -43,7 +43,9 @@ export const STILLWATER_SUNKEN_HALL = {
   // "The Stillwater" (src/data/music/stillwaterTheme.js).
   music: 'stillwater',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
-  ambience: 'lake',
+  ambience: 'lake_hall',
+  // How it rings (a huge space: ECHOES in src/audio/music.js).
+  echo: 'cavern',
   // Under the hall's roof of rock: the edges of the screen sink into shadow.
   indoors: true,
   fog: 0.12,

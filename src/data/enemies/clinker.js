@@ -16,7 +16,7 @@ export const CLINKER = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: CLINKER_SPRITE, palette: CLINKER_PALETTE },
-  maxHp: 600,
+  maxHp: 760,
   damage: 22,
 
   // A Chapter 3 enemy from under Hollin's well: a step past the Grist.

@@ -13,7 +13,7 @@ import { LADLE_PORTRAIT } from './ladle.js';
 import { BRYONY_PORTRAIT, THISTLE_PORTRAIT } from './lasthome.js';
 import { SLOWLY_PORTRAIT } from './deadcity.js';
 import { TUCK_PORTRAIT, RUMBOLD_PORTRAIT, HOBNAIL_PORTRAIT, MARIGOLD_PORTRAIT, GUBB_PORTRAIT } from './belowFolk.js';
-import { HADDOCK_PORTRAIT, ORLA_PORTRAIT, CORRIE_PORTRAIT, TANSY_PORTRAIT, WRASSE_PORTRAIT, CRAB_PORTRAIT, RAT_PORTRAIT, PUFFIN_PORTRAIT } from './coastFolk.js';
+import { HADDOCK_PORTRAIT, HADDOCK_HATLESS_PORTRAIT, ORLA_PORTRAIT, CORRIE_PORTRAIT, TANSY_PORTRAIT, WRASSE_PORTRAIT, CRAB_PORTRAIT, RAT_PORTRAIT, PUFFIN_PORTRAIT } from './coastFolk.js';
 import { WY_COOK_PORTRAIT } from './wreckYard.js';
 
 const KEEPER_PALETTE = {
@@ -624,6 +624,8 @@ export const PORTRAITS = {
   haddock_reach: HADDOCK_PORTRAIT,
   haddock_reach_foot: HADDOCK_PORTRAIT,
   haddock_light: HADDOCK_PORTRAIT,
+  // Hat gone and soaked, at the crank.
+  haddock_hatless: HADDOCK_HATLESS_PORTRAIT,
   orla: ORLA_PORTRAIT,
   corrie: CORRIE_PORTRAIT,
   tansy: TANSY_PORTRAIT,

@@ -17,7 +17,7 @@ export const FROSTBITE = {
     frames: [FROSTBITE_DISGUISE_SPRITES.still, FROSTBITE_DISGUISE_SPRITES.look, FROSTBITE_DISGUISE_SPRITES.grin],
     palette: FROSTBITE_PALETTE,
   },
-  maxHp: 240,
+  maxHp: 305,
   damage: 13,
 
   // A Chapter 2 enemy: slow things, but a lot of them.

@@ -9,6 +9,9 @@ import { isLamplit, PROP_GLOWS } from './lamplight.js';
 import { checkBeams, restorePrisms, resetPrisms } from './beams.js';
 import { CHIME_SETS } from './chimes.js';
 import { RoomTide } from './tides.js';
+import { RoomList } from './shipList.js';
+import { blendTiles } from './tileBlend.js';
+import { shipDecor } from './shipDecor.js';
 
 // Crack pixels as [x, y, width, height] within a tile. Each crack level shows more of the list.
 const CRACKS = [
@@ -32,8 +35,9 @@ function drawHole(ctx, x, y) {
 // her), or only `after` one has (then she's at home).
 function showsUpNow({ until = null, after = null, join = null }) {
   const seen = WORLD_STATE.seenScenes ?? [];
-  if (until && seen.includes(until)) return false;
-  if (after && !seen.includes(after)) return false;
+  // (`until` and `after` may be a list: any one of those scenes is enough.)
+  if (until && [until].flat().some((id) => seen.includes(id))) return false;
+  if (after && ![after].flat().some((id) => seen.includes(id))) return false;
   // Someone who's joined the party is with you, not here.
   if (join && inParty(join)) return false;
   return true;
@@ -82,7 +86,8 @@ export class Room {
     this.tiles = data.tiles;
     // A tide (Chapter 5, tides.js): the room's tiles are its high-tide map; the
     // tide swaps them for the low-tide map and back.
-    this.tide = data.tide ? new RoomTide(this, data) : null;
+    // (The ghost ship's list, shipList.js, is the same thing with two other names: `list` in place of `tide`.)
+    this.tide = data.list ? new RoomList(this, data) : data.tide ? new RoomTide(this, data) : null;
     if (this.tide) this.tiles = this.tide.currentRows();
     // The region it's in (src/data/areas.js); outdoor regions floor their
     // hidden corners with grass instead of Ruins stone.
@@ -99,6 +104,18 @@ export class Room {
     this.leafy = Boolean(data.leafy);
     // Chapter 5: boxes of b/B tiles drawn as cargo crates (coastTiles.js).
     this.cargo = data.cargo ?? null;
+    // Chapter 5: `ledges: 'rock'` draws the room's b/B as rough natural rock (coastTiles.js).
+    this.ledges = data.ledges ?? null;
+    // Chapter 5: `tileLook: 'cliffcave'` paints the coast tiles in another palette than the
+    // area's (coastTiles.js), keeping the area for everything else (backdrop, footsteps, songs).
+    this.tileLook = data.tileLook ?? null;
+    // Indoors, and `softEdges: false`, leave out the coast's soft-edge pass (tileBlend.js).
+    this.indoors = Boolean(data.indoors);
+    this.softEdges = data.softEdges ?? null;
+    // Which tiles have their own words (the soft-edge pass lays nothing on those: ch3Blend.js).
+    this.tileTexts = data.tileTexts ?? null;
+    // Wading in the shallows (;) goes this much slower here (player.js), e.g. `wadeSlow: 0.8`.
+    this.wadeSlow = data.wadeSlow ?? null;
     // Lit by its own lamps and fires (see lamplight.js): those lights are
     // drawn live over the room, so they aren't painted into its floor.
     this.lamplit = isLamplit(data);
@@ -501,7 +518,7 @@ export class Room {
       const tx = treadle.x / T;
       const ty = treadle.y / T;
       const stood = bodies.some((b) => (!treadle.who || (b.skin ?? 'hero') === treadle.who) && Math.floor(b.x / T) === tx && Math.floor((b.y - 1) / T) === ty);
-      const weighed = !treadle.who && this.props.some((p) => (p.rock || p.log || p.cart) && !p.sunk && !p.slide && !p.hidden && p.x === treadle.x && p.y === treadle.y);
+      const weighed = !treadle.who && this.props.some((p) => (p.rock || p.log || p.cart || (p.weighs && !p.looseMoving)) && !p.sunk && !p.slide && !p.hidden && p.x === treadle.x && p.y === treadle.y);
       if (stood || weighed) down.add(treadle.treadle);
     }
     const changed = down.size !== this.treadlesDown.size || [...down].some((name) => !this.treadlesDown.has(name));
@@ -565,7 +582,8 @@ export class Room {
     // Whoever's standing still while the other of you goes off (`blockers`,
     // set by OverworldScene) is in the way too: nobody walks through a friend.
     if ((this.blockers ?? []).some((b) => left < b.x + 5 && right > b.x - 5 && top < b.y && bottom > b.y - 6)) return true;
-    return this.props.some((prop) => !(small && prop.gap) && !(climbing && this.isStepping(prop)) && this.propBlocks(prop, left, top, right, bottom));
+    // (`small` is a kid, through any gap; 'planks' is someone light, over rotten planks only.)
+    return this.props.some((prop) => !(small && prop.gap && (small !== 'planks' || prop.baseLook === 'rotten_planks')) && !(climbing && this.isStepping(prop)) && this.propBlocks(prop, left, top, right, bottom));
   }
 
   // A `step` rock sitting still: a low block to climb, not a wall.
@@ -641,6 +659,10 @@ export class Room {
         (tile.standing ? TILES[floorUnder(this, tx, ty)] : tile).draw(ctx, tx * T, ty * T, tx, ty, this);
       }
     }
+    // Ragged edges between grounds, patches, little things lying about (the coast only).
+    blendTiles(ctx, this);
+    // The ghost ship's weathering: stains, moss, broken boards, shadow under the rail (ghostship only).
+    shipDecor(ctx, this);
     // Depth where the ground ends at open sky (see drawDrops in tileset.js).
     drawDrops(ctx, this);
     this.paintLight(ctx);

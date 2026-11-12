@@ -1,6 +1,7 @@
 import {
   BAR_128 as BAR, slow, rest as restBars, held, onNotes, patter, cells,
 } from './parts/chapter3.js';
+import { midi } from '../../audio/notation.js';
 import {
   COAST_CELL, LULLABY_OPENING, lullaby, sustained, scatter, tight,
 } from './parts/chapter5.js';
@@ -14,13 +15,14 @@ import {
 //
 // Built the way Christopher Larkin built Hollow Knight's City of Tears (its
 // shape and its sound, not its tune), but sunlit: where the City has rain,
-// this has waves. Two harps roll the same three notes, A E B (a stack of
+// this has waves: real ones, recorded on a beach, breaking once a bar under
+// everything (the seaWaves set). Two harps roll the same three notes, A E B (a stack of
 // fifths), up and back like water coming in and going out, every bar of
 // the song, while a low harp underneath changes what they mean: over D
 // they're bright and open, over G they shimmer, over B minor they ache a
 // little. A solo violin sings the tune high where the City's soprano would,
-// then the choir takes it, in two long waves. Soft strings, a glass
-// glitter now and then like sun on the water. No cellos, no brass, no
+// then the choir takes it, in two long waves. Soft strings, a glitter of
+// high glock now and then like sun on the water. No cellos, no brass, no
 // drums: beautiful, never loud.
 //
 // THE TUNE starts on the chapter's COAST CELL (A D D E, parts/chapter5.js),
@@ -101,15 +103,20 @@ export const FIRST_SEA_THEME = {
   volume: 0.8,
 
   instruments: {
-    // The waves: two harps, soft, each note left to ring, one near and one
+    // The real sea under it all: waves breaking on a beach, one every bar,
+    // recorded (seaWaves: cut from a CC0 field recording), each left to ring
+    // into the next. They come and go with the harps.
+    waves: { sample: 'seaWaves', volume: 0.1, ring: true, reverb: 0.2, pan: 0 },
+    // The harps' roll: two harps, soft, each note left to ring, one near and one
     // further off the other side. (Not muffled: a muffled harp goes "boing".)
-    wavesNear: { sample: 'harp', volume: 0.12, ring: true, reverb: 0.5, pan: 0.25, humanize: { time: 0.012, volume: 0.25 } },
-    waves: { sample: 'harp', volume: 0.18, ring: true, reverb: 0.5, pan: 0.25, humanize: { time: 0.012, volume: 0.25 } },
+    rollNear: { sample: 'harp', volume: 0.15, ring: true, reverb: 0.5, pan: 0.25, humanize: { time: 0.012, volume: 0.25 } },
+    roll: { sample: 'harp', volume: 0.18, ring: true, reverb: 0.5, pan: 0.25, humanize: { time: 0.012, volume: 0.25 } },
     backwash: { sample: 'harp', volume: 0.09, ring: true, muffle: 3800, reverb: 0.6, pan: -0.3, humanize: { time: 0.015, volume: 0.3 } },
     // A soft piano on the waves with the harp, as in the City.
     shine: { sample: 'grandPiano', volume: 0.06, ring: true, muffle: 3000, reverb: 0.5, pan: -0.1, humanize: { time: 0.014, volume: 0.25 } },
-    // Sun on the water: a glass note now and then.
-    glitter: { sample: 'glass', volume: 0.07, ring: true, reverb: 0.65, pan: 0.35, humanize: { time: 0.02, volume: 0.3 } },
+    // Sun on the water: a high glock note now and then (the glass set
+    // stops below these notes and went thin stretched up to them).
+    glitter: { sample: 'glock', volume: 0.06, ring: true, muffle: 6000, reverb: 0.65, pan: 0.35, echo: { time: 0.5, feedback: 0.2, mix: 0.2 }, humanize: { time: 0.02, volume: 0.3 } },
     // The low harp that changes what the waves mean.
     // (An octave up: the harp's lowest strings went "boing".)
     low: { sample: 'harp', volume: 0.2, ring: true, octave: 1, reverb: 0.45, pan: -0.15, humanize: { time: 0.012, volume: 0.1 } },
@@ -140,7 +147,7 @@ export const FIRST_SEA_THEME = {
     shore: fit('shore', {
       violas: [...rest(1), ...held('A3', 3 * BAR)],
       hum: [...held('D3', 2 * BAR), ...rest(2)],
-      wavesNear: [...rest(2), ...waves(2)],
+      rollNear: [...rest(2), ...waves(2)],
       low: [...rest(2), ...onNotes('D2 G1', LOW)],
     }, 4),
 
@@ -149,8 +156,8 @@ export const FIRST_SEA_THEME = {
     A: fit('A', {
       voice: up(TUNE, 12),
       sing: [...rest(4), ...TUNE.slice(4 * BAR)],
-      wavesNear: [...waves(4), ...rest(4)],
-      waves: [...rest(4), ...waves(4)],
+      rollNear: [...waves(4), ...rest(4)],
+      roll: [...rest(4), ...waves(4)],
       shine: [...rest(4), ...waves(4)],
       low: onNotes(A_BASS, LOW),
       violas: sustained(A_CHORDS, BAR, 0, 3),
@@ -164,7 +171,7 @@ export const FIRST_SEA_THEME = {
       shine: waves(8),
       sing: TUNE,
       voice: ABOVE,
-      waves: waves(8),
+      roll: waves(8),
       backwash: [...rest(2), ...backwash(6)],
       low: onNotes(A_BASS, LOW),
       violas: sustained(A_CHORDS, BAR, 0, 3),
@@ -190,8 +197,8 @@ export const FIRST_SEA_THEME = {
     // last, into the second wave.
     B: fit('B', {
       backwash: [...backwash(3), ...rest(5)],
-      wavesNear: [...rest(1), ...waves(2), ...rest(5)],
-      waves: [...rest(3), ...waves(5)],
+      rollNear: [...rest(1), ...waves(2), ...rest(5)],
+      roll: [...rest(3), ...waves(5)],
       shine: [...rest(3), ...waves(5)],
       voice: MIDDLE,
       low: onNotes(B_BASS, LOW),
@@ -209,7 +216,7 @@ export const FIRST_SEA_THEME = {
       sing: up(TUNE, -12),
       sopranos: TUNE,
       voice: ABOVE,
-      waves: waves(8),
+      roll: waves(8),
       backwash: backwash(8),
       low: onNotes(A_BASS, LOW),
       piano: onNotes('D3 B2 G2 E3 D3 B2 G2 A2', LOW),
@@ -224,8 +231,8 @@ export const FIRST_SEA_THEME = {
     // The waves go on alone over G major (brighter, and not home), the choir
     // hanging on it, thinning to one harp, then nothing.
     out: fit('out', {
-      waves: [...waves(2), ...rest(2)],
-      wavesNear: [...rest(2), ...waves(1), ...rest(1)],
+      roll: [...waves(2), ...rest(2)],
+      rollNear: [...rest(2), ...waves(1), ...rest(1)],
       low: [...onNotes('G1 G1', LOW), ...rest(2)],
       choirLow: [...held('G3', 3 * BAR), ...rest(1)],
       choirMid: [...held('B3', 3 * BAR), ...rest(1)],
@@ -239,3 +246,16 @@ export const FIRST_SEA_THEME = {
   order: ['shore', 'A', 'A2', 'still', 'B', 'A3', 'out'],
   loopFrom: 0,
 };
+
+// The real waves: wherever a harp rolls in a bar, a wave breaks at its start
+// (a different one each time, so the sea never repeats on the beat).
+const BREAKS = ['D4', 'F4', 'C4', 'G4', 'Eb4', 'C#4', 'F#4', 'E4'];
+let breakNo = 0;
+for (const section of Object.values(FIRST_SEA_THEME.sections)) {
+  const length = section.roll?.length ?? section.rollNear?.length ?? section.backwash?.length ?? Object.values(section)[0].length;
+  section.waves = Array.from({ length }, (_, step) => {
+    if (step % BAR) return '.';
+    const rolling = ['roll', 'rollNear', 'backwash'].some((name) => section[name]?.slice(step, step + BAR).some((n) => typeof n === 'number'));
+    return rolling ? midi(BREAKS[breakNo++ % BREAKS.length]) : '.';
+  });
+}

@@ -14,13 +14,24 @@ export const SEED_SHEEP = {
   area: 'sunnyside',
   sprite: { rows: SEED_SHEEP_SPRITE, palette: SEED_SHEEP_PALETTE },
   anim: SEED_SHEEP_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): fluff when hit, seeds drifting off it;
+  // beaten, it puffs apart.
+  feel: { hit: 'fluff', idle: 'motes', defeat: 'fluff' },
   // Sunnyside's own battle song, the Dandelion Lion Rag.
   music: 'sunnyBattle',
-  maxHp: 1850,
-  damage: 54,
+  maxHp: 8800,
+  damage: 80,
 
   // The easy end of Chapter 5, like the coast's first monsters.
-  difficulty: { density: 1.25, speed: 1.2 },
+  difficulty: { density: 1.40, speed: 1.30 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  // (2026-11-10: comes in sooner and runs longer, was { at: 0.85, seconds: 4.5 }:
+  // its attacks are done throwing a second or so before their end, and the box
+  // sat empty until the encore came.)
+  encore: { at: 0.72, seconds: 5.3, density: 0.8 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
 
   // Its attacks live in src/battle/attacks/seed_sheep.js.
   patterns: [
@@ -37,7 +48,7 @@ export const SEED_SHEEP = {
     { name: 'Make a wish', calm: 30 },
   ],
 
-  rewards: { exp: 1850, coins: 10 },
+  rewards: { exp: 2150, coins: 10 },
 
   // What it sometimes leaves behind (src/data/items.js), with the chance of it.
   drops: [{ item: 'clock_wool', chance: 0.4 }],

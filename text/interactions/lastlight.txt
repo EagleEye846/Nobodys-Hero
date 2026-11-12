@@ -1,7 +1,7 @@
 # THE LAST LIGHT (Chapter 5): the climb up the black tower. The foot, the stair with the sea in
 # the bottom of it, the sluice room with the crank, the gallery of chalk and the too-big oilskin,
 # the upper hall with the turning lamp, the lamp room, and the balcony for the ending.
-# (draft) story text, for Patrick to review.
+# (draft).
 # A section with `_ves` or `_bramble` on the end is what they say after it.
 
 [save_point]
@@ -29,6 +29,10 @@ A niche in the brick with a lamp in it, turned low.
 [ll_window]
 A slit window, no wider than your hand. The storm outside it is the colour of a bruise.
 
+# (draft) after the storm.
+[ll_window_calm]
+A slit window, no wider than your hand. The sky outside it is clear and pale.
+
 [ll_floor]
 Black flagstones, worn into a shallow dip by a great many boots going up.
 
@@ -41,7 +45,7 @@ The way on.
 # --- THE FOOT ------------------------------------------------------------------------
 
 [foot_lamp]
-A lamp on a post. The flame gutters in the draught from the door and steadies again.
+A lamp on a post, cold. The glass is crusted white with salt, and the wick inside has rotted to a black thread.
 
 [foot_sign]
 A board by the stair door: THE LAST LIGHT. 212 STEPS. REST ON THE LANDINGS.
@@ -51,6 +55,10 @@ A board by the stair door: THE LAST LIGHT. 212 STEPS. REST ON THE LANDINGS.
 
 [foot_chains]
 A chain bollard. The chains run out through the door to rings in the rock, to hold the tower down in a gale. It doesn't look like it needs holding.
+
+# (draft) after the storm.
+[foot_chains_calm]
+A chain bollard. The chains run out through the door to rings in the rock, to hold the tower down in a gale. Today they have nothing to do.
 
 [foot_barrels]
 Barrels of lamp oil, tarred and empty. The staves have swollen shut with the damp.
@@ -69,6 +77,10 @@ The way up. The stair starts just through the arch and turns out of sight at onc
 
 [foot_door_out]
 The door you came in by. The storm leans on it from the other side.
+
+# (draft) after the storm.
+[foot_door_out_calm]
+The door you came in by. Nothing leans on it now.
 
 [foot_puddle]
 A puddle that came in under the door and stayed.
@@ -112,7 +124,7 @@ A number chalked on the wall: 100. Beside it, in another hand: not even half.
 {bored}Encouraging.
 
 [stair_lamp]
-A lamp on a post, burning low on the landing.
+A lamp on a post, out. It was filled once, long ago. The oil has gone to green jelly in the bottom of the glass.
 
 [stair_rope]
 A rope, stiff with salt, trailing down a flight.
@@ -140,7 +152,7 @@ Shingle, left by the sea going out. A channel runs through it that the tide has 
 [sluice_crank]
 A great iron crank on the wall, a wheel as big as a cartwheel with a handle as long as your arm, geared down to a chain that runs off into the dark.
 
-You put your weight on it. It comes a quarter turn, then tries to take your arm back. It won't stay up on its own.
+You put your weight on it. It comes a quarter turn, then tries to take your arm back.
 
 [sluice_crank_ves]
 {thoughtful}It only stays up while somebody leans on it.
@@ -152,7 +164,7 @@ You put your weight on it. It comes a quarter turn, then tries to take your arm 
 The sluice gate: an iron plate in a frame, raised a hand's breadth, with green water standing behind it. The plate is red with rust, except along the bottom edge, where it has been scraped bright.
 
 [sluice_lamp]
-A lamp on a post, burning low.
+A lamp on a post, long dead. The spray comes in through the grille and runs down its glass.
 
 [sluice_grille]
 An iron grille across the passage, hung on three chains that run up into the roof. Each chain is hauled by a weight, and each weight hangs from a plate in the floor.
@@ -217,7 +229,7 @@ A circle burnt into the brick. The ring is black and the middle is scorched thro
 Sums, chalked in a child's hand: tide times, high and low. The answers are wrong, crossed out, and wrong again, and right at last. An arrow up. An arrow down.
 
 [gal_hand]
-Handwriting, big at the start and small at the end, as if the chalk was running out of wall: WHEN I GET IT RIGHT THE SEA WILL STAY. WHEN I GET IT RIGHT HE WILL COME BACK.
+Handwriting, big at the start and small at the end, as if the chalk was running out of wall: WHEN I GET IT RIGHT THE SEA WILL GO BACK. WHEN I GET IT RIGHT HE WILL COME BACK.
 
 [gal_hand_ves]
 {thoughtful}...Right.
@@ -238,7 +250,7 @@ A small table with a stub of chalk worn to nothing, a jar of seawater with a pap
 A chair with its legs sawn short, so a small boy's feet reach the floor.
 
 [gal_boat]
-A paper boat, folded very well, sitting on the floor. It is dry.
+A paper boat, folded very well, sitting on the floor. Nobody has sailed it.
 
 [gal_driftwood]
 Driftwood, stacked by size, the straightest pieces set aside. Staffs, maybe.
@@ -252,13 +264,16 @@ A yellow oilskin on a coat stand, far too big for any child. The sleeves would h
 It was cut from memory by someone who remembered how big the coat looked from underneath.
 
 [gal_oilskin_ves]
-{thoughtful}Somebody else's coat, drawn from memory.
+{thoughtful}Somebody else's coat.
 
 [gal_oilskin_bramble]
 {worried}He'd trip on that. He'd trip on that every day.
 
+[gal_boat_wall]
+Another paper boat, on the floor by the wall. This one has its nose right up against the brick, as if it were waiting to be let through.
+
 [gal_lamp]
-A lamp on a post, burning low by the east door.
+A lamp on a post by the east door, cold and black, like the others below.
 
 [gal_pouch]
 A purse under the last of the chalk circles, in the corner. It has been there some while.
@@ -274,6 +289,9 @@ A purse under the last of the chalk circles, in the corner. It has been there so
 [upper_lamp]
 A signal lamp on an iron pillar, turning on a clockwork. Its glass is clean and the flame is steady. Round and round, once every eight seconds.
 
+[upper_lamp_after]
+The signal lamp, stopped. The clockwork has run down, the flame is out, and the glass is dark, with salt dried in streaks down it.
+
 [upper_door]
 The door to the top of the tower. The wind is coming under it.
 
@@ -281,15 +299,23 @@ The door to the top of the tower. The wind is coming under it.
 An iron pillar, spiked at the top. The beam can't get through it.
 
 [upper_pouch]
-A purse in the corner, in the lee of the pillars. The beam goes round it twice a minute.
+A purse in the corner, in the lee of the pillars. The beam goes past it every eight seconds.
 
 # --- THE LAMP ROOM -------------------------------------------------------------------
 
 [lamp_glass]
 The lantern glass, tall panes in an iron frame, and the storm pressing black against them.
 
+# (draft) after the storm.
+[lamp_glass_calm]
+The lantern glass, tall panes in an iron frame, and the sea all the way round, grey and still.
+
 [lamp_glass_cracked]
 A pane starred across, with the storm showing through the star.
+
+# (draft) after the storm.
+[lamp_glass_cracked_calm]
+A pane starred across, with a bit of clear sky showing through the star.
 
 [lamp_dead]
 The Last Light's great lamp: a drum of glass rings as tall as a house, cold and dark. There is a crack across it, and salt on the brass. It has not been lit in a long time.
@@ -302,6 +328,25 @@ The glass is white, and the stair behind you is gone. There is nowhere to run to
 
 [lamp_pillar]
 An iron pillar, spiked at the top, holding up the lantern's roof.
+
+[lamp_barrel]
+A barrel of lamp oil, the bung still sealed with wax. It's full. Nobody has used a drop of it in years.
+
+[lamp_barrel_ves]
+{thoughtful}Full. So it never ran out of oil.
+
+[lamp_rope]
+A coil of hauling line for bringing the oil up the outside of the tower, the end whipped tidy. Somebody was taught to be neat about rope.
+
+[lamp_broom]
+A broom stood in a bucket, its bristles worn down to a slant. The bucket is full of rain that came in through the cracked pane.
+
+# (draft) after the storm.
+[lamp_broom_calm]
+A broom stood in a bucket, its bristles worn down to a slant. The bucket is full of the storm's rain, from the cracked pane. It can wait.
+
+[lamp_broom_bramble]
+{surprised}Somebody used to sweep up here. All the way up here.
 
 # --- THE BALCONY ---------------------------------------------------------------------
 
@@ -319,3 +364,79 @@ Boards, wet, and cold underfoot.
 
 [balcony_rail]
 An iron rail, rusted but sound. Past it there is nothing at all, a very long way down.
+
+# --- THE DEN (secret, behind the gallery's false wall) -------------------------------
+
+[den_gap]
+The gap in the brick, back out into the gallery. From this side it's plain as a door.
+
+[den_bed]
+A fish crate lined with old sailcloth, and a rolled-up oilskin for a pillow. It's just the size of a boy, if the boy curls up.
+
+[den_tally]
+Tally marks scratched into the back wall: four strokes and one across, row on row on row. They are very neat at the start. Then they stop.
+
+[den_tally_bramble]
+{worried}That's a lot of days.
+
+[den_tin]
+A tin with a dented lid. Inside, a jar of humbugs, the striped kind, all stuck together into one big lump years ago. You could break a bit off.
+
+[den_tin_bramble]
+{grin}He'd want them eaten. ...Probably.
+
+[den_tin_ves]
+{bored}Humbugs. I'd have hidden them too.
+
+[den_tin_empty]
+An empty tin. It still smells of mint.
+
+# --- THE WORKING TOWER: pipes, chains, oil and the sea getting in ------------------
+# (draft)
+[ll_pipes]
+Iron pipes on bolted brackets, running off into the brick. Something in them knocks, now and then, a long way off.
+
+[ll_pipes_bramble]
+{worried}They're humming. Pipes shouldn't hum.
+
+[ll_chain_hook]
+A chain on an iron hook, hung up in loops. The links are worn bright where hands have pulled on it.
+
+[ll_lamp_bracket]
+A lamp in an iron cage on a bracket. The glass is green. The wick is black and cold, and the oil in it went to jelly long ago.
+
+[ll_lamp_bracket_ves]
+{bored}Green glass. Of course it's green.
+
+[ll_tide_marks]
+Lines scratched in the brick with a nail, one over another, each with a few strokes after it. The top one is higher than your head. Weed has dried along the bottom.
+
+[ll_tide_marks_bramble]
+{worried}The sea's been in here. Up to there.
+
+[ll_coal]
+Coal for the boiler that works the pumps, shovelled into a heap and left. Black dust over everything near it.
+
+[ll_drums]
+Iron drums of lamp oil, sweating black down their sides. Enough to keep a light going for years.
+
+[ll_drum_tipped]
+An oil drum on its side with the bung out. Nobody has set it right. The oil has found the cracks in the floor.
+
+[upper_pillar_broken]
+An iron pillar, snapped off short. Its spiked top lies on the flags nearby. The beam still can't get through it.
+
+[foot_drums]
+Oil drums, stood just inside the door, as if somebody meant to carry them up later.
+
+[den_window]
+A slit in the brick, just wide enough for one eye. It looks straight out at the sea.
+
+[den_books]
+Library books, very late. Tide tables, knots, a book about lighthouses with the corners turned down.
+
+[den_boat]
+A paper boat, folded from a page of tide sums. The sums are wrong.
+
+[lamp_oilcan]
+A can of lamp oil with a long spout, for filling the great lamp. It is full. Nobody has filled anything in a long time.

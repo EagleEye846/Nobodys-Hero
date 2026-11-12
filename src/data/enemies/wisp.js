@@ -24,7 +24,7 @@ export const WISP = {
     frames: [WISP_DISGUISE_SPRITES.still, WISP_DISGUISE_SPRITES.eyes, WISP_DISGUISE_SPRITES.flicker],
     palette: WISP_PALETTE,
   },
-  maxHp: 620,
+  maxHp: 785,
   damage: 23,
 
   // The Lantern Marsh, past the Old Drains: a step up again.

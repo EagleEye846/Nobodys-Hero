@@ -57,7 +57,7 @@ You look very closely at the spoon. SILTLING swells up with pride. Nobody has ev
 You find a button on your coat and hold it out. SILTLING goes very still. Then it takes it, very gently, and puts it somewhere safe.
 
 [talk: Help it sort]
-You put the pennies with the pennies and the keys with the key. SILTLING watches every move. It decides you're doing it right.
+You put the pennies with the pennies and the keys with the keys. SILTLING watches every move. It decides you're doing it right.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

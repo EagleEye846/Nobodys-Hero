@@ -12,7 +12,7 @@ export const BURRHOG = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: BURRHOG_SPRITE, palette: BURRHOG_PALETTE },
-  maxHp: 380,
+  maxHp: 485,
   damage: 17,
 
   // A Chapter 3 enemy: a step busier than the mountain's.

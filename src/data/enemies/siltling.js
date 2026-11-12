@@ -16,7 +16,7 @@ export const SILTLING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: SILTLING_SPRITE, palette: SILTLING_PALETTE },
-  maxHp: 550,
+  maxHp: 700,
   damage: 22,
 
   // The Old Drains, below Hollin: a step up from the Hushwood's.

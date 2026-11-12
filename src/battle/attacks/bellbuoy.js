@@ -1,5 +1,5 @@
 import { defineBulletArt, Line } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
 
 // The Bellbuoy's attacks. A haunted bell buoy: it tolls (rings of sound that
@@ -16,11 +16,6 @@ import { Ring } from './underShapes.js';
 
 const BELL = { k: '#1a1c22', n: '#8a8f98', N: '#5a5f68', w: '#e8e4d8', y: '#e8ffb0', Y: '#a8d860', v: '#4fa882', V: '#2e6a58', o: '#7ac8a0', L: '#c89a40' };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // The anchor at the end of a chain: it hurts like a bullet, and (unlike a Shot) it
 // is kept while it swings outside the box.
@@ -97,8 +92,40 @@ class Chain extends Line {
     return Math.min(super.edgeDistance(px, py), this.anchor.edgeDistance(px, py));
   }
 
+  // Once it swings, it is drawn as real iron links (each one turned across the
+  // last), rusted where the sea got at it; the outline before that is the dashed preview.
   draw(ctx) {
-    super.draw(ctx);
+    if (this.age < this.warn) {
+      super.draw(ctx);
+      this.anchor.draw(ctx);
+      return;
+    }
+    const over = this.age - (this.warn + this.life);
+    ctx.save();
+    if (over > 0) ctx.globalAlpha = Math.max(0, 1 - over / 0.25);
+    const dx = Math.cos(this.angle);
+    const dy = Math.sin(this.angle);
+    const STEP = 5;
+    for (let d = 2, i = 0; d < this.length - 3; d += STEP, i++) {
+      const x = this.x + dx * d;
+      const y = this.y + dy * d;
+      const flat = i % 2 === 0;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(this.angle);
+      ctx.lineWidth = flat ? 1.6 : 1.2;
+      ctx.strokeStyle = '#1a1c22';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 3.6, flat ? 2.1 : 0.9, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = i % 5 === 3 ? '#b87848' : flat ? '#aab0ba' : '#6a707a';
+      ctx.lineWidth = flat ? 0.9 : 1;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 3.6, flat ? 2.1 : 0.9, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
     this.anchor.draw(ctx);
   }
 }

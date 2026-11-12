@@ -3,9 +3,12 @@ import { sfx } from '../audio/music.js';
 import { textSection } from '../engine/textLoader.js';
 import { makeSprite } from '../engine/sprite.js';
 import { ENEMIES } from '../data/enemies/index.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 import { AREA_NAMES } from '../data/areas.js';
 import { ITEMS } from '../data/items.js';
-import { JOURNAL_PAGES, isMet, journalEntry } from '../data/journal.js';
+import { GEAR } from '../data/gear.js';
+import { WEAPONS } from '../data/weapons.js';
+import { JOURNAL_PAGES, JOURNAL_PRIZES, isMet, journalEntry } from '../data/journal.js';
 import { drawMenuFrame, drawWeaponList, drawControls, MENU, FOOTER_Y, MENU_COLORS } from './menuFrame.js';
 import { drawText, textWidth, wrapLines } from './text.js';
 
@@ -93,7 +96,16 @@ export class JournalMenu {
     const data = ENEMIES[id];
     const known = isMet(id);
     const record = journalEntry(id) ?? { beaten: 0, spared: 0, loot: false };
-    const clip = picture(id, !known);
+    // Not met yet: no picture at all, not even its shape (a silhouette gave
+    // away who's coming, bosses and all). Just a question mark.
+    if (!known) {
+      const y = DETAILS.y + PICTURE.h + 10;
+      drawText(ctx, '?', DETAILS.x + PICTURE.w / 2, DETAILS.y + PICTURE.h / 2 - 24, { size: 48, color: MENU_COLORS.dim, align: 'center' });
+      drawText(ctx, '???', DETAILS.x, y, { size: 30, color: MENU_COLORS.dim });
+      drawText(ctx, 'Not met yet.', DETAILS.x, y + 36, { size: 22, color: MENU_COLORS.dim });
+      return;
+    }
+    const clip = picture(id, false);
 
     // The picture, as big as fits (whole-number scale, so the pixels stay crisp).
     const first = clip.frames[0];
@@ -119,10 +131,21 @@ export class JournalMenu {
     y += 32;
     drawText(ctx, AREA_NAMES[area] ?? '', DETAILS.x, y, { size: 20, color: MENU_COLORS.dim });
     y += 26;
-    drawText(ctx, `HP ${data.maxHp}`, DETAILS.x, y, { size: 22, color: MENU_COLORS.fight });
+    // (Its HP as it is in this chapter: an enemy met again later can have
+    // `later` numbers, see enemyForChapter in battleScene.js.)
+    const later = Object.entries(data.later ?? {}).filter(([from, changes]) => (WORLD_STATE.chapter ?? 1) >= Number(from) && changes.maxHp).pop();
+    drawText(ctx, `HP ${later ? later[1].maxHp : data.maxHp}`, DETAILS.x, y, { size: 22, color: MENU_COLORS.fight });
     y += 24;
-    const drop = data.drops?.[0]?.item;
-    if (drop) {
+    // (Its loot as it is in this chapter too: a `later` chapter can bring its own `drops`.)
+    const laterDrops = Object.entries(data.later ?? {}).filter(([from, changes]) => (WORLD_STATE.chapter ?? 1) >= Number(from) && changes.drops).pop();
+    const drop = (laterDrops ? laterDrops[1].drops : data.drops)?.[0]?.item;
+    const prize = JOURNAL_PRIZES[id];
+    if (!drop && prize) {
+      // A boss's prize (a boss's page only opens once the fight is over).
+      const name = prize.gear ? GEAR[prize.gear]?.name : WEAPONS[prize.weapon]?.name;
+      drawText(ctx, 'Prize', DETAILS.x, y, { size: 22, color: MENU_COLORS.dim });
+      drawText(ctx, name ?? '???', DETAILS.x + DETAILS.w, y, { size: 22, color: MENU_COLORS.highlight, align: 'right' });
+    } else if (drop) {
       drawText(ctx, 'Loot', DETAILS.x, y, { size: 22, color: MENU_COLORS.dim });
       const seen = record.loot;
       drawText(ctx, seen ? ITEMS[drop].name : '???', DETAILS.x + DETAILS.w, y, { size: 22, color: seen ? MENU_COLORS.heal : MENU_COLORS.dim, align: 'right' });

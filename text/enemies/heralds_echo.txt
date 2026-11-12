@@ -7,7 +7,7 @@ A bell rings down the empty street. A HERALD'S ECHO!
 
 # Shown at the start of each of your turns, in order, then repeating.
 [flavor]
-HERALD'S ECHO unrolls its scroll and clears its throat. It's been clearing it for centuries.
+HERALD'S ECHO unrolls its scroll and clears its throat. It's been clearing it for a hundred years.
 
 HERALD'S ECHO rings its bell at nobody. Nobody comes.
 

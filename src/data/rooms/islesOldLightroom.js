@@ -18,6 +18,8 @@ export const ISLES_OLD_LIGHTROOM = {
   music: 'isles',
   // Rain on the lantern glass, the sea far below.
   ambience: 'lighthouse',
+  // After the chapter the storm is over: no rain on the glass, only the sea below.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_lighthouse' },
   // Under cover: no rain or lightning, and the edges of the screen sink into shadow.
   indoors: true,
   vesWell: true,
@@ -51,7 +53,7 @@ export const ISLES_OLD_LIGHTROOM = {
 
   // Coming in from the stair: the tea.
   cutscenes: [
-    { x: 4, y: 7, w: 2, h: 4, scene: 'isles_hot_tea' },
+    { x: 1, y: 7, w: 5, h: 4, scene: 'isles_hot_tea' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
@@ -77,6 +79,18 @@ export const ISLES_OLD_LIGHTROOM = {
     { sprite: 'c5_rope_coil', x: 15, y: 6, text: 'old_rope', walkable: true, flat: true },
     { sprite: 'c5_crate', x: 2, y: 6, text: 'old_oil_crate' },
     { sprite: 'c5_barrel', x: 15, y: 10, text: 'old_oil_barrel' },
+    // Second pass: the keeper's things, left where they were when the light closed: a rug under
+    // the lens, the bench where it was mended, a rack of spare prisms, oil cans, stores. Nothing on the tea scene's walks
+    // (from 2-5, rows 7-10, up to 11-13, rows 4-7) or the way from door to door (rows 8-9).
+    { sprite: 'in_rug_blue', x: 8, y: 7, flat: true, walkable: true },
+    { sprite: 'il_workbench', x: 6, y: 3, text: 'old_workbench' },
+    { sprite: 'il_lens_rack', x: 15, y: 4, text: 'old_lens_rack' },
+    { sprite: 'il_oil_cans', x: 14, y: 10, text: 'old_oil_cans' },
+    { sprite: 'c5_crates_stack', x: 16, y: 6, text: 'old_stores' },
+    { sprite: 'il_broom', x: 1, y: 5, text: 'old_broom' },
+    { sprite: 'in_sea_chest_small', x: 11, y: 10, text: 'old_chest' },
+    { sprite: 'in_tins_crate', x: 7, y: 10, text: 'old_tins' },
+    { sprite: 'il_note_tidy', x: 10, y: 9, text: 'old_note', walkable: true, flat: true },
   ],
   tileTexts: { '#': 'old_wall', h: 'old_wall', o: 'old_floor' },
 

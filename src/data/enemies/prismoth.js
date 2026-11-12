@@ -20,7 +20,7 @@ export const PRISMOTH = {
   anim: PRISMOTH_ANIM,
   // The Chapter 4 battle song.
   music: 'belowBattle',
-  maxHp: 1140,
+  maxHp: 1450,
   damage: 37,
 
   difficulty: { density: 1.35, speed: 1.3 },

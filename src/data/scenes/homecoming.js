@@ -5,7 +5,7 @@
 // mole shouting THE HERO'S FRIENDS and another correcting him. Ves, for once,
 // lets it happen. The old snail (from tucks_whisper) tells the end of his
 // story: the Hero came back up the Way Up, slept on the bench, nobody
-// thanked them, and they went up the old stair, which fell in after.
+// thanked him, and he went up the old stair, which fell in after.
 // Tuck, in the crowd, isn't cheering: he's looking at the
 // throne hall, and he's frightened. A newt guard delivers the king's
 // invitation (the duel follows, in the throne hall).
@@ -59,9 +59,12 @@ export const HOMECOMING = {
     { do: 'sound', name: 'flare' },
     { do: 'stage', flare: { at: { x: 22, y: 3 }, seconds: 2.8 } },
     { do: 'music', song: 'belowtown' },
+    // The whole town out in the square (AMBIENCES in src/audio/music.js).
+    { do: 'ambience', name: 'belowtown_party' },
     { do: 'wait', seconds: 1.4 },
 
     // The square erupts.
+    { do: 'sound', name: 'crowdCheer' },
     { do: 'animate', who: 'bandA', animation: 'bf_drummer', speed: 0.16 },
     { do: 'animate', who: 'bandB', animation: 'bf_drummer', speed: 0.2 },
     { do: 'wait', seconds: 0.3 },
@@ -97,7 +100,7 @@ export const HOMECOMING = {
     { do: 'act', who: 'ves', act: 'look' },
     { do: 'say', who: 'ves', text: '{bored}We\'re not... {smile}Oh, let them.' },
 
-    // The old snail's other day: how the Hero came back, and what the town owed them.
+    // The old snail's other day: how the Hero came back, and what the town owed him.
     { do: 'wait', seconds: 0.6 },
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'face', who: 'player', dir: 'right' },
@@ -105,8 +108,8 @@ export const HOMECOMING = {
     { do: 'say', who: 'snail', text: 'Just like last time. Only louder. And I\'m older.' },
     { do: 'say', who: 'snail', text: 'Last time, the light came up and the whole town stood out here staring at it.\n\nAnd then the stair in the south wall, the one that only opens when the root is lit, creaked open, and up out of the Deep came the Hero.' },
     { do: 'say', who: 'snail', text: 'Mud to the eyebrows. Sat down on that bench. Never said a word. Fell asleep sitting up.' },
-    { do: 'say', who: 'snail', text: 'Every house in this town is still standing because of them. Every pie. Me.\n\nAnd nobody said thank you. We were all looking up at the light.' },
-    { do: 'say', who: 'snail', text: 'When we looked down, the bench was empty, and they were halfway up the old stair, clank, clank.\n\nNot long after, the stair fell in.' },
+    { do: 'say', who: 'snail', text: 'Every house in this town is still standing because of him. Every pie. Me.\n\nAnd nobody said thank you. We were all looking up at the light.' },
+    { do: 'say', who: 'snail', text: 'When we looked down, the bench was empty, and he was halfway up the old stair, clank, clank.\n\nNot long after, the stair fell in.' },
     { do: 'camera' },
     { do: 'say', who: 'ves', text: '{bored}You could start with us.\n\n{smile}We take thank-yous. And pies.' },
 
@@ -131,6 +134,8 @@ export const HOMECOMING = {
     { do: 'act', who: 'guard', act: 'sigh' },
     { do: 'say', who: 'guard', text: 'His Majesty requests your presence. At once. Immediately. And also now.' },
     { do: 'say', who: 'ves', text: '{bored}...That doesn\'t sound like a party invitation.' },
+    // (draft) The last-chance warning for chapter 4's forging and its secret (the whistle pieces, the shard under Seam Nine, Hobnail): nobody comes back from that hall.
+    { do: 'say', who: 'ves', text: '{thoughtful}Before we answer it. I don\'t like that door. If there\'s anything left to do in Belowtown, or down in the Diggings, the forge, a loose end, I\'d do it first.' },
     { do: 'leave', who: 'tuck' },
     { do: 'leave', who: 'guard' },
 

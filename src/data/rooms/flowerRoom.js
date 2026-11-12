@@ -67,11 +67,5 @@ export const FLOWER_ROOM = {
   // is how they move (see BEHAVIOURS in src/overworld/npc.js); hiding ones go
   // just above a tall pillar or statue, and `reach` is how many tiles away they
   // leap from.
-  npcs: [
-    // Dust bunnies nibbling at Taper's moonbells, and a moth drawn to the light.
-    { art: 'bunny', enemy: 'bunny', x: 5, y: 9, patrol: [2, 8] },
-    { art: 'bunny', enemy: 'bunny', x: 15, y: 10, patrol: [12, 18] },
-    // Kept off x 10, where Taper walks down to you and back in meetTaper.js.
-    { art: 'moth', enemy: 'moth', x: 14, y: 8, patrol: [12, 17] },
-  ],
+  npcs: [],
 };

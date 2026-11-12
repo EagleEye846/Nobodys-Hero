@@ -9,6 +9,14 @@
 [greeting]
 Wrasse's. If it floats, ties, or keeps the rain off, I've got it. If it does none of those, I've got that too, and it's cheaper.
 
+# (draft) The next times.
+[greeting 2]
+Back. Good. Wipe your feet, then tell me what's broken. Something always is.
+
+# (draft)
+[greeting 3]
+Wrasse's. You know where everything is. Leave it there.
+
 [menu_prompt]
 Yes?
 
@@ -76,4 +84,8 @@ The small one with the axe. A boat axe, for ropes. I'm told he's afraid of the s
 She asked if I stock umbrellas. I stock sailcloth. Same thing, if you're serious about it. She nodded as if I'd said something clever.
 
 [talk: The Hero]
-They came through here once. Small. Bought a coil of rope and nothing else, and paid in coppers, one at a time. It's in the ledger. I don't throw out ledgers.
+He came through here once, in my great-gran's day. Small. Bought a coil of rope and nothing else, and paid in coppers, one at a time. It's in her ledger. We don't throw out ledgers.
+
+# (draft) World reacts: after the storm.
+[farewell after haddock_gone]
+Mind the... well. Mind the sun, I suppose. I don't stock anything for the sun. I may have to.

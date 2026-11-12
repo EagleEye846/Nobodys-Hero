@@ -14,10 +14,13 @@ import { GEAR, giveGear } from '../data/gear.js';
 import { ARMOR } from '../data/armor.js';
 import { WEAPONS } from '../data/weapons.js';
 import { HERO_STATE } from '../characters/heroState.js';
+import { reforgeAt } from '../data/fallenStar.js';
+import { ReforgeShow } from './reforgeShow.js';
 import { wielderOf, HERO } from '../characters/equipment.js';
 import { saveGame, WORLD_STATE } from '../state/saveGame.js';
 import { DAY_SECONDS } from './daylight.js';
 import { textSection } from '../engine/textLoader.js';
+import { warmVoices } from '../audio/voiceClips.js';
 import { MEMBERS, joinParty, leaveParty, setHurt, memberFrames, inParty } from '../characters/party.js';
 import { hushFigureSprite, hushShadowSprite } from './hushwood.js';
 import { ACTS, actLength, actPose, poseOffset, drawPosed, startAct } from './acts.js';
@@ -64,6 +67,10 @@ export const STEP_TYPES = {
   goto: 'Go to another room',
   stage: 'Stage effects (spotlights, curtains, confetti, flicker, flare)',
   textbox: 'Move the text box to the top of the screen (or back)',
+  press: 'The player holds a key down to fill a bar (Nova holding the sea back)',
+  take: 'Take a keepsake away (it goes to someone else)',
+  reforge: "A smith reforges the Fallen Star (if you've brought the piece)",
+  forge_show: 'The big reforge show: the forge, the hammer, the shard, the new name',
 };
 // 'sweat' isn't a bubble: drops of cold sweat run down beside their head.
 export const EMOTES = ['!', '?', '...', '<3', 'sweat'];
@@ -292,6 +299,8 @@ export class ScenePlayer {
   constructor(scene, overworld) {
     this.scene = scene;
     this.overworld = overworld;
+    // A scene with recorded lines in it loads them ahead (src/audio/voiceClips.js).
+    if (scene.steps?.some((step) => step.voice)) warmVoices();
     // One you've watched to the end before (on any save) can be skipped:
     // hold the SKIP key (C), see SKIP_HOLD_SECONDS.
     this.skippable = canSkip(scene);
@@ -369,6 +378,17 @@ export class ScenePlayer {
     this.emotes.push({ body, text, t: 0 });
   }
 
+  // A new walk or toss for someone stops any `wait: false` one they still had
+  // going, so two never pull the same body two ways at once (and freeze it).
+  claim(step) {
+    const body = this.body(step.who);
+    this.background = this.background.filter((going) => {
+      if (this.body(going.who) !== body) return true;
+      this.setWalking(body, false, going);
+      return false;
+    });
+  }
+
   // Starts the next step. Instant steps run straight away, so several can happen in one frame.
   advance() {
     for (;;) {
@@ -378,6 +398,18 @@ export class ScenePlayer {
         this.finish();
         return;
       }
+      // A step can wait for a scene to have played (`after`), or stop once
+      // one has (`until`), like a trigger or a prop: the rides in the Bother
+      // have Haddock's line until he's gone, and Ves's after. (Not a battle:
+      // its `after` is the scene that plays once it's won, see storyBattle.)
+      const seen = WORLD_STATE.seenScenes ?? [];
+      if (step.do !== 'battle' && ((step.after && !seen.includes(step.after)) || (step.until && seen.includes(step.until)))) continue;
+      // What you carry can pick the steps too: `has` (every one of these keepsakes is in your pack),
+      // `lacks` (none of them is), and `holding: [n, [ids]]` (exactly n of those). For the quest
+      // pieces: the Register's leaves at the Old Street's cleft, the whistle's at Seam Nine's crack.
+      if (step.has && ![step.has].flat().every((id) => (HERO_STATE.gear ?? []).includes(id))) continue;
+      if (step.lacks && [step.lacks].flat().some((id) => (HERO_STATE.gear ?? []).includes(id))) continue;
+      if (step.holding && step.holding[1].filter((id) => (HERO_STATE.gear ?? []).includes(id)).length !== step.holding[0]) continue;
       this.step = { ...step, t: 0 };
       if (!this.begin(this.step)) return;
     }
@@ -392,7 +424,10 @@ export class ScenePlayer {
         if (!pages.length) return true;
         // `face` is the speaker's expression (see portraits.js); a page can change it with {sad} and so on.
         // `shake`: the words tremble (a scream, a shout).
-        this.overworld.textbox.open(pages, speaker?.portrait ?? null, step.face ?? null, { shake: Boolean(step.shake), top: step.top ?? this.textTop });
+        // (The hero has no voice; anyone else sounds like who they are or play: src/audio/voices.js.)
+        const voice = speaker && speaker !== this.overworld.player ? speaker.portrait ?? speaker.plays ?? speaker.id : null;
+        // `voice`: a recorded line (src/audio/voiceClips.js), by its id.
+        this.overworld.textbox.open(pages, speaker?.portrait ?? null, step.face ?? null, { shake: Boolean(step.shake), top: step.top ?? this.textTop, voice, line: step.voice ?? null });
         return false;
       }
       case 'textbox':
@@ -404,6 +439,7 @@ export class ScenePlayer {
       case 'walk':
         // `wait: false`: they set off and the scene goes straight on (two
         // things moving at once: the log and Bramble). `pace` is pixels a second.
+        this.claim(step);
         if (step.wait === false) {
           this.background.push(step);
           return true;
@@ -431,6 +467,7 @@ export class ScenePlayer {
           reach /= 2;
         }
         step.flight = { start, dx, dy, hops, hop: 0, t: 0, slide: 0 };
+        this.claim(step);
         if (step.wait === false) {
           this.background.push(step);
           return true;
@@ -438,13 +475,23 @@ export class ScenePlayer {
         return false;
       }
       case 'face': {
+        // `dir`, or `at`: toward someone else in the scene ('player' for you),
+        // or a spot ({ x, y }), whichever way is further.
         const body = this.body(step.who);
+        if (step.at) {
+          const there = typeof step.at === 'string' ? this.body(step.at) : { x: (step.at.x + 0.5) * T, y: (step.at.y + 1) * T };
+          const dx = there.x - body.x;
+          const dy = there.y - body.y;
+          if (dx || dy) body.facing = Math.abs(dx) >= Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+          return true;
+        }
         body.facing = step.dir ?? 'down';
         return true;
       }
       case 'emote':
+        // `wait: false`: the bubble pops up and the scene goes straight on.
         this.addEmote(this.body(step.who), step.emote ?? '!');
-        return false;
+        return step.wait === false;
       case 'act': {
         // Someone does something with their whole body (see ACTS in
         // acts.js): a hop, a start (with a "!"), a look about, a nod, a shake
@@ -537,6 +584,11 @@ export class ScenePlayer {
       case 'sound':
         if (step.name) sfx(step.name);
         return true;
+      case 'haunt':
+        // The ghost ship (haunt.js, shipList.js): { wake: 'name' } sends a sleeping ghost after you,
+        // { lantern: 'on' | 'off' }, { dip: seconds } the lights go low, { whisper: 'words' }, { list: 'port' | 'star' | 'toggle' }.
+        this.overworld.haunt?.run(step);
+        return true;
       case 'quake':
         // The screen shakes, `amount` pixels for `seconds` (the Warden coming down).
         this.overworld.shakeCamera?.(step.amount ?? 3, step.seconds ?? 0.5);
@@ -618,6 +670,13 @@ export class ScenePlayer {
         // `section`: start the song at one of its sections (any song's named part).
         music.play(step.song || null, null, step.section ?? null);
         return true;
+      case 'ambience':
+        // The sounds of the place change for a while (`name`, one of AMBIENCES in
+        // src/audio/music.js: the town hall full for the meeting), under the same
+        // song. Without a name, back to the room's own. (When the scene ends, the
+        // room's own comes back anyway.)
+        music.setAmbience(step.name ?? this.overworld.ambience ?? null);
+        return true;
       case 'stage':
         this.stage.apply(step);
         return true;
@@ -662,6 +721,39 @@ export class ScenePlayer {
         // Whoever's playing them walks in what they wear now (the crutch, or not).
         for (const actor of this.actors.values()) if (actor.plays === step.who && actor.frames) actor.frames = memberFrames(step.who);
         return true;
+      case 'press':
+        // { do: 'press', seconds: 3, text: 'Hold on.', glow: 'player' }: the
+        // player holds Z (confirm) and a bar fills; let go and it slips back
+        // (a third as fast). The scene waits till it's full. `text` is shown
+        // over the bar; `glow` (an actor id, or 'player') sets the stage's
+        // light pouring out of them, as bright as the bar is full (stageShow.js).
+        step.charge = 0;
+        return false;
+      case 'take':
+        // { do: 'take', item: 'haddocks_bell' }: a keepsake leaves you (knocked
+        // off in the wave; somebody else keeps it now). Nothing is said: the
+        // scene says it.
+        if (HERO_STATE.gear) HERO_STATE.gear = HERO_STATE.gear.filter((id) => id !== step.item);
+        return true;
+      case 'reforge':
+        // { do: 'reforge', smith: 'orla_forge', marks: 'isles_star_held' }: that smith's
+        // reforge of the Fallen Star (src/data/fallenStar.js), the same as from her shop's
+        // TALK: the piece goes into the sword. `marks`: a scene to count as watched with it
+        // (the one the shop would play after, so it never plays twice). Nothing happens if
+        // the reforge isn't ready (the scene's trigger checks that first: `forge`).
+        if (reforgeAt(step.smith)) {
+          // (No jingle here: the show that follows (`forge_show`) has the sting.)
+          WORLD_STATE.seenScenes ??= [];
+          for (const id of [step.marks ?? []].flat()) if (!WORLD_STATE.seenScenes.includes(id)) WORLD_STATE.seenScenes.push(id);
+        }
+        return true;
+      case 'forge_show':
+        // { do: 'forge_show', smith: 'orla_forge' }: the big show for that smith's reforge of the
+        // Fallen Star (src/overworld/reforgeShow.js): the forge, slow-motion hammer strikes, the shard
+        // sinking in, the new name. Purely a show: the reforge itself is `reforge` (or the shop's
+        // TALK topic), done before it. It ends by itself, so it can never hold the scene.
+        step.show = new ReforgeShow(step.smith, { quiet: Boolean(this.skipping) });
+        return false;
       case 'learn':
         // { do: 'learn', skill: 'nova' }: gives the hero a skill for free, no points
         // (Nova wakes this way, at the end of chapter 5).
@@ -734,6 +826,19 @@ export class ScenePlayer {
         break;
       case 'camera':
         finished = this.pan(step, dt);
+        break;
+      case 'press': {
+        // (Skipping, nobody's holding anything: it's simply done.)
+        const held = input.isDown('confirm');
+        const seconds = step.seconds ?? 3;
+        step.charge = this.skipping ? 1 : Math.max(0, Math.min(1, step.charge + (held ? dt / seconds : -dt / (seconds * 3))));
+        if (step.glow) this.stage.glow = { who: step.glow, power: step.charge };
+        finished = step.charge >= 1;
+        break;
+      }
+      case 'forge_show':
+        step.show.update(dt, input, this.skipping);
+        finished = step.show.done;
         break;
       case 'battle':
         if (step.lunged && !step.jolted && step.t >= LUNGE_JOLT) {
@@ -829,7 +934,7 @@ export class ScenePlayer {
     if (distance <= stride) {
       body.x = goalX;
       body.y = goalY;
-      this.setWalking(body, false);
+      this.setWalking(body, false, step);
       return true;
     }
     body.x += (dx / distance) * stride;
@@ -843,11 +948,11 @@ export class ScenePlayer {
     } else if (Math.abs(dx) > 0.5) {
       body.facing = dx < 0 ? 'left' : 'right';
     }
-    this.setWalking(body, true);
+    this.setWalking(body, true, step);
     return false;
   }
 
-  setWalking(body, walking) {
+  setWalking(body, walking, step = this.step) {
     if (body === this.overworld.player) {
       body.moving = walking;
       if (!walking) {
@@ -857,7 +962,7 @@ export class ScenePlayer {
       }
     } else {
       body.walking = walking;
-      body.running = walking && Boolean(this.step?.fast);
+      body.running = walking && Boolean(step?.fast);
     }
   }
 
@@ -1016,6 +1121,26 @@ export class ScenePlayer {
     });
   }
 
+  // The `press` step: its words, and a bar that fills while the key is held.
+  drawPress(step, ctx) {
+    inUiSpace(ctx, () => {
+      const w = 280;
+      const x = Math.round((UI_WIDTH - w) / 2);
+      const y = Math.round(UI_HEIGHT * 0.72);
+      const pulse = 0.82 + 0.18 * Math.sin(step.t * 6);
+      if (step.text) drawText(ctx, step.text, UI_WIDTH / 2, y - 64, { size: 24, color: '#ffffff', align: 'center', outline: '#000' });
+      drawText(ctx, `Hold ${keyName(keyFor('confirm'))}`, UI_WIDTH / 2, y - 32, { size: 20, color: `rgba(255, 246, 214, ${pulse.toFixed(2)})`, align: 'center', outline: '#000' });
+      ctx.fillStyle = '#120c1c';
+      ctx.fillRect(x - 3, y - 3, w + 6, 18);
+      ctx.fillStyle = '#3a3450';
+      ctx.fillRect(x, y, w, 12);
+      ctx.fillStyle = '#fff6d6';
+      ctx.fillRect(x, y, Math.round(w * step.charge), 12);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(x, y, Math.round(w * step.charge), 3);
+    });
+  }
+
   // Drops of cold sweat: two, running down either side of a head, in turn.
   drawSweat(ctx, x, headY, t) {
     for (const [side, delay] of [[-1, 0], [1, 0.35]]) {
@@ -1052,6 +1177,8 @@ export class ScenePlayer {
       });
     }
     this.stage.draw(ctx, camera, (id) => this.body(id));
+    if (this.step?.do === 'press' && !this.done) this.drawPress(this.step, ctx);
+    if (this.step?.do === 'forge_show' && !this.done) inUiSpace(ctx, () => this.step.show.draw(ctx));
     for (const { body, text, t } of this.emotes) {
       const pop = Math.min(1, t / 0.12);
       const headY = body.y - (body.sprites?.right.height ?? 24) - 8 - camera.y;

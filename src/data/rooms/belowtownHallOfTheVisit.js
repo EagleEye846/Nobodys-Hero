@@ -18,7 +18,7 @@ export const BELOWTOWN_HALL_OF_THE_VISIT = {
   // The region it's in (see src/data/areas.js).
   area: 'belowtown',
   music: 'belowtown',
-  ambience: 'belowtown',
+  ambience: 'belowtown_indoors',
   // Under cover: no sky, and the edges of the screen sink into shadow.
   indoors: true,
 

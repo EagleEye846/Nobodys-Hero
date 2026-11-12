@@ -10,18 +10,20 @@
 // then manages a bit, and gets the paper boat (keepsake). It all happens in
 // the bathing pool, which is the same at both tides.
 //
-// THE PUZZLE (Saltcombe's only tide puzzle, gentle): the tide is HIGH at the
-// start and the lagoon is deep. The sluice wheel (8,6) on the plank walk turns
-// it either way. At LOW the bed shows, but a deep outflow gully (column 22,
-// rows 7 to 20, deep at both tides) cuts it in half. The crate (19,7) floats on
-// the shallows by the rail at high tide: push it east into the gully (from the
-// shallows at high, or across the bed at low) and at low it sinks and bridges
-// it. Over the bridge to the ledge (27..32, rows 7-8, dry at both tides) and
-// the rope (x 30): walk up into the cliff to take hold, and all three climb to
-// the lookout (src/overworld/ropeClimb.js). The south edge (row 20) is deep at
-// both tides, so the gully can't be waded round. The wheel, the stump (2,4),
-// the doors and the ledge are dry at both tides; the stump puts the crate home
-// and the tide back to high. No clock.
+// THE PUZZLE (Saltcombe's only tide puzzle, gentle; 2026-11-10, it was a floating crate pushed
+// into the gully, too like the Wrack pools, and the old file is in notes/room-backup-2026-11-10b/):
+// the tide is HIGH at the start and the lagoon is deep. The sluice wheel (8,6) on the plank walk
+// turns it either way. At LOW the bed shows, but the whole lagoon runs out down the outflow gully
+// (column 22, rows 7 to 19) to the sluice gate at its foot (22,20): the gully is a fast, shallow
+// RACE then (`current_down` props, `lowTide: true`, so they only run with the water out), and at
+// HIGH it is deep. Step into it from either side and it carries you down to the gate, where it
+// stops and lets you off, sideways (Player.rideCurrent): step off east and you're across. Over the
+// east bed to the ledge (27..32, rows 7-8, dry at both tides) and the rope (x 30): walk up into the
+// cliff to take hold, and all three climb to the lookout (src/overworld/ropeClimb.js). The south
+// edge (row 20) is deep at both tides, so the gully can't be walked round. Coming back down the
+// rope, the ledge's own wheel (31,8) lets the water out from that side, and the gully takes you
+// across the same way, stepping off west. The wheels and the doors are dry at both tides. No
+// clock, nothing to reset.
 //
 // No monsters (a town).
 // Tile key (see src/overworld/coastTiles.js, saltcombe):
@@ -37,7 +39,11 @@ export const SALTCOMBE_LAGOON = {
   area: 'saltcombe',
   // "Salt and Rope", and the town's rain on the roofs.
   music: 'saltcombe',
+  // After chapter 5 (the_light_answers) the town is quiet: "What the Tide Left".
+  musicAfter: { scene: 'the_light_answers', song: 'saltcombeAfter' },
   ambience: 'stilt_town',
+  // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_stilt_town', lamplight: { shade: 0.22, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
 
   // The HIGH-tide map.
@@ -45,29 +51,29 @@ export const SALTCOMBE_LAGOON = {
     '####################################',
     '#hhhhhhhhhhhhhhhhhhhh###############',
     '#hhhhhhhhhhhhhhhhhhhh###############',
-    '#....................KKKKKKKKKKKKKK#',
-    '#....................KKKKKKKKKKKKKK#',
+    '#....................#K####KKKKK##K#',
+    '#....................KKK##KKKKKKK#K#',
     '#....................KKKKKKKKKKKKKK#',
     '#........ffffffffffffKKKKKKKKKKKKKK#',
     '#........;;;;;;;;;;;;;~~~~~......~##',
-    '#........~~~~~~~~~~~~~~~~~~......~##',
-    '.........~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '.........~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#........~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#........~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#.;;;;;;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#.;~~~~;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#.;~~~~;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#.;~~~~;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#.;~~~~;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#.;~~~~;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
-    '#.;;;;;;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
+    '#........~~~~~~~~~~~~~~~~~~......~~#',
+    '.oooooooo~~~~~~~~~~~~~~~~~~~~~~~~~##',
+    '.oooooooo~~~~~~~~~~~~~~~~~~x~~~~~~##',
+    '#........~~~~~~~~xx~~~~~~~~~~~~~~~##',
+    '#........~~~~~~~~~~~~~~~~~~~~~~~~~~#',
+    '#..;;;;..~~~~~~~~~~~~~~~~~~~~~~x~~~#',
+    '#.;~~~;;.~~~~~~~~~~~~~~~~~~~~~~~~~##',
+    '#.;~~~~;.~~x~~~~~~~~~~~~~~~~~~~x~~##',
+    '#.;~~~~;.~~~~~~~~~~~~~~~~~~~x~~~~~~#',
+    '#.;~~~~;.~~x~~~~~~~~~~~~~~~x~~~~~~##',
+    '#.;;~~;;.~~~x~~~~~~~x~~~~~~~~~x~~~##',
+    '#..;;;;..~~~~~~~~~~~~~~~~x~~~~~~~~##',
     '#........~~~~~~~~~~~~~~~~~~~~~~~~~~#',
     '####################################',
   ],
 
   tide: {
-    // The LOW-tide map (a space is "the same as high"): the bed shows, all but the gully.
+    // The LOW-tide map (a space is "the same as high"): the bed shows, and the gully (x 22) runs shallow and fast.
     low: [
       '                                    ',
       '                                    ',
@@ -76,19 +82,19 @@ export const SALTCOMBE_LAGOON = {
       '                                    ',
       '                                    ',
       '                                    ',
-      '         qqqqqqqqqqqqq qqqq      q  ',
-      '         qqqqqqqqqqqqq qqqq      q  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
-      '         qqqqqqqqqqqqq qqqqqqqqqqq  ',
+      '         qqqqqqqqqqqqq;qqqq      q  ',
+      '         qqqqqqqqqqqqq;qqqq      q  ',
+      '         qqqqqqqqqqqqq;qqqqqqqqqqq  ',
+      '         qqqqqqqqqqqqq;qqqqxqqqqqq  ',
+      '         qqqqqqqqxxqqq;qqqqqqqqqqq  ',
+      '         qqqqqqqqqqqqq;qqqqqqqqqqq  ',
+      '         qqqqqqqqqqqqq;qqqqqqqqxqq  ',
+      '         qqqqqqqqqqqqq;qqqqqqqqqqq  ',
+      '         qqxqqqqqqqqqq;qqqqqqqqxqq  ',
+      '         qqqqqqqqqqqqq;qqqqqxqqqqq  ',
+      '         qqxqqqqqqqqqq;qqqqxqqqqqq  ',
+      '         qqqxqqqqqqqxq;qqqqqqqxqqq  ',
+      '         qqqqqqqqqqqqq;qqxqqqqqqqq  ',
       '                                    ',
       '                                    ',
     ],
@@ -120,21 +126,30 @@ export const SALTCOMBE_LAGOON = {
   // (Its walks are on the plank walk and in the bathing pool, which never change.)
   cutscenes: [{ x: 1, y: 8, w: 2, h: 4, scene: 'swimming_lesson', after: 'haddock_hums' }],
 
-  // The sluice wheel, the floating crate, the reset stump, the rope's anchor,
-  // Haddock (only for the lesson), lamps, a bench, a kid, two purses.
+  // The sluice wheel, the outflow race, the rope's anchor, Haddock (only for the lesson), lamps,
+  // a bench, a kid, two purses.
   textFile: 'interactions/saltcombe.txt',
   props: [
     { sprite: 'c5_sluice_wheel', x: 8, y: 6, tideWheel: { to: 'toggle', text: 'lagoon_wheel', busy: 'lagoon_wheel_busy' } },
-    { sprite: 'c5_sluice_gate', x: 15, y: 20, text: 'lagoon_sluice_gate' },
-    { sprite: 'crates', x: 19, y: 7, rock: true, float: true, step: true },
-    // The way back from the lookout. The rope down lands you on the ledge, and crates go home
-    // every time you come in, so without these you could never walk back into town. A second
-    // wheel on the ledge turns the tide from that side, and a second crate (afloat at high just
-    // off the ledge, on the bed at low) is pushed three tiles west from (26,8) into the gully at
-    // (22,8). Neither can be reached from the west before crossing, so the puzzle is the same.
-    { sprite: 'crates', x: 25, y: 8, rock: true, float: true, step: true },
+    // The gate the lagoon runs out under, at the gully's foot.
+    { sprite: 'c5_sluice_gate', x: 22, y: 20, text: 'lagoon_sluice_gate' },
+    // The way back from the lookout: the rope down lands you on the ledge, so a second wheel there
+    // lets the water out from that side.
     { sprite: 'c5_sluice_wheel', x: 31, y: 8, tideWheel: { to: 'toggle', text: 'lagoon_wheel', busy: 'lagoon_wheel_busy' } },
-    { sprite: 'rock_stump', x: 2, y: 4, rockReset: true, text: 'lagoon_stump' },
+    // The outflow race down the gully: only there with the water out.
+    { sprite: 'current_down', x: 22, y: 7, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 8, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 9, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 10, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 11, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 12, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 13, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 14, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 15, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 16, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 17, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 18, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
+    { sprite: 'current_down', x: 22, y: 19, text: 'lagoon_outflow', flow: 'down', animation: 'sd_current_down', speed: 0.1, lowTide: true },
     { sprite: 'sc_rope_anchor', x: 30, y: 0, text: 'lagoon_rope_anchor' },
     { sprite: 'sign', x: 3, y: 8, text: 'lagoon_sign' },
     { sprite: 'sign', x: 28, y: 8, text: 'lagoon_rope_sign' },
@@ -147,6 +162,29 @@ export const SALTCOMBE_LAGOON = {
     { sprite: 'cf_kid_pup', x: 13, y: 4, text: 'lagoon_pup', animation: 'cf_kid_pup', speed: 0.3 },
     { sprite: 'gold_pouch', x: 14, y: 16, text: 'lagoon_pouch', lowTide: true, gold: 45, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'gold_pouch', x: 32, y: 8, text: 'lagoon_ledge_pouch', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // Dressing (2026-11-08), kept off the gully (x 22) and the swimming lesson's walks
+    // (west of x 7, rows 9 to 16): wreckage the storm threw over the sea wall into the lagoon
+    // (afloat at high, stranded on the bed at low), a crab's trail on the bed's far side, a
+    // lantern on a hook at the pool's south end, the wet deck.
+    { sprite: 'c5_planks_scatter', x: 12, y: 12, flat: true, walkable: true },
+    { sprite: 'c5_wrack_line', x: 25, y: 17, flat: true, walkable: true },
+    { sprite: 'c5_planks_scatter', x: 28, y: 13, flat: true, walkable: true },
+    { sprite: 'c5_wrack_line', x: 14, y: 19, flat: true, walkable: true },
+    { sprite: 'c5_lantern_hook', x: 1, y: 19 },
+    { sprite: 'c5_rope_coil', x: 6, y: 19, walkable: true },
+    { sprite: 'c5_barrel', x: 20, y: 5 },
+    { sprite: 'c5_crates_stack', x: 19, y: 4 },
+    { sprite: 'c5_puddle', x: 12, y: 5, flat: true, walkable: true },
+    { sprite: 'c5_gull_marks', x: 4, y: 5, flat: true, walkable: true },
+    // Storm-battered (2026-11-09): the houses' backs have their sea windows boarded, and the
+    // herring crans are stacked dry by the nets. The gangway in from the market is laid the other
+    // way (rows 9-10, o), and the bathing pool's square corners are boarded over (the lesson's
+    // walks are x 1..3 rows 9-12 and down x 3..4 in the pool, none on those corners).
+    { sprite: 'sc_window_boarded', x: 3, y: 2, text: 'lagoon_window_boarded' },
+    { sprite: 'sc_window_boarded', x: 12, y: 2, text: 'lagoon_window_boarded' },
+    { sprite: 'sc_herring_crans', x: 14, y: 3, text: 'lagoon_crans' },
+    { sprite: 'c5_pot_single', x: 1, y: 14, text: 'lagoon_pot' },
+    { sprite: 'c5_boat_upturned', x: 3, y: 6, text: 'lagoon_boat' },
   ],
   tileTexts: {
     h: 'lagoon_backs', '#': 'lagoon_cliff', K: 'lagoon_cliff', f: 'lagoon_rail',

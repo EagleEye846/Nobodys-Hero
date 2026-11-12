@@ -452,8 +452,9 @@ export const SOUL_ABILITIES = {
   // `cut(battle)`. Every string cut builds a little SP.
   snip: {
     name: 'CUT THE STRING',
+    whileHurt: true,
     hint: 'Your shadow finds a pair of SCISSORS!\nPress SHIFT to SNIP any string near you. Cut a puppet string and you are free.',
-    cooldown: 1.1,
+    cooldown: 0.7,
     duration: 0.3,
     update(battle) {
       const { soul } = battle;

@@ -17,3 +17,25 @@ Prices are up! The Sunstone's lit! Everything's worth more with a light on!
 
 [repeat after the_light_goes_up]
 I sold myself a hat. At a loss. I'm thrilled.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Fifty. Forty. Forty-five. Done! ...I've been had. I'm furious. I'm thrilled.
+
+# (draft)
+[repeat_ves 2]
+{bored}He's losing to himself. {smile}I didn't know you could.
+
+# (draft)
+[repeat 3]
+Want in? Rule one: never pay the first price. Rule two: there's always a first price. I made both rules. I break both.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+I offered the king's guard a quest at twenty. He said they're not for sale. Everything's for sale. He just hasn't met the right mole.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've put the hat back on the market. I'm asking a fortune. I won't get it. I'm going to try very hard.

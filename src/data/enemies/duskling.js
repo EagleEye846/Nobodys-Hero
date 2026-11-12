@@ -29,7 +29,7 @@ export const DUSKLING = {
     { name: 'Say its name', calm: 35 },
   ],
 
-  rewards: { exp: 55, coins: 70 },
+  rewards: { exp: 80, coins: 100 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'dark_chocolate', chance: 0.3 }],

@@ -870,7 +870,7 @@ export const DEADCITY_PROP_SPRITES = {
     'k#rkHk#HHHHHHHHH#k#HHHHH##kkkkkkk#HHHHHrkHk#HHHHHHHHHHHHHrkHk##k',
     'k#r#k#rrrrrrrrrrr#rrrrrrrr####k.k#rrrrrr#k#rrrrrrrrrrrrrrr#k#rrk',
   ],
-  // Slowly, the ancient tortoise of the bathhouse: three hundred years old,
+  // Slowly, the ancient tortoise of the bathhouse: well over a hundred,
   // moss on his shell, spectacles on his nose. 32x28, 2 tiles.
   slowly: [
     '...............kk...............',
@@ -920,6 +920,26 @@ export const DEADCITY_PROP_SPRITES = {
     '..k"####""##k...',
     '...kkkkkkkkk....',
     '................',
+    '................',
+    '................',
+  ],
+  // A TORN LEAF of the Welcome Register (the Registry quest: three of them, hidden in chapter 3):
+  // a page torn out at the binding, ruled in rows, a thread of star-light along its torn edge. 16x16.
+  register_leaf: [
+    '................',
+    '................',
+    '...kkkkkkkk.....',
+    '..kEEEEEEEEk....',
+    '..kEddddddEk....',
+    '..kEEEEEEEEkk...',
+    '..kEddddddEPk...',
+    '..kEEEEEEEEPk...',
+    '..kEdddddEEEPk..',
+    '..kEEEEEEEEPk...',
+    '..kEdddEEEEPk...',
+    '..kEEEEEEEPk....',
+    '..zkPPkEPPPk....',
+    '...zkkkkkkk.....',
     '................',
     '................',
   ],

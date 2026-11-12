@@ -35,3 +35,35 @@ export const SAMPLE_DRUMS = {
   crash: (volume) => ({ sample: 'crash', drum: 'sample', volume, ring: true, reverb: 0.3 }),
   boom: (volume) => ({ sample: 'bassDrumDeep', drum: 'sample', volume, ring: true, reverb: 0.35 }),
 };
+
+// A song heard from indoors: the same tune and sections, played by fewer of
+// its instruments, softer and through a lowpass, as if the band were out in
+// the street and you'd shut the door on it. `keep` names the tracks that
+// stay (the tune's carriers, the harp, a soft bass: no drums, no brass);
+// every other track is dropped. `muffle` (Hz) is the lowpass on all of
+// them (a track already muffled lower keeps its own), `soften` scales each
+// track's volume, and `tracks` sets anything else per track ({ bell: {
+// muffle: 900 } }: the quay bell further off still).
+export function indoors(song, { title, keep, muffle = 1800, soften = 0.85, volume = song.volume ?? 1, tracks = {} }) {
+  for (const track of [...keep, ...Object.keys(tracks)]) {
+    if (!song.instruments[track]) throw new Error(`${song.title}: no track called '${track}' to keep indoors`);
+  }
+  const kept = new Set(keep);
+  const instruments = Object.fromEntries(keep.map((track) => {
+    const instrument = song.instruments[track];
+    return [track, {
+      ...instrument,
+      volume: instrument.volume * soften,
+      muffle: Math.min(instrument.muffle ?? Infinity, muffle),
+      ...tracks[track],
+    }];
+  }));
+  const sections = Object.fromEntries(Object.entries(song.sections).map(([name, section]) => {
+    const left = Object.fromEntries(Object.entries(section).filter(([track]) => kept.has(track)));
+    if (!Object.keys(left).length) throw new Error(`${song.title}: nothing kept in section '${name}' indoors`);
+    return [name, left];
+  }));
+  // `tuneOf`: the song it's the indoor twin of, so going through a door
+  // carries on from the same place (MusicPlayer.start in music.js).
+  return { ...song, title, volume, sections, instruments, tuneOf: song.tuneOf ?? song.title };
+}

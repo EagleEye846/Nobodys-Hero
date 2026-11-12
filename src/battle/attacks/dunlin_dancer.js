@@ -1,5 +1,6 @@
 import { defineBulletArt } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
+import { withSnipes } from './snipes.js';
 
 // The Dunlin Dancer's attacks. Five sandpipers that move as one, so
 // everything comes in rows and waves: whole rows of little running birds
@@ -14,11 +15,6 @@ import { Pix } from '../../data/art/ch5Kit.js';
 
 const DUN = { k: '#1c1a1e', b: '#a89478', B: '#7c6a54', r: '#c0703e', w: '#f4efe4', K: '#3a3436', l: '#6a5a4a', o: '#e0a060', s: '#d8c8a0', S: '#a8946a', e: '#ffffff' };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // A tiny running sandpiper, facing left, two frames of legs.
 const runner = (a) => art(13, 10, (p) => {
@@ -34,9 +30,10 @@ const runner = (a) => art(13, 10, (p) => {
 });
 defineBulletArt('dunRunner', { frames: [runner(1), runner(-1)], palette: DUN, radius: 3.2, frameSeconds: 0.09 });
 
-// A diving beak, pointing right: a thin black dagger on a little head.
+// A diving beak, pointing right: a thin dagger on a little head. (Pale since
+// 2026-11-08: the black one was nearly lost in the black box.)
 defineBulletArt('dunBeak', {
-  frames: [art(13, 5, (p) => { p.ellipse(2.5, 2, 2.3, 2, 'b'); p.set(2, 1, 'e'); p.line(4, 2, 11, 2, 'K', 1); p.set(11, 2, 'k'); })],
+  frames: [art(13, 5, (p) => { p.ellipse(2.5, 2, 2.3, 2, 'b'); p.set(2, 1, 'e'); p.line(4, 2, 11, 2, 's', 1); p.set(11, 2, 'w'); })],
   palette: DUN,
   radius: 2.2,
   rotate: true,
@@ -61,11 +58,29 @@ const fly = (down) => art(15, 9, (p) => {
 });
 defineBulletArt('dunFlyer', { frames: [fly(false), fly(true)], palette: DUN, radius: 1, frameSeconds: 0.18 });
 
+// Tells (harmless, they blink before the thing they warn of):
+// a dunlin's three-toed footprint pressed in at the edge of a lane, where a
+// row of runners is about to come in;
+defineBulletArt('dunPrint', {
+  frames: [['o...o', '.o.o.', '..o..', '..o..'], ['.....', 'o...o', '.o.o.', '..o..']],
+  palette: DUN,
+  radius: 1,
+  frameSeconds: 0.12,
+});
+// a little puff of feathers at the top of the box, where a beak will come in;
+defineBulletArt('dunDive', { frames: [['w.e.w', '.ses.', '..s..']], palette: DUN, radius: 1 });
+// and a shell's shadow on the floor, where it will land.
+defineBulletArt('dunMark', { frames: [['.sssss.', 'ssSSSss', '.sssss.']], palette: DUN, radius: 1 });
+
+// (The tells were added 2026-11-08: the attacks used to open with no
+// warning at all, the only ch5 monster's that did.)
+const TELL = 0.4; // real seconds
+
 export const DUNLIN_DANCER_ATTACKS = {
   // Wave run: whole rows of little running dunlin cross the box one lane
   // after another, each row starting a beat after the last so the wave
-  // rolls down the box. Three neighbouring lanes are left empty, never the
-  // ones you're in.
+  // rolls down the box. Four neighbouring lanes are left empty, never the
+  // ones you're in. Seven waves.
   dunWave(box, density, { Shot, rand }) {
     const T = (s) => s * density;
     let t = 0;
@@ -78,9 +93,9 @@ export const DUNLIN_DANCER_ATTACKS = {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && waves < 4 && t < T(5)) {
+        if (t >= next && waves < 7 && t < T(6.2)) {
           waves++;
-          next = t + T(1.5);
+          next = t + T(0.95);
           const mine = Math.round(((soul.y - box.y - 6) / (box.h - 12)) * (LANES - 1));
           let gap = Math.floor(rand(0, LANES - 3));
           if (mine >= gap - 1 && mine <= gap + 4) gap = mine < LANES / 2 ? LANES - 4 : 0;
@@ -88,13 +103,15 @@ export const DUNLIN_DANCER_ATTACKS = {
           for (let k = 0; k < LANES; k++) {
             const lane = down ? k : LANES - 1 - k;
             if (lane >= gap && lane <= gap + 3) continue;
-            queue.push({ at: t + T(k * 0.09), y: laneY(lane) });
+            // Footprints at the right-hand edge of the lane first, then the runners.
+            bullets.push(new Shot({ x: box.x + box.w - 4, y: laneY(lane), harmless: true, warn: TELL + k * 0.09, life: 0, art: 'dunPrint' }));
+            queue.push({ at: t + T(TELL + k * 0.09), y: laneY(lane) });
           }
         }
         for (const q of queue) {
           if (t < q.at) continue;
           q.done = true;
-          for (let n = 0; n < 3; n++) bullets.push(new Shot({ x: box.x + box.w + 6 + n * 13, y: q.y, vx: -48, art: 'dunRunner', life: 4 }));
+          for (let n = 0; n < 3; n++) bullets.push(new Shot({ x: box.x + box.w + 6 + n * 13, y: q.y, vx: -60, art: 'dunRunner', life: 4 }));
         }
         for (let i = queue.length - 1; i >= 0; i--) if (queue[i].done) queue.splice(i, 1);
       },
@@ -108,13 +125,18 @@ export const DUNLIN_DANCER_ATTACKS = {
     let t = 0;
     let flip = 1;
     let nextFlip = T(3.2);
-    const rain = every(0.24, 0.34, (bullets, soul) => {
-      const aimed = Math.random() < 0.2;
+    const rain = every(0.15, 0.21, (bullets, soul) => {
+      const aimed = Math.random() < 0.3;
       const vx = -30 * flip;
       const vy = 52;
       // Slant: they start high and to the side, so they cross the box on a diagonal.
+      // (It waits a moment above the box first, while a puff of feathers
+      // shows where it will come in: its own warning would be out of sight.)
       const x = aimed ? soul.x - vx * ((soul.y - (box.y - 4)) / vy) : rand(box.x - 30, box.x + box.w + 30);
-      bullets.push(new Shot({ x: clamp(x, box.x - 40, box.x + box.w + 40), y: box.y - 5, vx, vy, art: 'dunBeak', life: 3 }));
+      const from = clamp(x, box.x - 40, box.x + box.w + 40);
+      const inX = from + vx * (8 / vy);
+      bullets.push(new Shot({ x: from, y: box.y - 5, vx, vy, warn: TELL, art: 'dunBeak', life: 3 }));
+      if (inX > box.x + 2 && inX < box.x + box.w - 2) bullets.push(new Shot({ x: inX, y: box.y + 3, harmless: true, warn: TELL, life: 0, art: 'dunDive' }));
     });
     return {
       duration: 7,
@@ -124,7 +146,7 @@ export const DUNLIN_DANCER_ATTACKS = {
           nextFlip = Infinity;
           flip = -1;
         }
-        if (t < T(5.6)) rain(dt, bullets, soul);
+        if (t < T(6.2)) rain(dt, bullets, soul);
       },
     };
   },
@@ -142,21 +164,25 @@ export const DUNLIN_DANCER_ATTACKS = {
       duration: 7.2,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && flights < 7 && t < T(5.4)) {
+        if (t >= next && flights < 11 && t < T(6.2)) {
           const fromRight = flights % 2 === 0;
           flights++;
-          next = t + T(0.72);
+          next = t + T(0.52);
           const aim = clamp(soul.x + rand(-14, 14), box.x + 8, box.x + box.w - 8);
           const speed = 70;
           const startX = fromRight ? box.x + box.w + 14 : box.x - 14;
           const bird = new Shot({ x: startX, y: box.y + 4, vx: fromRight ? -speed : speed, harmless: true, life: 3, art: 'dunFlyer' });
           bullets.push(bird);
-          // It drops its shell when it's over the mark.
-          live.push({ bird, x: aim, fromRight });
+          // It drops its shell when it's over the mark. The shell's shadow
+          // shows on the floor from the moment the bird sets off.
+          const mark = new Shot({ x: aim, y: box.y + box.h - 3, harmless: true, warn: 4, life: 0, art: 'dunMark' });
+          bullets.push(mark);
+          live.push({ bird, x: aim, fromRight, mark });
         }
         for (const d of live) {
           if (d.fromRight ? d.bird.x > d.x : d.bird.x < d.x) continue;
           d.done = true;
+          d.mark.warn = Math.min(d.mark.warn, d.mark.age + 0.8);
           bullets.push(new Shot({ x: d.x, y: box.y + 6, vy: 8, gravity: 105, bounce: true, art: 'dunShell', life: 3.4 }));
         }
         for (let i = live.length - 1; i >= 0; i--) if (live[i].done) live.splice(i, 1);
@@ -164,3 +190,9 @@ export const DUNLIN_DANCER_ATTACKS = {
     };
   },
 };
+
+// A lone dunlin dives at you on top of each, aimed a little ahead of where
+// you're going, so standing still or running one way is never safe (see snipes.js).
+DUNLIN_DANCER_ATTACKS.dunWave = withSnipes(DUNLIN_DANCER_ATTACKS.dunWave, { art: 'dunBeak', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });
+DUNLIN_DANCER_ATTACKS.dunPeck = withSnipes(DUNLIN_DANCER_ATTACKS.dunPeck, { art: 'dunBeak', count: 3, first: 1.2, every: 1.6, lead: [0.9, 'mean', 0.5] });
+DUNLIN_DANCER_ATTACKS.dunShells = withSnipes(DUNLIN_DANCER_ATTACKS.dunShells, { art: 'dunBeak', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });

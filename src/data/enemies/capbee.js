@@ -13,13 +13,23 @@ export const CAPBEE = {
   area: 'sunnyside',
   sprite: { rows: CAPBEE_SPRITE, palette: CAPBEE_PALETTE },
   anim: CAPBEE_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): pollen when hit; beaten, a puff of pollen.
+  feel: { hit: 'fluff', color: '#ffe27a', defeat: 'fluff' },
   // Sunnyside's own battle song, the Dandelion Lion Rag.
   music: 'sunnyBattle',
-  maxHp: 1800,
-  damage: 53,
+  maxHp: 8800,
+  damage: 79,
 
   // The easy end of Chapter 5, like the coast's first monsters.
-  difficulty: { density: 1.25, speed: 1.25 },
+  difficulty: { density: 1.40, speed: 1.35 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  // (2026-11-10: comes in sooner and runs longer, was { at: 0.85, seconds: 4.5 }:
+  // its attacks are done throwing a second or so before their end, and the box
+  // sat empty until the encore came.)
+  encore: { at: 0.72, seconds: 5.3, density: 0.8 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
 
   // Its attacks live in src/battle/attacks/capbee.js.
   patterns: [
@@ -31,12 +41,12 @@ export const CAPBEE = {
   // TALK options. Each name needs a [talk: Name] section in the text file.
   talk: [
     { name: 'Inspect' },
-    { name: 'Ask about the clover', calm: 40 },
+    { name: 'Point at the clover', calm: 40 },
     { name: 'Admire the cap', calm: 35 },
-    { name: 'Compliment the honey', calm: 30 },
+    { name: 'Sniff the honey', calm: 30 },
   ],
 
-  rewards: { exp: 1800, coins: 10 },
+  rewards: { exp: 2100, coins: 10 },
 
   // What it sometimes leaves behind (src/data/items.js), with the chance of it.
   drops: [{ item: 'flatcap_honey', chance: 0.4 }],

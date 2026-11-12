@@ -15,3 +15,10 @@
 {offended}Tide table's on the wall. Chalked it myself. Read it. Don't rub it.
 
 {eh}Eh? No, miss. The lantern's none of mine.
+
+# (draft) Turns.
+[repeat 2 after lantern_at_noon]
+{offended}Biscuits are for emergencies, lad. Being peckish is not an emergency.
+
+{eh}...Go on, then. One.
+

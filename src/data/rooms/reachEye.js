@@ -6,7 +6,7 @@
 // a draft for the designer to check). The jetty's end (27,13) rows on to the foot of the Last
 // Light; the step off its west side (26,12) rows back to the wreck.
 //
-// The song starts at its calm section C ("the eye"), see `musicFrom`.
+// The song starts at its calm section C ("the eye", no drums), see `musicFrom`.
 // Tile key (see src/overworld/coastTiles.js, reach):
 //   .  wet rock slabs   ,  turf   o  planks   ;  pools (walk)   ~  sea (solid)   x  barnacle rock (solid)
 
@@ -17,10 +17,13 @@ export const REACH_EYE = {
   name: 'THE EYE',
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'reach',
-  // "Out Past the Light" (src/data/music/reachTheme.js), from its calm section (C: the eye).
-  music: 'reach',
+  // "Hopes Above Water" (src/data/music/reachRainTheme.js), from its calm section (C: the eye).
+  music: 'reachRain',
   musicFrom: 'C',
   ambience: 'open_sea',
+  // After the chapter (the_light_answers) the storm is over, as at the tower's foot: no rain or
+  // lightning, the sea lying down, and the grey-blue light of a quiet sea in place of the storm's green.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.5, fog: 0.15 }, ambience: 'calm_sea', lamplight: { shade: 0.32, tint: '30, 40, 64' } },
   vesWell: true,
   // The calm: next to no rain, no lightning, the sea lying down. (A little rain is kept so the
   // skyline, and the Last Light on it, still draws.)
@@ -35,21 +38,21 @@ export const REACH_EYE = {
   tiles: [
     '##################################',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~x...,,,,,,,.....x~~~~~~~#',
-    '#~~~~~~~~....,,,,,,,......~~~~~~~#',
-    '#~~~~~~~~....,,,,,,,......~~~~~~~#',
-    '#~~~~~~~~.................~~~~~~~#',
-    '#~~~~~~~~.................~~~~~~~#',
+    '#~~~~~~~~~~~~~~xx~~~~~~~~~~~~~~~~#',
+    '#~~^~~~~~~~~~..,,,.~~~~~~~~~~~x~~#',
+    '#~~~x~~~~~~x.,,,,,,,..x~~~~~~~~^~#',
+    '#~~~~~~~~~..,,,,,,,,,....~~~~~~~~#',
+    '#~~~~~~~......,,,,,.......~~~~~~~#',
+    '#~~~~~~~~......,,,........~~~~~~~#',
+    '#~~~~~~~~.......,.........~~~~~~~#',
     '#~~~~~~~~oo...............oo~~~~~#',
     '#~~~~~~~~oo...............~o~~~~~#',
-    '#~~~~~~~~oo.......;;......~o~~~~~#',
-    '#~~~~~~~~..,,,,,,.;......xoo~~~~~#',
-    '#~~~~~~~~..,,,,,,.........~o~~~~~#',
-    '#~~~~~~~~x.,,,,,,........x~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
+    '#~~~~~~~~oo..,,...;;......~o~~~~~#',
+    '#~x~~~~~~...,,,,,,;......xoo~~~~~#',
+    '#~~~~~~~.~.,,,,,,,,.......~o~~~~~#',
+    '#~~~~~~~~~~x,,,,.......x~~~~~~~~~#',
+    '#~~~x~~~~~~~..,...~~~~~~~~~~~~^~~#',
+    '#~~~~~~~~~~~~~x~~~~~~x~~~~~~~~~~~#',
     '##################################',
   ],
 
@@ -73,13 +76,37 @@ export const REACH_EYE = {
   props: [
     { sprite: 'savepoint', x: 14, y: 8, save: true },
     // Haddock on a crate by the jetty (footprint 2: x 22 and 23), and the empty Bother (x 28-31).
-    { sprite: 'cf_haddock_sit', x: 22, y: 7, npc: 'haddock_reach', animation: 'cf_haddock_sit', speed: 0.6 },
+    { sprite: 'cf_haddock_sit', x: 22, y: 7, npc: 'haddock_reach', animation: 'cf_haddock_sit', speed: 0.6, until: 'haddock_gone' },
     { sprite: 'cf_bother', x: 28, y: 11, text: 'eye_bother', animation: 'cf_bother', speed: 0.7 },
     { sprite: 'c5_chain_bollard', x: 25, y: 8, text: 'reach_bollard' },
     { sprite: 'c5_driftwood', x: 12, y: 13, text: 'eye_driftwood' },
     { sprite: 'c5_rope_coil', x: 24, y: 12, text: 'eye_coil', walkable: true },
     { sprite: 'c5_seaweed_heap', x: 17, y: 5, text: 'reach_weed' },
     { sprite: 'gold_pouch', x: 16, y: 13, text: 'eye_pouch', gold: 180, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // Second pass: the rock's own look in the calm: a pool, lichen, sea-pinks, a cairn, stakes, gulls
+    // on a rock in the sea, more rocks breaking the water. Nothing solid on the landing (x 9-10,
+    // rows 8-12), the boat's water west of it, Haddock's talk ground (x 19-23, rows 6-9) or the jetty.
+    { sprite: 'il_tidepool', x: 10, y: 6, flat: true, walkable: true },
+    { sprite: 'il_cairn', x: 13, y: 4, text: 'reach_cairn' },
+    { sprite: 'il_rocks', x: 11, y: 5, text: 'reach_rocks' },
+    { sprite: 'il_thrift', x: 15, y: 3, walkable: true },
+    { sprite: 'il_grass_tuft', x: 17, y: 4, walkable: true },
+    { sprite: 'il_thrift', x: 12, y: 12, walkable: true },
+    { sprite: 'il_grass_tuft_b', x: 16, y: 12, walkable: true },
+    { sprite: 'il_grass_tuft', x: 13, y: 13, walkable: true },
+    { sprite: 'il_lichen', x: 22, y: 10, flat: true, walkable: true },
+    { sprite: 'il_lichen', x: 16, y: 9, flat: true, walkable: true },
+    { sprite: 'il_lichen', x: 23, y: 13, flat: true, walkable: true },
+    { sprite: 'il_lichen', x: 11, y: 9, flat: true, walkable: true },
+    { sprite: 'il_stakes_rope', x: 13, y: 14, text: 'reach_stakes' },
+    { sprite: 'il_pot_broken', x: 21, y: 14, text: 'reach_pot' },
+    { sprite: 'il_drift_timber', x: 14, y: 15, flat: true, walkable: true },
+    { sprite: 'il_gull', x: 24, y: 6, walkable: true },
+    { sprite: 'il_gull', x: 18, y: 10, walkable: true },
+    { sprite: 'il_gull_rock', x: 29, y: 4, text: 'reach_gull_rock' },
+    { sprite: 'il_rocks_big', x: 5, y: 14, text: 'reach_rocks' },
+    { sprite: 'il_rocks', x: 17, y: 16, text: 'reach_rocks' },
+    { sprite: 'il_rocks', x: 8, y: 3, text: 'reach_rocks' },
   ],
   tileTexts: { '~': 'eye_sea', x: 'reach_barnacles', o: 'reach_planks', ';': 'eye_pool', '.': 'eye_rock', ',': 'eye_turf' },
 

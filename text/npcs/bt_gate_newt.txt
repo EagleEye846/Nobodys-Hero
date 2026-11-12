@@ -19,3 +19,25 @@ I've made a new banner! WELLDUN. Two words. I checked.
 
 [repeat after the_light_goes_up]
 Tomorrow's banner says HAPPPY. I checked it three times.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+That's the official crowd. We count them. Today: eleven moles, four frogs, a bat, and me. I'm not sure I count.
+
+# (draft)
+[repeat 3]
+If anyone asks, the banner's a family name. The Wellcomes. Very old Belowtown family.
+
+# (draft)
+[repeat_ves 3]
+{bored}Very old family. {smile}Can't spell, but very old.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+His Majesty called the banner "a TRIUMPH". He says that about everything. He said it about my helmet.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Somebody's written under WELLDUN, in small letters: "well done". I'm choosing to take it as agreement.

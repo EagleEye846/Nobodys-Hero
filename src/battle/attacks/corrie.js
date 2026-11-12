@@ -1,6 +1,6 @@
 import { defineBulletArt as defineArt } from '../projectiles.js';
 import { makeSprite } from '../../engine/sprite.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
 import { LULLABY_OPENING } from '../../data/music/parts/chapter5.js';
 import { midi } from '../../audio/notation.js';
 
@@ -45,12 +45,6 @@ const P = {
   s: '#b8c4cc', S: '#6a7884',
 };
 
-function art(w, h, draw, outline = true) {
-  const p = new Pix(w, h);
-  draw(p);
-  if (outline) p.outline('k');
-  return p.rows();
-}
 
 // --- Bullet art ---------------------------------------------------------
 
@@ -157,6 +151,18 @@ defineBulletArt('corSpark', {
   frames: [art(5, 5, (p) => { p.set(2, 0, 'y'); p.set(2, 4, 'y'); p.set(0, 2, 'y'); p.set(4, 2, 'y'); p.set(2, 2, 'Y'); }, false)],
   palette: P,
   radius: 1,
+});
+// A shard of the lamp's glass, cracked off by the heat: a pale sliver,
+// lit gold along one edge, turning as it falls.
+defineBulletArt('corGlass', {
+  frames: [
+    art(7, 9, (p) => { p.poly([[3, 0], [6, 6], [2, 8], [0, 4]], 'c'); p.line(3, 0, 6, 6, 'Y'); p.set(3, 4, 'w'); p.set(1, 5, 'C'); }),
+    art(7, 9, (p) => { p.poly([[3, 0], [6, 6], [2, 8], [0, 4]], 'c'); p.line(3, 0, 6, 6, 'y'); p.set(4, 3, 'w'); p.set(2, 6, 'w'); }),
+  ],
+  palette: P,
+  radius: 2.2,
+  spin: 2.6,
+  frameSeconds: 0.12,
 });
 
 // --- Hazards that aren't Shots -------------------------------------------
@@ -711,6 +717,22 @@ class Beam {
   }
 }
 
+// One ray of the lamp's lens (lampLens): a narrow Beam that swings `reach`
+// radians from `from` and back, `legs` times, `leg` seconds each, easing at
+// each turn.
+class LensRay extends Beam {
+  constructor({ ox, oy, from, reach, leg = 2.4, legs = 3, half = 0.05, warn = 0.9 }) {
+    super({ ox, oy, from, to: from + reach, sweep: leg * legs, half, warn });
+    this.reach = reach;
+    this.leg = leg;
+  }
+
+  get angle() {
+    const t = Math.min(this.sweep, Math.max(0, this.age - this.warn));
+    return this.from + this.reach * (0.5 - 0.5 * Math.cos((t / this.leg) * Math.PI));
+  }
+}
+
 // The lullaby's opening, as [{ pitch (MIDI), at (8ths from the start), long }].
 const LULLABY = (() => {
   const tokens = LULLABY_OPENING.trim().split(/\s+/);
@@ -964,14 +986,16 @@ export const CORRIE_ATTACKS = {
         nextRow += every;
         // The gap: a step or two off from where you are, never on you.
         const way = soul.x < box.x + 20 ? 1 : soul.x > box.x + box.w - 20 ? -1 : Math.random() < 0.5 ? -1 : 1;
-        gap = clamp(soul.x + way * rand(9, 22), box.x + 4, box.x + box.w - 4);
+        // (2026-11-10: a step, not up to three: wading in the tide you can't
+        // cover 22 px between rows.)
+        gap = clamp(soul.x + way * rand(8, 19), box.x + 4, box.x + box.w - 4);
         const vy = 60;
         const angle = Math.atan2(vy, wind);
         for (let x = box.x - 20; x < box.x + box.w + 20; x += 8) {
           const sx = x + rand(-1.5, 1.5);
           // (Where the drop will be when it's level with you.)
           const later = sx + wind * ((soul.y - box.y + 8) / vy);
-          if (Math.abs(later - gap) < 11) continue;
+          if (Math.abs(later - gap) < 12) continue;
           bullets.push(new Line({ x: sx, y: box.y - 8, angle, length: 6, thickness: 1.6, warn: 0, life: 2.6, vx: wind, vy, color: '#bfe8f0' }));
         }
       },
@@ -1012,7 +1036,7 @@ export const CORRIE_ATTACKS = {
         wade(soul, tide);
         // A little rain between, so standing about is no good.
         if (real >= nextDrop && real < 7) {
-          nextDrop += 0.55 / density;
+          nextDrop += 0.9 / density;
           bullets.push(new Shot({ x: rand(box.x + 3, box.x + box.w - 3), y: box.y - 6, vy: 44, vx: rand(-6, 6), life: 2.6, art: 'corDrop' }));
         }
         if (real < next || real > 6.6) return;
@@ -1038,7 +1062,10 @@ export const CORRIE_ATTACKS = {
     let started = false;
     let next = 0.3;
     const bands = [];
-    const every = 1.5 / density;
+    // (2026-11-10: a band a little less often, and its foam a little thinner:
+    // wading in the tide with a band always on your row and drops on top,
+    // a careful player was hit about twice a turn.)
+    const every = 1.9 / density;
     let nextDrop = 0.5;
     return {
       duration: 7.8,
@@ -1064,14 +1091,16 @@ export const CORRIE_ATTACKS = {
           if (soul.y >= band.y && soul.y <= band.y + band.h) soul.x += band.dir * 32 * rdt;
           band.nextFoam -= rdt;
           if (band.nextFoam <= 0) {
-            band.nextFoam = 0.34;
-            const x = band.dir > 0 ? box.x - 6 : box.x + box.w + 6;
-            bullets.push(new Shot({ x, y: band.y + rand(3, band.h - 3), vx: band.dir * 66, vy: rand(-4, 4), life: 2.2, art: 'corFoam' }));
+            band.nextFoam = 0.42;
+            // (It gathers just inside the windward wall for a blink first, so you
+            // can see each one coming down the band. 2026-11-10.)
+            const x = band.dir > 0 ? box.x + 3 : box.x + box.w - 3;
+            bullets.push(new Shot({ x, y: band.y + rand(3, band.h - 3), vx: band.dir * 66, vy: rand(-4, 4), warn: 0.3, life: 2.1, art: 'corFoam' }));
           }
         }
         wade(soul, tide);
         if (real >= nextDrop && real < 7) {
-          nextDrop += 0.52 / density;
+          nextDrop += 0.7 / density;
           bullets.push(new Shot({ x: rand(box.x + 3, box.x + box.w - 3), y: box.y - 6, vy: 46, life: 2.6, art: 'corDrop' }));
         }
       },
@@ -1117,7 +1146,9 @@ export const CORRIE_ATTACKS = {
     const c = middle(box);
     const pulled = whirl(box, sea);
     let next = 0.2;
-    const every = 1.05 / density;
+    // (2026-11-10: a pair every 0.65 s, not 0.5, and each goes round for 3.8 s,
+    // not 6.2: they piled up to two dozen spinning oars in the little box.)
+    const every = 1.3 / density;
     return {
       duration: 7.8,
       update: (dt, bullets, soul) => {
@@ -1129,7 +1160,7 @@ export const CORRIE_ATTACKS = {
         const a = rand(0, TAU);
         const r = rand(22, 48);
         for (const side of [0, Math.PI]) {
-          bullets.push(new Orbiter({ cx: c.x, cy: c.y, r: side ? Math.max(22, 70 - r) : r, a: a + side, speed: 26, dr: -2, art: 'corOar', seg: 11, radius: 1.8, spin: 1.4, warn: 0.6, life: 6.2, minR: 16 }));
+          bullets.push(new Orbiter({ cx: c.x, cy: c.y, r: side ? Math.max(22, 70 - r) : r, a: a + side, speed: 26, dr: -2, art: 'corOar', seg: 11, radius: 1.8, spin: 1.4, warn: 0.6, life: 3.8, minR: 16 }));
         }
       },
     };
@@ -1171,72 +1202,85 @@ export const CORRIE_ATTACKS = {
   },
 
   // --- 4. The lamp ----------------------------------------------------------
+  // The last phase, and the fight's peak: he's tired, but the lamp isn't.
+  // Every lamp attack has the beam in it, and something to dodge while you
+  // shelter from it: hiding is never the whole answer.
 
   // THE BEAM: the Last Light's lamp swings its beam through the box, from
   // one side and then the other. Stone pillars rise out of the floor before
-  // each pass: get in a pillar's shadow (away from the lamp). A few tired
-  // darts between.
+  // each pass: get in a pillar's shadow (away from the lamp). The heat
+  // cracks the lamp's glass, and shards rain down while it swings (the
+  // pillars keep them off you too); tired darts come in between.
   lampSweep(box, density, { Shot, rand }) {
     let real = 0;
     let pass = 0;
     const times = [0.2, 3.0, 5.8];
     let side = Math.random() < 0.5 ? -1 : 1;
-    let next = 1.2;
+    let next = 1.0;
+    let nextShard = 1.0;
+    const pillars = [];
+    const shards = [];
+    const me = {};
     return {
       duration: 9,
       update: (dt, bullets, soul) => {
         real += dt / density;
-        if (pass < times.length && real >= times[pass]) {
-          lampPass(bullets, box, side, soul);
+        if (pass < times.length && real >= times[pass] && !beamBusy(bullets, me)) {
+          pillars.push(...lampPass(bullets, box, side, soul, me));
           side = -side;
           pass++;
         }
         if (real >= next && real < 8) {
-          next += 1.5 / density;
+          next += LAMP.dartEvery / density;
           const from = { x: staff(box).x, y: box.y + rand(8, box.h - 8) };
           const a = Math.atan2(soul.y - from.y, soul.x - from.x);
-          for (const turn of [-0.2, 0.2]) bullets.push(new Shot({ x: from.x, y: from.y, vx: Math.cos(a + turn) * 34, vy: Math.sin(a + turn) * 34, warn: 0.4, life: 3.5, art: 'corDart' }));
+          for (const turn of [-0.22, 0, 0.22]) bullets.push(new Shot({ x: from.x, y: from.y, vx: Math.cos(a + turn) * 40, vy: Math.sin(a + turn) * 40, warn: 0.4, life: 3.5, art: 'corDart' }));
         }
+        if (real >= nextShard && real < 8.2) {
+          nextShard += LAMP.shardEvery / density;
+          shards.push(glassShard(bullets, box, Shot, rand(box.x + 4, box.x + box.w - 4)));
+        }
+        splashOnPillars(shards, pillars);
       },
     };
   },
 
-  // TEARS: he cries, and the tears come down slowly all over the box; the
-  // pillars keep them off you too. The beam passes twice.
+  // TEARS: he cries, and the tears come down all over the box, thicker now;
+  // the pillars keep them off you too. The beam passes three times.
   lampTears(box, density, { Shot, rand }) {
     let real = 0;
     let pass = 0;
-    const times = [0.9, 4.6];
+    const times = [0.6, 3.4, 6.2];
     let side = Math.random() < 0.5 ? -1 : 1;
     let nextTear = 0.2;
     const tears = [];
     const pillars = [];
+    const me = {};
     return {
-      duration: 8.6,
+      duration: 9.2,
       update: (dt, bullets, soul) => {
         real += dt / density;
-        if (pass < times.length && real >= times[pass]) {
-          pillars.push(...lampPass(bullets, box, side, soul));
+        if (pass < times.length && real >= times[pass] && !beamBusy(bullets, me)) {
+          pillars.push(...lampPass(bullets, box, side, soul, me));
           side = -side;
           pass++;
         }
-        if (real >= nextTear && real < 7.6) {
-          nextTear += 0.2 / density;
-          const tear = new Shot({ x: rand(box.x + 3, box.x + box.w - 3), y: box.y - 6, vy: 26, gravity: 16, life: 4, art: 'corTear' });
+        if (real >= nextTear && real < 8.4) {
+          nextTear += LAMP.tearEvery / density;
+          const tear = new Shot({ x: rand(box.x + 3, box.x + box.w - 3), y: box.y - 6, vy: 30, gravity: 20, life: 4, art: 'corTear' });
           bullets.push(tear);
           tears.push(tear);
         }
-        // A tear that lands on a pillar splashes there.
-        for (const tear of tears) {
-          if (tear.spent) continue;
-          if (pillars.some((p) => p.standing && tear.x >= p.x - 1 && tear.x <= p.x + p.w + 1 && tear.y >= p.y - 1 && tear.y <= p.y + p.h)) tear.spent = true;
-        }
+        splashOnPillars(tears, pillars);
       },
     };
   },
 
-  // THE LULLABY, AGAIN: slower now, tired, the notes drifting in from his
-  // side; the beam goes through twice.
+  // THE LULLABY, AGAIN: tired, the notes drifting in from his side, three
+  // phrases of it now, overlapping like a round, and sung in harmony (a
+  // second note under or over each, and the last phrase in full chords);
+  // the beam goes through
+  // three times.
   lampLullaby(box, density, { Shot, clamp }) {
     let real = 0;
     const EIGHTH = 0.22;
@@ -1245,14 +1289,18 @@ export const CORRIE_ATTACKS = {
     let laid = 0;
     let passed = 0;
     let side = Math.random() < 0.5 ? -1 : 1;
+    const passTimes = [1.0, 3.8, 6.6];
+    const me = {};
     return {
-      duration: 8.8,
+      duration: 9.2,
       update: (dt, bullets, soul) => {
         real += dt / density;
-        while (laid < 2 && real >= 0.3 + laid * PHRASE * 0.62) {
-          const start = 0.3 + laid * PHRASE * 0.62;
-          const centre = clamp(soul.y + (laid ? 10 : -10), box.y + 14, box.y + box.h - 14);
-          for (const note of LULLABY) queue.push({ at: start + note.at * EIGHTH, note, centre });
+        while (laid < 3 && real >= 0.3 + laid * PHRASE * LAMP.phraseGap) {
+          const start = 0.3 + laid * PHRASE * LAMP.phraseGap;
+          const centre = clamp(soul.y + (laid % 2 ? 10 : -10), box.y + 14, box.y + box.h - 14);
+          // (The last phrase is a full chord: a note over and under.)
+          const harmony = laid === 2 ? [-LAMP.harmony, LAMP.harmony] : [(laid % 2 ? 1 : -1) * LAMP.harmony];
+          for (const note of LULLABY) queue.push({ at: start + note.at * EIGHTH, note, centre, harmony });
           laid++;
         }
         for (let i = queue.length - 1; i >= 0; i--) {
@@ -1260,17 +1308,101 @@ export const CORRIE_ATTACKS = {
           if (real < q.at) continue;
           queue.splice(i, 1);
           const y = q.centre - (q.note.pitch - LULLABY_MID) * 5.2;
-          bullets.push(new Shot({ x: box.x + box.w + 8, y, vx: -30, vy: 3, warn: 0.25, life: 4.2, art: q.note.long ? 'corNoteLong' : 'corNote', wobble: { frequency: 2.2, amplitude: 1.5 } }));
+          for (const at of [y, ...q.harmony.map((h) => y + h)]) {
+            bullets.push(new Shot({ x: box.x + box.w + 8, y: at, vx: -LAMP.noteSpeed, vy: 3, warn: 0.25, life: 4.2, art: q.note.long ? 'corNoteLong' : 'corNote', wobble: { frequency: 2.2, amplitude: 1.5 } }));
+          }
         }
-        if (passed < 2 && real >= (passed ? 5.0 : 1.4)) {
+        if (passed < passTimes.length && real >= passTimes[passed] && !beamBusy(bullets, me)) {
           side = passed ? -side : side;
           passed++;
-          lampPass(bullets, box, side, soul);
+          lampPass(bullets, box, side, soul, me);
+        }
+      },
+    };
+  },
+
+  // THE LENS: the lamp's great lens turns right over the box, and its light
+  // breaks into three rays that swing through together, one way and back
+  // and back again. No pillars here: stay in the dark between two rays and
+  // move with them. (The lens starts turning with you in the dark, never in
+  // a ray's path.) Splinters of the lens's glass fall as it grinds round.
+  lampLens(box, density, { Shot, rand }) {
+    let real = 0;
+    let lit = false;
+    const ox = box.x + box.w / 2;
+    const oy = box.y - 58;
+    const down = Math.PI / 2;
+    const me = {};
+    let nextShard = 1.2;
+    return {
+      duration: 9.2,
+      update: (dt, bullets, soul) => {
+        real += dt / density;
+        if (!lit && real >= 0.3 && !beamBusy(bullets, me)) {
+          lit = true;
+          // Toward the middle first, with you in the dark just behind the
+          // middle ray.
+          const at = Math.atan2(soul.y - oy, soul.x - ox);
+          const way = at > down ? -1 : 1;
+          const mid = at + way * LAMP.lensSpread / 2;
+          for (const off of [-LAMP.lensSpread, 0, LAMP.lensSpread]) {
+            const ray = new LensRay({ ox, oy, from: mid + off, reach: way * LAMP.lensReach, leg: LAMP.lensSweep, legs: 3, half: 0.05, warn: 0.9 });
+            ray.owner = me;
+            bullets.push(ray);
+          }
+        }
+        if (real >= nextShard && real < 8.4) {
+          nextShard += LAMP.lensShardEvery / density;
+          glassShard(bullets, box, Shot, rand(box.x + 4, box.x + box.w - 4));
         }
       },
     };
   },
 };
+
+// The lamp phase's knobs, in one place for tuning.
+const LAMP = {
+  pillarWidth: 8, // the pillars you hide behind (11 before the fight's peak was raised)
+  passSweep: 2.0, // seconds the beam takes to cross the box (2.4 before)
+  passHalf: 0.15, // half the beam's width, in radians (0.12 before)
+  dartEvery: 0.7, // lampSweep: a fan of three darts this often
+  shardEvery: 0.13, // lampSweep: a shard of glass this often
+  tearEvery: 0.045, // lampTears
+  phraseGap: 0.33, // lampLullaby: each phrase starts this share of a phrase after the last
+  noteSpeed: 56,
+  harmony: 22, // px between a note and its harmony
+  lensSweep: 2.4,
+  lensSpread: 0.38, // between the rays (radians)
+  lensReach: 0.32, // how far the rays swing each time (radians)
+  lensShardEvery: 0.15,
+};
+
+// A shard of the lamp's glass: it flickers a moment at the top of the box,
+// then falls. Returns it.
+function glassShard(bullets, box, Shot, x) {
+  const shard = new Shot({ x, y: box.y + 3, vy: 28, gravity: 46, warn: 0.35, life: 3.4, art: 'corGlass' });
+  bullets.push(shard);
+  return shard;
+}
+
+// Whether another attack's beam is still in the box (or about to be): with
+// two attacks in a turn, one waits for the other's beam to finish, so two
+// beams never cross the box at once with nowhere dark to stand.
+function beamBusy(bullets, me) {
+  return bullets.some((b) => b instanceof Beam && b.owner !== me && b.age < b.warn + b.sweep);
+}
+
+// Anything falling or drifting that runs into a standing pillar breaks on it.
+function splashOnPillars(list, pillars) {
+  for (let i = list.length - 1; i >= 0; i--) {
+    const b = list[i];
+    if (b.spent || b.age > b.warn + b.life) {
+      list.splice(i, 1);
+      continue;
+    }
+    if (pillars.some((p) => p.standing && b.x >= p.x - 1 && b.x <= p.x + p.w + 1 && b.y >= p.y - 1 && b.y <= p.y + p.h)) b.spent = true;
+  }
+}
 
 // The middle of the box: the eye of the whirlpool.
 function middle(box) {
@@ -1310,7 +1442,7 @@ function stormHint(box, sea, real) {
 
 // One pass of the lamp's beam from the top corner on `side` (-1 left, 1
 // right), with two pillars risen first to hide behind. Returns the pillars.
-function lampPass(bullets, box, side, soul = null) {
+function lampPass(bullets, box, side, soul = null, owner = null) {
   const ox = side > 0 ? box.x + box.w + 34 : box.x - 34;
   const oy = box.y - 46;
   const corners = [[box.x, box.y], [box.x + box.w, box.y], [box.x, box.y + box.h], [box.x + box.w, box.y + box.h]];
@@ -1325,7 +1457,7 @@ function lampPass(bullets, box, side, soul = null) {
   const halves = [[box.x + 8, box.x + box.w / 2 - 16], [box.x + box.w / 2 + 6, box.x + box.w - 19]];
   let pillars = [];
   for (let tries = 0; tries < 8; tries++) {
-    pillars = halves.map(([a, b]) => new LampPillar({ x: a + Math.random() * (b - a), y: box.y + 14 + Math.random() * 22, w: 11, h: 16, warn: 0.6, life: 3.4 }));
+    pillars = halves.map(([a, b]) => new LampPillar({ x: a + Math.random() * (b - a), y: box.y + 14 + Math.random() * 22, w: LAMP.pillarWidth, h: 16, warn: 0.6, life: 3.4 }));
     if (!soul) break;
     pillars.forEach((p) => { p.age = p.warn; });
     const hidden = pillars.some((p) => p.blocks(ox, oy, soul.x, soul.y) || p.blocks(ox, oy, soul.x + 6, soul.y) || p.blocks(ox, oy, soul.x - 6, soul.y));
@@ -1333,7 +1465,9 @@ function lampPass(bullets, box, side, soul = null) {
     if (!hidden) break;
   }
   // (The beam first, so the pillars are drawn over its light.)
-  bullets.push(new Beam({ ox, oy, from, to, sweep: 2.4, half: 0.12, warn: 0.9, pillars }));
+  const beam = new Beam({ ox, oy, from, to, sweep: LAMP.passSweep, half: LAMP.passHalf, warn: 0.9, pillars });
+  beam.owner = owner;
+  bullets.push(beam);
   bullets.push(...pillars);
   return pillars;
 }

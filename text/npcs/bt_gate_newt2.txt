@@ -17,3 +17,25 @@ Well done. Officially. Unofficially, that was a bit of a lark.
 
 [repeat after the_light_goes_up]
 The gate is open. All of it. The lock fell off in the excitement.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I've drawn up a list of everything the gate might be attacked by. It's one page. The page says "weather?"
+
+# (draft)
+[repeat 3]
+My colleague says I worry. Somebody ought to. Three hundred quiet years is exactly when you want somebody worrying.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Officially the Deep stops at the lake. Unofficially, nobody's been down to check. That's the trouble with officially.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've written "light: back" in the gate book. Under TROUBLE, for now. I'll rule a new column.
+
+# (draft)
+[repeat_ves 2 after the_light_goes_up]
+{bored}Put us under trouble too. {smile}We'll be in good company.

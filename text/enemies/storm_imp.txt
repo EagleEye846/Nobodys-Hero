@@ -17,6 +17,14 @@ STORM IMP's tail zigs and zags. It's drawing something. It might be your name. I
 
 Smells like wet pavement and a struck match, and a little like a child who's been told to be quiet.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+STORM IMP is raining on itself a little, by mistake. It is trying not to cry about that.
+
+[flavor: spareable]
+STORM IMP has stopped making weather. It's drawing something in the air with its tail. It's a sun. It isn't a very good sun, but it's a sun.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -56,8 +64,8 @@ You jump over a puddle it points at, and then another, and then you pretend to b
 [talk: Hold up an umbrella]
 You hold your coat over your head and walk, very slowly, through its rain. STORM IMP trails after you, a little way above, drizzling politely so that it all falls exactly where you are not.
 
-[talk: Tell it a joke]
-You tell it a joke about a lighthouse. It doesn't understand a word, but it understands you're trying, and it laughs so hard that thunder comes out of its ears. It tells you to do it again. You do not.
+[talk: Do a lighthouse]
+You do your best lighthouse: arms up, turning slowly on the spot, blinking. It doesn't understand a thing, but it understands you're trying, and it laughs so hard that thunder comes out of its ears. It tells you to do it again. You do not.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

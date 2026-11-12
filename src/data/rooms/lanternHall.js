@@ -4,6 +4,7 @@
 //   #  wall top (solid)                W  wall face (solid)
 //   .  floor                           r  rug
 //   P  pillar with a lantern (solid)   D  doorway (walk through it; see `doors`)
+//   b  low stone block (jump up onto it)
 export const LANTERN_HALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lantern_hall',
@@ -56,7 +57,6 @@ export const LANTERN_HALL = {
     { sprite: 'sign', x: 13, y: 3, text: 'hall_riddle' },
     { sprite: 'lantern_post', x: 5, y: 11, text: 'hall_lantern', lever: 'west' },
     { sprite: 'lantern_post', x: 16, y: 11, text: 'hall_lantern', lever: 'east' },
-    // The heart of the hall: up on a stone dais in the middle (jump up to it).
     { sprite: 'lantern_post', x: 10, y: 8, text: 'hall_lantern', lever: 'heart' },
   ],
 
@@ -72,10 +72,7 @@ export const LANTERN_HALL = {
   // just above a tall pillar or statue, and `reach` is how many tiles away they
   // leap from.
   npcs: [
-    // Up on the rug, clear of the stone dais in the middle (enemies can't climb).
-    { art: 'moth', enemy: 'moth', x: 10, y: 6, patrol: [7, 14] },
     { art: 'waxling', enemy: 'waxling', x: 9, y: 11, patrol: [6, 13] },
     { art: 'duskling', enemy: 'duskling', x: 16, y: 5, patrol: [13, 19] },
-    { art: 'waxling', enemy: 'waxling', x: 5, y: 12, patrol: [2, 8] },
   ],
 };

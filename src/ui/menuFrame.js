@@ -11,6 +11,7 @@ import { PORTRAITS } from '../data/art/portraits.js';
 import { makeSprite } from '../engine/sprite.js';
 import { HERO, wielderOf, memberGearLabels } from '../characters/equipment.js';
 import { drawText, wrapLines, textWidth } from './text.js';
+import { glide, opening, bob } from './uiMotion.js';
 
 // Shared layout for full-screen menus (EQUIP, SKILLS), in UI pixels (640x480):
 // a header, a scrolling weapon list on the left, details on the right, and a
@@ -40,7 +41,9 @@ export const MENU_COLORS = {
 const BORDER = 4;
 const LIST = { x: MENU.x + 24, y: MENU.y + 78, width: 272, rowHeight: 30, rows: 8 };
 // `h` is how tall the panel is: a description too long for it shrinks to fit.
-const DETAILS = { x: MENU.x + 320, y: MENU.y + 78, w: 216, h: MENU.h - 78 - 42 };
+// It stops above the footer's divider (FOOTER_Y - 8), so a long description
+// never runs over the line.
+const DETAILS = { x: MENU.x + 320, y: MENU.y + 78, w: 216, h: FOOTER_Y - 14 - (MENU.y + 78) };
 
 // Where the title row sits, for menus that add their own header text.
 export const HEADER_Y = MENU.y + 16;
@@ -106,9 +109,23 @@ export function drawOwnerTag(ctx, who, x, y, { selected = true, size = 22 } = {}
 
 // `split` draws the line between a list on the left and details on the right.
 // `accent` colours the border: whose menu it is (see ownerLook).
+// The menu eases open over its first few frames (a little small and faint,
+// then full size): the scale and fade are left on `ctx` for the rest of the
+// menu's drawing, which every caller does inside inUiSpace, so it's undone
+// when that's done.
 export function drawMenuFrame(ctx, title, rightLabel, { split = true, accent = MENU_COLORS.text } = {}) {
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+  const open = opening('menuFrame');
+  ctx.fillStyle = `rgba(0, 0, 0, ${0.5 * open})`;
   ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  if (open < 1) {
+    const scale = 0.94 + 0.06 * open;
+    const cx = MENU.x + MENU.w / 2;
+    const cy = MENU.y + MENU.h / 2;
+    ctx.translate(cx, cy);
+    ctx.scale(scale, scale);
+    ctx.translate(-cx, -cy);
+    ctx.globalAlpha *= 0.35 + 0.65 * open;
+  }
   ctx.fillStyle = accent;
   ctx.fillRect(MENU.x, MENU.y, MENU.w, MENU.h);
   ctx.fillStyle = '#000';
@@ -125,23 +142,69 @@ export function drawMenuFrame(ctx, title, rightLabel, { split = true, accent = M
 // nameColor(id) colours each name; tag(id) can return { text, color } for the right edge.
 // `area` is { x, y, width, rowHeight, rows }. `name(id)` is what to call each
 // row (weapons by default; the ITEMS menu and shops pass their own).
-export function drawWeaponList(ctx, ids, cursor, { nameColor, tag, area = LIST, name = (id) => WEAPONS[id].name }) {
+// `icon(id)` can give a small picture (see listIcon) to sit before each name.
+// The cursor slides from row to row rather than jumping (see uiMotion.js).
+export function drawWeaponList(ctx, ids, cursor, { nameColor, tag, area = LIST, name = (id) => WEAPONS[id].name, icon = null }) {
   const first = Math.min(Math.max(0, cursor - Math.floor(area.rows / 2)), Math.max(0, ids.length - area.rows));
   const last = Math.min(ids.length, first + area.rows);
 
+  if (cursor >= first && cursor < last) {
+    const at = glide(`list:${area.x},${area.y}`, area.x, area.y + (cursor - first) * area.rowHeight);
+    ctx.drawImage(soulSprite(), at.x, at.y + 5);
+  }
   for (let i = first; i < last; i++) {
     const id = ids[i];
     const y = area.y + (i - first) * area.rowHeight;
-    if (i === cursor) ctx.drawImage(soulSprite(), area.x, y + 5);
-    drawText(ctx, name(id), area.x + 26, y, { size: 28, color: nameColor(id) });
-    const label = tag(id);
-    if (label) drawText(ctx, label.text, area.x + area.width, y + 4, { size: 22, color: label.color, align: 'right' });
+    // A name too long for its row shrinks to fit (down to 20).
+    const label = name(id);
+    // (A name that wouldn't fit beside its picture goes without it.)
+    let picture = icon?.(id);
+    if (picture && (28 * (area.width - 50)) / textWidth(ctx, label, 28) < 20) picture = null;
+    const nameX = area.x + 26 + (picture ? 24 : 0);
+    if (picture) {
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      ctx.globalAlpha *= i === cursor ? 1 : 0.7;
+      ctx.drawImage(picture, area.x + 26, y + 5, 18, 18);
+      ctx.restore();
+    }
+    const room = area.width - (nameX - area.x);
+    const size = Math.max(20, Math.min(28, Math.floor((28 * room) / textWidth(ctx, label, 28))));
+    drawText(ctx, label, nameX, y + (28 - size) / 2, { size, color: nameColor(id) });
+    const tagged = tag(id);
+    if (tagged) drawText(ctx, tagged.text, area.x + area.width, y + 4, { size: 22, color: tagged.color, align: 'right' });
   }
 
+  // The "more this way" arrows nudge gently outward.
   const arrowX = area.x + area.width / 2;
+  const nudge = bob(2, 900);
   ctx.fillStyle = MENU_COLORS.dim;
-  if (first > 0) triangle(ctx, arrowX, area.y - 10, -1);
-  if (last < ids.length) triangle(ctx, arrowX, area.y + area.rows * area.rowHeight - 2, 1);
+  if (first > 0) triangle(ctx, arrowX, area.y - 10 - nudge, -1);
+  if (last < ids.length) triangle(ctx, arrowX, area.y + area.rows * area.rowHeight - 2 + nudge, 1);
+}
+
+// Little 9x9 pictures for list rows, in a colour: a sword, a shield, a
+// bowl of food, a candle, a star, a pouch (anything else). Made once each.
+const LIST_ICONS = {
+  weapon: ['.......##', '......###', '.....###.', '....###..', '.#.###...', '..###....', '..##.....', '.#..#....', '#........'],
+  armor: ['#########', '#.......#', '#.......#', '#.......#', '.#.....#.', '.#.....#.', '..#...#..', '...#.#...', '....#....'],
+  food: ['..#..#...', '...#..#..', '..#..#...', '.........', '#########', '#.......#', '.#.....#.', '..#####..', '.........'],
+  candle: ['....#....', '...###...', '....#....', '..#####..', '..#...#..', '..#...#..', '..#...#..', '..#...#..', '.#######.'],
+  star: ['....#....', '....#....', '...###...', '#########', '.#######.', '..#####..', '..##.##..', '.##...##.', '.#.....#.'],
+  other: ['...###...', '..#...#..', '.#######.', '#.......#', '#...#...#', '#..###..#', '#...#...#', '#.......#', '.#######.'],
+};
+const listIconCache = new Map();
+export function listIcon(kind, color) {
+  const key = `${kind}|${color}`;
+  if (!listIconCache.has(key)) listIconCache.set(key, makeSprite(LIST_ICONS[kind] ?? LIST_ICONS.other, { '#': color }));
+  return listIconCache.get(key);
+}
+// The picture for an item in the bag: food, a candle, or something else.
+export function itemIcon(id) {
+  const item = ITEMS[id];
+  if (item?.light) return listIcon('candle', MENU_COLORS.highlight);
+  if (item?.heal && !item.use) return listIcon('food', MENU_COLORS.heal);
+  return listIcon('other', MENU_COLORS.description);
 }
 
 function triangle(ctx, x, y, direction) {
@@ -152,10 +215,42 @@ function triangle(ctx, x, y, direction) {
   ctx.fill();
 }
 
-// Name, FIGHT power, SHIFT ability and description of one weapon. `area` is { x, y, w }.
-export function drawWeaponDetails(ctx, id, area = DETAILS) {
+// Comparing gear (the EQUIP menu passes what's on now as `compare`): a small
+// green arrow up beside a stat that's better than what's equipped, a red one
+// down beside one that's worse. Nothing when they're the same.
+function gearStat(slot, id, stat) {
+  return (slot === 'weapon' ? WEAPONS : ARMOR)[id]?.[stat] ?? 0;
+}
+const COMPARE_ROOM = 18;
+function drawCompare(ctx, slot, id, compare, stats, x, y) {
+  if (!compare || compare === id) return;
+  const signs = stats.map((stat) => Math.sign(gearStat(slot, id, stat) - gearStat(slot, compare, stat))).filter(Boolean);
+  // A line with two stats (DEF and MAG) only gets an arrow if they agree.
+  if (!signs.length || signs.some((sign) => sign !== signs[0])) return;
+  const up = signs[0] > 0;
+  ctx.fillStyle = up ? MENU_COLORS.heal : MENU_COLORS.bad;
+  ctx.beginPath();
+  if (up) {
+    ctx.moveTo(x, y + 16);
+    ctx.lineTo(x + 12, y + 16);
+    ctx.lineTo(x + 6, y + 6);
+  } else {
+    ctx.moveTo(x, y + 7);
+    ctx.lineTo(x + 12, y + 7);
+    ctx.lineTo(x + 6, y + 17);
+  }
+  ctx.fill();
+}
+// The stats one line of labels is about: two for a shared DEF and MAG line.
+function labelStats(label) {
+  return label.stat === 'defense' && label.text.includes('MAG') ? ['defense', 'magic'] : [label.stat];
+}
+
+// Name, FIGHT power, SHIFT ability and description of one weapon. `area` is
+// { x, y, w }; `compare` is the weapon it's being weighed against, if any.
+export function drawWeaponDetails(ctx, id, area = DETAILS, compare = null) {
   if (wielderOf('weapon', id) !== HERO) {
-    drawMemberGearDetails(ctx, 'weapon', id, WEAPONS[id].name, WEAPON_TEXT, area);
+    drawMemberGearDetails(ctx, 'weapon', id, WEAPONS[id].name, WEAPON_TEXT, area, compare);
     return;
   }
   const weapon = WEAPONS[id];
@@ -166,6 +261,7 @@ export function drawWeaponDetails(ctx, id, area = DETAILS) {
   y += 34;
   drawHeroMark(ctx, area, y);
   drawText(ctx, `FIGHT x${weapon.fightPower}`, area.x, y, { size: 24, color: MENU_COLORS.fight });
+  drawCompare(ctx, 'weapon', id, compare, ['fightPower'], area.x + textWidth(ctx, `FIGHT x${weapon.fightPower}`, 24) + 8, y);
   y += 26;
   const abilityLabel = ability ? `${ability.hold ? 'HOLD SHIFT' : 'SHIFT'}: ${ability.name}` : 'No shadow ability';
   drawText(ctx, abilityLabel, area.x, y, { size: 24, color: ability ? MENU_COLORS.ability : MENU_COLORS.dim });
@@ -174,10 +270,11 @@ export function drawWeaponDetails(ctx, id, area = DETAILS) {
   drawDescription(ctx, textSection(WEAPON_TEXT, id)[0], area, y);
 }
 
-// Name, stats (DEF, MAG, SP) and description of a piece of armor. `area` is { x, y, w }.
-export function drawArmorDetails(ctx, id, area = DETAILS) {
+// Name, stats (DEF, MAG, SP) and description of a piece of armor. `area` is
+// { x, y, w }; `compare` as for drawWeaponDetails.
+export function drawArmorDetails(ctx, id, area = DETAILS, compare = null) {
   if (wielderOf('armor', id) !== HERO) {
-    drawMemberGearDetails(ctx, 'armor', id, ARMOR[id].name, ARMOR_TEXT, area);
+    drawMemberGearDetails(ctx, 'armor', id, ARMOR[id].name, ARMOR_TEXT, area, compare);
     return;
   }
   let y = area.y;
@@ -191,6 +288,7 @@ export function drawArmorDetails(ctx, id, area = DETAILS) {
   }
   for (const label of labels) {
     drawText(ctx, label.text, area.x, y, { size: 24, color: label.bad ? MENU_COLORS.bad : MENU_COLORS[label.stat] });
+    drawCompare(ctx, 'armor', id, compare, [label.stat], area.x + textWidth(ctx, label.text, 24) + 8, y);
     y += 26;
   }
   y += 8;
@@ -205,21 +303,26 @@ function drawHeroMark(ctx, area, y) {
 
 // A party member's weapon or armor: its name, its stats (one a line, with
 // who it's for beside the first, in their colour) and its description.
-function drawMemberGearDetails(ctx, slot, id, name, textPath, area) {
+function drawMemberGearDetails(ctx, slot, id, name, textPath, area, compare = null) {
   const member = MEMBERS[wielderOf(slot, id)];
   let y = area.y;
   // A long name shrinks to fit the panel.
   const size = Math.min(30, Math.floor((30 * area.w) / textWidth(ctx, name, 30)));
   drawText(ctx, name, area.x, y + (30 - size), { size });
   y += 34;
-  drawText(ctx, member.name, area.x + area.w, y, { size: 24, color: member.color, align: 'right' });
   const labels = memberGearLabels(slot, id);
+  // Their name shrinks if the first stat line (DEF and MAG together) would run into it.
+  const firstWidth = labels.length ? textWidth(ctx, labels[0].text, 24) : 0;
+  const nameRoom = area.w - firstWidth - 8 - (compare && compare !== id ? COMPARE_ROOM : 0);
+  const nameSize = Math.max(16, Math.min(24, Math.floor((24 * nameRoom) / textWidth(ctx, member.name, 24))));
+  drawText(ctx, member.name, area.x + area.w, y + (24 - nameSize), { size: nameSize, color: member.color, align: 'right' });
   if (!labels.length) {
     drawText(ctx, 'No bonus', area.x, y, { size: 24, color: MENU_COLORS.dim });
     y += 26;
   }
   for (const label of labels) {
     drawText(ctx, label.text, area.x, y, { size: 24, color: label.bad ? MENU_COLORS.bad : MENU_COLORS[label.color] });
+    drawCompare(ctx, slot, id, compare, labelStats(label), area.x + textWidth(ctx, label.text, 24) + 8, y);
     y += 26;
   }
   y += 8;
@@ -252,6 +355,17 @@ export function drawItemDetails(ctx, id, area = DETAILS) {
     y += 24;
   }
   drawDescription(ctx, textSection(ITEM_TEXT, id)[0], area, y);
+}
+
+// Name and description of something you carry for good (the KEEPSAKES page
+// of the ITEMS menu): `name` and `text` from src/data/gear.js. `area` is { x, y, w }.
+export function drawKeepsakeDetails(ctx, name, text, area = DETAILS) {
+  let y = area.y;
+  // A long name shrinks to fit the panel.
+  const size = Math.min(30, Math.floor((30 * area.w) / textWidth(ctx, name, 30)));
+  drawText(ctx, name, area.x, y + (30 - size), { size });
+  y += 42;
+  drawDescription(ctx, text, area, y);
 }
 
 export function drawControls(ctx, text) {

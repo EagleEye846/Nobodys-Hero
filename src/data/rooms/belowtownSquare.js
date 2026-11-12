@@ -27,6 +27,8 @@ export const BELOWTOWN_SQUARE = {
   // "Lamps Lit Early" (belowtownTheme.js).
   music: 'belowtown',
   ambience: 'belowtown',
+  // Once the light has gone up, the whole town out partying in the square.
+  ambienceAfter: { scene: 'the_light_goes_up', ambience: 'belowtown_party' },
 
   tiles: [
     '######################################',
@@ -74,7 +76,10 @@ export const BELOWTOWN_SQUARE = {
   // wall: the duel waits on it, so there's no way round it) the first time
   // you're back after the light goes up.
   cutscenes: [
-    { x: 19, y: 8, w: 10, h: 1, scene: 'tucks_whisper', after: 'the_kings_welcome' },
+    // (Rows 6 to 8 in front of the hall's doors, so it plays on the tile you come out on.
+    // The hall's back door to the Diggings waits for it: belowtownThrone.js. Not once the
+    // light's gone up: "before you go down" would be a bit late by then.)
+    { x: 19, y: 6, w: 10, h: 3, scene: 'tucks_whisper', after: 'the_kings_welcome', until: ['the_light_goes_up', 'homecoming'] },
     { x: 1, y: 9, w: 36, h: 3, scene: 'homecoming', after: 'the_light_goes_up' },
     // The end of the chapter: out of the fallen hall, Tuck leads you to the secret way.
     { x: 20, y: 19, w: 1, h: 1, scene: 'tuck_shows_the_way', after: 'the_hall_falls' },

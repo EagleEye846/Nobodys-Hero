@@ -3,7 +3,7 @@
 // and a few of the folk have come to see you off. A rope hangs down the face
 // from a square of daylight a very long way up: the hand-rope of the old
 // stair the Hero came down and went back up, still tied at the top after the
-// steps fell in. The folk kept it for when the Hero came back. They never did. Tuck asks for two tugs on it from the
+// steps fell in. The folk kept it for when the Hero came back. He never did. Tuck asks for two tugs on it from the
 // top, so they'll know you made it. Then the scene's over and the climb is
 // yours (the room's `rope`: src/overworld/ropeClimb.js).
 export const THE_LONG_ROPE = {
@@ -44,7 +44,7 @@ export const THE_LONG_ROPE = {
     { do: 'walk', who: 'tuck', to: { x: 8, y: 42 } },
     { do: 'face', who: 'tuck', dir: 'down' },
     { do: 'face', who: 'ves', dir: 'up' },
-    { do: 'say', who: 'tuck', text: '{shy}That\'s the Long Rope. It\'s all that\'s left of the old stair, the one the Hero came down. We kept it for when they came back.\n\n{sad}They never did.' },
+    { do: 'say', who: 'tuck', text: '{shy}That\'s the Long Rope. It\'s all that\'s left of the old stair, the one the Hero came down. We kept it for when he came back.\n\n{sad}He never did.' },
     { do: 'wait', seconds: 0.6 },
     { do: 'say', who: 'ves', text: '{thoughtful}...Then somebody had better use it.' },
     { do: 'say', who: 'tuck', text: '{shy}Pull it twice when you\'re at the top. So we know you got there.' },

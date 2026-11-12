@@ -19,3 +19,31 @@ NOTHING TO LIGHT! Every lamp is on and the Sunstone's doing it all! I'm out of a
 
 [repeat after the_light_goes_up]
 Look at that glow! I'm just a lamp next to it. A good lamp. But a lamp.
+
+# (draft)
+[repeat 2]
+I've started lighting every lamp twice. To be sure. Then a third time, for morale.
+
+# (draft)
+[repeat 3]
+People ask me what time it is. I say lamp o'clock. It's always lamp o'clock now.
+
+# (draft)
+[repeat_ves 3]
+{bored}Lamp o'clock. {smile}...I'm going to say that.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Take a spare wick. No? Take a spare worm. I'm joking. Mostly.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+If it goes dark down there, sing. The dark can't stand singing. Nor can my wife, but that's different.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've put my pole away in the cupboard. I keep opening the cupboard to look at it.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+I might take up dancing. Look at those two. Can't be that hard. It's mostly glowing.

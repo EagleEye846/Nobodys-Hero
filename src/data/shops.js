@@ -214,7 +214,7 @@ export const SHOPS = {
       { armor: 'oilcloth_poncho', price: 260 },
     ],
   },
-  // Slowly's, in the Old Baths of the Dead City: a tortoise three hundred
+  // Slowly's, in the Old Baths of the Dead City: a tortoise well over a hundred
   // years old, selling what the city left behind and what he grows.
   slowly_shop: {
     title: "SLOWLY'S",
@@ -264,6 +264,8 @@ export const SHOPS = {
     title: "TEASEL'S FORGE",
     textFile: 'shops/lasthome_smithy.txt',
     music: 'lasthome',
+    // The reforge's big show, once [forge_now] has been read (src/data/scenes/reforgeShows.js).
+    forgeScene: 'reforge_teasel',
     keeper: { sprite: 'lh_teasel', eyes: [{ x: 6, y: 6 }, { x: 9, y: 6 }], eyeColor: '#b08858' },
     look: {
       wall: '#3e3236', wallLine: '#30262a', shelf: '#5a3a1e', shelfTop: '#8a5a32',
@@ -392,6 +394,8 @@ export const SHOPS = {
     title: "HOBNAIL'S FORGE",
     textFile: 'shops/hobnail_forge.txt',
     music: 'forge',   // "Hn.": the hammer is the rhythm (src/data/music/forgeTheme.js)
+    // The reforge's big show, once [forge_now] has been read (src/data/scenes/reforgeShows.js).
+    forgeScene: 'reforge_hobnail',
     keeper: { sprite: 'bf_hobnail', eyes: [] },
     look: {
       wall: '#3a2a26', wallLine: '#2c201c', shelf: '#4a3022', shelfTop: '#7a5038',
@@ -428,7 +432,7 @@ export const SHOPS = {
   // Chapter 5: the drowned coast.
   // The Cockle Stall in Saltcombe's market: a crab who sells what the tide
   // leaves, cooked. Bramble's snacks. (Chapter 5's gold: keep it near 1.4 times
-  // the shops' total, 13,445 G.)
+  // the shops' total, 13,715 G.)
   cockle_stall: {
     title: 'THE COCKLE STALL',
     textFile: 'shops/cockle_stall.txt',
@@ -439,16 +443,16 @@ export const SHOPS = {
       counter: '#4a3a30', counterTop: '#8a6a4a', counterGrain: '#32261e', lantern: '#ffc864',
     },
     stock: [
-      { item: 'sea_biscuit', price: 90 },
-      { item: 'kelp_crisps', price: 115 },
-      { item: 'winkle_skewer', price: 140 },
+      { item: 'sea_biscuit', price: 150 },
+      { item: 'kelp_crisps', price: 160 },
+      { item: 'winkle_skewer', price: 170 },
       { item: 'cockle_chowder', price: 185 },
       { item: 'brine_tonic', price: 190 },
     ],
   },
   // Mrs. Wrasse's Chandlery in Saltcombe: rope, oilskin and everything else a
   // boat or a person might need. The chapter's shop gear for the hero, Ves
-  // and Bramble, candles, and a skill point.
+  // and Bramble, ship's stores, an Ash Candle, and a skill point.
   wrasse_chandlery: {
     title: "WRASSE'S CHANDLERY",
     textFile: 'shops/wrasse_chandlery.txt',
@@ -459,15 +463,16 @@ export const SHOPS = {
       counter: '#4a3828', counterTop: '#7e6244', counterGrain: '#2e2218', lantern: '#ffc864',
     },
     stock: [
-      // Prices back to their first numbers (8,590 in all) since the balance
+      // Prices back to their first numbers (8,725 in all, with the ship's
+      // stores in place of the Hearth and Glow Candles) since the balance
       // pass cut the coast fights' gold: you reach the town with about 4.9k and
       // leave the Soundings with about 9.2k, so this shop and the Cockle Stall
       // can't both be bought out before the Isles. The maths is in
       // chapter-5-builders-guide.md, "Chapter 5 balance pass".
       { skillPoint: true, price: 900, limit: 1 },
-      { item: 'hearth_candle', price: 60 },
+      { item: 'lamp_oil', price: 170 },
+      { item: 'pine_tar', price: 125 },
       { item: 'ash_candle', price: 75 },
-      { item: 'glow_candle', price: 95 },
       { weapon: 'driftwood_cutlass', price: 900 },
       { weapon: 'brine_harpoon', price: 960 },
       { armor: 'oilskin_coat', price: 840 },

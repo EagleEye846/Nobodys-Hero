@@ -49,7 +49,8 @@ export const BELOWTOWN_FORGE = {
     { sprite: 'bf_hobnail_forge', x: 7, y: 5, shop: 'hobnail_forge', animation: 'bf_hobnail_forge', speed: 0.28 },
     { sprite: 'coal_heap', x: 2, y: 3, text: 'forge_coal' },
     { sprite: 'anvil', x: 4, y: 4, text: 'forge_anvil' },
-    { sprite: 'quench_tub', x: 11, y: 4, text: 'forge_quench' },
+    // Hale's whistle mouthpiece, left in the tub "to cool" (the whistle quest: Seam Nine's roster).
+    { sprite: 'quench_tub', x: 11, y: 4, text: 'forge_quench_mouth', gives: 'whistle_mouth', taken: { sprite: 'quench_tub', text: 'forge_quench' } },
     { sprite: 'grindstone', x: 13, y: 4, text: 'forge_grindstone' },
     { sprite: 'barrel', x: 2, y: 9, text: 'forge_barrel' },
     { sprite: 'crates', x: 3, y: 9, text: 'forge_crates' },

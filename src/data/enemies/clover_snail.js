@@ -13,13 +13,24 @@ export const CLOVER_SNAIL = {
   area: 'sunnyside',
   sprite: { rows: CLOVER_SNAIL_SPRITE, palette: CLOVER_SNAIL_PALETTE },
   anim: CLOVER_SNAIL_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): a clack off the shell when hit; beaten, bits
+  // of shell and clover.
+  feel: { hit: 'shell', defeat: 'clatter', color: '#c8e8a0' },
   // Sunnyside's own battle song, the Dandelion Lion Rag.
   music: 'sunnyBattle',
-  maxHp: 1900,
-  damage: 55,
+  maxHp: 9000,
+  damage: 83,
 
   // The easy end of Chapter 5, like the coast's first monsters.
-  difficulty: { density: 1.2, speed: 1.15 },
+  difficulty: { density: 1.35, speed: 1.25 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  // (2026-11-10, round 2: the encore comes in sooner and fuller, so the two
+  // attacks overlap; it was { at: 0.85, seconds: 4.5, density: 0.8 }, and the
+  // careful dodger took almost no hits from it.)
+  encore: { at: 0.65, seconds: 5.6, density: 0.85 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
 
   // Its attacks live in src/battle/attacks/clover_snail.js.
   patterns: [
@@ -36,7 +47,7 @@ export const CLOVER_SNAIL = {
     { name: 'Sit beside it', calm: 30 },
   ],
 
-  rewards: { exp: 1900, coins: 10 },
+  rewards: { exp: 2200, coins: 10 },
 
   // What it sometimes leaves behind (src/data/items.js), with the chance of it.
   drops: [{ item: 'lucky_clover', chance: 0.4 }],

@@ -2,7 +2,8 @@
 // STARTING_SPELLS; the rest are learned from the skill tree.
 //
 // An attack spell's damage is measured against a good FIGHT (every slash
-// landed, not PERFECT; see spellStrike in battleScene.js), but only as strong
+// landed, not PERFECT, times FIGHT_GROWTH; see spellStrike in battleScene.js
+// and strikeBar.js), but only as strong
 // as a FIGHT could be in the spell's `chapter`: the slash and FIGHT skills
 // from then, and a sword no better than that chapter's best
 // (SPELL_WEAPON_CAP). So an old spell stops growing and the new ones take
@@ -48,9 +49,9 @@ export const SPELLS = {
   // (and your friends') land `attack` times as hard and theirs `defence`
   // times, until `turns` enemy turns have passed. Low Water shows an enemy's
   // weak spots: every hit on it does `bonus` more for `turns` enemy turns.
-  undertow: { name: 'Shove', sp: 60, power: 1.4, shove: 0.3, chapter: 5 },
+  undertow: { name: 'Shove', sp: 60, power: 1, shove: 0.3, chapter: 5 },
   brine: { name: 'Scald', sp: 50, power: 0.6, dot: { power: 0.25, turns: 3 }, chapter: 5 },
-  ebb_flow: { name: 'Turnabout', sp: 40, swap: { attack: 1.75, defence: 1.5, turns: 2 } },
+  ebb_flow: { name: 'Turnabout', sp: 40, swap: { attack: 1.5, defence: 1.5, turns: 2 } },
   low_water: { name: 'Lay Bare', sp: 45, expose: { bonus: 0.4, turns: 3 } },
   // Chapter 5's second wave (the full-size tree). Cleave is VALOR's big single
   // hit; Restore is Balm for a whole party that's really hurt; Bastion is
@@ -61,9 +62,22 @@ export const SPELLS = {
   restore: { name: 'Restore', sp: 70, heals: 55, all: true },
   bastion: { name: 'Bastion', sp: 70, turns: 4 },
   soothe: { name: 'Soothe', sp: 75, calm: 50 },
-  starstorm: { name: 'Starstorm', sp: 100, power: 1.2, all: true, chapter: 5 },
+  starstorm: { name: 'Starstorm', sp: 100, power: 1.8, all: true, chapter: 5 },
   undercut: { name: 'Undercut', sp: 75, power: 1, shove: 0.2, dot: { power: 0.15, turns: 3 }, chapter: 5 },
-  overwhelm: { name: 'Overwhelm', sp: 115, power: 2.6, shove: 0.3, chapter: 5 },
+  overwhelm: { name: 'Overwhelm', sp: 100, power: 3.3, shove: 0.3, chapter: 5 },
+  // Chapter 5's third wave: choices rather than more damage. Counter waits:
+  // the next hit on you does nothing and goes back at an attacker for `power`
+  // good FIGHTs (more than a FIGHT, but only if they hit you). Sidestep: the
+  // next hit on you does nothing. Truce calms one enemy and cuts its next
+  // attack short (`shove`). Weaken leaves every enemy open (`expose`, like
+  // Lay Bare, smaller but on all of them). Stall only cuts the next attack
+  // short. Duck Under: nothing can touch you for the first `sail` seconds of it.
+  counter: { name: 'Counter', sp: 45, power: 1.5, chapter: 5 },
+  sidestep: { name: 'Sidestep', sp: 25 },
+  truce: { name: 'Truce', sp: 40, calm: 22, shove: 0.2 },
+  weaken: { name: 'Weaken', sp: 55, expose: { bonus: 0.25, turns: 2 } },
+  stall: { name: 'Stall', sp: 30, shove: 0.35 },
+  duck: { name: 'Duck Under', sp: 35, sail: 2 },
 };
 
 // The best FIGHT a hero's weapon gives in each chapter (Worn Sword, Skyiron

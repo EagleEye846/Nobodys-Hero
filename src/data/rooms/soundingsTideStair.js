@@ -12,6 +12,8 @@
 //   #  rock top (solid)   W  cave rock face (solid)   .  wet slate   q  shingle   ;  the ford
 //   ~  black water (solid)   x  glowing sea-glass (solid; the ford's teeth at low)   s  a stair
 
+// The light off a lump of sea-glass: a small bloom and a pool round it.
+const GLASS_GLOW = [{ dy: -8, bloom: 10, strength: 0.45, flicker: 0.1, color: '120, 240, 220' }, { dy: 2, pool: 40, strength: 0.38, flicker: 0.05, color: '120, 240, 220' }];
 export const SOUNDINGS_TIDE_STAIR = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'soundings_tide_stair',
@@ -22,38 +24,41 @@ export const SOUNDINGS_TIDE_STAIR = {
   // The Soundings' song ("The Soundings"), and the sounds of a sea cave under it.
   music: 'soundings',
   ambience: 'sea_cave',
+  // After chapter 5 the storm is over (`calmAfter`): the same cave sounds, but the sky in the
+  // cave mouth of its fights clears (coastBackdrops.js) and any `_calm` words are used.
+  calmAfter: { scene: 'the_light_answers', ambience: 'sea_cave' },
   vesWell: true,
 
   // The HIGH-water map.
   tiles: [
     '##############################',
-    '#WWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#.............................',
+    '#WWWWWWWWWWWWWWWWWWWWWWWWW#WW#',
+    '#.........................W...',
     '#.x...........................',
-    '#............#################',
-    '#............#################',
-    '#..........x.#################',
+    '#............#....####...#####',
+    '#..........x.##..#############',
+    '#..........x##################',
     '##############################',
     '##############################',
     '#WWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#............................#',
-    '#..............~~~~~~......x.#',
-    '#........x.....~~~~~~........#',
-    '#..x...........~~~~~~........#',
-    '#............................#',
+    '#.W........................W.#',
+    '#..............~~~~~.......x.#',
+    '#........x....~~~~~~~~.......#',
+    '#x.x............~~~~~.......x#',
+    '#...............x............#',
     '########################ss####',
     '########################ss####',
     '########################ss####',
     '#WWWWWWWWWWWWWWWWWWWWWWWssWWW#',
     '#WWWWW~~~~~~~~~~~~~~~~WWssWWW#',
-    '#.....~~~~~~~~~~~~~~~~.......#',
-    '#.....~~~~~~xqqqq~~~~~.......#',
+    '#......~~~~~~~~~~~~~~~.......#',
+    '#....~~~~~~~xqqqq~~~~~.......#',
     '#.....~~~~~~qqqqx~~~~~.......#',
     '#.....~~~~~~qqqqq;;;;;.......#',
     '......~~~~~~qqqqq;;;;;.......#',
-    '......~~~~~~qqqqq~~~~~.......#',
-    '#.x...~~~~~~qqqqq~~~~~......x#',
-    '#.....~~~~~~~~~~~~~~~~.......#',
+    '......~~~~~~qqqqq~~~~~~......#',
+    '#.x..~~~~~~~qqqq~~~~~~~.....x#',
+    '#...x~~~~~~~~~q~~~~~~~~......#',
     'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
     '##############################',
   ],
@@ -127,6 +132,42 @@ export const SOUNDINGS_TIDE_STAIR = {
     { sprite: 'c5_stalactite_drip', x: 10, y: 10, text: 'sound_drip', animation: 'c5_stalactite_drip', speed: 0.55 },
     { sprite: 'c5_rope_coil', x: 23, y: 26, text: 'stair_line', walkable: true },
     { sprite: 'gold_pouch', x: 13, y: 25, text: 'stair_pouch', gold: 100, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The shaft's rock. At the top: weed off a shelf, the sounders' ladder, dripstone in the
+    // notches of the floor's edge, sea-glass by the cliff (the rope's foot at 6,6 is kept
+    // clear). Mid level: a pit prop and a weed shelf on the north wall (row 10, x 14 to 21, the
+    // only way past the pool, kept clear), rock in the pool's
+    // corners (off the eel's beat), the divers' gear by the stair. At the foot: rock standing
+    // in the shaft's sea (never on the bar or the ford), and clutter on both landings.
+    { sprite: 'sd_weed_ledge', x: 8, y: 2, text: 'sound_weed_ledge' },
+    { sprite: 'sd_scree', x: 12, y: 2, flat: true, walkable: true },
+    { sprite: 'sd_rope_ladder', x: 22, y: 2, text: 'sound_rope_ladder' },
+    { sprite: 'sd_stalagmites', x: 2, y: 5, text: 'sound_stalagmites' },
+    { sprite: 'sd_glass_rock', x: 9, y: 5, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_glass_bed', x: 10, y: 6, flat: true, walkable: true },
+    { sprite: 'sd_scree', x: 8, y: 4, flat: true, walkable: true },
+    { sprite: 'sd_stalagmite', x: 16, y: 5, text: 'sound_stalagmites' },
+    { sprite: 'sd_rock_pile', x: 23, y: 4, text: 'sound_rocks' },
+    { sprite: 'sd_weed_ledge', x: 12, y: 10, text: 'sound_weed_ledge' },
+    { sprite: 'sd_pit_prop', x: 22, y: 10, text: 'sound_pit_prop' },
+    { sprite: 'sd_stalagmites', x: 25, y: 10, text: 'sound_stalagmites' },
+    { sprite: 'sd_glass_rock', x: 28, y: 12, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_stalagmite', x: 1, y: 11, text: 'sound_stalagmites' },
+    { sprite: 'sd_scree', x: 4, y: 14, flat: true, walkable: true },
+    { sprite: 'sd_sea_rock', x: 14, y: 12 },
+    { sprite: 'sd_sea_rock', x: 19, y: 13 },
+    { sprite: 'sd_slab', x: 8, y: 14, text: 'sound_slab' },
+    { sprite: 'sd_diver_gear', x: 21, y: 14, text: 'sound_diver_gear' },
+    { sprite: 'c5_puddle', x: 11, y: 12, flat: true, walkable: true },
+    { sprite: 'sd_weed_ledge', x: 1, y: 20, text: 'sound_weed_ledge' },
+    { sprite: 'sd_glass_rock', x: 3, y: 26, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_stalagmite', x: 16, y: 21, text: 'sound_stalagmites' },
+    { sprite: 'sd_scree', x: 12, y: 26, flat: true, walkable: true },
+    { sprite: 'sd_wall_chain', x: 28, y: 20, text: 'sound_wall_chain' },
+    { sprite: 'sd_glass_rock', x: 28, y: 24, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_timbers', x: 26, y: 27, text: 'sound_timbers' },
+    { sprite: 'sd_sea_rock', x: 9, y: 26 },
+    { sprite: 'sd_sea_rocks', x: 19, y: 21 },
+    { sprite: 'sd_sea_rock', x: 20, y: 27 },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'stair_water', ';': 'stair_ford', q: 'hall_shingle', x: 'sound_glass', s: 'stair_steps' },
 

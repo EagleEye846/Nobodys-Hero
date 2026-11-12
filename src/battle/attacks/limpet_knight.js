@@ -1,5 +1,6 @@
 import { defineBulletArt } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
+import { withSnipes } from './snipes.js';
 
 // The Limpet Knight's attacks. Very serious, very armoured, and it will not
 // be moved: so it bashes (two wide steel plates slam across the box with a
@@ -15,11 +16,6 @@ import { Pix } from '../../data/art/ch5Kit.js';
 
 const ROCK = { k: '#1b1a22', h: '#b4a68a', H: '#d8ccb0', s: '#8a7c64', D: '#35302c', g: '#7e8a78', G: '#aab6a0', w: '#f0f4ee' };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // A rolling stone, two sizes: round and lumpy, with a pale crack.
 const stone = (r) => art(r * 2 + 3, r * 2 + 3, (p) => {
@@ -61,8 +57,10 @@ defineBulletArt('limpSwirl', {
 // A steel plate slamming across the box: a rectangle with rivets and a
 // limpet crest. It flashes where it will be before it moves.
 class Plate {
-  constructor({ x, y, w, h, vx, warn = 0.6, life = 3 }) {
-    Object.assign(this, { x, y, w, h, vx, warn, life });
+  // `peek`: where its warning outline shows (inside the box, by the wall it
+  // comes from), since it waits just outside the box where nothing is seen.
+  constructor({ x, y, w, h, vx, warn = 0.6, life = 3, peek = null }) {
+    Object.assign(this, { x, y, w, h, vx, warn, life, peek });
     this.age = 0;
     this.dmg = null;
     this.grazed = false;
@@ -95,7 +93,18 @@ class Plate {
       ctx.strokeStyle = '#a8b8c8';
       ctx.setLineDash([3, 2]);
       ctx.lineWidth = 1;
-      ctx.strokeRect(this.x + 0.5, this.y + 0.5, this.w, this.h);
+      const px = this.peek ?? this.x;
+      ctx.strokeRect(px + 0.5, this.y + 0.5, this.w, this.h);
+      // Chevrons down the outline: the way it will slam.
+      ctx.setLineDash([]);
+      ctx.globalAlpha *= 1.4;
+      for (let cy = this.y + 6; cy < this.y + this.h - 4; cy += 10) {
+        ctx.beginPath();
+        ctx.moveTo(px + this.w - 2, cy - 3);
+        ctx.lineTo(px + 2, cy);
+        ctx.lineTo(px + this.w - 2, cy + 3);
+        ctx.stroke();
+      }
       ctx.restore();
       return;
     }
@@ -128,7 +137,8 @@ class Plate {
 export const LIMPET_KNIGHT_ATTACKS = {
   // Shield bash: two wide plates slam across the box with a gap between
   // them. The gap is never where you are, and the plates' outlines flash
-  // first.
+  // first. Every other bash has a backhand: a second pair close behind,
+  // its gap a step up or down from the first.
   limpBash(box, density, { rand, clamp }) {
     const T = (s) => s * density;
     let t = 0;
@@ -138,19 +148,25 @@ export const LIMPET_KNIGHT_ATTACKS = {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && waves < 4 && t < T(5.4)) {
+        if (t >= next && waves < 6 && t < T(6.2)) {
           waves++;
-          next = t + T(1.55);
-          const gapH = 25;
+          next = t + T(1.1);
+          const gapH = 23;
           const lo = box.y + 4 + gapH / 2;
           const hi = box.y + box.h - 4 - gapH / 2;
           // Somewhere other than where you stand.
           let c = clamp(soul.y + (Math.random() < 0.5 ? -1 : 1) * rand(24, 34), lo, hi);
           if (Math.abs(c - soul.y) < 18) c = soul.y < (lo + hi) / 2 ? hi : lo;
           const x = box.x + box.w + 3;
-          const speed = -64;
-          bullets.push(new Plate({ x, y: box.y - 2, w: 9, h: c - gapH / 2 - (box.y - 2), vx: speed, warn: 0.65, life: 3 }));
-          bullets.push(new Plate({ x, y: c + gapH / 2, w: 9, h: box.y + box.h + 2 - (c + gapH / 2), vx: speed, warn: 0.65, life: 3 }));
+          const speed = -76;
+          const pair = (gy, warn) => {
+            bullets.push(new Plate({ x, y: box.y - 2, w: 9, h: gy - gapH / 2 - (box.y - 2), vx: speed, warn, life: 3, peek: box.x + box.w - 11 }));
+            bullets.push(new Plate({ x, y: gy + gapH / 2, w: 9, h: box.y + box.h + 2 - (gy + gapH / 2), vx: speed, warn, life: 3, peek: box.x + box.w - 11 }));
+          };
+          pair(c, 0.65);
+          // The backhand waits a little longer (its outline flashing all the
+          // while), then follows the first pair in.
+          if (waves % 2 === 0) pair(clamp(c + (c < (lo + hi) / 2 ? 1 : -1) * rand(18, 26), lo, hi), 1.15);
         }
       },
     };
@@ -163,7 +179,7 @@ export const LIMPET_KNIGHT_ATTACKS = {
     const T = (s) => s * density;
     let t = 0;
     let bed = false;
-    const pebbles = every(0.3, 0.42, (bullets, soul) => {
+    const pebbles = every(0.19, 0.27, (bullets, soul) => {
       const y = Math.random() < 0.55 ? clamp(soul.y + rand(-6, 6), box.y + 4, box.y + box.h - 4) : rand(box.y + 4, box.y + box.h - 4);
       bullets.push(new Shot({ x: box.x - 3, y, vx: 14, accel: 38, art: 'limpPebble', life: 3.5 }));
     });
@@ -182,7 +198,7 @@ export const LIMPET_KNIGHT_ATTACKS = {
           for (let i = 0; i < 3; i++) bullets.push(new Shot({ x: box.x + box.w - 6, y: box.y + 14 + i * 26, harmless: true, life: 6, art: 'limpSwirl' }));
         }
         if (t >= T(0.9) && t < T(6.2)) {
-          soul.x += 17 * (dt / density);
+          soul.x += 24 * (dt / density);
           if (t < T(5.6)) pebbles(dt, bullets, soul);
         }
       },
@@ -202,15 +218,15 @@ export const LIMPET_KNIGHT_ATTACKS = {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && volleys < 5 && t < T(5.2)) {
+        if (t >= next && volleys < 7 && t < T(6.0)) {
           volleys++;
-          next = t + T(1.2);
+          next = t + T(0.78);
           // Lanes run down and to the left, then up and to the left (each
           // volley turns the other way), so strafing one way never beats it.
           // A lane is the value of (x + dir * y).
           const dir = volleys % 2 === 1 ? 1 : -1;
           const base = soul.x + dir * soul.y;
-          const offsets = [0, rand(24, 32), -rand(24, 32), rand(48, 60)];
+          const offsets = [0, rand(24, 32), -rand(24, 32), rand(48, 60), -rand(48, 60)];
           const cut = [];
           for (const o of offsets) {
             const lane = base + o;
@@ -228,10 +244,16 @@ export const LIMPET_KNIGHT_ATTACKS = {
         for (const v of firing) {
           if (t < v.at) continue;
           v.done = true;
-          for (const s of v.cut) bullets.push(new Shot({ x: s.x, y: s.y, vx: -40, vy: 40 * s.dir, art: s.big ? 'limpBoulder' : 'limpStone', life: 4 }));
+          for (const s of v.cut) bullets.push(new Shot({ x: s.x, y: s.y, vx: -54, vy: 54 * s.dir, art: s.big ? 'limpBoulder' : 'limpStone', life: 4 }));
         }
         firing = firing.filter((v) => !v.done);
       },
     };
   },
 };
+
+// Pebbles flicked off the rim of its shield on top, aimed a little ahead of
+// you, so standing still or running one way is never safe (see snipes.js).
+LIMPET_KNIGHT_ATTACKS.limpBash = withSnipes(LIMPET_KNIGHT_ATTACKS.limpBash, { art: 'limpPebble', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });
+LIMPET_KNIGHT_ATTACKS.limpSuck = withSnipes(LIMPET_KNIGHT_ATTACKS.limpSuck, { art: 'limpPebble', count: 3, first: 1.4, every: 1.5, lead: [0.9, 'mean', 0.5] });
+LIMPET_KNIGHT_ATTACKS.limpStones = withSnipes(LIMPET_KNIGHT_ATTACKS.limpStones, { art: 'limpPebble', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });

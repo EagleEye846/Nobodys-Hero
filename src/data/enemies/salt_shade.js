@@ -21,12 +21,20 @@ export const SALT_SHADE = {
   // comes apart into bubbles when beaten, and takes off his hat when spared.
   // See src/data/art/salt_shade.js.
   anim: SALT_SHADE_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): it frays when hit and gives off pale wisps;
+  // beaten, its light goes up and it drifts away.
+  feel: { hit: 'ghost', idle: 'wisps', defeat: 'ghost', exit: 'float' },
   // The chapter 5 storm battle song (the Wreck Yard and on).
   music: 'coastBattleStorm',
-  maxHp: 2200,
-  damage: 62,
+  maxHp: 11400,
+  damage: 93,
 
-  difficulty: { density: 1.6, speed: 1.5 },
+  difficulty: { density: 1.75, speed: 1.60 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  encore: { at: 0.85, seconds: 4.5, density: 0.8 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
   battlePos: { x: 218, y: 44 },
 
   // His attacks live in src/battle/attacks/salt_shade.js.
@@ -39,9 +47,9 @@ export const SALT_SHADE = {
   // TALK options. Each name needs a [talk: Name] section in the text file.
   talk: [
     { name: 'Inspect' },
-    { name: 'Ask the news', calm: 40 },
+    { name: 'Tap your wrist', calm: 40 },
     { name: 'Take the rope', calm: 35 },
-    { name: 'Say the tide is turning', calm: 30 },
+    { name: 'Point at the tide', calm: 30 },
   ],
 
   rewards: { exp: 2950, coins: 18 },

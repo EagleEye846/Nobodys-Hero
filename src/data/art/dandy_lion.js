@@ -1097,3 +1097,60 @@ export const DANDY_LION_ANIM = {
     ],
   ] },
 };
+
+// The mane, tidied to match the rest of the coast's monsters (the seed sheep,
+// the bunting): typed above as a speckle of three greys with no edge, it read
+// as a different game's sprite next to them. Every frame gets the same pass:
+//  - its edge (any mane pixel next to empty) takes the dark outline, like
+//    every other sprite's silhouette; a seed drifting on its own stays white;
+//  - inside, the speckle becomes one soft fluff lit from the top left (the
+//    game's light): white, a cream shade toward the lower right, and the grey
+//    only in the deepest shadow. The dark seed-dots typed in the mane stay.
+// Below the puff (the chest and body) nothing changes.
+function tidyMane(rows) {
+  const g = rows.map((row) => [...row]);
+  const h = g.length;
+  const w = g[0].length;
+  const mane = (c) => c === 'q' || c === 'w' || c === 'W';
+  const solid = (x, y) => (g[y]?.[x] ?? '.') !== '.';
+  let n = 0, sx = 0, sy = 0, x0 = w, x1 = 0, y0 = h, y1 = 0;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (!mane(g[y][x])) continue;
+    n++; sx += x; sy += y;
+    x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+  }
+  if (n < 12) return rows;
+  // Close the speckle's gaps first: an empty pixel with mane on three sides is fluff.
+  const body = h - 6;
+  for (let pass = 0; pass < 2; pass++) {
+    const fill = [];
+    for (let y = y0; y <= Math.min(y1, body - 1); y++) for (let x = x0; x <= x1; x++) {
+      if (g[y][x] !== '.') continue;
+      const m = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dx, dy]) => mane(g[y + dy]?.[x + dx])).length;
+      if (m >= 3) fill.push([x, y]);
+    }
+    for (const [x, y] of fill) g[y][x] = 'w';
+  }
+  const cx = sx / n, cy = sy / n;
+  const rx = Math.max(2, (x1 - x0) / 2), ry = Math.max(2, (y1 - y0) / 2);
+  const out = g.map((row) => [...row]);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (!mane(g[y][x])) continue;
+    const ny = (y - cy) / ry;
+    const nx = (x - cx) / rx;
+    const around = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dx, dy]) => solid(x + dx, y + dy)).length;
+    if (around === 0) { out[y][x] = 'w'; continue; }
+    // The body's own pale bits (chest fluff, the bottom rows) stay as typed.
+    if (y >= body) continue;
+    const edge = x === 0 || y === 0 || x === w - 1 || around < 4;
+    if (edge) { out[y][x] = 'k'; continue; }
+    const v = -0.6 * nx - 0.8 * ny;
+    out[y][x] = v < -0.75 ? 'q' : v < -0.15 ? 'W' : 'w';
+  }
+  return out.map((row) => row.join(''));
+}
+DANDY_LION_SPRITE.splice(0, DANDY_LION_SPRITE.length, ...tidyMane(DANDY_LION_SPRITE));
+for (const clip of Object.values(DANDY_LION_ANIM)) {
+  if (!clip?.frames) continue;
+  clip.frames = clip.frames.map((frame) => (Array.isArray(frame) ? tidyMane(frame) : frame));
+}

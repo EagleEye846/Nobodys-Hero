@@ -30,6 +30,24 @@ The giant mushroom, glowing violet: the size of a house, and about as soft as a 
 
 {smile}...It was very comfortable, though.
 
+# (draft)
+[landing_cap 2]
+You give the cap a prod. It gives back, slowly, and sighs out a little cloud of spores that smells of warm bread.
+
+# (draft)
+[landing_cap_ves 2]
+{bored}Stop poking it. It's been through enough. {smile}We both have.
+
+# (draft)
+[landing_cap 10]
+You prod the cap one more time. It wobbles, sags, and with a great soft BWUMP blows a ring of glowing spores clean up to the roof.
+
+They come down over everything, very slowly, as if it's snowing in a bakery.
+
+# (draft)
+[landing_cap_ves 10]
+{laughing}It sneezed on us. {bored}...A mushroom got the last word. Nobody hears about this.
+
 [landing_sign]
 A hand-painted sign, nailed to a crystal: MIND THE PINK ONES. THEY BITE.
 
@@ -38,11 +56,23 @@ And underneath, in a smaller and much shakier hand: (sorry).
 [landing_sign_ves]
 {bored}Pink ones bite. Noted. {smile}Apology accepted.
 
+# (draft)
+[landing_sign 2]
+You read it again. Under the "(sorry)", smaller still, is a line you missed: (they only bite a bit).
+
+# (draft)
+[landing_sign_ves 2]
+{bored}"A bit." {smile}That's a sign somebody wrote after they'd been bitten.
+
 [landing_bloom]
 A great bloom of crystals in every colour, all growing from a single point, like the world's most expensive bouquet.
 
 [landing_pool]
 A little pool of glowing water, no deeper than a plate, full of tiny drifting lights. Your reflection in it is a bit brighter than you are.
+
+# (draft)
+[landing_pool 2]
+Your reflection in the pool is still a bit brighter than you are. It's also standing up straighter. You stand up straighter. It looks pleased.
 
 [landing_crystal]
 A crystal, humming faintly, warm to the touch and one clear colour all the way through.
@@ -50,8 +80,16 @@ A crystal, humming faintly, warm to the touch and one clear colour all the way t
 [landing_trio]
 Three little glowing mushrooms in a row, teal, violet and pink, standing close together like a family waiting to be let in.
 
+# (draft)
+[landing_trio 2]
+The three little mushrooms have shuffled a fraction closer together. The pink one has gone to the back. The teal one is being very brave about it.
+
 [landing_small]
 A small pink mushroom. It's very cute, and you don't touch it. You have a feeling about it.
+
+# (draft)
+[landing_small 2]
+The small pink mushroom has turned, very slightly, to face you. You didn't see it move. You're quite sure about that.
 
 [landing_pouch]
 A purse wedged between the crystal spires. Somebody dropped it in a hurry, or hid it with great care. Either way, it's yours now.
@@ -70,6 +108,10 @@ Glowing moss hanging down the rock in long strands. They sway, though there's no
 
 [landing_spires]
 Tall crystal spires, three colours, standing very straight, like they were told to wait there and say something important.
+
+# (draft)
+[landing_spires 2]
+The spires are still waiting to say something important. Whatever it is, they've been rehearsing it for a very long time.
 
 [landing_spike]
 A crystal spike, sharp as a pin. The kind of thing you walk around.

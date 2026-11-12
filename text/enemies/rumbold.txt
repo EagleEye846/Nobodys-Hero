@@ -2,8 +2,8 @@
 # Numbers (HP, damage, the phases, how much each TALK option calms) live in
 # src/data/enemies/rumbold.js.
 # Every line the king says out loud is marked with a "voice:" comment above it,
-# numbered rumbold_battle_<n>, so a recording can be dropped in later. Nobody
-# else is voiced. He talks about himself in the third person when he is excited
+# numbered rumbold_battle_<n>; src/audio/voiceClips.js says which recording
+# (if any) plays as it opens. Nobody else is voiced. He talks about himself in the third person when he is excited
 # and he is nearly always excited.
 #
 # A section with ": behind" after its name is used in the second part of the
@@ -70,17 +70,9 @@ The footlights hum. The stage smells of dust and old candle wax.
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on.
 [taunts]
-# voice: rumbold_battle_4
-HA HA! And NOW,
-the SPOTLIGHT!
-
 # voice: rumbold_battle_5
 Peptup has NEVER
 lost a duel!
-
-# voice: rumbold_battle_6
-Applause, my friends!
-APPLAUSE!
 
 # voice: rumbold_battle_7
 Oh, you are GOOD.
@@ -89,10 +81,6 @@ Peptup is BETTER!
 # voice: rumbold_battle_8
 Stand still, would you?
 It's a SHOW!
-
-# voice: rumbold_battle_9
-Watch the swords!
-The swords are the best part!
 
 # voice: rumbold_battle_10
 The Hero was
@@ -119,6 +107,23 @@ a duel!
 Peptup walked the stair
 with the HERO!
 You fell down a HOLE!
+
+# Said just before that attack (battleScene.js: `taunt: <pattern>`), so the
+# swords line only comes when the swords do.
+[taunt: rumboldSpotlights]
+# voice: rumbold_battle_4
+HA HA! And NOW,
+the SPOTLIGHT!
+
+[taunt: rumboldApplause]
+# voice: rumbold_battle_6
+Applause, my friends!
+APPLAUSE!
+
+[taunt: rumboldSwords]
+# voice: rumbold_battle_9
+Watch the swords!
+The swords are the best part!
 
 [taunts: behind]
 # voice: rumbold_battle_15
@@ -500,7 +505,7 @@ my friends!
 (CUE APPLAUSE.)
 
 # voice: rumbold_battle_80
-They're coming BACK for me!
+He's coming BACK for me!
 Back for me, back for
 me me ME! Any minute!
 (ENTRANCE, STAGE LEFT.)
@@ -512,6 +517,17 @@ Tall as... tall as...
 ...TALLER! The line
 is TALLER!
 
+# (These two were said before attacks he doesn't do any more.)
+# voice: rumbold_battle_58
+Read the SCRIPT, my friend!
+It's all written DOWN!
+(BOW.) (BOW.) (EXIT.)
+
+# voice: rumbold_battle_59
+EVERYBODY DANCE!
+You've got strings now
+TOO! How does it FEEL?
+
 # Before the attack it's about to make, sometimes.
 [taunt: rumboldAliveLimbs]
 # voice: rumbold_battle_56
@@ -519,23 +535,34 @@ Give the people a HAND!
 And a FOOT! A hand!
 Hand hand HAND!
 
+[taunt: rumboldAliveGouge]
+# (draft)
+A FACE, my friends! He'll
+put on his best FACE!
+(DIG.) (DIG.) ...Smile!
+
+# (draft)
+Hold still, hold still,
+he's doing his FACE!
+...No. Again. AGAIN.
+
+[taunt: rumboldAliveJoints]
+# (draft)
+Every joint in the HOUSE,
+my friends! Every JOINT!
+(POP.) (POP.) (POP.)
+
+[taunt: rumboldAliveCrossbar]
+# (draft)
+Who's holding the bar?
+WHO'S HOLDING THE BAR?
+...Nobody! Ha! NOBODY!
+
 [taunt: rumboldAliveJaw]
 # voice: rumbold_battle_57
 Say it with me, my friends!
 Friends! FRIENDS! FRI-
 (CLACK.)
-
-[taunt: rumboldAliveCues]
-# voice: rumbold_battle_58
-Read the SCRIPT, my friend!
-It's all written DOWN!
-(BOW.) (BOW.) (EXIT.)
-
-[taunt: rumboldAliveDance]
-# voice: rumbold_battle_59
-EVERYBODY DANCE!
-You've got strings now
-TOO! How does it FEEL?
 
 [taunt: rumboldAliveTuck]
 # voice: rumbold_battle_60
@@ -577,7 +604,7 @@ what's already WOOD!
 # voice: rumbold_battle_82
 You'd hit the Hero's
 FRIEND? Wait till
-they come BACK!
+he comes BACK!
 
 [low_hp: alive]
 # voice: rumbold_battle_66
@@ -601,9 +628,9 @@ Where did all my
 friends go?
 
 # voice: rumbold_battle_83
-They'll come back for me.
-Won't they? For their friend?
-...Tuck? Won't they?
+He'll come back for me.
+Won't he? For his friend?
+...Tuck? Won't he?
 
 # Tuck's MERCY half full or more: Tuck finding his nerve, and the king
 # hating it.

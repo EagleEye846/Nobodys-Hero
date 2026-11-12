@@ -17,6 +17,14 @@ SHELLAC clacks its claw twice. It means: this is a respectable address.
 
 Smells of wet china, hot tea and a crab who has had enough.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+SHELLAC's lid is rattling. It's very close to boiling over, and not in a dangerous way.
+
+[flavor: spareable]
+SHELLAC has stopped steaming. It sets its lid straight and nods at you. Your feet may be considered wiped.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -53,13 +61,13 @@ SHELLAC - HP 1950
 A hermit crab in a teapot, and extremely house-proud. Snaps its claw in fans, tosses cups that bounce, spins the whole pot in rings of china, and lets off steam. Stay off the flat of the floor.
 
 [talk: Wipe your feet]
-You scrape each boot on the sand, slowly, and then the other one, for a good long while. SHELLAC watches every scrape. Its claw drops a little. Nobody has wiped their feet for it in years.
+You scrape one boot on the sand, slowly, and then the other one, for a good long while. SHELLAC watches every scrape. Its claw drops a little. Nobody has wiped their feet for it in years.
 
 [talk: Admire the pattern]
 You lean in to look at the blue willow pattern, the little bridge, the two birds. SHELLAC turns so you can see the other side. It had forgotten there were birds on it.
 
-[talk: Ask for tea]
-You ask, very politely, whether there is any tea. SHELLAC is stunned. It tips the lid. There isn't. There hasn't been for years. It looks at you as if you're the first person to ask.
+[talk: Mime a cup of tea]
+You mime a teacup, very politely, little finger out, and look hopefully at the spout. SHELLAC is stunned. It tips the lid. There isn't. There hasn't been for years. It looks at you as if you're the first person to ask.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

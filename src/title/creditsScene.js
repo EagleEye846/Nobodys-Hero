@@ -35,6 +35,11 @@ const WALKER_SECTION = 'walkers';
 const WALKER_SCALE = 3;
 const WALKER_GAP = 120;
 const GROUND_Y = UI_HEIGHT - 16;
+// The chapter 5 sea: where its horizon sits, how many rows of glints are on
+// it, and how big a pixel of the lantern is.
+const SEA_HORIZON = UI_HEIGHT - 150;
+const SEA_ROWS = 12;
+const LANTERN_PIXEL = 3;
 // The song fades up out of black over this long.
 const OPEN_FADE = 2;
 
@@ -43,12 +48,18 @@ const OPEN_FADE = 2;
 // reaches them, like a karaoke line. Nobody sings; the words just glow.
 // Behind them, a night sky slowly turns to dawn over the length of the song,
 // like the end of a long walk. When it's over, `next()` gives the scene to go on to.
-// `song` and `text` pick another chapter's credits song and cards.
+// `song` and `text` pick another chapter's credits song and cards. `ambience`
+// plays under the song (see music.js), and `sea` puts the sea along the
+// bottom, with a lantern bobbing out on it (chapter 5).
 export class CreditsScene {
-  constructor(next, { song = SONG, text = TEXT_FILE } = {}) {
+  constructor(next, { song = SONG, text = TEXT_FILE, ambience = null, sea = false, skippable = true } = {}) {
     this.next = next;
+    // The first time through a chapter's ending the credits play in full.
+    this.skippable = skippable;
     this.time = 0;
     this.songName = song;
+    this.ambience = ambience;
+    this.sea = sea;
     this.song = SONGS[song];
     const stepSeconds = 60 / this.song.bpm / this.song.stepsPerBeat;
     const steps = this.song.order.reduce((sum, name) => sum + Object.values(this.song.sections[name])[0].length, 0);
@@ -89,7 +100,7 @@ export class CreditsScene {
 
   enter(game) {
     this.game = game;
-    music.play(this.songName);
+    music.play(this.songName, this.ambience);
   }
 
   // Where we are in the song: its own clock while it plays (so the words land
@@ -108,7 +119,7 @@ export class CreditsScene {
     // X asks whether to skip the credits; the answer starts on "No", so a
     // stray press doesn't skip them.
     if (!this.asking) {
-      if (input.wasPressed('cancel')) {
+      if (this.skippable && input.wasPressed('cancel')) {
         sfx('select');
         this.asking = { cursor: 1 };
       }
@@ -135,6 +146,7 @@ export class CreditsScene {
     const t = this.clock;
     inUiSpace(ctx, () => {
       this.drawSky(ctx, Math.min(1, t / this.duration));
+      if (this.sea) this.drawSea(ctx, t, Math.min(1, t / this.duration));
       this.drawWalkers(ctx, t);
       this.cards.forEach((card, i) => this.drawCard(ctx, card, t, i === 0 || i === this.cards.length - 1));
       this.drawLyrics(ctx, t);
@@ -188,6 +200,123 @@ export class CreditsScene {
       ctx.fillStyle = `rgba(220, 228, 255, ${twinkle.toFixed(3)})`;
       ctx.fillRect(Math.round(x), Math.round(y), size, size);
     }
+  }
+
+  // The sea under the sky, from the horizon down to the shore the walkers are
+  // on: slow glints drifting on it that catch the dawn as it comes, the foam
+  // running up the sand and back, and far out, one lantern bobbing.
+  drawSea(ctx, t, dawn) {
+    const glow = Math.max(0, (dawn - 0.35) / 0.65) ** 1.5;
+    const top = SEA_HORIZON;
+    const shore = GROUND_Y - 6;
+    // The dawn coming up behind the horizon (the sea hides the sky's own).
+    const dawnLight = ctx.createLinearGradient(0, top - 110, 0, top);
+    dawnLight.addColorStop(0, 'rgba(230, 150, 120, 0)');
+    dawnLight.addColorStop(0.7, `rgba(150, 90, 120, ${(0.35 * glow).toFixed(3)})`);
+    dawnLight.addColorStop(1, `rgba(255, 170, 130, ${(0.65 * glow).toFixed(3)})`);
+    ctx.fillStyle = dawnLight;
+    ctx.fillRect(0, top - 110, UI_WIDTH, 110);
+    const sea = ctx.createLinearGradient(0, top, 0, shore);
+    sea.addColorStop(0, `rgb(${Math.round(22 + 70 * glow)}, ${Math.round(26 + 34 * glow)}, ${Math.round(58 + 30 * glow)})`);
+    sea.addColorStop(0.25, `rgb(${Math.round(12 + 26 * glow)}, ${Math.round(18 + 18 * glow)}, ${Math.round(44 + 18 * glow)})`);
+    sea.addColorStop(1, '#070a1c');
+    ctx.fillStyle = sea;
+    ctx.fillRect(0, top, UI_WIDTH, shore - top);
+    // The horizon itself: a thin bright line once the sun is near.
+    ctx.fillStyle = `rgba(255, 196, 160, ${(0.15 + 0.5 * glow).toFixed(3)})`;
+    ctx.fillRect(0, top, UI_WIDTH, 2);
+    // Glints: short dashes in rows, longer and slower the nearer they are.
+    for (let row = 0; row < SEA_ROWS; row++) {
+      const near = row / (SEA_ROWS - 1);
+      const y = Math.round(top + 4 + (shore - top - 14) * near ** 1.5);
+      const length = 6 + near * 26;
+      const gap = 40 + near * 70;
+      const drift = (t * (4 + near * 6) * (row % 2 ? 1 : -1) + row * 37) % gap;
+      for (let x = -gap + drift; x < UI_WIDTH; x += gap) {
+        const wobble = Math.sin(t * 0.9 + x * 0.05 + row * 1.9);
+        if (wobble < 0.1) continue;
+        const a = (0.08 + 0.22 * wobble) * (1 - near * 0.4) * (0.5 + 0.5 * glow + 0.25);
+        ctx.fillStyle = `rgba(${Math.round(150 + 105 * glow)}, ${Math.round(170 + 30 * glow)}, ${Math.round(230 - 60 * glow)}, ${a.toFixed(3)})`;
+        ctx.fillRect(Math.round(x), y, Math.round(length * wobble), 2);
+      }
+      // The sun's path on the water, widening toward the shore.
+      if (glow > 0.02) {
+        const half = 10 + near * 50;
+        for (let k = 0; k < 3; k++) {
+          const w = Math.round(half * (0.3 + 0.7 * Math.abs(Math.sin(t * 0.8 + row * 2.3 + k * 1.9))));
+          const x = UI_WIDTH * 0.72 + Math.sin(t * 0.6 + row + k * 2.1) * half * 0.6 - w / 2;
+          ctx.fillStyle = `rgba(255, 200, 150, ${(0.4 * glow * (1 - near * 0.5)).toFixed(3)})`;
+          ctx.fillRect(Math.round(x), y, w, 2);
+        }
+      }
+    }
+    this.drawLantern(ctx, t, glow);
+    // The foam, running up the sand and sliding back.
+    const reach = Math.sin(t * 0.45) * 0.5 + 0.5;
+    const foamY = shore - 2 + Math.round(reach * 6);
+    for (let x = 0; x < UI_WIDTH; x += 4) {
+      const edge = Math.round(Math.sin(x * 0.031 + t * 0.6) * 2 + Math.sin(x * 0.11) * 1.5);
+      const a = 0.25 + 0.35 * (1 - reach) * (0.5 + 0.5 * Math.sin(x * 0.07 + t));
+      ctx.fillStyle = `rgba(220, 232, 255, ${a.toFixed(3)})`;
+      ctx.fillRect(x, foamY + edge, 4, 2);
+    }
+  }
+
+  // A little lantern far out on the water, drifting slowly across over the
+  // song, rocking on the swell, its light laid on the sea under it.
+  drawLantern(ctx, t, glow) {
+    const p = LANTERN_PIXEL;
+    const across = Math.min(1, t / Math.max(1, this.duration));
+    const cx = Math.round(UI_WIDTH * (0.18 + 0.5 * across));
+    const swell = Math.sin(t * 1.25) * 4 + Math.sin(t * 0.53 + 1) * 2;
+    const baseY = Math.round(SEA_HORIZON + 62 + swell);
+    const lean = Math.round(Math.sin(t * 1.25 + 0.9) * 1.6);
+    const flicker = 0.85 + 0.1 * Math.sin(t * 9.3) + 0.05 * Math.sin(t * 23.1);
+    // Its light, round it and laid on the water under it.
+    const halo = ctx.createRadialGradient(cx, baseY - 5 * p, 2, cx, baseY - 5 * p, 46);
+    halo.addColorStop(0, `rgba(255, 200, 110, ${(0.42 * flicker * (1 - glow * 0.5)).toFixed(3)})`);
+    halo.addColorStop(1, 'rgba(255, 200, 110, 0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(cx - 46, baseY - 5 * p - 46, 92, 92);
+    for (let k = 0; k < 7; k++) {
+      const y = baseY + 3 + k * 5;
+      const w = Math.round((10 - k) * (0.7 + 0.3 * Math.sin(t * 2.1 + k * 1.7)));
+      ctx.fillStyle = `rgba(255, 196, 110, ${((0.4 - k * 0.05) * flicker).toFixed(3)})`;
+      ctx.fillRect(cx - w + Math.round(Math.sin(t * 1.7 + k) * 2), y, w * 2, 2);
+    }
+    // The lantern, in rows from the top (the ring, the cap, the glass, the
+    // foot), leaning with the swell: the top sways more than the foot.
+    const iron = '#2a2236';
+    const rim = '#4a3d58';
+    const glass = `rgb(255, ${Math.round(190 + 30 * flicker)}, ${Math.round(90 + 30 * flicker)})`;
+    const flame = '#fff6d0';
+    const rows = [
+      [[2, 2, rim]],
+      [[1, 1, rim], [4, 1, rim]],
+      [[0, 6, iron]],
+      [[1, 4, rim]],
+      [[0, 1, iron], [1, 4, glass], [5, 1, iron]],
+      [[0, 1, iron], [1, 1, glass], [2, 2, flame], [4, 1, glass], [5, 1, iron]],
+      [[0, 1, iron], [1, 1, glass], [2, 2, flame], [4, 1, glass], [5, 1, iron]],
+      [[0, 1, iron], [1, 4, glass], [5, 1, iron]],
+      [[0, 6, iron]],
+      [[1, 4, rim]],
+    ];
+    const height = rows.length;
+    rows.forEach((spans, r) => {
+      const shift = Math.round(lean * (height - r) / height);
+      const y = baseY - (height - r) * p;
+      for (const [col, width, color] of spans) {
+        ctx.fillStyle = color;
+        ctx.fillRect(cx - 3 * p + (col * p) + shift, y, width * p, p);
+      }
+    });
+    // The water lapping round its foot.
+    ctx.fillStyle = 'rgba(10, 14, 34, 0.85)';
+    ctx.fillRect(cx - 4 * p, baseY - 1, 8 * p, 3);
+    ctx.fillStyle = `rgba(255, 210, 140, ${(0.5 * flicker).toFixed(3)})`;
+    ctx.fillRect(cx - 4 * p + Math.round(Math.sin(t * 2) * 2), baseY - 1, 3 * p, 1);
+    ctx.fillRect(cx + p + Math.round(Math.sin(t * 2 + 2) * 2), baseY - 1, 2 * p, 1);
   }
 
   drawCard(ctx, card, t, bookend = false) {

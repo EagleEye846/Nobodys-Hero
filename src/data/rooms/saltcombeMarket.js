@@ -22,7 +22,11 @@ export const SALTCOMBE_MARKET = {
   area: 'saltcombe',
   // "Salt and Rope" (src/data/music/saltcombeTheme.js), and the town's rain on the roofs.
   music: 'saltcombe',
+  // After chapter 5 (the_light_answers) the town is quiet: "What the Tide Left".
+  musicAfter: { scene: 'the_light_answers', song: 'saltcombeAfter' },
   ambience: 'stilt_town',
+  // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_stilt_town', lamplight: { shade: 0.22, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
 
   tiles: [
@@ -40,10 +44,10 @@ export const SALTCOMBE_MARKET = {
     '#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
     '#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
     '#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#',
-    '#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#',
-    '#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#',
-    '#..................................#',
-    '#..................................#',
+    '#XXXXX..XXXXXXXXXXXXXXXXXXXXXXXXXXX#',
+    '#XXXX....XXXXX..XXXXXXXX....XXXXX.X#',
+    '#..........XXX......XX........XX...#',
+    '#...........X......................#',
     '#..................................#',
     '#..................................#',
     '#..................................#',
@@ -80,6 +84,12 @@ export const SALTCOMBE_MARKET = {
     { sprite: 'c5_sign_fish', x: 9, y: 13, text: 'market_fish_sign' },
     { sprite: 'town_noticeboard', x: 21, y: 6, text: 'market_noticeboard' },
     { sprite: 'sign', x: 33, y: 9, text: 'market_lagoon_sign' },
+    // The way out to the lagoon is roped off until the Drowned Rat (haddock_hums), where Haddock
+    // arranges the lesson and goes on ahead: so the lesson, and the boat to the Wreck Yard after it,
+    // can't be walked past by skipping the inn.
+    { sprite: 'sy_rope_post', x: 35, y: 10, text: 'market_lagoon_rope', until: 'haddock_hums' },
+    { sprite: 'sy_rope_v', x: 35, y: 11, text: 'market_lagoon_rope', until: 'haddock_hums' },
+    { sprite: 'sy_rope_post', x: 35, y: 12, text: 'market_lagoon_rope', until: 'haddock_hums' },
     // Lamps about the square, and two in the hill garden.
     { sprite: 'c5_lantern_post_lit', x: 2, y: 8, text: 'market_lamp', animation: 'c5_lantern_post_lit', speed: 0.26 },
     { sprite: 'c5_lantern_post_lit', x: 13, y: 7, text: 'market_lamp', animation: 'c5_lantern_post_lit', speed: 0.25 },
@@ -99,6 +109,16 @@ export const SALTCOMBE_MARKET = {
     { sprite: 'cf_fisher_a', x: 4, y: 17, text: 'market_fisher_a', animation: 'cf_fisher_a', speed: 0.45 },
     { sprite: 'cf_kid_otter', x: 20, y: 19, text: 'market_otter', animation: 'cf_kid_otter', speed: 0.3 },
     { sprite: 'gold_pouch', x: 7, y: 14, text: 'market_pouch', gold: 60, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+
+    // Storm-battered (2026-11-09): sandbags in front of the chandlery, what's left of the town's
+    // flag on its pole by the lagoon lane, a spill of storm-broken planks on the boards. The
+    // cobbles and the planks now meet raggedly (rows 14-17) instead of on one ruled line.
+    { sprite: 'c5_sandbags', x: 7, y: 6, text: 'market_sandbags' },
+    { sprite: 'c5_tattered_flag', x: 34, y: 7, text: 'market_flag' },
+    { sprite: 'c5_planks_scatter', x: 25, y: 19, flat: true, walkable: true },
+    // The hill garden, less of a lawn: gorse in a corner, a stone come up through it.
+    { sprite: 'sc_gorse_small', x: 27, y: 5, text: 'market_garden' },
+    { sprite: 'sc_rock_small', x: 34, y: 2, text: 'market_garden' },
   ],
   tileTexts: {
     W: 'market_wall', '#': 'market_wall', f: 'market_rail', I: 'market_post', ',': 'market_garden',

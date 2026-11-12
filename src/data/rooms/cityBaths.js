@@ -1,6 +1,6 @@
 // THE OLD BATHS: off the Old Street, the city's bathhouse, where a hot spring
 // still comes up into the great stone tubs and the steam keeps it warm. Slowly
-// lives here: a tortoise three hundred years old, who remembers the city when
+// lives here: a tortoise well over a hundred years old, who remembers the city when
 // it was alive (meet_slowly). A save point, a bath to rest in, and Slowly's
 // things to buy.
 // Tile key (see src/overworld/tileset.js):
@@ -38,7 +38,7 @@ export const CITY_BATHS = {
     '#..~~~~........~~~~..#',
     '#..~~~~........~~~~..#',
     '#....................#',
-    '######################',
+    '###################.##',
   ],
 
   // Where the player starts, in tile coordinates.
@@ -47,6 +47,8 @@ export const CITY_BATHS = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 9, y: 0, w: 3, h: 1, to: 'city_old_street', spawn: { x: 13, y: 12 } },
+    // Behind a stack of pots that doesn't sit right: the Stokehold (a secret: src/data/rooms/bathsStokehold.js).
+    { x: 19, y: 13, w: 1, h: 1, to: 'baths_stokehold', spawn: { x: 1, y: 6 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -62,6 +64,8 @@ export const CITY_BATHS = {
     { sprite: 'bathhouse_tub', x: 15, y: 6, text: 'baths_tub', rest: true },
     { sprite: 'savepoint', x: 17, y: 3, save: true },
     { sprite: 'pot_pile', x: 1, y: 12, text: 'baths_pots' },
+    // A stack of pots that isn't fixed to anything (push it aside): it hides the door to the Stokehold.
+    { sprite: 'pot_pile', x: 18, y: 12, text: 'baths_loose_pots', rock: true },
     { sprite: 'sign', x: 14, y: 3, text: 'baths_sign' },
   ],
   tileTexts: { W: 'baths_wall', '#': 'baths_wall', '~': 'baths_pool', I: 'city_pillar' },

@@ -17,6 +17,16 @@ The air above SLAGLING wobbles. So do your eyebrows.
 
 Smells like a blacksmith's sleeve.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+SLAGLING's glow has gone down to a few red cracks. It shuffles toward the vent, very slowly, for a warm.
+
+# (draft)
+[flavor: spareable]
+SLAGLING ticks softly and goes the colour of embers at bedtime. It's shuffled over to keep your boots warm.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

@@ -14,12 +14,26 @@ export const OLD_DIVER = {
   area: 'wreck',
   sprite: { rows: OLD_DIVER_SPRITE, palette: OLD_DIVER_PALETTE },
   anim: OLD_DIVER_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): a clank and sparks off the brass when hit,
+  // bubbles out of the helmet; beaten, bubbles and it settles under.
+  feel: { hit: 'brass', idle: 'bubbles', at: [0.55, 0.1], defeat: 'diver', exit: 'sink' },
   // The coast's fights from the Wreck Yard on: the storm one.
   music: 'coastBattleStorm',
-  maxHp: 2300,
-  damage: 64,
+  maxHp: 11700,
+  damage: 95,
 
-  difficulty: { density: 1.45, speed: 1.35 },
+  difficulty: { density: 1.60, speed: 1.45 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  // (2026-11-10: comes in sooner and runs longer, was { at: 0.85, seconds: 4.5 }:
+  // its attacks are done throwing a second or so before their end, and the box
+  // sat empty until the encore came.)
+  // (2026-11-10, round 2: it's meant to be one of the coast's hardest, and
+  // the careful dodger took almost no hits from it: the encore now comes in
+  // sooner and fuller, so the two attacks overlap. Was { at: 0.72, seconds: 5.3, density: 0.8 }.)
+  encore: { at: 0.55, seconds: 6.3, density: 0.95 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
   // Tall and heavy, it stands with its boots on the bottom of the picture.
   battlePos: { x: 222, y: 40 },
 

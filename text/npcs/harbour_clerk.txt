@@ -9,7 +9,61 @@
 
 The ledger? You may look. Don't lick your fingers. It falls open at the same page, I'm afraid. Always has. Some books are like that.
 
+# (draft)
+[first_bramble]
+{grin}We get our own column.
+
 [repeat]
 Everything that leaves this harbour goes in the book, and everything that comes back. Mostly they come back.
 
 {stern}Mostly.
+
+# (draft) Turns.
+[repeat 2]
+{stern}Going out, you sign the book. Coming back, you sign the book.
+
+{stern}Standing about in my office, there isn't a column for that either.
+
+# (draft)
+[repeat 3]
+{flustered}Don't mind the bell. People ring it. I hear every single one. I don't write them down.
+
+{stern}...Much.
+
+# The side quest "The Clerk's Stamp" (src/data/rooms/saltcombeHarbourOffice.js): the stamp is in a gull's stash on the quay's fish crates.
+[stamp_ask]
+{flustered}And if you see a gull with a brass stamp in its beak, it's mine. It says APPROVED. It hasn't approved anything since Tuesday. I've had to write it out by hand.
+
+{stern}They like high places, gulls. And shiny things. And me, apparently.
+
+[stamp_done]
+{flustered}My stamp! Where was... no. Don't tell me. I'd only have to write it down.
+
+{smile}There. One harbour pass, stamped APPROVED. It lets you take a boat out of Saltcombe. Any boat, any time.
+
+{stern}You haven't got a boat. That's not my department.
+
+[stamp_after]
+{smile}Everything's being approved again. It's a weight off.
+
+# (draft) World reacts: the Bother came back from the Wreck Yard.
+[first after wreck_slip_home]
+{stern}The Bother. Out, to the Wreck Yard. Haddock, oars. Three passengers. Purpose of visit: "a look."
+
+{flustered}And back. I've written a time in.
+
+{smile}I underlined it. I don't, as a rule.
+
+[repeat after wreck_slip_home]
+{smile}Time in. Underlined. I keep turning back to look at it.
+
+# (draft) World reacts: after the chapter (the storm gone, Haddock gone).
+[first after haddock_gone]
+{stern}The Bother came in this morning. Rowed by the young lady with the umbrella, I'm told. I've written her in. Back.
+
+{smile}And the weather, under REMARKS: FAIR. I've never once had cause to write it.
+
+{stern}...There's no column for the rest. I haven't ruled one.
+
+[repeat after haddock_gone]
+{smile}FAIR again today. I'm getting quite good at the F.

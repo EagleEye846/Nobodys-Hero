@@ -21,6 +21,9 @@ export const RUINS_THEME = {
   title: 'Lantern Dark',
   bpm: 88,
   stepsPerBeat: 2,
+  // Turned down on 10 November 2026 to sit with the other area songs (it was
+  // about 5 dB louder than them).
+  volume: 0.57,
 
   instruments: {
     lead: {

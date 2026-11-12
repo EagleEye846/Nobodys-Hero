@@ -17,6 +17,14 @@ SEED SHEEP nibbles a dandelion that looks very much like its own hat.
 
 Smells like warm grass, and clean wool, and Sunday.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+SEED SHEEP is nearly see-through now. It goes on chewing regardless, because what else is there.
+
+[flavor: spareable]
+SEED SHEEP has lain down in the grass, the way sheep do at the end of a good day.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -50,7 +58,7 @@ A sheep with a dandelion clock for a fleece. Blows drifts of seeds across the fi
 You scratch SEED SHEEP behind both ears, slowly. Its eyes close. Its whole fleece loosens by half an inch and about forty seeds sigh off into the air. It leans into your hand with all its weight.
 
 [talk: Count its seeds]
-You start to count its seeds out loud. SEED SHEEP waits politely until you lose your place around three hundred, and then starts again from the top, to be helpful. You both give up at the same time.
+You start to count its seeds, one finger at a time. SEED SHEEP waits politely until you lose your place around three hundred, and then starts again from the top, to be helpful. You both give up at the same time.
 
 [talk: Make a wish]
 You hold a seed up and make a wish. SEED SHEEP watches you very seriously. You blow, and the seed goes up past the hedge, and the sheep gives a small, satisfied baa, as if it were the one who'd asked.

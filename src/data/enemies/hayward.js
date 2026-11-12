@@ -16,7 +16,7 @@ export const HAYWARD = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: HAYWARD_SPRITE, palette: HAYWARD_PALETTE },
-  maxHp: 460,
+  maxHp: 585,
   damage: 20,
 
   // A Chapter 3 enemy from the far end of the wood: a touch busier than the

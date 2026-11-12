@@ -86,7 +86,7 @@ export const USURPER_BOSS = {
   // only phase 3 can hurt him, and the lantern catching burns off a quarter,
   // so it's about 1050 HP of real fighting, with Ves's blade and the team
   // attack to do it with (see notes/docs/mountain-enemies.md for the sums).
-  maxHp: 1510,
+  maxHp: 1920,
   damage: 21,
   difficulty: { density: 1.35, speed: 1.18 },
 

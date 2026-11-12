@@ -319,30 +319,50 @@ export const WISP_ATTACKS = {
     };
   },
 
-  // Stay a while: a ring of its lights gathers round you and comes in close,
-  // turning, because it doesn't want you to go. There's a gap in the ring:
-  // slip out through it before it closes. The first ring has a real light
-  // in it, too.
+  // Stay a while: a ring of its lights gathers round where you are and
+  // comes in close, because it doesn't want you to go. It shows first (the
+  // lights flicker where they'll start), then closes in, holds a moment,
+  // and lets go, drifting back out. There's a gap in the ring, always
+  // opening toward the middle of the box: slip out through it before it
+  // closes, and stay in line with it as the ring drifts back out. The
+  // first ring has a real light in it, too, across from the gap.
+  // (It used to follow you as it closed, with its gap turning, and could
+  // close with the gap facing a wall: there was no way out.)
   wispLonely(box, density, { Shot, rand }) {
     const pieces = 12;
-    let ring = null;
-    let rings = 0;
+    // How far out it gathers, and how close it comes in.
+    const START = 44;
+    const CLOSE = 4;
+    // Real seconds: showing before it moves, coming in, holding close.
+    const WARN = 0.7;
+    const closing = 2.2 / density;
+    const HOLD = 0.3;
+    // How fast it drifts back out once it lets go.
+    const DRIFT = 34;
+    let rings = [];
+    let count = 0;
     let t = 0;
     let next = 0.1;
     const gather = (bullets, soul) => {
-      const gap = Math.floor(rand(0, pieces));
-      const real = rings === 0 ? (gap + Math.floor(pieces / 2)) % pieces : -1;
+      const x = Math.min(Math.max(soul.x, box.x + 14), box.x + box.w - 14);
+      const y = Math.min(Math.max(soul.y, box.y + 14), box.y + box.h - 14);
+      const midX = box.x + box.w / 2;
+      const midY = box.y + box.h / 2;
+      const toMiddle = Math.hypot(midX - x, midY - y) < 8 ? rand(0, Math.PI * 2) : Math.atan2(midY - y, midX - x);
+      const gapAt = toMiddle + rand(-0.5, 0.5);
       const lights = [];
-      for (let i = 0; i < pieces; i++) {
-        if (i === gap || i === (gap + 1) % pieces) continue;
-        const light = new Shot({ x: soul.x, y: soul.y, warn: 0.4, life: 2.6, art: i === real ? 'wispTrueLight' : 'wispLight' });
-        light.slot = i;
-        if (i === real) light.heals = TRUE_LIGHT_HEAL;
+      // Eleven lights, a sixth of the ring left open around gapAt.
+      for (let j = 0; j < pieces - 1; j++) {
+        const a = gapAt + ((j + 1) / pieces) * Math.PI * 2;
+        const isReal = count === 0 && j === 5;
+        const light = new Shot({ x: x + Math.cos(a) * START, y: y + Math.sin(a) * START, warn: WARN, life: 3.4, art: isReal ? 'wispTrueLight' : 'wispLight' });
+        light.toward = { x: -Math.cos(a), y: -Math.sin(a) };
+        if (isReal) light.heals = TRUE_LIGHT_HEAL;
         lights.push(light);
       }
-      ring = { lights, x: soul.x, y: soul.y, turn: rand(0, Math.PI * 2), spin: rand(0.9, 1.3) * (Math.random() < 0.5 ? 1 : -1), age: 0 };
+      rings.push({ lights, age: 0, closing: false, letGo: false });
       bullets.push(...lights);
-      rings++;
+      count++;
     };
     return {
       duration: 6.6,
@@ -352,20 +372,29 @@ export const WISP_ATTACKS = {
           gather(bullets, soul);
           next = t + 3.2;
         }
-        if (!ring) return;
-        ring.age += dt;
-        // It follows you, a little slower than you go.
-        ring.x += (soul.x - ring.x) * Math.min(1, dt * 0.9);
-        ring.y += (soul.y - ring.y) * Math.min(1, dt * 0.9);
-        ring.turn += ring.spin * dt;
-        // In close, a moment, then it lets go and drifts off.
-        const k = ring.age;
-        const radius = k < 2.2 ? 46 - (k / 2.2) * 43 : 3 + (k - 2.2) * 48;
-        for (const light of ring.lights) {
-          const a = ring.turn + (light.slot / pieces) * Math.PI * 2;
-          light.x = ring.x + Math.cos(a) * radius;
-          light.y = ring.y + Math.sin(a) * radius;
+        for (const ring of rings) {
+          ring.age += dt / density;
+          // In: fast, slowing to a stop right where it gathered round you.
+          if (!ring.closing && ring.age >= WARN) {
+            ring.closing = true;
+            const v = (2 * (START - CLOSE)) / closing;
+            for (const light of ring.lights) {
+              light.vx = light.toward.x * v;
+              light.vy = light.toward.y * v;
+              light.accel = -v / closing;
+            }
+          }
+          // Then it lets go, and they drift back out the way they came.
+          if (!ring.letGo && ring.age >= WARN + closing + HOLD) {
+            ring.letGo = true;
+            for (const light of ring.lights) {
+              light.vx = -light.toward.x * DRIFT;
+              light.vy = -light.toward.y * DRIFT;
+              light.accel = 0;
+            }
+          }
         }
+        rings = rings.filter((ring) => !ring.letGo);
       },
     };
   },

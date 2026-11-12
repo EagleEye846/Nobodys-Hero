@@ -22,6 +22,8 @@ export const WRECK_GATE = {
   // "Fog Bell" (src/data/music/wreckTheme.js).
   music: 'wreck',
   ambience: 'wreck_yard',
+  // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.5, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_wreck_yard', lamplight: { shade: 0.24, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
   // The Last Light's foot, on the skyline (atmosphere.js: `lastLight`).
   lastLight: { x: 27, y: 4 },
@@ -90,6 +92,22 @@ export const WRECK_GATE = {
     { sprite: 'c5_anchor', x: 33, y: 13, text: 'gate_anchor' },
     { sprite: 'c5_crate', x: 13, y: 13, text: 'gate_crate' },
     { sprite: 'gold_pouch', x: 37, y: 14, text: 'gate_pouch', gold: 80, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // Where the shingle meets the water: weed off the spit's lip and under the jetty, barnacles
+    // up the far bank, the jetty's old mooring posts with a rope's end on a ring, and the yard's
+    // wreckage drifting about the channel.
+    { sprite: 'wy_mooring_post', x: 8, y: 8 },
+    { sprite: 'wy_mooring_post', x: 8, y: 11 },
+    { sprite: 'wy_weed_fringe', x: 10, y: 12, flat: true, walkable: true },
+    { sprite: 'wy_weed_fringe_b', x: 14, y: 15, flat: true, walkable: true },
+    { sprite: 'wy_edge_r', x: 29, y: 7, flat: true, walkable: true },
+    { sprite: 'wy_edge_r', x: 30, y: 13, flat: true, walkable: true },
+    { sprite: 'wy_plank_slick', x: 6, y: 3, flat: true, walkable: true },
+    { sprite: 'wy_timber_sunk', x: 24, y: 3, flat: true, walkable: true },
+    { sprite: 'wy_weed_mat', x: 15, y: 3, flat: true, walkable: true },
+    { sprite: 'wy_boat_swamped', x: 9, y: 15, flat: true, walkable: true },
+    { sprite: 'wy_weed_mat_b', x: 21, y: 16, flat: true, walkable: true },
+    { sprite: 'wy_ribs_jag', x: 37, y: 3 },
+    { sprite: 'wy_plank_slick_b', x: 29, y: 15, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'gate_edge', '~': 'gate_water', f: 'gate_rail', g: 'gate_bridge' },
 

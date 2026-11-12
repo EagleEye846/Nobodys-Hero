@@ -101,6 +101,10 @@ export const ARMOR = {
   // Grig's, the last stall before the root: a padded hood with two sewn-on feelers.
   feeler_hood: { name: 'Feeler Hood', defense: 8, spGain: 0.2, magic: 0.1 },
   olmskin_vest: { name: 'Olmskin Vest', defense: 7, magic: 0.4, spGain: 0.25 },
+  // Chapter 4's secret superboss: Pudding, the Glass Olm, at the bottom of Seam Nine (the scenes
+  // `pudding_spared` and `pudding_beaten` give it). The best of the chapter's mixes: the Miner's Helm's
+  // DEF 8, with the Mossweave Cloak's magic a little down and the Olmskin Vest's SP.
+  olmglass_mantle: { name: 'Olm-Glass Mantle', defense: 8, magic: 0.5, spGain: 0.3 },
   // Ves's, chapter 4: for the Stillwater damp.
   reedweave_coat: { name: 'Reedweave Coat', wielder: 'vesper', defense: 5, magic: 0.35, shelterDef: 4, regen: 4, grazeSp: 0.3 },
   // Chapter 5, the drowned coast: each beats the best of chapter 4 in its
@@ -113,20 +117,38 @@ export const ARMOR = {
   bellbuoy_mantle: { name: 'Bellbuoy Mantle', defense: 7, magic: 0.7, spGain: 0.2 },
   // Haddock's Light: a chest in Corrie's room. The best of the chapter.
   lightmans_coat: { name: "Lightman's Coat", defense: 9, magic: 0.5, spGain: 0.4 },
+  // The Isles' tidy cave (lantern 6's): the SP one. Beats the Sailcloth Vest on every count and
+  // sits beside the Lightman's Coat (less DEF and MAG, more SP).
+  darned_jersey: { name: 'Darned Jersey', defense: 8, magic: 0.4, spGain: 0.55 },
   // Ves's, chapter 5 (DEF 5 to 6).
   gull_feather_hat: { name: 'Gull-Feather Hat', wielder: 'vesper', defense: 5, magic: 0.4, shelterDef: 4, regen: 4, grazeSp: 0.5 },
-  sea_silk_shawl: { name: 'Sea-Silk Shawl', wielder: 'vesper', defense: 5, magic: 0.55, shelterDef: 4, regen: 6, grazeSp: 0.3 },
+  // The gulls' hoard at Gullrest (early, before Saltcombe's shop): a touch more MAG
+  // than the shop hat, kept under the Ugly Sou'wester from Haddock's shed.
+  sea_silk_shawl: { name: 'Sea-Silk Shawl', wielder: 'vesper', defense: 5, magic: 0.45, shelterDef: 4, regen: 5, grazeSp: 0.3 },
   rope_belt: { name: 'Rope Belt', wielder: 'vesper', defense: 6, magic: 0.35, shelterDef: 5, regen: 4, grazeSp: 0.3 },
+  // The Storm Reach's secret: the first Bother's locker on the reef's coral head. Over the Rope
+  // Belt and the Sea-Silk Shawl, under the Ugly Sou'wester from Haddock's shed.
+  petrel_scarf: { name: 'Petrel Scarf', wielder: 'vesper', defense: 6, magic: 0.45, shelterDef: 5, regen: 5, grazeSp: 0.35 },
   // Bramble's first full set (DEF 5; his best was 4).
   small_oilskin: { name: 'Small Oilskin', wielder: 'bramble', defense: 5, magic: 0.1, regen: 4, shorten: 0.1 },
+  // The Fishers' Hollow, by the old boat (sunny_cliff_hollow): his first find on the coast,
+  // a step under the Small Oilskin (DEF 5 over his chapter 4 best of 4).
+  fishers_smock: { name: "Fisher's Smock", wielder: 'bramble', defense: 5, magic: 0.05, regen: 3, grazeSp: 0.2 },
   sea_boots: { name: 'Sea Boots', wielder: 'bramble', defense: 5, sneak: 0.3, grazeSp: 0.35, regen: 2 },
+  // Haddock's Light's secret: up on the oil crates on the stair. Over the Small Oilskin (more
+  // MAG, grazing, the same DEF); a different mix from the Cork Float after the chapter.
+  little_gansey: { name: 'Little Gansey', wielder: 'bramble', defense: 5, magic: 0.15, regen: 4, grazeSp: 0.3, shorten: 0.1 },
+  // The Fair Return's captain, beaten or talked down (the ship's cabin scenes `captain_spared` and
+  // `captain_beaten` give it): the chapter's balanced tank. DEF 9 like the Diver's Plate, but with
+  // none of its -0.2 MAG, and a little SP.
+  captains_greatcoat: { name: "Captain's Greatcoat", defense: 9, magic: 0.1, spGain: 0.1 },
   // Haddock's shed (secret_haddocks_shed, open after the chapter): one for each of the three.
   // The hero's matches the Lightman's Coat on DEF with a little less MAG.
   haddocks_muffler: { name: "Haddock's Muffler", defense: 9, magic: 0.45, spGain: 0.45 },
   // Ves's: DEF stays at her chapter ceiling of 6; the gain is spells and shelter.
   ugly_sou_wester: { name: "Ugly Sou'wester", wielder: 'vesper', defense: 6, magic: 0.5, shelterDef: 5, regen: 5, grazeSp: 0.4 },
   // Bramble's: swim proper. DEF 5 as his best, the gain is grazing and staying afloat.
-  cork_float: { name: 'Cork Float', wielder: 'bramble', defense: 5, grazeSp: 0.45, regen: 3, shorten: 0.15, sneak: 0.1 },
+  cork_float: { name: 'Cork Float', wielder: 'bramble', defense: 5, grazeSp: 0.45, regen: 3, shorten: 0.15 },
 };
 
 // One stat of a piece of armor, 0 if it hasn't got it.

@@ -12,7 +12,7 @@ export const BELOWTOWN_INN = {
   // The region it's in (see src/data/areas.js).
   area: 'belowtown',
   music: 'belowtown',
-  ambience: 'hearth',
+  ambience: 'belowtown_inn',
   // Under cover: no sky, and the edges of the screen sink into shadow.
   indoors: true,
 

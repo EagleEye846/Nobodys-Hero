@@ -6,7 +6,8 @@ import { Pix, flash, shift } from './ch5Kit.js';
 // house-proud and extremely snappish about it. Its battle clips (SHELLAC_ANIM,
 // see `anim` in src/battle/battleScene.js): the claw clacks and steam curls
 // off the spout; it raises the claw wide before an attack; hit, it flinches
-// into the pot; beaten, the lid pops off and it flops out on its back;
+// into the pot; beaten, the lid pops off and it flops out on its back, then
+// rights itself and scuttles off, pot and all;
 // spared, it puts the lid on like a hat and clacks happily. The shapes are
 // drawn from a pose (see src/data/art/ch5Kit.js).
 export const SHELLAC_PALETTE = {
@@ -157,7 +158,11 @@ export const SHELLAC_ANIM = {
       draw({ eyes: 'squint', claw: 0, bob: 2, lid: { dx: 0, dy: -2 }, raise: -2 }),
       draw({ eyes: 'dead', claw: 1, bob: 3, lid: { dx: 3, dy: -6 }, raise: -3, flop: 1 }),
       draw({ eyes: 'dead', claw: 1, bob: 3, lid: { dx: 6, dy: -3 }, raise: -4, flop: 1, steam: 1 }),
-      draw({ eyes: 'dead', claw: 1, bob: 4, lid: { dx: 8, dy: 1 }, raise: -4, flop: 1, steam: 0 }),
+      draw({ eyes: 'dead', claw: 1, bob: 4, lid: { dx: 14, dy: 4 }, raise: -4, flop: 1, steam: 0 }),
+      // It flips itself back over, lidless, and (its `feel.exit`) scuttles off with the pot.
+      draw({ eyes: 'squint', claw: 0.6, bob: 2, lid: { dx: 40, dy: 0 }, raise: 0, flop: 0.4 }),
+      draw({ eyes: 'squint', claw: 1, bob: 0, lid: { dx: 40, dy: 0 }, raise: 2, sx: 1 }),
+      draw({ eyes: 'squint', claw: 0.4, bob: 1, lid: { dx: 40, dy: 0 }, raise: 1, sx: 1 }),
     ],
   },
   spared: {

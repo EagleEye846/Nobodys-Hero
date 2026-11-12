@@ -250,8 +250,40 @@ export const DUSKLING_ATTACKS = {
       const start = edgePoint(box, edge());
       const bend = bendWay * rand(1.0, 1.4); // radians per second
       bendWay = -bendWay;
-      // Aim to one side of the soul so the bend carries it back across.
-      const aim = angleTo(start, soul) - bend * 0.55 + rand(-0.4, 0.4);
+      // Aim off to one side so the bend carries it back across where you
+      // are: it tries a spread of throws and takes the one whose curve
+      // comes closest to you (a fixed lean used to miss a still soul in a
+      // corner by a mile), then wobbles it a little.
+      const missBy = (aim) => {
+        let x = start.x;
+        let y = start.y;
+        let vx = Math.cos(aim) * 30;
+        let vy = Math.sin(aim) * 30;
+        let closest = Infinity;
+        const step = 0.05;
+        for (let t = 0; t < 3; t += step) {
+          const sp = Math.hypot(vx, vy);
+          vx *= (sp + 30 * step) / sp;
+          vy *= (sp + 30 * step) / sp;
+          const turn = bend * density * step;
+          [vx, vy] = [vx * Math.cos(turn) - vy * Math.sin(turn), vx * Math.sin(turn) + vy * Math.cos(turn)];
+          x += vx * step;
+          y += vy * step;
+          closest = Math.min(closest, Math.hypot(x - soul.x, y - soul.y));
+        }
+        return closest;
+      };
+      let aim = angleTo(start, soul) - bend * 0.55;
+      let best = Infinity;
+      for (let k = -12; k <= 12; k++) {
+        const tryAim = angleTo(start, soul) + k * 0.1;
+        const miss = missBy(tryAim);
+        if (miss < best) {
+          best = miss;
+          aim = tryAim;
+        }
+      }
+      aim += rand(-0.06, 0.06);
       const shot = new Shot({
         x: start.x,
         y: start.y,

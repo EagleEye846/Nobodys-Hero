@@ -151,7 +151,8 @@ export const CRAGHORN_ATTACKS = {
 
   // The kids want to play: little goats spring off the cliff walls and
   // ricochet around the box, bouncing off every side. Each one blinks in a
-  // corner first. They don't stay long, but more keep coming.
+  // corner first, then springs off at you (they want to play), give or
+  // take. They don't stay long, but more keep coming.
   cragRicochet(box, density, { Shot, every, rand, shuffleBag }) {
     const corners = shuffleBag([
       { x: box.x + 5, y: box.y + 5, sx: 1, sy: 1 },
@@ -159,9 +160,12 @@ export const CRAGHORN_ATTACKS = {
       { x: box.x + 5, y: box.y + box.h - 5, sx: 1, sy: -1 },
       { x: box.x + box.w - 5, y: box.y + box.h - 5, sx: -1, sy: -1 },
     ]);
-    const spring = every(0.95, 1.2, (bullets) => {
+    const spring = every(0.95, 1.2, (bullets, soul) => {
       const corner = corners();
-      const angle = rand(0.45, 1.1);
+      // The angle off the corner's floor or wall that points at you,
+      // kept well into the box.
+      const at = Math.atan2(Math.abs(soul.y - corner.y), Math.abs(soul.x - corner.x));
+      const angle = Math.min(1.3, Math.max(0.25, at + rand(-0.15, 0.15)));
       const speed = rand(58, 70);
       bullets.push(new Shot({
         x: corner.x,
@@ -174,7 +178,7 @@ export const CRAGHORN_ATTACKS = {
         art: 'cragKid',
       }));
     });
-    return { duration: 7, update: (dt, bullets) => spring(dt, bullets) };
+    return { duration: 7, update: (dt, bullets, soul) => spring(dt, bullets, soul) };
   },
 
   // Grazing: the goat munches its way across the box, and blades of grass

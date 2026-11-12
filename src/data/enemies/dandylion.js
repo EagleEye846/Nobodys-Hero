@@ -23,12 +23,15 @@ export const DANDYLION = {
   anim: DANDY_LION_ANIM,
   // Sunnyside's own battle song, once it's there.
   music: 'sunnyBattle',
-  maxHp: 960,
+  maxHp: 1220,
   // A cheerful thing, so a gentle hit, for Chapter 4.
   damage: 36,
 
   // The easy end of the chapter: slow seeds, plenty of room.
   difficulty: { density: 1.2, speed: 1.25 },
+  // Chapter 5's Sunnyside (`later`, see enemyForChapter in battleScene.js): the
+  // same monster, met again at the coast's strength, a fight of several rounds.
+  later: { 5: { maxHp: 8500, damage: 54, difficulty: { density: 1.35, speed: 1.35 }, encore: { at: 0.85, seconds: 4.5, density: 0.8 }, secondWind: { below: 0.4, density: 0.3, delay: 1.6 }, drops: [{ item: 'dandelion_burdock', chance: 0.4 }] } },
 
   // Its attacks live in src/battle/attacks/dandy_lion.js.
   patterns: [
@@ -47,8 +50,10 @@ export const DANDYLION = {
     { name: 'Hold still in the breeze', calm: 30 },
   ],
 
-  rewards: { exp: 650, coins: 18 },
+  // In chapter 5 Sunnyside, on the steeper curve, they pay the coast's rate.
+  rewards: { exp: 650, coins: 18, laterExp: { 5: 2100 } },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
+  // (From chapter 5 it leaves Dandelion and Burdock instead: see `later`, a late-summer find worth eating at the coast's numbers.)
   drops: [{ item: 'dandelion_tea', chance: 0.4 }],
 };

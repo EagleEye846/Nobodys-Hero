@@ -20,23 +20,23 @@ export const SUNNY_CLIFF_MEADOW = {
 
   tiles: [
     '############################################',
-    '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::::::::::#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,:::::::::::#',
-    '#,,,,T,,,,,,,,T,,,,,,,,,,,,,,:bBBb::::::bb:#',
+    '##WWWW######WWWWW######WWWWWWWWWWWWWWWWWWWW#',
+    '#W,,,,WW##WW,,,,,WWWWWW,,,,,,,,,,::::::::::#',
+    '#,,,,,,,WW,,,,,,,,,,,,,,,,,,,,,,:::::::::::#',
+    '#,I,,T,,,,,,,,T,,,,,,,,,,,,,,:bBBb::::::bb:#',
     '#,,,,,,,,,,,,,,,,,,,,,,,,,::::bbbb,,,:::bb:#',
     '#,,,,,,,,,,,,,,,,,,,,,,,,,:::::,,,,,,,:::::#',
     '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::::::#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::::::::#',
+    '#,,,,,:::::::,,,,,,,,,,,,,,,,,,,,,,::::::::#',
     '::::::::::::::::::::::::::::::::::::::::::::',
-    '::::::::::::::::::::::::::::::::::::::::::::',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::::::::::::#',
+    '::::::::,,,,::::::::::::::::::::::::::::::::',
+    '#,,,,,,,,,,,,,,,,::::::::,,,,,,::::::::::::#',
     '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,:::::::::::#',
     '#,,J,,,,,,,,,,,,T,,,,,,,,,,,,,,,,:::::bbbb:#',
     '#,,,,,,,,,,,,,,,,,,,,,,,,,bbb,,,,,::::bbbb:#',
-    '#,,,,,,,,T,,,,,,,,I,,,,,,,,,,,,,,,:::::::::#',
+    '#T,,,,,,,T,,,,,,,,I,,,,,,,,,,,,,,,:::::::::#',
     '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::::::::::#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::::::::::::#',
+    '#,,,#####,,,####,,,,,,######,,,::::::::::::#',
     '############################################',
     '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
   ],
@@ -61,7 +61,9 @@ export const SUNNY_CLIFF_MEADOW = {
     { sprite: 'sy_windsock', x: 15, y: 8, text: 'cliff_windsock', animation: 'sy_windsock', speed: 0.3 },
     { sprite: 'bench', x: 21, y: 12, text: 'cliff_bench' },
     { sprite: 'gold_pouch', x: 35, y: 5, text: 'cliff_pouch', gold: 60, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
-    { sprite: 'chest', x: 42, y: 16, text: 'cliff_chest', gives: 'dandelion_tea', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // Up on the old bank (jump onto the b, then the B): only seen from the high bits.
+    { sprite: 'gold_pouch', x: 31, y: 4, text: 'cliff_bank_pouch', gold: 80, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'chest', x: 42, y: 16, text: 'cliff_chest', gives: 'lemonade', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'sy_sand_patch', x: 27, y: 7, walkable: true },
     { sprite: 'sy_sand_patch', x: 35, y: 12, walkable: true },
     { sprite: 'sy_sand_patch', x: 41, y: 8, walkable: true },
@@ -106,7 +108,8 @@ export const SUNNY_CLIFF_MEADOW = {
   // doors; no cutscenes here.
   npcs: [
     { enemy: 'haybob', x: 20, y: 6, patrol: [17, 23], behaviour: 'patrol' },
-    { enemy: 'capbee', x: 33, y: 6, patrol: [30, 38], behaviour: 'wander' },
+    // Wanders the middle of the meadow, west of the purse at 35,5, so it is never on top of the pickup (a hand-run or a walk-through line can stand there in peace).
+    { enemy: 'capbee', x: 30, y: 6, patrol: [27, 32], behaviour: 'wander' },
     { enemy: 'dandylion', x: 32, y: 15, patrol: [29, 35], behaviour: 'patrol' },
   ],
 };

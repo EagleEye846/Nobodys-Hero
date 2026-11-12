@@ -43,16 +43,37 @@ defineBulletArt('eelNode', {
   frameSeconds: 0.1,
 });
 
-// A bit of coil: a curl of eel, spinning.
+// A length of coiled eel: a scaly blue body with a pale belly, drawn pointing
+// right (it turns to run along the ring), and a spark crawling down it.
 defineBulletArt('eelCoil', {
   frames: [
-    ['.ccc.', 'cBBBc', 'cB.Bc', 'cBycc', '.ccc.'],
-    ['.ccc.', 'cBBBc', 'cyBBc', 'cB.Bc', '.ccc.'],
+    ['.BBBBB.', 'BbbbbbB', 'cccccyc', 'BbbbbbB', '.BBBBB.'],
+    ['.BBBBB.', 'BbbbbbB', 'cyccccc', 'BbbbbbB', '.BBBBB.'],
   ],
   palette: { ...EEL, c: '#9ff4ff' },
-  frameSeconds: 0.2,
+  frameSeconds: 0.14,
   radius: 2.4,
-  spin: 3,
+  rotate: true,
+});
+
+// The head of the coil, pointing right: a jaw full of sparks and a hot eye.
+defineBulletArt('eelCoilHead', {
+  frames: [
+    ['..BBBB...', '.BbbbyBB.', 'BbbbbbbbB', 'cccccwkwk', 'BbbbbbbB.', '.BBBBB...'],
+    ['..BBBB...', '.BbbbwBB.', 'BbbbbbbbB', 'cccccyky.', 'BbbbbbbB.', '.BBBBB...'],
+  ],
+  palette: { ...EEL, c: '#9ff4ff' },
+  frameSeconds: 0.1,
+  radius: 2.4,
+  rotate: true,
+});
+
+// The tip of its tail (it hurts like the rest of it).
+defineBulletArt('eelCoilTail', {
+  frames: [['.....', 'BBB..', 'bbbBB', 'BBB..', '.....']],
+  palette: EEL,
+  radius: 2.4,
+  rotate: true,
 });
 
 // Where a surge will end up (harmless): a pair of sparks on the wall.
@@ -172,13 +193,14 @@ export const WRACKEEL_ATTACKS = {
     };
   },
 
-  // Coil: a ring of curls gathers round where you are and closes in, turning, with a
-  // gap in it. Slip into the gap and ride round with it. Three rings, the
-  // second turns the other way.
+  // Coil: an eel wraps itself round where you are and squeezes, turning, its
+  // head at one end of the gap and its tail at the other. Slip into the gap and
+  // ride round with it. Three coils, the second turns the other way.
   eelCoil(box, density, { Shot, rand }) {
     let t = 0;
     let made = 0;
-    // A bead steers itself round its ring (so its path can be read ahead).
+    // A bead steers itself round its ring (so its path can be read ahead), and
+    // faces along the ring the way the eel swims.
     class Bead extends Shot {
       constructor(opts, ring, base) {
         super(opts);
@@ -192,11 +214,53 @@ export const WRACKEEL_ATTACKS = {
         const a = this.base + this.ring.rot + this.ring.dir * 0.7 * this.age;
         this.x = this.ring.cx + Math.cos(a) * R;
         this.y = this.ring.cy + Math.sin(a) * R;
+        this.angle = a + this.ring.dir * Math.PI / 2;
       }
 
       update(dt) {
         this.age += dt;
         this.place();
+      }
+    }
+    // The body between the beads: a dark tube with a pale stripe, drawn under
+    // them so the ring reads as one eel, not a ring of beads. It never hurts.
+    class Body {
+      constructor(beads) {
+        this.beads = beads;
+        this.age = 0;
+        this.grazed = false;
+      }
+
+      update(dt) {
+        this.age += dt;
+      }
+
+      isGone(box) {
+        return this.beads.every((b) => b.isGone(box));
+      }
+
+      edgeDistance() {
+        return Infinity;
+      }
+
+      draw(ctx) {
+        const b0 = this.beads[0];
+        if (!b0) return;
+        let alpha = b0.age < b0.warn ? (Math.floor(b0.age * 10) % 2 ? 0.25 : 0.6) : 1;
+        const over = b0.age - (b0.warn + b0.life);
+        if (over > 0) alpha = Math.max(0, 1 - over / 0.25);
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        for (const [w, colour] of [[6, '#0f1b26'], [4, '#1d5f78'], [1, '#9ff4ff']]) {
+          ctx.strokeStyle = colour;
+          ctx.lineWidth = w;
+          ctx.beginPath();
+          this.beads.forEach((b, i) => (i ? ctx.lineTo(b.x, b.y) : ctx.moveTo(b.x, b.y)));
+          ctx.stroke();
+        }
+        ctx.restore();
       }
     }
     return {
@@ -205,15 +269,31 @@ export const WRACKEEL_ATTACKS = {
         t += dt;
         if (made < 3 && t >= 0.2 + made * 2.3) {
           const ring = { rot: rand(0, Math.PI * 2), dir: made === 1 ? -1 : 1, cx: soul.x, cy: soul.y };
-          const gap = rand(0, Math.PI * 2);
+          // The gap opens toward the middle of the box (it turns with the ring,
+          // so it's aimed to face the middle about a second into the squeeze):
+          // caught by a wall, the way out is never into the wall.
+          const mx = box.x + box.w / 2 - soul.x;
+          const my = box.y + box.h / 2 - soul.y;
+          const toMid = Math.hypot(mx, my) < 10 ? rand(0, Math.PI * 2) : Math.atan2(my, mx);
+          const gap = toMid - ring.dir * 0.7 * 1.1 + rand(-0.3, 0.3) - ring.rot;
           const count = 17;
+          const beads = [];
+          // Round the ring from one side of the gap to the other, so the body runs tail to head.
           for (let i = 0; i < count; i++) {
             const a = (i / count) * Math.PI * 2;
             // The gap is a fifth of the way round.
             const off = Math.abs(((a - gap + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
             if (off > Math.PI - 0.68) continue;
-            bullets.push(new Bead({ x: ring.cx, y: ring.cy, art: 'eelCoil', warn: 0.5, life: 2.15 }, ring, a));
+            beads.push({ a, from: (((a - gap - Math.PI) % (Math.PI * 2)) + Math.PI * 4) % (Math.PI * 2) });
           }
+          beads.sort((p, q) => p.from - q.from);
+          // It swims head first: the head is the end the ring turns toward.
+          if (ring.dir < 0) beads.reverse();
+          const shots = beads.map(({ a }, k) => new Bead({
+            x: ring.cx, y: ring.cy, warn: 0.5, life: 2.15,
+            art: k === beads.length - 1 ? 'eelCoilHead' : k === 0 ? 'eelCoilTail' : 'eelCoil',
+          }, ring, a));
+          bullets.push(new Body(shots), ...shots);
           made++;
         }
       },
@@ -228,7 +308,8 @@ export const WRACKEEL_ATTACKS = {
     let waves = 0;
     const lanes = [0, 1, 2, 3, 4];
     return {
-      duration: 7.2,
+      // (The third surge is out by 4.4 s: 6.4, was 7.2, so the next attack isn't long in coming.)
+      duration: 6.4,
       update: (dt, bullets, soul) => {
         t += dt;
         if (waves >= 3 || t < 0.2 + waves * 2.2) return;

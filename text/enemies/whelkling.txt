@@ -1,0 +1,88 @@
+# WHELKLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/whelkling.js.
+
+[intro]
+Out in the dark water a cluster of tiny green lights comes up, swaying. Under them, a shell. Under the shell, two eyes on stalks, and a claw. A WHELKLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+WHELKLING peers at you out of its shell, one eye and then the other, as if they disagree about what you are.
+
+The little anemones on WHELKLING's shell sway and glow, very softly, the colour of the pool.
+
+WHELKLING taps its big claw on its shell. It sounds hollow, and expensive.
+
+WHELKLING pulls right in, and then comes out again, a little, to see if you've gone.
+
+Smells like a rock pool at night, and lemon.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+WHELKLING is nearly all the way into its shell, one eye out, keeping watch on the rest of the fight.
+
+[flavor: spareable]
+WHELKLING has come all the way out of its shell. Both eyes agree about you at last.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+My
+shell.
+
+Hands
+off the
+shell!
+
+Click
+click.
+
+It's a
+WHELK,
+thank you.
+
+Don't
+look in!
+
+Snip!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/whelkling.js.
+[talk: Inspect]
+WHELKLING - HP 1950
+A hermit crab in a big whelk shell crusted with glowing anemones. Buds anemones near you that burst into rings of stings, spins its shell to throw grit round in two arms, and pinches its big claw shut along your row or column. Watch the line, then step off it.
+
+[talk: Admire the shell]
+You lean in and look at the shell properly: the spiral going round and up, the bands, the little lights on top. You nod slowly. WHELKLING comes all the way out to see you looking, and turns, so you can see the other side as well.
+
+[talk: Offer a bigger shell]
+You find a bigger shell on the floor of the cave and hold it out. WHELKLING looks at it a long while. It gets halfway out of its own, very carefully, and then gets back in. It keeps yours, though. You can tell it's going to think about it.
+
+[talk: Sit still by the pool]
+You sit down on the wet rock at the edge of the pool and wait, in the dark, the drips going. After a while WHELKLING's little lights come up beside you and stay there, and nobody says anything, which suits you both.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+WHELKLING pulls all the way into its shell and shuts the door with its claw. The shell rolls over, slowly, into the dark water, and the little lights go out one at a time.
+
+[pacified]
+WHELKLING gives you a small wave of its big claw. Then it backs away into the dark water, and you watch its little green lights go down, and down, and stop, somewhere at the bottom, still glowing.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves holds her umbrella over her head and tells {foe} she carries her roof about too. {foe} looks at the umbrella, and then at its shell. It seems to feel sorry for her.
+
+Ves asks {foe} where it got the shell. {foe} says it was there first. She says that's the best reason there is for anything.
+
+Ves tells {foe} its anemones are better than lanterns, they don't need filling. {foe} glows a bit brighter. She says now it's showing off.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} that it lives in the sea, which is very brave or very silly, and he's not sure which. {foe} says brave. Bramble says he'll take its word for it, from up here.
+
+Bramble asks {foe} if anything bigger lives at the bottom of the pool. {foe} doesn't answer. It looks down. Bramble takes two steps back without deciding to.
+
+Bramble shows {foe} a pebble with a hole in it. {foe} shows him a sweet with a lemon in it. They both decide they've won.

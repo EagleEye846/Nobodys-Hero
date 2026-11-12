@@ -28,5 +28,7 @@ echo  Your browser will open the game. If it doesn't, go to http://localhost:800
 echo  Keep this window open while you play. Close it to stop.
 echo.
 start "" http://localhost:8001
-%PYTHON% tools\serve.py 8001
+rem With the Studio here (the tools folder), start its server, so saving
+rem from the Studio works; otherwise the plain game server.
+if exist tools\serve.py (%PYTHON% tools\serve.py 8001) else (%PYTHON% play.py 8001)
 pause

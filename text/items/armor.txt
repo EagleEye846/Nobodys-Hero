@@ -182,6 +182,10 @@ A miner's helmet, dented from every direction at once. There's a candle bracket 
 [olmskin_vest]
 A vest from skin an olm shed, which they do politely, once a year. Thin, pale, cool, and tougher than it looks. It clings.
 
+# (draft) Chapter 4's secret superboss, Pudding's pool at the bottom of Seam Nine.
+[olmglass_mantle]
+A heavy grey-blue coat stitched all over with beads of glass that catch the light, and warm in the way a coat is when something large has been keeping it for you. The tag says FOR WHOEVER CAME BACK.
+
 # Ves's.
 # In a chest in the Stillwater.
 [reedweave_coat]
@@ -226,6 +230,9 @@ A shawl of sea-silk, pale gold and thin as breath. It's warm, and it mends. Ves 
 A thick rope belt, knotted by Mrs. Wrasse in a knot she wouldn't name. It cinches the whole coat tight, and SHELTER holds firmer than anything.
 
 # Bramble's.
+[fishers_smock]
+A canvas smock from the fishers' chest, salt-stiff and patched at the elbows. Bramble says it smells of fish. It does.
+
 [small_oilskin]
 A sou'wester and coat in a boy's size, bright yellow. Bramble says he looks like a duck. Everyone agrees. He keeps it on.
 
@@ -236,7 +243,20 @@ A long knitted muffler in oilskin yellow, dropped stitches and all, smelling of 
 A mustard-green sou'wester with a floppy brim and one pink bobble nobody can explain. It is ugly. It is also very dry.
 
 [cork_float]
-A red-striped cork float on a string. It bobs on your chest. Swim proper.
+A cork float on a loop of string, one red stripe round it. It bobs on your chest. Swim proper.
 
 [sea_boots]
 Tall waxed boots that come up to his belt. They stomp in the shallows, and they're surprisingly quiet in the sneaky.
+
+[darned_jersey]
+A fisher's jersey, navy and thick, darned at the elbows so neatly you can't find where the holes were. It was folded as flat as a letter.
+
+[petrel_scarf]
+A scarf of storm-petrel grey, light as down and warm right through. It smells of tar and the sea. The wind likes it.
+
+[little_gansey]
+A knitted gansey, thick as rope, far too small for anyone grown. The elbows have been darned twice, in two different wools. It fits him.
+
+# (draft) The Fair Return's captain.
+[captains_greatcoat]
+A tall coat of dark blue broadcloth gone grey-green, with brass buttons, most of them still on. The cuffs are worn from a hundred years of a hand on a rail. It does not smell of the sea any more, only of a closed cabin, and it fits as if it had been waiting for someone to be on time.

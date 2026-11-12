@@ -17,3 +17,31 @@ The Sunstone's lit! I can tell! Even inside the helmet, it's gone a sort of oran
 
 [repeat after the_light_goes_up]
 His Majesty's waiting. Do hurry. He's in a very big mood.
+
+# (draft)
+[repeat 2]
+I'm told the hall's very grand. I'll take their word for it. I've mostly seen the inside of my helmet.
+
+# (draft)
+[repeat 3]
+If you see His Majesty's arm move, tell me. I've a bet on with the other one.
+
+# (draft)
+[repeat_ves 3]
+{thoughtful}...What are the odds? {bored}No. I don't want to know.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Bring us back some light. Even a bit. I'd like to see my feet again. I'm told they're lovely.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+I lifted the visor once. Saw the king, very close up. Put it back down. Bit much.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Is it very bright out there? It's very orange in here. In the helmet. I like it.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Mind how you go up to him. He's been sitting exactly the same way all morning. Very still. Very excited.

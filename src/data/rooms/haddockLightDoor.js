@@ -22,6 +22,8 @@ export const HADDOCK_LIGHT_DOOR = {
   // "Minding the Light", and the open sea under it.
   music: 'haddock',
   ambience: 'open_sea',
+  // After the chapter (the_light_answers) the storm is over here too, as on the causeway next door.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.5, fog: 0.15 }, ambience: 'calm_sea', lamplight: { shade: 0.32, tint: '30, 40, 64' } },
   vesWell: true,
 
   // The wrecks' silhouettes on the sea keep this many tiles clear of any shore
@@ -31,20 +33,20 @@ export const HADDOCK_LIGHT_DOOR = {
   tiles: [
     '##############################',
     '#~~~~~~~~~~hhhhhhhh~~~~~~~~~~#',
-    '#~~~~~~~~~~h66hh66h~~~~~~~~~~#',
+    '#~~~~~x~~~~h66hh66h~~~~~^~~~~#',
     '#~~~~~~~~~~hhhHHhhh~~~~~~~~~~#',
-    '#~~~~~~~~~~h6hhhh6h~~~~~~~~~~#',
-    '#~~~~,,,,,,hhhDDhhh,,,,,~~~~~#',
-    '#~~,,,,,,,,,,,::,,,,,,,,,~~~~#',
+    '#~~~~~~~,,~h6hhhh6h~,~~~~~~~~#',
+    '#~~~~~,,,,,hhhDDhhh,,,,~~~~~~#',
+    '#~~x,,,,,,,,,,::,,,,,,,,,~~~~#',
     '#~,,,,,,,,,,,,::,,,,,,,,,,~~~#',
-    ':,,,,,,,,,,,,,::,,,,,,,,,,~~~#',
+    ':,,,,,,,::,,,,::,,,,,,,,,,~~~#',
     '::::::::::::::::,,,,,,,oooo~~#',
     ':::::::::::::::,,,,,,,,oooo~~#',
-    '#,,,,,,,,,,,,,,,,,,,,,~~~~~~~#',
-    '#~,,,,,,,,,,,,,,,,,,,,~~~~~~~#',
-    '#~~,,,,,,,,,,,,,,,,,,,~~~~~~~#',
-    '#~~~,,,,,,,,,,,,,,,,,,~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
+    '#,,,::,,,,:,,,,,,,,,,,~~~~~~~#',
+    '#~,,,,,,,,,,,,,,,,,,,,,~~~~~~#',
+    '#~~,,,,,,,,,,,,,,,,,,,,,~~~x~#',
+    '#~~~~,,,x,,,,,,,,,,,x~~~~~~~~#',
+    '#~~~~~~~~~,,~~~~x~~~~~~~~~~~~#',
     '##############################',
   ],
 
@@ -70,8 +72,11 @@ export const HADDOCK_LIGHT_DOOR = {
   props: [
     { sprite: 'sign', x: 3, y: 8, text: 'door_sign' },
     // A lantern on a post either side of the door.
-    { sprite: 'c5_lantern_post_lit', x: 12, y: 7, text: 'door_lantern', animation: 'c5_lantern_post_lit', speed: 0.25 },
-    { sprite: 'c5_lantern_post_lit', x: 17, y: 7, text: 'door_lantern', animation: 'c5_lantern_post_lit', speed: 0.25 },
+    { sprite: 'c5_lantern_post_lit', x: 12, y: 7, text: 'door_lantern', animation: 'c5_lantern_post_lit', speed: 0.25, until: 'haddock_gone' },
+    { sprite: 'c5_lantern_post_lit', x: 17, y: 7, text: 'door_lantern', animation: 'c5_lantern_post_lit', speed: 0.25, until: 'haddock_gone' },
+    // After the chapter: the town keeps them lit.
+    { sprite: 'c5_lantern_post_lit', x: 12, y: 7, text: 'door_lantern_after', animation: 'c5_lantern_post_lit', speed: 0.25, after: 'haddock_gone' },
+    { sprite: 'c5_lantern_post_lit', x: 17, y: 7, text: 'door_lantern_after', animation: 'c5_lantern_post_lit', speed: 0.25, after: 'haddock_gone' },
     // His garden: bottles on posts, buoys on poles.
     { sprite: 'c5_bottle_garden', x: 5, y: 6, text: 'door_bottles' },
     { sprite: 'c5_bottle_garden', x: 19, y: 7, text: 'door_bottles' },
@@ -85,6 +90,15 @@ export const HADDOCK_LIGHT_DOOR = {
     // The Bother, tied up alongside the jetty.
     { sprite: 'c5_the_bother', x: 23, y: 11, text: 'door_bother' },
     { sprite: 'gold_pouch', x: 4, y: 13, text: 'door_pouch', gold: 300, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // (2026-11-08b) A garden somebody works in: a bench against the tower, a washing line on its two
+    // posts, the barrow he brings the pots up in, and tufts of sea grass. Off the path and the jetty.
+    { sprite: 'il_workbench', x: 7, y: 5, text: 'door_bench' },
+    { sprite: 'washing_line', x: 15, y: 12, text: 'door_washing' },
+    { sprite: 'sy_wheelbarrow', x: 9, y: 13, text: 'door_barrow' },
+    { sprite: 'il_grass_tuft', x: 3, y: 12, flat: true, walkable: true },
+    { sprite: 'il_grass_tuft_b', x: 13, y: 8, flat: true, walkable: true },
+    { sprite: 'il_grass_tuft', x: 21, y: 7, flat: true, walkable: true },
+    { sprite: 'il_grass_tuft_b', x: 20, y: 13, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'door_rock', '~': 'door_sea', h: 'door_wall', 6: 'door_window', H: 'door_niche', ',': 'door_turf', ':': 'door_path', o: 'door_planks' },
 

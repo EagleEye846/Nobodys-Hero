@@ -14,12 +14,13 @@ import { Sandbag, GrabHand } from './rumboldFinaleBullets.js';
 // from the bottom in his story (touching it hurts, and throws you back up).
 // Keep climbing, and on the way:
 //
-//   from  6s  his strings drop down the stairwell, straight down
+//   6s-15s    his strings drop down the stairwell, straight down
 //   from 10s  some steps are only card: they sag, and drop when stood on
-//   from 11s  his hand reaches up out of the Deep for you
-//   from 15s  sandbags, dropped down the well at you
-//   from 17s  strings slice across it, slantwise (jump them, or drop)
+//   11s-15s   his hand reaches up out of the Deep for you
+//   15s-18s   sandbags, dropped down the well at you
+//   18s-21s   strings slice across it, slantwise (jump them, or drop)
 //   at   21s  the last step: a landing, and a door, at the top of the stair
+// (One or two of these at a time, never more: climbing is hard enough.)
 //
 // At the top the stair stops, and the door opens on nothing at all. Then the
 // door comes down on you, flat, and another, and another: stand in the
@@ -294,7 +295,7 @@ export function stairClimb({ rand, push, sfx }) {
   let nextString = 6;
   let nextHand = 11;
   let nextBag = 15;
-  let nextSlice = 17;
+  let nextSlice = 18.3;
   let opened = false;
   let door = 0;
   let lastHole = null;
@@ -383,34 +384,30 @@ export function stairClimb({ rand, push, sfx }) {
       if (t < LANDING_AT + 0.5) {
         // His strings, dropped straight down the well: at you, and later a
         // second beside it.
-        if (t >= nextString) {
-          nextString = t + (t < 14 ? 1.3 : 1.0);
+        if (t >= nextString && t < 15) {
+          nextString = t + (t < 11 ? 1.35 : 1.7);
           const x = inWell(soul.x + rand(-6, 6));
-          push(new Line({ x, y: COLUMN.y - 2, angle: Math.PI / 2, length: 170, thickness: 2, warn: 0.75, life: 0.45, color: C.string }));
-          if (t >= 14) {
-            const other = inWell(x + (Math.random() < 0.5 ? -1 : 1) * rand(24, 34));
-            push(new Line({ x: other, y: COLUMN.y - 2, angle: Math.PI / 2, length: 170, thickness: 2, warn: 0.75, life: 0.45, color: C.string }));
-          }
+          push(new Line({ x, y: COLUMN.y - 2, angle: Math.PI / 2, length: 170, thickness: 2, warn: 0.8, life: 0.45, color: C.string }));
         }
         // His hand, up out of the Deep, for wherever you are.
-        if (t >= nextHand) {
-          nextHand = t + 2.6;
+        if (t >= nextHand && t < 14.5) {
+          nextHand = t + 2.4;
           const side = soul.x < COLUMN.x + COLUMN.w / 2 ? 1 : -1;
           push(new GrabHand({
             from: { x: inWell(soul.x + side * rand(20, 34)), y: COLUMN.y + COLUMN.h + 30 },
             to: { x: inWell(soul.x), y: Math.min(DEEP_TOP - 14, Math.max(COLUMN.y + 12, soul.y)) },
-            warn: 0.75, bend: side,
+            warn: 0.85, bend: side,
             onClench: () => sfx('clack'),
           }));
         }
         // Sandbags down the well.
-        if (t >= nextBag) {
-          nextBag = t + 1.05;
-          push(new Sandbag({ x: inWell(soul.x + rand(-14, 14)), warn: 0.65 }));
+        if (t >= nextBag && t < 18) {
+          nextBag = t + 1.2;
+          push(new Sandbag({ x: inWell(soul.x + rand(-14, 14)), warn: 0.75 }));
         }
         // Strings slicing across, slantwise, at your height.
         if (t >= nextSlice) {
-          nextSlice = t + 1.7;
+          nextSlice = t + 1.8;
           const left = Math.random() < 0.5;
           const tilt = rand(0.22, 0.42) * (Math.random() < 0.5 ? -1 : 1);
           // From one wall, through where you are now.
@@ -427,7 +424,7 @@ export function stairClimb({ rand, push, sfx }) {
       }
       if (door < DOORS.length && t >= DOORS[door].at && landing) {
         const holeW = 26;
-        const warn = 0.75 - door * 0.08;
+        const warn = 0.82 - door * 0.05;
         // Never further than you can walk before it lands (heavy, you walk
         // at 72 a second), and the first one never where you already are.
         const reach = 72 * (warn + DOORS[door].fall) - 14;

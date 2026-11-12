@@ -35,7 +35,7 @@ export const QUARTZLING = {
   anim: QUARTZLING_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1140,
+  maxHp: 1450,
   damage: 37,
 
   // The Glimmering: stillness, aimed shots, and things you can hardly see.

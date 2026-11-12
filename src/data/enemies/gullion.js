@@ -17,13 +17,24 @@ export const GULLION = {
   area: 'gullrest',
   sprite: { rows: GULLION_SPRITE, palette: GULLION_PALETTE },
   anim: GULLION_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): feathers fly when it's hit, a glint on the
+  // beak before it goes for you; beaten, a burst of feathers.
+  feel: { hit: 'feather', windup: 'glint', at: [0.28, 0.3], defeat: 'feathers' },
   // The coast's fights: the shanty (also on Sunnyside's cliffs, in place of sunnyBattle).
   music: 'coastBattleStorm',
-  maxHp: 1850,
-  damage: 54,
+  maxHp: 9700,
+  damage: 80,
 
   // The easy end of the chapter: slow dives, plenty of room.
-  difficulty: { density: 1.25, speed: 1.2 },
+  difficulty: { density: 1.40, speed: 1.30 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  // (2026-11-10: comes in sooner and runs longer, was { at: 0.85, seconds: 4.5 }:
+  // its attacks are done throwing a second or so before their end, and the box
+  // sat empty until the encore came.)
+  encore: { at: 0.72, seconds: 5.3, density: 0.8 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
   // Upright and a little hunched, he stands in close to the box.
   battlePos: { x: 216, y: 44 },
 

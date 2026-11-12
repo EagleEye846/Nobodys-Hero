@@ -194,8 +194,9 @@ function acrossBox(box, x, y, dx, dy) {
 export const RINGER_ATTACKS = {
   // Pendulums: three rings swing across the box on ropes from pegs along the
   // top, short, middling and long, each a beat behind the one before. Now
-  // and then a rope snaps at the bottom of its swing: the ring flies off the
-  // way it was going, and a new one slides down to take its place.
+  // and then a rope snaps at the bottom of its swing: the ring is flung
+  // off at you (where you're going, if you're on the move), and a new one
+  // slides down to take its place.
   ringPendulum(box, density, { Shot, every, shuffleBag }) {
     const lengths = [28, 50, 72].sort(() => Math.random() - 0.5);
     const swing = 2.2;
@@ -204,6 +205,9 @@ export const RINGER_ATTACKS = {
     const which = shuffleBag([0, 1, 2]);
     let time = 0;
     let pendulums = null;
+    // Where you were last frame, to tell which way you're going.
+    let last = null;
+    let drift = { x: 0, y: 0 };
     const hang = (bullets, p) => {
       p.ring = new Shot({ x: p.peg.x, y: p.peg.y + p.length, warn: 0.6, art: 'ringIron' });
       p.rope = swingRope(p.peg, p.ring);
@@ -216,8 +220,10 @@ export const RINGER_ATTACKS = {
     }, { first: 1.6 });
     return {
       duration: 7,
-      update: (dt, bullets) => {
+      update: (dt, bullets, soul) => {
         time += dt;
+        if (last && dt > 0) drift = { x: (soul.x - last.x) * density / dt, y: (soul.y - last.y) * density / dt };
+        last = { x: soul.x, y: soul.y };
         if (!pendulums) {
           pendulums = [0.2, 0.5, 0.8].map((along, i) => ({
             peg: new Shot({ x: box.x + box.w * along, y: box.y + 1, harmless: true, art: 'ringPeg' }),
@@ -246,10 +252,15 @@ export const RINGER_ATTACKS = {
           // Snap at the bottom of the swing, where it's going fastest.
           if (p.snapping && Math.abs(angle) < 0.12) {
             p.snapping = false;
-            // (The swing runs on the pattern's clock, which density speeds up.)
-            p.ring.vx = Math.cos(angle) * turning * p.length * density;
-            p.ring.vy = -Math.sin(angle) * turning * p.length * density;
-            p.ring.gravity = 90;
+            // (The swing runs on the pattern's clock, which density speeds
+            // up.) It keeps the speed it had, but goes at you, in a line.
+            const speed = Math.max(55, Math.abs(turning * p.length * density));
+            const lead = Math.hypot(soul.x - p.ring.x, soul.y - p.ring.y) / speed;
+            const tx = Math.min(Math.max(soul.x + drift.x * lead, box.x + 5), box.x + box.w - 5);
+            const ty = Math.min(Math.max(soul.y + drift.y * lead, box.y + 5), box.y + box.h - 5);
+            const aim = Math.atan2(ty - p.ring.y, tx - p.ring.x);
+            p.ring.vx = Math.cos(aim) * speed;
+            p.ring.vy = Math.sin(aim) * speed;
             p.rope.done = true;
             p.regrow = 0.9;
           }

@@ -38,6 +38,10 @@ A squat iron bollard at the bridge's end. A chain runs off it along the rail, ke
 [gate_hulk]
 A hulk lying over on her side, half out of the water, her plates rusted the colour of old blood. The rain drums on her like a roof.
 
+# After the chapter (the storm over).
+[gate_hulk_calm]
+A hulk lying over on her side, half out of the water, her plates rusted the colour of old blood. The last of the rain runs off her in strings.
+
 [gate_mast]
 A mast standing up out of the water on its own, snapped off at the top. Whatever it belonged to is underneath.
 
@@ -59,6 +63,10 @@ A flag on a staff jammed into the shingle. The colours are long gone. It snaps i
 [gate_figurehead]
 A ship's figurehead, wedged upright in the shingle: a lady with her arms folded, looking out to sea with an expression of tremendous disappointment.
 
+# (draft)
+[gate_figurehead 2]
+The figurehead's face hasn't changed. You get the feeling it was meant for you all along.
+
 [gate_figurehead_ves]
 {thoughtful}Somebody carved that face on purpose. I'd like to meet them.
 
@@ -73,6 +81,10 @@ A purse under the shingle by the anchor, buttoned shut. Somebody's salvage.
 
 [gate_edge]
 Rusted iron and black rock, slick with rain.
+
+# (draft) after the storm.
+[gate_edge_calm]
+Rusted iron and black rock, crusted white with salt.
 
 [gate_water]
 Green-black water, heaving slowly between the wrecks. There's no telling how deep it is. There's no wanting to know.
@@ -92,7 +104,7 @@ The plank bridge. Every board is a different wood, nailed down by a different ha
 A loose crate of ship's biscuit, light enough to shove. It's about as high as a step.
 
 [hull_crate_ves]
-{thoughtful}About as high as a step. I'm just saying it out loud.
+{smile}About as high as a step. I'm just saying it out loud.
 
 [hull_sign]
 A board hung by a nail on the walkway's post, in a tidy hand: MIDDLE DECK. MIND THE BILGE. STEPS WASHED AWAY 4TH MARCH.
@@ -105,13 +117,13 @@ A sea chest, up on top of the cargo where the bilge couldn't reach it. Inside, w
 A purse, tucked between two crates where only somebody climbing would find it.
 
 [hull_barrels]
-Barrels, strapped down with iron hoops. Rain water, in the top one. Something worse in the others.
+Barrels, strapped down with iron hoops. Rainwater, in the top one. Something worse in the others.
 
 [hull_rope]
 A coil of rope, wet through and heavier than it looks.
 
 [hull_anchor]
-A spare anchor, lashed to the deck, waiting forty years for somebody to need it.
+A spare anchor, lashed to the deck, still waiting for somebody to need it.
 
 [hull_cargo]
 Cargo crates, stamped with a harbour's name that's been washed off.
@@ -127,6 +139,10 @@ The ship's iron plates, rivets as big as buttons, rust running down them in long
 
 [hull_porthole]
 A porthole, the glass salted over. Out there the sea heaves grey-green, and the rain hits it sideways.
+
+# After the chapter (the storm over).
+[hull_porthole_calm]
+A porthole, the glass salted over. Out there the sea heaves grey and slow, with nothing hitting it for once.
 
 [hull_bilge]
 Bilge water. Black, still, and it smells like the inside of a boot.
@@ -220,6 +236,10 @@ A ship's bell on a frame bolted to the deck, green with age. The wind leans on i
 [fog_bell_ves]
 {thoughtful}Nobody. That's what makes it a fog bell.
 
+# (draft) Ten times.
+[fog_bell 10]
+You ring the fog bell a tenth time. It rings out into the fog, and nothing rings back. You're almost sure.
+
 [fog_wheel]
 The ship's wheel, still on its post. It turns if you push it. Nothing else turns with it.
 
@@ -233,7 +253,7 @@ An iron bollard, with a chain round it that disappears into the fog.
 A flag on a staff jammed in a hole in the deck, flapping hard at nothing.
 
 [fog_net]
-A net hung out to dry on its frame, forty years ago. It's still not dry.
+A net hung out to dry on its frame, a hundred years ago. It's still not dry.
 
 [fog_log]
 A board nailed to the mast, the ship's notice of the day, in chalk that the rain hasn't quite got to yet:
@@ -287,10 +307,20 @@ The galley stove. It's iron, and stone cold, and the firebox is full of seawater
 The ghost cook floats over his cold stove, stirring a pot with a ladle and humming. He beams at you. "More soup? There's always more soup."
 
 [galley_cook_bramble]
-{smile}Thanks, Mister Cook!
+{grin}Thanks, Mister Cook!
 
 [galley_cook_ves]
 {bored}There isn't any soup, Bramble.
+
+# (draft)
+[galley_cook 2]
+The ghost cook stirs and hums. "Twelve to feed," he says, "and they're always late. Never mind. It keeps."
+
+[galley_cook_bramble 2]
+{thinking}...Where are the twelve?
+
+[galley_cook_ves 2]
+{thoughtful}Let him keep it, Bramble.
 
 [galley_pot]
 The cook's great iron pot. You lift the lid, braced for nothing, and find chowder: a real bowl of it, thick and hot. The cook beams. "Told you."
@@ -305,7 +335,7 @@ TOMORROW: SOUP.
 SUNDAY: SOUP (SPECIAL).
 
 [galley_menu_ves]
-{thoughtful}What makes Sunday's special?
+{smile}What makes Sunday's special?
 
 [galley_menu_bramble]
 {grin}Bigger spoons.
@@ -313,8 +343,12 @@ SUNDAY: SOUP (SPECIAL).
 [galley_table]
 The crew's table, laid for twelve. Every bowl is full of rain.
 
+# (draft) after the storm.
+[galley_table_calm]
+The crew's table, laid for twelve. Every bowl is full of old rain with a skin of salt on top.
+
 [galley_bench]
-A long bench, worn smooth by forty years of nobody sitting on it.
+A long bench, worn smooth by a hundred years of nobody sitting on it.
 
 [galley_barrels]
 Barrels of salt pork. The salt has won.
@@ -359,10 +393,17 @@ An iron post, with a chain running out from it into the moat. At the other end, 
 {bored}It's waiting for the tide. Like the rest of us.
 
 [mast_mast]
-The great mast, snapped high up. Its rigging hangs down it in ropes as thick as your arm, and at the very top, where the wood splits, something shines.
+The great mast, snapped high up. Its rigging hangs down it in ropes as thick as your arm. At the very top, where the wood splits, the grain is black and glassy, as if something hot had been pulled out of it.
 
-[wreck_shard]
-Wedged in the split at the top of the mast, a splinter of star-metal, shining in the rain without any light to shine with.
+# (draft) The hint that the star-shard is somewhere else: a scorch running east, out to sea.
+[mast_scorch]
+A scorch along the planks, a thumb deep, running east in a line as straight as a ruled one. It has burnt the wet wood dry. Down in the char, a few flecks of something pale blue, still bright. The line goes on over the end of the yard and out towards the sea.
+
+[mast_scorch_ves]
+{thoughtful}Fell lengthways. Whatever it was, it wasn't stopping here.
+
+[mast_scorch_bramble]
+{worried}Why does it point at nothing?
 
 [mast_halyard]
 The halyard, an old rope run down the mast to the deck. You could slide down it, if you didn't value your hands.
@@ -385,6 +426,10 @@ The hulk's side, all rivets and weed, stood up out of the basin like a wall.
 [mast_yard]
 The main yard: a spar as wide as a bench, running out over the water to the cliff. The rain beads along it.
 
+# (draft) after the storm.
+[mast_yard_calm]
+The main yard: a spar as wide as a bench, running out over the water to the cliff. The gulls have found it.
+
 [mast_yard_bramble]
 {scared}Don't think about it. Don't think about it.
 
@@ -393,12 +438,24 @@ The main yard: a spar as wide as a bench, running out over the water to the clif
 [slip_bother]
 The Bother, rocking at the end of the slip with her oars shipped. Rain pools in the bottom of her. She looks pleased to see you, which for a boat is saying something.
 
+# (draft) after the storm.
+[slip_bother_calm]
+The Bother, rocking at the end of the slip with her oars shipped. She looks pleased to see you, which for a boat is saying something.
+
 [slip_bother_bramble]
 {worried}...Still very small.
 
 [slip_sign]
 A board on a post at the head of the slip, newer than anything else here: SLIP. FERRY BY ARRANGEMENT. RING LOUDLY.
 There's no bell.
+
+# (draft) THE FOG BELL: the old bell at the cove's far east point, the way in to the ghost ship (the lever `fog_bell`; the
+# scene ship_looms plays when you walk out to the point afterwards).
+[slip_fog_bell]
+You haul the rope. The bell speaks once: a flat, deep note that goes out over the water and doesn't come back. Out in the fog, a long way off, something answers it.
+
+[slip_fog_bell_post]
+A post at the very point of the cove, behind an upturned boat, with a ship's bell hung on a bracket and a rope hanging from its tongue. The rope is dry, and the brass has a cold shine that nothing else in the cove has. Under the bell, a brass plate: IN FOG, RING FOR THE FAIR RETURN. The rest of the plate has gone green.
 
 [slip_sign_ves]
 {bored}Shout loudly, then. He'll hear you eventually.
@@ -414,6 +471,10 @@ A purse, wedged in the cliff's foot above the tide line.
 
 [slip_cliff]
 The cliff, black and running with rain.
+
+# (draft) after the storm.
+[slip_cliff_calm]
+The cliff, black and dripping.
 
 [slip_planks]
 Planks laid over an old stone slip, running down into the water.
@@ -435,3 +496,49 @@ Under it, in a different hand: I WASN'T GOING TO.
 
 [pocket_note_bramble]
 {grin}He was going to.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_galley_mugs]
+The crew's mugs on their rail, a name painted on each. The paint is mostly gone.
+
+# (draft)
+[in_galley_pans]
+Pans and a ladle on their hooks, ready for a dinner a hundred years late.
+
+# (draft)
+[in_galley_bottles]
+The cook's bottles: VINEGAR, SAUCE, SAUCE (HOT), and one marked DO NOT.
+
+# (draft)
+[in_galley_tins]
+Tins on a crate. PEAS, PEAS, PEAS, PEAS.
+
+# (draft)
+[in_galley_bowl]
+A bowl put out for the ship's cat. There's a fish in it, and it's fresh.
+
+# (draft)
+[in_pocket_ship]
+A ship in a bottle, on a ship, inside a ship. The bosun liked a joke.
+
+# (draft)
+[in_pocket_knots]
+The bosun's knot board. Every knot perfect, except the last one, which is a bow.
+
+# (draft)
+[in_hull_oilskin]
+An oilskin still on its peg, green with weed at the hem.
+
+# (draft)
+[in_hull_chart]
+A chart gone soft with damp. A course is pencilled across it, and stops short.
+
+# (draft)
+[galley_sea_chests]
+A sailor's sea chest, his name cut in the lid. Locked. Whatever he kept, he's still keeping it.
+
+# (draft)
+[pocket_sea_chest]
+The bosun's own sea chest. Inside: one dry sock, and a note that says WHO TOOK THE OTHER ONE.

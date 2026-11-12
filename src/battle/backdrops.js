@@ -4,6 +4,7 @@ import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { BRIGHT_BACKDROPS } from './brightBackdrops.js';
 import { COAST_BACKDROPS } from './coastBackdrops.js';
 import { THEATRE_BACKDROPS } from './theatreBackdrop.js';
+import { POOL_BACKDROPS } from './poolBackdrop.js';
 
 // Animated battle backgrounds, one per area. Each draws the stage from y = 0
 // down to `height`; the battle panel covers the rest of the screen.
@@ -2080,6 +2081,8 @@ export const BACKDROPS = {
   ...COAST_BACKDROPS,
   // King Peptup's stage (src/battle/theatreBackdrop.js).
   ...THEATRE_BACKDROPS,
+  // Pudding's glass pool, the bottom of Seam Nine's shaft (src/battle/poolBackdrop.js).
+  ...POOL_BACKDROPS,
   // Chapter 4's mines, lake and bottom (rooms with `area: 'diggings'`,
   // 'stillwater' and 'deep').
   diggings: drawDiggings,

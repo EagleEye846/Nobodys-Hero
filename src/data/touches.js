@@ -198,4 +198,292 @@ export const ROOM_TOUCHES = {
     { kind: 'eyes', points: [[2, 13], [22, 27]] },
     { kind: 'bats', x: 3, y: 41.5, w: 14, n: 2, every: 15 },
   ],
+
+  // ---- Chapter 5: the coast (kinds in src/overworld/coastTouches.js) ----
+  // `when: 'storm'` / `when: 'calm'`: only while the green storm is on, or once it's lifted.
+
+  // Sunnyside: the mill pond.
+  sunny_mill_pond: [
+    { kind: 'fishjump', x: 10.5, y: 12.5, w: 18, h: 2.5, n: 1, every: 9 },
+    { kind: 'dragonfly', x: 22, y: 4.5, w: 7, h: 2 },
+  ],
+
+  // Gullrest: gulls on mooring posts, crabs in the sand, fish and floats out in the bay.
+  gullrest_beach: [
+    { kind: 'gull', x: 13.5, y: 15.1, post: true, face: -1 },
+    { kind: 'gull', x: 30.5, y: 15.3, post: true },
+    { kind: 'crab', x: 16, y: 11 },
+    { kind: 'crab', x: 40, y: 12, r: 1.2 },
+    { kind: 'fishjump', x: 2, y: 16.5, w: 40, h: 2.5, n: 2, every: 8 },
+    { kind: 'floats', points: [[5, 17.2], [7, 17.5], [9, 17.3], [11, 17.6]] },
+  ],
+  // (Nothing out on the water here: the tide drains the middle to walkable shingle.)
+  gullrest_cove: [
+    { kind: 'crab', x: 30, y: 11 },
+    { kind: 'crab', x: 6, y: 12, r: 1.2 },
+  ],
+  gullrest_jetty: [
+    { kind: 'gull', x: 17.5, y: 11.6, post: true, face: -1 },
+    { kind: 'gull', x: 26.5, y: 13.2, post: true },
+    { kind: 'floats', points: [[29, 14.2], [31, 14.6], [33, 14.3], [35, 14.7]] },
+    { kind: 'fishjump', x: 24, y: 15, w: 20, h: 2, n: 1, every: 8 },
+  ],
+  gullrest_cliff_steps: [
+    { kind: 'gull', x: 5.5, y: 9.2, post: true },
+    { kind: 'crab', x: 14, y: 27 },
+  ],
+  gullrest_lifeboat_house: [
+    { kind: 'steam', x: 15, y: 2.6, lean: -1 },
+    { kind: 'rope', x: 7.5, y: 2.7, len: 12 },
+  ],
+  sunny_cliff_hollow: [
+    { kind: 'crab', x: 17, y: 9, r: 1.2, color: '#b8704a', dark: '#6a3a22' },
+  ],
+
+  // The Wrack Shore: wrack and sand blowing through in the storm, a gull sitting it out
+  // hunched on a post, puddles on the path. Crabs come out once the storm's gone.
+  // (Nothing on the tide rooms' water: wrack_pools and wrack_tide_clock drain.)
+  wrack_landing: [
+    { kind: 'gull', x: 30.5, y: 8.1, post: true, face: -1 },
+    { kind: 'blown', x: 1, y: 8.5, w: 38, h: 5, n: 7, wind: 95, colors: ['#4a5a2a', '#6a5a32', '#3a4a2a'], when: 'storm' },
+    { kind: 'puddles', points: [[13, 12.6], [27.5, 11.5, 18]] },
+    { kind: 'crab', x: 21, y: 9, when: 'calm' },
+  ],
+  wrack_dunes: [
+    { kind: 'blown', x: 1, y: 2, w: 42, h: 13, n: 9, wind: 80, colors: ['#d8c89a', '#c0ae80', '#6a7a3a'], when: 'storm' },
+    { kind: 'grass', x: 36, y: 11, w: 6, h: 3 },
+    { kind: 'crab', x: 31, y: 9, when: 'calm' },
+  ],
+  wrack_bathtub: [
+    { kind: 'gull', x: 20.5, y: 3.1, post: true },
+    { kind: 'puddles', points: [[8, 9.6, 16], [28, 8.4]] },
+    { kind: 'blown', x: 1, y: 4, w: 35, h: 11, n: 6, wind: 90, colors: ['#4a5a2a', '#6a5a32'], when: 'storm' },
+  ],
+  wrack_boardwalk: [
+    { kind: 'gull', x: 17.5, y: 20.3, post: true, face: -1 },
+    { kind: 'gull', x: 29.5, y: 6.2, post: true },
+    { kind: 'floats', points: [[20, 22.4], [22, 22.8], [24, 22.5], [26, 22.9]] },
+  ],
+  wrack_pools: [
+    { kind: 'crab', x: 36, y: 10, when: 'calm' },
+    { kind: 'crab', x: 4, y: 7, r: 1, when: 'calm' },
+  ],
+  wrack_tide_clock: [
+    { kind: 'crab', x: 38, y: 9, when: 'calm' },
+  ],
+  wrack_gaps: [
+    { kind: 'puddles', points: [[10, 11.6], [21, 14.5, 18], [32, 11.3]] },
+    { kind: 'crab', x: 31, y: 13, when: 'calm' },
+  ],
+  // The old hulk lets the rain in through its seams.
+  secret_wrack_hulk: [
+    { kind: 'drip', x: 4, y: 2.6, fall: 1.6, every: 3.4, when: 'storm' },
+    { kind: 'drip', x: 11, y: 2.6, fall: 2.2, every: 4.6, when: 'storm' },
+    { kind: 'drip', x: 6, y: 2.8, fall: 0.9, every: 3.1, when: 'storm' },
+  ],
+
+  // Saltcombe: chimneys smoking (torn sideways in the storm), gulls on the harbour posts,
+  // the inn's grey cat asleep by the fire while it rains and out on a sill once it stops,
+  // washing out between the market lamps once there's something to dry it.
+  saltcombe_quay: [
+    { kind: 'smoke', x: 6.5, y: 1.6, stack: true },
+    { kind: 'smoke', x: 17.5, y: 1.6, stack: true, lean: 0.6 },
+    { kind: 'smoke', x: 26.5, y: 1.6, stack: true },
+    { kind: 'gull', x: 14.5, y: 15.2, post: true },
+    { kind: 'gull', x: 36.5, y: 15, post: true, face: -1 },
+    { kind: 'puddles', points: [[13, 10.6], [27, 8.5]] },
+    { kind: 'cat', x: 3.15, y: 4.25, color: '#8a8a96', dark: '#55555f', light: '#e0e0e4', eye: '#e8d050', when: 'calm' },
+  ],
+  saltcombe_market: [
+    { kind: 'smoke', x: 5.5, y: 1.6, stack: true },
+    { kind: 'smoke', x: 19.5, y: 0.7, stack: true, lean: 0.7 },
+    { kind: 'puddles', points: [[11, 10.5, 18], [24, 13.6], [20, 18.4]] },
+    { kind: 'laundry', x: 28.6, y: 2.5, x2: 33.4, y2: 2.5, items: 4, posts: false, when: 'calm' },
+  ],
+  saltcombe_inn: [
+    { kind: 'sleeper', x: 3, y: 3.9, color: '#b4b4c0', dark: '#62626e', when: 'storm' },
+    // The oilskin by the fire dripping while it rains (indoor details, 2026-11-08).
+    { kind: 'drip', x: 1, y: 2.8, fall: 0.9, every: 2.6, when: 'storm' },
+    // The leak over the bucket by the east wall (2026-11-09).
+    { kind: 'drip', x: 18, y: 7.4, fall: 1.4, every: 2.8, when: 'storm' },
+  ],
+  // The town hall's oilskin dripping in the rain, the badger's tea steaming on its stool.
+  saltcombe_town_hall: [
+    { kind: 'drip', x: 3, y: 2.8, fall: 0.9, every: 2.9, when: 'storm' },
+    { kind: 'steam', x: 19, y: 4.9, lean: -0.3 },
+    // The leak over the bucket (2026-11-09).
+    { kind: 'drip', x: 16, y: 5.4, fall: 1.4, every: 2.2, when: 'storm' },
+  ],
+  saltcombe_chandlery: [
+    { kind: 'rope', x: 10.6, y: 2.6, len: 12 },
+  ],
+  saltcombe_lookout: [
+    { kind: 'gull', x: 20.5, y: 5.4, face: -1 },
+    { kind: 'blown', x: 1, y: 6, w: 34, h: 9, n: 7, wind: 85, colors: ['#5a7a3a', '#7a8a4a', '#4a6a2a'], when: 'storm' },
+  ],
+  saltcombe_lagoon: [
+    { kind: 'crab', x: 4, y: 11, when: 'calm' },
+  ],
+
+  // The Sunken Lanes: left behind. Someone's washing still out in the storm, puddles in
+  // the lanes, a gull on a post in the flood, the attic's leak.
+  // (Nothing on the causeway's or the sluices' water: both rise and fall.)
+  lanes_down: [
+    { kind: 'gull', x: 8.5, y: 14.2, post: true },
+    { kind: 'puddles', points: [[9, 6.6, 18], [21, 9.6], [16, 3.6]] },
+  ],
+  lanes_fork: [
+    { kind: 'floats', points: [[25, 14.3], [27, 14.7], [29, 14.4], [31, 14.8]] },
+    { kind: 'blown', x: 1, y: 2, w: 38, h: 13, n: 7, wind: 85, colors: ['#5a6a3a', '#7a6a42', '#4a5a2a'], when: 'storm' },
+  ],
+  lanes_mill: [
+    { kind: 'laundry', x: 2.4, y: 11.6, x2: 7.6, y2: 11.8, items: 4 },
+    { kind: 'puddles', points: [[25, 9.6, 18], [29, 14.5]] },
+  ],
+  // The attic's leak, into its pail (2026-11-09).
+  secret_lanes_attic: [
+    { kind: 'drip', x: 8, y: 2.6, fall: 1.6, every: 3.1, when: 'storm' },
+  ],
+  lanes_hamlet: [
+    { kind: 'puddles', points: [[6, 14.6, 18], [24, 14.4], [36, 14.6]] },
+    { kind: 'crab', x: 11, y: 15, when: 'calm' },
+  ],
+  lanes_causeway: [
+    { kind: 'crab', x: 37, y: 13, r: 1, when: 'calm' },
+  ],
+  secret_lanes_attic: [
+    { kind: 'drip', x: 3, y: 1.8, fall: 2.6, every: 2.6, when: 'storm' },
+    { kind: 'drip', x: 3, y: 1.8, fall: 2.6, every: 7, when: 'calm' },
+  ],
+
+  // Merrow: nobody left but the crabs, which have the run of the square; a gull on a post
+  // in the flood; drips in the cold house and the bell tower.
+  merrow_square: [
+    { kind: 'crab', x: 7, y: 7 },
+    { kind: 'crab', x: 33, y: 8, r: 1.2 },
+    { kind: 'gull', x: 22.5, y: 17.3, post: true, face: -1 },
+  ],
+  merrow_tower_lane: [
+    { kind: 'crab', x: 10, y: 11 },
+  ],
+  merrow_high_street: [
+    { kind: 'crab', x: 37, y: 6, r: 1 },
+  ],
+  merrow_house: [
+    { kind: 'drip', x: 11, y: 1.6, fall: 2.2, every: 4.2 },
+  ],
+  merrow_belfry: [
+    { kind: 'drip', x: 9, y: 2.2, fall: 2.4, every: 3.8 },
+    { kind: 'drip', x: 22, y: 2.2, fall: 1.6, every: 5.1 },
+  ],
+  merrow_sea_gate: [
+    { kind: 'gull', x: 33.5, y: 9, sort: 17 },
+  ],
+
+  // The Wreck Yard: gulls riding out the storm on the bollards, ropes hanging off the
+  // wrecks, the old hulks dripping inside, the ghost cook's pot steaming.
+  wreck_gate: [
+    { kind: 'gull', x: 17.5, y: 8, sort: 17, face: -1 },
+    { kind: 'gull', x: 31.5, y: 11, sort: 17 },
+  ],
+  wreck_fog: [
+    { kind: 'gull', x: 22.5, y: 7, sort: 17 },
+    { kind: 'blown', x: 1, y: 3, w: 42, h: 12, n: 6, wind: 80, colors: ['#4a5a2a', '#6a5a32'], when: 'storm' },
+  ],
+  wreck_slip: [
+    { kind: 'floats', points: [[21, 15.3], [23, 15.7], [25, 15.4], [27, 15.8]] },
+    { kind: 'crab', x: 26, y: 6, when: 'calm' },
+  ],
+  wreck_hull: [
+    { kind: 'drip', x: 8, y: 1.4, fall: 2.2, every: 4.4 },
+    { kind: 'drip', x: 25, y: 1.4, fall: 1.6, every: 5.6 },
+    { kind: 'drip', x: 5, y: 1.8, fall: 0.9, every: 3.6, when: 'storm' },
+  ],
+  wreck_galley: [
+    { kind: 'steam', x: 13, y: 3.6, lean: 0.5 },
+    { kind: 'drip', x: 20, y: 1.4, fall: 2, every: 4.9 },
+  ],
+  wreck_pumps: [
+    { kind: 'drip', x: 7, y: 1.4, fall: 1.4, every: 3.9 },
+    { kind: 'drip', x: 21, y: 14.4, fall: 1.4, every: 4.6 },
+  ],
+  secret_wreck_pocket: [
+    { kind: 'drip', x: 4, y: 1.4, fall: 2.2, every: 5 },
+  ],
+
+  // The Soundings: pale cave crabs on the shingle, fish in the cave mouth's still water.
+  // (The tide rooms' water is left alone.)
+  soundings_mouth: [
+    { kind: 'crab', x: 27, y: 13, color: '#c8a088', dark: '#7a5a48' },
+    { kind: 'fishjump', x: 2, y: 14.6, w: 32, h: 1.4, n: 1, every: 11 },
+  ],
+  soundings_echo_hall: [
+    { kind: 'crab', x: 40, y: 18, r: 1.2, color: '#c8a088', dark: '#7a5a48' },
+  ],
+  soundings_up: [
+    { kind: 'drip', x: 15, y: 2.4, fall: 2.4, every: 4.7 },
+  ],
+
+  // The Beacon Isles and the Reach: spray and wrack flying in the storm, gulls on the
+  // bollards, crabs once it's over. Orla's forge spits sparks and the quench tub steams.
+  isles_landing: [
+    { kind: 'blown', x: 1, y: 3, w: 34, h: 12, n: 8, wind: 110, colors: ['#e0eef0', '#4a5a2a', '#c8dce0'], when: 'storm' },
+    { kind: 'crab', x: 13, y: 14, when: 'calm' },
+  ],
+  isles_causeway: [
+    { kind: 'blown', x: 1, y: 2, w: 46, h: 13, n: 9, wind: 120, colors: ['#e0eef0', '#c8dce0', '#4a5a2a'], when: 'storm' },
+  ],
+  isles_west_light: [
+    { kind: 'gull', x: 25.5, y: 10, sort: 17, face: -1 },
+    { kind: 'gull', x: 33.5, y: 13, sort: 17 },
+  ],
+  isles_east_light: [
+    { kind: 'crab', x: 6, y: 16, when: 'calm' },
+    { kind: 'blown', x: 1, y: 2, w: 42, h: 17, n: 7, wind: 110, colors: ['#e0eef0', '#4a5a2a'], when: 'storm' },
+  ],
+  isles_forge: [
+    { kind: 'sparks', x: 3, y: 3.2, n: 6 },
+    { kind: 'steam', x: 12, y: 2.8, lean: 1 },
+    // Orla's oilskin, near enough to the forge to steam.
+    { kind: 'steam', x: 5, y: 1.9, lean: 0.4 },
+  ],
+  isles_old_lightroom: [
+    { kind: 'spores', x: 6, y: 3, w: 6, h: 4, color: '220, 214, 196', n: 7 },
+  ],
+  reach_eye: [
+    { kind: 'gull', x: 12.5, y: 13.3, face: -1 },
+    { kind: 'crab', x: 20, y: 13, r: 1.2 },
+  ],
+  reach_reef: [
+    { kind: 'blown', x: 9, y: 3, w: 25, h: 13, n: 7, wind: 120, colors: ['#e0eef0', '#c8dce0', '#4a5a2a'], when: 'storm' },
+    { kind: 'crab', x: 12, y: 10, when: 'calm' },
+  ],
+  reach_first_rock: [
+    { kind: 'blown', x: 9, y: 2, w: 22, h: 12, n: 6, wind: 120, colors: ['#e0eef0', '#c8dce0'], when: 'storm' },
+  ],
+  reach_wreck: [
+    { kind: 'rope', x: 25.5, y: 3.6, len: 16 },
+    { kind: 'gull', x: 40.5, y: 8, sort: 17, face: -1 },
+  ],
+
+  // Haddock's Light: his stovepipe smoking while he's there, cold after; floats by the Bother.
+  haddock_light_door: [
+    { kind: 'smoke', x: 17.6, y: 1.4, stack: true, when: 'storm' },
+    { kind: 'smoke', x: 17.6, y: 1.4, stack: true, cold: true, when: 'calm' },
+    { kind: 'floats', points: [[24, 13.3], [26, 13.7], [28, 13.4]] },
+  ],
+  haddock_light_parlour: [
+    { kind: 'steam', x: 5, y: 2.6, lean: 1, when: 'storm' },
+  ],
+
+  // The Last Light: the sea getting in, and dust in the dead lamp's room.
+  lastlight_foot: [
+    { kind: 'drip', x: 6, y: 2.4, fall: 2.4, every: 4.3 },
+  ],
+  lastlight_sluice: [
+    { kind: 'drip', x: 9, y: 1.6, fall: 2, every: 3.7 },
+  ],
+  lastlight_lamp: [
+    { kind: 'spores', x: 6, y: 5, w: 9, h: 5, color: '210, 210, 200', n: 8 },
+  ],
 };

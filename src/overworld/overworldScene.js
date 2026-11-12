@@ -10,14 +10,15 @@ import { TravelMenu } from '../ui/travelMenu.js';
 import { catchUpDrafts, foundDrafts, draftIn } from '../data/travel.js';
 import { drawText } from '../ui/text.js';
 import { nowPlayingShowing, NOW_PLAYING_DROP } from '../ui/nowPlaying.js';
-import { textFile, textSection } from '../engine/textLoader.js';
+import { textFile, textSection, setTextVariant, storySection, variantSection, turnSection, answerSection } from '../engine/textLoader.js';
 import { inUiSpace } from '../engine/screen.js';
 import { music, sfx } from '../audio/music.js';
-import { WORLD_STATE, saveGame, loadGame } from '../state/saveGame.js';
+import { doorSound, gateSound } from '../audio/doorSounds.js';
+import { WORLD_STATE, saveGame, loadGame, snapshotState, restoreState } from '../state/saveGame.js';
 import { BattleScene } from '../battle/battleScene.js';
 import { ShopScene } from '../shop/shopScene.js';
 import { FishingScene } from '../ui/fishingScene.js';
-import { GameOverScene } from '../gameOver/gameOverScene.js';
+import { GameOverScene, bossGameOverWords } from '../gameOver/gameOverScene.js';
 import { ROOMS } from '../data/rooms/index.js';
 // Every enemy by id (its file name in src/data/enemies/); rooms' `enemy` refers to these.
 import { ENEMIES } from '../data/enemies/index.js';
@@ -31,38 +32,48 @@ import { drawSnow, drawCirclingBirds, drawWisps, drawFog } from './weather.js';
 import { drawVision } from './visions.js';
 import { Stage } from './stageShow.js';
 import { makeAtmosphere } from './atmosphere.js';
+import { setGust } from './gustFlutter.js';
 import { beatPulse } from './beatPulse.js';
 import { makeTouches } from './touches.js';
+import { makeLiveliness } from './liveliness.js';
+import { makeReflections } from './reflections.js';
+import { makeDynamicLight } from './dynamicLight.js';
 import { updateFolk } from './folk.js';
+import { updateReactions, reactToTalk } from './npcReactions.js';
 import { drawShadows, drawBlockShadows, sunShadows, drawPropFootShadows, setShadowDepth } from './shadows.js';
 import { Whirl, WhirlRide, windIn, turnWind, applyWind, whirlLanding, WIND_STEP } from './weathervanes.js';
 import { PROP_SPRITES } from '../data/art/props.js';
 import { daylight } from './daylight.js';
-import { isLamplit, isRelit, roomLights, ambientFor, flickerAt, skyColor, holeSprite, glowSprite } from './lamplight.js';
+import { isLamplit, isRelit, cachedRoomLights, breatheAt, ambientFor, flickerAt, skyColor, holeSprite, glowSprite } from './lamplight.js';
 import { heroFrame } from '../characters/hero.js';
+import { setMirrorPainter } from './prop.js';
 import { healHeroFully, heroMaxHp } from '../characters/progress.js';
 import { Follower } from './follower.js';
-import { MEMBERS, partyIds, joinParty, inParty, isHurt } from '../characters/party.js';
+import { MEMBERS, partyIds, joinParty, inParty, isHurt, pronoun } from '../characters/party.js';
 import { wielderOf, HERO } from '../characters/equipment.js';
 import { ITEMS, giveItem } from '../data/items.js';
 import { ARMOR } from '../data/armor.js';
 import { WEAPONS } from '../data/weapons.js';
-import { GEAR, hasGear, giveGear } from '../data/gear.js';
+import { GEAR, GEAR_SETS, hasGear, giveGear } from '../data/gear.js';
 import { questRuleHolds, applyQuestRule } from '../data/quests.js';
 import { ChapterEndScene } from '../title/chapterEndScene.js';
 import { burnCandle, lightRadius } from '../data/candles.js';
 import { HERO_STATE } from '../characters/heroState.js';
+import { forgeReady } from '../data/fallenStar.js';
 import { skillBonus } from '../characters/progress.js';
 import { CreditsScene } from '../title/creditsScene.js';
-import { recordChapterStart, settleChapter, LAST_CHAPTER } from '../state/chapters.js';
+import { recordChapterStart, recordChapterBeaten, settleChapter, catchUpSave, chapterProgress, LAST_CHAPTER } from '../state/chapters.js';
 import { roomForChapter } from './chapterRooms.js';
 import { SeedCloud } from './seedCloud.js';
 import { FloatTrio, brambleHere } from './trioFloat.js';
-import { WindGeyser, Updraft, GeyserRide, canRide, hopPath, hopAt, VES } from './windGeyser.js';
+import { WindGeyser, Updraft, GeyserRide, canRide, hopPath, hopAt, VES, holdingHands } from './windGeyser.js';
+import { COAST_AREAS } from './coastTiles.js';
 import { HushShadow, SoundHunter } from './hushwood.js';
 import { Bridges } from './bridges.js';
 import { Carts } from './carts.js';
 import { Tides } from './tides.js';
+import { RoomList, ShipList } from './shipList.js';
+import { Haunt } from './haunt.js';
 import { crumbleIn } from './crumble.js';
 import { BeamField, makeVesWell } from './beams.js';
 import { LampField } from './lamps.js';
@@ -106,8 +117,8 @@ const SINK_SECONDS = 1.8;
 // The mist's colour, and how far you can see through it round yourself.
 const MIST_TINT = '176, 186, 188';
 const MIST_SIGHT = 30;
-// How long a follower can be held up at a gap before they catch you up anyway.
-const FOLLOWER_STRANDED = 1.5;
+// How long a follower can be held up at a gap before they walk on along your path anyway.
+const FOLLOWER_STRANDED = 0.4;
 // How fast you settle onto the middle of a stepping-stone, pixels a second.
 const SETTLE_SPEED = 30;
 // A tile's step in each direction you can face.
@@ -136,6 +147,47 @@ const BATTLE_JOLT_AT = 0.24;
 
 // Dark rooms: the darkness is drawn onto this, with holes cut where light reaches.
 let darkCanvas = null;
+// Which tiles of a room's picture can be seen through (any pixel not solid),
+// read once a picture: where a vista shows (see vistaBox).
+const seeThrough = new WeakMap();
+function seeThroughTiles(picture) {
+  let open = seeThrough.get(picture);
+  if (open) return open;
+  const cols = Math.ceil(picture.width / T);
+  const rows = Math.ceil(picture.height / T);
+  const flags = new Uint8Array(cols * rows);
+  let data = null;
+  try {
+    data = picture.getContext('2d').getImageData(0, 0, picture.width, picture.height).data;
+  } catch {
+    flags.fill(1);
+  }
+  if (data) {
+    for (let y = 0; y < picture.height; y++) {
+      for (let x = 0; x < picture.width; x++) {
+        if (data[(y * picture.width + x) * 4 + 3] < 255) flags[Math.floor(y / T) * cols + Math.floor(x / T)] = 1;
+      }
+    }
+  }
+  open = { cols, rows, flags };
+  seeThrough.set(picture, open);
+  return open;
+}
+
+// Lamplight's two pictures (see drawLamplight), made once: plain white and
+// plain black, and wiped back to that after each use.
+let lightCanvases = null;
+function lightLayers() {
+  const make = (fill) => {
+    const canvas = Object.assign(document.createElement('canvas'), { width: SCREEN_WIDTH, height: SCREEN_HEIGHT });
+    const c = canvas.getContext('2d');
+    c.fillStyle = fill;
+    c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    return canvas;
+  };
+  lightCanvases ??= { tint: make('#fff'), glow: make('#000') };
+  return lightCanvases;
+}
 
 // Footprints in the snow last this long, and come every so many pixels walked.
 const PRINT_SECONDS = 70;
@@ -194,7 +246,9 @@ export function continueGame(fallbackRoom, { whole = false } = {}) {
   const loaded = loadGame();
   // (A save from before the end of a chapter stopped moving you on into one
   // that isn't built yet: back to the last chapter there is.)
-  if (loaded && settleChapter()) saveGame(WORLD_STATE.room, WORLD_STATE.spawn);
+  // (And one far behind its chapter's level, from an old start, is caught up
+  // once: catchUpSave in chapters.js.)
+  if (loaded && (settleChapter() | catchUpSave())) saveGame(WORLD_STATE.room, WORLD_STATE.spawn);
   if (whole) healHeroFully();
   if (loaded && ROOMS[WORLD_STATE.room]) return new OverworldScene(ROOMS[WORLD_STATE.room], WORLD_STATE.spawn);
   return new OverworldScene(fallbackRoom);
@@ -226,6 +280,8 @@ export class OverworldScene {
     // Sunnyside's first rooms read differently in Chapter 5 (chapterRooms.js).
     roomData = roomForChapter(roomData);
     this.roomData = roomData;
+    // Standing mirrors show the hero (drawMirrorImage).
+    setMirrorPainter((ctx, glass) => this.drawMirrorImage(ctx, glass));
     // Darker foot shadows on the dark ground underground (shadows.js).
     setShadowDepth(DARK_GROUND.has(roomData.area) ? 1.45 : 1);
     this.room = new Room(roomData);
@@ -270,6 +326,9 @@ export class OverworldScene {
     this.geysers = (roomData.geysers ?? []).map((data) => new WindGeyser(data));
     // Updrafts: small ones that toss you to another tile in this room.
     this.updrafts = (roomData.gusts ?? []).map((data) => (data.seeds ? new SeedCloud(data, this.room) : new Updraft(data)));
+    // On the coast (sand and wet rock, often in heavy rain) each one has a dark scoured
+    // ring and a swirl of grit at its foot, so the pale air still reads against the rain.
+    if (COAST_AREAS.has(roomData.area)) for (const updraft of this.updrafts) if (updraft instanceof Updraft) updraft.foot = true;
     // Whirlwinds, and the wind the weathervanes set (see weathervanes.js).
     this.whirls = (roomData.whirls ?? []).map((data) => new Whirl(data));
     // The Hush's shadow going over (see hushwood.js), and how much the room
@@ -315,9 +374,11 @@ export class OverworldScene {
     // The screen jolting (shakeCamera): how hard, and for how much longer.
     this.shake = null;
     // Each enemy has a key, so a beaten one stays gone even after leaving the room.
+    // One with `until: '<scene id>'` is gone for good once that scene has played
+    // (the Last Light's monsters, once the sea has been through the tower).
     this.npcs = (roomData.npcs ?? [])
       .map((data, i) => Object.assign(new Npc(data), { key: data.key ?? `${roomData.id}:${i}`, light: data.light ?? ENEMIES[data.enemy]?.light ?? null }))
-      .filter((npc) => !WORLD_STATE.defeated.includes(npc.key));
+      .filter((npc, i) => !WORLD_STATE.defeated.includes(npc.key) && !(roomData.npcs[i].until && (WORLD_STATE.seenScenes ?? []).includes(roomData.npcs[i].until)) && !(roomData.npcs[i].after && !(WORLD_STATE.seenScenes ?? []).includes(roomData.npcs[i].after)));
     this.camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
     this.textbox = new TextBox();
     this.pauseMenu = new PauseMenu();
@@ -331,7 +392,11 @@ export class OverworldScene {
     this.fadeIn = DOOR_FADE_SECONDS;
     this.titleTime = 0;
     // The region's name card, only when arriving from a different region.
-    this.areaName = roomData.area !== fromArea ? AREA_NAMES[roomData.area] : null;
+    // A room can count as another region for the card (`titleArea`): the cliff
+    // cave under the Sea View is drawn in Gullrest's rock but is still Sunnyside,
+    // so GULLREST comes up on the cliff steps, not in the cave.
+    const cardArea = roomData.titleArea ?? roomData.area;
+    this.areaName = cardArea !== fromArea ? AREA_NAMES[cardArea] : null;
     // Mine carts and their rails (carts.js); arriving through a door in a cart rolls on.
     this.carts = new Carts(this, arrival.cart ?? null);
     // Light beams, prisms, crystal eyes and light bridges (beams.js).
@@ -344,24 +409,55 @@ export class OverworldScene {
     // Singing crystals (chimes.js).
     this.chimes = new Chimes(this);
     // The tide: clock, wheels, bells, gauge (tides.js).
-    this.tides = new Tides(this);
+    this.tides = this.room.tide instanceof RoomList ? new ShipList(this) : new Tides(this);
+    // The ghost ship's lantern, watching portraits and the dread under it (haunt.js): only in rooms with a `haunt` field.
+    this.haunt = roomData.haunt ? new Haunt(this) : null;
     // Dust, glints, embers, mist and the like (atmosphere.js).
     this.atmosphere = makeAtmosphere(this);
     // The room's own little extras: bees, a kite, washing, eyes in the dark (touches.js).
     this.touches = makeTouches(this);
+    // The world noticing you: reflections, prints, birds, moths (liveliness.js).
+    this.life = makeLiveliness(this);
+    // Still water giving back the party, the lamps and what stands at its edge (reflections.js).
+    this.reflections = makeReflections(this);
+    // Lamps, fires, windows and lightning lighting the people in the room (dynamicLight.js).
+    this.dynLight = makeDynamicLight(this);
   }
 
   enter(game) {
     this.game = game;
+    // After the storm, a calm room's words have their `_calm` versions where the text file has them.
+    setTextVariant(this.calm ? 'calm' : null);
     // The room's song, and its ambience (wind, birds, dripping caves: see music.js).
     // `musicFrom`: start the room's song at one of its sections (the Storm Reach's calm eye).
-    music.play(this.song, this.roomData.ambience ?? null, this.roomData.musicFrom ?? null);
+    // `echo`: how the room rings (src/audio/music.js, setEcho): 'cave', 'hull'
+    // or false; left out, a cave or a hull rings by its ambience.
+    music.setEcho(this.roomData.echo);
+    music.play(this.song, this.ambience, this.roomData.musicFrom ?? null);
     // A scene played on its own as soon as we arrive (see end_chapter's
     // `postCredits`): nobody else is in it, so the party waits out of sight.
     if (this.opening) {
       for (const follower of this.followers) follower.hidden = true;
       this.playCutscene(SCENES[this.opening]);
     }
+  }
+
+  // The room's ambience, or once its `calmAfter` scene has played, that one's
+  // (see makeAtmosphere in atmosphere.js).
+  // `ambienceAfter` ({ scene, ambience }), like musicAfter: once that scene has
+  // played, the place sounds different (Belowtown Square partying once the
+  // light has gone up).
+  get ambience() {
+    if (this.calm) return this.roomData.calmAfter.ambience ?? null;
+    const after = this.roomData.ambienceAfter;
+    if (after && (WORLD_STATE.seenScenes ?? []).includes(after.scene)) return after.ambience;
+    return this.roomData.ambience ?? null;
+  }
+
+  // Whether the room's `calmAfter` scene has played (the storm over, after chapter 5).
+  get calm() {
+    const calm = this.roomData.calmAfter;
+    return Boolean(calm && (WORLD_STATE.seenScenes ?? []).includes(calm.scene));
   }
 
   // The room's song: its `music`, or, once a scene has played, the song of
@@ -380,11 +476,16 @@ export class OverworldScene {
     const gusts = this.room.climbWind;
     this.gusting = Boolean(gusts) && (this.time % gusts.every) < gusts.lasts;
     WORLD_STATE.playSeconds = (WORLD_STATE.playSeconds ?? 0) + dt;
+    // Time played, kept apart from playSeconds (the clock the sun runs on), which a
+    // cutscene's `time` step can set. An old save starts it from the clock.
+    WORLD_STATE.timePlayed = (WORLD_STATE.timePlayed ?? WORLD_STATE.playSeconds ?? 0) + dt;
     this.fadeIn = Math.max(0, this.fadeIn - dt);
     this.updateParticles(dt);
     this.updateFeet(dt);
+    this.life?.update(dt);
     this.chimes.update(dt);
     this.tides.update(dt);
+    this.haunt?.update(dt, input);
     // Underground, the light breathes with the song: `swell` follows how loud
     // the music is (0 in a hush, 1 at the top of a wave), smoothed. The
     // Deep's crystals, the Glimmering's and the Stillwater's glowing reeds
@@ -406,7 +507,7 @@ export class OverworldScene {
         const arrival = door.climb ? { climb: true, swing: this.climbMomentum ?? null } : {};
         arrival.from = this.roomData.id;
         if (this.carts.rideInfo) arrival.cart = this.carts.rideInfo;
-        this.game.changeScene(new OverworldScene(ROOMS[door.to], door.spawn, this.roomData.area, arrival));
+        this.game.changeScene(new OverworldScene(ROOMS[door.to], door.spawn, (this.roomData.titleArea ?? this.roomData.area), arrival));
       }
       return;
     }
@@ -442,7 +543,7 @@ export class OverworldScene {
       this.ride = null;
       if (geyser) {
         if (!ROOMS[geyser.to]) throw new Error(`A wind geyser in ${this.roomData.id} blows to unknown room '${geyser.to}'`);
-        this.game.changeScene(new OverworldScene(ROOMS[geyser.to], geyser.spawn, this.roomData.area, { geyser: true }));
+        this.game.changeScene(new OverworldScene(ROOMS[geyser.to], geyser.spawn, (this.roomData.titleArea ?? this.roomData.area), { geyser: true }));
         return;
       }
       for (const follower of this.followers) follower.warpTo(this.player.x, this.player.y + 2);
@@ -467,7 +568,7 @@ export class OverworldScene {
       if (this.rope.done === 'top') {
         const { to, spawn } = this.roomData.rope;
         if (!ROOMS[to]) throw new Error(`The rope in ${this.roomData.id} goes up to unknown room '${to}'`);
-        this.game.changeScene(new OverworldScene(ROOMS[to], spawn, this.roomData.area, { from: this.roomData.id }));
+        this.game.changeScene(new OverworldScene(ROOMS[to], spawn, (this.roomData.titleArea ?? this.roomData.area), { from: this.roomData.id }));
       } else if (this.rope.done === 'foot') {
         this.rope = null;
         this.player.y = Math.round(this.player.y);
@@ -542,6 +643,9 @@ export class OverworldScene {
         const { battle, endChapter, goto, goOn } = this.cutscene;
         this.cutscene = null;
         this.room.refreshShowsUp();
+        // A scene that changed the song drops the place's sounds; once the room's
+        // own song is back, so are they (or the calm's, if the scene ended the storm).
+        if (!battle && !goto && !endChapter && music.songName === this.song) music.setAmbience(this.ambience);
         if (battle) {
           this.storyBattle(battle);
           return;
@@ -551,7 +655,7 @@ export class OverworldScene {
           if (!next) throw new Error(`A cutscene in ${this.roomData.id} goes to unknown room '${goto.room}'`);
           // With `save`, it saves by itself there (no going back up a well).
           if (goto.save) saveGame(next.id, goto.spawn ?? next.playerStart);
-          this.game.changeScene(new OverworldScene(next, goto.spawn ?? next.playerStart, this.roomData.area, { from: this.roomData.id }));
+          this.game.changeScene(new OverworldScene(next, goto.spawn ?? next.playerStart, (this.roomData.titleArea ?? this.roomData.area), { from: this.roomData.id }));
           return;
         }
         // A stinger played on its own ends with `go_on`: on to what was waiting behind it.
@@ -561,6 +665,9 @@ export class OverworldScene {
         }
         if (endChapter) {
           const next = ROOMS[endChapter.room];
+          // The credits can only be skipped by someone who has finished this
+          // chapter before (asked now, before this ending records it as beaten).
+          const seenBefore = chapterProgress().beaten.has(endChapter.chapter ?? WORLD_STATE.chapter ?? 1);
           // On to the next chapter (the skill tree grows with it), and the
           // end of a chapter saves by itself, ready to start the next one.
           // With no next room yet (the next chapter isn't built), you stay in
@@ -570,17 +677,23 @@ export class OverworldScene {
           // a later chapter mustn't push you on a chapter too far (or back one).
           const now = WORLD_STATE.chapter ?? 1;
           const reached = Math.min(LAST_CHAPTER, Math.max(now, (endChapter.chapter ?? now) + 1));
+          // The last chapter there is, ending with a room to go on in (the end of
+          // chapter 5 puts you back in Saltcombe): you play on in it, it counts
+          // as beaten, and its recorded start is left as it was.
+          const playOn = Boolean(next) && reached <= (endChapter.chapter ?? 0);
           if (next) WORLD_STATE.chapter = reached;
-          else WORLD_STATE.chapterDone = reached - 1;
+          if (!next) WORLD_STATE.chapterDone = reached - 1;
+          else if (playOn) WORLD_STATE.chapterDone = reached;
           // With no next room yet, `saveIn: { room, spawn }` is where Continue
           // picks up instead (somewhere safe in the chapter just finished).
           if (next) saveGame(next.id, endChapter.spawn ?? next.playerStart);
           else if (endChapter.saveIn) saveGame(endChapter.saveIn.room, endChapter.saveIn.spawn);
           // Remembered for chapter select, to start the next chapter later
           // (and the one just finished counts as beaten).
-          recordChapterStart(reached);
+          if (playOn) recordChapterBeaten(reached);
+          else recordChapterStart(reached);
           let goOn = next
-            ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, this.roomData.area)
+            ? () => new OverworldScene(next, endChapter.spawn ?? next.playerStart, (this.roomData.titleArea ?? this.roomData.area))
             : this.game.home;
           // With `postCredits: '<scene id>'`, that scene plays last, after the
           // card and the credits, alone in its own room (the scene names its
@@ -598,7 +711,7 @@ export class OverworldScene {
           // for a chapter's own song and cards); `card` names its chapter card.
           const card = () => new ChapterEndScene(goOn, endChapter.card);
           const credits = endChapter.credits === true ? {} : endChapter.credits;
-          this.game.changeScene(credits ? new CreditsScene(card, credits) : card());
+          this.game.changeScene(credits ? new CreditsScene(card, { ...credits, skippable: seenBefore }) : card());
           return;
         }
       }
@@ -635,8 +748,8 @@ export class OverworldScene {
     } else if (this.caught) {
       this.updateCaught(dt);
     } else if (input.wasPressed('menu') && !this.player.isAirborne) {
-      sfx('select');
-      this.pauseMenu.open();
+      sfx('menuOpen');
+      this.pauseMenu.open(this.roomData);
     } else if (input.wasPressed('swap') && !this.player.isAirborne && this.canSwap(this.qTarget())) {
       this.steer(this.qTarget());
     } else if (input.wasPressed('swapB') && !this.player.isAirborne && this.canSwap(this.eTarget())) {
@@ -650,9 +763,12 @@ export class OverworldScene {
       const p = this.partner;
       this.room.blockers = this.others.filter((o) => !(Math.abs(o.x - this.player.x) < 10 && Math.abs(o.y - this.player.y) < 6));
       const wasGround = this.player.ground;
+      const was = { x: this.player.x, y: this.player.y, jumped: this.player.jumpedAt };
       this.player.update(dt, input, this.room);
+      if (this.player.jumpedAt !== was.jumped) sfx('jump');
       if (this.player.ground > wasGround) this.leaveVesBelow();
       this.pushRocks(dt, input);
+      this.bumpWall(dt, input, was);
       this.carts.push(dt, input);
       this.settleTreadles();
       this.updateHush(dt);
@@ -670,6 +786,7 @@ export class OverworldScene {
       if (this.roomData.dark) this.burnCandle(dt);
       for (const npc of this.npcs) npc.update(dt, this.player, this.room);
       updateFolk(this, dt);
+      updateReactions(this, dt);
       if (this.player.landedThisFrame) this.handleLanding();
       if (input.wasPressed('confirm') && !this.player.isAirborne) this.interact();
       this.checkDoors();
@@ -682,7 +799,10 @@ export class OverworldScene {
       }
 
       // Either of you, if you've split up.
-      const foe = this.npcs.find((npc) => npc.touches(this.player) || this.others.some((o) => npc.touches(o)));
+      // One out on water you can't walk (a jelly in the basin, an eel in the
+      // pool) is met from the bank: anywhere within two and a half tiles of it.
+      const reach = (npc) => (this.room.isSolidTile(Math.floor(npc.x / T), Math.floor((npc.y - 1) / T)) ? 40 : undefined);
+      const foe = this.npcs.find((npc) => npc.touches(this.player, reach(npc)) || this.others.some((o) => npc.touches(o, reach(npc))));
       if (foe && !this.player.isAirborne && !this.doorway) this.caughtBy(foe);
     }
 
@@ -833,6 +953,43 @@ export class OverworldScene {
     ctx.restore();
   }
 
+  // In a standing mirror (on screen, `glass`): the hero, if they're in front
+  // of it and near enough. Facing the mirror you see your face; turned away,
+  // your back. The further off you stand, the higher up the glass your feet
+  // are. A cool tint and the glass's streak of light go back over the top.
+  // Your friends show in it too, the furthest off drawn first (deepest in
+  // the glass), each as they are: walking, glancing at it, or sat down.
+  drawMirrorImage(ctx, glass) {
+    if (this.climb) return;
+    const bottom = glass.y + glass.h;
+    const seen = [this.heroBody, ...this.followers, ...this.others.filter((b) => b !== this.heroBody)]
+      .filter((body) => body && !body.hidden && !body.tucked)
+      .map((body) => ({ body, sx: body.x - this.camera.x, away: body.y - this.camera.y - bottom }))
+      .filter(({ sx, away }) => away >= -2 && away <= 5 * T && Math.abs(sx - (glass.x + glass.w / 2)) <= 2 * T)
+      .sort((a, b) => b.away - a.away);
+    if (!seen.length) return;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(glass.x, glass.y, glass.w, glass.h);
+    ctx.clip();
+    ctx.globalAlpha = 0.85;
+    for (const { body, sx, away } of seen) {
+      const turned = { up: 'down', down: 'up', left: 'left', right: 'right' }[body.facing] ?? 'down';
+      const frame = body === this.heroBody
+        ? heroFrame(turned, body.moving, body.isAirborne, body.animationTime ?? 0, body.running)
+        : this.life?.mirrorFrame(body) ?? null;
+      if (!frame) continue;
+      const feet = bottom - 1 - Math.min(6, Math.round(Math.max(0, away) / 8));
+      ctx.drawImage(frame, Math.round(sx - frame.width / 2), feet - frame.height);
+    }
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = 'rgba(160, 205, 235, 0.22)';
+    ctx.fillRect(glass.x, glass.y, glass.w, glass.h);
+    ctx.fillStyle = 'rgba(235, 248, 255, 0.35)';
+    ctx.fillRect(glass.x + glass.w - 3, glass.y + 1, 2, glass.h - 2);
+    ctx.restore();
+  }
+
   // --- Spire rooms: the outside of a round mountain (`wraps` in the room's data). ---
   // The room's map is the mountain's surface unrolled. Walking off one edge
   // brings you round to the other, and the room is drawn bent round a
@@ -910,6 +1067,17 @@ export class OverworldScene {
     return list;
   }
 
+  // Walking into a wall: one soft bump each time you push into it (after a
+  // moment, so brushing past a corner is quiet). Not while leaning on a rock.
+  bumpWall(dt, input, was) {
+    const p = this.player;
+    const held = ['left', 'right', 'up', 'down'].some((d) => input.isDown(d));
+    const stuck = held && p.x === was.x && p.y === was.y && !p.isAirborne && !p.isSliding && !this.pushing && !this.climb && !this.hop && !this.ride;
+    const before = stuck ? (this.bumpTime ?? 0) : 0;
+    this.bumpTime = stuck ? before + dt : 0;
+    if (before < 0.12 && this.bumpTime >= 0.12) sfx('bump');
+  }
+
   updateFeet(dt) {
     const walkers = this.walkers();
     this.bridges.update(dt, walkers);
@@ -937,6 +1105,7 @@ export class OverworldScene {
       const under = this.bridges.step(body, body.running ? 1.3 : 1);
       if (under && body === this.player && Math.random() < 0.3) sfx('creak');
       if (body === this.player) this.chimes.footstep();
+      if (body === this.player) music.footstep(groundUnder(this.room, body));
       footfall(this.particles, groundUnder(this.room, body), body, { running: Boolean(body.running), light: body !== this.player, under, way });
     }
   }
@@ -962,7 +1131,37 @@ export class OverworldScene {
     const yaw = (vista.heading ?? 0) + (this.spire ? ((this.camera.x + SCREEN_WIDTH / 2) % w) / w : 0);
     const rise = Math.max(0, this.room.pixelHeight - SCREEN_HEIGHT - this.camera.y);
     const { night, dusk } = daylight();
-    return { kind: vista.kind, yaw, rise, altitude: vista.altitude ?? 0, driftX: this.spire ? 0 : this.camera.x, night, dusk };
+    return { kind: vista.kind, calm: this.calm, yaw, rise, altitude: vista.altitude ?? 0, driftX: this.spire ? 0 : this.camera.x, night, dusk };
+  }
+
+  // The part of the screen where the view shows through (the room's open sky,
+  // and anything past the room's edges), as [x, y, w, h], or null for none:
+  // the rest is covered by the room's picture, so there's no need to paint
+  // the view there.
+  vistaBox() {
+    const picture = this.room.background;
+    const open = seeThroughTiles(picture);
+    const cam = this.camera;
+    let x0 = Infinity;
+    let y0 = Infinity;
+    let x1 = -Infinity;
+    let y1 = -Infinity;
+    // Every tile with any of it on the screen.
+    for (let ty = Math.floor(cam.y / T); ty <= Math.floor((cam.y + SCREEN_HEIGHT - 0.001) / T); ty++) {
+      for (let tx = Math.floor(cam.x / T); tx <= Math.floor((cam.x + SCREEN_WIDTH - 0.001) / T); tx++) {
+        if (tx >= 0 && ty >= 0 && tx < open.cols && ty < open.rows && !open.flags[ty * open.cols + tx]) continue;
+        x0 = Math.min(x0, tx * T);
+        y0 = Math.min(y0, ty * T);
+        x1 = Math.max(x1, tx * T + T);
+        y1 = Math.max(y1, ty * T + T);
+      }
+    }
+    if (x1 < x0) return null;
+    const left = Math.max(0, Math.floor(x0 - cam.x) - 1);
+    const top = Math.max(0, Math.floor(y0 - cam.y) - 1);
+    const right = Math.min(SCREEN_WIDTH, Math.ceil(x1 - cam.x) + 1);
+    const bottom = Math.min(SCREEN_HEIGHT, Math.ceil(y1 - cam.y) + 1);
+    return right > left && bottom > top ? [left, top, right - left, bottom - top] : null;
   }
 
   // Whether the time of day shows here: outdoors, under the sky.
@@ -973,23 +1172,24 @@ export class OverworldScene {
   // Stepping into a cutscene trigger plays its scene (just the first time,
   // unless the scene says `once: false`).
   checkCutscenes() {
-    // Scenes wait till you're together again.
-    if (this.player.isAirborne || this.doorway || this.cutscene) return;
+    if (this.doorway || this.cutscene) {
+      this.jumpedTrigger = null;
+      return;
+    }
+    // Mid-jump nothing plays, but a trigger you jump over is remembered and
+    // plays as you land: a jump can't carry you past a scene (Taper's, at
+    // the way out, is only two tiles wide).
+    if (this.player.isAirborne) {
+      if (!this.partner) this.jumpedTrigger = this.triggerAt(...this.player.tilePosition()) ?? this.jumpedTrigger;
+      return;
+    }
     if (this.partner) {
       this.nudgeWhileSplit();
       return;
     }
-    const [tx, ty] = this.player.tilePosition();
-    // A trigger can wait for a scene to have played (`after`), or stop once
-    // one has (`until`), like a prop.
-    const seen = WORLD_STATE.seenScenes ?? [];
-    const trigger = (this.roomData.cutscenes ?? []).find((c) => !c.nudge && tx >= c.x && tx < c.x + c.w && ty >= c.y && ty < c.y + c.h
-      && (!c.after || seen.includes(c.after)) && (!c.until || !seen.includes(c.until))
-      // `when`: a room switch (a lever, a crystal eye) that has to be on, for a scene a
-      // beam sets off (the light going up the root).
-      && (!c.when || this.room.isLeverOn(c.when))
-      // A scene already watched (once) doesn't hide the next one on the same tiles (an `after` chain).
-      && (SCENES[c.scene]?.once === false || !seen.includes(c.scene)));
+    const jumped = this.jumpedTrigger;
+    this.jumpedTrigger = null;
+    const trigger = this.triggerAt(...this.player.tilePosition()) ?? jumped;
     if (!trigger) {
       this.lastTrigger = null;
       return;
@@ -1003,6 +1203,32 @@ export class OverworldScene {
     this.lastTrigger = trigger;
     if (!WORLD_STATE.seenScenes.includes(scene.id)) WORLD_STATE.seenScenes.push(scene.id);
     this.playCutscene(scene);
+  }
+
+  // The cutscene trigger on tile (tx, ty) that would play now, if any. A
+  // trigger can wait for a scene to have played (`after`), or stop once one
+  // has (`until`), like a prop. Either can be a list: any one of them counts
+  // (so a save already further on than the scene is treated as past it).
+  triggerAt(tx, ty) {
+    const seen = WORLD_STATE.seenScenes ?? [];
+    const any = (ids) => [ids].flat().some((id) => seen.includes(id));
+    return (this.roomData.cutscenes ?? []).find((c) => !c.nudge && tx >= c.x && tx < c.x + c.w && ty >= c.y && ty < c.y + c.h
+      && (!c.after || any(c.after)) && (!c.until || !any(c.until))
+      // `when`: a room switch (a lever, a crystal eye) that has to be on, for a scene a
+      // beam sets off (the light going up the root).
+      && (!c.when || this.room.isLeverOn(c.when))
+      // `forge`: a smith's shop id; only while that smith's reforge of the Fallen Star is ready
+      // (you have the sword and the piece it needs: src/data/fallenStar.js). Orla's forge.
+      && (!c.forge || forgeReady(c.forge))
+      // `gear`: a keepsake you have to be carrying (the ghost ship's cabin key).
+      && (!c.gear || hasGear(c.gear))
+      // `someGear`: at least one of these keepsakes, but not every one (some of a quest's pieces:
+      // Seam Nine's crack, with one or two of the whistle's three).
+      && (!c.someGear || (c.someGear.some((id) => hasGear(id)) && !hasGear(c.someGear)))
+      // `weapon`: a weapon you have to own (the Fallen Star, held to the Old Street's sealed cleft).
+      && (!c.weapon || HERO_STATE.weapons.includes(c.weapon))
+      // A scene already watched (once) doesn't hide the next one on the same tiles (an `after` chain).
+      && (SCENES[c.scene]?.once === false || !seen.includes(c.scene)));
   }
 
   // A cutscene entry with `nudge: '<section>'` is Ves speaking up, once, while
@@ -1024,6 +1250,8 @@ export class OverworldScene {
   // not the snowy heights.
   get battleArea() {
     const data = this.roomData;
+    // A room can name its own (the cliff cave: `battleArea: 'cliff_cave'`).
+    if (data.battleArea) return data.battleArea;
     if (data.cave) return 'cave';
     // The Hushwood (and Hollin, in it) is still the Pinefall, deeper in: its
     // fights look and sound the same.
@@ -1039,7 +1267,11 @@ export class OverworldScene {
   // A step can name several `enemies` instead of one `enemy` (a pack, say),
   // and an `after` scene that plays however it was won. With `noRun`, there's
   // no running away (`noRunText`, a section of the room's text file, says why).
-  storyBattle(step) {
+  //
+  // Losing one offers TRY AGAIN as well as the last save: straight back into
+  // the same fight, everyone whole, with everything as it was when it first
+  // began (`start`), and the same scenes after it.
+  storyBattle(step, start = snapshotState()) {
     const ids = step.enemies ?? [step.enemy];
     const list = ids.map((id) => {
       if (!ENEMIES[id]) throw new Error(`A cutscene starts a battle with unknown enemy '${id}'`);
@@ -1049,7 +1281,12 @@ export class OverworldScene {
     const noRun = step.noRun ? (textSection(this.roomData.textFile, step.noRunText ?? '')[0] ?? true) : null;
     game.changeScene(new BattleScene(list, (result, outcomes, gameOver) => {
       if (result === 'death') {
-        game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true }), gameOver ?? 'Your light flickered out.'));
+        const retry = () => {
+          restoreState(start);
+          healHeroFully();
+          this.storyBattle(step, start);
+        };
+        game.changeScene(new GameOverScene(() => continueGame(this.roomData, { whole: true }), gameOver ?? bossGameOverWords(ids) ?? 'Your light flickered out.', { retry }));
         return;
       }
       game.changeScene(this);
@@ -1059,7 +1296,7 @@ export class OverworldScene {
       WORLD_STATE.seenScenes ??= [];
       if (!WORLD_STATE.seenScenes.includes(next)) WORLD_STATE.seenScenes.push(next);
       if (SCENES[next]) this.playCutscene(SCENES[next]);
-    }, this.battleArea, { noRun }));
+    }, this.battleArea, { noRun, stormOver: this.calm }));
   }
 
   // Never leave the player stuck where they arrive (say, a door that opens onto
@@ -1142,9 +1379,11 @@ export class OverworldScene {
       const to = { x: updraft.drop.x * T + T / 2, y: (updraft.drop.y + 1) * T - 2 };
       this.hop = hopPath({ x: this.player.x, y: this.player.y }, to, this.player.ground, this.room.raiseAt(updraft.drop.x, updraft.drop.y));
       // A seed cloud lifts the whole party on Ves's umbrella (trioFloat.js): you
-      // hold her hand, and Bramble, if he's with you, hangs on her boot.
+      // hold her hand, and Bramble, if he's with you, hangs on her boot. Once
+      // she's offered you her hand, every updraft (the coast's gusts too) takes
+      // the party up together the same way, so nobody is left behind.
       const together = !this.others.length && !this.player.skin && !this.player.carrying && this.followers.some((f) => f.id === VES && !f.hidden);
-      this.hopTrio = updraft instanceof SeedCloud && together && canRide() ? new FloatTrio(this.player, this.hop, brambleHere()) : null;
+      this.hopTrio = (updraft instanceof SeedCloud || holdingHands()) && together && canRide() ? new FloatTrio(this.player, this.hop, brambleHere()) : null;
       sfx('flare');
       return;
     }
@@ -1286,10 +1525,26 @@ export class OverworldScene {
   checkDoors() {
     if (this.player.isAirborne) return;
     const [tx, ty] = this.player.tilePosition();
-    // A door can wait for a scene to have played (`after`): until then it isn't one.
-    const door = (this.roomData.doors ?? []).find((d) => tx >= d.x && tx < d.x + d.w && ty >= d.y && ty < d.y + d.h
-      && (!d.after || (WORLD_STATE.seenScenes ?? []).includes(d.after)));
-    if (!door) return;
+    // A door can wait for a scene to have played (`after`, or a list: any one of them will
+    // do, so a save already further on isn't shut out): until then it isn't one. With
+    // `notYet: '<section>'` it turns you back with those words (from the room's text
+    // file, and the friends' answers), so the way on points at the scene you've missed.
+    const seen = WORLD_STATE.seenScenes ?? [];
+    const open = (d) => !d.after || [d.after].flat().some((id) => seen.includes(id));
+    const here = (d) => tx >= d.x && tx < d.x + d.w && ty >= d.y && ty < d.y + d.h;
+    const door = (this.roomData.doors ?? []).find((d) => here(d) && open(d));
+    if (!door) {
+      const shut = (this.roomData.doors ?? []).find((d) => here(d) && d.notYet);
+      if (shut) {
+        const [bx, by] = BACK_STEP[this.player.facing] ?? [0, -1];
+        this.player.x += bx * T;
+        this.player.y += by * T;
+        this.unstick();
+        this.player.moving = false;
+        this.say(this.roomData.textFile, shut.notYet);
+      }
+      return;
+    }
     if (!ROOMS[door.to]) throw new Error(`A door in ${this.roomData.id} leads to unknown room '${door.to}'`);
     // Split up, nobody leaves without the other.
     if (this.partner) {
@@ -1321,7 +1576,7 @@ export class OverworldScene {
       if (ahead.leavesAhead.blocked) this.textbox.open(textSection(this.roomData.textFile, ahead.leavesAhead.blocked));
       return;
     }
-    sfx('door');
+    sfx(doorSound(this.roomData, ROOMS[door.to], door));
     this.doorway = { door, t: 0 };
   }
 
@@ -1331,6 +1586,8 @@ export class OverworldScene {
   handleLanding() {
     const under = this.bridges.step(this.player, 2.2);
     if (under) sfx('creak');
+    sfx('land');
+    music.footstep(groundUnder(this.room, this.player));
     landing(this.particles, groundUnder(this.room, this.player), this.player, under);
     if (this.roomData.area !== 'ruins' && !this.roomData.crumbles) return;
     // Stone blocks are solid all the way through: only the floor cracks.
@@ -1385,7 +1642,7 @@ export class OverworldScene {
       this.battleFlash = null;
       game.changeScene(this);
     };
-    game.changeScene(new BattleScene(group.map((npc) => ENEMIES[npc.enemy]), onEnd, this.battleArea));
+    game.changeScene(new BattleScene(group.map((npc) => ENEMIES[npc.enemy]), onEnd, this.battleArea, { stormOver: this.calm }));
   }
 
   interact() {
@@ -1411,7 +1668,11 @@ export class OverworldScene {
     // reaches it. The iron rings aren't pressed, they're climbed with the rope
     // (tryClimb): one hammered into the tile right in front of you must not
     // swallow the press, or Z at the foot of the face does nothing at all.
-    const prop = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y)).find((p) => p && this.inLight(p) && !p.grapple && !p.swing);
+    // A floor drawing with no words of its own (a puddle, a weed line) never
+    // takes the press: the tile under it keeps its own look line.
+    const wordless = (p) => p.flat && p.walkable && !p.text && !p.nightText && !p.npc && !p.shop && !p.gives
+      && !p.lever && !p.button && !p.treadle && !p.chime && !p.save && !p.quest && !p.fishing && !p.sound && !p.cast;
+    const prop = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y)).find((p) => p && this.inLight(p) && !p.grapple && !p.swing && !wordless(p));
     if (!prop) {
       if (!this.tryClimb()) this.inspectTile(Math.floor(px / T), Math.floor(py / T));
       return;
@@ -1439,6 +1700,8 @@ export class OverworldScene {
       this.textbox.open(textSection(this.roomData.textFile, prop.nightText));
       return;
     }
+    // Someone you talk to turns to you (and maybe a "!": npcReactions.js).
+    if (prop.npc) reactToTalk(this, prop);
     // Shops are their own screen; leaving comes back here (and to the room's music).
     // A reforge can hand back a scene to play in the room (the shop's `forgeScene`): once only.
     if (prop.shop) {
@@ -1454,15 +1717,19 @@ export class OverworldScene {
     else if (prop.save) this.useSavePoint();
     else if (prop.vane) this.turnVane();
     else if (prop.storage) {
-      sfx('select');
+      sfx('storage');
       this.storageMenu.open();
     }
     else if (prop.rest) this.useBed(prop);
     else if (prop.travel) this.useTravelDraft(prop);
     else if (prop.join && MEMBERS[prop.join]) this.recruit(prop);
     else if (prop.fishing && (WORLD_STATE.seenScenes ?? []).includes(prop.fishing)) this.offerFishing(prop);
-    else if (prop.npc) this.textbox.open(this.npcPages(prop), prop.npc);
-    else if ((prop.tideWheel || prop.tideBell || prop.tideDial) && this.tides.use(prop)) { /* the tide answered */ }
+    else if (prop.npc) {
+      this.textbox.open(this.npcPages(prop), prop.npc);
+      // Ves and Bramble can have their say on it too ([first_ves], [repeat_bramble 2]...).
+      if (this.npcSaid) this.queueAnswers(this.npcSaid.path, this.npcSaid.section);
+    }
+    else if ((prop.tideWheel || prop.tideBell || prop.tideDial || prop.listWheel) && this.tides.use(prop)) { /* the tide (or the ship's list) answered */ }
     else if (prop.lever) this.useLever(prop);
     else if (prop.chime) this.chimes.ring(prop);
     else if (prop.cart) this.carts.use(prop);
@@ -1474,7 +1741,69 @@ export class OverworldScene {
     else if (prop.gold) this.takeGold(prop);
     else if (prop.gives && prop.drawScene && SCENES[prop.drawScene]) this.drawFromStone(prop);
     else if (prop.gives) this.takeGift(prop);
-    else if (prop.text) this.say(this.roomData.textFile, prop.text);
+    else if (prop.pieces && this.lookWithPieces(prop)) { /* held up the quest's pieces you have */ }
+    else if (prop.text) this.lookAt(prop.text, `${this.roomData.id}:${prop.text}`, prop.pet, prop.speaker);
+  }
+
+  // `pieces: '<set>'` (a GEAR_SETS name) on the thing a quest's pieces go into (the ghost ship's binnacle):
+  // pressing Z on it while you carry some of them says so. [<text>_some_<n>] (how many), then a
+  // [<text>_has_<id>] for each one you have, on one page; then a [<text>_miss_<id>] hint for each one
+  // you don't, on the next. Ves and Bramble can answer [<text>_some_<n>]. With none (or no _some_ line
+  // for that many) it is the usual look.
+  lookWithPieces(prop) {
+    const file = this.roomData.textFile;
+    const words = textFile(file);
+    const ids = GEAR_SETS[prop.pieces] ?? [];
+    const held = ids.filter((id) => hasGear(id));
+    const some = `${prop.text}_some_${held.length}`;
+    if (!held.length || !words[some]?.length) return false;
+    const line = (name) => (words[name] ?? []).join(' ');
+    const pages = [
+      [some, ...held.map((id) => `${prop.text}_has_${id}`)].map(line).filter(Boolean).join(' '),
+      ids.filter((id) => !held.includes(id)).map((id) => line(`${prop.text}_miss_${id}`)).filter(Boolean).join(' '),
+    ].filter(Boolean);
+    this.textbox.open(pages);
+    this.queueReactions(file, some);
+    return true;
+  }
+
+  // Looking at something (a prop's `text`, or a tile's): its words, taking
+  // turns the more you look ([thing 2], [thing 3]; see turnSection), counted
+  // in the save so a second look is still a second look after you've been
+  // away. `pet`: it's a cat, and it blinks at you (coastTouches.js, touches.js).
+  // `speaker`: someone standing there says it (a portrait id, like 'tuck'):
+  // their face and voice in the box, as an NPC's.
+  lookAt(section, key, pet = false, speaker = null) {
+    const file = this.roomData.textFile;
+    if (pet) this.pettedAt = this.time;
+    const own = storySection(file, section, WORLD_STATE.seenScenes ?? []);
+    WORLD_STATE.turns ??= {};
+    const n = (WORLD_STATE.turns[`${key}:${own}`] ?? 0) + 1;
+    WORLD_STATE.turns[`${key}:${own}`] = n;
+    const turn = turnSection(file, own, n);
+    if (turn === own) {
+      this.say(file, section, speaker);
+      return;
+    }
+    // A turn has its own answers from the friends, or none.
+    this.textbox.open(textSection(file, turn), speaker);
+    this.queueAnswers(file, turn);
+  }
+
+  // Bramble's, then Ves's, words on a section, if they're with you and the
+  // file has them (see answerSection).
+  queueAnswers(file, section) {
+    const words = textFile(file);
+    const after = [[BRAMBLE, '_bramble'], [VES, '_ves']]
+      .map(([who, end]) => [who, answerSection(section, end)])
+      .filter(([who, name]) => inParty(who) && words[name]?.length)
+      .map(([who, name]) => [words[name], who]);
+    const next = () => {
+      const [lines, who] = after.shift();
+      this.textbox.open(lines, who);
+      if (after.length) this.afterText = next;
+    };
+    if (after.length) this.afterText = next;
   }
 
   // Loose scree (the Deep's Crawl): kick it and the pebbles clatter off down
@@ -1507,8 +1836,9 @@ export class OverworldScene {
   // A section of words, then Bramble's say on it, if he's with you and has one
   // (a section of the same name with `_bramble` on the end), with his face;
   // then Ves's (`_ves`), if she's with you.
+  // Later in the story it can be `<section> after <scene id>` instead (see storySection).
   say(file, section, speaker = null) {
-    this.textbox.open(textSection(file, section), speaker);
+    this.textbox.open(textSection(file, storySection(file, section, WORLD_STATE.seenScenes ?? [])), speaker);
     this.queueReactions(file, section);
   }
 
@@ -1516,9 +1846,15 @@ export class OverworldScene {
   // `<section>_bramble` and/or `<section>_ves`.
   queueReactions(file, section) {
     const words = textFile(file);
+    // A `_calm` section (see setTextVariant) can have its own answers; if it has none, the usual ones.
+    // A later-in-the-story one (`<section> after <scene>`) has only its own: `<section>_ves after <scene>`.
+    const own = storySection(file, section, WORLD_STATE.seenScenes ?? []);
+    const [base, scene] = own.split(' after ');
+    const key = (end) => (scene ? `${base}${end} after ${scene}`
+      : words[`${own}${end}`]?.length ? `${own}${end}` : `${section}${end}`);
     const after = [[BRAMBLE, '_bramble'], [VES, '_ves']]
-      .filter(([who, end]) => inParty(who) && words[`${section}${end}`]?.length)
-      .map(([who, end]) => [words[`${section}${end}`], who]);
+      .filter(([who, end]) => inParty(who) && words[key(end)]?.length)
+      .map(([who, end]) => [words[key(end)], who]);
     const next = () => {
       const [lines, who] = after.shift();
       this.textbox.open(lines, who);
@@ -1596,6 +1932,9 @@ export class OverworldScene {
     if (!kid) kid = this.kids[follower.id] = new Player(follower.x, follower.y, { skin: follower.id, small: follower.id === BRAMBLE });
     // On a crutch only while she's hurt: well again, Ves walks, jumps and climbs.
     kid.crutch = follower.id === VES && isHurt(VES);
+    // Ves is light enough for rotten planks (the Dead City, the Diggings),
+    // though not small enough for a kid's gap.
+    kid.light = follower.id === VES;
     return kid;
   }
 
@@ -1739,7 +2078,9 @@ export class OverworldScene {
     const pages = prop.text ? [...textSection(this.roomData.textFile, prop.text)] : [];
     HERO_STATE.gold += prop.gold;
     pages.push(`You found ${prop.gold} gold!`);
-    sfx('heal');
+    if (prop.baseLook?.startsWith('chest')) sfx('chest');
+    else if (prop.baseLook?.startsWith('gold_pouch')) sfx('pouch');
+    sfx('coins');
     WORLD_STATE.taken ??= [];
     WORLD_STATE.taken.push(prop.key);
     prop.markTaken();
@@ -2058,7 +2399,7 @@ export class OverworldScene {
   rockSettled() {
     const { opened, pressed } = this.room.settleButtons();
     if (opened.length) {
-      sfx('door');
+      sfx(gateSound(this.roomData, opened[0]));
       const gate = opened[0];
       this.textbox.open(gate.openText ? textSection(this.roomData.textFile, gate.openText) : ['Somewhere nearby, something grinds open.']);
     } else if (pressed) {
@@ -2147,6 +2488,7 @@ export class OverworldScene {
       return;
     }
     const { opened, reset } = this.room.flipLever(prop.lever);
+    sfx('lever');
     // A sluice (a lever some channel's water answers to): it won't send water
     // down onto a rock or a log sitting in the channel, or onto either of you.
     // (It checks after the flip, and flips back.)
@@ -2162,7 +2504,7 @@ export class OverworldScene {
       sfx('error');
       say(reset[0].resetText, 'Click... Everything resets.');
     } else if (opened.length) {
-      sfx('door');
+      sfx(gateSound(this.roomData, opened[0]));
       say(opened[0].openText, 'Somewhere nearby, something grinds open.');
     } else {
       sfx(prop.on ? 'select' : 'back');
@@ -2213,6 +2555,10 @@ export class OverworldScene {
     } else if (gear) {
       giveGear(id);
       pages.push(...textSection(GEAR_TEXT, `got_${id}`));
+      // One of a quest's pieces (GEAR_SETS): how many of them you have now ([<set>_1], [<set>_2]...).
+      const set = Object.entries(GEAR_SETS).find(([, ids]) => ids.includes(id));
+      const count = set && `${set[0]}_${set[1].filter((one) => hasGear(one)).length}`;
+      if (count && textFile(GEAR_TEXT)[count]?.length) pages.push(...textSection(GEAR_TEXT, count));
     } else if (armor) {
       if (!HERO_STATE.armors.includes(id)) HERO_STATE.armors.push(id);
       pages.push(`You got the ${name}! Wear it from EQUIP (press C).`);
@@ -2230,7 +2576,9 @@ export class OverworldScene {
       }
     }
     if (got) {
-      sfx('heal');
+      if (prop.baseLook?.startsWith('chest')) sfx('chest');
+      else if (prop.baseLook === 'old_pack') sfx('pack');
+      sfx('pickup');
       WORLD_STATE.taken ??= [];
       WORLD_STATE.taken.push(prop.key);
       prop.markTaken();
@@ -2246,7 +2594,7 @@ export class OverworldScene {
     const member = MEMBERS[prop.join];
     if (joinParty(prop.join)) {
       sfx('levelUp');
-      pages.push(`${member.name} joined the party!\nThey'll follow you, take a turn in battles, and have a branch of their own in SKILLS.`);
+      pages.push(`${member.name} joined the party!\n${pronoun(prop.join)}'ll follow you, take a turn in battles, and have a branch of ${pronoun(prop.join, 'their').toLowerCase()} own in SKILLS.`);
       this.addFollower(prop.join);
     }
     this.textbox.open(pages, prop.npc);
@@ -2298,7 +2646,8 @@ export class OverworldScene {
     } else if (rest.phase === 'sleep') {
       if (rest.t < REST_SLEEP_SECONDS) return;
       healHeroFully();
-      music.play(this.song);
+      // (With the room's ambience: waking up, the rain is still on the roof.)
+      music.play(this.song, this.ambience);
       rest.phase = 'wake';
       rest.t = 0;
     } else if (rest.phase === 'wake') {
@@ -2447,7 +2796,7 @@ export class OverworldScene {
   inspectTile(tx, ty) {
     const spot = (this.roomData.looks ?? []).find((look) => look.x === tx && look.y === ty);
     const section = spot?.text ?? this.roomData.tileTexts?.[this.room.tileAt(tx, ty)];
-    if (section) this.say(this.roomData.textFile, section);
+    if (section) this.lookAt(section, `${this.roomData.id}:${section}`, spot?.pet);
   }
 
   // Saves the game where the player is standing.
@@ -2535,30 +2884,59 @@ export class OverworldScene {
     if (!rule) return pages;
     const said = [...textSection(`npcs/${prop.npc}.txt`, rule.text)];
     const effects = applyQuestRule(rule);
+    // (Their quest words instead of the usual: nobody answers the usual.)
+    if (!rule.append) this.npcSaid = null;
     return [...(rule.append ? pages : []), ...said, ...effects];
   }
 
+  // [first], then [repeat], [repeat 2], [repeat 3]... in turn, staying on the
+  // last (turnSection). Who you've talked to is kept in the save, by room, so
+  // coming back in doesn't start them over. After a scene: [first after <id>],
+  // then [repeat after <id>], [repeat 2 after <id>]...
   usualPages(prop) {
     const path = `npcs/${prop.npc}.txt`;
     const sections = textFile(path);
     const scene = [...(WORLD_STATE.seenScenes ?? [])].reverse().find((id) => sections[`first after ${id}`]);
-    if (scene) {
-      WORLD_STATE.talked ??= [];
-      const key = `${prop.npc}:${scene}`;
-      const heard = WORLD_STATE.talked.includes(key);
-      if (!heard) WORLD_STATE.talked.push(key);
-      return heard ? sections[`repeat after ${scene}`] ?? sections[`first after ${scene}`] : sections[`first after ${scene}`];
-    }
-    const repeat = sections.repeat;
-    const pages = prop.talkedTo && repeat ? repeat : textSection(path, 'first');
-    prop.talkedTo = true;
-    return pages;
+    WORLD_STATE.turns ??= {};
+    WORLD_STATE.talked ??= [];
+    const key = scene ? `${prop.npc}:${scene}` : `${this.roomData.id}:${prop.npc}`;
+    // (A save from before turns were kept knows only that an after-scene line was heard.)
+    const before = WORLD_STATE.turns[`npc:${key}`] ?? (scene && WORLD_STATE.talked.includes(key) ? 1 : 0);
+    const n = before + 1;
+    WORLD_STATE.turns[`npc:${key}`] = n;
+    if (scene && !WORLD_STATE.talked.includes(key)) WORLD_STATE.talked.push(key);
+    const first = scene ? `first after ${scene}` : 'first';
+    const repeat = scene ? `repeat after ${scene}` : 'repeat';
+    const section = n > 1 && sections[repeat]?.length
+      ? turnSection(path, scene ? repeat : variantSection(path, repeat), n - 1)
+      : (scene ? first : variantSection(path, first));
+    this.npcSaid = { path, section };
+    return textSection(path, section);
   }
 
   draw(ctx) {
+    // The ship leaning (shipList.js): the whole picture tips, up to where the HUD is drawn.
+    this.drawWorld(ctx);
+  }
+
+  drawWorld(out) {
+    // The ship leaning (shipList.js): the world is drawn to a canvas of its own, which is then laid on the screen tipped (smooth, so thin lines don't shimmer).
+    const ship = this.tides instanceof ShipList;
+    let ctx = ship ? this.tides.beginTilt(out) : out;
     // The view off the mountain shows wherever the room has open sky.
-    if (this.roomData.vista) drawVista(ctx, this.vistaView, this.time);
-    else if (this.spire) { ctx.fillStyle = '#07040f'; ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); }
+    // (Only where it shows: round the spire, all of it.)
+    if (this.roomData.vista && this.spire) drawVista(ctx, this.vistaView, this.time);
+    else if (this.roomData.vista) {
+      const box = this.vistaBox();
+      if (box) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(...box);
+        ctx.clip();
+        drawVista(ctx, this.vistaView, this.time);
+        ctx.restore();
+      }
+    } else if (this.spire) { ctx.fillStyle = '#07040f'; ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); }
 
     // Draw lower things last so the player can stand in front of or behind
     // others (footprints lowest of all).
@@ -2570,7 +2948,7 @@ export class OverworldScene {
       : this.hop && this.hopTrio ? [this.hopTrio]
       : this.rope ? [this.rope]
         : [...this.followers, this.player, ...this.others];
-    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.geysers, ...this.updrafts, ...this.whirls, ...(this.touches?.things ?? []), ...(this.cutscene?.drawables ?? []), ...people].sort((a, b) => a.sortY - b.sortY);
+    const entities = [...this.prints, ...props, ...this.room.standing, ...this.npcs, ...this.geysers, ...this.updrafts, ...this.whirls, ...(this.touches?.things ?? []), ...(this.life?.things ?? []), ...(this.cutscene?.drawables ?? []), ...people].sort((a, b) => a.sortY - b.sortY);
     if (this.spire) {
       this.drawSpire(ctx);
       for (const entity of entities) this.drawOnSpire(ctx, entity);
@@ -2579,8 +2957,10 @@ export class OverworldScene {
       if (this.roomData.rope) drawHangingRope(ctx, this.camera, this.roomData.rope, this.time);
       this.bridges.draw(ctx, this.camera, this.room.background, SCREEN_WIDTH);
       this.room.drawDamage(ctx, this.camera);
+      this.reflections?.drawFloor(ctx);
       this.atmosphere?.drawFloor(ctx);
       this.touches?.drawFloor(ctx);
+      this.life?.drawFloor(ctx);
       this.crumble?.drawFloor(ctx, this.camera);
       this.carts.drawFloor(ctx, this.camera);
       this.beams.drawFloor(ctx, this.camera);
@@ -2592,7 +2972,12 @@ export class OverworldScene {
       } else {
         drawPropFootShadows(ctx, this.camera, props);
       }
-      for (const entity of entities) entity.draw(ctx, this.camera);
+      // Lamp and lightning shadows, and who's lit by what (dynamicLight.js).
+      this.dynLight?.begin();
+      this.dynLight?.drawGround(ctx, entities);
+      // The storm wind on the party (gustFlutter.js): outdoors in the rain only.
+      setGust(this.atmosphere?.gust ?? 0, this.time, Boolean(this.atmosphere?.layers?.rain) && !this.roomData.indoors);
+      for (const entity of entities) if (!this.dynLight?.drawLit(ctx, entity)) entity.draw(ctx, this.camera);
       this.crumble?.draw(ctx, this.camera);
       this.beams.draw(ctx, this.camera);
     }
@@ -2602,13 +2987,18 @@ export class OverworldScene {
     this.climb?.drawTarget(ctx, this.camera, project);
     this.drawSnowCap(ctx);
     this.drawParticles(ctx);
+    this.life?.drawOver(ctx);
     this.carts.drawFx(ctx, this.camera);
     this.atmosphere?.drawUnder(ctx);
     if (this.roomData.birds) this.drawBirds(ctx);
     // High up, wisps of cloud blow across between you and everything.
     if (this.roomData.vista && (this.roomData.vista.altitude ?? 0) > 0.55) drawWisps(ctx, this.time, Math.min(1, ((this.roomData.vista.altitude ?? 0) - 0.55) * 2.5));
     if (this.underSky) this.drawTimeOfDay(ctx);
-    else if (this.lamplit) this.drawLamplight(ctx, false);
+    else if (this.lamplit) {
+      this.drawLamplight(ctx, false);
+      // Lamps and lit windows streaking the water below them (reflections.js).
+      this.reflections?.drawStreaks(ctx, this.lampsShown, this.lampStrength);
+    }
     // Up a long rope: the daylight coming down from the top.
     if (this.roomData.rope?.daylight) drawDaylightFromAbove(ctx, this.camera, this.roomData.rope);
     // The snow blows the way the weathervanes say, if there are any; on a
@@ -2622,6 +3012,11 @@ export class OverworldScene {
     if (this.roomData.mist) this.drawMist(ctx);
     if (this.caught) this.drawCaught(ctx);
     else if (this.lampFade > 0) this.drawBlack(ctx, 0, '255, 246, 214', this.lampFade * 1.6);
+    this.haunt?.drawGlow(ctx);
+    this.haunt?.drawOver(ctx);
+    if (ship) { this.tides.endTilt(out); ctx = out; }
+    this.haunt?.drawWhispers(ctx);
+    this.haunt?.drawHint(ctx);
     this.tides.drawHud(ctx);
     if (this.partner && !this.cutscene) {
       this.drawSplitTag(ctx);
@@ -2631,13 +3026,20 @@ export class OverworldScene {
     this.hush?.drawSound(ctx, this.camera);
     this.atmosphere?.drawOver(ctx);
     this.touches?.drawOver(ctx);
+    this.life?.drawTop(ctx);
     this.cutscene?.drawOverlay(ctx, this.camera);
     this.atmosphere?.drawTop(ctx);
     // A room's own curtains, left drawn open after a show (`openCurtains`).
+    // Before that show they hang closed across the stage, so walking in you
+    // see the drapes drawn (the show's first step draws them shut too).
     const drapes = this.roomData.openCurtains;
-    if (drapes && !this.cutscene && (WORLD_STATE.seenScenes ?? []).includes(drapes.after)) {
+    if (drapes && !this.cutscene) {
+      const shown = (WORLD_STATE.seenScenes ?? []).includes(drapes.after);
       this.drapes ??= new Stage();
-      if (!this.drapes.curtain) this.drapes.apply({ curtains: { x: drapes.x, y: drapes.y, w: drapes.w, h: drapes.h, open: 1 } });
+      if (this.drapesShown !== shown) {
+        this.drapes.apply({ curtains: { x: drapes.x, y: drapes.y, w: drapes.w, h: drapes.h, open: shown ? 1 : 0 } });
+        this.drapesShown = shown;
+      }
       this.drapes.drawCurtains(ctx, this.camera);
     }
     // Underground, the edges of the screen sink into shadow; outdoors they don't.
@@ -2802,6 +3204,8 @@ export class OverworldScene {
   // Whether a prop can be seen: always, unless it's only `seenInLight` in a
   // dark room and your light doesn't reach it.
   inLight(prop) {
+    // Ghosts, footprints and writing that only the ship's lantern shows (haunt.js).
+    if (prop.haunt && this.haunt && !this.haunt.reveals(prop)) return false;
     if (!prop.seenInLight || !this.roomData.dark) return true;
     if (this.beams.litProp(prop)) return true;
     const { x, y } = this.lightPoint;
@@ -2828,8 +3232,10 @@ export class OverworldScene {
       ctx.fillStyle = `rgba(255, 168, 90, ${(dusk * 0.11).toFixed(3)})`;
       ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
-    if (this.lamplit) this.drawLamplight(ctx, true);
-    else if (night > 0.02) this.drawShade(ctx, night * NIGHT_SHADE, NIGHT_TINT, 26);
+    if (this.lamplit) {
+      this.drawLamplight(ctx, true);
+      this.reflections?.drawStreaks(ctx, this.lampsShown, this.lampStrength);
+    } else if (night > 0.02) this.drawShade(ctx, night * NIGHT_SHADE, NIGHT_TINT, 26);
   }
 
   // Whether this room is lit by its own lamps and fires (see lamplight.js).
@@ -2882,20 +3288,24 @@ export class OverworldScene {
   drawLamplight(ctx, outdoors) {
     const { night } = daylight();
     const { shade, tint, lit } = ambientFor(this.roomData, outdoors, night);
-    const lights = roomLights(this.room, outdoors);
+    const lights = cachedRoomLights(this.room, outdoors);
     const sky = skyColor(night);
     const beat = beatPulse(performance.now() / 1000);
     // Sky windows let in more by night (moonlight off the snow) than they
     // seem to by day, against a room lit by fires.
     const strengthOf = (l) => l.strength * flickerAt(l, this.time) * (l.sky ? 0.5 + night : lit) * (l.sings && this.swell !== null ? 0.85 + 0.45 * this.swell : 1) * (l.beat || (l.sings && this.swell !== null) ? 1 + (l.beat ? 0.32 : 0.1) * beat.env + 0.18 * beat.down : 1);
+    // (Kept for the light streaks on the water: see reflections.js.)
+    this.lampsShown = lights;
+    this.lampStrength = strengthOf;
     if (shade > 0.01) {
-      const holes = lights.filter((l) => l.pool).map((l) => ({ x: l.x, y: l.y, radius: l.pool * 0.9, cut: strengthOf(l) * 1.1 }));
+      const holes = lights.filter((l) => l.pool).map((l) => ({ x: l.x, y: l.y, radius: Math.round(l.pool * 0.9 * breatheAt(l, this.time)), cut: strengthOf(l) * 1.1 }));
       // Your own little light (so you never vanish in the dark) is faint here:
       // the lamps do the lighting.
-      holes.push({ ...this.lightPoint, radius: 20, cut: 0.3 });
+      holes.push(this.haunt?.hole() ?? { ...this.lightPoint, radius: 20, cut: 0.3 });
       // Light beams light their own path (beams.js).
       holes.push(...this.beams.lights());
-      this.drawShade(ctx, shade, tint, 0, holes);
+      // (A lightning flash lifts the shade for a moment: dynamicLight.js.)
+      this.drawShade(ctx, Math.min(0.9, shade * (1 - (this.dynLight?.flashLift ?? 0)) * (1 + (this.haunt?.dip ?? 0) * 0.5)), tint, 0, holes);
     }
     ctx.save();
     // A relit town (the Sunstone blazing): a warm golden wash over everything
@@ -2908,22 +3318,87 @@ export class OverworldScene {
     }
     // Light is soft: let the round pictures blend as they're scaled.
     ctx.imageSmoothingEnabled = true;
+    // Each light on screen, and how strong it is just now.
+    const shown = [];
+    let poolArea = 0;
+    let bloomArea = 0;
+    const box = [SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0];
     for (const l of lights) {
       const strength = strengthOf(l);
       if (strength < 0.01) continue;
-      const point = this.toScreen(l.x, l.y, l.pool ?? l.bloom);
+      const point = this.toScreen(l.x, l.y, Math.round((l.pool ?? l.bloom) * breatheAt(l, this.time)));
       if (!point || !onScreen(point)) continue;
-      const sprite = glowSprite(l.sky ? sky : l.color);
       const { x, y, r } = point;
-      if (l.pool && !l.sky) {
-        // Firelight tints what it falls on; moonlight only brightens it.
-        ctx.globalCompositeOperation = 'multiply';
-        ctx.globalAlpha = Math.min(1, strength);
+      const tints = Boolean(l.pool && !l.sky);
+      shown.push({ sprite: glowSprite(l.sky ? sky : l.color), x, y, r, tints, strength, glow: Math.min(1, strength * (!l.pool ? 0.6 : l.sky ? 0.7 : 0.16)) });
+      const area = (Math.min(SCREEN_WIDTH, x + r) - Math.max(0, x - r)) * (Math.min(SCREEN_HEIGHT, y + r) - Math.max(0, y - r));
+      if (tints) poolArea += area;
+      else bloomArea += area;
+      box[0] = Math.min(box[0], Math.max(0, Math.floor(x - r) - 1));
+      box[1] = Math.min(box[1], Math.max(0, Math.floor(y - r) - 1));
+      box[2] = Math.max(box[2], Math.min(SCREEN_WIDTH, Math.ceil(x + r) + 1));
+      box[3] = Math.max(box[3], Math.min(SCREEN_HEIGHT, Math.ceil(y + r) + 1));
+    }
+    // A few lights: each straight onto the room, a tint (firelight tints what
+    // it falls on; moonlight only brightens it) and then its glow. A room full
+    // of them: onto two pictures at the world's size (a quarter of the
+    // canvas's pixels) and each laid over the room once, `tint` (every light's
+    // tint multiplied together, from white) and `glow` (every light's glow,
+    // from black, each tinted by the lights after it). Laid on in turn that
+    // comes to the same as drawing them one by one, for far less work once
+    // there are many. Only the box the lights cover is laid on (white and
+    // black elsewhere change nothing), and it's wiped clean again after.
+    // (Costs in canvas pixels: the layers' fixed cost is laying two boxes over
+    // the room and wiping them.)
+    const boxArea = Math.max(0, box[2] - box[0]) * Math.max(0, box[3] - box[1]);
+    const direct = 4 * (2 * poolArea + bloomArea);
+    const layered = 3 * poolArea + bloomArea + 14 * boxArea;
+    if (direct <= layered) {
+      for (const { sprite, x, y, r, tints, strength, glow } of shown) {
+        if (tints) {
+          ctx.globalCompositeOperation = 'multiply';
+          ctx.globalAlpha = Math.min(1, strength);
+          ctx.drawImage(sprite, x - r, y - r, r * 2, r * 2);
+        }
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalAlpha = glow;
         ctx.drawImage(sprite, x - r, y - r, r * 2, r * 2);
       }
-      ctx.globalCompositeOperation = 'lighter';
-      ctx.globalAlpha = Math.min(1, strength * (!l.pool ? 0.6 : l.sky ? 0.7 : 0.16));
-      ctx.drawImage(sprite, x - r, y - r, r * 2, r * 2);
+      ctx.restore();
+      return;
+    }
+    const { tint: tintLayer, glow: glowLayer } = lightLayers();
+    const tinted = tintLayer.getContext('2d');
+    const glowing = glowLayer.getContext('2d');
+    tinted.imageSmoothingEnabled = true;
+    glowing.imageSmoothingEnabled = true;
+    let anyTint = false;
+    let anyGlow = false;
+    for (const { sprite, x, y, r, tints, strength, glow } of shown) {
+      if (tints) {
+        // (A tint also tints the glow of the lights drawn before it.)
+        for (const layer of anyGlow ? [tinted, glowing] : [tinted]) {
+          layer.globalCompositeOperation = 'multiply';
+          layer.globalAlpha = Math.min(1, strength);
+          layer.drawImage(sprite, x - r, y - r, r * 2, r * 2);
+        }
+        anyTint = true;
+      }
+      glowing.globalCompositeOperation = 'lighter';
+      glowing.globalAlpha = glow;
+      glowing.drawImage(sprite, x - r, y - r, r * 2, r * 2);
+      anyGlow = true;
+    }
+    ctx.globalAlpha = 1;
+    const [x0, y0, x1, y1] = box;
+    for (const [on, op, layer, picture, clean] of [[anyTint, 'multiply', tinted, tintLayer, '#fff'], [anyGlow, 'lighter', glowing, glowLayer, '#000']]) {
+      if (!on) continue;
+      ctx.globalCompositeOperation = op;
+      ctx.drawImage(picture, x0, y0, x1 - x0, y1 - y0, x0, y0, x1 - x0, y1 - y0);
+      layer.globalCompositeOperation = 'source-over';
+      layer.globalAlpha = 1;
+      layer.fillStyle = clean;
+      layer.fillRect(x0, y0, x1 - x0, y1 - y0);
     }
     ctx.restore();
   }
@@ -2936,7 +3411,8 @@ export class OverworldScene {
     // Lit by the room's lights, your own, and any cutscene character who glows.
     // (Crystals reach further into the dark as the Deep's song swells.)
     const swell = this.swell ?? 0;
-    const sources = this.room.lightSources().map((l) => (l.crystal && swell ? { ...l, radius: l.radius * (0.85 + 0.55 * swell) } : l));
+    // (Lanterns and fires breathe, a little and slowly: breatheAt in lamplight.js.)
+    const sources = this.room.lightSources().map((l) => (l.crystal ? (swell ? { ...l, radius: l.radius * (0.85 + 0.55 * swell) } : l) : { ...l, radius: Math.round(l.radius * breatheAt({ flicker: 0.4, phase: (l.x * 0.37 + l.y * 0.61) % 6.28 }, t)) }));
     this.drawShade(ctx, this.roomData.dark, '4, 2, 10', this.lightReach() * flicker, [...sources, ...this.beams.lights(), ...(this.cutscene?.lights ?? [])]);
     if (swell) this.drawCrystalSwell(ctx, sources, swell, t);
     // Your candle's warm glow on everything near you.
@@ -3028,7 +3504,9 @@ export class OverworldScene {
   // Whether a body's feet are on a solid tile (not up a climb, or in a hop or ride).
   onThinAir(body) {
     if (this.climb || this.hop || this.ride || this.player.ground) return false;
-    return this.room.isSolidTile(Math.floor(body.x / T), Math.floor((body.y - 1) / T));
+    // A raised block (a rock or stone you jump up on) is somewhere to stand, not a drop.
+    const [tx, ty] = [Math.floor(body.x / T), Math.floor((body.y - 1) / T)];
+    return this.room.isSolidTile(tx, ty) && !this.room.raiseAt(tx, ty);
   }
 
   // The party behind you, in a line: each one that's walking with you takes
@@ -3043,16 +3521,13 @@ export class OverworldScene {
       // The path can cut a corner over a drop (or lead over a bridge of light
       // that's gone): never walk on thin air, wait at the last firm spot.
       // Where you jumped it (stone to stone over water), they jump it too.
-      const waiting = !follower.hidden && !follower.ground && !follower.leaping && this.onThinAir(follower) && !this.onThinAir({ x, y });
-      if (waiting) {
+      // Never stranded and never whisked to you: held up for more than a
+      // moment, they walk on along your path after all (it's where you went).
+      const snagged = !follower.hidden && !follower.ground && !follower.leaping && this.onThinAir(follower) && !this.onThinAir({ x, y });
+      follower.heldFor = snagged && follower.walking ? (follower.heldFor ?? 0) + dt : 0;
+      if (snagged && follower.heldFor <= FOLLOWER_STRANDED) {
         follower.x = x;
         follower.y = y;
-      }
-      // Never stranded: held up for long while you've gone on, they catch you up.
-      follower.heldFor = waiting && follower.walking ? (follower.heldFor ?? 0) + dt : 0;
-      if (follower.heldFor > FOLLOWER_STRANDED && !this.onThinAir(this.heroBody)) {
-        follower.warpTo(this.heroBody.x, this.heroBody.y + 2, this.heroBody.ground ?? 0);
-        follower.heldFor = 0;
       }
       if (!follower.hidden) place++;
     }

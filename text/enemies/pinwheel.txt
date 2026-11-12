@@ -17,6 +17,14 @@ PINWHEEL tries to look big. It's already big. It tries to look bigger. A spine f
 
 Smells like wet rock and something sweet and expensive.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+PINWHEEL is down to its last few spines, and keeps the bare side turned away from you.
+
+[flavor: spareable]
+PINWHEEL turns its spines a notch, click, and lays them all down flat. From an urchin, that's a handshake.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -54,8 +62,8 @@ A sea urchin with a temper. Throws fans of spines, rolls across the box shedding
 [talk: Offer it a smooth stone]
 You set a smooth, flat stone in front of it. PINWHEEL pokes it with one spine. Then another. Then it leans on it, spines drooping, like a creature that has never once sat on something soft.
 
-[talk: Tell it it is very round]
-You tell PINWHEEL it is the roundest thing on the whole shore. It stops spinning. It turns slowly to look at its own side. It goes a very deep, proud pink.
+[talk: Admire its roundness]
+You trace a big, slow circle in the air, then point at PINWHEEL and nod, very impressed. It stops spinning. It turns slowly to look at its own side. It goes a very deep, proud pink.
 
 [talk: Sit down nearby]
 You sit down on the shingle, a good way off, and look at the water. PINWHEEL watches you for a long time. Then it rolls a little closer, and then a little closer, and then it sits too.

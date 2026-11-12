@@ -20,12 +20,19 @@ export const MOONJELLY = {
   // sinks and goes out when beaten, and glows when it's spared.
   // See src/data/art/moonjelly.js.
   anim: MOONJELLY_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): it wobbles when hit; little glints drift off
+  // it; beaten, it swells and pops.
+  feel: { hit: 'jelly', idle: 'motes', color: '#d8e4ff', defeat: 'pop', defeatAt: 1, exit: 'pop' },
   // The chapter 5 coast battle song (the Wrack Shore and Gullrest).
   music: 'coastBattleStorm',
-  maxHp: 2000,
-  damage: 58,
+  maxHp: 10200,
+  damage: 86,
 
-  difficulty: { density: 1.5, speed: 1.4 },
+  difficulty: { density: 1.65, speed: 1.50 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore, see startAttack in battleScene.js). No
+  // secondWind: two of its attacks at once were too much to read.
+  encore: { at: 0.85, seconds: 4.5, density: 0.8 },
   battlePos: { x: 214, y: 46 },
 
   // Its attacks live in src/battle/attacks/moonjelly.js.
@@ -39,7 +46,7 @@ export const MOONJELLY = {
   talk: [
     { name: 'Inspect' },
     { name: 'Hold your breath', calm: 40 },
-    { name: 'Lower the lantern', calm: 35 },
+    { name: 'Dim your light', calm: 35 },
     { name: 'Drift along', calm: 30 },
   ],
 

@@ -11,7 +11,30 @@ import { withSnipes } from './snipes.js';
 const STORM = { c: '#86a294', C: '#b4ccbe', d: '#54706a', k: '#18242a', y: '#fff06a', Y: '#ffc83a', w: '#ffffff', r: '#8fd0ff', R: '#4a8ac8', p: '#e8e0c8', P: '#b8b098' };
 
 // A streak of rain, pointing the way it falls.
-defineBulletArt('impRain', { frames: [['RRrrw']], palette: STORM, radius: 1.5, rotate: true });
+defineBulletArt('impRain', { frames: [['.RRrrrw.', 'RRrrrww.', '.RRrrrw.'].map((r, i) => (i === 1 ? r : r.replace(/R/g, '.')))], palette: STORM, radius: 1.5, rotate: true });
+
+// Where a drop hits the floor (harmless): a little splash.
+defineBulletArt('impSplash', {
+  frames: [['r.....r', '.r.r.r.', '..RRR..'], ['.......', 'r..r..r', '.RRRRR.']],
+  palette: STORM,
+  radius: 1,
+  frameSeconds: 0.1,
+});
+
+// The storm cloud it rains from, along the top of the box (harmless): grey
+// puffs with a dark belly.
+defineBulletArt('impCloud', {
+  frames: [[
+    '....cccc.....ccc....',
+    '..ccCCCCcc.ccCCCcc..',
+    '.cCCCCccccccCCcccccc',
+    'cccccccccccccccccccc',
+    'cddcdddcddddcdddcddc',
+    '.dd.ddd..dd.ddd..dd.',
+  ]],
+  palette: STORM,
+  radius: 1,
+});
 
 // A little spark (where a bolt lands, where an orb bounces).
 defineBulletArt('impSpark', {
@@ -129,16 +152,35 @@ export const STORM_IMP_ATTACKS = {
     let count = 0;
     const vx = -26;
     const vy = 104;
+    let drops = [];
+    let clouds = false;
     return {
-      duration: 6.8,
+      // (Its rain stops at 5 s: 6.0, was 6.8, so the next attack isn't long in coming.)
+      duration: 6.0,
       update: (dt, bullets, soul) => {
         t += dt;
+        // The cloud rolls in over the top of the box first, drifting with the wind.
+        if (!clouds) {
+          clouds = true;
+          for (let x = box.x + 6; x < box.x + box.w + 30; x += 19) {
+            bullets.push(new Shot({ x, y: box.y + 3 + (Math.round(x / 19) % 2 ? 2 : 0), vx: -3, harmless: true, life: 5.6, art: 'impCloud' }));
+          }
+        }
+        // Each drop that reaches the floor splashes (only a look).
+        for (const d of drops) {
+          if (d.y < box.y + box.h - 2) continue;
+          d.done = true;
+          if (d.x > box.x + 2 && d.x < box.x + box.w - 2) bullets.push(new Shot({ x: d.x, y: box.y + box.h - 2, harmless: true, life: 0.2, art: 'impSplash' }));
+        }
+        drops = drops.filter((d) => !d.done && d.age < d.warn + d.life);
         if (t < next || t > 5) return;
         next = t + 0.085;
         const aimed = count % 4 === 0;
         const fall = ((aimed ? soul.y : box.y + box.h / 2) - box.y) / vy;
         const x = aimed ? clamp(soul.x - vx * fall, box.x - 4, box.x + box.w + 40) : rand(box.x - 4, box.x + box.w + 34);
-        bullets.push(new Shot({ x, y: box.y - 2, vx, vy, warn: aimed ? 0.45 : 0, art: 'impRain', life: 2.2 }));
+        const drop = new Shot({ x, y: box.y - 2, vx, vy, warn: aimed ? 0.45 : 0, art: 'impRain', life: 2.2 });
+        drops.push(drop);
+        bullets.push(drop);
         count++;
       },
     };

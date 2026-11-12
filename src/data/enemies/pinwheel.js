@@ -14,12 +14,22 @@ export const PINWHEEL = {
   area: 'wrack',
   sprite: { rows: PINWHEEL_SPRITE, palette: PINWHEEL_PALETTE },
   anim: PINWHEEL_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): spines shaken loose when hit, a glint before
+  // it fires; beaten, its spines fly and it rolls away.
+  feel: { hit: 'spines', windup: 'glint', at: [0.5, 0.12], defeat: 'spines', exit: 'roll' },
   // The coast's fights from the Wrack Shore on: the shanty.
   music: 'coastBattleStorm',
-  maxHp: 2050,
-  damage: 59,
+  maxHp: 10500,
+  damage: 89,
 
-  difficulty: { density: 1.35, speed: 1.3 },
+  difficulty: { density: 1.50, speed: 1.40 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore, see startAttack in battleScene.js). No
+  // secondWind: two of its attacks at once were too much to read.
+  // (2026-11-10: comes in sooner and runs longer, was { at: 0.85, seconds: 4.5 }:
+  // its attacks are done throwing a second or so before their end, and the box
+  // sat empty until the encore came.)
+  encore: { at: 0.72, seconds: 5.3, density: 0.8 },
   // Round and sat on the ground; it stands a little in.
   battlePos: { x: 214, y: 46 },
 
@@ -35,7 +45,7 @@ export const PINWHEEL = {
   talk: [
     { name: 'Inspect' },
     { name: 'Offer it a smooth stone', calm: 40 },
-    { name: 'Tell it it is very round', calm: 35 },
+    { name: 'Admire its roundness', calm: 35 },
     { name: 'Sit down nearby', calm: 30 },
   ],
 

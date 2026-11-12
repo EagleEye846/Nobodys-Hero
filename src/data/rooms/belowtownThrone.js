@@ -26,7 +26,7 @@ export const BELOWTOWN_THRONE = {
   area: 'belowtown',
   // "Built to Be Performed In" (src/data/music/throneHallTheme.js).
   music: 'throneHall',
-  ambience: 'belowtown',
+  ambience: 'throne_hall',
   // Under cover: no sky, and the edges of the screen sink into shadow.
   indoors: true,
 
@@ -61,7 +61,11 @@ export const BELOWTOWN_THRONE = {
   doors: [
     { x: 12, y: 20, w: 2, h: 1, to: 'belowtown_square', spawn: { x: 22, y: 6 } },
     // The back way down to the Diggings.
-    { x: 25, y: 16, w: 1, h: 1, to: 'diggings_pithead', spawn: { x: 1, y: 8 } },
+    // Not until Tuck's had his word out in the square (tucks_whisper): he stands in the
+    // little door and shoos you out the front. (Any later scene will do, so a save already
+    // in the Diggings or further on isn't shut out.)
+    { x: 25, y: 16, w: 1, h: 1, to: 'diggings_pithead', spawn: { x: 1, y: 8 },
+      after: ['tucks_whisper', 'diggings_quake', 'diggings_lift_down', 'gubb_crossing', 'the_cold_camp', 'the_light_goes_up', 'homecoming', 'tide_held_opens'], notYet: 'throne_back_not_yet' },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).

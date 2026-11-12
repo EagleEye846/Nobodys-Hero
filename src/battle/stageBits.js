@@ -9,6 +9,7 @@
 //   swoop   sweeps down out of the dark on its wings
 //   rise    rises up out of the floor, out of nothing
 //   whirl   spins in out of the air, gathering itself
+//   surge   bursts up out of the water from below, too high, and falls back
 //   curtain stays where it is while the stage curtains part on it, a spotlight
 //           snapping on (the showman's; drawn by drawCurtains in battleScene.js)
 
@@ -48,6 +49,15 @@ export function entranceOffset(style, t, pos, size) {
     case 'rise':
       if (after < 0) return { ...home, y: 28 * (1 - u) ** 2, alpha: u };
       return home;
+    case 'surge': {
+      // Up out of the water fast, past its spot, then it drops back in.
+      if (after < 0) {
+        if (u < 0.55) { const k = 1 - (1 - u / 0.55) ** 3; return { ...home, y: 120 - 144 * k, sx: 0.94, sy: 1.08 }; }
+        const k = (u - 0.55) / 0.45;
+        return { ...home, y: -24 + 24 * k * k };
+      }
+      return { ...home, sx: 1 + 0.07 * squash, sy: 1 - 0.1 * squash };
+    }
     case 'whirl': {
       if (after < 0) {
         const r = 46 * (1 - u);
@@ -102,14 +112,14 @@ export class StageBits {
   }
 
   // A soft light rising.
-  mote(x, y, { vy = -24, life = 1.4, color = '#fff2cf', size = 2 } = {}) {
-    this.add({ kind: 'mote', x, y, vy, life, color, size, sway: rand(0, TAU) });
+  mote(x, y, { vy = -24, life = 1.4, color = '#fff2cf', size = 2, sway = rand(0, TAU) } = {}) {
+    this.add({ kind: 'mote', x, y, vy, life, color, size, sway });
   }
 
   // A chip of wood (or paint, or gold) flung off a broken thing: it spins,
   // falls, bounces on the boards at `floor` and settles, then fades.
-  chip(x, y, { vx = 0, vy = 0, gravity = 300, life = 2.4, color = '#c9a06a', w = 3, h = 2, spin = 9, floor = 160, bounce = 0.35 } = {}) {
-    this.add({ kind: 'chip', x, y, vx, vy, gravity, life, color, w, h, spin, floor, bounce, rot: rand(0, TAU) });
+  chip(x, y, { vx = 0, vy = 0, gravity = 300, life = 2.4, color = '#c9a06a', w = 3, h = 2, spin = 9, floor = 160, bounce = 0.35, rot = rand(0, TAU) } = {}) {
+    this.add({ kind: 'chip', x, y, vx, vy, gravity, life, color, w, h, spin, floor, bounce, rot });
   }
 
   // A string let go: it whips from where it was tied (`x, y`) out along
@@ -133,7 +143,9 @@ export class StageBits {
   }
 
   // Dust kicked out both ways along the ground from `x, y`, `width` wide.
-  dust(x, y, width, count = 12, { color = '#cbbfa8', spray = 0 } = {}) {
+  // (`random`: the caller's own random source, if it mustn't use Math.random.)
+  dust(x, y, width, count = 12, { color = '#cbbfa8', spray = 0, random = Math.random } = {}) {
+    const rand = (lo, hi) => lo + random() * (hi - lo);
     for (let i = 0; i < count; i++) {
       const side = i % 2 ? 1 : -1;
       const way = spray || side;

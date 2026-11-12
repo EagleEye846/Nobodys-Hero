@@ -17,6 +17,14 @@ It looks at you. It is not sure what you are, and is far too polite to ask.
 
 Smells of cold brine, tar and a very long wait.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+SALT SHADE is wearing thin. You can see the sea through it, and it is still watching for a sail.
+
+[flavor: spareable]
+SALT SHADE has turned from the sea to look at you. It seems to have decided what you are, and that it's all right.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -48,14 +56,14 @@ a ship?
 SALT SHADE - HP 2200
 The ghost of a drowned sailor, still waiting for a ship. Throws an anchor on a rope arc, flings messages in bottles that burst into bubbles, and casts lassos that draw tight. The loop is always open on his side.
 
-[talk: Ask the news]
-You ask how long he's been on watch. SALT SHADE counts on its fingers, and loses its count, and starts again. He asks, politely, whether the war is still on. You do not have the heart.
+[talk: Tap your wrist]
+You tap your wrist and point at his post: how long? SALT SHADE counts on its fingers, and loses its count, and starts again. He asks, politely, whether the war is still on. You do not have the heart.
 
 [talk: Take the rope]
 You step in and take the end of the rope from his hand. For a moment you are both pulling the same line, gently, and the water in him goes still. He nods, as if a watch had been handed over.
 
-[talk: Say the tide is turning]
-You say, quietly, that the tide is turning. SALT SHADE lifts its head. All its life, and a good while after it, he has been waiting to hear someone say it, and the lights in his eyes go from pale to warm.
+[talk: Point at the tide]
+You point out to sea, where the water has begun, very slowly, to slide back off the posts. SALT SHADE lifts its head. All its life, and a good while after it, he has been waiting for someone to show him the tide turning, and the lights in his eyes go from pale to warm.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

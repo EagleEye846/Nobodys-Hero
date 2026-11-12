@@ -17,6 +17,16 @@ GLEAMSNAIL gleams. It doesn't need to say so. It says so.
 
 Smells like cold stone and clean laundry.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+GLEAMSNAIL's shell has a new crack in it. It turns so the crack faces the wall, where visitors won't see.
+
+# (draft)
+[flavor: spareable]
+The chimney on GLEAMSNAIL's shell is puffing gently. The kettle's on. You are, it seems, expected for tea.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

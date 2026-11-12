@@ -47,6 +47,10 @@ export function soulSprite(modeName = 'normal') {
   }
   return sprites.get(modeName);
 }
+// The shadow all in white, for its blink when it's hurt.
+let whiteSprite = null;
+const hurtSprite = () => (whiteSprite ??= makeSprite(SOUL_ROWS, { '#': '#ffffff', o: '#ffffff', g: '#ffffff' }));
+const HURT_GLOW_SECONDS = 0.28;
 
 // The light through the visor: the rim's colour, faded into the dark.
 function dim(hex) {
@@ -70,6 +74,9 @@ export class Soul {
     this.untouchable = 0;
     this.modeFlash = 0;
     this.grazeGlow = 0;
+    // A white blink and an afterimage when it's hurt (set by battleFeel.js).
+    this.hurtGlow = 0;
+    this.hurtScale = 1;
     this.shattered = false;
     this.modeName = 'normal';
     this.mode = SOUL_MODES.normal;
@@ -89,6 +96,7 @@ export class Soul {
     this.locked = false;
     this.untouchable = 0;
     this.grazeGlow = 0;
+    this.hurtGlow = 0;
     // A ring pulses out when the soul takes on a special mode.
     this.modeFlash = modeName === 'normal' ? 0 : MODE_FLASH_SECONDS;
   }
@@ -103,6 +111,7 @@ export class Soul {
     this.untouchable = Math.max(0, this.untouchable - dt);
     this.modeFlash = Math.max(0, this.modeFlash - dt);
     this.grazeGlow = Math.max(0, this.grazeGlow - dt);
+    this.hurtGlow = Math.max(0, this.hurtGlow - dt);
     if (!this.locked) this.mode.update(this, dt, input, box);
     this.clampTo(box);
   }
@@ -126,13 +135,33 @@ export class Soul {
       ctx.globalAlpha = 1;
     }
 
-    // Blink while invincible after a hit.
-    if (this.iframes > 0 && Math.floor(this.iframes * 12) % 2 === 0) return;
+    // Hurt: a white afterimage swelling off it and fading.
+    if (this.hurtGlow > 0) {
+      const k = this.hurtGlow / HURT_GLOW_SECONDS;
+      const grow = 1 + (1 - k) * 1.2;
+      const white = hurtSprite();
+      ctx.globalAlpha = k * 0.5 * this.hurtScale;
+      ctx.drawImage(white, Math.round(x - CENTER.x * grow), Math.round(y - CENTER.y * grow), Math.round(white.width * grow), Math.round(white.height * grow));
+      ctx.globalAlpha = 1;
+    }
+    // Blink while invincible after a hit: every other beat it's a faint
+    // ghost of itself, so you can still see where it is.
+    if (this.iframes > 0 && this.hurtGlow <= HURT_GLOW_SECONDS * 0.6 && Math.floor(this.iframes * 12) % 2 === 0) {
+      ctx.globalAlpha = 0.3;
+      ctx.drawImage(sprite, x - CENTER.x, y - CENTER.y);
+      ctx.globalAlpha = 1;
+      return;
+    }
     // A soft glow around its rim, so the shadow stands out against the dark box.
     ctx.save();
     ctx.shadowColor = this.mode.color;
     ctx.shadowBlur = 6;
     ctx.drawImage(sprite, x - CENTER.x, y - CENTER.y);
+    // (The first moment after a hit it shows white.)
+    if (this.hurtGlow > HURT_GLOW_SECONDS * 0.6) {
+      ctx.globalAlpha = 0.8 * this.hurtScale;
+      ctx.drawImage(hurtSprite(), x - CENTER.x, y - CENTER.y);
+    }
     ctx.restore();
 
     if (this.focused) {

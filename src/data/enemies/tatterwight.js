@@ -23,7 +23,7 @@ export const TATTERWIGHT_BOSS = {
   // Each chapter's bosses climb: past the Roost Mother (900 HP, 15 damage)
   // and well past the Pinefall's regulars (280-380 HP, 15-16 damage), but
   // well short of the Warden at the end of the chapter (2400).
-  maxHp: 1260,
+  maxHp: 1600,
   damage: 21,
 
   difficulty: { density: 1.15, speed: 1.08 },

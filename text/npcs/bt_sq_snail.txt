@@ -3,7 +3,7 @@
 [first]
 Hm. You've come down from the top. How unusual. Last time, it was a... small person.
 
-With a sword. And not much else. Sat on that bench, they did. Didn't say a word.
+With a sword. And not much else. Sat on that bench, he did. Didn't say a word.
 
 [repeat]
 I was only a hatchling then. Everything was taller. Even the Hero.
@@ -19,3 +19,35 @@ Oh. Oh, it's lovely. It's just like last time. Only I'm older. And the bench is 
 
 [repeat after the_light_goes_up]
 I've got a good view of the Sunstone from here. I've had it for sixty years. It's my favourite thing.
+
+# (draft)
+[repeat 2]
+He had a good sit, the small one. Then he got up again. That's the bit I like. The getting up.
+
+# (draft)
+[repeat 3]
+Ask me another day. I tell it better another day. I've had longer to think.
+
+# (draft)
+[repeat_ves 3]
+{bored}He's had a hundred years to think. {smile}It's going to be very good.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+There's more. There's always more. But I tell a thing once, and properly, or I sleep on it.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+Go on down. I'll still be here. It's what I'm best at.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+That's the whole of it now. A hundred years and two goes. A snail's pace is a proper pace.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Sit, if you like. The bench doesn't mind. It's had worse. It's had me.
+
+# (draft)
+[repeat_ves 3 after the_light_goes_up]
+{smile}...Two minutes. {bored}Don't tell anyone we sat.

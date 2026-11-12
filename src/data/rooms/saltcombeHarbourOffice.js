@@ -11,6 +11,7 @@
 // Puzzle-free. No monsters.
 // Tile key (see src/overworld/coastTiles.js, saltcombe, indoors):
 //   #  wall top (solid)   h  board wall (solid)   o  floor boards
+//   .  the boards behind the clerk's desk (crossways)
 
 export const SALTCOMBE_HARBOUR_OFFICE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -20,8 +21,12 @@ export const SALTCOMBE_HARBOUR_OFFICE = {
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'saltcombe',
   // "Salt and Rope", with the rain on the roof.
-  music: 'saltcombe',
+  music: 'saltcombeIndoor',
+  // After chapter 5 (the_light_answers) the town is quiet: "What the Tide Left".
+  musicAfter: { scene: 'the_light_answers', song: 'saltcombeAfterIndoor' },
   ambience: 'stilt_inside',
+  // After chapter 5 the storm is over (`calmAfter`): no rain on the roof, and the room's `_calm` words.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_stilt_inside' },
   vesWell: true,
   indoors: true,
 
@@ -29,12 +34,12 @@ export const SALTCOMBE_HARBOUR_OFFICE = {
     '##############',
     'hhhhhhhhhhhhhh',
     'hhhhhhhhhhhhhh',
+    '#oo......oooo#',
     '#oooooooooooo#',
     '#oooooooooooo#',
     '#oooooooooooo#',
     '#oooooooooooo#',
-    '#oooooooooooo#',
-    '#oooooooooooo#',
+    '##oooooooooo##',
     '######oo######',
   ],
 
@@ -48,12 +53,20 @@ export const SALTCOMBE_HARBOUR_OFFICE = {
     { x: 12, y: 3, w: 1, h: 1, to: 'secret_haddocks_shed', spawn: { x: 6, y: 8 }, after: 'haddock_gone' },
   ],
 
-  cutscenes: [],
+  // The launch-ledger (trail 4: the_launch_ledger), the row inside the door.
+  cutscenes: [
+    { x: 4, y: 7, w: 6, h: 1, scene: 'the_launch_ledger', until: ['the_light_answers', 'haddock_gone'] },
+  ],
 
   // The clerk behind his desk (the ledger is on it), tide tables, shelves, the back door.
   textFile: 'interactions/saltcombe.txt',
   props: [
-    { sprite: 'cf_clerk_puffin', x: 6, y: 3, npc: 'harbour_clerk', animation: 'cf_clerk_puffin', speed: 0.5 },
+    // The side quest "The Clerk's Stamp": a gull has it, up on the quay's fish crates.
+    { sprite: 'cf_clerk_puffin', x: 6, y: 3, npc: 'harbour_clerk', animation: 'cf_clerk_puffin', speed: 0.5, quest: [
+      { needs: ['has:approved_stamp'], take: 'approved_stamp', set: ['q_stamp_asked', 'q_stamp_done'], give: 'harbour_pass', text: 'stamp_done' },
+      { needs: ['q_stamp_done'], text: 'stamp_after', append: true },
+      { needs: ['!q_stamp_asked'], set: 'q_stamp_asked', text: 'stamp_ask', append: true },
+    ] },
     { sprite: 'sc_ledger_desk', x: 5, y: 4, text: 'office_ledger', notice: true },
     { sprite: 'bookshelf', x: 1, y: 3, text: 'office_shelves' },
     { sprite: 'c5_tide_board', x: 9, y: 3, text: 'office_tide_board' },
@@ -62,6 +75,18 @@ export const SALTCOMBE_HARBOUR_OFFICE = {
     { sprite: 'stove', x: 1, y: 6, text: 'office_stove' },
     { sprite: 'chair', x: 10, y: 6, text: 'office_chair' },
     { sprite: 'c5_barrel', x: 12, y: 7, text: 'office_barrel' },
+    // Lived in (2026-11-08): a barometer, a lamp over the clerk's desk, pigeonholes of charts and
+    // papers behind him, a calendar by the back door, and a rag rug where the ending puts you down.
+    { sprite: 'in_barometer', x: 3, y: 2, text: 'in_office_barometer' },
+    { sprite: 'in_wall_lamp', x: 5, y: 2, text: 'in_office_lamp' },
+    { sprite: 'in_pigeonholes', x: 7, y: 2, text: 'in_office_pigeonholes' },
+    { sprite: 'in_calendar', x: 11, y: 2, text: 'in_office_calendar' },
+    { sprite: 'in_rug_blue', x: 5, y: 6, text: 'in_office_rug', walkable: true, flat: true },
+
+    // (2026-11-09) A waiting bench nobody waits on, the old launch books piled up by the stove.
+    // Off the way from the back door (12,4) to the front (6..7,9) and the ending's spot (6,8).
+    { sprite: 'bench', x: 9, y: 8, text: 'in_office_bench' },
+    { sprite: 'in_book_pile', x: 3, y: 7, text: 'in_office_books' },
   ],
   tileTexts: { h: 'office_wall' },
 

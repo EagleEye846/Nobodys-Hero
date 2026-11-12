@@ -1,20 +1,22 @@
 import { UI_WIDTH, UI_HEIGHT, SCREEN_WIDTH } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
 import { inUiSpace } from '../engine/screen.js';
-import { textFile, textSection } from '../engine/textLoader.js';
+import { textFile, textSection, turnSection } from '../engine/textLoader.js';
 import { music, sfx } from '../audio/music.js';
+import { voiceFor, speak } from '../audio/voices.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { SHOPS } from '../data/shops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines, layoutDialogue, drawDialogue, paginate } from '../ui/text.js';
-import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawItemDetails } from '../ui/menuFrame.js';
+import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawItemDetails, listIcon, itemIcon } from '../ui/menuFrame.js';
+import { glide, counting } from '../ui/uiMotion.js';
 import { ITEMS, giveItem, roomForItem } from '../data/items.js';
 import { WEAPONS } from '../data/weapons.js';
 import { ARMOR } from '../data/armor.js';
 import { skillBonus } from '../characters/progress.js';
-import { isWorn, wielderOf, HERO } from '../characters/equipment.js';
+import { isWorn, wielderOf, equippedGear, HERO } from '../characters/equipment.js';
 import { inParty } from '../characters/party.js';
 import { STAR_FORGINGS, starLevel } from '../data/fallenStar.js';
 import { hasGear } from '../data/gear.js';
@@ -137,7 +139,11 @@ export class ShopScene {
     this.forging = STAR_FORGINGS.findIndex((f) => f.smith === shopId);
     // Without the sword, they've heard of it, and say where to look.
     if (this.forging > 0) this.topics.push({ section: null, label: HERO_STATE.weapons.includes('fallen_star') ? 'The star sword' : 'Star-metal', forge: true });
-    this.say('greeting');
+    // Hello, and a different hello the next times you come in ([greeting 2], [greeting 3]).
+    WORLD_STATE.turns ??= {};
+    const visits = (WORLD_STATE.turns[`shop:${shopId}`] ?? 0) + 1;
+    WORLD_STATE.turns[`shop:${shopId}`] = visits;
+    this.say('greeting', visits);
   }
 
   enter(game) {
@@ -148,15 +154,31 @@ export class ShopScene {
   // Everything a section says, as pages that fit the box (Z shows the next).
   // A "<section> after <scene>" version wins once you've seen that scene (the
   // latest one seen), the way townsfolk's lines move on with the story.
-  say(section) {
+  // `turn`: the how-manyth time it's said, for words that take turns (turnSection).
+  say(section, turn = 1) {
     measuring ??= document.createElement('canvas').getContext('2d');
     const sections = textFile(this.shop.textFile);
     const scene = [...(WORLD_STATE.seenScenes ?? [])].reverse().find((id) => sections[`${section} after ${id}`]);
-    this.pages = textSection(this.shop.textFile, scene ? `${section} after ${scene}` : section)
+    this.pages = textSection(this.shop.textFile, turnSection(this.shop.textFile, scene ? `${section} after ${scene}` : section, turn))
       .flatMap((entry) => paginate(measuring, entry, TALK_WIDTH, TALK_SIZE, TALK_LINES));
     this.pageIndex = 0;
     this.line = this.pages[0];
     this.lineTime = 0;
+  }
+
+  // The keeper's voice as their words type out (src/audio/voices.js), every
+  // other letter. Words shown whole at once (Z) make no sound.
+  speakLine() {
+    // (A new line, or the same words said again from the start.)
+    if (!this.spoken || this.spokenLine !== this.line || this.lineTime < this.spoken.time) {
+      this.spokenLine = this.line;
+      this.spoken = { letters: 0, upTo: 0, time: 0 };
+    }
+    this.spoken.time = this.lineTime;
+    const length = this.line?.length ?? 0;
+    const shown = Number.isFinite(this.lineTime) ? Math.min(length, this.visibleCharacters()) : length;
+    if (Number.isFinite(this.lineTime)) speak(voiceFor(this.shopId), this.line, this.spoken.upTo, shown, this.spoken);
+    this.spoken.upTo = Math.max(this.spoken.upTo, shown);
   }
 
   get morePages() {
@@ -166,6 +188,7 @@ export class ShopScene {
   update(dt, input) {
     this.time += dt;
     this.lineTime += dt;
+    this.speakLine();
 
     // A long line carries on: Z finishes the page, then shows the next.
     if (this.morePages && this.mode !== 'buy' && input.wasPressed('confirm')) {
@@ -288,7 +311,7 @@ export class ShopScene {
         sfx('error');
         this.say('bag_full');
       } else {
-        sfx('heal');
+        sfx('buy');
         HERO_STATE.gold -= price;
         // With your bag full, it goes to storage, and they say so.
         const stored = giveItem(item) === 'stored';
@@ -311,7 +334,7 @@ export class ShopScene {
       sfx('error');
       this.say('too_poor');
     } else {
-      sfx('heal');
+      sfx('buy');
       HERO_STATE.gold -= price;
       owned.push(id);
       this.say('bought');
@@ -332,7 +355,7 @@ export class ShopScene {
   }
 
   sell(entry) {
-    sfx('heal');
+    sfx('coins');
     HERO_STATE.gold += sellValue(entry);
     if (entry.item) HERO_STATE.items.splice(entry.index, 1);
     else if (entry.weapon) HERO_STATE.weapons.splice(HERO_STATE.weapons.indexOf(entry.weapon), 1);
@@ -387,7 +410,7 @@ export class ShopScene {
     }
     HERO_STATE.gear = HERO_STATE.gear.filter((id) => id !== forging.needs);
     HERO_STATE.starForged = this.forging;
-    sfx('levelUp');
+    // (No jingle: the reforge show that follows has its own sting. src/overworld/reforgeShow.js)
     this.say('forge_now');
     // A smith with a `forgeScene` (src/data/shops.js) finishes the job out in the room: once
     // [forge_now] has been read, the shop closes and the overworld plays that scene.
@@ -514,6 +537,7 @@ export class ShopScene {
         name: (i) => (stock[i].skillPoint ? 'Skill Point' : stock[i].item ? ITEMS[stock[i].item].name : stock[i].armor ? ARMOR[stock[i].armor].name : WEAPONS[stock[i].weapon].name),
         nameColor: (i) => (gone(i) ? MENU_COLORS.dim : stock[i].skillPoint ? '#ffe14d' : MENU_COLORS.text),
         tag: (i) => (gone(i) ? { text: stock[i].skillPoint ? 'SOLD OUT' : 'OWNED', color: MENU_COLORS.dim } : { text: `${this.priceOf(stock[i])}G`, color: MENU_COLORS.highlight }),
+        icon: (i) => this.entryIcon(stock[i]),
       });
       return;
     }
@@ -524,6 +548,7 @@ export class ShopScene {
         name: (i) => (list[i].item ? ITEMS[list[i].item].name : list[i].armor ? ARMOR[list[i].armor].name : WEAPONS[list[i].weapon].name),
         nameColor: () => MENU_COLORS.text,
         tag: (i) => ({ text: `+${sellValue(list[i])}G`, color: '#5fc27a' }),
+        icon: (i) => this.entryIcon(list[i]),
       });
       return;
     }
@@ -538,7 +563,11 @@ export class ShopScene {
       const i = first + row;
       const y = LEFT_BOX.y + 24 + row * rowHeight;
       const selected = i === cursor && this.mode !== 'leaving';
-      if (selected) ctx.drawImage(soulSprite(), LEFT_BOX.x + 24, y + 7);
+      if (selected) {
+        // The heart slides between the options rather than jumping.
+        const at = glide(`shop:${this.mode}`, LEFT_BOX.x + 24, y + 7);
+        ctx.drawImage(soulSprite(), at.x, at.y);
+      }
       drawText(ctx, label, LEFT_BOX.x + 52, y, { size: this.mode === 'talk' ? 28 : 34, color: selected ? MENU_COLORS.highlight : MENU_COLORS.text });
     });
     if (first > 0) drawText(ctx, '▲', LEFT_BOX.x + LEFT_BOX.w - 30, LEFT_BOX.y + 12, { size: 20, color: MENU_COLORS.dim });
@@ -551,8 +580,9 @@ export class ShopScene {
       if (!entry) return;
       if (entry.skillPoint) this.drawSkillPointDetails(ctx, entry);
       else if (entry.item) drawItemDetails(ctx, entry.item, DETAILS_AREA);
-      else if (entry.armor) drawArmorDetails(ctx, entry.armor, DETAILS_AREA);
-      else drawWeaponDetails(ctx, entry.weapon, DETAILS_AREA);
+      // Gear gets green and red arrows against what its wearer has on now.
+      else if (entry.armor) drawArmorDetails(ctx, entry.armor, DETAILS_AREA, equippedGear(wielderOf('armor', entry.armor), 'armor'));
+      else drawWeaponDetails(ctx, entry.weapon, DETAILS_AREA, equippedGear(wielderOf('weapon', entry.weapon), 'weapon'));
       this.drawOwnedNote(ctx, entry);
     } else {
       const lines = layoutDialogue(ctx, this.line, TALK_WIDTH, TALK_SIZE);
@@ -563,7 +593,16 @@ export class ShopScene {
       }
     }
     // Your gold sits in the room's bottom-left corner, clear of both boxes.
-    drawText(ctx, `${HERO_STATE.gold} G`, 16, ROOM_HEIGHT * 2 - 30, { size: 28, color: MENU_COLORS.highlight, outline: '#000' });
+    // It counts down (or up) to what's left after you buy or sell.
+    drawText(ctx, `${counting('shopGold', HERO_STATE.gold)} G`, 16, ROOM_HEIGHT * 2 - 30, { size: 28, color: MENU_COLORS.highlight, outline: '#000' });
+  }
+
+  // The small picture beside a stock or sell row: a sword, a shield, food,
+  // a candle, or a star for a skill point.
+  entryIcon(entry) {
+    if (entry.skillPoint) return listIcon('star', '#ffe14d');
+    if (entry.item) return itemIcon(entry.item);
+    return listIcon(entry.armor ? 'armor' : 'weapon', MENU_COLORS.description);
   }
 
   // A small line along the bottom of the details: how many of an item you

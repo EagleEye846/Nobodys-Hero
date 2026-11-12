@@ -65,8 +65,30 @@ Sacks of ore, tied at the neck and stacked tidy. Someone has chalked ORE on them
 [d_sacks_ves]
 {bored}'Also ore.' The most honest sign in the mine.
 
+# (draft)
+[d_sacks 2]
+ORE. ALSO ORE. Further down the stack, in a third hand that has clearly been waiting years for its chance: MOSTLY ORE.
+
 [d_toolbox]
 A toolbox with a dozen hammers in it and a sandwich. The sandwich has been here a very long time and has formed views.
+
+# (draft)
+[d_toolbox 2]
+The sandwich in the toolbox has moved, slightly, since you last looked. Towards you.
+
+# (draft)
+[d_toolbox_ves 2]
+{bored}Shut the lid. {smile}Slowly. No sudden moves.
+
+# (draft)
+[d_toolbox 10]
+You open the toolbox one more time. The sandwich is gone.
+
+In its place, set down very neatly in the middle of the hammers, is a pinecone.
+
+# (draft)
+[d_toolbox_ves 10]
+{surprised}A pinecone. Down a mine. {bored}...No. I'm not going to think about that.
 
 [d_spoil]
 A heap of waste rock with a shovel stuck in the top of it, like a flag on a hill that nobody wanted.
@@ -74,11 +96,19 @@ A heap of waste rock with a shovel stuck in the top of it, like a flag on a hill
 [d_hat]
 A hard hat on a nail. Chalked inside the brim: WHOEVER FINDS THIS, IT'S MINE.
 
+# (draft)
+[d_hat 2]
+WHOEVER FINDS THIS, IT'S MINE. Under it, in other chalk: FOUND IT. And under that, in the first: STILL MINE.
+
 [d_pick]
 A pickaxe left stuck in the rock face at a jaunty angle, as if it were just going to be fetched after tea.
 
 [d_ladder]
 A broken ladder, two rungs short of useful and three short of a joke.
+
+# (draft)
+[d_ladder 2]
+Two rungs short of useful. Somebody has chalked the missing rungs on the rock above it. Nobody has tried them. Probably.
 
 [d_wreck]
 A cart with a wheel off and a lean to it. Someone has painted STOP on the side, in case it was thinking of going anywhere.
@@ -88,6 +118,10 @@ A pick, a shovel and a broom, each about as long as your hand, leaned neatly aga
 
 [d_tiny_door]
 A little round door in the rock, with a knocker and a mat. A note on it says ON SHIFT. Underneath, newer: NOT ON SHIFT. SHIFT CANCELLED. GONE UP TO TOWN.
+
+# (draft)
+[d_tiny_door 2]
+GONE UP TO TOWN. The mat has been turned over. The other side says GO AWAY, NICELY.
 
 [cart_stuck]
 The cart won't go. Something is in the way along the track, or the track runs out. It wants a clear line.
@@ -109,11 +143,23 @@ The winch over the shaft: an A-frame of black timber, a drum of rope as thick as
 [pit_winch_ves]
 {glee}Ten moles, or one large badger. {bored}I'd love to meet whoever did that sum.
 
+# (draft)
+[pit_winch 2]
+TEN MOLES OR ONE VERY LARGE BADGER. A smaller plate, screwed on underneath: THE BADGER KNOWS WHAT HE DID.
+
+# (draft)
+[pit_winch_ves 2]
+{glee}There's a story there. {bored}We'll never hear it. That's the worst part.
+
 [pit_shaft]
 The shaft: a round black hole, boarded over, with a rope round it. Cold air breathes up between the boards, smelling of a very long way down. The sign says the lift is round the back, and would you please stop looking at the hole.
 
 [pit_warning]
 A red warning sign, hand-painted: DANGER. Under that, smaller: DEEP. Under that, smaller still: (VERY).
+
+# (draft)
+[pit_warning 2]
+(VERY). Somebody has added, almost too small to read: (no, really).
 
 [pit_tally]
 The shift board: a slate with a peg for every miner. The ON SHIFT column has two pegs in it. The GONE HOME column has all the rest, and under them, in chalk: SINCE THE LIGHT STARTED GOING.
@@ -121,14 +167,26 @@ The shift board: a slate with a peg for every miner. The ON SHIFT column has two
 [pit_tally_ves]
 {surprised}Two on shift. {bored}Brave, or stubborn. Down a mine they look the same.
 
+# (draft)
+[pit_tally 2]
+Two pegs ON SHIFT. Somebody has hung a tiny paper hat on each of them, as if to say well done.
+
 [pit_office]
 PIT OFFICE. CLOSED. Under that, smaller: (OPEN ALTERNATE WEDNESDAYS). Under that, smaller still: (NOT THIS ONE). Somebody is snoring behind the door, and nobody is going to wake him.
+
+# (draft)
+[pit_office 2]
+The snoring behind the door stops. There's a long pause. Then it starts again, a bit louder, to make a point.
 
 [pit_warning_ves]
 {bored}'Very.' Finally, a sign that gives a number.
 
 [pit_hat]
 A hard hat on a nail by the shaft. Chalked on the brim, in a very small hand: FIRST ONE DOWN IS A MOLE. A second hand has added: WE WERE ALL MOLES.
+
+# (draft)
+[pit_hat 2]
+WE WERE ALL MOLES. Under it, in a third hand, smaller: (I WAS A VOLE. NOBODY ASKED.)
 
 [pit_pouch]
 A wage purse, tucked behind the ladder where somebody hid it from a friend. You found it first.
@@ -143,6 +201,10 @@ CART YARD. ONE CART PER CUSTOMER. Under it: THE CART HAS NO BRAKES. Under that: 
 
 {smile}I'd like it noted that I'm only slightly interested.
 
+# (draft)
+[yard_sign 2]
+THIS IS HOW CARTS WORK. Under it, newer: COMPLAINTS TO THE CART.
+
 [yard_board]
 A slate of carts out and carts back. Out: thirty-six. Back: nineteen. A note in the margin says: THEY KNOW THE WAY HOME. THEY JUST DON'T WANT TO.
 
@@ -150,6 +212,10 @@ Below it, in a tidier hand: SIDING POINTS HAVE NO LEVER. THEY ARE HELD BY THE EA
 
 [yard_warning]
 MIND THE POINTS. Someone has scratched out POINTS and written PRICES. Someone else has scratched out PRICES and written POINTS. It's a long-running argument.
+
+# (draft)
+[yard_warning 2]
+POINTS. Under it, in fresh chalk: PRICES. The argument goes on. Somebody has left a stool here for whoever's turn it is.
 
 [yard_lever]
 A points lever with an iron handle worn bright. The junction up the track shows how it's set: the bright rail with the yellow arrow is the way a cart will go. Z throws it.
@@ -188,6 +254,10 @@ A chalk diagram of the three levels, drawn by someone who only ever thought abou
 
 [sb_warning]
 WARNING: CARTS DO NOT STOP FOR LEVELS. Neither, it's said, do the people in them.
+
+# (draft)
+[sb_warning 2]
+Neither, it's said, do the people in them. Somebody has added, in a shaky hand: CONFIRMED.
 
 [sb_lever_1]
 The top points lever, beside the first fork. Thrown, the cart goes down the west side instead of along the top. The paint has worn off the handle exactly where a hand goes. The junction shows how it's set: the bright rail is the way the cart will go.
@@ -237,6 +307,10 @@ A hand-painted sign: BROKEN. LEAVE IT. And underneath, in the same hand: THIS ME
 [seam_nope_ves]
 {bored}It says it three times. {smile}That's practically an invitation.
 
+# (draft)
+[seam_nope 2]
+THIS ONE ESPECIALLY. Lower down, in older, fainter paint you missed the first time, there's a little star.
+
 [seam_nope_lever]
 A lever in the wall with a paper tag tied to the handle: OUT OF ORDER. It's very well oiled for something out of order.
 
@@ -263,6 +337,10 @@ A purse behind a stalagmite. The stalagmite has been guarding it for centuries a
 [seam_warning]
 WARNING: ROOF. Under it: (AND FLOOR). Under that: (AND ALL THE BITS IN BETWEEN).
 
+# (draft)
+[seam_warning 2]
+(AND ALL THE BITS IN BETWEEN). Under that: (THAT MEANS YOU). Under that: (YOU ARE A BIT IN BETWEEN).
+
 # --- THE TRESTLE ---
 
 [tr_sign]
@@ -276,8 +354,20 @@ THE TRESTLE. A HUNDRED PACES OF PLANK AND RAIL OVER NOTHING. KEEP TO THE MIDDLE.
 [tr_warning]
 DO NOT LEAN OVER THE EDGE TO SEE HOW FAR IT IS. IT'S FAR.
 
+# (draft)
+[tr_warning 2]
+IT'S FAR. Under it, in pencil: HOW FAR? Under that: FARTHER THAN THAT.
+
 [tr_drop]
 The drop: black, cold and bottomless. A pebble dropped into it in your head never finishes landing.
+
+# (draft)
+[tr_drop 2]
+You drop a real pebble this time, and count. You stop counting. You never hear it land. It must still be going. You leave it to it.
+
+# (draft)
+[tr_drop_ves 2]
+{bored}Don't do that. {surprised}...Did it land? {bored}Don't tell me.
 
 [tr_pouch]
 A purse in the corner of the west platform, in the one spot where nobody would stand to look over the edge.
@@ -360,11 +450,19 @@ Under it, in a careful hand: LOADS ARE WEIGHED AT THE PLATE BEFORE THE GATE. A L
 [cave_warning]
 THE ROOF IS NOT YOUR FRIEND. Under it, smaller: THE ROOF IS NOBODY'S FRIEND.
 
+# (draft)
+[cave_warning 2]
+THE ROOF IS NOBODY'S FRIEND. A tiny addition, underneath: (THE ROOF IS A BIT LONELY.)
+
 [cave_rock]
 A big rock off the roof, the size of a barrel and about as friendly. Walk into it, steadily, and it will shift a tile at a time.
 
 [cave_hat]
 A hard hat on a ledge, dented in the exact shape of a falling rock. The hat looks smug. (It was empty at the time. The owner is fine. He'll tell you so himself.)
+
+# (draft)
+[cave_hat 2]
+The hat still looks smug. Inside the brim, in chalk: TOLD YOU. And it's signed: THE HAT.
 
 [cave_barricade]
 A heavy barricade across the tunnel: timbers, planks, wedges. The old shift put it up against the fall, and it has held for a hundred years. Nothing alive is going to get through it, but an empty cart at speed might.
@@ -395,6 +493,10 @@ A purse beside the east cavern's wall, half-buried in grit. The fall must have m
 [lift_sign]
 THE LIFT. DOWN ONLY. For up, see LADDERS (NONE).
 
+# (draft)
+[lift_sign 2]
+For up, see LADDERS (NONE). Somebody has drawn a little ladder under it. It's very wobbly, and it doesn't reach the top of the sign.
+
 [lift_winch]
 The lift's winch: a drum, a brake as big as a door, a crank as long as a mole is tall, and a box of counterweights with a slot in the lid. The brake is on. The gate to the cage is on with it.
 
@@ -408,6 +510,14 @@ At the bottom, in the tidy hand: TWO PLATES. EAST LINE, ONE SHORT OF THE BUFFER.
 
 [lift_board_ves]
 {bored}Down one. Up none. {surprised}...That's not a slip of the chalk, is it.
+
+# (draft)
+[lift_board 2]
+DOWN 1. UP --. The dash has been gone over, more than once, by somebody hoping it would turn into a number.
+
+# (draft)
+[lift_board_ves 2]
+{thoughtful}...{determined}Two more down. {bored}And two more up, after. I'll write it in myself.
 
 [lift_warning]
 STAND CLEAR OF THE ROPE. Under it: STAND CLEAR OF THE CAGE. Under that: STAND CLEAR.
@@ -441,6 +551,30 @@ A purse on the spoil heap above the yard, for whoever is quick on the last day o
 
 # --- SEAM NINE (the secret) ---
 
+# (draft) The roster: where the seventh shift put the three pieces of the whistle (the whistle quest).
+[lost_roster]
+A duty roster, tacked up beside the hats, ruled in chalk. Most of it is who has the pick and who has the kettle. At the bottom, in a bossy hand:
+
+WHISTLE. KEPT IN THREE, SO NOBODY BLOWS IT BY HABIT.
+  PEA .......... FENN. UP TO THE LIGHT. NEEDS A STONE UNDER IT.
+  MOUTH ........ HALE. TO THE SMITH'S. STILL COOLING.
+  BARREL ....... TARN. THE LONG WAY ROUND, WHERE THE STONES RUN OUT.
+ALL THREE AT THE CRACK, OR NOT AT ALL.
+
+# (draft)
+[lost_roster_ves]
+{bored}Three miners, three pockets, and not a one of them thought to write down which town.
+{thoughtful}Up to the light. The smith's. Where the stones run out. I'd say that was a tour.
+
+# (draft) Plainer reading of the roster, so the three towns are named: the Glimmering, Belowtown, the lake.
+{smile}Up to the light is the Glimmering, all that crystal. The smith's is Hobnail, and he's the only smith down here. And stepping stones that run out can only be the Stillwater. So: the hill, the forge, the lake.
+
+# (draft)
+[crack_not_yet]
+The crack runs on into the floor here, but a skin of glass has set across it, clear as pond ice, and it hums at the sword and does not give. It is a seal, not a break: somebody laid it on purpose.
+
+Wherever it is meant to be opened from, it is not from here, and not with a sword. The roster by the hats said ALL THREE AT THE CRACK.
+
 [lost_hats]
 A row of hard hats on nails, each with a tin tag: names, in a hand that was in no hurry. They're all brushed clean and ready for the next shift.
 
@@ -450,8 +584,17 @@ A row of hard hats on nails, each with a tin tag: names, in a hand that was in n
 [lost_board]
 The tally board of Seam Nine. The last column says, in chalk: BACK AFTER LUNCH. The date next to it is a very long time ago.
 
+# (draft) The end-of-shift whistle (Pudding's TALK sings it back).
+Under the last column, in smaller chalk, in a different hand: END OF SHIFT. THREE DOWN, ONE UP. WHISTLE IT. HE LIKES IT.
+
+The HE has a line under it, as if somebody had been told off for the pronoun.
+
 [lost_sign]
 SEAM NINE. NOT ON THE MAP. If you've read this sign, you're not supposed to be here. You're welcome to the tea.
+
+# (draft)
+[lost_sign 2]
+You're welcome to the tea. You look at the seven rings of dust. It's a very kind offer.
 
 [lost_table]
 A table laid for a break: seven tin mugs, a kettle, and a plate of something that was once a pasty. The tea has gone to a ring of dust in each mug. Seven mugs, and one stool pushed back, as if someone had just stood up.
@@ -459,14 +602,45 @@ A table laid for a break: seven tin mugs, a kettle, and a plate of something tha
 [lost_table_ves]
 {bored}Seven mugs. {surprised}And a stool pushed back. I'd rather we didn't sit down.
 
+# (draft)
+[lost_table 2]
+Seven mugs. One has a chip in the rim, turned carefully to the back, so nobody would have to drink from that side.
+
 [lost_bench]
 A bench worn smooth in seven places. The eighth place is a little less smooth.
+
+# (draft)
+[lost_bench 2]
+The eighth place, a little less smooth. Somebody who only came now and then. Or somebody who never quite sat down.
 
 [lost_chest]
 A chest under the back wall with a rivet-studded lid. Chalked on it: TO THE NEXT SHIFT.
 
+# (draft) Only a sliver now: the real shard is at the bottom of the crack, south-west.
 [lost_shard]
-A sliver of pale metal wedged in a crack in the back wall, giving off a faint, cold light. It hums when you come near, and the sword answers.
+A sliver of pale metal wedged in a crack in the back wall, no bigger than a fingernail, giving off a faint, cold light. It hums when you come near, and the sword answers.
+
+But it isn't the sliver the sword is answering. The hum comes up from below. The crack runs on across the floor, out of the south-west corner, and down.
+
+# (draft)
+[lost_shard_ves]
+{thoughtful}Too small to hold. Too small to be what it's humming at. Whatever it is, it's down there.
 
 [lost_pouch]
 A purse beside the back wall, left by someone who had a good day. It's been the same good day ever since.
+
+# (draft)
+[d_lunch]
+Somebody's tea break, left exactly where they left it: a tin lunch box with half a mushroom pasty in it, a mug gone cold, a candle stuck to the crate in its own wax.
+
+They'll be back for the pasty. Nobody leaves half a pasty.
+
+# (draft)
+[d_lunch 2]
+The candle has burned down another finger since you were here. Nobody's been. Candles down here just have to get on with it.
+
+# (draft)
+[d_timber]
+Spare pit props, sawn to length and stacked on two stones, ready for the next bit of roof that wants holding up.
+
+Down here there's always a next bit.

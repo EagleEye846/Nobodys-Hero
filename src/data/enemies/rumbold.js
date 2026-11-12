@@ -37,7 +37,8 @@ import { KING_SPRITE, KING_PALETTE, KING_SHOW_ANIM } from '../art/peptupKing.js'
 //      slips: Tuck, on his stool, both hands on the levers. The king's
 //      voice keeps going, perfectly clear, and his mouth doesn't move. Music
 //      turns to "Behind the Curtain". The attacks fall apart (smaller and
-//      slower, nothing meant to hurt), and TALK is to Tuck now: MERCY
+//      slower, nothing meant to hurt: heavy and tired, sagging to a stall
+//      and yanked back up as Tuck's arms give out), and TALK is to Tuck now: MERCY
 //      fills (each thing said once, in a natural order). Hitting the king
 //      only makes the show louder (and costs a little MERCY). When Tuck's
 //      MERCY is full (he's ready to come out from behind the puppet), or
@@ -65,8 +66,14 @@ import { KING_SPRITE, KING_PALETTE, KING_SHOW_ANIM } from '../art/peptupKing.js'
 // Puppet strings that hook and reel you in, and the cords prop swords
 // hang by, are cuttable.
 
-// His attacks live in src/battle/attacks/rumbold.js, rumboldBroken.js and
-// rumboldAlive.js.
+// His attacks live in src/battle/attacks/rumbold.js, rumboldBroken.js,
+// rumboldAlive.js and rumboldWood.js.
+//
+// (Reworked 2026-11-09 after a playtest found him "kaizo": damage down, the
+// show a little thinner, the jam's attacks slowed to Tuck's tired arms (the
+// tired clock in rumboldBroken.js), and the last act's attacks all his own
+// body now (rumboldWood.js) with no second attack laid on top. Backups in
+// notes/peptup-rework-2026-11-09/backup/.)
 const SHOW_ATTACKS = [
   { name: 'rumboldSpotlights', weight: 3 },
   { name: 'rumboldTrapdoors', weight: 3 },
@@ -79,7 +86,7 @@ const SHOW_ATTACKS = [
 ];
 const BROKEN_ATTACKS = [
   // (His strings, out in the open now that you've seen them.)
-  { name: 'rumboldStrings', weight: 2 },
+  { name: 'rumboldSlackStrings', weight: 2 },
   { name: 'rumboldFlicker', weight: 2 },
   { name: 'rumboldTangle', weight: 3 },
   { name: 'rumboldFizzle', weight: 2 },
@@ -87,14 +94,17 @@ const BROKEN_ATTACKS = [
   { name: 'rumboldRestart', weight: 2 },
   { name: 'rumboldStuckSign', weight: 2 },
 ];
+// (By now he's no king putting on a show: it's all his own body, the wood,
+// the joints and the strings. rumboldWood.js has the first four.)
 const ALIVE_ATTACKS = [
   { name: 'rumboldAliveLimbs', weight: 3 },
-  { name: 'rumboldAliveJaw', weight: 3 },
-  { name: 'rumboldAliveCues', weight: 2 },
-  { name: 'rumboldAliveDance', weight: 3 },
-  { name: 'rumboldAliveTuck', weight: 3 },
-  { name: 'rumboldAliveLight', weight: 3 },
-  { name: 'rumboldAliveWorkYou', weight: 3 },
+  { name: 'rumboldAliveGouge', weight: 3 },
+  { name: 'rumboldAliveJoints', weight: 3 },
+  { name: 'rumboldAliveCrossbar', weight: 3 },
+  { name: 'rumboldAliveJaw', weight: 2 },
+  { name: 'rumboldAliveTuck', weight: 2 },
+  { name: 'rumboldAliveLight', weight: 2 },
+  { name: 'rumboldAliveWorkYou', weight: 2 },
 ];
 // His finale, played once when he's low (the alive phase's `finale`).
 const ALIVE_FINALE = 'rumboldAliveTear';
@@ -135,9 +145,17 @@ export const RUMBOLD_BOSS = {
   // by talking; and then the light in him mends him back up to 60% for the
   // last act (beaten every step of the way, about 12,100 HP in all; the last
   // act has to be won by fighting, so it's kept to about 20 turns).
-  maxHp: 13200,
-  damage: 67,
-  difficulty: { density: 2, speed: 1.3 },
+  maxHp: 16800,
+  // (2026-11-09: 67, 53 and 77 a hit, with thicker rain, played as "kaizo":
+  // a hit is now about a seventh of a LV 28-31 party member's 360-400 HP
+  // (52 here, 45 behind the curtain, 56 in the last act, 46 in its finale),
+  // so a careful player lives through several mistakes in each act, still
+  // over the chapter's regulars (37-44) and under the coast's Dowager (70+).)
+  damage: 52,
+  difficulty: { density: 1.45, speed: 1.15 },
+  // His turns run 10 s (not the 12 of TURN_SECONDS in battleScene.js): his
+  // attacks are the busiest of the chapter as they are.
+  turnSeconds: 10,
   // In a last stand he layers a lighter second act on the first.
   secondWind: { below: 0.3, density: 0.35, delay: 2.5 },
   // Low on HP (but see each phase's `lowHp`), his taunts are often [low_hp].
@@ -179,8 +197,8 @@ export const RUMBOLD_BOSS = {
       patterns: BROKEN_ATTACKS,
       // The show carrying on, badly: easier and gentler, and softer still as
       // MERCY rises.
-      damage: 53,
-      difficulty: { density: 1.4, speed: 1.1 },
+      damage: 45,
+      difficulty: { density: 1.2, speed: 0.95 },
       gentle: true,
       // (No last stand here: it's falling apart, not fighting.)
       secondWind: null,
@@ -221,12 +239,14 @@ export const RUMBOLD_BOSS = {
       // climb you can see, even if Tuck was talked round at half), and it's
       // harder than anything yet: his own body thrown at you, and no hand
       // holding him back.
-      renew: { to: 0.6, seconds: 2.4 },
-      // His own body thrown at you two ways at once, all through this act:
-      // a lighter second attack laid on every one.
-      secondWind: { below: 1, density: 0.32, delay: 2.5 },
-      damage: 77,
-      difficulty: { density: 1.9, speed: 1.4 },
+      // (Buffed 2026-11-10 at Patrick's ask: mends to 70%, harder hits,
+      // denser and quicker, finale too; still one attack at a time.)
+      renew: { to: 0.7, seconds: 2.6 },
+      // (No second attack laid on top: one thing of his at a time, each with
+      // room to read it. Two at once was too much, even lightly.)
+      secondWind: null,
+      damage: 64,
+      difficulty: { density: 1.65, speed: 1.3 },
       lowHp: 0.25,
       // He can't be spared. The MERCY bar stays as Tuck left it (full, if
       // you talked him round), but the first kindness tried (a TALK, Pacify,
@@ -238,7 +258,7 @@ export const RUMBOLD_BOSS = {
       // and the whole stage is the box (rumboldAliveTear). He can't be
       // brought below `hold` until it's played, so it always does.
       // (The finale, a long gauntlet with the stair in it, keeps its own pace.)
-      finale: { below: 0.3, hold: 0.22, pattern: ALIVE_FINALE, difficulty: { density: 1.15, speed: 1.1 } },
+      finale: { below: 0.3, hold: 0.22, pattern: ALIVE_FINALE, difficulty: { density: 1.3, speed: 1.2 }, music: 'rumboldTear' },
       // He takes his name back: PUPPET to PEPTUP, fast, rattling.
       anagram: ['PUPPET', 'PUPEPT', 'PUPETP', 'PUEPTP', 'PEUPTP', 'PEPUTP', 'PEPTUP'],
       nameSwap: 0.24,

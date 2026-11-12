@@ -12,3 +12,11 @@
 {determined}Down to the boat when you're ready.
 
 {eh}Eh? No, miss. You can't steer.
+
+# (draft) Turns.
+[repeat 2]
+{proud}She's called the Bother for the noise she makes coming in. Not on account of me. Whatever they tell you up the hill.
+
+[repeat_ves 2]
+{bored}They say it's on account of him.
+

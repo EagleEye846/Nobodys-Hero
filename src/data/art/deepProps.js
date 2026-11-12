@@ -774,6 +774,37 @@ still('tiny_tools', { ...WOOD, ...IRON, b: '#c8a050', B: '#8a6a30' }, 16, 16, (g
   g.outline('k');
 });
 
+// The shift's tea break: an upturned crate for a table, a dented tin lunch
+// box left open (half a mushroom pasty in it), a tin mug, and a stub of
+// candle stuck to the crate in its own wax.
+still('lunch_crate', { ...WOOD, ...IRON, ...ROCK, p: '#c89a58', P: '#8a6230', w: '#e8dcc0', f: '#ffcf6a', F: '#fff0b0' }, 16, 16, (g) => {
+  // The crate: slats, a lit top edge, darker on its right.
+  g.rect(2, 8, 12, 7, 'm').rect(2, 8, 12, 1, 'l').rect(11, 9, 3, 6, 'd');
+  g.rect(2, 11, 12, 1, 'd').px(3, 9, 'D').px(12, 9, 'D').px(3, 13, 'D').px(12, 13, 'D');
+  // The lunch box, lid up behind it.
+  g.rect(3, 5, 6, 3, 'I').rect(3, 5, 6, 1, 'i').rect(3, 3, 6, 2, 'i').px(3, 3, 'I');
+  g.rect(4, 6, 4, 1, 'p').px(5, 6, 'P').px(7, 6, 'w');
+  // The mug and the candle.
+  g.rect(10, 5, 2, 3, 'I').px(12, 6, 'i').px(10, 5, 'j');
+  g.px(13, 6, 'w').px(13, 7, 'w').px(13, 5, 'f').px(13, 4, 'F');
+  g.outline('k');
+});
+
+// Spare pit props, sawn to length and stacked against the wall on two chocks,
+// ready for the next bit of roof that needs holding up.
+still('timber_stack', { ...WOOD, ...ROCK, e: '#c8a070' }, 32, 16, (g) => {
+  // Two chocks of stone under the stack.
+  g.rect(4, 13, 4, 2, 's').rect(4, 13, 4, 1, 'S').rect(24, 13, 4, 2, 's').rect(24, 13, 4, 1, 'S');
+  // Three logs on the bottom, two on top, each with a pale sawn end on the left.
+  for (const [x, y] of [[2, 9], [2, 5], [6, 1]]) {
+    const w = y === 1 ? 20 : 28;
+    g.rect(x, y, w, 4, 'm').rect(x, y, w, 1, 'l').rect(x, y + 3, w, 1, 'd');
+    g.rect(x, y, 2, 4, 'e').px(x, y + 3, 'D');
+    for (let i = x + 5; i < x + w - 2; i += 7) g.px(i, y + 1, 'd');
+  }
+  g.outline('k');
+}, 2);
+
 // ======================= Exports =======================
 export { DEEP_PALETTE_EXTRA, DEEP_PROP_SPRITES, DEEP_FOOTPRINTS };
 

@@ -14,6 +14,17 @@ import { hasGear } from '../data/gear.js';
 // pitch, so the order to ring them is whatever the tune says, and how tall
 // each crystal stands is up to the room (taller for higher is the kind thing).
 export const CHIME_SETS = {
+  // The Fair Return's harmonium, in the crew's quarters (Chapter 5, the ghost ship): four keys, and the crew's
+  // shanty "Port Tomorrow" (src/data/music/parts/ghostShip.js) as far as its first phrase: C C D Eb D C (60 60 62 63 62 60). A reed voice, the real clarinet; it plays itself now and
+  // then (haunt.js `selfPlay`), the tune the crew sang for the pipes at the end of a watch. Opens the
+  // bulkhead door to the gun deck.
+  ship: {
+    notes: [60, 62, 63, 67],
+    tune: [60, 60, 62, 63, 62, 60],
+    opens: 'ship_tune',
+    sample: 'clarinet',
+    octave: 0,
+  },
   // The chapter's four-note tune (the first cell, in C: G C E D), for the
   // four crystals on the King's Road. G4 C5 D5 E5 are 67 72 74 76; the glock
   // rings an octave above.
@@ -23,6 +34,27 @@ export const CHIME_SETS = {
     opens: 'cavern_song',
     sample: 'glock',
     octave: 1,
+  },
+  // The Whistle Gallery under Seam Nine (Chapter 4's secret, src/data/rooms/diggingsStarGallery.js):
+  // the miners' end-of-shift whistle, B G E and F-sharp up (three long down, one short up: the
+  // tune of src/data/music/starSeamTheme.js). Notes E4 F#4 G4 B4 (64 66 67 71), the glock an
+  // octave above. Opens the gate to the Last Camp.
+  seam: {
+    notes: [64, 66, 67, 71],
+    tune: [71, 67, 64, 66],
+    opens: 'seam_tune',
+    sample: 'glock',
+    octave: 1,
+  },
+  // Chapter 5's Merrow: the three practice bells in the drowned square, rung the way the town's
+  // tower rings in its song (merrowTheme.js: G4 C5 C5 D5 on the same 'chimes', no octave
+  // shift, so they sound at the song's pitch). Opens the ringers' hall door.
+  merrow: {
+    notes: [67, 72, 74],
+    tune: [67, 72, 72, 74],
+    opens: 'merrow_peal',
+    sample: 'chimes',
+    octave: 0,
   },
 };
 
@@ -90,7 +122,7 @@ export class Chimes {
     const name = prop.chime.set;
     if (!this.warmed) {
       this.warmed = true;
-      music.warm('glock', 'vibesBowed', 'harp', 'cellos');
+      music.warm(CHIME_SETS[name].sample, 'vibesBowed', 'harp', 'cellos');
     }
     // The cavern is singing; wait for it.
     if (this.answer) return true;

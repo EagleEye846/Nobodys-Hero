@@ -138,7 +138,7 @@ A sword of pale star-metal, pulled out of the stone that brought it down. It's w
 A sword out of the old city, kept dry in its vault for longer than Hollin stood. A line runs along the blade like the mark water leaves on a wall, and it turns a blow aside the way a weir turns water.
 
 [bookmark]
-A thin old blade, left in a book to keep somebody's place, three hundred years ago. It was a very long book. It's light as a page and it slips through things like a page through fingers.
+A thin old blade, left in a book to keep somebody's place, a hundred years ago. It was a very long book. It's light as a page and it slips through things like a page through fingers.
 
 [sculptors_mallet]
 The mallet the old city's sculptor carved all the Hero's statues with. Its head is worn into a shape that fits stone exactly. Swing it, and stone remembers it.
@@ -216,6 +216,10 @@ A long punting pole, polished by a hundred years of hands. It's for pushing off 
 A blade of black glass that formed in the dark, slowly, around nothing. It rings very quietly. It catches a blow and hands it back with interest.
 
 # Ves's.
+# In the fishers' chest in the cliff cave.
+[gaff_hook]
+A fisher's long hook for landing big fish. It lands other things too.
+
 # In a chest in Sunnyside.
 [daisy_ferrule]
 A brass tip for Ves's umbrella, with a daisy stamped in it. Ves says it's embarrassing. She hasn't taken it off.

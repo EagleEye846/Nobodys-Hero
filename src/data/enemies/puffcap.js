@@ -14,7 +14,7 @@ export const PUFFCAP = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: PUFFCAP_SPRITE, palette: PUFFCAP_PALETTE },
-  maxHp: 390,
+  maxHp: 495,
   damage: 17,
 
   // A Hushwood enemy: a touch busier than the Pinefall's.

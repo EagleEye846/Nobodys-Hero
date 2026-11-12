@@ -10,17 +10,37 @@ import { withSnipes } from './snipes.js';
 
 const KELP = { s: '#a8e8f0', S: '#e8fcff', c: '#68d0b4', C: '#3aa890', d: '#1f7868', K: '#4a7a2a', L: '#7ab040', l: '#a8d460', g: '#c8f0e0', k: '#12262a', h: '#2a3a3a', t: '#68d0b4', D: '#14584e', e: '#fff6c8' };
 
-// A drop of water.
+// A drop of water, flung: a teardrop pointing the way it flies, with a glint.
 defineBulletArt('kelpDrop', {
-  frames: [['.s.', 'sSs', 'sSs', '.s.'], ['.s.', 'sSs', '.s.', '...']],
+  frames: [
+    ['..ss...', '.sSSsc.', 'sSSSSsc', '.sSSsc.', '..ss...'],
+    ['...ss..', '.sSSsc.', 'sSSSSsc', '.sSSsc.', '...ss..'],
+  ],
   palette: KELP,
   radius: 1.9,
+  rotate: true,
   frameSeconds: 0.14,
 });
 
-// Where a hoof will land (harmless): a pale crescent, flashing.
+// Where a hoof will land (harmless): a hoofprint pressed in the wet, with a ring
+// of ripple round it, flashing.
 defineBulletArt('kelpHoof', {
-  frames: [['.ggg.', 'g...g', 'g...g', '.....'], ['.....', '.ggg.', 'g...g', '.....']],
+  frames: [
+    ['..ggggg..', '.g.....g.', 'g..ccc..g', 'g.c...c.g', 'g.c...c.g', 'g.c...c.g', '.g.c.c.g.', '..ggggg..'],
+    ['.........', '..ggggg..', '.g.ccc.g.', '.gc...cg.', '.gc...cg.', '.gc...cg.', '..gc.cg..', '.........'],
+  ],
+  palette: KELP,
+  radius: 1,
+  frameSeconds: 0.12,
+});
+
+// The splash where a hoof came down (harmless): a crown of water, falling back.
+defineBulletArt('kelpCrown', {
+  frames: [
+    ['s.S.s.S.s', '.sSsSsSs.', '..sSSSs..', '.ccccccc.'],
+    ['.........', 's..S.S..s', '.s.sSs.s.', '.ccccccc.'],
+    ['.........', '.........', '..s.s.s..', '..ccccc..'],
+  ],
   palette: KELP,
   radius: 1,
   frameSeconds: 0.12,
@@ -54,7 +74,7 @@ defineBulletArt('kelpGap', {
   frameSeconds: 0.12,
 });
 
-// The foal at full gallop, pointing right: a streak of horse with weed streaming behind.
+// The foal at full gallop, drawn pointing right: a streak of horse with weed streaming behind.
 function rush() {
   const g = new Pix(24, 13);
   g.line(0, 5, 9, 4, 'K', 2);
@@ -72,7 +92,8 @@ function rush() {
   g.outline('k');
   return g.rows();
 }
-defineBulletArt('kelpFoalRush', { frames: [rush()], palette: KELP, hitbox: { w: 19, h: 8 }, radius: 4 });
+// It gallops leftward across the box, so the art is turned to face that way.
+defineBulletArt('kelpFoalRush', { frames: [rush().map((row) => [...row].reverse().join(''))], palette: KELP, hitbox: { w: 19, h: 8 }, radius: 4 });
 
 export const KELPIE_FOAL_ATTACKS = {
   // Stamps: a hoof comes down where you are (a crescent flashes there first) and
@@ -114,6 +135,7 @@ export const KELPIE_FOAL_ATTACKS = {
           if (t < s.at) continue;
           s.done = true;
           const toSoul = Math.atan2(soul.y - s.p.y, soul.x - s.p.x);
+          bullets.push(new Shot({ x: s.p.x, y: s.p.y - 2, harmless: true, life: 0.36, art: 'kelpCrown' }));
           ring(bullets, s.p, 48, toSoul, 0, 0.8);
           if (s.near) ring(bullets, s.p, 34, toSoul + (s.p.x > soul.x ? 1 : -1) * 0.45, 0.4);
         }
@@ -236,11 +258,14 @@ export const KELPIE_FOAL_ATTACKS = {
             const guide = new Line({ x: box.x - 4, y, angle: 0, length: box.w + 8, thickness: 1, warn, life: 0, color: '#a8e8f0' });
             const print = new Shot({ x: box.x + box.w - 6, y, harmless: true, life: warn, art: 'kelpHoof' });
             const foal = new Shot({ x: box.x + box.w + 13, y, warn, art: 'kelpFoalRush', life: 2.4 });
+            // Its head pokes in at the wall, pawing (only a look), so you see who's coming.
+            const peek = new Shot({ x: box.x + box.w + 1, y, harmless: true, life: warn, art: 'kelpFoalRush' });
             foal.shed = 0.15;
             foal.offset = offset;
             foal.guide = guide;
             foal.print = print;
-            bullets.push(guide, print, foal);
+            foal.peek = peek;
+            bullets.push(guide, print, peek, foal);
             runners.push(foal);
           }
           charges++;
@@ -252,6 +277,7 @@ export const KELPIE_FOAL_ATTACKS = {
             r.y = y;
             r.guide.y = y;
             r.print.y = y;
+            r.peek.y = y;
           }
           if (r.age < r.warn) continue;
           if (!r.launched) {
@@ -261,7 +287,9 @@ export const KELPIE_FOAL_ATTACKS = {
           r.shed -= dt;
           if (r.shed <= 0 && r.x > box.x + 6) {
             r.shed = 0.26;
-            for (const dir of [-1, 1]) bullets.push(new Shot({ x: r.x + 6, y: r.y + dir * 3, vx: 14, vy: dir * 46, art: 'kelpDrop', life: 1.0 }));
+            // The drops hang in its wake a moment, flickering, before they spray
+            // out sideways: you've stepped off its row, so you see them coming.
+            for (const dir of [-1, 1]) bullets.push(new Shot({ x: r.x + 6, y: r.y + dir * 3, vx: 14, vy: dir * 46, warn: 0.3, art: 'kelpDrop', life: 0.9 }));
           }
         }
         runners = runners.filter((r) => r.x > box.x - 20);

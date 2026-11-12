@@ -27,6 +27,8 @@ export const INTO_BELOWTOWN = {
   ],
 
   steps: [
+    // Half the town on the road, all talking at once (AMBIENCES in src/audio/music.js).
+    { do: 'ambience', name: 'belowtown_crowd' },
     { do: 'walk', who: 'player', to: { x: 7, y: 8 } },
     { do: 'walk', who: 'ves', to: { x: 6, y: 9 } },
     { do: 'face', who: 'player', dir: 'right' },
@@ -38,7 +40,7 @@ export const INTO_BELOWTOWN = {
     { do: 'act', who: 'mole', act: 'startle' },
     { do: 'say', who: 'mole', text: 'Down from the TOP?' },
     { do: 'act', who: 'kid', act: 'hop' },
-    { do: 'say', who: 'kid', top: true, text: 'Is it them? Is it the Hero, come back?' },
+    { do: 'say', who: 'kid', top: true, text: 'Is it him? Is it the Hero, come back?' },
     { do: 'say', who: 'kid2', top: true, text: 'Two of them, though. The Hero was only one.' },
     { do: 'act', who: 'bow', act: 'look' },
     { do: 'say', who: 'bow', text: 'Maybe the Hero\'s brought a friend. I ironed my tie for this.' },

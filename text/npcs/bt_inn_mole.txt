@@ -19,3 +19,25 @@ To the Hero's friends! May their carts never roll over them! Hic!
 
 [repeat after the_light_goes_up]
 Drink up! There's another one coming! There's always another one coming!
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I named it. The Cart. Capital C. You've got to name a thing that's out to get you. Gives you something to shout.
+
+# (draft)
+[repeat 3]
+I've moved house twice. The rails don't go near either. It found me anyway. Rolled through the kitchen.
+
+# (draft)
+[repeat_ves 3]
+{bored}Has anyone thought of moving the cart?
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+If you meet it, don't look it in the eye. It hasn't got eyes. Don't look where they'd be.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I can see the whole rail line from here, in this light. No Cart. ...That's worse. Where's it gone?

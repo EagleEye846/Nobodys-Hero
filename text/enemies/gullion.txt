@@ -17,6 +17,14 @@ GULLION throws a one-two at the air, and the air, which is fast, gets out of the
 
 Smells like fish and chips, and cold salt air.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+GULLION is edging towards the side of the box with the sack held in front of it. It's thinking about the sea.
+
+[flavor: spareable]
+GULLION has put the sack down and is standing well away from it, as if it had never seen that sack in its life.
+
 # When a hit lets him snatch something out of your bag ({item} is its name).
 [steal]
 GULLION snatches your {item} and stuffs it in the sack! Beat him, or calm him, to get it back.
@@ -59,7 +67,7 @@ You hold out a chip, flat on your palm. GULLION goes absolutely still. Then he s
 You turn out your pockets, to show him there's nothing worth taking. GULLION looks into every one. Then, quietly, he puts something back in your hand: a button. He says he was going to give it back anyway.
 
 [talk: Admire the sack]
-You tell him it's a fine sack, and very full. GULLION puffs out his chest. He starts to show you things. Four teaspoons. A kettle lid. A boot for a left foot. He says it is a collection, not stealing.
+You heft the sack, very impressed, and give him a slow nod of respect. GULLION puffs out his chest. He starts to show you things. Four teaspoons. A kettle lid. A boot for a left foot. He says it is a collection, not stealing.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

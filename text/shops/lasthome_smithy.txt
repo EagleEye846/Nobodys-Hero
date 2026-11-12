@@ -81,17 +81,26 @@ Bryony says she asks like it's a fact it'll turn up.
 [forge_ask]
 Let me see that. ...Huh. That's not iron. That's not anything I've got a name for. It's warm.
 
-There's a bit missing off the edge, look. Snapped off when it came down. Old Tam says a star went over the city when his gran was a girl, low enough to chip the old steps along the street, and came down in the Hushwood. Bring me the piece and I'll put it back where it goes.
+# (draft) Changed below: where the shard is (not on the Old Street's steps any more; it's in the Registry, behind them).
+There's a bit missing off the edge, look. Snapped off when it came down. Old Tam says a star went over the city when his gran was a girl, low enough to chip the old steps along the street, and came down in the Hushwood.
+
+He says the chip never left, either. It's been somewhere in the dead part of the city all this while, in some back way nobody walks, and it isn't lying quiet. Something's got hold of it. Bring me the piece and I'll put it back where it goes.
+
+# (draft) The true ending's rule, said gently: a forging can't be done late.
+And don't dawdle. Metal like that takes the fire in order, one smith after the next, once each. Miss one, and nobody after can touch it.
 
 [forge_now]
 That's it. That's the bit. Give it here.
 
-(Teasel works the shard back into the blade over the fire for a long time, very carefully, and doesn't say a word the whole while.)
+(Teasel takes the sword in both hands, sets the shard to the notch, and thrusts the blade into the fire.)
 
-There. Stronger than it was. And it'll call down two now, if you ask it. Don't ask me how I know that. It told me.
+# The rest, after the show: the scene reforge_teasel (src/data/scenes/reforgeShows.js).
 
 [forge_done]
 It's as good as I can make it. Somebody else'll have to take it further. Somebody with a bigger fire.
+
+# (draft) The true ending: a hint that it isn't finished.
+It's not finished, mind. I can feel that much. There's more of it out there somewhere, and it wants all of it back.
 
 [forge_later]
 Somebody's got to do the work before me first. I only mend what's in front of me.

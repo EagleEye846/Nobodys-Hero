@@ -47,7 +47,7 @@ defineBulletArt('snailZBig', { frames: [zed(13)], palette: SNAIL, radius: 5.4, f
 export const CLOVER_SNAIL_ATTACKS = {
   // Trail: a wall of slime, blob by blob, creeps across the box from the
   // right with a gap in it. It blinks first. Each new gap is a good way
-  // up or down from the last. Four walls.
+  // up or down from the last. Six walls.
   snailTrail(box, density, { Shot, rand, clamp }) {
     let t = 0;
     let walls = 0;
@@ -57,8 +57,8 @@ export const CLOVER_SNAIL_ATTACKS = {
       duration: 7.6,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || walls >= 5 || t > 5.8) return;
-        next = t + 1.28;
+        if (t < next || walls >= 6 || t > 6.2) return;
+        next = t + 0.9;
         const lo = box.y + 14;
         const hi = box.y + box.h - 14;
         if (gap === null) gap = clamp(soul.y, lo, hi);
@@ -67,8 +67,8 @@ export const CLOVER_SNAIL_ATTACKS = {
           gap = clamp(gap + dir * rand(14, 26) * (rand(0, 1) < 0.8 ? 1 : -1), lo, hi);
         }
         for (let y = box.y + 4; y <= box.y + box.h - 4; y += 7) {
-          if (Math.abs(y - gap) < 14) continue;
-          bullets.push(new Shot({ x: box.x + box.w + 6, y, vx: -42, warn: 0.45, art: 'snailSlime', life: 3.4 }));
+          if (Math.abs(y - gap) < 12) continue;
+          bullets.push(new Shot({ x: box.x + box.w + 6, y, vx: -48, warn: 0.45, art: 'snailSlime', life: 3.4 }));
         }
         walls++;
       },
@@ -77,7 +77,7 @@ export const CLOVER_SNAIL_ATTACKS = {
 
   // Clover: the shell lights and a pinwheel of four-leaf clovers turns out of
   // it, three arms, sweeping up and down across the box and back. When it has
-  // wound down, two showers of loose leaves come down from the top, a
+  // wound down, three showers of loose leaves come down from the top, a
   // blink first, aimed along your column and either side of it.
   snailClover(box, density, { Shot, clamp, rand }) {
     let t = 0;
@@ -89,18 +89,18 @@ export const CLOVER_SNAIL_ATTACKS = {
       duration: 7.4,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= 3.9 + showers * 1.2 && showers < 2) {
+        if (t >= 3.9 + showers * 1.0 && showers < 3) {
           showers++;
-          for (const off of [-22, -4, 14]) {
+          for (const off of [-22, -6, 10, 26]) {
             const x = clamp(soul.x + off + rand(-3, 3), box.x + 6, box.x + box.w - 6);
             bullets.push(new Shot({ x, y: box.y + 4, vx: 0, vy: 58, warn: 0.5, art: 'snailLeaf', life: 2.2 }));
           }
         }
         if (t < next || t > 3.5) return;
-        next = t + 0.085;
+        next = t + 0.075;
         for (let arm = 0; arm < 3; arm++) {
           const a = Math.PI + Math.sin(t * 1.05) * 1.2 + (arm - 1) * 0.7;
-          bullets.push(new Shot({ x: ox, y: oy, vx: Math.cos(a) * 64, vy: Math.sin(a) * 64, art: 'snailLeaf', life: 2.1 }));
+          bullets.push(new Shot({ x: ox, y: oy, vx: Math.cos(a) * 76, vy: Math.sin(a) * 76, art: 'snailLeaf', life: 2.1 }));
         }
       },
     };
@@ -116,10 +116,10 @@ export const CLOVER_SNAIL_ATTACKS = {
       duration: 7.4,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || t > 5.6) return;
-        next = t + 0.34;
+        if (t < next || t > 6.0) return;
+        next = t + 0.16;
         const big = made % 4 === 3;
-        const y = clamp(soul.y + rand(-28, 28), box.y + 6, box.y + box.h - 6);
+        const y = clamp(soul.y + rand(-20, 20), box.y + 6, box.y + box.h - 6);
         bullets.push(new Shot({
           x: box.x + box.w + 7, y, vx: big ? -34 : -50, warn: big ? 0.4 : 0.15,
           wobble: { amplitude: big ? 5 : 8, frequency: 2.6 + (made % 3) * 0.5 },
@@ -132,6 +132,6 @@ export const CLOVER_SNAIL_ATTACKS = {
 };
 
 // Aimed slime on top, so standing still or running one way is never safe (see snipes.js).
-CLOVER_SNAIL_ATTACKS.snailTrail = withSnipes(CLOVER_SNAIL_ATTACKS.snailTrail, { art: 'snailSlime' });
+CLOVER_SNAIL_ATTACKS.snailTrail = withSnipes(CLOVER_SNAIL_ATTACKS.snailTrail, { art: 'snailSlime', count: 4, first: 1.0, every: 1.2, lead: [0.9, 'mean', 0.5, 'mean'] });
 CLOVER_SNAIL_ATTACKS.snailClover = withSnipes(CLOVER_SNAIL_ATTACKS.snailClover, { art: 'snailSlime', count: 4, first: 1.0, every: 1.25 });
-CLOVER_SNAIL_ATTACKS.snailZzz = withSnipes(CLOVER_SNAIL_ATTACKS.snailZzz, { art: 'snailZ' });
+CLOVER_SNAIL_ATTACKS.snailZzz = withSnipes(CLOVER_SNAIL_ATTACKS.snailZzz, { art: 'snailZ', count: 4, first: 1.0, every: 1.2, lead: [0.9, 'mean', 0.5, 'mean'] });

@@ -24,6 +24,10 @@ An old stone post, worn smooth on top. Press on it, and the water and everything
 [lanes_rock]
 Old stone, mossy and running with rain.
 
+# (draft) after the storm.
+[lanes_rock_calm]
+Old stone, mossy, drying in patches.
+
 [lanes_hedge]
 A hedge so tangled with weed that the flood has made it its own. Something small rustles in it, and thinks better of it.
 
@@ -40,6 +44,10 @@ A signpost, leaning. Three arms. SALTCOMBE, back the way you came. THE CHURCH, t
 
 [fork_lamp]
 A lamp on an iron post, hissing in the rain. The glass is cracked, and the flame doesn't seem to care.
+
+# After the chapter (the storm over).
+[fork_lamp_calm]
+A lamp on an iron post, dripping. The glass is cracked, and the flame doesn't seem to care.
 
 [fork_cottage]
 A cottage stands in the flood up to its windowsills. The curtains are still drawn. A cat sits on the roof with the patience of something that has decided this is fine.
@@ -80,10 +88,10 @@ A gatepost, standing up out of the water with nothing to hold.
 A post with a round face, crusted with rust. A blue arc for the water in, a sandy arc for the water out, and a hand that goes round whether anybody's watching or not.
 
 [causeway_crate]
-A crate, sealed with tar. When the water's in it bobs about. When the water's out it sits in the mud like it's always lived there. Two deep drains cut the fields, and they never empty.
+A crate, sealed with tar. When the water's in, it bobs about. When the water's out, it sits in the mud like it's always lived there. Two deep drains cut the fields, and they never empty.
 
 [causeway_crate_ves]
-{thoughtful}A drain. A crate. You know, I think the people who lived here just didn't build bridges.
+{smile}A drain. A crate. You know, I think the people who lived here just didn't build bridges.
 
 [causeway_signpost]
 A signpost on the island, its arms gone. Someone has chalked an arrow on it pointing east, and under the arrow, SOON.
@@ -170,6 +178,10 @@ What's left of the church's north wall: good grey stone, a pointed window with i
 [hamlet_church_window]
 A pointed window, and in it a little of the old glass: a blue piece, a green piece, and the corner of a red one. The rain runs down the glass on both sides.
 
+# After the chapter (the storm over).
+[hamlet_church_window_calm]
+A pointed window, and in it a little of the old glass: a blue piece, a green piece, and the corner of a red one. Drops run down it from the eaves.
+
 [hamlet_church_window_ves]
 {thoughtful}Someone fitted every piece of that by hand. ...And the sea took the other half anyway.
 
@@ -178,6 +190,10 @@ A church pillar, standing. The one beside it isn't. The water is up to the secon
 
 [hamlet_font]
 The font, a stone bowl on a stem, full to the brim with rain. It's the only water in the hamlet that's where it's meant to be.
+
+# (draft) after the storm.
+[hamlet_font_calm]
+The font, a stone bowl on a stem, still full to the brim with the storm's rain. It's the only water in the hamlet that's where it's meant to be.
 
 [hamlet_rubble]
 The east end of the church, tumbled into the flood, block on block.
@@ -204,7 +220,7 @@ A purse on the altar step, in an inch of water. Collection, perhaps.
 A cottage built into the bank, the old way, so its attic window opens straight onto the top of it.
 
 [hamlet_terrace_sign]
-A board at the foot of the wall: CHURCHYARD. THE STEPS ARE GONE. THERE IS A RING. PLEASE USE THE RING.
+A board at the foot of the wall: CHURCHYARD. THE STEPS ARE GONE. THERE IS A RING. PLEASE USE THE RING. (STAND UNDER IT, FACE THE WALL, THROW.)
 
 # --- THE MILL ------------------------------------------------------------------
 
@@ -291,11 +307,21 @@ The edge of the pocket, where the water stands up like a wall of glass. You coul
 [bubble_water]
 The flood, seen from inside. Bubbles go up through it in threads, toward a roof of rain you can't see.
 
+# After the chapter (the storm over).
+[bubble_water_calm]
+The flood, seen from inside. Bubbles go up through it in threads, toward a roof of sky you can't see.
+
 [bubble_water_bramble]
 {scared}We're UNDER it. We are under the water. I want that written down.
 
 [bubble_fish]
 A fish, nosing at the outside of the pocket. It looks at the lantern for a while, then goes off as if it's seen it before.
+
+[bubble_signpost]
+A finger-post from when this was a lane, still pointing the way to somewhere. The words have gone green.
+
+[bubble_weed]
+Weed, left in a heap where the water let go of it. It's still wet, and it's the only thing down here that is.
 
 [bubble_culvert]
 The culvert's stone, slick and cold. The whole weight of the flood is on the other side of it.
@@ -317,20 +343,25 @@ A purse tucked behind a stone on the cliff lane, out of the rain.
 [down_stair]
 A broad stone stair, going down. Every step is a little wetter than the last, and then they're under the water, and they keep going.
 
-[down_stair_rope]
-A rope across the head of the stair, between two posts.
+# (draft) World reacts: Old Gulper's bell has gone quiet.
+[down_stair after merrow_sea_gate]
+A broad stone stair, going down into the water. Nothing rings down there now. It is very quiet, the way a house is quiet when somebody is having a nap.
 
-[down_stair_sign]
-A board on the rope: MERROW. CLOSED. (The way down to Merrow isn't open yet.)
+[down_stair_bramble after merrow_sea_gate]
+{grin}Shh. He's sleeping.
 
-[down_stair_sign_ves]
-{bored}Closed. A whole town. That's commitment.
+[down_stair_ves after merrow_sea_gate]
+{bored}Finally. A hundred years of toothache. I'd ring things too.
 
 [down_east_sign]
-A board by the cliff lane: THE SOUNDINGS. ALONG THE CLIFF, AND IN. MIND THE SEA, IT COMES INDOORS.
+A board by the cliff lane: THE SOUNDINGS. ALONG THE CLIFF. GATE AT THE FAR END KEPT BOLTED (HARBOUR BOARD). FOR MERROW, TAKE THE STAIR.
 
 [down_flood]
 The flood, wide and still, the rain hissing on it. Far out, a church spire stands up out of the water like a finger saying "shh".
+
+# After the chapter (the storm over).
+[down_flood_calm]
+The flood, wide and still, and nothing falling on it now. Far out, a church spire stands up out of the water like a finger saying "shh".
 
 # --- THE ATTIC (secret) --------------------------------------------------------
 
@@ -355,6 +386,10 @@ A lamp on an iron crook, put out a long time ago. Dry, and ready, for whenever.
 [attic_beams]
 The roof beams, black with age. Rain on the slates just over your head.
 
+# After the chapter (the storm over).
+[attic_beams_calm]
+The roof beams, black with age. Something drips on the slates just over your head, slower and slower.
+
 [attic_wall]
 Board walls, papered once, with a pattern of little ships.
 
@@ -363,3 +398,91 @@ The top of the stairs, and three steps down, black water. The rest of the house 
 
 [attic_stairwell_bramble]
 {worried}I'm not looking at it. You can't make me look at it.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_attic_ship]
+A ship in a bottle on a little shelf, carried up here out of the water.
+
+# (draft)
+[in_attic_sketch]
+A sketch of a boat, framed and hung up high where the water couldn't reach it.
+
+# (draft)
+[in_attic_chest]
+A little sea chest, a blanket folded on the lid. Somebody slept up here for a while.
+
+# (draft)
+[in_attic_boots]
+A pair of boots in the corner, side by side, dry.
+
+# (draft)
+[in_attic_bucket]
+A pail under a leak in the roof. The only water in this house anyone has bothered to catch.
+
+# (draft)
+[in_attic_bucket_calm]
+A pail under where the roof leaked. The water in it has gone still.
+
+# (draft)
+[in_attic_chair]
+An armchair, turned to face the top of the stairs. Somebody sat here and watched the water come up, one step at a time.
+
+# (draft)
+[in_attic_plant]
+A potted plant, carried up out of the flood and then left to die of thirst. It managed it.
+
+# --- DRESSING (second pass): things standing in the flood, any lane ---------------
+
+# (draft)
+[dress_sunk_fence]
+A picket fence wading out into the water, as if it could still keep something in.
+
+# (draft)
+[dress_sunk_cart]
+A cart tipped into the flood, one wheel up. Whatever was pulling it got away.
+
+# (draft)
+[dress_sunk_bed]
+A drowned bed of cabbages. The beans are still climbing. Nobody has told them.
+
+# (draft)
+[dress_sunk_wall]
+A garden wall up to its middle in water. Ivy above, weed below.
+
+# (draft)
+[dress_sunk_door]
+A doorway with no house round it. The door stands open, the way you'd leave it for someone.
+
+# (draft)
+[dress_washing]
+Washing still pegged out. It is never going to be dry.
+
+# (draft)
+[dress_headstone]
+A leaning headstone, the name gone soft under lichen. Someone still cuts the grass round it.
+
+# (draft)
+[dress_pews]
+Pews in their rows, facing an altar that is mostly water now.
+
+# (draft)
+[dress_mill_cart]
+The mill's cart, down on one corner. Its wheel leans beside it, waiting for someone handy.
+
+# (draft)
+[dress_millstone]
+A spare millstone in the grass. It weighs more than the cart and its horse.
+
+# (draft)
+[dress_reeds]
+Reeds at the pond's edge, beaten flat by the rain and standing up again.
+
+# (draft)
+[dress_well]
+The crossroads' well, level with the flood now. Rather takes the point out of it.
+
+# (draft) QUEST PIECE 1 for the ghost ship's deep part.
+[attic_compass]
+A brass-rimmed glass, standing in a teacup on the sill like something that was put somewhere safe. Round the rim, in letters worn nearly smooth: FAIR RETURN. BINNACLE. It is dry, which is more than the rest of the house.

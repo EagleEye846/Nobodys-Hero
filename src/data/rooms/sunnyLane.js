@@ -144,9 +144,9 @@ export const SUNNY_LANE = {
     npcs: [
       { enemy: 'dandylion', x: 17, y: 5, patrol: [14, 20], behaviour: 'patrol' },
       { enemy: 'bunting', x: 11, y: 14, patrol: [9, 15], behaviour: 'wander' },
-      // A flatcap bee works the clover in the east field (x 29 to 36, rows 12 to 14), past
-      // the blossom hedge, well clear of the lane (rows 9 and 10).
-      { enemy: 'capbee', x: 32, y: 13, patrol: [29, 36], behaviour: 'wander' },
+      // A flatcap bee works the clover in the east field (x 33 to 36, rows 12 to 14), past
+      // the blossom hedge, well clear of the lane (rows 9 and 10) and of the haystack at x 31 and 32.
+      { enemy: 'capbee', x: 34, y: 14, patrol: [33, 36], behaviour: 'wander' },
     ],
   },
 };

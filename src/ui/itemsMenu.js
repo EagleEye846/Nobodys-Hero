@@ -2,10 +2,11 @@ import { inUiSpace } from '../engine/screen.js';
 import { sfx } from '../audio/music.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { heroHp, heroMaxHp, setHeroHp, skillBonus } from '../characters/progress.js';
-import { MEMBERS, partyIds, memberHp, memberMaxHp, setMemberHp } from '../characters/party.js';
+import { MEMBERS, partyIds, memberHp, memberMaxHp, setMemberHp, possessive } from '../characters/party.js';
 import { HERO } from '../characters/equipment.js';
 import { ITEMS, MAX_ITEMS } from '../data/items.js';
-import { drawMenuFrame, drawWeaponList, drawItemDetails, drawControls, drawOwnerTag, MENU, MENU_COLORS, FOOTER_Y } from './menuFrame.js';
+import { GEAR, keepsakeText } from '../data/gear.js';
+import { drawMenuFrame, drawWeaponList, drawItemDetails, drawKeepsakeDetails, drawControls, drawOwnerTag, itemIcon, MENU, MENU_COLORS, FOOTER_Y } from './menuFrame.js';
 import { drawText } from './text.js';
 
 // The ITEMS menu, opened with C in the overworld: what's in your bag. Z on
@@ -14,6 +15,11 @@ import { drawText } from './text.js';
 // gets it (their HP carries between fights too, see memberHp in party.js).
 // Candles and other things that only work in a fight (a `use`, or a `light`
 // you burn with the candle menu) say so.
+//
+// SPACE turns to the KEEPSAKES page: everything you carry for good (the rope,
+// the star shards, keys, and the keepsakes people give you, src/data/gear.js),
+// in the order you got them, with a line or two about each. Nothing to do
+// with them there but look.
 const OPTIONS = ['EAT', 'THROW AWAY'];
 // How long a line like "You ate the Trail Mix" stays up, in frames.
 const NOTE_FRAMES = 150;
@@ -36,11 +42,16 @@ export class ItemsMenu {
     this.feeding = -1;
     this.note = null;
     this.noteLeft = 0;
+    // The KEEPSAKES page instead of the bag, and its cursor.
+    this.keepsakes = false;
+    this.keepCursor = 0;
   }
 
   open() {
     this.isOpen = true;
     this.cursor = 0;
+    this.keepsakes = false;
+    this.keepCursor = 0;
     this.choosing = false;
     this.confirming = false;
     this.feeding = -1;
@@ -89,7 +100,7 @@ export class ItemsMenu {
     const name = hero ? 'You' : MEMBERS[eater.who].name;
     if (eater.hp >= eater.max) {
       sfx('error');
-      this.say(hero ? "You're not hungry. Your HP is already full." : `${name} isn't hungry. Their HP is already full.`);
+      this.say(hero ? "You're not hungry. Your HP is already full." : `${name} isn't hungry. ${possessive(eater.who)} HP is already full.`);
       return false;
     }
     const heal = item.heal >= 999 ? item.heal : Math.round(item.heal * (1 + skillBonus('itemBoost')));
@@ -98,7 +109,7 @@ export class ItemsMenu {
     items.splice(this.cursor, 1);
     this.cursor = Math.min(this.cursor, Math.max(0, items.length - 1));
     sfx('heal');
-    const whose = hero ? 'Your' : 'Their';
+    const whose = hero ? 'Your' : possessive(eater.who);
     this.say(after >= eater.max ? `${name} ate the ${item.name}. ${whose} HP was maxed out!` : `${name} ate the ${item.name}. Recovered ${after - eater.hp} HP!`);
     return true;
   }
@@ -112,6 +123,23 @@ export class ItemsMenu {
       else if (this.feeding >= 0) this.feeding = -1;
       else if (this.choosing) this.choosing = false;
       else this.isOpen = false;
+      return;
+    }
+    // SPACE: between the bag and the KEEPSAKES page (not while picking what to do).
+    if (input.wasPressed('jump') && !this.choosing && !this.confirming && this.feeding < 0) {
+      this.keepsakes = !this.keepsakes;
+      this.noteLeft = 0;
+      sfx('move');
+      return;
+    }
+    if (this.keepsakes) {
+      const kept = HERO_STATE.gear ?? [];
+      if (!kept.length) return;
+      this.keepCursor = Math.min(this.keepCursor, kept.length - 1);
+      const before = this.keepCursor;
+      if (input.wasPressed('down')) this.keepCursor = (this.keepCursor + 1) % kept.length;
+      if (input.wasPressed('up')) this.keepCursor = (this.keepCursor - 1 + kept.length) % kept.length;
+      if (this.keepCursor !== before) sfx('move');
       return;
     }
     if (!items.length) return;
@@ -176,17 +204,22 @@ export class ItemsMenu {
   draw(ctx) {
     if (!this.isOpen) return;
     const items = HERO_STATE.items;
+    if (this.keepsakes) {
+      inUiSpace(ctx, () => this.drawKeepsakes(ctx));
+      return;
+    }
     inUiSpace(ctx, () => {
       drawMenuFrame(ctx, 'ITEMS', `HP ${heroHp()}/${heroMaxHp()}   ${items.length}/${MAX_ITEMS}`);
       if (!items.length) {
         drawText(ctx, 'Your bag is empty.', MENU.x + 50, MENU.y + 90, { size: 28, color: MENU_COLORS.dim });
-        drawControls(ctx, this.noteLeft > 0 ? this.note : 'X: close');
+        drawControls(ctx, this.noteLeft > 0 ? this.note : 'SPACE: keepsakes     X: close');
         return;
       }
       drawWeaponList(ctx, items, this.cursor, {
         name: (id) => ITEMS[id].name,
         nameColor: (id) => (edible(id) ? MENU_COLORS.text : MENU_COLORS.dim),
         tag: () => null,
+        icon: itemIcon,
       });
       drawItemDetails(ctx, items[this.cursor]);
       const name = ITEMS[items[this.cursor]].name;
@@ -196,9 +229,27 @@ export class ItemsMenu {
       else if (this.confirming) line = `Throw away the ${name}?   Z: yes   X: no`;
       else if (this.choosing) line = OPTIONS.map((o, i) => (i === this.option ? `> ${o}` : `  ${o}`)).join('        ');
       else if (this.noteLeft > 0) line = this.note;
-      else line = 'Z: eat or throw away     X: close';
+      else line = 'Z: eat or throw away   SPACE: keepsakes   X: close';
       drawControls(ctx, line);
     });
+  }
+
+  // The KEEPSAKES page: what you carry for good, and a line or two about it.
+  drawKeepsakes(ctx) {
+    const kept = (HERO_STATE.gear ?? []).filter((id) => GEAR[id]);
+    drawMenuFrame(ctx, 'KEEPSAKES', `${kept.length} kept`);
+    if (!kept.length) {
+      drawText(ctx, 'Nothing kept yet.', MENU.x + 50, MENU.y + 90, { size: 28, color: MENU_COLORS.dim });
+    } else {
+      const cursor = Math.min(this.keepCursor, kept.length - 1);
+      drawWeaponList(ctx, kept, cursor, {
+        name: (id) => GEAR[id].name,
+        nameColor: () => MENU_COLORS.text,
+        tag: () => null,
+      });
+      drawKeepsakeDetails(ctx, GEAR[kept[cursor]].name, keepsakeText(kept[cursor]));
+    }
+    drawControls(ctx, 'Up/Down: look   SPACE: bag   X: close');
   }
 
   // Who's eating, along the row under the list: a tag for each (the one

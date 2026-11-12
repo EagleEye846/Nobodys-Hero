@@ -29,3 +29,43 @@
 ...
 
 (He gives you a thumbs-up. Then he pumps the bellows even harder, to show his joy.)
+
+# (draft)
+[repeat 2]
+...
+
+(He points at the anvil, then at himself, then at the anvil again. You gather he's allowed to sweep near it.)
+
+# (draft)
+[repeat 3]
+...
+
+(He mimes Hobnail hammering. It's very good. He glances round to check Hobnail didn't see.)
+
+# (draft)
+[repeat_ves 3]
+{smile}That's exactly him. {bored}Don't let him catch you. Or do. I'd watch.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+...
+
+(He mimes a long fall, a bounce, and getting up again. Then he shrugs. That's the Diggings, apparently.)
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+...
+
+(He puts a small lump of coal in your hand and closes your fingers over it. It's a present. It's warm.)
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+...!
+
+(He points at the Sunstone through the door and does a very small dance. He stops at once, in case it counts as talking.)
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+...
+
+(He gives the bellows a pat, like a dog that's done well.)

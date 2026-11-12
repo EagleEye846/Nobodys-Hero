@@ -19,3 +19,25 @@ Business is up! Nobody's buying the cheese, but they're LOOKING at it hopefully!
 
 [repeat after the_light_goes_up]
 I might sell a wedge today. I can feel it. In my gut. Or it's the cheese.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Grandad said: never sell the cheese. I asked why. He said: you'll see. I never sold it. I never saw.
+
+# (draft)
+[repeat 3]
+Tap it. Go on. Hear that? That's ninety years. That's the sound of a very patient cheese.
+
+# (draft)
+[repeat_ves 3]
+{bored}That's the sound of a rock.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Seriously, take some. Anything down there with teeth, give it the cheese. It'll give up on teeth.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Somebody asked the price. ASKED it! I panicked and said "no." Next time I'll have a number ready.

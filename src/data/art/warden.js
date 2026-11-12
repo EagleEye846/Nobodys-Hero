@@ -2,7 +2,7 @@
 // prophesied Hero that the old city built to greet him, before the Hero's
 // Gate. Its stone sword raised high in welcome, its other hand held out
 // open, a carved garland of flowers over its chest and the city's sun on
-// it, standing on a plinth carved with the prophecy. Three hundred years of
+// it, standing on a plinth carved with the prophecy. A hundred years of
 // moss. Its eyes are open now. The same purple-grey slab stone as the Dead
 // City (and its overworld self, warden_asleep in deadcity.js).
 //

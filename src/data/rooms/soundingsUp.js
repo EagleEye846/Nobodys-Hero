@@ -8,6 +8,8 @@
 //   #  rock top (solid)   W  cave rock face (solid)   .  wet slate   s  stair
 //   x  glowing sea-glass (solid)   I  a rock pillar
 
+// The light off a lump of sea-glass: a small bloom and a pool round it.
+const GLASS_GLOW = [{ dy: -8, bloom: 10, strength: 0.45, flicker: 0.1, color: '120, 240, 220' }, { dy: 2, pool: 40, strength: 0.38, flicker: 0.05, color: '120, 240, 220' }];
 export const SOUNDINGS_UP = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'soundings_up',
@@ -18,19 +20,22 @@ export const SOUNDINGS_UP = {
   // The Soundings' song ("The Soundings"), and the sounds of a sea cave under it.
   music: 'soundings',
   ambience: 'sea_cave',
+  // After chapter 5 the storm is over (`calmAfter`): the same cave sounds, but the sky in the
+  // cave mouth of its fights clears (coastBackdrops.js) and any `_calm` words are used.
+  calmAfter: { scene: 'the_light_answers', ambience: 'sea_cave' },
   vesWell: true,
 
   tiles: [
     '###########..###########',
     '#WWWWWWWWWW..WWWWWWWWWW#',
+    '######...#........######',
+    '#####W...W........W#####',
+    '####.................###',
+    '###....I........I....###',
+    '##...................###',
     '####................####',
-    '####.x..............####',
-    '####................####',
-    '####...I........I...####',
-    '####................####',
-    '####................####',
-    '####..............x.####',
-    '####................####',
+    '#####.............x.####',
+    '######............######',
     '###########ss###########',
     '###########ss###########',
     '###########ss###########',
@@ -38,17 +43,17 @@ export const SOUNDINGS_UP = {
     '###########ss###########',
     '###########..###########',
     '###########..###########',
-    '#########......#########',
+    '#########WW...W#########',
     '#########.....x#########',
-    '#########......#########',
-    '#########x.....#########',
-    '#########......#########',
-    '#########......#########',
-    '###.x................###',
-    '###..................###',
-    '###..................###',
+    '########.......#########',
+    '#########x......########',
+    '########........########',
+    '########.#.....#########',
+    '###WxWWWW......WWWWWW###',
+    '###....................#',
+    '##...................###',
     '###.................x###',
-    '###..................###',
+    '#####..............#####',
     'WWWWWWWWWWW..WWWWWWWWWWW',
     '###########..###########',
   ],
@@ -80,6 +85,33 @@ export const SOUNDINGS_UP = {
     { sprite: 'sign', x: 16, y: 24, text: 'up_sign' },
     { sprite: 'c5_stalactite_drip', x: 8, y: 2, text: 'sound_drip', animation: 'c5_stalactite_drip', speed: 0.5 },
     { sprite: 'c5_rope_coil', x: 18, y: 25, text: 'up_line', walkable: true },
+    // The cave round the stair: dripstone and fallen slabs in the top chamber, sea-glass in the
+    // corner, weed off a shelf; in the throat, rock and glass either side of the way (x 10 to 13
+    // kept clear for the walk and the scene); at the foot, the divers' leavings by the save
+    // crystal. Nothing on the stair or round the doors.
+    { sprite: 'sd_rope_ladder', x: 6, y: 2, text: 'sound_rope_ladder' },
+    { sprite: 'sd_weed_ledge', x: 15, y: 2, text: 'sound_weed_ledge' },
+    { sprite: 'sd_stalagmites', x: 4, y: 4, text: 'sound_stalagmites' },
+    { sprite: 'sd_slab', x: 2, y: 6, text: 'sound_slab' },
+    { sprite: 'c5_puddle', x: 8, y: 5, flat: true, walkable: true },
+    { sprite: 'sd_scree', x: 5, y: 8, flat: true, walkable: true },
+    { sprite: 'sd_stalagmite', x: 8, y: 7, text: 'sound_stalagmites' },
+    { sprite: 'sd_timbers', x: 15, y: 7, text: 'sound_timbers' },
+    { sprite: 'sd_glass_rock', x: 17, y: 8, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_glass_bed', x: 19, y: 6, flat: true, walkable: true },
+    { sprite: 'sd_scree', x: 17, y: 4, flat: true, walkable: true },
+    { sprite: 'sd_stalagmite', x: 9, y: 18, text: 'sound_stalagmites' },
+    { sprite: 'sd_rock_pile', x: 8, y: 21, text: 'sound_rocks' },
+    { sprite: 'sd_glass_rock', x: 15, y: 20, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_scree', x: 14, y: 22, flat: true, walkable: true },
+    { sprite: 'sd_weed_ledge', x: 3, y: 24, text: 'sound_weed_ledge' },
+    { sprite: 'sd_stalagmites', x: 19, y: 24, text: 'sound_stalagmites' },
+    { sprite: 'sd_glass_rock', x: 19, y: 26, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_diver_gear', x: 3, y: 26, text: 'sound_diver_gear' },
+    { sprite: 'sd_slab', x: 15, y: 27, text: 'sound_slab' },
+    { sprite: 'sd_stalagmite', x: 6, y: 27, text: 'sound_stalagmites' },
+    { sprite: 'sd_scree', x: 8, y: 26, flat: true, walkable: true },
+    { sprite: 'sd_glass_bed', x: 14, y: 25, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', x: 'sound_glass', I: 'sound_pillar', s: 'up_stair' },
 

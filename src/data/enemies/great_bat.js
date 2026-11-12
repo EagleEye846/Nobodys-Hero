@@ -25,7 +25,7 @@ export const GREAT_BAT_BOSS = {
   // Chapter 2's bosses are its hardest fights, and each chapter's are harder
   // than the last: well above Taper (320 HP, 6 damage) and the caves' toughest
   // regulars (300 HP), with spells now hitting harder than any FIGHT.
-  maxHp: 970,
+  maxHp: 1230,
   damage: 16,
 
   // A good step above the caves' regulars.

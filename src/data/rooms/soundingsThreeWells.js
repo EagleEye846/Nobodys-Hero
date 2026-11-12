@@ -18,6 +18,8 @@
 //   #  rock top (solid)   W  cave rock face (solid)   .  wet slate   ;  shallows (and the currents)
 //   ~  the wells and the pocket's water (solid)   x  glowing sea-glass (solid)
 
+// The light off a lump of sea-glass: a small bloom and a pool round it.
+const GLASS_GLOW = [{ dy: -8, bloom: 10, strength: 0.45, flicker: 0.1, color: '120, 240, 220' }, { dy: 2, pool: 40, strength: 0.38, flicker: 0.05, color: '120, 240, 220' }];
 export const SOUNDINGS_THREE_WELLS = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'soundings_three_wells',
@@ -28,13 +30,16 @@ export const SOUNDINGS_THREE_WELLS = {
   // The Soundings' song ("The Soundings"), and the sounds of a sea cave under it.
   music: 'soundings',
   ambience: 'sea_cave',
+  // After chapter 5 the storm is over (`calmAfter`): the same cave sounds, but the sky in the
+  // cave mouth of its fights clears (coastBackdrops.js) and any `_calm` words are used.
+  calmAfter: { scene: 'the_light_answers', ambience: 'sea_cave' },
   vesWell: true,
 
   tiles: [
     '####################################',
     '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#........x..........x..............#',
-    '#.............................x....#',
+    '#.....xx.x..........x.......xx.....#',
+    '#......x......................x....#',
     '...................................#',
     '...................................#',
     '#W.........WWW.WWWWWWWWWW.WWWWWWW.W#',
@@ -46,10 +51,10 @@ export const SOUNDINGS_THREE_WELLS = {
     '#...~~.....W~~;~~~~...~W...~~..WW;W#',
     '#..x..x....W~~;;;;;...~W..x..x.WW;W#',
     '#..........W~~~~~~~...~W.......WW;W#',
-    '#..........W~~~~~~~~~~~W.......WW;W#',
-    '#;;;;;;;;;;WWWWWWWWWWWWWWWWWWWWWW;W#',
-    '#;;;;;;;;;;W###########W#######W....',
-    'W;;;;;;;;;;W###########W#######W....',
+    '#...;;;....W~~~~~~~~~~~W.......WW;W#',
+    '#.;;;;;;;..WWWWWWWWWWWWWWWWWWWWWW;W#',
+    '#;;;;;;;;;.W###########W#######W....',
+    'Wx;;;;;;;xxW###########W#######W....',
     '####################################',
   ],
 
@@ -118,6 +123,44 @@ export const SOUNDINGS_THREE_WELLS = {
     { sprite: 'c5_stalactite_drip', x: 16, y: 2, text: 'sound_drip', animation: 'c5_stalactite_drip', speed: 0.5 },
     { sprite: 'gold_pouch', x: 29, y: 15, text: 'wells_pouch', gold: 110, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'gold_pouch', x: 33, y: 18, text: 'wells_chute_pouch', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The sounders' gallery as they left it: their work lantern still on its post, a coil of line,
+    // a spare weight, stones down from the roof and the wet coming up through the cracks.
+    { sprite: 'c5_lantern_hook', x: 22, y: 2 },
+    { sprite: 'c5_rope_coil', x: 12, y: 2, text: 'weight_line', walkable: true },
+    { sprite: 'c5_sounding_weight', x: 26, y: 2 },
+    { sprite: 'c5_crate', x: 34, y: 2 },
+    { sprite: 'c5_rubble', x: 9, y: 3, flat: true, walkable: true },
+    { sprite: 'c5_floor_crack', x: 17, y: 4, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 23, y: 4, flat: true, walkable: true },
+    { sprite: 'c5_floor_crack', x: 29, y: 4, flat: true, walkable: true },
+    { sprite: 'c5_rubble', x: 2, y: 7, flat: true, walkable: true },
+    { sprite: 'c5_floor_crack', x: 28, y: 8, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 25, y: 13, flat: true, walkable: true },
+    // The cave round the wells: sea-glass and weed along the gallery's wall, rock fallen into
+    // the corners of Bramble's pocket so it's a hole in the cave and not a tank, stones at the
+    // feet of the yard walls, and the sounders' gear on Ves's side. None of it is in the
+    // boulder's way (x 8 to 10, rows 8 to 13), on the currents, or by a windlass.
+    { sprite: 'sd_glass_rock', x: 8, y: 2, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_weed_ledge', x: 14, y: 2, text: 'sound_weed_ledge' },
+    { sprite: 'sd_scree', x: 18, y: 2, flat: true, walkable: true },
+    { sprite: 'sd_rope_ladder', x: 24, y: 2, text: 'sound_rope_ladder' },
+    { sprite: 'sd_stalagmites', x: 31, y: 2, text: 'sound_stalagmites' },
+    { sprite: 'sd_glass_bed', x: 27, y: 3, flat: true, walkable: true },
+    { sprite: 'sd_scree', x: 12, y: 5, flat: true, walkable: true },
+    { sprite: 'sd_sea_rock', x: 12, y: 7 },
+    { sprite: 'sd_sea_rocks', x: 21, y: 7 },
+    { sprite: 'sd_sea_rock', x: 12, y: 15 },
+    { sprite: 'sd_sea_rock', x: 22, y: 15 },
+    { sprite: 'sd_rock_pile', x: 10, y: 12, text: 'sound_rocks' },
+    { sprite: 'sd_scree', x: 9, y: 15, flat: true, walkable: true },
+    { sprite: 'sd_stalagmite', x: 1, y: 8, text: 'sound_stalagmites' },
+    { sprite: 'sd_timbers', x: 5, y: 14, text: 'sound_timbers' },
+    { sprite: 'sd_glass_bed', x: 2, y: 12, flat: true, walkable: true },
+    { sprite: 'sd_scree', x: 24, y: 7, flat: true, walkable: true },
+    { sprite: 'sd_weed_ledge', x: 29, y: 7, text: 'sound_weed_ledge' },
+    { sprite: 'sd_glass_rock', x: 24, y: 12, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_diver_gear', x: 29, y: 14, text: 'sound_diver_gear' },
+    { sprite: 'sd_scree', x: 32, y: 18, flat: true, walkable: true },
     // Bramble's current round the pocket, and the chute.
     { sprite: 'current_down', x: 14, y: 8, text: 'wells_current', flow: 'down', animation: 'sd_current_down', speed: 0.1 },
     { sprite: 'current_down', x: 14, y: 9, text: 'wells_current', flow: 'down', animation: 'sd_current_down', speed: 0.1 },

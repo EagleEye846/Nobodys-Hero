@@ -15,7 +15,7 @@
 //   - Purse 250 in the south-east corner. A pair of monsters in the north-west.
 // Tile key (see src/overworld/coastTiles.js, lastlight, indoors):
 //   #  wall top (solid)   h  black brick (solid)   H  lamp niche   6  slit window   .  flagstones   o  a door
-// (draft) story text, for Patrick to review.
+// (draft).
 
 export const LASTLIGHT_SLUICE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -27,25 +27,27 @@ export const LASTLIGHT_SLUICE = {
   music: 'lastlight',
   ambience: 'last_light',
   indoors: true,
+  // After the chapter the storm is over: no more howl round the tower, only the sea far below.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_tower' },
   vesWell: true,
 
   tiles: [
     '##############################',
     '#hhhhhhhhhhhhhhhhhhhhhhhhhhhh#',
     '#hhhhhHhhhhh6hhhhhhhhHhhhhh6h#',
-    '#....h............h..........#',
-    '#....h............h..........#',
-    '#....h............h..........#',
-    '#hh.hh............h..........#',
-    '#.................h..........#',
-    '#............................#',
-    '#............................#',
-    '#.................h..........#',
-    '#.................h..........o',
-    '#.................h..........o',
-    '#.................h..........#',
-    '#.................h..........#',
-    '#.................h..........#',
+    '#q...h.q..........h.ooooooo.q#',
+    '#....h............h..ooooooo.#',
+    '#..q.h............h...:::::..#',
+    '#hh.hh.........q..h....:::...#',
+    '#..:..............h.....::...#',
+    '#..::..........::::::...::...#',
+    '#...::.......:::.......::....#',
+    '#....:......::....h...::.....#',
+    '#....::....::.....h..::......o',
+    '#.....:::::.......h.::.......o',
+    '#..q....:.........h.:.......q#',
+    '#.qq....::........h.........q#',
+    '#q.......:........hqq......qq#',
     '##oo##########################',
   ],
 
@@ -59,14 +61,17 @@ export const LASTLIGHT_SLUICE = {
     { x: 29, y: 11, w: 1, h: 2, to: 'lastlight_gallery', spawn: { x: 1, y: 11 } },
   ],
 
-  cutscenes: [],
+  // The end of the chapter (tideHeldFinale.js): back in by the east door after the fight, Haddock at the crank.
+  cutscenes: [
+    { x: 28, y: 11, w: 1, h: 1, scene: 'the_crank', after: 'corrie_falls' },
+  ],
 
   textFile: 'interactions/lastlight.txt',
   props: [
     // THE CRANK and the sluice gate it works, in the east wall. Floor in front (x 19-28, rows 4-10) stays clear.
     { sprite: 'c5_crank_wheel', x: 24, y: 3, text: 'sluice_crank', animation: 'c5_crank_wheel', speed: 0.5 },
     { sprite: 'c5_sluice_gate', x: 27, y: 3, text: 'sluice_gate' },
-    { sprite: 'c5_lantern_post_lit', x: 20, y: 3, text: 'sluice_lamp', animation: 'c5_lantern_post_lit', speed: 0.25 },
+    { sprite: 'c5_lantern_post_unlit', x: 20, y: 3, text: 'sluice_lamp' },
     // The weight grille, and its three plates (each with a wheel on its chain).
     { sprite: 'gate_narrow', x: 18, y: 8, text: 'sluice_grille', opensWith: ['sl_h', 'sl_v', 'sl_b'], openText: 'sluice_grille_open' },
     { sprite: 'gate_narrow', x: 18, y: 9, text: 'sluice_grille', opensWith: ['sl_h', 'sl_v', 'sl_b'] },
@@ -83,15 +88,54 @@ export const LASTLIGHT_SLUICE = {
     { sprite: 'c5_barrels', x: 21, y: 14, text: 'sluice_barrels' },
     { sprite: 'c5_crate', x: 25, y: 14, text: 'sluice_crate' },
     { sprite: 'c5_rope_coil', x: 8, y: 14, text: 'sluice_rope', walkable: true, flat: true },
+    // The sea in the walls: it weeps out round the sluice gate and stands in puddles, the
+    // crank's iron bleeds rust onto the boards, the floor is cracking, the stones are coming
+    // loose, and one lamp still burns on its hook by the stair.
+    { sprite: 'c5_puddle', x: 26, y: 5, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 22, y: 8, flat: true, walkable: true },
+    { sprite: 'c5_rust_bloom', x: 23, y: 4, flat: true, walkable: true },
+    { sprite: 'c5_floor_crack', x: 27, y: 7, flat: true, walkable: true },
+    { sprite: 'c5_floor_crack', x: 6, y: 12, flat: true, walkable: true },
+    { sprite: 'c5_floor_crack', x: 12, y: 7, flat: true, walkable: true },
+    { sprite: 'c5_rubble', x: 16, y: 3, flat: true, walkable: true },
+    { sprite: 'c5_rubble', x: 1, y: 7, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 10, y: 15, flat: true, walkable: true },
+    { sprite: 'c5_lantern_hook', x: 1, y: 11 },
+    // The working tower (2026-11-08b): pipes along the north wall on their brackets, one with a
+    // valve and gauge going down into the floor, the tide's old marks scratched beside them, a chain
+    // on a hook; a riser, a chain and a caged green lamp on the divider; the oil and coal stores along
+    // the south wall (drums, one tipped and leaking, a split coal sack); a drain grating in the path;
+    // the sea seeping out under the sluice gate, and kelp dragged in from the east door.
+    // Walls and the south wall only: the crank's floor, the plates' ways and the grille stay clear.
+    { sprite: 'll_tide_marks', x: 7, y: 2, text: 'll_tide_marks' },
+    { sprite: 'll_chain_hook', x: 10, y: 2, text: 'll_chain_hook' },
+    { sprite: 'll_pipes_run', x: 13, y: 2, text: 'll_pipes' },
+    { sprite: 'll_pipes_end', x: 15, y: 2, text: 'll_pipes' },
+    { sprite: 'll_lamp_bracket', x: 18, y: 5, text: 'll_lamp_bracket' },
+    { sprite: 'll_chain_hook', x: 18, y: 11, text: 'll_chain_hook' },
+    { sprite: 'll_pipe_riser', x: 18, y: 14, text: 'll_pipes' },
+    { sprite: 'll_drum_tipped', x: 11, y: 15, text: 'll_drum_tipped' },
+    { sprite: 'll_coal_spill', x: 13, y: 15, flat: true, walkable: true },
+    { sprite: 'll_drums', x: 15, y: 15, text: 'll_drums' },
+    { sprite: 'll_oil_spill', x: 6, y: 13, flat: true, walkable: true },
+    { sprite: 'll_drums', x: 23, y: 15, text: 'll_drums' },
+    { sprite: 'coal_heap', x: 6, y: 15, text: 'll_coal' },
+    { sprite: 'll_coal_spill', x: 7, y: 14, flat: true, walkable: true },
+    { sprite: 'c5_crates_stack', x: 26, y: 15, text: 'sluice_crate' },
+    { sprite: 'll_grating', x: 9, y: 10, flat: true, walkable: true },
+    { sprite: 'll_grating', x: 22, y: 12, flat: true, walkable: true },
+    { sprite: 'll_seep', x: 27, y: 4, flat: true, walkable: true },
+    { sprite: 'll_kelp_drag', x: 26, y: 12, flat: true, walkable: true },
     { sprite: 'gold_pouch', x: 28, y: 14, text: 'sluice_pouch', gold: 250, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', H: 'll_niche', 6: 'll_window', o: 'll_door', '.': 'll_floor' },
 
   // A salt shade and a storm imp in the north-west corner of the west half (x 8-13, rows 4-5), clear
   // of the closet (x 1-5), the way from the stair door to the plates (rows 7-15), the hero's plate and
-  // the grille, and well away from the clear floor in front of the crank. No cutscenes in this room.
+  // the grille, and well away from the clear floor in front of the crank. Gone once the sea has been
+  // through the tower (`until`: the end of the chapter).
   npcs: [
-    { enemy: 'salt_shade', x: 9, y: 4, patrol: [8, 11], behaviour: 'wander' },
-    { enemy: 'storm_imp', x: 11, y: 5, patrol: [10, 13], behaviour: 'wander' },
+    { enemy: 'salt_shade', x: 9, y: 4, patrol: [8, 11], behaviour: 'wander', until: 'corrie_falls' },
+    { enemy: 'storm_imp', x: 11, y: 5, patrol: [10, 13], behaviour: 'wander', until: 'corrie_falls' },
   ],
 };

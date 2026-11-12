@@ -12,6 +12,7 @@ import { ICONS } from '../data/art/icons.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, wrapLines, textWidth } from './text.js';
 import { drawOwnerTag, ownerLook } from './menuFrame.js';
+import { glide } from './uiMotion.js';
 
 // The skill tree, drawn as constellations in a night sky. Each branch is a
 // chain of stars under a tab across the top; learned stars burn in the
@@ -31,10 +32,10 @@ const DESCRIPTIONS = 'skills/skills.txt';
 const TABS_Y = 68;
 const TAB_H = 28;
 const TREE_TOP = 134;
-const ROW_H = 46;
+const ROW_H = 50;
 // How many stars of a branch fit on the screen at once; taller ones scroll.
 const ROWS = 5;
-const TREE_BOTTOM = TREE_TOP + (ROWS - 1) * ROW_H + 34;
+const TREE_BOTTOM = TREE_TOP + (ROWS - 1) * ROW_H + 40;
 const NODE_RADIUS = 12;
 // Small sideways offsets so each branch reads as a constellation, not a list.
 const ZIGZAG = [0, -6, 5, -4, 6, -5, 3];
@@ -401,9 +402,11 @@ export class SkillsMenu {
       }
       // How much of the branch is learned, as dots under the tab.
       const learned = branch.skills.filter((skill) => hasSkill(skill.id)).length;
+      // (Squeezed closer on a long branch, so the row stays inside its own column.)
+      const step = Math.min(6, (W / this.branches.length - 14) / branch.skills.length);
       for (let i = 0; i < branch.skills.length; i++) {
         ctx.fillStyle = i < learned ? branch.color : COLORS.faint;
-        ctx.fillRect(Math.round(cx - branch.skills.length * 3 + i * 6), TABS_Y + TAB_H + 10, 3, 3);
+        ctx.fillRect(Math.round(cx - (branch.skills.length * step) / 2 + i * step), TABS_Y + TAB_H + 10, step < 4 ? 2 : 3, step < 4 ? 2 : 3);
       }
     });
   }
@@ -481,9 +484,10 @@ export class SkillsMenu {
     ctx.restore();
 
     if (selected) {
-      // The soul marks the star you're looking at.
+      // The soul marks the star you're looking at, sliding over from the last one.
       const soul = soulSprite();
-      ctx.drawImage(soul, Math.round(x - soul.width / 2), Math.round(y - soul.height / 2));
+      const at = glide('skillStar', Math.round(x - soul.width / 2), Math.round(y - soul.height / 2), 100);
+      ctx.drawImage(soul, at.x, at.y);
       ctx.save();
       ctx.strokeStyle = COLORS.gold;
       ctx.lineWidth = 2;
@@ -495,13 +499,15 @@ export class SkillsMenu {
     } else if (learned) {
       sparkle(ctx, x, y, 7, '#ffffff');
     } else {
-      drawText(ctx, `${skill.cost}`, x, y - 11, { size: 22, color: available ? COLORS.gold : COLORS.dim, align: 'center' });
+      drawText(ctx, skill.scripted ? '0' : `${skill.cost}`, x, y - 11, { size: 22, color: available ? COLORS.gold : COLORS.dim, align: 'center' });
     }
 
     // Its name under the star, in the column.
     const labelColor = learned ? branch.color : available ? COLORS.text : COLORS.dim;
-    // Outlined in the night's colour, so the line on to the next star runs behind the name.
-    drawText(ctx, skill.name, x, y + NODE_RADIUS + 1, { size: 15, color: selected ? COLORS.gold : labelColor, align: 'center', shadow: '#05030f', outline: '#0a0618' });
+    // Below the selection ring, with a dark outline round the letters (no box)
+    // so the line on to the next star reads as passing behind it.
+    const labelY = y + NODE_RADIUS + 7;
+    drawText(ctx, skill.name, x, labelY, { size: 15, color: selected ? COLORS.gold : labelColor, align: 'center', shadow: '#05030f', outline: '#0a0618' });
   }
 
   // Arrows when a branch runs off the top or bottom of the sky.
@@ -562,7 +568,8 @@ export class SkillsMenu {
     drawText(ctx, title, x + 22, y + 8, { size: 30, color: branch.color });
     // The cost, as a little chip after the name.
     const nameWidth = textWidth(ctx, title, 30);
-    const chip = `${skill.cost} PT${skill.cost === 1 ? '' : 'S'}`;
+    // A skill a scene gives (Nova) costs nothing.
+    const chip = skill.scripted ? 'FREE' : `${skill.cost} PT${skill.cost === 1 ? '' : 'S'}`;
     const chipW = textWidth(ctx, chip, 18) + 16;
     roundRect(ctx, x + 32 + nameWidth, y + 14, chipW, 22, 11);
     ctx.fillStyle = hasSkill(skill.id) ? `${branch.color}55` : 'rgba(255, 225, 77, 0.18)';

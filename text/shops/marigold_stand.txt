@@ -10,6 +10,14 @@
 [greeting]
 Well, hello! Travellers! We don't get travellers. We don't get anybody. Marigold! Lemonade?
 
+# (draft)
+[greeting 2]
+Back again! Twice in a day. That's a rush, for us. Somebody had three lemonades while you were reading my sign, and left a pinecone on the counter. I suppose that's money, where they're from.
+
+# (draft)
+[greeting 3]
+Hello, regulars! I've put your names on a crate. Well. I've put THE TWO on a crate. And THE PINECONE on another. Business is booming.
+
 [menu_prompt]
 Anything else? I've got all afternoon. I've got every afternoon, really.
 
@@ -71,13 +79,13 @@ Safest fields in the world, these. Well. Safest fields with one hole in. I've pu
 ...But I was right about the humming. I'll have that.
 
 [talk: The Hero after out_into_the_light]
-"Down they went and up they came." I always thought it was about a well. ...You went down, and you came up. I'm not saying anything. I'm just humming.
+"Down he went and up he came." I always thought it was about a well. ...You went down, and you came up. I'm not saying anything. I'm just humming.
 
 [talk: The Gate]
 That big old gate? Been shut since before my nan. Funny you coming out of it. Hope you wiped your feet.
 
 [talk: The Hero]
-The Hero? Oh, there's an old song. "Down they went and up they came." Nobody knows the rest. Probably about a well.
+The Hero? Oh, there's an old song. "Down he went and up he came." Nobody knows the rest. Probably about a well.
 
 [talk: The stand]
 It's not much, but it's mine! The awning's from my nan's tent, the pitcher's from my nan's kitchen, and the bee's his own. He pays in company.

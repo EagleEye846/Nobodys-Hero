@@ -28,6 +28,8 @@ export const DEEP_WAY_UP = {
   music: 'wayUp',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'deep',
+  // How it rings (a narrow drift: ECHOES in src/audio/music.js).
+  echo: 'tunnel',
   // Dim, not dark: the root's veins light the stair now.
   dark: 0.55,
 
@@ -89,8 +91,12 @@ export const DEEP_WAY_UP = {
     { x: 1, y: 1, w: 2, h: 1, to: 'belowtown_square', spawn: { x: 30, y: 20 } },
   ],
 
-  // Nothing plays here.
-  cutscenes: [],
+  // The way up from the fourth flight to the fifth (x 1-2, row 23), the only
+  // way on: stones_on_the_stair. Once the light is up, and not for saves
+  // already home in the square.
+  cutscenes: [
+    { x: 1, y: 23, w: 2, h: 1, scene: 'stones_on_the_stair', after: 'the_light_goes_up', until: ['homecoming', 'rumbolds_duel'] },
+  ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   // Lit root veins in the rock between the flights, the Hero's little cairns
@@ -124,6 +130,6 @@ export const DEEP_WAY_UP = {
   ],
   tileTexts: { '#': 'deep_rock', W: 'wu_face', '^': 'deep_stalagmite', O: 'deep_boulder' },
 
-  // Nobody, nothing: a quiet stair. (No scenes either, so there's nothing to keep clear of.)
+  // Nobody, nothing: a quiet stair (so stones_on_the_stair has nothing to keep clear of).
   npcs: [],
 };

@@ -1,0 +1,212 @@
+# QUIRE, the Welcome Register: the Dead City's secret guardian of the Fallen Star's shard.
+# Every line here is a (draft).
+# Numbers (HP, damage, its phases) live in src/data/enemies/tally.js.
+#
+# It was the city's list of everyone who promised to be present on the day the Hero came. It has
+# been counting them for a hundred years and the figures never come out. It speaks like a clerk who
+# has stopped sleeping: precisely, a little too fast, losing its place, starting again from the top.
+# It isn't cruel. It wants the number to be right. It can be spared: let it count you.
+#
+# A section with ": roll_call", ": late_fees" or ": margins" after its name is used in that phase of
+# its fight instead of the plain one. [phase: ...] sections are what's said as a phase starts: plain
+# ones in the battle panel, "vesper" ones by Ves in her box, "foe" ones by it in speech bubbles.
+
+# Said in speech bubbles during its entrance, after its title card. Lines written together (no
+# blank line between) share a bubble; a line starting with ... waits for a bubble of its own.
+[boss_intro]
+Good morning. Good morning.
+Please keep to the line.
+
+I'll just
+take the numbers.
+
+One. Two.
+...
+
+You weren't on the list.
+
+That won't do.
+That won't do at all.
+
+[intro]
+QUIRE unfolds out of the stacks, page after page of it, counting.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+QUIRE's pages riffle, all by themselves. A breeze nobody can feel.
+
+QUIRE is counting under its breath. It's very, very fast.
+
+A star-blue light flickers behind QUIRE's spectacles, like a candle in a window.
+
+Ink runs down QUIRE's chin. It dabs at it with a corner of a page.
+
+Ves leans on her crutch behind you. "It's counting us," she says. "Look at its lips."
+
+[flavor: late_fees]
+QUIRE's total has gone wrong. It's started again. It has started again several times.
+
+QUIRE's stamp is held so tightly its binding creaks.
+
+The splinter in QUIRE's chest is shining through the cracks like a lamp through a door.
+
+Pages are coming off QUIRE faster than it can pick them up.
+
+[flavor: margins]
+QUIRE has stopped starting again. It's started doing everything instead.
+
+Ink, paper and light are going round QUIRE in a ring, faster and faster.
+
+QUIRE has written on its own face. It doesn't seem to mind.
+
+The numbers are coming out of QUIRE's mouth in two voices at once. Neither is winning.
+
+# Said in a speech bubble before each attack, picked at random. Lines written together (no
+# blank line between) share a bubble; a line starting with ... waits for a bubble of its own.
+[taunts]
+One.
+Two.
+Two. Two. Two.
+
+Present?
+PRESENT?
+
+Seven thousand,
+four hundred and...
+
+...no.
+From the top.
+
+Mark them off,
+mark them off.
+
+All present
+and correct.
+Except one.
+
+Please don't
+fidget in the line.
+
+Names, names.
+Have you a name?
+
+[taunts: late_fees]
+Late. Late.
+Everyone is late.
+
+That's a fee.
+That's another fee.
+
+It's not adding up.
+It never adds up.
+
+Tick, tick, tick.
+
+Sit down!
+Sit! Down!
+
+I had them all.
+I HAD them all.
+
+[taunts: margins]
+ONE!
+TWO!
+EVERYONE!
+
+Write it down
+write it down
+write it down
+
+Present present
+present present
+present NOBODY
+
+I can fit you in
+in the margin
+
+Whose hand is that
+whose hand is that
+
+The Hero is
+the Hero is
+the Hero
+
+# What happens as each phase starts (see `beat` in tally.js).
+[phase: late_fees]
+Ink sheets down QUIRE's front. The bookmark ribbon in its mouth has gone stiff as a tongue.
+
+[phase: late_fees vesper]
+{scared}It's getting worse. Every time it gets to the end of the list it starts again, and it's meaner each time.
+
+{determined}Keep moving. It can't count what it can't pin down.
+
+[phase: late_fees foe]
+Nine thousand
+and
+...
+
+No.
+
+I shall have to charge you.
+
+[phase: margins]
+The star in QUIRE's chest cracks it open. Pages go up like birds, and don't come down.
+
+[phase: margins vesper]
+{scared}It's coming to pieces! It's all coming at once!
+
+{determined}Look for the gaps. There's always a gap. It's a book, it's made of gaps!
+
+[phase: margins foe]
+Never
+mind
+the list
+
+WRITE
+IN
+THE MARGINS
+
+# One section per TALK option. The names after "talk:" must match the TALK options in
+# src/data/enemies/tally.js.
+[talk: Check]
+QUIRE - HP 17500
+The Welcome Register of the Dead City, with a splinter of star in its binding. It is counting everyone who promised to come. It is trying to get the number to come out right.
+
+[talk: Check: late_fees]
+QUIRE - HP 17500
+It keeps losing its place. Each time it starts again, the sums come out angrier.
+
+[talk: Check: margins]
+QUIRE - HP 17500
+It's all coming off the page. There is no list any more, only counting.
+
+[talk: Stand in line]
+You stand very straight, at the end of an invisible queue. QUIRE stops. It looks along it, and finds you, and can't think why you weren't there before.
+
+[talk: Raise a hand]
+You raise your hand, the way you would for a register. QUIRE's quill hangs in the air. "...Present?" it whispers, as if it had been afraid to ask.
+
+[talk: Keep very quiet]
+You keep so quiet that the ink stops dripping. QUIRE holds its breath, which it doesn't have. For the first time in a hundred years it can hear itself think.
+
+[talk: Sign the book]
+QUIRE holds out its great pages, and a quill. You write one word. It takes a long time to read it out. "...No-bod-y. Nobody." A pause. "...Present."
+
+# Ves's own kind word (TALK): she does it for you.
+[vesper_talk]
+Ves says she'll sign the book too, if it likes. It writes her name down, and gets the spelling right, which makes it sob like a printing press.
+
+Ves tells QUIRE it can stop counting the ones who aren't here. The ones who are here are a nice number. It tries it out loud.
+
+Ves says the Hero was never going to come, and nobody put it on the list that they'd be sorry. QUIRE writes "sorry" in the margin and underlines it.
+
+# Said when you try to RUN.
+[no_escape]
+The pages have closed round you like a door. The room is the book now.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+QUIRE goes up in a gust of loose pages, all its figures spilling out of it. Nobody on its list came to see it end.
+
+[pacified]
+QUIRE closes itself gently, like a book at the end of a long day. The splinter in its binding comes loose and drifts out into your hand. "...Everyone present," it says. "Everyone. Present."

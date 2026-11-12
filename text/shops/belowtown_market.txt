@@ -70,7 +70,7 @@ King Peptup! The Resplendent! Oh, he's marvellous. He's so loud. He's never once
 It's gone dim, dearie. It used to be bright as noon down here. Now it's more of a tea-time. Everybody says it's nothing. Everybody says it in a very quiet voice.
 
 [talk: The Hero]
-Oh, that old song. The Hero came through, long ago, little thing, hardly said a word. Pebble's gran gave them a pasty. Some say they ate it. Gran said they kept it for later. Gran was always a bit sad about that.
+Oh, that old song. The Hero came through, long ago, little thing, hardly said a word. Pebble's gran gave him a pasty. Some say he ate it. Gran said he kept it for later. Gran was always a bit sad about that.
 
 [talk: The Sunstone after the_light_goes_up]
 Did you SEE it, dearie? Bright as noon again, all at once. Pebble dropped a whole tray of pasties. Nobody's saying anything in a quiet voice now. They're all saying it very loudly.
@@ -80,3 +80,21 @@ Listen to it! Somebody's got a fiddle out, and somebody else is dancing who shou
 
 [talk: Hobnail]
 The mole at the vent? Grumpy as a wet cat, and the best smith there is. Don't ask him anything. Bring him something shiny, and he'll tell you everything. In grunts.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[greeting 2]
+Back already! Pebble knew you would. Pebble's told everyone she knew. Pasty?
+
+# (draft)
+[greeting 3]
+You again! Lovely. Nine people asked after you this morning. Pebble told them all something different.
+
+# (draft)
+[greeting after the_kings_welcome]
+Off on the king's quest! Everybody's saying. Pebble said it first. Pasties for the road?
+
+# (draft)
+[greeting after the_light_goes_up]
+The light! You did the light! Pebble saw the whole thing. Well. Pebble heard it from someone who did. Same thing!

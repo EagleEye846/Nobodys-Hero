@@ -21,8 +21,6 @@ The doorway to the north leads to the Lantern Hall.
 LANTERN HALL
 The lanterns here were lit by the first Keeper, and were never to go out.
 
-Something with wings has been circling them lately.
-
 # Shown at save points (the floating crystals).
 [save_point]
 The crystal's warm light washes over you.

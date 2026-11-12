@@ -19,6 +19,10 @@ An old iron mooring post, worn smooth on top. Press on it, and the water and eve
 [reach_rock]
 Black rock, running with rain.
 
+# (draft) after the storm.
+[reach_rock_calm]
+Black rock, drying in the wind.
+
 [reach_cliff]
 A face of black rock, slick with weed at the bottom and bare at the top, where the sea can't reach. Mostly can't.
 
@@ -75,22 +79,36 @@ A purse wedged deep in a crack in the rock, out of the rain.
 # --- THE REEF ----------------------------------------------------------------------
 
 [reef_sign]
-A plank with a tide wheel painted on it, and an arrow: TURN FOR LOW. TURN AGAIN FOR HIGH. MIND THE CUT.
+A plank nailed to a stake, the paint half gone: BLOWHOLES. STAND ON ONE AND IT'LL HAVE YOU OVER. MIND WHICH.
 
-[reef_wheel]
-A tide wheel bolted to the rock, green with weed, its brass rings scoured bright by the rain.
+[reef_sign_bramble]
+{worried}Have me over WHAT?
 
-[reef_wheel_turn]
-You heave the wheel round. Out on the reef the sea stops, thinks about it, and starts to move.
+[reef_blowhole]
+A hole in the coral, black and wet. Every few breaths the sea heaves somewhere under the rock, and the air comes roaring up out of it, salt and all.
 
-[reef_wheel_busy]
-The wheel won't budge. The water's still moving.
+[reef_blowhole_ves]
+{smile}Now that's my kind of weather.
 
-[reef_crate]
-A sea chest, nailed shut and tarred. It floats when the reef is drowned and sits like a rock when it isn't.
+[reef_locker]
+A sea locker, lashed to the coral with chain so the storm can't have it. BOTHER is painted on the lid, and under it, very small, THE FIRST. Inside, wrapped in oilcloth, a scarf of grey down, and a page torn out of a log in big square writing:
 
-[reef_crate_bramble]
-{thinking}If it falls in the cut, we can walk on it. If I fall in the cut, nobody walks on me.
+"Took the boy out to the reef to see the petrels. He asked where they go in a storm. Told him they go out in it. Only ones that do. He thought about that all the way home."
+
+[reef_locker_bramble]
+{worried}...The first Bother. What happened to the first Bother?
+
+[reef_locker_ves]
+{smile}A storm bird's scarf. It's coming with me.
+
+[reef_locker_empty]
+The old locker, lashed down tight, and empty. The chain will outlast the reef.
+
+[reef_stormglass]
+Out on the reef, where the lightning struck all those nights, the sand has run into glass. Among the shells, one green bead of it, smooth as a sweet. You pocket it.
+
+[reef_stormglass_gone]
+Shells on the wet rock. Nothing else among them glints.
 
 [reef_coral]
 Coral, brittle and grey, with little red bits still alive in the cracks.
@@ -226,3 +244,36 @@ A chain as thick as your arm, run from the rock out into the sea. Whatever's on 
 
 [foot_pouch]
 A purse wedged in behind the chain, where the sea couldn't pull it loose.
+
+# After the chapter (haddock_gone): the Bother, empty, where Haddock left her. (draft).
+[bother_after]
+The Bother, tied up and bumping the planks, her oars shipped. There is a dent in the thwart the exact shape of a walrus.
+
+[bother_after_ves]
+{bored}I row now. Complaints go in the sea.
+
+# --- SHORE DETAILS (2026-11-08) ---------------------------------------------------
+
+# (draft)
+[reach_cairn]
+A cairn of flat stones on the bare rock. Somebody stopped out here once and wanted it known.
+
+# (draft)
+[reach_rocks]
+Rocks, black and streaming, barnacles crusted on the seaward side.
+
+# (draft)
+[reach_stakes]
+Stakes driven into a crack, with a rope between them to hold on to in a blow. A rag on the middle one has been red.
+
+# (draft)
+[reach_gull_rock]
+Gulls on a rock in the sea, packed in tight with their backs to the wind. Not one of them is leaving.
+
+# (draft)
+[reach_rowboat_half]
+Half a rowboat, wedged up on the rock where the sea threw it. The other half is somewhere out there.
+
+# (draft)
+[reach_pot]
+A lobster pot that came a long way to be broken here. The float on it still has somebody's mark.

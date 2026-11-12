@@ -195,6 +195,375 @@ function signpost() {
   return g.rows();
 }
 
+/// --- The drowned lanes' dressing (second pass) --------------------------
+// Garden walls, carts, doors and beds standing in the flood, weed mats on top of it and
+// the shapes of the old lanes under it, so the water reads as a drowned village and not
+// as a flat green floor. Every one in water has its waterline drawn on: a pale lapping
+// edge and the part below darkened and green.
+const OUTLINE_LN = '#101810';
+function edge(g) {
+  const pts = [];
+  const at = (x, y) => x >= 0 && y >= 0 && x < g.w && y < g.h && g.cells[y][x];
+  for (let y = 0; y < g.h; y++) for (let x = 0; x < g.w; x++) {
+    if (!at(x, y) && (at(x - 1, y) || at(x + 1, y) || at(x, y - 1) || at(x, y + 1))) pts.push([x, y]);
+  }
+  for (const [x, y] of pts) g.set(x, y, OUTLINE_LN);
+}
+const SUNK = ['#1f4a44cc', '#2c5e54aa'];
+const LAP = ['#8ad0c0d0', '#c8f0e4e0'];
+// Darken everything below `y` as if seen through the water, and lap a pale line along it.
+function waterline(g, y, from = 0, to = g.w) {
+  // Below the line it fades into the water: darker, then broken up, then gone.
+  for (let yy = y + 1; yy < g.h; yy++) for (let x = from; x < to; x++) {
+    if (!g.cells[yy][x]) continue;
+    const d = yy - y;
+    if (d > 6 || (d > 3 && (x + yy) % 2)) g.set(x, yy, null);
+    else g.set(x, yy, d < 3 ? SUNK[0] : SUNK[1]);
+  }
+  for (let x = from; x < to; x++) {
+    const wob = Math.round(Math.sin(x / 3) * 0.6);
+    if ((x * 7) % 5 !== 0) g.set(x, y + wob, (x % 4) ? LAP[0] : LAP[1]);
+  }
+}
+const MORTAR = '#2e3834';
+
+// A run of old garden wall standing out of the water, broken at one end.
+function sunkWall(w, broken) {
+  const h = 26;
+  const g = new Grid(w, h);
+  const top = (x) => (broken && x > w - 14 ? 6 + Math.round((x - (w - 14)) * 0.9) + ((x * 5) % 3) : 4 + ((x * 3) % 7 === 0 ? 1 : 0));
+  for (let x = 1; x < w - 1; x++) {
+    const t = top(x);
+    for (let y = t; y < h; y++) g.set(x, y, STONE[1]);
+    g.set(x, t, STONE[3]);
+    g.set(x, t + 1, STONE[2]);
+  }
+  // Courses of stone, staggered, each stone a shade of its own.
+  for (let y = 9, k = 0; y < h; y += 5, k++) {
+    for (let x = 1; x < w - 1; x++) if (g.cells[y][x] && y > top(x) + 1) g.set(x, y, MORTAR);
+    for (let x = 1 + (k % 2 ? 4 : 0); x < w - 1; x += 8) for (let j = 1; j < 5; j++) if (y - j > top(x) + 1) g.set(x, y - j, MORTAR);
+    for (let x = 3 + k * 3; x < w - 3; x += 11) if (y - 2 > top(x) + 1) { g.set(x, y - 2, STONE[2]); g.set(x + 1, y - 2, STONE[2]); }
+  }
+  // Ivy and weed down the face, moss on the coping.
+  for (let x = 2; x < w - 2; x += 1) if ((x * 11) % 7 < 2) {
+    const t = top(x);
+    const len = 3 + ((x * 13) % 7);
+    for (let j = 0; j < len; j++) g.set(x + (j % 3 === 2 ? 1 : 0), t + 1 + j, WEED[(x + j) % 3]);
+  }
+  for (let x = 1; x < w - 1; x++) if ((x * 3) % 4 === 0) g.set(x, top(x), WEED[2]);
+  // Fallen stones at the broken end, half in the water.
+  if (broken) { g.rect(w - 9, 18, 4, 3, STONE[2]); g.rect(w - 8, 18, 2, 1, STONE[3]); g.rect(w - 4, 20, 3, 2, STONE[1]); }
+  edge(g);
+  waterline(g, 19, 0, w);
+  return g.rows();
+}
+
+// A cart tipped into the flood: one wheel up out of the water, the shafts in the air.
+const WOOD = ['#2e2218', '#4a3624', '#6a4e34', '#8a6a48'];
+function sunkCart() {
+  const g = new Grid(36, 28);
+  // The bed, tipped down to the left.
+  for (let x = 2; x < 26; x++) {
+    const y = 14 + Math.round((26 - x) * 0.18);
+    g.rect(x, y, 1, 6, WOOD[1]);
+    g.set(x, y, WOOD[3]);
+    g.set(x, y + 3, WOOD[0]);
+  }
+  // The shafts, sticking up out of the water to the right.
+  g.line(24, 16, 34, 5, WOOD[2]); g.line(24, 17, 34, 6, WOOD[1]);
+  g.line(21, 16, 31, 3, WOOD[2]); g.line(21, 17, 31, 4, WOOD[1]);
+  // The wheel, spoked, its top half dry.
+  const cx = 12, cy = 15, r = 7;
+  for (let a = 0; a < 64; a++) {
+    const t = (a / 64) * Math.PI * 2;
+    g.set(cx + Math.cos(t) * r, cy + Math.sin(t) * r, WOOD[2]);
+    g.set(cx + Math.cos(t) * (r - 1), cy + Math.sin(t) * (r - 1), WOOD[1]);
+  }
+  for (let s = 0; s < 6; s++) { const t = (s / 6) * Math.PI * 2 + 0.3; g.line(cx, cy, cx + Math.cos(t) * (r - 1), cy + Math.sin(t) * (r - 1), WOOD[1]); }
+  g.rect(cx - 1, cy - 1, 3, 3, WOOD[3]);
+  // Weed hung over the rim.
+  for (const x of [6, 9, 17, 20]) { g.set(x, 13, WEED[1]); g.set(x, 14, WEED[0]); g.set(x + 1, 15, WEED[0]); }
+  edge(g);
+  waterline(g, 19, 0, 36);
+  return g.rows();
+}
+
+// A cottage doorway with nothing left round it: the jambs, the lintel, and the door
+// hanging open on one hinge, up to its knees in the flood.
+function sunkDoor() {
+  const g = new Grid(32, 38);
+  g.rect(4, 4, 24, 4, STONE[2]); g.rect(4, 4, 24, 1, STONE[3]); g.rect(4, 7, 24, 1, STONE[0]);
+  g.rect(14, 2, 4, 3, STONE[2]); g.set(15, 2, STONE[3]);
+  for (const x0 of [4, 24]) { g.rect(x0, 8, 4, 30, STONE[1]); g.rect(x0, 8, 1, 30, STONE[2]); for (let y = 12; y < 38; y += 6) g.rect(x0, y, 4, 1, MORTAR); }
+  // The dark inside of the doorway, and the door swung half open.
+  g.rect(8, 8, 16, 30, '#18241f');
+  for (let y = 9; y < 38; y++) { g.set(9, y, WOOD[2]); g.set(10, y, WOOD[1]); g.set(11, y, WOOD[1]); g.set(12, y, WOOD[0]); }
+  g.rect(9, 14, 4, 1, WOOD[3]); g.rect(9, 28, 4, 1, WOOD[3]);
+  g.set(12, 22, '#c8b070');
+  // The number painted over the door, nearly gone.
+  g.rect(13, 5, 1, 2, '#c8c0a8'); g.rect(17, 5, 2, 1, '#c8c0a8'); g.set(18, 6, '#c8c0a8');
+  // Weed and moss.
+  for (const [x, y] of [[5, 9], [6, 10], [26, 12], [25, 13], [7, 3], [22, 3], [23, 3]]) g.set(x, y, WEED[(x + y) % 3]);
+  edge(g);
+  waterline(g, 30, 0, 32);
+  return g.rows();
+}
+
+// A raised bed of cabbages and beans, the flood over the earth and the leaves on top.
+function sunkBed() {
+  const g = new Grid(36, 18);
+  g.rect(2, 9, 32, 8, WOOD[1]); g.rect(2, 9, 32, 1, WOOD[3]);
+  for (let i = 0; i < 6; i++) {
+    const cx = 5 + i * 5 + (i % 2), cy = 8 + (i % 2);
+    g.rect(cx - 2, cy - 1, 5, 3, WEED[1]); g.rect(cx - 1, cy - 2, 3, 1, WEED[2]); g.set(cx, cy, '#86b070'); g.set(cx - 1, cy - 1, '#86b070');
+  }
+  // Bean poles, leaning.
+  g.line(30, 0, 31, 10, WOOD[2]); g.line(33, 1, 31, 10, WOOD[2]); g.set(31, 3, WEED[1]); g.set(32, 5, WEED[2]); g.set(30, 6, WEED[1]);
+  edge(g);
+  waterline(g, 11, 0, 36);
+  return g.rows();
+}
+
+// Weed and lily mats lying on the water (flat).
+const LILY = ['#2c5a30', '#3e7a40', '#5a9a52', '#e8c8d8', '#f4e8a0', '#2c5a30c0'];
+function lilyMat(w, h, seed) {
+  const g = new Grid(w, h);
+  let s = seed;
+  const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+  // Floating weed strands first, then pads with their notch.
+  for (let i = 0; i < w / 2; i++) {
+    const y = 2 + Math.floor(rnd() * (h - 4));
+    const x = Math.floor(rnd() * (w - 6));
+    for (let j = 0; j < 6; j++) g.set(x + j, y + Math.round(Math.sin(j) * 0.6), LILY[5]);
+  }
+  for (let i = 0; i < Math.max(3, Math.floor((w * h) / 70)); i++) {
+    const cx = 3 + Math.floor(rnd() * (w - 6)), cy = 2 + Math.floor(rnd() * (h - 4));
+    const r = rnd() < 0.4 ? 2 : 3;
+    for (let dy = -r + 1; dy < r; dy++) for (let dx = -r; dx <= r; dx++) if (dx * dx + dy * dy * 2 <= r * r + 1) g.set(cx + dx, cy + dy, dy < 0 ? LILY[2] : LILY[1]);
+    g.set(cx + 1, cy - 1, null); g.set(cx + 2, cy - 1, null);
+    g.set(cx - r, cy, LILY[0]); g.set(cx + r, cy, LILY[0]);
+  }
+  for (let i = 0; i < Math.max(1, Math.floor(w / 18)); i++) {
+    const cx = 4 + Math.floor(rnd() * (w - 8)), cy = 2 + Math.floor(rnd() * (h - 4));
+    g.set(cx - 1, cy, LILY[3]); g.set(cx + 1, cy, LILY[3]); g.set(cx, cy - 1, LILY[3]); g.set(cx, cy, LILY[4]);
+  }
+  return g.rows();
+}
+
+// The old lanes seen down through the water: the line of a wall, a path's edging, a bed,
+// in darker green (flat, over water).
+const UNDER = ['#0e2a2290', '#0a201ab0', '#5a9a8a50'];
+function underShapes(w, h, seed) {
+  const g = new Grid(w, h);
+  let s = seed;
+  const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+  // A wall line that turns a corner, broken in places.
+  const y0 = 4 + Math.floor(rnd() * 4), x1 = Math.floor(w * (0.4 + rnd() * 0.4));
+  for (let x = 2; x < x1; x++) if ((x * 7) % 11 > 1) { g.set(x, y0, UNDER[1]); g.set(x, y0 + 1, UNDER[0]); g.set(x, y0 - 1, UNDER[2]); }
+  for (let y = y0; y < h - 2; y++) if ((y * 5) % 9 > 1) { g.set(x1, y, UNDER[1]); g.set(x1 + 1, y, UNDER[0]); }
+  // Paving stones of a path, loosely.
+  for (let i = 0; i < w / 6; i++) {
+    const x = 2 + Math.floor(rnd() * (x1 - 6)), y = y0 + 4 + Math.floor(rnd() * Math.max(1, h - y0 - 8));
+    g.rect(x, y, 3 + Math.floor(rnd() * 2), 2, UNDER[0]);
+  }
+  // A drowned bush or two, round and dark.
+  for (let i = 0; i < 2; i++) {
+    const cx = x1 + 5 + Math.floor(rnd() * Math.max(1, w - x1 - 9)), cy = 4 + Math.floor(rnd() * (h - 8)), r = 3;
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r - 1; dx <= r + 1; dx++) if (dx * dx + dy * dy * 1.6 <= r * r + 2) g.set(cx + dx, cy + dy, UNDER[1]);
+  }
+  return g.rows();
+}
+
+// Weed fronds growing up off the bottom, swaying (over water, flat).
+const KELP = ['#1e4a30', '#2e6a40', '#5a9a5a'];
+function kelp(i) {
+  const g = new Grid(16, 30);
+  for (const [x0, len, ph] of [[5, 26, 0], [9, 20, 1.5], [12, 14, 3]]) {
+    for (let j = 0; j < len; j++) {
+      const y = 29 - j;
+      const x = x0 + Math.round(Math.sin(j / 5 + i * 1.57 + ph) * (j / len) * 2.4);
+      g.set(x, y, KELP[j % 5 === 0 ? 2 : (j / len) > 0.5 ? 1 : 0]);
+      if (j / len < 0.75) g.set(x + 1, y, KELP[0]);
+      if (j % 6 === 3) g.set(x + (j % 12 === 3 ? 1 : -1), y, KELP[2]);
+    }
+  }
+  return g.rows();
+}
+
+// Light coming down through the water in slanting bands (flat, for the dry pocket's lake).
+const SHAFT = ['#d8fff018', '#d8fff022', '#d8fff014', '#d8fff01c'];
+function lightShafts() {
+  const g = new Grid(80, 72);
+  [[10, 6], [24, 10], [44, 5], [56, 8]].forEach(([x0, wdt], k) => {
+    for (let y = 0; y < 72; y++) {
+      const x = x0 + Math.round(y * 0.35);
+      const fade = y < 8 ? 0.5 : y > 56 ? (72 - y) / 16 : 1;
+      for (let i = 0; i < wdt; i++) if (fade > 0.6 || (i + y) % 2 === 0) g.set(x + i, y, SHAFT[k]);
+    }
+  });
+  return g.rows();
+}
+
+// Moss, weed and lost cobbles over the old lane's paving, to break the grid (flat, walkable).
+const MOSS = ['#2e4a2a', '#3e6234', '#5a7e44', '#1e2a24', '#5a8a80'];
+function laneMoss(seed, w = 40, h = 22) {
+  const g = new Grid(w, h);
+  let s = seed;
+  const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+  // An uneven blob of moss, thicker at its middle.
+  const cx = w / 2, cy = h / 2;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const d = ((x - cx) / (w / 2)) ** 2 + ((y - cy) / (h / 2)) ** 2 + (rnd() - 0.5) * 0.5;
+    if (d < 0.35) g.set(x, y, MOSS[(x + y) % 3 === 0 ? 2 : 1]);
+    else if (d < 0.8 && rnd() < 0.55) g.set(x, y, MOSS[(x * y) % 4 === 0 ? 1 : 0]);
+  }
+  // Two cobbles missing: dark mud holes with a wet glint.
+  for (let i = 0; i < 2; i++) {
+    const x = 6 + Math.floor(rnd() * (w - 14)), y = 4 + Math.floor(rnd() * (h - 9));
+    g.rect(x, y, 5, 3, MOSS[3]); g.rect(x + 1, y - 1, 3, 1, MOSS[3]); g.set(x + 1, y + 1, MOSS[4]);
+  }
+  return g.rows();
+}
+
+// A run of picket fence half under the water, leaning, a paling or two gone.
+const PALE = ['#8a8270', '#b0a890', '#5e584c'];
+function sunkFence() {
+  const g = new Grid(48, 24);
+  for (let i = 0; i < 9; i++) {
+    if (i === 3 || i === 6) continue;
+    const x = 3 + i * 5, lean = Math.round(i * 0.4), top = 4 + (i % 3) + (i > 5 ? 3 : 0);
+    g.line(x + lean, top, x, 23, PALE[1]); g.line(x + 1 + lean, top, x + 1, 23, PALE[0]); g.line(x + 2 + lean, top + 1, x + 2, 23, PALE[2]);
+    g.set(x + 1 + lean, top - 1, PALE[1]);
+  }
+  for (let x = 2; x < 44; x++) { g.set(x, 11 + Math.round(x * 0.06), PALE[2]); if (x < 30) g.set(x, 16 + Math.round(x * 0.06), PALE[2]); }
+  for (const x of [5, 14, 27, 40]) { g.set(x, 13, WEED[1]); g.set(x, 14, WEED[0]); }
+  edge(g);
+  waterline(g, 16, 0, 48);
+  return g.rows();
+}
+
+// The light through the flood overhead, wobbling on the pocket's floor in a loose net
+// (flat, walkable, animated: four frames that drift).
+const CAUSTIC = ['#c8fff022', '#e0fff840'];
+function caustics(i) {
+  const w = 64, h = 48;
+  const g = new Grid(w, h);
+  const t = i * (Math.PI / 2);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    // Two crossing wave fields; where they nearly cancel, a bright thread.
+    const a = Math.sin(x / 5.2 + Math.sin(y / 7 + t) * 1.4 + t * 0.5);
+    const b = Math.sin(y / 4.6 + Math.sin(x / 6 - t) * 1.3 - t * 0.5);
+    const v = Math.abs(a + b);
+    // Fade out round the edge, so it has no box.
+    const fx = Math.min(x, w - 1 - x) / 10, fy = Math.min(y, h - 1 - y) / 8;
+    const fade = Math.min(1, fx, fy);
+    if (v < 0.34 && ((x * 7 + y * 3) % 10) / 10 < fade) g.set(x, y, v < 0.12 ? CAUSTIC[1] : CAUSTIC[0]);
+  }
+  return g.rows();
+}
+
+// The pocket's skin from inside: a pale crescent of light up the top-left of the dome, as on
+// a glass ball, and a few running drops (flat, laid over the rim).
+const GLINT = ['#e8fff860', '#ffffff90', '#bfeee440'];
+function domeGlint() {
+  const w = 176, h = 160;
+  const g = new Grid(w, h);
+  const cx = w / 2, cy = h / 2;
+  for (let i = 0; i < 900; i++) {
+    const a = Math.PI * (1.05 + (i / 900) * 0.55);
+    for (const [r, c] of [[78, GLINT[2]], [76, GLINT[0]], [74, GLINT[2]]]) {
+      const ry = r * 0.9;
+      g.set(cx + Math.cos(a) * r, cy + Math.sin(a) * ry, c);
+    }
+  }
+  for (let i = 0; i < 300; i++) {
+    const a = Math.PI * (1.2 + (i / 300) * 0.22);
+    g.set(cx + Math.cos(a) * 72, cy + Math.sin(a) * 72 * 0.9, GLINT[1]);
+  }
+  // Drops running down the inside of the skin on the lit side.
+  for (const [x, y, n] of [[30, 54, 4], [44, 30, 3], [70, 14, 5], [118, 12, 3], [146, 40, 4]]) for (let j = 0; j < n; j++) g.set(x, y + j, j === n - 1 ? GLINT[1] : GLINT[0]);
+  return g.rows();
+}
+
+// Weed and a wet streak hanging down a culvert wall's face (flat, on the wall).
+const STREAK = ['#1a2a2480', '#2a3a3460'];
+function wallWeed(seed) {
+  const g = new Grid(32, 16);
+  let s = seed;
+  const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+  for (let k = 0; k < 3; k++) {
+    const x0 = 3 + Math.floor(rnd() * 26), len = 6 + Math.floor(rnd() * 9);
+    for (let j = 0; j < len; j++) g.set(x0 + (j > len / 2 && k % 2 ? 1 : 0), j, j < 3 ? STREAK[0] : STREAK[1]);
+  }
+  for (let k = 0; k < 6; k++) {
+    const x0 = 2 + Math.floor(rnd() * 28), len = 2 + Math.floor(rnd() * 7);
+    for (let j = 0; j < len; j++) g.set(x0 + Math.round(Math.sin(j / 2 + k) * 0.6), j, WEED[(j + k) % 3]);
+  }
+  return g.rows();
+}
+
+// Headstones in the churchyard: a round-topped one and a cross, both leaning a little,
+// lichen on their shoulders and grass round their feet.
+const GRASS = ['#2e4a2a', '#4a6e3a'];
+function headstone(kind) {
+  const g = new Grid(16, 22);
+  if (kind === 'round') {
+    for (let y = 6; y < 20; y++) for (let x = 4; x < 12; x++) {
+      const lean = Math.round((20 - y) * 0.12);
+      if (y < 9 && (x - 8) ** 2 + (y - 9) ** 2 * 1.4 > 16) continue;
+      g.set(x + lean, y, x === 4 ? STONE[3] : x === 11 ? STONE[1] : STONE[2]);
+    }
+    g.rect(6, 11, 4, 1, STONE[1]); g.rect(6, 13, 4, 1, STONE[1]); g.rect(7, 15, 2, 1, STONE[1]);
+    g.set(6, 7, '#8a9a60'); g.set(7, 6, '#8a9a60'); g.set(10, 8, '#6a7a50');
+  } else {
+    const lean = (y) => Math.round((20 - y) * -0.15);
+    for (let y = 4; y < 20; y++) { g.set(7 + lean(y), y, STONE[3]); g.set(8 + lean(y), y, STONE[2]); g.set(9 + lean(y), y, STONE[1]); }
+    for (let x = 4; x < 13; x++) { g.set(x + lean(8), 8, STONE[3]); g.set(x + lean(9), 9, STONE[1]); }
+    g.set(8, 5, '#8a9a60'); g.set(5, 8, '#8a9a60');
+  }
+  edge(g);
+  // Grass round the foot, over the outline.
+  for (let x = 2; x < 14; x++) if ((x * 5) % 3) { g.set(x, 20, GRASS[x % 2]); if (x % 3 === 0) g.set(x, 19, GRASS[1]); }
+  return g.rows();
+}
+
+// The flood standing up round the pocket: along its north half you see the inside face of
+// the water from below, a curved wall of green glass rising off the floor's edge, lit low down
+// by the lantern and darkening up into the deep, with streaks running down it and a bright
+// skin along the top where it bends over into the dome (flat; same footprint as ln_pocket_rim,
+// laid at the same spot).
+const FACE = ['#1a4a40c8', '#24605298', '#3a8070a8', '#5aa290b0', '#9ad8c8c0', '#d8fff0d0'];
+function domeWall() {
+  const w = 176, h = 176;
+  const g = new Grid(w, h);
+  const cx = w / 2, cy = 96, rx = 84, ry = 76;
+  for (let x = 2; x < w - 2; x++) {
+    const dx = (x - cx) / rx;
+    if (Math.abs(dx) >= 1) continue;
+    const ye = cy - ry * Math.sqrt(1 - dx * dx);
+    // Only along the top: the face fades out toward the culverts at the sides.
+    const tall = Math.round(18 * Math.pow(1 - dx * dx, 0.8));
+    if (tall < 2) continue;
+    const y1 = Math.round(ye);
+    for (let k = 0; k <= tall; k++) {
+      const y = y1 - k;
+      const f = k / tall;
+      let c = f < 0.18 ? FACE[3] : f < 0.45 ? FACE[2] : f < 0.8 ? FACE[1] : FACE[0];
+      // Streaks running down the glass.
+      if ((x * 7) % 13 === 0 && f > 0.15 && f < 0.85) c = FACE[3];
+      if ((x * 11) % 17 === 0 && f > 0.3) c = FACE[0];
+      g.set(x, y, c);
+    }
+    // The bright skin where it bends over into the dome, and the lit foot.
+    g.set(x, y1 - tall, (x % 5) ? FACE[4] : FACE[5]);
+    g.set(x, y1 + 1, FACE[4]);
+  }
+  // A fish nosing at the outside, and bubbles caught on the glass.
+  for (const [x, y] of [[54, 34], [55, 34], [56, 33], [56, 35], [57, 34], [58, 34], [59, 33], [59, 35]]) g.set(x, y, FACE[0]);
+  for (const [x, y] of [[96, 10], [120, 18], [70, 16], [134, 30]]) { g.set(x, y, FACE[5]); g.set(x + 1, y + 1, FACE[4]); }
+  return g.rows();
+}
+
 // --- Registry ----------------------------------------------------------
 export const LN_PROP_SPRITES = {
   ln_pocket_rim: pocketRim(),
@@ -202,15 +571,57 @@ export const LN_PROP_SPRITES = {
   ln_fish: fish(0),
   ln_stair: stair(),
   ln_signpost: signpost(),
+  ln_sunk_wall: sunkWall(48, true),
+  ln_sunk_wall_short: sunkWall(32, false),
+  ln_sunk_cart: sunkCart(),
+  ln_sunk_door: sunkDoor(),
+  ln_sunk_bed: sunkBed(),
+  ln_sunk_fence: sunkFence(),
+  ln_lily_mat: lilyMat(40, 18, 7),
+  ln_lily_mat_b: lilyMat(30, 14, 31),
+  ln_lily_small: lilyMat(16, 10, 5),
+  ln_under_a: underShapes(80, 40, 11),
+  ln_under_b: underShapes(64, 48, 23),
+  ln_kelp: kelp(0),
+  ln_light_shafts: lightShafts(),
+  ln_moss_a: laneMoss(3),
+  ln_moss_b: laneMoss(17, 32, 18),
+  ln_caustics: caustics(0),
+  ln_dome_glint: domeGlint(),
+  ln_wall_weed: wallWeed(5),
+  ln_wall_weed_b: wallWeed(41),
+  ln_headstone: headstone('round'),
+  ln_headstone_cross: headstone('cross'),
+  ln_dome_wall: domeWall(),
 };
 
 export const LN_PALETTE = palette;
 export const LN_PALETTE_EXTRA = palette;
 export const LN_BUBBLES_SPRITES = frames((i) => bubbles(i), 8);
 export const LN_FISH_SPRITES = frames((i) => fish(i), 4);
+export const LN_KELP_SPRITES = frames((i) => kelp(i), 4);
+export const LN_CAUSTICS_SPRITES = frames((i) => caustics(i), 4);
 
 // How many tiles wide each big one stands.
 export const LN_FOOTPRINTS = {
   ln_pocket_rim: 11,
   ln_stair: 8,
+  ln_sunk_wall: 3,
+  ln_sunk_wall_short: 2,
+  ln_sunk_cart: 2,
+  ln_sunk_door: 2,
+  ln_sunk_bed: 2,
+  ln_sunk_fence: 3,
+  ln_lily_mat: 2,
+  ln_lily_mat_b: 2,
+  ln_under_a: 5,
+  ln_under_b: 4,
+  ln_light_shafts: 5,
+  ln_moss_a: 2,
+  ln_moss_b: 2,
+  ln_caustics: 4,
+  ln_dome_glint: 11,
+  ln_dome_wall: 11,
+  ln_wall_weed: 2,
+  ln_wall_weed_b: 2,
 };

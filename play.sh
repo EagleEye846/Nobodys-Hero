@@ -40,4 +40,9 @@ echo
   fi
 ) &
 
-exec "$PYTHON" tools/serve.py "$PORT"
+# With the Studio here (the tools folder), start its server; otherwise the
+# plain game server.
+if [ -f tools/serve.py ]; then
+  exec "$PYTHON" tools/serve.py "$PORT"
+fi
+exec "$PYTHON" play.py "$PORT"

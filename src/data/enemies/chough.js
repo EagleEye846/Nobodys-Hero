@@ -9,7 +9,7 @@ export const CHOUGH = {
   gait: 'fly',
   textFile: 'enemies/chough.txt',
   sprite: { rows: CHOUGH_SPRITE, palette: CHOUGH_PALETTE },
-  maxHp: 130,
+  maxHp: 165,
   damage: 11,
 
   // A Chapter 2 enemy, and a quick one: its things fly fast.

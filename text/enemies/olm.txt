@@ -17,6 +17,16 @@ A drop of water runs down OLM's snout and falls off the end. It lets it.
 
 Smells like wet stone and a very clean cellar.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+OLM's frills droop. It apologises for the frills. It apologises, a little, for the droop.
+
+# (draft)
+[flavor: spareable]
+OLM has lowered its long neck all the way to the water and is resting its chin there. It has stopped minding that you're looking.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

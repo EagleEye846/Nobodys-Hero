@@ -23,7 +23,7 @@ export const LAMP_MITE = {
     frames: [LAMP_MITE_DISGUISE_SPRITES.still, LAMP_MITE_DISGUISE_SPRITES.eyes, LAMP_MITE_DISGUISE_SPRITES.peek],
     palette: LAMP_MITE_PALETTE,
   },
-  maxHp: 665,
+  maxHp: 845,
   // Each mite hardly stings, but there are a LOT of them.
   damage: 23,
 

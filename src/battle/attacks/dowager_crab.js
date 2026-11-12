@@ -1,5 +1,5 @@
 import { defineBulletArt } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
 
 // The Dowager Crab's attacks. A very old, very polite hermit crab who lives in
@@ -24,11 +24,6 @@ const P = {
   W: '#f4f6f4', b: '#9ab0c8', B: '#5a7090', e: '#2a2230',
 };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // A soap bubble: a thin ring with a pink and blue sheen and a bright dot.
 const bubble = (shift) => art(15, 15, (p) => {
@@ -139,7 +134,9 @@ class Snip {
 
   update(dt) {
     this.age += dt;
-    if (this.follow && this.age < this.warn - 0.33) {
+    // (Stops following 0.4 s before it shuts, was 0.33: in her riled phase
+    // three or four are out at once. 2026-11-10.)
+    if (this.follow && this.age < this.warn - 0.4) {
       const target = this.vertical ? this.follow.x : this.follow.y;
       const lo = this.vertical ? this.box.x + 5 : this.box.y + 5;
       const hi = this.vertical ? this.box.x + this.box.w - 5 : this.box.y + this.box.h - 5;
@@ -359,7 +356,9 @@ export const DOWAGER_CRAB_ATTACKS = {
           const turn = Math.random() * Math.PI;
           for (let k = 0; k < 7; k++) {
             const a = turn + (k / 7) * Math.PI * 2;
-            bullets.push(new Shot({ x, y, vx: Math.cos(a) * 34, vy: Math.sin(a) * 34, art: 'crabDrop', life: 1.5 }));
+            // (The drops hang a blink where it burst before they fly, so a bubble
+            // popping beside you isn't a hit from point-blank. 2026-11-10.)
+            bullets.push(new Shot({ x, y, vx: Math.cos(a) * 34, vy: Math.sin(a) * 34, warn: 0.22, art: 'crabDrop', life: 1.4 }));
           }
         }
       },
@@ -412,7 +411,8 @@ export const DOWAGER_CRAB_ATTACKS = {
     let t = 0;
     let n = 0;
     return {
-      duration: 8,
+      // (The last snip is open again by 5.5 s: 7.0, was 8, so the next attack isn't long in coming.)
+      duration: 7.0,
       update: (dt, bullets, soul) => {
         t += dt;
         if (n < 7 && t >= 0.2 + n * 1.12) {
@@ -423,7 +423,7 @@ export const DOWAGER_CRAB_ATTACKS = {
           snip.offset = rand(-6, 6);
           bullets.push(snip);
           if (n >= 4) {
-            const second = new Snip({ box, vertical: !vertical, at: vertical ? soul.y : soul.x, warn: warn + 0.12, follow: soul });
+            const second = new Snip({ box, vertical: !vertical, at: vertical ? soul.y : soul.x, warn: warn + 0.2, follow: soul });
             second.offset = rand(-4, 4);
             bullets.push(second);
           }
@@ -562,22 +562,30 @@ export const DOWAGER_CRAB_ATTACKS = {
   // Tide (once she's lost patience): the bath water sloshes over the half of
   // the box you are standing in, from the taps above or the plug below. Cross
   // before it lands. Three times, and in between, her bubbles.
+  // (Made fair 2026-11-08: the surges came on the pattern's clock, which
+  // runs `density` fast, while the water itself runs in real time, so the
+  // next surge rose before the last had drained and the two halves met:
+  // nowhere to stand. Now each surge's warning starts just before the last one
+  // drains, and it rises just after the last has gone.)
   crabTide(box, density, { Shot, rand, clamp }) {
     let t = 0;
     let surges = 0;
     let bubbles = 0;
     let nextBubble = 0.5;
+    let last = null;
     return {
       duration: 8.2,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (surges < 3 && t >= 0.2 + surges * 2.45) {
+        const ready = last ? last.age >= last.end - last.warn + 0.12 : t >= 0.2;
+        if (surges < 3 && ready) {
           surges++;
           const mid = box.y + box.h / 2;
-          bullets.push(new Tide({ box, fromTop: soul.y < mid, depth: 46, warn: 0.9 }));
+          last = new Tide({ box, fromTop: soul.y < mid, depth: 46, warn: 0.9 });
+          bullets.push(last);
         }
         // Soap on the water: small bubbles drifting in from the right.
-        if (t >= nextBubble && bubbles < 7) {
+        if (t >= nextBubble && bubbles < 12) {
           bubbles++;
           nextBubble = t + rand(0.9, 1.1);
           bullets.push(new Shot({ x: box.x + box.w + 8, y: clamp(soul.y + rand(-26, 26), box.y + 8, box.y + box.h - 8), vx: -30, warn: 0.3, life: 5, art: 'crabBubble', wobble: { frequency: 4, amplitude: 5 } }));

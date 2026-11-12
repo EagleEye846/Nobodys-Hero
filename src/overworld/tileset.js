@@ -3,6 +3,7 @@ import { OUTDOOR_AREAS } from '../data/areas.js';
 import { deepBaseFloor, installDeepTiles } from './deepTiles.js';
 import { BRIGHT_AREAS, installBrightTiles } from './brightTiles.js';
 import { COAST_AREAS, installCoastTiles } from './coastTiles.js';
+import { ch3BlendOn, ch3SoftEdge } from './ch3Blend.js';
 
 // Tiles drawn in code as pixel art. Each draw function paints one tile at
 // pixel (x, y); tx/ty and room let a tile react to its neighbours. The old
@@ -546,7 +547,7 @@ function drawWater(ctx, x, y, tx, ty, room) {
     }
   }
   // A stone lip where the water meets the floor above.
-  if (room.tileAt(tx, ty - 1) !== '~') {
+  if (room.tileAt(tx, ty - 1) !== '~' && !ch3SoftEdge(room, tx, ty, 0, -1)) {
     px(ctx, '#4b3d78', x, y, T, 3);
     px(ctx, '#120c1c', x, y + 3, T, 1);
     if (open) for (let i = 0; i < T; i += 4) if (hash(tx * 3 + i, ty, 130) < 0.4) px(ctx, '#3f6b4a', x + i + 1, y + 1, 2, 2);
@@ -736,8 +737,9 @@ function drawCandelabra(ctx, x, y) {
 // Grass: a few greens, blades catching the light, and now and then a flower.
 const GRASS = ['#4a8446', '#4f8a4a', '#548f4e', '#46803f'];
 const FLOWERS = ['#f2e6c8', '#ffd25e', '#f0a8c8', '#a8c8f0'];
-function drawGrass(ctx, x, y, tx, ty) {
-  px(ctx, pick(GRASS, hash(tx, ty, 41)), x, y, T, T);
+function drawGrass(ctx, x, y, tx, ty, room) {
+  // (One green under Chapter 3's soft-edge pass: its patches give the variety.)
+  px(ctx, ch3BlendOn(room) ? GRASS[1] : pick(GRASS, hash(tx, ty, 41)), x, y, T, T);
   // Other greens mottled in, soft-edged, so no squares show across a field.
   mottle(ctx, pick(GRASS, hash(tx, ty, 43)), x, y, tx, ty, 44, 7);
   if (hash(tx, ty, 42) < 0.6) mottle(ctx, pick(GRASS, hash(tx, ty, 47)), x, y, tx, ty, 48, 4);
@@ -771,6 +773,8 @@ function drawGrass(ctx, x, y, tx, ty) {
 
 // A worn dirt path, pebbly, with grass creeping in at its edges.
 function drawPath(ctx, x, y, tx, ty, room) {
+  // In the scarlet wood a bare patch is trampled earth, dark under the leaves.
+  if (room?.leafy && ch3BlendOn(room)) return drawTrampledEarth(ctx, x, y, tx, ty);
   px(ctx, '#8f6f48', x, y, T, T);
   // Trodden patches, a little paler or darker, and the odd rut.
   mottle(ctx, hash(tx, ty, 100) < 0.5 ? '#967650' : '#866842', x, y, tx, ty, 101, 6);
@@ -791,6 +795,21 @@ function drawPath(ctx, x, y, tx, ty, room) {
     if (grassy(0, 1)) px(ctx, '#4f8a4a', x + i, y + T - tuft, 2, tuft);
     if (grassy(-1, 0)) px(ctx, '#4f8a4a', x, y + i, tuft, 2);
     if (grassy(1, 0)) px(ctx, '#4f8a4a', x + T - tuft, y + i, tuft, 2);
+  }
+}
+
+// Earth trodden bare in the scarlet wood: dark loam, scuffed, a stone or a leaf in it.
+function drawTrampledEarth(ctx, x, y, tx, ty) {
+  px(ctx, '#3a2622', x, y, T, T);
+  mottle(ctx, hash(tx, ty, 100) < 0.5 ? '#432c26' : '#33211d', x, y, tx, ty, 101, 6);
+  for (let i = 0; i < 6; i++) {
+    px(ctx, i % 3 ? '#4e3830' : '#2a1a18', x + Math.floor(hash(tx, ty, 80 + i) * 15), y + Math.floor(hash(tx, ty, 90 + i) * 15), i % 3 ? 1 : 2, 1);
+  }
+  if (hash(tx, ty, 104) < 0.25) {
+    const sx = x + 2 + Math.floor(hash(tx, ty, 105) * 11);
+    const sy = y + 2 + Math.floor(hash(tx, ty, 106) * 11);
+    px(ctx, '#241816', sx, sy + 1, 3, 1);
+    px(ctx, '#6a5a52', sx, sy, 2, 1);
   }
 }
 
@@ -1283,9 +1302,11 @@ function drawLeafLitter(ctx, x, y, tx, ty, room) {
   const loam = isHushwood(room);
   const ground = loam ? LOAM : LITTER;
   const leaves = loam ? LOAM_LEAVES : LITTER_LEAVES;
-  px(ctx, pick(ground, hash(tx, ty, 141)), x, y, T, T);
+  // (Under Chapter 3's soft-edge pass one colour: its big drifts give the variety, so no grid shows.)
+  const soft = ch3BlendOn(room);
+  px(ctx, soft ? ground[0] : pick(ground, hash(tx, ty, 141)), x, y, T, T);
   // Other tones mottled in, soft-edged, so no squares show across the floor.
-  mottle(ctx, pick(ground, hash(tx, ty, 143)), x, y, tx, ty, 144, 7);
+  if (!soft) mottle(ctx, pick(ground, hash(tx, ty, 143)), x, y, tx, ty, 144, 7);
   if (hash(tx, ty, 142) < 0.6) mottle(ctx, pick(ground, hash(tx, ty, 147)), x, y, tx, ty, 148, 4);
   // A root breaking the surface, running across the tile.
   if (hash(tx, ty, 185) < (loam ? 0.14 : 0.07)) {
@@ -1344,7 +1365,7 @@ function drawLeafPath(ctx, x, y, tx, ty, room) {
   }
   if (hash(tx, ty, 193) < 0.25) px(ctx, pick(isHushwood(room) ? LOAM_LEAVES : LITTER_LEAVES, hash(tx, ty, 194)), x + Math.floor(hash(tx, ty, 195) * 13), y + Math.floor(hash(tx, ty, 196) * 14), 2, 1);
   // Where it meets the litter, the edge frays into dark leaves.
-  const litter = (dx, dy) => room && room.tileAt(tx + dx, ty + dy) === 'd';
+  const litter = (dx, dy) => room && room.tileAt(tx + dx, ty + dy) === 'd' && !ch3SoftEdge(room, tx, ty, dx, dy);
   const edge = isHushwood(room) ? '#32201e' : '#3a1a26';
   for (let i = 0; i < T; i += 2) {
     const fray = hash(tx * 3 + i, ty, 197) < 0.6 ? 1 : 2;
@@ -1357,24 +1378,37 @@ function drawLeafPath(ctx, x, y, tx, ty, room) {
 
 // A tall tree in full autumn: a dark trunk and a round crown of scarlet,
 // lit on one side, with a few leaves always falling.
+// Each tree is a little different (picked by where it stands): its crown leans a pixel,
+// one side fuller, a shade deeper or more orange. The false tree is drawn the same way.
+const CROWNS = [
+  ['#4a0c1a', '#8a1426', '#b81e30', '#e0383e'],
+  ['#3e0a18', '#7a1024', '#a8182c', '#d02e3a'],
+  ['#4e1018', '#962022', '#c43228', '#ec5a3e'],
+];
 function drawScarletTree(ctx, x, y, tx = 0, ty = 0) {
   drawStandingShadow(ctx, x, y);
   ctx.fillStyle = '#1e0f14';
   ctx.fillRect(x + 6, y - 2, 4, 17);
   ctx.fillStyle = '#3a1e22';
   ctx.fillRect(x + 7, y - 2, 2, 17);
+  const roll = hash(tx, ty, 225);
+  const [rim, under, mid, top] = CROWNS[roll < 0.55 ? 0 : roll < 0.8 ? 1 : 2];
+  const lean = Math.floor(hash(tx, ty, 226) * 3) - 1;
+  const fullL = hash(tx, ty, 227) < 0.35 ? 1 : 0;
+  const fullR = hash(tx, ty, 228) < 0.35 ? 1 : 0;
+  const tall = hash(tx, ty, 229) < 0.3 ? -1 : 0;
   // The crown: overlapping rounds, darkest underneath, brightest on top.
-  const blobs = [[8, -14, 9], [3, -20, 6], [13, -20, 6], [8, -25, 7], [4, -10, 5], [12, -10, 5]];
+  const blobs = [[8, -14, 9], [3 + lean, -20 + tall, 6 + fullL], [13 + lean, -20 + tall, 6 + fullR], [8 + lean, -25 + tall, 7], [4, -10, 5], [12, -10, 5]];
   for (const [cx, cy, r] of blobs) {
     for (let dy = -r; dy <= r; dy++) {
       const w = Math.round(Math.sqrt(r * r - dy * dy));
-      px(ctx, '#4a0c1a', x + cx - w - 1, y + cy + dy, 2 * w + 2, 1);
+      px(ctx, rim, x + cx - w - 1, y + cy + dy, 2 * w + 2, 1);
     }
   }
   for (const [cx, cy, r] of blobs) {
     for (let dy = -r + 1; dy <= r - 1; dy++) {
       const w = Math.round(Math.sqrt((r - 1) * (r - 1) - dy * dy));
-      const shade = dy > r / 3 ? '#8a1426' : dy < -r / 3 ? '#e0383e' : '#b81e30';
+      const shade = dy > r / 3 ? under : dy < -r / 3 ? top : mid;
       px(ctx, shade, x + cx - w, y + cy + dy, 2 * w, 1);
     }
   }
@@ -2051,6 +2085,27 @@ function drawUnderside(ctx, room, tx, ty) {
   const y = ty * T;
   // Room below for it: the rest of this tile, and the next if that's sky too.
   const room2 = room.tileAt(tx, ty + 1) === '_' ? T * 2 : T - 2;
+  // The Last Light's balcony is no cliff: under its rail, the edge of the
+  // gallery's stone slab and the iron brackets that hold it out from the tower.
+  if (room.area === 'lastlight') {
+    px(ctx, '#3e4a4e', x, y, T, 1);
+    px(ctx, '#1c2226', x, y + 1, T, 3);
+    px(ctx, '#0c1012', x, y + 4, T, 1);
+    for (let c = 0; c < T; c++) if ((x + c) % 8 === 3) px(ctx, '#6a7a7c', x + c, y + 2, 1, 1);
+    if (tx % 3 === 1) {
+      for (let r = 0; r < 9; r++) {
+        const half = Math.max(0, Math.round(3 - r * 0.35));
+        px(ctx, '#161c1e', x + 8 - half, y + 5 + r, half * 2 + 1, 1);
+        px(ctx, '#4a5a5c', x + 8 - half, y + 5 + r, 1, 1);
+      }
+    }
+    const fall = ctx.createLinearGradient(0, y + 5, 0, y + 12);
+    fall.addColorStop(0, 'rgba(30, 20, 40, 0.3)');
+    fall.addColorStop(1, 'rgba(30, 20, 40, 0)');
+    ctx.fillStyle = fall;
+    ctx.fillRect(x, y + 5, T, 7);
+    return;
+  }
   // Ground that carries on to either side keeps its full depth (where it
   // steps down, the rock meets the lower ground); only where the ground itself
   // ends does the underside taper away, so its corner reads as rounded.
@@ -2466,8 +2521,8 @@ const FEN = ['#363c34', '#383e35', '#343a32', '#3a4036'];
 const SEDGE = ['#4a5244', '#525a48', '#46503e', '#5a6250'];
 
 // Fen turf: tussocky sedge, damp and dull, with a seed-head or a puddle now and then.
-function drawFenTurf(ctx, x, y, tx, ty) {
-  px(ctx, pick(FEN, hash(tx, ty, 800)), x, y, T, T);
+function drawFenTurf(ctx, x, y, tx, ty, room) {
+  px(ctx, ch3BlendOn(room) ? FEN[0] : pick(FEN, hash(tx, ty, 800)), x, y, T, T);
   // Wetter and drier ground mottled together, soft-edged.
   mottle(ctx, pick(FEN, hash(tx, ty, 802)), x, y, tx, ty, 803, 7);
   if (hash(tx, ty, 801) < 0.5) mottle(ctx, '#323830', x, y, tx, ty, 826, 4);
@@ -2519,7 +2574,7 @@ function drawBog(ctx, x, y, tx, ty, room) {
   }
   if (!room) return;
   // Sedge creeping in over the edges where it meets the turf.
-  const turf = (dx, dy) => { const c = room.tileAt(tx + dx, ty + dy); return c !== '%' && c !== '$' && c !== null; };
+  const turf = (dx, dy) => { const c = room.tileAt(tx + dx, ty + dy); return c !== '%' && c !== '$' && c !== null && !ch3SoftEdge(room, tx, ty, dx, dy); };
   for (let i = 0; i < T; i += 3) {
     const n = hash(tx * 5 + i, ty, 839) < 0.5 ? 1 : 2;
     if (turf(0, -1)) px(ctx, '#363c34', x + i, y, 2, n);
@@ -2581,7 +2636,7 @@ function drawFenWater(ctx, x, y, tx, ty, room) {
   if (!room) return;
   // A soft bank where the water meets the turf above.
   const above = room.tileAt(tx, ty - 1);
-  if (above !== '$' && above !== null && above !== '9') {
+  if (above !== '$' && above !== null && above !== '9' && !ch3SoftEdge(room, tx, ty, 0, -1)) {
     px(ctx, '#2e3430', x, y, T, 2);
     px(ctx, '#121816', x, y + 2, T, 1);
   }
@@ -2817,4 +2872,4 @@ installDeepTiles(TILES);
 installBrightTiles(TILES, { drawBaseFloor });
 
 // Chapter 5's coast: the sunny beach and the green-storm shore (coastTiles.js).
-installCoastTiles(TILES, { drawBaseFloor });
+installCoastTiles(TILES, { drawBaseFloor, floorUnder });

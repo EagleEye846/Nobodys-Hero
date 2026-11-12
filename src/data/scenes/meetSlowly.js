@@ -1,4 +1,4 @@
-// MEET SLOWLY: in the Old Baths, steam, warm water, and a tortoise three
+// MEET SLOWLY: in the Old Baths, steam, warm water, and a tortoise well over a
 // hundred years old who remembers the city alive. He's very glad of company.
 // He saw what went by last night.
 export const MEET_SLOWLY = {
@@ -24,7 +24,7 @@ export const MEET_SLOWLY = {
     { do: 'wait', seconds: 1.2 },
     { do: 'say', who: 'slowly', text: '{surprised}...Oh! People.\n\n{smile}How nice. Come in. Come in. Mind the steam. I\'m Slowly. That\'s not my name. It\'s what everyone called me. When there was everyone.' },
     { do: 'say', who: 'ves', text: '{surprised}You live here? On your own? In the dead city?' },
-    { do: 'say', who: 'slowly', text: '{thoughtful}It wasn\'t dead when I came. I came for the warm water, three hundred years ago. Everybody was getting ready. Flags on all the roofs.\n\n{sad}Then they all went. I didn\'t. I\'m not good at going.' },
+    { do: 'say', who: 'slowly', text: '{thoughtful}It wasn\'t dead when I came. I came for the warm water, a hundred years ago. Everybody was getting ready. Flags on all the roofs.\n\n{sad}Then they all went. I didn\'t. I\'m not good at going.' },
     { do: 'say', who: 'slowly', text: '{smile}Get in the bath, the both of you. You look like you\'ve come a long way. I\'ve things to eat, if you\'ve coins. I\'ve things to talk about, if you haven\'t.' },
     { do: 'wait', seconds: 0.6 },
     { do: 'say', who: 'ves', text: '{worried}Did you see anything go past? Last night? Something big?' },

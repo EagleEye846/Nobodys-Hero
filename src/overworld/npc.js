@@ -139,7 +139,7 @@ function shrinkRows(rows, palette, max) {
 // `reach` is how many tiles away a hidden or disguised one springs from.
 export class Npc {
   // `art` is optional: by default the enemy looks like its own battle sprite.
-  constructor({ art, enemy, x, y, patrol, behaviour, ambush = false, reach = null }) {
+  constructor({ art, enemy, x, y, patrol, behaviour, ambush = false, reach = null, lantern = null, chaseSpeed = null, sight = null, dormant = false, quiet = false, name = null }) {
     const source = ENEMIES[art] ?? ENEMIES[enemy];
     if (!source) throw new Error(`Unknown enemy '${enemy}' in a room's npcs`);
     const { rows, palette } = source.sprite;
@@ -171,6 +171,17 @@ export class Npc {
     this.time = Math.random() * 10;
     this.cooldown = 0;
 
+    // The ghost ship (haunt.js): what a lantern's light does to it ('freeze' it, make it 'flee', or
+    // it is 'unseen' outside the light), how fast it chases and how far it notices you.
+    this.lantern = lantern;
+    this.chaseSpeed = chaseSpeed;
+    this.sightDistance = sight;
+    this.frozen = false;
+    this.ghostAlpha = null;
+    // Waiting where it stands until a scene wakes it (haunt.js `wake`); `quiet` skips the ambush sting.
+    this.dormant = dormant;
+    this.quiet = quiet;
+    this.name = name;
     this.lurking = LURKING.has(this.behaviour);
     this.springDistance = (reach ?? DEFAULT_REACH[this.behaviour] ?? 0) * T;
     this.peekSide = Math.random() < 0.5 ? -1 : 1;
@@ -178,6 +189,13 @@ export class Npc {
     this.chasing = false;
     this.alert = 0;
     this.wander = { target: null, pause: rand(...WANDER_PAUSE) };
+  }
+
+  // A sleeper told to start (a scene's `haunt` step): it comes for you.
+  wake() {
+    this.dormant = false;
+    this.alert = ALERT_SECONDS;
+    this.chasing = true;
   }
 
   startCooldown() {
@@ -238,6 +256,8 @@ export class Npc {
     this.cooldown = Math.max(0, this.cooldown - dt);
     this.alert = Math.max(0, this.alert - dt);
     const distance = Math.hypot(player.x - this.x, player.y - this.y);
+    // Held still in a lantern's light (haunt.js).
+    if (this.frozen || this.dormant) return;
 
     if (this.lurking) {
       if (distance < this.springDistance) this.spring(player, room);
@@ -245,16 +265,19 @@ export class Npc {
     }
     if (this.leap) {
       this.updateLeap(dt, player);
+      // Landed in a wall (a pounce at you up against one): out to the nearest clear spot.
+      if (!this.leap) this.unstick(room);
       return;
     }
     if (this.chasing) {
+      this.unstick(room);
       if (this.cooldown <= 0) this.chase(dt, player, room);
       return;
     }
 
-    if (this.behaviour === 'chase' && distance < SIGHT_DISTANCE && this.cooldown <= 0) {
+    if (this.behaviour === 'chase' && distance < (this.sightDistance ?? SIGHT_DISTANCE) && this.cooldown <= 0) {
       this.alert = ALERT_SECONDS;
-      sfx('ambush');
+      sfx(this.quiet ? 'creak' : 'ambush');
       this.chasing = true;
     } else if (this.behaviour === 'patrol' || this.behaviour === 'chase') {
       this.patrol(dt);
@@ -346,7 +369,7 @@ export class Npc {
     if (distance < 1) return;
     // Bursty gaits keep their rhythm in a chase, at the same average speed.
     const gait = GAITS[this.gait];
-    const speed = CHASE_SPEED * this.pace(dt) / (gait.moving * gait.pace || 1) * Math.min(1, gait.pace);
+    const speed = (this.chaseSpeed ?? CHASE_SPEED) * this.pace(dt) / (gait.moving * gait.pace || 1) * Math.min(1, gait.pace);
     if (speed <= 0) return;
     // Going round something in the way (a tree between you): sideways for a bit.
     if (this.detour) {
@@ -369,6 +392,23 @@ export class Npc {
       const free = sides.find((d) => !this.blockedAt(room, this.x + d.x * T, this.y + d.y * T)) ?? sides[0];
       this.detour = { ...free, t: DETOUR_SECONDS };
       this.blocked = 0;
+    }
+  }
+
+  // Inside something solid (landed in a wall from a leap): step out to the
+  // nearest spot it can stand, looking further out a few pixels at a time.
+  unstick(room) {
+    if (this.lurking || !this.blockedAt(room, this.x, this.y)) return;
+    for (let r = 2; r <= 2 * T; r += 2) {
+      for (let a = 0; a < 16; a++) {
+        const x = this.x + Math.round(Math.cos((a / 16) * Math.PI * 2) * r);
+        const y = this.y + Math.round(Math.sin((a / 16) * Math.PI * 2) * r);
+        if (!this.blockedAt(room, x, y)) {
+          this.x = x;
+          this.y = y;
+          return;
+        }
+      }
     }
   }
 
@@ -414,6 +454,7 @@ export class Npc {
   }
 
   draw(ctx, camera) {
+    if (this.ghostAlpha === 0) return;
     if (this.cooldown > 0 && Math.floor(this.cooldown * 10) % 2 === 0) return;
     let x = Math.round(this.x) - camera.x;
     const y = Math.round(this.y) - camera.y;
@@ -510,7 +551,7 @@ export class Npc {
 
     const bottom = y - 2 - lift;
     ctx.save();
-    ctx.globalAlpha = alpha;
+    ctx.globalAlpha = alpha * (this.ghostAlpha ?? 1);
     if (!angle && sx === 1 && sy === 1) {
       ctx.drawImage(this.sprite, x - Math.floor(w / 2), bottom - h);
     } else {

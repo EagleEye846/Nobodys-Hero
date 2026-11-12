@@ -51,6 +51,12 @@ export function withSnipes(attack, opts = {}) {
         for (let k = 0; k < fan; k++) {
           const b = a + (k - (fan - 1) / 2) * 0.4;
           bullets.push(new Shot({ x: from.x, y: from.y, vx: Math.cos(b) * speed, vy: Math.sin(b) * speed, warn, art, life }));
+          // The shot waits outside the box, where it can't be seen (the box
+          // clips everything), so a harmless copy blinks just inside the
+          // edge on its line while it waits: that's the warning you see.
+          const inX = from.x + Math.cos(b) * 15;
+          const inY = from.y + Math.sin(b) * 15;
+          bullets.push(new Shot({ x: inX, y: inY, angle: b, harmless: true, warn, life: 0, art }));
         }
         fired++;
       },

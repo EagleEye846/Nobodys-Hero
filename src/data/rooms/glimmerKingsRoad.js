@@ -34,6 +34,8 @@ export const GLIMMER_KINGS_ROAD = {
   music: 'glimmer',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'crystal',
+  // How it rings (a cave: ECHOES in src/audio/music.js).
+  echo: 'cave',
   // The view down over the buried kingdom, behind the open air.
   vista: { kind: 'kingdom' },
 

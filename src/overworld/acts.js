@@ -1,6 +1,6 @@
 // Little things people do with their whole body, out in the world: a hop, a
 // start, a look about, a nod, a shake of the head, a shiver, a sigh, a lunge,
-// crouching down and standing back up. A cutscene's `act` step plays one (on
+// crouching down and standing back up, a fidget, a bounce on the spot. A cutscene's `act` step plays one (on
 // you, an actor, or anyone following you), the hero glances about on their
 // own when left standing a while, and enemies lunge as they catch you.
 //
@@ -19,10 +19,12 @@ export const ACTS = {
   lunge: 'Lunge forward',
   crouch: 'Crouch down (stays down)',
   stand: 'Stand back up',
+  fidget: 'Fidget (shift from foot to foot)',
+  bounce: 'Bounce on the spot (two quick hops)',
 };
 
 // How long each one takes, in seconds.
-const LENGTH = { hop: 0.38, startle: 0.42, look: 1.4, nod: 0.62, shake: 0.62, shiver: 0.9, sigh: 1.1, lunge: 0.42, crouch: 0.2, stand: 0.24 };
+const LENGTH = { hop: 0.38, startle: 0.42, look: 1.4, nod: 0.62, shake: 0.62, shiver: 0.9, sigh: 1.1, lunge: 0.42, crouch: 0.2, stand: 0.24, fidget: 0.8, bounce: 0.6 };
 // How low a crouch goes, and how much wider it squashes.
 const CROUCH = { sx: 1.1, sy: 0.8 };
 
@@ -105,6 +107,16 @@ export function actPose(act, now) {
       pose.sy = CROUCH.sy + (1 - CROUCH.sy) * c + 0.05 * hump(k);
       break;
     }
+    case 'fidget':
+      // Weight onto one foot, then the other, and a little bob between.
+      pose.dx = k < 0.45 ? Math.round(hump(k / 0.45)) : -Math.round(hump((k - 0.45) / 0.55));
+      pose.sy = 1 - 0.04 * hump((k * 2) % 1);
+      break;
+    case 'bounce':
+      // Two quick little hops, the second lower.
+      pose.lift = k < 0.5 ? Math.round(hump(k / 0.5) * 4) : Math.round(hump((k - 0.5) / 0.5) * 3);
+      if (k > 0.92 || (k > 0.46 && k < 0.54)) { pose.sx = 1.08; pose.sy = 0.92; }
+      break;
     default:
       break;
   }

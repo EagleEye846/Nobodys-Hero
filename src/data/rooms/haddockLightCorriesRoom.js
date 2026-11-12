@@ -17,6 +17,8 @@ export const HADDOCK_LIGHT_CORRIES_ROOM = {
   // "Come In, Little Boat", a music box.
   music: 'corrieLullaby',
   ambience: 'lighthouse',
+  // After the chapter (the_light_answers): no storm on the windows, as in the Isles' old lightroom.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_lighthouse' },
   // Under cover: no rain or lightning, and the edges of the screen sink into shadow.
   indoors: true,
   vesWell: true,
@@ -45,7 +47,10 @@ export const HADDOCK_LIGHT_CORRIES_ROOM = {
     { x: 5, y: 10, w: 2, h: 1, to: 'haddock_light_stair', spawn: { x: 2, y: 4 } },
   ],
 
-  cutscenes: [],
+  // The drawing, ME and THE HERO (trail 5: me_and_the_hero), just inside the door.
+  cutscenes: [
+    { x: 4, y: 8, w: 4, h: 1, scene: 'me_and_the_hero', until: ['the_light_answers', 'haddock_gone'] },
+  ],
 
   // The made bed, the drawing, the toy boat, the chest.
   textFile: 'interactions/haddock_light.txt',
@@ -54,6 +59,13 @@ export const HADDOCK_LIGHT_CORRIES_ROOM = {
     { sprite: 'c5_child_drawing', x: 7, y: 2, text: 'room_drawing' },
     { sprite: 'c5_toy_boat', x: 3, y: 7, text: 'room_boat' },
     { sprite: 'c5_chest', x: 9, y: 4, text: 'room_chest', gives: 'lightmans_coat', taken: { sprite: 'c5_chest_open', text: 'chest_empty' } },
+    // (2026-11-08) A rag rug by the bed, laid straight.
+    { sprite: 'in_rug_blue', x: 1, y: 5, text: 'in_room_rug', walkable: true, flat: true },
+    // (2026-11-08b) Kept ready: a lamp left lit on a stool by the bed, his books piled by the
+    // chest, a geranium on the floor under the window.
+    { sprite: 'in_lamp_stool', x: 3, y: 4, text: 'in_lamp' },
+    { sprite: 'in_book_pile', x: 10, y: 7, text: 'in_books' },
+    { sprite: 'in_plant_pot', x: 4, y: 3, text: 'in_plant' },
   ],
   tileTexts: { '#': 'room_wall', h: 'room_wall', 6: 'room_window', o: 'room_floor' },
 

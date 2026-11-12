@@ -5,7 +5,7 @@
 // as he talks and his mouth never moves; the folk cheer
 // in waves, a beetle holds up a sign that says CHEER, and he tells the hall
 // its favourite story: how he came down the stair WITH the Hero, shoulder to
-// shoulder, lost them in the dark, wandered lost for years till a brave
+// shoulder, lost him in the dark, wandered lost for years till a brave
 // little page found him, and was crowned by the folk (look at him: tall,
 // HUMAN, the Hero's own friend). Tuck made all that up; it's the story that
 // lets a puppet be king. Then the Sunstone
@@ -19,7 +19,8 @@
 // audience member's animation is stopped at the end, so none keep cheering).
 //
 // King Peptup may be voice-acted, the only character who is: each of his
-// lines has a `// voice: rumbold_welcome_<n>` comment above it.
+// lines has a `voice: 'rumbold_welcome_<n>'` on it (src/audio/voiceClips.js
+// says which recording, if any, each one plays).
 
 // The audience: [actor id, the room's cast name or npc id, picture, how fast they cheer].
 const AUDIENCE = [
@@ -88,9 +89,12 @@ export const THE_KINGS_WELCOME = {
   ],
 
   steps: [
-    // The curtains are drawn across the dais, and the hall is quiet.
+    // The curtains are drawn across the dais, and the hall is quiet: no song,
+    // only the audience talking low, waiting (the `ambience` steps are the
+    // hall's crowd: AMBIENCES in src/audio/music.js).
     { do: 'stage', curtains: { x: 8, y: 0, w: 10, h: 8, open: 0 } },
     { do: 'music' },
+    { do: 'ambience', name: 'throne_hall' },
     // The king (3 tiles wide) and the old snail (2) are cast from their left
     // tile, so they're set on the middle of their footprint: half a tile on.
     { do: 'appear', who: 'king', at: { x: 12, y: 7 } },
@@ -130,8 +134,9 @@ export const THE_KINGS_WELCOME = {
     { do: 'face', who: 'player', dir: 'up' },
     { do: 'face', who: 'ves', dir: 'up' },
 
-    // The lights go down. A drum roll.
+    // The lights go down, and the hall hushes. A drum roll.
     { do: 'stage', dim: 0.55, seconds: 1.2 },
+    { do: 'ambience', name: 'throne_hush' },
     { do: 'appear', who: 'drum' },
     { do: 'appear', who: 'sign' },
     { do: 'wait', seconds: 1.2 },
@@ -170,21 +175,20 @@ export const THE_KINGS_WELCOME = {
     // The curtains open on the king, to a fanfare.
     { do: 'camera', to: { x: 13, y: 10.5 } },
     { do: 'music', song: 'peptup' },
+    { do: 'ambience', name: 'throne_show' },
     { do: 'stage', curtains: { x: 8, y: 0, w: 10, h: 8, open: 1, seconds: 1.8 }, confetti: 4 },
     { do: 'sound', name: 'levelUp' },
     { do: 'wait', seconds: 0.9 },
     { do: 'stage', spots: ON_THE_KING, dim: 0.28, seconds: 1 },
     { do: 'animate', who: 'sign', animation: 'bf_cheer_beetle', speed: 0.45 },
+    { do: 'sound', name: 'crowdCheer' },
     ...wave(0.08),
     { do: 'wait', seconds: 0.8 },
 
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_welcome_1
-    { do: 'say', who: 'king', text: '{shouting}WELCOME! Welcome, welcome, WELCOME, my friends!' },
-    // voice: rumbold_welcome_2
-    { do: 'say', who: 'king', text: '{laughing}Strangers from the TOP of the world! In MY hall! On a TUESDAY!' },
-    // voice: rumbold_welcome_3
-    { do: 'say', who: 'king', text: '{proud}Do you know who I am? Of course you do. Everybody does.\n\n{shouting}King PEPTUP! The RESPLENDENT!' },
+    { do: 'say', who: 'king', text: '{shouting}WELCOME! Welcome, welcome, WELCOME, my friends!', voice: 'rumbold_welcome_1' },
+    { do: 'say', who: 'king', text: '{laughing}Strangers from the TOP of the world! In MY hall! On a TUESDAY!', voice: 'rumbold_welcome_2' },
+    { do: 'say', who: 'king', text: '{proud}Do you know who I am? Of course you do. Everybody does.\n\n{shouting}King PEPTUP! The RESPLENDENT!', voice: 'rumbold_welcome_3' },
     // He throws his arms wide for the roar, the one time he moves them.
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.35, once: true },
     { do: 'stage', confetti: 2 },
@@ -192,17 +196,17 @@ export const THE_KINGS_WELCOME = {
     ...hush(),
     { do: 'wait', seconds: 0.4 },
     { do: 'say', text: 'At the front, the beetle holds his sign higher. It says CHEER. The hall obliges.' },
+    { do: 'sound', name: 'crowdCheer' },
     ...wave(0.07),
     { do: 'wait', seconds: 0.9 },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_welcome_4
-    { do: 'say', who: 'king', text: '{proud}And do you know who ELSE stood where you\'re standing? The HERO! My dear, dear, PERSONAL friend!' },
+    { do: 'say', who: 'king', text: '{proud}And do you know who ELSE stood where you\'re standing? The HERO! My dear, dear, PERSONAL friend!', voice: 'rumbold_welcome_4' },
     { do: 'say', who: 'ves', text: '{surprised}You knew the Hero?' },
-    // voice: rumbold_welcome_5
-    { do: 'say', who: 'king', text: '{outraged}KNEW them? I came down the stair WITH them!\n\nShoulder to shoulder! Tall as me, the Hero was. Every inch!' },
+    { do: 'say', who: 'king', text: '{outraged}KNEW him? I came down the stair WITH him!\n\nShoulder to shoulder! Tall as me, the Hero was. Every inch!', voice: 'rumbold_welcome_5' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.35, once: true },
     { do: 'sound', name: 'burst' },
     ...hush(),
+    { do: 'sound', name: 'crowdCheer' },
     ...wave(0.05),
     { do: 'wait', seconds: 0.9 },
 
@@ -211,52 +215,47 @@ export const THE_KINGS_WELCOME = {
     // never tells it the same way twice, and nobody saw him found but Tuck,
     // who is behind the curtain doing the voice, so can't answer.)
     { do: 'stage', spots: [{ onto: 'king', color: '255, 236, 190', radius: 40 }], dim: 0.5, seconds: 0.8 },
+    { do: 'ambience', name: 'throne_hush' },
     ...hush(),
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_welcome_6
-    { do: 'say', who: 'king', text: '{sly}Long ago... the dark came up from the DEEP! And the Sunstone... went OUT!' },
-    // voice: rumbold_welcome_7
-    { do: 'say', who: 'king', text: '{shouting}So down the stair came the Hero, and ME beside them! Down and down and DOWN!' },
-    // voice: rumbold_welcome_15
-    { do: 'say', who: 'king', text: '{sly}And somewhere in the dark... we lost each other.' },
-    // voice: rumbold_welcome_16
-    { do: 'say', who: 'king', text: '{shouting}The Hero went on alone, all the way to the bottom... and LIT IT AGAIN!' },
-    // voice: rumbold_welcome_8
-    { do: 'say', who: 'king', text: '{proud}And then they went back up the stair... and never came back.' },
+    { do: 'say', who: 'king', text: '{sly}Long ago... the dark came up from the DEEP! And the Sunstone... went OUT!', voice: 'rumbold_welcome_6' },
+    { do: 'say', who: 'king', text: '{shouting}So down the stair came the Hero, and ME beside him! Down and down and DOWN!', voice: 'rumbold_welcome_7' },
+    { do: 'say', who: 'king', text: '{sly}And somewhere in the dark... we lost each other.', voice: 'rumbold_welcome_15' },
+    { do: 'say', who: 'king', text: '{shouting}The Hero went on alone, all the way to the bottom... and LIT IT AGAIN!', voice: 'rumbold_welcome_16' },
+    { do: 'say', who: 'king', text: '{proud}And then he went back up the stair... and never came back.', voice: 'rumbold_welcome_8' },
     { do: 'say', text: 'Near the front, a little mole is mouthing every word along with him.' },
-    // voice: rumbold_welcome_17
-    { do: 'say', who: 'king', text: '{sly}And poor Peptup? LOST! Wandering in the dark, for days! For YEARS!\n\nUntil a brave little page FOUND me. Didn\'t you, Tuck?' },
+    { do: 'say', who: 'king', text: '{sly}And poor Peptup? LOST! Wandering in the dark, for days! For YEARS!\n\nUntil a brave little page FOUND me. Didn\'t you, Tuck?', voice: 'rumbold_welcome_17' },
     { do: 'wait', seconds: 1 },
-    // voice: rumbold_welcome_18
-    { do: 'say', who: 'king', text: '{laughing}...Tuck\'s shy.' },
+    { do: 'say', who: 'king', text: '{laughing}...Tuck\'s shy.', voice: 'rumbold_welcome_18' },
     { do: 'say', who: 'ves', text: '{bored}How long were you lost, exactly?' },
-    // voice: rumbold_welcome_19
-    { do: 'say', who: 'king', text: '{laughing}Who was COUNTING? It was DARK!' },
+    { do: 'say', who: 'king', text: '{laughing}Who was COUNTING? It was DARK!', voice: 'rumbold_welcome_19' },
     { do: 'stage', spots: ON_THE_KING, dim: 0.28, seconds: 0.4 },
-    // voice: rumbold_welcome_20
-    { do: 'say', who: 'king', text: '{shouting}And the good folk of Belowtown put a CROWN on me!\n\nAnd why not? Look at me! TALL! HUMAN! The Hero\'s own FRIEND!' },
+    { do: 'ambience', name: 'throne_show' },
+    { do: 'say', who: 'king', text: '{shouting}And the good folk of Belowtown put a CROWN on me!\n\nAnd why not? Look at me! TALL! HUMAN! The Hero\'s own FRIEND!', voice: 'rumbold_welcome_20' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.35, once: true },
     { do: 'sound', name: 'burst' },
+    { do: 'sound', name: 'crowdCheer' },
     ...wave(0.05),
     { do: 'say', text: '"HUMAN!" cheers the hall, very proudly.' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_welcome_21
-    { do: 'say', who: 'king', text: '{proud}And I\'ve looked after you ever since. Just as the Hero ASKED me to!' },
+    { do: 'say', who: 'king', text: '{proud}And I\'ve looked after you ever since. Just as the Hero ASKED me to!', voice: 'rumbold_welcome_21' },
     { do: 'wait', seconds: 0.5 },
     { do: 'stage', spots: [{ onto: 'king', color: '255, 236, 190', radius: 40 }], dim: 0.5, seconds: 0.6 },
+    { do: 'ambience', name: 'throne_hush' },
     ...hush(),
-    // voice: rumbold_welcome_9
-    { do: 'say', who: 'king', text: '{sly}And one day...' },
+    { do: 'say', who: 'king', text: '{sly}And one day...', voice: 'rumbold_welcome_9' },
     { do: 'stage', spots: ON_THE_KING, dim: 0.28, seconds: 0.4 },
-    // voice: rumbold_welcome_10
-    { do: 'say', who: 'king', text: '{shouting}...they\'ll come BACK!' },
+    { do: 'ambience', name: 'throne_show' },
+    { do: 'say', who: 'king', text: '{shouting}...he\'ll come BACK!', voice: 'rumbold_welcome_10' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.35, once: true },
     { do: 'sound', name: 'burst' },
+    { do: 'sound', name: 'crowdCheer' },
     ...wave(0.05),
     { do: 'say', text: '"COME BACK!" roars the whole hall.' },
 
-    // And overhead, the Sunstone gutters.
+    // And overhead, the Sunstone gutters. The cheering dies to a murmur...
     { do: 'music' },
+    { do: 'ambience', name: 'throne_hush' },
     { do: 'stage', spots: [], flicker: 2.8 },
     { do: 'animate', who: 'sun', animation: 'sunstone_flicker', speed: 0.2 },
     { do: 'sound', name: 'creak' },
@@ -266,37 +265,40 @@ export const THE_KINGS_WELCOME = {
     { do: 'wait', seconds: 1.4 },
     { do: 'sound', name: 'toll' },
     { do: 'wait', seconds: 1.8 },
+    // ...and then to nothing at all.
+    { do: 'ambience', name: 'silent' },
     { do: 'say', text: 'The cheering falters. Then there is no sound in the hall at all.' },
     { do: 'animate', who: 'sun', animation: 'sunstone_dim_pulse', speed: 1.1 },
     { do: 'stage', dim: 0.3, seconds: 0.6 },
     { do: 'wait', seconds: 0.8 },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_welcome_11
-    { do: 'say', who: 'king', text: '{sly}...Ahem. A small flicker. Nothing to worry about. Peptup has it in hand.' },
+    { do: 'say', who: 'king', text: '{sly}...Ahem. A small flicker. Nothing to worry about. Peptup has it in hand.', voice: 'rumbold_welcome_11' },
     { do: 'music', song: 'peptup' },
+    { do: 'ambience', name: 'throne_show' },
     { do: 'stage', spots: ON_THE_KING, dim: 0.2, seconds: 0.8, confetti: 1.5 },
     { do: 'animate', who: 'sign', animation: 'bf_cheer_beetle', speed: 0.45 },
-    // voice: rumbold_welcome_12
-    { do: 'say', who: 'king', text: '{shouting}Which is why... my new friends... Peptup has a QUEST for you!' },
+    { do: 'say', who: 'king', text: '{shouting}Which is why... my new friends... Peptup has a QUEST for you!', voice: 'rumbold_welcome_12' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.35, once: true },
     { do: 'sound', name: 'burst' },
+    { do: 'sound', name: 'crowdCheer' },
     ...wave(0.05),
     { do: 'wait', seconds: 0.6 },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_talk', speed: 0.14 },
-    // voice: rumbold_welcome_13
-    { do: 'say', who: 'king', text: '{proud}Down through the Diggings! Over the Stillwater! To the very bottom of the Deep! Light the Sunstone from its root, as the Hero did!' },
+    { do: 'say', who: 'king', text: '{proud}Down through the Diggings! Over the Stillwater! To the very bottom of the Deep! Light the Sunstone from its root, as the Hero did!', voice: 'rumbold_welcome_13' },
     { do: 'say', who: 'ves', text: '{bored}And if we don\'t?' },
-    // voice: rumbold_welcome_14
-    { do: 'say', who: 'king', text: '{laughing}Then you won\'t! And that\'s fine! And it\'ll get very DARK!\n\nHa ha ha! Off you go!' },
+    { do: 'say', who: 'king', text: '{laughing}Then you won\'t! And that\'s fine! And it\'ll get very DARK!\n\nHa ha ha! Off you go!', voice: 'rumbold_welcome_14' },
     { do: 'animate', who: 'king', animation: 'bf_rumbold_gesture', speed: 0.35, once: true },
     { do: 'stage', confetti: 3 },
     { do: 'sound', name: 'burst' },
     ...hush(),
+    { do: 'sound', name: 'crowdCheer' },
     ...wave(0.04),
     { do: 'wait', seconds: 1.6 },
 
-    // Curtain call: the lights come up, the hall settles, the stage hands go home.
+    // Curtain call: the lights come up, the hall settles (back to its own low
+    // talk), the stage hands go home.
     { do: 'stage', spots: [], dim: 0, seconds: 1.2 },
+    { do: 'ambience' },
     ...hush(),
     { do: 'animate', who: 'sign' },
     { do: 'leave', who: 'drum' },

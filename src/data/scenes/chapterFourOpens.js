@@ -84,7 +84,7 @@ export const CHAPTER_FOUR_OPENS = {
     { do: 'wait', seconds: 0.4 },
     // Why she's going looking (seeded at the Gate, end of chapter 3).
     { do: 'say', who: 'ves', text: '{smile}That little sun on the Gate. Somebody came through here once, and left a mark for whoever came next.' },
-    { do: 'say', who: 'ves', text: '{sad}Mum lit lamps for twenty years for a Hero who never turned up.\n\n{determined}I\'d like to know if they turned up anywhere.' },
+    { do: 'say', who: 'ves', text: '{sad}Mum lit lamps for twenty years for a Hero who never turned up.\n\n{determined}I\'d like to know if he turned up anywhere.' },
     { do: 'say', who: 'ves', text: '{smile}So. Somewhere out there is someone who knows.\n\nLet\'s go and be annoying at them.' },
   ],
 };

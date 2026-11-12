@@ -1,0 +1,149 @@
+# OLD GULPER: Merrow's midboss, a giant, very old moray eel who nests in the
+# great bell of the drowned bell tower. When he turns over in his sleep the
+# bell rings. He is grumpy, not wicked: he has toothache, from one crooked,
+# wobbly tooth at the front, and he keeps rubbing his jaw on the bell. The
+# hero never speaks, so every TALK is something he does.
+# Numbers (HP, damage, his two phases) live in src/data/enemies/old_gulper.js.
+#
+# A section with ": awake" after its name is used in his second phase (from
+# half his HP) instead of the plain one. [phase: awake] sections are what's
+# said as that phase starts: plain ones in the battle panel, "vesper" ones by
+# Ves in her box, "foe" ones by him in speech bubbles.
+
+# Said in speech bubbles during his entrance, after his title card. Lines
+# written together (no blank line between) share a bubble; a line starting
+# with ... waits for a bubble of its own.
+[boss_intro]
+Mmf.
+
+Who's
+ringing?
+
+...Nobody
+rings.
+
+I was
+ASLEEP.
+
+[intro]
+The water in the bell tower heaves, and something as long as a street comes up out of the fallen bell. OLD GULPER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+OLD GULPER rubs his jaw on the rim of the bell. It rings. He winces.
+
+OLD GULPER's gills open and shut, slowly, like a tired accordion.
+
+One big pale eye watches you. The other lid has not been all the way up in years.
+
+Somewhere in the nest, a spoon settles.
+
+Smells of old pennies, wet rope and the bottom of the sea.
+
+[flavor: awake]
+Both of OLD GULPER's eyes are open now. Nobody has seen that in a long time. Nobody wanted to.
+
+The great bell is still humming from the last time he hit it.
+
+OLD GULPER grinds his teeth. One of them clicks.
+
+Spray drips off the beams. The ropes are swinging, and nobody is pulling them.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Go
+away.
+
+My
+nest.
+
+Mmmf.
+My TOOTH.
+
+Ringing,
+ringing,
+always
+ringing.
+
+Shh.
+
+Hundred
+years of
+peace.
+
+[taunts: awake]
+OW.
+
+WHO
+RANG IT?
+
+GET
+OUT!
+
+IT
+THROBS!
+
+I'll
+gulp
+you!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/old_gulper.js.
+[talk: Inspect]
+OLD GULPER - HP 13000
+A moray eel older than the town, living in its fallen bell. Lunges, blows bubbles, whips his tail, sucks the water in and rings the bell. He is not wicked. He is in pain, and he has not slept properly in a very long time.
+
+[talk: Look in his mouth]
+You lean in, as close as you dare, and look into the mouth. Teeth, teeth, teeth, and at the front one tooth sticking out sideways, red round the root. It wobbles every time he breathes. OLD GULPER sees you see it, and goes quiet.
+
+[talk: Hum]
+You hum, low and slow, like the bell does when it's nearly stopped. OLD GULPER's gills slow down. The ringing in the tower fades away to nothing. For a moment he looks very sleepy.
+
+[talk: Pat the bell]
+You give the great bell a pat on its green bronze side, the way you'd pat a horse. It gives back the smallest note. OLD GULPER watches you do it with one eye, and lets it go.
+
+[talk: Wiggle the tooth]
+You take hold of the crooked tooth with both hands and wiggle it. OLD GULPER goes rigid. Then a noise comes out of him like a kettle going off, and the tooth swings loose, hanging by a thread. His whole long body sags with relief.
+
+# Said when you try to RUN.
+[no_escape]
+The stairs are under water, and OLD GULPER is between you and the door. He is also, in a way, the floor.
+
+# What's said as his second phase starts.
+[phase: awake]
+OLD GULPER rears back and slams his head into the bell. It rings like the end of the world. His other eye opens. He is awake now, all of him, and the tooth is worse.
+
+[phase: awake vesper]
+{determined}Good news, he's awake. That's also the bad news.
+
+[phase: awake foe]
+NOW
+I'M
+UP.
+
+AND
+IT
+HURTS.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+OLD GULPER sinks back into his bell, slowly, until only the end of his tail is hanging over the rim.
+
+[pacified]
+OLD GULPER lowers his head and rests his chin on the rim of the bell. He opens his mouth wide, and waits. You reach in and take hold of the crooked tooth.
+
+# Ves's own TALK lines for him ({foe} is his name).
+[vesper_talk]
+Ves tells {foe} she has had toothache too, and it makes everyone horrible, and she is not judging. {foe} grumbles. It sounds like agreement.
+
+Ves holds her umbrella over the worst of the drips coming down on {foe}'s head. He looks up at it. He does not say thank you. He does stop thrashing.
+
+Ves tells {foe} his bell is very fine, and that he should really stop headbutting it. {foe} says it's his bell and he'll headbutt it if he likes. Ves says that's fair, but it's still loud.
+
+# Bramble's own TALK lines for him.
+[bramble_talk]
+Bramble tells {foe} that he is not scared of the sea, or of eels, or of the sea with eels in it. His voice goes very high at the end. {foe} looks almost sorry for him.
+
+Bramble says that when his tooth was wobbly his mum tied it to a door. {foe} looks at the door of the tower. Bramble says maybe not that door.
+
+Bramble asks {foe} if it is lonely in a bell. {foe} says it is quiet in a bell, which is the point. Then the bell rings, because he moved. They both sigh.

@@ -42,9 +42,6 @@ Stalactites, hanging off the roof in a row like teeth. Every one of them is drip
 [sound_stalactites_bramble]
 {scared}Don't look up. That's my advice. Don't look up and don't look down.
 
-[sound_current]
-Fast water, running hard one way. Step in and it takes you with it.
-
 # --- THE MOUTH ----------------------------------------------------------------------
 
 [mouth_chart]
@@ -55,7 +52,7 @@ South of the hall, under the water: the DROWNED CHAPEL, "drained from the wells"
 North of the hall: the WAY UP, to the Isles. "Gate weighted. Weight kept below."
 
 [mouth_chart_ves]
-{thoughtful}A map that tells you where the key is. I could get used to the Harbour Board.
+{smile}A map that tells you where the key is. I could get used to the Harbour Board.
 
 [mouth_chart_bramble]
 {worried}It says "floods" a LOT.
@@ -91,10 +88,22 @@ The open sea, coming in under the cliff. It booms in the dark and goes out again
 Shingle, round as eggs, clacking under your boots and under every wave.
 
 [mouth_rockfall]
-A rockfall, choking an old tunnel in the west wall. Water seeps out between the boulders. The tunnel goes down, toward the drowned town.
+A boulder off the cave roof, half sunk in the shingle. The sea has been at it for a long time and hasn't got anywhere.
 
 [mouth_tunnel]
-Black water in the mouth of an old tunnel, going down into the hill.
+Black water in the mouth of an old tunnel. It runs back under the hill to Merrow's sea gate.
+
+[mouth_lane_gate]
+An iron gate across the cliff lane, with a bolt as thick as a wrist. The bolt is on the cave side.
+
+[mouth_lane_gate_ves]
+{bored}Bolted from in here. So everyone who came in, came in the long way.
+
+[mouth_lane_bolt]
+The gate's bolt, on a lever, stiff with salt. It draws the bolt on the cliff lane's gate, or shoots it again.
+
+[mouth_lane_open]
+The bolt grinds back and the gate swings out onto the cliff lane. Daylight, of a sort, and the Sunken Lanes at the end of it.
 
 # --- THE ECHO HALL ----------------------------------------------------------------
 
@@ -109,6 +118,13 @@ A notice, nailed to a post: SOUNDERS. SHOUT HERE. COUNT THE ECHOES. THREE IS SAF
 
 [hall_echo_post_ves]
 {bored}It's safe until it says four.
+
+# (draft)
+[hall_echo_post 2]
+SHOUT HERE. COUNT THE ECHOES. THREE IS SAFE. Scratched into the post underneath, by some sounder with time on their hands: FOUR IS ALSO FINE. FIVE, RUN.
+
+[hall_echo_post_bramble 2]
+{worried}...I'm not shouting again. In case it's five.
 
 [hall_wheel]
 The hall's own sluice wheel, rusted into one solid lump. A chain runs from it up the wall and into the rock, toward the east and up.
@@ -167,7 +183,7 @@ A tide dial on a post, for the sea in the bottom of the shaft.
 A board: TIDE STAIR. AT LOW WATER, THE BAR. AT HIGH WATER, THE FORD. NEVER BOTH. WAIT ON THE ROCK.
 
 [stair_sign_ves]
-{thoughtful}Out to the rock while it's low, wait for it to come in, then wade. The sea's on a timetable. Like a coach.
+{smile}Out to the rock while it's low, wait for it to come in, then wade. The sea's on a timetable. Like a coach.
 
 [stair_cliff_sign]
 A board at the foot of a short cliff, with an iron ring at the top: FOR ROPES.
@@ -209,7 +225,7 @@ A purse on the rock in the middle of the shaft, where somebody waited for the ti
 A board: THREE WELLS. ONE TO EACH WINDLASS. HOLD ALL, AND THE CHAPEL GRILLE LIFTS. (THE CHUTE IS ONE WAY.)
 
 [wells_sign_ves]
-{thoughtful}One to each. Well. There are three of us. That seems planned.
+{smile}One to each. Well. There are three of us. That seems planned.
 
 [wells_windlass_hero]
 A windlass over a well. Its handle is chained down to a plate in the floor, and the plate wants something heavy on it.
@@ -287,7 +303,7 @@ Shallow water, cold enough to make your teeth ache through your boots.
 A hymn board, the numbers still up: 107, 23, 8. Underneath, in chalk: FOR CALM WATER.
 
 [chapel_board_ves]
-{thoughtful}I sat in a chapel once and someone walked in on me. I'll be quick in this one.
+{smile}I sat in a chapel once and someone walked in on me. I'll be quick in this one.
 
 [chapel_wheel]
 The chapel's own sluice, seized solid. Its rod goes up into the roof, toward the wells.
@@ -325,7 +341,7 @@ A stair behind the altar, going down. The steps are wet.
 A board: WEIGHT ROOM. RACES RUN ONE WAY. THE WHEEL ON THE FAR LEDGE TURNS THEM. ROPE OUT.
 
 [weight_sign_ves]
-{thoughtful}Ride across, turn the wheel, ride the others. Then up the rope with it. They even told us how to leave.
+{smile}Ride across, turn the wheel, ride the others. Then up the rope with it. They even told us how to leave.
 
 [weight_frame]
 An oak gallows over the deepest well in the caves. From its pulley, on a knotted cord, hangs a big brass weight, glowing in the light off the water.
@@ -402,7 +418,7 @@ The sounders went down in this, two at a time, to measure the caves by hand.
 {bored}A teacup for drowning in. Very civilised.
 
 [bell_chest]
-The sounders' food box, still sealed with wax. Inside: a tin of COCKLE CHOWDER that has kept, somehow, perfectly.
+The sounders' kit box, still sealed with wax. Inside, wrapped in a jumper: a SOUNDERS' FLASK, and it's still hot. Somebody always made sure the ones coming up had something warm.
 
 [bell_pouch]
 A pay tin, with the names of a crew on the lid and their pay still in it.
@@ -412,3 +428,60 @@ The last slate of soundings, chalked in a neat hand: "Weight Room well. Forty fa
 
 [bell_line]
 A coil of lead line, all the tags torn off but one: 60.
+
+# --- THE CAVE'S ROCK, AND WHAT WAS LEFT IN IT -----------------------------------------
+
+[sound_stalagmites]
+Stone grown up off the floor, one drip at a time, toward the stone growing down to meet it. They've got a few thousand years to go.
+
+[sound_stalagmites_bramble]
+{glee}If you knock on them they go "tock". Each one's a different "tock".
+
+[sound_weed_ledge]
+A shelf of rock out of the wall with weed hanging off it in a curtain, dripping into the pool underneath. It smells like the bottom of a bucket.
+
+[sound_rocks]
+Rock down from the roof. You don't look up for very long.
+
+[sound_slab]
+A slab of the roof, come down flat and broken in two. Weed has started on the underneath.
+
+[sound_pit_prop]
+An oak prop wedged under a crossbeam, holding up a bit of roof the sounders didn't trust. It's gone hard as iron in the wet, and barnacles have climbed it.
+
+[sound_rope_ladder]
+A rope ladder pegged to the rock, up to a crack in the roof that a sounder once thought worth a look. The rungs are green.
+
+[sound_wall_chain]
+An iron ring let into the rock, and a chain off it in a heap. Boats were tied up here, when there was water to float them.
+
+[sound_timbers]
+Old timbers, black with wet and crusted with barnacles. Bits of a boat, or a jetty, or both.
+
+[sound_diver_gear]
+A brass diving helmet, a lead boot and a coil of air hose, set down where somebody took them off. The glass in the front of the helmet has gone green.
+
+[sound_diver_gear_ves]
+{bored}Wear that and you'd sink like a kettle. I suppose that was the point.
+
+[chapel_nave_pews]
+The backs of the pews, in their rows under the water, as if everybody had only just stood up to go.
+
+[chapel_column]
+A pillar of the nave, fallen in two pieces into the aisle. The carving on it is ropes and anchors.
+
+[chapel_font]
+The font, by the door where it belongs. It's full to the brim, and it isn't holy water any more.
+
+[chapel_screen]
+What's left of the rood screen, the carved partition between the nave and the altar. The top has snapped off and the bottom is green to the height of the flood.
+
+[chapel_screen_bramble]
+{worried}It looks like a gate. Is it a gate? Are we allowed past?
+
+[chapel_candlestick]
+A brass candlestick by the altar, its candle drowned out long ago. Somebody kept it polished right up to the end.
+
+# (draft) QUEST PIECE 2 for the ghost ship's deep part.
+[bell_compass]
+A compass needle, long as a finger, laid across the rim of the divers' helmet where somebody wouldn't lose it. It swings, in the still air, and settles pointing at the way you came in. Scratched on its pivot: FAIR RETURN.

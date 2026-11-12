@@ -3,8 +3,9 @@
 // the forge's high window and holds it up (the player_sword_get pose), and it glints. Then she
 // takes it back to the anvil and works the shard in. (The hero never speaks; what the hero does
 // is told.) Played once, by the shop as it closes after [forge_now] (`forgeScene` on orla_forge
-// in src/data/shops.js); the sword is already +3 by then. The walk is a few tiles of boards from
-// Orla's anvil to the shaft (x 6 to 9, rows 5 to 6), and Ves and Bramble step back to row 8
+// in src/data/shops.js); the sword is already +3 by then. Usually it plays instead as the end of
+// isles_star_brought (islesStarBrought.js), as you walk in with the sword and the shard. The
+// walk is a few tiles of boards from Orla's anvil to the shaft (x 6 to 9, rows 5 to 6), and Ves and Bramble step back to row 8
 // to watch; the forge has no monsters.
 export const ISLES_STAR_HELD = {
   id: 'isles_star_held',
@@ -38,8 +39,21 @@ export const ISLES_STAR_HELD = {
     { do: 'say', who: 'orla', text: '{soft}...Right. That\'s what I wanted to see. It\'s lit from the inside. It wants to be.' },
     { do: 'stage', shafts: [] },
     { do: 'animate', who: 'player' },
-    { do: 'say', text: 'She nods, once, to nobody. Then she takes the sword back to the anvil, pulls her goggles down, and the forge fills with sparks. She works for a long time without another word. When she\'s done, the blade hums back.' },
+    { do: 'sound', name: 'clink' },
+    { do: 'wait', seconds: 0.25 },
+    { do: 'sound', name: 'clink' },
+    { do: 'wait', seconds: 0.25 },
+    { do: 'sound', name: 'clink' },
+    // Back round to her at the anvil, to hand it over.
+    { do: 'face', who: 'player', dir: 'left' },
+    { do: 'say', text: 'She nods, once, to nobody. Then she takes the sword back to the anvil and pulls her goggles down.' },
+    // The big reforge show (src/overworld/reforgeShow.js): the forge, the hammer, the shard, the new name.
+    { do: 'forge_show', smith: 'orla_forge' },
+    { do: 'wait', seconds: 0.4 },
+    { do: 'say', text: 'When she\'s done, the blade hums back.' },
     { do: 'say', who: 'orla', text: '{proud}There. Four stars now, if you ask. Don\'t ask for them all at once.' },
+    { do: 'act', who: 'bramble', act: 'bounce', wait: false },
+    { do: 'wait', seconds: 0.3 },
     { do: 'say', who: 'ves', text: '{bored}It hummed at her. It never hums at me.' },
   ],
 };

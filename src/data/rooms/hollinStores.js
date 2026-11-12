@@ -30,7 +30,7 @@ export const HOLLIN_STORES = {
     '#oooooooooooo#',
     '#oooooooooooo#',
     '#oooooooooooo#',
-    '#oooooooooooo#',
+    '#ooooooooooooo',
     '#oooooooooooo#',
     '#oooooooooooo#',
     '#oooooooooooo#',
@@ -44,6 +44,8 @@ export const HOLLIN_STORES = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 6, y: 11, w: 2, h: 1, to: 'hollin_gate', spawn: { x: 14, y: 5 } },
+    // Behind the shelf that isn't fixed to the wall: Mags's back room (a secret: src/data/rooms/hollinBackroom.js).
+    { x: 13, y: 6, w: 1, h: 1, to: 'hollin_backroom', spawn: { x: 1, y: 6 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -68,6 +70,8 @@ export const HOLLIN_STORES = {
     { sprite: 'barrel', x: 11, y: 8, text: 'hstores_barrel' },
     { sprite: 'barrel', x: 12, y: 9, text: 'hstores_barrel' },
     { sprite: 'chair', x: 2, y: 5, text: 'hstores_chair' },
+    // A shelf with nothing fixing it to the wall (push it aside): it hides the way to the back room.
+    { sprite: 'bookshelf', x: 12, y: 6, text: 'hstores_loose_shelf', rock: true },
   ],
   tileTexts: { h: 'hstores_wall' },
 

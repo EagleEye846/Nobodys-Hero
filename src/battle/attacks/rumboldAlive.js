@@ -1,8 +1,11 @@
-import { FlungLimb, Jaw, CueRow, Splinter, DanceString, Stamp, TuckSwing, JointRay, Glint, MarionetteString, ControlBar, BLOCK, BLOCK_STEP } from './rumboldAliveBullets.js';
-import { SceneryFlat, Sandbag, SandGrain, Batten, PaperStar, GiantHead, GrabHand, Shell, StarShard, SHOW_COLORS, FLY_FLOOR } from './rumboldFinaleBullets.js';
+import { Jaw, DanceString, Stamp, TuckSwing, JointRay, Glint, MarionetteString, ControlBar } from './rumboldAliveBullets.js';
+import { RUMBOLD_WOOD_ATTACKS } from './rumboldWood.js';
+import { SceneryFlat, Sandbag, SandGrain, Batten, GiantHead, GrabHand, FLY_FLOOR } from './rumboldFinaleBullets.js';
+import { Shaving, FlungJoint, splinterRing } from './rumboldWood.js';
 import { stairClimb, COLUMN, STAIR_SECONDS } from './rumboldStair.js';
 import { Line } from '../projectiles.js';
 import { sfx } from '../../audio/music.js';
+import { sayLine } from '../../audio/voiceClips.js';
 
 // KING PEPTUP's attacks once he's alive (phase 3 of his fight, NO STRINGS;
 // src/data/enemies/rumbold.js). Tuck let go of the levers and the puppet kept
@@ -10,16 +13,17 @@ import { sfx } from '../../audio/music.js';
 // everything he throws is HIM: his own body, his own stuck words, the strings
 // he's turned on Tuck.
 //
-//   rumboldAliveLimbs   his arms and legs, flung out on their strings and
-//                       yanked back (the line shows first)
+//   rumboldAliveLimbs,  his own body: loose limbs swinging, the face he
+//   rumboldAliveGouge,  digs (and wipes), his ball joints, his control bar
+//   rumboldAliveJoints, and its strings (all in rumboldWood.js)
+//   rumboldAliveCrossbar
 //   rumboldAliveJaw     the box is in his mouth: the lower teeth snap up to
 //                       bite, three times on the same word; stand where a
 //                       tooth is missing (the light shines up through it)
-//   rumboldAliveCues    stage directions, falling as rows of wooden letter
-//                       blocks in jerks; they splinter on the floor
 //   rumboldAliveDance   strings catch YOUR shadow and jerk it about on the
 //                       beat, toward chalked dance steps where his shoe
-//                       stamps: fight the pull, or snip the string
+//                       stamps: fight the pull, or snip the string (not in
+//                       his rotation since 2026-11-09: Working You does it)
 //   rumboldAliveTuck    Tuck, hung on three strings, swung through the box
 //                       like a trapeze: don't let him hit you, and SNIP his
 //                       strings (each one fills MERCY)
@@ -42,8 +46,8 @@ import { sfx } from '../../audio/music.js';
 //                       light hunting you, the painted scenery of his old
 //                       show running across on its tracks (stand in the
 //                       window), sandbags and a batten of lamps from the
-//                       flies, a curtain call of his light and cardboard
-//                       stars, and last of all his head, swollen huge in
+//                       flies, his light and the shavings off him, and
+//                       last of all his head, swollen huge in
 //                       the middle of it all, while his hands come in from
 //                       the wings to grab you (rumboldFinaleBullets.js)
 //
@@ -53,44 +57,8 @@ import { sfx } from '../../audio/music.js';
 // its repeats come `density` times as often (so a layered second wind at a
 // quarter density is light).
 
-// --- His arms and legs ---
-
-export function limbs(box, density, { rand }) {
-  let real = 0;
-  let next = 0.6;
-  let count = 0;
-  const every = 0.85 / density;
-  // From somewhere offstage: above the box, or off one side.
-  const origin = (soul) => {
-    const r = Math.random();
-    if (r < 0.6) return { x: rand(box.x - 6, box.x + box.w + 6), y: box.y - 12 };
-    const left = soul.x > box.x + box.w / 2;
-    return { x: left ? box.x - 12 : box.x + box.w + 12, y: rand(box.y + 6, box.y + box.h - 6) };
-  };
-  // Out along the line from there through `at`, to the far side of the box.
-  const fling = (bullets, from, at, kind) => {
-    const a = Math.atan2(at.y - from.y, at.x - from.x);
-    const reach = Math.hypot(at.x - from.x, at.y - from.y) + 26;
-    const to = { x: from.x + Math.cos(a) * reach, y: from.y + Math.sin(a) * reach };
-    bullets.push(new FlungLimb({ from, to, kind, warn: 0.72, creepy: true }));
-  };
-  return {
-    duration: 7.6,
-    update: (dt, bullets, soul) => {
-      real += dt / density;
-      if (real < next || real > 6.2) return;
-      next += every;
-      count++;
-      if (count % 4 === 0) {
-        // Both arms at once, from the top corners, crossing.
-        fling(bullets, { x: box.x - 4, y: box.y - 12 }, { x: soul.x + 10, y: soul.y }, 'arm');
-        fling(bullets, { x: box.x + box.w + 4, y: box.y - 12 }, { x: soul.x - 10, y: soul.y }, 'arm');
-        return;
-      }
-      fling(bullets, origin(soul), { x: soul.x, y: soul.y }, count % 2 ? 'arm' : 'leg');
-    },
-  };
-}
+// (His arms and legs, his digging, his joints and his control bar are in
+// rumboldWood.js.)
 
 // --- The jaw ---
 
@@ -142,97 +110,6 @@ export function jaw(box, density) {
       jawBullet.bite = showing.length > 1 && real < showing[0].at + 0.32 ? showing[0] : showing[showing.length - 1] ?? null;
       // Keep the jaw's clock on the attack's (its bites are timed in it).
       jawBullet.age = real;
-    },
-  };
-}
-
-// --- Stage directions ---
-
-// What he can't stop saying: the stage directions of his own old show. Each
-// fits with room to pass (eight blocks at most, and gaps two blocks wide).
-const CUES = ['(CUE)', 'APPLAUSE', '(EXIT)', 'BOW  BOW', 'ENCORE!', '(LIGHTS)', 'BRAVO', 'TA-DA', 'CURTAIN', 'NO  NO'];
-
-export function cues(box, density, { rand, pick }) {
-  let real = 0;
-  let next = 0.35;
-  let last = -1;
-  // (Thick and fast, but a row about every 0.8 seconds at most: any closer
-  // and there's no getting from one row's gap to the next's.)
-  const every = 1.05 / Math.min(1.3, density);
-  // How far you can be asked to go between rows (half what you could, at
-  // full speed: you've the row's own width to get round, too).
-  const reach = 80 * every * 0.5;
-  let openings = null;
-  const speed = rand(31, 36);
-  const jerk = rand(0.45, 0.6);
-  const words = [...CUES].sort(() => Math.random() - 0.5);
-  let i = 0;
-  // The open stretches of the floor under a row (where its blocks aren't),
-  // as [from, to] in x.
-  const open = (word, x) => {
-    const spans = [];
-    let from = box.x;
-    [...word].forEach((ch, k) => {
-      if (ch === ' ') return;
-      const bx = x + k * BLOCK_STEP;
-      if (bx - from > 12) spans.push([from, bx]);
-      from = bx + BLOCK;
-    });
-    if (box.x + box.w - from > 12) spans.push([from, box.x + box.w]);
-    return spans;
-  };
-  // How far you'd have to go from the middle of one of the last row's gaps
-  // to well inside one of this one's.
-  const travel = (spans) => {
-    if (!openings) return 0;
-    let best = Infinity;
-    for (const [a0, a1] of openings) {
-      const c = (a0 + a1) / 2;
-      for (const [b0, b1] of spans) best = Math.min(best, Math.max(0, b0 + 5 - c, c - (b1 - 5)));
-    }
-    return best;
-  };
-  return {
-    duration: 7.8,
-    update: (dt, bullets) => {
-      real += dt / density;
-      if (real < next || real > 5.8) return;
-      next += every;
-      const word = words[i++ % words.length];
-      const width = word.length * BLOCK_STEP - 1;
-      // Somewhere along the top, not just where the last one was, but with
-      // a gap you can get to from the last one's.
-      const slots = Math.max(1, Math.floor((box.w - width) / 8));
-      // (Every place it could go, in a shuffle, the last one's place last;
-      // the first you can get to, or failing that the nearest. Never one
-      // leaving a sliver of a gap at a wall, just wide enough to squeeze
-      // into and get caught in.)
-      const room = (s) => {
-        const left = Math.min(box.w - width, s * 8);
-        const right = box.w - width - left;
-        return (left <= 6 || left >= 14) && (right <= 6 || right >= 14);
-      };
-      const tries = [...Array(slots + 1).keys()].filter(room).sort(() => Math.random() - 0.5).sort((a, b) => (a === last) - (b === last));
-      const go = tries.map((s) => travel(open(word, box.x + Math.min(box.w - width, s * 8))));
-      let pickAt = go.findIndex((g) => g <= reach);
-      if (pickAt < 0) pickAt = go.indexOf(Math.min(...go));
-      const slot = tries[pickAt];
-      last = slot;
-      const x = box.x + Math.min(box.w - width, slot * 8);
-      openings = open(word, x);
-      const row = new CueRow({
-        box, word, x, y: box.y - 9, speed, jerk, peel: true,
-        // On the boards it breaks, and two splinters skitter off.
-        onLand: (landed) => {
-          const y = box.y + box.h - 3;
-          bullets.push(new Splinter({ x: landed.x + 3, y, vx: -rand(36, 50) }));
-          bullets.push(new Splinter({ x: landed.x + width - 3, y, vx: rand(36, 50) }));
-        },
-      });
-      // (All on the one jammed rope: every row drops and catches together,
-      // so the rows keep the same room between them all the way down.)
-      row.age = real % jerk;
-      bullets.push(row);
     },
   };
 }
@@ -408,7 +285,7 @@ export function workYou(box, density, { rand }) {
       // While he has you, your own steering is mostly taken off you: what
       // you moved since last time is cut back (the more strings, the more).
       if (last && hooked) {
-        const keep = 1 - 0.25 * hooked;
+        const keep = 1 - 0.2 * hooked;
         soul.x = last.x + (soul.x - last.x) * keep;
         soul.y = last.y + (soul.y - last.y) * keep;
       }
@@ -424,17 +301,19 @@ export function workYou(box, density, { rand }) {
       if (free && strings.length && nextGrab === Infinity) nextGrab = real + 1.5 / Math.min(1.3, density);
       // He walks you to a chalked dance step, and his shoe comes down on it.
       if (hooked && real >= nextStep && real < 6.9) {
-        nextStep = real + 1.5;
+        nextStep = real + 1.9;
         for (let tries = 0; tries < 12; tries++) {
           const p = { x: rand(box.x + pad, box.x + box.w - pad), y: rand(box.y + pad + 8, box.y + box.h - pad) };
           if (Math.hypot(p.x - soul.x, p.y - soul.y) > 22) { target = p; break; }
         }
-        if (target) bullets.push(new Stamp({ x: target.x, y: target.y, warn: 1.5 }));
+        // (Time to get all three snipped and step off, even from the first
+        // cut: it's the scissors that beat this, not quick feet.)
+        if (target) bullets.push(new Stamp({ x: target.x, y: target.y, warn: 1.9 }));
       }
       if (!hooked) target = null;
       if (hooked && target) {
         const d = Math.hypot(target.x - soul.x, target.y - soul.y);
-        const go = Math.min(d, (30 + 16 * hooked) * rdt);
+        const go = Math.min(d, (22 + 12 * hooked) * rdt);
         if (d > 0.5) {
           soul.x += ((target.x - soul.x) / d) * go;
           soul.y += ((target.y - soul.y) / d) * go;
@@ -474,8 +353,9 @@ const OPEN = 3.7;
 //                                one after another from the same wing
 //   the flies come down          sandbags at you, and a batten of lamps
 //                                swinging down from the side you're on
-//   the curtain call             the light pours out of his chest in three
-//                                wheeling rays, and the cardboard stars fall
+//   the light                    the light pours out of his chest in three
+//                                wheeling rays, and shavings off him drift
+//                                down through it
 //   the stair                    the tower narrows to a stairwell: the great
 //                                stair of his story, painted, every step on
 //                                strings. Your shadow turns heavy and climbs
@@ -540,31 +420,34 @@ const TILT_EVERY = 3.4;
 // from the wing or the flies above it (`high`), grabbing at where you are;
 // or both at once, clapping across your row. Quicker as it goes.
 const GRABS = [
-  { at: 1.4, side: -1, warn: 0.75 },
-  { at: 2.1, side: 1, warn: 0.75 },
-  { at: 2.75, side: -1, high: true, warn: 0.7 },
-  { at: 3.35, side: 1, high: true, warn: 0.7 },
-  { at: 4.1, clap: true, warn: 0.8 },
-  { at: 5.3, side: 1, warn: 0.62 },
-  { at: 5.8, side: -1, warn: 0.62 },
-  { at: 6.25, side: 1, high: true, warn: 0.6 },
-  { at: 6.7, side: -1, high: true, warn: 0.6 },
-  { at: 7.4, clap: true, warn: 0.72 },
+  { at: 1.4, side: -1, warn: 0.85 },
+  { at: 2.2, side: 1, warn: 0.85 },
+  { at: 2.95, side: -1, high: true, warn: 0.8 },
+  { at: 3.65, side: 1, high: true, warn: 0.8 },
+  { at: 4.5, clap: true, warn: 0.9 },
+  { at: 5.7, side: 1, warn: 0.75 },
+  { at: 6.35, side: -1, warn: 0.75 },
+  { at: 7.0, side: 1, high: true, warn: 0.72 },
+  { at: 7.9, clap: true, warn: 0.85 },
 ];
 // His strings, from CAGE_AT: volleys of them, each string aimed at you as it
 // shows (`from`: the grid overhead, or the wings either side), one after
 // another `every` seconds apart; and his eyes' light wheeling through.
+// (Thinned 2026-11-09: fewer strings a volley, more room between them, a
+// longer look at each.)
 const CAGE = [
-  { at: 0, from: 'grid', count: 8, every: 0.16, warn: 0.6 },
-  { at: 1.9, from: 'wings', count: 10, every: 0.13, warn: 0.55 },
+  { at: 0, from: 'grid', count: 5, every: 0.26, warn: 0.7 },
+  { at: 1.9, from: 'wings', count: 6, every: 0.22, warn: 0.65 },
   { at: 3.6, rays: true },
-  { at: 3.9, from: 'grid', count: 6, every: 0.22, warn: 0.55 },
-  { at: 5.4, from: 'both', count: 14, every: 0.09, warn: 0.5 },
+  { at: 4.1, from: 'grid', count: 4, every: 0.3, warn: 0.65 },
+  { at: 5.6, from: 'both', count: 8, every: 0.17, warn: 0.6 },
 ];
 // It's his last act and everything he has, and it's long: a hit of it hurts
 // a little less than his usual (64), so it can be lived through from less
 // than full HP. Every piece is still warned before it lands.
-const TEAR_DAMAGE = 50;
+// (2026-11-09: 50 to 46, with the long finale thinned out, so a careful
+// player comes through it with mistakes to spare.)
+const TEAR_DAMAGE = 46;
 
 export function tear(box, density, { rand }) {
   let real = 0;
@@ -648,12 +531,12 @@ export function tear(box, density, { rand }) {
       // The flies coming down: sandbags dropped at you, bursting in sand,
       // and still coming while the batten swings.
       if (real >= nextBag && real < BAGS_TO) {
-        nextBag += 0.36 / often;
+        nextBag += 0.5 / often;
         const x = Math.min(STAGE.x + STAGE.w - 8, Math.max(STAGE.x + 8, soul.x + rand(-20, 20)));
         push(new Sandbag({
           x, warn: 0.65,
           onLand: (bag) => {
-            for (let k = 0; k < 7; k++) {
+            for (let k = 0; k < 4; k++) {
               const side = k % 2 ? 1 : -1;
               push(new SandGrain({ x: bag.x, y: FLY_FLOOR - 2, vx: side * rand(25, 85), vy: -rand(40, 120) }));
             }
@@ -670,9 +553,9 @@ export function tear(box, density, { rand }) {
         const length = Math.min(168, Math.max(124, Math.abs(soul.x - pivot.x) + 84));
         push(new Batten({ pivot, dir: left ? 1 : -1, length, warn: 1.5, life: 2.6 }));
       }
-      // The curtain call: the light pouring out of him in three rays from his
-      // chest, wheeling across the whole stage, and the cardboard stars of
-      // the show cut loose and coming down everywhere.
+      // The light pouring out of him in three rays from his chest, wheeling
+      // across the whole stage, and shavings off his gouged wood drifting
+      // down all over.
       if (step === 3 && real >= CALL_AT) {
         step = 4;
         const spin = (Math.random() < 0.5 ? -1 : 1) * 0.5;
@@ -682,8 +565,8 @@ export function tear(box, density, { rand }) {
         }
       }
       if (real >= nextStar && real < STARS_TO) {
-        nextStar += 0.2 / often;
-        push(new PaperStar({ x: rand(STAGE.x + 6, STAGE.x + STAGE.w - 6), y: rand(10, 22), vx: rand(-10, 10), vy: rand(44, 64), warn: 0.45 }));
+        nextStar += 0.34 / often;
+        push(new Shaving({ x: rand(STAGE.x + 6, STAGE.x + STAGE.w - 6), y: rand(10, 22), vx: rand(-8, 8), vy: rand(34, 46), curl: 9, turn: 4, warn: 0.5 }));
       }
       // The stair: the tower narrows to the well, you climb, and it opens out
       // again.
@@ -708,6 +591,8 @@ export function tear(box, density, { rand }) {
         head = new GiantHead(HEAD_ON_HIM);
         bullets.unshift(head);
         sfx('flare');
+        // His scream as the head swells (a recorded line: voiceClips.js).
+        sayLine('rumbold_finale');
       }
       if (!head) return;
       const grow = (k) => {
@@ -777,7 +662,7 @@ export function tear(box, density, { rand }) {
       }
       // And its eyes spit sparks of his light at you, one eye then the other.
       if (real >= nextSpit && real < FACE_AT + 8.4) {
-        nextSpit += 1.15 / often;
+        nextSpit += 1.5 / often;
         const eye = head.eye(spitEye++ % 2);
         const a = Math.atan2(soul.y - eye.y, soul.x - eye.x);
         push(new Glint({ x: eye.x, y: eye.y, vx: Math.cos(a) * 52, vy: Math.sin(a) * 52, life: 3.2 }));
@@ -821,17 +706,19 @@ export function tear(box, density, { rand }) {
   };
 }
 
-// --- His curtain call: THE GRAND FINALE ---
+// --- The last of him: THE GRAND FINALE ---
 
-// The last thing he does: the king himself hauls back, thrusts, and the
-// tower's fireworks go up on the beat (he's the one setting them off: the
-// stage draws his body doing it, from `pose`), two volleys of rockets and
-// then TA-DA, three rings of cardboard stars with a gap in each, and he
-// takes his bow. The rockets show their lane and where they'll burst first.
+// The last thing he does: he hauls back and throws, and the joints of his
+// own body go flying up off the boards on each throw (the stage draws him
+// doing it, from `pose`): two volleys of them, each bursting into a ring of
+// splinters; then all he has left in one, three rings of splinters with a
+// gap in each; and he folds over at the middle, like a puppet that's been
+// let go. Each joint shows its lane and where it'll burst first. Shavings
+// drift down off him through all of it.
 const BOW_LENGTH = 10.6;
 // His body in the tower, from the second this starts: `tilt` (radians,
 // about his feet), squash and stretch, a lift off the boards, and how hard his
-// light's burning (all eased; kicks are the little jolts as each rocket goes).
+// light's burning (all eased; kicks are the little jolts as each joint is flung).
 const KICKS = [1.2, 1.7, 2.2, 4.0, 4.4, 6.6];
 function bowPose(t) {
   const ease = (k) => k * k * (3 - 2 * k);
@@ -848,7 +735,7 @@ function bowPose(t) {
     lift -= 5 * k;
     glow += 0.5 * k;
   }
-  // Thrown forward on each rocket: a quick jolt that rings back.
+  // Thrown forward on each joint: a quick jolt that rings back.
   for (const at of KICKS) {
     const d = t - at;
     if (d < 0 || d > 0.6) continue;
@@ -857,14 +744,14 @@ function bowPose(t) {
     stretch -= 0.06 * e;
     glow += 0.6 * e;
   }
-  // TA-DA: stretched up, arms flung, light blazing.
+  // All of it at once: stretched up, arms flung, light blazing.
   if (t >= 6.6 && t < 8.3) {
     const k = ease(clamp((t - 6.6) / 0.25)) * (1 - ease(clamp((t - 7.9) / 0.4)));
     stretch += 0.1 * k;
     lift -= 7 * k;
     glow += 0.8 * k;
   }
-  // The bow: a deep fold forward, held, and up again.
+  // The fold: over at the middle, held, and hauled up again.
   if (t >= 8.3) {
     const k = ease(clamp((t - 8.3) / 0.7)) * (1 - ease(clamp((t - 9.7) / 0.7)));
     tilt += 0.38 * k;
@@ -879,24 +766,16 @@ export function bow(box, density, { rand }, { stage = false } = {}) {
   let real = 0;
   let live = null;
   const plan = [];
-  // Rockets: when each is lit (its lane shows), then it goes 0.9s later.
-  // [lit, size of its ring, ring speed]
-  for (const [lit, n, speed] of [[0.3, 12, 34], [0.8, 12, 34], [1.3, 12, 34], [3.1, 16, 40], [3.5, 16, 40]]) plan.push({ lit, n, speed });
+  // His joints: when each one's lane shows, then it goes 0.9s later.
+  // [shown, size of its ring, ring speed]
+  for (const [lit, n, speed] of [[0.3, 9, 32], [0.85, 9, 32], [1.4, 9, 32], [3.1, 12, 36], [3.6, 12, 36]]) plan.push({ lit, n, speed });
   let lit = 0;
   let tada = 0;
   let nextRain = 2.2;
   const pending = [];
   const calls = [];
-  const rect = () => ({ x: box.x, y: box.y, w: box.w, h: box.h });
-  const ring = (x, y, n, speed, turn, gap = null) => {
-    const color = SHOW_COLORS[Math.floor(Math.random() * SHOW_COLORS.length)];
-    for (let i = 0; i < n; i++) {
-      const a = turn + (i / n) * Math.PI * 2;
-      if (gap !== null && Math.abs(((a - gap + Math.PI * 3) % (Math.PI * 2)) - Math.PI) < 0.5) continue;
-      live.push(Object.assign(new StarShard({ x: x + Math.cos(a) * 4, y: y + Math.sin(a) * 4, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, color: gap === null ? color : SHOW_COLORS[i % 3], bounds: rect() }), { dmg: 50 }));
-    }
-  };
-  // A rocket lane well away from where you're standing.
+  const ring = (x, y, n, speed, turn, gap = null) => splinterRing(live, x, y, n, speed, turn, gap, TEAR_DAMAGE);
+  // A lane well away from where you're standing.
   const lane = (soul, used) => {
     for (let tries = 0; tries < 20; tries++) {
       const x = box.x + 18 + Math.random() * (box.w - 36);
@@ -917,31 +796,31 @@ export function bow(box, density, { rand }, { stage = false } = {}) {
         used.push(x);
         if (used.length > 3) used.shift();
         const top = box.y + box.h * (0.16 + Math.random() * 0.3);
-        const shell = new Shell({
+        const joint = new FlungJoint({
           x, floor: box.y + box.h, top, warn: 0.9, rise: 0.5,
           onBurst: (sh) => {
-            sfx('burst');
+            sfx('crumble');
             ring(sh.x, sh.top, n, speed, Math.random() * 6.28);
           },
         });
-        shell.dmg = 50;
-        bullets.push(shell);
-        // (The rocket goes up after its warning: the king's kick.)
+        joint.dmg = TEAR_DAMAGE;
+        bullets.push(joint);
+        // (The joint goes up after its warning: his throw.)
         calls.push(real + 0.9);
       }
-      // Stars cut loose from the flies all through it, half of them dropping
-      // near where you stand.
+      // Shavings off him drifting down all through it, half of them near
+      // where you stand.
       if (real >= nextRain && real < 9.4) {
-        nextRain += 0.42 / Math.min(1.3, density);
-        const aimed = Math.random() < 0.55;
+        nextRain += 0.6 / Math.min(1.3, density);
+        const aimed = Math.random() < 0.5;
         const x = aimed ? Math.min(box.x + box.w - 6, Math.max(box.x + 6, soul.x + (Math.random() - 0.5) * 40)) : box.x + 6 + Math.random() * (box.w - 12);
-        const star = new StarShard({ x, y: box.y + 4, vx: (Math.random() - 0.5) * 8, vy: 40, gravity: 4, color: SHOW_COLORS[Math.floor(Math.random() * 3)], bounds: rect(), warn: 0.5 });
-        star.dmg = 50;
-        bullets.push(star);
+        const shaving = new Shaving({ x, y: box.y + 4, vx: (Math.random() - 0.5) * 8, vy: 34, curl: 8, turn: 4, warn: 0.5 });
+        shaving.dmg = TEAR_DAMAGE;
+        bullets.push(shaving);
       }
       while (calls.length && real >= calls[0]) { calls.shift(); sfx('clack'); }
-      // TA-DA: a great star in the middle, then three rings of stars, each
-      // with a gap.
+      // All he has left: a flare in the middle of him, then three rings of
+      // splinters, each with a gap.
       if (tada === 0 && real >= 5.6) {
         tada = 1;
         sfx('flare');
@@ -952,7 +831,7 @@ export function bow(box, density, { rand }, { stage = false } = {}) {
         const cy = box.y + box.h * 0.3;
         const gapAt = Math.atan2(soul.y - cy, soul.x - cx) + Math.PI * (0.35 + Math.random() * 0.3);
         sfx('boom');
-        [[0, 14, 30], [0.4, 18, 42], [0.8, 22, 54]].forEach(([after, n, speed], i) => {
+        [[0, 11, 30], [0.45, 14, 40], [0.9, 17, 50]].forEach(([after, n, speed], i) => {
           pending.push({ at: real + after, burst: { cx, cy, n, speed, turn: i * 0.21, gap: gapAt + i * 1.9 } });
         });
       }
@@ -960,7 +839,7 @@ export function bow(box, density, { rand }, { stage = false } = {}) {
         const b = pending[i].burst;
         if (!b || real < pending[i].at) continue;
         pending.splice(i, 1);
-        sfx('burst');
+        sfx('crumble');
         ring(b.cx, b.cy, b.n, b.speed, b.turn, b.gap);
       }
     },
@@ -969,9 +848,8 @@ export function bow(box, density, { rand }, { stage = false } = {}) {
 }
 
 export const RUMBOLD_ALIVE_ATTACKS = {
-  rumboldAliveLimbs: (box, density, tools) => limbs(box, density, tools),
+  ...RUMBOLD_WOOD_ATTACKS,
   rumboldAliveJaw: (box, density, tools) => jaw(box, density, tools),
-  rumboldAliveCues: (box, density, tools) => cues(box, density, tools),
   rumboldAliveDance: (box, density, tools) => dance(box, density, tools),
   rumboldAliveTuck: (box, density, tools) => tuck(box, density, tools),
   rumboldAliveLight: (box, density, tools) => light(box, density, tools),

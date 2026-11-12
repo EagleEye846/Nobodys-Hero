@@ -31,7 +31,7 @@ import { SAMPLE_SETS } from '../../audio/sampleSets.js';
 // villain's chord.
 //
 // D minor, 120 BPM, one step a 16th note: a bar is 2 seconds. The intro
-// plays once (2 bars, 4s); then it loops from A, 40 bars, 80 seconds:
+// plays once (2 bars, 4s); then it loops from A, 48 bars, 96 seconds:
 //
 //   intro   2 bars  a chromatic shuffle-in in octaves, then a run down
 //   A       8 bars  THE HOOK on the piano alone over its own stride
@@ -45,6 +45,13 @@ import { SAMPLE_SETS } from '../../audio/sampleSets.js';
 //   D       8 bars  round the circle: the cell on F#7, B7, E7 and A7, a
 //                   walking tuba, everybody; the band stops dead and the
 //                   piano runs up alone into the hook
+//   A3      8 bars  the payoff: the hook at its biggest, everybody on it
+//                   (piano in octaves, clarinet, plucked strings, piccolo),
+//                   the tuba walking, the trombone smearing; it lands home
+//                   and the loop starts again with the piano alone
+//
+// The hook is heard at 0:04 (piano), 0:36 (band) and 1:24 (everybody),
+// and its first four notes come back in every other section.
 
 const BAR = 16;
 const riff = (text) => melody(text, 1);   // each token a 16th
@@ -149,6 +156,13 @@ const GIGGLE = riff(`
   A4 - D5 - | F5 - - E5 | - - D5 - | A4 - - -
   G#4 B4 D5 E5 | G#5 - E5 - | G5 - E5 C#5 | A4 - G4 -
   Bb4 D5 G5 Bb5 | A5 - G5 - | E5 - C#5 - | A4 - G#4 -
+`);
+
+// --- The tuba walking under the last hook, a quarter a step, leaning into
+// each new chord. ---
+const WALK_A = steps(`
+  D2 E2 F2 A2 | D3 C3 A2 F#2 | G2 A2 Bb2 D3 | A2 G2 E2 C#2
+  D2 F2 A2 D3 | F#2 A2 G2 Bb2 | D2 F2 E2 C#2 | D2 A2 D3 .
 `);
 
 // --- The trombone's counter-line under the second hook: long notes that
@@ -339,9 +353,30 @@ export const SUNNY_BATTLE_THEME = {
       ...kit(),
       crash: crashOn(8, 0, 4),
     }, 4, ['pianoR']),
+
+    // The payoff: the piano's run lands on the hook with everybody at
+    // once, the tuba walking under it, the trombone smearing, the
+    // plucked strings an octave down, the piccolo and the bells on top.
+    // It lands home on D, and the loop starts again with the piano alone.
+    A3: {
+      pianoR: HOOK,
+      pianoR2: up(HOOK, -12),
+      clarinet: HOOK,
+      pizz: up(HOOK, -12),
+      piccolo: playable(up(HOOK, 12), 'piccolo'),
+      trombone: SMEAR,
+      tuba: WALK_A,
+      seeds: SEEDS,
+      ...stride(A_HALVES),
+      ...kit(),
+      // The dry drum stamps the one and the three with the kick.
+      claps: repeat(KICK, 8),
+      tom: [...rest(7), ...ROLL],
+      crash: crashOn(8, 0, 2, 4, 6),
+    },
   },
 
   // The intro plays once; then the fight goes round from the hook.
-  order: ['intro', 'A', 'B', 'A2', 'C', 'D'],
+  order: ['intro', 'A', 'B', 'A2', 'C', 'D', 'A3'],
   loopFrom: 1,
 };

@@ -2,12 +2,16 @@ import { TILE_SIZE as T } from '../config.js';
 import { drawFootShadow } from './shadows.js';
 import { HERO_ANIMATIONS, chooseFacing, heroFrame, heroBounce, carryFrame } from '../characters/hero.js';
 import { animationFrame } from '../engine/animations.js';
-import { skillBonus } from '../characters/progress.js';
-import { memberFrames, memberSprites } from '../characters/party.js';
+import { skillBonus, heroHp, setHeroHp } from '../characters/progress.js';
+import { memberFrames, memberSprites, partyIds, memberHp, setMemberHp } from '../characters/party.js';
 import { actPose, poseOffset, drawPosed, startAct } from './acts.js';
 import { pickIdle, idleStep, idleLength } from './idles.js';
+import { gustFrame } from './gustFlutter.js';
+import { blinkFrame } from './blink.js';
 
 const WALK_SPEED = 70; // pixels per second
+// How far off a corner you can be and still be eased round it (slipCorner).
+const CORNER_SLIP = 4;
 const RUN_SPEED = 130;
 // Carrying someone on your back: slower, and no running or jumping.
 const CARRY_SPEED = 56;
@@ -23,6 +27,21 @@ const JUMP_BUFFER = 0.12;
 // skill (`jumpHeight`) adds a step.
 export const JUMP_REACH = (JUMP_SPEED * JUMP_SPEED) / (2 * GRAVITY);
 const jumpSpeed = () => Math.sqrt(2 * GRAVITY * (JUMP_REACH + skillBonus('jumpHeight')));
+
+// Walk It Off (`walkHeal`): every WALK_HEAL_STEP pixels walked, everyone
+// still standing gets that much HP back. Six tiles a point: running about,
+// it's a few HP a second, so food and inns still matter.
+const WALK_HEAL_STEP = 6 * T;
+let walkedSinceMend = 0;
+function walkMend(distance) {
+  const hp = skillBonus('walkHeal');
+  if (!hp || !distance) return;
+  walkedSinceMend += distance;
+  if (walkedSinceMend < WALK_HEAL_STEP) return;
+  walkedSinceMend -= WALK_HEAL_STEP;
+  if (heroHp() > 0) setHeroHp(heroHp() + hp);
+  for (const id of partyIds()) if (memberHp(id) > 0) setMemberHp(id, memberHp(id) + hp);
+}
 
 // On ice (`z` tiles) you slide: pushing builds speed slowly, and it bleeds
 // away slowly, so you skate, overshoot, and bump into things.
@@ -181,10 +200,18 @@ export class Player {
       this.facing = chooseFacing(dx, dy, this.facing);
 
       // Diagonals aren't normalised, matching Deltarune's movement feel.
-      this.running = input.isDown('cancel') && !this.carrying && !this.crutch;
-      const speed = this.crutch ? CRUTCH_SPEED : this.carrying ? CARRY_SPEED : this.running ? RUN_SPEED * (1 + skillBonus('runSpeed')) : WALK_SPEED;
-      this.moveAxis(room, 'x', dx * speed * dt);
-      this.moveAxis(room, 'y', dy * speed * dt);
+      this.running = (input.isDown('run') || input.isDown('cancel')) && !this.carrying && !this.crutch;
+      let speed = this.crutch ? CRUTCH_SPEED : this.carrying ? CARRY_SPEED : this.running ? RUN_SPEED * (1 + skillBonus('runSpeed')) : WALK_SPEED;
+      // Wading (a room with `wadeSlow`, in its shallows): the water drags at your boots.
+      if (room.wadeSlow && !(this.ground > 0) && !this.isAirborne && room.tileAt(Math.floor(this.x / T), Math.floor((this.y - 1) / T)) === ';') speed *= room.wadeSlow;
+      const fromX = this.x;
+      const fromY = this.y;
+      const stoppedX = this.moveAxis(room, 'x', dx * speed * dt);
+      const stoppedY = this.moveAxis(room, 'y', dy * speed * dt);
+      // Walking straight at the very edge of a wall or a door frame: round it.
+      if (!dy && stoppedX) this.slipCorner(room, 'y', dx, speed * dt);
+      if (!dx && stoppedY) this.slipCorner(room, 'x', dy, speed * dt);
+      walkMend(Math.hypot(this.x - fromX, this.y - fromY));
 
       this.animationTime += dt;
     } else {
@@ -334,8 +361,39 @@ export class Player {
     }
   }
 
+  // Corner slip: stopped dead walking straight on (`dir` along the other
+  // axis), with only the last few pixels of you catching a corner. If a
+  // nudge of up to CORNER_SLIP px sideways (`axis`) would let you on, you're
+  // eased that way, a little slower than walking; the nearer side first.
+  // (Not up in the air, or when nothing's in reach.)
+  slipCorner(room, axis, dir, step) {
+    if (this.isAirborne) return;
+    const ahead = axis === 'y' ? [dir, 0] : [0, dir];
+    const height = this.ground + this.z;
+    const clear = (x, y) => !this.collidesAt(room, x, y) && this.floorAt(room, x, y) <= height + 0.5;
+    // (Feet are only 6 px front to back, so less slip going sideways.)
+    const most = axis === 'y' ? CORNER_SLIP - 1 : CORNER_SLIP;
+    for (let d = 1; d <= most; d++) {
+      for (const side of [-1, 1]) {
+        let ok = true;
+        for (let i = 1; i <= d && ok; i++) {
+          const x = this.x + (axis === 'x' ? side * i : 0);
+          const y = this.y + (axis === 'y' ? side * i : 0);
+          ok = clear(x, y);
+        }
+        const x = this.x + (axis === 'x' ? side * d : 0) + ahead[0];
+        const y = this.y + (axis === 'y' ? side * d : 0) + ahead[1];
+        if (ok && clear(x, y)) {
+          this.moveAxis(room, axis, side * step * 0.8);
+          return;
+        }
+      }
+    }
+  }
+
   // Moves one pixel at a time and stops at the first solid pixel. Fractional
   // movement is carried over between frames so position stays a whole number.
+  // Returns true if something stopped it.
   moveAxis(room, axis, amount) {
     const remainderKey = axis === 'x' ? 'remainderX' : 'remainderY';
     // (A speed that isn't a number would spin the loop below for ever.)
@@ -350,14 +408,14 @@ export class Player {
       const nextY = axis === 'y' ? this.y + step : this.y;
       if (this.collidesAt(room, nextX, nextY)) {
         this[remainderKey] = 0;
-        return;
+        return true;
       }
       // A block's side is a wall unless they're up as high as its top.
       const height = this.ground + this.z;
       const floor = this.floorAt(room, nextX, nextY);
       if (floor > height + 0.5) {
         this[remainderKey] = 0;
-        return;
+        return true;
       }
       this.x = nextX;
       this.y = nextY;
@@ -371,7 +429,7 @@ export class Player {
   }
 
   collidesAt(room, x, y) {
-    return room.collides(x - HITBOX_HALF_WIDTH, y - HITBOX_HEIGHT, x + HITBOX_HALF_WIDTH, y, true, this.small);
+    return room.collides(x - HITBOX_HALF_WIDTH, y - HITBOX_HEIGHT, x + HITBOX_HALF_WIDTH, y, true, this.small || (this.light ? 'planks' : false));
   }
 
   // The highest floor under the feet at (x, y): 0, or a block's top.
@@ -516,7 +574,8 @@ export class Player {
       return;
     }
     const [sx, sy] = this.squash(t, pose);
-    this.drawFrame(ctx, camera, frame, feet, sx, sy, off.x);
+    // In a storm gust, his scarf streams out (gustFlutter.js); now and then he blinks (blink.js).
+    this.drawFrame(ctx, camera, blinkFrame(gustFrame(frame), this), feet, sx, sy, off.x);
   }
 
   // How squashed to draw them now: by an act, or just landed or jumping.

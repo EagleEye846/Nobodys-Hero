@@ -19,3 +19,31 @@ I'm so glad. I'd put my helmet on for the occasion but I'm wearing it. As ever.
 
 [repeat after the_light_goes_up]
 His Majesty's very pleased. He's practising his speech in the mirror. I can hear him through the door.
+
+# (draft)
+[repeat 2]
+He'll tell you his helmet's fine. It isn't. Last week he guarded a coat stand for an hour.
+
+# (draft)
+[repeat 3]
+Off the carpet, please. That's the standing part. I can tell from here. I can SEE from here.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+The cloak, they say, was mended by the Hero himself. Very small stitches. In a hurry.
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}Small stitches. {bored}Of course they were.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+The cup's dented on one side. A king's guard doesn't speculate. But somebody dropped it a lot.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+The speech is getting longer. I've heard the word PEPTUP eleven times through that door.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Twelve.

@@ -6,12 +6,13 @@
 //
 // The boy is two actors, `corrie_back` and `corrie` (a swap between two pictures: `instant`), and
 // the fight is on `corrie`. He sits on the lamp's rim (the lamp prop `ll_dead_lamp` is 4 wide at
-// x 9-12, foot on row 8), so he is drawn behind the drum's top. No monsters in this room, so
-// nothing crosses the walk.
-// (draft) story text, for Patrick to review.
+// x 9-12, foot on row 8), so he is drawn behind the drum's top. The three spread out round the
+// lamp's foot, up where the text box doesn't hide them: Ves to its left (7,8), Bramble to its
+// right (14,8), the hero just below it (10,9). No monsters in this room, so nothing crosses the walk.
+// (draft).
 //
-// After the fight: the finale pass adds `defeated: 'corrie_defeated'` (and the scenes after it) to
-// the battle step below. There is no mercy bar for him, so no `spared`.
+// After the fight: `corrie_falls` (src/data/scenes/tideHeldFinale.js) and the scenes after it, to the
+// end of the chapter. There is no mercy bar for him, so no `spared`.
 export const CORRIE_APPEARS = {
   // Triggers in rooms name the scene by this id.
   id: 'corrie_appears',
@@ -29,25 +30,31 @@ export const CORRIE_APPEARS = {
 
   steps: [
     { do: 'face', who: 'player', dir: 'up' },
-    { do: 'walk', who: 'player', to: { x: 10, y: 10 } },
-    { do: 'walk', who: 'ves', to: { x: 9, y: 11 }, wait: false },
-    { do: 'walk', who: 'bramble', to: { x: 11, y: 11 } },
+    { do: 'walk', who: 'ves', to: { x: 7, y: 8 }, wait: false },
+    { do: 'walk', who: 'bramble', to: { x: 14, y: 8 }, wait: false },
+    { do: 'walk', who: 'player', to: { x: 10, y: 9 }, pace: 40 },
+    { do: 'face', who: 'player', dir: 'up' },
+    { do: 'wait', seconds: 1.2 },
+    { do: 'face', who: 'ves', dir: 'up' },
+    { do: 'face', who: 'bramble', dir: 'up' },
+    { do: 'wait', seconds: 0.4 },
     { do: 'say', text: 'The lamp room is dark. The glass all round it is black with the storm, and the great lamp stands in the middle, cold and cracked.\n\nSomething small is sitting on the rim of it.' },
     { do: 'say', text: 'A boy. His oilskin is so big that the sleeves hang past his hands, and across his knees lies a staff of driftwood. He has his back to you.' },
     { do: 'say', who: 'ves', text: '{thoughtful}...That\'s a child.' },
-    { do: 'say', who: 'bramble', text: '{worried}Why\'s he on his own?' },
+    { do: 'say', who: 'bramble', text: '{worried}...Hello?' },
     { do: 'wait', seconds: 0.8 },
     // He turns.
     { do: 'leave', who: 'corrie_back', instant: true },
     { do: 'appear', who: 'corrie', instant: true },
     { do: 'wait', seconds: 1 },
     { do: 'say', text: 'He turns. His eyes are the colour of the sea out there.' },
+    { do: 'act', who: 'bramble', act: 'shiver', wait: false },
     { do: 'wait', seconds: 1.2 },
-    // He doesn't speak. The storm does.
+    // He rises, and the storm with him.
     { do: 'stage', bolt: true },
     { do: 'stage', white: 1, seconds: 0.5 },
-    { do: 'say', text: 'He does not say a word. The storm says it for him: the glass all round goes white.' },
+    { do: 'say', text: 'He stands up, on nothing. The storm stands up with him: the glass all round goes white.' },
     { do: 'camera' },
-    { do: 'battle', enemy: 'corrie', who: 'corrie', noRun: true, noRunText: 'corrie_no_run' },
+    { do: 'battle', enemy: 'corrie', who: 'corrie', noRun: true, noRunText: 'corrie_no_run', defeated: 'corrie_falls' },
   ],
 };

@@ -2,7 +2,7 @@
 // the Warden, a colossal statue of the Hero, asleep with its sword raised.
 // High on its shoulder, the Hush, with Ves's umbrella in its jaws; it looks
 // at you, and closes its eyes. Then you step forward, and the Warden wakes.
-// It has waited three hundred years for the Hero, and it looks at you and
+// It has waited a hundred years for the Hero, and it looks at you and
 // finds you wanting: the wrong height, the wrong face, and no name. None may
 // pass but the Hero. It can't be talked round: it has to break (the fight;
 // warden_breaks after).
@@ -48,7 +48,7 @@ export const AT_THE_GATE = {
     { do: 'music', song: 'warden' },
     { do: 'say', who: 'warden', text: 'WHO COMES TO THE GATE OF THE HERO?', shake: true },
     { do: 'wait', seconds: 1 },
-    { do: 'say', who: 'warden', text: 'THREE HUNDRED YEARS I HAVE STOOD. THREE HUNDRED YEARS I HAVE HELD UP MY SWORD TO GREET HIM.\n\nLET ME SEE YOU.' },
+    { do: 'say', who: 'warden', text: 'A HUNDRED YEARS I HAVE STOOD. A HUNDRED YEARS I HAVE HELD UP MY SWORD TO GREET HIM.\n\nLET ME SEE YOU.' },
     { do: 'wait', seconds: 1.2 },
     { do: 'say', who: 'warden', text: 'HE WAS TO BE TALL. YOU ARE NOT.\n\nHE WAS TO HAVE A FACE THE CITY KNEW. YOU HAVE NOT.\n\nSPEAK YOUR NAME.' },
     { do: 'emote', who: 'player', emote: '...' },

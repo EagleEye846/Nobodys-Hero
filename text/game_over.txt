@@ -1,0 +1,40 @@
+# The line under GAME OVER when a boss or story fight beats you, by the
+# enemy's id (the name of its file in src/data/enemies/). A boss phase's own
+# `gameOver` line (in the enemy's text file) comes first; with neither, the
+# game says "Your light flickered out."
+# Short: two lines at most on the screen. The hero never speaks.
+
+# Chapter 1
+[taper]
+Taper's flame steadies. She goes back to her humming.
+
+# Chapter 2
+[great_bat]
+The roost goes quiet. A hundred small eyes close again.
+
+[usurper]
+He doesn't look back. The stolen blade goes on casting its shadow.
+
+# Chapter 3
+[tatterwight]
+The leaves settle over you, round and round, and still.
+
+[warden]
+The WARDEN lowers its sword and goes back to waiting.
+
+[the_hush]
+The wood goes quiet again. It is very good at that.
+
+# Chapter 4
+[rumbold]
+The curtain comes down. Nobody claps.
+
+# Chapter 5
+[dowager_crab]
+Ves: "Up. I'm not apologising to a crab for you."
+
+[old_gulper]
+Old Gulper rubs his jaw on the bell and goes back to sulking.
+
+[corrie]
+The tide doesn't wait. Get up.

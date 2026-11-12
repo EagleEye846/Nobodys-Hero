@@ -1,5 +1,5 @@
 # THE WARDEN OF THE GATE: the colossal stone statue of the Hero before the
-# Hero's Gate, built by the old city to greet him. It has waited three
+# Hero's Gate, built by the old city to greet him. It has waited a
 # hundred years, and it has decided you are not him.
 # Numbers (HP, damage, its phases) live in src/data/enemies/warden.js.
 # It can't be spared: nothing here builds MERCY. It has to break.
@@ -33,7 +33,7 @@ The WARDEN OF THE GATE lifts its foot from its plinth. The whole court shakes.
 
 # Shown at the start of each of your turns, in order, then repeating.
 [flavor]
-The WARDEN holds its stone sword high, the way it has for three hundred years.
+The WARDEN holds its stone sword high, the way it has for a hundred years.
 
 Moss falls from the WARDEN's shoulders every time it moves.
 
@@ -76,7 +76,7 @@ THE CITY CARVED ME
 TO GREET HIM.
 YOU WILL BE GREETED INSTEAD.
 
-THREE HUNDRED YEARS
+A HUNDRED YEARS
 I HAVE HELD UP THIS SWORD.
 MY ARM DOES NOT TIRE.
 
@@ -227,4 +227,4 @@ There's nowhere to run. The court is walled in, and the only way on is through t
 
 # How the fight ends. The rewards line is added automatically.
 [victory]
-The WARDEN stops. Its broken sword arm, held up for three hundred years, begins to shake.
+The WARDEN stops. Its broken sword arm, held up for a hundred years, begins to shake.

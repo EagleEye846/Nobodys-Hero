@@ -36,8 +36,26 @@ A smooth pinched column, like the neck of an hourglass. Nobody built it. It has 
 [deep_knob]
 A smooth knob of black stone about knee height. It is warm, very faintly, as if something had just stopped sitting on it.
 
+# (draft)
+[deep_knob 2]
+Still faintly warm. You don't sit on it. You get the feeling the seat's taken.
+
 [deep_stalagmite]
 A black stalagmite, wet at the tip. Slow drops fall on it from a long way up. It has been hearing the same joke for ten thousand years.
+
+# (draft)
+[deep_stalagmite 2]
+Drip. The same joke again. The stalagmite takes it very well.
+
+# (draft)
+[deep_stalagmite 10]
+Drip. On the tenth time, you finally get the joke. It isn't a very good one. It's taken ten thousand years to tell.
+
+You smile anyway, so as not to be rude. The stalagmite seems to stand a little straighter.
+
+# (draft)
+[deep_stalagmite_ves 10]
+{bored}Did a rock just tell you a joke? {smile}...Was it any good?
 
 [deep_boulder]
 A glossy black boulder. It is perfectly round and very heavy and does not want to talk about it.
@@ -45,11 +63,19 @@ A glossy black boulder. It is perfectly round and very heavy and does not want t
 [deep_crystal]
 A crystal growing out of the rock, giving off a thin blue light. It's the only thing in here that doesn't need yours.
 
+# (draft)
+[deep_crystal 2]
+The thin blue light. You hold your own light away from it, and it carries on exactly the same, not bothered either way.
+
 [deep_drop]
 A drop. Your light doesn't find the bottom of it. Far down, very small, there are specks, like a night sky seen from underneath.
 
 [deep_ash]
 Fine grey ash, soft as flour, with no footprints in it but yours.
+
+# (draft)
+[deep_ash 2]
+You look back at the ash. Your footprints, and Ves's beside them, with the little round dent of the umbrella tip every other step. It's good to see you've been somewhere.
 
 # --- THE FIRST DARK ---
 
@@ -68,6 +94,14 @@ The same careful stack as in the reeds. The same small hands.
 
 [fd_cairn_ves]
 {thoughtful}They point. That's all they do. In a place like this, that's plenty.
+
+# (draft)
+[fd_cairn 2]
+The same little stack: three stones, smallest on top, and three pale pebbles in a line pointing the way on. Somebody pressed each pebble down with a thumb. The thumbprints are still in the dust.
+
+# (draft)
+[fd_cairn_ves 2]
+{thoughtful}Small thumbs.
 
 [fd_cairn_turn]
 The same little stack of flat stones, three of them, smallest on top. In front of it, three pale pebbles lie in a line, and they point DOWN: away from the wide way east, and into a gap in the floor of the cave one person wide.
@@ -149,6 +183,14 @@ Something else lives here now, on the leftovers.
 [fd_bones_ves]
 {bored}I'd rather not meet whatever has all those teeth.
 
+# (draft)
+[fd_bones 2]
+You look again at the tooth marks on the rib. Small. Many. Some of them quite fresh.
+
+# (draft)
+[fd_bones_ves 2]
+{bored}Thank you. That's exactly what I needed to know.
+
 [fd_purse]
 A purse left at the back of a blind nook, as if somebody had meant to come back for it. Inside, some coins and a very old dried flower.
 
@@ -156,6 +198,10 @@ A purse left at the back of a blind nook, as if somebody had meant to come back 
 
 [cr_stalactite]
 A stalactite hanging so low you have to duck under it. Everything in the Crawl is built for something shorter than you.
+
+# (draft)
+[cr_stalactite 2]
+You duck under it again. You'll remember this one. Your head will, anyway.
 
 [cr_rubble]
 A low heap of fallen rock with a hollow under it, just big enough to crouch in. It has a faint pale shine, as if something had been sheltering here and the shine hadn't left.
@@ -238,6 +284,10 @@ Under a rib of bone, a chest. There is something in it that glows, very faintly,
 [cr_bones]
 A heap of bones in the chest chamber. There are tooth marks on them. They are all very tidy tooth marks.
 
+# (draft)
+[cr_bones 2]
+All very tidy tooth marks. Whatever lives down here has table manners. That isn't as comforting as it ought to be.
+
 [cr_purse]
 A purse in the west chamber, tucked behind a stalagmite. A bit damp, a bit grey, but it clinks.
 
@@ -260,6 +310,10 @@ There are a lot of them.
 [cp_marks_high_ves]
 {thoughtful}Neat, aren't they. Somebody who liked things in rows.
 
+# (draft)
+[cp_marks_high 2]
+You start counting the marks. You get to a hundred and stop, because there are a great many more, and because it's beginning to feel rude.
+
 [cp_marks_low]
 More marks, lower down the wall, in a smaller, wobblier hand.
 
@@ -270,8 +324,20 @@ Among the marks, a drawing. A sun, with rays, scratched round and round till it 
 
 Whoever drew it had been without a sun for a long time.
 
+# (draft)
+[cp_marks_child 2]
+The sun, scratched round and round until it was deep. The stick figure beside it is holding its stick. The stick is very nearly as big as it is.
+
+# (draft)
+[cp_marks_child_ves 2]
+{sad}...That's the sword.
+
 [cp_fire]
 A ring of nine stones round a hollow of old ash. The sticks are burned right through. Whoever built this fire built it carefully and then ran out of wood.
+
+# (draft)
+[cp_fire 2]
+Nine stones round the ash, and you see now they were chosen: all of a size, all smooth. Picked out one at a time, in the dark, by feel.
 
 [cp_stay]
 A smooth stone by the fire. Scratched on it, one word, over and over, in a hand that gets smaller down the stone:
@@ -283,11 +349,27 @@ At the very bottom, smallest of all, a promise: TILL IT'S LIT.
 [cp_stay_ves]
 {sad}...We're not staying.
 
+# (draft)
+[cp_stay 2]
+TILL IT'S LIT. The last word is scratched twice as deep as all the rest, as if he wanted to be very sure he'd meant it.
+
 [cp_cairn]
 A little pile of flat stones beside the fire. It's the smallest of them all. The top stone is a child's sweet wrapper, folded flat and weighted down.
 
+# (draft)
+[cp_cairn 2]
+Another sweet wrapper. You wonder how many sweets one small person can carry down a hole. Enough, it seems, to leave one at every place he wanted to remember.
+
 [cp_bedroll]
 An old bedroll. It's the size of a child's.
+
+# (draft)
+[cp_bedroll 2]
+You don't touch it. It's been smoothed flat, with one corner turned back, the way you leave a bed you mean to come back to.
+
+# (draft)
+[cp_bedroll_ves 2]
+{sad}...Leave it like that.
 
 [cp_purse]
 A very small purse, tucked behind a stalagmite where nobody would think to look. Some coins. A button. A sweet wrapper, folded flat.
@@ -399,6 +481,10 @@ A purse on the east ledge, behind a boulder. It sat there all the time the light
 [rt_cairn]
 A little pile of flat stones by the door, very small, very neat. The top one is a pebble from somewhere with water in it. It is a long way from anywhere with water in it.
 
+# (draft)
+[rt_cairn 2]
+The pebble on top, from somewhere with water in it. You think of the lake, and the reeds, and somebody small picking up one stone to carry the whole way down.
+
 [rt_stone]
 Two smooth stones leaning together at the edge of the ledge, side by side, looking out at the drop.
 
@@ -420,12 +506,16 @@ Another little pile of flat stones at a turn in the stair. Whoever made them cam
 A little pile of flat stones, halfway up the stair. Somebody sat down here for a while. The step is worn, just there, in a hollow about the size of somebody small.
 
 [wu_cairn_mid_ves]
-{sad}They sat here. Halfway up, and too tired to be glad about it.
+{sad}He sat here. Halfway up, and too tired to be glad about it.
 
-{determined}And then they got up and built another one.
+{determined}And then he got up and built another one.
 
 [wu_top]
 Warm air is coming down the stair from above, and there's a noise on it, very faint and very far away. Something like drums. Something like a lot of people deciding to be happy at once.
+
+# (draft)
+[wu_top 2]
+The noise again, on the warm air, closer or louder. Drums, and something that might be a band of frogs, and a great many people who have made up their minds.
 
 [wu_chest]
 A chest tucked into the corner of the stair, where somebody tired could rest against it. Inside, a jar of something honey-coloured, still warm.
@@ -443,6 +533,14 @@ A cluster of blue crystal, giving off a soft, cold glow. It is the light you saw
 
 [vg_stone]
 A smooth stone, set down in the middle of the hollow like a seat. It's worn, a little, as if somebody sat on it to look at the crystals.
+
+# (draft)
+[vg_stone 2]
+You sit on the worn stone for a moment and look at the crystals, the way somebody did before you. It's very quiet. It's the first place down here that's quiet in a good way.
+
+# (draft)
+[vg_stone_ves 2]
+{thoughtful}...Two minutes. {bored}Then we're going.
 
 [vg_cairn]
 A little pile of flat stones, tucked into the corner of the hollow. It has been here a very long time.

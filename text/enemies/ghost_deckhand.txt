@@ -1,0 +1,88 @@
+# DECKHAND: one of the Fair Return's crew, a boy of sixteen in a striped
+# jersey and a knitted cap, still on watch a hundred years after the ship went
+# down. He swabs, empties the bucket, strikes the bell and holds out a letter he
+# never posted. He means no harm. The hero never speaks. (draft: every line here)
+# Numbers (HP, damage, how much each TALK option calms him) live in
+# src/data/enemies/ghost_deckhand.js.
+
+[intro]
+A knitted cap rises out of the fog on the deck, and under it a striped jersey, and under that nothing but mist. In one hand is a swab. In the other, held out to you, is a letter. A DECKHAND!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+DECKHAND hums something under his breath. It sounds like it had words once, and they were about a girl.
+
+He holds the letter out to you. The seal is still red. It has been waiting a long time for someone to take it.
+
+The swab goes round and round the same boards. They are the cleanest boards in the world, and have been for a hundred years.
+
+He looks at you, politely, and then past you, at the door. Nobody ever comes through it.
+
+Smells of wet rope, lye soap and an old, old Sunday.
+
+[flavor: low]
+DECKHAND is wearing thin. You can see the boards through his jersey, and he is still holding out the letter.
+
+[flavor: spareable]
+DECKHAND has put down the swab. He is holding the letter with both hands now, as if he'd like you to have it, and is not sure how to say so.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Swab the
+deck!
+
+...What
+day is it?
+
+Mind
+the wet.
+
+Eight
+bells.
+
+Is it my
+watch?
+
+Will you
+post it?
+
+Nearly
+done.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/ghost_deckhand.js.
+[talk: Inspect]
+DECKHAND - HP 12400
+A boy of the Fair Return's crew, still on watch. Swabs the deck in a wide sweep with a clean gap, slops the bilge bucket in splashes, strikes the bell in rings with gaps, and drops letters from above, with the wax seals coming down hard. Means no harm.
+
+[talk: Ask the day]
+You point at your wrist, then at him: what day is it? DECKHAND thinks about it hard. He says it was a Tuesday. It was definitely a Tuesday, and he'd be paid on Friday, and then he'd go home. He is quiet for a while, and the swab stops.
+
+[talk: Take the letter]
+You step in and take the letter from his hand. It weighs nothing at all. DECKHAND looks at his empty hand, and then at you, and something in his face lets go. He says thank you, very quietly, as if he had been wanting to say it all this time.
+
+[talk: Hum along]
+You pick up the tune he has been humming and hum it, a note behind. DECKHAND stops. Then he starts again, from the beginning, slower, with you, and for a verse and a half the two of you get all the way to the part about the girl.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+DECKHAND sets the letter down very carefully on the deck, as if it were the last thing he had to do. Then he comes apart into mist, a cap and a jersey's worth, and the swab clatters on the boards.
+
+[pacified]
+DECKHAND puts his letter in your hand and closes your fingers over it. He says it's all right, he knows how long the post takes, and he tips his knitted cap to you, to the ship, and to a girl who isn't there, and fades, cap first, into the fog.
+
+# Ves's own TALK lines for him ({foe} is his name).
+[vesper_talk]
+Ves says she'll see the letter gets where it's going, and doesn't say she doesn't know where that is. {foe} looks relieved, and a good deal less like a ghost.
+
+Ves tells {foe} the deck is very clean. It is the cleanest deck she has ever seen. {foe} goes pink, in so far as he can.
+
+Ves asks {foe} who the girl in the song is. He tells her. It takes a long time, and she doesn't interrupt once.
+
+# Bramble's own TALK lines for him.
+[bramble_talk]
+Bramble tells {foe} that he is not scared of ghosts. His voice cracks on "ghosts". {foe} looks at the swab, and offers it to him, in case it helps.
+
+Bramble says his mum writes letters too, and that she always puts a pressed flower in. {foe} asks, hopefully, whether you have to put a flower in.
+
+Bramble asks {foe} if it's lonely, being the only one still swabbing. {foe} says there's always the bell. Then he says it was nicer when there were other people to hear it.

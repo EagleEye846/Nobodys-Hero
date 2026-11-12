@@ -27,6 +27,8 @@ export const DEEP_HEROS_CAMP = {
   music: 'herosCamp',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'deep',
+  // How it rings (a cave: ECHOES in src/audio/music.js).
+  echo: 'cave',
   // Dark: only your light shows anything (0 to 1).
   // Dark, but the camp has a little light of its own: a faint blue crystal
   // between the marks, another over the bedroll and the fire's last embers,

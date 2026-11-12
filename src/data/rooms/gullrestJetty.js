@@ -1,7 +1,9 @@
 // THE JETTY: the last of Gullrest. A boardwalk pier runs out into the bay with
 // rails along both sides, a headland (the point) to the north-east and open sea
-// beyond. At the end of the pier is Haddock's rowboat, the Bother, with Haddock
-// beside her. The scene the_sky_turns is the ride: rowing round the point, the sun
+// beyond. At the end of the pier is Haddock's rowboat, the Bother. Haddock isn't here
+// before you (he went round the back way from the cove): stepping onto the end of the
+// pier, he comes in at the door after you and along the pier to her. The scene
+// the_sky_turns is that and the ride: rowing round the point, the sun
 // goes, the rain starts and the sky turns green (the storm look), and the ride ends
 // on the shingle of the Wrack Shore (wrack_landing). It plays once: afterwards Haddock
 // and the Bother are gone from the pier.
@@ -24,22 +26,22 @@ export const GULLREST_JETTY = {
 
   tiles: [
     '################################################',
-    '#WWWWWWWWWWWW~~~~~~~~~~~~~~~#########~~~~~~~~~~~',
-    '#,,,,,,,,,,,,~~~~~~~~~~~~~~~#########~~~~~~~~~~~',
-    '#,,,,,,,,,,,,~~~~~~~~~~~~~~~#########~~~~~~~~~~~',
-    '#..........qqqq~~~~~~~~~~~~~#########~~~~~~~~~~~',
-    '#..........qqqq~~~~~~~~~~~~~#########~~~~~~~~~~~',
-    '#..........q;;q~~~~~~~~~~~~~~#######~~~~~~~~~~~~',
-    '#..........fffffffffff~~~~~~~~#####~~~~~~~~~~~~~',
+    '##WWW###WWWWW~~~~~~~~~~~~O~#,,,##,,,##~~~~~~~~~~',
+    '#W,,,WWW,,,,~~~~~~~~~~~~~~~#,,O,,,,,,#~O~~~~~~~~',
+    '#,,,,,,,,,,~~~~~~~~~~~~~~~OW##,,,,O,,#~~~~~~~~~~',
+    '#..........qqq~~~~~~~~~~~~~~##,,,,,##W~~~~~OO~~~',
+    '#..........qqqqq~~~~~~~~~~~~W########~O~~~~~~~~~',
+    '#..........qqqq~~~~~~~~~~~~~~W#####WW~~~~~~~~~~~',
+    '#..........fffffffffff~~~~~~~~WWWWW~O~~~~~~~~~~~',
     ':..........oooooooooooo~~~~~~~~~~~~~~~~~~~~~~~~~',
     ':..........oooooooooooo~~~~~~~~~~~~~~~~~~~~~~~~~',
     '#..........fffffffffff~~~~~~~~~~~~~~~~~~~~~~~~~~',
-    '#..........q;;q~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
-    '#..........q;;q~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
     '#..........qqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
     '#..........qqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
-    '#............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
-    '#............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
+    '#..........qqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~O~',
+    '#..........qqqq~~~OO~~~~~~~~~~~~~~~~~~~~O~~~~~~~',
+    '#...........q~~~~O~~~~~~~~~~~~~~~O~~~~~~~OO~~~~~',
+    '#..........;.qq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
     '############~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
   ],
 
@@ -54,11 +56,10 @@ export const GULLREST_JETTY = {
   // Stepping onto the end of the pier boards the Bother (once).
   cutscenes: [{ x: 21, y: 8, w: 2, h: 2, scene: 'the_sky_turns' }],
 
-  // Haddock beside the Bother, a sign, buoys, pots, a net, an unlit lantern post, a rope
+  // The Bother, a sign, buoys, pots, a net, an unlit lantern post, a rope
   // coil and a purse.
   textFile: 'interactions/gullrest.txt',
   props: [
-    { sprite: 'cf_haddock', x: 19, y: 8, npc: 'haddock_jetty', animation: 'cf_haddock', speed: 0.5, until: 'the_sky_turns' },
     { sprite: 'cf_bother', x: 23, y: 9, npc: 'the_bother', animation: 'cf_bother', speed: 0.5, until: 'the_sky_turns' },
     { sprite: 'sign', x: 8, y: 6, text: 'jetty_sign' },
     { sprite: 'c5_buoys_pile', x: 4, y: 6, text: 'jetty_buoys' },
@@ -69,15 +70,40 @@ export const GULLREST_JETTY = {
     { sprite: 'gold_pouch', x: 3, y: 14, text: 'jetty_pouch', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'c5_bunting_post', x: 12, y: 7, text: 'beach_bunting_post', animation: 'c5_bunting_post', speed: 0.4 },
     { sprite: 'sy_dune_grass', x: 6, y: 3, text: 'steps_dune', animation: 'sy_dune_grass', speed: 0.4, walkable: true },
+    // Dressing (second pass): warm stones in the sea (none in rows 8 to 11 east of the jetty,
+    // where the Bother rows off in the_sky_turns, and nothing on rows 8 and 9 of the sand,
+    // where Haddock walks out), a log and a pot on the sand, weed along the shingle.
+    { sprite: 'c5_rocks_sunny', x: 40, y: 3, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 18, y: 4, text: 'beach_rocks' },
+    { sprite: 'c5_rocks_sunny', x: 27, y: 14, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 36, y: 13, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 21, y: 16, text: 'beach_rocks' },
+    { sprite: 'c5_rocks_sunny', x: 44, y: 15, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 46, y: 5, text: 'beach_rocks' },
+    { sprite: 'c5_rocks_sunny', x: 1, y: 4, text: 'beach_rocks' },
+    { sprite: 'c5_drift_log', x: 7, y: 16, text: 'beach_log' },
+    { sprite: 'c5_pot_single', x: 10, y: 12, text: 'beach_pot' },
+    { sprite: 'c5_wrack_line', x: 11, y: 5, flat: true, walkable: true },
+    { sprite: 'c5_wrack_line', x: 11, y: 13, flat: true, walkable: true },
+    { sprite: 'c5_rock_pool_sunny', x: 12, y: 15, flat: true, walkable: true },
+    { sprite: 'c5_gull_marks', x: 6, y: 10, flat: true, walkable: true },
+    { sprite: 'c5_crab_trail', x: 1, y: 12, flat: true, walkable: true },
+    { sprite: 'sy_dune_grass', x: 9, y: 3, flat: true, walkable: true },
+    { sprite: 'sy_dune_grass', x: 1, y: 15, flat: true, walkable: true },
+    { sprite: 'c5_marram', x: 3, y: 2, flat: true, walkable: true },
+    // The headland's grassy top (out of reach): a little marram and dune grass up there.
+    { sprite: 'sy_dune_grass', x: 31, y: 2, flat: true, walkable: true },
+    { sprite: 'c5_marram', x: 33, y: 4, flat: true, walkable: true },
+    { sprite: 'sy_dune_grass', x: 35, y: 1, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'jetty_wall', W: 'jetty_wall', '~': 'jetty_sea' },
 
-  // A PAIR on the south sand: a gullion (x 3 to 6, row 13) and a sandcastle beside it (x 3 to 6,
-  // home row 12), close enough to fight you together. Both on the beach and well clear of the pier
+  // A PAIR on the south sand: a gullion (x 3 to 7, row 15) and a sandcastle beside it (x 3 to 6,
+  // home row 14, down off the cove door's spawn at 2,9), close enough to fight you together. Both on the beach and well clear of the pier
   // (rows 8 and 9), the door and the boat's route (row 9 east of the pier, then round the point).
   // No monsters on the pier, so the boarding and the ride have a clear run.
   npcs: [
-    { enemy: 'gullion', x: 4, y: 13, patrol: [3, 6], behaviour: 'patrol' },
-    { enemy: 'sandcastle', x: 5, y: 12, patrol: [3, 6], behaviour: 'wander' },
+    { enemy: 'gullion', x: 4, y: 15, patrol: [3, 7], behaviour: 'patrol' },
+    { enemy: 'sandcastle', x: 5, y: 14, patrol: [3, 6], behaviour: 'wander' },
   ],
 };

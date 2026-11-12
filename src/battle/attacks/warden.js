@@ -173,25 +173,31 @@ defineBulletArt('wdBlockL', {
 // --- Bullets of its own ---
 
 // THE GREAT SWORD, point down. First the column it'll come down blinks,
-// then it plunges from above, sticks in the floor of the box (`onLand`
-// fires once, as it hits), and draws back up. The blade hurts all the way
+// then it plunges from above, sticks in the floor of the box (`landed`
+// is set as it hits; the attack throws its chips from there), and draws
+// back up. The blade hurts all the way
 // along while it's moving or stuck.
-function plungingSword({ x, box, warn = 0.65, speed = 280, stick = 0.45, length = 64, onLand }) {
+function plungingSword({ x, box, warn = 0.65, speed = 280, stick = 0.45, length = 64 }) {
   const floor = box.y + box.h - 1;
   return {
-    x, y: box.y - 4, dmg: null, grazed: false, age: 0, tip: box.y - 4, landed: 0, rising: false,
+    x, y: box.y - 4, vx: 0, vy: 0, dmg: null, grazed: false, age: 0, tip: box.y - 4, landed: 0, rising: false,
     update(dt) {
       this.age += dt;
       if (this.age < warn) return;
+      // (vy only says how fast it's going, for anything reading it; it
+      // moves by its tip.)
+      this.vy = 0;
       if (!this.landed) {
         this.tip = Math.min(floor, this.tip + speed * dt);
+        this.vy = speed;
         if (this.tip >= floor) {
           this.landed = this.age;
-          onLand?.(this);
+          this.vy = 0;
         }
       } else if (this.age > this.landed + stick) {
         this.rising = true;
         this.tip -= 150 * dt;
+        this.vy = -150;
       }
       this.y = this.tip;
     },
@@ -303,35 +309,49 @@ function sweepingHand({ y, box, from, warn = 0.6, speed = 150, h = 16 }) {
 // The GARLAND, swinging like a pendulum from a pin above the box: a chain
 // of carved flowers and leaves, `links` of them, each `gap` apart. Only the
 // flowers and leaves hurt, not the space between.
-function swingingGarland({ pivot, length, swing, period, phase, Shot, links = 12, gap = 6 }) {
+// Where it hangs is worked out from its age alone (not from where it was
+// last frame), so it swings the same however it's stepped. It blinks for
+// `warn` seconds as it's let down before it can hurt.
+function swingingGarland({ pivot, length, swing, period, phase, Shot, links = 12, gap = 6, warn = 0.7 }) {
   const parts = Array.from({ length: links }, (_, i) => new Shot({ x: pivot.x, y: pivot.y, art: i % 2 ? 'wdLeaf' : 'wdFlower', harmless: true }));
+  const radii = parts.map((_, i) => length - (links - 1 - i) * gap);
+  const angleAt = (age) => Math.PI / 2 + Math.sin((age / period) * Math.PI * 2 + phase) * swing;
   let fade = 0;
   return {
-    x: pivot.x, y: pivot.y, dmg: null, grazed: false, age: 0, ending: false,
+    x: pivot.x, y: pivot.y, vx: 0, vy: 0, dmg: null, grazed: false, age: 0, ending: false,
     update(dt) {
       this.age += dt;
       if (this.ending) fade += dt;
-      const a = Math.PI / 2 + Math.sin((this.age / period) * Math.PI * 2 + phase) * swing;
+      const a = angleAt(this.age);
       parts.forEach((part, i) => {
-        const r = length - (links - 1 - i) * gap;
-        part.x = pivot.x + Math.cos(a) * r;
-        part.y = pivot.y + Math.sin(a) * r;
+        part.x = pivot.x + Math.cos(a) * radii[i];
+        part.y = pivot.y + Math.sin(a) * radii[i];
         part.angle = a + Math.PI / 2;
         part.age = this.age;
       });
-      const end = parts[parts.length - 1];
-      this.x = end.x;
-      this.y = end.y;
+      this.x = pivot.x + Math.cos(a) * length;
+      this.y = pivot.y + Math.sin(a) * length;
+      // How fast its tip is going (it isn't moved by this, it's only said).
+      const turn = Math.cos((this.age / period) * Math.PI * 2 + phase) * swing * (Math.PI * 2 / period);
+      this.vx = -Math.sin(a) * length * turn;
+      this.vy = Math.cos(a) * length * turn;
     },
     isGone() { return fade > 0.3; },
     edgeDistance(px, py) {
-      if (this.ending || this.age < 0.5) return Infinity;
-      return Math.min(...parts.map((part) => Math.hypot(px - part.x, py - part.y) - part.r));
+      if (this.ending || this.age < warn) return Infinity;
+      const a = angleAt(this.age);
+      const cx = Math.cos(a);
+      const cy = Math.sin(a);
+      let d = Infinity;
+      for (let i = 0; i < parts.length; i++) {
+        d = Math.min(d, Math.hypot(px - (pivot.x + cx * radii[i]), py - (pivot.y + cy * radii[i])) - parts[i].r);
+      }
+      return d;
     },
     draw(ctx) {
       ctx.save();
       // Blinks as it's let down, fades once it's done.
-      if (this.age < 0.5) ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.3 : 0.6;
+      if (this.age < warn) ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.3 : 0.6;
       if (this.ending) ctx.globalAlpha = Math.max(0, 1 - fade / 0.3);
       for (const part of parts) part.draw(ctx);
       ctx.restore();
@@ -491,7 +511,7 @@ function heroOutline({ box, start, swing = 14, period = 3.2, from = 1.15, to = 0
 // across blinks, then it tips over and comes down flat along the floor,
 // lies there a moment, and breaks up. The whole slab hurts while it falls
 // and lies.
-function topplingDoor({ box, side, length = 58, thick = 9, warn = 0.8, seconds = 0.55, lie = 0.5, onLand }) {
+function topplingDoor({ box, side, length = 58, thick = 9, warn = 0.8, seconds = 0.55, lie = 0.5 }) {
   // Which side of its hinge line the slab's thickness is on (so it lands
   // lying on the floor, not under it).
   const across = side === 'left' ? -1 : 1;
@@ -510,7 +530,6 @@ function topplingDoor({ box, side, length = 58, thick = 9, warn = 0.8, seconds =
       this.age += dt;
       if (!this.landed && this.age >= warn + seconds) {
         this.landed = true;
-        onLand?.(this);
       }
     },
     isGone() { return this.age > warn + seconds + lie + 0.3; },
@@ -635,19 +654,31 @@ export const WARDEN_ATTACKS = {
   wardenSword(box, density, { Shot, every, rand }) {
     let real = 0;
     let count = 0;
-    const land = (bullets) => (sword) => {
-      chips(bullets, Shot, rand, { x: sword.x, y: box.y + box.h - 3, count: 4, spread: 55, up: 50 });
-    };
+    // The blades down, waiting to land. (The chips go in from here, as each
+    // lands, into the bullets as they are that frame: a list handed to a
+    // blade when it was thrown is gone by the time it lands.)
+    let swords = [];
     const plunge = every(1.2, 1.35, (bullets, soul) => {
       count++;
       const x = clamp(soul.x + rand(-4, 4), box.x + 6, box.x + box.w - 6);
-      bullets.push(plungingSword({ x, box, onLand: land(bullets) }));
+      const thrown = [plungingSword({ x, box })];
       // Every third, a second blade a little apart: get between, or out.
       if (count % 3 === 0) {
         const other = x < box.x + box.w / 2 ? x + rand(26, 34) : x - rand(26, 34);
-        bullets.push(plungingSword({ x: clamp(other, box.x + 6, box.x + box.w - 6), box, warn: 0.85, onLand: land(bullets) }));
+        thrown.push(plungingSword({ x: clamp(other, box.x + 6, box.x + box.w - 6), box, warn: 0.85 }));
       }
+      swords.push(...thrown);
+      bullets.push(...thrown);
     }, { first: 0.15 });
+    const landings = (bullets) => {
+      for (const sword of swords) {
+        if (!sword.landed || sword.chipped) continue;
+        sword.chipped = true;
+        // Two chips, skidding low along the floor, one each way.
+        chips(bullets, Shot, rand, { x: sword.x, y: box.y + box.h - 3, count: 2, spread: 55, up: 30 });
+      }
+      swords = swords.filter((sword) => !sword.chipped);
+    };
     // Stone petals, shaken off the garland every time it moves.
     const petals = every(0.3, 0.42, (bullets) => {
       bullets.push(new Shot({ x: rand(box.x + 4, box.x + box.w - 4), y: box.y - 2, vx: rand(-12, 12), vy: rand(26, 36), art: 'wdPetal' }));
@@ -656,6 +687,7 @@ export const WARDEN_ATTACKS = {
       duration: 7.5,
       update: (dt, bullets, soul) => {
         real += dt / density;
+        landings(bullets);
         if (real > 6.3) return;
         plunge(dt, bullets, soul);
         petals(dt, bullets);
@@ -664,17 +696,18 @@ export const WARDEN_ATTACKS = {
   },
 
   // THE GARLAND. The carved garland off its chest comes down into the box
-  // in two long strands, swinging like bells from pins above it, one
-  // against the other. Keep out from under them, or time it. Stone petals
-  // shake off them as they go.
+  // in two strands, swinging like bells from pins above it, one against
+  // the other. They don't reach the floor: keep low, under them, where the
+  // stone petals they shake off come down. (Hung any lower they swept the
+  // whole box, with nowhere to be as they crossed.)
   wardenGarland(box, density, { Shot, every, rand }) {
     let real = 0;
     let strands = [];
     const left = Math.random() < 0.5;
     const hang = (bullets) => {
       strands = [
-        swingingGarland({ pivot: { x: box.x + box.w * 0.3, y: box.y - 26 }, length: 100, swing: 0.62, period: 2.3, phase: left ? 0 : Math.PI, Shot, links: 15 }),
-        swingingGarland({ pivot: { x: box.x + box.w * 0.7, y: box.y - 26 }, length: 84, swing: 0.7, period: 2.3, phase: left ? Math.PI : 0, Shot, links: 12 }),
+        swingingGarland({ pivot: { x: box.x + box.w * 0.3, y: box.y - 26 }, length: 82, swing: 0.62, period: 2.3, phase: left ? 0 : Math.PI, Shot, links: 12 }),
+        swingingGarland({ pivot: { x: box.x + box.w * 0.7, y: box.y - 26 }, length: 74, swing: 0.7, period: 2.3, phase: left ? Math.PI : 0, Shot, links: 10 }),
       ];
       bullets.push(...strands);
     };
@@ -945,18 +978,25 @@ export const WARDEN_ATTACKS = {
     let real = 0;
     const side = shuffleBag(['left', 'right']);
     let count = 0;
-    const land = (bullets) => (door) => {
-      for (let i = 0; i < 3; i++) chips(bullets, Shot, rand, { x: door.x + (door.x < box.x + box.w / 2 ? 1 : -1) * (12 + i * 18), y: box.y + box.h - 5, count: 2, spread: 30, up: 50 });
+    // The doors down, waiting to land: their chips go in from update, into
+    // the bullets as they are that frame.
+    let doors = [];
+    const landings = (bullets) => {
+      for (const door of doors) {
+        if (!door.landed || door.chipped) continue;
+        door.chipped = true;
+        for (let i = 0; i < 3; i++) chips(bullets, Shot, rand, { x: door.x + (door.x < box.x + box.w / 2 ? 1 : -1) * (12 + i * 18), y: box.y + box.h - 5, count: 2, spread: 30, up: 50 });
+      }
+      doors = doors.filter((door) => !door.chipped);
     };
     const topple = every(1.7, 1.85, (bullets) => {
       count++;
-      if (count % 3 === 0) {
+      const thrown = count % 3 === 0
         // Both at once, shorter: the middle top is the only safe place.
-        bullets.push(topplingDoor({ box, side: 'left', length: 46, onLand: land(bullets) }));
-        bullets.push(topplingDoor({ box, side: 'right', length: 46, onLand: land(bullets) }));
-      } else {
-        bullets.push(topplingDoor({ box, side: side(), length: 60, onLand: land(bullets) }));
-      }
+        ? [topplingDoor({ box, side: 'left', length: 46 }), topplingDoor({ box, side: 'right', length: 46 })]
+        : [topplingDoor({ box, side: side(), length: 60 })];
+      doors.push(...thrown);
+      bullets.push(...thrown);
     }, { first: 0.1 });
     const arch = every(0.7, 0.85, (bullets) => {
       bullets.push(new Shot({ x: rand(box.x + 24, box.x + box.w - 24), y: box.y + 4, vy: 10, gravity: 170, warn: 0.45, art: 'wdBlockS' }));
@@ -965,6 +1005,7 @@ export const WARDEN_ATTACKS = {
       duration: 7.6,
       update: (dt, bullets) => {
         real += dt / density;
+        landings(bullets);
         if (real < 6.2) topple(dt, bullets);
         if (real < 6.4) arch(dt, bullets);
       },
@@ -1012,9 +1053,13 @@ export const WARDEN_ATTACKS = {
     let real = 0;
     let line = Math.floor(rand(0, PROPHECY.length));
     const falling = [];
-    const land = (bullets) => (sword) => chips(bullets, Shot, rand, { x: sword.x, y: box.y + box.h - 3, count: 3, spread: 50, up: 45 });
+    // The blade's chips go in from update as it lands, into the bullets as
+    // they are that frame.
+    let swords = [];
     const plunge = every(2.0, 2.2, (bullets, soul) => {
-      bullets.push(plungingSword({ x: clamp(soul.x, box.x + 6, box.x + box.w - 6), box, length: 34, onLand: land(bullets) }));
+      const sword = plungingSword({ x: clamp(soul.x, box.x + 6, box.x + box.w - 6), box, length: 34 });
+      swords.push(sword);
+      bullets.push(sword);
     }, { first: 0.2 });
     const words = every(2.1, 2.3, (bullets) => {
       const text = PROPHECY[line++ % PROPHECY.length];
@@ -1035,6 +1080,12 @@ export const WARDEN_ATTACKS = {
       duration: 8.4,
       update: (dt, bullets, soul) => {
         real += dt / density;
+        for (const sword of swords) {
+          if (!sword.landed || sword.chipped) continue;
+          sword.chipped = true;
+          chips(bullets, Shot, rand, { x: sword.x, y: box.y + box.h - 3, count: 2, spread: 50, up: 30 });
+        }
+        swords = swords.filter((sword) => !sword.chipped);
         if (real < 7.4) {
           plunge(dt, bullets, soul);
           words(dt, bullets);

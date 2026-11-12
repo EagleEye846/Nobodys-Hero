@@ -203,7 +203,8 @@ export const GLINTLING_ATTACKS = {
   // Skating. The glintling rolls itself up and skates round the box,
   // bouncing off the walls (turning a little toward you at each one), and
   // leaves a trail of glitter on the ice that sparkles for a second before
-  // it fades. Don't get boxed in by your own side of the trail.
+  // it fades. Don't get boxed in by your own side of the trail. Each time
+  // it hits a wall it kicks up a spray of three splinters at you.
   glintSkate(box, density, { Shot, rand, angleTo }) {
     let skater = null;
     let heading = null;
@@ -242,6 +243,10 @@ export const GLINTLING_ATTACKS = {
         if (Math.sign(Math.cos(angle)) !== sx || Math.sign(Math.sin(angle)) !== sy) angle = now;
         skater.vx = Math.cos(angle) * speed;
         skater.vy = Math.sin(angle) * speed;
+        const spray = angleTo(skater, soul);
+        for (const off of [-0.28, 0, 0.28]) {
+          bullets.push(new Shot({ x: skater.x, y: skater.y, vx: Math.cos(spray + off) * 52, vy: Math.sin(spray + off) * 52, warn: 0.15, life: 2, art: 'glintShard' }));
+        }
       },
     };
   },

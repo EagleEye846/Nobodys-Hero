@@ -9,7 +9,7 @@ I'm Mattock. I'm staying till it goes properly dark. Then I'm going home. It's a
 [repeat]
 My grandad's grandad dug with the Hero, you know. Well, near the Hero. In the same mountain.
 
-He said the Hero never took a pick. Just walked down the old workings like they owed money. And he said the Hero was small.
+He said the Hero never took a pick. Just walked down the old workings like they owed him money. And he said the Hero was small.
 
 Nobody believed him. We all thought the Hero would be, you know. Bigger.
 
@@ -43,3 +43,23 @@ Tell her... no. I can't write. Hold on.
 He presses his thumb in the dirt, and then on a scrap of sacking, and then, carefully, draws a hat. That's "soon". She'll know.
 
 You take the reply.
+
+# More turns (2026-11-09 polish)
+
+# (draft)
+[repeat 2]
+Is it properly dark yet? No? I'll wait.
+
+...Is it now?
+
+# (draft)
+[repeat_ves 2]
+{bored}It's a cave. {thoughtful}It's never going to be properly anything.
+
+# (draft)
+[repeat 3]
+That broken lever in the Old Seam. Grandad's grandad said the lever was fine. It was the sign that was broken. I've thought about that for years. I still don't know what he meant.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Packing up. That's my hat, my other hat, my spare lamp, and Mum's letters. Mostly Mum's letters. It's a lot of hat for one mole.

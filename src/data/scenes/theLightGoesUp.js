@@ -41,6 +41,8 @@ export const THE_LIGHT_GOES_UP = {
     ]),
     { do: 'stage', flare: { at: { x: 16, y: 2 }, seconds: 2.4 } },
     { do: 'sound', name: 'boom' },
+    // The whole rock wakes: rumbling, shedding grit (AMBIENCES in src/audio/music.js).
+    { do: 'ambience', name: 'root_waking' },
     // The beam pulses down the whole root from the roof, and grit shakes
     // loose from the rock as the light goes on up through it.
     { do: 'stage', shafts: [{ at: { x: 16.5, y: 14 }, w: 1.4, color: '255, 240, 170' }], rubble: 3.5, rubbleAmount: 0.25 },
@@ -52,6 +54,8 @@ export const THE_LIGHT_GOES_UP = {
     { do: 'stage', shafts: [], rubble: 0 },
     { do: 'say', text: 'A long rumble comes down through the rock from very far above, as if something enormous had turned over in its sleep and opened one eye.' },
     { do: 'wait', seconds: 1.4 },
+    // It settles back to the Deep's own quiet, for the cheer.
+    { do: 'ambience' },
     { do: 'sound', name: 'farCheer' },
     { do: 'say', text: 'And then, from a very long way up, so faint you could swear you imagined it: a cheer.' },
     { do: 'wait', seconds: 1 },
@@ -75,9 +79,9 @@ export const THE_LIGHT_GOES_UP = {
     { do: 'wait', seconds: 1 },
     // What the Hero's "I KNOW HOW" was (the_heros_camp): the root shows it now.
     { do: 'say', text: 'In the new light, the ledge by the last prism shows something the dark had been hiding.\n\nA narrow crack in the rock, worn smooth and wide at the top, about the width of a sword blade.' },
-    { do: 'say', text: 'Below it, the rock is scraped pale, low down, where somebody small braced their feet and pushed the stone round on their own.\n\nScratched beside the crack, a number and a word: 112. LIT.' },
+    { do: 'say', text: 'Below it, the rock is scraped pale, low down, where somebody small braced his feet and pushed the stone round on his own.\n\nScratched beside the crack, a number and a word: 112. LIT.' },
     { do: 'wait', seconds: 0.8 },
-    { do: 'say', who: 'ves', text: '{thoughtful}They stuck the sword in the crack to hold the beam, and turned the stone themselves.' },
+    { do: 'say', who: 'ves', text: '{thoughtful}He stuck the sword in the crack to hold the beam, and turned the stone himself.' },
     { do: 'say', who: 'ves', text: '{bored}It took two of us.\n\n{smile}...Show-off.' },
     { do: 'wait', seconds: 0.6 },
   ],

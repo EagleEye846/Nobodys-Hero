@@ -5,19 +5,19 @@
 
 # Said the first time you talk to her at home.
 [first]
-There you are, sprout. Come in, come in. Sit by the fire and thaw out.
+There you are. Boots off, sprout, I've only just swept. Sit by the fire and thaw out.
 
 Stay near the lanterns out there. Most of them, anyway.
 
-The waxlings may snap at you. Be gentle with them. They're only frightened.
+The waxlings will have a go at you. They're mostly drip and bluster. You needn't snuff them.
 
-If you get hurt, come straight home. Warm wax mends most things.
+If you come back scorched, I've wax for that. Warm wax mends most things.
 
 # Said every time after that.
 [repeat]
-Back again? Good. Let me look at you. ...Yes, still all there.
+Back again? Hold out your hands. ...Ten fingers. Good.
 
-Hero or not, there's always a seat by my fire for you.
+Hero or not, you track mud in like one.
 
 The Keeper's lantern... I don't like how it leans toward people. Do be careful, sprout.
 
@@ -26,17 +26,17 @@ The Keeper's lantern... I don't like how it leans toward people. Do be careful, 
 [first after taper_spared]
 {surprised}...Sprout? Is that you?
 
-{surprised}You came back. You actually came back.
+{surprised}You came back up. Nothing comes back up those steps.
 
 {sad}I was sure that door had swallowed you, like all the others.
 
-{sad}I keep thinking about it, you know. I threw everything I had at you...
+{sad}I keep going over it. I gave you the worst frost I had, and you stood in it.
 
-{crying}...and you never once raised a hand. Not one of them ever did that for me.
+{crying}...I only ever got to watch them go. I never got to see one come back.
 
-{glee}Well! Don't just stand in the doorway. The soup's still warm.
+{glee}Well! Boots off. The soup's on, and there's far too much of it.
 
-{glee}I made too much. I always make too much.
+{glee}There always is. Old habit.
 
 # Said every time after that.
 [repeat after taper_spared]

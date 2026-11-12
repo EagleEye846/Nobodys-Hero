@@ -23,7 +23,7 @@
 
 const T = 16;
 
-export const COAST_AREAS = new Set(['gullrest', 'wrack', 'saltcombe', 'lanes', 'wreck', 'merrow', 'soundings', 'isles', 'haddock_light', 'reach', 'lastlight']);
+export const COAST_AREAS = new Set(['gullrest', 'wrack', 'saltcombe', 'lanes', 'wreck', 'ghostship', 'merrow', 'soundings', 'isles', 'haddock_light', 'reach', 'lastlight']);
 
 // --- Little helpers (the same ones brightTiles.js has) ---
 function hash(tx, ty, salt = 0) {
@@ -52,6 +52,19 @@ function shade(ctx, x, y, w, h, alpha, rgb = '0, 0, 0') {
   ctx.fillRect(x, y, w, h);
 }
 // '#aabbcc' as 'r, g, b' (for a soft stroke).
+// Smooth value noise, 0..1, and a 4x4 dither table.
+function softNoise(x, y, s) {
+  const ix = Math.floor(x);
+  const iy = Math.floor(y);
+  const u = (x - ix) * (x - ix) * (3 - 2 * (x - ix));
+  const v = (y - iy) * (y - iy) * (3 - 2 * (y - iy));
+  const a = hash(ix, iy, s);
+  const b = hash(ix + 1, iy, s);
+  const c = hash(ix, iy + 1, s);
+  const d = hash(ix + 1, iy + 1, s);
+  return (a + (b - a) * u) * (1 - v) + (c + (d - c) * u) * v;
+}
+const DITHER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
 function hexRgb(hex) {
   const n = parseInt(hex.slice(1, 7), 16);
   return `${n >> 16}, ${(n >> 8) & 255}, ${n & 255}`;
@@ -59,6 +72,142 @@ function hexRgb(hex) {
 const WALLISH = '#WVHKk5678awehM';
 const isWallish = (c) => c != null && WALLISH.includes(c);
 const isSea = (c) => c === '~' || c === '0';
+
+// --- Things laid across tiles (deck plates, flagstones, boards) ---
+// A row of pieces of uneven length laid end to end, in world pixels: where each piece of
+// row `row` starts. Worked out as far as it is needed, then kept. So a plate or a slab can
+// be any size and run over several tiles, and its seams don't line up with the tiles.
+const SPANS = new Map();
+function piecesIn(row, salt, min, max, a, b) {
+  const key = `${row},${salt}`;
+  let s = SPANS.get(key);
+  if (!s) { s = [-1 - Math.floor(hash(row, salt, 1) * max)]; SPANS.set(key, s); }
+  while (s[s.length - 1] < b) s.push(s[s.length - 1] + min + Math.floor(hash(row, s.length, salt + 100) * (max - min + 1)));
+  const out = [];
+  for (let i = 0; i < s.length - 1; i++) if (s[i + 1] > a && s[i] < b) out.push([i, s[i], s[i + 1]]);
+  return out;
+}
+// A brush that paints in world pixels, clipped to one tile (drawn at x, y).
+function tileBrush(ctx, x, y, tx, ty) {
+  const X0 = tx * T;
+  const Y0 = ty * T;
+  return (color, wx, wy, w = 1, h = 1) => {
+    if (!color) return;
+    const a = Math.max(wx, X0);
+    const b = Math.min(wx + w, X0 + T);
+    const c = Math.max(wy, Y0);
+    const d = Math.min(wy + h, Y0 + T);
+    if (a >= b || c >= d) return;
+    ctx.fillStyle = color;
+    ctx.fillRect(x + a - X0, y + c - Y0, b - a, d - c);
+  };
+}
+const rgba = (hex, a) => `rgba(${hexRgb(hex)}, ${a})`;
+// The beds of a rock face, by world height: which bed (BED_I), how far into it (BED_K) and
+// how thick it is (BED_N, 3 to 7 px).
+const BED_SPAN = 4096;
+const BED_I = new Int16Array(BED_SPAN);
+const BED_K = new Uint8Array(BED_SPAN);
+const BED_N = new Uint8Array(BED_SPAN);
+for (let wy = 0, i = 0; wy < BED_SPAN; i++) {
+  const n = 3 + Math.floor(hash(i, 0, 432) * 5);
+  for (let k = 0; k < n && wy < BED_SPAN; k++, wy++) { BED_I[wy] = i; BED_K[wy] = k; BED_N[wy] = n; }
+}
+
+// --- Soft edges (see tileBlend.js) ---
+// Outdoors on the coast, the room's picture gets a second pass after the tiles are
+// painted: ragged, blended edges where one kind of ground meets another, blotches
+// that run across tiles, little things lying about, rough wall feet. Where that pass
+// draws an edge, the tiles below leave out their own straight one (the wet band, the
+// bank's lip, the foam line) and their per-tile colour patches.
+const NATURAL_GROUND = new Set(['sand', 'shingle', 'turf', 'path', 'rockfloor']);
+// The kind of ground a letter is in this room, for the blend pass (null: not ground it blends).
+function groundKind(room, char) {
+  const cfg = AREAS[room?.tileLook ?? room?.area];
+  if (!cfg || char == null) return null;
+  if ('.,:qoX'.includes(char)) return cfg[char] ?? null;
+  if (char === ';') return cfg.shallows === 'cobbles' ? 'clearShallows' : 'shallows';
+  // Stepping stones stand in the sea: the same water round them, no shore of their own.
+  if (char === '~' || char === 'j') return cfg.water === 'clear' ? 'clearWater' : 'water';
+  if (char === '0') return cfg.water === 'clear' ? 'clearWater' : 'deep';
+  return null;
+}
+// (Indoors only when the room asks for it: `softEdges: true`, as a sea cave with water in it does.)
+const blendOn = (room) => Boolean(room && room.softEdges !== false && (!room.indoors || room.softEdges === true) && AREAS[room.tileLook ?? room.area]);
+// Indoors the pass still softens the water's edges (a flooded deck, a chapel floor going under).
+const indoorWetOn = (room) => Boolean(room && room.indoors && room.softEdges == null && AREAS[room.tileLook ?? room.area]);
+const isLandKind = (k) => NATURAL_GROUND.has(k);
+const isWaterKind = (k) => k === 'water' || k === 'deep';
+const isWetKind = (k) => isWaterKind(k) || k === 'shallows';
+// Built floors the water creeps over (iron plate, cobbles, flags): the shallows over all of
+// them, the open water over plate and cobbles (a flooded hole, a drowned floor). Outdoors,
+// boards and quays keep a straight edge; indoors a hole in the boards is broken and ragged.
+const WET_OVER = { shallows: new Set(['plate', 'cobbles', 'flags']), water: new Set(['plate', 'cobbles']), deep: new Set(['plate', 'cobbles']) };
+const BOARDS = new Set(['planks', 'planksV']);
+export function wetOverBuilt(a, b, indoor = false) {
+  if (WET_OVER[a]?.has(b) || WET_OVER[b]?.has(a)) return true;
+  return indoor && ((isWetKind(a) && BOARDS.has(b)) || (isWetKind(b) && BOARDS.has(a)));
+}
+// A boulder, heap or standing thing has the floor round it under it (tileset.js floorUnder).
+const ON_FLOOR = 'OFZNxfIJ^v';
+let floorLetter = null;
+const groundAt = (room, tx, ty) => {
+  const c = room.tileAt(tx, ty);
+  return groundKind(room, c != null && ON_FLOOR.includes(c) && floorLetter ? floorLetter(room, tx, ty) : c);
+};
+// Does the blend pass draw the edge between this tile and its neighbour (dx, dy)?
+function softEdge(room, tx, ty, dx, dy) {
+  const out = blendOn(room);
+  if (!out && !indoorWetOn(room)) return false;
+  const a = groundAt(room, tx, ty);
+  const b = groundAt(room, tx + dx, ty + dy);
+  if (!a || !b || a === b) return false;
+  // (Indoors, only where water meets something.)
+  if (!out && !isWetKind(a) && !isWetKind(b)) return (a === 'path' && ['flags', 'cobbles', 'plate'].includes(b)) || (b === 'path' && ['flags', 'cobbles', 'plate'].includes(a));
+  const soft = (k) => isLandKind(k) || isWaterKind(k) || k === 'shallows';
+  return (soft(a) && soft(b)) || townSoft(a, b) || wetOverBuilt(a, b, !out);
+}
+// Merrow (clear water over a drowned town): the flood's edges wander too. The line
+// between the shallows and the deep water, and the waterline where the shallows creep
+// up the dry street, are ragged both ways. Where the deep water meets dry paving it is
+// a built quay edge and stays straight.
+const TOWN_PAVED = new Set(['townCobbles', 'townFlags', 'setts']);
+function townSoft(a, b) {
+  if (a === b) return false;
+  const wet = (k) => k === 'clearWater' || k === 'clearShallows';
+  if (wet(a) && wet(b)) return true;
+  return (a === 'clearShallows' && TOWN_PAVED.has(b)) || (b === 'clearShallows' && TOWN_PAVED.has(a));
+}
+// For tileBlend.js: this room's palette, the kind of ground each letter is, and which walls are natural rock.
+export function coastBlendLook(room) {
+  if (!blendOn(room)) return null;
+  const cfg = AREAS[room.tileLook ?? room.area];
+  const p = withDefaults(cfg.p);
+  const naturalFace = cfg.wallFace === 'rockFace';
+  const naturalWall = (c) => {
+    if (c === '#' || c === 'k') return naturalFace;
+    if (c === 'W' || c === 'G' || c === 'V') return naturalFace;
+    if (c === 'K') return cfg.K === 'seaCliff' || (!cfg.K && naturalFace);
+    if (c === 'h') return cfg.h === 'rockFace';
+    return false;
+  };
+  const town = cfg.water === 'clear';
+  return {
+    p, kind: (c) => groundKind(room, c), naturalWall, isLand: isLandKind, isWater: isWaterKind,
+    soften: town ? townSoft : null, town, paved: (k) => TOWN_PAVED.has(k),
+  };
+}
+// Indoors on the coast the blend pass only lays faint wear over the floor and a soft
+// shadow along the walls (no ragged edges, nothing lying about): this is its look.
+export function coastIndoorLook(room) {
+  if (!room || !room.indoors || room.softEdges === false) return null;
+  const cfg = AREAS[room.tileLook ?? room.area];
+  if (!cfg) return null;
+  return {
+    p: withDefaults(cfg.p), indoors: true, kind: (c) => groundKind(room, c), naturalWall: () => false,
+    isLand: isLandKind, isWater: isWaterKind, wetOnly: true,
+  };
+}
 
 // =====================================================================
 // Ground. Every kind paints a whole tile, then the edges (a wall's shadow
@@ -73,12 +222,22 @@ function edges(ctx, x, y, tx, ty, room, p) {
     shade(ctx, x + bx, y + by, bw, bh, 0.28, p.wetShade ?? '10, 30, 40');
     px(ctx, p.wetLine, x + lx, y + ly, lw, lh);
   };
-  wet(isSea(at(room, tx, ty, 0, 1)), 0, 11, T, 5, 0, 10, T, 1);
-  wet(isSea(at(room, tx, ty, -1, 0)), 0, 0, 4, T, 4, 0, 1, T);
-  wet(isSea(at(room, tx, ty, 1, 0)), 12, 0, 4, T, 11, 0, 1, T);
-  wet(isSea(at(room, tx, ty, 0, -1)), 0, 0, T, 4, 0, 4, T, 1);
+  // (Where the blend pass draws a ragged shore instead, the straight band is left out.)
+  const sea = (dx, dy) => isSea(at(room, tx, ty, dx, dy)) && !softEdge(room, tx, ty, dx, dy);
+  wet(sea(0, 1), 0, 11, T, 5, 0, 10, T, 1);
+  wet(sea(-1, 0), 0, 0, 4, T, 4, 0, 1, T);
+  wet(sea(1, 0), 12, 0, 4, T, 11, 0, 1, T);
+  wet(sea(0, -1), 0, 0, T, 4, 0, 4, T, 1);
 }
-function base(ctx, x, y, tx, ty, p, salt = 0) {
+// The whole tile in one colour, and a patch or two. With the blend pass on, the colour
+// is the same on every tile and the patches come from it instead (they run across tiles,
+// so the ground doesn't read as a checkerboard).
+function base(ctx, x, y, tx, ty, p, salt = 0, room = null) {
+  if (blendOn(room)) {
+    px(ctx, p.ground[0], x, y, T, T);
+    if (hash(tx, ty, 6 + salt) < 0.35) mottle(ctx, pick([p.hi, p.lo], hash(tx, ty, 2 + salt)), x, y, tx, ty, 7 + salt, 3);
+    return;
+  }
   px(ctx, pick(p.ground, hash(tx, ty, 1 + salt)), x, y, T, T);
   mottle(ctx, pick([p.hi, p.lo, p.hi], hash(tx, ty, 2 + salt)), x, y, tx, ty, 3 + salt, 8);
   if (hash(tx, ty, 6 + salt) < 0.5) mottle(ctx, p.lo, x, y, tx, ty, 7 + salt, 5);
@@ -89,10 +248,46 @@ function glints(ctx, x, y, tx, ty, p, chance = 0.3) {
   if (hash(tx, ty, 94) < chance * 0.6) px(ctx, p.glint, x + 1 + rnd(tx, ty, 95, 9), y + 10 + rnd(tx, ty, 96, 4), 2, 1);
 }
 
+// A floor of boards (see GROUND.planks): rows 4 px apart, each board its own length and
+// colour, butted end to end, two nails at each end, the odd knot, split or darker board.
+function laidBoards(ctx, x, y, tx, ty, room, p, vertical) {
+  // Drawn as if lying sideways; a vertical floor swaps the axes.
+  const f0 = tileBrush(ctx, x, y, tx, ty);
+  const f = vertical ? (c, a, b, w = 1, h = 1) => f0(c, b, a, h, w) : f0;
+  const A0 = (vertical ? ty : tx) * T;
+  const B0 = (vertical ? tx : ty) * T;
+  px(ctx, p.gap, x, y, T, T);
+  for (let row = B0 / 4; row < B0 / 4 + 4; row++) {
+    const by = row * 4;
+    for (const [bi, a0, a1] of piecesIn(row, vertical ? 33 : 31, 18, 58, A0, A0 + T)) {
+      const len = a1 - a0;
+      const r = (salt) => hash(row, bi, salt);
+      f(pick(p.plank, r(71)), a0 + 1, by, len - 1, 3);
+      f(p.plankHi, a0 + 1, by, len - 1, 1);
+      f(p.plankLo, a0 + 1, by + 2, len - 1, 1);
+      f(p.nail, a0 + 2, by + 1, 1, 1);
+      f(p.nail, a1 - 2, by + 1, 1, 1);
+      const v = r(72);
+      if (v < 0.12) f('rgba(0, 0, 0, 0.16)', a0 + 1, by, len - 1, 3);
+      else if (v < 0.2) f(rgba(p.plankHi, 0.35), a0 + 1, by + 1, len - 1, 1);
+      // Grain, a knot, or a split.
+      if (r(73) < 0.5) f(p.plankLo, a0 + 4 + Math.floor(r(74) * Math.max(1, len - 12)), by + 1, 3 + Math.floor(r(75) * 5), 1);
+      if (r(76) < 0.14) { const kx = a0 + 4 + Math.floor(r(77) * Math.max(1, len - 8)); f(p.gap, kx, by + 1, 2, 1); f(p.plankHi, kx, by, 2, 1); }
+      if (r(78) < 0.08) f(p.gap, a0 + 3 + Math.floor(r(79) * Math.max(1, len - 10)), by + 1, 5 + Math.floor(r(80) * 4), 1);
+    }
+  }
+  if (p.glint && hash(tx, ty, 75) < 0.35) {
+    const gl = 1 + rnd(tx, ty, 77, 3) * 4;
+    const ga = 1 + rnd(tx, ty, 76, 5);
+    f0(p.glint, (vertical ? gl : ga) + tx * T, (vertical ? ga : gl) + ty * T, vertical ? 1 : 6 + rnd(tx, ty, 78, 6), vertical ? 6 + rnd(tx, ty, 78, 6) : 1);
+  }
+  edges(ctx, x, y, tx, ty, room, p);
+}
+
 const GROUND = {
   // Soft sand: ripple lines, grains, the odd shell.
   sand(ctx, x, y, tx, ty, room, p) {
-    base(ctx, x, y, tx, ty, p);
+    base(ctx, x, y, tx, ty, p, 0, room);
     for (let i = 0; i < 2; i++) {
       const ry = y + 3 + i * 7 + rnd(tx, ty, 10 + i, 4);
       px(ctx, p.hi, x + rnd(tx, ty, 12 + i, 5), ry, 5 + rnd(tx, ty, 14 + i, 5), 1);
@@ -110,7 +305,7 @@ const GROUND = {
   },
   // Pebbles and broken shell, sorted by the tide.
   shingle(ctx, x, y, tx, ty, room, p) {
-    base(ctx, x, y, tx, ty, p);
+    base(ctx, x, y, tx, ty, p, 0, room);
     for (let i = 0; i < 13; i++) {
       const cx = x + 1 + rnd(tx, ty, 50 + i, 14);
       const cy = y + 2 + rnd(tx, ty, 70 + i, 12);
@@ -124,9 +319,11 @@ const GROUND = {
   },
   // Flat slabs of rock, wet, with hairline cracks.
   rockfloor(ctx, x, y, tx, ty, room, p) {
-    base(ctx, x, y, tx, ty, p);
-    if (hash(tx, ty, 11) < 0.7) px(ctx, p.lo, x + rnd(tx, ty, 12, 10), y + rnd(tx, ty, 13, 14) + 1, 5 + rnd(tx, ty, 14, 7), 1);
-    if (hash(tx, ty, 15) < 0.4) px(ctx, p.lo, x + rnd(tx, ty, 16, 14) + 1, y + 2, 1, 5 + rnd(tx, ty, 17, 8));
+    base(ctx, x, y, tx, ty, p, 0, room);
+    // Hairline joints (fewer and shorter with the blend pass on, so they don't make a grid).
+    const smooth = blendOn(room);
+    if (hash(tx, ty, 11) < (smooth ? 0.4 : 0.7)) px(ctx, p.lo, x + rnd(tx, ty, 12, 10), y + rnd(tx, ty, 13, 14) + 1, (smooth ? 3 : 5) + rnd(tx, ty, 14, smooth ? 4 : 7), 1);
+    if (hash(tx, ty, 15) < (smooth ? 0.2 : 0.4)) px(ctx, p.lo, x + rnd(tx, ty, 16, 14) + 1, y + 2 + (smooth ? rnd(tx, ty, 18, 5) : 0), 1, (smooth ? 3 : 5) + rnd(tx, ty, 17, smooth ? 4 : 8));
     for (let i = 0; i < 4; i++) px(ctx, pick(p.speck, hash(tx, ty, 20 + i)), x + rnd(tx, ty, 26 + i, 15), y + rnd(tx, ty, 32 + i, 15), 1 + (i % 2), 1);
     if (hash(tx, ty, 8) < 0.07) {
       let cx = 3 + rnd(tx, ty, 48, 9);
@@ -135,42 +332,100 @@ const GROUND = {
     glints(ctx, x, y, tx, ty, p, 0.4);
     edges(ctx, x, y, tx, ty, room, p);
   },
-  // Cobbles, round and close, mud in the joints.
+  // Cobbles, round and close, mud in the joints: rows of stones of uneven width (laid in
+  // world pixels, so the joints don't repeat tile after tile), the odd one sunk or lifted.
   cobbles(ctx, x, y, tx, ty, room, p) {
+    const f = tileBrush(ctx, x, y, tx, ty);
     px(ctx, p.gap, x, y, T, T);
-    for (let r = 0; r < 2; r++) {
-      const off = (r + tx + ty) % 2 ? 4 : 0;
-      for (let bx = -off; bx < T; bx += 8) {
-        const sx = Math.max(0, bx);
-        const w = Math.min(bx + 8, T) - sx;
-        if (w < 3) continue;
-        const cy = y + r * 8;
-        px(ctx, pick(p.ground, hash(tx * 3 + bx, ty * 5 + r, 61)), x + sx, cy + 1, w - 1, 7);
-        px(ctx, pick(p.ground, hash(tx * 3 + bx, ty * 5 + r, 62)), x + sx + 1, cy, w - 3, 8);
-        px(ctx, p.hi, x + sx + 1, cy + 1, Math.max(1, w - 4), 1);
-        px(ctx, p.lo, x + sx + 1, cy + 6, Math.max(1, w - 3), 1);
+    for (let row = ty * 2; row < ty * 2 + 2; row++) {
+      const cy = row * 8;
+      for (const [ci, c0, c1] of piecesIn(row, 61, 6, 11, tx * T, tx * T + T)) {
+        const w = c1 - c0;
+        const r = (salt) => hash(row, ci, salt);
+        const col = pick(p.ground, r(61));
+        const lift = r(63) < 0.18 ? 1 : 0;
+        f(col, c0, cy + 1 + lift, w - 1, 6 - lift);
+        f(col, c0 + 1, cy + lift, w - 3, 8 - lift);
+        f(p.hi, c0 + 1, cy + 1 + lift, Math.max(1, w - 4), 1);
+        f(p.lo, c0 + 1, cy + 6, Math.max(1, w - 3), 1);
+        if (r(64) < 0.12) f(rgba(p.lo, 0.5), c0 + 1, cy + 2, w - 3, 3);
       }
     }
     if (hash(tx, ty, 63) < p.moss) mottle(ctx, p.mossColor, x, y, tx, ty, 64, 5);
     glints(ctx, x, y, tx, ty, p, 0.3);
     edges(ctx, x, y, tx, ty, room, p);
   },
-  // Squared flagstones with joints.
+  // Flagstones of every size, laid in courses that wander across the tiles (so the joints
+  // never make a grid): some worn pale in the middle, some cracked, stained, sunk, chipped,
+  // or holding a little rain in a dip.
   flags(ctx, x, y, tx, ty, room, p) {
-    const layout = hash(tx, ty, 1);
-    const slabs = layout < 0.4 ? [[0, 0, 16, 16]] : layout < 0.75 ? (hash(tx, ty, 2) < 0.5 ? [[0, 0, 16, 8], [0, 8, 16, 8]] : [[0, 0, 8, 16], [8, 0, 8, 16]]) : [[0, 0, 8, 8], [8, 0, 8, 8], [0, 8, 8, 8], [8, 8, 8, 8]];
+    const f = tileBrush(ctx, x, y, tx, ty);
+    const X0 = tx * T;
+    const Y0 = ty * T;
     px(ctx, p.gap, x, y, T, T);
-    slabs.forEach(([sx, sy, w, h], i) => {
-      px(ctx, pick(p.ground, hash(tx, ty, 10 + i)), x + sx, y + sy, w - 1, h - 1);
-      px(ctx, p.hi, x + sx, y + sy, w - 1, 1);
-      px(ctx, p.lo, x + sx, y + sy + h - 2, w - 1, 1);
-    });
-    for (let i = 0; i < 3; i++) if (hash(tx, ty, 20 + i) < 0.5) px(ctx, pick(p.speck, hash(tx, ty, 24 + i)), x + rnd(tx, ty, 28 + i, 14), y + rnd(tx, ty, 32 + i, 14));
-    glints(ctx, x, y, tx, ty, p, 0.3);
+    for (const [ci, cy0, cy1] of piecesIn(-7, 21, 9, 22, Y0, Y0 + T)) {
+      for (const [si, sx0, sx1] of piecesIn(ci, 23, 10, 32, X0, X0 + T)) {
+        const w = sx1 - sx0;
+        const h = cy1 - cy0;
+        const r = (salt) => hash(ci * 131 + si, ci, salt);
+        f(pick(p.ground, r(24)), sx0 + 1, cy0 + 1, w - 1, h - 1);
+        f(p.hi, sx0 + 1, cy0 + 1, w - 2, 1);
+        f(rgba(p.hi, 0.35), sx0 + 1, cy0 + 2, 1, h - 3);
+        f(p.lo, sx0 + 2, cy1 - 1, w - 2, 1);
+        const v = r(25);
+        const ix = sx0 + 3 + Math.floor(r(26) * Math.max(1, w - 8));
+        const iy = cy0 + 3 + Math.floor(r(27) * Math.max(1, h - 7));
+        if (v < 0.14) {
+          // Worn pale where feet go.
+          f(rgba(p.hi, 0.3), sx0 + 3, cy0 + 3, w - 6, h - 6);
+          f(rgba(p.hi, 0.25), sx0 + 4, cy0 + 2, w - 8, h - 4);
+        } else if (v < 0.28) {
+          // A crack across it.
+          let cx = ix;
+          const len = 5 + Math.floor(r(28) * 9);
+          for (let k = 0; k < len; k++) {
+            f(p.crack ?? p.lo, cx, cy0 + 2 + k, 1, 1);
+            if (hash(ci + k, si, 29) < 0.45) cx += hash(ci, si + k, 30) < 0.5 ? -1 : 1;
+            if (cy0 + 2 + k >= cy1 - 2) break;
+          }
+        } else if (v < 0.4) {
+          // A stain.
+          f(rgba(p.lo, 0.45), ix - 2, iy, 7, 3);
+          f(rgba(p.lo, 0.45), ix - 1, iy - 1, 5, 5);
+        } else if (v < 0.47) {
+          // A dip with rain in it.
+          f(rgba(p.lo, 0.5), ix - 3, iy, 8, 3);
+          f(rgba(p.water ?? p.lo, 0.7), ix - 2, iy + 1, 6, 1);
+          f(rgba(p.water ?? p.lo, 0.5), ix - 1, iy, 4, 1);
+          f(p.glint ?? p.hi, ix - 1, iy + 1, 2, 1);
+        } else if (v < 0.55) {
+          // Sunk a little: darker, its top edge in shadow.
+          f('rgba(0, 0, 0, 0.14)', sx0 + 1, cy0 + 1, w - 1, h - 1);
+          f(p.lo, sx0 + 1, cy0 + 1, w - 1, 1);
+        } else if (v < 0.62) {
+          // A corner broken off.
+          const right = r(31) < 0.5;
+          const cx = right ? sx1 - 4 : sx0 + 1;
+          f(p.gap, cx, cy0 + 1, 3, 2);
+          f(p.gap, right ? cx + 1 : cx, cy0 + 3, 2, 1);
+        } else if (v < 0.68 && w > 14) {
+          // Split in two.
+          const sx = sx0 + 5 + Math.floor(r(32) * (w - 10));
+          f(p.gap, sx, cy0 + 1, 1, h - 1);
+          f(p.hi, sx + 1, cy0 + 1, 1, h - 2);
+        }
+        if (r(33) < 0.5) f(pick(p.speck, r(34)), sx0 + 2 + Math.floor(r(35) * (w - 3)), cy0 + 2 + Math.floor(r(36) * (h - 3)));
+        if (p.moss && r(37) < p.moss) f(p.mossColor, sx0, cy0 + 2 + Math.floor(r(38) * (h - 4)), 1, 2);
+      }
+    }
+    glints(ctx, x, y, tx, ty, p, 0.2);
     edges(ctx, x, y, tx, ty, room, p);
   },
-  // Boards: dark gaps, nails, the grain, rain-wet along the grain.
+  // Boards: dark gaps, nails, the grain, rain-wet along the grain. On a floor the boards are
+  // of uneven length, butted end to end at different places in each row (nailed only at their
+  // ends); a bridge's boards run the whole width (no room: the old even boards).
   planks(ctx, x, y, tx, ty, room, p, vertical = false) {
+    if (room) { laidBoards(ctx, x, y, tx, ty, room, p, vertical); return; }
     px(ctx, p.gap, x, y, T, T);
     for (let i = 0; i < 4; i++) {
       const colour = pick(p.plank, hash(tx * (vertical ? 4 : 1) + (vertical ? i : 0), ty * (vertical ? 1 : 4) + (vertical ? 0 : i), 71));
@@ -196,27 +451,112 @@ const GROUND = {
     if (hash(tx, ty, 79) < 0.1) px(ctx, p.gap, x + 3 + rnd(tx, ty, 80, 9), y + 1 + rnd(tx, ty, 81, 3) * 4, 2, 1);
     edges(ctx, x, y, tx, ty, room, p);
   },
-  // Iron deck plate: riveted squares, rust bleeding down from the rivets.
+  // Iron deck plate: plates of every size in uneven courses, the seams riveted (not every
+  // tile: the rivets go along each plate's own top and left seam, spaced its own way). Some
+  // plates are worn bright, some patched with a smaller plate, streaked with rust, rusted
+  // through and patched, buckled along a seam, dented, or have a board laid over them.
   plate(ctx, x, y, tx, ty, room, p) {
-    base(ctx, x, y, tx, ty, p);
-    px(ctx, p.lo, x, y + 7, T, 1);
-    px(ctx, p.lo, x + 7, y, 1, T);
-    px(ctx, p.hi, x, y + 8, T, 1);
-    px(ctx, p.hi, x + 8, y, 1, T);
-    for (const [rx, ry] of [[2, 2], [12, 2], [2, 12], [12, 12], [5, 5], [10, 10]]) if (hash(tx, ty, 90 + rx * 7 + ry) < 0.7) {
-      px(ctx, p.hi, x + rx, y + ry, 2, 1);
-      px(ctx, p.lo, x + rx, y + ry + 1, 2, 1);
-      if (hash(tx, ty, 130 + rx + ry) < 0.4) px(ctx, p.rust, x + rx, y + ry + 2, 1, 2 + rnd(tx, ty, 140 + rx, 4));
+    const f = tileBrush(ctx, x, y, tx, ty);
+    const X0 = tx * T;
+    const Y0 = ty * T;
+    const rivet = (rx, ry) => { f(p.hi, rx, ry, 1, 1); f(p.lo, rx, ry + 1, 1, 1); };
+    for (const [ci, cy0, cy1] of piecesIn(-3, 41, 18, 38, Y0, Y0 + T)) {
+      for (const [pi, sx0, sx1] of piecesIn(ci, 43, 20, 54, X0, X0 + T)) {
+        const w = sx1 - sx0;
+        const h = cy1 - cy0;
+        const r = (salt) => hash(ci * 977 + pi, pi, salt);
+        // The plate, its seams (dark, then a lit edge), and its lower edge a shade darker.
+        f(pick(p.ground, r(44)), sx0, cy0, w, h);
+        f(p.lo, sx0, cy0, w, 1);
+        f(p.lo, sx0, cy0, 1, h);
+        f(p.hi, sx0 + 1, cy0 + 1, w - 1, 1);
+        f(rgba(p.hi, 0.5), sx0 + 1, cy0 + 2, 1, h - 2);
+        f(rgba(p.lo, 0.45), sx0 + 2, cy1 - 1, w - 2, 1);
+        // Rivets along the top seam, and (on most plates) down the left one.
+        const sp = 4 + Math.floor(r(45) * 4);
+        for (let rx = sx0 + 2 + Math.floor(r(46) * sp); rx < sx1 - 1; rx += sp) if (hash(rx, ci, 47) > 0.18) rivet(rx, cy0 + 3);
+        if (r(48) < 0.7) for (let ry = cy0 + 3 + sp; ry < cy1 - 2; ry += sp) if (hash(ry, pi, 49) > 0.18) rivet(sx0 + 3, ry);
+        const ix = sx0 + 5 + Math.floor(r(50) * Math.max(1, w - 14));
+        const iy = cy0 + 6 + Math.floor(r(51) * Math.max(1, h - 14));
+        const v = r(52);
+        if (v < 0.12) {
+          // Worn bright where feet and cargo went.
+          f(rgba(p.hi, 0.22), sx0 + 4, cy0 + Math.floor(h / 2) - 3, w - 8, 6);
+          f(rgba(p.hi, 0.3), sx0 + 6, cy0 + Math.floor(h / 2) - 1, w - 12, 2);
+        } else if (v < 0.24) {
+          // Patched with a smaller riveted plate.
+          const pw = 8 + Math.floor(r(53) * 6);
+          const ph = 6 + Math.floor(r(54) * 5);
+          f(p.lo, ix - 1, iy - 1, pw + 2, ph + 2);
+          f(pick(p.ground, r(55)), ix, iy, pw, ph);
+          f(p.hi, ix, iy, pw, 1);
+          for (const [qx, qy] of [[1, 2], [pw - 2, 2], [1, ph - 2], [pw - 2, ph - 2]]) f(p.hi, ix + qx, iy + qy, 1, 1);
+          f(rgba(p.rust, 0.6), ix + 1, iy + ph, 1, 2 + Math.floor(r(56) * 3));
+        } else if (v < 0.4) {
+          // Rust weeping down from the seam.
+          const n = 2 + Math.floor(r(57) * 3);
+          f(rgba(p.rust, 0.4), sx0 + 2, cy0 + 2, w - 4, 2);
+          for (let k = 0; k < n; k++) {
+            const sx = sx0 + 2 + Math.floor(hash(ci, pi * 7 + k, 58) * (w - 4));
+            f(rgba(p.rust, 0.75), sx, cy0 + 3, 1, 3 + Math.floor(hash(ci, pi * 7 + k, 59) * (h - 7)));
+            f(rgba(p.rust, 0.35), sx + 1, cy0 + 3, 1, 2 + Math.floor(hash(ci, pi * 7 + k, 60) * 4));
+          }
+        } else if (v < 0.48) {
+          // Rusted through: a ragged hole, and a plate bolted half over it.
+          f(rgba(p.rust, 0.5), ix - 4, iy - 2, 10, 6);
+          f(rgba(p.rust, 0.5), ix - 3, iy - 3, 8, 8);
+          f(p.gap, ix - 2, iy, 4, 2);
+          f(p.gap, ix - 1, iy - 1, 2, 4);
+          f(p.lo, ix + 1, iy - 2, 7, 7);
+          f(pick(p.ground, r(61)), ix + 2, iy - 1, 5, 5);
+          f(p.hi, ix + 2, iy - 1, 5, 1);
+          f(p.hi, ix + 3, iy + 1, 1, 1);
+          f(p.hi, ix + 5, iy + 2, 1, 1);
+        } else if (v < 0.56) {
+          // A board or two laid over it.
+          const n = 1 + Math.floor(r(62) * 2);
+          const bx = sx0 + 2 + Math.floor(r(63) * 6);
+          const len = Math.min(w - 4, 14 + Math.floor(r(64) * 16));
+          for (let k = 0; k < n; k++) {
+            const by = iy - 2 + k * 4;
+            f('rgba(0, 0, 0, 0.3)', bx + 1, by + 3, len, 1);
+            f(pick(p.plank, r(65 + k)), bx, by, len, 3);
+            f(p.plankHi, bx, by, len, 1);
+            f(p.plankLo, bx, by + 2, len, 1);
+            f(p.nail, bx + 1, by + 1, 1, 1);
+            f(p.nail, bx + len - 2, by + 1, 1, 1);
+          }
+        } else if (v < 0.64) {
+          // Buckled: a ridge running slantwise across it.
+          const len = Math.min(w - 4, 10 + Math.floor(r(67) * 14));
+          const sx = sx0 + 2 + Math.floor(r(68) * Math.max(1, w - len - 3));
+          const down = r(69) < 0.5;
+          for (let k = 0; k < len; k++) {
+            const ky = iy + Math.floor(k / 3) * (down ? 1 : -1);
+            f(p.hi, sx + k, ky, 1, 1);
+            f(p.lo, sx + k, ky + 1, 1, 1);
+          }
+        } else if (v < 0.7) {
+          // A dent.
+          f(rgba(p.lo, 0.45), ix - 3, iy - 1, 7, 3);
+          f(rgba(p.lo, 0.45), ix - 2, iy - 2, 5, 5);
+          f(p.hi, ix + 1, iy + 2, 2, 1);
+        }
+        // Now and then rust running from one rivet.
+        if (r(70) < 0.3) f(rgba(p.rust, 0.8), sx0 + 2 + Math.floor(r(71) * (w - 4)), cy0 + 5, 1, 3 + Math.floor(r(72) * 5));
+      }
     }
-    if (hash(tx, ty, 150) < 0.35) mottle(ctx, p.rust, x, y, tx, ty, 151, 6);
-    glints(ctx, x, y, tx, ty, p, 0.3);
+    glints(ctx, x, y, tx, ty, p, 0.22);
     edges(ctx, x, y, tx, ty, room, p);
   },
   // Turf and sea-grass: blades in tufts, flattened by the wind.
   turf(ctx, x, y, tx, ty, room, p) {
-    px(ctx, pick(p.turf, hash(tx, ty, 1)), x, y, T, T);
-    mottle(ctx, pick(p.turf, hash(tx, ty, 2)), x, y, tx, ty, 3, 8);
-    mottle(ctx, p.turfLo, x, y, tx, ty, 5, 6);
+    if (blendOn(room)) px(ctx, p.turf[0], x, y, T, T);
+    else {
+      px(ctx, pick(p.turf, hash(tx, ty, 1)), x, y, T, T);
+      mottle(ctx, pick(p.turf, hash(tx, ty, 2)), x, y, tx, ty, 3, 8);
+      mottle(ctx, p.turfLo, x, y, tx, ty, 5, 6);
+    }
     for (let i = 0; i < 8; i++) {
       const bx = x + rnd(tx, ty, 10 + i, 15);
       const by = y + 1 + rnd(tx, ty, 20 + i, 13);
@@ -232,10 +572,12 @@ const GROUND = {
   },
   // A trodden way: bare ground, ruts and prints.
   path(ctx, x, y, tx, ty, room, p) {
-    px(ctx, pick(p.path, hash(tx, ty, 1)), x, y, T, T);
-    mottle(ctx, pick(p.path, hash(tx, ty, 2)), x, y, tx, ty, 3, 8);
+    const smooth = blendOn(room) || indoorWetOn(room);
+    px(ctx, smooth ? p.path[0] : pick(p.path, hash(tx, ty, 1)), x, y, T, T);
+    if (!smooth) mottle(ctx, pick(p.path, hash(tx, ty, 2)), x, y, tx, ty, 3, 8);
     for (let i = 0; i < 7; i++) px(ctx, pick(p.speck, hash(tx, ty, 10 + i)), x + rnd(tx, ty, 20 + i, 15), y + rnd(tx, ty, 30 + i, 15));
-    if (hash(tx, ty, 40) < 0.3) px(ctx, p.lo, x, y + 4 + rnd(tx, ty, 41, 8), T, 1);
+    // Ruts (shorter with the blend pass on, so they don't line up tile after tile).
+    if (hash(tx, ty, 40) < 0.3) px(ctx, p.lo, x + (smooth ? rnd(tx, ty, 44, 6) : 0), y + 4 + rnd(tx, ty, 41, 8), smooth ? 5 + rnd(tx, ty, 45, 6) : T, 1);
     if (hash(tx, ty, 42) < 0.3) px(ctx, p.hi, x + 2, y + 5 + rnd(tx, ty, 43, 8), 10, 1);
     glints(ctx, x, y, tx, ty, p, 0.3);
     edges(ctx, x, y, tx, ty, room, p);
@@ -249,7 +591,7 @@ const GROUND = {
 function water(ctx, x, y, tx, ty, room, p, deep = false) {
   const w = deep ? p.deep : p.water;
   px(ctx, w, x, y, T, T);
-  mottle(ctx, deep ? p.water : p.deep, x, y, tx, ty, 3, 8);
+  if (!blendOn(room)) mottle(ctx, deep ? p.water : p.deep, x, y, tx, ty, 3, 8);
   // Wave strokes: a lit crest over a dark trough.
   for (let i = 0; i < 3; i++) {
     const wy = y + 2 + i * 5 + rnd(tx, ty, 10 + i, 3);
@@ -264,37 +606,50 @@ function water(ctx, x, y, tx, ty, room, p, deep = false) {
     px(ctx, p.foam, cx, cy, 3, 1);
     px(ctx, p.foam, cx + 1, cy - 1, 1, 1);
   }
+  waterBanks(ctx, x, y, tx, ty, room, p);
+}
+// The edges of a stretch of water: the bank above, calm strips at the sides, foam below.
+function waterBanks(ctx, x, y, tx, ty, room, p) {
   if (!room) return;
+  // (Stepping stones stand in the same water: no bank or foam against them.)
+  const inSea = (c) => isSea(c) || c === 'j';
   const above = at(room, tx, ty, 0, -1);
-  if (!isSea(above)) {
+  // (The blend pass draws the shore where water meets sand, turf, shallows and so on.)
+  const soft = (dx, dy) => softEdge(room, tx, ty, dx, dy);
+  if (!inSea(above) && !soft(0, -1)) {
     // The bank above: a dark lip and its reflection.
     px(ctx, p.lip, x, y, T, 2);
     shade(ctx, x, y + 2, T, 3, 0.3, p.shadow);
     if (isWallish(above)) shade(ctx, x, y + 5, T, 2, 0.15, p.shadow);
   }
   // Land to the sides: a calm, darker strip where the water laps it.
-  if (!isSea(at(room, tx, ty, -1, 0)) && at(room, tx, ty, -1, 0) != null) shade(ctx, x, y, 2, T, 0.25, p.shadow);
-  if (!isSea(at(room, tx, ty, 1, 0)) && at(room, tx, ty, 1, 0) != null) shade(ctx, x + T - 2, y, 2, T, 0.25, p.shadow);
+  if (!inSea(at(room, tx, ty, -1, 0)) && at(room, tx, ty, -1, 0) != null && !soft(-1, 0)) shade(ctx, x, y, 2, T, 0.25, p.shadow);
+  if (!inSea(at(room, tx, ty, 1, 0)) && at(room, tx, ty, 1, 0) != null && !soft(1, 0)) shade(ctx, x + T - 2, y, 2, T, 0.25, p.shadow);
   // And foam where it breaks (atmosphere.js moves it).
-  if (at(room, tx, ty, 0, 1) != null && !isSea(at(room, tx, ty, 0, 1))) { px(ctx, p.foam, x, y + T - 2, T, 1); shade(ctx, x, y + T - 4, T, 2, 0.25, '255, 255, 255'); }
+  if (at(room, tx, ty, 0, 1) != null && !inSea(at(room, tx, ty, 0, 1)) && !soft(0, 1)) { px(ctx, p.foam, x, y + T - 2, T, 1); shade(ctx, x, y + T - 4, T, 2, 0.25, '255, 255, 255'); }
 }
 
 // Shallows you can wade: the bottom shows through, pale and rippled.
 function shallows(ctx, x, y, tx, ty, room, p) {
   px(ctx, p.shallow, x, y, T, T);
-  mottle(ctx, p.shallowHi, x, y, tx, ty, 3, 9);
+  const smooth = blendOn(room);
+  if (!smooth) mottle(ctx, p.shallowHi, x, y, tx, ty, 3, 9);
   for (let i = 0; i < 6; i++) px(ctx, pick(p.speck, hash(tx, ty, 10 + i)), x + rnd(tx, ty, 16 + i, 15), y + rnd(tx, ty, 22 + i, 15));
   for (let i = 0; i < 2; i++) {
     const wy = y + 3 + i * 7 + rnd(tx, ty, 30 + i, 3);
     px(ctx, p.wave, x + rnd(tx, ty, 34 + i, 8), wy, 4 + rnd(tx, ty, 36 + i, 4), 1);
   }
   if (hash(tx, ty, 40) < 0.2) px(ctx, p.foam, x + 2 + rnd(tx, ty, 41, 10), y + 2 + rnd(tx, ty, 42, 10), 2, 1);
-  if (room && at(room, tx, ty, 0, -1) !== ';' && at(room, tx, ty, 0, -1) !== 'j') shade(ctx, x, y, T, 2, 0.2, p.shadow);
+  if (room && at(room, tx, ty, 0, -1) !== ';' && at(room, tx, ty, 0, -1) !== 'j' && !softEdge(room, tx, ty, 0, -1)) shade(ctx, x, y, T, 2, 0.2, p.shadow);
 }
 
 // Stepping stones through the water (you can walk them).
 function stones(ctx, x, y, tx, ty, room, p) {
-  water(ctx, x, y, tx, ty, room, p);
+  // In the shallows (more shallows beside it than open sea), the stones stand in shallows.
+  const near = room ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => at(room, tx, ty, dx, dy)) : [];
+  const wade = near.filter((c) => c === ';').length;
+  if (blendOn(room) && wade && wade >= near.filter(isSea).length) shallows(ctx, x, y, tx, ty, room, p);
+  else water(ctx, x, y, tx, ty, room, p);
   const n = 1 + rnd(tx, ty, 1, 2);
   for (let i = 0; i < n; i++) {
     const cx = x + 4 + rnd(tx, ty, 2 + i, 8);
@@ -314,8 +669,11 @@ const WALLS = {
   // Cliff or cave rock. Top: the dark mass; face: banded strata.
   rockTop(ctx, x, y, tx, ty, room, p) {
     px(ctx, p.deepRock, x, y, T, T);
-    if (hash(tx, ty, 1) < 0.6) px(ctx, p.topRock, x + rnd(tx, ty, 2, 9), y + rnd(tx, ty, 3, 9), 6, 5);
-    if (hash(tx, ty, 4) < 0.4) px(ctx, p.deepRock2, x + rnd(tx, ty, 5, 11), y + rnd(tx, ty, 6, 11), 4, 3);
+    // (With the blend pass on, its patches run across the rock instead of a block per tile.)
+    if (!blendOn(room)) {
+      if (hash(tx, ty, 1) < 0.6) px(ctx, p.topRock, x + rnd(tx, ty, 2, 9), y + rnd(tx, ty, 3, 9), 6, 5);
+      if (hash(tx, ty, 4) < 0.4) px(ctx, p.deepRock2, x + rnd(tx, ty, 5, 11), y + rnd(tx, ty, 6, 11), 4, 3);
+    }
     if (hash(tx, ty, 7) < 0.12 && p.fleck) px(ctx, p.fleck, x + rnd(tx, ty, 8, 13) + 1, y + rnd(tx, ty, 9, 13) + 1, 1, 1);
     if (!room) return;
     const below = at(room, tx, ty, 0, 1);
@@ -329,23 +687,90 @@ const WALLS = {
     if (left != null && !isWallish(left)) px(ctx, p.rockLo, x, y, 1, T);
     if (right != null && !isWallish(right)) px(ctx, p.rockLo, x + T - 1, y, 1, T);
   },
+  // A rock face: beds of uneven thickness that slant a little and run on from tile to tile
+  // (picked in world pixels, so a long face is not one tile over and over), split into blocks
+  // by joints, some beds wet and dark for a stretch. Now and then something on it: a ledge
+  // with thrift or weed, a gull's nest, white gull streaks, a deep crack; rain running down.
   rockFace(ctx, x, y, tx, ty, room, p) {
-    for (let band = 0; band < 4; band++) {
-      const by = y + band * 4;
-      px(ctx, pick(p.rock, hash(tx, ty * 4 + band, 430)), x, by, T, 4);
-      if (hash(tx, ty * 4 + band, 437) < 0.5) shade(ctx, x + rnd(tx, ty * 4 + band, 431, 7), by, 4 + rnd(tx, ty * 4 + band, 432, 8), 1, 0.4, hexRgb(p.rim));
-      shade(ctx, x + rnd(tx, ty * 4 + band, 433, 9), by + 3, 3 + rnd(tx, ty * 4 + band, 434, 7), 1, 0.5, hexRgb(p.rockLo));
+    const X0 = tx * T;
+    const Y0 = ty * T;
+    for (let c = 0; c < T; c++) {
+      const wx = X0 + c;
+      const off = Math.floor(softNoise(wx / 21, 0.5, 431) * 5) + ((wx >> 3) & 1);
+      let run = null;
+      let from = 0;
+      for (let r = 0; r <= T; r++) {
+        let col = null;
+        if (r < T) {
+          const wy = Math.max(0, Y0 + r + off) % BED_SPAN;
+          const i = BED_I[wy];
+          const k = BED_K[wy];
+          const n = BED_N[wy];
+          const cw = 9 + (i % 3) * 5;
+          const chunk = Math.floor((wx + i * 13) / cw);
+          col = pick(p.rock, hash(chunk, i, 433));
+          const wet = hash(i, 0, 435) < 0.22 && softNoise(wx / 26, i, 436) > 0.45;
+          if (k === 0) col = hash(wx >> 1, i, 434) < 0.65 ? p.rim : col;
+          else if (k === n - 1) col = wet || hash(i, 0, 439) < 0.45 ? p.deepRock2 : p.rockLo;
+          else if (wet) col = p.rockLo;
+          else if ((wx + i * 13) % cw === 0 && hash(chunk, i, 437) < 0.3) col = p.rockLo;
+        }
+        if (col !== run) {
+          if (run) px(ctx, run, x + c, y + from, 1, r - from);
+          run = col;
+          from = r;
+        }
+      }
     }
-    if (hash(tx, ty, 435) < 0.4) {
-      const cx = x + 2 + rnd(tx, ty, 436, 11);
-      for (let cy = 0; cy < 7; cy++) px(ctx, p.deepRock2, cx + (cy > 3 ? 1 : 0), y + 2 + cy);
+    // Things on the face (no gulls in a cave or indoors).
+    const open = room && !room.indoors && (room.tileLook ?? room.area) !== 'soundings';
+    const roll = hash(tx, ty, 438);
+    const lx = x + 2 + rnd(tx, ty, 439, 8);
+    const ly = y + 5 + rnd(tx, ty, 441, 6);
+    const ledge = (len) => {
+      px(ctx, p.rim, lx, ly, len, 1);
+      px(ctx, p.rockLo, lx, ly + 1, len, 1);
+      px(ctx, p.deepRock2, lx + 1, ly + 2, len - 1, 1);
+    };
+    if (roll < 0.11) {
+      // A ledge with a tuft of thrift or weed on it.
+      ledge(6);
+      const g = p.weedFoot ?? p.weed ?? [p.turfLo];
+      for (let i = 0; i < 4; i++) px(ctx, pick(g, hash(tx, ty, 448 + i)), lx + i + (i > 1 ? 1 : 0), ly - 1 - (i % 2), 1, 1 + (i % 2));
+      if (open) { px(ctx, p.flowers?.[1] ?? '#e08aa8', lx + 1, ly - 2, 1, 1); px(ctx, p.flowers?.[1] ?? '#e08aa8', lx + 4, ly - 3, 1, 1); }
+    } else if (roll < 0.15 && open) {
+      // A gull's nest on a ledge, white streaks under it.
+      ledge(7);
+      px(ctx, p.driftwood ?? p.stand2, lx + 1, ly - 2, 5, 2);
+      px(ctx, p.stand1 ?? p.rockLo, lx, ly - 1, 7, 1);
+      px(ctx, '#e8e6da', lx + 3, ly - 2, 1, 1);
+      px(ctx, '#dcdcd0', lx + 2, ly + 2, 1, 3 + rnd(tx, ty, 452, 4));
+      px(ctx, '#c4c8be', lx + 5, ly + 2, 1, 2 + rnd(tx, ty, 453, 3));
+    } else if (roll < 0.27 && open) {
+      // Gull streaks.
+      for (let i = 0; i < 1 + rnd(tx, ty, 454, 2); i++) {
+        const gx = x + 2 + rnd(tx, ty, 455 + i, 12);
+        const gy = y + rnd(tx, ty, 457 + i, 6);
+        px(ctx, '#dcdcd0', gx, gy, 2, 1);
+        px(ctx, '#c4c8be', gx, gy + 1, 1, 4 + rnd(tx, ty, 459 + i, 6));
+      }
+    } else if (roll < 0.42) {
+      // A deep crack, lit on one side.
+      let cx = x + 3 + rnd(tx, ty, 461, 10);
+      const len = 7 + rnd(tx, ty, 462, 7);
+      for (let cy = 0; cy < len; cy++) {
+        px(ctx, p.deepRock2, cx, y + 1 + cy);
+        px(ctx, p.rim, cx - 1, y + 1 + cy);
+        if (hash(tx, ty * 16 + cy, 463) < 0.35) cx += hash(tx, ty * 16 + cy, 464) < 0.5 ? -1 : 1;
+      }
     }
-    // Wet: pale streaks running down, and weed or barnacles at the foot.
-    for (let i = 0; i < 2; i++) if (hash(tx, ty, 440 + i) < 0.55) px(ctx, p.streak, x + 2 + rnd(tx, ty, 442 + i, 12), y + rnd(tx, ty, 444 + i, 6), 1, 5 + rnd(tx, ty, 446 + i, 8));
+    // Wet: a pale streak of rain running down now and then, and weed or barnacles at the foot.
+    if (hash(tx, ty, 440) < 0.4) shade(ctx, x + 2 + rnd(tx, ty, 442, 12), y + rnd(tx, ty, 444, 8), 1, 3 + rnd(tx, ty, 446, 10), 0.55, hexRgb(p.streak));
     if (p.weedFoot && isSea(at(room, tx, ty, 0, 1))) {
       for (let i = 0; i < 6; i++) px(ctx, pick(p.weedFoot, hash(tx, ty, 450 + i)), x + rnd(tx, ty, 456 + i, 15), y + 11 + rnd(tx, ty, 462 + i, 5), 1, 2 + (i % 2));
     }
-    px(ctx, p.deepRock2, x, y + T - 1, T, 1);
+    // (A face going on down into another face runs on without a line.)
+    if (!'WKGVH'.includes(at(room, tx, ty, 0, 1) ?? '?')) px(ctx, p.deepRock2, x, y + T - 1, T, 1);
   },
   // A ship's hull: vertical iron strakes, rivets, rust.
   hullFace(ctx, x, y, tx, ty, room, p) {
@@ -646,13 +1071,32 @@ const STANDING = {
 
 // A boulder / barrel / crate / cask / lobster pots, standing on the floor under it.
 const BLOCKERS = {
+  // Each one its own size and lean, sometimes with a smaller stone beside it, so a row
+  // of them reads as a tumble of rocks, not a row of the same rock.
   boulder(ctx, x, y, tx, ty, room, p) {
-    shade(ctx, x + 1, y + 12, 14, 3, 0.3);
-    oval(ctx, p.deepRock2, x + 8, y + 8, 7, 5);
-    oval(ctx, p.rock[1], x + 8, y + 7, 6, 4);
-    px(ctx, p.rim, x + 4, y + 4, 5, 2);
-    px(ctx, p.rockLo, x + 9, y + 10, 4, 2);
-    if (p.weedFoot) { px(ctx, p.weedFoot[0], x + 3, y + 3, 5, 2); px(ctx, p.weedFoot[1] ?? p.weedFoot[0], x + 4, y + 3, 2, 1); }
+    const rx = 5 + rnd(tx, ty, 700, 3);
+    const ry = 3 + rnd(tx, ty, 701, 3);
+    const cx = x + 8 + (rx < 7 ? rnd(tx, ty, 702, 3) - 1 : 0);
+    const cy = y + 14 - ry - 1;
+    shade(ctx, cx - rx, cy + ry - 1, rx * 2 + 1, 3, 0.3);
+    oval(ctx, p.deepRock2, cx, cy, rx, ry);
+    oval(ctx, pick(p.rock, hash(tx, ty, 703)), cx, cy - 1, rx - 1, ry - 1);
+    px(ctx, p.rim, cx - rx + 2 + rnd(tx, ty, 704, 2), cy - ry + 1, 3 + rnd(tx, ty, 705, 3), 1);
+    px(ctx, p.rim, cx - rx + 2, cy - ry + 2, 2, 1);
+    px(ctx, p.rockLo, cx + 1, cy + ry - 2, rx - 1, 1);
+    if (hash(tx, ty, 706) < 0.5) px(ctx, p.deepRock2, cx - 1 + rnd(tx, ty, 707, 3), cy - 1, 1, 2 + rnd(tx, ty, 708, 2));
+    if (rx < 7 && hash(tx, ty, 709) < 0.6) {
+      // A smaller stone fallen beside it.
+      const sx = hash(tx, ty, 710) < 0.5 ? cx - rx - 1 : cx + rx + 1;
+      const sy = y + 13;
+      oval(ctx, p.deepRock2, sx, sy, 2, 1);
+      px(ctx, pick(p.rock, hash(tx, ty, 711)), sx - 1, sy - 1, 3, 1);
+    }
+    if (p.weedFoot && hash(tx, ty, 712) < 0.7) {
+      const wx = cx - rx + 2 + rnd(tx, ty, 713, rx);
+      px(ctx, p.weedFoot[0], wx, cy - ry + 1, 3 + rnd(tx, ty, 714, 3), 2);
+      px(ctx, p.weedFoot[1] ?? p.weedFoot[0], wx + 1, cy - ry + 1, 2, 1);
+    }
   },
   barrel(ctx, x, y, tx, ty, room, p) {
     shade(ctx, x + 1, y + 12, 14, 3, 0.3);
@@ -958,8 +1402,8 @@ function blockOf(raise, look) {
     }
     if (look.weed && isSea(at(room, tx, ty, 0, 1))) for (let i = 0; i < 4; i++) px(ctx, look.weed, x + rnd(tx, ty, 80 + i, 15), top + T + raise - 4 + rnd(tx, ty, 84 + i, 3), 1, 3);
     px(ctx, look.outline, x, y + T - 1, T, 1);
-    // Top.
-    px(ctx, pick(look.tops, hash(tx, ty, 33)), x, top, T, T);
+    // Top (outdoors with the blend pass on: one colour per pair of tiles, so a long ledge isn't a checkerboard).
+    px(ctx, pick(look.tops, blendOn(room) ? hash(tx >> 1, ty >> 1, 33) : hash(tx, ty, 33)), x, top, T, T);
     if (hash(tx, ty, 34) < 0.5) px(ctx, look.seam, x + 7, top + 1, 1, T - 2);
     if (hash(tx, ty, 35) < 0.4) px(ctx, look.seam, x + 1, top + 9, T - 2, 1);
     if (hash(tx, ty, 36) < 0.3) px(ctx, look.fleck, x + 3 + rnd(tx, ty, 37, 9), top + 3 + rnd(tx, ty, 38, 8), 2, 1);
@@ -967,6 +1411,142 @@ function blockOf(raise, look) {
     if (raiseAt(0, -1) < raise) px(ctx, look.outline, x, top, T, 1);
     if (raiseAt(-1, 0) < raise) px(ctx, look.outline, x, top, 1, T + raise);
     if (raiseAt(1, 0) < raise) px(ctx, look.outline, x + T - 1, top, 1, T + raise);
+  };
+}
+
+// A raised ledge of natural rock (b 12 px, B 24 px), for a room with `ledges: 'rock'`
+// (the Cliff Cave's shelf): the area's own rock, rough-edged, the top worn and pitted,
+// the face in wavy beds of sandstone with cracks, weed at its foot and a shell or two.
+// Same heights and solidity as any b or B; only the look. Edges are ragged only where
+// the ledge ends (a lower neighbour), so a run of tiles reads as one shelf.
+function rockLedgeOf(raise, p, smoothTop = false) {
+  // The face in shadow (darker beds), the top in the light (paler, worn smooth).
+  const beds = [p.rock[0], p.rock[3], p.rock[1], p.deepRock, p.rock[3], p.rock[2], p.deepRock];
+  const tops = [p.rim, p.rock[2], p.rim, p.streak ?? p.rim];
+  return (ctx, x, y, tx, ty, room, floor) => {
+    floor(ctx, x, y, tx, ty, room);
+    const top = y - raise;
+    const H = T + raise;
+    const raiseAt = (dx, dy) => ({ b: 12, B: 24 }[at(room, tx, ty, dx, dy)] ?? 0);
+    const openL = raiseAt(-1, 0) < raise;
+    const openR = raiseAt(1, 0) < raise;
+    const openU = raiseAt(0, -1) < raise;
+    const openD = raiseAt(0, 1) < raise;
+    const wx0 = tx * T;
+    const wy0 = ty * T - raise;
+    // How far each ragged edge comes in: smooth bumps, not noise.
+    const bump = (v, salt) => Math.max(0, Math.round(1.2 + Math.sin(v * 0.55 + salt) * 1.1 + Math.sin(v * 1.7 + salt * 2) * 0.6));
+    // Against the cave wall the rock runs straight into it (nothing to see behind), in
+    // a ragged band of shadow; only where it ends over open floor is its edge ragged.
+    const wallL = isWallish(at(room, tx, ty, -1, 0));
+    const wallR = isWallish(at(room, tx, ty, 1, 0));
+    const wallU = isWallish(at(room, tx, ty, 0, -1));
+    const inL = (r) => (openL && !wallL ? bump(wy0 + r, tx * 0.7 + 1) : 0);
+    const inR = (r) => (openR && !wallR ? bump(wy0 + r, tx * 0.9 + 4) : 0);
+    const inU = (c) => (openU && !wallU ? bump(wx0 + c, ty * 0.8 + 2) : 0);
+    const dark = (c, r) => (openL && wallL && c <= bump(wy0 + r, tx * 0.7 + 1))
+      || (openR && wallR && c >= T - 1 - bump(wy0 + r, tx * 0.9 + 4))
+      || (openU && wallU && r <= 1 + bump(wx0 + c, ty * 0.8 + 2));
+    // The front lip wanders a pixel up and down; the face starts under it.
+    const lipAt = (c) => T - 1 + (openD ? Math.round(Math.sin((wx0 + c) * 0.45 + ty) * 0.9) : 1);
+    // In the rock? Off this tile's sides it is the neighbour's rock unless the ledge ends there.
+    const inside = (c, r) => {
+      if (c < 0) return !openL;
+      if (c >= T) return !openR;
+      if (r < 0) return !openU;
+      return r < H && c >= inL(r) && c <= T - 1 - inR(r) && r >= inU(c);
+    };
+    for (let r = 0; r < H; r++) {
+      let runColor = null;
+      let runStart = 0;
+      const flush = (end) => { if (runColor) px(ctx, runColor, x + runStart, top + r, end - runStart, 1); };
+      for (let c = 0; c <= T; c++) {
+        let color = null;
+        if (c < T && inside(c, r)) {
+          const wx = wx0 + c;
+          const wy = wy0 + r;
+          const lip = lipAt(c);
+          const edge = !inside(c - 1, r) || !inside(c + 1, r) || !inside(c, r - 1);
+          if (edge) color = p.deepRock2;
+          else if (r === H - 1 && openD) color = p.deepRock2;
+          else if (dark(c, r)) color = (c + r) % 3 ? p.rockLo : p.deepRock;
+          else if (r < lip) {
+            // The top: worn patches, pits, a lit front edge.
+            // Big soft patches (a wavy grain across the shelf), a few pits.
+            if (smoothTop) {
+              // Soft patches of three tones, dithered where they meet (no stripes down a long ledge).
+              const n = softNoise(wx / 9, wy / 9, 955) * 0.7 + softNoise(wx / 4, wy / 4, 956) * 0.3 + (DITHER[(wy & 3) * 4 + (wx & 3)] / 16 - 0.5) * 0.08;
+              color = n < 0.4 ? p.rock[2] : n < 0.62 ? p.rim : (p.streak ?? p.rim);
+            } else {
+              const grain = Math.floor((wy + Math.sin(wx * 0.21) * 3 + Math.sin(wx * 0.07 + wy * 0.1) * 4) / 5);
+              color = tops[Math.floor(hash(grain, wx >> 3, 951) * tops.length)];
+            }
+            if (hash(wx >> 1, wy >> 1, 952) < 0.008) color = p.rockLo;
+            if (openD && r === lip - 1) color = p.fleck;
+          } else if (r === lip && openD) color = p.deepRock2;
+          else if (r === lip + 1 && openD) color = p.rockLo; // the overhang's shadow
+          else {
+            // The face: beds of sandstone, wavy, darker toward the foot.
+            const d = r - lip;
+            const wave = Math.round(Math.sin(wx * 0.3 + ty * 1.3) * 1.2 + Math.sin(wx * 0.11) * 1.5);
+            const bed = Math.floor((d + wave + 40) / 4);
+            color = beds[(bed + tx * 3 + ty) % beds.length];
+            if ((d + wave + 40) % 4 === 0 && hash(wx, bed, 953) < 0.6) color = p.rockLo;
+            if (d > raise - 4) color = (d + c) % 2 ? p.deepRock : p.rockLo;
+          }
+        }
+        if (color !== runColor) {
+          flush(c);
+          runColor = color;
+          runStart = c;
+        }
+      }
+      flush(T);
+    }
+    // A crack or two down the face, lit on one side.
+    if (openD) {
+      for (let k = 0; k < 2; k++) {
+        if (hash(tx, ty, 960 + k) > 0.55) continue;
+        const cx = 3 + rnd(tx, ty, 962 + k, 10);
+        const len = 4 + rnd(tx, ty, 964 + k, raise - 6);
+        const y0 = top + lipAt(cx) + 2;
+        for (let i = 0; i < len; i++) {
+          const jx = cx + (i > len / 2 ? (hash(tx, ty, 966 + k) < 0.5 ? -1 : 1) : 0);
+          px(ctx, p.deepRock2, x + jx, y0 + i, 1, 1);
+          px(ctx, p.rim, x + jx + 1, y0 + i, 1, 1);
+        }
+      }
+    }
+    // On top: a pebble, a shell, a scrap of dried weed.
+    if (hash(tx, ty, 970) < 0.22) {
+      const sx = x + 3 + rnd(tx, ty, 971, 9);
+      const sy = top + 3 + rnd(tx, ty, 972, 8);
+      px(ctx, pick(p.shells, hash(tx, ty, 973)), sx, sy, 2, 1);
+      px(ctx, p.fleck, sx, sy - 1, 1, 1);
+      px(ctx, p.rockLo, sx, sy + 1, 2, 1);
+    }
+    if (hash(tx, ty, 974) < 0.18) {
+      const sx = x + 2 + rnd(tx, ty, 975, 11);
+      const sy = top + 4 + rnd(tx, ty, 976, 8);
+      px(ctx, p.rockLo, sx, sy + 1, 3, 1);
+      px(ctx, pick(p.rock, hash(tx, ty, 977)), sx, sy, 3, 1);
+    }
+    // Weed and a shell in the damp at the foot of the face.
+    if (openD) {
+      const foot = top + H - 2;
+      for (let i = 0; i < 3; i++) {
+        if (hash(tx, ty, 980 + i) < 0.4) continue;
+        const wx = x + 2 + rnd(tx, ty, 983 + i, 12);
+        const tall = 2 + rnd(tx, ty, 986 + i, 3);
+        px(ctx, pick(p.weed, hash(tx, ty, 989 + i)), wx, foot - tall + 1, 1, tall);
+        if (tall > 2) px(ctx, p.weedHi, wx, foot - tall + 1, 1, 1);
+      }
+      if (hash(tx, ty, 992) < 0.35) {
+        const sx = x + 4 + rnd(tx, ty, 993, 8);
+        px(ctx, pick(p.shells, hash(tx, ty, 994)), sx, foot - 1, 2, 2);
+        px(ctx, p.fleck, sx, foot - 1, 1, 1);
+      }
+    }
   };
 }
 
@@ -992,6 +1572,507 @@ function hanging(ctx, x, y, tx, ty, room, p) {
     const len = 8 + rnd(tx, ty, 20 + i, 14);
     for (let r = 0; r < len; r++) px(ctx, r % 5 === 4 ? p.weedHi : pick(p.weed, hash(tx, ty, 30 + i)), hx + (r > len * 0.6 ? 1 : 0), top + r, 1 + (r % 6 === 0 ? 1 : 0), 1);
   }
+}
+
+// =====================================================================
+// Merrow, the drowned town: dressed stone and cobbles under clear green
+// water, limewashed houses with the tide's stain on them, slate roofs you
+// jump across (b and B), chimneys, bollards and a spire. Its pieces are
+// below; the config is AREAS.merrow.
+// =====================================================================
+// Cobbles with green weed growing in the joints.
+GROUND.townCobbles = (ctx, x, y, tx, ty, room, p) => {
+  GROUND.cobbles(ctx, x, y, tx, ty, null, p);
+  // Weed in the joints between the cobbles (the same joints GROUND.cobbles laid).
+  for (let row = ty * 2; row < ty * 2 + 2; row++) {
+    for (const [ci, c0, c1] of piecesIn(row, 61, 6, 11, tx * T, tx * T + T)) {
+      const jx = c1 - 1 - tx * T;
+      if (jx < 0 || jx >= T || hash(row, ci, 300) > 0.55) continue;
+      const jy = y + (row - ty * 2) * 8 + 1 + rnd(row, ci, 301, 4);
+      px(ctx, pick(p.jointWeed, hash(row, ci, 302)), x + jx, jy, 1, 2 + rnd(row, ci, 303, 3));
+      if (hash(row, ci, 304) < 0.4) px(ctx, p.jointWeedHi, x + jx, jy, 1, 1);
+    }
+  }
+  if (hash(tx, ty, 305) < 0.35) px(ctx, p.jointWeed[0], x + rnd(tx, ty, 306, 14), y + 7, 3, 1);
+  edges(ctx, x, y, tx, ty, room, p);
+};
+// Big squared flagstones, paler than the street.
+GROUND.townFlags = (ctx, x, y, tx, ty, room, p) => {
+  GROUND.flags(ctx, x, y, tx, ty, room, p.flagP);
+  if (hash(tx, ty, 310) < 0.25) px(ctx, p.jointWeed[1], x + rnd(tx, ty, 311, 12), y + 7 + rnd(tx, ty, 312, 2) * 8 - 1, 2, 1);
+};
+// Granite setts: small oblong blocks in close rows, bluer than the cobbles.
+GROUND.setts = (ctx, x, y, tx, ty, room, p) => {
+  px(ctx, p.settGap, x, y, T, T);
+  for (let r = 0; r < 4; r++) {
+    const wy = ty * 4 + r;
+    const start = -((tx * T + (wy % 2 ? 3 : 0)) % 6);
+    for (let bx = start; bx < T; bx += 6) {
+      const sx = Math.max(0, bx);
+      const w = Math.min(bx + 6, T) - sx;
+      if (w < 2) continue;
+      const wx = tx * T + bx;
+      px(ctx, pick(p.sett, hash(wx, wy, 341)), x + sx, y + r * 4, w - 1, 3);
+      px(ctx, p.settHi, x + sx, y + r * 4, w - 1, 1);
+    }
+  }
+  if (hash(tx, ty, 342) < 0.3) px(ctx, p.jointWeed[0], x + rnd(tx, ty, 343, 13), y + 3 + rnd(tx, ty, 344, 3) * 4, 2, 1);
+  glints(ctx, x, y, tx, ty, p, 0.35);
+  edges(ctx, x, y, tx, ty, room, p);
+};
+
+// Clear dark bottle-green water with the drowned street showing through it.
+function clearWater(ctx, x, y, tx, ty, room, p) {
+  px(ctx, p.water, x, y, T, T);
+  // The drowned street: cobbles, a few gone, all of it fading in and out of the deep.
+  const f = tileBrush(ctx, x, y, tx, ty);
+  for (let row = ty * 2; row < ty * 2 + 2; row++) {
+    for (const [ci, c0, c1] of piecesIn(row, 51, 6, 11, tx * T, tx * T + T)) {
+      if (hash(row, ci, 350) < 0.12) continue;
+      const lift = hash(row, ci, 349) < 0.3 ? 1 : 0;
+      f(pick(p.under, hash(row, ci, 351)), c0 + 1, row * 8 + 1 + lift, c1 - c0 - 1, 6 - lift);
+      f(p.underHi, c0 + 2, row * 8 + 1 + lift, Math.max(1, c1 - c0 - 3), 1);
+    }
+  }
+  // Now and then a strand of weed standing up off the bottom, or a lost thing on it.
+  const roll = hash(tx, ty, 352);
+  if (roll < 0.14) {
+    const wx = x + 3 + rnd(tx, ty, 353, 10);
+    const wy = y + 4 + rnd(tx, ty, 354, 6);
+    px(ctx, p.underWeed, wx, wy, 1, 5);
+    px(ctx, p.underWeed, wx + 1, wy - 2, 1, 3);
+  } else if (roll < 0.17) {
+    px(ctx, p.underThing, x + 4 + rnd(tx, ty, 355, 8), y + 6 + rnd(tx, ty, 356, 6), 3, 2);
+  }
+  // Deeper and shallower in big soft stretches that run across the tiles (4 px at a time, dithered).
+  const depthAt = (wx, wy) => softNoise(wx / 52, wy / 40, 371) * 0.7 + softNoise(wx / 17, wy / 13, 372) * 0.3;
+  for (let by = 0; by < T; by += 4) for (let bx = 0; bx < T; bx += 4) {
+    const dpt = depthAt(tx * T + bx + 2, ty * T + by + 2);
+    const a = Math.max(0, Math.min(0.55, (dpt - 0.3) * 1.1 + (DITHER[((by >> 2) & 3) * 4 + ((bx >> 2) & 3)] / 16 - 0.5) * 0.06));
+    if (a > 0.03) shade(ctx, x + bx, y + by, 4, 4, a.toFixed(2), p.deepRgb);
+  }
+  // Light through the surface: a net of bright lines where two slow swells cross, brightest in the shallow stretches.
+  const lightRgb = hexRgb(p.shallowHi ?? p.wave);
+  for (let ly = 0; ly < T; ly++) for (let lx = 0; lx < T; lx++) {
+    const wx = tx * T + lx;
+    const wy = ty * T + ly;
+    const d = Math.abs(softNoise(wx / 9, wy / 7, 373) - softNoise(wx / 8 + 3.1, wy / 9 + 1.7, 374));
+    if (d > 0.05) continue;
+    const a = (0.05 - d) * 14 * (1.2 - depthAt(wx, wy));
+    if (a > 0.06) shade(ctx, x + lx, y + ly, 1, 1, Math.min(0.5, a).toFixed(2), lightRgb);
+  }
+  // Weed torn loose, drifting just under the surface.
+  if (hash(tx, ty, 375) < 0.08) {
+    const wx = x + 1 + rnd(tx, ty, 376, 5);
+    const wy = y + 3 + rnd(tx, ty, 377, 9);
+    for (let k = 0; k < 9; k++) px(ctx, k % 4 === 3 ? p.jointWeedHi ?? p.underWeed : p.underWeed, wx + k, wy + Math.round(Math.sin((k + tx) * 0.9)), 1, 1);
+  }
+  for (let i = 0; i < 2; i++) {
+    const wy = y + 3 + i * 7 + rnd(tx, ty, 360 + i, 3);
+    const wx = x + rnd(tx, ty, 362 + i, 9);
+    const len = 3 + rnd(tx, ty, 364 + i, 5);
+    px(ctx, p.wave, wx, wy, len, 1);
+    shade(ctx, wx + 1, wy + 1, len, 1, 0.5, p.deepRgb);
+  }
+  if (hash(tx, ty, 366) < p.caps) px(ctx, p.foam, x + 3 + rnd(tx, ty, 367, 10), y + 4 + rnd(tx, ty, 368, 8), 2, 1);
+  waterBanks(ctx, x, y, tx, ty, room, p);
+}
+
+// Shallows over the cobbles: the street itself, under a skin of green water.
+function shallowCobbles(ctx, x, y, tx, ty, room, p) {
+  GROUND.cobbles(ctx, x, y, tx, ty, null, p);
+  shade(ctx, x, y, T, T, 0.42, p.shallowTint);
+  for (let i = 0; i < 2; i++) {
+    const wy = y + 3 + i * 7 + rnd(tx, ty, 370 + i, 3);
+    px(ctx, p.shallowHi, x + rnd(tx, ty, 372 + i, 8), wy, 4 + rnd(tx, ty, 374 + i, 4), 1);
+  }
+  if (hash(tx, ty, 376) < 0.2) px(ctx, p.foam, x + 2 + rnd(tx, ty, 377, 10), y + 2 + rnd(tx, ty, 378, 10), 2, 1);
+  if (room && ![';', 'j'].includes(at(room, tx, ty, 0, -1)) && !softEdge(room, tx, ty, 0, -1)) shade(ctx, x, y, T, 2, 0.2, p.shadow);
+}
+
+// A stair of dressed stone (an area with `stair: 'dressed'`: Merrow and the Lanes), in the
+// area's own stone instead of the mountain's pale steps. Two treads a tile; each tread is
+// its own few blocks, joints staggered, worn hollow in the middle where feet went. Going up
+// (a wall or more stair above the run's top) each tread shows its riser below it; going
+// down into the water (water under the run's foot) each tread drops into the shadow of the
+// next and the lower treads are wet, green and then under the water's skin. Low kerbs
+// where the stair meets anything else.
+function dressedStair(ctx, x, y, tx, ty, room, p) {
+  const stones = p.ashlar ?? p.rock;
+  const hi = p.ashlarHi ?? p.rim;
+  const lo = p.ashlarLo ?? p.rockLo;
+  let foot = ty;
+  while (room && at(room, tx, foot, 0, 1) === 's') foot++;
+  const below = room ? at(room, tx, foot, 0, 1) : null;
+  const down = isSea(below) || below === ';';
+  // How far down the run this tile is (0 at its top), for the wet lower treads.
+  let head = ty;
+  while (room && at(room, tx, head, 0, -1) === 's') head--;
+  const run = foot - head + 1;
+  px(ctx, p.mortar ?? p.deepRock2, x, y, T, T);
+  for (let step = 0; step < 2; step++) {
+    const sy = y + step * 8;
+    const n = (ty - head) * 2 + step;
+    const deep = down ? n / (run * 2 - 1) : 0;
+    // The tread: blocks with staggered joints.
+    const start = -(((tx * T) + (n % 2 ? 5 : 0)) % 10);
+    for (let bx = start; bx < T; bx += 10) {
+      const sx = Math.max(0, bx);
+      const w = Math.min(bx + 10, T) - sx;
+      if (w < 1) continue;
+      px(ctx, pick(stones, hash(tx * T + bx, ty * 2 + step, 450)), x + sx, sy, w - 1, down ? 7 : 5);
+    }
+    // The worn nosing: lit, except where it's hollowed in the middle of the flight.
+    for (let i = 0; i < T; i++) {
+      const worn = Math.abs(((tx * T + i) % 48) - 24) < 6 && hash(tx * T + i, n, 451) < 0.7;
+      px(ctx, worn ? lo : hi, x + i, sy, 1, 1);
+    }
+    if (down) {
+      // The drop to the next tread down, in its shadow.
+      px(ctx, p.deepRock2, x, sy + 7, T, 1);
+      shade(ctx, x, sy + 5, T, 2, 0.25, p.shadow);
+    } else {
+      // The riser below the tread, darker, and a line of grime at its foot.
+      px(ctx, lo, x, sy + 5, T, 3);
+      px(ctx, p.deepRock2, x, sy + 7, T, 1);
+      for (let i = 0; i < T; i += 5) if (hash(tx * 5 + i, n, 452) < 0.4) px(ctx, p.streak ?? hi, x + i + rnd(tx, n, 453 + i, 4), sy + 5, 1, 2);
+    }
+    // Weed in the joints, more of it the lower (and wetter) the tread.
+    if (hash(tx, n, 454) < 0.3 + deep * 0.5) px(ctx, pick(p.weedFoot ?? p.weed, hash(tx, n, 455)), x + rnd(tx, n, 456, 13), sy + (down ? 6 : 4), 2 + rnd(tx, n, 457, 2), 1);
+    // Down into the water: the lower treads go green, then under the water's skin.
+    if (down && deep > 0.45) shade(ctx, x, sy, T, 8, Math.min(0.55, (deep - 0.45) * 1.1), p.tideStain ?? p.wetShade ?? p.shadow);
+    if (down && deep > 0.8) {
+      shade(ctx, x, sy, T, 8, 0.35, p.shallowTint ?? '40, 110, 90');
+      px(ctx, p.shallowHi ?? p.wave, x + rnd(tx, n, 458, 8), sy + 2 + rnd(tx, n, 459, 3), 3 + rnd(tx, n, 460, 3), 1);
+    }
+  }
+  if (!room) return;
+  // Kerbs where the stair meets anything else.
+  for (const side of [-1, 1]) {
+    if (at(room, tx, ty, side, 0) === 's') continue;
+    const kx = side < 0 ? x : x + T - 2;
+    px(ctx, lo, kx, y, 2, T);
+    px(ctx, side < 0 ? hi : p.deepRock2, side < 0 ? kx : kx + 1, y, 1, T);
+  }
+}
+
+// Dressed stone: long blocks in courses, a lit top edge, the tide's green on the bottom course.
+WALLS.ashlar = (ctx, x, y, tx, ty, room, p) => {
+  px(ctx, p.mortar, x, y, T, T);
+  for (let r = 0; r < 2; r++) {
+    const wy = ty * 2 + r;
+    const start = -((tx * T + (wy % 2 ? 6 : 0)) % 12);
+    for (let bx = start; bx < T; bx += 12) {
+      const sx = Math.max(0, bx);
+      const w = Math.min(bx + 12, T) - sx;
+      if (w < 1) continue;
+      const by = y + r * 8;
+      px(ctx, pick(p.ashlar, hash(tx * T + bx, wy, 380)), x + sx, by, w - 1, 7);
+      px(ctx, p.ashlarHi, x + sx, by, w - 1, 1);
+      if (bx >= 0) px(ctx, p.ashlarHi, x + sx, by, 1, 7);
+      px(ctx, p.ashlarLo, x + sx, by + 6, w - 1, 1);
+      // Tooling marks.
+      if (hash(tx * T + bx, wy, 381) < 0.5) px(ctx, p.ashlarLo, x + sx + 2 + rnd(tx, wy, 382, Math.max(1, w - 4)), by + 3, 2, 1);
+    }
+  }
+  for (let i = 0; i < 2; i++) if (hash(tx, ty, 383 + i) < 0.4) px(ctx, p.streak, x + 2 + rnd(tx, ty, 385 + i, 12), y + rnd(tx, ty, 387 + i, 6), 1, 4 + rnd(tx, ty, 389 + i, 6));
+  if (!room) return;
+  const down = at(room, tx, ty, 0, 1);
+  if (down != null && !isWallish(down)) {
+    shade(ctx, x, y + 9, T, 7, 0.35, p.tideStain);
+    px(ctx, p.tideLine, x, y + 9, T, 1);
+    if (isSea(down) && p.weedFoot) for (let i = 0; i < 6; i++) px(ctx, pick(p.weedFoot, hash(tx, ty, 391 + i)), x + rnd(tx, ty, 397 + i, 15), y + 12 + rnd(tx, ty, 403 + i, 3), 1, 2 + (i % 2));
+  }
+  const left = at(room, tx, ty, -1, 0);
+  const right = at(room, tx, ty, 1, 0);
+  if (left != null && !isWallish(left)) shade(ctx, x, y, 2, T, 0.3, hexRgb(p.ashlarHi));
+  if (right != null && !isWallish(right)) shade(ctx, x + T - 2, y, 2, T, 0.4);
+};
+
+// Narrow town houses: limewash gone green-grey where the water sat, quoins, slate, dark windows.
+const isHouse = (c) => c != null && '5678'.includes(c);
+function townHouse(room, tx, ty) {
+  let ex = tx;
+  while (ex > 0 && isHouse(at(room, ex - 1, ty))) ex--;
+  let top = ty;
+  while (top > 0 && isHouse(at(room, tx, top - 1)) && at(room, tx, top - 1) !== '7') top--;
+  // Every three tiles of a terrace is its own house.
+  const idx = Math.floor((tx - ex) / 3);
+  return { ex, top, idx, first: (tx - ex) % 3 === 0 };
+}
+const TOWN = {
+  wall(ctx, x, y, tx, ty, room, p) {
+    const h = room ? townHouse(room, tx, ty) : { ex: tx, top: ty, idx: 0, first: false };
+    const c = p.houses[Math.floor(hash(h.ex + h.idx * 3, h.top, 777) * p.houses.length)];
+    px(ctx, c, x, y, T, T);
+    mottle(ctx, p.plasterHi, x, y, tx, ty, 410, 6);
+    if (hash(tx, ty, 412) < 0.6) mottle(ctx, p.plasterLo, x, y, tx, ty, 413, 4);
+    // Hairline cracks, and here and there the plaster fallen off the stone.
+    if (hash(tx, ty, 415) < 0.2) { let cx = 3 + rnd(tx, ty, 416, 9); for (let cy = 2; cy < 9; cy++) { px(ctx, p.plasterLo, x + cx, y + cy); cx += hash(tx, ty, 417 + cy) < 0.5 ? 1 : -1; } }
+    if (hash(tx, ty, 425) < 0.12) { const bx = x + 2 + rnd(tx, ty, 426, 8); const by = y + 2 + rnd(tx, ty, 427, 6); px(ctx, p.ashlarLo, bx, by, 6, 4); px(ctx, p.ashlar[0], bx + 1, by + 1, 4, 1); px(ctx, p.ashlar[1], bx + 1, by + 3, 4, 1); }
+    // Quoins up the corners of each house, and a downpipe between neighbours.
+    const corner = (right) => { for (let q = 0; q < 4; q++) { const wide = (ty * 4 + q) % 2 ? 4 : 2; px(ctx, q % 2 ? p.quoin : p.quoinHi, x + (right ? T - wide : 0), y + q * 4, wide, 3); } };
+    if (room && !isHouse(at(room, tx - 1, ty))) corner(false);
+    if (room && !isHouse(at(room, tx + 1, ty))) corner(true);
+    if (room && h.first && tx > h.ex) { px(ctx, p.pipe, x, y, 2, T); px(ctx, p.pipeHi, x, y, 1, T); if ((ty % 2) === 0) px(ctx, p.pipe, x, y + 6, 3, 1); }
+    // The tide: the bottom of the wall stained green-grey, a hard line where it stood.
+    const down = room ? at(room, tx, ty, 0, 1) : null;
+    if (down != null && !isHouse(down)) {
+      shade(ctx, x, y + 6, T, 10, 0.45, p.tideStain);
+      px(ctx, p.tideLine, x, y + 6, T, 1);
+      for (let i = 0; i < 3; i++) px(ctx, p.tideLine, x + rnd(tx, ty, 430 + i, 15), y + 7, 1, 2 + rnd(tx, ty, 433 + i, 4));
+      if (isSea(down) && p.weedFoot) for (let i = 0; i < 6; i++) px(ctx, pick(p.weedFoot, hash(tx, ty, 436 + i)), x + rnd(tx, ty, 442 + i, 15), y + 12 + rnd(tx, ty, 448 + i, 3), 1, 2 + (i % 2));
+      px(ctx, p.ashlarLo, x, y + T - 2, T, 2);
+    } else if (hash(tx, ty, 450) < 0.4) {
+      // Higher up: rain running down from the eaves.
+      px(ctx, p.streak, x + 2 + rnd(tx, ty, 451, 12), y, 1, 5 + rnd(tx, ty, 452, 6));
+    }
+  },
+  window(ctx, x, y, tx, ty, room, p) {
+    TOWN.wall(ctx, x, y, tx, ty, room, p);
+    // Stone dressings, a dark empty window: no light in it, only the storm's sky caught in the glass.
+    px(ctx, p.dress, x + 3, y + 1, 10, 13);
+    px(ctx, p.dressLo, x + 12, y + 1, 1, 13);
+    px(ctx, p.glassDark, x + 4, y + 2, 8, 10);
+    px(ctx, p.glassSky, x + 4, y + 2, 3, 1);
+    px(ctx, p.glassSky, x + 4, y + 3, 1, 3);
+    px(ctx, p.sash, x + 8, y + 2, 1, 10);
+    px(ctx, p.sash, x + 4, y + 6, 8, 1);
+    const k = hash(tx, ty, 460);
+    if (k < 0.3) {
+      // A pane gone: blacker, a shard left in the corner.
+      px(ctx, '#040806', x + 9, y + 7, 3, 5);
+      px(ctx, p.glassSky, x + 11, y + 7, 1, 2);
+    } else if (k < 0.55) {
+      // A drowned curtain hanging limp.
+      px(ctx, p.curtainDark, x + 4, y + 2, 2, 10);
+      px(ctx, p.curtainDark, x + 6, y + 2, 1, 6);
+    }
+    px(ctx, p.dressHi, x + 2, y + 13, 12, 2);
+    px(ctx, p.dressLo, x + 2, y + 14, 12, 1);
+    px(ctx, p.dressHi, x + 3, y + 1, 9, 1);
+  },
+  door(ctx, x, y, tx, ty, room, p) {
+    TOWN.wall(ctx, x, y, tx, ty, room, p);
+    const h = room ? townHouse(room, tx, ty) : { ex: tx, top: ty, idx: 0 };
+    const colour = p.doors[Math.floor(hash(h.ex + h.idx * 3, h.top, 470) * p.doors.length)];
+    px(ctx, p.dress, x + 2, y, 12, T);
+    px(ctx, p.dressLo, x + 13, y, 1, T);
+    // The fanlight, dark.
+    px(ctx, p.glassDark, x + 4, y + 1, 8, 3);
+    px(ctx, p.sash, x + 7, y + 1, 1, 3);
+    px(ctx, p.dress, x + 4, y + 1, 1, 1); px(ctx, p.dress, x + 11, y + 1, 1, 1);
+    // The door: paint faded, four panels, knocker, the bottom rotted green.
+    px(ctx, colour, x + 4, y + 4, 8, 12);
+    px(ctx, '#ffffff18', x + 4, y + 4, 1, 12);
+    for (const [dx, dy] of [[5, 5], [8, 5], [5, 10], [8, 10]]) { px(ctx, '#00000040', x + dx, y + dy, 2, 4); px(ctx, '#ffffff14', x + dx, y + dy, 2, 1); }
+    px(ctx, p.knob, x + 7, y + 8, 2, 1);
+    px(ctx, p.knob, x + 10, y + 10, 1, 1);
+    shade(ctx, x + 4, y + 12, 8, 4, 0.35, p.tideStain);
+    px(ctx, p.dressHi, x + 1, y + T - 1, 14, 1);
+  },
+  roof(ctx, x, y, tx, ty, room, p) {
+    slateCourses(ctx, x, y, T, tx, ty, p, p.slate, 0);
+    if (!room) return;
+    // The ridge where the roof stops above, the gutter where it stops below.
+    if (!isHouse(at(room, tx, ty, 0, -1))) ridgeTiles(ctx, x, y, tx, p);
+    if (at(room, tx, ty, 0, 1) !== '7') {
+      px(ctx, p.gutter, x, y + T - 3, T, 3);
+      px(ctx, p.gutterHi, x, y + T - 3, T, 1);
+      if (tx % 3 === 1) px(ctx, p.gutter, x + 7, y + T - 1, 2, 1);
+    }
+  },
+};
+// Slates: 4 px courses of overlapping slates, staggered across the whole town: a dark lap line
+// under each course, fine joints, each slate's bottom edge catching the light; lichen and the
+// odd one slipped.
+function slateCourses(ctx, x, y, h, tx, ty, p, tones, salt) {
+  for (let r = 0; r * 4 < h; r++) {
+    const wy = ty * 4 + r + salt;
+    const cy = y + r * 4;
+    const ch = Math.min(4, h - r * 4);
+    const start = -((tx * T + (wy % 2 ? 4 : 0)) % 8);
+    for (let bx = start; bx < T; bx += 8) {
+      const sx = Math.max(0, bx);
+      const w = Math.min(bx + 8, T) - sx;
+      if (w < 1) continue;
+      const wx = tx * T + bx;
+      const roll = hash(wx, wy, 480 + salt);
+      px(ctx, pick(tones, hash(wx, wy, 479 + salt)), x + sx, cy, w, ch);
+      if (roll < 0.03) {
+        // A slate gone: the dark under it and a batten across.
+        px(ctx, p.slateGap, x + sx, cy, w, ch);
+        px(ctx, p.batten, x + sx, cy + 2, w, 1);
+        continue;
+      }
+      if (ch > 2) px(ctx, p.slateHi, x + sx, cy + ch - 1, w, 1);
+      if (bx + 8 <= T) px(ctx, p.slateLo, x + bx + 7, cy, 1, ch - 1);
+      if (hash(wx, wy, 481 + salt) < 0.06) px(ctx, pick(p.lichen, hash(wx, wy, 482)), x + sx + 2, cy + 1, 2, 2);
+    }
+    // The lap line: the course above casts its edge over this one.
+    px(ctx, p.slateGap, x, cy, T, 1);
+  }
+}
+// Half-round ridge tiles along the top of a roof.
+function ridgeTiles(ctx, x, y, tx, p) {
+  px(ctx, p.slateLo, x, y + 5, T, 1);
+  shade(ctx, x, y + 6, T, 2, 0.35);
+  for (let bx = -((tx * T) % 5); bx < T; bx += 5) {
+    const sx = Math.max(0, bx);
+    const w = Math.min(bx + 5, T) - sx;
+    if (w < 1) continue;
+    px(ctx, p.ridgeTile, x + sx, y, w, 5);
+    px(ctx, p.ridgeHi, x + sx, y + 1, w, 1);
+    px(ctx, p.ridgeLo, x + sx, y + 4, w, 1);
+    px(ctx, p.slateLo, x + sx + w - 1, y, 1, 5);
+  }
+}
+
+// Rooftops for the jumping rooms: a b is a lower roof slope, a B a roof with its ridge. The face is
+// the slope coming down at you to the gutter; the top is the slates you land on.
+function slateBlockOf(raise, p) {
+  return (ctx, x, y, tx, ty, room, floor) => {
+    floor(ctx, x, y, tx, ty, room);
+    const top = y - raise;
+    const raiseAt = (dx, dy) => ({ b: 12, B: 24 }[at(room, tx, ty, dx, dy)] ?? 0);
+    // The face: slates, darker (it falls away from the light), down to the gutter.
+    slateCourses(ctx, x, top + T, raise, tx, ty + 50, p, p.slate, 7);
+    shade(ctx, x, top + T, T, raise, 0.4, p.shadow);
+    px(ctx, p.gutter, x, y + T - 4, T, 3);
+    px(ctx, p.gutterHi, x, y + T - 4, T, 1);
+    if (tx % 3 === 0) px(ctx, p.gutterHi, x + 3, y + T - 5, 1, 2);
+    if (isSea(at(room, tx, ty, 0, 1))) for (let i = 0; i < 3; i++) px(ctx, pick(p.weedFoot, hash(tx, ty, 490 + i)), x + rnd(tx, ty, 493 + i, 15), y + T - 2, 1, 2);
+    px(ctx, p.slateOutline, x, y + T - 1, T, 1);
+    // The top.
+    slateCourses(ctx, x, top, T, tx, ty, p, p.slateTop, 0);
+    if (raise > 12 && raiseAt(0, -1) < raise) ridgeTiles(ctx, x, top, tx, p);
+    else if (raise <= 12 && raiseAt(0, -1) > raise) shade(ctx, x, top, T, 3, 0.35, p.shadow);
+    if (raiseAt(0, 1) < raise) px(ctx, p.slateHi, x, top + T - 1, T, 1);
+    if (raiseAt(0, -1) < raise) px(ctx, p.slateOutline, x, top, T, 1);
+    // Bargeboards at the open ends.
+    if (raiseAt(-1, 0) < raise) { px(ctx, p.slateOutline, x, top, 1, T + raise); px(ctx, p.barge, x + 1, top + 1, 1, T + raise - 2); }
+    if (raiseAt(1, 0) < raise) { px(ctx, p.slateOutline, x + T - 1, top, 1, T + raise); px(ctx, p.barge, x + T - 2, top + 1, 1, T + raise - 2); }
+  };
+}
+
+// Standing things in town: a chimney stack, an iron bollard, a church spire.
+Object.assign(STANDING, {
+  chimney(ctx, x, y, tx, ty, room, p) {
+    shade(ctx, x + 1, y + 13, 14, 3, 0.35);
+    px(ctx, p.deepRock2, x + 2, y - 24, 12, 38);
+    for (let r = 0; r < 9; r++) {
+      const by = y - 23 + r * 4;
+      const off = r % 2 ? 3 : 0;
+      for (let bx = 3 - off; bx < 13; bx += 6) {
+        const sx = Math.max(3, bx);
+        const w = Math.min(bx + 6, 13) - sx;
+        if (w < 1) continue;
+        px(ctx, pick(p.ashlar, hash(tx * 9 + bx, ty * 9 + r, 500)), x + sx, by, w - 1, 3);
+        px(ctx, p.ashlarHi, x + sx, by, w - 1, 1);
+      }
+    }
+    px(ctx, p.ashlarLo, x + 11, y - 23, 2, 36);
+    // Soot from the pots, the cap, two clay pots, the tide's green at the foot.
+    px(ctx, '#20242280', x + 5, y - 23, 1, 7);
+    px(ctx, p.deepRock2, x + 1, y - 27, 14, 4);
+    px(ctx, p.ashlarHi, x + 2, y - 27, 12, 1);
+    px(ctx, p.ashlar[0], x + 2, y - 26, 12, 2);
+    for (const [cx, hgt] of [[4, 6], [9, 5]]) {
+      px(ctx, p.deepRock2, x + cx - 1, y - 27 - hgt, 5, hgt);
+      px(ctx, p.pot, x + cx, y - 27 - hgt + 1, 3, hgt - 1);
+      px(ctx, p.potHi, x + cx, y - 27 - hgt + 1, 1, hgt - 1);
+      px(ctx, '#140e0c', x + cx + 1, y - 27 - hgt, 1, 1);
+    }
+    shade(ctx, x + 3, y + 4, 10, 9, 0.4, p.tideStain);
+    px(ctx, p.tideLine, x + 3, y + 4, 10, 1);
+  },
+  bollard(ctx, x, y, tx, ty, room, p) {
+    shade(ctx, x + 2, y + 12, 12, 3, 0.35);
+    px(ctx, p.ashlarLo, x + 3, y + 9, 10, 5);
+    px(ctx, p.ashlar[0], x + 4, y + 9, 8, 1);
+    px(ctx, p.stand0, x + 4, y - 7, 8, 17);
+    px(ctx, p.stand1, x + 5, y - 6, 6, 15);
+    px(ctx, p.stand2, x + 5, y - 6, 2, 15);
+    px(ctx, p.standHi, x + 5, y - 6, 1, 15);
+    // The domed cap with its lip, a band, rust weeping.
+    px(ctx, p.stand0, x + 3, y - 9, 10, 3);
+    px(ctx, p.stand2, x + 4, y - 9, 8, 1);
+    px(ctx, p.stand0, x + 5, y - 11, 6, 2);
+    px(ctx, p.standHi, x + 6, y - 11, 3, 1);
+    px(ctx, p.stand0, x + 4, y - 1, 8, 1);
+    px(ctx, p.rust, x + 9, y - 6, 1, 4 + rnd(tx, ty, 510, 5));
+    if (hash(tx, ty, 511) < 0.5) for (let r = -4; r < 6; r += 3) px(ctx, p.rope, x + 4, y + r, 8, 1);
+  },
+  spire(ctx, x, y, tx, ty, room, p) {
+    shade(ctx, x + 1, y + 13, 14, 3, 0.35);
+    px(ctx, p.deepRock2, x + 1, y + 6, 14, 8);
+    px(ctx, p.ashlar[1], x + 2, y + 7, 12, 6);
+    px(ctx, p.ashlarHi, x + 2, y + 7, 12, 1);
+    const tall = 34;
+    for (let row = 0; row < tall; row++) {
+      const w = Math.max(1, Math.round(10 * (1 - row / tall)));
+      const left = x + 8 - Math.ceil(w / 2);
+      const py = y + 6 - row;
+      px(ctx, p.deepRock2, left - 1, py, w + 2, 1);
+      px(ctx, row % 5 === 0 ? p.ashlarLo : p.ashlar[(row >> 2) % 2], left, py, w, 1);
+      if (w > 2) px(ctx, p.ashlarHi, left, py, 1, 1);
+      // Crockets up the edges.
+      if (row % 6 === 3 && w > 3) { px(ctx, p.ashlar[2], left - 2, py, 1, 1); px(ctx, p.ashlarLo, left + w + 1, py, 1, 1); }
+    }
+    // The iron finial, gone to rust.
+    px(ctx, p.stand0, x + 7, y - 34, 2, 7);
+    px(ctx, p.stand0, x + 5, y - 32, 6, 1);
+    px(ctx, p.rust, x + 7, y - 31, 1, 2);
+    shade(ctx, x + 2, y + 2, 12, 11, 0.4, p.tideStain);
+  },
+});
+// A fallen piece of dressed stone: a block with a moulding along it, lying askew, a chip beside.
+BLOCKERS.fallenStone = (ctx, x, y, tx, ty, room, p) => {
+  shade(ctx, x + 1, y + 12, 14, 3, 0.32);
+  const flip = hash(tx, ty, 520) < 0.5;
+  for (let r = 0; r < 9; r++) {
+    const slant = Math.round((flip ? r : 8 - r) * 0.35);
+    px(ctx, p.deepRock2, x + 1 + slant, y + 4 + r, 13, 1);
+    px(ctx, r < 3 ? p.ashlarHi : r < 5 ? p.ashlar[0] : p.ashlar[1], x + 2 + slant, y + 4 + r, 11, 1);
+  }
+  px(ctx, p.ashlarLo, x + 2, y + 7, 13, 1);
+  px(ctx, p.ashlarLo, x + 3, y + 10, 10, 1);
+  px(ctx, p.deepRock2, x + 1, y + 13, 14, 1);
+  px(ctx, p.ashlar[2], x + 12, y + 11, 3, 2);
+  if (p.weedFoot) px(ctx, p.weedFoot[0], x + 3, y + 12, 6, 1);
+};
+// Stone thick with barnacles (x): a squared block, crusted.
+MASSES.masonry = (ctx, x, y, tx, ty, room, p, floor) => {
+  floor(ctx, x, y, tx, ty, room);
+  shade(ctx, x + 1, y + 12, 14, 3, 0.3);
+  px(ctx, p.deepRock2, x + 1, y + 1, 14, 13);
+  px(ctx, p.ashlar[1], x + 2, y + 2, 12, 11);
+  px(ctx, p.ashlarHi, x + 2, y + 2, 12, 1);
+  px(ctx, p.ashlarLo, x + 2, y + 7, 12, 1);
+  px(ctx, p.ashlarLo, x + 7 + rnd(tx, ty, 530, 3), y + 2, 1, 5);
+  shade(ctx, x + 2, y + 8, 12, 5, 0.4, p.tideStain);
+  for (let i = 0; i < 14; i++) {
+    const bx = x + 2 + rnd(tx, ty, 531 + i, 11);
+    const by = y + 3 + rnd(tx, ty, 551 + i, 9);
+    px(ctx, '#d0d4c8', bx, by, 2, 1);
+    px(ctx, p.deepRock2, bx, by + 1, 2, 1);
+  }
+};
+// Old nets in a tangle (Z): mesh, floats, a rope's end, weed through it.
+function netTangle(ctx, x, y, tx, ty, room, p, floor) {
+  floor(ctx, x, y, tx, ty, room);
+  shade(ctx, x + 1, y + 12, 14, 3, 0.3);
+  oval(ctx, p.stand0, x + 8, y + 8, 7, 5);
+  oval(ctx, p.netDark, x + 8, y + 8, 6, 4);
+  for (let i = 0; i < 16; i += 2) {
+    px(ctx, p.net, x + 2 + Math.round(i * 0.75), y + 4 + (i % 4), 1, 8 - (i % 4));
+    px(ctx, p.net, x + 2, y + 5 + (i >> 2) * 2, 12, 1);
+  }
+  for (let i = 0; i < 5; i++) px(ctx, pick(p.weed, hash(tx, ty, 560 + i)), x + 2 + rnd(tx, ty, 565 + i, 11), y + 4 + rnd(tx, ty, 570 + i, 7), 2, 1);
+  px(ctx, p.float, x + 3 + rnd(tx, ty, 575, 3), y + 4, 3, 2);
+  if (hash(tx, ty, 576) < 0.6) px(ctx, p.float, x + 10, y + 8 + rnd(tx, ty, 577, 2), 3, 2);
+  px(ctx, p.rope, x + 1, y + 11, 6, 1);
+  px(ctx, p.rope, x + 6, y + 12, 5, 1);
 }
 
 // =====================================================================
@@ -1259,8 +2340,54 @@ const AREAS = {
     O: 'boulder', F: 'net', Z: 'wrack', N: 'grass', x: 'barnacle', hang: 'rope', curve: true,
   },
 };
-// Merrow (on hold) borrows the Wreck Yard's palette in sunken stone until it is designed.
-AREAS.merrow = { ...AREAS.lanes, p: { ...AREAS.lanes.p, water: '#1c4c4c', deep: '#143e3e' } };
+// --- MERROW: the drowned town. Dressed grey-green stone, cobbles with weed in the joints, clear
+// bottle-green water with the street showing under it, limewashed houses stained where the tide
+// stood, dark slate roofs (b and B are roof slopes and ridges to jump across), no lit windows. ---
+const MERROW_P = {
+  shadow: '4, 20, 18', wetShade: '4, 26, 22', wetLine: '#78a094', glint: '#b4d4c8',
+  ground: ['#5e6a64', '#58645e', '#64706a', '#525e58'], hi: '#7e8a82', lo: '#3c4642', crack: '#222a26', gap: '#1a2a20',
+  jointWeed: ['#3a6a3a', '#4e8048', '#2e5a32'], jointWeedHi: '#86b468',
+  speck: ['#3c4642', '#8a968c', '#46524a'], shells: ['#d0d0c4'],
+  sett: ['#4e5862', '#48525c', '#545e68', '#444e56'], settHi: '#6e7882', settGap: '#18221e',
+  turf: ['#3e5e3a', '#3a5836', '#44643e', '#34502f'], turfHi: '#6a8a58', turfLo: '#283e26',
+  path: ['#5a5a4a', '#545444', '#606050'],
+  water: '#15433b', deep: '#0e322c', deepRgb: '6, 30, 26', wave: '#3a7a6a', troughs: '#0a2824', foam: '#bfe2d4', lip: '#0a2420', caps: 0.05,
+  under: ['#1e5046', '#1c4c42', '#22564a'], underHi: '#2a5e52', underWeed: '#2e6a40', underThing: '#4a6e60',
+  shallow: '#3a6e60', shallowHi: '#7ab4a0', shallowTint: '24, 84, 68',
+  stone: '#76827a', stoneDark: '#2a3632', stoneHi: '#a0aca2',
+  plank: ['#5a4c3a', '#544634', '#605240'], plankHi: '#7a6a52', plankLo: '#3a3024', nail: '#8a8a7a', rope: '#a09070',
+  deepRock: '#161e1c', deepRock2: '#0a100e', topRock: '#1e2826', rim: '#6a7a72', rockLo: '#2e3a36', fleck: '#9ab0a4',
+  rock: ['#5a6660', '#545e5a', '#606c66', '#4c5852'], streak: '#7e9088', weedFoot: ['#2e5a32', '#3a6a38', '#264a2a'], rivet: '#8a9890', rust: '#7a4a30',
+  // Dressed stone.
+  mortar: '#2a3430', ashlar: ['#66726a', '#606c64', '#6c786f', '#5a665e'], ashlarHi: '#8a968c', ashlarLo: '#3e4844',
+  tideStain: '34, 66, 48', tideLine: '#5a7a5e',
+  // Limewash, its quoins and downpipes; dark windows and faded doors.
+  houses: ['#a8aea0', '#9ea69a', '#b0b2a2', '#a0a894', '#aaa49a'], plasterHi: '#bcc0b0', plasterLo: '#868c80',
+  quoin: '#6e7a72', quoinHi: '#8a968c', pipe: '#1e2422', pipeHi: '#3a4442',
+  dress: '#7e8880', dressHi: '#9aa49a', dressLo: '#4e5852', glassDark: '#0c1816', glassSky: '#2e5248', sash: '#3a423e', curtainDark: '#2a2a26',
+  doors: ['#2e4a42', '#4a2e2a', '#2e3a4e', '#3e3a2a'], knob: '#8a8a6a',
+  boardHi: '#ffffff18', boardLo: '#1c2622', trim: '#2a3430', frame: '#2a3430', glass: '#0c1816', glassHi: '#2e5248', sill: '#4e5852', curtain: '#2a2a26', door: '#2e4a42', doorHi: '#3e5a52',
+  // Slate.
+  slate: ['#2a343a', '#263036', '#2e3a40', '#222c32'], slateTop: ['#46545c', '#424f58', '#4a5862', '#3e4b54'], slateHi: '#4a5a64', slateLo: '#141c20',
+  slateGap: '#10161a', slateOutline: '#0a0e10', ridgeTile: '#56646c', ridgeHi: '#7a8a92', ridgeLo: '#2e383e', gutter: '#161a1c', gutterHi: '#3e4648', barge: '#3a3026', batten: '#4a3a28',
+  lichen: ['#7a8a4a', '#5a7040', '#8a9a60'],
+  roof: ['#2a343a', '#263036'], roofHi: '#4a5a64', roofLo: '#141c20',
+  wall: ['#58604c', '#505844', '#626a54'], wallHi: '#7a8468', wallLo: '#2c3426',
+  pot: '#7a5038', potHi: '#9a6a4a',
+  stand0: '#101412', stand1: '#2a3230', stand2: '#44504c', standHi: '#64726c', sail: '#8a8a74', sailLo: '#585848', hoop: '#2a3230',
+  net: '#7a7a5e', netDark: '#2a2e24', float: '#b84a34',
+  weed: ['#2e5a32', '#3a6a38', '#264a2a'], weedHi: '#78a65e', driftwood: '#9a9a86',
+  coral: [['#a85a6a', '#d08a98']], glow0: '#2a9a98', glow1: '#80e8d8', moss: 0.3, mossColor: '#365a36',
+};
+MERROW_P.flagP = { ...MERROW_P, ground: ['#6e7872', '#68726c', '#747e78', '#626c66'], hi: '#8c968e', lo: '#4a544e', gap: '#24302a' };
+AREAS.merrow = {
+  p: MERROW_P,
+  '.': 'townCobbles', ',': 'turf', ':': 'townFlags', q: 'shingle', o: 'planks', X: 'setts',
+  wallTop: 'rockTop', wallFace: 'ashlar', h: 'ashlar', stair: 'dressed',
+  houses: 'town', stand: { I: 'chimney', J: 'bollard', '^': 'spire' }, block: 'slate',
+  O: 'fallenStone', F: 'weed', Z: 'nets', N: 'grass', x: 'masonry', hang: 'rope',
+  water: 'clear', shallows: 'cobbles',
+};
 
 // Raised-ledge looks, from each area's palette.
 function ledgeLook(p, kind) {
@@ -1394,8 +2521,12 @@ function buildLook(cfg0) {
     px(c, p.stand0, x + 2, y + 1, 12, 1);
     for (let i = 0; i < 4; i++) px(c, i % 2 ? p.sailLo : p.sail, x + 2 + i * 3, y + 2, 3, 6 + ((i * 5 + tx) % 5));
   };
-  look['~'] = (c, x, y, tx, ty, room) => water(c, x, y, tx, ty, room, p);
-  look[';'] = (c, x, y, tx, ty, room) => shallows(c, x, y, tx, ty, room, p);
+  look['~'] = cfg.water === 'clear'
+    ? (c, x, y, tx, ty, room) => clearWater(c, x, y, tx, ty, room, p)
+    : (c, x, y, tx, ty, room) => water(c, x, y, tx, ty, room, p);
+  look[';'] = cfg.shallows === 'cobbles'
+    ? (c, x, y, tx, ty, room) => shallowCobbles(c, x, y, tx, ty, room, p)
+    : (c, x, y, tx, ty, room) => shallows(c, x, y, tx, ty, room, p);
   look.j = (c, x, y, tx, ty, room) => stones(c, x, y, tx, ty, room, p);
   look.g = (c, x, y, tx, ty, room) => bridge(c, x, y, tx, ty, room, p);
   look['0'] = (c, x, y, tx, ty, room) => drop(c, x, y, tx, ty, room, p);
@@ -1434,17 +2565,28 @@ function buildLook(cfg0) {
     };
   }
   look.f = (c, x, y, tx, ty, room, floor) => rail(c, x, y, tx, ty, room, p, floor);
-  look.b = blockOf(12, ledgeLook(p, cfg.block));
-  look.B = blockOf(24, ledgeLook(p, cfg.block));
-  // A room's `cargo` boxes turn its b and B into crates (see crateBlockOf).
+  if (cfg.stair === 'dressed') look.s = (c, x, y, tx, ty, room) => dressedStair(c, x, y, tx, ty, room, p);
+  look.b = cfg.block === 'slate' ? slateBlockOf(12, p) : blockOf(12, ledgeLook(p, cfg.block));
+  look.B = cfg.block === 'slate' ? slateBlockOf(24, p) : blockOf(24, ledgeLook(p, cfg.block));
+  // A room's `cargo` boxes turn its b and B into crates (see crateBlockOf), and a room
+  // with `ledges: 'rock'` draws them as natural rock (rockLedgeOf). Outdoors, the areas
+  // whose ledges are the shore's own stone (sandstone, wet rock) are natural rock by
+  // default, so they read as ledges and boulders, not cut blocks; `ledges: 'blocks'`
+  // keeps the cut blocks in a room that wants them.
+  const naturalLedges = cfg.block === 'sandstone' || cfg.block === 'wetrock';
   for (const [letter, raise] of [['b', 12], ['B', 24]]) {
     const stone = look[letter];
     const crate = crateBlockOf(raise, p);
-    look[letter] = (c, x, y, tx, ty, room, floor) => (inCargo(room, tx, ty) ? crate : stone)(c, x, y, tx, ty, room, floor);
+    const rock = rockLedgeOf(raise, p);
+    const shoreRock = rockLedgeOf(raise, p, true);
+    const rocky = (room) => naturalLedges && room?.ledges !== 'blocks' && !room?.indoors;
+    look[letter] = (c, x, y, tx, ty, room, floor) => (inCargo(room, tx, ty) ? crate : room?.ledges === 'rock' ? rock : rocky(room) ? shoreRock : stone)(c, x, y, tx, ty, room, floor);
   }
   look.O = (c, x, y, tx, ty, room, floor) => { floor(c, x, y, tx, ty, room); BLOCKERS[cfg.O](c, x, y, tx, ty, room, p); };
   look.F = (c, x, y, tx, ty, room, floor) => HEAPS[cfg.F](c, x, y, tx, ty, room, p, floor);
-  look.Z = cfg.Z === 'hedge'
+  look.Z = cfg.Z === 'nets'
+    ? (c, x, y, tx, ty, room, floor) => netTangle(c, x, y, tx, ty, room, p, floor)
+    : cfg.Z === 'hedge'
     ? (c, x, y, tx, ty, room, floor) => hedgeRow(c, x, y, tx, ty, room, p, floor)
     : (c, x, y, tx, ty, room, floor) => wrackHeap(c, x, y, tx, ty, room, p, floor);
   look.N = (c, x, y, tx, ty, room, floor) => seaGrass(c, x, y, tx, ty, room, p, floor);
@@ -1463,8 +2605,56 @@ function buildLook(cfg0) {
   // A ship's porthole looking out on the storm (the Wreck Yard): `seaPorthole` in the config.
   if (cfg.seaPorthole) look.w = (c, x, y, tx, ty, room) => seaPorthole(c, x, y, tx, ty, room, p, cfg);
   look.e = (c, x, y, tx, ty, room) => HOUSES.cabinRoof(c, x, y, tx, ty, room, p);
+  // Town houses (Merrow): limewash, quoins, dark windows, slate.
+  if (cfg.houses === 'town') {
+    look[5] = (c, x, y, tx, ty, room) => TOWN.wall(c, x, y, tx, ty, room, p);
+    look[6] = (c, x, y, tx, ty, room) => TOWN.window(c, x, y, tx, ty, room, p);
+    look[7] = (c, x, y, tx, ty, room) => TOWN.roof(c, x, y, tx, ty, room, p);
+    look[8] = (c, x, y, tx, ty, room) => TOWN.door(c, x, y, tx, ty, room, p);
+  }
   return look;
 }
+
+// --- THE CLIFF CAVE (a `tileLook`, not an area): Gullrest's letters inside the cliff
+// spur (sunny_cliff_cave, sunny_cliff_hollow), but in the cave's own damp gloom: the
+// stone a darker grey-brown, the sand dull and grey, wet planks, and the pool a murky
+// green-teal, the open water ('~') much darker than the shallows (';') round it so
+// the edge where you can wade no further is plain. The rooms' shade does the rest.
+AREAS.cliffcave = {
+  ...AREAS.gullrest,
+  p: {
+    ...AREAS.gullrest.p,
+    shadow: '14, 14, 12', wetShade: '6, 22, 22', wetLine: '#9aa898', glint: '#c8d0c0',
+    ground: ['#9a8c72', '#94866c', '#a09278', '#8e8268'], hi: '#ac9e84', lo: '#7c705a', crack: '#625844',
+    speck: ['#746a54', '#b4a88e', '#867a62', '#5e5644'], shells: ['#b49890', '#c4bcae'],
+    path: ['#8a7c64', '#84765e', '#908268'],
+    water: '#163c3a', deep: '#0e2c2c', wave: '#2c5a54', troughs: '#0a2222', foam: '#8ab4a6', lip: '#081c1c', caps: 0.03,
+    shallow: '#3a6a5e', shallowHi: '#4e7e70', stone: '#7a7468', stoneDark: '#3a3630', stoneHi: '#9c9484',
+    plank: ['#7a6448', '#725c40', '#806a4c'], plankHi: '#927c5a', plankLo: '#52402a', gap: '#2a1e12', nail: '#3a2c1a', rope: '#a89c80',
+    deepRock2: '#2a2620', topRock: '#4a443a', deepRock: '#3a352c', rim: '#888070', rockLo: '#463f35', fleck: '#a8a08a',
+    rock: ['#6a6256', '#645c50', '#70685c', '#5e564a'], streak: '#847c6e', weedFoot: ['#365638', '#2a462c'],
+    weed: ['#365c3a', '#3e6842', '#2e5034'], weedHi: '#6a9060', driftwood: '#a49a86',
+  },
+};
+
+// --- THE FAIR RETURN (the ghost ship): the Wreck Yard's palette gone colder and darker, a brig
+// that has stood a hundred years in fog. Decks are long laid boards (grey-brown, gaps black),
+// bulkheads and the hull's side are board walls, the sea round her is the yard's black water.
+// Every room of it says `area: 'ghostship'` (src/data/rooms/ship*.js). ---
+AREAS.ghostship = {
+  ...AREAS.wreck,
+  p: {
+    ...AREAS.wreck.p,
+    shadow: '2, 10, 12', wetShade: '2, 12, 14',
+    ground: ['#4a4038', '#42382f', '#52463c', '#3a3029'], hi: '#645649', lo: '#2a211b', crack: '#14100c', gap: '#120e0a',
+    plank: ['#4a4640', '#413e38', '#524c42', '#3a3834', '#44484a', '#4c4238'], plankHi: '#68675c', plankLo: '#1f1d1a', nail: '#8a9088',
+    wall: ['#3a3630', '#33302b', '#423c34', '#2c2a26'], wallHi: '#58554a', wallLo: '#18110c', trim: '#21170f', frame: '#21170f',
+    water: '#142e34', deep: '#0e2429', wave: '#2c5a60', troughs: '#0a1e24', foam: '#9cbcb4', lip: '#0a1c22', caps: 0.1,
+    streak: '#7a6a50', rust: '#6a3a24', glint: '#8ca8a0',
+  },
+  '.': 'planks', ',': 'planks', ':': 'planks', o: 'planksV', X: 'planks',
+  wallTop: 'rockTop', wallFace: 'boardWall', h: 'boardWall', cabin: true,
+};
 
 const LOOKS = Object.fromEntries(Object.entries(AREAS).map(([area, cfg]) => [area, buildLook(cfg)]));
 
@@ -1472,6 +2662,7 @@ const LOOKS = Object.fromEntries(Object.entries(AREAS).map(([area, cfg]) => [are
 // Hooking in.
 // =====================================================================
 export function installCoastTiles(TILES, helpers) {
+  floorLetter = helpers.floorUnder ?? null;
   const letters = new Set(Object.values(LOOKS).flatMap((look) => Object.keys(look)));
   // `0` (a drop) is made by deepTiles.js; if it is missing, make it here.
   if (!TILES['0']) TILES['0'] = { solid: true, beamOver: true, draw: () => {} };
@@ -1480,7 +2671,7 @@ export function installCoastTiles(TILES, helpers) {
     if (!tile) continue;
     const old = tile.draw;
     tile.draw = (ctx, x, y, tx, ty, room) => {
-      const draw = LOOKS[room?.area]?.[letter];
+      const draw = LOOKS[room?.tileLook ?? room?.area]?.[letter];
       if (!draw) return old(ctx, x, y, tx, ty, room);
       const floor = (c, fx, fy, ftx, fty, froom) => helpers.drawBaseFloor(c, fx, fy, ftx, fty, froom);
       return draw(ctx, x, y, tx, ty, room, floor, () => old(ctx, x, y, tx, ty, room));

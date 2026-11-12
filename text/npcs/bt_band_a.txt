@@ -7,3 +7,15 @@
 
 [repeat]
 *thump* *thump-thump* *THUMP*
+
+# (draft)
+[repeat 2]
+*thump* ... *thump* ...
+
+*Sorry. That was a rest. Rests are important too.*
+
+# (draft)
+[repeat 3]
+*thump-thump*
+
+*Been playing since the light went up. Can't feel my tummy.*

@@ -21,6 +21,10 @@ An empty chest. The salt has got into the hinges.
 [isles_rock]
 Bare rock, scoured clean by the wind and the sea, with a skin of rain running down it.
 
+# (draft) after the storm.
+[isles_rock_calm]
+Bare rock, scoured clean by the wind and the sea, drying pale in the light.
+
 [isles_sea]
 The sea, grey-green and heaving, white where it hits the rocks.
 
@@ -44,6 +48,9 @@ The stump of a lighthouse on a rock, with nothing on top but sky. Whatever it us
 [landing_haddocks_light]
 Far off to the east, past all the little lights, a taller lighthouse, white, with one warm window low down. It looks like somebody's home.
 
+[landing_haddocks_light_after]
+Far off to the east, past all the little lights, a taller lighthouse, white. Its lamp is dark. One window low down still glows, very faintly.
+
 [landing_signpost]
 A signpost with four arms, all pointing different ways across the water: EAST LIGHT. OLD LIGHT. BIG LIGHT (FORGE). WEST LIGHT. Under them, in smaller letters: MIND THE LAMPS.
 
@@ -53,11 +60,19 @@ A signpost with four arms, all pointing different ways across the water: EAST LI
 [landing_bottles]
 A garden of bottles on sticks, and buoys hung on poles, all chinking in the wind. Somebody has planted it in rows and comes back to straighten it.
 
+# (draft)
+[landing_bottles 2]
+You straighten one bottle on its stick. The wind knocks it crooked again at once. Whoever keeps this garden must come out every single day.
+
 [landing_bench]
 A bench facing the sea, bolted to the rock. It has been sat on a lot, and the seat is worn into two dips.
 
 [landing_bench_bramble]
 {thinking}Who comes all the way out here to sit and look at more sea?
+
+# (draft)
+[landing_bench 2]
+Two dips worn into the seat, side by side. One is a good deal bigger than the other.
 
 [landing_buoys]
 A heap of old buoys, red paint flaking. One of them still has a bell in it that rings when the wind leans on it.
@@ -103,6 +118,10 @@ The lamp-yard's slabs, swept bare by the wind.
 [east_cliff]
 A rock face, slick with rain. At the top there's an iron ring hammered into the rock.
 
+# (draft) after the storm.
+[east_cliff_calm]
+A rock face, still damp. At the top there's an iron ring hammered into the rock.
+
 [east_cliff_sign]
 A board at the foot of the rock: OLD LIGHT. STEPS GONE. USE THE RING.
 
@@ -134,6 +153,10 @@ The lightroom's brick wall, curving round. Damp has drawn maps on it.
 
 [old_glass]
 The lantern glass, all the way round the room: tall panes in an iron frame, salt in the corners. Outside, the storm, and the sea a long way down.
+
+# (draft) after the storm.
+[old_glass_calm]
+The lantern glass, all the way round the room: tall panes in an iron frame, salt in the corners. Outside, the sea a long way down, and quiet for once.
 
 [old_glass_cracked]
 One pane of the lantern glass is starred, as if something hit it a long time ago. The wind whistles through it, very quietly.
@@ -250,6 +273,10 @@ The quench tub, full of black water. A pair of tongs stands in it.
 [forge_grind]
 A grindstone. The handle is worn bright where a big hand has turned it.
 
+# (draft)
+[forge_grind 2]
+You give the handle one turn. It is very, very heavy. Whoever turns it every day doesn't think so.
+
 [forge_oil]
 Barrels of lamp oil, stencilled BIG LIGHT. One has a tap in it and a tin cup hung under the tap.
 
@@ -261,6 +288,14 @@ A coil of rope on the floor. Somebody trips over it, sometimes, and doesn't move
 
 [forge_sign]
 A board: ORLA COBB. SMITH. KNOCK. (The board has been knocked on so often there's a dent.)
+
+# (draft) Knocked on ten times, inside the forge.
+[forge_sign 2]
+You knock on the board. The dent is exactly the size of a knuckle. Several hundred knuckles.
+
+# (draft)
+[forge_sign 10]
+You knock on the board a tenth time. Orla doesn't look round from the anvil. "You're inside. You're already inside. The dent's for people who aren't." 
 
 [forge_chest]
 A chest by the door, with a bun in it wrapped in a cloth. A label on the cloth says: FOR WHOEVER COMES THROUGH. Inside: a TINDER BUN.
@@ -344,6 +379,13 @@ Haddock's Light, at the end of the causeway: a white tower, its lamp turning slo
 [causeway_haddocks_light_ves]
 {thoughtful}...That one's his, isn't it.
 
+# After the chapter (haddock_gone).
+[causeway_haddocks_light_after]
+Haddock's Light, at the end of the causeway: a white tower under a quiet sky. The lamp at the top has stopped turning, and no smoke comes from the little chimney. The window low down still glows a little, the way a fire does when it's been banked for the night.
+
+[causeway_haddocks_light_after_ves]
+{thoughtful}Banked the fire before he went. Course he did.
+
 [causeway_lifebuoy]
 A lifebuoy on a post, halfway. The rope on it has been knotted and re-knotted many times.
 
@@ -392,7 +434,130 @@ A broom standing in a bucket. The bristles are worn down on one side, the way a 
 Crates, stacked square, their labels all turned to face out.
 
 [cave_chest]
-A chest against the wall, its lid dusted. Inside, wrapped in a clean cloth: a COCKLE CHOWDER, in a jar, still sealed.
+A chest against the wall, its lid dusted. Inside, folded as flat as a letter: a fisher's jersey, navy and thick, darned at the elbows so neatly you can't find where the holes were.
+
+[cave_chest_ves]
+{bored}Even the darning's tidy.
 
 [cave_pouch]
 A purse on the floor, set down square in the middle of a raked patch, as if it were meant to be found.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_forge_oilskin]
+Orla's oilskin on its peg, near enough to the forge to steam.
+
+# (draft)
+[in_forge_shelf]
+Tins of nails, rivets, flux, and one of humbugs.
+
+# (draft)
+[in_forge_lamp]
+A lamp on an iron arm. Orla made the arm; it is the best thing on the wall.
+
+# (draft)
+[in_forge_tea]
+A mug of tea on a stool by the anvil, stone cold. She forgets it every time.
+
+# --- SHORE AND RUIN DETAILS (2026-11-08) ------------------------------------------
+
+# (draft)
+[isle_cairn]
+A cairn of flat stones, stacked by somebody with patience. The wind has had every storm since to knock it down, and it hasn't.
+
+# (draft)
+[isle_rocks]
+Rocks, black with wet, barnacles all over the side the sea comes from.
+
+# (draft)
+[isle_stakes]
+Three stakes with a rope run between them, to hold on to when the wind gets up. There's a rag tied on the middle one so you can find it.
+
+# (draft)
+[isle_gull_rock]
+Gulls on a rock, sitting the storm out with their backs to it. They look at you like you're the weather.
+
+# (draft)
+[isle_gull_rock_bramble]
+{grin}That one's got a crab. ...Had a crab.
+
+# (draft)
+[isle_rowboat_half]
+The front half of a rowboat. Wherever the back half went, it went in a hurry.
+
+# (draft)
+[isle_pot_broken]
+A lobster pot, stove in, the netting torn open. Whatever was in it got out.
+
+# (draft)
+[old_workbench]
+A bench with a vice on the end, and on it a chipped prism and a lamp chimney waiting to be mended. Dust over all of it, even the waiting.
+
+# (draft)
+[old_lens_rack]
+A rack of spare glass for the lens: curved rings and a round piece as big as a cartwheel, each in its own slot. One slot is empty.
+
+# (draft)
+[old_oil_cans]
+Oil cans with long spouts for reaching into the lamp. All empty. One has fallen over, and nobody stood it back up.
+
+# (draft)
+[old_stores]
+Crates of stores, nailed shut. The top one says WICKS.
+
+# (draft)
+[old_broom]
+A broom in a bucket. Whoever swept up here last did a good job, and then stopped.
+
+# (draft)
+[old_chest]
+A little sea chest, with a blanket folded on the lid. The blanket has gone the colour of the dust.
+
+# (draft)
+[old_tins]
+A crate with tins on it: polish, putty, wick trimmings. Everything a lamp needs except the lamp.
+
+# (draft)
+[old_note]
+A list, in the logbook's careful hand: "Polish glass. Trim wick. Wind clock. Again."
+
+# (draft)
+[forge_bench]
+A bench with a vice, a hammer and pliers, and a prism off the big lens that Orla is putting right. She has put a cloth under it, which is more than she does for her tea.
+
+# (draft)
+[forge_oil_cans]
+Oil cans for the big light's lamp, filled and lined up, spouts all pointing the same way.
+
+# (draft)
+[forge_tins]
+A crate with tins on it: rivets, flux, polish. One tin says BISCUITS and is full of nails.
+
+# (draft)
+[forge_crate]
+A crate of coal, the lid off. The top lumps have been picked out one by one for being the right size.
+
+# (draft)
+[forge_barrel]
+A barrel of rainwater for the forge. Orla says the sea's no good for quenching; it leaves the salt in.
+
+# (draft)
+[forge_shelf_neat]
+A shelf of tins, labels out, in order of size.
+
+# (draft)
+[forge_chart]
+A chart of the isles, the lights marked in red ink. Somebody has drawn a little teapot by the old one.
+
+# (draft)
+[cave_cairn]
+A cairn of flat stones, the biggest at the bottom and the smallest at the top. Not one of them is crooked.
+
+# (draft)
+[cave_shelf]
+A plank on two pegs, with bottles on it: sea-glass in one, buttons in another, string. All sorted. All labelled.
+
+# (draft) QUEST PIECE 3 for the ghost ship's deep part.
+[cave_compass]
+A round card, painted with a compass rose, put away between two rows of shells where it would be tidy. Every point on it is lettered but one, where the letter has been rubbed out by a thumb. Along the edge: FAIR RETURN.

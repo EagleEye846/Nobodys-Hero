@@ -20,7 +20,7 @@ export const TAPER_DEFEATED = {
   steps: [
     { do: 'music', song: 'taperFarewell' },
     { do: 'wait', seconds: 1.5 },
-    { do: 'say', who: 'taper', face: 'exhausted', text: 'Heh... look at you. Such strong roots...\n\nStronger than any of them...' },
+    { do: 'say', who: 'taper', face: 'exhausted', text: 'Heh... not a wilt on you. Frost-hardy...\n\nI should have hardened them all off like this...' },
     { do: 'emote', who: 'taper', emote: '...' },
     { do: 'say', who: 'taper', text: '{sad}Go on, then, sprout. Grow somewhere bright.\n\n{beaten}Just... not toward that light. Promise me...' },
     { do: 'wait', seconds: 1 },

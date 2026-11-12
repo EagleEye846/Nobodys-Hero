@@ -20,12 +20,22 @@ export const BELLBUOY = {
   // It rocks, the bell swings, the eyes flare, it goes under when beaten
   // and rings once, softly, when spared. See src/data/art/bellbuoy.js.
   anim: BELLBUOY_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): a clang when it's hit, a toll before each
+  // attack, drips off the float; beaten, a last clang and it goes under.
+  feel: { hit: 'bell', windup: 'toll', at: [0.5, 0.15], idle: 'drip', defeat: 'clang', exit: 'sink' },
   // The chapter 5 storm battle song (the Lanes, the Wreck Yard, and on).
   music: 'coastBattleStorm',
-  maxHp: 2150,
-  damage: 60,
+  maxHp: 11000,
+  damage: 90,
 
-  difficulty: { density: 1.6, speed: 1.5 },
+  difficulty: { density: 1.75, speed: 1.60 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore, see startAttack in battleScene.js). No
+  // secondWind: two of its attacks at once were too much to read.
+  // (2026-11-10: comes in sooner and runs longer, was { at: 0.85, seconds: 4.5 }:
+  // its attacks are done throwing a second or so before their end, and the box
+  // sat empty until the encore came.)
+  encore: { at: 0.72, seconds: 5.3, density: 0.8 },
   battlePos: { x: 218, y: 44 },
 
   // Its attacks live in src/battle/attacks/bellbuoy.js.

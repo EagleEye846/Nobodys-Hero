@@ -17,6 +17,14 @@ HAYBOB sheds a bit of straw and kicks it under itself, hoping you didn't see.
 
 Smells like warm hay and a very good afternoon.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+HAYBOB is coming loose at the string. Something small inside it is packing a bag.
+
+[flavor: spareable]
+HAYBOB settles down on its base, at peace, like a bale at the end of a long field.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

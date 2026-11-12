@@ -26,23 +26,23 @@ export const SUNNY_HAYFIELDS = {
 
   tiles: [
     '########################################',
-    '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
-    '#,,NNNNNNNNNN,,,,,,,,,,,,,,,,INNNNNN,,,#',
-    '#,,NNNNNNNNNN,T,,,,,,,,,,,,,,,NNNNNN,,,#',
+    '##WWWWW######WWWWWWWWWWW####WWWWWWWWWW##',
+    '#W,,,,,WW##WW,,,,,,,,,,,WWWW,,,NNN,,,,W#',
+    '#,,NNNNNNWWNN,,,,,,,,,,,,,,,,INNNNNN,,,#',
+    '#I,NNNNNNNNNN,T,,,,,,,,,,,,,,,NNNNNN,,,#',
     '#,,NNNNNNNNNN,,,,,,,,,,,,,,,,,NNNNNNJ,,#',
     '#,,NNNNNTNNNN,,,,,,,,,,,,,,,T,NNNNNN,,,#',
-    '#,,NNNNNNNNNN,,,,,,,,,,,,,,,,,,,,,,,,,,#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+    '#,,,NNNNNNN,,,,,,,,,,,,,,,,,,,,NNNN,,,,#',
+    '#,,,,,NNN,,,:::::::::::,,,,,,:::,,,,,,,#',
     '::::::::::::::::::::::::::::::::::::::::',
-    '::::::::::::::::::::::::::::::::::::::::',
-    '#,,,,,,,,NNN,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
-    '#,,,,,,,,,,,,,,NNNNNNNNNNNNN,,,,,,,,,,,#',
-    '#,,,,,OOOOOO,,,NNNNNNNNNNNNN,,,,,,,,,,,#',
-    '#,,,,,OOOOOO,,,NNNNNNNNNNNNN,,,,,T,,,,,#',
-    '#OOO,,,,,,,,,,,NNNNNNNTNNNNN,,,,,,,,,,,#',
-    '#,,O,,,,,,,,,J,,,,,,,,,,,,,,,,,,,,,,,,,#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+    '::::::::::::::::::,,,,::::::::::::::::::',
+    '#,,,,,::::NN,,,,,,,,,,,,,:::::,,,,,,,,,#',
+    '#,,,,,,,,,,,,,,,NNNNNNNNNNN,,,,,,,,,,,,#',
+    '#,,,,,,OOOO,,,,NNNNNNNNNNNNNN,,,,,,,,,,#',
+    '#,,,,,OOOOOO,,NNNNNNNNNNNNNN,,,,,T,,,,,#',
+    '#OOO,,,,OO,,,,,NNNNNNNTNNNNN,,,,,,,,,,,#',
+    '#,,O,,,,,,,,,J,,,NNNNN,,,,,,,,,,,,,,,,,#',
+    '#,,,,,,,,,,,,,###,,,,,,,,,#####,,,,,,T,#',
     '########################################',
     '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
   ],
@@ -73,7 +73,7 @@ export const SUNNY_HAYFIELDS = {
     { sprite: 'haystack', x: 35, y: 16, text: 'hay_haystack' },
     { sprite: 'haystack', x: 17, y: 3, text: 'hay_haystack' },
     { sprite: 'gold_pouch', x: 2, y: 16, text: 'hay_pouch', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
-    { sprite: 'chest', x: 38, y: 3, text: 'hay_chest', gives: 'hay_biscuit', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    { sprite: 'chest', x: 38, y: 3, text: 'hay_chest', gives: 'oilskin_coat', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'bench', x: 24, y: 12, text: 'hay_bench' },
     { sprite: 'daisy_patch', x: 21, y: 8, walkable: true },
     { sprite: 'daisy_patch', x: 9, y: 16, walkable: true },
@@ -112,8 +112,9 @@ export const SUNNY_HAYFIELDS = {
   npcs: [
     { enemy: 'haybob', x: 17, y: 6, patrol: [14, 20], behaviour: 'patrol' },
     { enemy: 'seed_sheep', x: 26, y: 5, patrol: [23, 29], behaviour: 'patrol' },
-    // A flatcap bee in the clover of the south-east field (x 29 to 38, rows 12 to 16).
-    { enemy: 'capbee', x: 33, y: 14, patrol: [29, 38], behaviour: 'wander' },
+    // A flatcap bee in the clover of the south-east field (x 30 to 37, rows 13 to 15): home
+    // row 14, so it never drifts up into the lane (rows 9 and 10) or the east door's arrival (38,9).
+    { enemy: 'capbee', x: 31, y: 14, patrol: [30, 37], behaviour: 'wander' },
     
   ],
 };

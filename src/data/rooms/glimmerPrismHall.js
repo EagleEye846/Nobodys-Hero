@@ -42,6 +42,8 @@ export const GLIMMER_PRISM_HALL = {
   music: 'glimmer',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'crystal',
+  // How it rings (a cave: ECHOES in src/audio/music.js).
+  echo: 'cave',
 
   tiles: [
     '################################',

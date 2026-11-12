@@ -21,3 +21,31 @@ It's brighter. The mural looks a bit more honest, now. Funny, how light does tha
 
 [repeat after the_light_goes_up]
 I'll sit here a little longer. I like the colours.
+
+# (draft)
+[repeat 2]
+He sat on the bottom step a while, before he went on down. The mural leaves that out. It would.
+
+# (draft)
+[repeat 3]
+The wrong dark, I said. The real one's quieter. You'll see.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+There's a little figure low on the stair. I don't remember a lamp. I remember the dark. But I was very small.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+Wobble. Wobble. There. Now you've sat on a bit of history.
+
+# (draft)
+[repeat_ves 3 after the_kings_welcome]
+{bored}A bit of history that wobbles. {smile}The best kind.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+The mural's still too tall. But the light's honest. One out of two.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Go on. You don't have to keep an old snail company. ...Although you can.

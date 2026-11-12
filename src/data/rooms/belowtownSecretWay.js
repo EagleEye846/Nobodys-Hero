@@ -17,7 +17,7 @@ export const BELOWTOWN_SECRET_WAY = {
   area: 'belowtown',
   // Quiet: the tunnel's the pause between the square and the goodbyes.
   music: null,
-  ambience: 'belowtown',
+  ambience: 'belowtown_tunnel',
   // Under cover: no sky, and the edges of the screen sink into shadow.
   indoors: true,
 
@@ -50,6 +50,14 @@ export const BELOWTOWN_SECRET_WAY = {
     { sprite: 'tiny_door', x: 17, y: 2, text: 'town_house_door' },
     { sprite: 'floor_pebbles', x: 6, y: 3, walkable: true, flat: true },
     { sprite: 'floor_pebbles', x: 12, y: 4, walkable: true, flat: true },
+    // Where it gets low (Bramble finds out at x 9): roots come down through the
+    // roof, and two old pit props hold it up either side.
+    { sprite: 'mine_timber', x: 5, y: 2, text: 'secret_post' },
+    { sprite: 'wall_roots', x: 9, y: 2, text: 'secret_roots' },
+    { sprite: 'wall_roots', x: 10, y: 2, text: 'secret_roots' },
+    { sprite: 'mine_timber', x: 14, y: 2, text: 'secret_post' },
+    { sprite: 'ore_crumbs', x: 3, y: 3, walkable: true, flat: true },
+    { sprite: 'floor_pebbles', x: 18, y: 4, walkable: true, flat: true },
   ],
   tileTexts: { W: 'rope_face', '#': 'town_rock', V: 'town_lamps_wall' },
 

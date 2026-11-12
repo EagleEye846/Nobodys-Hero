@@ -19,7 +19,7 @@ defineBulletArt('diverHarpoon', {
   rotate: true,
 });
 
-// A bead of its rope (harmless).
+// A bead of its rope: pulled taut behind the harpoon, it cuts too.
 defineBulletArt('diverRope', { frames: [['SS']], palette: DIVE, radius: 1 });
 
 // The nozzle at the end of the air hose, glowing faint green.
@@ -62,30 +62,33 @@ defineBulletArt('diverPellet', {
   frameSeconds: 0.1,
 });
 
-// The anchor: iron, with a ring at the top and two flukes.
-defineBulletArt('diverAnchor', {
-  frames: [[
-    '....nnnnn....',
-    '....n...n....',
-    '....nnnnn....',
-    '......n......',
-    '....nnnnn....',
-    '......n......',
-    '......n......',
-    '.n....n....n.',
-    '.nn...n...nn.',
-    '..nn..n..nn..',
-    '...nn.n.nn...',
-    '....nnnnnn...',
-    '.....nnnn....',
-  ]],
-  palette: DIVE,
-  hitbox: { w: 9, h: 13 },
-});
+// The anchor: shaded iron, a ring at the top, a stock across, two curved
+// arms ending in flukes, rust where the sea has had it.
+function anchorArt() {
+  const g = new Pix(15, 16);
+  g.disc(7, 2, 2.2, 2.2, 'I');
+  g.disc(7, 2, 0.9, 0.9, 'k', 'I');
+  g.rect(3, 5, 9, 2, 'I');
+  g.rect(3, 6, 9, 1, 'n');
+  g.rect(6, 5, 3, 10, 'I');
+  g.rect(8, 5, 1, 10, 'n');
+  g.line(1, 9, 3, 13, 'I', 2);
+  g.line(3, 13, 7, 15, 'n', 2);
+  g.line(13, 9, 11, 13, 'I', 2);
+  g.line(11, 13, 7, 15, 'n', 2);
+  g.rect(0, 8, 3, 2, 'I');
+  g.rect(12, 8, 3, 2, 'I');
+  g.set(7, 11, 'm');
+  g.set(4, 13, 'M');
+  g.set(9, 8, 'm');
+  g.outline('k');
+  return g.rows();
+}
+defineBulletArt('diverAnchor', { frames: [anchorArt()], palette: DIVE, hitbox: { w: 9, h: 13 } });
 
-// Where it will land (harmless): a dark smear on the floor, blinking.
+// Where it will land (harmless): a pale ring of stirred silt on the floor, blinking.
 defineBulletArt('diverShadow', {
-  frames: [['..ddddd..', '.ddddddd.', '..ddddd..'], ['.........', '..ddddd..', '.........']],
+  frames: [['..IIIII..', '.I.....I.', 'I..mmm..I', '.I.....I.', '..IIIII..'], ['.........', '..mmmmm..', '.m.....m.', '..mmmmm..', '.........']],
   palette: DIVE,
   radius: 1,
   frameSeconds: 0.12,
@@ -102,8 +105,9 @@ defineBulletArt('diverSilt', {
 export const OLD_DIVER_ATTACKS = {
   // Harpoon: it throws a harpoon at where you are, on a line (the beads are the
   // rope, and the harpoon blinks first, so you can see the way it points). It
-  // flies out, stops, and is reeled home along the same line, a touch faster. Four
-  // throws, from the right and from above.
+  // flies out, stops, and is reeled home along the same line, a touch faster;
+  // the rope lies taut behind it till then, and the rope hurts too. Six
+  // throws of two, from the right and from above.
   diverHarpoon(box, density, { Shot, Line, rand, clamp }) {
     let t = 0;
     let throws = 0;
@@ -121,8 +125,8 @@ export const OLD_DIVER_ATTACKS = {
         }
         seen.x = soul.x;
         seen.y = soul.y;
-        if (t >= next && throws < 4 && t < 5.2) {
-          next = t + 1.55;
+        if (t >= next && throws < 6 && t < 6.2) {
+          next = t + 1.05;
           const from = throws % 2 === 0
             ? { x: box.x + box.w + 3, y: rand(box.y + 10, box.y + box.h - 10) }
             : { x: clamp(soul.x + rand(-26, 26), box.x + 8, box.x + box.w - 8), y: box.y - 3 };
@@ -152,15 +156,15 @@ export const OLD_DIVER_ATTACKS = {
           if (h.age < h.warn) continue;
           if (!h.thrown) {
             h.thrown = true;
-            h.vx = Math.cos(h.aim) * 150;
-            h.vy = Math.sin(h.aim) * 150;
+            h.vx = Math.cos(h.aim) * 170;
+            h.vy = Math.sin(h.aim) * 170;
           }
           const flown = h.age - h.warn;
           if (flown < h.out) {
             h.bead -= dt;
             if (h.bead <= 0) {
               h.bead = 0.045;
-              bullets.push(new Shot({ x: h.x, y: h.y, harmless: true, life: h.out - flown + 0.45, art: 'diverRope' }));
+              bullets.push(new Shot({ x: h.x, y: h.y, life: h.out - flown + 0.45, art: 'diverRope' }));
             }
           } else if (!h.reeled) {
             h.reeled = true;
@@ -176,7 +180,7 @@ export const OLD_DIVER_ATTACKS = {
 
   // Hose: the air hose comes alive, the brass nozzle at the end of it hunting
   // you across the box (it turns, but only so fast) and leaving a length of
-  // hose behind it that lies there a moment. Three hunts, one at a time.
+  // hose behind it that lies there a moment. Four hunts.
   diverHose(box, density, { Shot, rand, clamp }) {
     let t = 0;
     let hunts = 0;
@@ -185,13 +189,13 @@ export const OLD_DIVER_ATTACKS = {
       duration: 7.4,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (hunts < 3 && t >= 0.2 + hunts * 2.15) {
+        if (hunts < 4 && t >= 0.2 + hunts * 1.75) {
           // It comes in from whichever side is further from you, aimed at you.
           const right = soul.x < box.x + box.w / 2;
           const x = right ? box.x + box.w - 2 : box.x + 2;
           const y = hunts % 2 === 0 ? box.y + 8 : box.y + box.h - 8;
           const aim = Math.atan2(soul.y - y, soul.x - x);
-          const head = new Shot({ x, y, warn: 0.6, art: 'diverNozzle', life: 2.6, angle: aim, homing: { target: soul, turn: 2.1 } });
+          const head = new Shot({ x, y, warn: 0.6, art: 'diverNozzle', life: 2.6, angle: aim, homing: { target: soul, turn: 2.3 } });
           head.aim = aim;
           head.drop = 0;
           heads.push(head);
@@ -202,13 +206,13 @@ export const OLD_DIVER_ATTACKS = {
           if (head.age < head.warn) continue;
           if (!head.going) {
             head.going = true;
-            head.vx = Math.cos(head.aim) * 54;
-            head.vy = Math.sin(head.aim) * 54;
+            head.vx = Math.cos(head.aim) * 58;
+            head.vy = Math.sin(head.aim) * 58;
           }
           head.drop -= dt;
           if (head.drop <= 0) {
             head.drop = 0.075;
-            bullets.push(new Shot({ x: head.x, y: head.y, art: 'diverSeg', life: 0.85 }));
+            bullets.push(new Shot({ x: head.x, y: head.y, art: 'diverSeg', life: 1.3 }));
           }
         }
         heads = heads.filter((head) => head.age < head.warn + head.life);
@@ -228,8 +232,8 @@ export const OLD_DIVER_ATTACKS = {
       duration: 7.0,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 4.8) {
-          next = t + 0.36;
+        if (t >= next && t < 5.6) {
+          next = t + 0.2;
           const x = made % 2 === 0 ? clamp(soul.x + rand(-8, 8), box.x + 7, box.x + box.w - 7) : box.x + 7 + ((made * 23) % 67);
           const pop = rand(1.2, 2.0);
           // Each drifts a little toward you as it rises.
@@ -243,9 +247,9 @@ export const OLD_DIVER_ATTACKS = {
           if (b.age < b.pop) continue;
           b.done = true;
           const turn = rand(0, Math.PI / 5);
-          for (let k = 0; k < 6; k++) {
-            const a = turn + (k / 6) * Math.PI * 2;
-            bullets.push(new Shot({ x: b.x, y: b.y, vx: Math.cos(a) * 52, vy: Math.sin(a) * 52, art: 'diverPellet', life: 1.3 }));
+          for (let k = 0; k < 8; k++) {
+            const a = turn + (k / 8) * Math.PI * 2;
+            bullets.push(new Shot({ x: b.x, y: b.y, vx: Math.cos(a) * 62, vy: Math.sin(a) * 62, art: 'diverPellet', life: 1.4 }));
           }
         }
         bubbles = bubbles.filter((b) => !b.done);
@@ -255,8 +259,30 @@ export const OLD_DIVER_ATTACKS = {
 
   // Anchor: an anchor is dropped from the dark onto your column (a smear shows on
   // the floor where, and holds where it was when it first appeared). It lands with
-  // a wave of silt each way along the floor, three puffs high. Four anchors.
+  // a wave of silt each way along the floor, three puffs high. Five anchors.
   diverAnchor(box, density, { Shot, rand, clamp }) {
+    // The anchor comes down on its chain: links run from the top of the box to
+    // its ring (only a look; the anchor is what hurts).
+    class AnchorShot extends Shot {
+      draw(ctx) {
+        if (this.age >= this.warn) {
+          ctx.save();
+          const over = this.age - (this.warn + this.life);
+          if (over > 0) ctx.globalAlpha = Math.max(0, 1 - over / 0.25);
+          const x = Math.round(this.x);
+          for (let y = this.y - 9, i = 0; y > box.y - 6; y -= 4, i++) {
+            ctx.fillStyle = '#14181c';
+            if (i % 2) ctx.fillRect(x - 1, y - 2, 3, 5);
+            else ctx.fillRect(x - 2, y - 2, 5, 5);
+            ctx.fillStyle = i % 2 ? '#6c7280' : '#c8ccd4';
+            if (i % 2) ctx.fillRect(x, y - 1, 1, 3);
+            else { ctx.fillRect(x - 1, y - 1, 3, 1); ctx.fillRect(x - 1, y + 1, 3, 1); ctx.fillRect(x - 1, y, 1, 1); ctx.fillRect(x + 1, y, 1, 1); }
+          }
+          ctx.restore();
+        }
+        super.draw(ctx);
+      }
+    }
     let t = 0;
     let drops = 0;
     let next = 0.2;
@@ -265,12 +291,12 @@ export const OLD_DIVER_ATTACKS = {
       duration: 7.4,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && drops < 4 && t < 5.4) {
-          next = t + 1.55;
+        if (t >= next && drops < 5 && t < 6.2) {
+          next = t + 1.35;
           const x = clamp(soul.x + rand(-5, 5), box.x + 8, box.x + box.w - 8);
           const warn = 0.8;
-          bullets.push(new Shot({ x, y: box.y + box.h - 2, harmless: true, life: warn, art: 'diverShadow' }));
-          const anchor = new Shot({ x, y: box.y - 10, vy: 140, warn, art: 'diverAnchor', life: 2 });
+          bullets.push(new Shot({ x, y: box.y + box.h - 4, harmless: true, life: warn, art: 'diverShadow' }));
+          const anchor = new AnchorShot({ x, y: box.y - 10, vy: 140, warn, art: 'diverAnchor', life: 2 });
           falling.push(anchor);
           bullets.push(anchor);
           drops++;
@@ -295,7 +321,8 @@ export const OLD_DIVER_ATTACKS = {
 };
 
 // Aimed shots on top, so standing still or running one way is never safe (see snipes.js).
-OLD_DIVER_ATTACKS.diverHarpoon = withSnipes(OLD_DIVER_ATTACKS.diverHarpoon, { art: 'diverHarpoon', count: 4, first: 1.0, every: 1.2, lead: 0.8 });
-OLD_DIVER_ATTACKS.diverHose = withSnipes(OLD_DIVER_ATTACKS.diverHose, { art: 'diverPellet', count: 4, first: 1.0, every: 1.2, lead: 0.8 });
-OLD_DIVER_ATTACKS.diverBubbles = withSnipes(OLD_DIVER_ATTACKS.diverBubbles, { art: 'diverBubble', count: 4, first: 1.0, every: 1.2, lead: [0.9, 'mean', 0.5, 'mean'] });
-OLD_DIVER_ATTACKS.diverAnchor = withSnipes(OLD_DIVER_ATTACKS.diverAnchor, { art: 'diverSilt' });
+OLD_DIVER_ATTACKS.diverHarpoon = withSnipes(OLD_DIVER_ATTACKS.diverHarpoon, { art: 'diverHarpoon', count: 6, first: 0.8, every: 0.85, lead: [0.9, 'mean', 0.4, 'mean', 0.9, 0], until: 6.2 });
+OLD_DIVER_ATTACKS.diverHose = withSnipes(OLD_DIVER_ATTACKS.diverHose, { art: 'diverPellet', count: 6, first: 0.8, every: 0.85, lead: [0.9, 'mean', 0.4, 'mean', 0.9, 0], until: 6.2 });
+// (Its aimed shots are pellets, not bubbles: a bubble is always harmless to touch.)
+OLD_DIVER_ATTACKS.diverBubbles = withSnipes(OLD_DIVER_ATTACKS.diverBubbles, { art: 'diverPellet', count: 6, first: 0.8, every: 0.85, lead: [0.9, 'mean', 0.4, 'mean', 0.9, 0], until: 6.2 });
+OLD_DIVER_ATTACKS.diverAnchor = withSnipes(OLD_DIVER_ATTACKS.diverAnchor, { art: 'diverSilt', count: 4, first: 1.0, every: 1.2, lead: [0.9, 'mean', 0.5, 'mean'] });

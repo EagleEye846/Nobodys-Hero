@@ -1,4 +1,4 @@
-import { Pix, flash, shift, crumble } from './ch5Kit.js';
+import { Pix, flash, shift } from './ch5Kit.js';
 
 // The MOONJELLY, 34x38: a big, soft, drifting jellyfish the blue-white of
 // moonlight on water, with a four-leaf ring glowing in its bell, long
@@ -6,8 +6,8 @@ import { Pix, flash, shift, crumble } from './ch5Kit.js';
 // without hurry. Its battle clips (MOONJELLY_ANIM, see `anim` in
 // src/battle/battleScene.js): the bell breathes in and out while the
 // tendrils sway; before an attack it squeezes hard and the tendrils flare;
-// hit, it flinches and flashes; beaten, the bell sags and sinks into itself
-// and goes out like a lamp; spared, it glows warm and its eyes close happily.
+// hit, it flinches and flashes; beaten, the bell sags, swells up tight and
+// pops; spared, it glows warm and its eyes close happily.
 // Drawn from a pose (see src/data/art/ch5Kit.js).
 export const MOONJELLY_PALETTE = {
   k: '#1f2750',
@@ -139,13 +139,16 @@ export const MOONJELLY_ANIM = {
       shift(draw({ pulse: 0.5, flare: 0.3, sway: 2 }), 1, 0),
     ],
   },
+  // Beaten, it sags, then swells up round and tight, flashes, and pops (the
+  // burst of rings and slime is its `feel` in src/data/enemies/moonjelly.js).
   death: {
-    fps: 3,
+    fps: 5,
     frames: [
       draw({ pulse: 1, sag: 0.3, eyes: 'dead', sink: 1, sway: 1 }),
-      draw({ pulse: 0, sag: 0.8, eyes: 'dead', sink: 4, sway: 2 }),
-      draw({ pulse: 0, sag: 1, eyes: 'dead', sink: 8, sway: 3 }),
-      crumble(draw({ pulse: 0, sag: 1, eyes: 'dead', sink: 12, sway: 3 }), 0.5, false),
+      draw({ pulse: 0, sag: 0.7, eyes: 'dead', sink: 3, sway: 2 }),
+      draw({ pulse: -0.7, sag: 0.2, eyes: 'dead', sink: 1, sway: 2.6 }),
+      draw({ pulse: -1.3, sag: 0.1, eyes: 'dead', sink: 0, sway: 3, glow: 1 }),
+      flash(draw({ pulse: -1.5, sag: 0, eyes: 'dead', sink: 0, sway: 3.2 })),
     ],
   },
   spared: {

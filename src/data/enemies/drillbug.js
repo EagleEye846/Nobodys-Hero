@@ -22,7 +22,7 @@ export const DRILLBUG = {
   anim: DRILLBUG_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1260,
+  maxHp: 1600,
   damage: 40,
 
   // The Diggings, the first of the deep: heavy, fast, plenty.

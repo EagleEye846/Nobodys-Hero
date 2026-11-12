@@ -17,6 +17,16 @@ All the other crystals in the room are perfectly still. QUARTZLING is the one no
 
 Smells like a cold cellar and a very still afternoon.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+QUARTZLING has a chip off one corner and is pretending very hard that it's always had a chip there. All the best crystals do.
+
+# (draft)
+[flavor: spareable]
+QUARTZLING has stopped pretending to be a crystal. It's just standing there, pink, being a quartzling, and hoping that's all right.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

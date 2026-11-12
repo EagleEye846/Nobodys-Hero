@@ -17,6 +17,14 @@ The hook swings, all by itself. NET WRAITH watches it, with enormous patience.
 
 Smells like salt, tar and a boat that went down without a fuss.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+NET WRAITH is coming apart at the knots. It has stopped counting.
+
+[flavor: spareable]
+NET WRAITH hangs slack and still, the way a net does once the boats are in.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -52,8 +60,8 @@ A drowned fishing net that still thinks it's at work. Closes the box to a small 
 [talk: Untangle a knot]
 You find a knot in its edge, as big as your fist and hard as a nut, and you work it loose with your thumbs. NET WRAITH goes completely still. Then it lets out a long, thin sigh, and its whole mesh loosens, just a little, like a held breath.
 
-[talk: Tell it the boat got home]
-You tell NET WRAITH the boat got home, and everyone aboard, and there's a hot dinner on the table. You don't know if it's true. NET WRAITH's floats stop bobbing. It says that it knew. It says that it always knew.
+[talk: Mime the boat home]
+You make a little boat with your hands and bring it, slowly, all the way in to shore, and then you pat your belly like after a hot dinner. You don't know if it's true. NET WRAITH's floats stop bobbing. It says that it knew. It says that it always knew.
 
 [talk: Hum a sea shanty]
 You hum the slow part of a sea shanty, the part where they haul. NET WRAITH's strands lift and fall in time with it, a little behind. A very small, very old pull on a rope, answering you.
@@ -63,7 +71,7 @@ You hum the slow part of a sea shanty, the part where they haul. NET WRAITH's st
 NET WRAITH comes undone, strand by strand, and settles on the planks in a heap of dull, wet rope. There's nothing in it any more. It looks smaller than you expected. It looks like what it is.
 
 [pacified]
-NET WRAITH goes slack and gentle, and spreads itself out on the air like something laid in the sun to dry. Then it drifts off over the water, low and slow, towards a harbour that isn't there anymore, and perhaps is.
+NET WRAITH goes slack and gentle, and spreads itself out on the air like something laid in the sun to dry. Then it drifts off over the water, low and slow, towards a harbour that isn't there any more, and perhaps is.
 
 # Ves's own TALK lines for it ({foe} is its name).
 [vesper_talk]

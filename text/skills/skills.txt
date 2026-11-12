@@ -424,7 +424,7 @@ One more slash in every FIGHT.
 Start every battle with 20% SP, and graze for 50% more SP.
 
 [slack_tide]
-Spells cost 15% less SP.
+Spells cost 15% less SP. Big spells stop at 25% off; full-bar ones never get cheaper.
 
 [oilskin_skin]
 Every hit does another 1 less damage.
@@ -463,7 +463,7 @@ Learn the spell Shove: 60% SP for a hard hit on one enemy that drags it back. It
 Learn the spell Lay Bare: 45% SP. One enemy's weak spots show, and every hit on it does 40% more for 3 turns.
 
 [tide_ebb_flow]
-Learn Turnabout: 40% SP. Your hits land 1.75x as hard, and theirs 1.5x, for 2 turns.
+Learn Turnabout: 40% SP. Your hits land 1.5x as hard, and so do theirs, for 2 turns.
 
 # --- Ves, chapter 5 ---
 [ves_tarred_seams]
@@ -595,7 +595,7 @@ Attack spells hit harder, by another 30%.
 Learn the spell Undercut: 75% SP for a hard hit that knocks one enemy back and stings after each of the next 3 enemy turns.
 
 [tide_overwhelm]
-Learn the spell Overwhelm: 115% SP. Everything you have on one enemy, and its next attack is shorter.
+Learn the spell Overwhelm: 100% SP. Everything you have on one enemy, and its next attack is shorter.
 
 # --- Ves, the second half ---
 [ves_sturdy_handle]
@@ -606,6 +606,9 @@ Ves's attack spells do 8 more damage.
 
 [ves_hold_fast]
 Ves learns HOLD FAST: the next attack does half the damage, and the first hit on you does nothing at all.
+
+[ves_quick_jab]
+Ves's FIGHT gets one more slash to hit.
 
 [ves_old_friend]
 Ves's spells do 12 more damage, heal 12 more HP and calm 6 more. It's been through a lot.
@@ -665,6 +668,9 @@ Bramble learns SPLINTERS: he hacks at everything in reach, and chips fly into ev
 [bram_woodpile]
 Bramble's attack spells do 12 more damage.
 
+[bram_backswing]
+Bramble's FIGHT gets one more slash to hit.
+
 [bram_big_one]
 Bramble learns THE BIG ONE: the longest wind-up in history, on one enemy. The next attack is cut well short.
 
@@ -709,3 +715,156 @@ Bramble's HOLLER calms 8% more, and his BISCUIT gives back 8 more HP.
 
 [bram_got_you]
 Bramble learns I'VE GOT YOU: everyone recovers HP, and for one enemy turn hits meant for his friends land on him, halved.
+
+# --- Chapter 5, the third wave ---
+[steady_hand]
+The FIGHT bar's hit window is 20% wider again.
+
+[counter]
+Learn COUNTER: the next hit on you does nothing, and goes straight back at an attacker.
+
+[calm_mind]
+DEFEND gives you 10% more SP.
+
+[close_shave]
+Every new graze puts 2 HP back into whoever the attack is aimed at.
+
+[hold_ground]
+While you DEFEND, every hit on you does 3 less.
+
+[sidestep]
+Learn SIDESTEP: cheap, and the next hit on you does nothing at all.
+
+[walk_it_off]
+Out of battle, everyone gets 1 HP back every few steps.
+
+[square_meal]
+Food heals 20% more.
+
+[good_listener]
+TALK, Lull and Hush raise MERCY 20% more.
+
+[truce]
+Learn TRUCE: one enemy calms down, and its next attack is cut short.
+
+[weaken]
+Learn WEAKEN: every enemy takes 25% more from every hit for 2 enemy turns.
+
+[tide_stall]
+Learn STALL: no damage, but the next attack is cut well short.
+
+[tide_duck]
+Learn DUCK UNDER: nothing can touch you for the first 2 seconds of the next attack.
+
+# --- Ves, the third wave ---
+[ves_good_grip]
+Ves's ZEPHYR gives back 8 more HP, and her FLURRY calms 4% more.
+
+[ves_twirl]
+Ves learns TWIRL: every enemy calms a little, and the next attack's bullets start out slow.
+
+[ves_steady_wind]
+Ves's ZEPHYR fills 6 more SP, and her FLURRY calms 4% more.
+
+[ves_lift]
+Ves learns LIFT: the wind takes the next attack right off you (it's cut well short), and SP fills a bit.
+
+[ves_kind_heart]
+Ves's ZEPHYR gives back 10 more HP.
+
+[ves_hot_soup]
+Ves learns HOT SOUP: everyone in the party gets HP back after each of the next 2 enemy turns.
+
+[ves_calm_before]
+Ves's FLURRY calms 6% more, and her ZEPHYR fills 6 more SP.
+
+[ves_charge]
+Ves learns CHARGE: one enemy takes 30% more from every hit, anyone's, for 2 enemy turns.
+
+[ves_easy_going]
+Ves's ZEPHYR fills 8 more SP and gives back 6 more HP.
+
+[ves_windbreak]
+Ves learns WINDBREAK: her SHELTER, and nothing can touch you at the start of the next attack.
+
+# --- Bramble, the third wave ---
+[bram_whetstone]
+Bramble's attack spells do 6 more damage.
+
+[bram_notch]
+Bramble learns NOTCH: a small chop, and that enemy takes 30% more from every hit for 2 turns.
+
+[bram_deep_lungs]
+Bramble's WAR CRY fills 8 more SP.
+
+[bram_clear_voice]
+Bramble's HOLLER calms 6% more, and his WAR CRY fills 4 more SP.
+
+[bram_rally]
+Bramble learns RALLY: everyone in the party gets some HP back, and SP fills a bit.
+
+[bram_pocket_sand]
+Bramble learns POCKET SAND: cheap, and the next attack's bullets start out slow.
+
+[bram_duck_cover]
+Bramble's BISCUIT gives back 8 more HP, and his sneak attack hits 25% harder.
+
+[bram_look_out]
+Bramble learns LOOK OUT!: he shouts what's coming, it starts out slow, and the first hit on you does nothing.
+
+[bram_steady_breath]
+Bramble's HOLLER calms 6% more, and his WAR CRY fills 6 more SP.
+
+[bram_shake_off]
+Bramble learns SHAKE IT OFF: a friend gets HP back, even one who's down, and the next attack is shorter.
+
+# Sharpenings: an old attack spell catches up with how strong you've got.
+# (draft)
+
+[rend_2]
+Rend catches up with how strong you've got. It hits harder than a good FIGHT again.
+
+[ember_2]
+Ember Flare catches up with how strong you've got. Every enemy burns about as hard as a good FIGHT.
+
+[comet_2]
+Comet catches up with how strong you've got. Well over a good FIGHT, on one enemy.
+
+[starfall_2]
+Starfall catches up with how strong you've got. Well over a good FIGHT, on one enemy.
+
+[spark_2]
+Spark catches up with how strong you've got. Still cheap, and a little harder than a good FIGHT.
+
+[siphon_2]
+Siphon catches up with how strong you've got. Harder than a good FIGHT, and half of it comes back to you.
+
+[chain_bolt_2]
+Chain Bolt catches up with how strong you've got. Every enemy takes about a good FIGHT.
+
+[rend_3]
+Rend catches up again. Harder than a good FIGHT, even now.
+
+[ember_3]
+Ember Flare catches up again. Every enemy still burns about as hard as a good FIGHT.
+
+[comet_3]
+Comet catches up again. Well over a good FIGHT, even now.
+
+[starfall_3]
+Starfall catches up again. Well over a good FIGHT, even now.
+
+[spark_3]
+Spark catches up again. Still cheap, and still a little harder than a good FIGHT.
+
+[siphon_3]
+Siphon catches up again. Harder than a good FIGHT, and half of it comes back to you.
+
+[chain_bolt_3]
+Chain Bolt catches up again. Every enemy still takes about a good FIGHT.
+
+[sunder_2]
+Sunder catches up with how strong you've got. Well over a good FIGHT, on one enemy.
+
+[lance_2]
+Light Lance catches up with how strong you've got. Harder than a good FIGHT again.

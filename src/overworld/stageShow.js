@@ -77,6 +77,17 @@ import { music } from '../audio/music.js';
 //                                     and the light round it dimmed where they
 //                                     block it. Only the shadow: whoever casts
 //                                     it is never shown. `shadow: null` lifts it.
+//   { do: 'stage', flood: 0.4 }      the sea coming in: green water over the bottom
+//                                     of the view, that much of its height deep,
+//                                     heaving, with foam along the top (0 drains
+//                                     it; `seconds` eases it up or down).
+//   { do: 'stage', glow: { who: 'player', power: 0.5 } }
+//                                     light pouring out of someone (an actor id,
+//                                     or 'player'): a white bloom and rays, the
+//                                     whole view going white as `power` nears 1,
+//                                     and any `flood` pushed down before it.
+//                                     The `press` step drives it as the bar
+//                                     fills; `glow: null` puts it out.
 
 const CONFETTI = ['#e8484e', '#f6c640', '#4aa8e8', '#58c878', '#f08ad0', '#ffffff'];
 
@@ -111,6 +122,8 @@ export class Stage {
     this.notesFrom = null;
     this.shadow = null;
     this.doorway = null;
+    this.flood = { from: 0, to: 0, t: 1, seconds: 0 };
+    this.glow = null;
   }
 
   // One `stage` step.
@@ -162,6 +175,16 @@ export class Stage {
       this.doorway = d ? { at: d.at, w: d.w ?? 5, length: d.length ?? 13, color: d.color ?? '255, 226, 170', seconds: d.seconds ?? 0, t: 0 } : null;
     }
     if (step.flare) this.flare = { at: step.flare.at, seconds: step.flare.seconds ?? 2.4, t: 0 };
+    if (step.flood !== undefined) this.flood = { from: this.floodNow(), to: step.flood, t: 0, seconds: step.seconds ?? 0 };
+    if (step.glow !== undefined) this.glow = step.glow ? { who: step.glow.who ?? 'player', power: step.glow.power ?? 1 } : null;
+  }
+
+  // Eased both ways, like the look up: water rises and settles, it doesn't jerk.
+  floodNow() {
+    const f = this.flood;
+    if (!f.seconds || f.t >= f.seconds) return f.to;
+    const k = f.t / f.seconds;
+    return f.from + (f.to - f.from) * k * k * (3 - 2 * k);
   }
 
   skyNow() {
@@ -244,6 +267,7 @@ export class Stage {
     this.haze.t += dt;
     this.sky.t += dt;
     this.rain.t += dt;
+    this.flood.t += dt;
     if (this.curtain && this.curtain.seconds && this.curtain.t < this.curtain.seconds) {
       this.curtain.t += dt;
       const k = Math.min(1, this.curtain.t / this.curtain.seconds);
@@ -365,6 +389,8 @@ export class Stage {
     this.drawHaze(ctx, camera);
     this.drawRubble(ctx, camera);
     this.drawNotes(ctx, camera);
+    this.drawFlood(ctx);
+    this.drawGlow(ctx, camera, bodyAt);
     this.drawSky(ctx);
     this.drawStormRain(ctx);
     this.drawFlicker(ctx);
@@ -372,6 +398,93 @@ export class Stage {
     this.drawFlare(ctx, camera);
     this.drawWhite(ctx);
     this.drawTilt(ctx);
+  }
+
+  // The sea coming in over the bottom of the view: a heaving green body of
+  // water, darker as it deepens, light lines sliding through it, and a ragged
+  // band of foam along the top. A `glow` shoves it down.
+  drawFlood(ctx) {
+    const push = this.glow ? Math.min(1, this.glow.power) : 0;
+    const level = this.floodNow() * (1 - 0.9 * push);
+    if (level <= 0.004) return;
+    const t = this.time;
+    const top = SCREEN_HEIGHT * (1 - level);
+    const surface = (x) => top + Math.sin(x * 0.045 + t * 2.1) * 3 + Math.sin(x * 0.11 - t * 3.3) * 1.5;
+    const body = ctx.createLinearGradient(0, top - 4, 0, SCREEN_HEIGHT);
+    body.addColorStop(0, 'rgba(70, 150, 128, 0.5)');
+    body.addColorStop(0.35, 'rgba(32, 96, 88, 0.7)');
+    body.addColorStop(1, 'rgba(10, 44, 48, 0.88)');
+    ctx.fillStyle = body;
+    ctx.beginPath();
+    ctx.moveTo(0, SCREEN_HEIGHT);
+    for (let x = 0; x <= SCREEN_WIDTH; x += 4) ctx.lineTo(x, surface(x));
+    ctx.lineTo(SCREEN_WIDTH, SCREEN_HEIGHT);
+    ctx.closePath();
+    ctx.fill();
+    // Light lines slipping along under the surface.
+    for (let i = 0; i < 26; i++) {
+      const depth = noise(i + 7);
+      const y = top + 6 + depth * (SCREEN_HEIGHT - top);
+      if (y > SCREEN_HEIGHT) continue;
+      const x = ((noise(i + 31) * SCREEN_WIDTH * 1.3 + t * (14 + depth * 20) * (i % 2 ? 1 : -1)) % (SCREEN_WIDTH + 40) + SCREEN_WIDTH + 40) % (SCREEN_WIDTH + 40) - 20;
+      ctx.fillStyle = `rgba(170, 236, 210, ${(0.35 * (1 - depth)).toFixed(3)})`;
+      ctx.fillRect(Math.round(x), Math.round(y), 6 + Math.round(depth * 10), 1);
+    }
+    // The foam: a bright broken line on the crest, and flecks just under it.
+    for (let x = 0; x < SCREEN_WIDTH; x += 2) {
+      const y = Math.round(surface(x));
+      const n = noise(Math.floor(x / 2) + Math.floor(t * 6) * 0.37);
+      ctx.fillStyle = n > 0.25 ? 'rgba(236, 255, 244, 0.9)' : 'rgba(190, 236, 220, 0.7)';
+      ctx.fillRect(x, y - 1, 2, n > 0.6 ? 2 : 1);
+      if (n > 0.8) {
+        ctx.fillStyle = 'rgba(220, 250, 236, 0.6)';
+        ctx.fillRect(x, y + 2 + Math.round(n * 3), 1, 1);
+      }
+    }
+  }
+
+  // Light pouring out of someone: a bloom, slow rays turning round them, and
+  // as `power` nears 1 the whole view going white.
+  drawGlow(ctx, camera, bodyAt) {
+    const g = this.glow;
+    if (!g || g.power <= 0.004) return;
+    const body = bodyAt(g.who);
+    if (!body) return;
+    const x = body.x - camera.x;
+    const y = body.y - 12 - camera.y;
+    const p = Math.min(1, g.power);
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    // The rays: long thin wedges, turning slowly, longer as it grows.
+    const rays = 12;
+    const reach = 30 + p * 360;
+    for (let i = 0; i < rays; i++) {
+      const a = (i / rays) * Math.PI * 2 + this.time * 0.25 + noise(i) * 0.3;
+      const spread = 0.05 + noise(i + 50) * 0.05;
+      const len = reach * (0.6 + noise(i + 90) * 0.4) * (0.92 + 0.08 * Math.sin(this.time * 3 + i));
+      ctx.fillStyle = `rgba(255, 252, 236, ${(0.18 + 0.3 * p).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + Math.cos(a - spread) * len, y + Math.sin(a - spread) * len);
+      ctx.lineTo(x + Math.cos(a + spread) * len, y + Math.sin(a + spread) * len);
+      ctx.closePath();
+      ctx.fill();
+    }
+    // The bloom.
+    const radius = 16 + p * p * 300;
+    const bloom = ctx.createRadialGradient(x, y, 1, x, y, radius);
+    bloom.addColorStop(0, `rgba(255, 255, 255, ${(0.7 + 0.3 * p).toFixed(3)})`);
+    bloom.addColorStop(0.4, `rgba(255, 250, 228, ${(0.35 + 0.4 * p).toFixed(3)})`);
+    bloom.addColorStop(1, 'rgba(255, 244, 210, 0)');
+    ctx.fillStyle = bloom;
+    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+    ctx.restore();
+    // Swallowing the room.
+    const wash = Math.max(0, (p - 0.55) / 0.45);
+    if (wash > 0) {
+      ctx.fillStyle = `rgba(255, 252, 240, ${(wash * wash * 0.92).toFixed(3)})`;
+      ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
   }
 
   // Rain and the odd bolt, for scenes that bring the storm in.

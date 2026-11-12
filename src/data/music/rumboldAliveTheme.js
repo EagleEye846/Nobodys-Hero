@@ -1,134 +1,130 @@
-import { melody, transpose, hits, HOLD, REST } from '../../audio/notation.js';
+import { melody, transpose, hits, HOLD, REST, HIT } from '../../audio/notation.js';
 import { SAMPLE_SETS } from '../../audio/sampleSets.js';
 import { midi, timpRoot, ORCHESTRA } from './parts/usurper.js';
 import { cellIn, FIRST_STEPS_MINOR } from './parts/chapter4.js';
+import { RUMBOLD_HOOK, TUCK_TUNE, TUCK_CHORDS } from './rumboldTheme.js';
 
-// "No Strings": the third and last part of the duel with King Peptup the
-// Resplendent (after "The Resplendent Hour" and "Behind the Curtain"). Tuck
-// lets go of the levers and the puppet keeps moving. A cold light kindles in
-// his hollow chest, nobody is working him, and he strings Tuck up like a
-// marionette and carries on the show alone, sure he really was the Hero's
-// friend. The battle swaps to this song with the phase's `music`:
-// `music: 'rumboldAlive'` on the phase where the puppet comes alive.
+// "No Strings": the third and last part of the duel with King Peptup (after
+// "The Resplendent Hour" and "Behind the Curtain"). Tuck lets go of the bar,
+// and the pale-wood mannequin keeps moving anyway. The jaw is jammed, nobody
+// is working him, something else is driving him now, and he carries on the
+// show alone. The battle swaps to this song with the phase's `music`
+// (`music: 'rumboldAlive'`), after a silence. Once he's low, his head turns
+// upside down and the finale cue takes over: "Upside Down"
+// (rumboldTearTheme.js), the same hook played upside down.
 //
-// WHAT IT SOUNDS LIKE: the show, possessed, at a sprint. The spine is a
-// slow, sad piano tune (the king's four notes, one note every two beats)
-// sitting on top of a breakbeat that runs at twice the speed underneath: the
-// piano sings and the drums panic, both at once. Over that go the real
-// orchestra (brass, strings, timpani, gong) for the weight, and a toy for the
-// puppet: a music box (glockenspiel and harp) that plays the tune the way it
-// always did, now a half-step wrong. The strings don't play so much as get
-// yanked: short spiccato stabs that stop and start on a string pulled by
-// somebody else. Real recordings only (VSCO 2 and VCSL, sampleSets.js); no
-// choir, no synth. The whole song goes through the trailers' squeeze
-// (`limit`), so the breaks hit hard and flat, the way a loud break should.
+// THE IDEA: the king's own show-tune, played by a full orchestra with
+// nobody conducting. It's the same strut as "The Resplendent Hour", note
+// for note at first, but in the minor with the lights off, and it answers
+// itself UPSIDE DOWN. Around it, the machinery: a clock that never stops
+// ticking, a creaking pizzicato "string" figure that slips a semitone at
+// the end of every bar (the strings being pulled), a music box gone sour,
+// and the jaw: a dry clack, the clack from phase 1, now STUTTERING,
+// clack-clack-clack, in every gap the tune leaves. Under all of it, Tuck's
+// small tune tries to get a word in: the boy who could cut the strings.
 //
-// THE HOOK ("the show-tune, wrong"): the chapter's cell, the king's four
-// notes, in D minor: A D F E (up a fourth, up a third, a step back: it asks
-// a question and doesn't finish). It is played two ways. SLOW is the
-// piano's: a note every two beats, eight bars. FAST is the puppet's: the
-// same four notes in one bar, jerking. In "The Resplendent Hour" the second
-// phrase went up a third, bright. Here it goes up ONE SEMITONE (Bb Eb Gb F,
-// the Neapolitan, the borrowed chord that means menace), and the last
-// phrase falls through the tritone (Ab, as far from D as a note can be)
-// before landing back on D. The tune alone on a piano is already the song.
-// TUCK'S TUNE: the small stammering tune from "Behind the Curtain" (D D-G
-// Bb A, G F Eb...) in G minor, re-barred into 4/4 (six bars). In D minor, G
-// minor is the fourth degree: Tuck's key sits just beside the king's, and
-// in the last big section the king's brass takes Tuck's key as its own.
+// THE HOOK, Bb minor, eight bars, one token a 16th (bars 1 and 3 are bars 1
+// and 3 of the king's hook in "The Resplendent Hour", with the lights off:
+// every D and G flattened. The file checks that.):
 //
-// HOW IT IS BUILT (the boss recipe, with the breakbeat laid under it): the
-// drums are a kit of real recordings (bass drum, snare and a ghost snare, a
-// tenor drum as the hat, toms for fills), written as one-bar patterns that
-// swap every other bar and fill every fourth: a chopped break (kick on 1,
-// the "and" of 3 and a flam after it, snare on 2 and 4 with ghosts) for the
-// drops, a half-time version (kick on 1, snare on 3) for the walks, and a
-// two-step for the sad middle. The hook is doubled the Fox way, trumpets
-// and violins at pitch, cellos an octave down, horns and trombones two
-// octaves down (the horn recordings skip C#4 to Db5, so the horns live
-// below it), tuba under, and a dry close grand piano carrying the same
-// line; a glockenspiel on top is the toy-piano shine. A second trumpet line
-// a hair sharp (14 cents) beats against the first and the horns sit a hair
-// flat (10 cents): the "detuned brass" of a dread cue. Per-voice space:
-// ticks, footfalls and the piano nearly dry, strings and brass in a hall,
-// the music box wet with an echo. The drops are stacked: gong, deep bass
-// drum, concert bass drum, crash, trombone and tuba BRAAAM (tuba an octave
-// down), timpani. Bass walks by step (D Eb E F... up a chromatic ladder).
-// One borrowed chord for colour (Eb, the flat second). A new tune every 25
-// seconds or so, a pivot two-thirds in, and home before the loop. The
-// builds are kept quieter than the drops.
+//   F - - Bb - - Db - - - C - - - . . | F - - C - - A - - - Bb - - - . .  |
+//   Gb - Gb - Gb . F Gb - - Db - Bb - Gb - | F - F - F . E F - - C - A - F - |
+//   F - - Bb - - Db - - - C - - - . . | F# - - B - - D# - - - C# - - - . . |
+//   Db - - C - - B - Bb - - A - - - - | A (held, and the jaw clacks in the gap)
 //
-// THE CREEP (what makes him wrong, not just loud):
-//   THE MUSIC BOX OUT OF TRUE: the music box of the intro, the waltz and
-//     HOME has a twin, a glockenspiel a third of a semitone flat and a harp
-//     a quarter flat, playing the same notes a 16th late, so the box sounds warped and
-//     doubled, like a toy left in the damp. (The flat box first turns up at
-//     the end of "Behind the Curtain".)
-//   STUCK ON WORDS: the way he sticks on "friends friends FRIENDS", the
-//     tune sticks on the cell's first three notes, A D F, going round in
-//     threes against the bar's fours so it never lines up, and can't get to
-//     the fourth note. The intro's music box does it, the waltz is built on
-//     it, and HOME does it on the piano.
-//   THE WALTZ THAT SLIPS: a 3/4 waltz in the middle of a 4/4 breakbeat song,
-//     its pah-pahs landing a 16th late, then a bar that loses a beat
-//     altogether, as if the floor tipped.
+// Bar 1 is the chapter's cell (parts/chapter4.js: up a fourth, up a third,
+// a step back), minor, strutting in 3-3-4. Bar 2 is the same cell upside
+// down (down a fourth, down a third, a step up): the question answered by
+// something wrong. Bars 3 and 4 are the king's boast, the one note said
+// three times. Bar 6 is his old bright major cell, but a half step out of
+// true (the flat second, the one borrowed chord: menace). Bar 7 slides down
+// by semitones like a string let out, and bar 8 hangs on the leading note.
+// Chords: Bbm F Gb F Bbm B Gb F. The bass walks down Bb A Gb F.
 //
-// D minor; the climax in G minor; home in D minor. 176 BPM, one step a 16th,
-// a bar of 4/4 is 16 steps = 1.36 seconds (the piano's half-speed tune
-// feels like 88; a waltz bar is 12 steps, 1.02 seconds). The intro plays
-// once (10.9s); then the loop runs from A: 2120 steps, 3m01s:
+// THE ORCHESTRA (all real recordings, VSCO 2 and VCSL, sampleSets.js, and
+// the game's own choir): the hook scored the Fox/Williams way, trumpets and
+// violins at pitch, a dry close grand piano on it too, cellos and horns an
+// octave down (the horns kept out of the gap in their recordings), trombones
+// two octaves down, tuba on the roots; a second trumpet a hair sharp beats
+// against the first, and the horns sit a hair flat, so the brass is never
+// quite in tune with itself. The choir sings it from the second time. Each
+// drop is a BRAAAM: trombones, tuba and horns on one low Bb with the gong,
+// the deepest drum and the concert bass drum. Taiko on the 3-3-2, snare on
+// two and four, timpani pounding the roots, spiccato basses digging in.
+// THE MACHINERY: the clock (a dry col-legno tick and a muffled tock, every
+// eighth, and it never stops, not even in the quiet); the creak (plucked
+// violins and cellos in 3-3-2, the last pluck a semitone under the root);
+// the music box (glockenspiel, harp and a celesta made of the piano two
+// octaves up, each with a twin a third of a semitone flat, a 16th late);
+// the jaw (claps and stabbed brass, stuttering: x.x.x...x.x.).
 //
-//   intro   8 bars  0:00 THE MUSIC BOX: the gong; the music box stuck on the
-//                   king's first three notes, A D F A D F A D F... E, its
-//                   flat twin creeping in a step behind, over a creaking low
-//                   drone and little wooden ticks; (0:05) it snaps: the dry
-//                   piano plays it at full speed, strings jerking; then the
-//                   build (timpani roll, strings and horns climbing, a cymbal
-//                   swell) and ONE BEAT of dead silence
-//   A      16 bars  0:00 THE DROP (loop 0:00): gong, deep drum, BRAAAM, the
-//                   break at full tilt; the slow hook on trumpets, piano,
-//                   cellos, horns and trombones; the strings jerk in at bar 4,
-//                   the piano hammers from bar 8, the toy shines
-//   B      20 bars  0:22 THE LIMP: half-time. A new tune, a slow clarinet
-//                   walk with a wrong note in it (G sharp against D) over a
-//                   kick-and-snare that drags, the last beat always late;
-//                   oboe, glockenspiel and a rippling piano join at 0:44; the
-//                   hook creeps back in the low strings at 0:59
-//   W      22 bars  0:49 THE WALTZ THAT SLIPS: the drums stop and it's 3/4,
-//                   the music box and its flat twin waltzing the cell and
-//                   sticking (A D F, A D F, A D F, E); (0:53) again on the
-//                   flat second, the clarinet with it; (0:58) stuck for good,
-//                   A D F four times, violins and sour trumpet on it, the
-//                   pahs late, the bass climbing D Eb E F underneath; (1:02)
-//                   a bar loses a beat, the piano stuck on F F F F; (1:03)
-//                   gong and BRAAAM on the tritone, and the band stomps the
-//                   hook as a waltz; (1:11) a chromatic slide back into 4/4
-//   C      20 bars  1:12 STRUNG UP: Tuck's tune, music box then solo violin,
-//                   fragile, a two-step starting under him while the king's
-//                   tune begins to tread; (1:23) the brass drowns him, flute
-//                   and violin keep singing over it; (1:34) Tuck's stammer
-//                   cries out alone at the top, the snare rolls, and
-//                   everything cuts off
-//   D      16 bars  1:39 THE STRINGS PULL: the cell at full speed, climbing a
-//                   semitone a bar over a bass that climbs with it (D Eb E F F#
-//                   G Ab A), the break at full strength; then the hook comes
-//                   home in D minor at half speed, piano first, with the bass;
-//                   Tuck's stammer squeaks on the top every fourth bar
-//   P       8 bars  2:01 THE LIGHT (the pivot, two-thirds in): no drums;
-//                   bowed vibes and glass holding the tritone (the cold
-//                   light), Tuck's tune on a lone piano and the music box, a
-//                   heartbeat; then the climb to the dominant, a roll, a
-//                   swell, and ONE BEAT of silence
-//   E      24 bars  2:12 THE SECOND DROP, G minor: BRAAAM and gong; the
-//                   hook on everything over the break; (2:23) Tuck's tune
-//                   soars on the violins, horns and flute over the king's
-//                   cell hammering in the trombones; (2:34) the hook again in
-//                   G minor, (2:40) the cell climbing back up to A
-//   H      12 bars  2:44 HOME: D minor, the piano alone with the hook, which
-//                   sticks halfway (A D F, A D F...) and never finishes, the
-//                   warped music box with it, a quiet half-time limp; Tuck's
-//                   stammer squeaks twice; the king's cell low in the cellos;
-//                   then the build and the silence, and the drop again at A
+// Bb minor; the second drop half a step up in B minor (phase 1's comeback
+// went up a half step too); the slip back down and home in Bb minor.
+// 150 BPM, one step a 16th, a bar is 1.6 seconds. The intro plays once
+// (12.8s); then it loops from A: 1694 steps, 2m49s:
+//
+//   intro   8 bars       THE CLOCK: the clock alone, a creaking string cluster;
+//                        the music box plays the hook's first two bars, slowly,
+//                        its flat twin a step behind; the creak starts; (0:06)
+//                        the jaw stutters with the brass stabbing a semitone
+//                        apart; (0:10) the build, and ONE BEAT of silence
+//   A      16 bars  0:00 THE SHOW GOES ON: the drop (BRAAAM, gong), the hook on
+//                        the whole orchestra, the jaw clacking in the gap;
+//                        (0:13) again with the choir, violins an octave up, the
+//                        sour trumpet, glockenspiel, racing spiccato
+//   B      16 bars  0:26 THE JAW: a new riff, the stutter, low strings and
+//                        brass in 16ths (Bb . Bb Bb . . Db . C . Bb Bb Bb) that
+//                        walks down by semitones; over it the chapter's cell on
+//                        the choir and violins, one note every two beats, in
+//                        every chord it lands on (Bb minor, the flat second B,
+//                        Db, F...). Bars 8 and 16 lose their last 16th note:
+//                        the jaw jumps, and the beat with it
+//   C      16 bars  0:51 TUCK'S THREAD: Tuck's tune (from "The Resplendent
+//                        Hour", here in Bb minor) on a solo violin, a clarinet
+//                        under it, small and in tune, over the clock and the
+//                        creak; the king's cell mutters underneath in the soft
+//                        horns; (1:04) the band comes back and the two tunes
+//                        fight: Tuck's on the violins, flute and choir, the
+//                        king's cell and boast hammered in the trombones; it
+//                        ends on Tuck's B FLAT MAJOR, and the beat goes dead
+//   P       8 bars  1:16 THE MUSIC BOX (the pivot, 45% in): near silence. The
+//                        clock, and the music box playing the hook UPSIDE DOWN,
+//                        slowly, its twin out of true, a bowed tritone (the cold
+//                        light) under it; Tuck answers twice on the piano with
+//                        his stammer in D flat major, the one warm thing; a
+//                        heartbeat on the timpani
+//   W      16 bars  1:29 THE DANCE ON STRINGS: 7/8. The hook re-barred: the
+//                        strut is 3+3+4+4 sixteenths, so every bar just loses
+//                        its last two and limps on; oboe, clarinet and plucked
+//                        violins dance it over a 7/8 taiko and the creak;
+//                        (1:40) the brass and choir take it over, the strings
+//                        race, the last bar is 4/4 again and builds, a swell,
+//                        ONE BEAT of silence
+//   D      16 bars  1:52 THE SECOND DROP, B minor: BRAAAM on B, the hook half a
+//                        step up on everything; (2:05) Tuck's tune taken up by
+//                        the whole orchestra, trumpets, violins, choir, the
+//                        king's cell and boast fighting under it in the low
+//                        brass; it ends on a B MAJOR chord, Tuck's
+//   E       8 bars  2:17 THE STRINGS SLIP: the jaw riff in B minor, the
+//                        trumpets stuck on the first three notes (F# B D, F# B
+//                        D, in threes against the bar's fours: the stuck cell of
+//                        all three songs); (2:24) everything slides down by
+//                        semitones in parallel minor chords, a string let out,
+//                        and lands on F, the door home
+//   H      12 bars  2:30 HOME: Bb minor, quiet. The dry piano plays the hook
+//                        and sticks halfway on F Bb Db, F Bb Db..., the clock,
+//                        the creak, the music box twin; Tuck's stammer twice on
+//                        the solo violin; (2:43) the jaw stutters faster and
+//                        faster over a timpani roll, the strings climb, a
+//                        swell, ONE BEAT of silence, and the drop at A
+//
+// HOW THE MOTIFS APPEAR: the king's hook in A (straight), W (re-barred to
+// 7/8), D (half a step up), H (stuck), P (upside down) and in the finale
+// (upside down, in E minor); the chapter's cell in bar 1 of the hook, as
+// the B section's chorale in six keys, and stuck in E and H; Tuck's tune in
+// C (fragile, then fighting), P (his stammer in D flat major), D (the whole
+// orchestra's) and H (twice, small). The loop starts and ends the same way
+// as the intro (build, silence, drop), so the seam is the drop itself.
 
 // --- Helpers. ---
 const BAR = 16;                                           // 4/4, one step a 16th
@@ -146,629 +142,665 @@ const after = (bars, track) => [...rest(bars), ...track.slice(bars * BAR)];
 const barsOf = (track, from, to) => track.slice(from * BAR, to * BAR);
 const held = (name, n) => [typeof name === 'number' ? name : midi(name), ...Array(n - 1).fill(H)];
 const holdBar = (p, len = BAR) => [p, ...Array(len - 1).fill(H)];
+const up = transpose;
 const onBars = (bars, list, pattern) => Array.from({ length: bars }, (_, i) => (list.includes(i) ? pattern : steps(pattern.length))).flat();
+// A drum pattern as notes: each 'x' a `note` (for pitched hits: ticks, stabs).
+const pitched = (pattern, note) => pattern.map((x) => (x === HIT ? (typeof note === 'number' ? note : midi(note)) : R));
 // A chromatic climb: `n` notes from `from`, `len` steps each.
 const climb = (from, n, len = 4) => Array.from({ length: n }, (_, i) => [from + i, ...Array(len - 1).fill(H)]).flat();
+// Each step played twice as long (a tune at half speed).
+const slow = (track) => track.flatMap((s) => [s, s === R ? R : H]);
+const mapTracks = (tracks, fn) => Object.fromEntries(Object.entries(tracks).map(([name, track]) => [name, fn(track, name)]));
 
 function section(length, tracks) {
-  return Object.fromEntries(Object.entries(tracks).map(([name, track]) => {
+  return mapTracks(tracks, (track, name) => {
     if (track.length > length) throw new Error(`No Strings: '${name}' is ${track.length} steps, longer than ${length}`);
-    return [name, [...track, ...steps(length - track.length)]];
-  }));
+    return [...track, ...steps(length - track.length)];
+  });
 }
 // The whole band stops dead for the last beat (4 steps).
-const stopdown = (tracks, n = 4) => Object.fromEntries(Object.entries(tracks).map(([name, track]) => [name, [...track.slice(0, -n), ...steps(n)]]));
-// Every track of a bundle pushed `bars` bars later.
-const place = (bars, tracks) => Object.fromEntries(Object.entries(tracks).map(([name, track]) => [name, at(bars, track)]));
+const stopdown = (tracks, n = 4) => mapTracks(tracks, (track) => [...track.slice(0, -n), ...steps(n)]);
+// THE JOLT: the bars listed lose their last `cut` steps (the jaw jumps and
+// the beat with it). A note that started in the cut moves to the next step.
+function jolt(tracks, list, cut = 2) {
+  return mapTracks(tracks, (track) => {
+    const out = [];
+    let carry = null;
+    track.forEach((s, i) => {
+      if (list.includes(Math.floor(i / BAR)) && i % BAR >= BAR - cut) {
+        if (typeof s === 'number') carry = s;
+        return;
+      }
+      out.push(carry !== null && s === H ? carry : s);
+      carry = null;
+    });
+    return out;
+  });
+}
+// The horns' recordings skip from C4 to D5: a doubling note in that gap
+// drops an octave.
+const hornFit = (track) => track.map((s) => (typeof s === 'number' && s > 63 && s < 71 ? s - 12 : s));
 
-// --- Chords: 'Dm', 'A7', 'Ebm'. Patterns name chord tones: R root, T third,
-// F fifth, S seventh; '+' an octave up, '-' one down. One chord a bar. ---
-const QUALITY = { '': [0, 4, 7, 12], m: [0, 3, 7, 12], 7: [0, 4, 7, 10], dim: [0, 3, 6, 9], aug: [0, 4, 8, 12] };
+// --- Chords: 'Bbm', 'F7', 'Bdim', 'Ebm,F' (two in a bar). Patterns name
+// chord tones: R root, T third, F fifth, S seventh, N a semitone under the
+// root (the creak); '+' an octave up, '-' one down. ---
+const QUALITY = { '': [0, 4, 7, 12], m: [0, 3, 7, 12], 7: [0, 4, 7, 10], dim: [0, 3, 6, 9] };
 const NAMES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 function chordOf(symbol) {
-  const m = symbol.match(/^([A-G][#b]?)(m|7|dim|aug)?$/);
+  const m = symbol.match(/^([A-G][#b]?)(m|7|dim)?$/);
   if (!m) throw new Error(`No Strings: can't read the chord '${symbol}'`);
-  return { root: midi(`${m[1]}4`) % 12, tones: QUALITY[m[2] ?? ''] };
+  return { root: midi(`${m[1]}4`) % 12, tones: QUALITY[m[2] ?? ''], minor: m[2] === 'm' || m[2] === 'dim' };
 }
 const inBand = (pc, low) => low + ((pc - (low % 12) + 12) % 12);
 function toneOf(chord, low, p) {
   const shift = p.endsWith('+') ? 12 : p.endsWith('-') ? -12 : 0;
-  return inBand(chord.root, low) + chord.tones['RTFS'.indexOf(p[0])] + shift;
+  const base = inBand(chord.root, low);
+  return (p[0] === 'N' ? base - 1 : base + chord.tones['RTFS'.indexOf(p[0])]) + shift;
 }
+const barList = (chords) => chords.split(/\s+/).filter(Boolean);
 function comp(chords, pattern, low) {
-  return chords.split(/\s+/).filter(Boolean).flatMap((bar) => {
-    const chord = chordOf(bar);
-    return pattern.map((p) => (p === R || p === H ? p : toneOf(chord, low, p)));
+  return barList(chords).flatMap((bar) => {
+    const parts = bar.split(',');
+    const each = pattern.length / parts.length;
+    return parts.flatMap((symbol, i) => {
+      const chord = chordOf(symbol);
+      const slice = pattern.slice(i * each, (i + 1) * each);
+      if (i > 0 && slice[0] === H) slice[0] = pattern[0];
+      return slice.map((p) => (p === R || p === H ? p : toneOf(chord, low, p)));
+    });
   });
 }
-const moveChords = (chords, by) => chords.replace(/([A-G][#b]?)(m|7|dim|aug)?/g, (_, root, q = '') => `${NAMES[(midi(`${root}4`) + by) % 12]}${q}`);
-const bars = (chords, from, to) => chords.split(' ').slice(from, to).join(' ');
-// Timpani on each chord's root.
-const timps = (chords, pattern) => chords.split(/\s+/).filter(Boolean).flatMap((bar) => {
-  const root = timpRoot(NAMES[chordOf(bar).root]);
+const moveChords = (chords, by) => chords.replace(/([A-G][#b]?)(m|7|dim)?/g, (_, root, kind = '') => `${NAMES[(midi(`${root}4`) + by) % 12]}${kind}`);
+const bars = (chords, from, to) => barList(chords).slice(from, to).join(' ');
+// Timpani on each bar's (first) chord root: 0 the root, -5 the fifth below.
+const timps = (chords, pattern) => barList(chords).flatMap((bar) => {
+  const root = timpRoot(NAMES[chordOf(bar.split(',')[0]).root]);
   return pattern.map((p) => (typeof p === 'number' ? root + (root + p < 41 ? p + 12 : p) : p));
 });
 
-// --- THE HOOK, 8 bars, D minor. SLOW: a note every two beats (the piano's
-// tune). FAST: a beat a note, one cell a bar (the puppet's). ---
-const HOOK8 = h(`
-  A4 D5 F5 E5      | Bb4 Eb5 Gb5 F5   |
-  A4 D5 F5 A5      | Ab5 - E5 D5
-`);
-const HOOK_FAST = q(`
-  A4 D5 F5 E5   | Bb4 Eb5 Gb5 F5   | A4 D5 F5 E5   | Bb4 Eb5 Gb5 F5 |
-  A4 D5 F5 A5   | D5 F5 A5 Bb5     | A5 Ab5 G5 E5  | Ab5 - E5 D5
-`);
-const HOOK_CH = 'Dm Dm Ebm Ebm Dm Dm A7 A7';
-const HOOK16 = [...HOOK8, ...HOOK8];
-{
-  const notes = HOOK8.filter((s) => typeof s === 'number').slice(0, 4);
-  if (notes.join() !== cellIn('D5', FIRST_STEPS_MINOR).join()) throw new Error("No Strings: the hook's first cell isn't the chapter's cell");
-  if (HOOK8.length !== 8 * BAR || HOOK_FAST.length !== 8 * BAR) throw new Error('No Strings: the hook is not eight bars');
+// UPSIDE DOWN: a tune turned over inside the minor scale around `axis`
+// (each step up becomes a step down). A note outside the scale keeps its
+// sharpness the other way up.
+const MINOR = [0, 2, 3, 5, 7, 8, 10];
+export function upsideDown(track, axis) {
+  return track.map((s) => {
+    if (typeof s !== 'number') return s;
+    const rel = s - axis;
+    const octave = Math.floor(rel / 12);
+    const pc = rel - 12 * octave;
+    let d = 6;
+    while (MINOR[d] > pc) d--;
+    const extra = pc - MINOR[d];
+    const degree = -(octave * 7 + d);
+    const o2 = Math.floor(degree / 7);
+    return axis + 12 * o2 + MINOR[degree - 7 * o2] - extra;
+  });
 }
 
-// --- TUCK'S TUNE, G minor, 4/4, one token an 8th: the stammer, then the
-// tune of "Behind the Curtain", hanging on its last bar. Six bars. ---
-const TUCK = e(`
-  D5 . D5 G5 - Bb5 A5 -  | - - G5 F5 Eb5 - - -  | . . G4 . G4 C5 - Eb5 |
-  D5 - - - C5 Bb4 A4 -   | - - . . D5 . D5 G5   | - Bb5 D6 - C6 - Bb5 -
+// --- THE HOOK, Bb minor. ---
+export const HOOK = r(`
+  F4 - - Bb4 - - Db5 - - - C5 - - - . .           | F5 - - C5 - - A4 - - - Bb4 - - - . .          |
+  Gb5 - Gb5 - Gb5 . F5 Gb5 - - Db5 - Bb4 - Gb4 -   | F5 - F5 - F5 . E5 F5 - - C5 - A4 - F4 -       |
+  F4 - - Bb4 - - Db5 - - - C5 - - - . .           | F#4 - - B4 - - D#5 - - - C#5 - - - . .        |
+  Db5 - - C5 - - B4 - Bb4 - - A4 - - - -          | A4 - - - - - - - . . . . . . . .              |
 `);
-const TUCK_CH = 'Gm Eb Cm D Gm Eb';
-const STAMMER = e('D5 . D5 G5 - Bb5 - .');
-const CRY = transpose(STAMMER, 12);
+export const HOOK_CH = 'Bbm F Gb F Bbm B Gb F';
+// The second time round it climbs instead of slipping, and hangs on F.
+const HOOK_END = r(`
+  Db5 - - Eb5 - - F5 - Gb5 - - F5 - - E5 -        | F5 - - - - - - - . . . . . . . .
+`);
+const HOOK16 = [...HOOK, ...barsOf(HOOK, 0, 6), ...HOOK_END];
+const HOOK16_CH = `${HOOK_CH} ${HOOK_CH}`;
+{
+  // Bar 1 is the chapter's cell, minor, in Bb.
+  const cell = barsOf(HOOK, 0, 1).filter((s) => typeof s === 'number');
+  if (cell.join() !== cellIn('Bb4', FIRST_STEPS_MINOR).join()) throw new Error("No Strings: the hook's first bar isn't the chapter's cell");
+  // Bars 1 and 3 are the king's own hook with the lights off (D, G and the
+  // F sharp under the G each a semitone flatter).
+  const dark = up(RUMBOLD_HOOK, 0).map((s) => (typeof s === 'number' && [2, 6, 7].includes(s % 12) ? s - 1 : s));
+  for (const b of [0, 2]) {
+    if (barsOf(HOOK, b, b + 1).join() !== barsOf(dark, b, b + 1).join()) throw new Error(`No Strings: bar ${b + 1} isn't the king's bar in the minor`);
+  }
+  if (HOOK.length !== 8 * BAR || HOOK16.length !== 16 * BAR) throw new Error('No Strings: the hook is the wrong length');
+}
 
-// The music box, stuck: the cell's first three notes going round in threes
-// against the bar's fours (A D F, A D F, A D F...), the way he gets stuck on
-// a word, before it finally lets out the fourth. Four bars.
-const STUCK3 = [midi('A4'), midi('D5'), midi('F5')];
-const BOX_STUCK = [...Array.from({ length: 9 }, (_, i) => [STUCK3[i % 3], H, H, H, H, H]).flat(), midi('E5'), ...Array(9).fill(H)];
-// The detuned twin: the same notes a step late, starting from note `from`
-// (in steps), on the flat music box: the box's two combs out of true.
+// --- TUCK'S TUNE (from "The Resplendent Hour"), moved from G minor up to
+// Bb minor. Eight bars; it ends in the major. ---
+export const TUCK = up(e(TUCK_TUNE), 3);
+export const TUCK_CH = moveChords(TUCK_CHORDS, 3);           // Bbm Gb Ebm F Bbm Gb Ebm,F Bb
+const STAMMER = barsOf(TUCK, 0, 1);                           // F . F Bb - Db C -
+
+// THE KING UNDER TUCK: the king's two gestures fitted to each bar's chord,
+// low: on a minor chord his cell, strutting; on a major one his boast (the
+// note three times, a step under, back, and down the chord).
+const strut = (a, b, c, d) => [a, H, H, b, H, H, c, H, H, H, d, H, H, H, R, R];
+const boast = (n) => [n, H, n, H, n, R, n - 1, n, H, H, n - 5, H, n - 8, H, n - 12, H];
+export const kingUnder = (chords, low) => barList(chords).flatMap((bar) => {
+  const chord = chordOf(bar.split(',')[0]);
+  const root = inBand(chord.root, low);
+  return chord.minor ? strut(root - 5, root, root + 3, root + 2) : boast(root + 12);
+});
+
+// THE JAW RIFF: the stutter, in 16ths, two bars, from Bb2; the second bar
+// walks down by semitones.
+export const RIFF = r(`
+  Bb2 . Bb2 Bb2 . . Db3 . C3 . Bb2 Bb2 Bb2 . A2 .   |
+  Bb2 . Bb2 Bb2 . . F3 . E3 . Eb3 . D3 . Db3 .      |
+`);
+const riffBar = (bar, by) => up(barsOf(RIFF, bar, bar + 1), by);
+// The chapter's cell as a chorale over the riff, one note every two beats,
+// in the key of each chord it lands on.
+const CHORALE = h(`
+  F4 Bb4 Db5 C5 | F#4 B4 D#5 C#5 | Ab4 Db5 F5 Eb5 | C5 F5 A5 G5 |
+  F4 Bb4 Db5 C5 | Bb4 Eb5 Gb5 F5 | A5 G5 F5 E5    | Gb5 F5 E5 F5
+`);
+const CHORALE_CH = 'Bbm Bbm B B Db Db F F Bbm Bbm Ebm Ebm F F Gb F';
+const CHORALE_RIFF = [
+  ...riffBar(0, 0), ...riffBar(1, 0), ...riffBar(0, 1), ...riffBar(1, 1),
+  ...riffBar(0, 3), ...riffBar(1, 3), ...riffBar(0, -5), ...riffBar(1, -5),
+  ...riffBar(0, 0), ...riffBar(1, 0), ...riffBar(0, 5), ...riffBar(1, 5),
+  ...riffBar(0, -5), ...riffBar(1, -5), ...riffBar(0, -4), ...riffBar(1, -5),
+];
+
+// The stuck cell: the first three notes going round in threes against the
+// bar's fours, never getting to the fourth (as in all three songs).
+const stuck = (a, b, c, len) => Array.from({ length: len }, (_, i) => (i % 3 === 0 ? [a, b, c][(i / 3) % 3] : H));
+// The music box's twin: the same notes a 16th late, from step `from`.
 const twin = (track, from = 0) => [R, ...track.slice(0, -1)].map((s, i) => (i <= from ? R : s));
 
-// The hook, stuck: the first phrase as written, then the third phrase gets
-// stuck on A D F and never lets go (for HOME).
-const HOOK_STUCK = h(`
-  A4 D5 F5 E5      | Bb4 Eb5 Gb5 F5   |
-  A4 D5 F5 A4      | D5 F5 A4 D5
-`);
-
-// --- THE WALTZ THAT SLIPS: 3/4, twelve steps a bar, the cell as a waltz
-// on the music box that keeps getting stuck; then the band joins and the
-// beat slips (a bar loses a beat, the pah lands late). 264 steps. ---
-const W3 = 12;
-const cell3 = (a, b, c) => [midi(a), H, H, H, midi(b), H, H, H, midi(c), H, H, H];
-const long3 = (a, bars = 1) => [midi(a), ...Array(bars * W3 - 1).fill(H)];
-const STUCK_D = cell3('A4', 'D5', 'F5');
-const STUCK_EB = cell3('Bb4', 'Eb5', 'Gb5');
-const WALTZ = {
-  p1: [...STUCK_D, ...STUCK_D, ...STUCK_D, ...long3('E5')],
-  p2: [...STUCK_EB, ...STUCK_EB, ...STUCK_EB, ...long3('F5')],
-  p3: [...STUCK_D, ...STUCK_D, ...STUCK_D, ...STUCK_D],
-  slip: e('F5 F5 F5 F5'),
-  p4: [...long3('Ab5'), ...long3('E5'), ...long3('D5', 2)],
-  p5: [...STUCK_D, ...long3('E5'), ...STUCK_EB, ...long3('F5')],
-  fall: q('Gb5 F5 E5 C#5'),
-};
-// The bass, one note a bar on the waltz's ONE (under the stuck third phrase
-// it climbs D Eb E F while the tune can't move).
-const W_BASS = 'D D D A Eb Eb Eb Eb D Eb E F F# Bb A D D D A Eb Eb';
-const W_CH = 'Dm Dm Dm A7 Ebm Ebm Ebm Ebm Dm Dm Dm Dm - Bb A7 Dm Dm Dm A7 Ebm Ebm';
-const OOM3 = ['R', ...steps(11)];
-const PAH3 = [R, R, R, R, 'T', R, R, R, 'F', R, R, R];
-const PAH3_HONK = [R, R, R, R, 'F', R, R, R, 'T', R, R, R];
-// The slip: each pah a sixteenth late, then later.
-const PAH3_LATE = [R, R, R, R, R, 'T', R, R, R, R, 'F', R];
-// A waltz part, bar by bar: `fn(chord, i)` gives the bar's steps; the slip
-// bar is two beats, the fall a whole 4/4 bar.
-function waltzBars(fn, slip = steps(8), fall = steps(16)) {
-  const out = [];
-  W_CH.split(' ').forEach((symbol, i) => out.push(...(symbol === '-' ? slip : fn(symbol, i))));
-  return [...out, ...fall];
-}
-const pahsOf = (pattern, low, from = 0, to = 99) => waltzBars((symbol, i) => (i >= from && i < to ? comp(symbol, pattern, low) : steps(W3)));
-const W_MEL = [...WALTZ.p1, ...WALTZ.p2, ...WALTZ.p3, ...WALTZ.slip, ...WALTZ.p4, ...WALTZ.p5, ...WALTZ.fall];
-// Where each part of the waltz starts, in steps.
-const W_AT = { p2: 48, p3: 96, slip: 144, p4: 152, p5: 200, fall: 248, end: 264 };
-const onlyIn = (track, from, to) => track.map((s, i) => (i >= from && i < to ? s : R));
-
-// --- THE LIMP: the clarinet's walk, new, eight bars, with the wrong note. ---
-const WALK = r(`
-  D5 - - - F5 - - - A5 - - - G#5 - A5 -     |
-  Bb5 - - - - - - - A5 - - - F5 - - -       |
-  E5 - - - - - D5 - - - - - . . . .         |
-  D5 - - - F5 - - - A5 - - - C#6 - D6 -     |
-  Bb5 - - - A5 - - - G5 - - - F5 - - -      |
-  E5 - - - - - - - D5 - - - . . . .         |
-  Bb5 - - A5 - - G5 - - F5 - - E5 - - -     |
-  D5 - - - - - - - - - - - . . . .
-`);
-const WALK_CH = 'Dm Bb Gm Gm Dm Dm Bb A7';
-
-// --- Patterns, one bar (16 steps). ---
-const BOOM = ['R', ...steps(15)];
-const LIMP_PAH = [R, R, R, R, 'T', R, R, R, R, R, R, R, R, 'F', R, R];       // the last beat a sixteenth late
-const LIMP_PAH2 = [R, R, R, R, 'F', R, R, R, R, R, R, R, R, 'T', R, R];
-const BASS_BRK = ['R', R, 'R', R, R, R, R, R, R, R, 'R', 'R', R, R, R, R];    // locked to the kick
-const JERK = ['R', R, 'R', 'R', R, R, 'F', R, 'R', R, R, 'R+', 'F', R, R, R]; // the yank: stops and starts
+// --- Patterns, one bar. ---
+const CREAK = ['R+', R, R, 'F', R, R, 'T+', R, 'R+', R, 'N+', 'R+', R, 'F', R, R];
+const CREAK_LOW = ['R', R, R, 'R', R, R, R, R, 'R', R, R, R, R, R, 'N', R];
+const DIG = ['R', R, R, 'R', R, R, 'R', R, 'R', R, R, 'R', R, R, 'R', 'R'];
 const POUND = ['R', R, 'R+', 'R', 'R', R, 'R+', 'R', 'R', R, 'R+', 'R', 'R', R, 'R+', 'R'];
-const HAMMER = ['R+', R, R, 'R+', R, R, 'R+', R, 'R+', R, R, 'R+', R, R, 'R+', R];
-const STAB = ['R', R, R, R, R, R, 'R', R, R, R, R, R, 'R+', R, R, R];
+const RACE = ['R', 'F', 'R+', 'T+', 'R+', 'F', 'T+', 'F', 'R', 'F', 'R+', 'T+', 'R+', 'F', 'T+', 'F'];
+const HAMMER = ['R+', R, R, 'R+', R, R, 'R+', R, 'R+', R, R, 'R+', R, R, 'T+', R];
 const RIPPLE = ['R', R, 'F', R, 'R+', R, 'T+', R, 'F+', R, 'T+', R, 'R+', R, 'F', R];
-const T_BRK = [0, R, R, R, R, R, R, R, R, R, 0, R, 0, R, R, R];
-const T_BEAT = [0, ...steps(7), 0, ...steps(7)];
-const T_SLOW = [0, ...steps(15)];
+// The dance in 7/8 (3+3+4+4, the last two steps cut by the jolt).
+const CREAK7 = ['R+', R, R, 'F', R, R, 'T+', R, R, R, 'N+', R, R, 'F', R, R];
+const OOM7 = ['R', R, R, 'F-', R, R, 'R', R, R, R, 'F-', R, R, R, R, R];
+const T_POUND = [0, R, R, 0, R, R, -5, R, 0, R, R, 0, R, R, -5, 0];
+const T_HEART = [0, R, R, 0, ...steps(12)];
+const T_ONE = [0, ...steps(15)];
+const T_DANCE = [0, R, R, -5, R, R, 0, R, R, R, -5, R, R, R, R, R];
+const T_JAW = [0, R, 0, R, 0, ...steps(7), 0, R, 0, R];
 
 const ONE = hits('x...............');
+const TICK = hits('x.x.x.x.x.x.x.x.');
+const TOCK = hits('..x...x...x...x.');
 const ROLL_8 = hits('x.x.x.x.x.x.x.x.');
 const ROLL_16 = hits('xxxxxxxxxxxxxxxx');
-const FOOT = hits('x.......x.......');
-const TICK = hits('x.x...x.x...x...');
-// Ticks as pitched hits (a dry spiccato, the wooden click of col legno).
-const ticks = (pattern, note = 'D4') => pattern.map((x) => (x === 'x' ? midi(note) : R));
-// The cymbal swell is loudest 3.18s in: 37 steps at 176 BPM.
-const SWELL_STEPS = 37;
-const swellEnd = (length) => [...steps(length - SWELL_STEPS), ...held(60, SWELL_STEPS)];
-
-// --- THE KIT. A one-bar pattern per voice; the second one is used on
-// every other bar, and a fill replaces the bar named. ---
-const KITS = {
-  // The chopped break: kick on 1, 3-and and the flam after it, snare on 2
-  // and 4 with ghost snares in between, eighth-note hat.
-  break: {
-    kick: ['x.x.......xx....', 'x.x...x...x.x...'],
-    snare: ['....x.......x...', '....x.......x..x'],
-    ghost: ['.......x.x....x.', '..x....x.x...x..'],
-    hat: ['x.x.x.x.x.x.x.x.', 'x.x.x.x.x.x.xxxx'],
-  },
-  // Half-time: kick on 1, snare on 3, hat a hair shuffled.
-  half: {
-    kick: ['x.....x.......x.', 'x.......x.x.....'],
-    snare: ['........x.......', '........x.......'],
-    ghost: ['...x......x....x', '...x.....x....x.'],
-    hat: ['x.xxx.xxx.xxx.xx', 'x.xxx.xxx.xxx.x.'],
-  },
-  // Two-step, the sad one: kick 1, kick 3-and, snare 2 and 4.
-  step: {
-    kick: ['x.........x.....', 'x.........x.x...'],
-    snare: ['....x.......x...', '....x.......x...'],
-    ghost: ['...x...x.x...x..', '...x...x.x......'],
-    hat: ['x.x.x.x.x.x.x.x.', 'x.x.x.x.x.x.x.x.'],
-  },
+// The jaw, stuttering: in the gap at the end of the hook, and on its own.
+const JAW_GAP = hits('........x.x.x..x');
+const JAW_A = hits('x.x.x.......x.x.');
+const JAW_B = hits('x.x.x.x.xxx.x...');
+// The drums.
+const DRUMS = {
+  drop: { taiko: 'x..x..x.x..x..x.', taikoHigh: '....x..x..x.x.xx', snare: '....x.......x...', bassDrum: 'x.......x.......' },
+  dropB: { taiko: 'x..x..x.x..x..x.', taikoHigh: '..x...x...xxx.xx', snare: '....x.......x..x', bassDrum: 'x.......x.....x.' },
+  half: { taiko: 'x.......x..x....', taikoHigh: '..........x.....', snare: '........x.......', bassDrum: 'x...............' },
+  soft: { taiko: 'x.......x.......', taikoHigh: '................', snare: '................', bassDrum: '................' },
+  dance: { taiko: 'x..x..x...x.....', taikoHigh: '......x...x..x..', snare: '......x.........', bassDrum: 'x.........x.....' },
+  fill: { taiko: 'x..x..x.x.x.x.x.', taikoHigh: '....x.x.xxxxxxxx', snare: '....x...x.x.xxxx', bassDrum: 'x.......x.......' },
 };
-const FILL = { kick: 'x.......x.......', snare: '....x.x.x.xx....', ghost: '................', hat: '................', tom: '............xxxx' };
-const NONE = '................';
-// `n` bars of a kit; the bars named in `fills` are fills. Gives the five drum tracks.
-function kit(style, n, fills = []) {
-  const out = { kick: [], snare: [], ghost: [], hat: [], tom: [] };
+// `n` bars of a kit, alternating with `other` every other bar if given;
+// the bars in `fills` are fills.
+function kit(style, n, fills = [], other = style) {
+  const out = { taiko: [], taikoHigh: [], snare: [], bassDrum: [] };
   for (let i = 0; i < n; i++) {
-    for (const voice of Object.keys(out)) {
-      const pattern = fills.includes(i) ? FILL[voice] : KITS[style][voice]?.[i % 2] ?? NONE;
-      out[voice].push(...hits(pattern));
-    }
+    const k = DRUMS[fills.includes(i) ? 'fill' : i % 2 ? other : style];
+    for (const voice of Object.keys(out)) out[voice].push(...hits(k[voice]));
   }
   return out;
 }
+// Two runs of drums one after the other.
+const then = (a, b) => mapTracks(a, (track, name) => [...track, ...b[name]]);
+// The cymbal swell is loudest 3.18s in: 32 steps at 150 BPM.
+const SWELL_STEPS = 32;
+const swellEnd = (length) => [...steps(length - SWELL_STEPS), ...held(60, SWELL_STEPS)];
 
 const O = ORCHESTRA;
 const cents = (c) => c / 1200;
+const box = { time: 0.3, feedback: 0.3, mix: 0.25 };
+
+// The seats, shared with the finale (rumboldTearTheme.js).
+export const INSTRUMENTS = {
+  // THE MACHINERY. The clock: a col-legno tick and a muffled tock.
+  tick: { sample: 'violinsSpic', volume: 0.13, release: 0.02, gate: 0.06, reverb: 0.06, pan: 0.35, humanize: { time: 0.002, volume: 0.15 } },
+  tock: { sample: 'frameDrum', drum: 'sample', volume: 0.22, ring: true, muffle: 1800, reverb: 0.06, pan: -0.3, humanize: { time: 0.002, volume: 0.1 } },
+  // The jaw: the clack from phase 1, and the brass stabbing with it, a
+  // semitone apart.
+  jaw: { sample: 'claps', drum: 'sample', volume: 0.34, ring: true, reverb: 0.12, pan: 0.1, humanize: { time: 0.002, volume: 0.1 } },
+  stabs: { sample: 'trombone', volume: 0.42, release: 0.05, gate: 0.5, reverb: 0.25, pan: -0.1 },
+  stabsHigh: { sample: 'trumpet', volume: 0.3, release: 0.05, gate: 0.5, reverb: 0.25, pan: 0.15 },
+  // The creak: the strings being pulled.
+  creak: { sample: 'violinsPizz', volume: 0.28, ring: true, reverb: 0.25, pan: 0.3, humanize: { time: 0.005, volume: 0.15 } },
+  creakLow: { sample: 'cellosPizz', volume: 0.36, ring: true, reverb: 0.25, pan: -0.25, humanize: { time: 0.005, volume: 0.15 } },
+  // The music box: glockenspiel, harp and a celesta (the piano two octaves
+  // up), each with a twin a third of a semitone flat.
+  glock: { sample: 'glock', volume: 0.11, ring: true, reverb: 0.5, pan: 0.2, echo: box },
+  glockSour: { sample: 'glock', octave: cents(-35), volume: 0.09, ring: true, reverb: 0.55, pan: -0.25, echo: box },
+  celesta: { sample: 'grandPiano', octave: 2, volume: 0.17, ring: true, reverb: 0.45, pan: 0.15, echo: box },
+  celestaSour: { sample: 'grandPiano', octave: 2 + cents(-30), volume: 0.12, ring: true, reverb: 0.5, pan: -0.2, echo: box },
+  harp: { sample: 'harp', volume: 0.24, ring: true, reverb: 0.45, pan: -0.15, humanize: { time: 0.006, volume: 0.15 } },
+  // The cold light.
+  vibes: { sample: 'vibesBowed', volume: 0.18, attack: 0.5, release: 1.2, reverb: 0.6, pan: -0.2 },
+  vibesB: { sample: 'vibesBowed', volume: 0.15, attack: 0.6, release: 1.2, reverb: 0.6, pan: 0.2 },
+  glass: { sample: 'glass', volume: 0.12, ring: true, reverb: 0.6, pan: 0.25, echo: { time: 0.5, feedback: 0.3, mix: 0.25 } },
+  // The piano: dry and close for the tune; octaves hammered.
+  piano: { sample: 'grandPiano', volume: 0.36, ring: true, reverb: 0.1, humanize: { time: 0.004, volume: 0.1 } },
+  pianoLow: { sample: 'grandPiano', volume: 0.26, ring: true, reverb: 0.14, pan: -0.1, humanize: { time: 0.006, volume: 0.12 } },
+  // Strings.
+  soloViolin: { ...O.soloViolin, volume: 0.5 },
+  violins: { ...O.violins, volume: 0.32 },
+  violinsHigh: { ...O.violinsHigh, volume: 0.24 },
+  violas: { sample: 'violas', volume: 0.28, attack: 0.03, release: 0.35, reverb: 0.38, pan: -0.1 },
+  cellos: { ...O.cellos, volume: 0.34 },
+  race: { ...O.race, volume: 0.2 },
+  pound: { ...O.pound, volume: 0.32 },
+  basses: { ...O.basses, volume: 0.4 },
+  violinsTrem: { sample: 'violinsTrem', volume: 0.16, attack: 0.2, release: 0.5, reverb: 0.45, pan: 0.25 },
+  violasTrem: { sample: 'violasTrem', volume: 0.16, attack: 0.2, release: 0.5, reverb: 0.45, pan: -0.2 },
+  cellosTrem: { sample: 'cellosTrem', volume: 0.26, attack: 0.3, release: 0.6, reverb: 0.4, pan: -0.15 },
+  // Winds.
+  clarinet: { sample: 'clarinet', volume: 0.3, attack: 0.03, release: 0.2, reverb: 0.35, pan: -0.15 },
+  oboe: { sample: 'oboe', volume: 0.26, attack: 0.02, release: 0.12, reverb: 0.35, pan: 0.15 },
+  flute: { sample: 'flute', volume: 0.24, attack: 0.03, release: 0.2, reverb: 0.4, pan: 0.25 },
+  piccolo: { sample: 'piccolo', volume: 0.1, attack: 0.01, release: 0.12, reverb: 0.35, pan: 0.3 },
+  // Brass: a second trumpet a hair sharp, the horns a hair flat.
+  trumpets: { ...O.trumpets, volume: 0.36 },
+  trumpetsSour: { ...O.trumpets, volume: 0.18, octave: cents(14), pan: -0.15 },
+  horns: { ...O.horns, volume: 0.4, octave: cents(-9) },
+  hornsSoft: { ...O.hornsSoft, volume: 0.3 },
+  trombones: { ...O.trombones, volume: 0.38 },
+  tuba: { ...O.tuba, volume: 0.4 },
+  // The BRAAAM: trombones, tuba and horns on one low note.
+  braam: { ...O.braam, volume: 0.6 },
+  braamTuba: { ...O.braamLow, volume: 0.55 },
+  braamHorns: { sample: 'horns', volume: 0.5, release: 0.7, reverb: 0.45 },
+  // The choir: the game's own "ah" voices.
+  choir: { sample: 'choir', volume: 0.24, attack: 0.05, release: 0.4, reverb: 0.55, pan: 0.05, humanize: { time: 0.008, volume: 0.1 } },
+  choirHeld: { sample: 'choir', volume: 0.18, attack: 0.9, release: 1, reverb: 0.6 },
+  // Percussion.
+  timpani: O.timpani,
+  timpRoll: { ...O.timpRoll, volume: 0.42 },
+  swell: { ...O.swell, volume: 0.3 },
+  roll: { ...O.roll, volume: 0.14 },
+  taiko: { ...O.taiko, volume: 0.5 },
+  taikoHigh: { ...O.taikoHigh, volume: 0.3 },
+  snare: { ...O.snare, volume: 0.36, reverb: 0.15 },
+  bassDrum: { ...O.bassDrum, volume: 0.6 },
+  concertBassDrum: { sample: 'concertBassDrum', drum: 'sample', volume: 0.7, ring: true, reverb: 0.35 },
+  impact: O.impact,
+  crash: { ...O.crash, volume: 0.36 },
+  gong: O.gong,
+};
+
+// The tracks of a full statement of a tune (`mel`) on the whole orchestra,
+// from bar `full` with everything doubled.
+function tutti(mel, ch, full = 8) {
+  const n = barList(ch).length;
+  return {
+    trumpets: mel,
+    trumpetsSour: after(full, mel),
+    violins: mel,
+    violinsHigh: after(full, up(mel, 12)),
+    piano: mel,
+    horns: hornFit(up(mel, -12)),
+    cellos: up(mel, -12),
+    trombones: up(mel, -24),
+    choir: after(full, mel),
+    glock: after(full, up(mel, 24)),
+    tuba: comp(ch, holdBar('R'), 34),
+    basses: comp(ch, DIG, 34),
+    pound: comp(ch, POUND, 46),
+    creak: comp(ch, CREAK, 58),
+    creakLow: comp(ch, CREAK_LOW, 38),
+    race: after(full, comp(ch, RACE, 62)),
+    timpani: timps(ch, T_POUND),
+    tick: times(pitched(TICK, 'D6'), n),
+    tock: times(TOCK, n),
+  };
+}
+// The BRAAAM and the drop's hits, on `note`.
+const drop = (note, n, hitsOn = [0, 8]) => ({
+  braam: held(note, BAR),
+  braamTuba: held(note, BAR),
+  braamHorns: held(midi(note) + 12, BAR),
+  gong: onBars(n, hitsOn, ONE),
+  impact: onBars(n, hitsOn, ONE),
+  concertBassDrum: onBars(n, [0, 4, 8, 12], ONE),
+  crash: onBars(n, [0, 4, 8, 12], ONE),
+});
+// The jaw stuttering in the gap of the hook's last bar, the brass with it.
+const jawIn = (n, list, low = 'Bb2', high = 'A4') => ({
+  jaw: onBars(n, list, JAW_GAP),
+  stabs: onBars(n, list, pitched(JAW_GAP, low)),
+  stabsHigh: onBars(n, list, pitched(JAW_GAP, high)),
+});
 
 const song = {
   title: 'No Strings',
-  bpm: 176,
+  bpm: 150,
   stepsPerBeat: 4,
-  volume: 0.85,
+  volume: 0.55,
   limit: 1,
-
-  instruments: {
-    // The music box, the light, the wood.
-    glock: { sample: 'glock', volume: 0.12, ring: true, reverb: 0.5, pan: 0.2, echo: { time: 0.34, feedback: 0.3, mix: 0.28 } },
-    boxHarp: { sample: 'harp', volume: 0.3, ring: true, reverb: 0.5, pan: -0.15, echo: { time: 0.34, feedback: 0.25, mix: 0.2 } },
-    // The music box's twin, out of true: a glockenspiel a third of a
-    // semitone flat and a harp a quarter flat, a step behind the first.
-    glockSour: { sample: 'glock', octave: cents(-35), volume: 0.11, ring: true, reverb: 0.55, pan: -0.25, echo: { time: 0.34, feedback: 0.35, mix: 0.3 } },
-    boxSour: { sample: 'harp', octave: cents(-25), volume: 0.22, ring: true, reverb: 0.55, pan: 0.25, echo: { time: 0.34, feedback: 0.3, mix: 0.25 } },
-    glass: { sample: 'glass', volume: 0.14, ring: true, reverb: 0.6, pan: 0.25, echo: { time: 0.5, feedback: 0.3, mix: 0.25 } },
-    vibes: { sample: 'vibesBowed', volume: 0.2, attack: 0.4, release: 1.2, reverb: 0.6, pan: -0.2 },
-    vibesB: { sample: 'vibesBowed', volume: 0.16, attack: 0.5, release: 1.2, reverb: 0.6, pan: 0.2 },
-    ticks: { sample: 'violinsSpic', volume: 0.2, release: 0.02, gate: 0.07, reverb: 0.08, pan: 0.1, humanize: { time: 0.004, volume: 0.2 } },
-    frameDrum: { sample: 'frameDrum', drum: 'sample', volume: 0.3, ring: true, reverb: 0.1, pan: -0.1, humanize: { time: 0.004, volume: 0.15 } },
-    tom: { sample: 'tom', drum: 'sample', volume: 0.3, ring: true, reverb: 0.2, pan: 0.1, humanize: { time: 0.003, volume: 0.2 } },
-    // The break: real drums, close and dry.
-    kick: { sample: 'bassDrum', drum: 'sample', volume: 0.62, ring: true, reverb: 0.06, humanize: { time: 0.002, volume: 0.08 } },
-    snare: { sample: 'snare', drum: 'sample', volume: 0.46, ring: true, reverb: 0.1, humanize: { time: 0.002, volume: 0.12 } },
-    ghost: { sample: 'snareSoft', drum: 'sample', volume: 0.2, ring: true, reverb: 0.08, humanize: { time: 0.003, volume: 0.3 } },
-    hat: { sample: 'tenorDrumHigh', drum: 'sample', volume: 0.16, ring: true, reverb: 0.05, pan: 0.2, humanize: { time: 0.003, volume: 0.3 } },
-    // Strings: creaking tremolo, pizzicato, the yank.
-    violinsTrem: { sample: 'violinsTrem', volume: 0.2, attack: 0.15, release: 0.5, reverb: 0.45, pan: 0.25 },
-    violasTrem: { sample: 'violasTrem', volume: 0.18, attack: 0.15, release: 0.5, reverb: 0.45, pan: -0.2 },
-    cellosTrem: { sample: 'cellosTrem', volume: 0.3, attack: 0.3, release: 0.6, reverb: 0.4, pan: -0.15 },
-    cellosPizz: { sample: 'cellosPizz', volume: 0.34, ring: true, reverb: 0.3, pan: -0.15, humanize: { time: 0.006, volume: 0.15 } },
-    violinsPizz: { sample: 'violinsPizz', volume: 0.28, ring: true, reverb: 0.3, pan: 0.3, humanize: { time: 0.006, volume: 0.15 } },
-    jerk: { sample: 'violinsSpic', volume: 0.3, release: 0.04, gate: 0.1, reverb: 0.2, pan: -0.3, humanize: { time: 0.004, volume: 0.15 } },
-    // The piano: the tune's carrier, dry and close; the left hand rippling.
-    pianoHook: { sample: 'grandPiano', volume: 0.5, ring: true, reverb: 0.1, pan: 0, humanize: { time: 0.004, volume: 0.1 } },
-    pianoLow: { sample: 'grandPiano', volume: 0.3, ring: true, reverb: 0.12, pan: -0.1, humanize: { time: 0.006, volume: 0.12 } },
-    honkChord: { sample: 'grandPiano', octave: cents(-14), volume: 0.16, release: 0.12, reverb: 0.25, pan: -0.1, humanize: { time: 0.008, volume: 0.12 } },
-    // Winds.
-    clarinet: { sample: 'clarinet', volume: 0.32, attack: 0.03, release: 0.2, reverb: 0.35, pan: -0.15 },
-    oboeShort: { sample: 'oboe', volume: 0.26, attack: 0.02, release: 0.1, reverb: 0.35, pan: 0.15 },
-    flute: { sample: 'flute', volume: 0.24, attack: 0.03, release: 0.2, reverb: 0.4, pan: 0.25 },
-    piccolo: { sample: 'piccolo', volume: 0.1, attack: 0.01, release: 0.12, reverb: 0.35, pan: 0.3 },
-    // The orchestra, as in "Who Would Be Hero".
-    soloViolin: O.soloViolin,
-    violins: { ...O.violins, volume: 0.32 },
-    violinsHigh: { ...O.violinsHigh, volume: 0.26 },
-    cellos: { ...O.cellos, volume: 0.34 },
-    race: O.race,
-    pound: O.pound,
-    basses: O.basses,
-    trumpets: { ...O.trumpets, volume: 0.38 },
-    // A hair flat, so the brass sit a little wrong against the strings.
-    horns: { ...O.horns, octave: -0.008 },
-    // The trumpets doubled a hair sharp: the two beat against each other.
-    trumpetsSour: { ...O.trumpets, volume: 0.2, octave: 0.012 },
-    cellosHook: { ...O.cellos, volume: 0.3, attack: 0.02 },
-    hornsSoft: { ...O.hornsSoft, volume: 0.3 },
-    trombones: O.trombones,
-    tuba: O.tuba,
-    braam: O.braam,
-    braamLow: { ...O.braamLow, octave: -1 },
-    piano: { ...O.piano, volume: 0.3 },
-    timpani: O.timpani,
-    // The builds are held down a little so the drops stand well above them.
-    timpRoll: { ...O.timpRoll, volume: 0.4 },
-    swell: { ...O.swell, volume: 0.3 },
-    roll: { ...O.roll, volume: 0.14 },
-    bassDrum: O.bassDrum,
-    concertBassDrum: { sample: 'concertBassDrum', drum: 'sample', volume: 0.8, ring: true, reverb: 0.35 },
-    crash: O.crash,
-    gong: O.gong,
-    impact: O.impact,
-  },
+  instruments: INSTRUMENTS,
 
   sections: {
-    // THE MUSIC BOX. A gong; the tune at a quarter speed; a creaking drone;
-    // wooden ticks. At the fifth bar the piano snaps it to speed, strings
-    // jerking. Then the build and one beat of silence.
-    intro: stopdown(section(8 * BAR, {
-      gong: ONE,
-      cellosTrem: held('D2', 6 * BAR),
-      glock: transpose(BOX_STUCK, 24),
-      boxHarp: transpose(BOX_STUCK, 12),
-      glockSour: twin(transpose(BOX_STUCK, 24), 18),
-      boxSour: twin(transpose(BOX_STUCK, 12), 36),
-      glass: at(1, held('Ab5', 3 * BAR)),
-      violinsTrem: at(3, held('Gb5', 3 * BAR)),
-      pianoHook: at(4, barsOf(HOOK_FAST, 0, 2)),
-      jerk: at(4, comp('Dm Ebm', JERK, 55)),
-      ticks: at(2, ticks(times(TICK, 4))),
-      timpani: at(2, timps('Dm Dm Dm Dm', T_BEAT)),
-      cellos: at(4, comp('Dm Ebm', holdBar('R'), 38)),
-      tuba: at(6, held('D2', 2 * BAR)),
-      horns: at(6, [...held('A3', BAR), ...held('Bb3', BAR)]),
-      violins: at(6, climb(69, 8, 4)),
-      timpRoll: at(6, held('D3', 2 * BAR)),
-      roll: at(6, [...ROLL_8, ...ROLL_16]),
-      swell: swellEnd(8 * BAR),
-    })),
-
-    // THE DROP. Gong, the deepest drum, a BRAAAM, the break; the slow hook on
-    // the brass and the piano; strings jerk in at bar 4, piano hammers and the
-    // toy joins at bar 8.
-    A: (() => {
-      const ch = `${HOOK_CH} ${HOOK_CH}`;
-      return section(16 * BAR, {
-        ...kit('break', 16, [3, 7, 11, 15]),
-        gong: onBars(16, [0, 4, 8, 12], ONE),
-        impact: onBars(16, [0, 4, 8, 12], ONE),
-        concertBassDrum: onBars(16, [0, 2, 4, 6, 8, 10, 12, 14], ONE),
-        crash: onBars(16, [0, 4, 8, 12], ONE),
-        braam: held('D2', BAR),
-        braamLow: held('D2', BAR),
-        trumpets: HOOK16,
-        trumpetsSour: after(4, HOOK16),
-        violins: after(4, HOOK16),
-        pianoHook: HOOK16,
-        cellosHook: after(2, transpose(HOOK16, -12)),
-        horns: transpose(HOOK16, -24),
-        trombones: transpose(HOOK16, -24),
-        glass: onBars(16, [8, 12], held('Ab5', BAR)),
-        tuba: comp(ch, holdBar('R'), 34),
-        basses: comp(ch, BASS_BRK, 34),
-        jerk: after(4, comp(ch, JERK, 55)),
-        pound: after(4, comp(ch, POUND, 43)),
-        piano: after(8, comp(ch, HAMMER, 36)),
-        glock: after(8, transpose(HOOK16, 24)),
-        piccolo: after(12, transpose(HOOK16, 12)),
-        timpani: timps(ch, T_BRK),
-        bassDrum: times(hits('x...............'), 16),
-      });
-    })(),
-
-    // THE LIMP. Half-time. The clarinet walks; the last beat is always late;
-    // the hook creeps back low in the last four bars.
-    B: (() => {
-      const ch = `${WALK_CH} ${WALK_CH} ${bars(WALK_CH, 0, 4)}`;
-      const walk = [...WALK, ...WALK, ...barsOf(WALK, 0, 4)];
-      const low = barsOf(HOOK8, 0, 4);
-      return section(20 * BAR, {
-        ...kit('half', 20, [7, 15]),
-        clarinet: walk,
-        oboeShort: after(8, walk),
-        glock: after(8, transpose(walk, 12)),
-        cellosPizz: comp(ch, BOOM, 38),
-        violinsPizz: comp(ch, LIMP_PAH, 60),
-        honkChord: after(4, comp(ch, LIMP_PAH2, 55)),
-        pianoLow: after(8, comp(ch, RIPPLE, 43)),
-        violinsTrem: at(8, comp(bars(ch, 8, 20), holdBar('F'), 67)),
-        frameDrum: times(FOOT, 20),
-        ticks: at(4, ticks(times(TICK, 12))),
-        horns: at(16, transpose(low, -24)),
-        cellos: at(16, transpose(low, -12)),
-        pianoHook: at(16, transpose(low, -12)),
-        timpani: after(12, timps(ch, T_BEAT)),
-        crash: onBars(20, [8], ONE),
-        gong: onBars(20, [16], ONE),
-      });
-    })(),
-
-    // THE WALTZ THAT SLIPS. 3/4. The music box (and its flat twin) plays the
-    // cell as a waltz and gets stuck on it; the clarinet joins; the third
-    // phrase can't get past A D F at all while the bass climbs under it; a
-    // bar loses a beat (the piano stuck on F); then the band crashes in, the
-    // tritone, the hook as a stomping waltz, and a slide back into 4/4.
-    W: (() => {
-      const bass = W_BASS.split(' ');
-      const bassBar = (pitch, len) => [midi(`${pitch}${['Bb', 'A', 'F#'].includes(pitch) ? 1 : 2}`), ...steps(len - 1)];
-      const cellos = [...bass.flatMap((p, i) => bassBar(p, i === 12 ? 8 : W3)), ...held('A1', 16)];
-      const full = (track) => onlyIn(track, W_AT.p4, W_AT.end);
-      const waltzKick = waltzBars((_, i) => (i >= 8 ? hits('x...........') : steps(W3)), steps(8), hits('x.......x.......'));
-      const waltzSnare = waltzBars((_, i) => (i >= 17 ? hits('....x...x...') : i >= 8 && i < 12 ? hits('.....x....x.') : steps(W3)), hits('x.x.x.x.'), hits('....x.x.x.xx....'));
-      const stuckPiano = onlyIn(W_MEL, W_AT.slip, W_AT.p4);
-      return section(W_AT.end, {
-        glock: transpose(W_MEL.map((s, i) => (i >= W_AT.slip && i < W_AT.p4 ? R : s)), 24),
-        glockSour: twin(transpose(onlyIn(W_MEL, 0, W_AT.slip), 24), 24),
-        boxHarp: transpose(onlyIn(W_MEL, 0, W_AT.slip), 12),
-        boxSour: twin(transpose(onlyIn(W_MEL, W_AT.p2, W_AT.slip), 12)),
-        clarinet: onlyIn(W_MEL, W_AT.p2, W_AT.slip),
-        violins: onlyIn(W_MEL, W_AT.p3, W_AT.slip).map((s) => (typeof s === 'number' ? s + 12 : s)),
-        trumpetsSour: onlyIn(W_MEL, W_AT.p3, W_AT.slip),
-        pianoHook: [...onlyIn(W_MEL, W_AT.p3, W_AT.slip).slice(0, W_AT.slip), ...stuckPiano.slice(W_AT.slip, W_AT.p4), ...full(W_MEL).slice(W_AT.p4)],
-        glass: at(0, [...steps(W_AT.p2), ...held('Ab5', 48)]),
-        cellosPizz: onlyIn(cellos, 0, W_AT.p4),
-        violinsPizz: pahsOf(PAH3, 60, 0, 8),
-        jerk: pahsOf(PAH3_LATE, 55, 8, 12),
-        honkChord: pahsOf(PAH3_HONK, 55, 4, 12),
-        ticks: waltzBars((_, i) => (i < 12 ? ticks(hits('x...x...x...')) : steps(W3))),
-        kick: waltzKick,
-        snare: waltzSnare,
-        // The band: the tritone, then the hook as a stomping waltz.
-        trumpets: full(W_MEL),
-        violinsHigh: full(W_MEL),
-        cellosHook: transpose(full(W_MEL), -12),
-        horns: transpose(full(W_MEL), -24),
-        trombones: transpose(full(W_MEL), -24),
-        tuba: onlyIn(cellos, W_AT.p4, W_AT.end),
-        basses: onlyIn(cellos, W_AT.p4, W_AT.end).map((s) => (typeof s === 'number' ? s + 12 : s)),
-        pound: pahsOf(PAH3, 43, 13, 21),
-        timpani: waltzBars((symbol, i) => (i >= 8 && i !== 12 ? timps(symbol, [0, ...steps(11)]) : steps(W3)), steps(8), timps('A7', [0, R, R, R, 0, R, R, R, 0, R, 0, R, 0, 0, 0, 0])),
-        gong: [...steps(W_AT.p4), ...ONE],
-        braam: [...steps(W_AT.p4), ...held('Bb2', W3)],
-        braamLow: [...steps(W_AT.p4), ...held('Bb2', W3)],
-        crash: [...steps(W_AT.p4), ...ONE, ...steps(W_AT.p5 - W_AT.p4 - ONE.length), ...ONE],
-        impact: [...steps(W_AT.p4), ...ONE],
-        tom: [...steps(W_AT.fall), ...hits('............xxxx')],
-      });
-    })(),
-
-    // STRUNG UP. Tuck's tune, music box then violin; a two-step under him;
-    // the brass drowns it; his stammer cries out alone at the top; the snare
-    // rolls and everything cuts.
-    C: stopdown((() => {
-      const tc = [TUCK_CH, TUCK_CH, TUCK_CH].join(' ');
-      const hookLow = barsOf(HOOK8, 0, 4);
-      const cry = at(16, [...CRY, ...CRY, ...held('A6', 2 * BAR)]);
-      return section(20 * BAR, {
-        ...place(6, kit('step', 10, [5, 9])),
-        boxHarp: TUCK,
-        glock: transpose(TUCK, 12),
-        pianoLow: comp(bars(tc, 0, 12), RIPPLE, 43),
-        soloViolin: at(6, TUCK),
-        flute: at(6, transpose(TUCK, 12)),
-        cellosPizz: comp(bars(tc, 0, 16), BOOM, 38),
-        violinsTrem: comp(bars(tc, 0, 16), holdBar('F'), 67),
-        violasTrem: at(2, comp(bars(tc, 2, 16), holdBar('R'), 55)),
-        ticks: at(2, ticks(times(TICK, 14))),
-        trumpets: at(12, hookLow),
-        horns: at(12, transpose(hookLow, -24)),
-        trombones: at(12, transpose(hookLow, -24)),
-        tuba: at(12, comp(bars(HOOK_CH, 0, 4), holdBar('R'), 34)),
-        basses: at(12, comp(bars(HOOK_CH, 0, 4), BASS_BRK, 34)),
-        timpani: at(12, timps(bars(HOOK_CH, 0, 4), T_BEAT)),
-        crash: onBars(20, [12], ONE),
-        impact: onBars(20, [12], ONE),
-        piccolo: cry,
-        timpRoll: at(16, held('D3', 4 * BAR)),
-        roll: at(18, [...ROLL_8, ...ROLL_16]),
-        swell: swellEnd(20 * BAR),
+    // THE CLOCK. The clock alone; the music box, slowly, and its twin; the
+    // creak; the jaw stutters; the build; one beat of silence.
+    intro: stopdown((() => {
+      const tune = slow(barsOf(HOOK, 0, 2));
+      return section(8 * BAR, {
+        tick: times(pitched(TICK, 'D6'), 8),
+        tock: times(TOCK, 8),
+        violasTrem: held('A4', 4 * BAR),
+        violinsTrem: at(1, held('Bb4', 3 * BAR)),
+        celesta: tune,
+        glock: up(tune, 24),
+        harp: at(2, up(barsOf(tune, 2, 4), -12)),
+        celestaSour: twin(tune, 16),
+        glockSour: twin(up(tune, 24), 40),
+        creak: at(2, comp('Bbm Bbm Bbm Bbm', CREAK, 58)),
+        creakLow: at(2, comp('Bbm Bbm Bbm Bbm', CREAK_LOW, 38)),
+        cellosTrem: at(2, held('Bb2', 4 * BAR)),
+        jaw: at(4, [...JAW_A, ...JAW_B]),
+        stabs: at(4, pitched([...JAW_A, ...JAW_B], 'Bb2')),
+        stabsHigh: at(4, pitched([...JAW_A, ...JAW_B], 'A4')),
+        timpani: at(4, [...timps('Bb', T_JAW), ...timps('Bb', T_JAW)]),
+        tuba: at(6, held('F1', 2 * BAR)),
+        horns: at(6, climb(41, 8, 4)),
+        violins: at(6, climb(65, 8, 4)),
+        choirHeld: at(6, held('F4', 2 * BAR)),
+        timpRoll: at(6, held('F2', 2 * BAR)),
+        roll: at(6, [...ROLL_8, ...ROLL_16]),
+        swell: swellEnd(8 * BAR),
       });
     })()),
 
-    // THE STRINGS PULL. The cell at full speed climbs a semitone a bar over
-    // a climbing bass and the break at full strength; then the hook comes
-    // home at half speed. Tuck squeaks on top every fourth bar.
-    D: (() => {
-      const ch = `Dm Ebm Em Fm F#m Gm Abm Am ${HOOK_CH}`;
-      const cellK = (k) => [69 + k, H, H, H, 74 + k, H, H, H, 77 + k, H, H, H, 76 + k, H, H, H];
-      const first = Array.from({ length: 8 }, (_, k) => cellK(k)).flat();
-      const melody16 = [...first, ...HOOK8];
-      const cry = onBars(16, [3, 7, 11, 15], [...CRY, ...steps(BAR - CRY.length)]);
+    // THE SHOW GOES ON. The drop; the hook on everything; the jaw in the gap.
+    A: section(16 * BAR, {
+      ...tutti(HOOK16, HOOK16_CH),
+      ...drop('Bb1', 16),
+      ...kit('drop', 16, [15], 'dropB'),
+      ...jawIn(16, [7]),
+    }),
+
+    // THE JAW. The riff stutters in the low strings and brass; the chapter's
+    // cell sings over it in every chord; bars 8 and 16 lose a 16th.
+    B: jolt(section(16 * BAR, {
+      cellos: CHORALE_RIFF,
+      basses: up(CHORALE_RIFF, -12),
+      trombones: CHORALE_RIFF,
+      horns: after(8, CHORALE_RIFF),
+      pianoLow: up(CHORALE_RIFF, 12),
+      tuba: comp(CHORALE_CH, holdBar('R'), 34),
+      choir: CHORALE,
+      violins: CHORALE,
+      violinsHigh: after(8, up(CHORALE, 12)),
+      trumpets: after(8, CHORALE),
+      hornsSoft: hornFit(up(barsOf(CHORALE, 0, 8), -12)),
+      celesta: at(4, comp(bars(CHORALE_CH, 4, 8), RIPPLE, 58)),
+      creak: comp(CHORALE_CH, CREAK, 58),
+      tick: times(pitched(TICK, 'D6'), 16),
+      tock: times(TOCK, 16),
+      timpani: [...timps(bars(CHORALE_CH, 0, 8), T_HEART), ...timps(bars(CHORALE_CH, 8, 16), T_POUND)],
+      ...then(kit('half', 8, [7]), kit('drop', 8, [7], 'dropB')),
+      jaw: onBars(16, [3, 7, 11, 15], JAW_GAP),
+      stabsHigh: onBars(16, [7, 15], pitched(JAW_GAP, 'A4')),
+      crash: onBars(16, [0, 8], ONE),
+      gong: onBars(16, [8], ONE),
+    }), [7, 15]),
+
+    // TUCK'S THREAD. Tuck small and in tune over the machinery, the king
+    // muttering under; then the band, and the two tunes fight. Tuck's major
+    // chord, and the beat goes dead.
+    C: stopdown((() => {
+      const tc = `${TUCK_CH} ${TUCK_CH}`;
+      const king = kingUnder(TUCK_CH, 46);
       return section(16 * BAR, {
-        ...kit('break', 16, [7, 15]),
-        gong: onBars(16, [0, 8], ONE),
-        crash: onBars(16, [0, 4, 8, 12], ONE),
-        concertBassDrum: onBars(16, [4, 6, 8, 10, 12, 14], ONE),
-        trumpets: melody16,
-        trumpetsSour: melody16,
-        violins: melody16,
-        pianoHook: after(8, melody16),
-        cellosHook: transpose(melody16, -12),
-        horns: transpose(melody16, -24),
-        trombones: transpose(melody16, -24),
-        tuba: comp(ch, holdBar('R'), 34),
-        basses: comp(ch, BASS_BRK, 34),
-        jerk: comp(ch, JERK, 55),
-        pound: comp(ch, POUND, 43),
-        piano: after(8, comp(ch, HAMMER, 36)),
-        soloViolin: cry,
-        glock: transpose(cry, 12),
-        timpani: timps(ch, T_BRK),
-        bassDrum: times(hits('x...............'), 16),
+        soloViolin: TUCK,
+        clarinet: up(TUCK, -12),
+        harp: comp(TUCK_CH, RIPPLE, 46),
+        hornsSoft: up(king, -12),
+        cellosTrem: comp(TUCK_CH, holdBar('R'), 46),
+        violins: at(8, TUCK),
+        flute: at(8, TUCK),
+        choir: at(8, up(TUCK, -12)),
+        piano: at(8, up(TUCK, -12)),
+        trombones: at(8, king),
+        horns: at(8, hornFit(king)),
+        cellos: at(8, up(king, -12)),
+        tuba: at(8, comp(TUCK_CH, holdBar('R'), 34)),
+        basses: at(8, comp(TUCK_CH, DIG, 34)),
+        race: at(12, comp(bars(TUCK_CH, 4, 8), RACE, 62)),
+        creak: comp(tc, CREAK, 58),
+        creakLow: comp(bars(tc, 0, 8), CREAK_LOW, 38),
+        tick: times(pitched(TICK, 'D6'), 16),
+        tock: times(TOCK, 16),
+        timpani: at(8, timps(TUCK_CH, T_POUND)),
+        ...then(kit('soft', 8), kit('drop', 8, [], 'dropB')),
+        jaw: onBars(16, [1, 3, 9, 11], hits('............x.x.')),
+        crash: onBars(16, [8, 15], ONE),
+        gong: onBars(16, [15], ONE),
+        impact: onBars(16, [8], ONE),
+      });
+    })()),
+
+    // THE MUSIC BOX. Near silence: the clock, and the hook upside down on the
+    // music box, slowly, out of true; the cold light; Tuck answers twice.
+    P: stopdown((() => {
+      const turned = slow(barsOf(upsideDown(HOOK, midi('Bb4')), 0, 4));
+      const answer = e('Ab4 . Ab4 Db5 - F5 Eb5 -');     // his stammer in D flat major
+      return section(8 * BAR, {
+        tick: times(pitched(TICK, 'D6'), 8),
+        tock: times(TOCK, 8),
+        glock: up(turned, 24),
+        glockSour: twin(up(turned, 24)),
+        celesta: turned,
+        celestaSour: twin(turned, 8),
+        vibes: held('E5', 4 * BAR),
+        vibesB: held('Bb4', 4 * BAR),
+        glass: at(1, held('E6', 2 * BAR)),
+        piano: [...at(2, answer), ...rest(3), ...answer],
+        harp: [...at(2, comp('Db', RIPPLE, 49)), ...rest(3), ...comp('Db', RIPPLE, 49)],
+        violasTrem: at(4, held('F4', 4 * BAR)),
+        violinsTrem: at(4, held('Ab4', 4 * BAR)),
+        cellosTrem: at(4, held('Db3', 2 * BAR)),
+        choirHeld: at(6, held('C5', 2 * BAR)),
+        timpani: at(2, timps('Eb Eb Eb Eb F F', T_HEART)),
+        timpRoll: at(7, held('F2', BAR)),
+        roll: at(7, ROLL_8),
+      });
+    })()),
+
+    // THE DANCE ON STRINGS. 7/8: the hook with every bar cut short; light
+    // first, then the brass and the choir; the last bar 4/4, the swell, the
+    // silence.
+    W: (() => {
+      const ch = HOOK16_CH;
+      const mel = [...HOOK, ...HOOK];
+      const tracks = section(16 * BAR, {
+        oboe: barsOf(mel, 0, 8),
+        clarinet: up(barsOf(mel, 0, 8), -12),
+        creak: comp(bars(ch, 0, 8), CREAK7, 58),
+        celesta: at(4, up(barsOf(mel, 4, 8), 0)),
+        celestaSour: at(4, twin(barsOf(mel, 4, 8))),
+        creakLow: comp(bars(ch, 0, 15), OOM7, 46),
+        tick: times(pitched(TICK, 'D6'), 15),
+        tock: times(TOCK, 15),
+        trumpets: after(8, mel),
+        trumpetsSour: after(12, mel),
+        violins: after(8, mel),
+        horns: after(8, hornFit(up(mel, -12))),
+        trombones: after(8, up(mel, -24)),
+        cellos: after(8, up(mel, -12)),
+        choir: after(8, mel),
+        piccolo: after(12, up(mel, 12)),
+        race: after(8, comp(ch, RACE, 62)),
+        tuba: after(8, comp(ch, holdBar('R'), 34)),
+        basses: after(8, comp(ch, OOM7, 34)),
+        timpani: [...rest(8), ...timps(bars(ch, 8, 15), T_DANCE)],
+        ...kit('dance', 15),
+        jaw: [...onBars(15, [3, 7, 11], hits('..........x..x..')), ...hits('x.x.x.x.xxxxxxxx')],
+        crash: onBars(16, [8], ONE),
+        gong: onBars(16, [8], ONE),
+        timpRoll: at(15, held('F2', BAR)),
+        roll: at(15, ROLL_16),
+      });
+      const cut = jolt(tracks, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+      const length = cut.tick.length;
+      return stopdown({ ...cut, swell: swellEnd(length) });
+    })(),
+
+    // THE SECOND DROP, B minor. The hook half a step up on everything; then
+    // Tuck's tune taken up by the whole orchestra, the king fighting under it.
+    D: (() => {
+      const ch = moveChords(HOOK_CH, 1);
+      const tch = moveChords(TUCK_CH, 1);
+      const tuck = up(TUCK, 1);
+      const king = kingUnder(tch, 47);
+      const hook = up(HOOK, 1);
+      const both = `${ch} ${tch}`;
+      return section(16 * BAR, {
+        ...drop('B1', 16),
+        trumpets: [...hook, ...up(tuck, -12)],
+        trumpetsSour: hook,
+        violins: [...hook, ...tuck],
+        violinsHigh: up(hook, 12),
+        piano: [...hook, ...up(tuck, -12)],
+        horns: [...hornFit(up(hook, -12)), ...hornFit(up(tuck, -24))],
+        cellos: [...up(hook, -12), ...up(king, -12)],
+        trombones: [...up(hook, -24), ...king],
+        choir: [...hook, ...up(tuck, -12)],
+        flute: at(8, tuck),
+        piccolo: at(8, up(tuck, 12)),
+        glock: up(hook, 24),
+        tuba: comp(both, holdBar('R'), 34),
+        basses: comp(both, DIG, 34),
+        pound: comp(both, POUND, 47),
+        race: comp(both, RACE, 62),
+        creak: comp(bars(both, 0, 8), CREAK, 59),
+        tick: times(pitched(TICK, 'D6'), 16),
+        tock: times(TOCK, 16),
+        timpani: timps(both, T_POUND),
+        ...kit('drop', 16, [7], 'dropB'),
+        ...jawIn(16, [7], 'B2', 'A#4'),
       });
     })(),
 
-    // THE LIGHT. No drums: the cold light (vibes and glass on a tritone),
-    // Tuck's tune on a lone piano and the music box, a heartbeat. Then the
-    // climb.
-    P: stopdown(section(8 * BAR, {
-      vibes: held('D5', 4 * BAR),
-      vibesB: held('A4', 4 * BAR),
-      glass: at(1, held('Ab5', 3 * BAR)),
-      pianoHook: at(1, barsOf(TUCK, 0, 4)),
-      boxHarp: at(2, barsOf(TUCK, 0, 3)),
-      glock: at(2, transpose(barsOf(TUCK, 0, 3), 12)),
-      timpani: at(2, timps('Dm Dm', T_SLOW)),
-      cellosTrem: at(3, held('D2', 5 * BAR)),
-      violinsTrem: at(4, climb(70, 12, 4)),
-      violasTrem: at(4, climb(58, 12, 4)),
-      tuba: at(4, held('D2', 4 * BAR)),
-      timpRoll: at(4, held('D3', 4 * BAR)),
-      roll: at(5, [...ROLL_8, ...ROLL_8, ...ROLL_16]),
-      swell: swellEnd(8 * BAR),
-    })),
-
-    // THE SECOND DROP, G minor. The hook on everything; then Tuck's tune
-    // soars over the king's cell hammering low; then the hook; then the
-    // climb back to A.
+    // THE STRINGS SLIP. The riff in B minor, the trumpets stuck on three
+    // notes; then everything slides down by semitones to F.
     E: (() => {
-      const gch = moveChords(HOOK_CH, 5);
-      const ch = `${gch} ${TUCK_CH} Gm D ${bars(gch, 0, 4)} Gm Abm Am A7`;
-      const hookG = transpose(HOOK8, 5);
-      const cells = [
-        ...q('D5 G5 Bb5 A5'),
-        ...q('Eb5 Ab5 B5 Bb5'),
-        ...q('E5 A5 C6 B5'),
-        ...held('A5', BAR),
-      ];
-      const cellG = q('D5 G5 Bb5 A5');
-      const tail = [...barsOf(hookG, 0, 4), ...cells];
-      const mel = [...hookG, ...rest(8), ...tail];
-      const tuck = at(8, TUCK);
-      const hammer = at(8, times(cellG, 8));
-      return section(24 * BAR, {
-        ...kit('break', 24, [3, 7, 11, 15, 19, 23]),
-        gong: onBars(24, [0, 4, 8, 12, 16, 20], ONE),
-        impact: onBars(24, [0, 4, 8, 12, 16, 20], ONE),
-        concertBassDrum: onBars(24, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22], ONE),
-        crash: onBars(24, [0, 4, 8, 12, 16, 20], ONE),
-        braam: held('G2', BAR),
-        braamLow: held('G2', BAR),
-        trumpets: [...barsOf(mel, 0, 8), ...comp(TUCK_CH, STAB, 60), ...rest(2), ...tail],
-        trumpetsSour: [...barsOf(mel, 0, 8), ...rest(8), ...tail],
-        violins: mel.map((s, i) => (typeof tuck[i] === 'number' || tuck[i] === H ? tuck[i] : s)),
-        pianoHook: mel.map((s, i) => (typeof tuck[i] === 'number' || tuck[i] === H ? tuck[i] : s)),
-        cellosHook: transpose([...barsOf(mel, 0, 8), ...rest(8), ...tail], -12),
-        soloViolin: transpose(tuck, 12),
-        flute: transpose(tuck, 12),
-        horns: [...transpose(barsOf(mel, 0, 8), -24), ...transpose(barsOf(tuck, 8, 14), -24), ...rest(2), ...transpose(tail, -24)],
-        trombones: [...transpose(barsOf(mel, 0, 8), -24), ...transpose(barsOf(hammer, 8, 16), -24), ...transpose(tail, -24)],
-        tuba: comp(ch, holdBar('R'), 34),
-        basses: comp(ch, BASS_BRK, 34),
-        jerk: after(2, comp(ch, JERK, 55)),
-        pound: comp(ch, POUND, 43),
-        piano: after(4, comp(ch, HAMMER, 36)),
-        glock: after(4, transpose(mel, 12)),
-        piccolo: after(16, transpose(mel, 12)),
-        timpani: timps(ch, T_BRK),
-        bassDrum: times(hits('x...............'), 24),
+      const ch = 'Bm Bm G Gb';
+      const riff = [...riffBar(0, 1), ...riffBar(1, 1), ...riffBar(0, -3), ...riffBar(1, -4)];
+      const stuckTune = stuck(midi('F#4'), midi('B4'), midi('D5'), 4 * BAR);
+      const slide = q('F#5 F5 E5 Eb5 | D5 C#5 C5 B4 | Bb4 A4 Ab4 G4 | Gb4 - F4 -');
+      const sink = h('B2 Bb2 | A2 Ab2 | G2 Gb2 | F2 -');
+      return section(8 * BAR, {
+        cellos: [...riff, ...up(slide, -15)],
+        basses: up(riff, -12),
+        trombones: [...riff, ...sink],
+        horns: [...riff, ...up(slide, -24)],
+        tuba: [...comp(ch, holdBar('R'), 34), ...up(sink, -12)],
+        trumpets: [...stuckTune, ...slide],
+        violins: [...up(stuckTune, 12), ...slide],
+        violas: at(4, up(slide, -3)),
+        choir: at(4, up(slide, -8)),
+        celesta: up(stuckTune, 12),
+        celestaSour: twin(up(stuckTune, 12)),
+        piano: at(4, up(slide, -12)),
+        tick: times(pitched(TICK, 'D6'), 8),
+        tock: times(TOCK, 8),
+        timpani: [...timps(ch, T_HEART), ...timps('Bb A G F', T_ONE)],
+        ...kit('half', 8, [7]),
+        jaw: onBars(8, [1, 3, 5], JAW_GAP),
+        crash: onBars(8, [4], ONE),
       });
     })(),
 
-    // HOME. D minor; the piano alone with the hook, the music box and a
-    // quiet limp; Tuck squeaks twice; the king's cell low; then the build
-    // and the beat of silence.
+    // HOME. Bb minor, quiet: the piano sticks halfway through the hook;
+    // Tuck's stammer twice; the jaw stutters faster; the build; the silence.
     H: stopdown((() => {
-      const ch = 'Dm Dm Ebm Ebm Dm Dm A7 A7 Bb Gm A7 A7';
-      const lowCell = transpose(barsOf(HOOK_FAST, 0, 2), -24);
-      const quiet = kit('half', 8, []);
+      const ch = 'Bbm F Gb F Bbm Bbm Bbm Bbm F F F F';
+      const tune = [...barsOf(HOOK, 0, 4), ...stuck(midi('F4'), midi('Bb4'), midi('Db5'), 4 * BAR)];
+      const jawFaster = hits('x.......x....... x...x...x...x... x.x.x.x.x.x.x.x. xxxxxxxxxxxx....');
       return section(12 * BAR, {
-        kick: quiet.kick,
-        ghost: quiet.ghost,
-        hat: quiet.hat,
-        pianoHook: HOOK_STUCK,
-        pianoLow: comp(bars(ch, 0, 8), RIPPLE, 43),
-        glock: at(4, transpose(barsOf(HOOK_STUCK, 4, 8), 24)),
-        glockSour: at(4, twin(transpose(barsOf(HOOK_STUCK, 4, 8), 24))),
-        boxHarp: [...rest(3), ...STAMMER, ...rest(3), ...STAMMER],
-        cellosTrem: held('D2', 8 * BAR),
-        hornsSoft: comp(bars(ch, 0, 8), holdBar('R'), 43),
-        cellosPizz: comp(bars(ch, 0, 8), BOOM, 38),
-        violinsPizz: comp(bars(ch, 0, 8), LIMP_PAH, 60),
-        frameDrum: times(FOOT, 8),
-        ticks: at(2, ticks(times(TICK, 6))),
-        cellos: at(6, lowCell),
-        timpani: at(4, timps(bars(ch, 4, 8), T_BEAT)),
-        violinsTrem: at(8, climb(62, 16, 4)),
-        horns: at(8, [...held('A3', BAR), ...held('Bb3', BAR), ...held('B3', BAR), ...held('C#4', BAR)]),
-        tuba: at(8, held('D2', 4 * BAR)),
-        race: at(9, comp(bars(ch, 9, 12), JERK, 55)),
-        timpRoll: at(8, held('D3', 4 * BAR)),
-        roll: at(8, [...ROLL_8, ...ROLL_8, ...ROLL_16, ...ROLL_16]),
+        piano: tune,
+        celestaSour: at(4, twin(up(barsOf(tune, 4, 8), 0))),
+        glock: at(4, up(barsOf(tune, 4, 8), 24)),
+        soloViolin: [...at(3, up(STAMMER, 0)), ...rest(3), ...STAMMER],
+        creak: comp(bars(ch, 0, 8), CREAK, 58),
+        creakLow: comp(bars(ch, 0, 8), CREAK_LOW, 38),
+        cellosTrem: held('Bb2', 8 * BAR),
+        hornsSoft: at(4, held('F3', 4 * BAR)),
+        tick: times(pitched(TICK, 'D6'), 12),
+        tock: times(TOCK, 12),
+        taiko: times(hits('x..x............'), 8),
+        jaw: at(8, jawFaster),
+        stabs: at(8, pitched(jawFaster, 'F2')),
+        stabsHigh: at(8, pitched(jawFaster, 'E4')),
+        timpRoll: at(8, held('F2', 4 * BAR)),
+        roll: at(9, [...ROLL_8, ...ROLL_16, ...ROLL_16]),
+        tuba: at(8, held('F1', 4 * BAR)),
+        horns: at(8, climb(41, 16, 4)),
+        violins: at(8, climb(65, 16, 4)),
+        race: at(10, comp('F F', RACE, 62)),
+        choirHeld: at(8, held('F4', 4 * BAR)),
         swell: swellEnd(12 * BAR),
       });
     })()),
   },
 
   // The intro plays once; after that the show loops from the drop.
-  order: ['intro', 'A', 'B', 'W', 'C', 'D', 'P', 'E', 'H'],
+  order: ['intro', 'A', 'B', 'C', 'P', 'W', 'D', 'E', 'H'],
   loopFrom: 1,
 };
 
 // Every recorded instrument kept within reach of its recordings. The player
 // stretches a note from the nearest recording, so any note inside an
-// instrument's whole span keeps its written pitch (even across a wide gap,
-// like the horns' between C4 and D5). Only a note more than three semitones
-// beyond the lowest or highest recording moves by octaves, to inside it.
-// The doublers (bells, glass, piccolo) just leave out a note they can't reach.
+// instrument's whole span keeps its written pitch. Only a note more than
+// three semitones beyond the lowest or highest recording moves by octaves,
+// to inside it. The doublers (bells, glass, piccolo) just leave out a note
+// they can't reach. `song.moved` counts the notes moved, track by track.
 const DOUBLERS = ['glock', 'glockSour', 'glass', 'piccolo'];
-const near = (n, notes, reach = 2) => notes.some((x) => Math.abs(x - n) <= reach);
-// How many notes of each track had to move an octave (a check for whoever
-// writes the song: a doubling should keep the tune's shape).
-song.moved = {};
-for (const [sectionName, tracks] of Object.entries(song.sections)) {
-  for (const [name, track] of Object.entries(tracks)) {
-    const instrument = song.instruments[name];
-    if (!instrument) throw new Error(`No Strings: no instrument called '${name}'`);
-    if (!instrument.sample || instrument.drum || SAMPLE_SETS[instrument.sample].notes.length < 2) continue;
-    const { notes } = SAMPLE_SETS[instrument.sample];
-    let dropped = false;
-    tracks[name] = track.map((s) => {
-      if (s === HOLD) return dropped ? REST : s;
-      dropped = false;
-      if (typeof s !== 'number') return s;
-      if (DOUBLERS.includes(name)) {
-        if (near(s, notes, 3)) return s;
-        dropped = true;
-        return REST;
-      }
-      const low = Math.min(...notes) - 3;
-      const high = Math.max(...notes) + 3;
-      const fit = [s, s - 12, s + 12, s - 24, s + 24].find((n) => n >= low && n <= high) ?? s;
-      if (fit !== s) song.moved[`${sectionName}.${name}`] = (song.moved[`${sectionName}.${name}`] ?? 0) + 1;
-      return fit;
-    });
+const near = (n, notes, reach) => notes.some((x) => Math.abs(x - n) <= reach);
+export function fitToRecordings(target) {
+  target.moved = {};
+  for (const [sectionName, tracks] of Object.entries(target.sections)) {
+    for (const [name, track] of Object.entries(tracks)) {
+      const instrument = target.instruments[name];
+      if (!instrument) throw new Error(`${target.title}: no instrument called '${name}'`);
+      if (!instrument.sample || instrument.drum || SAMPLE_SETS[instrument.sample].notes.length < 2) continue;
+      const { notes } = SAMPLE_SETS[instrument.sample];
+      const shift = Math.round(12 * (instrument.octave ?? 0));
+      let dropped = false;
+      tracks[name] = track.map((s) => {
+        if (s === HOLD) return dropped ? REST : s;
+        dropped = false;
+        if (typeof s !== 'number') return s;
+        if (DOUBLERS.includes(name)) {
+          if (near(s + shift, notes, 3)) return s;
+          dropped = true;
+          return REST;
+        }
+        const low = Math.min(...notes) - 3 - shift;
+        const high = Math.max(...notes) + 3 - shift;
+        const fit = [s, s - 12, s + 12, s - 24, s + 24].find((n) => n >= low && n <= high) ?? s;
+        if (fit !== s) target.moved[`${sectionName}.${name}`] = (target.moved[`${sectionName}.${name}`] ?? 0) + 1;
+        return fit;
+      });
+    }
   }
 }
+fitToRecordings(song);
 
 export const RUMBOLD_ALIVE_THEME = song;
+
+// The pieces the finale (rumboldTearTheme.js) is built from.
+export const PARTS = {
+  BAR, ONE, TICK, TOCK, ROLL_8, ROLL_16, JAW_B, T_POUND, DIG, CREAK, CREAK_LOW,
+  e, h, rest, at, barsOf, held, times, onBars, pitched, climb, twin, section, stopdown, then, swellEnd,
+  comp, timps, hornFit, tutti, drop, jawIn, kit,
+};

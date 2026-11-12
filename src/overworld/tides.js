@@ -516,7 +516,8 @@ export class Tides {
     const s = this.scene;
     if (rt.changedBy) {
       rt.changedBy = null;
-      sfx('splash');
+      // The sea starting to move: a real wave's rush, slowed (tideRush in music.js).
+      sfx('tideRush');
       this.splashLater = rt.creep * 0.5;
       this.startPhase();
     }

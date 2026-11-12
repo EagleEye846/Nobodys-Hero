@@ -17,6 +17,14 @@ MOONJELLY has noticed you the way the sea notices a pebble.
 
 Smells of cold salt and a clear, faint, sweet something, like a bell that hasn't been rung yet.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+The light inside MOONJELLY has gone dim and slow, like a lamp that's been left on all night.
+
+[flavor: spareable]
+MOONJELLY drifts close and glows very softly, the colour of nothing to be afraid of.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -49,8 +57,8 @@ A jellyfish that glows like a moon. Lashes in long ripples, pulses rings of pale
 [talk: Hold your breath]
 You hold your breath, and your arms, and your boots, and wait. MOONJELLY comes closer, and then closer, and the light inside it goes slow. It has never had anything be so quiet next to it.
 
-[talk: Lower the lantern]
-You lower the lantern until the glow is only a glow on the ground. MOONJELLY tilts, like a head tilting. It is, for once, the brightest thing in the dark, and it sounds pleased.
+[talk: Dim your light]
+You cup your hands round your light until it is only a glow on the ground. MOONJELLY tilts, like a head tilting. It is, for once, the brightest thing in the dark, and it sounds pleased.
 
 [talk: Drift along]
 You walk alongside it, slowly, at exactly its speed, and don't hurry it. MOONJELLY keeps pace. After a while neither of you is going anywhere in particular, and it's wonderful.

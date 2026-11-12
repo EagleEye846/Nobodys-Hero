@@ -15,7 +15,7 @@ export const HOB = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hollin',
   sprite: { rows: HOB_SPRITE, palette: HOB_PALETTE },
-  maxHp: 485,
+  maxHp: 615,
   damage: 21,
 
   // A Chapter 3 enemy from the village at the end of the wood: about as busy

@@ -4,7 +4,7 @@
 // change (the planks go with you); the screen shudders, and Ves holds the
 // umbrella a little tighter than she'd admit. On the way down, the cage's
 // corner post: the diggers' height marks, and one much lower notch that was
-// the Hero's, the night they rode down alone. When it settles, the way out is
+// the Hero's, the night he rode down alone. When it settles, the way out is
 // at the east end of the cage, and it leads to the lake.
 export const DIGGINGS_LIFT_DOWN = {
   // Triggers in rooms name the scene by this id.

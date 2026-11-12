@@ -8,11 +8,46 @@
 
 {smug}Every lamp on this quay is mine. Trimmed, filled, lit, every night, rain or worse. And it's always worse.
 
-{smug}Forty years, that last one. Never once gone out on my watch.
+{smug}A hundred years of worse, now. Never once gone out on my watch. Nor my mum's.
 
 {huffy}And before you ask: the ones up the hill aren't mine. Must be someone else. The quay's plenty.
+
+# (draft) Ves and Bramble on her (their words after hers, the first time).
+[first_ves]
+{bored}Never once gone out. She'd like a medal. She'd like you to offer.
+
+[first_bramble]
+{thinking}How does she get the pole up the ladder?
 
 [repeat]
 {smile}You can see the quay from the boats, from the point, from right out past the wrecks. That's the idea.
 
 {huffy}Up the hill? Not my lamps. Not my business.
+
+# (draft) Turns: the next times you talk to her.
+[repeat 2]
+{smug}A quay lamp takes oil, a wick and an eye for it. Two out of three and you get a lamp. All three and you get one of mine.
+
+# (draft)
+[repeat 3]
+{huffy}The hill again? They're lit, aren't they? Then somebody's doing it. Good for them. Not my business.
+
+# (draft) World reacts: the Bother came back from the Wreck Yard, steering for her lamps.
+[first after wreck_slip_home]
+{smug}Saw you come in round the point. Couldn't miss you. That was my quay you were steering for.
+
+{smile}"Steer for Tansy's," they used to say. Nobody's said it in years. Nobody's been out.
+
+[repeat after wreck_slip_home]
+{smug}Every lamp on this quay is mine. And now somebody's come home by them. Proper.
+
+# (draft) World reacts: after the chapter (the storm gone, Haddock gone).
+[first after haddock_gone]
+{smile}First night in my life I've lit the quay under stars. Took me a minute to work out what they were.
+
+{huffy}I've done one more lamp, too. The end of the slip, where the Bother ties up. Nobody asked me to.
+
+{smug}The quay's still plenty. It's plenty and one.
+
+[repeat after haddock_gone]
+{smile}Every lamp on this quay is mine. And the one on the slip.

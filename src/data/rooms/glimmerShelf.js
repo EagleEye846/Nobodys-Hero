@@ -37,6 +37,8 @@ export const GLIMMER_SHELF = {
   music: 'glimmer',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'crystal',
+  // How it rings (a huge space: ECHOES in src/audio/music.js).
+  echo: 'cavern',
   // The view down over the buried kingdom, behind the open air.
   vista: { kind: 'kingdom' },
 

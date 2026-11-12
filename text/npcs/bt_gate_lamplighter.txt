@@ -23,3 +23,25 @@ I lit the lamps anyway, out of habit. They look a bit silly now, next to it. Lik
 
 [repeat after the_light_goes_up]
 Do you know, I'd almost forgotten what they look like when it's bright.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Some nights the Sunstone's so low, my tail's the brightest thing in the street. Everybody looks at me. I don't care for it.
+
+# (draft)
+[repeat 3]
+Ten thousand times I've lit these lamps. Not one of them's said thank you. Lamps are like that. So are towns.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+If it gets very dark down there, sing. It won't help you see. It helps you not mind.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've put my pole away. First time in years. I keep picking it up again. My hands don't know what else to do.
+
+# (draft)
+[repeat_ves 2 after the_light_goes_up]
+{thoughtful}I know the feeling. I keep reaching for a crutch I threw in a hedge.

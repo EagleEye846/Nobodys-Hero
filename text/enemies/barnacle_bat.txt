@@ -1,0 +1,91 @@
+# BARNACLE BAT
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/barnacle_bat.js.
+
+[intro]
+Something up in the dark lets go of the rock with a wet little click. Two pale green eyes open, upside down, and the dark flaps at you. A BARNACLE BAT!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+BARNACLE BAT hangs from its knob of rock, wrapped up tight in its wings, and watches you upside down.
+
+A drop of sea water gathers on the end of BARNACLE BAT's ear, and falls, and lands on your boot. It looks pleased about that.
+
+BARNACLE BAT squeaks. A moment later the squeak comes back from every wall in the cave, a little smaller each time.
+
+BARNACLE BAT tries to fold its wings neatly. The barnacles get in the way. It's been trying for years.
+
+Smells like wet rock, old rope, and the inside of a shell.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+BARNACLE BAT's grip on its knob of rock is slipping. It's hanging on by one foot, and its pride.
+
+[flavor: spareable]
+BARNACLE BAT has folded its wings, barnacles and all, and hangs very still, the way bats do when a visit is over.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Eek!
+
+I can
+hear
+you.
+
+Drip.
+Drip.
+DRIP!
+
+You're
+the wrong
+way up.
+
+Squeak!
+...squeak.
+...squeak.
+
+Mine!
+My
+ledge!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/barnacle_bat.js.
+[talk: Inspect]
+BARNACLE BAT - HP 1850
+A cave bat crusted with barnacles. Drips off the roof (one always over you), squeaks echoes that bounce off the walls, shakes barnacles down that open where they land, and swoops along a path you can see first. Watch the roof.
+
+[talk: Hang your head upside down]
+You bend right over and look at BARNACLE BAT between your knees, so the cave is the wrong way up and it's the right way up. It goes very still. Then it squeaks, softly, the friendly sort of squeak. Nobody has ever met it halfway before.
+
+[talk: Keep very quiet]
+You stand quite still in the dark and don't make a sound. BARNACLE BAT squeaks at you to find out where you went, and the echo comes back around you, and it seems to decide you're a sort of rock. A nice rock. It settles.
+
+[talk: Pick off a barnacle]
+You reach up and work loose the one barnacle on the middle of its back, the one it can never reach. BARNACLE BAT shivers all over. Then it stretches its wings out, both of them, all the way, for what seems to be the first time in years.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+BARNACLE BAT flutters down onto the wet floor in a little heap of wing and barnacle. It gives one small squeak, and the echo of it goes round the cave and doesn't come back.
+
+[pacified]
+BARNACLE BAT flaps up into the dark, finds its knob of rock first time, and folds itself up. Two pale green eyes watch you go, upside down, and then shut.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves opens her umbrella and holds it upside down over her head, so {foe} has something to hang from. {foe} looks at it for a long time. She tells it the offer's open.
+
+Ves tells {foe} that the barnacles are a bold look and she respects it. {foe} preens. One of them falls off. She says nobody saw.
+
+Ves asks {foe} if the echo ever answers back. {foe} squeaks. The cave squeaks back. She says that's a yes, then, and she's not sure she likes it.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} he's not scared of bats, only of the sea, and the dark, and things that are in the dark near the sea. He stops. {foe} waits. He says that's all of them.
+
+Bramble asks {foe} if it's ever been in the sea. {foe} says every day, a drop at a time. Bramble says that's the worst way he's ever heard of.
+
+Bramble holds his arms out like wings and squeaks at {foe}. {foe} squeaks back. He's so pleased he forgets to keep away from the pool.

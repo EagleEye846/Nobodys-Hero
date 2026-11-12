@@ -12,7 +12,7 @@ export const RIMEWING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'vigil',
   sprite: { rows: RIMEWING_SPRITE, palette: RIMEWING_PALETTE },
-  maxHp: 280,
+  maxHp: 355,
   damage: 13,
 
   // A Chapter 2 enemy, and the toughest of the regulars.

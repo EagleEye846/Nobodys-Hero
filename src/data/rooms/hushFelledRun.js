@@ -73,6 +73,11 @@ export const HUSH_FELLED_RUN = {
     { sprite: 'roll_log', x: 18, y: 8, text: 'roll_log', log: true },
     { sprite: 'rock_stump', x: 26, y: 12, text: 'rock_stump', rockReset: true },
     { sprite: 'sign', x: 27, y: 8, text: 'felled_sign' },
+    // (draft) The woodcutters' leavings: the stumps of what went down the run, and an axe left in one.
+    { sprite: 'thin_pine_stump', x: 8, y: 2, text: 'felled_stump' },
+    { sprite: 'axe_in_ground', x: 9, y: 2, text: 'felled_axe' },
+    { sprite: 'thin_pine_stump', x: 2, y: 14, text: 'felled_stump_2' },
+    { sprite: 'thin_pine_stump', x: 22, y: 3, text: 'felled_stump' },
     { sprite: 'boot_print', x: 8, y: 12, text: 'boot_print' },
     { sprite: 'boot_print', x: 5, y: 9, text: 'boot_print' },
     { sprite: 'boot_print', x: 3, y: 5, text: 'boot_print' },

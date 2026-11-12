@@ -23,9 +23,12 @@ export const REACH_WRECK = {
   name: 'THE WRECK',
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'reach',
-  // "Out Past the Light" (src/data/music/reachTheme.js).
-  music: 'reach',
+  // "Hopes Above Water" (src/data/music/reachRainTheme.js).
+  music: 'reachRain',
   ambience: 'open_sea',
+  // After the chapter (the_light_answers) the storm is over, as at the tower's foot: no rain or
+  // lightning, the sea lying down, and the grey-blue light of a quiet sea in place of the storm's green.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.5, fog: 0.15 }, ambience: 'calm_sea', lamplight: { shade: 0.32, tint: '30, 40, 64' } },
   vesWell: true,
   // Rougher again: the sea comes over her rail.
   atmosphere: { rain: 1.5, lightning: 1.1, spray: 1.6, fog: 0.9 },
@@ -38,22 +41,22 @@ export const REACH_WRECK = {
   tiles: [
     '################################################',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~ffffffffffffffff~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~oooooooooaawaaoo~~qqqqx~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~oooooooooaoooaoo~~qqqqq~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~oooooooooaoooaoo~~qqqqq~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~oooooooooaaoaaooggqqqqq~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~ooooooooooooooooggqqqqq~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~oooooooooooooooo~~qqqqq~~~~~~#',
-    '#~~~~~~~~ooqqxqqqqhhhhhhhhhhhhhhhh~~qqqqqoo~~~~#',
-    '#~~~~~~~~ooqqqqqqqhhhhhhhhhhhhhhhh~~qqqqq~o~~~~#',
-    '#~~~~~~~~ooqqqqqqqhhhhhhhhhhhhhhhh~~qqqqq~o~~~~#',
-    '#~~~~~~~~qqqqqqqqqqqqqqqq~~~~~~~~~~~qqqqxoo~~~~#',
-    '#~~~~~~~~qqqqqqqqqqqqqqqq~~~~~~~~~~~qq,,,~o~~~~#',
-    '#~~~~~~~~qqqqqqqqqqqqqqqq~~~~~~~~~~~qq,,,~~~~~~#',
-    '#~~~~~~~~xqqqqqqqqqqqqqqq~~~~~~~~~~~xq,,,~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
+    '#~~~~~~~~~~x~~~~~~~fff~~ffffff~fff~~~x~~~~~~~~~#',
+    '#~~~~~~~~~~~~~~~~~~ooooooooaawaaoo~~~qqqx~~~~~~#',
+    '#~~~^~~~~~~~~~~~~~fooooooooaoooaoo~~qqqqq~~~^~~#',
+    '#~~~~~~~~~~~~~~~~~oooooooooaoooaoo~~~qqqq~~~~~~#',
+    '#~~~~~~~~~~~~~~~~~oooooooooaaoaaooggqqq,q~~~~~~#',
+    '#~~~~~~~~~~~~~~~~~ooooooooooooooooggqq,;q~~~~~~#',
+    '#~~~~~~~~~~,qq~~~~~ooooooooooooooo~~;qqqq~~~~~~#',
+    '#~~~~~~~~ooqqxq;qqhhhhhhhhhhhhhhhh~~xqqqqoo~~~~#',
+    '#~~~~~~~~ooq,,qqqqhhhhhhhhhhhhhh~~~~qqqq;~o~~~~#',
+    '#~~~~~~~~ooqq,;qqqxhhhxxhhh~~hhxx~~~~qqqq~o~~~~#',
+    '#~~~~~~~~qqqq;qqqqqqqq,,qxx~~x~xxx~~qqqqxoo~~~~#',
+    '#~~~~x~~~qq,,qqq;qqqqq,,~~x~~~~~x~~~qq,,,~o~~~~#',
+    '#~~~~~~~~q,,,qqqqq;qqqq~~~~~~~~~~~~~~q,,,~~~~~~#',
+    '#~~~~~~~~xq;qqqqqq~~~~~~~~~~~~~~~~~~xq,,,~~~~~~#',
+    '#~~~~~~~~~qqqx~~~~~~~~~~~~~~^~~~~~~~qqx~~~~~~x~#',
+    '#~~~x~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
     '################################################',
   ],
@@ -83,10 +86,12 @@ export const REACH_WRECK = {
     { sprite: 'gate_narrow', x: 34, y: 7, text: 'wreck_gate', opensWith: ['reach_bolt'] },
     { sprite: 'rock_stump', x: 24, y: 7, text: 'rock_stump', rockReset: true },
     // Haddock in the Bother alongside the east jetty (x 43-46).
-    { sprite: 'cf_haddock_row', x: 43, y: 11, npc: 'haddock_reach', animation: 'cf_haddock_row', speed: 0.6 },
+    { sprite: 'cf_haddock_row', x: 43, y: 11, npc: 'haddock_reach', animation: 'cf_haddock_row', speed: 0.6, until: 'haddock_gone' },
+    // After the chapter: the Bother, empty (Ves rows her now).
+    { sprite: 'cf_bother', x: 43, y: 11, text: 'bother_after', animation: 'cf_bother', speed: 0.6, after: 'haddock_gone' },
     { sprite: 'c5_chain_bollard', x: 40, y: 8, text: 'reach_bollard' },
     // Her deck: a broken wheel, a stump of mast, a sail in rags, the figurehead on the shingle.
-    { sprite: 'c5_ships_wheel', x: 18, y: 7, text: 'wreck_wheel' },
+    { sprite: 'c5_ships_wheel', x: 19, y: 7, text: 'wreck_wheel' },
     { sprite: 'c5_tattered_sail', x: 25, y: 4, text: 'wreck_sail', animation: 'c5_tattered_sail', speed: 0.4 },
     { sprite: 'c5_tattered_flag', x: 33, y: 3, text: 'wreck_flag', animation: 'c5_tattered_flag', speed: 0.35 },
     { sprite: 'c5_figurehead', x: 16, y: 13, text: 'wreck_figurehead' },
@@ -94,6 +99,40 @@ export const REACH_WRECK = {
     { sprite: 'sign', x: 12, y: 13, text: 'wreck_sign' },
     { sprite: 'c5_crate', x: 32, y: 8, text: 'wreck_crate' },
     { sprite: 'gold_pouch', x: 32, y: 4, text: 'wreck_pouch', gold: 250, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // What came off her: her jolly boat, thrown up keel-first on the shingle with a hole in her;
+    // planks and a torn net washed up round her; a tide line; gulls and a crab about their business.
+    { sprite: 'c5_boat_upturned', x: 14, y: 9 },
+    { sprite: 'c5_planks_scatter', x: 18, y: 12, flat: true, walkable: true },
+    { sprite: 'c5_wrack_line', x: 10, y: 15, flat: true, walkable: true },
+    { sprite: 'c5_crab_trail', x: 10, y: 11, flat: true, walkable: true },
+    { sprite: 'c5_net_torn', x: 19, y: 5, flat: true, walkable: true },
+    { sprite: 'c5_gull_marks', x: 37, y: 6, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 37, y: 10, flat: true, walkable: true },
+    { sprite: 'c5_planks_scatter', x: 37, y: 14, flat: true, walkable: true },
+    // A lantern hung at the jetty's foot, the one warm thing on this side.
+    { sprite: 'c5_lantern_hook', x: 39, y: 12 },
+    // Her outline, broken: the bow torn off and lying in the sea at her east end, her ribs
+    // standing up bare at the north-west corner and off her bow, a topmast down across her
+    // west rail into the water, her rail stove in, barnacles thick along her waterline, and
+    // what she sheds every tide floating round her.
+    { sprite: 'wy_bow_broken', x: 35, y: 11 },
+    { sprite: 'wy_ribs_jag', x: 18, y: 3 },
+    { sprite: 'wy_ribs_jag_b', x: 34, y: 4 },
+    { sprite: 'wy_mast_fallen', x: 17, y: 7, flat: true, walkable: true },
+    { sprite: 'wy_barnacle_band', x: 28, y: 12, flat: true, walkable: true },
+    { sprite: 'wy_barnacle_band_b', x: 32, y: 12, flat: true, walkable: true },
+    { sprite: 'wy_weed_fringe', x: 26, y: 13, flat: true, walkable: true },
+    { sprite: 'wy_plank_slick', x: 15, y: 3, flat: true, walkable: true },
+    { sprite: 'wy_plank_slick_b', x: 28, y: 14, flat: true, walkable: true },
+    { sprite: 'wy_plank_slick', x: 36, y: 1, flat: true, walkable: true },
+    { sprite: 'wy_weed_mat', x: 22, y: 16, flat: true, walkable: true },
+    { sprite: 'wy_timber_sunk', x: 6, y: 11, flat: true, walkable: true },
+    // On her deck: the rail's shadow, a grating, her chain, a scupper's rust.
+    { sprite: 'wy_rail_shadow', x: 26, y: 3, flat: true, walkable: true },
+    { sprite: 'wy_scupper', x: 19, y: 3, flat: true, walkable: true },
+    { sprite: 'wy_grating', x: 22, y: 6, flat: true, walkable: true },
+    { sprite: 'wy_chain_pile', x: 26, y: 8, flat: true, walkable: true },
+    { sprite: 'c5_planks_scatter', x: 30, y: 8, flat: true, walkable: true },
   ],
   tileTexts: { '~': 'reach_sea', x: 'reach_barnacles', h: 'wreck_side', a: 'wreck_house', w: 'wreck_porthole', f: 'wreck_rail', o: 'wreck_deck', g: 'wreck_gangway', q: 'wreck_shingle' },
 

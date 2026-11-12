@@ -140,19 +140,12 @@ export function crumble(rows, k, fromTop = true) {
   }).join(''));
 }
 
-// Swaps the colours of every pixel through `map`.
-export function recolor(rows, map) {
-  return rows.map((row) => [...row].map((v) => map[v] ?? v).join(''));
-}
-
-// Squashes (k<1) or stretches the picture vertically about its bottom edge.
-export function stretchY(rows, k) {
-  const h = rows.length;
-  const newH = Math.max(1, Math.round(h * k));
-  const out = [];
-  for (let y = 0; y < h; y++) {
-    const srcY = Math.floor((y - (h - newH)) / k);
-    out.push(srcY >= 0 && srcY < h && y >= h - newH ? rows[srcY] : '.'.repeat(rows[0].length));
-  }
-  return out;
+// A bullet's or a hazard's picture: draws on a fresh Pix of w x h, outlines it
+// in 'k' (unless `outline` is false) and returns its rows. Shared by the
+// chapter 5 attack files.
+export function art(w, h, draw, outline = true) {
+  const p = new Pix(w, h);
+  draw(p);
+  if (outline) p.outline('k');
+  return p.rows();
 }

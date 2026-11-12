@@ -27,7 +27,7 @@ export const THE_HEROS_CAMP = {
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'act', who: 'ves', act: 'crouch' },
     { do: 'wait', seconds: 1.6 },
-    { do: 'say', who: 'ves', text: '{thoughtful}...They were a kid.' },
+    { do: 'say', who: 'ves', text: '{thoughtful}...He was a kid.' },
     { do: 'wait', seconds: 1 },
     // What's rolled up inside it: the rest of the copybook from the far
     // shore (the_cold_camp), a day at a time.
@@ -41,9 +41,9 @@ export const THE_HEROS_CAMP = {
     { do: 'wait', seconds: 0.8 },
     { do: 'say', who: 'ves', text: '{sad}"There is only me."\n\n{bored}...I know that page.' },
     { do: 'wait', seconds: 1.2 },
-    { do: 'say', who: 'ves', text: '{sad}Down here on their own, counting days. Telling themselves to stay.' },
+    { do: 'say', who: 'ves', text: '{sad}Down here on his own, counting days. Telling himself to stay.' },
     { do: 'wait', seconds: 1.4 },
-    { do: 'say', who: 'ves', text: '{determined}And they did.' },
+    { do: 'say', who: 'ves', text: '{determined}And he did.' },
     { do: 'act', who: 'ves', act: 'stand' },
     { do: 'wait', seconds: 1 },
     { do: 'say', who: 'ves', text: '{bored}Nine feet tall, the mural said. {smile}Liars.' },

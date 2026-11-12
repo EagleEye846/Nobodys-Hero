@@ -17,3 +17,31 @@ Bounce! BOUNCE! IT'S ALL SO BRIGHT!
 
 [repeat after the_light_goes_up]
 I've lost the ball in the sun. Not literally. Metaphorically. Dad says that's allowed.
+
+# (draft)
+[repeat 2]
+Bounce. Bounce. ...Bounce. That one didn't come back. Will you wait with me? It might.
+
+# (draft)
+[repeat 3]
+I'm practising for the ball contest. There isn't one yet. I'm going to win it.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+The king can't bounce a ball. His arms don't go. I asked him.
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}...His arms don't go. {bored}Noted.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+If you see a green ball down the Diggings, it's mine. It went down a crack. It was a good ball.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I can see my shadow! I've got a SHADOW! It bounces too!
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Found the ball. It was on my head. Nobody said.

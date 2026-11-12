@@ -53,6 +53,8 @@ export const GLIMMER_GEODE = {
   music: 'glimmer',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'crystal',
+  // How it rings (a huge space: ECHOES in src/audio/music.js).
+  echo: 'cavern',
   // The view down through the crack.
   vista: { kind: 'kingdom' },
 
@@ -112,6 +114,9 @@ export const GLIMMER_GEODE = {
     // The stump puts them both back.
     { sprite: 'push_rock', x: 8, y: 10, text: 'geode_rock', rock: true, step: true },
     { sprite: 'push_rock', x: 14, y: 5, text: 'geode_rock_yard', rock: true, step: true },
+    // The yard on top of the hill, which only the top of the hill touches: a miner's lunch tin
+    // left there (Fenn's, "taken up to the light"): the whistle pea (the seven-shift quest, Seam Nine's roster).
+    { sprite: 'lunch_crate', x: 13, y: 6, text: 'geode_tin', gives: 'whistle_pea', taken: { sprite: 'lunch_crate', text: 'geode_tin_empty' } },
     { sprite: 'rock_stump', x: 2, y: 9, text: 'rock_stump', rockReset: true },
   ],
   tileTexts: {

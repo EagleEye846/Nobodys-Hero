@@ -222,8 +222,31 @@ A bumblebee in a tweed flat cap who has worked the same clover patch for forty y
 [clover_snail]
 A slow green snail with a four-leaf clover for a shell, always about to fall asleep. It is not dangerous so much as drowsy. Sit down beside it, if you have the time.
 
+[barnacle_bat]
+A little cave bat that has hung over the same wet ledge for so long the barnacles moved in. Its squeaks come back from every wall. Meet it the wrong way up.
+
+[whelkling]
+A hermit crab in a whelk shell far too big for it, crusted with anemones that glow in the dark pool. It has very strong feelings about the shell. Admire it.
+
 [dowager_crab]
 A hermit crab the size of a cart who lives in a bathtub with a ship's bell on it. She is very polite and very angry about your boots. Mind the mat.
+
+# (draft) The ghost ship's three.
+[ghost_deckhand]
+A boy of the Fair Return's crew, still on watch. He swabs, strikes the bell and holds out the letter he never posted. He asks what day it is.
+
+[powder_monkey]
+The gunner's boy, ten years old, still running powder to guns long silent. Everything goes off slowly. He is waiting for someone to say fire.
+
+[captain_tarry]
+Master of the brig Fair Return, who will not say she went down. He promised the families he'd bring the crew home. He is not cruel. He is late.
+
+# (draft)
+[fairweather]
+The Fair Return's carved figurehead, woken by a star-splinter in her breast. She laughs, she spins, she throws stars and horses, and she is so glad you came.
+
+[old_gulper]
+A moray eel older than Merrow, asleep in the fallen great bell. When he turns over, it rings. Not wicked: he has toothache.
 
 # (draft)
 [corrie]

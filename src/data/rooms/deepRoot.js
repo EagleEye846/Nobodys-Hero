@@ -57,6 +57,8 @@ export const DEEP_ROOT = {
   music: 'deep',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'deep',
+  // How it rings (a huge space: ECHOES in src/audio/music.js).
+  echo: 'cavern',
   // Dark: only your light and the beams show anything (0 to 1).
   dark: 0.94,
   // Glow-worms on Ves's umbrella: your light never drops below this here.

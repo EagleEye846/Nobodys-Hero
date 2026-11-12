@@ -10,10 +10,15 @@ export const WRECK_SLIP_HOME = {
 
   actors: [
     { id: 'haddock', look: 'prop:cf_haddock', x: 15, y: 10, portrait: 'haddock', plays: 'haddock_wreck', centered: true, animation: 'cf_haddock', speed: 0.5 },
+    { id: 'ves_voice', look: 'prop:vesper_stand', x: 1, y: 1, portrait: 'vesper', hidden: true },
   ],
 
   steps: [
-    { do: 'say', who: 'haddock', text: '{smile}Saltcombe, then? In you get. Sit still.' },
+    // After the chapter he isn't on the slip (his prop is gone, and the actor would stand there alone):
+    // out of sight at once, and Ves rows ((draft)).
+    { do: 'leave', who: 'haddock', instant: true, after: 'haddock_gone' },
+    { do: 'say', who: 'haddock', text: '{smile}Saltcombe, then? In you get. Sit still.', until: 'haddock_gone' },
+    { do: 'say', who: 'ves_voice', text: "{bored}Saltcombe. In you get. And no, you can't steer.", after: 'haddock_gone' },
     { do: 'stage', dim: 1, seconds: 1.6 },
     { do: 'sound', name: 'splash' },
     { do: 'wait', seconds: 1.8 },

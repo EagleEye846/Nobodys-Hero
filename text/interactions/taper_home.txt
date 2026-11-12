@@ -6,7 +6,7 @@
 
 [home_fireplace]
 A warm fire crackles in the hearth.
-It smells of cinnamon and candle wax.
+It smells of beeswax and tomato leaves.
 
 Taper says she keeps it lit "for company." The flames lean toward her when she passes.
 
@@ -77,9 +77,9 @@ A small wooden chair. It's just your size.
 # --- Hallway ---
 
 [hall_mirror]
-It's you!
+A tall mirror, foggy with years of candle smoke.
 
-...Not much of a Hero. But it's you.
+Someone small and scruffy looks back. Not much of a Hero. Taper has pencilled a growth line on the frame at your height.
 
 [hall_door]
 It's locked. A wax seal reads: TAPER.

@@ -6,7 +6,7 @@ import { HERO, ownedGear, equippedGear, equipGear } from '../characters/equipmen
 import { ARMOR } from '../data/armor.js';
 import { drawText } from './text.js';
 import { maybeScream } from './scream.js';
-import { drawMenuFrame, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawControls, drawOwnerTag, ownerLook, MENU, HEADER_Y, FOOTER_Y, MENU_COLORS } from './menuFrame.js';
+import { drawMenuFrame, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawControls, drawOwnerTag, ownerLook, listIcon, MENU, HEADER_Y, FOOTER_Y, MENU_COLORS } from './menuFrame.js';
 
 // What you can equip, one tab each: the weapon (FIGHT power and a shadow
 // ability) and the armor (DEF, MAG and SP, see src/data/armor.js). Each tab
@@ -73,7 +73,7 @@ export class EquipMenu {
     if (input.wasPressed('up')) this.cursor = (this.cursor - 1 + owned.length) % owned.length;
     if (this.cursor !== before) sfx('move');
     if (input.wasPressed('confirm')) {
-      sfx('select');
+      sfx('equip');
       equipGear(tab.who, tab.slot, owned[this.cursor]);
       if (owned[this.cursor] === 'ash_spear') maybeScream();
     }
@@ -112,12 +112,14 @@ export class EquipMenu {
       drawWeaponList(ctx, owned, this.cursor, {
         nameColor: (id) => (equipped(id) ? MENU_COLORS.highlight : MENU_COLORS.text),
         tag: (id) => (equipped(id) ? { text: 'E', color: MENU_COLORS.highlight } : null),
+        icon: (id) => listIcon(tab.slot, equipped(id) ? MENU_COLORS.highlight : MENU_COLORS.description),
         ...(tab.name ? { name: tab.name } : {}),
       });
       // A member's tabs keep their details above the footer, where their note goes.
       // (While they're hurt, the note says what that changes, like Ves's lost umbrella.)
       const note = hurtState(tab.who)?.note ?? MEMBER_NOTES[tab.who];
-      if (owned.length) tab.details(ctx, owned[this.cursor], note ? NOTE_DETAILS : undefined);
+      // Stats better or worse than what's on now get a green or red arrow.
+      if (owned.length) tab.details(ctx, owned[this.cursor], note ? NOTE_DETAILS : undefined, equippedGear(tab.who, tab.slot));
       if (note) drawText(ctx, note, MENU.x + MENU.w / 2, FOOTER_Y + 4, { size: 22, color: MENU_COLORS.description, align: 'center' });
       drawControls(ctx, people.length > 1
         ? 'Z: equip     LEFT/RIGHT: change tab     X: close'

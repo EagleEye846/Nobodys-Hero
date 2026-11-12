@@ -16,7 +16,7 @@ export const GLOAMWORM = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hushwood',
   sprite: { rows: GLOAMWORM_SPRITE, palette: GLOAMWORM_PALETTE },
-  maxHp: 505,
+  maxHp: 640,
   damage: 21,
 
   // A Chapter 3 enemy from under the deep wood: a touch tougher than the

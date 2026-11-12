@@ -227,14 +227,18 @@ export const DRILLBUG_ATTACKS = {
   // Boring along: it tunnels along under your feet, and you can see its
   // tunnel, a trail of scuffs where you've been. A moment later it bursts up
   // out of the oldest of them, in a ring of grit around a spinning bit. So
-  // if you stay in one place, that's where.
+  // if you stay in one place, that's where. Before it bursts, the ground
+  // heaves into a mound and the rock it'll throw up shows through it,
+  // flickering, for MOUND_SECONDS (real seconds, however fast the fight:
+  // it was 0.8 of the attack's own quicker clock, about half a second in
+  // the Diggings, and the burst came with no warning a dodger could see).
   drillTunnels(box, density, { Shot, rand }) {
+    const MOUND_SECONDS = 0.85;
     const dots = [];
     let t = 0;
     let nextDot = 0.1;
     let nextBurst = 1.4;
     let bursts = 0;
-    let waiting = [];
     return {
       duration: 6.8,
       update: (dt, bullets, soul) => {
@@ -245,30 +249,28 @@ export const DRILLBUG_ATTACKS = {
           dots.push(dot);
           bullets.push(new Shot({ x: soul.x, y: soul.y + 3, harmless: true, life: 3, art: 'drillTunnelDot' }));
         }
-        if (t >= nextBurst && bursts < 4 && t < 5.2) {
-          nextBurst = t + 1.05;
+        // (Seven, closer together, now each shows where it'll come up.)
+        if (t >= nextBurst && bursts < 7 && t < 5.6) {
+          nextBurst = t + 0.68;
           // The oldest scuff that isn't already spoken for.
           const spot = dots.find((dot) => !dot.used && t - dot.at > 0.9) ?? dots.find((dot) => !dot.used);
           if (spot) {
             spot.used = true;
-            bullets.push(new Shot({ x: spot.x, y: spot.y + 2, harmless: true, life: 0.8, art: 'drillMound' }));
-            waiting.push({ at: t + 0.8, x: spot.x, y: spot.y });
+            const warn = MOUND_SECONDS;
+            bullets.push(new Shot({ x: spot.x, y: spot.y + 2, harmless: true, life: warn, art: 'drillMound' }));
+            // What it'll throw up shows through the mound, flickering, until
+            // it bursts: the rock, the bit (it stays a moment), and the grit
+            // in a ring.
+            bullets.push(new Shot({ x: spot.x, y: spot.y, art: 'drillRock', warn, life: 0.35 }));
+            bullets.push(new Shot({ x: spot.x, y: spot.y - 3, vy: -26, accel: -60, art: 'drillBit', angle: -Math.PI / 2, warn, life: 0.7 }));
+            const turn = rand(0, Math.PI / 5);
+            for (let i = 0; i < 10; i++) {
+              const a = turn + (i / 10) * Math.PI * 2;
+              bullets.push(new Shot({ x: spot.x, y: spot.y, vx: Math.cos(a) * 50, vy: Math.sin(a) * 50, gravity: 14, art: 'drillGrit', warn, life: 1.9 }));
+            }
             bursts++;
           }
         }
-        for (const burst of waiting) {
-          if (t < burst.at) continue;
-          burst.done = true;
-          // The bit bursts up (it stays a moment), with grit in a ring.
-          bullets.push(new Shot({ x: burst.x, y: burst.y - 3, vy: -26, accel: -60, art: 'drillBit', angle: -Math.PI / 2, life: 0.7 }));
-          bullets.push(new Shot({ x: burst.x, y: burst.y, vx: 0, vy: 0, art: 'drillRock', life: 0.35 }));
-          const turn = rand(0, Math.PI / 4);
-          for (let i = 0; i < 8; i++) {
-            const a = turn + (i / 8) * Math.PI * 2;
-            bullets.push(new Shot({ x: burst.x, y: burst.y, vx: Math.cos(a) * 50, vy: Math.sin(a) * 50, gravity: 14, art: 'drillGrit', life: 1.9 }));
-          }
-        }
-        waiting = waiting.filter((burst) => !burst.done);
       },
     };
   },

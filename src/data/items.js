@@ -129,8 +129,22 @@ export const ITEMS = {
   clock_wool: { name: 'Clock Wool', use: 'sp', amount: 80 },
   flatcap_honey: { name: 'Flatcap Honey', heal: 260 },
   lucky_clover: { name: 'Lucky Clover', use: 'calm', amount: 30 },
+  // Chapter 5's cliff cave monsters (the Barnacle Bat, the Whelkling).
+  echo_shell: { name: 'Echo Shell', use: 'sp', amount: 90 },
+  sea_glass_sweet: { name: 'Sea-Glass Sweet', heal: 265 },
+  // Sunnyside's chapter 4 monsters met again in chapter 5 (the Bunting, the Dandy Lion,
+  // the Haybob): late-summer loot at the coast's numbers (their `later` drops).
+  fete_sponge: { name: 'Fete Sponge', heal: 245 },
+  dandelion_burdock: { name: 'Dandelion and Burdock', heal: 250 },
+  harvest_loaf: { name: 'Harvest Loaf', heal: 255 },
   // Found and given.
   candle_cake: { name: 'Candle Cake', heal: 70 },
+  // The Soundings bell's secret chest (chapter 5): a full mend, not sold anywhere.
+  sounders_flask: { name: "Sounders' Flask", heal: 999 },
+  // The Last Light's secret den (chapter 5): a full mend, not sold anywhere.
+  humbug_lump: { name: 'Humbug Lump', heal: 999 },
+  // Merrow's secret, the ringers' loft (chapter 5): a big SP drink, not sold anywhere.
+  ringers_cordial: { name: "Ringers' Cordial", use: 'sp', amount: 130 },
   climbers_ration: { name: "Climber's Ration", heal: 50 },
   // Mount Vigil and Heralds' Rest: sold at Rest Stores, or found in chests.
   pine_candy: { name: 'Pine Candy', heal: 30, price: 10 },
@@ -164,6 +178,8 @@ export const ITEMS = {
   lamplight_candle: { name: 'Lamplight Candle', use: 'sp', amount: 50, light: { radius: 88, burn: 900 } },
   // The Hush's: a tuft of its fur, left on your sleeve at the Hero's Gate.
   hush_fur: { name: 'Hush Bristles', use: 'guard' },
+  // Quire's, the Dead City's secret guardian: a vial of the ink it ran on (draft).
+  star_ink: { name: 'Star-Ink', heal: 200 },
   // Chapter 4's deeper monsters' (the Diggings, the Stillwater, the Deep).
   cinder_toffee: { name: 'Cinder Toffee', heal: 170 },
   smoked_blindfish: { name: 'Smoked Blindfish', heal: 185 },
@@ -188,13 +204,28 @@ export const ITEMS = {
   ancient_sweet: { name: 'Ancient Sweet', heal: 85, price: 6 },
   slowfin_carp: { name: 'Slowfin Carp', heal: 215, price: 14 },
   // Saltcombe's Cockle Stall and Orla's Forge (Chapter 5). The best food of
-  // chapter 4 heals 240; these climb a little past it.
-  sea_biscuit: { name: 'Sea Biscuit', heal: 160, price: 90 },
-  kelp_crisps: { name: 'Kelp Crisps', heal: 190, price: 115 },
-  winkle_skewer: { name: 'Winkle Skewer', heal: 230, price: 140 },
+  // chapter 4 heals 240, and the coast's monsters drop food that heals
+  // 245-280 for free, so the shop food starts at 250 and climbs to the
+  // Chowder's 285. About 0.6 G an HP, the cheaper ones a touch better value.
+  sea_biscuit: { name: 'Sea Biscuit', heal: 250, price: 150 },
+  kelp_crisps: { name: 'Kelp Crisps', heal: 265, price: 160 },
+  winkle_skewer: { name: 'Winkle Skewer', heal: 275, price: 170 },
   cockle_chowder: { name: 'Cockle Chowder', heal: 285, price: 185 },
   brine_tonic: { name: 'Brine Tonic', use: 'sp', amount: 110, price: 190 },
   tinder_bun: { name: 'Tinder Bun', heal: 250, price: 160 },
+  // Mrs. Wrasse's Chandlery (Chapter 5): ship's stores in place of the
+  // candles (the coast has no dark rooms). Lamp oil for SP, pine tar to calm.
+  lamp_oil: { name: 'Lamp Oil', use: 'sp', amount: 100, price: 170 },
+  pine_tar: { name: 'Pine Tar', use: 'calm', amount: 30, price: 125 },
+  // Corrie's, beaten at the top of the Last Light: from a storm boy's pocket.
+  salt_taffy: { name: 'Salt-Water Taffy', heal: 300 },
+  // The Fair Return's two crew (the ghost ship, area `ghostship`): a hundred-year-old ship's
+  // biscuit with a name scratched in it (heals like the coast's other drops), and a slow-match's
+  // last length wound in paper (SP, as the Dunlin Dancer's feather and the Moonjelly's bell).
+  scratched_hardtack: { name: 'Scratched Hardtack', heal: 285 },
+  powder_toffee: { name: 'Powder Toffee', use: 'sp', amount: 85 },
+  // The Figurehead's, Madam Fairweather's (the ghost ship's secret superboss): a stopper of star-glass with the light still in it.
+  starfall_cordial: { name: 'Starfall Cordial', heal: 700 },
 };
 
 // How many items you can carry.

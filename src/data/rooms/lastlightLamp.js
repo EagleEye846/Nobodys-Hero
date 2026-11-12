@@ -10,7 +10,7 @@
 //   - The way in is the door at the bottom (10-11, row 13), back down to the upper hall.
 // Tile key (see src/overworld/coastTiles.js, lastlight, indoors):
 //   #  wall top (solid)   h  black brick (solid)   o  boards   I  iron pillar
-// (draft) story text, for Patrick to review.
+// (draft).
 
 export const LASTLIGHT_LAMP = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -25,6 +25,8 @@ export const LASTLIGHT_LAMP = {
   ambience: 'lighthouse',
   // Under cover: no rain or lightning, and the edges of the screen sink into shadow.
   indoors: true,
+  // After the chapter the storm is over: no more howl round the tower, only the sea far below.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_tower' },
   vesWell: true,
 
   tiles: [
@@ -52,9 +54,10 @@ export const LASTLIGHT_LAMP = {
     { x: 10, y: 13, w: 2, h: 1, to: 'lastlight_upper', spawn: { x: 27, y: 4 } },
   ],
 
-  // Stepping in from the door: Corrie, and then the fight.
+  // Stepping in from the door: Corrie, and then the fight. The trigger is the whole width of the
+  // floor below the lamp (rows 9-11), so nobody can slip round it up the sides of the room.
   cutscenes: [
-    { x: 8, y: 9, w: 6, h: 3, scene: 'corrie_appears' },
+    { x: 1, y: 9, w: 20, h: 3, scene: 'corrie_appears' },
   ],
 
   textFile: 'interactions/lastlight.txt',
@@ -72,6 +75,20 @@ export const LASTLIGHT_LAMP = {
     { sprite: 'il_lantern_glass_corner_r', x: 19, y: 2, text: 'lamp_glass' },
     // The great lamp, dead, in the middle of the floor. Corrie sits on its rim in the scene.
     { sprite: 'll_dead_lamp', x: 9, y: 8, text: 'lamp_dead' },
+    // The keeping of the lamp, pushed back against the walls out of everyone's way (the middle of the
+    // floor, x 6-15, is kept clear for the scenes): oil barrels, a coil of line, a broom in its bucket.
+    { sprite: 'c5_barrel', x: 2, y: 4, text: 'lamp_barrel' },
+    { sprite: 'c5_barrel', x: 19, y: 4, text: 'lamp_barrel' },
+    { sprite: 'c5_rope_coil', x: 2, y: 11, walkable: true, flat: true, text: 'lamp_rope' },
+    { sprite: 'il_broom', x: 19, y: 10, text: 'lamp_broom' },
+    // (2026-11-08b) The keeper's things pushed back to the walls: oil spilt by the barrels, a drain
+    // grating, and kelp dragged up even here. All flat, all off the scene's floor.
+    { sprite: 'll_oil_spill', x: 2, y: 5, flat: true, walkable: true },
+    { sprite: 'll_coal_spill', x: 19, y: 5, flat: true, walkable: true },
+    { sprite: 'll_grating', x: 1, y: 8, flat: true, walkable: true },
+    { sprite: 'll_grating', x: 20, y: 8, flat: true, walkable: true },
+    { sprite: 'll_kelp_drag', x: 18, y: 12, flat: true, walkable: true },
+    { sprite: 'oil_can', x: 3, y: 4, text: 'lamp_oilcan' },
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', o: 'lamp_floor', I: 'lamp_pillar' },
 

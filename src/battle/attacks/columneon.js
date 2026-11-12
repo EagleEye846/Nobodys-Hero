@@ -104,7 +104,9 @@ export const COLUMNEON_ATTACKS = {
   },
 
   // The "pillar" crumbles: bricks rain down all over the box. Every so often
-  // one of them has eyes, and drifts after you for a moment before giving up.
+  // one of them has eyes: it looks at you, creeps toward you wherever you
+  // are (up into a corner too), and drifts after you for a moment before
+  // giving up.
   columneonCrumble(box, density, { Shot, every, rand, spreadAcross }) {
     const dropX = spreadAcross(box.x + 6, box.x + box.w - 6, 5);
     const followSeconds = 1.6;
@@ -113,7 +115,9 @@ export const COLUMNEON_ATTACKS = {
       bullets.push(new Shot({ x: dropX(), y: box.y + 4, vy: 10, gravity: 110, art: 'brick', warn: 0.35 }));
     });
     const sneak = every(1.7, 2.1, (bullets, soul) => {
-      const shot = new Shot({ x: dropX(), y: box.y + 4, vy: 30, art: 'mimicBrick', warn: 0.5, homing: { target: soul, turn: 1.4 } });
+      const x = dropX();
+      const aim = Math.atan2(soul.y - (box.y + 4), soul.x - x);
+      const shot = new Shot({ x, y: box.y + 4, vx: Math.cos(aim) * 30, vy: Math.sin(aim) * 30, art: 'mimicBrick', warn: 0.5, homing: { target: soul, turn: 1.4 } });
       bullets.push(shot);
       mimics.push(shot);
     });
@@ -162,8 +166,10 @@ export const COLUMNEON_ATTACKS = {
     let swish = rand(0, Math.PI * 2);
     const move = every(2.8, 3.2, () => { at = corner(); }, { first: 2.8 });
     const flick = every(0.17, 0.17, (bullets) => {
-      // Sweeps between 10 and 80 degrees into the box, so rings never fly straight out.
-      const angle = at.from + Math.PI / 4 + Math.sin(swish) * (Math.PI * 7 / 36);
+      // Sweeps between 4 and 86 degrees into the box, so rings never fly
+      // straight out, but do skim along the walls (hugging a wall by its
+      // corner was safe when it only reached 10 degrees).
+      const angle = at.from + Math.PI / 4 + Math.sin(swish) * (Math.PI * 41 / 180);
       bullets.push(new Shot({ x: at.x, y: at.y, vx: Math.cos(angle) * 54, vy: Math.sin(angle) * 54, art: 'tailCurl', warn: 0.2 }));
     });
     return {

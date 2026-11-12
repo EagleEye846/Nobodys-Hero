@@ -12,7 +12,7 @@ export const GLINTLING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'vigil',
   sprite: { rows: GLINTLING_SPRITE, palette: GLINTLING_PALETTE },
-  maxHp: 150,
+  maxHp: 190,
   damage: 12,
 
   // A Chapter 2 enemy: small, but its tricks come thick and fast.

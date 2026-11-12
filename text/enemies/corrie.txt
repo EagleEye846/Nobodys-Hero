@@ -34,7 +34,7 @@ The boy lifts his driftwood staff, and the sea comes up the tower to meet it. CO
 
 # Shown at the start of each of your turns, in order, then repeating.
 [flavor]
-CORRIE floats over nothing. His coat is far too big for him. The sleeves are rolled four times.
+CORRIE floats over nothing. His coat is far too big for him. The sleeves are rolled four times and still hang past his hands.
 
 The glow in the fork of his staff flickers like a candle in a draught.
 
@@ -121,11 +121,8 @@ Everything
 comes back
 down here.
 
-I can't
-let go.
-If I let go
-it all
-comes in.
+Hold on.
+Hold ON.
 
 Make it stop
 spinning.
@@ -143,7 +140,7 @@ I'm so tired.
 
 Was I good?
 Was I like
-them?
+him?
 
 Nobody came.
 The light
@@ -164,15 +161,16 @@ I can't stop.
 
 # One section per TALK option (the names must match corrie.js).
 [talk: Check]
-CORRIE - HP 21000
+CORRIE - HP 36000
 A boy who tried to stop the sea and became the storm. Darts, boats, a spell circle, a lullaby. Then the tide, the whirlpool and the lamp. He can't be talked down. The storm won't let him hear.
+His bullets come too thick to feed on: grazing them gives little SP. Spend it well.
 
 [talk: Ring Haddock's bell]
 You and Bramble take Haddock's bell by its cord together and ring it, hard. The note goes out over the water, and for a moment the storm holds its breath.
 The sea pulls back. The next attack will be gentler.
 
-[talk: Call to him]
-You call to him across the water.
+[talk: Wave to him]
+You wave to him across the water, both arms, the way you'd wave a boat in.
 
 [talk: Hold out a hand]
 You hold out a hand.
@@ -181,12 +179,12 @@ You hold out a hand.
 # storm answers, not him. The first time, all of [no_mercy]; after that, one
 # of [no_mercy_again].
 [no_mercy]
-The wind tears the words off you and throws them back into the sea.
+The wind tears it away and throws it back into the sea.
 
 Somewhere in the storm, he might have heard. If he did, the storm didn't let him.
 
 [no_mercy_again]
-A wave comes over the rail and drowns it out.
+A wave comes over the rail, and he's gone behind it.
 
 The thunder answers instead. It doesn't sound like him.
 
@@ -203,10 +201,9 @@ The stair behind you is under water. There's only up, and up is him.
 CORRIE lifts the staff over his head, and the sky comes down into the box. The sea starts to climb the walls.
 
 [phase: storm foe]
-I was going
-to stop it.
-I WAS
-going to.
+It's meant
+to go
+DOWN.
 
 [phase: storm vesper]
 {determined}Right. He's the weather now. Keep above the water, and don't stand where it lights up.

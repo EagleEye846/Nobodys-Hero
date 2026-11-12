@@ -1,4 +1,5 @@
 import { TILE_SIZE as T } from '../config.js';
+import { COAST_AREAS } from './coastTiles.js';
 
 // What your feet do to the ground, wherever you walk: dust off a dry path
 // when you run, leaves kicked up in the litter, mud flicked off the bog,
@@ -24,15 +25,55 @@ const GROUND = {
   g: 'bridge', '=': 'duckboards', '%': 'bog',
 };
 // The colours of what's kicked up off each.
-const DUST = { dust: '200, 184, 156', floor: '170, 160, 170', boards: '180, 150, 110', grass: '150, 170, 120' };
+const DUST = { dust: '200, 184, 156', floor: '170, 160, 170', boards: '180, 150, 110', grass: '150, 170, 120', sand: '226, 206, 156' };
 const LEAVES = ['#c8402e', '#e0702a', '#a82838', '#e8a03a', '#8a2a24'];
 const GRASS = ['#6c9a48', '#88b458', '#5a8040'];
 const MUD = ['#3a2e22', '#4a3c2a', '#2c241a'];
 
+// On the coast, `;` is the shallows (not fen turf), and `q` is shingle
+// (pebbles that crunch). Each coast area's own tiles (their tile keys are in
+// the room files): Gullrest's `.` and `:` are sand; Wrack Shore's `.` is wet
+// shingle and `:` its shell path and dune sand; Saltcombe's `.` is planks and
+// `X` cobbles; the wreck's `:` is deck planks; Merrow's `:`, the Soundings'
+// and the Isles' `X` are flagstones and cobbles; the lighthouse's `:` gravel.
+const COAST_GROUND = { ';': 'shallows', q: 'shingle' };
+const AREA_GROUND = {
+  gullrest: { '.': 'sand', ':': 'sand' },
+  wrack: { '.': 'shingle', ':': 'sand' },
+  saltcombe: { '.': 'boards', X: 'floor' },
+  wreck: { ':': 'boards' },
+  ghostship: { '.': 'boards', ':': 'boards', o: 'boards' },
+  merrow: { ':': 'floor' },
+  soundings: { X: 'floor' },
+  isles: { X: 'floor' },
+  haddock_light: { ':': 'shingle' },
+  // Chapter 4 (added 9 November 2026), with real footsteps for each (see
+  // FOOTSTEPS in src/audio/music.js). Sunnyside: meadow grass and buttercups,
+  // the golden lane, sun-warmed flagstones, stepping stones, the shallows and
+  // the fishers' plank steps. The Glimmering: the lilac cave floor (crystal
+  // underfoot), glowing moss and ferns (soft), the shallow glowing water.
+  // Belowtown: flagstones and cobbles (the moles' paving), mossy turf, the
+  // royal carpet and the inn's rug, floorboards. The Diggings: packed dirt,
+  // gravel, plank causeways, trestles, water. The Stillwater: pale wet
+  // stone, wet shingle, the jetty, the shallows. The Deep: black stone, ash.
+  sunnyside: { ',': 'meadow', N: 'meadow', ':': 'lane', '.': 'paving', j: 'paving', ';': 'wade', o: 'planks' },
+  glimmer: { '.': 'crystal', ',': 'moss', N: 'moss', j: 'wade' },
+  belowtown: { '.': 'paving', X: 'paving', ',': 'moss', r: 'rug', o: 'planks' },
+  diggings: { '.': 'dirt', q: 'gravel', o: 'planks', g: 'trestle', ';': 'wade' },
+  stillwater: { '.': 'rock', q: 'gravel', o: 'planks', g: 'trestle', ';': 'wade' },
+  deep: { '.': 'rock', q: 'ash', o: 'planks', g: 'trestle', ';': 'wade' },
+};
+// Chapter 4's grounds kick up what the older ones do (their own sound aside).
+const LOOKS_LIKE = {
+  rock: 'floor', paving: 'floor', crystal: 'floor', rug: 'floor', ash: 'floor', gravel: 'dust', dirt: 'dust', lane: 'dust',
+  planks: 'boards', trestle: 'bridge', meadow: 'grass', wade: 'shallows',
+};
+
 export function groundUnder(room, body) {
   if ((body.ground ?? 0) > 0) return 'block';
   const tile = room.tileAt(Math.floor(body.x / T), Math.floor((body.y - 1) / T));
-  return GROUND[tile] ?? null;
+  const own = AREA_GROUND[room.area]?.[tile] ?? (COAST_AREAS.has(room.area) ? COAST_GROUND[tile] : null);
+  return own ?? GROUND[tile] ?? null;
 }
 
 const rand = (min, max) => min + Math.random() * (max - min);
@@ -51,6 +92,7 @@ function puff(particles, x, y, color, size, way = 0) {
 // `ground`. `light` is someone following, who stirs up less. `under` is the
 // bridge run they're on, if any (to sift bits down through its planks).
 export function footfall(particles, ground, body, { running = false, light = false, under = null, way = 0 } = {}) {
+  ground = LOOKS_LIKE[ground] ?? ground;
   const x = body.x;
   const y = body.y;
   const chance = (p) => Math.random() < p * (light ? 0.5 : 1);
@@ -73,6 +115,17 @@ export function footfall(particles, ground, body, { running = false, light = fal
     case 'snow':
       if (running && chance(0.6)) {
         for (let i = 0; i < 2; i++) particles.push({ kind: 'snow', x: x + rand(-2, 2), y: y - 1, vx: rand(-14, 14) - way * 8, vy: -rand(14, 24), life: rand(0.3, 0.45), age: 0 });
+      }
+      break;
+    case 'sand':
+      // Soft sand sprays up behind you running.
+      if (running && chance(0.85)) puff(particles, x, y, DUST.sand, 1, way);
+      break;
+    case 'shallows':
+      // Wading: a ring spreading from where you trod, and a few drops flicked up.
+      if (chance(0.9)) particles.push({ kind: 'ripple', color: '236, 252, 250', x, y: y - 1, vx: 0, vy: 0, life: 0.75, age: 0 });
+      for (let i = 0; i < (running ? 3 : 1); i++) {
+        if (chance(running ? 0.9 : 0.6)) particles.push({ kind: 'drop', x: x + rand(-3, 3), y: y - 2, vx: rand(-14, 14) - way * 6, vy: -rand(18, 30), life: 0.45, age: 0, floor: y - 1 });
       }
       break;
     case 'bog':
@@ -102,6 +155,7 @@ export function footfall(particles, ground, body, { running = false, light = fal
 
 // Landing from a jump on `ground`: more of everything.
 export function landing(particles, ground, body, under = null) {
+  ground = LOOKS_LIKE[ground] ?? ground;
   const { x, y } = body;
   switch (ground) {
     case 'dust':
@@ -116,12 +170,50 @@ export function landing(particles, ground, body, under = null) {
       puff(particles, x, y, '160, 90, 70', 2);
       for (let i = 0; i < 4; i++) particles.push({ kind: 'bit', color: pick(LEAVES), x: x + rand(-5, 5), y: y - 1, vx: rand(-24, 24), vy: -rand(30, 50), life: rand(1, 1.4), age: 0, flutter: true, phase: rand(0, 6) });
       break;
+    case 'sand':
+      puff(particles, x, y, DUST.sand, 2);
+      break;
     case 'bog':
     case 'duckboards':
+    case 'shallows':
       for (let i = 0; i < 3; i++) footfall(particles, ground, body, { running: true });
       break;
     case 'bridge':
       for (let i = 0; i < 3; i++) footfall(particles, 'bridge', body, { running: true, under });
+      break;
+    default:
+      break;
+  }
+}
+
+// Pulling up short from a run, or turning back on the spot while running
+// (`way` is the way you were going: -1 left, 1 right, 0 up or down): a scuff of
+// whatever's underfoot thrown on ahead of your boots (see smallLife.js).
+export function skid(particles, ground, body, way = 0) {
+  ground = LOOKS_LIKE[ground] ?? ground;
+  const { x, y } = body;
+  switch (ground) {
+    case 'dust':
+    case 'floor':
+    case 'boards':
+    case 'block':
+    case 'sand':
+      puff(particles, x + way * 3, y, DUST[ground] ?? DUST.floor, 1, -way);
+      puff(particles, x + way * 2, y + 1, DUST[ground] ?? DUST.floor, 1, -way);
+      break;
+    case 'grass':
+      for (let i = 0; i < 3; i++) particles.push({ kind: 'bit', color: pick(GRASS), x: x + way * 3 + rand(-2, 2), y: y - 1, vx: way * rand(10, 24) + rand(-6, 6), vy: -rand(14, 26), life: 0.4, age: 0, flutter: false });
+      break;
+    case 'leaves':
+      for (let i = 0; i < 3; i++) particles.push({ kind: 'bit', color: pick(LEAVES), x: x + way * 3 + rand(-2, 2), y: y - 1, vx: way * rand(12, 26) + rand(-8, 8), vy: -rand(24, 38), life: rand(0.9, 1.2), age: 0, flutter: true, phase: rand(0, 6) });
+      break;
+    case 'snow':
+      for (let i = 0; i < 4; i++) particles.push({ kind: 'snow', x: x + way * 3 + rand(-2, 2), y: y - 1, vx: way * rand(14, 30) + rand(-8, 8), vy: -rand(12, 22), life: rand(0.3, 0.45), age: 0 });
+      break;
+    case 'shallows':
+    case 'bog':
+    case 'duckboards':
+      footfall(particles, ground, body, { running: true, way: -way });
       break;
     default:
       break;

@@ -18,12 +18,20 @@ export const DUNLIN_DANCER = {
   // when hit, takes off when beaten and dances when spared.
   // See src/data/art/dunlin_dancer.js.
   anim: DUNLIN_DANCER_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): feathers knocked loose, dust kicked up as it
+  // sets off; beaten, a burst of feathers.
+  feel: { hit: 'feather', idle: 'feather', windup: 'dust', defeat: 'feathers' },
   // The chapter 5 coast battle song (Sunnyside cliffs, Gullrest).
   music: 'coastBattleStorm',
-  maxHp: 1900,
-  damage: 55,
+  maxHp: 10000,
+  damage: 83,
 
-  difficulty: { density: 1.5, speed: 1.4 },
+  difficulty: { density: 1.65, speed: 1.50 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  encore: { at: 0.85, seconds: 4.5, density: 0.8 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
   battlePos: { x: 214, y: 54 },
 
   // Its attacks live in src/battle/attacks/dunlin_dancer.js.

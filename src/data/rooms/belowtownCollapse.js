@@ -22,7 +22,7 @@ export const BELOWTOWN_COLLAPSE = {
   // The region it's in (see src/data/areas.js).
   area: 'belowtown',
   music: null,
-  ambience: 'belowtown',
+  ambience: 'hall_falling',
   // Under cover: no sky, and the edges of the screen sink into shadow.
   indoors: true,
 
@@ -68,7 +68,26 @@ export const BELOWTOWN_COLLAPSE = {
   ],
 
   textFile: 'interactions/belowtown.txt',
-  props: [],
+  // Left from the welcome show and the duel, along the walls (clear of where the
+  // folk run, the pillars and the doorway): benches knocked over, the barrels
+  // for afterwards, and the show's confetti and streamers trodden into the floor.
+  props: [
+    { sprite: 'bench', x: 2, y: 10, text: 'collapse_bench' },
+    { sprite: 'bench', x: 23, y: 6, text: 'collapse_bench' },
+    { sprite: 'town_barrels', x: 1, y: 20, text: 'collapse_barrels' },
+    { sprite: 'town_barrels', x: 24, y: 3, text: 'collapse_barrels' },
+    { sprite: 'bf_confetti_a', x: 6, y: 4, flat: true, walkable: true },
+    { sprite: 'bf_confetti_b', x: 19, y: 9, flat: true, walkable: true },
+    { sprite: 'bf_confetti_a', x: 7, y: 15, flat: true, walkable: true },
+    { sprite: 'bf_streamer', x: 20, y: 4, flat: true, walkable: true },
+    { sprite: 'bf_confetti_b', x: 18, y: 18, flat: true, walkable: true },
+    { sprite: 'bench', x: 23, y: 15, text: 'collapse_bench' },
+    { sprite: 'bf_confetti_b', x: 8, y: 7, flat: true, walkable: true },
+    { sprite: 'bf_confetti_a', x: 17, y: 12, flat: true, walkable: true },
+    { sprite: 'bf_streamer', x: 6, y: 19, flat: true, walkable: true },
+    { sprite: 'bf_confetti_a', x: 21, y: 2, flat: true, walkable: true },
+    { sprite: 'bf_confetti_b', x: 3, y: 16, flat: true, walkable: true },
+  ],
   tileTexts: { W: 'hall_wall', '#': 'town_rock', V: 'town_lamps_wall', H: 'town_banner_wall', I: 'town_pillar', r: 'throne_carpet' },
 
   // After the credits (tuck_afterwards) the hall is left wrecked: cracks, heaps

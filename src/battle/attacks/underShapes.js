@@ -38,7 +38,8 @@ export class Ring {
 
   update(dt) {
     this.age += dt;
-    if (this.age >= this.warn) this.r += this.grow * dt;
+    // A shrinking ring stops at a point (a negative radius would throw when drawn).
+    if (this.age >= this.warn) this.r = Math.max(0, this.r + this.grow * dt);
   }
 
   isGone() {

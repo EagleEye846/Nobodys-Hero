@@ -8,6 +8,7 @@ import { peekSave, eraseSave, formatPlayTime } from '../state/saveGame.js';
 import { ROOMS } from '../data/rooms/index.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, textWidth } from '../ui/text.js';
+import { glide } from '../ui/uiMotion.js';
 import { ChapterSelectScene } from './chapterSelectScene.js';
 
 // "LANTERN HALL" or "taper_home" -> "Lantern Hall"
@@ -142,7 +143,7 @@ export class TitleScene {
       else if (this.options[this.cursor] === 'CHAPTERS') {
         sfx('select');
         const title = () => new TitleScene(this.startGame, this.newGame, this.playChapter);
-        this.game.changeScene(new ChapterSelectScene(title, this.playChapter));
+        this.game.changeScene(new ChapterSelectScene(title, this.playChapter, this.startGame));
       } else if (this.options[this.cursor] === 'OPTIONS') {
         sfx('select');
         this.settings.open();
@@ -170,9 +171,13 @@ export class TitleScene {
     const place = room ? friendlyName(room.name || room.id) : 'Somewhere in the Ruins';
     drawText(ctx, 'HERO', card.x + 20, card.y + 12, { size: 30, color: '#4fe3d0' });
     drawText(ctx, `LV ${hero.level ?? 1}`, card.x + 120, card.y + 14, { size: 28 });
-    drawText(ctx, formatPlayTime(world.playSeconds), card.x + card.w - 20, card.y + 14, { size: 28, align: 'right' });
-    drawText(ctx, place, card.x + 20, card.y + 52, { size: 28, color: '#ffcc66' });
-    drawText(ctx, `${hero.gold ?? 0} G`, card.x + card.w - 20, card.y + 54, { size: 24, color: '#ffe14d', align: 'right' });
+    drawText(ctx, formatPlayTime(world.timePlayed ?? world.playSeconds), card.x + card.w - 20, card.y + 14, { size: 28, align: 'right' });
+    const gold = `${hero.gold ?? 0} G`;
+    // A long place name (The Foot Of The Last Light) shrinks to keep clear of the gold.
+    const placeRoom = card.w - 40 - textWidth(ctx, gold, 24) - 14;
+    const placeSize = Math.max(18, Math.min(28, Math.floor((28 * placeRoom) / textWidth(ctx, place, 28))));
+    drawText(ctx, place, card.x + 20, card.y + 52 + (28 - placeSize) / 2, { size: placeSize, color: '#ffcc66' });
+    drawText(ctx, gold, card.x + card.w - 20, card.y + 54, { size: 24, color: '#ffe14d', align: 'right' });
 
     const optionsY = card.y + card.h + 36;
     if (this.confirming) {
@@ -186,7 +191,11 @@ export class TitleScene {
     this.options.forEach((label, i) => {
       const x = UI_WIDTH / 2 + spots[i];
       const selected = i === this.cursor;
-      if (selected) ctx.drawImage(soulSprite(), x - 26, optionsY + 6);
+      // The heart slides across to the option rather than jumping.
+      if (selected) {
+        const at = glide('titleOptions', x - 26, optionsY + 6, 110);
+        ctx.drawImage(soulSprite(), at.x, at.y);
+      }
       drawText(ctx, label, x, optionsY, { size, color: selected ? '#ffe14d' : '#ffffff', outline: '#07040c' });
     });
   }

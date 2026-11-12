@@ -14,6 +14,8 @@
 // brightTileLights() says what glows in the tiles (crystals, lit windows, the
 // water of the pools): lamplight.js adds them to the room's lights.
 
+import { caveBlendOn, caveSoftEdge } from './caveBlend.js';
+
 const T = 16;
 
 function hash(tx, ty, salt = 0) {
@@ -81,7 +83,79 @@ function blockOf(raise, look) {
     if (raiseAt(0, -1) < raise) px(ctx, look.edge, x, top, T, 1);
     if (raiseAt(-1, 0) < raise) px(ctx, look.edge, x, top, 1, T + raise);
     if (raiseAt(1, 0) < raise) px(ctx, look.edge, x + T - 1, top, 1, T + raise);
+    // Natural rock (the Glimmering): its outside corners worn round, the ground
+    // showing where the square corner was, and a dark rim along the new curve.
+    if (look.round && room) roundCorners(ctx, x, y, tx, ty, room, raise, raiseAt, floor, look.edge);
   };
+}
+// Cuts the outside corners of a raised block off in a curve. The ground there is
+// painted again (clipped to the corner): above the block's top it's the tile
+// behind's floor, at the foot it's this tile's own.
+function roundCorners(ctx, x, y, tx, ty, room, raise, raiseAt, floor, edge) {
+  const top = y - raise;
+  const flat = (dx, dy) => raiseAt(dx, dy) === 0 && !WALLISH.includes(at(room, tx, ty, dx, dy) ?? '#');
+  // How far in from the side row i (counted from the corner) is cut, for radius r.
+  const bite = (r, i) => Math.round(r - Math.sqrt(Math.max(0, r * r - (r - i - 0.5) ** 2))) + (i === 0 ? 1 : 0);
+  const cut = (cx, cy, sx, sy, groundY, groundTy) => {
+    const r = 3 + Math.floor(hash(tx, ty, 77 + sx * 3 + sy) * 2);
+    const rowY = (i) => (sy < 0 ? cy + i : cy - 1 - i);
+    ctx.save();
+    ctx.beginPath();
+    for (let i = 0; i < r; i++) {
+      const len = bite(r, i);
+      if (len) ctx.rect(sx < 0 ? cx : cx - len, rowY(i), len, 1);
+    }
+    ctx.clip();
+    floor(ctx, x, groundY, tx, groundTy, room);
+    ctx.restore();
+    // The rim along the curve.
+    for (let i = 0; i < r; i++) {
+      const len = bite(r, i);
+      px(ctx, edge, sx < 0 ? cx + len : cx - len - 1, rowY(i), 1, 1);
+    }
+  };
+  // The top's back corners, against the floor of the tile behind.
+  // (A tall block's top reaches two tiles back: the floor there is that tile's.)
+  const back = Math.floor(-raise / T);
+  const behind = flat(0, -1) && flat(0, back);
+  if (behind && flat(-1, 0)) cut(x, top, -1, -1, y + back * T, ty + back);
+  if (behind && flat(1, 0)) cut(x + T, top, 1, -1, y + back * T, ty + back);
+  // The face's foot corners, against this tile's own floor.
+  if (flat(0, 1) && flat(-1, 0)) cut(x, y + T, -1, 1, y, ty);
+  if (flat(0, 1) && flat(1, 0)) cut(x + T, y + T, 1, 1, y, ty);
+  // The back edge of the top, worn: here and there a pixel or two of it gone, so a
+  // long shelf's skyline isn't ruled straight.
+  if (behind) {
+    const notch = (X) => { const g = Math.floor(X / 3); const r = hash(g, ty, 91); return r < 0.45 ? 0 : r < 0.85 ? 1 : 2; };
+    ctx.save();
+    ctx.beginPath();
+    let any = false;
+    for (let i = 0; i < T; i++) { const n = notch(tx * T + i); if (n) { ctx.rect(x + i, top, 1, n); any = true; } }
+    if (any) {
+      ctx.clip();
+      floor(ctx, x, y + back * T, tx, ty + back, room);
+    }
+    ctx.restore();
+    for (let i = 0; i < T; i++) { const n = notch(tx * T + i); if (n) px(ctx, edge, x + i, top + n, 1, 1); }
+  }
+  // The sides, the same: the rock bulges and bites in a pixel or so.
+  for (const side of [-1, 1]) {
+    if (!flat(side, 0)) continue;
+    const sx = side < 0 ? x : x + T - 1;
+    for (let Y = top + 5; Y < y + T - 4; Y++) {
+      const r = hash(Math.floor(Y / 3), tx * 2 + side, 93);
+      if (r < 0.6) continue;
+      const tileRow = ty + Math.floor((Y - y) / T);
+      if (tileRow < ty && raiseAt(0, tileRow - ty) > 0) continue;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(sx, Y, 1, 1);
+      ctx.clip();
+      floor(ctx, x, y + (tileRow - ty) * T, tx, tileRow, room);
+      ctx.restore();
+      px(ctx, edge, sx - side, Y, 1, 1);
+    }
+  }
 }
 
 // =====================================================================
@@ -90,10 +164,44 @@ function blockOf(raise, look) {
 const SUN_GRASS = ['#68bf47', '#6bc249', '#66bd45', '#6cc34a'];
 const DAISY = '#fffdf2';
 
-function sunGrass(ctx, x, y, tx, ty) {
-  px(ctx, pick(SUN_GRASS, hash(tx, ty, 1)), x, y, T, T);
-  mottle(ctx, '#7dd356', x, y, tx, ty, 2, 8);
-  if (hash(tx, ty, 4) < 0.6) mottle(ctx, '#58ac3c', x, y, tx, ty, 5, 5);
+// --- Soft edges (tileBlend.js): Sunnyside's grass, lane and flagstones get ragged
+// edges between them, patches that run across tiles and little things lying about,
+// painted once into the room's picture. The grass and the lane then leave out their
+// per-tile colour and patch. A room can opt out with `softEdges: false`.
+const sunBlendOn = (room) => Boolean(room && room.area === 'sunnyside' && room.softEdges !== false && !room.indoors);
+const SUN_KINDS = { ',': 'turf', ':': 'path', '.': 'flags', '~': 'water', j: 'water', g: 'water' };
+const SUN_BLEND_P = {
+  turf: SUN_GRASS, turfHi: '#7dd356', turfLo: '#58ac3c', flowers: ['#ffd62e', '#f08ab8', DAISY],
+  hi: '#efe5ca', lo: '#c8964f', crack: '#9a7a52', speck: ['#b88442', '#f0d29a', '#9a7a52'],
+  path: ['#dcae6c'], ground: ['#d9ccaa'], driftwood: '#b88442', weed: ['#5fb040', '#4c9a34'], weedHi: '#86d860',
+  // The brook.
+  water: '#4ab4e6', wave: '#9ee2fa', foam: '#ffffff', troughs: '#3a96c8',
+};
+export function sunnyBlendLook(room) {
+  if (!sunBlendOn(room)) return null;
+  return {
+    p: SUN_BLEND_P,
+    kind: (c) => SUN_KINDS[c] ?? null,
+    naturalWall: () => false,
+    isLand: (k) => k === 'turf' || k === 'path',
+    isWater: (k) => k === 'water',
+    // The stones and planks in the brook stand on plain brook (their own pixels are left alone).
+    floorOf: { j: '~', g: '~' },
+    // The brook's banks, and its water in soft lighter and darker swirls.
+    brook: { fringe: '#4ea03a', fringeHi: '#62b842', earth: '#7a5434', shade: '#2f7ab0', edge: '#3a96c8' },
+    patches: { water: ['#8edcf8', 0.35, '#3a9ad2', 0.3] },
+    // The hedges' leaves.
+    hedge: { dark: '#215a2a', mid: '#2f7a34', light: '#4aa84c', top: '#2f7634', topHi: '#3f9444', topLo: '#2a6a30' },
+  };
+}
+
+function sunGrass(ctx, x, y, tx, ty, room) {
+  if (sunBlendOn(room)) px(ctx, SUN_GRASS[0], x, y, T, T);
+  else {
+    px(ctx, pick(SUN_GRASS, hash(tx, ty, 1)), x, y, T, T);
+    mottle(ctx, '#7dd356', x, y, tx, ty, 2, 8);
+    if (hash(tx, ty, 4) < 0.6) mottle(ctx, '#58ac3c', x, y, tx, ty, 5, 5);
+  }
   for (let i = 0; i < 7; i++) {
     const bx = x + rnd(tx, ty, 10 + i, 15);
     const by = y + rnd(tx, ty, 20 + i, 13);
@@ -158,8 +266,9 @@ function sunFlags(ctx, x, y, tx, ty, room) {
 // The dirt lane: warm gold, trodden, pebbled, grass creeping in at its edges.
 const LANE = ['#dcae6c', '#d4a460', '#e0b476'];
 function sunLane(ctx, x, y, tx, ty, room) {
-  px(ctx, pick(LANE, hash(tx, ty, 100)), x, y, T, T);
-  mottle(ctx, hash(tx, ty, 101) < 0.5 ? '#c8964f' : '#e8c284', x, y, tx, ty, 102, 6);
+  const smooth = sunBlendOn(room);
+  px(ctx, smooth ? LANE[0] : pick(LANE, hash(tx, ty, 100)), x, y, T, T);
+  if (!smooth) mottle(ctx, hash(tx, ty, 101) < 0.5 ? '#c8964f' : '#e8c284', x, y, tx, ty, 102, 6);
   for (let i = 0; i < 7; i++) {
     px(ctx, i % 3 ? '#f0d29a' : '#b88442', x + rnd(tx, ty, 110 + i, 15), y + rnd(tx, ty, 120 + i, 15), i % 3 ? 1 : 2, 1);
   }
@@ -247,6 +356,9 @@ const sunBank = {
 
 // The brook: clear, bright, rippled, with the sky in it.
 const isWater = (c) => c === '~' || c === 'j' || c === 'g';
+// With the blend pass on, it draws the brook's bank where it meets grass or the lane
+// (ragged), so the tile leaves out its own straight one there.
+const softBank = (room, tx, ty, dx, dy) => sunBlendOn(room) && [',', ':'].includes(at(room, tx + dx, ty + dy));
 function brook(ctx, x, y, tx, ty, room, lip = true) {
   // (One blue for all of it, so the tiles don't show as squares; the mottle
   // and ripples give it its texture.)
@@ -266,15 +378,15 @@ function brook(ctx, x, y, tx, ty, room, lip = true) {
     if (hash(tx, ty, 148) < 0.5) px(ctx, '#ffd0e4', lx + 1, ly - 1, 2, 1);
   }
   if (!room) return;
-  if (lip && !isWater(at(room, tx, ty - 1))) {
+  if (lip && !isWater(at(room, tx, ty - 1)) && !softBank(room, tx, ty, 0, -1)) {
     px(ctx, '#7a5434', x, y, T, 2);
     for (let i = 0; i < T; i += 2) px(ctx, i % 4 ? '#4ea03a' : '#62b842', x + i, y, 2, 1 + (hash(tx * 5 + i, ty, 149) < 0.4 ? 1 : 0));
     px(ctx, '#2f7ab0', x, y + 2, T, 2);
     px(ctx, '#3a96c8', x, y + 4, T, 1);
   }
-  if (!isWater(at(room, tx, ty + 1))) px(ctx, '#3a96c8', x, y + T - 2, T, 2);
-  if (!isWater(at(room, tx - 1, ty))) px(ctx, '#3a96c8', x, y, 1, T);
-  if (!isWater(at(room, tx + 1, ty))) px(ctx, '#3a96c8', x + T - 1, y, 1, T);
+  if (!isWater(at(room, tx, ty + 1)) && !softBank(room, tx, ty, 0, 1)) px(ctx, '#3a96c8', x, y + T - 2, T, 2);
+  if (!isWater(at(room, tx - 1, ty)) && !softBank(room, tx, ty, -1, 0)) px(ctx, '#3a96c8', x, y, 1, T);
+  if (!isWater(at(room, tx + 1, ty)) && !softBank(room, tx, ty, 1, 0)) px(ctx, '#3a96c8', x + T - 1, y, 1, T);
 }
 function brookStones(ctx, x, y, tx, ty, room) {
   // (With the bank's edge drawn like any water tile's, so the bank runs on
@@ -604,6 +716,8 @@ function glimFloor(ctx, x, y, tx, ty, room) {
 // then clips what's drawn next to a notched shape. Returns true if it clipped,
 // and then the caller must ctx.restore() when it's done.
 function raggedPatch(ctx, x, y, tx, ty, room, bareChars, floor) {
+  // (Where the blend pass softens the room, it draws the ragged edge itself.)
+  if (caveBlendOn(room) && !room.indoors) return false;
   const bare = (dx, dy) => bareChars.includes(at(room, tx, ty, dx, dy) ?? '#');
   const soft = { l: bare(-1, 0), r: bare(1, 0), u: bare(0, -1), d: bare(0, 1) };
   if (!(soft.l || soft.r || soft.u || soft.d)) return false;
@@ -731,30 +845,70 @@ function glimMossWall(ctx, x, y, tx, ty, room) {
     if (hash(tx, ty, 260 + i) < 0.5) px(ctx, '#e8fff4', sx + 1, y + len - 3, 1, 1);
   }
 }
+// A raised shelf of the cave's own rock: no masonry, just beds of stone of
+// uneven thickness, a thread of crystal in one, a lit lip; the top worn smooth
+// with a crack or a tuft of moss. Its outside corners are worn round.
+const GLIM_BEDS = ['#4b3d86', '#52438f', '#473a80', '#584a96', '#4f4089'];
 const glimBlock = {
   edge: '#1e1442',
   lit: '#d4c8ff',
+  round: true,
   face(ctx, x, y, tx, ty, raise) {
-    px(ctx, '#4a3c84', x, y, T, raise);
-    for (let row = 0; row * 4 < raise; row++) {
-      const offset = (row + tx) % 2 ? 4 : 0;
-      for (let bx = -offset; bx < T; bx += 8) {
-        const left = Math.max(0, bx);
-        const width = Math.min(bx + 7, T) - left;
-        if (width > 0) px(ctx, pick(['#6a5aa8', '#7466b4', '#6454a2', '#7060ae'], hash(tx * 3 + bx, ty * 5 + row, 31)), x + left, y + row * 4 + 1, width, 3);
-      }
+    px(ctx, '#43367c', x, y, T, raise);
+    // Beds a world-height apart, so a long shelf's run on from tile to tile.
+    let by = 0;
+    for (let bed = 0; by < raise; bed++) {
+      const n = 3 + Math.floor(hash(bed, ty, 31) * 4);
+      const h = Math.min(n, raise - by);
+      px(ctx, pick(GLIM_BEDS, hash(bed, ty, 32)), x, y + by, T, h);
+      // A lighter top to each bed, broken, and a dark seam under it.
+      const lx = rnd(tx, ty * 8 + bed, 33, 8);
+      px(ctx, '#6a5aaa', x + lx, y + by, 3 + rnd(tx, ty * 8 + bed, 34, 9), 1);
+      if (by + h < raise) px(ctx, '#2f2460', x, y + by + h - 1, T, 1);
+      if (hash(tx, ty * 8 + bed, 35) < 0.35) px(ctx, '#2f2460', x + 1 + rnd(tx, ty * 8 + bed, 36, 13), y + by + h - 1, 2, 1);
+      by += h;
     }
-    // A thread of crystal in one joint.
+    // Light from the upper left: the face a shade brighter at its left.
+    ctx.fillStyle = 'rgba(200, 180, 255, 0.07)';
+    ctx.fillRect(x, y, 5, raise);
+    // A thread of crystal along one bed, with a bright heart.
     const hue = hueOf(tx, ty, 300);
-    if (raise > 12 || hash(tx, ty, 301) < 0.6) px(ctx, HUES[hue][2], x + 1, y + 4, T - 2, 1);
-    px(ctx, HUES[hue][4], x + 3 + rnd(tx, ty, 302, 10), y + 4, 1, 1);
+    if (raise > 12 || hash(tx, ty, 301) < 0.6) {
+      const vy = y + 3 + rnd(tx, ty, 303, Math.max(1, raise - 6));
+      let vx = 0;
+      while (vx < T) {
+        const len = 2 + rnd(tx, vx, 304, 4);
+        px(ctx, HUES[hue][2], x + vx, vy + (hash(tx, vx, 305) < 0.3 ? 1 : 0), len, 1);
+        vx += len + (hash(tx, vx, 306) < 0.3 ? 1 : 0);
+      }
+      px(ctx, HUES[hue][4], x + 3 + rnd(tx, ty, 302, 10), vy, 1, 1);
+    }
+    // A crack down the face.
+    if (hash(tx, ty, 307) < 0.35) {
+      let cx = 2 + rnd(tx, ty, 308, 12);
+      for (let cy = 1; cy < raise - 2; cy++) { px(ctx, '#2a2054', x + cx, y + cy); if (hash(tx, cy, 309) < 0.3) cx += hash(tx, cy, 310) < 0.5 ? -1 : 1; }
+    }
+    // The foot, darker where it meets the ground.
+    px(ctx, '#2f2460', x, y + raise - 2, T, 2);
   },
   top(ctx, x, y, tx, ty) {
-    px(ctx, pick(['#8a7acc', '#9486d6', '#8272c4', '#9080d0'], hash(tx, ty, 33)), x, y, T, T);
-    if (hash(tx, ty, 34) < 0.5) px(ctx, '#7466b4', x + 7, y + 1, 1, T - 2);
-    if (hash(tx, ty, 35) < 0.4) px(ctx, '#7466b4', x + 1, y + 9, T - 2, 1);
-    px(ctx, '#d4c8ff', x + 2 + rnd(tx, ty, 36, 11), y + 2 + rnd(tx, ty, 37, 9), 1, 1);
-    if (hash(tx, ty, 38) < 0.3) shard(ctx, x + 4 + rnd(tx, ty, 39, 8), y + 12, 3, 4, hueOf(tx, ty, 40));
+    px(ctx, '#8a7acc', x, y, T, T);
+    mottle(ctx, pick(['#9486d6', '#8272c4', '#9080d0'], hash(tx, ty, 33)), x, y, tx, ty, 34, 9);
+    if (hash(tx, ty, 35) < 0.6) mottle(ctx, '#7a6abc', x, y, tx, ty, 36, 6);
+    // A crack across the top, wandering.
+    if (hash(tx, ty, 37) < 0.35) {
+      let cy = 3 + rnd(tx, ty, 38, 9);
+      for (let cx = 1; cx < T - 1; cx++) { px(ctx, '#6a5aa8', x + cx, y + cy); if (hash(tx, cx, 39) < 0.3) cy = Math.max(2, Math.min(13, cy + (hash(tx, cx, 41) < 0.5 ? -1 : 1))); }
+    }
+    px(ctx, '#d4c8ff', x + 2 + rnd(tx, ty, 42, 11), y + 2 + rnd(tx, ty, 43, 9), 1, 1);
+    // A tuft of glowing moss in a hollow, or a seed of crystal.
+    if (hash(tx, ty, 44) < 0.22) {
+      const mx = x + 2 + rnd(tx, ty, 45, 10);
+      const my = y + 3 + rnd(tx, ty, 46, 9);
+      px(ctx, '#2c8a78', mx, my, 4, 2);
+      px(ctx, '#3cc4a0', mx + 1, my, 2, 1);
+      px(ctx, '#9affe0', mx + 1, my - 1, 1, 1);
+    } else if (hash(tx, ty, 47) < 0.3) shard(ctx, x + 4 + rnd(tx, ty, 39, 8), y + 12, 3, 4, hueOf(tx, ty, 40));
   },
 };
 const isGlimWater = (c) => c === '~' || c === 'j';
@@ -770,7 +924,7 @@ function glimWater(ctx, x, y, tx, ty, room) {
   for (let i = 0; i < 3; i++) if (hash(tx, ty, 330 + i) < 0.5) px(ctx, '#e8fdff', x + rnd(tx, ty, 334 + i, 14), y + rnd(tx, ty, 338 + i, 14), 1, 1);
   if (hash(tx, ty, 345) < 0.18) px(ctx, '#c070d8', x + 3 + rnd(tx, ty, 346, 8), y + 3 + rnd(tx, ty, 347, 8), 4, 2);
   if (!room) return;
-  if (!isGlimWater(at(room, tx, ty - 1))) {
+  if (!isGlimWater(at(room, tx, ty - 1)) && !caveSoftEdge(room, tx, ty, 0, -1)) {
     px(ctx, '#7a68c0', x, y, T, 2);
     px(ctx, '#d4c8ff', x, y, T, 1);
     px(ctx, '#1e1442', x, y + 2, T, 1);
@@ -994,7 +1148,7 @@ function townEarth(ctx, x, y, tx, ty, room) {
     px(ctx, '#4a3a30', sx, sy + 1, 3, 1);
     px(ctx, '#b0a090', sx, sy, 2, 1);
   }
-  const turf = (dx, dy) => at(room, tx, ty, dx, dy) === ',';
+  const turf = (dx, dy) => at(room, tx, ty, dx, dy) === ',' && !caveSoftEdge(room, tx, ty, dx, dy);
   for (let i = 0; i < T; i += 2) {
     const tuft = hash(tx * 3 + i, ty, 99) < 0.6 ? 1 : 2;
     if (turf(0, -1)) px(ctx, '#4f8044', x + i, y, 2, tuft);

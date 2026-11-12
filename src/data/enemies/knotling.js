@@ -21,7 +21,7 @@ export const KNOTLING = {
     frames: [KNOTLING_DISGUISE_SPRITES.still, KNOTLING_DISGUISE_SPRITES.glare, KNOTLING_DISGUISE_SPRITES.grumble],
     palette: KNOTLING_PALETTE,
   },
-  maxHp: 485,
+  maxHp: 615,
   damage: 20,
 
   // A Chapter 3 enemy from the deep wood: a touch tougher than the Burrhog.

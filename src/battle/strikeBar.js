@@ -18,12 +18,30 @@ const TRAIL_STEP = 9;
 const BURST_SECONDS = 0.4;
 const LABEL_SECONDS = 1.2;
 
-// The most a slash short of PERFECT does (attack spells are measured against
-// it, see spellStrike in battleScene.js). A PERFECT slash does PERFECT_BONUS
+// The most a slash short of PERFECT does. A PERFECT slash does PERFECT_BONUS
 // more, up to PERFECT_SLASH_DAMAGE.
 export const SLASH_DAMAGE = 20;
 const PERFECT_BONUS = 1.3;
 export const PERFECT_SLASH_DAMAGE = Math.round(SLASH_DAMAGE * PERFECT_BONUS);
+// A slash's damage climbs in a straight line from 5 (the very edge of the hit
+// window) to SLASH_DAMAGE at FULL_AT of the way to the centre, and stays there
+// until PERFECT. So OK (closeness 0.3) does 11, GOOD (0.6) 16, a near miss of
+// PERFECT (0.85) 20, and PERFECT 33 (26 x FIGHT_GROWTH). (Before 9 November 2026 it rose with the
+// square of closeness: 6, 10, 16 and 26, so ordinary timing felt weak.)
+const FULL_AT = 0.8;
+export function slashDamage(closeness) {
+  if (closeness <= 0) return 0;
+  const damage = Math.round(5 + Math.min(1, closeness / FULL_AT) * (SLASH_DAMAGE - 5));
+  // A PERFECT grows with the rest (FIGHT_GROWTH): monsters' HP went up by that
+  // much, so a PERFECT left at 26 would have been worth less than before.
+  return closeness > 0.85 ? Math.round(damage * PERFECT_BONUS * FIGHT_GROWTH) : damage;
+}
+// How much more a typical FIGHT does on that curve than on the old one (good
+// timing; tools/ttkCheck.html works it out). Monsters' HP from chapter 2 on
+// went up by the same, and so do attack spells, allies' spells and team
+// attacks (spellStrike, allyStrikeDamage and teamDamage in battleScene.js),
+// so they still beat a FIGHT by as much as they did and fights last as long.
+export const FIGHT_GROWTH = 1.27;
 
 // The FIGHT minigame: slash marks slide in from the right, one after another,
 // toward a notch at the left of the bar. Press confirm as each one crosses the
@@ -83,11 +101,10 @@ export class StrikeBar {
     slash.state = 'hit';
     slash.x = NOTCH_X;
     sfx('slash');
-    let damage = Math.round(5 + closeness * closeness * (SLASH_DAMAGE - 5));
+    const damage = slashDamage(closeness);
     let text = 'OK';
     let color = COLORS.text;
     if (closeness > 0.85) {
-      damage = Math.round(damage * PERFECT_BONUS);
       text = 'PERFECT';
       color = COLORS.yellow;
     } else if (closeness > 0.4) {

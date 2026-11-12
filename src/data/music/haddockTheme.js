@@ -37,10 +37,18 @@ import {
 //   A2       8 bars  the tune again, clarinet and oboe in thirds, the
 //                    trombone harrumphing at the end of each half
 //   bridge   8 bars  the minor: the motif with its third flattened, slower,
-//                    on violas and a lone harp; the hand bell far away
+//                    on violas and a lone harp; then he hums. The last
+//                    four bars are the opening of Corrie's lullaby ("Come
+//                    In, Little Boat", F A D / D C Bb / A G F / E) on a low
+//                    voice and a soft clarinet, over the lullaby's own
+//                    chords (Dm Bb Gm A, which the bridge already has),
+//                    stopping on the E, asking. It's the first time the
+//                    player hears him hum it; the hand bell far away
 //   A3       8 bars  the tune home in D major, the whole band, soft; the
 //                    last bar is the motif on the bell alone, in the
-//                    minor, like a thought he did not finish
+//                    minor, like a thought he did not finish (the harp
+//                    under it is an open fifth, so the bell's F rubs
+//                    against nothing but the question)
 
 const BAR = 16;
 const tune = (text) => melody(text, 2);   // each token an 8th: 8 to a bar
@@ -75,6 +83,13 @@ const TUNE_BRIDGE = tune(`
   A4 - D5 - F5 - - E5     D5 - Bb4 - F4 - - .
   G4 - Bb4 - D5 - - C5    E5 - C#5 - A4 - - -
 `);
+// He hums: the lullaby's opening, its 6/8 bars squeezed into 4/4 as 3+3+2
+// (the same as "The Long Climb" breaks it). One bar of it per chord.
+const HUM = tune(`
+  F3 - - A3 - - D4 -      D4 - - C4 - - Bb3 -
+  A3 - - G3 - - F3 -      E3 - - - - - - .
+`);
+
 // The thirds over the tune for the oboe, in the repeat.
 const THIRD_ABOVE = tune(`
   A4 - G4 F#4 - - D4 -    F#4 - A4 D5 - - C#5 -
@@ -99,9 +114,12 @@ const plod = (chords) => chordLine(chords, PLOD, 3);
 // up into it, then the fifth below, bowed and short. Gruff, not bouncy.
 const GRUMBLE = [-1, 0, '-', '-', '-', '-', '.', '.', -5, '-', '-', '-', '.', '.', '.', '.'];
 const grumble = (chords) => chordLine(chords, GRUMBLE, 2);
-// The hand bell rings the hour: a D at the top of the bar.
-const BELL_HOUR = [midi('D6'), ...Array(15).fill('-')];
-const bellEvery = (bars, n) => Array.from({ length: bars }, (_, i) => (i % n === n - 1 ? BELL_HOUR : rest(1))).flat();
+// The hand bell rings the hour: a D at the top of the bar (D5, where the
+// chimes were recorded; any higher and the bell squeaks).
+const BELL_HOUR = [midi('D5'), ...Array(15).fill('-')];
+// It rings on the first bar of each group (a D or G chord): on the last
+// bar, the A chord, its D would sit a half step over the tune's C sharp.
+const bellEvery = (bars, n) => Array.from({ length: bars }, (_, i) => (i % n === 0 ? BELL_HOUR : rest(1))).flat();
 
 // The motif said plainly on the bell, once, in the minor, at the very end.
 const END_BELL = haddockPhrase('D6', { minor: true });
@@ -127,6 +145,8 @@ export const HADDOCK_THEME = {
     pad: { sample: 'violas', volume: 0.12, attack: 0.7, release: 1.2, reverb: 0.5, pan: 0.15 },
     violins: { sample: 'violins', volume: 0.1, attack: 0.9, release: 1.2, reverb: 0.55, pan: 0.3 },
     plod: { sample: 'cellosPizz', volume: 0.3, release: 0.25, reverb: 0.3, pan: -0.1, humanize: { time: 0.01, volume: 0.15 } },
+    // His hum: a low "ah", soft, close.
+    hum: { sample: 'choir', volume: 0.13, attack: 0.35, release: 1.0, reverb: 0.55, pan: -0.05, humanize: { time: 0.02, volume: 0.1 } },
     bell: { sample: 'chimes', volume: 0.16, ring: true, reverb: 0.6, pan: 0.3 },
     bellBright: { sample: 'glock', volume: 0.2, ring: true, reverb: 0.6, pan: 0.3, echo: { time: 0.45, feedback: 0.3, mix: 0.25 } },
     tick: { sample: 'frameDrum', drum: 'sample', volume: 0.1, ring: true, reverb: 0.25, humanize: { time: 0.006, volume: 0.25 } },
@@ -177,11 +197,11 @@ export const HADDOCK_THEME = {
       bell: bellEvery(8, 8),
     }, 8),
 
-    // The minor: slower, the sadness showing.
+    // The minor: slower, the sadness showing; then he hums the lullaby.
     bridge: fit('bridge', {
-      pad: TUNE_BRIDGE,
-      oboe: after(4, transpose(TUNE_BRIDGE, 12)),
-      reedSoft: sustained(BRIDGE_CHORDS, BAR, 1, 4),
+      pad: [...TUNE_BRIDGE.slice(0, 4 * BAR), ...sustained('Dm Bb Gm A', BAR, 2, 3)],
+      hum: after(4, [...rest(4), ...HUM]),
+      reedSoft: [...sustained(BRIDGE_CHORDS, BAR, 1, 4).slice(0, 4 * BAR), ...HUM],
       violins: sustained(BRIDGE_CHORDS, BAR, 2, 4),
       harpSoft: slow(BRIDGE_CHORDS),
       bell: bellEvery(8, 8),
@@ -194,7 +214,7 @@ export const HADDOCK_THEME = {
       growl: [...transpose(TUNE_A, -12).slice(0, 7 * BAR), ...rest(1)],
       oboe: [...THIRD_ABOVE.slice(0, 7 * BAR), ...rest(1)],
       harrumph: [...rest(3), ...HARRUMPH, ...rest(4)],
-      harp: strum(A_CHORDS),
+      harp: [...strum(A_CHORDS).slice(0, 7 * BAR), ...slow('A')],
       plod: [...plod(A_CHORDS).slice(0, 7 * BAR), ...rest(1)],
       basses: [...grumble(A_CHORDS).slice(0, 7 * BAR), ...rest(1)],
       pad: sustained(A_CHORDS, BAR, 2, 4),

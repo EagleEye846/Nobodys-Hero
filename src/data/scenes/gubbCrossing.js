@@ -2,7 +2,7 @@
 // jetty. A slow, croaky voice is singing out on the black water. Gubb the
 // ferryman, old and fat and green, in his punt, who hasn't had a passenger
 // for a hundred years. The last one was very small, and didn't say much, and
-// he gave them a sweet. (He doesn't know it was the Hero. Ves does the sums.)
+// he gave him a sweet. (He doesn't know it was the Hero. Ves does the sums.)
 // Then he gives you one too, and you hop aboard and he poles you across the
 // whole width of the lake: the punt gliding (its east-facing frames,
 // lake_punt_east), Gubb leaning on his pole, rings spreading out from the
@@ -43,13 +43,13 @@ export const GUBB_CROSSING = {
     { do: 'say', who: 'punt', text: 'Like your friend there.' },
     { do: 'emote', who: 'player', emote: '...' },
     { do: 'say', who: 'ves', text: '{surprised}A hundred years?\n\n{thoughtful}...Small. How small?' },
-    { do: 'say', who: 'punt', text: 'Oh, so high. Boots too big, and a sword longer than they were.' },
+    { do: 'say', who: 'punt', text: 'Oh, so high. Boots too big, and a sword longer than he was.' },
     { do: 'say', who: 'ves', text: '{surprised}The Hero? You took the HERO across?' },
     { do: 'say', who: 'punt', text: 'Was that who it was? Ohh.\n\nI thought it was a lost child.' },
-    { do: 'say', who: 'punt', face: 'solemn', text: 'Gave them a sweet.' },
+    { do: 'say', who: 'punt', face: 'solemn', text: 'Gave him a sweet.' },
     { do: 'wait', seconds: 0.7 },
-    { do: 'say', who: 'ves', text: '{thoughtful}Which way did they go?' },
-    { do: 'say', who: 'punt', face: 'solemn', text: 'Down, dear. Only ever down. I put them off at the far shore and they looked at the stair a long time, and then they went.' },
+    { do: 'say', who: 'ves', text: '{thoughtful}Which way did he go?' },
+    { do: 'say', who: 'punt', face: 'solemn', text: 'Down, dear. Only ever down. I put him off at the far shore and he looked at the stair a long time, and then he went.' },
     { do: 'say', who: 'punt', face: 'solemn', text: 'I waited a bit. Folk come back for the punt, as a rule.' },
     { do: 'say', who: 'ves', text: '{bored}You waited a hundred years.' },
     { do: 'say', who: 'punt', text: 'Not waiting. Punting. They feel very alike from the inside.' },

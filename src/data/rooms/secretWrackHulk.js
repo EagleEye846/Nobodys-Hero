@@ -12,9 +12,11 @@ export const SECRET_WRACK_HULK = {
   name: 'THE HULK',
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'wrack',
-  // The Wrack Shore's song, and the sounds of the place under it (rain on the planks above).
-  music: 'wrack',
-  ambience: 'wreck_yard',
+  // The Wrack Shore's song through the planking (wrackIndoorTheme.js), and the sounds of the place under it (rain on the planks above).
+  music: 'wrackIndoor',
+  ambience: 'hulk_storm',
+  // After chapter 5 the storm is over (`calmAfter`): no rain on the roof, and the room's `_calm` words.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_hulk' },
   vesWell: true,
   indoors: true,
 
@@ -51,6 +53,16 @@ export const SECRET_WRACK_HULK = {
     { sprite: 'chest', x: 12, y: 6, text: 'hulk_chest', gives: 'brine_tonic', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 2, y: 7, text: 'hulk_pouch', gold: 75, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'c5_rope_coil', x: 9, y: 7, text: 'hulk_rope', walkable: true },
+    // (2026-11-08) A chart on the wall and an oilskin on its peg.
+    { sprite: 'in_oilskin_peg', x: 6, y: 2, text: 'in_hulk_oilskin' },
+    { sprite: 'in_chart', x: 8, y: 2, text: 'in_hulk_chart' },
+    // Dressing (second pass): a lamp and a shelf on the hull, a rug, crates in the corner.
+    { sprite: 'in_wall_lamp', x: 13, y: 2, text: 'in_hulk_lamp' },
+    { sprite: 'in_shelf_tins', x: 10, y: 2, text: 'in_hulk_shelf' },
+    { sprite: 'in_rug_red', x: 6, y: 7, flat: true, walkable: true },
+    { sprite: 'c5_crates_stack', x: 14, y: 8, text: 'in_hulk_crates' },
+    { sprite: 'c5_lantern_fallen', x: 1, y: 4, walkable: true, text: 'in_hulk_lamp' },
+    { sprite: 'c5_planks_scatter', x: 10, y: 8, flat: true, walkable: true },
   ],
   tileTexts: { W: 'hulk_wall', '#': 'hulk_wall' },
 

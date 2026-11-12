@@ -31,9 +31,6 @@ The sea, a long way down, lapping the cliff foot as if it had all day. It has.
 [steps_sea_bramble]
 {worried}It's very close. And very... wet-looking.
 
-[steps_bunting_post]
-A post with a little red and yellow pennant on top. The bunting runs down the whole stair, one post at a time.
-
 [steps_bunting]
 Flags in red, yellow, blue and white, strung from post to post. They're flapping hard. Somebody takes this seriously.
 
@@ -43,6 +40,10 @@ A striped deckchair on the landing, set facing the sea. There is a hat on it, an
 [steps_deckchair_ves]
 {bored}It's a lovely spot to be back in a minute from.
 
+# (draft)
+[steps_deckchair 2]
+The hat on the deckchair has a feather in it now. It didn't before. Things are happening to this hat while nobody's looking.
+
 [steps_buoys]
 A pile of old buoys, painted in every colour somebody had left. They've been put out as seats.
 
@@ -51,6 +52,14 @@ A lifebuoy on a post, with a neat little notice. ONLY FOR EMERGENCIES. NOT FOR H
 
 [steps_counter]
 A chalk board by the stair, with a tally scratched under a neat heading. STEPS CLIMBED TODAY: 3. The last mark is very small and a little proud.
+
+# (draft) A second look, and ten: you add your mark.
+[steps_counter 2]
+STEPS CLIMBED TODAY: 3. You could add a mark. But you came down them, not up, and it wouldn't be honest.
+
+# (draft)
+[steps_counter 10]
+You've stood at the tally so long you could have climbed the steps twice. You add a mark, very small and a little proud. STEPS CLIMBED TODAY: 4.
 
 [steps_pouch]
 A purse wedged in the dune grass at the top of the stair, where somebody sat down to get their breath back and got up lighter.
@@ -78,17 +87,25 @@ A tuft of tough pale grass, bent over by a wind that's been going the same way f
 [beach_sign]
 A signpost with three arms. GULLREST: POP. 41 AND A WALRUS. (THE GULLS DON'T COUNT, AND THEY KNOW.) The lifeboat house is in the big red doors up the beach.
 
+# (draft)
+[beach_sign 2]
+POP. 41 AND A WALRUS. The 41 has been chalked over and over, a different number every time. The walrus never has.
+
 [beach_sign_east]
 A signpost. THE COVE (TIDE BELL). THE JETTY (MIND THE BOAT). Someone has added, in chalk: AND THE CASTLES ARE NOT FRIENDLY.
 
 [beach_sign_east_ves]
-{thoughtful}I'd like to know what that means. I'd like to know it from a distance.
+{smile}I'd like to know what that means. I'd like to know it from a distance.
 
 [beach_hut]
 A little striped beach hut, shut up tight. The sign says: GONE FOR THE DAY. The sign has been up since last week.
 
 [beach_hut_bramble]
 {grin}It's got a tiny porch. I want a tiny porch.
+
+# (draft)
+[beach_hut 2]
+GONE FOR THE DAY. Underneath, in somebody else's writing: WHICH DAY.
 
 [beach_bunting_post]
 A post with a pennant on top. The bunting between the posts hums in the sea breeze, a thin and cheerful note.
@@ -102,11 +119,45 @@ A deckchair in the sun, facing the water. There's a book on it, upside down. A g
 [beach_deckchair_ves]
 {bored}Don't ask him to move. He's got a good page.
 
+# (draft)
+[beach_deckchair 2]
+The gull on the book has turned a page. You didn't see how.
+
 [beach_rowboat]
 A little rowboat, pulled up high on the sand and propped on its side. Paint flaking, bright blue underneath. Well loved by somebody who doesn't paint.
 
 [beach_pots]
+Lobster pots, stacked three high and tied with rope. Wedged in the top one is an empty jam jar. You rinse it out in a rock pool and fill it with the sea, for someone who has never seen it.
+
+[beach_pots_bramble]
+{grin}For the tortoise? ...He did say not to hurry.
+
+[beach_pots_after]
 Lobster pots, stacked three high and tied with rope, each with a little brass tag. They've all been licked clean by something.
+
+[beach_pup]
+A seal pup with a bucket and spade, very carefully not building a sandcastle. "You have to poke them first," she says. "To see if they poke back."
+
+[beach_pup_bramble]
+{worried}...Do they poke back?
+
+# (draft)
+[beach_pup 2]
+"I poked one yesterday," says the seal pup. "It didn't poke back. It just went a bit flat." She looks at you very seriously. "That's how you know."
+
+[beach_pup_bramble 2]
+{thinking}...Know what?
+
+# (draft) World reacts: the sky went green round the point.
+[beach_pup after the_sky_turns]
+A seal pup with a bucket and spade, looking out past the point. "Mum says the sky's gone green round there," she says. "Mum says not to look." She is looking.
+
+# (draft) World reacts: after the chapter (Haddock is gone).
+[beach_pup after haddock_gone]
+A seal pup with a bucket and spade, facing the walrus's empty rock. "Ding," she says to the sea, very seriously. "He's not doing it. So I am."
+
+[beach_pup_bramble after haddock_gone]
+{sad}...That's right. That's how he did it.
 
 [beach_net]
 A net drying on a frame. It has been mended so often that the mends have been mended.
@@ -138,6 +189,10 @@ The sea, turquoise at the edges and foaming a little, putting on a show for anyo
 [beach_boulder]
 Big pink boulders, polished by the tide. One has a flat dent in the top, just the size of somebody sitting down. A big somebody.
 
+# (draft)
+[beach_boulder 2]
+You sit in the dent in the boulder. It's far too big for you. Whoever it's the shape of has sat here a great many mornings.
+
 [beach_wall]
 A low sandstone cliff, striped like a cake, with huts built up against its feet.
 
@@ -155,8 +210,19 @@ A chalk board, big and neat, headed HADDOCK'S TIDES. Under it: HIGH: WHEN IT'S H
 [house_tide_board_ves]
 {bored}I didn't think a board could look offended.
 
+# (draft) World reacts: after the chapter (Haddock is gone).
+[house_tide_board after haddock_gone]
+HADDOCK'S TIDES. The last row of times is in his big, crossed-out chalk. The row under it is in somebody else's hand, small and round, with nothing crossed out at all. Underneath, still: LIGHTMAN. LIGHTMAN. LIGHTMAN.
+
+[house_tide_board_ves after haddock_gone]
+{thoughtful}...Somebody's minding it.
+
 [house_lifeboat]
 The lifeboat itself, on a cradle by the big doors, scrubbed and ready, with a name in white on her bow: DAISY. She has never been launched, by the look of the ropes. She has been polished every week for years.
+
+# (draft)
+[house_lifeboat 2]
+Chalked on the cradle under DAISY's keel: NEXT SPRING. It has been rubbed out and written again a great many springs.
 
 [house_lifebuoy]
 A lifebuoy on a post, with a neat note: LIFE-SAVING EQUIPMENT. NOT A HAT, A HOOP OR A DISCUS.
@@ -165,7 +231,11 @@ A lifebuoy on a post, with a neat note: LIFE-SAVING EQUIPMENT. NOT A HAT, A HOOP
 A kettle on a little stove, on the boil. It has been on the boil, by the sound of it, since long before you arrived.
 
 [house_kettle_ves]
-{thoughtful}Somebody's very good at kettles.
+{smile}Somebody's very good at kettles.
+
+# (draft) World reacts: after the chapter (Haddock is gone).
+[house_kettle after haddock_gone]
+A kettle on a little stove, gone cold. It has been filled right to the top, ready, by somebody who meant to be back for it.
 
 [house_barrels]
 Spare ropes, a pail of sand and a barrel of something that rattles. A label: BISCUITS. (EMERGENCY.)
@@ -214,8 +284,16 @@ A rock pool, bright with anemones and a single furious crab. The crab regards yo
 [cove_pool_bramble]
 {grin}He's the king of the pool. I'd listen to him.
 
+# (draft)
+[cove_pool 2]
+The crab in the pool hasn't moved. It has the air of somebody who has outlasted a great many visitors and fully expects to outlast you.
+
 [cove_boulder]
 A big grey boulder, balanced on a smaller one. There's a name scratched into it: HARRY. Another name is scratched underneath: NOT HARRY.
+
+# (draft)
+[cove_boulder 2]
+HARRY. NOT HARRY. Lower down, freshly scratched: WHO IS HARRY.
 
 [cove_pouch]
 A purse in a niche at the back of the cove. A note: I'LL BE BACK FOR THIS. (SIGNED, A CRAB.)
@@ -224,7 +302,7 @@ A purse in a niche at the back of the cove. A note: I'LL BE BACK FOR THIS. (SIGN
 A hole at the foot of the cliff, just wider than you are, with a little shingle path leading into it. Something in the dark is glinting. A lot of somethings.
 
 [cove_hole_ves]
-{thoughtful}That's a lot of glinting for one hole.
+{smile}That's a lot of glinting for one hole.
 
 [cove_sea]
 Deep water, very still and very clear. Small silver fish hang in it like thoughts.
@@ -288,7 +366,10 @@ A stake of driftwood pushed into the sand, with a scrap of wrapping paper speare
 {bored}I've heard that excuse. I've used that excuse.
 
 [hoard_chest]
-A chest, much dented, with gull-prints all round it and a neat little pile of sardine tins beside it, as a sort of toll. Inside is a packet of kelp crisps, still sealed. Nobody knows who it was stolen from.
+A chest, much dented, with gull-prints all round it and a neat little pile of sardine tins beside it, as a sort of toll. Inside, folded with great care for a gull: a SEA-SILK SHAWL, light as spray.
+
+[hoard_chest_ves]
+{smile}Mine, then. They can have the sardines back.
 
 [hoard_pouch]
 A purse hung from a hook of driftwood, heavy for its size. Somebody has pecked their initials into it: G. (THIS IS NOT THE ONLY ONE.)
@@ -297,4 +378,75 @@ A purse hung from a hook of driftwood, heavy for its size. Somebody has pecked t
 A hand mirror propped against the wall, with a gull's careful footprints in front of it. A gull comes here every day to look at itself.
 
 [hoard_tinsel]
-A brass handbell, stood up on the sand like a trophy, with tinsel wound round the handle and three keys and a bit of ribbon threaded on it. It looks quite festive.
+A tin dinner bell, dented on one side, stood up on the sand with tinsel wound round the handle and three keys and a bit of ribbon threaded on it. Scratched on the rim: DROWNED RAT. SUPPER. It looks quite festive.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_house_knots]
+A board of knots on a cord: reef, bowline, sheet bend, clove hitch. The last one is only half tied.
+
+# (draft)
+[in_house_shelf]
+A shelf of odd tins. The one marked BISCUITS rattles like nails.
+
+# (draft)
+[in_house_window]
+A small window, salted round the edges. You can hear the sea through it.
+
+# (draft)
+[in_house_sketch]
+A pencil sketch of a little rowing boat, framed and hung on a nail.
+
+# (draft)
+[in_house_net]
+A net over a trestle, half mended. The netting needle waits on the boards beside it.
+
+# (draft)
+[in_house_tea]
+A mug of tea on a stool, at walrus height. Nobody else sits there.
+
+# (draft)
+[in_house_boots]
+Big sea boots by the door, standing in a puddle of their own.
+
+# The way to the cove, before the lifeboat house (lantern_at_noon): it turns you back.
+[beach_cove_not_yet]
+The cove is round the point. But Haddock said the lifeboat house first: the big red doors, up the beach, kettle on.
+
+[beach_cove_not_yet_ves]
+{bored}He said kettle. I heard kettle.
+
+# --- SHORE DRESSING (2026-11-08) ------------------------------------------------
+
+# (draft)
+[beach_rocks]
+Warm stones, dry on top, with a green beard of weed where the sea reaches. Something small lives under every one of them.
+
+# (draft)
+[beach_pot]
+A lobster pot, its rope out to a red cork. Nobody's lobster today.
+
+# (draft)
+[beach_fence]
+A bit of fence that once kept the dune grass off the path. The dune grass won.
+
+# (draft)
+[beach_log]
+A whole bleached tree, roots and all, come ashore from somewhere far. Children have carved their names in it, and one of them carved a fish.
+
+# (draft)
+[in_house_lamp]
+An oil lamp on an iron arm, the brass rubbed bright. Someone trims the wick every morning, whether it's needed or not.
+
+# (draft)
+[in_house_crate]
+A crate of tins: peaches, pilchards, and one with no label that has been here longer than anyone.
+
+# (draft)
+[in_house_chest]
+A little sea chest with rope handles. A folded blanket on top, for whoever comes in off the sea cold.
+
+# (draft)
+[in_house_oar]
+A spare oar stood in the corner, a red rag tied round it so it can't be borrowed without somebody noticing.

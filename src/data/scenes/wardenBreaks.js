@@ -25,7 +25,7 @@ export const WARDEN_BREAKS = {
     // It cracks, slowly, all through what it says (5 frames, 2.5 seconds).
     { do: 'animate', who: 'warden', animation: 'warden_crack', speed: 0.5, once: true },
     { do: 'say', text: 'A crack runs up the Warden from its plinth to its crown, slowly, with a sound like ice on a pond.' },
-    { do: 'say', who: 'warden', text: '...THREE HUNDRED YEARS.' },
+    { do: 'say', who: 'warden', text: '...A HUNDRED YEARS.' },
     { do: 'wait', seconds: 0.8 },
     { do: 'say', who: 'warden', text: 'I WAS MADE TO KNOW HIM WHEN I SAW HIM.\n\n...I THINK I WOULD NOT HAVE KNOWN HIM AT ALL.' },
     { do: 'wait', seconds: 0.6 },

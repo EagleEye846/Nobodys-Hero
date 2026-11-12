@@ -330,3 +330,23 @@ The quarry wall, cut in neat steps. Someone took a lot of stone out of here, a l
 
 [quarry_sign_bramble]
 {thinking}Three's hard. I did it in nineteen goes. I'm not writing that on a sign.
+
+# (draft) THE REGISTRY'S QUEST: the rhyme at the camp, the first clue to the three leaves.
+
+[camp_riddle]
+A scrap of ruled paper, tucked under the leg of the stall's counter, spotted with rain. Somebody has copied a rhyme out in careful capitals, and drawn a tick at the end of it.
+
+THREE LEAVES WENT OUT ON THE WIND.
+ONE WANTED A SHELF, AND FOUND ONE.
+ONE WANTED WATER, AND FOUND A TOLL.
+ONE WANTED WARMTH, AND FOUND THE POTS.
+BRING THEM TO THE CUT IN THE STREET.
+
+# (draft) The pencil note under the rhyme: the missable-leaf warning. Hollin is the last of the wood; nobody comes back up from the well.
+In pencil underneath, in a smaller and much more worried hand:
+
+THE SHELF IS IN THE WOOD, IN HOLLIN, IN THE SHOP. THE OTHER TWO ARE A LONG WAY ON. DON'T LEAVE THE SHELF FOR LAST. THERE IS NO COMING BACK UP.
+
+[camp_riddle_bramble]
+{sly}I didn't write that. ...I'd remember. I think I'd remember.
+

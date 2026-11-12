@@ -88,8 +88,3 @@ browser at the same address (http://localhost:8000).
 - **No sound:** press a key on the first screen (browsers wait for a key press
   before playing sound), check you haven't muted it with **M**, and check
   the volume in **SETTINGS** (in the C menu).
-
----
-
-Making things for the game (rooms, enemies, songs, dialogue): the Studio tools,
-described in [tools/README.md](tools/README.md).

@@ -17,9 +17,11 @@ export const WRECK_GALLEY = {
   name: 'THE GALLEY',
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'wreck',
-  // "Fog Bell" (src/data/music/wreckTheme.js).
-  music: 'wreck',
-  ambience: 'wreck_yard',
+  // "Under Her Ribs" (src/data/music/wreckHullsTheme.js): inside the beached wrecks.
+  music: 'wreckHulls',
+  ambience: 'hulk_storm',
+  // After chapter 5 the storm is over (`calmAfter`): no rain on the roof, and the room's `_calm` words.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_hulk' },
   vesWell: true,
   indoors: true,
 
@@ -27,12 +29,12 @@ export const WRECK_GALLEY = {
     '########################',
     '#WWWWwWWWWWWWWWWWWwWWWW#',
     '#::::::v:::::::::v:::::#',
-    '#::::::::::::::::::::::#',
-    '#::::::::::::::::::::::#',
-    '#::::::::::::::::::::::#',
-    '#::::::::::::::::::::::#',
-    '::::::::::::::::::::::::',
-    '::::::::::::::::::::::::',
+    '#:::::::::::..::..:::::#',
+    '#:::::::::.........::::#',
+    '#::::::::::.........:::#',
+    '#:::::::::::::..:.:::::#',
+    '...::::::::::::::::::...',
+    '...:::::::::::::::::::..',
     '#::::::::::::::::::::::#',
     '#::::::::::::::::::::::#',
     '#::::::::::::::::::::::#',
@@ -70,6 +72,44 @@ export const WRECK_GALLEY = {
     { sprite: 'c5_barrel', x: 21, y: 11, text: 'galley_barrels' },
     { sprite: 'c5_crates_stack', x: 2, y: 3, text: 'galley_stores' },
     { sprite: 'c5_rope_coil', x: 18, y: 11, text: 'hull_rope', walkable: true },
+    // Lived in, once (2026-11-08): the crew's mugs on their rail, pans on hooks, the cook's
+    // bottles, tins on a crate, and the ship's cat's bowl, still put out. (All east of x 6 or up
+    // on the wall, clear of the_ghost_cook.)
+    { sprite: 'in_mug_rail', x: 3, y: 1, text: 'in_galley_mugs' },
+    { sprite: 'in_pans_rail', x: 11, y: 1, text: 'in_galley_pans' },
+    { sprite: 'in_shelf_bottles', x: 21, y: 1, text: 'in_galley_bottles' },
+    { sprite: 'in_tins_crate', x: 22, y: 4, text: 'in_galley_tins' },
+    { sprite: 'in_cat_bowl', x: 16, y: 6, text: 'in_galley_bowl', walkable: true, flat: true },
+    // The second mess table, laid too, and the lantern they ate by, still lit on its hook; a
+    // leak under the porthole, more stores along the walls.
+    { sprite: 'wy_crew_table', x: 14, y: 10, text: 'galley_table' },
+    { sprite: 'bench', x: 14, y: 11, text: 'galley_bench' },
+    { sprite: 'bench', x: 16, y: 11, text: 'galley_bench' },
+    { sprite: 'c5_lantern_hook', x: 12, y: 9 },
+    { sprite: 'in_shelf_tins', x: 7, y: 1, text: 'in_galley_bottles' },
+    { sprite: 'in_oilskin_peg', x: 20, y: 1, text: 'galley_stores' },
+    { sprite: 'c5_puddle', x: 17, y: 3, flat: true, walkable: true },
+    { sprite: 'c5_crate', x: 22, y: 10, text: 'galley_stores' },
+    { sprite: 'c5_barrel', x: 22, y: 3, text: 'galley_barrels' },
+    { sprite: 'in_stool_mugs', x: 19, y: 10, text: 'galley_table' },
+    { sprite: 'c5_puddle', x: 1, y: 10, flat: true, walkable: true },
+    { sprite: 'in_rug_red', x: 3, y: 5, flat: true, walkable: true },
+    // (Second pass.) The dark along the foot of the north wall, a scupper's rust under the leak,
+    // a sack of the cook's beans gone over by his stores, the crew's sea chests along the south
+    // wall, and a grating in the boards over the bilge.
+    { sprite: 'wy_rail_shadow', x: 2, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 5, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow', x: 8, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 11, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow', x: 15, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 18, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow', x: 21, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_scupper', x: 18, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_cargo_spill', x: 20, y: 6, flat: true, walkable: true },
+    { sprite: 'wy_grating', x: 5, y: 11, flat: true, walkable: true },
+    { sprite: 'in_sea_chest_small', x: 8, y: 12, text: 'galley_sea_chests' },
+    { sprite: 'in_sea_chest_small', x: 12, y: 12, text: 'galley_sea_chests' },
+    { sprite: 'in_boots', x: 13, y: 12, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'hull_plate', W: 'hull_plate', w: 'galley_porthole', v: 'galley_pans' },
 

@@ -188,6 +188,10 @@ const FONT = {
   E: ['111', '1..', '11.', '1..', '111'],
   R: ['11.', '1.1', '11.', '1.1', '1.1'],
   L: ['1..', '1..', '1..', '1..', '111'],
+  W: ['1.1', '1.1', '1.1', '111', '1.1'],
+  C: ['.11', '1..', '1..', '1..', '.11'],
+  O: ['.1.', '1.1', '1.1', '1.1', '.1.'],
+  M: ['1.1', '111', '1.1', '1.1', '1.1'],
 };
 function paint(g, text, x, y, c) {
   [...text].forEach((ch, i) => FONT[ch]?.forEach((row, j) => [...row].forEach((v, k) => { if (v === '1') g.set(x + i * 4 + k, y + j, c); })));
@@ -669,6 +673,23 @@ function ropeCoil() {
   g.outline(OUT);
   return g.rows();
 }
+// The Dowager's doormat: woven coir laid flat on the shingle, a dark red
+// border, WELCOME across it, a few loose strands at the ends.
+function doormat() {
+  const g = new Grid(32, 13);
+  g.rect(1, 1, 30, 11, RED[0]);
+  g.rect(2, 2, 28, 9, ROPE[1]);
+  // The weave: alternate rows a shade lighter, flecked darker.
+  for (let y = 2; y < 11; y += 2) g.rect(2, y, 28, 1, ROPE[2]);
+  for (let i = 0; i < 18; i++) g.set(2 + ri(28), 2 + ri(9), ROPE[0]);
+  paint(g, 'WELCOME', 3, 4, RED[0]);
+  // Fringe at each end.
+  for (let y = 2; y < 11; y += 2) { g.set(0, y, ROPE[1]); g.set(31, y, ROPE[1]); }
+  // Its far edge in shadow, so it lies flat.
+  g.rect(1, 12, 30, 1, SAND[0]);
+  g.outline(OUT);
+  return g.rows();
+}
 function crate() {
   const g = new Grid(16, 17);
   box(g, 1, 1, 14, 15, WOOD);
@@ -718,34 +739,6 @@ function barrels() {
 }
 
 // ===================== THE STORM SHORE (wrack) =====================
-function tideClock(step) {
-  const g = new Grid(32, 60);
-  post(g, 14, 30, 59, 4, WOOD);
-  g.rect(10, 56, 12, 4, STONE[1]);
-  g.rect(9, 58, 14, 2, STONE[0]);
-  g.thick(15, 52, 8, 44, 2, WOOD[1]);
-  g.thick(17, 52, 24, 44, 2, WOOD[1]);
-  // The dial: brass rim, pale face, twelve ticks, H at the top, L at the bottom.
-  g.oval(16, 17, 15, 15, BRASS[0]);
-  g.oval(16, 17, 14, 14, BRASS[2]);
-  g.oval(16, 17, 12, 12, WHITE[1]);
-  g.oval(15, 16, 10, 10, WHITE[2]);
-  for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * 6.2832;
-    g.line(16 + Math.sin(a) * 9, 17 - Math.cos(a) * 9, 16 + Math.sin(a) * 11, 17 - Math.cos(a) * 11, IRON[1]);
-  }
-  paint(g, 'H', 14, 7, BLUE[0]);
-  paint(g, 'L', 14, 22, BLUE[0]);
-  // Tide hand: sweeps through four positions; a green weed-strand clings to the rim.
-  const a = (step / 4) * 6.2832 + 0.4;
-  g.thick(16, 17, 16 + Math.sin(a) * 8, 17 - Math.cos(a) * 8, 1, RED[1]);
-  g.thick(16, 17, 16 - Math.sin(a) * 3, 17 + Math.cos(a) * 3, 1, RED[0]);
-  g.rect(15, 16, 3, 3, BRASS[2]);
-  g.rect(16, 17, 1, 1, IRON[0]);
-  for (let i = 0; i < 6; i++) g.set(5 + i, 27 + (i % 2), WEED[2]);
-  g.outline(OUT);
-  return g.rows();
-}
 function seaweedHeap(big) {
   const w = big ? 32 : 16;
   const h = big ? 16 : 10;
@@ -759,6 +752,70 @@ function seaweedHeap(big) {
   }
   for (let i = 0; i < 4; i++) g.set(3 + ri(w - 6), h - 3 - ri(3), BRASS[2]);
   g.outline(OUT);
+  return g.rows();
+}
+// A great heap of storm-wrack piled against a wall or a rail, with a low
+// arched hole at its foot that only Bramble fits through (a `gap: true`
+// prop, like sy_hedge_gap). The hole is see-through, so the ground shows in
+// it and Bramble shows crawling through. No seeded rand() here (a fixed
+// hash instead), so adding it left every other prop's picture as it was.
+function weedGap(w, h) {
+  const g = new Grid(w, h);
+  const cx = Math.floor(w / 2);
+  const bit = (i, k) => {
+    const v = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453;
+    return v - Math.floor(v);
+  };
+  // The heap: lumps of wrack piled up, tallest in the middle, each dark at
+  // its edge and lighter on top, and fronds sticking up out of it.
+  const lumps = 7;
+  for (let i = 0; i < lumps; i++) {
+    const x = Math.round(3 + ((w - 6) * i) / (lumps - 1));
+    const tall = (1 - Math.abs(x - cx) / cx) * (h - 8) + 6 + bit(i, 6) * 3;
+    const rx = Math.round(w / 7 + bit(i, 7) * 2);
+    g.oval(x, h - 1, rx, Math.round(tall), WEED[0]);
+  }
+  for (let i = 0; i < lumps; i++) {
+    const x = Math.round(3 + ((w - 6) * i) / (lumps - 1));
+    const tall = (1 - Math.abs(x - cx) / cx) * (h - 8) + 6 + bit(i, 6) * 3;
+    const rx = Math.round(w / 7 + bit(i, 7) * 2);
+    g.oval(x - 1, h - 2, rx - 2, Math.round(tall) - 2, WEED[1]);
+  }
+  for (let i = 0; i < 6; i++) {
+    const x = 4 + Math.floor(bit(i, 8) * (w - 8));
+    let y = 0;
+    while (y < h && !g.get(x, y)) y++;
+    g.line(x, y, x + Math.floor(bit(i, 9) * 5) - 2, y - 3, WEED[i % 2 ? 1 : 2]);
+  }
+  // Strands and fronds all over it, and a few shells and a bit of rope.
+  for (let i = 0; i < w; i++) {
+    const x = 2 + Math.floor(bit(i, 1) * (w - 4));
+    const y = 3 + Math.floor(bit(i, 2) * (h - 5));
+    if (!g.get(x, y)) continue;
+    g.line(x, y, x + Math.floor(bit(i, 3) * 5) - 2, y + 2, i % 3 ? WEED[2] : WEED[3]);
+  }
+  for (let i = 0; i < 6; i++) {
+    const x = 3 + Math.floor(bit(i, 4) * (w - 6));
+    const y = h - 3 - Math.floor(bit(i, 5) * (h / 2));
+    if (g.get(x, y)) g.set(x, y, i % 2 ? BRASS[2] : WHITE[2]);
+  }
+  g.line(3, h - 4, Math.floor(w / 3), h - 7, BRASS[1]);
+  g.outline(OUT);
+  // The hole: a dark rim round a low arch (15 high, like the hedge's), clear
+  // all the way to the ground.
+  const half = (d) => (d <= 0 ? 3 : d === 1 ? 4 : d === 2 ? 5 : 6);
+  const top = h - 15;
+  for (let y = top - 2; y < h; y++) {
+    const d = y - top;
+    const r = half(Math.max(0, d)) + 2;
+    g.rect(cx - r, y, r * 2, 1, d < -1 ? WEED[0] : OUT);
+  }
+  for (let y = top; y < h; y++) {
+    const r = half(y - top);
+    g.rect(cx - r, y, r * 2, 1, null);
+  }
+  // A few fronds hanging over the top of the hole.
+  for (const dx of [-4, -1, 3]) g.rect(cx + dx, top, 1, 2 + (dx & 1), WEED[2]);
   return g.rows();
 }
 function bathtubWreck() {
@@ -1529,28 +1586,6 @@ function littleLight(step) {
   g.outline(OUT);
   return g.rows();
 }
-function lampHousing() {
-  const g = new Grid(36, 30);
-  // A lantern room lying on its rocks: brass frame, a ring of panes, some gone.
-  g.rect(3, 22, 30, 5, BRASS[1]);
-  g.rect(3, 22, 30, 1, BRASS[3]);
-  g.rect(3, 26, 30, 1, BRASS[0]);
-  for (let i = 0; i < 6; i++) {
-    const x = 5 + i * 5;
-    g.rect(x, 9, 4, 13, i === 2 || i === 4 ? null : GLASS[1]);
-    if (i !== 2 && i !== 4) g.rect(x, 9, 1, 13, GLASS[2]);
-    g.rect(x + 4, 8, 1, 14, BRASS[2]);
-  }
-  g.rect(3, 8, 1, 14, BRASS[2]);
-  g.poly([[2, 9], [18, 1], [34, 9]], BRASS[1]);
-  g.poly([[5, 9], [18, 3], [20, 9]], BRASS[2]);
-  g.rect(16, 0, 4, 2, BRASS[2]);
-  g.oval(18, 17, 3, 4, LAMPY[2]);
-  g.rect(0, 26, 36, 4, STONE[1]);
-  g.rect(2, 28, 10, 2, STONE[2]);
-  g.outline(OUT);
-  return g.rows();
-}
 function ropeBridgePost() {
   const g = new Grid(20, 36);
   post(g, 6, 6, 35, 5, WOOD);
@@ -1592,20 +1627,6 @@ function forge(step) {
   g.rect(3, 22, 1, 7, IRON[2]);
   g.rect(4, 22, 3, 1, IRON[2]);
   g.rect(2, 28, 5, 1, IRON[1]);
-  g.outline(OUT);
-  return g.rows();
-}
-function sealAnvil() {
-  const g = new Grid(20, 22);
-  g.rect(5, 12, 10, 10, WOOD[1]);
-  g.rect(5, 12, 2, 10, WOOD[2]);
-  g.rect(5, 12, 10, 1, WOOD[3]);
-  g.rect(5, 21, 10, 1, WOOD[0]);
-  g.poly([[1, 6], [14, 6], [18, 8], [14, 10], [11, 10], [11, 12], [6, 12], [6, 10]], IRON[1]);
-  g.rect(1, 6, 13, 2, IRON[3]);
-  g.rect(14, 7, 1, 2, IRON[2]);
-  g.thick(10, 5, 14, 1, 2, WOOD[2]);
-  g.rect(14, 1, 4, 3, IRON[2]);
   g.outline(OUT);
   return g.rows();
 }
@@ -1774,53 +1795,6 @@ function sluiceGate() {
   g.outline(OUT);
   return g.rows();
 }
-function spiralRail(kind) {
-  const g = new Grid(20, 44);
-  // Broken bits of stairwell rail: a curved handrail with balusters.
-  g.rect(1, 41, 18, 3, IRON[1]);
-  g.rect(1, 41, 18, 1, IRON[2]);
-  for (let i = 0; i < 5; i++) {
-    const x = 2 + i * 4;
-    const top = kind === 'a' ? 10 + i * 3 : 28 - i * 4 + (i === 4 ? 4 : 0);
-    g.rect(x, top, 2, 41 - top, IRON[1]);
-    g.rect(x, top, 1, 41 - top, IRON[2]);
-    g.set(x, top - 1, BRASS[2]);
-  }
-  for (let x = 0; x < 20; x++) {
-    const t = x / 19;
-    const y = kind === 'a' ? 8 + Math.round(t * 14 - Math.sin(t * 3) * 2) : 26 - Math.round(t * 18) + (t > 0.9 ? 6 : 0);
-    g.rect(x, y, 1, 3, WOOD[x % 2 ? 1 : 2]);
-    g.set(x, y, WOOD[3]);
-  }
-  g.outline(OUT);
-  return g.rows();
-}
-function greatLens(step) {
-  const g = new Grid(68, 68);
-  // Brass pedestal and bottom ring.
-  g.rect(14, 60, 40, 8, BRASS[1]);
-  g.rect(14, 60, 40, 2, BRASS[3]);
-  g.rect(14, 66, 40, 2, BRASS[0]);
-  g.rect(24, 54, 20, 7, BRASS[0]);
-  // The lens: a drum of concentric glass rings, a hot bulb in the middle.
-  g.oval(34, 30, 26, 26, BRASS[0]);
-  g.oval(34, 30, 24, 24, GLASS[1]);
-  for (const r of [22, 19, 16, 13, 10]) g.ring(34, 30, r, r % 2 ? GLASS[2] : GLASS[0], r * 8);
-  g.oval(34, 30, 7, 7, LAMPY[1]);
-  g.oval(34, 30, 5, 5, LAMPY[2]);
-  g.oval(34, 30, 3, 3, LAMPY[3]);
-  // Brass ribs.
-  for (let i = 0; i < 6; i++) { const a = (i / 6) * 3.1416; g.thick(34 - Math.cos(a) * 25, 30 - Math.sin(a) * 25, 34 + Math.cos(a) * 25, 30 + Math.sin(a) * 25, 1, BRASS[2]); }
-  g.rect(8, 28, 52, 3, BRASS[2]);
-  g.rect(8, 28, 52, 1, BRASS[3]);
-  // A moving glint that sweeps across the glass.
-  const gx = 12 + step * 12;
-  for (let y = 10; y < 52; y++) { const x = gx + Math.round((y - 30) / 4); const dx = x - 34; const dy = y - 30; if (dx * dx + dy * dy < 22 * 22) { g.set(x, y, '#ffffff'); g.set(x + 1, y, '#e8fff8'); } }
-  g.oval(34, 6, 6, 3, BRASS[1]);
-  g.rect(30, 0, 8, 4, BRASS[2]);
-  g.outline(OUT);
-  return g.rows();
-}
 function longLantern(step) {
   const g = new Grid(16, 48);
   g.rect(4, 42, 8, 5, IRON[1]);
@@ -1839,6 +1813,34 @@ function longLantern(step) {
   g.outline(OUT);
   return g.rows();
 }
+// The same lamp after the storm: stopped and cold. Dark glass with the night behind it, salt
+// dried in streaks down the panes, soot at the top from the last burn, a dead wick standing in it.
+function longLanternCold() {
+  const g = new Grid(16, 48);
+  g.rect(4, 42, 8, 5, IRON[1]);
+  g.rect(3, 45, 10, 3, IRON[0]);
+  g.rect(4, 42, 8, 1, IRON[2]);
+  g.rect(5, 10, 6, 32, GLASS[0]);
+  g.rect(6, 12, 4, 28, SLATE[1]);
+  g.rect(6, 11, 4, 4, IRON[0]); // soot under the cap
+  // The wick and its holder, cold.
+  g.rect(7, 30, 2, 10, IRON[2]);
+  g.rect(7, 27, 2, 3, WOOD[0]);
+  // A thin cold shine down one side of the glass, and salt run down the panes.
+  g.rect(6, 16, 1, 20, GLASS[1]);
+  for (const [x, y0, len] of [[9, 14, 9], [8, 22, 6], [6, 33, 5], [9, 30, 8]]) g.rect(x, y0, 1, len, WHITE[0]);
+  g.set(9, 13, WHITE[1]); g.set(6, 32, WHITE[1]);
+  // Brass gone dull.
+  g.rect(4, 9, 8, 2, BRASS[0]);
+  g.rect(4, 41, 8, 2, BRASS[0]);
+  g.rect(4, 9, 1, 34, BRASS[1]);
+  g.rect(11, 9, 1, 34, BRASS[0]);
+  g.poly([[5, 9], [8, 4], [11, 9]], BRASS[0]);
+  g.ring(8, 3, 2, BRASS[1]);
+  g.set(8, 1, BRASS[1]);
+  g.outline(OUT);
+  return g.rows();
+}
 function handbell() {
   const g = new Grid(14, 18);
   g.rect(6, 1, 2, 7, WOOD[2]);
@@ -1848,6 +1850,23 @@ function handbell() {
   g.poly([[5, 9], [7, 9], [6, 15], [3, 15]], BRASS[3]);
   g.rect(2, 16, 10, 1, BRASS[0]);
   g.rect(6, 17, 2, 1, IRON[1]);
+  g.outline(OUT);
+  return g.rows();
+}
+// The gulls' prize: the inn's old dinner bell, tin, dented on one side, done up in tinsel.
+// (Tin, not brass, and a short stubby handle, so nobody takes it for Haddock's.)
+function dinnerBell() {
+  const g = new Grid(14, 18);
+  g.rect(6, 3, 2, 5, WOOD[1]);
+  g.rect(5, 2, 4, 2, WOOD[2]);
+  g.poly([[5, 8], [9, 8], [11, 15], [12, 16], [2, 16], [3, 15]], IRON[2]);
+  g.poly([[5, 9], [7, 9], [6, 15], [3, 15]], IRON[3]);
+  g.rect(2, 16, 10, 1, IRON[1]);
+  // The dent: a pushed-in flat on the right of the rim.
+  g.set(10, 13, IRON[1]); g.set(10, 14, IRON[1]); g.set(11, 15, IRON[1]);
+  g.rect(6, 17, 2, 1, IRON[1]);
+  // Tinsel round the handle, and a key or two threaded on it.
+  for (const [x, y, c] of [[4, 4, '#e84040'], [5, 5, '#ffe27a'], [8, 4, '#4ccf6a'], [9, 5, '#e84040'], [10, 6, '#ffe27a'], [4, 6, '#4ccf6a'], [11, 7, BRASS[2]], [11, 8, BRASS[1]], [3, 7, BRASS[2]]]) g.set(x, y, c);
   g.outline(OUT);
   return g.rows();
 }
@@ -1908,6 +1927,536 @@ function gullHoard() {
   return g.rows();
 }
 
+// ===================== STORM DRESSING (2026-11-08) =====================
+// What the storm left lying about, to break up a big flat stretch of ground and say what
+// happened there. The flat ones lie on the floor: lay them `flat: true, walkable: true`
+// (they need no text). They roll their own dice, so adding them changes nothing above.
+let dressSeed = 4057;
+const dr = () => {
+  dressSeed = (dressSeed * 1664525 + 1013904223) >>> 0;
+  return dressSeed / 4294967296;
+};
+const dri = (n) => Math.floor(dr() * n);
+const MUD = ['#1e1c18', '#2e2a22', '#46402f'];
+
+// c5_wrack_line: the high-water line: a wandering band of torn weed, with a red cork,
+// two shells and a bit of frayed rope caught in it (3 wide, flat).
+function wrackLine() {
+  dressSeed = 4057;
+  const g = new Grid(48, 12);
+  let y = 6;
+  for (let x = 1; x < 47; x++) {
+    if (dr() < 0.35) y += dr() < 0.5 ? -1 : 1;
+    y = Math.max(4, Math.min(8, y));
+    const t = (x < 4 || x > 43) ? 1 : 1 + dri(3);
+    for (let j = 0; j < t; j++) g.set(x, y + j - 1, WEED[j === 0 ? 2 : 1]);
+    if (dr() < 0.12) g.set(x, y - 2, WEED[3]);
+    if (dr() < 0.18) { g.set(x, y + t - 1, WEED[2]); g.set(x + 1, y + t, WEED[1]); }
+  }
+  // Shells, a cork float, rope.
+  g.rect(9, 3, 3, 2, WHITE[2]); g.set(11, 4, WHITE[0]);
+  g.rect(33, 8, 2, 2, WHITE[1]); g.set(33, 8, WHITE[2]);
+  g.rect(21, 4, 4, 3, RED[1]); g.rect(21, 4, 2, 1, RED[2]); g.set(24, 6, RED[0]);
+  g.thick(37, 4, 44, 6, 1, ROPE[1]); g.set(37, 4, ROPE[2]); g.set(44, 6, ROPE[0]); g.set(45, 7, ROPE[1]);
+  g.outline(WEED[0]);
+  return g.rows();
+}
+
+// c5_crab_trail: little crabs' feet crossing wet ground in a wandering double row, to a
+// hole with its spoil heaped round (2 wide, flat).
+function crabTrail() {
+  const g = new Grid(32, 12);
+  for (let i = 0; i < 12; i++) {
+    const x = 2 + i * 2;
+    const y = 6 + Math.round(Math.sin(i / 2) * 2);
+    g.set(x, y - 2, MUD[1]); g.set(x + 1, y - 2, MUD[0]);
+    g.set(x, y + 2, MUD[1]); g.set(x + 1, y + 2, MUD[0]);
+  }
+  g.oval(28, 6, 3, 2, MUD[2]);
+  g.oval(28, 6, 2, 1, MUD[0]);
+  g.set(27, 5, '#0c0c0a'); g.set(28, 5, '#0c0c0a');
+  g.set(25, 4, MUD[2]); g.set(31, 8, MUD[2]); g.set(26, 9, MUD[1]);
+  return g.rows();
+}
+
+// c5_gull_marks: where gulls sat out the storm: forked footprints, two white splashes and a
+// grey feather (1 wide, flat).
+function gullMarks() {
+  const g = new Grid(16, 14);
+  const foot = (x, y) => { g.set(x, y, MUD[1]); g.set(x - 1, y - 1, MUD[1]); g.set(x + 1, y - 1, MUD[1]); g.set(x, y - 1, MUD[0]); g.set(x, y + 1, MUD[0]); };
+  foot(3, 11); foot(6, 8); foot(4, 4);
+  g.oval(11, 10, 2, 1, WHITE[2]); g.set(13, 11, WHITE[1]); g.set(10, 11, WHITE[1]); g.set(11, 10, WHITE[1]);
+  g.rect(13, 3, 2, 1, WHITE[2]); g.set(14, 4, WHITE[1]);
+  // The feather: a grey vane and a pale quill.
+  g.line(7, 3, 12, 6, WHITE[0]);
+  g.line(7, 2, 11, 4, WHITE[1]);
+  g.line(8, 4, 11, 6, WHITE[1]);
+  g.set(12, 6, WHITE[2]); g.set(7, 3, '#4a5054');
+  return g.rows();
+}
+
+// c5_puddle: a rain puddle, the storm's sky in it: a dark rim, teal water, a pale streak of
+// reflected light and a rain ring (2 wide, flat).
+function stormPuddle() {
+  const g = new Grid(32, 12);
+  g.poly([[2, 6], [6, 2], [15, 1], [24, 2], [30, 5], [28, 9], [19, 11], [8, 10], [3, 9]], MUD[1]);
+  g.poly([[4, 6], [7, 3], [15, 2], [23, 3], [28, 5], [27, 8], [19, 10], [9, 9], [5, 8]], WATER[1]);
+  g.poly([[5, 6], [8, 4], [15, 3], [22, 4], [27, 6], [26, 8], [19, 9], [9, 8]], WATER[2]);
+  g.line(8, 5, 20, 4, WATER[3]);
+  g.line(11, 6, 15, 6, GLASS[3]);
+  g.ring(22, 7, 2, WATER[1], 10);
+  g.ring(11, 8, 1, WATER[3], 6);
+  g.rect(5, 3, 3, 1, MUD[0]);
+  g.rect(4, 4, 1, 3, MUD[0]);
+  return g.rows();
+}
+
+// c5_planks_scatter: planks off a broken boat, washed up anyhow: three staves with nails in
+// them, a fleck of old red paint, their ends snapped (2 wide, walk over).
+function planksScatter() {
+  const g = new Grid(32, 14);
+  const stave = (x0, y0, x1, y1) => {
+    g.thick(x0, y0, x1, y1, 3, WOOD[1]);
+    g.line(x0, y0 - 1, x1, y1 - 1, WOOD[2]);
+    g.line(x0, y0 + 1, x1, y1 + 1, WOOD[0]);
+    g.set(Math.round((x0 * 2 + x1) / 3), Math.round((y0 * 2 + y1) / 3), IRON[2]);
+    g.set(x1 + 1, y1 - 1, WOOD[2]); g.set(x1 + 2, y1, WOOD[1]);
+  };
+  stave(2, 9, 18, 11);
+  stave(10, 4, 27, 3);
+  stave(15, 8, 28, 9);
+  g.set(5, 10, RED[1]); g.set(6, 10, RED[0]); g.set(13, 4, RED[1]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+// c5_net_torn: a fishing net blown off its frame and spread over the ground, a hole torn in
+// it, its cork floats still on the head rope (2 wide, flat).
+function netTorn() {
+  const g = new Grid(32, 14);
+  for (let y = 3; y < 13; y++) for (let x = 1; x < 31; x++) {
+    const inHole = (x - 19) ** 2 / 16 + (y - 7) ** 2 / 6 < 1;
+    if (inHole) continue;
+    { const a = (x + y) % 5 === 0, b = (x - y + 100) % 5 === 0; if (a || b) g.set(x, y, a && b ? ROPE[2] : ROPE[1]); }
+  }
+  // The frayed ends round the hole.
+  g.set(15, 6, ROPE[2]); g.set(22, 8, ROPE[2]); g.set(19, 4, ROPE[1]); g.set(18, 10, ROPE[1]);
+  // The head rope and its floats along the top.
+  g.line(1, 2, 30, 2, ROPE[2]);
+  for (const x of [4, 13, 24]) { g.rect(x, 1, 3, 3, YELLOW[1]); g.set(x, 1, YELLOW[2]); g.set(x + 2, 3, YELLOW[0]); }
+  return g.rows();
+}
+
+// c5_rubble: stones come down off a wall in the storm, one split, grit round them
+// (1 wide, walk over).
+function rubble() {
+  const g = new Grid(16, 12);
+  box(g, 1, 5, 6, 5, STONE);
+  box(g, 8, 6, 5, 4, STONE);
+  box(g, 5, 2, 5, 4, STONE);
+  g.line(10, 6, 11, 9, STONE[0]);
+  g.outline(OUT);
+  g.set(14, 10, STONE[2]); g.set(0, 11, STONE[1]); g.set(13, 11, STONE[1]); g.set(3, 11, STONE[2]);
+  return g.rows();
+}
+
+// c5_floor_crack: a crack across old stone floor, sea water seeping up through it and weed
+// already rooting in it (1 wide, flat).
+function floorCrack() {
+  const g = new Grid(16, 16);
+  const K = '#0c1012';
+  g.line(1, 3, 5, 6, K); g.line(5, 6, 8, 7, K); g.line(8, 7, 11, 11, K); g.line(11, 11, 15, 13, K);
+  g.line(8, 7, 9, 2, K); g.line(5, 6, 3, 10, K);
+  g.line(2, 3, 6, 6, STONE[3]); g.line(9, 7, 12, 11, STONE[3]);
+  g.set(9, 8, WATER[1]); g.set(10, 9, WATER[1]); g.set(10, 10, WATER[2]); g.set(6, 7, WATER[1]);
+  g.set(12, 12, WEED[2]); g.set(13, 11, WEED[3]); g.set(12, 11, WEED[1]); g.set(4, 9, WEED[2]);
+  return g.rows();
+}
+
+// c5_rust_bloom: rust breaking out of an iron deck where the sea sits on it: a ragged bloom
+// with a run of rust down from a popped rivet (2 wide, flat).
+function rustBloom() {
+  dressSeed = 977;
+  const g = new Grid(32, 14);
+  g.poly([[3, 7], [7, 3], [14, 2], [20, 4], [27, 5], [29, 9], [22, 12], [12, 12], [5, 11]], RUST[0]);
+  g.poly([[5, 7], [8, 4], [14, 3], [20, 5], [26, 6], [27, 9], [22, 11], [12, 11], [6, 10]], RUST[1]);
+  for (let i = 0; i < 26; i++) g.set(6 + dri(21), 4 + dri(7), dr() < 0.5 ? RUST[2] : RUST[0]);
+  for (let i = 0; i < 6; i++) g.set(8 + dri(18), 5 + dri(5), RUST[3]);
+  g.rect(14, 6, 2, 2, IRON[3]); g.set(15, 7, IRON[1]);
+  g.line(15, 8, 16, 13, RUST[2]);
+  return g.rows();
+}
+
+// c5_oar_stuck: half an oar driven blade-up into the ground for a marker, a red rag knotted
+// round it (1 wide, solid).
+function oarStuck() {
+  const g = new Grid(16, 32);
+  post(g, 7, 10, 29, 2, WOOD);
+  g.poly([[5, 1], [10, 0], [11, 3], [10, 11], [6, 11], [5, 4]], WOOD[2]);
+  g.rect(6, 2, 1, 8, WOOD[3]);
+  g.rect(10, 2, 1, 9, WOOD[1]);
+  g.line(5, 1, 7, 0, WOOD[1]); g.set(8, 1, WOOD[1]);
+  g.rect(6, 15, 4, 2, RED[1]); g.set(6, 15, RED[2]);
+  g.line(10, 16, 13, 18, RED[1]); g.line(10, 17, 12, 20, RED[0]);
+  g.oval(8, 30, 5, 1, MUD[2]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+// c5_lantern_hook: a storm lantern on an iron hook at the end of a post's arm, lit (1 wide,
+// solid). The arm, its brace and the hook all show, so it never floats.
+function lanternHook() {
+  const g = new Grid(16, 44);
+  post(g, 3, 6, 42, 3, WOOD);
+  g.rect(1, 40, 7, 3, WOOD[0]);
+  g.rect(3, 6, 11, 2, IRON[2]); g.rect(3, 7, 11, 1, IRON[0]);
+  g.line(6, 8, 4, 12, IRON[1]);
+  g.rect(12, 8, 1, 3, IRON[2]); g.set(13, 10, IRON[2]); g.set(11, 10, IRON[1]);
+  // The lantern: cap, glass, base.
+  g.rect(10, 11, 5, 1, IRON[1]); g.rect(11, 10, 3, 1, IRON[2]);
+  g.rect(10, 12, 5, 6, LAMPY[2]); g.rect(11, 13, 3, 4, LAMPY[3]); g.rect(10, 12, 1, 6, LAMPY[1]);
+  g.rect(12, 12, 1, 6, IRON[1]);
+  g.rect(10, 18, 5, 1, IRON[1]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+// c5_boat_upturned: a rowboat turned keel-up out of the weather, a hole stove in her side and
+// a stone wedged under the bow (3 wide, solid).
+function boatUpturned() {
+  const g = new Grid(48, 22);
+  // Her back, seen from the side and a little above: a long hump, the bow a point on the left,
+  // the transom square on the right. The strakes run along it, following the curve.
+  const top = (x) => Math.round(6 + Math.max(0, (14 - x) * 0.55) + ((x - 26) / 22) ** 2 * 3);
+  for (let x = 2; x < 46; x++) {
+    const t = top(x);
+    const foot = x < 6 ? 17 - (6 - x) : 17;
+    for (let y = t; y <= foot; y++) {
+      const k = y - t;
+      g.set(x, y, k === 0 ? WOOD[3] : k < 3 ? WOOD[2] : k % 3 === 0 ? WOOD[0] : WOOD[1]);
+    }
+  }
+  // The keel along the top, the transom's dark end, the old red paint at the gunwale.
+  for (let x = 4; x < 46; x++) g.set(x, top(x) - 1, WOOD[0]);
+  g.rect(45, top(45) - 1, 1, 18 - top(45), WOOD[0]);
+  for (let x = 5; x < 46; x++) { g.set(x, 16, RED[1]); g.set(x, 17, RED[0]); }
+  // The stove-in hole, splinters round it.
+  g.oval(30, 12, 3, 2, '#0c0c0a');
+  g.set(27, 11, WOOD[3]); g.set(33, 13, WOOD[3]); g.set(29, 10, WOOD[3]); g.set(31, 14, WOOD[0]);
+  // The dark underneath, and the stone she's propped on.
+  g.rect(7, 18, 32, 2, '#0c0c0a');
+  box(g, 38, 16, 6, 5, STONE);
+  g.outline(OUT);
+  return g.rows();
+}
+
+// c5_lantern_fallen: a lantern blown off its hook, on its side in the wet, the glass cracked,
+// the wick still burning low (1 wide, walk over).
+function lanternFallen() {
+  const g = new Grid(16, 12);
+  g.rect(3, 5, 9, 5, LAMPY[1]);
+  g.rect(4, 6, 6, 3, LAMPY[2]); g.rect(6, 7, 2, 1, LAMPY[3]);
+  g.rect(2, 5, 1, 5, IRON[2]); g.rect(12, 5, 2, 5, IRON[1]); g.rect(14, 6, 1, 3, IRON[2]);
+  g.rect(3, 4, 9, 1, IRON[1]); g.rect(3, 10, 9, 1, IRON[0]);
+  g.line(5, 5, 8, 9, WHITE[2]);
+  g.ring(1, 4, 1, IRON[1], 6);
+  g.outline(OUT);
+  g.set(9, 11, GLASS[3]); g.set(11, 11, GLASS[2]);
+  return g.rows();
+}
+
+// c5_sandbags: sandbags piled against the flood, one burst and spilling (2 wide, solid).
+function sandbags() {
+  const g = new Grid(32, 16);
+  const bag = (x, y, w) => {
+    g.oval(x + w / 2, y + 2, w / 2, 2, SAIL[1]);
+    g.rect(x + 1, y, w - 2, 1, SAIL[2]);
+    g.set(x + 1, y + 1, SAIL[2]);
+    g.rect(x + 1, y + 4, w - 2, 1, SAIL[0]);
+  };
+  bag(1, 10, 10); bag(11, 10, 10); bag(21, 10, 10);
+  bag(5, 6, 10); bag(16, 6, 10);
+  bag(10, 2, 10);
+  g.outline(OUT);
+  g.oval(28, 14, 3, 1, SAND[1]); g.set(26, 13, SAND[2]);
+  return g.rows();
+}
+
+// ---- The shore's own odds (second pass, 2026-11-08): rocks, pools, plants, a fire. ----
+// The Wrack Shore's wet rock and turf colours, so these sit in its ground.
+const WROCK = ['#1c262a', '#3e4c52', '#566870', '#7a8e92'];
+const WTURF = ['#2e4a30', '#4d7648', '#628e58', '#7aa66a'];
+const PEB = ['#4a4a40', '#68665a', '#848070', '#a8a48e', '#c0bca4'];
+const KELP = ['#2a2412', '#4a4220', '#6a6428', '#8c8a3a'];
+
+// A rounded wet stone, lit from the top left: light on that shoulder, dark under the far side.
+function blob(g, cx, cy, rx, ry, ramp) {
+  for (let y = Math.floor(cy - ry); y <= cy + ry; y++) for (let x = Math.floor(cx - rx); x <= cx + rx; x++) {
+    const u = (x - cx) / rx, v = (y - cy) / ry;
+    if (u * u + v * v > 1) continue;
+    const d = u * 0.6 + v * 0.8;
+    g.set(x, y, d < -0.62 ? ramp[3] : d < -0.2 ? ramp[2] : d > 0.55 ? ramp[0] : ramp[1]);
+  }
+}
+
+// Weed lying along the foot of whatever is drawn so far, and barnacles above it.
+function weedFoot(g, x0, x1, barnacles) {
+  for (let x = x0; x <= x1; x++) {
+    let low = -1;
+    for (let y = g.h - 1; y >= 0; y--) if (g.get(x, y)) { low = y; break; }
+    if (low < 0) continue;
+    const up = 1 + dri(4);
+    for (let k = 0; k < up; k++) g.set(x, low - k, WEED[k === up - 1 ? 2 : 1]);
+    if (dr() < 0.5) g.set(x, low + 1, WEED[0]);
+    if (dr() < 0.15) g.set(x, low - up, WEED[3]);
+  }
+  for (let i = 0; i < barnacles; i++) {
+    const x = x0 + dri(x1 - x0 + 1);
+    let low = -1;
+    for (let y = g.h - 1; y >= 0; y--) if (g.get(x, y)) { low = y; break; }
+    if (low < 0) continue;
+    const y = low - 4 - dri(5);
+    if (!g.get(x, y) || !g.get(x + 1, y)) continue;
+    g.set(x, y, WHITE[1]); g.set(x + 1, y, WHITE[2]); g.set(x, y + 1, WHITE[0]);
+  }
+}
+
+// c5_rocks_weedy: a knot of three wet stones, weed lying round their feet, barnacles and a
+// limpet on them, a strand of wrack thrown over the top one (2 wide, solid).
+// c5_rock_weedy: one stone of the same, for the edge of a group (1 wide, solid).
+// c5_rocks_sunny, c5_rock_sunny: the same in Gullrest's warm sandstone, dry and pale.
+const SUNROCK = ['#6e5e48', '#a89678', '#c8b898', '#ece2c6'];
+function rocksWeedy(big, ramp = WROCK) {
+  const WROCK = ramp;
+  dressSeed = big ? 6113 : 6227;
+  const g = new Grid(big ? 32 : 16, big ? 26 : 18);
+  if (big) {
+    blob(g, 18, 10, 7.5, 6.5, WROCK);
+    blob(g, 9.5, 16, 8, 7, WROCK);
+    blob(g, 24, 18.5, 6.5, 5.5, WROCK);
+    g.line(14, 13, 16, 17, WROCK[0]);
+    weedFoot(g, 2, 30, 7);
+    // The limpet, and the strand over the top stone.
+    g.rect(21, 13, 3, 1, STONE[3]); g.set(22, 12, WHITE[2]); g.set(21, 14, STONE[0]);
+    g.line(13, 6, 17, 4, WEED[2]); g.line(17, 4, 21, 5, WEED[1]); g.line(21, 5, 24, 9, WEED[1]); g.set(24, 10, WEED[2]);
+  } else {
+    blob(g, 8, 10.5, 6.5, 6, WROCK);
+    g.line(6, 7, 9, 12, WROCK[0]);
+    weedFoot(g, 2, 14, 3);
+  }
+  g.outline(OUT);
+  return g.rows();
+}
+
+// c5_rock_pool: a pool left in the rock by the tide: a rim of stones, weed, a red anemone and
+// an orange starfish under the water (2 wide, flat).
+// c5_rock_pool_sunny: the same pool in the sun, sandstone round clear blue water.
+function rockPool(ramp = WROCK, water = WATER) {
+  const WROCK = ramp, WATER = water;
+  dressSeed = 5003;
+  const g = new Grid(32, 18);
+  const rim = [[2, 9], [5, 4], [12, 2], [21, 2], [28, 5], [30, 10], [25, 15], [15, 16], [6, 15]];
+  g.poly(rim, WROCK[1]);
+  g.poly([[5, 9], [8, 5], [13, 4], [21, 4], [27, 7], [27, 11], [23, 13], [14, 14], [7, 13]], WATER[0]);
+  g.poly([[7, 9], [10, 6], [14, 5], [21, 5], [25, 8], [24, 11], [14, 12], [8, 11]], WATER[1]);
+  g.line(10, 6, 18, 6, WATER[2]); g.line(12, 7, 14, 7, WATER[3]);
+  // Stones round the rim, each with its light top.
+  for (const [x, y, w] of [[3, 8, 3], [6, 4, 3], [12, 2, 4], [20, 2, 3], [26, 5, 3], [28, 9, 2], [24, 14, 3], [15, 15, 4], [7, 14, 3]]) {
+    g.rect(x, y, w, 2, WROCK[2]); g.rect(x, y, w - 1, 1, WROCK[3]); g.set(x + w - 1, y + 1, WROCK[0]);
+  }
+  // The starfish, the anemone, weed in the corner.
+  const S = ['#8a3c1c', '#d8783c', '#f0a860'];
+  g.set(19, 9, S[1]); g.set(18, 9, S[1]); g.set(20, 9, S[1]); g.set(19, 8, S[2]); g.set(19, 10, S[1]);
+  g.set(17, 10, S[0]); g.set(21, 10, S[0]); g.set(17, 8, S[1]); g.set(21, 8, S[1]);
+  g.oval(11, 10, 1, 1, RED[1]); g.set(11, 10, RED[2]); g.set(10, 9, RED[2]); g.set(12, 9, RED[2]);
+  for (const x of [22, 23, 24]) { g.set(x, 11 - (x % 2), WEED[2]); g.set(x, 12 - (x % 2), WEED[1]); }
+  g.set(6, 11, WEED[2]); g.set(7, 12, WEED[1]);
+  return g.rows();
+}
+
+// c5_marram: a clump of marram grass bent over by the wind off the sea (1 wide, walk through).
+function marram() {
+  dressSeed = 7019;
+  const g = new Grid(16, 20);
+  const C = ['#34402a', '#5e6e3e', '#8e9a58', '#c0c084'];
+  for (let i = 0; i < 12; i++) {
+    const x = 2 + dri(11);
+    const h = 6 + dri(12);
+    const lean = 1 + dri(5);
+    const c = C[1 + dri(2)];
+    g.line(x, 19, x + lean, 19 - h, c);
+    g.line(x + 1, 19, x + lean, 19 - h + 2, c === C[1] ? C[0] : C[1]);
+    g.set(x + lean, 19 - h, C[3]);
+  }
+  g.line(3, 19, 13, 19, C[0]); g.line(5, 18, 11, 18, C[0]);
+  return g.rows();
+}
+
+// c5_sea_holly: sea holly in the shingle: grey-blue spiny leaves, three thistle heads
+// (1 wide, walk through).
+function seaHolly() {
+  const g = new Grid(16, 16);
+  const L = ['#2e4650', '#5a7a88', '#90b0ba'];
+  const H = ['#3a4a8a', '#6a7cc0', '#a0b0e8'];
+  const leaf = (x0, y0, x1, y1) => { g.thick(x0, y0, x1, y1, 2, L[1]); g.line(x0, y0 - 1, x1, y1 - 1, L[2]); g.set(x1, y1 - 1, L[2]); g.set(x1 + (x1 > x0 ? 1 : -1), y1 - 2, L[2]); };
+  leaf(7, 14, 2, 11); leaf(8, 14, 13, 10); leaf(7, 13, 5, 8); leaf(8, 13, 11, 7);
+  g.line(7, 14, 7, 6, L[0]); g.line(9, 14, 10, 5, L[0]);
+  g.oval(7, 4, 1, 1, H[1]); g.set(6, 3, H[2]); g.set(7, 2, H[2]);
+  g.oval(10, 4, 1, 1, H[1]); g.set(10, 3, H[2]);
+  g.oval(4, 8, 1, 1, H[0]); g.set(4, 7, H[1]);
+  g.outline(OUT);
+  g.rect(3, 15, 10, 1, null);
+  g.line(4, 15, 11, 15, PEB[1]);
+  return g.rows();
+}
+
+// c5_fence_broken: a bit of driftwood fence on three posts, its rail snapped and hanging off
+// the middle post, the other rail down in the shingle (2 wide, solid).
+function fenceBroken() {
+  const g = new Grid(32, 24);
+  // Three thin posts, none the same height; the middle one leans.
+  post(g, 3, 5, 21, 2, DRIFT);
+  for (let y = 8; y <= 21; y++) { const x = 15 + Math.round((21 - y) / 5); g.rect(x, y, 2, 1, DRIFT[1]); g.set(x, y, DRIFT[2]); }
+  post(g, 27, 10, 21, 2, DRIFT);
+  // Two rails from the first post to the middle one, sagging a little.
+  g.line(4, 8, 17, 10, DRIFT[2]); g.line(4, 9, 17, 11, DRIFT[0]);
+  g.line(4, 14, 16, 15, DRIFT[2]); g.line(4, 15, 16, 16, DRIFT[0]);
+  // Past the middle post they're gone: a stub on each post, and a rope still slack between.
+  g.rect(18, 10, 3, 2, DRIFT[1]); g.set(20, 10, DRIFT[3]);
+  g.rect(24, 12, 3, 2, DRIFT[1]); g.set(24, 12, DRIFT[3]);
+  for (let x = 18; x <= 27; x++) g.set(x, 15 + Math.round(Math.sin(((x - 18) / 9) * 3.1416) * 3), ROPE[1]);
+  g.outline(OUT);
+  // The rail that came off, lying in the shingle.
+  g.line(17, 22, 30, 20, DRIFT[1]); g.line(17, 21, 30, 19, DRIFT[2]); g.line(17, 23, 30, 21, OUT);
+  g.set(1, 23, WEED[1]); g.set(2, 22, WEED[2]); g.set(6, 23, WEED[1]); g.set(28, 23, WEED[2]);
+  return g.rows();
+}
+
+// c5_drift_log: a whole tree come ashore, bleached grey, its root plate still on and wrack
+// caught in the roots (3 wide, solid).
+function driftLog() {
+  dressSeed = 8081;
+  const g = new Grid(48, 22);
+  // The trunk tapers from the roots to the snapped top, with a crook in it.
+  for (let x = 10; x <= 45; x++) {
+    const t = (x - 10) / 35;
+    const mid = 14 + Math.round(t * 2 + Math.sin(t * 4) * 0.8);
+    const half = Math.round(3.5 - t * 1.5);
+    for (let y = mid - half; y <= mid + half; y++) {
+      const k = (y - (mid - half)) / (half * 2);
+      g.set(x, y, k < 0.2 ? DRIFT[3] : k < 0.45 ? DRIFT[2] : k > 0.8 ? DRIFT[0] : DRIFT[1]);
+    }
+    if (x % 7 === 3) g.set(x, mid, DRIFT[0]);
+    if (x % 9 === 5) g.set(x + 1, mid - 1, DRIFT[0]);
+  }
+  // A broken branch stub, and a knot.
+  g.thick(26, 12, 29, 7, 2, DRIFT[2]); g.set(29, 6, DRIFT[3]);
+  g.oval(36, 15, 1, 1, '#2a2a26');
+  g.rect(45, 13, 2, 3, '#d8d0b4'); g.set(46, 13, '#f0e8cc');
+  // The root plate: a ragged disc seen side-on, roots twisting off it.
+  g.oval(8, 13, 5, 7, DRIFT[1]);
+  g.oval(7, 11, 3, 4, DRIFT[2]);
+  g.oval(9, 15, 3, 3, DRIFT[0]);
+  for (const [x1, y1] of [[2, 6], [1, 14], [4, 20], [13, 20]]) g.thick(8, 13, x1, y1, 2, DRIFT[1]);
+  g.line(8, 7, 5, 3, DRIFT[1]);
+  g.outline(OUT);
+  g.line(2, 16, 8, 19, WEED[2]); g.line(3, 17, 9, 20, WEED[1]); g.set(1, 15, WEED[3]);
+  g.rect(8, 9, 3, 2, STONE[2]); g.set(8, 9, STONE[3]);
+  return g.rows();
+}
+
+// c5_shingle_spill: a tongue of loose pebbles washed up over the grass or the wet sand, thick in
+// the middle and thinning out (3 wide, flat). It softens a hard edge between two grounds.
+function shingleSpill() {
+  dressSeed = 9013;
+  const g = new Grid(48, 20);
+  for (let i = 0; i < 230; i++) {
+    const a = dr() * 6.2832, r = Math.sqrt(dr());
+    const x = 24 + Math.cos(a) * r * 22, y = 10 + Math.sin(a) * r * 8;
+    const c = PEB[1 + dri(4)];
+    g.set(x, y, c);
+    if (r < 0.7 && dr() < 0.6) { g.set(x + 1, y, c); g.set(x, y + 1, PEB[0]); g.set(x + 1, y + 1, PEB[0]); }
+    if (dr() < 0.12) g.set(x, y - 1, PEB[4]);
+  }
+  for (let i = 0; i < 4; i++) g.set(6 + dri(36), 5 + dri(10), WHITE[2]);
+  return g.rows();
+}
+
+// c5_turf_patch: a ragged patch of salt grass rooted in the shingle, thrift in it (2 wide,
+// flat). It breaks a straight grass edge into islands.
+function turfPatch() {
+  dressSeed = 9311;
+  const g = new Grid(32, 18);
+  for (let y = 0; y < 18; y++) for (let x = 0; x < 32; x++) {
+    const u = (x - 16) / 15, v = (y - 9) / 8;
+    const wob = 0.82 + 0.2 * Math.sin(x * 1.3 + y * 0.7) + 0.1 * Math.sin(y * 2.1);
+    if (u * u + v * v > wob) continue;
+    g.set(x, y, WTURF[1 + ((x * 7 + y * 13) % 5 === 0 ? 1 : (x + y * 3) % 7 === 0 ? -1 : 0)]);
+  }
+  for (let i = 0; i < 26; i++) {
+    const x = 4 + dri(24), y = 3 + dri(12);
+    if (g.get(x, y) && g.get(x, y - 1)) { g.set(x, y - 1, WTURF[3]); g.set(x, y, WTURF[2]); }
+  }
+  for (const [x, y] of [[9, 6], [20, 10], [14, 12]]) { g.set(x, y, '#e8a0b8'); g.set(x + 1, y, '#c87098'); g.set(x, y + 1, WTURF[0]); }
+  return g.rows();
+}
+
+// c5_weed_mat: a mat of wrack the sea has laid down: kelp ribbons and bladderwrack over each
+// other, a cork and a shell in it (2 wide, flat).
+function weedMat() {
+  dressSeed = 9551;
+  const g = new Grid(32, 14);
+  for (let i = 0; i < 6; i++) {
+    const y0 = 4 + dri(6), x0 = 1 + dri(8), len = 14 + dri(14), ph = dr() * 6;
+    const c = KELP[1 + (i % 3)];
+    for (let x = x0; x < Math.min(31, x0 + len); x++) {
+      const y = y0 + Math.round(Math.sin(x / 3 + ph) * 1.5);
+      g.set(x, y, c); if ((x + i) % 3) g.set(x, y + 1, KELP[0]);
+    }
+  }
+  // Bladderwrack: little knots of olive with their bubbles.
+  for (let i = 0; i < 9; i++) {
+    const x = 3 + dri(25), y = 2 + dri(9);
+    g.set(x, y, WEED[1]); g.set(x + 1, y + 1, WEED[2]); g.set(x - 1, y + 1, WEED[1]); g.set(x, y + 1, KELP[3]);
+  }
+  g.rect(24, 6, 3, 2, YELLOW[1]); g.set(24, 6, YELLOW[2]); g.set(26, 7, YELLOW[0]);
+  g.set(8, 4, WHITE[2]); g.set(9, 4, WHITE[1]);
+  return g.rows();
+}
+
+// c5_drift_fire: a fire of driftwood in a ring of stones, someone's shelter from the storm; it
+// burns low and orange (1 wide, solid; lit, see COAST_GLOWS).
+function driftFire() {
+  const g = new Grid(16, 16);
+  g.oval(8, 12, 6, 3, '#1a1612');
+  for (const [x, y] of [[2, 12], [4, 9], [8, 9], [12, 9], [14, 12], [12, 14], [8, 15], [4, 14]]) {
+    g.rect(x - 1, y - 1, 3, 2, WROCK[2]); g.set(x - 1, y - 1, WROCK[3]); g.set(x + 1, y, WROCK[0]);
+  }
+  g.line(4, 13, 11, 10, DRIFT[2]); g.line(5, 10, 12, 13, DRIFT[1]);
+  g.poly([[5, 12], [7, 5], [8, 8], [10, 3], [11, 11]], LAMPY[0]);
+  g.poly([[6, 12], [8, 7], [9, 9], [10, 6], [10, 12]], LAMPY[1]);
+  g.poly([[7, 12], [8, 9], [9, 12]], LAMPY[2]); g.set(8, 11, LAMPY[3]);
+  g.outline(OUT);
+  g.set(8, 1, '#5a5a52'); g.set(9, 0, '#4a4a44');
+  return g.rows();
+}
+
+// c5_pot_single: one lobster pot of willow, its rope to a little cork float (1 wide, solid).
+function potSingle() {
+  const g = new Grid(16, 16);
+  const W = ['#5a4422', '#8a6a3a', '#b8945a'];
+  g.oval(7, 9, 6, 5, W[1]);
+  g.rect(1, 9, 13, 5, W[1]);
+  for (let x = 2; x < 14; x += 3) g.line(x, 5, x, 13, W[0]);
+  for (let y = 7; y < 14; y += 3) g.line(1, y, 13, y, W[2]);
+  g.oval(7, 9, 2, 1, '#1a1410');
+  g.rect(1, 14, 13, 1, W[0]);
+  g.line(13, 11, 15, 13, ROPE[1]);
+  g.outline(OUT);
+  g.rect(13, 13, 3, 2, RED[1]); g.set(13, 13, RED[2]);
+  return g.rows();
+}
+
 export const COAST_PROP_SPRITES = {
   // Gullrest: the happy beach
   c5_bunting_string: buntingString(0),
@@ -1931,12 +2480,12 @@ export const COAST_PROP_SPRITES = {
   c5_net_frame: netFrame(),
   c5_anchor: anchor(),
   c5_rope_coil: ropeCoil(),
+  c5_doormat: doormat(),
   c5_crate: crate(),
   c5_crates_stack: cratesStack(),
   c5_barrel: barrel(),
   c5_barrels: barrels(),
   // The storm shore
-  c5_tide_clock: tideClock(0),
   c5_seaweed_heap: seaweedHeap(false),
   c5_seaweed_heap_big: seaweedHeap(true),
   c5_bathtub_wreck: bathtubWreck(),
@@ -1978,13 +2527,10 @@ export const COAST_PROP_SPRITES = {
   c5_sounding_weight: soundingWeight(),
   c5_chapel_pews: chapelPews(0),
   // The Beacon Isles and Haddock's Light
-  c5_light_base_a: lightBase('a'),
   c5_light_base_b: lightBase('b'),
   c5_little_light: littleLight(2),
-  c5_lamp_housing: lampHousing(),
   c5_rope_bridge_post: ropeBridgePost(),
   c5_forge: forge(0),
-  c5_seal_anvil: sealAnvil(),
   c5_bottle_garden: bottleGarden(),
   c5_height_marks: heightMarks(),
   c5_child_drawing: childDrawing(),
@@ -1994,14 +2540,47 @@ export const COAST_PROP_SPRITES = {
   // The Last Light
   c5_crank_wheel: crankWheel(0),
   c5_sluice_gate: sluiceGate(),
-  c5_spiral_rail_a: spiralRail('a'),
-  c5_spiral_rail_b: spiralRail('b'),
-  c5_great_lens: greatLens(1),
   c5_long_lantern: longLantern(0),
+  c5_long_lantern_cold: longLanternCold(),
   c5_handbell: handbell(),
+  c5_dinner_bell: dinnerBell(),
   c5_gull_hoard: gullHoard(),
   c5_handbell_float: handbellFloat(0),
   c5_far_lantern: farLantern(0),
+  // Bramble's ways in at the Wrack Gaps and the fog deck's rail (`gap: true`).
+  c5_weed_gap: weedGap(40, 28),
+  c5_weed_gap_small: weedGap(32, 24),
+  // Storm dressing (2026-11-08): what the storm left lying about.
+  c5_wrack_line: wrackLine(),
+  c5_crab_trail: crabTrail(),
+  c5_gull_marks: gullMarks(),
+  c5_puddle: stormPuddle(),
+  c5_planks_scatter: planksScatter(),
+  c5_net_torn: netTorn(),
+  c5_rubble: rubble(),
+  c5_floor_crack: floorCrack(),
+  c5_rust_bloom: rustBloom(),
+  c5_oar_stuck: oarStuck(),
+  c5_lantern_hook: lanternHook(),
+  c5_boat_upturned: boatUpturned(),
+  c5_lantern_fallen: lanternFallen(),
+  c5_sandbags: sandbags(),
+  // The shore's own odds (second pass): rock knots, pools, plants, a fire.
+  c5_rocks_weedy: rocksWeedy(true),
+  c5_rock_weedy: rocksWeedy(false),
+  c5_rock_pool: rockPool(),
+  c5_rocks_sunny: rocksWeedy(true, SUNROCK),
+  c5_rock_sunny: rocksWeedy(false, SUNROCK),
+  c5_rock_pool_sunny: rockPool(SUNROCK, ['#1e7898', '#34b8d4', '#86e6f0', '#e0fbff']),
+  c5_marram: marram(),
+  c5_sea_holly: seaHolly(),
+  c5_fence_broken: fenceBroken(),
+  c5_drift_log: driftLog(),
+  c5_shingle_spill: shingleSpill(),
+  c5_turf_patch: turfPatch(),
+  c5_weed_mat: weedMat(),
+  c5_drift_fire: driftFire(),
+  c5_pot_single: potSingle(),
 };
 
 // Moving props: frames of one size, played by `animation: '<same name>'`.
@@ -2010,7 +2589,6 @@ export const COAST_PALETTE_EXTRA = palette;
 export const C5_BUNTING_STRING_SPRITES = frames((i) => buntingString(i), 3);
 export const C5_BUNTING_POST_SPRITES = frames((i) => buntingPost(i), 2);
 export const C5_LANTERN_POST_LIT_SPRITES = { f1: lanternPost(1), f2: lanternPost(2), f3: lanternPost(3), f4: lanternPost(2) };
-export const C5_TIDE_CLOCK_SPRITES = frames((i) => tideClock(i), 4);
 export const C5_LAMPLIGHTER_LADDER_SPRITES = { f1: lamplighterLadder(true), f2: lamplighterLadder(false) };
 export const C5_HARBOUR_BELL_SPRITES = { f1: harbourBell(0), f2: harbourBell(1), f3: harbourBell(0), f4: harbourBell(-1) };
 export const C5_SLUICE_WHEEL_SPRITES = frames((i) => sluiceWheel(i), 4);
@@ -2023,13 +2601,13 @@ export const C5_CHAPEL_PEWS_SPRITES = frames((i) => chapelPews(i), 4);
 export const C5_LITTLE_LIGHT_SPRITES = { f1: littleLight(1), f2: littleLight(2), f3: littleLight(3), f4: littleLight(2) };
 export const C5_FORGE_SPRITES = frames((i) => forge(i), 3);
 export const C5_CRANK_WHEEL_SPRITES = frames((i) => crankWheel(i), 8);
-export const C5_GREAT_LENS_SPRITES = frames((i) => greatLens(i), 5);
 export const C5_LONG_LANTERN_SPRITES = frames((i) => longLantern(i), 3);
 export const C5_HANDBELL_FLOAT_SPRITES = frames((i) => handbellFloat(i), 4);
 export const C5_FAR_LANTERN_SPRITES = frames((i) => farLantern(i), 4);
 
 // How many tiles wide each big one stands.
 export const COAST_FOOTPRINTS = {
+  c5_doormat: 2,
   c5_gull_hoard: 2,
   c5_bunting_string: 3,
   c5_beach_hut: 3,
@@ -2044,7 +2622,6 @@ export const COAST_FOOTPRINTS = {
   c5_net_frame: 2,
   c5_crates_stack: 1,
   c5_barrels: 2,
-  c5_tide_clock: 2,
   c5_seaweed_heap_big: 2,
   c5_bathtub_wreck: 2,
   c5_driftwood: 2,
@@ -2067,18 +2644,30 @@ export const COAST_FOOTPRINTS = {
   c5_tattered_flag: 1,
   c5_stalactites_wide: 3,
   c5_chapel_pews: 3,
-  c5_light_base_a: 2,
-  c5_lamp_housing: 2,
   c5_forge: 3,
   c5_bottle_garden: 3,
   c5_height_marks: 2,
   c5_sluice_gate: 2,
-  c5_spiral_rail_a: 1,
-  c5_spiral_rail_b: 1,
-  c5_great_lens: 4,
   c5_chest: 1,
   c5_chest_open: 1,
   c5_toy_boat: 1,
+  c5_wrack_line: 3,
+  c5_crab_trail: 2,
+  c5_puddle: 2,
+  c5_planks_scatter: 2,
+  c5_net_torn: 2,
+  c5_rust_bloom: 2,
+  c5_boat_upturned: 3,
+  c5_sandbags: 2,
+  c5_rocks_weedy: 2,
+  c5_rock_pool: 2,
+  c5_rocks_sunny: 2,
+  c5_rock_pool_sunny: 2,
+  c5_fence_broken: 2,
+  c5_drift_log: 3,
+  c5_shingle_spill: 3,
+  c5_turf_patch: 2,
+  c5_weed_mat: 2,
 };
 
 // What glows (positions from the middle of the prop's foot, up is negative).
@@ -2112,10 +2701,6 @@ export const COAST_GLOWS = {
     { dy: -8, bloom: 20, strength: 0.75, flicker: 0.8, color: FIRE },
     { dy: 4, pool: 90, strength: 0.6, flicker: 0.6, color: FIRE },
   ],
-  c5_great_lens: [
-    { dy: -34, bloom: 34, strength: 0.8, flicker: 0, color: '255, 244, 200' },
-    { dy: -6, pool: 130, strength: 0.6, flicker: 0, color: '255, 244, 200' },
-  ],
   c5_long_lantern: [
     { dy: -24, bloom: 14, strength: 0.7, flicker: 0.3, color: LAMP },
     { dy: -4, pool: 54, strength: 0.5, flicker: 0.2, color: LAMP },
@@ -2133,5 +2718,17 @@ export const COAST_GLOWS = {
     { dy: 0, pool: 40, strength: 0.25, flicker: 0.2, color: GOLD },
   ],
   c5_far_lantern: [{ dy: -8, bloom: 10, strength: 0.7, flicker: 0.4, color: LAMP }],
-  c5_lamp_housing: [{ dy: -12, bloom: 10, strength: 0.25, flicker: 0.5, color: PALE }],
+  // The lantern hangs off the arm's end, right of the post (the prop's middle is x 8).
+  c5_lantern_hook: [
+    { dx: 4, dy: -28, bloom: 12, strength: 0.75, flicker: 0.4, color: LAMP },
+    { dx: 3, dy: -6, pool: 54, strength: 0.55, flicker: 0.3, color: LAMP },
+  ],
+  c5_lantern_fallen: [
+    { dx: -1, dy: -5, bloom: 8, strength: 0.5, flicker: 0.7, color: LAMP },
+    { dy: -2, pool: 30, strength: 0.3, flicker: 0.6, color: LAMP },
+  ],
+  c5_drift_fire: [
+    { dy: -8, bloom: 14, strength: 0.75, flicker: 0.8, color: FIRE },
+    { dy: -3, pool: 64, strength: 0.55, flicker: 0.6, color: FIRE },
+  ],
 };

@@ -72,7 +72,9 @@ export const LASTHOME_THEME = {
   title: 'The Ones Who Stopped Waiting',
   bpm: 58,
   stepsPerBeat: 3,
-  volume: 0.7,
+  // Was 0.7: turned up on 10 November 2026, it sat well under the other
+  // area songs (its quiet start most of all).
+  volume: 1,
 
   instruments: {
     // The rain: a felted piano, close, soft.

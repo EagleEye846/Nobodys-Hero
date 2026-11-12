@@ -15,7 +15,7 @@ export const BOG_TOAD = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'marsh',
   sprite: { rows: BOG_TOAD_SPRITE, palette: BOG_TOAD_PALETTE },
-  maxHp: 715,
+  maxHp: 910,
   damage: 24,
 
   // Slow, but there's a lot of it: its bullets come thick but not fast.

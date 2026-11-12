@@ -13,9 +13,11 @@ export const SECRET_WRECK_POCKET = {
   name: 'THE POCKET',
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'wreck',
-  // "Fog Bell" (src/data/music/wreckTheme.js).
-  music: 'wreck',
-  ambience: 'wreck_yard',
+  // "Under Her Ribs" (src/data/music/wreckHullsTheme.js): inside the beached wrecks.
+  music: 'wreckHulls',
+  ambience: 'hulk_storm',
+  // After chapter 5 the storm is over (`calmAfter`): no rain on the roof, and the room's `_calm` words.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_hulk' },
   vesWell: true,
   indoors: true,
 
@@ -51,6 +53,22 @@ export const SECRET_WRECK_POCKET = {
     { sprite: 'sign', x: 6, y: 2, text: 'pocket_note' },
     { sprite: 'c5_rope_coil', x: 11, y: 7, text: 'hull_rope', walkable: true },
     { sprite: 'c5_anchor', x: 2, y: 7, text: 'hull_anchor' },
+    // (2026-11-08) The bosun's own: a ship in a bottle and his knot board.
+    { sprite: 'in_bottle_ship', x: 4, y: 1, text: 'in_pocket_ship' },
+    { sprite: 'in_knot_board', x: 13, y: 1, text: 'in_pocket_knots' },
+    // (Second pass.) Dark under the deck beams along the north wall, the bosun's lamp on its
+    // bracket, the bilge spreading out of its hole over the boards, a grating, his sea chest and
+    // a heap of chain he never got round to stowing.
+    { sprite: 'wy_rail_shadow', x: 3, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 7, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow', x: 11, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 13, y: 2, flat: true, walkable: true },
+    { sprite: 'in_wall_lamp', x: 8, y: 1 },
+    { sprite: 'wy_bilge_slick', x: 5, y: 4, flat: true, walkable: true },
+    { sprite: 'wy_bilge_slick_b', x: 3, y: 5, flat: true, walkable: true },
+    { sprite: 'wy_grating', x: 9, y: 5, flat: true, walkable: true },
+    { sprite: 'in_sea_chest_small', x: 14, y: 7, text: 'pocket_sea_chest' },
+    { sprite: 'wy_chain_pile', x: 4, y: 7, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'hull_plate', W: 'hull_plate', '~': 'hull_bilge' },
 

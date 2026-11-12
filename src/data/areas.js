@@ -56,6 +56,8 @@ export const AREA_NAMES = {
   saltcombe: 'SALTCOMBE',
   lanes: 'THE SUNKEN LANES',
   wreck: 'THE WRECK YARD',
+  // The brig Fair Return, lying on the yard's bar (src/data/rooms/ship*.js).
+  ghostship: 'THE FAIR RETURN',
   merrow: 'MERROW',
   soundings: 'THE SOUNDINGS',
   isles: 'THE BEACON ISLES',
@@ -72,7 +74,7 @@ export const OUTDOOR_AREAS = new Set(['stair', 'vigil', 'rest', 'pinefall', 'hus
 // per area in lamplight.js (AREA_AMBIENT) and atmosphere.js (rain, lightning).
 // They are lamplit rather than "outdoors": the storm hides the sun, so the
 // time of day doesn't change them, and their lamps keep warm pools of light.
-export const STORM_AREAS = ['wrack', 'saltcombe', 'lanes', 'wreck', 'merrow', 'soundings', 'isles', 'haddock_light', 'reach', 'lastlight'];
+export const STORM_AREAS = ['wrack', 'saltcombe', 'lanes', 'wreck', 'ghostship', 'merrow', 'soundings', 'isles', 'haddock_light', 'reach', 'lastlight'];
 
 // Regions lit by their own lamps and fires (see src/overworld/lamplight.js):
 // outdoors the night comes down deeper and every lamp and lit window keeps a

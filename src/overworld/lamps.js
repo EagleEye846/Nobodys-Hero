@@ -1,5 +1,6 @@
-import { TILE_SIZE as T } from '../config.js';
+import { TILE_SIZE as T, SCREEN_WIDTH, SCREEN_HEIGHT } from '../config.js';
 import { TILES } from './tileset.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 
 // THE SWEEPING LAMPS (Chapter 5: the Beacon Isles and the Last Light).
 //
@@ -21,6 +22,8 @@ import { TILES } from './tileset.js';
 //     range: 7,        how far it reaches, in tiles
 //     off: 'name',     a switch (lever, plate, eye...) that puts the lamp out while it's on
 //                      (or a list of names: any one of them on puts it out)
+//     until: 'scene',  gone for good once that scene has played (the upper hall's lamp
+//                      stops when the storm ends)
 //     art: false,      don't draw the little iron lamp (the room has a prop there)
 //                      ('lens': just a glow on the prop's lantern glass, gone while it's off)
 //   }
@@ -35,12 +38,14 @@ const OVER = new Set(['~', '$', '_']);
 const CHEST = 6;
 const RAY_EVERY = 3;
 const rad = (d) => (d * Math.PI) / 180;
+const NONE = [];
 
 export class LampField {
   constructor(scene) {
     this.scene = scene;
     this.room = scene.room;
-    this.data = scene.roomData.lamps ?? [];
+    const seen = WORLD_STATE.seenScenes ?? [];
+    this.data = (scene.roomData.lamps ?? []).filter((d) => !(d.until && seen.includes(d.until)));
     this.lamps = this.data.map((d) => ({
       d,
       x: d.x * T + T / 2,
@@ -52,6 +57,38 @@ export class LampField {
     }));
     this.over = new Set([...OVER, ...(scene.roomData.beamOver ?? '')]);
     this.t = 0;
+    // The props that could stop a beam, by the tiles they cover, and which
+    // tiles stop it on their own: worked out once a frame (see sortOut), as
+    // props move, hide and open and the tide turns tiles over.
+    this.byTile = new Map();
+    this.tileBlocks = new Map();
+  }
+
+  // Once a frame, before any rays: a fresh sort of the props into the tiles
+  // they cover, so a ray step looks only at the props on its own tile
+  // instead of every prop in the room. (A room that wraps round keeps the
+  // old way: its props can block from the far side.)
+  sortOut() {
+    this.byTile.clear();
+    this.tileBlocks.clear();
+    if (this.room.wraps) return;
+    const W = this.room.width ?? 0;
+    for (const p of this.room.props) {
+      if (p.hidden || p.isOpen) continue;
+      if (p.walkable && !p.solidSides) continue;
+      const x0 = Math.floor(p.x / T);
+      const y0 = Math.floor(p.y / T);
+      const x1 = Math.floor((p.x + p.width - 1) / T);
+      const y1 = Math.floor((p.y + p.height - 1) / T);
+      for (let ty = y0; ty <= y1; ty++) {
+        for (let tx = x0; tx <= x1; tx++) {
+          const key = ty * (W + 1) + tx;
+          let list = this.byTile.get(key);
+          if (!list) this.byTile.set(key, list = []);
+          list.push(p);
+        }
+      }
+    }
   }
 
   get active() {
@@ -92,11 +129,23 @@ export class LampField {
     const ty = Math.floor(py / T);
     // Nothing blocks right at the lamp itself: it can sit in a wall or on a pillar.
     if (Math.hypot(px - lamp.x, py - lamp.y) < T || (tx === lamp.d.x && ty === lamp.d.y)) return false;
+    if (this.room.wraps) {
+      if (this.tileStops(tx, ty)) return true;
+      return this.room.props.some((p) => !p.hidden && this.room.propBlocks(p, px, py, px + 1, py + 1));
+    }
+    const key = ty * ((this.room.width ?? 0) + 1) + tx;
+    let stops = this.tileBlocks.get(key);
+    if (stops === undefined) this.tileBlocks.set(key, stops = this.tileStops(tx, ty));
+    if (stops) return true;
+    return (this.byTile.get(key) ?? NONE).some((p) => p.blocks(px, py, px + 1, py + 1));
+  }
+
+  // Whether a tile on its own stops the beam: off the map, a wall, a raised block.
+  tileStops(tx, ty) {
     const tile = this.room.tileAt(tx, ty);
     if (tile === null) return true;
     if (this.room.isSolidTile(tx, ty) && !this.over.has(tile) && !TILES[tile]?.beamOver) return true;
-    if (this.room.raiseAt(tx, ty) > 0) return true;
-    return this.room.props.some((p) => !p.hidden && this.room.propBlocks(p, px, py, px + 1, py + 1));
+    return this.room.raiseAt(tx, ty) > 0;
   }
 
   // How far a ray at an angle goes before it's stopped.
@@ -152,6 +201,7 @@ export class LampField {
 
   // The lamp that has any of these bodies in its beam, or null.
   seen(bodies) {
+    this.sortOut();
     for (const lamp of this.lamps) {
       if (bodies.some((b) => !b.hidden && !b.tucked && Number.isFinite(b.x) && this.touches(lamp, b))) return lamp;
     }
@@ -160,9 +210,13 @@ export class LampField {
 
   // The beams: a soft warm wedge that's brighter at the lamp, with a firmer edge.
   draw(ctx, camera, time = 0) {
+    this.sortOut();
     for (const lamp of this.lamps) {
       const lx = Math.round(lamp.x - camera.x);
       const ly = Math.round(lamp.y - camera.y);
+      // Its whole reach off the screen: no beam to work out, no lamp to draw.
+      const reach = lamp.range + T;
+      if (lx + reach < 0 || lx - reach > SCREEN_WIDTH || ly + reach < 0 || ly - reach > SCREEN_HEIGHT) continue;
       const off = this.isOff(lamp);
       if (!off) {
         const { points } = this.shape(lamp);

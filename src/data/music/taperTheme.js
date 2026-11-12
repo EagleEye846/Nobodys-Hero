@@ -22,6 +22,9 @@ export const TAPER_THEME = {
   title: 'Wax and Lullaby',
   bpm: 70,
   stepsPerBeat: 2,
+  // Turned down on 10 November 2026 to sit with the other area songs (it was
+  // about 3 dB louder than them).
+  volume: 0.69,
 
   instruments: {
     // The music box: bright and bell-like, with a soft echo, like it's playing in the next room.

@@ -17,6 +17,16 @@ A drip falls somewhere. BLINDFISH snaps at it. Misses by a mile.
 
 Smells like cold water and fish. Mostly fish.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+BLINDFISH floats on its side, listening to its own ripples go out. It's not sure it likes what they're saying.
+
+# (draft)
+[flavor: spareable]
+BLINDFISH lies still in the shallows. The water around it goes perfectly flat, which for a blindfish is a kind of smile.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

@@ -15,7 +15,7 @@ export const SLIPJACK = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: SLIPJACK_SPRITE, palette: SLIPJACK_PALETTE },
-  maxHp: 540,
+  maxHp: 685,
   damage: 23,
 
   // Quick, as it'll tell you: a step past the Hushwood's worst.

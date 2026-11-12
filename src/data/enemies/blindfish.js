@@ -24,7 +24,7 @@ export const BLINDFISH = {
   anim: BLINDFISH_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1380,
+  maxHp: 1750,
   damage: 42,
 
   // The Stillwater: quick and splashy, and a step up from the Diggings.

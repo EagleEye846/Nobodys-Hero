@@ -15,12 +15,23 @@ export const WRACKEEL = {
   swims: true,
   sprite: { rows: WRACKEEL_SPRITE, palette: WRACKEEL_PALETTE },
   anim: WRACKEEL_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): crackles when hit, static off it, sparks
+  // gathering before it strikes; beaten, a last fizzle and it sinks belly-up.
+  feel: { hit: 'zap', idle: 'static', windup: 'charge', at: [0.2, 0.45], defeat: 'fizzle', exit: 'sink' },
   // The coast's fights from the Lanes on: the shanty.
   music: 'coastBattleStorm',
-  maxHp: 2050,
-  damage: 60,
+  maxHp: 10800,
+  damage: 90,
 
-  difficulty: { density: 1.4, speed: 1.3 },
+  difficulty: { density: 1.55, speed: 1.40 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  // (2026-11-10: comes in sooner and runs longer, was { at: 0.85, seconds: 4.5 }:
+  // its attacks are done throwing a second or so before their end, and the box
+  // sat empty until the encore came.)
+  encore: { at: 0.72, seconds: 5.3, density: 0.8 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
   // Long and low, it lies along the bottom of the picture.
   battlePos: { x: 208, y: 58 },
 

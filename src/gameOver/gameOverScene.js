@@ -2,8 +2,14 @@ import { UI_WIDTH, UI_HEIGHT } from '../config.js';
 import { inUiSpace } from '../engine/screen.js';
 import { music, sfx } from '../audio/music.js';
 import { drawText, textWidth, wrapLines } from '../ui/text.js';
+import { textFile } from '../engine/textLoader.js';
+import { promptName } from '../engine/input.js';
+import { soulSprite } from '../battle/soul.js';
 
 // Shown when the player dies. Confirm calls restart() to build a fresh scene.
+// After a boss or story fight (`retry`), there are two choices instead: TRY
+// AGAIN goes straight back into the fight (retry() does that), and LAST SAVE
+// is the usual restart().
 //
 // The last thing you saw stays up and goes slowly dark. Over it, a lantern
 // flame, small, guttering; GAME OVER comes up a letter at a time to a low
@@ -19,10 +25,27 @@ const LINE_LETTER = 0.022;
 const FLAME_OUT = 2.2;
 const PROMPT_AT = 2.5;
 const PROMPT_IN = 0.5;
+const CHOICES = ['TRY AGAIN', 'LAST SAVE'];
+const CHOICE_GAP = 220;
+
+// A boss's own line under GAME OVER (text/game_over.txt, by the id of any
+// enemy in the fight), or undefined.
+export function bossGameOverWords(ids = []) {
+  let words;
+  try {
+    words = textFile('game_over.txt');
+  } catch {
+    return undefined;
+  }
+  for (const id of ids) if (words[id]?.length) return words[id][0];
+  return undefined;
+}
 
 export class GameOverScene {
-  constructor(restart, message = 'The floor could not hold you.') {
+  constructor(restart, message = 'The floor could not hold you.', { retry = null } = {}) {
     this.restart = restart;
+    this.retry = retry;
+    this.choice = 0;
     this.message = message;
     // Counted by letter, not by code unit, so an emoji never shows half-drawn.
     this.letters = [...message];
@@ -60,8 +83,19 @@ export class GameOverScene {
       if (line % 3 === 0) sfx('type');
       this.lineShown = line;
     }
-    if (this.time >= PROMPT_AT && input.wasPressed('confirm')) {
-      this.game.changeScene(this.restart());
+    if (this.time < PROMPT_AT || this.chosen) return;
+    if (this.retry) {
+      const before = this.choice;
+      if (input.wasPressed('left') || input.wasPressed('up')) this.choice = 0;
+      if (input.wasPressed('right') || input.wasPressed('down')) this.choice = 1;
+      if (this.choice !== before) sfx('move');
+    }
+    if (input.wasPressed('confirm')) {
+      // (Once: a second press mustn't start it twice.)
+      this.chosen = true;
+      sfx('select');
+      if (this.retry && this.choice === 0) this.retry();
+      else this.game.changeScene(this.restart());
     }
   }
 
@@ -97,11 +131,32 @@ export class GameOverScene {
       // The prompt, breathing.
       if (this.time >= PROMPT_AT) {
         const t = this.time - PROMPT_AT;
-        ctx.globalAlpha = Math.min(1, t / PROMPT_IN) * (0.6 + 0.4 * Math.sin(t * 3));
-        drawText(ctx, 'Press Z to try again', cx, UI_HEIGHT - 80, { size: 30, align: 'center' });
+        if (this.retry) {
+          this.drawChoices(ctx, cx, UI_HEIGHT - 84, Math.min(1, t / PROMPT_IN));
+        } else {
+          ctx.globalAlpha = Math.min(1, t / PROMPT_IN) * (0.6 + 0.4 * Math.sin(t * 3));
+          drawText(ctx, `Press ${promptName('confirm')} to try again`, cx, UI_HEIGHT - 80, { size: 30, align: 'center' });
+        }
         ctx.globalAlpha = 1;
       }
     });
+  }
+
+  // TRY AGAIN and LAST SAVE side by side, the soul by the chosen one.
+  drawChoices(ctx, cx, y, fade) {
+    const size = 30;
+    CHOICES.forEach((label, i) => {
+      const x = cx + (i - 0.5) * CHOICE_GAP;
+      const selected = i === this.choice;
+      ctx.globalAlpha = fade * (selected ? 1 : 0.7);
+      drawText(ctx, label, x, y, { size, align: 'center', color: selected ? '#ffe14d' : '#9b8fbf' });
+      if (selected) {
+        const soul = soulSprite();
+        ctx.drawImage(soul, Math.round(x - textWidth(ctx, label, size) / 2 - soul.width - 12), y + Math.round((size - soul.height) / 2));
+      }
+    });
+    ctx.globalAlpha = fade * 0.8;
+    drawText(ctx, this.choice === 0 ? 'Back into the fight, everyone whole.' : 'Back to where you last saved.', cx, y + 40, { size: 22, align: 'center', color: '#6f6690' });
   }
 
   // A lantern flame on its wick, guttering, and out; then a wisp of smoke.

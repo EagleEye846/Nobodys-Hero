@@ -120,7 +120,9 @@ export const BUNNY_ATTACKS = {
         for (const cloud of clouds) {
           cloud.t -= dt;
           if (cloud.t > 0) continue;
-          const aim = angleTo(cloud, soul) + rand(-0.14, 0.14);
+          // (The middle speck comes straight at you: standing still in a
+          // corner isn't safe from a sneeze.)
+          const aim = angleTo(cloud, soul) + rand(-0.04, 0.04);
           for (let i = 0; i < 5; i++) {
             const angle = aim + (i - 2) * 0.24 + rand(-0.04, 0.04);
             const speed = rand(72, 86);
@@ -143,34 +145,55 @@ export const BUNNY_ATTACKS = {
   // Baby dust bunnies tumble in from the sides and hop around the box,
   // bouncing off the floor and walls. Each one blinks first on the floor, then
   // leaps for where you are: high enough to reach you, landing past you.
+  // About two in five are pouncers: each waits out its blink, looks where you
+  // are, and hops so the top of its hop comes down on you, bumping its head
+  // on the top of the box if it has to, or going nearly straight up beside
+  // a wall. So there's nowhere to stand still, not even up at the top.
   bunnyHopscotch(box, density, { Shot, every, rand, clamp, shuffleBag }) {
     const side = shuffleBag(['left', 'right']);
     const floor = box.y + box.h - 4;
     const gravity = 150;
+    let pouncers = [];
     const hop = every(0.95, 1.25, (bullets, soul) => {
-      const fromLeft = side() === 'left';
+      const aimed = Math.random() < 0.4;
+      // (A pouncer comes in on your side of the box.)
+      const fromLeft = aimed ? soul.x < box.x + box.w / 2 : side() === 'left';
       const x = fromLeft ? box.x + 5 : box.x + box.w - 5;
-      // About one bunny in three jumps just over your height, so the top of
-      // its hop passes through you (a little extra, since the bunny's slow
-      // difficulty takes some height off). The rest hop at random heights.
-      const aimed = Math.random() < 0.3;
-      const height = aimed ? clamp(floor - soul.y + rand(12, 20), 18, box.h - 8) : rand(18, box.h - 10);
+      const height = rand(18, box.h - 10);
       const jump = Math.sqrt(2 * gravity * height);
-      const timeToTop = jump / gravity;
-      const run = aimed ? clamp(Math.abs(soul.x - x) / timeToTop, 25, 60) : rand(25, 45);
-      bullets.push(new Shot({
+      const run = rand(25, 45);
+      const kit = new Shot({
         x,
         y: floor,
-        vx: fromLeft ? run : -run,
-        vy: -jump,
+        vx: aimed ? 0 : fromLeft ? run : -run,
+        vy: aimed ? 0 : -jump,
         gravity,
         bounce: true,
         warn: 0.6,
         life: 2.4,
         art: 'bunnyKit',
-      }));
+      });
+      bullets.push(kit);
+      if (aimed) pouncers.push(kit);
     });
-    return { duration: 6.5, update: (dt, bullets, soul) => hop(dt, bullets, soul) };
+    return {
+      duration: 6.5,
+      update: (dt, bullets, soul) => {
+        hop(dt, bullets, soul);
+        for (const kit of pouncers) {
+          if (kit.age < kit.warn) continue;
+          kit.launched = true;
+          // Up to just past your height (the top of the box stops it), and
+          // across so it's over you as it gets there.
+          const height = clamp(floor - soul.y + 2, 4, box.h);
+          const jump = Math.sqrt(2 * gravity * height);
+          const run = clamp((soul.x - kit.x) / (jump / gravity), -60, 60);
+          kit.vx = Math.abs(run) < 3 ? (kit.x < box.x + box.w / 2 ? 3 : -3) : run;
+          kit.vy = -jump;
+        }
+        pouncers = pouncers.filter((kit) => !kit.launched);
+      },
+    };
   },
 
   // A broom sweeps a wall of lint across the box. Each wall has one gap in
@@ -223,9 +246,17 @@ export const BUNNY_ATTACKS = {
     const moteX = spreadAcross(box.x + 4, box.x + box.w - 4);
     const strands = 4;
     const warn = 0.85;
-    const weave = every(1.55, 1.95, (bullets) => {
+    const weave = every(1.55, 1.95, (bullets, soul) => {
       const corner = nextCorner();
-      const tilt = rand(-0.4, 0.4);
+      // The fan turns so one strand runs through where you are (as far as
+      // it can turn): there's no spot along a wall it can't reach.
+      const toSoul = Math.atan2(soul.y - corner.y, soul.x - corner.x);
+      let tilt = rand(-0.4, 0.4);
+      for (let i = 0; i < strands; i++) {
+        const want = Math.atan2(Math.sin(toSoul - (corner.angle + (i + 0.5) / strands * (Math.PI / 2))), Math.cos(toSoul - (corner.angle + (i + 0.5) / strands * (Math.PI / 2))));
+        if (i === 0 || Math.abs(want) < Math.abs(tilt)) tilt = want;
+      }
+      tilt = Math.max(-0.4, Math.min(0.4, tilt));
       bullets.push(new Shot({ x: corner.x, y: corner.y, art: 'bunnyWebKnot', harmless: true, life: warn + 0.6 }));
       for (let i = 0; i < strands; i++) {
         const angle = corner.angle + tilt + (i + 0.5) / strands * (Math.PI / 2);
@@ -248,8 +279,8 @@ export const BUNNY_ATTACKS = {
     });
     return {
       duration: 7,
-      update: (dt, bullets) => {
-        weave(dt, bullets);
+      update: (dt, bullets, soul) => {
+        weave(dt, bullets, soul);
         drift(dt, bullets);
       },
     };

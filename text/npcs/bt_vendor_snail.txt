@@ -34,3 +34,23 @@ The inn... Auntie... the snail... with the table... growing into her... She's wa
 
 [toffee_after]
 Thank you... for taking it... I do miss... doing a delivery... myself... but I'd have... got there... by next week...
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+...I remember... every customer... There was one... long ago... small... in a hurry...
+
+He wanted... directions... not sweets... I gave him both... I'm still... a bit cross...
+
+# (draft)
+[repeat 3]
+...Don't rush... you'll... drop it...
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+...Mind the... bottom of things... It comes up... quicker... than you'd think...
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+...Something's... different... Oh. It's me. I'm... smiling. Give it... a moment... It'll... spread.

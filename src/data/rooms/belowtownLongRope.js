@@ -24,7 +24,7 @@ export const BELOWTOWN_LONG_ROPE = {
   // "Pull It Twice" (src/data/music/longRopeTheme.js): the goodbye, from
   // walking in through the whole climb. The Soft Field takes over at the top.
   music: 'longRope',
-  ambience: 'belowtown',
+  ambience: 'long_rope',
   indoors: true,
 
   tiles: [
@@ -115,7 +115,7 @@ export const BELOWTOWN_LONG_ROPE = {
 
   textFile: 'interactions/belowtown.txt',
   props: [
-    { sprite: 'bf_tuck', x: 7, y: 41, cast: 'tuck', text: 'rope_tuck', animation: 'bf_tuck', speed: 0.5 },
+    { sprite: 'bf_tuck', x: 7, y: 41, cast: 'tuck', text: 'rope_tuck', speaker: 'tuck', animation: 'bf_tuck', speed: 0.5 },
     { sprite: 'bf_rumbold_head', x: 6, y: 41, text: 'rope_king_head' },
     { sprite: 'bf_mole_miner_a', x: 12, y: 42, cast: 'm1', text: 'rope_mole' },
     { sprite: 'bf_frog_kid_a', x: 13, y: 43, cast: 'f1', text: 'rope_frog' },

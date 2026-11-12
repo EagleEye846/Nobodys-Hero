@@ -26,20 +26,20 @@ export const MARSH_FAR_SHORE = {
   fog: 0.25,
 
   tiles: [
-    '""""""""""""""""""""""""""""',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '=====;;;;;;;;;;;;;;;,,,,::::',
-    '=====;;;;;;;;;;;;;;;,,,,::::',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
-    '"%%%%;;;;;;;;;;;;;;;,,,,:::"',
+    '"""""""""":;""""""""""""""""',
+    '"%%%%;;;;;;;;;;;;,,;,,,,,,,"',
+    '"%%%%;;;;;;;;;;;,,,,,,,::::"',
+    '"%%%%;;;;;;;;;;;,,,,,,:::::"',
+    '"%%%%;;;;;;;;;;;;;,;;;;,:::"',
+    '"%%%%;;;;;;;;;;;;;,,,,,,:::"',
+    '=====;;::;::::::;;,,,,,,::::',
+    '=====:::::;:::::::,,,,,,::::',
+    '"%%%%;;;;;;;;;;;;,,;,,,::::"',
+    '"%%%%;;;;;;;;;;,,,,,,,:::::"',
+    '"%%%%;;;;;;;;;;,,,,,,,,::::"',
+    '"%%%%;;;;;;;;;;;,,,;,,,,::,"',
+    '"%%%%;;;;;;;;;;;,,;;,,;;:,,"',
+    '"%%%%;;;;;;;;;;;;;;;,,;,::,"',
     '$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
   ],
 
@@ -50,6 +50,8 @@ export const MARSH_FAR_SHORE = {
   doors: [
     { x: 0, y: 6, w: 1, h: 2, to: 'marsh_watergate', spawn: { x: 28, y: 7 } },
     { x: 27, y: 6, w: 1, h: 2, to: 'valley_road', spawn: { x: 1, y: 7 } },
+    // A gap in the reeds, kept trodden: the Clerk's Islet (a secret: src/data/rooms/marshClerksIslet.js).
+    { x: 10, y: 0, w: 2, h: 1, to: 'marsh_clerks_islet', spawn: { x: 8, y: 10 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -63,6 +65,8 @@ export const MARSH_FAR_SHORE = {
     { sprite: 'marsh_lantern', x: 5, y: 5, text: 'marsh_lantern', light: 60 },
     { sprite: 'sign', x: 25, y: 7, text: 'shore_end' },
     { sprite: 'cairn', x: 18, y: 4, text: 'shore_cairn' },
+    // The toll board at the gap in the reeds: the Clerk's Islet.
+    { sprite: 'sign', x: 9, y: 1, text: 'shore_toll_sign' },
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

@@ -2,6 +2,8 @@ import { SCREEN_WIDTH as W, SCREEN_HEIGHT as H, TILE_SIZE as T } from '../config
 import { glowSprite, roomLights } from './lamplight.js';
 import { sfx } from '../audio/music.js';
 import { ROOM_TOUCHES, AREA_TOUCHES } from '../data/touches.js';
+import { COAST_KINDS } from './coastTouches.js';
+import { fract, hash } from '../engine/noise.js';
 
 // TOUCHES: the small, living extras that give each Chapter 4 room its own
 // look: bees over the flowers, a kite stuck in a tree, washing on a line, a
@@ -21,12 +23,11 @@ import { ROOM_TOUCHES, AREA_TOUCHES } from '../data/touches.js';
 //   thing  { sortY, draw(ctx, cam, t) }   stands among the props, in front of
 //                                          or behind people by its y
 //   over(ctx, cam, t)    glows, added on top after the room's lighting
-// The player's spot is `scene.player` (pixels). Everything is worked out from
+// The coast's kinds (gulls, crabs, a cat, smoke, ropes, floats, blown bits,
+// puddles) are in coastTouches.js. The player's spot is `scene.player` (pixels). Everything is worked out from
 // the time and the player's place, so nothing is kept between frames except
 // the odd flash.
 
-const fract = (x) => x - Math.floor(x);
-const hash = (n) => fract(Math.sin(n * 91.7 + 17.3) * 43758.5453);
 const rect = (ctx, color, x, y, w = 1, h = 1) => {
   ctx.fillStyle = color;
   ctx.fillRect(Math.round(x), Math.round(y), w, h);
@@ -320,8 +321,9 @@ const KINDS = {
         if (x2 < -20 || x1 > W + 20 || y1 > H + 20 || y2 < -40) return;
         const len = Math.round(x2 - x1);
         const sag = (u) => Math.round(Math.sin(u * Math.PI) * 3);
-        // A post at each end to hold the line up, with a crossbar and a footing.
-        for (const [px, py] of [[x1, y1], [x2, y2]]) {
+        // A post at each end to hold the line up, with a crossbar and a footing
+        // (`posts: false` when it's tied to something already standing there, like two lamp posts).
+        for (const [px, py] of s.posts === false ? [] : [[x1, y1], [x2, y2]]) {
           const top = Math.round(py) - 2;
           const post = Math.round(px) - 1;
           rect(ctx, '#3a2a1a', post - 1, top, 4, 20);
@@ -446,6 +448,13 @@ const KINDS = {
         rect(ctx, dark, x - 2, y - 1, 2, 1);
         rect(ctx, '#2a2018', x + 3, y - 4 - breathe);
         rect(ctx, '#2a2018', x + 6, y - 4 - breathe);
+        // Stroked (a `looks` spot with `pet: true`): one eye opens, a while, and
+        // shuts again, and no Z till it's back off.
+        const since = s.scene.pettedAt == null ? Infinity : t - s.scene.pettedAt;
+        if (since < 2.4) {
+          if (since > 0.2 && since < 1.8) rect(ctx, s.eye ?? '#e8d050', x + 6, y - 4 - breathe);
+          return;
+        }
         // A Z.
         const life = fract(t * 0.3);
         const zx = x + 8 + life * 3;
@@ -847,8 +856,12 @@ export class Touches {
     const id = scene.roomData.id;
     const specs = [...(AREA_TOUCHES[scene.roomData.area] ?? []), ...(ROOM_TOUCHES[id] ?? [])];
     this.list = [];
+    // `when: 'storm'` or `when: 'calm'`: only while a green-storm room's storm is on, or once it has
+    // lifted (the room's `calmAfter`); a room with no `calmAfter` is never calm.
+    const calm = Boolean(scene.calm);
     for (const spec of specs) {
-      const make = KINDS[spec.kind];
+      if (spec.when === 'storm' ? calm : spec.when === 'calm' ? !calm : false) continue;
+      const make = KINDS[spec.kind] ?? COAST_KINDS[spec.kind];
       if (!make) throw new Error(`Room '${id}': unknown touch '${spec.kind}'`);
       const parts = make({ ...spec, scene });
       this.list.push(parts);

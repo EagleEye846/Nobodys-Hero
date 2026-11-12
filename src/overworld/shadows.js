@@ -14,7 +14,7 @@ import { daylight } from './daylight.js';
 
 // A shadow's own picture: the same shape, all one colour. Kept per picture.
 const silhouettes = new WeakMap();
-function silhouette(image) {
+export function silhouette(image) {
   let shape = silhouettes.get(image);
   if (!shape) {
     shape = document.createElement('canvas');

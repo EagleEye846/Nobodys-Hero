@@ -21,7 +21,7 @@ enemy:rimewing
 enemy:great_bat
 
 [title]
-Chapter Two: The Long Stair
+Chapter Two: Mount Vigil
 NOBODY'S HERO
 
 [created]

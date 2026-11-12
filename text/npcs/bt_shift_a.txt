@@ -17,3 +17,21 @@ It's so bright I put my lamp out. Then I walked into a barrel. Worth it.
 
 [repeat after the_light_goes_up]
 Is it still a shift if there's a party? I'm going to say no.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I've been on my way to this shift since the bell. The bell was yesterday.
+
+# (draft)
+[repeat 3]
+My dad was a digger. His dad was a digger. His dad said "down THERE?" and went the other way. We don't talk about him.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Past the trestle the rails go funny. Don't ride a cart you didn't push yourself. That's not advice. That's a scar.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Found my lamp. It was in the barrel. I'm leaving it there. It's earned a rest.

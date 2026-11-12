@@ -17,6 +17,14 @@ A feather drifts off. Nobody can tell whose.
 
 Smells of wet sand, seaweed and very quick feet.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+DUNLIN DANCER is out of step. One bird hops a beat late, and the other four look at it.
+
+[flavor: spareable]
+DUNLIN DANCER bows, all five at once, perfectly together. The dance is over.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

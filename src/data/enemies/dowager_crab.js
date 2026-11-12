@@ -17,8 +17,11 @@ import { DOWAGER_CRAB_PALETTE, DOWAGER_CRAB_SPRITE, DOWAGER_CRAB_ANIM, DOWAGER_C
 // (a key in the Wrack Shore, gear.js) is given by her room after the fight,
 // beaten or spared; she is not a fight you need to win to be let through.
 //
-// Strength: about 1.6x the Wrack regulars (2000-2300 HP) and above chapter 4's
-// midbosses (Tatterwight 1260, Warden 2760), well under Corrie (21,000).
+// Strength: about 3x a Wrack regular (7,400-9,000 HP; in a pack each has a
+// share of that, see groupHpShare in battleScene.js), under Old Gulper
+// (31,000) and well under Corrie (50,000). 24,000 from 8 November 2026 (it was
+// 3,600, then 7,600, then 12,500): with the party's chapter 5 skills she went
+// down in about 7 rounds of good play, hardly longer than a regular.
 
 // Her attacks live in src/battle/attacks/dowager_crab.js.
 const RECEIVING_ATTACKS = [
@@ -29,7 +32,7 @@ const RECEIVING_ATTACKS = [
   { name: 'crabBarnacles', weight: 2 },
 ];
 const RILED_ATTACKS = [
-  { name: 'crabTide', weight: 4 },
+  { name: 'crabTide', weight: 4, layer: false },
   { name: 'crabToll', weight: 2 },
   { name: 'crabSnips', weight: 3 },
   { name: 'crabDucks', weight: 2 },
@@ -46,6 +49,9 @@ export const DOWAGER_CRAB = {
   area: 'wrack',
   sprite: { rows: DOWAGER_CRAB_SPRITE, palette: DOWAGER_CRAB_PALETTE },
   anim: DOWAGER_CRAB_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): a clack off her shell when hit (her defeat is
+  // the boss finale).
+  feel: { hit: 'shell' },
   // Beaten, she doesn't fade: she has sunk into the tub, and stays there.
   beatenSprite: { rows: DOWAGER_CRAB_DEATH_LAST, palette: DOWAGER_CRAB_PALETTE },
   boss: true,
@@ -55,12 +61,15 @@ export const DOWAGER_CRAB = {
   music: 'crabBattle',
   backdrop: 'wrack',
   battlePos: { x: 202, y: 34 },
-  maxHp: 3600,
-  damage: 70,
-  difficulty: { density: 1.65, speed: 1.5 },
+  maxHp: 30500,
+  damage: 106,
+  difficulty: { density: 1.95, speed: 1.70 },
 
-  // Below a fifth of her HP she adds a light second attack on top.
-  secondWind: { below: 0.2, density: 0.3, delay: 2.5 },
+  // Below 30% of her HP she adds a light second attack on top.
+  secondWind: { below: 0.3, density: 0.25, delay: 2.4 },
+  // Its turns run long: as one attack winds down, another follows (encore,
+  // see startAttack in battleScene.js).
+  encore: { at: 0.85, seconds: 5, density: 0.65 },
   // She scuttles in from the right and skids to a stop (see stageBits.js).
   entrance: 'charge',
   introCard: { title: 'THE DOWAGER CRAB', subtitle: 'Mistress of the Bathtub' },
@@ -80,8 +89,8 @@ export const DOWAGER_CRAB = {
       sprite: { rows: DOWAGER_CRAB_RILED_SPRITE, palette: DOWAGER_CRAB_PALETTE },
       anim: DOWAGER_CRAB_RILED_ANIM,
       patterns: RILED_ATTACKS,
-      damage: 76,
-      difficulty: { density: 1.8, speed: 1.62 },
+      damage: 114,
+      difficulty: { density: 2.10, speed: 1.82 },
       introSfx: 'thud',
       lowHp: 0.25,
       beat: [{ say: 'phase: riled' }, { who: 'vesper', say: 'phase: riled vesper' }, { who: 'foe', say: 'phase: riled foe' }],
@@ -95,7 +104,7 @@ export const DOWAGER_CRAB = {
     { name: 'crabSnips', weight: 3 },
     { name: 'crabDucks', weight: 2 },
     { name: 'crabBarnacles', weight: 2 },
-    { name: 'crabTide', weight: 2 },
+    { name: 'crabTide', weight: 2, layer: false },
   ],
 
   // TALK options: everything the hero does is told in the panel. Manners win her
@@ -105,7 +114,7 @@ export const DOWAGER_CRAB = {
     { name: 'Inspect' },
     { name: 'Wipe your feet', calm: 25, once: true },
     { name: 'Admire the tub', calm: 25, once: true },
-    { name: 'Ask about the bell', calm: 20, once: true },
+    { name: 'Point at the bell', calm: 20, once: true },
     { name: 'Curtsey', calm: 20, once: true, after: 'Wipe your feet' },
     { name: 'Apologise for the sand', calm: 25, once: true, atCalm: 35 },
   ],

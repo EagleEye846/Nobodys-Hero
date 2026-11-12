@@ -17,6 +17,14 @@ Somewhere inside the armour, a very small voice recites regulations.
 
 Smells of rock pool, polish and duty.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+LIMPET KNIGHT's shell is cracked. The small voice inside has moved on to the regulations about retreat.
+
+[flavor: spareable]
+LIMPET KNIGHT lowers its lance and lifts its visor all the way up. Duty, it seems, has been done.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -52,11 +60,11 @@ A limpet in tiny armour, very serious. Bashes with a wide plate, sucks you towar
 [talk: Salute]
 You put your hand to your brow, properly, with your elbow up. LIMPET KNIGHT freezes. Then it gives the smallest, sharpest salute you have ever seen, and the plume trembles a little with feeling.
 
-[talk: Ask to pass]
-You ask, very formally, whether you might pass. LIMPET KNIGHT considers it for a long moment. Nobody has ever asked. They've only gone round. It is not sure what the form is.
+[talk: Gesture to pass]
+You bow, very formally, and point at the gap past its rock, with your eyebrows up. LIMPET KNIGHT considers it for a long moment. Nobody has ever asked. They've only gone round. It is not sure what the form is.
 
 [talk: Admire the shield]
-You look at the shield for a good while and say it's a fine piece of work. The limpet on it has the same face as the knight. LIMPET KNIGHT turns it very slightly in the light. That is the one it likes best.
+You look at the shield for a good while and give it a long, approving nod. The limpet on it has the same face as the knight. LIMPET KNIGHT turns it very slightly in the light. That is the one it likes best.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

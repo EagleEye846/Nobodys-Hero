@@ -1,4 +1,6 @@
 import * as hud from './hud.js';
+import { fract, vistaHash as noise } from '../engine/noise.js';
+import { flashScale } from '../state/settings.js';
 
 // Corrie, the Tidecaller's stage (src/data/enemies/corrie.js): what each of
 // his four phases does to the box, beyond its attacks (see stageEffects.js
@@ -28,6 +30,165 @@ const TURN = 0.2;
 const TURN_SPEED = 0.85;
 
 const phaseOf = (battle) => battle.bossPhase()?.id ?? null;
+// Battle sprites are drawn at twice their size (as in battleScene.js).
+const FOE_SCALE = 2;
+
+
+// A soft round light.
+function soft(ctx, x, y, r, rgb, a) {
+  const g = ctx.createRadialGradient(x, y, 1, x, y, r);
+  g.addColorStop(0, `rgba(${rgb}, ${a.toFixed(3)})`);
+  g.addColorStop(1, `rgba(${rgb}, 0)`);
+  ctx.fillStyle = g;
+  ctx.fillRect(x - r, y - r, r * 2, r * 2);
+}
+
+// The boy: seven drops of sea turning round him on a tilted ring, the far
+// half behind him and the near half in front, each with a glint and a tail.
+function orbit(ctx, cx, cy, t, side) {
+  for (let i = 0; i < 7; i++) {
+    const a = t * 0.9 + (i / 7) * Math.PI * 2;
+    const front = Math.sin(a) > 0;
+    if ((side === 'front') !== front) continue;
+    const x = cx + Math.cos(a) * 54;
+    const y = cy + Math.sin(a) * 12 - 10 + Math.sin(t * 2 + i) * 2;
+    const r = front ? 2 : 1;
+    for (let k = 1; k <= 3; k++) {
+      const b = a - k * 0.09;
+      ctx.fillStyle = `rgba(143, 240, 255, ${(0.3 - k * 0.08).toFixed(3)})`;
+      ctx.fillRect(Math.round(cx + Math.cos(b) * 54), Math.round(cy + Math.sin(b) * 12 - 10), 2, 2);
+    }
+    ctx.fillStyle = front ? '#7fd4ee' : 'rgba(80, 170, 200, 0.8)';
+    ctx.fillRect(Math.round(x - r), Math.round(y - r), r * 2, r * 2);
+    ctx.fillStyle = front ? '#efffff' : '#a8e8f4';
+    ctx.fillRect(Math.round(x - r + 1), Math.round(y - r), 1, 1);
+  }
+}
+
+// The storm: a mass of cloud piled up at his back, rolling slowly, its edges
+// lit green-white, and now and then a fork running down it and the whole of
+// it lighting from inside.
+function stormMass(ctx, cx, top, t) {
+  const flash = (() => {
+    const n = Math.floor(t / 2.6);
+    const local = t - n * 2.6;
+    // (The LIGHTNING FLASHES option dims it, or leaves it out.)
+    return local < 0.5 ? (local < 0.08 ? 1 : 1 - local / 0.5) * (noise(n) > 0.3 ? 1 : 0.4) * flashScale() : 0;
+  })();
+  const puffs = [[-50, 30, 34, 22], [48, 26, 32, 22], [0, 4, 44, 26], [-30, -6, 26, 18], [30, -8, 28, 18], [-66, 62, 22, 18], [64, 58, 22, 18], [0, 40, 52, 24]];
+  for (const [i, [dx, dy, rx, ry]] of puffs.entries()) {
+    const x = cx + dx + Math.sin(t * 0.6 + i) * 3;
+    const y = top + dy + Math.cos(t * 0.5 + i * 1.3) * 2;
+    ctx.fillStyle = 'rgba(8, 22, 20, 0.9)';
+    ctx.beginPath();
+    ctx.ellipse(x, y, rx + 2, ry + 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(22, 46, 40, 0.95)';
+    ctx.beginPath();
+    ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = `rgba(${Math.round(70 + flash * 140)}, ${Math.round(124 + flash * 120)}, ${Math.round(100 + flash * 120)}, ${(0.55 + flash * 0.4).toFixed(3)})`;
+    ctx.beginPath();
+    ctx.ellipse(x - rx * 0.15, y - ry * 0.25, rx * 0.8, ry * 0.6, 0, Math.PI * 1.05, Math.PI * 1.95);
+    ctx.fill();
+  }
+  if (flash > 0.2) {
+    // The fork: down from the cloud on one side or the other.
+    const n = Math.floor(t / 2.6);
+    const sx = cx + (noise(n + 5) > 0.5 ? 1 : -1) * (36 + noise(n + 9) * 30);
+    ctx.strokeStyle = `rgba(236, 255, 220, ${flash.toFixed(3)})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    let px = sx;
+    let py = top + 10;
+    ctx.moveTo(px, py);
+    for (let k = 0; k < 7; k++) {
+      px += (noise(n * 13 + k) - 0.5) * 16;
+      py += 12 + noise(n * 7 + k) * 6;
+      ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    soft(ctx, sx, top + 30, 60, '220, 255, 230', 0.3 * flash);
+  }
+}
+
+// The storm's rain, slanting across in front of him.
+function stormRain(ctx, cx, top, h, t) {
+  ctx.strokeStyle = 'rgba(190, 236, 220, 0.35)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let i = 0; i < 34; i++) {
+    const span = h + 40;
+    const y = top - 20 + ((noise(i) * span + t * (220 + noise(i + 40) * 60)) % span);
+    const x = cx - 80 + noise(i + 80) * 160 - (y - top) * 0.3;
+    ctx.moveTo(Math.round(x) + 0.5, Math.round(y));
+    ctx.lineTo(Math.round(x - 3) + 0.5, Math.round(y - 9));
+  }
+  ctx.stroke();
+}
+
+// The whirlpool: a tilted ring of foam going round under him, with planks
+// and a broken oar carried in it; the far half behind, the near half in front.
+function whirlRing(ctx, cx, cy, t, side) {
+  for (let i = 0; i < 44; i++) {
+    const a = -t * 2.2 + (i / 44) * Math.PI * 2;
+    const front = Math.sin(a) > 0;
+    if ((side === 'front') !== front) continue;
+    const r = 52 + Math.sin(i * 1.7) * 4;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * 13;
+    ctx.fillStyle = i % 3 ? (front ? 'rgba(224, 248, 255, 0.85)' : 'rgba(160, 210, 225, 0.55)') : (front ? 'rgba(127, 212, 238, 0.8)' : 'rgba(60, 140, 170, 0.55)');
+    ctx.fillRect(Math.round(x), Math.round(y), front ? 3 : 2, 2);
+    if (front && i % 4 === 0) {
+      ctx.fillStyle = 'rgba(224, 248, 255, 0.6)';
+      ctx.fillRect(Math.round(x - 1), Math.round(y - 3 - ((t * 6 + i) % 3)), 1, 1);
+    }
+  }
+  // The wreckage going round with it.
+  for (let i = 0; i < 3; i++) {
+    const a = -t * 2.2 * 0.8 + i * 2.1;
+    const front = Math.sin(a) > 0;
+    if ((side === 'front') !== front) continue;
+    const x = cx + Math.cos(a) * 46;
+    const y = cy + Math.sin(a) * 11 - 3;
+    const turn = t * 3 + i;
+    ctx.save();
+    ctx.translate(Math.round(x), Math.round(y));
+    ctx.rotate(turn);
+    ctx.fillStyle = '#6e553c';
+    ctx.fillRect(-6, -1, 12, 3);
+    ctx.fillStyle = '#a88a68';
+    ctx.fillRect(-6, -1, 12, 1);
+    if (i === 1) { ctx.fillStyle = '#6e553c'; ctx.fillRect(5, -2, 4, 5); }
+    ctx.restore();
+  }
+}
+
+// The lamp: the Last Light's beam coming down on him from above through the
+// dark, warm, dust turning in it.
+function lampBeam(ctx, cx, y, w, h, t) {
+  const top = Math.max(0, y - 40);
+  const g = ctx.createLinearGradient(0, top, 0, y + h);
+  g.addColorStop(0, 'rgba(255, 228, 160, 0.26)');
+  g.addColorStop(1, 'rgba(255, 228, 160, 0.04)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.moveTo(cx - 22, top);
+  ctx.lineTo(cx + 30, top);
+  ctx.lineTo(cx + w * 0.7, y + h);
+  ctx.lineTo(cx - w * 0.6, y + h);
+  ctx.closePath();
+  ctx.fill();
+  soft(ctx, cx, y + h * 0.4, 60, '255, 220, 150', 0.16 + 0.03 * Math.sin(t * 1.3));
+  for (let i = 0; i < 14; i++) {
+    const k = fract(noise(i) + t * (0.04 + noise(i + 20) * 0.04));
+    const dy = top + k * (y + h - top);
+    const spread = 22 + (dy - top) * 0.45;
+    const dx = cx + (noise(i + 40) - 0.5) * 2 * spread + Math.sin(t + i) * 3;
+    ctx.fillStyle = `rgba(255, 240, 200, ${(0.5 * Math.sin(k * Math.PI)).toFixed(3)})`;
+    ctx.fillRect(Math.round(dx), Math.round(dy), 1, 1);
+  }
+}
 
 export const CORRIE_STAGE = {
   start(battle, foe) {
@@ -70,6 +231,49 @@ export const CORRIE_STAGE = {
     // (It eases in as the box opens.)
     const ease = Math.min(1, battle.dodgeTime / 0.8);
     return TURN * ease * Math.sin(battle.dodgeTime * TURN_SPEED * Math.PI);
+  },
+
+  // Behind him, so each phase reads as a boss and not just a boy: the sea's
+  // glow and the drops he keeps turning round him (the boy); the storm itself
+  // piled up at his back, lightning running in it (the storm); the sea going
+  // round under him with spray and wreckage (the whirlpool); the Last Light's
+  // beam falling on him through the dark (the lamp). Then the battle draws him.
+  drawFoe(ctx, battle, foe, x, y, w, h) {
+    if (foe.state !== 'active') return false;
+    const id = phaseOf(battle);
+    const t = battle.time;
+    const cx = x + w / 2;
+    const cy = y + h * 0.5;
+    ctx.save();
+    if (id === 'boy') {
+      soft(ctx, cx, cy, 84, '120, 220, 240', 0.24 + 0.05 * Math.sin(t * 1.7));
+      orbit(ctx, cx, y + h * 0.62, t, 'back');
+    } else if (id === 'storm') {
+      stormMass(ctx, cx, y + 14, t);
+    } else if (id === 'whirlpool') {
+      soft(ctx, cx, y + h * 0.75, 70, '60, 150, 180', 0.2);
+      whirlRing(ctx, cx, y + h * 0.8, t, 'back');
+    } else if (id === 'lamp') {
+      lampBeam(ctx, cx, y, w, h, t);
+    }
+    ctx.restore();
+    return false;
+  },
+
+  // In front of him: the near half of what goes round him, the storm's rain.
+  drawOver(ctx, battle) {
+    const foe = battle.phased;
+    if (!foe || foe.state !== 'active') return;
+    const id = phaseOf(battle);
+    const t = battle.time;
+    const w = foe.sprite.width * FOE_SCALE;
+    const h = foe.sprite.height * FOE_SCALE;
+    const cx = foe.pos.x + w / 2;
+    ctx.save();
+    if (id === 'boy') orbit(ctx, cx, foe.pos.y + h * 0.62, t, 'front');
+    else if (id === 'whirlpool') whirlRing(ctx, cx, foe.pos.y + h * 0.8, t, 'front');
+    else if (id === 'storm') stormRain(ctx, cx, foe.pos.y, h, t);
+    ctx.restore();
   },
 
   // Over the backdrop: the storm darkens the room; the lamp warms it.

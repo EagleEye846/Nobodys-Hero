@@ -37,6 +37,8 @@ export const STILLWATER_REEDS = {
   music: 'stillwater',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'lake',
+  // How it rings (a huge space: ECHOES in src/audio/music.js).
+  echo: 'cavern',
   // More mist, here, between the reeds.
   fog: 0.32,
   vesWell: true,

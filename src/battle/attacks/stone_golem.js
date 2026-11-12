@@ -180,8 +180,9 @@ export const STONE_GOLEM_ATTACKS = {
   // Tremor. The golem stamps, and the floor heaves: a wave runs across the
   // box, throwing rocks up out of the floor as it goes, some barely a hop,
   // some nearly to the roof. Then it stamps again and the wave runs back.
-  // Chips of the roof rattle down the whole time.
-  golemTremor(box, density, { Shot, every, rand, spreadAcross }) {
+  // Chips of the roof rattle down the whole time, every other one right
+  // over you.
+  golemTremor(box, density, { Shot, every, rand, spreadAcross, clamp }) {
     const floor = box.y + box.h - 3;
     const pebbleX = spreadAcross(box.x + 4, box.x + box.w - 4);
     let way = Math.random() < 0.5 ? 1 : -1;
@@ -189,13 +190,16 @@ export const STONE_GOLEM_ATTACKS = {
     let wait = 0.2;
     let lastHeave = null;
     let high = false;
-    const crumble = every(0.6, 0.85, (bullets) => {
-      bullets.push(new Shot({ x: pebbleX(), y: box.y - 3, vx: rand(-5, 5), vy: rand(30, 40), art: 'golemPebble' }));
+    let overYou = false;
+    const crumble = every(0.6, 0.85, (bullets, soul) => {
+      overYou = !overYou;
+      const x = overYou ? clamp(soul.x + rand(-2, 2), box.x + 4, box.x + box.w - 4) : pebbleX();
+      bullets.push(new Shot({ x, y: box.y - 3, vx: overYou ? 0 : rand(-5, 5), vy: rand(30, 40), art: 'golemPebble' }));
     }, { first: 0.6 });
     return {
       duration: 7,
-      update: (dt, bullets) => {
-        crumble(dt, bullets);
+      update: (dt, bullets, soul) => {
+        crumble(dt, bullets, soul);
         if (front === null) {
           wait -= dt;
           if (wait > 0) return;
@@ -223,8 +227,13 @@ export const STONE_GOLEM_ATTACKS = {
   // Geode. A lump of rock thumps into the box away from you, sits there
   // while a crack opens across it, then bursts: two rings of ice shards,
   // the second turned half a step from the first, so the gaps don't line up.
-  golemGeode(box, density, { Shot, every, rand, pointAwayFrom }) {
+  // The first ring cracks open toward you: one shard comes straight at you
+  // (where you're going, if you're on the move).
+  golemGeode(box, density, { Shot, every, rand, clamp, pointAwayFrom, angleTo }) {
     let geodes = [];
+    // Where you were last frame, to tell which way you're going.
+    let last = null;
+    let drift = { x: 0, y: 0 };
     const land = every(1.5, 1.8, (bullets, soul) => {
       const at = pointAwayFrom(box, soul, 30, 12);
       const geode = new Shot({ x: at.x, y: at.y, warn: 0.5, life: 0.9, art: 'golemGeode', angle: 0 });
@@ -241,12 +250,16 @@ export const STONE_GOLEM_ATTACKS = {
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
+        if (last && dt > 0) drift = { x: (soul.x - last.x) * density / dt, y: (soul.y - last.y) * density / dt };
+        last = { x: soul.x, y: soul.y };
         land(dt, bullets, soul);
         for (const geode of geodes) {
           const open = geode.age - (geode.warn + geode.life);
           if (open < 0) continue;
           if (geode.rings === 0) {
-            geode.tilt = rand(0, Math.PI * 2);
+            const lead = Math.hypot(soul.x - geode.x, soul.y - geode.y) / 42;
+            const ahead = { x: clamp(soul.x + drift.x * lead, box.x + 5, box.x + box.w - 5), y: clamp(soul.y + drift.y * lead, box.y + 5, box.y + box.h - 5) };
+            geode.tilt = angleTo(geode, ahead) + rand(-0.06, 0.06);
             // Broken before it opened (a shield, an arrow): no shards at all.
             if (!bullets.includes(geode)) {
               geode.rings = 2;

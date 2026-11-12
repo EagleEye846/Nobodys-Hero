@@ -102,6 +102,19 @@ class Cv {
     }
     return this;
   }
+  // The same figure a pixel wider on each side, with the outline closed where
+  // the drawing ran into the canvas's side (a claw, a hammer, a sleeve): the
+  // party's sprites never have an edge left open, so the townsfolk don't
+  // either. Feet on the bottom row stay as they are, as on the hero.
+  closed(c = 'k') {
+    const out = new Cv(this.w + 2, this.h);
+    for (let y = 0; y < this.h; y++) {
+      for (let x = 0; x < this.w; x++) out.g[y][x + 1] = this.g[y][x];
+      if (this.g[y][0] !== '.' && this.g[y][0] !== c) out.g[y][0] = c;
+      if (this.g[y][this.w - 1] !== '.' && this.g[y][this.w - 1] !== c) out.g[y][this.w + 1] = c;
+    }
+    return out;
+  }
   rows() { return this.g.map((row) => row.join('')); }
 }
 const flip = (rows) => rows.map((row) => [...row].reverse().join(''));
@@ -112,7 +125,7 @@ export const CF_PROP_LOOKS = {};
 // =====================================================================
 // HADDOCK, the lightman
 // =====================================================================
-// An old walrus: big, round and slow. A yellow oilskin coat and sou'wester
+// An old walrus: big, round and slow. A deep navy oilskin coat and sou'wester
 // hat, a huge drooping white moustache with two ivory tusks poking out below
 // it, small kind dark eyes under bushy white brows, a brass handbell on a
 // cord. 24 wide and 30 tall (the hero is 12 x 18): he is a good head and a
@@ -124,7 +137,7 @@ const HADDOCK = pal({
   n: '#2a1a1e', w: '#ffffff', // nose and eyes, shine
   m: '#e4dfd0', M: '#b2ab98', N: '#7f7968', // moustache
   i: '#fffbea', I: '#d8c690', // tusks
-  Y: '#f2c230', y: '#c48e14', Z: '#ffe58a', X: '#8a5c0e', // oilskin
+  Y: '#46587a', y: '#33415c', Z: '#6a7c9c', X: '#222b40', // oilskin, deep navy
   g: '#d8862a', G: '#6a3a0c', h: '#ffe9a0', // brass
   t: '#6b4a2c', // cord
   B: '#3d4258', C: '#2a2e40', // boots
@@ -234,7 +247,7 @@ function haddockFront(o = {}) {
     c.rect(bx + 1, 21, 1, 2, 't');
     c.stamp(BELL, bx - 1, 22);
   }
-  // Arms: yellow sleeves with flipper hands.
+  // Arms: navy sleeves with flipper hands.
   const sleeveL = (x0, y0, x1, y1) => { c.thick(x0, y0, x1, y1, 3, 'Y'); c.line(x0 + 1, y0, x1 + 1, y1, 'y'); };
   if (armL === 'cup') {
     sleeveL(5 + sh(17), 18 + bob, -1, 12);
@@ -266,7 +279,7 @@ function haddockFront(o = {}) {
 }
 
 // From behind: the back flap of the hat over his collar, the cord round his
-// neck, the big yellow back of the coat.
+// neck, the big navy back of the coat.
 function haddockBack(o = {}) {
   const { step = 0 } = o;
   const c = new Cv(24, 30);
@@ -442,39 +455,74 @@ CF_PROP_LOOKS.cf_haddock_sit = H(haddockSit());
 // In his own armchair, at home (haddock_light_parlour): still, and not humming.
 CF_PROP_LOOKS.cf_haddock_chair = H(haddockSit({ chair: true }));
 
-// Turning the big crank (the ending): leaning into it with both flippers on
-// the handle, eyes screwed shut, sweat flying. The winch is part of the sprite,
-// to his right: an iron wheel on a post, a handle that goes round (frames a to
-// d), a wooden knob. 36 wide, 30 tall: it stands on three tiles' worth of
-// width, so give it a footprint of 2 and put it on the left tile.
-function haddockCrank(frame) {
-  const angle = (frame * Math.PI) / 2 + Math.PI / 4;
-  const hub = [30, 19];
-  const kx = Math.round(hub[0] + 4.6 * Math.cos(angle));
-  const ky = Math.round(hub[1] + 4.6 * Math.sin(angle));
-  const c = new Cv(36, 30);
-  return haddockFront({
-    canvas: c, dx: 2, armL: 'crank', armR: 'crank', knob: [kx, ky], eyes: 'squint', brows: 'low', sweat: frame % 2 === 0,
-    step: 0, hy: frame % 2,
-    extra: (cv) => {
-      // The post and its foot.
-      cv.rect(29, 19, 3, 11, 'C'); cv.rect(29, 19, 1, 11, 'B'); cv.rect(26, 28, 9, 2, 'U'); cv.rect(26, 28, 9, 1, 'V');
-      // The wheel: a dark iron disc with spokes and a bright rim.
-      cv.ell(hub[0], hub[1], 5.6, 5.6, 'e', 'E', 'B');
-      cv.ell(hub[0], hub[1], 3.4, 3.4, 'C');
-      for (let k = 0; k < 8; k++) {
-        const a = (k * Math.PI) / 4 + angle;
-        cv.line(hub[0], hub[1], hub[0] + 3.4 * Math.cos(a), hub[1] + 3.4 * Math.sin(a), 'e');
-      }
-      cv.ell(hub[0], hub[1], 1.4, 1.4, 'g', 'h', 'G');
-      // The handle: a bright iron arm out to a wooden knob.
-      cv.thick(hub[0], hub[1], kx, ky, 2, 'E');
-      cv.ell(kx, ky, 1.9, 1.9, 'W', 'W', 'V');
-    },
-  });
+// At the sluice crank in the ending (tf_haddock_strain and tf_haddock_look in
+// tideFinale.js), from behind: the same Haddock as haddockBack (same coat,
+// boots and size), but his hat gone, both sleeves up past his head to the
+// crank's handle on the wall above him, flippers on it, leaning his weight in.
+// `strain` 0-1 sinks his head and shoulders a pixel; `look` turns his head over
+// his right shoulder (he can't let go to turn round): one eye, the side of the
+// moustache, a tusk. 24 wide, 34 tall: the four extra rows on top are for his
+// arms, so the figure itself is his usual 30.
+function haddockCrankBack({ strain = 0, look = false, drip = 0 } = {}) {
+  const c = new Cv(24, 34);
+  c.oy = 4;
+  const s = strain;
+  // Boots and the coat, as in haddockBack.
+  c.ell(8.5, 28, 3.2, 1.8, 'B', 'B', 'C');
+  c.ell(15.5, 28, 3.2, 1.8, 'B', 'B', 'C');
+  c.rect(5, 29, 7, 1, 'C'); c.rect(12, 29, 7, 1, 'C');
+  for (let y = 15 + s; y <= 27; y++) {
+    const half = 6.4 + (y - 15) * 0.27;
+    for (let x = Math.round(12 - half); x < Math.round(12 + half); x++) c.px(x, y, x <= Math.round(12 - half) + 1 ? 'Z' : x >= Math.round(12 + half) - 3 ? 'y' : 'Y');
+    c.px(Math.round(12 + half) - 1, y, 'X');
+  }
+  c.rect(6, 27, 13, 1, 'X');
+  c.line(12, 16 + s, 12, 26, 'y'); c.line(12, 20, 8, 22, 'y'); c.line(12, 20, 16, 22, 'y');
+  // Both sleeves up beside his head to the handle, the flippers on its knob.
+  c.thick(5, 17 + s, 8, -1, 3, 'Y'); c.line(4, 17 + s, 7, -1, 'Z');
+  c.thick(19, 17 + s, 16, -1, 3, 'Y'); c.line(20, 17 + s, 17, -1, 'y');
+  c.ell(9, -2.4, 2, 1.6, 'a', 'A', 'b');
+  c.ell(15, -2.4, 2, 1.6, 'a', 'A', 'b');
+  // The head, bare and wet, hunched down between his arms.
+  const hy = 10 + s;
+  c.ell(12, hy, 7.2, 5.4, 'a', 'A', 'b');
+  c.rect(8, hy + 5, 8, 1, 't');
+  if (look) {
+    // Turned over his right shoulder, toward us.
+    c.ell(16.6, hy + 1.6, 3.6, 2.8, 'a', 'A', 'b');
+    c.rect(16, hy - 1, 2, 2, 'n'); c.px(16, hy - 1, 'w');
+    c.rect(15, hy - 2, 4, 1, 'm');
+    c.ell(18, hy + 3.6, 3.2, 1.7, 'm', 'm', 'M');
+    c.line(21, hy + 4, 21, hy + 7, 'm'); c.px(20, hy + 7, 'M');
+    c.rect(18, hy + 5, 1, 3, 'i'); c.px(18, hy + 8, 'I');
+    c.line(8, hy - 4, 11, hy - 5, 'A');
+  } else {
+    // The moustache, sticking out either side of his head from behind.
+    c.rect(4, hy + 2, 2, 2, 'm'); c.px(4, hy + 4, 'M');
+    c.rect(18, hy + 2, 2, 2, 'm'); c.px(19, hy + 4, 'N');
+    // Wet shine on the crown, a few hairs plastered flat.
+    c.line(9, hy - 4, 12, hy - 5, 'A'); c.px(8, hy - 3, 'A');
+    for (const x of [10, 12, 14]) c.px(x, hy - 1, 'b');
+  }
+  c.outline();
+  // Water running off him.
+  c.px(4, 22 + drip, 's');
+  c.px(20, 19 + ((drip + 1) % 3), 's');
+  c.px(12, hy + 7 + drip, 's');
+  return c;
 }
-export const CF_HADDOCK_CRANK_SPRITES = { a: H(haddockCrank(0)), b: H(haddockCrank(1)), c: H(haddockCrank(2)), d: H(haddockCrank(3)) };
-CF_PROP_LOOKS.cf_haddock_crank = H(haddockCrank(0));
+export const HADDOCK_CRANK_BACK = {
+  strain: {
+    a: H(haddockCrankBack({ strain: 0, drip: 0 })),
+    b: H(haddockCrankBack({ strain: 1, drip: 1 })),
+    c: H(haddockCrankBack({ strain: 1, drip: 2 })),
+    d: H(haddockCrankBack({ strain: 0, drip: 1 })),
+  },
+  look: {
+    a: H(haddockCrankBack({ strain: 1, look: true, drip: 0 })),
+    b: H(haddockCrankBack({ strain: 1, look: true, drip: 1 })),
+  },
+};
 
 // The Bother, his little rowing boat (48 wide, 34 tall, three tiles): a
 // brown clinker hull with a red band and a name in white dashes at the bow, the
@@ -651,7 +699,7 @@ function orlaFigure(dir, { blink = false, hammer = 0, breathe = 0, whisker = 0, 
   }
   return c;
 }
-const O_ = (cv) => ORLA(cv.rows());
+const O_ = (cv) => ORLA(cv.closed().rows());
 export const CF_ORLA_SPRITES = {
   a: O_(orlaFigure('down')),
   b: O_(orlaFigure('down', { blink: true })),
@@ -774,23 +822,9 @@ export const CF_CORRIE_SPRITES = {
   c: CO(corrieFigure('down', { sway: 1 })),
   d: CO(corrieFigure('down', { drip: 2, tear: true })),
 };
-export const CF_CORRIE_FLOAT_SPRITES = {
-  a: CO(corrieFigure('down', { lift: 3, sway: 0, drip: 1 })),
-  b: CO(corrieFigure('down', { lift: 4, sway: 1, drip: 2 })),
-  c: CO(corrieFigure('down', { lift: 5, sway: 0, blink: true, drip: 1 })),
-  d: CO(corrieFigure('down', { lift: 4, sway: -1, drip: 2 })),
-};
-export const CF_CORRIE_CAST_SPRITES = {
-  a: CO(corrieFigure('down', { lift: 3, cast: 1 })),
-  b: CO(corrieFigure('down', { lift: 4, cast: 2, sway: 1 })),
-  c: CO(corrieFigure('down', { lift: 5, cast: 2, sway: -1 })),
-  d: CO(corrieFigure('down', { lift: 4, cast: 1, sway: 1 })),
-};
 Object.assign(CF_PROP_LOOKS, {
   cf_corrie: CO(corrieFigure('down')),
   cf_corrie_back: CO(corrieFigure('up')),
-  cf_corrie_float: CO(corrieFigure('down', { lift: 3 })),
-  cf_corrie_cast: CO(corrieFigure('down', { lift: 4, cast: 2 })),
 });
 
 // =====================================================================
@@ -858,7 +892,7 @@ function tansyFigure(dir, { blink = false, tail = 0, flame = 0, sway = 0 } = {})
   if (front) { c.line(5, 17, 1, 16, 'm'); c.line(5, 18, 1, 19, 'm'); c.line(11, 17, 13, 16, 'm'); c.line(11, 18, 13, 19, 'm'); }
   return c;
 }
-const TA = (cv) => TANSY(cv.rows());
+const TA = (cv) => TANSY(cv.closed().rows());
 export const CF_TANSY_SPRITES = {
   a: TA(tansyFigure('down', { flame: 1 })),
   b: TA(tansyFigure('down', { blink: true, flame: 2, sway: 0 })),
@@ -981,7 +1015,7 @@ function crabFigure(dir, { claw = 0, blink = false, bob = 0 } = {}) {
   c.ell(16, 3, 1.8, 1.5, 'c', 'i', 'C'); c.px(16, 2, 'C');
   return c.outline();
 }
-const CR = (cv) => CRAB(cv.rows());
+const CR = (cv) => CRAB(cv.closed().rows());
 export const CF_CRAB_COCKLE_SPRITES = {
   a: CR(crabFigure('down')), b: CR(crabFigure('down', { claw: 1 })), c: CR(crabFigure('down', { blink: true, bob: 1 })), d: CR(crabFigure('down', { claw: 1, bob: 1 })),
 };
@@ -1076,7 +1110,7 @@ function ratFigure(dir, { polish = 0, blink = false, ear = 0, tail = 0 } = {}) {
   if (front) { c.line(6, 11, 2, 10, 'm'); c.line(6, 12, 2, 13, 'm'); c.line(10, 11, 14, 10, 'm'); c.line(10, 12, 14, 13, 'm'); }
   return c;
 }
-const RA = (cv) => RAT(cv.rows());
+const RA = (cv) => RAT(cv.closed().rows());
 export const CF_RAT_INNKEEPER_SPRITES = {
   a: RA(ratFigure('down')), b: RA(ratFigure('down', { polish: 1 })), c: RA(ratFigure('down', { blink: true, tail: 1 })), d: RA(ratFigure('down', { polish: 2, ear: 1 })),
 };
@@ -1169,7 +1203,7 @@ function pupFigure(dir, { bounce = 0, blink = false, boat = 0 } = {}) {
   if (front) { c.line(3, 7 - b, 0, 6 - b, 'm'); c.line(8, 7 - b, 11, 6 - b, 'm'); }
   return c;
 }
-const PP = (cv) => PUP(cv.rows());
+const PP = (cv) => PUP(cv.closed().rows());
 export const CF_KID_PUP_SPRITES = { a: PP(pupFigure('down')), b: PP(pupFigure('down', { bounce: 1, boat: 1 })), c: PP(pupFigure('down', { blink: true })), d: PP(pupFigure('down', { bounce: 1 })) };
 Object.assign(CF_PROP_LOOKS, { cf_kid_pup: PP(pupFigure('down')), cf_kid_pup_back: PP(pupFigure('up')) });
 
@@ -1202,7 +1236,7 @@ function otterKidFigure(dir, { swing = 0, blink = false, bounce = 0 } = {}) {
   if (front) { c.line(4, 7 - b, 1, 6 - b, 'm'); c.line(8, 7 - b, 11, 6 - b, 'm'); }
   return c;
 }
-const OK = (cv) => OTTERKID(cv.rows());
+const OK = (cv) => OTTERKID(cv.closed().rows());
 export const CF_KID_OTTER_SPRITES = { a: OK(otterKidFigure('down')), b: OK(otterKidFigure('down', { swing: -1, bounce: 1 })), c: OK(otterKidFigure('down', { blink: true })), d: OK(otterKidFigure('down', { swing: -2 })) };
 Object.assign(CF_PROP_LOOKS, { cf_kid_otter: OK(otterKidFigure('down')), cf_kid_otter_back: OK(otterKidFigure('up')) });
 
@@ -1268,10 +1302,10 @@ function fisherFigure(dir, look, { blink = false, bob = 0, puff = 0, step = 0 } 
 const FSH = {};
 for (const [k, look] of Object.entries(FISHER_LOOKS)) {
   const P = fisherPal(look);
-  const f = (o) => P(fisherFigure('down', look, o).rows());
+  const f = (o) => P(fisherFigure('down', look, o).closed().rows());
   FSH[k] = {
     anim: { a: f({}), b: f({ bob: 1, puff: 1 }), c: f({ blink: true }), d: f({ puff: 1 }) },
-    front: f({}), back: P(fisherFigure('up', look).rows()),
+    front: f({}), back: P(fisherFigure('up', look).closed().rows()),
   };
 }
 export const CF_FISHER_A_SPRITES = FSH.a.anim;
@@ -1362,7 +1396,7 @@ const both = (c, x, y, col) => { c.px(x, y, col); c.px(mir(x), y, col); };
 // --- Haddock ---
 // The lightman, close up: the sou'wester pulled down over his brow, small
 // kind eyes under bushy white brows, a big pink-whiskered muzzle behind the
-// moustache, two ivory tusks, the collar of the yellow oilskin. His mouth is
+// moustache, two ivory tusks, the collar of the navy oilskin. His mouth is
 // under the moustache, so the moustache does the acting: it lifts when he's
 // pleased, droops when he's sad, bristles when he's offended.
 const HADDOCK_PORTRAIT_PALETTE = {
@@ -1372,7 +1406,7 @@ const HADDOCK_PORTRAIT_PALETTE = {
   n: '#2a1a1e', w: '#ffffff', // eyes, shine
   m: '#e4dfd0', M: '#b2ab98', N: '#7f7968', // moustache
   i: '#fffbea', I: '#d8c690', // tusks
-  Y: '#f2c230', y: '#c48e14', Z: '#ffe58a', X: '#8a5c0e', // oilskin
+  Y: '#46587a', y: '#33415c', Z: '#6a7c9c', X: '#222b40', // oilskin, deep navy
   o: '#5a2a36', q: '#d0586a', // mouth, tongue
   s: '#bfe6ff', // tear, sweat
   t: '#6b4a2c',
@@ -1390,13 +1424,23 @@ function haddockFace(f) {
     // A flipper cupped behind his ear, hat flap pushed out of the way.
     c.ell(2.6, 17, 3.4, 4.8, 'a', 'A', 'b'); c.px(1, 14, 'b'); c.px(0, 16, 'b'); c.px(0, 19, 'b'); c.px(1, 21, 'b'); c.rect(4, 15, 1, 5, 'b');
   }
-  // The sou'wester: crown, wide brim dipping at the sides, flaps.
-  c.rect(1, 7, 4, 11, 'y'); c.rect(1, 7, 1, 11, 'X'); c.rect(27, 7, 4, 11, 'y'); c.rect(30, 7, 1, 11, 'X');
-  c.ell(16, 2.2, 12, 5.4, 'Y', 'Z', 'y');
-  c.ell(16, 7, 15.6, 2.8, 'Y', 'Z', 'y');
-  c.rect(1, 8, 30, 1, 'y');
-  c.rect(6, 4, 4, 1, 'Z'); c.rect(11, 2, 3, 1, 'Z');
-  c.rect(4, 10, 24, 1, 'b'); // the brim's shadow on his brow
+  if (f.hatless) {
+    // No hat (the crank scene): a bare, soaked dome, a few wet strands plastered
+    // flat across it and the sea running off his brow.
+    c.ell(16, 9.4, 11.4, 6.2, 'a', 'A', 'b');
+    c.rect(9, 5, 5, 1, 'A'); c.rect(8, 6, 2, 1, 'A'); c.px(15, 4, 'A'); // wet shine
+    [[12, 4, 17, 6], [15, 4, 21, 7], [18, 5, 23, 8]].forEach(([x0, y0, x1, y1]) => c.line(x0, y0, x1, y1, 'M'));
+    c.px(11, 4, 'M'); c.px(22, 9, 'N');
+    [[6, 9], [6, 10], [25, 8], [25, 9], [25, 10], [13, 11], [19, 11]].forEach(([x, y]) => c.px(x, y, 's'));
+  } else {
+    // The sou'wester: crown, wide brim dipping at the sides, flaps.
+    c.rect(1, 7, 4, 11, 'y'); c.rect(1, 7, 1, 11, 'X'); c.rect(27, 7, 4, 11, 'y'); c.rect(30, 7, 1, 11, 'X');
+    c.ell(16, 2.2, 12, 5.4, 'Y', 'Z', 'y');
+    c.ell(16, 7, 15.6, 2.8, 'Y', 'Z', 'y');
+    c.rect(1, 8, 30, 1, 'y');
+    c.rect(6, 4, 4, 1, 'Z'); c.rect(11, 2, 3, 1, 'Z');
+    c.rect(4, 10, 24, 1, 'b'); // the brim's shadow on his brow
+  }
   if (f.cup) { c.ell(2.6, 17, 3.4, 4.8, 'a', 'A', 'b'); c.px(0, 16, 'b'); c.px(0, 19, 'b'); c.px(1, 21, 'b'); c.px(1, 14, 'b'); c.rect(4, 15, 1, 5, 'b'); }
   // Brows: bushy white tufts, two rows thick. y0 is the outer end, slope the
   // rise per pixel towards the middle (negative: the inner end goes up).
@@ -1464,6 +1508,8 @@ const HADDOCK_EXPRESSIONS = {
   tired: { eyes: 'heavy', brow: 'tired', lift: -1, sag: 1, sweat: true },
 };
 export const HADDOCK_PORTRAIT = makePortrait(HADDOCK_PORTRAIT_PALETTE, haddockFace, { eyes: 'open', brow: 'kind', lift: 0.4 }, HADDOCK_EXPRESSIONS);
+// The same face with his hat gone and soaked through, for the crank (tideHeldFinale.js).
+export const HADDOCK_HATLESS_PORTRAIT = makePortrait(HADDOCK_PORTRAIT_PALETTE, haddockFace, { eyes: 'open', brow: 'kind', lift: 0.4, hatless: true }, HADDOCK_EXPRESSIONS);
 
 // --- Orla Cobb ---
 // A grey seal in a red bandana: big dark wet eyes under heavy brows, a pale
@@ -1859,7 +1905,7 @@ export const PUFFIN_PORTRAIT = makePortrait(PUFFIN_PORTRAIT_PALETTE, puffinFace,
 
 // How many tiles wide the big ones stand (see PROP_FOOTPRINTS in props.js).
 // Haddock is two tiles wide wherever he stands (put him on the left one: he is
-// drawn centred across both), and so are his crank, his boat and the stalls.
+// drawn centred across both), and so are his boat and the stalls.
 export const CF_FOOTPRINTS = {
   cf_haddock: 2,
   cf_haddock_back: 2,
@@ -1868,7 +1914,6 @@ export const CF_FOOTPRINTS = {
   cf_haddock_listen: 2,
   cf_haddock_sit: 2,
   cf_haddock_chair: 2,
-  cf_haddock_crank: 2,
   cf_haddock_row: 4,
   cf_bother: 4,
   cf_bother_moored: 5,

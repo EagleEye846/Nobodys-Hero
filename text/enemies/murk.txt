@@ -17,6 +17,16 @@ Wherever you look, MURK is just a little bit behind it.
 
 Smells like nothing at all. That's how you can tell.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+MURK has gone thin and grey at the edges, like the dark just before morning. It doesn't like it one bit.
+
+# (draft)
+[flavor: spareable]
+MURK has shrunk to a size you could sit on, and is sitting very close to your light, the way a cat sits near a fire it doesn't trust.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

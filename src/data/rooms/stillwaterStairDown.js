@@ -18,7 +18,9 @@ export const STILLWATER_STAIR_DOWN = {
   // "The Stillwater" (src/data/music/stillwaterTheme.js), thinning out.
   music: 'stillwater',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
-  ambience: 'lake',
+  ambience: 'deep_stair',
+  // How it rings (a narrow drift: ECHOES in src/audio/music.js).
+  echo: 'tunnel',
   // The light gives out as you go down: only lights and your own show.
   dark: 0.55,
   // Under cover: no sky, and the edges of the screen sink into shadow.

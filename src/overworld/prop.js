@@ -3,6 +3,7 @@ import { drawFootShadow } from './shadows.js';
 import { makeSprite } from '../engine/sprite.js';
 import { PROP_PALETTE, PROP_SPRITES, PROP_FOOTPRINTS } from '../data/art/props.js';
 import { beatPulse } from './beatPulse.js';
+import { drawBubble } from './npcReactions.js';
 import { animationFrame, DEFAULT_FRAME_SECONDS } from '../engine/animations.js';
 
 const sprites = Object.fromEntries(
@@ -18,6 +19,14 @@ export function registerPropSprite(name, canvas) {
 // Characters (NPCs and shopkeepers) breathe, so they read as alive: in for
 // two of these, out for two.
 const BOB_SECONDS = 0.6;
+
+// A standing mirror shows whoever's in front of it: the room sets who paints
+// that (OverworldScene.drawMirrorImage), given the glass on screen.
+const MIRROR_GLASS = { mirror: { x: 4, y: 2, w: 8, h: 22 } };
+let mirrorPainter = null;
+export function setMirrorPainter(paint) {
+  mirrorPainter = paint;
+}
 
 // A solid, one-tile object in a room. Press confirm on it to read its `text`
 // (a section of the room's text file), talk to its `npc` (a file in text/npcs/),
@@ -49,12 +58,15 @@ export class Prop {
     member = null, storage = false, vane = false, drift = null, travel = null,
     rock = false, button = null, rockReset = false, step = false,
     gap = false, treadle = null, log = false, chop = null, hide = false, wet = null, gold = 0,
-    flow = null, tideWheel = null, tideBell = null, tideDial = false, float = false, cast = null, high = false, drawScene = null,
+    flow = null, listWheel = null, tideWheel = null, tideBell = null, tideDial = false, float = false, cast = null, high = false, drawScene = null,
     cart = false, smash = false, switch: railSwitch = null, dir = null, cartOnly = false,
     beam = null, beamWhen = null, mirror = null, fixed = false, eye = null, latch = true,
     stroll = null, flat = false, chime = null, pulse = null, lure = null, quest = null,
-    who = null, by = null, byText = null, react = false,
+    who = null, by = null, byText = null, react = false, speaker = null,
   }) {
+    // Someone stood here who says its `text` (a portrait id, like 'tuck'): their
+    // face and voice in the box (see lookAt in overworldScene.js).
+    this.speaker = speaker;
     // A gift whose friends answer after it (see takeGift in overworldScene.js).
     this.react = react;
     // `pulse: 'beat'`: swells with the song (see beatPulse.js). It stretches
@@ -133,6 +145,11 @@ export class Prop {
     // The tides (Chapter 5, tides.js): a wheel or a bell post that sets the tide,
     // a dial that shows it, and a crate (a `rock`) that floats at high tide.
     this.tideWheel = tideWheel;
+    // The ghost ship's list (shipList.js): a helm, a trimming line or a crank that leans her over.
+    this.listWheel = listWheel;
+    // Seen as a ghost: drawn this see-through (haunt.js sets it; null is solid).
+    this.ghostAlpha = null;
+    this.haunt = null;
     this.tideBell = tideBell;
     this.tideDial = tideDial;
     this.float = float;
@@ -323,6 +340,14 @@ export class Prop {
   }
 
   draw(ctx, camera) {
+    if (this.ghostAlpha == null) { this.drawBody(ctx, camera); return; }
+    ctx.save();
+    ctx.globalAlpha *= this.ghostAlpha;
+    this.drawBody(ctx, camera);
+    ctx.restore();
+  }
+
+  drawBody(ctx, camera) {
     if (this.hidden || this.isOpen) return;
     const seconds = performance.now() / 1000;
     let frame = (this.animation && animationFrame(this.animation, seconds, this.speed)) || this.sprite;
@@ -403,10 +428,14 @@ export class Prop {
       ctx.drawImage(frame, 0, 0, w, waist, x, y - 1, w, waist);
     } else {
       ctx.drawImage(frame, x, y);
+      const glass = MIRROR_GLASS[this.look];
+      if (glass && mirrorPainter) mirrorPainter(ctx, { x: x + glass.x, y: y + glass.y, w: glass.w, h: glass.h });
     }
     if (flipped) ctx.restore();
     if (this.emote > 0) this.drawNotice(ctx, x + frame.width / 2, y - 3, seconds);
     if (this.notice && !this.noticed) this.drawNotice(ctx, x + frame.width / 2, y - 3, seconds);
+    // A "!", "?" or "..." popping up over someone (npcReactions.js).
+    if (this.bubble) drawBubble(ctx, this.bubble, x + frame.width / 2, y - 1);
   }
 
   // Swelling with the song: stretched up a pixel (two for a tall one) and

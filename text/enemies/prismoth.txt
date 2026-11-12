@@ -17,6 +17,16 @@ PRISMOTH turns slightly, to catch the light better. It's not subtle.
 
 Smells like frost on glass and old candy.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+PRISMOTH's wings have a crack across the blue pane. The cave is now only six colours. It's taking it badly.
+
+# (draft)
+[flavor: spareable]
+PRISMOTH settles on your shoulder, quite tired, and lets the light through its wings onto your face. You are, briefly, every colour.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

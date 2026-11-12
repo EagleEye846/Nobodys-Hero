@@ -1,0 +1,138 @@
+// THE FLOODED BOW (Chapter 5, the ghost ship's DEEP PART, optional): the forepeak, under the forecastle, flooded to the beams. Fifteen little
+// raised decks (islands, 4 x 3) stand in black water in a grid of five by three, and what joins them is planks on cleats that the list moves.
+// A bridge is dry in one lean only: 'p' dry to PORT, 's' dry to STARBOARD, '.' always. Five tackles (on the islands (0,0), (0,2), (2,0), (4,0) and
+// (4,2), at their top right corner) turn her. You come in at the west (island (0,1)); the goal is the east island (4,1) and the door beyond it
+// (29, rows 9-10), barred by a gate that the ring on the east island opens (a ring only the lantern shows). The way is five turnings and twenty-seven
+// steps, checked by a breadth-first search of every (island, lean) state: from either lean every reachable state can get back to the west door, so
+// nobody can be shut in; the east island has no tackle and is joined by a starboard bridge only, so you cannot be on it while that bridge is wet.
+// Island (column, row): the west island is (0,1), the goal is (4,1). Shortest way from the west door leaning to PORT:
+//   (0,1)P > (0,2)P > (0,2)S > (0,1)S > (0,0)S > (0,0)P > (1,0)P > (1,1)P > (1,2)P > (2,2)P > (2,1)P > (2,0)P > (2,0)S > (1,0)S > (1,1)S > (2,1)S > (2,2)S > (3,2)S > (4,2)S > (4,2)P > (3,2)P > (3,1)P > (3,0)P > (4,0)P > (4,0)S > (3,0)S > (3,1)S > (4,1)S
+// Scene ship_flooded_bow_in (the west end, once). Tile key: # hull and bulkhead (solid)   W planking face (solid)   . deck and plank   ~ black water (solid)
+export const SHIP_FLOODED_BOW = {
+  id: 'ship_flooded_bow',
+  name: 'THE FLOODED BOW',
+  area: 'ghostship',
+  music: 'ghostShip',
+  musicFrom: 'list',
+  ambience: 'ghost_ship_deep',
+  vesWell: true,
+  indoors: true,
+  haunt: { whispers: ['...water\'s up to the forepeak...', '...she\'s bowed down...', '...hold the bow up...', '...who is laughing...'] },
+  playerStart: { x: 2, y: 9 },
+
+  tiles: [
+      '##############################',
+      '##############################',
+      '#WWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
+      '#....~~....~~....~~....~~....#',
+      '#..........~~....~~..........#',
+      '#....~~....~~....~~....~~....#',
+      '#~~~~~~~.~~~~~.~~~~~.~~~~~~~~#',
+      '#~~~~~~~.~~~~~.~~~~~.~~~~~~~~#',
+      '#....~~....~~....~~....~~....#',
+      '.....~~....~~....~~....~~.....',
+      '.....~~....~~....~~....~~.....',
+      '#~.~~~~~.~~~~~.~~~~~.~~~~~~~~#',
+      '#~.~~~~~.~~~~~.~~~~~.~~~~~~~~#',
+      '#....~~....~~....~~....~~....#',
+      '#....~~..........~~..........#',
+      '#....~~....~~....~~....~~....#',
+      '##############################',
+      '##############################',
+    ],
+
+  // The STARBOARD map (a space is "same as the port map above").
+  list: { star: [
+        '                              ',
+        '                              ',
+        '                              ',
+        '                              ',
+        '     ~~    ..                 ',
+        '                              ',
+        '  .           ~               ',
+        '  .           ~               ',
+        '                              ',
+        '           ..          ..     ',
+        '                              ',
+        '                    ~         ',
+        '                    ~         ',
+        '                              ',
+        '           ~~    ..           ',
+        '                              ',
+        '                              ',
+        '                              ',
+      ] },
+
+  doors: [
+    { x: 0, y: 9, w: 1, h: 2, to: 'ship_sail_locker', spawn: { x: 27, y: 8 } },
+    { x: 29, y: 9, w: 1, h: 2, to: 'ship_figurehead_perch', spawn: { x: 2, y: 7 } },
+  ],
+
+  cutscenes: [
+    { x: 1, y: 9, w: 2, h: 2, scene: 'ship_flooded_bow_in' },
+  ],
+
+  textFile: 'interactions/ghostship.txt',
+  props: [
+    { sprite: 'gs_trim_line', x: 4, y: 3, text: 'bow_trim', listWheel: { to: 'toggle', port: 'bow_port', star: 'bow_star', busy: 'bow_busy', already: 'bow_already' } },
+    { sprite: 'gs_trim_line', x: 4, y: 13, text: 'bow_trim', listWheel: { to: 'toggle', port: 'bow_port', star: 'bow_star', busy: 'bow_busy', already: 'bow_already' } },
+    { sprite: 'gs_trim_line', x: 16, y: 3, text: 'bow_trim', listWheel: { to: 'toggle', port: 'bow_port', star: 'bow_star', busy: 'bow_busy', already: 'bow_already' } },
+    { sprite: 'gs_trim_line', x: 28, y: 3, text: 'bow_trim', listWheel: { to: 'toggle', port: 'bow_port', star: 'bow_star', busy: 'bow_busy', already: 'bow_already' } },
+    { sprite: 'gs_trim_line', x: 28, y: 13, text: 'bow_trim', listWheel: { to: 'toggle', port: 'bow_port', star: 'bow_star', busy: 'bow_busy', already: 'bow_already' } },
+    { sprite: 'gs_bulk_door', x: 28, y: 9, text: 'bow_gate', opensWith: ['bow_ring'], openText: 'bow_gate_open' },
+    { sprite: 'gs_bulk_door', x: 28, y: 10, text: 'bow_gate', opensWith: ['bow_ring'], openText: 'bow_gate_open' },
+    { sprite: 'gs_ghost_ring', x: 26, y: 10, text: 'bow_ring', lever: 'bow_ring', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gs_ghost_boy', x: 2, y: 10, text: 'ghost_bow_boy', animation: 'gs_ghost_boy', speed: 0.7, walkable: true, haunt: { kind: 'ghost' } },
+    { sprite: 'gs_chalk', x: 3, y: 8, text: 'bow_chalk', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gs_handprint', x: 26, y: 8, text: 'hold_handprint', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gold_pouch', x: 14, y: 3, text: 'bow_purse', gold: 150, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'gold_pouch', x: 2, y: 15, text: 'bow_purse', gold: 110, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'c5_barrels', x: 8, y: 3, text: 'hold_barrels' },
+    { sprite: 'c5_crate', x: 20, y: 4, text: 'hold_crates' },
+    { sprite: 'c5_barrel', x: 22, y: 13, text: 'hold_barrels' },
+    { sprite: 'c5_crates_stack', x: 9, y: 13, text: 'hold_crates' },
+    { sprite: 'c5_barrel', x: 26, y: 14, text: 'hold_barrels' },
+    { sprite: 'wy_chain_pile', x: 14, y: 9, text: 'hold_chain', flat: true, walkable: true },
+    { sprite: 'gs_coil', x: 20, y: 9, text: 'deck_coil', flat: true, walkable: true },
+    { sprite: 'gs_coil', x: 9, y: 10, text: 'deck_coil', flat: true, walkable: true },
+    { sprite: 'gs_lantern_smashed', x: 15, y: 15, flat: true, walkable: true },
+    { sprite: 'gs_wall_lantern', x: 4, y: 2 },
+    { sprite: 'gs_wall_lantern', x: 10, y: 2 },
+    { sprite: 'gs_wall_lantern', x: 16, y: 2 },
+    { sprite: 'gs_wall_lantern', x: 22, y: 2 },
+    { sprite: 'gs_wall_lantern', x: 27, y: 2 },
+    { sprite: 'gs_knee', x: 3, y: 2 },
+    { sprite: 'gs_knee', x: 7, y: 2 },
+    { sprite: 'gs_knee', x: 13, y: 2 },
+    { sprite: 'gs_knee', x: 19, y: 2 },
+    { sprite: 'gs_knee_r', x: 24, y: 2 },
+    { sprite: 'gs_puddle', x: 3, y: 10, flat: true, walkable: true },
+    { sprite: 'gs_puddle_b', x: 15, y: 8, flat: true, walkable: true },
+    { sprite: 'gs_puddle', x: 22, y: 10, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 14, y: 6, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 8, y: 12, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 22, y: 13, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 4, y: 3, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 27, y: 4, flat: true, walkable: true },
+    { sprite: 'gs_shadow_a', x: 10, y: 9, flat: true, walkable: true },
+    { sprite: 'gs_shadow_b', x: 16, y: 14, flat: true, walkable: true },
+    { sprite: 'gs_weed_a', x: 8, y: 8, flat: true, walkable: true },
+    { sprite: 'gs_weed_b', x: 20, y: 15, flat: true, walkable: true },
+    { sprite: 'gs_shoe', x: 10, y: 13, flat: true, walkable: true },
+    { sprite: 'gs_doll', x: 13, y: 15, flat: true, walkable: true },
+    { sprite: 'gs_letter_dropped', x: 22, y: 8, flat: true, walkable: true },
+    { sprite: 'gs_net_heap', x: 9, y: 9, flat: true, walkable: true },
+    { sprite: 'gs_bottles', x: 16, y: 4, flat: true, walkable: true },
+    { sprite: 'gs_cutlass', x: 22, y: 3, flat: true, walkable: true },
+    { sprite: 'gs_barrel_staves', x: 3, y: 15, flat: true, walkable: true },
+    { sprite: 'gs_sack_spill', x: 27, y: 15, flat: true, walkable: true },
+  ],
+  tileTexts: { '#': 'hold_wall', W: 'hold_wall', '~': 'bow_water' },
+  // The deckhands patrol the middle island (row 9, x 13-16) and the south-east one (row 14, x 19-22); the powder monkey the south-west one (row 15, x 7-10). None is on a bridge, a tackle, the gate, the ring or the scene's tiles (1-2, rows 9-10).
+
+  npcs: [
+    { enemy: 'ghost_deckhand', x: 14, y: 9, patrol: [13, 16], behaviour: 'patrol', lantern: 'flee' },
+    { enemy: 'powder_monkey', x: 8, y: 15, patrol: [7, 10], behaviour: 'patrol', lantern: 'freeze' },
+    { enemy: 'ghost_deckhand', x: 20, y: 14, patrol: [19, 22], behaviour: 'patrol', lantern: 'flee' },
+  ],
+};

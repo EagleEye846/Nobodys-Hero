@@ -23,15 +23,55 @@ const ART = new Map();
 //                 face where it's flying (pins, needles, moths)
 //   spin          radians per second to spin no matter where it's going (buttons)
 //   frameSeconds  how long each animation frame shows
-export function defineBulletArt(name, { frames, palette, radius = 2, hitbox = null, rotate = false, spin = 0, frameSeconds = 0.12 }) {
+//   rim           false to leave off the dark rim (see withRim below)
+export function defineBulletArt(name, { frames, palette, radius = 2, hitbox = null, rotate = false, spin = 0, frameSeconds = 0.12, rim = true }) {
+  const look = rim ? withRim(frames, palette) : { frames, palette };
   ART.set(name, {
-    frames: frames.map((rows) => makeSprite(rows, palette)),
+    frames: look.frames.map((rows) => makeSprite(rows, look.palette)),
     radius,
     hitbox,
     rotate,
     spin,
     frameSeconds,
   });
+}
+
+// Every bullet gets a one-pixel dark rim round its light pixels, so it still
+// reads against a busy box (Corrie's storm, a lightning flash, the sea). The
+// frame grows a pixel on each side, so it stays centred; the hit radius
+// doesn't change. Pixels next to only dark ones (art that already has its own
+// dark outline) get no second rim.
+const RIM_CHAR = '§';
+const RIM_COLOUR = '#08070d';
+function isDark(colour) {
+  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(colour ?? '');
+  if (!hex) return false;
+  const h = hex[1].length === 3 ? [...hex[1]].map((c) => c + c).join('') : hex[1];
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.16;
+}
+function withRim(frames, palette) {
+  const light = (rows, x, y) => {
+    const c = rows[y]?.[x];
+    return Boolean(c && palette[c] && !isDark(palette[c]));
+  };
+  const out = frames.map((rows) => {
+    const w = rows[0].length;
+    const h = rows.length;
+    const padded = [];
+    for (let y = -1; y <= h; y++) {
+      let line = '';
+      for (let x = -1; x <= w; x++) {
+        const c = rows[y]?.[x];
+        if (c && palette[c]) line += c;
+        else if (light(rows, x - 1, y) || light(rows, x + 1, y) || light(rows, x, y - 1) || light(rows, x, y + 1)) line += RIM_CHAR;
+        else line += '.';
+      }
+      padded.push(line);
+    }
+    return padded;
+  });
+  return { frames: out, palette: { ...palette, [RIM_CHAR]: RIM_COLOUR } };
 }
 
 export function bulletArtNames() {

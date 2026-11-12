@@ -91,7 +91,7 @@ export class CutsceneScene {
       const after = Math.floor(this.visibleCharacters);
       // (One blip a frame at most, so INSTANT text isn't a burst of them.)
       for (let i = before; i < Math.min(after, before + 3); i++) {
-        if (i % BLIP_EVERY === 0 && this.page[i].trim()) sfx('type');
+        if (i % BLIP_EVERY === 0 && this.page[i].trim() && SETTINGS.textSounds !== false) sfx('type');
       }
       if (this.visibleCharacters >= this.page.length) this.setPhase('hold');
     } else if (this.phase === 'hold' && this.phaseTime >= HOLD_SECONDS + this.page.length * HOLD_SECONDS_PER_CHARACTER) {

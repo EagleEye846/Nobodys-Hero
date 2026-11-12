@@ -18,12 +18,21 @@ export const SHELLAC = {
   // Claw clacks, steam curls, flinches into the pot, loses its lid when beaten.
   // See src/data/art/shellac.js.
   anim: SHELLAC_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): china shards when it's hit, a glint on the
+  // claw before it snaps; beaten, the china smashes and, once it's flipped itself back over, it
+  // scuttles off pot and all.
+  feel: { hit: 'china', windup: 'glint', at: [0.1, 0.42], defeat: 'shards', exit: 'scuttle' },
   // The chapter 5 coast battle song (the Wrack Shore and Gullrest).
   music: 'coastBattleStorm',
-  maxHp: 1950,
-  damage: 56,
+  maxHp: 10200,
+  damage: 84,
 
-  difficulty: { density: 1.6, speed: 1.5 },
+  difficulty: { density: 1.75, speed: 1.60 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  encore: { at: 0.85, seconds: 4.5, density: 0.8 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
   battlePos: { x: 218, y: 52 },
 
   // Its attacks live in src/battle/attacks/shellac.js.
@@ -39,7 +48,7 @@ export const SHELLAC = {
     { name: 'Inspect' },
     { name: 'Wipe your feet', calm: 40 },
     { name: 'Admire the pattern', calm: 35 },
-    { name: 'Ask for tea', calm: 30 },
+    { name: 'Mime a cup of tea', calm: 30 },
   ],
 
   rewards: { exp: 2100, coins: 12 },

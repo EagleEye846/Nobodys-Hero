@@ -39,7 +39,29 @@ Right. That goes in the satchel, and I'll walk it to his mum's door myself. That
 
 Here. You've earned this. It's a Sunstone stamp. The founders printed one sheet the day the Sunstone was lit, and they put a hundred on it, and we've never used one. They were for the Hero's post, you see. For the day the Hero writes back.
 
-Nobody has, so far. But somebody should hold one. Hang onto it for them.
+Nobody has, so far. But somebody should hold one. Hang onto it for him.
 
 [letter_after]
 The beetle is sorting letters into thirteen piles. He keeps looking at the thirteenth with a kind of shy pride.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Every letter here starts "Dear..." and stops. People down here are very brave up to the comma.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}...That's most letters, really.
+
+# (draft)
+[repeat 3]
+The Hero's one? I can't open it. It isn't to me. It isn't to anyone. It just says "for when."
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+If you see a postman down the Diggings, it isn't one. It's a beetle who's lost. Send him up.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Somebody's written to the Sunstone. Just "Dear Sunstone, thank you." No address. I'll take it up the hall and hold it near.

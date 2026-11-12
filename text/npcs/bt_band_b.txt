@@ -7,3 +7,19 @@
 
 [repeat]
 *thump* *thump* *thump-a-thump-a-thump* *oops*
+
+# (draft)
+[repeat 2]
+*thump* *thump-a*
+
+*...He's speeding up. I'm not. One of us is right.*
+
+# (draft)
+[repeat 3]
+*thump*
+
+*Never played together before today. It shows. In a good way.*
+
+# (draft)
+[repeat_ves 3]
+{smile}It shows. {bored}Mostly in the other way.

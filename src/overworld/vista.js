@@ -1,6 +1,6 @@
 import { SCREEN_WIDTH as W, SCREEN_HEIGHT as H } from '../config.js';
 import { drawKingdomVista } from './kingdomVista.js';
-import { drawSeaVista } from './seaVista.js';
+import { drawSeaVista, drawLowTideVista } from './seaVista.js';
 
 // The view off Mount Vigil, drawn behind any room with open sky (`_` tiles).
 // A room asks for it with `vista: { altitude, heading }`: `altitude` (0 at the
@@ -172,6 +172,8 @@ export function drawVista(ctx, view, time) {
   if (view.kind === 'kingdom') return drawKingdomVista(ctx, view, time);
   // The sea off the cliffs above Gullrest (seaVista.js).
   if (view.kind === 'sea') return drawSeaVista(ctx, view, time);
+  // The end of chapter 5: dawn from the Last Light's balcony, the sea pulled far back (seaVista.js).
+  if (view.kind === 'low_tide_dawn') return drawLowTideVista(ctx, view, time);
   const altitude = Math.max(0, Math.min(1, view.altitude ?? 0));
   const yaw = view.yaw ?? 0;
   const rise = view.rise ?? 0;

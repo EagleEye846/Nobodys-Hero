@@ -57,6 +57,49 @@ class Grid {
     for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) this.set(x + i, y + j, c);
   }
 
+  get(x, y) {
+    return x >= 0 && y >= 0 && x < this.w && y < this.h ? this.cells[y][x] : null;
+  }
+
+  oval(cx, cy, rx, ry, c) {
+    for (let dy = -ry; dy <= ry; dy++) {
+      const w = Math.round(rx * Math.sqrt(Math.max(0, 1 - (dy * dy) / (ry * ry + 0.25))));
+      this.rect(cx - w, cy + dy, w * 2 + 1, 1, c);
+    }
+  }
+
+  line(x0, y0, x1, y1, c) {
+    const steps = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
+    for (let i = 0; i <= steps; i++) this.set(x0 + ((x1 - x0) * i) / steps, y0 + ((y1 - y0) * i) / steps, c);
+  }
+
+  // Scanline fill of a polygon [[x, y], ...].
+  poly(pts, c) {
+    const ys = pts.map((p) => p[1]);
+    for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
+      const xs = [];
+      for (let i = 0; i < pts.length; i++) {
+        const [ax, ay] = pts[i];
+        const [bx, by] = pts[(i + 1) % pts.length];
+        if ((ay <= y + 0.5 && by > y + 0.5) || (by <= y + 0.5 && ay > y + 0.5)) xs.push(ax + ((y + 0.5 - ay) / (by - ay)) * (bx - ax));
+      }
+      xs.sort((a, b) => a - b);
+      for (let i = 0; i + 1 < xs.length; i += 2) this.rect(Math.round(xs[i]), y, Math.max(1, Math.round(xs[i + 1]) - Math.round(xs[i])), 1, c);
+    }
+  }
+
+  // A dark rim round everything drawn so far.
+  outline(c) {
+    const edge = [];
+    for (let y = -1; y <= this.h; y++) {
+      for (let x = -1; x <= this.w; x++) {
+        if (this.get(x, y)) continue;
+        if (this.get(x - 1, y) || this.get(x + 1, y) || this.get(x, y - 1) || this.get(x, y + 1)) edge.push([x, y]);
+      }
+    }
+    for (const [x, y] of edge) this.set(x, y, c);
+  }
+
   rows() {
     return this.cells.map((row) => row.map((c) => (c ? char(c) : '.')).join(''));
   }
@@ -445,6 +488,454 @@ function logbook() {
   return g.rows();
 }
 
+// ===================== SHORE AND RUIN DRESSING (2026-11-08) =====================
+// The isles' and the Reach's rocks, to break up bare slabs and turf: things the wind and the sea
+// leave, and what the lamp-keepers left. Flat ones lie on the ground (`flat: true, walkable: true`);
+// tufts are low enough to walk through (`walkable: true`). They roll their own dice, so adding
+// them changes nothing above.
+//   il_tidepool        a pool in the rock: a ragged rim, weed round the edge, red anemones and a
+//                      starfish (2 wide, flat)
+//   il_tidepool_small  a little one (1 wide, flat)
+//   il_rocks           two or three wet stones with barnacles and weed at the foot (solid)
+//   il_rocks_big       a heap of them (2 wide, solid)
+//   il_rocks_flat      the tops of stones just breaking the ground or the sea (2 wide, flat)
+//   il_thrift          a cushion of sea-pinks, the flowers all blown one way (walkable)
+//   il_grass_tuft      wind-bent grass, a and b (walkable)
+//   il_lichen          yellow and orange lichen on bare rock (flat)
+//   il_drift_timber    a bleached ship's timber with its bolts still in (2 wide, flat)
+//   il_gull            one gull, standing (walkable); il_gull_rock three on a rock (2 wide, solid)
+//   il_cairn           a cairn of flat stones (solid)
+//   il_pot_broken      a lobster pot stove in, its netting torn (solid)
+//   il_stakes_rope     three stakes and a rope sagging between them (2 wide, solid)
+//   il_rowboat_half    the bow half of a rowboat, broken off, ribs showing (2 wide, solid)
+//   il_wall_ivy*       ivy hanging down a stone wall from the coping: put it on the wall's tile
+//   il_wall_tumble     a stretch of wall come down in a heap of blocks: put it on the wall's tile
+//   il_wall_stones     loose blocks sitting crooked on a wall's top: put it on the wall's tile
+//   il_fallen_block    a squared block down off a wall, moss on it (solid)
+//   il_workbench       a lens-maker's bench: a vice, tools, a prism, a lamp chimney (2 wide)
+//   il_lens_rack       a rack of prism rings and lens pieces stood in slots (2 wide)
+//   il_oil_cans        oil cans with long spouts, one fallen over
+let shoreSeed = 7307;
+const sr = () => {
+  shoreSeed = (shoreSeed * 1664525 + 1013904223) >>> 0;
+  return shoreSeed / 4294967296;
+};
+const sri = (n) => Math.floor(sr() * n);
+const OUT = '#141a18';
+const TURF = ['#2e4a2a', '#3e6034', '#4e7442', '#6a9458', '#9ab878'];
+const PINK = ['#7a3050', '#c0608a', '#eaa0c0'];
+const ANEM = ['#6a1e2a', '#b0404c', '#e47a72'];
+const SEA = ['#0e2e38', '#174a54', '#2e7a80', '#9ad0c8'];
+const BLEACH = ['#5a5648', '#8a846e', '#b4ae96', '#d8d2bc'];
+const GULL = ['#22262a', '#7c868c', '#c4cace', '#eef0ee'];
+const LICHEN = ['#a8902c', '#d0b440', '#c86a2c'];
+const IVY = ['#1e3a22', '#2c5030', '#3e6a3a', '#5a8a48'];
+const STONE = ['#3a3e38', '#5a6058', '#767c70', '#92988a'];
+
+function stone(g, cx, cy, rx, ry, barn = true) {
+  g.oval(cx, cy, rx, ry, ROCK[1]);
+  g.oval(cx - 1, cy - 1, Math.max(1, rx - 1), Math.max(1, ry - 1), ROCK[2]);
+  g.oval(cx - Math.ceil(rx / 2), cy - Math.ceil(ry / 2), Math.max(1, Math.floor(rx / 3)), Math.max(0, Math.floor(ry / 3)), ROCK[3]);
+  g.rect(cx - rx + 1, cy + ry, rx * 2 - 1, 1, ROCK[0]);
+  if (barn) for (let i = 0; i < rx; i++) g.set(cx - rx + 1 + sri(rx * 2 - 1), cy + sri(ry + 1), WHITE[sri(2) + 1]);
+}
+
+function weedFoot(g, x0, x1, y) {
+  for (let x = x0; x <= x1; x++) {
+    if (sr() < 0.7) g.set(x, y, WEED[sri(2)]);
+    if (sr() < 0.35) g.set(x, y - 1, WEED[sri(3)]);
+  }
+}
+
+function tidePool(big) {
+  shoreSeed = big ? 811 : 823;
+  const w = big ? 32 : 16;
+  const g = new Grid(w, big ? 16 : 12);
+  const pts = big
+    ? [[1, 8], [4, 3], [11, 1], [19, 2], [26, 1], [31, 5], [30, 11], [24, 15], [14, 14], [6, 15], [1, 12]]
+    : [[1, 6], [3, 2], [9, 1], [15, 3], [15, 8], [11, 11], [4, 11], [1, 9]];
+  g.poly(pts, ROCK[1]);
+  const inner = pts.map(([x, y]) => [x + (w / 2 - x) * (big ? 0.22 : 0.3), y + ((big ? 8 : 6) - y) * 0.3]);
+  g.poly(inner, SEA[1]);
+  const deep = pts.map(([x, y]) => [x + (w / 2 - x) * 0.5, y + ((big ? 8 : 6) - y) * 0.55]);
+  g.poly(deep, SEA[0]);
+  // The rim lit from the top left, darker below.
+  for (let x = 0; x < w; x++) {
+    for (let y = 0; y < g.h; y++) {
+      if (g.get(x, y) !== ROCK[1]) continue;
+      if (g.get(x, y - 1) == null || g.get(x - 1, y) == null) g.set(x, y, ROCK[3]);
+      else if (y > g.h / 2 && sr() < 0.4) g.set(x, y, ROCK[0]);
+      else if (sr() < 0.12) g.set(x, y, WHITE[1]);
+    }
+  }
+  // Weed round the inside edge.
+  for (let x = 0; x < w; x++) {
+    for (let y = 0; y < g.h; y++) {
+      if (g.get(x, y) !== SEA[1]) continue;
+      const rim = [g.get(x - 1, y), g.get(x + 1, y), g.get(x, y - 1), g.get(x, y + 1)].some((c) => c && c.startsWith('#') && ROCK.includes(c));
+      if (rim && sr() < 0.6) g.set(x, y, WEED[sri(3)]);
+    }
+  }
+  // A glint, anemones and a starfish.
+  g.line(Math.round(w * 0.3), big ? 6 : 4, Math.round(w * 0.5), big ? 5 : 4, SEA[2]);
+  g.set(Math.round(w * 0.35), big ? 6 : 4, SEA[3]);
+  const anem = (x, y) => { g.rect(x - 1, y, 3, 1, ANEM[1]); g.rect(x, y - 1, 1, 3, ANEM[1]); g.set(x, y, ANEM[2]); g.set(x + 1, y + 1, ANEM[0]); };
+  if (big) {
+    anem(8, 10); anem(23, 4); anem(26, 9);
+    const sx = 16, sy = 10;
+    g.line(sx - 2, sy, sx + 2, sy, LICHEN[2]); g.line(sx, sy - 2, sx, sy + 1, LICHEN[2]);
+    g.set(sx - 1, sy + 1, LICHEN[2]); g.set(sx + 1, sy + 1, LICHEN[2]); g.set(sx, sy, '#e89a50');
+  } else {
+    anem(5, 7); anem(11, 5);
+  }
+  g.outline(OUT);
+  return g.rows();
+}
+
+function rocks(kind) {
+  shoreSeed = kind === 'big' ? 901 : kind === 'flat' ? 907 : 919;
+  if (kind === 'flat') {
+    const g = new Grid(32, 12);
+    stone(g, 7, 6, 5, 2); stone(g, 17, 8, 3, 2); stone(g, 25, 5, 4, 2); stone(g, 13, 3, 2, 1, false);
+    weedFoot(g, 2, 12, 9); weedFoot(g, 21, 29, 8);
+    g.outline(OUT);
+    return g.rows();
+  }
+  if (kind === 'big') {
+    const g = new Grid(32, 22);
+    stone(g, 10, 13, 8, 6); stone(g, 21, 15, 7, 5); stone(g, 15, 8, 5, 4); stone(g, 27, 18, 3, 2); stone(g, 4, 18, 3, 2);
+    weedFoot(g, 2, 30, 21); weedFoot(g, 3, 28, 20);
+    g.outline(OUT);
+    return g.rows();
+  }
+  const g = new Grid(16, 14);
+  stone(g, 6, 8, 5, 4); stone(g, 11, 10, 3, 3); stone(g, 2, 11, 2, 1, false);
+  weedFoot(g, 1, 14, 13);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function thrift() {
+  shoreSeed = 1009;
+  const g = new Grid(16, 14);
+  g.oval(7, 11, 6, 2, TURF[1]);
+  g.oval(6, 10, 4, 1, TURF[2]);
+  for (let i = 0; i < 9; i++) g.set(2 + sri(11), 9 + sri(3), TURF[3]);
+  g.outline(OUT);
+  // Stalks, all blown east, and the round pink heads.
+  const heads = [[3, 5], [6, 3], [9, 4], [11, 6], [13, 3], [7, 6]];
+  for (const [hx, hy] of heads) {
+    g.line(hx - 2, 10, hx, hy + 1, TURF[2]);
+    g.rect(hx, hy - 1, 2, 2, PINK[1]);
+    g.set(hx, hy - 1, PINK[2]);
+    g.set(hx + 1, hy, PINK[0]);
+  }
+  return g.rows();
+}
+
+function grassTuft(b) {
+  shoreSeed = b ? 1103 : 1109;
+  const g = new Grid(18, 18);
+  // A dark root clump, then blades, two pixels thick at the foot, all bent east by the wind.
+  g.oval(7, 16, 5, 1, TURF[0]);
+  const n = b ? 8 : 11;
+  for (let i = 0; i < n; i++) {
+    const x0 = 3 + sri(9);
+    const h = 7 + sri(b ? 5 : 8);
+    const lean = 2 + sri(5);
+    const mx = x0 + Math.round(lean / 3), my = 16 - Math.round(h / 2);
+    const c = TURF[2 + sri(2)];
+    g.line(x0, 16, mx, my, c);
+    g.line(x0 + 1, 16, mx + 1, my + 1, TURF[1]);
+    g.line(mx, my, x0 + lean, 16 - h, c);
+    g.set(x0 + lean, 16 - h, TURF[4]);
+    g.set(x0 + lean - 1, 17 - h, TURF[4]);
+  }
+  if (!b) { g.set(5, 12, PINK[1]); g.set(4, 11, PINK[2]); g.set(11, 10, '#e0d078'); }
+  g.outline(OUT);
+  return g.rows();
+}
+
+function lichen() {
+  shoreSeed = 1201;
+  const g = new Grid(16, 10);
+  // Little rosettes, spread thin, each a ring of crust round a darker eye.
+  const spots = [[2, 3], [5, 6], [9, 2], [12, 7], [14, 4], [7, 8], [3, 8]];
+  for (const [x, y] of spots) {
+    const c = LICHEN[sri(3)];
+    g.set(x, y - 1, c); g.set(x - 1, y, c); g.set(x + 1, y, c); g.set(x, y + 1, c);
+    g.set(x, y, LICHEN[0]);
+    if (sr() < 0.5) g.set(x + 1, y + 1, LICHEN[1]);
+  }
+  return g.rows();
+}
+
+function driftTimber() {
+  shoreSeed = 1301;
+  const g = new Grid(32, 12);
+  g.poly([[2, 8], [28, 2], [30, 4], [4, 10]], BLEACH[2]);
+  g.line(3, 8, 28, 2, BLEACH[3]);
+  g.line(4, 10, 30, 4, BLEACH[0]);
+  for (let i = 0; i < 4; i++) { const x = 6 + i * 6; g.line(x, 8 - Math.round(x / 5) + 1, x + 3, 8 - Math.round((x + 3) / 5) + 1, BLEACH[1]); }
+  // Bolts, and the rust they've bled.
+  for (const x of [9, 22]) { const y = 8 - Math.round(x * 0.23); g.set(x, y, IRON[0]); g.set(x + 1, y + 1, RUST[1]); g.set(x + 1, y + 2, RUST[0]); }
+  // A splinter off the end and weed caught round it.
+  g.line(28, 2, 31, 1, BLEACH[2]);
+  g.set(14, 8, WEED[1]); g.set(15, 8, WEED[2]); g.set(15, 7, WEED[0]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function gullAt(g, x, y, facingLeft) {
+  // About 9 x 7: white head and breast, grey back, black tips, a yellow bill, yellow legs.
+  const d = facingLeft ? -1 : 1;
+  g.oval(x, y, 3, 2, GULL[3]);
+  g.rect(x - 2 * d, y - 1, 1, 2, GULL[1]);
+  g.line(x - 3 * d, y - 1, x + 1 * d, y - 1, GULL[1]);
+  g.set(x - 3 * d, y, GULL[0]); g.set(x - 4 * d, y, GULL[0]);
+  g.oval(x + 2 * d, y - 3, 1, 1, GULL[3]);
+  g.set(x + 2 * d, y - 3, GULL[0]);
+  g.set(x + 4 * d, y - 3, LAMP[0]);
+  g.set(x + 3 * d, y - 3, LAMP[0]);
+  g.set(x, y + 3, LAMP[0]); g.set(x + 1 * d, y + 3, LAMP[0]);
+  g.set(x - 1, y + 2, GULL[2]); g.set(x + 1, y + 2, GULL[2]);
+}
+
+function gull() {
+  const g = new Grid(12, 10);
+  gullAt(g, 5, 5, false);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function gullRock() {
+  shoreSeed = 1409;
+  const g = new Grid(32, 26);
+  stone(g, 15, 19, 12, 5);
+  stone(g, 24, 21, 5, 3);
+  // Their splashes all down it.
+  for (let i = 0; i < 18; i++) g.set(5 + sri(22), 15 + sri(9), WHITE[3]);
+  weedFoot(g, 3, 29, 25);
+  g.outline(OUT);
+  const tmp = new Grid(32, 26);
+  gullAt(tmp, 8, 10, false); gullAt(tmp, 17, 9, true); gullAt(tmp, 24, 13, false);
+  tmp.outline(OUT);
+  for (let y = 0; y < 26; y++) for (let x = 0; x < 32; x++) if (tmp.cells[y][x]) g.set(x, y, tmp.cells[y][x]);
+  return g.rows();
+}
+
+function cairn() {
+  shoreSeed = 1511;
+  const g = new Grid(16, 26);
+  const layers = [[8, 22, 6, 2], [7, 18, 5, 2], [8, 14, 4, 2], [7, 10, 3, 2], [8, 7, 2, 1], [8, 4, 1, 1]];
+  for (const [x, y, rx, ry] of layers) {
+    g.oval(x, y, rx, ry, STONE[1]);
+    g.rect(x - rx + 1, y - ry, rx * 2 - 2, 1, STONE[2]);
+    g.set(x - rx + 1, y - ry, STONE[3]);
+    g.rect(x - rx + 1, y + ry, rx * 2 - 1, 1, STONE[0]);
+  }
+  g.set(6, 18, LICHEN[1]); g.set(10, 22, LICHEN[0]); g.set(11, 21, LICHEN[2]);
+  weedFoot(g, 2, 14, 25);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function potBroken() {
+  shoreSeed = 1601;
+  const g = new Grid(20, 16);
+  // The base, slatted, and the hoops: one standing, one stove in.
+  g.rect(2, 11, 16, 3, WOOD[1]);
+  g.rect(2, 11, 16, 1, WOOD[2]);
+  for (let x = 3; x < 18; x += 3) g.set(x, 12, WOOD[0]);
+  const net = '#8a8264';
+  for (let a = 0; a <= 12; a++) {
+    const t = (a / 12) * Math.PI;
+    g.set(5 + Math.round(Math.cos(t) * 3), 11 - Math.round(Math.sin(t) * 8), WOOD[2]);
+  }
+  g.line(11, 11, 13, 6, WOOD[2]); g.line(13, 6, 17, 9, WOOD[2]);
+  for (let y = 4; y < 11; y += 2) g.line(3, y, 8, y + 1, net);
+  g.line(9, 5, 14, 10, net); g.line(13, 7, 11, 10, net);
+  g.set(16, 10, RED[1]); g.set(17, 10, RED[2]); g.set(16, 11, RED[0]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function stakesRope() {
+  shoreSeed = 1709;
+  const g = new Grid(32, 22);
+  const stakes = [[3, 5], [15, 3], [28, 6]];
+  for (const [x, top] of stakes) {
+    g.rect(x, top, 2, 20 - top, WOOD[1]);
+    g.rect(x, top, 1, 20 - top, WOOD[2]);
+    g.rect(x, top, 2, 1, WOOD[3]);
+    g.set(x - 1, 20, WEED[1]); g.set(x + 2, 20, WEED[0]); g.set(x, 20, WEED[2]);
+  }
+  g.outline(OUT);
+  const rope = '#b0a07c';
+  for (let i = 0; i + 1 < stakes.length; i++) {
+    const [ax, at] = stakes[i];
+    const [bx, bt] = stakes[i + 1];
+    for (let x = ax + 2; x < bx; x++) {
+      const t = (x - ax) / (bx - ax);
+      const y = at + 1 + (bt - at) * t + Math.sin(t * Math.PI) * 4;
+      g.set(x, y, rope);
+      g.set(x, y + 1, '#6a5e44');
+    }
+  }
+  // A rag knotted on the middle stake, blowing east.
+  g.rect(17, 4, 3, 2, RED[1]); g.set(20, 5, RED[2]); g.set(19, 6, RED[0]);
+  return g.rows();
+}
+
+function rowboatHalf() {
+  shoreSeed = 1801;
+  const g = new Grid(34, 20);
+  // Lying on her side: the bow on the left, the hull broken off on the right.
+  g.poly([[1, 12], [6, 6], [26, 4], [30, 6], [28, 9], [31, 12], [27, 15], [8, 17], [3, 15]], WOOD[1]);
+  // Her inside, dark, with ribs.
+  g.poly([[6, 9], [9, 7], [26, 6], [27, 9], [24, 11], [10, 12]], WOOD[0]);
+  for (const x of [12, 17, 22]) g.line(x, 7, x + 1, 12, WOOD[2]);
+  // Strakes and a faded green band at the gunwale.
+  for (let x = 3; x < 30; x++) {
+    if (g.get(x, 13) === WOOD[1]) g.set(x, 13, WOOD[2]);
+    if (g.get(x, 15) === WOOD[1]) g.set(x, 15, WOOD[0]);
+  }
+  g.line(6, 6, 26, 4, '#4a7a72'); g.line(7, 5, 25, 4, '#6a9a90');
+  // Snapped plank ends sticking out.
+  g.line(29, 6, 33, 4, WOOD[2]); g.line(30, 9, 33, 10, WOOD[1]); g.line(29, 12, 32, 14, WOOD[2]);
+  g.set(2, 12, IRON[2]);
+  weedFoot(g, 4, 28, 18);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function wallIvy(b) {
+  shoreSeed = b ? 1907 : 1913;
+  // 24 wide over a one-tile wall, so it spills a little either side. The wall tile is the
+  // bottom 16 rows (14-29): a mat over the coping, trails of different lengths down the face,
+  // and a skirt of leaves on the ground at the foot.
+  const g = new Grid(24, 30);
+  const leaf = (x, y, c) => { g.set(x, y, c); g.set(x + 1, y, c); g.set(x, y + 1, IVY[0]); };
+  for (let x = 3; x < 21; x++) {
+    const top = 11 + sri(4) - (x > 7 && x < 16 ? 1 : 0);
+    const bottom = 18 + sri(b ? 6 : 11);
+    for (let y = top; y < bottom; y++) {
+      if (y > 19 && sr() < 0.35) continue;
+      g.set(x, y, IVY[y < top + 2 ? 3 : 1 + sri(2)]);
+    }
+  }
+  for (let i = 0; i < 22; i++) leaf(2 + sri(20), 11 + sri(14), sr() < 0.5 ? IVY[3] : '#78a85a');
+  // The skirt on the ground.
+  for (let x = 1; x < 23; x++) if (sr() < 0.75) { g.set(x, 28, IVY[1 + sri(2)]); if (sr() < 0.5) g.set(x, 27, IVY[2 + sri(2)]); }
+  g.outline(OUT);
+  return g.rows();
+}
+
+// A stretch of the wall come down: blocks tumbled in a heap over its line, spilling either side.
+function wallTumble() {
+  shoreSeed = 2029;
+  const g = new Grid(26, 24);
+  const block = (x, y, w, h, tilt) => {
+    g.poly([[x, y + tilt], [x + w, y], [x + w, y + h], [x, y + h + tilt]], STONE[1]);
+    g.line(x, y + tilt, x + w, y, STONE[3]);
+    g.line(x + 1, y + tilt + 1, x + w - 1, y + 1, STONE[2]);
+    g.line(x, y + h + tilt, x + w, y + h, STONE[0]);
+  };
+  block(2, 15, 7, 5, 1); block(15, 16, 8, 5, -1); block(8, 12, 9, 6, 1); block(5, 8, 7, 5, -1); block(13, 6, 6, 5, 1); block(19, 11, 5, 4, 0);
+  for (let i = 0; i < 6; i++) g.set(3 + sri(20), 22, STONE[2]);
+  g.set(6, 9, IVY[3]); g.set(7, 9, IVY[2]); g.set(14, 7, IVY[3]); g.set(10, 12, LICHEN[1]); g.set(20, 12, LICHEN[0]);
+  g.outline(OUT);
+  for (let x = 1; x < 25; x += 2 + sri(3)) { g.set(x, 23, TURF[2]); g.set(x, 22, TURF[3]); }
+  return g.rows();
+}
+
+function wallStones() {
+  shoreSeed = 2003;
+  const g = new Grid(16, 24);
+  // Two blocks sat crooked on the wall top, one cocked up, moss in the joint.
+  g.poly([[1, 9], [8, 7], [9, 13], [2, 14]], STONE[2]);
+  g.line(1, 9, 8, 7, STONE[3]);
+  g.line(2, 14, 9, 13, STONE[0]);
+  g.poly([[8, 10], [14, 10], [15, 15], [9, 15]], STONE[1]);
+  g.line(8, 10, 14, 10, STONE[3]);
+  g.set(9, 14, IVY[2]); g.set(8, 15, IVY[3]); g.set(10, 15, IVY[2]); g.set(4, 8, LICHEN[1]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function fallenBlock() {
+  shoreSeed = 2011;
+  const g = new Grid(18, 14);
+  g.poly([[2, 5], [12, 3], [15, 9], [5, 12]], STONE[1]);
+  g.poly([[2, 5], [12, 3], [13, 5], [3, 7]], STONE[2]);
+  g.line(2, 5, 12, 3, STONE[3]);
+  g.line(5, 12, 15, 9, STONE[0]);
+  g.rect(4, 4, 4, 1, IVY[3]); g.set(9, 3, IVY[2]); g.set(5, 5, IVY[2]);
+  g.set(15, 12, STONE[2]); g.set(16, 12, STONE[1]); g.set(1, 11, STONE[2]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function workbench() {
+  shoreSeed = 2101;
+  const g = new Grid(32, 26);
+  // Legs, a shelf of shavings under it, the top.
+  g.rect(2, 14, 2, 11, WOOD[0]); g.rect(28, 14, 2, 11, WOOD[0]);
+  g.rect(3, 20, 26, 2, WOOD[1]);
+  for (let i = 0; i < 6; i++) g.set(6 + sri(20), 19, BLEACH[3]);
+  g.rect(1, 11, 30, 4, WOOD[2]);
+  g.rect(1, 11, 30, 1, WOOD[3]);
+  g.rect(1, 14, 30, 1, WOOD[0]);
+  // A vice on the left end.
+  g.rect(2, 7, 5, 4, IRON[2]); g.rect(2, 7, 5, 1, IRON[3]); g.rect(4, 6, 1, 1, IRON[1]); g.rect(1, 9, 7, 1, IRON[1]);
+  // A lamp chimney lying down, a prism, a hammer and pliers.
+  g.rect(9, 8, 6, 3, GLASS[2]); g.rect(9, 8, 6, 1, GLASS[3]); g.set(14, 10, GLASS[1]);
+  g.poly([[17, 10], [20, 6], [23, 10]], GLASS[2]); g.line(18, 9, 20, 7, GLASS[3]);
+  g.rect(24, 9, 5, 1, WOOD[1]); g.rect(27, 7, 2, 3, IRON[2]);
+  g.set(20, 13, IRON[2]); g.set(21, 12, IRON[2]); g.set(22, 13, IRON[2]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function lensRack() {
+  shoreSeed = 2203;
+  const g = new Grid(32, 30);
+  // A frame of two uprights and two rails, and the pieces stood in it.
+  g.rect(1, 6, 2, 23, WOOD[1]); g.rect(29, 6, 2, 23, WOOD[1]);
+  g.rect(1, 6, 1, 23, WOOD[2]); g.rect(29, 6, 1, 23, WOOD[2]);
+  g.rect(1, 16, 30, 2, WOOD[2]); g.rect(1, 27, 30, 2, WOOD[1]);
+  g.rect(1, 16, 30, 1, WOOD[3]);
+  // Upper rail: prism rings, curved glass bands.
+  for (let i = 0; i < 4; i++) {
+    const x = 5 + i * 6;
+    g.rect(x, 7, 4, 9, GLASS[1]);
+    g.rect(x, 7, 1, 9, GLASS[3]);
+    g.rect(x + 1, 8, 1, 7, GLASS[2]);
+    if (i === 2) { g.set(x + 2, 10, DUST[2]); g.set(x + 3, 11, DUST[2]); }
+  }
+  // Lower rail: a big lens piece on its edge, and an empty slot.
+  g.oval(11, 22, 6, 5, GLASS[1]);
+  g.oval(10, 21, 4, 3, GLASS[2]);
+  g.set(8, 19, GLASS[3]); g.set(9, 19, GLASS[3]); g.set(8, 20, GLASS[3]);
+  g.rect(20, 21, 6, 6, GLASS[0]); g.rect(20, 21, 6, 1, GLASS[2]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function oilCans() {
+  const g = new Grid(20, 16);
+  const can = (x, y, h) => {
+    g.rect(x, y, 5, h, RED[1]); g.rect(x, y, 1, h, RED[2]); g.rect(x + 4, y, 1, h, RED[0]);
+    g.rect(x + 1, y - 1, 3, 1, IRON[2]); g.line(x + 3, y - 1, x + 6, y - 4, IRON[2]);
+    g.rect(x, y + 2, 5, 1, IRON[1]);
+  };
+  can(2, 7, 8); can(8, 9, 6);
+  // One on its side, a black drip from its spout.
+  g.rect(13, 11, 6, 4, RED[1]); g.rect(13, 11, 6, 1, RED[2]); g.line(13, 12, 11, 14, IRON[2]); g.set(11, 15, IRON[0]); g.set(10, 15, IRON[0]);
+  g.outline(OUT);
+  return g.rows();
+}
+
 // --- Registry ----------------------------------------------------------
 export const IL_PROP_SPRITES = {
   il_light_tower: tower(false),
@@ -464,6 +955,30 @@ export const IL_PROP_SPRITES = {
   il_lantern_glass_salt: lanternGlass('salt'),
   il_lantern_glass_corner: cornerGlass(false),
   il_lantern_glass_corner_r: cornerGlass(true),
+  il_tidepool: tidePool(true),
+  il_tidepool_small: tidePool(false),
+  il_rocks: rocks(''),
+  il_rocks_big: rocks('big'),
+  il_rocks_flat: rocks('flat'),
+  il_thrift: thrift(),
+  il_grass_tuft: grassTuft(false),
+  il_grass_tuft_b: grassTuft(true),
+  il_lichen: lichen(),
+  il_drift_timber: driftTimber(),
+  il_gull: gull(),
+  il_gull_rock: gullRock(),
+  il_cairn: cairn(),
+  il_pot_broken: potBroken(),
+  il_stakes_rope: stakesRope(),
+  il_rowboat_half: rowboatHalf(),
+  il_wall_ivy: wallIvy(false),
+  il_wall_ivy_b: wallIvy(true),
+  il_wall_stones: wallStones(),
+  il_wall_tumble: wallTumble(),
+  il_fallen_block: fallenBlock(),
+  il_workbench: workbench(),
+  il_lens_rack: lensRack(),
+  il_oil_cans: oilCans(),
 };
 
 export const IL_PALETTE = palette;
@@ -480,4 +995,13 @@ export const IL_FOOTPRINTS = {
   il_lantern_glass_salt: 2,
   il_lantern_glass_corner: 2,
   il_lantern_glass_corner_r: 2,
+  il_tidepool: 2,
+  il_rocks_big: 2,
+  il_rocks_flat: 2,
+  il_drift_timber: 2,
+  il_gull_rock: 2,
+  il_stakes_rope: 2,
+  il_rowboat_half: 2,
+  il_workbench: 2,
+  il_lens_rack: 2,
 };

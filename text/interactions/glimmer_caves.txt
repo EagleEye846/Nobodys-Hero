@@ -103,6 +103,10 @@ Air. A very great deal of it, and then, far down, a town in a haze under a cryst
 [shelf_edge_ves]
 {surprised}Still there. {bored}Good. I'd hate to have fallen all that way for nothing.
 
+# (draft)
+[shelf_edge 2]
+Still air, and still the town, far down. One of its lights goes out while you watch, and a moment later another comes on beside it, as if somebody has gone into the next room.
+
 [shelf_sign]
 A sign hammered into a crack in the rock: MIND THE GAP.
 
@@ -110,6 +114,10 @@ Underneath, in smaller, shakier paint: (the gap is ahead). And underneath that, 
 
 [shelf_sign_ves]
 {bored}Which gap? {surprised}...Oh. That gap.
+
+# (draft)
+[shelf_sign 2]
+You read it again. It still says MIND THE GAP. The gap is still ahead. You get the feeling the sign has done all it can.
 
 [shelf_bloom]
 A great bloom of crystals in every colour, growing out of one spot. Someone has swept the floor round it.
@@ -119,6 +127,10 @@ A crystal, warm to the touch, one clear colour all the way through. It hums when
 
 [shelf_glowcap]
 A glowing mushroom, big enough to sit under. There's a small dent in the dirt beside it where someone has.
+
+# (draft)
+[shelf_glowcap 2]
+You look at the dent in the dirt beside the mushroom. It's small. Whoever sits here sits here a lot, with their knees folded right up.
 
 [shelf_trio]
 Three small glowing mushrooms, a teal, a violet and a pink, standing in a row. The pink one is looking at you.
@@ -157,6 +169,14 @@ Underneath, in smaller paint: (the loose prism slides. a prism will catch two be
 [hall_sign_ves]
 {bored}"Where they meet." {smile}So the answer is in the sign, and I'm supposed to be impressed that it's small print.
 
+# (draft)
+[hall_sign 2]
+You read the small print again, slower. It's the most useful thing in the hall, and it apologises for itself at the end. Every sign in these caves does.
+
+# (draft)
+[hall_sign_ves 2]
+{thoughtful}Same hand on every sign. {smile}Somebody small, writing very carefully, saying sorry for the scenery.
+
 [hall_gate]
 A gate of crystal bars across the hall, set into a frame that has been waiting a very long time. The light stops here. It opens when the first eye, by the south wall, is awake.
 
@@ -168,6 +188,10 @@ The crystal bars slide apart, quietly, as if they'd been waiting to be asked.
 
 [hall_giant]
 A giant glowing mushroom, the size of a hut, with a violet cap and moss round the foot. Under it, someone has left a very small chair.
+
+# (draft)
+[hall_giant 2]
+You crouch to look at the very small chair under the mushroom. It has a cushion. The cushion has been plumped. Recently.
 
 [hall_bloom]
 A great bloom of crystals, all growing from a single point. The glints go round it slowly, one colour after another.
@@ -203,6 +227,20 @@ A sign: THE GEODE. MIND YOUR HEAD. ALSO YOUR FEET. ALSO THE POINTY ONES.
 
 Underneath, in a hand that's trying to be braver than it is: (you can climb up the blocks. press the jump button. a jump gets you up one step, never two. the flat stones roll if you lean on them, and a stone is a step too. the stump puts them back if you push one somewhere silly. there's another stone somewhere. I couldn't get at it. I think the hill is hiding it. sorry).
 
+# (draft)
+[geode_sign 2]
+You read the end of it again: "I couldn't get at it. I think the hill is hiding it. sorry." It's the only sign in the Glimmering that owns up to giving up.
+
+# (draft) The whistle pea: Fenn's lunch tin, in the yard on the hill (the whistle quest, Seam Nine's roster).
+[geode_tin]
+A miner's lunch tin, dented, wedged into the corner of the yard where nobody but a very determined person could ever have put it. There is a note scratched on the lid with a nail:
+
+FENN. TOOK THE PEA UP TO LOOK AT THE LIGHT. IT RATTLES. THE HILL WANTS A STONE UNDER IT, DON'T FORGET TO PUT ONE BACK.
+
+# (draft)
+[geode_tin_empty]
+Fenn's lunch tin. Empty now, apart from a crust that has turned to crystal.
+
 [geode_chest]
 At the top of the stairs of blocks, in a nest of crystal, sits a chest. Inside it, folded like a wing, is an umbrella canopy of glass and silk.
 
@@ -212,11 +250,19 @@ A purse on a high block in the corner of the geode. Somebody climbed up here for
 [geode_bloom]
 A great bloom of crystals in every colour, with a seat worn into the rock in front of it. People have sat here and looked at it for a long time.
 
+# (draft)
+[geode_bloom 2]
+You sit in the worn seat for a moment, the way everybody else seems to have. The glints go round. It's very hard to get up again.
+
 [geode_crystal]
 A crystal, humming faintly. Inside it, a very small, very slow light goes round and round.
 
 [geode_trio]
 Three glowing mushrooms side by side, the smallest in the middle. It looks like a family portrait.
+
+# (draft)
+[geode_trio 2]
+The family portrait again. The small one in the middle has gone a little brighter than its parents. They look proud. It looks mortified.
 
 [geode_glowcap]
 A glowing mushroom, big and blue, and as warm as a bowl of soup.
@@ -247,10 +293,38 @@ A waterfall of glowing water pouring from a lip in the cave roof, and the sound 
 [falls_water_ves]
 {smile}HELLO. {bored}...hello. hello. {laughing}Fine. I won't do that again.
 
+# (draft)
+[falls_water 2]
+The waterfall's voice keeps coming back off the walls. Listen long enough and the echo starts to sound as if it's humming to itself.
+
+# (draft)
+[falls_water_ves 2]
+{bored}I said I wouldn't. {smile}...hello.
+
+{surprised}...hello. hello. {laughing}Terrible echo. Best thing in the cave.
+
+# (draft)
+[falls_water 10]
+You stand at the water's edge long enough for the echo to run out of things to say. Then, from somewhere a long way back in the rock, very faint and very late, something comes back: HELLO.
+
+It's Ves's voice. From the first time. It's taken all this while to get round.
+
+# (draft)
+[falls_water_ves 10]
+{surprised}...That was me. {bored}I sound ridiculous. {smile}Don't tell it.
+
 [falls_sign]
 A sign: THE ECHO FALLS. PLEASE KEEP YOUR VOICE DOWN. (don't shout. it comes back.)
 
 Underneath, in different paint: (it comes back worse).
+
+# (draft)
+[falls_sign 2]
+(it comes back worse). You don't test it. Ves is looking at the water in a way that suggests she's thinking about it.
+
+# (draft)
+[falls_sign_ves 2]
+{bored}I'm not going to shout. {smile}I'm just going to stand here thinking about shouting, very loudly.
 
 [falls_sign_water]
 A sign: THE LAKE DRAINS. THE WATER WILL TAKE YOU, SO CHOOSE YOUR WATER.
@@ -304,11 +378,23 @@ A great violet crystal, taller than you, wider than it looks. A little way behin
 [tuck_crystal_ves]
 {bored}That crystal is breathing.
 
+# (draft)
+[tuck_crystal 2]
+You look round the side of the great crystal. Nobody. The churned dust goes off behind the next crystal along, in small, quick steps.
+
+# (draft)
+[tuck_crystal_ves 2]
+{bored}It's stopped breathing. {smile}It's that sort of crystal.
+
 [tuck_bloom]
 A bloom of crystals in every colour, sprouting from one point. There are small footprints in the dust in front of it, and then a lot of smaller ones going the other way, quickly.
 
 [tuck_crystal_other]
 A crystal, humming. Warm. Perfectly innocent. Nobody's behind this one.
+
+# (draft)
+[tuck_crystal_other 2]
+Still nobody behind this one. It is very, very innocent. Somebody has gone to a lot of trouble over it.
 
 [tuck_glowcap]
 A glowing mushroom, which looks after itself.
@@ -319,11 +405,19 @@ Three little glowing mushrooms in a row, with a small teal one on the end lookin
 [tuck_pool]
 A pool of glowing water. There's a smudge of tabard-red on the rim, as if someone's had a drink and run off.
 
+# (draft)
+[tuck_pool 2]
+You look again at the smudge of red on the rim. Next to it, very small, a wet pawprint. Next to that, another, going the other way, much faster.
+
 [tuck_sign]
 A sign, in a very neat, very small hand: THIS WAY TO BELOWTOWN. (not the crystal.)
 
 [tuck_sign_ves]
 {smile}That's an oddly specific thing to put on a sign.
+
+# (draft)
+[tuck_sign 2]
+(not the crystal.) The "not" has been gone over again in thicker paint, as if quite a few visitors tried the crystal anyway.
 
 [tuck_purse]
 A purse, left under the crystal at the back of the grotto, with a note: FOR WHOEVER COMES. (sorry for the state of the grotto.)
@@ -343,6 +437,10 @@ Underneath, in tiny paint: (the mirror by the wall has two roads: the low one go
 
 [bridge_sign_ves]
 {bored}"You can't be in two places. One of you can be somewhere else." {smile}I'm going to assume that's me.
+
+# (draft)
+[bridge_sign 2]
+IF IT GOES OUT, IT'S YOUR FAULT. Under it, added later in tiny paint: (it's not really your fault. sorry.) And under that: (it's a bit your fault.)
 
 [prism_road]
 A prism on a stand, the only one on this ledge that turns. Set one way it sends the light down and out to the island. Set the other it sends it up and away across the top of the cave.
@@ -380,6 +478,10 @@ A crystal, humming. It's warm, and every so often it gives a small, hopeful flas
 [bridge_trio]
 Three small glowing mushrooms in a row, as far from the edge as they can get.
 
+# (draft)
+[bridge_trio 2]
+The three little mushrooms are as far from the edge as they can get. One of them has got slightly further since you last looked.
+
 [bridge_glowcap]
 A glowing mushroom, big and calm, and wholly unbothered by the drop.
 
@@ -399,14 +501,30 @@ A sign, newly painted: BELOWTOWN. DOWN. TWENTY MINUTES IF YOU DON'T DAWDLE. FORT
 
 Underneath, in smaller letters: (you'll look at the view).
 
+# (draft)
+[road_sign 2]
+You look at the view again. It's been forty minutes. The sign was right, and it knew it would be.
+
 [road_signpost]
 A signpost: WELCOME TO BELOWTOWN. PLEASE WIPE YOUR FEET. A small paw has added, with a stub of chalk, underneath: (THEY WON'T).
+
+# (draft)
+[road_signpost 2]
+(THEY WON'T). Under it, in different chalk: (I DID). And under that, back in the first: (THANK YOU).
 
 [road_lamp]
 A glow-worm lamp on a pole. The glow-worm inside is very happy to be a lamp, and does not want to talk about it.
 
 [road_lamp_ves]
 {smile}He looks proud. {bored}Don't tell him it's a job.
+
+# (draft)
+[road_lamp 2]
+The glow-worm catches you looking and goes a little brighter, the way somebody stands up straight when the boss walks past.
+
+# (draft)
+[road_lamp_ves 2]
+{bored}Don't encourage him. {smile}He'll want a raise.
 
 [road_bloom]
 A great bloom of crystals, mixed colours, where the road bends. Someone has hung a little ribbon on it, for luck.

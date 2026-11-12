@@ -17,3 +17,25 @@
 
 [repeat after the_light_goes_up]
 ...zzz... party... zzz... can't... sleeping...
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+...zzz... no, YOU'RE a bat... zzz...
+
+# (draft)
+[repeat 3]
+...zzz... Gran said... zzz... little lad... asked her the way... zzz... said down... zzz... everybody says down...
+
+# (draft)
+[repeat_ves 3]
+{thoughtful}...Ten years asleep, and he's dreaming his gran's story.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+...zzz... confetti... zzz... in my ear... zzz... still in my ear...
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+...zzz... fine... I'm up... zzz... I'm not up...

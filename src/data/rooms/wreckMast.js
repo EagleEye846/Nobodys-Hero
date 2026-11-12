@@ -16,8 +16,9 @@
 //     (20,14) means nobody is ever stuck there. Start LOW. No crates, so no stump needed.
 //   - On the hulk, walk up into the mast at the rope's foot (17,12) and climb (the long
 //     rope engine, ropeClimb.js, all three of you together). At the top you come out on the
-//     fighting top (17,4), and the scene wreck_star_shard plays: the shard is in the split
-//     of the mast (15,4), and the hero works it free (a `give` step).
+//     fighting top (17,4), and the scene wreck_star_shard plays (the id is kept for the goals and
+//     Haddock's lines): the mast's split top has a scorch on it and a line of burnt grain running out
+//     to sea. The star shard is NOT here any more: it is at the end of the optional ghost ship.
 //   - From the fighting top, walk the yard east to the slip (door 39,3). Or slide back down
 //     the halyard (the coil at 13,3 is a door back to the rope's foot).
 // Tile key (see src/overworld/coastTiles.js, wreck):
@@ -35,6 +36,8 @@ export const WRECK_MAST = {
   // "Fog Bell" (src/data/music/wreckTheme.js).
   music: 'wreck',
   ambience: 'wreck_yard',
+  // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.5, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_wreck_yard', lamplight: { shade: 0.24, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
   lastLight: { x: 33, y: 7 },
   skyline: [
@@ -122,7 +125,7 @@ export const WRECK_MAST = {
     { x: 13, y: 3, w: 1, h: 1, to: 'wreck_mast', spawn: { x: 17, y: 13 } },
   ],
 
-  // The fighting top: taking the shard (wreck_star_shard, once) as you come off the rope.
+  // The fighting top: the scorch and the line of light (wreck_star_shard, once) as you come off the rope.
   cutscenes: [
     { x: 16, y: 2, w: 3, h: 3, scene: 'wreck_star_shard' },
   ],
@@ -138,13 +141,13 @@ export const WRECK_MAST = {
     { sprite: 'sign', x: 5, y: 14, text: 'mast_sign' },
     // The raft's mooring post on the bank (its chain runs out to the raft).
     { sprite: 'c5_chain_bollard', x: 6, y: 14, text: 'mast_raft_post' },
-    // The mast, standing out of the hulk, and the star in the split at its top.
-    // (The great mast is one tall prop standing on the hulk's north side; its cross-trees
-    // carry the fighting top. Its split top comes up through the planks at 15,4, and the
-    // shard, listed after it on the same tile, sits in the split.)
+    // The mast, standing out of the hulk, and its split top. (The great mast is one tall prop standing on
+    // the hulk's north side; its cross-trees carry the fighting top. Its split top comes up through the
+    // planks at 15,4. The scorch beside it (16,3) is the hint to the ghost ship.)
     { sprite: 'wy_mainmast', x: 15, y: 11, text: 'mast_mast' },
     { sprite: 'wy_mast_tip', x: 15, y: 4, text: 'mast_mast' },
-    { sprite: 'c5_star_shard', x: 15, y: 4, text: 'wreck_shard', cast: 'wreck_shard', until: 'wreck_star_shard', animation: 'c5_star_shard', speed: 0.3, light: 24, notice: true },
+    { sprite: 'wy_scorch_line', x: 16, y: 3, text: 'mast_scorch', flat: true, walkable: true },
+    { sprite: 'wy_scorch_line_b', x: 21, y: 3, text: 'mast_scorch', flat: true, walkable: true },
     // The fighting top: the halyard coil (the way back down), a flag on its staff.
     { sprite: 'c5_rope_coil', x: 13, y: 3, text: 'mast_halyard', walkable: true },
     { sprite: 'c5_tattered_flag', x: 18, y: 2, text: 'mast_flag', animation: 'c5_tattered_flag', speed: 0.35 },
@@ -154,6 +157,33 @@ export const WRECK_MAST = {
     { sprite: 'c5_barrels', x: 15, y: 17, text: 'hull_barrels' },
     { sprite: 'c5_hull_lean_b', x: 26, y: 13, text: 'gate_hulk' },
     { sprite: 'gold_pouch', x: 10, y: 18, text: 'mast_pouch', gold: 120, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The basin's edges (all on water that stays water at both tides): barnacles and weed up the
+    // bank's side, the sandbar's and the hulk's, a mooring post off the bank's corner, an old quay
+    // beam fallen across the top of the bar, and the yard's leavings out on the open water.
+    { sprite: 'wy_edge_l', x: 7, y: 13, flat: true, walkable: true },
+    { sprite: 'wy_edge_l', x: 7, y: 19, flat: true, walkable: true },
+    { sprite: 'wy_edge_r', x: 8, y: 13, flat: true, walkable: true },
+    { sprite: 'wy_edge_r', x: 8, y: 19, flat: true, walkable: true },
+    { sprite: 'wy_edge_l', x: 22, y: 14, flat: true, walkable: true },
+    { sprite: 'wy_edge_l', x: 22, y: 18, flat: true, walkable: true },
+    { sprite: 'wy_barnacle_band', x: 16, y: 20, flat: true, walkable: true },
+    { sprite: 'wy_barnacle_band_b', x: 19, y: 20, flat: true, walkable: true },
+    { sprite: 'wy_weed_fringe', x: 10, y: 20, flat: true, walkable: true },
+    { sprite: 'wy_weed_fringe_b', x: 3, y: 22, flat: true, walkable: true },
+    { sprite: 'wy_timber_sunk', x: 10, y: 11, flat: true, walkable: true },
+    { sprite: 'wy_mooring_post', x: 6, y: 10 },
+    { sprite: 'wy_ribs_jag', x: 30, y: 9 },
+    { sprite: 'wy_ribs_jag_b', x: 36, y: 14 },
+    { sprite: 'wy_plank_slick', x: 25, y: 8, flat: true, walkable: true },
+    { sprite: 'wy_weed_mat', x: 33, y: 17, flat: true, walkable: true },
+    { sprite: 'wy_weed_mat_b', x: 23, y: 6, flat: true, walkable: true },
+    { sprite: 'wy_timber_sunk', x: 29, y: 20, flat: true, walkable: true },
+    { sprite: 'wy_plank_slick_b', x: 9, y: 7, flat: true, walkable: true },
+    // The hulk's deck: her rail's shadow, a scupper's rust, a grating, her chain.
+    { sprite: 'wy_rail_shadow', x: 18, y: 12, flat: true, walkable: true },
+    { sprite: 'wy_scupper', x: 20, y: 12, flat: true, walkable: true },
+    { sprite: 'wy_grating', x: 16, y: 15, flat: true, walkable: true },
+    { sprite: 'wy_chain_pile', x: 14, y: 14, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'gate_edge', '~': 'mast_water', W: 'mast_hulk', f: 'gate_rail', g: 'mast_yard', O: 'hull_cargo', F: 'hull_net', x: 'hull_barnacles' },
 

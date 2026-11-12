@@ -140,6 +140,8 @@ const crackAll = (speed) => PILLARS.flatMap((p, i) => [
 // =========================================================================
 const FIRST_HALF = [
   { do: 'music', song: null },
+  // The folk shouting as they run, the rock grinding (AMBIENCES in src/audio/music.js).
+  { do: 'ambience', name: 'hall_falling' },
   { do: 'stage', dim: 0.1, seconds: 1, rubble: 80, rubbleAmount: 0.6, shafts: SHAFTS, haze: 0.35 },
   { do: 'face', who: 'player', dir: 'up' },
   { do: 'face', who: 'ves', dir: 'up' },
@@ -205,6 +207,7 @@ const FIRST_HALF = [
   { do: 'wait', seconds: 1.6 },
 
   // Everyone's out. Now it's just the two of you and the weight.
+  { do: 'ambience', name: 'hall_straining' },
   { do: 'camera', who: 'player' },
   { do: 'say', text: 'The stone grinds down onto the lid. The lid dents. It is very, very heavy.' },
   { do: 'sound', name: 'creak' },
@@ -337,6 +340,7 @@ const SECOND_HALF = [
   { do: 'face', who: 'player', dir: 'up' },
   { do: 'animate', who: 'ves', animation: 'finale_ves_bent', speed: 0.9 },
   // Dust settles. A long silence.
+  { do: 'ambience', name: 'hall_settled' },
   { do: 'wait', seconds: 1.4 },
   { do: 'leave', who: 'puff', instant: true },
   { do: 'say', who: 'bramble', text: '{proud}...Meant to do that.' },

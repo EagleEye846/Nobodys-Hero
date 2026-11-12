@@ -23,7 +23,7 @@ export const OLM = {
   anim: OLM_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1420,
+  maxHp: 1800,
   damage: 42,
 
   // The Stillwater's other regular: slow and patient, but with a lot of it.

@@ -17,6 +17,16 @@ Somewhere in GNAWER, a tooth falls out. Another grows in. It doesn't seem to min
 
 Smells like old bone and a long time.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+GNAWER is down to its last few teeth. It counts them with its tongue, slowly, and loses count.
+
+# (draft)
+[flavor: spareable]
+GNAWER has stopped clicking. It rests its chin on a bone and listens to you, the way an old dog listens to the door.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

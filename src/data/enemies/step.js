@@ -15,7 +15,7 @@ export const LOOSE_STEP = {
     frames: [STEP_DISGUISE_SPRITES.still, STEP_DISGUISE_SPRITES.glare, STEP_DISGUISE_SPRITES.glance],
     palette: STEP_PALETTE,
   },
-  maxHp: 175,
+  maxHp: 220,
   damage: 13,
 
   // A Chapter 2 enemy: busier and quicker than anything in the Ruins.

@@ -13,9 +13,17 @@ WRACKEEL looks you up and down. It hasn't decided if you are a friend or a condu
 
 A puddle near WRACKEEL fizzes, all by itself. It pretends it wasn't doing that.
 
-WRACKEEL's sparks are all leaning toward your lantern. It leans too, a little, and then catches itself.
+WRACKEEL's sparks are all leaning toward your light. It leans too, a little, and then catches itself.
 
 Smells like a struck match and low tide.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+WRACKEEL's sparks are coming slower now, each one a little sadder than the last.
+
+[flavor: spareable]
+WRACKEEL has stopped sparking. It curls up close to your light, like something warming itself at a fire.
 
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with

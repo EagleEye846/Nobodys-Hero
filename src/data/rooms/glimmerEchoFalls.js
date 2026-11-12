@@ -55,7 +55,9 @@ export const GLIMMER_ECHO_FALLS = {
   // "The Glimmering" (src/data/music/glimmerTheme.js).
   music: 'glimmer',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
-  ambience: 'crystal',
+  ambience: 'crystal_falls',
+  // How it rings (a huge space: ECHOES in src/audio/music.js).
+  echo: 'cavern',
 
   tiles: [
     '##############################',
@@ -85,6 +87,13 @@ export const GLIMMER_ECHO_FALLS = {
     { x: 29, y: 9, w: 1, h: 2, to: 'glimmer_tuck', spawn: { x: 1, y: 9 } },
     // The secret: through the vein at the end of the ledge behind the falls.
     { x: 16, y: 3, w: 1, h: 1, to: 'glimmer_vug', spawn: { x: 6, y: 8 } },
+  ],
+
+  // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
+  // A line down the far bank's west edge, which every way on from the lake
+  // crosses (the_echo_answers: Ves and the echo). Not for saves past Tuck.
+  cutscenes: [
+    { x: 22, y: 4, w: 1, h: 9, scene: 'the_echo_answers', until: ['tuck_finds_you', 'the_kings_welcome'] },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
@@ -132,8 +141,10 @@ export const GLIMMER_ECHO_FALLS = {
   },
 
   // A gleamsnail on the near bank, and a quartzling and a prismoth
-  // across the lake. No scenes here, so nothing to keep clear of (the snails
-  // and the quartzling are all on the banks, never near the currents).
+  // across the lake (the snails and the quartzling are all on the banks,
+  // never near the currents). The_echo_answers walks only x 21-22 on rows
+  // 8-9 of the far bank, clear of the quartzling (25,7) and the prismoth
+  // (24-26 on row 12).
   npcs: [
     { enemy: 'gleamsnail', x: 5, y: 7, patrol: [5, 7], behaviour: 'patrol' },
     { enemy: 'quartzling', x: 25, y: 7, patrol: [25, 25], behaviour: 'disguise', reach: 3 },

@@ -19,12 +19,19 @@ export const SANDCASTLE = {
   // into a mound when beaten, and the flag stands up when it's spared.
   // See src/data/art/sandcastle.js.
   anim: SANDCASTLE_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): sand puffs when hit and trickles off it;
+  // beaten, it slumps in a cloud of sand.
+  feel: { hit: 'sand', idle: 'sand', windup: 'dust', defeat: 'sand' },
   // The chapter 5 coast battle song (Gullrest and the Wrack Shore).
   music: 'coastBattleStorm',
-  maxHp: 2000,
-  damage: 58,
+  maxHp: 10200,
+  damage: 86,
 
-  difficulty: { density: 1.5, speed: 1.4 },
+  difficulty: { density: 1.65, speed: 1.50 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore, see startAttack in battleScene.js). No
+  // secondWind: two of its attacks at once were too much to read.
+  encore: { at: 0.85, seconds: 4.5, density: 0.8 },
   battlePos: { x: 212, y: 54 },
 
   // Its attacks live in src/battle/attacks/sandcastle.js.
@@ -39,7 +46,7 @@ export const SANDCASTLE = {
     { name: 'Inspect' },
     { name: 'Admire the towers', calm: 40 },
     { name: 'Pat the walls', calm: 35 },
-    { name: 'Mention the tide', calm: 30 },
+    { name: 'Point at the sea', calm: 30 },
   ],
 
   rewards: { exp: 2050, coins: 12 },

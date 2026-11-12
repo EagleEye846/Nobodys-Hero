@@ -3,7 +3,7 @@ import { WARDEN_PALETTE, WARDEN_SPRITE, WARDEN_CRACKED_SPRITE, WARDEN_CRUMBLING_
 // THE WARDEN OF THE GATE: Chapter 3's first boss of its climax, at the end
 // of the Dead City. A colossal stone statue of the prophesied Hero, built by
 // the old city to greet him, standing before the Hero's Gate with its stone
-// sword raised in welcome. It has waited three hundred years. When you come
+// sword raised in welcome. It has waited a hundred years. When you come
 // (at_the_gate starts this fight), it wakes to judge you and finds you
 // wanting: the wrong height, the wrong face, and no name. It isn't evil.
 // It's a monument doing its job. It can't be talked round: it has to break,
@@ -71,7 +71,7 @@ export const WARDEN_BOSS = {
   // Clearly the hardest fight so far: above the Usurper (1400 HP, damage
   // 19, density 1.3 to 1.45) and every Chapter 3 regular (540 to 760 HP,
   // damage 20 to 28), and everything lands, start to finish.
-  maxHp: 2760,
+  maxHp: 3510,
   damage: 34,
   difficulty: { density: 1.4, speed: 1.2 },
 

@@ -1,5 +1,6 @@
 import { PUPPET_STAGE } from './puppetStage.js';
 import { CORRIE_STAGE } from './corrieStage.js';
+import { FAIRWEATHER_STAGE } from './fairweatherStage.js';
 
 // Stage effects a boss's phase can bring with it (`stage: '<name>'` on the
 // phase, see the phases notes in battleScene.js): things that happen to the
@@ -40,4 +41,6 @@ export const STAGE_EFFECTS = {
   puppet: PUPPET_STAGE,
   // Corrie, the Tidecaller's four phases: the tide, the whirlpool, the lamp (corrie.js).
   corrie: CORRIE_STAGE,
+  // Madam Fairweather, the Figurehead: the box turns, star-light rings her (fairweather.js).
+  fairweather: FAIRWEATHER_STAGE,
 };

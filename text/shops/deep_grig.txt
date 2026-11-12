@@ -10,6 +10,14 @@
 [greeting]
 Oh! A light! Two lights! Well, one light and a friend. Grig. Cakes, dew, candles, hood. Everything's on the blanket. Touch what you like.
 
+# (draft)
+[greeting 2]
+You came back! Nobody comes back. Well, nobody comes, but nobody comes BACK even more. One, two, three cheers. Quietly. The dark's having a nap.
+
+# (draft)
+[greeting 3]
+Regulars! Grig's got regulars. Grig's going to put a little sign on the blanket. It'll say OPEN. It's always been open. Now it can say so.
+
 [menu_prompt]
 Anything else? Take your time. Nobody's going anywhere. Well. You are. But not yet.
 
@@ -56,7 +64,7 @@ Your bag's full, and so's the chest! Eat something. Grig recommends the cake.
 Off you go, then! Light up high, feet down low. Mind the dark. It's only shy.
 
 [talk: The camp]
-The Hero stopped here. It's the only flat bit for miles. Grig never met them, mind. Long before Grig's time. But they left their marks up on the wall, in fives, small and neat, and Grig counts them when it's quiet. It's never the same number twice. Grig is fairly sure that's Grig.
+The Hero stopped here. It's the only flat bit for miles. Grig never met him, mind. Long before Grig's time. But he left his marks up on the wall, in fives, small and neat, and Grig counts them when it's quiet. It's never the same number twice. Grig is fairly sure that's Grig.
 
 [talk: The dark]
 Oh, it's lovely, the dark. Don't tell it Grig said so, it gets ideas. It's very old, and it's mostly just waiting. Grig talks to it. It never says anything back. Which is good manners, really.

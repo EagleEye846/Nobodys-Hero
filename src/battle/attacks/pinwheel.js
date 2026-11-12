@@ -18,9 +18,10 @@ defineBulletArt('pinSpine', {
   rotate: true,
 });
 
-// A short spine (a burst's).
+// A short spine (a burst's). (Lighter since 2026-11-08: the dark purple one
+// was hard to pick out in the box.)
 defineBulletArt('pinQuill', {
-  frames: [['.ss..', 'sSSTT', '.ss..']],
+  frames: [['.SS..', 'SPPTT', '.SS..']],
   palette: SPINE,
   radius: 1.8,
   rotate: true,
@@ -47,6 +48,10 @@ defineBulletArt('pinBall', { frames: [ball(17, 14)], palette: SPINE, radius: 6.6
 // A mine: a small urchin, pulsing its spines out and in (harmless until it bursts).
 defineBulletArt('pinMine', { frames: [ball(11, 8), ball(13, 10)], palette: SPINE, radius: 1, frameSeconds: 0.18 });
 
+// A mine about to burst (harmless): its spines all the way out, tipped gold,
+// blinking for a moment over the mine before it goes.
+defineBulletArt('pinMineHot', { frames: [ball(15, 12).map((r) => r.replace(/t/g, 'g'))], palette: SPINE, radius: 1 });
+
 // Where a spine will fall (harmless): a pink tick.
 defineBulletArt('pinTick', {
   frames: [['..t..', '.ttt.', '..t..'], ['.....', '..t..', '.....']],
@@ -57,8 +62,8 @@ defineBulletArt('pinTick', {
 
 export const PINWHEEL_ATTACKS = {
   // Fans: five spines at a time thrown at where you are, spread a hand apart
-  // (they blink first, so you can see the way they point). One volley from the
-  // right, one from the top, then from the right again.
+  // (they blink first, so you can see the way they point). Six volleys, from
+  // the right and from the top by turns.
   pinFan(box, density, { Shot, rand, clamp }) {
     let t = 0;
     let volleys = 0;
@@ -75,8 +80,8 @@ export const PINWHEEL_ATTACKS = {
         }
         last.x = soul.x;
         last.y = soul.y;
-        if (t < next || volleys >= 4 || t > 5.2) return;
-        next = t + 1.45;
+        if (t < next || volleys >= 6 || t > 6.0) return;
+        next = t + 1.0;
         const top = volleys % 2 === 1;
         const from = top
           ? { x: clamp(soul.x + rand(-20, 20), box.x + 8, box.x + box.w - 8), y: box.y - 2 }
@@ -116,7 +121,7 @@ export const PINWHEEL_ATTACKS = {
           for (const offset of [0, rolls % 2 ? 26 : -26]) {
             const y = clamp(soul.y + offset, box.y + 9, box.y + box.h - 9);
             const warn = 0.8;
-            const guide = new Line({ x: box.x - 4, y, angle: 0, length: box.w + 8, thickness: 1, warn, life: 0, color: '#ff9ad0' });
+            const guide = new Line({ x: box.x - 4, y, angle: 0, length: box.w + 8, thickness: 1, warn, life: 0, color: '#a0507c' });
             const ball = new Shot({ x: box.x + box.w + 9, y, warn, art: 'pinBall', life: 3 });
             ball.guide = guide;
             ball.offset = offset;
@@ -127,12 +132,14 @@ export const PINWHEEL_ATTACKS = {
           rolls++;
         }
         for (const ball of balls) {
-          // The row follows you until the last moment before it rolls, then it is fixed.
-          if (ball.age < ball.warn - 0.15) {
+          // The row follows you, then a third of a second before it rolls it
+          // is fixed and goes bright (made fairer 2026-11-08: it used to be
+          // fixed only a sixth of a second before).
+          if (ball.age < ball.warn - 0.32) {
             const y = clamp(soul.y + ball.offset + heading.y * 0.25, box.y + 9, box.y + box.h - 9);
             ball.y = y;
             ball.guide.y = y;
-          }
+          } else ball.guide.color = '#ffd6ec';
           if (ball.age < ball.warn) continue;
           if (!ball.rolling) {
             ball.rolling = true;
@@ -141,7 +148,9 @@ export const PINWHEEL_ATTACKS = {
           ball.shed -= dt;
           if (ball.shed <= 0 && ball.x > box.x + 6) {
             ball.shed = 0.34;
-            for (const dir of [-1, 1]) bullets.push(new Shot({ x: ball.x, y: ball.y, vx: 8, vy: dir * 52, art: 'pinQuill', life: 1.5, angle: dir * Math.PI / 2 }));
+            // (They hang where they came off for a blink before they fly, so
+            // a step off the row isn't a hit from point-blank.)
+            for (const dir of [-1, 1]) bullets.push(new Shot({ x: ball.x, y: ball.y, vx: 8, vy: dir * 52, warn: 0.16, art: 'pinQuill', life: 1.5, angle: dir * Math.PI / 2 }));
           }
         }
         balls = balls.filter((ball) => ball.x > box.x - 14);
@@ -159,8 +168,8 @@ export const PINWHEEL_ATTACKS = {
       duration: 6.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || t > 5) return;
-        next = t + 0.17;
+        if (t < next || t > 6) return;
+        next = t + 0.12;
         const aimed = count % 3 === 0;
         const x = aimed ? clamp(soul.x + rand(-5, 5), box.x + 5, box.x + box.w - 5) : rand(box.x + 5, box.x + box.w - 5);
         bullets.push(new Shot({ x, y: box.y + 4, harmless: true, life: 0.55, art: 'pinTick' }));
@@ -183,12 +192,13 @@ export const PINWHEEL_ATTACKS = {
         t += dt;
         if (rounds < 3 && t >= 0.2 + rounds * 2.0) {
           const side = rand(0, Math.PI * 2);
-          const pts = [{ x: clamp(soul.x + Math.cos(side) * rand(18, 24), box.x + 9, box.x + box.w - 9), y: clamp(soul.y + Math.sin(side) * rand(18, 24), box.y + 9, box.y + box.h - 9) }];
+          const pts = [{ x: clamp(soul.x + Math.cos(side) * rand(22, 27), box.x + 9, box.x + box.w - 9), y: clamp(soul.y + Math.sin(side) * rand(22, 27), box.y + 9, box.y + box.h - 9) }];
           let tries = 0;
           while (pts.length < 3 && tries < 40) {
             tries++;
             const p = { x: rand(box.x + 9, box.x + box.w - 9), y: rand(box.y + 9, box.y + box.h - 9) };
-            if (pts.every((q) => Math.hypot(p.x - q.x, p.y - q.y) > 24)) pts.push(p);
+            // (Never right on top of you: only the first is meant to be close.)
+            if (pts.every((q) => Math.hypot(p.x - q.x, p.y - q.y) > 24) && Math.hypot(p.x - soul.x, p.y - soul.y) > 26) pts.push(p);
           }
           pts.forEach((p, i) => {
             const fuse = 0.95 + i * 0.16;
@@ -198,11 +208,18 @@ export const PINWHEEL_ATTACKS = {
           rounds++;
         }
         for (const m of mines) {
+          // Just under half a real second before it bursts, it bristles: all
+          // spines out, gold-tipped, blinking (made fairer 2026-11-08: the
+          // mines used to pulse the same way right up to the burst).
+          if (!m.hot && t >= m.at - 0.4 * density) {
+            m.hot = true;
+            bullets.push(new Shot({ x: m.p.x, y: m.p.y, harmless: true, warn: 0.4, life: 0, art: 'pinMineHot' }));
+          }
           if (t < m.at) continue;
           m.done = true;
           for (let k = 0; k < 8; k++) {
             const a = m.turn + (k / 8) * Math.PI * 2;
-            bullets.push(new Shot({ x: m.p.x, y: m.p.y, vx: Math.cos(a) * 70, vy: Math.sin(a) * 70, art: 'pinQuill', life: 1.5 }));
+            bullets.push(new Shot({ x: m.p.x, y: m.p.y, vx: Math.cos(a) * 70, vy: Math.sin(a) * 70, warn: 0.06, art: 'pinQuill', life: 1.5 }));
           }
           for (let k = 0; k < 8; k++) {
             const a = m.turn + Math.PI / 8 + (k / 8) * Math.PI * 2;
@@ -216,4 +233,7 @@ export const PINWHEEL_ATTACKS = {
 };
 
 // Aimed shots on top, so standing still or running one way is never safe (see snipes.js).
-PINWHEEL_ATTACKS.pinRoll = withSnipes(PINWHEEL_ATTACKS.pinRoll, { art: 'pinQuill' });
+PINWHEEL_ATTACKS.pinRoll = withSnipes(PINWHEEL_ATTACKS.pinRoll, { art: 'pinQuill', count: 5, first: 0.8, every: 1.0, lead: [0.9, 'mean', 0.4, 'mean', 0.9] });
+PINWHEEL_ATTACKS.pinFan = withSnipes(PINWHEEL_ATTACKS.pinFan, { art: 'pinQuill', count: 2, first: 1.4, every: 2.0, lead: ['mean', 0.9] });
+PINWHEEL_ATTACKS.pinRain = withSnipes(PINWHEEL_ATTACKS.pinRain, { art: 'pinSpine', count: 4, first: 1.0, every: 1.2, lead: [0.9, 'mean', 0.5, 'mean'] });
+PINWHEEL_ATTACKS.pinBurst = withSnipes(PINWHEEL_ATTACKS.pinBurst, { art: 'pinSpine', count: 2, first: 1.4, every: 2.0, lead: [0.9, 'mean'] });

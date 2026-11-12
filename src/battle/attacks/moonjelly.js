@@ -1,5 +1,5 @@
 import { defineBulletArt } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
 
 // The Moonjelly's attacks. A big soft jellyfish that drifts about like
@@ -15,11 +15,6 @@ import { Ring } from './underShapes.js';
 
 const JEL = { k: '#232a5a', b: '#b4cdf5', B: '#86a4e6', w: '#f2f8ff', p: '#e0c4f6', P: '#b890e4', t: '#a4c0f0', T: '#7694dc', g: '#fff4c4' };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // One bead of a stinging tendril, and its tip.
 defineBulletArt('jelBead', {

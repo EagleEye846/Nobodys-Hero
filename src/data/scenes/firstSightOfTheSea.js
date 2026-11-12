@@ -1,7 +1,7 @@
 // FIRST SIGHT OF THE SEA: the clifftop above Gullrest, the last room of
 // Sunnyside. The three walk to the telescope at the edge and the camera slides
 // down off the cliff: the whole summer sea, the beach far below with its huts
-// and bunting, and, out on the horizon on the right, a green smudge of storm
+// and bunting, and, out on the horizon, a green smudge of storm
 // with a black spiky lighthouse standing in it (the Last Light). Bramble has
 // never seen the sea. "...That's a big puddle."
 // (The hero never speaks.)
@@ -19,12 +19,13 @@ export const FIRST_SIGHT_OF_THE_SEA = {
 
   steps: [
     { do: 'music', song: null },
-    { do: 'appear', who: 'ves', at: { x: 10, y: 9 }, instant: true },
-    { do: 'appear', who: 'bramble', at: { x: 9, y: 10 }, instant: true },
+    // They step in from where they were following (no pop).
+    { do: 'appear', who: 'ves', instant: true },
+    { do: 'appear', who: 'bramble', instant: true },
     { do: 'say', text: 'The lane has been getting sandier for a while. Now it stops, just like that, at a low green lip of cliff, and there is nothing past it but air.' },
     { do: 'walk', who: 'player', to: { x: 11, y: 11 }, wait: false },
-    { do: 'walk', who: 'ves', to: { x: 12, y: 11 }, wait: false },
-    { do: 'walk', who: 'bramble', to: { x: 10, y: 11 } },
+    { do: 'walk', who: 'bramble', to: { x: 10, y: 11 }, wait: false },
+    { do: 'walk', who: 'ves', to: { x: 12, y: 11 } },
     { do: 'face', who: 'player', dir: 'down' },
     { do: 'face', who: 'ves', dir: 'down' },
     { do: 'face', who: 'bramble', dir: 'down' },
@@ -47,10 +48,10 @@ export const FIRST_SIGHT_OF_THE_SEA = {
     // Gullrest.
     { do: 'camera', to: { x: 6, y: 26 } },
     { do: 'wait', seconds: 2.4 },
-    { do: 'say', text: 'Far below, in the crook of the cliff, a small town of white huts with red roofs sits on a crescent of sand, with bunting strung between them and little boats pulled up in a row.\n\nGullrest. It looks like somebody made it for a party.' },
+    { do: 'say', text: 'Far below, in the crook of the cliff, a small town of white huts with red roofs sits on a crescent of sand, with bunting strung between them and little boats pulled up in a row.\n\nIt looks like somebody made it for a party.' },
     { do: 'say', who: 'ves', text: '{smile}Bunting. We\'re going to the bunting.' },
-    // The horizon.
-    { do: 'camera', to: { x: 24, y: 21 } },
+    // The horizon (west of the cliff path, so the path never stands in front of the tower).
+    { do: 'camera', to: { x: 12, y: 21 } },
     { do: 'wait', seconds: 2.6 },
     { do: 'say', text: 'And then, out on the very edge of things, where the sky should meet the water neatly: a smudge.\n\nGreen. A bruise of cloud lying low on the sea, thin as a pencil line from here, with rain hanging off it in stripes.' },
     { do: 'wait', seconds: 0.8 },

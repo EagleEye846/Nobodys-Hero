@@ -4,7 +4,9 @@
 // until he wants one: then he raises a hand and DIGS it into the wood with
 // his fingertips (a grin, a scowl, a gape: GOUGES), and wipes his head smooth
 // again after. A tarnished crown a size too big and slipping, and a rag of
-// his old purple cape off one shoulder. Lit by one cold spotlight from above.
+// his old purple cape off one shoulder (until he comes alive in his last act:
+// then they're flung off him and he's bare wood, `bare`). Lit by one cold
+// spotlight from above.
 //
 // The sprite is 88 wide and 82 tall (drawn at double size): the bar near the
 // top (room above it for the rafters, where Tuck works him: rumboldBattle.js),
@@ -607,6 +609,11 @@ function figureTies(p, ox, oy) {
 //                     have snapped (their ends hang from the bar)
 //   chips             [x, y] points of wood flicking off as he digs (on the
 //                     sprite, not moved with him)
+//   bare              true: no crown and no cape rag, just the wood
+//   flung             [{ part: 'crown' or 'cape', dx, dy, turn }]: the crown
+//                     or the rag thrown off him, moved from where it sat and
+//                     turned (radians), drawn behind him (on the sprite, not
+//                     moved with him)
 export function puppetRows(pose = 'idle', opts = {}) {
   const p = poseOf(pose);
   const { ox = 0, oy = 0, bar = {}, strings = 'taut', cut = [] } = opts;
@@ -625,6 +632,7 @@ export function puppetRows(pose = 'idle', opts = {}) {
     });
     c.stamp(controlBar(), bdx, bdy);
   }
+  (opts.flung ?? []).forEach((f) => c.stamp(flungPart(f)));
   const parts = figureParts(p, opts);
   const order = [parts.legL, parts.legR, parts.body, parts.cape];
   if (!p.r.tip) order.push(parts.armR);
@@ -645,7 +653,7 @@ function figureParts(p, opts) {
   h.stamp(head(opts));
   // (Lit up inside, it sits straight: tipped over one eye it reads as a
   // fringe of hair.)
-  h.stamp(crown(opts.glow != null ? 0 : 0.2));
+  if (!opts.bare) h.stamp(crown(opts.glow != null ? 0 : 0.2));
   const tilted = opts.twist ? h.turned(opts.twist, ...NECK) : h;
   const placed = new Cv();
   placed.stamp(tilted, opts.dx ?? 0, opts.hy ?? 0);
@@ -653,15 +661,26 @@ function figureParts(p, opts) {
     legL: leg(p.ll, false),
     legR: leg(p.rl, true),
     body: body(),
-    cape: cape(),
+    cape: opts.bare ? new Cv() : cape(),
     armL: arm(p.l, false),
     armR: arm(p.r, true),
     head: placed,
   };
 }
 
+// The crown or the cape rag thrown off him: turned about its own middle and
+// moved by dx, dy.
+function flungPart({ part: which, dx = 0, dy = 0, turn = 0 }) {
+  const piece = which === 'cape' ? cape() : crown(0);
+  const mid = which === 'cape' ? [36, 44] : [44, 28];
+  const out = new Cv();
+  out.stamp(turn ? piece.turned(turn, ...mid) : piece, dx, dy);
+  return out;
+}
+
 // His parts as rows in PUPPET_PALETTE, each where it is on the sprite (moved
 // by ox, oy): for coming apart. head (with the crown), body (with the cape),
+// unless he's `bare`;
 // armL, armR, legL, legR.
 export function puppetParts(pose = 'idle', opts = {}) {
   const p = poseOf(pose);

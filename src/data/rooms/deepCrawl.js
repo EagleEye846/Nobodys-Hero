@@ -64,6 +64,8 @@ export const DEEP_CRAWL = {
   music: 'deep',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'deep',
+  // How it rings (a narrow drift: ECHOES in src/audio/music.js).
+  echo: 'tunnel',
   // Dark: only your light shows anything (0 to 1).
   dark: 0.92,
   // Glow-worms on Ves's umbrella: your light never drops below this here.

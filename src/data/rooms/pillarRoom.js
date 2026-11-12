@@ -3,6 +3,7 @@
 //   #  wall top (solid)                         W  wall face (solid)
 //   .  floor                                    r  rug
 //   D  doorway (walk through it; see `doors`)   I  tall pillar (walk or hide behind) (solid)
+//   b  low stone block (jump up onto it)        B  tall stone block (jump onto it from a low block)
 export const PILLAR_ROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'pillar_room',
@@ -49,7 +50,6 @@ export const PILLAR_ROOM = {
   textFile: 'interactions/the_ruins.txt',
   props: [
     { sprite: 'gate_wide', x: 9, y: 3, text: 'pillar_gate', opensWith: ['lever_east', 'lever_hidden'], openText: 'pillar_gate_open' },
-    // Up on the high ledge in the corner: jump onto the low blocks, then up again.
     { sprite: 'lever', x: 17, y: 3, text: 'pillar_lever', lever: 'lever_east' },
     { sprite: 'lever', x: 14, y: 10, text: 'pillar_lever', lever: 'lever_hidden' },
   ],
@@ -67,9 +67,5 @@ export const PILLAR_ROOM = {
   // leap from.
   npcs: [
     { enemy: 'columneon', x: 10, y: 6, patrol: [8, 12], behaviour: 'disguise', reach: 3 },
-    { art: 'waxling', enemy: 'waxling', x: 5, y: 9, patrol: [2, 8] },
-    { art: 'bunny', enemy: 'bunny', x: 15, y: 8, patrol: [13, 18] },
-    // Lurking behind the pillar by the east wall.
-    { art: 'duskling', enemy: 'duskling', x: 14, y: 5, patrol: [12, 17], behaviour: 'ambush', reach: 3 },
   ],
 };

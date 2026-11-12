@@ -384,6 +384,9 @@ A sign at the end of the street, in the old writing.
 [last_sign_ves]
 {thoughtful}"THE GATE." That's all it says.
 
+# (draft) The last-chance warning for chapter 3's secrets (the Registry, the smith's forging): past the Gate there is no way back.
+{bored}It doesn't say anything about the way home, either. {thoughtful}If there's something left to do behind us, the old streets, the town, the smith, I'd do it before we walk up to something that big.
+
 # --- THE HERO'S GATE ---
 
 [gate_wall]
@@ -451,13 +454,13 @@ The library's cellar: the stacks, where they kept the books nobody asked for. Th
 Stairs up, back into the library. Somebody propped the hatch open with a book, a long time ago.
 
 [stacks_shelf]
-Ledgers, shelved by year. Three hundred years of them.
+Ledgers, shelved by year. Hundreds of them.
 
 [stacks_heap]
 Books, to the ceiling. Account books, mostly. Somebody wrote down every flag they bought for him.
 
 [stacks_heap_ves]
-{thoughtful}Three hundred years of receipts for bunting.
+{thoughtful}A whole city's worth of receipts for bunting.
 
 [stacks_chest]
 A chest pushed under the bottom shelf, where you'd only find it by falling on it.
@@ -468,5 +471,206 @@ A purse, flat under a heap of ledgers.
 [stacks_purse_ves]
 {smile}So that's where the library's money went.
 
-[old_street_shard]
-Something pale is struck deep into the old stone step, glowing faintly blue. It comes free in your hand.
+# (draft) The Old Street, where the star's splinter used to lie. The scorch, the
+# trail, and the sealed cleft (a secret: the way to the Registry).
+[old_street_scorch]
+A pale scorch on the old step, in the shape of something that was struck into it, and isn't any more. The stone round it is smooth and warm, and glowing a very little.
+
+[old_street_scorch_ves]
+{thoughtful}Something was stuck in there. It's gone, but it didn't go far. Look at the marks.
+
+[old_street_trail]
+A smaller scorch in the flagstones, faintly warm. There's another past it, and another, going away along the foot of the wall.
+
+[old_street_seal]
+A carved panel across a cleft between two houses, taller than a door and as narrow as one. It's cut all over with tiny columns of marks, ruled in rows. Three of the columns are bare: torn off clean, each with a numeral over it. I, II, III. There's a thin line of cold blue light in the stone round the edge.
+
+[old_street_seal_ves]
+{thoughtful}It's a list, I think. Rows and rows of little marks, and three columns where somebody tore the paper out.
+
+{bored}The sword's a start. I'd say the rest of it is paper.
+
+[cleft_lever]
+A lever on a bracket, worn smooth. It's on the east side of the cracked paving.
+
+[cleft_scorch]
+A scorch on the floor, small and round, faintly warm. It gives off a pale blue light, as if there were something underneath.
+
+[cleft_scorch_ves]
+{bored}It's following us. Or we're following it. I can never tell with a thing that hums.
+
+[cleft_inscription]
+A row of tiny marks cut in the wall, in groups of four with a slash through each. Hundreds, going along the lane and out of sight.
+
+[cleft_inscription_ves]
+{thoughtful}Tally marks. Somebody counted something along the whole length of this wall, one stroke at a time.
+
+[cleft_sign]
+A board hung crooked on the wall, in the old city's writing.
+
+[cleft_sign_ves]
+{thoughtful}"REGISTRY STAFF. BY THIS WAY ONLY. PLEASE DO NOT BLOCK THE LANE."
+
+{bored}They'd have hated us.
+
+[cleft_purse]
+A purse, forgotten on the lane's edge by a clerk who must have been in a hurry.
+
+[counting_stone]
+A fallen block of the registry's stone. Walk into it to push it. There's a stone plate in the paving near the south gate.
+
+[counting_desks]
+Rows of tall desks with slanted lids and tin inkwells, side by side along the wall. Every lid is shut.
+
+[counting_desks_ves]
+{thoughtful}Somebody sat at each of these every night with a ledger and a very sharp pencil. It must have been dreadful.
+
+[counting_inscription]
+Words cut deep into the wall over the gate, in the old city's writing, rubbed smooth at the bottom by sleeves.
+
+[counting_inscription_ves]
+{thoughtful}"ALL PRESENT AND CORRECT, OR NOT AT ALL." It's the motto. It's about as cheerful as it sounds.
+
+[counting_sign]
+A board with a list of rules on it, in the old city's writing.
+
+[counting_sign_ves]
+{bored}"No talking. No whistling. No eating at the desks. No leaving until the count is right."
+
+{smile}I'd like to see them enforce the last one.
+
+[counting_purse]
+A purse in a pigeonhole, labelled in tiny neat writing. The label says: PETTY CASH.
+
+[stacks_alcove]
+A narrow gap between two shelves, deep as a doorway. You could slip into it and keep very still.
+
+[stacks_shelves]
+Shelves of ledgers, floor to ceiling, going up out of the lamplight. The spines have years on them, and years, and years.
+
+[stacks_shelves_ves]
+{scared}It's in here, isn't it. Whatever goes along the roof.
+
+[stacks_sign]
+A board on the wall, in the old city's writing, with only one word on it.
+
+[stacks_sign_ves]
+{thoughtful}"HUSH."
+
+{bored}Well. It's not a great start for a reading room.
+
+[registry_stand]
+A stand of black stone, as high as your chest, with a great shut ledger on it. Its cover is warm. The pages inside it are moving, very slightly, like something sleeping.
+
+[registry_stand_after]
+The great ledger lies shut on its stand. It's warm. Its pages are moving very softly, in and out.
+
+[registry_stand_after_ves]
+{smile}Shh. It's asleep.
+
+[registry_ruin]
+A heap of loose paper on the stand where the Register was, going grey. The figures on the top page don't add up. They don't seem to have tried.
+
+[registry_shelves]
+Shelves of old registers, floor to ceiling, one for every year of the Wait. They're all the same. Every page says the same number.
+
+[registry_inscription]
+Letters carved over the shelves in the old city's writing, deep and tidy.
+
+[registry_inscription_ves]
+{thoughtful}"HERE THEY ARE, EVERY ONE. COUNT THEM TWICE." Mum used to say that about the apples.
+
+[registry_purse]
+A fat purse in the pigeonhole at the end of the shelf, labelled in a clerk's hand: FOR THE HERO'S FIRST DAY. UNSPENT.
+
+[registry_purse_ves]
+{bored}Well. He's not going to want it.
+
+# (draft) THE REGISTRY'S QUEST: the Leaf of the Seal, in the Stokehold under the Old Baths; the gauntlet's new rooms; the panel.
+
+[baths_loose_pots]
+A stack of pots, rim to rim, taller than you. It's standing a little crooked against the wall, and there's a drag mark in the dust on the floor under it, as long as it is wide. Walk into it to push it.
+
+[baths_loose_pots_ves]
+{thoughtful}Somebody's been shoving that about. Pots don't wander.
+
+[stoke_inscription]
+A slab of stone over the furnace mouths, cut with the old city's writing. You can't read it.
+
+[stoke_inscription_ves]
+{thoughtful}"STOKERS, TWO TO A SHIFT. ONE TO HOLD THE FIRST DOOR AND ONE TO REACH THE SECOND. THE LEVER IS ON THE WALL, AND THE WALL IS HIGH."
+
+{bored}Of course it is. Every door in this city is somebody's idea of a height joke.
+
+[stoke_stone]
+A round of old millstone, set aside by the stokers to hold a plate down. Walk into it to push it.
+
+[stoke_lever]
+A bronze lever on a bracket high on the wall, well out of your reach, over the second gate.
+
+[stoke_lever_ves]
+{smile}Mine.
+
+[stoke_leaf]
+A page of ruled paper, wedged in the crack of a furnace door to keep it shut, brown at one edge where the fire licked it. In the middle, a round seal in red ink. In the corner: III.
+
+[stoke_leaf_taken]
+A furnace door, ajar, with a crack down the edge where a page was wedged.
+
+[stoke_sign]
+A board over the furnace doors:
+
+STOKERS: TWO TO A SHIFT. FEED THE FIRE. KEEP THE DOORS SHUT.
+
+[cellar_gate]
+A gate of iron bars across the stair up, shut. Three chains run from it into the wall, one to each lever.
+
+[cellar_gate_open]
+The chains go slack, one after another, and the gate rises with a ring like a pen dropped in a glass.
+
+[cellar_gate_reset]
+Clack, clack, clack. All three levers spring back up. Wrong order.
+
+[cellar_lever_names]
+A lever, and carved over it, a column of tiny names.
+
+[cellar_lever_hours]
+A bronze lever on a bracket high up the wall. Over it, a clock face with its hands torn off.
+
+[cellar_lever_hours_ves]
+{smile}Out of the way.
+
+[cellar_lever_seal]
+A lever, and carved over it, a round seal like the one on the panel in the street.
+
+[cellar_lever_span]
+A lever on a bracket, worn smooth. Its chain runs out across the cracked paving, to a span that isn't there yet.
+
+[cellar_inscription]
+A slate over the vats, written in chalk in the old city's letters. You can't read it.
+
+[cellar_inscription_ves]
+{thoughtful}"TO BREAK THE SEAL. FIRST THE NAMES, FOR THEY CAME FIRST. THEN THE HOURS, FOR THEY WERE KEPT. THEN THE SEAL, FOR IT CLOSES."
+
+{smile}Names, hours, seal. It's a very organised cellar.
+
+[cellar_sign]
+A card tacked to a vat: MIX FRESH. DO NOT LEAVE IT TO STAND.
+
+[cellar_purse]
+A purse behind a vat, with an ink stain on it the shape of a thumb.
+
+[waiting_bench]
+A long bench, polished by a great many people sitting very still. A number is cut into each end of the seat.
+
+[waiting_board]
+A board of numbers on the wall, in slots, each number on a tile. Every tile has been turned to the same word, in the old letters.
+
+[waiting_board_ves]
+{thoughtful}It says NEXT. All of them.
+
+{bored}Good. I wasn't looking forward to a wait.
+
+[waiting_sign]
+A card on a nail by the arch: PLEASE HAVE YOUR NAME READY. Underneath, in smaller letters: IT WILL BE ASKED FOR.
+

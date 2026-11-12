@@ -16,3 +16,12 @@ Press Z to continue
 # game waits for one before the intro and its music.)
 [press_start]
 Press Z to start
+
+# A chapter started again from CHAPTERS, short of the gear a player would
+# have by then: the best the last chapter's shops sold, for whoever lacked it.
+# Each piece's line fills in {who} and {gear}. (draft)
+[chapter_kit]
+A kit from the road behind you, for whoever was short of it.
+
+[chapter_kit_piece]
+{who}: {gear}.

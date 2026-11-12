@@ -22,7 +22,7 @@ export const GNAWER = {
   anim: GNAWER_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1500,
+  maxHp: 1900,
   damage: 44,
 
   // The Deep: the hardest regulars of the chapter, and the strangest.

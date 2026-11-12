@@ -1,4 +1,4 @@
-import { Pix, dissolve, recolour, clip } from './pixKit.js';
+import { Pix, recolour, clip } from './pixKit.js';
 
 // The NET WRAITH, 40x42: a fishing net that drowned with its boat and still
 // hangs in the air as if it were in the water. A ghost cut out of rope
@@ -27,9 +27,10 @@ const W = 40;
 const H = 42;
 
 // pose: sway (the bottom swings), tight (0-1, mesh drawn narrower), eye ('glow' | 'narrow' | 'x' | 'happy'),
-// bob (floats up/down 0/1), hook (hook line length), dy.
+// bob (floats up/down 0/1), hook (hook line length), dy, empty (0-1: the ghost has left it, the
+// sea-glow inside thins out and the face goes; 1 is a plain empty net).
 function drawNet(pose) {
-  const { sway = 0, tight = 0, eye = 'glow', bob = 0, hook = 6, dy = 0, droop = 0 } = pose;
+  const { sway = 0, tight = 0, eye = 'glow', bob = 0, hook = 6, dy = 0, droop = 0, empty = 0 } = pose;
   const g = new Pix(W, H);
   const cx = 20;
   const cy = 15 + dy;
@@ -58,7 +59,7 @@ function drawNet(pose) {
       if (edge(x, y)) g.set(x, y, 'N');
       else if (knot(x, y)) g.set(x, y, 'N');
       else if (mesh(x, y)) g.set(x, y, 'n');
-      else g.set(x, y, y > cy ? 'F' : 'f');
+      else if (!empty || ((x * 13 + y * 7) % 10) / 10 >= empty) g.set(x, y, y > cy ? 'F' : 'f');
     }
   }
   // Loose strands hanging from the hem.
@@ -84,8 +85,13 @@ function drawNet(pose) {
     g.set(x + 1, y, 'O');
     g.set(x, y - 2, 'w');
   });
-  // The eyes: two holes where a few knots are gone, and a glow in each.
+  // The eyes: two holes where a few knots are gone, and a glow in each
+  // (nothing there once it's empty).
   const ey = cy - 1;
+  if (empty >= 1) {
+    g.outline('k');
+    return g.rows();
+  }
   const eyeAt = (x) => {
     g.disc(x, ey, 3.2, 3.8, 'e');
     if (eye === 'glow') { g.rect(x - 1, ey - 1, 2, 3, 'g'); }
@@ -105,6 +111,16 @@ function drawNet(pose) {
 
 const FLASH = { n: 'w', N: 'i', f: 'W', F: 'W' };
 
+// The empty net coming down in a heap: squashed toward its bottom row, `k` of
+// its height left (the rows it keeps are spread over the lower part).
+function heap(rows, k) {
+  const h = rows.length;
+  return rows.map((_, y) => {
+    const from = Math.round(h - 1 - (h - 1 - y) / k);
+    return from >= 0 ? rows[from] : '.'.repeat(rows[0].length);
+  });
+}
+
 export const NET_WRAITH_SPRITE = drawNet({});
 
 export const NET_WRAITH_ANIM = {
@@ -115,6 +131,11 @@ export const NET_WRAITH_ANIM = {
     const rows = drawNet({ sway: i % 2 ? 1 : -1, tight: 0.6, eye: 'x', hook: 3, dy: i === 1 ? 1 : 0 });
     return i === 0 ? recolour(rows, FLASH) : rows;
   }),
-  death: clip(4, [0, 1, 2, 3, 4, 5], (i) => dissolve(drawNet({ sway: 0, eye: 'x', droop: Math.min(1, i * 0.4), dy: Math.min(i, 4), hook: 2 }), i >= 1 ? i * 0.17 : 0, 21)),
+  // Beaten, the ghost goes out of it (the glow thins, the face goes), and the
+  // net, empty, drops in a heap with its corks on top.
+  death: clip(5, [0, 1, 2, 3, 4, 5, 6], (i) => {
+    const rows = drawNet({ sway: 0, eye: 'x', droop: Math.min(1, i * 0.4), dy: Math.min(i, 3), hook: 2, empty: [0, 0.5, 1, 1, 1, 1, 1][i] });
+    return heap(rows, [1, 1, 1, 0.8, 0.55, 0.4, 0.36][i]);
+  }),
   spared: clip(3, [0, 1, 2, 3], (i) => drawNet({ sway: [0, 0.4, 0, -0.4][i], eye: 'happy', droop: 0.6, bob: i, hook: 4, dy: i % 2 ? 0 : -1 })),
 };

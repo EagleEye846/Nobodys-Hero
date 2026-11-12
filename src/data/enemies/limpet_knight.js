@@ -19,12 +19,23 @@ export const LIMPET_KNIGHT = {
   // Plume stirs, shield and sword up before an attack, shell slips off when beaten,
   // bows when spared. See src/data/art/limpet_knight.js.
   anim: LIMPET_KNIGHT_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): a clack off the shell when hit, a glint up
+  // the blade before it swings, a drip now and then; beaten, its shell clatters down.
+  feel: { hit: 'shell', windup: 'glint', at: [0.9, 0.12], idle: 'drip', defeat: 'clatter' },
   // Wrack Shore fights use the shanty; the wreck yard's use the storm song.
   music: 'coastBattleStorm',
-  maxHp: 2250,
-  damage: 62,
+  maxHp: 11400,
+  damage: 93,
 
-  difficulty: { density: 1.55, speed: 1.45 },
+  difficulty: { density: 1.70, speed: 1.55 },
+  // Fought alone, its turns run long: as one attack winds down another of
+  // its attacks follows (encore), and under 40% of its HP it layers a light
+  // second attack on top (secondWind). See startAttack in battleScene.js.
+  // (2026-11-10, round 2: the encore comes in sooner and fuller, so the two
+  // attacks overlap; it was { at: 0.85, seconds: 4.5, density: 0.8 }, and the
+  // careful dodger took almost no hits from it.)
+  encore: { at: 0.6, seconds: 6, density: 0.9 },
+  secondWind: { below: 0.4, density: 0.3, delay: 1.6 },
   battlePos: { x: 214, y: 50 },
 
   // Its attacks live in src/battle/attacks/limpet_knight.js.
@@ -38,7 +49,7 @@ export const LIMPET_KNIGHT = {
   talk: [
     { name: 'Inspect' },
     { name: 'Salute', calm: 40 },
-    { name: 'Ask to pass', calm: 35 },
+    { name: 'Gesture to pass', calm: 35 },
     { name: 'Admire the shield', calm: 30 },
   ],
 

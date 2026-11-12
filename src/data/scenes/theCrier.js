@@ -24,7 +24,7 @@ export const THE_CRIER = {
     { do: 'say', who: 'echo', text: 'THE HERO COMES TODAY! TODAY THE HERO WALKS THROUGH THE GATE!\n\nPUT OUT THE FLAGS! RING THE BELLS! WEAR YOUR BEST! TODAY! TODAY!' },
     { do: 'wait', seconds: 1.2 },
     { do: 'say', who: 'echo', text: 'HEAR YE! HEAR YE!' },
-    { do: 'say', who: 'ves', text: '{sad}It doesn\'t even know we\'re here.\n\nIt\'s been saying that every morning. For three hundred years. To nobody.' },
+    { do: 'say', who: 'ves', text: '{sad}It doesn\'t even know we\'re here.\n\nIt\'s been saying that every morning. For a hundred years. To nobody.' },
     { do: 'emote', who: 'player', emote: '...' },
     { do: 'say', who: 'ves', text: '{thoughtful}At home they ring the bell when anybody comes up the stairs. Just in case.\n\n{sad}I used to think that was hopeful. I don\'t know any more.' },
     { do: 'wait', seconds: 0.8 },

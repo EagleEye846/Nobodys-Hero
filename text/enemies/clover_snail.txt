@@ -17,6 +17,14 @@ CLOVER SNAIL looks at its shell, then at you, then at its shell. It seems to be 
 
 Smells like cut clover, and a warm afternoon with nothing in it.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+CLOVER SNAIL is pulling itself back into its shell, one tired inch at a time.
+
+[flavor: spareable]
+CLOVER SNAIL has fallen asleep. Properly asleep, this time. It looks very pleased with itself.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

@@ -146,6 +146,6 @@ export const KELPIE_FOAL_ANIM = {
     const rows = drawFoal({ dy: i === 1 ? 2 : 0, head: i < 2 ? 3 : 1, eye: 'x', mouth: 1, mane: i, splash: 3, legs: 'stand' });
     return i === 0 ? recolour(rows, FLASH) : rows;
   }),
-  death: clip(4, [0, 1, 2, 3, 4, 5], (i) => dissolve(drawFoal({ legs: i > 0 ? 'fold' : 'stand', fold: Math.min(1, i * 0.4), eye: 'x', mouth: 1, mane: i, splash: i }), i >= 3 ? (i - 2) * 0.3 : 0, 17)),
+  death: clip(4, [0, 1, 2, 3, 4, 5], (i) => dissolve(drawFoal({ legs: i > 0 ? 'fold' : 'stand', fold: Math.min(1, i * 0.4), eye: 'x', mouth: 1, mane: i, splash: i }), i >= 4 ? (i - 3) * 0.15 : 0, 17)),
   spared: clip(4, [0, 1, 2, 3], (i) => drawFoal({ mane: i * 1.4, eye: 'glad', head: i % 2 ? 2 : 0, dy: i % 2 ? 1 : 0, splash: 1 })),
 };

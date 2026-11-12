@@ -35,10 +35,10 @@ export const COLORS = {
 };
 
 const PANEL_TOP = STAGE_HEIGHT * S;
-const PARTY_CARD = { x: 10, y: 338, w: 206, h: 46 };
+export const PARTY_CARD = { x: 10, y: 338, w: 206, h: 46 };
 const BUTTON = { x: 226, y: 340, w: 62, h: 42, gap: 5 };
 const TEXT = { x: 24, y: 396, w: 596, size: 28, lineHeight: 27 };
-const SP_GAUGE = { x: 36, y: 84, w: 20, h: 196 };
+export const SP_GAUGE = { x: 36, y: 84, w: 20, h: 196 };
 const BUBBLE = { w: 164, h: 64 };
 const ICON_SIZE = 18;
 

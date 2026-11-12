@@ -90,7 +90,7 @@ export const THE_HUSH_BOSS = {
   // density 1.35) and far above the Warden just before it (2400 HP, 30 damage).
   // Half of it is out of reach until the umbrella's free (`floor`), and you
   // needn't take the rest: MERCY fills in the last phase whatever its HP.
-  maxHp: 8280,
+  maxHp: 10500,
   damage: 46,
   difficulty: { density: 1.6, speed: 1.2 },
   // It doesn't really want to hurt you: as MERCY rises its attacks thin out.

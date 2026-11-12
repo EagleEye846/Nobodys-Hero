@@ -5,8 +5,12 @@
 // south of the room is open air with the view behind it (`vista: { kind: 'sea' }`,
 // src/overworld/seaVista.js). A telescope on the edge, a bench, a sign.
 // The way down is the 4-wide path on the east side (x 23 to 26): steps cut down a
-// buttress of the cliff (the flat prop sy_cliff_path, with its turf edges and hand
-// ropes on posts) to a door at its foot (row 22) into Gullrest's cliff steps.
+// spur of the cliff (the flat prop sy_cliff_path, with its turf edges and hand
+// ropes on posts) to a ragged cave mouth (row 22, the door) into the cave inside the cliff
+// (sunny_cliff_cave, then sunny_cliff_hollow, then Gullrest's cliff steps). The
+// spur runs on down below the mouth to the bottom of the room, standing in the sea
+// with the surf round its foot, so it never hangs in the air. Both side edges of
+// the room are open air below the clifftop, as is everything south of row 12.
 // The meadow ends straight at the drop (row 13 is open air: the cliff's turf lip
 // and rock are drawn hanging under row 12), so nobody's feet are hidden by a lip.
 // Tile key (see src/overworld/brightTiles.js):
@@ -26,6 +30,8 @@ export const SUNNY_SEA_VIEW = {
   vesWell: true,
   // The sea, the beach and the storm behind the open air (src/overworld/seaVista.js).
   vista: { kind: 'sea' },
+  // After chapter 5 the storm on the horizon has gone (seaVista.js, `view.calm`): a thin grey tail of cloud by the tower.
+  calmAfter: { scene: 'the_light_answers', ambience: 'beach' },
   // The scene when you walk to the edge.
 
   tiles: [
@@ -42,23 +48,23 @@ export const SUNNY_SEA_VIEW = {
     ':::::::::::::::::::::::,,::::#',
     '#,,,,,,:::::,,,,,,,,,,,::::::#',
     '#,,,,,,:::::::,,,,,,:::::::,,#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#______________________::::__#',
-    '#____________________________#',
-    '#____________________________#',
-    '#____________________________#',
-    '#____________________________#',
-    '#____________________________#',
-    '#____________________________#',
-    '#____________________________#',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '_______________________::::___',
+    '______________________________',
+    '______________________________',
+    '______________________________',
+    '______________________________',
+    '______________________________',
+    '______________________________',
+    '______________________________',
   ],
 
   // Where the player starts, in tile coordinates.
@@ -67,7 +73,8 @@ export const SUNNY_SEA_VIEW = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 0, y: 9, w: 1, h: 2, to: 'sunny_cliff_meadow', spawn: { x: 42, y: 9 } },
-    { x: 23, y: 22, w: 4, h: 1, to: 'gullrest_cliff_steps', spawn: { x: 9, y: 2 } },
+    // Into the cave mouth at the foot of the steps, into the cave inside the cliff.
+    { x: 23, y: 22, w: 4, h: 1, to: 'sunny_cliff_cave', spawn: { x: 11, y: 1 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -79,7 +86,7 @@ export const SUNNY_SEA_VIEW = {
   textFile: 'interactions/sunnyside.txt',
   props: [
     // The cliff path down: steps cut in the rock, turf edges, hand ropes on posts.
-    { sprite: 'sy_cliff_path', x: 21, y: 23, text: 'sea_path', flat: true, walkable: true },
+    { sprite: 'sy_cliff_path', x: 20, y: 29, text: 'sea_path', flat: true, walkable: true, animation: 'sy_cliff_path', speed: 0.8 },
     { sprite: 'telescope', x: 5, y: 11, text: 'sea_telescope' },
     { sprite: 'bench', x: 15, y: 11, text: 'sea_bench' },
     { sprite: 'sign', x: 21, y: 8, text: 'sea_sign' },

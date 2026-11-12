@@ -19,7 +19,7 @@ export const RINGER = {
     frames: [RINGER_DISGUISE_SPRITES.still, RINGER_DISGUISE_SPRITES.peek, RINGER_DISGUISE_SPRITES.twitch],
     palette: RINGER_PALETTE,
   },
-  maxHp: 160,
+  maxHp: 205,
   damage: 14,
 
   // A Chapter 2 enemy, and a heavy hitter.

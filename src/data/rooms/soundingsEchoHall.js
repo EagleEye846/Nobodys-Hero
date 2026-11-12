@@ -18,6 +18,8 @@
 //   #  rock top (solid)   W  cave rock face (solid)   .  wet slate   q  shingle   ;  shallows
 //   ~  black water (solid)   x  glowing sea-glass (solid)   I  a rock pillar
 
+// The light off a lump of sea-glass: a small bloom and a pool round it.
+const GLASS_GLOW = [{ dy: -8, bloom: 10, strength: 0.45, flicker: 0.1, color: '120, 240, 220' }, { dy: 2, pool: 40, strength: 0.38, flicker: 0.05, color: '120, 240, 220' }];
 export const SOUNDINGS_ECHO_HALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'soundings_echo_hall',
@@ -28,31 +30,34 @@ export const SOUNDINGS_ECHO_HALL = {
   // The Soundings' song ("The Soundings"), and the sounds of a sea cave under it.
   music: 'soundings',
   ambience: 'sea_cave',
+  // After chapter 5 the storm is over (`calmAfter`): the same cave sounds, but the sky in the
+  // cave mouth of its fights clears (coastBackdrops.js) and any `_calm` words are used.
+  calmAfter: { scene: 'the_light_answers', ambience: 'sea_cave' },
   vesWell: true,
 
   // The HIGH-water map.
   tiles: [
     '###..################..#####################',
-    '#WW..WWWWWWWWWWWWWWWW..WWWWWWWWWWWWWWWWWWWW#',
-    '#.....x.......................x............#',
-    '#.....x...xx...............................#',
+    '#WW..WWWWWWW###WWWWWW..WWWWWWWWWWWWWW####WW#',
+    '#.....x.....WWW...............x......W##W..#',
+    '#.....x...xx..........................WW...#',
     '#x.x.xx.....................I..............#',
     '..............I.............................',
     '........I...................................',
     '#..................................x.......#',
-    '#...............x..........x...............#',
+    '#..~~.......~~..x..........x..........~....#',
+    '#~~~~~~....~~~~~~~~~~~~~~~~~~~~~~~~~.qqqqqq#',
+    '#~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqxxq#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
-    '#qxqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
+    '#~~~~~~~x~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqxxq#',
+    '#~~~~~~~~x~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqq#',
+    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqq#',
+    '#qxqqq~~~~x~~~~~~~~~~~~~~~~~~~~~~~x~~qqqqqq#',
+    '#qqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqqq#',
+    '.qqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqqq.',
+    '.qqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~x~qqqqqq.',
     '#qqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
-    '.qqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq.',
-    '.qqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq.',
-    '#qqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
-    '#qqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~qqqqqq#',
+    '#qqqqqqq~~~~~~~~~~~~~~~~~~~~~~~~~x~~~qqqqqq#',
     'WWWWWWWWWWWWWWWWWWWWW..WWWWWWWWWWWWWWWWWWWWW',
     '#####################..#####################',
   ],
@@ -100,7 +105,7 @@ export const SOUNDINGS_ECHO_HALL = {
     { x: 21, y: 0, w: 2, h: 1, to: 'soundings_up', spawn: { x: 11, y: 26 } },
     { x: 21, y: 22, w: 2, h: 1, to: 'soundings_drowned_chapel', spawn: { x: 16, y: 2 } },
     // The shortcuts: the chute's foot from the Three Wells, and the passage up to the Weight Room's gallery.
-    { x: 43, y: 17, w: 1, h: 2, to: 'soundings_three_wells', spawn: { x: 33, y: 18 } },
+    { x: 43, y: 17, w: 1, h: 2, to: 'soundings_three_wells', spawn: { x: 34, y: 17 } },
     { x: 0, y: 17, w: 1, h: 2, to: 'soundings_weight_room', spawn: { x: 1, y: 10 } },
     // The secret, up through the outcrop.
     { x: 3, y: 0, w: 2, h: 1, to: 'secret_soundings_bell', spawn: { x: 7, y: 7 } },
@@ -131,6 +136,31 @@ export const SOUNDINGS_ECHO_HALL = {
     { sprite: 'gold_pouch', x: 17, y: 19, text: 'hall_bed_pouch', lowTide: true, gold: 90, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'c5_seaweed_heap', x: 39, y: 15, text: 'sound_weed' },
     { sprite: 'sign', x: 3, y: 16, text: 'hall_sw_sign' },
+    // The hall's own rock: weed off a shelf on the north wall, sea-glass growing out by the way
+    // up, dripstone on the ledge, the sounders' ladder up to a crack in the roof, rock standing
+    // in the two deep pools, and what the sea has piled on the east strip.
+    { sprite: 'sd_weed_ledge', x: 16, y: 2, text: 'sound_weed_ledge' },
+    { sprite: 'sd_glass_outcrop', x: 28, y: 2, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_scree', x: 31, y: 2, flat: true, walkable: true },
+    { sprite: 'sd_rope_ladder', x: 36, y: 2, text: 'sound_rope_ladder' },
+    { sprite: 'sd_stalagmites', x: 41, y: 2, text: 'sound_stalagmites' },
+    { sprite: 'sd_diver_gear', x: 36, y: 4, text: 'sound_diver_gear' },
+    { sprite: 'sd_glass_rock', x: 36, y: 7, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_stalagmite', x: 15, y: 5, text: 'sound_stalagmites' },
+    { sprite: 'sd_scree', x: 9, y: 7, flat: true, walkable: true },
+    { sprite: 'sd_rock_pile', x: 11, y: 8, text: 'sound_rocks' },
+    { sprite: 'sd_scree', x: 29, y: 8, flat: true, walkable: true },
+    { sprite: 'sd_glass_bed', x: 17, y: 8, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 6, y: 7, flat: true, walkable: true },
+    { sprite: 'sd_sea_rocks', x: 3, y: 11 },
+    { sprite: 'sd_sea_rock', x: 6, y: 13 },
+    { sprite: 'sd_sea_rock', x: 2, y: 13 },
+    { sprite: 'sd_sea_rock', x: 6, y: 15 },
+    { sprite: 'sd_sea_rock', x: 35, y: 13 },
+    { sprite: 'sd_timbers', x: 40, y: 10, text: 'sound_timbers' },
+    { sprite: 'sd_glass_rock', x: 42, y: 13, text: 'sound_glass', glow: GLASS_GLOW },
+    { sprite: 'sd_scree', x: 37, y: 17, flat: true, walkable: true },
+    { sprite: 'sd_stalagmites', x: 4, y: 20, text: 'sound_stalagmites' },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'hall_water', q: 'hall_shingle', ';': 'hall_puddle', x: 'sound_glass', I: 'hall_pillar' },
 

@@ -69,19 +69,30 @@ defineBulletArt('gullSandwich', {
   spin: 2,
 });
 
-// A taped fist, small and big.
-function fist(size) {
-  const c = (size - 1) / 2;
-  const g = new Pix(size, size);
-  g.disc(c, c, c, c, 't');
-  g.line(1, c - 1.5, size - 2, c - 1.5, 'T');
-  g.line(1, c + 1.5, size - 2, c + 1.5, 'T');
-  g.disc(c - 1, c - 1, c * 0.4, c * 0.4, 'w', 't');
+// A taped fist punching left: four knuckle rolls at the front, a thumb folded
+// across them, sailor's tape round the wrist, and (on the big one) speed lines
+// streaming off the back.
+function fist(scale, streaks) {
+  const f = Math.max(2, Math.round(2 * scale));
+  const H = f * 4 + 1;
+  const back = streaks ? 5 : 0;
+  const W = Math.round(H * 1.25) + back + 1;
+  const g = new Pix(W, H + 2);
+  const front = 1;
+  const wrist = W - back - Math.round(H * 0.4) - 1;
+  g.rect(front + f / 2, 1, W - back - front - f / 2 - 1, H, 't');
+  for (let i = 0; i < 4; i++) g.disc(front + f / 2, 1 + f * i + f / 2, f / 2 + 0.4, f / 2, 't');
+  for (let i = 1; i < 4; i++) g.line(front, 1 + f * i, front + f, 1 + f * i, 'T');
+  g.line(front + f, 1 + Math.round(H * 0.62), wrist - 1, 1 + Math.round(H * 0.62), 'T');
+  g.line(front + 1, 2, front + f, 2, 'w');
+  g.rect(wrist, 1, W - back - wrist - 1, H, 'c');
+  for (let x = wrist + 1; x < W - back - 1; x += 2) g.line(x, 1, x, H, 'h');
+  if (streaks) for (const y of [2, Math.round(H / 2), H - 1]) g.line(W - back + 1, y + 1, W - 1, y + 1, 's');
   g.outline('k');
   return g.rows();
 }
-defineBulletArt('gullFist', { frames: [fist(7)], palette: GULL, radius: 3.2, spin: 1 });
-defineBulletArt('gullFistBig', { frames: [fist(13)], palette: GULL, radius: 5.8, spin: 1 });
+defineBulletArt('gullFist', { frames: [fist(1, false)], palette: GULL, radius: 3.2 });
+defineBulletArt('gullFistBig', { frames: [fist(1.7, true)], palette: GULL, radius: 5.8 });
 
 export const GULLION_ATTACKS = {
   // Dives: he drops out of the sky or across the box at where you are (a thin

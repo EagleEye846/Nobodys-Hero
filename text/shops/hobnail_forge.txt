@@ -8,6 +8,14 @@
 [greeting]
 Hn.
 
+# (draft)
+[greeting 2]
+Hn. Back.
+
+# (draft)
+[greeting 3]
+(He kicks a stool towards the vent. It's the warm one.) Sit.
+
 [menu_prompt]
 Well?
 
@@ -88,18 +96,27 @@ Missing. Bring star.
 
 (He jabs a thumb at the floor.) Fell. Down. Old Seam. Hn.
 
+# (draft) The shard is no longer just lying in the crack: something keeps it, at the bottom of Seam Nine.
+(He lowers the thumb. Then lowers it again, further.) ...Deeper. Past the hats. Something keeps it. Hn.
+
 [forge_now]
 Hn!
 
-(Hobnail pulls his goggles down. The shard goes into the fire, then onto the blade, and the whole forge fills with sparks. He hammers for a long, long time without a word.)
+(Hobnail pulls his goggles down. The shard goes into the fire, then onto the blade, and the whole forge fills with sparks.)
 
-...Good.
+# The rest, after the show: the scene reforge_hobnail (src/data/scenes/reforgeShows.js).
 
 [forge_done]
 Done. Good.
 
+# (draft) The true ending: a hint that it isn't finished.
+(He taps the blade with one claw, and listens to it ring for a long time.) ...Not finished. More. Out there.
+
 [forge_later]
 First. Other. Smith.
+
+# (draft) The true ending's rule: an earlier forging was missed, and it's too late now.
+(He turns the blade over, slowly, and shakes his head.) Missed one. Too late. Hn.
 
 [forge_hint]
 Star? Hn. Sword. Find.

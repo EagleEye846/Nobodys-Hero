@@ -13,7 +13,7 @@ export const RUSSET = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: RUSSET_SPRITE, palette: RUSSET_PALETTE },
-  maxHp: 320,
+  maxHp: 405,
   damage: 18,
 
   // A Chapter 3 enemy, and a quick one.

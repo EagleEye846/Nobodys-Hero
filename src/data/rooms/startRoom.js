@@ -59,7 +59,6 @@ export const START_ROOM = {
     { sprite: 'sign', x: 21, y: 3, text: 'east_sign' },
     { sprite: 'merchant', x: 11, y: 5, shop: 'ruins_shop' },
     { sprite: 'savepoint', x: 3, y: 12, save: true },
-    // He's gone on ahead of you once you meet him again up Mount Vigil.
     { sprite: 'keeper', x: 9, y: 15, npc: 'old_keeper', until: 'keeper_on_the_shoulder' },
   ],
 
@@ -76,8 +75,5 @@ export const START_ROOM = {
   // leap from.
   npcs: [
     { art: 'dummy', enemy: 'dummy', x: 21, y: 11, patrol: [18, 24] },
-    { art: 'bunny', enemy: 'bunny', x: 20, y: 16, patrol: [16, 26] },
-    { art: 'waxling', enemy: 'waxling', x: 21, y: 5, patrol: [16, 26] },
-    { art: 'bunny', enemy: 'bunny', x: 24, y: 8, patrol: [16, 27] },
   ],
 };

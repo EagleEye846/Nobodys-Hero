@@ -17,7 +17,7 @@ export const HERALDS_ECHO = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'valley',
   sprite: { rows: HERALDS_ECHO_SPRITE, palette: HERALDS_ECHO_PALETTE },
-  maxHp: 780,
+  maxHp: 990,
   damage: 28,
 
   // Lots of words, at a good clip.

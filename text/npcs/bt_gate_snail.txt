@@ -3,7 +3,7 @@
 [first]
 Oh. Good. I got here. I was starting to think I wouldn't.
 
-Is it... the Hero? I set off to see the Hero last time, too. I got there just as they left.
+Is it... the Hero? I set off to see the Hero last time, too. I got there just as he left.
 
 [repeat]
 I left home the morning before last. It's four doors down. I'd like to be back by the weekend.
@@ -19,3 +19,25 @@ I saw it flare. I was even facing the right way. I started turning round at brea
 
 [repeat after the_light_goes_up]
 I think I'll just sit here and look at it for a hundred years or so.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Last time, all I saw was his heels. Very small heels, going round a corner. I've thought about them a great deal.
+
+# (draft)
+[repeat 3]
+Don't wait for me. Nobody does. It's restful, being waited for by nobody.
+
+# (draft)
+[repeat_ves 3]
+{smile}We'll wave from the corner. {bored}You'll see our heels.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+I'll walk you to the pithead, if you like. You go on. I'll catch you up next month.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've turned round to face it properly now. It took all morning. Worth every bit.

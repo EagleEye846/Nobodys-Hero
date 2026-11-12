@@ -17,3 +17,25 @@ It's SO BRIGHT you can see the lava! Chalk lava! It's everywhere!
 
 [repeat after the_light_goes_up]
 Hop! Hop! Don't look at the ceiling, look at the squares.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+You've got very big feet. That's not a rule. It's just a worry.
+
+# (draft)
+[repeat 3]
+You can have a go if you like. Hop on one foot. No, the other one. No. You're out.
+
+# (draft)
+[repeat_ves 3]
+{bored}You didn't even move.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+The king's never played. He'd be out straight away. Too much hat on the lines.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Nine to nothing. He went on the line again. Everybody cheered. It's that sort of day.

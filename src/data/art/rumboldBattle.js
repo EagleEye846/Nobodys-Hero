@@ -435,7 +435,9 @@ export const RUMBOLD_JAMMED_ANIM = {
 // Tuck has let go, and the heap gets up anyway: a light burns INSIDE the
 // hollow wood, white-gold and a little cold, and shows through the gaps at
 // every joint, a seam down his chest, the crack in his head and every face he
-// digs. His strings go taut up to a bar nobody's holding. Its idle is wrong:
+// digs. The crown and the rag of cape are flung off him as he's hauled up,
+// and he's bare wood from then on. His strings go taut up to a bar nobody's
+// holding. Its idle is wrong:
 // the head ticks sideways, the jaw clacks out of time with anything, the arms
 // hang and then snap up. Tuck has been dragged down out of the rafters and
 // hangs from strings tied to its hand, at the left, small and scared, his
@@ -464,12 +466,12 @@ export const RUMBOLD_JAMMED_ANIM = {
 //                          down 'down')
 
 // One frame of the living king. pose (l, r arms, legs both legs) and
-// puppetRows' options (glow 3 unless said); tuck, ty, tx: Tuck's frame and
+// puppetRows' options (glow 3 and bare unless said); tuck, ty, tx: Tuck's frame and
 // where he hangs; tie: Tuck's strings 'taut', 'slack' or 'none'; dots:
 // motes of light.
 function alive({ l = 'hang', r = 'sag', legs = 'dangle', tuck = 'a', ty = 44, tx = 1, tie = 'taut', dots = [], withTuck = true, ...opts }) {
   const pose = { l, r, ll: legs, rl: legs };
-  const o = { glow: 3, ...opts };
+  const o = { glow: 3, bare: true, ...opts };
   return frame(pose, o, {
     top: 'beam',
     after: (g) => {
@@ -576,7 +578,7 @@ function breakFrames() {
   const pose = { l: 'hang', r: 'sag' };
   const out = [];
   for (let f = 0; f < total; f++) {
-    const opts = { glow: glowBy[f], jaw: jawBy[f], dx: dxBy[f] };
+    const opts = { glow: glowBy[f], jaw: jawBy[f], dx: dxBy[f], bare: true };
     const parts = puppetParts(pose, opts);
     const g = grid(puppetRows(pose, { ...opts, oy: 200, strings: 'none', cut: f >= 10 ? 'all' : [] }));
     rafters(g, null);
@@ -614,7 +616,7 @@ export const RUMBOLD_STARE = {
   fps: 4,
   frames: [
     alive({}),
-    ...dig('stare', 3, { l: 'hang', r: 'sag' }, { glow: 3 }, { top: 'beam', after: (g) => tuckStrung(g, { hand: puppetHandL('idle'), tuck: 'd', ty: 44 }) }),
+    ...dig('stare', 3, { l: 'hang', r: 'sag' }, { glow: 3, bare: true }, { top: 'beam', after: (g) => tuckStrung(g, { hand: puppetHandL('idle'), tuck: 'd', ty: 44 }) }),
     ...[0.3, 0.8, 1.4, 2.0, 2.6, Math.PI].map((twist, i) => alive({ gouge: { kind: 'stare' }, twist, tuck: i % 2 ? 'd' : 'e' })),
     alive({ gouge: { kind: 'stare' }, twist: Math.PI, tuck: 'e' }),
   ],
@@ -689,16 +691,17 @@ export const RUMBOLD_ALIVE_ANIM = {
   ] },
   hurt: { fps: 12, frames: [alive({ ox: 3, oy: 1, glow: 1, gouge: { kind: 'gape' } }), alive({ ox: -2, glow: 2, gouge: { kind: 'gape' } }), alive({})] },
   // The heap Tuck dropped: dark, then a flicker in the joints, then the
-  // light; the strings go taut and haul it up, and Tuck comes down off his
-  // beam on them.
+  // light; the strings go taut and haul it up, the jerk flinging his crown
+  // and the rag of cape off him (spinning away off the stage to the right),
+  // and Tuck comes down off his beam on them.
   intro: { fps: 5, frames: [
     SPARED_FRAMES[SPARED_FRAMES.length - 1],
     kindle(0),
     kindle(1, 2),
     kindle(2, 3),
-    alive({ l: 'limp', r: 'limp', legs: 'limp', jaw: 3, twist: 0.4, hy: 2, oy: 3, tuck: 'd', ty: 14 }),
-    alive({ l: 'up', r: 'snap', jaw: 1, tuck: 'a', ty: 30 }),
-    alive({ l: 'snap', r: 'up', legs: 'kick', jaw: 3, dx: 1, tuck: 'c', ty: 40 }),
+    alive({ l: 'limp', r: 'limp', legs: 'limp', jaw: 3, twist: 0.4, hy: 2, oy: 3, tuck: 'd', ty: 14, flung: [{ part: 'cape', dx: 6, dy: 2, turn: 0.5 }, { part: 'crown', dx: 9, dy: -7, turn: 0.7 }] }),
+    alive({ l: 'up', r: 'snap', jaw: 1, tuck: 'a', ty: 30, flung: [{ part: 'cape', dx: 24, dy: 8, turn: 1.6 }, { part: 'crown', dx: 26, dy: -6, turn: 2.0 }] }),
+    alive({ l: 'snap', r: 'up', legs: 'kick', jaw: 3, dx: 1, tuck: 'c', ty: 40, flung: [{ part: 'cape', dx: 50, dy: 18, turn: 2.8 }, { part: 'crown', dx: 48, dy: 4, turn: 3.4 }] }),
     alive({}),
   ] },
   stare: RUMBOLD_STARE,

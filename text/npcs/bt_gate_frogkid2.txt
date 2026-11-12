@@ -17,3 +17,25 @@ I knew it. I SAID you'd do it. I said so to a toad.
 
 [repeat after the_light_goes_up]
 I'm guarding the party. It's a very dangerous party.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Password? ...There isn't one. I just like asking.
+
+# (draft)
+[repeat 3]
+If anything comes, I hit it with my sword. Then I run. That's the plan. The second bit's the good bit.
+
+# (draft)
+[repeat_ves 3]
+{smile}Sound plan. I've used it.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+My helmet's for soup on Tuesdays. Don't come back on a Tuesday. I won't be guarding.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Nothing's attacked the party yet. That's because of me.

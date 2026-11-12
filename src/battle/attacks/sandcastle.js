@@ -1,5 +1,5 @@
 import { defineBulletArt } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
 
 // The Sandcastle's attacks. A living sandcastle, very pleased with itself,
 // and quite sure the tide is not coming: so it fires sand from its turrets in
@@ -15,11 +15,6 @@ import { Pix } from '../../data/art/ch5Kit.js';
 
 const SAND = { k: '#3a2e1c', s: '#e8cf8e', S: '#caa968', d: '#a88848', l: '#f6e6b0', m: '#9a7c44', w: '#5aa0c8', W: '#a8d8ec', e: '#ffffff', r: '#d8453a', R: '#9c2a2a', f: '#e0d4b0', c: '#f4dcdc', C: '#e49aa0' };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // A pellet of sand: a tight little ball, and a clod (bigger, lumpier).
 defineBulletArt('castlePellet', {

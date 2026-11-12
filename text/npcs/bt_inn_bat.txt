@@ -17,3 +17,25 @@
 
 [repeat after the_light_goes_up]
 ...zzz... it's a party... zzz... don't wake me... zzz...
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+...zzz... not another rule... zzz... I didn't do it... zzz... I did do it...
+
+# (draft)
+[repeat 3]
+...zzz... left side... zzz... other left... zzz...
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+...zzz... king... never sleeps... zzz... never once... zzz... I'd know...
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}...Talking in his sleep. {bored}Probably.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+...zzz... save me a bowl... zzz... the big bowl...

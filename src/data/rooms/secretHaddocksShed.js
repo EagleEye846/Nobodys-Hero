@@ -7,10 +7,11 @@
 // the Muffler (the hero), the Ugly Sou'wester (Ves), the Cork Float (Bramble).
 // No monsters, no puzzle.
 //
-// (draft) story text, for Patrick to review (text/interactions/haddock_shed.txt)
+// (draft) (text/interactions/haddock_shed.txt)
 //
 // Tile key (see src/overworld/coastTiles.js, saltcombe, indoors):
 //   #  wall top (solid)   h  board wall (solid)   o  floor boards
+//   .  the boards round the workbench (crossways, laid by him)
 
 export const SECRET_HADDOCKS_SHED = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -19,9 +20,15 @@ export const SECRET_HADDOCKS_SHED = {
   name: "HADDOCK'S SHED",
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'saltcombe',
-  // "Salt and Rope", with the rain on the roof.
-  music: 'saltcombe',
+  // "Salt and Rope (Indoors)", as in the other Saltcombe rooms (the shed only opens after
+  // chapter 5, so it's always "What the Tide Left (Indoors)", see `musicAfter`).
+  music: 'saltcombeIndoor',
+  // After chapter 5 (the_light_answers) the town is quiet: "What the Tide Left".
+  musicAfter: { scene: 'the_light_answers', song: 'saltcombeAfterIndoor' },
   ambience: 'stilt_inside',
+  // After chapter 5 the storm is over (`calmAfter`): his stove cold, the boards, the quay
+  // through the walls (`calm_shed`), and the room's `_calm` words.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_shed' },
   vesWell: true,
   indoors: true,
 
@@ -31,10 +38,10 @@ export const SECRET_HADDOCKS_SHED = {
     'hhhhhhhhhhhhhh',
     '#oooooooooooo#',
     '#oooooooooooo#',
+    '#oooo.....ooo#',
+    '#oooo.....ooo#',
     '#oooooooooooo#',
-    '#oooooooooooo#',
-    '#oooooooooooo#',
-    '#oooooooooooo#',
+    '##oooooooooo##',
     '######oo######',
   ],
 
@@ -66,6 +73,14 @@ export const SECRET_HADDOCKS_SHED = {
     { sprite: 'hs_bench_hero_0', x: 6, y: 6, text: 'shed_gift_hero', gives: 'haddocks_muffler', react: true, taken: { sprite: 'hs_bench_empty_0', text: 'shed_bench_empty' } },
     { sprite: 'hs_bench_ves_1', x: 7, y: 6, text: 'shed_gift_ves', gives: 'ugly_sou_wester', react: true, taken: { sprite: 'hs_bench_empty_1', text: 'shed_bench_empty' } },
     { sprite: 'hs_bench_bramble_2', x: 8, y: 6, text: 'shed_gift_bramble', gives: 'cork_float', react: true, taken: { sprite: 'hs_bench_empty_2', text: 'shed_bench_empty' } },
+    // (2026-11-08) His sea boots by the door.
+    { sprite: 'in_boots_dry', x: 5, y: 8, text: 'in_shed_boots' },
+
+    // (2026-11-09) His oilskin on its peg by the back wall, his rods in the west corner, a little sea
+    // chest with a blanket on it. Off the way from the door (6..7,9) to the bench (6..8,6).
+    { sprite: 'in_oilskin_peg', x: 12, y: 2, text: 'in_shed_oilskin' },
+    { sprite: 'in_rods_corner', x: 1, y: 5, text: 'in_shed_rods' },
+    { sprite: 'in_sea_chest_small', x: 11, y: 8, text: 'in_shed_chest' },
   ],
   tileTexts: { h: 'shed_wall', '#': 'shed_beams' },
 

@@ -173,10 +173,22 @@ export const MOTH_ATTACKS = {
     const pattern = shuffleBag(['single', 'single', 'pair']);
     const warn = 1.0;
     const shine = every(2.4, 2.8, (bullets, soul) => {
-      const lantern = edgePoint(box, edge(), -4);
+      let lantern = edgePoint(box, edge(), -4);
+      // Hugging a wall? Half the time the lantern comes in on the next edge
+      // round, right in line with you, and shines straight down the wall.
+      if (Math.random() < 0.5) {
+        if (soul.x < box.x + 12) lantern = { x: soul.x, y: soul.y < box.y + box.h / 2 ? box.y + box.h + 4 : box.y - 4 };
+        else if (soul.x > box.x + box.w - 12) lantern = { x: soul.x, y: soul.y < box.y + box.h / 2 ? box.y + box.h + 4 : box.y - 4 };
+        else if (soul.y < box.y + 12) lantern = { x: soul.x < box.x + box.w / 2 ? box.x + box.w + 4 : box.x - 4, y: soul.y };
+        else if (soul.y > box.y + box.h - 12) lantern = { x: soul.x < box.x + box.w / 2 ? box.x + box.w + 4 : box.x - 4, y: soul.y };
+      }
       bullets.push(new Shot({ x: lantern.x, y: lantern.y, art: 'mothLantern', harmless: true, life: warn + 0.6 }));
       const aim = angleTo(lantern, soul);
-      const angles = pattern() === 'single' ? [aim + rand(-0.12, 0.12)] : [aim - 0.5, aim + 0.5];
+      // A single beam comes within a couple of pixels of you however far
+      // off the lantern is (it used to wander by an angle, so from across
+      // the box it missed a still soul by ten pixels or more).
+      const slip = rand(-2, 2) / Math.max(20, Math.hypot(soul.x - lantern.x, soul.y - lantern.y));
+      const angles = pattern() === 'single' ? [aim + slip] : [aim - 0.5, aim + 0.5];
       for (const angle of angles) {
         bullets.push(new Line({
           x: lantern.x,
@@ -196,8 +208,11 @@ export const MOTH_ATTACKS = {
   },
 
   // A lantern swings back and forth on a chain from the top of the box,
-  // shaking loose flames that fly off the way it's swinging and fall.
-  mothSwingingLantern(box, density, { Shot, every, rand }) {
+  // shaking loose flames that fly off the way it's swinging and fall. Now
+  // and then its flame flares up and a spark leaps out toward your light
+  // (it's a moth's lantern: it goes for light), slow, so you see it come,
+  // and bending after you for a moment.
+  mothSwingingLantern(box, density, { Shot, every, rand, angleTo }) {
     const pivot = { x: box.x + box.w / 2, y: box.y - 6 };
     const chainLength = 30;
     const reach = 0.95; // widest swing, in radians
@@ -214,15 +229,21 @@ export const MOTH_ATTACKS = {
         x: lantern.x,
         y: lantern.y + 3,
         vx: sideways * 0.6 + rand(-10, 10),
-        vy: rand(-18, 4),
+        // (Some fly up as high as the top of the box before they fall.)
+        vy: rand(-36, 4),
         gravity: 70,
         art: 'mothSpark',
       }));
     });
 
+    const leap = every(1.5, 1.9, (bullets, soul) => {
+      const aim = angleTo(lantern, soul);
+      bullets.push(new Shot({ x: lantern.x, y: lantern.y + 3, vx: Math.cos(aim) * 42, vy: Math.sin(aim) * 42, warn: 0.35, life: 2, homing: { target: soul, turn: 1.4 }, art: 'mothSpark' }));
+    }, { first: 1.2 });
+
     return {
       duration: 6.5,
-      update: (dt, bullets) => {
+      update: (dt, bullets, soul) => {
         time += dt;
         if (!lantern) {
           lantern = new Shot({ x: pivot.x, y: pivot.y + chainLength, art: 'mothLantern', harmless: true });
@@ -234,6 +255,7 @@ export const MOTH_ATTACKS = {
         lantern.y = pivot.y + Math.cos(angle) * chainLength;
         // Give it a moment to start swinging before the flames shake loose.
         if (time > 0.6) drop(dt, bullets);
+        if (time < 5.6) leap(dt, bullets, soul);
         if (time > 6.2) {
           lantern.life = 0;
           chain.done = true;
@@ -260,7 +282,7 @@ export const MOTH_ATTACKS = {
         for (const cocoon of cocoons) {
           cocoon.t -= dt;
           if (cocoon.t > 0) continue;
-          const aim = angleTo(cocoon, soul) + rand(-0.35, 0.35);
+          const aim = angleTo(cocoon, soul) + rand(-0.12, 0.12);
           for (let i = 0; i < 5; i++) {
             const angle = aim + (i / 5) * Math.PI * 2;
             bullets.push(new Shot({
@@ -280,8 +302,9 @@ export const MOTH_ATTACKS = {
 
   // A big moth drifts back and forth across the top of the box beating its
   // wings, and the glittering dust it sheds spirals out in two turning arms.
-  // Slip through the gaps between them.
-  mothWingDust(box, density, { Shot, rand }) {
+  // Slip through the gaps between them. Every third beat it shakes a scale
+  // off straight at you, so the gaps aren't a place to stand still.
+  mothWingDust(box, density, { Shot, rand, angleTo }) {
     const home = { x: box.x + box.w / 2, y: box.y + 12 };
     const spinRate = 1.2; // how fast the arms turn, radians per second
     const shedEvery = 0.46;
@@ -290,9 +313,10 @@ export const MOTH_ATTACKS = {
     let turn = rand(0, Math.PI * 2);
     let moth = null;
 
+    let beats = 0;
     return {
       duration: 6.5,
-      update: (dt, bullets) => {
+      update: (dt, bullets, soul) => {
         time += dt;
         turn += spinRate * dt;
         if (!moth) {
@@ -305,6 +329,10 @@ export const MOTH_ATTACKS = {
         shedTimer -= dt;
         while (shedTimer <= 0 && time < 6) {
           shedTimer += shedEvery;
+          if (++beats % 3 === 0) {
+            const aim = angleTo(moth, soul);
+            bullets.push(new Shot({ x: moth.x, y: moth.y, vx: Math.cos(aim) * 36, vy: Math.sin(aim) * 36, art: 'mothScale' }));
+          }
           for (const arm of [0, Math.PI]) {
             const angle = turn + arm;
             bullets.push(new Shot({

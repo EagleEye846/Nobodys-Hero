@@ -1,4 +1,5 @@
 import { TILE_SIZE as T } from '../config.js';
+import { caveSoftEdge } from './caveBlend.js';
 
 // How Chapter 4's three underground regions look: the Diggings (the creature
 // folk's mines), the Stillwater (the great black lake) and the Deep (the
@@ -354,7 +355,8 @@ function lakeFloor(ctx, x, y, tx, ty, room) {
   if (!room) return;
   if (wallish(room.tileAt(tx, ty - 1))) { shade(ctx, x, y, T, 3, 0.5, '4, 8, 24'); shade(ctx, x, y + 3, T, 2, 0.22, '4, 8, 24'); }
   // Wet where the water laps it.
-  const wet = (dx, dy) => room.tileAt(tx + dx, ty + dy) === '~';
+  // (Where the blend pass draws a ragged shore instead, the straight one is left out.)
+  const wet = (dx, dy) => room.tileAt(tx + dx, ty + dy) === '~' && !caveSoftEdge(room, tx, ty, dx, dy);
   if (wet(0, -1)) { px(ctx, '#3c4964', x, y, T, 2); px(ctx, '#8aa0c0', x, y + 2, T, 1); }
   if (wet(0, 1)) { px(ctx, '#3c4964', x, y + T - 3, T, 3); px(ctx, '#8aa0c0', x + 1, y + T - 4, T - 2, 1); }
   if (wet(-1, 0)) { px(ctx, '#3c4964', x, y, 2, T); px(ctx, '#8aa0c0', x + 2, y + 1, 1, T - 2); }
@@ -484,17 +486,18 @@ function lakeShallows(ctx, x, y, tx, ty, room) {
   }
   if (!room) return;
   const kind = (dx, dy) => room.tileAt(tx + dx, ty + dy);
-  const deep = (c) => c === '~';
-  const dry = (c) => c !== ';' && c !== '~' && c !== null;
-  if (deep(kind(0, -1))) { shade(ctx, x, y, T, 5, 0.6, '2, 6, 16'); }
-  if (deep(kind(0, 1))) { shade(ctx, x, y + T - 5, T, 5, 0.6, '2, 6, 16'); }
-  if (deep(kind(-1, 0))) { shade(ctx, x, y, 5, T, 0.6, '2, 6, 16'); }
-  if (deep(kind(1, 0))) { shade(ctx, x + T - 5, y, 5, T, 0.6, '2, 6, 16'); }
-  // Foam-edge where it meets the shore.
-  if (dry(kind(0, -1))) px(ctx, '#9ab4d0', x, y, T, 1);
-  if (dry(kind(0, 1))) px(ctx, '#9ab4d0', x, y + T - 1, T, 1);
-  if (dry(kind(-1, 0))) px(ctx, '#9ab4d0', x, y, 1, T);
-  if (dry(kind(1, 0))) px(ctx, '#9ab4d0', x + T - 1, y, 1, T);
+  const soft = (dx, dy) => caveSoftEdge(room, tx, ty, dx, dy);
+  const deep = (dx, dy) => kind(dx, dy) === '~' && !soft(dx, dy);
+  const dry = (dx, dy) => { const c = kind(dx, dy); return c !== ';' && c !== '~' && c !== null && !soft(dx, dy); };
+  if (deep(0, -1)) { shade(ctx, x, y, T, 5, 0.6, '2, 6, 16'); }
+  if (deep(0, 1)) { shade(ctx, x, y + T - 5, T, 5, 0.6, '2, 6, 16'); }
+  if (deep(-1, 0)) { shade(ctx, x, y, 5, T, 0.6, '2, 6, 16'); }
+  if (deep(1, 0)) { shade(ctx, x + T - 5, y, 5, T, 0.6, '2, 6, 16'); }
+  // Foam-edge where it meets the shore (the blend pass draws a ragged one where it can).
+  if (dry(0, -1)) px(ctx, '#9ab4d0', x, y, T, 1);
+  if (dry(0, 1)) px(ctx, '#9ab4d0', x, y + T - 1, T, 1);
+  if (dry(-1, 0)) px(ctx, '#9ab4d0', x, y, 1, T);
+  if (dry(1, 0)) px(ctx, '#9ab4d0', x + T - 1, y, 1, T);
 }
 
 function lakeChasmAsWater(ctx, x, y, tx, ty, room) { lakeWater(ctx, x, y, tx, ty, room); }
@@ -866,7 +869,7 @@ function murkyWater(ctx, x, y, tx, ty, room, p) {
       break;
     }
   }
-  const edge = (dx, dy) => { const c = room.tileAt(tx + dx, ty + dy); return c !== '~' && c !== null && c !== '0'; };
+  const edge = (dx, dy) => { const c = room.tileAt(tx + dx, ty + dy); return c !== '~' && c !== null && c !== '0' && !caveSoftEdge(room, tx, ty, dx, dy); };
   // Where a wall stands in the water, it's dark right to its foot.
   const wallAbove = wallish(room.tileAt(tx, ty - 1));
   if (wallAbove) shade(ctx, x, y, T, 4, 0.5, '0, 2, 10');

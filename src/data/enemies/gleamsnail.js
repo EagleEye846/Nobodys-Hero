@@ -21,7 +21,7 @@ export const GLEAMSNAIL = {
   anim: GLEAMSNAIL_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1140,
+  maxHp: 1450,
   damage: 37,
 
   // The Glimmering: a notch up from Sunnyside. Slow things, and lots of lines.

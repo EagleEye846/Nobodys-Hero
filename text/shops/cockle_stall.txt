@@ -7,6 +7,14 @@
 [greeting]
 Come in, come in, mind the claws, they're mostly decorative. You look peckish. All three of you look peckish. The small one looks ready to fall over.
 
+# (draft) The next times.
+[greeting 2]
+Back again, dear! Nobody has the cockles just the once. And the small one's looking peckish. The small one is always looking peckish.
+
+# (draft)
+[greeting 3]
+Regulars! Sit, sit. Mind the claws. You know about the claws.
+
 [menu_prompt]
 Well, dear? Something hot?
 
@@ -76,4 +84,16 @@ He's the small one. Isn't he? He's been looking at the pot like it might come ov
 Has she eaten? The tall one. Dry as a board. Mind she has something. Dry people forget.
 
 [talk: The Hero]
-Someone small, in a coat that didn't fit, years ago. Stood where you're standing. Had a bowl of the chowder, didn't say a word, and left the bowl clean. My mum remembers it. Said it was the politest bowl she ever washed.
+A little lad, in a coat that didn't fit, a hundred years back. Stood where you're standing. Had a bowl of the chowder, didn't say a word, and left the bowl clean. My gran served him. Said it was the politest bowl she ever washed.
+
+# (draft) World reacts: after the chapter (the storm gone, Haddock gone).
+[talk: The storm after haddock_gone]
+Gone. Just like that. Business is terrible. I've never been so pleased about anything.
+
+I still put a bit more pepper in. For morale. Some of us need it.
+
+[talk: Bramble after haddock_gone]
+He's holding that bell like it's hot. Let him. I've given him two biscuits. We don't need to talk about it.
+
+[farewell after haddock_gone]
+Off you go. Wrap up anyway. It's a habit now.

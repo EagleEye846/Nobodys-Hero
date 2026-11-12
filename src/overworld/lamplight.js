@@ -5,6 +5,9 @@ import { brightTileLights } from './brightTiles.js';
 import { coastTileLights } from './coastTiles.js';
 import { BRIGHT_GLOWS } from '../data/art/brightProps.js';
 import { COAST_GLOWS } from '../data/art/coastProps.js';
+import { IN_GLOWS } from '../data/art/interiorProps.js';
+import { TH_GLOWS } from '../data/art/taperHouse.js';
+import { GS_GLOWS } from '../data/art/ghostShip.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 
 // Lamplight: how a lived-in place is lit by its own flames. The Ruins' dark
@@ -145,6 +148,12 @@ Object.assign(PROP_GLOWS, {
 Object.assign(PROP_GLOWS, BRIGHT_GLOWS);
 // Chapter 5's coast lamps, forge and great lens (src/data/art/coastProps.js).
 Object.assign(PROP_GLOWS, COAST_GLOWS);
+// Chapter 5's indoor wall lamps, kettle stoves and windows (src/data/art/interiorProps.js).
+Object.assign(PROP_GLOWS, IN_GLOWS);
+// Mother Taper's hearth, wax pots, candle sconces and glasshouse panes (src/data/art/taperHouse.js).
+Object.assign(PROP_GLOWS, TH_GLOWS);
+// The ghost ship's lantern and harmonium (src/data/art/ghostShip.js).
+Object.assign(PROP_GLOWS, GS_GLOWS);
 
 // Lit cabin windows and open doors, outdoors.
 const WINDOW_GLOW = [
@@ -221,6 +230,72 @@ export function roomLights(room, outdoors) {
   return lights;
 }
 
+// The lights a prop gives off, or null.
+const glowOf = (prop) => prop.glow ?? PROP_GLOWS[prop.look] ?? (prop.save ? SAVE_GLOW : null);
+
+// The same lights as roomLights, kept from frame to frame: the tiles' once,
+// each prop's made once and only moved when the prop moves (a lamplighter
+// strolling with her lamp, a lantern on a floating crate), and the list put
+// together again only when a prop's light comes or goes (hidden, opened, lit).
+// The same light objects come back each frame, so nothing is made fresh.
+const kept = new WeakMap();
+export function cachedRoomLights(room, outdoors) {
+  let c = kept.get(room);
+  if (!c || c.outdoors !== outdoors || c.count !== room.props.length) {
+    const tiles = lightsOfTiles(room, outdoors).map((l) => ({ ...l, phase: l.phase ?? (l.x * 0.37 + l.y * 0.61) % (Math.PI * 2) }));
+    c = { outdoors, count: room.props.length, tiles, props: room.props.map((prop) => ({ prop, list: null, lights: null, x: NaN, y: NaN, on: false })), out: null };
+    kept.set(room, c);
+  }
+  let dirty = !c.out;
+  for (const e of c.props) {
+    const { prop } = e;
+    const list = glowOf(prop);
+    const on = Boolean(list) && !prop.hidden && !prop.isOpen;
+    if (list !== e.list || Boolean(prop.pulse) !== e.pulse) {
+      e.list = list;
+      e.pulse = Boolean(prop.pulse);
+      e.lights = list ? list.map((l) => ({ ...l, ...(prop.pulse ? { beat: true } : {}) })) : null;
+      e.x = NaN;
+      dirty = true;
+    }
+    if (on !== e.on) { e.on = on; dirty = true; }
+    if (!e.lights) continue;
+    const footX = prop.x + prop.width / 2;
+    const footY = prop.y + T - (prop.raise ?? 0);
+    if (footX === e.x && footY === e.y) continue;
+    const first = Number.isNaN(e.x);
+    e.x = footX;
+    e.y = footY;
+    e.list.forEach((l, i) => {
+      const light = e.lights[i];
+      light.x = footX + (l.dx ?? 0);
+      light.y = footY + (l.dy ?? 0);
+      if (first) light.phase = l.phase ?? (light.x * 0.37 + light.y * 0.61) % (Math.PI * 2);
+    });
+  }
+  if (dirty) {
+    c.out = [...c.tiles];
+    for (const e of c.props) if (e.on) c.out.push(...e.lights);
+    c.version = (c.version ?? 0) + 1;
+    c.out.version = c.version;
+  }
+  return c.out;
+}
+
+// A flame's light breathes as well as wavers: its reach swells and shrinks a
+// little (a fire quickly and raggedly, a lantern slowly), as a share of its
+// size. Steady glass and crystals don't. Kept to whole pixels by the caller.
+export function breatheAt(light, time) {
+  const amount = light.flicker ?? 0;
+  if (!amount) return 1;
+  const p = light.phase ?? 0;
+  const fire = amount >= 0.7;
+  const wave = fire
+    ? Math.sin(time * 4.1 + p) * 0.6 + Math.sin(time * 10.7 + p * 2.3) * 0.4
+    : Math.sin(time * 1.4 + p) * 0.75 + Math.sin(time * 3.3 + p * 1.9) * 0.25;
+  return 1 + wave * (fire ? 0.06 : 0.035) * Math.min(1, amount * 1.5);
+}
+
 // Chapter 4's underground regions have their own light: the Diggings are a
 // dusty brown dim, the Stillwater a cool blue one, and neither cares what
 // time it is up top. A room can still say `lamplight: { shade, tint }`.
@@ -244,6 +319,8 @@ const AREA_AMBIENT = {
   saltcombe: { shade: 0.42, nightShade: 0, tint: '6, 34, 32', inside: { shade: 0.24, tint: '34, 16, 6' } },
   lanes: { shade: 0.38, nightShade: 0, tint: '8, 52, 42', inside: { shade: 0.3, tint: '26, 22, 14' } },
   wreck: { shade: 0.46, nightShade: 0, tint: '8, 50, 38', inside: { shade: 0.4, tint: '14, 28, 20' } },
+  // The ghost ship: darker than the yard round it, a cold grey-green, and the lit lamps and lantern do the rest.
+  ghostship: { shade: 0.54, nightShade: 0, tint: '6, 30, 34', inside: { shade: 0.52, tint: '8, 18, 22' } },
   merrow: { shade: 0.5, nightShade: 0, tint: '6, 40, 38', inside: { shade: 0.4, tint: '14, 28, 24' } },
   soundings: { shade: 0.55, nightShade: 0, tint: '4, 22, 30', inside: { shade: 0.55, tint: '4, 22, 30' } },
   isles: { shade: 0.5, nightShade: 0, tint: '6, 52, 36', inside: { shade: 0.36, tint: '30, 18, 8' } },
@@ -263,6 +340,10 @@ export function isRelit(data) {
 export function ambientFor(data, outdoors, night) {
   const own = { ...AREA_AMBIENT[data.area], ...(data.indoors ? AREA_AMBIENT[data.area]?.inside : null), ...(typeof data.lamplight === 'object' ? data.lamplight : {}) };
   if (isRelit(data)) Object.assign(own, own.relit);
+  // A room's `calmAfter` can bring its own light too, once its scene has played
+  // (the foot of the Last Light, the grey before dawn after the storm).
+  const calm = data.calmAfter;
+  if (calm?.lamplight && (WORLD_STATE.seenScenes ?? []).includes(calm.scene)) Object.assign(own, calm.lamplight);
   if (outdoors) {
     const lit = DAY_GLOW + (1 - DAY_GLOW) * Math.min(1, night * 1.4);
     return { shade: night * (own.night ?? OUTDOOR_NIGHT), tint: NIGHT_TINT, lit };

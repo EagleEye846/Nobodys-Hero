@@ -117,7 +117,7 @@ A big, hard biscuit a Cairn Hound was keeping safe under a stone. It's a dog bis
 A slice of the cake the old city baked to welcome the Hero. Nobody came to eat it, so a Herald's Echo kept it. Still fresh, somehow.
 
 [heros_offering]
-A honey cake sealed in wax, left in the Warden's open hand three hundred years ago, for the Hero. Nobody else came for it.
+A honey cake sealed in wax, left in the Warden's open hand a hundred years ago, for the Hero. Nobody else came for it.
 
 [candle_cake]
 A cake shaped like a candle, from Taper's kitchen. "FOR OUR GUEST."
@@ -148,6 +148,10 @@ Lit from the lamplighter's lantern on the summit. Shadows lean away from it.
 
 [hush_fur]
 A hank of the Hush's bristles, caught on your sleeve. Coarse and black, and very, very quiet. Held up, it hides you like a shadow.
+
+# (draft)
+[star_ink]
+A little glass vial of the ink the Welcome Register counted with. It shines faintly blue, and it will not stay still on the page. Drunk, it puts you back together.
 
 # Chapter 4's deeper monsters.
 [cinder_toffee]
@@ -240,7 +244,7 @@ A ladleful of the cistern's water, kept sweet for fifty years by a hob who never
 A scarlet leaf off the Tatterwight. Hold it still and it still turns, slowly, round and round, as if there's a wind only it can feel. Holding it makes you want to get going.
 
 [city_hardtack]
-A biscuit baked for the Hero's welcome feast, three hundred years ago, and never eaten. It hasn't gone off. Nothing could make it go off. Soak it first.
+A biscuit baked for the Hero's welcome feast, a hundred years ago, and never eaten. It hasn't gone off. Nothing could make it go off. Soak it first.
 
 [spring_water]
 Hot water from the spring under the Old Baths, in a stoppered jar. It tastes of iron and makes your fingertips tingle.
@@ -407,6 +411,23 @@ A small pot of clover honey, sealed with wax, with a tweed-patterned lid that a 
 [lucky_clover]
 A four-leaf clover, picked from a Clover Snail's shell, pressed flat. Nobody has ever been unlucky holding one while it napped. MERCY +30% for everyone.
 
+# Chapter 5's cliff cave monsters (the Barnacle Bat, the Whelkling).
+[echo_shell]
+A tiny barnacle that a Barnacle Bat wore off its wing. Hold it to your ear and you hear the whole cave at once, every drip, and somehow it clears your head. SP +90%.
+
+[sea_glass_sweet]
+A boiled sweet that has been in the sea so long it has gone smooth and frosted, just like a bit of sea glass. A Whelkling keeps a hoard of them. It still tastes of lemon. Heals 265 HP.
+
+# Chapter 5: Sunnyside's chapter 4 monsters, met again in the late summer (the Bunting, the Dandy Lion, the Haybob).
+[fete_sponge]
+A slice of sponge cake off the end-of-summer fete, still on its paper doily. A Bunting won it in the raffle and has carried it to every party since. The jam has given up. Heals 245 HP.
+
+[dandelion_burdock]
+A stone bottle of dandelion and burdock that a Dandy Lion was saving for the last hot day. It has gone a bit flat. It is still the best thing in the field. Heals 250 HP.
+
+[harvest_loaf]
+A loaf baked in the shape of a wheatsheaf, the sort left on the church step at harvest. A Haybob was guarding it from the birds. Only one ear is nibbled. Heals 255 HP.
+
 # CHAPTER 5: the Cockle Stall, in Saltcombe's market, and Orla's Forge.
 [sea_biscuit]
 A hard, salty sea biscuit. It's been dunked in something warm. Bramble says they're good for teeth.
@@ -417,14 +438,35 @@ Kelp fried crisp, with a pinch of sea salt. They crackle. Bramble ate three befo
 [winkle_skewer]
 Six winkles on a skewer, still steaming. You need a pin. The Cockle Stall gives you a pin.
 
+[sounders_flask]
+A dented tin flask from the sounders' kit, the cork waxed in. Cocoa, still hot after all these years. It puts everything right.
+
+[humbug_lump]
+A fist-sized lump of striped humbugs, all stuck together in their jar years ago. Break a bit off. It puts everything right, and it takes a while.
+
 [cockle_chowder]
 Creamy, peppery chowder in a thick bowl. The crab ladles it herself. It warms you from the inside out, and from the outside in.
+
+[ringers_cordial]
+A stone bottle with a bell on the label, kept in the ringers' chest for long peals. Restores SP +130%. It tastes of blackcurrant and stamina.
 
 [brine_tonic]
 A tonic of salt water and secrets, in a green bottle. Restores SP +110%. It tastes like swimming.
 
 [tinder_bun]
 A warm sticky bun, baked on Orla's forge in the lamp oil's last heat. Sticks to your fingers and your ribs.
+
+# (draft) Mrs. Wrasse's ship's stores, in place of the Hearth and Glow Candles.
+[lamp_oil]
+A small tin of the good lamp oil, the kind Mrs. Wrasse won't sell to anyone who'd waste it. One whiff and you're wide awake. Restores SP +100%.
+
+# (draft)
+[pine_tar]
+A pot of warm pine tar, for ropes and seams. Light a dab of it and the smell is so sweet and homely that enemies forget what they were cross about. MERCY +30% for everyone.
+
+# (draft) Corrie's drop.
+[salt_taffy]
+Salt-water taffy in a twist of old chart paper, from a storm boy's pocket. Sticky, salty, and a little bit sad. Heals 300 HP.
 
 # Chapter 5's first coast monsters (batch 1: shellac, moonjelly, limpet knight, dunlin dancer, bellbuoy, salt shade, sandcastle).
 [teapot_shell]
@@ -447,3 +489,14 @@ A coil of salt liquorice, black and tarry and cold as the sea, knotted into a pr
 
 [pail_and_spade]
 A little tin pail packed with sweet sandcake, turned out in a tower, and a spade-shaped spoon to eat it with. It's warm from the sun, gritty in the nicest way, and rather proud of itself.
+
+# (draft) The Fair Return's crew: the deckhand's drop and the powder monkey's.
+[scratched_hardtack]
+A ship's biscuit, hard as a slate and a hundred years old, with a name scratched in it by a bored sailor and a date that never got finished. It is no worse for the wait. Heals a good deal.
+
+[powder_toffee]
+The last length of a slow-match wound in a twist of paper, dipped in toffee by a boy who was told to be careful and has a sweet tooth. It smoulders sweetly and wakes you right up. Restores SP +85%.
+
+# (draft) Madam Fairweather's drop.
+[starfall_cordial]
+A little carved bottle with a stopper of star-glass, the glass still faintly lit, and inside it something that tastes of salt, sugar and a very good night. It hums if you shake it. Heals 700 HP.

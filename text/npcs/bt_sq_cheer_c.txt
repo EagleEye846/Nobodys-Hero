@@ -5,3 +5,15 @@ You're the Hero's friends! You must be! Come here! I'll shake your hand! Both of
 
 [repeat]
 Best day ever! Don't tell my cousin. He thinks his wedding was.
+
+# (draft)
+[repeat 2]
+I've shaken two hundred hands today. Three of them twice. One was a door handle. Lovely door.
+
+# (draft)
+[repeat_ves 2]
+{bored}He's going to shake my hand again. {thoughtful}I can see it in his eyes.
+
+# (draft)
+[repeat 3]
+Have you met my cousin? You'll like him. Don't mention the wedding.

@@ -49,9 +49,10 @@ import {
 //
 // Strength: the hardest fight in the game so far, well above King Peptup
 // (13,200 HP, 67-77 damage, density 2 / 1.9 and speed 1.3 / 1.4) and the
-// Dowager Crab (3,600 HP, 70-76), against a party around LV 37-45 with
+// Dowager Crab (24,000 HP, 106-114) and Old Gulper (31,000, 110-119), against a party around LV 37-45 with
 // chapter 5 gear (the hero about 460-540 HP; DEF 8-9 takes a little off
-// every hit, so a hit is about 75-85: six or so to knock him down).
+// every hit, so a hit is about 95-110: five or so to knock him down, about
+// twice that under Ves's SHELTER, which halves it).
 
 // His attacks live in src/battle/attacks/corrie.js.
 const BOY_ATTACKS = [
@@ -74,6 +75,7 @@ const LAMP_ATTACKS = [
   { name: 'lampSweep', weight: 3 },
   { name: 'lampTears', weight: 3 },
   { name: 'lampLullaby', weight: 3 },
+  { name: 'lampLens', weight: 3 },
 ];
 
 // The bell: the hero and Bramble together, all your SP.
@@ -90,7 +92,7 @@ const BELL = {
 const TALK = [
   { name: 'Check' },
   BELL,
-  { name: 'Call to him', calm: 10 },
+  { name: 'Wave to him', calm: 10 },
   { name: 'Hold out a hand', calm: 10 },
 ];
 
@@ -100,6 +102,9 @@ export const CORRIE_BOSS = {
   area: 'lastlight',
   sprite: { rows: CORRIE_BATTLE_SPRITE, palette: CORRIE_BATTLE_PALETTE },
   anim: CORRIE_BOY_ANIM,
+  // How it feels to fight (src/battle/foeFeel.js): a splash when hit (his defeat is the boss
+  // finale).
+  feel: { hit: 'splash' },
   // Beaten, he doesn't fade: he stays, sunk low over the water.
   beatenSprite: { rows: CORRIE_BEATEN_SPRITE, palette: CORRIE_BATTLE_PALETTE },
   // 44x58, drawn twice that: right of the box, floating over the lamp room.
@@ -108,9 +113,30 @@ export const CORRIE_BOSS = {
   // "Salt in the Wound" (corrieBattleTheme.js); each phase starts its own part.
   music: 'corrieBattle',
   backdrop: 'lastlight',
-  maxHp: 21000,
-  damage: 82,
+  // 36,000 (21,000 at first, then 28,000, then this on 7 November 2026). At
+  // 28,000 grazing past his thick bullets filled the SP bar every turn, so
+  // Tempest every round won in about 18 rounds and the bell cost nothing.
+  // Now grazing him gives a quarter of the SP (`grazeSp`), so a careful
+  // player gets a big spell every two turns or so, and the bell (all your
+  // SP) means saving up for it. With the harder hits (about 1.27x what they
+  // were) the battle bot, at LV 44-46: careful 26-30 rounds, a few heals;
+  // average 28-33 rounds, low on HP, a knockdown or some food; sloppy
+  // 36-38 rounds, often lost.
+  // 50,000 and about 15% harder hits from 8 November 2026: the coast's regular
+  // monsters went up to 6,000-10,000 HP, so a fight takes several rounds, and
+  // he has to stay well clear of Old Gulper (31,000).
+  maxHp: 63500,
+  damage: 120,
   difficulty: { density: 1.9, speed: 1.45 },
+  // Grazing past him gives this much of the usual SP (see battleScene's
+  // grazeSpBonus). His bullets are so thick that full SP would be every turn.
+  grazeSp: 0.25,
+  // Its turns run long: as one attack winds down, another follows (encore,
+  // see startAttack in battleScene.js).
+  encore: { at: 0.85, seconds: 5, density: 0.65 },
+  // His turns are already about 11-12.5 s with it, and the storm's are the
+  // thickest in the game: no top-up past that (TURN_SECONDS in battleScene.js).
+  turnSeconds: 11,
   // He whirls in out of the storm (stageBits.js).
   entrance: 'whirl',
   introCard: { title: 'CORRIE', subtitle: 'The Tidecaller' },
@@ -130,13 +156,18 @@ export const CORRIE_BOSS = {
       id: 'storm',
       stage: 'corrie',
       music: 'corrieBattle',
-      musicFrom: 'C',
+      musicFrom: 'W', // the drop: the gong and the broken lullaby
       sprite: { rows: CORRIE_STORM_SPRITE, palette: CORRIE_BATTLE_PALETTE },
       anim: CORRIE_STORM_ANIM,
       introSfx: 'boom',
       flash: true,
       patterns: STORM_ATTACKS,
-      damage: 86,
+      // The storm's attacks are the busiest: its encore is shorter and lighter,
+      // and comes in as the first attack is nearly done. (2026-11-10: was
+      // { at: 0.9, seconds: 4, density: 0.5 }; with the tide up, the encore
+      // doubled the hits a careful player took.)
+      encore: { at: 0.95, seconds: 3.6, density: 0.35 },
+      damage: 125,
       difficulty: { density: 2, speed: 1.5 },
       until: { below: 0.5, atLeast: 4 },
       floor: 0.45,
@@ -152,7 +183,10 @@ export const CORRIE_BOSS = {
       anim: CORRIE_WHIRL_ANIM,
       introSfx: 'splash',
       patterns: WHIRL_ATTACKS,
-      damage: 90,
+      // A lighter encore than his others, coming in later: the current already
+      // pulls you about, and the default one doubled the hits (2026-11-10).
+      encore: { at: 0.93, seconds: 4.4, density: 0.45 },
+      damage: 132,
       difficulty: { density: 2, speed: 1.5 },
       until: { below: 0.25, atLeast: 4 },
       floor: 0.2,
@@ -169,9 +203,13 @@ export const CORRIE_BOSS = {
       introSfx: 'flare',
       flash: true,
       patterns: LAMP_ATTACKS,
-      // Slower and sadder, and it hurts the most.
-      damage: 94,
-      difficulty: { density: 1.6, speed: 1.25 },
+      // Sadder, and it hurts the most. The fight's peak: the lamp's patterns
+      // are the thickest of his four (2026-11-10, round 2: was density 1.6,
+      // speed 1.25, when the careful dodger took 0.04 hits a turn here).
+      damage: 138,
+      difficulty: { density: 1.9, speed: 1.4 },
+      // A fuller encore than his others: everything he has left.
+      encore: { at: 0.85, seconds: 5, density: 0.85 },
       // At the very end he puts everything he has left into it.
       secondWind: { below: 0.12, density: 0.3, delay: 2.5 },
       lowHp: 0.12,
@@ -194,5 +232,5 @@ export const CORRIE_BOSS = {
   // purse (600 coins, about 2,700 gold). Beaten once, in a story fight: no
   // way to farm him.
   rewards: { exp: 30000, coins: 600 },
-  materials: [{ id: 'shadow_ash', chance: 1, amount: 3 }],
+  drops: [{ item: 'salt_taffy', chance: 1 }],
 };

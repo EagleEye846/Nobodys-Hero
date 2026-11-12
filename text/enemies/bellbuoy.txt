@@ -17,6 +17,14 @@ BELLBUOY tolls three times. It is warning something off. It is not clear what.
 
 Smells of rust, weed and cold brass.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+BELLBUOY lists hard to one side. The bell rings by itself every time it rolls, which is often.
+
+[flavor: spareable]
+BELLBUOY bobs quietly. The two pale lights have stopped looking past you at the sea.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into
@@ -55,7 +63,7 @@ You knock a stone against the nearest post, in time with its toll. BELLBUOY goes
 You step up to the swinging bell and gently, firmly, put a hand around the clapper. The bell can't ring. BELLBUOY goes very still. A kind of shudder goes through the float, as if someone had been crying for a long time and been let stop.
 
 [talk: Light the lamp]
-You hold up your lantern to the dark lamp at the top of the mast. It doesn't light, but it catches. BELLBUOY looks up at it, and the two pale lights in the bell go warm and green, and then amber.
+You hold your light up to the dark lamp at the top of the mast. It doesn't light, but it catches. BELLBUOY looks up at it, and the two pale lights in the bell go warm and green, and then amber.
 
 # How the fight ends. The rewards line is added automatically.
 [victory]

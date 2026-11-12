@@ -17,3 +17,21 @@ You did it! I can tell by the shine on my hat. Bless you, whoever you are.
 
 [repeat after the_light_goes_up]
 Look at me, home in daylight. Well. Sunstone-light. Still counts.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Dug a whole new drift today. Found a rock. Under it: another rock. You don't get work like that just anywhere.
+
+# (draft)
+[repeat 3]
+Mattock at the pithead talks the whole shift. The WHOLE shift. I sing over him. He talks over me. We get a lot done.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+If you see a mole down there who looks like me, that's my cousin. Tell him I said hurry up. He'll know.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've shaken my hat out. Gold dust, near enough. It's grit. It looks like gold, though, in this light.

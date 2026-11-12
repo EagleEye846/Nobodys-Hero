@@ -27,25 +27,27 @@ export const DIGGINGS_PITHEAD = {
   music: 'diggings',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'mine',
+  // How it rings (a cave: ECHOES in src/audio/music.js).
+  echo: 'cave',
   vesWell: true,
 
   tiles: [
     '##################################',
-    '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#................................#',
-    '#..I.....I...0000....I..hhhhhh...#',
-    '#............0000.......hhhhhh...#',
-    '#.......................hhhhhh...#',
-    '#...OO.........................O.#',
-    'W................................W',
+    '#WWWW##WWWWWWWWWWWWWWWWWWWW##WWW##',
+    '#....WW........qq..........WWqqqW#',
+    '#..I.....I...0000....I..hhhhhhqqq#',
+    '#............0000.......hhhhhhqqq#',
+    '#..qqq..................hhhhhhqqq#',
+    '#..qOOq...............q......qqOq#',
+    'W..qqqq...............q.......qq.W',
     '..................................',
     '..................................',
-    '#................................#',
-    '#................................#',
-    '#.O..........................OO..#',
-    '#...........................^....#',
-    '#..I......I...........I..........#',
-    '#.....^..........................#',
+    '#..............................q.#',
+    '#qqq............................##',
+    '#qOqq......................qqOO.##',
+    '##qq........................^...##',
+    '##qI......I......qqq..Iqqq.......#',
+    '#.qqq.^...###...qq###..q##.......#',
     '##################################',
     '##################################',
   ],
@@ -83,7 +85,11 @@ export const DIGGINGS_PITHEAD = {
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
+  // A line down column 3, just in from the back door, that the way on from it
+  // crosses (the_two_the_king_sent: Sedge and Mattock meet you). Not for
+  // saves already further down the mines.
   cutscenes: [
+    { x: 3, y: 2, w: 1, h: 14, scene: 'the_two_the_king_sent', after: 'the_kings_welcome', until: ['diggings_quake', 'diggings_lift_down', 'gubb_crossing', 'the_light_goes_up', 'homecoming'] },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
@@ -140,6 +146,9 @@ export const DIGGINGS_PITHEAD = {
     { sprite: 'ore_crumbs', x: 8, y: 15, walkable: true, flat: true },
     { sprite: 'floor_pebbles', x: 16, y: 15, walkable: true, flat: true },
     { sprite: 'floor_pebbles', x: 28, y: 15, walkable: true, flat: true },
+    // A tea break left mid-pasty, and spare pit props stacked for the next bit of roof.
+    { sprite: 'lunch_crate', x: 19, y: 4, text: 'd_lunch' },
+    { sprite: 'timber_stack', x: 29, y: 10, text: 'd_timber' },
   ],
   tileTexts: { '#': 'd_rock', h: 'd_timber_wall', O: 'd_ore', I: 'd_post', '^': 'd_stalag', '0': 'pit_shaft', W: 'd_face' },
 

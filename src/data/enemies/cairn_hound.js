@@ -24,7 +24,7 @@ export const CAIRN_HOUND = {
     frames: [CAIRN_HOUND_DISGUISE_SPRITES.still, CAIRN_HOUND_DISGUISE_SPRITES.eyes, CAIRN_HOUND_DISGUISE_SPRITES.wag],
     palette: CAIRN_HOUND_PALETTE,
   },
-  maxHp: 875,
+  maxHp: 1110,
   // It's made of rocks. Being hit by it is being hit by rocks.
   damage: 32,
 

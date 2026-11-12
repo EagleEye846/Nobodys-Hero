@@ -33,3 +33,25 @@ Here. Don't look at it, just hold it. A spare cup, for visitors who stay. You wo
 
 [toffee_after]
 The snail is looking at the toffee, in its nineteen pleats, with great satisfaction. She will not be eating it for some time. That is the point of a toffee.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I came in for one cup. That was a while ago. The table grew. I stayed.
+
+# (draft)
+[repeat 3]
+Mm. Do sit. Nobody sits. They all stand about in a hurry, as if a cup of tea were a race.
+
+# (draft)
+[repeat_ves 3]
+{bored}We'd sit. {smile}We'd never get up again. That's the trouble.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Down there you'll want a warm drink. Take it slowly. That's the only advice I've got, and I've used it all my life.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+The bat woke up for a moment. I've never seen him awake. He has lovely eyes. Then he went back.

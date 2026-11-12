@@ -17,3 +17,25 @@ Even the dust is sparkling. I almost don't want to sweep it. Almost.
 
 [repeat after the_light_goes_up]
 Look at it all, shining. Nobody tell the broom.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Seventy years with this broom. Three new heads and two new handles. Still the same broom.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}...I'm not going to think about that.
+
+# (draft)
+[repeat 3]
+Every speck of this street I've swept a hundred times. Some of them know me by name.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Some of this confetti's very old. Same colours as the last show, and the one before. Somebody sweeps it up and throws it again.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've leant the broom on the wall and sat down. First time. I've no idea what you do with the rest of a day.

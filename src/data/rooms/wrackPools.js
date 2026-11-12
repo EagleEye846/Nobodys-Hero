@@ -18,25 +18,27 @@ export const WRACK_POOLS = {
   // The Wrack Shore's song (src/data/music/wrackTheme.js), and the sounds of the place under it.
   music: 'wrack',
   ambience: 'storm_shore',
+  // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_shore', lamplight: { shade: 0.16, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
 
   tiles: [
     '############################################',
-    '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#........~~~~~~~~~~~~~~~~~~~~..............#',
-    '#.;;..x..~~~~~~~~~~~~~~~~~~~~.,,,,,,,,,,,,,#',
-    '#.;.....O~~~~~~~~~~~~~~~~~~~~.,,,,,,,,,,,,,#',
+    '##WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW####WWWW##',
+    '#W......~..~~~~~~~~~~~~~~~~.......W##W....W#',
+    '#.;;..x...~~~~~~~~~~~~~~~~~~.;,,,,,WW,,,,,,#',
+    '#.;.....O~~~~~~~~~~~~~~~~~~~~;,,,,,,,,,,,,,#',
     '#........~~~~~~~~~~~~~~~~~~~~.,,,,,,,,,,,,,#',
-    '#x.......~~~~~~~~~~~~~~~~~~~~.,,,,,,,,,,,,,#',
-    '#........~~~~~~~~~~~~~~~~~~~~..............#',
+    '#x........~~~~~~~~~~~~x~~~~~~~,,,,,,,,,,,,,#',
+    '#........~~~~~~~~~~~~~~~~~~~~~.,,,,,,,,....#',
     '.........~~~~~~~~~~~~~~~~~~~~............F..',
-    '.........~~~~~~~~~~~~~~~~~~~~...............',
-    '#........~~~~~~~~~~~~~~~~~~~~.O............#',
-    '#........~~~~~~~~~~~~~~~~~~~~..............#',
-    '#...;;...~~~~~~~~~~~~~~~~~~~~.......;;.....#',
-    '#,,,,,,,,~~~~~~~~~~~~~~~~~~~~........;;....#',
-    '#,,,,,,F,~~~~~~~~~~~~~~~~~~~~..x........x..#',
-    '#,,,,,,,,~~~~~~~~~~~~~~~~~~~~..............#',
+    '.........~~x~~~~~~~~~~~~~~~~................',
+    '#.......;~~~~~~~~~~~~~~~~~~~..O........;;..#',
+    '#......;;~~~~~~~~~~~~~~~~~~~~~........;;;..#',
+    '#...;;...~~~~~~~~~~~~~~~~~~~~.......;;.O...#',
+    '#,,,,,,,,~~~~~~~x~~~~~~~~~~~~.x......;;..Ox#',
+    '#O,,,,,F,.~~~~~~~~~~~~~~~~~~.x.x........Oxx#',
+    '#xxO,,,,,..~~~~~~~~~~~~~~~~...........xOxxO#',
     '#WWWWWWWW~~~~~~~~~~~~~~~~~~~~WWWWWWWWWWWWWW#',
     '############################################',
   ],
@@ -85,9 +87,11 @@ export const WRACK_POOLS = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/wrack.txt',
   props: [
-    // A wheel on each bank (the tide), a reset stump, the crate, and the bank's odds and ends.
-    { sprite: 'valve_wheel', x: 5, y: 6, text: 'pools_wheel', tideWheel: { to: 'toggle', text: 'pools_wheel_turn', busy: 'pools_wheel_busy' } },
-    { sprite: 'valve_wheel', x: 32, y: 5, text: 'pools_wheel', tideWheel: { to: 'toggle', text: 'pools_wheel_turn', busy: 'pools_wheel_busy' } },
+    // A tide bell on each bank (like the cove's), a reset stump, the crate, and the bank's odds and ends.
+    { sprite: 'c5_harbour_bell', x: 5, y: 6, text: 'pools_bell', animation: 'c5_harbour_bell', speed: 0.9,
+      tideBell: { to: 'toggle', text: 'pools_bell_ring', busy: 'pools_bell_busy' } },
+    { sprite: 'c5_harbour_bell', x: 32, y: 5, text: 'pools_bell', animation: 'c5_harbour_bell', speed: 0.9,
+      tideBell: { to: 'toggle', text: 'pools_bell_ring', busy: 'pools_bell_busy' } },
     { sprite: 'rock_stump', x: 3, y: 11, text: 'rock_stump', rockReset: true },
     { sprite: 'c5_crate', x: 18, y: 8, text: 'pools_crate', rock: true, float: true, step: true },
     // The way back. Crates go home every time you come in, so a player coming back from the
@@ -101,6 +105,51 @@ export const WRACK_POOLS = {
     { sprite: 'c5_driftwood', x: 34, y: 14, text: 'landing_driftwood' },
     { sprite: 'c5_rope_coil', x: 31, y: 8, text: 'landing_pots', walkable: true },
     { sprite: 'gold_pouch', x: 40, y: 4, text: 'pools_pouch', gold: 45, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // Dressing (second pass). Stones out in the inlet (in the water at high tide, on the bed at
+    // low): all on rows 3, 4, 13 and 14, well clear of the crates' rows (8 and 11) and the trench.
+    // The barnacle rocks at (11,9), (16,13) and (22,6) stand at both tides now.
+    { sprite: 'c5_rocks_weedy', x: 12, y: 3, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 17, y: 4, text: 'shore_rocks' },
+    { sprite: 'c5_rocks_weedy', x: 24, y: 14, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 10, y: 13, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 26, y: 3, text: 'shore_rocks' },
+    { sprite: 'c5_rocks_weedy', x: 21, y: 3, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 28, y: 4, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 13, y: 14, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 9, y: 3, text: 'shore_rocks' },
+    { sprite: 'c5_weed_mat', x: 14, y: 6, flat: true, walkable: true },
+    { sprite: 'c5_weed_mat', x: 23, y: 13, flat: true, walkable: true },
+    { sprite: 'c5_weed_mat', x: 16, y: 2, flat: true, walkable: true },
+    // The west bank: a lantern by the way in, a fire in the grass, weed and pools on the stones.
+    { sprite: 'c5_lantern_hook', x: 1, y: 7, text: 'shore_lantern' },
+    { sprite: 'c5_drift_fire', x: 5, y: 15, text: 'shore_fire' },
+    { sprite: 'c5_rocks_weedy', x: 6, y: 2, text: 'shore_rocks' },
+    { sprite: 'c5_rock_pool', x: 3, y: 5, flat: true, walkable: true },
+    { sprite: 'c5_weed_mat', x: 6, y: 4, flat: true, walkable: true },
+    { sprite: 'c5_wrack_line', x: 4, y: 10, flat: true, walkable: true },
+    { sprite: 'c5_marram', x: 1, y: 13, flat: true, walkable: true },
+    { sprite: 'c5_sea_holly', x: 8, y: 13, flat: true, walkable: true },
+    { sprite: 'c5_crab_trail', x: 2, y: 2, flat: true, walkable: true },
+    // The east bank: an old fence across the turf, a fire and a lantern by the way on.
+    { sprite: 'c5_rocks_weedy', x: 37, y: 3, text: 'shore_rocks' },
+    { sprite: 'c5_fence_broken', x: 35, y: 6, text: 'shore_fence' },
+    { sprite: 'c5_drift_fire', x: 39, y: 6, text: 'shore_fire' },
+    { sprite: 'c5_lantern_hook', x: 42, y: 7, text: 'shore_lantern' },
+    { sprite: 'c5_rock_weedy', x: 37, y: 14, text: 'shore_rocks' },
+    { sprite: 'c5_marram', x: 34, y: 4, flat: true, walkable: true },
+    { sprite: 'c5_marram', x: 30, y: 6, flat: true, walkable: true },
+    { sprite: 'c5_marram', x: 41, y: 3, flat: true, walkable: true },
+    { sprite: 'c5_sea_holly', x: 31, y: 3, flat: true, walkable: true },
+    { sprite: 'c5_sea_holly', x: 38, y: 7, flat: true, walkable: true },
+    { sprite: 'c5_weed_mat', x: 29, y: 9, flat: true, walkable: true },
+    { sprite: 'c5_wrack_line', x: 29, y: 12, flat: true, walkable: true },
+    { sprite: 'c5_rock_pool', x: 32, y: 14, flat: true, walkable: true },
+    { sprite: 'c5_crab_trail', x: 35, y: 9, flat: true, walkable: true },
+    // Stones on the lip of each bank, to break the water's straight edge.
+    { sprite: 'c5_rock_weedy', x: 8, y: 5, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 8, y: 12, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 29, y: 5, text: 'shore_rocks' },
+    { sprite: 'c5_rock_weedy', x: 29, y: 13, text: 'shore_rocks' },
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', '~': 'pools_sea', x: 'landing_rock', O: 'landing_rock', F: 'landing_weed', ';': 'pools_pool' },
 
@@ -111,7 +160,7 @@ export const WRACK_POOLS = {
   // both tides), clear of the wheel (32,5), the door and the return crate's lane (row 11, x 21 to
   // 23). No cutscenes in this room.
   npcs: [
-    { enemy: 'shellac', x: 3, y: 14, patrol: [2, 6], behaviour: 'patrol' },
+    { enemy: 'shellac', x: 5, y: 13, patrol: [4, 8], behaviour: 'patrol' },
     { enemy: 'limpet_knight', x: 33, y: 12, patrol: [32, 34], behaviour: 'patrol' },
     { enemy: 'pinwheel', x: 34, y: 11, patrol: [32, 35], behaviour: 'wander' },
   ],

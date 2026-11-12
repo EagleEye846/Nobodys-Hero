@@ -17,6 +17,16 @@ FIDDLER plays a short phrase, waits, and nods. It's very glad somebody's there t
 
 Smells like cold rock and a waxed bow.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+FIDDLER's tune has gone thin and wobbly. It keeps going anyway, a little flat, the way you do when you've promised a whole song.
+
+# (draft)
+[flavor: spareable]
+FIDDLER plays something slow and quiet, and keeps its feelers still, so as not to put you off. It's waiting for you to finish listening.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

@@ -11,12 +11,12 @@
 // hill stair are lit too; she didn't do those ("the ones up the hill must be
 // someone else"). Nobody says more, and nobody goes to look.
 //
-// Puzzle-free. No monsters (a town). Rain, and every window gold.
+// Puzzle-free, but for a jump up the fish crates to a gull's stash. No monsters (a town). Rain, and every window gold.
 // Tile key (see src/overworld/coastTiles.js, saltcombe):
 //   #  wall top (solid)   W  the hill's board wall (solid)   .  quay planks
 //   5 6 7  house wall, lit window, tar roof (solid)   8  shut door (solid)
 //   D  an open door   :  the hill stair   ,  turf banks   f  rail (solid)
-//   ~  the harbour (solid)
+//   ~  the harbour (solid)   X  the cobbled apron along the house fronts
 
 export const SALTCOMBE_QUAY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -27,8 +27,16 @@ export const SALTCOMBE_QUAY = {
   area: 'saltcombe',
   // "Salt and Rope" (src/data/music/saltcombeTheme.js), and the town's rain on the roofs.
   music: 'saltcombe',
+  // After chapter 5 (the_light_answers) the town is quiet: "What the Tide Left".
+  musicAfter: { scene: 'the_light_answers', song: 'saltcombeAfter' },
   ambience: 'stilt_town',
+  // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_stilt_town', lamplight: { shade: 0.22, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
+
+  // The fish crates in the north-west corner (b and B, drawn as crates): jump from the
+  // planks at (3,7) onto the b, then up onto a B. The gull's stash is on top.
+  cargo: [{ x: 1, y: 6, w: 2, h: 2 }],
 
   tiles: [
     '#################################:::####',
@@ -37,8 +45,8 @@ export const SALTCOMBE_QUAY = {
     '#W7777777WW7777777777WW777777WWW,:::,WW#',
     '#W5656565WW5656556565WW565565WWW,:::,WW#',
     '#W555D555WW5555DD5555WW555855WWW,:::,WW#',
-    '#......................................#',
-    '#......................................#',
+    '#BBXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.......#',
+    '#Bb.XXXX.....XXXXXX...XXX..............#',
     '#......................................#',
     '#......................................#',
     '#......................................#',
@@ -90,13 +98,15 @@ export const SALTCOMBE_QUAY = {
     { sprite: 'sign', x: 7, y: 6, text: 'quay_office_sign' },
     { sprite: 'c5_sign_inn', x: 18, y: 6, text: 'quay_inn_sign' },
     // The quay's clutter.
-    { sprite: 'c5_harbour_bell', x: 22, y: 11, text: 'quay_bell', animation: 'c5_harbour_bell', speed: 0.7 },
-    { sprite: 'c5_crates_stack', x: 2, y: 7, text: 'quay_crates' },
+    { sprite: 'c5_harbour_bell', x: 22, y: 11, text: 'quay_bell', animation: 'c5_harbour_bell', speed: 0.7, sound: 'bell' },
     { sprite: 'c5_barrels', x: 36, y: 7, text: 'quay_barrels' },
     { sprite: 'c5_lobster_pots', x: 9, y: 12, text: 'quay_pots' },
     { sprite: 'c5_hanging_nets', x: 14, y: 12, text: 'quay_nets' },
     { sprite: 'c5_rope_coil', x: 26, y: 10, text: 'quay_rope', walkable: true },
     { sprite: 'c5_anchor', x: 37, y: 11, text: 'quay_anchor' },
+    // On top of the fish crates: a gull's stash, with the clerk's APPROVED stamp in it
+    // (the side quest "The Clerk's Stamp", text/npcs/harbour_clerk.txt).
+    { sprite: 'c5_gull_hoard', x: 1, y: 6, text: 'quay_gull_stash', gives: 'approved_stamp', react: true, taken: { text: 'quay_gull_stash_bare' } },
     // Folk.
     { sprite: 'cf_fisher_a', x: 9, y: 8, text: 'quay_fisher_a', animation: 'cf_fisher_a', speed: 0.5 },
     { sprite: 'cf_fisher_c', x: 24, y: 7, text: 'quay_fisher_c', animation: 'cf_fisher_c', speed: 0.55 },
@@ -110,11 +120,24 @@ export const SALTCOMBE_QUAY = {
     { sprite: 'c5_buoy_red', x: 17, y: 16, text: 'quay_buoy' },
     { sprite: 'c5_buoy_yellow', x: 29, y: 18, text: 'quay_buoy' },
     { sprite: 'gold_pouch', x: 2, y: 11, text: 'quay_pouch', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+
+    // Storm-battered (2026-11-09): sandbags along the house fronts, the herring crans stacked dry
+    // by the fisher's house, and a boat turned over on the quay for good. Off the doors' rows and
+    // Tansy's spot, and clear of the cat's sill.
+    { sprite: 'c5_sandbags', x: 12, y: 6, text: 'quay_sandbags' },
+    { sprite: 'sc_herring_crans', x: 27, y: 6, text: 'quay_crans' },
+    { sprite: 'c5_boat_upturned', x: 33, y: 11, text: 'quay_boat_upturned' },
   ],
   tileTexts: {
     '~': 'quay_water', W: 'quay_wall', '#': 'quay_wall', f: 'quay_rail',
     5: 'quay_house', 6: 'quay_window', 7: 'quay_roof', 8: 'quay_fisher_door', ',': 'quay_bank',
+    b: 'quay_crates', B: 'quay_crates',
   },
+  // The sill under the fisher's window, where the inn's grey cat sits out once the storm's gone
+  // (drawn in src/data/touches.js): Z on the wall under it strokes the cat, and it blinks back.
+  looks: [
+    { x: 3, y: 5, text: 'quay_sill', pet: true },
+  ],
 
   // None: a town.
   npcs: [

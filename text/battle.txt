@@ -168,12 +168,19 @@ The rain came down between you, and you were gone!
 
 You ducked behind a rock and held on!
 
+[escape: lastlight]
+You slipped away down the stairs!
+
+You ducked round the turn of the stair and were gone!
+
+The lamp swung past, and so did you!
+
 # --- VES, on her own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
 
 # Shown in the panel while she picks what to do. One is picked at random.
 # Keep each to a line or two: it isn't split into pages.
 [vesper_turn]
-Ves shakes the snow off her umbrella. Her turn.
+Ves shakes out her umbrella. Her turn.
 
 Ves taps the brass handle twice, for luck. Her turn.
 
@@ -189,7 +196,7 @@ Ves tells {foe} it's doing very well, considering.
 
 Ves asks {foe} if it's eaten. It hasn't thought about it in years.
 
-Ves holds her umbrella over {foe} for a moment. Just to keep the snow off.
+Ves holds her umbrella over {foe} for a moment. Just to keep the weather off.
 
 Ves says sorry to {foe}, for everything. It isn't sure what for. Neither is she.
 
@@ -230,6 +237,15 @@ Ves shouts: "Here it comes! Watch it, watch it!"
 
 Ves shouts: "{foe}! Now! Move!"
 
+# Bramble's LOOK OUT!: what he shouts as the next attack starts (like Ves's
+# CALL OUT). {foe} is the name of the enemy attacking. Keep each to a line.
+[bramble_call_out]
+Bramble yells: "{foe}'s doing a thing! LOOK OUT!"
+
+Bramble yells: "Here it comes! Duck! No, the other way!"
+
+Bramble yells: "{foe}! Now! NOW!"
+
 # --- BRAMBLE, on his own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
 
 # Shown in the panel while he picks what to do. One is picked at random.
@@ -247,7 +263,7 @@ Bramble squints at the enemy like Ma does at logs. His turn.
 # His TALK: a word to one enemy, which raises its MERCY a little. {foe} is
 # the enemy's name. An enemy's own text file can have [bramble_talk] instead.
 [bramble_talk]
-Bramble tells {foe} it's not allowed in this bit of the wood. It looks confused.
+Bramble tells {foe} it's not allowed round here. It looks confused.
 
 Bramble asks {foe} if it wants to see a frog he found. It sort of does.
 

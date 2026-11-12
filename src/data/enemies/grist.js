@@ -15,7 +15,7 @@ export const GRIST = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hollin',
   sprite: { rows: GRIST_SPRITE, palette: GRIST_PALETTE },
-  maxHp: 530,
+  maxHp: 675,
   damage: 21,
 
   // A Chapter 3 enemy from the village at the end of the wood: busier than

@@ -19,3 +19,27 @@ Is it over? Can I stop cheering? ... No? Oh, hooray. Hooray again.
 
 [repeat after the_light_goes_up]
 HOORAY. I'm doing it on purpose this time.
+
+# (draft)
+[repeat 2]
+Is it now? ...Is it NOW? ...Oh, that was a cough. I nearly went.
+
+# (draft)
+[repeat 3]
+I've got a system. I wait for the beetle with the sign. But he's very short and I'm at the back.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+I'm going to have a jaw like his when I grow up. Mum says frogs don't really have jaws. I'm going to anyway.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+He's not blinked yet. I started counting again. I'm on two hours. I've had a sandwich.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+HOORAY! ...Nobody else did that one. I'll wait for the next.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+I've cheered so much my throat's gone squeaky. It's a hero's throat now.

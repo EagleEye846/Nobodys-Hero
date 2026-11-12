@@ -874,6 +874,9 @@ It comes out of the stone like it was waiting to.
 [starfall_stone]
 The fallen star, dark and cold now, with a sword-shaped slot in it.
 
+# (draft) The true ending: a lore touch, that the star's pieces are scattered.
+Round the slot, the stone is chipped away in more than one place, as if bits of it broke off on the way down and went on without it.
+
 [starfall_brambles]
 Brambles, grown up thick all round the stone in fifty years, as if the wood wanted to keep it.
 
@@ -1047,6 +1050,9 @@ The mill gate, through the leat's north wall, on two treadles in the bed of the 
 [mill_chalk]
 A chalk arrow on the mill yard wall, pointing north, towards the square. It's very small.
 
+# (draft) The last-chance warning for everything left in Hollin (the shop's back room): the well is a one-way drop.
+Under the arrow, a line added in a hurry and underlined twice: "THE WELL IS ONE WAY. if there's anything you want from up here, shop, shelf, anything, get it FIRST."
+
 [mill_chalk_bramble]
 {worried}It's getting smaller. Her arrows. Like she's running out of chalk.
 
@@ -1072,6 +1078,8 @@ Mags lent out books as well. Each one has a card inside with names on it. The la
 [hstores_notices]
 Notices for a dance on the green, a lost cat, and "Don't go up to the old hollow." Somebody's written "Too late" under it.
 
+Pinned over the dance, a slip of ruled paper, with a note on the back in pencil: "East shelf walks if you lean on it from above. Shove it toward the barrels, not the door. Mags says a lot of things. This one was true." 
+
 [hstores_lamp]
 An oil lamp, dry. A box of matches beside it, every one used.
 
@@ -1086,4 +1094,46 @@ Mags's chair, by the counter, where she could see the lane. The cushion still ha
 
 [hstores_wall]
 Faded paper with little sprigs of heather on it. A row of nails where coats were hung.
+
+# --- Felled Run, woodcutters' leavings (2026-11-09) ---
+[felled_stump]
+# (draft)
+A pine stump, cut clean and level. Somebody counted the rings once: there are chalk ticks on the top, and they give up at forty.
+
+[felled_stump_2]
+# (draft)
+A stump with a seat worn into it. Good for sitting on while somebody else does the rolling.
+
+[felled_axe]
+# (draft)
+An axe, sunk in a stump and left there. The handle's gone grey. Whoever left it meant to come back after lunch.
+
+# (draft) THE REGISTRY'S QUEST: the Leaf of Names, behind a loose shelf in Hollin Stores.
+
+[hstores_loose_shelf]
+A tall shelf of tins and tallow, standing a hand's width off the east wall. Its feet have worn grooves in the boards, and it isn't fixed to anything. Walk into it to push it.
+
+[hstores_loose_shelf_bramble]
+{sly}It's on RUNNERS. Mags had a secret door the whole time. ...I'm not even mad. I'm taking notes.
+
+[backroom_sign]
+A card tacked to a shelf edge, in a woman's square hand: "NOT FOR THE COUNTER." Under it, smaller: "Don't prop the gate with your foot. Use the weight." 
+
+[backroom_gate]
+A slatted wooden gate across the stockroom, shut tight. There's an iron plate set in the floor on this side.
+
+[backroom_button]
+A round iron plate in the boards, with a ring cut round it. Something heavy would hold it down.
+
+[backroom_stone]
+A cast-iron weight off a big scale, the kind Mags weighed flour with. Walk into it to push it. There's a stump by the wall: press it, and everything goes back where it started.
+
+[backroom_leaf]
+A page of ruled paper, pinned upright to a shelf with a nail, torn along one edge. The ruled lines are faintly blue, as if there's light in them. Across the top, in a hand that isn't Mags's: I.
+
+[backroom_leaf_taken]
+A nail in a shelf, and a small clean square on the wood where the page was pinned.
+
+[backroom_leaf_bramble]
+{awed}Is it from a book? It's SO old. ...Mags just stuck it up and never told anyone?
 

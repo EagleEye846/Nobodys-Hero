@@ -6,3 +6,7 @@ __pycache__/
 
 # Research notes and reports (not part of the game).
 notes/
+
+# The Studio and dev tools stay on the designer's computer only. Players run
+# play.py (through Play.bat / Play.command / play.sh) instead.
+tools/

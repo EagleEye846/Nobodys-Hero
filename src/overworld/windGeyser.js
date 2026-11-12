@@ -1,4 +1,4 @@
-import { TILE_SIZE as T } from '../config.js';
+import { TILE_SIZE as T, SCREEN_WIDTH, SCREEN_HEIGHT } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
 import { PLAYER_PALETTE, PLAYER_SPRITES, PLAYER_HANG_SPRITES } from '../data/art/player.js';
 import { memberFrames, inParty } from '../characters/party.js';
@@ -29,6 +29,16 @@ const MOTES = 16;
 const AIR = '240, 248, 255';
 const AIR_SHADE = '150, 186, 218';
 const AIR_EDGE = '96, 132, 172';
+
+// A colour at an alpha (to 3 places), as a fillStyle: made once and kept, as a
+// column draws a few hundred specks a frame.
+const styles = new Map();
+function airStyle(rgb, a) {
+  let list = styles.get(rgb);
+  if (!list) styles.set(rgb, list = []);
+  const k = Math.round(a * 1000);
+  return list[k] ??= `rgba(${rgb}, ${(k / 1000).toFixed(3)})`;
+}
 
 export const VES = 'vesper';
 
@@ -61,16 +71,21 @@ export class WindGeyser {
     // How far a point `up` pixels up the column is bent over: more the higher it is.
     const bendX = (up) => (lean ? lean[0] * 16 * (up / height) ** 2 : 0);
     const bendY = (up) => (lean && lean[1] > 0 ? 10 * (up / height) ** 2 : 0);
+    // Off the screen (a room full of blowholes): nothing to draw.
+    if (cx < -48 || cx > SCREEN_WIDTH + 48 || base < -16 || base - height - 24 > SCREEN_HEIGHT) return;
     const dot = (x, y, a, shade = false, w = 1) => {
       if (a <= 0.02) return;
       const up = base - y;
       const px = Math.round(x + bendX(up));
       const py = Math.round(y + bendY(up));
-      ctx.fillStyle = `rgba(${AIR_EDGE}, ${Math.min(1, a * 0.55).toFixed(3)})`;
+      ctx.fillStyle = airStyle(AIR_EDGE, Math.min(1, a * 0.55));
       ctx.fillRect(px, py + 1, w, 1);
-      ctx.fillStyle = `rgba(${shade ? AIR_SHADE : AIR}, ${Math.min(1, a).toFixed(3)})`;
+      ctx.fillStyle = airStyle(shade ? AIR_SHADE : AIR, Math.min(1, a));
       ctx.fillRect(px, py, w, 1);
     };
+    // On the coast (`foot`, set by the scene): a dark scoured ring in the
+    // ground and grit whirling round it, so the column shows in heavy rain.
+    if (this.foot) drawFoot(ctx, cx, base, time, strength);
     // A soft glow of churned-up air inside the column, so it reads as a column
     // and not just streaks: a funnel, narrow at the ground and wide at the top.
     glowColumn(ctx, cx, base, height, strength, time, bendX, bendY);
@@ -110,13 +125,34 @@ export class WindGeyser {
   }
 }
 
+// The foot of a coast updraft: a hollow the wind has scoured, darker than
+// the ground round it, and grit (sand, or spray on rock) spinning round its
+// rim, thrown up a little on the near side.
+const SCOUR = '18, 26, 24';
+const GRIT = '206, 186, 140';
+function drawFoot(ctx, cx, base, time, strength) {
+  for (let dy = -4; dy <= 4; dy++) {
+    const half = Math.round(13 * Math.sqrt(1 - (dy * dy) / 20.25));
+    ctx.fillStyle = airStyle(SCOUR, (Math.abs(dy) >= 3 ? 0.3 : 0.5) * Math.min(1, strength * 2));
+    ctx.fillRect(Math.round(cx - half), Math.round(base + dy), half * 2, 1);
+  }
+  for (let i = 0; i < 14; i++) {
+    const a = time * 3.6 + (i / 14) * Math.PI * 2;
+    const near = Math.sin(a) > 0;
+    const r = 12 + (i % 3);
+    const lift = near ? (i % 4) * 0.8 : 0;
+    ctx.fillStyle = airStyle(GRIT, (near ? 0.9 : 0.5) * Math.min(1, strength * 1.6));
+    ctx.fillRect(Math.round(cx + Math.cos(a) * r), Math.round(base + Math.sin(a) * 4 - lift), near ? 2 : 1, 1);
+  }
+}
+
 // The column's glow, swelling a little as the wind gusts.
 function glowColumn(ctx, cx, base, height, strength, time, bendX = () => 0, bendY = () => 0) {
   const gust = 0.8 + 0.2 * Math.sin(time * 2.3);
   for (let k = 0; k < height; k += 2) {
     const half = 4 + k * 0.13;
     const a = 0.16 * (1 - k / height) * strength * gust;
-    ctx.fillStyle = `rgba(${AIR}, ${a.toFixed(3)})`;
+    ctx.fillStyle = airStyle(AIR, a);
     ctx.fillRect(Math.round(cx - half + bendX(k)), Math.round(base - k - 1 + bendY(k)), Math.round(half * 2), 2);
   }
 }

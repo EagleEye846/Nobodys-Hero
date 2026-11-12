@@ -1,0 +1,529 @@
+# MERROW (Chapter 5): the town the green storm drowned, under the Sunken Lanes. The top street,
+# the rooftops, the drowned square and the open house, the high street (a river now), the lane
+# under the bell tower, the tower itself (Old Gulper), the sea gate and its tunnel to the
+# Soundings, and the ringers' loft (a secret). Why the town went under, and where its people
+# went, is never said. Nothing in Merrow is lit.
+# A section with `_ves` or `_bramble` on the end is what they say after it. `_calm` is used after
+# the chapter, when the storm has gone. DRAFT words throughout, for the designer to read.
+
+[save_point]
+The crystal hums at the top of the town, small and steady, the only thing in Merrow still awake.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[chest_empty]
+An empty chest.
+
+[rock_stump]
+An old stone mounting block, worn smooth on top. Press on it, and everyone goes back to where they came in.
+
+[merrow_stone]
+Dressed stone, laid by somebody who meant it to last. It has lasted. It's just under the sea now.
+
+[merrow_roof]
+Slate roofs, wet and dark, every slate still in its row.
+
+[merrow_house]
+A house front, limewashed once. There's a line of green on it at the height the water came to and went back from.
+
+[merrow_chimney]
+A chimney standing up out of the water. No smoke.
+
+[merrow_bollard]
+An iron bollard, for tying up to. Nobody has.
+
+[merrow_bubbles]
+Bubbles come up from somewhere down in the street and pop on the top. Something under there is breathing out, or the town is.
+
+# --- THE TOWN STEPS ---------------------------------------------------------------
+
+[steps_sign]
+A post office sign on a bracket: MERROW. LETTERS COLLECTED 7 A.M. AND 4 P.M.
+
+[steps_sign_ves]
+{bored}I'd say they've missed the post.
+
+[steps_washing]
+Washing on a line between two posts, pegged out and never brought in. It's been rained on for a long time.
+
+# (draft) after the storm.
+[steps_washing_calm]
+Washing on a line between two posts, pegged out and never brought in. It's nearly dry, for the first time in a long time.
+
+[steps_weathercock]
+A weathercock on its pole, sticking up out of the water. Under it, somewhere, is the rest of the roof.
+
+# (draft)
+[steps_weathercock 2]
+The weathercock creaks round to face you, then swings back to the sea, as if it had only wanted to check.
+
+[steps_chimney]
+A stack of chimney pots, out in the flood. You could row round it.
+
+[steps_stair]
+The stair you came down, back up to the Sunken Lanes.
+
+[steps_rail]
+An iron rail along the edge of the street. Past it, the town goes on under the water.
+
+[steps_slipway]
+The street just keeps going, down a slope and into the water, cobbles and all, as if it had somewhere to be.
+
+[steps_flood]
+Green water, very clear. Down in it you can see the street: doorsteps, a cart with its shafts up, a boot-scraper, a cat's dish.
+
+[steps_flood_bramble]
+{worried}I can see a cat's dish. Where's the cat?
+
+[steps_flood_calm]
+Green water, very clear, very still now the rain has stopped. Down in it you can see the street: doorsteps, a cart with its shafts up, a cat's dish.
+
+[steps_roofs]
+Slate roofs in a row, the water up to the gutters. A long way to jump. Too long.
+
+[steps_spire]
+The tip of a spire, pointing up out of the water like a finger saying "shh".
+
+# --- THE ROOFTOPS -----------------------------------------------------------------
+
+[roofs_sign]
+A board nailed to a post: OVER THE TOP TO THE SQUARE. MIND THE PLANKS. Someone has added underneath, smaller: AND THE SLATES.
+
+[roofs_boat]
+A rowing boat, upside down, stranded right on the ridge of the roof. The water must have put it there on its way down. Or on its way up.
+
+[roofs_boat_ves]
+{bored}Somebody's going to have a very confusing morning.
+
+[roofs_washing]
+More washing, on a line up on the roof, between the chimneys. Somebody's good shirts.
+
+[roofs_stack]
+A chimney stack standing up out of the water on its own, with three pots on it. There's a little dormer roof at its foot, just over the plank.
+
+[roofs_pouch]
+A purse on top of the chimney stack, tucked behind the pots. Somebody's savings, up where the burglars wouldn't look.
+
+[roofs_rope]
+A coil of rope, left on the cobbles. Whoever laid the planks.
+
+[roofs_post_sign]
+A post office sign: MERROW, EAST WARD. The letterbox under it is full of water.
+
+[roofs_water]
+The flood, between the houses. It's a street down there.
+
+[roofs_eave]
+A low roof: a porch, an eave, a dormer. One jump up.
+
+[roofs_roof]
+A slate roof. From the ridge you can see the whole drowned town: roofs and roofs, and the bell tower.
+
+[roofs_plank]
+A plank across the gap between two roofs. It bends a bit in the middle. It's fine. It's fine.
+
+[roofs_plank_bramble]
+{scared}Don't jump on it. Don't anybody JUMP on it.
+
+# --- THE DROWNED SQUARE -----------------------------------------------------------
+
+[square_ringers_door]
+A big oak door with iron studs, under a board: MERROW RINGERS. It's barred from the inside. It doesn't move at all.
+
+[square_ringers_open]
+The ringers' hall door, standing open. A narrow stair goes up inside.
+
+[square_frame]
+The ringers' practice frame, with a painted board: MERROW RINGERS. Underneath, smaller, in somebody's careful hand: "Practise on these. Then ring it the way the tower does."
+
+[square_frame_ves]
+{thoughtful}The way the tower does. Well, it's been doing it all day.
+
+[square_bell_low]
+A bronze bell on an iron bracket, the biggest of the three.
+
+[square_bell_mid]
+A bronze bell on an iron bracket, the middle one.
+
+[square_bell_high]
+A bronze bell on an iron bracket, the smallest of the three.
+
+[chime_answered]
+The last bell's note hangs in the air, and then, from the drowned tower across the town, the big bells answer it: the same four strokes, slow and even. Somewhere behind the ringers' door, a bar falls.
+
+[chime_answered_ves]
+{surprised}It answered. {bored}At least something round here keeps its word.
+
+[square_cross]
+The market cross, on its three steps. The bottom step is green. Pinned to it: SUNDAY. THE BAND. 3 O'CLOCK. WEATHER PERMITTING.
+
+[square_cross_bramble]
+{thinking}...Was it permitting?
+
+[square_well]
+The town well, with its roof and its winch. The water is right up to the lip. You wouldn't need the bucket.
+
+[square_baker]
+A baker's sign, a gold loaf on a bracket. The shop under it is closed. The shutters are down.
+
+# (draft)
+[square_baker 2]
+Through a crack in the shutters comes the smell of nothing at all. A baker's always smells of bread, even shut. This one has stopped.
+
+[square_post]
+The post office sign, a letter on a bracket. In the window, a card: BACK IN TEN MINUTES.
+
+[square_washing]
+Washing on a line between two posts, still pegged out. A row of small socks.
+
+[square_pouch]
+A purse on the doorstep of the end house, put down and not picked up again.
+
+[square_window]
+A dark window. Nobody behind it.
+
+[square_doorway]
+A doorway.
+
+[square_shallows]
+Shallow water over the cobbles, where the square goes down into the flood.
+
+[square_water]
+The square goes on down into the water, and the far side of it is under the sea.
+
+# --- THE OPEN HOUSE ---------------------------------------------------------------
+
+[house_table]
+A table laid for four: plates, cups, a loaf on its board, the butter out. The chairs are pushed back. Nothing has been eaten.
+
+[house_clock]
+A grandfather clock. It says ten to seven. It isn't going.
+
+# (draft)
+[house_clock 2]
+Ten to seven. You stand and wait for the minute hand. It doesn't come.
+
+[house_dresser]
+A dresser with its good plates on the rack and a teapot on the shelf. Inside the teapot, a purse.
+
+[house_dresser_empty]
+A dresser with its good plates on the rack, and the teapot, empty now.
+
+[house_pegs]
+Four coats on the pegs by the door, and a small hat.
+
+[house_mat]
+A doormat. It says WELCOME.
+
+[house_wall]
+A plain wall. Dry.
+
+# --- THE HIGH STREET --------------------------------------------------------------
+
+[street_sign]
+A board on a post: HIGH STREET. NO HORSES ON THE PAVEMENT. The pavement is a river.
+
+[street_sign_ves]
+{bored}Good news for the horses.
+
+# (draft)
+[street_sign 2]
+NO HORSES ON THE PAVEMENT. A fish goes by along the pavement, bold as you like.
+
+[street_hall_sign]
+A sign on a bracket on the market hall steps: MARKET THURSDAYS. FISH, BREAD, HABERDASHERY.
+
+[street_post_sign]
+A sign on a post: TO THE TOWER LANE.
+
+[street_pouch]
+A purse on the market hall steps. Change from Thursday.
+
+# (draft)
+[street_current]
+The flood running down the street, fast. Step in and it takes you with it, one way only, and it won't let you off till something gets in its way.
+
+# (draft)
+[street_roof]
+The roof of a drowned house, standing up out of the flood. The water piles up white against it and goes round, one way or the other.
+
+[street_front]
+A shop front, drowned to its sills. In the window, the water, and behind the water, a row of hats.
+
+[street_window]
+A shop window with the flood standing against the glass.
+
+[street_shallows]
+Shallow water over the cobbles.
+
+[street_water]
+The high street, deep and brown-green, going about its business.
+
+# --- THE TOWER LANE ---------------------------------------------------------------
+
+[lane_tower]
+The bell tower, going up and up into the rain. The bells are inside it somewhere. Nobody is.
+
+[lane_tower_calm]
+The bell tower, going up and up into the grey sky. The bells are inside it somewhere. Nobody is.
+
+[lane_door]
+The tower's porch door: oak and iron, barred on the inside. You'd need to be inside to open it.
+
+[lane_door_open]
+The bar comes up with a clank, and the door swings in.
+
+[lane_door_opened]
+The tower's porch door, standing open. Inside, a dark porch, and a stair going up.
+
+[lane_grate]
+An old drain grating at the waterline, half its bars rusted away. It's full of sea, and it's about the size of a ten-year-old.
+
+[lane_grate_bramble]
+{scared}...It's dark in there.
+
+[lane_bar]
+The bar across the inside of the door, on its iron brackets. It's heavy, but it lifts.
+
+[lane_bar_not_you]
+The bar is on the inside of the door. You can't reach it from out here.
+
+[lane_porch_ropes]
+Old bell ropes, coiled on the porch floor, waiting for somebody to carry them up.
+
+[lane_sign]
+A board on a post: THE BELLS OF MERROW. RUNG FOR WEDDINGS, SUNDAYS AND THE TIDE. VISITORS WELCOME TO THE TOWER.
+
+[lane_sign_ves]
+{bored}"Welcome." The door's barred on the inside.
+
+[lane_pouch]
+A purse in the gutter, dropped on the way somewhere.
+
+[lane_masonry]
+The tower's stone, black with wet, every block as big as a cupboard.
+
+[lane_flood]
+Floodwater, up against the foot of the tower.
+
+# --- THE BELL TOWER ---------------------------------------------------------------
+
+[belfry_bell]
+The great bell of Merrow, fallen on its side in the water. It's green with age, and there's a crack in its lip. Something inside it is breathing.
+
+[belfry_bell_spared]
+Old Gulper, asleep in his bell with his chin on the rim, very carefully not ringing it. His jaw has stopped hurting. You can tell.
+
+[belfry_bell_beaten]
+Old Gulper is back inside his bell, with only the tip of his tail over the rim. He's snoring. The bell hums along.
+
+[belfry_nest]
+A nest in the mouth of the bell: nets, rope, bones, spoons, buttons, a bicycle bell, a teapot lid. Everything shiny that ever went down a drain in Merrow.
+
+[belfry_rope]
+A bell rope hanging from its beam, with a striped woollen grip. The bell it rang is somewhere up in the dark, or lying on the floor.
+
+[belfry_ropes_coiled]
+Spare bell ropes, coiled on the porch floor.
+
+[belfry_floor]
+The tower floor, under a foot of green water.
+
+[belfry_hole]
+A hole in the floor where the boards gave way under the bell. The water in it goes down a long way.
+
+# --- THE SEA GATE -----------------------------------------------------------------
+
+[gate_shut]
+The town's sea gate: a great fish's head in iron, set in the wall, with its mouth wide open. The bars across the tunnel are its teeth. One tooth at the front is missing. There's an empty socket where it should be.
+
+[gate_shut_ves]
+{thoughtful}One tooth gone. I've seen a tooth like that today.
+
+[gate_open]
+The sea gate, with its iron jaws open and the Gulper Tooth sitting in its socket. The tunnel behind it runs east under the cliff.
+
+[gate_sign]
+A board by the gate: MERROW SEA GATE. TUNNEL TO THE SOUNDINGS. KEY KEPT BY THE HARBOUR MASTER.
+
+[gate_sign_ves]
+{bored}The harbour master's out.
+
+[gate_boat]
+A rowing boat, upside down on the quay. Somebody's going to want that.
+
+[gate_pots]
+Lobster pots, stacked up by the harbour wall. Empty.
+
+[gate_bollard]
+A bollard with a chain round it. The chain goes down into the water and doesn't come back up.
+
+[gate_pouch]
+A purse on the end of the quay, half hidden under a coil of chain.
+
+[gate_tunnel]
+Dark water in the tunnel, running east under the cliff.
+
+[gate_basin]
+Merrow's harbour, full to the brim, with the town wall all round it. The boats are on the bottom.
+
+# --- THE RINGERS' LOFT (a secret) -------------------------------------------------
+
+[loft_board]
+A peal board, in gold letters on black: the peals rung by the Merrow Ringers, every one with its date and the names of the ringers. The last one has a date and a time, and the names, and then nothing where the number of changes should be.
+
+[loft_board_ves]
+{thoughtful}They never finished it.
+
+[loft_rope]
+A practice rope, hanging from its beam. Its grip is worn pale where the hands went.
+
+[loft_chest]
+The ringers' chest, with a bell painted on the lid. Inside, for long peals: a bottle of RINGERS' CORDIAL.
+
+[loft_tin]
+The ringers' tin, for the tea fund. It's very full. They must have liked tea.
+
+[loft_ropes]
+Spare ropes, coiled.
+
+[loft_pegs]
+A peg rail with four pairs of ringers' gloves on it, and one small pair.
+
+[loft_wall]
+The loft wall. Dry as a biscuit. The water never got up here.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_mhouse_mugs]
+Four mugs on the rail: a big one, two middling, one small.
+
+# (draft)
+[in_mhouse_sketch]
+A pencil drawing of the bell tower, framed.
+
+# (draft)
+[in_mhouse_window]
+A window on the square. Rain on the glass, and nobody out there.
+
+# (draft)
+[in_mhouse_window_calm]
+A window on the square. Nobody out there.
+
+# (draft)
+[in_mhouse_rug]
+A rag rug under the table, the chairs pushed back across it.
+
+# (draft)
+[in_mhouse_bowl]
+A cat's bowl by the wall, full.
+
+# (draft)
+[in_mhouse_boots]
+Boots by the door, lined up for the morning.
+
+# (draft)
+[in_loft_calendar]
+A calendar on a nail. Every Thursday is ringed: PRACTICE.
+
+# (draft)
+[in_loft_window]
+A small window high in the loft. The rain can't decide which way to go.
+
+# (draft)
+[in_loft_window_calm]
+A small window high in the loft. You can see the tower from here.
+
+# (draft)
+[in_loft_mugs]
+Two mugs on a stool, left after practice. One of them says TENOR.
+
+# The way east to the high street, before the open house (merrow_house): it turns you back.
+[square_house_not_yet]
+Every door on the square is shut fast, except one. On the west side, a house has its door standing open.
+
+[square_house_not_yet_ves]
+{bored}A drowned town, and one door open. I'm not walking past that.
+
+# House fronts and what's in the water (2026-11-08).
+[front_gable]
+A tall house with its gable to the street. The shutters upstairs are open, as if somebody meant to air the room.
+
+[front_dutch]
+A stone house with a stepped gable. Somebody bricked up the window upstairs long before the water came.
+
+[front_parapet]
+A neat house behind a stone parapet, its upstairs shutters closed. The knocker's gone green.
+
+[front_shop]
+SAILS, says the board over the window. Coils of rope still sit on the shelf inside, just above the water.
+
+[front_narrow]
+A thin house squeezed in between its neighbours. The door is boarded up. One shutter hangs by a hinge.
+
+[front_door]
+A door, shut. Nobody's going to answer it.
+
+[front_door_boarded]
+Planks nailed across a door. Whoever did it was in a hurry.
+
+[front_door_hanging]
+The door hangs off its top hinge. Inside, it's dark, and the water's in.
+
+[front_shutters]
+Shutters, painted once. The paint's gone and the hinges have rusted the wood orange.
+
+[front_window_box]
+A window box. Whatever grew in it drowned, and the weed moved in.
+
+[front_bricked]
+A window, bricked up. The bricks are older than the flood.
+
+[front_sign_fish]
+A fish on a board, hung off an iron bracket. The fishmonger's. Plenty of fish about, now.
+
+[front_sign_key]
+A gilt key on a board: the locksmith's. Not much call for keys, now.
+
+[front_sign_boot]
+A boot on a board: the cobbler's.
+
+[front_awning]
+A striped awning on iron brackets, sagging with rain.
+
+[front_pipe]
+A downpipe, running over. There's a green streak down the wall under every joint.
+
+[front_lamp]
+A storm lamp on a wall bracket, still burning, low and steady.
+
+[water_cart]
+A handcart gone nose-down in the flood. One wheel turns a little when the water pushes it.
+
+[water_crate]
+A crate, riding low in the water. Whatever's in it is heavy, and wet.
+
+[water_barrel]
+A barrel bobbing on its side, its bung gone.
+
+[water_lamp]
+A street lamp leaning over in the water, still alight.
+
+[water_stall]
+A market stall, drowned to its counter. The apples got away.
+
+[belfry_candle]
+The ringers' lantern on its iron spike, a candle in it burning down.
+
+[square_barrels]
+Barrels and a crate stood out by a door for the carter. The carter never came.
+
+[loft_barrels]
+Two barrels. One says ALE in chalk. It's empty. Ringing is thirsty work.

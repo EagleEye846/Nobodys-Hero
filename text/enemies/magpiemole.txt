@@ -17,6 +17,16 @@ MAGPIE MOLE polishes a coin on its waistcoat, and holds it up to the light. It d
 
 Smells like dirt, brass and a very full pocket.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+MAGPIE MOLE's sack has a hole in it, and something shiny falls out with every step. It picks each one up. It's falling behind.
+
+# (draft)
+[flavor: spareable]
+MAGPIE MOLE has stopped looking at your buttons. It's looking in its sack for something to give you, and taking its time choosing.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

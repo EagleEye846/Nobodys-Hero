@@ -7,3 +7,17 @@ Go and see him. He's expecting you. I mean, he'll BE expecting you. Once you've 
 
 [repeat]
 Sorry. Orders. If it's any comfort, I'd love to let you through. But I'd lose my hat.
+
+# More turns (2026-11-09 polish)
+
+# (draft)
+[repeat 2]
+Still no word. You'll know when there's word. There'll be a drum roll. There's always a drum roll.
+
+# (draft)
+[repeat 3]
+The door? Goes down. Just down. Not a nice down. Diggings, then dark, then darker, then I'm told it gets quite bad.
+
+# (draft)
+[repeat_ves 3]
+{bored}Thank you. That was very nearly a map.

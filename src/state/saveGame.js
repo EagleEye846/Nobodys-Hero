@@ -18,6 +18,9 @@ export const WORLD_STATE = {
   // NPCs' lines for after a cutscene that you've already heard, as "npc:scene"
   // (see OverworldScene.npcPages).
   talked: [],
+  // How many times you've looked at each thing and talked to each person, as
+  // "room:thing:section" and "npc:..." (words that take turns: turnSection in textLoader.js).
+  turns: {},
   // Puzzle switches that are on, as "room:name".
   levers: [],
   // Green updrafts you've found and can travel between (src/data/travel.js).
@@ -44,12 +47,20 @@ function resetTo(state, fresh, saved) {
   Object.assign(state, JSON.parse(JSON.stringify(fresh)), saved);
 }
 
+// When the game last saved (performance.now()), or -Infinity: the text box
+// shows a little "SAVED" badge on words that open straight after a save.
+let savedAt = -Infinity;
+export function lastSavedAt() {
+  return savedAt;
+}
+
 // Returns whether the save worked (storage can be blocked, e.g. in private windows).
 export function saveGame(roomId, spawn) {
   WORLD_STATE.room = roomId;
   WORLD_STATE.spawn = spawn;
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ hero: HERO_STATE, world: WORLD_STATE }));
+    savedAt = performance.now();
     return true;
   } catch {
     return false;
@@ -88,6 +99,20 @@ export function loadGame() {
   } catch {
     return false;
   }
+}
+
+// Everything as it is this moment, to go back to later (restoreState): a
+// story battle keeps one from its start, so TRY AGAIN on the game over
+// begins the fight again exactly as it began (your bag, the scenes seen).
+export function snapshotState() {
+  return JSON.parse(JSON.stringify({ hero: HERO_STATE, world: WORLD_STATE }));
+}
+export function restoreState(snapshot) {
+  // (Time played keeps counting through the tries.)
+  const played = WORLD_STATE.timePlayed;
+  resetTo(HERO_STATE, FRESH.hero, JSON.parse(JSON.stringify(snapshot.hero)));
+  resetTo(WORLD_STATE, FRESH.world, JSON.parse(JSON.stringify(snapshot.world)));
+  if (played !== undefined) WORLD_STATE.timePlayed = played;
 }
 
 // The saved game without loading it, for the title screen's save card: null if there isn't one.

@@ -17,6 +17,14 @@ OLD DIVER pats its breastplate for a pocket. It has no pockets. It pats again, t
 
 Smells like wet brass, canvas, and a lot of years.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+OLD DIVER leans on nothing to get its breath. The bubbles come up the hose slower and slower.
+
+[flavor: spareable]
+OLD DIVER stands easy, for the first time in a very long walk.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

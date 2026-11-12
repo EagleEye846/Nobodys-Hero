@@ -17,6 +17,16 @@ A little grit sifts down from the ceiling. DRILLBUG says that's normal.
 
 Smells like a hot cellar and a very long weekend.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+DRILLBUG's drill coughs, splutters, and turns a quarter turn. DRILLBUG says it meant to do that. It's very proud of the quarter.
+
+# (draft)
+[flavor: spareable]
+DRILLBUG has switched off its drill and is pointing its helmet lamp at the ceiling, so you can see the way out. It's the real way, this time.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

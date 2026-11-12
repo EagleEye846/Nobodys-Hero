@@ -24,7 +24,7 @@ export const REED_STALKER = {
     frames: [REED_STALKER_DISGUISE_SPRITES.still, REED_STALKER_DISGUISE_SPRITES.eye, REED_STALKER_DISGUISE_SPRITES.beak],
     palette: REED_STALKER_PALETTE,
   },
-  maxHp: 780,
+  maxHp: 990,
   // Every hit hurts a lot more than the marsh's other monsters'.
   damage: 31,
 

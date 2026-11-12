@@ -182,7 +182,7 @@ Drags one enemy back: {amount} damage, next attack shorter.
 Salts one enemy: a little now, then a burn for 3 turns.
 
 [ebb_flow]
-Swap attack and defence: hits 1.75x, theirs 1.5x, 2 turns.
+Swap attack and defence: hits 1.5x, theirs too, 2 turns.
 
 [low_water]
 Shows weak spots: one enemy takes 40% more for 3 turns.
@@ -274,3 +274,52 @@ Conkers for everyone: {damage} damage to every enemy.
 
 [bramble_i've got you]
 Everyone recovers {heal} HP; friends' hits land on him, halved.
+
+# Chapter 5, the third wave.
+[counter]
+Waits: the next hit on you does nothing and goes back for {amount}.
+
+[sidestep]
+Light on your feet. The next hit on you does nothing at all.
+
+[truce]
+One enemy: MERCY +{amount}%, and its next attack is shorter.
+
+[weaken]
+Every enemy takes 25% more from every hit for 2 enemy turns.
+
+[stall]
+No damage, but the next attack is cut well short.
+
+[duck]
+Nothing can touch you for the first 2 seconds of the next attack.
+
+[vesper_twirl]
+MERCY +{calm}% for all, and the next attack starts out slow.
+
+[vesper_lift]
+The next attack is cut well short, and SP +{sp}%.
+
+[vesper_hot soup]
+Everyone recovers {heal} HP after each of the next {turns} enemy turns.
+
+[vesper_charge]
+One enemy takes 30% more from every hit for 2 enemy turns.
+
+[vesper_windbreak]
+Next attack halved, each hit {def} less, and safe at its start.
+
+[bramble_notch]
+{damage} damage, and it takes 30% more from every hit for 2 turns.
+
+[bramble_rally]
+Everyone recovers {heal} HP, and SP +{sp}%.
+
+[bramble_pocket sand]
+Sand in their eyes: the next attack's bullets start out slow.
+
+[bramble_look out!]
+He shouts what's coming; it starts slow; first hit on you: nothing.
+
+[bramble_shake it off]
+Heals a friend {heal} HP, even one who's down; next attack shorter.

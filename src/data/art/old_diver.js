@@ -132,6 +132,6 @@ export const OLD_DIVER_ANIM = {
     const rows = drawDiver({ dy: i === 1 ? 1 : 0, nod: i === 1 ? 2 : 1, dent: true, glow: i < 2 ? 2 : 0, spear: 'low' });
     return i === 0 ? recolour(rows, FLASH) : rows;
   }),
-  death: clip(4, [0, 1, 2, 3, 4, 5], (i) => dissolve(drawDiver({ fold: Math.min(i, 3), spear: 'low', dent: true, helmet: i < 3, nod: -i, hose: 0 }), i >= 3 ? (i - 2) * 0.28 : 0, 3)),
+  death: clip(4, [0, 1, 2, 3, 4, 5], (i) => dissolve(drawDiver({ fold: Math.min(i, 3), spear: 'low', dent: true, helmet: i < 3, nod: -i, hose: 0 }), i >= 4 ? (i - 3) * 0.15 : 0, 3)),
   spared: clip(3, [0, 1, 2, 3], (i) => drawDiver({ dy: 0, nod: i % 2 ? -1 : 0, spear: 'low', glow: 1, hose: Math.sin(i) * 0.6 })),
 };

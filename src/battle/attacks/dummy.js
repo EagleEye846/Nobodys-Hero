@@ -110,22 +110,25 @@ export const DUMMY_ATTACKS = {
   },
 
   // Big buttons pop off and ricochet around the box, spinning, while loose
-  // stuffing drifts down between them.
-  buttonBounce(box, density, { Shot, every, rand, shuffleBag, spreadAcross }) {
+  // stuffing drifts down between them. The last button off is flicked
+  // straight at you, so a corner isn't a hiding place.
+  buttonBounce(box, density, { Shot, every, rand, shuffleBag, spreadAcross, angleTo }) {
     const dropX = spreadAcross(box.x + 10, box.x + box.w - 10);
     const fluffX = spreadAcross(box.x + 4, box.x + box.w - 4, 5);
     const heading = shuffleBag([-1, 1]);
     const total = 2 + Math.round(density);
     let thrown = 0;
-    const pop = every(0.8, 1.1, (bullets) => {
+    const pop = every(0.8, 1.1, (bullets, soul) => {
       if (thrown >= total) return;
       thrown++;
-      const angle = rand(0.25, 0.75) * Math.PI;
+      const x = dropX();
+      const at = thrown === total ? angleTo({ x, y: box.y + 6 }, soul) : null;
+      const angle = at ?? rand(0.25, 0.75) * Math.PI;
       const speed = rand(48, 62);
       bullets.push(new Shot({
-        x: dropX(),
+        x,
         y: box.y + 6,
-        vx: Math.cos(angle) * speed * heading(),
+        vx: Math.cos(angle) * speed * (at === null ? heading() : 1),
         vy: Math.sin(angle) * speed,
         art: 'button',
         bounce: true,
@@ -137,8 +140,8 @@ export const DUMMY_ATTACKS = {
     });
     return {
       duration: 6.5,
-      update: (dt, bullets) => {
-        pop(dt, bullets);
+      update: (dt, bullets, soul) => {
+        pop(dt, bullets, soul);
         fluff(dt, bullets);
       },
     };
@@ -159,12 +162,12 @@ export const DUMMY_ATTACKS = {
       let angle;
       let length;
       if (horizontal) {
-        y = clamp(soul.y + rand(-10, 10), box.y + 6, box.y + box.h - 6);
+        y = clamp(soul.y + rand(-4, 4), box.y + 6, box.y + box.h - 6);
         x = forward ? box.x - 4 : box.x + box.w + 4;
         angle = forward ? 0 : Math.PI;
         length = box.w + 8;
       } else {
-        x = clamp(soul.x + rand(-10, 10), box.x + 6, box.x + box.w - 6);
+        x = clamp(soul.x + rand(-4, 4), box.x + 6, box.x + box.w - 6);
         y = forward ? box.y - 4 : box.y + box.h + 4;
         angle = forward ? Math.PI / 2 : -Math.PI / 2;
         length = box.h + 8;
@@ -176,8 +179,8 @@ export const DUMMY_ATTACKS = {
   },
 
   // Balls of stuffing swell up around the box (never right on top of you),
-  // then burst into a ring of six tufts.
-  stuffingBurst(box, density, { Shot, every, rand, pointAwayFrom }) {
+  // then burst into a ring of six tufts, one of them coming your way.
+  stuffingBurst(box, density, { Shot, every, rand, pointAwayFrom, angleTo }) {
     const swell = 0.8;
     let swelling = [];
     const grow = every(1.2, 1.6, (bullets, soul) => {
@@ -192,7 +195,7 @@ export const DUMMY_ATTACKS = {
         for (const ball of swelling) {
           ball.t -= dt;
           if (ball.t > 0) continue;
-          const turn = rand(0, Math.PI * 2);
+          const turn = angleTo(ball, soul) + rand(-0.08, 0.08);
           for (let i = 0; i < 6; i++) {
             const angle = turn + (i / 6) * Math.PI * 2;
             bullets.push(new Shot({ x: ball.x, y: ball.y, vx: Math.cos(angle) * 44, vy: Math.sin(angle) * 44, art: 'tuft' }));

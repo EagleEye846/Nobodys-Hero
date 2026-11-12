@@ -19,7 +19,7 @@ export const FROZEN_STEP = {
     frames: [ICE_STEP_DISGUISE_SPRITES.still, ICE_STEP_DISGUISE_SPRITES.glare, ICE_STEP_DISGUISE_SPRITES.glance],
     palette: ICE_STEP_PALETTE,
   },
-  maxHp: 205,
+  maxHp: 260,
   damage: 13,
 
   // A little busier than its brother at the bottom.

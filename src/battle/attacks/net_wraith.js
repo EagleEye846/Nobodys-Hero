@@ -10,22 +10,26 @@ import { withSnipes } from './snipes.js';
 
 const NET = { n: '#c8b48a', N: '#8a7650', i: '#cfd8dc', o: '#e0583a', O: '#a83a28', W: '#f4ece0', w: '#ffffff', g: '#9af0c8', G: '#4ab08a', k: '#1c2a2a' };
 
-// A cork float: red and white.
-function float(size) {
-  const c = (size - 1) / 2;
-  const g = new Pix(size, size);
-  g.disc(c, c, c, c, 'o');
-  g.rect(0, Math.round(c) - 1, size, 2, 'W');
-  g.disc(c + 1, c + 1.5, c * 0.7, c * 0.5, 'O', 'o');
-  g.set(c - 1, c - 2, 'w');
+// A net float: a cork bobber, red cap, white band, a peg on top where the
+// line ties on, and a wet glint.
+function float(flip) {
+  const g = new Pix(7, 10);
+  g.rect(3, 0, 1, 2, 'N');
+  g.disc(3, 4, 3, 2.4, 'o');
+  g.disc(3.6, 4.6, 1.6, 1.2, 'O', 'o');
+  g.rect(0, 5, 7, 1, 'W');
+  g.disc(3, 7, 2.6, 2, 'W');
+  g.rect(1, 7, 5, 1, 'n');
+  g.set(2, 3, 'w');
+  g.rect(3, 9, 1, 1, flip ? 'n' : 'N');
   g.outline('k');
   return g.rows();
 }
-defineBulletArt('netFloat', { frames: [float(7)], palette: NET, radius: 3, spin: 1.5 });
+defineBulletArt('netFloat', { frames: [float(0), float(1)], palette: NET, radius: 3, frameSeconds: 0.25 });
 
 // A hook on its line, point down.
 defineBulletArt('netHook', {
-  frames: [['...i...', '...i...', '...i...', '...i...', '...i.i.', '.i.i.i.', '..iii..']],
+  frames: [['..kk...', '.kiik..', '.k..k..', '..kik..', '...ik..', '...ik..', 'k..ikk.', 'ik.iik.', 'iikiik.', '.iiiik.', '..kkk..']],
   palette: NET,
   radius: 2.6,
 });
@@ -132,12 +136,33 @@ export const NET_WRAITH_ATTACKS = {
     let lineShift = 0;
     let gapAt = 4;
     // A float bobs by itself (so its path can be read ahead).
+    // Each float is tied to the one ahead of it in its line by a sagging rope
+    // (only a look: the floats are what hurt), so the line reads as a float line.
     class Cork extends Shot {
       update(dt, box2) {
         super.update(dt, box2);
         if (this.age > this.warn) this.y = this.row + Math.sin((this.age - this.warn) * 4.4 + this.phase) * 15;
       }
+
+      draw(ctx) {
+        const p = this.ahead;
+        if (p && !p.isGone(box) && this.age > this.warn) {
+          ctx.save();
+          const over = Math.max(this.age - (this.warn + this.life), p.age - (p.warn + p.life));
+          ctx.globalAlpha = over > 0 ? Math.max(0, 1 - over / 0.25) * 0.9 : 0.9;
+          ctx.strokeStyle = '#8a7650';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y - 3);
+          ctx.quadraticCurveTo((this.x + p.x) / 2, (this.y + p.y) / 2 + 4, p.x, p.y - 3);
+          ctx.stroke();
+          ctx.restore();
+        }
+        super.draw(ctx);
+      }
     }
+    // The last float made in each row, so the next can be tied to it.
+    const last = new Map();
     return {
       duration: 7.2,
       update: (dt, bullets, soul) => {
@@ -156,10 +181,14 @@ export const NET_WRAITH_ATTACKS = {
           // Each float's bob starts when it comes in, so the line rolls like a wave.
           // A second line rides the mirror row on the other side of the box.
           // A gap in each line (two floats missing) is the way through.
-          for (const row of (made >= gapAt && made <= gapAt + 2) ? [] : [base, box.y * 2 + box.h - base]) {
+          const gapNow = made >= gapAt && made <= gapAt + 2;
+          if (gapNow || made === 1) last.clear();
+          for (const [k, row] of (gapNow ? [] : [base, box.y * 2 + box.h - base]).entries()) {
             const f = new Cork({ x: box.x + box.w + 5, y: row, vx: -48, warn: 0.15, art: 'netFloat', life: 3.6 });
             f.row = row;
             f.phase = made * 0.9 + lineShift;
+            f.ahead = last.get(k) ?? null;
+            last.set(k, f);
             bullets.push(f);
           }
           made++;
@@ -179,6 +208,23 @@ export const NET_WRAITH_ATTACKS = {
     let live = [];
     const heading = { x: 0 };
     let lastX = null;
+    // A hook draws its own fishing line up to the top of the box.
+    class Hook extends Shot {
+      draw(ctx) {
+        if (this.age >= this.warn && this.y > box.y - 4) {
+          ctx.save();
+          ctx.globalAlpha = 0.8;
+          ctx.strokeStyle = '#cfd8dc';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(Math.round(this.x) + 0.5, box.y - 2);
+          ctx.lineTo(Math.round(this.x) + 0.5, this.y - 3);
+          ctx.stroke();
+          ctx.restore();
+        }
+        super.draw(ctx);
+      }
+    }
     return {
       duration: 7.8,
       update: (dt, bullets, soul) => {
@@ -192,11 +238,10 @@ export const NET_WRAITH_ATTACKS = {
           const warn = 0.7;
           const glint = new Shot({ x, y: box.y + 4, harmless: true, life: warn, art: 'netGlint' });
           bullets.push(glint);
-          const hook = new Shot({ x, y: box.y - 6, vy: 0, warn, art: 'netHook', life: 3 });
+          const hook = new Hook({ x, y: box.y - 6, vy: 0, warn, art: 'netHook', life: 3 });
           hook.glint = glint;
           hook.depth = depth;
           hook.state = 'fall';
-          hook.bead = 0;
           live.push(hook);
           bullets.push(hook);
           hooks++;
@@ -208,11 +253,6 @@ export const NET_WRAITH_ATTACKS = {
             h.glint.x = h.x;
           }
           if (h.age < h.warn) continue;
-          h.bead -= dt;
-          if (h.bead <= 0 && h.state !== 'done') {
-            h.bead = 0.05;
-            bullets.push(new Shot({ x: h.x, y: h.y - 4, harmless: true, life: 0.7, art: 'netThread' }));
-          }
           if (h.state === 'fall') {
             h.vy = 150;
             if (h.y >= h.depth) { h.state = 'hang'; h.vy = 0; h.hung = h.age; }
@@ -237,7 +277,8 @@ export const NET_WRAITH_ATTACKS = {
     let sheets = 0;
     const COLS = 8;
     return {
-      duration: 8.2,
+      // (The last sheet is down by 5 s: 7.0, was 8.2, so the next attack isn't long in coming.)
+      duration: 7.0,
       update: (dt, bullets, soul) => {
         t += dt;
         if (sheets < 3 && t >= 0.2 + sheets * 1.9) {

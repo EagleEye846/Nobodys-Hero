@@ -122,7 +122,12 @@ export const WEAPONS = {
   // Orla has reforged it).
   // Mrs. Wrasse's Chandlery, Saltcombe.
   driftwood_cutlass: { name: 'Driftwood Cutlass', fightPower: 2.1, ability: 'lunge' },
-  brine_harpoon: { name: 'Brine Harpoon', fightPower: 1.5, ability: 'shoot' },
+  // The cliff cave's fishers' chest (sunny_cliff_cave), on the way down: the first find of the
+  // chapter on the coast. Over chapter 4's best lunge (1.8), under the chandlery's cutlass.
+  gaff_hook: { name: 'Gaff Hook', fightPower: 1.95, ability: 'lunge' },
+  // Close behind the cutlass it's sold beside (at 1.5 nobody would buy it): you trade
+  // a little FIGHT for SHOOT.
+  brine_harpoon: { name: 'Brine Harpoon', fightPower: 1.95, ability: 'shoot' },
   // The Wreck Yard's chest.
   anchor_maul: { name: 'Anchor Maul', fightPower: 2.3, ability: 'quake' },
   // A chest in the Soundings.
@@ -134,9 +139,11 @@ export const WEAPONS = {
   sailcloth_umbrella: { name: 'Sailcloth Brolly', wielder: 'vesper', fightPower: 1.15, allyHeal: 18, allySp: 14, regen: 4 },
   storm_umbrella: { name: 'Storm Umbrella', wielder: 'vesper', fightPower: 1.35, allyStrike: 14, gust: 3 },
   // Bramble's first full set (the boat axe from the chandlery, the cleaver from Orla).
-  // Kept at 1.5 and 1.55 (just over his chapter 4 best, 1.4): his FIGHT grows 5%
-  // a level and the hero's doesn't, so at chapter 5's levels a bigger axe would
-  // out-hit the hero's sword (see "Chapter 5 balance pass" in the builders guide).
-  boat_axe: { name: 'Boat Axe', wielder: 'bramble', fightPower: 1.5, allyStrike: 10, allyCalm: 3 },
+  // Kept at 1.45 and 1.55 (just over his chapter 4 best, 1.4, with more STRIKE):
+  // the hero's sword doesn't grow until Orla reforges it, so a bigger axe would
+  // out-hit it at Saltcombe when the hero has no chapter 5 FIGHT skills (his
+  // FIGHT stops growing with levels past LV 37 in chapter 5: memberGrowth in
+  // party.js; see "Chapter 5 balance pass" in the builders guide).
+  boat_axe: { name: 'Boat Axe', wielder: 'bramble', fightPower: 1.45, allyStrike: 10, allyCalm: 3 },
   ships_cleaver: { name: "Ship's Cleaver", wielder: 'bramble', fightPower: 1.55, allyStrike: 12, sneak: 0.6, shorten: 0.15 },
 };

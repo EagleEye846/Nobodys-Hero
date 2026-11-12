@@ -26,7 +26,9 @@ export const DEEP_KEEPERS_FIRE = {
   // His theme while he's at the fire ("Minding the Fire").
   musicAfter: { scene: 'keeper_in_the_deep', song: 'keeper' },
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
-  ambience: 'deep',
+  ambience: 'deep_fire',
+  // How it rings (a cave: ECHOES in src/audio/music.js).
+  echo: 'cave',
   // Dark: only your light and the fire show anything (0 to 1).
   dark: 0.92,
   // Glow-worms on Ves's umbrella: your light never drops below this here.

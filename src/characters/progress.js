@@ -17,7 +17,9 @@ const HP_PER_LEVEL = 10;
 // the tree has skills for (a save that thinks it's past the last chapter
 // built mustn't hand out extra).
 const NEWEST_SKILL_CHAPTER = Math.max(...ALL_SKILL_BRANCHES.flatMap((branch) => branch.skills.map((skill) => skill.chapter ?? 1)));
-const skillPointsPerLevel = () => Math.min(WORLD_STATE.chapter ?? 1, NEWEST_SKILL_CHAPTER);
+// One a level per chapter (5 a level in chapter 5), never past the newest
+// chapter that has skills.
+const skillPointsPerLevel = (chapter = WORLD_STATE.chapter ?? 1) => Math.min(chapter, NEWEST_SKILL_CHAPTER);
 
 const ALL_SKILLS = ALL_SKILL_BRANCHES.flatMap((branch) => branch.skills);
 
@@ -42,15 +44,39 @@ export function gainExp(amount) {
   let levels = 0;
   while (HERO_STATE.exp >= expToNext(HERO_STATE.level)) {
     HERO_STATE.exp -= expToNext(HERO_STATE.level);
-    HERO_STATE.level++;
-    HERO_STATE.skillPoints += skillPointsPerLevel();
-    // Everyone in the party grows with you.
-    HERO_STATE.memberPoints ??= {};
-    for (const id of partyIds()) HERO_STATE.memberPoints[id] = (HERO_STATE.memberPoints[id] ?? 0) + MEMBERS[id].skillPointsPerLevel * skillPointsPerLevel();
+    levelUp();
     levels++;
   }
   // A new level comes with a full recovery.
   if (levels) healHeroFully();
+  return levels;
+}
+
+// One level up, with the skill points it brings: the hero's, and everyone's
+// in the party (they grow with you). `chapter` is the chapter the level counts
+// as gained in (the one you're on, unless catching up: catchUpTo).
+function levelUp(chapter) {
+  const points = skillPointsPerLevel(chapter);
+  HERO_STATE.level++;
+  HERO_STATE.skillPoints += points;
+  HERO_STATE.memberPoints ??= {};
+  for (const id of partyIds()) HERO_STATE.memberPoints[id] = (HERO_STATE.memberPoints[id] ?? 0) + MEMBERS[id].skillPointsPerLevel * points;
+}
+
+// Raises the hero to `level` (never lowers him), as if he'd earned every level
+// on the way: the skill points each level gives the hero and the party, where
+// `chapterOf(level)` says which chapter that level would have come in. Starts
+// the new level with no EXP towards the next, at full HP. Returns the levels gained.
+export function catchUpTo(level, chapterOf) {
+  let levels = 0;
+  while (HERO_STATE.level < level) {
+    levelUp(chapterOf(HERO_STATE.level + 1));
+    levels++;
+  }
+  if (levels) {
+    HERO_STATE.exp = 0;
+    healHeroFully();
+  }
   return levels;
 }
 
@@ -110,6 +136,16 @@ export function memberSkillBonus(id, effect) {
   return (MEMBER_SKILLS[id] ?? [])
     .filter((skill) => hasSkill(skill.id) && effect in skill.effect)
     .reduce((sum, skill) => sum + Number(skill.effect[effect]), 0);
+}
+
+// An old attack spell sharpened by a later skill (`sharpen: '<spell id>'`,
+// "Rend II"): it's worked out as a spell of that skill's chapter, at the
+// skill's `sharpPower` (see spellStrike in battleScene.js). The latest learned
+// one counts; null if it hasn't been sharpened.
+export function spellSharpening(id) {
+  return ALL_SKILLS
+    .filter((skill) => skill.effect.sharpen === id && hasSkill(skill.id))
+    .reduce((best, skill) => ((skill.chapter ?? 1) > (best?.chapter ?? 0) ? { chapter: skill.chapter ?? 1, power: skill.effect.sharpPower } : best), null);
 }
 
 // Why a skill can't be learned right now, or null if it can.

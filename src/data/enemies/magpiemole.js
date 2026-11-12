@@ -22,7 +22,7 @@ export const MAGPIEMOLE = {
   anim: MAGPIE_MOLE_ANIM,
   // The Chapter 4 battle song.
   music: 'belowBattle',
-  maxHp: 1260,
+  maxHp: 1600,
   damage: 40,
 
   difficulty: { density: 1.45, speed: 1.35 },

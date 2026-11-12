@@ -417,3 +417,30 @@ Far off to the east, past the end of the fen, a long valley, and in it, broken t
 
 [shore_end]
 A path goes on east, down toward the valley and the lights.
+
+# (draft) THE REGISTRY'S QUEST: the Leaf of Hours, on the Clerk's Islet off the Far Shore.
+
+[shore_toll_sign]
+A board nailed to a stake at the mouth of a path trodden into the reeds:
+
+TOLL: ONE PENNY. PAY AT THE ISLET.
+
+Somebody's crossed out PAY and written LEAVE.
+
+[islet_sign]
+A clerk's board on a post:
+
+HOURS OF THE TOLL, DUSK TO DAWN. THE WATER IS TWO DEEP. TWO STONES, AND THE FIRST ONE'S NO USE WITHOUT THE SECOND.
+
+[islet_stone]
+A stone the size of a loaf, worn round by water. Walk into it to push it. It will sink wherever you push it into the fen.
+
+[islet_stump]
+A low stump with a hand worn into the top. Press it, and everything goes back where it started.
+
+[islet_leaf]
+A page of ruled paper, pinned flat to a clerk's board with a fish hook. Tiny hours down the side, one to a line, from dusk to dawn, every line ticked. In the corner: II.
+
+[islet_leaf_taken]
+A clerk's board on a post, with a fish hook through it, and a clean square where a page was pinned.
+

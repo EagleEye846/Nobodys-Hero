@@ -1,5 +1,5 @@
 import { defineBulletArt } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
 import { withSnipes } from './snipes.js';
 
 // The Shellac's attacks. It's a hermit crab living in a teapot, and it is
@@ -17,11 +17,6 @@ const CHINA = { k: '#1c1a24', c: '#f4eedb', C: '#cfc7ac', w: '#ffffff', b: '#4f7
 const CLAW = { k: '#1c1a24', r: '#e0673a', R: '#a8432a', o: '#f5a070' };
 const STEAM = { k: '#5a7a80', s: '#e8f6f4', S: '#b8d8d6', t: '#a8723a', T: '#7a4a22', y: '#d9a866' };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // A pincer pointing right: open, then snapped shut.
 const pincer = (open) => art(13, 11, (p) => {

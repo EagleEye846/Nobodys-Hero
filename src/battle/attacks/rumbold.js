@@ -268,8 +268,9 @@ export function confetti(box, density, { Shot, Line, rand, pick, every }, { brok
   let real = 0;
   let nextPop = 0.5;
   const pops = [];
-  // (Each piece of the rain glints at the top of the box a moment first.)
-  const rain = every(broken ? 0.7 : 0.3, broken ? 0.9 : 0.4, (bullets) => {
+  // (Each piece of the rain glints at the top of the box a moment first.
+  // Spaced so the poppers' fans have room to be read through it.)
+  const rain = every(broken ? 0.7 : 0.42, broken ? 0.9 : 0.55, (bullets) => {
     bullets.push(new Shot({
       x: rand(box.x + 4, box.x + box.w - 4), y: box.y + 2, vy: rand(16, 26), vx: rand(-6, 6), warn: 0.35, life: 6,
       wobble: { amplitude: 3, frequency: rand(4, 7) }, art: pick(CONFETTI),
@@ -280,9 +281,10 @@ export function confetti(box, density, { Shot, Line, rand, pick, every }, { brok
     update: (dt, bullets, soul) => {
       const rdt = dt / density;
       real += rdt;
-      if (real < 6.1) rain(dt, bullets);
+      // (Broken, there's no rain: just the poppers that barely pop.)
+      if (!broken && real < 6.1) rain(dt, bullets);
       if (real >= nextPop && real < 6.0) {
-        nextPop += broken ? 1.5 : 0.85;
+        nextPop += broken ? 1.5 : 1.0;
         const left = Math.random() < 0.5;
         const x = left ? box.x - 2 : box.x + box.w + 2;
         // Never point-blank: on the wall you're hugging, it goes in well
@@ -303,7 +305,7 @@ export function confetti(box, density, { Shot, Line, rand, pick, every }, { brok
           const a = aim + (i - (n - 1) / 2) * (broken ? 0.4 : 0.16) + rand(-0.03, 0.03);
           const speed = rand(66, 80) * (broken ? 0.55 : 1);
           bullets.push(new Shot({
-            x: x + (left ? 6 : -6), y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, accel: -16, gravity: broken ? 40 : 20,
+            x: x + (left ? 6 : -6), y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, accel: -16, gravity: broken ? 22 : 20,
             life: 2.4, wobble: { amplitude: 1, frequency: 9 }, art: pick(CONFETTI),
           }));
         }
@@ -656,7 +658,7 @@ export function curtain(box, density, { Shot, rand, pick, every }, { broken = fa
   const spans = left ? [box.x + 6, box.x + half - 6] : [box.x + half + 6, box.x + box.w - 6];
   const cols = [];
   const events = [];
-  const rain = every(0.4, 0.55, (bullets) => {
+  const rain = every(0.65, 0.85, (bullets) => {
     // (Right up to the curtain's hem: there's no hiding in the seam.)
     const openMin = left ? box.x + half : box.x;
     bullets.push(new Shot({ x: rand(openMin + (left ? -3 : 4), openMin + half + (left ? -4 : 3)), y: box.y + 2, vy: rand(20, 32), warn: 0.35, life: 5, wobble: { amplitude: 2, frequency: 6 }, art: pick(CONFETTI) }));
@@ -697,7 +699,8 @@ export function curtain(box, density, { Shot, rand, pick, every }, { broken = fa
           });
         }
       }
-      if (real < 6.3) rain(dt, bullets);
+      // (Broken, nobody's throwing confetti: just the bags.)
+      if (!broken && real < 6.3) rain(dt, bullets);
       while (events.length && real >= events.sort((a, b) => a.at - b.at)[0].at) {
         const event = events.shift();
         if (event.kind === 'drop') drape.drop(1.2);
@@ -722,6 +725,9 @@ export function finale(box, density, { Shot, rand, pick, pointAwayFrom }, { brok
   const bottom = box.y + box.h + 4;
   let tada = false;
   const gapAt = Math.random() * 6.28;
+  // Which way you've been heading (for the broken rack's aim).
+  let lastX = null;
+  let drift = 0;
   const ring = (bullets, x, y, n, speed, turn, gap = null) => {
     const art = pick(SPARKS);
     for (let i = 0; i < n; i++) {
@@ -734,12 +740,19 @@ export function finale(box, density, { Shot, rand, pick, pointAwayFrom }, { brok
     duration: 8.2,
     update: (dt, bullets, soul) => {
       real += dt / density;
+      if (lastX !== null && dt > 0) drift += ((soul.x - lastX) / dt - drift) * Math.min(1, dt * 4);
+      lastX = soul.x;
       if (real >= next && real < 5.0) {
         next += broken ? 1.5 : 0.95;
         // A rocket up a lane, the other side from you. (Broken, Tuck can't
         // aim the rack, and it goes up wherever you are: it blinks first.)
-        const x = broken ? clampX(box, soul.x, 6) : pointAwayFrom(box, soul, 26, 10).x;
-        const stop = box.y + 10 + Math.random() * 22;
+        // (Broken, it goes up a little ahead of you if you're on the move.)
+        const x = broken ? clampX(box, soul.x + Math.max(-30, Math.min(30, drift * 0.5)), 6) : pointAwayFrom(box, soul, 26, 10).x;
+        // (Broken, it can't get far: it peters out about as high as you are,
+        // so there's no waiting it out up at the top of the box.)
+        const stop = broken
+          ? Math.min(box.y + box.h - 22, Math.max(box.y + 8, soul.y + (Math.random() - 0.5) * 16))
+          : box.y + 10 + Math.random() * 22;
         const rise = 95;
         const life = (bottom - stop) / rise;
         bullets.push(new Shot({ x, y: bottom, vy: -rise, warn: 0.65, life, art: 'rumRocket' }));
@@ -757,11 +770,13 @@ export function finale(box, density, { Shot, rand, pick, pointAwayFrom }, { brok
       while (bursts.length && real >= bursts[0].at) {
         const b = bursts.shift();
         if (b.big !== undefined) {
-          ring(bullets, b.x, b.y, [14, 18, 22][b.big], [28, 40, 52][b.big], b.big * 0.21, gapAt + b.big * 2.1);
+          ring(bullets, b.x, b.y, [12, 15, 18][b.big], [28, 40, 52][b.big], b.big * 0.21, gapAt + b.big * 2.1);
         } else if (b.fizzle) {
           // A dud: a few sparks drooping out of it.
-          for (let i = 0; i < 4; i++) {
-            bullets.push(new Shot({ x: b.x, y: b.y, vx: rand(-12, 12), vy: rand(-8, 4), gravity: 70, life: 2, art: 'rumSparkW' }));
+          // (A weak little pop all round first: there's no being right over it.)
+          for (let i = 0; i < 5; i++) {
+            const a = (i / 5) * Math.PI * 2 + rand(-0.3, 0.3);
+            bullets.push(new Shot({ x: b.x, y: b.y, vx: Math.cos(a) * 26, vy: Math.sin(a) * 26 - 8, gravity: 45, life: 2, art: 'rumSparkW' }));
           }
         } else {
           ring(bullets, b.x, b.y, 11, 34, rand(0, 6));

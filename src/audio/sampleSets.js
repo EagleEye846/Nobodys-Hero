@@ -29,6 +29,9 @@ export const SAMPLE_SETS = {
   crash: { notes: [60], unpitched: true },
   cymbalSwell: { notes: [60], peak: 3.18, unpitched: true },
   gong: { notes: [60], unpitched: true },
+  // Real waves breaking on a beach, eight of them, small to big (CC0 field
+  // recording, see assets/audio/samples/README.md). Play each at its own note.
+  seaWaves: { notes: [60, 61, 62, 63, 64, 65, 66, 67] },
   // Added for Chapter 3 (2026-10-21): more of VSCO 2 CE, and the Versilian
   // Community Sample Library (VCSL, also CC0: https://github.com/sgossner/VCSL).
   violas: { notes: [48, 50, 52, 55, 59, 62, 65, 69, 72, 76, 79, 83, 86] },
@@ -58,4 +61,36 @@ export const SAMPLE_SETS = {
   // Made for this game, not from a library: a soft "ah" choir, eight voices
   // to a note (tenor and bass shape low, alto and soprano high).
   choir: { notes: [45, 48, 52, 55, 58, 62, 65, 69, 72, 76, 79, 83] },
+  // Added 11 November 2026, for the ghost ship's songs: a ship's old timbers,
+  // as an instrument. Each note is a different real recording (Kenney's CC0
+  // "RPG Audio" creaks, the moored boat's boards and the CC0 tree creak the
+  // underground ambiences use, and a knock of wood; see
+  // assets/audio/samples/README.md), so play each at its own note, or a
+  // little under it for a heavier hull: 60-62 short creaks, 63-64 boards
+  // shifting, 65 a long groan, 66 a hull rocking, 67 a knock on the planks.
+  shipTimbers: { notes: [60, 61, 62, 63, 64, 65, 66, 67] },
+  // Added 11 November 2026, for a jazz band (the Storm Reach): a real kit's
+  // cymbals and a plucked double bass. From VCSL (CC0): a hi-hat struck
+  // closed (hatClosed, and a softer hit, hatSoft), its foot pedal (hatFoot),
+  // struck open (hatOpen); a suspended cymbal played with a stick as a ride
+  // (ride) and on its bell (rideBell); a small shaker. From VSCO 2 CE (CC0):
+  // the solo double bass plucked, one recording a note (28 is weak; keep
+  // the line above it).
+  hatClosed: { notes: [60], unpitched: true },
+  hatSoft: { notes: [60], unpitched: true },
+  hatFoot: { notes: [60], unpitched: true },
+  hatOpen: { notes: [60], unpitched: true },
+  ride: { notes: [60], unpitched: true },
+  rideBell: { notes: [60], unpitched: true },
+  shaker: { notes: [60], unpitched: true },
+  bassPizz: { notes: [28, 30, 31, 34, 36, 38, 40, 42, 44, 45, 49, 52, 56, 59] },
+  // Added 11 November 2026, for Tally's song (the Welcome Register): an old
+  // typewriter's keys and a pencil on paper, as instruments. Each note is a
+  // different real recording, so play each at its own note (a few at random
+  // keeps a run of them from sounding like one sample). typewriter: 60-66 seven
+  // key strikes, 67 a key coming back up. penScratch: 60-65 short strokes of a
+  // pencil, 66 a whole line written, 67 a rub of an eraser. CC0, from
+  // OpenGameArt (see assets/audio/samples/README.md).
+  typewriter: { notes: [60, 61, 62, 63, 64, 65, 66, 67] },
+  penScratch: { notes: [60, 61, 62, 63, 64, 65, 66, 67] },
 };

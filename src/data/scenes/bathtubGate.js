@@ -21,7 +21,9 @@ export const BATHTUB_GATE = {
     { do: 'wait', seconds: 1.4 },
     { do: 'leave', who: 'gate_a' },
     { do: 'leave', who: 'gate_b' },
+    { do: 'act', who: 'player', act: 'hop', wait: false },
     { do: 'say', text: 'It rings once, low and round, and every board in the gate rattles and sighs. Then the gate swings open on its own, like a door that has been waiting to be asked.' },
+    { do: 'wait', seconds: 0.3 },
     { do: 'say', who: 'ves', text: '{bored}A bell that opens a gate. Sensible. You can\'t lose a bell down your boot.' },
   ],
 };

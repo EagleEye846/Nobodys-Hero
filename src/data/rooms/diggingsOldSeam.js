@@ -42,27 +42,29 @@ export const DIGGINGS_OLD_SEAM = {
   // "Down the Line" (diggingsTheme.js).
   music: 'diggings',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
-  ambience: 'mine',
+  ambience: 'mine_quiet',
+  // How it rings (a narrow drift: ECHOES in src/audio/music.js).
+  echo: 'tunnel',
   // Darker the further down you go.
   lamplight: { shade: 0.5 },
 
   tiles: [
     '######################################',
     '######################################',
-    '#WWWW#WWWWWWW#########################',
-    '#....I.......^#############W#WWWWWWW##',
-    '#.O...........#############.I.......^#',
-    '#..........O..#############...O......#',
-    '#.............#############........O.#',
-    'W.............WWWWWWWWWWWWW..........W',
+    '#WWWW#WWW##WW#########################',
+    '#q...I...WW.q^#############W#WWWWWWW##',
+    '#.O........qqq#############qIqqqqqq.^#',
+    '#..........Oqq#############...O......#',
+    '#..........qqq#############........O.#',
+    'W...........qqWWWWWWWWWWWWW..........W',
     '......................................',
-    '..............#############...........',
+    '..............#############........q..',
     '#.............####WWWW#WWWW######.####',
-    '#.............####....I....######.####',
-    '#......O......WWWW.........######.####',
-    '#^.......I.................######.####',
-    '#.............####..O...O..######.####',
-    '##################.........######.####',
+    '#q....qqqq....####....Iqqqq######.####',
+    '#q....qOqq....WWWW......qqq######.####',
+    '#^......qI................q######.####',
+    '#.qq##........####..O...Oq.######.####',
+    '##################......#########.####',
     '#################################.####',
     '#################################.####',
   ],
@@ -154,6 +156,8 @@ export const DIGGINGS_OLD_SEAM = {
     { sprite: 'ore_crumbs', x: 30, y: 9, walkable: true, flat: true },
     { sprite: 'floor_pebbles', x: 8, y: 14, walkable: true, flat: true },
     { sprite: 'floor_pebbles', x: 21, y: 14, walkable: true, flat: true },
+    // A tea break left mid-pasty, and spare pit props stacked for the next bit of roof.
+    { sprite: 'lunch_crate', x: 11, y: 4, text: 'd_lunch' },
   ],
   tileTexts: { '#': 'd_rock', O: 'd_ore', I: 'd_post', '^': 'd_stalag', W: 'd_face' },
 

@@ -17,6 +17,14 @@ KELPIE FOAL gallops in a circle and stops, panting, to check you were watching.
 
 Smells like pond weed, wet horse, and a morning in spring.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+KELPIE FOAL's legs are wobbling. It is trying very hard to look like it's wobbling on purpose.
+
+[flavor: spareable]
+KELPIE FOAL nudges your hand with its wet nose, then looks away, as if somebody else did it.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

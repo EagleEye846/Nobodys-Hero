@@ -19,3 +19,25 @@ THE LIGHT! THE LIGHT'S BACK! I THOUGHT IT'D NEVER!
 
 [repeat after the_light_goes_up]
 I'm taking the helmet off. It's a party. It's allowed.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+If I put my stick on the ground and stand on it, I'm taller than you. Don't move.
+
+# (draft)
+[repeat 3]
+When I grow up I'm getting a real sword. And a real helmet. And a real market, with nothing to count in it.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+I'm holding your coat. In my head. You haven't got a coat, so I'm holding it really well.
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{smile}Hold my umbrella, then. {bored}...In your head. I need the real one.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I can see all the way to the end of the market! It's the same as this end! It's brilliant!

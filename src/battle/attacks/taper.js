@@ -103,11 +103,13 @@ export const TAPER_ATTACKS = {
 
   // Walls of flame sweep across with one narrow gap, near you but never on
   // you. Halfway through, walls come from both sides at once, gaps apart.
+  // The flames in a wall sit a little higher or lower each time, so there's
+  // no seam between two rows to stand still in.
   taperFlameWall(box, density, { Shot, every, rand, clamp, shuffleBag }) {
     let time = 0;
     const side = shuffleBag(['left', 'right']);
     const wall = (bullets, fromLeft, gapY) => {
-      for (let y = box.y + 4; y < box.y + box.h; y += 8) {
+      for (let y = box.y + rand(2, 8); y < box.y + box.h; y += 8) {
         if (Math.abs(y - gapY) < 12) continue;
         bullets.push(new Shot({ x: fromLeft ? box.x - 4 : box.x + box.w + 4, y, vx: fromLeft ? 80 : -80, art: 'taperFlame', warn: 0.6 }));
       }

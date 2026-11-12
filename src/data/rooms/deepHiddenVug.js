@@ -21,6 +21,8 @@ export const DEEP_HIDDEN_VUG = {
   music: 'deep',
   // The sounds of the place, under the song (see AMBIENCES in src/audio/music.js).
   ambience: 'deep',
+  // How it rings (a little hollow: ECHOES in src/audio/music.js).
+  echo: 'pocket',
   // Dark, so the crystals show as the only light there is.
   dark: 0.8,
   // Glow-worms on Ves's umbrella: your light never drops below this here.

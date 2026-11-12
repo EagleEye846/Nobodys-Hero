@@ -26,9 +26,11 @@ export const WRECK_PUMPS = {
   name: 'THE PUMPS',
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'wreck',
-  // "Fog Bell" (src/data/music/wreckTheme.js).
-  music: 'wreck',
-  ambience: 'wreck_yard',
+  // "Under Her Ribs" (src/data/music/wreckHullsTheme.js): inside the beached wrecks.
+  music: 'wreckHulls',
+  ambience: 'hulk_storm',
+  // After chapter 5 the storm is over (`calmAfter`): no rain on the roof, and the room's `_calm` words.
+  calmAfter: { scene: 'the_light_answers', ambience: 'calm_hulk' },
   vesWell: true,
   // Below decks: dim and dripping, no rain.
   indoors: true,
@@ -36,24 +38,24 @@ export const WRECK_PUMPS = {
   tiles: [
     '##################################',
     '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#.......OO............F......W.O.#',
-    '#............................W...#',
-    '..................................',
-    '..................................',
-    '#............................W.F.#',
+    '#...::::OO:::.........F......W.O.#',
+    '#..:::::::::::...............W...#',
+    '.....::::::::.......:::...........',
+    '.................:::::::::........',
+    '#.................:::::::....W.F.#',
     '##.#############..################',
-    '##.WWWWWWWWWWWWW..WWWWWWWWWWWWWWW#',
-    '##.W...........................O.#',
-    '##.W..O..........................#',
-    '##.W................F............#',
-    '##.W.............................#',
+    '##.WWWWWWWWWWWWW:.WWWWWWWWWWWWWWW#',
+    '##.W..:::::::::::::........::..O.#',
+    '##.W.:O::::::::::::......:::::::.#',
+    '##.W.:.:::::::::::::F...:::::::::#',
+    '##.W.....:::::::.........:::::::.#',
     '##.###############################',
     '#W.WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
-    '#.............;..................#',
-    '#.......;;............~~......;;.#',
-    '#........;;........;.............#',
-    '#....~~...........;;.............#',
-    '#...........F~..............OO...#',
+    '#................................#',
+    '#....:::..............~~......;;.#',
+    '#...:::::....................::..#',
+    '#...:~~:....................:::::#',
+    '#...........F~..............OO:.:#',
     '##################################',
   ],
 
@@ -97,13 +99,61 @@ export const WRECK_PUMPS = {
     { sprite: 'c5_lobster_pots', x: 14, y: 11, text: 'hull_pots' },
     { sprite: 'gold_pouch', x: 4, y: 16, text: 'pumps_pouch', gold: 100, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'c5_buoys_pile', x: 16, y: 18, text: 'pumps_buoys' },
+    // A lantern hung on each deck by whoever worked her last, the deck rusting through where
+    // the sea sat on it, a fallen lantern and a net washed down into the bilge.
+    { sprite: 'c5_lantern_hook', x: 17, y: 2 },
+    { sprite: 'c5_lantern_hook', x: 11, y: 9 },
+    { sprite: 'c5_lantern_hook', x: 7, y: 15 },
+    { sprite: 'c5_rust_bloom', x: 25, y: 2, flat: true, walkable: true },
+    { sprite: 'c5_rust_bloom', x: 3, y: 5, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 14, y: 6, flat: true, walkable: true },
+    { sprite: 'c5_planks_scatter', x: 14, y: 12, flat: true, walkable: true },
+    { sprite: 'c5_rust_bloom', x: 6, y: 12, flat: true, walkable: true },
+    { sprite: 'c5_lantern_fallen', x: 21, y: 15, flat: true, walkable: true },
+    { sprite: 'c5_net_torn', x: 2, y: 18, flat: true, walkable: true },
+    { sprite: 'c5_rust_bloom', x: 26, y: 18, flat: true, walkable: true },
+    // Bilge water lying in the low places.
+    { sprite: 'c5_puddle', x: 17, y: 17, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 27, y: 15, flat: true, walkable: true },
+    // (Second pass: three decks, three different places.) The main deck is her cargo deck: the
+    // bulkhead's shadow, scuppers bleeding rust, gratings over the hold, chain, a burst sack.
+    { sprite: 'wy_rail_shadow', x: 3, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 7, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow', x: 22, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 26, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_scupper', x: 10, y: 2, flat: true, walkable: true },
+    { sprite: 'wy_grating', x: 7, y: 5, flat: true, walkable: true },
+    { sprite: 'wy_grating', x: 21, y: 4, flat: true, walkable: true },
+    { sprite: 'wy_cargo_spill', x: 26, y: 4, flat: true, walkable: true },
+    { sprite: 'wy_chain_pile', x: 17, y: 3, flat: true, walkable: true },
+    // The 'tween deck is where the crew slept: hammocks still slung along the bulkhead, a lamp on
+    // its bracket, somebody's boots.
+    { sprite: 'wy_hammock', x: 6, y: 8 },
+    { sprite: 'wy_hammock', x: 10, y: 8 },
+    { sprite: 'wy_hammock', x: 21, y: 8 },
+    { sprite: 'in_wall_lamp', x: 25, y: 8 },
+    { sprite: 'wy_hammock', x: 29, y: 8 },
+    { sprite: 'wy_rail_shadow_b', x: 8, y: 9, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow', x: 23, y: 9, flat: true, walkable: true },
+    { sprite: 'in_boots', x: 18, y: 12, flat: true, walkable: true },
+    // The bilge: black water spreading out of the holes in her bottom, barnacles and weed where
+    // it has lain longest.
+    { sprite: 'wy_bilge_slick', x: 21, y: 17, flat: true, walkable: true },
+    { sprite: 'wy_bilge_slick_b', x: 23, y: 16, flat: true, walkable: true },
+    { sprite: 'wy_bilge_slick', x: 6, y: 17, flat: true, walkable: true },
+    { sprite: 'wy_bilge_slick_b', x: 4, y: 19, flat: true, walkable: true },
+    { sprite: 'wy_bilge_slick', x: 14, y: 18, flat: true, walkable: true },
+    { sprite: 'wy_weed_mat_b', x: 10, y: 18, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow', x: 12, y: 15, flat: true, walkable: true },
+    { sprite: 'wy_rail_shadow_b', x: 18, y: 15, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'hull_plate', W: 'hull_plate', '~': 'hull_bilge', ';': 'pumps_shallows', O: 'hull_cargo', F: 'hull_net' },
 
-  // A net wraith in the forecastle, past the flooded hatch (row 4, x 30 to 32): it is shut
-  // away until the hatch is pumped dry, so it never meets anyone mid-split, and it is off
-  // the door's own tiles (x 33). No cutscenes in this room.
+  // A net wraith in the forecastle, past the flooded hatch (row 3, x 30 to 31): it is shut
+  // away until the hatch is pumped dry, so it never meets anyone mid-split. It keeps two
+  // tiles off the door (x 33) and its arrival spot (32,5), so the door's lower row is a
+  // way past it; step up beside it to fight. No cutscenes in this room.
   npcs: [
-    { enemy: 'net_wraith', x: 31, y: 3, patrol: [30, 32], behaviour: 'patrol' },
+    { enemy: 'net_wraith', x: 30, y: 3, patrol: [30, 31], behaviour: 'patrol' },
   ],
 };

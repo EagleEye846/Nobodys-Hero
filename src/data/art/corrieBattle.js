@@ -31,6 +31,8 @@ export const CORRIE_BATTLE_PALETTE = {
   a: '#7fd4eecc', A: '#3c8cc0cc', f: '#e0f8ffdd', D: '#d8f6ff',
   s: '#13302ad8', S: '#24493ed0', l: '#fff6a0',
   L: '#ffe2a0',
+  // His eyes, the colour of the sea out there; the storm cloud's lit edges.
+  g: '#3cc4b0', G: '#1e7a72', r: '#5c9a80', R: '#9ad8b8',
 };
 
 const W = 44;
@@ -57,6 +59,16 @@ function corrie({ look = 'boy', bob = 0, cast = 0, blink = false, frame = 0, hur
     p.ellipse(8, 28, 6, 6, 's');
     p.ellipse(40, 28, 5, 6, 's');
     const bolts = [[[4, 18], [7, 22], [5, 24], [9, 29]], [[39, 14], [36, 19], [39, 21], [35, 27]]];
+    // Its tops lit green-white, the way a thunderhead catches the lightning inside it.
+    for (let y = 1; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const v = p.get(x, y);
+        if ((v === 's' || v === 'S') && p.get(x, y - 1) === '.') {
+          p.set(x, y, (x + frame) % 5 ? 'r' : 'R');
+          if (p.get(x, y + 1) === 's') p.set(x, y + 1, 'S');
+        }
+      }
+    }
     const lit = bolts[frame % 2];
     for (let i = 0; i + 1 < lit.length; i++) p.line(lit[i][0], lit[i][1], lit[i + 1][0], lit[i + 1][1], 'l');
   }
@@ -195,12 +207,15 @@ function corrie({ look = 'boy', bob = 0, cast = 0, blink = false, frame = 0, hur
       p.rect(ex, eyeY, 3, 4, 'E');
       p.rect(ex, eyeY, 3, 1, 'e');
     } else if (lamp) {
-      p.rect(ex, eyeY + 2, 3, 2, 'e');
+      p.rect(ex, eyeY + 2, 3, 2, 'g');
+      p.set(ex + 1, eyeY + 3, 'G');
       p.rect(ex, eyeY + 1, 3, 1, 'n');
       p.set(ex, eyeY + 3, 'n');
     } else {
-      p.rect(ex, eyeY, 3, 4, 'e');
-      p.rect(ex, eyeY + 1, 2, 3, 'n');
+      // Big, and sea-green.
+      p.rect(ex, eyeY, 3, 4, 'g');
+      p.rect(ex, eyeY + 3, 3, 1, 'G');
+      p.rect(ex + 1, eyeY + 1, 2, 2, 'n');
       p.set(ex + 1, eyeY + 1, 'w');
     }
   }

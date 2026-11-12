@@ -33,6 +33,20 @@
 //   swingPower       pump a rope swing up this much faster (0.5 = +50%)
 //   bargain          shops charge this much less (0.15 = 15% off)
 //   spellPower       attack spells hit this much harder (0.2 = +20%)
+// Chapter 5 effects (the third wave):
+//   defendSp         extra SP when you DEFEND
+//   defendDef        taken off each hit on you while you DEFEND (or SHELTER)
+//   grazeHeal        HP back for whoever the attack's aimed at, each new graze
+//   walkHeal         HP back for everyone every few steps in the overworld
+//                    (WALK_HEAL_STEP in src/overworld/player.js)
+// Sharpening (chapters 4 and 5): an old attack spell stops growing past its
+// own chapter (src/data/spells.js). A skill with
+//   sharpen          a spell id: that spell is worked out as one of the
+//                    skill's chapter from now on ("Rend II"), at
+//   sharpPower       its power once sharpened (lower than the spell's own:
+//                    the newer chapter's FIGHT is far stronger). The latest
+//                    learned sharpening counts (progress.js, spellSharpening).
+// sits in the spell's own branch, after the chapter's other skills.
 // Chapter 3 adds a couple of stars to every branch (the Hushwood, the Dead
 // City), and chapter 4 a couple more, past the Hero's Gate: those are written
 // now, hidden until the story gets there, so the tree's ready to grow.
@@ -64,6 +78,22 @@ export const SKILL_BRANCHES = [
       { id: 'cleave', name: 'Cleave', cost: 3, chapter: 5, effect: { spell: 'cleave' } },
       { id: 'strong_grip', name: 'Strong Grip', cost: 3, chapter: 5, effect: { fightPower: 0.2 } },
       { id: 'masterstroke', name: 'Masterstroke', cost: 6, chapter: 5, effect: { fightPower: 0.35, strikeTolerance: 0.2 } },
+      // Chapter 5, the third wave: a steadier hand on the bar, and a stance
+      // that turns their next hit back on them.
+      { id: 'steady_hand', name: 'Steady Hand', cost: 3, chapter: 5, effect: { strikeTolerance: 0.2 } },
+      { id: 'counter', name: 'Counter', cost: 5, chapter: 5, effect: { spell: 'counter' } },
+      // Chapter 5: a chapter 3 spell, sharpened (it's hidden in chapter 4, so
+      // there the chapter 4 sharpenings follow straight on from the spells).
+      { id: 'sunder_2', name: 'Sunder II', cost: 3, chapter: 5, effect: { sharpen: 'sunder', sharpPower: 0.8 } },
+      // Chapter 4: the old spells, sharpened to keep up. They sit at the end
+      // of the branch, so chapter 5's skills don't wait for them.
+      { id: 'rend_2', name: 'Rend II', cost: 2, chapter: 4, effect: { sharpen: 'rend', sharpPower: 1.05 } },
+      { id: 'ember_2', name: 'Ember II', cost: 2, chapter: 4, effect: { sharpen: 'ember', sharpPower: 0.75 } },
+      { id: 'comet_2', name: 'Comet II', cost: 2, chapter: 4, effect: { sharpen: 'comet', sharpPower: 1.15 } },
+      // Chapter 5: the old spells, sharpened again.
+      { id: 'rend_3', name: 'Rend III', cost: 3, chapter: 5, effect: { sharpen: 'rend', sharpPower: 0.75 } },
+      { id: 'ember_3', name: 'Ember III', cost: 3, chapter: 5, effect: { sharpen: 'ember', sharpPower: 0.4 } },
+      { id: 'comet_3', name: 'Comet III', cost: 3, chapter: 5, effect: { sharpen: 'comet', sharpPower: 0.8 } },
     ],
   },
   {
@@ -92,6 +122,14 @@ export const SKILL_BRANCHES = [
       { id: 'second_wind', name: 'Second Wind', cost: 2, chapter: 5, effect: { healBoost: 0.3 } },
       { id: 'restore', name: 'Restore', cost: 3, chapter: 5, effect: { spell: 'restore' } },
       { id: 'wellspring', name: 'Wellspring', cost: 5, chapter: 5, effect: { spStart: 20, grazeSp: 0.5 } },
+      // Chapter 5, the third wave: SP from bracing, and HP from close calls.
+      { id: 'calm_mind', name: 'Calm Mind', cost: 3, chapter: 5, effect: { defendSp: 10 } },
+      { id: 'close_shave', name: 'Close Shave', cost: 5, chapter: 5, effect: { grazeHeal: 2 } },
+      // Chapter 4: Starfall, sharpened to keep up (at the end of the branch, so
+      // chapter 5's skills don't wait for it).
+      { id: 'starfall_2', name: 'Starfall II', cost: 2, chapter: 4, effect: { sharpen: 'starfall', sharpPower: 1.1 } },
+      // Chapter 5: Starfall, sharpened again.
+      { id: 'starfall_3', name: 'Starfall III', cost: 3, chapter: 5, effect: { sharpen: 'starfall', sharpPower: 0.75 } },
     ],
   },
   {
@@ -120,6 +158,10 @@ export const SKILL_BRANCHES = [
       { id: 'catch_breath', name: 'Catch Breath', cost: 2, chapter: 5, effect: { defendHeal: 15 } },
       { id: 'bastion', name: 'Bastion', cost: 3, chapter: 5, effect: { spell: 'bastion' } },
       { id: 'immovable', name: 'Immovable', cost: 6, chapter: 5, effect: { damageReduction: 2, iframes: 0.2 } },
+      // Chapter 5, the third wave: a real guard when you DEFEND, and getting
+      // out of the way of the first hit.
+      { id: 'hold_ground', name: 'Hold Ground', cost: 3, chapter: 5, effect: { defendDef: 3 } },
+      { id: 'sidestep', name: 'Sidestep', cost: 5, chapter: 5, effect: { spell: 'sidestep' } },
     ],
   },
   {
@@ -146,6 +188,10 @@ export const SKILL_BRANCHES = [
       // Chapter 5, the second half: hands for the ropes, and an old traveller's ways.
       { id: 'rope_hands', name: 'Rope Hands', cost: 1, chapter: 5, effect: { swingPower: 0.5 } },
       { id: 'old_hand', name: 'Old Hand', cost: 4, chapter: 5, effect: { itemBoost: 0.4, runSpeed: 0.15 } },
+      // Chapter 5, the third wave: getting your breath back on the road (no
+      // more running speed: there's plenty), and a proper meal.
+      { id: 'walk_it_off', name: 'Walk It Off', cost: 3, chapter: 5, effect: { walkHeal: 1 } },
+      { id: 'square_meal', name: 'Square Meal', cost: 3, chapter: 5, effect: { itemBoost: 0.2 } },
     ],
   },
   {
@@ -171,6 +217,9 @@ export const SKILL_BRANCHES = [
       // Chapter 5, the second half: a calm over the whole room, and making peace.
       { id: 'soothe', name: 'Soothe', cost: 3, chapter: 5, effect: { spell: 'soothe' } },
       { id: 'peacemaker', name: 'Peacemaker', cost: 5, chapter: 5, effect: { mercyBoost: 0.4 } },
+      // Chapter 5, the third wave: listening, and a truce with one enemy.
+      { id: 'good_listener', name: 'Good Listener', cost: 3, chapter: 5, effect: { mercyBoost: 0.2 } },
+      { id: 'truce', name: 'Truce', cost: 5, chapter: 5, effect: { spell: 'truce' } },
     ],
   },
   {
@@ -198,6 +247,21 @@ export const SKILL_BRANCHES = [
       // before Nova, so they don't wait for the end of the chapter.)
       { id: 'starstorm', name: 'Starstorm', cost: 4, chapter: 5, effect: { spell: 'starstorm' } },
       { id: 'mastery', name: 'Mastery', cost: 6, chapter: 5, effect: { spellPower: 0.3 } },
+      // Chapter 5, the third wave: a spell that leaves every enemy open.
+      { id: 'weaken', name: 'Weaken', cost: 5, chapter: 5, effect: { spell: 'weaken' } },
+      // Chapter 5: a chapter 3 spell, sharpened (it's hidden in chapter 4, so
+      // there the chapter 4 sharpenings follow straight on from the spells).
+      { id: 'lance_2', name: 'Light Lance II', cost: 3, chapter: 5, effect: { sharpen: 'lance', sharpPower: 0.7 } },
+      // Chapter 4: the old spells, sharpened to keep up. They sit at the end
+      // of the branch, so chapter 5's skills don't wait for them.
+      { id: 'spark_2', name: 'Spark II', cost: 2, chapter: 4, effect: { sharpen: 'spark', sharpPower: 0.85 } },
+      { id: 'siphon_2', name: 'Siphon II', cost: 2, chapter: 4, effect: { sharpen: 'siphon', sharpPower: 0.95 } },
+      { id: 'chain_bolt_2', name: 'Chain Bolt II', cost: 2, chapter: 4, effect: { sharpen: 'chain', sharpPower: 0.8 } },
+      // Chapter 5: the old spells, sharpened again (before Nova, which waits
+      // for the end of the chapter).
+      { id: 'spark_3', name: 'Spark III', cost: 3, chapter: 5, effect: { sharpen: 'spark', sharpPower: 0.5 } },
+      { id: 'siphon_3', name: 'Siphon III', cost: 3, chapter: 5, effect: { sharpen: 'siphon', sharpPower: 0.6 } },
+      { id: 'chain_bolt_3', name: 'Chain Bolt III', cost: 3, chapter: 5, effect: { sharpen: 'chain', sharpPower: 0.45 } },
       // Nova can't be bought: it wakes by itself at the end of chapter 5, when
       // the water comes up the stair (`scripted`: a cutscene's { do: 'learn',
       // skill: 'nova' } step gives it, see scenePlayer.js). Everything going
@@ -220,6 +284,9 @@ export const SKILL_BRANCHES = [
       // The second half: a shove and a burn in one, and the last word.
       { id: 'tide_undercut', name: 'Undercut', cost: 3, chapter: 5, effect: { spell: 'undercut' } },
       { id: 'tide_overwhelm', name: 'Overwhelm', cost: 6, chapter: 5, effect: { spell: 'overwhelm' } },
+      // The third wave: holding them back, and ducking under the worst of it.
+      { id: 'tide_stall', name: 'Stall', cost: 3, chapter: 5, effect: { spell: 'stall' } },
+      { id: 'tide_duck', name: 'Duck Under', cost: 4, chapter: 5, effect: { spell: 'duck' } },
     ],
   },
 ];
@@ -236,6 +303,8 @@ export const SKILL_BRANCHES = [
 //   gust         seconds their SHELTER also slows the next attack's bullets
 //   command      a new SPELL for them: a key of their `learnable` commands
 //   allyFight    their FIGHT hits this much harder (0.2 = +20%)
+//   allySlashes  extra slashes in their FIGHT (not strikeSlashes: that one
+//                counts for the hero, wherever it's learned)
 //   sneak        their sneak attack, after HIDE, hits this much harder
 //   shorten      their HOLLER cuts the next attack short by this much more
 //                (and Ves's UPDRAFT and THUNDERCLAP)
@@ -277,7 +346,13 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'ves_sturdy_handle', name: 'Sturdy Handle', cost: 2, chapter: 5, effect: { shelterDef: 1, allyCalm: 4 } },
         { id: 'ves_brass_tip', name: 'Brass Tip', cost: 2, chapter: 5, effect: { allyStrike: 8 } },
         { id: 'ves_hold_fast', name: 'Hold Fast', cost: 3, chapter: 5, effect: { command: 'hold_fast' } },
+        // A second jab, this late so her FIGHT stays under Bramble's.
+        { id: 'ves_quick_jab', name: 'Quick Jab', cost: 3, chapter: 5, effect: { allySlashes: 1 } },
         { id: 'ves_old_friend', name: 'Old Friend', cost: 6, chapter: 5, effect: { allyStrike: 12, allyHeal: 12, allyCalm: 6 } },
+        // Chapter 5, the third wave: a better grip, and a twirl that calms
+        // everyone and slows what's coming.
+        { id: 'ves_good_grip', name: 'Good Grip', cost: 3, chapter: 5, effect: { allyHeal: 8, allyCalm: 4 } },
+        { id: 'ves_twirl', name: 'Twirl', cost: 4, chapter: 5, effect: { command: 'twirl' } },
       ],
     },
     {
@@ -312,6 +387,10 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'ves_sharp_gusts', name: 'Sharp Gusts', cost: 2, chapter: 5, effect: { allyStrike: 10 } },
         { id: 'ves_windshear', name: 'Windshear', cost: 3, chapter: 5, effect: { command: 'windshear' } },
         { id: 'ves_hurricane', name: 'Hurricane', cost: 7, chapter: 5, effect: { command: 'hurricane' } },
+        // The third wave: a steady wind, and one that lifts the next attack
+        // right off you. (No more gust: her SHELTER slows plenty already.)
+        { id: 'ves_steady_wind', name: 'Steady Wind', cost: 2, chapter: 5, effect: { allySp: 6, allyCalm: 4 } },
+        { id: 'ves_lift', name: 'Lift', cost: 4, chapter: 5, effect: { command: 'lift' } },
       ],
     },
     {
@@ -347,6 +426,9 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'ves_spare_blanket', name: 'Spare Blanket', cost: 2, chapter: 5, effect: { shelterDef: 1, allyHeal: 6 } },
         { id: 'ves_fireside', name: 'Fireside', cost: 3, chapter: 5, effect: { command: 'fireside' } },
         { id: 'ves_home_fires', name: 'Home Fires', cost: 6, chapter: 5, effect: { allyHeal: 16, allyCalm: 6, shelterDef: 1 } },
+        // The third wave: a kind heart, and soup that keeps you going.
+        { id: 'ves_kind_heart', name: 'Kind Heart', cost: 3, chapter: 5, effect: { allyHeal: 10 } },
+        { id: 'ves_hot_soup', name: 'Hot Soup', cost: 5, chapter: 5, effect: { command: 'hot_soup' } },
       ],
     },
     {
@@ -378,6 +460,10 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'ves_charged_air', name: 'Charged Air', cost: 2, chapter: 5, effect: { allyStrike: 10 } },
         { id: 'ves_sheet_lightning', name: 'Sheet Lightning', cost: 3, chapter: 5, effect: { command: 'sheet_lightning' } },
         { id: 'ves_supercell', name: 'Supercell', cost: 6, chapter: 5, effect: { command: 'supercell' } },
+        // The third wave: the quiet before, and a charge that leaves one
+        // enemy open to everyone's hits.
+        { id: 'ves_calm_before', name: 'Calm Before', cost: 2, chapter: 5, effect: { allyCalm: 6, allySp: 6 } },
+        { id: 'ves_charge', name: 'Static Charge', cost: 5, chapter: 5, effect: { command: 'charge' } },
       ],
     },
     {
@@ -400,6 +486,9 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'ves_light_rain', name: 'Light Rain', cost: 2, chapter: 5, effect: { allyCalm: 6, allyHeal: 8 } },
         { id: 'ves_still_air', name: 'Still Air', cost: 3, chapter: 5, effect: { command: 'still_air' } },
         { id: 'ves_clear_skies', name: 'Clear Skies', cost: 7, chapter: 5, effect: { command: 'clear_skies' } },
+        // The third wave: taking it easy, and a windbreak for everyone.
+        { id: 'ves_easy_going', name: 'Easy Going', cost: 3, chapter: 5, effect: { allySp: 8, allyHeal: 6 } },
+        { id: 'ves_windbreak', name: 'Windbreak', cost: 6, chapter: 5, effect: { command: 'windbreak' } },
       ],
     },
   ],
@@ -431,7 +520,12 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'bram_notched_handle', name: 'Notched Handle', cost: 3, chapter: 5, effect: { allyStrike: 10 } },
         { id: 'bram_splinters', name: 'Splinters', cost: 3, chapter: 5, effect: { command: 'splinters' } },
         { id: 'bram_woodpile', name: 'Woodpile', cost: 3, chapter: 5, effect: { allyStrike: 12 } },
+        // One more chop, this late so the hero (with Crosscut by now) still hits hardest.
+        { id: 'bram_backswing', name: 'Backswing', cost: 3, chapter: 5, effect: { allySlashes: 1 } },
         { id: 'bram_big_one', name: 'The Big One', cost: 7, chapter: 5, effect: { command: 'big_one' } },
+        // The third wave: a whetstone, and a notch that shows where to hit.
+        { id: 'bram_whetstone', name: 'Whetstone', cost: 2, chapter: 5, effect: { allyStrike: 6 } },
+        { id: 'bram_notch', name: 'Notch', cost: 5, chapter: 5, effect: { command: 'notch' } },
       ],
     },
     {
@@ -459,6 +553,10 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'bram_cheer', name: 'Three Cheers', cost: 3, chapter: 5, effect: { command: 'cheer' } },
         { id: 'bram_bottomless', name: 'Bottomless', cost: 3, chapter: 5, effect: { allySp: 6, allyCalm: 6 } },
         { id: 'bram_sing_along', name: 'Sing-Along', cost: 7, chapter: 5, effect: { command: 'sing_along' } },
+        // The third wave: more lungs, a clearer voice, and rallying everyone.
+        { id: 'bram_deep_lungs', name: 'Deep Lungs', cost: 2, chapter: 5, effect: { allySp: 8 } },
+        { id: 'bram_clear_voice', name: 'Clear Voice', cost: 3, chapter: 5, effect: { allyCalm: 6, allySp: 4 } },
+        { id: 'bram_rally', name: 'Rally', cost: 5, chapter: 5, effect: { command: 'rally' } },
       ],
     },
     {
@@ -487,6 +585,11 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'bram_hand_me_downs', name: 'Hand-Me-Downs', cost: 2, chapter: 5, effect: { allyHeal: 10, allyStrike: 4 } },
         { id: 'bram_conkers', name: 'Conkers', cost: 3, chapter: 5, effect: { command: 'conkers' } },
         { id: 'bram_not_there', name: 'Not There', cost: 7, chapter: 5, effect: { sneak: 0.5, allyStrike: 8 } },
+        // The third wave: sand in their eyes, ducking for cover, and shouting
+        // a warning.
+        { id: 'bram_pocket_sand', name: 'Pocket Sand', cost: 3, chapter: 5, effect: { command: 'pocket_sand' } },
+        { id: 'bram_duck_cover', name: 'Duck and Cover', cost: 3, chapter: 5, effect: { allyHeal: 8, sneak: 0.25 } },
+        { id: 'bram_look_out', name: 'Look Out', cost: 5, chapter: 5, effect: { command: 'look_out' } },
       ],
     },
     {
@@ -510,6 +613,9 @@ export const MEMBER_SKILL_BRANCHES = {
         { id: 'bram_feet_down', name: 'Feet Down', cost: 2, chapter: 5, effect: { allyHeal: 10 } },
         { id: 'bram_keep_calm', name: 'Keep Calm', cost: 3, chapter: 5, effect: { allyCalm: 8, allyHeal: 8 } },
         { id: 'bram_got_you', name: "I've Got You", cost: 7, chapter: 5, effect: { command: 'got_you' } },
+        // The third wave: steady breathing, and shaking it off.
+        { id: 'bram_steady_breath', name: 'Steady Breath', cost: 3, chapter: 5, effect: { allyCalm: 6, allySp: 6 } },
+        { id: 'bram_shake_off', name: 'Shake It Off', cost: 6, chapter: 5, effect: { command: 'shake_off' } },
       ],
     },
   ],

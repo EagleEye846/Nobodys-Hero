@@ -1,5 +1,8 @@
 import { UI_SCALE } from '../config.js';
 import { drawNowPlaying } from '../ui/nowPlaying.js';
+import { drawGoalToast } from '../ui/goalLine.js';
+import { drawPaused } from '../ui/pausedCard.js';
+import { music, sfx } from '../audio/music.js';
 
 // Longest frame step we simulate, so a stalled tab doesn't teleport the player.
 const MAX_FRAME_SECONDS = 1 / 20;
@@ -13,6 +16,32 @@ export class Game {
     this.input = input;
     this.scene = null;
     this.lastTime = 0;
+    // Clicking or tabbing away from the game stops it where it is (a fight
+    // won't go on hitting you while you answer a message), under a PAUSED
+    // card, and the sound goes quiet. Any key, button or click carries on.
+    this.paused = false;
+    const pause = () => this.pause();
+    window.addEventListener('blur', pause);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) pause();
+    });
+    window.addEventListener('pointerdown', () => {
+      if (this.paused) this.resumeSoon = true;
+    });
+  }
+
+  pause() {
+    if (this.paused) return;
+    this.paused = true;
+    this.pausedAt = performance.now();
+    music.setPaused(true);
+  }
+
+  resume() {
+    this.paused = false;
+    this.resumeSoon = false;
+    music.setPaused(false);
+    sfx('unpause');
   }
 
   changeScene(scene) {
@@ -33,7 +62,11 @@ export class Game {
     this.lastTime = now;
     const { ctx } = this;
     try {
-      if (!this.error) this.scene.update(dt, this.input);
+      this.input.pollPads();
+      if (this.paused) {
+        // The key that wakes it is only for that: it does nothing in the game.
+        if (this.input.anyPressed || this.resumeSoon) this.resume();
+      } else if (!this.error) this.scene.update(dt, this.input);
       this.input.endFrame();
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -43,6 +76,9 @@ export class Game {
       this.scene.draw(ctx);
       // A new song's name, top left, for a few seconds.
       drawNowPlaying(ctx, now);
+      // After a save loads: what you were doing, for a few seconds.
+      drawGoalToast(ctx, now, this.scene);
+      if (this.paused) drawPaused(ctx, now - this.pausedAt);
     } catch (error) {
       // Stop the scene where it is and say what went wrong, on screen, so it
       // can be reported rather than just freezing.

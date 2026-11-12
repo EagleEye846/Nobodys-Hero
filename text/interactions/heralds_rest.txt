@@ -162,6 +162,9 @@ The soup pot, which is never off and never empty, except that Greta would like y
 [inn_books]
 Books left behind by guests: "KNOTS FOR CLIMBERS", "A HUNDRED SOUPS", and "WHAT TO SAY TO A HERO" (unread, spine uncracked).
 
+# (draft) The true ending: a faint early mention of the Fallen Star.
+Wedged behind them, a thin one for children: "THE STAR THAT FELL". Somebody has torn out the last few pages.
+
 [inn_bed]
 A bed, made this morning with sheets that smell of pine and wind. You could sleep in it.
 
@@ -315,7 +318,7 @@ Today's line is still blank. Dunstan is waiting to see what to write.
 A lamp by the ladder, lit, so Dunstan can see the rope at dawn.
 
 [tower_wall]
-The tower's walls are hung with ropes, old and new, and one very old pair of ear muffs on a nail.
+The tower's walls are hung with ropes, old and new, and one very old pair of earmuffs on a nail.
 
 [tower_blocks]
 Blocks of stone, stacked into steps up to the bell platform. Jump up them.
@@ -332,7 +335,7 @@ Marta's chair, with a scarf trailing off it that goes under the door and, as far
 A neat bed with a knitted blanket in every colour the heralds have. It took sixty years. She says she rushed the end.
 
 [marta_patterns]
-Pattern books, hand-written. "MITTENS FOR HEROES" has a lot of crossings out where she kept guessing at the hand size.
+Pattern books, handwritten. "MITTENS FOR HEROES" has a lot of crossings out where she kept guessing at the hand size.
 
 [marta_drawer]
 A drawer full of balls of wool, and, under them, a paper bag of pine candies. Marta says help yourself in a voice that means it.
@@ -397,7 +400,7 @@ The walls are covered in drawings, up to exactly the height a small herald can r
 [chapel_window]
 The great round window: petals of red and blue and gold, all around one clear pane in the middle.
 
-The Hero was meant to go there. Nobody knew what they looked like, so the glass was left clear. Now it's just sky.
+The Hero was meant to go there. Nobody knew what he looked like, so the glass was left clear. Now it's just sky.
 
 [chapel_lancet_left]
 A tall window. In the glass, a row of heralds blow their trumpets down a flight of stairs. The stairs are empty.
@@ -436,7 +439,7 @@ The back pew. Carved very small into the wood: "WHAT IF THEY'RE NOT COMING". Car
 Little candles, one lit for each prayer. Most are for the Hero. One, labelled in a child's hand, is for Old Nan's knees.
 
 [chapel_sign]
-PRAYERS AT DUSK. If the Hero arrives during prayers, please let them in and carry on as normal. (Nobody will.)
+PRAYERS AT DUSK. If the Hero arrives during prayers, please let him in and carry on as normal. (Nobody will.)
 
 [chapel_runner]
 A red runner up the aisle, worn pale down the middle by a hundred years of heralds walking up it to ask.

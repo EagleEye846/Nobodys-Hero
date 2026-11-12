@@ -101,7 +101,7 @@ export const WRACKEEL_ANIM = {
   }),
   death: clip(4, [0, 1, 2, 3, 4, 5], (i) => {
     const belly = flipV(drawEel({ ph: 1.2, amp: 2.5 - i * 0.3, freq: 1.5, mouth: 1, eye: 'x', sparks: Math.max(0, 3 - i), spin: i, dy: 2 }));
-    return dissolve(belly, i >= 3 ? (i - 2) * 0.28 : 0, 11);
+    return dissolve(belly, i >= 4 ? (i - 3) * 0.12 : 0, 11);
   }),
   spared: clip(5, [0, 1, 2, 3], (i) => drawEel({ ph: i * 1.4, amp: 7, freq: 2.6, mouth: 1, eye: 'glad', sparks: 2, spin: i })),
 };

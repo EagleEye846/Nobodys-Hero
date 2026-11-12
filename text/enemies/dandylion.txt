@@ -17,6 +17,14 @@ DANDY LION poses. It's a very long pose. Nobody asked for it.
 
 Smells like a summer lawn and a lot of hair product.
 
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+DANDY LION's mane is getting thin on top. It keeps one paw over the patch and hopes.
+
+[flavor: spareable]
+DANDY LION strikes a pose just for you. It's a friendly pose. You could leave on a pose like that.
+
 # Said in a speech bubble before each attack, picked at random. Lines written
 # together (no blank line between) share a bubble; a line starting with
 # ... waits for a bubble of its own, and words that won't fit run on into

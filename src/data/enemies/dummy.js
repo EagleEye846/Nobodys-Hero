@@ -35,7 +35,7 @@ export const ROGUE_DUMMY = {
     { name: 'Hum', calm: 40 },
   ],
 
-  rewards: { exp: 40, coins: 31 },
+  rewards: { exp: 55, coins: 45 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'cotton_candy', chance: 0.4 }],

@@ -7,11 +7,8 @@
 
 # The procession along the bottom of the screen, one look per line, leader
 # first: 'hero', 'member:vesper', or any card look (@prop:, @enemy:).
-# Voice credits: none yet. If voices are ever added, put each actor's name
-# here, exactly as they want it written, in a card of its own, e.g.
-#   [voices]
-#   Voices
-#   (name, as they want it written)
+# Voice credits: halfturkey voiced King Peptup (thanked on the Special
+# Thanks card, by the name exactly as they want it written).
 
 [walkers]
 hero
@@ -79,8 +76,9 @@ Gubb, on the Stillwater
 
 [thanks]
 Special Thanks
+halfturkey, the voice of King Peptup
 Everyone who didn't mind the camp
-@prop:bramble_stand
+@enemy:rumbold
 
 [end]
 To be continued

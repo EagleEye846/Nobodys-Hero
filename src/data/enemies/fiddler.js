@@ -21,7 +21,7 @@ export const FIDDLER = {
   anim: FIDDLER_ANIM,
   // The Chapter 4 battle song.
   music: 'belowBattle',
-  maxHp: 1440,
+  maxHp: 1830,
   damage: 43,
 
   difficulty: { density: 1.5, speed: 1.4 },

@@ -9,6 +9,14 @@
 [greeting]
 Forge is lit. Don't touch anything glowing. Most things are glowing.
 
+# (draft) The next times you come in (then the last one, every time).
+[greeting 2]
+You again. Shut the door. The forge doesn't heat the whole sea.
+
+# (draft)
+[greeting 3]
+Forge is lit. You know the rule. Don't touch anything glowing.
+
 [menu_prompt]
 Well?
 
@@ -79,7 +87,7 @@ That boy's gripping his axe like it might swim away. Good. Keep a grip. The sea 
 She asked if I do umbrellas. I don't. I do iron. But I had a canopy frame that might do, if she can stand the noise. The storm one. It sings in the wind.
 
 [talk: The Hero]
-Small, once. Came through here years back. Stood at the door looking up at the light. Didn't come in. I think about that more than I'd say. The door was open.
+A small lad, once. Came through here a hundred years back, when it was my gran's forge. Stood at the door looking up at the light. Didn't come in. Gran thought about that more than she'd say. The door was open.
 
 [talk: The old light]
 The one on the shelf? Nobody's used that in years. The draught up there keeps a wick going for days, if somebody's left one. And the tea'll be the crab-pot lot. They go up to look at the weather. They'd leave their own heads up there.
@@ -91,8 +99,9 @@ The one on the shelf? Nobody's used that in years. The draught up there keeps a 
 [forge_ask]
 Let me see that. (She takes the sword in both hands and turns it in the forge-light. Her face goes very still.)
 
-Hm. There's a piece missing off the edge. Snapped when it fell. There's a shard of it on a snapped mast in the Wreck Yard, up high, where the ship graveyard leans against the sky. I'd know it by the hum.
+Hm. There's a piece missing off the edge. Snapped when it fell. The rest of it came down at the Wreck Yard, I'd say, and then went on: I can hear it off the sea past the yard's far point, where the old fog bell hangs. Whatever's got it won't give it up for asking. I'd know it by the hum.
 
+# (draft)
 Bring it. I'll put it back where it goes.
 
 [forge_now]
@@ -105,15 +114,30 @@ That's the one. Give it here.
 [forge_done]
 It's as good as I can make it. Somebody with a bigger fire will have to take it further. I'd like to meet them.
 
+# (draft) The true ending: a lore touch, that every forging counts and there are more to come.
+Every smith who's had it has left a mark on the tang. Three now. There's room for a good few more.
+
+# (draft) The true ending's rule: an earlier forging was missed, and it can't be done late.
+# Was: "Not yet. There's an earlier smith's work to be done first. I only finish what someone's started."
 [forge_later]
-Not yet. There's an earlier smith's work to be done first. I only finish what someone's started.
+Can't. There's a smith's work missing from this, further back along the road. It takes the work in order, and it won't take it late. I'm sorry. I'd have liked to.
 
 [forge_hint]
-Star-metal? I've heard of it. A while back, something came down over the coast and snapped off on a mast in the Wreck Yard. On a still night I can hear it humming from here.
+# (draft)
+Star-metal? I've heard of it. A while back, something came down over the coast, skipped across the Wreck Yard's masts, and went on, out into the fog past the slip. On a still night I can hear it humming from here, with something that sounds a lot like laughing on top.
 
 If you ever find a sword that hums the same note, bring both. I'd like to hear that.
 
 [forge_shard_only]
-That hums. Same as the mast does. Same note.
+That hums. Same as the thing out past the Wreck Yard does. Same note.
 
 ...I don't know what to do with a shard on its own. You'd need the rest of whatever it broke off.
+
+# (draft) World reacts: after the chapter (the storm gone, Haddock gone).
+[greeting after haddock_gone]
+Forge is lit. Sky's clear. Don't touch anything glowing. Less is glowing, these days.
+
+[talk: Haddock after haddock_gone]
+He never did bring my boathook back.
+
+I'm leaving it on the slate. Don't rub it off.

@@ -1,5 +1,5 @@
 import { defineBulletArt } from '../projectiles.js';
-import { Pix } from '../../data/art/ch5Kit.js';
+import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
 import { withSnipes } from './snipes.js';
 
@@ -16,11 +16,6 @@ import { withSnipes } from './snipes.js';
 
 const SEA = { k: '#132a34', b: '#6fb8b2', B: '#3f8088', w: '#d4f0ec', e: '#f0ffff', x: '#9ad8d0', g: '#4c8044', r: '#cfae7c', R: '#8c6c42', c: '#c8d8d0', p: '#e8dcb0', P: '#b8a878' };
 
-function art(w, h, draw) {
-  const p = new Pix(w, h);
-  draw(p);
-  return p.outline('k').rows();
-}
 
 // A bottle with a message in it, neck to the right.
 defineBulletArt('shdBottle', {
@@ -185,6 +180,50 @@ class AnchorThrow {
   }
 }
 
+// A noose of old hawser: once it is cast it is drawn as twisted rope (dark
+// under, tan strands, a twist every couple of pixels) with a whipped end
+// either side of its opening. Its outline before that is the plain Ring's.
+class Noose extends Ring {
+  draw(ctx) {
+    if (this.age < this.warn || this.r < 1.5) {
+      super.draw(ctx);
+      return;
+    }
+    const over = this.age - (this.warn + this.life);
+    const half = this.gap.width / 2;
+    const a0 = this.gap.angle + half;
+    const a1 = this.gap.angle - half + Math.PI * 2;
+    const arc = () => {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, a0, a1);
+      ctx.stroke();
+    };
+    ctx.save();
+    ctx.globalAlpha = over > 0 ? Math.max(0, 1 - over / 0.25) : 1;
+    ctx.lineCap = 'butt';
+    ctx.strokeStyle = '#2a1e14';
+    ctx.lineWidth = this.thick + 2;
+    arc();
+    ctx.strokeStyle = '#cfae7c';
+    ctx.lineWidth = this.thick;
+    arc();
+    ctx.setLineDash([1.3, 2.2]);
+    ctx.lineDashOffset = -this.age * 6;
+    ctx.strokeStyle = '#8a6a44';
+    arc();
+    ctx.setLineDash([]);
+    for (const a of [a0, a1]) {
+      const x = Math.round(this.x + Math.cos(a) * this.r);
+      const y = Math.round(this.y + Math.sin(a) * this.r);
+      ctx.fillStyle = '#2a1e14';
+      ctx.fillRect(x - 2, y - 2, 5, 5);
+      ctx.fillStyle = '#e8d4a8';
+      ctx.fillRect(x - 1, y - 1, 3, 3);
+    }
+    ctx.restore();
+  }
+}
+
 export const SALT_SHADE_ATTACKS = {
   // Anchor throw: the sailor swings an anchor on a rope in a high arc, aimed
   // at where you stood. The dashed arc and the landing ring flash first. The
@@ -300,7 +339,7 @@ export const SALT_SHADE_ATTACKS = {
             const y = clamp(spot.y + rand(-4, 4), box.y + 12, box.y + box.h - 12);
             // The opening faces the sailor (right), a touch off to one side.
             const gap = rand(-0.5, 0.5);
-            bullets.push(new Ring({ x, y, r: 26, grow: -22, thick: 3, warn: 0.9 + i * 0.1, life: 1.15, gap: { angle: gap, width: 1.3 }, color: '#cfae7c', dash: [4, 1] }));
+            bullets.push(new Noose({ x, y, r: 26, grow: -22, thick: 3, warn: 0.9 + i * 0.1, life: 1.15, gap: { angle: gap, width: 1.3 }, color: '#cfae7c', dash: [4, 1] }));
           });
         }
       },

@@ -1,6 +1,8 @@
 # Gear: things for getting around that you keep for good (src/data/gear.js).
 # [got_<id>] is what you see when you get it, after the words of whatever it
-# was in. The other sections are shared by every room.
+# was in. The KEEPSAKES page (SPACE in the ITEMS menu) shows the same words
+# without their first line, or [about_<id>] when a thing has one.
+# The other sections are shared by every room.
 
 [got_climbing_rope]
 You got the CLIMBING ROPE!
@@ -14,6 +16,10 @@ On a face too tall for one throw, hook the lowest ring and swing.
 Hold left or right with the swing to swing higher and reach farther.
 
 Press Z at the right moment to catch the next ring. X lets go.
+
+# On the KEEPSAKES page: the same, short.
+[about_climbing_rope]
+A long rope with a hook. Face a cliff with an iron ring at the top and press Z to climb. On a tall face, hook the lowest ring and swing: left or right to swing higher, Z to catch the next ring, X to let go.
 
 [got_ves_mitten]
 You picked up VES'S MITTEN.
@@ -59,12 +65,50 @@ A whistle carved out of a bit of elder, with his name scratched on it, spelt wro
 [got_star_shard]
 You got a STAR SHARD.
 
-A splinter of pale star-metal as long as your hand, still warm, struck deep into the old stone. It hums at the same note as the sword.
+# (draft) Changed: it now comes out of the Welcome Register's binding (the Registry, behind the Old Street).
+A splinter of pale star-metal as long as your hand, still warm, out of the binding of a book. It hums at the same note as the sword.
 
+# (draft) The end-of-shift whistle, in three pieces (the quest under Seam Nine).
+[got_whistle_pea]
+You got the WHISTLE PEA.
+
+A little cork ball, scorched at one side, no bigger than a pea. It rattles in your palm like it is still waiting to be blown. The roster in Seam Nine says where the others went.
+
+[about_whistle_pea]
+Piece 1 of 3 of the seventh shift's whistle: the pea, the little cork ball that makes it trill. Found in the Glimmering.
+
+# (draft)
+[got_whistle_mouth]
+You got the WHISTLE MOUTHPIECE.
+
+A brass mouthpiece, polished by years of lips, with a smear of old solder where somebody meant to mend it. Still faintly warm, which it has no business being.
+
+[about_whistle_mouth]
+Piece 2 of 3 of the seventh shift's whistle: the mouthpiece. Found in Belowtown.
+
+# (draft)
+[got_whistle_barrel]
+You got the WHISTLE BARREL.
+
+A short brass barrel with a slot cut in the side and a loop for a lanyard. It is damp, and it smells of the lake.
+
+[about_whistle_barrel]
+Piece 3 of 3 of the seventh shift's whistle: the barrel. Found in the Stillwater.
+
+# (draft) The three pieces, put together at the sealed crack in Seam Nine.
+[got_shift_whistle]
+You got the SHIFT WHISTLE.
+
+A small brass whistle with a cork pea in it. The seventh shift blew it every day at the end of the shift: three long notes down, one short note up. It is yours to blow now.
+
+[about_shift_whistle]
+The seventh shift's end-of-shift whistle, whole again. Blown at the sealed crack in Seam Nine to open the way down.
+
+# (draft) Won from Pudding, at the bottom of Seam Nine's crack.
 [got_star_shard_deep]
 You got a DEEP STAR SHARD.
 
-A second splinter of star-metal, stuck in the rock like a nail in a beam. It's colder than the first one, and it hums lower. The sword hums back.
+A second splinter of star-metal, worn smooth from years in a small tin dish. It's colder than the first one, and it hums lower. The sword hums back.
 
 [got_singing_shard]
 You picked up the SINGING SHARD.
@@ -166,11 +210,32 @@ You got the SPARE TEACUP.
 
 A small cup with a chip in the rim, kept for visitors who stay. It is warm, and it doesn't seem to be getting any colder.
 
+[got_jar_of_sea]
+You got a JAR OF SEA.
+
+A jam jar of the sea, with a bit of weed in it for company. It sloshes.
+
+[got_turnip_rosette]
+You got the TURNIP ROSETTE.
+
+A faded blue rosette, FIRST PRIZE, TURNIPS. The ribbon has been re-stitched more times than anyone has ever looked at it.
+
+[got_approved_stamp]
+You got the APPROVED STAMP.
+
+A brass stamp with a wooden knob, the word APPROVED cut backwards in its face. It has a beak-mark on the handle.
+
+[got_harbour_pass]
+You got a HARBOUR PASS.
+
+A stiff card, stamped APPROVED twice, to be sure. Boat: ANY. Passengers: ANY. Bound: ANYWHERE.
+
 # --- CHAPTER 5: the drowned coast ---
 [got_star_shard_wreck]
 You got a WRECK STAR SHARD.
 
-A third splinter of star-metal, wedged high in a snapped mast with the fog drifting past it. It's the loudest yet. It hums right through the wood, and the sword answers like it's been waiting.
+# (draft)
+A third splinter of star-metal, still warm from the wooden breast it was lodged in for a hundred years. It's the loudest yet. It rings right through your hand, and the sword answers like it's been waiting.
 
 [got_haddocks_bell]
 You got HADDOCK'S BELL.
@@ -212,3 +277,140 @@ Lamp: lit.
 The last line is only the date, and then, in a different pen, one word.
 
 found
+
+[about_haddocks_ledger]
+A salt-stained ledger in a lightman's tight hand. Every page is a day: the tide, the weather, how long the lamp burned. The last line is only the date, and then, in a different pen, one word: found.
+
+[got_storm_glass]
+You got a STORMGLASS BEAD.
+
+A bead of green glass, the size of a pea, smooth as a sweet. The storm made it out of sand, one of all those nights.
+
+[got_polished_tankard]
+You got the POLISHED TANKARD.
+
+A pewter tankard, polished every day since the storm came. You can see your whole face in it, and a bit of the room behind you.
+
+# --- The ghost ship (the brig Fair Return). (draft) ---
+[got_ship_lantern]
+You got the SHIP'S LANTERN.
+
+It's burning, and there's no oil in it. The glass is warm in your hand. Press L to put it out, and L again to light it. What hides in the dark can sometimes be seen in this.
+
+[about_ship_lantern]
+The Fair Return's lantern, still lit. Press L to put it out and light it again. Ghosts, footprints and writing that can't be seen in the dark show in its light, and some of the crew will stop dead in it, or back away.
+
+[got_captains_key]
+You got the CAPTAIN'S KEY.
+
+A long brass key on a ring gone green. The tag on it says CABIN, and under that, LET HIM REST. It fits the door under the poop deck.
+
+[about_captains_key]
+The key to the captain's cabin on the Fair Return, hung in the bilge by someone who thought he needed a rest.
+
+[got_crew_letter]
+You got A MOTHER'S LETTER.
+
+Worn soft at every fold from being read. The garden is coming on, and the kettle is always on, come home when you can. It was never answered.
+
+[about_crew_letter]
+A sailor's letter from his mother, read to ribbons. It might mean something to the captain.
+
+[got_ship_log]
+You got the SHIP'S LOG.
+
+The last page says DAY 41. PORT TOMORROW. So does the page before. So does every page before that, a hundred years of them, in the same hand.
+
+[about_ship_log]
+The Fair Return's log: the same day, written the same way, every page. It might mean something to the captain.
+
+[got_unsent_letters]
+You got the UNSENT LETTERS.
+
+A bundle in the purser's careful hand, tied with string, every one addressed to someone on the quay at Saltcombe. They were never posted. They are very light.
+
+[about_unsent_letters]
+The crew's last post, written on the voyage and never sent. Bramble offered to carry them very carefully.
+
+# (draft) The ghost ship's compass, in three pieces (the quest for the deep part).
+[got_compass_glass]
+You got the COMPASS GLASS.
+
+A brass-rimmed glass, dry and clear, engraved FAIR RETURN. BINNACLE. It keeps showing you the room, very slightly larger than it is.
+
+[about_compass_glass]
+The glass off the Fair Return's binnacle compass. The needle and the card are somewhere else on the coast.
+
+[got_compass_needle]
+You got the COMPASS NEEDLE.
+
+A long thin needle that wants badly to point somewhere. It is not pointing north.
+
+[about_compass_needle]
+The needle off the Fair Return's binnacle compass. The glass and the card are somewhere else on the coast.
+
+[got_compass_card]
+You got the COMPASS CARD.
+
+A painted compass rose, every point lettered but one. The missing letter is rubbed out, as if by someone who did not want to be told which way home was.
+
+[about_compass_card]
+The card off the Fair Return's binnacle compass. The glass and the needle are somewhere else on the coast.
+
+# (draft) THE REGISTRY'S QUEST (chapter 3): three torn leaves of the Welcome Register, in three hidden places. All three and the sword open the sealed cleft off the Old Street.
+
+[got_register_leaf_names]
+You got the LEAF OF NAMES.
+
+A page torn out at the binding, ruled in columns and crowded with names in a hundred different hands, every one of them ticked. In the corner, a numeral: I. It is warm, the way paper is after a hundred years in a sunny window.
+
+[about_register_leaf_names]
+Page I of the Welcome Register: the Names, every one ticked. There are two more leaves out there, torn out the same night. A clerk would have kept the second where the fen ends, the toll being a clerk's business.
+
+[got_register_leaf_hours]
+You got the LEAF OF HOURS.
+
+A page ruled in thin rows, one for each hour from dusk to dawn, every row ticked. The corner is marked II. It has dried stiff in the shape of the hand that held it, and a fish hook is still through the top.
+
+[about_register_leaf_hours]
+Page II of the Welcome Register: the Hours, called one by one all night. One leaf left, the third. A page like that would go where there was a fire to wedge a door against: somewhere in the old city that kept one burning day and night, and kept the water warm.
+
+[got_register_leaf_seal]
+You got the LEAF OF THE SEAL.
+
+A page with almost nothing on it but a great round seal, printed in red ink, and under it a line of tiny columns. The corner says III. One edge is scorched brown, where a furnace door was held shut on it.
+
+[about_register_leaf_seal]
+Page III of the Welcome Register: the Seal. That's all three leaves. The panel over the cleft off the Old Street is ruled with three blank columns, and these are the pages that go in them.
+
+
+# (draft) How many of a secret quest's pieces you have, said after you pick one up
+# (GEAR_SETS in src/data/gear.js). The Register's three torn leaves (chapter 3).
+[register_leaves_1]
+One leaf of three. The other two went wherever the wind took them that night.
+
+[register_leaves_2]
+Two leaves of three. They lie flat together in your pack, ruled lines meeting, with a gap where the third should go.
+
+[register_leaves_3]
+Three leaves of three. Whatever book they were torn from, it can have them back now.
+
+# (draft) The seventh shift's whistle, in three pieces (chapter 4).
+[whistle_pieces_1]
+One piece of three. On its own, it won't make a sound.
+
+[whistle_pieces_2]
+Two pieces of three. They very nearly fit together. Nearly is no use to a whistle.
+
+[whistle_pieces_3]
+Three pieces of three. ALL THREE AT THE CRACK, the roster said.
+
+# (draft) The Fair Return's binnacle compass, in three pieces (chapter 5).
+[compass_pieces_1]
+One piece of three. FAIR RETURN, it says, as if you ought to know where that is.
+
+[compass_pieces_2]
+Two pieces of three. They sit together in your pack like two thirds of a sentence.
+
+[compass_pieces_3]
+Three pieces of three: glass, needle and card. A whole compass. Somewhere there is a binnacle with an empty bowl.

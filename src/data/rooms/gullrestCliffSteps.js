@@ -1,4 +1,5 @@
-// THE CLIFF STEPS: the stair down the cliff from the Sea View to Gullrest's beach.
+// THE CLIFF STEPS: the stair down the cliff to Gullrest's beach. You come out at the
+// top from the fishers' hollow (the cave inside the Sea View's cliff, sunny_cliff_hollow).
 // Boardwalk flights and two landings above the sea, bunting posts all the way
 // down, a deckchair with a hat on it, a chalk tally of steps climbed, a chest
 // on the second landing and a purse in the dunes at the top. PUZZLE-FREE and no
@@ -22,35 +23,35 @@ export const GULLREST_CLIFF_STEPS = {
 
   tiles: [
     '#########::#########',
-    '#WWWWWWWW::WWWWWWWW#',
-    '#,,,,,,,::::,,,,,,,#',
-    '#,,,,,,,::::,,,,,,,#',
-    '#,,,,,,,::::,,,,,,,#',
-    '#,,,,,,,::::,,,,,,,#',
-    '#,,,,,,,::::,,,,,,,#',
+    '#WWWWWWWW::WWWWWW###',
+    '#W,,..,,::::.,,,,WW#',
+    '#,,.,,,,,:::.,,,,,W#',
+    '#,,,,,,,,:::.,,..,,#',
+    '#,,,,,,,::::,,,..,O#',
+    '#,O,,,.:::::,,,,,,,#',
     '#~~~~~~~~foooo######',
-    '#~~~~~~~~foooo######',
-    '#~~~~~~~~foooo######',
-    '#~~~~~~~~foooo######',
-    '#~~~ffffffoooo######',
-    '#~~foooooooooo######',
-    '#~~foooooooooo######',
-    '#~~foooo############',
-    '#~~foooo############',
-    '#~~foooo############',
-    '#~~foooo############',
-    '#~~fooooWWWWWW######',
-    '#~~foooooooooo######',
-    '#~~foooooooooo######',
-    '#~~~ffffffoooo######',
-    '#~~~~~~~~foooo######',
-    '#~~~~~~~~foooo######',
+    '#~~~~~~~~foooo##,,,#',
+    '#~O~~~~~~foooo#,,,##',
+    '#~~O~~~~~foooo#,,,,#',
+    '#~~~ffffffoooo#,O,,#',
+    '#~~foooooooooo#,,,,#',
+    '#~~foooooooooo#,,,,#',
+    '#~~foooo#######,J,,#',
+    '#~~foooo##,,,##,,,,#',
+    '#O~foooo#,,,,,#,,,##',
+    '#~~foooo#######,,,##',
+    '#~~fooooWWWWWW#,,,,#',
+    '#~~foooooooooo#,,O,#',
+    '#~~foooooooooo#,,,,#',
+    '#~~~ffffffoooo#,,,,#',
+    '#~O~~~~~~foooo##,,,#',
+    '#O~~~~~~~foooo###,,#',
     '#~~~~~~~~foooo######',
     '#~~~~~~~~fooooWWWWW#',
-    '#..................#',
-    '#..................#',
-    '#.......::::.......#',
-    '#.......::::.......#',
+    '#~~;;..........,,,O#',
+    '#~;....:::.....,,..#',
+    '#;.......::::.....O#',
+    '#.O.....::::.......#',
   ],
 
   // Where the player starts, in tile coordinates.
@@ -58,7 +59,8 @@ export const GULLREST_CLIFF_STEPS = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 9, y: 0, w: 2, h: 1, to: 'sunny_sea_view', spawn: { x: 24, y: 19 } },
+    // Up into the fishers' hollow, the bottom of the cave inside the Sea View's cliff.
+    { x: 9, y: 0, w: 2, h: 1, to: 'sunny_cliff_hollow', spawn: { x: 9, y: 15 } },
     { x: 8, y: 29, w: 4, h: 1, to: 'gullrest_beach', spawn: { x: 3, y: 3 } },
   ],
 
@@ -84,6 +86,38 @@ export const GULLREST_CLIFF_STEPS = {
     { sprite: 'sign', x: 6, y: 28, text: 'steps_foot_sign' },
     { sprite: 'sy_dune_grass', x: 3, y: 27, text: 'steps_dune', animation: 'sy_dune_grass', speed: 0.4, walkable: true },
     { sprite: 'sy_dune_grass', x: 15, y: 28, text: 'steps_dune', animation: 'sy_dune_grass', speed: 0.46, walkable: true },
+    // Dressing (2026-11-08): life about the stair, and the beach at its foot.
+    { sprite: 'c5_gull_marks', x: 13, y: 5, flat: true, walkable: true },
+    { sprite: 'c5_lobster_pots', x: 15, y: 2 },
+    { sprite: 'c5_buoy_yellow', x: 2, y: 5 },
+    { sprite: 'sy_dune_grass', x: 17, y: 10, text: 'steps_dune', animation: 'sy_dune_grass', speed: 0.42, walkable: true },
+    { sprite: 'sy_dune_grass', x: 16, y: 21, text: 'steps_dune', animation: 'sy_dune_grass', speed: 0.47, walkable: true },
+    { sprite: 'sy_dune_grass', x: 11, y: 16, text: 'steps_dune', animation: 'sy_dune_grass', speed: 0.4, walkable: true },
+    { sprite: 'c5_crates_stack', x: 4, y: 17, text: 'cove_crates' },
+    { sprite: 'c5_lantern_post_unlit', x: 13, y: 13 },
+    { sprite: 'c5_rope_coil', x: 13, y: 19, walkable: true },
+    { sprite: 'c5_rowboat', x: 13, y: 28, text: 'beach_rowboat' },
+    { sprite: 'c5_anchor', x: 3, y: 29, text: 'beach_anchor' },
+    { sprite: 'c5_crab_trail', x: 5, y: 27, flat: true, walkable: true },
+    { sprite: 'c5_gull_marks', x: 16, y: 26, flat: true, walkable: true },
+    // Dressing (second pass): warm stones in the water beside the steps, stones and grass on the
+    // grassy ledge east of them (out of reach), a pool and a pot on the sand at the foot. The
+    // way down (the boards and x 7 to 12 at the foot) stays clear.
+    { sprite: 'c5_rocks_sunny', x: 5, y: 9, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 2, y: 14, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 1, y: 20, text: 'beach_rocks' },
+    { sprite: 'c5_rocks_sunny', x: 5, y: 23, text: 'beach_rocks' },
+    { sprite: 'c5_rocks_sunny', x: 15, y: 9, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 17, y: 17, text: 'beach_rocks' },
+    { sprite: 'c5_rocks_sunny', x: 16, y: 22, text: 'beach_rocks' },
+    { sprite: 'c5_rock_sunny', x: 18, y: 4, text: 'beach_rocks' },
+    { sprite: 'c5_rocks_sunny', x: 1, y: 4, text: 'beach_rocks' },
+    { sprite: 'c5_pot_single', x: 17, y: 29, text: 'beach_pot' },
+    { sprite: 'c5_rock_pool_sunny', x: 16, y: 27, flat: true, walkable: true },
+    { sprite: 'c5_marram', x: 16, y: 12, flat: true, walkable: true },
+    { sprite: 'c5_marram', x: 18, y: 19, flat: true, walkable: true },
+    { sprite: 'c5_sea_holly', x: 17, y: 15, flat: true, walkable: true },
+    { sprite: 'c5_wrack_line', x: 1, y: 28, flat: true, walkable: true },
   ],
   tileTexts: { '#': 'steps_rock', W: 'steps_rock', '~': 'steps_sea', f: 'steps_rail' },
 

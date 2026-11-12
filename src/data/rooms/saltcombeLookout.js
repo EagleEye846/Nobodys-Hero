@@ -25,7 +25,11 @@ export const SALTCOMBE_LOOKOUT = {
   area: 'saltcombe',
   // "Salt and Rope", and the wind and rain up on top.
   music: 'saltcombe',
+  // After chapter 5 (the_light_answers) the town is quiet: "What the Tide Left".
+  musicAfter: { scene: 'the_light_answers', song: 'saltcombeAfter' },
   ambience: 'stilt_town',
+  // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
+  calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_stilt_town', lamplight: { shade: 0.22, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
   // The black tower on the skyline, over the sea.
   lastLight: { x: 27, y: 4 },
@@ -33,25 +37,25 @@ export const SALTCOMBE_LOOKOUT = {
 
   tiles: [
     '####################################',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
-    '#ffffffffffffffffffffffffffffffffff#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
-    '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
-    '#,,:::::::::::::::::::::::::::::::::',
-    '#,,,,,:,,,,,,,,,,,,,,,,,,,,:,,,,,:::',
-    '#,,,,,:,,,,,,,,,,,,,,,,,,,,:,,,,,:::',
+    '#~~~~~~~~~~~~~~~~x~~~~~~~~~~~~~~~~~#',
+    '#~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~x~~~#',
+    '#~~~~x~~xx~~~~~~~~x~~~~~^~~~x~~~~~~#',
+    '#~~~~~~x,,x~~~~~~x,,x~~~~xfffx~~~~~#',
+    '#fffxfffffffxOff,,,,,,xffx,,,xOffff#',
+    '#Ox,,,,,,,,,,,,xffffffx,,,,,,,,,,,xO',
+    '#x,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,x#',
+    '#,,,,,,,,:::::,,,,,,,,,,,,,,,,::,,,#',
+    '#,,::::::,,,,::::::,,,:::::::,::::::',
+    '#,,,,,:,,,,,,,,,,,:::::,,,,:,,,,,:::',
+    '#,,,,,:,,,,,,,,,,,,,,,,,,,:,,,,,,:::',
+    '#,,,,,,:,,,,,,,,,,,,,,,,,,:,,,,,,,,#',
+    '#,,,,,,:,,,,,,,,,,,,,,,,,,::,,,,,,,#',
     '#,,,,,:,,,,,,,,,,,,,,,,,,,,:,,,,,,,#',
-    '#,,,,,:,,,,,,,,,,,,,,,,,,,,:,,,,,,,#',
-    '#,,,,,:,,,,,,,,,,,,,,,,,,,,:,,,,,,,#',
-    '#,,,,,:,,,,,,,,,,,,,,,,,,,,:,,,,,,,#',
-    '#fffff:ffffffffffffffKKKKK:::KKKKKK#',
-    '#00000000000000000000KKKKK:::KKKKKK#',
-    '#00000000000000000000KKKKK:::KKKKKK#',
-    '#00000000000000000000KKKKK:::KKKKKK#',
+    '#x,,,,:,,,,,,,,,,,,,,,,,,,,:,,,,,,O#',
+    '#fxfff:,,,,,,,OxfffffxKKKK:::KKKKKx#',
+    '#00x000xffffffx000x00KKKKK:::KKKKKK#',
+    '#0000000x0000000000000KKKK:::KKKKKK#',
+    '#0000000000000000000000KxK:::KxKKKx#',
     '#00000000000000000000..............#',
     '#00000000000000000000..............#',
     '#00000000000000000000~~~~~~~~~~..~~#',
@@ -66,7 +70,10 @@ export const SALTCOMBE_LOOKOUT = {
     // Over the edge by the anchor and back down the rope, to its foot in the lagoon.
     { x: 6, y: 16, w: 1, h: 1, to: 'saltcombe_lagoon', spawn: { x: 29, y: 8 } },
     // East, down the cliff path to the Sunken Lanes.
-    { x: 35, y: 9, w: 1, h: 3, to: 'lanes_fork', spawn: { x: 2, y: 8 } },
+    // The Lanes wait for the Wreck Yard (the star shard, Haddock's run out there): until the ride
+    // home (wreck_slip_home) the path east turns you back, Haddock waving from the landing. A save
+    // already in the Lanes goes through.
+    { x: 35, y: 9, w: 1, h: 3, to: 'lanes_fork', spawn: { x: 2, y: 8 }, after: ['wreck_slip_home', 'lanes_lantern'], notYet: 'lookout_lanes_not_yet' },
   ],
 
   // Down the step at the end of the landing, beside the Bother's post (31..32, row 22): Haddock
@@ -88,11 +95,49 @@ export const SALTCOMBE_LOOKOUT = {
     { sprite: 'sign', x: 25, y: 15, text: 'lookout_stair_sign' },
     { sprite: 'sign', x: 32, y: 8, text: 'lookout_lanes_sign' },
     // The landing: Haddock and the Bother, from the swimming lesson on.
-    { sprite: 'cf_haddock', x: 23, y: 20, npc: 'haddock_lookout', animation: 'cf_haddock', speed: 0.5, after: 'swimming_lesson' },
-    { sprite: 'cf_bother_moored', x: 26, y: 22, text: 'lookout_bother', animation: 'cf_bother_moored', speed: 0.5, after: 'swimming_lesson' },
+    { sprite: 'cf_haddock', x: 23, y: 20, npc: 'haddock_lookout', animation: 'cf_haddock', speed: 0.5, after: 'swimming_lesson', until: 'haddock_gone' },
+    { sprite: 'cf_bother_moored', x: 26, y: 22, text: 'lookout_bother', animation: 'cf_bother_moored', speed: 0.5, after: 'swimming_lesson', until: 'haddock_gone' },
+    // After the chapter: the same boat, Ves's to row now.
+    { sprite: 'cf_bother_moored', x: 26, y: 22, text: 'lookout_bother_after', animation: 'cf_bother_moored', speed: 0.5, after: 'haddock_gone' },
     { sprite: 'sign', x: 32, y: 20, text: 'lookout_ferry_sign' },
     { sprite: 'c5_lantern_post_lit', x: 33, y: 20, text: 'lookout_landing_lamp', animation: 'c5_lantern_post_lit', speed: 0.25 },
     { sprite: 'c5_buoys_pile', x: 21, y: 21, text: 'lookout_buoys' },
+    // The weather's own instrument, and tufts flattened by the wind.
+    { sprite: 'sy_windsock', x: 30, y: 13, text: 'lookout_windsock', animation: 'sy_windsock', speed: 0.22 },
+    { sprite: 'sy_dune_grass', x: 3, y: 13, text: 'lookout_turf', animation: 'sy_dune_grass', speed: 0.4, walkable: true },
+    { sprite: 'sy_dune_grass', x: 13, y: 12, text: 'lookout_turf', animation: 'sy_dune_grass', speed: 0.36, walkable: true },
+    { sprite: 'sy_dune_grass', x: 22, y: 14, text: 'lookout_turf', animation: 'sy_dune_grass', speed: 0.44, walkable: true },
+    { sprite: 'sy_dune_grass', x: 29, y: 7, text: 'lookout_turf', animation: 'sy_dune_grass', speed: 0.4, walkable: true },
+    { sprite: 'bench', x: 16, y: 13, text: 'lookout_bench' },
+    // Second pass: the headland itself. Rock coming up through the turf with sea pinks round it,
+    // gorse combed flat by the wind, a length of rail the wind took off and threw inland, flat
+    // stones worn into the turf round the bench, and gulls sitting the weather out. All off the
+    // paths, the rope's edge and the stair.
+    { sprite: 'sc_rocks', x: 3, y: 7, text: 'dress_lookout_rock' },
+    { sprite: 'sc_thrift_wide', x: 2, y: 8, flat: true, walkable: true },
+    { sprite: 'sc_thrift', x: 5, y: 7, flat: true, walkable: true },
+    { sprite: 'sc_rock_small', x: 13, y: 6, text: 'dress_lookout_rock' },
+    { sprite: 'sc_thrift_b', x: 14, y: 6, flat: true, walkable: true },
+    { sprite: 'sc_rocks_b', x: 11, y: 11, text: 'dress_lookout_rock' },
+    { sprite: 'sc_thrift', x: 13, y: 11, flat: true, walkable: true },
+    { sprite: 'sc_thrift_b', x: 10, y: 12, flat: true, walkable: true },
+    { sprite: 'sc_gorse', x: 19, y: 11, text: 'dress_lookout_gorse' },
+    { sprite: 'sc_gorse_small', x: 9, y: 13, text: 'dress_lookout_gorse' },
+    { sprite: 'sc_gorse', x: 31, y: 6, text: 'dress_lookout_gorse' },
+    { sprite: 'sc_gorse_small', x: 24, y: 12, text: 'dress_lookout_gorse' },
+    { sprite: 'sc_flagstones', x: 15, y: 14, flat: true, walkable: true },
+    { sprite: 'sc_flagstones', x: 19, y: 8, flat: true, walkable: true },
+    { sprite: 'sc_fence_broken', x: 10, y: 15, text: 'dress_lookout_fence' },
+    { sprite: 'sc_rocks_b', x: 31, y: 15, text: 'dress_lookout_rock' },
+    { sprite: 'sc_thrift_wide', x: 29, y: 15, flat: true, walkable: true },
+    { sprite: 'sc_thrift_wide', x: 17, y: 15, flat: true, walkable: true },
+    { sprite: 'sc_thrift_wide', x: 23, y: 6, flat: true, walkable: true },
+    { sprite: 'sc_thrift', x: 33, y: 7, flat: true, walkable: true },
+    { sprite: 'sc_gull', x: 22, y: 12, text: 'dress_lookout_gull', walkable: true, animation: 'sc_gull', speed: 0.7 },
+    { sprite: 'sc_gull', x: 23, y: 13, text: 'dress_lookout_gull', walkable: true, animation: 'sc_gull', speed: 0.9 },
+    { sprite: 'sc_gull', x: 27, y: 6, text: 'dress_lookout_gull', walkable: true, animation: 'sc_gull', speed: 0.8 },
+    { sprite: 'c5_gull_marks', x: 22, y: 13, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 4, y: 11, flat: true, walkable: true },
     { sprite: 'gold_pouch', x: 33, y: 13, text: 'lookout_pouch', gold: 50, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
   ],
   tileTexts: {

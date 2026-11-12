@@ -210,6 +210,46 @@ A loose plank lying in the grass. Whatever it was part of, it isn't any more.
 [brook_hedge]
 A thick hedge, humming with insects. The ordinary sort. Something deep inside it sniffs, once, and stops.
 
+# (draft)
+[brook_hedge 2]
+Something deep in the hedge sneezes. A small, wet, extremely guilty sneeze.
+
+Then nothing. The hedge goes back to being a hedge, very hard.
+
+# (draft)
+[brook_hedge_ves 2]
+{thoughtful}Bless you.
+
+{bored}...I've just said bless you to a hedge. Don't tell anyone.
+
+# (draft)
+[brook_hedge 3]
+The hedge holds very still. It has the stillness of a hedge that is holding its breath, and isn't very good at it.
+
+# (draft)
+[brook_hedge 10]
+A pinecone rolls out from under the hedge and stops at your foot.
+
+A small hand comes out, feels about, finds it, and takes it back in.
+
+# (draft)
+[brook_hedge_ves 10]
+{surprised}...
+
+{bored}No. I've decided I didn't see that. Sunnyside's got enough going on.
+
+# (draft)
+[brook_hedge after the_hall_falls]
+A thick hedge, humming with insects. Nothing in it sniffs. You listen quite hard, to be sure.
+
+# (draft)
+[brook_hedge_bramble after the_hall_falls]
+{sheepish}...Different bush.
+
+# (draft)
+[brook_hedge_ves after the_hall_falls]
+{bored}It's the same bush, Bramble. It's got your shape in it.
+
 [brook_water]
 The brook runs west to east, quick and clear and cold. Now and then, all together, the pebbles on the bottom jump, as if something very far below were tapping.
 
@@ -375,7 +415,7 @@ Underneath, smaller: Also not up it.
 Farmer Tolliver's breakfast basket, empty except for a note tied to the handle: THE BASKET IS NOT FOR THE HOLE. BASKET BACK TO TOLLIVER, THE LAST FARM. NO HURRY.
 
 [soft_basket_bramble]
-{grin}There's one egg shell left. I'm keeping it.
+{grin}There's one eggshell left. I'm keeping it.
 
 [soft_keep_off_5]
 KEEP OFF THE GRASS. Someone has added, below it, in neat little letters: (because of the hole).
@@ -450,7 +490,7 @@ Round bales of hay, stacked two deep, with string round their middles. They have
 A purse tucked in the corner of a pen of bales, with a label: FOUND IT AT THE BOTTOM OF THE HAY. YOURS NOW. SORRY ABOUT THE HAY.
 
 [hay_chest]
-A small chest at the end of the field, painted with ears of wheat. Inside, wrapped in a cloth: a hay biscuit, rather dry, still warm. It smells like a summer you haven't had yet.
+A small chest at the end of the field, painted with ears of wheat. Inside, folded small: a yellow OILSKIN COAT, still smelling of the sea. Someone was going to have a very wet picnic.
 
 # --- DANDELION HILL ---
 
@@ -488,7 +528,7 @@ Ves hooks it and shakes. Seeds pour out in a great white rush, and a cloud rises
 A purse on top of the banks, left in the open. Someone has stuck a dandelion in the drawstring, as a flag.
 
 [hill_pouch_far]
-A purse in the far corner of the hill, behind a tree. A label in tiny writing: IF YOU CAME ALL THE WAY OUT HERE, YOU'D EARNED IT.
+A purse in the far corner of the hill, behind a tree. A label in tiny writing: IF YOU CAME ALL THE WAY OUT HERE, YOU'VE EARNED IT.
 
 [hill_bench]
 A bench at the foot of the hill, pointing up it. A hat has been left on one end, with the brim turned up to catch seeds. It has caught two.
@@ -519,7 +559,7 @@ A painted board. THE MILL GATES NEED TWO SCALES HELD. ONE FOR THE CART, IN THE O
 [mill_sign_ves]
 {thoughtful}A plate for you, a plate for Bramble, and a hole just his size.
 
-{smile}Mine's the lever over the way. Hero on his plate first, then press E and send Bramble through.
+{smile}Mine's the lever over the way. You on your plate first, then press E and send Bramble through.
 
 [mill_sign_bramble]
 {grin}Press E and I'm yours!
@@ -584,7 +624,7 @@ A bench in the lee of the fence, out of the wind. The seat is worn pale in the s
 A purse in the corner of the yard behind some sacks. A label: DROPPED IT. DON'T KNOW WHEN. GOOD LUCK.
 
 [mill_chest]
-A chest by the east fence, with a flour handprint on the lid. Inside: a cucumber sandwich on a plate, wrapped up in a napkin. Still crisp. The miller is nothing if not tidy.
+A chest by the east fence, with a flour handprint on the lid. Inside, side by side: a pair of little SEA BOOTS, Bramble's size exactly. The miller is nothing if not tidy.
 
 # --- THE ORCHARD ---
 
@@ -597,17 +637,16 @@ A signpost. EAST: THE MILL POND. NO SWIMMING. THE FOALS BITE, BUT NOT ON PURPOSE
 [orch_sign_east_bramble]
 {worried}"Foals". Whose foals?
 
-[orch_gap]
-A round hole in the bushes, a little way up from the ground. It's the width of a ten-year-old with his elbows in.
+# (draft)
+[orch_bank]
+An old bank of turf where the bushes have died back, with a step at its foot worn bare by somebody's feet. Somebody comes and goes this way, and doesn't bother with the gate.
 
-[orch_gap_bramble]
-{grin}Easy! Press E and I'm in!
+# (draft)
+[orch_bank_bramble]
+{grin}It's a back door! For people who can't be bothered with front doors!
 
 [orch_lever]
 The lever, pulled down. The knot has slipped, and the gate outside stands open.
-
-[orch_lever_no]
-The lever's stiff. It's built low, for small hands, and the knot is tight. It doesn't seem to want you.
 
 [orch_gate]
 A little green gate in the ring of bushes, tied shut from the inside with string. There's a round green door beyond it, in a bank of turf.
@@ -674,7 +713,7 @@ A smaller purse on the south island, behind the reeds. A fish is looking at it. 
 A chest on the far bank, under the blossom, with a cord of green weed tied around it for a handle. Inside: a bottle of lemonade, cold from the water, with a little label: THE FOALS SENT THIS. BE KIND.
 
 [pond_bench]
-A bench at the pond's edge, facing the water. Someone has left a small tin of bread-crumbs for the ducks, who aren't there. The foals have been eating them.
+A bench at the pond's edge, facing the water. Someone has left a small tin of breadcrumbs for the ducks, who aren't there. The foals have been eating them.
 
 [pond_haystack]
 A haystack with a long green streak of weed trailing from it. Something wet has been sleeping in it.
@@ -743,8 +782,11 @@ A low mound of sand, held together by tough pale grass. It was a meadow a minute
 [cliff_pouch]
 A purse in the lee of a dune, half buried. Someone has weighed it down with a shell, so it won't blow away.
 
+[cliff_bank_pouch]
+A purse up on the old bank, tucked into the dune grass where the wind can't have it. You'd only see it from up here.
+
 [cliff_chest]
-A chest in a dip in the dunes, rimed with salt. Inside: a bottle of dandelion tea, still warm, tied with a scrap of ribbon. The note says: DRINK IT AT THE TOP.
+A chest in a dip in the dunes, rimed with salt. Inside: a bottle of lemonade, still cold, tied with a scrap of ribbon. The note says: DRINK IT AT THE TOP.
 
 # --- THE SEA VIEW ---
 
@@ -763,7 +805,7 @@ The sea is wide and blue and full of tiny sparkles. And, right at the edge, smal
 A bench on the very edge, with a view of the whole bright sea. It's worn smooth by a great many people sitting and not saying much.
 
 [sea_sign]
-A sign by the lane. GULLREST (BELOW). TAKE THE CLIFF PATH. THE VIEW IS FREE. THE STEPS ARE EXTRA.
+A sign by the lane. THE BEACH (BELOW). TAKE THE CLIFF PATH. THE VIEW IS FREE. THE STEPS ARE EXTRA.
 
 [sea_bunting_post]
 A post with a red and yellow pennant on top, at the head of a path that goes down the cliff. The first of a great many.
@@ -775,10 +817,119 @@ A post with a red and yellow pennant on top, at the head of a path that goes dow
 A purse in the dunes near the edge. Someone has stuck a feather through the string, and a gull has been looking at it from the bench ever since.
 
 [sea_path]
-Steps cut down into the cliff, worn hollow in the middle by a great many feet, with a rope on posts down both sides to hold on to. Sand has blown into the back of every one.
+Steps cut down a spur of the cliff, worn hollow in the middle by a great many feet, with a rope on posts down both sides to hold on to. At the bottom they go in under a lip of rock, into a dark cave mouth. Below that the spur goes on down, all the way to the sea.
 
 [sea_edge]
 The lip of the cliff, with thrift growing in the cracks, and a long way down. The wind comes up it, steady, smelling of salt.
+
+# --- THE CLIFF CAVE (inside the Sea View's cliff) ---
+
+[cave_window]
+A hole right through the cliff, about the size of a door, with the whole bright sea in it: blue water, a white wave, a gull hanging on the wind. The light it lets in lies on the pool like a coin.
+
+[cave_window_ves]
+{smile}Best window in the county. No glass to clean.
+
+[cave_window_bramble]
+{worried}I'm not looking at it. If I don't look at it, it can't look at me.
+
+[cave_shallows_ves]
+{bored}Cold. Wonderful. My boots wanted a wash.
+
+[cave_shallows_bramble]
+{worried}I'm only going in up to my ankles. My ankles can swim. The rest of me can't.
+
+[cave_rope]
+A hand rope on wooden posts, down the side of the steps, rubbed smooth and dark by years of hands. On the other side of it there is the pool, and not very much else.
+
+[cave_rope_bramble]
+{determined}I'm holding the rope. I'm holding it the whole way down.
+
+[cave_lantern]
+A small tin lantern on a hook in the last post. It's lit. Someone comes down here to fill it, or it is a very patient lantern.
+
+[cave_shaft]
+A thin thread of grey daylight, all the way down from a crack in the roof. Bits of dust turn over and over in it, in no hurry at all. It doesn't light much.
+
+[cave_drip]
+Water gathering on the roof, a drop at a time, and falling into a little puddle with a sound like a very small bell.
+
+[cave_chest]
+A fishers' chest up on the shelf, out of reach of the water, with a rope handle at each end. Inside, wrapped in sacking: a long gaff hook, its point still sharp.
+
+[hollow_chest]
+The fishers' kit chest, beside the boat. Under a coil of line: a canvas smock, salt-stiff and patched, small enough for a boy.
+
+[cave_chest_empty]
+An empty chest with a rope handle at each end. It smells of tar and old string.
+
+[cave_shells]
+Shells washed in by the pool: a scallop, a whelk, some cockles, and a starfish who has decided this is far enough.
+
+[cave_coil]
+An old coil of rope, stiff with salt. It has been coiled very neatly by someone who was going to come back for it.
+
+[cave_rock]
+Cold rock, wet to the touch. Out in the sun this was the cliff's warm pink sandstone; in here, in the damp and the dark, it has gone the grey-brown of an old loaf.
+
+[cave_pool]
+The middle of the pool, where it goes down dark and green, a long way, further than you can see. It rises and falls by a hand's width, slowly, and never quite stops.
+
+[cave_shallows]
+The edge of the pool, shin-deep and very cold, the bottom just showing through. It's fine to wade. Further out, where it goes dark, it isn't.
+
+[cave_steps]
+Planks laid on steps cut in the rock, worn hollow in the middle. Somebody put a lot of work into getting down to the sea.
+
+[cave_pillar]
+A pillar of rock the sea has been working on for a very long time. It has nearly got a waist.
+
+[cave_boulder]
+A boulder, rounded smooth. It came down off the roof once, a long time ago, and nobody has mentioned it since.
+
+[cave_shelf]
+A shelf of rock, higher than the floor, high enough to keep things dry. There's a step up to it, if you jump.
+
+# --- THE FISHERS' HOLLOW (the bottom of the cave) ---
+
+[hollow_window]
+A gap in the rock, low over the water, with the sea outside going on for ever. A gull lands on the edge, looks in at you, and leaves.
+
+[hollow_window_ves]
+{bored}The gulls have a view. They seem to think it's theirs.
+
+[hollow_sea]
+The sea, come in under the cliff. It slides up the sand, thinks about it, and slides back.
+
+[hollow_sea_bramble]
+{worried}It keeps coming up to see us. Tell it we're busy.
+
+[hollow_sea_ves]
+{smile}It doesn't take messages, Bramble.
+
+[hollow_stones]
+Two flat stones in the water, worn into a path by careful feet.
+
+[hollow_net]
+A fishing net drying on a frame of poles, mended in a dozen places with different string.
+
+[hollow_pots]
+Lobster pots stacked against the rock, empty. A crab has moved into one and put nothing in it.
+
+[hollow_boat]
+An old rowing boat pulled up on the sand, out of the tide's way, with a puddle in the bottom and a crab living under the seat who would like you to know that.
+
+[hollow_boat_ves]
+{bored}It's either resting or retired.
+
+[hollow_pouch]
+A purse on the sand bar, half buried, with the tide's tidy ripples all round it. Someone was paid and then went fishing.
+
+[hollow_sign]
+A board on a post by the way out, the letters burnt in with a hot nail: STEPS UP. STEPS DOWN. ALL STEPS EXTRA.
+
+[hollow_sign_ves]
+{thoughtful}Somebody round here really doesn't like steps.
 
 # --- THE BURROW (secret) ---
 

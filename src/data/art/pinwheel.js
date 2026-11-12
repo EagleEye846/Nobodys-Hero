@@ -103,6 +103,6 @@ export const PINWHEEL_ANIM = {
     const rows = drawUrchin({ ext: i < 2 ? 0.4 : 0.8, rot: 0.1, face: 'hurt', dy: i === 1 ? 1 : 0 });
     return i === 0 ? recolour(rows, FLASH) : rows;
   }),
-  death: clip(4, [0, 1, 2, 3, 4, 5], (i) => dissolve(drawUrchin({ ext: Math.max(0.1, 0.7 - i * 0.15), rot: 0.1, face: 'dead', droop: 1, dy: Math.min(i, 3) }), i >= 3 ? (i - 2) * 0.3 : 0, 5)),
+  death: clip(4, [0, 1, 2, 3, 4, 5], (i) => dissolve(drawUrchin({ ext: Math.max(0.1, 0.7 - i * 0.15), rot: 0.1, face: 'dead', droop: 1, dy: Math.min(i, 3) }), 0, 5)),
   spared: clip(4, [0, 1, 2, 3], (i) => drawUrchin({ ext: 0.9, rot: 0.1 + i * 0.03, face: 'glad', droop: 0.9, dy: i % 2 ? -1 : 0 })),
 };
