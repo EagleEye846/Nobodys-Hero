@@ -110,6 +110,9 @@ A picket fence, every post wearing a hat of snow.
 [square_chough]
 A chough on the fence post. It's watching the brazier. It might be warming its feet from here.
 
+[ridge_chough]
+A chough, glossy black with a red beak. It looks at you sideways, says "chee-ow", and goes back to looking at the view.
+
 [square_inn_sign]
 THE SOFT BEDS. Inn. Soup always on. Beds always made. Dreams not guaranteed but very likely.
 
