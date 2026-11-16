@@ -2,7 +2,7 @@ import { inUiSpace } from '../engine/screen.js';
 import { sfx } from '../audio/music.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { ITEMS, MAX_ITEMS, maxStorage } from '../data/items.js';
-import { drawMenuFrame, drawWeaponList, drawItemDetails, drawControls, MENU, MENU_COLORS, HEADER_Y, FOOTER_Y } from './menuFrame.js';
+import { drawMenuFrame, drawWeaponList, drawItemDetails, drawControls, itemIcon, MENU, MENU_COLORS, HEADER_Y, FOOTER_Y } from './menuFrame.js';
 import { edible } from './itemsMenu.js';
 import { drawText, textWidth } from './text.js';
 
@@ -188,6 +188,8 @@ export class StorageMenu {
         name: (entry) => ITEMS[entry.id].name,
         nameColor: (entry) => (edible(entry.id) ? MENU_COLORS.text : MENU_COLORS.description),
         tag: (entry) => (entry.count > 1 ? { text: `x${entry.count}`, color: MENU_COLORS.highlight } : null),
+        // The same little pictures as the bag (food, a candle, or something else).
+        icon: (entry) => itemIcon(entry.id),
       });
       drawItemDetails(ctx, row.id);
       // What just happened, under the list.
