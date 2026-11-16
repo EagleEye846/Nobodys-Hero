@@ -14,6 +14,7 @@
 //   I  old stone pillar (solid)
 //   J  broken pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const CITY_OLD_STREET = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_old_street',
@@ -96,6 +97,8 @@ export const CITY_OLD_STREET = {
     { sprite: 'sign', x: 7, y: 4, text: 'old_street_sign' },
     { sprite: 'water_mark', x: 18, y: 7, text: 'water_mark', walkable: true },
     { sprite: 'chest', x: 6, y: 8, text: 'street_chest', gives: 'lamp_soot_shawl', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_old_street'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', '!': 'cracked_floor', I: 'city_pillar', J: 'city_pillar', b: 'city_step' },
 

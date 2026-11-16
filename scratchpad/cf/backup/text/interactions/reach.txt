@@ -1,0 +1,684 @@
+# THE STORM REACH (Chapter 5): the open sea past Haddock's Light, crossed in the Bother from
+# stop to stop: the first rock, the reef, the wreck, the eye of the storm, and the foot of the
+# Last Light. A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums. Out here it's the only steady thing for miles.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[rock_stump]
+An old iron mooring post, worn smooth on top. Press on it, and the water and everything you've pushed goes back where it started.
+
+[reach_rock]
+Black rock, running with rain.
+
+# (draft) after the storm.
+[reach_rock_calm]
+Black rock, drying in the wind.
+
+[reach_cliff]
+A face of black rock, slick with weed at the bottom and bare at the top, where the sea can't reach. Mostly can't.
+
+[reach_sea]
+The open sea, green-black and heaving, white where it breaks. There's a lot of it.
+
+[reach_sea_bramble]
+{scared}Don't look at it. If you look at it, it looks back.
+
+[reach_barnacles]
+A knuckle of rock crusted with barnacles. They've done well out here. Nobody else has.
+
+[reach_planks]
+Old planks spiked into the rock, slippery as soap.
+
+[reach_pool]
+A rock pool. Inside it the water is perfectly calm, as if it hadn't heard.
+
+[reach_weed]
+A heap of weed the sea has thrown up and forgotten.
+
+[reach_driftwood]
+A length of driftwood, bleached grey, with a rusted nail still in it.
+
+[reach_bollard]
+A mooring post with a chain round it, sunk into the rock. Somebody used to tie up here. Haddock still does.
+
+# --- THE FIRST ROCK --------------------------------------------------------------
+
+[rock_sign]
+A board nailed to a stake, the letters nearly washed off: GULLY. WAIT FOR THE SWELL TO DROP. DON'T BE CLEVER.
+
+# (draft)
+[rock_sign_ves]
+{laughing}That last line's for you, Bramble.
+
+# (draft)
+[rock_sign_bramble]
+{sheepish}I'm never clever near water. I'm just wet.
+
+[rock_bar]
+A bar of shingle across the gully. Every few breaths the sea pulls off it, and every few breaths it comes back.
+
+[rock_dial]
+A post with a round face: a blue arc for the swell in, a sandy arc for the swell out, and a hand going round. Out here the sea keeps time like a clock.
+
+[rock_buoy]
+A red buoy hauled up onto the shelf, its bell long gone.
+
+[rock_coil]
+A coil of rope, flaked down neatly and weighted with a stone.
+
+[rock_pouch]
+A purse wedged deep in a crack in the rock, out of the rain.
+
+# --- THE REEF ----------------------------------------------------------------------
+
+[reef_sign]
+A plank nailed to a stake, the paint half gone: BLOWHOLES. STAND ON ONE AND IT'LL HAVE YOU OVER. MIND WHICH.
+
+# (draft)
+[reef_sign_bramble]
+{surprised}Have me over WHAT?
+
+[reef_blowhole]
+A hole in the coral, black and wet. Every few breaths the sea heaves somewhere under the rock, and the air comes roaring up out of it, salt and all.
+
+# (draft)
+[reef_blowhole_ves]
+{glee}Now that's my kind of weather.
+
+[reef_locker]
+A sea locker, lashed to the coral with chain so the storm can't have it. BOTHER is painted on the lid, and under it, very small, THE FIRST. Inside, wrapped in oilcloth, a scarf of grey down, and a page torn out of a log in big square writing:
+
+"Took the boy out to the reef to see the petrels. He asked where they go in a storm. Told him they go out in it. Only ones that do. He thought about that all the way home."
+
+# (draft)
+[reef_locker_bramble]
+{thinking}...The first Bother. What happened to the first Bother?
+
+# (draft)
+[reef_locker_ves]
+{proud}A storm bird's scarf. It's coming with me.
+
+[reef_locker_empty]
+The old locker, lashed down tight, and empty. The chain will outlast the reef.
+
+[reef_stormglass]
+Out on the reef, where the lightning struck all those nights, the sand has run into glass. Among the shells, one green bead of it, smooth as a sweet. You pocket it.
+
+[reef_stormglass_gone]
+Shells on the wet rock. Nothing else among them glints.
+
+[reef_coral]
+Coral, brittle and grey, with little red bits still alive in the cracks.
+
+[reef_rock]
+Wet rock and coral, full of holes that suck and bubble.
+
+[reef_buoys]
+A heap of old buoys, lashed together so the sea can't have them.
+
+[reef_pouch]
+A purse caught in the weed at the foot of the rock.
+
+# --- THE WRECK ---------------------------------------------------------------------
+
+[wreck_sign]
+Somebody has painted on a broken oar: ALL HANDS LOST. KEEP OFF HER DECK. DON'T GO IN THE DECKHOUSE.
+
+# (draft)
+[wreck_sign_ves]
+{smile}Two out of three's not bad.
+
+[wreck_shingle]
+Black shingle in the lee of the wreck, the only bit of this rock the sea doesn't go over.
+
+[wreck_side]
+The ship's side, leaning over you, plate after rusted plate. Barnacles have got as far as halfway up.
+
+[wreck_rail]
+The ship's rail, bent where the sea came over it.
+
+[wreck_deck]
+The deck, tilted a little, wet and slippery. Water runs off it in sheets with every wave.
+
+[wreck_gangway]
+A gangway down the ship's far side to the rock.
+
+[wreck_house]
+The deckhouse. Its door is stove in and jammed with wreckage. Nothing bigger than a cat is getting in that way.
+
+[wreck_porthole]
+A porthole, the glass cracked in a star. Inside, a wheel on the wall, and a bolt running from it out to the gangway.
+
+[wreck_gap]
+A gap low in the deckhouse wall where a plate has rusted through. It's about the size of a ten-year-old.
+
+[wreck_gap_bramble]
+{sheepish}Why is it always me and a hole?
+
+# (draft)
+[wreck_gap_ves]
+{laughing}Because it's always you and a hole.
+
+[wreck_bolt]
+A bolt wheel on the deckhouse wall. Bramble hangs off it with all his weight, and it squeals round, and out on the gangway something goes CLUNK.
+
+[wreck_bolt_not_you]
+It's inside the deckhouse, and the deckhouse door is jammed solid.
+
+[wreck_gate]
+A gate across the gangway, bolted. The bolt runs back into the deckhouse.
+
+[wreck_gate_open]
+The gangway gates swing open with a long, rusty groan.
+
+[wreck_wheel]
+The ship's wheel, three spokes snapped off. Somebody tied it hard over, a long time ago, and it's stayed that way.
+
+[wreck_sail]
+A sail on a broken spar, more hole than sail.
+
+[wreck_flag]
+A flag on the stump of a mast. Whatever was on it has been rained off.
+
+[wreck_figurehead]
+The figurehead, broken off and lying on the shingle: a woman with her hand up to her eyes, looking out to sea. She's still looking.
+
+[wreck_anchor]
+The ship's anchor, dropped on the rock and never weighed. It didn't help.
+
+[wreck_crate]
+A cargo crate, burst. Whatever was in it went with the sea.
+
+[wreck_pouch]
+A purse in the lee of the deckhouse, dry, which out here is close to a miracle.
+
+# --- THE EYE -------------------------------------------------------------------------
+
+[eye_sea]
+The sea, lying flat. It's so still that the rock is in it upside down.
+
+[eye_sea_bramble]
+{thinking}It's much nicer when it's asleep.
+
+[eye_rock]
+Dry rock. Actually dry. You'd forgotten.
+
+[eye_turf]
+Thin turf in the cracks, and in it a few tiny white flowers, shut tight like fists.
+
+[eye_pool]
+A rock pool with a crab in it. The crab is having a lovely time.
+
+[eye_driftwood]
+A log of driftwood, just right for sitting on.
+
+# (draft)
+[eye_driftwood_ves]
+{determined}Don't get comfortable. It's a hole in the weather, not a holiday.
+
+[eye_coil]
+The Bother's spare rope, coiled and dry.
+
+[eye_bother]
+The Bother, pulled in snug at the jetty. Somebody has bailed her out, and the bailing tin is upside down on the thwart to dry.
+
+[eye_pouch]
+A purse tucked under the driftwood.
+
+# --- THE FOOT OF THE LAST LIGHT ------------------------------------------------------
+
+[foot_sign]
+An iron plate bolted to the rock, letters raised in rust: THE LAST LIGHT. The rest has been scraped off, one letter at a time, by the sea.
+
+[foot_plinth]
+The rock the tower stands on, cut flat and faced with black stone. The sea has had a go at it for years and got nowhere.
+
+[foot_wall]
+The foot of the tower: black brick, every course as wide as you are tall. You can't see the top from here. You can't see much of anything from here except the tower.
+
+# (draft)
+[foot_wall_ves]
+{surprised}...Somebody built this. On purpose.
+
+[foot_chain]
+A chain as thick as your arm, run from the rock out into the sea. Whatever's on the other end, it isn't saying.
+
+[foot_pouch]
+A purse wedged in behind the chain, where the sea couldn't pull it loose.
+
+# After the chapter (haddock_gone): the Bother, empty, where Haddock left her. (draft).
+[bother_after]
+The Bother, tied up and bumping the planks, her oars shipped. There is a dent in the thwart the exact shape of a walrus.
+
+# (draft)
+[bother_after_ves]
+{proud}I row now. Complaints go in the sea.
+
+# --- SHORE DETAILS (2026-11-08) ---------------------------------------------------
+
+# (draft)
+[reach_cairn]
+A cairn of flat stones on the bare rock. Somebody stopped out here once and wanted it known.
+
+# (draft)
+[reach_rocks]
+Rocks, black and streaming, barnacles crusted on the seaward side.
+
+# (draft)
+[reach_stakes]
+Stakes driven into a crack, with a rope between them to hold on to in a blow. A rag on the middle one has been red.
+
+# (draft)
+[reach_gull_rock]
+Gulls on a rock in the sea, packed in tight with their backs to the wind. Not one of them is leaving.
+
+# (draft)
+[reach_rowboat_half]
+Half a rowboat, wedged up on the rock where the sea threw it. The other half is somewhere out there.
+
+# (draft)
+[reach_pot]
+A lobster pot that came a long way to be broken here. The float on it still has somebody's mark.
+
+# --- THE NEEDLE (optional, 2026-11-14) -------------------------------------------------
+
+# (draft)
+[needle_sign]
+A board nailed to the rock, the paint nearly gone: KEEPERS ONLY. NOT IN A GALE.
+It is always in a gale.
+
+# (draft)
+[needle_sign_bramble]
+{scared}It's really tall. It's really, really tall.
+
+# (draft)
+[needle_sign_ves]
+{grin}Then don't look up. Look at him. He's the one climbing.
+
+# (draft)
+[needle_rock]
+Black rock, scoured bare by the storm.
+
+# (draft)
+[needle_face]
+The Needle's face, sheer and black and streaming.
+
+Old pitons are driven into it, each with a ring in its head, worn bright by keepers' ropes.
+
+# (draft)
+[needle_face_calm]
+The Needle's face, sheer and black and drying.
+
+Old pitons are driven into it, each with a ring in its head, worn bright by keepers' ropes.
+
+# (draft)
+[needle_pouch]
+A purse jammed into a crack on the ledge. Somebody got this far and thought better of it.
+
+# (draft)
+[needle_cairn]
+A little cairn of stones on the ledge, half way.
+
+Somebody stopped here to get their breath, and left a stone. Lots of somebodies.
+
+# (draft)
+[needle_hut]
+The stump of the keepers' watch hut. Two walls are left. They are the two the wind didn't want.
+
+# (draft)
+[needle_lamp]
+The watch hut's lamp on its post, cold. From up here they'd have seen a ship in trouble a long way off.
+
+# (draft)
+[needle_locker]
+The keepers' locker, bolted to the rock.
+
+Inside, folded up tight and dry: a long black oilskin with a hood, stiff with salt.
+
+Whoever wore it climbed up here in weather like this, on purpose.
+
+# (draft)
+[needle_locker_ves]
+{proud}You climbed the Needle. In this. I'll say it once: that was good.
+
+# (draft)
+[needle_locker_bramble]
+{awed}You're the best climber in the whole world. Probably.
+
+[needle_locker_empty]
+The locker's empty. The wind has a go at the lid now and then.
+
+# --- LIFE PASS (2026-11-14): extra things to look at ---
+# (draft)
+
+# reach_foot
+[lp_rf_scope]
+A brass telescope on a post, aimed at the tower's lamp. A card: TEN PENCE A LOOK. There's a tin for the pennies, glued shut.
+
+[lp_rf_scope_ves]
+{bored}Nobody pays and nobody's allowed to. A very tidy business.
+
+[lp_rf_scope_bramble]
+{thinking}I've got a button. Do you think a button counts?
+
+[lp_rf_bell_buoy]
+A red buoy with a bell on it, washed up on the slabs. Every time the swell lifts it a little, it goes ding. It's been doing that all day.
+
+[lp_rf_bell_buoy_ves]
+{bored}I'd have thrown it back in.
+
+[lp_rf_bell_buoy_bramble]
+{glee}Ding! DING! Ding ding!
+
+[lp_rf_cairn]
+A cairn, with a stone from every visitor. The top one is a small shell with BYE written on it in pencil.
+
+[lp_rf_cairn_ves]
+{smile}He's the polite sort.
+
+[lp_rf_cairn_bramble]
+{sad}It says bye. It doesn't say who to.
+
+[lp_rf_tar]
+A barrel of tar with its lid hammered down so many times it's all dents. Whoever sealed it didn't trust it.
+
+[lp_rf_tar_ves]
+{bored}Good instinct. It's tar.
+
+[lp_rf_end_sign]
+A sign: THE END OF THE LINE. REFRESHMENTS: NONE. Under that, someone's added a tiny arrow pointing towards the tower. It's labelled: WORSE.
+
+[lp_rf_end_sign_ves]
+{bored}Consistent, at least.
+
+[lp_rf_end_sign_bramble]
+{worried}Worse than what, exactly?
+
+[lp_rf_oar]
+An oar stuck in the shingle, with a gull's feather tied on, and a message burnt into the blade: GONE TO TOWER. BACK SOON. It's been a very long soon.
+
+[lp_rf_oar_ves]
+{sad}Back soon. They always say that.
+
+# reach_eye
+[lp_re_bottles]
+A crate of corked bottles, every one stuffed with a note. They say things like HELLO FROM SUNNYSIDE and IF THE SEA'S GOT YOU, EAT SOMETHING. They're all in one very small, very round handwriting.
+
+[lp_re_bottles_ves]
+{surprised}That's Tolliver's gran. That's definitely Tolliver's gran.
+
+[lp_re_bottles_bramble]
+{glee}She sent us a message! In a bottle! She's amazing!
+
+[lp_re_chair]
+A deckchair on the slabs, canvas faded, facing the open sea. A blanket is folded on the seat and a kettle stands by its foot, with a cup. Somebody comes out here to watch for something.
+
+[lp_re_chair_ves]
+{thoughtful}They're watching for something that's late.
+
+[lp_re_chair_bramble]
+{sad}It's a very patient chair.
+
+[lp_re_tides]
+A tide board with every high and low chalked in, and a heading: THE EYE. And a second one in smaller letters: IF YOU CAN SEE THIS, THE SEA ISN'T OVER IT YET.
+
+[lp_re_tides_ves]
+{bored}How comforting.
+
+[lp_re_eye_rock]
+A rock with a hole worn right through, so you can see the sea on the far side. It's the shape of an eye. You look into it, and there's a gull looking back.
+
+[lp_re_eye_rock_ves]
+{smile}Look: a rock that stares back. And it's still the less awkward one.
+
+[lp_re_eye_rock_bramble]
+{awed}I can see through the rock! I can see through!
+
+# reach_reef
+[lp_rr_pots]
+Lobster pots, sunk in the pools along the reef, every one numbered, every one empty. In pot nine, a very old crab is sitting like a landlord.
+
+[lp_rr_pots_ves]
+{smile}It's paying no rent and giving no notice.
+
+[lp_rr_pots_bramble]
+{glee}Hello, sir! Sorry! We're just passing through!
+
+[lp_rr_toy]
+A toy boat, floating in a pool, tied to a rock with a fishing line. A child set it out to sea on a string, and the sea has been playing along.
+
+[lp_rr_toy_ves]
+{bored}It's nearly seaworthy.
+
+[lp_rr_toy_bramble]
+{sad}Somebody left it just to see if it would come home.
+
+[lp_rr_depth]
+A board stuck in the shingle: SEA GOES OVER THIS BIT. A line has been painted at knee height, and an arrow, and: HERE. And a second line, at chest height: NOT HERE.
+
+[lp_rr_depth_ves]
+{bored}Educational, I suppose.
+
+[lp_rr_depth_bramble]
+{scared}I'd like to stay at the first line, please.
+
+[lp_rr_stakes]
+Three stakes with a rope sagged between them, and a row of wet socks hung along it, in pairs. Every sock has a hole at the heel.
+
+[lp_rr_stakes_ves]
+{surprised}Why are there so many socks?
+
+[lp_rr_stakes_bramble]
+{laughing}Somebody's got a lot of feet!
+
+[lp_rr_oilskin]
+A yellow oilskin nailed up like a flag. It's got a face drawn on its hood, and underneath someone has written: DON'T GO IN THE WATER. YOU WILL REGRET IT.
+
+[lp_rr_oilskin_ves]
+{bored}Wise words from a coat.
+
+[lp_rr_oilskin_bramble]
+{scared}It's got a very serious face.
+
+# reach_first_rock
+[lp_rk_scope]
+A telescope jammed into a crack in the rock and pointing nowhere. Whoever uses it has to lie on their back.
+
+[lp_rk_scope_ves]
+{bored}Cheap trick. They've got the best view of the clouds.
+
+[lp_rk_net]
+A net on a frame, mended in four different colours of thread. The newest patch is a bright, cheerful blue, and the stitches have been done by someone who really cared.
+
+[lp_rk_net_ves]
+{smile}Somebody's proud of that patch.
+
+[lp_rk_net_bramble]
+{awed}It's the nicest bit of the whole net!
+
+[lp_rk_cairn]
+A cairn of grey stones with a fishing float on top, painted with a very small smile. It's looking out to sea in a thoroughly hopeful way.
+
+[lp_rk_cairn_ves]
+{thoughtful}Somebody was in a good mood.
+
+[lp_rk_cairn_bramble]
+{grin}It's got a smile! A rock with a smile!
+
+[lp_rk_bollard]
+A bollard with a hundred ropes' worth of grooves worn into it, and a sticker on the top: PLEASE SHARE.
+
+[lp_rk_bollard_ves]
+{surprised}Share a bollard? With who?
+
+# reach_wreck
+[lp_rw_souwester]
+A yellow sou'wester hat hanging from a nail on the wreck's rail, by its strap. It's too big for a gull, and it's got a hole in the crown. A gull-sized hole.
+
+[lp_rw_souwester_ves]
+{smile}Someone's been tried on for size.
+
+[lp_rw_souwester_bramble]
+{thinking}A gull wants a hat. That's really all there is to it.
+
+[lp_rw_souwester_gone]
+Nothing else here. You already have what was lying about.
+
+[lp_rw_cat_stone]
+A flat stone on the shingle, with a cat's paw cut into it, and a line: SHE WAS THE BEST OF US. A tin bowl beside it is full, and the milk has been replaced. Recently.
+
+[lp_rw_cat_stone_ves]
+{sad}Someone still comes.
+
+[lp_rw_cat_stone_bramble]
+{sad}Good cat.
+
+[lp_rw_hide_pouch]
+A purse in a hollow under the stone, beside the bowl. A note: FOR THE CAT'S COMPANY.
+
+[lp_rw_rum]
+A barrel marked RUM. You lean in and sniff, and it's rainwater. Somebody has been had.
+
+[lp_rw_rum_ves]
+{bored}Well, the sea has a sense of humour.
+
+[lp_rw_rum_bramble]
+{sheepish}I only smelled it. I didn't drink it. Not even a bit.
+
+[lp_rw_ship_biscuit]
+A ship's biscuit crate, with one biscuit left, hard as slate. Somebody has drawn a face on it with a nail.
+
+[lp_rw_ship_biscuit_ves]
+{surprised}It's got a better face than most of the crew.
+
+[lp_rw_ship_biscuit_bramble]
+{glee}Can I keep it? His name's Gary.
+
+[lp_rw_flag]
+A flag on the wreck's mast stump. It was a skull and crossbones, then somebody added a hat to the skull, and then a very small smile.
+
+[lp_rw_flag_ves]
+{grin}Pirates with a sense of fun. I like them.
+
+# reach_needle
+[lp_rn_tally]
+A board nailed to a post at the foot: CLIMBERS TO DATE. A tally of strokes, one hundred and something, and a little drawing of a gull at the bottom, crossed out. A different hand has written under it: NEXT.
+
+[lp_rn_tally_ves]
+{bored}Somebody's counting on us, then.
+
+[lp_rn_tally_bramble]
+{thinking}A hundred climbers! Where are they?
+
+[lp_rn_net]
+A climbing net, rotted and slung over a rock like a bad habit. Whoever tried the Needle with this had either courage or no good ideas.
+
+[lp_rn_net_ves]
+{surprised}They tried the Needle with a net. A net.
+
+[lp_rn_net_bramble]
+{worried}Did it work?
+
+[lp_rn_mug]
+A mug at the foot of the climb, left there for luck. It's half full of a cold, strong tea. There's a biscuit balanced on the rim.
+
+[lp_rn_mug_ves]
+{smile}Nice. That's a tradition I can support.
+
+[lp_rn_mug_bramble]
+{glee}I'll have the biscuit! For luck!
+
+[lp_rn_summit_gull]
+A gull on the top of the Needle, looking down over the whole sea like it's been put in charge. It looks at you. It's clearly not impressed you took the stairs.
+
+[lp_rn_summit_gull_ves]
+{bored}We took the rings. It took the sky. It's unbearable.
+
+[lp_rn_summit_gull_bramble]
+{angry}We climbed! We did the hard bit!
+
+# --- R3D BEGIN (round 3 fun check, helper D) ---
+# (draft)
+
+[r3d_reach_needle_cairn]
+A cairn on the ledge, built by people who were very, very tired. The top stone is a lump of white quartz.
+
+[r3d_reach_needle_cairn_bramble]
+{glee}I'm adding one.
+
+[r3d_reach_needle_cairn_ves]
+{bored}That's a pebble. But fine.
+
+[r3d_reach_needle_bell]
+A little handbell on a hook at the ledge. A card: RING IF YOU MADE IT. A gull's already rung it.
+
+[r3d_reach_needle_bell_bramble]
+{glee}I made it! DING!
+
+[r3d_reach_needle_bell_ves]
+{smile}Once.
+
+[r3d_reach_needle_book]
+A climbers' book in a tin: names, dates, and drawings of the Needle, each one steeper than the last. The newest has the Needle drawn with a smile.
+
+[r3d_reach_needle_book_bramble]
+{grin}I'm drawing it with a hat.
+
+[r3d_reach_needle_book_ves]
+{bored}The Needle is the hat. Go on, then.
+
+[r3d_reach_needle_baro]
+A brass barometer on a nail at the foot of the climb: STORMY, CHANGE, FAIR, VERY DRY. The needle's wedged on a fifth word, scratched in: WHOOPS.
+
+[r3d_reach_needle_baro_bramble]
+{grin}WHOOPS!
+
+[r3d_reach_needle_baro_ves]
+{bored}That's not a setting. Somebody drew that on.
+
+[r3d_reach_wreck_bell]
+A ship's bell fallen out of its frame, cracked down one side. It still sounds, a little, like a sigh.
+
+[r3d_reach_wreck_bell_bramble]
+{glee}BONG. ...bong?
+
+[r3d_reach_wreck_bell_ves]
+{bored}That's what's left of BONG.
+
+[r3d_reach_wreck_chart]
+A sea chart soaked to felt. You can make out one word: HERE. There's an arrow, rubbed through.
+
+[r3d_reach_wreck_chart_bramble]
+{thinking}Here what?
+
+[r3d_reach_wreck_chart_ves]
+{bored}Here here. Very helpful.
+
+[r3d_reach_wreck_grain]
+A burst sack of grain, a hundred years old and fresh as the day. The gulls won't touch it.
+
+[r3d_reach_wreck_grain_bramble]
+{worried}Gulls eat everything.
+
+[r3d_reach_wreck_grain_ves]
+{bored}Then it isn't food.
+
+[r3d_reach_wreck_hammock]
+A hammock strung between two ribs of the wreck, sagging in the middle, a hat over the end as if somebody's snoring.
+
+[r3d_reach_wreck_hammock_bramble]
+{glee}I'm getting in.
+
+[r3d_reach_wreck_hammock_ves]
+{bored}It's four hundred years old and made of barnacles.
+
+# --- R3D END ---

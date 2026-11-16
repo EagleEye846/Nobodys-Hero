@@ -9,7 +9,8 @@
 // pans the camera down to it.
 //
 // There is no way back up the shaft, and nothing to fight here. The way on is
-// the door in the east wall, along the ledge.
+// the door in the east wall, along the ledge. A crack in the west wall
+// leads to the Chimney (glimmerChimney.js), a ring climb up to a chest.
 // Tile key (see src/overworld/brightTiles.js for how the Glimmering draws them):
 //   #  dark rock overhead (solid)   W  rock face with veins of crystal (solid)
 //   V  wall with a fat glowing vein (solid)   H  wall hung with glowing moss (solid)
@@ -18,6 +19,8 @@
 //   ^  crystal spike (solid)   p  small glowing mushrooms (solid)
 //   Z  crystal thicket (solid)   N  glowing ferns (walkable)
 //   _  open air: the view over the edge shows through
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const GLIMMER_LANDING = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'glimmer_landing',
@@ -47,8 +50,8 @@ export const GLIMMER_LANDING = {
     '#.,,,...O........,^,.........#',
     '#,,,,,,..........,,,,..O.....#',
     '#.,,,,,.........,,,..........#',
-    '#Z.,,..................^......',
-    '#Z..p.....N...................',
+    '...,,..................^......',
+    '....p.....N...................',
     '#......N...........,,,,,.....#',
     '#O.................,,,,,,,..O#',
     '#..^....,,,........,,,,,,,...#',
@@ -77,6 +80,8 @@ export const GLIMMER_LANDING = {
   // arrive. East, along the ledge, to the Shelf (glimmer_shelf: you arrive at x 1, y 7).
   doors: [
     { x: 29, y: 8, w: 1, h: 2, to: 'glimmer_shelf', spawn: { x: 1, y: 7 } },
+    // West, through a crack in the wall, to the Chimney (a ring climb up to a chest).
+    { x: 0, y: 8, w: 1, h: 2, to: 'glimmer_chimney', spawn: { x: 16, y: 16 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -91,8 +96,11 @@ export const GLIMMER_LANDING = {
   // a purse tucked behind the spires.
   textFile: 'interactions/glimmer.txt',
   props: [
+    ...(R3C_PROPS.glimmer_landing ?? []),
     // A save crystal, so the caves never go long without one.
     { sprite: 'savepoint', x: 26, y: 10, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 27, y: 10, travel: 'glimmer_landing', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'glowcap_giant', x: 12, y: 9, text: 'landing_cap', cast: 'glowcap' },
     { sprite: 'sign', x: 17, y: 9, text: 'landing_sign' },
     { sprite: 'crystal_bloom', x: 4, y: 10, text: 'landing_bloom', animation: 'crystal_bloom', speed: 0.6 },
@@ -103,9 +111,12 @@ export const GLIMMER_LANDING = {
     { sprite: 'crystal_violet_s', x: 7, y: 7, text: 'landing_crystal' },
     { sprite: 'glowcap_trio', x: 24, y: 12, text: 'landing_trio' },
     { sprite: 'glowcap_small', x: 10, y: 6, text: 'landing_small' },
-    { sprite: 'glow_moss', x: 6, y: 12, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 15, y: 11, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 6, y: 12, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 15, y: 11, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'gold_pouch', x: 3, y: 4, text: 'landing_pouch', gold: 80, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'gold_pouch', x: 1, y: 4, text: 'lp_land_nook', gives: 'glow_sugar', taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'landing_rock', W: 'landing_wall', V: 'landing_vein', H: 'landing_moss_wall', K: 'landing_wall',

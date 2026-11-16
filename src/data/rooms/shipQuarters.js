@@ -9,10 +9,14 @@
 // Scene ship_quarters_in (row 3 under the ladder, once). The way up is the ladder (14..15, row 2).
 // Tile key: # bulkhead (solid)   W bulkhead face (solid)   . planks
 
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
+
 export const SHIP_QUARTERS = {
   id: 'ship_quarters',
   name: 'THE CREW\'S QUARTERS',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.3,
   // "Port Tomorrow" (src/data/music/ghostShipTheme.js).
   music: 'ghostShip',
   ambience: 'ghost_ship',
@@ -70,8 +74,8 @@ export const SHIP_QUARTERS = {
     { sprite: 'gs_harm_2', x: 22, y: 2, text: 'quarters_harmonium', chime: { set: 'ship', note: 1 } },
     { sprite: 'gs_harm_3', x: 23, y: 2, text: 'quarters_harmonium', chime: { set: 'ship', note: 2 } },
     { sprite: 'gs_harm_4', x: 24, y: 2, text: 'quarters_harmonium', chime: { set: 'ship', note: 3 } },
-    { sprite: 'gs_bulk_door', x: 28, y: 7, text: 'quarters_bulkhead', opensWith: ['ship_tune'], openText: 'quarters_bulkhead_open' },
-    { sprite: 'gs_bulk_door', x: 28, y: 8, text: 'quarters_bulkhead', opensWith: ['ship_tune'] },
+    { sprite: 'gs_bulk_door_top', x: 29, y: 7, text: 'quarters_bulkhead', opensWith: ['ship_tune'], openText: 'quarters_bulkhead_open' },
+    { sprite: 'gs_side_door', x: 29, y: 8, text: 'quarters_bulkhead', opensWith: ['ship_tune'], openLook: 'gs_side_door_open', ajarLook: 'gs_side_door_ajar' },
     { sprite: 'wy_crew_table', x: 8, y: 6, text: 'quarters_table' },
     { sprite: 'bench', x: 8, y: 7, text: 'quarters_bench' },
     { sprite: 'bench', x: 10, y: 7, text: 'quarters_bench' },
@@ -142,6 +146,8 @@ export const SHIP_QUARTERS = {
     { sprite: 'gs_net_heap', x: 16, y: 8, flat: true, walkable: true },
     { sprite: 'gs_weed_a', x: 2, y: 6, flat: true, walkable: true },
     { sprite: 'gs_barrel_staves', x: 26, y: 5, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_quarters ?? []),
   ],
   tileTexts: { '#': 'quarters_wall', W: 'quarters_wall' },
 

@@ -1,0 +1,37 @@
+# THE MOORHEN'S NEST (the Rushes, in the Lantern Marsh): a nest on stakes, one egg short. (life pass, 15 November 2026)
+
+# (draft)
+[first]
+A nest on three stakes at the edge of the water. Three speckled eggs and a gap where a fourth would be.
+
+# (draft)
+[repeat]
+The nest, one egg short. A pair of small dark eyes watches you from the reeds.
+
+# (draft)
+[nest_ask]
+A nest on three stakes at the edge of the water. Three speckled eggs, and a gap in the middle where a fourth would be.
+
+A pair of small dark eyes watches you from the reeds. They aren't angry. They're very worried.
+
+[nest_ask_bramble]
+{worried}There's one missing. Somebody's egg is out there. It'll have rolled off. I bet it's on the other side, near the start.
+
+# (draft)
+[nest_wait]
+The nest, one egg short. The eyes in the reeds are still watching. They look at your hands, and then at your face, and then at your hands again.
+
+# (draft)
+[nest_done]
+You set the egg in the gap. It settles with a little click, the way an egg does when it's home.
+
+There's a rustle in the reeds, and a small dark bird steps out, and sits on the nest without a word, and looks at you for a long moment. Then she shakes herself, and a feather drifts down onto the boards by your feet.
+
+You pick it up. It's a thank-you. It's a very small one. She's very busy.
+
+[nest_done_bramble]
+{glee}She came out! She SAT on it! That's the most beautiful thing I've ever seen. I'm going to cry. I'm NOT. I'm... allergic to eggs.
+
+# (draft)
+[nest_after]
+The nest, full again. The moorhen sits on it with her eyes half shut. She doesn't look up, but one wing lifts a little as you pass, which is as good as a wave.

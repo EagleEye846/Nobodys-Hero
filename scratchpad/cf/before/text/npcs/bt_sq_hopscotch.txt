@@ -1,0 +1,27 @@
+# BT_SQ_HOPSCOTCH: A small frog who hops the chalk squares in the south east of the square, and takes the rules very, very seriously.
+
+[first]
+Shh! Can't talk, I'm on a three! You hop on one, two, three, then the double, and you never, ever step on a line. It's the only rule. Dad invented it.
+
+[repeat]
+Three... double... four... and back! Did you see? I didn't touch one line. Not a single one.
+
+[first after the_kings_welcome]
+I did the king's hopscotch. In front of the king! He said "BRAVO!" I haven't stopped since.
+
+[repeat after the_kings_welcome]
+The king says if you hop with confidence the lines don't matter. They matter. He's wrong. I love him.
+
+[first after the_light_goes_up]
+The chalk's all glowing! Look! It's better when it's glowing. I can see where the lines are.
+
+[repeat after the_light_goes_up]
+Same game, brighter. I think I'm going to be unbeatable.
+
+# (draft)
+[repeat 2]
+You can have a go. You have to take your boots off, because boots make a noise. I'm very sensitive to noise.
+
+# (draft)
+[repeat_ves 2]
+{smile}I'll skip, thanks. {bored}I've got an umbrella and a reputation to think of.

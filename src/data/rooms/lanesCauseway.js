@@ -127,6 +127,7 @@ export const LANES_CAUSEWAY = {
     { sprite: 'ln_moss_b', x: 19, y: 6, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 1, y: 4, flat: true, walkable: true },
     { sprite: 'c5_gull_marks', x: 37, y: 9, flat: true, walkable: true },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
   ],
   tileTexts: { '#': 'lanes_rock', W: 'lanes_rock', '~': 'causeway_water', ';': 'causeway_puddle', x: 'lanes_stone', O: 'lanes_stone', J: 'fork_gatepost', F: 'fork_weed' },
 

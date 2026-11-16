@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE DEADFALL: giant trees lie where they fell, too high to climb from the
 // ground (tall blocks). A stump (a low block) gets you up onto the biggest
 // trunk, which runs the length of the room; walk along it, and out along the
@@ -65,6 +67,7 @@ export const PINEFALL_DEADFALL = {
   props: [
     { sprite: 'ves_ribbon', x: 26, y: 3, text: 'deadfall_ribbon', gives: 'ves_ribbon', taken: { gone: true } },
     { sprite: 'old_pack', x: 2, y: 2, text: 'deadfall_pack', gives: 'pine_candy', taken: { text: 'deadfall_pack_empty' } },
+    ...(R3P_PROPS['pinefall_deadfall'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', B: 'deadfall_trunk', b: 'deadfall_stump' },
 

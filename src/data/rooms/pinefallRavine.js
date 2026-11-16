@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE LONG DROP: the wood ends at a ravine that falls away in shelves. Rope
 // down shelf by shelf (stand on a ring and face down). At the bottom the
 // trees stop and there's only mist, flat and grey, with lights in it: the
@@ -85,6 +87,7 @@ export const PINEFALL_RAVINE = {
     { sprite: 'sign', x: 4, y: 27, text: 'ravine_west' },
     // Tucked in the far corner of the bottom shelf, off the way down.
     { sprite: 'chest', x: 21, y: 23, text: 'ravine_chest', gives: 'fallen_leaf_cloak', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    ...(R3P_PROPS['pinefall_ravine'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

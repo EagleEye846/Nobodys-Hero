@@ -1,12 +1,17 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Pix } from '../../data/art/pixKit.js';
-import { withSnipes } from './snipes.js';
+import { art } from '../../data/art/ch5Kit.js';
+import { PathShot, Zone, Deco, shove, blit } from './coastKit.js';
 
-// The Kelpie Foal's attacks. It's a young water-horse, so it's hooves and weed
-// and water: hoof-stamps that throw rings of droplets (each ring has a gap, the
-// second ring a different one), kelp whips that lash out along a line (the line
-// shows first), a galloping wave of foam with a gap in it, and a charge along a
-// row, shedding spray. It stands to the right of the box.
+// The Kelpie Foal's attacks. A young water-horse practising being
+// frightening, all knees and mane:
+//   - Practice laps: it gallops round the rim of the box, da-da-da-DUM: a
+//     drop flicked in on each beat, a kick of spray at you on the fourth.
+//   - Hurdles: it leaps, harmless in the air; only its shadow shows where it
+//     will land, and it lands with a splash.
+//   - Come for a ride: it tosses its head and then tugs everything toward
+//     its kelp. Line up with a gap in the fronds before it pulls.
+// It stands to the right of the box.
 
 const KELP = { s: '#a8e8f0', S: '#e8fcff', c: '#68d0b4', C: '#3aa890', d: '#1f7868', K: '#4a7a2a', L: '#7ab040', l: '#a8d460', g: '#c8f0e0', k: '#12262a', h: '#2a3a3a', t: '#68d0b4', D: '#14584e', e: '#fff6c8' };
 
@@ -95,212 +100,170 @@ function rush() {
 // It gallops leftward across the box, so the art is turned to face that way.
 defineBulletArt('kelpFoalRush', { frames: [rush().map((row) => [...row].reverse().join(''))], palette: KELP, hitbox: { w: 19, h: 8 }, radius: 4 });
 
+// The foal galloping any way at all (drawn facing right), small enough for laps.
+const RUSH = rush();
+defineBulletArt('kelpLapper', { frames: [RUSH], palette: KELP, radius: 4.4, rotate: true });
+// The foal in the air over a hurdle (harmless up there): legs tucked.
+defineBulletArt('kelpAirborne', { frames: [RUSH], palette: KELP, radius: 1 });
+// Its shadow on the ground under it.
+defineBulletArt('kelpShadow', { frames: [['..ddddd..', '.ddddddd.', '..ddddd..']], palette: KELP, radius: 1 });
+// A frond of kelp poking out of the wall it lives by.
+const frond = art(13, 7, (p) => { p.line(0, 3, 12, 3, 'K', 2); p.line(3, 3, 6, 0, 'L'); p.line(6, 3, 9, 6, 'L'); p.line(9, 3, 12, 1, 'l'); });
+
 export const KELPIE_FOAL_ATTACKS = {
-  // Stamps: a hoof comes down where you are (a crescent flashes there first) and
-  // throws a ring of droplets with a gap in it, the gap turned toward you. A
-  // slower ring follows with its gap a quarter turn round. Two stamps a round,
-  // three rounds.
-  kelpSplash(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let rounds = 0;
-    let stamps = [];
-    // `open` is the gap: how far either side of `gapAt` is left empty (a ring aimed
-    // straight at you, the follow-up, has none).
-    const ring = (bullets, p, speed, gapAt, warn = 0, open = 0) => {
-      const N = 11;
-      for (let k = 0; k < N; k++) {
-        const a = (k / N) * Math.PI * 2;
-        const off = Math.abs(((a - gapAt + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-        if (off < open || off > Math.PI - 1.3) continue;
-        bullets.push(new Shot({ x: p.x, y: p.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, warn, art: 'kelpDrop', life: 1.6 }));
-      }
+  // Practice laps: it gallops round and round the edge of the box, keeping
+  // to a proper gallop, da-da-da-DUM. On the first three beats a hoof
+  // flicks up a drop; on the fourth it kicks a spray at you. Keep off the
+  // rim, and count the beats.
+  kelpLaps(box, density, { Shot, rand }) {
+    const IN = 7;
+    const L = box.x + IN;
+    const R = box.x + box.w - IN;
+    const U = box.y + IN;
+    const D = box.y + box.h - IN;
+    const W = R - L;
+    const H = D - U;
+    const LAP = 2 * (W + H);
+    const SPEED = 72;
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    const off = rand(0, LAP);
+    const at = (k) => {
+      let d = ((off + dir * SPEED * k) % LAP + LAP) % LAP;
+      if (d < W) return { x: R - d, y: U, a: Math.PI * (dir > 0 ? 1 : 0) };
+      d -= W;
+      if (d < H) return { x: L, y: U + d, a: dir > 0 ? Math.PI / 2 : -Math.PI / 2 };
+      d -= H;
+      if (d < W) return { x: L + d, y: D, a: dir > 0 ? 0 : Math.PI };
+      d -= W;
+      return { x: R, y: D - d, a: dir > 0 ? -Math.PI / 2 : Math.PI / 2 };
     };
+    const WARN = 0.6;
+    const BEAT = 0.3;
+    let real = 0;
+    let n = 0;
+    let made = false;
     return {
-      duration: 7.4,
+      duration: 7,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (rounds < 3 && t >= 0.2 + rounds * 2.2) {
-          // The hoof comes down a step off you, never right underfoot.
-          const side = rand(0, Math.PI * 2);
-          const near = { x: clamp(soul.x + Math.cos(side) * rand(16, 22), box.x + 10, box.x + box.w - 10), y: clamp(soul.y + Math.sin(side) * rand(16, 22), box.y + 10, box.y + box.h - 10) };
-          const far = { x: rand(box.x + 10, box.x + box.w - 10), y: rand(box.y + 10, box.y + box.h - 10) };
-          (rounds === 0 ? [near] : [near, far]).forEach((p, i) => {
-            const warn = 0.7 + i * 0.5;
-            bullets.push(new Shot({ x: p.x, y: p.y, harmless: true, life: warn, art: 'kelpHoof' }));
-            stamps.push({ at: t + warn, p, near: i === 0 });
-          });
-          rounds++;
+        real += dt / density;
+        if (!made) {
+          made = true;
+          bullets.push(new PathShot({ art: 'kelpLapper', warn: WARN, life: 6.4, path: at }));
         }
-        for (const s of stamps) {
-          if (t < s.at) continue;
-          s.done = true;
-          const toSoul = Math.atan2(soul.y - s.p.y, soul.x - s.p.x);
-          bullets.push(new Shot({ x: s.p.x, y: s.p.y - 2, harmless: true, life: 0.36, art: 'kelpCrown' }));
-          ring(bullets, s.p, 48, toSoul, 0, 0.8);
-          if (s.near) ring(bullets, s.p, 34, toSoul + (s.p.x > soul.x ? 1 : -1) * 0.45, 0.4);
+        if (real >= WARN + 0.3 + n * BEAT && n < 20) {
+          n++;
+          const p = at(real - WARN);
+          if (n % 4) {
+            // A drop flicked up and in, toward the middle of the box.
+            const a = Math.atan2(box.y + box.h / 2 - p.y, box.x + box.w / 2 - p.x) + rand(-0.4, 0.4);
+            bullets.push(new Shot({ x: p.x, y: p.y, vx: Math.cos(a) * 55, vy: Math.sin(a) * 55, art: 'kelpDrop', life: 1.6 }));
+          } else {
+            // DUM: a kick of spray straight at you.
+            const a = Math.atan2(soul.y - p.y, soul.x - p.x);
+            for (const o of [-0.22, 0, 0.22]) bullets.push(new Shot({ x: p.x, y: p.y, vx: Math.cos(a + o) * 70, vy: Math.sin(a + o) * 70, art: 'kelpDrop', warn: 0.2, life: 1.8 }));
+          }
         }
-        stamps = stamps.filter((s) => !s.done);
       },
     };
   },
 
-  // Whips: kelp lashes out of its mane along the line to you (the line flickers
-  // thin first), three at a time, a fan of them, and flings leaves where they
-  // crack. Three lashes.
-  kelpWhip(box, density, { Shot, Line, rand, clamp }) {
-    let t = 0;
-    let lashes = 0;
-    let cracks = [];
-    let whips = [];
-    const heading = { x: 0, y: 0 };
-    const seen = { x: null, y: null };
+  // Hurdles: it leaps, and you can only see where it will come down by its
+  // shadow on the ground, sliding along under it. Up in the air it's
+  // harmless; where the shadow meets it, it lands with a splash. It leaps at
+  // where you were when it took off, one leap after another.
+  kelpLeap(box, density, { Shot }) {
+    const LEAP = 0.85;
+    const HOP = 30;
+    let real = 0;
+    let next = 0.15;
+    let n = 0;
+    let at = { x: box.x + box.w + 10, y: box.y + box.h / 2 };
     return {
-      duration: 7.2,
+      duration: 7,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (seen.x !== null && dt > 0) {
-          heading.x = heading.x * 0.85 + ((soul.x - seen.x) / dt) * 0.15;
-          heading.y = heading.y * 0.85 + ((soul.y - seen.y) / dt) * 0.15;
+        real += dt / density;
+        if (real < next || n >= 6) return;
+        n++;
+        const from = at;
+        const to = { x: soul.x, y: soul.y };
+        next = real + LEAP + 0.25;
+        const ground = (k) => {
+          const u = Math.min(1, k / LEAP);
+          return { x: from.x + (to.x - from.x) * u, y: from.y + (to.y - from.y) * u };
+        };
+        bullets.push(new PathShot({ art: 'kelpShadow', harmless: true, life: LEAP, path: ground }));
+        bullets.push(new PathShot({ art: 'kelpAirborne', harmless: true, life: LEAP, path: (k) => { const g = ground(k); return { x: g.x, y: g.y - Math.sin(Math.PI * Math.min(1, k / LEAP)) * HOP }; } }));
+        // The landing.
+        bullets.push(new Zone({ x: to.x, y: to.y, r: 8, warn: LEAP, life: 0.22, paint(ctx, z) {
+          if (z.age < z.warn) return;
+          blit(ctx, RUSH, KELP, z.x, z.y - 2);
+        } }));
+        for (let i = 0; i < 8; i++) {
+          const a = (i / 8) * Math.PI * 2 + n * 0.4;
+          bullets.push(new Shot({ x: to.x, y: to.y, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, art: 'kelpDrop', warn: LEAP, life: 1 }));
         }
-        seen.x = soul.x;
-        seen.y = soul.y;
-        if (lashes < 3 && t >= 0.2 + lashes * 2.0) {
-          const roots = [box.y + 14, box.y + box.h / 2, box.y + box.h - 14];
-          roots.forEach((ry, i) => {
-            const x = box.x + box.w + 8;
-            const warn = 0.75 + i * 0.22;
-            const line = new Line({ x, y: ry, angle: Math.PI, length: 150, thickness: 4, warn, life: 0.3, grow: 520, color: '#7ab040', glow: '#a8d460' });
-            line.fan = (i - 1) * 0.2 * (lashes % 2 ? -1 : 1);
-            line.root = { x, y: ry };
-            whips.push(line);
-            bullets.push(line);
-            cracks.push({ line, done: false });
-          });
-          lashes++;
-        }
-        // Each lash tracks you (a little ahead of where you are heading) until a third of
-        // a second before it goes, and then it is fixed: that is the line it lashes along.
-        for (const line of whips) {
-          if (line.age < line.warn - 0.3) {
-            line.angle = Math.atan2(soul.y + heading.y * 0.3 - line.root.y, soul.x + heading.x * 0.3 - line.root.x) + line.fan;
-          }
-        }
-        whips = whips.filter((line) => line.age < line.warn + line.life);
-        for (const c of cracks) {
-          if (c.line.age < c.line.warn + 0.2) continue;
-          c.done = true;
-          const ex = c.line.x + Math.cos(c.line.angle) * 100;
-          const ey = c.line.y + Math.sin(c.line.angle) * 100;
-          if (ex < box.x - 4 || ey < box.y - 4 || ey > box.y + box.h + 4) continue;
-          for (const k of [-1, 1]) {
-            const a2 = c.line.angle + k * 1.3;
-            bullets.push(new Shot({ x: ex, y: ey, vx: Math.cos(a2) * 44, vy: Math.sin(a2) * 44, art: 'kelpLeaf', life: 1.1 }));
-          }
-        }
-        cracks = cracks.filter((c) => !c.done);
+        at = to;
       },
     };
   },
 
-  // Wave: a wall of foam gallops across the box with a gap in it (the gap shows
-  // on the wall first), then another a half-beat behind with the gap shifted. Four
-  // waves, the gap never right on you.
-  kelpWave(box, density, { Shot, rand, clamp }) {
+  // Come for a ride: it tosses its head (its mane flicks), and then tugs:
+  // for a long moment everything in the box is drawn toward it, to the
+  // right wall, where its kelp fronds poke out of the water. There are
+  // gaps between the fronds, different each tug. Line up with a gap before
+  // it pulls, or pull the other way.
+  kelpLure(box, density, { rand }) {
+    const T = (s) => s * density;
+    const NOD = 0.8;
+    const TUG = 1.0;
+    const EVERY = 1.55;
     let t = 0;
-    let waves = 0;
-    let prev = null;
-    const GAP = 26;
+    let n = 0;
+    let tugEnd = -1;
     return {
-      duration: 7.4,
-      update: (dt, bullets, soul) => {
+      duration: 7,
+      update: (dt, bullets, soul, real = dt / density) => {
         t += dt;
-        if (waves >= 4 || t < 0.2 + waves * 1.75) return;
-        let centre;
-        if (waves % 2 === 0 || prev === null) {
-          centre = soul.y + (Math.random() < 0.5 ? -1 : 1) * rand(16, 28);
-        } else {
-          centre = prev + (prev < box.y + box.h / 2 ? 1 : -1) * rand(20, 28);
-        }
-        centre = clamp(centre, box.y + GAP / 2 + 4, box.y + box.h - GAP / 2 - 4);
-        prev = centre;
-        const warn = 0.65;
-        bullets.push(new Shot({ x: box.x + box.w - 3, y: centre, harmless: true, life: warn, art: 'kelpGap' }));
-        for (let y = box.y + 3; y < box.y + box.h + 3; y += 7) {
-          if (Math.abs(y - centre) < GAP / 2) continue;
-          bullets.push(new Shot({ x: box.x + box.w + 5, y, vx: -96, warn, art: 'kelpFoam', life: 2.2 }));
-        }
-        waves++;
-      },
-    };
-  },
-
-  // Charge: it paws, then gallops along a row (the row flickers first), shedding
-  // spray up and down as it goes. Three charges, each with a second foal a step
-  // off your row, and the rows follow you until the last moment.
-  kelpCharge(box, density, { Shot, Line, rand, clamp }) {
-    let t = 0;
-    let charges = 0;
-    const offsets = [0, 0, 0];
-    let runners = [];
-    const heading = { y: 0 };
-    let lastY = null;
-    return {
-      duration: 7.0,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (lastY !== null && dt > 0) heading.y = heading.y * 0.85 + ((soul.y - lastY) / dt) * 0.15;
-        lastY = soul.y;
-        if (charges < 3 && t >= 0.2 + charges * 1.9) {
-          // One on your row, and a second a step off it (a different side each time).
-          for (const offset of [0, charges % 2 ? 24 : -24]) {
-            const y = clamp(soul.y + offset, box.y + 8, box.y + box.h - 8);
-            const warn = 0.8;
-            const guide = new Line({ x: box.x - 4, y, angle: 0, length: box.w + 8, thickness: 1, warn, life: 0, color: '#a8e8f0' });
-            const print = new Shot({ x: box.x + box.w - 6, y, harmless: true, life: warn, art: 'kelpHoof' });
-            const foal = new Shot({ x: box.x + box.w + 13, y, warn, art: 'kelpFoalRush', life: 2.4 });
-            // Its head pokes in at the wall, pawing (only a look), so you see who's coming.
-            const peek = new Shot({ x: box.x + box.w + 1, y, harmless: true, life: warn, art: 'kelpFoalRush' });
-            foal.shed = 0.15;
-            foal.offset = offset;
-            foal.guide = guide;
-            foal.print = print;
-            foal.peek = peek;
-            bullets.push(guide, print, peek, foal);
-            runners.push(foal);
+        if (t >= T(0.2 + n * EVERY) && n < 4) {
+          n++;
+          tugEnd = t + T(NOD + TUG);
+          // Fronds along the right wall, with one wide gap (not where you are now).
+          let gap;
+          let tries = 0;
+          do {
+            gap = rand(box.y + 12, box.y + box.h - 12);
+            tries++;
+          } while (tries < 20 && Math.abs(gap - soul.y) < 18);
+          for (let y = box.y + 5; y < box.y + box.h; y += 9) {
+            if (Math.abs(y - gap) < 10) continue;
+            const len = rand(14, 22);
+            bullets.push(new Zone({ x: box.x + box.w - len, y: y - 3, w: len, h: 6, warn: NOD, life: TUG + 0.2, paint(ctx, z) {
+              ctx.save();
+              ctx.beginPath();
+              ctx.rect(z.x, z.y - 2, z.w, z.h + 4);
+              ctx.clip();
+              blit(ctx, frond, KELP, z.x + z.w - 6, z.y + 3);
+              ctx.restore();
+            } }));
           }
-          charges++;
+          // The pull, shown as streaks running toward the right.
+          bullets.push(new Deco({ warn: NOD, life: NOD + TUG, paint(ctx, d) {
+            if (d.age < d.warn) return;
+            ctx.strokeStyle = '#a8e8f0';
+            ctx.globalAlpha *= 0.5;
+            for (let i = 0; i < 6; i++) {
+              const y = box.y + 7 + i * 13;
+              const x = box.x + (((d.age - d.warn) * 120 + i * 29) % box.w);
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x + 8, y);
+              ctx.stroke();
+            }
+          } }));
         }
-        for (const r of runners) {
-          // The row follows you until the last third of a second, then it is fixed.
-          if (r.age < r.warn - 0.12) {
-            const y = clamp(soul.y + r.offset + heading.y * 0.2, box.y + 8, box.y + box.h - 8);
-            r.y = y;
-            r.guide.y = y;
-            r.print.y = y;
-            r.peek.y = y;
-          }
-          if (r.age < r.warn) continue;
-          if (!r.launched) {
-            r.launched = true;
-            r.vx = -150;
-          }
-          r.shed -= dt;
-          if (r.shed <= 0 && r.x > box.x + 6) {
-            r.shed = 0.26;
-            // The drops hang in its wake a moment, flickering, before they spray
-            // out sideways: you've stepped off its row, so you see them coming.
-            for (const dir of [-1, 1]) bullets.push(new Shot({ x: r.x + 6, y: r.y + dir * 3, vx: 14, vy: dir * 46, warn: 0.3, art: 'kelpDrop', life: 0.9 }));
-          }
-        }
-        runners = runners.filter((r) => r.x > box.x - 20);
+        const k = tugEnd - t;
+        if (k > 0 && k < T(TUG)) shove(soul, box, 56 * real, 0);
       },
     };
   },
 };
-
-// Flung kelp leaves, aimed ahead of you (see snipes.js): stamping alone left running one way safe.
-KELPIE_FOAL_ATTACKS.kelpSplash = withSnipes(KELPIE_FOAL_ATTACKS.kelpSplash, { art: 'kelpLeaf', count: 3, first: 1.2, every: 1.8 });
-
-// Aimed shots on top (see snipes.js): the whip and the charge alone left running one way safe.
-KELPIE_FOAL_ATTACKS.kelpWhip = withSnipes(KELPIE_FOAL_ATTACKS.kelpWhip, { art: 'kelpLeaf', count: 5, first: 0.7, every: 1.0, lead: [0.9, 0, 'mean', 0.5, 0.9], until: 5.8 });
-KELPIE_FOAL_ATTACKS.kelpCharge = withSnipes(KELPIE_FOAL_ATTACKS.kelpCharge, { art: 'kelpFoam', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });

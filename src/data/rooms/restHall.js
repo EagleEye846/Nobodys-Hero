@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE HALL OF HERALDS: the long hall built for the Hero's welcome feast. The
 // table is laid (and relaid, every week, for a hundred years), the Hero's
 // chair stands at its head, the trumpets hang polished on their racks, and
@@ -7,6 +8,7 @@
 //   #  wall top (solid)                           h  papered wall with wood panelling (solid)
 //   o  wooden floorboards                         r  rug
 //   D  doorway (walk through it; see `doors`)
+import { R3A_PROPS } from '../r3aLife.js';
 export const REST_HALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'rest_hall',
@@ -74,6 +76,10 @@ export const REST_HALL = {
     { sprite: 'banner_pole', x: 1, y: 6, text: 'hall_banner' },
     { sprite: 'banner_pole', x: 18, y: 6, text: 'hall_banner' },
     { sprite: 'sign', x: 13, y: 12, text: 'hall_sign' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_hall'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['rest_hall'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

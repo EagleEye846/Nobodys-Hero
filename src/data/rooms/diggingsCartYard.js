@@ -22,6 +22,8 @@
 //   .  packed dirt floor
 //   ^  stalagmite (solid)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_CART_YARD = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_cart_yard',
@@ -103,6 +105,7 @@ export const DIGGINGS_CART_YARD = {
   // beyond the dead end.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_cart_yard ?? []),
     // A save point near the way in (added so the mines have more of them).
     { sprite: 'savepoint', x: 3, y: 10, save: true },
     { sprite: 'mine_cart', x: 5, y: 8, cart: 'a', dir: 'R', text: 'cart_stuck' },
@@ -155,6 +158,7 @@ export const DIGGINGS_CART_YARD = {
     // A tea break left mid-pasty, and spare pit props stacked for the next bit of roof.
     { sprite: 'lunch_crate', x: 25, y: 4, text: 'd_lunch' },
     { sprite: 'timber_stack', x: 16, y: 2, text: 'd_timber' },
+    { sprite: 'col_token', x: 29, y: 13, walkable: true, flat: true, gives: 'tally_pick', taken: { gone: true } },
   ],
   tileTexts: { '#': 'd_rock', O: 'd_ore', I: 'd_post', '^': 'd_stalag', W: 'd_face' },
 
@@ -164,8 +168,10 @@ export const DIGGINGS_CART_YARD = {
   npcs: [
     { enemy: 'drillbug', x: 12, y: 4, patrol: [6, 18] },
     { enemy: 'slagling', x: 26, y: 14, patrol: [25, 29] },
-    // A magpie mole in the north-east corner (row 5, x 20 to 27), three rows above the line,
-    // clear of both buttons, the cart and the gate.
-    { enemy: 'magpiemole', x: 24, y: 5, patrol: [20, 27] },
+    // AMBUSH: a magpie mole hiding as a third heap of ore sacks under the two in the south-west
+    // corner (2,14), till you come within two tiles (a beady eye opens and the sacks shiver:
+    // `look: 'ore_sacks'`, src/overworld/hideouts.js). Four tiles from the save point (3,10) and
+    // the stump (6,13), and six below the line (row 8): only poking at the sacks wakes it.
+    { enemy: 'magpiemole', x: 2, y: 14, patrol: [2, 2], behaviour: 'disguise', look: 'ore_sacks', reach: 2 },
   ],
 };

@@ -28,6 +28,10 @@
 //   #  dark rock overhead (solid)   W  rock face (solid)   O  boulder (solid)
 //   q  loose gravel   ^  stalagmite (solid)   ~  the boiled water (solid)   .  packed dirt floor
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DIGGINGS_STAR_SPILL = {
   id: 'diggings_star_spill',
   name: 'THE SPILL',
@@ -67,6 +71,8 @@ export const DIGGINGS_STAR_SPILL = {
 
   textFile: 'interactions/star_seam.txt',
   props: [
+    ...(R3C_PROPS.diggings_star_spill ?? []),
+    ...(DIGGINGS_DRESSING.diggings_star_spill ?? []),
     { sprite: 'roll_log', x: 7, y: 9, text: 'sp_log', log: true },
     { sprite: 'roll_log', x: 21, y: 5, text: 'sp_log', log: true },
     { sprite: 'rock_stump', x: 2, y: 11, text: 'sp_stump', rockReset: true },

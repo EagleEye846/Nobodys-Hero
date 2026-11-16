@@ -1,0 +1,41 @@
+# BT_MARKET_BAT: A bat asleep from a beam in the market roof, who has slept through every announcement for ten years. Z puts him in a mutter.
+
+[first]
+...zzz... not the Sunstone... zzz... five more minutes... zzz...
+
+[repeat]
+...zzz... is it morning... zzz... no... zzz...
+
+[first after the_kings_welcome]
+...zzz... a king... zzz... very loud... zzz... tell him... zzz... shh...
+
+[repeat after the_kings_welcome]
+...zzz... mm... Peptup... zzz... too much... zzz...
+
+[first after the_light_goes_up]
+...zzz... bright... zzz... turn it down... zzz...
+
+[repeat after the_light_goes_up]
+...zzz... party... zzz... can't... sleeping...
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+...zzz... no, YOU'RE a bat... zzz...
+
+# (draft)
+[repeat 3]
+...zzz... Gran said... zzz... little lad... asked her the way... zzz... said down... zzz... everybody says down...
+
+# (draft)
+[repeat_ves 3]
+{thoughtful}...Ten years asleep, and he's dreaming his gran's story.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+...zzz... confetti... zzz... in my ear... zzz... still in my ear...
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+...zzz... fine... I'm up... zzz... I'm not up...

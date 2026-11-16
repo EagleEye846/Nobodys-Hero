@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE WATER STAIR: the old conduit climbs over a buried ridge in great stone
 // steps, and its water comes down them in falls. The floor, a terrace a step
 // up, a gallery a step above that (split in two by a gap): each can be jumped
@@ -71,6 +72,8 @@ export const DRAINS_STAIR = {
     { sprite: 'water_flow', x: 12, y: 7, text: 'stair_fall', wet: ['!a'], animation: 'water_flow', speed: 0.3 },
     { sprite: 'water_flow', x: 6, y: 4, text: 'stair_fall', wet: ['a'], animation: 'water_flow', speed: 0.3 },
     { sprite: 'water_flow', x: 19, y: 4, text: 'stair_fall', wet: ['!b'], animation: 'water_flow', speed: 0.3 },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_stair'] ?? []),
   ],
   tileTexts: { W: 'stair_wall', '#': 'stair_wall', b: 'stair_step', B: 'stair_step' },
 

@@ -19,18 +19,20 @@ export const FROZEN_STEP = {
     frames: [ICE_STEP_DISGUISE_SPRITES.still, ICE_STEP_DISGUISE_SPRITES.glare, ICE_STEP_DISGUISE_SPRITES.glance],
     palette: ICE_STEP_PALETTE,
   },
-  maxHp: 260,
+  maxHp: 980,
   damage: 13,
 
   // A little busier than its brother at the bottom.
   difficulty: { density: 1.25, speed: 1.15 },
 
-  // The Loose Step's moves in ice and snow (src/battle/attacks/iceStep.js).
+  // The Loose Step's moves in ice and snow, and its own sliding ice blocks
+  // (src/battle/attacks/iceStep.js).
   patterns: [
-    { name: 'iceStepTumble', weight: 3 },
+    { name: 'iceStepStairs', weight: 3 },
     { name: 'iceStepFootfall', weight: 3 },
     { name: 'iceStepCrack', weight: 2 },
     { name: 'iceStepAvalanche', weight: 2 },
+    { name: 'iceStepSlide', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

@@ -205,7 +205,7 @@ export const DROWNED_BATTLE_THEME = {
   title: "Dead Men's Weather",
   bpm: 100,
   stepsPerBeat: 6,
-  volume: 0.63,
+  volume: 0.77,
 
   instruments: {
     ...ORCHESTRA,

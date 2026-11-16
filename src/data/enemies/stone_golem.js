@@ -20,7 +20,7 @@ export const STONE_GOLEM = {
     frames: [STONE_GOLEM_DISGUISE_SPRITES.still, STONE_GOLEM_DISGUISE_SPRITES.look, STONE_GOLEM_DISGUISE_SPRITES.glint],
     palette: STONE_GOLEM_BOULDER_PALETTE,
   },
-  maxHp: 415,
+  maxHp: 990,
   damage: 14,
 
   // A Chapter 2 enemy: slow, heavy things, but plenty of them.
@@ -28,7 +28,7 @@ export const STONE_GOLEM = {
 
   // Its attacks live in src/battle/attacks/stone_golem.js.
   patterns: [
-    { name: 'golemFist', weight: 3 },
+    { name: 'golemThinking', weight: 3 },
     { name: 'golemCrystals', weight: 3 },
     { name: 'golemTremor', weight: 2 },
     { name: 'golemGeode', weight: 2 },

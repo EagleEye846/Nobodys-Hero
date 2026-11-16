@@ -1,12 +1,17 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Pix } from '../../data/art/pixKit.js';
-import { withSnipes } from './snipes.js';
+import { Ring } from './underShapes.js';
+import { blit } from './coastKit.js';
 
-// The Net Wraith's attacks. It's a drowned fishing net, so it's a net's whole
-// business: the box closing to a small window like a net being hauled tight
-// (the window shows first), a line of cork floats bobbing in on the swell, a
-// hook let down on a line that stops, then jerks home, and a curtain of knots
-// let fall with a hole torn in it. It hangs to the right of the box.
+// The Net Wraith's attacks. A fishing net that drowned with its boat and
+// still thinks it's at work:
+//   - Cast net: it lands round you and the weighted edge draws in. Get out
+//     through the tear (between the two cork floats) before it closes.
+//   - Mesh: the whole net hangs in the box, drifting on the swell. Stay in
+//     your hole and go with it; the cords sting.
+//   - Lost catch: the fish it never landed wriggle loose. A fish only ever
+//     swims the way it faces, and turns to face you again at a wall.
+// It hangs to the right of the box.
 
 const NET = { n: '#c8b48a', N: '#8a7650', i: '#cfd8dc', o: '#e0583a', O: '#a83a28', W: '#f4ece0', w: '#ffffff', g: '#9af0c8', G: '#4ab08a', k: '#1c2a2a' };
 
@@ -61,246 +66,236 @@ defineBulletArt('netPeg', {
   frameSeconds: 0.12,
 });
 
+// A little silver fish, drawn swimming right: it wriggles.
+function fish(bend) {
+  const g = new Pix(13, 7);
+  g.disc(6, 3, 4.4, 2.4, 'i');
+  g.disc(6, 4, 3.6, 1.2, 'W', 'i');
+  g.line(1, 3 - bend, 0, 1 - bend, 'i');
+  g.line(1, 3 - bend, 0, 5 - bend, 'i');
+  g.set(9, 2, 'k');
+  g.line(4, 1, 7, 1, 'g');
+  g.outline('k');
+  return g.rows();
+}
+defineBulletArt('netFish', { frames: [fish(0), fish(1)], palette: NET, radius: 2.8, rotate: true, frameSeconds: 0.08 });
+
+// A fish loose in the box. It darts the way it faces; when it reaches a wall
+// it flops, turns to face you, and darts again (twice, then it's off).
+class Fish {
+  constructor({ x, y, angle, speed, warn, soul, box, flops = 2 }) {
+    Object.assign(this, { x, y, angle, speed, warn, soul, box, flops });
+    this.age = 0;
+    this.rest = 0;
+    this.gone = false;
+    this.dmg = null;
+    this.grazed = false;
+    this.art = null;
+  }
+
+  get active() {
+    return this.age >= this.warn && !this.gone;
+  }
+
+  update(dt) {
+    this.age += dt;
+    if (this.age < this.warn || this.gone) return;
+    if (this.rest > 0) {
+      this.rest -= dt;
+      if (this.rest <= 0) this.angle = Math.atan2(this.soul.y - this.y, this.soul.x - this.x);
+      return;
+    }
+    this.x += Math.cos(this.angle) * this.speed * dt;
+    this.y += Math.sin(this.angle) * this.speed * dt;
+    const b = this.box;
+    const out = this.x < b.x + 4 || this.x > b.x + b.w - 4 || this.y < b.y + 4 || this.y > b.y + b.h - 4;
+    if (!out) return;
+    this.x = Math.min(Math.max(this.x, b.x + 4), b.x + b.w - 4);
+    this.y = Math.min(Math.max(this.y, b.y + 4), b.y + b.h - 4);
+    if (this.flops-- > 0) this.rest = 0.4; else this.gone = true;
+  }
+
+  isGone() {
+    return this.gone;
+  }
+
+  edgeDistance(px, py) {
+    if (!this.active || this.rest > 0) return Infinity;
+    return Math.hypot(px - this.x, py - this.y) - 2.8;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    if (this.age < this.warn || this.rest > 0) ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.45 : 0.9;
+    const wiggle = this.rest > 0 ? Math.sin(this.age * 40) * 0.5 : 0;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle + wiggle);
+    ctx.strokeStyle = '#1c2a2a';
+    blit(ctx, FISH_ROWS, NET, 0, 0);
+    ctx.restore();
+  }
+}
+const FISH_ROWS = fish(0);
+
+// The drifting net: cords every `cell` pixels, offset by `at(k)`, hurting
+// along the cords. Knots where they cross.
+class Mesh {
+  constructor({ box, cell, at, warn, life }) {
+    Object.assign(this, { box, cell, at, warn, life });
+    this.age = 0;
+    this.dmg = null;
+    this.grazed = false;
+  }
+
+  get active() {
+    const k = this.age - this.warn;
+    return k >= 0 && k < this.life;
+  }
+
+  update(dt) {
+    this.age += dt;
+  }
+
+  isGone() {
+    return this.age >= this.warn + this.life + 0.25;
+  }
+
+  edgeDistance(px, py) {
+    if (!this.active) return Infinity;
+    const o = this.at(this.age - this.warn);
+    const fx = ((px - o.x) % this.cell + this.cell) % this.cell;
+    const fy = ((py - o.y) % this.cell + this.cell) % this.cell;
+    return Math.min(fx, this.cell - fx, fy, this.cell - fy) - 0.8;
+  }
+
+  draw(ctx) {
+    const o = this.at(Math.max(0, this.age - this.warn));
+    const b = this.box;
+    ctx.save();
+    if (this.age < this.warn) ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.2 : 0.45;
+    const over = this.age - this.warn - this.life;
+    if (over > 0) ctx.globalAlpha = Math.max(0, 1 - over / 0.25);
+    ctx.beginPath();
+    ctx.rect(b.x, b.y, b.w, b.h);
+    ctx.clip();
+    const x0 = b.x + ((((o.x - b.x) % this.cell) + this.cell) % this.cell) - this.cell;
+    const y0 = b.y + ((((o.y - b.y) % this.cell) + this.cell) % this.cell) - this.cell;
+    ctx.strokeStyle = '#c8b48a';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let x = x0; x <= b.x + b.w + this.cell; x += this.cell) { ctx.moveTo(x, b.y); ctx.lineTo(x, b.y + b.h); }
+    for (let y = y0; y <= b.y + b.h + this.cell; y += this.cell) { ctx.moveTo(b.x, y); ctx.lineTo(b.x + b.w, y); }
+    ctx.stroke();
+    ctx.fillStyle = '#8a7650';
+    for (let x = x0; x <= b.x + b.w + this.cell; x += this.cell) for (let y = y0; y <= b.y + b.h + this.cell; y += this.cell) ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 3, 3);
+    ctx.restore();
+  }
+}
+
+// The weighted edge of a cast net, drawn with its mesh inside and the tear left open.
+class CastNet extends Ring {
+  draw(ctx) {
+    super.draw(ctx);
+    if (this.age < this.warn || this.r < 4) return;
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+    ctx.strokeStyle = '#c8b48a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * Math.PI * 2;
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x + Math.cos(a) * this.r, this.y + Math.sin(a) * this.r);
+    }
+    for (const f of [0.35, 0.7]) {
+      ctx.moveTo(this.x + this.r * f, this.y);
+      ctx.arc(this.x, this.y, this.r * f, 0, Math.PI * 2);
+    }
+    ctx.stroke();
+    // Cork floats either side of the tear, so it's easy to find.
+    if (this.gap) {
+      for (const s of [-1, 1]) {
+        const a = this.gap.angle + s * (this.gap.width / 2 + 0.12);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#1c2a2a';
+        ctx.fillRect(Math.round(this.x + Math.cos(a) * this.r) - 2, Math.round(this.y + Math.sin(a) * this.r) - 2, 5, 5);
+        ctx.fillStyle = '#e0583a';
+        ctx.fillRect(Math.round(this.x + Math.cos(a) * this.r) - 1, Math.round(this.y + Math.sin(a) * this.r) - 1, 3, 3);
+      }
+    }
+    ctx.restore();
+  }
+}
+
 export const NET_WRAITH_ATTACKS = {
-  // Grid: the net is hauled tight. A window shows at four green corners (one a
-  // good way off you), and then bars of rope slide in from all four sides until
-  // only the window is left, holding a moment. Be in the window. Three hauls,
-  // each window somewhere else.
-  netGrid(box, density, { Shot, Line, rand, clamp }) {
+  // Cast net: it throws itself over you. A round net lands with you in the
+  // middle and its weighted edge draws in, closing to nothing. There's a
+  // tear in it somewhere (the gap in the edge): get out through the tear
+  // before it closes. Four casts.
+  netCast(box, density, { rand }) {
+    const T = (s) => s * density;
     let t = 0;
-    let hauls = 0;
-    let bars = [];
-    const WIN = 32;
+    let n = 0;
     return {
-      duration: 7.8,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (hauls < 3 && t >= 0.2 + hauls * 2.5) {
-          let wx = 0;
-          let wy = 0;
+        if (t >= T(0.2 + n * 2.1) && n < 3) {
+          n++;
+          const R = 40;
+          const CLOSE = 1.4;
+          const tear = rand(0, Math.PI * 2);
+          bullets.push(new CastNet({ x: soul.x, y: soul.y, r: R, grow: -R / CLOSE, thick: 3, warn: 0.7, life: CLOSE, gap: { angle: tear, width: 1.5 }, color: '#c8b48a', glow: '#8a7650' }));
+        }
+      },
+    };
+  },
+
+  // Mesh: the whole net hangs in the box, drifting on the swell, cords and
+  // knots. The holes are big enough to stand in, and the cords sting. It
+  // drifts and sways, so stay in your hole and go with it.
+  netMesh(box, density, { rand }) {
+    let made = false;
+    return {
+      duration: 7,
+      update: (dt, bullets) => {
+        if (made) return;
+        made = true;
+        const vx = rand(6, 9) * (Math.random() < 0.5 ? -1 : 1);
+        const vy = rand(4, 6) * (Math.random() < 0.5 ? -1 : 1);
+        const ox = rand(0, 20);
+        const oy = rand(0, 20);
+        const ph = rand(0, 6);
+        bullets.push(new Mesh({ box, cell: 30, warn: 1.0, life: 5.3, at: (k) => ({ x: box.x + ox + vx * k + Math.sin(k * 1.2 + ph) * 6, y: box.y + oy + vy * k + Math.sin(k * 0.9) * 4 }) }));
+      },
+    };
+  },
+
+  // Lost catch: the fish it never landed wriggle loose into the box. Each
+  // fish shows facing the way it will go (it's facing you), then darts
+  // straight that way. When it hits a wall it flops about, turns to face
+  // you again, and darts again. Fish only ever swim the way they face.
+  netCatch(box, density, { rand }) {
+    const T = (s) => s * density;
+    let t = 0;
+    let n = 0;
+    return {
+      duration: 7,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (t >= T(0.2 + n * 0.9) && n < 6) {
+          n++;
+          let x;
+          let y;
           let tries = 0;
           do {
-            wx = rand(box.x + 6, box.x + box.w - WIN - 6);
-            wy = rand(box.y + 6, box.y + box.h - WIN - 6);
+            x = rand(box.x + 8, box.x + box.w - 8);
+            y = rand(box.y + 8, box.y + box.h - 8);
             tries++;
-          } while (tries < 30 && Math.hypot(wx + WIN / 2 - soul.x, wy + WIN / 2 - soul.y) < 30);
-          const warn = 0.9;
-          for (const [px, py, a] of [[wx, wy, 0], [wx + WIN, wy, 1], [wx, wy + WIN, 3], [wx + WIN, wy + WIN, 2]]) {
-            bullets.push(new Shot({ x: px, y: py, harmless: true, life: warn + 1.3, art: 'netPeg', angle: (a * Math.PI) / 2 }));
-          }
-          const SPEED = 74;
-          const mk = (x, y, angle, length, vx, vy, stop) => {
-            const line = new Line({ x, y, angle, length, thickness: 5, warn: 0, life: 4, color: '#c8b48a', glow: '#8a7650', dash: [7, 2] });
-            line.go = t + warn;
-            line.vx0 = vx;
-            line.vy0 = vy;
-            line.stop = stop;
-            bars.push(line);
-            bullets.push(line);
-          };
-          // Four bars waiting off the box, sliding in to the window's edges.
-          mk(box.x - 10, box.y - 9, 0, box.w + 20, 0, SPEED, (l) => l.y >= wy - 3);
-          mk(box.x - 10, box.y + box.h + 9, 0, box.w + 20, 0, -SPEED, (l) => l.y <= wy + WIN + 3);
-          mk(box.x - 9, box.y - 10, Math.PI / 2, box.h + 20, SPEED, 0, (l) => l.x >= wx - 3);
-          mk(box.x + box.w + 9, box.y - 10, Math.PI / 2, box.h + 20, -SPEED, 0, (l) => l.x <= wx + WIN + 3);
-          hauls++;
-        }
-        for (const bar of bars) {
-          if (t < bar.go || bar.stopped) {
-            if (bar.stopped && t > bar.until) bar.life = bar.age - bar.warn;
-            continue;
-          }
-          bar.vx = bar.vx0;
-          bar.vy = bar.vy0;
-          if (bar.stop(bar)) {
-            bar.vx = 0;
-            bar.vy = 0;
-            bar.stopped = true;
-            bar.until = t + 0.55;
-          }
-        }
-        bars = bars.filter((bar) => !(bar.stopped && t > bar.until + 0.1));
-      },
-    };
-  },
-
-  // Floats: a line of cork floats comes in on the swell from the right, each one
-  // bobbing up and down a beat after the one before it, so the line rolls like a
-  // wave. Three lines; the first rides on your row.
-  netFloats(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let lines = 0;
-    let made = 0;
-    let next = 0;
-    let base = 0;
-    let lineShift = 0;
-    let gapAt = 4;
-    // A float bobs by itself (so its path can be read ahead).
-    // Each float is tied to the one ahead of it in its line by a sagging rope
-    // (only a look: the floats are what hurt), so the line reads as a float line.
-    class Cork extends Shot {
-      update(dt, box2) {
-        super.update(dt, box2);
-        if (this.age > this.warn) this.y = this.row + Math.sin((this.age - this.warn) * 4.4 + this.phase) * 15;
-      }
-
-      draw(ctx) {
-        const p = this.ahead;
-        if (p && !p.isGone(box) && this.age > this.warn) {
-          ctx.save();
-          const over = Math.max(this.age - (this.warn + this.life), p.age - (p.warn + p.life));
-          ctx.globalAlpha = over > 0 ? Math.max(0, 1 - over / 0.25) * 0.9 : 0.9;
-          ctx.strokeStyle = '#8a7650';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(this.x, this.y - 3);
-          ctx.quadraticCurveTo((this.x + p.x) / 2, (this.y + p.y) / 2 + 4, p.x, p.y - 3);
-          ctx.stroke();
-          ctx.restore();
-        }
-        super.draw(ctx);
-      }
-    }
-    // The last float made in each row, so the next can be tied to it.
-    const last = new Map();
-    return {
-      duration: 7.2,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (made === 0 && lines < 3 && t >= 0.2 + lines * 2.2) {
-          base = lines === 0 ? soul.y : soul.y + (lines === 1 ? 12 : -12);
-          base = clamp(base, box.y + 18, box.y + box.h - 18);
-          lineShift = rand(0, 6.28);
-          gapAt = 2 + Math.floor(rand(0, 4));
-          made = 1;
-          lines++;
-          next = t;
-        }
-        if (made > 0 && t >= next) {
-          next = t + 0.21;
-          // Each float's bob starts when it comes in, so the line rolls like a wave.
-          // A second line rides the mirror row on the other side of the box.
-          // A gap in each line (two floats missing) is the way through.
-          const gapNow = made >= gapAt && made <= gapAt + 2;
-          if (gapNow || made === 1) last.clear();
-          for (const [k, row] of (gapNow ? [] : [base, box.y * 2 + box.h - base]).entries()) {
-            const f = new Cork({ x: box.x + box.w + 5, y: row, vx: -48, warn: 0.15, art: 'netFloat', life: 3.6 });
-            f.row = row;
-            f.phase = made * 0.9 + lineShift;
-            f.ahead = last.get(k) ?? null;
-            last.set(k, f);
-            bullets.push(f);
-          }
-          made++;
-          if (made > 9) made = 0;
-        }
-      },
-    };
-  },
-
-  // Hooks: a hook is let down on a fishing line onto your column (a glint at the
-  // top shows where), stops at about your depth, hangs a beat, then is jerked
-  // back up much faster. Six hooks.
-  netHooks(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let hooks = 0;
-    let next = 0.2;
-    let live = [];
-    const heading = { x: 0 };
-    let lastX = null;
-    // A hook draws its own fishing line up to the top of the box.
-    class Hook extends Shot {
-      draw(ctx) {
-        if (this.age >= this.warn && this.y > box.y - 4) {
-          ctx.save();
-          ctx.globalAlpha = 0.8;
-          ctx.strokeStyle = '#cfd8dc';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(Math.round(this.x) + 0.5, box.y - 2);
-          ctx.lineTo(Math.round(this.x) + 0.5, this.y - 3);
-          ctx.stroke();
-          ctx.restore();
-        }
-        super.draw(ctx);
-      }
-    }
-    return {
-      duration: 7.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (lastX !== null && dt > 0) heading.x = heading.x * 0.85 + ((soul.x - lastX) / dt) * 0.15;
-        lastX = soul.x;
-        if (t >= next && hooks < 6 && t < 6.4) {
-          next = t + 1.1;
-          const x = clamp(soul.x + rand(-4, 4), box.x + 6, box.x + box.w - 6);
-          const depth = clamp(soul.y + rand(-8, 14), box.y + 26, box.y + box.h - 8);
-          const warn = 0.7;
-          const glint = new Shot({ x, y: box.y + 4, harmless: true, life: warn, art: 'netGlint' });
-          bullets.push(glint);
-          const hook = new Hook({ x, y: box.y - 6, vy: 0, warn, art: 'netHook', life: 3 });
-          hook.glint = glint;
-          hook.depth = depth;
-          hook.state = 'fall';
-          live.push(hook);
-          bullets.push(hook);
-          hooks++;
-        }
-        for (const h of live) {
-          // The hook lines up on your column (a little ahead of you) until the last moment.
-          if (h.age < h.warn - 0.15) {
-            h.x = clamp(soul.x + heading.x * 0.5, box.x + 6, box.x + box.w - 6);
-            h.glint.x = h.x;
-          }
-          if (h.age < h.warn) continue;
-          if (h.state === 'fall') {
-            h.vy = 150;
-            if (h.y >= h.depth) { h.state = 'hang'; h.vy = 0; h.hung = h.age; }
-          } else if (h.state === 'hang') {
-            if (h.age - h.hung > 0.4) { h.state = 'rise'; h.vy = -200; }
-          } else if (h.state === 'rise' && h.y < box.y - 10) {
-            h.state = 'done';
-            h.vy = 0;
-            h.life = h.age - h.warn;
-          }
-        }
-        live = live.filter((h) => h.state !== 'done');
-      },
-    };
-  },
-
-  // Curtain: the net is let fall over the box like a sheet: rows of knots
-  // drifting down, with a hole torn in it two columns wide, a good way from
-  // where you stand. Three curtains, one after the other.
-  netCurtain(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let sheets = 0;
-    const COLS = 8;
-    return {
-      // (The last sheet is down by 5 s: 7.0, was 8.2, so the next attack isn't long in coming.)
-      duration: 7.0,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (sheets < 3 && t >= 0.2 + sheets * 1.9) {
-          const colW = box.w / COLS;
-          const want = clamp(soul.x + (Math.random() < 0.5 ? -1 : 1) * rand(16, 30), box.x + 12, box.x + box.w - 12);
-          const gap = Math.round((want - box.x) / colW - 0.5);
-          for (let row = 0; row < 3; row++) {
-            for (let c = 0; c < COLS; c++) {
-              if (c === gap || c === Math.min(COLS - 1, gap + 1)) continue;
-              const x = box.x + colW * (c + 0.5) + (row % 2 ? colW / 2 : 0);
-              if (x > box.x + box.w + 2) continue;
-              bullets.push(new Shot({ x, y: box.y - 4 - row * 8, vy: 50, warn: 0.5, art: 'netKnot', life: 4 }));
-            }
-          }
-          sheets++;
+          } while (tries < 30 && Math.hypot(x - soul.x, y - soul.y) < 30);
+          bullets.push(new Fish({ x, y, angle: Math.atan2(soul.y - y, soul.x - x), speed: 105, warn: 0.6, soul, box }));
         }
       },
     };
   },
 };
-
-// Aimed shots on top, so standing still or running one way is never safe (see snipes.js).
-NET_WRAITH_ATTACKS.netGrid = withSnipes(NET_WRAITH_ATTACKS.netGrid, { art: 'netKnot' });
-NET_WRAITH_ATTACKS.netHooks = withSnipes(NET_WRAITH_ATTACKS.netHooks, { art: 'netKnot', count: 6, first: 0.6, every: 0.9, lead: [0.4, 'mean', 0, 0.9, 'mean', 0.2], until: 5.8, speed: 66, fan: 3 });
-NET_WRAITH_ATTACKS.netCurtain = withSnipes(NET_WRAITH_ATTACKS.netCurtain, { art: 'netKnot', count: 4, first: 1.0, every: 1.2, lead: 0.8 });

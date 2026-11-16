@@ -1,7 +1,7 @@
-// PUDDING'S POOL (secret, draft): the bottom of the shaft. The star came to rest
+// PALE'S POOL (secret, draft): the bottom of the shaft. The star came to rest
 // in the pool here, and the rock round it has been glass ever since. West, on
 // the dry side, is the miners' tea shelf: a kettle, seven mugs, and one small
-// tin dish. Step up to the edge and PUDDING wakes (scenes `pudding_wakes`,
+// tin dish. Step up to the edge and the PALE OLM wakes (scenes `pudding_wakes`,
 // then `pudding_again` for every try after the first; the fight is `pudding`,
 // src/data/enemies/pudding.js). Spared or beaten, `pudding_spared` or
 // `pudding_beaten` hands over the Deep Star Shard and the Olm-Glass Mantle.
@@ -14,9 +14,13 @@
 //   x  glassy crystal (solid)       q  loose gravel        ^  stalagmite (solid)
 //   ~  the pool (solid)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DIGGINGS_STAR_POOL = {
   id: 'diggings_star_pool',
-  name: "PUDDING'S POOL",
+  name: "PALE'S POOL",
   area: 'diggings',
   // "Something Hums Below" (src/data/music/starSeamTheme.js): carries on from the camp right up
   // to the water's edge, where the olm's own song takes over.
@@ -59,6 +63,8 @@ export const DIGGINGS_STAR_POOL = {
 
   textFile: 'interactions/star_seam.txt',
   props: [
+    ...(R3C_PROPS.diggings_star_pool ?? []),
+    ...(DIGGINGS_DRESSING.diggings_star_pool ?? []),
     // A save point at the back of the dry side, before the water.
     { sprite: 'savepoint', x: 2, y: 11, save: true },
     // The tea shelf: kettle, seven tin mugs, the dish.

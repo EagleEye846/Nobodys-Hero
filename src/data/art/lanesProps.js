@@ -13,6 +13,11 @@
 //                    its left foot at the parapet's bottom, 12,17)
 //   ln_signpost      a leaning three-armed signpost on dry ground (c5_drowned_signpost is the
 //                    one standing in water)
+//   ln_sunk_door     a doorway with no house round it, the door open (2 wide): the Sluices'
+//                    one, the way into secret_lanes_door (lay it `walkable, solidSides: 5`)
+//   ln_sunk_door_shut  the same with its door shut (scenery)
+//   ln_parlour_window  the parlour's window: rain on the glass, a summer lane behind it (2 wide, hung)
+//   ln_parlour_clock*  a tall clock, going (an animation: its pendulum swings)
 
 const colors = new Map();
 const palette = {};
@@ -152,6 +157,29 @@ function stair() {
     const edge = 52 + Math.round(Math.sin(x / 5) * 1.5);
     for (let y = edge; y < 64; y++) g.set(x, y, y === edge ? '#8ad0c0b0' : '#1f5a5c99');
   }
+  // The road carries on: the water deepens over the last treads, and below the stair's foot the
+  // drowned steps show faintly, darker with each one, running on down.
+  for (let y = 52; y < 64; y++) g.rect(16, y + 1, 96, 1, '#0c2a2c' + (0x20 + (y - 52) * 7).toString(16));
+  g.rect(16, 64, 96, 16, '#10383a88');
+  for (let i = 0; i < 4; i++) {
+    const y = 65 + i * 4;
+    const a = (0x60 - i * 14).toString(16).padStart(2, '0');
+    g.rect(16, y, 96, 1, '#5a9a90' + a);
+    g.rect(16, y + 1, 96, 1, '#06181a' + (0x70 + i * 20).toString(16));
+  }
+  g.rect(16, 72, 96, 8, '#04121444');
+  // Worn chevrons inlaid down the middle of the upper steps: this way.
+  for (let k = 0; k < 4; k++) {
+    const y = Math.round(16 + k * th) + 2;
+    const col = ['#c8b878', '#b0a46c', '#8a8458', '#5e6a50'][k];
+    for (let d = 0; d < 5; d++) { g.set(60 + d, y + d, col); g.set(68 - d, y + d, col); }
+  }
+  // A chain handrail down each inner edge, from a post at the head into the water.
+  for (const hx of [18, 109]) {
+    g.rect(hx - 1, 15, 3, 4, '#2a231e');
+    g.rect(hx - 1, 15, 3, 1, '#6c5440');
+    for (let y = 19; y < 70; y += 2) g.set(hx, y, y % 4 === 3 ? '#a8b4aa' : '#586660');
+  }
   // The parapets over the '#' columns: a coping on top, dressed stone, weed at the foot.
   for (const x0 of [0, 112]) {
     g.rect(x0, 0, 16, 80, STONE[1]);
@@ -290,22 +318,121 @@ function sunkCart() {
 
 // A cottage doorway with nothing left round it: the jambs, the lintel, and the door
 // hanging open on one hinge, up to its knees in the flood.
-function sunkDoor() {
+// `shut`: the door drawn to in its frame (the ones you can't go through). The open one (the
+// Sluices', the way into secret_lanes_door) has a secret in the drawing: the flood stops at the
+// jambs. Through the opening there are dry boards and a little warm light, a long way back.
+function sunkDoor(shut = false) {
   const g = new Grid(32, 38);
   g.rect(4, 4, 24, 4, STONE[2]); g.rect(4, 4, 24, 1, STONE[3]); g.rect(4, 7, 24, 1, STONE[0]);
   g.rect(14, 2, 4, 3, STONE[2]); g.set(15, 2, STONE[3]);
   for (const x0 of [4, 24]) { g.rect(x0, 8, 4, 30, STONE[1]); g.rect(x0, 8, 1, 30, STONE[2]); for (let y = 12; y < 38; y += 6) g.rect(x0, y, 4, 1, MORTAR); }
-  // The dark inside of the doorway, and the door swung half open.
-  g.rect(8, 8, 16, 30, '#18241f');
-  for (let y = 9; y < 38; y++) { g.set(9, y, WOOD[2]); g.set(10, y, WOOD[1]); g.set(11, y, WOOD[1]); g.set(12, y, WOOD[0]); }
-  g.rect(9, 14, 4, 1, WOOD[3]); g.rect(9, 28, 4, 1, WOOD[3]);
-  g.set(12, 22, '#c8b070');
+  if (shut) {
+    // The door shut in its frame: upright boards, two ledges and a brace, a ring latch.
+    g.rect(8, 8, 16, 30, WOOD[1]);
+    for (const x of [11, 15, 19]) g.rect(x, 8, 1, 30, WOOD[0]);
+    for (const x of [8, 12, 16, 20]) g.rect(x, 8, 1, 30, WOOD[2]);
+    g.rect(8, 13, 16, 2, WOOD[2]); g.rect(8, 13, 16, 1, WOOD[3]);
+    g.rect(8, 29, 16, 2, WOOD[2]); g.rect(8, 29, 16, 1, WOOD[3]);
+    g.line(9, 28, 22, 15, WOOD[2]); g.line(9, 27, 22, 14, WOOD[3]);
+    g.rect(20, 20, 2, 3, '#2a2a24'); g.set(21, 23, '#c8b070'); g.set(20, 24, '#c8b070'); g.set(21, 24, '#9a8850');
+    // Weed caught along the foot of it.
+    for (const x of [9, 10, 14, 18, 22]) g.set(x, 27, WEED[x % 3]);
+  } else {
+    // The dark inside of the doorway, and the door swung half open. Far back in the dark,
+    // warm light; and along the bottom, dry boards where the water ought to be.
+    g.rect(8, 8, 16, 30, '#18241f');
+    g.rect(14, 18, 9, 20, '#241f18'); g.rect(16, 23, 6, 15, '#3a2c1c'); g.rect(17, 26, 4, 8, '#5a4026');
+    g.rect(18, 28, 2, 4, '#8a6236');
+    for (let y = 33; y < 38; y++) g.rect(8, y, 16, 1, y === 33 ? '#7a5c3c' : (y % 2 ? '#5a4430' : '#4e3a28'));
+    for (let y = 9; y < 38; y++) { g.set(9, y, WOOD[2]); g.set(10, y, WOOD[1]); g.set(11, y, WOOD[1]); g.set(12, y, WOOD[0]); }
+    g.rect(9, 14, 4, 1, WOOD[3]); g.rect(9, 28, 4, 1, WOOD[3]);
+    g.set(12, 22, '#c8b070');
+  }
   // The number painted over the door, nearly gone.
   g.rect(13, 5, 1, 2, '#c8c0a8'); g.rect(17, 5, 2, 1, '#c8c0a8'); g.set(18, 6, '#c8c0a8');
   // Weed and moss.
   for (const [x, y] of [[5, 9], [6, 10], [26, 12], [25, 13], [7, 3], [22, 3], [23, 3]]) g.set(x, y, WEED[(x + y) % 3]);
   edge(g);
-  waterline(g, 30, 0, 32);
+  if (shut) waterline(g, 30, 0, 32);
+  else { waterline(g, 30, 0, 8); waterline(g, 30, 24, 32); }
+  return g.rows();
+}
+
+// --- The parlour behind the open door (secret_lanes_door) ---------------
+// A window with rain running down the glass and, behind it, a lane in summer sun: hedges cut,
+// a cottage, washing out. Its curtains on a rod with two brackets. 2 wide, hung on the wall's
+// lowest row (its foot a few pixels above the floor line).
+const PARLOUR = { frame: '#d8ccb0', frameLo: '#a89a7c', sill: '#8a6a48', sillHi: '#b08a60', curtain: ['#7a3a30', '#a85a48', '#c87a62'], rod: '#3a2c20' };
+function parlourWindow() {
+  const g = new Grid(32, 28);
+  // The frame and sill.
+  g.rect(3, 3, 26, 19, PARLOUR.frame); g.rect(3, 21, 26, 1, PARLOUR.frameLo);
+  g.rect(1, 22, 30, 2, PARLOUR.sill); g.rect(1, 22, 30, 1, PARLOUR.sillHi);
+  // The view: four panes of somewhere else.
+  const sky = (y) => (y < 7 ? '#8ccaf0' : y < 10 ? '#a8d8f4' : '#c8e8f4');
+  for (const [px, py] of [[5, 5], [17, 5], [5, 14], [17, 14]]) {
+    for (let y = 0; y < 7; y++) for (let x = 0; x < 10; x++) {
+      const vy = py + y - 5; // 0..15 down the whole view
+      const vx = px + x - 5; // 0..21 across it
+      let c = sky(vy);
+      if (vy >= 9) c = '#6aaa50';
+      if (vy === 9 || (vy === 10 && vx % 3 === 0)) c = '#3e7a36';
+      if (vy >= 10 && Math.abs(vx - 11 + (vy - 10) * 0.6) < 1 + (vy - 10) * 0.7) c = vy % 2 ? '#d8c08a' : '#e4cc96';
+      if (vy >= 11 && vy % 2 === 0 && vx % 4 === 1) c = '#8ac868';
+      g.set(px + x, py + y, c);
+    }
+  }
+  // The sun, top right, and a cottage with a red roof beside the lane, far off.
+  g.rect(24, 6, 3, 2, '#fff4b0'); g.set(25, 5, '#fff4b0'); g.set(23, 7, '#ffe890');
+  g.rect(7, 12, 5, 1, '#b84a3a'); g.rect(8, 11, 3, 1, '#b84a3a'); g.rect(7, 14, 5, 3, '#f0e8d8'); g.set(9, 15, '#5a4a3a');
+  g.rect(19, 13, 1, 3, PARLOUR.rod); g.rect(25, 13, 1, 3, PARLOUR.rod); g.line(20, 13, 24, 13, '#e8e8e0');
+  g.set(21, 14, '#e8e8e0'); g.set(23, 14, '#88a8d8');
+  // The glazing bars.
+  g.rect(15, 5, 2, 16, PARLOUR.frame); g.rect(5, 12, 22, 2, PARLOUR.frame);
+  // Rain running down the outside of the glass, in spite of all that sun.
+  for (const [x, y, n] of [[6, 5, 3], [9, 7, 4], [12, 14, 3], [18, 6, 3], [21, 15, 4], [26, 8, 3], [8, 16, 3], [24, 17, 2]]) {
+    for (let j = 0; j < n; j++) g.set(x, y + j, '#e8f4ffb0');
+    g.set(x, y + n, '#ffffffd0');
+  }
+  // The curtains drawn back to either side, on a rod with a bracket at each end.
+  g.rect(0, 1, 32, 1, PARLOUR.rod); g.set(1, 2, PARLOUR.rod); g.set(30, 2, PARLOUR.rod); g.rect(0, 0, 2, 1, PARLOUR.rod); g.rect(30, 0, 2, 1, PARLOUR.rod);
+  for (const side of [0, 1]) for (let y = 2; y < 24; y++) {
+    const w = y < 12 ? 5 : y < 16 ? 4 : 5;
+    for (let i = 0; i < w; i++) {
+      const x = side ? 31 - i : i;
+      g.set(x, y, PARLOUR.curtain[(i + (y > 13 ? 1 : 0)) % 3]);
+    }
+  }
+  // The tie-backs.
+  g.rect(0, 14, 5, 1, '#d8b060'); g.rect(27, 14, 5, 1, '#d8b060');
+  edge(g);
+  return g.rows();
+}
+
+// A tall clock, going: its pendulum swinging in the window of its trunk (4 frames), the
+// hands at ten to four. Tall, 1 wide.
+const CLOCK = ['#3a2416', '#5a3820', '#7a5030', '#9a6a40'];
+const BRASSY = ['#a88a3a', '#d8b860', '#f4e0a0'];
+function parlourClock(i) {
+  const g = new Grid(16, 48);
+  g.rect(2, 41, 12, 7, CLOCK[2]); g.rect(2, 41, 12, 1, CLOCK[3]); g.rect(1, 46, 14, 2, CLOCK[1]);
+  g.rect(4, 15, 8, 26, CLOCK[2]); g.rect(4, 15, 1, 26, CLOCK[3]); g.rect(11, 15, 1, 26, CLOCK[1]);
+  // The trunk door and its little window, the pendulum swinging in it.
+  g.rect(5, 18, 6, 18, CLOCK[1]); g.rect(6, 21, 4, 12, '#1a120c');
+  const sway = [-1, 0, 1, 0][i];
+  g.rect(8, 21, 1, 7, BRASSY[0]);
+  g.set(8 + sway, 27, BRASSY[0]); g.set(8 + sway, 28, BRASSY[0]);
+  g.rect(7 + sway, 29, 3, 3, BRASSY[1]); g.set(7 + sway, 29, BRASSY[2]);
+  // The hood, a swan-neck top with a brass finial, and the dial.
+  g.rect(2, 3, 12, 12, CLOCK[2]); g.rect(2, 3, 12, 1, CLOCK[3]);
+  g.rect(1, 1, 5, 2, CLOCK[3]); g.rect(10, 1, 5, 2, CLOCK[3]); g.rect(7, 0, 2, 2, BRASSY[1]);
+  g.rect(3, 4, 10, 10, BRASSY[0]);
+  for (let y = -4; y <= 4; y++) for (let x = -4; x <= 4; x++) if (x * x + y * y <= 17) g.set(8 + x, 9 + y, '#f0ead6');
+  for (const [dx, dy] of [[0, -4], [4, 0], [0, 4], [-4, 0]]) g.set(8 + dx, 9 + dy, '#6a5a44');
+  // Ten to four: the long hand up and to the left, the short one nearly at the four.
+  g.line(8, 9, 5, 7, '#14100c'); g.line(8, 9, 10, 10, '#14100c');
+  g.rect(1, 14, 14, 1, CLOCK[1]);
+  edge(g);
   return g.rows();
 }
 
@@ -564,6 +691,38 @@ function domeWall() {
   return g.rows();
 }
 
+// The flooded cottage's stair (secret_lanes_kitchen): the top flight, hanging off the landing
+// where the lower steps have gone, 2 tiles wide and 2 high, laid flat over the board wall under
+// the landing (its top is at the landing's edge, where the rope's ring is). Four treads left,
+// the stringers splintered off short and nothing under them.
+const IRONS = ['#161a22', '#3e4852', '#7c8c9a'];
+function stairStub() {
+  const g = new Grid(32, 32);
+  for (let x = 8; x < 32; x++) {
+    const k = Math.floor((x - 8) / 6);
+    const top = 25 - 6 * k;
+    const jag = (x * 5) % 7 === 0 ? 1 : 0;
+    // The stringer under the treads, a darker board with a pale top edge.
+    for (let y = top + 6; y < top + 11 - jag; y++) g.set(x, y, y === top + 6 ? POST[2] : y < top + 9 ? POST[1] : POST[0]);
+  }
+  for (let k = 0; k < 4; k++) {
+    const x0 = 8 + 6 * k, top = 25 - 6 * k;
+    g.rect(x0, top, 32 - x0, 3, POST[3]);
+    g.rect(x0, top, 32 - x0, 1, '#b49c78');
+    g.rect(x0, top + 3, 32 - x0, 1, POST[0]);
+    g.rect(x0, top + 4, 2, 2, POST[1]);
+    for (let x = x0 + 4; x < 32; x += 7) g.set(x, top + 1, POST[1]);
+  }
+  // The newel post at the top, and its iron band.
+  g.rect(28, 0, 4, 12, POST[2]); g.rect(28, 0, 1, 12, POST[3]); g.rect(31, 0, 1, 12, POST[0]);
+  g.rect(28, 5, 4, 2, IRONS[1]); g.rect(28, 5, 4, 1, IRONS[2]);
+  // Splinters hanging from the broken end, one nail left in a stringer.
+  g.set(9, 31, POST[0]); g.set(10, 30, POST[0]); g.set(8, 29, POST[1]); g.set(12, 29, IRONS[2]);
+  edge(g);
+  return g.rows();
+}
+
+
 // --- Registry ----------------------------------------------------------
 export const LN_PROP_SPRITES = {
   ln_pocket_rim: pocketRim(),
@@ -575,6 +734,9 @@ export const LN_PROP_SPRITES = {
   ln_sunk_wall_short: sunkWall(32, false),
   ln_sunk_cart: sunkCart(),
   ln_sunk_door: sunkDoor(),
+  ln_sunk_door_shut: sunkDoor(true),
+  ln_parlour_window: parlourWindow(),
+  ln_parlour_clock: parlourClock(0),
   ln_sunk_bed: sunkBed(),
   ln_sunk_fence: sunkFence(),
   ln_lily_mat: lilyMat(40, 18, 7),
@@ -593,6 +755,7 @@ export const LN_PROP_SPRITES = {
   ln_headstone: headstone('round'),
   ln_headstone_cross: headstone('cross'),
   ln_dome_wall: domeWall(),
+  ln_stair_stub: stairStub(),
 };
 
 export const LN_PALETTE = palette;
@@ -601,6 +764,7 @@ export const LN_BUBBLES_SPRITES = frames((i) => bubbles(i), 8);
 export const LN_FISH_SPRITES = frames((i) => fish(i), 4);
 export const LN_KELP_SPRITES = frames((i) => kelp(i), 4);
 export const LN_CAUSTICS_SPRITES = frames((i) => caustics(i), 4);
+export const LN_PARLOUR_CLOCK_SPRITES = frames((i) => parlourClock(i), 4);
 
 // How many tiles wide each big one stands.
 export const LN_FOOTPRINTS = {
@@ -610,6 +774,8 @@ export const LN_FOOTPRINTS = {
   ln_sunk_wall_short: 2,
   ln_sunk_cart: 2,
   ln_sunk_door: 2,
+  ln_sunk_door_shut: 2,
+  ln_parlour_window: 2,
   ln_sunk_bed: 2,
   ln_sunk_fence: 3,
   ln_lily_mat: 2,
@@ -624,4 +790,5 @@ export const LN_FOOTPRINTS = {
   ln_dome_wall: 11,
   ln_wall_weed: 2,
   ln_wall_weed_b: 2,
+  ln_stair_stub: 2,
 };

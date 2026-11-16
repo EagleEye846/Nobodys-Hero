@@ -1,0 +1,9 @@
+# HADDOCK (the Storm Reach): in the Bother off each stop's far jetty (reach_first_rock, reach_reef, reach_wreck), on a crate by the jetty in the eye (reach_eye); below the Last Light he is haddock_reach_foot. The jetty's END rows on; the little step off the jetty's side rows back.
+
+[first]
+{proud}There ye are. Walked it all right, then?
+
+{smile}Out to the end o' the jetty and we'll push on. Want to go back, take the little step off the side.
+
+[repeat]
+{smile}End o' the jetty, on. The little step, back. I'll not go anywhere.

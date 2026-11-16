@@ -20,9 +20,10 @@ export const SHIP_NEST = {
     { do: 'say', text: '"Land," he says. "Land ho. I see lights. I see the lights of the town."' },
     { do: 'wait', seconds: 0.6 },
     { do: 'say', text: 'Far off in the fog, so faint you might be imagining it, there is a row of small lights, like a harbour\'s. They are the lamps of the Wreck Yard\'s wrecks. You know that. He doesn\'t.' },
-    { do: 'say', who: 'bramble', text: '{worried}...Shall we tell him?' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Not him. He\'s only a man who saw the lights. Whoever he\'s pointing them out to is the one who needs telling.' },
-    { do: 'say', who: 'bramble', text: '{worried}That\'s worse.' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Yes.' },
+    { do: 'say', who: 'bramble', text: '{sad}...Shall we tell him?' },
+    { do: 'say', who: 'ves', text: '{surprised}Tell him what? I don\'t even know what he IS.' },
+    { do: 'say', who: 'bramble', text: '{scared}That\'s worse.' },
+    { do: 'say', who: 'ves', text: '{worried}Yes.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

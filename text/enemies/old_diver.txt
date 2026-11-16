@@ -55,7 +55,7 @@ reached.
 # TALK options in src/data/enemies/old_diver.js.
 [talk: Inspect]
 OLD DIVER - HP 2300
-An empty diving suit that still thinks it has a job. Throws a harpoon on a line and reels it back, hunts with the loose air hose, lets its last air up in bubbles, and drops an anchor on you. Watch the line and the floor.
+An empty diving suit that still thinks it has a job. Harpoons whatever its lamp finds, stamps rivets loose with every step, and its patched air hose bursts in turn. Keep out of the light.
 
 [talk: Knock on the helmet]
 You knock on the helmet, twice, politely. A long, low note rings out of it, and rolls round the inside like a bell in a well. OLD DIVER holds quite still while it fades, as if listening for somebody to knock back.

@@ -1,6 +1,6 @@
 import { TILE_SIZE as T } from '../config.js';
 import { drawFootShadow } from './shadows.js';
-import { MEMBERS, memberSprites, memberFrames } from '../characters/party.js';
+import { MEMBERS, memberSprites, memberFrames, isHurt } from '../characters/party.js';
 import { STONE_LIFT, swayAt, JUMP_REACH } from './player.js';
 import { actPose, poseOffset, drawPosed, startAct } from './acts.js';
 import { animationFrame } from '../engine/animations.js';
@@ -337,7 +337,8 @@ export class Follower {
     const fidget = this.fidget && !pose ? idleStep(this.id, this.fidget.name, this.fidget.t, this.facing) : null;
     if (this.fidget && !fidget) this.fidget = null;
     pose ??= fidget?.pose ?? null;
-    const sprite = fidget?.sprite ?? this.frameLooking(pose?.look ?? null);
+    // (On her crutch Ves has no umbrella: its fidget frames would swap the crutch away.)
+    const sprite = (isHurt(this.id) ? null : fidget?.sprite) ?? this.frameLooking(pose?.look ?? null);
     const off = poseOffset(pose, this.dir);
     // Up on a stepping-stone in the water, keeping their balance (see OverworldScene.balance).
     const sway = this.balancing && !this.walking ? swayAt(this.balanceTime ?? 0) : 0;

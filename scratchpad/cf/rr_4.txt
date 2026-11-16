@@ -1,0 +1,17 @@
+FAIL L12 glimmer_tuck
+umbrella:U  ->  glimmer_crystal_bridge: you 4,12 other hero@2,8 | logs  | bridged  | gates shut | treadles  | beams 2 (15 tiles) VES-UMBRELLA | prisms 4,10/ 7,5/ 7,7\ 7,4/ | lit  | followers vesper@48.0,159.0(hidden)(still)
+wait:30  ->  glimmer_crystal_bridge: you 4,12 other hero@2,8 | logs  | bridged  | gates shut | treadles  | beams 2 (15 tiles) VES-UMBRELLA | prisms 4,10/ 7,5/ 7,7\ 7,4/ | lit  | followers vesper@48.0,159.0(hidden)(still)
+PLAY FAIL: expected lit bridge_wake; glimmer_crystal_bridge: you 4,12 other hero@2,8 | logs  | bridged  | gates shut | treadles  | beams 2 (15 tiles) VES-UMBRELLA | prisms 4,10/ 7,5/ 7,7\ 7,4/ | lit  | followers vesper@48.0,159.0(hidden)(still)
+PLAY DONE
+FAIL L14 glimmer_tuck
+umbrella:U  ->  glimmer_crystal_bridge: you 4,12 other hero@2,8 | logs  | bridged  | gates shut | treadles  | beams 2 (15 tiles) VES-UMBRELLA | prisms 4,10/ 7,5/ 7,7\ 7,4/ | lit  | followers vesper@48.0,159.0(hidden)(still)
+wait:30  ->  glimmer_crystal_bridge: you 4,12 other hero@2,8 | logs  | bridged  | gates shut | treadles  | beams 2 (15 tiles) VES-UMBRELLA | prisms 4,10/ 7,5/ 7,7\ 7,4/ | lit  | followers vesper@48.0,159.0(hidden)(still)
+PLAY FAIL: expected lit bridge_wake; glimmer_crystal_bridge: you 4,12 other hero@2,8 | logs  | bridged  | gates shut | treadles  | beams 2 (15 tiles) VES-UMBRELLA | prisms 4,10/ 7,5/ 7,7\ 7,4/ | lit  | followers vesper@48.0,159.0(hidden)(still)
+PLAY DONE
+PASS L16 glimmer_crystal_bridge
+PASS L39 diggings_lift
+PASS L43 stillwater_shore
+PASS L53 deep_crawl
+PASS L55 deep_crawl
+PASS L57 deep_crawl
+PASS L59 deep_first_dark

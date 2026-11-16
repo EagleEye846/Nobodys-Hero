@@ -1,0 +1,25 @@
+# THE TATTERED POLE (Lamplighter's Ledge): a prayer pole with one flag torn down to threads. A tiny errand of the life
+# pass on Mount Vigil. (draft)
+
+[first]
+A prayer pole in a little cairn, with five flags on it. Four of them are bright. The middle one, the blue, has torn down to three threads, snapping on the pole like a very small bad temper.
+
+[first_ves]
+{thoughtful}Five winds, and one of them got away.
+
+[repeat]
+The prayer pole. Four flags, and three blue threads where the fifth was.
+
+[flag_ask]
+The blue one has been gone a long time. All that's left is three threads, knotted on, still trying. The wind has been looking for the rest.
+
+[flag_done]
+You knot the torn blue flag onto the old threads. They take it at once, as if they'd been holding the place for it, and the wind snaps it out straight with the others. Five winds, all of them hung.
+
+Something is tucked into the cairn at the foot of the pole. A faded red ribbon, knotted at one end. It looks like it's meant for you.
+
+[flag_done_ves]
+{smile}There. Now it's finished. That was worth the climb.
+
+[flag_after]
+The prayer pole, five flags flying, the blue one the bluest. The wind goes through all five as if it were reading.

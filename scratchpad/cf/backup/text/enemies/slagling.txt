@@ -1,0 +1,82 @@
+# SLAGLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/slagling.js.
+
+[intro]
+A heap of cooled slag by the old vent ticks, cracks, and starts to glow from the inside. A SLAGLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SLAGLING ticks as it cools. Then it leans toward the vent and warms back up.
+
+SLAGLING drips a little onto the floor and looks very sorry about it.
+
+SLAGLING pats the old vent with a lump of itself. They've known each other a long time.
+
+The air above SLAGLING wobbles. So do your eyebrows.
+
+Smells like a blacksmith's sleeve.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+SLAGLING's glow has gone down to a few red cracks. It shuffles toward the vent, very slowly, for a warm.
+
+# (draft)
+[flavor: spareable]
+SLAGLING ticks softly and goes the colour of embers at bedtime. It's shuffled over to keep your boots warm.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Pssst.
+Warm enough?
+
+Come closer.
+Not TOO
+close.
+
+Sorry!
+That's just
+how I am.
+
+Tssss.
+
+Nobody ever
+sits with me.
+
+...They burn
+their trousers.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/slagling.js.
+[talk: Inspect]
+SLAGLING - HP 1050
+Leftover from the furnaces. Crusty outside, molten in the middle, and lonely, by the look of it. Spits sparks. Slow, but it sticks.
+
+[talk: Warm your hands]
+You hold your hands out to SLAGLING, the way you would to a fire. It goes very still. Then it goes brighter, and brighter, until you have to lean back a bit. It's showing off.
+
+[talk: Sit by the vent with it]
+You sit down on the old vent next to SLAGLING. It sits, in its way. Neither of you says anything. It ticks, very quietly, like a clock being careful.
+
+[talk: Pat its crust]
+You pat SLAGLING with your sleeve. It's hot. You pat it anyway. It tries to purr and spits a small spark instead, and looks mortified.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SLAGLING sets into a heap of cold black rock. It was warm right up to the end, which is something.
+
+[pacified]
+SLAGLING settles back on its vent with a long, contented tick. The glow in its cracks goes the colour of a sleeping hearth. It lets you by.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves holds her umbrella between you and {foe}, then thinks better of it and shuts it. "Flammable," she says. {foe} looks very sorry.
+
+Ves tells {foe} it's the first thing down here that's been pleasant to stand near. {foe} glows. She adds that it's a low bar.
+
+Ves asks {foe} how long it's been by this vent. It ticks, slowly, a great many times. She says that sounds about right.

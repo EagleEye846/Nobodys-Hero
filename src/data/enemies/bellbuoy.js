@@ -3,8 +3,8 @@ import { BELLBUOY_PALETTE, BELLBUOY_SPRITE, BELLBUOY_ANIM } from '../art/bellbuo
 // The BELLBUOY's numbers: a haunted bell buoy that has slipped its mooring
 // and goes on ringing, in the sunken lanes and the wreck yard, for ships that
 // aren't there. Nobody has seen who rings the bell, and the bell isn't
-// saying. It tolls rings on the beat (so you can feel it coming), lashes
-// its anchor chain round, and blows a foghorn cone that sweeps the box.
+// saying. It tolls rings that only hurt while the note is loud, raises rocks
+// wherever the water ripples, and blows a foghorn that shoves you back.
 // Everything it says is in text/enemies/bellbuoy.txt.
 export const BELLBUOY = {
   name: 'BELLBUOY',
@@ -25,7 +25,7 @@ export const BELLBUOY = {
   feel: { hit: 'bell', windup: 'toll', at: [0.5, 0.15], idle: 'drip', defeat: 'clang', exit: 'sink' },
   // The chapter 5 storm battle song (the Lanes, the Wreck Yard, and on).
   music: 'coastBattleStorm',
-  maxHp: 11000,
+  maxHp: 7300,
   damage: 90,
 
   difficulty: { density: 1.75, speed: 1.60 },
@@ -41,7 +41,7 @@ export const BELLBUOY = {
   // Its attacks live in src/battle/attacks/bellbuoy.js.
   patterns: [
     { name: 'buoyToll', weight: 3 },
-    { name: 'buoyChain', weight: 3 },
+    { name: 'buoyReef', weight: 3 },
     { name: 'buoyHorn', weight: 3 },
   ],
 
@@ -53,7 +53,7 @@ export const BELLBUOY = {
     { name: 'Light the lamp', calm: 30 },
   ],
 
-  rewards: { exp: 2500, coins: 13 },
+  rewards: { exp: 2500, coins: 10 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'buoy_bell', chance: 0.4 }],

@@ -57,7 +57,7 @@ spine.
 # TALK options in src/data/enemies/pinwheel.js.
 [talk: Inspect]
 PINWHEEL - HP 2050
-A sea urchin with a temper. Throws fans of spines, rolls across the box shedding more, rains them down and lays little mines that burst. Mind the roll and the sky.
+A sea urchin with a temper. Spines come up wherever you've walked, it sheds spines on every bounce, and it turns the way the wind blows. Don't go back the way you came.
 
 [talk: Offer it a smooth stone]
 You set a smooth, flat stone in front of it. PINWHEEL pokes it with one spine. Then another. Then it leans on it, spines drooping, like a creature that has never once sat on something soft.

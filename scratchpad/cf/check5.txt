@@ -1,0 +1,1 @@
+ERROR: Uncaught SyntaxError: Invalid or unexpected token (http://localhost:8000/src/data/scenes/tideHeldOpens.js:112)

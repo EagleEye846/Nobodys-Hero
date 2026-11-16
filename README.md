@@ -59,7 +59,7 @@ Press **Z** on the first screen to begin.
 
 | Key | What it does |
 | --- | --- |
-| Arrow keys / WASD | Move |
+| Arrow keys | Move (rebind in OPTIONS) |
 | Z / Enter | Talk, read, climb, confirm |
 | X / Shift | Hold to run; back out of menus |
 | Space | Jump |

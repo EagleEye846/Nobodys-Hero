@@ -58,6 +58,7 @@ export const BELOWTOWN_SECRET_WAY = {
     { sprite: 'mine_timber', x: 14, y: 2, text: 'secret_post' },
     { sprite: 'ore_crumbs', x: 3, y: 3, walkable: true, flat: true },
     { sprite: 'floor_pebbles', x: 18, y: 4, walkable: true, flat: true },
+    { sprite: 'col_token', x: 20, y: 3, walkable: true, flat: true, gives: 'tally_hammer', taken: { gone: true } },
   ],
   tileTexts: { W: 'rope_face', '#': 'town_rock', V: 'town_lamps_wall' },
 

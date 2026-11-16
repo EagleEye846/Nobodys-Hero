@@ -17,7 +17,7 @@ export const CAPBEE = {
   feel: { hit: 'fluff', color: '#ffe27a', defeat: 'fluff' },
   // Sunnyside's own battle song, the Dandelion Lion Rag.
   music: 'sunnyBattle',
-  maxHp: 8800,
+  maxHp: 5800,
   damage: 79,
 
   // The easy end of Chapter 5, like the coast's first monsters.
@@ -34,8 +34,8 @@ export const CAPBEE = {
   // Its attacks live in src/battle/attacks/capbee.js.
   patterns: [
     { name: 'beeWaggle', weight: 3 },
-    { name: 'beeHoney', weight: 3 },
-    { name: 'beeCap', weight: 2 },
+    { name: 'beeComb', weight: 3 },
+    { name: 'beeRound', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -46,7 +46,7 @@ export const CAPBEE = {
     { name: 'Sniff the honey', calm: 30 },
   ],
 
-  rewards: { exp: 2100, coins: 10 },
+  rewards: { exp: 2100, coins: 8 },
 
   // What it sometimes leaves behind (src/data/items.js), with the chance of it.
   drops: [{ item: 'flatcap_honey', chance: 0.4 }],

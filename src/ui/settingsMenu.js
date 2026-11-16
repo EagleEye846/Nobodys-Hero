@@ -6,6 +6,7 @@ import { soulSprite } from '../battle/soul.js';
 import { drawMenuFrame, drawControls, MENU, MENU_COLORS } from './menuFrame.js';
 import { drawText } from './text.js';
 import { glide } from './uiMotion.js';
+import { exportSaves, readImport, applyImport, pickSaveFile } from '../state/saveTransfer.js';
 
 // The OPTIONS screen, in the C menu and on the title screen: how loud the
 // music is (songs and the sounds of a place), how loud the sound effects are,
@@ -13,7 +14,8 @@ import { glide } from './uiMotion.js';
 // talking voices), whether the screen shakes, how bright the storm's
 // lightning flashes (ON, SOFT or OFF, for anyone bright flashes bother),
 // whether running is held or tapped on and off (RUN), how a fight warns you
-// you're low on HP, fullscreen, and which keys do what.
+// you're low on HP, fullscreen, which keys do what, and SAVE FILE (moving
+// your saves to another browser or address: src/state/saveTransfer.js).
 // Up and down picks one, left and right turn it, and it's all remembered for
 // next time (src/state/settings.js).
 
@@ -31,6 +33,12 @@ const ROWS = [
   { key: 'lowHp', label: 'LOW HP WARNING', kind: 'steps', steps: LOW_HP_STEPS },
   { key: 'fullscreen', label: 'FULLSCREEN', kind: 'fullscreen' },
   { key: 'keys', label: 'CONTROLS', kind: 'keys' },
+  { key: 'saves', label: 'SAVE FILE', kind: 'saves' },
+];
+// The SAVE FILE page.
+const SAVE_ROWS = [
+  { id: 'export', label: 'EXPORT SAVE' },
+  { id: 'import', label: 'IMPORT SAVE' },
 ];
 // The keys you can change, in two columns on the CONTROLS page.
 const KEY_ROWS = [
@@ -45,7 +53,7 @@ const KEY_ROWS = [
 const PER_COLUMN = 7;
 // Ten steps from off to full.
 const STEP = 0.1;
-const ROW = { x: MENU.x + 60, y: MENU.y + 70, gap: 28 };
+const ROW = { x: MENU.x + 60, y: MENU.y + 66, gap: 22 };
 const BAR = { x: MENU.x + 290, w: 140, h: 16 };
 const VALUE_X = MENU.x + MENU.w - 24;
 const KEYS = { y: MENU.y + 84, gap: 36, columns: [MENU.x + 64, MENU.x + 310], width: 230 };
@@ -74,9 +82,17 @@ export class SettingsMenu {
     this.keyCursor = 0;
     this.waiting = false;
     this.note = '';
+    // SAVE FILE: the chosen row, a checked file waiting for a yes
+    // ({ data, summary }), and whether the file picker is open.
+    this.saveCursor = 0;
+    this.pending = null;
+    this.picking = false;
   }
 
   open() {
+    this.saveCursor = 0;
+    this.pending = null;
+    this.picking = false;
     this.isOpen = true;
     this.cursor = 0;
     this.page = 'main';
@@ -98,6 +114,10 @@ export class SettingsMenu {
       this.updateKeys(input);
       return;
     }
+    if (this.page === 'saves') {
+      this.updateSaves(input);
+      return;
+    }
     if (input.wasPressed('cancel') || input.wasPressed('menu')) {
       this.close(input);
       return;
@@ -108,11 +128,13 @@ export class SettingsMenu {
     if (this.cursor !== before) sfx('move');
     const row = ROWS[this.cursor];
     const turn = (input.wasPressed('right') ? 1 : 0) - (input.wasPressed('left') ? 1 : 0);
-    if (row.kind === 'keys') {
+    if (row.kind === 'keys' || row.kind === 'saves') {
       if (input.wasPressed('confirm') || turn > 0) {
         sfx('select');
-        this.page = 'keys';
+        this.page = row.kind;
         this.keyCursor = 0;
+        this.saveCursor = 0;
+        this.pending = null;
         this.note = '';
       }
     } else if (row.kind === 'toggle') {
@@ -199,6 +221,72 @@ export class SettingsMenu {
     }
   }
 
+  // The SAVE FILE page: EXPORT SAVE downloads every save as one file;
+  // IMPORT SAVE picks a file, says what's in it, and asks before it replaces
+  // anything. After an import the page reloads, so the game starts fresh
+  // from the title with the imported save.
+  updateSaves(input) {
+    if (this.picking) return;
+    if (this.pending) {
+      if (input.wasPressed('confirm')) {
+        const result = applyImport(this.pending.data);
+        this.pending = null;
+        if (result.ok) {
+          sfx('select');
+          this.note = 'Save imported. Starting again...';
+          this.picking = true;
+          setTimeout(() => location.reload(), 600);
+        } else {
+          sfx('back');
+          this.note = result.error;
+        }
+      } else if (input.wasPressed('cancel') || input.wasPressed('menu')) {
+        sfx('back');
+        this.pending = null;
+        this.note = 'Left as it was.';
+      }
+      return;
+    }
+    if (input.wasPressed('cancel') || input.wasPressed('menu')) {
+      sfx('back');
+      this.page = 'main';
+      this.note = '';
+      return;
+    }
+    const before = this.saveCursor;
+    if (input.wasPressed('down')) this.saveCursor = (this.saveCursor + 1) % SAVE_ROWS.length;
+    if (input.wasPressed('up')) this.saveCursor = (this.saveCursor - 1 + SAVE_ROWS.length) % SAVE_ROWS.length;
+    if (this.saveCursor !== before) {
+      sfx('move');
+      this.note = '';
+    }
+    if (!input.wasPressed('confirm')) return;
+    if (SAVE_ROWS[this.saveCursor].id === 'export') {
+      const result = exportSaves();
+      sfx(result.ok ? 'select' : 'back');
+      this.note = result.ok ? `Exported ${result.saves} save${result.saves > 1 ? 's' : ''} to your downloads.` : result.error;
+      return;
+    }
+    sfx('select');
+    this.picking = true;
+    this.note = 'Pick a save file...';
+    pickSaveFile().then((text) => {
+      this.picking = false;
+      if (text === null) {
+        this.note = '';
+        return;
+      }
+      const checked = readImport(text);
+      if (!checked.ok) {
+        sfx('back');
+        this.note = `${checked.error} Nothing was changed.`;
+        return;
+      }
+      this.pending = checked;
+      this.note = '';
+    });
+  }
+
   // `code` is now the key for `action`. A key another action had changes
   // hands: that action gets this one's old key, so nothing is left without.
   giveKey(action, code) {
@@ -229,8 +317,9 @@ export class SettingsMenu {
   draw(ctx) {
     if (!this.isOpen) return;
     inUiSpace(ctx, () => {
-      drawMenuFrame(ctx, 'OPTIONS', this.page === 'keys' ? 'CONTROLS' : '', { split: false });
+      drawMenuFrame(ctx, 'OPTIONS', { keys: 'CONTROLS', saves: 'SAVE FILE' }[this.page] ?? '', { split: false });
       if (this.page === 'keys') this.drawKeys(ctx);
+      else if (this.page === 'saves') this.drawSaves(ctx);
       else this.drawMain(ctx);
     });
   }
@@ -264,7 +353,7 @@ export class SettingsMenu {
         drawText(ctx, '>', VALUE_X, y + 3, { size: 24, color: dim, align: 'right' });
       }
     });
-    drawText(ctx, 'M: all sound off and on.  F: fullscreen.  Any time.', ROW.x, MENU.y + 352, { size: 20, color: MENU_COLORS.dim });
+    drawText(ctx, 'M: all sound off and on.  F: fullscreen.  Any time.', ROW.x, MENU.y + 344, { size: 20, color: MENU_COLORS.dim });
     drawControls(ctx, `Up/down: choose     Left/right: change     ${hint('cancel')}: close`);
   }
 
@@ -291,6 +380,32 @@ export class SettingsMenu {
     if (this.note) drawText(ctx, this.note, MENU.x + 24, MENU.y + 330, { size: 22, color: MENU_COLORS.dim });
     else drawText(ctx, 'Esc leaves a key as it is. Other keys still work as well.', MENU.x + 24, MENU.y + 330, { size: 22, color: MENU_COLORS.dim });
     drawControls(ctx, this.waiting ? 'Press the new key' : `${hint('confirm')}: change a key     ${hint('cancel')}: back`);
+  }
+
+  drawSaves(ctx) {
+    const x = MENU.x + 64;
+    SAVE_ROWS.forEach(({ label }, i) => {
+      const y = MENU.y + 84 + i * 40;
+      const selected = i === this.saveCursor && !this.pending;
+      if (selected) {
+        const at = glide('settingsSaves', x - 34, y + 4);
+        ctx.drawImage(soulSprite(), at.x, at.y);
+      }
+      drawText(ctx, label, x, y, { size: 26, color: selected ? MENU_COLORS.highlight : MENU_COLORS.text });
+    });
+    const about = MENU.x + 24;
+    if (this.pending) {
+      drawText(ctx, 'Replace the save in this browser with:', about, MENU.y + 190, { size: 24, color: MENU_COLORS.text });
+      drawText(ctx, this.pending.summary, about, MENU.y + 222, { size: 24, color: MENU_COLORS.highlight });
+      drawText(ctx, 'The save here now is kept aside, just in case.', about, MENU.y + 262, { size: 22, color: MENU_COLORS.dim });
+      drawControls(ctx, `${hint('confirm')}: yes, import it     ${hint('cancel')}: no`);
+      return;
+    }
+    drawText(ctx, 'Each browser and address keeps its own saves.', about, MENU.y + 190, { size: 22, color: MENU_COLORS.description });
+    drawText(ctx, 'Export them to a file, then import it anywhere.', about, MENU.y + 216, { size: 22, color: MENU_COLORS.description });
+    drawText(ctx, 'Export takes your last save point and each chapter\'s.', about, MENU.y + 250, { size: 22, color: MENU_COLORS.dim });
+    if (this.note) drawText(ctx, this.note, about, MENU.y + 296, { size: 22, color: MENU_COLORS.highlight });
+    drawControls(ctx, this.picking ? 'Waiting for a file...' : `${hint('confirm')}: choose     ${hint('cancel')}: back`);
   }
 
   // The slider: a row of notches, lit up to the volume.

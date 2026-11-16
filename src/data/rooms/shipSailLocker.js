@@ -1,16 +1,23 @@
 // THE SAIL LOCKER (Chapter 5, the ghost ship's DEEP PART, optional): where the sailmaker kept her spare canvas, rolled and roped in bales, and the
-// halyards that belong to each sail. Four narrow alcoves along the north wall, each with a halyard lever at its back (3) and each mouth stopped
-// by a loose BALE of canvas (it rolls with the list): the JIB's (x 5) and the FORE's (x 17) are stopped while she leans to STARBOARD and clear
-// to PORT; the MAIN's (x 11) and the TOPSAIL's (x 23) the other way (clear to STARBOARD, stopped to PORT). The way on (east, the gate at 28, rows
-// 8-9) opens only when the four halyards are hauled IN ORDER: main, jib, topsail, fore (an in-order gate: a wrong one resets all four). The order is
-// told only in the lantern: the sailmaker's ghost at (14,8) and her chalk by the gate. So: lean her, haul one, lean her the other way, haul the next.
-// Two tackles (3,6) and (26,10) turn her from the hall. You can never be shut in: nothing here blocks the hall, and the west door is always open.
+// halyards that belong to each sail. Four narrow alcoves along the north wall, each with a halyard lever at its back (row 3): from the west door,
+// JIB (x 5), MAIN (x 11), FORE (x 17), TOPS'L (x 23). Nothing leans in here and nothing blocks the alcoves.
+// THE PUZZLE (a rope order): the way on (east, the gate at 29, rows 8-9) opens only when the four halyards are hauled IN ORDER: main, jib,
+// topsail, fore (an in-order gate: a wrong one and all four go slack, start again). Readable without the lantern, three ways:
+//   * each alcove's name is chalked big on the boards at its mouth (row 5), in plain sight
+//   * a board on a post by the gate (27,6), with a lamp beside it, has the order chalked on it
+//   * the sailmaker's ghost goes about her work: she drifts from alcove to alcove IN THE ORDER, waits at each, and hums its name as she
+//     gets there ("...main...", "...jib..."), then goes back to her stool and starts again (haunt.js `drift`). Follow her round.
+// You can never be shut in: nothing here blocks the hall, and the west door is always open.
 // Scene ship_sail_locker_in (the west end, once). The west door (0, rows 8-9) is back to the orlop; the east door (29, rows 8-9) goes on, to the flooded bow.
 // Tile key: # hull and bulkhead (solid)   W planking face (solid)   . locker floor
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
+
 export const SHIP_SAIL_LOCKER = {
   id: 'ship_sail_locker',
   name: 'THE SAIL LOCKER',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.75,
   music: 'ghostShip',
   musicFrom: 'list',
   ambience: 'ghost_ship_deep',
@@ -36,7 +43,7 @@ export const SHIP_SAIL_LOCKER = {
       '##############################',
     ],
 
-  // No tiles change here, but she leans, and the whole room with her.
+  // Nothing leans in here any more: the list is kept only so she still creaks.
   list: {},
 
   doors: [
@@ -50,20 +57,30 @@ export const SHIP_SAIL_LOCKER = {
 
   textFile: 'interactions/ghostship.txt',
   props: [
-    { sprite: 'gs_trim_line', x: 3, y: 6, text: 'locker_trim', listWheel: { to: 'toggle', port: 'locker_port', star: 'locker_star', busy: 'locker_busy', already: 'locker_already' } },
-    { sprite: 'gs_trim_line', x: 26, y: 10, text: 'locker_trim', listWheel: { to: 'toggle', port: 'locker_port', star: 'locker_star', busy: 'locker_busy', already: 'locker_already' } },
+    // A save point at the west end, after the captain and the orlop.
+    { sprite: 'savepoint', x: 4, y: 6, save: true },
     { sprite: 'lever', x: 5, y: 3, text: 'locker_jib', lever: 'sl_jib' },
     { sprite: 'lever', x: 11, y: 3, text: 'locker_main', lever: 'sl_main' },
     { sprite: 'lever', x: 17, y: 3, text: 'locker_fore', lever: 'sl_fore' },
     { sprite: 'lever', x: 23, y: 3, text: 'locker_tops', lever: 'sl_tops' },
-    { sprite: 'gs_bale', x: 5, y: 4, text: 'locker_bale', loose: { port: [5, 11], star: [5, 4], seconds: 1.8 } },
-    { sprite: 'gs_bale', x: 11, y: 4, text: 'locker_bale', loose: { port: [11, 4], star: [11, 11], seconds: 1.8 } },
-    { sprite: 'gs_bale', x: 17, y: 4, text: 'locker_bale', loose: { port: [17, 11], star: [17, 4], seconds: 1.8 } },
-    { sprite: 'gs_bale', x: 23, y: 4, text: 'locker_bale', loose: { port: [23, 4], star: [23, 11], seconds: 1.8 } },
-    { sprite: 'gs_bulk_door', x: 28, y: 8, text: 'locker_gate', opensWith: ['sl_main', 'sl_jib', 'sl_tops', 'sl_fore'], inOrder: true, openText: 'locker_gate_open', resetText: 'locker_gate_reset' },
-    { sprite: 'gs_bulk_door', x: 28, y: 9, text: 'locker_gate', opensWith: ['sl_main', 'sl_jib', 'sl_tops', 'sl_fore'], inOrder: true, openText: 'locker_gate_open', resetText: 'locker_gate_reset' },
-    { sprite: 'gs_ghost_old', x: 14, y: 8, text: 'ghost_sailmaker', animation: 'gs_ghost_old', speed: 1.0, walkable: true, haunt: { kind: 'ghost' } },
-    { sprite: 'gs_chalk', x: 26, y: 8, text: 'locker_chalk', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    // Each alcove's name, chalked big at its mouth, in plain sight.
+    { sprite: 'gs_chalk_jib', x: 5, y: 5, text: 'locker_tag_jib', flat: true, walkable: true },
+    { sprite: 'gs_chalk_main', x: 11, y: 5, text: 'locker_tag_main', flat: true, walkable: true },
+    { sprite: 'gs_chalk_fore', x: 17, y: 5, text: 'locker_tag_fore', flat: true, walkable: true },
+    { sprite: 'gs_chalk_tops', x: 23, y: 5, text: 'locker_tag_tops', flat: true, walkable: true },
+    // The bales, stacked and roped along the south wall where they belong.
+    { sprite: 'gs_bale', x: 5, y: 11, text: 'locker_bale' },
+    { sprite: 'gs_bale', x: 11, y: 11, text: 'locker_bale' },
+    { sprite: 'gs_bale', x: 17, y: 11, text: 'locker_bale' },
+    { sprite: 'gs_bale', x: 23, y: 11, text: 'locker_bale' },
+    { sprite: 'gs_bulk_door_top', x: 29, y: 8, text: 'locker_gate', opensWith: ['sl_main', 'sl_jib', 'sl_tops', 'sl_fore'], inOrder: true, openText: 'locker_gate_open', resetText: 'locker_gate_reset' },
+    { sprite: 'gs_side_door', x: 29, y: 9, text: 'locker_gate', opensWith: ['sl_main', 'sl_jib', 'sl_tops', 'sl_fore'], inOrder: true, openText: 'locker_gate_open', resetText: 'locker_gate_reset', openLook: 'gs_side_door_open', ajarLook: 'gs_side_door_ajar' },
+    // The sailmaker, going about her work: her stool, then the alcoves in the order the gate wants, humming each one's name.
+    { sprite: 'gs_ghost_old', x: 9, y: 7, text: 'ghost_sailmaker', animation: 'gs_ghost_old', speed: 1.0, walkable: true,
+      haunt: { kind: 'ghost', drift: { at: [[9, 7], [11, 5], [5, 5], [23, 5], [17, 5]], stay: 2.6, speed: 20, hum: ['...one more stitch...', '...main...', '...jib...', "...tops'l...", '...and the fore, last...'] } } },
+    // The order, chalked on a board on a post by the gate, with a lamp beside it (in plain sight).
+    { sprite: 'gs_owners_board', x: 27, y: 6, text: 'locker_chalk' },
+    { sprite: 'gs_post_lantern', x: 28, y: 6, text: 'dress_lantern' },
     { sprite: 'gs_handprint', x: 2, y: 5, text: 'hold_handprint', flat: true, walkable: true, haunt: { kind: 'unseen' } },
     { sprite: 'gs_prints_a', x: 8, y: 7, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
     { sprite: 'gs_prints_b', x: 20, y: 9, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
@@ -103,12 +120,15 @@ export const SHIP_SAIL_LOCKER = {
     { sprite: 'gs_weed_a', x: 14, y: 11, flat: true, walkable: true },
     { sprite: 'gs_cutlass', x: 6, y: 11, flat: true, walkable: true },
     { sprite: 'gs_sack_spill', x: 15, y: 10, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_sail_locker ?? []),
   ],
   tileTexts: { '#': 'hold_wall', W: 'hold_wall' },
-  // The deckhand patrols the south of the hall (row 10, x 13-16) and the powder monkey the north-east of it (row 6, x 19-22). Neither is in an alcove's column (x 5, 11, 17, 23), on a gate, a tackle, the bales' lanes or the scene's tiles (1-2, rows 8-9).
+  // The deckhand patrols the south of the hall (row 10, x 13-16) and the powder monkey the north-east of it (row 7, x 19-22). Neither is in an alcove's
+  // column (x 5, 11, 17, 23), on row 5 where the sailmaker walks, on the gate or the scene's tiles (1-3, rows 8-10).
 
   npcs: [
     { enemy: 'ghost_deckhand', x: 14, y: 10, patrol: [13, 16], behaviour: 'patrol', lantern: 'flee' },
-    { enemy: 'powder_monkey', x: 20, y: 6, patrol: [19, 22], behaviour: 'patrol', lantern: 'freeze' },
+    { enemy: 'powder_monkey', x: 20, y: 7, patrol: [19, 22], behaviour: 'patrol', lantern: 'freeze' },
   ],
 };

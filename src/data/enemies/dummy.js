@@ -7,7 +7,7 @@ export const ROGUE_DUMMY = {
   gait: 'waddle',
   textFile: 'enemies/rogue_dummy.txt',
   sprite: { rows: DUMMY_SPRITE, palette: DUMMY_PALETTE },
-  maxHp: 120,
+  maxHp: 300,
   damage: 8,
 
   // The first enemy you meet, so its attacks are a little gentler: fewer bullets (density)
@@ -19,10 +19,10 @@ export const ROGUE_DUMMY = {
   // every enemy needs at least three. Patterns that change the soul mode (like
   // 'pillars') need `boss: true`.
   patterns: [
-    { name: 'pinCushion', weight: 3 },
+    { name: 'dummyPractice', weight: 3 },
     { name: 'buttonBounce', weight: 2 },
     { name: 'stitchLine', weight: 2 },
-    { name: 'stuffingBurst', weight: 2 },
+    { name: 'dummyRestuff', weight: 2 },
     { name: 'trainingTargets', weight: 2 },
   ],
 

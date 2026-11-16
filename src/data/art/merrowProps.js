@@ -24,6 +24,7 @@
 //   mw_dresser (2)                a kitchen dresser with its plates
 //   mw_coat_pegs (2)              a peg rail on the wall: four coats and a small hat
 //   mw_bell_tower (4)             the drowned bell tower from outside (128 high, decorative)
+//   mw_tower_porch (5)            the tower's stone base over its porch (80x64); fades while the party is inside
 //   mw_tower_door (2)             a studded oak door in a stone arch, barred; `_open` stands open
 //   mw_flood_grate                an arched drain grating at the waterline, bars rusted out
 //   mw_great_bell (3)             the great bell, fallen on its side in the shallows, cracked lip
@@ -141,6 +142,7 @@ const BR_ON = ['#4a2e10', '#8a5c22', '#c08a34', '#e8b84c', '#ffe08a', '#ffffff']
 const VG = ['#3a7262', '#5aa088']; // verdigris
 const IRON = ['#121416', '#262a2c', '#3e4446', '#5a6264', '#7a8486'];
 const RUST = ['#5a2e18', '#8a4a26'];
+const IRON_BAND = '#2a3236';
 const WOOD = ['#20160e', '#3a2a1a', '#56402c', '#745840', '#94785a'];
 const OAK = ['#1e140a', '#3c2814', '#5a3e22', '#7a5834'];
 const SLATE = ['#1a2226', '#262f34', '#334046', '#46565c'];
@@ -744,8 +746,59 @@ function bellTower() {
   for (let x = L; x <= R; x += 2) g.rect(x, 112 + (x % 3), 1, 6, WEED[(x >> 1) % 3]);
   // A crack.
   g.line(48, 20, 46, 28, ST[0]); g.line(46, 28, 49, 36, ST[0]);
+  // The inner door at the foot of the back wall: a pointed arch of dressed stone, a dark oak
+  // door with iron bands, and the sill. It stands over the porch's far side (the porch is
+  // drawn in front of it, see porchFront).
+  for (let y = 100; y < h; y++) {
+    const inset = y < 108 ? Math.round(12 - Math.sqrt(Math.max(0, 144 - (108 - y) * (108 - y)))) : 0;
+    g.rect(19 + inset, y, 26 - inset * 2, 1, ST[1]);
+    g.set(19 + inset, y, ST[5]); g.set(44 - inset, y, ST[0]);
+    g.rect(21 + inset, y, 22 - inset * 2, 1, y < 104 ? '#0a100e' : WOOD[1]);
+    g.set(21 + inset, y, WOOD[0]); g.set(42 - inset, y, WOOD[0]);
+  }
+  for (let x = 23; x < 41; x += 4) g.rect(x, 104, 1, h - 104, WOOD[0]);
+  g.rect(21, 112, 22, 2, IRON_BAND); g.rect(21, 122, 22, 2, IRON_BAND);
+  g.rect(36, 117, 2, 2, '#b8a068');
+  g.rect(17, h - 1, 30, 1, ST[4]);
   g.outline(OUT);
-  waterFoot(g, 0, w, 117, 1);
+  return g.rows();
+}
+
+// The porch in front of the tower's foot: the tower's wider stone base seen from the lane
+// (80 wide, 64 high, 5 tiles by 4 rows), with a coping on top. It is the tower's front wall
+// over the porch floor, so from the lane you see a wall with its door. It is drawn only
+// (walkable) and fades away while anyone is standing in the porch (src/overworld/porchCutaway.js).
+function porchFront() {
+  const w = 80;
+  const h = 64;
+  const g = new Grid(w, h);
+  for (let y = 6; y < h; y++) {
+    const course = Math.floor(y / 5);
+    for (let x = 0; x < w; x++) {
+      const joint = (x + (course % 2 ? 6 : 0)) % 12 === 0 || y % 5 === 0;
+      let c = joint ? ST[1] : ST[(course + Math.floor(x / 12)) % 2 ? 3 : 2];
+      if (x > w - 7 && !joint) c = ST[1];
+      if (x < 3 && !joint) c = ST[4];
+      g.set(x, y, c);
+    }
+  }
+  // The coping: a lit lip, a dressed course below it and a shadow under that.
+  g.rect(0, 2, w, 4, ST[3]); g.rect(0, 2, w, 1, ST[5]); g.rect(0, 5, w, 1, ST[1]);
+  for (let x = 0; x < w; x += 10) g.set(x, 3, ST[1]);
+  g.rect(0, 6, w, 1, ST[0]);
+  // Below the tide line the stone goes green, darker toward the foot, and weed hangs from the sill.
+  const blot = (x, y) => Math.sin(x * 0.7 + y * 0.3) + Math.sin(x * 0.23 - y * 0.61) + Math.sin((x + y) * 0.41);
+  for (let y = 34; y < h; y++) for (let x = 0; x < w; x++) {
+    const v = g.get(x, y);
+    if (!v || v === ST[1]) continue;
+    const n = blot(x, y) + (y - 34) / 12;
+    if (n > 0.4) g.set(x, y, n > 2 ? STAIN[0] : n > 1.1 ? STAIN[1] : STAIN[2]);
+  }
+  for (let x = 1; x < w; x += 3) g.rect(x, 56 + (x % 4), 1, 5, WEED[(x >> 1) % 3]);
+  // A long crack, and verdigris running down from the coping.
+  g.line(30, 8, 28, 16, ST[0]); g.line(28, 16, 31, 24, ST[0]);
+  for (const x of [12, 15, 58, 66]) g.line(x, 7, x + (x % 2), 15 + (x % 7), VG[0]);
+  g.outline(OUT);
   return g.rows();
 }
 
@@ -1213,32 +1266,39 @@ function bubbles(i) {
   return g.rows();
 }
 
-// --- House fronts (2026-11-08) ----------------------------------------------------------------------
-// The terraces were one long run of the same limewashed front. These stand on the wall tiles (a
-// solid row, never the street) so a run reads as different houses: their own wash, doors,
-// shutters, signs, a tall one with a gable, one with a parapet, a stepped one in bare stone. The
-// bottom 16 pixels of each is the tile row it stands on; anything above it stands up over the
-// roof tiles behind, so the roofline goes up and down.
+// --- House fronts (2026-11-08, redrawn 2026-11-15 at the people's size) -------------------------------
+// The terraces are two-storey houses now. A front door is 26 pixels tall (about 1.6 tiles, taller
+// than the hero) with a step; ground-floor windows are 10 by 15, the upper floor's 10 by 13; a
+// string course runs between the floors and the roof starts above. The pieces stand on the wall
+// tiles (a solid row, never the street). The bottom of each is the street row; the tiles above
+// it are wall too, so a piece 48 high is three tile rows of house, and a gable, parapet or stepped
+// gable stands up past that into the roof.
 //
-//   mw_house_gable (2)     tall, gable to the street: arched door, a drowned window, open shutters
-//                          upstairs, a round vent in the gable, a downpipe
+// The steps and the rooftops have only two tile rows above the street, so their pieces come in a
+// LOW size (32 high, `_low`): the roof's eave, then the ground floor with its full-height door; the
+// upper floor is above the top of the screen.
+//
+//   mw_house_gable (2)     a gable to the street: arched door, a drowned window, open shutters
+//                          upstairs, a round vent in the gable
 //   mw_house_dutch (2)     a stepped gable in bare dressed stone: a plank door hanging off its top
-//                          hinge, a bricked-up window, a sign (a key) on an iron bracket
+//                          hinge, a bracket sign (a key), a bricked-up window upstairs
 //   mw_house_parapet (2)   flat-fronted behind a stone parapet: a door with a knocker, a window
 //                          box, the upstairs shutters closed
-//   mw_house_shop (2)      a shop: a striped awning on iron brackets over a drowned window, ROPES
-//                          on its fascia, a glazed shop door
-//   mw_house_narrow        a narrow one squeezed in, its own little gable: a boarded-up door, one
-//                          shutter hanging by a hinge
+//   mw_house_shop (2)      a shop: a painted fascia, a wide drowned shop window with ropes on its
+//                          shelf, a glazed door
+//   mw_house_narrow        a narrow one with its own little gable: a boarded-up door, one shutter
+//                          hanging by a hinge
 //   mw_house_gable_b / _c, mw_house_parapet_b, mw_house_narrow_b   the same in other washes
+//   (and the same names ending _low for the steps and the rooftops)
 //   mw_dormer              a dormer window sitting on the slates (put it on a roof tile)
 //   mw_chimney_short       a short chimney stack, one pot, sooty (on a roof tile)
-// Pieces laid over an ordinary front tile (they let its wash show through):
+// Pieces laid over a plain wall tile, 16 wide and 48 high (they let its wash show through):
 //   mw_ov_shutters_open / _shut / _hanging, mw_ov_window_drowned, mw_ov_window_bricked,
-//   mw_ov_window_box       (over a window tile)
-//   mw_ov_door_arched / _knocker / _boarded / _hanging   (over a plain wall tile)
-//   mw_ov_sign_fish / _key / _boot   a hanging sign on a wrought bracket bolted to the wall
-//   mw_ov_awning (2) / mw_ov_awning_torn (2)   a striped awning on iron brackets
+//   mw_ov_window_box       a ground-floor window with an upper-floor one over it
+//   mw_ov_door_arched / _knocker / _boarded / _hanging / _open   a full-height door and its step,
+//                          a window over it
+//   mw_ov_sign_fish / _key / _boot   a sign hung under a wrought arm bolted to a wall plate
+//   mw_ov_awning (2) / mw_ov_awning_torn (2)   a striped awning on iron stays
 //   mw_ov_drainpipe        a downpipe from a hopper at the eaves, green streaks down the wash
 //   mw_ov_wall_lamp        a storm lamp hung off a wall bracket, lit (give it a `glow`)
 
@@ -1247,16 +1307,17 @@ function mix(a, b, t) {
   const p = (h, i) => parseInt(h.slice(1 + i * 2, 3 + i * 2), 16);
   return '#' + [0, 1, 2].map((i) => Math.round(p(a, i) + (p(b, i) - p(a, i)) * t).toString(16).padStart(2, '0')).join('');
 }
-// The town's limewashes, each dark to light: the tiles' grey-white, and three old colours gone pale.
+// The town's limewashes, each dark to light: wet through and gone grey-green, with three old colours
+// faded nearly out of them.
 const WASH = {
-  white: ['#7a8276', '#a4aa9c', '#b4b8a8', '#c4c8b8'],
-  ochre: ['#7e7458', '#a89c78', '#b8ac88', '#c8bc98'],
-  pink: ['#7e6e6a', '#a6948e', '#b6a49c', '#c6b4ac'],
-  blue: ['#6a767c', '#929ea2', '#a4b0b2', '#b6c0c0'],
-  stone: ['#3e4844', '#66726a', '#7a867c', '#8e9a8e'],
+  white: ['#566058', '#737d73', '#838d82', '#939d91'],
+  ochre: ['#5e5a42', '#80795c', '#908968', '#a09878'],
+  pink: ['#5e5252', '#7d6e6c', '#8d7e7a', '#9d8e8a'],
+  blue: ['#485860', '#677982', '#778992', '#879aa2'],
+  stone: ['#2a3430', '#46524c', '#566258', '#68766c'],
 };
-const DR = { dress: '#7e8880', hi: '#9aa49a', lo: '#4e5852', glass: '#0c1816', sky: '#2e5248', sash: '#3a423e', tide: '#5a7a5e' };
-const PAINT = { teal: ['#22382f', '#2e4a42', '#43645a'], ox: ['#381f1c', '#4a2e2a', '#64403a'], navy: ['#222c3a', '#2e3a4e', '#43506a'], olive: ['#2e2c1e', '#3e3a2a', '#56523a'], blue: ['#2e4450', '#45606e', '#5e7a86'], green: ['#2a3e2c', '#3e5a40', '#56765a'], red: ['#4a2a22', '#6e3e30', '#8a5440'] };
+const DR = { dress: '#6c766e', hi: '#8a948a', lo: '#3e4842', glass: '#0a1412', sky: '#2a4c42', sash: '#323a36', tide: '#4e6e54' };
+const PAINT = { teal: ['#1e3229', '#2a4239', '#3c5a50'], ox: ['#321c1a', '#432a26', '#5a3a34'], navy: ['#1e2834', '#2a3446', '#3c485e'], olive: ['#2a281c', '#38362a', '#4e4a36'], blue: ['#2a3e48', '#3e5662', '#566e7a'], green: ['#243628', '#375038', '#4c6a50'], red: ['#42261e', '#623a2c', '#7e4e3c'] };
 const SOOT = '#26282a';
 
 // Limewash over an area: mottled, a few flakes off showing the stone, rain run down from the top.
@@ -1265,13 +1326,13 @@ function wash(g, x0, y0, w, h, tone, seed) {
     const n = hr(x, y, seed);
     g.set(x, y, n < 0.1 ? tone[2] : n > 0.93 ? tone[0] : n > 0.8 ? mix(tone[1], tone[0], 0.3) : tone[1]);
   }
-  for (let i = 0; i < Math.max(1, Math.round(w * h / 260)); i++) {
+  for (let i = 0; i < Math.max(1, Math.round(w * h / 200)); i++) {
     const fx = x0 + 1 + Math.floor(hr(i, seed, 3) * (w - 6)); const fy = y0 + 1 + Math.floor(hr(seed, i, 5) * (h - 5));
     g.rect(fx, fy, 4, 2, ST[2]); g.set(fx, fy, ST[3]); g.set(fx + 3, fy + 1, ST[1]);
   }
-  for (let i = 0; i < Math.round(w / 6); i++) {
+  for (let i = 0; i < Math.round(w / 4); i++) {
     const sx = x0 + Math.floor(hr(i, seed, 9) * w);
-    g.rect(sx, y0, 1, 2 + Math.floor(hr(seed, i, 11) * 6), tone[0]);
+    g.rect(sx, y0, 1, 3 + Math.floor(hr(seed, i, 11) * 9), tone[0]);
   }
 }
 // Quoins up a corner: big and small stones in turn.
@@ -1279,194 +1340,238 @@ function quoins(g, x, y0, y1, right, seed) {
   for (let y = y0, q = seed; y < y1; y += 4, q++) {
     const wide = q % 2 ? 4 : 2;
     const xx = right ? x - wide + 1 : x;
-    g.rect(xx, y, wide, 3, q % 2 ? '#6e7a72' : '#8a968c');
-    g.rect(xx, y + 3, wide, 1, '#3e4844');
+    g.rect(xx, y, wide, 3, q % 2 ? '#5c6860' : '#748078');
+    g.rect(xx, y + 3, wide, 1, '#3a4440');
   }
 }
-// The tide: everything below line y stained green-grey, a hard line where it stood, runs below it.
+// The tide: the foot of the wall stained green-grey, darker toward the ground, a ragged line where
+// it stood and a few runs below it (no hard-edged block).
 function tideMark(g, x0, x1, y, seed) {
-  for (let yy = y + 1; yy < g.h; yy++) for (let x = x0; x < x1; x++) {
-    const c = g.get(x, yy);
-    if (c && c.length === 7) g.set(x, yy, mix(c, '#2c4a38', 0.2 + (yy - y) * 0.015));
+  for (let x = x0; x < x1; x++) {
+    const top = y + Math.round((hr(x, seed, 6) - 0.5) * 4);
+    for (let yy = top + 1; yy < g.h; yy++) {
+      const c = g.get(x, yy);
+      if (c && c.length === 7) g.set(x, yy, mix(c, '#2c4a38', 0.06 + (yy - top) * 0.012));
+    }
+    if (hr(x, seed, 8) < 0.45 && g.get(x, top)) g.set(x, top, mix(g.get(x, top), DR.tide, 0.5));
   }
-  for (let x = x0; x < x1; x++) if (g.get(x, y)) g.set(x, y + (hr(x, seed, 1) < 0.15 ? 1 : 0), DR.tide);
   for (let i = 0; i < (x1 - x0) / 5; i++) {
     const x = x0 + Math.floor(hr(i, seed, 2) * (x1 - x0));
-    if (g.get(x, y + 1)) g.rect(x, y + 1, 1, 1 + Math.floor(hr(seed, i, 4) * 4), DR.tide);
+    if (g.get(x, y + 1)) g.rect(x, y + 1, 1, 1 + Math.floor(hr(seed, i, 4) * 4), mix(g.get(x, y + 1), DR.tide, 0.6));
   }
 }
-// A window: stone dressings (10 by 13 from x, y), dark glass, a sash, the sill under it.
-function windowAt(g, x, y, shade = 0) {
-  g.rect(x, y, 10, 13, DR.dress); g.rect(x, y, 10, 1, DR.hi); g.rect(x + 9, y, 1, 13, DR.lo);
-  g.rect(x + 1, y + 1, 8, 10, DR.glass);
-  g.rect(x + 1, y + 1, 3, 1, DR.sky); g.rect(x + 1, y + 2, 1, 3, DR.sky);
-  g.rect(x + 5, y + 1, 1, 10, DR.sash); g.rect(x + 1, y + 5, 8, 1, DR.sash);
-  if (shade) { g.rect(x + 1, y + 1, 2, 10, '#2a2a26'); g.rect(x + 3, y + 1, 1, 6, '#2a2a26'); }
-  g.rect(x - 1, y + 12, 12, 2, DR.hi); g.rect(x - 1, y + 13, 12, 1, DR.lo);
+// A window with stone dressings: (x, y) is its top left, w by h with a two-row sill. The glass is
+// dark and holds a little of the storm sky.
+function winAt(g, x, y, w, h) {
+  g.rect(x, y, w, h - 2, DR.dress); g.rect(x, y, w, 1, DR.hi); g.rect(x + w - 1, y, 1, h - 2, DR.lo);
+  const gx = x + 1, gy = y + 1, gw = w - 2, gh = h - 4;
+  g.rect(gx, gy, gw, gh, DR.glass);
+  g.rect(gx, gy, 3, 1, DR.sky); g.rect(gx, gy + 1, 1, 3, DR.sky);
+  g.rect(gx + (gw >> 1), gy, 1, gh, DR.sash); g.rect(gx, gy + Math.round(gh * 0.4), gw, 1, DR.sash);
+  g.rect(x - 1, y + h - 2, w + 2, 2, DR.hi); g.rect(x - 1, y + h - 1, w + 2, 1, DR.lo);
 }
-// A pair of shutters by a window (x, y as for windowAt). 'open', 'shut' or 'hanging'.
-function shutters(g, x, y, how, paint) {
-  const leaf = (lx, ly, w, h) => {
-    g.rect(lx, ly, w, h, paint[1]); g.rect(lx, ly, 1, h, paint[2]); g.rect(lx + w - 1, ly, 1, h, paint[0]);
-    for (let j = ly + 1; j < ly + h - 1; j += 2) g.rect(lx + 1, j, w - 2, 1, paint[0]);
+// A pair of shutters by a window (x, y, w, h as for winAt). 'open', 'shut' or 'hanging'.
+function shutters(g, x, y, w, h, how, paint) {
+  const gh = h - 2;
+  const leaf = (lx, ly, lw, lh) => {
+    g.rect(lx, ly, lw, lh, paint[1]); g.rect(lx, ly, 1, lh, paint[2]); g.rect(lx + lw - 1, ly, 1, lh, paint[0]);
+    for (let j = ly + 1; j < ly + lh - 1; j += 2) g.rect(lx + 1, j, lw - 2, 1, paint[0]);
   };
   if (how === 'shut') {
-    leaf(x + 1, y + 1, 4, 10); leaf(x + 5, y + 1, 4, 10);
-    g.rect(x + 1, y + 5, 8, 1, IRON[1]); g.set(x + 5, y + 5, IRON[3]);
+    const half = (w - 2) >> 1;
+    leaf(x + 1, y + 1, half, gh - 2); leaf(x + 1 + half, y + 1, w - 2 - half, gh - 2);
+    g.rect(x + 1, y + Math.round(gh / 2), w - 2, 1, IRON[1]); g.set(x + (w >> 1), y + Math.round(gh / 2), IRON[3]);
     return;
   }
-  leaf(x - 3, y, 3, 12);
-  g.set(x - 2, y + 2, IRON[3]); g.set(x - 2, y + 9, IRON[3]);
-  if (how === 'open') { leaf(x + 10, y, 3, 12); g.set(x + 11, y + 2, IRON[3]); g.set(x + 11, y + 9, IRON[3]); return; }
+  leaf(x - 3, y, 3, gh);
+  g.set(x - 2, y + 2, IRON[3]); g.set(x - 2, y + gh - 3, IRON[3]);
+  if (how === 'open') { leaf(x + w, y, 3, gh); g.set(x + w + 1, y + 2, IRON[3]); g.set(x + w + 1, y + gh - 3, IRON[3]); return; }
   // Hanging by its bottom hinge: the leaf dropped and swung out askew, its top hinge torn out.
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 3; i++) {
     const top = y + 3 + i * 2;
-    g.rect(x + 9 + i, top, 1, 10 - i, i === 0 ? paint[2] : i === 3 ? paint[0] : paint[1]);
-    for (let j = top + 1; j < top + 9 - i; j += 2) if (i > 0 && i < 3) g.set(x + 9 + i, j, paint[0]);
+    g.rect(x + w + i, top, 1, gh - 5 - i, i === 0 ? paint[2] : i === 2 ? paint[0] : paint[1]);
+    for (let j = top + 1; j < top + gh - 7 - i; j += 2) if (i === 1) g.set(x + w + i, j, paint[0]);
   }
-  g.set(x + 10, y + 1, IRON[2]); g.set(x + 10, y + 2, RUST[1]);
-  g.set(x + 9, y + 11, IRON[3]);
+  g.set(x + w, y + 1, IRON[2]); g.set(x + w, y + 2, RUST[1]);
+  g.set(x + w, y + gh - 2, IRON[3]);
 }
-// The flood standing in a window: water to halfway up, weed hanging over the sill.
-function drowned(g, x, y) {
-  for (let j = 6; j < 11; j++) for (let i = 1; i < 9; i++) g.set(x + i, y + j, j === 6 ? '#5a9a86' : j === 7 ? '#2e6a58' : '#1e4a3e');
-  g.set(x + 2, y + 6, '#a8e0cc'); g.set(x + 7, y + 6, '#a8e0cc');
-  for (const [i, l] of [[0, 3], [2, 4], [3, 2], [7, 3], [9, 2]]) g.rect(x + i, y + 12, 1, l, i % 2 ? WEED[1] : WEED[2]);
-  g.set(x + 4, y + 12, WEED[3]);
+// The flood standing in a window: water to halfway up the glass, weed hanging over the sill.
+function drowned(g, x, y, w, h) {
+  const top = y + 1 + Math.round((h - 4) * 0.45);
+  for (let j = top; j < y + h - 3; j++) for (let i = 1; i < w - 1; i++) g.set(x + i, j, j === top ? '#4e8c78' : j === top + 1 ? '#2a6252' : '#1a4237');
+  g.set(x + 2, top, '#a0d8c4'); g.set(x + w - 3, top, '#a0d8c4');
+  for (const [i, l] of [[0, 3], [2, 5], [3, 2], [w - 3, 4], [w - 1, 2]]) g.rect(x + i, y + h - 2, 1, l, i % 2 ? WEED[1] : WEED[2]);
+  g.set(x + (w >> 1) - 1, y + h - 2, WEED[3]);
 }
 // A window bricked up: the opening filled with smaller stone, a different grey, rough mortar.
-function bricked(g, x, y) {
-  for (let j = 1; j < 11; j++) for (let i = 1; i < 9; i++) {
+function bricked(g, x, y, w, h) {
+  for (let j = 1; j < h - 3; j++) for (let i = 1; i < w - 1; i++) {
     const course = Math.floor((j - 1) / 2);
     const joint = (i + (course % 2 ? 2 : 0)) % 4 === 0;
-    g.set(x + i, y + j, (j - 1) % 2 === 1 || joint ? '#3a3e38' : hr(i, j, 7) < 0.3 ? '#7e7a6c' : '#6a685c');
+    g.set(x + i, y + j, (j - 1) % 2 === 1 || joint ? '#363a34' : hr(i, j, 7) < 0.3 ? '#767264' : '#625f54');
   }
-  g.rect(x + 1, y + 1, 8, 1, '#4a4a40');
+  g.rect(x + 1, y + 1, w - 2, 1, '#44443a');
 }
-// A window box on the sill, the flowers drowned and the weed got in among them.
-function windowBox(g, x, y) {
-  g.rect(x - 1, y + 11, 12, 4, WOOD[2]); g.rect(x - 1, y + 11, 12, 1, WOOD[3]); g.rect(x - 1, y + 14, 12, 1, WOOD[1]);
-  g.set(x + 1, y + 13, WOOD[0]); g.set(x + 8, y + 13, WOOD[0]);
-  for (const [i, h, c] of [[0, 3, WEED[2]], [1, 2, '#6a5a3a'], [3, 4, WEED[1]], [4, 2, '#8a6a6a'], [6, 3, WEED[2]], [8, 2, '#7a6a3a'], [9, 3, WEED[1]]]) g.rect(x + i, y + 11 - h, 1, h, c);
-  g.set(x + 4, y + 8, '#b07a7a'); g.set(x + 8, y + 9, '#c8b060'); g.set(x + 1, y + 8, '#a07070');
-  for (const [i, l] of [[0, 4], [2, 2], [7, 5], [9, 3]]) g.rect(x + i, y + 15, 1, l, WEED[1]);
+// A window box under the sill, the flowers drowned and the weed got in among them.
+function windowBox(g, x, y, w, h) {
+  const by = y + h - 1;
+  g.rect(x - 2, by, w + 4, 5, WOOD[2]); g.rect(x - 2, by, w + 4, 1, WOOD[3]); g.rect(x - 2, by + 4, w + 4, 1, WOOD[1]);
+  g.set(x, by + 2, WOOD[0]); g.set(x + w - 1, by + 2, WOOD[0]);
+  g.rect(x - 2, by + 1, 1, 3, WOOD[3]); g.rect(x + w + 1, by + 1, 1, 3, WOOD[1]);
+  for (const [i, hh, c] of [[-1, 3, WEED[2]], [1, 2, '#6a5a3a'], [3, 4, WEED[1]], [4, 2, '#8a6a6a'], [6, 3, WEED[2]], [8, 2, '#7a6a3a'], [w, 3, WEED[1]]]) g.rect(x + i, by - hh, 1, hh, c);
+  g.set(x + 4, by - 3, '#a47474'); g.set(x + 8, by - 2, '#b8a458'); g.set(x + 1, by - 3, '#946868');
+  for (const [i, l] of [[-1, 4], [2, 2], [7, 5], [w, 3]]) g.rect(x + i, by + 5, 1, l, WEED[1]);
 }
-// Doors, in a 10-wide opening from x, its foot on row `foot` (inclusive), 13 high.
-function doorArched(g, x, foot, paint) {
-  const top = foot - 13;
-  for (let j = 0; j <= 13; j++) for (let i = -1; i < 11; i++) {
-    const dy = Math.max(0, 5 - j); const dx = Math.abs(i - 4.5);
-    if (dx * dx + dy * dy * 1.6 > 34) continue;
-    const edge = dx * dx + dy * dy * 1.6 > 20 || i < 0 || i > 9;
-    g.set(x + i, top + j, edge ? (j < 5 ? (i % 3 === 0 ? DR.lo : DR.hi) : DR.dress) : j < 4 ? DR.glass : paint[1]);
+
+// Doors: the frame stands w wide from x, its foot on row `foot` (the step is under it). The leaf
+// is `h` tall, 26 for a house front (taller than the hero), and the frame has a lintel over it.
+function stepAt(g, x, w, foot) {
+  g.rect(x, foot + 1, w, 1, DR.hi);
+  g.rect(x - 1, foot + 2, w + 2, 1, DR.dress);
+  g.rect(x - 1, foot + 3, w + 2, 1, DR.lo);
+}
+function doorAt(g, x, foot, kind, paint, h = 26, w = 16) {
+  const top = foot - h - 1;
+  const lx = x + 2, lw = w - 4, ly = top + 3, lh = foot - ly + 1;
+  g.rect(x, top, w, foot - top + 1, DR.dress); g.rect(x, top, w, 1, DR.hi); g.rect(x + w - 1, top, 1, foot - top + 1, DR.lo);
+  g.rect(x + (w >> 1) - 1, top, 2, 3, DR.hi);
+  const leaf = (c) => g.rect(lx, ly, lw, lh, c);
+  const damp = () => { for (let y = foot - 7; y <= foot; y++) for (let i = 0; i < lw; i++) { const c = g.get(lx + i, y); if (c && c.length === 7) g.set(lx + i, y, mix(c, '#2c4a38', 0.18 + (y - foot + 7) * 0.03)); } };
+  if (kind === 'arched') {
+    leaf(paint[1]);
+    // The round head: the corners given back to the stone, a dark fanlight in it.
+    for (let j = 0; j < 5; j++) { const cut = [3, 2, 1, 1, 0][j]; for (let i = 0; i < cut; i++) { g.set(lx + i, ly + j, DR.dress); g.set(lx + lw - 1 - i, ly + j, DR.dress); } }
+    g.rect(lx + 2, ly + 1, lw - 4, 5, DR.glass); g.rect(lx + 2, ly + 1, 3, 1, DR.sky);
+    g.rect(lx + (lw >> 1), ly + 1, 1, 5, DR.sash); g.rect(lx + 2, ly + 6, lw - 4, 1, DR.sash);
+    for (let i = 0; i < lw; i += 4) g.rect(lx + i, ly + 7, 1, lh - 7, paint[0]);
+    for (let i = 1; i < lw; i += 4) g.rect(lx + i, ly + 7, 1, lh - 7, paint[2]);
+    for (const by of [ly + 10, foot - 8]) { g.rect(lx, by, lw, 2, IRON[1]); g.rect(lx, by, lw, 1, IRON[2]); g.set(lx + 2, by, IRON[4]); g.set(lx + lw - 3, by, IRON[4]); }
+    g.ring(lx + lw - 3, ly + 15, 1, 1, GILT[1]);
+    damp();
+  } else if (kind === 'knocker') {
+    leaf(paint[1]);
+    g.rect(lx + 1, ly + 1, lw - 2, 4, DR.glass); g.set(lx + 2, ly + 1, DR.sky); g.rect(lx + (lw >> 1), ly + 1, 1, 4, DR.sash);
+    g.rect(lx, ly + 5, lw, 1, paint[0]);
+    const mid = ly + 6 + Math.round((lh - 6) * 0.38);
+    for (const [py, ph] of [[ly + 7, mid - ly - 8], [mid + 1, foot - 3 - mid]]) for (const px of [lx + 1, lx + 1 + (lw >> 1)]) {
+      g.rect(px, py, (lw >> 1) - 2, ph, paint[0]); g.rect(px, py, (lw >> 1) - 2, 1, paint[2]); g.rect(px + 1, py + 1, (lw >> 1) - 4, ph - 2, paint[1]);
+    }
+    g.ring(lx + (lw >> 1), mid - 2, 1, 1, GILT[1]); g.set(lx + (lw >> 1), mid - 4, GILT[2]);
+    g.rect(lx + lw - 4, mid + 2, 3, 1, GILT[0]);
+    g.rect(lx, foot - 2, lw, 3, IRON[1]); g.rect(lx, foot - 2, lw, 1, IRON[2]);
+    damp();
+  } else if (kind === 'boarded') {
+    leaf(paint[0]);
+    for (let j = ly + 1; j < foot; j += 3) g.rect(lx, j, lw, 1, mix(paint[0], '#000000', 0.3));
+    for (const [y0, y1] of [[3, 6], [10, 8], [17, 20]]) {
+      g.line(lx - 1, ly + y0, lx + lw, ly + y1, WOOD[3]); g.line(lx - 1, ly + y0 + 1, lx + lw, ly + y1 + 1, WOOD[2]); g.line(lx - 1, ly + y0 + 2, lx + lw, ly + y1 + 2, WOOD[1]);
+      g.set(lx, ly + y0 + 1, IRON[4]); g.set(lx + lw - 1, ly + y1 + 1, IRON[4]);
+    }
+    damp();
+  } else if (kind === 'hanging') {
+    leaf('#050908');
+    g.rect(lx, foot - 6, lw, 7, '#0c2820'); g.rect(lx, foot - 6, lw, 1, '#367260');
+    // The door off its bottom hinge, hanging from the top one: swung out and down to the right.
+    for (let i = 0; i < lw - 3; i++) {
+      const t = ly + 1 + Math.round(i * 0.7);
+      g.rect(lx + 2 + i, t, 1, lh - 7 - Math.round(i * 0.3), i === 0 ? WOOD[3] : i % 2 ? WOOD[2] : WOOD[1]);
+    }
+    g.line(lx + 2, ly + 5, lx + lw - 1, ly + 10, WOOD[0]); g.line(lx + 2, ly + 15, lx + lw - 1, ly + 20, WOOD[0]);
+    g.set(lx + 2, ly + 1, IRON[3]); g.set(lx + 1, ly + 1, IRON[2]); g.set(lx + 1, ly + 2, IRON[2]);
+    g.set(lx + 1, ly + 17, RUST[1]);
+    g.rect(lx + 1, foot - 3, 2, 4, WEED[1]);
+  } else if (kind === 'glazed') {
+    leaf(paint[1]);
+    g.rect(lx + 1, ly + 1, lw - 2, 11, DR.glass); g.set(lx + 2, ly + 1, DR.sky); g.rect(lx + (lw >> 1), ly + 1, 1, 11, DR.sash); g.rect(lx + 1, ly + 6, lw - 2, 1, DR.sash);
+    g.rect(lx + 1, ly + 13, lw - 2, foot - ly - 14, paint[0]); g.rect(lx + 2, ly + 14, lw - 4, foot - ly - 16, paint[1]);
+    g.set(lx + lw - 3, ly + 14, GILT[1]);
+    damp();
+  } else if (kind === 'open') {
+    // Open on a dark hall: a warm light low on the floor, rising a little up the back wall.
+    leaf('#08100d');
+    for (let y = ly + 1; y <= foot; y++) {
+      const t = (y - (foot - 12)) / 12;
+      if (t <= 0) continue;
+      const c = mix('#0a0e0c', '#a8743a', Math.min(1, t * 0.9));
+      for (let i = 3; i < lw - 1; i++) g.set(lx + i, y, hr(i, y, 5) < 0.12 ? mix(c, '#000000', 0.25) : c);
+    }
+    g.rect(lx + 5, foot - 3, lw - 8, 4, '#d8a458'); g.rect(lx + 6, foot - 2, lw - 10, 2, '#f0c878');
+    g.rect(lx + lw - 3, ly + 3, 2, foot - ly - 6, '#16120c');
+    // The leaf, swung in against the left of the frame: wood in a narrow slant.
+    for (let i = 0; i < 3; i++) g.rect(lx + i, ly + 1 + i, 1, lh - 2 - i * 2, i === 0 ? WOOD[4] : i === 1 ? WOOD[3] : WOOD[2]);
+    g.set(lx + 1, ly + 13, IRON[3]); g.set(lx, ly + 3, IRON[3]); g.set(lx, foot - 4, IRON[3]);
   }
-  g.set(x + 4, top - 1, DR.hi); g.set(x + 5, top - 1, DR.hi); g.set(x + 4, top, DR.dress); g.set(x + 5, top, DR.dress);
-  g.set(x + 3, top + 2, DR.sky); g.set(x + 6, top + 2, DR.sash); g.set(x + 4, top + 3, DR.sash);
-  for (let j = 5; j < 14; j++) { g.set(x + 2, top + j, paint[0]); g.set(x + 5, top + j, paint[0]); g.set(x + 1, top + j, paint[2]); }
-  g.set(x + 7, top + 9, GILT[1]);
-  g.rect(x - 1, foot, 12, 1, DR.lo);
+  stepAt(g, x, w, foot);
+  if (kind === 'open') { g.rect(x + 3, foot + 1, w - 6, 1, '#b08044'); g.rect(x + 4, foot + 2, w - 8, 1, '#7e5a30'); }
 }
-function doorKnocker(g, x, foot, paint) {
-  const top = foot - 13;
-  g.rect(x, top, 10, 14, DR.dress); g.rect(x, top, 10, 1, DR.hi); g.rect(x + 9, top, 1, 14, DR.lo);
-  g.rect(x + 1, top + 1, 8, 3, DR.glass); g.set(x + 2, top + 1, DR.sky); g.set(x + 4, top + 2, DR.sash); g.set(x + 6, top + 2, DR.sash);
-  g.rect(x + 1, top + 4, 8, 10, paint[1]); g.rect(x + 1, top + 4, 8, 1, paint[2]);
-  for (const [i, j] of [[2, 6], [5, 6], [2, 10], [5, 10]]) { g.rect(x + i, top + j, 2, 3, paint[0]); g.set(x + i, top + j, paint[2]); }
-  g.ring(x + 4.5, top + 9, 1, 1, GILT[1]); g.set(x + 4, top + 8, GILT[2]);
-  g.set(x + 7, top + 9, GILT[2]);
-  g.rect(x - 1, foot, 12, 1, DR.hi); g.rect(x - 1, foot, 12, 1, ST[4]);
-}
-function doorBoarded(g, x, foot, paint) {
-  const top = foot - 13;
-  g.rect(x, top, 10, 14, DR.dress); g.rect(x, top, 10, 1, DR.hi); g.rect(x + 9, top, 1, 14, DR.lo);
-  g.rect(x + 1, top + 1, 8, 13, paint[0]);
-  for (let j = top + 2; j < foot; j += 3) g.rect(x + 1, j, 8, 1, mix(paint[0], '#000000', 0.3));
-  // Planks nailed across, not quite straight.
-  for (const [y0, y1] of [[2, 4], [7, 6], [11, 12]]) {
-    g.line(x - 1, top + y0, x + 10, top + y1, WOOD[3]); g.line(x - 1, top + y0 + 1, x + 10, top + y1 + 1, WOOD[2]);
-    g.set(x, top + y0, IRON[4]); g.set(x + 9, top + y1, IRON[4]);
-  }
-}
-function doorHanging(g, x, foot) {
-  const top = foot - 13;
-  g.rect(x, top, 10, 14, DR.dress); g.rect(x, top, 10, 1, DR.hi); g.rect(x + 9, top, 1, 14, DR.lo);
-  g.rect(x + 1, top + 1, 8, 13, '#060a08');
-  g.rect(x + 1, top + 10, 8, 4, '#0e2a22'); g.rect(x + 1, top + 10, 8, 1, '#3e7a66');
-  // The door off its bottom hinge, hanging from the top one: swung out and down to the right.
-  for (let i = 0; i < 7; i++) {
-    const t = top + 1 + Math.round(i * 0.7);
-    g.rect(x + 3 + i, t, 1, 12, i === 0 ? WOOD[3] : i % 2 ? WOOD[2] : WOOD[1]);
-  }
-  g.line(x + 3, top + 3, x + 9, top + 7, WOOD[0]); g.line(x + 3, top + 10, x + 9, top + 14, WOOD[0]);
-  g.set(x + 3, top + 1, IRON[3]); g.set(x + 2, top + 1, IRON[2]);
-  g.set(x + 2, top + 11, RUST[1]);
-}
-// A sign hung off a wrought bracket bolted to the wall: plate at x, arm along row y.
-function bracketSign(g, x, y, kind) {
-  g.rect(x, y - 1, 2, 6, IRON[2]); g.set(x, y, IRON[4]); g.set(x, y + 3, IRON[4]);
-  g.rect(x + 1, y, 13, 1, IRON[2]); g.set(x + 14, y - 1, IRON[2]); g.set(x + 13, y - 2, IRON[2]);
-  g.line(x + 1, y + 4, x + 6, y + 1, IRON[1]);
-  g.set(x + 4, y + 2, IRON[2]);
-  g.set(x + 5, y + 1, IRON[3]); g.set(x + 12, y + 1, IRON[3]);
-  const bx = x + 3, by = y + 2, bw = 11, bh = 8;
-  const board = kind === 'key' ? ['#2e3a4e', '#43506a'] : kind === 'boot' ? ['#4a2e2a', '#64403a'] : ['#2e4a42', '#43645a'];
+// A sign hung under an iron arm: the plate (x, y) bolted to the wall, the arm out along row y,
+// a chain from it at each end of the board.
+function bracketSign(g, x, y, kind, bw = 12) {
+  g.rect(x, y - 2, 2, 12, IRON[2]); g.set(x, y, IRON[4]); g.set(x, y + 6, IRON[4]);
+  g.rect(x + 1, y, bw + 3, 1, IRON[2]); g.set(x + bw + 3, y - 1, IRON[2]); g.set(x + bw + 2, y - 2, IRON[2]);
+  g.line(x + 1, y + 8, x + 7, y + 1, IRON[1]);
+  g.set(x + 4, y + 4, IRON[2]);
+  const bx = x + 3, by = y + 3, bh = 11;
+  g.set(bx + 1, y + 1, IRON[3]); g.set(bx + 1, y + 2, IRON[3]); g.set(bx + bw - 2, y + 1, IRON[3]); g.set(bx + bw - 2, y + 2, IRON[3]);
+  const board = kind === 'key' ? ['#2a364a', '#3e4a64'] : kind === 'boot' ? ['#432a26', '#5c3c34'] : ['#2a4239', '#3e5c50'];
   g.rect(bx, by, bw, bh, board[0]); g.rect(bx + 1, by + 1, bw - 2, bh - 2, board[1]); g.rect(bx, by, bw, 1, mix(board[1], '#ffffff', 0.2));
   if (kind === 'fish') {
-    g.oval(bx + 5, by + 4, 3, 1, '#a8b4b0'); g.set(bx + 2, by + 3, '#a8b4b0'); g.set(bx + 2, by + 5, '#a8b4b0');
-    g.set(bx + 7, by + 3, '#1a1a1a'); g.rect(bx + 4, by + 5, 3, 1, '#7a8884');
+    g.oval(bx + 6, by + 5, 3, 2, '#9ca8a4'); g.set(bx + 2, by + 3, '#9ca8a4'); g.set(bx + 2, by + 7, '#9ca8a4'); g.set(bx + 3, by + 4, '#9ca8a4'); g.set(bx + 3, by + 6, '#9ca8a4');
+    g.set(bx + 8, by + 4, '#1a1a1a'); g.rect(bx + 4, by + 6, 4, 1, '#728078');
   } else if (kind === 'key') {
-    g.ring(bx + 3, by + 4, 1, 1, GILT[1]); g.rect(bx + 5, by + 4, 5, 1, GILT[1]); g.set(bx + 8, by + 5, GILT[1]); g.set(bx + 9, by + 5, GILT[0]);
+    g.ring(bx + 3, by + 5, 2, 2, GILT[1]); g.rect(bx + 5, by + 5, 6, 1, GILT[1]); g.set(bx + 8, by + 6, GILT[1]); g.set(bx + 9, by + 6, GILT[0]); g.set(bx + 10, by + 6, GILT[1]);
   } else {
-    g.rect(bx + 3, by + 2, 3, 4, '#2a1c14'); g.rect(bx + 3, by + 5, 6, 2, '#2a1c14'); g.set(bx + 4, by + 2, '#5a4030'); g.set(bx + 8, by + 5, '#5a4030');
+    g.rect(bx + 3, by + 2, 4, 5, '#241810'); g.rect(bx + 3, by + 6, 7, 3, '#241810'); g.set(bx + 4, by + 2, '#54402e'); g.set(bx + 9, by + 7, '#54402e');
   }
-  g.set(bx + 2, by + bh, STAIN[2]); g.set(bx + 8, by + bh, STAIN[2]);
+  g.set(bx + 2, by + bh, STAIN[2]); g.set(bx + 8, by + bh, STAIN[2]); g.set(bx + 8, by + bh + 1, STAIN[1]);
 }
 // A downpipe from a hopper at the eaves (row `top`) to `foot`, at x (2 wide).
 function downpipe(g, x, top, foot) {
   g.rect(x - 1, top, 4, 3, IRON[1]); g.rect(x - 1, top, 4, 1, IRON[3]); g.set(x - 1, top + 2, IRON[0]);
   g.rect(x, top + 3, 2, foot - top - 3, '#1e2422'); g.rect(x, top + 3, 1, foot - top - 3, '#3a4442');
-  for (let y = top + 6; y < foot - 1; y += 6) { g.rect(x - 1, y, 4, 1, IRON[0]); g.set(x - 1, y, IRON[2]); }
+  for (let y = top + 8; y < foot - 1; y += 8) { g.rect(x - 1, y, 4, 1, IRON[0]); g.set(x - 1, y, IRON[2]); }
   g.rect(x, foot - 1, 3, 1, '#1e2422'); g.set(x + 2, foot - 2, '#1e2422');
   for (let y = top + 4; y < foot - 1; y++) if (hr(x, y, 21) < 0.7) g.set(x + 2, y, mix(g.get(x + 2, y) ?? '#808878', '#3a5a40', 0.45));
   for (let y = top + 9; y < foot - 1; y++) if (hr(y, x, 23) < 0.5) g.set(x - 1, y, mix(g.get(x - 1, y) ?? '#808878', '#3a5a40', 0.35));
 }
-// A striped awning: canvas from x0 for w wide, its batten along row y, brackets under it.
+// A striped awning: canvas from x0 for w wide, its batten along row y, iron stays under it.
 function awning(g, x0, w, y, torn) {
-  const RED = ['#5a2a24', '#7e3a30', '#9a4a3c'], CRM = ['#8a8270', '#aea490', '#c4baa2'];
-  g.rect(x0, y, w, 1, WOOD[1]);
-  for (let j = 1; j <= 6; j++) for (let i = 0; i < w; i++) {
+  const RED = ['#4e2620', '#6e342a', '#86443a'], CRM = ['#76705f', '#948c78', '#aaa28a'];
+  g.rect(x0, y, w, 2, WOOD[1]); g.rect(x0, y, w, 1, WOOD[2]);
+  for (let j = 2; j <= 9; j++) for (let i = 0; i < w; i++) {
     const xx = x0 + i;
-    if (torn && i > w * 0.55 && j > 2 + ((i * 7) % 3)) continue;
+    if (torn && i > w * 0.55 && j > 4 + ((i * 7) % 3)) continue;
     const red = Math.floor(i / 3) % 2 === 0;
     const c = red ? RED : CRM;
-    g.set(xx, y + j, j === 1 ? c[2] : j > 4 ? c[0] : c[1]);
+    g.set(xx, y + j, j === 2 ? c[2] : j > 7 ? c[0] : c[1]);
   }
   // The valance: scalloped.
   for (let i = 0; i < w; i++) {
     if (torn && i > w * 0.55) continue;
     const red = Math.floor(i / 3) % 2 === 0;
-    if (i % 3 !== 2) g.set(x0 + i, y + 7, red ? RED[0] : CRM[0]);
+    g.set(x0 + i, y + 10, red ? RED[0] : CRM[0]);
+    if (i % 3 !== 2) g.set(x0 + i, y + 11, red ? RED[0] : CRM[0]);
   }
   if (torn) {
-    for (const [i, l] of [[Math.round(w * 0.62), 7], [Math.round(w * 0.74), 5], [Math.round(w * 0.86), 8]]) {
-      g.rect(x0 + i, y + 3, 1, l, Math.floor(i / 3) % 2 === 0 ? RED[1] : CRM[1]);
-      g.set(x0 + i + 1, y + 3 + l, Math.floor(i / 3) % 2 === 0 ? RED[0] : CRM[0]);
+    for (const [i, l] of [[Math.round(w * 0.62), 8], [Math.round(w * 0.74), 5], [Math.round(w * 0.86), 9]]) {
+      g.rect(x0 + i, y + 5, 1, l, Math.floor(i / 3) % 2 === 0 ? RED[1] : CRM[1]);
+      g.set(x0 + i + 1, y + 5 + l, Math.floor(i / 3) % 2 === 0 ? RED[0] : CRM[0]);
     }
   }
-  // Iron brackets: a strut from the wall up to the front of the canvas at each end.
-  for (const bx of [x0 + 1, x0 + w - 2]) { g.line(bx, y + 11, bx, y + 7, IRON[1]); g.set(bx, y + 12, IRON[3]); }
-  g.line(x0 + 1, y + 11, x0 + 3, y + 8, IRON[1]); g.line(x0 + w - 2, y + 11, x0 + w - 4, y + 8, IRON[1]);
+  // Iron stays: an arm from the wall under each end of the canvas, bolted.
+  for (const bx of [x0 + 1, x0 + w - 2]) { g.rect(bx, y + 12, 1, 5, IRON[1]); g.set(bx, y + 17, IRON[3]); g.set(bx, y + 14, IRON[3]); }
+  g.line(x0 + 1, y + 17, x0 + 4, y + 12, IRON[1]); g.line(x0 + w - 2, y + 17, x0 + w - 5, y + 12, IRON[1]);
 }
 // A storm lamp hung off a wall bracket (plate at x, y), lit.
 function wallLamp(g, x, y) {
-  g.rect(x, y, 2, 5, IRON[2]); g.set(x, y + 1, IRON[4]); g.set(x, y + 3, IRON[4]);
+  g.rect(x, y, 2, 7, IRON[2]); g.set(x, y + 1, IRON[4]); g.set(x, y + 5, IRON[4]);
   g.line(x + 1, y + 1, x + 4, y - 4, IRON[2]); g.rect(x + 4, y - 4, 6, 1, IRON[2]); g.set(x + 10, y - 5, IRON[2]);
-  g.line(x + 1, y + 3, x + 5, y - 3, IRON[1]);
+  g.line(x + 1, y + 5, x + 5, y - 3, IRON[1]);
   g.set(x + 8, y - 3, IRON[3]);
   g.rect(x + 6, y - 2, 5, 1, IRON[1]); g.rect(x + 7, y - 3, 3, 1, IRON[2]);
-  g.rect(x + 6, y - 1, 5, 6, '#c8862c'); g.rect(x + 7, y, 3, 4, '#ffd27a'); g.set(x + 8, y + 1, '#fff4c8');
-  g.rect(x + 6, y - 1, 1, 6, '#8a5a1c'); g.rect(x + 8, y - 1, 1, 1, IRON[1]);
-  g.rect(x + 6, y + 5, 5, 1, IRON[1]); g.set(x + 8, y + 6, IRON[2]);
+  g.rect(x + 6, y - 1, 5, 7, '#c8862c'); g.rect(x + 7, y, 3, 5, '#ffd27a'); g.set(x + 8, y + 1, '#fff4c8');
+  g.rect(x + 6, y - 1, 1, 7, '#8a5a1c'); g.rect(x + 8, y - 1, 1, 1, IRON[1]);
+  g.rect(x + 6, y + 6, 5, 1, IRON[1]); g.set(x + 8, y + 7, IRON[2]);
 }
 // A gable end: a triangle of wash over x0..x0+w, its peak at (cx, peak), its foot on row base,
 // slate barge boards along the slopes.
@@ -1484,102 +1589,143 @@ function gableEnd(g, x0, w, peak, base, tone, seed) {
   }
   g.rect(Math.round(cx), peak - 3, 1, 3, IRON[2]); g.set(Math.round(cx) - 1, peak - 2, IRON[2]); g.set(Math.round(cx) + 1, peak - 2, IRON[2]);
 }
+// The roof's eave over a low front (the steps, the rooftops): a slate lip, then a stone cornice.
+function eave(g, w) {
+  for (let y = 0; y < 3; y++) for (let x = 0; x < w; x++) g.set(x, y, hr(x, y, 91) < 0.2 ? SLATE[3] : y === 0 ? SLATE[2] : SLATE[1]);
+  g.rect(0, 3, w, 2, ST[3]); g.rect(0, 3, w, 1, ST[4]); g.rect(0, 4, w, 1, ST[1]);
+  for (let x = 2; x < w; x += 6) g.set(x, 3, ST[2]);
+}
 
-function houseGable(tone = WASH.ochre, shut = PAINT.blue, door = PAINT.teal) {
-  const g = new Grid(32, 46);
-  wash(g, 0, 15, 32, 31, tone, 31);
-  gableEnd(g, 0, 32, 3, 16, tone, 32);
-  quoins(g, 0, 15, 46, false, 0); quoins(g, 31, 15, 46, true, 1);
-  // A round vent up in the gable, a string course between the floors.
-  g.oval(16, 10, 2, 2, DR.dress); g.oval(16, 10, 1, 1, DR.glass); g.set(16, 10, DR.sash);
-  g.rect(0, 28, 32, 1, DR.hi); g.rect(0, 29, 32, 1, DR.lo);
-  windowAt(g, 11, 15); shutters(g, 11, 15, 'open', shut);
-  doorArched(g, 4, 45, door);
-  windowAt(g, 18, 31); drowned(g, 18, 31);
-  downpipe(g, 29, 15, 46);
-  tideMark(g, 0, 32, 38, 3);
+// A low front is 32 high: its eave, then the ground floor (no upper floor).
+const LOW_H = 32;
+const doorFoot = (low, E) => (low ? LOW_H - 4 : E + 44);
+const doorH = (low) => (low ? 23 : 26);
+// Top y of a 15-high ground-floor window.
+const groundY = (low, E) => (low ? 9 : E + 20);
+
+function houseGable(low, tone = WASH.ochre, shut = PAINT.blue, door = PAINT.teal) {
+  const E = 14, H = low ? LOW_H : E + 48;
+  const g = new Grid(32, H);
+  if (low) {
+    wash(g, 0, 5, 32, H - 5, tone, 31); eave(g, 32);
+  } else {
+    wash(g, 0, E, 32, H - E, tone, 31);
+    gableEnd(g, 0, 32, 3, E + 1, tone, 32);
+    g.oval(16, 10, 2, 2, DR.dress); g.oval(16, 10, 1, 1, DR.glass); g.set(16, 10, DR.sash);
+    g.rect(0, E + 17, 32, 1, DR.hi); g.rect(0, E + 18, 32, 1, DR.lo);
+    winAt(g, 6, E + 3, 10, 13); shutters(g, 6, E + 3, 10, 13, 'open', shut);
+    winAt(g, 20, E + 3, 10, 13); shutters(g, 20, E + 3, 10, 13, 'shut', shut);
+  }
+  quoins(g, 0, low ? 5 : E, H, false, 0); quoins(g, 31, low ? 5 : E, H, true, 1);
+  doorAt(g, 2, doorFoot(low, E), 'arched', door, doorH(low));
+  winAt(g, 20, groundY(low, E), 10, 15); drowned(g, 20, groundY(low, E), 10, 15);
+  tideMark(g, 0, 32, H - 12, 3);
   g.outline(OUT);
   return g.rows();
 }
 
-function houseDutch() {
-  const g = new Grid(32, 44);
+function houseDutch(low) {
+  const E = 14, H = low ? LOW_H : E + 48;
+  const g = new Grid(32, H);
   const tone = WASH.stone;
+  const y0 = low ? 5 : E;
   // Ashlar courses, each block its own shade.
-  for (let y = 14; y < 44; y++) for (let x = 0; x < 32; x++) {
-    const course = Math.floor((y - 14) / 4); const off = course % 2 ? 4 : 0;
-    const joint = (y - 14) % 4 === 3 || (x + off) % 8 === 0;
+  for (let y = y0; y < H; y++) for (let x = 0; x < 32; x++) {
+    const course = Math.floor((y - y0) / 4); const off = course % 2 ? 4 : 0;
+    const joint = (y - y0) % 4 === 3 || (x + off) % 8 === 0;
     g.set(x, y, joint ? tone[0] : hr(Math.floor((x + off) / 8), course, 41) < 0.4 ? tone[2] : tone[1]);
   }
-  // The stepped gable: three steps up each side, coping stones on every tread.
-  const steps = [[0, 32, 14], [3, 26, 10], [7, 18, 6], [11, 10, 2]];
-  for (const [x, w, y] of steps) {
-    for (let yy = y; yy < y + 4; yy++) for (let xx = x; xx < x + w; xx++) g.set(xx, yy, hr(xx, yy, 43) < 0.15 ? tone[2] : tone[1]);
-    g.rect(x, y, w, 1, tone[3]); g.rect(x, y + 1, w, 1, tone[0]);
+  if (low) {
+    eave(g, 32);
+  } else {
+    // The stepped gable: three steps up each side, coping stones on every tread.
+    const steps = [[0, 32, E], [3, 26, E - 4], [7, 18, E - 8], [11, 10, E - 12]];
+    for (const [x, w, y] of steps) {
+      for (let yy = y; yy < y + 4; yy++) for (let xx = x; xx < x + w; xx++) g.set(xx, yy, hr(xx, yy, 43) < 0.15 ? tone[2] : tone[1]);
+      g.rect(x, y, w, 1, tone[3]); g.rect(x, y + 1, w, 1, tone[0]);
+    }
+    g.rect(14, 3, 4, 5, DR.glass); g.rect(14, 3, 4, 1, tone[3]); g.set(15, 4, DR.sky);
+    g.rect(0, E + 17, 32, 1, tone[3]); g.rect(0, E + 18, 32, 1, tone[0]);
+    winAt(g, 11, E + 3, 10, 13); bricked(g, 11, E + 3, 10, 13);
   }
-  g.rect(14, 4, 4, 5, DR.glass); g.rect(14, 4, 4, 1, tone[3]); g.set(15, 5, DR.sky);
-  windowAt(g, 11, 15); bricked(g, 11, 15);
-  doorHanging(g, 3, 43);
-  windowAt(g, 19, 30);
-  bracketSign(g, 16, 29, 'key');
-  tideMark(g, 0, 32, 37, 5);
-  // Weed in the door's foot, pulled in with the water.
-  g.rect(2, 41, 2, 3, WEED[1]); g.set(13, 42, WEED[2]);
+  doorAt(g, 2, doorFoot(low, E), 'hanging', null, doorH(low));
+  winAt(g, 21, groundY(low, E), 10, 15);
+  if (!low) bracketSign(g, 18, E + 21, 'key');
+  tideMark(g, 0, 32, H - 12, 5);
+  g.rect(3, H - 5, 2, 3, WEED[1]); g.set(18, H - 4, WEED[2]);
   g.outline(OUT);
   return g.rows();
 }
 
-function houseParapet(tone = WASH.white, shut = PAINT.green, door = PAINT.ox) {
-  const g = new Grid(32, 34);
-  wash(g, 0, 4, 32, 30, tone, 51);
-  // The parapet and its coping.
-  g.rect(0, 2, 32, 3, ST[3]); g.rect(0, 2, 32, 1, ST[5]); g.rect(0, 4, 32, 1, ST[1]);
-  for (let x = 3; x < 32; x += 7) g.set(x, 3, ST[2]);
-  g.rect(0, 16, 32, 1, DR.hi); g.rect(0, 17, 32, 1, DR.lo);
-  windowAt(g, 4, 5); shutters(g, 4, 5, 'shut', shut);
-  windowAt(g, 19, 5); shutters(g, 19, 5, 'shut', shut);
-  doorKnocker(g, 4, 33, door);
-  windowAt(g, 19, 19); windowBox(g, 19, 19);
-  quoins(g, 0, 5, 34, false, 1); quoins(g, 31, 5, 34, true, 0);
-  tideMark(g, 0, 32, 28, 7);
+function houseParapet(low, tone = WASH.white, shut = PAINT.green, door = PAINT.ox) {
+  const E = 5, H = low ? LOW_H : E + 48;
+  const g = new Grid(32, H);
+  if (low) {
+    wash(g, 0, 5, 32, H - 5, tone, 51); eave(g, 32);
+  } else {
+    wash(g, 0, 3, 32, H - 3, tone, 51);
+    // The parapet and its coping.
+    g.rect(0, 0, 32, 4, ST[3]); g.rect(0, 0, 32, 1, ST[5]); g.rect(0, 3, 32, 1, ST[1]);
+    for (let x = 3; x < 32; x += 7) g.set(x, 1, ST[2]);
+    g.rect(0, E + 17, 32, 1, DR.hi); g.rect(0, E + 18, 32, 1, DR.lo);
+    winAt(g, 4, E + 3, 10, 13); shutters(g, 4, E + 3, 10, 13, 'shut', shut);
+    winAt(g, 20, E + 3, 10, 13); shutters(g, 20, E + 3, 10, 13, 'shut', shut);
+  }
+  quoins(g, 0, low ? 5 : 3, H, false, 1); quoins(g, 31, low ? 5 : 3, H, true, 0);
+  doorAt(g, 2, doorFoot(low, E), 'knocker', door, doorH(low));
+  winAt(g, 20, groundY(low, E), 10, 15); windowBox(g, 20, groundY(low, E), 10, 15);
+  tideMark(g, 0, 32, H - 12, 7);
   g.outline(OUT);
   return g.rows();
 }
 
-function houseShop() {
-  const g = new Grid(32, 32);
+function houseShop(low) {
+  const E = 3, H = low ? LOW_H : E + 48;
+  const g = new Grid(32, H);
   const tone = WASH.blue;
-  wash(g, 0, 3, 32, 29, tone, 61);
-  g.rect(0, 1, 32, 3, ST[3]); g.rect(0, 1, 32, 1, ST[4]); g.rect(0, 3, 32, 1, ST[1]);
-  windowAt(g, 11, 4); shutters(g, 11, 4, 'hanging', PAINT.red);
+  if (low) {
+    wash(g, 0, 5, 32, H - 5, tone, 61); eave(g, 32);
+  } else {
+    wash(g, 0, 2, 32, H - 2, tone, 61);
+    g.rect(0, 0, 32, 3, ST[3]); g.rect(0, 0, 32, 1, ST[4]); g.rect(0, 2, 32, 1, ST[1]);
+    winAt(g, 11, E + 3, 10, 13); shutters(g, 11, E + 3, 10, 13, 'hanging', PAINT.red);
+  }
   // The fascia, painted, its letters gone pale.
-  g.rect(0, 17, 32, 5, '#1e3228'); g.rect(0, 17, 32, 1, '#3e5a4c'); g.rect(0, 21, 32, 1, '#101a16');
-  g.text(7, 17, 'SAILS', '#b8b08a');
-  // The shop window, wide, drowned to half way; the glazed door.
-  g.rect(1, 22, 20, 10, DR.dress); g.rect(2, 23, 18, 8, DR.glass); g.rect(2, 23, 5, 1, DR.sky);
-  for (const x of [8, 14]) g.rect(x, 23, 1, 8, DR.sash);
-  for (let x = 2; x < 20; x++) { g.set(x, 27, '#5a9a86'); g.rect(x, 28, 1, 3, '#1e4a3e'); }
-  g.set(5, 27, '#a8e0cc'); g.set(16, 27, '#a8e0cc');
-  for (const [x, l] of [[3, 2], [9, 3], [12, 1], [18, 2]]) g.rect(x, 28, 1, l, WEED[1]);
+  const fy = low ? 6 : E + 19;
+  g.rect(0, fy, 19, 6, '#1a2c24'); g.rect(0, fy, 19, 1, '#38544a'); g.rect(0, fy + 5, 19, 1, '#0e1814');
+  g.text(3, fy + 1, 'SAIL', '#a8a07e');
+  // The shop window, wide, drowned to half way, a stall riser under it; the glazed door.
+  const wy = fy + 7, wh = H - 4 - wy - 4;
+  g.rect(1, wy, 18, wh + 2, DR.dress); g.rect(2, wy + 1, 16, wh, DR.glass); g.rect(2, wy + 1, 5, 1, DR.sky);
+  for (const x of [7, 12]) g.rect(x, wy + 1, 1, wh, DR.sash);
+  const wt = wy + 1 + Math.round(wh * 0.55);
+  for (let x = 2; x < 18; x++) { g.set(x, wt, '#4e8c78'); g.rect(x, wt + 1, 1, wy + wh - wt, '#1a4237'); }
+  g.set(5, wt, '#a0d8c4'); g.set(14, wt, '#a0d8c4');
+  for (const [x, l] of [[3, 2], [8, 3], [11, 1], [16, 2]]) g.rect(x, wy + wh - l + 1, 1, l, WEED[1]);
   // Coils of rope still on the window's shelf above the water.
-  g.ring(5, 25, 1, 1, '#8a7a52'); g.ring(11, 25, 1, 1, '#9a8a5a'); g.ring(17, 25, 1, 1, '#8a7a52');
-  g.rect(22, 21, 9, 11, DR.dress); g.rect(23, 22, 7, 10, PAINT.navy[1]); g.rect(24, 23, 5, 4, DR.glass); g.set(24, 23, DR.sky);
-  g.set(28, 28, GILT[1]);
-  awning(g, 0, 21, 20, true);
-  tideMark(g, 0, 32, 27, 9);
+  g.ring(4, wy + 4, 1, 1, '#7a6c48'); g.ring(10, wy + 4, 1, 1, '#8a7a50'); g.ring(15, wy + 4, 1, 1, '#7a6c48');
+  g.rect(1, wy + wh + 2, 18, H - 4 - wy - wh - 1, ST[2]); g.rect(1, wy + wh + 2, 18, 1, ST[3]);
+  doorAt(g, 19, doorFoot(low, E), 'glazed', PAINT.navy, doorH(low), 13);
+  quoins(g, 0, low ? 5 : 2, H, false, 0);
+  tideMark(g, 0, 32, H - 12, 9);
   g.outline(OUT);
   return g.rows();
 }
 
-function houseNarrow(tone = WASH.pink, shut = PAINT.blue) {
-  const g = new Grid(16, 40);
-  wash(g, 0, 12, 16, 28, tone, 71);
-  gableEnd(g, 0, 16, 4, 13, tone, 72);
-  g.rect(7, 8, 2, 2, DR.glass);
-  windowAt(g, 3, 12); shutters(g, 3, 12, 'hanging', shut);
-  doorBoarded(g, 3, 39, PAINT.olive);
-  g.rect(0, 12, 1, 28, tone[0]); g.rect(15, 12, 1, 28, tone[0]);
-  tideMark(g, 0, 16, 32, 11);
+function houseNarrow(low, tone = WASH.pink, shut = PAINT.blue) {
+  const E = 8, H = low ? LOW_H : E + 48;
+  const g = new Grid(16, H);
+  if (low) {
+    wash(g, 0, 5, 16, H - 5, tone, 71); eave(g, 16);
+  } else {
+    wash(g, 0, E, 16, H - E, tone, 71);
+    gableEnd(g, 0, 16, 3, E + 1, tone, 72);
+    g.rect(7, 4, 2, 2, DR.glass);
+    winAt(g, 3, E + 3, 10, 13); shutters(g, 3, E + 3, 10, 13, 'hanging', shut);
+    g.rect(0, E + 17, 16, 1, DR.hi); g.rect(0, E + 18, 16, 1, DR.lo);
+  }
+  doorAt(g, 0, doorFoot(low, E), 'boarded', PAINT.olive, doorH(low));
+  tideMark(g, 0, 16, H - 12, 11);
   g.outline(OUT);
   return g.rows();
 }
@@ -1588,7 +1734,7 @@ function dormer() {
   const g = new Grid(16, 18);
   // Slate cheeks and a little gable roof on the slope, the window looking out.
   for (let y = 2; y < 8; y++) { const hw = Math.round((y - 2) * 1.2) + 1; g.rect(8 - hw, y, hw * 2, 1, y % 2 ? SLATE[2] : SLATE[1]); g.set(8 - hw, y, SLATE[3]); }
-  g.rect(2, 8, 12, 9, LIME[1]); g.rect(2, 8, 1, 9, LIME[2]); g.rect(13, 8, 1, 9, LIME[0]);
+  g.rect(2, 8, 12, 9, WASH.white[1]); g.rect(2, 8, 1, 9, WASH.white[3]); g.rect(13, 8, 1, 9, WASH.white[0]);
   g.rect(4, 9, 8, 7, DR.dress); g.rect(5, 10, 6, 5, DR.glass); g.rect(5, 10, 2, 1, DR.sky); g.rect(8, 10, 1, 5, DR.sash);
   g.rect(1, 16, 14, 2, SLATE[0]); g.rect(1, 16, 14, 1, SLATE[3]);
   g.set(8, 1, IRON[2]); g.set(8, 0, IRON[3]);
@@ -1597,25 +1743,39 @@ function dormer() {
 }
 
 function chimneyShort() {
-  const g = new Grid(16, 26);
-  g.rect(4, 8, 8, 16, ST[2]);
-  for (let r = 0; r < 4; r++) for (let bx = 4 + (r % 2 ? 2 : 0); bx < 12; bx += 4) { g.rect(bx, 9 + r * 4, Math.min(3, 12 - bx), 3, ST[3]); g.set(bx, 9 + r * 4, ST[4]); }
-  g.rect(11, 8, 1, 16, ST[1]);
-  g.line(6, 8, 6, 14, SOOT);
-  g.rect(3, 6, 10, 2, ST[4]); g.rect(3, 6, 10, 1, ST[5]);
-  g.rect(6, 1, 4, 5, '#8a5a3a'); g.rect(6, 1, 1, 5, '#a87a52'); g.rect(6, 0, 4, 1, '#a87a52'); g.set(7, 0, '#1a1210');
-  g.rect(2, 23, 12, 3, '#5a6266'); g.rect(2, 23, 12, 1, '#7a8488');
+  const g = new Grid(16, 16);
+  g.rect(4, 5, 8, 9, ST[2]);
+  for (let r = 0; r < 2; r++) for (let bx = 4 + (r % 2 ? 2 : 0); bx < 12; bx += 4) { g.rect(bx, 6 + r * 4, Math.min(3, 12 - bx), 3, ST[3]); g.set(bx, 6 + r * 4, ST[4]); }
+  g.rect(11, 5, 1, 9, ST[1]);
+  g.line(6, 5, 6, 10, SOOT);
+  g.rect(3, 3, 10, 2, ST[4]); g.rect(3, 3, 10, 1, ST[5]);
+  g.rect(6, 0, 4, 3, '#8a5a3a'); g.rect(6, 0, 1, 3, '#a87a52'); g.rect(6, 0, 4, 1, '#a87a52'); g.set(7, 0, '#1a1210');
+  g.rect(2, 13, 12, 3, '#4a5256'); g.rect(2, 13, 12, 1, '#687276');
   g.outline(OUT);
   return g.rows();
 }
 
-// Pieces laid on a front tile (16 by 16 unless said), see-through round what they add.
-function ov(fn, w = 16, h = 16) {
+// Pieces laid on a front tile (16 wide, 48 high unless said), see-through round what they add.
+function ov(fn, w = 16, h = 48) {
   const g = new Grid(w, h);
   fn(g);
   return g.rows();
 }
-const OV_WIN = (fn) => ov((g) => fn(g, 3, 1));
+// A window pair: an upper-floor window over a ground-floor one (both 10 wide at x 3, so shutters
+// open out to the tile's edges), `fn` adding to the ground one and `how` hanging shutters on it.
+const OV_WIN = (fn, how = null, paint = null) => ov((g) => {
+  winAt(g, 3, 2, 10, 13);
+  winAt(g, 3, 24, 10, 15);
+  fn(g, 3, 24, 10, 15);
+  if (how) shutters(g, 3, 24, 10, 15, how, paint);
+  g.rect(0, 19, 16, 1, DR.hi); g.rect(0, 20, 16, 1, DR.lo);
+});
+// A front door and a window over it.
+const OV_DOOR = (kind, paint) => ov((g) => {
+  winAt(g, 3, 2, 10, 13);
+  doorAt(g, 0, 44, kind, paint, 26, 16);
+});
+const NO = () => {};
 
 // --- In the water (2026-11-08) ----------------------------------------------------------------------
 //   mw_cart_sunk (2)       a handcart gone nose-down in the flood, a wheel and the shafts out of it
@@ -1858,6 +2018,7 @@ export const MW_PROP_SPRITES = {
   mw_dresser: dresser(),
   mw_coat_pegs: coatPegs(),
   mw_bell_tower: bellTower(),
+  mw_tower_porch: porchFront(),
   mw_tower_door: towerDoor(false),
   mw_tower_door_open: towerDoor(true),
   mw_flood_grate: floodGrate(),
@@ -1869,35 +2030,45 @@ export const MW_PROP_SPRITES = {
   mw_peal_board: pealBoard(),
   mw_ropes_coiled: ropesCoiled(),
   mw_bubbles: bubbles(0),
-  // House fronts (2026-11-08).
-  mw_house_gable: houseGable(),
-  mw_house_gable_b: houseGable(WASH.blue, PAINT.red, PAINT.ox),
-  mw_house_gable_c: houseGable(WASH.pink, PAINT.green, PAINT.navy),
-  mw_house_dutch: houseDutch(),
-  mw_house_parapet: houseParapet(),
-  mw_house_parapet_b: houseParapet(WASH.ochre, PAINT.blue, PAINT.green),
-  mw_house_shop: houseShop(),
-  mw_house_narrow: houseNarrow(),
-  mw_house_narrow_b: houseNarrow(WASH.white, PAINT.red),
+  // House fronts (2026-11-08, redrawn 2026-11-15): 48 high over the street row, `_low` 32 high.
+  mw_house_gable: houseGable(false),
+  mw_house_gable_b: houseGable(false, WASH.blue, PAINT.red, PAINT.ox),
+  mw_house_gable_c: houseGable(false, WASH.pink, PAINT.green, PAINT.navy),
+  mw_house_dutch: houseDutch(false),
+  mw_house_parapet: houseParapet(false),
+  mw_house_parapet_b: houseParapet(false, WASH.ochre, PAINT.blue, PAINT.green),
+  mw_house_shop: houseShop(false),
+  mw_house_narrow: houseNarrow(false),
+  mw_house_narrow_b: houseNarrow(false, WASH.white, PAINT.red),
+  mw_house_gable_low: houseGable(true),
+  mw_house_gable_b_low: houseGable(true, WASH.blue, PAINT.red, PAINT.ox),
+  mw_house_gable_c_low: houseGable(true, WASH.pink, PAINT.green, PAINT.navy),
+  mw_house_dutch_low: houseDutch(true),
+  mw_house_parapet_low: houseParapet(true),
+  mw_house_parapet_b_low: houseParapet(true, WASH.ochre, PAINT.blue, PAINT.green),
+  mw_house_shop_low: houseShop(true),
+  mw_house_narrow_low: houseNarrow(true),
+  mw_house_narrow_b_low: houseNarrow(true, WASH.white, PAINT.red),
   mw_dormer: dormer(),
   mw_chimney_short: chimneyShort(),
-  mw_ov_shutters_open: OV_WIN((g, x, y) => shutters(g, x, y, 'open', PAINT.blue)),
-  mw_ov_shutters_shut: OV_WIN((g, x, y) => shutters(g, x, y, 'shut', PAINT.green)),
-  mw_ov_shutters_hanging: OV_WIN((g, x, y) => shutters(g, x, y, 'hanging', PAINT.red)),
+  mw_ov_shutters_open: OV_WIN(NO, 'open', PAINT.blue),
+  mw_ov_shutters_shut: OV_WIN(NO, 'shut', PAINT.green),
+  mw_ov_shutters_hanging: OV_WIN(NO, 'hanging', PAINT.red),
   mw_ov_window_drowned: OV_WIN(drowned),
   mw_ov_window_bricked: OV_WIN(bricked),
   mw_ov_window_box: OV_WIN(windowBox),
-  mw_ov_door_arched: ov((g) => doorArched(g, 3, 15, PAINT.navy)),
-  mw_ov_door_knocker: ov((g) => doorKnocker(g, 3, 15, PAINT.teal)),
-  mw_ov_door_boarded: ov((g) => doorBoarded(g, 3, 15, PAINT.ox)),
-  mw_ov_door_hanging: ov((g) => doorHanging(g, 3, 15)),
-  mw_ov_sign_fish: ov((g) => bracketSign(g, 0, 3, 'fish')),
-  mw_ov_sign_key: ov((g) => bracketSign(g, 0, 3, 'key')),
-  mw_ov_sign_boot: ov((g) => bracketSign(g, 0, 3, 'boot')),
-  mw_ov_awning: ov((g) => awning(g, 0, 32, 0, false), 32, 16),
-  mw_ov_awning_torn: ov((g) => awning(g, 0, 32, 0, true), 32, 16),
-  mw_ov_drainpipe: ov((g) => downpipe(g, 13, 0, 26), 16, 26),
-  mw_ov_wall_lamp: ov((g) => wallLamp(g, 2, 12), 16, 24),
+  mw_ov_door_arched: OV_DOOR('arched', PAINT.navy),
+  mw_ov_door_knocker: OV_DOOR('knocker', PAINT.teal),
+  mw_ov_door_boarded: OV_DOOR('boarded', PAINT.ox),
+  mw_ov_door_hanging: OV_DOOR('hanging', null),
+  mw_ov_door_open: OV_DOOR('open', null),
+  mw_ov_sign_fish: ov((g) => bracketSign(g, 0, 20, 'fish')),
+  mw_ov_sign_key: ov((g) => bracketSign(g, 0, 20, 'key')),
+  mw_ov_sign_boot: ov((g) => bracketSign(g, 0, 20, 'boot')),
+  mw_ov_awning: ov((g) => awning(g, 0, 32, 16, false), 32, 48),
+  mw_ov_awning_torn: ov((g) => awning(g, 0, 32, 16, true), 32, 48),
+  mw_ov_drainpipe: ov((g) => downpipe(g, 13, 2, 46)),
+  mw_ov_wall_lamp: ov((g) => wallLamp(g, 2, 22)),
   // In the water (2026-11-08).
   mw_cart_sunk: cartSunk(),
   mw_crate_drift: crateDrift(0),
@@ -1938,6 +2109,7 @@ export const MW_FOOTPRINTS = {
   mw_dresser: 2,
   mw_coat_pegs: 2,
   mw_bell_tower: 4,
+  mw_tower_porch: 5,
   mw_tower_door: 2,
   mw_tower_door_open: 2,
   mw_great_bell: 3,
@@ -1952,6 +2124,13 @@ export const MW_FOOTPRINTS = {
   mw_house_dutch: 2,
   mw_house_parapet: 2,
   mw_house_shop: 2,
+  mw_house_gable_low: 2,
+  mw_house_gable_b_low: 2,
+  mw_house_gable_c_low: 2,
+  mw_house_parapet_b_low: 2,
+  mw_house_dutch_low: 2,
+  mw_house_parapet_low: 2,
+  mw_house_shop_low: 2,
   mw_ov_awning: 2,
   mw_ov_awning_torn: 2,
   mw_cart_sunk: 2,

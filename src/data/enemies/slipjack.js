@@ -15,7 +15,7 @@ export const SLIPJACK = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: SLIPJACK_SPRITE, palette: SLIPJACK_PALETTE },
-  maxHp: 685,
+  maxHp: 2500,
   damage: 23,
 
   // Quick, as it'll tell you: a step past the Hushwood's worst.
@@ -24,8 +24,7 @@ export const SLIPJACK = {
   // Its attacks live in src/battle/attacks/slipjack.js.
   patterns: [
     { name: 'slipRun', weight: 3 },
-    { name: 'slipShowOff', weight: 3 },
-    { name: 'slipSnap', weight: 2 },
+    { name: 'slipEight', weight: 3 },
     { name: 'slipCoil', weight: 2 },
     { name: 'slipWhirl', weight: 2 },
   ],

@@ -20,7 +20,7 @@ export const WRACKEEL = {
   feel: { hit: 'zap', idle: 'static', windup: 'charge', at: [0.2, 0.45], defeat: 'fizzle', exit: 'sink' },
   // The coast's fights from the Lanes on: the shanty.
   music: 'coastBattleStorm',
-  maxHp: 10800,
+  maxHp: 8100,
   damage: 90,
 
   difficulty: { density: 1.55, speed: 1.40 },
@@ -37,10 +37,9 @@ export const WRACKEEL = {
 
   // Its attacks live in src/battle/attacks/wrackeel.js.
   patterns: [
-    { name: 'eelZig', weight: 3 },
-    { name: 'eelChain', weight: 2 },
-    { name: 'eelCoil', weight: 2 },
-    { name: 'eelSurge', weight: 2 },
+    { name: 'eelHoles', weight: 3 },
+    { name: 'eelCurrent', weight: 3 },
+    { name: 'eelLanes', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -51,7 +50,7 @@ export const WRACKEEL = {
     { name: 'Look away politely', calm: 30 },
   ],
 
-  rewards: { exp: 2600, coins: 14 },
+  rewards: { exp: 2600, coins: 11 },
 
   // Skin it sometimes sheds (src/data/items.js), with the chance of it.
   drops: [{ item: 'eel_skin', chance: 0.4 }],

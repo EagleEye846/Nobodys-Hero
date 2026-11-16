@@ -13,6 +13,7 @@
 //   n  snow                            A  snowy cliff top (solid)
 //   E  ice-veined cliff face (solid)   Y  snow pine (walk or hide behind) (solid)
 //   Q  snowy boulder (solid)           t  cave mouth (walk through it; see `doors`)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_VANE_GARDENS = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_vane_gardens',
@@ -95,6 +96,7 @@ export const VIGIL_VANE_GARDENS = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/upper_vigil.txt',
   props: [
+    { sprite: 'col_pin_lamp', x: 1, y: 22, walkable: true, flat: true, gives: 'pin_lamp', taken: { gone: true } },
     { sprite: 'sign', x: 9, y: 22, text: 'gardens_sign' },
     { sprite: 'weathervane_up', x: 4, y: 14, vane: true },
     { sprite: 'weathervane_up', x: 24, y: 14, vane: true },
@@ -106,6 +108,8 @@ export const VIGIL_VANE_GARDENS = {
     { sprite: 'grapple_ring', x: 6, y: 6, grapple: true },
     { sprite: 'chest', x: 8, y: 5, text: 'gardens_chest', gives: 'hot_cocoa', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'savepoint', x: 10, y: 4, save: true },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_vane_gardens'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

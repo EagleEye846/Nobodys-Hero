@@ -1,0 +1,19 @@
+# DP_CAMP_TIN: a tiny dented ration tin on a flat stone by the Hero's dead fire (deep_heros_camp). A very
+# small errand: the Patched Mitten from the Crawl belongs beside it. Handle with care.
+
+[first]
+A tiny ration tin, dented, shut, on a flat stone by the dead fire. Beside it there's a clear patch of stone, about the size of a mitten, where something used to be set out to dry.
+
+[first_ves]
+{thoughtful}Don't open it. Some things you leave exactly the way you found them.
+
+[repeat]
+A tiny dented tin on a flat stone. Beside it, a clean patch where something used to dry.
+
+[mitten_back]
+You lay the mitten on the stone beside the tin, thumb up, so the patch shows. It looks right there. It looks like it was always going to be.
+
+Under the tin, where it had been holding something flat, there's a sweet wrapper, folded small. You take it.
+
+[mitten_after]
+The mitten sits beside the tin, thumb up. The tin is still shut. Neither of them is going anywhere.

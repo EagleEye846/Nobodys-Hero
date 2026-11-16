@@ -26,8 +26,8 @@ export const BELOWTOWN_MARKET = {
     '################################',
     '#WWWVWWWHWWWVWWWWWWWWWVWWWHWWVW#',
     '#WW77777WWeeeeeWWWeeeeeW77777WW#',
-    '#WW56565WWawaWaWWWawaWaW56565WW#',
-    '#WW55855WWaaaaaWWWaaaaaW55855WW#',
+    '#WW56565WWawaWaW.WawaWaW56565WW#',
+    '#WW55855WWaaaaaW.WaaaaaW55855WW#',
     '#..............................#',
     '#.....,.....,.....,.....,.....,#',
     '#..............................#',
@@ -89,7 +89,12 @@ export const BELOWTOWN_MARKET = {
     // Mole miners on their way to the Diggings (one each lane, there and back), and the sweeper.
     { sprite: 'bf_mole_miner_a', x: 3, y: 10, npc: 'bt_shift_a', animation: 'bf_mole_miner_a', speed: 0.5, stroll: { path: [[3, 10], [28, 10]], speed: 20, pause: [2, 5], greet: true } },
     { sprite: 'bf_mole_miner_b', x: 28, y: 8, npc: 'bt_shift_b', animation: 'bf_mole_miner_b', speed: 0.5, stroll: { path: [[28, 8], [3, 8]], speed: 18, pause: [2, 6], greet: true } },
-    { sprite: 'bf_mole_sweeper', x: 5, y: 11, npc: 'bt_sweeper', animation: 'bf_mole_sweeper', speed: 0.45, stroll: { path: [[3, 11], [9, 11]], speed: 7, pause: [2, 4], greet: true, keepAnim: true } },
+    { sprite: 'bf_mole_sweeper', x: 5, y: 11, npc: 'bt_sweeper', animation: 'bf_mole_sweeper', speed: 0.45, quest: [
+      { needs: ['q_pan_done'], text: 'pan_after', append: true },
+      { needs: ['has:dented_dustpan'], take: 'dented_dustpan', set: ['q_pan_asked', 'q_pan_done'], give: 'sweepers_pin', text: 'pan_done' },
+      { needs: ['q_pan_asked'], text: 'pan_wait' },
+      { needs: ['!q_pan_asked'], set: 'q_pan_asked', text: 'pan_ask', append: true },
+    ], stroll: { path: [[3, 11], [9, 11]], speed: 7, pause: [2, 4], greet: true, keepAnim: true } },
     { sprite: 'bf_glowworm', x: 28, y: 11, npc: 'bt_market_glowworm', animation: 'bf_glowworm', speed: 0.4, stroll: { path: [[25, 11], [29, 11]], speed: 12, pause: [3, 6], greet: true }, glow: [{ dx: 0, dy: -4, bloom: 14, strength: 0.7, flicker: 0.2, color: '190, 255, 120' }, { dx: 0, dy: 2, pool: 40, strength: 0.4, flicker: 0.2, color: '190, 255, 120' }] },
     // After the king's welcome: scraps of the party still on the cobbles.
     { sprite: 'bf_confetti_a', x: 6, y: 9, flat: true, walkable: true, after: 'the_kings_welcome' },
@@ -101,9 +106,9 @@ export const BELOWTOWN_MARKET = {
     { sprite: 'bf_bat_sleeper', x: 16, y: 2, npc: 'bt_market_bat', animation: 'bf_bat_sleeper', speed: 0.6 },
     { sprite: 'burrow_door', x: 11, y: 4, text: 'market_burrow_door', walkable: true },
     { sprite: 'burrow_door', x: 19, y: 4, text: 'market_burrow_door', walkable: true },
-    { sprite: 'glowworm_string', x: 9, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true },
-    { sprite: 'glowworm_string', x: 20, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true },
-    { sprite: 'glowworm_string', x: 28, y: 6, animation: 'glowworm_string', speed: 0.4, walkable: true },
+    { sprite: 'glowworm_string', x: 9, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
+    { sprite: 'glowworm_string', x: 20, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
+    { sprite: 'glowworm_string', x: 28, y: 6, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
     { sprite: 'glowworm_lamp', x: 9, y: 7, text: 'market_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 21, y: 7, text: 'market_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 12, y: 12, text: 'market_lamp', animation: 'glowworm_lamp', speed: 0.5 },
@@ -115,6 +120,17 @@ export const BELOWTOWN_MARKET = {
     { sprite: 'town_noticeboard', x: 14, y: 12, text: 'market_noticeboard' },
     { sprite: 'town_signpost', x: 1, y: 6, text: 'market_signpost' },
     { sprite: 'chest', x: 30, y: 14, text: 'market_chest', gives: 'glow_candle', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass (14 Nov): what the folk have left lying about.
+    { sprite: 'bf_mole_miner_b', x: 19, y: 6, npc: 'bt_pot_mole', animation: 'bf_mole_miner_b', speed: 0.5 },
+    { sprite: 'bt_menu_board', x: 7, y: 7, text: 'bl_menu_board' },
+    { sprite: 'bt_cook_pot', x: 18, y: 7, text: 'bl_stew_pot', animation: 'bt_cook_pot', speed: 0.35 },
+    // The bat's niche, in the wall under the roost: a purse on a nail.
+    { sprite: 'gold_pouch', x: 16, y: 3, text: 'bl_niche_pouch', gives: 'bl_lookers_biscuit', taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // A barrel that is not quite where it was: one place before the king's welcome, another after, a third once the light is up.
+    { sprite: 'barrel', x: 7, y: 12, text: 'bl_odd_barrel', until: 'the_kings_welcome' },
+    { sprite: 'barrel', x: 17, y: 14, text: 'bl_odd_barrel', after: 'the_kings_welcome', until: 'the_light_goes_up' },
+    { sprite: 'barrel', x: 4, y: 12, text: 'bl_odd_barrel', after: 'the_light_goes_up' },
+
   ],
   tileTexts: { W: 'town_wall', '#': 'town_rock', V: 'town_lamps_wall', H: 'town_banner_wall', 5: 'town_house', 6: 'town_house', 7: 'town_house', 8: 'town_house_door', a: 'town_plank', w: 'town_plank', e: 'town_plank', O: 'town_barrel' },
 

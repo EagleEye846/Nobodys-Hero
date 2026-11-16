@@ -3,8 +3,9 @@ import { Pix, flash, shift, crumble } from './ch5Kit.js';
 // QUIRE, 60x68: the Dead City's Welcome Register, woken by the splinter of
 // the Fallen Star that came down through the old street. The city's clerks
 // kept one great ledger of everybody who had promised to be present when the
-// Hero came, and counted it every night. The star got into the binding. Now
-// it counts by itself and it will not stop: a hunched thing made of ledgers,
+// Hero came, and counted it every night. The star got into the binding, and
+// the book wished on it that the count would come out right. Now it counts by
+// itself and it will not stop: a hunched thing made of ledgers,
 // loose pages and ink, an open book for a face with two round spectacles lit
 // star-blue, a red ribbon bookmark for a tongue, a rubber stamp in one hand
 // and a long quill in the other, and a splinter of star in its chest, cracks

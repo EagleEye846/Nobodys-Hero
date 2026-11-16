@@ -1,0 +1,11 @@
+# Between chapters: shown when you set out from Saltcombe for the smoke (set_out_for_the_smoke),
+# before the bare seabed. The chapter is called What Burned (decided 13 November 2026).
+
+[title]
+CHAPTER SIX
+
+[subtitle]
+What Burned
+
+[neutral]
+The sea has gone out further than anyone has seen it go. To the north-east, low on the sky, the smoke.

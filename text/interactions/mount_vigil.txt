@@ -257,3 +257,116 @@ A lamp, lit. Above the clouds, under the stars, its light looks very small and v
 # A second chest on the Cloud Walk, at the top of the stairs by the bridge.
 [cloud_vane_chest]
 A chest at the top of the stairs, half buried. Inside, wrapped in sacking: an iron weathercock on a short handle, the kind that might fit an umbrella.
+
+# --- THE LIFE PASS (2026-11-15): Mount Vigil ---
+# (draft)
+
+# vigil_ridge
+[r2v_ridge_flags]
+A prayer pole stuck in a little cairn, with five rag flags streaming off it: red, white, blue, yellow, green.
+
+The heralds hung one for every wind they hoped for. Today the mountain has only brought the one.
+
+[r2v_ridge_bowl]
+A stone bowl by the foot of the stair. An oatcake is frozen into it, with a ribbon curled over the top like a question.
+
+Somebody left it for the mountain. The mountain has not touched it.
+
+[r2v_ridge_names]
+A flat stone with names scratched in it, row on row. The oldest are as soft as old soap. The newest is just a small square with a smile in it.
+
+[r2v_hollow_apple]
+Three stones stacked by the cave mouth, and a frozen apple on top, glazed like a sweet. A coin sits on the stone beside it.
+
+A gift for whatever lives in there. The cave hums. The apple is still here.
+
+[r2v_hollow_chimes]
+Bone and tin chimes hung from a post at the mouth of the cave. The draught from inside plays them, a few notes at a time.
+
+Some of the tunes are nearly something.
+
+[r2v_hollow_wheel]
+A prayer wheel on a stone post, its little drum painted with lamps. You give it a push. It turns, wobbles, and slows, and the lamps blur into one long glow.
+
+[r2v_spiral_names]
+Another name stone, this one with the tally: nine small marks, five to a gate, and a tenth added in a different hand. Whatever they were counting, they kept it going.
+
+[r2v_spiral_hat]
+A woolly hat jammed on a stake, red with a white band, a bobble on top. A card is tied to it: LOST HERO'S HAT. APPLY WITHIN.
+
+The frost has got in. It's been a long time since anyone applied.
+
+[r2v_spiral_bowl]
+A stone bowl on the little shelf by the draught, with a bit of fudge frozen into it and a ribbon in the fudge. A dollop of offering.
+
+[r2v_shoulder_bunny]
+A snow rabbit, built next to the snowman. It has twig ears and two berries for eyes, and a very serious expression for a rabbit.
+
+Someone built the snowman a pet. The real hares are watching from a distance, offended.
+
+[r2v_shoulder_hat]
+A woolly hat on a stake, and a card: LOST HERO'S HAT (TOO SMALL FOR HERO, SEE HOOD).
+
+Somebody had an opinion about the size of the hero.
+
+[r2v_shoulder_wheel]
+A little prayer wheel on a post, the kind you spin with one finger. Whatever it was praying for, it's still going. A good sign, or a stubborn one.
+
+[r2v_ice_face_flags]
+A prayer pole at the foot of the ice, leaning, flags stiff with frost. Somebody has retied one with a very good knot, and left it just the right amount of crooked.
+
+[r2v_ice_face_teapot]
+A dented tin teapot on a flat stone, its lid frozen shut. Somebody brewed tea up here, in this, on a stove the size of a hat. There's still a brown ring of it in the ice inside.
+
+[r2v_ice_face_tiny]
+A cairn on the top ledge the size of a loaf. Every stone has been chosen. Someone stood here with the whole sky and decided to build something small.
+
+[r2v_knife_edge_hat]
+A woolly hat on a stake, and a card in round, neat letters: IF FOUND, PLEASE RETURN TO WHOEVER HAS A HEAD. The frost has been at it.
+
+[r2v_knife_edge_bowl]
+A stone bowl on the high shelf at the far end, a frozen heel of bread inside it and a ribbon. For the wind, perhaps. It's very quiet up here, for a place with so much wind.
+
+[r2v_knife_edge_names]
+A stone with a hundred names on it, none the same size. The mountain doesn't say anything about them. It lets them have the stone.
+
+[r2v_cloud_walk_hat]
+A hat on a stake, and a sign: LOST HERO'S HAT. APPLY WITHIN. Under it, in smaller letters: (WE HAVE ASKED BEFORE.)
+
+[r2v_cloud_walk_bowl]
+A stone bowl at the foot of the lamps. An oatcake is frozen in it and a ribbon is tied round the handle, though it hasn't got a handle. Somebody tied it round the idea.
+
+[r2v_cloud_walk_chimes]
+A post with bone chimes, hung up high so only the wind could reach them. They click, and click again. A kind of conversation.
+
+[r2v_cloud_walk_hoard]
+At the far west end of the walk, behind a clump of rime-stones, there's a drift with a round dark door in it, and a worn trail of tiny tracks leading in. You reach in. Cold. Then something small and hard.
+
+A button. A bottle top. A bent brass ring. A tiny tin whistle. A silver thimble.
+
+Someone has been collecting these for a long time. You take the thimble, and leave a sweet in exchange.
+
+[r2v_cloud_walk_hoard_gone]
+The stoat's drift. The hole is empty now except for a button, a bottle top, and a note scratched in the snow: SWEET RECEIVED. WE ARE EVEN.
+
+# --- END OF THE LIFE PASS: Mount Vigil ---
+
+# === ROUND 3, THE FUN CHECK (15 November 2026): chapters 1 and 2, the dullest rooms ===
+
+# (draft)
+[r3a_ce_cord]
+A coil of rope left on the floor, a paper tag knotted on: CORD, ONE OF THREE. DON'T UNTIE. DON'T TRIP. -- B. The other end of it runs away across the cave, looped round every stalagmite it passes, like someone leading a very patient dog.
+
+# (draft)
+[r3a_ce_flask]
+A flask frozen to the floor, its cup welded to the lid. It sloshes a little in the middle. It's the sort of tea that has waited so long it's turned into an opinion.
+
+# (draft)
+[r3a_cg_slab]
+A flat slab of rock, worn smooth and shiny by hands. You lay your own hand on it. The whole stone is humming, one low note, in the heel of your palm, as if it's been waiting a long time for somebody to ask.
+
+# (draft)
+[r3a_cg_slate]
+A slate on a stick, in chalk: THE GALLERY IS IN D. (SLIGHTLY FLAT.) PLEASE DON'T WHISTLE. -- THE MANAGEMENT. Under it someone has added: WHO IS THE MANAGEMENT. And after a bit, in a smaller hand: ME. SORRY.
+
+# (draft)

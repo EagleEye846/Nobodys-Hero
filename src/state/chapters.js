@@ -12,6 +12,7 @@ import { WEAPONS } from '../data/weapons.js';
 import { ARMOR } from '../data/armor.js';
 import { catchUpTo } from '../characters/progress.js';
 import { STAR_FORGINGS } from '../data/fallenStar.js';
+import { settleNotches } from '../characters/notches.js';
 
 // Chapter select (on the title screen): start any chapter you've reached
 // again, from its beginning, to replay it or to try out something new in it.
@@ -38,6 +39,10 @@ export const CHAPTERS = [
   // with you for good; `fromSave`: a chapter 4 save that has climbed out of
   // the hole is already this chapter's start (chapter 5 was built after it).
   { number: 5, name: 'The Tide Held', room: 'sunny_soft_field', spawn: { x: 21, y: 12 }, party: ['vesper', 'bramble'], well: true, fromSave: 'out_into_the_light', arriveLevel: 37 },
+  // The bare seabed under the old slip (ash_road_opens). Set out for from the chart in the
+  // Saltcombe harbour office after the end of chapter 5 (set_out_for_the_smoke): a save that has
+  // done that is already this chapter's start. Its name is still to be chosen (draft).
+  { number: 6, name: 'What Burned', room: 'ash_seabed', spawn: { x: 5, y: 5 }, party: ['vesper', 'bramble'], well: true, fromSave: 'set_out_for_the_smoke', arriveLevel: 50 },
 ];
 
 // The last chapter there is so far.
@@ -492,7 +497,9 @@ export function catchUpSave() {
     gear = addEarlierGear(HERO_STATE, chapter.number, allSaves(), false);
     fitOut();
   }
-  return levels > 0 || gear;
+  // A save from before SPELL NOTCHES: the Notch Charms of the chapters before this one.
+  const notches = settleNotches();
+  return levels > 0 || gear || notches;
 }
 
 // A chapter started again from CHAPTERS (never CONTINUE, never a normal
@@ -549,6 +556,11 @@ export function beginChapter(chapter) {
   for (const key of Object.keys(WORLD_STATE)) delete WORLD_STATE[key];
   Object.assign(HERO_STATE, copy(FRESH.hero), start.hero);
   Object.assign(WORLD_STATE, copy(FRESH.world), start.world, { chapter: chapter.number });
+  // A start recorded before SPELL NOTCHES gets the Notch Charms of the chapters before it.
+  if (!('notchesSettled' in start.hero)) {
+    HERO_STATE.notchesSettled = false;
+    settleNotches();
+  }
   fitOut();
   catchUp(chapter);
   const kit = chapter.number > 1 ? giveKit(chapter.number) : [];

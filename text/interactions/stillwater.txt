@@ -452,3 +452,115 @@ A step, worn into a shallow dish in the middle, as if a great many feet have gon
 
 [sw_roots]
 Pale roots, come down through the rock from somewhere a very long way up. Something up there is still growing. It's been reaching down here the whole time, slowly, in case.
+
+# --- THE LIFE PASS: things to look at (set dressing) ---
+
+[sp_boat]
+A rowing boat, upside down on the shingle. The paint is long gone. Underneath, something small has built a nest of lakeweed and does not intend to explain itself.
+
+[sp_boat_ves]
+{bored}It's been upside down so long it's basically a house.
+
+[sp_boat 2]
+Something small and wet moves under the boat, and then stops moving.
+
+[sp_boat_ves 2]
+{bored}Nobody lift it. Whoever lives there has paid rent.
+
+[sp_bones]
+A fish skeleton, picked clean and laid out in a perfect line, as if for an exam.
+
+[sp_bones_ves]
+{thoughtful}Something ate it and was tidy about it. That's worse, somehow.
+
+[sp_bones 2]
+Every rib is accounted for. Whatever it was, it was well looked after, in its way.
+
+[sp_bones_ves 2]
+{bored}Don't give it a name.
+
+[sp_bucket 2]
+You look in the bucket. No fish. One very small, very pale shrimp, looking back at you.
+
+[sp_crate 2]
+You tap the crate. It answers with a small, hollow thump. Whatever's inside is exactly as big as it needs to be.
+
+[sp_net]
+A fishing net, strung between two driftwood posts to dry. It's been drying a very long time. There's one pale scale in it.
+
+[sp_net_ves]
+{bored}Nothing caught. The fish here are either clever or have no eyes. Possibly both.
+
+[sp_net 2]
+One knot has been tied again, neatly, over an older one. Somebody mends this net. Often. Lately.
+
+[sp_net_ves 2]
+{surprised}...Lately? Who mends a net at the bottom of the world?
+
+[sp_oar]
+An oar, blade-down in the shingle, a loop of rope on the handle. Somebody planted it like a flag and wandered off.
+
+[sp_oar_ves]
+{smile}Claiming the beach for nobody. Very generous of them.
+
+[sp_oar 2]
+The rope loop is worn smooth where a hand has gone through it, many times, always in the same place.
+
+[sp_oar_ves 2]
+{thoughtful}Somebody rowed a lot. And then somebody stopped.
+
+[sp_paper 2]
+The flag is a drawing of a sun, with a very round face. It looks pleased about everything.
+
+[sp_ring 2]
+The rope end isn't frayed from age. It's frayed the way a rope frays when something very large pulls it, once.
+
+[sp_skip 2]
+You weigh the stone in your hand. It's perfect. You put it back exactly where it was.
+
+[sp_snails]
+A knot of pale snails on a stone, shells like wet pearls. Every one of them has turned to face the lake.
+
+[sp_snails_ves]
+{smile}Waiting for the ferry. Same as us.
+
+[sp_snails 2]
+One of them has turned round to look at you. All the rest haven't. You decide it's the leader.
+
+[sp_snails_ves 2]
+{bored}The ferry committee. They've been waiting since before the ferry.
+
+[lp_isles_boat]
+A boat pulled up on the first isle, tied to nothing, with a single oar still shipped. Somebody rowed here from somewhere and thought: this will do.
+
+[lp_isles_boat_ves]
+{bored}And then they stayed. That's what we're calling a holiday.
+
+[lp_isles_nook]
+A small fish skull in the lee of the far rocks, where the spray never reaches, set on a flat stone as a paperweight. Under it, nothing. You take the skull anyway.
+
+[lp_isles_nook_ves]
+{smile}Finders keepers. I'll say hello to the fish for you.
+
+[lp_reeds_boat]
+A paper boat, folded small, snagged in the reeds. It has a tiny flag drawn on the sail, in charcoal. You fish it out. It weighs nothing.
+
+[lp_reeds_boat_ves]
+{smile}Somebody's had a long, wet journey.
+
+[lp_far_boat]
+A second boat, on this shore, upside down like the first. Between them they would make a very bad ferry, and a very good argument.
+
+[lp_far_boat_ves]
+{smile}Two boats. Two shores. One ferryman. The maths is not on his side.
+
+# --- end life pass ---
+
+# --- THE LIFE PASS, ROUND 3 (helper C, 15 November 2026): the dullest rooms of chapter 4 ---
+
+[r3c_sd_step_lamp]
+A tin lamp standing on the bottom of a step, its wick burnt to a black thread. It was lit once for every one of the folk who made the walk, and left for the next.
+
+[r3c_sd_step_lamp_ves]
+{thoughtful}Lamps with nobody to light them. You'd think they'd have had the sense to leave a match.
+

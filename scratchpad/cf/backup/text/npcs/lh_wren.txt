@@ -1,0 +1,56 @@
+# WREN: a marmot kid, about Bramble's age, very nosy, who has never met
+# anybody from outside the valley before and has a great many questions.
+
+[first]
+Who are YOU? Where'd you come from? Is that a real sword? Can I hold it? Can I hold HER?
+
+...Sorry. Mum says I ask too much.
+
+[repeat]
+Are you staying? Are you staying for the bean harvest? Everybody has to help with the bean harvest. It's the law. It isn't really the law.
+
+[first after ves_on_her_feet]
+Your friend with the hatchet says he's the best chopper in the whole forest under eleven.
+
+I'm the best bean-picker in the whole town under eleven. So.
+
+[repeat after ves_on_her_feet]
+Is the girl a hero? She LOOKS like one. Is she?
+
+[first after bramble_goes_home]
+He went home? He said he'd show me how to chop!
+
+...He said he'd come back and show me. He PROMISED.
+
+[repeat after bramble_goes_home]
+I'm practising chopping. On beans. It isn't going well.
+
+# --- SIDE QUEST: Biscuit the cat (she's in the healer's, where there isn't a cat) ---
+
+[cat_ask]
+Wait. WAIT. Don't go. This is important.
+
+Wren grabs your sleeve with both hands.
+
+Biscuit's GONE. She's a cat. She's brown. She sleeps in the hollow in the rug at the inn, every day, since the cart brought her in the spring, and today the rug's EMPTY.
+
+Mum says we don't have a cat. Mabb says it's a rug. Bryony says there isn't a cat. But she's MY cat. I just haven't told her yet.
+
+Find her? Please? She doesn't like being picked up. She'll let you do it once. She decides.
+
+[cat_wait]
+Biscuit! Brown! Rude! If you can't find her, go where somebody keeps saying there isn't a cat. That's where I'd hide, if I was a cat.
+
+[cat_done]
+Wren takes Biscuit out of your arms so fast you almost don't see it happen.
+
+BISCUIT. Where WERE you? ...The HEALER'S? Bryony said there wasn't a cat! Bryony LIED!
+
+She buries her face in the fur. Biscuit looks at you over Wren's shoulder with total contempt, which is how you know she's fine.
+
+...Okay. Okay. I owe you. I've only got one thing. It's the best thing in Lasthome and I've never given it to anyone, so don't make it weird.
+
+It's the bean medal. I won it last year. I won't win it this year, I'll be eleven by the harvest. So. It's yours. It's a bean.
+
+[cat_after]
+Biscuit is sitting on Wren's head. Wren is pretending not to notice. Biscuit is pretending to be a hat.

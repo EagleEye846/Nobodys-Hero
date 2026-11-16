@@ -737,94 +737,298 @@ Object.assign(CF_PROP_LOOKS, {
 // =====================================================================
 // CORRIE, the boy who became the storm
 // =====================================================================
-// About eight: smaller than Bramble. A pale boy in a yellow oilskin coat far
-// too big for him (the sleeves rolled four times, the hem dragging), a tangle
-// of dark wet hair, big sad eyes, a driftwood staff taller than he is with a
-// glow at the top. He is half water: the colours are see-through, there are
-// drops falling off the hem, and when he floats there is no floor under him.
-// 16 wide, 26 tall.
+// About eight: a bit shorter than Bramble, and thin. A pale skinny boy lost
+// in a yellow oilskin far too big for him: the hood up over his wet hair, its
+// shoulders drooping past his, long folds, the empty sleeves hanging past his
+// hands, the ragged hem trailing, his bare shins in the gap at the front.
+// Big eyes the pale sea-glass of his battle self, a driftwood staff taller
+// than he is with a glow caught in its fork. He is half water: the colours
+// are see-through, he hovers a little off the floor, toes down, and the green
+// of the storm catches him from below. 19 wide, 23 tall (the staff on our
+// right as he faces you, in his left hand).
+// (Redrawn twice on 2026-11-15: a grey head on a yellow cone, then a thin
+// boy; now the battle drawing's boy, hood and all. Both older drawings are in
+// notes/art-backup-2026-11-15/corrie/ and corrie-v2/.)
+//
+// Looks (each an animation, `anim:<name>`, and a prop of its first frame):
+//   cf_corrie            hovering, facing you, hood up (4)
+//   cf_corrie_back       the same from behind (4)
+//   cf_corrie_possessed  the storm has him: hood blown back, hair lifting,
+//                        eyes burning green, the staff up and blazing,
+//                        lightning in the darkened coat, rising (4)
+//   cf_corrie_tired      spent: hood down, sitting in the air with his knees
+//                        up, head bowed, the coat slipping off one shoulder,
+//                        the staff leaning on him, its light low, a tear (4)
+// (The colours of his skin, eyes, staff and drops stay exactly as they were:
+// src/data/art/tideRescue.js picks them out of these frames.)
 const CORRIE = pal({
   k: 'rgba(16, 30, 60, 0.92)',
   c: 'rgba(222, 238, 246, 0.9)', C: 'rgba(158, 194, 218, 0.88)', // skin
   H: 'rgba(58, 74, 118, 0.95)', h: 'rgba(104, 126, 178, 0.92)', // wet hair
   y: 'rgba(242, 208, 96, 0.8)', Y: 'rgba(255, 232, 150, 0.82)', z: 'rgba(188, 148, 48, 0.8)', // coat
+  Z: 'rgba(120, 88, 30, 0.85)', // the coat's dark inside
+  x: 'rgba(66, 46, 20, 0.9)', q: 'rgba(255, 250, 228, 0.9)', // deepest fold, wet shine
   e: '#bff8ff', w: '#ffffff', n: 'rgba(40, 60, 100, 0.95)', // eyes, shine, pupils
+  m: 'rgba(96, 60, 84, 0.9)', p: 'rgba(236, 196, 214, 0.8)', // mouth, a flush
   W: '#a88a68', V: '#7a5e44', // driftwood
   T: '#8ff0ff', t: '#e8ffff', // staff glow
   D: 'rgba(196, 236, 255, 0.9)', G: 'rgba(150, 226, 255, 0.5)', // drops, watery trail
+  L: 'rgba(132, 240, 176, 0.92)', l: 'rgba(96, 210, 160, 0.45)', // the storm's green, from below
+  // The storm in him: eyes, their glow, the coat darkened, lightning.
+  s: '#8dffb0', E: '#f0fff4', j: 'rgba(120, 255, 170, 0.55)',
+  o: 'rgba(210, 220, 116, 0.85)', O: 'rgba(147, 162, 68, 0.85)', P: 'rgba(78, 104, 54, 0.88)', f: '#f4fff0',
+  // His undershirt, where the coat slips off.
+  B: 'rgba(222, 226, 238, 0.92)',
 });
-// lift: pixels off the ground (floating); cast: 0..2 the staff raised and the
-// coat flaring; blink; sway: the coat hem and staff drift by a pixel.
-function corrieFigure(dir, { lift = 0, cast = 0, blink = false, sway = 0, tear = false, drip = 0 } = {}) {
-  const c = new Cv(16, 26);
+const STORMED = { Y: 'o', y: 'O', z: 'P', Z: 'P', q: 'o' };
+
+// look: 'hover' | 'possessed' | 'tired'; dir 'down' (facing you) or 'up';
+// frame 0-3 round the loop.
+function corrieFigure(dir, { frame = 0, blink = false, look = 'hover' } = {}) {
+  const c = new Cv(19, 23);
   const front = dir === 'down';
-  const L = lift;
-  // A watery ripple under him when he floats; a shadow of sorts on the ground when not.
-  if (L) { c.ell(8, 24.5, 5.5 + (cast ? 1.5 : 0), 1.1, 'G'); }
-  // The coat: far too big, a tall bell with the hem dragging.
-  const flare = cast ? 1.5 : 0;
-  for (let y = 11; y <= 22; y++) {
-    const half = 3.4 + (y - 11) * 0.34 + (cast && y > 18 ? flare : 0);
-    const x0 = Math.round(8 - half) + (y > 19 ? sway : 0);
-    const x1 = Math.round(8 + half) + (y > 19 ? sway : 0);
-    for (let x = x0; x < x1; x++) c.px(x, y - L + 2, x <= x0 + 1 ? 'Y' : x >= x1 - 2 ? 'z' : 'y');
-  }
-  c.rect(3, 22 - L + 2, 10, 1, 'z');
-  if (front) { c.line(8, 13 - L + 2, 8, 22 - L + 2, 'z'); c.px(8, 15 - L + 2, 'Y'); c.px(8, 18 - L + 2, 'Y'); c.px(8, 21 - L + 2, 'Y'); }
-  else c.line(8, 12 - L + 2, 8, 21 - L + 2, 'z');
-  // Torn, ragged hem.
-  [4, 6, 9, 11].forEach((x, i) => c.px(x + sway, 24 - L + 2 + (i % 2) - (L ? 1 : 0), 'z'));
-  // The collar and a bare neck.
-  c.rect(5, 10 - L + 2, 6, 2, 'z'); c.rect(6, 10 - L + 2, 2, 1, 'y');
-  // Sleeves rolled up four times: fat cuffs, tiny hands. The right hand holds the staff.
-  const arm = (x, flip) => {
-    c.rect(x, 12 - L + 2, 3, 5, 'y'); c.rect(x + (flip ? 2 : 0), 12 - L + 2, 1, 5, 'z');
-    c.rect(x - 1, 16 - L + 2, 5, 2, 'z'); c.rect(x, 16 - L + 2, 3, 1, 'Y');
-    c.rect(x, 18 - L + 2, 3, 2, 'c'); c.px(x + 1, 19 - L + 2, 'C');
-  };
-  arm(1, false);
-  // The staff.
-  const topY = cast ? 0 : 1;
-  if (cast) {
-    // Raised high in the right hand, tilted out.
-    c.thick(13, 19 - L + 2, 14, 2, 1, 'W'); c.rect(12, 17 - L + 2, 3, 2, 'c');
-    c.px(13, 1, 'V'); c.px(15, 3, 'V');
-    c.ell(14, 0.6, 1.6 + cast * 0.7, 1.6 + cast * 0.7, 'T', 't', 'T');
+  const storm = look === 'possessed';
+  const tired = look === 'tired';
+  const ph = (frame / 4) * Math.PI * 2;
+  const bob = Math.round(Math.sin(ph) * 0.9 + 0.2);
+  const stir = [0, 1, 0, -1][frame % 4];
+  // The light under him (green; brighter when the storm has him).
+  c.ell(9, 22, 4 + (frame % 2) + (storm ? 2 : 0), 0.8, storm ? 'L' : 'l');
+  // Where he is: hovering (the storm lifts him a pixel or two; tired, he sags).
+  c.oy = bob + (storm ? -1 - (frame % 2) : 0) + (tired ? 1 : 0);
+  const sx = front ? 17 : 1;
+
+  // --- The staff: driftwood, crooked, the glow in its fork. Raised and
+  // blazing when the storm has him; leaning on his shoulder when he's spent.
+  if (tired) {
+    c.line(16, 21, 13, 3, 'W');
+    c.px(15, 15, 'V'); c.px(14, 9, 'V');
+    c.px(12, 2, 'V'); c.px(14, 2, 'V');
+    c.px(13, 1, 'G');
+  } else if (storm) {
+    c.line(sx, 18, sx, 3, 'W');
+    c.px(sx, 7, 'V'); c.px(sx, 12, 'V');
+    c.px(sx - 1, 2, 'V'); c.px(sx + 1, 2, 'V');
   } else {
-    arm(12, true);
-    c.thick(14, 22 - L + 2, 14, topY + 2, 1, 'W'); c.px(13, topY + 3, 'V'); c.px(15, topY + 3, 'V');
-    c.ell(14, topY + 1, 1.4, 1.4, 'T', 't', 'T');
+    c.line(sx, 22, sx + (frame === 1 ? 0 : 0), 3, 'W');
+    c.px(sx, 8, 'V'); c.px(sx, 14, 'V'); c.px(sx, 19, 'V');
+    c.px(sx - 1, 2, 'V'); c.px(sx + 1, 2, 'V');
+    c.px(sx - 1, 1, 'V'); c.px(sx + 1, 1, 'V');
   }
-  // The head: round, a bit too big, with wet hair plastered down and sticking up.
-  const hy = 6 - L + 2;
-  c.ell(8, hy, 4.6, 4.3, 'c', 'c', 'C');
-  c.ell(8, hy - 2.2, 5, 2.8, 'H', 'h', 'H');
-  [[3, 1], [5, 0], [8, -1], [11, 0], [12, 1]].forEach(([x, dy], i) => c.px(x, hy - 4 + dy + 1, i % 2 ? 'h' : 'H'));
-  c.px(3, hy, 'H'); c.px(13, hy, 'H'); c.px(3, hy + 1, 'H'); c.px(12, hy + 1, 'H');
-  if (front) {
-    if (blink) { c.rect(5, hy + 1, 2, 1, 'n'); c.rect(10, hy + 1, 2, 1, 'n'); }
-    else {
-      [5, 10].forEach((x) => { c.rect(x, hy, 2, 3, 'e'); c.px(x + (x < 8 ? 1 : 0), hy + 1, 'n'); c.px(x + (x < 8 ? 1 : 0), hy + 2, 'n'); c.px(x, hy, 'w'); });
-      c.px(5, hy - 1, 'C'); c.px(11, hy - 1, 'C');
+
+  // --- The hood fallen back (storm, tired): a lump of it behind his neck.
+  if (storm || tired) {
+    c.ell(9, 10, 5, 2.2, 'y', 'Y', 'z');
+  }
+
+  // --- The coat. Shoulders far wider than his, drooping; then it hangs in
+  // long folds to a ragged hem; open at the front below the buttons.
+  const hem = tired ? 17 : 19;
+  const flare = storm ? 1 : 0;
+  // (Tired, the far shoulder has slid down off him.)
+  c.rect(5, 11, 9, 1, 'y');
+  c.rect(3, 12, 13, 1, 'y'); c.px(3, 12, 'Y'); c.px(15, 12, 'z');
+  if (tired) { c.rect(12, 11, 3, 1, 'B'); c.px(12, 11, 'c'); c.px(14, 12, 'B'); }
+  for (let y = 13; y <= hem; y++) {
+    const k = (y - 13) / (hem - 13);
+    const s = y >= hem - 2 ? stir : 0;
+    const L = Math.round(4 - k * (1 + flare) - (tired ? k * 1.5 : 0)) + s;
+    const R = Math.round(14 + k * (1 + flare) + (tired ? k * 1.5 : 0)) + s;
+    for (let x = L; x <= R; x++) {
+      const u = (x - L) / Math.max(1, R - L);
+      c.px(x, y, u < 0.12 ? 'Y' : u < 0.55 ? 'y' : u < 0.85 ? 'z' : 'Z');
     }
-    c.px(8, hy + 3, 'C'); c.rect(7, hy + 4, 2, 1, 'C');
-    if (tear) { c.px(5, hy + 3, 'D'); c.px(5, hy + 4, 'D'); }
   }
-  // Drops falling off him.
-  if (drip) { c.px(4 + sway, 24 - L + 2 + drip, 'D'); c.px(11 + sway, 25 - L + 1 + drip % 2, 'D'); }
-  return c.outline();
+  // The ragged hem, longer at the back, stirring; a fold or two dipping lower.
+  for (let x = 3; x <= 15; x++) {
+    const low = ((x * 5 + frame) % 4 === 0 ? 1 : 0) + (x > 11 ? 1 : 0);
+    if (low) c.px(x + stir, hem + 1, x > 11 ? 'Z' : 'z');
+  }
+  if (storm) for (const x of [2, 5, 13, 16]) c.px(x + stir, hem + 1 + (frame + x) % 2, 'G');
+  // Folds: long shadows down from the shoulders, a lit ridge beside each.
+  for (const [fx, top] of [[6, 14], [12, 13]]) {
+    for (let y = top; y <= hem; y++) {
+      const s = y >= hem - 2 ? stir : 0;
+      c.px(fx + s, y, y > top + 2 ? 'Z' : 'z');
+      if (fx < 12) c.px(fx - 1 + s, y, 'Y');
+    }
+  }
+  // A wet shine down the lit side.
+  c.px(4, 14, 'q'); c.px(4, 15, 'q'); c.px(6, 13, 'q');
+  if (front) {
+    // Buttoned at the top, open below, his thin shins in the gap.
+    c.px(9, 12, 'V'); c.px(9, 14, 'V');
+    for (let y = 15; y <= hem; y++) c.rect(9 - (y >= 18 ? 1 : 0) + (y >= hem - 1 ? stir : 0), y, y >= 18 ? 2 : 1, 1, 'x');
+    if (tired) {
+      // Knees drawn up under the coat; feet dangling out under the hem.
+      c.ell(7, 14, 1.6, 1, 'Y'); c.ell(11, 14, 1.6, 1, 'y');
+      c.px(8, hem + 1, 'c'); c.px(10, hem + 1, 'C');
+    } else {
+      const kick = frame === 2 ? 1 : 0;
+      c.rect(8, hem + 1, 1, 2, 'C'); c.rect(10 + kick, hem + 1, 1, 2, 'c');
+      c.px(8, hem + 3, 'c'); c.px(10 + kick, hem + 3, 'c');
+    }
+  } else {
+    // From behind: the seam down the back, and a vent.
+    c.line(9, 12, 9 + stir, hem, 'z');
+    c.px(9 + stir, hem - 1, 'x'); c.px(9 + stir, hem, 'x');
+  }
+
+  // --- The sleeves: long limp tubes off the drooping shoulders, past his
+  // hands. One hangs empty, its cuff stirring and dripping; the other
+  // bunches on the staff (raised with it, in the storm).
+  const empty = front ? 2 : 15;
+  const held = front ? 15 : 2;
+  const eSt = stir > 0 ? 1 : 0;
+  if (storm) {
+    // Both flung out from his sides, cuffs flapping.
+    c.rect(1, 12, 3, 2, 'y'); c.rect(0, 13 + (frame % 2), 2, 1, 'Z'); c.px(2, 12, 'Y');
+    c.rect(15, 9, 2, 4, 'y'); c.rect(16, 8, 1, 1, 'Z'); c.px(16, 9, 'c');
+  } else if (tired) {
+    // Limp in his lap.
+    c.rect(3, 13, 2, 4, 'Y'); c.rect(4, 17, 2, 1, 'Z');
+    c.rect(13, 13, 2, 3, 'z'); c.rect(13, 16, 2, 1, 'Z'); c.px(14, 15, 'c');
+  } else {
+    c.rect(empty, 13, 2, 6, front ? 'Y' : 'z'); c.px(empty + (front ? 1 : 0), 14, front ? 'y' : 'Z'); c.px(empty + (front ? 1 : 0), 16, front ? 'y' : 'Z');
+    c.rect(empty + eSt, 19, 2, 1, 'Z');
+    c.rect(held, 13, 2, 4, front ? 'z' : 'Y'); c.px(held + (front ? 1 : 0), 14, front ? 'Z' : 'y');
+    c.rect(held, 17, 2, 1, 'Z');
+    // Fingertips round the staff, just out of the cuff.
+    c.px(sx + (front ? -1 : 1), 17, 'c');
+  }
+
+  // --- The collar's dark inside, and his thin neck coming up out of it.
+  c.rect(6, 10, 7, 1, 'Z');
+  c.rect(8, 9, 3, 2, 'C');
+
+  // --- The head.
+  const hy = tired ? 6 : 5;
+  const hoodUp = !storm && !tired;
+  if (hoodUp) {
+    // The hood: a big rounded cowl round his head, lit down its left.
+    c.ell(9, hy, 6.4, 5.6, 'y', 'Y', 'z');
+    c.rect(4, hy + 2, 2, 4, 'y'); c.rect(13, hy + 2, 2, 4, 'z');
+    if (!front) {
+      // From behind: all hood, its seam and point.
+      c.line(9, hy - 5, 9, hy + 5, 'z');
+      c.px(8, hy - 3, 'Y'); c.px(8, hy - 1, 'q');
+      c.px(12, hy + 2, 'Z'); c.px(6, hy + 3, 'Y');
+      // Where the hood lies on his shoulders.
+      for (let x = 4; x <= 14; x++) c.px(x, hy + 5 + (x > 6 && x < 12 ? 1 : 0), x > 9 ? 'Z' : 'z');
+    }
+  }
+  if (front) {
+    // The face, a little too big for him, pale, a pointed chin.
+    c.ell(9, hy + 1.5, 4.3, 4, 'c', 'c', 'C');
+    c.rect(8, hy + 5, 3, 1, 'c'); c.px(10, hy + 5, 'C');
+    if (hoodUp) {
+      // The hood's rim, and its shadow inside, over his hair.
+      c.rect(5, hy - 2, 9, 1, 'Y'); c.px(4, hy - 1, 'Y'); c.px(14, hy - 1, 'z');
+      c.px(6, hy - 2, 'q');
+    } else {
+      // Hood back: his wet hair, flat to his head.
+      c.ell(9, hy - 1.5, 5, 3, 'H', 'h', 'H');
+      c.px(4, hy + 1, 'H'); c.px(14, hy + 1, 'H'); c.px(14, hy + 2, 'H');
+      if (storm) {
+        // Lifting: strands rising off his head, swaying, green at the ends.
+        const sway = frame % 2 ? 1 : -1;
+        for (const [x, len] of [[5, 2], [7, 3], [9, 4], [11, 3], [13, 2]]) {
+          for (let i = 1; i <= len; i++) c.px(x + (i > 1 ? sway : 0), hy - 4 - i + 1, i === len ? 'j' : (x % 4 === 1 ? 'h' : 'H'));
+        }
+      } else {
+        c.px(7, hy - 4, 'h'); c.px(10, hy - 4, 'h');
+      }
+    }
+    // The fringe: wet points stuck to his forehead.
+    c.rect(5, hy - 1, 9, 1, 'H');
+    for (const x of [5, 6, 9, 12, 13]) c.px(x, hy, 'H');
+    c.px(7, hy - 1, 'h'); c.px(11, hy - 1, 'h');
+    // The eyes: big; burning green in the storm; heavy-lidded and shut when spent.
+    for (const x of [6, 11]) {
+      if (storm) {
+        c.rect(x, hy + 2, 2, 2, 's'); c.px(x + (x < 9 ? 1 : 0), hy + 2, 'E');
+        c.px(x + (x < 9 ? -1 : 2), hy + 2, 'j');
+      } else if (tired || blink) {
+        c.rect(x, hy + 3, 2, 1, 'n');
+        if (tired && !blink) c.px(x + (x < 9 ? 1 : 0), hy + 4, 'e');
+      } else {
+        c.px(x, hy + 2, 'n'); c.px(x + 1, hy + 2, 'w');
+        c.rect(x, hy + 3, 2, 1, 'e');
+      }
+    }
+    // A flush on his cheeks; the mouth.
+    if (!storm) { c.px(5, hy + 4, 'p'); c.px(13, hy + 4, 'p'); }
+    if (storm) c.rect(9, hy + 5, 1, 1, 'm');
+    else c.px(9, hy + 5, tired ? 'C' : 'm');
+    // A tear, tired.
+    if (tired) c.px(6, hy + 5 + (frame % 2), 'D');
+  } else if (!hoodUp) {
+    // From behind with the hood back: wet hair down to the collar.
+    c.ell(9, hy + 0.5, 4.5, 4, 'H', 'h', 'H');
+  }
+  // The collar, turned up to his ears: a stiff flap either side.
+  c.rect(3, hy + 3, 1, 4, 'Y'); c.rect(4, hy + 5, 1, 3, 'y');
+  c.rect(15, hy + 3, 1, 4, 'z'); c.rect(14, hy + 5, 1, 3, 'z');
+
+  // --- The storm: the coat darkened, lightning running in it.
+  if (storm) {
+    for (let y = 0; y < c.h; y++) for (let x = 0; x < c.w; x++) if (STORMED[c.g[y][x]]) c.g[y][x] = STORMED[c.g[y][x]];
+    const bolt = [[[6, 13], [7, 15], [6, 16], [7, 18]], [[12, 12], [11, 14], [12, 15], [11, 17]], [[8, 14], [9, 16], [8, 18]], [[13, 15], [12, 17], [13, 19]]][frame % 4];
+    c.oy = 0;
+    const lift = bob - 1 - (frame % 2);
+    for (let i = 0; i + 1 < bolt.length; i++) c.line(bolt[i][0], bolt[i][1] + lift, bolt[i + 1][0], bolt[i + 1][1] + lift, 'f');
+    c.oy = lift;
+  }
+
+  // --- The staff's light (last, over the coat's outline): raised and green
+  // in the storm, low when he's spent.
+  c.outline();
+  if (!tired) {
+    if (storm) {
+      c.oy = 0;
+      c.px(sx, 1, 's'); c.px(sx, 0, 'E'); c.px(sx - 1, 1, 'E');
+      c.px(sx - 2, 1, 'j'); c.px(sx + 1, 0, 'j'); c.px(sx - 1, 0, 'j'); c.px(sx, 2, 'j');
+    } else {
+      c.ell(sx, 1, 1.2, 1.2, 'T', 't', 'T');
+      if (frame % 2 === 0) { c.px(sx - 1, -1, 'G'); c.px(sx + 1, -1, 'G'); }
+    }
+  }
+  // The storm's green, from below: every edge that faces down catches it.
+  const lit = new Set(['y', 'Y', 'z', 'c', 'C', 'Z', 'o', 'O', 'P', 'x']);
+  for (let y = c.h - 1; y >= 1; y--) {
+    for (let x = 0; x < c.w; x++) {
+      const v = c.g[y - 1][x];
+      if (y >= 16 && lit.has(v) && (c.g[y][x] === '.' || c.g[y][x] === 'k')) c.g[y - 1][x] = 'L';
+    }
+  }
+  // Drops falling off his hem and his empty cuff.
+  c.oy = 0;
+  if (!storm) {
+    const dx = front ? 3 : 15;
+    const d = (frame % 4);
+    if (c.g[20 + (d % 2)]?.[dx] === '.') c.px(dx, 20 + (d % 2), 'D');
+    if (d < 2 && c.g[21]?.[6 + stir] === '.') c.px(6 + stir, 21 + d, 'D');
+  }
+  return c;
 }
-// Three rows out of the middle of the coat: he is smaller than he looks drawn long.
-const CO = (cv) => CORRIE(cv.rows().filter((_, i) => ![15, 16, 17].includes(i)));
-export const CF_CORRIE_SPRITES = {
-  a: CO(corrieFigure('down')),
-  b: CO(corrieFigure('down', { blink: true, drip: 1 })),
-  c: CO(corrieFigure('down', { sway: 1 })),
-  d: CO(corrieFigure('down', { drip: 2, tear: true })),
-};
+const CO = (cv) => CORRIE(cv.rows());
+const loopOf = (dir, look) => ({
+  a: CO(corrieFigure(dir, { frame: 0, look })),
+  b: CO(corrieFigure(dir, { frame: 1, look })),
+  c: CO(corrieFigure(dir, { frame: 2, look, blink: dir === 'down' && look === 'hover' })),
+  d: CO(corrieFigure(dir, { frame: 3, look })),
+});
+// Hovering: up and down, the coat stirring, the drops falling (`anim:cf_corrie`
+// facing you, `anim:cf_corrie_back` from behind; the props are the first frames).
+export const CF_CORRIE_SPRITES = loopOf('down', 'hover');
+export const CF_CORRIE_BACK_SPRITES = loopOf('up', 'hover');
+export const CF_CORRIE_POSSESSED_SPRITES = loopOf('down', 'possessed');
+export const CF_CORRIE_TIRED_SPRITES = loopOf('down', 'tired');
 Object.assign(CF_PROP_LOOKS, {
-  cf_corrie: CO(corrieFigure('down')),
-  cf_corrie_back: CO(corrieFigure('up')),
+  cf_corrie: CF_CORRIE_SPRITES.a,
+  cf_corrie_back: CF_CORRIE_BACK_SPRITES.a,
+  cf_corrie_possessed: CF_CORRIE_POSSESSED_SPRITES.a,
+  cf_corrie_tired: CF_CORRIE_TIRED_SPRITES.a,
 });
 
 // =====================================================================

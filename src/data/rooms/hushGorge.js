@@ -15,6 +15,10 @@
 //   y  leaf path
 //   Z  bramble hedge (solid)
 //   ~  brook (solid, until a log sinks into it)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_GORGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_gorge',
@@ -82,6 +86,7 @@ export const HUSH_GORGE = {
   // the gate and its lever.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_gorge ?? []),
     { sprite: 'grapple_ring', x: 26, y: 6, grapple: true },
     { sprite: 'sign', x: 28, y: 5, text: 'gorge_sign' },
     { sprite: 'kid_gap', x: 12, y: 7, text: 'gorge_crack', gap: true },
@@ -93,6 +98,8 @@ export const HUSH_GORGE = {
     { sprite: 'chest', x: 33, y: 1, text: 'gorge_chest', gives: 'charcoal_toffee', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 34, y: 21, text: 'gorge_pouch', gold: 110, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chalk_rock_down', x: 24, y: 6, text: 'gorge_chalk' },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_gorge ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', M: 'gorge_cliff', m: 'gorge_cliff', '~': 'mist_brook' },
 

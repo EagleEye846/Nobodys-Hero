@@ -8,4 +8,8 @@ THE TIDE HELD
 Chapter Five complete
 
 [neutral]
-In Saltcombe, behind the harbour office, a door that was always locked is standing open.
+In Saltcombe, the harbour office's back door, always locked, is standing open.
+
+# The card shown once after these credits, and on loading a save made after them (src/ui/goalLine.js, maybeShowEndNotice).
+[notice]
+The tide has turned. Finish what's left behind, or take the chart in the harbour office when you're ready to go on.

@@ -22,12 +22,13 @@ export const TO_THE_WRECK_YARD = {
   ],
 
   steps: [
-    { do: 'say', who: 'haddock', text: '{proud}The Wreck Yard, is it? Right. In you get. Sit still, and don\'t touch the oars.', until: 'haddock_gone' },
+    { do: 'say', who: 'haddock', text: '{proud}The Wreck Yard, is it? Right. In ye get. Sit still, and don\'t touch the oars.', until: 'haddock_gone' },
     // After the chapter, Ves rows ((draft)).
-    { do: 'say', who: 'ves_voice', text: "{bored}The Wreck Yard. In you get. Nobody touch the oars.", after: 'haddock_gone' },
+    { do: 'say', who: 'ves_voice', text: "{proud}The Wreck Yard. In you get. Nobody touch the oars.", after: 'haddock_gone' },
     { do: 'stage', dim: 1, seconds: 1.6 },
     { do: 'sound', name: 'splash' },
     { do: 'wait', seconds: 1.8 },
     { do: 'goto', room: 'wreck_gate', spawn: { x: 9, y: 10 } },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

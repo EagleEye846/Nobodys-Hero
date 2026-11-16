@@ -1,0 +1,34 @@
+# TOLLIVER: Farmer Tolliver, an ancient tortoise in a waistcoat, at the Last Farm (sunny_last_farm). He has farmed this land for two hundred years and has never been to see the sea.
+
+[first]
+Oh. It's you. From the field. I took the short cut.
+
+Last farm in Sunnyside. I've been here two hundred and some years. You get to know the short cuts.
+
+You're off to the sea? Over the cliff? I've never been, myself. It's only a few fields on. It'll keep.
+
+[repeat]
+Do tell me what it's like. On the way back. Don't hurry. I'll still be here.
+
+I've heard it's big. And wet. I'd have thought one of those would be enough.
+
+Bring me a jarful, if you're passing. Just to see. I won't need much of it.
+
+[first after first_sight_of_the_sea]
+You've seen it? You have? Well. Is it big? ...Bigger than the turnip field?
+
+[repeat after first_sight_of_the_sea]
+Bigger than the turnip field. I'm going to think about that for a good long while.
+
+# The side quest "A Bit of the Sea" (src/data/rooms/sunnyLastFarm.js): the jar from Gullrest's lobster pots.
+[sea_done]
+What's that? In the jar? ...That's it? That's the sea?
+
+It's smaller than I'd heard.
+
+Oh, I know. I know. It's only a bit. I'll put it on the sill and look at it of an evening. That'll do me for a hundred years or so.
+
+Here. Turnips, two hundred and four years ago. First prize. I'd like it to see a bit of the world.
+
+[sea_after]
+It's gone a bit cloudy. Like weather. I didn't know it did weather.

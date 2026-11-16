@@ -1,7 +1,14 @@
 # CORRIE, THE TIDECALLER: chapter 5's last boss, at the top of the Last Light.
-# A boy of about eight in an oilskin far too big for him, who tried to stop the
-# sea with a spell and became the storm. He speaks a little, in fragments, like
-# the child he is. The hero never speaks. (draft: every line here)
+# A boy of about eight in an oilskin far too big for him. He went out to stop
+# the sea with a spell, and the spell became the storm. He's still trying to
+# get it right ("WHEN I GET IT RIGHT HE WILL COME BACK", on the gallery wall),
+# and the bigger it got, the more he hoped somebody would see it and come.
+# Across the four phases: a proud, lonely boy showing off his spells; the
+# storm taking him over; dragged round in the whirl; then a tired child.
+# He speaks like the child he is, in short bits. The hero never speaks.
+# Ves and Bramble only say what they can see; they're frightened, and they
+# shout. (draft: every line here, rewritten 2026-11-15; the old ones are in
+# notes/text-backup-2026-11-15/corrie/)
 # Numbers (HP, damage, his four phases) live in src/data/enemies/corrie.js.
 # He can't be spared: the storm answers every kindness ([no_mercy]).
 #
@@ -17,28 +24,29 @@ all the stairs.
 
 Nobody comes
 up the stairs.
+Not ever.
 
-I'm stopping
-the sea.
-I've nearly
-done it.
+...Is he
+with you?
+The Hero?
 
-Like the Hero
-would.
+...No.
+He never is.
 
-Go home.
-...Go HOME.
+Then watch.
+I'm going to
+stop the sea.
 
 [intro]
 The boy lifts his driftwood staff, and the sea comes up the tower to meet it. CORRIE, THE TIDECALLER!
 
 # Shown at the start of each of your turns, in order, then repeating.
 [flavor]
-CORRIE floats over nothing. His coat is far too big for him. The sleeves are rolled four times and still hang past his hands.
+CORRIE floats over nothing. His coat is far too big for him. The sleeves hang right past his hands.
 
 The glow in the fork of his staff flickers like a candle in a draught.
 
-Water runs off his hem and never reaches the floor.
+Drops of sea go round and round him in a ring, and never fall.
 
 He holds the staff the way you'd hold something you were told not to touch.
 
@@ -52,9 +60,9 @@ Rain lashes the lamp room's glass. The lightning finds the water first.
 TIP: Haddock's bell, rung by you and Bramble together, sends the water back down.
 
 [flavor: whirlpool]
-The sea under the tower is turning. Everything it ever took is going round in it.
+The water under him is turning. Planks and oars go round in it, and the bits of old boats.
 
-Planks. Oars. A figurehead with salt in her hair. Round and round.
+A ship's figurehead goes by, with salt in her hair. Round and round.
 
 Below the waist, CORRIE isn't there any more. Only the whirl.
 
@@ -75,78 +83,85 @@ Watch.
 I can do
 the boats.
 
-The Hero had
-a coat like
-this.
-Mine's nearly
-the same.
+This coat's
+just like his.
+Nearly.
 
-Don't come
-closer.
-I'm busy.
+Go away!
+I'm nearly
+getting it right.
 
 I learned this
 one myself.
 Mostly.
+
+When I get it
+right, he'll
+come back.
 
 I'm being
 brave.
 See?
 
 [taunts: storm]
-It's ALL the
-sea now.
+That's not
+the spell!
+That's NOT it!
 
 I said STOP.
 Why won't
 it stop?
 
-I'm the storm.
-I'm meant
-to be.
-
-Louder.
-LOUDER.
-
 It's not
 listening.
-It never
-listens.
+It never listens.
+
+BIGGER.
+Big enough
+that he SEES.
+
+Go AWAY!
+You're making
+it worse!
 
 [taunts: whirlpool]
 Round and round.
-Round and round.
+I can't get
+out.
 
-Everything
-comes back
-down here.
+If I let go,
+it all
+comes in.
 
 Hold on.
 Hold ON.
+
+It took the
+boat. It took
+Haddock's boat.
 
 Make it stop
 spinning.
 
 [taunts: lamp]
 It's too bright.
-Turn it off.
+I'm so
+tired.
 
-I waited.
-I waited
-ever so long.
+Is Haddock
+cross with me?
 
-I'm tired.
-I'm so tired.
+I made it big
+so he'd see.
+So somebody'd come.
 
 Was I good?
 Was I like
 him?
 
 Nobody came.
-The light
-went out
-and nobody
-came.
+Not for ever
+so long.
 
 # Low on HP (below his phase's lowHp), often instead of a taunt.
 [low_hp]
@@ -157,16 +172,17 @@ I CAN.
 [low_hp: lamp]
 I'm sorry.
 I'm sorry.
-I can't stop.
+I can't stop it.
 
 # One section per TALK option (the names must match corrie.js).
 [talk: Check]
 CORRIE - HP 36000
-A boy who tried to stop the sea and became the storm. Darts, boats, a spell circle, a lullaby. Then the tide, the whirlpool and the lamp. He can't be talked down. The storm won't let him hear.
+A boy in a coat far too big for him, and the storm all round him. Darts, boats, a spell circle, a song. Words don't get through the storm to him.
 His bullets come too thick to feed on: grazing them gives little SP. Spend it well.
 
 [talk: Ring Haddock's bell]
-You and Bramble take Haddock's bell by its cord together and ring it, hard. The note goes out over the water, and for a moment the storm holds its breath.
+You and Bramble take Haddock's bell by its cord together and ring it, hard. Bramble yells over it: "HADDOCK! We're UP here!"
+The note goes out over the water. CORRIE looks round at it, and for a moment the storm holds its breath.
 The sea pulls back. The next attack will be gentler.
 
 [talk: Wave to him]
@@ -176,21 +192,32 @@ You wave to him across the water, both arms, the way you'd wave a boat in.
 You hold out a hand.
 
 # Any kindness at all (a TALK, Pacify, a candle, a friend's kind word): the
-# storm answers, not him. The first time, all of [no_mercy]; after that, one
-# of [no_mercy_again].
+# storm answers, not him, in the panel. The first time, all of [no_mercy];
+# after that, one of [no_mercy_again] (each phase has its own).
 [no_mercy]
-The wind tears it away and throws it back into the sea.
+You try to reach him. The wind gets there first, tears it up, and throws it into the sea.
 
-Somewhere in the storm, he might have heard. If he did, the storm didn't let him.
+If he heard any of it, the storm didn't let him answer.
 
 [no_mercy_again]
-A wave comes over the rail, and he's gone behind it.
+The rain on the glass is too loud. Nothing gets through to him.
 
+He looks your way for a moment. Then the wind turns him round again.
+
+[no_mercy_again: storm]
 The thunder answers instead. It doesn't sound like him.
 
-The rain is too loud. Nothing gets through to him.
+A wave comes over, and he's gone behind it.
 
+[no_mercy_again: whirlpool]
 The whirl takes it and turns it round and round until it's gone.
+
+The roar of the water swallows it.
+
+[no_mercy_again: lamp]
+He almost looks up. Then the storm pulls him back.
+
+The wind throws it straight back at you.
 
 # Said when you try to RUN.
 [no_escape]
@@ -198,44 +225,117 @@ The stair behind you is under water. There's only up, and up is him.
 
 # What's said as each phase starts (see `beat` in corrie.js).
 [phase: storm]
-CORRIE lifts the staff over his head, and the sky comes down into the box. The sea starts to climb the walls.
+CORRIE screams, and the storm comes pouring out of him: black cloud and green lightning. The sea starts to climb the walls.
 
 [phase: storm foe]
-It's meant
-to go
-DOWN.
+No. NO.
+That's not
+the spell!
+
+[phase: storm bramble]
+{scared}It's coming UP! Why's it coming UP? This is the TOP!
 
 [phase: storm vesper]
-{determined}Right. He's the weather now. Keep above the water, and don't stand where it lights up.
+{scared}Feet out of the water! Get UP, get up!
 
 [phase: whirlpool]
-The sea below the tower starts to turn. The whole box turns with it, and the wreckage of every boat it took comes round.
+The water under him starts to turn, faster and faster, and the whole room goes round with it. Wreckage comes round too: planks, oars, bits of boats.
 
 [phase: whirlpool foe]
-I can't
-stop now.
-If I stop,
-it all
-comes in.
+It won't
+let go
+of me!
 
 [phase: whirlpool bramble]
-{scared}That's a plughole. That's the biggest plughole there is. I'm not going down a plughole.
+{scared}That's a plughole. That's the biggest plughole there is. I'm NOT going down a plughole!
+
+[phase: whirlpool vesper]
+{furious}Grab something. ANYTHING!
 
 [phase: lamp]
-High above, the Last Light's great lamp swings round, and its beam comes down through the storm.
+Lightning hits the great lamp. The old wick catches, and the lamp starts to turn, its beam sweeping the dark.
 
 CORRIE flinches from it. For a moment he's only a small boy in a big coat.
 
 [phase: lamp foe]
-...The light's on.
+...The light's
+on.
 
 Haddock always
 left it on.
-So I'd find
-the way back.
+So I'd come home.
+
+[phase: lamp bramble]
+{worried}He's just a little kid. He's littler than ME.
 
 [phase: lamp vesper]
-{resolute}The beam's coming round. Get behind something and stay there.
+{scared}Beam! Get DOWN behind something!
+
+# Ves's and Bramble's turns, in each part of the fight (instead of their usual
+# lines). What they shout is only what they can see.
+[vesper_turn: boy]
+Ves stares at the boy. "Corrie? ...It can't be." Her turn.
+
+Ves watches the paper boats go by. "He made those. Same as downstairs." Her turn.
+
+Ves grips her umbrella. "That's a CHILD. Floating." Her turn.
+
+Ves wipes the spray off her face. "Fine. Stop him first. Questions after." Her turn.
+
+[vesper_turn: storm]
+Ves shouts over the thunder. "Keep OUT of the water!" Her turn.
+
+Ves looks down. "No, no, no. It's still coming up." Her turn.
+
+Ves can't hear herself. "Did he DO that? On purpose?" Her turn.
+
+Ves wipes the rain out of her eyes. "I can't SEE!" Her turn.
+
+[vesper_turn: whirlpool]
+Ves digs her umbrella into the boards. "Hold ON!" Her turn.
+
+Ves, white in the face: "Don't let it pull you in. Don't you DARE." Her turn.
+
+Ves watches the boy go round with it. "He can't get out either." Her turn.
+
+[vesper_turn: lamp]
+Ves ducks behind a pillar as the beam goes by. "Down! DOWN!" Her turn.
+
+Ves looks at the boy, then away. "He's crying." Her turn.
+
+Ves keeps her voice low. "Nearly done. Nearly." Her turn.
+
+[bramble_turn: boy]
+Bramble waves his hatchet at the boy. "Are you Corrie? HADDOCK'S Corrie?" His turn.
+
+Bramble, to the boy: "Oi! Put the stick DOWN! You'll have somebody's eye out!" His turn.
+
+Bramble eyes the water on the floor and steps round it. His turn.
+
+Bramble, to the boy: "Your coat's too big! You'll TRIP!" His turn.
+
+[bramble_turn: storm]
+Bramble stands on tiptoe, out of the water. "I'm fine. I'm FINE." His turn.
+
+Bramble shouts down the stair. "HADDOCK! It's raining INSIDE!" His turn.
+
+Bramble yells at the storm. "Leave him ALONE!" His turn.
+
+Bramble's teeth are chattering. He grips his hatchet anyway. His turn.
+
+[bramble_turn: whirlpool]
+Bramble flattens himself on the boards. "I'm not scared. My LEGS are scared." His turn.
+
+Bramble, to the boy: "Corrie! Grab hold of something! ANYTHING!" His turn.
+
+Bramble yells at the water. "Let him GO, you stupid sea!" His turn.
+
+[bramble_turn: lamp]
+Bramble, to the boy: "We came up all the stairs, Corrie! Somebody CAME!" His turn.
+
+Bramble wipes his face. It's only rain. Probably. His turn.
+
+Bramble crouches behind a pillar. "Beam! BEAM!" His turn.
 
 # His last words as he's beaten (before the panel says so).
 [beaten: lamp foe]

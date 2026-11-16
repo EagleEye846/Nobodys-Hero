@@ -1,0 +1,93 @@
+# GULLION
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/gullion.js.
+
+[intro]
+A gull the size of a sheepdog lands in front of you, squares up, and puts both taped wing-tips under its chin. Behind it is a very full sack. A GULLION!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+GULLION bounces on its toes, fists up, and glares at you over its dented tin cap. The sack on its back clinks.
+
+GULLION eyes your pockets. Then your hands. Then your pockets again. It is not subtle and has never needed to be.
+
+A spoon slides out of the sack and falls on the ground. GULLION steps on it and looks at the sky.
+
+GULLION throws a one-two at the air, and the air, which is fast, gets out of the way.
+
+Smells like fish and chips, and cold salt air.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+GULLION is edging towards the side of the box with the sack held in front of it. It's thinking about the sea.
+
+[flavor: spareable]
+GULLION has put the sack down and is standing well away from it, as if it had never seen that sack in its life.
+
+# When a hit lets him snatch something out of your bag ({item} is its name).
+[steal]
+GULLION snatches your {item} and stuffs it in the sack! Beat him, or calm him, to get it back.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Mine!
+
+That's
+MINE!
+
+What's in
+your
+pockets?
+
+Finders
+keepers!
+
+Come get
+it!
+
+Squawk!
+
+...Is that
+a chip?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/gullion.js.
+[talk: Inspect]
+GULLION - HP 1850
+A brawler gull with a swag sack. Dives for whichever chip is nearest you, throws junk that each goes its own way, and brawls in a cloud with fists on the side facing you.
+
+[talk: Offer a chip]
+You hold out a chip, flat on your palm. GULLION goes absolutely still. Then he snatches it, drops his fists, and swallows it whole with his eyes shut. A very small, very happy noise comes out of him, and he looks about to cry.
+
+[talk: Check your pockets]
+You turn out your pockets, to show him there's nothing worth taking. GULLION looks into every one. Then, quietly, he puts something back in your hand: a button. He says he was going to give it back anyway.
+
+[talk: Admire the sack]
+You heft the sack, very impressed, and give him a slow nod of respect. GULLION puffs out his chest. He starts to show you things. Four teaspoons. A kettle lid. A boot for a left foot. He says it is a collection, not stealing.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+GULLION goes down on his back with his feet in the air and the sack bursting. Out roll the spoons, the boots, the buttons, a lot of chips. He sits up and starts gathering them again, a little dazed.
+
+[pacified]
+GULLION sits on his sack, cracks a chip in half, and gives you the bigger bit. Then he gives you your own button, a spoon you didn't know you'd lost, and a very dignified nod. He flaps off, a lighter bird.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says that {foe} has an excellent sack, and could she see what's in it, and not take anything. {foe} lets her look. There is a lot in there. It is mostly spoons.
+
+Ves tells {foe} that gulls are the only birds she's ever respected, and she's not sure why. {foe} says it's because they know what they want. She finds she can't argue.
+
+Ves hides her sandwich behind her umbrella. {foe} watches the umbrella very hard. She says that's the most honest anyone's been about a sandwich.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} that his chips are for him, and he's sorry. {foe} says that's the first time anyone has said sorry for having chips. Bramble gives it one.
+
+Bramble asks {foe} if it has stolen anything good. {foe} shows him a ship's bell, a trowel, and half a kite. Bramble asks to be its friend. {foe} says maybe.
+
+Bramble says gulls are really big birds, up close. {foe} says that's the idea. Bramble steps behind Ves. {foe} says that's the idea, too.

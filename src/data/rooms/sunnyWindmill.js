@@ -20,6 +20,7 @@
 //   f  white fence (solid)   Z  blossoming bush (solid)   N  buttercup meadow
 //   I  oak   T  apple tree   J  blossom tree (solid, standing)
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_WINDMILL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_windmill',
@@ -75,6 +76,8 @@ export const SUNNY_WINDMILL = {
   props: [
     // A save stone in the east yard, past the second gates.
     { sprite: 'savepoint', x: 34, y: 8, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 35, y: 8, travel: 'windmill', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'sy_windmill', x: 20, y: 6, text: 'mill_windmill', animation: 'sy_windmill', speed: 0.9 },
     { sprite: 'sy_mill_gear', x: 23, y: 8, text: 'mill_gear', animation: 'sy_mill_gear', speed: 0.6 },
     { sprite: 'sign', x: 8, y: 8, text: 'mill_sign' },
@@ -94,9 +97,9 @@ export const SUNNY_WINDMILL = {
     { sprite: 'gold_pouch', x: 3, y: 17, text: 'mill_pouch', gold: 50, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 37, y: 17, text: 'mill_chest', gives: 'sea_boots', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'bench', x: 27, y: 7, text: 'mill_bench' },
-    { sprite: 'daisy_patch', x: 13, y: 7, walkable: true },
-    { sprite: 'daisy_patch', x: 30, y: 14, walkable: true },
-    { sprite: 'buttercups', x: 25, y: 4, walkable: true },
+    { sprite: 'daisy_patch', x: 13, y: 7, walkable: true, decor: true },
+    { sprite: 'daisy_patch', x: 30, y: 14, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 25, y: 4, walkable: true, decor: true },
     { sprite: 'sy_seed_heads', x: 2, y: 8, animation: 'sy_seed_heads', speed: 1.1 },
     { sprite: 'sy_seed_heads', x: 10, y: 12, animation: 'sy_seed_heads', speed: 1.1 },
     { sprite: 'sy_seed_heads', x: 19, y: 16, animation: 'sy_seed_heads', speed: 1.3 },
@@ -104,12 +107,14 @@ export const SUNNY_WINDMILL = {
     { sprite: 'sy_seed_heads', x: 31, y: 4, animation: 'sy_seed_heads', speed: 1.0 },
     { sprite: 'sy_seed_heads', x: 9, y: 3, animation: 'sy_seed_heads', speed: 1.0 },
     { sprite: 'sy_seed_heads', x: 37, y: 12, animation: 'sy_seed_heads', speed: 1.0 },
-    { sprite: 'sy_seed_drift', x: 6, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 14, y: 6, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 19, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 26, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 31, y: 15, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 35, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
+    { sprite: 'sy_seed_drift', x: 6, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 14, y: 6, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 19, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 26, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 31, y: 15, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 35, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_windmill ?? []),
   ],
   tileTexts: { '#': 'field_hedge', W: 'field_hedge', I: 'field_oak', T: 'field_apple', J: 'field_blossom', Z: 'blossom_bush', f: 'soft_fence' },
 

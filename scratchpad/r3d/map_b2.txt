@@ -1,0 +1,450 @@
+M
+=== lastlight_upper 30x19 area=lastlight tide=false text=interactions/lastlight.txt
+    012345678901234567890123456789
+  0 ##############################
+  1 ##############################
+  2 #T#T###TT###T#####T###T##TDD##
+  3 #ooop+ooop+ooooTooo##ooooooSx#
+  4 #+++++++++++++ooo++##p++xxxxp#
+  5 #++++++++++++++++++##+++xxxxx#
+  6 #+++++++++++++p++++++xxxxxxxx#
+  7 #++####++++####++++####xx###x#
+  8 #++++p++++ooo++p+++++xxSSSSSS#
+  9 #++++++p++oTo++++++++xxSSSpSS#
+ 10 #+++++++++ooo+p+++p++xxSSSSSS#
+ 11 ####++++####++++####+xx####xx#
+ 12 #pooo++++p++++++++++pxxxxxxoo#
+ 13 #+oTo+++++++++++p+p+pp+++oooT#
+ 14 #xopo++++++++++++++++++++pToo#
+ 15 #xxxp####++++####++oo####ooo+#
+ 16 #xxxxx++++++p++++++oTop++++++#
+ 17 #xxxxp+++++++++p+++ooo++p++++#
+ 18 ##DD##########################
+tiles:
+  0 ##############################
+  1 #hhhhhhhhhhhhhhhhhhhhhhhhhhhh#
+  2 #hhhhHhhhh6hhhhhhhhhh6hhHhDDh#
+  3 #q.......:::.:oooo.II.:::...q#
+  4 #.q.....::.:::oooo.II..:::..:#
+  5 #.......:.....::::.II...::...#
+  6 #q.....::..........:.....:...#
+  7 #..IIJI:...IIIJ....IJII..IIJ.#
+  8 #.....::.........:::.......:.#
+  9 #....::.......::::.:........:#
+ 10 #...::.......::.....::.......#
+ 11 #IJI:...IIJI::..JIII.:.IIJI..#
+ 12 #...::.....::........::......#
+ 13 #....:.....:..........::....q#
+ 14 #.....::..::...........::...q#
+ 15 #....IIIJ:...IJII....IJII.:..#
+ 16 #.::....:........:....::..::q#
+ 17 #.:..::::........::::::....qq#
+ 18 ##oo##########################
+props: c5_long_lantern@15,3* c5_long_lantern_cold@15,3* c5_puddle@9,3 c5_puddle@21,4 c5_rubble@4,3 c5_rubble@28,4 c5_rubble@1,12 c5_floor_crack@7,9 c5_floor_crack@18,13 c5_floor_crack@26,9 c5_floor_crack@12,16 c5_puddle@14,10 c5_lantern_fallen@20,13 c5_puddle@15,17 c5_net_torn@5,17 c5_rubble@24,17 ll_pillar_fallen@5,8 ll_pillar_fallen@15,8 ll_pillar_fallen@9,12 ll_pillar_fallen@22,16 ll_oil_spill@21,13 ll_kelp_drag@25,14 ll_grating@18,10 ll_grating@3,14 ll_pipes_run@1,2* ll_pipes_valve@3,2* ll_tide_marks@7,2* ll_chain_hook@12,2* ll_lamp_bracket@18,2* ll_pipe_riser@22,2* ll_chain_hook@25,2* gold_pouch@28,13* telescope@11,9* c5_crate@3,13* sign@20,16* c5_barrels@26,14* in_sketch_light@8,2* ll_oil_spill@5,8 ll_coal_spill@16,13 ll_grating@20,12 c5_puddle@12,16 c5_rubble@14,6 ll_kelp_drag@4,15
+
+=== sunny_cliff_hollow 22x18 area=gullrest tide=false text=interactions/sunnyside.txt
+    0123456789012345678901
+  0 ####DDD###############
+  1 ####xxx###############
+  2 ####xxx##T############
+  3 ##+xxxxxooo+oToT#+o#o#
+  4 ##+xxxxx++++ooo#oooTo#
+  5 ##++++++++##++xxoT#oo#
+  6 #####+########xxoooxx#
+  7 #####o########xxxxxxx#
+  8 #####oT#######xxxExxx#
+  9 #####oo#######xxxxxxx#
+ 10 ##############oxxxxx##
+ 11 ####+++++##+TTooxxxxx#
+ 12 ###T++++++++ooT##o#o+#
+ 13 ##To#++++++TooooToTo+#
+ 14 ##oo+++oooooToxEoooo+#
+ 15 ###+T++oTooTooxxxxx++#
+ 16 #########oo###########
+ 17 #########DD###########
+tiles:
+  0 ####:::###############
+  1 ##WW:::WWWWWWWWWWWWWW#
+  2 ##WW:::WWWWWWWWWWWWWW#
+  3 ##.................O.#
+  4 ##.............^.....#
+  5 WW........~~.........#
+  6 ~~~~~j~~~~~~~~;......#
+  7 ~~~~~j~~~~~~~~;......#
+  8 ~~~~~..~~~~~~~;......#
+  9 ~~~~~..~~~~~~~;......#
+ 10 ~~~~~~~~~~~~~~;.....O#
+ 11 ~~~~.....~~..........#
+ 12 ##O...............O..#
+ 13 ##..O................#
+ 14 ##...................#
+ 15 ##O..................#
+ 16 #########::###########
+ 17 #########::###########
+props: sy_sea_window@9,2* sy_cave_drip@13,3* c5_net_frame@15,3* c5_lobster_pots@17,5* c5_rowboat@14,12* chest@18,13* c5_rope_coil@11,13* sy_shells@3,12* sy_shells@12,11* gold_pouch@6,8* sy_dim_shaft@4,15* sy_fisher_lantern@8,15* sign@11,15* r5s_fish_tub@13,11* r5s_crab_trap@16,13* r5s_hung_coat@19,4* r5s_boots@2,13* r5s_fishing_rod@12,14*
+
+=== ship_figurehead_perch 30x14 area=ghostship tide=false text=interactions/ghostship.txt
+    012345678901234567890123456789
+  0 ##############################
+  1 ##############################
+  2 #######p######################
+  3 ##############################
+  4 #opooTooooo+op########p#######
+  5 #oopooooTTo+oo################
+  6 Dxoooxxpooopoo++xxSxx+++ooo###
+  7 DxoV#xx++p+oTo++xxSxx+++oT####
+  8 #xoooxx+++pooo++xxSxx+++ooo###
+  9 #ooopoTT++ooTo#p###p##########
+ 10 #opoxoTo++oTop##p###p#########
+ 11 ########################p#####
+ 12 ##############################
+ 13 ##############################
+tiles:
+  0 ##############################
+  1 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  2 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  3 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  4 #.............~~~~~~~~~~~~~~~#
+  5 #.............~~~~~~~~~~~~~~~#
+  6 ..............ooooooooooooo~~#
+  7 ..............ooooooooooooo~~#
+  8 #.............ooooooooooooo~~#
+  9 #.............~~~~~~~~~~~~~~~#
+ 10 #.............~~~~~~~~~~~~~~~#
+ 11 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+ 12 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+ 13 ##############################
+props: savepoint@3,7 gs_figurehead@25,7* gs_figurehead_dark@25,7* gs_figurehead_dark@25,7* gs_rail_post@2,4 gs_rail_post@2,10 gs_rail_post@13,4 gs_rail_post@13,10 gs_capstan@8,5* gs_coil@6,9* c5_chain_bollard@12,9* gs_post_lantern@5,4* gs_post_lantern@11,10* gs_puddle@9,7 gs_puddle_b@4,9 gs_fog_a@16,10 gs_fog_b@22,4 gs_fog_c@20,10 gs_fog_a@7,2 gs_fog_b@24,11 gs_shoe@10,8 gs_letter_dropped@7,6 gs_shadow_a@3,5 gs_shadow_b@11,6 wy_weed_fringe@15,9 wy_weed_fringe_b@19,9 r5g_barnacles@7,9* r5g_hook_lamp@9,5* r5g_weed@12,7* r5g_mug@6,10*
+
+=== isles_gannet_stack 40x24 area=isles tide=false text=interactions/isles.txt
+    0123456789012345678901234567890123456789
+  0 ########################################
+  1 ########################################
+  2 ###########++++++##########xxxx+########
+  3 ####+opo+++++pp++++oT####opxxxx+++oT####
+  4 ###++oTp+++p++++p+pooo++oToEoox+++ooo###
+  5 ##+p+ooo+++ooo++ooopp+++poooTox+p+ppp+##
+  6 #ooo+++ooppoTo+poTo+++oooxxoTox+ooooop+#
+  7 #opo+++oTo+ooo++ooo+++opoxxoooxpopooTo+#
+  8 ##########+++#######################oo##
+  9 ###+ooT#################################
+ 10 ###+opo##################p##############
+ 11 ############################++++++++opo#
+ 12 ############################o+++++++oooD
+ 13 #######p###################po++++++++xxD
+ 14 ##################p####p####o++++++p+#x#
+ 15 ##p###########p##############++p+++++x##
+ 16 ##############################p++++++###
+ 17 #########++#####################++######
+ 18 Dxxxx++++poo+p++########################
+ 19 Dxxpppo++oTp++++########################
+ 20 #xxxoTo++oooT++#########################
+ 21 ##xpooo++##+s###########################
+ 22 ########################################
+ 23 ########################################
+tiles:
+  0 ########################################
+  1 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  2 #~~~~~~~~~~,,,,,,~~~~~~~~~~,,,,,~~~~~~~#
+  3 #~~~,,,,,,,,,,,,,,,,,~~~~,,,,,,,,,,,~~~#
+  4 #~~,,,,,,,,,,,:::::::::::::::,,,,,,,,~~#
+  5 #~,,,,,,,::::::,,,,,,,,,,,,,::::,,,,,,~#
+  6 #,,,,,::::,,,,,,,,,,,,,,,,,,,,,::::,,,,#
+  7 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#
+  8 #WWWWWWWWW,,,WWWWWWWWWWWWWWWWWWWWWWW,,W#
+  9 #WW,.,,WWWWWWWWWWWWWWWWWWWWWWW#WWWWWWWW#
+ 10 #WW.,,.WWWWWWWWWWWWW##WWWWWWWWWWWWWWWWW#
+ 11 #WWWWWWWWWWWWWWWWWW#WWWWWWWW..,,,,,,...#
+ 12 #WWWWWWWWW##WWWWWWWWWWWWWWWW.,,,,,,,,...
+ 13 #WWWWWWWWWWWWWWWWWWWWWWWWWWW..,,,;,,,...
+ 14 #WWWWWWWWWWWWWWWWWWWWWWWWWWW.,,,,,,,.x.#
+ 15 #WWWWWWWWWWWWWWWWWWWWWWWWWWW~.,,,,,,..~#
+ 16 #WWWWWWWWWWWWWWW##WWWWWWWWWW~~...,...~~#
+ 17 #WWWWWWWW,,WWWWWWWWWWWWWWWWW~~~~..~~~~~#
+ 18 ::,,,..,,,,,,,..~~~~~~~~~~~~~~~~~~~~~~~#
+ 19 ::,,,,,,.,,,,,,;~~~~~~~~~~~~~~~~~~~~~~~#
+ 20 #,,,..,,,,,,,;;~~~~~~~~~~~~~~~~~~~~~~~~#
+ 21 #~,,,,,,,~~;;~~~~~~~~~~~~~~~~~~~~~~~~~~#
+ 22 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+ 23 ########################################
+props: swing_ring@14,15 swing_ring@18,14 swing_ring@23,14 swing_ring@27,13 swing_ring@25,10 grapple_ring@23,7 grapple_ring@2,7 grapple_ring@33,7 swing_ring@2,15 swing_ring@7,13 grapple_ring@5,10 c5_chest@6,9* sign@10,19* il_drift_timber@12,20* il_rocks@5,20* il_thrift@3,21 il_lichen@3,19 il_cairn@6,4* il_wall_tumble@25,4* il_oil_cans@28,6* il_gull_rock@35,3* il_gull@13,3 il_thrift@9,6 il_grass_tuft@20,5 il_grass_tuft_b@31,7 il_lichen@15,6 il_lichen@37,6 c5_lantern_hook@37,11 il_tidepool_small@31,15 c5_wrack_line@30,16 il_thrift@35,14 col_glass_black@36,5 il_gull_rock@12,6* c5_tattered_flag@36,7* c5_rope_coil@17,6* il_cairn@8,7* sign@20,3* c5_driftwood@28,5* c5_marram@3,5 c5_marram@11,4 c5_marram@32,5 c5_sea_holly@10,6 c5_sea_holly@26,3 il_thrift@6,3 il_thrift@19,5 il_thrift@35,5 il_grass_tuft@14,3 il_grass_tuft_b@24,5 il_lichen@7,4 il_lichen@16,4 il_lichen@34,5 c5_gull_marks@18,4 c5_wrack_line@5,19 c5_seaweed_heap@9,18 c5_puddle@11,19 il_thrift@4,19 c5_marram@13,18
+
+=== reach_wreck 48x20 area=reach tide=false text=interactions/reach.txt
+    012345678901234567890123456789012345678901234567
+  0 ################################################
+  1 ####################################p###########
+  2 ################################################
+  3 ###############p##ppxxxxoop#####oT###ooo########
+  4 ###################oxExxoT##oTo#Top#+oTo+#######
+  5 ##################xpxxxxooo#ooo#oo###oTo+#######
+  6 ##################oooxpooo+##T##oTTo+pop+#######
+  7 #################poT#oooTo++ooooooTop++op#######
+  8 ###########xxo#####oopoooop+++poTo##+ooTT#######
+  9 #########SSxx#p##+###################oTooo+#####
+ 10 #########SSxxooo++##################opoox#o#####
+ 11 ######p##Spxxxxxxx#################p#+pop#oT####
+ 12 #########SSoooxooopx+ooop###p###p###o+op#So#####
+ 13 #########oooToxoToxx+oTo##p#########+pooo#S#####
+ 14 #########oTopExoEoxx+oo#####p########p+xx#######
+ 15 ##########poxxxxxx###################+++x#######
+ 16 ##########xxx#########p#############++##########
+ 17 ################################################
+ 18 ################################################
+ 19 ################################################
+tiles:
+  0 ################################################
+  1 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  2 #~~~~~~~~~~x~~~~~~~fff~~ffffff~fff~~~x~~~~~~~~~#
+  3 #~~~~~~~~~~~~~~~~~~ooooooooaawaaoo~~~qqqx~~~~~~#
+  4 #~~~^~~~~~~~~~~~~~fooooooooaoooaoo~~qqqqq~~~^~~#
+  5 #~~~~~~~~~~~~~~~~~oooooooooaoooaoo~~~qqqq~~~~~~#
+  6 #~~~~~~~~~~~~~~~~~oooooooooaaoaaooggqqq,q~~~~~~#
+  7 #~~~~~~~~~~~~~~~~~ooooooooooooooooggqq,;q~~~~~~#
+  8 #~~~~~~~~~~,qq~~~~~ooooooooooooooo~~;qqqq~~~~~~#
+  9 #~~~~~~~~ooqqxq;qqhhhhhhhhhhhhhhhh~~xqqqqoo~~~~#
+ 10 #~~~~~~~~ooq,,qqqqhhhhhhhhhhhhhh~~~~qqqq;~o~~~~#
+ 11 #~~~~~~~~ooqq,;qqqxhhhxxhhh~~hhxx~~~~qqqq~o~~~~#
+ 12 #~~~~~~~~qqqq;qqqqqqqq,,qxx~~x~xxx~~qqqqxoo~~~~#
+ 13 #~~~~x~~~qq,,qqq;qqqqq,,~~x~~~~~x~~~qq,,,~o~~~~#
+ 14 #~~~~~~~~q,,,qqqqq;qqqq~~~~~~~~~~~~~~q,,,~~~~~~#
+ 15 #~~~~~~~~xq;qqqqqq~~~~~~~~~~~~~~~~~~xq,,,~~~~~~#
+ 16 #~~~~~~~~~qqqx~~~~~~~~~~~~~~^~~~~~~~qqx~~~~~~x~#
+ 17 #~~~x~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+ 18 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+ 19 ################################################
+props: grapple_ring@21,8 wy_hull_hole@29,6* valve_wheel@29,4* c5_gangway_gate@34,6* c5_gangway_gate@34,7* rock_stump@24,7* cf_haddock_row@43,11 cf_bother@43,11* c5_chain_bollard@40,8* c5_ships_wheel@19,7* c5_tattered_sail@25,4* c5_tattered_flag@33,3* c5_figurehead@16,13* c5_anchor@38,4* sign@12,13* c5_crate@32,8* gold_pouch@32,4* c5_boat_upturned@14,9 c5_planks_scatter@18,12 c5_wrack_line@10,15 c5_crab_trail@10,11 c5_net_torn@19,5 c5_gull_marks@37,6 c5_puddle@37,10 c5_planks_scatter@37,14 c5_lantern_hook@39,12 wy_bow_broken@35,11 wy_ribs_jag@18,3 wy_ribs_jag_b@34,4 wy_mast_fallen@17,7 wy_barnacle_band@28,12 wy_barnacle_band_b@32,12 wy_weed_fringe@26,13 wy_plank_slick@15,3 wy_plank_slick_b@28,14 wy_plank_slick@36,1 wy_weed_mat@22,16 wy_timber_sunk@6,11 wy_rail_shadow@26,3 wy_scupper@19,3 wy_grating@22,6 wy_chain_pile@26,8 c5_planks_scatter@30,8 c5_oilskin_hook@38,5* il_note_tidy@39,8* gold_pouch@38,9* c5_barrel@22,13* c5_crate@10,14* c5_tattered_flag@33,6* c5_seaweed_heap@12,14 c5_wrack_line@40,11 c5_gull_marks@36,7 c5_crab_trail@38,11 c5_planks_scatter@24,12 c5_rope_coil@37,13 il_lichen@40,7 c5_puddle@39,6
+
+=== lanes_bubble 30x20 area=lanes tide=false text=interactions/lanes.txt
+    012345678901234567890123456789
+  0 ##############################
+  1 ##############################
+  2 ##############################
+  3 ##################T###########
+  4 ####T##p##################p###
+  5 ##p##########+oooo###T########
+  6 ####T###T##p++oTooTo###p######
+  7 ##p######p#px+ooopoo##p#######
+  8 ###p######xxx+p++++++###p#####
+  9 Dxxxx+++xxSooo++ooooop+ooo+xxD
+ 10 Dxxxx+++xxSoTo++oTpoTo+oTo+xxD
+ 11 ######p###xppo++ooooo#p#######
+ 12 ###########ooop+++++##########
+ 13 ###p##T####oTo++p++p##T####p##
+ 14 ##########p#po++++###p########
+ 15 #########p###########p########
+ 16 #############T###########T####
+ 17 ##p###################p#######
+ 18 ##############################
+ 19 ##############################
+tiles:
+  0 ##############################
+  1 #WWWWWWWWWWWWWWWWWWWWWWWWWWWW#
+  2 #~000~~~~~~~~~~~F~~~~0000000~#
+  3 #00000~~xx~~~~x~~~~~~~~000000#
+  4 #~000000~~~~~~~~~~~~~~~~~0000#
+  5 #~~0000~~~~~~.....~~~~^~~~00~#
+  6 #~F~~00~~~~.........~~~~~~~~~#
+  7 #~~~~~~~~~~.........~~~~~x~~~#
+  8 #~x###x##x...........x#x####x#
+  9 ..............................
+ 10 ..............................
+ 11 ###x#x###x...........x###x#x~#
+ 12 #~~x~~~~~~~.........~~~~~~F~~#
+ 13 #~~~~x~~~~~.........~~~~~~~~~#
+ 14 #~~~~~~~~~~~~.....~~~~~x0000~#
+ 15 #~~~000~~~~~~~~~~~~~~~0000000#
+ 16 #~00000F~~~~~~~~~~~~000000000#
+ 17 #0000000~~~~~x~~~~~0000000000#
+ 18 #WWWWWWWWWWWWWWWWWWWWWWWWWWWW#
+ 19 ##############################
+props: c5_lantern_post_lit@15,6* ln_pocket_rim@10,14* ln_bubbles@8,6* ln_bubbles@22,13* ln_bubbles@13,16* ln_bubbles@18,3* c5_drowned_signpost@12,13* c5_seaweed_heap@18,6* ln_fish@4,6* ln_fish@6,13* ln_fish@21,5* ln_fish@25,16* ln_light_shafts@2,7 ln_light_shafts@22,17 ln_under_a@2,5 ln_under_b@23,6 ln_under_b@2,17 ln_under_a@21,15 ln_kelp@9,7 ln_kelp@7,4 ln_kelp@22,7 ln_kelp@26,4 ln_kelp@9,15 ln_kelp@21,14 ln_kelp@3,13 ln_kelp@27,13 ln_dome_wall@10,14 ln_dome_glint@10,14 ln_caustics@11,7 ln_caustics@16,13 ln_caustics@12,11 ln_moss_b@17,7 ln_moss_a@12,14 c5_puddle@14,12 c5_puddle@18,10 c5_rubble@19,13 c5_rubble@11,6 ln_wall_weed@3,8 ln_wall_weed_b@24,8 ln_wall_weed_b@6,11 ln_wall_weed@22,11 lv_chimney@4,4* lv_boot@17,10* lv_bench@12,10* lv_letterbox@20,10* lv_sign_lane@24,10* lv_ivy@14,8 lv_toadstools@21,9 lv_boards@11,11
+
+=== wreck_under_point 26x16 area=wreck tide=true text=interactions/wreck.txt
+    01234567890123456789012345
+  0 ###DD#####################
+  1 ###px#####################
+  2 ##Txx####T#####T##########
+  3 ##xxoop###################
+  4 #ooxoTo###########p#######
+  5 #T#Too###############T####
+  6 #ooo++######p#############
+  7 #oTo++##p#################
+  8 #oooT#################oo##
+  9 ##op############p####oTox#
+ 10 ##To################+oopxD
+ 11 ###o################+++xxD
+ 12 ##xx############p###p+oo##
+ 13 #oEx###################p##
+ 14 #Toxx##To#################
+ 15 ##########################
+tiles:
+  0 ###oo#####################
+  1 ##Woo#WWWWWWW####WWW######
+  2 #WWooWWWWWWWWWWWWWWW######
+  3 #W:oo:WWWWWWWWWWWWWWWW####
+  4 #::::::~~~~WWW~~~WWWWWW###
+  5 #:::::~~~~~~x~~~~~~~WWWW##
+  6 #:::::~~~~~~~~~~~~~~~WWWW#
+  7 #;::::~~~~~~~~~~~x~~~~WWW#
+  8 #::::~~~~~~~~~~~~~~~~~::W#
+  9 #W::~~~~x~~~~~~~~~~~~::::#
+ 10 #W::~~~~~~~~~~~~~~~~:::::.
+ 11 #WW:~~~~~~~~~~~~~~~~:::::.
+ 12 #W::~~~~~~~~~~~x~~~~~:::W#
+ 13 #:::~~~~~~~~~~~~~~~~~~WWW#
+ 14 #::::~~..~~~~~~~~~~~~WWWW#
+ 15 ##########################
+props: bench@1,5* gs_fog_tally@2,2* gs_fog_tally@6,3* c5_lantern_post_unlit@5,4* c5_rope_coil@2,7* gs_fog_a@3,1 gs_fog_b@23,10 c5_stalactite_drip@9,2* c5_stalactite_drip@15,2* c5_stalactite_drip@21,5* wy_weed_fringe@6,3 wy_weed_fringe_b@18,4 wy_ribs_jag@23,13 c5_seaweed_heap@22,9* c5_wrack_line@20,12 c5_crab_trail@3,9 c5_puddle@2,13 gold_pouch@1,14* shore_rivets@7,14* shore_boot@2,10* c5_rock_pool@4,8* shore_shells_b@3,5* wy_timber_sunk@12,6 wy_weed_mat@8,7 wy_timber_sunk@16,12 wy_weed_mat_b@16,9
+
+=== lanes_sluices 40x18 area=lanes tide=true text=interactions/lanes.txt
+    0123456789012345678901234567890123456789
+  0 ########################################
+  1 ####################p########T##########
+  2 #p++++################T####p######+ooo##
+  3 #+#++####p##############T##########pToo#
+  4 #ooo+#######T###############p######ooop#
+  5 #opoop##############T############+ooooo#
+  6 #oooTo+#########+oTooTo+#####p###+oToxx#
+  7 #ooooo+p########+oooooo+#p########ooooo#
+  8 DoTox+##########++++++++xxxxxxx++++++oTD
+  9 DTooo+##########++p+++++xxxxxxx+++pooooD
+ 10 #ooTo++#T#######ooo++ooo##########ooTox#
+ 11 #oooo+##########oTo++oTp###E###p#T#oppo#
+ 12 #p#Top####p######oo++oo##########ooxoTo#
+ 13 #oooo+###T################p####T#xxxEoo#
+ 14 #oT#+####################DD########xx#x#
+ 15 ###o++####p#############ooo##p#####xx###
+ 16 ########################################
+ 17 ########################################
+tiles:
+  0 ########################################
+  1 ##WWWWWWWWWWWWWWWWWWWWWWWWWW####WWWWWW##
+  2 #W,,.,~~~~~~~~~~~~~~~~~~~~~~WWWW~~,,,,W#
+  3 #,F,,~~~~~~~~~~~~~~~~~~~~~x~~x~~~~~,x;,#
+  4 #,.,;~~~~~~~~~~~~~~~~~~~~~~~~~~x~~~,,,,#
+  5 #.,,,;~~~~~~~~~~IhhhhhhI~~~~~~~~~,;,,.,#
+  6 #,,,,,,~~~~~~~~~,.......~~~~~~~~~,,,,,,#
+  7 #,,.,,,~~~~~~~~~........~~~~~~~~~~,.,,,#
+  8 ......~~~~~~~~~~........;;;;;;;;;;......
+  9 ......~~~~~~~~~~........;;;;;;;;;;......
+ 10 #,.,,,,~~~~~~~~~........~~~~~~~~~~,,.,,#
+ 11 #,,.;,~~~~~~~~~~........~~~~~~~~~~;,,.,#
+ 12 #,,,,,~~~~~~~~~~~.....,~~~~~~~~~~,,,,,,#
+ 13 #,,;,,~~~~~~~~~~~~~~~~~~~~~~~~~~~,,,,,,#
+ 14 #,,,;~~~~~~~~~~~~~~~~~~~~~~~~~x~~~~,;O,#
+ 15 #xO,,,~~~~~~~~~~~~~~~~~~;;;~~~~~~~~,,xx#
+ 16 #WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#
+ 17 ########################################
+props: c5_sluice_wheel@4,6* c5_sluice_wheel@18,6* c5_sluice_wheel@21,6* c5_sluice_wheel@35,6* sign@3,10* sluice_gate@20,5* gold_pouch@9,13* gs_log_bottle@22,2* c5_buoys_pile@2,14* c5_rope_coil@22,11* street_lamp@17,11* street_lamp@36,10* c5_planks_scatter@9,3 c5_planks_scatter@28,4 c5_wrack_line@26,13 c5_wrack_line@10,15 c5_boat_upturned@1,12 c5_lantern_hook@2,5 c5_lantern_hook@38,4 c5_net_torn@18,9 c5_rubble@23,11 c5_crab_trail@35,3 c5_gull_marks@37,11 c5_puddle@1,2 ln_sunk_wall_short@24,3* ln_sunk_door@25,14* ln_sunk_bed@31,13* ln_under_a@25,7 ln_under_b@29,15 ln_under_b@7,7 ln_under_a@10,12 ln_lily_mat@29,6 ln_lily_mat_b@31,11 ln_lily_small@27,2 lv_roof_ridge@8,10* lv_chimney@12,4* lv_apple_tree@33,11* lv_sign_bakery@2,8* lv_bench@3,12* lv_rain_barrel@37,12* lv_letterbox@38,8* lv_willow@36,3* lv_toadstools@5,12 lv_reeds@5,5 lv_reeds@34,9 lv_ivy@20,1 lv_sill@29,1* lv_boards@36,11 lv_churn@1,9*
+
+=== soundings_tide_stair 30x30 area=soundings tide=true text=interactions/soundings.txt
+    012345678901234567890123456789
+  0 ##############################
+  1 ##############################
+  2 #+oooTooT#++p++++oTo+oTooo#xxD
+  3 #+#Toooooo+++++++ooopooooToxxD
+  4 #oooo+++poo++#+ooo####oTo#####
+  5 #oT#+ooooTo#+##oT#############
+  6 #ooo+opooop###################
+  7 ##############################
+  8 ##############################
+  9 ##############################
+ 10 #o#++++oToToT#xxxxxxxoTooT##p#
+ 11 #Tp+++poooooooo#####xoooToo#o#
+ 12 #oo++ooo+#+p+op##E####oooo+oT#
+ 13 ##+#+oTooo+++ooo###p#ooTo++o##
+ 14 #+++poooT#++++xx#xoopT#oo++++#
+ 15 ########################++####
+ 16 ########################++####
+ 17 ########################++####
+ 18 ########################++####
+ 19 ########################++####
+ 20 #T#oTox##E############++++ooT#
+ 21 #ooTo########oooT##p##++++oTo#
+ 22 #pooo+######xoTo######+oooooo#
+ 23 #xxxx+xxxxxxxooo+#####+oTo+oo#
+ 24 DxxxT+++++++ooo++###p#+ooo+oT#
+ 25 Dxooo+######oTo++######oo++oo#
+ 26 #x#To####p##poo+#######Toopo##
+ 27 #xoo##########+#####p##oooT#+#
+ 28 ##############################
+ 29 ##############################
+tiles:
+  0 ##############################
+  1 #WWWWWWWWWWWWWWWWWWWWWWWWW#WW#
+  2 #.........................W...
+  3 #.x...........................
+  4 #............#....####...#####
+  5 #..........x.##..#############
+  6 #..........x##################
+  7 ##############################
+  8 ##############################
+  9 #WWWWWWWWWWWWWWWWWWWWWWWWWWWW#
+ 10 #.W........................W.#
+ 11 #..............~~~~~.......x.#
+ 12 #........x....~~~~~~~~.......#
+ 13 #x.x............~~~~~.......x#
+ 14 #...............x............#
+ 15 ########################ss####
+ 16 ########################ss####
+ 17 ########################ss####
+ 18 #WWWWWWWWWWWWWWWWWWWWWWWssWWW#
+ 19 #WWWWW~~~~~~~~~~~~~~~~WWssWWW#
+ 20 #......~~~~~~~~~~~~~~~.......#
+ 21 #....~~~~~~~xqqqq~~~~~.......#
+ 22 #.....~~~~~~qqqqx~~~~~.......#
+ 23 #.....~~~~~~qqqqq;;;;;.......#
+ 24 ......~~~~~~qqqqq;;;;;.......#
+ 25 ......~~~~~~qqqqq~~~~~~......#
+ 26 #.x..~~~~~~~qqqq~~~~~~~.....x#
+ 27 #...x~~~~~~~~~q~~~~~~~~......#
+ 28 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+ 29 ##############################
+props: tide_dial@3,21* tide_dial@14,22* tide_dial@27,21* sign@4,20* grapple_ring@6,6 sign@8,10* c5_sluice_wheel@3,3* sign@5,2* c5_stalactite_drip@18,2* c5_stalactite_drip@10,10* c5_rope_coil@23,26* gold_pouch@13,25* sd_weed_ledge@8,2* sd_scree@12,2 sd_rope_ladder@22,2* sd_stalagmites@2,5* sd_glass_rock@9,5* sd_glass_bed@10,6 sd_scree@8,4 sd_stalagmite@16,5* sd_rock_pile@23,4* sd_weed_ledge@12,10* sd_pit_prop@22,10* sd_stalagmites@25,10* sd_glass_rock@28,12* sd_stalagmite@1,11* sd_scree@4,14 sd_sea_rock@14,12 sd_sea_rock@19,13 sd_slab@8,14* sd_diver_gear@21,14* c5_puddle@11,12 sd_weed_ledge@1,20* sd_glass_rock@3,26* sd_stalagmite@16,21* sd_scree@12,26 sd_wall_chain@28,20* sd_glass_rock@28,24* sd_timbers@26,27* sd_sea_rock@9,26 sd_sea_rocks@19,21 sd_sea_rock@20,27 lv_glow_threads@20,3 lv_echo_stone@25,3* lv_pearl_pool@6,13* lv_coil_line@6,11 lv_midden@20,14 lv_tripod@23,13* lv_hook_lamp@24,11* lv_boot@24,23* lv_cave_fern@2,11 lv_cave_fern@28,10 lv_candle_stubs@4,24* lv_chalk_arrow@20,24 lv_drip_column@26,26 lv_glow_shelf@1,22
+
+=== gullrest_cove 34x20 area=gullrest tide=true text=interactions/gullrest.txt
+    0123456789012345678901234567890123
+  0 ##################################
+  1 ###############DD#################
+  2 ##++####++++###oo#####+++oT#xoo###
+  3 #+p+oTo++p+####xx######+poooo#Tp##
+  4 #++#opo++###T#########p#+xoTTToo+#
+  5 #+ooo+p++############T##+xooEoop+#
+  6 #xoToxxxxx###p#########++xpxxxooo#
+  7 #xoooxxxxx#############++xxooooTo#
+  8 #SSSSSSSSx######p#######+xxoT#ooo#
+  9 DSSSSSSpoo##############ooopoo+xxD
+ 10 DSSSSSSoT############p##oT#++++xxD
+ 11 #SSSSSSooo##############oooxxxpxx#
+ 12 #SSSSoooopo#T###T#######pxxxxpxxx#
+ 13 #oooSoToooo#######p######xx##ooop#
+ 14 #oToxoooxx#########T##p##xxExoTo+#
+ 15 #oooxExxxxx##p#########+ooooxoo#+#
+ 16 #p#ooxxxx+++##########++oTT##xx++#
+ 17 #ooToxx###################ooxxx++#
+ 18 #########T################++######
+ 19 #######################T##########
+tiles:
+  0 ##################################
+  1 ##WW####WWWWWWW::WWWWWWWWWWWWWW###
+  2 #W,,WWWW,,..~~~;;~~~~~..,,,,,,,WW#
+  3 #,,,,,,,,,.~~~~;;~~~~~~.,,,,,O,,W#
+  4 #..O.....~~~~~~~~~~~~~~~.........#
+  5 #........~~~~~~~~~~~~~~~.........#
+  6 #.........~~~~~~~~~~~~~..........#
+  7 #.........~~~~~~~~~~~~~..........#
+  8 #.........~~~~~~~~~~~~~~.........#
+  9 :.........~~~~~~~~~~~~~~.........:
+ 10 :.........~~~~~~~~~~~~~~.........:
+ 11 #.........~~~~~~~~~~~~~~.........#
+ 12 #..........~~~~~~~~~~~~~~........#
+ 13 #..........~~~~~~~~~~~~~~..xx....#
+ 14 #.........~~~~~~~~~~~~~~~........#
+ 15 #..........~~~~~~~~~~~~........O.#
+ 16 #...........~~~~~~~~~~...........#
+ 17 #...;;;~~~~~~~~~~~~~~~~~~~;;;..;;#
+ 18 #~~~~~~~~~~~~O~~~~~~~~~~~~;;~~~~~#
+ 19 #~~~O~~~~~~~~~~~~~~~O~~~~~~~~~OO~#
+props: cf_haddock@9,12 c5_harbour_bell@8,10* c5_harbour_bell@25,10* sign@3,6* gold_pouch@2,14* c5_sea_cave@15,1* c5_buoys_pile@28,8* c5_crates_stack@30,14* sy_dune_grass@6,13* sy_dune_grass@27,4* c5_rocks_sunny@30,3* c5_rocks_sunny@1,16* c5_rock_sunny@12,4* c5_rock_sunny@19,14* c5_rocks_sunny@9,18* c5_rock_sunny@23,19* c5_pot_single@31,7* c5_fence_broken@26,2* c5_drift_log@26,16* c5_rock_pool_sunny@30,11 c5_wrack_line@1,16 c5_wrack_line@24,12 c5_crab_trail@5,4 c5_gull_marks@29,12 sy_dune_grass@2,3 sy_dune_grass@24,3 sy_dune_grass@32,13 c5_sea_holly@9,3 c5_marram@31,5 c5_rocks_sunny@21,5* c5_rock_sunny@12,12* c5_rock_pool_sunny@18,13 c5_weed_mat@13,6 c5_weed_mat@21,10 c5_wrack_line@13,15 c5_crab_trail@16,8 col_glass_green@31,3 st_bucket_spade@16,12* st_pool_life@6,5 st_pool_life@27,9 st_starfish@7,9 st_starfish@26,6 st_shells@22,4 st_shells@29,12 st_glass_float@5,3* st_old_boot@3,17* st_tin_can@28,4* st_message_bottle@25,16* st_driftwood_face@29,4* c5_crab_trail@22,14
+
+CHECK DONE

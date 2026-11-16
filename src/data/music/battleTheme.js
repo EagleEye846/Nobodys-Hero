@@ -58,6 +58,7 @@ const STAB = { wave: 'sawtooth', volume: 0.028, attack: 0.003, decay: 0.06, sust
 export const BATTLE_THEME = {
   title: 'Cotton Clash',
   bpm: 160,
+  volume: 1.43,
   stepsPerBeat: 4,
 
   instruments: {

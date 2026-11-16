@@ -3,7 +3,7 @@
 // the isle and the sea. The yard's low stone wall is broken in places, and wherever there's a
 // gap the beam comes through it in a spoke. ONE LAMP, TIMING: walk round outside the wall from
 // the west door to the far side, keeping in the wall's shadow, and cross each spoke when the
-// beam has just gone by. Caught, it's a white wash and back to the last safe stop; nothing hurts.
+// beam has just gone by. Caught, you're dazzled (the storm has turned the old lamps up wrong, green-white and blinding): a green-white glare and back to the last safe stop; nothing hurts.
 // Inside the yard there's a purse at the light's foot, out in the open: in and out between turns.
 // On the far side a cliff with a ring at the top (the Climbing Rope) goes up to a shelf where the
 // old light stands, dark; its door is the way on (isles_old_lightroom).
@@ -14,6 +14,8 @@
 //   #  rock top (solid)   W  rock face (solid)   ,  wind turf   .  the lamp-yard's slabs
 //   ~  the sea and the light's pool (solid; the beam goes over it)   h  the yard wall (solid:
 //      squared stone with a coping, drawn by coastTiles.js's `coping`)
+
+import { LIFE5_PROPS } from '../lifePass5.js';
 
 export const ISLES_EAST_LIGHT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -33,6 +35,7 @@ export const ISLES_EAST_LIGHT = {
     { kind: 'mast', x: 6, y: 6, lean: 1, tall: 50 },
     { kind: 'hull', x: 37, y: 19, lean: -1 },
   ],
+
 
   tiles: [
     '############################################',
@@ -82,7 +85,9 @@ export const ISLES_EAST_LIGHT = {
     { x: 31, y: 8, w: 6, h: 3 },
     { x: 33, y: 1, w: 9, h: 4 },
   ],
-  lampText: { first: 'east_seen', again: 'east_seen_again' },
+  lampText: { first: 'east_seen', again: 'east_seen_again', dazzle: 'lamp_dazzle' },
+  // The storm has turned the old lamps up wrong: green-white and blinding, so the wash is a green-white glare.
+  lampTint: '222, 255, 232',
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/isles.txt',
@@ -106,14 +111,8 @@ export const ISLES_EAST_LIGHT = {
     // rain standing in the yard, a tide line and a boat turned over out of the weather on the
     // south shore, gulls on the shelf. Only drawn on the floor: nothing here blocks the way round.
     { sprite: 'c5_rubble', x: 16, y: 8, flat: true, walkable: true },
-    { sprite: 'c5_rubble', x: 24, y: 15, flat: true, walkable: true },
-    { sprite: 'c5_rubble', x: 26, y: 10, flat: true, walkable: true },
     { sprite: 'c5_floor_crack', x: 24, y: 11, flat: true, walkable: true },
-    { sprite: 'c5_floor_crack', x: 17, y: 4, flat: true, walkable: true },
-    { sprite: 'c5_puddle', x: 18, y: 12, flat: true, walkable: true },
     { sprite: 'c5_wrack_line', x: 17, y: 17, flat: true, walkable: true },
-    { sprite: 'c5_crab_trail', x: 33, y: 10, flat: true, walkable: true },
-    { sprite: 'c5_gull_marks', x: 37, y: 1, flat: true, walkable: true },
     { sprite: 'c5_boat_upturned', x: 25, y: 18 },
     // A lantern by the old light's door, lit by whoever still minds it.
     { sprite: 'c5_lantern_hook', x: 41, y: 3 },
@@ -121,61 +120,30 @@ export const ISLES_EAST_LIGHT = {
     // in at the yard's corners, rocks round the pool's corners. On the wall's own tiles, the floor
     // or the water only, and all walkable, so none of it throws a shadow the beam didn't before.
     // Solid things only out past the beam's reach (the far sea, the shelf, the south shore).
-    { sprite: 'il_wall_ivy', x: 15, y: 3, walkable: true },
-    { sprite: 'il_wall_ivy_b', x: 15, y: 12, walkable: true },
-    { sprite: 'il_wall_ivy', x: 27, y: 6, walkable: true },
-    { sprite: 'il_wall_ivy_b', x: 27, y: 12, walkable: true },
-    { sprite: 'il_wall_ivy', x: 21, y: 14, walkable: true },
-    { sprite: 'il_wall_tumble', x: 15, y: 10, walkable: true },
-    { sprite: 'il_wall_stones', x: 27, y: 3, walkable: true },
-    { sprite: 'il_wall_tumble', x: 17, y: 14, walkable: true },
-    { sprite: 'il_wall_stones', x: 15, y: 5, walkable: true },
-    { sprite: 'il_wall_tumble', x: 27, y: 7, walkable: true },
-    { sprite: 'il_wall_stones', x: 25, y: 14, walkable: true },
-    { sprite: 'il_wall_ivy', x: 15, y: 13, walkable: true },
-    { sprite: 'il_wall_ivy_b', x: 27, y: 2, walkable: true },
-    { sprite: 'il_rocks_flat', x: 19, y: 8, flat: true, walkable: true },
-    { sprite: 'il_rocks_flat', x: 22, y: 8, flat: true, walkable: true },
+    { sprite: 'il_wall_ivy', x: 15, y: 3, walkable: true, decor: true },
+    { sprite: 'il_wall_ivy_b', x: 27, y: 12, walkable: true, decor: true },
+    { sprite: 'il_wall_stones', x: 27, y: 3, walkable: true, decor: true },
+    { sprite: 'il_wall_tumble', x: 27, y: 7, walkable: true, decor: true },
+    { sprite: 'il_wall_ivy_b', x: 27, y: 2, walkable: true, decor: true },
     { sprite: 'il_rocks_flat', x: 19, y: 5, flat: true, walkable: true },
-    { sprite: 'il_lichen', x: 18, y: 6, flat: true, walkable: true },
-    { sprite: 'il_lichen', x: 25, y: 4, flat: true, walkable: true },
     { sprite: 'il_lichen', x: 17, y: 10, flat: true, walkable: true },
-    { sprite: 'il_lichen', x: 24, y: 13, flat: true, walkable: true },
-    { sprite: 'il_grass_tuft', x: 16, y: 4, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 26, y: 13, walkable: true },
-    { sprite: 'il_grass_tuft', x: 17, y: 13, walkable: true },
-    { sprite: 'il_thrift', x: 26, y: 3, walkable: true },
-    { sprite: 'il_thrift', x: 12, y: 9, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 13, y: 11, walkable: true },
-    { sprite: 'il_thrift', x: 11, y: 13, walkable: true },
-    { sprite: 'il_grass_tuft', x: 14, y: 6, walkable: true },
-    { sprite: 'il_drift_timber', x: 2, y: 16, flat: true, walkable: true },
-    { sprite: 'il_thrift', x: 9, y: 15, walkable: true },
-    { sprite: 'il_grass_tuft', x: 1, y: 17, walkable: true },
-    { sprite: 'il_tidepool', x: 33, y: 12, flat: true, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 30, y: 9, walkable: true },
-    { sprite: 'il_thrift', x: 36, y: 11, walkable: true },
-    { sprite: 'il_lichen', x: 32, y: 10, flat: true, walkable: true },
-    { sprite: 'il_gull', x: 35, y: 1, walkable: true },
-    { sprite: 'il_gull', x: 40, y: 2, walkable: true },
-    { sprite: 'il_thrift', x: 33, y: 3, walkable: true },
-    { sprite: 'il_lichen', x: 37, y: 3, flat: true, walkable: true },
-    { sprite: 'il_grass_tuft', x: 16, y: 9, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 26, y: 5, walkable: true },
-    { sprite: 'il_grass_tuft', x: 18, y: 13, walkable: true },
-    { sprite: 'il_thrift', x: 23, y: 3, walkable: true },
-    { sprite: 'il_lichen', x: 20, y: 10, flat: true, walkable: true },
-    { sprite: 'il_lichen', x: 19, y: 3, flat: true, walkable: true },
+    { sprite: 'il_grass_tuft_b', x: 26, y: 13, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 12, y: 9, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 14, y: 6, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 1, y: 17, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 36, y: 11, walkable: true, decor: true },
+    { sprite: 'il_gull', x: 40, y: 2, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 16, y: 9, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 23, y: 3, walkable: true, decor: true },
     { sprite: 'il_tidepool_small', x: 24, y: 9, flat: true, walkable: true },
     { sprite: 'il_gull_rock', x: 38, y: 15, text: 'isle_gull_rock' },
     { sprite: 'il_rocks', x: 33, y: 14, text: 'isle_rocks' },
     { sprite: 'il_cairn', x: 42, y: 2, text: 'isle_cairn' },
     { sprite: 'il_rocks_big', x: 17, y: 18, text: 'isle_rocks' },
     { sprite: 'il_stakes_rope', x: 21, y: 19, text: 'isle_stakes' },
-    { sprite: 'il_thrift', x: 28, y: 18, walkable: true },
-    { sprite: 'il_grass_tuft', x: 23, y: 18, walkable: true },
     { sprite: 'il_gull_rock', x: 6, y: 11, text: 'isle_gull_rock' },
     { sprite: 'il_rocks', x: 2, y: 6, text: 'isle_rocks' },
+    ...(LIFE5_PROPS['isles_east_light'] ?? []),
   ],
   tileTexts: { '#': 'isles_rock', W: 'east_cliff', '~': 'isles_sea', h: 'east_wall', '.': 'east_yard' },
 

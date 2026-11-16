@@ -10,6 +10,8 @@
 // Tile key (see src/overworld/coastTiles.js, reach):
 //   .  wet rock slabs   ,  turf   o  planks   ;  pools (walk)   ~  sea (solid)   x  barnacle rock (solid)
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const REACH_EYE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'reach_eye',
@@ -30,11 +32,15 @@ export const REACH_EYE = {
   atmosphere: { rain: 0.12, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.4 },
   // Lighter than the storm round it: the silver patch overhead.
   lamplight: { shade: 0.34, tint: '30, 60, 52' },
-  lastLight: { x: 4, y: 16 },
+  lastLight: { x: 4, y: 16, scale: 1.65 },
   skyline: [
     { kind: 'mast', x: 29, y: 16, lean: 1, tall: 36 },
   ],
 
+  // The storm's far wrecks stay well out to sea: never in the boat's lane (west of the landing, row 10) or by
+  // the jetty, where they used to stand over the Bother and the party. (15 Nov 2026)
+  skylineClear: 5,
+  skylineKeepOut: [{ x: 0, y: 5, w: 13, h: 9 }],
   tiles: [
     '##################################',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
@@ -66,9 +72,6 @@ export const REACH_EYE = {
     { x: 9, y: 8, w: 2, h: 5, scene: 'reach_crossing_eye' },
     // Across the middle of the rock: Haddock's talk, once.
     { x: 20, y: 4, w: 1, h: 11, scene: 'reach_eye_talk' },
-    // The jetty's end: on to the foot of the Last Light. The side step: back to the wreck.
-    { x: 27, y: 13, w: 1, h: 1, scene: 'reach_to_foot' },
-    { x: 26, y: 12, w: 1, h: 1, scene: 'reach_back_to_wreck' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
@@ -76,8 +79,8 @@ export const REACH_EYE = {
   props: [
     { sprite: 'savepoint', x: 14, y: 8, save: true },
     // Haddock on a crate by the jetty (footprint 2: x 22 and 23), and the empty Bother (x 28-31).
-    { sprite: 'cf_haddock_sit', x: 22, y: 7, npc: 'haddock_reach', animation: 'cf_haddock_sit', speed: 0.6, until: 'haddock_gone' },
-    { sprite: 'cf_bother', x: 28, y: 11, text: 'eye_bother', animation: 'cf_bother', speed: 0.7 },
+    { sprite: 'cf_haddock_sit', x: 22, y: 7, playScene: 'reach_boat_eye', notice: 'stays', animation: 'cf_haddock_sit', speed: 0.6, until: 'haddock_gone' },
+    { sprite: 'cf_bother', x: 28, y: 11, text: 'eye_bother', playScene: 'reach_boat_eye', notice: 'stays', animation: 'cf_bother', speed: 0.7 },
     { sprite: 'c5_chain_bollard', x: 25, y: 8, text: 'reach_bollard' },
     { sprite: 'c5_driftwood', x: 12, y: 13, text: 'eye_driftwood' },
     { sprite: 'c5_rope_coil', x: 24, y: 12, text: 'eye_coil', walkable: true },
@@ -89,11 +92,11 @@ export const REACH_EYE = {
     { sprite: 'il_tidepool', x: 10, y: 6, flat: true, walkable: true },
     { sprite: 'il_cairn', x: 13, y: 4, text: 'reach_cairn' },
     { sprite: 'il_rocks', x: 11, y: 5, text: 'reach_rocks' },
-    { sprite: 'il_thrift', x: 15, y: 3, walkable: true },
-    { sprite: 'il_grass_tuft', x: 17, y: 4, walkable: true },
-    { sprite: 'il_thrift', x: 12, y: 12, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 16, y: 12, walkable: true },
-    { sprite: 'il_grass_tuft', x: 13, y: 13, walkable: true },
+    { sprite: 'il_thrift', x: 15, y: 3, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 17, y: 4, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 12, y: 12, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft_b', x: 16, y: 12, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 13, y: 13, walkable: true, decor: true },
     { sprite: 'il_lichen', x: 22, y: 10, flat: true, walkable: true },
     { sprite: 'il_lichen', x: 16, y: 9, flat: true, walkable: true },
     { sprite: 'il_lichen', x: 23, y: 13, flat: true, walkable: true },
@@ -101,12 +104,13 @@ export const REACH_EYE = {
     { sprite: 'il_stakes_rope', x: 13, y: 14, text: 'reach_stakes' },
     { sprite: 'il_pot_broken', x: 21, y: 14, text: 'reach_pot' },
     { sprite: 'il_drift_timber', x: 14, y: 15, flat: true, walkable: true },
-    { sprite: 'il_gull', x: 24, y: 6, walkable: true },
-    { sprite: 'il_gull', x: 18, y: 10, walkable: true },
+    { sprite: 'il_gull', x: 24, y: 6, walkable: true, decor: true },
+    { sprite: 'il_gull', x: 18, y: 10, walkable: true, decor: true },
     { sprite: 'il_gull_rock', x: 29, y: 4, text: 'reach_gull_rock' },
     { sprite: 'il_rocks_big', x: 5, y: 14, text: 'reach_rocks' },
     { sprite: 'il_rocks', x: 17, y: 16, text: 'reach_rocks' },
     { sprite: 'il_rocks', x: 8, y: 3, text: 'reach_rocks' },
+    ...(LIFE5_PROPS['reach_eye'] ?? []),
   ],
   tileTexts: { '~': 'eye_sea', x: 'reach_barnacles', o: 'reach_planks', ';': 'eye_pool', '.': 'eye_rock', ',': 'eye_turf' },
 

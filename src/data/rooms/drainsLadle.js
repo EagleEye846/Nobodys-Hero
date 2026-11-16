@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // LADLE'S NOOK: a dry brick chamber where three culverts meet, swept clean,
 // with a fire in an old hearth-grate and a kettle on it. Old Ladle lives here,
 // the cistern's hob, who has kept Hollin's water sweet for fifty years for a
@@ -76,6 +77,8 @@ export const DRAINS_LADLE = {
     { sprite: 'water_flow', x: 17, y: 2, text: 'ladle_gutter', animation: 'water_flow_side', speed: 0.3 },
     { sprite: 'water_flow', x: 18, y: 2, text: 'ladle_gutter', animation: 'water_flow_side', speed: 0.3 },
     { sprite: 'water_flow', x: 19, y: 2, text: 'ladle_gutter', animation: 'water_flow_side', speed: 0.3 },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_ladle'] ?? []),
   ],
   tileTexts: { K: 'ladle_wall', k: 'ladle_wall' },
 

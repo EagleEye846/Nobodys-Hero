@@ -1,0 +1,77 @@
+# RUINS SHOP: Moss, the travelling merchant in the west room of the Ruins.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Oh! A customer! Are you the Hero? ...No cape. Hm. Then I'm afraid it's full price.
+
+[menu_prompt]
+Anything else catch your eye?
+
+[buy_prompt]
+Take a look! Snacks up top, sharp things below.
+
+[talk_prompt]
+Oh, you want to chat? I love to chat.
+
+[bought]
+A fine choice! Press C out there to equip it.
+
+[bought_item]
+Thank you kindly! Eat it in a pinch. In a fight, I mean.
+
+# (draft) A Notch Charm bought: one more SPELL NOTCH for everyone.
+[bought_notch]
+A notch charm! Everyone with you can carry one more spell into a fight now. Pick them from SPELLS. Press C!
+
+[owned]
+You already have that one, friend.
+
+[too_poor]
+Ah... you can't quite afford that. Come back with more gold!
+
+# Bought with your bag full: it went to storage.
+[bought_stored]
+Oh, your bag's stuffed! I'll slip it into storage for you. Any chest by a save point, friend.
+
+[bag_full]
+Your bag's stuffed! Eat something first. Or throw something out.
+
+[farewell]
+Come back soon! Mind the dummy.
+
+[talk: Who are you?]
+I'm Moss! I carry the whole shop on my back. My back has opinions about this.
+
+[talk: The Ruins]
+Nobody remembers who built these halls. The Keeper says the lanterns remember, though.
+
+[talk: That dummy]
+It used to train heroes. Then one day it decided it would rather fight them. Can't say I blame it, really. Hitting things looks fun.
+
+[talk: The Hero?]
+I stocked this shop for the Hero! Swords, shields, the works. The Hero was supposed to have a cape. And a chin. A really good chin. No offence.
+
+[talk: Free stuff?]
+Everything was free for the Hero. You're not the Hero, so... business is business! A hundred years of rent, you know.
+
+[talk: Gold?]
+Monsters drop gold when you beat them. And when you spare them! Kindness pays, sometimes.
+
+[sell_prompt]
+Selling? Oh, I do love a swap. Three quarters of what it's worth, mind. A hundred years of rent.
+
+[bought_skill]
+A skill point! I've had that in the back since the Hero was due. It's yours now. Spend it from the SKILLS screen. Press C!
+
+[skill_sold_out]
+That was my only one! I'm a merchant, not a miracle.
+
+[sold]
+Lovely! I'll find a corner of the pack for it. The pack has opinions.
+
+[nothing_to_sell]
+Your bag's empty, friend. Come back when you've found treasure. Or carrots. I'll take carrots.
+
+[cant_sell]
+You're wearing that one! Take it off first. Press C out there.

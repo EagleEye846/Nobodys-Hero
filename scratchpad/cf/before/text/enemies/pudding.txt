@@ -1,0 +1,291 @@
+# THE PALE OLM: the secret superboss of Chapter 4, guardian of the Deep Star
+# Shard at the bottom of Seam Nine's glassy shaft. Once the miners' cave olm,
+# a blind pale thing the size of a slipper they kept in a tin dish by the
+# kettle and called "Pale". It touched the fallen star and grew huge and
+# glassy. You can see right through it: the long white spine, the star in its
+# belly, and, turning slowly round the star, the things the miners left
+# behind (a hard hat, a boot, a tin mug, a pocket watch). It keeps far too
+# still. Its mouth is a seam that opens much too wide. When the star wakes,
+# seven eyes open down its side. It speaks only in the miners' voices.
+# When the miners didn't come back, it made one wish on the star: that they
+# would come back after lunch. The star gave it their voices and the things
+# they left behind instead of the miners themselves. It isn't mad or
+# possessed; it is stuck inside that wish, still waiting for everyone to come
+# back after lunch. Sparing it lets the wish go. Beating it breaks it.
+# The hero never speaks, so every TALK is something the hero does.
+# (draft: every line here)
+# Numbers (HP, damage, its three phases) live in src/data/enemies/pudding.js.
+#
+# A section with ": wake" or ": chaos" after its name is used in that phase of
+# the fight instead of the plain one (phase 1 is "olm"). [phase: ...] sections
+# are what is said as a phase starts: plain ones in the battle panel, "vesper"
+# ones by Ves in her box, "foe" ones by it in speech bubbles. Lines written
+# together (no blank line between) share a bubble; a line starting with ...
+# waits for a bubble of its own.
+
+# (draft)
+[boss_intro]
+...
+
+Back
+already?
+
+Is it
+lunch?
+
+# (draft)
+[intro]
+The pool goes still. The stone at its edge goes soft, and something long and pale comes up out of it without a ripple, slow as a drowned thing rising. You can see right through it, to what it has kept. The PALE OLM!
+
+# Shown at the start of each of your turns, in order, then repeating.
+# (draft)
+[flavor]
+The PALE OLM hangs in the stone and does not move. It does not drift. It does not breathe. Nothing alive keeps that still.
+
+Through the glass of its belly you can see a hard hat, one boot and a tin mug, turning very slowly round the star.
+
+It has no eyes. It is facing you exactly anyway, and it has not looked away once.
+
+Its head turns to the seven mugs on the shelf in small jerks. Then back to you, all in one smooth go.
+
+Somewhere inside it, a pocket watch is still ticking.
+
+# (draft)
+[flavor: wake]
+Seven eyes have opened down its side, one after another. There is a star in every one of them.
+
+It talks in a miner's voice now. A different miner every time, and none of them its own.
+
+Every crack in it hums a different note. Together they are very nearly the end-of-shift whistle.
+
+# (draft)
+[flavor: chaos]
+The PALE OLM flickers through every colour of a bruise. The things inside it rattle against the glass.
+
+Its jaw hangs open to the gills, then past them. It is still asking about lunch.
+
+The tin dish on the shelf has not moved. Everything else has moved twice.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full).
+# (draft)
+[flavor: low]
+The PALE OLM is coming apart in slow pieces. Deep inside all that glass is a very small olm, curled up tight round a boot.
+
+# (draft)
+[flavor: spareable]
+The PALE OLM has gone still, the right kind of still. The star has dimmed to a candle. It listens, as if something sounded like home.
+
+# Said in a speech bubble before each attack, picked at random.
+# (draft)
+[taunts]
+Hhhh.
+
+Tea?
+
+Is it
+lunch
+yet?
+
+Back
+soon.
+
+Seven.
+
+Who's
+there?
+
+Mind
+your
+boots.
+
+Shift's
+not
+over.
+
+I kept
+your
+hat.
+
+# (draft)
+[taunts: wake]
+Who's
+THERE?
+
+LUNCH!
+
+Seven.
+SEVEN.
+
+Hkk!
+
+It's
+LIGHT.
+It's in
+me.
+
+They
+SAID
+back
+soon.
+
+Stay.
+Stay for
+tea.
+
+# (draft)
+[taunts: chaos]
+STAY STAY
+STAY STAY
+
+BACK
+AFTER
+LUNCH!
+
+Hkk!
+Hkk!
+
+Seven!
+Six!
+Nine!
+
+Where's
+the
+KETTLE?
+
+Keep you
+keep you
+KEEP you
+
+Everyone's
+LATE!
+
+# (draft)
+[low_hp]
+Is it...
+lunch?
+
+Back
+soon.
+
+# (draft)
+[low_hp: chaos]
+...Kettle's
+on.
+
+Don't
+go.
+
+One more
+shift.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/pudding.js.
+# (draft)
+[talk: Inspect]
+PALE OLM - HP 25200
+The miners' cave olm, grown huge and glassy round a star. It asked for the miners back after lunch, and got their voices and their things. You can see straight through it to what it kept. It swims through rock: gill-light, thrown stone, glass bubbles, its tail, tin mugs. When the star wakes, rings of light, and then it stops choosing. It only wants the shift back.
+
+# (draft)
+[talk: Offer the half pasty]
+You hold the half pasty out on your flat hand. Its head comes down to it in one slow, silent slide, much closer than you wanted, and stops a finger's width off. The seam of its mouth parts, all the way back. It does not take it. Through its jaw you can see a row of crusts, kept.
+
+# (draft)
+[talk: Tap the tin dish]
+You tap the tin dish with one finger. Tink. Every part of it stops at once, even the things inside. Tink. Its head turns to the sound, and the long body follows a moment too late, and it lays its chin on the rim. It was a very small dish, once.
+
+# (draft)
+[talk: Whistle the end of shift]
+You whistle the tune from the tally board: three long notes down, one short note up. The glass rings it back. Then it whistles it too, in a man's breath, through no lips at all, a bit flat. It has been practising on its own for a very long time.
+
+# (draft)
+[talk: Blow the shift whistle]
+You blow the brass whistle made of three borrowed pieces: three long notes down, one short note up. It stops. Inside it the hat, the boot and the mug settle, as if somebody had sat down. For a moment the pool is a room where a shift has just ended.
+
+It answers with the fourth note, the short one, up, perfectly in tune. It has been saving it.
+
+# (draft)
+[talk: Count the mugs]
+You count the mugs aloud, pointing. One. Two. It counts with you, in seven voices, one for each mug. Seven. Then you point at the dish, and it says "and me" in a voice that must be its own, small and wet. You let it.
+
+# (draft)
+[talk: Pour it a cup of tea]
+You fill a tin mug from the kettle, a cup of nothing and dust and a very long time, and set it down. Its jaw opens wider than its head, slowly, and takes in the mug, the whole mug. It comes to rest inside, beside the other one, with the star shining through the tin.
+
+# (draft)
+[talk: Say back after lunch]
+You tell it plainly: BACK AFTER LUNCH, the way the tally board says it. It listens without moving at all. Then it asks, in the last voice it has, whether it is after lunch yet. You nod. It is. It has been for a very long time. You are sorry nobody came back to say so.
+
+# Said when you try to RUN.
+# (draft)
+[no_escape]
+The stone has closed over the way back up, smooth as skin. It is the sort of cave that lets you go when somebody says the shift is over.
+
+# What is said as each phase starts.
+# (draft)
+[phase: wake]
+The glass cracks down the whole length of it. Then, one after another, seven eyes open along its side, and in every one is the star, and every one finds you.
+
+# (draft)
+[phase: wake vesper]
+{scared}It didn't have eyes. Now it's got seven. {bored}I counted. {determined}Keep moving, and stop me counting.
+
+# (draft)
+[phase: wake foe]
+There you
+ARE.
+
+You were
+a LONG
+time.
+
+I kept
+your
+PLACE.
+
+# (draft)
+[phase: chaos]
+Its jaw drops open, past its gills, past where a jaw should stop. The glass goes every colour of a bruise, and the things inside it start to rattle.
+
+# (draft)
+[phase: chaos vesper]
+{scared}Its mouth goes all the way back. {bored}I didn't need to know that. {determined}It's not angry. It's just everything at once now. Don't stand still.
+
+# (draft)
+[phase: chaos foe]
+STAY!
+
+BACK!
+
+LUNCH!
+STAY!
+
+PALE OLM!
+PLAE OML!
+OLM PALE!
+
+# How the fight ends. The rewards line is added automatically.
+# (draft)
+[victory]
+The PALE OLM comes apart in slow pieces and sinks. A hard hat, a boot and a tin mug drift down after it, and settle. The star goes dull and rolls into the dish on the shelf. In the stone, very faintly, three notes go down and one goes up.
+
+# (draft)
+[pacified]
+The PALE OLM lays its chin on the rim of the tin dish and goes still, the right kind of still. The glass clears. Then it's only a pale cave olm the size of a slipper, in the dish, with a star in its stomach like a very good supper.
+
+# Ves's own TALK lines for it ({foe} is its name).
+# (draft)
+[vesper_talk]
+Ves tells {foe} it's a very good olm, and could it please stop doing that with its mouth. {foe} closes it, slowly, most of the way.
+
+Ves asks {foe} what the miners called it. "Pale," say seven voices at once, none of them its own. She says she'll take their word for it.
+
+Ves tells {foe} she's been asked to say the shift is over, and it can come out now. {foe} holds perfectly still for the length of three breaths. None of them are its own.
+
+# Bramble's own TALK lines for it, in case he is ever in the party for this.
+# (draft)
+[bramble_talk]
+Bramble asks {foe} if it's lonely, then holds out half his sandwich at arm's length. {foe} is, and takes it. The sandwich can be seen inside it for some time.
+
+Bramble says he's not scared, then walks round the star very wide. {foe} watches him the whole way round without turning its head.
+
+Bramble asks {foe} how many mugs there are. Seven voices answer him at once. He stands behind you for a while after that.

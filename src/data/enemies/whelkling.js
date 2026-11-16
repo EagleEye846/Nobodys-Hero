@@ -20,7 +20,7 @@ export const WHELKLING = {
   anim: WHELKLING_ANIM,
   // The coast's fights (Gullrest's version of it in the cliff cave, as before).
   music: 'coastBattleStorm',
-  maxHp: 9700,
+  maxHp: 6300,
   damage: 83,
 
   // Not a pushover (it was too easy): up with Gullrest's beach monsters.
@@ -37,10 +37,9 @@ export const WHELKLING = {
 
   // Its attacks live in src/battle/attacks/whelkling.js.
   patterns: [
-    { name: 'whelkSting', weight: 3 },
-    { name: 'whelkSpiral', weight: 2 },
-    { name: 'whelkPinch', weight: 3 },
-    { name: 'whelkRoll', weight: 2 },
+    { name: 'whelkShells', weight: 3 },
+    { name: 'whelkTopple', weight: 3 },
+    { name: 'whelkClock', weight: 3 },
   ],
 
   // TALK options (the hero's own actions; the hero never speaks). Each name
@@ -52,7 +51,7 @@ export const WHELKLING = {
     { name: 'Sit still by the pool', calm: 30 },
   ],
 
-  rewards: { exp: 2100, coins: 12 },
+  rewards: { exp: 2100, coins: 10 },
 
   // A boiled sweet from its hoard (src/data/items.js), with the chance of it.
   drops: [{ item: 'sea_glass_sweet', chance: 0.4 }],

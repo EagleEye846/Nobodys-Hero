@@ -1,0 +1,672 @@
+# THE STILLWATER (Chapter 4): the great underground lake. Things you can read
+# and look at in stillwater_shore, stillwater_isles, stillwater_reeds,
+# stillwater_sunken_hall, stillwater_far_shore and stillwater_stair_down.
+# Quieter and stranger than the world above: fewer jokes, and the ones there
+# are come out low.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal hums, very low, like something asleep that doesn't mind you being there.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. The damp has got into the stitching.
+
+[chest_empty]
+Empty. The lid is cold, and a little slimy.
+
+[rock_home]
+Every log you moved slides back through the black water to where it began. It makes hardly any sound.
+
+# --- THE LAKE, EVERYWHERE ---
+
+[lake_rock]
+Cold black rock. Somewhere beyond it, the lake goes on.
+
+[lake_wall]
+Pale rock, streaked with flowstone where water has run down it since before there were names for water.
+
+[lake_water]
+Black water, perfectly still. It shows you the roof, and the pillars, and you, upside down, a little paler than you'd like.
+
+You can't see the bottom. You don't try for long.
+
+[lake_water_ves]
+{bored}I keep thinking something is about to look back.
+
+{smile}Don't tell me if it does.
+
+# (draft)
+[lake_water 2]
+The black water shows you the roof again, and the pillars, and you. Your reflection moves a moment late, this time. Only a moment.
+
+# (draft)
+[lake_water_ves 2]
+{bored}I saw that. {thoughtful}I'm choosing not to have.
+
+[lake_shallows]
+Cold shallows over pale sand. You can see your boots. The sand is ribbed in long lines, as if something rocked it to sleep.
+
+[lake_shingle]
+Wet shingle. Pale pebbles, all the same size, as if somebody sorted them.
+
+[lake_jetty]
+Grey boards, spongy with damp, furred with green. They creak under you in a friendly, apologetic way.
+
+[lake_pillar]
+A fluted pillar standing in the water, as tall as the hall that isn't here any more. The tide-line on it is the same height all the way round.
+
+[lake_pillar_ves]
+{bored}The hall's long gone, and the pillars never got the message.
+
+# (draft)
+[lake_pillar 2]
+Just above the tide-line, somebody has scratched a small mark, and under the mark, very small: STILL HERE.
+
+[lake_broken_pillar]
+A pillar broken off short. Its top has been polished smooth by the water, a little at a time.
+
+[lake_boulder]
+A water-worn boulder, rounded like an egg. Whatever moved it here moved it slowly.
+
+[lake_stalagmite]
+A stalagmite, pale as a candle and taller than you. It grows a finger's width in a lifetime.
+
+[lake_crystal]
+A pale crystal, glowing the colour of a thin moon. It is warm to the touch, which is the strangest thing in the cave.
+
+# (draft)
+[lake_crystal 2]
+Still warm. You leave your hand on it a little longer than you need to. It's been a long, cold walk.
+
+# (draft)
+[lake_crystal_ves 2]
+{bored}Share. {smile}...Thank you.
+
+[lake_stalactite]
+A stalactite, hanging from the roof. The drop on its tip gets fatter and fatter, and falls, and a long time afterwards you hear it land.
+
+# (draft)
+[lake_stalactite 2]
+Another drop. Fatter, fatter, and it falls. A long time later, it lands. You notice you've started holding your breath for it.
+
+# (draft)
+[lake_stalactite 10]
+You wait for the drop again. It swells. It swells. It doesn't fall.
+
+It just hangs there on the tip, perfectly round and perfectly still, and you get the strong feeling it's waiting for you to leave first.
+
+# (draft)
+[lake_stalactite_ves 10]
+{bored}It's won. {smile}Back away slowly. Let it have this one.
+
+[glow_reeds]
+Reeds that give off their own pale light, like thin candle flames. They lean away from you, very slightly, and then back.
+
+# (draft)
+[glow_reeds 2]
+You hold still. The reeds lean away, and back, and away, in time with your breathing. You breathe slower. So do they.
+
+[pillar_top]
+The top of a pillar just breaking the surface. The water has been up to its chin for so long it has stopped noticing. Slow rings go out from it every so often, with nobody there to make them.
+
+# (draft)
+[pillar_top 2]
+Another slow ring goes out from the pillar's top. You watch long enough to be sure nothing's there. Nothing's there. The rings keep coming.
+
+# --- THE SHORE ---
+
+[shore_sign]
+A board nailed to a post, the paint run to ghosts: FERRY. PLEASE KNOCK.
+
+Under it, in another hand: Or just stand at the end. He'll hear you.
+
+Under that, in a third: (He sings. Don't take it personally.)
+
+[shore_sign_ves]
+{bored}"Please knock." On what? The lake?
+
+{bored}...The post, probably. It's the only thing out here that's worn smooth at knuckle height.
+
+# (draft)
+[shore_sign 2]
+(He sings. Don't take it personally.) And at the very bottom, in a fourth hand, very wobbly: (he means it nicely).
+
+[shore_punt_west]
+Gubb's punt, moored at the end of the jetty, rocking very slightly. There's a basket of fish aboard, and a pole, and a slow, croaky humming that never quite gets to the end of the tune.
+
+(Step out onto the last board.)
+
+[shore_punt_east]
+Gubb's punt, moored at the foot of the east jetty, rocking very slightly. A basket of fish, a long pole, and a humming that never quite gets to the end of the tune.
+
+(Step out onto the last board.)
+
+[jetty_post]
+A jetty post, fat with green weed to the waterline and rope-burned above it. The groove where the rope runs is a hundred years deep.
+
+# (draft)
+[jetty_post 2]
+The rope groove, a hundred years deep. You start wondering how many crossings that is, and stop, because it's a lot of them, and most of them on his own.
+
+[mooring_ring]
+An iron ring set into the stone. The rust has taken it nearly through. The rope hasn't.
+
+[shore_chest]
+A chest wedged in behind the boulders, green with damp. Inside, a long pole worn smooth, with a notch for a hand and a little frog carved on the end.
+
+Somebody's spare. He'll never miss it.
+
+[shore_purse]
+A purse under a flat stone on the east shore, left the way you leave a tip for a ferryman who never counts.
+
+# --- THE ISLES ---
+
+[isles_sign]
+A leaning board, scratched, not painted: NORTH: WADE. SOUTH: STONES.
+
+Under it, small and neat, in a different hand: The stones are lovely. They don't go anywhere.
+
+[isles_sign_ves]
+{smile}"They don't go anywhere."
+
+Somebody has been very polite about it.
+
+# (draft)
+[isles_sign 2]
+"They don't go anywhere." Under it, in the same small, neat hand: But they're very good at it.
+
+# (draft) The whistle barrel (the whistle quest, Seam Nine's roster).
+[isles_barrel]
+A small cask on its side, bleached grey, wedged in a crack where the flagstones stop. Chalked on the end: TARN. DON'T OPEN. IT'S A JOKE. IT'S NOT A JOKE.
+
+Inside, wrapped in a greasy rag, is a short brass barrel with a slot cut in the side. It is a whistle part, and it is very pleased to see somebody.
+
+# (draft)
+[isles_barrel_empty]
+Tarn's cask. The rag is still in it, folded neatly, as if for somebody who'd be needing a hanky.
+
+[isles_purse]
+A purse on a flat stone at the very end of the stepping stones. Somebody wanted to be at the end of something.
+
+[isles_far_purse]
+A purse wedged in a crack on the little island, up out of reach of the water. Whoever put it there thought of everything but how to get back.
+
+[isles_chest]
+A chest on the small island, sitting there as if it's been waiting for the tide. Inside, wrapped in a leaf: a jam tart, miraculously dry.
+
+[lake_log]
+A drift log, pale as bone, worn smooth by a very long time in the dark. It smells of nothing at all.
+
+(Walk into it to push it. It rolls till something stops it, and sinks into open water as a bridge.)
+
+[lake_log_ves]
+{bored}It keeps going until it hits something. A boulder will do. I suppose another log would too.
+
+[lake_stump]
+A stump of pale rock sticking out of the stones, with a ring worn into the top. You rap it twice. Somewhere across the water there is a long, wet shuffling, and every log you moved is back where it started.
+
+# --- THE REEDS ---
+
+[reeds_post]
+A post at the mouth of the reeds. Cut into it, tally after tally: how many went in.
+
+Beside them, in another colour: how many came out.
+
+The second list is shorter.
+
+Lower down, cut small and neat, in a different hand: STONES AREN'T MINE. FLOATS ARE. A FLOAT MEANS A POT, AND A POT MEANS THE END OF THE CHANNEL. (G.)
+
+[reeds_post_ves]
+{surprised}They stopped counting after a bit.
+
+{bored}I'd like to know why. Preferably not by finding out.
+
+{thoughtful}"Stones aren't mine." So somebody small went in ahead of us. And Gubb's got opinions about where not to go.
+
+# (draft)
+[reeds_post 2]
+You count the tallies again. You get a different number from last time. You decide not to count them a third time.
+
+[reeds_reeds]
+Tall reeds, thick as a wall, each glowing its own faint blue-green. You can see the way through by the water, and by nothing else.
+
+[reeds_cairn]
+Three flat stones, the biggest at the bottom, stacked on a nub of shingle at the water's edge. Careful, small hands: the biggest stone is hardly bigger than your fist.
+
+In front of it, three pale pebbles are laid in a line, each one smaller than the last. They point on, along the channel.
+
+[reeds_cairn_ves]
+{smile}Someone small built these, and thought to lay the pebbles in a line so they'd point. Clever. Careful.
+
+{bored}Not every fork has one, though. Either something knocked them over, or somebody got bored. Or scared.
+
+# (draft)
+[reeds_cairn 2]
+The little cairn again: three flat stones, smallest on top, and three pale pebbles in front, pointing on along the channel. The top stone has been set down and straightened. Twice, by the look of it.
+
+# (draft)
+[reeds_cairn_ves 2]
+{thoughtful}He came back to straighten it. {bored}Of course he did.
+
+[reeds_float]
+A stake driven into the shingle with a cork float on a line and a rag of red wool tied on for luck. Somewhere under the black water there is a fish-pot, waiting for something stupid.
+
+Gubb's mark. He puts a pot at the end of everything that has an end.
+
+[reeds_float_ves]
+{bored}A float is a pot. A pot is a dead end. I've never known a ferryman to be wrong about water.
+
+[reeds_fallen_up]
+A cairn, knocked flat. The three stones are scattered over the shingle, and the pale pebbles that sat in front of it have been kicked about. But they all fetched up on the north side, in a rough line, as if they were still trying to point.
+
+The way on is north.
+
+[reeds_fallen_down]
+A cairn, knocked flat. The three stones are scattered over the shingle, and the pale pebbles that sat in front of it have been kicked about. But they all fetched up on the south side, in a rough line, as if they were still trying to point.
+
+The way on is south.
+
+[reeds_fallen_left]
+A cairn, knocked flat. The three stones are scattered over the shingle, and the pale pebbles that sat in front of it have been kicked about. But they all fetched up on the west side, in a rough line, as if they were still trying to point.
+
+The way on is west.
+
+[reeds_fallen_right]
+A cairn, knocked flat. The three stones are scattered over the shingle, and the pale pebbles that sat in front of it have been kicked about. But they all fetched up on the east side, in a rough line, as if they were still trying to point.
+
+The way on is east.
+
+[reeds_fallen_up_ves]
+{thoughtful}Something big has been through here. The pebbles didn't go far, though. Small hands, small throw. North.
+
+[reeds_fallen_down_ves]
+{thoughtful}Something big has been through here. The pebbles didn't go far, though. Small hands, small throw. South.
+
+[reeds_fallen_left_ves]
+{thoughtful}Something big has been through here. The pebbles didn't go far, though. Small hands, small throw. West.
+
+[reeds_fallen_right_ves]
+{thoughtful}Something big has been through here. The pebbles didn't go far, though. Small hands, small throw. East.
+
+[reeds_chest]
+At the end of a blind channel, a chest on a dry ledge. Inside, folded, a coat woven from the reeds themselves, still faintly green, still faintly glowing at the seams. It smells of rain.
+
+[reeds_purse]
+A purse hung on a reed stem at the end of a channel that goes nowhere, as if someone had wanted it found.
+
+[reeds_far_purse]
+A purse half sunk in the mud at the end of a channel. Whoever left it was in a hurry to go, and not at all in a hurry to come back.
+
+# --- THE SUNKEN HALL ---
+
+[hall_plaque]
+A plaque on the wall, the letters worn to a whisper: LIGHT WENT OUT OVER THE WATER, AND THE WATER GAVE IT BACK.
+
+The rest has gone.
+
+[hall_plaque_ves]
+{smile}"And the water gave it back."
+
+{bored}Poets. They always say that, just before it gets complicated.
+
+# (draft)
+[hall_plaque 2]
+AND THE WATER GAVE IT BACK. You look at the water. It doesn't look like it gives anything back. It looks like it's thinking about it.
+
+[hall_sun_crystal]
+A sun-crystal on a plinth. In here it is thin as a candle, throwing a ribbon of pale gold light east along the floor. It looks very out of place in the dark, like a visitor.
+
+[hall_prism]
+A prism on a worn stone ring, cut so cleanly it must be as old as the hall. It turns when you push it, with a sound like a very small bell.
+
+[hall_lamp]
+A crystal eye on a stone pedestal in the middle of the islet, facing back across the water. It burns only while a beam is on it. Turn the light off it and it goes out, like a lamp with nobody holding the wick. The road of light goes with it.
+
+[hall_lamp_ves]
+{bored}So if I put the umbrella down, the road goes. I am, apparently, a lamp-post.
+
+{smile}A very good one.
+
+[hall_sun_crystal_asleep]
+A sun-crystal on the islet, dark and cold. It wakes when the lamp does, and goes back to sleep when the lamp goes out.
+
+[hall_prism_islet]
+A prism on a stone ring, with the islet's sun-crystal throwing its beam up into it. Set one way it sends the light on east, over the water. Set the other, it sends it back the way you came, west.
+
+Stand beside it, not in the line of the beam, and press Z.
+
+[hall_eye_west]
+A crystal eye on the west platform, dark, facing out over the water. If a beam came all the way back from the islet and struck it, it would wake for good, and the first bridge would stay.
+
+[hall_eye]
+A crystal eye, closed, set in a stone pedestal on the far platform and facing back across the water. It looks as if it has been waiting a long time to be looked at.
+
+[hall_purse]
+A purse on the little spur, behind a broken pillar. The spur goes nowhere except to it. Somebody built a whole pier to put one purse out of the way.
+
+[hall_chest]
+A chest on the far platform, behind the colonnade, with the old flood's tide-line across its lid. Inside, folded, a vest of olm-skin, pale and fine. It is pleasantly cold, like a cellar.
+
+[hall_wall]
+Dressed stone, pale, the joints fine as a hair, with a green line along it exactly where the water stops. The lake rose to here once, and stayed.
+
+[hall_pillar]
+A fluted pillar standing in the black water. Its reflection goes down as far as it goes up. You can't tell which of them is holding the roof.
+
+# --- THE FAR SHORE ---
+
+[far_fire]
+A ring of small stones, and a few black sticks laid in it by someone who knew how to lay a fire and hadn't the strength to carry much wood. Cold. It has been cold for a very long time.
+
+# (draft)
+[far_fire 2]
+One of the black sticks has been snapped short, very neatly, to make it fit the ring. He made the fire fit the wood he had.
+
+[far_bedroll]
+An old bedroll, tied up small and tucked against the rock where the draught couldn't reach it. It's the size of a child's.
+
+Beside it, flat on the stone, a twist of waxed paper, folded smaller and smaller and kept. A sweet wrapper.
+
+[far_bedroll_ves]
+{thoughtful}He kept the wrapper.
+
+{bored}Of course he did.
+
+# (draft)
+[far_bedroll 2]
+You look again at the sweet wrapper, folded smaller and smaller. Eight times. Paper doesn't fold eight times. Somebody tried very hard.
+
+# (draft)
+[far_bedroll_ves 2]
+{thoughtful}Eight. {bored}Show-off.
+
+[far_cairn]
+Three stones, stacked: the biggest at the bottom, the smallest on top. In front of it, three pale pebbles are laid in a line, each smaller than the last, pointing at the south-east corner of the cave, where the stair goes down.
+
+The same careful, small hands as in the reeds. A cairn, and a line of pebbles to say which way it means.
+
+[far_cairn_ves]
+{thoughtful}Same hands.
+
+{sad}Same size of hands.
+
+# (draft)
+[far_cairn 2]
+Same careful stones, same pale pebbles pointing at the south-east corner, where the stair goes down. Somebody has set a tiny chip of stone on the top, like a hat. It's the only joke on the whole trail.
+
+# (draft)
+[far_cairn_ves 2]
+{smile}A hat. {sad}...He was having a good day.
+
+[far_stair_sign]
+A signboard, bright new paint on old rock: BY ROYAL DECREE, THE DEEP IS THIS WAY.
+
+Underneath, smaller: PLEASE MIND THE DARK.
+
+Underneath that, smaller still: (Painted from the top step. The painter did not go further.)
+
+[far_stair_sign_ves]
+{bored}He's never been down here, has he.
+
+{smile}Nobody has painted anything below that step.
+
+# (draft)
+[far_stair_sign 2]
+(Painted from the top step.) You can see the brush marks stop, just there, as if the brush had decided for itself.
+
+[far_purse]
+A purse up on the highest rock shelf, where the damp can't get at it. Somebody's idea of a safe place, and just a little too safe.
+
+[lake_ledge]
+A shelf of pale rock, about as high as your chest, with a hand's width of green along the edge where the damp reaches. It's a fair jump, and a good one.
+
+# --- THE STAIR ---
+
+[stair_notice]
+A board at the head of the stair, older than the king's. One word is cut deep into it with a knife: DOWN.
+
+Someone has gone over it in charcoal, again and again, until it is nearly through the wood.
+
+[stair_notice_ves]
+{bored}A lot of people have wanted this one to be clear.
+
+[stair_hook]
+A post with a bare iron hook on it, at the stairhead, for a lantern. Nothing hangs on it. The post leans a little toward the stair, as if it had wanted to go too.
+
+[stair_purse]
+A purse on the top step, set down very carefully, square to the edge, like something left to come back for.
+
+[stair_wall]
+The rock here is smooth, and cut. Someone cut this stair with tools, for feet. The cuts are old. They all lean the same way, down.
+
+[stair_step]
+A step, worn into a shallow dish in the middle, as if a great many feet have gone down it and a great many fewer have come back up.
+
+[sw_roots]
+Pale roots, come down through the rock from somewhere a very long way up. Something up there is still growing. It's been reaching down here the whole time, slowly, in case.
+
+# --- THE LIFE PASS: things to look at (set dressing) ---
+
+[sp_boat]
+A rowing boat, upside down on the shingle. The paint is long gone. Underneath, something small has built a nest of lakeweed and does not intend to explain itself.
+
+[sp_boat_ves]
+{bored}It's been upside down so long it's basically a house.
+
+[sp_boat 2]
+Something small and wet moves under the boat, and then stops moving.
+
+[sp_boat_ves 2]
+{bored}Nobody lift it. Whoever lives there has paid rent.
+
+[sp_bones]
+A fish skeleton, picked clean and laid out in a perfect line, as if for an exam.
+
+[sp_bones_ves]
+{thoughtful}Something ate it and was tidy about it. That's worse, somehow.
+
+[sp_bones 2]
+Every rib is accounted for. Whatever it was, it was well looked after, in its way.
+
+[sp_bones_ves 2]
+{bored}Don't give it a name.
+
+[sp_bucket]
+A wooden bucket with a coil of rope in it. There's a puddle round its foot and no leak anywhere.
+
+[sp_bucket_ves]
+{surprised}Why is there a puddle? Don't answer that.
+
+[sp_bucket 2]
+You look in the bucket. No fish. One very small, very pale shrimp, looking back at you.
+
+[sp_bucket_ves 2]
+{smile}Hello. Sorry. We'll put you back.
+
+[sp_crate]
+A half-sunk crate, wet to the lid, a rope trailing off it into the lake. Whatever was in it left the party early.
+
+[sp_crate_ves]
+{bored}Don't pull the rope. Whatever it's tied to has had a long time to get used to it.
+
+[sp_crate 2]
+You tap the crate. It answers with a small, hollow thump. Whatever's inside is exactly as big as it needs to be.
+
+[sp_crate_ves 2]
+{bored}Not opening it.
+
+[sp_net]
+A fishing net, strung between two driftwood posts to dry. It's been drying a very long time. There's one pale scale in it.
+
+[sp_net_ves]
+{bored}Nothing caught. The fish here are either clever or have no eyes. Possibly both.
+
+[sp_net 2]
+One knot has been tied again, neatly, over an older one. Somebody mends this net. Often. Lately.
+
+[sp_net_ves 2]
+{surprised}...Lately? Who mends a net at the bottom of the world?
+
+[sp_oar]
+An oar, blade-down in the shingle, a loop of rope on the handle. Somebody planted it like a flag and wandered off.
+
+[sp_oar_ves]
+{smile}Claiming the beach for nobody. Very generous of them.
+
+[sp_oar 2]
+The rope loop is worn smooth where a hand has gone through it, many times, always in the same place.
+
+[sp_oar_ves 2]
+{thoughtful}Somebody rowed a lot. And then somebody stopped.
+
+[sp_pads]
+Pale pads of lake-fungus, floating in a loose ring. They bob, very slightly, when you breathe on them.
+
+[sp_pads_ves]
+{smile}Don't step on them. They look like they'd hold. That's the lie.
+
+[sp_paper]
+A paper boat, folded small, floating on its own. There's a wobbly flag drawn on the sail in what looks like charcoal.
+
+[sp_paper_ves]
+{smile}A very small, very optimistic boat.
+
+[sp_paper 2]
+The flag is a drawing of a sun, with a very round face. It looks pleased about everything.
+
+[sp_paper_ves 2]
+{thoughtful}A sun on a flag, in a place with no sun. That's called optimism.
+
+[sp_ring]
+A mooring ring set in the stone lip, a frayed end of rope still through it. Whatever was tied here has long since gone off on its own.
+
+[sp_ring_ves]
+{thoughtful}I hope it was a boat.
+
+[sp_ring 2]
+The rope end isn't frayed from age. It's frayed the way a rope frays when something very large pulls it, once.
+
+[sp_ring_ves 2]
+{surprised}I'd like to un-know that.
+
+[sp_skip]
+A smooth flat stone, balanced on a bigger one. Somebody was going to skip it. Somebody has been going to skip it for years.
+
+[sp_skip_ves]
+{bored}Seven skips, on a good day. Don't look at me, I'm only judging.
+
+[sp_skip 2]
+You weigh the stone in your hand. It's perfect. You put it back exactly where it was.
+
+[sp_skip_ves 2]
+{smile}Good. Some things you don't spend.
+
+[sp_snails]
+A knot of pale snails on a stone, shells like wet pearls. Every one of them has turned to face the lake.
+
+[sp_snails_ves]
+{smile}Waiting for the ferry. Same as us.
+
+[sp_snails 2]
+One of them has turned round to look at you. All the rest haven't. You decide it's the leader.
+
+[sp_snails_ves 2]
+{bored}The ferry committee. They've been waiting since before the ferry.
+
+[lp_shore_olm]
+A signpost, hand-lettered: OLM WAS HERE. Under it, smaller, in a different, very careful hand: (politely.)
+
+[lp_shore_olm_ves]
+{smile}I think it's the only polite graffiti I've ever seen. I'm choosing not to meet the artist.
+
+[lp_isles_boat]
+A boat pulled up on the first isle, tied to nothing, with a single oar still shipped. Somebody rowed here from somewhere and thought: this will do.
+
+[lp_isles_boat_ves]
+{bored}And then they stayed. That's what we're calling a holiday.
+
+[lp_isles_nook]
+A small fish skull in the lee of the far rocks, where the spray never reaches, set on a flat stone as a paperweight. Under it, nothing. You take the skull anyway.
+
+[lp_isles_nook_ves]
+{smile}Finders keepers. I'll say hello to the fish for you.
+
+[lp_reeds_boat]
+A paper boat, folded small, snagged in the reeds. It has a tiny flag drawn on the sail, in charcoal. You fish it out. It weighs nothing.
+
+[lp_reeds_boat_ves]
+{smile}Somebody's had a long, wet journey.
+
+[lp_reeds_pine]
+A pinecone, bobbing among the reeds, upstream of where it ought to be. There are no pine trees for a very long way. You decide not to think about it.
+
+[lp_reeds_pine_ves]
+{surprised}...Huh.
+
+[lp_hall_pillars]
+A chalk tally on the sign-post: the number of pillars that are still standing, with a smaller number beside it, crossed out and rewritten. The smaller one's gone down again.
+
+[lp_hall_pillars_ves]
+{bored}Somebody's been counting and not liking the answer.
+
+[lp_stair_bucket]
+A bucket at the head of the stair, upside down, with something chalked on the bottom: 'FOR THE WAY BACK UP'. It's empty. It always was.
+
+[lp_stair_bucket_ves]
+{thoughtful}A bucket for the way back up. I'd have gone with a rope.
+
+[lp_far_boat]
+A second boat, on this shore, upside down like the first. Between them they would make a very bad ferry, and a very good argument.
+
+[lp_far_boat_ves]
+{smile}Two boats. Two shores. One ferryman. The maths is not on his side.
+
+# --- end life pass ---
+
+# --- THE LIFE PASS, ROUND 3 (helper C, 15 November 2026): the dullest rooms of chapter 4 ---
+
+[r3c_sd_step_lamp]
+A tin lamp standing on the bottom of a step, its wick burnt to a black thread. It was lit once for every one of the folk who made the walk, and left for the next.
+
+[r3c_sd_step_lamp_ves]
+{thoughtful}Lamps with nobody to light them. You'd think they'd have had the sense to leave a match.
+
+[r3c_sd_prints]
+Small boot-prints on every other step, as if whoever made them was counting. Left, right, left. The prints grow fainter as they go down.
+
+[r3c_sd_prints_ves]
+{bored}It's a very long way to fall asleep going down.
+
+[r3c_sd_wrapper]
+A square of paper, folded small. When you open it, it says: 'DOWN IS EASIER THAN UP. DO NOT LET THAT FOOL YOU.'
+
+[r3c_sd_wrapper_ves]
+{smile}That's the sort of wise thing you'd read in a fortune cookie. A cave one, I suppose.
+
+[r3c_sd_stub]
+A candle stub on a step, a bit of wax and a black wick. Whoever lit it needed to see their feet.
+
+[r3c_sd_stub_ves]
+{thoughtful}Looking at your feet is a fine plan on a staircase this long.
+
+[r3c_sd_arrow]
+A chalk arrow on the step, pointing down. Under it, someone has written: (YES, STILL DOWN).
+
+[r3c_sd_arrow_ves]
+{bored}It's honest. I'll give it that.
+
+[r3c_sd_caps]
+A few pale caps growing out of a crack along the side of the stair. They lean down, towards the Deep.
+
+[r3c_sd_caps_ves]
+{surprised}That's where everything's going, then. The mushrooms too.
+
+# --- end life pass round 3 (helper C) ---

@@ -27,7 +27,7 @@ export const POWDER_MONKEY = {
   // "Still on Watch" (src/data/music/ghostCrewBattleTheme.js): the fight song for the crew's two
   // boys, small and lonely, on the ship's shanty. (It used to be the storm fight song.)
   music: 'ghostCrewBattle',
-  maxHp: 11800,
+  maxHp: 7300,
   damage: 99,
 
   difficulty: { density: 1.75, speed: 1.6 },
@@ -37,10 +37,9 @@ export const POWDER_MONKEY = {
 
   // His attacks live in src/battle/attacks/powder_monkey.js.
   patterns: [
-    { name: 'monkeyShot', weight: 3 },
     { name: 'monkeyKeg', weight: 3 },
-    { name: 'monkeyRam', weight: 3 },
-    { name: 'monkeySmoke', weight: 3 },
+    { name: 'monkeyFuse', weight: 3 },
+    { name: 'monkeyBroadside', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -51,7 +50,7 @@ export const POWDER_MONKEY = {
     { name: 'Sit down beside him', calm: 30 },
   ],
 
-  rewards: { exp: 3000, coins: 17 },
+  rewards: { exp: 3000, coins: 14 },
 
   // The slow-match's last length, wound up in a twist of paper, left behind (src/data/items.js).
   drops: [{ item: 'powder_toffee', chance: 0.4 }],

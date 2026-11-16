@@ -10,7 +10,7 @@
 
 # (draft)
 [first_bramble]
-{thinking}Is it the same soup from when the storm came?
+{glee}Is it the same soup from when the storm came? Since THEN?
 
 [repeat]
 {smile}Soup's on. It's always on. It's the same soup, mostly, with more put in.
@@ -39,6 +39,12 @@
 [repeat 2 after haddock_hums]
 {smile}If you see him at the lagoon, tell him his mug's warm. It isn't. Tell him anyway.
 
+# (draft) The Fair Return, in passing: the bottles.
+[repeat 3 after haddock_hums]
+{wry}Folk still find bottles on this coast, love. Green glass, red wax, FR pressed in it. You don't open those. Fair Return's. Bad luck to read another ship's post.
+
+{smile}My grandad had one on that shelf for years. Then one morning it wasn't. Nobody took it. It just went back out.
+
 # (draft) World reacts: after the swimming lesson.
 [first after swimming_lesson]
 {smile}Is that the boy? Look at him. Wet right through and grinning. It took, then.
@@ -58,6 +64,12 @@
 
 [repeat after wreck_slip_home]
 {smile}Soup's on. He'll be in for it. He's always in for it.
+
+# (draft) The Fair Return, in passing.
+[repeat 2 after wreck_slip_home]
+{wry}Out at the Wreck Yard, did you hear singing? No? Good. Some do. Off the water, in the fog. Men, slow, all together.
+
+{smile}Stops before the end, every time. My grandad used to hum the last note for them, behind the bar. Said somebody ought to.
 
 [shelf_ask]
 {wry}They say when the lightning hits the sand out on the Reach, it runs into glass. Green, like a bottle.

@@ -1,23 +1,32 @@
 // THE HOLD: the Fair Return's cargo hold, the biggest room in her and the darkest: stacks of crates and sacks to the beams,
 // a row of barrels, chains, and between the stacks two long AISLES (the north, rows 3-4, and the south, rows 13-14)
-// joined by three passages: the west (x 2-3), the CHANNEL (x 20-21, open floor the whole way) and the east (x 34-35).
-// Four loose barrels roll down the channel with the list: when she leans to PORT they sit in the north aisle's crossing
-// (20-21, rows 3-4); STARBOARD, in the south aisle's (20-21, rows 13-14). So one aisle is always stopped and the other
-// open. Three trim lines (16,3), (24,3), (32,13) turn her. THE CHASE: the Bosun, a ghost sailor asleep at his post
-// in the south-west, wakes when you pass x 12 on the north aisle (ship_hold_chase) and comes after you at 82 px/s
-// (walking is 70, running 130): you can outrun him, put the lantern on him (he stops dead in the light), or turn her
-// once you're past the barrels so they roll into the aisle behind you. Caught, it is a fight with a deckhand. Leave by
-// the east: up to the deck hatch (34-35, row 3), down to the bilge (34-35, row 14).
-// The way up to the gun deck is the ladder at the NW (2-3, row 3). A boarded door in the west wall (2,8), with a ring
-// only the lantern shows (3,10), is the purser's locker (the secret).
+// joined by five passages: the west (x 2-3), x 11-12, the channel (x 20-21), x 28-29 and the east (x 34-35). No lean
+// here and nothing to turn: every way is open. THE CHASE is the room. The Bosun, a ghost sailor asleep at his post in
+// the south-west, wakes when you pass x 12 (ship_hold_chase) and hunts you at 82 px/s (walking is 70, running 130).
+// Three ways to live through it:
+//   * run: he is slower than you running, and the way out is at the east end
+//   * the lantern: he stops dead in its light (lantern: 'freeze')
+//   * HIDE: eight NOOKS, gaps a body wide in the faces of the stacks along both aisles (north (8,5) (16,5) (25,5) (32,5),
+//     south (7,12) (16,12) (25,12) (31,12)), each a dark slot with a shadow in it. Step in, stand still and put the
+//     lantern OUT, and he loses you: he stops, wonders where you went, and walks slowly back to his post (haunt.js
+//     `nooks`). For a few seconds he can't see you at all; after that, in the dark he only notices you close to, but
+//     with the lantern lit he sees it from anywhere.
+// Caught, it is a fight with a deckhand. After the chase (later visits) he is awake at his post, prowling, not asleep.
+// Leave by the east: up to the deck hatch (34-35, row 3), down to the bilge (34-35, row 14). The way up to the gun deck
+// is the ladder at the NW (2-3, row 3). A boarded door in the west wall (1,8), with a ring only the lantern shows (3,10),
+// is the purser's locker (the secret).
 // Scenes: ship_hold_in (just under the NW ladder, once: she lurches to port, the dark closes in), ship_hold_chase
-// (x 12 on the north aisle, once, after ship_hold_in: the Bosun wakes).
+// (across every aisle east, once, after ship_hold_in: the Bosun wakes).
 // Tile key: # hull and bulkhead (solid)   W planking face (solid)   . hold floor   B cargo stacks (24 high, drawn as crates: too tall to climb)
+
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
 
 export const SHIP_HOLD = {
   id: 'ship_hold',
   name: 'THE HOLD',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.25,
   music: 'ghostShip',
   musicFrom: 'list',
   ambience: 'ghost_ship_deep',
@@ -25,7 +34,9 @@ export const SHIP_HOLD = {
   indoors: true,
   // The haunting: whispers, the lights going low; `chaseSong` is what plays while something is after you (haunt.js).
   cargo: [{ x: 4, y: 5, w: 16, h: 8 }, { x: 22, y: 5, w: 12, h: 8 }],
-  haunt: { whispers: ['...hold her steady...', '...is it morning...', '...Day forty-one...', '...nobody leaves...'], chaseSong: 'ghostShipChase' },
+  // `nooks`: the gaps in the stacks you can hide in (lantern out, standing still: haunt.js).
+  haunt: { whispers: ['...hold her steady...', '...is it morning...', '...Day forty-one...', '...nobody leaves...'], chaseSong: 'ghostShipChase',
+    nooks: [[8, 5], [16, 5], [25, 5], [32, 5], [7, 12], [16, 12], [25, 12], [31, 12]] },
   playerStart: { x: 3, y: 4 },
 
   tiles: [
@@ -34,14 +45,14 @@ export const SHIP_HOLD = {
       '##WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW##',
       '##..................................##',
       '##..................................##',
-      '##..BBBB.BB..BBB.BB...BBBBBB..BBBB..##',
+      '##..BBBB.BB..BBB.BB...BBB.BB..BB.B..##',
       '##..BBBBBBB..BBBBBBB..BBBBB...BBBB..##',
       '##..BBBBBBB..BBBBBBB..BBBBBB...BBB..##',
       '#...BBBBBBB..BBBBBBB..BBBBBB..BBBB..##',
       '##..BBBBBBB..BBBBBBB..BBBBBB..BBBB..##',
       '##..BBBBBBB..BBBBBBB..BBBBBB..BBBB..##',
       '##..BBBBBBB..BBBBBBB..BBBBBB..BBBB..##',
-      '##..BBBBBBB...BBBBBB..BBBBBB..BBBB..##',
+      '##..BBB.BBB...BB.BBB..BBB.BB..B.BB..##',
       '##..................................##',
       '##..................................##',
       '######################################',
@@ -49,7 +60,7 @@ export const SHIP_HOLD = {
       '######################################',
     ],
 
-  // No tiles change here, but she leans, and the whole room with her.
+  // Nothing leans in here any more (no wheel, nothing loose): the list is kept only so she still creaks.
   list: {},
 
   doors: [
@@ -59,28 +70,38 @@ export const SHIP_HOLD = {
     { x: 1, y: 8, w: 1, h: 1, to: 'secret_ship_post', spawn: { x: 6, y: 7 } },
   ],
 
-  cutscenes: [{ x: 3, y: 5, w: 2, h: 1, scene: 'ship_hold_in' }, { x: 12, y: 3, w: 1, h: 2, scene: 'ship_hold_chase', after: 'ship_hold_in' }],
+  // ship_hold_in covers the tile you arrive on (3,4), so it plays as you come off the ladder.
+  // ship_hold_chase has three lines, one across each way east: the north aisle (x 12), the
+  // middle aisle (x 11-12, row 6) and the west aisle (x 2-3, row 7). You can't slip past it.
+  cutscenes: [
+    { x: 2, y: 4, w: 3, h: 2, scene: 'ship_hold_in' },
+    { x: 12, y: 3, w: 1, h: 2, scene: 'ship_hold_chase', after: 'ship_hold_in' },
+    { x: 11, y: 6, w: 2, h: 1, scene: 'ship_hold_chase', after: 'ship_hold_in' },
+    { x: 2, y: 7, w: 2, h: 1, scene: 'ship_hold_chase', after: 'ship_hold_in' },
+  ],
 
   textFile: 'interactions/ghostship.txt',
   props: [
-    { sprite: 'c5_barrel', x: 20, y: 3, text: 'hold_loose', loose: { port: [20, 3], star: [20, 13], seconds: 1.9 } },
-    { sprite: 'c5_barrel', x: 21, y: 3, text: 'hold_loose', loose: { port: [21, 3], star: [21, 13], seconds: 1.9 } },
-    { sprite: 'c5_barrel', x: 20, y: 4, text: 'hold_loose', loose: { port: [20, 4], star: [20, 14], seconds: 1.9 } },
-    { sprite: 'c5_barrel', x: 21, y: 4, text: 'hold_loose', loose: { port: [21, 4], star: [21, 14], seconds: 1.9 } },
-    { sprite: 'gs_trim_line', x: 16, y: 3, text: 'hold_trim', listWheel: { to: 'toggle', port: 'trim_port', star: 'trim_star', busy: 'trim_busy', already: 'trim_already' } },
-    { sprite: 'gs_trim_line', x: 24, y: 3, text: 'hold_trim', listWheel: { to: 'toggle', port: 'trim_port', star: 'trim_star', busy: 'trim_busy', already: 'trim_already' } },
-    { sprite: 'gs_trim_line', x: 32, y: 13, text: 'hold_trim', listWheel: { to: 'toggle', port: 'trim_port', star: 'trim_star', busy: 'trim_busy', already: 'trim_already' } },
+    // The nooks: a dark gap in the face of each stack, a body wide (see `nooks` above).
+    { sprite: 'gs_nook', x: 8, y: 5, text: 'hold_nook', flat: true, walkable: true },
+    { sprite: 'gs_nook', x: 16, y: 5, text: 'hold_nook', flat: true, walkable: true },
+    { sprite: 'gs_nook', x: 25, y: 5, text: 'hold_nook', flat: true, walkable: true },
+    { sprite: 'gs_nook', x: 32, y: 5, text: 'hold_nook', flat: true, walkable: true },
+    { sprite: 'gs_nook', x: 7, y: 12, text: 'hold_nook', flat: true, walkable: true },
+    { sprite: 'gs_nook', x: 16, y: 12, text: 'hold_nook', flat: true, walkable: true },
+    { sprite: 'gs_nook', x: 25, y: 12, text: 'hold_nook', flat: true, walkable: true },
+    { sprite: 'gs_nook', x: 31, y: 12, text: 'hold_nook', flat: true, walkable: true },
     { sprite: 'gs_ladder', x: 2, y: 3, flat: true, walkable: true, text: 'hold_ladder_up' },
     { sprite: 'gs_ladder', x: 3, y: 3, flat: true, walkable: true, text: 'hold_ladder_up' },
     { sprite: 'gs_ladder', x: 34, y: 3, flat: true, walkable: true, text: 'hold_ladder_deck' },
     { sprite: 'gs_ladder', x: 35, y: 3, flat: true, walkable: true, text: 'hold_ladder_deck' },
     { sprite: 'gs_bilge_hatch_open', x: 34, y: 14, flat: true, walkable: true, text: 'hold_hatch_bilge' },
     { sprite: 'gs_bilge_hatch_open', x: 35, y: 14, flat: true, walkable: true, text: 'hold_hatch_bilge' },
-    { sprite: 'gs_bulk_door', x: 2, y: 8, text: 'hold_boarded', opensWith: ['post_door'], openText: 'hold_boarded_open' },
-    { sprite: 'gs_ghost_ring', x: 3, y: 10, text: 'hold_ring', lever: 'post_door', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gs_side_door_low', x: 1, y: 8, text: 'hold_boarded', opensWith: ['post_door'], openText: 'hold_boarded_open', openLook: 'gs_side_door_low_open', ajarLook: 'gs_side_door_low_ajar' },
+    { sprite: 'gs_ghost_ring', x: 3, y: 10, text: 'hold_ring', lever: 'post_door', flat: true, walkable: true, haunt: { kind: 'unseen', glint: true } },
     { sprite: 'gs_ghost_old', x: 30, y: 4, text: 'ghost_hold_old', animation: 'gs_ghost_old', speed: 1.0, walkable: true, haunt: { kind: 'ghost' } },
     { sprite: 'gs_ghost_boy', x: 8, y: 13, text: 'ghost_hold_boy', animation: 'gs_ghost_boy', speed: 0.7, walkable: true, haunt: { kind: 'ghost' } },
-    { sprite: 'gs_chalk', x: 12, y: 3, text: 'hold_chalk', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gs_chalk', x: 12, y: 2, text: 'hold_chalk', walkable: true, haunt: { kind: 'unseen' } },
     { sprite: 'gs_prints_a', x: 5, y: 4, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
     { sprite: 'gs_prints_b', x: 3, y: 7, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
     { sprite: 'gs_prints_a', x: 3, y: 9, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
@@ -157,12 +178,17 @@ export const SHIP_HOLD = {
     { sprite: 'gs_weed_b', x: 30, y: 14, flat: true, walkable: true },
     { sprite: 'gs_doll', x: 3, y: 13, flat: true, walkable: true },
     { sprite: 'gs_letter_dropped', x: 22, y: 4, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_hold ?? []),
   ],
   tileTexts: { '#': 'hold_wall', W: 'hold_wall', B: 'hold_stack' },
 
-  // The Bosun sleeps at (4,13) until ship_hold_chase wakes him. The powder monkey patrols the east end of the south aisle (row 14, x 27-32). Neither stands on a door, a trim line, the channel (x 20-21) or the scenes' rows.
+  // The Bosun sleeps at (4,13) until ship_hold_chase wakes him; after that scene (a later visit) he is awake at his post from the start, and only notices
+  // you close to in the dark, or your lantern from anywhere (haunt.js `nooks`). Both share one key, so beaten once he stays beaten. The powder monkey
+  // patrols the east end of the south aisle (row 14, x 27-32). None stands on a door, a nook, the passages or the scenes' rows.
   npcs: [
-    { enemy: 'ghost_deckhand', x: 4, y: 13, patrol: [4, 4], behaviour: 'chase', lantern: 'freeze', dormant: true, quiet: true, chaseSpeed: 82, sight: 600, name: 'bosun' },
+    { enemy: 'ghost_deckhand', key: 'ship_hold:bosun', x: 4, y: 13, patrol: [4, 4], behaviour: 'chase', lantern: 'freeze', dormant: true, quiet: true, chaseSpeed: 82, sight: 600, name: 'bosun', until: 'ship_hold_chase' },
+    { enemy: 'ghost_deckhand', key: 'ship_hold:bosun', x: 4, y: 13, patrol: [4, 4], behaviour: 'chase', lantern: 'freeze', quiet: true, chaseSpeed: 82, sight: 600, name: 'bosun', after: 'ship_hold_chase' },
     { enemy: 'powder_monkey', x: 28, y: 14, patrol: [27, 32], behaviour: 'patrol', lantern: 'freeze' },
   ],
 };

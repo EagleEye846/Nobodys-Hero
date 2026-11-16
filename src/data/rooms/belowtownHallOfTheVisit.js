@@ -25,8 +25,8 @@ export const BELOWTOWN_HALL_OF_THE_VISIT = {
   tiles: [
     '########################',
     '#WHWWWVWWWWWWWWWWVWWWHW#',
-    '#WWWWWWWWWWWWWWWWWWWWWW#',
-    '#WWWWWWWWWWWWWWWWWWWWWW#',
+    '#WWWWWWWWWWWWWWWWWWWW.W#',
+    '#WWWWWWWWWWWWWWWWWWWW.W#',
     '#......................#',
     '#.........XXXX.........#',
     '#.........XXXX.........#',
@@ -68,6 +68,12 @@ export const BELOWTOWN_HALL_OF_THE_VISIT = {
     { sprite: 'bf_snail_elder', x: 19, y: 10, npc: 'bt_hall_snail', animation: 'bf_snail_elder', speed: 0.5 },
     { sprite: 'chest', x: 22, y: 12, text: 'hall_chest', gives: 'frog_toffee', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'town_barrels', x: 20, y: 12, text: 'hall_barrels' },
+    // The life pass (14 Nov): the museum's odds and ends, a stash in the wall, a pinwheel that shouldn't spin.
+    { sprite: 'bt_hand_cart', x: 2, y: 6, text: 'bl_hall_cart' },
+    { sprite: 'bt_pick_rack', x: 22, y: 7, text: 'bl_hall_rack' },
+    { sprite: 'bt_bucket_mop', x: 3, y: 11, text: 'bl_hall_bucket', gives: 'dented_dustpan', taken: { sprite: 'bt_bucket_mop', text: 'bl_hall_bucket_empty' } },
+    { sprite: 'gold_pouch', x: 21, y: 2, text: 'bl_hall_stash', gives: 'bl_curator_iou', taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+
   ],
   tileTexts: { W: 'hall_wall', '#': 'town_rock', V: 'town_lamps_wall', H: 'town_banner_wall' },
 

@@ -1,0 +1,85 @@
+# DANDY LION
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/dandylion.js.
+
+[intro]
+A very round, very fluffy head turns toward you and lifts its chin. A DANDY LION!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+DANDY LION shakes its mane out. A few seeds float off. It pretends not to have noticed.
+
+DANDY LION checks its reflection in a puddle and is, once again, thrilled.
+
+A seed drifts past your nose. DANDY LION watches it go with the look of a lion who's lost a button.
+
+DANDY LION poses. It's a very long pose. Nobody asked for it.
+
+Smells like a summer lawn and a lot of hair product.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+DANDY LION's mane is getting thin on top. It keeps one paw over the patch and hopes.
+
+[flavor: spareable]
+DANDY LION strikes a pose just for you. It's a friendly pose. You could leave on a pose like that.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Look at
+this mane.
+
+Don't
+breathe on it.
+
+I'm told
+it's iconic.
+
+Mind
+the hair!
+
+...Okay,
+breathe a
+LITTLE.
+
+Fluff for
+all! Well,
+for me.
+
+Hold on.
+I'm
+shedding.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/dandylion.js.
+[talk: Inspect]
+DANDY LION - HP 800
+A lion whose mane is a dandelion clock. Vain about it. Blows apart when it roars, puffs back together when it sulks. Easy, if you stay out of the fluff.
+
+[talk: Admire the mane]
+You tell DANDY LION its mane is the roundest you have ever seen. It tries to look modest. It looks, instead, like a very proud cloud.
+
+[talk: Make a wish]
+You close your eyes and hold your breath. DANDY LION goes rigid with delight. You wish it would stop fighting. It sneezes a little, and a seed floats away, and you feel the wish go.
+
+[talk: Hold still in the breeze]
+You stand perfectly still while the seeds blow past. DANDY LION is moved. Nobody has ever just stood and let its mane be a landscape.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+DANDY LION blows apart in one last, enormous puff. When the seeds settle, there is a small, bald, very embarrassed lion in the middle of them. It runs.
+
+[pacified]
+DANDY LION fluffs itself up, big and bright, and bows. Then it trots off, tail first, so you can see the flower on the end. It lets you by.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} its mane is the most dramatic thing she's seen all week. {foe} spins slowly so she can see it from all sides.
+
+Ves holds out her umbrella, handle first, and offers {foe} the reflection in the canopy. {foe} stares. It has never looked so good. She says it's an optical effect.
+
+Ves asks {foe} to just not shed on her coat. {foe} promises. A single seed lands on her sleeve. She decides to let it live.

@@ -14,7 +14,13 @@ export const LASTLIGHT_SONG = {
 
   steps: [
     { do: 'music', song: 'lastlight' },
+    // Somewhere above, very faintly, a music box running down: the hero looks up, and the view with them. (draft)
     { do: 'wait', seconds: 1.5 },
-    { do: 'say', text: 'Somewhere above you, very faintly, something has started to play. A music box, running down.' },
+    { do: 'act', who: 'player', act: 'look', wait: false },
+    { do: 'stage', tilt: 0.22, seconds: 1.6 },
+    { do: 'wait', seconds: 2.8 },
+    { do: 'stage', tilt: 0, seconds: 1.6 },
+    { do: 'wait', seconds: 1.4 },
   ],
 };
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

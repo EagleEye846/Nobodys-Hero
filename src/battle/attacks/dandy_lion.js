@@ -1,13 +1,20 @@
 import { defineBulletArt } from '../projectiles.js';
+import { PathShot, Deco, Guide } from './coastKit.js';
 
-// The Dandy Lion's attacks. Its mane is a dandelion clock, so everything it
-// throws is the mane: seeds on thin stalks drifting about on the breeze,
-// fluff, petals from the flower it grew from, and a pounce that leaves a
-// trail of puffs. It's the cheerful, vain fake-out of Sunnyside: slow,
-// pretty, easy to read, and every attack still goes where you're standing.
+// The Dandy Lion's attacks. Its mane is a dandelion clock, it is extremely
+// vain about it, and every attack is the mane or the vanity:
+//   - Roar: it puffs the mane up and roars it off at you in a spray.
+//   - Pounce: it's a lion. It springs.
+//   - Wish: wishes twinkle up and come true in rings of petals.
+//   - Reflection: it admires itself in a puddle across the box, and every
+//     seed above the water has a twin in it, upside down. Read the one you
+//     can see to know where its twin goes.
+//   - Sulk: the mane blows apart, every seed hangs in the air on its own
+//     string back to the lion's head, and then it puffs itself back together:
+//     every seed flies home along the same line it went out on.
 //
 // It stands to the right of the box, so everything comes in from the right
-// edge (the breeze, the roar, the pounce). Attacks work on `box` and `soul`
+// edge (the roar, the pounce, the mane). Attacks work on `box` and `soul`
 // positions only; each one is a factory `(box, density, tools) => ({ duration,
 // update })`; see dummy.js for the shape.
 
@@ -23,6 +30,28 @@ defineBulletArt('dandySeed', {
     ['w.w.w..', '.wwWw..', '..wWw..', '...q...', '...q...', '...s...'],
   ],
   palette: SEED,
+  radius: 1.8,
+  frameSeconds: 0.35,
+});
+
+// A seed's reflection in the puddle: the same seed upside down, gone blue.
+const DROWNED = { w: '#cfe6f2', W: '#8fb4c8', q: '#5f8296', s: '#3a4a5a' };
+defineBulletArt('dandySeedDown', {
+  frames: [
+    ['...s...', '...q...', '...q...', '..wWw..', '..wWw..', '.w.w.w.'],
+    ['...s...', '...q...', '...q...', '..wWw..', '.wwWw..', 'w.w.w..'],
+  ],
+  palette: DROWNED,
+  radius: 1.8,
+  frameSeconds: 0.35,
+});
+// Its reflection when the puddle runs down the middle: the right way up, blue.
+defineBulletArt('dandySeedBlue', {
+  frames: [
+    ['.w.w.w.', '..wWw..', '..wWw..', '...q...', '...q...', '...s...'],
+    ['..w.w.w', '..wWww.', '..wWw..', '...q...', '...q...', '...s...'],
+  ],
+  palette: DROWNED,
   radius: 1.8,
   frameSeconds: 0.35,
 });
@@ -44,17 +73,6 @@ defineBulletArt('dandyPetal', {
   palette: PETAL,
   radius: 1.7,
   rotate: true,
-});
-
-// The flower it grew from (harmless: it only throws petals).
-defineBulletArt('dandyFlower', {
-  frames: [
-    ['...yyy...', '.y.yYy.y.', '..yyYyy..', 'yyyYYYyyy', '..yyYyy..', '.y.yYy.y.', '...yyy...'],
-    ['..y.y.y..', '.yyyYyyy.', 'yyyyYyyyy', '.yYYYYYy.', 'yyyyYyyyy', '.yyyYyyy.', '..y.y.y..'],
-  ],
-  palette: PETAL,
-  radius: 1,
-  frameSeconds: 0.2,
 });
 
 // A paw, mid-pounce: three toes and a big pad, all pink beans, and the
@@ -82,41 +100,9 @@ defineBulletArt('dandyWish', {
 });
 
 export const DANDY_LION_ATTACKS = {
-  // On the breeze: seeds come drifting in on the wind in lazy arcs, and
-  // every couple of seconds the wind turns and sends all of them back the
-  // other way, still lazy, still coming.
-  dandyBreeze(box, density, { Shot, every, rand, clamp }) {
-    let t = 0;
-    let dir = -1;
-    let nextTurn = 2.2;
-    let seeds = [];
-    const drift = every(0.24, 0.34, (bullets, soul) => {
-      // Half of them are drifting along your row.
-      const y = Math.random() < 0.5 ? clamp(soul.y + rand(-10, 10), box.y + 4, box.y + box.h - 4) : rand(box.y + 4, box.y + box.h - 4);
-      const x = dir < 0 ? box.x + box.w + 6 : box.x - 6;
-      const seed = new Shot({ x, y, vx: dir * rand(24, 34), vy: rand(-4, 4), wobble: { amplitude: rand(7, 12), frequency: rand(1.6, 2.4) }, art: 'dandySeed', life: 7 });
-      seeds.push(seed);
-      bullets.push(seed);
-    });
-    return {
-      duration: 6.6,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t < 5.8) drift(dt, bullets, soul);
-        if (t >= nextTurn) {
-          nextTurn = t + 2.1;
-          dir = -dir;
-          // The gust turns every seed round, a bit slower than it came.
-          for (const seed of seeds) seed.vx = dir * Math.abs(seed.vx) * 0.8;
-        }
-        seeds = seeds.filter((seed) => seed.age < 7);
-      },
-    };
-  },
-
   // Roar: it puffs its mane up, and then ROARS, and the whole mane blows off
   // in a spray of seeds, in a fan aimed at where you were standing. The fan's
-  // edges flash first.
+  // edges flash first. Four roars, and it's out of breath.
   dandyRoar(box, density, { Shot, Line, rand, clamp }) {
     const mouth = { x: box.x + box.w - 2, y: box.y + box.h / 2 };
     let t = 0;
@@ -124,10 +110,10 @@ export const DANDY_LION_ATTACKS = {
     let next = 0.2;
     let firing = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && roars < 3 && t < 5) {
+        if (t >= next && roars < 4) {
           roars++;
           next = t + 2.1;
           const aim = Math.atan2(soul.y - mouth.y, soul.x - mouth.x);
@@ -155,46 +141,8 @@ export const DANDY_LION_ATTACKS = {
     };
   },
 
-  // Petals: it grows a flower. The flower spins out petals in a pair of
-  // spiral arms, then wilts, and another opens somewhere else.
-  dandyPetals(box, density, { Shot, rand, pointAwayFrom }) {
-    let t = 0;
-    let flower = null;
-    let nextFlower = 0.2;
-    let count = 0;
-    let angle = 0;
-    let spin = 3.4;
-    let timer = 0;
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= nextFlower && count < 2 && t < 4) {
-          count++;
-          nextFlower = t + 3.1;
-          const at = pointAwayFrom(box, soul, 30, 16);
-          flower = { x: at.x, y: at.y, from: t + 0.5, until: t + 3 };
-          spin = count === 1 ? 3.4 : -3.8;
-          angle = rand(0, Math.PI * 2);
-          bullets.push(new Shot({ x: at.x, y: at.y, harmless: true, life: 3.1, art: 'dandyFlower' }));
-        }
-        if (flower && t >= flower.from && t < flower.until) {
-          angle += spin * dt;
-          timer -= dt;
-          while (timer <= 0) {
-            timer += 0.11;
-            for (const arm of [0, Math.PI]) {
-              const a = angle + arm;
-              bullets.push(new Shot({ x: flower.x, y: flower.y, vx: Math.cos(a) * 34, vy: Math.sin(a) * 34, art: 'dandyPetal', life: 5 }));
-            }
-          }
-        }
-      },
-    };
-  },
-
   // Pounce: it springs across the box in a high arc and lands on the spot
-  // where you were (the arc flashes first). Each leap leaves a trail of fluff
+  // where you were (the arc flashes first), four times, side to side. Each leap leaves a trail of fluff
   // that hangs in the air a while, and a ring of puffs where it lands.
   dandyPounce(box, density, { Shot, Line, rand, clamp }) {
     let t = 0;
@@ -203,10 +151,10 @@ export const DANDY_LION_ATTACKS = {
     const leaps = [];
     const FLIGHT = 0.6;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && count < 3 && t < 5) {
+        if (t >= next && count < 4) {
           const fromRight = count % 2 === 0;
           const start = { x: fromRight ? box.x + box.w + 8 : box.x - 8, y: clamp(soul.y + rand(-10, 10), box.y + 10, box.y + box.h - 6) };
           const end = { x: clamp(soul.x, box.x + 6, box.x + box.w - 6), y: clamp(soul.y, box.y + 6, box.y + box.h - 6) };
@@ -257,12 +205,12 @@ export const DANDY_LION_ATTACKS = {
     let next = 0.3;
     let wishes = [];
     return {
-      duration: 6.8,
+      duration: 7.6,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5) {
-          next = t + 0.62;
-          const near = Math.random() < 0.55;
+        if (t >= next && t < 6.2) {
+          next = t + 0.66;
+          const near = Math.random() < 0.45;
           const x = near ? clamp(soul.x + rand(-9, 9), box.x + 8, box.x + box.w - 8) : rand(box.x + 8, box.x + box.w - 8);
           const y = near ? clamp(soul.y + rand(-9, 9), box.y + 8, box.y + box.h - 8) : rand(box.y + 8, box.y + box.h - 8);
           bullets.push(new Shot({ x, y, harmless: true, life: 0.95, art: 'dandyWish' }));
@@ -278,6 +226,161 @@ export const DANDY_LION_ATTACKS = {
           }
         }
         wishes = wishes.filter((wish) => !wish.done);
+      },
+    };
+  },
+
+  // Reflection: it finds a puddle and admires itself in it. The puddle lies
+  // across the middle of the box, and every seed that drifts over it has a
+  // twin in the water, upside down, doing exactly the opposite. Half the
+  // seeds come along the mirror of your row, so their twins come along yours.
+  // Then it turns its head for a better angle, and the puddle turns with it:
+  // now it runs down the middle, seeds float down the left half and their
+  // twins down the right. The new waterline flickers before it's used.
+  dandyMirror(box, density, { Shot, rand, clamp }) {
+    // Real seconds (on the attack's clock, which runs `density` times fast);
+    // when it's layered on another, lighter (density under 1), it spreads out.
+    const pace = Math.max(density, 1);
+    const T = (s) => s * pace;
+    const midY = box.y + box.h / 2;
+    const midX = box.x + box.w / 2;
+    let t = 0;
+    let next = T(0.3);
+    const TURN = 4.1;
+    // The waterline, shimmering (harmless).
+    const water = (vertical, from, until) => new Deco({
+      life: until - from,
+      paint: (ctx, d) => {
+        const blink = d.age < 0.7 ? (Math.floor(d.age * 10) % 2 ? 0.3 : 0.75) : 0.8;
+        ctx.globalAlpha *= blink;
+        ctx.fillStyle = '#8fc8e8';
+        for (let i = 0; i < box.w; i += 4) {
+          const wob = Math.round(Math.sin(d.age * 5 + i * 0.4));
+          if (vertical) ctx.fillRect(midX + wob, box.y + i, 1, 3);
+          else ctx.fillRect(box.x + i, midY + wob, 3, 1);
+        }
+      },
+    });
+    const twins = [];
+    let phase = 0;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (phase === 0) {
+          phase = 1;
+          bullets.push(water(false, 0, TURN + 0.2));
+        }
+        if (phase === 1 && t >= T(TURN - 0.8)) {
+          phase = 2;
+          bullets.push(water(true, 0, 4.2));
+        }
+        if (t >= next && t < T(7)) {
+          const vertical = t >= T(TURN);
+          next = t + T(vertical ? 0.42 : 0.4);
+          if (!vertical && t > T(TURN - 0.9)) return;
+          if (!vertical) {
+            // Over the water, on the mirror of your row half the time.
+            const mirrorRow = 2 * midY - soul.y;
+            const y = Math.random() < 0.5 && mirrorRow < midY - 4 ? clamp(mirrorRow + rand(-3, 3), box.y + 4, midY - 5) : rand(box.y + 5, midY - 6);
+            const seed = new Shot({ x: box.x + box.w + 6, y, vx: -rand(24, 32), wobble: { amplitude: rand(3, 6), frequency: rand(1.8, 2.6) }, art: 'dandySeed', life: 5 });
+            const twin = new Shot({ x: seed.x, y: 2 * midY - y, art: 'dandySeedDown', life: 5 });
+            twin.of = seed;
+            twin.flip = 'y';
+            bullets.push(seed, twin);
+            twins.push(twin);
+          } else {
+            // Down the left half; the twin down the right.
+            const mirrorCol = 2 * midX - soul.x;
+            const x = Math.random() < 0.5 && mirrorCol < midX - 4 ? clamp(mirrorCol + rand(-3, 3), box.x + 4, midX - 5) : rand(box.x + 5, midX - 6);
+            const seed = new Shot({ x, y: box.y - 6, vy: rand(24, 32), vx: rand(-3, 3), art: 'dandySeed', life: 5 });
+            const twin = new Shot({ x: 2 * midX - x, y: seed.y, art: 'dandySeedBlue', life: 5 });
+            twin.of = seed;
+            twin.flip = 'x';
+            bullets.push(seed, twin);
+            twins.push(twin);
+          }
+        }
+        // Each twin goes wherever its seed goes, the other way up.
+        for (const twin of twins) {
+          const seed = twin.of;
+          if (twin.flip === 'y') {
+            twin.x = seed.x;
+            twin.y = 2 * midY - seed.y;
+          } else {
+            twin.x = 2 * midX - seed.x;
+            twin.y = seed.y;
+          }
+          twin.age = seed.age;
+        }
+      },
+    };
+  },
+
+  // Sulk: someone breathed on it. The whole mane blows apart into the box,
+  // and every seed stops where it got to, hanging on its own thin line back
+  // to the lion's head. Then it sulks, and puffs itself back together: every
+  // seed flies home along exactly the line it went out on. So the lines are
+  // the danger, out and back, and the wedges between them are where to be.
+  // One line always runs through you. Three sulks, from three heights.
+  dandySulk(box, density, { rand, clamp }) {
+    // Real seconds (on the attack's clock, which runs `density` times fast);
+    // when it's layered on another, lighter (density under 1), it spreads out.
+    const pace = Math.max(density, 1);
+    const T = (s) => s * pace;
+    const OUT = 0.75;
+    const HOLD = 0.9;
+    const BACK = 0.55;
+    const heights = [0.18, 0.5, 0.82].sort(() => Math.random() - 0.5);
+    let t = 0;
+    let n = 0;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (n >= 3 || t < T(0.2 + n * 2.45)) return;
+        const head = { x: box.x + box.w + 4, y: box.y + box.h * heights[n] };
+        n++;
+        const aim = Math.atan2(soul.y - head.y, soul.x - head.x);
+        const count = 10;
+        // A fan across the box from the head, one line on you.
+        const lo = Math.atan2(box.y + 2 - head.y, box.x - head.x);
+        const hi = Math.atan2(box.y + box.h - 2 - head.y, box.x - head.x);
+        const top = Math.min(lo, hi);
+        const bottom = Math.max(lo, hi);
+        const angles = [aim];
+        for (let i = 0; i < count; i++) {
+          const a = top + ((bottom - top) * (i + 0.5)) / count + rand(-0.04, 0.04);
+          if (Math.abs(a - aim) > 0.11) angles.push(a);
+        }
+        for (const a of angles.slice(0, count)) {
+          // Where it stops: inside the box, the one on you just past you.
+          const reach = a === aim ? Math.hypot(soul.x - head.x, soul.y - head.y) + 10 : rand(36, 92);
+          const room = (() => {
+            // Keep it inside the box.
+            let r = reach;
+            for (let i = 0; i < 20; i++) {
+              const x = head.x + Math.cos(a) * r;
+              const y = head.y + Math.sin(a) * r;
+              if (x > box.x + 4 && y > box.y + 3 && y < box.y + box.h - 3) break;
+              r -= 5;
+            }
+            return Math.max(r, 20);
+          })();
+          const stop = { x: head.x + Math.cos(a) * room, y: clamp(head.y + Math.sin(a) * room, box.y + 3, box.y + box.h - 3) };
+          const path = (k) => {
+            if (k < OUT) {
+              const u = 1 - (1 - k / OUT) ** 2;
+              return { x: head.x + (stop.x - head.x) * u, y: head.y + (stop.y - head.y) * u };
+            }
+            if (k < OUT + HOLD) return { x: stop.x + Math.sin(k * 30) * 0.6, y: stop.y };
+            const u = Math.min(1, ((k - OUT - HOLD) / BACK) ** 2);
+            return { x: stop.x + (head.x - stop.x) * u, y: stop.y + (head.y - stop.y) * u };
+          };
+          bullets.push(new PathShot({ path, art: a === aim ? 'dandyFluff' : 'dandySeed', warn: 0.35, life: OUT + HOLD + BACK }));
+          // Its string home, dotted, the whole time it's out.
+          bullets.push(new Guide({ x: stop.x, y: stop.y, angle: Math.atan2(head.y - stop.y, head.x - stop.x), length: Math.hypot(head.x - stop.x, head.y - stop.y), warn: 0.35 + OUT + HOLD, color: '#fffdf0' }));
+        }
       },
     };
   },

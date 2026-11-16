@@ -21,7 +21,7 @@ export const GLEAMSNAIL = {
   anim: GLEAMSNAIL_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1450,
+  maxHp: 2850,
   damage: 37,
 
   // The Glimmering: a notch up from Sunnyside. Slow things, and lots of lines.
@@ -29,11 +29,10 @@ export const GLEAMSNAIL = {
 
   // Its attacks live in src/battle/attacks/gleamsnail.js.
   patterns: [
-    { name: 'snailShards', weight: 3 },
     { name: 'snailSlime', weight: 2 },
-    { name: 'snailBeams', weight: 2 },
     { name: 'snailShell', weight: 2 },
-    { name: 'snailTidy', weight: 2 },
+    { name: 'snailTidy', weight: 3 },
+    { name: 'snailLaundry', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

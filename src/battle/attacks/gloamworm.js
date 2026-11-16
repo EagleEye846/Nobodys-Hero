@@ -3,8 +3,8 @@ import { defineBulletArt } from '../projectiles.js';
 // The Gloamworm's attacks. It's a glowworm grub hanging in the dark under
 // the dead giant tree, so it fights the way glowworms fish: glowing silk
 // threads let down from above with sweet dew beaded on the ends, little
-// lights to make you come and look, and the roots it hangs from, shaken till
-// the earth comes down.
+// lights to make you come and look, swinging down on its own thread, and a
+// curtain of sticky threads for the moths (and you) to blunder into.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -14,8 +14,6 @@ const THREAD_GLOW = '#6ad8c4';
 const DEW = { d: '#d8fff4', D: '#5ac8b0', w: '#ffffff' };
 const LIGHT = { l: '#7affe0', L: '#2ac8a8', w: '#ffffff', k: '#14101c' };
 const GRUB = { k: '#14101c', g: '#e8dcc0', G: '#b8a888', s: '#8a7a64', e: '#000000', l: '#7affe0', L: '#2ac8a8' };
-// Earth is a little paler than real earth, so you can see it in the dark.
-const EARTH = { r: '#c09468', R: '#8a6440', e: '#a88c6c', E: '#76604a' };
 
 // A bead of dew, a little heavy at the bottom.
 defineBulletArt('gloamDew', {
@@ -24,19 +22,6 @@ defineBulletArt('gloamDew', {
   radius: 1.6,
 });
 
-// A mote of its light, twinkling; the same mote gone out (harmless); and a
-// splinter of light, drawn pointing right.
-defineBulletArt('gloamMote', {
-  frames: [['.L.', 'LwL', '.L.'], ['l.l', '.w.', 'l.l']],
-  palette: LIGHT,
-  radius: 1.5,
-  frameSeconds: 0.15,
-});
-defineBulletArt('gloamMoteOut', {
-  frames: [['.L.', 'L.L', '.L.']],
-  palette: { L: '#1e5a50' },
-  radius: 1.5,
-});
 defineBulletArt('gloamSpark', {
   frames: [['LllW']],
   palette: { L: '#2ac8a8', l: '#7affe0', W: '#ffffff' },
@@ -73,18 +58,12 @@ defineBulletArt('gloamGrub', {
   radius: 3.5,
 });
 
-// A clod of earth with a root through it, spinning down; and a length of
-// broken root, falling flat.
-defineBulletArt('gloamClod', {
-  frames: [['.eEe.', 'eErEe', 'rrRrr', 'eEeEE', '.EeE.']],
-  palette: EARTH,
-  radius: 2.2,
-  spin: 4,
-});
-defineBulletArt('gloamRoot', {
-  frames: [['r.rrrRRrrrrrRr', 'RrRRrrrRRrRRrR', '.R..r....R..r.']],
-  palette: EARTH,
-  hitbox: { w: 14, h: 3 },
+// A moth, fluttering along (drawn heading right).
+defineBulletArt('gloamMoth', {
+  frames: [['g.g..', '.GgGe', 'g.g..'], ['.....', 'gGgGe', '.....']],
+  palette: GRUB,
+  radius: 1.8,
+  frameSeconds: 0.08,
 });
 
 export const GLOAMWORM_ATTACKS = {
@@ -109,7 +88,7 @@ export const GLOAMWORM_ATTACKS = {
       lines.push({ line, bead });
     });
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
         castLine(dt, bullets, soul);
         for (const hung of lines) {
@@ -138,9 +117,21 @@ export const GLOAMWORM_ATTACKS = {
     let light = null;
     let beads = [];
     const lightSeconds = 1.65;
-    const spark = (bullets) => {
+    let sparks = 0;
+    const spark = (bullets, soul) => {
       if (!light) return;
-      const p = edgePoint(box, undefined, 4);
+      // From all round the edges, and most of them from the wall nearest you.
+      let p = edgePoint(box, undefined, 4);
+      if (sparks++ % 3 !== 0 && soul) {
+        const walls = [
+          { side: 'left', d: soul.x - box.x }, { side: 'right', d: box.x + box.w - soul.x },
+          { side: 'top', d: soul.y - box.y }, { side: 'bottom', d: box.y + box.h - soul.y },
+        ].sort((a, b) => a.d - b.d);
+        p = edgePoint(box, walls[0].side, 4);
+        // Close by you along that wall.
+        if (walls[0].side === 'left' || walls[0].side === 'right') p.y = Math.min(Math.max(soul.y + rand(-10, 10), box.y + 2), box.y + box.h - 2);
+        else p.x = Math.min(Math.max(soul.x + rand(-10, 10), box.x + 2), box.x + box.w - 2);
+      }
       const angle = Math.atan2(light.y - p.y, light.x - p.x);
       const bead = new Shot({
         x: p.x, y: p.y, vx: Math.cos(angle) * 46, vy: Math.sin(angle) * 46,
@@ -156,7 +147,8 @@ export const GLOAMWORM_ATTACKS = {
       light.life = light.age;
       const gathered = beads.filter((bead) => bead.stuck);
       gathered.forEach((bead, i) => {
-        const angle = (i / gathered.length) * Math.PI * 2 + rand(-0.2, 0.2);
+        // (Aimed off into the corners as much as anywhere.)
+        const angle = (i / gathered.length) * Math.PI * 2 + Math.PI / 4 + rand(-0.2, 0.2);
         bead.x = light.x;
         bead.y = light.y;
         bead.vx = Math.cos(angle) * 52;
@@ -170,10 +162,10 @@ export const GLOAMWORM_ATTACKS = {
     let t = 0;
     let next = 0;
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 6.2) {
+        if (t >= next && t < 9.4) {
           douse();
           // A new one comes on, well away from you.
           const p = pointAwayFrom(box, soul, 30, 12);
@@ -181,8 +173,8 @@ export const GLOAMWORM_ATTACKS = {
           bullets.push(light);
           next = t + lightSeconds;
         }
-        if (t >= 6.2) douse();
-        drip(dt, bullets);
+        if (t >= 9.9) douse();
+        drip(dt, bullets, soul);
         for (const bead of beads) {
           if (bead.stuck || !light || bead.homing?.target !== light) continue;
           const d = Math.hypot(bead.x - light.x, bead.y - light.y);
@@ -202,16 +194,17 @@ export const GLOAMWORM_ATTACKS = {
 
   // Down it comes: the Gloamworm lets itself down on its own thread from
   // the roof and swings, back and forth across the box like a pendulum. The
-  // thread hurts as much as it does. It can't reach the floor right under
-  // where it hangs, so get under it, low down. At the end of each swing it
-  // flicks off dew. Then it climbs up and comes down somewhere else.
+  // thread hurts as much as it does. It starts short of the floor, but it
+  // lets itself down further as it swings, so don't count on low down. At
+  // the end of each swing it flicks off dew, and a drop rolls back across
+  // the floor. Then it climbs up and comes down somewhere else.
   gloamSwing(box, density, { Shot, Line, rand }) {
     let drop = null;
     let drops = 0;
     let t = 0;
     const warn = 0.6;
     const swingSeconds = 2.5;
-    const reach = 1.05; // how far it swings either side, in radians
+    const reach = 1.25; // how far it swings either side, in radians
     const period = 1.8;
     const lower = (bullets) => {
       const anchor = { x: box.x + box.w / 2 + rand(-14, 14), y: box.y - 2 };
@@ -230,16 +223,19 @@ export const GLOAMWORM_ATTACKS = {
     const place = (d) => {
       const swing = Math.max(0, d.t - warn);
       const angle = Math.PI / 2 + reach * Math.cos((swing / period) * Math.PI * 2);
+      // It lets itself down further as it swings, till it brushes the floor.
+      const length = d.length + Math.min(1, swing / swingSeconds) * 24;
       d.thread.angle = angle;
-      d.grub.x = d.anchor.x + Math.cos(angle) * d.length;
-      d.grub.y = d.anchor.y + Math.sin(angle) * d.length;
+      d.thread.length = length;
+      d.grub.x = d.anchor.x + Math.cos(angle) * length;
+      d.grub.y = d.anchor.y + Math.sin(angle) * length;
       return { angle, swing };
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (!drop && drops < 2 && t >= 0.1 + drops * (warn + swingSeconds + 0.3)) lower(bullets);
+        if (!drop && drops < 3 && t >= 0.1 + drops * (warn + swingSeconds + 0.3)) lower(bullets);
         if (!drop) return;
         drop.t += dt;
         const { angle, swing } = place(drop);
@@ -252,79 +248,93 @@ export const GLOAMWORM_ATTACKS = {
             const a = out + i * 0.35;
             bullets.push(new Shot({ x: drop.grub.x, y: drop.grub.y, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, gravity: 50, life: 2, art: 'gloamDew' }));
           }
+          // And a fat drop falls and rolls back across the floor.
+          const back = drop.grub.x < box.x + box.w / 2 ? 1 : -1;
+          const from = Math.min(Math.max(drop.grub.x, box.x + 2), box.x + box.w - 2);
+          bullets.push(new Shot({ x: from, y: box.y + box.h - 6, vx: back * 60, warn: 0.3, life: 1.5, art: 'gloamDew' }));
         }
         if (drop.t >= warn + swingSeconds) drop = null;
       },
     };
   },
 
-  // Glow-swarm: its lights come drifting up from the floor like sparks off
-  // a fire, swaying as they go. Now and then one goes out. Count to two: it
-  // lights up again and bursts, a splinter of light at you and one either
-  // side.
-  gloamMotes(box, density, { Shot, every, rand, angleTo, spreadAcross }) {
-    const nextX = spreadAcross(box.x + 6, box.x + box.w - 6, 5);
-    let motes = [];
-    let dark = [];
-    let count = 0;
-    const rise = every(0.26, 0.34, (bullets) => {
-      const x = nextX();
-      const mote = new Shot({ x, y: box.y + box.h + 3, vy: rand(-34, -26), art: 'gloamMote' });
-      mote.baseX = x;
-      mote.sway = rand(0, Math.PI * 2);
-      // Every other one goes out somewhere on its way up.
-      mote.outAt = ++count % 2 === 0 ? rand(0.7, 1.6) : Infinity;
-      bullets.push(mote);
-      motes.push(mote);
-    });
+  // Sticky: it lets down a curtain of its threads (they glow as they come),
+  // and they don't hurt, but they're sticky: brush one and you're stuck on
+  // it for a moment. Meanwhile moths come fluttering across the box, and a
+  // moth that blunders into a thread sticks too, and shakes the dew off it.
+  // (It pretends that was the plan.) Dodge the moths without touching the
+  // threads. Every so often it reels them in and lets down a new curtain.
+  gloamSnare(box, density, { Shot, Line, rand, clamp }) {
+    const STICK = 0.4;
+    let threads = [];
+    let moths = [];
+    let t = 0;
+    let curtain = 0;
+    let moth = 0.5;
+    let stuck = 0;
+    let held = null;
+    const hang = (bullets) => {
+      for (const thread of threads) thread.life = Math.min(thread.life, thread.age - thread.warn);
+      threads = [];
+      const count = 4;
+      for (let i = 0; i < count; i++) {
+        const x = box.x + ((i + 0.5 + rand(-0.3, 0.3)) / count) * box.w;
+        const length = rand(40, 70);
+        const thread = new Line({ x, y: box.y - 2, angle: Math.PI / 2, length, thickness: 1, warn: 0.6, life: 30, grow: 120, color: THREAD, glow: THREAD_GLOW });
+        // Sticky, not sharp: it never hurts.
+        thread.edgeDistance = () => Infinity;
+        thread.at = { x, end: box.y - 2 + length };
+        threads.push(thread);
+        bullets.push(thread);
+      }
+    };
+    const onThread = (x, y, slack) => threads.find((thread) => thread.age > thread.warn + 0.3 && Math.abs(thread.x - x) < slack && y < thread.at.end + 1);
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
-        rise(dt, bullets);
-        for (const mote of motes) {
-          mote.x = mote.baseX + Math.sin(mote.age * 3 + mote.sway) * 5;
-          if (mote.age < mote.outAt) continue;
-          // It goes out, and sits there dark for a moment.
-          mote.life = mote.age - mote.warn;
-          mote.done = true;
-          const speck = new Shot({ x: mote.x, y: mote.y, harmless: true, life: 0.5, art: 'gloamMoteOut' });
-          speck.relight = 0.5;
-          bullets.push(speck);
-          dark.push(speck);
+        t += dt;
+        curtain -= dt;
+        if (curtain <= 0 && t < 9.6) {
+          curtain = 3.2;
+          hang(bullets);
         }
-        motes = motes.filter((mote) => !mote.done && mote.y > box.y - 10);
-        for (const speck of dark) {
-          speck.relight -= dt;
-          if (speck.relight > 0) continue;
-          speck.done = true;
-          const aim = angleTo(speck, soul);
-          for (const turn of [-0.55, 0, 0.55]) {
-            bullets.push(new Shot({ x: speck.x, y: speck.y, vx: Math.cos(aim + turn) * 62, vy: Math.sin(aim + turn) * 62, life: 2, art: 'gloamSpark' }));
+        moth -= dt;
+        if (moth <= 0 && t < 9.8) {
+          moth = rand(0.3, 0.4);
+          const fromLeft = Math.random() < 0.5;
+          const y = Math.random() < 0.4 ? clamp(soul.y, box.y + 6, box.y + box.h - 6) : rand(box.y + 6, box.y + box.h - 6);
+          const m = new Shot({
+            x: fromLeft ? box.x - 4 : box.x + box.w + 4, y, vx: (fromLeft ? 1 : -1) * rand(40, 52),
+            wobble: { amplitude: 4, frequency: 7 }, warn: 0.2, art: 'gloamMoth',
+          });
+          moths.push(m);
+          bullets.push(m);
+        }
+        // A moth in a thread sticks fast, and the dew shakes off.
+        for (const m of moths) {
+          if (m.caught || m.age < m.warn) continue;
+          const thread = onThread(m.x, m.y, 2.5);
+          if (!thread) continue;
+          m.caught = true;
+          m.vx = 0;
+          m.wobble = null;
+          m.life = m.age - m.warn + 1.2;
+          for (let k = 0; k < 3; k++) {
+            bullets.push(new Shot({ x: thread.x, y: m.y, vx: rand(-30, 30), vy: rand(-30, -10), gravity: 90, life: 1.6, art: 'gloamDew' }));
           }
         }
-        dark = dark.filter((speck) => !speck.done);
-      },
-    };
-  },
-
-  // Root rattle: it tugs on all its threads at once, and the roots they
-  // hang from shake. Earth comes down in clods all over (each one blinks
-  // before it drops), and every so often a whole length of broken root
-  // falls flat, right over you.
-  gloamRattle(box, density, { Shot, every, rand, clamp, spreadAcross }) {
-    const nextX = spreadAcross(box.x + 4, box.x + box.w - 4, 6);
-    const crumble = every(0.17, 0.25, (bullets) => {
-      bullets.push(new Shot({ x: nextX(), y: box.y + 3, vy: 18, gravity: 140, warn: 0.35, art: 'gloamClod' }));
-    });
-    const snap = every(1.25, 1.45, (bullets, soul) => {
-      const x = clamp(soul.x + rand(-6, 6), box.x + 8, box.x + box.w - 8);
-      bullets.push(new Shot({ x, y: box.y + 3, vy: 12, gravity: 120, warn: 0.5, art: 'gloamRoot' }));
-    }, { first: 0.8 });
-    return {
-      duration: 6.4,
-      update: (dt, bullets, soul) => {
-        crumble(dt, bullets);
-        snap(dt, bullets, soul);
+        moths = moths.filter((m) => m.age < m.warn + m.life && m.x > box.x - 30 && m.x < box.x + box.w + 30);
+        // And so do you.
+        if (stuck > 0) {
+          stuck -= dt;
+          soul.x = held.x;
+          soul.y = held.y;
+        } else if (stuck > -0.5) {
+          stuck -= dt;
+        } else if (onThread(soul.x, soul.y, 2.8)) {
+          stuck = STICK;
+          held = { x: soul.x, y: soul.y };
+        }
       },
     };
   },

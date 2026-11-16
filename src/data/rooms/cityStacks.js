@@ -8,6 +8,8 @@
 //   .  the old city's flagstones
 //   W  the old city's stone wall (solid)
 //   U  a stair up (the way back into the library)
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_STACKS = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_stacks',
@@ -49,6 +51,7 @@ export const CITY_STACKS = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_stacks ?? []),
     { sprite: 'bookshelf', x: 1, y: 2, text: 'stacks_shelf' },
     { sprite: 'bookshelf', x: 9, y: 2, text: 'stacks_shelf' },
     { sprite: 'bookshelf', x: 11, y: 2, text: 'stacks_shelf' },

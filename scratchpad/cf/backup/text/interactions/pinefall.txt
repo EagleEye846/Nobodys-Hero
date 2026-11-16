@@ -1,0 +1,603 @@
+# THE PINEFALL: things you can read and look at in the scarlet forest below
+# the clouds (Chapter 3).
+
+# What a save point says when you save here.
+[save_point]
+The crystal's light is warm against all this red.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Shared, across the forest ---
+
+[scarlet_tree]
+A tall tree in full autumn. Every leaf on it is red.
+
+Every few seconds, one lets go.
+
+[bramble]
+A wall of bramble, thick as a hedge and twice as rude about it.
+
+There are berries in it. They look like they'd bite back.
+
+# --- WHERE YOU FELL ---
+
+# Ves's mitten (it gives you the mitten, then the [got_ves_mitten] words).
+[landing_mitten]
+Something mustard-yellow in the red leaves.
+
+A mitten. Hand-knitted, a little lopsided. Still a bit warm.
+
+[landing_great_tree]
+The great tree you came down through. Its crown is gone, snapped off and lying in a heap.
+
+The branches broke your fall. Most of them, anyway.
+
+[landing_crown]
+The tree's snapped crown, in a tangle of red branches.
+
+You can see the hole you made in it.
+
+# --- THE BRAMBLE GATE ---
+
+[gate_gate]
+An old gate of woven branches, tied shut with a rope that runs off to three levers in the leaves.
+
+[gate_open]
+The rope goes taut, and the gate creaks open.
+
+[gate_reset]
+Clunk. The levers all drop back, and the rope goes slack.
+
+That wasn't the order.
+
+[gate_sign]
+A board nailed to a tree, the letters burnt in:
+
+WOODCUTTERS' GATE. PULL AS THE SUN GOES.
+
+Underneath, smaller: "it comes up in the east. at noon it stands in the south. it goes down in the west. honestly, it's not hard."
+
+[gate_lever]
+A wooden lever, worn smooth by a lot of hands.
+
+# --- THE DEADFALL ---
+
+# Ves's ribbon, caught on a branch up on the fallen trunks.
+[deadfall_ribbon]
+A coral ribbon, snagged on a branch where the wind dropped it.
+
+You've seen it in her hair the whole way up the mountain.
+
+[deadfall_pack]
+An old pack under a tree, half buried in leaves. Inside, a bag of pine candy, still sealed.
+
+[deadfall_pack_empty]
+The old pack. Empty now, apart from leaves.
+
+[deadfall_trunk]
+A fallen giant, lying where it came down. Far too tall to climb straight up.
+
+A stump might help.
+
+[deadfall_stump]
+A stump, about knee high. A good step up.
+
+# --- THE COLD BROOK ---
+
+[brook_sign]
+A sign by the water:
+
+NO BRIDGE DOWN HERE. NEVER WAS. USE THE ONE UP TOP.
+(YES, YOU HAVE TO CLIMB. NO, WE'RE NOT SORRY.)
+
+[brook_water]
+Snowmelt off the mountain, fast and clear and very, very cold.
+
+It's not something you'd want to wade.
+
+[brook_cliff]
+A shelf of grey rock. There's a ring hammered in at the top, for a rope.
+
+[brook_bridge]
+A plank bridge across the brook. It sways, but it holds.
+
+# --- WOODCUTTERS' CAMP ---
+
+[camp_fire]
+A campfire. Someone's been feeding it a stick at a time, just enough to keep it going.
+
+[camp_bench]
+A bench made of half a log. The bark's been worn off where people sit.
+
+[camp_tent]
+A canvas tent, patched in three colours. The flap's tied shut.
+
+[camp_table]
+A long table, set for eight. Seven bowls are clean.
+
+The eighth has had a very small amount of porridge in it for a while.
+
+[camp_stall]
+A little stall, made from crates and a door laid flat. On it: pinecones, painted red. A jar of something sticky. A carved wooden owl.
+
+None of it has a price. All of it has a little card that says "ask".
+
+[camp_stall_sign]
+A hand-painted sign, very cheerful:
+
+THE GREAT PINEFALL SALE!!
+EVERYTHING MUST GO!!
+(NOTHING HAS GONE YET.)
+
+[camp_crates]
+Crates of split wood, stacked neat. Each one is labelled with a name.
+
+[camp_barrel]
+A rain barrel. There's a ladle tied to it, and a cup with a chip in it.
+
+[camp_notices]
+A notice board. Most of the notes are about firewood.
+
+One, newer than the rest, in big letters: "SOMETHING BIG IN THE WOOD AGAIN. GO ROUND BY THE CAMP. DON'T GO TO THE CLEARING."
+
+[camp_fence]
+A rail fence. It keeps the camp in rather than anything out.
+
+# --- THE TURNING WOOD ---
+
+[maze_tree]
+A scarlet tree, taller than the brambles. You've seen this one before.
+
+Haven't you?
+
+[maze_pack]
+An old pack, tucked in the brambles where nobody would find it. Somebody did. Inside, a climber's ration, wrapped in wax paper.
+
+[maze_pack_empty]
+The old pack. Empty now. Whoever hid it was good at hiding.
+
+# --- THE TORN CLEARING ---
+
+[tatters_scrap]
+A scrap of evening-blue wool, caught on a branch.
+
+It's the blue of her coat.
+
+[tatters_scrap_2]
+Another scrap of blue wool, torn at the edges.
+
+The leaves round it are trampled flat, in a circle, like something big went round and round here.
+
+[tatters_scrap_3]
+A last scrap of blue. No footprints anywhere. Whatever tore her coat, she was still in the air.
+
+She got away from whatever it was.
+
+[tatters_claws]
+Claw marks in the bark, four deep grooves, one above the other.
+
+The sap in them is still wet.
+
+[tatters_claws_high]
+More claw marks, higher up the trunk than you could reach on tiptoe.
+
+You decide not to think about that.
+
+[tatters_brush]
+A thicket, crushed flat on one side, as if something heavy pushed straight through it.
+
+# --- THE LONG DROP ---
+
+[ravine_cliff]
+The ravine wall, grey rock in shelves. Each shelf has a ring at its edge.
+
+Someone has done this climb before. A lot of someones.
+
+# A chest on the bottom shelf (it gives you the Fallen-Leaf Cloak).
+[ravine_chest]
+An old chest wedged into the corner of the shelf, half buried in red leaves. Inside, folded neatly: a cloak made of leaves.
+
+[chest_empty]
+An empty chest. The leaves are already filling it back up.
+
+[ravine_end]
+A post at the bottom of the ravine, with a sign hung off it:
+
+THE LANTERN MARSH. KEEP TO THE LIGHTS.
+
+Somebody has scratched underneath: "which ones?"
+
+[ravine_west]
+A sign on a post, pointing west along the foot of the cliffs:
+
+OLD ROAD TO HOLLIN. (NOBODY LIVES THERE.)
+
+Underneath, scratched with a knife: "the hush does."
+
+[ravine_mist]
+Below the last of the trees, the ground goes flat and grey, and then it stops being ground at all. Mist, as far as you can see.
+
+There are lights out in it. Small ones, swinging.
+
+Nothing's going to walk into that and come out again. Not today.
+
+# --- Push puzzles: shared across the rock rooms ---
+
+[push_rock]
+A mossy boulder, about as big as you are. It rocks a little when you lean on it.
+
+(Walk into it to push it. It only goes where there's room behind it. Press Z on it again to roll every rock back to where it started.)
+
+[rock_home]
+You give it a shove the wrong way. Every rock in the pen shivers and rolls back to where it started.
+
+[stone_plate]
+A round stone plate set flat in the ground, with a ring carved round it. It gives a little underfoot.
+
+You're not heavy enough. Something heavier might be.
+
+[rock_stump]
+A mossy stump with a hand carved into the top. The rocks here have scraped trails back to it.
+
+You press the hand. Every rock in the pen shivers and rolls back to where it started.
+
+[pen_gate]
+A gate of woven branches, set in the hedge. No lever, no lock. The rope runs off under the ground towards the stone plates.
+
+[pen_gate_open]
+The last plate sinks. Under the ground, something pulls taut... and the gate creaks open.
+
+[pen_stump]
+A stump, about knee high. The way into the stone pen is up and over it.
+
+[pen_hedge]
+A hedge of bramble, grown round the pen like a wall. Something big has been kept out of here, or in.
+
+# --- THE TUMBLED STONES ---
+
+[tumbled_sign]
+A board on a post, the letters burnt in:
+
+PLATES WANT ROCKS. ROCKS GO WHERE THEY'RE PUSHED. A ROCK IN A CORNER STAYS IN A CORNER.
+
+Underneath, smaller: "if you get it stuck, the stump puts them back. it's fine. we've all done it."
+
+# --- THE ROLLING STONES ---
+
+[rolling_sign]
+A board on a post:
+
+TWO ROCKS, TWO PLATES. THINK FIRST.
+
+Underneath, in a child's writing: "i did it in four goes"
+
+# --- THE OLD QUARRY ---
+
+[quarry_sign]
+An old board, half rotten, nailed to a tree at the quarry's edge:
+
+THREE. AND MIND WHICH ONE GOES FIRST.
+
+[quarry_cut]
+The quarry wall, cut in neat steps. Someone took a lot of stone out of here, a long time ago, and left the leftovers lying about.
+
+# --- What Bramble says about the Pinefall, if you come back this way with
+# him (a section's `_bramble` twin, see OverworldScene.say) ---
+
+[scarlet_tree_bramble]
+{proud}That one's a good climbing tree. That one isn't. That one's a good climbing tree but don't tell Ma.
+
+[gate_sign_bramble]
+{sly}"Honestly, it's not hard." Ma wrote that bit. She says it to me every single time.
+
+[brook_sign_bramble]
+{grin}"No, we're not sorry." That's Uncle Ash. He's never sorry about anything.
+
+[camp_fire_bramble]
+{sad}...Somebody's kept it going. It's never gone out, not since before I was born.
+
+[camp_tent_bramble]
+{thinking}That's our tent. Ma's and mine. Don't go in, it's a mess. I didn't make the mess. Some of the mess.
+
+[camp_table_bramble]
+{sheepish}...That's my bowl. The one with the porridge. I was going to finish it.
+
+[camp_stall_sign_bramble]
+{proud}I did the sign! I did all the exclamation marks. Ma said that was too many. There's no such thing.
+
+[camp_notices_bramble]
+{scared}"Don't go to the clearing." ...I went to the clearing.
+
+[maze_pack_bramble]
+{sly}That's MY pack. I hid it. Nobody ever finds it. ...Except you, apparently.
+
+[maze_pack_empty_bramble]
+{sly}Whoever hid it was very good at hiding. That's me. I'm very good at hiding.
+
+[tatters_scrap_3_bramble]
+{determined}That's her footprint. I saw her running. She was fast. Faster than me, and I'm the fastest in the camp.
+
+[ravine_end_bramble]
+{scared}Don't go in the mist. Everybody knows. You go in, and the lights take you round and round till you're a light too.
+
+{thinking}...That's what Uncle Ash says, anyway. He also says he's got a tail.
+
+[rolling_sign_bramble]
+{glee}"I did it in four goes." That's me! I wrote that! Four goes! Ma took eleven.
+
+[quarry_sign_bramble]
+{thinking}Three's hard. I did it in nineteen goes. I'm not writing that on a sign.
+
+# (draft) THE REGISTRY'S QUEST: the rhyme at the camp, the first clue to the three leaves.
+
+[camp_riddle]
+A scrap of ruled paper, tucked under the leg of the stall's counter, spotted with rain. Somebody has copied a rhyme out in careful capitals, and drawn a tick at the end of it.
+
+THREE LEAVES WENT OUT ON THE WIND.
+ONE WANTED A SHELF, AND FOUND ONE.
+ONE WANTED WATER, AND FOUND A TOLL.
+ONE WANTED WARMTH, AND FOUND THE POTS.
+BRING THEM TO THE CUT IN THE STREET.
+
+# (draft) The pencil note under the rhyme: the missable-leaf warning. Hollin is the last of the wood; nobody comes back up from the well.
+In pencil underneath, in a smaller and much more worried hand:
+
+THE SHELF IS IN THE WOOD, IN HOLLIN, IN THE SHOP. THE OTHER TWO ARE A LONG WAY ON. DON'T LEAVE THE SHELF FOR LAST. THERE IS NO COMING BACK UP.
+
+[camp_riddle_bramble]
+{sly}I didn't write that. ...I'd remember. I think I'd remember.
+
+
+# --- THE LIFE PASS (r3p, 15 November 2026) ---
+# Things to look at in the red wood and the empty village (and what Bramble says about the ones in Hollin).
+
+[r3p_landing_dent]
+A dent in the leaves, exactly the shape of someone who fell a very long way. It's a good dent. It seems a shame to leave it.
+
+[r3p_landing_bough]
+A bough as thick as your leg, torn off fresh: pale at the break, still red at the tip. It came down with you.
+
+[r3p_landing_twigs]
+Snapped twigs and torn leaves, in a long line all the way back to the great tree. Like crumbs, for something that fell.
+
+[r3p_fern_0]
+A fern, gone red for the autumn. It's been very brave about it.
+
+[r3p_toadstools_0]
+Red toadstools with white spots, standing in a neat group like they were told to wait here. You don't touch them. They look like they'd tell.
+
+[r3p_chanterelles_0]
+Gold-orange mushrooms, curled like little trumpets. They smell of apricots. You decide that's a good sign.
+
+[r3p_puffballs_0]
+Pale puffballs, round and dry. You tap one. It goes off like a very small, very rude cloud.
+
+[r3p_leaf_heap_0]
+A heap of red leaves, swept together by nobody. You poke it. A beetle leaves, offended.
+
+[r3p_leaf_heap_1]
+Leaves drifted up against a root. It'd make a good bed. Someone's already thought of that.
+
+[r3p_acorns_0]
+A scatter of acorns, every one with its cap on. Squirrels have been counting them and getting a different answer every time.
+
+[r3p_pinecones_0]
+Pinecones, in a wood that has no pines. Somebody carried these a long way, and then dropped them.
+
+[r3p_moss_rock_0]
+A rock in a thick green coat. It's the softest thing in the forest, and it knows it.
+
+[r3p_mush_log_0]
+A fallen log with a whole village of mushrooms on its back. Some have little stalks, and some have big hats. Mostly big hats.
+
+[r3p_bracket_stump_0]
+A stump with shelves of orange fungus stacked up one side, like a staircase for something very small. Nothing's coming down it. Probably.
+
+[r3p_burrow_0]
+A hole at the foot of a tree, neat and round, with fresh earth by it. Whoever lives here isn't in. Or is, and is being quiet.
+
+[r3p_web_bush_0]
+A spiderweb strung across a bush, dew on every thread. The spider sits in the middle and is not impressed with you.
+
+[r3p_hollow_log_0]
+A hollow log, one end dark. You don't put your hand in. Somebody lives here: there's a tidy doormat of leaves.
+
+[r3p_roots_0]
+Roots like knuckles, gripping the ground. A gap between two of them, dark and dry. Somebody's front door.
+
+[r3p_berries_0]
+Brambleberries, dark as plums. A bird has eaten all the low ones and left the high ones as a challenge.
+
+[r3p_stump_0]
+A cut stump. The rings are packed tight. Slow tree. You try to count them and lose your place at ninety.
+
+[r3p_stump_1]
+A short stump, the top worn smooth in the middle. Somebody's been sitting here, a lot, thinking.
+
+[r3p_stump_big_0]
+A great stump, a tall man across. The rings go on and on to the middle. Somebody's carved a W in the top, and then given up on the rest of the word.
+
+[r3p_branch_0]
+A big branch, down in the leaves, with all its red still on. It's not dead yet. It's just not going to be told.
+
+[r3p_stones_flat_0]
+Flat stones set in the leaves like a path somebody gave up on halfway.
+
+[r3p_fairy_ring_0]
+A ring of little red toadstools in the leaves, dead round. Whatever's inside it has been left alone. You stay out. It seems polite.
+
+[r3p_hoofprints_0]
+Hoofprints, small and sharp. A deer came through here, walking, in no hurry at all.
+
+[r3p_fern_1]
+Bracken, scarlet and crisp. It rustles when you're nowhere near it.
+
+[r3p_bracken_0]
+A bed of dead bracken, taller than a hare. Something's been using it as a road: the fronds are flattened in a line.
+
+[r3p_toadstools_1]
+A clump of toadstools. Somebody has taken one small bite out of the biggest cap, and thought better of it.
+
+[r3p_toadstools_2]
+Spotted red caps, still wet from the night. The leaves round them are the same red. It's a very well-organised wood.
+
+[r3p_boletes_0]
+Brown mushrooms, fat as buns. Something's been at them: neat little tooth marks, all in a row.
+
+[r3p_boletes_1]
+A pair of brown caps pushing up through the leaves. One has a leaf stuck on top, like a hat.
+
+[r3p_puffballs_1]
+A puffball that's already gone off. A little brown haze hangs over it, thinking about what it's done.
+
+[r3p_moss_rock_1]
+A mossy rock, warm on the south side where the light gets it. A lizard-shaped patch of nothing is on top.
+
+[r3p_mush_log_1]
+A mushroom log: wet, soft and busy. Something is clearly paying rent.
+
+[r3p_bracket_stump_1]
+Orange bracket fungus, hard as roof tile, all the way up an old stump. You knock on one. It knocks back, in a way.
+
+[r3p_nut_stump_0]
+A hollow stump, packed with acorns and hazelnuts. A squirrel's cupboard. A note in tooth marks says nothing.
+
+[r3p_hollow_log_1]
+A log hollow all the way through. You can see the forest on the far side, small and round, like a picture in a spyglass.
+
+[r3p_berries_1]
+A bramble with berries on. You reach. The bramble reaches back. You both think again.
+
+[r3p_stump_2]
+A stump with a small cup of rainwater in the middle. A leaf floats on it like a boat with nobody in.
+
+[r3p_red_shrub_0]
+A little tree of red leaves, no taller than you. It looks very proud of itself.
+
+[r3p_puddle_0]
+A puddle with red leaves on it. The sky's in there, upside down, between them.
+
+[r3p_feather_0]
+A robin's tail feather, brown with a rust edge. You turn it in the light. It's warm. You put it back where you found it, in case somebody's using it.
+
+[r3p_boulder_0]
+A boulder the size of a cart, moss up the north side and leaves up the south. It was here before the trees. It doesn't say much about it.
+
+[r3p_blaze_post_0]
+A post with a red ring painted on it and an arrow beneath. The paint's pale, but it's been gone over at the edges, not long ago. Someone wants people to find their way out of here.
+
+[r3p_cut_tree_0]
+A tree with a mark cut in it at chest height: three notches and a tick. You look along the line of trees. There's another one, further on. Somebody laid a trail, so as to be found.
+
+[r3p_fence_bit_0]
+A piece of fence: two posts, a rail, and nothing at all on either side. It goes nowhere, very bravely.
+
+[r3p_cairn_0]
+A little cairn of stacked stones with a red rag on top. Somebody saying: I was here. And then: I turned back.
+
+[r3p_rag_pole_0]
+A pole with a red rag tied on, snapping in the wind. Somebody put it here to say: not that way. It's saying it again now.
+
+[r3p_wheel_0]
+A cartwheel, half buried in the leaves, the wood gone soft as cheese. Whatever it was on hasn't been this way for a long time.
+
+[r3p_old_boot_0]
+A single boot, stuffed with leaves, a very tidy sock folded in it. Nobody's here to ask.
+
+[r3p_wedge_log_0]
+A log with an iron wedge hammered a quarter of the way in. Somebody started it, and thought better of it. The wedge is rusting politely.
+
+[r3p_sled_0]
+A log sled with a log on it, the rope still tied on. Someone dragged this all the way up here, and then thought: not today.
+
+[r3p_cap_stump_0]
+A woodcutter's cap on a stump, mustard yellow, the brim bent. Left where the owner will see it when they come back for it. They haven't, yet.
+
+[r3p_timber]
+A board nailed to a stump, in big painted letters: TIMBER! Under it, much smaller, in the same brush: (SORRY.)
+
+[r3p_nest_found]
+A robin's nest lying in the leaves, upside down, with three blue eggs wedged in it and not one cracked. It fell. Or it was knocked out. Either way, somebody's front room is on the floor.
+
+[r3p_bracken_1]
+Red bracken, thick as wool. There's a dent in the middle, the shape of something that sat.
+
+[r3p_chanterelles_1]
+Chanterelles. Somebody in a camp would be thrilled to see these. You'd have to ask them what to do with them.
+
+[r3p_antler_0]
+A shed antler, pale at the tips. A deer left it behind like a coat it didn't need any more.
+
+[r3p_tally_board_0]
+A board nailed to a post, scored with cuts: days since something. The last ones are fresh. Under them, scratched small: TREES: 3. WOODCUTTERS: 0. It sounds like a good day.
+
+[r3p_marker_stone_0]
+A standing stone with notches cut down one side. Days? Trees? Miles? The tally runs right down to the bottom and starts again at the top.
+
+[r3p_rope_coil_0]
+A coil of rope, stiff with sap. It's been in more knots than you've had hot dinners.
+
+[r3p_split_logs_0]
+A neat heap of kindling. Somebody has a good eye for a log.
+
+[r3p_fingerpost_0]
+A fingerpost with three arms. CAMP, and BROOK, and a third that's been scratched out and written over: NOT THAT WAY. The scratched-out arm points straight at where you're going.
+
+[r3p_sign_shroom]
+A toadstool, holding up a sign the size of a thumbnail. It says PRIVATE. You decide to respect that.
+
+[r3p_pail_0]
+A tin lunch pail on a stump, lid on. There's a note on the lid: DON'T. It's for you. You don't.
+
+[r3p_brook_pouch]
+A purse tucked in behind a great trunk, in the corner nobody would think to go. It's not very heavy, but it's heavy with having been hidden.
+
+[r3p_nut_cache]
+A hollow behind the roots, packed with nuts and one wrapped brown paper twist. It says, in squirrel, DO NOT. You take the twist. The squirrels will have words.
+
+[r3p_wallow_0]
+A mud wallow, churned and smelly. A boar's, you'd say, and you'd rather not say it twice.
+
+[r3p_axe_stump_0]
+An axe, sunk in a stump up to the cheek. Left for the morning, as you do. You leave it for the morning too.
+
+[r3p_log_stack_0]
+A stack of split logs, neat enough to be proud of. The ends have been dabbed with red paint: one dab for each woodcutter's share.
+
+[r3p_log_small_0]
+A short log, standing ready to be split. It looks like it knows.
+
+[r3p_log_stack_1]
+Logs stacked to dry. Somebody's chalked MINE on one. Next to it, in a different hand: NOT YOURS.
+
+[r3p_sawhorse_0]
+A log across a sawhorse, the saw still in the cut. Whoever was halfway through went off for tea. The sawdust is still pale.
+
+[r3p_saw_0]
+A two-man saw leaning on a stump. It needs two men. There's only the one stump.
+
+[r3p_billy_0]
+A blackened billy can on three stones, the fire long out. The tea in it has gone to tar. Somebody's tea. Somebody's coming back for it.
+
+[r3p_feeder_0]
+A bird feeder on a post, made from a roof tile and a bit of string, with seed in it. Robins stand round it like customers.
+
+[r3p_peeled_log_0]
+A log with its bark stripped off, pale and smooth as a bone. The strips lie in a curl nearby, like ribbons.
+
+[r3p_maze_gift]
+Someone left a little pile here: an acorn, a button, a very good stone. A gift, at the dead end of a maze, for whoever got this far. You leave it. It doesn't feel like yours.
+
+[r3p_deer_bed_0]
+A hollow in the leaves, exactly deer-sized, and warm to the hand. Whatever slept here got up and left before you came.
+
+[r3p_face_stump]
+A stump with a face carved in it: two knots for eyes, a wide grin, and a fresh apple wedged between the teeth. Somebody's been feeding it. You don't think the apple is staying.
+
+[r3p_blaze_post_1]
+A woodcutters' blaze: a red ring, and an arrow. It points the way out, which seems to be a thing the woodcutters worry about.
+
+# --- END THE LIFE PASS (r3p) ---

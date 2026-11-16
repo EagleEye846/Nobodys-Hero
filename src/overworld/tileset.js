@@ -3,6 +3,7 @@ import { OUTDOOR_AREAS } from '../data/areas.js';
 import { deepBaseFloor, installDeepTiles } from './deepTiles.js';
 import { BRIGHT_AREAS, installBrightTiles } from './brightTiles.js';
 import { COAST_AREAS, installCoastTiles } from './coastTiles.js';
+import { installAshTiles } from './ashTiles.js';
 import { ch3BlendOn, ch3SoftEdge } from './ch3Blend.js';
 
 // Tiles drawn in code as pixel art. Each draw function paints one tile at
@@ -2873,3 +2874,5 @@ installBrightTiles(TILES, { drawBaseFloor });
 
 // Chapter 5's coast: the sunny beach and the green-storm shore (coastTiles.js).
 installCoastTiles(TILES, { drawBaseFloor, floorUnder });
+// Chapter 6's Ash Road redraws them for its own rooms, and adds `*` (a hot crack): see ashTiles.js.
+installAshTiles(TILES, { floorUnder });

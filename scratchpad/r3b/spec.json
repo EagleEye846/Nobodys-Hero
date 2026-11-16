@@ -1,0 +1,2184 @@
+{
+ "rooms": {
+  "hush_mist_edge": {
+   "short": "me2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule1",
+     "text": "A board nailed to a post, the paint run in the damp. A hand with one finger across its lips, and under it in careful capitals: RULE ONE. WALK SOFT.",
+     "line": "{worried}Walk soft. I'm walking soft. Am I walking soft? You're walking soft. I think we're both walking soft.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_me2_rule1"
+    },
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn bush hung with strips of cloth, dozens, red and ochre and blue and grey. Each is knotted tight. Somebody tied each one on and whispered into it first.",
+     "line": "{awed}You whisper a wish and tie it on. Ma did it every year. ...I never found out what she asked for.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_me2_thorn"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar on a hook, full of a green glow. Not a flame: a fungus, kept alive in a little damp moss, so the light never flickers and never smells of smoke. Smoke carries.",
+     "line": "{thinking}That's clever. ...Is that clever? It's very clever.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_me2_jar"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "stump",
+     "text": "A great old stump with a round door and one small lit window. A tin chimney the width of a thumb. Nothing is smoking. Somebody very small is trying to look like nobody's home.",
+     "line": "{sly}Hello? ...Sorry. Sorry, we're leaving.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_me2_stump"
+    },
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "A rail with three pairs of shoes hung out to dry, all soled in thick grey felt. You hold one up to your ear and listen to nothing. It's the quietest shoe you've ever heard.",
+     "line": "{sheepish}I can hear my own ear.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_me2_shoes"
+    }
+   ]
+  },
+  "hush_felled_run": {
+   "short": "fr2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule2",
+     "text": "RULE TWO. NO SINGING. And under it, smaller, in a different chalk: (HUMMING COUNTS.)",
+     "line": "{sheepish}...I hum when I'm scared. I'm humming now. Am I? Oh no.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_fr2_rule2"
+    },
+    {
+     "sprite": "r3b_fallen_giant",
+     "name": "giant",
+     "text": "A trunk as long as a barn and as wide as a door, felled so long ago it's turned into a hill. Moss, shelf fungus, one small mushroom wearing a bigger one as a hat. The broken end is wide enough to crawl into, and somebody has, and left.",
+     "line": "{awed}It's got a hole you could live in. Somebody did. Look, there's a spoon.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_fr2_giant"
+    },
+    {
+     "sprite": "r3b_quiet_shrine",
+     "name": "shrine",
+     "text": "A little stack of stones with a nook in it: a candle stub wrapped in felt and a pinch of dried flowers. The woodcutters didn't sing to the trees. They left a candle and kept quiet.",
+     "line": "{worried}A candle. For who? ...For it?",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_fr2_shrine"
+    },
+    {
+     "sprite": "r3p_axe_stump",
+     "name": "axe",
+     "text": "An axe sunk in a stump, the handle wrapped in rag so it won't clack when it's pulled out. It's still stuck. Whoever wrapped it never came back to pull.",
+     "line": "{scared}Don't pull it. Don't. ...Was I going to? No.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_fr2_axe"
+    },
+    {
+     "sprite": "r3p_old_boot",
+     "name": "boot",
+     "text": "One felt-soled boot lying on its side, not worn through. Not a boot you'd leave. Somebody was moving fast and quiet at once, which is very hard to do.",
+     "line": "{scared}Where's the other one?",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_fr2_boot"
+    }
+   ]
+  },
+  "hush_hollow_oak": {
+   "short": "ho2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn tree at the oak's foot, hung with cloth strips, the oldest gone grey as ash. At the bottom is a new one: a scrap of blue scarf, the knot tied by small, careful hands.",
+     "line": "{sad}That one's mine. ...I wished for something. It's rude to say.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ho2_thorn"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "mouse",
+     "text": "A stump with a door painted on it, and a mouse in a thimble for a helmet who looks at you, looks at your boots, and goes in. The door shuts without a sound.",
+     "line": "{glee}A guard mouse! Hello, sir! We're friends, sir!",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ho2_mouse"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow on a post, hung low, at child height. Somebody didn't want a little one to trip.",
+     "line": "{proud}That's how you do it. ...I'd have put it higher. No. Lower. Fine.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ho2_jar"
+    },
+    {
+     "sprite": "r3p_nest_ground",
+     "name": "nest",
+     "text": "A nest on the ground, empty. The shells have been folded in neatly and tucked beside it. Neat birds.",
+     "line": "{thinking}Do birds tidy? ...Do I tidy? Don't answer that.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ho2_nest"
+    },
+    {
+     "sprite": "r3b_moss_patch",
+     "name": "moss",
+     "text": "Moss thick enough to sleep on. You press it. It presses back, softly, and forgives you.",
+     "line": "{grin}I'm going to sleep here. No. Not here. Somewhere with a roof.",
+     "zone": "w",
+     "near": null,
+     "flat": true,
+     "key": "r3b_ho2_moss"
+    }
+   ]
+  },
+  "hush_kid_gap": {
+   "short": "kg2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_bell_wrapped",
+     "name": "bell",
+     "text": "A small brass bell on a post, wrapped in felt and tied with string. A children's bell: the little ones used to ring it to say they were home. Then somebody wrapped it, and nobody unwrapped it.",
+     "line": "{sad}...I used to ring that. It went ding like a spoon on a cup.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_kg2_bell"
+    },
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "Little felt shoes in a row, from toddler to nearly grown. Each pair has a name chalked on the sole: PIP, DOT, WREN. The last pair is blank.",
+     "line": "{sad}Mine were over there. ...They were over there.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_kg2_shoes"
+    },
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule0",
+     "text": "A board with a rule, and under it, in wobbly chalk: RULE ZERO. HOLD HANDS. Somebody has added: (EVEN IF YOUR HANDS ARE STICKY.)",
+     "line": "{grin}That's Wren. Wren's rules are the best rules.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_kg2_rule0"
+    },
+    {
+     "sprite": "r3p_hoop",
+     "name": "hoop",
+     "text": "A hoop and a stick, left where the game stopped. There's a footprint in the mud inside the hoop, a small one, pointing home.",
+     "line": "{worried}It's pointing home. Good. That's good.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_kg2_hoop"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "mice",
+     "text": "A mouse house under a root. Someone has built it a twig fence and left a toast crumb at the door. A note: PLEASE BE QUIET (MICE).",
+     "line": "{glee}They're very quiet already!",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_kg2_mice"
+    }
+   ]
+  },
+  "hush_leaning_pines": {
+   "short": "lp2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule4",
+     "text": "RULE FOUR. IF IT LISTENS, STAND STILL. Somebody has gone over the word STILL, three times, in thicker paint.",
+     "line": "{scared}Stand still. Good. I can do still. I'm so good at still.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_lp2_rule4"
+    },
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn bush on the lean, hung so heavy with cloth strips that it droops. They're all the same grey now. The wishes have worn the colour out of them.",
+     "line": "{sad}That's a lot of wishes. ...Do you think any of them came true?",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_lp2_thorn"
+    },
+    {
+     "sprite": "r3b_quiet_shrine",
+     "name": "shrine",
+     "text": "A shrine stuffed in the crook of a leaning trunk: a felted candle stub, a button, a thimble, a pressed leaf. Small offerings. Nothing a hungry thing would want.",
+     "line": "{thinking}That's the point, isn't it. Nothing to want.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_lp2_shrine"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow on a post. The pines lean away from it, or toward it. It's hard to tell, with pines.",
+     "line": "{awed}They're leaning at it like they're reading over its shoulder.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_lp2_jar"
+    },
+    {
+     "sprite": "r3p_cairn",
+     "name": "cairn",
+     "text": "A cairn of seven stones, one for each person who got through this stretch. The eighth stone, on top, has been turned face down. Out of respect, probably.",
+     "line": "{sad}Seven. ...That's not very many.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_lp2_cairn"
+    }
+   ]
+  },
+  "hush_treadles": {
+   "short": "tr2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule3",
+     "text": "RULE THREE. NO AXES AFTER DUSK. A second line, newer: NO AXES AT ALL. A third, in a hurry: PLEASE.",
+     "line": "{worried}Three rules. They were running out of rules, Sword. Or running out of patience.",
+     "zone": "n",
+     "near": null,
+     "flat": false,
+     "key": "r3b_tr2_rule3"
+    },
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "A rack of felt shoes beside the treadle path, so you could change before the planks. The planks creak. The shoes are why they didn't.",
+     "line": "{proud}Soft shoes for hard planks. Ma would've made us wear them.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_tr2_shoes"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow set where the path goes dark, so you can find the next plank. The moss in it glows without being asked.",
+     "line": "{thinking}It's moss. It just does it. I like that.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_tr2_jar"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "stump",
+     "text": "A stump with a small door and a doormat the size of a stamp: WELCOME (QUIETLY).",
+     "line": "{sly}We'll be so quiet.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_tr2_stump"
+    }
+   ]
+  },
+  "hush_gorge": {
+   "short": "go2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_bell_wrapped",
+     "name": "bell",
+     "text": "A bell on the gorge's lip, wrapped in felt and wound round with rope. This is the bell that used to ring the hours across the drop. Nothing rings now. The wood has been counting without it.",
+     "line": "{worried}They tied up the bell. So it wouldn't tell it where they were.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_go2_bell"
+    },
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn tree leaning out over the gorge, hung with cloth strips. They flick in the updraught without a sound. Every one is tied facing the drop.",
+     "line": "{awed}They're wishing at the bottom. Why would you wish at the bottom?",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_go2_thorn"
+    },
+    {
+     "sprite": "r3b_fallen_giant",
+     "name": "giant",
+     "text": "A trunk laid across the gorge's near lip, as a bridge once and a bench now. The moss is worn off the middle where people sat to look.",
+     "line": "{grin}Sit on it. Go on. It's the best view in the wood.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_go2_giant"
+    },
+    {
+     "sprite": "r3p_cairn",
+     "name": "cairn",
+     "text": "A cairn on the ledge, and a hat balanced on top, brim down. It's held there with a stone. It's been held there a long time.",
+     "line": "{sad}Somebody's hat. ...Somebody made sure it stayed.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_go2_cairn"
+    }
+   ]
+  },
+  "hush_sawpit": {
+   "short": "sp2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "A rack of shoes with felt tied round every sole, and a second rack of saw teeth with felt tied round every tooth. The woodcutters worked in a hush. You can see the effort.",
+     "line": "{awed}Even the saw had socks.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sp2_shoes"
+    },
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule3b",
+     "text": "RULE THREE AND A HALF. CUT SLOW. A third of the planks stacked here are stamped SLOW in black. They're perfectly square.",
+     "line": "{proud}Slow is good. Ma says fast is for people who like splinters.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sp2_rule3b"
+    },
+    {
+     "sprite": "r3b_quiet_shrine",
+     "name": "shrine",
+     "text": "A shrine at the end of the sawpit with a felted candle and a tiny saw carved from a twig. An offering to the saw, so it wouldn't squeak.",
+     "line": "{sly}It's working. The saw hasn't said a word.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sp2_shrine"
+    },
+    {
+     "sprite": "r3p_cap_stump",
+     "name": "cap",
+     "text": "A cap left on a stump, a pencil behind its band. A tally of planks on the stump top, in neat fives. The last five has only four.",
+     "line": "{worried}They stopped at four. Why would you stop at four?",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sp2_cap"
+    }
+   ]
+  },
+  "hush_notched": {
+   "short": "no2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule5",
+     "text": "RULE FIVE. IF IT STOPS, YOU STOP. Underneath, tallied in scratches: forty-one marks. The last twelve are very close together.",
+     "line": "{scared}...Forty-one times. Somebody stopped forty-one times.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_no2_rule5"
+    },
+    {
+     "sprite": "r3b_quiet_shrine",
+     "name": "shrine",
+     "text": "A shrine in the notch of an old stump: a candle, a button, a child's tooth, a note: FOR LUCK. KEEP.",
+     "line": "{sad}I'm not going to take the tooth.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_no2_shrine"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "mouse",
+     "text": "A mouse's door under the fox's old den. The mouse has chalked a rule of its own: RULE ONE. RUN.",
+     "line": "{glee}That's the best rule I've heard.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_no2_mouse"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow on a post, half-sunk in the leaf-litter. The mist makes it a green moon.",
+     "line": "{awed}It's a moon. It's a tiny moon on a stick.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_no2_jar"
+    }
+   ]
+  },
+  "hush_sprung_trap": {
+   "short": "st2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule7",
+     "text": "RULE SEVEN. DON'T ANSWER IT. And below, in a different hand, a shaky addition: (IT SOUNDS LIKE ANYONE YOU KNOW.)",
+     "line": "{scared}...Don't answer it. I won't. I'm not going to. ...Who?",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_st2_rule7"
+    },
+    {
+     "sprite": "r3b_bell_wrapped",
+     "name": "bell",
+     "text": "A bell in a trap-frame, the cord sprung and the felt still on. It was a warning bell. It was wrapped so it couldn't be a warning.",
+     "line": "{worried}They set a trap that couldn't ring. ...That's not a trap. That's a hope.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_st2_bell"
+    },
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "A rack of shoes with every sole felted, and a space on the rail the size of one pair. Somebody went out in a hurry in their good shoes.",
+     "line": "{sad}Not the good ones. Never go out in the good ones.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_st2_shoes"
+    },
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn tree with a white rag tied on every branch, all of them tied by the same hand. Somebody came alone, and wished many times.",
+     "line": "{sad}That's a lot of wishing for one person.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_st2_thorn"
+    }
+   ]
+  },
+  "hush_windfall": {
+   "short": "wf2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule6",
+     "text": "RULE SIX. DON'T LOOK UP. The sign has been put up very low, so you won't have to.",
+     "line": "{worried}I'm not looking up. I'm looking at the sign. It's a nice sign.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wf2_rule6"
+    },
+    {
+     "sprite": "r3b_fallen_giant",
+     "name": "giant",
+     "text": "A great trunk across the maze's mouth, and the other trunks have gone round it, as water goes round a stone. In the wood, even a fallen thing has the right of way.",
+     "line": "{awed}Everything's polite here. Even the trees.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wf2_giant"
+    },
+    {
+     "sprite": "r3b_quiet_shrine",
+     "name": "shrine",
+     "text": "A shrine at a corner of the walls: a felted candle, a clay bird, a thimble that held water once. It's long dry.",
+     "line": "{thinking}Nobody's topped it up. That's fine. That's allowed.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wf2_shrine"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow set where two walls meet, so you'd know the corner was a corner. It's the only way to tell, in the mist.",
+     "line": "{proud}A corner light! That's what I'd do.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wf2_jar"
+    }
+   ]
+  },
+  "hush_millrace": {
+   "short": "mr2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule",
+     "text": "A rule on a board by the water: LET THE RIVER BE LOUD. The mill-folk's one exception, scratched in after the rest. The river was the only thing allowed to speak.",
+     "line": "{glee}The river gets to talk! Lucky river.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_mr2_rule"
+    },
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn tree at the water's edge with cloth strips tied in the river-side branches. The mill-folk's wishes: for rain, for wheel-grease, for a quiet winter.",
+     "line": "{thinking}A quiet winter. They got one, didn't they.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_mr2_thorn"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow on a mooring post at the race. The water takes the light and gives back a greener one.",
+     "line": "{awed}It's green on the water too! Look! Two jars!",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_mr2_jar"
+    },
+    {
+     "sprite": "r3b_bell_wrapped",
+     "name": "bell",
+     "text": "The mill bell, wrapped in felt. A mill with no bell to say the hour ends: the folk worked by the sun and the stomach.",
+     "line": "{sheepish}My stomach would have been a good bell.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_mr2_bell"
+    }
+   ]
+  },
+  "hush_quiet": {
+   "short": "qu2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "rule8",
+     "text": "RULE EIGHT. A board with the rule painted over, white, and then written on again in the white: THERE IS NO RULE EIGHT. (WE RAN OUT OF TIME.)",
+     "line": "{scared}...They ran out of rules. Sword, they ran out of rules.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_qu2_rule8"
+    },
+    {
+     "sprite": "r3b_quiet_shrine",
+     "name": "shrine",
+     "text": "A shrine on the edge of the Quiet: the candle stub is the biggest you've seen. It's never been lit. A stone beside it is warm from the sun, and your hand wants to stay on it.",
+     "line": "{sad}It's warm. Why's the rock warm? It's the Quiet.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_qu2_shrine"
+    },
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn tree at the Quiet's edge, with no cloth on it at all. Only the knots, left behind, where the strips were pulled off all at once.",
+     "line": "{scared}Something took them. ...Or someone took them down. In a hurry.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_qu2_thorn"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow, the last on the path, its moss going pale from the cold. You're not sure it's meant to light anything now. It just marks where the lights stop.",
+     "line": "{worried}That's where the lights stop. ...Don't go further. ...Go further.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_qu2_jar"
+    }
+   ]
+  },
+  "hush_clawed_bridge": {
+   "short": "cb2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_bell_wrapped",
+     "name": "bell",
+     "text": "A bell on a post at the bridge's end, felt-wrapped, with a second wrap over the first and a third over that. It's been wrapped more than anything you've seen.",
+     "line": "{scared}They really, really, really didn't want it to ring.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cb2_bell"
+    },
+    {
+     "sprite": "r3b_hush_sign",
+     "name": "sign",
+     "text": "A board at the bridge's end: CROSS ONE AT A TIME. DON'T LOOK DOWN. DON'T LOOK BACK. It runs out of board before it runs out of advice.",
+     "line": "{worried}That's a lot of don'ts for a bridge.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cb2_sign"
+    },
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "A rack of felt shoes before the bridge, the last pairs in the wood. Somebody's lined them up toe to heel. Some of them are very small.",
+     "line": "{sad}...They changed their shoes for the bridge. Of course they did.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cb2_shoes"
+    },
+    {
+     "sprite": "r3b_rag_thorn",
+     "name": "thorn",
+     "text": "A thorn bush by the bridge-foot, hung with a last wish or two. The newest strip is the colour of your sleeve. You check. It isn't yours.",
+     "line": "{sly}Is it yours? It looks like yours.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cb2_thorn"
+    }
+   ]
+  },
+  "hush_underroot": {
+   "short": "ur2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow on a hook screwed into a root, the only light but yours. In the dark under the wood, somebody thought of a night-light.",
+     "line": "{awed}It's a night-light. Somebody put a night-light down here.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ur2_jar"
+    },
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar2",
+     "text": "A second jar, further on, hung low. The glow is dimmer. It's the spare, in case the first one fails, in case anybody would need it.",
+     "line": "{proud}Two! They thought of two!",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ur2_jar2"
+    },
+    {
+     "sprite": "r3b_quiet_shrine",
+     "name": "shrine",
+     "text": "A shrine in a hollow of a root: a felted candle and a child's drawing of the sky, so the dark can know what it's missing.",
+     "line": "{sad}That's for the dark. That's so nice.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ur2_shrine"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "stump",
+     "text": "A root-house with a round door and a window lit green with glow-moss. Tiny curtains. Somebody's put out a doormat the size of a button.",
+     "line": "{glee}Somebody lives down here!",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ur2_stump"
+    }
+   ]
+  },
+  "city_gate_foot": {
+   "short": "gf",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_bedroll",
+     "name": "bed",
+     "text": "A bedroll, still rolled the way a careful person rolls one. The pack beside it has a tin mug and half a biscuit, and the biscuit has been half-eaten for fifty years. Somebody camped at the gate to be first through.",
+     "line": "{thoughtful}First through. I'd rather be second. Second gets to see what happens to first.",
+     "zone": [
+      1,
+      4,
+      5,
+      16
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_gf_bed"
+    },
+    {
+     "sprite": "r3b_left_sticks",
+     "name": "sticks",
+     "text": "A barrel of walking sticks, and one hat on top. Left at the gate by people who thought they wouldn't need them. Every stick has a name burned into it. Most are worn off.",
+     "line": "{bored}A coat-stand for people who thought they were done walking. Optimistic.",
+     "zone": [
+      1,
+      4,
+      5,
+      16
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_gf_sticks"
+    },
+    {
+     "sprite": "r3b_queue_posts",
+     "name": "queue",
+     "text": "Two brass posts and a red rope. A queue, for a gate. Somebody thought the Hero would be popular.",
+     "line": "{laughing}There's no queue. There's us. ...Do we form one?",
+     "zone": [
+      1,
+      4,
+      5,
+      16
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_gf_queue"
+    },
+    {
+     "sprite": "cl_street_chair",
+     "name": "chair",
+     "text": "A chair set at an angle facing the gate, so someone could watch for the hero in comfort. The seat is worn pale. Chairs don't go that pale in a year.",
+     "line": "{sad}Somebody watched a long time. That's a lot of looking at a door.",
+     "zone": [
+      1,
+      4,
+      5,
+      16
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_gf_chair"
+    },
+    {
+     "sprite": "r3p_kettle_stones",
+     "name": "kettle",
+     "text": "A ring of fire-stones and a black kettle, the ash crusted over. The lid is still on.",
+     "line": "{smile}Tea at the end of the world. I respect that.",
+     "zone": [
+      1,
+      4,
+      5,
+      16
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_gf_kettle"
+    }
+   ]
+  },
+  "city_statue_court": {
+   "short": "sc2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_fountain_dry",
+     "name": "fountain",
+     "text": "A round fountain, dry as a bone. A plinth stands in the middle with nothing on top. The water used to come from the statue's hands. Moss has filled the basin, and a single brass coin is left in it.",
+     "line": "{thoughtful}Dry. A fountain's the first thing to go. You don't notice one until the sound stops.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sc2_fountain"
+    },
+    {
+     "sprite": "r3b_plinth_feet",
+     "name": "feet",
+     "text": "A plinth with only the boots left on it: stone boots, toes up, a little cracked, standing as if the rest of the person had stepped out. Which may be exactly what happened.",
+     "line": "{laughing}Out of the boots and gone. I've felt the urge.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sc2_feet"
+    },
+    {
+     "sprite": "r3b_banner_pole",
+     "name": "banner",
+     "text": "A banner on a pole, faded to pink. Four poles ring this court. Three have banners. The fourth has a pair of socks, which somebody had the sense to hang out.",
+     "line": "{smile}Practical.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sc2_banner"
+    },
+    {
+     "sprite": "r3b_stall",
+     "name": "stall",
+     "text": "A stall at the court's edge, striped awning faded to pale blue. A chalk card on the counter: LAST DAY. EVERYTHING MUST GO. Everything did.",
+     "line": "{bored}Everything must go. Spot on.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sc2_stall"
+    },
+    {
+     "sprite": "r3b_laundry_slab",
+     "name": "laundry",
+     "text": "A laundry slab, scrubbed hollow by years of wrists, with a violet bar of soap still sitting in the dip, shrunk to a pebble.",
+     "line": "{smile}Violet. Fancy. Even the washing was fancy.",
+     "zone": "se",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sc2_laundry"
+    }
+   ]
+  },
+  "city_last_street": {
+   "short": "ls2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_bell_wrapped",
+     "name": "bell",
+     "text": "A bell on a post by a door, wrapped in felt and tied with string. Even here. Even in the city, where nobody walks, they wrapped the bell.",
+     "line": "{worried}Even here. They knew it was coming. ...They knew a long time.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ls2_bell"
+    },
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "Soft shoes on a rack by the last gate, felt-soled, in every size, set out as if for a long line. For the last stretch, you changed your shoes.",
+     "line": "{thoughtful}A shoe stand at the edge of the world. That's very polite.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ls2_shoes"
+    },
+    {
+     "sprite": "r3b_stall",
+     "name": "stall",
+     "text": "A stall with its shutter down and a card: CLOSED UNTIL FURTHER NOTICE. THANK YOU FOR YOUR PATIENCE. The card has been left to curl at the corners.",
+     "line": "{bored}Further notice. We're all waiting on that.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ls2_stall"
+    },
+    {
+     "sprite": "r3b_banner_pole",
+     "name": "banner",
+     "text": "A banner on a pole, torn to ribbons and pink as a shell. Under the faded gold: the city's motto, in small letters: WE ARE LISTENING.",
+     "line": "{worried}We are listening. ...To what?",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ls2_banner"
+    }
+   ]
+  },
+  "city_stacks": {
+   "short": "sk2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_book_tower",
+     "name": "tower",
+     "text": "A tower of books that has leaned, in fifty years, about a thumb's width. A slip of paper marks the place: PAGE 40 OF 41. The last page isn't in the book. You check.",
+     "line": "{bored}Page forty of forty-one. And forty-one isn't there. Of course not.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sk2_tower"
+    },
+    {
+     "sprite": "r3b_globe",
+     "name": "globe",
+     "text": "A globe. The seas have faded to the same tan as the land, so the world is one dusty ball with writing on it. There's a pin in a place that isn't on any map you know.",
+     "line": "{thoughtful}A pin. Somebody knew where they were going. That's more than I can say.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sk2_globe"
+    },
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "Something under a dust sheet, shaped like a desk with an opinion. You lift a corner: a desk. You lower it. It's the sort of room that makes you whisper.",
+     "line": "{shy}Why am I whispering?",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sk2_sheet"
+    },
+    {
+     "sprite": "r3b_book_tower",
+     "name": "tower2",
+     "text": "A second tower, this one fallen over and put back together wrong, with the spines facing in. A note on top: SORT LATER.",
+     "line": "{bored}Later. The great tradition.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sk2_tower2"
+    }
+   ]
+  },
+  "city_aqueduct": {
+   "short": "aq2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_laundry_slab",
+     "name": "slab",
+     "text": "A washing slab at the water's edge, scrubbed hollow by years of wrists. A bar of soap sits in the dip, shrunk to a violet pebble.",
+     "line": "{smile}Fancy soap. Even the laundry had standards.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_aq2_slab"
+    },
+    {
+     "sprite": "r3m_cattails",
+     "name": "cattail",
+     "text": "Cattails, thick as a fence at the pool's lip. They've climbed the aqueduct's stone and think they own it.",
+     "line": "{bored}They'd win an election, honestly.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_aq2_cattail"
+    },
+    {
+     "sprite": "r3m_stepstones",
+     "name": "steps",
+     "text": "Stepping stones across the shallows, laid so no one would ever wet their feet. They've sunk a little. You'll wet your feet.",
+     "line": "{smile}Excellent planning. For a different century.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_aq2_steps"
+    },
+    {
+     "sprite": "r3m_boot",
+     "name": "boot",
+     "text": "A single boot at the pool's edge, half-sunk, a frog sitting in it like it's the only chair in town.",
+     "line": "{laughing}It's got a tenant. Don't evict it.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_aq2_boot"
+    }
+   ]
+  },
+  "city_colonnade": {
+   "short": "co2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_stall",
+     "name": "stall1",
+     "text": "A stall between two pillars, awning faded to pale stripes. The scales are still on the counter, one pan up, one down: weighing something when it stopped. A mouse has moved into the empty pan.",
+     "line": "{laughing}Two ounces of mouse. Fair price.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_co2_stall1"
+    },
+    {
+     "sprite": "r3b_stall",
+     "name": "stall2",
+     "text": "A stall with a hand-lettered card: BACK IN FIVE MINUTES. The ink says it was written with a very steady hand, which is how you write a polite lie.",
+     "line": "{bored}Five minutes. Excellent timekeeping.",
+     "zone": "se",
+     "near": null,
+     "flat": false,
+     "key": "r3b_co2_stall2"
+    },
+    {
+     "sprite": "r3b_banner_pole",
+     "name": "banner",
+     "text": "A banner at the colonnade's end, torn, one corner hanging. The picture on it was a lantern. The lantern has faded the least.",
+     "line": "{thoughtful}The lantern outlasted the rest. Lanterns do that.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_co2_banner"
+    },
+    {
+     "sprite": "r3b_bedroll",
+     "name": "bed",
+     "text": "A bedroll tucked behind a pillar, the blanket folded square. A tag on the strap: PLEASE DON'T MOVE. Whoever it was, they planned to be back.",
+     "line": "{sad}Don't move it. I won't.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_co2_bed"
+    }
+   ]
+  },
+  "city_reading_room": {
+   "short": "rr2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_globe",
+     "name": "globe",
+     "text": "A reading-room globe with a brass ring round it, tilted to the angle of somebody leaning to see. There's a thumbprint at the north.",
+     "line": "{thoughtful}They checked the north. Everyone checks the north.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rr2_globe"
+    },
+    {
+     "sprite": "r3b_book_tower",
+     "name": "tower",
+     "text": "A book tower by the armchair, three open at once, face down: somebody reading three things at the same time. The tower is the height of a bored person's patience.",
+     "line": "{bored}Three at once. I do that. It means none of them are good.",
+     "zone": "se",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rr2_tower"
+    },
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A sheet over a reading-lamp and a footstool, shaped like a patient animal.",
+     "line": "{shy}It's waiting for somebody to come back and read. It's very patient.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rr2_sheet"
+    },
+    {
+     "sprite": "r3b_ticket_post",
+     "name": "ticket",
+     "text": "A ticket post by the door: TAKE A NUMBER. QUIET PLEASE. The roll holds one ticket, and it's 0001.",
+     "line": "{laughing}Number one. Not first. Just number one.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rr2_ticket"
+    }
+   ]
+  },
+  "city_sculptors_yard": {
+   "short": "sy2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_unfinished_statue",
+     "name": "statue",
+     "text": "A figure half-freed from its block: shoulders, a chin, the idea of a face. The chisel marks stop mid-line, as if the sculptor was called to dinner. A mallet waits on one shoulder.",
+     "line": "{bored}He got as far as the chin. The chin is excellent.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sy2_statue"
+    },
+    {
+     "sprite": "r3b_plinth_feet",
+     "name": "feet",
+     "text": "A plinth waiting for a finished statue, and on it a pair of stone boots: the first bit done. Somebody always starts at the bottom.",
+     "line": "{thoughtful}Start at the feet. Good advice for most things.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sy2_feet"
+    },
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A sheet over a statue, and the statue's outline looks like a person holding up a lantern. You don't lift the sheet.",
+     "line": "{worried}Leave it. I mean it. Leave it.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sy2_sheet"
+    },
+    {
+     "sprite": "r3b_laundry_slab",
+     "name": "slab",
+     "text": "A grinding slab for pigment: red, ochre, a lump of blue the size of an egg. The blue is still bright. Everything else faded around it.",
+     "line": "{smile}Fifty years and the blue is still the best part.",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_sy2_slab"
+    }
+   ]
+  },
+  "registry_cleft": {
+   "short": "cl2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A big dust sheet over a table with four chairs, as if the meeting broke up in a hurry and somebody was tidy about it.",
+     "line": "{bored}Meeting adjourned. Permanently.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cl2_sheet"
+    },
+    {
+     "sprite": "r3b_book_tower",
+     "name": "tower",
+     "text": "A tower of ledgers by the crack, each labelled with a year. The newest is open on top: the page is blank, except one line. A date. And: SEE NEXT.",
+     "line": "{thoughtful}See next. There isn't a next. ...Is there?",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cl2_tower"
+    },
+    {
+     "sprite": "r3b_file_cart",
+     "name": "cart",
+     "text": "A file cart parked half in the crack, its boxes ready to go. One box says OUTGOING. One says INCOMING. The third says WHATEVER THAT IS.",
+     "line": "{laughing}I like the third box.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cl2_cart"
+    },
+    {
+     "sprite": "r3b_queue_posts",
+     "name": "queue",
+     "text": "Queue posts leading to the crack in the wall, a sign hanging from the rope: THIS WAY FOR APPEALS.",
+     "line": "{bored}Appeals. To what? The wall?",
+     "zone": "s",
+     "near": null,
+     "flat": false,
+     "key": "r3b_cl2_queue"
+    }
+   ]
+  },
+  "registry_cellar": {
+   "short": "ce3",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_file_cart",
+     "name": "cart",
+     "text": "A cart of file boxes in the cellar, each lid taped shut with a red seal. The seals are unbroken. Nothing in here was ever meant to be looked at.",
+     "line": "{worried}Don't break the seals. Don't. ...I'm tempted. Don't let me.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ce3_cart"
+    },
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A dust sheet over a heap that rises in the middle, then falls: a desk, a lamp, a very tall plant that never got watered.",
+     "line": "{bored}Tall plant. Poor plant.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ce3_sheet"
+    },
+    {
+     "sprite": "r3b_book_tower",
+     "name": "tower",
+     "text": "A tower of damp ledgers, swollen to twice their size. The top one has a note on it: WE'LL DRY THESE. A second note, later: WE WILL DRY THESE.",
+     "line": "{smile}Optimism in two handwritings.",
+     "zone": "se",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ce3_tower"
+    },
+    {
+     "sprite": "r3b_globe",
+     "name": "globe",
+     "text": "A globe in the cellar, face to the wall. Somebody turned it round and didn't want to look at it.",
+     "line": "{thoughtful}Somebody didn't want to see the world. I understand them a little.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ce3_globe"
+    }
+   ]
+  },
+  "registry_counting": {
+   "short": "ct2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_file_cart",
+     "name": "cart",
+     "text": "A cart of counting-boards stacked like loaves. The topmost board has a tally with a thumb-sized hole poked through the sixth mark.",
+     "line": "{bored}They got bored at six. I'd have got bored at three.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ct2_cart"
+    },
+    {
+     "sprite": "r3b_ticket_post",
+     "name": "ticket",
+     "text": "A ticket post by the counting desks. The roll has run out, but one ticket is stuck in the slot: 0000. A note: DON'T.",
+     "line": "{shy}Zero. Not even one. Not even a start.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ct2_ticket"
+    },
+    {
+     "sprite": "r3b_globe",
+     "name": "globe",
+     "text": "A globe at the desk's end, spun last by an impatient hand: it's stopped with a hole where the pin was.",
+     "line": "{thoughtful}Somebody pulled the pin out. Just left. As a gesture.",
+     "zone": "n",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ct2_globe"
+    },
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A big dust sheet over something four-legged. It's a stool. You are sure it's a stool.",
+     "line": "{shy}It's a stool. Don't lift it.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_ct2_sheet"
+    }
+   ]
+  },
+  "registry_stacks": {
+   "short": "rs2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_book_tower",
+     "name": "tower",
+     "text": "A tower of books in the stacks' aisle, one stack tall, one stack wide. A sticky note on it: PLEASE RESHELVE. A second, below: IT IS REALLY VERY HIGH UP.",
+     "line": "{bored}Please reshelve. Please reach.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rs2_tower"
+    },
+    {
+     "sprite": "r3b_file_cart",
+     "name": "cart",
+     "text": "A file cart on its side by the shelves, its books spilled in a fan. A fallen ladder beside it. Somebody went for a high book and the cart had other ideas.",
+     "line": "{laughing}High shelf wins again.",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rs2_cart"
+    },
+    {
+     "sprite": "r3b_globe",
+     "name": "globe",
+     "text": "A globe at the end of the aisle, parked in the dust. Someone has drawn a small line on it from this room to a place you can't read. A trip planned and not taken.",
+     "line": "{thoughtful}A trip they never took. We've all got one.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rs2_globe"
+    },
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A sheet over a tall shape at the aisle's far end: a clerk's high stool, or a ghost with good posture.",
+     "line": "{shy}Ghost with good posture. That's my guess.",
+     "zone": "ne",
+     "near": null,
+     "flat": false,
+     "key": "r3b_rs2_sheet"
+    }
+   ]
+  },
+  "registry_waiting": {
+   "short": "wa2",
+   "spk": "ves",
+   "items": [
+    {
+     "sprite": "r3b_queue_posts",
+     "name": "queue",
+     "text": "Two queue posts and a rope, and the carpet worn into a track where hundreds of people stood and shuffled and stood. The track goes round the room twice and ends at a desk with a CLOSED sign.",
+     "line": "{bored}They queued for years. To be told to ask again tomorrow.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wa2_queue"
+    },
+    {
+     "sprite": "r3b_ticket_post",
+     "name": "ticket",
+     "text": "A dispenser with a roll of paper numbers. You tear one off: 0001. Nothing happens. You hold it for a bit, in case.",
+     "line": "{bored}Number one. Not first in line. Just number one. It's different.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wa2_ticket"
+    },
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A bench under a dust sheet, shaped like a long, flat, slightly disappointed animal.",
+     "line": "{smile}A sheeted bench. Somebody tidied the waiting. It's the saddest thing I've seen all day.",
+     "zone": "nw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wa2_sheet"
+    },
+    {
+     "sprite": "r3b_file_cart",
+     "name": "cart",
+     "text": "A trolley of forms: FORM 1. FORM 1A. FORM 1A (REVISED). The top form asks for your name, your age, and a reason. The reason has a very small box.",
+     "line": "{laughing}Reason: small box.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wa2_cart"
+    }
+   ]
+  },
+  "hollin_well": {
+   "short": "wl2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_feast_table",
+     "name": "feast",
+     "text": "A trestle table laid for a feast: forty plates, forty cups, a cake the size of a cartwheel gone to green velvet. Among the plates, a card in a careful hand: FOR THE HERO. WHEN HE COMES. (START WITHOUT HIM IF IT GETS LATE.)",
+     "line": "{sad}They put out all the good plates. ...Nobody started. Look, nobody started.",
+     "zone": [
+      12,
+      9,
+      19,
+      12
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_wl2_feast"
+    },
+    {
+     "sprite": "r3b_bunting",
+     "name": "bunting1",
+     "text": "Bunting strung between two posts, the flags faded to the colours of weak tea. One's lost a corner, and the string still holds the shape of the wind that used to blow.",
+     "line": "{awed}They hung flags. For the Hero. ...For whoever.",
+     "zone": [
+      3,
+      9,
+      11,
+      14
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_wl2_bunting1"
+    },
+    {
+     "sprite": "r3b_bunting",
+     "name": "bunting2",
+     "text": "A second string of bunting, further down the square, hung to meet the first. Somebody's measured it, and it doesn't quite. Two flags short, and then a ribbon.",
+     "line": "{thinking}They ran out of flags. They tied a ribbon. Good thinking.",
+     "zone": [
+      21,
+      9,
+      29,
+      14
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_wl2_bunting2"
+    },
+    {
+     "sprite": "r3b_wild_flowers",
+     "name": "flowers",
+     "text": "Wild flowers coming up through the cobbles in a line, as if the stones had been laid with a gap for them. Some days a town can't help having a garden.",
+     "line": "{grin}They came up in a row! They're organised!",
+     "zone": [
+      2,
+      6,
+      29,
+      13
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_wl2_flowers"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "mouse",
+     "text": "A mouse has made a house in an upturned bucket by the well, with a door cut in the side and a doormat made of a leaf.",
+     "line": "{glee}A mouse in a bucket. That's so smart.",
+     "zone": [
+      4,
+      15,
+      28,
+      22
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_wl2_mouse"
+    }
+   ]
+  },
+  "hollin_well_bottom": {
+   "short": "wb2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_jar_post",
+     "name": "jar",
+     "text": "A jar of glow-moss on a post by the well-bottom landing. Somebody lowered it down on a rope and left it, in case anyone fell, or anyone came down to find them.",
+     "line": "{worried}A light for whoever fell. ...That's what I'd do.",
+     "zone": "c",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wb2_jar"
+    },
+    {
+     "sprite": "r3m_g_tally",
+     "name": "tally",
+     "text": "A chalk tally on the wall, six marks, then a seventh crossing them, and a seventh again, as if someone gave up counting days and began counting something else.",
+     "line": "{sad}It stops counting days. It starts counting... what?",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wb2_tally"
+    },
+    {
+     "sprite": "r3m_g_face",
+     "name": "face",
+     "text": "A chalk face on the wall with a big smile and an arrow pointing UP. Underneath, a child's writing: THIS WAY OUT. (WE THINK.)",
+     "line": "{proud}That's the right way. I can read upside down.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_wb2_face"
+    },
+    {
+     "sprite": "r3b_moss_patch",
+     "name": "moss",
+     "text": "A patch of moss on the old stones, fat and green in the dark, as if something down here cares about the damp.",
+     "line": "{thinking}It likes it here. Good for it.",
+     "zone": "s",
+     "near": null,
+     "flat": true,
+     "key": "r3b_wb2_moss"
+    }
+   ]
+  },
+  "hollin_backroom": {
+   "short": "bk2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_dust_sheet",
+     "name": "sheet",
+     "text": "A dust sheet over a stack of crates, the corner chewed. A tiny nest is built in the folds: three mice and a toast crust.",
+     "line": "{glee}They've got a whole flat!",
+     "zone": "w",
+     "near": null,
+     "flat": false,
+     "key": "r3b_bk2_sheet"
+    },
+    {
+     "sprite": "r3p_bundle",
+     "name": "flags",
+     "text": "A bundle of spare flags, rolled tight, tied with string: WELCOME (SPARE). They never took them out. You leave them rolled.",
+     "line": "{sad}Spare welcome. They kept a spare.",
+     "zone": "e",
+     "near": null,
+     "flat": false,
+     "key": "r3b_bk2_flags"
+    },
+    {
+     "sprite": "r3b_file_cart",
+     "name": "cart",
+     "text": "A stores trolley of tinned goods and paper-wrapped parcels, labelled: HERO'S SUPPER (HOT). The parcels are very cold.",
+     "line": "{worried}Hero's supper. Nobody ate it. Nobody ate it, Sword.",
+     "zone": "sw",
+     "near": null,
+     "flat": false,
+     "key": "r3b_bk2_cart"
+    }
+   ]
+  },
+  "hollin_mill": {
+   "short": "mi2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_bunting",
+     "name": "bunting",
+     "text": "Bunting strung from the mill's gable to a post in the yard, the flags faded to pastel. MILL OPEN DAY, says a board beneath. The date has run.",
+     "line": "{awed}An open day! Open to everyone! Even us!",
+     "zone": [
+      3,
+      11,
+      25,
+      19
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_mi2_bunting"
+    },
+    {
+     "sprite": "r3b_wild_flowers",
+     "name": "flowers",
+     "text": "A tuft of wild flowers growing from a crack in the millstone's old plinth. Yellow, pink, white. The only thing in the mill still turning to the sun.",
+     "line": "{grin}Flowers! On a rock! That's brave!",
+     "zone": [
+      3,
+      11,
+      25,
+      19
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_mi2_flowers"
+    },
+    {
+     "sprite": "r3p_wheelbarrow",
+     "name": "barrow",
+     "text": "A wheelbarrow tipped on its side with a note chalked on the underside: GONE FOR HELP. BACK SOON.",
+     "line": "{sad}Back soon. ...Does it say how soon?",
+     "zone": [
+      3,
+      11,
+      25,
+      21
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_mi2_barrow"
+    },
+    {
+     "sprite": "r3p_sack_pile",
+     "name": "sacks",
+     "text": "A pile of flour sacks, one slit and spilled into a fan. A line of mouse prints crosses it, and returns, and crosses again. A busy road.",
+     "line": "{glee}A mouse highway!",
+     "zone": [
+      3,
+      11,
+      25,
+      21
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_mi2_sacks"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "stump",
+     "text": "A mill-stump with a tiny door and a tin-lid roof. A thread of smoke would be rising if it weren't unlit.",
+     "line": "{sly}Is it a house? A tiny house?",
+     "zone": [
+      3,
+      11,
+      25,
+      21
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_mi2_stump"
+    }
+   ]
+  },
+  "hollin_lane": {
+   "short": "ln2",
+   "spk": "bramble",
+   "items": [
+    {
+     "sprite": "r3b_wild_flowers",
+     "name": "flowers",
+     "text": "Wild flowers in a doorstep crack. They've got every colour a doorstep can have.",
+     "line": "{grin}Somebody's garden's still going.",
+     "zone": [
+      1,
+      1,
+      10,
+      26
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_ln2_flowers"
+    },
+    {
+     "sprite": "r3b_stump_house",
+     "name": "mouse",
+     "text": "A mouse's door at the foot of a garden wall, a pea-pod for a doorbell. It's pulled shut, tightly.",
+     "line": "{glee}Doorbell! Doorbell! No, don't.",
+     "zone": [
+      22,
+      1,
+      32,
+      26
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_ln2_mouse"
+    },
+    {
+     "sprite": "r3b_bunting",
+     "name": "bunting",
+     "text": "A short string of bunting between two garden posts, as welcome as it was fifty years ago, which is to say very, very faded.",
+     "line": "{awed}Even the gardens put out flags.",
+     "zone": [
+      22,
+      1,
+      32,
+      26
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_ln2_bunting"
+    },
+    {
+     "sprite": "r3b_felt_shoes",
+     "name": "shoes",
+     "text": "A rack of felt shoes outside a garden gate, set out, in rows, for a long line of visitors. Not one pair's been moved.",
+     "line": "{sad}Not one pair's been touched. They were all waiting for somebody to need them.",
+     "zone": [
+      1,
+      1,
+      10,
+      26
+     ],
+     "near": null,
+     "flat": false,
+     "key": "r3b_ln2_shoes"
+    }
+   ]
+  }
+ },
+ "kits": {
+  "hush": [
+   [
+    "r3b_moss_patch",
+    4
+   ],
+   [
+    "r3h_leafdrift",
+    3
+   ],
+   [
+    "r3p_leaf_heap",
+    3
+   ],
+   [
+    "r3h_fern",
+    3
+   ],
+   [
+    "r3p_toadstools",
+    2
+   ],
+   [
+    "r3p_boletes",
+    2
+   ],
+   [
+    "r3p_chanterelles",
+    2
+   ],
+   [
+    "r3p_red_shrub",
+    3
+   ],
+   [
+    "r3p_berries",
+    1
+   ],
+   [
+    "r3p_moss_rock",
+    3
+   ],
+   [
+    "r3p_slim_trunk",
+    3
+   ],
+   [
+    "r3p_slim_trunk_b",
+    3
+   ],
+   [
+    "r3p_web_bush",
+    1
+   ],
+   [
+    "r3p_hoofprints",
+    1
+   ],
+   [
+    "r3h_bracket",
+    2
+   ],
+   [
+    "r3p_puffballs",
+    1
+   ],
+   [
+    "r3p_pinecones",
+    2
+   ],
+   [
+    "r3h_twigs",
+    2
+   ],
+   [
+    "r3p_stump",
+    2
+   ],
+   [
+    "r3p_stump_big",
+    1
+   ],
+   [
+    "r3p_hollow_log",
+    1
+   ],
+   [
+    "r3p_mush_log",
+    1
+   ],
+   [
+    "r3p_bracken",
+    2
+   ],
+   [
+    "r3h_glowcaps",
+    2
+   ],
+   [
+    "r3p_boulder",
+    1
+   ],
+   [
+    "r3b_wild_flowers",
+    1
+   ],
+   [
+    "r3p_fairy_ring",
+    1
+   ],
+   [
+    "r3p_stones_flat",
+    1
+   ],
+   [
+    "r3p_puddle",
+    1
+   ]
+  ],
+  "city": [
+   [
+    "cl_weeds",
+    3
+   ],
+   [
+    "cl_weeds_tall",
+    3
+   ],
+   [
+    "cl_moss_flat",
+    3
+   ],
+   [
+    "cl_cracks_flat",
+    3
+   ],
+   [
+    "r3b_wild_flowers",
+    3
+   ],
+   [
+    "cl_shoes",
+    1
+   ],
+   [
+    "cl_bundle",
+    1
+   ],
+   [
+    "cl_bench_moss",
+    1
+   ],
+   [
+    "cl_loose_pages",
+    2
+   ],
+   [
+    "r3p_leaves_flat",
+    2
+   ],
+   [
+    "r3p_leaf_heap",
+    1
+   ],
+   [
+    "cl_trunk",
+    1
+   ],
+   [
+    "cl_hand_cart",
+    1
+   ]
+  ],
+  "reg": [
+   [
+    "cl_loose_pages",
+    3
+   ],
+   [
+    "cl_paper_stack",
+    2
+   ],
+   [
+    "cl_ink_blot",
+    1
+   ],
+   [
+    "cl_cracks_flat",
+    2
+   ],
+   [
+    "cl_moss_flat",
+    1
+   ]
+  ],
+  "town": [
+   [
+    "cl_weeds",
+    3
+   ],
+   [
+    "cl_weeds_tall",
+    2
+   ],
+   [
+    "cl_moss_flat",
+    3
+   ],
+   [
+    "cl_cracks_flat",
+    3
+   ],
+   [
+    "r3b_wild_flowers",
+    4
+   ],
+   [
+    "r3h_leafdrift",
+    3
+   ],
+   [
+    "r3p_leaf_heap",
+    2
+   ],
+   [
+    "r3p_bucket",
+    1
+   ],
+   [
+    "r3p_broom",
+    1
+   ],
+   [
+    "cl_flower_tub",
+    1
+   ],
+   [
+    "r3p_stones_flat",
+    1
+   ],
+   [
+    "r3p_puddle",
+    1
+   ],
+   [
+    "r3p_pinecones",
+    1
+   ]
+  ],
+  "cave": [
+   [
+    "r3b_moss_patch",
+    3
+   ],
+   [
+    "r3m_puddle",
+    2
+   ],
+   [
+    "r3m_puddle2",
+    2
+   ],
+   [
+    "r3m_bricks",
+    2
+   ],
+   [
+    "r3m_fungus",
+    2
+   ],
+   [
+    "r3m_bones",
+    1
+   ],
+   [
+    "r3m_mould",
+    1
+   ],
+   [
+    "r3p_stones_flat",
+    2
+   ],
+   [
+    "r3p_old_boot",
+    1
+   ]
+  ],
+  "store": [
+   [
+    "r3p_sack_pile",
+    1
+   ],
+   [
+    "r3p_apple_crate",
+    1
+   ],
+   [
+    "r3p_broom",
+    1
+   ],
+   [
+    "r3p_old_bucket",
+    1
+   ],
+   [
+    "cl_loose_pages",
+    3
+   ],
+   [
+    "r3p_jars",
+    1
+   ],
+   [
+    "r3p_tin_stack",
+    1
+   ],
+   [
+    "cl_cracks_flat",
+    2
+   ]
+  ]
+ },
+ "fill": {
+  "hush_mist_edge": [
+   "hush",
+   30
+  ],
+  "hush_felled_run": [
+   "hush",
+   30
+  ],
+  "hush_hollow_oak": [
+   "hush",
+   32
+  ],
+  "hush_kid_gap": [
+   "hush",
+   28
+  ],
+  "hush_leaning_pines": [
+   "hush",
+   30
+  ],
+  "hush_treadles": [
+   "hush",
+   28
+  ],
+  "hush_gorge": [
+   "hush",
+   30
+  ],
+  "hush_sawpit": [
+   "hush",
+   28
+  ],
+  "hush_notched": [
+   "hush",
+   28
+  ],
+  "hush_sprung_trap": [
+   "hush",
+   28
+  ],
+  "hush_windfall": [
+   "hush",
+   26
+  ],
+  "hush_millrace": [
+   "hush",
+   28
+  ],
+  "hush_quiet": [
+   "hush",
+   28
+  ],
+  "hush_clawed_bridge": [
+   "hush",
+   28
+  ],
+  "hush_underroot": [
+   "hush",
+   24
+  ],
+  "city_gate_foot": [
+   "city",
+   14,
+   "flatCut"
+  ],
+  "city_statue_court": [
+   "city",
+   24
+  ],
+  "city_last_street": [
+   "city",
+   22
+  ],
+  "city_stacks": [
+   "reg",
+   11
+  ],
+  "city_aqueduct": [
+   "city",
+   22
+  ],
+  "city_colonnade": [
+   "city",
+   22
+  ],
+  "city_reading_room": [
+   "reg",
+   11
+  ],
+  "city_sculptors_yard": [
+   "city",
+   18
+  ],
+  "registry_cleft": [
+   "reg",
+   13
+  ],
+  "registry_cellar": [
+   "reg",
+   13
+  ],
+  "registry_counting": [
+   "reg",
+   13
+  ],
+  "registry_stacks": [
+   "reg",
+   11
+  ],
+  "registry_waiting": [
+   "reg",
+   13
+  ],
+  "hollin_well": [
+   "town",
+   26
+  ],
+  "hollin_well_bottom": [
+   "cave",
+   10
+  ],
+  "hollin_backroom": [
+   "store",
+   6
+  ],
+  "hollin_mill": [
+   "hush",
+   30
+  ],
+  "hollin_lane": [
+   "town",
+   14
+  ]
+ },
+ "flatset": [
+  "cl_cracks_flat",
+  "cl_ink_blot",
+  "cl_loose_pages",
+  "cl_mosaic",
+  "cl_moss_flat",
+  "r3b_moss_patch",
+  "r3h_acorns",
+  "r3h_leafdrift",
+  "r3h_moss",
+  "r3h_roots",
+  "r3h_stardust",
+  "r3h_toadring",
+  "r3h_twigs",
+  "r3m_duckweed",
+  "r3m_mould",
+  "r3m_mudflat",
+  "r3m_puddle",
+  "r3m_puddle2",
+  "r3m_silt",
+  "r3m_stain",
+  "r3p_branch",
+  "r3p_deer_bed",
+  "r3p_fairy_ring",
+  "r3p_hoofprints",
+  "r3p_leaves_flat",
+  "r3p_puddle",
+  "r3p_stones_flat",
+  "r3p_twigs"
+ ]
+}

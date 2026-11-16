@@ -1,0 +1,1053 @@
+# THE DEEP (Chapter 4): the dark at the bottom. The First Dark, the Crawl,
+# the Hero's Camp, the Keeper's Fire, the Root, the Way Up and the Vug. Things
+# you can read and look at.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say). She gets
+# quieter the further down she goes.
+#
+# The Keeper's fire is the one Keeper moment down here (the scene
+# keeper_in_the_deep). Everything he says is in that scene. Keep the rest small.
+
+[save_point]
+The crystal glows a low, steady blue, like a pilot light. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+Empty. Even the dust has been taken out of it.
+
+[gold_pouch_empty]
+An empty purse.
+
+# --- WHAT THE DEEP IS MADE OF (tiles, every room) ---
+
+[deep_rock]
+Black rock overhead. You can't see it. You can feel it there, the way you feel somebody standing behind your chair.
+
+[deep_face]
+Smooth black rock, polished by something that wasn't water. If you hold your light close there are faint threads in it, the colour of a bruise going blue.
+
+[deep_column]
+A smooth pinched column, like the neck of an hourglass. Nobody built it. It has no tool marks, and it has no reason to be here, and it holds the roof up anyway.
+
+[deep_knob]
+A smooth knob of black stone about knee height. It is warm, very faintly, as if something had just stopped sitting on it.
+
+# (draft)
+[deep_knob 2]
+Still faintly warm. You don't sit on it. You get the feeling the seat's taken.
+
+[deep_stalagmite]
+A black stalagmite, wet at the tip. Slow drops fall on it from a long way up. It has been hearing the same joke for ten thousand years.
+
+# (draft)
+[deep_stalagmite 2]
+Drip. The same joke again. The stalagmite takes it very well.
+
+# (draft)
+[deep_stalagmite 10]
+Drip. On the tenth time, you finally get the joke. It isn't a very good one. It's taken ten thousand years to tell.
+
+You smile anyway, so as not to be rude. The stalagmite seems to stand a little straighter.
+
+# (draft)
+[deep_stalagmite_ves 10]
+{bored}Did a rock just tell you a joke? {smile}...Was it any good?
+
+[deep_boulder]
+A glossy black boulder. It is perfectly round and very heavy and does not want to talk about it.
+
+[deep_crystal]
+A crystal growing out of the rock, giving off a thin blue light. It's the only thing in here that doesn't need yours.
+
+# (draft)
+[deep_crystal 2]
+The thin blue light. You hold your own light away from it, and it carries on exactly the same, not bothered either way.
+
+[deep_drop]
+A drop. Your light doesn't find the bottom of it. Far down, very small, there are specks, like a night sky seen from underneath.
+
+[deep_ash]
+Fine grey ash, soft as flour, with no footprints in it but yours.
+
+# (draft)
+[deep_ash 2]
+You look back at the ash. Your footprints, and Ves's beside them, with the little round dent of the umbrella tip every other step. It's good to see you've been somewhere.
+
+# --- THE FIRST DARK ---
+
+[fd_cairn_first]
+A little pile of flat stones, stacked neatly, each one smaller than the one below. A waymark. In front of it, three pale pebbles lie in a line, pointing away.
+
+Somebody wanted to be able to find the way back. Or the way on.
+
+[fd_cairn_first_ves]
+{smile}Somebody's been careful. Good. I'll follow the careful person.
+
+[fd_cairn]
+Another little pile of flat stones: three of them, the biggest at the bottom, the smallest on top, each one smaller than your fist. In front of it, three pale pebbles in a line, pointing the way on.
+
+The same careful stack as in the reeds. The same small hands.
+
+[fd_cairn_ves]
+{thoughtful}They point. That's all they do. In a place like this, that's plenty.
+
+# (draft)
+[fd_cairn 2]
+The same little stack: three stones, smallest on top, and three pale pebbles in a line pointing the way on. Somebody pressed each pebble down with a thumb. The thumbprints are still in the dust.
+
+# (draft)
+[fd_cairn_ves 2]
+{thoughtful}Small thumbs.
+
+[fd_cairn_turn]
+The same little stack of flat stones, three of them, smallest on top. In front of it, three pale pebbles lie in a line, and they point DOWN: away from the wide way east, and into a gap in the floor of the cave one person wide.
+
+The open hall looks like the way. The pebbles do not seem to care what it looks like.
+
+[fd_cairn_turn_ves]
+{thoughtful}Down. Not east.
+
+{bored}East is where I'd have gone. That's the part I don't like.
+
+[fd_cairn_fork]
+Three small flat stones, stacked, and three pale pebbles laid in a line in front of them. They point back, west, the way you came. It is the same pile you have been following since the stair: you could have built it yourself, if you were very small and very patient.
+
+It has been put here, at the end of the long open hall, to say: not this way.
+
+[fd_cairn_fork_ves]
+{smile}Three stones. Pale pebbles. The reeds, again.
+
+{thoughtful}And it's telling us to go back. The one next to it, and the one over there, say something else entirely.
+
+[fd_old_cairn]
+A cairn, but not like the others. Five stones, not three, big heavy ones, set down with a thump rather than a pat, and a skin of dust on every one. In front of it, four dark pebbles lie in a line, so dark that you nearly step on them. They point down the south corridor. Quite firmly.
+
+It is the firmest-looking cairn you have ever seen.
+
+[fd_old_cairn_ves]
+{bored}Five stones. Dark pebbles. Different hands.
+
+{thoughtful}Somebody who isn't small, and isn't careful, and wants us to go that way very much. I'd like to know why before I find out.
+
+[fd_old_cairn_north]
+A heavy cairn, five stones under a skin of dust. In front of it, four dark pebbles in a line, pointing up the north corridor. They are so dark you nearly step on them, and they look very sure.
+
+[fd_old_cairn_north_ves]
+{bored}Another one with five stones. It points the other way from the one by the floor. Those two can't both be right.
+
+[fd_old_cairn_hub]
+One of the heavy cairns: five stones under dust, four dark pebbles in a line in front of it, pointing straight down the pocket toward the south. It stands as straight and sure of itself as a post.
+
+[fd_old_cairn_hub_ves]
+{bored}Same hands as the fork. Same confidence.
+
+[fd_old_cairn_last]
+The last of the heavy cairns, at the end of a dead end. Five stones under dust and four dark pebbles in a line, pointing on, firmly, at a wall.
+
+[fd_old_cairn_last_ves]
+{proud}It's pointing at a wall. I want it noted that I said so.
+
+[fd_fallen]
+A cairn, knocked flat. The stones lie every which way, and the pale pebbles that sat in front of it have been kicked all over the floor. If they ever pointed anywhere, they don't now.
+
+Whoever it was gave up here, or got taken.
+
+[fd_fallen_ves]
+{sad}They didn't go on from here. I'd rather we didn't either.
+
+[fd_fallen_right]
+A cairn, knocked flat. Three small stones, scattered, none bigger than your fist; and three pale pebbles, fetched up in a line along the floor to the east, as if they hadn't quite given up pointing.
+
+The small stones. The pale pebbles. The careful hands from the reeds, knocked down, and still telling the truth. The way on is east.
+
+[fd_fallen_right_ves]
+{thoughtful}Flat on the floor, and the only honest one here. East.
+
+{bored}The standing ones are the liars. That feels rude to the standing.
+
+[fd_stone]
+A smooth stone, bigger than a person, with a face like a closed eyelid. Your light slides off it.
+
+[fd_stone_wide]
+Two smooth stones leaning together, like friends who have said everything they have to say.
+
+[fd_bones]
+Bones. Something huge lay down here and was not disturbed for a very long time, and the dust has settled on it like a blanket. The marks along one rib are teeth. Small, many, and not from the big thing.
+
+Something else lives here now, on the leftovers.
+
+[fd_bones_ves]
+{bored}I'd rather not meet whatever has all those teeth.
+
+# (draft)
+[fd_bones 2]
+You look again at the tooth marks on the rib. Small. Many. Some of them quite fresh.
+
+# (draft)
+[fd_bones_ves 2]
+{bored}Thank you. That's exactly what I needed to know.
+
+[fd_purse]
+A purse left at the back of a blind nook, as if somebody had meant to come back for it. Inside, some coins and a very old dried flower.
+
+# --- THE CRAWL ---
+
+[cr_stalactite]
+A stalactite hanging so low you have to duck under it. Everything in the Crawl is built for something shorter than you.
+
+# (draft)
+[cr_stalactite 2]
+You duck under it again. You'll remember this one. Your head will, anyway.
+
+[cr_rubble]
+A low heap of fallen rock with a hollow under it, just big enough to crouch in. It has a faint pale shine, as if something had been sheltering here and the shine hadn't left.
+
+Stand in it and keep still. Whatever is hunting down here won't find what doesn't move.
+
+[cr_rubble_ves]
+{bored}So we hide, and the thing that can't see us goes past. I have been this person at every family dinner I have ever had.
+
+[cr_scree_w]
+A drift of loose stones at the foot of the west corridor, banked against the wall and balanced so that a boot would bring the lot down. There is a faint pale shine on the top ones.
+
+(Press Z again to kick it.)
+
+[cr_scree_w_kick]
+You send the heap skittering. The stones clatter off east along the tunnel, a long way, bouncing from wall to wall, and the noise goes with them.
+
+A ring of sound spreads over the floor, far off, at a fork in the east. And the rings that were standing still at the split get up and go to see, along the north tunnel, and they do not come back.
+
+[cr_scree_w_kick_ves]
+{proud}Oh, that's rude. It's gone to see.
+
+{bored}All the way to the fork. Which is where we're going. I did say to give it something more interesting to listen to. I didn't say anywhere helpful.
+
+[cr_scree_w_again]
+You scatter what's left. Far off, the rings turn their heads.
+
+[cr_scree]
+Another heap of loose stones, fallen against the wall of the south tunnel, a good armful, balanced so that a boot would bring the lot down. There is a faint pale shine on the top ones.
+
+(Press Z again to kick it.)
+
+[cr_scree_kick]
+You send the heap skittering. The stones clatter off west along the tunnel, to the far end of it, and the noise goes a long way.
+
+A ring of sound spreads over the floor at the west end of this tunnel. And the rings at the fork, which had sat so still, get up and set off for it, by whichever tunnel is shorter. Watch which.
+
+[cr_scree_kick_ves]
+{bored}Of course it's walking. The noise is the other side of us.
+
+{determined}There's a hollow along the tunnel, east of here. Or we run. For the record, I'm hiding first.
+
+[cr_scree_again]
+You scatter what's left. The rings far off tremble, as if it is not sure it has heard enough.
+
+[cr_scree_e]
+A last heap of loose stones in the mouth of the east tunnel, banked against the wall. Somebody left it where it could be kicked on the way out, and it has a faint pale shine on top, like all the rest.
+
+(Press Z again to kick it.)
+
+[cr_scree_e_kick]
+You send the heap skittering. The stones clatter off back into the Crawl, to the corner of the south tunnel, and the noise goes a long way.
+
+A ring of sound spreads over the floor, far off. And the rings at the split get up and go the long way round, down the south tunnel, to the corner of it. The way back west is open.
+
+[cr_scree_e_kick_ves]
+{bored}A heap on the way out, too. Thoughtful. Slightly suspicious.
+
+{smile}Good. Now we can go back for anything we forgot.
+
+[cr_scree_e_again]
+You scatter what's left. Far off, the rings turn their heads.
+
+[crawl_caught]
+{surprised}It heard us.
+
+{surprised}It doesn't even move. It sits where the tunnel splits and listens, and the second we stepped inside the rings, that was it.
+
+{determined}Back to the start. Keep out of the rings. If it won't leave its post, we'll have to give it somewhere else to be.
+
+[crawl_caught_again]
+{surprised}Heard! Back to the door, and every heap loose again. Make it want to be somewhere else. Then somewhere else after that.
+
+[cr_chest]
+Under a rib of bone, a chest. There is something in it that glows, very faintly, like a lamp left on in another room: a canopy of glowing caps, folded for an umbrella.
+
+[cr_chest_ves]
+{smile}A new canopy! It glows. I'm going to be the only person who can find her own umbrella in a cupboard.
+
+[cr_bones]
+A heap of bones in the chest chamber. There are tooth marks on them. They are all very tidy tooth marks.
+
+# (draft)
+[cr_bones 2]
+All very tidy tooth marks. Whatever lives down here has table manners. That isn't as comforting as it ought to be.
+
+[cr_purse]
+A purse in the west chamber, tucked behind a stalagmite. A bit damp, a bit grey, but it clinks.
+
+[cr_cairn]
+A little pile of flat stones, at the foot of the west corridor. The top stone is set to point up the tunnel, toward the corner, like a finger. Somebody wanted to be sure.
+
+[cr_cairn_blind]
+A little pile of flat stones, knocked over. It's in a dead end. Whoever made it must have gone into the dead end, turned around, and come back out.
+
+[cr_stone]
+A smooth stone in the small chamber off the west corridor, polished at one side where somebody leaned against it to rest.
+
+# --- THE HERO'S CAMP ---
+
+[cp_marks_high]
+Marks scratched in the rock, in fives. Four strokes and a slash. Days.
+
+There are a lot of them.
+
+[cp_marks_high_ves]
+{thoughtful}Neat, aren't they. Somebody who liked things in rows.
+
+# (draft)
+[cp_marks_high 2]
+You start counting the marks. You get to a hundred and stop, because there are a great many more, and because it's beginning to feel rude.
+
+[cp_marks_low]
+More marks, lower down the wall, in a smaller, wobblier hand.
+
+Somebody had to reach up to make the first ones, and then got tired of reaching.
+
+[cp_marks_child]
+Among the marks, a drawing. A sun, with rays, scratched round and round till it was deep. Beside it, a stick figure, holding a stick.
+
+Whoever drew it had been without a sun for a long time.
+
+# (draft)
+[cp_marks_child 2]
+The sun, scratched round and round until it was deep. The stick figure beside it is holding its stick. The stick is very nearly as big as it is.
+
+# (draft)
+[cp_marks_child_ves 2]
+{sad}...That's the sword.
+
+[cp_fire]
+A ring of nine stones round a hollow of old ash. The sticks are burned right through. Whoever built this fire built it carefully and then ran out of wood.
+
+# (draft)
+[cp_fire 2]
+Nine stones round the ash, and you see now they were chosen: all of a size, all smooth. Picked out one at a time, in the dark, by feel.
+
+[cp_stay]
+A smooth stone by the fire. Scratched on it, one word, over and over, in a hand that gets smaller down the stone:
+
+STAY. STAY. STAY.
+
+At the very bottom, smallest of all, a promise: TILL IT'S LIT.
+
+[cp_stay_ves]
+{sad}...We're not staying.
+
+# (draft)
+[cp_stay 2]
+TILL IT'S LIT. The last word is scratched twice as deep as all the rest, as if he wanted to be very sure he'd meant it.
+
+[cp_cairn]
+A little pile of flat stones beside the fire. It's the smallest of them all. The top stone is a child's sweet wrapper, folded flat and weighted down.
+
+# (draft)
+[cp_cairn 2]
+Another sweet wrapper. You wonder how many sweets one small person can carry down a hole. Enough, it seems, to leave one at every place he wanted to remember.
+
+[cp_bedroll]
+An old bedroll. It's the size of a child's.
+
+# (draft)
+[cp_bedroll 2]
+You don't touch it. It's been smoothed flat, with one corner turned back, the way you leave a bed you mean to come back to.
+
+# (draft)
+[cp_bedroll_ves 2]
+{sad}...Leave it like that.
+
+[cp_purse]
+A very small purse, tucked behind a stalagmite where nobody would think to look. Some coins. A button. A sweet wrapper, folded flat.
+
+# --- THE KEEPER'S FIRE ---
+
+[kf_fire]
+A small fire, burning quietly in the middle of the dark. It gives out a warm, ordinary light and no smoke at all.
+
+[kf_keeper]
+He doesn't look round. He lifts one hand a little, without looking, the way you would to a neighbour going past. Go on.
+
+[kf_cairn]
+A little pile of flat stones at the cave mouth, set by the same careful hand. The top stone has a fingerprint pressed into it, small and very old.
+
+[kf_purse]
+A purse tucked into a crack in the rock, out of the way of the fire. It is lighter than it looks, and it is warm.
+
+# --- THE ROOT ---
+
+[rt_face]
+Smooth black rock rising out of sight, as high as your light can reach and a good deal higher. There are thin threads in it, the colour of a bruise going blue, and all of them lead toward the middle of the wall.
+
+[rt_drop]
+A great drop between the ledges. The far side is somewhere over there, past the edge of what you can see. Specks fall past, very slowly, the other way.
+
+[rt_sun_crystal]
+A sun-crystal on the west ledge, throwing its beam straight up the wall to the first prism. It has been shining down here all this time, for nobody.
+
+[rt_prism_first]
+A prism on a stand, up against the wall. The beam from the sun-crystal hits it and goes off to the left, into the rock, which is not where anybody wants it.
+
+Press Z beside it and it turns over.
+
+[rt_prism_first_ves]
+{bored}Left, into the wall. It's very good at wasting light. I know a few people like that.
+
+[rt_prism]
+A prism on a stand. Z beside it turns it over. The beam comes into it and goes off the wrong way.
+
+[rt_prism_last]
+The last prism, on the east ledge by the wall. The sun-crystal below throws a beam up to it, when it can. Set the wrong way, it sends it right into the rock.
+
+Stand beside it on the east side, not in the line of the beam, and press Z.
+
+[rt_eye]
+A crystal eye on the east ledge, dark, facing the drop. If a beam reaches it across the gap, it wakes for good, and wakes something else with it.
+
+[rt_sun_crystal_asleep]
+A sun-crystal, dark and cold. Something has to wake it first.
+
+[rt_beam_gate]
+A narrow gate of black glass, standing in the middle of the ledge, in the line of the dark sun-crystal below it. It is shut. Set in the post is a little pale window that faces the drop, and a thread of the same blue as the root's veins runs from it across the rock, out toward the great crystal's foot.
+
+Whatever lights the root's foot opens this.
+
+[rt_beam_gate_ves]
+{thoughtful}A gate that opens when the root's foot is lit. And the root's foot is lit by a beam I'm standing in. I do see my part in this.
+
+[rt_rock]
+A rock the size of a sheep, dark as everything else down here, sitting right where the light would have to go. It looks as if it has been waiting a long time to be in somebody's way.
+
+(Walk into it to push it. Z again, straight after, rolls every rock back to where it began.)
+
+[rt_rock_ves]
+{bored}I'm told I can't push it. I'm not going to argue; I'd lose.
+
+[rt_prism_fixed]
+A prism set into the floor and fixed fast, the stone grown round its foot. Whatever light came down to it from above would be sent east along the floor, out over the drop.
+
+Nothing is coming down to it. Three tiles of bare floor lie above it, and the light that runs along the ledge higher up goes straight past, over the drop, to the foot of the root.
+
+[rt_prism_fixed_ves]
+{thoughtful}Light comes in from the top, goes out the side. All it needs is somebody to bend it from the west. Hm.
+
+[rt_stump]
+A stump of black rock with a ring worn into the top. You rap it twice. Every rock on both ledges rolls home, and the prisms swing back the way they were set. (Anything that has lit stays lit.)
+
+[rt_root_base]
+The foot of the root, just where it meets the drop. It is a dark eye, set in the glass, and it burns only while a light is on it. Take the light off and it goes out.
+
+[rt_root_base_ves]
+{bored}Lit when the beam's on it. I'm sure somebody's very pleased with that arrangement.
+
+[rock_home]
+Every rock on both ledges slides back through the dark to where it began, and the prisms swing round to how they were. It makes hardly any sound.
+
+
+[rt_root]
+The root of the Sunstone. It comes down through the rock like a tree's, thick as a house, black and glassy and cold, and stops here at the edge of the drop. A long way up there is a sun, and this is where it plugs in.
+
+It is waiting for a light.
+
+[rt_rejoin]
+{proud}It's lit! Come and get me, so we can both see what we did.
+
+[rt_vein]
+The vein of the root, running up the rock into the dark. Black crystal, faintly glossy. The cold off it is like standing at the mouth of a cellar.
+
+[rt_vein_lit]
+The vein of the root, alight. The light climbs the rock in slow pulses, from the bottom, like a pulse in a wrist. It is warm to stand beside.
+
+[rt_gate]
+A narrow gate across the way out, shut tight. Beyond it the stair goes up.
+
+[rt_purse]
+A purse on the east ledge, behind a boulder. It sat there all the time the light was out.
+
+[rt_cairn]
+A little pile of flat stones by the door, very small, very neat. The top one is a pebble from somewhere with water in it. It is a long way from anywhere with water in it.
+
+# (draft)
+[rt_cairn 2]
+The pebble on top, from somewhere with water in it. You think of the lake, and the reeds, and somebody small picking up one stone to carry the whole way down.
+
+[rt_stone]
+Two smooth stones leaning together at the edge of the ledge, side by side, looking out at the drop.
+
+# --- THE WAY UP ---
+
+[wu_face]
+Smooth black rock, and in it the light of the root, running through like blue ink through a blotter.
+
+[wu_vein]
+A vein of the root, lit. It lights the stair like a string of lamps going up into the dark, and it makes the stone look warm.
+
+[wu_cairn_first]
+A little pile of flat stones at the bottom of the stair, the first of a long row of them. In the root's light you can see them plainly now. They go all the way up.
+
+[wu_cairn]
+Another little pile of flat stones at a turn in the stair. Whoever made them came up this way after the light went up, a step at a time, and stopped at every turn to leave the way marked for whoever might come down next.
+
+[wu_cairn_mid]
+A little pile of flat stones, halfway up the stair. Somebody sat down here for a while. The step is worn, just there, in a hollow about the size of somebody small.
+
+[wu_cairn_mid_ves]
+{sad}He sat here. Halfway up, and too tired to be glad about it.
+
+{determined}And then he got up and built another one.
+
+[wu_top]
+Warm air is coming down the stair from above, and there's a noise on it, very faint and very far away. Something like drums. Something like a lot of people deciding to be happy at once.
+
+# (draft)
+[wu_top 2]
+The noise again, on the warm air, closer or louder. Drums, and something that might be a band of frogs, and a great many people who have made up their minds.
+
+[wu_chest]
+A chest tucked into the corner of the stair, where somebody tired could rest against it. Inside, a jar of something honey-coloured, still warm.
+
+[wu_purse]
+A purse on the top landing, left on a ledge in plain sight. It has a note pinned to it, in big, careful letters: FOR WHOEVER COMES NEXT.
+
+# --- THE VUG ---
+
+[vg_wall]
+Smooth black rock, and set in it, crystals as long as your arm, growing out sideways like something that took its time deciding which way was up.
+
+[vg_crystal]
+A cluster of blue crystal, giving off a soft, cold glow. It is the light you saw from the cave: the only thing in the Deep that never needed anybody.
+
+[vg_stone]
+A smooth stone, set down in the middle of the hollow like a seat. It's worn, a little, as if somebody sat on it to look at the crystals.
+
+# (draft)
+[vg_stone 2]
+You sit on the worn stone for a moment and look at the crystals, the way somebody did before you. It's very quiet. It's the first place down here that's quiet in a good way.
+
+# (draft)
+[vg_stone_ves 2]
+{thoughtful}...Two minutes. {bored}Then we're going.
+
+[vg_cairn]
+A little pile of flat stones, tucked into the corner of the hollow. It has been here a very long time.
+
+[vg_chest]
+In the middle of the hollow, on a bed of crystal dust, a chest. Inside is a blade of black glass, sharp as a thought. It has been waiting so long it has stopped minding.
+
+# --- THE LAST FLIGHT (deep_last_flight, draft): the top of the Way Up, a ring climb ---
+
+[lf_face]
+Where the stair should go on up, there's only the face.
+
+Old iron rings are hammered into it, going up where the steps used to be.
+
+[lf_face_ves]
+{bored}Up. Always up. I'm starting to miss the dark.
+
+[lf_step]
+A broken step, the last of the old stair. The rest of it is somewhere down the shaft.
+
+[lf_top]
+The stair again, at last: a few worn steps up into the town. You can hear the noise from here.
+
+# --- THE LIFE PASS: things to look at (set dressing) ---
+
+[dd_ash]
+A heap of old ash and candle-ends, swept together into a corner. Somebody tidied up, even here.
+
+[dd_ash_ves]
+{thoughtful}Somebody tidy. I'd have liked them.
+
+[dd_ash 2]
+Under the ash there's a bit of wick, a bit of wax. A great many candles, burned right down, one after another.
+
+[dd_ash_ves 2]
+{thoughtful}A lot of nights. A lot of candles.
+
+[dd_bud]
+A tiny blue crystal, no bigger than a thumb, pushing up through the black floor. Nothing else down here is growing. It pulses, slowly, like a heartbeat.
+
+[dd_bud_ves]
+{thoughtful}Growing in the dark with nobody to show it off to. I admire that.
+
+[dd_bud 2]
+It pulses in time with your steps for a moment, then forgets and goes back to its own rhythm.
+
+[dd_bud_ves 2]
+{smile}Everything down here has its own tempo. Let's not let it set ours.
+
+[dd_caps]
+Pale cave mushrooms with no colour in them at all, all leaning the same way, as if they're listening.
+
+[dd_caps_ves]
+{bored}They look like the kind of thing that grows on things you'd rather not name.
+
+[dd_caps 2]
+They lean towards you as you come near, and away as you go. By the time you look back, they all lean the same way again.
+
+[dd_caps_ves 2]
+{bored}Nothing in here reacts to me, and I'd like it to stay that way.
+
+[dd_tuft]
+Pale roots, come down through the roof like something reaching, ending in a tuft. One thread of it moves when the rest don't.
+
+[dd_tuft_ves]
+{bored}It's moving. I'm not asking.
+
+[dd_tuft 2]
+The moving thread has curled round your finger. You unhook it, gently. It doesn't seem to mind.
+
+[dd_tuft_ves 2]
+{surprised}Don't. I won't say why.
+
+[dd_worms]
+A heap of sleeping glow-worms, curled up together, each breathing a slow pale light. The light brightens a little when you breathe near them.
+
+[dd_worms_ves]
+{smile}Don't wake them. The last glow-worms that woke up wanted to sit on my umbrella.
+
+[dd_worms 2]
+One of them uncurls, looks at you, and curls up again. Whatever it was going to say, it's decided against.
+
+[dd_worms_ves 2]
+{bored}Wise worm.
+
+[lp_crawl_mitten]
+A mitten with a patched thumb, a child's, left on a rock to dry and never picked up. It is dry now. You put it in your pocket, carefully.
+
+[lp_crawl_mitten_ves]
+{sad}...It's so small.
+
+[lp_crawl_knife]
+A little pocket knife, wedged in a crack in the rock, handle out. It has been holding a loose stone in place for longer than the town has had a name. You leave it. It's busy.
+
+[lp_crawl_knife_ves]
+{smile}It has a job. Don't fire it.
+
+[lp_camp_candle]
+A stub of candle in a thumb of its own wax, black from being lit and lit again. The wick has been trimmed. Even down here, someone trimmed the wick.
+
+[lp_camp_candle_ves]
+{thoughtful}I'd have liked to meet whoever did that.
+
+[lp_camp_slate]
+A slate, propped in a crack. Three chalk drawings of a sun, one under the other. Each one a bit rounder than the last, and a bit more pleased with itself.
+
+[lp_camp_slate_ves]
+{thoughtful}The third one's smiling. Somebody was having a better day.
+
+[lp_vug_ash]
+A little heap of crystal dust, swept up and left. Nobody has been in here to sweep it, and somebody has.
+
+[lp_vug_ash_ves]
+{bored}I'm choosing not to ask who. For the sake of my evening.
+
+[lp_fire_ring]
+Seven pale mushrooms in a ring, round nothing at all. You count them twice, and the answer is the same both times.
+
+[lp_fire_ring_ves]
+{bored}Don't step in it. Rings are contracts. I'm not signing anything down here.
+
+[lp_root_nook]
+A knot of pale root wedged between the wall and a stalagmite, at the very end of the floor. More roots have grown round it like fingers. They let go, one by one, when you pull.
+
+[lp_crawl_candle]
+A candle-end burned down to a flat dish of wax, set on a rock, a long way from the camp. Somebody lit it here to see the way, and then went on without it.
+
+[lp_crawl_candle_ves]
+{thoughtful}A lit candle in a dark place, and then he went on anyway.
+
+# --- end life pass ---
+
+# --- THE LIFE PASS, ROUND 3 (helper C, 15 November 2026): the dullest rooms of chapter 4 ---
+
+[r3c_lf_rest_stub]
+A candle stub standing in its own wax on the first flat ledge. Somebody sat here to get their breath, and lit it to keep the dark off their knees.
+
+[r3c_lf_rest_stub_ves]
+{thoughtful}You'd need a rest, going up this. I'd have taken a nap.
+
+[r3c_lf_rest_stub 2]
+The wax has run in three layers. Three rests, one after another. Whoever it was was getting tired.
+
+[r3c_lf_rest_stub_ves 2]
+{sad}Or getting brave. It's the same wax.
+
+[r3c_lf_dry_flask]
+A dented flask, dry as dust. The cork is tied to its neck with a bit of someone's shoelace.
+
+[r3c_lf_dry_flask_ves]
+{bored}Dry. Well, they used it all. Good for them.
+
+[r3c_lf_ring_tally]
+Chalk strokes on the wall behind the ledge, in fives. One stroke for every ring, you suppose. The last few are shaky.
+
+[r3c_lf_ring_tally_ves]
+{thoughtful}Counting is how you get up something like this. One more. One more.
+
+[r3c_lf_rope_loop]
+A short loop of rope with a knot at each end, left on the middle ledge. A spare grip, for hands that were tired of the rings.
+
+[r3c_lf_rope_loop_ves]
+{surprised}Hang on. That's a rope I could use. Hold it. I'm not touching it.
+
+[r3c_lf_caps]
+Pale mushrooms in a row along the foot of the wall, leaning towards your light. They look as if they're listening for the next ring to swing.
+
+[r3c_lf_caps_ves]
+{bored}They've nothing better to do. Neither have I, apparently.
+
+[r3c_lf_tuft]
+A tuft of white root, as fine as hair, hanging from a crack. The air from above moves it. It's the first sign that there's an above.
+
+[r3c_lf_tuft_ves]
+{thoughtful}A draught. A real one. That means a way out.
+
+[r3c_lf_tuft 2]
+It sways for a while, then goes still, as if it heard you.
+
+[r3c_lf_top_cairn]
+A small stack of flat stones on the top ledge, the way you'd mark a place when you'd been somewhere a long time and wanted the next person to know it could be done.
+
+[r3c_lf_top_cairn_ves]
+{smile}It can be done. We just did. Somebody should put up a sign.
+
+[r3c_cr_prints]
+A line of small boot-prints going into the crawl, pressed in the dust as flat as a stamp. They go on tiptoe: heel up, toes only. Whoever made them knew about the thing in here.
+
+[r3c_cr_prints_ves]
+{thoughtful}They went on tiptoe, which is smart. We should do what the footprints say.
+
+[r3c_cr_prints 2]
+The prints stop where the passage splits, then pick up again, going the other way. Someone changed their mind. Once.
+
+[r3c_cr_prints_ves 2]
+{bored}Wise. Or fussy. I can't tell with footprints.
+
+[r3c_cr_pot]
+A tin pot with a lid, tied shut with string. When you tilt it, something rattles. Small pebbles. They've been collected to throw.
+
+[r3c_cr_pot_ves]
+{smile}They had the same idea as us. Throw something to make it go away.
+
+[r3c_cr_pot 2]
+The pebbles are all smooth ones, picked for their sound. This was somebody's craft.
+
+[r3c_cr_pot_ves 2]
+{surprised}Somebody planned the clatter.
+
+[r3c_cr_quiet_caps]
+Little grey mushrooms growing in a tight clump. When you step near them the clump flinches, all at once, and then goes still. They are practising too.
+
+[r3c_cr_quiet_caps_ves]
+{bored}Please stop copying us.
+
+[r3c_cr_jar]
+A glass jar with a handful of glowbugs in it, set on the floor with its lid off. They aren't trapped. They've simply decided to stay.
+
+[r3c_cr_jar_ves]
+{smile}A little lamp that can't be made angry. I like it.
+
+[r3c_cr_jar 2]
+The glowbugs shift when you lean in, then go back to glowing at each other.
+
+[r3c_cr_jar_ves 2]
+{thoughtful}We should take notes.
+
+[r3c_cr_ash_circle]
+A small ring of candle ends melted into the floor, all burnt to nothing. A place somebody sat very still for a very long time.
+
+[r3c_cr_ash_circle_ves]
+{sad}Sitting still in the dark. That's the bravest thing in here.
+
+[r3c_cr_arrow]
+A chalk arrow on the floor pointing left, with 'NOT THIS WAY' under it. Then a second one, pointing right, with 'ALSO NOT THIS WAY'. Then a smudge.
+
+[r3c_cr_arrow_ves]
+{bored}Helpful. In the way a locked door is helpful.
+
+[r3c_cr_arrow 2]
+The third arrow has been rubbed out with a sleeve. Whoever it was ran out of ideas.
+
+[r3c_cr_arrow_ves 2]
+{smile}I've been there.
+
+[r3c_wu_prints_a]
+Boot-prints in the dust, coming and going. The going ones are deep and sure. The coming ones are a bit lighter, and further apart.
+
+[r3c_wu_prints_a_ves]
+{thoughtful}Light feet on the way back. Somebody had less to carry.
+
+[r3c_wu_flask]
+A flask on its side, cork out and dry. Somebody put it down at the end of a long switchback and didn't pick it up again.
+
+[r3c_wu_flask_ves]
+{bored}That's the sound of someone saying, 'one more turn and then I'll rest.'
+
+[r3c_wu_stub]
+A candle stub on a ledge, melted flat. Whoever lit it had been counting turns and lost count.
+
+[r3c_wu_stub_ves]
+{sad}I lost count of the turns two flights ago.
+
+[r3c_wu_stub 2]
+There's a number scratched beside it, then crossed out, then a bigger one, then crossed out.
+
+[r3c_wu_stub_ves 2]
+{bored}It's a lot of switchbacks, I think.
+
+[r3c_wu_count]
+Chalk marks on the wall in fives: SIX SWITCHBACKS. Under it, in different chalk: SEVEN. Under that, in tiny letters: FINE, I'M NOT COUNTING.
+
+[r3c_wu_count_ves]
+{smile}I'd like to shake their hand. They'd probably complain about the climb.
+
+[r3c_wu_count 2]
+The marks stop at seven. Nobody counted the last turn. Perhaps it felt rude.
+
+[r3c_wu_glove]
+One woollen glove, dropped on a switchback corner. A flat stone has been put on it to keep it from blowing away, though there's no wind. A kind thing to do for a glove.
+
+[r3c_wu_glove_ves]
+{thoughtful}A stone to keep a lost glove warm. It's silly. I love it.
+
+[r3c_wu_caps]
+A little group of pale mushrooms on a switchback corner. They lean up the stairs, the way people do at the bottom of a long flight.
+
+[r3c_wu_caps_ves]
+{bored}They know what's coming.
+
+[r3c_wu_cairn]
+A cairn on the corner, with a pebble on top that's slightly too big. Someone put it there to make themselves laugh.
+
+[r3c_wu_cairn_ves]
+{smile}I'd have used a bigger one.
+
+[r3c_wu_cairn 2]
+The big pebble is balanced on the smallest bit of the cairn. It hasn't fallen yet. You feel obscurely proud of it.
+
+[r3c_wu_cairn_ves 2]
+{surprised}It's an act of faith.
+
+[r3c_kf_old_ash]
+A rake of old ash in a heap, swept up and left. A long time of fires came out of this, one after another, and every one of them was put out by hand.
+
+[r3c_kf_old_ash_ves]
+{thoughtful}Whoever kept this fire kept it for years. You don't do that by accident.
+
+[r3c_kf_logs]
+A little stack of split logs, the bark dry and silvery. Carried in a long way from somewhere with trees.
+
+[r3c_kf_logs_ves]
+{bored}That's a lot of effort for a campfire. And a lot of stairs.
+
+[r3c_kf_logs 2]
+The ends have been cut square, each to the same length. Nobody does that when they're in a hurry.
+
+[r3c_kf_logs_ves 2]
+{thoughtful}Somebody was never in a hurry.
+
+[r3c_kf_kettle]
+A blackened pot with a spoon standing in it, set a little back from the coals. The spoon is straight up, the way you leave it when you'll be back in a moment.
+
+[r3c_kf_kettle_ves]
+{thoughtful}A moment, said once. It has lasted a long time.
+
+[r3c_kf_jar]
+A jar of glowbugs, lid off, left near the warmth. They've come to sit by the fire the way anyone would.
+
+[r3c_kf_jar_ves]
+{smile}Even bugs know a good fireplace when they see one.
+
+[r3c_kf_ring]
+Pale mushrooms in a loose ring, all leaning towards the fire. Nothing here is warm, but they lean as if it were.
+
+[r3c_kf_ring_ves]
+{bored}They're having a lovely time. Leave them be.
+
+[r3c_rt_journal]
+A thin notebook weighed down with a stone. The first line says: IT'S VERY BIG. The second: I'M GOING TO NEED A LONGER ROPE. The rest has been torn out.
+
+[r3c_rt_journal_ves]
+{thoughtful}Whoever it was came to the same edge we're about to stand on. And wrote it down.
+
+[r3c_rt_journal 2]
+Under the stone, a pencil, sharpened to a stub. A pencil you'd use to say one last thing.
+
+[r3c_rt_journal_ves 2]
+{sad}They left the pencil. In case someone wanted to add something.
+
+[r3c_rt_flask]
+A flask on its side at the foot of the cliff, a thin bit of string tied round its neck. A good flask. Somebody carried it all this way and didn't drink from it.
+
+[r3c_rt_flask_ves]
+{bored}That's an unusual kind of self-restraint.
+
+[r3c_rt_stub]
+A candle stub standing on a flat stone, a small ring of soot on the rock above. Somebody looked up at the root and thought, 'I'll need to see that properly.'
+
+[r3c_rt_stub_ves]
+{thoughtful}It was never going to be enough light. That's what makes it brave.
+
+[r3c_rt_rope]
+A coil of old rope, the strands gone grey and soft. A knot at one end, tied by hand, tight enough that it hasn't loosened in a long, long time.
+
+[r3c_rt_rope_ves]
+{surprised}They tied it up as neatly as a gift.
+
+[r3c_rt_rope 2]
+You turn the rope over. There's a name tag, almost worn away, with a single letter left, and it could be any of them.
+
+[r3c_rt_bud]
+A crystal bud no bigger than a thumb, pushing up through the floor beside the cliff. It's a darker blue than the others. It pulses, slowly, as if it can feel the root above.
+
+[r3c_rt_bud_ves]
+{smile}It's like a baby tooth. Someday it'll be the big one.
+
+[r3c_rt_pot]
+A small tin pot with the lid tied on. A paper tag: 'FOR WHEN IT WAKES UP. (HOT CHOCOLATE.)' There's a spoon, and a cup, and one small biscuit wrapped in cloth.
+
+[r3c_rt_pot_ves]
+{smile}They made a drink for a mountain. I think I love them.
+
+[r3c_rt_pot 2]
+The pot has been sitting here so long the chocolate's gone hard and sweet as a stone. It would still be warm if it could.
+
+[r3c_rt_pot_ves 2]
+{sad}It's waiting. All of this is waiting.
+
+[r3c_fd_welcome]
+A little board stuck in a crack: THE FIRST DARK. PLEASE KEEP YOUR LIGHT LOW AND YOUR VOICE LOWER. And underneath, in smaller letters: (BUT YOU CAN WHISTLE, IT HELPS.)
+
+[r3c_fd_welcome_ves]
+{bored}That's a rule I could get behind.
+
+[r3c_fd_welcome 2]
+Somebody scratched out 'LOWER' and wrote 'QUIETER' above it. A fussy neighbour.
+
+[r3c_fd_welcome_ves 2]
+{smile}There's always a neighbour.
+
+[r3c_fd_prints]
+Boot-prints in the dust, going in neat rows. They stop and start, stop and start, like someone stepping out of one patch of light into the next.
+
+[r3c_fd_prints_ves]
+{thoughtful}Walking from candle to candle. I'd do the same.
+
+[r3c_fd_stub_a]
+A candle stub set in a little cup of clay, so it wouldn't tip. It's the third you've seen. They're a very careful sort of lost.
+
+[r3c_fd_stub_a_ves]
+{thoughtful}Someone who brings their own cups for their candles knows how to be afraid properly.
+
+[r3c_fd_flask]
+A flask on its side, wedged in a crack. A name has been scratched into the side with a nail, and then scratched out, and then written again, smaller.
+
+[r3c_fd_flask_ves]
+{surprised}They kept trying to get it right. I recognise that.
+
+[r3c_fd_jar]
+A jar of glowbugs standing in the first patch of true dark. Somebody put it there so the next person would have something to aim for.
+
+[r3c_fd_jar_ves]
+{smile}A lighthouse made of bugs. I want to say thank you to whoever made it.
+
+[r3c_fd_caps]
+A little group of pale caps. When you step by, one of them is a very slightly different shade. A tiny blue one, shy, in the middle of all the white.
+
+[r3c_fd_caps_ves]
+{surprised}That's... the first colour I've seen in here. I'm weirdly moved.
+
+[r3c_hc_pot]
+A small pot on three stones, a spoon in it, a crust of something dried to the sides. A meal for one, cooked often, eaten fast.
+
+[r3c_hc_pot_ves]
+{sad}For one. Always for one.
+
+[r3c_hc_socks]
+A pair of mismatched socks hung on a string between two stalagmites. One is blue, one is brown. They've been darned so often there's more wool than sock.
+
+[r3c_hc_socks_ves]
+{thoughtful}Somebody kept going, in socks. That's a whole kind of courage.
+
+[r3c_hc_socks 2]
+The darning is very neat in the first few mends and very hasty in the last. The same hand, getting tired.
+
+[r3c_hc_socks_ves 2]
+{sad}Yes.
+
+[r3c_hc_journal]
+A tiny notebook with a pencil tied to it. The last line says: 'NO ONE ASKED ME TO. I KEPT GOING ANYWAY. I THINK THAT'S THE WHOLE JOB.'
+
+[r3c_hc_journal_ves]
+{thoughtful}That's... exactly what I'd say, if I had the courage.
+
+[r3c_hc_journal 2]
+The page opposite is a small drawing: a lamp, a lot of stairs, and somebody small on them, waving.
+
+[r3c_hc_journal_ves 2]
+{sad}They're waving at us, aren't they.
+
+[r3c_hc_knife]
+A small knife with a bone handle, worn smooth in one spot where a thumb has rested. It's closed. Next to it, a half-carved wooden bird, about the size of an egg.
+
+[r3c_hc_knife_ves]
+{smile}They were making something. Even down here.
+
+[r3c_hc_knife 2]
+The bird has one wing finished and the other one only started. The knife is lying where the next cut would go.
+
+[r3c_hc_knife_ves 2]
+{sad}They never finished it.
+
+[r3c_hc_flask]
+A flask of water, nearly full, tied with a piece of green ribbon. The ribbon is the only colour in the whole camp. It might have been a gift.
+
+[r3c_hc_flask_ves]
+{thoughtful}Someone gave them that ribbon. I'm sure of it.
+
+[r3c_hv_stub]
+A candle stub standing in the dust a polite distance from the blade, the way you'd leave a light for somebody asleep. It has burned down to a thumbnail of wax.
+
+[r3c_hv_stub_ves]
+{thoughtful}Somebody visited. Somebody was polite about it.
+
+[r3c_hv_stub 2]
+The wax has dripped into a neat little coin. Whoever lit it sat and watched it all the way down.
+
+[r3c_hv_stub_ves 2]
+{sad}Keeping company. It's a kind of present.
+
+[r3c_hv_oil]
+A tiny flask of lamp oil with a label in a small, embarrassed hand: FOR THE BLADE'S LAMP. (IT HAS NO LAMP. I FELT BAD.)
+
+[r3c_hv_oil_ves]
+{smile}That's the best thing I've read all day. Please don't tell me they took it back.
+
+[r3c_hv_bud]
+A crystal bud no bigger than a thumb, leaning towards the blade. Every crystal in the vug leans a little that way, like people round a stove.
+
+[r3c_hv_bud_ves]
+{surprised}They're all facing it. Fine. We're all facing it.
+
+[r3c_hv_bud 2]
+You step round the vug. Every bud turns its tip to follow you for a breath, then settles back to the blade.
+
+[r3c_hv_bud_ves 2]
+{bored}Nobody likes being second-best.
+
+# --- end life pass round 3 (helper C) ---

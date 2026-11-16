@@ -23,7 +23,7 @@ export const KELPIE_FOAL = {
   feel: { hit: 'kelp', idle: 'drip', windup: 'stamp', at: [0.45, 0.9], defeat: 'splash', exit: 'sink' },
   // The coast's fights: the shanty (swapped per area in battleScene.js).
   music: 'coastBattleStorm',
-  maxHp: 10800,
+  maxHp: 8700,
   damage: 83,
 
   // The easy end of the chapter: plenty of room.
@@ -41,10 +41,9 @@ export const KELPIE_FOAL = {
 
   // Its attacks live in src/battle/attacks/kelpie_foal.js.
   patterns: [
-    { name: 'kelpSplash', weight: 3 },
-    { name: 'kelpWhip', weight: 2 },
-    { name: 'kelpWave', weight: 2 },
-    { name: 'kelpCharge', weight: 2 },
+    { name: 'kelpLaps', weight: 3 },
+    { name: 'kelpLeap', weight: 3 },
+    { name: 'kelpLure', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -55,7 +54,7 @@ export const KELPIE_FOAL = {
     { name: 'Hold still and let it sniff', calm: 30 },
   ],
 
-  rewards: { exp: 2650, coins: 14 },
+  rewards: { exp: 2650, coins: 11 },
 
   // A braid of its mane it sometimes sheds (src/data/items.js), with the chance of it.
   drops: [{ item: 'kelp_mane', chance: 0.4 }],

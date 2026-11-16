@@ -15,7 +15,7 @@ export const BOG_TOAD = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'marsh',
   sprite: { rows: BOG_TOAD_SPRITE, palette: BOG_TOAD_PALETTE },
-  maxHp: 910,
+  maxHp: 2700,
   damage: 24,
 
   // Slow, but there's a lot of it: its bullets come thick but not fast.
@@ -25,7 +25,7 @@ export const BOG_TOAD = {
   // the whole battle box and carries it off, you and all, then spits it back.
   patterns: [
     { name: 'toadLash', weight: 3 },
-    { name: 'toadFlies', weight: 3 },
+    { name: 'toadHop', weight: 3 },
     { name: 'toadGulp', weight: 2 },
     { name: 'toadSpawnHatch', weight: 2 },
     { name: 'toadFlop', weight: 2 },

@@ -12,7 +12,7 @@ export const BURRHOG = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: BURRHOG_SPRITE, palette: BURRHOG_PALETTE },
-  maxHp: 485,
+  maxHp: 2250,
   damage: 17,
 
   // A Chapter 3 enemy: a step busier than the mountain's.
@@ -20,10 +20,9 @@ export const BURRHOG = {
 
   // Its attacks live in src/battle/attacks/burrhog.js.
   patterns: [
-    { name: 'burrRoll', weight: 3 },
-    { name: 'burrQuills', weight: 3 },
-    { name: 'burrCones', weight: 2 },
-    { name: 'burrBristle', weight: 2 },
+    { name: 'burrCurl', weight: 3 },
+    { name: 'burrDownhill', weight: 3 },
+    { name: 'burrRoll', weight: 2 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

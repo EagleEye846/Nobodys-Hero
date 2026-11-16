@@ -8,6 +8,7 @@
 //   n  snow                                       i  trodden snow path
 //   s  the great stair                            Y  snow pine (solid)
 //   Q  snowy boulder (solid)                      _  open sky (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_OWL_SHELF = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_owl_shelf',
@@ -61,6 +62,7 @@ export const VIGIL_OWL_SHELF = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/upper_vigil.txt',
   props: [
+    { sprite: 'col_pin_goat', x: 24, y: 13, walkable: true, flat: true, gives: 'pin_goat', taken: { gone: true } },
     { sprite: 'owl_shop', x: 20, y: 6, shop: 'owl_stall' },
     { sprite: 'crates', x: 22, y: 6, text: 'shelf_crates' },
     { sprite: 'crates', x: 18, y: 6, text: 'shelf_crates' },
@@ -69,6 +71,8 @@ export const VIGIL_OWL_SHELF = {
     { sprite: 'travel_draft', x: 11, y: 10, travel: 'owl_shelf', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'sign', x: 15, y: 11, text: 'last_shelf_sign' },
     { sprite: 'cairn', x: 6, y: 5, text: 'last_shelf_cairn' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_owl_shelf'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

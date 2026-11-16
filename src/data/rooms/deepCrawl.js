@@ -52,6 +52,8 @@
 // Tile key (see src/overworld/deepTiles.js for how the Deep draws them):
 //   #  black rock overhead (solid)   W  smooth black rock face (solid)
 //   .  black stone floor   v  a stalactite hanging low (you walk under)
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DEEP_CRAWL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'deep_crawl',
@@ -125,6 +127,7 @@ export const DEEP_CRAWL = {
   // Canopy), a purse in the west chamber, a few cairns and bones.
   textFile: 'interactions/deep.txt',
   props: [
+    ...(R3C_PROPS.deep_crawl ?? []),
     { sprite: 'rubble_hide', x: 26, y: 17, text: 'cr_rubble', hide: true, light: 22 },
     // Loose scree to kick, lit faintly so you can find it. Its noise lands at a waypoint of the loop and the
     // hunter stays there: A (foot of the west corridor) at the fork (3), S (south loop) at (21,17) (5),
@@ -138,6 +141,10 @@ export const DEEP_CRAWL = {
     { sprite: 'little_cairn', x: 5, y: 12, text: 'cr_cairn', seenInLight: true },
     { sprite: 'little_cairn', x: 10, y: 15, text: 'cr_cairn_blind', seenInLight: true },
     { sprite: 'smooth_stone_c', x: 10, y: 14, text: 'cr_stone', seenInLight: true },
+    { sprite: 'col_token', x: 14, y: 4, walkable: true, flat: true, gives: 'tally_boot', taken: { gone: true } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'dp_mitten', x: 9, y: 14, text: 'lp_crawl_mitten', gives: 'hero_mitten', react: true, walkable: true, seenInLight: true, taken: { gone: true } },
+    // --- end life pass ---
   ],
   tileTexts: { '#': 'deep_rock', W: 'deep_face', v: 'cr_stalactite' },
 

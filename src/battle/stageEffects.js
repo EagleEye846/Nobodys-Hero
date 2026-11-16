@@ -31,6 +31,12 @@ import { FAIRWEATHER_STAGE } from './fairweatherStage.js';
 //                                   water it puts in the box (tools.sea)
 //   boxTurn(battle)                 radians the box is turned by (only how
 //                                   it looks, like boxSway)
+//   turnStart(battle)               as each enemy turn starts, after its
+//                                   attacks are chosen: rules for the turn
+//                                   (Madam Fairweather's deck sets
+//                                   soul.mover and hud.BOX.deck)
+//   beforeAttacks(battle, dt)       every frame of a turn, before the
+//                                   attacks move
 //   leave(battle, foe, how)         it's beaten or spared
 //   skip(battle, foe)               straight to how things are once the
 //                                   phase's beat is over (for previews)

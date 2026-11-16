@@ -45,6 +45,8 @@
 //   #  black rock overhead (solid)   W  smooth black rock face with faint veins
 //   .  black stone floor   0  a drop into the dark (solid, a beam flies over)
 //   ^  black stalagmite (solid)   O  glossy black boulder (solid)   J  smooth knob
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DEEP_ROOT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'deep_root',
@@ -126,6 +128,7 @@ export const DEEP_ROOT = {
   // light has gone up), a gate to the way up, and a couple of purses.
   textFile: 'interactions/deep.txt',
   props: [
+    ...(R3C_PROPS.deep_root ?? []),
     // A save crystal, so the caves never go long without one.
     { sprite: 'savepoint', x: 6, y: 21, save: true },
     // The west ledge: S1, the wrong-way prism, the rock in the beam's way, the prism fixed to the
@@ -167,6 +170,9 @@ export const DEEP_ROOT = {
     { sprite: 'gold_pouch', x: 29, y: 18, text: 'rt_purse', gold: 90, seenInLight: true, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'little_cairn', x: 5, y: 23, text: 'rt_cairn', seenInLight: true },
     { sprite: 'smooth_stone_b', x: 26, y: 24, text: 'rt_stone', seenInLight: true },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'gold_pouch', x: 4, y: 25, text: 'lp_root_nook', gives: 'deep_root_chew', seenInLight: true, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- end life pass ---
   ],
   tileTexts: { '#': 'deep_rock', W: 'rt_face', '^': 'deep_stalagmite', O: 'deep_boulder', J: 'deep_knob', '0': 'rt_drop' },
 

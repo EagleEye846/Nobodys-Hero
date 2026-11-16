@@ -127,12 +127,15 @@ export const GLIMMER_ECHO_FALLS = {
     { sprite: 'glowcap_big', x: 22, y: 12, text: 'falls_glowcap' },
     { sprite: 'glowcap_tall', x: 27, y: 8, text: 'falls_glowcap' },
     { sprite: 'crystal_pool', x: 4, y: 10, text: 'falls_pool', animation: 'crystal_pool', speed: 0.5 },
-    { sprite: 'glow_moss', x: 6, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 25, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 23, y: 5, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 6, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 25, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 23, y: 5, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'sign', x: 8, y: 9, text: 'falls_sign' },
     // A purse on the high ledge by the far bank (b, then B).
     { sprite: 'gold_pouch', x: 28, y: 4, text: 'falls_purse_high', gold: 80, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'crystal_teal_s', x: 7, y: 4, text: 'gp_gem' },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', H: 'cave_moss_wall', K: 'cave_wall',

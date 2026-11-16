@@ -1,0 +1,41 @@
+# BT_INN_BAT: The bat who sleeps through everything at the inn, in the rafters over the fire. It is possible he is the reason for the rules on the board.
+
+[first]
+...zzz... a bit to the left... zzz... no... zzz... that's my pillow... zzz...
+
+[repeat]
+...zzz... don't tell Mum... zzz... I'm up... zzz...
+
+[first after the_kings_welcome]
+...zzz... kings... zzz... too loud... zzz... hang him upside down... zzz...
+
+[repeat after the_kings_welcome]
+...zzz... hmm... a lamp, please... zzz... too dark... zzz...
+
+[first after the_light_goes_up]
+...zzz... too bright... zzz... who left the Sunstone on... zzz...
+
+[repeat after the_light_goes_up]
+...zzz... it's a party... zzz... don't wake me... zzz...
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+...zzz... not another rule... zzz... I didn't do it... zzz... I did do it...
+
+# (draft)
+[repeat 3]
+...zzz... left side... zzz... other left... zzz...
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+...zzz... king... never sleeps... zzz... never once... zzz... I'd know...
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}...Talking in his sleep. {bored}Probably.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+...zzz... save me a bowl... zzz... the big bowl...

@@ -58,7 +58,7 @@ Snap!
 # TALK options in src/data/enemies/shellac.js.
 [talk: Inspect]
 SHELLAC - HP 1950
-A hermit crab in a teapot, and extremely house-proud. Snaps its claw in fans, tosses cups that bounce, spins the whole pot in rings of china, and lets off steam. Stay off the flat of the floor.
+A hermit crab in a teapot, and extremely house-proud. Pours a stream that walks with the tilt, boils its pot until the lid rattles off, and its full cups spill away from the handle.
 
 [talk: Wipe your feet]
 You scrape one boot on the sand, slowly, and then the other one, for a good long while. SHELLAC watches every scrape. Its claw drops a little. Nobody has wiped their feet for it in years.

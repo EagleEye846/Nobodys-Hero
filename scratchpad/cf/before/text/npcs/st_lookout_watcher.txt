@@ -1,0 +1,31 @@
+# ST_LOOKOUT_WATCHER: a grey seal in a dark hat at the telescope, on the lookout's headland, watching the sea for a boat that is due. The life pass.
+
+[first]
+Shh. Not now. Not NOW. ...No. False alarm. A wave. I get a lot of waves.
+
+[repeat]
+Forty years. A lot of seagulls, a lot of weather, and not one boat that wasn't expected. I keep a log. The log says: nothing.
+
+# (draft)
+[repeat 2]
+There was a light, once. Out past the Wrack, on a still night, swinging. A ship's lamp. I wrote it down. Nobody believed me. I believe me.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}...I believe you.
+
+# (draft)
+[repeat 3]
+It's not the looking. Anyone can look. It's the not-looking-away. That's where the skill is.
+
+# (draft)
+[repeat_bramble 3]
+{determined}I can not-look-away. I'll do it with you. I'll do it all day.
+
+# (draft)
+[first after the_light_answers]
+I saw it. The whole thing. The light going out, and the light coming back, and I'd have been dead before I wrote it down. I've never been so busy.
+
+# (draft)
+[repeat after the_light_answers]
+Now there's nothing to watch but the sun going down. I'll watch it. I've the habit.

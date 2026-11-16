@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE TORN CLEARING: a ring of trees round trampled leaves. Deep claw marks
 // in the bark, some higher than a person. Scraps of evening-blue wool from
 // Ves's coat. Something big was here, and so was she. And the wind that
@@ -64,9 +66,11 @@ export const PINEFALL_TATTERS = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/pinefall.txt',
   props: [
+    { sprite: 'col_marble_cats_eye', x: 25, y: 16, walkable: true, flat: true, gives: 'marble_cats_eye', taken: { gone: true } },
     { sprite: 'wool_scrap', x: 12, y: 8, text: 'tatters_scrap' },
     { sprite: 'wool_scrap', x: 17, y: 11, text: 'tatters_scrap_2' },
     { sprite: 'wool_scrap', x: 9, y: 12, text: 'tatters_scrap_3' },
+    ...(R3P_PROPS['pinefall_tatters'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

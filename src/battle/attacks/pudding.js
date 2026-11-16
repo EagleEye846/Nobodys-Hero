@@ -1,7 +1,7 @@
 import { defineBulletArt, Shot } from '../projectiles.js';
 import { defineGuardianStar } from './guardianStar.js';
 
-// PUDDING's attacks: the Glass Olm of Seam Nine (src/data/enemies/pudding.js).
+// The PALE OLM's attacks (code id `pudding`): the guardian of Seam Nine (src/data/enemies/pudding.js).
 // The miners' tea-break mascot, grown huge and see-through round a fallen
 // star, swimming through solid rock as if it were water. Everything it throws
 // is either the olm (gill-light, glass bubbles, its tail, its hiccups, stone
@@ -19,7 +19,7 @@ import { defineGuardianStar } from './guardianStar.js';
 //                   every few seconds, each at its own speed
 //   puddingShatter  (the finale) the glass goes all at once, in three stages
 //
-// Pudding sits to the right of the box. Each attack is a factory
+// The olm sits to the right of the box. Each attack is a factory
 // `(box, density, tools) => ({ duration, update })` (see dummy.js). Custom
 // bullets here (the rays, the rings) have the same four methods as Shot:
 // update, isGone, edgeDistance, draw. Their motion runs on the battle's own
@@ -463,11 +463,16 @@ export const PUDDING_ATTACKS = {
           bullets.push(new Shot({ x, y, vx: -from * 90, art: 'pudBead', wobble: { amplitude: amp, frequency: 4.6 }, warn: 0.7 + k * 0.09 }));
         }
       }
-      if (lashes % 2 === 0) {
-        const x = Math.max(box.x + 8, Math.min(box.x + box.w - 8, soul.x + rand(-16, 16)));
-        bullets.push(new Shot({ x, y: box.y + box.h - 2, art: 'pudSpark', harmless: true, warn: 0.6, life: 0.1 }));
+      // A tail-tip up through the floor (or down from the roof) on every lash,
+      // close to where you stand: sitting still or running the edges isn't
+      // enough on its own (13 November 2026: the cheese check found a lazy
+      // way through it at one hit a turn).
+      {
+        const up = lashes % 2 === 1;
+        const x = Math.max(box.x + 8, Math.min(box.x + box.w - 8, soul.x + rand(-10, 10)));
+        bullets.push(new Shot({ x, y: up ? box.y + box.h - 2 : box.y + 2, art: 'pudSpark', harmless: true, warn: 0.6, life: 0.1 }));
         for (let k = 0; k < 9; k++) {
-          bullets.push(new Shot({ x, y: box.y + box.h + 3, vy: -74, art: 'pudBead', wobble: { amplitude: 9, frequency: 4 }, warn: 0.7 + k * 0.1 }));
+          bullets.push(new Shot({ x, y: up ? box.y + box.h + 3 : box.y - 3, vy: up ? -74 : 74, art: 'pudBead', wobble: { amplitude: 9, frequency: 4 }, warn: 0.7 + k * 0.1 }));
         }
       }
     };
@@ -545,7 +550,7 @@ export const PUDDING_ATTACKS = {
       duration: 11,
       update(dt, bullets, soul) {
         clock += dt;
-        if (clock > 0.25 + thrown * 1.2 && thrown < 9) {
+        if (clock > 0.25 + thrown * 1.45 && thrown < 7) {
           thrown++;
           const sx = rightEdge(box) + 6;
           const fy = floorOf(box);
@@ -555,7 +560,7 @@ export const PUDDING_ATTACKS = {
             const tx = off === null
               ? Math.max(box.x + 3, Math.min(box.x + box.w - 3, wall + rand(-4, 4)))
               : Math.max(box.x + 3, Math.min(box.x + box.w - 3, soul.x + off + rand(-2, 2)));
-            const T = off === null ? 0.95 : 0.75;
+            const T = off === null ? 0.95 : 0.85;
             bullets.push(new Shot({ x: tx, y: fy, art: 'pudMark', harmless: true, warn: T, life: 0.25 }));
             const mug = new Shot({ x: sx, y: sy, vx: (tx - sx) / T, vy: (fy - sy - 0.5 * G * T * T) / T, gravity: G, art: 'pudMug' });
             bullets.push(mug);
@@ -572,12 +577,14 @@ export const PUDDING_ATTACKS = {
           if (m.mug.y >= floorOf(box)) {
             live.splice(i, 1);
             m.mug.life = Math.max(0, m.mug.age - m.mug.warn);
-            for (const dir of [-1, 1]) bullets.push(new Shot({ x: m.mug.x, y: floorOf(box) - 1.5, vx: dir * 60, art: 'pudTea', life: 0.9 }));
-            for (let k = 0; k < 3; k++) {
+            // (Eased 13 November 2026: seven throws, a short floor splash, one drop up
+            // and three sprayed, so a careful dodger takes about one hit a turn here.)
+            for (const dir of [-1, 1]) bullets.push(new Shot({ x: m.mug.x, y: floorOf(box) - 1.5, vx: dir * 50, art: 'pudTea', life: 0.4 }));
+            for (let k = 0; k < 1; k++) {
               bullets.push(new Shot({ x: m.mug.x, y: floorOf(box), vx: rand(-12, 12), vy: -rand(110, 150), gravity: 130, art: 'pudTea', life: 1.3 }));
             }
-            for (let k = 0; k < 7; k++) {
-              bullets.push(new Shot({ x: m.mug.x, y: floorOf(box), vx: rand(-90, 90), vy: -rand(55, 150), gravity: 130, art: 'pudTea', life: 1.3 }));
+            for (let k = 0; k < 3; k++) {
+              bullets.push(new Shot({ x: m.mug.x, y: floorOf(box), vx: rand(-70, 70), vy: -rand(70, 150), gravity: 130, art: 'pudTea', life: 1.3 }));
             }
           }
         }

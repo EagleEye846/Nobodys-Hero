@@ -1,14 +1,18 @@
 // THE FIGUREHEAD'S PERCH (Chapter 5, the ghost ship's DEEP PART, optional): the very bow of the Fair Return, out in the open again, in a fog that has
-// stars in it. A little forecastle deck (x 1-13) with a save crystal, and the bowsprit running out from it (x 14-26, rows 6-8) to the head, where the
+// stars in it. A little forecastle deck (x 1-13) with a save crystal, and the bowsprit running out from it (x 14-23, rows 6-8; the carved stem she hangs from is her own picture past its end) to the head, where the
 // carved figurehead hangs over the water: the star-shard lodged in her breast has woken her. The way in is the west door (0, rows 6-7) from the flooded bow.
 // Scene figurehead_meets (the column x 18, rows 6-8, once): she turns her head; the battle (enemy fairweather, spared figurehead_spared, defeated
 // figurehead_beaten). After either, the Wreck Star Shard is yours (the gear star_shard_wreck) and the figurehead hangs dark and still on her bracket.
 // No monsters here, and no puzzle: save, then walk out to her.
 // Tile key: # hull (solid)   . deck planks   o the bowsprit's planks   ~ the sea and the fog (solid)
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
+
 export const SHIP_FIGUREHEAD_PERCH = {
   id: 'ship_figurehead_perch',
   name: 'THE FIGUREHEAD\'S PERCH',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 1,
   music: 'ghostShip',
   ambience: 'ghost_ship',
   vesWell: true,
@@ -24,9 +28,9 @@ export const SHIP_FIGUREHEAD_PERCH = {
       '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
       '#.............~~~~~~~~~~~~~~~#',
       '#.............~~~~~~~~~~~~~~~#',
-      '..............ooooooooooooo~~#',
-      '..............ooooooooooooo~~#',
-      '#.............ooooooooooooo~~#',
+      '..............oooooooooo~~~~~#',
+      '..............oooooooooo~~~~~#',
+      '#.............oooooooooo~~~~~#',
       '#.............~~~~~~~~~~~~~~~#',
       '#.............~~~~~~~~~~~~~~~#',
       '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
@@ -38,7 +42,7 @@ export const SHIP_FIGUREHEAD_PERCH = {
   list: {},
 
   doors: [
-    { x: 0, y: 6, w: 1, h: 2, to: 'ship_flooded_bow', spawn: { x: 27, y: 9 } },
+    { x: 0, y: 6, w: 1, h: 2, to: 'ship_flooded_bow', spawn: { x: 15, y: 9 } },
   ],
 
   cutscenes: [
@@ -48,9 +52,11 @@ export const SHIP_FIGUREHEAD_PERCH = {
   textFile: 'interactions/ghostship.txt',
   props: [
     { sprite: 'savepoint', x: 3, y: 7, save: true },
-    { sprite: 'gs_figurehead', x: 25, y: 7, text: 'perch_figurehead', until: 'figurehead_meets' },
-    { sprite: 'gs_figurehead_dark', x: 25, y: 7, text: 'perch_figurehead_dark', after: 'figurehead_beaten' },
-    { sprite: 'gs_figurehead_dark', x: 25, y: 7, text: 'perch_figurehead_dark', after: 'figurehead_spared' },
+    // She is drawn big (src/data/art/figureheadWake.js): the bowsprit running out of the end of the planks, the knee and cutwater she is
+    // bolted to, dark water round her foot. Her base is on the last row of the bowsprit (8), so she stands in the sea beyond its end.
+    { sprite: 'gs_figurehead', x: 24, y: 8, text: 'perch_figurehead', until: 'figurehead_meets', cast: 'figurehead', animation: 'figurehead_wake_sleep', speed: 0.7 },
+    { sprite: 'gs_figurehead_dark', x: 24, y: 8, text: 'perch_figurehead_dark', after: 'figurehead_beaten', cast: 'figurehead', animation: 'figurehead_wake_dark', speed: 0.9 },
+    { sprite: 'gs_figurehead_dark', x: 24, y: 8, text: 'perch_figurehead_dark', after: 'figurehead_spared', cast: 'figurehead', animation: 'figurehead_wake_dark', speed: 0.9 },
     { sprite: 'gs_rail_post', x: 2, y: 4 },
     { sprite: 'gs_rail_post', x: 2, y: 10 },
     { sprite: 'gs_rail_post', x: 13, y: 4 },
@@ -73,6 +79,8 @@ export const SHIP_FIGUREHEAD_PERCH = {
     { sprite: 'gs_shadow_b', x: 11, y: 6, flat: true, walkable: true },
     { sprite: 'wy_weed_fringe', x: 15, y: 9, flat: true, walkable: true },
     { sprite: 'wy_weed_fringe_b', x: 19, y: 9, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_figurehead_perch ?? []),
   ],
   tileTexts: { '#': 'hold_wall', '~': 'perch_sea' },
 

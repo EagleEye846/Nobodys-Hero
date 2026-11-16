@@ -1,0 +1,30 @@
+# THE HERMIT CRAB (Chapter 5, the life pass): a hermit crab in a shell much too small for it, on the Landing's shingle (wrack_landing). It wants a bigger one: the big whelk shell lies in a hollow at the far corner of the Pools (wrack_pools). (draft)
+
+[first]
+Excuse me. Excuse me. Yes, you. I am between homes.
+
+This one has been very good to me. But a person grows. Look at it: I have to keep my elbows in.
+
+I want a whelk. A proper one. Big as a loaf, with a doorway.
+
+There was one by the Pools, in the far corner. I'm told. I can't go. I have no transport.
+
+[repeat]
+A big whelk shell, in the far corner of the Pools. I'd be so grateful. I'd be in it.
+
+I'm doing my best to look patient. It isn't easy in this shell.
+
+# The big whelk is in your pack.
+[shell_done]
+Oh. Oh, look at it. It's got a doorway. A real one.
+
+One moment. Look away. It's a private thing.
+
+...There! How do I look?
+
+Take my old one. It's a good shell. It's only a bit tight. I don't want to see it go to a stranger.
+
+[shell_after]
+I can turn round in here. I can turn round! Look!
+
+...I'll do that again in a minute.

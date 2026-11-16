@@ -146,6 +146,17 @@ export const WRECK_PUMPS = {
     { sprite: 'wy_weed_mat_b', x: 10, y: 18, flat: true, walkable: true },
     { sprite: 'wy_rail_shadow', x: 12, y: 15, flat: true, walkable: true },
     { sprite: 'wy_rail_shadow_b', x: 18, y: 15, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_pipe', x: 1, y: 2, text: 'sl_pipe_found', gives: 'duncans_pipe', react: true, taken: { sprite: 'shore_rust_plate', text: 'sl_pipe_gone' } },
+    { sprite: 'shore_boot', x: 29, y: 15, text: 'sl_boot', walkable: true },
+    { sprite: 'c5_rope_coil', x: 2, y: 14, text: 'sl_rope', walkable: true },
+    { sprite: 'c5_barrel', x: 20, y: 19, text: 'sl_barrel' },
+    { sprite: 'shore_bar_rack', x: 11, y: 12, text: 'sl_bars' },
+    { sprite: 'c5_buoy_yellow', x: 16, y: 6, text: 'sl_float' },
+    { sprite: 'shore_shells_b', x: 2, y: 4, text: 'sl_shells_b', flat: true, walkable: true },
+    { sprite: 'shore_tally_post', x: 9, y: 4, text: 'sl_tally' },
+    { sprite: 'shore_chalk_skull', x: 5, y: 6, text: 'sl_chalk_skull', walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'hull_plate', W: 'hull_plate', '~': 'hull_bilge', ';': 'pumps_shallows', O: 'hull_cargo', F: 'hull_net' },
 

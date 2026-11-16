@@ -1,0 +1,66 @@
+# SAPLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/sapling.js.
+
+[intro]
+The little tree you just walked past is right behind you. A SAPLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SAPLING is standing perfectly still. You're almost sure it was further away a second ago.
+
+SAPLING's leaves rustle. There's no wind.
+
+SAPLING wants to grow up to be one of the big red ones. It's practising.
+
+You blink. SAPLING has a different pose. It's pretending it doesn't.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+...
+
+I'm a tree.
+Trees don't talk.
+
+Don't look.
+Don't look.
+DON'T LOOK.
+
+Creak.
+
+One day I'll be
+taller than you.
+Then you'll see.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/sapling.js.
+[talk: Inspect]
+SAPLING - HP 380
+A young tree spirit that only moves when nobody's looking. Bad at staying put.
+
+[talk: Water it]
+You pour a little water at its roots. SAPLING's leaves go glossy. It grows about a hair. It's delighted.
+
+[talk: Look away]
+You look away. When you look back, SAPLING is right next to you, very pleased, pretending it's always been there.
+
+[talk: Stand like a tree]
+You stand very still with your arms out like branches. SAPLING looks you up and down. You pass.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SAPLING drops its leaves all at once, and the next time you look it's a stump. Then it isn't anywhere.
+
+[pacified]
+SAPLING shuffles off between the big trees, but only while you're looking the other way.
+
+# What Bramble says to it, on his turn (TALK).
+[bramble_talk]
+Bramble promises SAPLING he only chops the thin ones. SAPLING is thin. It doesn't like that.
+
+Bramble tells SAPLING it'll be a very good tree one day. SAPLING stands up a little straighter.
+
+Bramble hides his hatchet behind his back. SAPLING can still see it. Everybody can see it.

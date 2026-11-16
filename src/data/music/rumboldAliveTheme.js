@@ -483,7 +483,7 @@ const song = {
   title: 'No Strings',
   bpm: 150,
   stepsPerBeat: 4,
-  volume: 0.55,
+  volume: 0.5,
   limit: 1,
   instruments: INSTRUMENTS,
 

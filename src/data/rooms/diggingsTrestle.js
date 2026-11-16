@@ -26,6 +26,8 @@
 //   .  packed dirt floor
 //   0  the drop (solid; sight goes over it)   g  trestle planks (walkable, rails run on them)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_TRESTLE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_trestle',
@@ -124,6 +126,7 @@ export const DIGGINGS_TRESTLE = {
   // The cart, signs and purses on both platforms.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_trestle ?? []),
     // A save point near the way in (added so the mines have more of them).
     { sprite: 'savepoint', x: 2, y: 13, save: true },
     { sprite: 'mine_cart', x: 3, y: 8, cart: 'a', text: 'cart_stuck' },
@@ -152,8 +155,12 @@ export const DIGGINGS_TRESTLE = {
 
   // A drillbug on the west platform (row 4) and a slagling on the east (row 4). Both
   // are away from the track (row 8 west, row 11 east).
+  // AMBUSH: the drillbug is under the gravel of the west platform's north end (3,4), and drills up
+  // out of it when you come within two and a half tiles (now and then its drill tip pokes up and
+  // the grit hops: `look: 'mine_floor'`, src/overworld/hideouts.js). The cart (3,8), the door and
+  // the sign (5,6) are all more than that away.
   npcs: [
-    { enemy: 'drillbug', x: 5, y: 4, patrol: [2, 7] },
+    { enemy: 'drillbug', x: 3, y: 4, patrol: [3, 3], behaviour: 'burrow', look: 'mine_floor', reach: 2.5 },
     { enemy: 'slagling', x: 32, y: 4, patrol: [31, 34] },
     // A magpie mole on the west platform's south end (row 13, x 5 to 9), below the rails (rows
     // 8 to 12), clear of the save point (2,13) and the first purse.

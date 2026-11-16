@@ -7,12 +7,16 @@ import { TextBox } from '../ui/textbox.js';
 import { PauseMenu } from '../ui/pauseMenu.js';
 import { StorageMenu } from '../ui/storageMenu.js';
 import { TravelMenu } from '../ui/travelMenu.js';
+import { ChoiceBox } from '../ui/choiceBox.js';
 import { catchUpDrafts, foundDrafts, draftIn } from '../data/travel.js';
+import { currentGoalKey, maybeShowEndNotice, resetEndNotice } from '../ui/goalLine.js';
 import { drawText } from '../ui/text.js';
 import { nowPlayingShowing, NOW_PLAYING_DROP } from '../ui/nowPlaying.js';
 import { textFile, textSection, setTextVariant, storySection, variantSection, turnSection, answerSection } from '../engine/textLoader.js';
 import { inUiSpace } from '../engine/screen.js';
 import { music, sfx } from '../audio/music.js';
+import { takeCollectible } from './collecting.js';
+import { ROOM_AMBIENCE } from '../audio/roomAmbience.js';
 import { doorSound, gateSound } from '../audio/doorSounds.js';
 import { WORLD_STATE, saveGame, loadGame, snapshotState, restoreState } from '../state/saveGame.js';
 import { BattleScene } from '../battle/battleScene.js';
@@ -26,12 +30,15 @@ import { AREA_NAMES, OUTDOOR_AREAS } from '../data/areas.js';
 import { SCENES } from '../data/scenes/index.js';
 import { ScenePlayer } from './scenePlayer.js';
 import { Climb, findClimb, ringNear } from './climbing.js';
-import { RopeClimb, atRopeFoot, drawHangingRope, drawDaylightFromAbove } from './ropeClimb.js';
+import { RopeClimb, atRopeFoot, atRopeTop, drawHangingRope, drawDaylightFromAbove } from './ropeClimb.js';
 import { drawVista } from './vista.js';
+import { LampWreck } from './lampWreck.js';
 import { drawSnow, drawCirclingBirds, drawWisps, drawFog } from './weather.js';
 import { drawVision } from './visions.js';
 import { Stage } from './stageShow.js';
 import { makeAtmosphere } from './atmosphere.js';
+import { makeFarShip } from './farShip.js';
+import { makeStarPull } from './starPull.js';
 import { setGust } from './gustFlutter.js';
 import { beatPulse } from './beatPulse.js';
 import { makeTouches } from './touches.js';
@@ -74,10 +81,13 @@ import { Carts } from './carts.js';
 import { Tides } from './tides.js';
 import { RoomList, ShipList } from './shipList.js';
 import { Haunt } from './haunt.js';
+import { PorchCutaway } from './porchCutaway.js';
 import { crumbleIn } from './crumble.js';
 import { BeamField, makeVesWell } from './beams.js';
 import { LampField } from './lamps.js';
 import { Chimes } from './chimes.js';
+import { hearNoise } from './monsterHabits.js';
+import { makeAshRoad } from './ashRoad.js';
 import { STRIDE, RUN_STRIDE, groundUnder, footfall, landing, moveParticle, drawParticle } from './footfall.js';
 import { SETTINGS } from '../state/settings.js';
 import { keyName, keyFor } from '../engine/input.js';
@@ -244,6 +254,8 @@ function vignette() {
 // with, so a low save before a boss can't trap you.
 export function continueGame(fallbackRoom, { whole = false } = {}) {
   const loaded = loadGame();
+  // Loading a save (not coming back from a game over) may show the after-the-credits card again.
+  if (!whole) resetEndNotice();
   // (A save from before the end of a chapter stopped moving you on into one
   // that isn't built yet: back to the last chapter there is.)
   // (And one far behind its chapter's level, from an old start, is caught up
@@ -385,6 +397,8 @@ export class OverworldScene {
     this.storageMenu = new StorageMenu();
     // TRAVEL, from a green updraft (src/data/travel.js).
     this.travelMenu = new TravelMenu();
+    // The question-and-options box a cutscene's `choose` step opens (the Bother's "Where to?").
+    this.choiceBox = new ChoiceBox();
     // Something to do once the textbox closes (a second speaker's lines).
     this.afterText = null;
     this.battleFlash = null;
@@ -412,8 +426,16 @@ export class OverworldScene {
     this.tides = this.room.tide instanceof RoomList ? new ShipList(this) : new Tides(this);
     // The ghost ship's lantern, watching portraits and the dread under it (haunt.js): only in rooms with a `haunt` field.
     this.haunt = roomData.haunt ? new Haunt(this) : null;
+    // A roofed porch whose front wall fades while you're inside it (porchCutaway.js).
+    this.porch = roomData.porch ? new PorchCutaway(this, roomData.porch) : null;
+    // Chapter 6's Ash Road: heaps Ves blows, hot cracks, ash storms (ashRoad.js).
+    this.ash = makeAshRoad(this);
     // Dust, glints, embers, mist and the like (atmosphere.js).
     this.atmosphere = makeAtmosphere(this);
+    // The Fair Return, before she's found: her crew singing far off, her lantern out in the fog (farShip.js).
+    this.farShip = makeFarShip(this);
+    // The ghost ship's shard calling to the Fallen Star: a chime and a glint at your hip, quicker nearer the bow (starPull.js).
+    this.starPull = makeStarPull(this);
     // The room's own little extras: bees, a kite, washing, eyes in the dark (touches.js).
     this.touches = makeTouches(this);
     // The world noticing you: reflections, prints, birds, moths (liveliness.js).
@@ -434,6 +456,8 @@ export class OverworldScene {
     // or false; left out, a cave or a hull rings by its ambience.
     music.setEcho(this.roomData.echo);
     music.play(this.song, this.ambience, this.roomData.musicFrom ?? null);
+    // After the end of chapter 5, on arriving in Saltcombe or loading a save from after it: one card about what's left.
+    if (!this.opening) maybeShowEndNotice();
     // A scene played on its own as soon as we arrive (see end_chapter's
     // `postCredits`): nobody else is in it, so the party waits out of sight.
     if (this.opening) {
@@ -451,7 +475,16 @@ export class OverworldScene {
     if (this.calm) return this.roomData.calmAfter.ambience ?? null;
     const after = this.roomData.ambienceAfter;
     if (after && (WORLD_STATE.seenScenes ?? []).includes(after.scene)) return after.ambience;
-    return this.roomData.ambience ?? null;
+    // (A room can have a mix of its own: src/audio/roomAmbience.js.)
+    return ROOM_AMBIENCE[this.roomData.id] ?? this.roomData.ambience ?? null;
+  }
+
+  // The lamp room once Corrie's fight has torn it open (`wreck: { after }`, lampWreck.js).
+  get wreck() {
+    const wreck = this.roomData.wreck;
+    if (!wreck || !(WORLD_STATE.seenScenes ?? []).includes(wreck.after)) return null;
+    this.wreckLayer ??= new LampWreck(this.room);
+    return this.wreckLayer;
   }
 
   // Whether the room's `calmAfter` scene has played (the storm over, after chapter 5).
@@ -486,6 +519,10 @@ export class OverworldScene {
     this.chimes.update(dt);
     this.tides.update(dt);
     this.haunt?.update(dt, input);
+    this.porch?.update(dt);
+    this.ash?.update(dt);
+    this.farShip?.update(dt);
+    this.starPull?.update(dt);
     // Underground, the light breathes with the song: `swell` follows how loud
     // the music is (0 in a hush, 1 at the top of a wave), smoothed. The
     // Deep's crystals, the Glimmering's and the Stillwater's glowing reeds
@@ -646,6 +683,10 @@ export class OverworldScene {
         // A scene that changed the song drops the place's sounds; once the room's
         // own song is back, so are they (or the calm's, if the scene ended the storm).
         if (!battle && !goto && !endChapter && music.songName === this.song) music.setAmbience(this.ambience);
+        // A scene that cut the music and ended in a room that has a song of its own: the song
+        // comes back (it used to stay silent until you left the room). A scene that changed to
+        // another song on purpose keeps it.
+        else if (!battle && !goto && !endChapter && !music.songName && this.song) music.play(this.song, this.ambience);
         if (battle) {
           this.storyBattle(battle);
           return;
@@ -676,7 +717,9 @@ export class OverworldScene {
           // step), never past the last one built: playing an ending again from
           // a later chapter mustn't push you on a chapter too far (or back one).
           const now = WORLD_STATE.chapter ?? 1;
-          const reached = Math.min(LAST_CHAPTER, Math.max(now, (endChapter.chapter ?? now) + 1));
+          // `stay: true` (the end of chapter 5): you play on in the chapter just ended, even with
+          // a next one built; that one starts from somewhere you choose to set out from (setOut).
+          const reached = endChapter.stay ? (endChapter.chapter ?? now) : Math.min(LAST_CHAPTER, Math.max(now, (endChapter.chapter ?? now) + 1));
           // The last chapter there is, ending with a room to go on in (the end of
           // chapter 5 puts you back in Saltcombe): you play on in it, it counts
           // as beaten, and its recorded start is left as it was.
@@ -795,7 +838,12 @@ export class OverworldScene {
       // Walking up into the face at the foot of a long rope: take hold.
       const rope = this.roomData.rope;
       if (rope && !this.cutscene && !this.player.isAirborne && input.isDown('up') && atRopeFoot(rope, this.player)) {
-        this.rope = new RopeClimb(rope, this.player, this.followers.filter((f) => !f.hidden));
+        this.rope = new RopeClimb(rope, this.player, this.followers.filter((f) => !f.hidden), this.roomData.id);
+      }
+      // A rope whose top is in this room too (the mast in the Wreck Yard): walk down off the
+      // top, over the edge, and you climb back down it.
+      if (rope && rope.to === this.roomData.id && !this.rope && !this.cutscene && !this.player.isAirborne && input.isDown('down') && atRopeTop(rope, this.player)) {
+        this.rope = new RopeClimb(rope, this.player, this.followers.filter((f) => !f.hidden), this.roomData.id, true);
       }
 
       // Either of you, if you've split up.
@@ -1201,6 +1249,11 @@ export class OverworldScene {
     // Stepping off and back on doesn't replay a repeatable scene straight away.
     if (this.lastTrigger === trigger) return;
     this.lastTrigger = trigger;
+    // `oncePerVisit`: a repeatable scene that plays the first time you cross it each time you
+    // come into the room, not again while you walk about in it (Haddock at the inn door).
+    this.playedThisVisit ??= new Set();
+    if (scene.oncePerVisit && this.playedThisVisit.has(scene.id)) return;
+    this.playedThisVisit.add(scene.id);
     if (!WORLD_STATE.seenScenes.includes(scene.id)) WORLD_STATE.seenScenes.push(scene.id);
     this.playCutscene(scene);
   }
@@ -1214,6 +1267,12 @@ export class OverworldScene {
     const any = (ids) => [ids].flat().some((id) => seen.includes(id));
     return (this.roomData.cutscenes ?? []).find((c) => !c.nudge && tx >= c.x && tx < c.x + c.w && ty >= c.y && ty < c.y + c.h
       && (!c.after || any(c.after)) && (!c.until || !any(c.until))
+      // `afterAll`: every one of these scenes has played (the Fair Return sails only once her captain
+      // and her figurehead have both been talked down).
+      && (!c.afterAll || [c.afterAll].flat().every((id) => seen.includes(id)))
+      // `untilTalked`: only while somebody's lines haven't been heard by talking to them ("npc:scene", as
+      // WORLD_STATE.talked keeps them): a scene that says them for you if you walk straight past.
+      && (!c.untilTalked || !(WORLD_STATE.talked ?? []).includes(c.untilTalked))
       // `when`: a room switch (a lever, a crystal eye) that has to be on, for a scene a
       // beam sets off (the light going up the root).
       && (!c.when || this.room.isLeverOn(c.when))
@@ -1530,7 +1589,8 @@ export class OverworldScene {
     // `notYet: '<section>'` it turns you back with those words (from the room's text
     // file, and the friends' answers), so the way on points at the scene you've missed.
     const seen = WORLD_STATE.seenScenes ?? [];
-    const open = (d) => !d.after || [d.after].flat().some((id) => seen.includes(id));
+    // (`until`: a door that is gone once that scene has played: the Fair Return's rail, once she has sailed.)
+    const open = (d) => (!d.after || [d.after].flat().some((id) => seen.includes(id))) && (!d.until || ![d.until].flat().some((id) => seen.includes(id)));
     const here = (d) => tx >= d.x && tx < d.x + d.w && ty >= d.y && ty < d.y + d.h;
     const door = (this.roomData.doors ?? []).find((d) => here(d) && open(d));
     if (!door) {
@@ -1670,9 +1730,9 @@ export class OverworldScene {
     // swallow the press, or Z at the foot of the face does nothing at all.
     // A floor drawing with no words of its own (a puddle, a weed line) never
     // takes the press: the tile under it keeps its own look line.
-    const wordless = (p) => p.flat && p.walkable && !p.text && !p.nightText && !p.npc && !p.shop && !p.gives
+    const wordless = (p) => (p.flat || p.decor) && p.walkable && !p.text && !p.nightText && !p.npc && !p.shop && !p.gives
       && !p.lever && !p.button && !p.treadle && !p.chime && !p.save && !p.quest && !p.fishing && !p.sound && !p.cast;
-    const prop = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y)).find((p) => p && this.inLight(p) && !p.grapple && !p.swing && !wordless(p));
+    const prop = this.player.interactionPoints().map(([x, y]) => this.room.propAt(x, y, (q) => !wordless(q) && !q.grapple && !q.swing)).find((p) => p && this.inLight(p));
     if (!prop) {
       if (!this.tryClimb()) this.inspectTile(Math.floor(px / T), Math.floor(py / T));
       return;
@@ -1683,7 +1743,7 @@ export class OverworldScene {
       return;
     }
     // Reading something with a "!" over it puts the "!" away, for good.
-    if (prop.notice && !prop.noticed) {
+    if (prop.notice && prop.notice !== 'stays' && !prop.noticed) {
       prop.noticed = true;
       WORLD_STATE.read ??= [];
       WORLD_STATE.read.push(prop.key);
@@ -1724,6 +1784,8 @@ export class OverworldScene {
     else if (prop.travel) this.useTravelDraft(prop);
     else if (prop.join && MEMBERS[prop.join]) this.recruit(prop);
     else if (prop.fishing && (WORLD_STATE.seenScenes ?? []).includes(prop.fishing)) this.offerFishing(prop);
+    // Something that plays a scene when you press Z on it (`playScene: 'id'`): the Bother, to row on.
+    else if (prop.playScene && SCENES[prop.playScene]) this.playCutscene(SCENES[prop.playScene]);
     else if (prop.npc) {
       this.textbox.open(this.npcPages(prop), prop.npc);
       // Ves and Bramble can have their say on it too ([first_ves], [repeat_bramble 2]...).
@@ -1735,6 +1797,9 @@ export class OverworldScene {
     else if (prop.cart) this.carts.use(prop);
     else if (prop.mirror && this.beams.interact(prop)) { /* a prism, turned over */ }
     else if (prop.lure && this.hush?.lure) this.kickScree(prop);
+    else if (prop.heap && this.ash) this.ash.blow(prop);
+    else if (this.setOutFrom(prop)) { /* read the warning, or set out */ }
+    else if (prop.ashReset && this.ash) this.ash.reset(prop);
     else if (prop.rockReset) this.resetRocks(prop);
     else if (prop.rock || prop.log) this.pokeRock(prop);
     else if (prop.chop && !prop.felled) this.chopTree(prop);
@@ -1743,6 +1808,24 @@ export class OverworldScene {
     else if (prop.gives) this.takeGift(prop);
     else if (prop.pieces && this.lookWithPieces(prop)) { /* held up the quest's pieces you have */ }
     else if (prop.text) this.lookAt(prop.text, `${this.roomData.id}:${prop.text}`, prop.pet, prop.speaker);
+  }
+
+  // `setOut: '<scene id>'` on a prop: where the next chapter is set out for (the chart in the
+  // Saltcombe harbour office, after chapter 5). Z once reads its words (what setting out leaves
+  // behind); Z on it again, straight after, plays the scene, which ends the chapter's play-on.
+  setOutFrom(prop) {
+    const info = this.roomData.props?.[this.room.allProps.indexOf(prop)];
+    if (!info?.setOut || !SCENES[info.setOut]) return false;
+    if (this.armedSetOut === prop) {
+      this.armedSetOut = null;
+      WORLD_STATE.seenScenes ??= [];
+      if (!WORLD_STATE.seenScenes.includes(info.setOut)) WORLD_STATE.seenScenes.push(info.setOut);
+      this.playCutscene(SCENES[info.setOut]);
+      return true;
+    }
+    this.armedSetOut = prop;
+    if (prop.text) this.textbox.open(textSection(this.roomData.textFile, prop.text));
+    return true;
   }
 
   // `pieces: '<set>'` (a GEAR_SETS name) on the thing a quest's pieces go into (the ghost ship's binnacle):
@@ -2017,10 +2100,14 @@ export class OverworldScene {
     }
     this.player = this.heroBody;
     this.others = rest;
+    // They catch up the way they do coming into a room: they're simply with
+    // you again, at your back, rather than walking a straight line to you
+    // through walls, gates and water.
+    const hero = this.heroBody;
     for (const kid of back) {
       const follower = this.followers.find((f) => f.id === kid.skin);
       if (follower) {
-        follower.warpTo(kid.x, kid.y);
+        follower.warpTo(hero.x, hero.y, hero.ground ?? 0);
         follower.hidden = false;
       }
     }
@@ -2078,7 +2165,7 @@ export class OverworldScene {
     const pages = prop.text ? [...textSection(this.roomData.textFile, prop.text)] : [];
     HERO_STATE.gold += prop.gold;
     pages.push(`You found ${prop.gold} gold!`);
-    if (prop.baseLook?.startsWith('chest')) sfx('chest');
+    if (/^(c5_)?chest/.test(prop.baseLook ?? '')) sfx('chest');
     else if (prop.baseLook?.startsWith('gold_pouch')) sfx('pouch');
     sfx('coins');
     WORLD_STATE.taken ??= [];
@@ -2487,8 +2574,17 @@ export class OverworldScene {
       if (prop.text) say(prop.text);
       return;
     }
+    // `onlyTide: 'high'` (the Fair Return's fog bell on the Watch Rock, where the fog comes in with the flood): it
+    // only takes while the tide stands that way and the water is still. Otherwise it rings for nothing: its
+    // `notNow` words (and the friends' answers), and the lever stays as it was.
+    if (prop.onlyTide && !this.room.isLeverOn(prop.lever) && (this.room.tide?.state !== prop.onlyTide || this.room.tide?.busy)) {
+      this.say(this.roomData.textFile, prop.notNowText ?? prop.text);
+      return;
+    }
     const { opened, reset } = this.room.flipLever(prop.lever);
     sfx('lever');
+    // A lever clanks: monsters that listen go to see (monsterHabits.js).
+    hearNoise(this.npcs, prop);
     // A sluice (a lever some channel's water answers to): it won't send water
     // down onto a rock or a log sitting in the channel, or onto either of you.
     // (It checks after the flip, and flips back.)
@@ -2510,6 +2606,14 @@ export class OverworldScene {
       sfx(prop.on ? 'select' : 'back');
       if (prop.on && prop.text) say(prop.text);
     }
+    // `scene` on a lever: that scene plays once the words are read, the first time it goes on (the fog bell: the Fair Return comes).
+    const scene = prop.leverScene && this.room.isLeverOn(prop.lever) && SCENES[prop.leverScene];
+    if (scene && !(WORLD_STATE.seenScenes ?? []).includes(prop.leverScene)) {
+      WORLD_STATE.seenScenes ??= [];
+      WORLD_STATE.seenScenes.push(prop.leverScene);
+      if (this.textbox.isOpen) this.afterText = () => this.playCutscene(scene);
+      else this.playCutscene(scene);
+    }
   }
 
   // Something with an item for you: its words, then you take it (if there's
@@ -2528,6 +2632,8 @@ export class OverworldScene {
   }
 
   takeGift(prop) {
+    // A piece of a collectible set (src/data/collections.js): its own words, count and reward.
+    if (takeCollectible(this, prop)) return;
     const section = prop.text;
     const pages = prop.text ? [...textSection(this.roomData.textFile, prop.text)] : [];
     const id = prop.gives;
@@ -2554,7 +2660,11 @@ export class OverworldScene {
           : `You pocketed the ${name}. It's no use to you, but you keep it anyway.`);
     } else if (gear) {
       giveGear(id);
+      // A loose page of a book (`book`: the Fair Return's torn log): the book comes with it (the KEEPSAKES page
+      // lists the book, which reads every page you hold), and the page is read out as you pick it up ([read_<id>]).
+      if (gear.book) giveGear(gear.book);
       pages.push(...textSection(GEAR_TEXT, `got_${id}`));
+      if (gear.book) pages.push(...textSection(GEAR_TEXT, `read_${id}`));
       // One of a quest's pieces (GEAR_SETS): how many of them you have now ([<set>_1], [<set>_2]...).
       const set = Object.entries(GEAR_SETS).find(([, ids]) => ids.includes(id));
       const count = set && `${set[0]}_${set[1].filter((one) => hasGear(one)).length}`;
@@ -2576,7 +2686,8 @@ export class OverworldScene {
       }
     }
     if (got) {
-      if (prop.baseLook?.startsWith('chest')) sfx('chest');
+      // The opening sound (chest, pack), then always the "got it" ding.
+      if (/^(c5_)?chest/.test(prop.baseLook ?? '')) sfx('chest');
       else if (prop.baseLook === 'old_pack') sfx('pack');
       sfx('pickup');
       WORLD_STATE.taken ??= [];
@@ -2736,7 +2847,9 @@ export class OverworldScene {
     }
     // Where there's another way round for him (a room with `ropeSplit`),
     // Bramble won't go on the rope: he stays where he is, and you're split up.
-    const vesBelow = this.swapperId() === VES && !this.partner && this.followers.some((f) => f.id === VES && !f.hidden);
+    // Ves waits below too while she's hurt (on her crutch); well again, she
+    // comes up after you, as on the mountain.
+    const vesBelow = this.swapperId() === VES && isHurt(VES) && !this.partner && this.followers.some((f) => f.id === VES && !f.hidden);
     if (vesBelow || (this.roomData.ropeSplit && !this.partner && this.followers.some((f) => f.id === BRAMBLE && !f.hidden))) {
       this.splitOff();
       this.textbox.open(vesBelow ? textSection(DEAD_TEXT, 'ves_rope_split') : textSection(HUSH_TEXT, 'kid_rope_split'), vesBelow ? VES : BRAMBLE);
@@ -2854,9 +2967,41 @@ export class OverworldScene {
     // Then, with Ves along and somewhere else found in this chapter to go,
     // TRAVEL (Stay here first, so tapping through the save doesn't send you off).
     const here = draftIn(this.roomData.id);
-    if (canRide() && foundDrafts().some((draft) => draft.id !== here?.id)) {
-      this.afterText = () => this.offerTravel(here?.id ?? null);
+    const offerTravel = canRide() && foundDrafts().some((draft) => draft.id !== here?.id) ? () => this.offerTravel(here?.id ?? null) : null;
+    // (draft 2026-11-15) Chapter 5: once for each new goal, Ves or Bramble says where you're headed and why (goalReminder).
+    const reminder = this.goalReminder();
+    if (reminder) {
+      this.afterText = () => {
+        this.textbox.open(reminder.lines, reminder.who);
+        this.afterText = offerTravel;
+      };
+    } else if (offerTravel) {
+      this.afterText = offerTravel;
     }
+  }
+
+  // The first time at a save point after the goal (text/goals.txt) has changed, in chapter 5: one short line from Ves or
+  // Bramble (text/interactions/goal_reminders.txt, `[<goal key> ves]` or `[<goal key> bramble]`). Not twice for one goal.
+  goalReminder() {
+    if ((WORLD_STATE.chapter ?? 1) !== 5) return null;
+    const key = currentGoalKey();
+    if (!key) return null;
+    const mark = `remind:${key}`;
+    WORLD_STATE.read ??= [];
+    if (WORLD_STATE.read.includes(mark)) return null;
+    let words;
+    try {
+      words = textFile('interactions/goal_reminders.txt');
+    } catch {
+      return null;
+    }
+    for (const [who, name] of [[VES, 'ves'], [BRAMBLE, 'bramble']]) {
+      const lines = words[`${key} ${name}`];
+      if (!lines?.length || !inParty(who)) continue;
+      WORLD_STATE.read.push(mark);
+      return { lines, who };
+    }
+    return null;
   }
 
   // TRAVEL from a save point: pick a place and Ves rides the wind there with
@@ -2940,7 +3085,7 @@ export class OverworldScene {
 
     // Draw lower things last so the player can stand in front of or behind
     // others (footprints lowest of all).
-    const props = this.room.props.filter((prop) => this.inLight(prop));
+    const props = this.room.props.filter((prop) => this.inLight(prop, true));
     // On a geyser ride, the ride draws the hero and Ves itself.
     // On the long rope, the rope draws all of you.
     // (Tossed by a seed cloud with Ves, the trio draws all of you: hopTrio.)
@@ -2954,9 +3099,11 @@ export class OverworldScene {
       for (const entity of entities) this.drawOnSpire(ctx, entity);
     } else {
       ctx.drawImage(this.room.background, -this.camera.x, -this.camera.y);
+      this.wreck?.drawBack(ctx, this.camera, this.time, this.calm);
       if (this.roomData.rope) drawHangingRope(ctx, this.camera, this.roomData.rope, this.time);
       this.bridges.draw(ctx, this.camera, this.room.background, SCREEN_WIDTH);
       this.room.drawDamage(ctx, this.camera);
+      this.ash?.drawFloor(ctx);
       this.reflections?.drawFloor(ctx);
       this.atmosphere?.drawFloor(ctx);
       this.touches?.drawFloor(ctx);
@@ -3007,13 +3154,16 @@ export class OverworldScene {
     if (this.roomData.fog && this.weatherAmount > 0) drawFog(ctx, this.time, this.roomData.fog * this.weatherAmount);
     // The Hush's shadow, over everything on the floor, and the old wood's gloom.
     this.lamps?.draw(ctx, this.camera, this.time);
+    this.ash?.drawGlow(ctx);
+    this.ash?.drawOver(ctx);
     this.hush?.draw(ctx, this.camera);
     if (this.roomData.gloom) this.drawGloom(ctx);
     if (this.roomData.mist) this.drawMist(ctx);
     if (this.caught) this.drawCaught(ctx);
-    else if (this.lampFade > 0) this.drawBlack(ctx, 0, '255, 246, 214', this.lampFade * 1.6);
+    else if (this.lampFade > 0) this.drawBlack(ctx, 0, this.roomData.lampTint ?? '255, 246, 214', this.lampFade * 1.6);
     this.haunt?.drawGlow(ctx);
     this.haunt?.drawOver(ctx);
+    this.starPull?.draw(ctx);
     if (ship) { this.tides.endTilt(out); ctx = out; }
     this.haunt?.drawWhispers(ctx);
     this.haunt?.drawHint(ctx);
@@ -3024,7 +3174,15 @@ export class OverworldScene {
     }
     if (this.roomData.dark) this.drawDarkness(ctx);
     this.hush?.drawSound(ctx, this.camera);
+    this.farShip?.draw(ctx);
     this.atmosphere?.drawOver(ctx);
+    if (this.wreck) {
+      // (Its great lamp burns from the fight until the sea comes over the top.)
+      const lamp = this.roomData.wreck.lamp;
+      const lit = lamp && !(WORLD_STATE.seenScenes ?? []).includes(lamp.until) ? { x: (lamp.x + 0.5) * T, y: (lamp.y + 0.5) * T } : null;
+      this.wreck.drawOver(ctx, this.camera, this.time, this.calm, lit);
+    }
+    this.farShip?.drawCaption(ctx);
     this.touches?.drawOver(ctx);
     this.life?.drawTop(ctx);
     this.cutscene?.drawOverlay(ctx, this.camera);
@@ -3048,10 +3206,12 @@ export class OverworldScene {
     // A dream's vision, over the dark (see visions.js).
     if (this.vision) drawVision(ctx, this.vision, performance.now() / 1000);
 
-    this.textbox.draw(ctx);
+    // A vision that asks for it (`hideText`) keeps the text box hidden while it's up (the compass memories).
+    if (!this.vision?.hideText) this.textbox.draw(ctx);
     this.pauseMenu.draw(ctx);
     this.storageMenu.draw(ctx);
     this.travelMenu.draw(ctx);
+    this.choiceBox.draw(ctx);
     this.drawTitleCard(ctx);
 
     if (this.player.isFalling) {
@@ -3202,10 +3362,12 @@ export class OverworldScene {
   }
 
   // Whether a prop can be seen: always, unless it's only `seenInLight` in a
-  // dark room and your light doesn't reach it.
-  inLight(prop) {
+  // dark room and your light doesn't reach it. `drawing`: only whether it's
+  // drawn (the ship's ghosts are drawn faintly even out of the light, but
+  // only answer in it).
+  inLight(prop, drawing = false) {
     // Ghosts, footprints and writing that only the ship's lantern shows (haunt.js).
-    if (prop.haunt && this.haunt && !this.haunt.reveals(prop)) return false;
+    if (prop.haunt && this.haunt && !this.haunt.reveals(prop, drawing)) return false;
     if (!prop.seenInLight || !this.roomData.dark) return true;
     if (this.beams.litProp(prop)) return true;
     const { x, y } = this.lightPoint;

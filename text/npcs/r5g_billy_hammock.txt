@@ -1,0 +1,18 @@
+# BILLY'S HAMMOCK (the crew's quarters): the powder monkey's. A tiny errand of the life pass: the half-carved whale from the gun deck goes here. (draft)
+
+[first]
+A hammock slung between two posts, swinging a little to and fro. A name is stitched in the canvas in large, uneven red thread: BILLY. The pillow has a dent in it, and a groove beside the dent, about the size of a boy's fist and the shape of something small that has been held at night.
+
+[repeat]
+Billy's hammock, swinging. The dent in the pillow is still there, and the groove.
+
+[whale_ask]
+There is a space on the pillow, just where a small thing might be tucked in for the night. Whatever slept there has been gone a long time.
+
+[whale_done]
+You set the half-carved whale in the groove on the pillow. For a moment nothing happens. Then the hammock stops swinging, all at once, as if someone has sat up in it.
+
+From the dark, very small, comes the sound of a knife on wood. A curl of pale shaving drops onto the planks at your feet. When you look again, the whale has a tail.
+
+[whale_after]
+Billy's hammock, hanging quite still. On the pillow, a small wooden whale with a tail, turned to face the door, as if somebody is keeping a lookout.

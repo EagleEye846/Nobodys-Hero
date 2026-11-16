@@ -11,6 +11,7 @@
 //   Y  snow pine (solid)                          Q  snowy boulder (solid)
 //   _  open sky: the crack (solid)                b  low stone block (jump onto it)
 //   B  tall stone block (jump onto it from a low block)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_SPIRE_NECK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_spire_neck',
@@ -116,6 +117,8 @@ export const VIGIL_SPIRE_NECK = {
     // Back down from the top ledge by rope.
     { sprite: 'grapple_ring', x: 24, y: 12, grapple: true },
     { sprite: 'waymark', x: 22, y: 9, text: 'neck_waymark' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_spire_neck'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

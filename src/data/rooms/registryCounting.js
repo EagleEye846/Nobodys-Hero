@@ -11,6 +11,9 @@
 //   I  old stone pillar (solid)
 //   J  broken pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const REGISTRY_COUNTING = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'registry_counting',
@@ -60,6 +63,7 @@ export const REGISTRY_COUNTING = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.registry_counting ?? []),
     { sprite: 'rotten_planks', x: 20, y: 5, text: 'rotten_planks', gap: true },
     { sprite: 'treadle', x: 20, y: 3, text: 'treadle', treadle: 'hold' },
     { sprite: 'gate_narrow', x: 14, y: 7, text: 'city_gate', opensWith: ['hold'] },
@@ -72,6 +76,8 @@ export const REGISTRY_COUNTING = {
     { sprite: 'inscription', x: 11, y: 9, text: 'counting_inscription' },
     { sprite: 'sign', x: 16, y: 9, text: 'counting_sign' },
     { sprite: 'gold_pouch', x: 28, y: 2, text: 'counting_purse', gold: 240, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['registry_counting'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', I: 'city_pillar', J: 'city_pillar' },
 

@@ -674,3 +674,291 @@ A board of numbers on the wall, in slots, each number on a tile. Every tile has 
 [waiting_sign]
 A card on a nail by the arch: PLEASE HAVE YOUR NAME READY. Underneath, in smaller letters: IT WILL BE ASKED FOR.
 
+# --- THE LIFE PASS, ROUND 2 (builder 7) ---
+
+# city_old_street
+[lp3_os_cart]
+A hand cart with a wheel off, tipped on its side. A sack is still tied on. A child's drawing is pinned to the side: a cart, with a great many arrows.
+
+[lp3_os_cart_ves]
+{thoughtful}They were leaving. Or they were coming back for it. The sack isn't saying.
+
+[lp3_os_chair]
+A plain chair, set against the corridor wall as if for somebody waiting. It's sound: four straight legs, a good back, a seat worn smooth by sitting. Nothing about it wants to be left. You pick it up.
+
+[lp3_os_chair_ves]
+{bored}You're carrying a chair. That's... a decision. Fine.
+
+[lp3_os_chair_gone]
+A pale square on the wall where a chair used to stand. The dust keeps the shape.
+
+# city_forum
+[lp3_fo_bench]
+A stone bench, the moss on it thick as a cushion, facing the pool. Somebody once sat here to watch the light on the water. A pair of spectacles is folded on the arm.
+
+[lp3_fo_bench_ves]
+{thoughtful}You'd have to love a place to take your glasses off in it.
+
+[lp3_fo_cat]
+A stone cat on a plinth, very upright, its tail wrapped round its feet. Moss has taken one ear. It looks smug about it.
+
+[lp3_fo_cat_ves]
+{smile}The only one in the whole city who still looks pleased with themselves.
+
+[lp3_co_chair]
+A chair on its own between two pillars, facing the way you came. Not tipped, not broken. Somebody sat here and watched the doors for as long as they could.
+
+[lp3_co_chair_ves]
+{thoughtful}You can tell where a person looked, if you know how the chair faces.
+
+[lp3_li_lectern]
+A lectern for reading aloud, a big book open on it at a page about tides. A pencil stub holds the place. The margin has been used for sums and drawings of a small, serious fish.
+
+[lp3_li_lectern_ves]
+{smile}Whoever was reading wasn't taking the tides very seriously. I like them.
+
+# city_reading_room
+[lp3_rr_ink]
+An ink pot by the armchair, the ink gone to a dark crust, a quill standing in it as if the writer were only thinking. There's a sentence on the desk that ends halfway.
+
+[lp3_rr_ink_ves]
+{tender}Left mid-sentence. I hope it was a good one.
+
+[lp3_ba_gauge]
+A brass gauge on the wall with the needle jammed hard against the stop. A note hangs from a string beside it: IT'S FINE.
+
+[lp3_ba_gauge_ves]
+{laughing}'It's fine.' The least reassuring note I've ever read.
+
+[lp3_ba_mosaic]
+A mosaic set into the bath floor: a blue fish on a blue sea, one eye picked out in a single piece of black stone. It's the only thing in the room that's looking back.
+
+[lp3_ba_mosaic_ves]
+{smile}He's watching the door. Good fish.
+
+[lp3_st_gauge]
+A boiler gauge, the glass cracked, the needle gone long ago. Somebody has drawn a needle on the dial in pencil. It says 'ABOUT HERE.'
+
+[lp3_st_gauge_ves]
+{bored}Technically a reading. That's about the nicest thing I can say.
+
+[lp3_st_rota]
+The stokers' rota, on a board with a post. Every row reads the same: MON: SLOWLY. TUE: SLOWLY. WED: SLOWLY. SUN: SLOWLY (REST: NEVER).
+
+[lp3_st_rota_ves]
+{laughing}Three hundred years of overtime. Somebody owes him a lot of Sundays.
+
+[lp3_st_duck]
+A little wooden duck sitting in the coal dust, bright yellow, with one painted eye. It's the pair of one that you've seen somewhere. You take it.
+
+[lp3_st_duck_ves]
+{smile}It's a duck. He's going to say it's a boat. Let him.
+
+[lp3_st_duck_gone]
+A duck-shaped patch where the coal dust is clean.
+
+[lp3_st_purse]
+A small purse behind the boiler, in the corner where the heat's best and nobody looks. Whoever hid it was warm, at least.
+
+[lp3_st_purse_ves]
+{smile}Finders keepers. We've earned a warm corner.
+
+# city_crier_square
+[lp3_cr_trunk]
+A trunk of crier's costumes: a brass bell, a bicorn hat, a coat with a great many buttons, a scroll marked READ THIS LOUDLY.
+
+[lp3_cr_trunk_ves]
+{smile}'Official hat.' Try it on. ...No, I will not be taking questions.
+
+[lp3_aq_purse]
+A purse on the narrow shore behind the west pool, where whoever hid it could sit and look at the water. It's dry, which is odd. Somebody put a stone on it to keep it from blowing away.
+
+[lp3_aq_purse_ves]
+{smile}A secret and a nice view. I'd keep it too.
+
+[lp3_aq_bucket]
+A bucket on a chain by the pool. A tag on the handle: TAKE ONE. LEAVE ONE. There is one bucket. Someone has taken one.
+
+[lp3_aq_bucket_ves]
+{bored}Take one, leave one. And there's one. So who's counting?
+
+[lp3_aq_cat]
+A stone cat sitting very straight on a block at the top of a stair, looking down the length of the channel. It's got a beard of water-stain.
+
+[lp3_aq_cat_ves]
+{bored}A cat. Of course there's a cat. This city's got nothing but cats and rules.
+
+[lp3_sc_posy]
+A little posy in a jam jar at the foot of a statue with no face. The flowers are cut, and the water in the jar is clean.
+
+[lp3_sc_posy_ves]
+{thoughtful}Somebody's been here this week. ...Birds, probably. Birds do that.
+
+[lp3_sy_cat]
+A stone cat, rough, the first thing the sculptor carved. You can tell it was going to be a cat. Somebody has put a tiny bell on it.
+
+[lp3_sy_cat_ves]
+{smile}Everybody starts with a cat.
+
+[lp3_sy_lunch]
+A lunch wrapped in a cloth and left on the sill: a heel of bread, a pickle, an apple with one bite out. He stopped for lunch and, it seems, never went back to the chisel.
+
+[lp3_sy_lunch_ves]
+{bored}Three hundred years, and the apple's the only thing in here that finished.
+
+[lp3_rc_slate]
+A slate on an easel by the lane's end: NOW SERVING: THE HERO. The chalk has been rubbed over so many times that the slate has gone grey. It still says the same thing.
+
+[lp3_rc_slate_ves]
+{bored}They kept the queue going. That's more faith than I've ever had in a queue.
+
+[lp3_rc_window]
+A window box under a shuttered window. The flowers are long dead but still standing, brown and neat, in a straight row, as if even they'd been filed.
+
+[lp3_rc_window_ves]
+{smile}Tidy to the end. I'd have wilted sideways.
+
+# registry_counting
+[lp3_rn_page]
+A single loose page on the floor, torn out of a file. It's headed with one letter, W, in a clerk's flourish, and a long list of names under it. You tuck it in your pocket. You think you know where it belongs.
+
+[lp3_rn_page_ves]
+{thoughtful}W. One empty pigeonhole, and one loose W. I know a sum that adds up.
+
+[lp3_rn_ink]
+An ink pot, lid off, ink long gone to a hard black disc. The quill beside it is a good one. It points, very slightly, to the door in the east.
+
+[lp3_rn_ink_ves]
+{bored}Directions by quill. Very clerkly.
+
+# registry_stacks
+[lp3_rs_ladder]
+A rolling ladder on a rail high along the shelves, stopped at the exact place where somebody ran out of rail. Somebody's tied a handkerchief to the top rung, in case.
+
+[lp3_rs_ladder_ves]
+{bored}In case of what, I can't tell you. A very tall sneeze.
+
+[lp3_rw_slate]
+A slate on an easel by the door: NOW SERVING: 0000. A faint rubbed-out line below says: NEXT: THE HERO. NEXT AFTER THAT: ASK AGAIN TOMORROW.
+
+[lp3_rw_slate_ves]
+{smile}'Ask again tomorrow.' I like these people more every minute.
+
+[lp3_rw_ink]
+A pen-and-ink stand at the end of the benches, with a card: FOR FILLING IN YOUR NAME WHILE YOU WAIT. Beneath it, a sheet of names, in a hundred different hands. The last hand is wobbly, and very small.
+
+[lp3_rw_ink_ves]
+{tender}People waited so long they signed in. And then they waited some more.
+
+[lp3_rw_lunch]
+A lunch pail wedged in behind the pillar, with a note on the lid: LUNCH. (MINE.) Inside is a heel of bread and an oatcake that is still, somehow, perfectly good. You take the oatcake.
+
+[lp3_rw_lunch_ves]
+{laughing}Three hundred years, and the oatcake's still good. Now I'm worried about us.
+
+[lp3_rw_lunch_empty]
+An empty lunch pail. The note on the lid says LUNCH. (MINE.) The word MINE has been underlined, a little reproachfully.
+
+# registry_lair
+[lp3_rl_slate]
+A slate at the foot of the hall: THE COUNT. The number has been rubbed out and written again so many times the slate has worn thin. The newest number is always exactly one short.
+
+[lp3_rl_slate_ves]
+{worried}One short. It keeps coming out one short.
+
+[lp3_rl_ink]
+An ink pot at the end of a desk, brimming, the ink black and fresh and wet. Nobody has written in this hall for three hundred years.
+
+[lp3_rl_ink_ves]
+{scared}...Fresh ink. I don't like fresh ink in a room that's been empty this long.
+
+# registry_cellar
+[lp3_ce_slate]
+A slate on an easel, ruled in columns: NAMES. HOURS. SEAL. The columns are filled with tally marks, and the last is blank. A small cross has been drawn beside the SEAL column with a note: DON'T FORGET THIS ONE.
+
+[lp3_ce_slate_ves]
+{thoughtful}The seal. Somebody was worried about the seal. I'd worry about the seal.
+
+[lp3_ce_desk]
+A clerk's desk with a lamp and a stack of blotting paper. Every sheet has the ghost of the same signature on it, backwards, over and over, the way you practise being someone.
+
+[lp3_ce_desk_ves]
+{thoughtful}Same signature. Practising to be important. I know that look.
+
+# --- end life pass round 2 (builder 7) ---
+
+# --- THE LIFE PASS, ROUND 3 (r3b): the fun check, the Dead City and the Registry ---
+
+# city_gate_foot
+[r3b_gf_bed]
+A bedroll, still rolled the way a careful person rolls one. The pack beside it has a tin mug and half a biscuit, and the biscuit has been half-eaten for fifty years. Somebody camped at the gate to be first through.
+
+[r3b_gf_bed_ves]
+{thoughtful}First through. I'd rather be second. Second gets to see what happens to first.
+
+[r3b_gf_sticks]
+A barrel of walking sticks, and one hat on top. Left at the gate by people who thought they wouldn't need them. Every stick has a name burned into it. Most are worn off.
+
+[r3b_gf_sticks_ves]
+{bored}A coat-stand for people who thought they were done walking. Optimistic.
+
+[r3b_ls2_bell]
+A bell on a post by a door, wrapped in felt and tied with string. Even here. Even in the city, where nobody walks, they wrapped the bell.
+
+[r3b_ls2_bell_ves]
+{worried}Even here. They knew it was coming. ...They knew a long time.
+
+[r3b_ls2_shoes]
+Soft shoes on a rack by the last gate, felt-soled, in every size, set out as if for a long line. For the last stretch, you changed your shoes.
+
+[r3b_ls2_shoes_ves]
+{thoughtful}A shoe stand at the edge of the world. That's very polite.
+
+[r3b_ls2_stall]
+A stall with its shutter down and a card: CLOSED UNTIL FURTHER NOTICE. THANK YOU FOR YOUR PATIENCE. The card has been left to curl at the corners.
+
+[r3b_ls2_stall_ves]
+{bored}Further notice. We're all waiting on that.
+
+[r3b_sk2_globe]
+A globe. The seas have faded to the same tan as the land, so the world is one dusty ball with writing on it. There's a pin in a place that isn't on any map you know.
+
+[r3b_sk2_globe_ves]
+{thoughtful}A pin. Somebody knew where they were going. That's more than I can say.
+
+[r3b_sk2_sheet]
+Something under a dust sheet, shaped like a desk with an opinion. You lift a corner: a desk. You lower it. It's the sort of room that makes you whisper.
+
+[r3b_sk2_sheet_ves]
+{shy}Why am I whispering?
+
+[r3b_co2_stall1]
+A stall between two pillars, awning faded to pale stripes. The scales are still on the counter, one pan up, one down: weighing something when it stopped. A mouse has moved into the empty pan.
+
+[r3b_co2_stall1_ves]
+{laughing}Two ounces of mouse. Fair price.
+
+[r3b_co2_banner]
+A banner at the colonnade's end, torn, one corner hanging. The picture on it was a lantern. The lantern has faded the least.
+
+[r3b_co2_banner_ves]
+{thoughtful}The lantern outlasted the rest. Lanterns do that.
+
+[r3b_rr2_tower]
+A book tower by the armchair, three open at once, face down: somebody reading three things at the same time. The tower is the height of a bored person's patience.
+
+[r3b_rr2_tower_ves]
+{bored}Three at once. I do that. It means none of them are good.
+
+[r3b_rs2_tower]
+A tower of books in the stacks' aisle, one stack tall, one stack wide. A sticky note on it: PLEASE RESHELVE. A second, below: IT IS REALLY VERY HIGH UP.
+
+[r3b_rs2_tower_ves]
+{bored}Please reshelve. Please reach.
+
+[r3b_rs2_cart]
+A file cart on its side by the shelves, its books spilled in a fan. A fallen ladder beside it. Somebody went for a high book and the cart had other ideas.
+
+[r3b_rs2_cart_ves]
+{laughing}High shelf wins again.
+

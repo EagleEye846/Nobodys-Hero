@@ -1,0 +1,54 @@
+# SEDGE: a grey mole in a yellow hard hat, the shift foreman at the pithead.
+# Forty years on the job, and he still thinks the shift is on. Brisk, kind,
+# and not easily shaken, except by the dark between the lamps.
+
+[first]
+# (draft) Changed 2026-11-10: the pithead scene now does his introduction.
+Mind the rope, mind the edge and mind your head, in that order. Foreman of a shift. Of two.
+
+And don't mind Mattock. He gets his grandad's grandad going and there's no stopping him. News gets round fast down here. There's nobody left to hold it up.
+
+[repeat]
+The lamps still burn the same, you'll have noticed. It's the dark between them that's got heavier. You feel it on the back of your neck.
+
+I've stopped sending anyone below the old seam. Somebody ought to see to it. Somebody, I'm told, is you.
+
+...Right. Well. Mind the carts. They're free, and they're awful.
+
+And if you're in the Old Seam, leave the lever that says BROKEN alone. That's an order. ...From before my time. I've never been sure who it was for.
+
+[first after the_light_goes_up]
+Well. Would you look at that. The dark between the lamps has gone off somewhere. I can feel the back of my neck again.
+
+I'd say the shift is over. Forty years, and it's over. ...Don't tell Mattock. He'll want to go home.
+
+[repeat after the_light_goes_up]
+Shift's over, officially. I'm going to stand here a bit longer anyway. Somebody ought to.
+
+# More turns (2026-11-09 polish)
+
+# (draft)
+[repeat 2]
+Shift's on. Has been for forty years. I clocked us all in the morning the Sunstone first flickered, and nobody's had the nerve to clock out.
+
+Mattock asks every day. I tell him: when it's dark. He says it IS dark. I tell him: properly.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}Forty years waiting for somebody to tell him he can stop.
+
+{bored}Somebody should. {smile}...Not us. We're busy.
+
+# (draft)
+[repeat 3]
+Mind the rope, mind the edge, mind your head. I've said it so often the words have worn smooth. Still true, though.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I clocked us all out. Took me twenty minutes. The clock had rusted on IN.
+
+Mattock cried. I didn't. I had grit in my eye. Forty years of it.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+I've been told to go home. Thing is, I've worked out I don't know where I live. I'll ask Mattock. He's got it written in his hat.

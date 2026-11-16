@@ -1,0 +1,20 @@
+# THE LAID TABLE in the Crier's Square: four places, and one with no chair. A tiny errand of the life pass. (draft)
+
+[first]
+A table laid in the middle of the square: four places, four cups, a candle stub, a plate of something that was once cake. Three chairs are pulled out and ready. The fourth place has no chair, only a card, lying face down on the cloth.
+
+[repeat]
+The laid table, three chairs out and one place without. The candle stub has never been lit.
+
+[chair_ask]
+The fourth place has no chair at all. Somebody meant to bring one, and didn't, and then the city went quiet. You could do something about that.
+
+[chair_done]
+You set the chair at the fourth place. It fits as if it were made for it, which it was. With the chair in, the card is easy to read, upright against the cup, in beautiful gold lettering:
+
+THE HERO. (SEAT SAVED.)
+
+You pick up the card. Somebody should.
+
+[chair_after]
+The laid table, four places, four chairs. Three cups have a little dust in them. The fourth is clean, and it is turned the right way up, as if someone has just sat.

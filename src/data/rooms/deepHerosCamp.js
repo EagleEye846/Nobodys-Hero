@@ -14,6 +14,8 @@
 //      north wall is two tiles of it, so marks can go high and low)
 //   .  black stone floor   q  ash (floor)   ^  black stalagmite (solid)
 //   O  glossy black boulder (solid)
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DEEP_HEROS_CAMP = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'deep_heros_camp',
@@ -77,6 +79,7 @@ export const DEEP_HEROS_CAMP = {
   // camp's own faint lights show them); only the purse waits for your light.
   textFile: 'interactions/deep.txt',
   props: [
+    ...(R3C_PROPS.deep_heros_camp ?? []),
     { sprite: 'tally_marks_a', x: 5, y: 3, text: 'cp_marks_high' },
     { sprite: 'tally_marks_a', x: 6, y: 3, text: 'cp_marks_high' },
     { sprite: 'tally_marks_b', x: 7, y: 3, text: 'cp_marks_high' },
@@ -89,9 +92,17 @@ export const DEEP_HEROS_CAMP = {
     { sprite: 'old_bedroll', x: 25, y: 7, text: 'cp_bedroll' },
     { sprite: 'gold_pouch', x: 3, y: 11, text: 'cp_purse', gold: 50, seenInLight: true, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'savepoint', x: 21, y: 6, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 20, y: 6, travel: 'heros_camp', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true, light: 30 },
     // Grig's pack (shops.js: deep_grig), set down at the west end where the camp is
     // flat and clear of the scene's walk (x 23 to 26): a cave cricket who sells the long walk.
     { sprite: 'bf_grig', x: 8, y: 7, shop: 'deep_grig', animation: 'bf_grig', speed: 0.5, light: 52 },
+    { sprite: 'col_token', x: 28, y: 5, walkable: true, flat: true, gives: 'tally_whistle', taken: { gone: true } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'dp_candle_stub', x: 15, y: 8, text: 'lp_camp_candle', animation: 'dp_candle_stub', speed: 0.25, walkable: true, seenInLight: true },
+    { sprite: 'dp_ration_tin', x: 21, y: 10, npc: 'dp_camp_tin', seenInLight: true, quest: [{ needs: ['has:hero_mitten'], take: 'hero_mitten', set: 'q_hero_mitten', give: 'hero_wrapper', text: 'mitten_back' }, { needs: ['q_hero_mitten'], text: 'mitten_after' }] },
+    { sprite: 'dp_worm_pile', x: 29, y: 9, text: 'dd_worms', animation: 'dp_worm_pile', speed: 0.7, walkable: true, seenInLight: true },
+    // --- end life pass ---
   ],
   tileTexts: { '#': 'deep_rock', W: 'deep_face', '^': 'deep_stalagmite', O: 'deep_boulder', q: 'deep_ash' },
 

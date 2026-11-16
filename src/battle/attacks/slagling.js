@@ -1,13 +1,18 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Slab, stillness } from './underShapes.js';
+import { Zone } from './coastKit.js';
 
 // The Slagling's attacks. It's a lump of mine slag, still hot, that came
-// out of the old furnace vents and never went back, and fights with what a
-// lump of slag has: it spits sparks (in fans, never quite where you'd like),
-// drips molten rock from above, oozes along the floor leaving cooling crust
-// behind it, pours itself across the box in a slow glowing wave, and lets off
-// cinders that drift upward like a chimney. Slow, hot and heavy; nothing
-// here is fast, but all of it sticks around.
+// out of the old furnace vents and never went back. It's nervous (it spits
+// sparks), it oozes, and it would very much like someone to sit with it:
+//   - Sparks: spat out in fans, never quite where you'd like.
+//   - Ooze: it slides along the floor leaving cooling crust behind it.
+//   - The pour: a slow glowing wave with a gap to ride through.
+//   - The crust: the floor is plates of crust over melt; a plate ticks,
+//     cracks glowing, and then the melt wells up through it. Ticking = move.
+//   - Sit with me: a little lump shuffles over to sit with you, leaving hot
+//     crust where it's been, and panics into a ring of sparks when it's close.
+// Slow, hot and heavy; nothing here is fast, but all of it sticks around.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. The attack's own clock (`t`) runs `density`
@@ -116,6 +121,17 @@ defineBulletArt('slagGlob', {
   spin: 2,
 });
 
+// A little lump of it that wants to sit with you: a hot blob with a shy face.
+defineBulletArt('slagLump', {
+  frames: [
+    ['..kkkk..', '.kooyok.', 'koeoyeok', 'kooyyook', '.krrrrk.', '..kkkk..'],
+    ['..kkkk..', '.koyook.', 'koeoyeok', 'koyoyook', '.krrrrk.', '..kkkk..'],
+  ],
+  palette: BLOB,
+  radius: 3.4,
+  frameSeconds: 0.3,
+});
+
 // Paints a slab of the pour: a body of ooze with a bright lip.
 function paintPour(ctx, slab, lipSide) {
   const x = Math.round(slab.x);
@@ -147,10 +163,10 @@ export const SLAGLING_ATTACKS = {
     let next = 0.2;
     let round = 0;
     return {
-      duration: 6.6,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || t > T(5.8)) return;
+        if (t < next || t > T(6.8)) return;
         next = t + 0.85;
         const high = round % 2 === 0;
         const from = { x: box.x + box.w + 6, y: box.y + (high ? 14 : box.h - 14) };
@@ -176,39 +192,6 @@ export const SLAGLING_ATTACKS = {
     };
   },
 
-  // Drips: beads of molten rock gather on the ceiling of the box and let go,
-  // one after another across the width, with every third one right over
-  // your head. Where one lands it splashes in two small hot sprays.
-  slagDrips(box, density, { Shot, rand, spreadAcross }) {
-    const T = (s) => s * density;
-    const nextX = spreadAcross(box.x + 5, box.x + box.w - 5, 6);
-    let t = 0;
-    let next = 0.1;
-    let count = 0;
-    let drops = [];
-    return {
-      duration: 6.6,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && t < T(5.8)) {
-          next = t + 0.3;
-          const x = ++count % 3 === 0 ? soul.x + rand(-3, 3) : nextX();
-          const drop = new Shot({ x: Math.max(box.x + 4, Math.min(box.x + box.w - 4, x)), y: box.y + 3, warn: 0.55, vy: 18, gravity: 150, art: 'slagDrip' });
-          drops.push(drop);
-          bullets.push(drop);
-        }
-        for (const drop of drops) {
-          if (drop.y < box.y + box.h - 3) continue;
-          drop.spent = true;
-          for (const way of [-1, 1]) {
-            bullets.push(new Shot({ x: drop.x, y: box.y + box.h - 3, vx: way * rand(24, 42), vy: -rand(40, 70), gravity: 170, life: 0.8, art: 'slagSplash' }));
-          }
-        }
-        drops = drops.filter((drop) => !drop.spent);
-      },
-    };
-  },
-
   // Ooze: it slides across the floor of the box, three times, along rows
   // near yours, and where it has been the slag cools into crust, glowing at
   // first and then black, and stays a while. Gaps in the crust are where the
@@ -220,7 +203,7 @@ export const SLAGLING_ATTACKS = {
     let launched = 0;
     let nextLaunch = 0.1;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (launched < 3 && t >= nextLaunch) {
@@ -266,7 +249,7 @@ export const SLAGLING_ATTACKS = {
     let nextBubble = 0.5;
     let nextGlob = 0;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         const stood = still(dt, soul);
@@ -308,53 +291,144 @@ export const SLAGLING_ATTACKS = {
     };
   },
 
-  // Cinders: the Slagling breathes out, and ash and embers lift off the
-  // floor all across the box, drifting slowly up, swaying. Every so often it
-  // works its bellows, and a burst of hot embers comes up under where you
-  // are. Stand still and the little cinders drift your way.
-  slagCinders(box, density, { Shot, rand, spreadAcross }) {
+
+  // The crust: the floor of the box is a skin of cooled slag in plates, and
+  // underneath it's all still molten. A plate starts to tick (cracks show
+  // and glow), and then it splits and the melt wells up through it for a
+  // moment before it crusts over again. Plates go one after another, often
+  // the one you're on. Ticking means move.
+  slagCrust(box, density, { rand }) {
     const T = (s) => s * density;
-    const still = stillness();
-    const nextX = spreadAcross(box.x + 4, box.x + box.w - 4, 6);
+    const N = 4;
+    const W = box.w / N;
+    const H = box.h / N;
+    const TICK = 0.75;
+    const HOT = 0.7;
     let t = 0;
-    let next = 0.1;
-    let nextBellows = 1.3;
-    let rising = [];
+    let next = T(0.15);
+    let count = 0;
+    const busy = new Map();
+    const plate = (c, r) => (ctx, z, hot) => {
+      const x = Math.round(z.x);
+      const y = Math.round(z.y);
+      if (hot) {
+        ctx.fillStyle = '#ff7a18';
+        ctx.fillRect(x + 1, y + 1, W - 2, H - 2);
+        ctx.fillStyle = '#ffc23a';
+        ctx.fillRect(x + 3, y + 3, W - 6, H - 6);
+        ctx.fillStyle = '#fff2a8';
+        ctx.fillRect(x + W / 2 - 2, y + H / 2 - 1, 4, 2);
+        return;
+      }
+      // Ticking: the cracks spread and glow.
+      ctx.globalAlpha = 1;
+      const k = Math.min(1, z.age / TICK);
+      ctx.fillStyle = Math.floor(z.age * 12) % 2 ? '#ff7a18' : '#c2300c';
+      const cx = x + W / 2;
+      const cy = y + H / 2;
+      const len = 2 + k * (W / 2 - 2);
+      ctx.fillRect(cx - len, cy, len * 2, 1);
+      ctx.fillRect(cx, cy - len * (H / W), 1, len * 2 * (H / W));
+      ctx.fillRect(cx - len * 0.6, cy - len * 0.6, 1, 1);
+      ctx.fillRect(cx + len * 0.6, cy + len * 0.6, 1, 1);
+      ctx.fillRect(cx + len * 0.6, cy - len * 0.6, 1, 1);
+      ctx.fillRect(cx - len * 0.6, cy + len * 0.6, 1, 1);
+    };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        const stood = still(dt, soul);
-        if (t >= next && t < T(5.8)) {
-          next = t + 0.3;
-          const x = nextX();
-          const cinder = new Shot({ x, y: box.y + box.h + 3, vy: -rand(14, 22), art: 'slagCinder' });
-          cinder.baseX = x;
-          cinder.sway = rand(0, Math.PI * 2);
-          rising.push(cinder);
-          bullets.push(cinder);
-          if (stood > 0.6) {
-            // Drifting your way.
-            const lean = new Shot({ x: soul.x + rand(-16, 16), y: box.y + box.h + 3, warn: 0.2, vy: -rand(22, 30), art: 'slagCinder' });
-            lean.baseX = lean.x;
-            lean.sway = 0;
-            lean.toward = soul;
-            rising.push(lean);
-            bullets.push(lean);
+        const now = t / density;
+        if (t < next || now > 6.7) return;
+        next = t + T(0.32);
+        count++;
+        // Every third plate is the one you're on.
+        let c;
+        let r;
+        if (count % 3 === 0) {
+          c = Math.min(N - 1, Math.max(0, Math.floor((soul.x - box.x) / W)));
+          r = Math.min(N - 1, Math.max(0, Math.floor((soul.y - box.y) / H)));
+        } else {
+          c = Math.floor(rand(0, N));
+          r = Math.floor(rand(0, N));
+        }
+        const key = c + r * N;
+        if ((busy.get(key) ?? -1) > now) return;
+        busy.set(key, now + TICK + HOT + 0.2);
+        bullets.push(new Zone({ x: box.x + c * W, y: box.y + r * H, w: W, h: H, warn: TICK, life: HOT, paint: plate(c, r) }));
+      },
+    };
+  },
+
+  // Sit with me: a little lump of it comes shuffling over to sit with you,
+  // slow and shy, leaving warm sticky crust where it's been. When it gets
+  // close it panics (it trembles first) and spits a ring of sparks, backs
+  // off, and tries again. A second one comes to join in. Keep them at arm's
+  // length, and mind where they've been.
+  slagHug(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const NEAR = 20;
+    const TREMBLE = 0.4;
+    const lumps = [];
+    let t = 0;
+    let made = 0;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        const real = dt / density;
+        if (made < 2 && t >= T(0.1 + made * 3.2)) {
+          made++;
+          // In from a corner away from you.
+          const right = soul.x < box.x + box.w / 2;
+          const low = soul.y < box.y + box.h / 2;
+          const lump = new Shot({ x: right ? box.x + box.w - 6 : box.x + 6, y: low ? box.y + box.h - 6 : box.y + 6, warn: 0.6, art: 'slagLump', life: 8 });
+          lump.mode = 'come';
+          lump.timer = 0;
+          lump.drip = 0;
+          lumps.push(lump);
+          bullets.push(lump);
+        }
+        for (const lump of lumps) {
+          if (lump.age < lump.warn || lump.age > lump.warn + lump.life) continue;
+          const dx = soul.x - lump.x;
+          const dy = soul.y - lump.y;
+          const d = Math.hypot(dx, dy) || 1;
+          if (lump.mode === 'come') {
+            lump.x += (dx / d) * 27 * real;
+            lump.y += (dy / d) * 27 * real;
+            if (d < NEAR) {
+              lump.mode = 'tremble';
+              lump.timer = TREMBLE;
+            }
+          } else if (lump.mode === 'tremble') {
+            lump.timer -= real;
+            lump.x += Math.sin(t * 80) * 0.4;
+            if (lump.timer <= 0) {
+              // Panic: sparks all round.
+              const turn = rand(0, Math.PI);
+              for (let i = 0; i < 9; i++) {
+                const a = turn + (i / 9) * Math.PI * 2;
+                bullets.push(new Shot({ x: lump.x, y: lump.y, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, art: 'slagSpark', life: 1.6 }));
+              }
+              lump.mode = 'back';
+              lump.timer = 0.7;
+            }
+          } else {
+            lump.timer -= real;
+            lump.x -= (dx / d) * 20 * real;
+            lump.y -= (dy / d) * 20 * real;
+            if (lump.timer <= 0) lump.mode = 'come';
+          }
+          lump.x = Math.min(Math.max(lump.x, box.x + 5), box.x + box.w - 5);
+          lump.y = Math.min(Math.max(lump.y, box.y + 5), box.y + box.h - 5);
+          // Where it's been stays hot a moment.
+          lump.drip -= real;
+          if (lump.drip <= 0 && lump.mode !== 'tremble') {
+            lump.drip = 0.32;
+            bullets.push(new Shot({ x: lump.x, y: lump.y, life: 1.1, art: 'slagCrustHot' }));
           }
         }
-        if (t >= nextBellows && t < T(5.6)) {
-          nextBellows = t + 1.7;
-          bullets.push(new Shot({ x: soul.x, y: box.y + box.h - 2, harmless: true, life: 0.45, art: 'slagSpark' }));
-          for (let i = -2; i <= 2; i++) {
-            bullets.push(new Shot({ x: soul.x + i * 6, y: box.y + box.h + 2, warn: 0.45, vy: -rand(44, 54), vx: i * 3, accel: -6, art: 'slagEmber' }));
-          }
-        }
-        for (const cinder of rising) {
-          if (cinder.toward) cinder.baseX += Math.sign(cinder.toward.x - cinder.baseX) * 9 * dt;
-          cinder.x = cinder.baseX + Math.sin(cinder.age * 2.2 + cinder.sway) * 5;
-        }
-        rising = rising.filter((cinder) => cinder.y > box.y - 6);
       },
     };
   },

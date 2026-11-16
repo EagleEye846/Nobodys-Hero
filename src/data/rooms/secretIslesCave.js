@@ -3,10 +3,11 @@
 // out in rows by size, the rope is coiled just so, and in the middle, on its post, a lantern is
 // burning. Beside the lantern a scrap of paper under a pebble says one word: "tidy". (Lantern 6
 // of the chapter. Nobody says who lit it; the excuses are plain ones.) A chest (the Darned Jersey), a purse. PUZZLE-FREE,
-// no monsters. The way out is the mouth (6,9), and up the rocks onto the west isle (isles_bridge 10,16).
+// no monsters. The way out is the mouth (6,9), and out onto the gully bed (isles_bridge 18,16).
 // Tile key (see src/overworld/coastTiles.js, isles):
 //   #  rock top (solid)   W  cave rock (solid)   q  raked shingle
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SECRET_ISLES_CAVE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'secret_isles_cave',
@@ -42,17 +43,20 @@ export const SECRET_ISLES_CAVE = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    // Out of the mouth and up the rocks onto the west isle's edge (dry at both tides).
-    { x: 6, y: 9, w: 2, h: 1, to: 'isles_bridge', spawn: { x: 10, y: 16 } },
+    // Out of the mouth into the gully's west bed, at the foot of the bridge's low point.
+    { x: 6, y: 9, w: 2, h: 1, to: 'isles_bridge', spawn: { x: 18, y: 16 } },
   ],
 
-  cutscenes: [],
+  cutscenes: [
+    // (2026-11-14) A piece of the night the Fair Return went down, as soon as you carry the compass piece (the whole room, once).
+    { x: 1, y: 2, w: 12, h: 7, scene: 'card_memory', gear: 'compass_card' },
+  ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/isles.txt',
   props: [
     // QUEST PIECE 3 (the Fair Return's compass card): tidied away among the shells.
-    { sprite: 'gs_compass_card', x: 6, y: 3, text: 'cave_compass', gives: 'compass_card', taken: { gone: true } },
+    { sprite: 'gs_compass_card', x: 6, y: 3, text: 'cave_compass', gives: 'compass_card', taken: { gone: true }, notice: true },
     // The lantern (6) and the note.
     { sprite: 'c5_lantern_post_lit', x: 7, y: 4, text: 'cave_lantern', animation: 'c5_lantern_post_lit', speed: 0.25 },
     { sprite: 'il_note_tidy', x: 8, y: 4, text: 'cave_note', walkable: true, flat: true },
@@ -77,6 +81,8 @@ export const SECRET_ISLES_CAVE = {
     { sprite: 'il_cairn', x: 12, y: 4, text: 'cave_cairn' },
     { sprite: 'in_shelf_bottles', x: 4, y: 1, text: 'cave_shelf' },
     { sprite: 'il_rocks_flat', x: 9, y: 8, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.secret_isles_cave ?? []),
   ],
   tileTexts: { '#': 'cave_rock', W: 'cave_rock', q: 'cave_floor' },
 

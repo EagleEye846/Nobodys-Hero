@@ -52,7 +52,7 @@ export class Prop {
   // once they're all on; with `inOrder`, they must be turned on in that order.
   constructor({
     sprite, x, y, text = null, npc = null, shop = null, fishing = null, save = false, animation = null, speed = DEFAULT_FRAME_SECONDS,
-    gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null,
+    gives = null, taken = null, lever = null, opensWith = null, inOrder = false, openText = null, resetText = null, openLook = null, ajarLook = null,
     walkable = false, solidSides = 0, light = null, seenInLight = false, notice = false, grapple = false,
     rest = false, dream = null, sound = null, join = null, nightText = null, wrath = null, glow = undefined,
     member = null, storage = false, vane = false, drift = null, travel = null,
@@ -62,11 +62,19 @@ export class Prop {
     cart = false, smash = false, switch: railSwitch = null, dir = null, cartOnly = false,
     beam = null, beamWhen = null, mirror = null, fixed = false, eye = null, latch = true,
     stroll = null, flat = false, chime = null, pulse = null, lure = null, quest = null,
-    who = null, by = null, byText = null, react = false, speaker = null,
+    who = null, by = null, byText = null, react = false, speaker = null, decor = false,
+    jamsOpen = false,
   }) {
     // Someone stood here who says its `text` (a portrait id, like 'tuck'): their
     // face and voice in the box (see lookAt in overworldScene.js).
     this.speaker = speaker;
+    // Pure dressing with no words (the life pass's snow lumps, tufts, icicles): never takes the Z press, like a
+    // floor drawing, so it can't stand between you and a rope ring or the look line of the tile under it.
+    this.decor = decor;
+    // A held gate that, once somebody has gone through it while it was up, stays up for good
+    // (the mill's tail gate jams on its chains), so friends can walk through after you.
+    this.jamsOpen = jamsOpen;
+    this.jammed = false;
     // A gift whose friends answer after it (see takeGift in overworldScene.js).
     this.react = react;
     // `pulse: 'beat'`: swells with the song (see beatPulse.js). It stretches
@@ -236,6 +244,13 @@ export class Prop {
     this.openText = openText;
     this.resetText = resetText;
     this.isOpen = false;
+    // A gate that stays in sight when open (`openLook`: a side door swung back against its frame), and swings
+    // through `ajarLook` for a moment as it opens or shuts, instead of just vanishing.
+    this.openSprite = openLook ? sprites[openLook] : null;
+    this.ajarSprite = ajarLook ? sprites[ajarLook] : null;
+    if (openLook && !this.openSprite) throw new Error(`Unknown prop sprite '${openLook}'`);
+    if (ajarLook && !this.ajarSprite) throw new Error(`Unknown prop sprite '${ajarLook}'`);
+    this.swungAt = -1;
     this.baseLook = sprite;
     this.animation = animation;
     this.speed = speed;
@@ -348,9 +363,16 @@ export class Prop {
   }
 
   drawBody(ctx, camera) {
-    if (this.hidden || this.isOpen) return;
+    if (this.hidden || (this.isOpen && !this.openSprite)) return;
     const seconds = performance.now() / 1000;
     let frame = (this.animation && animationFrame(this.animation, seconds, this.speed)) || this.sprite;
+    if (this.openSprite) {
+      // A gate that shows open: note when it changes, and swing through the half-open look for a moment.
+      if (this.wasOpen !== undefined && this.wasOpen !== this.isOpen) this.swungAt = seconds;
+      this.wasOpen = this.isOpen;
+      if (this.isOpen) frame = this.openSprite;
+      if (this.ajarSprite && seconds - this.swungAt < 0.18) frame = this.ajarSprite;
+    }
     // Folk on the move: the still front (or back) view, hopping along, unless
     // their walk keeps its animation (the sweeper sweeps as she goes).
     const walk = this.walk;

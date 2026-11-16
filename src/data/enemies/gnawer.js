@@ -4,7 +4,7 @@ import { GNAWER_PALETTE, GNAWER_SPRITE, GNAWER_ANIM } from '../art/gnawer.js';
 // far too many teeth, that has been down here a very long time and has
 // learned to hear everything: your pulse, your boots, your thinking about
 // running. It closes its teeth in rows, aims at wherever it last heard you,
-// gnaws through the floor, scatters bones, and screams until the walls
+// gnaws through the floor, loses teeth at you, and screams until the walls
 // scream back. Everything it says is in text/enemies/gnawer.txt.
 export const GNAWER = {
   name: 'GNAWER',
@@ -22,7 +22,7 @@ export const GNAWER = {
   anim: GNAWER_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1900,
+  maxHp: 3050,
   damage: 44,
 
   // The Deep: the hardest regulars of the chapter, and the strangest.
@@ -33,7 +33,7 @@ export const GNAWER = {
     { name: 'gnawTeeth', weight: 3 },
     { name: 'gnawHear', weight: 3 },
     { name: 'gnawFloor', weight: 2 },
-    { name: 'gnawBones', weight: 2 },
+    { name: 'gnawTeething', weight: 3 },
     { name: 'gnawScream', weight: 2 },
   ],
 

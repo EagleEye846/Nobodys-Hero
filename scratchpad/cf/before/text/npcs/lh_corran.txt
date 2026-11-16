@@ -1,0 +1,19 @@
+# CORRAN: a charcoal carter. Big, kind, sooty to the eyebrows. Takes his
+# cart up the valley to the forest's edge and back, once a week, and knows
+# the woodcutters' camp: he's traded with Bramble's ma for years.
+
+[first]
+Evening. Don't mind the soot. It doesn't come off, so there's no use minding.
+
+I'm up to the forest edge tomorrow, with the cart. Same as every week.
+
+[repeat]
+That's my pony out the front, eating Thistle's beans. Don't tell Thistle.
+
+[first after ves_on_her_feet]
+Bryony says the little one's to go home with me. Rowan's boy, is he? I know Rowan. I've bought charcoal off her twenty years.
+
+She'll be frantic. She'll be frantic, and then she'll be very, very cross. I'd go slow, if I were him.
+
+[repeat after ves_on_her_feet]
+We'll go when he's said his goodbyes. No hurry. The charcoal doesn't mind.

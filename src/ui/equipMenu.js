@@ -1,5 +1,6 @@
 import { inUiSpace } from '../engine/screen.js';
 import { sfx } from '../audio/music.js';
+import { equipSound } from '../audio/equipSounds.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { partyIds, hurtState } from '../characters/party.js';
 import { HERO, ownedGear, equippedGear, equipGear } from '../characters/equipment.js';
@@ -73,7 +74,8 @@ export class EquipMenu {
     if (input.wasPressed('up')) this.cursor = (this.cursor - 1 + owned.length) % owned.length;
     if (this.cursor !== before) sfx('move');
     if (input.wasPressed('confirm')) {
-      sfx('equip');
+      // Each kind of thing has its own sound (src/audio/equipSounds.js).
+      sfx(equipSound(tab.slot, owned[this.cursor]));
       equipGear(tab.who, tab.slot, owned[this.cursor]);
       if (owned[this.cursor] === 'ash_spear') maybeScream();
     }

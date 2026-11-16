@@ -11,6 +11,9 @@
 //   I  old stone pillar (solid)
 //   J  broken pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const REGISTRY_CLEFT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'registry_cleft',
@@ -58,6 +61,7 @@ export const REGISTRY_CLEFT = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.registry_cleft ?? []),
     { sprite: 'lever', x: 20, y: 5, text: 'cleft_lever', lever: 'span' },
     { sprite: 'scorch_mark', x: 4, y: 7, text: 'cleft_scorch', walkable: true, light: 14 },
     { sprite: 'scorch_mark', x: 9, y: 6, text: 'cleft_scorch', walkable: true, light: 14 },
@@ -65,6 +69,8 @@ export const REGISTRY_CLEFT = {
     { sprite: 'inscription', x: 7, y: 4, text: 'cleft_inscription' },
     { sprite: 'sign', x: 3, y: 5, text: 'cleft_sign' },
     { sprite: 'gold_pouch', x: 26, y: 10, text: 'cleft_purse', gold: 180, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['registry_cleft'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', '!': 'cracked_floor', I: 'city_pillar', J: 'city_pillar' },
 

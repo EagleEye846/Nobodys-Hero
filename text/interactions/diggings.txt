@@ -584,7 +584,7 @@ A row of hard hats on nails, each with a tin tag: names, in a hand that was in n
 [lost_board]
 The tally board of Seam Nine. The last column says, in chalk: BACK AFTER LUNCH. The date next to it is a very long time ago.
 
-# (draft) The end-of-shift whistle (Pudding's TALK sings it back).
+# (draft) The end-of-shift whistle (the Pale Olm's TALK sings it back).
 Under the last column, in smaller chalk, in a different hand: END OF SHIFT. THREE DOWN, ONE UP. WHISTLE IT. HE LIKES IT.
 
 The HE has a line under it, as if somebody had been told off for the pronoun.
@@ -644,3 +644,154 @@ The candle has burned down another finger since you were here. Nobody's been. Ca
 Spare pit props, sawn to length and stacked on two stones, ready for the next bit of roof that wants holding up.
 
 Down here there's always a next bit.
+
+# --- THE AIR SHAFT (diggings_air_shaft): a ring climb up an old shaft to a chest ---
+
+[shaft_sign]
+A tin sign on a post: AIR SHAFT. CLOSED. Under that, scratched in: BOLTS STILL GOOD. PROBABLY.
+
+[shaft_face]
+The shaft goes straight up through the rock.
+
+Iron eye-bolts are hammered into the face, where the diggers used to rope up and down.
+
+[shaft_face_ves]
+{bored}"Probably." Lovely. You first.
+
+[shaft_scree]
+Loose stone that's come off the face over the years. Some of it quite recently.
+
+[shaft_crate]
+A crate on the landing, with a lid that says LUNCH. Inside: nothing, and a note. GONE UP FOR MORE. BACK SOON.
+
+[shaft_hats]
+Hard hats on nails, all in a row, for whoever came up next. Nobody has in a long time.
+
+[shaft_chest]
+A chest at the top of the shaft, stencilled SPARES.
+
+Under the spare rope and a very old sandwich, something worth the climb.
+
+# ===== LIFE PASS (14 November 2026): set dressing, generated with src/data/diggingsDressing.js =====
+
+# --- diggings_pithead ---
+
+[dgp_rota]
+The shift rota on a chalkboard. Every name is crossed out but two. One is SEDGE (FOREMAN), written by Sedge. The other is MATTOCK, written by Sedge as well.
+
+[dgp_rota_ves]
+{bored}Two names. That's a very efficient mine.
+
+[dgp_mug]
+A tin mug of tea gone stone cold, with a skin on it you could stand a spoon on. A stub of candle burns beside it, as if the owner had just stepped out.
+
+[dgp_mug_ves]
+{bored}That's not tea any more. That's an opinion.
+
+[dgp_boots]
+A pair of boots left by the wall, one standing, one fallen over, as if they'd had a row. The owner went home in his socks.
+
+[dgp_boots_ves]
+{bored}Or he's still here, in his socks, being brave about it.
+
+[dgt_boots]
+A pair of boots, upright and neat, set side by side at the lip of the plank. Whoever stood in them stepped out and went another way.
+
+[dgt_boots_ves]
+{bored}That's the most reassuring thing I've seen all day. Or the least.
+
+[dgs_lean]
+A pit prop leaned against the wall, with a cap beam on one shoulder, like a man carrying his own coffin lid. A chalked note: WAITING FOR THE OTHER ONE.
+
+[dgs_lean_ves]
+{bored}There's always another one.
+
+[dgs_nook_pouch]
+A little parcel tucked behind a mushroom-coloured cushion. It's been left for whoever finds the nook, with a note: YOU'VE EARNED A NAP. HERE'S SOMETHING FOR AFTER. Inside, a biscuit.
+
+# --- diggings_old_seam ---
+
+[dgo_cage]
+A canary cage hung from a hook on a post. The door's open, and the perch is bare, and there's one yellow feather on the floor of it.
+
+A label on the bars, in a careful hand: GONE UP. WILL SING FROM THE TOP.
+
+[dgo_cage_ves]
+{sad}...I hope so.
+
+[dgf_stool]
+A stool, with fish bones neatly stacked on the seat. Somebody was sitting here with a line over the water, and fishing for something that doesn't exist.
+
+[dgf_stool_ves]
+{bored}Nothing's in there. I'm almost sure.
+
+[dgf_boot]
+A single boot, stood neatly on its own in the corner of the nook: brown, left-footed, with a good deal of character. Somebody has stuffed a note into it: PROPERTY OF MATTOCK. FOUND THE HARD WAY.
+
+[dgf_boot_ves]
+{smile}One boot. The other one will have run away.
+
+# --- diggings_cave_in ---
+
+[dgc_grit]
+Grit in a drift, shaken down in the last fall, with a hand print in it where someone pushed off to stand. It's small, and has four fingers and a thumb.
+
+[dgc_grit_ves]
+{surprised}That's a mole hand. Or a very determined child's.
+
+[dgc_nook_pouch]
+A tiny parcel, tied with a thread. Inside: a cake the size of a matchbox, a shirt button, a note. THE LITTLE SHIFT THANKS YOU FOR NOT TELLING.
+
+# --- diggings_lift ---
+
+[dgl_fossil]
+A fossil shell in the wall, the size of a plate, with the lift's own chain-shadow lying across it. It looks like a very slow clock.
+
+[dgl_fossil_ves]
+{thoughtful}Very slow indeed.
+
+[dgz_wreck]
+The last cart, run off the rails at the end of the line and left where it stopped. There's a tin lunch box still tied to the handle, and nothing in it.
+
+[dgz_wreck_ves]
+{sad}So that's what stopped.
+
+[dga_boots]
+A pair of boots, tied together by the laces and hung over a bolt. A note on them: FOR THE JOURNEY UP. SPARE. NOT YOURS.
+
+[dga_boots_ves]
+{smile}A spare pair. That's more planning than I expected.
+
+[dga_stub]
+A stub of a prop with a tin mug hung on it, upside down, so it doesn't gather dust. It has gathered dust. Somebody's mug-hanging is sadly flawed.
+
+[dga_stub_ves]
+{smile}It's the thought.
+
+[dgf_boot_gone]
+Just a damp ring on the floor where the boot stood, and a smell of mud and mole.
+
+[dgf_boot_gone_ves]
+{smile}Right. Go and make somebody's day.
+
+# --- second looks at a few things ---
+
+[dgp_box 2]
+You post a very small thought into the slot. Something inside rustles, and a stub of pencil writes: THANK YOU FOR ASKING. MORE PASTY.
+
+[dgs_tally 2]
+The cheerful zero has been rubbed out and written again, a little smaller, a little shakier. Underneath: (NOT TODAY.)
+
+[dgo_feather 2]
+The feather is still in its crack. You touch it and it stirs a little, though nothing down here is moving the air.
+
+[dgy_leaf 2]
+The leaf is still there. You turn it over: it has a small crease in it, as if somebody had held it very tight and then put it down in a hurry.
+
+[dgo_cage 2]
+The cage is just as you left it, the door open, the one yellow feather on the floor. For a moment, up in the dark, you think you hear a very small note.
+
+[dgo_cage_ves 2]
+{sad}...I heard it too.
+
+# ===== end of the life pass =====

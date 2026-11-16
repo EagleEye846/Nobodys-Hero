@@ -1,0 +1,42 @@
+# LADLE'S LOST PROPERTY SHELF (his nook in the Old Drains): everything that has washed down the drains in
+# fifty years, labelled in a tiny tidy hand, with one gap. (life pass, 15 November 2026)
+
+# (draft)
+[first]
+A shelf of lost property, every piece with a tag in a tiny tidy hand. THIMBLE (BRASS). SPOON (ONE). PENNY (1843). DOLL'S SHOE (RED).
+
+Under them, one tag with nothing on it: BOOT (LEFT). Somebody's been keeping a place.
+
+# (draft)
+[repeat]
+The shelf of lost property. One tag, BOOT (LEFT), still has nothing on it.
+
+# (draft)
+[shelf_ask]
+A shelf of lost property, every piece with a tag in a tiny tidy hand. THIMBLE (BRASS). SPOON (ONE). PENNY (1843). DOLL'S SHOE (RED).
+
+Under them, one tag with nothing on it: BOOT (LEFT). Somebody's been keeping a place for it, with a clean cloth under the gap, all these years.
+
+If it washed down, it's somewhere in the drains, in the dark.
+
+[shelf_ask_bramble]
+{thinking}A left boot. In the Sumps, probably. That's where everything ends up. We could find it.
+
+# (draft)
+[shelf_wait]
+The shelf waits, with its gap and its clean cloth. BOOT (LEFT). It will have gone to the Sumps, where the silt settles.
+
+# (draft)
+[shelf_done]
+You set the boot on the cloth. It fits the gap like a key in a lock. The tag says BOOT (LEFT), and for the first time it is true.
+
+Something moves at the edge of the nook, very small and very fast. When you look, there's a new thing on the shelf: a little tin tag on a loop of string. It says KEPT SWEET.
+
+It wasn't there before. It's yours, apparently.
+
+[shelf_done_bramble]
+{glee}He said thank you! Old Ladle said thank you! Without even coming out! That's the most polite thing that's ever happened!
+
+# (draft)
+[shelf_after]
+The shelf of lost property, every piece in its place. BOOT (LEFT) is on its cloth. The whole shelf looks very pleased with itself.

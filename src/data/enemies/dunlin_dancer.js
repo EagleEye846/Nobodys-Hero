@@ -23,7 +23,7 @@ export const DUNLIN_DANCER = {
   feel: { hit: 'feather', idle: 'feather', windup: 'dust', defeat: 'feathers' },
   // The chapter 5 coast battle song (Sunnyside cliffs, Gullrest).
   music: 'coastBattleStorm',
-  maxHp: 10000,
+  maxHp: 6300,
   damage: 83,
 
   difficulty: { density: 1.65, speed: 1.50 },
@@ -36,9 +36,9 @@ export const DUNLIN_DANCER = {
 
   // Its attacks live in src/battle/attacks/dunlin_dancer.js.
   patterns: [
-    { name: 'dunWave', weight: 3 },
-    { name: 'dunPeck', weight: 3 },
-    { name: 'dunShells', weight: 3 },
+    { name: 'dunTide', weight: 3 },
+    { name: 'dunFollow', weight: 3 },
+    { name: 'dunProbe', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -49,7 +49,7 @@ export const DUNLIN_DANCER = {
     { name: 'Scatter some crumbs', calm: 30 },
   ],
 
-  rewards: { exp: 2000, coins: 11 },
+  rewards: { exp: 2000, coins: 9 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'sandpiper_feather', chance: 0.4 }],

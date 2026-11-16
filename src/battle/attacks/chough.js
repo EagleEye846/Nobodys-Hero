@@ -144,7 +144,7 @@ export const CHOUGH_ATTACKS = {
       fromLeft = !fromLeft;
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         dive(dt, bullets, soul);
         for (const next of queued) {
@@ -262,7 +262,7 @@ export const CHOUGH_ATTACKS = {
       shinies.push({ trinket, t: drift, bird: null });
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         toss(dt, bullets, soul);
         for (const shiny of shinies) {
@@ -331,7 +331,7 @@ export const CHOUGH_ATTACKS = {
       calls.push({ t: 0.35, perch, aim, chee: cheeGap, ow: owGap, said: 0 });
     }, { first: 0.15 });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         call(dt, bullets, soul);
         for (const c of calls) {

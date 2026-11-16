@@ -22,8 +22,9 @@ An empty chest. The salt has got into the hinges.
 [door_sign]
 A board on a post: HADDOCK'S LIGHT. LIGHTMAN IN. KNOCK HARD, HE'S A BIT DEAF.
 
+# (draft)
 [door_sign_ves]
-{bored}Knock hard. Right.
+{smile}Knock hard. Right.
 
 [door_lantern]
 A lantern on a post by the door, lit. Haddock has trimmed the wick this very evening. Haddock always does.
@@ -54,6 +55,10 @@ A lifebuoy on a post, scrubbed white. The rope on it is new.
 
 [door_bother]
 The Bother, a stout little rowboat with a blue stripe, moored to the jetty. The oars lie shipped, ready, and there is a bailing tin in the bottom.
+
+# (draft) After he's told it: Haddock sat in her at the oars, waiting.
+[door_bother_haddock]
+Haddock stands on the jetty beside the Bother with his collar up and the painter in his fist, waiting. He nods at the boat. Step out to the end of the jetty when you're ready to go.
 
 [door_pouch]
 A purse in the flowerbed, tucked in among the posies where somebody hid it from the gulls.
@@ -98,8 +103,9 @@ A round iron stove with a kettle on it, ticking. The kettle is off the boil, as 
 [parlour_stove_calm]
 A round iron stove, gone cold. The kettle on it is still full.
 
+# (draft)
 [parlour_stove_calm_ves]
-{thoughtful}He always kept it full.
+{sad}He always kept it full.
 
 [parlour_tides]
 A tide board, chalked up to the day. Underneath, in different chalk: STILL HERE.
@@ -177,8 +183,9 @@ HOW TO BE A HERO.
 
 Number three has been crossed out, and written again underneath, bigger.
 
+# (draft)
 [stair_hidey_bramble]
-{worried}...It fits me. Is that all right? He won't mind?
+{sheepish}...It fits me. Is that all right? He won't mind?
 
 [stair_hidey_ves]
 {smile}He'd want it worn. Mind the elbows. Somebody darned those twice.
@@ -212,8 +219,9 @@ A child's drawing. A lighthouse, and two small people under it.
 
 One says ME. The other says THE HERO.
 
+# (draft)
 [room_drawing_ves]
-{thoughtful}...Good lighthouse.
+{smile}...Good lighthouse.
 
 [room_boat]
 A little wooden boat. Someone has painted BOTHER II on the side.
@@ -233,6 +241,10 @@ Scrubbed boards. Nothing on them, anywhere, is out of place.
 # After the chapter (haddock_gone). (draft).
 [parlour_chair_after]
 A worn red armchair under the window. The cushion still has the shape of him in it.
+
+# (draft) While he's down at the boat (after he's told it, before the end).
+[parlour_chair_out]
+His armchair, empty, still warm. He's gone down to see to the boat.
 
 # --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
 
@@ -314,3 +326,50 @@ A washing line between two posts: a vest the size of a tent, socks, a tea towel.
 
 [door_barrow]
 A barrow for bringing the pots up from the jetty. One handle is tied on with string.
+
+# --- THE LIFE PASS, ROUND 2: the headland (only outdoor things; the rooms inside are as they were) ---
+
+[r5s_hd_cairn]
+A cairn of beach stones at the headland's edge, each a different colour, the top one white. They are stacked with great care. Somebody adds one now and then.
+
+[r5s_hd_cairn_ves]
+{smile}A stone for something. I wonder what.
+
+[r5s_hd_cairn_bramble]
+{thinking}It's like counting without any numbers.
+
+[r5s_hd_cairn_after]
+A cairn of beach stones at the headland's edge, each a different colour, the top one white. There is a new stone on top, still damp, still warm from a hand. Folk from the town are keeping it up.
+
+[r5s_hd_cairn_after_ves]
+{thoughtful}Somebody's counting for him.
+
+[r5s_hd_cairn_after_bramble]
+{sad}It's a good cairn.
+
+[r5s_hd_rod]
+A fishing rod propped against a rock, the line wound in a neat figure of eight. Haddock's. He has never been seen to catch anything, and says that's the point.
+
+[r5s_hd_rod_ves]
+{smile}That's the right way to fish.
+
+[r5s_hd_rod_bramble]
+{grin}You don't need a fish. You need a rod and a good rock.
+
+[r5s_hd_rod_after]
+A fishing rod propped against a rock, the line still wound in a neat figure of eight. Nobody has moved it. Nobody has liked to.
+
+[r5s_hd_rod_after_ves]
+{thoughtful}Leave it where it is.
+
+[r5s_hd_rod_after_bramble]
+{sad}It can wait. It's good at waiting.
+
+[r5s_hd_trap]
+A crab trap by the path, the door propped open with a stone on purpose. A note on the lid: GO ON, THEN. (YOU CAN COME BACK FOR TEA.)
+
+[r5s_hd_trap_ves]
+{smile}The politest trap I've ever met.
+
+[r5s_hd_trap_bramble]
+{glee}They come back for tea!

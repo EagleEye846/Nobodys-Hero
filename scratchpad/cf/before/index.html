@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nobody's Hero</title>
+  <!-- The game's two fonts live in assets/fonts (both SIL Open Font License),
+       so text never falls back to a wider font on a slow or offline start. -->
+  <link rel="preload" href="assets/fonts/VT323-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    @font-face { font-family: 'VT323'; src: url('assets/fonts/VT323-Regular.ttf') format('truetype'); font-weight: 400; font-display: block; }
+    @font-face { font-family: 'Nunito'; src: url('assets/fonts/Nunito.ttf') format('truetype'); font-weight: 200 1000; font-display: block; }
+  </style>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

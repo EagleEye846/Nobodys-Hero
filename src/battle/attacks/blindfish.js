@@ -1,14 +1,18 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Ring, stillness } from './underShapes.js';
+import { PathShot } from './coastKit.js';
 
 // The Blindfish's attacks. It's a pale cave fish with no use for eyes, and
-// it finds you by the ripples you make. So it fights by sound and splash:
-// it leaps out of the black water in long arcs, spreads rings out from
-// wherever you've been moving (so, the less you move, the safer, but only
-// until it hears you've stopped), sends a school of silver minnows flashing
-// past, snaps its great jaw shut on the spot where you were standing, and
-// blows up bubbles that pop into spray. Everything it does is aimed at
-// where you WERE.
+// it finds everything by the ripples it makes. So it fights by sound and
+// splash, and everything it does is aimed at where you WERE:
+//   - Leaping: out of the black water in long arcs, over where you are.
+//   - Ripples: rings spread from wherever you've been moving; stop, and it
+//     hears you stop.
+//   - The jaw: it snaps shut on the spot where you were standing.
+//   - Drips: it snaps at every drip that plinks into the pool, and the
+//     drips fall all round you.
+//   - The fin: its back fin cuts the water after you; when it stops and
+//     shivers, it bursts up out of the water right there.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. The attack's own clock (`t`) runs `density`
@@ -99,6 +103,37 @@ defineBulletArt('fishSpray', {
   radius: 1.2,
 });
 
+// A drip off the cave roof, falling (harmless till it plinks).
+defineBulletArt('fishDrop', {
+  frames: [['.h.', 'hwh', '.h.'], ['.h.', 'hAh', '.h.']],
+  palette: WATER,
+  radius: 1,
+  frameSeconds: 0.1,
+});
+// The plink: a little ring where it hit the water (harmless).
+defineBulletArt('fishPlink', {
+  frames: [['.AAA.', 'A...A', 'A...A', 'A...A', '.AAA.'], ['.hhh.', 'h...h', 'h...h', 'h...h', '.hhh.']],
+  palette: WATER,
+  radius: 1,
+  frameSeconds: 0.15,
+});
+// Its back fin, cutting the water.
+defineBulletArt('fishFin', {
+  frames: [
+    ['...p...', '..pP...', '..pPp..', '.ppPpp.', 'aAhhhAa'],
+    ['..p....', '..pP...', '.ppPp..', '.ppPpp.', 'AahhhaA'],
+  ],
+  palette: { ...FISH, ...WATER },
+  radius: 2.8,
+  frameSeconds: 0.15,
+});
+// Its open mouth, coming up out of the water.
+defineBulletArt('fishJawBite', {
+  frames: [['.kpppppk.', 'kptttttpk', 'kp.....pk', 'kp.....pk', 'kptttttpk', '.kpppppk.']],
+  palette: { ...FISH, ...JAW },
+  radius: 4.2,
+});
+
 // A pair of jaws set to snap at (x, y): a pool marks the spot, then they
 // close from top and bottom and meet there, and open again. Returns the
 // jaws so the caller can run them (see `runJaws`).
@@ -161,7 +196,7 @@ export const BLINDFISH_ATTACKS = {
       }
     };
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         for (const l of leapers) {
@@ -170,7 +205,7 @@ export const BLINDFISH_ATTACKS = {
           l.fish.y = l.y - l.launch * flown + 0.5 * GRAVITY * flown * flown;
           l.fish.angle = Math.atan2(-l.launch + GRAVITY * flown, l.vx);
         }
-        if (t < next || t > T(5.6)) return;
+        if (t < next || t > T(6.6)) return;
         next = t + T(1.1);
         const fromLeft = count % 2 === 0;
         const from = fromLeft ? box.x + rand(2, 12) : box.x + box.w - rand(2, 12);
@@ -208,19 +243,19 @@ export const BLINDFISH_ATTACKS = {
     let heard = null;
     let nextSnap = 0;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         const stood = still(dt, soul);
         if (!last) last = { x: soul.x, y: soul.y };
-        if (t < T(6) && t >= nextRing && Math.hypot(soul.x - last.x, soul.y - last.y) >= 9) {
+        if (t < T(6.6) && t >= nextRing && Math.hypot(soul.x - last.x, soul.y - last.y) >= 9) {
           nextRing = t + 0.13;
           last = { x: soul.x, y: soul.y };
           heard = { x: soul.x, y: soul.y };
           bullets.push(new Ring({ x: soul.x, y: soul.y + 2, r: 3, grow: 40, thick: 2, warn: 0.28, life: 0.85, squash: 0.55, color: '#a4c0e4', glow: '#4e6a9c' }));
         }
         // A minnow-sized dart goes for the last place it heard you.
-        if (t >= nextDart && t < T(5.6) && heard) {
+        if (t >= nextDart && t < T(6.2) && heard) {
           nextDart = t + 0.8;
           const left = Math.random() < 0.5;
           const from = { x: left ? box.x - 4 : box.x + box.w + 4, y: rand(box.y + 8, box.y + box.h - 8) };
@@ -228,7 +263,7 @@ export const BLINDFISH_ATTACKS = {
           bullets.push(new Shot({ x: from.x, y: from.y, warn: 0.3, vx: Math.cos(aim) * 82, vy: Math.sin(aim) * 82, art: 'fishMinnow' }));
         }
         // Stood still: it has you.
-        if (stood > 0.9 && t >= nextSnap && t < T(5.4) && !jaw) {
+        if (stood > 0.9 && t >= nextSnap && t < T(6.6) && !jaw) {
           jaw = openJaws(box, bullets, Shot, soul.x, soul.y);
           nextSnap = t + T(2.2);
         }
@@ -240,43 +275,10 @@ export const BLINDFISH_ATTACKS = {
     };
   },
 
-  // The school: a V of silver minnows flashes across the box at speed, from
-  // one side and then the other, in rows near yours. A streak of light on the
-  // wall of the box shows the row a moment before. Small, quick, and all at
-  // once.
-  fishSchool(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = 0.1;
-    let count = 0;
-    return {
-      duration: 6.6,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t < next || t > T(5.4)) return;
-        next = t + T(1.15);
-        const right = count % 2 === 0;
-        const y = clamp(soul.y + rand(-14, 14), box.y + 14, box.y + box.h - 14);
-        const x0 = right ? box.x - 6 : box.x + box.w + 6;
-        const way = right ? 1 : -1;
-        bullets.push(new Shot({ x: right ? box.x + 8 : box.x + box.w - 8, y, harmless: true, life: 0.45, art: 'fishFlash' }));
-        for (let i = 0; i < 9; i++) {
-          const rank = Math.ceil(i / 2);
-          const side = i % 2 ? 1 : -1;
-          bullets.push(new Shot({
-            x: x0 - way * rank * 5, y: y + side * rank * 4.2, warn: 0.5,
-            vx: way * 118, wobble: { amplitude: 1.2, frequency: 14 }, art: 'fishMinnow',
-          }));
-        }
-        count++;
-      },
-    };
-  },
-
   // The jaw: it comes up from underneath and snaps shut. A dark pool with a
   // ring on it marks the spot on the floor, then the jaws close from below
   // and above and meet there, right where you were standing, and open again.
-  // Three snaps, and the last is a pair, either side of you.
+  // Four snaps, and the third is a pair, either side of you.
   fishJaw(box, density, { Shot, rand, clamp }) {
     const T = (s) => s * density;
     let t = 0;
@@ -284,12 +286,12 @@ export const BLINDFISH_ATTACKS = {
     let next = 0.15;
     let jaws = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (snaps < 3 && t >= next) {
+        if (snaps < 4 && t >= next) {
           next = t + T(1.6);
-          if (snaps < 2) {
+          if (snaps !== 2) {
             jaws.push(openJaws(box, bullets, Shot, clamp(soul.x, box.x + 12, box.x + box.w - 12), soul.y));
           } else {
             for (const side of [-1, 1]) {
@@ -304,43 +306,103 @@ export const BLINDFISH_ATTACKS = {
     };
   },
 
-  // Bubbles: it breathes out, and bubbles come wobbling up from the water
-  // all across the box. The big ones drift toward you, and they pop, any time
-  // they like, into a ring of spray.
-  fishBubbles(box, density, { Shot, rand, spreadAcross }) {
+
+  // Drips: water drips from the cave roof into the pool, plink, plink, and
+  // the fish can't help itself: it snaps at every one. Each drop falls to a
+  // spot on the water (a ring shows where it plinked), and a moment later
+  // the jaws close on that spot, top and bottom. The drips fall round you,
+  // so it's not you it's after, but you're in the way.
+  fishDrip(box, density, { Shot, rand, clamp }) {
     const T = (s) => s * density;
-    const nextX = spreadAcross(box.x + 5, box.x + box.w - 5, 6);
+    const FALL = 0.55;
     let t = 0;
-    let next = 0.1;
-    let nextBig = 0.7;
-    let bigs = [];
+    let n = 0;
+    const drops = [];
+    let jaws = [];
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < T(5.8)) {
-          next = t + 0.22;
-          bullets.push(new Shot({ x: nextX(), y: box.y + box.h + 3, vy: -rand(22, 34), wobble: { amplitude: 3, frequency: rand(3, 5) }, art: 'fishBubble' }));
+        const now = t / density;
+        if (n < 6 && t >= T(0.15 + n * 0.95)) {
+          n++;
+          // A drip near you, but not on top of you (it isn't aimed at you).
+          const x = clamp(soul.x + (Math.random() < 0.5 ? -1 : 1) * rand(6, 20), box.x + 12, box.x + box.w - 12);
+          const y = clamp(soul.y + rand(-14, 14), box.y + 12, box.y + box.h - 12);
+          bullets.push(new PathShot({ art: 'fishDrop', harmless: true, life: FALL, path: (k) => ({ x, y: box.y + 2 + (y - box.y - 2) * Math.min(1, (k / FALL) ** 2) }) }));
+          drops.push({ at: now + FALL, x, y });
         }
-        if (t >= nextBig && t < T(5.2)) {
-          nextBig = t + 1.05;
-          const big = new Shot({
-            x: rand(box.x + 10, box.x + box.w - 10), y: box.y + box.h + 4, vy: -rand(15, 21), warn: 0.2,
-            homing: { target: soul, turn: 0.35 }, art: 'fishBubbleBig',
-          });
-          big.popAt = rand(1.6, 2.6);
-          bigs.push(big);
-          bullets.push(big);
+        for (const drop of drops) {
+          if (drop.done || now < drop.at) continue;
+          drop.done = true;
+          // Plink: a ring on the water, and the jaws come for it.
+          bullets.push(new Shot({ x: drop.x, y: drop.y, harmless: true, art: 'fishPlink', life: 0.6 }));
+          jaws.push(openJaws(box, bullets, Shot, drop.x, drop.y));
         }
-        for (const big of bigs) {
-          if (big.age < big.popAt) continue;
-          big.spent = true;
-          for (let i = 0; i < 6; i++) {
-            const angle = (i / 6) * Math.PI * 2 + 0.3;
-            bullets.push(new Shot({ x: big.x, y: big.y, vx: Math.cos(angle) * 44, vy: Math.sin(angle) * 44, accel: -30, life: 0.9, art: 'fishSpray' }));
+        for (const jaw of jaws) runJaws(jaw, dt / density);
+        jaws = jaws.filter((jaw) => !(jaw.state === 'opening' && jaw.lower.y > box.y + box.h + 12));
+      },
+    };
+  },
+
+  // The fin: it noses along under the water, and all you see is its back
+  // fin cutting the surface, coming after where you were a moment ago. The
+  // fin is sharp. Every so often it stops and shivers: it's about to come
+  // up, and it bursts out of the water there in a ring of spray. Keep it
+  // following you round, and get clear when it shivers.
+  fishFin(box, density, { Shot, rand }) {
+    const SWIM = 30;
+    const SHIVER = 0.5;
+    const LAG = 0.6;
+    const trail = [];
+    let now = 0;
+    let fin = null;
+    let mode = 'swim';
+    let timer = 1.6;
+    let up = 0;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        const real = dt / density;
+        now += real;
+        trail.push({ at: now, x: soul.x, y: soul.y });
+        while (trail.length > 2 && trail[1].at < now - LAG) trail.shift();
+        if (!fin) {
+          const right = soul.x < box.x + box.w / 2;
+          fin = new Shot({ x: right ? box.x + box.w - 8 : box.x + 8, y: soul.y < box.y + box.h / 2 ? box.y + box.h - 8 : box.y + 8, warn: 0.6, art: 'fishFin', life: 7.6 });
+          bullets.push(fin);
+        }
+        if (fin.age < fin.warn || now > 7.4) return;
+        if (mode === 'swim') {
+          const goal = trail[0];
+          const dx = goal.x - fin.x;
+          const dy = goal.y - fin.y;
+          const d = Math.hypot(dx, dy);
+          if (d > 1) {
+            fin.x += (dx / d) * Math.min(d, SWIM * real);
+            fin.y += (dy / d) * Math.min(d, SWIM * real);
+          }
+          timer -= real;
+          if (timer <= 0 && up < 4) {
+            mode = 'shiver';
+            timer = SHIVER;
+          }
+        } else {
+          fin.x += Math.sin(now * 70) * 0.5;
+          timer -= real;
+          if (timer <= 0) {
+            // Up it comes.
+            up++;
+            mode = 'swim';
+            timer = rand(1.1, 1.4);
+            const turn = rand(0, Math.PI);
+            for (let i = 0; i < 8; i++) {
+              const a = turn + (i / 8) * Math.PI * 2;
+              bullets.push(new Shot({ x: fin.x, y: fin.y, vx: Math.cos(a) * 40, vy: Math.sin(a) * 40, art: 'fishSpray', life: 1.3 }));
+            }
+            bullets.push(new Shot({ x: fin.x, y: fin.y, art: 'fishJawBite', life: 0.35 }));
           }
         }
-        bigs = bigs.filter((big) => !big.spent);
       },
     };
   },

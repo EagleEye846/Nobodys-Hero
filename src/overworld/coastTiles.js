@@ -21,6 +21,8 @@
 // coastTileLights() says what glows in the tiles (lit windows, lamp niches,
 // the sea-glass of the Soundings): lamplight.js adds them to the room's lights.
 
+import { shipBoardsVertical } from './shipDecor.js';
+
 const T = 16;
 
 export const COAST_AREAS = new Set(['gullrest', 'wrack', 'saltcombe', 'lanes', 'wreck', 'ghostship', 'merrow', 'soundings', 'isles', 'haddock_light', 'reach', 'lastlight']);
@@ -195,6 +197,8 @@ export function coastBlendLook(room) {
   return {
     p, kind: (c) => groundKind(room, c), naturalWall, isLand: isLandKind, isWater: isWaterKind,
     soften: town ? townSoft : null, town, paved: (k) => TOWN_PAVED.has(k),
+    // A crag's clifftop (see cragTop): its broken edge reaches well out over the ground beside it.
+    crag: room.crag ? { at: (tx, ty) => inCrag(room, tx, ty), top: (wx, wy) => cragTopColour(wx, wy, p) } : null,
   };
 }
 // Indoors on the coast the blend pass only lays faint wear over the floor and a soft
@@ -251,6 +255,7 @@ function glints(ctx, x, y, tx, ty, p, chance = 0.3) {
 // A floor of boards (see GROUND.planks): rows 4 px apart, each board its own length and
 // colour, butted end to end, two nails at each end, the odd knot, split or darker board.
 function laidBoards(ctx, x, y, tx, ty, room, p, vertical) {
+  if (p.ship) { shipStrakes(ctx, x, y, tx, ty, room, p, shipBoardsVertical(room, tx, ty)); return; }
   // Drawn as if lying sideways; a vertical floor swaps the axes.
   const f0 = tileBrush(ctx, x, y, tx, ty);
   const f = vertical ? (c, a, b, w = 1, h = 1) => f0(c, b, a, h, w) : f0;
@@ -282,6 +287,128 @@ function laidBoards(ctx, x, y, tx, ty, room, p, vertical) {
     f0(p.glint, (vertical ? gl : ga) + tx * T, (vertical ? ga : gl) + ty * T, vertical ? 1 : 6 + rnd(tx, ty, 78, 6), vertical ? 6 + rnd(tx, ty, 78, 6) : 1);
   }
   edges(ctx, x, y, tx, ty, room, p);
+}
+
+// A ship's deck (the Fair Return): long strakes running fore and aft, 5 px of board and a 1 px
+// tarred seam, each strake two or three tiles long with its butts staggered against the next
+// (a shipwright's shift of butts), treenails in pairs at each butt, a long thin grain and the
+// odd knot. The tones are kept close together on purpose: the weathering pass (shipDecor.js)
+// lays the big patches of age across the deck, so the boards themselves stay quiet and read as
+// one deck, not a wall of little bricks. Gangways (a narrow run of `o`) go the other way.
+const STRAKE = 6;
+function shipStrakes(ctx, x, y, tx, ty, room, p, vertical) {
+  const f0 = tileBrush(ctx, x, y, tx, ty);
+  const f = vertical ? (c, a, b, w = 1, h = 1) => f0(c, b, a, h, w) : f0;
+  const A0 = (vertical ? ty : tx) * T;
+  const B0 = (vertical ? tx : ty) * T;
+  px(ctx, p.tar ?? p.gap, x, y, T, T);
+  for (let row = Math.floor(B0 / STRAKE); row * STRAKE < B0 + T; row++) {
+    const by = row * STRAKE;
+    for (const [bi, a0, a1] of piecesIn(row, vertical ? 37 : 35, 56, 112, A0, A0 + T)) {
+      const len = a1 - a0;
+      const r = (salt) => hash(row, bi, salt);
+      f(pick(p.plank, r(71)), a0 + 1, by, len - 1, 5);
+      f(rgba(p.plankHi, 0.55), a0 + 1, by, len - 1, 1);
+      f(rgba(p.plankLo, 0.6), a0 + 1, by + 4, len - 1, 1);
+      // The butt: a hair of light on the end grain, and the treenails.
+      f(rgba(p.plankHi, 0.35), a0 + 1, by + 1, 1, 3);
+      f(p.nail, a0 + 3, by + 1, 1, 1);
+      f(p.nail, a0 + 3, by + 3, 1, 1);
+      f(p.nail, a1 - 3, by + 1, 1, 1);
+      f(p.nail, a1 - 3, by + 3, 1, 1);
+      // Long grain, a knot now and then, a check (a split along the grain).
+      const g = r(73);
+      if (g < 0.7) f(rgba(p.plankLo, 0.45), a0 + 6 + Math.floor(r(74) * Math.max(1, len - 30)), by + 2, 10 + Math.floor(r(75) * 18), 1);
+      if (g < 0.3) f(rgba(p.plankHi, 0.25), a0 + 10 + Math.floor(r(81) * Math.max(1, len - 34)), by + 1, 8 + Math.floor(r(82) * 14), 1);
+      if (r(76) < 0.12) { const kx = a0 + 8 + Math.floor(r(77) * Math.max(1, len - 16)); f(p.plankLo, kx, by + 2, 2, 1); f(rgba(p.plankLo, 0.5), kx - 1, by + 1, 4, 3); }
+      if (r(78) < 0.06) f(p.tar ?? p.gap, a0 + 6 + Math.floor(r(79) * Math.max(1, len - 20)), by + 2, 6 + Math.floor(r(80) * 8), 1);
+    }
+  }
+  edges(ctx, x, y, tx, ty, room, p);
+}
+
+// The Fair Return's cargo (the hold's `cargo` stacks): not one crate per tile in a grid, but
+// a real stow, in little groups of a kind: crates (their lids run across two tiles as one
+// crate), barrels on end (round heads, hooped), and sacks heaped up. The group is picked by
+// the two-by-two block, so a stack reads as barrels here, crates there, sacks between.
+function cargoKind(tx, ty) {
+  const r = hash(tx >> 1, ty >> 1, 515);
+  return r < 0.42 ? 'crate' : r < 0.74 ? 'barrel' : 'sack';
+}
+const SACK = ['#403b31', '#474135', '#3a362e'];
+function shipCargoOf(raise, p) {
+  const crate = crateBlockOf(raise, p);
+  return (ctx, x, y, tx, ty, room, floor) => {
+    const kind = cargoKind(tx, ty);
+    if (kind === 'crate') {
+      crate(ctx, x, y, tx, ty, room, floor);
+      // A crate twice the width: the batten between two lids of one crate goes.
+      const top = y - raise;
+      if ((tx & 1) === 0 && inCargo(room, tx + 1, ty) && cargoKind(tx + 1, ty) === 'crate') {
+        px(ctx, pick(p.plank, hash(tx, ty, 77)), x + T - 4, top + 2, 4, T - 4);
+        for (let j = 0; j < 3; j++) px(ctx, p.plankLo, x + T - 4, top + 5 + j * 5, 4, 1);
+      }
+      if ((tx & 1) === 1 && inCargo(room, tx - 1, ty) && cargoKind(tx - 1, ty) === 'crate') {
+        px(ctx, pick(p.plank, hash(tx, ty, 78)), x, top + 2, 4, T - 4);
+        for (let j = 0; j < 3; j++) px(ctx, p.plankLo, x, top + 5 + j * 5, 4, 1);
+      }
+      return;
+    }
+    floor(ctx, x, y, tx, ty, room);
+    const top = y - raise;
+    const front = inCargo(room, tx, ty + 1) ? 0 : raise;
+    if (kind === 'barrel') {
+      // The gaps between the barrels: deep dark.
+      px(ctx, p.stand0, x, top, T, T + raise);
+      // Barrels never stand in rows like soldiers: each its own size, a little off true.
+      const jx = rnd(tx, ty, 520, 5) - 2;
+      const jy = rnd(tx, ty, 524, 3) - 1;
+      const rr = 6 + rnd(tx, ty, 525, 2);
+      const cx = x + 8 + jx;
+      if (front) {
+        // The barrel's side below its head: staves, two hoops, the bulge lit on the left.
+        for (let s = 0; s < 14; s++) {
+          const edge = s < 2 || s > 11;
+          px(ctx, edge ? p.plankLo : pick(p.plank, hash(tx * 16 + s, ty, 521)), cx - 7 + s, top + 8, 1, raise + 6);
+        }
+        px(ctx, rgba(p.plankHi, 0.5), cx - 5, top + 8, 1, raise + 6);
+        for (const hy of [top + 11, top + 8 + raise]) { px(ctx, p.hoop ?? p.stand1, cx - 7, hy, 14, 2); px(ctx, rgba(p.plankHi, 0.4), cx - 7, hy, 14, 1); }
+        shade(ctx, cx - 7, top + 13 + raise, 14, 1, 0.5);
+      }
+      // The head: a ring of hoop, the head boards, a bung, wet at the near edge.
+      const hy = top + 8 + jy;
+      oval(ctx, p.hoop ?? p.stand1, cx, hy, rr, rr);
+      oval(ctx, pick(p.plank, hash(tx, ty, 522)), cx, hy, rr - 2, rr - 2);
+      px(ctx, p.plankLo, cx - rr + 2, hy - 2, rr * 2 - 3, 1);
+      px(ctx, p.plankLo, cx - rr + 2, hy + 2, rr * 2 - 3, 1);
+      px(ctx, rgba(p.plankHi, 0.5), cx - 3, hy - rr + 2, 5, 1);
+      px(ctx, p.stand0, cx + 1 + rnd(tx, ty, 523, 2), hy, 2, 1);
+      shade(ctx, cx - rr + 2, hy + rr - 3, rr * 2 - 3, 2, 0.25);
+    } else {
+      // Sacks heaped: lumpy canvas, a tie at the neck, each one sagging onto the next.
+      px(ctx, p.stand0, x, top, T, T + raise);
+      if (front) {
+        // The near face of the heap: sacks lying one on another, each sagging, the lowest flattest.
+        for (let j = 0; j * 7 < raise; j++) {
+          const sy = top + T + j * 7 + 2;
+          const sx = x + 8 + (j & 1 ? 2 : -1) + rnd(tx, ty, 545 + j, 2);
+          oval(ctx, p.stand0, sx, sy + 1, 7, 4);
+          oval(ctx, pick(SACK, hash(tx + j, ty, 546)), sx, sy, 7, 3);
+          px(ctx, 'rgba(255, 250, 230, 0.1)', sx - 4, sy - 2, 6, 1);
+        }
+      }
+      const n = 2 + rnd(tx, ty, 531, 2);
+      for (let i = 0; i < n; i++) {
+        const sx = x + 3 + rnd(tx, ty, 532 + i, 10);
+        const sy = top + 3 + i * 4 + rnd(tx, ty, 536 + i, 3);
+        oval(ctx, p.stand0, sx, sy + 1, 5, 4);
+        oval(ctx, pick(SACK, hash(tx + i, ty, 540)), sx, sy, 5, 4);
+        px(ctx, 'rgba(255, 250, 230, 0.08)', sx - 3, sy - 3, 4, 1);
+        px(ctx, 'rgba(0, 0, 0, 0.22)', sx - 4, sy + 2, 9, 1);
+        if (i === n - 1) { px(ctx, p.rope, sx + 3, sy - 3, 2, 1); px(ctx, p.rope, sx + 4, sy - 4, 1, 1); }
+      }
+    }
+  };
 }
 
 const GROUND = {
@@ -663,11 +790,137 @@ function stones(ctx, x, y, tx, ty, room, p) {
 }
 
 // =====================================================================
+// A crag (a room's `crag`: a list of { x, y, w, h } tile boxes). Inside them the
+// rock is drawn as an open-air headland seen from above and to the south,
+// instead of the dark mass and the banded face: the clifftop ('#') is broken
+// slabs of weathered rock, lit by the sky along their upper edges, cracked
+// between, with moss and thrift in the wet hollows; the face ('W') is fractured
+// columns of rock of uneven width, leaning a little, each split across by
+// joints with a lit lip and a shadowed underside, darker toward the foot, weed
+// hanging off the ledges and a black wet band where the sea reaches. Where the
+// clifftop stands beside a lower face, its broken edge reaches over it.
+// (The Watch Rock's point: wreck_watch_rock.)
+// =====================================================================
+const inCrag = (room, tx, ty) => Boolean(room?.crag?.some((b) => tx >= b.x && ty >= b.y && tx < b.x + b.w && ty < b.y + b.h));
+// Rock broken into lumps: the nearest of a scatter of points (one in each cell of an sx by sy
+// grid, jittered) at a world pixel. [the lump's id, how far in from its edge, and where the
+// pixel is from the lump's middle (-1..1 across, -1..1 down)].
+function lumpAt(wx, wy, sx, sy, seed) {
+  const gx = Math.floor(wx / sx);
+  const gy = Math.floor(wy / sy);
+  let d1 = 1e9;
+  let d2 = 1e9;
+  let best = null;
+  for (let j = -1; j <= 1; j++) {
+    for (let i = -1; i <= 1; i++) {
+      const cx = gx + i;
+      const cy = gy + j;
+      const px0 = (cx + 0.15 + hash(cx, cy, seed) * 0.7) * sx;
+      const py0 = (cy + 0.15 + hash(cx, cy, seed + 1) * 0.7) * sy;
+      const d = Math.hypot((wx - px0) / sx, (wy - py0) / sy);
+      if (d < d1) { d2 = d1; d1 = d; best = [cx, cy, px0, py0]; } else if (d < d2) d2 = d;
+    }
+  }
+  const [cx, cy, px0, py0] = best;
+  return { id: hash(cx, cy, seed + 2), cx, cy, edge: (d2 - d1) * Math.min(sx, sy) * 0.5, ux: (wx - px0) / (sx * 0.6), uy: (wy - py0) / (sy * 0.6) };
+}
+// The clifftop's colour at a world pixel: low weathered lumps of rock, lit by the sky on the
+// sides that face up and left, cracked between, moss and thrift lying wet in the hollows.
+function cragTopColour(wx, wy, p) {
+  const L = lumpAt(wx, wy, 19, 12, 701);
+  const dd = DITHER[(wy & 3) * 4 + (wx & 3)] / 16;
+  const g = p.weed ?? p.weedFoot;
+  const m = softNoise(wx / 12, wy / 9, 703) + (dd - 0.5) * 0.14;
+  if (L.edge < 0.8) return m > 0.5 ? g[(wx + wy) % g.length] : p.deepRock2;
+  if (m > 0.58) {
+    if (hash(wx, wy, 704) < 0.015) return p.flowers?.[1] ?? '#d68aa4';
+    if (m > 0.78 && dd < 0.5) return p.weedHi ?? g[0];
+    return g[Math.floor(softNoise(wx / 3, wy / 3, 706) * g.length) % g.length];
+  }
+  const lit = -L.uy * 0.8 - L.ux * 0.35;
+  if (L.edge < 2 && lit > 0.25) return p.rim;
+  if (L.edge < 2 && lit < -0.3) return p.rockLo;
+  const tones = [p.rock[3], p.rock[1], p.rock[0], p.rock[2]];
+  let col = tones[Math.floor(L.id * tones.length)];
+  if (lit < -0.45 && dd < 0.5) col = p.rockLo;
+  else if (lit > 0.5 && dd < 0.35) col = p.rim;
+  if (hash(wx >> 2, wy, 707) < 0.015) col = p.streak;
+  return col;
+}
+function cragTop(ctx, x, y, tx, ty, room, p) {
+  for (let r = 0; r < T; r++) for (let c = 0; c < T; c++) px(ctx, cragTopColour(tx * T + c, ty * T + r, p), x + c, y + r);
+}
+// A crag's face: big rough lumps of rock stacked up the cliff, each lit on its upper side by
+// the sky and shadowed under; darker toward the foot; weed hanging off the lumps' tops, black
+// and weedy at the foot where the sea reaches; rain running down.
+function cragFace(ctx, x, y, tx, ty, room, p) {
+  let up = 0;
+  while (up < 6 && at(room, tx, ty, 0, -(up + 1)) === 'W') up++;
+  let down = 0;
+  while (down < 6 && at(room, tx, ty, 0, down + 1) === 'W') down++;
+  const faceTop = (ty - up) * T;
+  const faceH = (up + down + 1) * T;
+  const footY = (ty + down + 1) * T;
+  const below = at(room, tx, ty, 0, down + 1);
+  const wetFoot = isSea(below) || below === ';';
+  const g = p.weed ?? p.weedFoot;
+  for (let r = 0; r < T; r++) {
+    const wy = ty * T + r;
+    const depth = (wy - faceTop) / faceH;
+    for (let c = 0; c < T; c++) {
+      const wx = tx * T + c;
+      const dd = DITHER[(wy & 3) * 4 + (wx & 3)] / 16;
+      // Big slabs in places, smaller broken lumps between.
+      const L = softNoise(wx / 20, wy / 20, 740) > 0.52 ? lumpAt(wx, wy, 17, 19, 739) : lumpAt(wx, wy, 11, 13, 741);
+      const lit = -L.uy * 0.9 - L.ux * 0.3;
+      let col;
+      if (L.edge < 0.9) col = lit < 0.1 ? p.deepRock2 : p.rim;
+      else if (L.edge < 2.2 && lit > 0.2) col = p.rim;
+      else if (L.edge < 2.4 && lit < -0.2) col = p.rockLo;
+      else {
+        col = pick(p.rock, L.id);
+        if (lit > 0.45 && dd < 0.4) col = p.rim;
+        else if (lit < -0.35 && dd < 0.6) col = p.rockLo;
+      }
+      // Weed growing on top of a lump and hanging over its face.
+      if (hash(L.cx, L.cy, 748) < 0.3 && L.uy < -0.35 && L.edge > 0.9 && Math.abs(L.ux) < 0.7) {
+        if (hash(wx, L.cy, 749) < 0.7) col = g[(wx + L.cy) % g.length];
+      }
+      // Darker toward the foot, out of the sky's light.
+      if (depth > 0.5 && dd < (depth - 0.5) * 1.6 && col !== p.rim) col = col === p.rockLo ? p.deepRock2 : p.rockLo;
+      // The foot: wet and black where the sea reaches it, weed on it.
+      const toFoot = footY - wy;
+      if (wetFoot && toFoot <= 4) col = hash(wx, wy, 751) < 0.5 ? g[(wx >> 1) % g.length] : p.deepRock2;
+      else if (wetFoot && toFoot <= 7 && dd < 0.5) col = p.rockLo;
+      // Rain running down it.
+      if (hash(wx, 0, 752) < 0.05 && softNoise(wx, wy / 6, 753) > 0.62) col = p.streak;
+      px(ctx, col, x + c, y + r, 1, 1);
+    }
+  }
+  // Where the clifftop stands beside it, the top's broken edge reaches over its side.
+  for (const side of [-1, 1]) {
+    const n = at(room, tx, ty, side, 0);
+    if ((n !== '#' && n !== 'k') || !inCrag(room, tx + side, ty)) continue;
+    for (let r = 0; r < T; r++) {
+      const wy = ty * T + r;
+      const reach = 1 + Math.floor(softNoise(wy / 4, tx * 2 + (side > 0 ? 1 : 0), 760) * 5);
+      for (let s = 0; s < reach; s++) {
+        const c = side < 0 ? s : T - 1 - s;
+        px(ctx, s === reach - 1 ? p.rockLo : cragTopColour(tx * T + c, wy, p), x + c, y + r, 1, 1);
+      }
+      const sc = side < 0 ? reach : T - 1 - reach;
+      shade(ctx, x + sc, y + r, 1, 1, 0.4);
+    }
+  }
+}
+
+// =====================================================================
 // Walls.
 // =====================================================================
 const WALLS = {
   // Cliff or cave rock. Top: the dark mass; face: banded strata.
   rockTop(ctx, x, y, tx, ty, room, p) {
+    if (inCrag(room, tx, ty)) { cragTop(ctx, x, y, tx, ty, room, p); return; }
     px(ctx, p.deepRock, x, y, T, T);
     // (With the blend pass on, its patches run across the rock instead of a block per tile.)
     if (!blendOn(room)) {
@@ -692,6 +945,7 @@ const WALLS = {
   // by joints, some beds wet and dark for a stretch. Now and then something on it: a ledge
   // with thrift or weed, a gull's nest, white gull streaks, a deep crack; rain running down.
   rockFace(ctx, x, y, tx, ty, room, p) {
+    if (inCrag(room, tx, ty)) { cragFace(ctx, x, y, tx, ty, room, p); return; }
     const X0 = tx * T;
     const Y0 = ty * T;
     for (let c = 0; c < T; c++) {
@@ -1182,40 +1436,82 @@ function wrackHeap(ctx, x, y, tx, ty, room, p, floor) {
   if (hash(tx, ty, 101) < 0.5) px(ctx, '#e8d8c8', x + 5 + rnd(tx, ty, 102, 6), y + 8, 2, 2);
 }
 
-// A laid hedgerow (Z, in an area whose `Z` is 'hedge': the Sunken Lanes). A squared-off bank
-// of dark leaves that joins its Z neighbours into one long row, a flat lit top, weed caught in
-// its foot where the flood has been.
+// A hedgerow gone wild (Z, in an area whose `Z` is 'hedge': the Sunken Lanes). It joins its Z
+// neighbours into one long row, but nobody has clipped it in years: its top is a lumpy line of
+// leaf clumps (the bumps run on from tile to tile, so a long row never repeats), its ends curl
+// down round, sprigs stick up out of it, and weed is caught in its foot where the flood has been.
 function hedgeRow(ctx, x, y, tx, ty, room, p, floor) {
   floor(ctx, x, y, tx, ty, room);
   const l = at(room, tx, ty, -1, 0) === 'Z';
   const r = at(room, tx, ty, 1, 0) === 'Z';
   const up = at(room, tx, ty, 0, -1) === 'Z';
-  const x0 = x + (l ? 0 : 1);
-  const x1 = x + (r ? 16 : 15);
-  const top = y + (up ? 0 : 2);
+  const down = at(room, tx, ty, 0, 1) === 'Z';
   const dark = p.hedgeLo ?? '#1a2e1c';
-  shade(ctx, x0, y + 13, x1 - x0, 3, 0.45);
-  px(ctx, dark, x0, top, x1 - x0, y + 14 - top);
-  px(ctx, p.hedge ?? '#2a4a28', x0, top + 1, x1 - x0, y + 11 - top);
-  // The clipped top, catching the light, and the line where it turns down into the face.
-  if (!up) {
-    px(ctx, p.weed[1], x0, top, x1 - x0, 4);
-    px(ctx, p.weedHi, x0 + 1, top, x1 - x0 - 2, 1);
-    px(ctx, dark, x0, top + 4, x1 - x0, 1);
+  const mid = p.hedge ?? '#2a4a28';
+  // How far down the top sits at a pixel column: smooth bumps about 6 px apart and up to
+  // 4 px deep, worked out from the column's place in the room so they run on across tiles.
+  const bump = (wx, salt = 131, size = 7, depth = 6) => {
+    const f = wx / size, i = Math.floor(f), u = f - i, s = u * u * (3 - 2 * u);
+    const a = hash(i, ty, salt), b = hash(i + 1, ty, salt);
+    return Math.round((a + (b - a) * s) * depth);
+  };
+  // The foot is ragged too: leaves hang lower in places.
+  const feet = [];
+  for (let i = 0; i < 16; i++) feet.push(down ? y + 16 : y + 12 + bump(tx * 16 + i, 133, 5, 2));
+  const tops = [];
+  for (let i = 0; i < 16; i++) {
+    // Distance in from an open end of the row (9 if the row runs on that side).
+    const end = Math.min(l ? 9 : i, r ? 9 : 15 - i);
+    tops.push(end < 1 ? null : up ? y : y + 1 + bump(tx * 16 + i) + (end === 1 ? 5 : end === 2 ? 2 : end === 3 ? 1 : 0));
   }
-  // Leaves: specks of light and dark down its face.
+  const bottom = down ? y + 16 : y + 14;
+  if (!down) shade(ctx, x + (l ? 0 : 2), y + 13, 16 - (l ? 0 : 2) - (r ? 0 : 2), 3, 0.45);
+  for (let i = 0; i < 16; i++) {
+    const top = tops[i];
+    if (top == null) continue;
+    px(ctx, dark, x + i, top, 1, feet[i] - top);
+    const body = up ? top : top + 3;
+    px(ctx, mid, x + i, body, 1, Math.max(0, (down ? y + 16 : feet[i] - 2) - body));
+    if (!up) {
+      // The sunlit crown of each clump, and the shadow where it turns down into the face.
+      px(ctx, p.weed[1], x + i, top, 1, 3);
+      const crest = (tops[i - 1] ?? top + 1) >= top && (tops[i + 1] ?? top + 1) >= top;
+      if (crest) px(ctx, p.weedHi, x + i, top, 1, 1);
+      px(ctx, dark, x + i, top + 3, 1, 1);
+      // Where two clumps meet, a dark cleft runs down between them.
+      const wx = tx * 16 + i;
+      if (wx % 7 === 0 && hash(wx / 7, ty, 131) > 0.55) px(ctx, dark, x + i, top, 1, 6);
+    }
+  }
+  // Leaves: specks of light and dark down its face, and darker hollows between clumps.
   for (let i = 0; i < 14; i++) {
-    const bx = x + 1 + rnd(tx, ty, 10 + i, 14);
-    const by = top + 3 + rnd(tx, ty, 30 + i, Math.max(1, y + 9 - top));
-    px(ctx, i % 3 ? p.weed[0] : p.weed[1], bx, by, 2, 1);
-    if (i % 4 === 0) px(ctx, p.turfLo, bx, by + 1, 1, 1);
+    const c = 1 + rnd(tx, ty, 10 + i, 13);
+    const top = tops[c] ?? tops[8];
+    const by = top + 4 + rnd(tx, ty, 30 + i, Math.max(1, y + 9 - top));
+    if (by >= bottom - 2) continue;
+    px(ctx, i % 3 ? p.weed[0] : p.weed[1], x + c, by, 2, 1);
+    if (i % 4 === 0) px(ctx, p.turfLo, x + c, by + 1, 1, 1);
   }
-  // Rounded ends where the row stops.
-  if (!l) { px(ctx, p.turfLo, x0, top, 1, 2); }
-  if (!r) { px(ctx, p.turfLo, x1 - 1, top, 1, 2); }
-  // Its foot, and a bit of weed the flood left in it.
-  px(ctx, p.turfLo, x0, y + 13, x1 - x0, 1);
-  if (hash(tx, ty, 120) < 0.5) px(ctx, p.weedFoot?.[0] ?? p.weed[2], x + 3 + rnd(tx, ty, 121, 8), y + 12, 3, 2);
+  for (let i = 0; i < 2; i++) {
+    const c = 2 + rnd(tx, ty, 140 + i, 10);
+    const top = tops[c] ?? tops[8];
+    px(ctx, dark, x + c, top + 6 + rnd(tx, ty, 142 + i, 3), 3, 1);
+  }
+  // Sprigs poking up out of the top.
+  if (!up) {
+    for (let i = 0; i < 2; i++) {
+      if (hash(tx, ty, 150 + i) < 0.4) continue;
+      const c = 2 + rnd(tx, ty, 152 + i, 12);
+      if (tops[c] == null) continue;
+      px(ctx, p.weed[0], x + c, tops[c] - 2, 1, 2);
+      px(ctx, p.weedHi, x + c, tops[c] - 2, 1, 1);
+    }
+  }
+  // Its foot, ragged with leaves, and a bit of weed the flood left in it.
+  if (!down) {
+    for (let i = 0; i < 16; i++) if (tops[i] != null) px(ctx, p.turfLo, x + i, feet[i], 1, 1);
+    if (hash(tx, ty, 120) < 0.5) px(ctx, p.weedFoot?.[0] ?? p.weed[2], x + 3 + rnd(tx, ty, 121, 8), y + 12, 3, 2);
+  }
 }
 
 // Barnacled rock mass (x, solid), coral on the beach, sea-glass in the Soundings.
@@ -2340,6 +2636,17 @@ const AREAS = {
     O: 'boulder', F: 'net', Z: 'wrack', N: 'grass', x: 'barnacle', hang: 'rope', curve: true,
   },
 };
+// --- THE SHORE UNDER THE LAST LIGHT (lastlight_shore, the end of chapter 5): the Reach's
+// colours, but the ground is a strip of dark wet sand where the sea threw them up. ---
+AREAS.lastshore = {
+  ...AREAS.reach,
+  p: {
+    ...AREAS.reach.p,
+    ground: ['#6a6656', '#646050', '#706c5a', '#5e5a4c'], hi: '#86826c', lo: '#4a4838', crack: '#3a382c',
+    speck: ['#4e4c40', '#9a967e', '#5a5e50', '#7a7a66'], shells: ['#c8c8b8', '#d8d0c0'],
+  },
+  '.': 'sand',
+};
 // --- MERROW: the drowned town. Dressed grey-green stone, cobbles with weed in the joints, clear
 // bottle-green water with the street showing under it, limewashed houses stained where the tide
 // stood, dark slate roofs (b and B are roof slopes and ridges to jump across), no lit windows. ---
@@ -2362,7 +2669,7 @@ const MERROW_P = {
   mortar: '#2a3430', ashlar: ['#66726a', '#606c64', '#6c786f', '#5a665e'], ashlarHi: '#8a968c', ashlarLo: '#3e4844',
   tideStain: '34, 66, 48', tideLine: '#5a7a5e',
   // Limewash, its quoins and downpipes; dark windows and faded doors.
-  houses: ['#a8aea0', '#9ea69a', '#b0b2a2', '#a0a894', '#aaa49a'], plasterHi: '#bcc0b0', plasterLo: '#868c80',
+  houses: ['#707868', '#6a7264', '#787c6c', '#6c7460', '#767068'], plasterHi: '#868b7c', plasterLo: '#565c50',
   quoin: '#6e7a72', quoinHi: '#8a968c', pipe: '#1e2422', pipeHi: '#3a4442',
   dress: '#7e8880', dressHi: '#9aa49a', dressLo: '#4e5852', glassDark: '#0c1816', glassSky: '#2e5248', sash: '#3a423e', curtainDark: '#2a2a26',
   doors: ['#2e4a42', '#4a2e2a', '#2e3a4e', '#3e3a2a'], knob: '#8a8a6a',
@@ -2576,7 +2883,7 @@ function buildLook(cfg0) {
   const naturalLedges = cfg.block === 'sandstone' || cfg.block === 'wetrock';
   for (const [letter, raise] of [['b', 12], ['B', 24]]) {
     const stone = look[letter];
-    const crate = crateBlockOf(raise, p);
+    const crate = p.ship ? shipCargoOf(raise, p) : crateBlockOf(raise, p);
     const rock = rockLedgeOf(raise, p);
     const shoreRock = rockLedgeOf(raise, p, true);
     const rocky = (room) => naturalLedges && room?.ledges !== 'blocks' && !room?.indoors;
@@ -2637,6 +2944,17 @@ AREAS.cliffcave = {
   },
 };
 
+// --- THE WRECK YARD'S BARE ROCK (a `tileLook`): the Wreck Yard's palette and storm, but the point's own rock
+// instead of the yard's iron: the cliffs are natural rock faces (not riveted hull plate), the floor letters are
+// shingle and sand, not plate and planks. For the way out to the Fair Return's bell: the cave under the point
+// (wreck_under_point) and the Watch Rock (wreck_watch_rock). ---
+AREAS.wreckrock = {
+  ...AREAS.wreck,
+  p: { ...AREAS.wreck.p, rock: ['#3e3a36', '#38342f', '#46413b', '#322e2a'], streak: '#5e6a62', rim: '#4e5e58', topRock: '#161d1b', fleck: '#7c8a80' },
+  '.': 'shingle', ':': 'path', X: 'shingle',
+  wallFace: 'rockFace', h: 'rockFace', block: 'wetrock', cabin: false, seaPorthole: false,
+};
+
 // --- THE FAIR RETURN (the ghost ship): the Wreck Yard's palette gone colder and darker, a brig
 // that has stood a hundred years in fog. Decks are long laid boards (grey-brown, gaps black),
 // bulkheads and the hull's side are board walls, the sea round her is the yard's black water.
@@ -2647,12 +2965,16 @@ AREAS.ghostship = {
     ...AREAS.wreck.p,
     shadow: '2, 10, 12', wetShade: '2, 12, 14',
     ground: ['#4a4038', '#42382f', '#52463c', '#3a3029'], hi: '#645649', lo: '#2a211b', crack: '#14100c', gap: '#120e0a',
-    plank: ['#4a4640', '#413e38', '#524c42', '#3a3834', '#44484a', '#4c4238'], plankHi: '#68675c', plankLo: '#1f1d1a', nail: '#8a9088',
+    // The deck's boards: close tones of old grey-brown oak (shipStrakes); the age goes on top, in shipDecor.js.
+    ship: true, tar: '#0e0c0a',
+    plank: ['#4c463d', '#48423a', '#504a40', '#453f37', '#4a4540'], plankHi: '#6e6858', plankLo: '#29241e', nail: '#6c6a5e', hoop: '#22201c',
     wall: ['#3a3630', '#33302b', '#423c34', '#2c2a26'], wallHi: '#58554a', wallLo: '#18110c', trim: '#21170f', frame: '#21170f',
     water: '#142e34', deep: '#0e2429', wave: '#2c5a60', troughs: '#0a1e24', foam: '#9cbcb4', lip: '#0a1c22', caps: 0.1,
     streak: '#7a6a50', rust: '#6a3a24', glint: '#8ca8a0',
   },
-  '.': 'planks', ',': 'planks', ':': 'planks', o: 'planksV', X: 'planks',
+  // (The poop deck and the gangways are `o`: fore-and-aft boards like the rest, except a narrow
+  // gangway, whose boards run across it: see shipBoardsVertical in shipDecor.js.)
+  '.': 'planks', ',': 'planks', ':': 'planks', o: 'planks', X: 'planks',
   wallTop: 'rockTop', wallFace: 'boardWall', h: 'boardWall', cabin: true,
 };
 

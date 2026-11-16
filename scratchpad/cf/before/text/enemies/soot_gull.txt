@@ -1,0 +1,91 @@
+# SOOT GULL
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/soot_gull.js.
+
+[intro]
+A gull drops out of the grey onto a milestone, an ember in its beak like a pipe. It is the colour of a chimney sweep, and it is looking at your bag. A SOOT GULL!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SOOT GULL shifts the ember to the other side of its beak, like an old man with a pipe.
+
+SOOT GULL screams at nothing, out of habit. Out here, nothing screams back.
+
+SOOT GULL preens one feather clean. It is white underneath. It looks at it, surprised.
+
+SOOT GULL has its eye on your bag. It had its eye on your bag before you got here.
+
+Smells of a cold harbour and a hot grate, both at once.
+
+# When it snatches something (src/battle/steals.js; {item} is the item's name).
+[steal]
+SOOT GULL whips your {item} out of the bag and holds it up out of reach! Beat it, or calm it, to get it back.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+SOOT GULL's feathers are standing up all over. It's trying to look bigger. It mostly looks dusty.
+
+[flavor: spareable]
+SOOT GULL has put the ember down. It's looking east, the way the sea is, very hard.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+MINE.
+
+Mine!
+Mine!
+
+KAAAH!
+
+Got
+any
+chips?
+
+Finders
+keepers.
+
+What's
+in the
+bag?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/soot_gull.js.
+[talk: Inspect]
+SOOT GULL - HP 5600
+A sea gull a long way from the sea, gone grey all over, and still a thief. Dives along a marked line, throws feathers, drops stolen embers. If a dive or an ember lands, it takes food from your bag.
+
+[talk: Turn out your pockets]
+You turn out your pockets to show there's nothing in them. SOOT GULL hops closer for a good look, and is so let down that it gives back what it took, as if it never wanted it.
+
+[talk: Point at the sea]
+You point east, back the way you came, where the sea is. SOOT GULL follows your finger. It looks for a long time. A gull that far from the sea knows exactly what you mean.
+
+[talk: Brush off its wing]
+You hold out a hand, slowly, and brush the soot off one wing. It's white underneath. SOOT GULL stares at it, then lets you do the other one, and drops what it was holding to keep still.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SOOT GULL tumbles over in a puff of soot, and the ember rolls out of its beak and goes out on the road. It leaves a feather behind.
+
+[pacified]
+SOOT GULL shakes itself, a great cloud of soot coming off, and for a moment it is nearly white. Then it lifts off and heads east, toward the sea, crying all the way.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that she has known a great many gulls, and that it is the scruffiest. {foe} puffs up. Ves says that was not a compliment. {foe} disagrees.
+
+Ves holds her umbrella over {foe} so the ash stops landing on it. {foe} is suspicious of the umbrella, and then sits under it.
+
+Ves tells {foe} she knows a thief when she sees one. {foe} looks hurt. Ves says she said she knows one, not that she minds.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble offers {foe} a crust. {foe} takes the crust, and his hat. Bramble gets his hat back. He considers this a fair trade.
+
+Bramble asks {foe} if it's lost. {foe} looks at him like he's the lost one. Bramble says that's fair, they both are.
+
+Bramble flaps his arms at {foe} to show it how to fly back home. {foe} watches him with real pity.

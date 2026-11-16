@@ -7,11 +7,11 @@
 # ... waits for a bubble of its own, and words that won't fit run on into
 # the next.
 [boss_intro]
-Hold still, sprout.
-This is the cold.
+Alright, sprout.
+I'll be as gentle as I can.
 
-It only hurts
-if you wilt.
+But I won't make it easy.
+Not when it's you.
 
 [intro]
 TAPER stands before the door, her flame trembling.
@@ -39,7 +39,7 @@ Please, sprout.
 Just come home.
 
 I set a place for every one of them.
-I'm tired of clearing plates.
+I can't clear another.
 
 Out there isn't a garden.
 Nobody will tend you out there.

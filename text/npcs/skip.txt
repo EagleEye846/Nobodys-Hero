@@ -1,0 +1,22 @@
+# SKIP: a cave-frog kid on the Far Shore who launched a paper boat at the Reeds and has been waiting
+# for it ever since. A tiny errand: the boat is in the Reeds, bring it back, get a skipping stone.
+
+[first]
+Gubb brought me over for the afternoon. I made a boat out of the back of my brother's homework and I launched it off the end of the Reeds and it just went. It didn't even look back.
+
+Now I've got a flag and no boat.
+
+[repeat]
+It was a very small boat, with a charcoal flag on. If you see something small and optimistic, that's it.
+
+[boat_back]
+You hold out the paper boat. Skip stares at it, then at you, then at it.
+
+IT CAME BACK! It's dry! Mostly! Nothing ever comes back!
+
+He tucks it inside his jacket, very carefully, and presses a flat grey stone into your hand.
+
+That's my best. Seven skips, once, with witnesses. You can have it. I'll make another stone. I'm much better at boats.
+
+[boat_after]
+I'm going to launch it again. With a rope this time. That's called learning.

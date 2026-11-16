@@ -15,6 +15,7 @@ import { AREA_NAMES } from '../data/areas.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { EquipMenu } from './equipMenu.js';
 import { SkillsMenu } from './skillsMenu.js';
+import { NotchMenu } from './notchMenu.js';
 import { ItemsMenu } from './itemsMenu.js';
 import { CandleMenu } from './candleMenu.js';
 import { SettingsMenu } from './settingsMenu.js';
@@ -30,14 +31,16 @@ const TABS = [
   { label: 'ITEMS', icon: 'items' },
   { label: 'EQUIP', icon: 'fight' },
   { label: 'SKILLS', icon: 'spells' },
+  // Which learned spells go in each person's SPELL NOTCHES (notchMenu.js).
+  { label: 'SPELLS', icon: 'notch' },
   { label: 'CANDLES', icon: 'candle' },
   { label: 'JOURNAL', icon: 'talk' },
   { label: 'OPTIONS', icon: 'sound' },
 ];
 const BAR_HEIGHT = 96;
-// Six buttons across the bar with room between them: the icon sits centred
+// Seven buttons across the bar with room between them: the icon sits centred
 // above the label, so the labels don't crowd the icons.
-const BUTTON = { w: 90, h: 72, gap: 12, y: 12 };
+const BUTTON = { w: 80, h: 72, gap: 8, y: 12 };
 const ICON_SIZE = 20;
 const LABEL_SIZE = 18;
 const CARD = { x: 100, y: 330, w: 440, h: 134 };
@@ -70,7 +73,7 @@ export class PauseMenu {
   constructor() {
     this.isOpen = false;
     this.tab = 0;
-    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu(), new CandleMenu(), new JournalMenu(), new SettingsMenu()];
+    this.screens = [new ItemsMenu(), new EquipMenu(), new SkillsMenu(), new NotchMenu(), new CandleMenu(), new JournalMenu(), new SettingsMenu()];
   }
 
   // `room` is the room you're in (its data), for the area name on the card.
@@ -213,7 +216,10 @@ export class PauseMenu {
       const room = w - labelW - 24;
       const plain = goal.replace(/\{[^}]*\}/g, '');
       const size = Math.max(14, Math.min(20, Math.floor((20 * room) / Math.max(1, textWidth(ctx, plain, 20)))));
-      drawStyledLine(ctx, goal, x + 6, y - 24 + (20 - size), { size, color: COLORS.text, outline: '#000' });
+      // Still too long even small (a long place name on the tab): it goes up a line, over the tab, instead of under it.
+      const fits = textWidth(ctx, plain, size) <= room;
+      if (fits) drawStyledLine(ctx, goal, x + 6, y - 24 + (20 - size), { size, color: COLORS.text, outline: '#000' });
+      else drawStyledLine(ctx, goal, x + 6, y - 52, { size: 20, color: COLORS.text, outline: '#000' });
     }
   }
 }

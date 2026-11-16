@@ -13,7 +13,7 @@ export const RUSSET = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: RUSSET_SPRITE, palette: RUSSET_PALETTE },
-  maxHp: 405,
+  maxHp: 2250,
   damage: 18,
 
   // A Chapter 3 enemy, and a quick one.
@@ -23,8 +23,8 @@ export const RUSSET = {
   patterns: [
     { name: 'russetPiles', weight: 3 },
     { name: 'russetPounce', weight: 3 },
-    { name: 'russetTail', weight: 2 },
-    { name: 'russetTracks', weight: 2 },
+    { name: 'russetTrail', weight: 2 },
+    { name: 'russetPie', weight: 2 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

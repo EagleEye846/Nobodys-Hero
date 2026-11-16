@@ -162,11 +162,13 @@ export const GHOST_DECKHAND_ANIM = {
 };
 
 // ---------------------------------------------------------------------------
+// (His coat was a dead grey that vanished into the ship's dark boards; it is the crew's cold sea-green now,
+// paler, so the boy reads as one of the ghosts, as the deckhand does. 14 November.)
 export const POWDER_MONKEY_PALETTE = {
-  k: '#1c1a1c',
-  c: '#6a6a5c',
-  C: '#9a9a84',
-  d: '#3e3e36',
+  k: '#0e1c1e',
+  c: '#6e8c84',
+  C: '#a4c0b4',
+  d: '#445c56',
   s: '#cfd4c8',
   S: '#8c948c',
   f: '#d0dcd2',
@@ -182,8 +184,8 @@ export const POWDER_MONKEY_PALETTE = {
   r: '#c8442a',
   g: '#a8b4ac',
   G: '#68807a',
-  q: '#303034',
-  Q: '#585860',
+  q: '#2c3a3a',
+  Q: '#56686a',
 };
 
 function monkey(pose = {}) {

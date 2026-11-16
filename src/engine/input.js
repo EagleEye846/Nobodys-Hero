@@ -23,17 +23,23 @@ export const DEFAULT_KEYS = {
 };
 // Actions that ride along with another: X held is focus.
 const COMPANIONS = { cancel: ['focus'] };
+// (WASD doesn't move by default; anyone who wants it can bind it in OPTIONS.)
 const EXTRA_KEYS = {
-  KeyW: ['up'], KeyS: ['down'], KeyA: ['left'], KeyD: ['right'],
   Enter: ['confirm'],
   // Shift runs and uses the soul ability, but never backs out of a menu (so
   // Windows' Win+Shift+S screenshot doesn't close what you're looking at).
   ShiftLeft: ['run', 'ability'], ShiftRight: ['run', 'ability'],
+  // Ctrl is the menu when tapped on its own (see the keyup below), never when
+  // it's part of a shortcut like Ctrl+Shift+S.
   ControlLeft: ['menu'], ControlRight: ['menu'],
   Tab: ['swap'],
   // The ghost ship's lantern, out and lit again (src/overworld/haunt.js).
   KeyL: ['lantern'],
 };
+// Keys that start a shortcut (with another key) rather than doing anything
+// themselves. Ctrl tapped alone still opens the menu (on the way up).
+const CTRL_KEYS = ['ControlLeft', 'ControlRight'];
+const MODIFIER_KEYS = [...CTRL_KEYS, 'MetaLeft', 'MetaRight', 'AltLeft', 'AltRight', 'OSLeft', 'OSRight'];
 // Keys that can't be given to an action (they're kept for the extras above, or
 // the browser).
 export const RESERVED_KEYS = ['Escape', 'Enter', 'Tab', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlRight', 'AltLeft', 'AltRight', 'MetaLeft', 'MetaRight', 'KeyM'];
@@ -117,6 +123,11 @@ export function refreshBindings() {
   KEY_BINDINGS = buildBindings();
 }
 
+// Which actions repeat while held (menus scroll), and how fast.
+const REPEATING = ['up', 'down'];
+const REPEAT_DELAY_MS = 350;
+const REPEAT_EVERY_MS = 80;
+
 export class Input {
   constructor() {
     this.heldKeys = new Set();
@@ -130,6 +141,11 @@ export class Input {
     this.padHeld = new Set();
     // RUN set to TOGGLE: whether you're running now (tapping run flips it).
     this.runLatched = false;
+    // Holding UP or DOWN scrolls a menu: after a moment the press repeats, so you don't have to mash.
+    // (`firstPressed` ignores the repeats, for things that must only happen once a press: a jump.)
+    this.repeatedActions = new Set();
+    this.holdSince = {};
+    this.lastRepeat = {};
 
     window.addEventListener('keydown', (event) => {
       lastDevice = 'keys';
@@ -140,6 +156,17 @@ export class Input {
         if (!event.repeat) this.captured = event.code;
         return;
       }
+      // Ctrl (and the Windows/Command key, and Alt) with another key is a
+      // shortcut for the browser or the computer (Ctrl+Shift+S, Win+Shift+S
+      // for a screenshot, Ctrl+R, Alt+Tab): the game leaves those alone, and a
+      // Ctrl that was part of one doesn't open the menu.
+      if (MODIFIER_KEYS.includes(event.code)) {
+        if (CTRL_KEYS.includes(event.code) && !event.repeat) this.ctrlTap = event.code;
+        else this.ctrlTap = null;
+        return;
+      }
+      this.ctrlTap = null;
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
       const actions = KEY_BINDINGS[event.code];
       if (!actions) {
         if (event.code === 'KeyF' && !event.repeat) toggleFullscreen();
@@ -149,11 +176,19 @@ export class Input {
       if (!event.repeat) for (const action of actions) this.press(action);
       this.heldKeys.add(event.code);
     });
-    window.addEventListener('keyup', (event) => this.heldKeys.delete(event.code));
+    window.addEventListener('keyup', (event) => {
+      this.heldKeys.delete(event.code);
+      // Ctrl opens the menu when it's tapped on its own, on the way up.
+      if (CTRL_KEYS.includes(event.code) && this.ctrlTap === event.code) {
+        this.ctrlTap = null;
+        for (const action of KEY_BINDINGS[event.code] ?? []) this.press(action);
+      }
+    });
     // Releasing keys while the tab is unfocused never fires keyup.
     window.addEventListener('blur', () => {
       this.heldKeys.clear();
       this.padHeld.clear();
+      this.ctrlTap = null;
     });
   }
 
@@ -212,13 +247,32 @@ export class Input {
     return false;
   }
 
-  // True only on the frame the action was first pressed.
+  // True on the frame the action was first pressed, and (UP and DOWN) every so often while it's held.
   wasPressed(action) {
+    return this.pressedActions.has(action) || this.repeatedActions.has(action);
+  }
+
+  // True only on the frame the action was first pressed, never on a held repeat.
+  firstPressed(action) {
     return this.pressedActions.has(action);
   }
 
   endFrame() {
     this.pressedActions.clear();
+    // Held UP/DOWN: a repeat after 0.35 s, then one every 0.08 s, for the next frame.
+    this.repeatedActions.clear();
+    const now = performance.now();
+    for (const action of REPEATING) {
+      if (this.capture || !this.heldDown(action)) {
+        this.holdSince[action] = null;
+        continue;
+      }
+      this.holdSince[action] ??= now;
+      if (now - this.holdSince[action] >= REPEAT_DELAY_MS && now - (this.lastRepeat[action] ?? 0) >= REPEAT_EVERY_MS) {
+        this.repeatedActions.add(action);
+        this.lastRepeat[action] = now;
+      }
+    }
     this.anyPressed = false;
     this.runTap = false;
   }

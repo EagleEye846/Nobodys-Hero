@@ -9,6 +9,7 @@
 //   b  old stone step (jump up onto it; Ves can not)
 //   I  old stone pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const CITY_CRIER_SQUARE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_crier_square',
@@ -73,6 +74,8 @@ export const CITY_CRIER_SQUARE = {
     { sprite: 'inscription', x: 13, y: 12, text: 'crier_inscription' },
     { sprite: 'gold_pouch', x: 12, y: 7, text: 'crier_purse', gold: 200, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 24, y: 2, text: 'crier_chest', gives: 'criers_mittens', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_crier_square'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', '!': 'cracked_floor', I: 'city_pillar', b: 'crier_stone' },
 

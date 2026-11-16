@@ -14,6 +14,8 @@
 //   #  cavern rock overhead (solid)   W  old carved stone (solid)
 //   V  stone wall hung with glow-worm lamps   .  worn flagstone   ,  mossy turf
 //   I  carved pillar with a hanging lantern (solid)   F  mushroom bed (solid)
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const BELOWTOWN_LONG_ROPE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'belowtown_long_rope',
@@ -115,6 +117,7 @@ export const BELOWTOWN_LONG_ROPE = {
 
   textFile: 'interactions/belowtown.txt',
   props: [
+    ...(R3C_PROPS.belowtown_long_rope ?? []),
     { sprite: 'bf_tuck', x: 7, y: 41, cast: 'tuck', text: 'rope_tuck', speaker: 'tuck', animation: 'bf_tuck', speed: 0.5 },
     { sprite: 'bf_rumbold_head', x: 6, y: 41, text: 'rope_king_head' },
     { sprite: 'bf_mole_miner_a', x: 12, y: 42, cast: 'm1', text: 'rope_mole' },

@@ -63,6 +63,9 @@ export const SECRET_MERROW_RINGERS = {
     { sprite: 'in_stool_mugs', x: 4, y: 4, text: 'in_loft_mugs' },
     // (2026-11-08) The hall's barrels, stood in the corner.
     { sprite: 'c5_barrels', x: 11, y: 7, text: 'loft_barrels' },
+    // A page of the Fair Return's log (optional, secret: the way to her fog bell), in a bottle the ringers kept on their
+    // floor by the window, unopened.
+    { sprite: 'gs_log_bottle', x: 9, y: 4, text: 'loft_log_bottle', gives: 'log_page_4', notice: true, taken: { gone: true } },
   ],
   tileTexts: { '#': 'loft_wall', h: 'loft_wall' },
 

@@ -1,0 +1,2 @@
+PASS L9 ruins_entrance
+PASS L10 lantern_hall

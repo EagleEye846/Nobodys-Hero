@@ -629,3 +629,187 @@ A pick, a shovel and a broom, each about as long as your hand, leaned against th
 # (draft)
 [bt_tiny_tools 2]
 The little broom has been worn right down on one side. Somebody tidy lives near here, and has done for a very long time.
+
+# --- THE LIFE PASS (14 Nov): the things the folk have left lying about, in every room of the town ---
+
+[bl_menu_board]
+A chalkboard on two legs. TODAY: SPORE STEW. ALSO TODAY: SPORE STEW. TOMORROW: SEE TODAY.
+
+Underneath, in a different hand: (THE STEW IS GOOD. WE'RE ALLOWED TO SAY.)
+
+# (draft)
+[bl_menu_board 2]
+Somebody has added a line since you last looked: SPECIAL OFFER, FREE SECOND BOWL. Somebody else has crossed it out: THERE IS NO SECOND BOWL. A third hand: THERE WAS.
+
+[bl_menu_board_ves]
+{smile}A place that knows what it is. I respect that.
+
+[bl_inn_board]
+A chalkboard outside the Mossy Pillow: BED. BREAKFAST. A VERY LONG TALK ABOUT HOW YOU SLEEP. (THE TALK IS FREE. THE BED IS NOT.)
+
+[bl_inn_board_ves]
+{bored}I'd take the bed and skip the talk.
+
+[bl_stew_pot]
+A pot on a tripod, bubbling over a bed of coals. A ladle hangs off the rim on a bit of string, and a card says HELP YOURSELF, THEN PUT SOMETHING IN.
+
+Nobody has ever been sure what. It smells of onions, and of something older than onions.
+
+# (draft)
+[bl_stew_pot 2]
+You give it a stir. It stirs back, slowly. You decide that's the stew's business.
+
+[bl_stew_pot_ves]
+{bored}I'm not putting anything in. {smile}I'm also not asking what's already in there.
+
+[bl_shoes_b]
+Boots on a step. All left feet. Somebody here has a system, and it isn't working.
+
+[bl_sq_shoes]
+Small boots outside the inn door, and over one of them a stripy sock with a hole in the heel, left out to dry. It's dry. It's also very soft, and nobody's coming for it.
+
+You take the sock. It's not stealing. It's an errand, if anyone asks.
+
+[bl_sq_shoes_ves]
+{bored}If anyone asks, you're a sock rescuer.
+
+[bl_tub 2]
+The red one leans towards you as you go by. The orange one leans too. You decide it's a draught.
+
+[bl_cart]
+A hand cart, tipped to rest, full of ore that's gone a bit green. Somebody has chalked on the side: NOT STOLEN. BORROWED. WITH PERMISSION. FROM A MOLE.
+
+[bl_cart_ves]
+{smile}Which mole? {bored}Never mind. There's always a mole.
+
+[bl_pick_rack]
+A rack of picks and shovels, each with a name burnt into the handle: HOLLY. BIG HOLLY. AUNT HOLLY. NOT HOLLY'S. On the top peg is a hard hat with a candle stub in the brim, left for the next shift. Or the one after.
+
+# (draft)
+[bl_pick_rack 2]
+You lift the hard hat an inch. There's a note under it: IF YOU'RE READING THIS, I'M ON MY BREAK. DON'T MOVE ANYTHING. I'LL KNOW.
+
+[bl_sacks]
+Sacks of spore-meal, slumped together like they're sharing a secret. One is leaking a soft, golden dust, and the floor under it has gone fluffy.
+
+[bl_pigeons 2]
+You step closer. They each take one hop away, in the same direction, at the same moment, like they've practised.
+
+[bl_stalagmite 2]
+There's a little scratched ladder up the side, about a thumb high. Somebody's been measuring it. It's grown a hair since last year.
+
+[bl_odd_barrel]
+A barrel with a leafy sprig jammed in the bunghole, as if somebody ran out of corks. A single leaf has fallen on the cobbles beside it. There's no wind down here.
+
+[bl_odd_barrel_ves]
+{thinking}Hm. {bored}I'd swear that was nearer the noticeboard.
+
+[bl_niche_pouch]
+A snug little niche in the wall under the sleeping bat, with a biscuit hung on a nail. The tag says FOR WHOEVER LOOKS UP.
+
+You looked up.
+
+[bl_niche_pouch_ves]
+{smile}It's good to be rewarded for looking up. {bored}Usually it's only for looking down, and the reward's a puddle.
+
+# --- THE GATE ---
+
+[bl_gate_stool]
+A folding stool with a notice taped to the seat: RESERVED FOR THE HERO. (SORRY.) It's been wiped. Every day, by the look of it.
+
+[bl_gate_stool after the_light_goes_up]
+There's a cushion on the stool now, and the notice has changed: RESERVED FOR THE HERO'S FRIENDS. (YOU. YES, YOU. SIT.)
+
+[bl_gate_stool_ves]
+{bored}I'm not sitting on the Hero's stool. {thinking}...Not while somebody's watching.
+
+[bl_drying_rack]
+A drying rack, strung with caps and little red chillies, all hung out in the lamplight to go leathery. The label says DON'T ASK WHAT FOR. It's for soup. It's always for soup.
+
+[bl_sq_tea 2]
+The biscuit has a bite out of it. There's a note: IT WAS THE PIGEON.
+
+[bl_sq_alley]
+A skinny alley between the Hall of the Visit and the throne hall, one body wide. At the end is a stash: a spare shoe and a note in a small hand. DEN. KEEP OUT. (EXCEPT THE BAT. HE KNOWS WHAT HE DID.) You take the shoe.
+
+[bl_sq_alley_ves]
+{smile}We're not the bat. {bored}We'll make an exception for the purse.
+
+# --- THE INN ---
+
+[bl_inn_tea]
+A round table by the wall with a pot of tea and one cup, as if somebody got up for a moment and forgot to come back. The tea is still steaming. Nobody's in sight.
+
+[bl_inn_larder]
+A cold little larder hidden behind a curtain of the innkeeper's washing. Jars in rows, each labelled in a hurry. One says DO NOT. One says STILL DO NOT. At the back is a pot of glow-worm honey, with a note: FOR WHOEVER FINDS THIS. (YOU. DON'T TELL ANYONE.)
+
+You take the honey. It glows, a little, like it's pleased.
+
+[bl_inn_larder_ves]
+{smile}Hidden food. {bored}I'd forgive a lot for hidden food.
+
+[bl_inn_larder_empty]
+The larder's emptier than it was, and tidier. The jars that say DO NOT are still saying it.
+
+# --- THE FORGE ---
+
+[bl_forge_rack]
+A rack of picks, all sharpened, all pointing the same way, in order of age. The oldest is more handle than head. The newest is a very serious tool and looks it.
+
+[bl_hall_cart]
+A little ore cart on a plinth, with a brass plate: THE FIRST CART. (NOT THE SECOND. THE SECOND IS IN THE DIGGINGS, AND LEAKS.)
+
+[bl_hall_rack]
+A rack of famous picks behind a rope that nobody's ever stepped over. A card: PLEASE DO NOT DIG THE EXHIBITS. Somebody has underlined DIG.
+
+[bl_hall_bucket]
+A bucket by the wall with a dustpan hooked over the rim. There's a dent in the pan the size and shape of a very small king's very cross foot.
+
+You take the dustpan. A tag falls off it: PROPERTY OF THE SWEEPER. NOT AN EXHIBIT. (STOP TELLING PEOPLE IT'S AN EXHIBIT.)
+
+[bl_hall_bucket_empty]
+A bucket and a puddle. The dustpan's gone back to work.
+
+[bl_hall_stash]
+A tiny hollow in the wall behind a hanging banner, where somebody keeps a shred of paper that reads: IF FOUND, THE CURATOR OWES ME TWO COINS AND AN APOLOGY. You take the paper. The coins are long gone.
+
+You take the purse. The apology is not in it.
+
+[bl_hall_stash_ves]
+{bored}Two coins and an apology. {smile}We've got the coins.
+
+# --- THE LIFE PASS, ROUND 3 (helper C, 15 November 2026): the dullest rooms of chapter 4 ---
+
+[r3c_lr_parcel_a 2]
+You don't open it. It's the first thing anyone down here has made for you.
+
+[r3c_lr_flask]
+A tea flask on a flat stone, a spoon tied to its handle. Someone has made sure it won't roll.
+
+[r3c_lr_flask_ves]
+{smile}Warm. Whoever left it was here a minute ago, and ran off before we could say thank you.
+
+[r3c_lr_stool]
+A stool set square in front of the rope, facing up. One of the folk has been sitting here looking at the square of daylight, a long time, by the polish on the seat.
+
+[r3c_lr_stool_ves]
+{thoughtful}Looking at the way out. I know the feeling.
+
+[r3c_lr_stool 2]
+The seat's still a little warm. You wonder how many of them came to look, one at a time, when nobody else was about.
+
+[r3c_lr_toys 2]
+You hang the mole back on its string. It doesn't say what it thinks of the drop.
+
+[r3c_hf_handbell]
+The herald's handbell, on its side. The clapper is still swinging, just a little, as if it was the last thing to stop.
+
+[r3c_hf_handbell_ves]
+{sad}Somebody rang that when it started. I hope they were quick afterwards.
+
+[r3c_hf_hat]
+A tall paper hat with a feather in it, flattened. It says MC in marker pen.
+
+[r3c_hf_hat_ves]
+{smile}It was a good hat. It had a good run.
+

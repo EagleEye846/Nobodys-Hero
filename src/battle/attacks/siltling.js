@@ -3,9 +3,9 @@ import { defineBulletArt } from '../projectiles.js';
 // The Siltling's attacks. It's fifty years of drain silt under Hollin's well,
 // and everything that ever went down the well is in it somewhere: thimbles,
 // buttons, pennies, keys, spoons. So it fights with its collection (showing
-// it off, sorting it into rows, wanting yours) and with itself: muddy drips,
-// silt settling out of the dark, and the whole of it sinking into a puddle
-// and coming up somewhere else.
+// it off, counting its buttons and losing its place, wanting yours) and with
+// itself: the whole of it sinking into a puddle and coming up somewhere
+// else.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -47,17 +47,11 @@ defineBulletArt('siltSpoon', {
   rotate: true,
 });
 
-// A drop of muddy water, a flake of settling silt (it drifts), and a clod.
+// A drop of muddy water, and a clod.
 defineBulletArt('siltDrop', {
   frames: [['.l.', 'sls', 'sSs', '.S.']],
   palette: SILT,
   radius: 1.5,
-});
-defineBulletArt('siltFlake', {
-  frames: [['ls', 'sS'], ['sl', 'Ss']],
-  palette: SILT,
-  radius: 1.2,
-  frameSeconds: 0.3,
 });
 defineBulletArt('siltClod', {
   frames: [['.sss.', 'slsSs', 'ssSss', '.SSS.']],
@@ -88,6 +82,13 @@ defineBulletArt('siltMound', {
   radius: 4.5,
 });
 
+// A button counted, jumping up out of the silt.
+defineBulletArt('siltButtonUp', {
+  frames: [['.kkkk.', 'kwllwk', 'klhlhk', 'klhlhk', 'kwllwk', '.kkkk.']],
+  palette: { k: '#2a1418', w: '#e87a72', l: '#c8524a', h: '#2a1418' },
+  radius: 3,
+});
+
 const TREASURES = ['siltButton', 'siltThimble', 'siltPenny', 'siltKey', 'siltSpoon'];
 
 export const SILTLING_ATTACKS = {
@@ -114,47 +115,51 @@ export const SILTLING_ATTACKS = {
       }));
     });
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => fling(dt, bullets, soul),
     };
   },
 
-  // Sorting: it lays its treasures out in tidy rows, one kind to a row, with
-  // a space left in each for the thing it hasn't found yet. The rows come
-  // down the box from the top; then it turns them round and sends columns
-  // across from the side. Get in the space.
-  siltSort(box, density, { Shot, rand, shuffleBag }) {
-    const treasure = shuffleBag(TREASURES);
-    const across = shuffleBag(['left', 'right']);
-    const step = 8;
+  // Counting: its buttons are laid out in the silt in rows, and it counts
+  // them, out loud, the way you read: along each row, left to right, then
+  // the next row down. Each one it counts jumps up out of the silt (it
+  // blinks first) and flicks mud off. It always gets to eleven, loses its
+  // place, and starts again from somewhere else. Keep ahead of the count.
+  siltCount(box, density, { Shot, rand }) {
+    const COLS = 4;
+    const ROWS = 3;
+    const spots = [];
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) spots.push({ x: box.x + 13 + c * 18, y: box.y + 16 + r * 24 });
+    let laid = false;
     let t = 0;
-    let next = 0.1;
-    let made = 0;
-    const lay = (bullets) => {
-      const kind = treasure();
-      const row = made < 3 || made % 2 === 0;
-      const slots = Math.floor((row ? box.w : box.h) / step);
-      // The space: two slots wide, never right at the edge.
-      const gap = Math.floor(rand(1, slots - 2));
-      const speed = 34 + made * 3;
-      const fromLeft = across() === 'left';
-      for (let i = 0; i < slots; i++) {
-        if (i === gap || i === gap + 1) continue;
-        const along = (row ? box.x : box.y) + step / 2 + i * step;
-        bullets.push(row
-          ? new Shot({ x: along, y: box.y - 4, vy: speed, warn: 0.55, art: kind })
-          : new Shot({ x: fromLeft ? box.x - 4 : box.x + box.w + 4, y: along, vx: fromLeft ? speed : -speed, warn: 0.55, art: kind, angle: 0 }));
-      }
-      made++;
-    };
+    let at = Math.floor(rand(0, spots.length));
+    let counted = 0;
+    let next = 0.6;
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (t >= next && t < 5.6) {
-          lay(bullets);
-          next = t + Math.max(0.85, 1.25 - made * 0.06);
+        if (!laid) {
+          laid = true;
+          for (const spot of spots) bullets.push(new Shot({ x: spot.x, y: spot.y, harmless: true, life: 9, art: 'siltButton' }));
         }
+        if (t < next || t > 9.8) return;
+        if (counted >= 11) {
+          // Eleven... twelve? It's lost its place. Start again.
+          counted = 0;
+          at = Math.floor(rand(0, spots.length));
+          next = t + 0.6;
+          return;
+        }
+        const spot = spots[at];
+        bullets.push(new Shot({ x: spot.x, y: spot.y, warn: 0.35, life: 0.55, art: 'siltButtonUp' }));
+        for (let k = 0; k < 4; k++) {
+          const a = Math.PI / 4 + (k * Math.PI) / 2;
+          bullets.push(new Shot({ x: spot.x, y: spot.y, vx: Math.cos(a) * 34, vy: Math.sin(a) * 34, warn: 0.35, life: 0.9, art: 'siltDrop' }));
+        }
+        at = (at + 1) % spots.length;
+        counted++;
+        next = t + 0.26;
       },
     };
   },
@@ -186,45 +191,12 @@ export const SILTLING_ATTACKS = {
       rises++;
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.4) {
+        if (t >= next && t < 8.4) {
           rise(bullets, soul);
           next = t + 1.1;
-        }
-      },
-    };
-  },
-
-  // Settling: silt comes out of the dark water overhead, slowly, the way
-  // it's been coming for fifty years, flakes swaying as they sink. But now
-  // and then something heavier comes down with it: a penny, falling straight
-  // and fast (it blinks at the top first).
-  siltSettle(box, density, { Shot, every, rand, clamp, spreadAcross }) {
-    const nextX = spreadAcross(box.x + 4, box.x + box.w - 4, 7);
-    const flake = every(0.09, 0.14, (bullets) => {
-      const x = nextX();
-      bullets.push(new Shot({
-        x, y: box.y - 2, vy: rand(16, 22), wobble: null, art: 'siltFlake',
-      }));
-      const shot = bullets[bullets.length - 1];
-      shot.baseX = x;
-      shot.sway = rand(0, Math.PI * 2);
-    });
-    const penny = every(0.8, 1.05, (bullets, soul) => {
-      const x = clamp(soul.x + rand(-4, 4), box.x + 4, box.x + box.w - 4);
-      bullets.push(new Shot({ x, y: box.y + 3, vy: 40, gravity: 160, warn: 0.5, art: 'siltPenny' }));
-    }, { first: 0.9 });
-    return {
-      duration: 6.4,
-      update: (dt, bullets, soul) => {
-        flake(dt, bullets);
-        penny(dt, bullets, soul);
-        // The flakes sway from side to side as they sink.
-        for (const b of bullets) {
-          if (b.artName !== 'siltFlake' || b.baseX === undefined) continue;
-          b.x = b.baseX + Math.sin(b.age * 2.2 + b.sway) * 6;
         }
       },
     };
@@ -252,7 +224,7 @@ export const SILTLING_ATTACKS = {
       }
     }, { first: 0.2 });
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets, soul) => grab(dt, bullets, soul),
     };
   },

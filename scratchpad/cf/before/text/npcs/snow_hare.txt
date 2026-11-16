@@ -1,0 +1,12 @@
+# A SNOW HARE in the square, by the stores. White as the drifts, one ear
+# down. It doesn't talk, exactly.
+
+[first]
+The snow hare looks at you. One ear goes up. The other stays down.
+
+It sniffs your boots very thoroughly, decides something, and goes back to eating a frozen cabbage leaf.
+
+[repeat]
+The snow hare is eating the cabbage leaf. It's going to take all day. It has all day.
+
+Its nose twitches at you in what is probably a greeting.

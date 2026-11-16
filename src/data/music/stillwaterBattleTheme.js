@@ -120,7 +120,7 @@ export const STILLWATER_BATTLE_THEME = {
   title: 'Black Ripples',
   bpm: 132,
   stepsPerBeat: 4,
-  volume: 1.0,
+  volume: 1.24,
 
   instruments: {
     // The tunes.

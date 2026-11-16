@@ -1,0 +1,1185 @@
+# Gear: things for getting around that you keep for good (src/data/gear.js).
+# [got_<id>] is what you see when you get it, after the words of whatever it
+# was in. The KEEPSAKES page (SPACE in the ITEMS menu) shows the same words
+# without their first line, or [about_<id>] when a thing has one.
+# The other sections are shared by every room.
+
+[got_climbing_rope]
+You got the CLIMBING ROPE!
+
+Face a cliff with an iron ring at the top and press Z to climb up to it.
+
+Stand on a ring and face down the cliff to climb back down.
+
+On a face too tall for one throw, hook the lowest ring and swing.
+
+Hold left or right with the swing to swing higher and reach farther.
+
+Press Z at the right moment to catch the next ring. X lets go.
+
+# On the KEEPSAKES page: the same, short.
+[about_climbing_rope]
+A long rope with a hook. Face a cliff with an iron ring at the top and press Z to climb. On a tall face, hook the lowest ring and swing: left or right to swing higher, Z to catch the next ring, X to let go.
+
+[got_ves_mitten]
+You picked up VES'S MITTEN.
+
+You'll hold onto it for her.
+
+[got_ves_ribbon]
+You took down VES'S RIBBON.
+
+She came this way.
+
+[got_ves_scarf]
+You picked up VES'S SCARF.
+
+You wring the mud out of it as well as you can.
+
+# Facing a cliff with a ring at the top, before you have the rope.
+[ring_no_rope]
+High above, an iron ring is hammered into the top of the cliff.
+
+With a rope, you could get up there.
+
+# With the rope, facing a ring you can't throw to from where you stand.
+[ring_from_block]
+Not from up here. You need both feet on the ground under a ring to throw.
+
+[ring_too_far]
+There's a ring up there, but it's not a throw from here.
+
+Stand straight under it, as close in to the rock as you can.
+
+# Facing a steep face with rings hammered into it, before you have the rope.
+[swing_no_rope]
+Iron rings are hammered into the rock above you, one after another, all the way up.
+
+With a rope, you could swing from one to the next.
+
+[got_bramble_whistle]
+You got BRAMBLE'S WHISTLE.
+
+A whistle carved out of a bit of elder, with his name scratched on it, spelt wrong.
+
+[got_star_shard]
+You got a STAR SHARD.
+
+# (draft) Changed: it now comes out of the Welcome Register's binding (the Registry, behind the Old Street).
+A splinter of pale star-metal as long as your hand, still warm, out of the binding of a book. It hums at the same note as the sword.
+
+# (draft) The end-of-shift whistle, in three pieces (the quest under Seam Nine).
+[got_whistle_pea]
+You got the WHISTLE PEA.
+
+A little cork ball, scorched at one side, no bigger than a pea. It rattles in your palm like it is still waiting to be blown. The roster in Seam Nine says where the others went.
+
+[about_whistle_pea]
+Piece 1 of 3 of the seventh shift's whistle: the pea, the little cork ball that makes it trill. Found in the Glimmering.
+
+# (draft)
+[got_whistle_mouth]
+You got the WHISTLE MOUTHPIECE.
+
+A brass mouthpiece, polished by years of lips, with a smear of old solder where somebody meant to mend it. Still faintly warm, which it has no business being.
+
+[about_whistle_mouth]
+Piece 2 of 3 of the seventh shift's whistle: the mouthpiece. Found in Belowtown.
+
+# (draft)
+[got_whistle_barrel]
+You got the WHISTLE BARREL.
+
+A short brass barrel with a slot cut in the side and a loop for a lanyard. It is damp, and it smells of the lake.
+
+[about_whistle_barrel]
+Piece 3 of 3 of the seventh shift's whistle: the barrel. Found in the Stillwater.
+
+# (draft) The three pieces, put together at the sealed crack in Seam Nine.
+[got_shift_whistle]
+You got the SHIFT WHISTLE.
+
+A small brass whistle with a cork pea in it. The seventh shift blew it every day at the end of the shift: three long notes down, one short note up. It is yours to blow now.
+
+[about_shift_whistle]
+The seventh shift's end-of-shift whistle, whole again. Blown at the sealed crack in Seam Nine to open the way down.
+
+# (draft) Won from the Pale Olm, at the bottom of Seam Nine's crack.
+[got_star_shard_deep]
+You got a DEEP STAR SHARD.
+
+A second splinter of star-metal, worn smooth from years in a small tin dish. It's colder than the first one, and it hums lower. The sword hums back.
+
+[got_singing_shard]
+You picked up the SINGING SHARD.
+
+A sliver of crystal as long as a finger, humming one low note, no matter how you hold it. It's warm, and every time you shift it in your hand it sounds like someone in the next room is nearly tuning up.
+
+In the Glimmering, your footsteps will ring the old tune, one note a step.
+
+[got_paper_crown]
+You picked up the SPARE PAPER CROWN.
+
+Gold paper, creased, and much too big. It was never really a king's. It's somebody's idea of one.
+
+[got_pearl_button]
+You fished up the PEARL BUTTON.
+
+A pearl button, smooth as a pebble, with four tiny holes and no coat to go with it. You don't know whose it was. You keep it anyway.
+
+# --- SIDE QUESTS (src/data/quests.js) ---
+# Things carried from one person to another, and the keepsakes the errands pay in.
+
+[got_bram_trumpet]
+You got BRAM'S TRUMPET.
+
+Brass, dented, and very cold. It smells faintly of soup.
+
+[got_fanfare_pin]
+You got the FANFARE PIN.
+
+A tin pin in the shape of a trumpet, rubbed smooth by a child's thumb. The first one Bram ever got.
+
+[got_marta_mittens]
+You got MARTA'S MITTENS.
+
+Thick grey wool, with a small trumpet knitted on the back of each. Still warm from the needles. They're not for you.
+
+[got_dunstan_note]
+You got DUNSTAN'S NOTE.
+
+A scrap of paper, folded small. "Fits. Thank you. -- D." The D is underlined twice.
+
+[got_marta_scarf]
+You got MARTA'S SEVENTH SCARF.
+
+Grey-brown, the colour of a good mountain goat, with a row of stitches for every step of the great stair. It is much too long. It is warm all the way down.
+
+[got_bell_clapper]
+You took the BELL CLAPPER out of the stew.
+
+A long iron pole with a heavy knob on the end, black from years of gravy. It was made to hang inside a bell.
+
+[got_bell_spoon]
+You got the BELL-METAL SPOON.
+
+A spoon cut from the last scrap of the Lasthome bell. Tap it on anything and it says one note, low and round and kind.
+
+[got_biscuit]
+You picked up BISCUIT.
+
+She weighs more than she looks. She doesn't mind being carried, as long as everyone understands it was her idea.
+
+[got_bean_medal]
+You got the BEAN MEDAL.
+
+A dried bean on a string. Scratched on it, in careful letters: BEST BEAN-PICKER IN TOWN, UNDER ELEVEN.
+
+[got_thistle_hat]
+You took THISTLE'S HAT off the line.
+
+Brown felt, a brass trumpet badge on the front, and quite clean for the first time in its life. It's still dripping.
+
+[got_herald_button]
+You got the HERALD'S BUTTON.
+
+A brass button off a herald's coat, stamped with a trumpet. It has been handed down the whole way from Heralds' Rest.
+
+[got_mattock_letter]
+You got the LETTER FOR MATTOCK.
+
+Folded in three, with a smudged postmark and a mole's name on the front in round, firm handwriting.
+
+[got_mattock_reply]
+You got MATTOCK'S REPLY.
+
+A scrap of sacking with a muddy thumbprint on it and a drawing of a hat.
+
+[got_mattock_boot]
+You got MATTOCK'S BOOT.
+
+A brown left boot with a lot of character, a patch on the toe, and the name MATTOCK pressed into the tongue with a thumb.
+
+[got_mattock_pin]
+You got MATTOCK'S HAT PIN.
+
+A brass pin with a tiny enamel mole on the end. It came out of the best hat, and Mattock would like it known that the other hats aren't to be told.
+
+[got_sunstone_stamp]
+You got the SUNSTONE STAMP.
+
+A little square of paper with the Sunstone on it, burning bright, printed in gold ink that has hardly faded. It's for the day the Hero writes back.
+
+[got_slow_toffee]
+You got the SLOW TOFFEE.
+
+A toffee in a wrapper folded into nineteen tiny pleats. It took a long time to make, and you can tell.
+
+[got_warm_teacup]
+You got the SPARE TEACUP.
+
+A small cup with a chip in the rim, kept for visitors who stay. It is warm, and it doesn't seem to be getting any colder.
+
+[got_jar_of_sea]
+You got a JAR OF SEA.
+
+A jam jar of the sea, with a bit of weed in it for company. It sloshes.
+
+[got_turnip_rosette]
+You got the TURNIP ROSETTE.
+
+A faded blue rosette, FIRST PRIZE, TURNIPS. The ribbon has been re-stitched more times than anyone has ever looked at it.
+
+[got_approved_stamp]
+You got the APPROVED STAMP.
+
+A brass stamp with a wooden knob, the word APPROVED cut backwards in its face. It has a beak-mark on the handle.
+
+[got_harbour_pass]
+You got a HARBOUR PASS.
+
+A stiff card, stamped APPROVED twice, to be sure. Boat: ANY. Passengers: ANY. Bound: ANYWHERE.
+
+# --- CHAPTER 5: the drowned coast ---
+[got_star_shard_wreck]
+You got a WRECK STAR SHARD.
+
+# (draft)
+A third splinter of star-metal, still warm from the wooden breast it was lodged in for a hundred years. It's the loudest yet. It rings right through your hand, and the sword answers like it's been waiting.
+
+[got_haddocks_bell]
+You got HADDOCK'S BELL.
+
+A brass handbell on a worn cord, warm from his hand. It rings a small, clear note that makes the sea sound further off than it is.
+
+"Ring it if the sea gets cheeky."
+
+[got_bathtub_bell]
+You got the BATHTUB BELL.
+
+A ship's bell with a bathtub for a shell, and a note on it, in very neat writing: PLEASE WIPE YOUR FEET. It's a key to something in the Wrack Shore.
+
+[got_hearth_brick]
+You got the HEARTH BRICK.
+
+A brick out of the Lum's hearth, blackened on one face, with the warmth still in it. It doesn't cool down. It never will. (draft)
+
+[got_gulper_tooth]
+You got the GULPER TOOTH.
+
+A curved tooth as long as your arm, pale as a candle, still damp. It fits a lock somewhere in Merrow.
+
+[got_brass_sounding_weight]
+You got the BRASS SOUNDING-WEIGHT.
+
+A big brass weight on a long cord, for measuring how deep. It is deep. In the Soundings, somewhere, there's a hook it fits.
+
+[got_paper_boat]
+You got the PAPER BOAT.
+
+Bramble's. Haddock folded it from a page of an old tide table, after the swimming lesson, and Bramble hasn't put it down. It's a bit soggy. It floats.
+
+# (draft) Bramble's, from the Fair Return's ship's boy (bramble_and_the_boy).
+[got_monkeys_fist]
+You got the MONKEY'S FIST.
+
+Bramble's. A ball of knotted line the size of a plum, hard as a conker, with a tail to throw it by. The ship's boy made it for his first voyage. Bramble keeps it in his top pocket and checks it's there about once a minute.
+
+[got_haddocks_ledger]
+You found HADDOCK'S LEDGER.
+
+A salt-stained ledger in a lightman's tight hand. Every page is a day: the tide, the weather, how long the lamp burned. You turn to the last page.
+
+[haddocks_ledger_read]
+Tide: out, a long way out.
+Wind: none.
+Lamp: lit.
+
+The last line is only the date, and then, in a different pen, one word.
+
+found
+
+[about_haddocks_ledger]
+A salt-stained ledger in a lightman's tight hand. Every page is a day: the tide, the weather, how long the lamp burned. The last line is only the date, and then, in a different pen, one word: found.
+
+[got_storm_glass]
+You got a STORMGLASS BEAD.
+
+A bead of green glass, the size of a pea, smooth as a sweet. The storm made it out of sand, one of all those nights.
+
+[got_polished_tankard]
+You got the POLISHED TANKARD.
+
+A pewter tankard, polished every day since the storm came. You can see your whole face in it, and a bit of the room behind you.
+
+# --- The life pass errands: the isles, the tower, the Reach. (draft) ---
+[got_lp5_logbook_page]
+You picked up a TORN LOGBOOK PAGE.
+
+Tidy pencil, a column of dates, and one line gone over twice. It wants to be back in its book.
+
+[got_keepers_pencil]
+You got the KEEPER'S PENCIL.
+
+A stub of pencil, chewed at the end, worn flat on one side from being held a long time. Good for tides and tea-lists.
+
+[got_lp5_kettle]
+You picked up the OLD IRON KETTLE.
+
+Heavy, black, and cold. A rag is rolled into its spout to keep the damp out. Somebody looked after it.
+
+[got_trimmed_wick]
+You got a SPARE WICK.
+
+A lamp wick, rolled in a rag, kept dry. Not for any lamp in particular. For the next one.
+
+[got_lp5_souwester]
+You picked up a YELLOW SOU'WESTER.
+
+A sou'wester, stiff with salt, with a gull-sized hole in the crown and a strap that has been chewed.
+
+[got_gull_feather]
+You got a GULL'S FEATHER.
+
+Grey and white, a little chewed. Good for keeping your place in a page, or for tickling someone who's being serious.
+
+# --- The ghost ship (the brig Fair Return). (draft) ---
+[got_ship_lantern]
+You got the SHIP'S LANTERN.
+
+It's burning, and there's no oil in it. The glass is warm in your hand. Press L to put it out, and L again to light it. What hides in the dark can sometimes be seen in this.
+
+[about_ship_lantern]
+The Fair Return's lantern, still lit. Press L to put it out and light it again. Ghosts, footprints and writing that can't be seen in the dark show in its light, and some of the crew will stop dead in it, or back away.
+
+[got_captains_key]
+You got the CAPTAIN'S KEY.
+
+A long brass key on a ring gone green. The tag on it says CABIN, and under that, LET HIM REST. It fits the door under the poop deck.
+
+[about_captains_key]
+The key to the captain's cabin on the Fair Return, hung in the bilge by someone who thought he needed a rest.
+
+[got_crew_letter]
+You got A MOTHER'S LETTER.
+
+Worn soft at every fold from being read. The garden is coming on, and the kettle is always on, come home when you can. It was never answered.
+
+[about_crew_letter]
+A sailor's letter from his mother, read to ribbons. It might mean something to the captain.
+
+[got_ship_log]
+You got the SHIP'S LOG.
+
+The last page says DAY 41. PORT TOMORROW. So does the page before. So does every page before that, a hundred years of them, in the same hand.
+
+[about_ship_log]
+The Fair Return's log: the same day, written the same way, every page. It might mean something to the captain.
+
+[got_unsent_letters]
+You got the UNSENT LETTERS.
+
+A bundle in the purser's careful hand, tied with string, every one addressed to someone on the quay at Saltcombe. They were never posted. They are very light.
+
+[about_unsent_letters]
+The crew's last post, written on the voyage and never sent. Bramble offered to carry them very carefully.
+
+# (draft) The ghost ship's compass, in three pieces (the quest for the deep part).
+[got_compass_glass]
+You got the COMPASS GLASS.
+
+A brass-rimmed glass, dry and clear, engraved FAIR RETURN. BINNACLE. It keeps showing you the room, very slightly larger than it is.
+
+[about_compass_glass]
+The glass off the Fair Return's binnacle compass. The needle and the card are somewhere else on the coast.
+
+[got_compass_needle]
+You got the COMPASS NEEDLE.
+
+A long thin needle that wants badly to point somewhere. It is not pointing north.
+
+[about_compass_needle]
+The needle off the Fair Return's binnacle compass. The glass and the card are somewhere else on the coast.
+
+[got_compass_card]
+You got the COMPASS CARD.
+
+A painted compass rose, every point lettered but one. The missing letter is rubbed out, as if by someone who did not want to be told which way home was.
+
+[about_compass_card]
+The card off the Fair Return's binnacle compass. The glass and the needle are somewhere else on the coast.
+
+# (draft) THE CAPTAIN'S BOOK (2026-11-14): left on the chart table in the Fair Return's cabin once the captain is dealt with.
+# His own book, not the log. [got_] as you take it; the pages ([read_captains_book_*]) are read from KEEPSAKES, all of
+# them at once (the book comes whole). It says what is at the bow, how the hatch opens, and where the compass went.
+[got_captains_book]
+You got the CAPTAIN'S BOOK.
+
+A small book in dark leather, its clasp undone. Not the ship's log: his own. Read it from KEEPSAKES (press C, then SPACE).
+
+[about_captains_book]
+Captain Tarry's own book: a few lines in his hand, about the bow and his compass. Press Z to read it.
+
+# (draft)
+[read_captains_book_bow]
+The night the light went dark, a star struck on me bow,
+and Madam Fairweather's shone at the head of her ever since.
+What ye're after lies forrard, mates. At the bow.
+-- A.T., master
+
+# (draft)
+[read_captains_book_hatch]
+Me hatch won't lift for any hand, by tide nor tar nor prayer,
+till the compass sits whole in its bowl again.
+Glass, needle, card: I sent 'em all ashore. Go fetch 'em.
+
+# (draft)
+[read_captains_book_glass]
+THE GLASS
+In the Sunken Lanes the sea came in, but never up the stair.
+Heave a line aloft, and climb to the one dry berth.
+
+# (draft)
+[read_captains_book_needle]
+THE NEEDLE
+In the Soundings, where a hail comes back three times,
+there's a crack low in the glass, a ship's boy's arm wide.
+
+# (draft)
+[read_captains_book_card]
+THE CARD
+On the Beacon Isles, when the bridge sags at low water,
+follow the shells, mates, to the tidiest cave in the sea.
+
+# (draft) THE REGISTRY'S QUEST (chapter 3): three torn leaves of the Welcome Register, in three hidden places. All three and the sword open the sealed cleft off the Old Street.
+
+[got_register_leaf_names]
+You got the LEAF OF NAMES.
+
+A page torn out at the binding, ruled in columns and crowded with names in a hundred different hands, every one of them ticked. In the corner, a numeral: I. It is warm, the way paper is after a hundred years in a sunny window.
+
+[about_register_leaf_names]
+Page I of the Welcome Register: the Names, every one ticked. There are two more leaves out there, torn out the same night. A clerk would have kept the second where the fen ends, the toll being a clerk's business.
+
+[got_register_leaf_hours]
+You got the LEAF OF HOURS.
+
+A page ruled in thin rows, one for each hour from dusk to dawn, every row ticked. The corner is marked II. It has dried stiff in the shape of the hand that held it, and a fish hook is still through the top.
+
+[about_register_leaf_hours]
+Page II of the Welcome Register: the Hours, called one by one all night. One leaf left, the third. A page like that would go where there was a fire to wedge a door against: somewhere in the old city that kept one burning day and night, and kept the water warm.
+
+[got_register_leaf_seal]
+You got the LEAF OF THE SEAL.
+
+A page with almost nothing on it but a great round seal, printed in red ink, and under it a line of tiny columns. The corner says III. One edge is scorched brown, where a furnace door was held shut on it.
+
+[about_register_leaf_seal]
+Page III of the Welcome Register: the Seal. That's all three leaves. The panel over the cleft off the Old Street is ruled with three blank columns, and these are the pages that go in them.
+
+
+# (draft) How many of a secret quest's pieces you have, said after you pick one up
+# (GEAR_SETS in src/data/gear.js). The Register's three torn leaves (chapter 3).
+[register_leaves_1]
+One leaf of three. The other two went wherever the wind took them that night.
+
+[register_leaves_2]
+Two leaves of three. They lie flat together in your pack, ruled lines meeting, with a gap where the third should go.
+
+[register_leaves_3]
+Three leaves of three. Whatever book they were torn from, it can have them back now.
+
+# (draft) The seventh shift's whistle, in three pieces (chapter 4).
+[whistle_pieces_1]
+One piece of three. On its own, it won't make a sound.
+
+[whistle_pieces_2]
+Two pieces of three. They very nearly fit together. Nearly is no use to a whistle.
+
+[whistle_pieces_3]
+Three pieces of three. ALL THREE AT THE CRACK, the roster said.
+
+# (draft) The Fair Return's binnacle compass, in three pieces (chapter 5).
+[compass_pieces_1]
+One piece of three. FAIR RETURN, it says, as if you ought to know where that is.
+
+[compass_pieces_2]
+Two pieces of three. They sit together in your pack like two thirds of a sentence.
+
+[compass_pieces_3]
+Three pieces of three: glass, needle and card. A whole compass. Somewhere there is a binnacle with an empty bowl.
+
+# (draft) THE FAIR RETURN'S TORN LOG (the way to her fog bell): five pages, four come ashore in bottles, the fifth washed up
+# on the Saltcombe quay. [got_] is said as you take one, then the page itself ([read_], one entry a paragraph), then the
+# count ([log_pages_N]). The keepsake is the book, TORN LOG PAGES: Z on it in KEEPSAKES reads every page you hold.
+[got_log_page_1]
+You got a page of a ship's log!
+
+The bottle comes open with a sigh, as if it had been holding its breath. The page inside is dry. The hand is a captain's: small, upright, careful with the ink.
+
+[got_log_page_2]
+You got a page of a ship's log!
+
+Green glass, red wax, the same seal pressed into it: FR. The page inside is dry, and in the same careful hand.
+
+[got_log_page_3]
+You got a page of a ship's log!
+
+The wax gives with a crack. The page inside is the same hand again, a little less careful, as if the ship had been moving under it.
+
+[got_log_page_4]
+You got a page of a ship's log!
+
+The page is torn out raggedly, and the writing runs downhill. Some of the words have been written twice, hard, as if the pen kept slipping.
+
+[got_log_page_5]
+You got a page of a ship's log!
+
+The bottle is warm. The page inside is dry, and when you touch the writing, the ink comes off on your thumb.
+
+[read_log_page_1]
+FAIR RETURN, brig, 214 tons. A. Tarry, master. Saltcombe for the Brightwater roads, and home.
+
+DAY 1. Sailed on the morning tide, wind fair at north-east. The whole town on the quay to see us off, my wife at the end of it with her hat in her hand and the little one on her shoulder.
+
+Every berth full. Mr Pike mate. Hobbs at the masthead, where he would sleep if I let him. Billy, ship's boy, his first voyage, sick as a dog before we cleared the point and proud of it after.
+
+The men have named the figurehead Madam Fairweather. New gilt on her, her chin up, her hand held out for a coin. Every man touches it going forward. I have said nothing. I touched it myself.
+
+Due home the 14th. I have promised it.
+
+[read_log_page_2]
+DAY 19. Lying in the Brightwater roads, waiting on our cargo. No shore leave. The post boat has not come out to us, so the men's letters stay in the purser's bag. They will post them themselves at home, they say, and save the stamps.
+
+Aboard: a clock, a kettle, six dozen glass floats, a rocking horse. The horse is not on the manifest. I will square it with the owners.
+
+Billy asked me how you know the way home. I showed him the binnacle. He asked what you do if the compass fails. I told him, then you find your way by the stars. He was up half the night learning them.
+
+[read_log_page_3]
+DAY 38. Homeward. Wind foul and backing, the glass falling all day.
+
+Hobbs swears he saw a small figure on the cliff road at dusk, on its own. Nobody walks that road. I have doubled the watch.
+
+Mr Pike has the men singing at the capstan, the old one, Port Tomorrow, and they will not sing the last word of it till we are in. The bosun says it is bad luck to sing "home" at sea. I let them have it.
+
+Three days. Port tomorrow, and tomorrow, and tomorrow.
+
+[read_log_page_4]
+DAY 41. Fog since the forenoon, thick as wool. Lost the coast at noon.
+
+In the last dog watch a light came down out of the sky ahead of us, white, burning, slow as a feather, and struck Madam in the breast. The men cried out. When I came forward her face was wet and she was smiling. I will swear she was not smiling before.
+
+Later. Struck on the bar. Taking water fast. I am tearing out these pages to go ashore in bottles, so the owners will know the fault was not the men's. They did everything.
+
+Tell my wife I was nearly in. Tell Billy's mother
+
+[read_log_page_5]
+DAY 41. Fog. Lying off the point, waiting on the bell to bring us in.
+
+They hung a bell for us on the point, and they rang it faithful, every fog, and every fog we answered and stood in close. And they would not come down to the water. I do not understand it.
+
+Tonight there was no bell. I put the glass on the point: four men and a lantern, at the bottom of the ebb, taking our bell down off its post. They took her tongue out first, so she could not call us. They carried her to the old boat on the point, and down the steps under it, and along under the cliff to the rock where the fog-watch used to stand, and hung her there, where nobody would ever ring her.
+
+A mistake ashore. It will be put right. Port tomorrow.
+
+[about_torn_log]
+Pages torn out of the log of the brig Fair Return, each one sent ashore in a bottle, in the captain's careful hand. Press Z to read them.
+
+[log_pages_1]
+One page of five. Somebody put this in the sea on purpose, and hoped.
+
+[log_pages_2]
+Two pages of five. The same green glass, the same red wax. Read them from KEEPSAKES (press C, then SPACE).
+
+[log_pages_3]
+Three pages of five. Each one a little further along the voyage, and a little nearer home.
+
+[log_pages_4]
+Four pages of five. The last day stops in the middle of a line. Wherever the rest of it is, the sea hasn't given it back yet.
+
+[log_pages_5]
+Five pages of five. The log's last day, again, in fresh ink. It says where her bell went.
+
+[got_bell_clapper]
+You got the FOG BELL'S TONGUE.
+
+A heavy brass pear on an iron loop, worn bright where years of feet have nudged it and green where they haven't. Held up, it hums, very faintly, like a bell a long way off.
+
+[about_bell_clapper]
+The tongue of the Fair Return's fog bell, taken out so nobody could ring her in. It was the Drowned Rat's doorstop. It belongs in the bell on the Watch Rock.
+
+# NOTCH CHARMS (src/characters/notches.js): each is one more SPELL NOTCH for
+# everyone in the party. Two are found in chests ([got_...]); the rest are
+# bought from smiths, who say their own words. [about_...] is the KEEPSAKES page.
+[got_notch_high_shelf]
+You got a CLIMBER'S NOTCH CHARM!
+
+Everyone in the party can carry one more spell into a fight. Choose them from SPELLS (press C).
+
+[got_notch_hulk]
+You got a DRIFTWOOD NOTCH CHARM!
+
+Everyone in the party can carry one more spell into a fight. Choose them from SPELLS (press C).
+
+[about_notch_ruins]
+A chipped stone charm on a cord, with one notch cut in it. One more spell each in a fight (SPELLS).
+
+[about_notch_tilda]
+An iron charm, still a bit warm, with one notch filed in it. One more spell each in a fight (SPELLS).
+
+[about_notch_high_shelf]
+A charm of horn from the crag on the High Shelf, with one notch in it. One more spell each in a fight (SPELLS).
+
+[about_notch_teasel]
+A charm of bell-bronze with one neat notch. One more spell each in a fight (SPELLS).
+
+[about_notch_hobnail]
+A lump of slag glass on a bootlace, with one notch knocked in it. One more spell each in a fight (SPELLS).
+
+[about_notch_orla]
+A brass charm that smells of lamp oil, with one notch in it. One more spell each in a fight (SPELLS).
+
+[about_notch_hulk]
+A driftwood charm on a tarred string, with one notch in it. One more spell each in a fight (SPELLS).
+
+# The collectible sets' keepsakes (src/data/collections.js). Their pieces' words are in collections.txt.
+[about_tally_string]
+Ten brass tally tokens on a bootlace, one for every kind of work down there. Everyone on the board is accounted for.
+
+[about_glass_jar]
+A jam jar of sea glass in ten colours. Held up to a window, it throws little coloured patches on the wall.
+
+[about_flower_book]
+A small book with the flowers the fire missed pressed between its pages. It still smells, very faintly, of before.
+
+[got_big_whelk]
+You got a BIG WHELK SHELL.
+
+A whelk shell the size of a loaf, cream and brown, with a doorway you could nearly put your head in. Somebody has been looking for this.
+
+[got_little_old_shell]
+You got the LITTLE OLD SHELL.
+
+A very small shell, very clean, polished from the inside by a lifetime of being lived in. It smells of the sea and of being thanked.
+
+[got_duncans_pipe]
+You got DUNCAN'S PIPE.
+
+A clay pipe, stem chewed flat, with a plank worn round it where it lay. It has been waiting for somebody to come back for a very long time.
+
+[got_duncans_chalk]
+You got DUNCAN'S CHALK.
+
+A stub of yellow chalk, worn to the size of a thumbnail. It still marks.
+
+[got_dented_dustpan]
+You got the DENTED DUSTPAN.
+
+Tin, with a dent in the side the size and shape of a very small king's very cross foot. Somebody has loved it for decades and sworn at it for decades more.
+
+[got_sweepers_pin]
+You got the SWEEPER'S PIN.
+
+A little brass pin shaped like a broom, with a single bristle of real straw. It is the nicest thing the sweeper has ever given anyone, and she has just given it to you with her eyes shut.
+
+[got_odd_sock]
+You got the ODD SOCK.
+
+Stripy, soft, with a hole in the heel and no partner. It has been left out to dry long enough to stop being damp and start being a personality.
+
+[got_newt_badge]
+You got the HONORARY GUARD'S BADGE.
+
+A tin badge that says GATE, and under it, in smaller letters, SEE OTHER BADGE. It has never been worn by anybody with a helmet that fitted.
+
+# --- THE LIFE PASS: three tiny errands in Chapter 4's caves ---
+
+[got_dab_tin]
+You got DAB'S SWEET TIN!
+
+It rattles. Somebody on the King's Road will be wanting it back.
+
+[about_dab_tin]
+A small tin box with a smear of sugar on the lid and a very small thumbprint in it. It rattles. Someone on the King's Road is missing it.
+
+[got_lucky_pebble]
+You got a LUCKY PEBBLE!
+
+It is a very ordinary pebble. It has, however, been declared lucky, and that's final.
+
+[about_lucky_pebble]
+A grey pebble with a white stripe, handed over with great ceremony by a frog kid on the King's Road. Officially lucky.
+
+[got_paper_boat]
+You got a PAPER BOAT!
+
+It weighs nothing at all. Somebody on the Far Shore will want to know it's safe.
+
+[about_paper_boat]
+A paper boat with a charcoal flag on its sail, fished out of the reeds. Someone on the Far Shore lost it.
+
+[got_skipping_stone]
+You got a SKIPPING STONE!
+
+Flat, smooth and just the right weight. It is only waiting for the right lake.
+
+[about_skipping_stone]
+A flat grey stone from a frog kid on the Far Shore, worn smooth enough to skip eight times. He swears.
+
+[got_hero_mitten]
+You got a PATCHED MITTEN.
+
+You'll hold onto it. It belongs somewhere further on.
+
+[about_hero_mitten]
+A child's woollen mitten with a patch on the thumb, found drying on a rock in the Deep. It belongs somewhere in the dark further on.
+
+[got_hero_wrapper]
+You got a FOLDED WRAPPER.
+
+A sweet wrapper, folded into a tiny flat square, and older than the town. You keep it.
+
+[about_hero_wrapper]
+A sweet wrapper, folded small and flat, from under a tin at an old camp in the Deep. Somebody was saving it.
+
+# --- The Sunken Lanes and the Soundings (life pass, 14 November 2026) ---
+
+# (draft)
+[got_lane_worm]
+You picked up the BAIT TIN.
+
+A tin pail, lid weighted down. It's full of worms. It wriggles, now and then, to say it's still there.
+
+# (draft)
+[about_lane_worm]
+A tin pail of worms, marked BAIT. Somebody in the Lanes must be fishing.
+
+# (draft)
+[got_gnome_catch]
+You got the GNOME'S CATCH.
+
+A glass fish the length of your thumb, blue, with a very small eye. It's cold in the hand and warms up slowly. The gnome pressed it on you without looking round, and went on fishing.
+
+# (draft)
+[about_gnome_catch]
+A glass fish, blue, thumb-length, from the end of a gnome's line. He'd waited a hundred years and he was very calm about it.
+
+# (draft)
+[got_marrow_pail]
+You took T. MARROW'S PAIL.
+
+A tin pail with his name scratched in the lid. It's tied shut with fishing line. It isn't heavy, and it is something you can feel in your arm for a while.
+
+# (draft)
+[about_marrow_pail]
+A sounder's tin dinner pail, tied shut. T. MARROW is scratched in the lid. Some lamp at the cave mouth has an empty hook.
+
+# (draft)
+[got_marrow_whistle]
+You got MARROW'S WHISTLE.
+
+A tin whistle on a bit of cord, the sort a sounder blows once for 'down' and twice for 'up'. It was hanging on the hook the whole time. It was meant for whoever hung the pail up.
+
+# (draft)
+[about_marrow_whistle]
+A sounder's tin whistle. One blow for down, two for up. It still has a little cave-damp inside it.
+
+# (draft) The life pass.
+[got_pilchard_cat]
+You got PILCHARD (ASLEEP).
+
+A big ginger cat, picked up whole, still asleep. He weighs about the same as a sack of damp flour and he has not opened an eye. He is purring, a very low purr, like something far away being moved.
+
+[got_bottle_top_medal]
+You got a BOTTLE-TOP MEDAL.
+
+A bottle top with a ribbon through it. On the front, a drawing of a cat, in biro. On the back, in careful capitals: WORLD'S BEST CAT FINDER. It is slightly sticky.
+
+[got_pips_bucket]
+You got TIBBY'S BUCKET AND SPADE.
+
+A small blue bucket and a red spade, the bucket still full of cold wet sand and, down at the bottom, one very annoyed hermit crab. It looks at you. You look at it. You put it back, carefully.
+
+[got_sandcastle_flag]
+You got a SANDCASTLE FLAG.
+
+A lolly stick with a scrap of red paper stuck on. KING OF THE BEACH, it says, and then, smaller, (AND QUEEN). It's the best flag you've ever been given.
+
+# CHAPTER 6, THE ASH ROAD (life pass): Bramble's red rags. Five little cairns off the road (not the road's own
+# markers) each have a rag tied to a stick; Bramble takes them. The rags are `hidden` (never listed); the set
+# `bramble_rags` gives the "N rags now" line; with all five, the waystation scene makes the pennant. (draft)
+[got_ash_rag_1]
+You took a RED RAG.
+
+Bramble got there first, in fact. He unties it, shakes out the ash, and tucks it inside his jacket, tenderly, like a bird.
+
+[got_ash_rag_2]
+You took a RED RAG.
+
+Bramble rolls it round two fingers and puts it with the first.
+
+[got_ash_rag_3]
+You took a RED RAG.
+
+Bramble holds it up to the light, which isn't much, and nods as if it passed an exam.
+
+[got_ash_rag_4]
+You took a RED RAG.
+
+Bramble doesn't say anything. He just keeps his hand on his jacket pocket.
+
+[got_ash_rag_5]
+You took a RED RAG.
+
+Bramble holds the last one up with the others, a little bundle of old red in his fist, and looks very pleased with himself.
+
+[bramble_rags_2]
+Two rags. Bramble counts them twice, to be sure.
+
+[bramble_rags_3]
+Three rags. He's started a little knot of them.
+
+[bramble_rags_4]
+Four rags. His jacket pocket is going lumpy.
+
+[bramble_rags_5]
+Five rags. That's a long, red, quite stubborn string, if you tie it right. Bramble looks along the road as if it were already on it.
+
+[got_bell_pennant]
+You got the BELL PENNANT.
+
+[about_bell_pennant]
+Five faded red rags knotted into one long swallow-tail, tied to the bootlace that holds Haddock's bell on Bramble's belt. Whenever he moves, it moves. It's very easy to find. (draft)
+
+# The chapter 1 to 3 collectible sets' keepsakes (src/data/collections.js).
+[about_charm_cord]
+Eight clay charms on a cord: a sun, a moon, a star, and five more. Every door in the village had one, once.
+
+[about_pin_roll]
+Nine enamel pins on a roll of felt, one for every climber who left theirs on the mountain. They look braver than they were.
+
+[about_marble_bag]
+A cloth bag of ten glass marbles. The woodcutters' children left them where they dropped. They chink when you walk.
+
+# --- The life pass, round 2: the Hushwood. (draft) ---
+[got_lp3h_tea_tin]
+You picked up a DENTED TEA TIN.
+
+Round, solid and cross, with string tied round its lid. It wants to be back on a shelf.
+
+[got_lp3h_charcoal]
+You got NAN'S CHARCOAL STICK.
+
+Sharp at one end, smudged at the other. It draws a very black line. Good for arrows. Or noses.
+
+[got_lp3h_acorn]
+You got the GOLD ACORN.
+
+Not gold, really. Gilded by some long-ago sunset and then kept in a larder. It sits in your palm like a very small, very certain promise.
+
+[got_lp3h_quiet_feather]
+You got a QUIET FEATHER.
+
+The colour of dusk. So soft you can hardly feel it, and silent as a held breath. Whoever kept it kept it for a reason.
+
+[about_lp3h_tea_tin]
+A round tin of Nan Cinder's tea, with a dent and string round the lid. It belongs on a shelf in the Kiln.
+
+[about_lp3h_charcoal]
+A stub of charcoal from Nan Cinder, black to the end. It draws arrows very well.
+
+[about_lp3h_acorn]
+An acorn gilded by some long-ago sunset. Kept, by a squirrel, for luck.
+
+[about_lp3h_quiet_feather]
+A dusk-coloured feather from a nest in a hollow log. It makes no sound at all.
+
+# --- Chapter 1: the Ruins (life pass, round 2, 15 November 2026) ---
+
+# (draft)
+
+[got_r1_button]
+You picked up a BRASS BUTTON.
+
+Round, shiny, and sized for a very small coat. Somebody will be missing it.
+
+# (draft)
+[about_r1_button]
+A round brass button, found at the edge of the pool in the Flower Room. It's far too small for any of your clothes. It might be someone's lucky one.
+
+# (draft)
+[got_mouse_scarf]
+You got the THUMB SCARF.
+
+It's a knitted scarf about as long as your thumb. It's the thought that counts.
+
+# (draft)
+[about_mouse_scarf]
+A very small knitted scarf, from a mouse called Fennel, for when your thumb gets cold. It's warm, and it's the only one in the world.
+
+# (draft)
+[got_r1_later_seeds]
+You pocketed a SEED PACKET.
+
+It says LATER. It rattles a little.
+
+# (draft)
+[about_r1_later_seeds]
+A seed packet from behind a barrow in Taper's glasshouse. Written on it in a round hand: LATER. (IF THERE'S A LATER.) You haven't opened it.
+
+# The life pass on Mount Vigil (2026-11-15). (draft)
+[got_r2v_flag_rag]
+You picked up a TORN PRAYER FLAG.
+
+Blue cloth, snapped off its string, the edge frayed to threads. It is the right size for a gap somewhere.
+
+[got_r2v_pilgrim_ribbon]
+You got the PILGRIM'S RIBBON.
+
+A length of faded red ribbon, knotted once at one end where a flag was tied on. It still smells faintly of woodsmoke and cold.
+
+[got_stoat_shinies]
+You took the STOAT'S THIMBLE.
+
+A silver thimble, dented, polished bright by a very small collector. It rolls on your palm like a thimble that has had adventures.
+[got_mole_specs]
+You got BURDOCK'S SPECTACLES.
+
+Two small round lenses in a wire frame, one arm bent, the whole thing about as big as a coin. There's a smear of earth on the left lens, and a thumbprint that is clearly a mole's.
+
+[got_burdocks_button]
+You got BURDOCK'S BUTTON.
+
+A big brass button, heavy for its size, with an anchor on it. It came off a coat that was much too big for a mole, and a good deal too worn for anyone to want it back. It's very valuable. It's a button.
+
+[got_r5g_whale]
+You picked up a HALF-CARVED WHALE.
+
+One nick for an eye, no tail yet. Scratched on the base: BILLY. FOR LIZZIE. It should go somewhere warm.
+
+[got_r5g_shaving]
+You got a CURL OF WHITTLING.
+
+A shaving of pale pine, still faintly resinous, cut very small and very neat. Somebody finished the tail.
+
+
+# --- Chapter 3's Old Drains and Lantern Marsh (life pass, 15 November 2026) ---
+
+# (draft)
+[got_lost_boot]
+You picked up the LEFT BOOT.
+
+A good leather boot, the laces still done up, a sock still in it. It's heavy with fifty years of damp. Somebody, somewhere down here, is missing it.
+
+# (draft)
+[about_lost_boot]
+A left boot, wet through, with a sock in it. There's a shelf in the Drains where somebody keeps things that wash down.
+
+# (draft)
+[got_ladles_tag]
+You got LADLE'S TAG.
+
+A little tin tag on a loop of string, stamped KEPT SWEET. It smells faintly of clean water. It's the tidiest thing you own.
+
+# (draft)
+[about_ladles_tag]
+A tin tag from a very tidy hob. KEPT SWEET, it says. It says it like a promise.
+
+# (draft)
+[got_moorhen_egg]
+You picked up the SPECKLED EGG.
+
+It's small and warm and very light, and you have the strong feeling that you are responsible for it now.
+
+# (draft)
+[about_moorhen_egg]
+A speckled egg, fallen out of a nest. Somewhere in the Rushes there's a nest with a gap in it.
+
+# (draft)
+[got_moorhen_feather]
+You got the MOORHEN'S FEATHER.
+
+A small dark feather with a white edge, left on your hand like a thank-you. Moorhens don't say thank you. This is the nearest they get.
+
+# (draft)
+[about_moorhen_feather]
+A moorhen's feather, dark with a white edge. A nest in the Rushes is a little more full because of you.
+
+# --- Chapter 3's tiny errands (the life pass, round 2) ---
+
+[got_lp3_red_float]
+You picked up a CHEWED RED FLOAT.
+
+A fisherman's float, red, with a bite out of it and a bit of eel-line still tied on. It smells of dog, a little, and of fen, a lot.
+
+[got_fishers_knot]
+You got the FISHER'S KNOT.
+
+A length of eel-line tied in a knot that never slips. It holds anything, she says. Except a grudge.
+
+[got_lp3_street_chair]
+You picked up a PLAIN CHAIR.
+
+A plain wooden chair, with four straight legs and a good back. It weighs more than it looks, and you carry it anyway, a little embarrassed.
+
+[got_heros_place_card]
+You got THE HERO'S PLACE CARD.
+
+A card in careful gold lettering: THE HERO. (SEAT SAVED.) The corners have gone soft from three hundred years of not yet.
+
+[got_lp3_page]
+You picked up a LOOSE PAGE (W).
+
+A page torn out of a file, headed with a single flourished W, and a long list of names. It's very slightly warm, as if it had been waiting to be picked up.
+
+[got_clerks_blotter]
+You got the CLERK'S BLOTTER.
+
+A blotter printed backwards with everything its owner ever wrote. Held up to a mirror, the last line reads: SEE YOU TOMORROW.
+
+[got_lp3_duck]
+You picked up a WOODEN DUCK.
+
+A small wooden duck, bright yellow, with one painted eye. It looks as if it knows it's lost and is being quite brave about it.
+
+[got_slowlys_boat]
+You got SLOWLY'S BOAT.
+
+A little wooden boat, carved with great patience, that looks exactly like a duck if you're honest. It floats. It has never once been in a hurry.
+
+# --- The Pinefall and Hollin (life pass, 15 November 2026) ---
+
+[got_fallen_nest]
+You picked up the ROBIN'S NEST.
+
+Grass and moss, woven tight, with three blue eggs wedged in it. It weighs about as much as a thought. You carry it very level.
+
+[about_fallen_nest]
+A robin's nest, three blue eggs, none cracked. It came off its stump and needs to go back up.
+
+[got_robins_feather]
+You got a ROBIN'S FEATHER.
+
+Rust-red, with a brown edge. It was left on the stump, standing straight up, like a flag.
+
+[about_robins_feather]
+A robin's feather, rust and brown. The thanks of somebody very small, who doesn't do speeches.
+
+[got_hollin_doll]
+You picked up the RAG DOLL.
+
+She's stuffed with straw and a little hard with years. One boot, no hat, a very steady stare. You tuck her under your arm so she can see.
+
+[about_hollin_doll]
+A rag doll, one boot, straw stuffing. She was dropped in a hurry in Hollin, and there's somewhere in the village she belongs.
+
+[got_hollin_rattle]
+You got a WOODEN RATTLE.
+
+A little carved rattle with three dried beans in it, from the cradle. It was left on the pillow for you, or for whoever came next.
+
+[about_hollin_rattle]
+A wooden rattle with three beans. It still goes, a little. It's the sound of a house you'll never see.
+
+[got_hollin_marbles]
+You took a HANDFUL OF MARBLES.
+
+Blue, red, a very good gold one with a twist in it. You left one in the tin, as the note said.
+
+[about_hollin_marbles]
+A handful of marbles from the den in Hollin. You paid the one marble. You're not a thief.
+
+# === THE LIFE PASS, ROUND 2 (builder 3) ===
+# (draft)
+[got_r2r_toy_trumpet]
+You got a TOY TRUMPET!
+
+It's small and dented, with a sock stuffed in the bell. Somebody on the square will be wanting this back.
+
+# (draft)
+[about_r2r_toy_trumpet]
+A little dented trumpet with a sock in the bell. A kid on the square wants it back.
+
+# (draft)
+[got_r2r_dot_drawing]
+You got DOT'S DRAWING!
+
+It's you, very tall, holding a very small trumpet. The label says YOU.
+
+# (draft)
+[about_r2r_dot_drawing]
+A crayon picture of you: very tall, with a very small trumpet. The label says YOU.
+
+# (draft)
+[got_r2r_edelweiss]
+You got a TUFT OF EDELWEISS!
+
+It's white and woolly and smells of nothing at all, which is a surprise. Somebody on the Goat Track would like it.
+
+# (draft)
+[about_r2r_edelweiss]
+A tuft of white, woolly edelweiss. A marmot on the Goat Track wants it.
+
+# (draft)
+[got_r2r_marmot_whistle]
+You got a MARMOT'S WHISTLE!
+
+It's a tiny whistle of bone, still warm. Blow it and every marmot on the mountain looks up.
+
+# (draft)
+[about_r2r_marmot_whistle]
+A tiny bone whistle, still warm. Every marmot on the mountain looks up when it blows.
+
+# (draft)
+[got_r2r_red_mitten]
+You got a LITTLE RED MITTEN!
+
+It's very small and frozen into a curl. Somebody in the Grotto has one bare paw.
+
+# (draft)
+[about_r2r_red_mitten]
+A very small red mitten, frozen stiff. A hare in the Grotto has one bare paw.
+
+# (draft)
+[got_r2r_hare_print]
+You got a HARE'S PAWPRINT!
+
+It's a slab of clear ice with a perfect pawprint pressed in it, and for some reason it doesn't melt.
+
+# (draft)
+[about_r2r_hare_print]
+A slab of clear ice with a hare's pawprint in it. It never melts.
+# === END THE LIFE PASS, ROUND 2 (builder 3) ===
+
+# --- Chapter 4's hidden corners (the life pass fix-up) ---
+[got_bl_curator_iou]
+You got the CURATOR'S IOU.
+
+A shred of paper: IF FOUND, THE CURATOR OWES ME TWO COINS AND AN APOLOGY. Somebody has added, in a different hand, 'AND A STOOL.'
+
+[about_bl_curator_iou]
+A shred of paper from behind a banner. The curator still owes someone two coins and an apology.
+
+[got_bl_den_shoe]
+You got a DEN SHOE.
+
+A spare shoe from the alley den. It's very small and very loved, and somebody will be hopping about without it.
+
+[about_bl_den_shoe]
+A spare shoe from the alley den. Someone, somewhere, has one fewer.
+
+[got_glow_pebble]
+You got a GLOW PEBBLE.
+
+A smooth pebble from the rock lip, still faintly warm and faintly bright. The glowbug did not mind. Much.
+
+[about_glow_pebble]
+A pebble that glows a little in the dark. A glowbug is still keeping an eye on the place you got it.
+
+[got_fish_skull_weight]
+You got the FISH-SKULL WEIGHT.
+
+A small fish skull, worn smooth, that was holding a purse down against the spray. Now it will hold a paper down on your desk, if you ever get one.
+
+[about_fish_skull_weight]
+A small fish skull, polished by spray. A paperweight with opinions.

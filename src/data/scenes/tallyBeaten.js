@@ -1,5 +1,7 @@
 // QUIRE BEATEN (a secret, Chapter 3): the Register comes apart, every page of
-// it, all its figures spilling out of it across the hall. The splinter of the
+// it, all its figures spilling out of it across the hall, and the wish it made
+// on the star (that the count would come out right) breaks with it: its first
+// page comes down last, with the wish on it. The splinter of the
 // Fallen Star falls out of its binding onto the flagstones; you pick it up (the
 // `star_shard`). What's left is a heap of paper on the stand. The hero never
 // speaks. Every line is a (draft).
@@ -24,6 +26,7 @@ export const TALLY_BEATEN = {
     { do: 'sound', name: 'thud' },
     { do: 'leave', who: 'tally' },
     { do: 'say', text: 'Quire goes up in a gust of loose pages, all its figures spilling out of it, ink and old paper going every way across the hall at once. Nothing on any of them adds up.' },
+    { do: 'say', text: 'The last page to come down is the first one. WELCOME, in a big round hand, and under it, in a small cramped one, a single line: LET THE COUNT COME OUT RIGHT.\n\nThe ink has gone grey.' },
     { do: 'wait', seconds: 0.6 },
     { do: 'sound', name: 'shimmer' },
     { do: 'say', text: 'Something pale falls out of the binding and rings on the flagstones, still humming at the sword. You pick it up.' },

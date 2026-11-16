@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE BRAMBLE GATE: a bramble hedge right across the wood, with an old
 // woodcutters' gate in it worked by three levers. The sign gives the order:
 // as the sun goes (east, noon, west). Pull one out of turn and they all
@@ -65,6 +67,7 @@ export const PINEFALL_BRAMBLE_GATE = {
     { sprite: 'lever', x: 21, y: 12, text: 'gate_lever', lever: 'east' },
     { sprite: 'lever', x: 13, y: 16, text: 'gate_lever', lever: 'noon' },
     { sprite: 'lever', x: 3, y: 11, text: 'gate_lever', lever: 'west' },
+    ...(R3P_PROPS['pinefall_bramble_gate'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble' },
 

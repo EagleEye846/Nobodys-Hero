@@ -9,6 +9,8 @@
 //   n  snow                                       i  trodden snow path
 //   s  the great stair                            Q  snowy boulder (solid)
 //   _  open sky (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
+import { R3A_PROPS } from '../r3aLife.js';
 export const VIGIL_SUMMIT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_summit',
@@ -81,6 +83,10 @@ export const VIGIL_SUMMIT = {
     { sprite: 'cairn', x: 26, y: 13, text: 'summit_cairn' },
     // Her lantern, where he threw it down (summitArrival.js), there from then on.
     { sprite: 'mothers_lantern', x: 18, y: 9, text: 'summit_lantern', after: 'summit_arrival' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_summit'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['vigil_summit'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

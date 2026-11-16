@@ -35,7 +35,7 @@ export const QUARTZLING = {
   anim: QUARTZLING_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1450,
+  maxHp: 2800,
   damage: 37,
 
   // The Glimmering: stillness, aimed shots, and things you can hardly see.
@@ -44,10 +44,9 @@ export const QUARTZLING = {
   // Its attacks live in src/battle/attacks/quartzling.js.
   patterns: [
     { name: 'quartzFreeze', weight: 3 },
-    { name: 'quartzSplit', weight: 2 },
     { name: 'quartzGlint', weight: 2 },
     { name: 'quartzScurry', weight: 2 },
-    { name: 'quartzSpire', weight: 2 },
+    { name: 'quartzBlink', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

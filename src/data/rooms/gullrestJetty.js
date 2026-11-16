@@ -94,7 +94,12 @@ export const GULLREST_JETTY = {
     // The headland's grassy top (out of reach): a little marram and dune grass up there.
     { sprite: 'sy_dune_grass', x: 31, y: 2, flat: true, walkable: true },
     { sprite: 'c5_marram', x: 33, y: 4, flat: true, walkable: true },
-    { sprite: 'sy_dune_grass', x: 35, y: 1, flat: true, walkable: true },
+    { sprite: 'sy_dune_grass', x: 35, y: 1, flat: true, walkable: true },
+    // (life pass 2026-11-14)
+    // The jetty: an angler on the sand, boats on their moorings, a board of rules, drying fish, a bucket of crabs, a cat on a crate.
+    { sprite: 'st_folk_a', x: 9, y: 11, npc: 'st_jetty_angler', animation: 'st_folk_a', speed: 0.8 },
+    { sprite: 'st_fish_rack', x: 4, y: 13, text: 'life_j_rack' },
+    { sprite: 'st_cat_sit', x: 9, y: 14, text: 'life_j_cat', animation: 'st_cat_sit', speed: 0.7 },
   ],
   tileTexts: { '#': 'jetty_wall', W: 'jetty_wall', '~': 'jetty_sea' },
 

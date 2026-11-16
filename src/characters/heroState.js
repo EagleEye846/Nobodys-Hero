@@ -34,4 +34,10 @@ export const HERO_STATE = {
   memberGear: {},
   // The monster journal: monsters met, by enemy id (see src/data/journal.js).
   journal: {},
+  // The spells each person takes into battle, in their SPELL NOTCHES, as
+  // { hero: [spell ids], vesper: [...] } (see src/characters/notches.js).
+  loadout: {},
+  // False on a save from before notches: it's given the Notch Charms from the
+  // chapters before its own once (settleNotches in notches.js).
+  notchesSettled: true,
 };

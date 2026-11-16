@@ -9,7 +9,7 @@
 // is put together and blown (three pieces hidden in the Glimmering, Belowtown and the
 // Stillwater: the roster by the hats says where; scene `whistle_blown`). Then it is the way down to the secret detour: the
 // Scorch, the Spill, the Siding, the Glassworks, the Whistle Gallery,
-// the Last Camp and Pudding's Pool, where the Deep Star
+// the Last Camp and Pale's Pool, where the Deep Star
 // Shard is (src/data/rooms/diggingsStar*.js). The way back up is the way in: the
 // cart stub at 13,9 is the end of the line; ride it back up the shaft or just walk.
 
@@ -18,6 +18,8 @@
 //   h  timber-framed wall (solid)   O  ore rock (solid)   I  timber post (solid, standing)
 //   .  packed dirt floor
 //   ^  stalagmite (solid)
+
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
 
 export const DIGGINGS_LOST_SEAM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -105,6 +107,7 @@ export const DIGGINGS_LOST_SEAM = {
   // The chest, the sliver (it glows a little), the hats, the table laid for a break, the tally board.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_lost_seam ?? []),
     // A save point near the way in (added so the mines have more of them).
     { sprite: 'savepoint', x: 11, y: 9, save: true },
     { sprite: 'chest', x: 22, y: 5, text: 'lost_chest', gives: 'rivet_handle', taken: { sprite: 'chest_open', text: 'chest_empty' } },

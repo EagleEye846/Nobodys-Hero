@@ -4,9 +4,12 @@
 // the wind with things to fight on the way, a pool on the first rock, and a lot of weather.
 //
 // The causeway's far end (x 47, rows 7-9) is the door into Haddock's Light (haddock_light_door).
+// The west door goes back over the Gannet Stack (isles_gannet_stack) to the West Light.
 // Tile key (see src/overworld/coastTiles.js, isles):
 //   #  rock top (solid)   ,  wind turf   .  rock slabs   X  the causeway's cobbles
 //   ;  where the sea comes over (shallows, walk)   ~  the sea (solid)   x  barnacle rock (solid)
+
+import { LIFE5_PROPS } from '../lifePass5.js';
 
 export const ISLES_CAUSEWAY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -27,6 +30,7 @@ export const ISLES_CAUSEWAY = {
   // The wrecks' silhouettes on the sea keep this many tiles clear of any shore
   // (src/overworld/atmosphere.js, buildSkyline).
   skylineClear: 2,
+
 
   tiles: [
     '################################################',
@@ -54,7 +58,7 @@ export const ISLES_CAUSEWAY = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 0, y: 7, w: 1, h: 2, to: 'isles_west_light', spawn: { x: 41, y: 11 } },
+    { x: 0, y: 7, w: 1, h: 2, to: 'isles_gannet_stack', spawn: { x: 37, y: 12 } },
     // On to Haddock's Light.
     { x: 47, y: 7, w: 1, h: 3, to: 'haddock_light_door', spawn: { x: 2, y: 9 } },
   ],
@@ -77,11 +81,7 @@ export const ISLES_CAUSEWAY = {
     // on the rocks; gulls, a crab, rain in the hollows. Two lanterns on posts mark the road where
     // it leaves each rock, so it can be found in the dark.
     { sprite: 'c5_wrack_line', x: 19, y: 8, flat: true, walkable: true },
-    { sprite: 'c5_wrack_line', x: 35, y: 9, flat: true, walkable: true },
-    { sprite: 'c5_planks_scatter', x: 3, y: 11, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 27, y: 11, flat: true, walkable: true },
-    { sprite: 'c5_gull_marks', x: 31, y: 4, flat: true, walkable: true },
-    { sprite: 'c5_crab_trail', x: 43, y: 12, flat: true, walkable: true },
     { sprite: 'c5_net_torn', x: 8, y: 5, flat: true, walkable: true },
     { sprite: 'c5_boat_upturned', x: 27, y: 3 },
     { sprite: 'c5_lantern_hook', x: 24, y: 6 },
@@ -90,39 +90,27 @@ export const ISLES_CAUSEWAY = {
     // gulls, an old boat, stakes, a pot) and rocks out in the sea. Nothing on the road, nothing near
     // the trio's ground on the first rock (x 11-14, rows 9-11).
     { sprite: 'il_cairn', x: 4, y: 4, text: 'isle_cairn' },
-    { sprite: 'il_thrift', x: 11, y: 4, walkable: true },
-    { sprite: 'il_grass_tuft', x: 15, y: 5, walkable: true },
     { sprite: 'il_lichen', x: 8, y: 6, flat: true, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 2, y: 6, walkable: true },
     { sprite: 'il_rowboat_half', x: 4, y: 12, text: 'isle_rowboat_half' },
-    { sprite: 'il_grass_tuft', x: 2, y: 10, walkable: true },
-    { sprite: 'il_thrift', x: 6, y: 11, walkable: true },
+    { sprite: 'il_thrift', x: 6, y: 11, walkable: true, decor: true },
     { sprite: 'il_gull_rock', x: 31, y: 3, text: 'isle_gull_rock' },
-    { sprite: 'il_thrift', x: 28, y: 2, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 33, y: 5, walkable: true },
-    { sprite: 'il_grass_tuft', x: 25, y: 4, walkable: true },
-    { sprite: 'il_gull', x: 26, y: 5, walkable: true },
-    { sprite: 'il_tidepool', x: 30, y: 12, flat: true, walkable: true },
+    { sprite: 'il_grass_tuft', x: 25, y: 4, walkable: true, decor: true },
     { sprite: 'il_stakes_rope', x: 25, y: 13, text: 'isle_stakes' },
     { sprite: 'il_pot_broken', x: 31, y: 14, text: 'isle_pot_broken' },
-    { sprite: 'il_thrift', x: 29, y: 15, walkable: true },
-    { sprite: 'il_grass_tuft', x: 32, y: 10, walkable: true },
-    { sprite: 'il_grass_tuft', x: 42, y: 5, walkable: true },
-    { sprite: 'il_thrift', x: 45, y: 5, walkable: true },
+    { sprite: 'il_thrift', x: 29, y: 15, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 45, y: 5, walkable: true, decor: true },
     { sprite: 'il_cairn', x: 43, y: 11, text: 'isle_cairn' },
-    { sprite: 'il_thrift', x: 44, y: 13, walkable: true },
-    { sprite: 'il_lichen', x: 41, y: 10, flat: true, walkable: true },
     { sprite: 'il_rocks', x: 22, y: 10, text: 'isle_rocks' },
     { sprite: 'il_rocks', x: 34, y: 10, text: 'isle_rocks' },
     { sprite: 'il_rocks', x: 20, y: 6, text: 'isle_rocks' },
     { sprite: 'il_rocks', x: 35, y: 6, text: 'isle_rocks' },
     { sprite: 'il_lichen', x: 10, y: 10, flat: true, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 15, y: 11, walkable: true },
     { sprite: 'il_rocks', x: 8, y: 14, text: 'isle_rocks' },
     { sprite: 'il_rocks_big', x: 38, y: 14, text: 'isle_rocks' },
     { sprite: 'il_gull_rock', x: 20, y: 13, text: 'isle_gull_rock' },
     { sprite: 'il_rocks', x: 36, y: 2, text: 'isle_rocks' },
     { sprite: 'il_rocks_big', x: 5, y: 2, text: 'isle_rocks' },
+    ...(LIFE5_PROPS['isles_causeway'] ?? []),
   ],
   tileTexts: { '#': 'isles_rock', '~': 'causeway_sea', X: 'causeway_stones', ';': 'causeway_wash', x: 'isles_light_rock' },
 

@@ -63,7 +63,7 @@ export const SOUNDINGS_MOUTH = {
     { x: 0, y: 8, w: 1, h: 2, to: 'lanes_down', spawn: { x: 29, y: 9 } },
     { x: 35, y: 8, w: 1, h: 2, to: 'soundings_echo_hall', spawn: { x: 2, y: 5 } },
     // The flooded tunnel from Merrow's sea gate.
-    { x: 0, y: 4, w: 1, h: 2, to: 'merrow_sea_gate', spawn: { x: 33, y: 3 } },
+    { x: 0, y: 4, w: 1, h: 2, to: 'merrow_sea_gate', spawn: { x: 17, y: 6 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -75,6 +75,8 @@ export const SOUNDINGS_MOUTH = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/soundings.txt',
   props: [
+    // The far end of Merrow's flooded tunnel, in the west wall (drawn flat; the door tiles stay as they are).
+    { sprite: 'sd_tunnel_mouth', x: 0, y: 5, flat: true, walkable: true },
     // The sounders' chart: the map of the Soundings.
     { sprite: 'sd_chart', x: 6, y: 4, text: 'mouth_chart', notice: true },
     { sprite: 'sign', x: 9, y: 7, text: 'mouth_sign' },
@@ -96,30 +98,34 @@ export const SOUNDINGS_MOUTH = {
     // the walls' feet, sea-glass in clumps where the wet comes through, and rock standing out
     // of the sea at the mouth.
     { sprite: 'sd_pit_prop', x: 7, y: 2, text: 'sound_pit_prop' },
-    { sprite: 'sd_scree', x: 13, y: 2, flat: true, walkable: true },
     { sprite: 'sd_glass_rock', x: 11, y: 3, text: 'sound_glass', glow: GLASS_GLOW },
-    { sprite: 'sd_glass_bed', x: 8, y: 3, flat: true, walkable: true },
     { sprite: 'sd_stalagmites', x: 20, y: 3, text: 'sound_stalagmites' },
     { sprite: 'sd_stalagmite', x: 14, y: 6, text: 'sound_stalagmites' },
     { sprite: 'sd_scree', x: 17, y: 5, flat: true, walkable: true },
     { sprite: 'sd_weed_ledge', x: 25, y: 2, text: 'sound_weed_ledge' },
     { sprite: 'sd_glass_rock', x: 27, y: 3, text: 'sound_glass', glow: GLASS_GLOW },
-    { sprite: 'sd_scree', x: 30, y: 2, flat: true, walkable: true },
     { sprite: 'sd_glass_rock', x: 32, y: 6, text: 'sound_glass', glow: GLASS_GLOW },
-    { sprite: 'sd_glass_bed', x: 29, y: 7, flat: true, walkable: true },
     { sprite: 'sd_rock_pile', x: 25, y: 8, text: 'sound_rocks' },
     { sprite: 'sd_slab', x: 28, y: 10, text: 'sound_slab' },
     { sprite: 'sd_diver_gear', x: 6, y: 10, text: 'sound_diver_gear' },
     { sprite: 'c5_puddle', x: 11, y: 8, flat: true, walkable: true },
-    { sprite: 'c5_puddle', x: 21, y: 10, flat: true, walkable: true },
     { sprite: 'sd_timbers', x: 17, y: 11, text: 'sound_timbers' },
-    { sprite: 'sd_glass_bed', x: 15, y: 11, flat: true, walkable: true },
     { sprite: 'sd_scree', x: 2, y: 11, flat: true, walkable: true },
     // Rock standing out of the sea at the mouth.
     { sprite: 'sd_sea_rock', x: 4, y: 14 },
     { sprite: 'sd_sea_rocks', x: 8, y: 15 },
     { sprite: 'sd_sea_rock', x: 23, y: 15 },
     { sprite: 'sd_sea_rock', x: 30, y: 15 },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_hook_lamp', x: 8, y: 9, npc: 'lp_marrow_hook', quest: [
+      { needs: ['has:marrow_pail'], take: 'marrow_pail', set: ['q_marrow_done'], give: 'marrow_whistle', text: 'marrow_done' },
+      { needs: ['q_marrow_done'], text: 'marrow_after' },
+      { needs: ['q_marrow_asked'], text: 'marrow_wait' },
+      { needs: ['!q_marrow_asked'], set: 'q_marrow_asked', text: 'marrow_ask' },
+    ] },
+    { sprite: 'lv_boot', x: 22, y: 11, text: 'lp_boot_gift', walkable: true, react: true, gives: 'boiled_boot', taken: { gone: true } },
+    { sprite: 'lv_coil_line', x: 16, y: 9, text: 'lp_coil_line', walkable: true },
+    { sprite: 'lv_tripod', x: 26, y: 9, text: 'lp_tripod' },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'mouth_sea', '0': 'mouth_sea', q: 'mouth_shingle', x: 'sound_glass', I: 'sound_pillar', O: 'mouth_rockfall', F: 'sound_weed', ';': 'mouth_tunnel' },
 

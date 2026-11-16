@@ -84,7 +84,7 @@ export const STILLWATER_ISLES = {
     { sprite: 'rock_stump', x: 30, y: 9, text: 'lake_stump', rockReset: true },
     { sprite: 'sign', x: 7, y: 8, text: 'isles_sign' },
     // Tarn's whistle barrel, in a barrel washed up where the stepping stones run out (the whistle quest: Seam Nine's roster).
-    { sprite: 'barrel', x: 16, y: 14, text: 'isles_barrel', gives: 'whistle_barrel', taken: { sprite: 'barrel', text: 'isles_barrel_empty' } },
+    { sprite: 'barrel', x: 16, y: 14, text: 'isles_barrel', gives: 'whistle_barrel', notice: true, taken: { sprite: 'barrel', text: 'isles_barrel_empty' } },
     { sprite: 'gold_pouch', x: 20, y: 14, text: 'isles_purse', gold: 95, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'gold_pouch', x: 30, y: 14, text: 'isles_far_purse', gold: 105, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 29, y: 13, text: 'isles_chest', gives: 'jam_tart', taken: { sprite: 'chest_open', text: 'chest_empty' } },
@@ -93,11 +93,11 @@ export const STILLWATER_ISLES = {
     { sprite: 'glow_reeds_tall', x: 35, y: 5, text: 'glow_reeds', animation: 'glow_reeds_tall', speed: 0.55 },
     { sprite: 'glow_reeds', x: 41, y: 12, text: 'glow_reeds', animation: 'glow_reeds', speed: 0.45 },
     { sprite: 'glow_reeds_tall', x: 16, y: 13, text: 'glow_reeds', animation: 'glow_reeds_tall', speed: 0.5 },
-    { sprite: 'fungus_pads', x: 14, y: 6, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 12, y: 9, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 22, y: 10, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 34, y: 11, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 18, y: 16, walkable: true, animation: 'fungus_pads', speed: 0.9 },
+    { sprite: 'fungus_pads', x: 14, y: 6, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 12, y: 9, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 22, y: 10, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 34, y: 11, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 18, y: 16, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
     { sprite: 'sunken_pillar_top', x: 10, y: 11, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     { sprite: 'sunken_pillar_top', x: 26, y: 10, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     { sprite: 'sunken_pillar_top', x: 25, y: 4, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
@@ -111,6 +111,11 @@ export const STILLWATER_ISLES = {
     { sprite: 'drip_puddle', x: 22, y: 13, walkable: true, flat: true, animation: 'drip_puddle', speed: 0.3 },
     { sprite: 'floor_pebbles_cool', x: 29, y: 14, walkable: true, flat: true },
     { sprite: 'floor_pebbles_cool', x: 39, y: 14, walkable: true, flat: true },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'sw_old_boat', x: 3, y: 8, text: 'lp_isles_boat' },
+    { sprite: 'sw_pale_snails', x: 7, y: 10, text: 'sp_snails' },
+    { sprite: 'gold_pouch', x: 40, y: 5, text: 'lp_isles_nook', gives: 'fish_skull_weight', taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'lake_rock', W: 'lake_wall', '~': 'lake_water', ';': 'lake_shallows',
@@ -121,9 +126,12 @@ export const STILLWATER_ISLES = {
   // you only meet it from the stepping stones or the south islands), and an
   // olm waits on the dead-end island's shallows. No scenes here, nothing to
   // keep clear of; neither is near a door.
+  // AMBUSH: the olm lies under those shallows (15,15) and comes up out of them when you come within
+  // two and a half tiles (slow pale bubbles over it: `look: 'still_water'`, src/overworld/
+  // hideouts.js). That's only the dead end, round the barrel (16,14) and the purse (20,14).
   npcs: [
     { enemy: 'blindfish', x: 20, y: 11, patrol: [13, 33], behaviour: 'patrol' },
-    { enemy: 'olm', x: 18, y: 14, patrol: [15, 21], behaviour: 'patrol' },
+    { enemy: 'olm', x: 15, y: 15, patrol: [15, 15], behaviour: 'burrow', look: 'still_water', reach: 2.5 },
     // A fiddler on the east shore (row 8, x 37 to 39), past the last channel and above the
     // chest island; no cutscenes here, and the drift logs and the stones are all to the west.
     // It turns three tiles short of the east door, so coming in from the reeds (42,9) never

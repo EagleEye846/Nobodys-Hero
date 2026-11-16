@@ -6,6 +6,9 @@
 //   #  the old city's stone, overhead (solid)
 //   .  the old city's flagstones
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_SCULPTORS_YARD = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_sculptors_yard',
@@ -46,11 +49,14 @@ export const CITY_SCULPTORS_YARD = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_sculptors_yard ?? []),
     { sprite: 'plinth_empty', x: 6, y: 5, text: 'yard_unfinished' },
     { sprite: 'hero_statue_head', x: 2, y: 7, text: 'yard_heads' },
     { sprite: 'hero_statue_head', x: 10, y: 4, text: 'yard_heads' },
     { sprite: 'chest', x: 9, y: 7, text: 'yard_chest', gives: 'sculptors_mallet', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 3, y: 3, text: 'yard_purse', gold: 320, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_sculptors_yard'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall' },
 

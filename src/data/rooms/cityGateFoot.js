@@ -9,6 +9,9 @@
 //   #  the old city's stone, overhead (solid)
 //   .  the old city's flagstones
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_GATE_FOOT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_gate_foot',
@@ -65,6 +68,7 @@ export const CITY_GATE_FOOT = {
   // / `after` warden_breaks).
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_gate_foot ?? []),
     { sprite: 'gate_foot', x: 12, y: 3, text: 'gate_doors', until: 'warden_breaks' },
     { sprite: 'gate_foot_broken', x: 12, y: 3, text: 'gate_broken', after: 'warden_breaks' },
     { sprite: 'warden_asleep', x: 13, y: 7, text: 'gate_warden', cast: 'warden', until: 'warden_breaks' },
@@ -74,6 +78,8 @@ export const CITY_GATE_FOOT = {
     { sprite: 'scorch_mark', x: 17, y: 13, text: 'gate_claws', walkable: true },
     { sprite: 'street_lamp_dead', x: 4, y: 4, text: 'dead_lamp' },
     { sprite: 'street_lamp_dead', x: 23, y: 4, text: 'dead_lamp' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_gate_foot'] ?? []),
   ],
   tileTexts: { W: 'gate_wall', '#': 'gate_wall' },
 

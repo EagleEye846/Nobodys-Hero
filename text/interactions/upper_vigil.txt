@@ -129,8 +129,9 @@ OVER THE BLOCKS, THEN DOWN. THE CRAG HAS A CHEST.
 
 Ves runs a finger under the letters. Her mouth goes a funny shape. She doesn't say whose writing it is.
 
+# (draft) Was a honeycake; now a Notch Charm (src/characters/notches.js).
 [shelf_chest]
-A chest on the crag, wrapped in oilcloth against the weather. A honeycake inside.
+A chest on the crag, wrapped in oilcloth against the weather. Inside, a little charm of horn on a cord, with one notch cut in it.
 
 And a note: "FOR THE HERO. YOU'RE DOING WELL."
 
@@ -361,3 +362,251 @@ Nothing but sky, all the way round. Every other mountain is below you.
 
 [summit_lantern]
 Her mother's lantern, lying in the snow where he threw it. The brass is dented. One pane is cracked. It's cold.
+
+# --- THE LIFE PASS (2026-11-15): Mount Vigil ---
+# (draft)
+
+# vigil_second_cairn
+[r2v_second_cairn_flags]
+A prayer pole in a cairn, flags streaming. Every herald who got this far tied on one more before turning back. The poles on this side are quite full.
+
+[r2v_second_cairn_flags_ves]
+{bored}Every flag is a wish. Statistically, one of them has to work.
+
+[r2v_second_cairn_apple]
+Three stones, a frozen apple and a coin. An offering left on the terrace for whatever was above, in case it was listening.
+
+[r2v_second_cairn_apple_ves]
+{smile}It's polite to bring something. I brought an umbrella.
+
+[r2v_second_cairn_names]
+A stone with names in tight rows, all of them heralds', each followed by a number. Nine. Four. Eleven. The number of times they turned back, perhaps. It's quite a high score for a hobby.
+
+[r2v_second_cairn_names_ves]
+{sly}Eleven. Somebody was really committed to not making it.
+
+[r2v_cloud_bank_hole]
+A fishing hole at the edge of the pond, a forked stick, a line, a bobber. Somebody sat here in the wind with a rod and a flask. Whatever they were fishing for, the pond says nothing.
+
+[r2v_cloud_bank_hole_ves]
+{bored}Under the ice? Really?
+
+[r2v_cloud_bank_bowl]
+A stone bowl by the great stair, a frozen oatcake inside and a ribbon on top. This far up, an oatcake is serious money.
+
+[r2v_cloud_bank_bowl_ves]
+{smile}I'd leave a biscuit too. I'd want it back, though.
+
+[r2v_cloud_bank_chimes]
+A post with bone chimes. They tap each other in the wind, one after the other, like a very small and very bony band.
+
+[r2v_cloud_bank_chimes_ves]
+{sly}It's a good tune. I'd put money on the third verse.
+
+[r2v_high_shelf_flags]
+A prayer pole on the High Shelf, its five flags bleached to the colour of milk. They flap with a sound like someone clapping very slowly.
+
+[r2v_high_shelf_flags_ves]
+{bored}Applause for being here.
+
+[r2v_high_shelf_names]
+A stone with a single name scratched into it, very carefully, with a good deep line. The rest of the stone is blank. It's saving the room.
+
+[r2v_high_shelf_names_ves]
+{sheepish}Somebody was confident.
+
+[r2v_high_shelf_shoes]
+A pair of snowshoes, hung on a peg of ice, the laces frozen into a pattern. Somebody left them like a pair of boots by the door.
+
+[r2v_high_shelf_shoes_ves]
+{sly}They're not coming back for them. Someone had enough.
+
+# vigil_broken_span
+[r2v_broken_span_bowl]
+A stone bowl at the foot of the stair, a ribbon and an oatcake frozen in. A small offering to the span, that it might hold. It didn't.
+
+[r2v_broken_span_bowl_ves]
+{bored}An oatcake isn't a bridge.
+
+[r2v_broken_span_chimes]
+Bone chimes hung over the gorge, clicking out over nothing. It would be a wonderful thing to hear from the span, when there was a span.
+
+[r2v_broken_span_names]
+A stone with the names of people who reached the broken end and wrote them to prove it. Under the last one, a tidy drawing of a bridge, and then a smaller drawing of a bird.
+
+[r2v_broken_span_names_ves]
+{sly}A bird. Well. Of course.
+
+[r2v_broken_span_stash]
+Tucked into the nook under the high rock, behind a drift and a leaning pole of flags, a pack is wedged in a crack. A hare's track leads right up to it and turns away, politely.
+
+Inside, wrapped in a woollen sock: fudge, still soft. A note in a very small hand: FOR WHOEVER GOT THIS FAR. YOU'RE DOING WELL. (THE HARES HAVE BEEN WATCHING. THEY ARE IMPRESSED.)
+
+[r2v_broken_span_stash_ves]
+{smile}Somebody wrote that to be kind. And then somebody else put the hares in. I like them both.
+
+[r2v_broken_span_stash_gone]
+The nook under the rock. The wedge of snow has a hollow in it where the pack was. The hare tracks are still there. They look a bit sorry.
+
+# vigil_wind_stair
+[r2v_wind_stair_chimes]
+A post with chimes, bone and tin, and the sound is quite lovely, and quite alone.
+
+[r2v_wind_stair_apple]
+Three stones, a frozen apple, a coin. An offering on the lower path. Somebody gave the mountain an apple. The mountain gave them wind.
+
+[r2v_wind_stair_apple_ves]
+{sly}Seems fair. It's a mountain. It has priorities.
+
+[r2v_wind_stair_post]
+A wooden post carved into a face, cheeks puffed and lips pursed, blowing. Painted lines curl out of its mouth. Somebody carved the wind a face, so they'd have someone to shout at.
+
+[r2v_wind_stair_post_ves]
+{bored}It's got the right expression. Smug.
+
+[r2v_wind_stair_rag]
+A scrap of blue cloth pinned between two stones by the wind: a prayer flag, torn off its string, one corner still snapping. It's just the right size for a gap somewhere. You take it.
+
+[r2v_wind_stair_rag_ves]
+{thoughtful}Somebody's missing one of those. Look for the pole with the gap.
+
+[r2v_wind_stair_rag_gone]
+The two stones, with the mark of a flag between them. A little cleaner than the rest of the rock.
+
+# vigil_lamplighters_ledge
+[r2v_lamplighters_ledge_bowl]
+A bowl set by the path to the hut, an oatcake frozen into it. Left for the hut. Left for whoever is inside. A long time ago.
+
+[r2v_lamplighters_ledge_bowl_ves]
+{bored}Nobody came. It's a very patient oatcake.
+
+[r2v_lamplighters_ledge_chimes]
+Bone chimes on a post by the stair. They click softly, like somebody counting, then losing count, and starting again.
+
+[r2v_lamplighters_ledge_chimes_ves]
+{thoughtful}Eight. Nine. Eight.
+
+[r2v_lamplighters_ledge_names]
+A stone at the top of the ledge with names scratched on it. Lamplighters, mostly. Each name has a little lamp drawn beside it, four quick strokes, the way you'd do it after drawing a thousand.
+
+[r2v_lamplighters_ledge_names_ves]
+{thoughtful}They sign their names with lamps. It's very efficient.
+
+[r2v_gale_face_bowl]
+A stone bowl, an oatcake frozen in, a ribbon pulled taut and flapping off the top. The ribbon's pulled so tight it looks like it's trying to leave.
+
+[r2v_gale_face_bowl_ves]
+{sly}Even the ribbon's trying to leave.
+
+[r2v_gale_face_chimes]
+A post with chimes that hasn't a hope. The wind is so strong the chimes are blown flat and ring only in the lulls. For a moment they play, then they're quiet.
+
+[r2v_gale_face_shirt]
+A shirt on a stick, frozen flat as a board, pointing straight out. It's the only weathervane on the face that agrees with the wind.
+
+[r2v_gale_face_shirt_ves]
+{laughing}It's a very honest weathervane.
+
+[r2v_weathervanes_chimes]
+A post with bone chimes. When the wind changes, the chimes change. A herald once wrote a whole song for it. It had one note and it went on for an hour.
+
+[r2v_weathervanes_chimes_ves]
+{bored}Please don't hum it.
+
+[r2v_weathervanes_bowl]
+A stone bowl at the edge of the lowest shelf, an oatcake frozen inside. A place for gifts to the wind. It's been told several times it's welcome to the oatcake.
+
+[r2v_weathervanes_bowl_ves]
+{sly}It never takes anything. It just blows around the gift and leaves.
+
+[r2v_weathervanes_wheel]
+A prayer wheel at the edge of the middle shelf. It turns whichever way the vane says. The painted lamps go by, round and round, a great slow lamp-wheel.
+
+[r2v_weathervanes_wheel_ves]
+{thoughtful}Lamps again. It's always lamps.
+
+[r2v_vane_gardens_chimes]
+Bone chimes on a post by the cave mouth. The cave breathes out, the chimes move, and the wind brings the sound back.
+
+[r2v_vane_gardens_apple]
+Three stones, a frozen apple, a coin. A gift for the vane that works. The gardeners left it for the one that turned.
+
+[r2v_vane_gardens_apple_ves]
+{sly}Which one's that?
+
+[r2v_vane_gardens_names]
+A stone with a list of winds on it, scratched deep: NORTH, WEST, EAST, and DON'T ASK. Each has a tiny scratch beside it: a little flag.
+
+[r2v_vane_gardens_names_ves]
+{bored}The last wind is the one we met.
+
+[r2v_spire_neck_bowl]
+A stone bowl at the edge of the shelf, an oatcake frozen inside and a ribbon on top. It's pointed east, like everything here.
+
+[r2v_spire_neck_shirt]
+A shirt on a stick, frozen, arms out in the gale, the wind pressing it flat. The last herald's laundry. It's been waving at the summit for a hundred years.
+
+[r2v_spire_neck_shirt_ves]
+{laughing}He can see it. He's just very polite.
+
+[r2v_spire_neck_names]
+A stone with a spiral of names on it, the largest at the centre, the smallest on the rim. At the very centre, a name that has been scratched out, and written again, and scratched out.
+
+[r2v_spire_neck_names_ves]
+{thoughtful}Somebody couldn't decide who to put.
+
+[r2v_owl_shelf_names]
+A stone with names on it, climbers' names, scratched in rows. Under the last: HOLLIS WAS HERE (HE'S ALWAYS HERE).
+
+[r2v_owl_shelf_names_ves]
+{grin}He's very consistent.
+
+[r2v_owl_shelf_bowl]
+A stone bowl by the stall, with a few tiny frozen seeds in it, and a note, written very small: FOR THE BIRDS. NOT FOR THE OWL. HE IS NOT A BIRD, HE SAYS.
+
+[r2v_owl_shelf_bowl_ves]
+{sly}He's a bit sensitive.
+
+[r2v_owl_shelf_bunny]
+A snow rabbit, built on a crate by the owl's stall, with twig ears and berry eyes. Hollis is facing it. It's a sort of staring contest. He's losing.
+
+[r2v_owl_shelf_bunny_ves]
+{laughing}Hollis never blinks. Neither does the rabbit.
+
+[r2v_summit_tiny]
+A little cairn near the edge of the summit. A last ribbon, tied round the top stone, frozen straight out in the wind.
+
+[r2v_summit_candle]
+A candle stub in a jar, left at the top by someone who lit it for the view, and the view was the best light there was.
+
+[r2v_summit_candle_ves]
+{smile}A candle at the top. In case the sky needed a hand.
+
+# vigil_lamplighters_hut
+[r2v_lamplighters_hut_shoes]
+A pair of snowshoes propped by the door, mended with different coloured twine at every break. The mending's very neat.
+
+[r3a_hut_shelf]
+A shelf of oil tins and lamp wicks, every label in the same neat hand. The last tin is only half-labelled: OIL. And then the pen simply stops, as if it was called away to light something.
+
+# (draft)
+[r3a_hut_shelf_ves]
+{thoughtful}Somebody always means to finish the label.
+
+# (draft)
+[r3a_su_tin]
+A tin box wedged into a heap of rocks at the top of the world, a pencil on a string. Inside is a notebook: the summit register. Names, dates, one-word remarks. VIEW. WIND. VIEW. WIND. COLD. VIEW. A page has been torn out near the front, with a note in its place: I WAS GOING TO WRITE SOMETHING PROFOUND. IT WAS TOO WINDY.
+
+# (draft)
+[r3a_su_tin_ves]
+{bored}I'm not signing it. I'd have to write 'wind', and I've got more to say about it than that.
+
+# (draft)
+[r3a_su_snowman]
+A very small snowman at the very top, stone eyes, a stick for each arm. Somebody carried snow up a mountain made of snow to build him. One stick arm has been turned to point at the way down.
+
+# (draft)
+[r3a_su_snowman_ves]
+{smile}He's the only one up here with the right idea.
+
+# (draft)

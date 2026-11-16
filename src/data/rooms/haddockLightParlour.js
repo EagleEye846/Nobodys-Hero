@@ -68,8 +68,9 @@ export const HADDOCK_LIGHT_PARLOUR = {
     { sprite: 'bed', x: 1, y: 4, text: 'parlour_cot' },
     { sprite: 'in_stove_kettle', x: 5, y: 3, text: 'parlour_stove' },
     // Haddock, in his armchair under the window. He hides while the scene plays him.
-    { sprite: 'cf_haddock_chair', x: 8, y: 4, npc: 'haddock_light', until: 'haddock_gone' },
+    { sprite: 'cf_haddock_chair', x: 8, y: 4, npc: 'haddock_light', until: ['haddock_tells_it', 'haddock_gone'] },
     // After the chapter: his chair, empty.
+    { sprite: 'armchair', x: 8, y: 4, text: 'parlour_chair_out', after: 'haddock_tells_it', until: 'haddock_gone' },
     { sprite: 'armchair', x: 8, y: 4, text: 'parlour_chair_after', after: 'haddock_gone' },
     { sprite: 'c5_tide_board', x: 10, y: 2, text: 'parlour_tides' },
     { sprite: 'sc_ledger_desk', x: 14, y: 4, text: 'parlour_ledger' },

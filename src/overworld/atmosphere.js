@@ -100,10 +100,17 @@ export function makeAtmosphere(scene) {
   // the storm, drawn pale in the clearing air instead of black in the rain.
   const calmNow = Boolean(data.calmAfter && (WORLD_STATE.seenScenes ?? []).includes(data.calmAfter.scene));
   const calm = calmNow ? data.calmAfter.atmosphere ?? {} : {};
+  // `fogLiftAfter: { scene, fog }`: once that scene has played the room's fog is never thicker than `fog`
+  // (the Wreck Yard, once the Fair Return has sailed: her fog went with her). It holds after the storm too.
+  const lift = data.fogLiftAfter && (WORLD_STATE.seenScenes ?? []).includes(data.fogLiftAfter.scene) ? data.fogLiftAfter : null;
   for (const [name, amount] of Object.entries({ ...AREA_LAYERS[data.area], ...relit, ...(data.atmosphere ?? {}), ...calm })) if (amount > 0) layers[name] = amount;
+  if (lift && layers.fog > (lift.fog ?? 0)) layers.fog = lift.fog ?? 0;
+  if (lift && !layers.fog) delete layers.fog;
   // (The ghost ship keeps its fog below decks: a thinner bank far off and the low mist near, at two depths.)
   if (data.indoors && data.area === 'ghostship') { layers.fog = Math.min(layers.fog ?? 0.7, 0.7); delete layers.rain; delete layers.lightning; delete layers.spray; delete layers.gulls; }
   else if (data.indoors) for (const name of OUTSIDE_ONLY) delete layers[name];
+  // `tideFog` (the Watch Rock): the fog comes and goes with the room's tide, so it is always a layer here.
+  if (data.tideFog && !data.indoors) layers.fog ??= data.tideFog.low ?? 0.1;
   const clearSky = calmNow && data.calmAfter.skyline === true && !data.indoors;
   if (!Object.keys(layers).length && !data.wreck && !clearSky) return null;
   return new Atmosphere(scene, layers, clearSky);
@@ -224,6 +231,7 @@ export class Atmosphere {
   drawOver(ctx) {
     const { layers } = this;
     const t = this.scene.time;
+    this.followTideFog(t);
     ctx.save();
     ctx.imageSmoothingEnabled = true;
     if (layers.haze) this.drawHaze(ctx, t, layers.haze);
@@ -413,6 +421,32 @@ export class Atmosphere {
       else if (s.kind === 'hull') drawHull(ctx, Math.round(x), Math.round(y), s);
       else drawLastLight(ctx, Math.round(x), Math.round(y), t, s.scale, this.clearSky);
     }
+  }
+
+  // `tideFog: { high, low, after, speed }` on a room with a tide (the Watch Rock, out past the Wreck Yard's point):
+  // the sea fog comes in with the flood and goes out with the ebb. The fog layer eases towards `high` while the
+  // tide stands (or is coming) high, and towards `low` while it is low, `speed` a second (default 0.45). Thick
+  // fog brings the near mist with it. Once the `after` scene has played (the Fair Return has come), it stays high.
+  followTideFog(t) {
+    const cfg = this.scene.roomData.tideFog;
+    const tide = this.scene.room.tide;
+    if (!cfg || !tide) return;
+    // `lifted`: once that scene has played the fog has gone for good, at both tides (the Fair Return has sailed).
+    const lifted = cfg.lifted && (WORLD_STATE.seenScenes ?? []).includes(cfg.lifted);
+    const stays = !lifted && cfg.after && (WORLD_STATE.seenScenes ?? []).includes(cfg.after);
+    const want = lifted ? cfg.liftedTo ?? cfg.low ?? 0.1 : stays || tide.state === 'high' ? cfg.high ?? 1.8 : cfg.low ?? 0.1;
+    const dt = Math.min(0.1, Math.max(0, t - (this.fogClock ?? t)));
+    this.fogClock = t;
+    this.fogNow ??= want;
+    const step = (cfg.speed ?? 0.45) * dt;
+    this.fogNow += Math.max(-step, Math.min(step, want - this.fogNow));
+    this.layers.fog = this.fogNow;
+    this.layers.mist = Math.max(0, (this.fogNow - 0.9) * 1.1);
+  }
+
+  // How thick the tide's fog is now (the Watch Rock), or null in a room without one.
+  get tideFogNow() {
+    return this.scene.roomData.tideFog ? this.fogNow ?? null : null;
   }
 
   // Sea fog: soft pale banks sliding slowly across, a little behind the camera.
@@ -1040,7 +1074,7 @@ export function paintFlash(ctx, k) {
 // nothing is ever drawn over ground. A room may name where the Last Light stands
 // with `lastLight: { x, y }` (the tile of its foot, sea all the way up) and add
 // its own with `skyline: [{ kind: 'mast' | 'hull', x, y }]` (`skyline: false` for none),
-// and keep the placed ones out from the shore with `skylineClear: <tiles>`.
+// and keep the placed ones out from the shore with `skylineClear: <tiles>` (and out of boxes with `skylineKeepOut`).
 function buildSkyline(rows, data, low = null) {
   if (data.skyline === false) return null;
   // Sea at this spot at every tide (a bar or reef that shows at low tide is not sea).
@@ -1063,6 +1097,13 @@ function buildSkyline(rows, data, low = null) {
       if (ty >= 4 && sea(tx, ty) && sea(tx - 1, ty) && sea(tx + 1, ty) && sea(tx, ty - 1) && sea(tx, ty - 2) && sea(tx, ty - 3) && sea(tx, ty - 4) && clear(tx, ty)) free.push([tx, ty]);
     }
   });
+  // `skylineKeepOut: [{ x, y, w, h }]`: tiles none may stand on (where a ship comes alongside: the Watch Rock).
+  for (const box of data.skylineKeepOut ?? []) {
+    for (let i = free.length - 1; i >= 0; i--) {
+      const [fx, fy] = free[i];
+      if (fx >= box.x - 2 && fx < box.x + box.w && fy >= box.y && fy < box.y + box.h + 4) free.splice(i, 1);
+    }
+  }
   // Nothing stands in front of the near tower (`lastLightNear`): keep clear of it.
   const near = data.lastLightNear;
   if (near) for (let i = free.length - 1; i >= 0; i--) if (Math.abs(free[i][0] - near.x) <= 8 && free[i][1] <= near.y) free.splice(i, 1);

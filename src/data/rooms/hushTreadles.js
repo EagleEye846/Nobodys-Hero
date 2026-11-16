@@ -11,6 +11,10 @@
 //   O  boulder (solid)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_TREADLES = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_treadles',
@@ -68,6 +72,7 @@ export const HUSH_TREADLES = {
   // a rock or a log).
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_treadles ?? []),
     { sprite: 'sign', x: 26, y: 8, text: 'treadles_sign' },
     { sprite: 'gate_narrow', x: 20, y: 10, text: 'treadle_gate', opensWith: ['near'] },
     { sprite: 'treadle', x: 23, y: 7, text: 'treadle', treadle: 'near' },
@@ -83,6 +88,8 @@ export const HUSH_TREADLES = {
     { sprite: 'gold_pouch', x: 28, y: 18, text: 'den_jar', gold: 150, taken: { sprite: 'gold_pouch_empty', text: 'den_jar_empty' } },
     { sprite: 'leaf_pile', x: 26, y: 17, text: 'den_bed' },
     { sprite: 'notched_post', x: 2, y: 5, text: 'notched_post' },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_treadles ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

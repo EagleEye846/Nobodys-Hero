@@ -350,3 +350,67 @@ THE SHELF IS IN THE WOOD, IN HOLLIN, IN THE SHOP. THE OTHER TWO ARE A LONG WAY O
 [camp_riddle_bramble]
 {sly}I didn't write that. ...I'd remember. I think I'd remember.
 
+
+# --- THE LIFE PASS (r3p, 15 November 2026) ---
+# Things to look at in the red wood and the empty village (and what Bramble says about the ones in Hollin).
+
+[r3p_bracket_stump_0]
+A stump with shelves of orange fungus stacked up one side, like a staircase for something very small. Nothing's coming down it. Probably.
+
+[r3p_web_bush_0]
+A spiderweb strung across a bush, dew on every thread. The spider sits in the middle and is not impressed with you.
+
+[r3p_hollow_log_0]
+A hollow log, one end dark. You don't put your hand in. Somebody lives here: there's a tidy doormat of leaves.
+
+[r3p_stump_big_0]
+A great stump, a tall man across. The rings go on and on to the middle. Somebody's carved a W in the top, and then given up on the rest of the word.
+
+[r3p_fairy_ring_0]
+A ring of little red toadstools in the leaves, dead round. Whatever's inside it has been left alone. You stay out. It seems polite.
+
+[r3p_bracket_stump_1]
+Orange bracket fungus, hard as roof tile, all the way up an old stump. You knock on one. It knocks back, in a way.
+
+[r3p_nut_stump_0]
+A hollow stump, packed with acorns and hazelnuts. A squirrel's cupboard. A note in tooth marks says nothing.
+
+[r3p_hollow_log_1]
+A log hollow all the way through. You can see the forest on the far side, small and round, like a picture in a spyglass.
+
+[r3p_red_shrub_0]
+A little tree of red leaves, no taller than you. It looks very proud of itself.
+
+[r3p_boulder_0]
+A boulder the size of a cart, moss up the north side and leaves up the south. It was here before the trees. It doesn't say much about it.
+
+[r3p_old_boot_0]
+A single boot, stuffed with leaves, a very tidy sock folded in it. Nobody's here to ask.
+
+[r3p_nest_found]
+A robin's nest lying in the leaves, upside down, with three blue eggs wedged in it and not one cracked. It fell. Or it was knocked out. Either way, somebody's front room is on the floor.
+
+[r3p_antler_0]
+A shed antler, pale at the tips. A deer left it behind like a coat it didn't need any more.
+
+[r3p_rope_coil_0]
+A coil of rope, stiff with sap. It's been in more knots than you've had hot dinners.
+
+[r3p_sign_shroom]
+A toadstool, holding up a sign the size of a thumbnail. It says PRIVATE. You decide to respect that.
+
+[r3p_brook_pouch]
+A purse tucked in behind a great trunk, in the corner nobody would think to go. It's not very heavy, but it's heavy with having been hidden.
+
+[r3p_nut_cache]
+A hollow behind the roots, packed with nuts and one wrapped brown paper twist. It says, in squirrel, DO NOT. You take the twist. The squirrels will have words.
+
+[r3p_axe_stump_0]
+An axe, sunk in a stump up to the cheek. Left for the morning, as you do. You leave it for the morning too.
+
+[r3p_maze_gift]
+Someone left a little pile here: an acorn, a button, a very good stone. A gift, at the dead end of a maze, for whoever got this far. You leave it. It doesn't feel like yours.
+
+[r3p_face_stump]
+A stump with a face carved in it: two knots for eyes, a wide grin, and a fresh apple wedged between the teeth. Somebody's been feeding it. You don't think the apple is staying.
+

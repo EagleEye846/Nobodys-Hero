@@ -1,11 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
+import { PathShot, Deco, blit } from './coastKit.js';
 
-// The Magpie Mole's attacks. It's a mole that has decided everything shiny
-// is lost property, so it fights with its finds: coins, spoons, keys and
-// buttons thrown from the sack, molehills that pop with a pink digging
-// paw, the sack itself swung round on its strap, clods of dirt lobbed high
-// that burst into pebbles when they land, and its tail feathers sprayed in
-// a turning fan.
+// The Magpie Mole's attacks. It's a mole that runs the lost property office:
+// everything shiny is lost property, it has a sack of it, and it can't stop
+// looking at your buttons:
+//   - Finds: coins, spoons, keys and buttons thrown from the sack.
+//   - Hills: molehills that pop with a pink digging paw.
+//   - Swing: the sack swung round on its strap.
+//   - Filing: every kind of find has its own pigeonhole in the rack down the
+//     left of the box, and goes straight into it. Know the holes, know the line.
+//   - Finders keepers: shinies glint round you and its long arm reaches in
+//     for each one, in order. Don't stand between the paw and a shiny.
 //
 // It stands to the right of the box. Each attack is a factory `(box,
 // density, tools) => ({ duration, update })`; see dummy.js for the shape.
@@ -142,6 +147,23 @@ defineBulletArt('moleFeather', {
   rotate: true,
 });
 
+// Its digging arm's paw, reaching (drawn pointing right).
+defineBulletArt('moleGrabPaw', {
+  frames: [['....c..', 'ppppcp.', 'pPpppcc', 'ppppcp.', '....c..']],
+  palette: PAW,
+  radius: 2.6,
+  rotate: true,
+});
+
+// Little pictures on the pigeonholes: coin, spoon, key, button.
+const ICONS = [
+  ['.yyy.', 'yyYyy', 'yYyYy', 'yyYyy', '.yyy.'],
+  ['.....', 'zz...', 'zzzzz', 'zz...', '.....'],
+  ['.....', 'yy...', 'y.yyy', 'yy.y.', '.....'],
+  ['.zzz.', 'zZzZz', 'zzzzz', 'zZzZz', '.zzz.'],
+];
+const ICON_PAL = { ...COIN, ...STEEL };
+
 export const MAGPIE_MOLE_ATTACKS = {
   // Finders keepers: it rummages in the sack and throws what it finds, a
   // coin, a spoon, a key, a button, in high arcs that land where you stand.
@@ -154,7 +176,7 @@ export const MAGPIE_MOLE_ATTACKS = {
     const G = 120;
     const ARTS = ['moleCoin', 'moleSpoon', 'moleKey', 'moleButton'];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         // Gravity is done by hand, so the arc lands where it was aimed whatever
@@ -165,8 +187,8 @@ export const MAGPIE_MOLE_ATTACKS = {
           if (b.scale) b.vy += G * b.scale * b.scale * (dt / density);
         }
         flying = flying.filter((b) => b.age < 4);
-        if (t < next || t > 5.4) return;
-        next = t + 0.4;
+        if (t < next || t > 8.6) return;
+        next = t + 0.42;
         const art = ARTS[n % ARTS.length];
         n++;
         const x0 = box.x + box.w + 6;
@@ -193,10 +215,10 @@ export const MAGPIE_MOLE_ATTACKS = {
     let waves = 0;
     let next = 0.2;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || waves >= 3 || t > 4.6) return;
+        if (t < next || waves >= 5) return;
         next = t + 1.7;
         waves++;
         const xs = [clamp(soul.x, box.x + 8, box.x + box.w - 8)];
@@ -231,14 +253,14 @@ export const MAGPIE_MOLE_ATTACKS = {
     let thrown = 0;
     let shed = 0;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (!started) {
           started = true;
           // Starts out aimed through where you are.
           center = Math.atan2(soul.y - pivot.y, soul.x - pivot.x);
-          sack = new Shot({ x: pivot.x, y: pivot.y, art: 'moleSack', warn: 0.8, life: 5.4 });
+          sack = new Shot({ x: pivot.x, y: pivot.y, art: 'moleSack', warn: 0.8, life: 6.8 });
           bullets.push(sack);
         }
         if (!sack || t <= sack.warn) return;
@@ -259,7 +281,7 @@ export const MAGPIE_MOLE_ATTACKS = {
           shed = k + 0.3;
           bullets.push(new Shot({ x: sack.x, y: sack.y, art: 'moleButton', warn: 0.25, life: 1.1 }));
         }
-        if (k > thrown * 1.2 + 0.7 && thrown < 4) {
+        if (k > thrown * 1.2 + 0.7 && thrown < 6) {
           thrown++;
           const art = thrown % 2 ? 'moleCoin' : 'moleSpoon';
           // What flies off comes straight at you.
@@ -270,65 +292,116 @@ export const MAGPIE_MOLE_ATTACKS = {
     };
   },
 
-  // Clods: it flicks dirt up out of its hole, big clods that come down from
-  // the top of the box on a spot that sparkles first, and burst into a ring of
-  // pebbles when they land. Three at a time, near you.
-  moleClods(box, density, { Shot, rand, clamp }) {
+
+  // Filing: it runs the lost property office, and everything has its own
+  // pigeonhole. The rack is down the left of the box: coins in the top hole,
+  // spoons the next, keys the next, buttons at the bottom. It holds each find
+  // up at the counter (the paw on the right) and throws it straight into its
+  // own hole. So learn the holes: the moment you see what it's holding, you
+  // know the line it'll fly. The counter moves up and down as it works.
+  moleSort(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const KINDS = ['moleCoin', 'moleSpoon', 'moleKey', 'moleButton'];
+    const holeY = (i) => box.y + 10 + i * 20;
+    const HOLD = 0.45;
+    const SPEED = 135;
     let t = 0;
-    let waves = 0;
-    let next = 0.2;
-    let landing = [];
+    let next = T(0.2);
+    let thrown = 0;
+    let counter = box.y + box.h / 2;
+    let started = false;
     return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
+      duration: 8,
+      update: (dt, bullets) => {
         t += dt;
-        if (t >= next && waves < 3 && t < 4.4) {
-          next = t + 1.6;
-          waves++;
-          for (let i = 0; i < 3; i++) {
-            const x = clamp(soul.x + (i - 1) * rand(16, 26) + (i === 1 ? rand(-4, 4) : 0), box.x + 8, box.x + box.w - 8);
-            const y = i === 1 ? clamp(soul.y, box.y + 16, box.y + box.h - 10) : rand(box.y + 20, box.y + box.h - 12);
-            const fall = 0.7;
-            const warn = 0.55 + i * 0.22;
-            bullets.push(new Shot({ x, y, harmless: true, life: warn + fall, art: 'moleMark' }));
-            const vy = (y - (box.y - 6)) / fall;
-            bullets.push(new Shot({ x, y: box.y - 6, vy, warn, art: 'moleClod', life: fall }));
-            landing.push({ at: t + warn + fall, x, y });
-          }
+        if (!started) {
+          started = true;
+          // The rack, with a picture of what goes in each hole (harmless).
+          bullets.push(new Deco({
+            life: 8,
+            under: true,
+            paint: (ctx) => {
+              for (let i = 0; i < 4; i++) {
+                const y = holeY(i);
+                ctx.fillStyle = '#4a3422';
+                ctx.fillRect(box.x, y - 6, 9, 12);
+                ctx.fillStyle = '#1a120a';
+                ctx.fillRect(box.x + 1, y - 5, 7, 10);
+                ctx.fillStyle = '#a88256';
+                ctx.fillRect(box.x, y + 6, 9, 1);
+                blit(ctx, ICONS[i], ICON_PAL, box.x + 4.5, y, 0.9);
+              }
+            },
+          }));
         }
-        for (const l of landing) {
-          if (t < l.at) continue;
-          l.done = true;
-          for (let i = 0; i < 6; i++) {
-            const a = (i / 6) * Math.PI * 2 + 0.3;
-            bullets.push(new Shot({ x: l.x, y: l.y, vx: Math.cos(a) * 52, vy: Math.sin(a) * 52, art: 'molePebble', life: 1.1 }));
-          }
-        }
-        landing = landing.filter((l) => !l.done);
+        if (t < next || thrown >= 26) return;
+        thrown++;
+        next = t + T(0.24);
+        // Every few throws it shuffles along the counter.
+        if (thrown % 5 === 1) counter = rand(box.y + 8, box.y + box.h - 8);
+        const kind = Math.floor(rand(0, 4));
+        const from = { x: box.x + box.w - 4, y: counter };
+        const to = { x: box.x + 4, y: holeY(kind) };
+        const a = Math.atan2(to.y - from.y, to.x - from.x);
+        bullets.push(new Shot({ x: from.x, y: from.y, vx: Math.cos(a) * SPEED, vy: Math.sin(a) * SPEED, warn: HOLD, art: KINDS[kind], life: Math.hypot(to.x - from.x, to.y - from.y) / SPEED }));
       },
     };
   },
 
-  // Feathers: it fans its tail and flicks the feathers off in a turning
-  // spray, one way and then back, each feather a glossy blue-green blade
-  // that goes straight where it's sent.
-  moleFeathers(box, density, { Shot, rand }) {
-    const mouth = { x: box.x + box.w + 2, y: box.y + box.h / 2 };
+  // Finders keepers: shiny things glint on the floor of the box round you,
+  // and it reaches in for every one of them, in the order they glinted, with
+  // its long pink digging arm, straight from where it's poked through the
+  // wall, and digs it up in a spray of dirt. A dotted line shows each reach
+  // first. Don't stand between the paw and something shiny, or next to it. Three handfuls, from three different holes.
+  moleGrab(box, density, { Shot, Line, rand, clamp }) {
+    const T = (s) => s * density;
+    const WARN = 0.5;
+    const GAP = 0.3;
+    const sprays = [];
     let t = 0;
     let n = 0;
-    let next = 0.4;
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || t > 5.4) return;
-        next = t + 0.11;
+        for (const spray of sprays) {
+          if (spray.done || t / density < spray.at) continue;
+          spray.done = true;
+          const spin = rand(0, Math.PI);
+          for (let j = 0; j < 5; j++) {
+            const b = spin + (j / 5) * Math.PI * 2;
+            bullets.push(new Shot({ x: spray.x, y: spray.y, vx: Math.cos(b) * 42, vy: Math.sin(b) * 42, art: 'molePebble', life: 1.3 }));
+          }
+        }
+        if (n >= 3 || t < T(0.1 + n * 2.55)) return;
         n++;
-        // Sweeps back and forth across the box, a half-turn each way.
-        const base = Math.PI + Math.sin(t * 1.5) * 1.05;
-        // Every third feather goes straight at you.
-        const a = n % 3 === 0 ? Math.atan2(soul.y - mouth.y, soul.x - mouth.x) : base + rand(-0.05, 0.05);
-        bullets.push(new Shot({ x: mouth.x, y: mouth.y + rand(-6, 6), vx: Math.cos(a) * 66, vy: Math.sin(a) * 66, art: 'moleFeather', life: 2.6 }));
+        // Where it pokes through: right wall, top or bottom.
+        const side = (n + Math.floor(rand(0, 2))) % 3;
+        const from = side === 0 ? { x: box.x + box.w + 2, y: rand(box.y + 10, box.y + box.h - 10) }
+          : side === 1 ? { x: rand(box.x + 10, box.x + box.w - 10), y: box.y - 2 } : { x: rand(box.x + 10, box.x + box.w - 10), y: box.y + box.h + 2 };
+        bullets.push(new Shot({ x: clamp(from.x, box.x + 3, box.x + box.w - 3), y: clamp(from.y, box.y + 3, box.y + box.h - 3), harmless: true, art: 'moleHill', life: WARN + GAP * 5 + 0.4 }));
+        const turn = rand(0, Math.PI * 2);
+        for (let i = 0; i < 5; i++) {
+          const a = turn + (i / 5) * Math.PI * 2 + rand(-0.3, 0.3);
+          const d = rand(8, 22);
+          const shiny = { x: clamp(soul.x + Math.cos(a) * d, box.x + 6, box.x + box.w - 6), y: clamp(soul.y + Math.sin(a) * d, box.y + 6, box.y + box.h - 6) };
+          const at = i * GAP;
+          const ang = Math.atan2(shiny.y - from.y, shiny.x - from.x);
+          const reach = Math.hypot(shiny.x - from.x, shiny.y - from.y);
+          // The shiny thing, lying there until it's taken.
+          bullets.push(new Shot({ x: shiny.x, y: shiny.y, harmless: true, art: i % 2 ? 'moleCoin' : 'moleButton', life: at + WARN + 0.15 }));
+          // The arm: a dotted warning, then out it shoots, with the paw on the end.
+          bullets.push(new Line({ x: from.x, y: from.y, angle: ang, length: reach, thickness: 4, warn: at + WARN, life: 0.3, grow: 320, color: '#f0a0b0' }));
+          // It digs the thing up: dirt flies out round where it was.
+          sprays.push({ at: t / density + at + WARN + reach / 320, x: shiny.x, y: shiny.y });
+          bullets.push(new PathShot({
+            art: 'moleGrabPaw', warn: at + WARN, life: 0.3,
+            path: (k) => {
+              const r = Math.min(reach, k * 320);
+              return { x: from.x + Math.cos(ang) * r, y: from.y + Math.sin(ang) * r, a: ang };
+            },
+          }));
+        }
       },
     };
   },

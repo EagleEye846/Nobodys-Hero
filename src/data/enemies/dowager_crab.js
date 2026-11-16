@@ -6,8 +6,8 @@ import { DOWAGER_CRAB_PALETTE, DOWAGER_CRAB_SPRITE, DOWAGER_CRAB_ANIM, DOWAGER_C
 // hero never speaks, so every TALK is something he does, told in the panel.
 //
 // Two `phases` (see bossPhase in src/battle/battleScene.js):
-//   1. RECEIVING: she is cross but civil. Bubbles, the bell, claws, ducks and
-//      sponges, barnacles.
+//   1. RECEIVING: she is cross but civil. The doormat, her pearls, the
+//      minuet, the monocle, claws snipping across your way.
 //   2. RILED (at half her HP): she has had quite enough. Her brows come down,
 //      the bath water slops out of the tub, and she adds the tide (water over
 //      half the box, from the taps or the plug), with the rest faster.
@@ -25,19 +25,19 @@ import { DOWAGER_CRAB_PALETTE, DOWAGER_CRAB_SPRITE, DOWAGER_CRAB_ANIM, DOWAGER_C
 
 // Her attacks live in src/battle/attacks/dowager_crab.js.
 const RECEIVING_ATTACKS = [
-  { name: 'crabBubbles', weight: 3 },
-  { name: 'crabToll', weight: 3 },
-  { name: 'crabSnips', weight: 3 },
-  { name: 'crabDucks', weight: 2 },
-  { name: 'crabBarnacles', weight: 2 },
+  { name: 'crabMat', weight: 3 },
+  { name: 'crabPearls', weight: 3 },
+  { name: 'crabMinuet', weight: 3 },
+  { name: 'crabMonocle', weight: 2 },
+  { name: 'crabSnips', weight: 2 },
 ];
 const RILED_ATTACKS = [
   { name: 'crabTide', weight: 4, layer: false },
-  { name: 'crabToll', weight: 2 },
   { name: 'crabSnips', weight: 3 },
-  { name: 'crabDucks', weight: 2 },
-  { name: 'crabBubbles', weight: 2 },
-  { name: 'crabBarnacles', weight: 2 },
+  { name: 'crabMinuet', weight: 2 },
+  { name: 'crabPearls', weight: 2 },
+  { name: 'crabMonocle', weight: 2 },
+  { name: 'crabMat', weight: 2 },
 ];
 
 export const DOWAGER_CRAB = {
@@ -99,11 +99,11 @@ export const DOWAGER_CRAB = {
 
   // Every attack she has, across both phases (the battle checks there are enough).
   patterns: [
-    { name: 'crabBubbles', weight: 3 },
-    { name: 'crabToll', weight: 3 },
-    { name: 'crabSnips', weight: 3 },
-    { name: 'crabDucks', weight: 2 },
-    { name: 'crabBarnacles', weight: 2 },
+    { name: 'crabMat', weight: 3 },
+    { name: 'crabPearls', weight: 3 },
+    { name: 'crabMinuet', weight: 3 },
+    { name: 'crabMonocle', weight: 2 },
+    { name: 'crabSnips', weight: 2 },
     { name: 'crabTide', weight: 2, layer: false },
   ],
 
@@ -120,6 +120,6 @@ export const DOWAGER_CRAB = {
   ],
   lullCalm: 12,
 
-  // About five Wrack regulars of EXP (a level there costs about 21,000-25,000; see "Chapter 5 balance pass" in the builders guide), and a modest purse.
-  rewards: { exp: 10800, coins: 60 },
+  // About one level at the Wrack (a level there costs about 11,000-13,700 since the 12 November curve), and a modest purse.
+  rewards: { exp: 12000, coins: 60 },
 };

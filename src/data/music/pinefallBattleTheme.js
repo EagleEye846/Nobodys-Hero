@@ -133,7 +133,7 @@ export const PINEFALL_BATTLE_THEME = {
   title: 'Bramble Rush',
   bpm: 140,
   stepsPerBeat: 4,
-  volume: 0.9,
+  volume: 1.33,
 
   instruments: {
     // The hero: Cotton Clash's brassy sawtooth, a square an octave under it.

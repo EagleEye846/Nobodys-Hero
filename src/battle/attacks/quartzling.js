@@ -1,12 +1,17 @@
 import { defineBulletArt, Shot } from '../projectiles.js';
+import { Deco } from './coastKit.js';
 
 // The Quartzling's attacks. It's a little crystal creature that stands
 // perfectly still among the crystals of the Glimmering and pretends to be
-// one, so the fight is about stillness and what's hiding in it: the
-// crystals round the box are suddenly all quartzlings, shards split into
-// smaller shards, bullets you only see when they catch the light, a dash
-// that stops dead, and a spire that grows up out of the floor where you
-// were standing. (Standing still is its trick, not yours.)
+// one, and it has never once blinked (it blinks). So the fight is about
+// stillness and what's hiding in it:
+//   - Freeze: the crystals round the box are suddenly quartzlings too, and
+//     the ones that open their eyes fire at you.
+//   - Glint: shards you only see properly when they catch the light.
+//   - Scurry: little quartzlings dash at you and stop dead, being crystals.
+//   - Staring contest: nothing moves while it stares. Every blink, every
+//     shard in the box jumps one step the way it points.
+// (Standing still is its trick, not yours.)
 //
 // It stands to the right of the box. Each attack is a factory
 // `(box, density, tools) => ({ duration, update })`; see dummy.js for the
@@ -336,7 +341,7 @@ export const QUARTZLING_ATTACKS = {
     let nextWave = 1.0;
     let firing = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (!built) {
@@ -353,9 +358,9 @@ export const QUARTZLING_ATTACKS = {
             bullets.push(w);
           });
         }
-        if (t >= nextWave && waves < 4 && t < 5) {
+        if (t >= nextWave && waves < 6) {
           waves++;
-          nextWave = t + 1.3;
+          nextWave = t + 1.45;
           // Three of them wake, not the same ones twice running.
           const sleepers = watchers.filter((w) => !w.awake && !w.recent);
           const chosen = [];
@@ -384,66 +389,6 @@ export const QUARTZLING_ATTACKS = {
     };
   },
 
-  // Split: a big shard flies at you, and breaks in the air into three, and
-  // each of those breaks again into two bits a moment after. The big one
-  // cracks, flashing white, just before it goes, and the break glints, so you
-  // can see where the pieces will come from.
-  quartzSplit(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let next = 0.15;
-    let count = 0;
-    let pieces = [];
-    // Where you're heading, so the big shard is thrown a little ahead of
-    // you and circling doesn't dodge it.
-    let last = null;
-    let vel = { x: 0, y: 0 };
-    const split = (bullets, piece) => {
-      piece.shot.age = 1e9;
-      piece.done = true;
-      const heading = Math.atan2(piece.shot.vy, piece.shot.vx);
-      bullets.push(new Shot({ x: piece.shot.x, y: piece.shot.y, harmless: true, life: 0.3, art: 'quartzSpark' }));
-      const kids = piece.stage === 0 ? [-0.55, 0, 0.55] : [-0.3, 0.3];
-      for (const turn of kids) {
-        const speed = piece.stage === 0 ? 52 : 62;
-        const kid = new Shot({ x: piece.shot.x, y: piece.shot.y, vx: Math.cos(heading + turn) * speed, vy: Math.sin(heading + turn) * speed, art: piece.stage === 0 ? 'quartzShard' : 'quartzBit', life: 3 });
-        bullets.push(kid);
-        if (piece.stage === 0) pieces.push({ shot: kid, at: t + 0.55, stage: 1 });
-      }
-    };
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (last && dt > 0) vel = { x: vel.x * 0.7 + ((soul.x - last.x) / dt) * 0.3, y: vel.y * 0.7 + ((soul.y - last.y) / dt) * 0.3 };
-        last = { x: soul.x, y: soul.y };
-        if (t >= next && count < 6 && t < 5) {
-          const side = count % 3;
-          const from = side === 0 ? { x: box.x + box.w + 6, y: rand(box.y + 6, box.y + box.h - 6) }
-            : side === 1 ? { x: rand(box.x + 20, box.x + box.w - 6), y: box.y - 6 }
-              : { x: rand(box.x + 20, box.x + box.w - 6), y: box.y + box.h + 6 };
-          const lead = { x: clamp(soul.x + vel.x * 0.6, box.x + 2, box.x + box.w - 2), y: clamp(soul.y + vel.y * 0.6, box.y + 2, box.y + box.h - 2) };
-          const aim = Math.atan2(lead.y - from.y, lead.x - from.x);
-          const shot = new Shot({ x: from.x, y: from.y, vx: Math.cos(aim) * 46, vy: Math.sin(aim) * 46, art: 'quartzBig', life: 3 });
-          bullets.push(shot);
-          // It splits about where you are now.
-          const flight = Math.hypot(lead.x - from.x, lead.y - from.y) / 46;
-          pieces.push({ shot, at: t + Math.max(0.55, flight * 0.62), stage: 0 });
-          count++;
-          next = t + 0.95;
-        }
-        for (const piece of pieces) {
-          // The big one cracks a moment before it splits, so you see it coming.
-          if (piece.stage === 0 && !piece.cracked && t >= piece.at - 0.3) {
-            piece.cracked = true;
-            piece.shot.art = CRACKED;
-          }
-          if (!piece.done && t >= piece.at) split(bullets, piece);
-        }
-        pieces = pieces.filter((piece) => !piece.done);
-      },
-    };
-  },
-
   // Glint: shards come at you that you can only see when they catch the
   // light. They show faintly all the time, flash for a moment every so
   // often, and light up properly whenever a sweeping bar of light crosses
@@ -454,7 +399,7 @@ export const QUARTZLING_ATTACKS = {
     let started = false;
     let timer = 0.2;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (!started) {
@@ -465,10 +410,10 @@ export const QUARTZLING_ATTACKS = {
         const sweep = (t % 3.4) / 3.4;
         const toRight = Math.floor(t / 3.4) % 2 === 0;
         light.x = box.x - 10 + (toRight ? sweep : 1 - sweep) * (box.w + 20);
-        if (t < 5.4) {
+        if (t < 8.6) {
           timer -= dt;
           while (timer <= 0) {
-            timer += 0.22;
+            timer += 0.26;
             const fromRight = Math.random() < 0.55;
             const from = fromRight ? { x: box.x + box.w + 6, y: rand(box.y, box.y + box.h) } : { x: rand(box.x, box.x + box.w), y: Math.random() < 0.5 ? box.y - 6 : box.y + box.h + 6 };
             const aim = Math.atan2(soul.y - from.y, soul.x - from.x) + rand(-0.3, 0.3);
@@ -493,12 +438,12 @@ export const QUARTZLING_ATTACKS = {
     let last = null;
     let vel = { x: 0, y: 0 };
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (last && dt > 0) vel = { x: vel.x * 0.7 + ((soul.x - last.x) / dt) * 0.3, y: vel.y * 0.7 + ((soul.y - last.y) / dt) * 0.3 };
         last = { x: soul.x, y: soul.y };
-        if (started < 4 && t >= started * 1.2 + 0.1) {
+        if (started < 6 && t >= started * 1.4 + 0.1) {
           const from = { x: box.x + box.w + 4, y: rand(box.y + 8, box.y + box.h - 8) };
           const lead = { x: clamp(soul.x + vel.x * 0.5, box.x + 2, box.x + box.w - 2), y: clamp(soul.y + vel.y * 0.5, box.y + 2, box.y + box.h - 2) };
           const aim = Math.atan2(lead.y - from.y, lead.x - from.x);
@@ -547,38 +492,82 @@ export const QUARTZLING_ATTACKS = {
     };
   },
 
-  // Spire: the floor cracks and glints, and a spire of crystal bursts up out
-  // of it, with more spires rippling out on both sides, each a moment after
-  // the last. The first is right under where you are.
-  quartzSpire(box, density, { rand, clamp }) {
-    let t = 0;
-    let next = 0.15;
-    let waves = 0;
-    let queued = [];
+
+  // Staring contest: it never blinks. (It blinks.) Its eyes are open over
+  // the top of the box, and shards of crystal grow out of the air round you,
+  // pointing at you. Nothing moves while it's staring. Every time it blinks,
+  // every shard jumps one step forward along the way it points, then freezes
+  // again. Its eyes twitch just before a blink. Shards hurt still or moving,
+  // so read where each one's next step lands and don't be there.
+  quartzBlink(box, density, { rand }) {
+    const SHUT = 0.32;
+    const STEP = 27;
+    // When it blinks (real seconds from the start), decided up front.
+    const blinks = [];
+    for (let s = 1.15; s < 7.6; s += rand(0.95, 1.4)) blinks.push(s);
+    const blinking = (s) => blinks.some((b) => s >= b && s < b + SHUT);
+    const twitching = (s) => blinks.some((b) => s >= b - 0.3 && s < b);
+    class Frozen extends Shot {
+      constructor(opts, born) {
+        super(opts);
+        this.born = born;
+        this.heading = opts.angle;
+      }
+      update(dt) {
+        this.age += dt;
+        if (this.age < this.warn) return;
+        if (blinking(this.born + this.age)) {
+          this.x += Math.cos(this.heading) * (STEP / SHUT) * dt;
+          this.y += Math.sin(this.heading) * (STEP / SHUT) * dt;
+        }
+        this.angle = this.heading;
+      }
+    }
+    let now = 0;
+    let spawned = -1;
+    let started = false;
     return {
-      duration: 6.8,
+      duration: 8.2,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && waves < 4 && t < 5) {
-          waves++;
-          next = t + 1.45;
-          const centre = clamp(soul.x, box.x + 2, box.x + box.w - 2);
-          // Rippling out across the whole floor, so no corner is left quiet.
-          // The one under you grows right to the ceiling and the rest
-          // vary, tall near you and shorter as they go.
-          for (let k = -4; k <= 4; k++) {
-            const x = centre + k * 18;
-            if (x < box.x + 1 || x > box.x + box.w - 1) continue;
-            const far = Math.abs(k);
-            queued.push({ at: t + far * 0.17, x, width: k === 0 ? 12 : 8, height: k === 0 ? 92 : far >= 3 ? rand(44, 62) : rand(58, 80) });
+        now += dt / density;
+        if (!started) {
+          started = true;
+          // Its eyes, over the box.
+          bullets.push(new Deco({
+            life: 8.2,
+            paint: (ctx, d) => {
+              const shut = blinking(d.age);
+              const twitch = twitching(d.age);
+              for (const ex of [box.x + box.w / 2 - 9, box.x + box.w / 2 + 3]) {
+                const y = box.y - 8;
+                if (shut) {
+                  ctx.fillStyle = '#8062b0';
+                  ctx.fillRect(ex, y + 2, 6, 1);
+                  continue;
+                }
+                ctx.fillStyle = '#fbf0ff';
+                ctx.fillRect(ex, y + (twitch ? 1 : 0), 6, twitch ? 3 : 5);
+                ctx.fillStyle = '#2a1c3a';
+                ctx.fillRect(ex + 2 + (twitch && Math.floor(d.age * 20) % 2 ? 1 : 0), y + 1, 2, twitch ? 2 : 3);
+              }
+            },
+          }));
+        }
+        // A new set of shards each time it opens its eyes again (and at the start).
+        const opened = blinks.filter((b) => now >= b + SHUT).length;
+        if (opened > spawned && opened < blinks.length) {
+          spawned = opened;
+          const count = 4;
+          const turn = rand(0, Math.PI * 2);
+          for (let i = 0; i < count; i++) {
+            const a = turn + (i / count) * Math.PI * 2 + rand(-0.4, 0.4);
+            const d = rand(24, 31);
+            const x = Math.min(Math.max(soul.x + Math.cos(a) * d, box.x + 3), box.x + box.w - 3);
+            const y = Math.min(Math.max(soul.y + Math.sin(a) * d, box.y + 3), box.y + box.h - 3);
+            const aim = Math.atan2(soul.y - y, soul.x - x);
+            bullets.push(new Frozen({ x, y, angle: aim, warn: 0.35, art: 'quartzShard', life: 3.6 }, now));
           }
         }
-        for (const q of queued) {
-          if (t < q.at) continue;
-          q.done = true;
-          bullets.push(new Spire({ x: q.x, baseY: box.y + box.h - 1, height: q.height, width: q.width, warn: 0.8 }));
-        }
-        queued = queued.filter((q) => !q.done);
       },
     };
   },

@@ -1,0 +1,113 @@
+# (draft)
+# Haddock's shed (secret_haddocks_shed): opens once the chapter is over (world flag haddock_gone).
+# Every bit of junk has a paper label in his square capitals, with a date: sp. / su. / au. / wi. and a year.
+
+[shed_nets]
+A net on two nails, mended so many times it is more mend than net. The label on the frame: NET. MENDED (9TH TIME). IT HOLDS. SU. 43.
+
+# (draft)
+[shed_nets_ves]
+{laughing}Nine times. That isn't a net, that's a habit.
+
+[shed_oars]
+Two oars slung from a nail. One is big and scarred, labelled FIRST OAR. SP. 41. The other is short enough for a child, and the label says: SHORT OAR. SP. 54. PULLS TO THE LEFT. (THE ROWER, NOT THE OAR.)
+
+# (draft)
+[shed_oars_bramble]
+{glee}I'd row like that. Round and round and round.
+
+[shed_floats]
+A rope of cork floats across two pegs: red, white, plain cork, and one that is just a green bottle. A label under them: FLOATS. 3 MISSING. GULLS. WI. 52.
+
+[shed_barrel]
+A rain barrel with a lid, and on the lid a rusty bung and a label: THE BOTHER'S OLD BUNG. SU. 38. REPLACED. KEPT. REASONS UNKNOWN.
+
+# (draft)
+[shed_barrel_ves]
+{smile}Reasons unknown. He kept everything for reasons unknown.
+
+[shed_cabinet]
+A little cabinet, one door hanging off. On top, an open matchbox lined with cotton wool, and in it a tooth no bigger than a grain of rice. The label is in smaller capitals than the rest, so as not to crowd it: C. LOST TOOTH. WI. 53. (FIRST ONE. HE WAS VERY BRAVE ABOUT IT. I WAS NOT.)
+
+[shed_cabinet_ves]
+{tender}Put it back exactly where it was.
+
+[shed_notice]
+A card nailed up over a bucket of fish heads: GULLS: DO NOT FEED. Under it, in newer ink: (FED.) Under that, newer still: (AGAIN.)
+
+[shed_notice_bramble]
+{grin}They've definitely heard about this bucket.
+
+[shed_tide_table]
+A tide table pinned up by its corners, the paper gone soft as cloth. The label: TIDE TABLE. THE GOOD YEAR. SP. 44. Every tide in it came when it said it would. There is a pencil tick beside each one.
+
+# (draft)
+[shed_tide_table_ves]
+{smile}A whole year of tides doing as they were told. Imagine.
+
+[shed_stove]
+A little iron stove, gone cold. A kettle on top, one cup beside it, and a second cup, small, upside down on a clean cloth. The label on the pipe: STOVE. DON'T LET IT GO OUT. (IT HAS. THE KETTLE UNDERSTANDS.)
+
+[shed_cot]
+A narrow cot, a patched grey blanket tucked as square as a sail. Folded at the foot is a second blanket, small and red, with a label pinned to it: C. BLANKET. TOO SMALL NOW. KEPT ANYWAY. AU. 55.
+
+# (draft)
+[shed_cot_bramble]
+{sad}It's folded really neat.
+
+# The workbench: one gift each. Labels in his handwriting.
+[shed_gift_hero]
+A scarf rolled up in oilskin yellow, tied with string. The tag, in big square capitals: FOR THE QUIET ONE.
+
+Underneath, smaller: BEST LISTENER ON THE COAST. HEARD EVERYTHING I SAID. (I SAID A LOT.) WIND IT TWICE ROUND.
+
+[shed_gift_hero_ves]
+{tender}Twice round. Do as it says.
+
+[shed_gift_ves]
+A hat on the bench. A sou'wester, mustard green, with a floppy brim and one pink bobble. The tag: FOR THE MISS. YOU'LL SAY IT'S UGLY.
+
+Underneath: IT IS. IT'S ALSO DRY. THAT'S ALL A HAT HAS TO BE.
+
+# (draft)
+[shed_gift_ves_ves]
+{laughing}It is ugly. He did say it would be.
+
+{proud}It's very dry, though.
+
+[shed_gift_bramble]
+A cork float on a loop of string, a red stripe round it. The tag: FOR THE LAD. SWIM PROPER.
+
+Underneath: KEEP YOUR CHIN UP. THAT'S THE WHOLE TRICK. THE FLOAT'S JUST FOR SHOW.
+
+[shed_gift_bramble_bramble]
+{sad}I can swim now, you know. Mostly.
+
+{grin}I'll keep it on. In case.
+
+[shed_bench_empty]
+The workbench. Planed smooth, with a ring burned in it where a hot kettle once got set down. The label card is still propped on the edge. Whatever it labelled has gone.
+
+[shed_wall]
+Board walls, grey with salt and mended with every sort of plank. Somebody has pencilled a ladder of heights up one board, with dates. It stops partway.
+
+[shed_beams]
+Low rafters hung with coils of old rope. Every coil has a label. You decide not to read them all.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_shed_boots]
+Sea boots by the door, side by side, waxed. A label on a string: BOOTS. SECOND PAIR. AU. 49.
+
+# (draft)
+[in_shed_oilskin]
+His oilskin on a peg, still the shape of his shoulders. The label: OILSKIN. GOOD FOR ONE MORE WINTER. WI. 47. It was good for a great many more.
+
+# (draft)
+[in_shed_rods]
+Fishing rods stood in the corner, every one labelled. The smallest: FIRST ROD. CAUGHT A BOOT. SU. 54. (BOOT VERY PLEASED. SO WAS HE.)
+
+# (draft)
+[in_shed_chest]
+A little sea chest with a blanket folded on top. The label: SPARE BLANKET. FOR WHOEVER IS COLD. It's the softest thing in the shed.

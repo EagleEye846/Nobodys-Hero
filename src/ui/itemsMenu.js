@@ -5,9 +5,10 @@ import { heroHp, heroMaxHp, setHeroHp, skillBonus } from '../characters/progress
 import { MEMBERS, partyIds, memberHp, memberMaxHp, setMemberHp, possessive } from '../characters/party.js';
 import { HERO } from '../characters/equipment.js';
 import { ITEMS, MAX_ITEMS } from '../data/items.js';
-import { GEAR, keepsakeText } from '../data/gear.js';
+import { GEAR, GEAR_SETS, keepsakeText, hasGear } from '../data/gear.js';
 import { drawMenuFrame, drawWeaponList, drawItemDetails, drawKeepsakeDetails, drawControls, drawOwnerTag, itemIcon, MENU, MENU_COLORS, FOOTER_Y } from './menuFrame.js';
-import { drawText } from './text.js';
+import { drawText, wrapLines } from './text.js';
+import { textSection } from '../engine/textLoader.js';
 
 // The ITEMS menu, opened with C in the overworld: what's in your bag. Z on
 // an item offers EAT or THROW AWAY. Food can be eaten here as well as in
@@ -19,10 +20,42 @@ import { drawText } from './text.js';
 // SPACE turns to the KEEPSAKES page: everything you carry for good (the rope,
 // the star shards, keys, and the keepsakes people give you, src/data/gear.js),
 // in the order you got them, with a line or two about each. Nothing to do
-// with them there but look.
+// with them there but look, except a keepsake that `reads` a set of pages
+// (the Fair Return's TORN LOG PAGES): Z on it opens them, one sheet at a time.
 const OPTIONS = ['EAT', 'THROW AWAY'];
 // How long a line like "You ate the Trail Mix" stays up, in frames.
 const NOTE_FRAMES = 150;
+const GEAR_TEXT = 'interactions/gear.txt';
+// The reading page: the words fill the menu (no list), this size, this many lines a sheet.
+const READ = { x: MENU.x + 28, y: MENU.y + 80, w: MENU.w - 56, size: 22, lines: 9 };
+
+// What the KEEPSAKES page lists: everything kept, but not the loose pages a book holds (`hidden`).
+export function keptShown() {
+  return (HERO_STATE.gear ?? []).filter((id) => GEAR[id] && !GEAR[id].hidden);
+}
+
+// The sheets of a book you can read (`reads: '<set>'`): each page you hold, in the set's order, from
+// [read_<page id>] in text/interactions/gear.txt, wrapped to the reading page and cut into sheets
+// that fit. A missing page in between leaves a gap (the sheet says so). `ctx` measures the words.
+export function bookSheets(ctx, id) {
+  const ids = GEAR_SETS[GEAR[id]?.reads] ?? [];
+  const sheets = [];
+  // A book that came whole (`whole`: the captain's book) has every page in it.
+  const held = (page) => GEAR[id]?.whole || hasGear(page);
+  ids.forEach((page, i) => {
+    if (!held(page)) {
+      if (ids.slice(i + 1).some((later) => hasGear(later))) sheets.push({ title: GEAR[page].name, lines: ['(This page is missing. Torn out, and gone somewhere.)'] });
+      return;
+    }
+    const lines = textSection(GEAR_TEXT, `read_${page}`).flatMap((para, n) => [...(n ? [''] : []), ...wrapLines(ctx, para, READ.w, READ.size)]);
+    for (let at = 0; at < lines.length; at += READ.lines) {
+      const chunk = lines.slice(at, at + READ.lines);
+      while (chunk[0] === '') chunk.shift();
+      sheets.push({ title: GEAR[page].name, lines: chunk });
+    }
+  });
+  return sheets;
+}
 
 // Whether an item is food you can eat out here.
 export function edible(id) {
@@ -45,6 +78,8 @@ export class ItemsMenu {
     // The KEEPSAKES page instead of the bag, and its cursor.
     this.keepsakes = false;
     this.keepCursor = 0;
+    // A book open on the KEEPSAKES page: { id, sheet } (its sheets are worked out as it's drawn).
+    this.reading = null;
   }
 
   open() {
@@ -52,6 +87,7 @@ export class ItemsMenu {
     this.cursor = 0;
     this.keepsakes = false;
     this.keepCursor = 0;
+    this.reading = null;
     this.choosing = false;
     this.confirming = false;
     this.feeding = -1;
@@ -117,6 +153,23 @@ export class ItemsMenu {
   update(input) {
     const items = HERO_STATE.items;
     if (this.noteLeft > 0) this.noteLeft--;
+    // Reading a book: Z or right turns the sheet, left turns back; X shuts it (back to the KEEPSAKES page).
+    if (this.reading) {
+      const count = this.reading.count ?? 1;
+      if (input.wasPressed('cancel') || input.wasPressed('menu') || ((input.wasPressed('confirm') || input.wasPressed('right')) && this.reading.sheet >= count - 1)) {
+        sfx('back');
+        this.reading = null;
+        return;
+      }
+      if (input.wasPressed('confirm') || input.wasPressed('right')) {
+        this.reading.sheet++;
+        sfx('move');
+      } else if (input.wasPressed('left') && this.reading.sheet > 0) {
+        this.reading.sheet--;
+        sfx('move');
+      }
+      return;
+    }
     if (input.wasPressed('cancel') || input.wasPressed('menu')) {
       sfx('back');
       if (this.confirming) this.confirming = false;
@@ -133,9 +186,14 @@ export class ItemsMenu {
       return;
     }
     if (this.keepsakes) {
-      const kept = HERO_STATE.gear ?? [];
+      const kept = keptShown();
       if (!kept.length) return;
       this.keepCursor = Math.min(this.keepCursor, kept.length - 1);
+      if (input.wasPressed('confirm') && GEAR[kept[this.keepCursor]].reads) {
+        sfx('select');
+        this.reading = { id: kept[this.keepCursor], sheet: 0 };
+        return;
+      }
       const before = this.keepCursor;
       if (input.wasPressed('down')) this.keepCursor = (this.keepCursor + 1) % kept.length;
       if (input.wasPressed('up')) this.keepCursor = (this.keepCursor - 1 + kept.length) % kept.length;
@@ -204,6 +262,10 @@ export class ItemsMenu {
   draw(ctx) {
     if (!this.isOpen) return;
     const items = HERO_STATE.items;
+    if (this.reading) {
+      inUiSpace(ctx, () => this.drawBook(ctx));
+      return;
+    }
     if (this.keepsakes) {
       inUiSpace(ctx, () => this.drawKeepsakes(ctx));
       return;
@@ -236,7 +298,7 @@ export class ItemsMenu {
 
   // The KEEPSAKES page: what you carry for good, and a line or two about it.
   drawKeepsakes(ctx) {
-    const kept = (HERO_STATE.gear ?? []).filter((id) => GEAR[id]);
+    const kept = keptShown();
     drawMenuFrame(ctx, 'KEEPSAKES', `${kept.length} kept`);
     if (!kept.length) {
       drawText(ctx, 'Nothing kept yet.', MENU.x + 50, MENU.y + 90, { size: 28, color: MENU_COLORS.dim });
@@ -249,7 +311,25 @@ export class ItemsMenu {
       });
       drawKeepsakeDetails(ctx, GEAR[kept[cursor]].name, keepsakeText(kept[cursor]));
     }
-    drawControls(ctx, 'Up/Down: look   SPACE: bag   X: close');
+    const readable = kept.length && GEAR[kept[Math.min(this.keepCursor, kept.length - 1)]].reads;
+    drawControls(ctx, readable ? 'Z: read   Up/Down: look   SPACE: bag   X: close' : 'Up/Down: look   SPACE: bag   X: close');
+  }
+
+  // A book open: one sheet of it, the page's name over it, and which sheet of how many.
+  drawBook(ctx) {
+    const sheets = bookSheets(ctx, this.reading.id);
+    this.reading.count = sheets.length;
+    this.reading.sheet = Math.min(this.reading.sheet, Math.max(0, sheets.length - 1));
+    const sheet = sheets[this.reading.sheet];
+    drawMenuFrame(ctx, GEAR[this.reading.id].name.toUpperCase(), sheets.length ? `${this.reading.sheet + 1} / ${sheets.length}` : '', { split: false });
+    if (!sheet) {
+      drawText(ctx, 'Nothing to read yet.', READ.x, READ.y, { size: 26, color: MENU_COLORS.dim });
+    } else {
+      drawText(ctx, sheet.title, READ.x, READ.y - 6, { size: 24, color: MENU_COLORS.highlight });
+      drawText(ctx, sheet.lines.join('\n'), READ.x, READ.y + 26, { size: READ.size, lineHeight: READ.size, color: MENU_COLORS.description });
+    }
+    const last = this.reading.sheet >= sheets.length - 1;
+    drawControls(ctx, `${this.reading.sheet > 0 ? 'Left: back   ' : ''}Z: ${last ? 'close' : 'turn the page'}   X: close`);
   }
 
   // Who's eating, along the row under the list: a tag for each (the one

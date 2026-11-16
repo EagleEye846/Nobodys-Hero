@@ -9,11 +9,14 @@
 //      post, and wants an umbrella crook (Q steers her). Held, it shutters the east lamp (B).
 //   3. With both dark, the hero walks over both bridges to the big crank on the east isle (38,9),
 //      which winds both shutters shut for good (lever `wl_shut`). Then R brings everybody over.
-// Caught in a beam, it's a white wash and back to the last safe stop; nothing hurts. The stump
+// Caught in a beam (the storm has turned the old lamps up wrong, green-white and blinding), you're dazzled: a green-white glare and back to the last safe stop; nothing hurts. The stump
 // (2,15) puts everyone back at the door if a split goes wrong.
+// The east door goes on to the Gannet Stack (isles_gannet_stack, a ring climb), then the causeway.
 // Tile key (see src/overworld/coastTiles.js, isles):
 //   #  rock top (solid)   W  rock face (solid)   ,  wind turf   .  rock slabs   :  path
 //   ~  the sea (solid; the beams go over it)   g  rope bridge   x  the pen's rocks (solid)
+
+import { LIFE5_PROPS } from '../lifePass5.js';
 
 export const ISLES_WEST_LIGHT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -62,7 +65,7 @@ export const ISLES_WEST_LIGHT = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 0, y: 11, w: 1, h: 2, to: 'isles_forge', spawn: { x: 17, y: 9 } },
-    { x: 43, y: 11, w: 1, h: 2, to: 'isles_causeway', spawn: { x: 2, y: 9 } },
+    { x: 43, y: 11, w: 1, h: 2, to: 'isles_gannet_stack', spawn: { x: 2, y: 18 } },
   ],
 
   cutscenes: [],
@@ -81,7 +84,8 @@ export const ISLES_WEST_LIGHT = {
     { x: 20, y: 3, w: 4, h: 7 },
     { x: 35, y: 3, w: 8, h: 17 },
   ],
-  lampText: { first: 'west_seen', again: 'west_seen_again' },
+  lampText: { first: 'west_seen', again: 'west_seen_again', dazzle: 'lamp_dazzle' },
+  lampTint: '222, 255, 232',
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/isles.txt',
@@ -92,7 +96,7 @@ export const ISLES_WEST_LIGHT = {
     // 1. Bramble's crank, in the pen; the gap only he fits.
     { sprite: 'il_shutter_crank', x: 5, y: 5, text: 'west_crank_a' },
     { sprite: 'treadle', x: 5, y: 6, text: 'west_plate_a', treadle: 'wl_a', who: 'bramble' },
-    { sprite: 'kid_gap', x: 5, y: 8, text: 'west_gap', gap: true },
+    { sprite: 'c5_stone_gap', x: 5, y: 8, text: 'west_gap', gap: true },
     // 2. Ves's crank, on the middle isle.
     { sprite: 'il_shutter_crank', x: 21, y: 5, text: 'west_crank_b' },
     { sprite: 'treadle', x: 21, y: 6, text: 'west_plate_b', treadle: 'wl_b', who: 'vesper' },
@@ -112,56 +116,31 @@ export const ISLES_WEST_LIGHT = {
     // a net torn off its frame, planks, rain standing in the turf, gulls and a crab. A lantern
     // blown off its hook by the big crank, still burning, and one on its post on the east isle.
     { sprite: 'c5_wrack_line', x: 1, y: 18, flat: true, walkable: true },
-    { sprite: 'c5_wrack_line', x: 35, y: 18, flat: true, walkable: true },
-    { sprite: 'c5_net_torn', x: 5, y: 14, flat: true, walkable: true },
     { sprite: 'c5_planks_scatter', x: 19, y: 17, flat: true, walkable: true },
-    { sprite: 'c5_puddle', x: 22, y: 9, flat: true, walkable: true },
-    { sprite: 'c5_puddle', x: 7, y: 3, flat: true, walkable: true },
     { sprite: 'c5_gull_marks', x: 40, y: 4, flat: true, walkable: true },
-    { sprite: 'c5_crab_trail', x: 38, y: 15, flat: true, walkable: true },
-    { sprite: 'c5_lantern_fallen', x: 40, y: 10, flat: true, walkable: true },
     { sprite: 'c5_lantern_hook', x: 41, y: 14 },
     // Second pass: what grows and lies about on the three isles. Solid things only well out of
     // both beams (west isle's corners, the middle isle's top and bottom, the east isle); the rest
     // walkable tufts, gulls and things on the floor.
     // The pen's rocks heaped up higher and rougher (drawn on its own solid tiles, walkable so the
     // beam takes no notice; the gap at 5,8 stays as it was).
-    { sprite: 'il_rocks_big', x: 3, y: 4, walkable: true },
-    { sprite: 'il_rocks_big', x: 6, y: 4, walkable: true },
-    { sprite: 'il_rocks', x: 2, y: 6, walkable: true },
-    { sprite: 'il_rocks', x: 7, y: 7, walkable: true },
-    { sprite: 'il_rocks', x: 3, y: 8, walkable: true },
-    { sprite: 'il_rocks', x: 7, y: 8, walkable: true },
+    { sprite: 'il_rocks_big', x: 3, y: 4, walkable: true, decor: true },
+    { sprite: 'il_rocks', x: 7, y: 7, walkable: true, decor: true },
     { sprite: 'il_cairn', x: 8, y: 3, text: 'isle_cairn' },
-    { sprite: 'il_thrift', x: 2, y: 3, walkable: true },
-    { sprite: 'il_grass_tuft', x: 9, y: 5, walkable: true },
-    { sprite: 'il_lichen', x: 4, y: 2, flat: true, walkable: true },
-    { sprite: 'il_gull', x: 3, y: 9, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 8, y: 7, walkable: true },
-    { sprite: 'il_thrift', x: 1, y: 13, walkable: true },
+    { sprite: 'il_thrift', x: 2, y: 3, walkable: true, decor: true },
+    { sprite: 'il_gull', x: 3, y: 9, walkable: true, decor: true },
     { sprite: 'il_tidepool_small', x: 3, y: 16, flat: true, walkable: true },
     { sprite: 'il_rowboat_half', x: 6, y: 17, text: 'isle_rowboat_half' },
-    { sprite: 'il_grass_tuft', x: 8, y: 15, walkable: true },
-    { sprite: 'il_thrift', x: 9, y: 18, walkable: true },
     { sprite: 'il_lichen', x: 2, y: 19, flat: true, walkable: true },
     { sprite: 'il_cairn', x: 20, y: 2, text: 'isle_cairn' },
-    { sprite: 'il_thrift', x: 23, y: 3, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 22, y: 4, walkable: true },
     { sprite: 'il_lichen', x: 21, y: 8, flat: true, walkable: true },
-    { sprite: 'il_gull', x: 23, y: 7, walkable: true },
     { sprite: 'il_stakes_rope', x: 20, y: 15, text: 'isle_stakes' },
-    { sprite: 'il_thrift', x: 24, y: 14, walkable: true },
-    { sprite: 'il_grass_tuft', x: 19, y: 18, walkable: true },
-    { sprite: 'il_rocks_flat', x: 21, y: 19, flat: true, walkable: true },
+    { sprite: 'il_grass_tuft', x: 19, y: 18, walkable: true, decor: true },
     { sprite: 'il_gull_rock', x: 40, y: 3, text: 'isle_gull_rock' },
-    { sprite: 'il_tidepool', x: 37, y: 6, flat: true, walkable: true },
-    { sprite: 'il_thrift', x: 42, y: 6, walkable: true },
-    { sprite: 'il_grass_tuft', x: 35, y: 4, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 40, y: 12, walkable: true },
-    { sprite: 'il_thrift', x: 36, y: 14, walkable: true },
+    { sprite: 'il_thrift', x: 42, y: 6, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 36, y: 14, walkable: true, decor: true },
     { sprite: 'il_pot_broken', x: 42, y: 17, text: 'isle_pot_broken' },
-    { sprite: 'il_drift_timber', x: 38, y: 19, flat: true, walkable: true },
-    { sprite: 'il_gull', x: 39, y: 18, walkable: true },
+    ...(LIFE5_PROPS['isles_west_light'] ?? []),
   ],
   tileTexts: { '#': 'isles_rock', W: 'isles_rock', '~': 'isles_sea', x: 'west_pen_rock', g: 'bridge_planks' },
 
@@ -169,8 +148,12 @@ export const ISLES_WEST_LIGHT = {
   // x 12 to 16), and an old diver on the east isle's south end (row 16, x 37 to 40). Neither
   // comes near the cranks, the plates, the gap, the bridges' mouths, the stump or a door.
   // No cutscenes in this room.
+  // AMBUSH: the old diver stands stock still at the east isle's south end (39,17), an empty suit
+  // left out on the rocks, until you come within two and a half tiles (now and then a light comes
+  // on behind its helmet glass: `look: 'empty_suit'`, src/overworld/hideouts.js). The big crank
+  // (38,9), the sign and the way out (rows 11 and 12) are all five tiles or more to the north.
   npcs: [
     { enemy: 'kelpie_foal', x: 14, y: 17, patrol: [12, 16], behaviour: 'patrol' },
-    { enemy: 'old_diver', x: 38, y: 16, patrol: [37, 40], behaviour: 'patrol' },
+    { enemy: 'old_diver', x: 39, y: 17, patrol: [39, 39], behaviour: 'disguise', look: 'empty_suit', reach: 2.5 },
   ],
 };

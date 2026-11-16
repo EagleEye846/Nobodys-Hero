@@ -1,0 +1,54 @@
+# DUSKLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/duskling.js.
+
+[intro]
+A DUSKLING peels itself off the wall and turns to face you!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+The duskling stretches whenever the lanterns flicker.
+
+It's hard to tell where it ends and the dark begins.
+
+Its eyes follow you, never blinking.
+
+The air goes cold around it.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Nowhere to run...
+
+The dark is closing in.
+
+Stay. Stay in the shadow.
+
+I'm all around you.
+
+Hush now.
+
+You're not the one.
+
+Nobody's coming. Not even you.
+
+# One section per TALK option. The names after "talk:" must match
+# src/data/enemies/duskling.js.
+[talk: Inspect]
+DUSKLING - HP 130
+A shadow that got left behind when its owner walked away. It's been waiting ever since.
+
+[talk: Stand in its shadow]
+You step into its shadow. It shivers, like it hasn't been noticed in a long time.
+
+[talk: Share a secret]
+You whisper a secret to the duskling. Its eyes soften.
+
+[talk: Say its name]
+You don't know its name, so you make one up. It seems to like it.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+DUSKLING breaks apart into wisps, and the wisps fade into the dark.
+
+[pacified]
+DUSKLING drifts back to the wall, a little lighter than before.

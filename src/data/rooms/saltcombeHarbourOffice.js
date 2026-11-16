@@ -71,7 +71,7 @@ export const SALTCOMBE_HARBOUR_OFFICE = {
     { sprite: 'bookshelf', x: 1, y: 3, text: 'office_shelves' },
     { sprite: 'c5_tide_board', x: 9, y: 3, text: 'office_tide_board' },
     { sprite: 'locked_door', x: 12, y: 3, text: 'office_back_door', until: 'haddock_gone' },
-    { sprite: 'hs_open_door', x: 12, y: 3, walkable: true, after: 'haddock_gone' },
+    { sprite: 'hs_open_door', x: 12, y: 3, walkable: true, after: 'haddock_gone', decor: true },
     { sprite: 'stove', x: 1, y: 6, text: 'office_stove' },
     { sprite: 'chair', x: 10, y: 6, text: 'office_chair' },
     { sprite: 'c5_barrel', x: 12, y: 7, text: 'office_barrel' },
@@ -87,6 +87,13 @@ export const SALTCOMBE_HARBOUR_OFFICE = {
     // Off the way from the back door (12,4) to the front (6..7,9) and the ending's spot (6,8).
     { sprite: 'bench', x: 9, y: 8, text: 'in_office_bench' },
     { sprite: 'in_book_pile', x: 3, y: 7, text: 'in_office_books' },
+    // (2026-11-13) After the chapter, Haddock's chart of the coast on its board by the stove, a pencil line
+    // out to the north-east: where chapter 6 is set out for (`setOut`, see setOutFrom in overworldScene.js).
+    // Read from (4,5), facing it.
+    { sprite: 'sc_coast_map', x: 2, y: 5, text: 'office_smoke_chart', setOut: 'set_out_for_the_smoke', after: 'haddock_gone' },
+    // (life pass 2026-11-14)
+    { sprite: 'st_cat_loaf_b', x: 2, y: 4, text: 'life_o_cat', animation: 'st_cat_loaf_b', speed: 1.2 },
+    { sprite: 'st_boot_planter', x: 11, y: 8, text: 'life_o_boot' },
   ],
   tileTexts: { h: 'office_wall' },
 

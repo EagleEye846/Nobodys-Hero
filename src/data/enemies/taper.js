@@ -16,7 +16,9 @@ export const TAPER_BOSS = {
   music: 'taperBattle',
   // Her own battle background: the door out, and her candles (src/battle/backdrops.js).
   backdrop: 'taper_stand',
-  maxHp: 320,
+  // HP since 13 November 2026: about 20 rounds of good FIGHTs from the party
+  // you have when you meet this boss (every boss's rule; regulars take 4-5).
+  maxHp: 1500,
   damage: 8,
 
   difficulty: { density: 1, speed: 1 },

@@ -68,6 +68,8 @@
 //   o  plank causeway (walkable; sluice water can cover it)   J  snapped timber (solid, standing)
 
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_FLOODED_DRIFT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_flooded_drift',
@@ -148,6 +150,7 @@ export const DIGGINGS_FLOODED_DRIFT = {
   // a purse on the pump house and one on the islet.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_flooded_drift ?? []),
     // A save crystal, so the caves never go long without one.
     { sprite: 'savepoint', x: 2, y: 4, save: true },
     { sprite: 'mine_cart', x: 4, y: 12, cart: 'a', text: 'cart_stuck' },

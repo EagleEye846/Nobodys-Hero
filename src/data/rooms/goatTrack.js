@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE GOAT TRACK: east of the Foot of the Stair, the way around the rockslide.
 // A band of boulders cuts the meadow in two; the only way over is a run of the
 // old stair that came down with the slide and landed on top of it. Jump onto
@@ -63,6 +64,8 @@ export const GOAT_TRACK = {
   props: [
     { sprite: 'savepoint', x: 15, y: 3, save: true },
     { sprite: 'old_pack', x: 14, y: 10, text: 'goat_pack', gives: 'climbers_jacket' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['goat_track'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

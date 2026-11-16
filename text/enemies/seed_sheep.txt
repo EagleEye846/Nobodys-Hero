@@ -52,7 +52,7 @@ my hat?
 # TALK options in src/data/enemies/seed_sheep.js.
 [talk: Inspect]
 SEED SHEEP - HP 1850
-A sheep with a dandelion clock for a fleece. Blows drifts of seeds across the field, charges with a woolly head, and floats big seed clocks that burst into rings. Mind the gaps.
+A sheep with a dandelion clock for a fleece. Each baa turns the wind, its flock hops the fence (harmless in the air), and its wish clocks burst when you come near.
 
 [talk: Scratch behind the ears]
 You scratch SEED SHEEP behind both ears, slowly. Its eyes close. Its whole fleece loosens by half an inch and about forty seeds sigh off into the air. It leans into your hand with all its weight.

@@ -1,0 +1,20 @@
+# Between chapters: shown when you leave the Ruins, before you go on into
+# the world beyond. The last line depends on what happened with Taper.
+
+[title]
+THE RUINS
+
+[subtitle]
+Chapter One complete
+
+# You spared Taper.
+[spared]
+You carry a little warmth with you, wherever you go next.
+
+# You fought Taper until her flame went out.
+[defeated]
+It's colder out here than you thought it would be.
+
+# Neither (only if something went strange).
+[neutral]
+The door closes behind you.

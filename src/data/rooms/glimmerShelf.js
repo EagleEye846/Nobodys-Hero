@@ -96,12 +96,14 @@ export const GLIMMER_SHELF = {
     { sprite: 'glowcap_big', x: 2, y: 5, text: 'shelf_glowcap' },
     { sprite: 'glowcap_trio', x: 25, y: 10, text: 'shelf_trio' },
     { sprite: 'glowcap_tall', x: 27, y: 7, text: 'shelf_glowcap' },
-    { sprite: 'glow_moss', x: 7, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 3, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 19, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 7, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 3, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 19, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'sign', x: 11, y: 6, text: 'shelf_sign' },
     // A purse up on the high block (b, then B), on the far ledge.
     { sprite: 'gold_pouch', x: 27, y: 4, text: 'shelf_purse', gold: 65, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', H: 'cave_moss_wall', K: 'cave_wall',

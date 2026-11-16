@@ -22,7 +22,7 @@ export const DRILLBUG = {
   anim: DRILLBUG_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1600,
+  maxHp: 2850,
   damage: 40,
 
   // The Diggings, the first of the deep: heavy, fast, plenty.
@@ -32,8 +32,8 @@ export const DRILLBUG = {
   patterns: [
     { name: 'drillWalls', weight: 3 },
     { name: 'drillTunnels', weight: 2 },
-    { name: 'drillBits', weight: 2 },
-    { name: 'drillRumble', weight: 2 },
+    { name: 'drillLamp', weight: 3 },
+    { name: 'drillRoute', weight: 3 },
     { name: 'drillRail', weight: 2 },
   ],
 

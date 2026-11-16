@@ -15,9 +15,14 @@ export const DOWAGER_BEATEN = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed (she sits with a thud and the bell tips over, heard and seen).
     { do: 'camera', to: { x: 17, y: 9 } },
     { do: 'wait', seconds: 0.8 },
-    { do: 'say', text: 'The Dowager sits down in her bath with a sound like a very large teapot being put on a shelf.\n\nThe bell on top tips over and rings once, quite softly, as if it were embarrassed.' },
+    { do: 'sound', name: 'thud' },
+    { do: 'quake', amount: 1, seconds: 0.3 },
+    { do: 'wait', seconds: 0.5 },
+    { do: 'sound', name: 'bell' },
+    { do: 'wait', seconds: 1.2 },
     { do: 'say', who: 'crab', text: '"Well."\n\n"I have not been spoken to like that since the Admiral."' },
     // (Over a little, so Ves is in the picture.)
     { do: 'camera', to: { x: 15, y: 9 } },
@@ -25,7 +30,7 @@ export const DOWAGER_BEATEN = {
     { do: 'say', who: 'ves', text: '{bored}Nobody spoke.' },
     { do: 'camera', to: { x: 17, y: 9 } },
     { do: 'say', who: 'crab', text: '"That is what I found so rude."' },
-    { do: 'say', text: 'She works the bell loose from the top of her tub with one claw, polishes it on a pearl, and holds it out. A tag is tied to it, in very neat writing: PLEASE WIPE YOUR FEET.' },
+    { do: 'wait', seconds: 0.6 },
     { do: 'walk', who: 'ves', to: { x: 18, y: 9 }, wait: false },
     { do: 'walk', who: 'bramble', to: { x: 17, y: 11 }, wait: false },
     { do: 'walk', who: 'player', to: { x: 21, y: 10 }, pace: 48 },

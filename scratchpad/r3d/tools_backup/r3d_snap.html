@@ -1,0 +1,74 @@
+<!doctype html><html><head><meta charset="utf-8"><base href="../"><title>r3d snap</title></head><body style="background:#000;color:#ddd"><pre id="report">SNAP START
+</pre><script type="module">
+// Temporary tool (round 3 helper D): puts each requested piece on the nearest free tile.
+const r = document.getElementById('report');
+try {
+  const { Room } = await import('./src/overworld/room.js');
+  const { ROOMS } = await import('./src/data/rooms/index.js');
+  const reqs = await (await fetch('tools/r3d_requests.json?' + Date.now())).json();
+  const verify = new URLSearchParams(location.search).get('verify');
+  const R3D = verify ? (await import('./src/data/r3dLife.js')).R3D_PROPS : null;
+  const result = {};
+  for (const [id, rq] of Object.entries(reqs)) {
+    const d = ROOMS[id];
+    if (!d) { r.textContent += `NO ROOM ${id}\n`; continue; }
+    // the room without our additions, so snapping looks only at what was there
+    const mine = new Set((R3D?.[id] ?? []).map((p) => `${p.sprite}@${p.x},${p.y}`));
+    const base = { ...d, props: d.props.filter((p) => !mine.has(`${p.sprite}@${p.x},${p.y}`)) };
+    const room = new Room(base);
+    const w = d.tiles[0].length, h = d.tiles.length;
+    const props = base.props.map((p) => ({ x: p.x, y: p.y, flat: !!(p.flat || (p.walkable && !p.text)), text: !!p.text, save: !!p.save }));
+    const tight = props.filter((p) => !p.flat);
+    const near = (arr, x, y, rad) => arr.some((p) => Math.abs(p.x - x) <= rad && Math.abs(p.y - y) <= rad);
+    const saves = props.filter((p) => p.save);
+    const doors = [], scenes = [];
+    for (const dr of d.doors ?? []) for (let i = 0; i < (dr.w ?? 1); i++) for (let j = 0; j < (dr.h ?? 1); j++) doors.push({ x: dr.x + i, y: dr.y + j });
+    for (const c of d.cutscenes ?? []) for (let i = 0; i < (c.w ?? 1); i++) for (let j = 0; j < (c.h ?? 1); j++) scenes.push({ x: c.x + i, y: c.y + j });
+    const ens = (d.npcs ?? []).map((n) => ({ x: n.x, y: n.y }));
+    const start = d.playerStart ? [d.playerStart] : [];
+    const textP = props.filter((p) => p.text);
+    const occ = []; // placed by us: {x,y,poke}
+    const walk = (x, y) => { if (x < 0 || y < 0 || x >= w || y >= h) return false; const cx = (x + 0.5) * 16, cy = (y + 1) * 16; return !room.collides(cx - 5, cy - 5, cx + 5, cy); };
+    const okBase = (x, y, poke, water) => {
+      if (x < 1 || y < 2 || x > w - 2 || y > h - 2) return false;
+      if (rq.rows.includes(y) || rq.cols.includes(x)) return false;
+      if (!water && !walk(x, y)) return false;
+      if (props.some((p) => p.x === x && p.y === y)) return false;
+      if (near(doors, x, y, 2) || near(scenes, x, y, 2) || near(saves, x, y, 3) || near(ens, x, y, 3) || near(start, x, y, 2)) return false;
+      if (poke) {
+        if (near(tight, x, y, 1)) return false;
+        if (!walk(x, y + 1)) return false;
+        if (props.some((p) => p.x === x && p.y === y + 1 && !p.flat)) return false;
+        if (occ.some((o) => o.x === x && o.y === y + 1)) return false;
+      }
+      if (textP.some((p) => p.x === x && p.y === y - 1) && true) return false;
+      if (occ.some((o) => o.x === x && o.y === y)) return false;
+      if (occ.some((o) => o.poke && o.x === x && o.y === y - 1)) return false;
+      if (poke && occ.some((o) => Math.abs(o.x - x) <= 1 && Math.abs(o.y - y) <= 1 && o.poke)) return false;
+      return true;
+    };
+    const out = {};
+    const moves = [];
+    let di = 0;
+    for (const it of rq.items) {
+      const key = it.t === 'p' ? it.key : `d${di++}`;
+      const poke = it.t === 'p';
+      let found = null;
+      for (let rad = 0; rad <= 5 && !found; rad++) {
+        for (let dy = -rad; dy <= rad && !found; dy++) for (let dx = -rad; dx <= rad && !found; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== rad) continue;
+          if (okBase(it.x + dx, it.y + dy, poke, it.water)) found = [it.x + dx, it.y + dy, rad];
+        }
+      }
+      if (!found) { moves.push(`  NO SPOT ${key} ${it.sprite} near ${it.x},${it.y}`); continue; }
+      out[key] = [found[0], found[1]];
+      occ.push({ x: found[0], y: found[1], poke });
+      if (found[2] > 0) moves.push(`  moved ${key} ${it.sprite} ${it.x},${it.y} -> ${found[0]},${found[1]}`);
+    }
+    result[id] = out;
+    r.textContent += `${id}: ${Object.keys(out).length}/${rq.items.length} placed\n${moves.join('\n')}${moves.length ? '\n' : ''}`;
+  }
+  r.textContent += 'SNAPJSON ' + JSON.stringify(result) + '\n';
+} catch (e) { r.textContent += 'ERR ' + (e.stack ?? e) + '\n'; }
+r.textContent += 'CHECK DONE\n';
+</script></body></html>

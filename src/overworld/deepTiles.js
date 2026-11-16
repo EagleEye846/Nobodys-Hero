@@ -1,5 +1,6 @@
 import { TILE_SIZE as T } from '../config.js';
 import { caveSoftEdge } from './caveBlend.js';
+import { inCrag, cragFace, CRAG_ROCK } from './cragRock.js';
 
 // How Chapter 4's three underground regions look: the Diggings (the creature
 // folk's mines), the Stillwater (the great black lake) and the Deep (the
@@ -110,6 +111,8 @@ function digWallTop(ctx, x, y, tx, ty, room) {
 }
 
 function digWallFace(ctx, x, y, tx, ty, room) {
+  // A climbing face (a room's `crag`): broken rock, not courses (cragRock.js).
+  if (inCrag(room, tx, ty)) { cragFace(ctx, x, y, tx, ty, room, CRAG_ROCK.diggings, (c) => c === 'W'); return; }
   for (let band = 0; band < 4; band++) {
     const by = y + band * 4;
     px(ctx, pick(DIG_ROCK, hash(tx, ty * 4 + band, 430)), x, by, T, 4);
@@ -676,6 +679,12 @@ function rootVein(ctx, x, y, tx, ty, salt, bright = 1) {
 }
 
 function deepWallFace(ctx, x, y, tx, ty, room) {
+  // A climbing face (a room's `crag`): broken rock, not courses (cragRock.js), with the root's veins.
+  if (inCrag(room, tx, ty)) {
+    cragFace(ctx, x, y, tx, ty, room, CRAG_ROCK.deep, (c) => c === 'W');
+    if (hash(tx, ty, 440) < 0.3) rootVein(ctx, x, y, tx, ty, 441, 0.7);
+    return;
+  }
   for (let band = 0; band < 4; band++) {
     const by = y + band * 4;
     px(ctx, pick(DEEP_ROCK, hash(tx, ty * 4 + band, 430)), x, by, T, 4);

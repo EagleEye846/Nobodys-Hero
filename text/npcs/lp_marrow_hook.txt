@@ -1,0 +1,34 @@
+# T. MARROW'S HOOK (the Soundings' mouth): a sounder's lamp on its post, and the empty hook under it where a dinner pail
+# should hang. Nobody's here. The words are what you notice. (life pass, 14 November 2026)
+
+# (draft)
+[first]
+A sounder's lamp on a post at the cave mouth, unlit, and a name chalked on the rock below it: T. MARROW. Under the name there's a hook with nothing on it.
+
+# (draft)
+[repeat]
+T. MARROW's hook. Empty.
+
+# (draft)
+[marrow_ask]
+A sounder's lamp on a post at the cave mouth, unlit, the glass milky. Chalked on the rock under it: T. MARROW, SOUNDER. And under that, one word: DOWN.
+
+Under the chalk there's a hook, driven into the rock. All the others along the wall have a tin pail hung from them, for the sounder's dinner. This hook is empty.
+
+# (draft)
+[marrow_wait]
+T. Marrow's hook, empty. Somewhere in the caves there'll be a tin pail with his name on it, if he left one anywhere he'd think to look.
+
+# (draft)
+[marrow_done]
+You hang the pail on the hook.
+
+It swings once, and settles, as if it had never been taken down. The lamp above it doesn't light. You hadn't thought it would. But the whole cave mouth is quieter than it was a second ago.
+
+Tied round the hook, in a loop you hadn't noticed, there's a tin whistle on a bit of cord. It's been there the whole time. You think it was for whoever hung the pail up.
+
+You put it in your pocket. It seems that's what it was for.
+
+# (draft)
+[marrow_after]
+T. Marrow's pail hangs on its hook, with his name on the lid. The lamp over it is out, but the hook has something on it now, and that's all it ever wanted.

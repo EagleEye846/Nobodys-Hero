@@ -1,12 +1,15 @@
 import { defineBulletArt } from '../projectiles.js';
-import { withSnipes } from './snipes.js';
+import { Deco, blit, shove } from './coastKit.js';
 
-// The Storm Imp's attacks. It is a little thundercloud, and it plays with
-// weather the way a child plays with a hose: forks of lightning (every one
-// flickers thin first, and the flicker is the exact path), a rain of streaks
-// (the ones aimed at you tick first), gusts that push you across the box while
-// puffs and paper boats blow past, and crackling balls that bounce off the
-// walls. It stands above and to the right of the box.
+// The Storm Imp's attacks. A bit of the storm with a grin, and a show-off,
+// so it plays with lightning the way lightning really goes:
+//   - Lightning rods: the bolt comes down on the rod nearest you, then jumps
+//     to whatever is nearest that rod, another rod or you.
+//   - Flash, then thunder: the flash shows where the bolts will fall, and
+//     the thunder count (pips by the cloud) says when.
+//   - Puffed cheeks: it puffs up at one side of the box and blows a gust from
+//     there that shoves you, with the rain slanting in on it.
+// It floats to the right of the box.
 
 const STORM = { c: '#86a294', C: '#b4ccbe', d: '#54706a', k: '#18242a', y: '#fff06a', Y: '#ffc83a', w: '#ffffff', r: '#8fd0ff', R: '#4a8ac8', p: '#e8e0c8', P: '#b8b098' };
 
@@ -109,162 +112,176 @@ function bolt(Line, x, box, warn, rand, width = 5.5) {
   return lines;
 }
 
+// A lightning rod stuck in the ground: an iron spike with a brass ball.
+defineBulletArt('impRod', { frames: [['.Y.', 'YyY', '.Y.', '.P.', '.P.', '.P.', '.P.', 'PPP']], palette: STORM, radius: 1 });
+defineBulletArt('impRodLit', { frames: [['.w.', 'wyw', '.w.', '.y.', '.y.', '.y.', '.y.', 'yyy'], ['.Y.', 'YyY', '.Y.', '.P.', '.P.', '.P.', '.P.', 'PPP']], palette: STORM, radius: 1, frameSeconds: 0.06 });
+// The imp's puffed-out cheeks: a round grey face, swelling.
+const cheeks = (r) => {
+  const n = r * 2 + 3;
+  const rows = [];
+  for (let y = 0; y < n; y++) {
+    let row = '';
+    for (let x = 0; x < n; x++) {
+      const d = Math.hypot(x - n / 2 + 0.5, y - n / 2 + 0.5);
+      row += d < r - 0.5 ? (Math.abs(y - n / 2) < 1 && Math.abs(x - n / 2 + 1.5) < 1 ? 'k' : 'C') : d < r + 0.5 ? 'd' : '.';
+    }
+    rows.push(row);
+  }
+  return rows;
+};
+const CHEEKS = [cheeks(4), cheeks(5), cheeks(6)];
+
 export const STORM_IMP_ATTACKS = {
-  // Forks: three bolts at a time, one right where you stand and the others a
-  // hand either side. Each blinks thin along its exact path, then cracks. A spark
-  // jumps from the floor where it lands. Four volleys.
-  impFork(box, density, { Shot, Line, rand, clamp }) {
+  // Lightning rods: iron rods stand in the box. The imp's bolt always comes
+  // down on the rod nearest to you (it flickers first), and then, as
+  // lightning does, it jumps from that rod to whatever was nearest it when
+  // it lit: the next rod, or you (the jump's path shows faintly). Be further
+  // from the lit rod than another rod is.
+  impRods(box, density, { Shot, Line, rand }) {
+    const T = (s) => s * density;
+    const WARN = 0.6;
     let t = 0;
-    let volleys = 0;
-    let next = 0.2;
-    let sparks = [];
+    let n = 0;
+    let rods = [];
+    let placedFor = -1;
+    const place = (bullets, soul) => {
+      rods = [];
+      let tries = 0;
+      while (rods.length < 4) {
+        const r = { x: rand(box.x + 8, box.x + box.w - 8), y: rand(box.y + 14, box.y + box.h - 6) };
+        // (After many tries, take what comes, so it can never stall.)
+        const roomy = tries++ > 200 || (rods.every((o) => Math.hypot(o.x - r.x, o.y - r.y) > 26) && Math.hypot(r.x - soul.x, r.y - soul.y) > 12);
+        if (roomy) rods.push(r);
+      }
+      for (const r of rods) {
+        const s = new Shot({ x: r.x, y: r.y - 3, harmless: true, art: 'impRod' });
+        s.life = 2.8;
+        bullets.push(s);
+      }
+    };
     return {
-      duration: 7.2,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && volleys < 4 && t < 5.4) {
-          next = t + 1.55;
-          const gap = rand(30, 38);
-          const xs = [soul.x, soul.x + gap, soul.x - gap].map((x) => clamp(x, box.x + 5, box.x + box.w - 5));
-          const warn = 0.85;
+        if (n % 3 === 0 && placedFor !== n && t >= T(0.2 + n * 0.72) && n < 8) {
+          placedFor = n;
+          place(bullets, soul);
+        }
+        if (t >= T(0.5 + n * 0.72) && n < 8) {
+          n++;
+          let rod = rods[0];
+          for (const r of rods) if (Math.hypot(r.x - soul.x, r.y - soul.y) < Math.hypot(rod.x - soul.x, rod.y - soul.y)) rod = r;
+          bullets.push(new Shot({ x: rod.x, y: rod.y - 3, harmless: true, life: WARN, art: 'impRodLit' }));
+          // The bolt down to the rod (it hurts in the rod's column, above it).
+          bullets.push(new Line({ x: rod.x, y: box.y - 4, angle: Math.PI / 2, length: rod.y - box.y - 3, thickness: 4, warn: WARN, life: 0.25, color: '#fff06a', glow: '#ffffff' }));
+          // Where it will jump once it lands: to the nearest thing to that rod,
+          // another rod or you, as things stand when the rod lights. The path shows.
+          let to = { x: soul.x, y: soul.y };
+          let best = Math.hypot(soul.x - rod.x, soul.y - rod.y);
+          for (const o of rods) {
+            if (o === rod) continue;
+            const d = Math.hypot(o.x - rod.x, o.y - rod.y);
+            if (d < best) { best = d; to = o; }
+          }
+          const a = Math.atan2(to.y - rod.y, to.x - rod.x);
+          bullets.push(new Line({ x: rod.x, y: rod.y - 6, angle: a, length: best + 6, thickness: 3, warn: WARN, life: 0.22, color: '#fff06a', glow: '#ffffff' }));
+          bullets.push(new Shot({ x: rod.x, y: rod.y - 6, harmless: true, warn: WARN, life: 0.3, art: 'impSpark' }));
+        }
+      },
+    };
+  },
+
+  // Flash, then thunder: the imp flashes, and the flash shows exactly where
+  // the bolts will fall (pale strips). Then it counts the thunder, a pip at
+  // a time by the cloud: one, two or three. The bolts come on the last pip.
+  // The flash says where; the count says when.
+  impThunder(box, density, { Line, rand }) {
+    const T = (s) => s * density;
+    const PIP = 0.28;
+    let t = 0;
+    let n = 0;
+    let wait = 0;
+    return {
+      duration: 7,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (t >= T(0.2 + wait) && n < 6) {
+          n++;
+          const count = 1 + ((n * 2) % 3);
+          const delay = 0.25 + count * PIP;
+          wait += delay + 0.35;
+          // The flash.
+          bullets.push(new Deco({ life: 0.12, paint(ctx) {
+            ctx.globalAlpha *= 0.25;
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(box.x, box.y, box.w, box.h);
+          } }));
+          bullets.push(new Deco({ life: delay, paint(ctx, d) {
+            for (let i = 0; i < count; i++) if (d.age >= 0.25 + i * PIP) blit(ctx, ['.y.', 'yYy', '.y.'], STORM, box.x + box.w - 5, box.y + 5 + i * 6);
+          } }));
+          const xs = [soul.x + rand(-3, 3)];
+          for (let guard = 0; xs.length < 4 && guard < 300; guard++) {
+            const x = rand(box.x + 5, box.x + box.w - 5);
+            if (xs.every((o) => Math.abs(o - x) > 12)) xs.push(x);
+          }
           for (const x of xs) {
-            bullets.push(new Shot({ x, y: box.y + 3, harmless: true, life: warn, art: 'impMark' }));
-            for (const line of bolt(Line, x, box, warn, rand)) bullets.push(line);
-            sparks.push({ at: t + warn + 0.05, x });
+            bullets.push(new Deco({ life: delay, paint(ctx, d) {
+              ctx.globalAlpha *= d.age < 0.12 ? 0.6 : 0.18;
+              ctx.fillStyle = '#fff06a';
+              ctx.fillRect(Math.round(x) - 3, box.y, 6, box.h);
+            } }));
+            bullets.push(new Line({ x, y: box.y - 4, angle: Math.PI / 2, length: box.h + 8, thickness: 6, warn: delay, life: 0.28, color: '#fff06a', glow: '#ffffff' }));
           }
-          volleys++;
         }
-        for (const s of sparks) {
-          if (t < s.at) continue;
-          s.done = true;
-          for (const dir of [-1, 1]) bullets.push(new Shot({ x: s.x, y: box.y + box.h - 3, vx: dir * 48, vy: -22, art: 'impSpark', life: 0.8 }));
-        }
-        sparks = sparks.filter((s) => !s.done);
       },
     };
   },
 
-  // Rain: a shower of slanting streaks blowing in from the top right. Every
-  // fourth one is aimed at where you are (it ticks at the top first).
-  impRain(box, density, { Shot, rand, clamp }) {
+  // Puffed cheeks: the imp pops up at one side of the box and puffs out its
+  // cheeks, bigger, bigger, and then blows: a gust from that side shoves you
+  // across, and the rain comes slanting in on it, in lines with a gap.
+  // Whichever side the cheeks are on, that's where it's coming from.
+  impGust(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const PUFF = 0.75;
+    const BLOW = 1.0;
+    const sides = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
     let t = 0;
-    let next = 0.15;
-    let count = 0;
-    const vx = -26;
-    const vy = 104;
-    let drops = [];
-    let clouds = false;
+    let n = 0;
+    let blowEnd = -1;
+    let dir = { x: 0, y: 0 };
     return {
-      // (Its rain stops at 5 s: 6.0, was 6.8, so the next attack isn't long in coming.)
-      duration: 6.0,
-      update: (dt, bullets, soul) => {
+      duration: 7,
+      update: (dt, bullets, soul, real = dt / density) => {
         t += dt;
-        // The cloud rolls in over the top of the box first, drifting with the wind.
-        if (!clouds) {
-          clouds = true;
-          for (let x = box.x + 6; x < box.x + box.w + 30; x += 19) {
-            bullets.push(new Shot({ x, y: box.y + 3 + (Math.round(x / 19) % 2 ? 2 : 0), vx: -3, harmless: true, life: 5.6, art: 'impCloud' }));
-          }
-        }
-        // Each drop that reaches the floor splashes (only a look).
-        for (const d of drops) {
-          if (d.y < box.y + box.h - 2) continue;
-          d.done = true;
-          if (d.x > box.x + 2 && d.x < box.x + box.w - 2) bullets.push(new Shot({ x: d.x, y: box.y + box.h - 2, harmless: true, life: 0.2, art: 'impSplash' }));
-        }
-        drops = drops.filter((d) => !d.done && d.age < d.warn + d.life);
-        if (t < next || t > 5) return;
-        next = t + 0.085;
-        const aimed = count % 4 === 0;
-        const fall = ((aimed ? soul.y : box.y + box.h / 2) - box.y) / vy;
-        const x = aimed ? clamp(soul.x - vx * fall, box.x - 4, box.x + box.w + 40) : rand(box.x - 4, box.x + box.w + 34);
-        const drop = new Shot({ x, y: box.y - 2, vx, vy, warn: aimed ? 0.45 : 0, art: 'impRain', life: 2.2 });
-        drops.push(drop);
-        bullets.push(drop);
-        count++;
-      },
-    };
-  },
-
-  // Gust: arrows blow across the box (that is the way it will push), and then
-  // the wind comes, shoving you along while puffs of cloud and paper boats are
-  // blown through. Three gusts, back and forth.
-  impGust(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let gusts = 0;
-    let gust = null;
-    return {
-      duration: 7.6,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (!gust && gusts < 3 && t >= 0.2 + gusts * 2.45) {
-          const dir = gusts === 1 ? 1 : -1;
-          gust = { dir, start: t + 0.75, end: t + 2.05, spawn: 0 };
-          for (let k = 0; k < 4; k++) {
-            const y = box.y + 10 + k * 20;
-            const x0 = dir < 0 ? box.x + box.w - 6 : box.x + 6;
-            bullets.push(new Shot({ x: x0, y, vx: dir * 70, harmless: true, life: 0.75, art: 'impArrow', angle: dir < 0 ? Math.PI : 0 }));
-          }
-          gusts++;
-        }
-        if (gust) {
-          if (t >= gust.start && t < gust.end) {
-            soul.x = clamp(soul.x + gust.dir * 36 * dt, box.x + 4, box.x + box.w - 4);
-            gust.spawn -= dt;
-            if (gust.spawn <= 0) {
-              gust.spawn = 0.34;
-              const aimed = Math.random() < 0.12;
-              const y = aimed ? clamp(soul.y + rand(-4, 4), box.y + 6, box.y + box.h - 6) : rand(box.y + 6, box.y + box.h - 6);
-              const x = gust.dir < 0 ? box.x + box.w + 6 : box.x - 6;
-              bullets.push(new Shot({ x, y, vx: gust.dir * 74, art: Math.random() < 0.5 ? 'impPuff' : 'impBoat', life: 2.4 }));
+        if (t >= T(0.2 + n * 1.55) && n < 4) {
+          const side = sides[n % 4];
+          n++;
+          // From the right, the bottom, the left or the top.
+          const a = [Math.PI, -Math.PI / 2, 0, Math.PI / 2][side];
+          dir = { x: Math.cos(a), y: Math.sin(a) };
+          const cx = box.x + box.w / 2 - dir.x * (box.w / 2 + 9);
+          const cy = box.y + box.h / 2 - dir.y * (box.h / 2 + 9);
+          blowEnd = t + T(PUFF + BLOW);
+          // The cheeks show just inside the edge the gust comes from.
+          bullets.push(new Deco({ x: box.x + box.w / 2 - dir.x * (box.w / 2 - 6), y: box.y + box.h / 2 - dir.y * (box.h / 2 - 6), life: PUFF + BLOW, paint(ctx, d) {
+            const f = Math.min(2, Math.floor((d.age / PUFF) * 3));
+            blit(ctx, d.age < PUFF ? CHEEKS[f] : CHEEKS[0], STORM, d.x, d.y);
+          } }));
+          // Rain on the gust: lines of drops across the wind, each with a gap.
+          const px = -dir.y;
+          const py = dir.x;
+          for (let row = 0; row < 3; row++) {
+            const gap = rand(-26, 26);
+            for (let s = -42; s <= 42; s += 8) {
+              if (Math.abs(s - gap) < 10) continue;
+              bullets.push(new Shot({ x: cx + px * s, y: cy + py * s, vx: dir.x * 70, vy: dir.y * 70, art: 'impRain', warn: PUFF + row * 0.3, life: 2 }));
             }
           }
-          if (t >= gust.end) gust = null;
         }
-      },
-    };
-  },
-
-  // Balls: three balls of lightning, one after another, fizz out of it and
-  // bounce round the box off every wall. Each throws sparks where it bounces.
-  impBall(box, density, { Shot, rand }) {
-    let t = 0;
-    let made = 0;
-    const orbs = [];
-    return {
-      duration: 7.0,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (made < 3 && t >= 0.2 + made * 1.2) {
-          const x = box.x + box.w - 6;
-          const y = box.y + rand(14, box.h - 14);
-          const aim = Math.atan2(soul.y - y, soul.x - x) + rand(-0.25, 0.25);
-          const orb = new Shot({ x, y, vx: Math.cos(aim) * 56, vy: Math.sin(aim) * 56, bounce: true, warn: 0.6, art: 'impOrb', life: 5 });
-          orb.lastVx = orb.vx;
-          orb.lastVy = orb.vy;
-          orb.sparked = 0;
-          orbs.push(orb);
-          bullets.push(orb);
-          made++;
-        }
-        for (const orb of orbs) {
-          if (orb.age <= orb.warn) continue;
-          const bouncedX = orb.vx * orb.lastVx < 0;
-          const bouncedY = orb.vy * orb.lastVy < 0;
-          if ((bouncedX || bouncedY) && orb.sparked < 5) {
-            orb.sparked += 1;
-            for (const side of [-1, 1]) {
-              const a = Math.atan2(orb.vy, orb.vx) + side * 1.1;
-              bullets.push(new Shot({ x: orb.x, y: orb.y, vx: Math.cos(a) * 40, vy: Math.sin(a) * 40, art: 'impSpark', life: 1.0 }));
-            }
-          }
-          orb.lastVx = orb.vx;
-          orb.lastVy = orb.vy;
-        }
+        const k = blowEnd - t;
+        if (k > 0 && k < T(BLOW)) shove(soul, box, dir.x * 58 * real, dir.y * 58 * real);
       },
     };
   },
 };
-
-// Aimed shots on top (see snipes.js): with the aimed puffs thinned out, standing still was nearly safe.
-STORM_IMP_ATTACKS.impGust = withSnipes(STORM_IMP_ATTACKS.impGust, { art: 'impPuff', count: 6, first: 0.6, every: 1.0, lead: [0.9, 0.4, 'mean', 0.9, 'mean', 0.4], until: 5.8 });

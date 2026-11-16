@@ -30,7 +30,7 @@ export const LADLE_MEETS = {
     { do: 'say', who: 'ladle', text: '{muddled}Your grandad? Little Oakley? But he was only just... he dropped his marble down my well, only...\n\nOnly...' },
     { do: 'wait', seconds: 0.8 },
     { do: 'say', who: 'ladle', text: '{sad}Oh. How long has it been, up there?' },
-    { do: 'say', who: 'bramble', text: '{tender}Fifty years, Grandad says. Since everybody left.' },
+    { do: 'say', who: 'bramble', text: '{sad}Fifty years, Grandad says. Since everybody left.' },
     { do: 'say', who: 'ladle', text: '{sad}Fifty. And me down here all the while, keeping the water sweet for them. Nobody came down to say.' },
     { do: 'wait', seconds: 0.6 },
     { do: 'say', who: 'ladle', text: '{tender}Well. It\'s sweet, anyway. If anybody wants it.' },

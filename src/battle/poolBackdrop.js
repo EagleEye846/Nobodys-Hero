@@ -1,6 +1,6 @@
 import { SCREEN_WIDTH as W } from '../config.js';
 
-// The Glass Pool: where Pudding the Glass Olm is fought (`backdrop:
+// The Glass Pool: where the Pale Olm is fought (`backdrop:
 // 'glass_pool'` in src/data/enemies/pudding.js; registered in backdrops.js).
 // The bottom of the glassy shaft under Seam Nine: a cavern where something
 // very hot came through once and fused the rock to green-black glass. Sheets

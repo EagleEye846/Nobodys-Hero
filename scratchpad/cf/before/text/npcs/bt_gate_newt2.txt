@@ -1,0 +1,41 @@
+# BT_GATE_NEWT2: The other newt guard at the gate. Quieter than the first, and quite sure he is the sensible one.
+
+[first]
+Don't mind my colleague. He thinks 'guard' means 'greet'. I know the job is to guard. I just haven't been told what from.
+
+[repeat]
+Nothing's attacked the gate in three hundred years. I take my work very seriously.
+
+[first after the_kings_welcome]
+Going down, then. Come back in one piece, eh? The paperwork for two pieces is a nightmare.
+
+[repeat after the_kings_welcome]
+If you see anything sinister down there, do tell me. I'd like something to guard against.
+
+[first after the_light_goes_up]
+Well done. Officially. Unofficially, that was a bit of a lark.
+
+[repeat after the_light_goes_up]
+The gate is open. All of it. The lock fell off in the excitement.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I've drawn up a list of everything the gate might be attacked by. It's one page. The page says "weather?"
+
+# (draft)
+[repeat 3]
+My colleague says I worry. Somebody ought to. Three hundred quiet years is exactly when you want somebody worrying.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Officially the Deep stops at the lake. Unofficially, nobody's been down to check. That's the trouble with officially.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've written "light: back" in the gate book. Under TROUBLE, for now. I'll rule a new column.
+
+# (draft)
+[repeat_ves 2 after the_light_goes_up]
+{bored}Put us under trouble too. {smile}We'll be in good company.

@@ -17,6 +17,7 @@
 //   #  hedgerow (solid)   W  hedgerow face (solid)   ,  meadow   :  dirt lane / sand
 //   _  open air: the view over the edge shows through (the cliff drawn under the meadow)
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_SEA_VIEW = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_sea_view',
@@ -91,24 +92,28 @@ export const SUNNY_SEA_VIEW = {
     { sprite: 'bench', x: 15, y: 11, text: 'sea_bench' },
     { sprite: 'sign', x: 21, y: 8, text: 'sea_sign' },
     { sprite: 'savepoint', x: 15, y: 8, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 16, y: 8, travel: 'sea_view', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'c5_bunting_post', x: 23, y: 13, text: 'sea_bunting_post', animation: 'c5_bunting_post', speed: 0.4 },
     { sprite: 'c5_bunting_post', x: 26, y: 13, text: 'sea_bunting_post', animation: 'c5_bunting_post', speed: 0.45 },
     { sprite: 'gold_pouch', x: 27, y: 4, text: 'sea_pouch', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'sy_windsock', x: 18, y: 6, text: 'cliff_windsock', animation: 'sy_windsock', speed: 0.3 },
-    { sprite: 'sy_sand_patch', x: 10, y: 5, walkable: true },
-    { sprite: 'sy_sand_patch', x: 18, y: 11, walkable: true },
-    { sprite: 'sy_sand_patch', x: 7, y: 12, walkable: true },
-    { sprite: 'sy_dune_grass', x: 8, y: 4, animation: 'sy_dune_grass', speed: 0.33, walkable: true },
-    { sprite: 'sy_dune_grass', x: 14, y: 3, animation: 'sy_dune_grass', speed: 0.43000000000000005, walkable: true },
-    { sprite: 'sy_dune_grass', x: 19, y: 11, animation: 'sy_dune_grass', speed: 0.48000000000000004, walkable: true },
-    { sprite: 'sy_dune_grass', x: 22, y: 6, animation: 'sy_dune_grass', speed: 0.43000000000000005, walkable: true },
-    { sprite: 'sy_dune_grass', x: 4, y: 10, animation: 'sy_dune_grass', speed: 0.33, walkable: true },
-    { sprite: 'sy_dune_grass', x: 26, y: 10, animation: 'sy_dune_grass', speed: 0.43000000000000005, walkable: true },
-    { sprite: 'sy_dune_grass', x: 11, y: 7, animation: 'sy_dune_grass', speed: 0.48000000000000004, walkable: true },
-    { sprite: 'sy_dune_grass', x: 16, y: 5, animation: 'sy_dune_grass', speed: 0.33, walkable: true },
-    { sprite: 'sy_dune_grass', x: 13, y: 12, animation: 'sy_dune_grass', speed: 0.38, walkable: true },
-    { sprite: 'sy_dune_grass', x: 9, y: 7, animation: 'sy_dune_grass', speed: 0.38, walkable: true },
-    { sprite: 'sy_dune_grass', x: 25, y: 6, animation: 'sy_dune_grass', speed: 0.38, walkable: true },
+    { sprite: 'sy_sand_patch', x: 10, y: 5, walkable: true, decor: true },
+    { sprite: 'sy_sand_patch', x: 18, y: 11, walkable: true, decor: true },
+    { sprite: 'sy_sand_patch', x: 7, y: 12, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 8, y: 4, animation: 'sy_dune_grass', speed: 0.33, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 14, y: 3, animation: 'sy_dune_grass', speed: 0.43000000000000005, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 19, y: 11, animation: 'sy_dune_grass', speed: 0.48000000000000004, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 22, y: 6, animation: 'sy_dune_grass', speed: 0.43000000000000005, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 4, y: 10, animation: 'sy_dune_grass', speed: 0.33, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 26, y: 10, animation: 'sy_dune_grass', speed: 0.43000000000000005, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 11, y: 7, animation: 'sy_dune_grass', speed: 0.48000000000000004, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 16, y: 5, animation: 'sy_dune_grass', speed: 0.33, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 13, y: 12, animation: 'sy_dune_grass', speed: 0.38, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 9, y: 7, animation: 'sy_dune_grass', speed: 0.38, walkable: true, decor: true },
+    { sprite: 'sy_dune_grass', x: 25, y: 6, animation: 'sy_dune_grass', speed: 0.38, walkable: true, decor: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_sea_view ?? []),
   ],
   tileTexts: { '#': 'field_hedge', W: 'field_hedge', _: 'sea_edge' },
 

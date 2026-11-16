@@ -1,0 +1,378 @@
+# The collectible sets (src/data/collections.js): tally tokens (chapter 4), sea glass (chapter 5)
+# and pressed flowers (chapter 6).
+# [<id>] is what you find (the name of the piece and "n of N" are added after it); [<id>_ves] and
+# [<id>_bramble] are what the friend says, when they're with you. [<set>_done] is the end of a
+# whole set, with its own [<set>_done_ves] and [<set>_done_bramble].
+
+# --- Chapter 4: tally tokens. The miners hung one on a board going down, and took it off coming up. ---
+
+[tally_pick]
+A little brass token lies in the dust. A pick is stamped on it.
+
+[tally_pick_ves]
+Miners hung one on the board going down and took it back coming up. Fair system. Mostly.
+
+[tally_lamp]
+A little brass token, kicked into the corner. A lamp is stamped on it.
+
+[tally_lamp_ves]
+Somebody lost their lamp token. I bet they minded the walk back more than the token.
+
+[tally_cart]
+A little brass token, up on the ledge. A cart is stamped on it.
+
+[tally_cart_ves]
+Up here? Either somebody hid it, or somebody had very bad luck and very good knees.
+
+[tally_canary]
+A little brass token with a tiny bird on it, half under a stone.
+
+[tally_canary_ves]
+A token for the canary. They counted the bird. I respect that.
+
+[tally_candle]
+A little brass token, tucked in under the crystals. A candle is stamped on it.
+
+[tally_candle_ves]
+Everything in here sparkles, and this is the one thing I'd actually keep.
+
+[tally_rope]
+A little brass token in the corner. A coil of rope is stamped on it.
+
+[tally_rope_ves]
+Picks, lamps, ropes. Whoever made these had a short list of things to worry about.
+
+[tally_bucket]
+A little brass token wedged between two stones. A bucket is stamped on it.
+
+[tally_bucket_ves]
+A bucket, on a lake shore. I assume somebody is still bailing.
+
+[tally_hammer]
+A little brass token in the dust of the passage. A hammer is stamped on it.
+
+[tally_hammer_ves]
+Dropped on the way out of town. Whoever it was never came back for it. Neither would I.
+
+[tally_boot]
+A little brass token at the very end of the crawl. A boot is stamped on it.
+
+[tally_boot_ves]
+A boot token. Down here. I'd have gone home by now. Possibly sooner.
+
+[tally_whistle]
+A little brass token behind the old bedroll. A whistle is stamped on it.
+
+[tally_whistle_ves]
+A whistle. So somebody knew when to stop. I like them already.
+
+[tally_done]
+That's all ten. You thread them on a bootlace, and they chink together.
+
+You got a TOKEN STRING, from the dust under the last one.
+
+[tally_done_ves]
+Ten tokens, ten shifts. Hang them up properly and nobody's missing from the board.
+
+# --- Chapter 5: sea glass. ---
+
+[glass_green]
+A smooth green chip of glass, rubbed soft by the sea.
+
+[glass_green_bramble]
+Look! It's like a boiled sweet! Can I keep it? Can we keep it?
+
+[glass_blue]
+A smooth blue chip of glass in the sand.
+
+[glass_blue_ves]
+Blue is the rarer one. Don't ask me how I know. I just do.
+
+[glass_white]
+A smooth white chip of glass, tucked by a pool.
+
+[glass_white_bramble]
+It was a bottle once! Do you think there was a message in it?
+
+[glass_amber]
+A smooth amber chip of glass in the sand.
+
+[glass_amber_ves]
+Somebody's ale bottle, a long time ago. Now it's art.
+
+[glass_brown]
+A smooth brown chip of glass by the slip.
+
+[glass_brown_bramble]
+Brown glass looks like toffee. I'm not going to lick it. ...Ves is looking at me.
+
+[glass_frosted]
+A pale, frosted chip of glass in the corner of the quay.
+
+[glass_frosted_ves]
+The sea does that. Years of it. I haven't the patience, so I'm impressed.
+
+[glass_lilac]
+A smooth lilac chip of glass at the edge of the water.
+
+[glass_lilac_bramble]
+Purple! Do they make purple bottles? Who drinks out of those?
+
+[glass_pink]
+A smooth pink chip of glass, lying in the shallows.
+
+[glass_pink_ves]
+Pink, in a flooded well. Of course it is. I'll take it.
+
+[glass_black]
+A smooth black chip of glass in the tussock.
+
+[glass_black_bramble]
+It's a bit of night! Somebody cut a bit of night out and the sea rubbed it smooth!
+
+[glass_red]
+A small red chip of glass at the edge of the rock.
+
+[glass_red_ves]
+Red. The rarest, apparently. At the very end of everything, naturally.
+
+[glass_done]
+That's all ten. You line them up in your hand and the light goes through every one.
+
+You got a JAR OF SEA GLASS, and 100 gold from the bottom of your pocket where it had gone missing.
+
+[glass_done_bramble]
+It throws colours on the wall! All ten! Can the jar sit by my bed? Please?
+
+[glass_done_ves]
+Ten colours out of one beach. The sea is better at this than I am.
+
+# --- Chapter 6: pressed flowers. ---
+
+[flower_marigold]
+A scrap of card with a flat, dry marigold pressed to it, still orange.
+
+[flower_marigold_ves]
+Somebody pressed it in a book and the fire missed the page. I'd like to meet the book.
+
+[flower_cornflower]
+A scrap of card with a pressed cornflower on it, still blue.
+
+[flower_cornflower_bramble]
+It's still BLUE! Everything else is grey and this one stayed blue!
+
+[flower_poppy]
+A scrap of card with a pressed poppy on it, still red.
+
+[flower_poppy_ves]
+Poppy. Red as the rags on the cairns. Whoever pressed it meant it to last.
+
+[flower_violet]
+A scrap of card with a pressed violet on it, in the burnt orchard.
+
+[flower_violet_bramble]
+A violet! In the orchard! I'm not crying. That's the ash.
+
+[flower_harebell]
+A scrap of card with a pressed harebell on it, on the bare sea floor.
+
+[flower_harebell_ves]
+They grow on cliffs. Somebody carried this a long way to press it.
+
+[flower_foxglove]
+A scrap of card with a pressed foxglove on it.
+
+[flower_foxglove_ves]
+Foxglove. Pretty and poisonous. I do know some people like that.
+
+[flower_clover]
+A scrap of card with a pressed clover on it.
+
+[flower_clover_bramble]
+Is it a lucky one? It looks like a lucky one. Four leaves? ...No. Still nice.
+
+[flower_heather]
+A scrap of card with a pressed sprig of heather on it.
+
+[flower_heather_ves]
+Heather. Purple, on a grey road. I was almost getting used to the grey.
+
+[flowers_done]
+That's all eight. You slip them between the pages of a little book, and they stay.
+
+You got a BOOK OF FLOWERS, and 110 gold from the back of the book where somebody had hidden it.
+
+[flowers_done_bramble]
+Eight flowers that the fire missed. We should show Hearth.
+
+[flowers_done_ves]
+They survived all that. The least we can do is not crush them.
+
+# --- Chapters 1 to 3 (added in the second life pass). ---
+# Chapter 1 has no companions: plain words only. Chapter 2: Ves answers. Chapter 3: Bramble answers (Ves
+# only where she is along, with her crutch and no umbrella).
+
+# --- Chapter 1: welcome charms. Clay charms the village hung on its doors for a Hero who never came. ---
+
+[charm_sun]
+A little clay charm lies in the dust. A sun is pressed into it. The hole at the top says it once hung by a door.
+
+[charm_moon]
+A little clay charm, tucked against the wall. A crescent moon is pressed into it.
+
+[charm_star]
+A little clay charm, half under a flower bed. A star is pressed into it.
+
+[charm_leaf]
+A little clay charm in the corner. A leaf is pressed into it, veins and all.
+
+[charm_key]
+A little clay charm in a quiet corner. A key is pressed into it. Somebody wanted the Hero to feel welcome inside.
+
+[charm_bell]
+A little clay charm behind the furniture. A bell is pressed into it, and the clay is thumbprinted all round the edge.
+
+[charm_flame]
+A little clay charm by the wall. A flame is pressed into it. The glaze has gone smoky.
+
+[charm_feather]
+A little clay charm at the end of the room. A feather is pressed into it.
+
+[charms_done]
+That's all eight. You thread them on a cord, in the order of a day: sun, moon, star, and on.
+
+You got a CHARM CORD, and 60 gold. It was knotted in the end of the cord.
+
+# --- Chapter 2: climbers' pins. Enamel pins from the people who tried the mountain before. Ves answers. ---
+
+[pin_rope]
+A little enamel pin in the snow. A coil of rope is on it, and a pin-back still bright under the dust.
+
+[pin_rope_ves]
+Climbers pinned these on for luck. I'd say this one ran out about here.
+
+[pin_axe]
+A little enamel pin, out of the wind. An ice axe is on it.
+
+[pin_axe_ves]
+Somebody's lucky axe pin. I hope the axe was luckier.
+
+[pin_goat]
+A little enamel pin at the edge of the shelf. A mountain goat is on it.
+
+[pin_goat_ves]
+The goat looks very sure of itself. That seems about right for goats.
+
+[pin_lamp]
+A little enamel pin tucked into a corner of the gardens. A lamp is on it.
+
+[pin_lamp_ves]
+A lamplighter's pin. Somebody was proud of that job.
+
+[pin_bell]
+A little enamel pin behind the boulder. A bell is on it.
+
+[pin_bell_ves]
+Out of the wind, off the path. Whoever lost this wasn't looking.
+
+[pin_kettle]
+A little enamel pin by the gate. A kettle is on it.
+
+[pin_kettle_ves]
+A kettle. Their one wish: hot water. I respect it.
+
+[pin_boot]
+A little enamel pin at the end of the terrace. A boot is on it.
+
+[pin_boot_ves]
+A boot pin. Somebody did a lot of walking. I wish I had a pin for that.
+
+[pin_owl]
+A little enamel pin on the ledge. An owl is on it, in cream on grey.
+
+[pin_owl_ves]
+They gave the owl a very serious face. Fair. It's an owl.
+
+[pin_crow]
+A little enamel pin on the ridge, black and red. A crow is on it.
+
+[pin_crow_ves]
+A crow pin. Of all the birds up here, somebody picked that one.
+
+[pins_done]
+That's all nine. You pin them in a row on a roll of felt, and they sit there looking brave.
+
+You got a PIN ROLL, and 80 gold from a pocket in the felt.
+
+[pins_done_ves]
+Nine climbers. I'd like to say they all got home.
+
+# --- Chapter 3: Hollin marbles. Marbles the woodcutters' children left behind. Bramble answers. ---
+
+[marble_cats_eye]
+A glass marble in the leaves, green-blue with a twist of yellow in it. A cat's eye.
+
+[marble_cats_eye_bramble]
+A cat's eye! Those are the BEST. The yellow bit looks right at you.
+
+[marble_oxblood]
+A glass marble, dark red like old wine, right up in a corner of the wood.
+
+[marble_oxblood_bramble]
+An oxblood! My grandad had one. He said it won him a goat.
+
+[marble_aggie]
+A glass marble at the edge of the lane, amber with a brown streak through it.
+
+[marble_aggie_bramble]
+An aggie! That means it's a real stone one, on the outside. Or the other way round. I forget.
+
+[marble_swirl]
+A glass marble in the corner of the lookout, white with a blue twist.
+
+[marble_swirl_bramble]
+It's like a little frozen storm. Can I look at it a bit longer?
+
+[marble_clearie]
+A clear glass marble in the leaves. The light goes straight through it.
+
+[marble_clearie_bramble]
+A clearie! You can see the whole wood upside down in it. Look!
+
+[marble_galaxy]
+A glass marble, nearly black, with a purple twist and tiny specks in it.
+
+[marble_galaxy_bramble]
+It's got STARS in it. Somebody lost a sky out here.
+
+[marble_tiger]
+A glass marble in a patch of dry leaf, gold with dark stripes.
+
+[marble_tiger_bramble]
+A tiger! Rrrr. Sorry. It's what you do.
+
+[marble_peewee]
+A very small green marble, by the water.
+
+[marble_peewee_bramble]
+A peewee. The smallest. They always win by being too small to hit.
+
+[marble_steelie]
+A heavy grey marble in the reeds. It's iron, not glass.
+
+[marble_steelie_bramble]
+A steelie! It's cheating. It's the best kind of cheating.
+
+[marble_corkscrew]
+A glass marble on the ground by the square's far corner, white with a red twist like a barber's pole.
+
+[marble_corkscrew_ves]
+A corkscrew. Small, round, and it rolled all this way to the quiet end. I know how it feels.
+
+[marbles_done]
+That's all ten. You tip them into a little cloth bag, and they chink like a small laugh.
+
+You got a BAG OF MARBLES, and 30 gold that was knotted into the drawstring.
+
+[marbles_done_bramble]
+Ten marbles! We could have a TOURNAMENT. You'd lose. Sorry. I'd teach you.

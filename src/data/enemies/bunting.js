@@ -22,21 +22,23 @@ export const BUNTING = {
   anim: BUNTING_ANIM,
   // Sunnyside's own battle song.
   music: 'sunnyBattle',
-  maxHp: 1220,
+  maxHp: 2800,
   damage: 35,
 
   difficulty: { density: 1.2, speed: 1.25 },
   // Chapter 5's Sunnyside (`later`, see enemyForChapter in battleScene.js): the
-  // same monster, met again at the coast's strength, a fight of several rounds.
-  later: { 5: { maxHp: 8500, damage: 53, difficulty: { density: 1.35, speed: 1.35 }, encore: { at: 0.85, seconds: 4.5, density: 0.8 }, secondWind: { below: 0.4, density: 0.3, delay: 1.6 }, drops: [{ item: 'fete_sponge', chance: 0.4 }] } },
+  // same monster, met again at the coast's strength, three or four hits.
+  later: { 5: { maxHp: 5800, damage: 53, difficulty: { density: 1.35, speed: 1.35 }, encore: { at: 0.85, seconds: 4.5, density: 0.8 }, secondWind: { below: 0.4, density: 0.3, delay: 1.6 }, drops: [{ item: 'fete_sponge', chance: 0.4 }] } },
 
   // Its attacks live in src/battle/attacks/bunting.js.
   patterns: [
-    { name: 'buntFlags', weight: 3 },
+    // (The cake and the chairs each leave you one safe place, so neither is
+    // ever laid on top of another attack.)
+    { name: 'buntCake', weight: 3, layer: false },
     { name: 'buntPop', weight: 2 },
     { name: 'buntBalloons', weight: 2 },
     { name: 'buntStreamers', weight: 2 },
-    { name: 'buntChirp', weight: 2 },
+    { name: 'buntChairs', weight: 3, layer: false },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

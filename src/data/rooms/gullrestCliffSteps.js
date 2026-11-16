@@ -95,7 +95,7 @@ export const GULLREST_CLIFF_STEPS = {
     { sprite: 'sy_dune_grass', x: 11, y: 16, text: 'steps_dune', animation: 'sy_dune_grass', speed: 0.4, walkable: true },
     { sprite: 'c5_crates_stack', x: 4, y: 17, text: 'cove_crates' },
     { sprite: 'c5_lantern_post_unlit', x: 13, y: 13 },
-    { sprite: 'c5_rope_coil', x: 13, y: 19, walkable: true },
+    { sprite: 'c5_rope_coil', x: 13, y: 19, walkable: true, decor: true },
     { sprite: 'c5_rowboat', x: 13, y: 28, text: 'beach_rowboat' },
     { sprite: 'c5_anchor', x: 3, y: 29, text: 'beach_anchor' },
     { sprite: 'c5_crab_trail', x: 5, y: 27, flat: true, walkable: true },
@@ -118,6 +118,12 @@ export const GULLREST_CLIFF_STEPS = {
     { sprite: 'c5_marram', x: 18, y: 19, flat: true, walkable: true },
     { sprite: 'c5_sea_holly', x: 17, y: 15, flat: true, walkable: true },
     { sprite: 'c5_wrack_line', x: 1, y: 28, flat: true, walkable: true },
+    // (life pass 2026-11-14)
+    // The cliff steps: tubs and a board of numbers at the top, drying fish and a bucket at the foot.
+    { sprite: 'st_price_board', x: 14, y: 4, text: 'life_s_steps' },
+    { sprite: 'st_boot_planter', x: 5, y: 3, text: 'life_s_boot' },
+    { sprite: 'st_flower_tub', x: 6, y: 5, text: 'life_s_tub' },
+    { sprite: 'st_fish_rack', x: 15, y: 26, text: 'life_s_rack' },
   ],
   tileTexts: { '#': 'steps_rock', W: 'steps_rock', '~': 'steps_sea', f: 'steps_rail' },
 

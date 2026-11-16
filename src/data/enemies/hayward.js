@@ -16,7 +16,7 @@ export const HAYWARD = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: HAYWARD_SPRITE, palette: HAYWARD_PALETTE },
-  maxHp: 585,
+  maxHp: 2450,
   damage: 20,
 
   // A Chapter 3 enemy from the far end of the wood: a touch busier than the
@@ -25,11 +25,10 @@ export const HAYWARD = {
 
   // Its attacks live in src/battle/attacks/hayward.js.
   patterns: [
-    { name: 'haywardCrows', weight: 3 },
     { name: 'haywardHat', weight: 3 },
-    { name: 'haywardStraw', weight: 2 },
-    { name: 'haywardHug', weight: 2 },
     { name: 'haywardSeeds', weight: 2 },
+    { name: 'haywardScare', weight: 3 },
+    { name: 'haywardStitch', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

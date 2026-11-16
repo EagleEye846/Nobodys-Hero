@@ -11,6 +11,7 @@
 //   N  buttercup meadow (the hay stubble)   O  round hay bale (solid)
 //   I  oak   T  apple tree   J  blossom tree (solid, standing)
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_HAYFIELDS = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_hayfields',
@@ -75,12 +76,12 @@ export const SUNNY_HAYFIELDS = {
     { sprite: 'gold_pouch', x: 2, y: 16, text: 'hay_pouch', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 38, y: 3, text: 'hay_chest', gives: 'oilskin_coat', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'bench', x: 24, y: 12, text: 'hay_bench' },
-    { sprite: 'daisy_patch', x: 21, y: 8, walkable: true },
-    { sprite: 'daisy_patch', x: 9, y: 16, walkable: true },
-    { sprite: 'daisy_patch', x: 31, y: 11, walkable: true },
-    { sprite: 'buttercups', x: 16, y: 2, walkable: true },
-    { sprite: 'buttercups', x: 26, y: 15, walkable: true },
-    { sprite: 'buttercups', x: 5, y: 9, walkable: true },
+    { sprite: 'daisy_patch', x: 21, y: 8, walkable: true, decor: true },
+    { sprite: 'daisy_patch', x: 9, y: 16, walkable: true, decor: true },
+    { sprite: 'daisy_patch', x: 31, y: 11, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 16, y: 2, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 26, y: 15, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 5, y: 9, walkable: true, decor: true },
     { sprite: 'sy_seed_heads', x: 3, y: 3, animation: 'sy_seed_heads', speed: 1.3 },
     { sprite: 'sy_seed_heads', x: 10, y: 5, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 15, y: 6, animation: 'sy_seed_heads', speed: 1.0 },
@@ -93,16 +94,18 @@ export const SUNNY_HAYFIELDS = {
     { sprite: 'sy_seed_heads', x: 22, y: 3, animation: 'sy_seed_heads', speed: 1.1 },
     { sprite: 'sy_seed_heads', x: 38, y: 15, animation: 'sy_seed_heads', speed: 1.0 },
     { sprite: 'sy_seed_heads', x: 8, y: 17, animation: 'sy_seed_heads', speed: 1.2000000000000002 },
-    { sprite: 'sy_seed_drift', x: 7, y: 4, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 13, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 18, y: 7, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 26, y: 11, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 32, y: 13, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 36, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 10, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 23, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'butterflies', x: 20, y: 11, animation: 'butterflies', speed: 0.2, walkable: true },
-    { sprite: 'butterflies', x: 34, y: 4, animation: 'butterflies', speed: 0.2, walkable: true },
+    { sprite: 'sy_seed_drift', x: 7, y: 4, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 13, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 18, y: 7, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 26, y: 11, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 32, y: 13, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 36, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 10, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 23, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'butterflies', x: 20, y: 11, animation: 'butterflies', speed: 0.2, walkable: true, decor: true },
+    { sprite: 'butterflies', x: 34, y: 4, animation: 'butterflies', speed: 0.2, walkable: true, decor: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_hayfields ?? []),
   ],
   tileTexts: { '#': 'field_hedge', W: 'field_hedge', I: 'field_oak', T: 'field_apple', J: 'field_blossom', O: 'hay_bales' },
 

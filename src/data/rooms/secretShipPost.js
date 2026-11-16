@@ -8,6 +8,8 @@ export const SECRET_SHIP_POST = {
   id: 'secret_ship_post',
   name: 'THE PURSER\'S LOCKER',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.2,
   music: 'ghostShip',
   ambience: 'ghost_ship',
   vesWell: true,

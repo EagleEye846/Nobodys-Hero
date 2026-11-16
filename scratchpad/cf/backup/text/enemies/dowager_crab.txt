@@ -1,0 +1,178 @@
+# THE DOWAGER CRAB: Wrack Shore's midboss, a huge, very old, very polite
+# hermit crab who lives in a bathtub with a ship's bell on it, and who is
+# angry about trespass in a way that stays exactly correct. She asks for your
+# feet to be wiped. The hero never speaks, so every TALK is something he does.
+# Numbers (HP, damage, her two phases) live in src/data/enemies/dowager_crab.js.
+#
+# A section with ": riled" after its name is used in her second phase (from half
+# her HP) instead of the plain one. [phase: riled] sections are what's said as
+# that phase starts: plain ones in the battle panel, "vesper" ones by Ves in her
+# box, "foe" ones by her in speech bubbles.
+
+# Said in speech bubbles during her entrance, after her title card. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[boss_intro]
+Good
+afternoon.
+
+You have
+walked on
+my beach.
+
+...In
+those.
+
+Do wipe
+your feet.
+
+[intro]
+A crab the size of a cart pulls herself out of a bathtub on the shingle, bell clanging, pearls swinging. DOWAGER CRAB!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+DOWAGER CRAB sets her monocle straight with one claw and looks you up and down.
+
+The bell on her tub gives a small, disapproving ting.
+
+Somewhere inside the bathtub, a tap drips. It is, somehow, also disapproving.
+
+DOWAGER CRAB would like it noted that she was in the middle of her afternoon.
+
+Smells of soap, brine and good silver polish.
+
+[flavor: riled]
+Steam rises off DOWAGER CRAB. It may be the bath. It may not.
+
+Bath water slops over the rim of the tub and down the side. She does not look down.
+
+The bell clangs without anyone touching it.
+
+DOWAGER CRAB is still, technically, being polite. It is costing her.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+DOWAGER CRAB's monocle has fogged. She wipes it with great dignity, for rather longer than it needs.
+
+[flavor: spareable]
+DOWAGER CRAB inclines her head, very slightly. You have been found, on balance, acceptable.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Your feet,
+if you
+please.
+
+I did not
+receive a
+card.
+
+Mind the
+mat.
+
+How very
+forward.
+
+This is a
+private
+bath.
+
+One does
+not simply
+walk in.
+
+I shall
+have to
+insist.
+
+[taunts: riled]
+THE
+IMPUDENCE!
+
+I SAID
+PLEASE!
+
+OUT OF
+MY BATH!
+
+Forty
+years I
+have kept
+this shore.
+
+THERE
+IS A MAT.
+
+...I WAS
+BEING
+KIND.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/dowager_crab.js.
+[talk: Inspect]
+DOWAGER CRAB - HP 7600
+A hermit crab in a bathtub, in pearls. Inspects your feet (stay on the mat), dances a minuet with her claws, and her pearls come back the way they rolled. When she loses patience the bath water comes out too. Manners work on her.
+
+[talk: Wipe your feet]
+You drag one boot across the shingle, then the other, and then both again, slowly, where she can see. DOWAGER CRAB leans out of the tub to check. "Thank you," she says, as if it hurt. The monocle drops a little.
+
+[talk: Admire the tub]
+You walk round the bathtub once and nod at the taps, the blue band, the iron feet. DOWAGER CRAB goes pink under the pearls. "Clawfoot," she says. "Admiralty issue. They don't make the enamel any more."
+
+[talk: Point at the bell]
+You point at the ship's bell on her tub and raise your eyebrows. "That," says DOWAGER CRAB, "is my doorbell. The sea sent it in, one winter. Nobody has used it in years." She seems to be waiting for you to ring it. You don't. She approves.
+
+[talk: Curtsey]
+You bow as low as you can without falling over. DOWAGER CRAB, after a moment, dips the whole tub back at you, and the bell rings once. It is the first time in a long time someone has done it properly.
+
+[talk: Apologise for the sand]
+You hold up one boot and let a little sand trickle out of it onto the shingle. You say sorry with your face. DOWAGER CRAB stares at the sand, and at you. "It is a beach," she says slowly. "Sand is, I suppose, to be expected."
+
+# Said when you try to RUN.
+[no_escape]
+DOWAGER CRAB is standing in the only gap in the rocks, and she does not look as if she moves for anyone.
+
+# What's said as her second phase starts.
+[phase: riled]
+The ship's bell gives a flat, cracked clang. Bath water slops over the rim of the tub and down onto the shingle. DOWAGER CRAB has stopped counting to three.
+
+[phase: riled vesper]
+{determined}She's dropped the "please." That's worse.
+
+[phase: riled foe]
+THAT
+IS A
+MAT.
+
+IT HAS
+BEEN A
+MAT FOR
+FORTY
+YEARS.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+DOWAGER CRAB folds into her tub with a long, offended "Well!". The bell on top gives one short clang, to say it is not sorry either.
+
+[pacified]
+DOWAGER CRAB looks at your feet for a long moment. Then she dips her whole tub to you, and the bell rings a thin, polite note. "You may go through," she says. "Take the bell, dear. It was only ever a doorbell. And do shut the gate."
+
+# Ves's own TALK lines for her ({foe} is her name).
+[vesper_talk]
+Ves takes off her boots, holds them upside down, and shakes them out onto the mat. {foe} says that is not what she meant, but it is a start.
+
+Ves tells {foe} the tub is the finest thing she has seen all week. {foe} says she has seen the week. Ves says it's still the finest.
+
+Ves lowers her umbrella, closes it, and wipes the ferrule on the mat. {foe} watches the whole thing without blinking, and then puts her monocle back in.
+
+[bramble_talk]
+Bramble asks {foe} if she lives in the bath. {foe} says she lives in the bath, the bath is not a bath, it is a residence. Bramble says sorry for the residence.
+
+Bramble hides behind Ves, which is as far as he goes. He peeks round her and asks if the pearls are real. {foe} says they are, and that she thanks him for noticing.
+
+Bramble says his mum has a bath, but it is not nearly as big. {foe} says that is a shame. She offers to lend him the taps.

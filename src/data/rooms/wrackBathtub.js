@@ -120,6 +120,15 @@ export const WRACK_BATHTUB = {
     { sprite: 'c5_rocks_weedy', x: 6, y: 3, text: 'shore_rocks' },
     { sprite: 'c5_rock_weedy', x: 17, y: 3, text: 'shore_rocks' },
     { sprite: 'c5_rocks_weedy', x: 30, y: 3, text: 'shore_rocks' },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_bottle', x: 13, y: 14, text: 'sl_bottle', walkable: true },
+    { sprite: 'c5_net_torn', x: 28, y: 13, text: 'sl_net', flat: true, walkable: true },
+    { sprite: 'c5_buoy_red', x: 19, y: 7, text: 'sl_buoy' },
+    { sprite: 'shore_kelp', x: 27, y: 4, text: 'sl_kelp_a', walkable: true, animation: 'shore_kelp', speed: 0.45 },
+    { sprite: 'shore_nest', x: 8, y: 5, text: 'sl_nest', walkable: true },
+    { sprite: 'shore_boot', x: 13, y: 4, text: 'sl_boot', walkable: true },
+    { sprite: 'shore_starfish', x: 30, y: 14, text: 'sl_star_a', flat: true, walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', '~': 'landing_sea', x: 'landing_rock', O: 'landing_rock', F: 'landing_weed' },
 

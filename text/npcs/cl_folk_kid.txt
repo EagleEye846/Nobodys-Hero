@@ -1,0 +1,15 @@
+# DILLY, a very small marmot with a broken stick horse. Part of the life pass, round 2. (draft)
+
+[first]
+A very small marmot sitting in the grass beside a headless stick horse, wearing the expression of someone who has not done anything.
+
+I didn't do it. It was like that. It was ALWAYS like that.
+
+[repeat]
+He's not broken. He's... shorter now. He likes it.
+
+[first after bramble_goes_home]
+Is your friend with the hatchet coming back? He said he could split anything. I'd like him to see my horse. I think he'd say it was a very good horse.
+
+[repeat after bramble_goes_home]
+Gallop would like to meet a hatchet. As a friend.

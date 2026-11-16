@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE COLD BROOK: a brook off the mountain cuts the wood in two, and the
 // lower bank has no way over. The only bridge is up on a shelf of rock:
 // throw the rope at the ring, climb, cross, and rope down the far side.
@@ -67,6 +69,7 @@ export const PINEFALL_BROOK = {
     { sprite: 'grapple_ring', x: 6, y: 6, grapple: true },
     { sprite: 'grapple_ring', x: 22, y: 6, grapple: true },
     { sprite: 'sign', x: 8, y: 12, text: 'brook_sign' },
+    ...(R3P_PROPS['pinefall_brook'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', '~': 'brook_water', M: 'brook_cliff', g: 'brook_bridge' },
 

@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE BELL TOWER: the bell every climber hears ring once, far above. Dunstan
 // rings it every dawn, for the Hero, so they'll know the way, and has never
 // once rung it after dark. The bell hangs on a platform of old stone; jump up
@@ -6,6 +7,7 @@
 //   #  wall top (solid)                           h  papered wall with wood panelling (solid)
 //   B  tall stone block (jump onto it from a low block)o  wooden floorboards
 //   b  low stone block (jump up onto it)          D  doorway (walk through it; see `doors`)
+import { R3A_PROPS } from '../r3aLife.js';
 export const REST_BELLTOWER = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'rest_belltower',
@@ -74,6 +76,10 @@ export const REST_BELLTOWER = {
     { sprite: 'crates', x: 10, y: 18, text: 'tower_crates' },
     { sprite: 'book_stand', x: 1, y: 13, text: 'tower_log', notice: true },
     { sprite: 'street_lamp', x: 9, y: 15, text: 'tower_lamp' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_belltower'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['rest_belltower'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -1,0 +1,8 @@
+# HADDOCK (at the bathing lagoon, saltcombe_lagoon), between the scenes haddock_hums and
+# swimming_lesson (the lesson plays as you come in, so this is a spare).
+
+[first]
+{proud}In ye come, lad. Water's lovely.
+
+[repeat]
+{eh}Eh? Lovely, I said.

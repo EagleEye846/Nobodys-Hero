@@ -1,0 +1,26 @@
+# THE EMPTY CHAIR (Chapter 5, the life pass): a breaker's chair on the Wreck Yard's Hull (wreck_hull), with a note pinned to the blanket. Duncan's clay pipe is in a corner of the Bilge Pumps (wreck_pumps). (draft)
+
+[first]
+An empty chair, with a plaid blanket over it and a note pinned to the blanket in capital letters:
+
+BACK IN FIVE MINUTES. - DUNCAN
+
+The paper has gone the colour of tea. Whoever Duncan was, he has been five minutes for a very long time.
+
+[repeat]
+BACK IN FIVE MINUTES. The ink is faded, but the pin is bright, as if somebody changes it.
+
+There's a dent in the seat the exact shape of a man who has just stood up.
+
+# Duncan's pipe is in your pack.
+[pipe_done]
+You set the pipe on the arm of the chair, where the wood is worn pale.
+
+Nothing happens. The wind drops, just for a moment, as if it were holding its breath.
+
+Under the note, in fresh yellow chalk, a new line has appeared: THANKS. HAD IT ALL ALONG. BACK IN FIVE.
+
+There is a stub of chalk on the seat. It wasn't there before.
+
+[pipe_after]
+BACK IN FIVE MINUTES. The pipe is on the arm of the chair, and the blanket is, very slightly, warm.

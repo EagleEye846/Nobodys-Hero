@@ -11,6 +11,8 @@
 //   #  rock top (solid)   W  rock face (solid)   ,  wind turf   .  rock slabs   :  path
 //   ~  the sea (solid)   x  barnacle rock (solid: the little lights' rocks)
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const ISLES_LANDING = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'isles_landing',
@@ -26,7 +28,7 @@ export const ISLES_LANDING = {
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.5, fog: 0.15 }, ambience: 'calm_sea', lamplight: { shade: 0.32, tint: '30, 40, 64' } },
   vesWell: true,
   // The Last Light, small and black on the skyline out past the lights.
-  lastLight: { x: 31, y: 9 },
+  lastLight: { x: 31, y: 9, scale: 1.25 },
 
   // The wrecks' silhouettes on the sea keep this many tiles clear of any shore
   // (src/overworld/atmosphere.js, buildSkyline).
@@ -92,39 +94,24 @@ export const ISLES_LANDING = {
     // in the rock, gulls, a cairn on the headland, an old boat broken in half, a rope on stakes, rocks
     // in the sea. Nothing solid on the path below the cave (the scene walks rows 3-8, x 4-10) or the path.
     { sprite: 'il_cairn', x: 2, y: 6, text: 'isle_cairn' },
-    { sprite: 'il_thrift', x: 3, y: 4, walkable: true },
-    { sprite: 'il_grass_tuft', x: 1, y: 10, walkable: true },
-    { sprite: 'il_thrift', x: 4, y: 9, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 11, y: 4, walkable: true },
-    { sprite: 'il_lichen', x: 12, y: 5, flat: true, walkable: true },
-    { sprite: 'il_lichen', x: 15, y: 6, flat: true, walkable: true },
+    { sprite: 'il_thrift', x: 3, y: 4, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft_b', x: 11, y: 4, walkable: true, decor: true },
     { sprite: 'il_tidepool', x: 14, y: 7, flat: true, walkable: true },
-    { sprite: 'il_thrift', x: 17, y: 9, walkable: true },
-    { sprite: 'il_gull', x: 19, y: 9, walkable: true },
-    { sprite: 'il_grass_tuft', x: 12, y: 8, walkable: true },
-    { sprite: 'il_drift_timber', x: 8, y: 11, flat: true, walkable: true },
-    { sprite: 'il_thrift', x: 5, y: 12, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 7, y: 13, walkable: true },
+    { sprite: 'il_grass_tuft', x: 12, y: 8, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft_b', x: 7, y: 13, walkable: true, decor: true },
     { sprite: 'il_rowboat_half', x: 6, y: 14, text: 'isle_rowboat_half' },
     { sprite: 'il_stakes_rope', x: 13, y: 15, text: 'isle_stakes' },
-    { sprite: 'il_grass_tuft', x: 10, y: 14, walkable: true },
-    { sprite: 'il_thrift', x: 16, y: 13, walkable: true },
     { sprite: 'il_pot_broken', x: 20, y: 15, text: 'isle_pot_broken' },
-    { sprite: 'il_grass_tuft_b', x: 22, y: 14, walkable: true },
-    { sprite: 'il_thrift', x: 27, y: 14, walkable: true },
-    { sprite: 'il_grass_tuft', x: 23, y: 11, walkable: true },
+    { sprite: 'il_grass_tuft_b', x: 22, y: 14, walkable: true, decor: true },
     { sprite: 'c5_lantern_hook', x: 25, y: 11 },
     { sprite: 'il_rocks', x: 3, y: 11, text: 'isle_rocks' },
-    { sprite: 'il_thrift', x: 4, y: 11, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 2, y: 12, walkable: true },
-    { sprite: 'il_tidepool_small', x: 9, y: 9, flat: true, walkable: true },
-    { sprite: 'il_grass_tuft', x: 10, y: 10, walkable: true },
-    { sprite: 'il_lichen', x: 18, y: 7, flat: true, walkable: true },
-    { sprite: 'il_gull', x: 8, y: 13, walkable: true },
+    { sprite: 'il_thrift', x: 4, y: 11, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 10, y: 10, walkable: true, decor: true },
     { sprite: 'il_gull_rock', x: 20, y: 6, text: 'isle_gull_rock' },
     { sprite: 'il_rocks_big', x: 2, y: 13, text: 'isle_rocks' },
     { sprite: 'il_rocks', x: 11, y: 16, text: 'isle_rocks' },
     { sprite: 'il_rocks', x: 22, y: 3, text: 'isle_rocks' },
+    ...(LIFE5_PROPS['isles_landing'] ?? []),
   ],
   tileTexts: { '#': 'isles_rock', W: 'isles_rock', '~': 'isles_sea', x: 'isles_light_rock' },
 

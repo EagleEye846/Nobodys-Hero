@@ -22,6 +22,8 @@
 //   #  dark rock overhead (solid)   W  rock face (solid)   O  boulder (solid)
 //   x  glassy crystal (solid)       q  loose gravel        ^  stalagmite (solid)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_STAR_SIDING = {
   id: 'diggings_star_siding',
   name: 'THE SIDING',
@@ -83,6 +85,7 @@ export const DIGGINGS_STAR_SIDING = {
 
   textFile: 'interactions/star_seam.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_star_siding ?? []),
     // A save point by the way in, for the long middle of the detour.
     { sprite: 'savepoint', x: 2, y: 12, save: true },
     // The cart, and the lever for the fork (a lever beside the junction, never on a rail).

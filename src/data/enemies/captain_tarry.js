@@ -75,7 +75,7 @@ export const CAPTAIN_TARRY = {
   beatenSprite: { rows: CAPTAIN_TARRY_DEATH_LAST, palette: CAPTAIN_TARRY_PALETTE },
   boss: true,
   gentle: true,
-  // "Still Under Way" (src/data/music/ghostCaptainBattleTheme.js): his march breaking down into the crew's shanty.
+  // "One More Tide" (src/data/music/ghostCaptainBattleTheme.js): his bugle-call march, the crew's shanty, and a hymn.
   music: 'ghostCaptainBattle',
   // The captain's cabin: the stern windows, the chart table, a deck that creaks (coastBackdrops.js).
   backdrop: 'ghostship_cabin',
@@ -91,7 +91,7 @@ export const CAPTAIN_TARRY = {
   encore: { at: 0.85, seconds: 5, density: 0.65 },
   // He rises out of the fog on the cabin floor, still giving the order he was in the middle of.
   entrance: 'rise',
-  introCard: { title: 'CAPTAIN TARRY', subtitle: 'Still Under Way' },
+  introCard: { title: 'CAPTAIN TARRY', subtitle: 'One More Tide' },
 
   phases: [
     {
@@ -160,7 +160,7 @@ export const CAPTAIN_TARRY = {
   ],
   lullCalm: 12,
 
-  // A little more than Old Gulper (13,000 / 70 coins): he is the longer, sadder fight, and the
-  // chapter's second midboss. A level there costs about 28,000-30,000.
-  rewards: { exp: 14500, coins: 80 },
+  // About one level when you meet him (a level there costs about 14,000-17,000 since the
+  // 12 November curve): the chapter's second midboss, the longer, sadder fight.
+  rewards: { exp: 15500, coins: 80 },
 };

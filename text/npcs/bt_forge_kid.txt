@@ -1,0 +1,27 @@
+# BT_FORGE_KID: A frog kid who comes to the forge every day to watch Hobnail hammer, because it's the warmest seat in town.
+
+[first]
+Shh. He's about to hit it. ...He hit it. Did you see? I love when he does that.
+
+[repeat]
+I'm learning. I've learned that you hit it hard, and then you hit it again, and sometimes you shout.
+
+[first after the_kings_welcome]
+Hobnail says the Diggings are not for kids. I said I'm not a kid, I'm a frog. He said "that's worse".
+
+[repeat after the_kings_welcome]
+He's made me a tiny hammer. It doesn't do anything. It's the best thing I own.
+
+[first after the_light_goes_up]
+The fire's the same as it ever was, but it looks proud. Is that daft? It looks proud.
+
+[repeat after the_light_goes_up]
+I sat so close my eyebrows curled. Hobnail said it suits me.
+
+# (draft)
+[repeat 2]
+When I grow up I'm going to be a smith. Or a king. Or a smith who is also a king.
+
+# (draft)
+[repeat_ves 2]
+{smile}A smith who's also a king. {bored}We've had a king who's also a lot of things. Maybe try it neat.

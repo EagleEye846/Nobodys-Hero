@@ -1,0 +1,22 @@
+# ST_FLOOD_HAULER (the quay's east end, from Merrow's sea gate on): a vole in a brown coat on her way up the hill with something. A
+# walk-through figure of the flood (src/data/floodStages.js). Draft 2026-11-15.
+
+# (draft)
+[first]
+Everything off the low stilts goes up the hill. The Dunlins' piano went yesterday. Nine of us and a plank.
+
+# (draft)
+[repeat]
+If it's on a bottom shelf, it goes. If it's on a top shelf, it goes next week.
+
+# (draft)
+[repeat 2]
+Don't offer to help. I've a system. It's mostly shouting.
+
+# (draft)
+[first after soundings_weight_gate]
+Third time we've moved it. I'm leaving it on the hill this time and going back for the next lot.
+
+# (draft)
+[repeat after soundings_weight_gate]
+Up. Always up. Haddock says the sea's only trying to climb the hill for the view.

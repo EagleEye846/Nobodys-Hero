@@ -273,6 +273,7 @@ const STAB = { ...STACCATO_STRINGS, volume: 0.03 };
 export const MOUNTAIN_BATTLE_THEME = {
   title: 'Updraft',
   bpm: 162,
+  volume: 1.45,
   stepsPerBeat: 4,
 
   instruments: {

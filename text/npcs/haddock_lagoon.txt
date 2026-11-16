@@ -2,7 +2,7 @@
 # swimming_lesson (the lesson plays as you come in, so this is a spare).
 
 [first]
-{proud}In you come, lad. Water's lovely.
+{proud}In ye come, lad. Water's lovely.
 
 [repeat]
 {eh}Eh? Lovely, I said.

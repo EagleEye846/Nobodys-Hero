@@ -3,11 +3,12 @@ import { ORCHESTRA } from './parts/usurper.js';
 import { starFall, starNotes, STAR_LENGTHS } from './parts/starGuardians.js';
 import { SAMPLE_SETS } from '../../audio/sampleSets.js';
 
-// "Present and Correct": the fight with TALLY, the Welcome Register, chapter
+// "Present and Correct": the fight with QUIRE, the Welcome Register, chapter
 // 3's secret star guardian. The old city kept one great ledger of everyone
 // who promised to be present the day the Hero came, and counted it every
-// night. A splinter of the Fallen Star went into its binding, and now it
-// counts by itself, and the sum never comes out. Fussy, fast, over-polite,
+// night. A splinter of the Fallen Star went into its binding, the book wished
+// on it that the count would come out right, and now it counts by itself,
+// and the sum never comes out. Fussy, fast, over-polite,
 // losing its place and starting again from the top. Eerie and funny at once.
 //
 // So the song is a count: a harpsichord (a bright grand piano, two of them
@@ -20,7 +21,7 @@ import { SAMPLE_SETS } from '../../audio/sampleSets.js';
 //
 // THREE TUNES:
 //   THE COUNT (the hook): the dead city's own tune ("What They Built for
-//     Him", valleyTheme.js) opens F# E D C#, falling a step at a time. Tally
+//     Him", valleyTheme.js) opens F# E D C#, falling a step at a time. Quire
 //     counts it in fives, like a tally mark: four strokes (F# E D C#, the
 //     valley's cell) and the fifth cutting across them, a leap up to B (the
 //     stroke through the gate). One tally a 5/8 bar. Then the stroke falls
@@ -49,7 +50,7 @@ import { SAMPLE_SETS } from '../../audio/sampleSets.js';
 // (as Deltarune's secret bosses each take the same tune somewhere of their
 // own). After the count breaks at the end of the Margins, the star is the
 // tune: four notes, never bent out of shape, only moved, sped up, slowed
-// down and counted. In Tally's hands that means a harpsichord, the desk,
+// down and counted. In Quire's hands that means a harpsichord, the desk,
 // and fives: the star cut to a 5/8 bar and answered by itself in 16ths;
 // five stars on the brass across eight bars, against the harpsichord
 // counting one a bar like a tally mark; then the star climbing a step at a
@@ -827,6 +828,13 @@ const shard = (() => {
   s.put('bass', X + 4, hold('C2', 4)).put('braamLow', X + 4, hold('C2', 4));
   s.put('timpani', X + 4, [timpRoot(0)]);
   s.hit('crash', X + 4).hit('impact', X + 4).hit('stamp', X + 4).hit('stampClap', X + 4);
+  // (12 November 2026) the chord's weight: the pads above take a while to
+  // speak, so a stab on top of them speaks at once: brass and voices on C
+  // major, a braam on C and the bass drum, so this is the loudest moment of
+  // the section, not the climb before it
+  s.put('stabTpt', X + 4, hold('E4', 4)).put('stabHorn', X + 4, hold('G3', 4)).put('stabBone', X + 4, hold('C3', 4));
+  s.put('stabVoxLo', X + 4, hold('E4', 4)).put('stabVoxHi', X + 4, hold('G4', 4));
+  s.put('braam', X + 4, hold('C3', 4)).hit('kick', X + 4).hit('taiko', X + 4);
   // and it lands on F#: the dominant, held
   s.put('choirLo', X + 8, hold('A#3', 12)).put('choirMid', X + 8, hold('C#4', 12)).put('choirHi', X + 8, hold('F#4', 12));
   s.put('hornHi', X + 8, hold('C#3', 12)).put('violas', X + 8, hold('A#3', 12)).put('cellos', X + 8, hold('F#2', 12));
@@ -976,6 +984,12 @@ const instruments = {
   hornHi: { ...ORCHESTRA.horns, volume: 0.2, pan: 0.15 },
   trombone: { ...ORCHESTRA.trombones, volume: 0.26 },
   braam: { ...ORCHESTRA.braam, volume: 0.45 },
+  // the stab on the shard's climax chord (fast to speak, where the pads aren't)
+  stabTpt: { ...ORCHESTRA.trumpets, volume: 0.26, attack: 0.01 },
+  stabHorn: { ...ORCHESTRA.horns, volume: 0.26, attack: 0.01, pan: -0.15 },
+  stabBone: { ...ORCHESTRA.trombones, volume: 0.28, attack: 0.01 },
+  stabVoxLo: { sample: 'choir', volume: 0.24, attack: 0.02, release: 0.5, reverb: 0.55, pan: -0.15 },
+  stabVoxHi: { sample: 'choir', volume: 0.24, attack: 0.02, release: 0.5, reverb: 0.55, pan: 0.15 },
   braamLow: { ...ORCHESTRA.braamLow, volume: 0.45 },
   // voices: the roll call's "pre-sent", and the pads
   callVox: { sample: 'choir', volume: 0.32, attack: 0.01, release: 0.12, reverb: 0.5, pan: 0.1, humanize: { time: 0.006, volume: 0.1 } },
@@ -988,8 +1002,9 @@ const instruments = {
   humMid: { sample: 'choir', volume: 0.09, attack: 0.8, release: 1.2, reverb: 0.7, pan: 0.15 },
   humHigh: { sample: 'choir', volume: 0.07, attack: 0.8, release: 1.2, reverb: 0.7 },
   // the desk: typewriter keys, a pencil, the stamp, the bell
-  type: { sample: 'typewriter', volume: 0.2, ring: true, reverb: 0.12, pan: 0.3, humanize: { time: 0.006, volume: 0.3 } },
-  typeBack: { sample: 'typewriter', volume: 0.24, ring: true, reverb: 0.15, pan: 0.3 },
+  // (turned down about 5 dB on 12 November 2026 so it won't grate over a long fight)
+  type: { sample: 'typewriter', volume: 0.11, ring: true, reverb: 0.12, pan: 0.3, humanize: { time: 0.006, volume: 0.3 } },
+  typeBack: { sample: 'typewriter', volume: 0.13, ring: true, reverb: 0.15, pan: 0.3 },
   pen: { sample: 'penScratch', volume: 0.16, ring: true, reverb: 0.15, pan: -0.35, humanize: { time: 0.008, volume: 0.35 } },
   penLine: { sample: 'penScratch', volume: 0.24, ring: true, reverb: 0.3, pan: -0.25 },
   stamp: { ...ORCHESTRA.taiko, volume: 0.4 },

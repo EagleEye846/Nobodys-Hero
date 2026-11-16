@@ -124,6 +124,10 @@ A statue of a hero, carved to greet one. It cannot be talked round. It does its 
 [the_hush]
 Quiet as snow and about as heavy. It has been in the wood a very long time, and the wood has got used to it.
 
+# (draft)
+[tally]
+The Dead City's register of everyone promised for the day the Hero came. A star-splinter woke it. It counts. You were not on the list.
+
 [bunting]
 A round little bird in a string of party flags. Every party it throws is a bit slower than it looks.
 
@@ -153,6 +157,10 @@ A mole with a sack of everything shiny. Pops up wherever you stand. Never quite 
 
 [slagling]
 Furnace leftovers, crusty outside and molten in the middle. Spits sparks when it's nervous, which is always.
+
+# (draft)
+[pudding]
+The miners kept a blind olm in a tin dish. Then it found the star. Now it is huge, glassy and far too still, with their lost things inside it.
 
 [blindfish]
 Pale, eyeless, and rather good at knowing where you are. It can hear you stop, and it takes that personally.
@@ -213,6 +221,12 @@ A scruffy brawler gull with a sack of other people's things. He steals, but he a
 [kelpie_foal]
 A young water-horse, all knees and kelp, practising to be frightening. It's getting there. Pretend, politely, that it already has.
 
+[echo_shrimp]
+A blind cave shrimp with a bat's ears, who sees by clicking. Its rings bounce off the walls and its calls come back a beat later. Answer it softly.
+
+[plumb_lead]
+A sounder's lead on a frayed line, still counting fathoms for a Harbour Board long gone. It swings, rains numbers and hauls. Call it a depth.
+
 [seed_sheep]
 A placid sheep whose fleece is a dandelion clock. It baas, a few seeds float off, and it looks pleased. Scratch it behind the ears.
 
@@ -251,3 +265,26 @@ A moray eel older than Merrow, asleep in the fallen great bell. When he turns ov
 # (draft)
 [corrie]
 A boy in a coat far too big for him, who went out to stop the sea and became the storm. He wanted to be like the Hero. He can't stop now.
+
+# (draft) The Ash Road (chapter 6).
+[ashling]
+A little figure of packed ash with ember eyes, like a snowman nobody built. It crumbles as it goes, and pats itself back together.
+
+[soot_gull]
+A gull gone grey with soot, a long way from the sea and still a thief. Out here it steals embers. It will settle for your lunch.
+
+[charcur]
+A lean stray of charcoal with a smoking tail, keeping the old road. It is waiting for somebody to come back along it. It isn't you. It doesn't mind you.
+
+[milestone]
+An old roadside stone that got up to count the miles to the buried town. It says three. It always says three. It is a long three.
+
+[the_lum]
+The last chimney of a burnt farmhouse at the town gate. The house went; the fire in its hearth never did. Gruff, not wicked. There is one mug on its mantel.
+
+# The Soundings' monsters.
+[blind_crab]
+A huge white cave crab with no eyes, only feelers, that sits like a rock. Its feelers follow the path you just walked. Keep moving.
+
+[tidewight]
+Black water that stands up out of the deep wells at high tide, with old sounders' lamps still lit inside it. Stay above the water.

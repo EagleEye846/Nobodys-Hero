@@ -16,7 +16,7 @@ export const CLINKER = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: CLINKER_SPRITE, palette: CLINKER_PALETTE },
-  maxHp: 760,
+  maxHp: 2500,
   damage: 22,
 
   // A Chapter 3 enemy from under Hollin's well: a step past the Grist.
@@ -25,8 +25,8 @@ export const CLINKER = {
   // Its attacks live in src/battle/attacks/clinker.js.
   patterns: [
     { name: 'clinkerShears', weight: 3 },
-    { name: 'clinkerClang', weight: 3 },
-    { name: 'clinkerRust', weight: 2 },
+    { name: 'clinkerClang', weight: 2 },
+    { name: 'clinkerPeek', weight: 3 },
     { name: 'clinkerBackflip', weight: 2 },
     { name: 'clinkerMugRoll', weight: 2 },
   ],

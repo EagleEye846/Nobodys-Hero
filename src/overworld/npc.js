@@ -2,6 +2,8 @@ import { TILE_SIZE as T } from '../config.js';
 import { makeSprite } from '../engine/sprite.js';
 import { ENEMIES } from '../data/enemies/index.js';
 import { sfx } from '../audio/music.js';
+import { HIDEOUTS, hideoutSprite, drawHideout, burst, updateBits, drawBits } from './hideouts.js';
+import { followTide, drawSurfacing, followNoise } from './monsterHabits.js';
 
 const SPEED = 18; // pixels per second
 const TOUCH_DISTANCE = 16;
@@ -18,13 +20,15 @@ export const BEHAVIOURS = {
   ambush: 'Hides, jumps out, then chases',
   pounce: 'Hides, then pounces on you',
   disguise: 'In disguise, then pounces',
+  burrow: 'Buried (sand, water, leaves), bursts up, then pounces',
+  drop: 'Up overhead, drops down on you',
 };
 // Behaviours that start out hidden or disguised, waiting for you to come close.
-const LURKING = new Set(['ambush', 'pounce', 'disguise']);
+const LURKING = new Set(['ambush', 'pounce', 'disguise', 'burrow', 'drop']);
 
 // Hidden and disguised enemies spring when you come within this many tiles,
 // from any side. A room can set its own `reach` for each one.
-export const DEFAULT_REACH = { ambush: 2, pounce: 4, disguise: 4 };
+export const DEFAULT_REACH = { ambush: 2, pounce: 4, disguise: 4, burrow: 3, drop: 2.5 };
 // Chasers notice you from this far away.
 const SIGHT_DISTANCE = 64;
 // Leaping out: an ambusher hops this far to the side. A pouncer makes a big,
@@ -34,6 +38,14 @@ const LEAP_SECONDS = 0.45;
 const LEAP_HEIGHT = 14;
 const POUNCE_SECONDS = 0.65;
 const POUNCE_HEIGHT = 30;
+// Bursting up out of the ground (`burrow`): it rises out of it this long, then pounces.
+const RISE_SECONDS = 0.3;
+// Dropping from overhead (`drop`): a moment's warning (a shadow on the floor
+// where you stand, a "!"), then it falls from this high. It lands where you
+// were, so keep moving and it misses, and chases you instead.
+const DROP_WARN_SECONDS = 0.35;
+const DROP_SECONDS = 0.4;
+const DROP_HEIGHT = 80;
 // Chasing is slower than walking, so you can always get away.
 const CHASE_SPEED = 40;
 // The "!" shows this long after they spot you.
@@ -139,7 +151,7 @@ function shrinkRows(rows, palette, max) {
 // `reach` is how many tiles away a hidden or disguised one springs from.
 export class Npc {
   // `art` is optional: by default the enemy looks like its own battle sprite.
-  constructor({ art, enemy, x, y, patrol, behaviour, ambush = false, reach = null, lantern = null, chaseSpeed = null, sight = null, dormant = false, quiet = false, name = null }) {
+  constructor({ art, enemy, x, y, patrol, behaviour, ambush = false, reach = null, look = null, lantern = null, chaseSpeed = null, sight = null, dormant = false, quiet = false, name = null, tide = null, hears = null }) {
     const source = ENEMIES[art] ?? ENEMIES[enemy];
     if (!source) throw new Error(`Unknown enemy '${enemy}' in a room's npcs`);
     const { rows, palette } = source.sprite;
@@ -160,11 +172,19 @@ export class Npc {
     // A disguised enemy wears its `disguise` art if it has some (see columneon.js).
     const disguise = ENEMIES[enemy]?.disguise;
     this.disguiseFrames = disguise?.frames.map((frame) => makeSprite(frame, disguise.palette)) ?? null;
+    // Or a hiding place the room gives it (`look`, see hideouts.js): scenery to
+    // pass for, or what shows of it while it's buried or up overhead.
+    if (look && !HIDEOUTS[look]) throw new Error(`Unknown hiding place '${look}' for ${enemy}`);
+    this.look = look ? HIDEOUTS[look] : null;
+    this.lookSprite = this.look ? hideoutSprite(this.look, this.sprite) : null;
+    // What flies out of its hiding place as it goes (hideouts.js `burst`).
+    this.bits = [];
 
     // Like the player, (x, y) is the point under the feet.
     this.x = (x + 0.5) * T;
     this.y = (y + 1) * T;
     this.homeY = this.y;
+    this.homeX = this.x;
     this.minX = (patrol[0] + 0.5) * T;
     this.maxX = (patrol[1] + 0.5) * T;
     this.direction = 1;
@@ -182,6 +202,12 @@ export class Npc {
     this.dormant = dormant;
     this.quiet = quiet;
     this.name = name;
+    // Out of the water only at this tide (monsterHabits.js `tide`): `surface` is how far up it is, 0 to 1.
+    this.tideWhen = tide;
+    this.surface = null;
+    // Goes to look when something in the room makes a noise (monsterHabits.js `hears`): `heard` is where and what it is doing about it.
+    this.hears = hears;
+    this.heard = null;
     this.lurking = LURKING.has(this.behaviour);
     this.springDistance = (reach ?? DEFAULT_REACH[this.behaviour] ?? 0) * T;
     this.peekSide = Math.random() < 0.5 ? -1 : 1;
@@ -210,6 +236,13 @@ export class Npc {
     const d = Math.hypot(dx, dy) || 1;
     const surprised = this.alert <= 0;
     this.alert = ALERT_SECONDS;
+    // Still hiding when a fight starts beside it: out it comes to join in.
+    if (this.lurking) {
+      this.lurking = false;
+      if (this.look) this.bits = burst(this.look, this.x, this.y - 4);
+    }
+    // Dropped in or out of the ground mid-way: it joins in from where it is.
+    if (this.leap?.kind) this.leap = null;
     this.lunge = { t: 0, dx: dx / d, dy: dy / d };
     return surprised;
   }
@@ -237,6 +270,23 @@ export class Npc {
   }
 
   update(dt, player, room) {
+    if (this.bits.length) this.bits = updateBits(this.bits, dt);
+    // Rising and sinking with the tide (monsterHabits.js): under or part way up, it just waits.
+    if (this.tideWhen) {
+      followTide(this, dt, room);
+      if (this.surface < 1) {
+        this.time += dt;
+        this.moving = false;
+        return;
+      }
+    }
+    // Flattened by a careening gun on the ghost ship (shipList.js): it lies there a while, harmless.
+    if (this.stunned > 0) {
+      this.stunned = Math.max(0, this.stunned - dt);
+      this.time += dt;
+      this.moving = false;
+      return;
+    }
     if (this.lunge) {
       this.lunge.t += dt;
       this.time += dt;
@@ -275,10 +325,18 @@ export class Npc {
       return;
     }
 
+    // Off to see what the noise was (monsterHabits.js `hears`); a monster that has seen you comes first.
+    if (this.hears && this.heard && followNoise(this, dt, room)) return;
     if (this.behaviour === 'chase' && distance < (this.sightDistance ?? SIGHT_DISTANCE) && this.cooldown <= 0) {
       this.alert = ALERT_SECONDS;
       sfx(this.quiet ? 'creak' : 'ambush');
       this.chasing = true;
+    } else if (this.behaviour === 'chase' && Math.hypot(this.x - this.homeX, this.y - this.homeY) > 3) {
+      // Lost you (the ghost ship's hiding places, haunt.js): back to his post, slowly, looking.
+      const speed = this.chaseSpeed;
+      this.chaseSpeed = (speed ?? CHASE_SPEED) * 0.55;
+      this.chase(dt, { x: this.homeX, y: this.homeY }, room);
+      this.chaseSpeed = speed;
     } else if (this.behaviour === 'patrol' || this.behaviour === 'chase') {
       this.patrol(dt);
     } else if (this.behaviour === 'wander') {
@@ -331,8 +389,18 @@ export class Npc {
   spring(player, room) {
     this.lurking = false;
     this.alert = ALERT_SECONDS;
+    if (this.look?.sound) sfx(this.look.sound);
     sfx('ambush');
-    if (this.behaviour === 'ambush') {
+    if (this.behaviour === 'burrow') {
+      // Up out of the ground in a spray of whatever it was under, then at you.
+      this.bits = burst(this.look, this.x, this.y);
+      this.leap = { kind: 'rise', fromX: this.x, fromY: this.y, toX: this.x, toY: this.y, t: 0, seconds: RISE_SECONDS, height: 0 };
+    } else if (this.behaviour === 'drop') {
+      // It comes down where you are now.
+      this.x = player.x;
+      this.y = player.y;
+      this.leap = { kind: 'drop', fromX: this.x, fromY: this.y, toX: this.x, toY: this.y, t: 0, seconds: DROP_WARN_SECONDS + DROP_SECONDS, height: DROP_HEIGHT };
+    } else if (this.behaviour === 'ambush') {
       const toward = Math.sign(player.x - this.x) || this.peekSide;
       const down = Math.sign(player.y - this.y) * LEAP_DISTANCE * 0.6;
       const landing = [toward, -toward]
@@ -340,12 +408,30 @@ export class Npc {
         .find((spot) => !this.blockedAt(room, spot.x, spot.y)) ?? { x: this.x, y: this.y };
       this.leap = { fromX: this.x, fromY: this.y, toX: landing.x, toY: landing.y, t: 0, seconds: LEAP_SECONDS, height: LEAP_HEIGHT };
     } else {
+      // A disguise the room gave it flies apart as it goes.
+      if (this.look) this.bits = burst(this.look, this.x, this.y - 4);
       this.leap = { fromX: this.x, fromY: this.y, toX: player.x, toY: player.y, t: 0, seconds: POUNCE_SECONDS, height: POUNCE_HEIGHT, homing: true };
     }
   }
 
   updateLeap(dt, player) {
     const leap = this.leap;
+    if (leap.kind === 'rise') {
+      leap.t += dt;
+      if (leap.t >= leap.seconds) this.leap = { fromX: this.x, fromY: this.y, toX: player.x, toY: player.y, t: 0, seconds: POUNCE_SECONDS, height: POUNCE_HEIGHT, homing: true };
+      return;
+    }
+    if (leap.kind === 'drop') {
+      leap.t = Math.min(leap.seconds, leap.t + dt);
+      if (leap.t >= leap.seconds) {
+        // Down: a thump, and a puff of whatever was up there with it.
+        this.leap = null;
+        this.chasing = true;
+        sfx(this.look?.land ?? 'land');
+        this.bits = burst(this.look, this.x, this.y, 10);
+      }
+      return;
+    }
     if (leap.homing) {
       leap.toX = player.x;
       leap.toY = player.y;
@@ -361,10 +447,58 @@ export class Npc {
     }
   }
 
-  // Heads straight for the player, sliding along walls rather than through them.
+  // A hunter (behaviour 'chase': the ghost ship's Bosun) goes round things, not at them: a breadth-first
+  // search over the room's tiles to the one `to` is on, worked out again a few times a second. Returns the
+  // middle of the next tile to make for, or null to head straight there (same tile, next door, or no way).
+  waypoint(room, to) {
+    const tx = Math.floor(this.x / T);
+    const ty = Math.floor((this.y - 1) / T);
+    const gx = Math.floor(to.x / T);
+    const gy = Math.floor((to.y - 1) / T);
+    if (Math.abs(tx - gx) + Math.abs(ty - gy) <= 1) return null;
+    const key = `${tx},${ty}>${gx},${gy}`;
+    this.pathAge = (this.pathAge ?? 0) + 1;
+    if (this.pathKey !== key || this.pathAge > 20) {
+      this.pathKey = key;
+      this.pathAge = 0;
+      this.path = this.findPath(room, tx, ty, gx, gy);
+    }
+    const next = this.path?.find(([x, y]) => !(x === tx && y === ty));
+    return next ? { x: next[0] * T + T / 2, y: (next[1] + 1) * T - 4 } : null;
+  }
+
+  findPath(room, sx, sy, gx, gy) {
+    const w = room.width;
+    const h = room.height;
+    const open = (x, y) => x >= 0 && y >= 0 && x < w && y < h && !this.blockedAt(room, x * T + T / 2, (y + 1) * T - 4);
+    if (!open(gx, gy)) return null;
+    const from = new Map([[`${sx},${sy}`, null]]);
+    const queue = [[sx, sy]];
+    for (let i = 0; i < queue.length && i < 4000; i++) {
+      const [x, y] = queue[i];
+      if (x === gx && y === gy) {
+        const path = [];
+        for (let k = `${x},${y}`; k; k = from.get(k)) path.unshift(k.split(',').map(Number));
+        return path;
+      }
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx;
+        const ny = y + dy;
+        const k = `${nx},${ny}`;
+        if (from.has(k) || !open(nx, ny)) continue;
+        from.set(k, `${x},${y}`);
+        queue.push([nx, ny]);
+      }
+    }
+    return null;
+  }
+
+  // Heads straight for the player, sliding along walls rather than through them. A hunter
+  // (behaviour 'chase') follows the aisles instead (waypoint).
   chase(dt, player, room) {
-    const dx = player.x - this.x;
-    const dy = player.y - this.y;
+    const aim = this.behaviour === 'chase' ? (this.waypoint(room, player) ?? player) : player;
+    const dx = aim.x - this.x;
+    const dy = aim.y - this.y;
     const distance = Math.hypot(dx, dy);
     if (distance < 1) return;
     // Bursty gaits keep their rhythm in a chase, at the same average speed.
@@ -383,7 +517,7 @@ export class Npc {
     }
     const before = distance;
     this.step(room, (dx / distance) * speed * dt, (dy / distance) * speed * dt);
-    const gained = before - Math.hypot(player.x - this.x, player.y - this.y);
+    const gained = before - Math.hypot(aim.x - this.x, aim.y - this.y);
     this.blocked = gained < speed * dt * 0.3 ? (this.blocked ?? 0) + dt : 0;
     if (this.blocked > STUCK_SECONDS) {
       // Step out to whichever side is clear, at right angles to you.
@@ -429,6 +563,8 @@ export class Npc {
       for (let ty = Math.floor(top / T); ty <= Math.floor((bottom - 1) / T); ty++) {
         for (let tx = Math.floor(left / T); tx <= Math.floor((right - 1) / T); tx++) {
           if (room.isSolidTile(tx, ty) && room.tileAt(tx, ty) !== '~') return true;
+          // Water is theirs; a raised block (the ghost ship's cargo stacks) is not.
+          if (room.raiseAt(tx, ty) > 0) return true;
         }
       }
       return room.props.some((prop) => room.propBlocks(prop, left, top, right, bottom));
@@ -439,16 +575,31 @@ export class Npc {
   // Height off the ground mid-leap.
   get z() {
     if (!this.leap) return 0;
+    if (this.leap.kind === 'rise') return 0;
+    if (this.leap.kind === 'drop') {
+      const k = Math.max(0, this.leap.t - DROP_WARN_SECONDS) / DROP_SECONDS;
+      return Math.round(DROP_HEIGHT * (1 - k * k));
+    }
     return Math.round(Math.sin((this.leap.t / this.leap.seconds) * Math.PI) * this.leap.height);
   }
 
+  // Under the water, waiting for its tide (monsterHabits.js).
+  get submerged() {
+    return Boolean(this.tideWhen) && (this.surface ?? 0) < 1;
+  }
+
   touches(player) {
-    if (this.lurking || this.leap || this.cooldown > 0) return false;
-    return Math.hypot(this.x - player.x, this.y - player.y) < TOUCH_DISTANCE;
+    if (this.submerged || this.lurking || this.leap || this.cooldown > 0 || this.stunned > 0) return false;
+    // One standing out of a pool (monsterHabits.js `tide`) is met from the bank: a couple of tiles off.
+    return Math.hypot(this.x - player.x, this.y - player.y) < (this.tideWhen ? TOUCH_DISTANCE + 14 : TOUCH_DISTANCE);
   }
 
   // Its shadow in the sun (see shadows.js): in disguise, the disguise's.
   shadow() {
+    if (this.submerged) return null;
+    // Buried, up overhead or just coming out: no shadow of its own in the sun.
+    if ((this.lurking && (this.behaviour === 'burrow' || this.behaviour === 'drop')) || this.leap?.kind) return null;
+    if (this.lurking && this.look && !this.look.ownArt) return this.lookSprite ? { image: this.lookSprite, x: this.x, y: this.y } : null;
     const disguised = this.lurking && this.behaviour === 'disguise' && this.disguiseFrames;
     return { image: disguised ? this.disguiseFrames[0] : this.sprite, x: this.x, y: this.y };
   }
@@ -458,6 +609,39 @@ export class Npc {
     if (this.cooldown > 0 && Math.floor(this.cooldown * 10) % 2 === 0) return;
     let x = Math.round(this.x) - camera.x;
     const y = Math.round(this.y) - camera.y;
+    if (this.bits.length) drawBits(ctx, this.bits, camera);
+    if (this.submerged) {
+      drawSurfacing(ctx, this, x, y, this.time);
+      return;
+    }
+
+    // In a hiding place the room gave it (hideouts.js): the scenery it passes
+    // for, or only the tells of it under the ground or up overhead.
+    if (this.lurking && ((this.look && !this.look.ownArt) || this.behaviour === 'burrow' || this.behaviour === 'drop')) {
+      if (this.look) drawHideout(ctx, this.look, this.lookSprite, x, y, this.time);
+      return;
+    }
+    // Coming up out of the ground: only as much of it as is out so far.
+    if (this.leap?.kind === 'rise') {
+      const h = this.sprite.height;
+      const shown = Math.max(1, Math.round(h * Math.min(1, this.leap.t / this.leap.seconds)));
+      ctx.drawImage(this.sprite, 0, 0, this.sprite.width, shown, x - Math.floor(this.sprite.width / 2), y - 1 - shown, this.sprite.width, shown);
+      if (this.alert > 0) drawAlert(ctx, x, y - 1 - shown - 12);
+      return;
+    }
+    // Up overhead and about to drop: its shadow on the floor where you stood,
+    // growing as it comes; for the first moment, only that and the "!".
+    if (this.leap?.kind === 'drop') {
+      const k = Math.min(1, this.leap.t / this.leap.seconds);
+      ctx.fillStyle = `rgba(0, 0, 0, ${(0.15 + 0.3 * k).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.ellipse(x, y - 2, 3 + 5 * k, 1.5 + 1.5 * k, 0, 0, Math.PI * 2);
+      ctx.fill();
+      if (this.leap.t < DROP_WARN_SECONDS) {
+        if (this.alert > 0) drawAlert(ctx, x, y - 34);
+        return;
+      }
+    }
 
     // Still in disguise: stand stock-still, like the pillar it's pretending to be.
     if (this.lurking && this.behaviour === 'disguise' && this.disguiseFrames) {
@@ -542,6 +726,18 @@ export class Npc {
         break;
     }
     lift += this.z + extraLift;
+    // What it's up to while nobody's fighting it (monsterFlavour.js): drawing only.
+    const fl = this.flavourPose;
+    if (fl) { x += fl.dx; lift += fl.lift; angle += fl.angle; sx *= fl.sx; sy *= fl.sy; }
+    // Flattened (stunned): squashed to the boards, wobbling back up at the very end.
+    if (this.stunned > 0) {
+      const up = Math.min(1, Math.max(0, 1 - this.stunned / 0.6));
+      sx = 1.45 - 0.45 * up;
+      sy = 0.4 + 0.6 * up;
+      angle = 0;
+      lift = 0;
+      pivot = 'feet';
+    }
     // Rearing back before a lunge: squashed down, ready to spring.
     if (this.lunge && this.lunge.t < LUNGE_SECONDS * 0.3) { sx = 1.12; sy = 0.88; }
     // The shadow stays on the ground, smaller the higher it is.

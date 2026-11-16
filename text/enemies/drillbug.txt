@@ -56,7 +56,7 @@ Brrrrrrr!
 # TALK options in src/data/enemies/drillbug.js.
 [talk: Inspect]
 DRILLBUG - HP 1050
-A beetle with a drill for a nose and a lamp on its hat. Proud of every tunnel. Digs where you stand, so don't stand still. Rocks come down when it gets excited.
+A beetle with a drill for a nose and a lamp on its hat. Proud of every tunnel. Digs where you stand, so don't stand still. Hopeless with directions, and its lamp is very bright.
 
 [talk: Praise a tunnel]
 You point to a tunnel, any tunnel, and tell DRILLBUG it's the straightest you've ever seen. It's not straight at all. DRILLBUG's antennae stand bolt upright. It scratches the date into the wall beside it, so the tunnel will remember the day.

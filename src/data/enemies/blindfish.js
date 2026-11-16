@@ -24,7 +24,7 @@ export const BLINDFISH = {
   anim: BLINDFISH_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1750,
+  maxHp: 3050,
   damage: 42,
 
   // The Stillwater: quick and splashy, and a step up from the Diggings.
@@ -34,9 +34,9 @@ export const BLINDFISH = {
   patterns: [
     { name: 'fishLeap', weight: 3 },
     { name: 'fishRipples', weight: 3 },
-    { name: 'fishSchool', weight: 2 },
+    { name: 'fishDrip', weight: 3 },
     { name: 'fishJaw', weight: 2 },
-    { name: 'fishBubbles', weight: 2 },
+    { name: 'fishFin', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

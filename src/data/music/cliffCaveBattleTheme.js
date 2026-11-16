@@ -136,7 +136,7 @@ export const CLIFF_CAVE_BATTLE_THEME = {
   title: 'Echoes Back',
   bpm: 140,
   stepsPerBeat: 4,
-  volume: 1.4,
+  volume: 1.95,
 
   instruments: {
     lead: { sample: 'oboe', volume: 0.3, attack: 0.02, release: 0.25, reverb: 0.45, pan: 0.1, humanize: { time: 0.006, volume: 0.1 } },

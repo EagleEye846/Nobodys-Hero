@@ -1,0 +1,49 @@
+# BT_GATE_BEETLE: A beetle with a trumpet he doesn't know how to play, who came to the gate to welcome the Hero and has been practising for it.
+
+[first]
+*parp* Sorry. *parp* I'm learning. It's for the Hero's return. *parp*
+
+What do you think? It's a welcome tune. It's mostly one note.
+
+[repeat]
+I know three notes. Two of them are the same. I'm very proud.
+
+[first after the_kings_welcome]
+A fanfare, I'm told, for the start of the quest. I'll practise. You'll hear it as you go down.
+
+[repeat after the_kings_welcome]
+*parp*. That's me wishing you luck. It's the closest I get.
+
+[first after the_light_goes_up]
+I'm playing the whole tune today! Three notes! In order!
+
+[repeat after the_light_goes_up]
+*parp parp parp.* That's all three. Isn't it beautiful?
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+*parp* ...That one was a different note. I'm almost sure.
+
+# (draft)
+[repeat_ves 2]
+{bored}It was the same note.
+
+# (draft)
+[repeat 3]
+Mum says I can play for the Hero or for her, but not before breakfast. The Hero's late. So's breakfast.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+I'll play you down the pithead. You won't hear it from down there. That's the kindest way to have it.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Somebody asked for an encore. I don't know any more notes. I played the three again, slower.
+
+They cried. It was probably the light.
+
+# (draft)
+[repeat_ves 2 after the_light_goes_up]
+{smile}...It is better slower.

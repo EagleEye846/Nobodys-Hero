@@ -15,16 +15,21 @@ export const INTO_THE_CLIFF = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed (the sea breathing is heard, not described).
     { do: 'face', who: 'player', dir: 'down' },
-    { do: 'say', text: 'Under the lip of rock the steps go on down, into the cliff. It is cold in here after the sun, and dim, and damp: a grey light from somewhere below, and a lantern lit at the foot of the steps.\n\nFurther down, the sea is breathing in and out through a hole.' },
+    { do: 'wait', seconds: 0.8 },
+    { do: 'sound', name: 'whoosh' },
+    { do: 'quake', amount: 0.6, seconds: 1.4 },
+    { do: 'act', who: 'bramble', act: 'shiver', wait: false },
+    { do: 'wait', seconds: 1.2 },
     { do: 'face', who: 'bramble', dir: 'down' },
     { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
     { do: 'say', who: 'bramble', text: '{worried}...Why is the sea downstairs?' },
     { do: 'face', who: 'ves', at: 'bramble' },
     { do: 'face', who: 'player', at: 'ves' },
-    { do: 'say', who: 'ves', text: '{bored}It\'s always downstairs. That\'s how you can tell it\'s the sea.' },
+    { do: 'say', who: 'ves', text: '{laughing}It heard you call it a puddle. It\'s come up to have a word.' },
     { do: 'face', who: 'bramble', at: 'ves' },
     { do: 'act', who: 'bramble', act: 'nod', wait: false },
-    { do: 'say', who: 'bramble', text: '{thinking}Then I\'m staying upstairs of it.' },
+    { do: 'say', who: 'bramble', text: '{determined}Then I\'m staying upstairs of it.' },
   ],
 };

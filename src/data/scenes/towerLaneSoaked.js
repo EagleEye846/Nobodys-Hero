@@ -18,16 +18,19 @@ export const TOWER_LANE_SOAKED = {
     { do: 'face', who: 'bramble', dir: 'left' },
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'face', who: 'player', at: 'bramble' },
-    { do: 'act', who: 'bramble', act: 'shiver' },
-    { do: 'say', text: 'Bramble is wet from his hair to his boots, and a bit further. Water runs out of his sleeves. There is weed on one ear.' },
+    // Wet from his hair to his boots: the drops run down him, he shivers and shakes it off. (draft)
+    { do: 'act', who: 'bramble', act: 'shiver', wait: false },
+    { do: 'emote', who: 'bramble', emote: 'sweat' },
+    { do: 'sound', name: 'splash' },
     { do: 'say', who: 'bramble', text: '{sheepish}It went in my ears. Both of them.' },
-    { do: 'act', who: 'bramble', act: 'bounce', wait: false },
-    { do: 'say', who: 'bramble', text: '{proud}I got the bar up, though. It was really heavy. I did it with my back.' },
-    { do: 'wait', seconds: 0.4 },
-    { do: 'say', who: 'ves', text: '{bored}...You were very quick. I\'ll give you that.' },
-    { do: 'act', who: 'bramble', act: 'hop', wait: false },
-    { do: 'say', who: 'bramble', text: '{grin}I was SO quick.' },
     { do: 'act', who: 'bramble', act: 'shake', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}I\'m not doing it again, though.' },
+    { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
+    { do: 'say', who: 'bramble', text: '{proud}I got the bar up, though. Did it with my back.' },
+    { do: 'wait', seconds: 0.4 },
+    { do: 'say', who: 'ves', text: '{smile}...You were very quick. I\'ll give you that.' },
+    { do: 'act', who: 'bramble', act: 'hop', wait: false },
+    { do: 'say', who: 'bramble', text: '{grin}I was SO quick.\n\n{determined}I\'m not doing it again, though.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

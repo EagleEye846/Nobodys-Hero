@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE WISP HOLLOW: the deepest of the mist. Lanterns at first, then a long
 // stretch where every one has gone out and the boards fork and fork again, and
 // most ways just end in the bog. Ves came this way, and at every turning she
@@ -85,6 +86,8 @@ export const MARSH_WISP_HOLLOW = {
     { sprite: 'coat_strip', x: 20, y: 11, text: 'hollow_strip' },
     { sprite: 'coat_strip', x: 27, y: 11, text: 'hollow_strip' },
     { sprite: 'gold_pouch', x: 30, y: 4, text: 'hollow_purse', gold: 220, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_wisp_hollow'] ?? []),
   ],
   tileTexts: { '"': 'reeds', '%': 'bog', $: 'fen_water', '=': 'duckboards' },
 

@@ -15,10 +15,11 @@ export const JOURNAL_ORDER = [
   ['hollin', ['grist', 'hob', 'hayward']],
   ['drains', ['siltling', 'slipjack', 'clinker']],
   ['marsh', ['bog_toad', 'reed_stalker', 'wisp']],
-  ['valley', ['cairn_hound', 'lamp_mite', 'heralds_echo', 'warden', 'the_hush']],
+  ['valley', ['cairn_hound', 'lamp_mite', 'heralds_echo', 'warden', 'the_hush', 'tally']],
   ['sunnyside', ['bunting', 'dandylion', 'haybob']],
   ['glimmer', ['gleamsnail', 'prismoth', 'quartzling']],
-  ['diggings', ['drillbug', 'magpiemole', 'slagling']],
+  // The Pale Olm (id `pudding`) waits at the foot of Seam Nine, in the Diggings.
+  ['diggings', ['drillbug', 'magpiemole', 'slagling', 'pudding']],
   ['stillwater', ['blindfish', 'fiddler', 'olm']],
   ['deep', ['gnawer', 'murk']],
   ['belowtown', ['rumbold']],
@@ -32,10 +33,14 @@ export const JOURNAL_ORDER = [
   ['wreck', ['old_diver', 'salt_shade']],
   // The brig Fair Return, lying on the Wreck Yard's bar (area `ghostship`).
   ['ghostship', ['ghost_deckhand', 'powder_monkey', 'captain_tarry', 'fairweather']],
+  // The Soundings' own monsters (a sea cave of tides and echoes; moonjelly, wrackeel, net_wraith and kelpie_foal turn up there too).
+  ['soundings', ['echo_shrimp', 'plumb_lead', 'blind_crab', 'tidewight']],
   ['merrow', ['old_gulper']],
   ['isles', ['kelpie_foal']],
   ['reach', ['storm_imp']],
   ['lastlight', ['corrie']],
+  // Chapter 6.
+  ['ashroad', ['ashling', 'soot_gull', 'charcur', 'milestone', 'the_lum']],
 ];
 
 // Bosses that leave nothing in battle but give something after it (in the
@@ -45,7 +50,9 @@ export const JOURNAL_PRIZES = {
   rumbold: { gear: 'paper_crown' },
   dowager_crab: { gear: 'bathtub_bell' },
   old_gulper: { gear: 'gulper_tooth' },
+  the_lum: { gear: 'hearth_brick' },
   corrie: { weapon: 'stormglass_blade' },
+  captain_tarry: { weapon: 'captains_cutlass' },
 };
 
 // A row whose key isn't an area id: the area name its pages show.
@@ -58,9 +65,14 @@ const AREA_CHAPTER = {
   ruins: 1, stair: 2, vigil: 2,
   pinefall: 3, hushwood: 3, hollin: 3, drains: 3, marsh: 3, valley: 3,
   sunnyside: 4, glimmer: 4, diggings: 4, stillwater: 4, deep: 4, belowtown: 4,
-  sunnyside_again: 5, gullrest: 5, wrack: 5, lanes: 5, wreck: 5, ghostship: 5, merrow: 5, isles: 5, reach: 5, lastlight: 5,
+  sunnyside_again: 5, gullrest: 5, wrack: 5, lanes: 5, wreck: 5, ghostship: 5, merrow: 5, soundings: 5, isles: 5, reach: 5, lastlight: 5,
+  ashroad: 6,
 };
-const PAST_CHAPTER = Object.fromEntries(JOURNAL_ORDER.flatMap(([area, ids]) => ids.map((id) => [id, AREA_CHAPTER[area]])).filter(([, chapter]) => chapter));
+// The star guardians (Quire, the Pale Olm, Madam Fairweather) are secret: their
+// pages only open once you've really met them, never just for being past
+// their chapter.
+const GUARDIANS = new Set(['tally', 'pudding', 'fairweather']);
+const PAST_CHAPTER = Object.fromEntries(JOURNAL_ORDER.flatMap(([area, ids]) => ids.map((id) => [id, AREA_CHAPTER[area]])).filter(([id, chapter]) => chapter && !GUARDIANS.has(id)));
 
 // [{ id, area }] for every page, in order. Any enemy not listed above goes on
 // the end, so a new one never goes missing.

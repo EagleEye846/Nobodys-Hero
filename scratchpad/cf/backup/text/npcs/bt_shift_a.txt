@@ -1,0 +1,37 @@
+# BT_SHIFT_A: A grey mole on his way to the Diggings for the long shift, lamp already lit, in no hurry.
+
+[first]
+Shift's starting. Well. It's been starting for a while. The Diggings aren't going anywhere.
+
+[repeat]
+Can't stop. If I stop, I'll sit down. If I sit down, that's my day.
+
+[first after the_kings_welcome]
+Below the old seam, is it? Rather you than me. Mind the lower drifts. Not that you will. Nobody does.
+
+[repeat after the_kings_welcome]
+Left lamp's low. It's fine. Moles see perfectly well in the dark. We just like to look busy.
+
+[first after the_light_goes_up]
+It's so bright I put my lamp out. Then I walked into a barrel. Worth it.
+
+[repeat after the_light_goes_up]
+Is it still a shift if there's a party? I'm going to say no.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I've been on my way to this shift since the bell. The bell was yesterday.
+
+# (draft)
+[repeat 3]
+My dad was a digger. His dad was a digger. His dad said "down THERE?" and went the other way. We don't talk about him.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Past the trestle the rails go funny. Don't ride a cart you didn't push yourself. That's not advice. That's a scar.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Found my lamp. It was in the barrel. I'm leaving it there. It's earned a rest.

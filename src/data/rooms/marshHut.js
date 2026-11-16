@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // INSIDE THE STILT HUT: one room, swept once, long ago. An old stove with a
 // little fire going in it, a cot, a table, hooks along the walls with nothing
 // on them. And Ves, sitting against the wall with her leg out straight, bound
@@ -63,6 +64,8 @@ export const MARSH_HUT = {
     { sprite: 'savepoint', x: 11, y: 7, save: true, after: 'found_ves' },
     { sprite: 'barrel', x: 1, y: 8, text: 'hut_barrel' },
     { sprite: 'crates', x: 12, y: 8, text: 'hut_crates' },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_hut'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

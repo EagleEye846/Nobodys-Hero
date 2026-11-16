@@ -32,27 +32,24 @@ export const HADDOCK_TELLS_IT = {
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'face', who: 'bramble', dir: 'right' },
     { do: 'say', who: 'haddock', text: '{tired}Sit, sit. Mind the cat.\n\n...There\'s no cat. Habit.' },
-    { do: 'say', who: 'haddock', text: '{tired}You\'ll have seen the little room up top. Or you will.' },
     { do: 'music', song: 'corrieLullaby' },
-    { do: 'wait', seconds: 0.8 },
-    { do: 'say', who: 'haddock', text: '{tender}I had a boy. Not mine. Washed up in a crab pot, near enough. No bigger than a loaf.' },
-    { do: 'say', who: 'haddock', text: '{tender}Corrie. I minded him like I mind the light.' },
+    // The camera comes round to his face and stays on it while he tells it. (draft)
+    { do: 'camera', who: 'haddock' },
+    { do: 'wait', seconds: 1 },
+    { do: 'say', who: 'haddock', text: '{tender}I had a boy. Not mine. Washed up in a crab pot, near enough. No bigger than a loaf.\n\nCorrie. I minded him like I mind the light.' },
     { do: 'say', who: 'bramble', text: '{thinking}...Was he nice?' },
-    { do: 'say', who: 'haddock', text: '{laughing}He was a terror. Rang my bell at the gulls. Ate a candle once.' },
+    { do: 'say', who: 'haddock', text: '{laughing}He was a terror. Rang me bell at the gulls. Ate a candle once.' },
     { do: 'say', who: 'haddock', text: '{smile}Then a young\'un came down the coast. Hundred year back, near enough.\n\nSmall lad. Sword too big for him. Stopped with us a summer.' },
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'say', who: 'ves', text: '{thoughtful}...A sword.' },
-    { do: 'say', who: 'haddock', text: '{smile}Corrie followed him about like a gull after a boat. Wanted to be just like him.' },
-    { do: 'say', who: 'haddock', text: '{tired}Then he went off north-east. And the sea started coming up.' },
-    { do: 'say', who: 'haddock', text: '{sad}Corrie said he\'d stop it. Like the young\'un would have. Took my boat and a spell out of a book.' },
-    { do: 'say', who: 'haddock', text: '{sad}I said I\'d mind the light. All night, so he\'d find his way home.' },
-    { do: 'wait', seconds: 1.4 },
-    { do: 'say', who: 'haddock', text: '{sad}...' },
+    { do: 'say', who: 'haddock', text: '{smile}Corrie followed him about like a gull after a boat. Wanted to be just like him.\n\n{tired}Then he went off north-east. And the sea started comin\' up.' },
+    { do: 'say', who: 'haddock', text: '{sad}Corrie said he\'d stop it. Like the young\'un would have. Took me boat and a spell out of a book.\n\nI said I\'d mind the light. All night, so he\'d find his way home.' },
+    // Silence. (draft)
+    { do: 'wait', seconds: 2 },
     { do: 'act', who: 'haddock', act: 'sigh' },
-    { do: 'say', who: 'haddock', text: '{tired}I was old already. I sat down for a minute.' },
-    { do: 'say', who: 'haddock', text: '{sad}When I woke the light was out. And the sea was green.' },
-    { do: 'say', who: 'haddock', text: '{sad}He never came back. The storm did.' },
+    { do: 'say', who: 'haddock', text: '{tired}I was old already. I sat down for a minute.\n\n{sad}When I woke the light was out. And the sea was green.\n\nHe never came back. The storm did.' },
     { do: 'wait', seconds: 1 },
+    { do: 'camera' },
     { do: 'say', who: 'ves', text: '{tender}...You fell asleep.' },
     { do: 'say', who: 'haddock', text: '{tired}I did.' },
     // A beat of silence. Ves looks away; Bramble takes a step closer.
@@ -63,13 +60,14 @@ export const HADDOCK_TELLS_IT = {
     { do: 'face', who: 'bramble', dir: 'right' },
     { do: 'wait', seconds: 0.4 },
     { do: 'say', who: 'bramble', text: '{sheepish}I fall asleep all the time.' },
-    { do: 'say', who: 'haddock', text: '{smile}I know, lad. You snore.' },
+    { do: 'say', who: 'haddock', text: '{smile}I know, lad. Ye snore.' },
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'say', who: 'haddock', text: '{tired}There. That\'s it told. I\'ll not tell it again.' },
     { do: 'wait', seconds: 1.2 },
 
-    // The bell.
-    { do: 'say', text: 'Haddock lifts the cord over his head, and the brass handbell swings from his flipper, and he holds it out.' },
+    // The bell: he lifts the cord over his head and holds it out. (draft)
+    { do: 'act', who: 'haddock', act: 'lunge' },
+    { do: 'sound', name: 'bell' },
     { do: 'say', who: 'haddock', text: '{proud}Here. Ring it if the sea gets cheeky.' },
     { do: 'say', who: 'bramble', text: '{worried}Don\'t you need it?' },
     { do: 'say', who: 'haddock', text: '{eh}Eh? ...Need what?\n\nNever heard it anyway.' },
@@ -79,7 +77,15 @@ export const HADDOCK_TELLS_IT = {
     { do: 'give', item: 'haddocks_bell' },
     { do: 'act', who: 'player', act: 'nod' },
     { do: 'wait', seconds: 0.4 },
-    { do: 'say', who: 'ves', text: '{bored}He gave it to the one who never says thank you.' },
+    { do: 'say', who: 'ves', text: '{smile}He gave it to the one who never says thank you.' },
+    // He gets up out of the chair and goes to see to the boat: from here he waits in the Bother at the jetty
+    // (haddock_light_door), and the chair stays empty. (draft, 15 Nov 2026)
+    { do: 'say', who: 'haddock', text: '{determined}Right. I\'ll go and bail the Bother. Come down to the jetty when you\'re ready.' },
+    { do: 'sound', name: 'door' },
+    { do: 'leave', who: 'haddock' },
+    { do: 'wait', seconds: 0.4 },
     { do: 'face', who: 'player', dir: 'down' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

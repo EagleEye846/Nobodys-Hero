@@ -3,8 +3,8 @@ import { defineBulletArt } from '../projectiles.js';
 // The Glintling's attacks. It's a little living cluster of ice crystal that
 // plays with light, and it thinks it's very funny: a beam of light split
 // three ways through a prism, a reflection of you in the ice that copies
-// every move you make (backwards), crystals that pop up closer and closer
-// and burst into glitter, and the glintling itself skating round the box,
+// every move you make (backwards), a sunbeam bounced round the icy walls,
+// and the glintling itself skating round the box,
 // leaving a trail of sparkle behind it.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
@@ -159,43 +159,79 @@ export const GLINTLING_ATTACKS = {
     };
   },
 
-  // Glitter Burst. Crystals pop up in the box, one after another, each one
-  // closer to you than the last, and each bursts into a ring of splinters a
-  // moment after it appears. After four it starts again from far away.
-  glintBurst(box, density, { Shot, every, rand, clamp, pointAwayFrom }) {
-    let crystals = [];
-    let step = 0;
-    let last = null;
-    const pop = every(0.7, 0.85, (bullets, soul) => {
-      if (step % 4 === 0) {
-        last = pointAwayFrom(box, soul, 46, 10);
-      } else {
-        // A third of the way from the last one toward you, give or take.
-        last = {
-          x: clamp(last.x + (soul.x - last.x) * 0.38 + rand(-6, 6), box.x + 6, box.x + box.w - 6),
-          y: clamp(last.y + (soul.y - last.y) * 0.38 + rand(-6, 6), box.y + 6, box.y + box.h - 6),
-        };
+  // Catch the light! The Glintling winks a sunbeam into the box off one of
+  // its facets, straight at you, and the beam bounces off the icy walls,
+  // angle for angle. The whole zigzag flashes first, then the
+  // light races along it. Step off the line, and remember it bounces: the
+  // light comes back across the box after it hits a wall, four times, and
+  // each stretch glows a moment after the light has passed. Every bounce
+  // knocks two chips of ice off the wall, either side of you.
+  glintBounce(box, density, { Shot, Line, rand, angleTo, shuffleBag }) {
+    const sides = shuffleBag(['top', 'right', 'bottom', 'left']);
+    const WARN = 0.85;
+    const SPEED = 230;
+    const BOUNCES = 4;
+    let unlit = [];
+    let chips = [];
+    let timer = 0.1;
+    // Follows the light from `from` at `angle` to the next wall: where it
+    // hits, and which way it goes after bouncing.
+    const toWall = (from, angle) => {
+      const dx = Math.cos(angle);
+      const dy = Math.sin(angle);
+      const tx = dx > 0 ? (box.x + box.w - from.x) / dx : dx < 0 ? (box.x - from.x) / dx : Infinity;
+      const ty = dy > 0 ? (box.y + box.h - from.y) / dy : dy < 0 ? (box.y - from.y) / dy : Infinity;
+      const t = Math.min(tx, ty);
+      const hit = { x: from.x + dx * t, y: from.y + dy * t };
+      const next = tx < ty ? Math.atan2(dy, -dx) : Math.atan2(-dy, dx);
+      return { hit, length: t, next };
+    };
+    const wink = (bullets, soul) => {
+      const side = sides();
+      const along = rand(8, 72);
+      const from = side === 'top' ? { x: box.x + along, y: box.y } : side === 'bottom' ? { x: box.x + along, y: box.y + box.h }
+        : side === 'left' ? { x: box.x, y: box.y + along } : { x: box.x + box.w, y: box.y + along };
+      bullets.push(new Shot({ ...from, art: 'glintPrism', harmless: true, life: WARN + 0.5 }));
+      let at = from;
+      let angle = angleTo(from, soul) + rand(-0.05, 0.05);
+      let delay = WARN;
+      for (let leg = 0; leg <= BOUNCES; leg++) {
+        const { hit, length, next } = toWall(at, angle);
+        if (length < 1) break;
+        const beam = new Line({ x: at.x, y: at.y, angle, length, thickness: 3, warn: delay, life: length / SPEED + 0.7, color: '#fff2a0', glow: '#ffb8e8' });
+        bullets.push(beam);
+        unlit.push(beam);
+        // A sparkle where it bounces, and a chip of ice it knocks off the wall.
+        if (leg < BOUNCES) {
+          bullets.push(new Shot({ ...hit, art: 'glintSparkle', harmless: true, life: delay + length / SPEED + 0.3 }));
+          chips.push({ beam, hit });
+        }
+        delay += length / SPEED;
+        at = hit;
+        angle = next;
       }
-      step++;
-      const crystal = new Shot({ x: last.x, y: last.y, warn: 0.55, life: 0.35, art: 'glintPrism', angle: 0 });
-      bullets.push(crystal);
-      crystals.push(crystal);
-    }, { first: 0.15 });
+    };
     return {
-      duration: 6.5,
+      duration: 7.4,
       update: (dt, bullets, soul) => {
-        pop(dt, bullets, soul);
-        for (const crystal of crystals) {
-          if (crystal.age < crystal.warn + crystal.life) continue;
-          crystal.done = true;
-          if (!bullets.includes(crystal)) continue;
-          const tilt = rand(0, Math.PI * 2);
-          for (let i = 0; i < 7; i++) {
-            const angle = tilt + (i / 7) * Math.PI * 2;
-            bullets.push(new Shot({ x: crystal.x, y: crystal.y, vx: Math.cos(angle) * 46, vy: Math.sin(angle) * 46, art: 'glintShard' }));
+        // (Its speed is set a frame late, after the battle's bullet-speed
+        // tuning, so each leg starts as the last one reaches the wall.)
+        for (const beam of unlit) beam.grow = SPEED;
+        unlit = [];
+        timer -= dt;
+        if (timer <= 0) {
+          timer += 1.3;
+          wink(bullets, soul);
+        }
+        for (const chip of chips) {
+          if (chip.beam.solidLength < chip.beam.length) continue;
+          chip.done = true;
+          const aim = angleTo(chip.hit, soul) + rand(-0.1, 0.1);
+          for (const angle of [aim - 0.22, aim + 0.22]) {
+            bullets.push(new Shot({ ...chip.hit, vx: Math.cos(angle) * 56, vy: Math.sin(angle) * 56, art: 'glintShard' }));
           }
         }
-        crystals = crystals.filter((crystal) => !crystal.done);
+        chips = chips.filter((chip) => !chip.done);
       },
     };
   },
@@ -214,7 +250,7 @@ export const GLINTLING_ATTACKS = {
       { x: box.x + 6, y: box.y + box.h - 6 }, { x: box.x + box.w - 6, y: box.y + box.h - 6 },
     ];
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         if (!skater) {
           // From the corner farthest from you, aimed past you.

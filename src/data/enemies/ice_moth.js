@@ -12,7 +12,7 @@ export const ICE_MOTH = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'vigil',
   sprite: { rows: ICE_MOTH_SPRITE, palette: ICE_MOTH_PALETTE },
-  maxHp: 235,
+  maxHp: 990,
   damage: 12,
 
   // A Chapter 2 enemy, and a flighty one: its moths are quick.
@@ -21,7 +21,7 @@ export const ICE_MOTH = {
   // Its attacks live in src/battle/attacks/ice_moth.js.
   patterns: [
     { name: 'iceMothOrbit', weight: 3 },
-    { name: 'iceMothScales', weight: 2 },
+    { name: 'iceMothFrostTrail', weight: 2 },
     { name: 'iceMothFlurry', weight: 3 },
   ],
 

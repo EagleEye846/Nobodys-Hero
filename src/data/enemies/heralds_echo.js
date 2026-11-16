@@ -17,7 +17,7 @@ export const HERALDS_ECHO = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'valley',
   sprite: { rows: HERALDS_ECHO_SPRITE, palette: HERALDS_ECHO_PALETTE },
-  maxHp: 990,
+  maxHp: 1550,
   damage: 28,
 
   // Lots of words, at a good clip.
@@ -27,8 +27,7 @@ export const HERALDS_ECHO = {
   // spell out real words (see WORDS there).
   patterns: [
     { name: 'heraldHearYe', weight: 3 },
-    { name: 'heraldBell', weight: 3 },
-    { name: 'heraldScroll', weight: 2 },
+    { name: 'heraldSpell', weight: 3 },
     { name: 'heraldProclaim', weight: 2 },
     { name: 'heraldEcho', weight: 2 },
   ],

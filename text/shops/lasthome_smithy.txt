@@ -37,6 +37,10 @@ Nothing to weigh. Fair enough.
 [cant_sell]
 You're wearing that. Take it off out there first, with C. I don't buy things off people's backs.
 
+# (draft) A Notch Charm bought: one more SPELL NOTCH for everyone.
+[bought_notch]
+One notch. Don't ask me how it works. It just does. Choose your spells from SPELLS, with C.
+
 [owned]
 You've got that one already. I only made the one.
 
@@ -82,7 +86,7 @@ Bryony says she asks like it's a fact it'll turn up.
 Let me see that. ...Huh. That's not iron. That's not anything I've got a name for. It's warm.
 
 # (draft) Changed below: where the shard is (not on the Old Street's steps any more; it's in the Registry, behind them).
-There's a bit missing off the edge, look. Snapped off when it came down. Old Tam says a star went over the city when his gran was a girl, low enough to chip the old steps along the street, and came down in the Hushwood.
+There's a bit missing off the edge, look. Snapped off when it came down. Old Tam says his gran saw a star go over the city when she was a girl, a hundred years back, low enough to chip the old steps along the street. It came down in the Hushwood.
 
 He says the chip never left, either. It's been somewhere in the dead part of the city all this while, in some back way nobody walks, and it isn't lying quiet. Something's got hold of it. Bring me the piece and I'll put it back where it goes.
 

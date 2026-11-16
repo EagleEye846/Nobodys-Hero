@@ -49,11 +49,14 @@ export const FIGHT_GROWTH = 1.27;
 // the next one, so mashing doesn't work. Skills can add slashes
 // (extraSlashes) and widen the hit window (toleranceScale).
 export class StrikeBar {
-  constructor(cx, cy, { extraSlashes = 0, toleranceScale = 1, color = COLORS.teal } = {}) {
+  constructor(cx, cy, { extraSlashes = 0, toleranceScale = 1, color = COLORS.teal, slashColor = COLORS.text } = {}) {
     // Where the enemy is, for the PERFECT/GOOD labels.
     this.cx = cx;
     this.cy = cy;
     this.color = color;
+    // The sliding slash marks: white for the hero, a friend's own colour for
+    // theirs (Ves purple, Bramble orange), so you can tell whose swing it is.
+    this.slashColor = slashColor;
     this.tolerance = TOLERANCE * toleranceScale;
     this.slashes = [];
     let x = TRACK.x + TRACK.w + FIRST_GAP;
@@ -155,7 +158,7 @@ export class StrikeBar {
     if (slash.state === 'hit') {
       if (slash.t > BURST_SECONDS) return;
       const k = slash.t / BURST_SECONDS;
-      const color = slash.closeness > 0.85 ? COLORS.yellow : COLORS.text;
+      const color = slash.closeness > 0.85 ? COLORS.yellow : this.slashColor;
       ctx.globalAlpha = 1 - k;
       this.bar(ctx, slash.x, color, SLASH_WIDTH + k * 26, k * -6);
       ctx.strokeStyle = color;
@@ -166,14 +169,14 @@ export class StrikeBar {
       return;
     }
     if (slash.x > TRACK.x + TRACK.w + SLASH_WIDTH) return;
-    const color = slash.state === 'missed' ? COLORS.dim : COLORS.text;
+    const color = slash.state === 'missed' ? COLORS.dim : this.slashColor;
     for (let i = 3; i >= 1; i--) {
       ctx.globalAlpha = 0.1 * (4 - i);
       this.bar(ctx, slash.x + i * TRAIL_STEP, color, SLASH_WIDTH, 0);
     }
     ctx.globalAlpha = 1;
     if (slash.state === 'sliding') {
-      ctx.shadowColor = COLORS.text;
+      ctx.shadowColor = this.slashColor;
       ctx.shadowBlur = 10;
     }
     this.bar(ctx, slash.x, color, SLASH_WIDTH, 0);

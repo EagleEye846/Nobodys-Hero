@@ -9,7 +9,7 @@ import { WORLD_STATE } from '../state/saveGame.js';
 import { SHOPS } from '../data/shops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { soulSprite } from '../battle/soul.js';
-import { drawText, wrapLines, layoutDialogue, drawDialogue, paginate } from '../ui/text.js';
+import { drawText, wrapLines, textWidth, layoutDialogue, drawDialogue, paginate } from '../ui/text.js';
 import { MENU_COLORS, drawWeaponList, drawWeaponDetails, drawArmorDetails, drawItemDetails, listIcon, itemIcon } from '../ui/menuFrame.js';
 import { glide, counting } from '../ui/uiMotion.js';
 import { ITEMS, giveItem, roomForItem } from '../data/items.js';
@@ -19,7 +19,7 @@ import { skillBonus } from '../characters/progress.js';
 import { isWorn, wielderOf, equippedGear, HERO } from '../characters/equipment.js';
 import { inParty } from '../characters/party.js';
 import { STAR_FORGINGS, starLevel } from '../data/fallenStar.js';
-import { hasGear } from '../data/gear.js';
+import { GEAR, hasGear, giveGear, keepsakeText } from '../data/gear.js';
 
 // A shop, laid out like Deltarune's: the shopkeeper behind their counter up
 // top, and two boxes below. The left box is the menu (BUY, TALK, EXIT) or the
@@ -284,8 +284,24 @@ export class ShopScene {
   }
 
   buy(entry) {
-    const { weapon, armor, item, skillPoint } = entry;
+    const { weapon, armor, item, skillPoint, gear } = entry;
     const price = this.priceOf(entry);
+    // GEAR (a Notch Charm), once: their [bought_notch] words.
+    if (gear) {
+      if (hasGear(gear)) {
+        sfx('error');
+        this.say('owned');
+      } else if (HERO_STATE.gold < price) {
+        sfx('error');
+        this.say('too_poor');
+      } else {
+        sfx('levelUp');
+        HERO_STATE.gold -= price;
+        giveGear(gear);
+        this.say('bought_notch');
+      }
+      return;
+    }
     if (skillPoint) {
       if (this.skillPointsBought() >= (entry.limit ?? 1)) {
         sfx('error');
@@ -530,12 +546,13 @@ export class ShopScene {
       // armor and skill points a limited number of times.
       const stock = this.shop.stock;
       const gone = (i) => (stock[i].weapon && HERO_STATE.weapons.includes(stock[i].weapon))
+        || (stock[i].gear && hasGear(stock[i].gear))
         || (stock[i].armor && HERO_STATE.armors.includes(stock[i].armor))
         || (stock[i].skillPoint && this.skillPointsBought() >= (stock[i].limit ?? 1));
       drawWeaponList(ctx, stock.map((_, i) => i), this.buyCursor, {
         area: LIST_AREA,
-        name: (i) => (stock[i].skillPoint ? 'Skill Point' : stock[i].item ? ITEMS[stock[i].item].name : stock[i].armor ? ARMOR[stock[i].armor].name : WEAPONS[stock[i].weapon].name),
-        nameColor: (i) => (gone(i) ? MENU_COLORS.dim : stock[i].skillPoint ? '#ffe14d' : MENU_COLORS.text),
+        name: (i) => (stock[i].skillPoint ? 'Skill Point' : stock[i].gear ? GEAR[stock[i].gear].name : stock[i].item ? ITEMS[stock[i].item].name : stock[i].armor ? ARMOR[stock[i].armor].name : WEAPONS[stock[i].weapon].name),
+        nameColor: (i) => (gone(i) ? MENU_COLORS.dim : stock[i].skillPoint || stock[i].gear ? '#ffe14d' : MENU_COLORS.text),
         tag: (i) => (gone(i) ? { text: stock[i].skillPoint ? 'SOLD OUT' : 'OWNED', color: MENU_COLORS.dim } : { text: `${this.priceOf(stock[i])}G`, color: MENU_COLORS.highlight }),
         icon: (i) => this.entryIcon(stock[i]),
       });
@@ -579,6 +596,7 @@ export class ShopScene {
       const entry = this.mode === 'buy' ? this.shop.stock[this.buyCursor] : this.sellList[this.sellCursor];
       if (!entry) return;
       if (entry.skillPoint) this.drawSkillPointDetails(ctx, entry);
+      else if (entry.gear) this.drawGearDetails(ctx, entry);
       else if (entry.item) drawItemDetails(ctx, entry.item, DETAILS_AREA);
       // Gear gets green and red arrows against what its wearer has on now.
       else if (entry.armor) drawArmorDetails(ctx, entry.armor, DETAILS_AREA, equippedGear(wielderOf('armor', entry.armor), 'armor'));
@@ -601,6 +619,7 @@ export class ShopScene {
   // a candle, or a star for a skill point.
   entryIcon(entry) {
     if (entry.skillPoint) return listIcon('star', '#ffe14d');
+    if (entry.gear) return listIcon('other', '#ffe14d');
     if (entry.item) return itemIcon(entry.item);
     return listIcon(entry.armor ? 'armor' : 'weapon', MENU_COLORS.description);
   }
@@ -609,7 +628,7 @@ export class ShopScene {
   // carry, or whether you own a piece of gear and how it measures up to what
   // the hero wears (+ better, - worse).
   drawOwnedNote(ctx, entry) {
-    if (entry.skillPoint) return;
+    if (entry.skillPoint || entry.gear) return;
     let text = '';
     let color = MENU_COLORS.dim;
     if (entry.item) {
@@ -645,6 +664,18 @@ export class ShopScene {
     drawText(ctx, 'Skill Point', x, y, { size: 30, color: '#ffe14d' });
     drawText(ctx, `${left} left here`, x, y + 34, { size: 24, color: left ? MENU_COLORS.highlight : MENU_COLORS.dim });
     const lines = wrapLines(ctx, 'A point for the skill tree, saved up by someone who never got to spend it. Press C out there and choose SKILLS to use it.', w, 22);
+    drawText(ctx, lines.join('\n'), x, y + 70, { size: 22, lineHeight: 24, color: MENU_COLORS.text });
+  }
+
+  // A Notch Charm for sale: what it is (its KEEPSAKES words), and whether it's yours.
+  drawGearDetails(ctx, entry) {
+    const { x, y, w } = DETAILS_AREA;
+    const owned = hasGear(entry.gear);
+    const name = GEAR[entry.gear].name;
+    const size = Math.min(30, Math.floor((30 * w) / Math.max(1, textWidth(ctx, name, 30))));
+    drawText(ctx, name, x, y, { size, color: '#ffe14d' });
+    drawText(ctx, owned ? 'Yours already' : 'One of a kind', x, y + 34, { size: 24, color: owned ? MENU_COLORS.dim : MENU_COLORS.highlight });
+    const lines = wrapLines(ctx, keepsakeText(entry.gear), w, 22);
     drawText(ctx, lines.join('\n'), x, y + 70, { size: 22, lineHeight: 24, color: MENU_COLORS.text });
   }
 

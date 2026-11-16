@@ -21,7 +21,7 @@ export const KNOTLING = {
     frames: [KNOTLING_DISGUISE_SPRITES.still, KNOTLING_DISGUISE_SPRITES.glare, KNOTLING_DISGUISE_SPRITES.grumble],
     palette: KNOTLING_PALETTE,
   },
-  maxHp: 615,
+  maxHp: 2300,
   damage: 20,
 
   // A Chapter 3 enemy from the deep wood: a touch tougher than the Burrhog.
@@ -29,11 +29,11 @@ export const KNOTLING = {
 
   // Its attacks live in src/battle/attacks/knotling.js.
   patterns: [
-    { name: 'knotRings', weight: 3 },
-    { name: 'knotRoots', weight: 3 },
-    { name: 'knotAcorns', weight: 2 },
+    { name: 'knotRings', weight: 2 },
     { name: 'knotChop', weight: 2 },
     { name: 'knotSap', weight: 2 },
+    { name: 'knotGrudge', weight: 3 },
+    { name: 'knotSaw', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

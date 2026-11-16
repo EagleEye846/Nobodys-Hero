@@ -179,10 +179,14 @@ export const STILLWATER_REEDS = {
     { sprite: 'glow_reeds_tall', x: 31, y: 15, text: 'reeds_reeds', animation: 'glow_reeds_tall', speed: 0.40 },
     { sprite: 'glow_reeds', x: 35, y: 15, text: 'reeds_reeds', animation: 'glow_reeds', speed: 0.47 },
     { sprite: 'glow_reeds_tall', x: 41, y: 15, text: 'reeds_reeds', animation: 'glow_reeds_tall', speed: 0.58 },
-    { sprite: 'fungus_pads', x: 6, y: 10, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 30, y: 8, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 28, y: 4, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 29, y: 14, walkable: true, animation: 'fungus_pads', speed: 0.9 },
+    { sprite: 'fungus_pads', x: 6, y: 10, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 30, y: 8, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 28, y: 4, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 29, y: 14, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'sw_paper_boat', x: 33, y: 10, text: 'lp_reeds_boat', gives: 'paper_boat', animation: 'sw_paper_boat', speed: 0.8, walkable: true, react: true, taken: { gone: true } },
+    { sprite: 'sw_fish_bones', x: 28, y: 8, text: 'sp_bones', walkable: true },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'lake_rock', W: 'lake_wall', '~': 'lake_water', ';': 'lake_shallows', q: 'lake_shingle',

@@ -1,0 +1,85 @@
+# ASHLING
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/ashling.js.
+
+[intro]
+A little heap of ash by the road sits up. It has a head. It has two embers for eyes. Somebody built it, or nobody did. An ASHLING!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+ASHLING pats a bit of itself back on. A different bit falls off.
+
+ASHLING looks at you with both embers. One of them is slightly bigger than the other. It can't help that.
+
+A breeze comes down the road. ASHLING holds on to its head.
+
+ASHLING is trying to stand very straight, the way it remembers people standing.
+
+Smells of a grate in the morning, before anyone has lit it.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+ASHLING is mostly a heap now. It is still looking at you.
+
+[flavor: spareable]
+ASHLING has stopped crumbling. It's holding very still, so as not to spoil the shape you gave it.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Fff.
+
+Hhhhh.
+
+...crmbl.
+
+Stay.
+Stay
+here.
+
+Cold
+now.
+
+Warm?
+You?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/ashling.js.
+[talk: Inspect]
+ASHLING - HP 5300
+What the fire left, packed together and trying to be somebody. Throws flakes, balls of ash and its own ember eyes, and crumbles in walls. Mind where a ball is marked to land.
+
+[talk: Pat it into shape]
+You scoop up what has fallen off it and pat it back on, round the middle, firm, the way you would a snowman. ASHLING stands quite still and lets you. When you step back it is the best shape it has ever been.
+
+[talk: Give it a hat]
+You find a burnt pot lid by the road and set it on ASHLING's head. It is too big. ASHLING tips its head back to see out from under it, and keeps it on.
+
+[talk: Stand very still]
+You stand as still as it does. For a while there are two of you at the side of the road, not moving, while the ash comes down. ASHLING seems to find this very companionable.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+ASHLING slumps into a heap. The two embers glow on in it a little while, and then they don't. A button is lying in the ash where its middle was.
+
+[pacified]
+ASHLING bows, very carefully, holding on to its head. Then it shuffles off along the road, shedding a little, to stand somewhere somebody might see it.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} it would make a very good snowman, in a better year. {foe} doesn't know what snow is. Ves says it's like ash, with manners.
+
+Ves gives {foe} her scarf to hold for a moment. {foe} holds it as if it were the most important job in the world. When she takes it back, it looks lost. She lends it a ribbon.
+
+Ves crouches and draws a smile on {foe} with one finger. It can't see it. She tells it it's a good one. It believes her.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble builds {foe} a little friend out of ash, about knee high, with two pebbles for eyes. {foe} looks at it for a long time. It doesn't fall over. Bramble is very proud.
+
+Bramble asks {foe} if it's cold. {foe} doesn't know. Bramble says he'll check, and touches it, and says ow, and says it's fine.
+
+Bramble tells {foe} he once made a snowman so good his mum kept it in the cold store till spring. {foe} would like to be kept somewhere till spring.

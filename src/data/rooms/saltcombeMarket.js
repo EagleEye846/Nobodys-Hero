@@ -116,9 +116,37 @@ export const SALTCOMBE_MARKET = {
     { sprite: 'c5_sandbags', x: 7, y: 6, text: 'market_sandbags' },
     { sprite: 'c5_tattered_flag', x: 34, y: 7, text: 'market_flag' },
     { sprite: 'c5_planks_scatter', x: 25, y: 19, flat: true, walkable: true },
+    // The boards below the square, wet and well used: rain standing in the low planks, a net
+    // spread out to mend, gulls' feet, a rope left coiled, weed off somebody's boots.
+    { sprite: 'c5_puddle', x: 6, y: 20, flat: true, walkable: true },
+    { sprite: 'c5_puddle', x: 27, y: 17, flat: true, walkable: true },
+    { sprite: 'c5_net_torn', x: 11, y: 16, flat: true, walkable: true },
+    { sprite: 'c5_gull_marks', x: 14, y: 20, flat: true, walkable: true },
+    { sprite: 'c5_rope_coil', x: 33, y: 18, flat: true, walkable: true },
+    { sprite: 'c5_weed_mat', x: 2, y: 19, flat: true, walkable: true },
+    { sprite: 'c5_planks_scatter', x: 8, y: 21, flat: true, walkable: true },
     // The hill garden, less of a lawn: gorse in a corner, a stone come up through it.
     { sprite: 'sc_gorse_small', x: 27, y: 5, text: 'market_garden' },
     { sprite: 'sc_rock_small', x: 34, y: 2, text: 'market_garden' },
+    // (life pass 2026-11-14)
+    // Folk about the apron: a sweeper, a cat on its rounds, a pair gossiping, a kid hopping about (Skerry has lost a cat).
+    { sprite: 'st_sweeper', x: 4, y: 10, npc: 'st_market_sweeper', animation: 'st_sweeper', speed: 0.4, stroll: { path: [[3, 10], [9, 10]], speed: 9, pause: [2, 4], greet: true, keepAnim: true } },
+    { sprite: 'st_cat_walk_b', x: 12, y: 9, text: 'life_m_cat', animation: 'st_cat_walk_b', speed: 0.22, stroll: { path: [[11, 10], [16, 10]], speed: 10, pause: [3, 7], scatter: true, keepAnim: true } },
+    { sprite: 'st_folk_b', x: 8, y: 8, npc: 'st_market_gossip_a', animation: 'st_folk_b', speed: 0.85 },
+    { sprite: 'st_folk_c', x: 9, y: 8, npc: 'st_market_gossip_b', animation: 'st_folk_c', speed: 0.8 },
+    { sprite: 'cf_kid_pup', x: 4, y: 20, npc: 'st_skerry', animation: 'cf_kid_pup', speed: 0.3, quest: [
+      { needs: ['has:pilchard_cat'], take: 'pilchard_cat', set: ['q_pilchard_asked', 'q_pilchard_done'], give: 'bottle_top_medal', text: 'found' },
+      { needs: ['q_pilchard_done'], text: 'after', append: true },
+      { needs: ['!q_pilchard_asked'], set: 'q_pilchard_asked', text: 'ask', append: true },
+    ], stroll: { wander: [1, 19, 7, 21], speed: 20, pause: [1.5, 3.5], hop: true, scatter: true, greet: true } },
+    // Stall dressing: the day's prices, the drying fish (the gull is after them), a broom in a bucket.
+    { sprite: 'st_fish_rack', x: 28, y: 9, text: 'life_m_rack' },
+    { sprite: 'st_broom_bucket', x: 13, y: 8, text: 'life_m_broom' },
+    // Window boxes and tubs along the house fronts.
+    { sprite: 'st_rain_barrel', x: 2, y: 7, text: 'life_m_barrel', animation: 'st_rain_barrel', speed: 0.5 },
+    // Easter eggs: a crate from a very long way inland, a jug of lemonade, a sign nobody listens to.
+    // The garden, for sitting in: a model boat someone sailed here.
+    // Litter and wear.
   ],
   tileTexts: {
     W: 'market_wall', '#': 'market_wall', f: 'market_rail', I: 'market_post', ',': 'market_garden',

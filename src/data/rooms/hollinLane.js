@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // HOLLIN LANE: the one street of Hollin, cottages either side, gardens
 // behind them gone to bramble. The lane gate at the top end is shut and
 // barred. Up on the rooftops, the Hush: its shadow goes up and down the lane,
@@ -15,6 +17,8 @@
 //   f  fence (solid)
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   X  Hollin's cobbles
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HOLLIN_LANE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hollin_lane',
@@ -87,6 +91,8 @@ export const HOLLIN_LANE = {
   // Bramble fits, and leaf piles to hide in.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hollin_lane ?? []),
+    { sprite: 'col_marble_aggie', x: 31, y: 26, walkable: true, flat: true, gives: 'marble_aggie', taken: { gone: true } },
     { sprite: 'gate_narrow', x: 15, y: 2, text: 'lane_gate', opensWith: ['lane_bar'], openText: 'lane_gate_open' },
     { sprite: 'gate_narrow', x: 16, y: 2, text: 'lane_gate', opensWith: ['lane_bar'] },
     { sprite: 'cat_flap', x: 20, y: 21, text: 'lane_flap', gap: true },
@@ -101,6 +107,7 @@ export const HOLLIN_LANE = {
     { sprite: 'leaf_pile', x: 18, y: 10, text: 'leaf_pile', hide: true },
     { sprite: 'leaf_pile', x: 13, y: 6, text: 'leaf_pile', hide: true },
     { sprite: 'leaf_pile', x: 18, y: 4, text: 'leaf_pile', hide: true },
+    ...(R3P_PROPS['hollin_lane'] ?? []),
   ],
   tileTexts: { X: 'lane_cobbles', f: 'hollin_palisade', '6': 'hollin_window', '5': 'hollin_wall', '7': 'hollin_roof', '8': 'hollin_door', L: 'scarlet_tree' },
 

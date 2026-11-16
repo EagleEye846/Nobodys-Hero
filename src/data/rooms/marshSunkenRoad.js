@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE SUNKEN ROAD: the old city's road, raised over the fen on a causeway, its
 // pillars half sunk. Partway across it has slumped into the bog, five tiles of
 // it. Fallen blocks of it lie about the road: shove two into the bog, one
@@ -73,6 +74,8 @@ export const MARSH_SUNKEN_ROAD = {
     { sprite: 'marsh_lantern', x: 20, y: 9, text: 'marsh_lantern', light: 60 },
     { sprite: 'marsh_lantern', x: 29, y: 5, text: 'marsh_lantern', light: 60 },
     { sprite: 'gold_pouch', x: 5, y: 2, text: 'road_purse', gold: 180, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_sunken_road'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

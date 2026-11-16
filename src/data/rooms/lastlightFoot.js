@@ -7,6 +7,8 @@
 //   D  the door up   .  black flagstones   o  the door out   ;  the puddle   I  iron pillar
 // (draft).
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const LASTLIGHT_FOOT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lastlight_foot',
@@ -55,6 +57,8 @@ export const LASTLIGHT_FOOT = {
   textFile: 'interactions/lastlight.txt',
   props: [
     { sprite: 'savepoint', x: 5, y: 6, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 6, y: 6, travel: 'tower_foot', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     // Lamps on posts either side of the way to the stair, long out (the tower is dark; the
     // only lantern hint up here is the one that lights after Corrie).
     { sprite: 'c5_lantern_post_unlit', x: 9, y: 5, text: 'foot_lamp' },
@@ -86,6 +90,7 @@ export const LASTLIGHT_FOOT = {
     { sprite: 'c5_floor_crack', x: 2, y: 10, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 18, y: 4, flat: true, walkable: true },
     { sprite: 'c5_rubble', x: 22, y: 5, flat: true, walkable: true },
+    ...(LIFE5_PROPS['lastlight_foot'] ?? []),
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', H: 'll_niche', 6: 'll_window', D: 'foot_stair_door', o: 'foot_door_out', '.': 'll_floor', ';': 'foot_puddle', I: 'll_pillar' },
 

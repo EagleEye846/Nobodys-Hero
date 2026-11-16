@@ -52,7 +52,7 @@ Yawwwn.
 # TALK options in src/data/enemies/clover_snail.js.
 [talk: Inspect]
 CLOVER SNAIL - HP 1900
-A sleepy green snail with a clover for a shell. Lays down slow walls of slime with a gap, turns a pinwheel of clover leaves out of its shell, and drifts Z's your way. It is slow; the trick is not to join in.
+A sleepy green snail with a clover for a shell. Its slime trail dries from the tail, its lucky four-leaf clovers do you good, and its Z's drift in the moment you stop. Don't join in.
 
 [talk: Hum it a lullaby]
 You hum something soft, low and old. CLOVER SNAIL listens with both eyes shut. It sways. At the end it opens one eye and, in the smallest voice, asks if you know any others.

@@ -158,7 +158,7 @@ export const CRAB_BATTLE_THEME = {
   title: 'The Dowager Will See You Now',
   bpm: 144,
   stepsPerBeat: 4,
-  volume: 1.1,
+  volume: 1.18,
 
   instruments: {
     harp: { sample: 'harp', volume: 0.55, release: 0.5, reverb: 0.3, pan: -0.1 },

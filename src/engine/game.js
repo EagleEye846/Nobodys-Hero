@@ -6,6 +6,8 @@ import { music, sfx } from '../audio/music.js';
 
 // Longest frame step we simulate, so a stalled tab doesn't teleport the player.
 const MAX_FRAME_SECONDS = 1 / 20;
+// How long the window can be out of focus before the game pauses.
+const BLUR_GRACE_MS = 1500;
 
 // Runs the main loop and hands each frame to the active scene.
 // A scene is any object with update(dt, input) and draw(ctx), plus an optional enter(game).
@@ -19,9 +21,19 @@ export class Game {
     // Clicking or tabbing away from the game stops it where it is (a fight
     // won't go on hitting you while you answer a message), under a PAUSED
     // card, and the sound goes quiet. Any key, button or click carries on.
+    // A short blur doesn't count: a screenshot tool (Win+Shift+S, the
+    // browser's Ctrl+Shift+S) takes focus for a moment, and you shouldn't get
+    // a PAUSED card in your picture. Only focus gone for BLUR_GRACE_MS, or the
+    // tab hidden, pauses.
     this.paused = false;
     const pause = () => this.pause();
-    window.addEventListener('blur', pause);
+    window.addEventListener('blur', () => {
+      clearTimeout(this.blurTimer);
+      this.blurTimer = setTimeout(() => {
+        if (!document.hasFocus()) pause();
+      }, BLUR_GRACE_MS);
+    });
+    window.addEventListener('focus', () => clearTimeout(this.blurTimer));
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) pause();
     });

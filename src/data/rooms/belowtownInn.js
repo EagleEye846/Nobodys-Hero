@@ -18,8 +18,8 @@ export const BELOWTOWN_INN = {
 
   tiles: [
     '################',
-    '#hhhhhhhhhhhhhh#',
-    '#hhhhhhhhhhhhhh#',
+    '#hhhhhhhhohhhhh#',
+    '#hhhhhhhhohhhhh#',
     '#oooooooooooooo#',
     '#oooooooooooooo#',
     '#oorrrrrrrrrooo#',
@@ -61,6 +61,11 @@ export const BELOWTOWN_INN = {
     ] },
     { sprite: 'bf_bat_sleeper', x: 3, y: 2, npc: 'bt_inn_bat', animation: 'bf_bat_sleeper', speed: 0.6 },
     { sprite: 'gold_pouch', x: 14, y: 11, text: 'inn_pouch', gold: 25, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass (14 Nov): pegs, stools, a tub, lost property, and a larder behind the wall.
+    { sprite: 'bt_tea_table', x: 11, y: 6, text: 'bl_inn_tea' },
+    { sprite: 'bt_sacks', x: 14, y: 3, text: 'bl_sacks' },
+    { sprite: 'bt_produce_crate', x: 9, y: 1, text: 'bl_inn_larder', gives: 'glowworm_honey', taken: { sprite: 'bt_produce_crate', text: 'bl_inn_larder_empty' } },
+
   ],
   tileTexts: { h: 'inn_wall', r: 'inn_rug', '#': 'town_rock' },
 

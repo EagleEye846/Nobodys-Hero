@@ -40,7 +40,8 @@ function battleSong(area) {
 // "Cutlass Weather" (pirateBattleTheme.js); and from the Wreck Yard on, where
 // the storm is in full, it turns into "Dead Men's Weather"
 // (drownedBattleTheme.js), the same sea gone grim. Anything there asking for
-// Cutlass Weather by name (Old Gulper) gets the grim one too. Once the storm
+// Cutlass Weather by name gets the grim one too. (Old Gulper has his own song
+// now, "Long in the Tooth", oldGulperBattleTheme.js.) Once the storm
 // has lifted (`stormOver`, after the chapter) those fights go back to Cutlass
 // Weather.
 // The longest BILLOW (Ves's sail) can keep the party untouchable, in seconds.
@@ -55,10 +56,13 @@ const AREA_SONGS = {
   // The cliff cave (its own backdrop, coastBackdrops.js) has its own dark fight song,
   // "Echoes Back" (cliffCaveBattleTheme.js): the cave song's hook in E minor, the bats' echoes.
   cliff_cave: { coastBattleStorm: 'cliffCaveBattle' },
-  // The Soundings' sea caves have theirs too, "No Bottom" (soundingsBattleTheme.js): the
-  // Soundings' hook, low and heavy. Under the cliffs the storm makes no difference, so it
-  // stays after the storm has lifted (only 'drownedBattle' turns back into Cutlass Weather).
-  soundings: { ...STORM_FIGHT, coastBattleStorm: 'soundingsBattle' },
+  // The Soundings' sea caves have theirs too, "By the Mark" (leadlineBattleTheme.js, since
+  // 15 November 2026): a ping and its echo, the plumb lead swinging, the Soundings' hook on
+  // piano with the cave playing it back. Under the cliffs the storm makes no difference, so
+  // it stays after the storm has lifted, and anything there asking for the storm or pirate
+  // fight by name gets it too. ("No Bottom", soundingsBattleTheme.js, the one before, is
+  // still in the game's songs; swap the name back here to hear it again.)
+  soundings: { coastBattleStorm: 'leadlineBattle', pirateBattle: 'leadlineBattle', drownedBattle: 'leadlineBattle' },
   wrack: COAST_FIGHT, saltcombe: COAST_FIGHT, lanes: COAST_FIGHT,
   wreck: STORM_FIGHT, merrow: STORM_FIGHT,
   isles: STORM_FIGHT, haddock_light: STORM_FIGHT, reach: STORM_FIGHT, lastlight: STORM_FIGHT,
@@ -85,9 +89,11 @@ import { HERO_STATE } from '../characters/heroState.js';
 import { ITEMS, giveItem, healLabel } from '../data/items.js';
 import { MATERIALS, giveMaterial } from '../data/candles.js';
 import { WORLD_STATE } from '../state/saveGame.js';
-import { gainExp, heroMaxHp, heroHp, setHeroHp, healHeroFully, knownSpells, memberCommands, skillBonus, memberSkillBonus, heroDefense, spellPotency, armorSpGain, spellSharpening } from '../characters/progress.js';
+import { battleSpells, battleCommands } from '../characters/notches.js';
+import { gainExp, heroMaxHp, heroHp, setHeroHp, healHeroFully, memberCommands, skillBonus, memberSkillBonus, heroDefense, spellPotency, armorSpGain, spellSharpening } from '../characters/progress.js';
 import { WEAPONS } from '../data/weapons.js';
 import { SPELLS, SPELL_WEAPON_CAP } from '../data/spells.js';
+import { starfallPower, starForging } from '../data/fallenStar.js';
 import { Soul, SOUL_RADIUS, GRAZE_RADIUS } from './soul.js';
 import { SOUL_ABILITIES } from './soulAbilities.js';
 import { createPattern } from './bullets.js';
@@ -96,6 +102,7 @@ import { BACKDROPS } from './backdrops.js';
 import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import * as hud from './hud.js';
 import { SpellEffects } from './spellEffects.js';
+import { PartyMoves } from './partyMoves.js';
 import { StageBits, entranceOffset, bitColors, ENTER_LANDS, CURTAIN_PARTS, CURTAIN_OPEN } from './stageBits.js';
 import { drawCurtains } from './theatreBackdrop.js';
 import { STAGE_EFFECTS } from './stageEffects.js';
@@ -144,10 +151,11 @@ export function enemyForChapter(data, chapter = WORLD_STATE.chapter ?? 1) {
   }
   return out;
 }
-// From chapter 5 on, a regular enemy in a group has this share of its HP
-// (2 or 3 of them): the coast's monsters are built to take a lone fight of
-// several rounds, and three at full HP would outlast a boss.
-const GROUP_HP_CHAPTER = 5;
+// A regular enemy in a group has this share of its HP (2 or 3 of them):
+// monsters are built to take a lone fight of several rounds (about four or
+// five rounds of good FIGHTs), and three at full HP would outlast a boss.
+// Chapter 5 only until 13 November 2026, when every chapter's HP went up.
+const GROUP_HP_CHAPTER = 1;
 const GROUP_HP_SHARE = { 1: 1, 2: 0.7, 3: 0.6 };
 export function groupHpShare(size, chapter = WORLD_STATE.chapter ?? 1) {
   return chapter >= GROUP_HP_CHAPTER ? GROUP_HP_SHARE[size] ?? 1 : 1;
@@ -159,13 +167,19 @@ export function groupHpShare(size, chapter = WORLD_STATE.chapter ?? 1) {
 // once the target is fully calm. Spells in TARGETED_SPELLS ask which enemy.
 const HEAL_PULSE_HP = 35;
 const LULL_CALM = 30;
+// MERCY from a SPELL (yours or an ally's) is only a nudge: a tenth of the spell's own number, at least 1%, and it
+// doesn't grow with spell power (at 40% a cast, any boss was spared in three turns). Talking is how you calm someone.
+const SPELL_MERCY = 0.1;
+function spellMercy(amount) {
+  return amount > 0 ? Math.max(1, Math.round(amount * SPELL_MERCY)) : 0;
+}
 // Chapter 2's spells.
 const MEND_HP = 20;
 const HUSH_CALM = 20;
 const WARD_TURNS = 2;
 // Chapters 3 and 4: Balm and Renew heal by their `heals` (src/data/spells.js),
 // Aegis is a ward of `turns`, Serenade calms everyone by its `calm`.
-const TARGETED_SPELLS = new Set(['rend', 'lull', 'pacify', 'starfall', 'comet', 'spark', 'siphon', 'sunder', 'lance', 'tempest', 'nova', 'undertow', 'brine', 'low_water', 'cleave', 'undercut', 'overwhelm', 'truce']);
+const TARGETED_SPELLS = new Set(['rend', 'lull', 'pacify', 'starfall', 'comet', 'spark', 'siphon', 'sunder', 'lance', 'tempest', 'undertow', 'brine', 'low_water', 'cleave', 'undercut', 'overwhelm', 'truce']);
 const HEALING_SPELLS = new Set(['heal', 'mend', 'renew']);
 // What the attack spells say as they're cast.
 const ATTACK_SPELL_LINES = {
@@ -201,8 +215,10 @@ function spellText(section, values) {
 
 // Grazing, like Deltarune: a bullet entering the graze area gives a burst of SP
 // and shaves a little off the enemy's turn; staying close keeps trickling SP in.
-const GRAZE_SP = 2.5;
-const GRAZE_HOLD_SP_PER_SECOND = 4;
+// (Halved 13 November 2026: grazing alone filled the bar most enemy turns,
+// so the skills and armour that add graze SP did nothing you'd notice.)
+const GRAZE_SP = 1.25;
+const GRAZE_HOLD_SP_PER_SECOND = 2;
 const GRAZE_TURN_CUT_SECONDS = 0.08;
 // From chapter 5 on, graze SP bonuses past double count half: the coast's
 // gear and skills stack high enough to fill the bar every enemy turn, and a
@@ -219,6 +235,10 @@ const BLOCK_SP = 1;
 
 // How long an early SHIFT press waits for the soul ability to be ready.
 const ABILITY_BUFFER = 0.35;
+// The strike bar's slash marks on a friend's FIGHT.
+const ALLY_SLASH_COLORS = { vesper: '#b48cff', bramble: '#ff8c3a' };
+// A press this close to the end of a recharge waits for it.
+const ABILITY_RECHARGE_WAIT = 0.6;
 
 // Running away gets likelier every turn.
 const RUN_BASE_CHANCE = 0.4;
@@ -444,6 +464,8 @@ function boxHome() {
   delete hud.BOX.hint;
   // (An attack can list the deck: the Fair Return's captain, ghost_ship attacks.)
   delete hud.BOX.tilt;
+  // (Madam Fairweather's deck: her list and her waltz, fairweatherDeck.js.)
+  delete hud.BOX.deck;
 }
 
 // The hero's aura: a pulsing glow behind them and motes rising from their feet.
@@ -564,7 +586,7 @@ export class BattleScene {
       ...PARTY.map((member) => ({ ...member, level: HERO_STATE.level, maxHp: heroMaxHp(), hp: heroHp() })),
       // (A hurt friend sits on the ground for the fight: their `hurt` look.)
       ...partyIds().map((id) => ({
-        id, ...MEMBERS[id], commands: memberCommands(id), sprite: this.memberSprite(id), level: HERO_STATE.level, maxHp: memberMaxHp(id), hp: memberHp(id), ally: true, hurt: Boolean(hurtState(id)),
+        id, ...MEMBERS[id], commands: battleCommands(id), sprite: this.memberSprite(id), level: HERO_STATE.level, maxHp: memberMaxHp(id), hp: memberHp(id), ally: true, hurt: Boolean(hurtState(id)),
       })),
     ];
     this.hero = this.party[0];
@@ -605,7 +627,8 @@ export class BattleScene {
     // Thrift and Gentle Hands make spells cheaper. From chapter 5 on, a big
     // spell's discount stops at a quarter, so it's a choice every other turn
     // rather than every turn.
-    this.spells = knownSpells().map((id) => {
+    // Only the spells in the hero's SPELL NOTCHES come along (src/characters/notches.js).
+    this.spells = battleSpells().map((id) => {
       let discount = skillBonus('spellDiscount') + (id === 'pacify' ? skillBonus('pacifyDiscount') : 0);
       if ((WORLD_STATE.chapter ?? 1) >= BIG_SPELL_CHAPTER && SPELLS[id].sp >= BIG_SPELL_SP) discount = Math.min(BIG_SPELL_DISCOUNT, discount);
       // A spell that takes the whole bar (Starstorm, Nova) always takes the whole bar.
@@ -625,7 +648,8 @@ export class BattleScene {
     // The armor: DEF takes something off every hit, MAG strengthens spells.
     this.defense = heroDefense();
     this.potency = spellPotency();
-    this.lastStandReady = skillBonus('lastStand') > 0;
+    // How many knockouts Last Stand can still save you from (Not Yet adds a second).
+    this.lastStandReady = skillBonus('lastStand');
 
     // Kindling: some SP from the start.
     this.sp = Math.min(100, skillBonus('spStart'));
@@ -663,6 +687,8 @@ export class BattleScene {
     this.popups = [];
     // Spells' bursts over the stage (src/battle/spellEffects.js).
     this.fx = new SpellEffects();
+    // The party's swings, casts, guards and poses (partyMoves.js).
+    this.moves = new PartyMoves();
     // Dust, sparks and lights over the stage (src/battle/stageBits.js).
     this.bits = new StageBits();
     this.hitStop = 0;
@@ -1029,7 +1055,9 @@ export class BattleScene {
     if (phase.quiet) music.play(null);
     // (`musicFrom`: start that song at one of its sections, even if it's
     // already playing: Corrie's phases each cut to their own part.)
-    else if (phase.music) music.play(phase.music, null, phase.musicFrom ?? null);
+    // The song goes through the same area swaps as the fight's own (songFor),
+    // so a coast phase asking for Cutlass Weather gets the storm's version.
+    else if (phase.music) music.play(songFor(phase.music, this.area, this.stormOver), null, phase.musicFrom ?? null);
     if (phase.calm !== undefined) foe.calm = phase.calm;
     // The rest of a hit the last phase's floor held back (see resist), unless
     // this phase heals her back up anyway. Never past this phase's own floor.
@@ -1088,7 +1116,7 @@ export class BattleScene {
       const member = this.party.find((other) => other.id === id);
       if (!member) continue;
       member.hurt = false;
-      member.commands = memberCommands(id);
+      member.commands = battleCommands(id);
       member.maxHp = memberMaxHp(id);
       member.hp = member.maxHp;
       member.sprite = this.memberSprite(id);
@@ -1290,7 +1318,7 @@ export class BattleScene {
     sayClips(this.tauntClips?.shift());
   }
 
-  // Leaves a foe open (LOW WATER, WEAKEN, Ves's CHARGE, Bramble's NOTCH): every
+  // Leaves a foe open (LOW WATER, WEAKEN, Ves's CHARGE, Bramble's MARK IT): every
   // hit on it lands `bonus` harder for `turns` enemy turns (see resist). A
   // weaker one doesn't replace a stronger one that's still on it.
   exposeFoe(foe, { bonus, turns }) {
@@ -1327,7 +1355,8 @@ export class BattleScene {
   allyCommands(ally) {
     const change = this.bossPhase()?.allyCommands?.[ally.id];
     if (!change) return ally.commands;
-    return [...ally.commands.filter((command) => change.keep?.includes(command.label)), ...(change.add ?? [])];
+    // (`keep` reaches past the notches: those come along whatever they had notched.)
+    return [...memberCommands(ally.id).filter((command) => change.keep?.includes(command.label)), ...(change.add ?? [])];
   }
 
   // An ally's weapon power for FIGHT: their own, or the phase's `allyFight`.
@@ -1492,6 +1521,9 @@ export class BattleScene {
         this.strike = new StrikeBar(this.target.center.x * S, this.target.center.y * S, this.actor.ally ? {
           extraSlashes: this.allySlashes(this.actor),
           color: this.bossPhase()?.allyFight?.[this.actor.id]?.color ?? this.actor.color,
+          // Their slash marks in their own colour, a shade brighter so they
+          // show on the dark bar (Ves purple, Bramble orange).
+          slashColor: ALLY_SLASH_COLORS[this.actor.id] ?? this.actor.color,
         } : {
           extraSlashes: skillBonus('strikeSlashes'),
           toleranceScale: 1 + skillBonus('strikeTolerance'),
@@ -1558,7 +1590,7 @@ export class BattleScene {
     // the boss's HP drops below that share, played once. (`music`: the song
     // it cuts to then, for the rest of the fight: Peptup's "Upside Down";
     // with `musicFrom`, at one of its sections, even if it's already playing:
-    // PUDDING's shatter.)
+    // the Pale Olm's shatter.)
     const finale = this.bossPhase(foe)?.finale;
     if (finale && !foe.finaleDone && foe.hp < foe.maxHp * finale.below) {
       foe.finaleDone = true;
@@ -1737,6 +1769,8 @@ export class BattleScene {
     this.abilityLeft = 0;
     this.abilityUses = 0;
     this.abilityState = {};
+    this.abilityPending = false;
+    this.abilityBuffered = 0;
     this.grazeMultiplier = 1;
 
     const box = hud.BOX;
@@ -1766,6 +1800,9 @@ export class BattleScene {
       const shout = shouts[Math.floor(Math.random() * shouts.length)] ?? `${caller.name} shouts a warning!`;
       this.dodgeHint = shout.replaceAll('{foe}', this.attackers[0]?.name ?? 'it');
     }
+    // A phase's stage effects can set rules for the turn (Madam Fairweather's
+    // listing deck and her waltz: they move the shadow, soul.mover).
+    this.stageFx?.turnStart?.(this);
   }
 
   // Ends the battle. onEnd also hears how each enemy left: [{ enemy, state }],
@@ -1792,6 +1829,9 @@ export class BattleScene {
     // Time played, kept apart from playSeconds (the clock the sun runs on), which a
     // cutscene's `time` step can set. An old save starts it from the clock.
     WORLD_STATE.timePlayed = (WORLD_STATE.timePlayed ?? WORLD_STATE.playSeconds ?? 0) + dt;
+    // A SHIFT press on the enemies' turn is kept until updateAbility reads it,
+    // even on a frame that goes no further (a hit stop, the box still opening).
+    if (this.phase === 'dodge' && input.wasPressed('ability')) this.abilityPending = true;
     // The hit stop on a boss's last blow: everything holds still.
     if (this.hitStop > 0) {
       this.hitStop -= dt;
@@ -1832,6 +1872,7 @@ export class BattleScene {
     // HP bars' ghosts, dust off the fallen (battleFeel.js).
     feel.feelUpdate(this, dt);
     this.updateEffects(dt);
+    this.moves.update(this);
     this.stageFx?.update?.(this, dt);
 
     switch (this.phase) {
@@ -2001,7 +2042,7 @@ export class BattleScene {
   // bonus on every calming move made a 12 SP FLURRY worth over 100%.)
   allyCalmAmount(ally, base) {
     if (!base) return 0;
-    return this.allyPotent(ally, base * Math.max(0.25, 1 + this.allyBonus(ally, 'allyCalm') / 100));
+    return spellMercy(base * Math.max(0.25, 1 + this.allyBonus(ally, 'allyCalm') / 100));
   }
 
   // Bramble's sneak attack, after he HIDES: his next hit is SNEAK_POWER times
@@ -2675,6 +2716,7 @@ export class BattleScene {
 
   // One of an ally's spells, made stronger by their skills and gear.
   allyAct(ally, command) {
+    this.moves.cast(this, ally, command.label, command);
     const lines = [command.text];
     this.allyFx(ally, command);
     if (command.calmAll) {
@@ -2735,6 +2777,13 @@ export class BattleScene {
       this.hiding = ally.id;
       this.sneaking = ally.id;
       lines.push(`Nothing will aim at ${ally.name} this turn. His next hit is a sneak attack!`);
+      // Hiding Spot (`hideHeal`): a snack while he's down there, that share
+      // of his healing.
+      const snack = this.allyBonus(ally, 'hideHeal');
+      if (snack > 0 && ally.hp > 0) {
+        const healed = this.healMember(ally, this.allyPotent(ally, snack * this.allyBonus(ally, 'allyHeal')));
+        if (healed) lines.push(`${ally.name} recovered ${healed} HP.`);
+      }
     }
     // COVER (Ves, hurt): her coat held over you. Like SHELTER (the next
     // attack is halved, and every hit does a little less, more with a thick
@@ -2755,6 +2804,15 @@ export class BattleScene {
       this.defending = true;
       this.shelter = { def: SHELTER_DEF + Math.max(0, this.allyBonus(ally, 'shelterDef')), gust: Math.max(0, this.allyBonus(ally, 'gust')) + (this.shelter?.gust ?? 0) };
       lines.push(`Every hit does ${this.shelter.def} less, too.${this.shelter.gust ? ' A gust will slow the bullets.' : ''}`);
+      // Tuck In (`shelterHeal`): everyone under the umbrella gets that share
+      // of her healing back.
+      const tuck = this.allyBonus(ally, 'shelterHeal');
+      if (tuck > 0) {
+        const amount = this.allyPotent(ally, tuck * this.allyBonus(ally, 'allyHeal'));
+        let total = 0;
+        for (const member of this.party.filter((other) => other.hp > 0)) total += this.healMember(member, amount);
+        if (total) lines.push(`Everyone under it recovered ${amount} HP.`);
+      }
     }
     // HEADWIND: the next attack's bullets start out slowed, as SHELTER's gust
     // does, without the umbrella over you (her gust skills add to it).
@@ -2773,7 +2831,7 @@ export class BattleScene {
       this.riposte = { ally, damage: this.allyStrikeDamage(ally, command.riposte) };
       lines.push(`The next hit will be thrown back for ${this.riposte.damage} damage.`);
     }
-    // CHARGE and NOTCH: the one they chose is left open (LOW WATER's `exposed`).
+    // CHARGE and MARK IT: the one they chose is left open (LOW WATER's `exposed`).
     if (command.expose && this.target) {
       this.exposeFoe(this.target, command.expose);
       lines.push(`${this.target.name} takes ${Math.round(command.expose.bonus * 100)}% more from every hit for ${command.expose.turns} enemy turns.`);
@@ -2871,7 +2929,9 @@ export class BattleScene {
       this.teamTalk(option, foe);
     }
     (foe.said ??= new Set()).add(option.name);
-    let text = this.foeLine(foe, `talk: ${option.name}`);
+    // The Check line's "NAME - HP n" always shows the HP it really has in
+    // this fight (chapter strength, party size), not the number typed in the text file.
+    let text = this.foeLine(foe, `talk: ${option.name}`).replace(/ - HP \d+/, ` - HP ${foe.maxHp}`);
     // A TALK that spares it, like Pacify.
     if (option.spare) {
       this.spareFoe(foe, text);
@@ -2903,7 +2963,7 @@ export class BattleScene {
     if (index === null) return;
 
     const spell = this.spells[index];
-    if (this.sp < spell.sp) {
+    if (!this.freeSpell && this.sp < spell.sp) {
       this.showMessage('Not enough SP.\nGraze past bullets to build spell power.', 'spells');
       return;
     }
@@ -2920,7 +2980,10 @@ export class BattleScene {
     } else if ((spell.id === 'hush' || spell.id === 'serenade' || spell.id === 'soothe') && this.refuseMercy(this.activeFoes().find((other) => this.mercyRule(other)))) {
       return;
     }
-    this.sp -= spell.sp;
+    // After a Brine Tonic (`freeSpell`) the next spell is on the house.
+    if (this.freeSpell) this.freeSpell = false;
+    else this.sp -= spell.sp;
+    this.moves.cast(this, this.hero, spell.id);
     if (SPELL_SOUNDS[spell.id]) sfx(SPELL_SOUNDS[spell.id]);
     const name = this.hero.name;
     switch (spell.id) {
@@ -3002,7 +3065,7 @@ export class BattleScene {
         this.fx.add('snow', { style: 'flurry' });
         for (const other of this.activeFoes()) this.fx.add('calm', other.center);
         const calm = spell.id === 'hush' ? HUSH_CALM : SPELLS[spell.id].calm;
-        const calmed = this.activeFoes().map((other) => this.calmFoe(other, this.potent(calm), '').trim());
+        const calmed = this.activeFoes().map((other) => this.calmFoe(other, spellMercy(calm), '').trim());
         const words = spell.id === 'hush' ? 'Snow seems to fall inside the room.' : spell.id === 'soothe' ? 'Everything in the room goes quiet and still.' : 'A song nobody taught you fills the room.';
         this.showMessage(`${name} cast ${spell.name}. ${words}\n${calmed.join('\n')}`, 'taunt');
         break;
@@ -3019,7 +3082,7 @@ export class BattleScene {
         break;
       case 'lull':
         this.fx.add('calm', foe.center);
-        this.showMessage(this.calmFoe(foe, this.potent(foe.data.lullCalm ?? LULL_CALM), `${name} cast Lull. A soft hush settles over the room.`), 'taunt');
+        this.showMessage(this.calmFoe(foe, spellMercy(foe.data.lullCalm ?? LULL_CALM), `${name} cast Lull. A soft hush settles over the room.`), 'taunt');
         break;
       // Chapter 5's third wave (see src/data/spells.js).
       // COUNTER: the next hit on you goes back at them, as PARASOL SPIN's does.
@@ -3042,7 +3105,7 @@ export class BattleScene {
         sfx('truce');
         this.fx.add('calm', foe.center);
         this.flinch = Math.min(MAX_FLINCH, (this.flinch ?? 0) + SPELLS.truce.shove);
-        this.showMessage(`${this.calmFoe(foe, this.potent(SPELLS.truce.calm), `${name} cast Truce, and lowers the sword a little.`)}\nTheir next attack will be shorter.`, 'taunt');
+        this.showMessage(`${this.calmFoe(foe, spellMercy(SPELLS.truce.calm), `${name} cast Truce, and lowers the sword a little.`)}\nTheir next attack will be shorter.`, 'taunt');
         break;
       // WEAKEN: every enemy left open, like LOW WATER but smaller and shorter.
       case 'weaken': {
@@ -3102,8 +3165,14 @@ export class BattleScene {
     if (id === 'ember' || id === 'sunburst') this.fx.add('embers', { points: this.activeFoes().map((other) => other.center) });
     else if (id === 'starstorm') for (const other of this.activeFoes()) this.fx.add('starfall', other.center);
     else if (id === 'chain') this.fx.add('chain', { points: [hero, ...this.activeFoes().map((other) => other.center)] });
+    else if (id === 'nova') {
+      const points = this.activeFoes().map((other) => other.center);
+      if (points.length) this.fx.add('nova', { x: points.reduce((sum, point) => sum + point.x, 0) / points.length, y: points.reduce((sum, point) => sum + point.y, 0) / points.length });
+    }
     else if (!foe) return;
     else if (id === 'siphon') this.fx.add('siphon', { ...foe.center, to: hero });
+    // Starfall: the whole sky (bigger the more the Fallen Star's been reforged).
+    else if (id === 'starfall') this.fx.add('starfallShow', { ...foe.center, stars: HERO_STATE.weapons?.includes('fallen_star') ? starForging().stars : 0 });
     else this.fx.add(ATTACK_SPELL_FX[id] ?? id, foe.center);
   }
 
@@ -3157,7 +3226,7 @@ export class BattleScene {
       case 'HOT SOUP': sfx('soup'); this.fx.add('aurora', { ...this.partyMiddle(), h: me.h }); return;
       case 'CHARGE': sfx('charge'); return;
       case 'WINDBREAK': sfx('umbrella'); this.fx.add('shell', { ...this.partyMiddle(), style: 'umbrella' }); return;
-      case 'NOTCH': sfx('notch'); return;
+      case 'MARK IT': sfx('notch'); return;
       case 'RALLY': sfx('rally'); this.fx.add('shout', me); return;
       case 'LOOK OUT!': sfx('lookOut'); this.fx.add('shout', me); return;
       case 'POCKET SAND': sfx('sandThrow'); for (const point of all()) this.fx.add('pebble', point); return;
@@ -3215,7 +3284,9 @@ export class BattleScene {
   // keeps spells as far ahead of the FIGHT bar as they were before its curve
   // got gentler (see strikeBar.js).
   spellStrike(id) {
-    const chapter = spellSharpening(id)?.chapter ?? SPELLS[id].chapter ?? 1;
+    // Starfall is the hero's own spell: it never stops growing (it's measured
+    // against the chapter you're in, not the one it was learned in).
+    const chapter = id === 'starfall' ? Math.min(WORLD_STATE.chapter ?? 1, Math.max(...Object.keys(SPELL_WEAPON_CAP).map(Number))) : spellSharpening(id)?.chapter ?? SPELLS[id].chapter ?? 1;
     const slashes = BASE_SLASH_COUNT + skillBonus('strikeSlashes', chapter);
     const weapon = Math.max(1, Math.min(this.weapon.fightPower, SPELL_WEAPON_CAP[chapter] ?? Infinity));
     return slashes * SLASH_DAMAGE * FIGHT_GROWTH * weapon * (1 + skillBonus('fightPower', chapter));
@@ -3226,6 +3297,9 @@ export class BattleScene {
   // than multiply, so spells stay in line with FIGHT. Heavy armor (MAG
   // below 0) doesn't take any away.
   spellDamage(id, power = spellSharpening(id)?.power ?? SPELLS[id].power ?? 1) {
+    // Starfall grows with the Fallen Star and its own sharpenings (starfallPower
+    // in src/data/fallenStar.js).
+    if (id === 'starfall') power = starfallPower();
     const boost = Math.max(0, this.potency - 1) / 4 + skillBonus('spellPower') / 2;
     return Math.max(1, Math.round(this.spellStrike(id) * (power + boost)));
   }
@@ -3236,7 +3310,13 @@ export class BattleScene {
   // your spells are (see strikeBar.js).
   allyStrikeDamage(ally, power) {
     const boost = power ? Math.max(0, this.allyBonus(ally, 'magic')) / 4 : 0;
-    return Math.max(1, Math.round((this.bestStrike(ally) * (power + boost) + this.allyBonus(ally, 'allyStrike')) * FIGHT_GROWTH));
+    // A mage's attack spells grow faster than their FIGHT (Ves's `spellPower`, src/characters/party.js).
+    // (`allyMagic`: her own skills on top, which count for her alone.)
+    const mage = power ? 1 + Math.max(0, this.allyBonus(ally, 'spellPower')) + Math.max(0, this.allyBonus(ally, 'allyMagic')) : 1;
+    // A mage (`spellBase: 'hero'`, Ves) casts from halfway between her own arm and the hero's best FIGHT:
+    // well above Bramble's hatchet spells, a little above the hero's own.
+    const base = power && MEMBERS[ally.id]?.spellBase === 'hero' ? Math.max(this.bestStrike(ally), (this.bestStrike(ally) + this.bestStrike(this.hero ?? {})) / 2) : this.bestStrike(ally);
+    return Math.max(1, Math.round((base * (power + boost) + this.allyBonus(ally, 'allyStrike')) * FIGHT_GROWTH * mage));
   }
 
   // Rend, Starfall, Ember Flare and the rest: a hit on the target (shown with
@@ -3247,7 +3327,18 @@ export class BattleScene {
     this.attackFx(spell.id);
     const words = `${this.hero.name} cast ${spell.name}! ${ATTACK_SPELL_LINES[spell.id] ?? ''}`.trim();
     if (SPELLS[spell.id].all) {
-      this.showMessage(words, () => this.strikeAll(damage));
+      // Nova (15 Nov 2026): on everyone, and it also drags their next attack short (`shove`) and mends the party a little (`heals`).
+      const { shove: pushBack = 0, heals } = SPELLS[spell.id];
+      const extra = [];
+      if (pushBack) this.flinch = Math.min(MAX_FLINCH, (this.flinch ?? 0) + pushBack);
+      if (heals) {
+        const amount = this.potent(heals * (1 + skillBonus('healBoost')));
+        for (const other of this.party.filter((one) => one.hp > 0)) this.healFx(other, this.healMember(other, amount));
+        sfx('heal');
+      }
+      if (pushBack && heals) extra.push('Their next attack is shorter, and the party recovers a little.');
+      else if (pushBack) extra.push('Their next attack will be shorter.');
+      this.showMessage(extra.length ? `${words}\n${extra.join('\n')}` : words, () => this.strikeAll(damage));
       return;
     }
     // UNDERTOW: the water drags them back; their next attack is shorter.
@@ -3280,6 +3371,7 @@ export class BattleScene {
   // A hit on every enemy at once (Ember Flare, Ves's Sleet). Any that fall
   // leave one after another, then the turn goes on as after any attack.
   strikeAll(damage) {
+    this.moves.landed(this, 'spell');
     const active = this.activeFoes();
     if (this.tideSwap) damage = Math.round(damage * this.tideSwap.attack);
     for (const foe of active) {
@@ -3319,6 +3411,7 @@ export class BattleScene {
   useItem(index, member) {
     if (ITEMS[this.items[index]].use === 'calm' && this.refuseMercy(this.activeFoes().find((foe) => this.mercyRule(foe)))) return;
     const [id] = this.items.splice(index, 1);
+    this.moves.item(this, this.actor ?? this.hero, id, member);
     const item = ITEMS[id];
     sfx('heal');
     // An ally uses it on you: they light the candle, or hand you the food.
@@ -3332,7 +3425,9 @@ export class BattleScene {
     }
     if (item.use === 'sp') {
       this.gainSp(item.amount);
-      this.showMessage(`${light} the ${item.name}. Its glow fills you with power. SP +${item.amount}%!`, 'taunt');
+      // A `freeSpell` item (the Brine Tonic) also makes your next spell cost nothing.
+      if (item.freeSpell) this.freeSpell = true;
+      this.showMessage(`${light} the ${item.name}. Its glow fills you with power. SP +${item.amount}%!${item.freeSpell ? '\nYour next spell costs no SP!' : ''}`, 'taunt');
       return;
     }
     if (item.use === 'guard') {
@@ -3359,6 +3454,7 @@ export class BattleScene {
     const foe = this.target;
     // Who lunges, and whose colour the slash is.
     this.striker = this.actor ?? this.hero;
+    this.moves.landed(this, kind);
     if (this.tideSwap) damage = Math.round(damage * this.tideSwap.attack);
     damage = this.resist(foe, damage, kind);
     foe.hp = Math.max(0, foe.hp - damage);
@@ -3534,6 +3630,8 @@ export class BattleScene {
       this.gustShown = true;
       this.gustLeft = Math.max(0, this.gustLeft - dt);
     }
+    // (A stage's turn rules keep their clock before the attacks look at it.)
+    this.stageFx?.beforeAttacks?.(this, dt);
     for (const attack of this.attacks) {
       if (this.dodgeTime < attack.delay) continue;
       // An encore or a layered attack coming in is a new beat: the monster
@@ -3644,8 +3742,24 @@ export class BattleScene {
     const canUse = !ability.hold && hasCharges && this.abilityCooldown <= 0 && (ability.whileHurt || this.soul.iframes <= 0);
     // A press a little early (still recharging, still flashing) isn't lost:
     // it's held for ABILITY_BUFFER seconds and goes off the moment it can.
-    if (input.wasPressed('ability')) this.abilityBuffered = ABILITY_BUFFER;
-    else this.abilityBuffered = Math.max(0, (this.abilityBuffered ?? 0) - dt);
+    // While you're still flashing from a hit (up to a second, longer with
+    // skills) it waits out the flashing, and the last moments of a recharge
+    // too: before, a press in the first part of the flash was quietly dropped.
+    // One that can't go off soon (still recharging, no charges left) blips,
+    // so it doesn't feel like the key was missed.
+    if (this.abilityPending) {
+      this.abilityPending = false;
+      const flashing = ability.whileHurt ? 0 : this.soul.iframes;
+      const recharge = this.abilityCooldown <= ABILITY_RECHARGE_WAIT ? this.abilityCooldown : Infinity;
+      const wait = hasCharges && !ability.hold ? Math.max(flashing, recharge) : Infinity;
+      if (wait === Infinity) {
+        if (!ability.hold) sfx('error');
+      } else {
+        this.abilityBuffered = ABILITY_BUFFER + wait;
+      }
+    } else {
+      this.abilityBuffered = Math.max(0, (this.abilityBuffered ?? 0) - dt);
+    }
     if (canUse && this.abilityBuffered > 0) {
       this.abilityBuffered = 0;
       if (ability.activate?.(this, input) === false) {
@@ -3840,11 +3954,12 @@ export class BattleScene {
     feel.shadowHurt(this, victim, damage);
     this.flinching = victim;
     soul.iframes = BASE_IFRAMES + skillBonus('iframes');
-    // Last Stand: the hero's first knockout of the battle leaves them hanging on at 1 HP.
-    if (victim === this.hero && this.hero.hp <= 0 && this.lastStandReady) {
-      this.lastStandReady = false;
+    // Last Stand: the hero's first knockout of the battle leaves them hanging
+    // on at 1 HP (and with Not Yet, the second as well).
+    if (victim === this.hero && this.hero.hp <= 0 && this.lastStandReady > 0) {
+      this.lastStandReady -= 1;
       this.hero.hp = 1;
-      this.addPopup('LAST STAND!', soul.x, soul.y - 18, hud.COLORS.calm);
+      this.addPopup(this.lastStandReady ? 'LAST STAND!' : skillBonus('lastStand') > 1 ? 'NOT YET!' : 'LAST STAND!', soul.x, soul.y - 18, hud.COLORS.calm);
     }
     if (victim.hp > 0) return;
     // Knocked down: they can't act until someone heals them (an item, or a
@@ -3865,8 +3980,8 @@ export class BattleScene {
   // Every enemy is beaten or pacified: hand out what they left behind.
   win() {
     this.result = 'won';
-    // (No win jingle: the battle song carries on as it always did; Patrick
-    // preferred it. music.victory() is still there if it's ever wanted.)
+    // (No win jingle: the battle song carries on as it always did; that
+    // played better. music.victory() is still there if it's ever wanted.)
     const { exp } = this.earned;
     // Every fight pays better than the enemies' own `coins` (goldReward, more
     // each chapter), and Lucky Pockets pays more again.
@@ -4046,33 +4161,17 @@ export class BattleScene {
       }
 
       if ((this.phase === 'defeat' && member === this.hero) || member.hp <= 0) {
-        // Collapsed onto their side.
-        ctx.save();
-        ctx.translate(feetX, feetY - 6);
-        ctx.rotate(-Math.PI / 2);
-        ctx.drawImage(sprite, -w / 2, -h, w, h);
-        ctx.restore();
+        // Collapsed onto their side (partyMoves.js: their weapon beside them, stars round their head).
+        this.moves.drawDown(ctx, this, member, feetX, feetY);
         return;
       }
 
       this.drawAura(ctx, feetX, feetY, h, member.color);
-
-      let x = feetX - w / 2;
-      const lunging = (this.phase === 'fight' || this.phase === 'fightResult') && member === (this.striker ?? this.hero);
-      if (lunging) x += 12;
-      if (this.heroFlinch > 0 && member === (this.flinching ?? this.hero)) x += Math.round(Math.sin(this.heroFlinch * 60) * 2);
-      const y = feetY - h + Math.round(Math.sin(this.time * 2.5 + i));
-
-      // Afterimages trail behind a lunge.
-      if (lunging) {
-        for (const [offset, alpha] of [[-10, 0.25], [-20, 0.1]]) {
-          ctx.globalAlpha = alpha;
-          ctx.drawImage(sprite, x + offset, y, w, h);
-        }
-        ctx.globalAlpha = 1;
-      }
-      ctx.drawImage(sprite, x, y, w, h);
+      // Standing: swinging, casting, guarding, hiding... (partyMoves.js).
+      this.moves.drawMember(ctx, this, member, i, feetX, feetY);
     });
+    // Anything tossed from one of them to another.
+    this.moves.drawOver(ctx, this);
   }
 
   // A soft pulsing glow behind the hero, a shadow at their feet, and rising motes.
@@ -4170,6 +4269,9 @@ export class BattleScene {
       // (Worn down, it winces now and then: battleFeel.js.)
       ?? clipFrame(anim.hurt, this.time - (foe.winceAt ?? -99))
       ?? (anim.talk && this.isTalking(foe) ? loopFrame(anim.talk, this.time) : null)
+      // (A `low` clip, if it has one, in place of idle once it's below its
+      // phase's `lowHp`: Corrie fighting the storm in him at the very end.)
+      ?? (anim.low && foe.hp <= foe.maxHp * (this.bossPhase(foe)?.lowHp ?? foe.data.lowHp ?? 0) ? loopFrame(anim.low, this.time) : null)
       ?? (anim.idle ? loopFrame(anim.idle, this.time) : null);
   }
 
@@ -4444,12 +4546,14 @@ export class BattleScene {
   // text/spells/spells.txt, with {amount} the number it would do right now.
   spellDescription(spell) {
     const healBoost = 1 + skillBonus('healBoost');
-    const amounts = { heal: HEAL_PULSE_HP * healBoost, mend: MEND_HP * healBoost, lull: LULL_CALM, hush: HUSH_CALM, serenade: SPELLS.serenade.calm, soothe: SPELLS.soothe.calm, truce: SPELLS.truce.calm };
-    let amount = this.potent(amounts[spell.id] ?? (SPELLS[spell.id].heals ?? 0) * healBoost);
+    const amounts = { heal: HEAL_PULSE_HP * healBoost, mend: MEND_HP * healBoost };
+    const mercy = { lull: LULL_CALM, hush: HUSH_CALM, serenade: SPELLS.serenade.calm, soothe: SPELLS.soothe.calm, truce: SPELLS.truce.calm };
+    let amount = spell.id in mercy ? Math.round(spellMercy(mercy[spell.id]) * (1 + skillBonus('mercyBoost')))
+      : this.potent(amounts[spell.id] ?? (SPELLS[spell.id].heals ?? 0) * healBoost);
     if (spell.id === 'ward') amount = WARD_TURNS;
     else if (SPELLS[spell.id].turns) amount = SPELLS[spell.id].turns;
     else if (SPELLS[spell.id].power) amount = this.spellDamage(spell.id);
-    return spellText(spell.id, { amount });
+    return spellText(spell.id, { amount, heal: this.potent((SPELLS[spell.id].heals ?? 0) * healBoost) });
   }
 
   // The same for an ally's spells (<id>_<label> in the file), with their
@@ -4514,8 +4618,8 @@ export class BattleScene {
         const anyCalm = this.activeFoes().some((foe) => foe.calm >= 100);
         hud.drawOptions(ctx, this.spells.map((spell) => ({
           label: spell.name,
-          note: `${spell.sp}% SP`,
-          enabled: this.sp >= spell.sp && (spell.id !== 'pacify' || anyCalm),
+          note: this.freeSpell ? 'FREE' : `${spell.sp}% SP`,
+          enabled: (this.freeSpell || this.sp >= spell.sp) && (spell.id !== 'pacify' || anyCalm),
           description: this.spellDescription(spell),
         })), this.cursor);
         break;

@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // HOLLIN WELL: the square at the heart of Hollin, cobbles and empty
 // cottages all round, and in the middle the old well with its little roof.
 // Ves's last chalk mark is on its rim, an arrow pointing down, and a word.
@@ -11,6 +13,8 @@
 //   8  shut cottage door (solid)
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   X  Hollin's cobbles
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HOLLIN_WELL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hollin_well',
@@ -73,6 +77,7 @@ export const HOLLIN_WELL = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hollin_well ?? []),
     { sprite: 'well_chalk', x: 15, y: 11, text: 'well_well' },
     { sprite: 'cart_broken', x: 1, y: 12, text: 'well_blocked' },
     { sprite: 'cart_broken', x: 29, y: 8, text: 'well_blocked' },
@@ -80,6 +85,7 @@ export const HOLLIN_WELL = {
     { sprite: 'paw_print', x: 9, y: 9, text: 'paw_print' },
     { sprite: 'paw_print', x: 11, y: 7, text: 'paw_print' },
     { sprite: 'paw_print', x: 22, y: 12, text: 'paw_print' },
+    ...(R3P_PROPS['hollin_well'] ?? []),
   ],
   tileTexts: { X: 'lane_cobbles', '6': 'hollin_window', '5': 'hollin_wall', '7': 'hollin_roof', '8': 'hollin_door', L: 'scarlet_tree' },
 

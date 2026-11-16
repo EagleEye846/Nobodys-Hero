@@ -12,6 +12,7 @@
 //   m  cliff top (solid)                          _  open sky (the view shows through) (solid)
 //   b  low stone block (jump up onto it)          B  tall stone block (jump onto it from a low block)
 //   O  boulder (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_RIDGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_ridge',
@@ -85,6 +86,7 @@ export const VIGIL_RIDGE = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/mount_vigil.txt',
   props: [
+    { sprite: 'col_pin_crow', x: 35, y: 31, walkable: true, flat: true, gives: 'pin_crow', taken: { gone: true } },
     // The stair ends; a herald's waymark points up.
     { sprite: 'waymark', x: 24, y: 31, text: 'ridge_waymark' },
     { sprite: 'sign', x: 29, y: 31, text: 'ridge_notice' },
@@ -101,6 +103,8 @@ export const VIGIL_RIDGE = {
     { sprite: 'grapple_ring', x: 40, y: 10, grapple: true },
     { sprite: 'cairn', x: 36, y: 9, text: 'ridge_cairn' },
     { sprite: 'chough', x: 23, y: 9, text: 'ridge_chough', walkable: true },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_ridge'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

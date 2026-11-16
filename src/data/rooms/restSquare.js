@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // HERALDS' REST: the village on the spire's shoulder that was built to welcome
 // the Hero, a hundred years ago, and has kept everything ready since. A
 // frozen fountain, an ice statue of the Hero (carved fresh every winter from
@@ -134,6 +135,8 @@ export const REST_SQUARE = {
     { sprite: 'street_lamp', x: 24, y: 28, text: 'square_lamp', nightText: 'square_lamp_night' },
     { sprite: 'street_lamp', x: 38, y: 27, text: 'square_lamp', nightText: 'square_lamp_night' },
     { sprite: 'street_lamp', x: 2, y: 17, text: 'square_lamp', nightText: 'square_lamp_night' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_square'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

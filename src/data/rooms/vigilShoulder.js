@@ -10,6 +10,7 @@
 //   Y  snow pine (walk or hide behind) (solid)    g  plank bridge
 //   Q  snowy boulder (solid)                      A  snowy cliff top (solid)
 //   _  open sky (the view shows through) (solid)  t  cave mouth (walk through it; see `doors`)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_SHOULDER = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_shoulder',
@@ -89,6 +90,7 @@ export const VIGIL_SHOULDER = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/mount_vigil.txt',
   props: [
+    { sprite: 'col_pin_axe', x: 2, y: 29, walkable: true, flat: true, gives: 'pin_axe', taken: { gone: true } },
     // The camp the heralds keep for climbers: a tent, a fire that still burns, soup.
     { sprite: 'tent', x: 24, y: 27, text: 'shoulder_tent' },
     { sprite: 'campfire', x: 27, y: 29, text: 'shoulder_fire', animation: 'campfire', speed: 0.14 },
@@ -104,6 +106,8 @@ export const VIGIL_SHOULDER = {
     { sprite: 'grapple_ring', x: 20, y: 21, grapple: true },
     { sprite: 'chest', x: 37, y: 20, text: 'shoulder_chest', gives: 'fur_lined_hood', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'sign', x: 13, y: 19, text: 'shoulder_sign' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_shoulder'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

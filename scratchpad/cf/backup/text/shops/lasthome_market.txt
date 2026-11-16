@@ -1,0 +1,74 @@
+# PELL'S STALL: in Lasthome's square, under the great hall's broken roof. Pell
+# is a young marmot who sells what the town grows, catches and bakes (and
+# Bryony's tonic, on commission). Quick, cheerful, a terrible haggler, and
+# not at all interested in heroes: nobody in Lasthome is.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Evening! Apples, oatcakes, pie. Mum's oatcakes are the best in the valley. Don't tell her I said so.
+
+[menu_prompt]
+What else? I'm here till the lamps go down. Then I'm still here, but I'm asleep.
+
+[buy_prompt]
+All fresh today. Well. Most of it. The pie's fresh-ish.
+
+[sell_prompt]
+Selling? Go on, let's see what you've got.
+
+[talk_prompt]
+Talk? Sure. Business is slow. Business is always slow.
+
+[bought]
+Pleasure doing business!
+
+[bought_item]
+Enjoy it! Come back and tell me if you enjoyed it.
+
+[sold]
+I'll find somebody who wants that. Probably.
+
+[nothing_to_sell]
+You've nothing I can sell on. That's all right. Neither has anybody.
+
+[cant_sell]
+Oh, I couldn't take that. You'll want that.
+
+[owned]
+You've already got one of those!
+
+[wont_fit]
+That one's for your friend, not you. Bring her by and she can try it on.
+
+[too_poor]
+Short a few coins. I'd let you off, but Mum counts the till.
+
+[bought_stored]
+Your bag's full, so I've sent it to your storage. Don't ask me how. Nobody knows how.
+
+[bag_full]
+No room in your bag, and none in storage either! Eat something!
+
+[farewell]
+Mind how you go! Mind the bucket by the well. Everyone trips on it once.
+
+[talk: Lasthome]
+It's the old city's hall. The biggest building there ever was, my granny says. We just live in it.
+
+Somebody built it for something important. We don't know what. We use it for keeping the rain off.
+
+[talk: The Hero?]
+The what? Oh, the Hero. The one the old city was waiting for.
+
+Nobody's waited for him here in a long time. My granny's granny stopped. She said you can't keep a whole town on hold for a stranger.
+
+[talk: The far door]
+That's the way out into the rest of the city. The dead part. Nobody goes out there much.
+
+There's things in the old streets. And it's all falling down. And there's the Gate, right at the far end.
+
+[talk: The north ridge]
+Thistle put a notice up. The birds on the north ridge went quiet, two days ago.
+
+Birds going quiet's a bad sign, Mum says. She won't say what of.

@@ -4,13 +4,16 @@
 // Then the fight: enemy captain_tarry (his own song, ghostCaptainBattle; the backdrop ghostship_cabin), spared =
 // captain_spared, defeated = captain_beaten. He stands at (7,7) by the chart table (10-11, row 5); the chart table, the desk and the
 // bunk are all off the party's walk (the party stops at x 16-17). The hero never speaks. DRAFT words, for the designer.
+// He is drawn at the crew's scale (art/ghostShip.js, the gs_captain_ animations): at the chart table with his back to you,
+// a finger on the course (gs_captain_trace), turning round (gs_captain_turn), standing (gs_captain_idle), and the trumpet up
+// (gs_captain_trumpet), which he holds into the fight. He stands at (9.5,6), just in front of the table's left end.
 export const CAPTAIN_TARRY_MEETS = {
   id: 'captain_tarry_meets',
   room: 'ship_cabin',
   once: true,
 
   actors: [
-    { id: 'captain', look: 'enemy:captain_tarry', x: 7, y: 7, centered: true },
+    { id: 'captain', look: 'prop:gs_captain', x: 9.5, y: 6, animation: 'gs_captain_trace', speed: 0.5 },
     { id: 'ves', look: 'prop:vesper_stand', x: 20, y: 6, portrait: 'vesper', plays: 'vesper' },
     { id: 'bramble', look: 'prop:bramble_stand', x: 20, y: 8, portrait: 'bramble', plays: 'bramble' },
   ],
@@ -26,16 +29,20 @@ export const CAPTAIN_TARRY_MEETS = {
     { do: 'camera', to: { x: 11, y: 7 } },
     { do: 'say', who: 'captain', text: '"Mr Pike." He doesn\'t turn. "Mr Pike. Is that you? You\'ve been a long time. I said I\'d call when we raised the light."' },
     { do: 'wait', seconds: 0.5 },
-    { do: 'say', who: 'bramble', text: '{scared}He thinks we\'re somebody else.' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Let him. Don\'t startle him.' },
+    { do: 'say', who: 'bramble', text: '{surprised}He thinks we\'re somebody else.' },
+    { do: 'say', who: 'ves', text: '{worried}Then let him think it. I don\'t want to find out what he\'s like surprised.' },
     { do: 'wait', seconds: 0.6 },
-    { do: 'say', who: 'captain', text: 'He turns. He looks at you a long time: the way a man looks at a letter he was expecting that has come in the wrong hand. His face is kind, and tired, and not quite finished at the edges.\n\n"Not Mr Pike." He looks at the stern windows, at the grey in them. "Passengers? No. No, we\'ve no passengers aboard. We\'ve... "' },
+    { do: 'animate', who: 'captain', animation: 'gs_captain_turn', once: true, speed: 0.18 },
+    { do: 'wait', seconds: 0.9 },
+    { do: 'animate', who: 'captain', animation: 'gs_captain_idle', speed: 0.45 },
+    { do: 'say', who: 'captain', text: 'He turns. He looks at you a long time: the way a man looks at a letter he was expecting that has come in the wrong hand. His face is kind, and tired, and not quite finished at the edges.\n\n"Not Mr Pike." He looks at the stern windows, at the grey in them. "Passengers? No. No, we\'ve no passengers aboard. We\'ve... "\n\nHe straightens, the way a man does who has said a thing a great many times. "Tarry. Captain Tarry, master of the Fair Return. And you are aboard my ship."' },
     { do: 'say', who: 'captain', text: '"It\'s always just before dawn in there," he says, mildly. "It was just before dawn when it began. I do wish it would get on with it."' },
     { do: 'face', who: 'ves', at: 'player' },
-    { do: 'say', who: 'ves', text: '{determined}Captain Tarry. We need to go through your ship. I\'d like to do it without a fight.' },
+    { do: 'say', who: 'ves', text: '{determined}...Captain. We only need to get through your ship. I\'d really rather not fight a ghost about it.' },
     { do: 'wait', seconds: 0.4 },
     { do: 'say', who: 'captain', text: '"Through my ship." Something closes in his face, like a hatch. "Nobody leaves the Fair Return until she\'s in. I gave my word to their mothers."' },
     { do: 'say', who: 'bramble', text: '{worried}Nobody wants to leave. We only want to get by.' },
+    { do: 'animate', who: 'captain', animation: 'gs_captain_trumpet', once: true, speed: 0.16 },
     { do: 'say', who: 'captain', text: '"Then you\'ll do it on my deck, and by my leave." He lifts the speaking-trumpet. "Mr Pike! Clear the cabin!"' },
     { do: 'sound', name: 'shipGroan' },
     { do: 'wait', seconds: 0.6 },
@@ -44,3 +51,4 @@ export const CAPTAIN_TARRY_MEETS = {
     { do: 'battle', enemy: 'captain_tarry', who: 'captain', spared: 'captain_spared', defeated: 'captain_beaten' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

@@ -1,18 +1,18 @@
 import { defineBulletArt } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
-import { withSnipes } from './snipes.js';
+import { Line } from '../projectiles.js';
+import { PathShot, Deco, Zone, Tether, blit } from './coastKit.js';
 
-// The Salt Shade's attacks. A drowned sailor's ghost doing what sailors do:
-// he throws an anchor on a rope (the arc flashes first, and the rope itself
-// stings), he flings a message in a bottle that bursts into a cloud of rising
-// bubbles where it lands, and he casts lassos that drop round you and draw
-// tight (every noose has a gap on the side he's standing). He stands to the
-// right of the box, so everything comes from that side.
-//
-// Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. The attack's own clock (`t`) runs `density`
-// times faster than the seconds on the wall, hence the `T` below.
+// The Salt Shade's attacks. A drowned sailor's ghost in a sou'wester,
+// still keeping watch for a ship that was meant to come back for him:
+//   - Signal lamp: he signals in dots and dashes. A short flash flicks salt
+//     at you; a long one throws a beam. Each is aimed when the flash begins.
+//   - Brine: sea water runs off his oilskins into puddles that dry, and the
+//     salt grows into white spikes. Get off a puddle before it dries.
+//   - Heave the lead: he casts the sounding lead at you; the line snaps taut
+//     back to his hand, and he hauls the lead home along it.
+// He stands to the right of the box.
 
 const SEA = { k: '#132a34', b: '#6fb8b2', B: '#3f8088', w: '#d4f0ec', e: '#f0ffff', x: '#9ad8d0', g: '#4c8044', r: '#cfae7c', R: '#8c6c42', c: '#c8d8d0', p: '#e8dcb0', P: '#b8a878' };
 
@@ -56,298 +56,167 @@ defineBulletArt('shdScroll', {
   radius: 1,
 });
 
-// An anchor thrown on a rope. It follows an arc from the sailor to a spot
-// aimed at where you stood, the rope stinging all the way, lies there a
-// moment, and is hauled back. The arc is drawn dashed first.
-class AnchorThrow {
-  constructor({ from, to, warn = 0.8, flight = 0.75, linger = 0.55, back = 0.5, lift = 22 }) {
-    Object.assign(this, { from, to, warn, flight, linger, back, lift });
-    this.age = 0;
-    this.dmg = null;
-    this.grazed = false;
-    this.pos = { x: from.x, y: from.y };
-    this.total = warn + flight + linger + back;
-  }
+const LAMP = { ...SEA, y: '#ffe08a', Y: '#e0a040', n: '#3a4448', N: '#6a7478' };
+// A grain of salt, flicked off the lamp's dot of light: a little white crystal.
+defineBulletArt('shdSalt', { frames: [['.e.', 'eWe', '.e.'].map((r) => r.replace('W', 'w')), ['e.e', '.w.', 'e.e']], palette: SEA, radius: 1.8, frameSeconds: 0.08 });
+// The lead weight on its line: a heavy grey plumb.
+defineBulletArt('shdLead', { frames: [art(7, 9, (p) => { p.rect(3, 0, 1, 2, 'r'); p.poly([[1, 2], [5, 2], [6, 8], [0, 8]], 'N'); p.line(2, 3, 2, 7, 'c'); })], palette: LAMP, radius: 3.2 });
+defineBulletArt('shdMark', { frames: [['.BBB.', 'BBBBB', '.BBB.']], palette: SEA, radius: 1 });
+// Salt crust grown out of a puddle: white spikes.
+const CRUST = ['..e...e..', '.eWe.eWe.', 'eWWWeWWWe', '.eeeeeee.'].map((r) => r.replace(/W/g, 'w'));
 
-  arc(k) {
-    return { x: this.from.x + (this.to.x - this.from.x) * k, y: this.from.y + (this.to.y - this.from.y) * k - Math.sin(Math.PI * k) * this.lift };
-  }
-
-  get phase() {
-    if (this.age < this.warn) return 'warn';
-    const a = this.age - this.warn;
-    if (a < this.flight) return 'fly';
-    if (a < this.flight + this.linger) return 'lie';
-    if (a < this.flight + this.linger + this.back) return 'back';
-    return 'gone';
-  }
-
-  get active() {
-    const ph = this.phase;
-    return ph === 'fly' || ph === 'lie' || ph === 'back';
-  }
-
-  update(dt) {
-    this.age += dt;
-    const ph = this.phase;
-    const a = this.age - this.warn;
-    if (ph === 'fly') this.pos = this.arc(a / this.flight);
-    else if (ph === 'lie') this.pos = { ...this.to };
-    else if (ph === 'back') {
-      const k = (a - this.flight - this.linger) / this.back;
-      this.pos = { x: this.to.x + (this.from.x - this.to.x) * k, y: this.to.y + (this.from.y - this.to.y) * k };
-    }
-  }
-
-  isGone() {
-    return this.age >= this.total + 0.2;
-  }
-
-  // The rope runs from the sailor to the anchor, sagging a little.
-  ropePoints() {
-    const pts = [];
-    for (let i = 0; i <= 10; i++) {
-      const k = i / 10;
-      pts.push({ x: this.from.x + (this.pos.x - this.from.x) * k, y: this.from.y + (this.pos.y - this.from.y) * k + Math.sin(Math.PI * k) * 5 });
-    }
-    return pts;
-  }
-
-  edgeDistance(px, py) {
-    if (!this.active) return Infinity;
-    let best = Math.hypot(px - this.pos.x, py - this.pos.y) - 4.5;
-    const pts = this.ropePoints();
-    for (let i = 0; i < pts.length - 1; i++) {
-      const [a, b] = [pts[i], pts[i + 1]];
-      const l2 = (b.x - a.x) ** 2 + (b.y - a.y) ** 2 || 1;
-      const u = Math.max(0, Math.min(1, ((px - a.x) * (b.x - a.x) + (py - a.y) * (b.y - a.y)) / l2));
-      best = Math.min(best, Math.hypot(px - (a.x + (b.x - a.x) * u), py - (a.y + (b.y - a.y) * u)) - 1);
-    }
-    return best;
-  }
-
-  draw(ctx) {
+// The lantern on the right of the box, signalling: lit while `on(k)`.
+const lantern = (box, life, on) => new Deco({ life, paint(ctx, d) {
+  const x = box.x + box.w - 6;
+  const y = box.y + 7;
+  const lit = on(d.age);
+  blit(ctx, ['.nnn.', 'n...n', 'n...n', 'n...n', '.nnn.'], LAMP, x, y);
+  if (lit) {
     ctx.save();
-    const ph = this.phase;
-    if (ph === 'warn') {
-      ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.25 : 0.65;
-      ctx.strokeStyle = '#cfae7c';
-      ctx.setLineDash([2, 2]);
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      for (let i = 0; i <= 14; i++) {
-        const q = this.arc(i / 14);
-        if (i === 0) ctx.moveTo(q.x, q.y);
-        else ctx.lineTo(q.x, q.y);
-      }
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(this.to.x, this.to.y, 5, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-      return;
-    }
-    if (ph === 'gone') { ctx.restore(); return; }
-    ctx.lineCap = 'round';
-    const pts = this.ropePoints();
-    for (const [color, width] of [['#132a34', 4], ['#cfae7c', 2]]) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = width;
-      ctx.setLineDash(width === 2 ? [3, 1] : []);
-      ctx.beginPath();
-      pts.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
-      ctx.stroke();
-    }
-    // The anchor, tumbling a little in the air.
-    ctx.translate(this.pos.x, this.pos.y);
-    if (ph === 'fly') ctx.rotate(-1 + (this.age - this.warn) * 2.5);
-    ctx.setLineDash([]);
-    ctx.lineCap = 'round';
-    for (const [color, width] of [['#132a34', 4], ['#9aa0aa', 2]]) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = width;
-      ctx.beginPath();
-      ctx.moveTo(0, -5);
-      ctx.lineTo(0, 4);
-      ctx.moveTo(-4, -2);
-      ctx.lineTo(4, -2);
-      ctx.moveTo(-5, 1);
-      ctx.quadraticCurveTo(-4, 5, 0, 5);
-      ctx.quadraticCurveTo(4, 5, 5, 1);
-      ctx.stroke();
-    }
+    ctx.globalAlpha *= 0.4;
+    ctx.fillStyle = '#ffe08a';
+    ctx.beginPath();
+    ctx.arc(x, y, 9, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
   }
-}
-
-// A noose of old hawser: once it is cast it is drawn as twisted rope (dark
-// under, tan strands, a twist every couple of pixels) with a whipped end
-// either side of its opening. Its outline before that is the plain Ring's.
-class Noose extends Ring {
-  draw(ctx) {
-    if (this.age < this.warn || this.r < 1.5) {
-      super.draw(ctx);
-      return;
-    }
-    const over = this.age - (this.warn + this.life);
-    const half = this.gap.width / 2;
-    const a0 = this.gap.angle + half;
-    const a1 = this.gap.angle - half + Math.PI * 2;
-    const arc = () => {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, a0, a1);
-      ctx.stroke();
-    };
-    ctx.save();
-    ctx.globalAlpha = over > 0 ? Math.max(0, 1 - over / 0.25) : 1;
-    ctx.lineCap = 'butt';
-    ctx.strokeStyle = '#2a1e14';
-    ctx.lineWidth = this.thick + 2;
-    arc();
-    ctx.strokeStyle = '#cfae7c';
-    ctx.lineWidth = this.thick;
-    arc();
-    ctx.setLineDash([1.3, 2.2]);
-    ctx.lineDashOffset = -this.age * 6;
-    ctx.strokeStyle = '#8a6a44';
-    arc();
-    ctx.setLineDash([]);
-    for (const a of [a0, a1]) {
-      const x = Math.round(this.x + Math.cos(a) * this.r);
-      const y = Math.round(this.y + Math.sin(a) * this.r);
-      ctx.fillStyle = '#2a1e14';
-      ctx.fillRect(x - 2, y - 2, 5, 5);
-      ctx.fillStyle = '#e8d4a8';
-      ctx.fillRect(x - 1, y - 1, 3, 3);
-    }
-    ctx.restore();
-  }
-}
+  ctx.fillStyle = lit ? '#ffe08a' : '#3a4448';
+  ctx.fillRect(x - 1, y - 1, 3, 3);
+} });
 
 export const SALT_SHADE_ATTACKS = {
-  // Anchor throw: the sailor swings an anchor on a rope in a high arc, aimed
-  // at where you stood. The dashed arc and the landing ring flash first. The
-  // rope stings along its whole length, and then he hauls it back.
-  shadeAnchor(box, density, { rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = T(0.2);
-    let n = 0;
-    let later = [];
+  // Signal lamp: he still signals to the ship from the shore, with his lamp,
+  // in dots and dashes. A short flash (a dot) flicks a grain of salt at you;
+  // a long flash (a dash) throws a beam of light straight at you. Each is
+  // aimed when the flash begins and goes when it ends. Read the lamp.
+  shadeLamp(box, density, { Shot }) {
+    const DOT = 0.24;
+    const DASH = 0.55;
+    const GAP = 0.26;
+    // A message of dots and dashes, spaced out: on (start, length) times.
+    const code = '.-..-.--.-.'.split('');
+    const marks = [];
+    let at = 0.35;
+    for (const c of code) {
+      const len = c === '.' ? DOT : DASH;
+      marks.push({ at, len, dash: c === '-' });
+      at += len + GAP;
+    }
+    const on = (k) => marks.some((m) => k >= m.at && k < m.at + m.len);
+    const x = box.x + box.w - 6;
+    const y = box.y + 7;
+    let real = 0;
+    let made = false;
+    const aims = [];
     return {
-      duration: 7.2,
+      duration: 7,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && n < 4 && t < T(5.2)) {
-          n++;
-          next = t + T(1.5);
-          const from = { x: box.x + box.w + 8, y: box.y + rand(8, box.h - 8) };
-          const to = { x: clamp(soul.x + rand(-6, 6), box.x + 8, box.x + box.w - 8), y: clamp(soul.y + rand(-6, 6), box.y + 8, box.y + box.h - 8) };
-          bullets.push(new AnchorThrow({ from, to, warn: 0.85, lift: rand(16, 28) }));
-          // A smaller second anchor is thrown a beat later, wherever you've got to.
-          later.push({ at: t + T(0.5), from: { x: from.x, y: box.y + rand(8, box.h - 8) } });
+        real += dt / density;
+        if (!made) {
+          made = true;
+          bullets.push(lantern(box, 7, on));
         }
-        for (const l of later) {
-          if (t < l.at) continue;
-          l.done = true;
-          const to2 = { x: clamp(soul.x + rand(-6, 6), box.x + 8, box.x + box.w - 8), y: clamp(soul.y + rand(-6, 6), box.y + 8, box.y + box.h - 8) };
-          bullets.push(new AnchorThrow({ from: l.from, to: to2, warn: 0.7, lift: rand(16, 28), linger: 0.4 }));
+        // Aim when each flash begins; it goes when the flash ends. A dash's
+        // beam shows faintly along its line while the lamp is lit.
+        while (aims.length < marks.length && real >= marks[aims.length].at) {
+          const m = marks[aims.length];
+          const a = Math.atan2(soul.y - y, soul.x - x);
+          aims.push(a);
+          if (m.dash) {
+            bullets.push(new Line({ x, y, angle: a, length: 140, thickness: 9, warn: m.len, life: 0.4, grow: 500, color: '#ffe08a', glow: '#e0a040' }));
+          } else {
+            for (const o of [-0.12, 0.12]) bullets.push(new Shot({ x, y, vx: Math.cos(a + o) * 110, vy: Math.sin(a + o) * 110, art: 'shdSalt', warn: m.len, life: 1.6 }));
+          }
         }
-        later = later.filter((l) => !l.done);
       },
     };
   },
 
-  // Message in a bottle: bottles fly in over the box in arcs and burst where
-  // they land into a ring of bubbles, which then rise slowly, wobbling. The
-  // message floats down, harmless.
-  shadeBottle(box, density, { Shot, rand, clamp }) {
+  // Brine: sea water runs off his oilskins in drops. Where a drop lands it
+  // spreads into a puddle, harmless at first; then the puddle dries, and
+  // the salt in it grows into a crust of white spikes. Get off a puddle
+  // before it turns to salt. One drop always lands where you are.
+  shadeBrine(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const FALL = 0.45;
+    const DRY = 0.95;
     let t = 0;
-    let next = T(0.2);
     let n = 0;
-    const live = [];
     return {
-      duration: 7.2,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && n < 5 && t < T(5.2)) {
+        if (t >= T(0.2 + n * 0.45) && n < 14) {
           n++;
-          next = t + T(1.2);
-          const from = { x: box.x + box.w + 10, y: box.y + rand(12, box.h - 12) };
-          const to = { x: clamp(soul.x + rand(-16, 16), box.x + 10, box.x + box.w - 10), y: clamp(soul.y + rand(-16, 16), box.y + 10, box.y + box.h - 10) };
-          const bottle = new Shot({ x: from.x, y: from.y, harmless: false, life: 3, art: 'shdBottle' });
-          // The ring where it will burst, flashing.
-          bullets.push(new Ring({ x: to.x, y: to.y, r: 7, grow: 0, thick: 1, warn: 0.95, life: 0, color: '#d4f0ec' }));
-          bullets.push(bottle);
-          live.push({ bottle, from, to, born: bottle.age, flight: 1.0, burst: false });
-        }
-        for (const b of live) {
-          const k = Math.min(1, b.bottle.age / b.flight);
-          if (!b.burst) {
-            b.bottle.x = b.from.x + (b.to.x - b.from.x) * k;
-            b.bottle.y = b.from.y + (b.to.y - b.from.y) * k - Math.sin(Math.PI * k) * 24;
-          }
-          if (k >= 1 && !b.burst) {
-            b.burst = true;
-            b.bottle.life = 0;
-            b.bottle.age = 99;
-            const turn = rand(0, Math.PI);
-            for (let i = 0; i < 8; i++) {
-              const a = turn + (i / 8) * Math.PI * 2;
-              bullets.push(new Shot({ x: b.to.x, y: b.to.y, vx: Math.cos(a) * 22, vy: Math.sin(a) * 22 - 8, accel: -4, wobble: { amplitude: 2.5, frequency: 3 }, warn: 0.3, art: i % 3 === 0 ? 'shdBubbleBig' : 'shdBubble', life: 3 }));
+          const spots = [{ x: soul.x, y: soul.y }];
+          if (n % 2) spots.push({ x: rand(box.x + 8, box.x + box.w - 8), y: rand(box.y + 8, box.y + box.h - 8) });
+          for (const s of spots) {
+            bullets.push(new PathShot({ art: 'shdBubble', harmless: true, life: FALL, path: (k) => ({ x: s.x, y: s.y - 30 * (1 - Math.min(1, k / FALL)) }) }));
+            bullets.push(new Zone({ x: s.x, y: s.y, r: 10, warn: FALL + DRY, life: 0.8, paint(ctx, z) {
+              if (z.age < FALL) return;
+              if (z.age < z.warn) {
+                const g = Math.min(1, (z.age - FALL) / 0.3);
+                ctx.globalAlpha = 0.35 + 0.25 * ((z.age - FALL) / DRY);
+                ctx.fillStyle = '#6fb8b2';
+                ctx.beginPath();
+                ctx.ellipse(z.x, z.y, 9 * g, 6 * g, 0, 0, Math.PI * 2);
+                ctx.fill();
+                // Glints of salt as it dries.
+                if ((z.age - FALL) / DRY > 0.6) { ctx.fillStyle = '#f0ffff'; ctx.fillRect(Math.round(z.x) - 3, Math.round(z.y), 1, 1); ctx.fillRect(Math.round(z.x) + 2, Math.round(z.y) - 2, 1, 1); }
+                return;
+              }
+              blit(ctx, CRUST, SEA, z.x, z.y);
+              blit(ctx, CRUST, SEA, z.x, z.y - 4);
+            } }));
+            // As it turns to salt, the crust cracks and flicks grains out.
+            for (let i = 0; i < 4; i++) {
+              const a = Math.PI / 4 + (i * Math.PI) / 2;
+              bullets.push(new Shot({ x: s.x, y: s.y, vx: Math.cos(a) * 60, vy: Math.sin(a) * 60, art: 'shdSalt', warn: FALL + DRY, life: 1 }));
             }
-            bullets.push(new Shot({ x: b.to.x, y: b.to.y, vy: 14, harmless: true, life: 2, art: 'shdScroll' }));
           }
         }
-        for (let i = live.length - 1; i >= 0; i--) if (live[i].burst) live.splice(i, 1);
       },
     };
   },
 
-  // Lassos: a rope loop drops round where you're standing (a dashed ring
-  // flashes), then draws tight. Every noose has a gap on the side the sailor
-  // stands, so the way out is toward him.
-  shadeRope(box, density, { rand, clamp }) {
+  // Heave the lead: he takes soundings, the way he did on watch. He swings
+  // the lead and casts it at you; it lands with a thump, the line snaps
+  // taut from the lead back to his hand, and then he hauls it in along the
+  // line, dragging. The line goes taut first; the lead comes home along it.
+  shadeLead(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const FLY = 0.6;
+    const TAUT = 0.45;
+    const HAUL = 0.4;
     let t = 0;
-    let next = T(0.2);
     let n = 0;
-    let last = null;
-    let vel = { x: 0, y: 0 };
     return {
-      duration: 7.2,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        // Where you're heading: the nooses are cast a little ahead of you.
-        if (last && dt > 0) {
-          const k = Math.min(1, dt * 6);
-          vel = { x: vel.x + ((soul.x - last.x) / dt - vel.x) * k, y: vel.y + ((soul.y - last.y) / dt - vel.y) * k };
-        }
-        last = { x: soul.x, y: soul.y };
-        if (t >= next && n < 4 && t < T(5.2)) {
+        if (t >= T(0.2 + n * 0.9) && n < 7) {
           n++;
-          next = t + T(1.5);
-          // One noose where you are, one where you're heading, one anywhere.
-          const spots = [
-            { x: soul.x, y: soul.y },
-            { x: soul.x + vel.x * 0.9, y: soul.y + vel.y * 0.9 },
-            { x: rand(box.x + 12, box.x + box.w - 12), y: rand(box.y + 12, box.y + box.h - 12) },
-          ];
-          spots.forEach((spot, i) => {
-            const x = clamp(spot.x + rand(-4, 4), box.x + 12, box.x + box.w - 12);
-            const y = clamp(spot.y + rand(-4, 4), box.y + 12, box.y + box.h - 12);
-            // The opening faces the sailor (right), a touch off to one side.
-            const gap = rand(-0.5, 0.5);
-            bullets.push(new Noose({ x, y, r: 26, grow: -22, thick: 3, warn: 0.9 + i * 0.1, life: 1.15, gap: { angle: gap, width: 1.3 }, color: '#cfae7c', dash: [4, 1] }));
-          });
+          const hand = { x: box.x + box.w + 6, y: rand(box.y + 6, box.y + box.h - 6) };
+          const to = { x: soul.x, y: soul.y };
+          // Out in an arc (harmless in the air), down, then hauled home.
+          bullets.push(new PathShot({
+            art: 'shdLead', harmless: true, life: FLY,
+            path: (k) => { const u = Math.min(1, k / FLY); return { x: hand.x + (to.x - hand.x) * u, y: hand.y + (to.y - hand.y) * u - Math.sin(Math.PI * u) * 20 }; },
+          }));
+          bullets.push(new Shot({ x: to.x, y: to.y + 3, harmless: true, life: FLY, art: 'shdMark' }));
+          bullets.push(new Zone({ x: to.x, y: to.y, r: 5, warn: FLY, life: 0.18, paint() {} }));
+          bullets.push(new PathShot({
+            art: 'shdLead', warn: FLY + TAUT, life: HAUL,
+            path: (k) => { const u = Math.min(1, k / HAUL); const e = u * u; return { x: to.x + (hand.x - to.x) * e, y: to.y + (hand.y - to.y) * e }; },
+          }));
+          bullets.push(new Tether({ warn: FLY + 0.12, life: TAUT - 0.12 + HAUL, thick: 2, color: '#cfae7c', dark: '#3a2a18', ends: (k) => {
+            const h = Math.max(0, k - (TAUT - 0.12));
+            const u = Math.min(1, h / HAUL);
+            const e = u * u;
+            return [to.x + (hand.x - to.x) * e, to.y + (hand.y - to.y) * e, hand.x, hand.y];
+          } }));
         }
       },
     };
   },
 };
-
-// Aimed shots on top, so standing still or running one way is never safe (see snipes.js).
-SALT_SHADE_ATTACKS.shadeAnchor = withSnipes(SALT_SHADE_ATTACKS.shadeAnchor, { art: 'shdBottle' });
-SALT_SHADE_ATTACKS.shadeRope = withSnipes(SALT_SHADE_ATTACKS.shadeRope, { art: 'shdScroll' });
-SALT_SHADE_ATTACKS.shadeBottle = withSnipes(SALT_SHADE_ATTACKS.shadeBottle, { art: 'shdBottle', count: 2, first: 1.8, every: 2.2, speed: 66 });

@@ -384,11 +384,16 @@ function deep(bar, chords, low, touch, steps = [0, 8]) {
 // notes riding on it (each stops when the next one comes); a key struck
 // again stops its last sound, as on a real piano.
 const GROUPS = [[0, 3], [3, 3], [6, 2], [8, 3], [11, 3], [14, 2]];
-function rush(bar, chords, { sing, touch, accent = touch + 1.7, fresh: hit = accent + 0.8, lh = 34, floor = 48, swell = 0, from = 0, bare = false, thin = false }) {
+// `deep`: the deep bass octaves are under it (see deep()), so the left hand
+// answers in the tenor and leaves the root to them (struck twice, an octave
+// apart, it only thickened the low end). Wherever the deep bass plays, the
+// chords also keep above F3 (`floor: 53`): below that, a chord on every
+// sixteenth turned to mud.
+function rush(bar, chords, { sing, touch, accent = touch + 1.7, fresh: hit = accent + 0.8, lh = 34, floor = 48, swell = 0, from = 0, bare = false, thin = false, deep: overBass = false }) {
   const singing = (s) => sing.filter((n) => n.at <= s).at(-1) ?? sing[0];
   for (const [start, size] of GROUPS) {
     const c = chordIn(chords, start);
-    const root = bassFrom(c, lh);
+    const root = bassFrom(c, overBass ? 46 : lh);
     // Over the bass, the next chord note at least a fourth up (the fifth,
     // or over a slash chord the root).
     const answer = tones(plain(c), root + 5, 1)[0];
@@ -413,7 +418,7 @@ function rush(bar, chords, { sing, touch, accent = touch + 1.7, fresh: hit = acc
       // The hand half-lifts the pedal on each group, so the accents speak.
       for (const n of strike) put(at, n, Math.min(hold, size - k + 1), (k === 0 ? accent - 0.6 : touch - 0.4) + lift);
       if (k === 1) put(at, answer, hold, touch - 0.3 + lift, 'l');
-      if (k === 2) put(at, root, hold, touch - 0.6 + lift, 'l');
+      if (k === 2 && !overBass) put(at, root, hold, touch - 0.6 + lift, 'l');
     }
   }
 }
@@ -516,7 +521,9 @@ function lift(bar, text, touch) {
     if (echo.some((n) => n.at === i * 2)) continue;
     const c = chordIn(he[1], i * 2);
     const top = echo.filter((n) => n.at <= i * 2).at(-1).midi;
-    const below = tones(c, top - 12, 4).filter((x) => x < top - 2);
+    // (Never a seventh or a ninth against the echo's held note: that was a
+    // passing rub at 0:14.)
+    const below = tones(c, top - 12, 4).filter((x) => x < top - 2 && ![1, 11].includes(pc(x - top)));
     put(7 * BAR + i * 2, below[i % below.length], 2, 6);
   }
 
@@ -583,7 +590,7 @@ function lift(bar, text, touch) {
       return { at: h, midi: prev, len: 8 };
     });
     const touch = 6 + i * 0.25;
-    rush(bar, chords, { sing, touch, accent: touch + 1.8, fresh: touch + 1.8, floor: 50, swell: 0.4 });
+    rush(bar, chords, { sing, touch, accent: touch + 1.8, fresh: touch + 1.8, floor: 53, swell: 0.4, deep: true });
     deep(bar, chords, 34, 7.2 + i * 0.2, [0, 3, 6, 8, 11, 14]);
   }
   // (b) and (c): the tune's first eleven bars (bars 1-4 again, then the
@@ -602,11 +609,11 @@ function lift(bar, text, touch) {
       deep(bar, chords, 34, 9, [0]);
       tune(bar, melody, 11, { octaves: [12, 0], under: 9.5 });
       fill(bar, melody, [chords], 8.5, { top: 12, count: 2 });
-      rush(bar, chords, { sing: up(melody, -12), touch: touch + 0.4, swell: 0.6, from: 8 });
+      rush(bar, chords, { sing: up(melody, -12), touch: touch + 0.4, swell: 0.6, from: 8, floor: 53, deep: true });
       deep(bar, chords, 34, 8.5, [8, 11, 14]);
       return;
     }
-    rush(bar, chords, { sing: up(melody, -12), touch, swell: 0.4 });
+    rush(bar, chords, { sing: up(melody, -12), touch, swell: 0.4, floor: 53, deep: true });
     deep(bar, chords, 34, 7.2 + k * 0.1, [0, 3, 6, 8, 11, 14]);
     if (k < 4) {
       // Quietly, only its longer notes, held, so its outline floats in.
@@ -661,7 +668,7 @@ function lift(bar, text, touch) {
     if (i >= 4 && i < 7) {
       // The turn: the rush again, the tune its top note, struck out, the
       // bass on every group, quieter than the tune was and gathering.
-      rush(bar, chords, { sing: melody, touch: figure, fresh: top - 1, floor: 50, swell: 0.6 });
+      rush(bar, chords, { sing: melody, touch: figure, fresh: top - 1, floor: 53, swell: 0.6, deep: true });
       deep(bar, chords, 34, bass, [0, 3, 6, 8, 11, 14]);
       continue;
     }
@@ -717,6 +724,10 @@ function lift(bar, text, touch) {
   const cut = (B0 + 7) * BAR + 14;
   for (const n of notes) if (n.at >= (B0 + 7) * BAR && n.at < cut && n.at + n.len > cut) n.len = cut - n.at;
   put(cut + 1, 'G6', 1.5, 6.5);
+  // THE LANDING in C: under the climb's first note, the new key's floor, the
+  // lowest C left to ring through the bar under the left hand's own C
+  // octave, so the step up lands with weight instead of just arriving.
+  put((B0 + 8) * BAR, 'C1', 16, 9.5, 'l', true);
 }
 
 // ------------------------------------------------------------------ after

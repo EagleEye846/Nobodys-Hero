@@ -1,0 +1,17 @@
+# MARL, the baker, counting her oatcakes. Part of the life pass, round 2. (draft)
+
+[first]
+A round marmot in a floury apron stands on the bakehouse step with her arms folded, counting a rack of oatcakes under her breath.
+
+Nine. I put out ten. I ALWAYS put out ten.
+
+...Somebody in this town has an honest face and a full stomach.
+
+[repeat]
+Nine. I'm not angry. I'm just counting very loudly.
+
+[first after bramble_goes_home]
+Nine again. Whoever it is, they've moved to a different part of the town. That's cleverness, that is.
+
+[repeat after bramble_goes_home]
+Ten tomorrow. I'll put out TWELVE. Then we'll see who can count.

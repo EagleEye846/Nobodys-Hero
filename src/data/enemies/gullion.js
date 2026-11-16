@@ -22,7 +22,7 @@ export const GULLION = {
   feel: { hit: 'feather', windup: 'glint', at: [0.28, 0.3], defeat: 'feathers' },
   // The coast's fights: the shanty (also on Sunnyside's cliffs, in place of sunnyBattle).
   music: 'coastBattleStorm',
-  maxHp: 9700,
+  maxHp: 6300,
   damage: 80,
 
   // The easy end of the chapter: slow dives, plenty of room.
@@ -41,9 +41,8 @@ export const GULLION = {
   // His attacks live in src/battle/attacks/gullion.js.
   patterns: [
     { name: 'gullDive', weight: 3 },
-    { name: 'gullFeathers', weight: 2 },
     { name: 'gullJunk', weight: 3 },
-    { name: 'gullBrawl', weight: 2 },
+    { name: 'gullBrawl', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -60,7 +59,7 @@ export const GULLION = {
   // back. Run away and it's gone for good.
   steals: { on: ['gullDive', 'gullBrawl'], max: 1 },
 
-  rewards: { exp: 1900, coins: 12 },
+  rewards: { exp: 1900, coins: 10 },
 
   // A chip he's sometimes too proud to eat (src/data/items.js), with the chance of it.
   drops: [{ item: 'stolen_chip', chance: 0.4 }],

@@ -11,6 +11,7 @@
 //   ~  sea (solid; foam finds itself)   ;  shallows   j  stepping stones
 //   ^  rock pillar   O  boulder
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_CLIFF_HOLLOW = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_cliff_hollow',
@@ -92,6 +93,8 @@ export const SUNNY_CLIFF_HOLLOW = {
     // lighter here, toward Gullrest), and a board.
     { sprite: 'sy_fisher_lantern', x: 8, y: 15, text: 'cave_lantern', glow: [{ dy: -20, bloom: 9, strength: 0.55, flicker: 0.4, color: '255, 156, 68' }, { dy: -4, pool: 50, strength: 0.6, flicker: 0.3, color: '255, 156, 68' }, { dx: 24, dy: 26, pool: 96, strength: 0.55, flicker: 0, color: '196, 206, 206' }] },
     { sprite: 'sign', x: 11, y: 15, text: 'hollow_sign' },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_cliff_hollow ?? []),
   ],
   tileTexts: { '#': 'cave_rock', W: 'cave_rock', '~': 'hollow_sea', ';': 'hollow_sea', j: 'hollow_stones', '^': 'cave_pillar', O: 'cave_boulder' },
 

@@ -122,6 +122,23 @@ export const WRACK_DUNES = {
     { sprite: 'c5_rock_weedy', x: 12, y: 2, text: 'shore_rocks' },
     { sprite: 'c5_marram', x: 22, y: 8, flat: true, walkable: true },
     { sprite: 'c5_marram', x: 25, y: 3, flat: true, walkable: true },
+    { sprite: 'col_glass_amber', x: 9, y: 12, walkable: true, flat: true, gives: 'glass_amber', taken: { gone: true } },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'gold_pouch', x: 2, y: 14, text: 'sl_pouch_dunes', gold: 30, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'shore_turnip', x: 31, y: 10, text: 'sl_turnip', walkable: true },
+    { sprite: 'shore_nest', x: 41, y: 4, text: 'sl_nest', walkable: true },
+    { sprite: 'shore_starfish_purple', x: 12, y: 5, text: 'sl_star_b', flat: true, walkable: true },
+    { sprite: 'shore_starfish', x: 8, y: 10, text: 'sl_star_a', flat: true, walkable: true },
+    { sprite: 'shore_fishbones', x: 24, y: 2, text: 'sl_bones', flat: true, walkable: true },
+    { sprite: 'c5_lantern_fallen', x: 5, y: 2, text: 'sl_lantern', flat: true, walkable: true },
+    { sprite: 'c5_net_torn', x: 4, y: 14, text: 'sl_net', flat: true, walkable: true },
+    { sprite: 'c5_barrel', x: 32, y: 2, text: 'sl_barrel' },
+    { sprite: 'c5_rock_pool', x: 9, y: 8, text: 'sl_pool_a', flat: true, walkable: true },
+    { sprite: 'shore_starfish_purple', x: 15, y: 14, text: 'sl_star_b', flat: true, walkable: true },
+    { sprite: 'c5_rope_coil', x: 20, y: 12, text: 'sl_rope_b', walkable: true },
+    { sprite: 'c5_pot_single', x: 5, y: 6, text: 'sl_pot', walkable: true },
+    { sprite: 'shore_boot', x: 3, y: 7, text: 'sl_boot_b', walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', B: 'dunes_bank', O: 'landing_rock' },
 

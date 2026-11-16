@@ -11,6 +11,10 @@
 //   y  leaf path
 //   Z  bramble hedge (solid)
 //   ~  brook (solid, until a log sinks into it)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_LEANING_PINES = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_leaning_pines',
@@ -65,6 +69,7 @@ export const HUSH_LEANING_PINES = {
   // Thin pines to chop (`chop`), and the carved stump that stands them back up.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_leaning_pines ?? []),
     { sprite: 'sign', x: 16, y: 15, text: 'pines_sign' },
     { sprite: 'thin_pine', x: 8, y: 14, text: 'thin_pine', chop: true },
     { sprite: 'thin_pine', x: 18, y: 13, text: 'thin_pine', chop: true },
@@ -75,6 +80,8 @@ export const HUSH_LEANING_PINES = {
     { sprite: 'rock_stump', x: 17, y: 5, text: 'rock_stump', rockReset: true },
     { sprite: 'chest', x: 1, y: 9, text: 'pines_chest', gives: 'acorn_cap', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 28, y: 1, text: 'pines_pouch', gold: 75, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_leaning_pines ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', '~': 'mist_brook' },
 

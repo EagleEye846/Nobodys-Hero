@@ -24,7 +24,7 @@ export const CAIRN_HOUND = {
     frames: [CAIRN_HOUND_DISGUISE_SPRITES.still, CAIRN_HOUND_DISGUISE_SPRITES.eyes, CAIRN_HOUND_DISGUISE_SPRITES.wag],
     palette: CAIRN_HOUND_PALETTE,
   },
-  maxHp: 1110,
+  maxHp: 1550,
   // It's made of rocks. Being hit by it is being hit by rocks.
   damage: 32,
 
@@ -35,9 +35,8 @@ export const CAIRN_HOUND = {
   patterns: [
     { name: 'houndFetch', weight: 3 },
     { name: 'houndStack', weight: 2 },
-    { name: 'houndBark', weight: 3 },
-    { name: 'houndDig', weight: 2 },
-    { name: 'houndPatrol', weight: 2 },
+    { name: 'houndCollapse', weight: 3 },
+    { name: 'houndWag', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

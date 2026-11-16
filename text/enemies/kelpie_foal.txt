@@ -59,7 +59,7 @@ see THAT?
 # TALK options in src/data/enemies/kelpie_foal.js.
 [talk: Inspect]
 KELPIE FOAL - HP 1900
-A young water-horse, practising being frightening. Stamps rings of droplets (each with a gap), cracks kelp whips along a line, gallops a wave of foam with a gap in it, and charges along a row. Watch the gap and the line.
+A young water-horse, practising being frightening. Gallops laps of the box (kick on the fourth beat), leaps where only its shadow shows, and tugs you toward its kelp.
 
 [talk: Pretend to be frightened]
 You gasp, and stagger back, and hold your hands up. KELPIE FOAL stares. Then it rears, as high as it can, throws its head back, and lets out a neigh that is only a little squeaky. It trots in a very pleased circle. You've made its whole week.

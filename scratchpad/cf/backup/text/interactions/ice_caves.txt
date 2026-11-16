@@ -1,0 +1,520 @@
+# THE ICE CAVES: things you can read and look at in the caves behind the
+# Weathervane Shelf (iceCaveThroat.js, iceCaveGrotto.js, iceCaveHall.js).
+# Ves is with you; she doesn't speak in these.
+
+# What a save point says when you save here.
+[save_point]
+The crystal's glow fills the cave, and every ice crystal in the walls answers it.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+
+(Your browser isn't letting the game save.)
+
+# What an emptied chest says.
+[chest_empty]
+An empty chest, rimed with frost on the inside.
+
+# --- Shared ---
+
+[ice_wall]
+Cold rock, with ice running through it in veins. It's slightly see-through, if you look long enough. You'd rather not.
+
+[ice_stalactite]
+An icicle as long as you are, hanging from the roof. It drips, very slowly, onto the exact spot where you're standing.
+
+[ice_stalagmite]
+A spike of ice grown up from the floor, one drip at a time, for longer than anyone has been alive.
+
+[ice_crystals]
+A cluster of ice crystals, glowing a soft blue from the inside. Nobody knows why they glow. They hum, a little, if you put your ear to them.
+
+[ice_floor]
+Frozen solid and smooth as glass. Mind your feet.
+
+[ice_block]
+A block of stone that fell from the roof long ago. Ice has glued it to the floor.
+
+# --- The Glittering Throat ---
+
+[throat_sign]
+THE ICE CAVES. TURN BACK. THE HERO WILL NOT NEED TO COME THIS WAY.
+
+Underneath, scratched in later: "Turned out we did. Mind the boulders. - L."
+
+[throat_chest]
+A chest tucked in a hidden alcove, behind a wall that wasn't. Somebody hid it here on purpose.
+
+# --- The Goblin's Grotto ---
+
+[grotto_stall]
+Crates, stacked into a counter. Prices are chalked on the side, then rubbed out, then chalked on again, higher.
+
+[grotto_barrel]
+A barrel of something that smells sweet and very strong. There's a ladle hanging on it, and a sign: NOT FOR CLIMBERS.
+
+[grotto_lamp]
+A little lamp, burning with a steady, greenish flame. Whatever it burns, it isn't oil.
+
+[grotto_chest]
+A chest in the darkest corner of the grotto. You'd never have seen it without a light.
+
+# --- The Hall of Glass ---
+
+[hall_sign]
+THE HALL OF GLASS. Walk soft. The walls listen.
+
+[hall_upper_chest]
+A chest at the dead end of the upper hall, furred with frost. Inside, a muff of white fur, far too small for you.
+
+[hall_chest]
+Another chest behind another wall that wasn't. Somebody in these caves likes their secrets.
+
+# --- The Roost ---
+
+[roost_bat]
+A little bat, hanging from the ice, wrapped up in its own wings. It opens one eye at you, and closes it again.
+
+[roost_remains]
+The ROOST MOTHER, frozen where she fell. Frost has filled in every fold of her wings.
+
+[roost_pup]
+One of her little ones, pressed up against her. It doesn't fly off when you come close. It doesn't want to leave her.
+
+[roost_onward]
+A tunnel climbing up out of the roof of the Roost, plugged with ice. Cold air whistles down through the cracks, from somewhere very high above.
+
+# --- The Ice Chimney ---
+
+[chimney_daylight]
+Daylight, at the top of the shaft. Real daylight. Cold air pours down out of it, and it smells of snow.
+
+[chimney_ice]
+A waterfall that froze halfway down and never finished falling. Rings were hammered into it, a long time ago.
+
+[chimney_chest]
+A chest up on the ice blocks, out of reach of anything that can't jump. Something sweet inside.
+# === THE LIFE PASS, ROUND 2 (builder 3) ===
+# (draft)
+[r2r_it_bud]
+A knot of small ice crystals growing out of the floor, glowing faintly from the inside, like something thinking. When you hold your hand over it, it hums.
+
+# (draft)
+[r2r_it_bud_ves]
+{awed}Somebody should have put a lamp in a cave like this and made it a tea room.
+
+# (draft)
+[r2r_it_rope]
+A climbing rope coiled up and left, frozen into one stiff ring. The end's frayed, and somebody's tied a very small knot in it, as though that would help.
+
+# (draft)
+[r2r_it_rope_ves]
+{thoughtful}Somebody was in a hurry, or very careful. The knot says both.
+
+# (draft)
+[r2r_it_candle]
+A candle stub frozen into a puddle of its own wax and the ice that came after. The wick stands up, black and straight, as though it's waiting to be lit.
+
+# (draft)
+[r2r_it_candle_ves]
+{bored}I'd say it's patient. It's also a candle.
+
+# (draft)
+[r2r_it_horn]
+A curl of horn on the floor, ridged and cream. A goat's, from the look of it, one that went somewhere sensible a long time ago and came back for nothing. There's frost along its ridges like a line of writing.
+
+# (draft)
+[r2r_it_horn_ves]
+{thinking}It's very old. It's smaller than I'd have thought.
+
+# (draft)
+[r2r_it_axe]
+An ice axe wedged into a crack in a block of ice, the shaft still tied with two red bands. Whoever wedged it there meant to come back with something to put it in. Nothing's moved it since.
+
+# (draft)
+[r2r_it_axe_ves]
+{worried}It's still got a grip on the ice. It's the only thing here that has.
+
+# (draft)
+[r2r_it_fish]
+A small silver fish, frozen into the ice of the floor in the middle of a flick. One eye is still bright. There's no water for a long way. It must have been very sure of its route.
+
+# (draft)
+[r2r_it_fish 2]
+You look at the fish again. It's still got that look of surprise. You decide it isn't a good fish to think about.
+
+# (draft)
+[r2r_it_fish_ves]
+{sad}How did it get here?
+
+# (draft)
+[r2r_it_scratch]
+Scratches in the wall at head height, knife-cut: a tally of five strokes, an arrow, and a name that's been half-worn away by a thumb. BERT, it says. Under that: 'BERT WAS HERE.' Under that, much more recently: 'BERT IS NOW LEAVING.'
+
+# (draft)
+[r2r_it_scratch_ves]
+{smile}He got out. I'd like to think so.
+
+# (draft)
+[r2r_it_pool]
+A pool of meltwater, so clear you can see the floor through it. A drip lands in the middle every few seconds, and a ring spreads out and tells the walls about it.
+
+# (draft)
+[r2r_it_pool_ves]
+{bored}It's like a very slow clock.
+
+# (draft)
+[r2r_ig_candle]
+A candle stub on a lip of rock by the goblin's lamp, with a thumbprint pressed in the wax. It's been lit and put out so often it looks like a little tooth.
+
+# (draft)
+[r2r_ig_candle_ves]
+{bored}It's what the lamp does when the lamp isn't looking.
+
+# (draft)
+[r2r_ig_sack]
+A sack of goods behind the shop, labelled PROBABLY FINE. It's frozen in a crouch, as though it's afraid of being asked.
+
+# (draft)
+[r2r_ig_sack_ves]
+{smile}Probably is a flexible word.
+
+# (draft)
+[r2r_ig_mug]
+A tin mug with something in it that was cocoa once, a thin layer of ice on top and a spoon standing up. It's stuck to the barrel. It'll be a very good mug in the spring.
+
+# (draft)
+[r2r_ig_mug_ves]
+{bored}Spring's a long way off.
+
+# (draft)
+[r2r_ig_bud]
+A cluster of small crystals pushing up out of the floor, half hidden in a crown of hoar frost. It glows, quietly, blue. It doesn't mind being looked at.
+
+# (draft)
+[r2r_ig_bud_ves]
+{awed}It's the nicest thing in a cave I've seen.
+
+# (draft)
+[r2r_ig_axe]
+An ice axe stuck in a crack, with a cheerful red band. Somebody used it as a coat peg: a hat's still hanging on it. It's a good hat. You'd leave it be.
+
+# (draft)
+[r2r_ig_axe_ves]
+{smile}Somebody's very loyal to their hat.
+
+# (draft)
+[r2r_ig_scratch]
+A wall scratched with price marks: three strokes, a leaf, a star. The goblin's own secret code. A sign beside it says 'PLEASE DON'T READ THIS' in a hand that's pretending not to be the goblin's.
+
+# (draft)
+[r2r_ig_scratch_ves]
+{sly}Three strokes and a leaf is probably 'not for sale'.
+
+# (draft)
+[r2r_ih_glove]
+A single red mitten lying where it dropped, frozen into a curl of its own fingers. It's very small. Whoever lost it had paws, or a very small child.
+
+# (draft)
+[r2r_ih_glove_ves]
+{thinking}The ones who lose a mitten usually lose the other as well. This is a hare's mitten, for sure.
+
+# (draft)
+[r2r_ih_bud]
+A knot of glowing crystals pushing out of the floor, as if the cave were slowly blooming. It's wrong, somehow, that something so cold looks so friendly.
+
+# (draft)
+[r2r_ih_bud_ves]
+{awed}It's like standing in a jewel box that's been left out in the cold.
+
+# (draft)
+[r2r_ih_horn]
+A goat's horn in the middle of the lower hall, polished by wind. Somebody has propped a pebble in the hollow, and a very small bit of lichen has taken the pebble for company.
+
+# (draft)
+[r2r_ih_horn_ves]
+{smile}It's a nice pebble.
+
+# (draft)
+[r2r_ih_helmet]
+A climber's helmet, yellow, with a crack glued shut and a good bit of frost inside. It's been here a good while. It's got a bit of ice in it that's the exact size of a head.
+
+# (draft)
+[r2r_ih_helmet 2]
+You've looked at the helmet once. You decide not to look at it again, which is exactly what it'd want.
+
+# (draft)
+[r2r_ih_helmet_ves]
+{worried}It's a very empty helmet.
+
+# (draft)
+[r2r_ih_scratch]
+A wall scratched with a message in tidy capitals: IF THE ICE GOES 'PING', STOP. IF THE ICE GOES 'PING PING', RUN. And under that, in a shakier hand, 'PING PING PING?'
+
+# (draft)
+[r2r_ih_scratch_ves]
+{worried}Please don't be any of those.
+
+# (draft)
+[r2r_ih_fish]
+Another small fish, frozen into the ice. This one's got a tiny knitted hat on its head, in red. Somebody climbed all the way here to do that. You're not sure whether to salute them or be afraid.
+
+# (draft)
+[r2r_ih_fish_ves]
+{sly}It's the best-dressed fish in the mountain.
+
+# (draft)
+[r2r_ih_pool]
+A pool of meltwater under a long stalactite, so cold it smokes. The drip falls every few seconds, and the ring that follows it goes all the way to the edge.
+
+# (draft)
+[r2r_ih_pool_ves]
+{bored}I'd say it's the world's slowest clock, but it hasn't earned that.
+
+# (draft)
+[r2r_ir_horn]
+A goat's horn on the floor, with a perfectly bat-shaped clump of something on the tip. It's not a clump of anything nice. You step back.
+
+# (draft)
+[r2r_ir_horn_ves]
+{bored}I'm going to say it was the horn's decision.
+
+# (draft)
+[r2r_ir_helmet]
+A climber's helmet at the foot of the wall, upside down, filled to the brim with... things the bats left. It's an unfortunate end for a very sensible hat.
+
+# (draft)
+[r2r_ir_helmet_ves]
+{sly}Look at it differently. It's a planter.
+
+# (draft)
+[r2r_ir_bud]
+A knot of crystals glowing in the dark, a quiet blue. The bats leave it alone, as a rule. Everything has a rule about something.
+
+# (draft)
+[r2r_ir_bud_ves]
+{thoughtful}I think it keeps them at a distance. It's like a night-light for being afraid of.
+
+# (draft)
+[r2r_ir_candle]
+A candle stub with a bat's tooth-marks in it, the wax chewed ragged. Somebody was trying to eat it, or trying to put it out. Either way, the bat won.
+
+# (draft)
+[r2r_ir_candle_ves]
+{bored}The bat didn't win. The bat got candle.
+
+# (draft)
+[r2r_ir_pool]
+A puddle that's turned into a mirror: perfectly flat, a ceiling's worth of stalactites hanging in it. A drip lands in the middle every few seconds, and for a moment the whole cave shudders.
+
+# (draft)
+[r2r_ir_pool_ves]
+{awed}It's like looking up and down at the same time.
+
+# (draft)
+[r2r_ir_stash]
+A tin box wedged in the angle of two walls, as far from the bats as anyone could get. Inside: a flask of Snowmelt Tea, and a note: 'FOR THE ONE WHO GETS PAST THE BATS. I DIDN'T.' Underneath, a tiny drawing of a bat looking smug.
+
+# (draft)
+[r2r_ir_stash_ves]
+{bored}They're very particular about who gets past them. I'll take the tea.
+
+# (draft)
+[r2r_ir_stash_empty]
+The tin's empty, apart from the note. You close the lid, as gently as a lid can be closed in a bat-cave.
+
+# (draft)
+[r2r_ir_stash_empty_ves]
+{smile}They'll have a good story out of that, one day. Whoever 'they' are.
+# === END THE LIFE PASS, ROUND 2 (builder 3) ===
+
+# --- THE LIFE PASS (2026-11-15): Mount Vigil ---
+# (draft)
+
+# vigil_ice_chimney
+[r2v_ice_chimney_fall]
+A frozen waterfall in the chimney wall, a pillar of blue. Something's trapped in the middle of it, very small and bright: a coin, or a star, or a coin that wishes it were a star.
+
+[r2v_ice_chimney_fall_ves]
+{awed}Look at the colour.
+
+[r2v_ice_chimney_candle]
+A candle in a jar at the foot of the chimney, frozen into the cave floor. It lights the way for whoever comes up after, though it's gone out.
+
+[r2v_ice_chimney_candle_ves]
+{thoughtful}Lights it for the next. It's a very good thing to do.
+
+[r2v_ice_chimney_flask]
+A flask propped against the cave wall, still corked. When you tip it, it clinks. There's something inside that's gone solid.
+
+[r2v_ice_chimney_flask_ves]
+{bored}Ice. It's tea. It's ice tea.
+
+[r2v_ice_chimney_holds]
+Handholds cut into the chimney wall, polished so smooth by hands that they gleam. You can see exactly where each person reached.
+
+[r2v_ice_chimney_holds_ves]
+{smile}You can tell who had the big hands.
+
+[r2v_ice_chimney_spiral]
+A spiral of small stones in the cave floor, round and round to the middle, laid out by someone with a lot of patience and a lot of fear. It's a very good spiral.
+
+[r2v_ice_chimney_spiral_ves]
+{smile}I like them both.
+
+[r2v_ice_chimney_names]
+A name stone in the chimney, with names that have been rubbed smooth. Ice has grown over the lower rows, turning them to glass.
+
+[r2v_ice_chimney_rime]
+A stone furred with rime in the cold of the chimney, like a very small, very still polar bear.
+
+# --- END OF THE LIFE PASS: Mount Vigil ---
+
+# === ROUND 3, THE FUN CHECK (15 November 2026): chapters 1 and 2, the dullest rooms ===
+
+# (draft)
+[r3a_it_caps]
+Pale toadstools in a crack, glowing. Their light isn't blue like the crystals: it's a thin, milky green, like the dial of a watch. A line of tiny prints leads away from them. Something has been eating, politely, one cap at a time.
+
+# (draft)
+[r3a_it_caps_ves]
+{bored}If it's glowing and something's nibbling it, it's probably fine. Probably.
+
+# (draft)
+[r3a_it_bedroll]
+A bedroll laid out flat in a dry corner, a rolled coat for a pillow, and a pair of socks hung on a stalagmite to dry. They have been dry for a long time. A tag pinned to the pillow: BERT'S. DON'T.
+
+# (draft)
+[r3a_it_bedroll_ves]
+{sly}'Don't.' Not even 'please'. He means it.
+
+# (draft)
+[r3a_it_tea]
+A tea kit on a flat stone: spirit stove, kettle, two cups. One cup has BERT scratched into the side. The other says GUEST.
+
+# (draft)
+[r3a_it_tea_ves]
+{smile}I like him. I haven't met him, and I like him.
+
+# (draft)
+[r3a_it_slate]
+A slate stuck in the floor: NEXT CAMP: THE GROTTO. TEA'S ON IF THE GOBLIN'S IN. THE GOBLIN IS ALWAYS IN. THE TEA IS NOT ALWAYS ON. -- B.
+
+# (draft)
+[r3a_it_slate_ves]
+{bored}A map for people who like surprises.
+
+# (draft)
+[r3a_ig_slate]
+A slate beside the stall: PRICES. 1 GOLD = 1 GOLD. NO HAGGLING. (HAGGLING = 2 GOLD.) Someone has chalked a little arrow pointing at the goblin, and: SHE MEANS IT.
+
+# (draft)
+[r3a_ig_slate_ves]
+{sly}I'd haggle. I'd lose, though. I can tell.
+
+# (draft)
+[r3a_ig_boots]
+A heap of single boots with a tag chalked on the top one: BOOTS, SECOND-HAND, NO PAIRS. (THEY WERE ALL LEFT LIKE THIS.) And it's true. A left in a lovely red, a right with a hole in the toe, three of the same left foot.
+
+# (draft)
+[r3a_ig_boots_ves]
+{thoughtful}That's a lot of people who walked off the mountain with half their boots.
+
+# (draft)
+[r3a_ig_tea]
+A tea kit on a ledge near the stall: stove, kettle, two cups. The kettle is warm. Nobody is near it. A card is propped against it: ON. HELP YOURSELF. LEAVE A BISCUIT. -- B.
+
+# (draft)
+[r3a_ig_tea_ves]
+{smile}...Do we have a biscuit?
+
+# (draft)
+[r3a_ig_caps]
+Pale toadstools by the wall, fat and glowing. A tiny hand-lettered sign has been stuck beside them on a toothpick. It says: NO.
+
+# (draft)
+[r3a_ig_caps_ves]
+{sly}'No.' It's a clear, strong policy.
+
+# (draft)
+[r3a_ig_pool]
+A pool the size of a plate under a drip. The drip lands, and the grotto sends the note back a heartbeat late. One coin lies on the bottom, green with cold, wished at. It hasn't worked. It's still a very good puddle.
+
+# (draft)
+[r3a_ig_pool_ves]
+{thoughtful}I'd wish for a warmer cave. Then I'd feel silly.
+
+# (draft)
+[r3a_ih_caps]
+Pale toadstools climbing a stalagmite in a tidy spiral, like a small staircase for something that isn't here yet.
+
+# (draft)
+[r3a_ih_caps_ves]
+{awed}It's almost pretty. I hate that it's pretty.
+
+# (draft)
+[r3a_ih_slate]
+A slate by the corner where the golems stand: MIND THE GOLEMS. THEY LOOK LIKE ROCKS. SO DO ROCKS. (THE ROCKS DON'T HIT BACK.)
+
+# (draft)
+[r3a_ih_slate_ves]
+{bored}That's less a warning than a riddle.
+
+# (draft)
+[r3a_ih_tea]
+A tea kit tucked out of the way, stove cold, two cups upside down on a cloth. A note: GONE ON. BACK BY DARK. TEA'S IN THE TIN. -- B.
+
+# (draft)
+[r3a_ih_tea_ves]
+{smile}He keeps saying he'll be back by dark. There isn't any dark here. It's all dark.
+
+# (draft)
+[r3a_ih_bedroll]
+A bedroll rolled neatly and tied with a cord, a coat for a pillow, and one sock hung alone on a stalagmite like a very small flag. The tag says: BERT'S. STILL.
+
+# (draft)
+[r3a_ih_bedroll_ves]
+{sly}'Still.' So he means to come back for it.
+
+# (draft)
+[r3a_ih_fall]
+A frozen fall on the wall, a sheet of ice that was running when the cold came and never finished. The glow behind it puts a tiny rainbow in the stone, but only if you stand exactly here.
+
+# (draft)
+[r3a_ih_fall_ves]
+{awed}Stand still. I want to look at it a bit longer.
+
+# (draft)
+[r3a_ir_guano]
+A heap of bat leavings, deep and old, with a dent in the top where something sat down to think. You'd need a ladder to say anything rude about it.
+
+# (draft)
+[r3a_ir_guano_ves]
+{bored}No. We're not going to talk about it.
+
+# (draft)
+[r3a_ir_census]
+A slate: BAT CENSUS. A column of tally marks, crossed out, redone, crossed out. At the bottom: ABOUT 40. (THEY WON'T HOLD STILL.)
+
+# (draft)
+[r3a_ir_census_ves]
+{sly}Forty and a bit. I'd have put 'a lot'.
+
+# (draft)
+[r3a_ir_caps]
+Pale toadstools in a crevice, glowing against the dark. A bat hangs above them with its wings folded round itself like a coat, pretending not to watch the mushrooms.
+
+# (draft)
+[r3a_ir_caps_ves]
+{thoughtful}It's guarding them. Or it's very shy about its lunch.
+
+# (draft)
+[r3a_ir_claws]
+Deep scratches in the rock, a hand-span apart, all running the same way. No bat made those. Something far bigger has come through here, and gone up the passage you're about to take. Or down it. Hard to tell.
+
+# (draft)
+[r3a_ir_claws_ves]
+{worried}Those are higher up than I'd like them to be.
+
+# === END ROUND 3 (chapters 1 and 2) ===

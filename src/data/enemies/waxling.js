@@ -7,20 +7,21 @@ export const WAXLING = {
   gait: 'waddle',
   textFile: 'enemies/waxling.txt',
   sprite: { rows: WAXLING_SPRITE, palette: WAXLING_PALETTE },
-  maxHp: 110,
+  maxHp: 340,
   damage: 9,
 
   difficulty: { density: 0.95, speed: 0.9 },
 
   // Its attacks, in src/battle/attacks/waxling.js: wax drips that splash,
-  // candles whose flames shoot up, tossed matchsticks, a creeping wall of
-  // flame with a gap, and smoke curls that drift after you.
+  // candles whose flames shoot up, tossed matchsticks, a fuse laid across the
+  // box that burns along its path, and the Waxling itself running laps, a
+  // little shorter (and faster) each time.
   patterns: [
     { name: 'waxlingDripSplash', weight: 2 },
     { name: 'waxlingCandleColumns', weight: 2 },
     { name: 'waxlingMatchToss', weight: 2 },
-    { name: 'waxlingFlameCurtain', weight: 1 },
-    { name: 'waxlingSmokeCurls', weight: 1 },
+    { name: 'waxlingFuse', weight: 2 },
+    { name: 'waxlingHurry', weight: 2 },
   ],
 
   talk: [

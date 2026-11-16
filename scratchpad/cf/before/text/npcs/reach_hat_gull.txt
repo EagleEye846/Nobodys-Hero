@@ -1,0 +1,18 @@
+# THE HATLESS GULL (the Reach's first rock): a gull that wants a hat. A tiny errand of the life pass. (draft)
+
+[first]
+A gull on a rock, very upright, looking at the sea like a magistrate. It has a small round dent in the feathers on top of its head, where something used to sit.
+
+[repeat]
+The gull, upright and affronted. It glances at your head, then at the sea.
+
+[hat_ask]
+The gull gives you a long, steady look. Then it looks at its own head. Then at yours. It's obvious what it wants, and you aren't going to be the one to say it.
+
+[hat_done]
+The gull takes the sou'wester in both feet, somehow. It puts it on. It shakes itself. The hat slides over one eye, and the gull doesn't care.
+
+It looks a hundred times more important. It walks round in a slow, grand circle, and stops, and drops a feather at your boots without looking at you, the way a king drops a coin.
+
+[hat_after]
+The gull, in a yellow sou'wester, standing at the very edge of the rock. It looks as if it's in charge of the sea.

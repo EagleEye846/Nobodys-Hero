@@ -1,0 +1,11 @@
+# HADDOCK (on the shingle at the Wrack landing, wrack_landing), beside the Bother. He is only here until the scene the_dowager_crab; after that he has gone round by the water to Saltcombe.
+
+[first]
+{determined}This is the Wrack. I put in here, and I don't go further. The bay's no place for a boat that wants to stay a boat.
+
+{proud}Follow the shore east. Up the boards at the end is Saltcombe. I'll go round by the water and see ye there.
+
+{smile}And wipe yer feet where it asks. Most places don't ask. Here, somebody does.
+
+[repeat]
+{proud}East, and up the boards. I'll see ye in Saltcombe.

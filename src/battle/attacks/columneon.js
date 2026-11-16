@@ -1,7 +1,7 @@
 import { defineBulletArt } from '../projectiles.js';
 
 // The Columneon's attacks. It's a chameleon pretending to be a pillar, so it
-// fights with its tongue, its tail, its colour-changing scales, and bits of
+// fights with its tongue, its tail, its disguise (which column is it?), and bits of
 // the "pillar" (some of which are, suspiciously, also looking at you).
 
 // The sticky end of its tongue, drawn pointing right.
@@ -43,21 +43,6 @@ defineBulletArt('mimicBrick', {
   frameSeconds: 0.3,
 });
 
-// A scale that changes colour to blend in: bright, then dim, then barely there
-// (an outline you can still spot), then back.
-defineBulletArt('scale', {
-  frames: [
-    ['..g..', '.gGg.', 'gGGGg', '.gGg.', '..g..'],
-    ['..h..', '.hHh.', 'hHHHh', '.hHh.', '..h..'],
-    ['..o..', '.o.o.', 'o...o', '.o.o.', '..o..'],
-    ['..o..', '.o.o.', 'o...o', '.o.o.', '..o..'],
-    ['..h..', '.hHh.', 'hHHHh', '.hHh.', '..h..'],
-  ],
-  palette: { g: '#5fc27a', G: '#b8f0a0', h: '#3f8f5a', H: '#5fc27a', o: '#4a7a5a' },
-  radius: 2,
-  frameSeconds: 0.22,
-});
-
 // A curl of tail, ringed like a chameleon's.
 defineBulletArt('tailCurl', {
   frames: [[
@@ -72,6 +57,78 @@ defineBulletArt('tailCurl', {
   radius: 2,
   spin: 4,
 });
+
+// A stone column standing up off the floor (or hanging off the ceiling) of the
+// box. One of them is never really a column: its eyes open, and then it
+// scurries off along its wall, still pretending. Drawn like the pillars in the
+// Ruins, a little lighter so it shows in the dark box. (Its own hazard: it
+// has update, isGone, edgeDistance and draw like any bullet.)
+class Colonnade {
+  constructor({ box, x, h, ceiling }) {
+    this.box = box;
+    this.x = x;
+    this.w = 9;
+    this.h = h;
+    this.ceiling = ceiling;
+    this.y = ceiling ? box.y + h / 2 : box.y + box.h - h / 2;
+    this.vx = 0;
+    this.vy = 0;
+    this.warn = 0.6;
+    this.age = 0;
+    // When its eyes open (it's the Columneon), and when it runs.
+    this.eyesAt = Infinity;
+    this.runAt = Infinity;
+    this.lookX = x;
+    this.dmg = null;
+    this.grazed = false;
+  }
+
+  update(dt) {
+    this.age += dt;
+    if (this.age >= this.runAt) this.x += this.vx * dt;
+  }
+
+  isGone() {
+    return this.x < this.box.x - 20 || this.x > this.box.x + this.box.w + 20;
+  }
+
+  edgeDistance(px, py) {
+    if (this.age < this.warn) return Infinity;
+    const dx = Math.max(Math.abs(px - this.x) - this.w / 2, 0);
+    const dy = Math.max(Math.abs(py - this.y) - this.h / 2, 0);
+    return Math.hypot(dx, dy);
+  }
+
+  draw(ctx) {
+    const left = Math.round(this.x - this.w / 2);
+    const top = Math.round(this.y - this.h / 2);
+    ctx.save();
+    if (this.age < this.warn) ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.25 : 0.6;
+    ctx.fillStyle = '#3a2a5e';
+    ctx.fillRect(left, top, this.w, this.h);
+    ctx.fillStyle = '#a494d8';
+    ctx.fillRect(left + 1, top + 1, this.w - 2, this.h - 2);
+    ctx.fillStyle = '#d4c8f4';
+    ctx.fillRect(left + 1, top + 1, 2, this.h - 2);
+    ctx.fillStyle = '#7462b0';
+    for (let line = top + 5; line < top + this.h - 2; line += 6) ctx.fillRect(left + 1, line, this.w - 2, 1);
+    // Capital and base.
+    ctx.fillStyle = '#d4c8f4';
+    ctx.fillRect(left - 1, this.ceiling ? top + this.h - 3 : top, this.w + 2, 3);
+    if (this.age >= this.eyesAt) {
+      // Two eyes, looking about (and, at the last moment, the way it'll run).
+      const eyeY = this.ceiling ? top + this.h - 8 : top + 5;
+      const look = this.age >= this.runAt - 0.25 ? Math.sign(this.vx) : Math.sign(Math.sin(this.age * 9));
+      for (const ex of [left + 1, left + 5]) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(ex, eyeY, 3, 3);
+        ctx.fillStyle = '#1b1428';
+        ctx.fillRect(ex + 1 + look, eyeY + 1, 1, 1);
+      }
+    }
+    ctx.restore();
+  }
+}
 
 export const COLUMNEON_ATTACKS = {
   // Its tongue shoots across the box at your height, from one side (or now and
@@ -100,7 +157,7 @@ export const COLUMNEON_ATTACKS = {
       bullets.push(new Line({ x, y, angle, length, thickness: 4, warn, grow: speed, life: 0.35, color: '#ff5470' }));
       bullets.push(new Shot({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, art: 'tongueTip', warn }));
     });
-    return { duration: 6.5, update: (dt, bullets, soul) => lash(dt, bullets, soul) };
+    return { duration: 7, update: (dt, bullets, soul) => lash(dt, bullets, soul) };
   },
 
   // The "pillar" crumbles: bricks rain down all over the box. Every so often
@@ -122,7 +179,7 @@ export const COLUMNEON_ATTACKS = {
       mimics.push(shot);
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         crumble(dt, bullets);
         sneak(dt, bullets, soul);
@@ -137,17 +194,49 @@ export const COLUMNEON_ATTACKS = {
     };
   },
 
-  // Scales drift in from every edge toward you, fading in and out as they
-  // change colour. Even at their faintest you can still see their outline.
-  columneonCamouflage(box, density, { Shot, every, rand, edgePoint, angleTo, shuffleBag }) {
-    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
-    const shed = every(0.45, 0.65, (bullets, soul) => {
-      const start = edgePoint(box, edge());
-      const aim = angleTo(start, soul) + rand(-0.25, 0.25);
-      const speed = rand(36, 46);
-      bullets.push(new Shot({ x: start.x, y: start.y, vx: Math.cos(aim) * speed, vy: Math.sin(aim) * speed, art: 'scale', warn: 0.3 }));
-    });
-    return { duration: 6.5, update: (dt, bullets, soul) => shed(dt, bullets, soul) };
+  // I spy... Stone columns stand up off the floor and hang off the ceiling of
+  // the box (don't walk into them). One of them is the Columneon: its eyes
+  // open, dart about, then look the way it's going, and it scurries off
+  // along its wall, right across the box. Get out of that column's reach
+  // (above a floor one, below a ceiling one) before it runs. A new column
+  // stands up where it was.
+  columneonISpy(box, density, { rand, pick }) {
+    const slots = [box.x + 14, box.x + 40, box.x + 66];
+    let columns = [];
+    const raise = (bullets, x) => {
+      const column = new Colonnade({ box, x: x + rand(-3, 3), h: rand(30, 54), ceiling: Math.random() < 0.5 });
+      bullets.push(column);
+      columns.push(column);
+    };
+    let started = false;
+    let timer = 1.0;
+    let refill = [];
+    return {
+      duration: 7.4,
+      update: (dt, bullets, soul) => {
+        if (!started) {
+          started = true;
+          for (const x of slots) raise(bullets, x);
+        }
+        for (const slot of refill) slot.t -= dt;
+        for (const slot of refill.filter((s) => s.t <= 0)) raise(bullets, slot.x);
+        refill = refill.filter((s) => s.t > 0);
+        columns = columns.filter((c) => !c.isGone() && c.runAt === Infinity);
+        timer -= dt;
+        if (timer > 0) return;
+        timer += 1.75;
+        const ready = columns.filter((c) => c.age >= c.warn);
+        if (!ready.length) return;
+        // Usually the one whose wall you're nearest: it fancies its chances.
+        const reaching = ready.filter((c) => (c.ceiling ? soul.y < c.y + c.h / 2 + 6 : soul.y > c.y - c.h / 2 - 6));
+        const it = reaching.length && Math.random() < 0.75 ? pick(reaching) : pick(ready);
+        it.eyesAt = it.age;
+        it.runAt = it.age + 0.75;
+        // It runs the long way across, so it crosses the most box.
+        it.vx = it.x < box.x + box.w / 2 ? 78 : -78;
+        refill.push({ x: it.x, t: 1.3 });
+      },
+    };
   },
 
   // Its tail pokes in at one corner of the box and swishes back and forth,
@@ -173,7 +262,7 @@ export const COLUMNEON_ATTACKS = {
       bullets.push(new Shot({ x: at.x, y: at.y, vx: Math.cos(angle) * 54, vy: Math.sin(angle) * 54, art: 'tailCurl', warn: 0.2 }));
     });
     return {
-      duration: 6,
+      duration: 7,
       update: (dt, bullets) => {
         swish += 1.8 * dt;
         move(dt);

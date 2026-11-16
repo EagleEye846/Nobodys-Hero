@@ -46,6 +46,9 @@ function showsUpNow({ until = null, after = null, join = null }) {
 // Objects that give off light: [radius in pixels, strength].
 const PROP_LIGHTS = {
   fireplace: [56, 0.26],
+  // The Hushwood's jars of glow-moss and the stump house's little window (round 3 life pass).
+  r3b_jar_post: [34, 0.2, '110, 255, 170'],
+  r3b_stump_house: [18, 0.1],
   lamp: [30, 0.14],
   side_table: [24, 0.12],
   table: [26, 0.1],
@@ -106,6 +109,9 @@ export class Room {
     this.cargo = data.cargo ?? null;
     // Chapter 5: `ledges: 'rock'` draws the room's b/B as rough natural rock (coastTiles.js).
     this.ledges = data.ledges ?? null;
+    // Chapter 5: `crag` (a list of { x, y, w, h } tile boxes): the rock inside them is an open-air
+    // headland, broken and weathered, instead of the dark mass and banded face (coastTiles.js).
+    this.crag = data.crag ?? null;
     // Chapter 5: `tileLook: 'cliffcave'` paints the coast tiles in another palette than the
     // area's (coastTiles.js), keeping the area for everything else (backdrop, footsteps, songs).
     this.tileLook = data.tileLook ?? null;
@@ -128,13 +134,24 @@ export class Room {
     this.allProps = data.props.map((info) => {
       const prop = new Prop(info);
       prop.showsUp = { until: info.until, after: info.after, join: info.join };
+      // A quest's pieces (`pieces`: the binnacle) and a lever's scene (`scene`: the fog bell), see overworldScene.js.
+      if (info.pieces) prop.pieces = info.pieces;
+      if (info.lever && info.scene) prop.leverScene = info.scene;
+      // A prop that plays a scene when pressed (`playScene`: the Bother's "Where to?" choice).
+      if (info.playScene) prop.playScene = info.playScene;
+      // A lever that only takes at one tide (`onlyTide`, with `notNow` words otherwise): the Watch Rock's fog bell.
+      if (info.lever && info.onlyTide) {
+        prop.onlyTide = info.onlyTide;
+        prop.notNowText = info.notNow ?? null;
+      }
       // Gifts are remembered by room, look and spot, so they're only given once.
       prop.key = `${data.id}:${info.sprite}:${info.x},${info.y}`;
       if ((info.gives || info.gold) && (WORLD_STATE.taken ?? []).includes(prop.key)) prop.markTaken();
       // Up on a block: drawn standing on top of it, and only in reach from up there.
       prop.raise = TILES[data.tiles[info.y]?.[info.x]]?.raise ?? 0;
       // Already read: no more "!" over it.
-      if (info.notice && (WORLD_STATE.read ?? []).includes(prop.key)) prop.noticed = true;
+      // (`notice: 'stays'`: the "!" stays however often it's read, till the prop goes with the story: the binnacle.)
+      if (info.notice && info.notice !== 'stays' && (WORLD_STATE.read ?? []).includes(prop.key)) prop.noticed = true;
       return prop;
     });
     // Prisms go back the way you left them; the eyes' switches that hold only
@@ -145,6 +162,19 @@ export class Room {
     this.spans = new Set();
     this.id = data.id;
     this.doors = data.doors ?? [];
+    // The ghost ship: every way out through a side wall gets an open doorframe with a light coming through
+    // (gs_exit_door), so you can see where the exits are. Not where a gate already stands in the way.
+    if (data.area === 'ghostship') {
+      for (const door of this.doors) {
+        const h = door.h ?? 1;
+        if (h < 2 || (door.x !== 0 && door.x !== this.width - 1)) continue;
+        const gated = this.allProps.some((p) => p.opensWith && p.x === door.x * T && p.y >= door.y * T && p.y < (door.y + h) * T);
+        if (gated) continue;
+        const frame = new Prop({ sprite: 'gs_exit_door', x: door.x, y: door.y + h - 1, walkable: true });
+        frame.showsUp = {};
+        this.allProps.push(frame);
+      }
+    }
     // The Hushwood's puzzles (see hushwood.js): brook tiles bridged by sunk
     // logs ("x,y"), and the treadles held down right now. Both start fresh
     // every time you come in, until the room's been got through (`passed`,
@@ -271,7 +301,10 @@ export class Room {
       if (prop.opensWith) {
         let open = prop.opensWith.every((name) => this.isLeverOn(name));
         if (prop.held && this.passed) open = true;
-        if (!open && prop.isOpen && bodies.some((b) => b.x + 5 > prop.x && b.x - 5 < prop.x + prop.width && b.y > prop.y && b.y - 6 < prop.y + T)) open = true;
+        const inGate = bodies.some((b) => b.x + 5 > prop.x && b.x - 5 < prop.x + prop.width && b.y > prop.y && b.y - 6 < prop.y + T);
+        if (prop.jamsOpen && prop.isOpen && inGate) prop.jammed = true;
+        if (prop.jammed) open = true;
+        if (!open && prop.isOpen && inGate) open = true;
         if (open && !prop.isOpen) opened.push(prop);
         prop.isOpen = open;
       }
@@ -605,10 +638,21 @@ export class Room {
     return height;
   }
 
-  propAt(x, y) {
+  // `accept` (optional) skips props it refuses, so a wide drawing lying flat on the floor
+  // can't take the press meant for the thing standing under it.
+  // With `accept`, when several overlap the point the smallest one wins (a kettle on a wide
+  // wall, a mug on a bench): the thing standing in front is the one you meant.
+  propAt(x, y, accept) {
     const w = this.pixelWidth;
     const shifts = this.wraps ? [0, w, -w] : [0];
-    return this.props.find((prop) => shifts.some((s) => prop.overlaps(x + s, y, x + s + 1, y + 1))) ?? null;
+    const over = (prop) => shifts.some((s) => prop.overlaps(x + s, y, x + s + 1, y + 1));
+    if (!accept) return this.props.find(over) ?? null;
+    let best = null;
+    for (const prop of this.props) {
+      if (!accept(prop) || !over(prop)) continue;
+      if (!best || prop.width * prop.height < best.width * best.height) best = prop;
+    }
+    return best;
   }
 
   // Each landing cracks the tile under the player a little more, and the tile

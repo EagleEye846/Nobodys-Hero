@@ -1,11 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
+import { Deco } from './coastKit.js';
 
 // The Fiddler's attacks. It's an eyeless cave cricket that plays its wings
-// with its back leg, so everything it does is music (and the leg that plays
-// it): runs of notes up and down a scale, strings strummed across the box,
-// big leaps that land with a ring of leg-spikes, feelers that sweep the dark
-// for you, and a single note that goes round and round the box, throwing
-// echoes off every wall. It can't see you. It listens.
+// with its back leg. It can't see you; it listens, and it plays back what
+// it hears:
+//   - Strum: strings across the box, drawn one after another.
+//   - Leaps: it springs and lands in a ring of leg-spikes.
+//   - Feelers: its antennae sweep the dark for you.
+//   - Playback: it hums your footsteps back to you, a little late: every
+//     step you took sounds as a note, in order. Don't double back.
+//   - The phrase: it plays a phrase quietly on the staff, waits, nods, and
+//     plays it again for real, same notes, same rhythm.
 //
 // It stands to the right of the box. Each attack is a factory `(box, density,
 // tools) => ({ duration, update })`; see dummy.js for the shape.
@@ -83,47 +88,10 @@ defineBulletArt('fidBead', {
 });
 
 export const FIDDLER_ATTACKS = {
-  // Scales: a run of eight notes climbs the box from the floor to the
-  // ceiling, one after another, at different heights, and then runs back
-  // down. Each run starts one note off from where you are.
-  fidScale(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let runs = 0;
-    let next = 0.2;
-    let queue = [];
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && runs < 3 && t < 4.4) {
-          next = t + 1.9;
-          const up = runs % 2 === 0;
-          // A little off true each run.
-          const shift = rand(-3, 3);
-          for (let i = 0; i < 8; i++) {
-            const idx = up ? i : 7 - i;
-            const y = clamp(box.y + 6 + idx * 10 + shift, box.y + 5, box.y + box.h - 5);
-            queue.push({ at: t + i * 0.2, y });
-          }
-          // One of them is always on your row.
-          const near = queue.slice(-8).reduce((a, b) => (Math.abs(b.y - soul.y) < Math.abs(a.y - soul.y) ? b : a));
-          near.y = soul.y;
-          runs++;
-        }
-        for (const q of queue) {
-          if (t < q.at) continue;
-          q.done = true;
-          bullets.push(new Shot({ x: box.x + box.w + 6, y: q.y, vx: -62, art: 'fidNote', life: 3.4 }));
-        }
-        queue = queue.filter((q) => !q.done);
-      },
-    };
-  },
-
   // Strum: four strings stretch across the box (they flash, thin), and it
   // draws its leg down them: each goes off in turn, top to bottom or bottom to
   // top, with a half-second to get off the next. The first set runs across the
-  // box, the second runs up and down it, the third across again, and each
+  // box, the second runs up and down it, the third and fourth across again, and each
   // has a string through where you stand (or very near it), and a gap between
   // strings to get to.
   fidStrum(box, density, { Shot, Line }) {
@@ -131,11 +99,11 @@ export const FIDDLER_ATTACKS = {
     let strums = 0;
     let next = 0.15;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || strums >= 3) return;
-        next = t + 2.25;
+        if (t < next || strums >= 4) return;
+        next = t + 2.5;
         const down = strums !== 1;
         const upright = strums === 1;
         // Four strings 18px apart; the second one down is on you.
@@ -162,7 +130,7 @@ export const FIDDLER_ATTACKS = {
 
   // Leaps: it springs up out of the dark and comes down on a spot that shows
   // first (a ring of glints), on you, throwing the spikes of its back leg out
-  // round it in a ring, a puff of rosin behind them. Three leaps; each one
+  // round it in a ring, a puff of rosin behind them. Four leaps; each one
   // lands a little nearer where you've moved to.
   fidLeap(box, density, { Shot, rand, clamp }) {
     let t = 0;
@@ -172,7 +140,7 @@ export const FIDDLER_ATTACKS = {
     let last = null;
     let drift = { x: 0, y: 0 };
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         // Which way you've been heading (it lands a little ahead of that).
@@ -181,7 +149,7 @@ export const FIDDLER_ATTACKS = {
           drift.y = drift.y * 0.9 + ((soul.y - last.y) / dt) * 0.1;
         }
         last = { x: soul.x, y: soul.y };
-        if (t >= next && leaps < 3 && t < 4.6) {
+        if (t >= next && leaps < 4) {
           next = t + 1.55;
           leaps++;
           const ahead = (v) => clamp(v * 0.35, -26, 26);
@@ -215,7 +183,7 @@ export const FIDDLER_ATTACKS = {
   // thin lines, one after another from the top of the box to the bottom
   // (then back), each going off where it touches. They reach right across
   // the box, from a different side each sweep (the right edge, the upper left,
-  // the lower left), and each has a bead on the tip.
+  // the lower left, then the right again), and each has a bead on the tip.
   fidFeelers(box, density, { Shot, Line }) {
     const roots = [
       { x: box.x + box.w + 10, y: box.y + box.h / 2 },
@@ -226,12 +194,12 @@ export const FIDDLER_ATTACKS = {
     let sweeps = 0;
     let next = 0.2;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || sweeps >= 3) return;
-        next = t + 2.2;
-        const root = roots[sweeps];
+        if (t < next || sweeps >= 4) return;
+        next = t + 2.6;
+        const root = roots[sweeps % 3];
         const down = sweeps !== 1;
         const aim = Math.atan2(soul.y - root.y, soul.x - root.x);
         const count = 9;
@@ -249,41 +217,96 @@ export const FIDDLER_ATTACKS = {
     };
   },
 
-  // Echo: one fat note is sent at you and goes round and round the box,
-  // glancing off every wall; every time it hits one, an echo of it comes
-  // off in each direction, smaller and paler, and fades.
-  fidEcho(box, density, { Shot, rand }) {
-    let t = 0;
-    let note = null;
-    let bounces = 0;
+
+  // Playback: it listens to your footsteps, and plays them back to you, a
+  // little late. Wherever you go, a faint ring marks the step, and a moment
+  // later a note sounds right there, in the order you made them. So your own
+  // path is the tune: keep moving on, and don't double back over it. (Stand
+  // still and it plays the same step over and over.)
+  fidPlayback(box, density, { Shot }) {
+    const DELAY = 1.35;
+    const STEP = 0.13;
+    let now = 0;
+    let timer = 0.25;
     return {
-      duration: 6.8,
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        now += dt / density;
+        if (now > 6.4) return;
+        timer -= dt / density;
+        if (timer > 0) return;
+        timer += STEP;
+        // The step it heard: a ring now, a note later.
+        bullets.push(new Shot({ x: soul.x, y: soul.y, harmless: true, art: 'fidMark', life: DELAY - 0.05 }));
+        bullets.push(new Shot({ x: soul.x, y: soul.y, warn: DELAY, art: 'fidNote', life: 0.4 }));
+      },
+    };
+  },
+
+  // The phrase: five staff lines across the box. It plays a short phrase,
+  // the notes appearing on the staff one by one, quietly. Then it stops,
+  // listens, and nods, and plays the same phrase again, properly: each note
+  // in the same place, in the same rhythm, bursts into a ring of little
+  // notes. Learn the tune the first time. Two phrases, the second longer.
+  fidPhrase(box, density, { Shot, rand, clamp }) {
+    const T = (s) => s * density;
+    const BEAT = 0.26;
+    const WAIT = 0.75;
+    const lines = [0, 1, 2, 3, 4].map((i) => box.y + 16 + i * 12);
+    let t = 0;
+    let n = 0;
+    let started = false;
+    const events = [];
+    return {
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (!note && t > 0.2) {
-          const x = box.x + box.w - 6;
-          const y = box.y + box.h / 2;
-          const aim = Math.atan2(soul.y - y, soul.x - x);
-          note = new Shot({ x, y, vx: Math.cos(aim) * 58, vy: Math.sin(aim) * 58, bounce: true, warn: 0.6, art: 'fidBigNote', life: 5.6 });
-          note.lastVx = note.vx;
-          note.lastVy = note.vy;
-          bullets.push(note);
-        }
-        if (!note || note.age <= note.warn) return;
-        const bouncedX = note.vx * note.lastVx < 0;
-        const bouncedY = note.vy * note.lastVy < 0;
-        if ((bouncedX || bouncedY) && bounces < 6) {
-          bounces++;
-          const base = Math.atan2(note.vy, note.vx);
-          for (const side of [-1, 1]) {
-            const a = base + side * (0.55 + rand(0, 0.15));
-            bullets.push(new Shot({ x: note.x, y: note.y, vx: Math.cos(a) * 44, vy: Math.sin(a) * 44, art: 'fidEcho', life: 1.9 }));
+        for (const e of events) {
+          if (e.done || t / density < e.at) continue;
+          e.done = true;
+          if (e.quiet) {
+            bullets.push(new Shot({ x: e.note.x, y: e.note.y, harmless: true, art: 'fidNote', life: e.life }));
+            continue;
           }
-          note.vx *= 1.06;
-          note.vy *= 1.06;
+          const turn = rand(0, Math.PI);
+          for (let j = 0; j < 5; j++) {
+            const a = turn + (j / 5) * Math.PI * 2;
+            bullets.push(new Shot({ x: e.note.x, y: e.note.y, vx: Math.cos(a) * 42, vy: Math.sin(a) * 42, warn: 0.3, art: 'fidEcho', life: 1.1 }));
+          }
         }
-        note.lastVx = note.vx;
-        note.lastVy = note.vy;
+        if (!started) {
+          started = true;
+          bullets.push(new Deco({
+            life: 7.8,
+            under: true,
+            paint: (ctx) => {
+              ctx.fillStyle = '#6a583c';
+              for (const y of lines) ctx.fillRect(box.x + 2, y, box.w - 4, 1);
+            },
+          }));
+        }
+        if (n >= 2 || t < T(0.2 + n * 3.6)) return;
+        const count = 5 + n;
+        n++;
+        // A phrase that walks across the box near you, note by note.
+        let x = clamp(soul.x - 26, box.x + 8, box.x + box.w - 8 - (count - 1) * 9);
+        const notes = [];
+        for (let i = 0; i < count; i++) {
+          const near = Math.min(4, Math.max(0, Math.round((soul.y - lines[0]) / 12)));
+          const line = Math.min(4, Math.max(0, near + Math.floor(rand(-2, 3))));
+          // Some notes sit between the lines.
+          const y = lines[line] + (Math.random() < 0.4 ? 6 : 0);
+          notes.push({ x, y: Math.min(y, box.y + box.h - 6) });
+          x += 9 + rand(-1, 2);
+        }
+        const born = t / density;
+        notes.forEach((note, i) => {
+          // First time round: just the note, quietly, on its beat.
+          events.push({ at: born + i * BEAT, note, quiet: true, life: (count - i) * BEAT + WAIT + 0.1 });
+          // Second time: the same note, on the same beat, for real.
+          // (The note sounds a moment before it bursts: it flickers there.)
+          events.push({ at: born + count * BEAT + WAIT + i * BEAT - 0.3, note });
+        });
       },
     };
   },

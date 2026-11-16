@@ -54,7 +54,7 @@ a ship?
 # TALK options in src/data/enemies/salt_shade.js.
 [talk: Inspect]
 SALT SHADE - HP 2200
-The ghost of a drowned sailor, still waiting for a ship. Throws an anchor on a rope arc, flings messages in bottles that burst into bubbles, and casts lassos that draw tight. The loop is always open on his side.
+The ghost of a drowned sailor, still waiting for a ship. Signals in dots and dashes, his brine puddles dry into salt spikes, and he heaves the lead and hauls it home.
 
 [talk: Tap your wrist]
 You tap your wrist and point at his post: how long? SALT SHADE counts on its fingers, and loses its count, and starts again. He asks, politely, whether the war is still on. You do not have the heart.

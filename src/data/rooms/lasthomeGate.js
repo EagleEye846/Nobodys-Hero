@@ -10,6 +10,7 @@
 //   I  old stone pillar (solid)
 //   W  the old city's stone wall (solid)
 //   X  cobbles
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const LASTHOME_GATE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lasthome_gate',
@@ -75,6 +76,8 @@ export const LASTHOME_GATE = {
     { sprite: 'street_lamp', x: 15, y: 4, text: 'gate_lamp' },
     { sprite: 'carter_cart', x: 18, y: 11, text: 'gate_cart', until: 'bramble_goes_home' },
     { sprite: 'sign', x: 13, y: 4, text: 'gate_sign' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['lasthome_gate'] ?? []),
   ],
   tileTexts: { W: 'hall_front', '#': 'hall_front', F: 'gate_flowers', I: 'hall_pillar' },
 

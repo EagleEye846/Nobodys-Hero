@@ -11,6 +11,7 @@
 //   s  the great stair                            Y  snow pine (walk or hide behind) (solid)
 //   Q  snowy boulder (solid)                      _  open sky (the view shows through) (solid)
 //   z  ice
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_CLOUD_BANK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_cloud_bank',
@@ -93,6 +94,8 @@ export const VIGIL_CLOUD_BANK = {
     { sprite: 'grapple_ring', x: 12, y: 6, grapple: true },
     { sprite: 'lamp_cold', x: 17, y: 3, text: 'bank_lamp' },
     { sprite: 'cairn', x: 26, y: 3, text: 'bank_cairn' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_cloud_bank'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -361,8 +361,9 @@ SUNNYSIDE. PLEASE ENJOY. IT'S ALL PERFECTLY FINE.
 
 Under that, in a third hand, in fresh paint: (it was.)
 
+# (draft)
 [field_sign_5_ves]
-{bored}That's an uncomfortable amount of revision.
+{laughing}That's an uncomfortable amount of revision.
 
 [field_bench_5]
 The bench pointed at the Gate. Someone has left a little posy on the worn spot, tied with string. A card: FOR WHOEVER WAS WAITING.
@@ -385,20 +386,23 @@ A signpost. EAST: THE HAYFIELDS, THE HILL, THE MILL, THE LAST FARM, AND THEN THE
 [brook_sign_5]
 STEPPING STONES. THE BROOK RUNS TO THE SEA, EVENTUALLY. IF IT'S GONE A BIT SALTY, DON'T DRINK IT.
 
+# (draft)
 [brook_sign_5_ves]
-{bored}Salty. The brook. That's new.
+{surprised}Salty? The brook?
 
 [brook_water_5]
 The brook, bright and quick. There is a tide-line of seaweed along the bank, which is wrong by about a day's walk.
 
+# (draft)
 [brook_water_5_ves]
-{thoughtful}Seaweed. Inland. Something's been coming up the water.
+{surprised}Seaweed? Here? That's a long way from any sea.
 
 [soft_hole_5]
 The hole, roped off and ringed with posts. A fresh crack runs from it across the lawn, and then stops, as though thinking better of it.
 
+# (draft)
 [soft_hole_5_ves]
-{bored}We didn't keep off the grass. Look what happened.
+{shy}We didn't keep off the grass. Look what happened.
 
 [soft_rope]
 A rope tied between two posts, with a red flag knotted on every length. Farmer Tolliver has been thorough. There are a lot of knots, and every one of them took a while.
@@ -414,14 +418,16 @@ Underneath, smaller: Also not up it.
 [soft_basket]
 Farmer Tolliver's breakfast basket, empty except for a note tied to the handle: THE BASKET IS NOT FOR THE HOLE. BASKET BACK TO TOLLIVER, THE LAST FARM. NO HURRY.
 
+# (draft)
 [soft_basket_bramble]
-{grin}There's one eggshell left. I'm keeping it.
+{proud}There's one eggshell left. I'm keeping it.
 
 [soft_keep_off_5]
 KEEP OFF THE GRASS. Someone has added, below it, in neat little letters: (because of the hole).
 
+# (draft)
 [soft_keep_off_5_ves]
-{bored}We found out why. I'd like an apology from the grass.
+{angry}We found out why. I'd like an apology from the grass.
 
 [soft_picnic_5]
 The picnic, still laid out, but cold now. A note under the jug, in slow, even letters: DON'T. -- T.
@@ -434,10 +440,11 @@ The daisy has gone to seed. You put your ear to the ground beside it, as before.
 
 Silence. Not a hum. Just the field, going about its business, and a faint, pleased ticking, as if it were glad of the quiet.
 
+# (draft)
 [soft_hum_5_ves]
-{thoughtful}It's stopped humming.
+{surprised}It's stopped humming.
 
-{bored}Good. I'd have worried.
+{smile}Good. I'd have worried.
 
 [soft_scarecrow_5]
 Another scarecrow, arms out, hat tipped. Pointing east, as before. The straw in one of its fingers is a bit bent. Like someone shook it.
@@ -445,8 +452,9 @@ Another scarecrow, arms out, hat tipped. Pointing east, as before. The straw in 
 [soft_bench_5]
 A bench with a view of the whole field. This morning, the worn spot is damp. Someone slept near here.
 
+# (draft)
 [soft_bench_5_bramble]
-{grin}That was me. I'd do it again.
+{proud}That was me. I'd do it again.
 
 # --- THE HAYFIELDS ---
 
@@ -456,23 +464,27 @@ A signpost. WEST: THE SOFT FIELD (KEEP OFF) AND THE HOLE (KEEP OFF). EAST: DANDE
 [hay_sign_east]
 A signpost. EAST: DANDELION HILL. MIND THE SEEDS. THEY GET IN THE EYES, AND THE EARS, AND ONE TIME THE SOUP.
 
+# (draft)
 [hay_sign_east_ves]
-{bored}The soup. They always get in the soup.
+{laughing}The soup. They always get in the soup.
 
 [hay_picnic]
 A picnic, or what's left of one. The blanket is torn, the basket's on its side, and there are white feathers all over it. A drumstick bone has been picked clean and left in the middle, quite neatly, like a signature.
 
+# (draft)
 [hay_picnic_ves]
-{bored}Gulls. Look at the size of that bone. They've been practising.
+{surprised}Gulls? Look at the size of that bone. They've been practising.
 
+# (draft)
 [hay_picnic_bramble]
-{worried}They took the sandwiches. All of them. There was a note on the basket and they ate that too.
+{angry}They took the sandwiches. All of them. There was a note on the basket and they ate that too.
 
 [hay_scarecrow]
 A scarecrow with no hat. There's a long, white streak down its chest, and a smaller one on each shoulder. It has the dignity of someone who has had a bad day and refuses to discuss it.
 
+# (draft)
 [hay_scarecrow_ves]
-{smile}He's lost the hat. And his pride. Mostly the pride.
+{laughing}He's lost the hat. And his pride. Mostly the pride.
 
 [hay_barrow]
 A wheelbarrow of hay with a pitchfork across it. A label: FOR THE HORSE. The horse, the label adds, is not a real horse. Nobody has ever been able to tell it.
@@ -497,8 +509,9 @@ A small chest at the end of the field, painted with ears of wheat. Inside, folde
 [hill_sign]
 A sign, leaning. SEED CLOCKS. PUFF ONCE AND A WIND COMES UP. (NOT YOU. YOU WOULDN'T REACH. ASK SOMEONE WITH AN UMBRELLA.)
 
+# (draft)
 [hill_sign_ves]
-{bored}I'm "someone with an umbrella". That's my whole reputation, now.
+{proud}I'm "someone with an umbrella". That's my whole reputation, now.
 
 [hill_sign_hedge]
 A hedge, thick and flowering and without a single gap. A painted board is nailed to it, very fair: NO WAY ROUND. SORRY.
@@ -515,14 +528,16 @@ Ves hooks the stalk with her umbrella and gives it a shake. Whoosh. A cloud of s
 [hill_clock_b]
 Ves hooks it and shakes. A cloud of seeds rushes up at the edge of the second hedge, and stays there, circling.
 
+# (draft)
 [hill_clock_b_ves]
-{smile}Same again. It never gets old.
+{glee}Same again. It never gets old.
 
 [hill_clock_c]
 Ves hooks it and shakes. Seeds pour out in a great white rush, and a cloud rises off the island's edge and carries on up over the east hedge.
 
+# (draft)
 [hill_clock_c_ves]
-{bored}Of course there's one up here. Of course there is.
+{smile}Of course there's one up here. Of course there is.
 
 [hill_pouch]
 A purse on top of the banks, left in the open. Someone has stuck a dandelion in the drawstring, as a flag.
@@ -536,8 +551,9 @@ A bench at the foot of the hill, pointing up it. A hat has been left on one end,
 [hill_basket]
 A basket of dandelion seeds. A label: FOR WISHES. TAKE ONE. The basket is almost full, so people are being careful about what they wish for.
 
+# (draft)
 [hill_basket_bramble]
-{grin}I wished for more baskets of seeds. We'll see.
+{sly}I wished for more baskets of seeds. We'll see.
 
 [hill_haystack]
 A haystack with a dandelion clock stuck in the top of it, like a hat. Someone's idea of a joke, or a tribute.
@@ -550,16 +566,18 @@ The windmill. Whitewashed, round, patient, with four big sails going slowly roun
 [mill_gear]
 A wooden cog as tall as a person, turning on the mill's long shaft. Every tooth has been rubbed smooth by a hundred years of hands.
 
+# (draft)
 [mill_gear_ves]
-{thoughtful}It runs the gates. Everything in the yard hangs off that one wheel.
+{surprised}Big, isn't it. I'd like to know what it turns.
 
 [mill_sign]
 A painted board. THE MILL GATES NEED TWO SCALES HELD. ONE FOR THE CART, IN THE OPEN. ONE FOR THE SACKS, IN THE STORE. THE STORE IS THE RING OF BUSHES. THERE'S A HOLE IN IT. YOU'LL SEE.
 
+# (draft)
 [mill_sign_ves]
-{thoughtful}A plate for you, a plate for Bramble, and a hole just his size.
+{surprised}Two plates, and a hole. ...Is that hole Bramble-shaped, or is it me?
 
-{smile}Mine's the lever over the way. You on your plate first, then press E and send Bramble through.
+{proud}And a lever over the way, up high. That one's mine. I've decided.
 
 [mill_sign_bramble]
 {grin}Press E and I'm yours!
@@ -570,8 +588,9 @@ A little sign on the fence. Over the gates, in red paint: NEED BOTH SCALES DOWN.
 [mill_plate_hero]
 A big flat scale set into the yard, with a picture of a cart wheel on it. It goes down when you stand on it, and comes back up when you step off. Painted round the edge: THE HERO ONLY. (Nobody else is heavy enough, or cart-shaped enough.)
 
+# (draft)
 [mill_plate_hero_ves]
-{bored}A cart's plate. We have no cart. You'll have to do.
+{laughing}A cart's plate. We have no cart. You'll have to do.
 
 [mill_gap]
 A hole in the ring of bushes, round-topped, just a child high. Anyone bigger (that means you, and Ves) stops at the edge and thinks about their life.
@@ -582,8 +601,9 @@ A hole in the ring of bushes, round-topped, just a child high. Anyone bigger (th
 [mill_plate_bramble]
 A smaller scale, on the floor of the bushes' ring, with a sack painted on it. It's the right size for one very small person. Painted round the edge: BRAMBLE ONLY.
 
+# (draft)
 [mill_plate_bramble_ves]
-{smile}That's his. Hold it down, and the gates stay open.
+{smile}BRAMBLE ONLY. They've made him his own plate. He'll be unbearable.
 
 [mill_sacks]
 A basket of seeds and grain-sacks in the middle of the ring, tied with string. A sign: MILLER'S STORE. NOT AN OBSTACLE COURSE.
@@ -634,8 +654,9 @@ A neat sign: APPLES FOR THE PICKING. BEES FOR THE STINGING. PLEASE DON'T CONFUSE
 [orch_sign_east]
 A signpost. EAST: THE MILL POND. NO SWIMMING. THE FOALS BITE, BUT NOT ON PURPOSE.
 
+# (draft)
 [orch_sign_east_bramble]
-{worried}"Foals". Whose foals?
+{thinking}"Foals". Whose foals?
 
 # (draft)
 [orch_bank]
@@ -643,7 +664,7 @@ An old bank of turf where the bushes have died back, with a step at its foot wor
 
 # (draft)
 [orch_bank_bramble]
-{grin}It's a back door! For people who can't be bothered with front doors!
+{glee}It's a back door! For people who can't be bothered with front doors!
 
 [orch_lever]
 The lever, pulled down. The knot has slipped, and the gate outside stands open.
@@ -651,8 +672,9 @@ The lever, pulled down. The knot has slipped, and the gate outside stands open.
 [orch_gate]
 A little green gate in the ring of bushes, tied shut from the inside with string. There's a round green door beyond it, in a bank of turf.
 
+# (draft)
 [orch_gate_ves]
-{thoughtful}Tied from the inside. So somebody got in, and didn't open it. Interesting.
+{surprised}Tied from the inside? Then how did they get out?
 
 [orch_gate_open]
 The knot slips. The gate swings open with a small, polite creak, and the green door in the bank is waiting behind it.
@@ -668,8 +690,9 @@ A round green door, set into a grassy bank, with a doormat that says WIPE YOUR P
 [orch_hive]
 A beehive. The bees are going about their business with an air of heavy responsibility. You give them a wide berth, and they pretend not to notice.
 
+# (draft)
 [orch_hive_ves]
-{bored}Respect the bees. We all have jobs.
+{smile}Respect the bees. We all have jobs.
 
 [orch_crate]
 A crate of apples. A label: FOR THE CIDER. DO NOT EAT. The crate is two apples short.
@@ -697,8 +720,9 @@ A signpost. EAST: THE LAST FARM. AFTER THAT, THE CLIFFS. AFTER THAT, THE OTHER W
 [pond_water]
 A big, round pond, clear at the edge and dark in the middle. Reeds stand round it, and the water is slow. Something in it turns over, now and then, with a heavy, slow splash.
 
+# (draft)
 [pond_water_ves]
-{bored}I'll walk across the stones. I'll look at the stones.
+{worried}I'll walk across the stones. I'll look at the stones.
 
 [pond_stones]
 Flat stones in the water, worn smooth by a great many feet. The pond laps at their edges, interested.
@@ -732,14 +756,16 @@ The farmhouse door, green and round at the top, with a boot-scraper and a bell. 
 [farm_hen]
 A hen, pecking the dust. She gives you a look of cool appraisal, decides you're not a threat, and goes back to the dust.
 
+# (draft)
 [farm_hen_bramble]
-{grin}She likes me. She's looked at me twice.
+{proud}She likes me. She's looked at me twice.
 
 [farm_scarecrow]
 A scarecrow, in the turnips. It faces east, with both arms out, one hand slightly lower than the other, as if it had been waving and got tired.
 
+# (draft)
 [farm_scarecrow_ves]
-{thoughtful}Everyone on this road waves east. I'm starting to see why.
+{surprised}Everyone on this road waves east. ...What's east? Apart from us.
 
 [farm_bench]
 A bench by the save stone, in the sun. A hen sits on it, and a cat lies under it, and both are doing very well, on the whole, and very much hope you won't mention it.
@@ -767,8 +793,9 @@ A sign, bent a little to one side by the wind. LAST FIELD. THE SEA IS THAT WAY. 
 [cliff_windsock]
 A windsock on a pole, red and white, stuck straight out toward the sea. It is pulling at its post like a dog at a lead.
 
+# (draft)
 [cliff_windsock_ves]
-{bored}It's very keen. So is the wind.
+{smile}It's very keen. So is the wind.
 
 [cliff_bench]
 A bench, with its back to the sea. A hat has been tied to the arm with string. Whoever sat here knew about the wind, and learned.
@@ -795,11 +822,13 @@ A brass telescope on a stand, bolted to the cliff. The label says: ONE LOOK, FRE
 
 The sea is wide and blue and full of tiny sparkles. And, right at the edge, small as a splinter and black as a burnt match, a tower. Tall and thin, with spikes on top. It's the only thing out there that isn't moving.
 
+# (draft)
 [sea_telescope_ves]
-{thoughtful}Hm. Whatever it is, it's got a lot of spikes for something that's just a lamp.
+{worried}Hm. Whatever it is, it's got a lot of spikes for a lamp.
 
+# (draft)
 [sea_telescope_bramble]
-{worried}Can I have a turn? ...Oh. No. I changed my mind.
+{sheepish}Can I have a turn? ...Oh. No. I changed my mind.
 
 [sea_bench]
 A bench on the very edge, with a view of the whole bright sea. It's worn smooth by a great many people sitting and not saying much.
@@ -810,8 +839,9 @@ A sign by the lane. THE BEACH (BELOW). TAKE THE CLIFF PATH. THE VIEW IS FREE. TH
 [sea_bunting_post]
 A post with a red and yellow pennant on top, at the head of a path that goes down the cliff. The first of a great many.
 
+# (draft)
 [sea_bunting_post_ves]
-{smile}Bunting. Told you.
+{proud}Bunting. Told you.
 
 [sea_pouch]
 A purse in the dunes near the edge. Someone has stuck a feather through the string, and a gull has been looking at it from the bench ever since.
@@ -833,11 +863,13 @@ A hole right through the cliff, about the size of a door, with the whole bright 
 [cave_window_bramble]
 {worried}I'm not looking at it. If I don't look at it, it can't look at me.
 
+# (draft)
 [cave_shallows_ves]
-{bored}Cold. Wonderful. My boots wanted a wash.
+{cold}Cold. Wonderful. My boots wanted a wash.
 
+# (draft)
 [cave_shallows_bramble]
-{worried}I'm only going in up to my ankles. My ankles can swim. The rest of me can't.
+{determined}I'm only going in up to my ankles. My ankles can swim. The rest of me can't.
 
 [cave_rope]
 A hand rope on wooden posts, down the side of the steps, rubbed smooth and dark by years of hands. On the other side of it there is the pool, and not very much else.
@@ -895,17 +927,20 @@ A shelf of rock, higher than the floor, high enough to keep things dry. There's 
 [hollow_window]
 A gap in the rock, low over the water, with the sea outside going on for ever. A gull lands on the edge, looks in at you, and leaves.
 
+# (draft)
 [hollow_window_ves]
-{bored}The gulls have a view. They seem to think it's theirs.
+{smile}The gulls have a view. They seem to think it's theirs.
 
 [hollow_sea]
 The sea, come in under the cliff. It slides up the sand, thinks about it, and slides back.
 
+# (draft)
 [hollow_sea_bramble]
-{worried}It keeps coming up to see us. Tell it we're busy.
+{grin}It keeps coming up to see us. Tell it we're busy.
 
+# (draft)
 [hollow_sea_ves]
-{smile}It doesn't take messages, Bramble.
+{laughing}I'll tell it. ...It's not listening.
 
 [hollow_stones]
 Two flat stones in the water, worn into a path by careful feet.
@@ -928,8 +963,9 @@ A purse on the sand bar, half buried, with the tide's tidy ripples all round it.
 [hollow_sign]
 A board on a post by the way out, the letters burnt in with a hot nail: STEPS UP. STEPS DOWN. ALL STEPS EXTRA.
 
+# (draft)
 [hollow_sign_ves]
-{thoughtful}Somebody round here really doesn't like steps.
+{laughing}Somebody round here really doesn't like steps.
 
 # --- THE BURROW (secret) ---
 
@@ -939,10 +975,11 @@ Packed earth, smooth as a plate, hung with tiny pictures in frames. All of them 
 [burrow_fire]
 A stone hearth with the fire in, banked up neatly and crackling. Someone left it going for you. Or someone is about to come back, and is going to be very embarrassed.
 
+# (draft)
 [burrow_fire_ves]
 {surprised}The fire's in. Somebody lit it this morning.
 
-{bored}Nobody's here. I'm choosing not to think about that, either.
+{worried}Nobody's here. I'm choosing not to think about that, either.
 
 [burrow_table]
 A table laid for one, with a cup and a saucer and a doily. Beside it, a second place, much smaller: a tiny doily, a slice of seed cake, and a teacup the size of a thimble.
@@ -962,8 +999,9 @@ A little lamp on a stand, with a pale shade. It makes everything a little warm a
 [burrow_note]
 A little signpost, indoors, which is unusual. A card is pinned to it with a thorn. If you've got this far, you're either very small or very determined. Help yourself to a tart. Leave the crumbs. I like crumbs. -- Clover (Marigold's cousin. NOT IN.)
 
+# (draft)
 [burrow_note_bramble]
-{grin}"Very small OR very determined." I'm both!
+{proud}"Very small OR very determined." I'm both!
 
 [burrow_chest]
 A small chest at the foot of the bed with a tart in it. A jam tart, a good one, with a little paper flag stuck in the top. It says: YOU FOUND ME.
@@ -971,8 +1009,9 @@ A small chest at the foot of the bed with a tart in it. A jam tart, a good one, 
 [burrow_pantry]
 A round green door in the earth wall, with a brass knob in the very middle. A card hangs on the knob: PANTRY. NOT FOR VISITORS. NOT EVEN SMALL ONES.
 
+# (draft)
 [burrow_pantry_bramble]
-{thinking}What if you're medium?
+{sly}What if you're medium?
 
 [burrow_roof]
 Earth, overhead and all round, with roots threading through it. Somewhere up there is the orchard. It's very quiet, and smells of apples and soil.
@@ -983,5 +1022,404 @@ A purse on the floor in the corner, with a note: THIS ROOM IS A MESS. THIS IS WH
 [blossom_bush]
 A round bush smothered in blossom, humming with the sort of bees that have somewhere to be.
 
+# (draft)
 [blossom_bush_ves]
-{bored}It is a very pleased bush.
+{smile}It is a very pleased bush.
+
+# ===========================================================================
+# THE LIFE PASS, ROUND 2 (15 November 2026): farm life, dandelions and other people's things.
+# Sunnyside's rooms. In chapter 4 only Ves answers; in chapter 5 Bramble does too.
+# ===========================================================================
+
+# --- THE LANE ---
+
+[r5s_lane_lemons]
+A crate of lemons, each one the yellow of a shouted word. A card on top: SERIOUSLY, ONLY TWO.
+
+[r5s_lane_lemons_ves]
+{bored}Two. Per person. How many people does she think there are?
+
+[r5s_lane_lemons_bramble]
+{grin}I'd only count as half a person. I'm small.
+
+[r5s_lane_birdhouse]
+A blue birdhouse on a post, with a very small sign: NO VACANCIES. A beak at the door says otherwise, and then thinks better of it.
+
+[r5s_lane_birdhouse_ves]
+{smile}Full house.
+
+[r5s_lane_birdhouse_bramble]
+{glee}I bet it's got a bedroom for every bird!
+
+[r5s_gate_hat]
+A straw hat on a post, in the middle of the field. There's no scarecrow. Just the hat, looking out at the grass.
+
+[r5s_gate_hat_ves]
+{thinking}It's waiting for somebody to fill it.
+
+[r5s_gate_hat_bramble]
+{sheepish}Don't look at me. It'd come down over my ears.
+
+[r5s_gate_well]
+A well with a little tin roof and a bucket on a rope. A cool breath comes up. Far down, a very small you looks back, with the sky behind.
+
+[r5s_gate_well_ves]
+{thoughtful}Don't lean so far. The bucket gets to go in first, and it knows it.
+
+[r5s_gate_well_bramble]
+{awed}Hello? ...Hello? ...It said hello back!
+
+[r5s_brook_rod]
+A fishing rod propped in the bank, the line in the water, a red float bobbing. Nobody's holding it. Nobody's near. The float dips.
+
+[r5s_brook_rod_ves]
+{bored}It's fishing on its own. Good for it.
+
+[r5s_brook_rod_bramble]
+{shout}Something's got it! ...Oh. It stopped.
+
+[r5s_brook_mole]
+A fresh molehill, dark and crumbly. A tiny pink nose pokes out, sniffs twice, and is gone.
+
+[r5s_brook_mole_ves]
+{smile}Nothing to see here, it says.
+
+[r5s_brook_mole_bramble]
+{glee}It looked at me!
+
+[r5s_soft_cow]
+A cow in the pen, right up against the fence and very sure of herself. A tag in her ear says DAISY. (HER NAME. NOT THE FLOWER. SHE DOESN'T MIND EITHER.)
+
+[r5s_soft_cow_ves]
+{smile}I respect a cow with a plan.
+
+[r5s_soft_cow_bramble]
+{glee}Daisy! You're my favourite Daisy!
+
+[r5s_soft_coop]
+A hen house on stilts, red as a barn, with a ramp and a round door just big enough for a hen and her opinions. Something inside is clucking quietly to itself.
+
+[r5s_soft_coop_ves]
+{smile}Very smart. For a hen.
+
+[r5s_soft_coop_bramble]
+{glee}I want a house on stilts!
+
+[r5s_soft_ring]
+A ring of red-and-white toadstools in the grass, perfectly round, the grass inside it very green. It's a little cold in the middle, somehow.
+
+[r5s_soft_ring_ves]
+{worried}Don't step in it.
+
+[r5s_soft_ring_bramble]
+{scared}I wasn't going to!
+
+# --- THE HAYFIELDS ---
+
+[r5s_hay_cart]
+A hay cart, the wheels taller than you. The hay is stacked so evenly it looks combed.
+
+[r5s_hay_cart_ves]
+{smile}Somebody's proud of that.
+
+[r5s_hay_cart_bramble]
+{awed}Look at the wheels! You could live in a wheel.
+
+[r5s_hay_stack]
+Bales stacked three high, like a staircase for something with very short legs. A pitchfork is parked in the top one.
+
+[r5s_hay_stack_ves]
+{bored}I'm not climbing it.
+
+[r5s_hay_stack_bramble]
+{grin}Can we? ...We can't. Right.
+
+[r5s_hay_fork]
+A pitchfork standing upright with nothing to lean on. It's still standing. Don't ask how.
+
+[r5s_hay_fork_ves]
+{thinking}Don't touch it. It's balanced on something.
+
+[r5s_hay_ring]
+Toadstools in a ring at the edge of the wheat. A snail is sitting in the very middle, perfectly relaxed. The snail hasn't heard the stories.
+
+[r5s_hay_ring_ves]
+{thinking}It's got the right idea. Ignore the stories.
+
+[r5s_hay_ring_bramble]
+{worried}Is the snail all right in there?
+
+# --- DANDELION HILL ---
+
+[r5s_hill_cairn]
+A little cairn at the hill's far corner with a single dandelion clock tucked in the top, whole and white. The breeze has been leaving it alone out of politeness.
+
+[r5s_hill_cairn_ves]
+{thoughtful}Somebody wants that to stay. Nobody blow on it.
+
+[r5s_hill_cairn_bramble]
+{worried}I wasn't going to!
+
+[r5s_hill_basket]
+A basket full of tiny crowns woven from dandelion stems. Six of them, all different sizes. A note: ONE EACH. (BADGERS COUNT.)
+
+[r5s_hill_basket_ves]
+{bored}Do badgers wear crowns?
+
+[r5s_hill_basket_bramble]
+{proud}I'd wear mine. I'd wear everyone's.
+
+[r5s_mill_sacks]
+Flour sacks stacked against the mill wall, each stamped with a small windmill and the words WE TRIED. A little white powder drifts off the top.
+
+[r5s_mill_sacks_ves]
+{bored}"We tried." Is that a brand?
+
+[r5s_mill_sacks_bramble]
+{surprised}Does it taste like clouds? ...No. Don't. It's flour.
+
+[r5s_mill_stone]
+A big millstone leaning on the mill wall, grooves cut in it like a sunburst. There's moss on one half and none at all on the other.
+
+[r5s_mill_stone_ves]
+{bored}If that falls, we're pancakes.
+
+[r5s_mill_stone_bramble]
+{scared}Don't say pancakes.
+
+[r5s_orch_ladder]
+A long ladder leaning against the apple tree with one rung missing near the top. An apple is balanced on the topmost rung, as if it climbed there.
+
+[r5s_orch_ladder_ves]
+{bored}That apple has ambitions.
+
+[r5s_orch_ladder_bramble]
+{glee}I could get it! ...I won't. But I could.
+
+[r5s_orch_cow]
+A cow lying under an apple tree. An apple has dropped onto her back and she hasn't noticed, or doesn't mind, or has decided it's a hat.
+
+[r5s_orch_cow_ves]
+{laughing}It suits her.
+
+[r5s_orch_cow_bramble]
+{glee}It's a hat! Look, it's a hat!
+
+[r5s_orch_ring]
+Toadstools in a ring between the apple trees, nibbled at the edges by something small and polite.
+
+[r5s_orch_ring_ves]
+{thinking}Whatever's nibbling doesn't mind the stories.
+
+[r5s_orch_ring_bramble]
+{worried}Which small thing?
+
+# --- THE MILL POND ---
+
+[r5s_pond_rod]
+A fishing rod propped in a forked stick, a worm still on the hook. The worm looks bored. The pond looks bored. A fish looks interested, but won't commit.
+
+[r5s_pond_rod_ves]
+{thinking}Stalemate.
+
+[r5s_pond_rod_bramble]
+{worried}Be nice to the worm.
+
+[r5s_pond_basket]
+Tucked under the leaves in the hedge's hidden alcove, a picnic basket, and in it a jam tart wrapped in a napkin. A card: FOR WHOEVER FINDS THIS. (YOU'RE WELCOME.)
+
+[r5s_pond_basket_ves]
+{smile}...It's nice to be expected.
+
+[r5s_pond_basket_bramble]
+{glee}Jam!
+
+[r5s_pond_specs]
+A pair of round spectacles lying in the grass, one arm folded, one not. The lenses are the size of peas. Whoever owns these has very small ears.
+
+[r5s_pond_specs_ves]
+{thinking}Small ears and a big squint. Somebody can't see a thing.
+
+[r5s_pond_specs_bramble]
+{surprised}Somebody's lost their eyes!
+
+[r5s_pond_birdbath]
+A birdbath with a wren in it, standing in the middle and shaking out her feathers in a small, furious rain.
+
+[r5s_pond_birdbath_ves]
+{smile}She's had a day.
+
+# --- THE LAST FARM ---
+
+[r5s_farm_coop]
+A hen house, red as a barn and just as proud. A small sign on the door: HENS ONLY. (AND ONE VERY LOST DUCK.)
+
+[r5s_farm_coop_ves]
+{smile}The duck lives here now.
+
+[r5s_farm_coop_bramble]
+{worried}Is the duck all right in there?
+
+[r5s_farm_nest]
+A nest by the fence: three eggs, two warm and one that is definitely a stone. The hen sits beside it, quite sure.
+
+[r5s_farm_nest_ves]
+{bored}Nobody tell her.
+
+[r5s_farm_nest_bramble]
+{surprised}It's a stone?!
+
+[r5s_farm_birdhouse]
+A birdhouse on a post, with a sign: VACANCIES. (WITH REFERENCES.)
+
+[r5s_farm_birdhouse_ves]
+{smile}Fussy landlord.
+
+[r5s_farm_finish]
+A bright ribbon strung between two stakes, and a board that says FINISH in careful capitals. Far along the grass towards it, something small is making an effort.
+
+[r5s_farm_finish_ves]
+{laughing}Somebody entered a snail.
+
+[r5s_farm_finish_bramble]
+{shout}Go, snail! GO!
+
+[r5s_cliff_cow]
+A cow standing right at the cliff edge as if she's been told it's a good view and is checking.
+
+[r5s_cliff_cow_ves]
+{bored}Step back, cow.
+
+[r5s_cliff_cow_bramble]
+{scared}Get away from the edge!
+
+[r5s_cliff_cow_lie]
+A cow lying in the gorse with a daisy chain looped round one horn.
+
+[r5s_cliff_cow_lie_ves]
+{smile}Style.
+
+[r5s_cliff_cow_lie_bramble]
+{awed}Somebody made her a crown!
+
+[r5s_cliff_chair]
+A deckchair facing the sea, with a tin mug on its arm. The mug is still a little warm. Whoever sat here got up and went, and didn't take their book.
+
+[r5s_cliff_chair_ves]
+{thinking}Somebody got up. Not long ago.
+
+[r5s_cliff_chair_bramble]
+{worried}Where did they go?
+
+[r5s_sea_basket]
+A basket by the cliff path with a flask, a folded blanket and a pair of binoculars with one lens missing, so you can only see the sea in one eye.
+
+[r5s_sea_basket_ves]
+{smile}That's how I'd do it.
+
+[r5s_sea_basket_bramble]
+{awed}One-eyed sea!
+
+[r5s_sea_cairn]
+A cairn at the cliff edge, higher than your hand, with a dried sea-pink on top. A gull is sitting on the pink looking at the horizon as though it had just thought of it.
+
+[r5s_sea_cairn_ves]
+{bored}Don't knock it. The gull has made up its mind.
+
+[r5s_hol_tub]
+A tub of the day's catch, packed in wet seaweed, shining in the lantern light. One fish is still working its mouth, as if it is about to say something.
+
+[r5s_hol_tub_ves]
+{worried}Don't listen.
+
+[r5s_hol_tub_bramble]
+{scared}It's talking!
+
+[r5s_cave_tub]
+A tub of fish, half in the lantern light and half in the dark. Something in the dark half is looking at them.
+
+[r5s_cave_tub_ves]
+{bored}Leave it. It saw them first.
+
+[r5s_burrow_rug]
+A round rug, woven in rings of orange and cream, with a rabbit's hind footprints all over it in a very certain pattern. Dancing, probably.
+
+[r5s_burrow_rug_ves]
+{smile}Somebody in here has a good time.
+
+[r5s_burrow_rug_bramble]
+{glee}Is that a dance? I want to learn it!
+
+[r3d_sunny_sea_view_sleeper]
+Somebody asleep in a deckchair with a hat over their face. They're snoring in time with the waves, or the waves are snoring in time with them.
+
+[r3d_sunny_sea_view_sleeper_bramble]
+{grin}Shh!
+
+[r3d_sunny_sea_view_sleeper_ves]
+{bored}That's how you wake a sleeper.
+
+[r3d_sunny_sea_view_ships]
+A chalk board: SHIPS SEEN TODAY: 0. LAST WEEK: 0. LAST MONTH: 0 (A BIG ONE, BUT FAR).
+
+[r3d_sunny_sea_view_ships_bramble]
+{thinking}Maybe we're the first ship.
+
+[r3d_sunny_sea_view_ships_ves]
+{bored}We're not a ship.
+
+[r3d_sunny_sea_view_model]
+A model boat on a ledge, rigged and varnished, with a paper sail. NAME: HOPE. It's pointing out to sea like it's about to go.
+
+[r3d_sunny_sea_view_model_bramble]
+{glee}Can we launch it?
+
+[r3d_sunny_sea_view_model_ves]
+{bored}From a cliff? It's a very long drop.
+
+[r3d_sunny_sea_view_bottle]
+A bottle stuck cork-down in the sand with a note rolled in it: THE SEA IS VERY BIG. (I CHECKED.) BURDOCK.
+
+[r3d_sunny_sea_view_bottle_bramble]
+{glee}BURDOCK! He's been here!
+
+[r3d_sunny_sea_view_bottle_ves]
+{bored}He came all this way to measure the sea. He did a short sum.
+
+[r3d_sunny_cliff_cave_bucket]
+A bucket catching a drip from the cave roof. Plink. Plink. It's nearly full, which means whoever emptied it hasn't been back.
+
+[r3d_sunny_cliff_cave_bucket_bramble]
+{grin}Plink!
+
+[r3d_sunny_cliff_cave_bucket_ves]
+{bored}...Plink. There. Happy?
+
+[r3d_sunny_cliff_cave_net]
+A half-mended net on a frame, the netting needle still in it. Whoever left it knew exactly where they'd stopped.
+
+[r3d_sunny_cliff_cave_net_bramble]
+{thoughtful}Do you think they'll come back and finish it?
+
+[r3d_sunny_cliff_cave_net_ves]
+{bored}Not this season.
+
+[r3d_sunny_cliff_hollow_crabs]
+A bucket of crabs with a plank over it and a rock on the plank. Every few seconds the bucket rattles.
+
+[r3d_sunny_cliff_hollow_crabs_bramble]
+{worried}They're plotting.
+
+[r3d_sunny_cliff_hollow_crabs_ves]
+{bored}They're crabs. They're always plotting.
+
+[r3d_sunny_cliff_hollow_gull]
+A gull standing on a crate marked FISH, looking at you in a way that suggests the crate is its property.
+
+[r3d_sunny_cliff_hollow_gull_bramble]
+{worried}It's going to peck.
+
+[r3d_sunny_cliff_hollow_gull_ves]
+{bored}It's going to stand there until you leave. That's worse.
+
+# --- R3D END ---

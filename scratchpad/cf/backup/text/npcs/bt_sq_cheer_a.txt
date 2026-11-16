@@ -1,0 +1,19 @@
+# BT_SQ_CHEER_A: A mole in the party crowd, cheering at nothing in particular.
+
+[first]
+HOORAY! For what? I don't know! Hooray anyway! It's bright!
+
+[repeat]
+HOORAY! Still hooray! Wait, what are we hooraying?
+
+# (draft)
+[repeat 2]
+HOORAY! I asked! It's the LIGHT! I knew it was something!
+
+# (draft)
+[repeat_ves 2]
+{bored}He's very thorough. {smile}I respect thorough.
+
+# (draft)
+[repeat 3]
+Hooray. ...I've lost my voice. That one was all in the arms.

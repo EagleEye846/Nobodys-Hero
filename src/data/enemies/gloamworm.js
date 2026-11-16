@@ -16,7 +16,7 @@ export const GLOAMWORM = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hushwood',
   sprite: { rows: GLOAMWORM_SPRITE, palette: GLOAMWORM_PALETTE },
-  maxHp: 640,
+  maxHp: 2300,
   damage: 21,
 
   // A Chapter 3 enemy from under the deep wood: a touch tougher than the
@@ -28,8 +28,7 @@ export const GLOAMWORM = {
     { name: 'gloamLines', weight: 3 },
     { name: 'gloamLure', weight: 3 },
     { name: 'gloamSwing', weight: 2 },
-    { name: 'gloamMotes', weight: 2 },
-    { name: 'gloamRattle', weight: 2 },
+    { name: 'gloamSnare', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

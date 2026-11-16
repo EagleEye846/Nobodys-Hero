@@ -6,6 +6,12 @@
 # most recently wins, so the order here doesn't matter). Keep each line
 # short (one line on the card), plain, and free of spoilers: say where to
 # go, not what happens there. {c:gold}...{/c} picks out a place or a thing.
+#
+# A side quest's lines: [5: <scene id> ~<quest>]. They work the same way,
+# until a scene marked [5: <scene id> ~<quest> done] (no words) has played:
+# from then on that quest's lines are passed over, and the line goes back
+# to whatever the main story's latest one is (src/ui/goalLine.js). A main
+# story scene seen later always wins over a side quest's line anyway.
 
 [1]
 Find a way out of the Ruins.
@@ -27,61 +33,61 @@ Find a way back up to the surface.
 
 # Chapter 5, The Tide Held. Sunnyside, Gullrest and the Wrack Shore.
 [5]
-Follow the lane east, toward the sea.
+Follow the lane east, after the boy's trail.
 
 [5: first_sight_of_the_sea]
-Find a way down the cliff to {c:gold}Gullrest{/c}.
+Get down to {c:gold}Gullrest{/c}: ask about the storm.
 
 [5: meet_haddock]
-Follow Haddock up the beach to the {c:gold}lifeboat house{/c}.
+Follow Haddock: he knows about the storm.
 
 [5: lantern_at_noon]
-Go along the shore to the cove.
+Go on to the cove: Haddock's boat is the way.
 
 [5: haddock_shows_bell]
-Ring the tide bell, then meet Haddock at the jetty.
+Ring the tide bell, then take Haddock's boat.
 
 [5: the_sky_turns]
-Make your way along the {c:gold}Wrack Shore{/c}.
+Get to {c:gold}Saltcombe{/c}: someone knows this storm.
 
 [5: dowager_spared]
-Ring the {c:gold}Bathtub Bell{/c} at the gate past the beach.
+Ring the {c:gold}Bathtub Bell{/c}: Saltcombe is past it.
 
 [5: dowager_beaten]
-Ring the {c:gold}Bathtub Bell{/c} at the gate past the beach.
+Ring the {c:gold}Bathtub Bell{/c}: Saltcombe is past it.
 
 # Saltcombe: the town hall, the inn, the lagoon, then the lookout.
 [5: bathtub_gate]
-Go on to {c:gold}Saltcombe{/c}, and find the town hall.
+Go on to {c:gold}Saltcombe{/c} and ask about the storm.
 
 [5: inn_hall_first]
-Go up to the town hall.
+Go up to the town hall: it's about the storm.
 
 [5: town_meeting]
-Find Haddock at {c:gold}the Drowned Rat{/c}.
+Stop the storm at {c:gold}the Last Light{/c}: find Haddock.
 
 [5: haddock_hums]
-Meet Haddock at the lagoon.
+Stop the storm: meet Haddock at the lagoon.
 
 [5: swimming_lesson]
-Meet Haddock's boat under the lookout.
+Meet Haddock's boat under the {c:gold}lookout{/c}: it's the way out.
 
 # The Wreck Yard.
 [5: wreck_crossing]
-Search the {c:gold}Wreck Yard{/c}.
+Search the {c:gold}Wreck Yard{/c} for a way to the tower.
 
 [5: wreck_star_shard]
-Get back to Haddock's boat at the slip.
+Back to Haddock's boat: ask about the star.
 
 [5: wreck_slip_home]
-Find the way into the {c:gold}Sunken Lanes{/c}.
+Find the {c:gold}Sunken Lanes{/c}: the way out goes under.
 
 # The Sunken Lanes, Merrow and the Soundings.
 [5: lanes_lantern]
-Keep on through the Sunken Lanes.
+Keep on through the Lanes, toward the sea.
 
 [5: merrow_in]
-Find a way through drowned {c:gold}Merrow{/c}.
+Get through drowned {c:gold}Merrow{/c} to the sea beyond.
 
 [5: gulper_spared]
 Open Merrow's sea gate with the {c:gold}Gulper Tooth{/c}.
@@ -90,33 +96,50 @@ Open Merrow's sea gate with the {c:gold}Gulper Tooth{/c}.
 Open Merrow's sea gate with the {c:gold}Gulper Tooth{/c}.
 
 [5: merrow_sea_gate]
-Follow the tunnel into the sea caves.
+Follow the tunnel out to the sea caves.
 
 [5: soundings_in]
-Find a way up through {c:gold}the Soundings{/c}.
+Climb up through {c:gold}the Soundings{/c} to the Isles.
 
 [5: soundings_the_weight]
 Hang the brass weight on the gate's counterweight.
 
 [5: soundings_weight_gate]
-Keep climbing the stair.
+Keep climbing the stair to the Isles.
 
 # The Beacon Isles, Haddock's Light, the Reach and the Last Light.
 [5: isles_four_lights]
-Find the smith on the {c:gold}Beacon Isles{/c}.
+Cross the Isles to {c:gold}Haddock's Light{/c}, then the tower.
 
 [5: isles_star_held]
-Go on to {c:gold}Haddock's Light{/c}.
+Go on to {c:gold}Haddock's Light{/c}, then the tower.
 
 [5: haddock_tells_it]
-Take the boat out across the {c:gold}Storm Reach{/c}.
+Cross the {c:gold}Storm Reach{/c} to the Last Light.
 
 [5: reach_eye_talk]
-Get to {c:gold}the Last Light{/c}.
+Get to {c:gold}the Last Light{/c} and stop the storm.
 
 [5: lastlight_song]
-Climb to the top of the Last Light.
+Climb the Last Light and stop the storm.
 
-# After the chapter: the open door in the harbour office (the chapter-end card points at it).
+# After the chapter: finish what's left behind, or take the chart in the harbour office to go on.
 [5: the_tide_held]
-See what is behind the {c:gold}harbour office{/c} door.
+Finish up here, or take the {c:gold}chart{/c} in the harbour office.
+
+
+# (draft) THE FAIR RETURN'S DEEP PART (optional, the ghost ship's star shard: side quest `ship`). After the captain,
+# his book on the chart table says where the compass went; once it's set, the bow; once the figurehead is dealt with,
+# the quest is done and the main story's line comes back.
+[5: captain_spared ~ship]
+Rebuild the captain's compass: his {c:gold}book{/c} says where it went.
+
+[5: captain_beaten ~ship]
+Rebuild the captain's compass: his {c:gold}book{/c} says where it went.
+
+[5: compass_set ~ship]
+Go down the cabin hatch, and forward to the {c:gold}bow{/c}.
+
+[5: figurehead_spared ~ship done]
+
+[5: figurehead_beaten ~ship done]

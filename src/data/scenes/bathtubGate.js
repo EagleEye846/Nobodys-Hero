@@ -15,15 +15,21 @@ export const BATHTUB_GATE = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed (the camera goes to the gate; the bell, the rattle and the swing
+    // are heard and seen).
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', text: 'The post by the gate has a bracket on top, just the size of a ship\'s bell, and a notice: RING FOR PASSAGE. (NO KNOCKING.)\n\nYou hang the Bathtub Bell on the bracket.' },
+    { do: 'say', text: 'A notice on the post by the gate: RING FOR PASSAGE. (NO KNOCKING.)' },
+    { do: 'act', who: 'player', act: 'hop' },
     { do: 'sound', name: 'bell' },
-    { do: 'wait', seconds: 1.4 },
+    { do: 'camera', to: { x: 37, y: 9 } },
+    { do: 'wait', seconds: 1 },
+    { do: 'quake', amount: 1, seconds: 0.6 },
+    { do: 'sound', name: 'creak' },
+    { do: 'wait', seconds: 0.5 },
     { do: 'leave', who: 'gate_a' },
     { do: 'leave', who: 'gate_b' },
-    { do: 'act', who: 'player', act: 'hop', wait: false },
-    { do: 'say', text: 'It rings once, low and round, and every board in the gate rattles and sighs. Then the gate swings open on its own, like a door that has been waiting to be asked.' },
-    { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{bored}A bell that opens a gate. Sensible. You can\'t lose a bell down your boot.' },
+    { do: 'wait', seconds: 1.4 },
+    { do: 'camera' },
+    { do: 'say', who: 'ves', text: '{smile}A bell that opens a gate. I like that. You can\'t lose a bell down your boot.' },
   ],
 };

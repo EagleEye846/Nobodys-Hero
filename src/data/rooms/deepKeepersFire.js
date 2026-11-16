@@ -13,6 +13,8 @@
 //   #  black rock overhead (solid)   W  smooth black rock face (solid)
 //   .  black stone floor   q  ash (floor)   ^  black stalagmite (solid)
 //   O  glossy black boulder (solid)   J  smooth knob (solid)
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DEEP_KEEPERS_FIRE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'deep_keepers_fire',
@@ -70,6 +72,7 @@ export const DEEP_KEEPERS_FIRE = {
   // The fire and the Keeper beside it; a few cairns, stones and a purse.
   textFile: 'interactions/deep.txt',
   props: [
+    ...(R3C_PROPS.deep_keepers_fire ?? []),
     { sprite: 'campfire', x: 22, y: 7, text: 'kf_fire', animation: 'campfire', speed: 0.14 },
     { sprite: 'keeper', x: 23, y: 7, cast: 'keeper', text: 'kf_keeper' },
     { sprite: 'little_cairn', x: 5, y: 7, text: 'kf_cairn', seenInLight: true },
@@ -77,6 +80,8 @@ export const DEEP_KEEPERS_FIRE = {
     { sprite: 'smooth_stone_a', x: 14, y: 8, text: 'fd_stone', seenInLight: true },
     { sprite: 'smooth_stone_c', x: 27, y: 6, text: 'fd_stone', seenInLight: true },
     { sprite: 'gold_pouch', x: 9, y: 11, text: 'kf_purse', gold: 70, seenInLight: true, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    // --- end life pass ---
   ],
   tileTexts: { '#': 'deep_rock', W: 'deep_face', J: 'deep_knob', '^': 'deep_stalagmite', O: 'deep_boulder', q: 'deep_ash' },
 

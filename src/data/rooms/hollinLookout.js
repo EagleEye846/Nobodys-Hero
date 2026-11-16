@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE LOOKOUT: up the old lookout tree at Hollin Gate (a secret), a
 // platform of boards with a rail round it, where the woodcutters kept watch
 // over the wood. Nobody's been up in fifty years. A chest with a lookout's
@@ -49,11 +51,13 @@ export const HOLLIN_LOOKOUT = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/hushwood.txt',
   props: [
+    { sprite: 'col_marble_swirl', x: 11, y: 10, walkable: true, flat: true, gives: 'marble_swirl', taken: { gone: true } },
     { sprite: 'chest', x: 3, y: 3, text: 'lookout_chest', gives: 'lookouts_oilskin', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'chest', x: 10, y: 3, text: 'lookout_axe', gives: 'heartwood_axe', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 10, y: 8, text: 'lookout_pouch', gold: 250, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'telescope', x: 6, y: 2, text: 'lookout_telescope' },
     { sprite: 'bench', x: 4, y: 6, text: 'lookout_bench' },
+    ...(R3P_PROPS['hollin_lookout'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

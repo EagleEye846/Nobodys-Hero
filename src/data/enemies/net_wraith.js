@@ -18,7 +18,7 @@ export const NET_WRAITH = {
   feel: { hit: 'ghost', idle: 'drip', color: '#bfe8dc', defeat: 'ghost' },
   // The coast's fights from the Lanes on: the shanty (the Wreck Yard's ones, in the storm song).
   music: 'coastBattleStorm',
-  maxHp: 11000,
+  maxHp: 7300,
   damage: 91,
 
   difficulty: { density: 1.55, speed: 1.40 },
@@ -35,10 +35,9 @@ export const NET_WRAITH = {
 
   // Its attacks live in src/battle/attacks/net_wraith.js.
   patterns: [
-    { name: 'netGrid', weight: 3 },
-    { name: 'netFloats', weight: 2 },
-    { name: 'netHooks', weight: 2 },
-    { name: 'netCurtain', weight: 2 },
+    { name: 'netCast', weight: 3 },
+    { name: 'netMesh', weight: 3 },
+    { name: 'netCatch', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -49,7 +48,7 @@ export const NET_WRAITH = {
     { name: 'Hum a sea shanty', calm: 30 },
   ],
 
-  rewards: { exp: 2600, coins: 14 },
+  rewards: { exp: 2600, coins: 11 },
 
   // A float it sometimes lets go of (src/data/items.js), with the chance of it.
   drops: [{ item: 'net_float', chance: 0.4 }],

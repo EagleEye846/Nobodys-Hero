@@ -24,7 +24,7 @@ export const SANDCASTLE = {
   feel: { hit: 'sand', idle: 'sand', windup: 'dust', defeat: 'sand' },
   // The chapter 5 coast battle song (Gullrest and the Wrack Shore).
   music: 'coastBattleStorm',
-  maxHp: 10200,
+  maxHp: 6300,
   damage: 86,
 
   difficulty: { density: 1.65, speed: 1.50 },
@@ -36,8 +36,8 @@ export const SANDCASTLE = {
 
   // Its attacks live in src/battle/attacks/sandcastle.js.
   patterns: [
-    { name: 'castleVolley', weight: 3 },
-    { name: 'castleFlag', weight: 3 },
+    { name: 'castleTowers', weight: 3 },
+    { name: 'castleGarrison', weight: 3 },
     { name: 'castleMoat', weight: 3 },
   ],
 
@@ -49,7 +49,7 @@ export const SANDCASTLE = {
     { name: 'Point at the sea', calm: 30 },
   ],
 
-  rewards: { exp: 2050, coins: 12 },
+  rewards: { exp: 2050, coins: 10 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'pail_and_spade', chance: 0.4 }],

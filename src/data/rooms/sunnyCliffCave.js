@@ -19,6 +19,7 @@
 //   0  its deepest middle (solid)   ;  the pool's shallow edge (wade it)   b B  the shelf's step and the shelf (jump up)   ^  rock pillar
 //   O  boulder
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_CLIFF_CAVE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_cliff_cave',
@@ -46,6 +47,9 @@ export const SUNNY_CLIFF_CAVE = {
   wadeSlow: 0.75,
   // The shelf (b, B) is the cave's own rough rock, not Gullrest's cut blocks.
   ledges: 'rock',
+  // Rough natural rock round the walls (ragged overhangs, fallen stones, shadow at the foot),
+  // like the hollow below: the floor's edges bay in and out instead of running ruler-straight.
+  softEdges: true,
 
   tiles: [
     '##########::::##########', // 0
@@ -59,14 +63,14 @@ export const SUNNY_CLIFF_CAVE = {
     '##;~~00~;:ooooWWWBBBBB##', // 8
     '##;~~~~~;:ooooWWWbbbbb##', // 9
     '##;;~~~;;.............##', // 10
-    '##;;;;;;;......^......##', // 11
-    '##;;;;;;;.............##', // 12
-    '##....................##', // 13
-    '##...................O##', // 14
-    '##....^...............##', // 15
-    '##.O..................##', // 16
-    '##...........O........##', // 17
-    '#################...####', // 18
+    '##;;;;;;;......^.......#', // 11
+    '##;;;;;;;..............#', // 12
+    '###.................O..#', // 13
+    '###..................O##', // 14
+    '##....^..............###', // 15
+    '##.O................####', // 16
+    '###..........O......####', // 17
+    '#####....########...####', // 18
     '#################...####', // 19
   ],
 
@@ -109,6 +113,12 @@ export const SUNNY_CLIFF_CAVE = {
     { sprite: 'sy_shells', x: 3, y: 13, text: 'cave_shells', walkable: true, flat: true },
     { sprite: 'sy_shells', x: 8, y: 14, text: 'cave_shells', walkable: true, flat: true },
     { sprite: 'c5_rope_coil', x: 12, y: 16, text: 'cave_coil', walkable: true, flat: true },
+    // A crack in the floor, and the roof dripping into a puddle in the bay in the south wall.
+    { sprite: 'c5_puddle', x: 6, y: 17, walkable: true, flat: true },
+    { sprite: 'c5_floor_crack', x: 10, y: 15, walkable: true, flat: true },
+    { sprite: 'c5_stalactite_drip', x: 6, y: 18, text: 'cave_drip', walkable: true, animation: 'c5_stalactite_drip', speed: 0.55 },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_cliff_cave ?? []),
   ],
   tileTexts: { '#': 'cave_rock', W: 'cave_rock', '~': 'cave_pool', 0: 'cave_pool', ';': 'cave_shallows', o: 'cave_steps', '^': 'cave_pillar', O: 'cave_boulder', b: 'cave_shelf', B: 'cave_shelf' },
 
@@ -118,8 +128,13 @@ export const SUNNY_CLIFF_CAVE = {
   // floor (patrols x 12 to 17, row 14). Both clear of the scene's trigger (row
   // 4, on the steps; nobody walks) and of both doors (top x 10 to 13, bottom x
   // 17 to 19, row 19), and more than 4 tiles apart, so they're met one at a time.
+  // AMBUSH: the bat hangs in the roof over the west end of the sand floor (12,15) and drops on you
+  // when you come within two and a half tiles (dust sifts down onto a faint shadow there: `look:
+  // 'cave_roof'`, src/overworld/hideouts.js). It comes down where you stood, so keep walking and it
+  // misses and gives chase. The way from the steps to the bottom door, and down from the shelf,
+  // stays nearer the east side (three and a half tiles or more from it).
   npcs: [
     { enemy: 'whelkling', x: 4, y: 9, patrol: [3, 6], behaviour: 'wander' },
-    { enemy: 'barnacle_bat', x: 14, y: 14, patrol: [12, 17], behaviour: 'patrol' },
+    { enemy: 'barnacle_bat', x: 12, y: 15, patrol: [12, 12], behaviour: 'drop', look: 'cave_roof', reach: 2.5 },
   ],
 };

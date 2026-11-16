@@ -1,4 +1,4 @@
-// THE WAY OUT: down the stairs from Taper's hallway. A long, quiet corridor
+// THE WAY OUT: down the stairs from Taper's dipping room. A long, quiet corridor
 // to the old door out of the Ruins. Taper won't let you through it easily.
 // Tile key (see src/overworld/tileset.js):
 //   #  wall top (solid)                            W  wall face (solid)
@@ -6,6 +6,7 @@
 //   .  floor                                       c  cracked floor (safe)
 //   D  doorway (walk through it; see `doors`)      U  stairs up (walk through it; see `doors`)
 //   I  tall pillar (walk or hide behind) (solid)
+import { R1_PROPS } from '../ruinsLife.js';
 export const WAY_OUT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'way_out',
@@ -34,7 +35,7 @@ export const WAY_OUT = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 2, y: 1, w: 2, h: 2, to: 'taper_hall', spawn: { x: 18, y: 7 } },
+    { x: 2, y: 1, w: 2, h: 2, to: 'taper_hall', spawn: { x: 10, y: 10 } },
     { x: 31, y: 1, w: 3, h: 2, to: 'beyond_ruins', spawn: { x: 11, y: 12 } },
   ],
 
@@ -49,9 +50,12 @@ export const WAY_OUT = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/the_ruins.txt',
   props: [
+    { sprite: 'col_charm_moon', x: 1, y: 7, walkable: true, flat: true, gives: 'charm_moon', taken: { gone: true } },
     { sprite: 'savepoint', x: 4, y: 6, save: true },
     { sprite: 'taper', x: 32, y: 4, npc: 'mother_taper', after: 'taper_follows', until: 'taper_blocks' },
     { sprite: 'taper_remains', x: 32, y: 4, text: 'taper_remains', after: 'taper_defeated', walkable: true },
+    // The life pass, round 2 (15 November 2026): chapter 1's dressing, in src/data/ruinsLife.js.
+    ...(R1_PROPS['way_out'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

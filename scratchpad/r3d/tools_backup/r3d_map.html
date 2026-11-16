@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><base href="../"><title>r3d map</title></head><body style="background:#000;color:#ddd"><pre id="report">M
+</pre><script type="module">
+const r=document.getElementById('report');
+try{
+const { Room } = await import('./src/overworld/room.js');
+const { ROOMS } = await import('./src/data/rooms/index.js');
+const ids=(new URLSearchParams(location.search).get('rooms')??'').split(',').filter(Boolean);
+for (const id of ids){
+  const d=ROOMS[id]; if(!d){r.textContent+=`NO ROOM ${id}\n`;continue;}
+  const room=new Room(d);
+  const w=d.tiles[0].length,h=d.tiles.length;
+  const g=[...Array(h)].map(()=>Array(w).fill(' '));
+  const near=(arr,x,y,rad)=>arr.some(p=>Math.abs(p.x-x)<=rad&&Math.abs(p.y-y)<=rad);
+  const props=(d.props??[]).map(p=>({x:p.x,y:p.y,flat:!!(p.flat||(p.walkable&&!p.text)),text:!!p.text,save:!!p.save,sprite:p.sprite,spr:p}));
+  const blockers=props.filter(p=>!p.flat);
+  const saves=props.filter(p=>p.save);
+  const doors=[]; for(const dr of d.doors??[]) for(let i=0;i<(dr.w??1);i++)for(let j=0;j<(dr.h??1);j++)doors.push({x:dr.x+i,y:dr.y+j});
+  const scenes=[]; for(const c of d.cutscenes??[]) for(let i=0;i<(c.w??1);i++)for(let j=0;j<(c.h??1);j++)scenes.push({x:c.x+i,y:c.y+j});
+  const ens=(d.npcs??[]).map(n=>({x:n.x,y:n.y}));
+  const textP=props.filter(p=>p.text);
+  const start=d.playerStart?[d.playerStart]:[];
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const cx=(x+0.5)*16, cy=(y+1)*16; const solid=room.collides(cx-5,cy-5,cx+5,cy);
+    let c=solid?'#':'+';
+    if(!solid){
+      if(near(blockers,x,y,1)||near(props.filter(p=>p.flat),x,y,0)) c='o';
+      else if(near(doors,x,y,2)||near(scenes,x,y,2)||near(saves,x,y,3)||near(ens,x,y,3)||near(start,x,y,2)) c='x';
+      else if(textP.some(p=>p.x===x&&p.y===y-1)) c='s';
+      else if(y<2||x<1||x>w-2||y>h-2) c='e';
+    }
+    g[y][x]=c;
+  }
+  for(const p of props){ if(g[p.y]?.[p.x]!==undefined) g[p.y][p.x]=p.save?'V':(p.text?'T':'p'); }
+  for(const e of ens){ if(g[e.y]?.[e.x]!==undefined) g[e.y][e.x]='E'; }
+  for(const dd of doors){ if(g[dd.y]?.[dd.x]!==undefined) g[dd.y][dd.x]='D'; }
+  for(const dd of scenes){ if(g[dd.y]?.[dd.x]==='+'||g[dd.y]?.[dd.x]==='x') g[dd.y][dd.x]='S'; }
+  r.textContent+=`=== ${id} ${w}x${h} area=${d.area} tide=${!!d.tide} text=${d.textFile}\n    `+[...Array(w)].map((_,i)=>i%10).join('')+'\n';
+  r.textContent+=g.map((row,y)=>String(y).padStart(3)+' '+row.join('')).join('\n')+'\n';
+  r.textContent+='tiles:\n'+d.tiles.map((row,y)=>String(y).padStart(3)+' '+row).join('\n')+'\n';
+  r.textContent+='props: '+props.map(p=>`${p.sprite}@${p.x},${p.y}${p.text?'*':''}`).join(' ')+'\n\n';
+}
+}catch(e){r.textContent+='ERR '+(e.stack??e)+'\n'}
+r.textContent+='CHECK DONE\n';</script></body></html>

@@ -3,7 +3,8 @@ import { defineBulletArt } from '../projectiles.js';
 // The Bog Toad's attacks. It's a big, slow, grumpy, sleepy toad that would
 // like everyone to go away so it can get back to sleep, so it fights like a
 // toad that can't be bothered to get up: its long sticky tongue lashing out
-// across the box, the flies it has for supper, a great GULP that swallows
+// across the box, hopping from lily pad to lily pad (always to the pad
+// nearest you), a great GULP that swallows
 // the whole box and carries it off (you, and the frogspawn in its mouth,
 // slosh about inside) before it spits it back out, frogspawn that hatches
 // into tadpoles, and a belly flop that lands right on you, after which it
@@ -87,6 +88,13 @@ defineBulletArt('toadBelly', {
   radius: 6.5,
 });
 
+// A lily pad on the pool (harmless).
+defineBulletArt('toadPad', {
+  frames: [['..gggg..', '.gGggGg.', 'gGgg.gGg', 'ggGg..gg', '.gGggGg.', '..gggg..']],
+  palette: { g: '#4a7a3a', G: '#2e5226' },
+  radius: 1,
+});
+
 // Its shadow on the box, growing as it comes down (harmless).
 defineBulletArt('toadShadow', {
   frames: [[
@@ -153,10 +161,10 @@ export const BOG_TOAD_ATTACKS = {
       tongues.push(tongue);
     };
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.6) {
+        if (t >= next && t < 8.6) {
           lash(bullets, soul);
           next = t + 0.95;
         }
@@ -176,66 +184,53 @@ export const BOG_TOAD_ATTACKS = {
     };
   },
 
-  // Supper: a cloud of flies buzzes about the box, all over the place, and
-  // every so often the toad's tongue snaps out at the one nearest you. It
-  // gets the fly. Mind it doesn't get you too.
-  toadFlies(box, density, { Shot, Line, rand }) {
-    const flies = [];
-    let tongues = [];
+  // Lily pads: five lily pads float in the pool, and the toad hops from pad
+  // to pad, SPLOSH, sending a ring of pondwater out each time it lands. It
+  // always hops to the pad nearest you (its shadow shows which), so you
+  // choose where it comes down: keep a pad between you and it, and be
+  // somewhere else when it lands.
+  toadHop(box, density, { Shot, rand }) {
+    const pads = [
+      { x: box.x + 18, y: box.y + 18 }, { x: box.x + box.w - 18, y: box.y + 18 },
+      { x: box.x + box.w / 2, y: box.y + box.h / 2 },
+      { x: box.x + 18, y: box.y + box.h - 18 }, { x: box.x + box.w - 18, y: box.y + box.h - 18 },
+    ];
     let t = 0;
-    let nextSnap = 0.9;
-    const addFly = (bullets, x, y) => {
-      const fly = new Shot({ x, y, warn: 0.3, art: 'toadFly' });
-      fly.goal = { x: rand(box.x + 6, box.x + box.w - 6), y: rand(box.y + 6, box.y + box.h - 6) };
-      bullets.push(fly);
-      flies.push(fly);
-    };
-    let started = false;
+    let next = 0.4;
+    let on = -1;
+    let hop = null;
+    let laid = false;
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (!started) {
-          started = true;
-          for (let i = 0; i < 11; i++) addFly(bullets, rand(box.x + 6, box.x + box.w - 6), rand(box.y + 6, box.y + 30));
+        if (!laid) {
+          laid = true;
+          for (const pad of pads) bullets.push(new Shot({ x: pad.x, y: pad.y, harmless: true, life: 30, art: 'toadPad' }));
         }
-        // Buzzing: off toward a spot, jittering, then a new spot.
-        for (const fly of flies) {
-          if (fly.eaten || fly.age < fly.warn) continue;
-          const dx = fly.goal.x - fly.x;
-          const dy = fly.goal.y - fly.y;
-          const d = Math.hypot(dx, dy);
-          if (d < 4) fly.goal = { x: rand(box.x + 6, box.x + box.w - 6), y: rand(box.y + 6, box.y + box.h - 6) };
-          fly.vx = (dx / (d || 1)) * 34 + rand(-30, 30);
-          fly.vy = (dy / (d || 1)) * 34 + rand(-30, 30);
+        if (!hop && t >= next && t < 9.8) {
+          // The pad nearest you (not the one it's on).
+          let best = -1;
+          pads.forEach((pad, i) => {
+            if (i === on) return;
+            if (best < 0 || Math.hypot(pad.x - soul.x, pad.y - soul.y) < Math.hypot(pads[best].x - soul.x, pads[best].y - soul.y)) best = i;
+          });
+          hop = { to: best, at: t };
+          bullets.push(new Shot({ x: pads[best].x, y: pads[best].y, harmless: true, life: 0.9, art: 'toadShadow' }));
         }
-        // Snap: at the fly nearest you.
-        if (t >= nextSnap && t < 5.8) {
-          nextSnap = t + 1.0;
-          const live = flies.filter((fly) => !fly.eaten && fly.age >= fly.warn);
-          live.sort((a, b) => Math.hypot(a.x - soul.x, a.y - soul.y) - Math.hypot(b.x - soul.x, b.y - soul.y));
-          const prey = live[0];
-          if (prey) {
-            const from = { x: box.x + box.w + 6, y: Math.max(box.y + 4, Math.min(box.y + box.h - 4, prey.y + rand(-14, 14))) };
-            const angle = Math.atan2(prey.y - from.y, prey.x - from.x);
-            const reach = Math.hypot(prey.x - from.x, prey.y - from.y) + 6;
-            const tongue = makeTongue(Line, Shot, from, angle, reach, 0.45);
-            tongue.prey = prey;
-            bullets.push(tongue.line, tongue.tip);
-            tongues.push(tongue);
+        if (hop && t - hop.at >= 0.9) {
+          // SPLOSH.
+          const pad = pads[hop.to];
+          on = hop.to;
+          bullets.push(new Shot({ x: pad.x, y: pad.y, life: 0.6, art: 'toadBelly' }));
+          const turn = rand(0, Math.PI * 2);
+          for (let i = 0; i < 8; i++) {
+            const a = turn + (i / 8) * Math.PI * 2;
+            bullets.push(new Shot({ x: pad.x, y: pad.y, vx: Math.cos(a) * 46, vy: Math.sin(a) * 46, accel: -20, life: 1.6, art: 'toadMud' }));
           }
+          hop = null;
+          next = t + 0.7;
         }
-        for (const tongue of tongues) {
-          moveTongue(tongue);
-          const k = tongue.line.age - tongue.line.warn;
-          // Got it. A new fly comes in from the far side to take its place.
-          if (k > 0.18 && !tongue.prey.eaten) {
-            tongue.prey.eaten = true;
-            tongue.prey.spent = true;
-            addFly(bullets, box.x - 4, rand(box.y + 8, box.y + box.h - 8));
-          }
-        }
-        tongues = tongues.filter((tongue) => tongue.line.age < tongue.warn + 1);
       },
     };
   },
@@ -251,8 +246,8 @@ export const BOG_TOAD_ATTACKS = {
     const home = { x: box.x, y: box.y };
     const haulAt = 0.7;
     const swallowAt = 1.7;
-    const spitAt = 4.7;
-    const backAt = 5.3;
+    const spitAt = 7.6;
+    const backAt = 8.2;
     const pull = { x: 22, y: -8 };
     let t = 0;
     let owner = false;
@@ -284,7 +279,7 @@ export const BOG_TOAD_ATTACKS = {
       return { x: 0, y: 0 };
     };
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
         // Only one toad at a time gets to swallow the box.
@@ -375,10 +370,10 @@ export const BOG_TOAD_ATTACKS = {
       clumps.push(clump);
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (t >= next && t < 5.4) {
+        if (t >= next && t < 8.4) {
           plop(bullets);
           next = t + 0.62;
         }
@@ -415,7 +410,7 @@ export const BOG_TOAD_ATTACKS = {
       count++;
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (t >= next && count < 3) {

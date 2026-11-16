@@ -55,10 +55,14 @@ import { FIDDLER_ATTACKS } from './fiddler.js';
 import { KELPIE_FOAL_ATTACKS } from './kelpie_foal.js';
 import { GULLION_ATTACKS } from './gullion.js';
 import { NET_WRAITH_ATTACKS } from './net_wraith.js';
+import { ECHO_SHRIMP_ATTACKS } from './echo_shrimp.js';
+import { PLUMB_LEAD_ATTACKS } from './plumb_lead.js';
 import { STORM_IMP_ATTACKS } from './storm_imp.js';
 import { OLD_DIVER_ATTACKS } from './old_diver.js';
 import { PINWHEEL_ATTACKS } from './pinwheel.js';
 import { WRACKEEL_ATTACKS } from './wrackeel.js';
+import { BLIND_CRAB_ATTACKS } from './blind_crab.js';
+import { TIDEWIGHT_ATTACKS } from './tidewight.js';
 import { SHELLAC_ATTACKS } from './shellac.js';
 import { MOONJELLY_ATTACKS } from './moonjelly.js';
 import { LIMPET_KNIGHT_ATTACKS } from './limpet_knight.js';
@@ -83,6 +87,7 @@ import { CAPTAIN_TARRY_ATTACKS } from './captain_tarry.js';
 import { TALLY_ATTACKS } from './tally.js';
 import { FAIRWEATHER_ATTACKS } from './fairweather.js';
 import { PUDDING_ATTACKS } from './pudding.js';
+import { ASHROAD_ATTACKS } from './ashroad.js';
 
 // Every enemy's own attacks, by name. Each enemy has a file here with several
 // distinct attacks and bullet art that looks like things from that enemy (pins
@@ -149,10 +154,14 @@ export const ENEMY_ATTACKS = {
   ...KELPIE_FOAL_ATTACKS,
   ...GULLION_ATTACKS,
   ...NET_WRAITH_ATTACKS,
+  ...ECHO_SHRIMP_ATTACKS,
+  ...PLUMB_LEAD_ATTACKS,
   ...STORM_IMP_ATTACKS,
   ...OLD_DIVER_ATTACKS,
   ...PINWHEEL_ATTACKS,
   ...WRACKEEL_ATTACKS,
+  ...BLIND_CRAB_ATTACKS,
+  ...TIDEWIGHT_ATTACKS,
   ...SHELLAC_ATTACKS,
   ...MOONJELLY_ATTACKS,
   ...LIMPET_KNIGHT_ATTACKS,
@@ -177,4 +186,6 @@ export const ENEMY_ATTACKS = {
   ...TALLY_ATTACKS,
   ...FAIRWEATHER_ATTACKS,
   ...PUDDING_ATTACKS,
+  // Chapter 6's Ash Road (ashroad.js gathers them).
+  ...ASHROAD_ATTACKS,
 };

@@ -24,7 +24,7 @@ export const REED_STALKER = {
     frames: [REED_STALKER_DISGUISE_SPRITES.still, REED_STALKER_DISGUISE_SPRITES.eye, REED_STALKER_DISGUISE_SPRITES.beak],
     palette: REED_STALKER_PALETTE,
   },
-  maxHp: 990,
+  maxHp: 2750,
   // Every hit hurts a lot more than the marsh's other monsters'.
   damage: 31,
 
@@ -33,9 +33,9 @@ export const REED_STALKER = {
 
   // Its attacks live in src/battle/attacks/reed_stalker.js.
   patterns: [
-    { name: 'stalkerStrike', weight: 3 },
+    { name: 'stalkerStrike', weight: 2 },
     { name: 'stalkerReeds', weight: 3 },
-    { name: 'stalkerFeathers', weight: 2 },
+    { name: 'stalkerReach', weight: 3 },
     { name: 'stalkerFishing', weight: 2 },
     { name: 'stalkerWade', weight: 2 },
   ],

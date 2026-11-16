@@ -1,0 +1,19 @@
+# BT_FORGE_BAT: A bat who has been asleep in the forge rafters since before Hobnail's apprenticeship, through every blow of the hammer.
+
+[first]
+...zzz... lovely... the warm... zzz... tap, tap, tap... zzz...
+
+[repeat]
+...zzz... no, I like it... the hammering... zzz... it's like rain...
+
+# (draft)
+[repeat 2]
+...zzz... no, not the dream with the ladder... zzz... fine, the ladder... zzz...
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}I'd like to sleep through anything like that. {bored}Once. Just to see.
+
+# (draft)
+[repeat 3]
+...zzz... he's a good smith... zzz... don't tell him I said... zzz... I didn't...

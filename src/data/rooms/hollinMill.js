@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE OLD MILL: Hollin's water mill, its wheel still turning in what's
 // left of the leat. The way through to the square is the mill gate, on two
 // treadles in the bed of the leat: two logs have to come to rest on them. A
@@ -16,6 +18,8 @@
 //   X  Hollin's cobbles
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HOLLIN_MILL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hollin_mill',
@@ -79,6 +83,7 @@ export const HOLLIN_MILL = {
   // the leat, and the gate they hold.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hollin_mill ?? []),
     { sprite: 'sign', x: 14, y: 17, text: 'mill_sign' },
     { sprite: 'mill_wheel', x: 26, y: 12, text: 'mill_wheel', animation: 'mill_wheel_turning', speed: 0.12 },
     // Two sluices: the leat stops at the first stone (`a`, here in the yard), or
@@ -97,6 +102,7 @@ export const HOLLIN_MILL = {
     { sprite: 'chalk_rock_up', x: 18, y: 2, text: 'mill_chalk' },
     { sprite: 'chest', x: 1, y: 22, text: 'mill_chest', gives: 'kiln_stew', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 29, y: 1, text: 'mill_pouch', gold: 220, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    ...(R3P_PROPS['hollin_mill'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', j: 'mill_leat', '5': 'hollin_wall', '6': 'hollin_window', '7': 'hollin_roof' },
 

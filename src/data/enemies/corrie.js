@@ -9,7 +9,9 @@ import {
 // out to stop the sea with a spell, and the light that should have guided
 // him home went out, and he became the storm. Half child, half whirlpool.
 // Everything he says is in text/enemies/corrie.txt; he speaks a little, in
-// fragments, like the child he is. The hero never speaks.
+// fragments, like the child he is. The hero never speaks. Ves and Bramble
+// speak at every phase change and on each of their turns ([vesper_turn: <phase>],
+// [bramble_turn: <phase>]), frightened, and only about what they can see.
 //
 // Started by a cutscene step (the Last Light's `corrie_appears`):
 //   { do: 'battle', enemy: 'corrie', who: 'corrie', noRun: true, defeated: '<the finale scene>' }
@@ -53,6 +55,11 @@ import {
 // chapter 5 gear (the hero about 460-540 HP; DEF 8-9 takes a little off
 // every hit, so a hit is about 95-110: five or so to knock him down, about
 // twice that under Ves's SHELTER, which halves it).
+
+// Each change of phase is a moment you watch before anyone speaks: his
+// `intro` clip plays (corrieBattle.js) while the lamp room breaks round him
+// (the timeline in src/battle/corrieStage.js), then the beat's lines.
+const CHANGE_SECONDS = 3;
 
 // His attacks live in src/battle/attacks/corrie.js.
 const BOY_ATTACKS = [
@@ -107,8 +114,8 @@ export const CORRIE_BOSS = {
   feel: { hit: 'splash' },
   // Beaten, he doesn't fade: he stays, sunk low over the water.
   beatenSprite: { rows: CORRIE_BEATEN_SPRITE, palette: CORRIE_BATTLE_PALETTE },
-  // 44x58, drawn twice that: right of the box, floating over the lamp room.
-  battlePos: { x: 214, y: 6 },
+  // 60x74, drawn twice that: right of the box, floating over the lamp room.
+  battlePos: { x: 200, y: 0 },
   boss: true,
   // "Salt in the Wound" (corrieBattleTheme.js); each phase starts its own part.
   music: 'corrieBattle',
@@ -127,7 +134,11 @@ export const CORRIE_BOSS = {
   // he has to stay well clear of Old Gulper (31,000).
   maxHp: 63500,
   damage: 120,
-  difficulty: { density: 1.9, speed: 1.45 },
+  // (The boy's: 15 November 2026, speed 1.45 to 1.9 with his attacks remade,
+  // because his patterns played too easy: a careful dodger took 0.11 hits a
+  // turn here. Now about 0.8, the storm about 1.1, the whirlpool about 1.3,
+  // the lamp about 1.6. The old attacks are in notes/corrie-attacks-backup-2026-11-15.)
+  difficulty: { density: 1.9, speed: 1.9 },
   // Grazing past him gives this much of the usual SP (see battleScene's
   // grazeSpBonus). His bullets are so thick that full SP would be every turn.
   grazeSp: 0.25,
@@ -160,7 +171,6 @@ export const CORRIE_BOSS = {
       sprite: { rows: CORRIE_STORM_SPRITE, palette: CORRIE_BATTLE_PALETTE },
       anim: CORRIE_STORM_ANIM,
       introSfx: 'boom',
-      flash: true,
       patterns: STORM_ATTACKS,
       // The storm's attacks are the busiest: its encore is shorter and lighter,
       // and comes in as the first attack is nearly done. (2026-11-10: was
@@ -172,7 +182,7 @@ export const CORRIE_BOSS = {
       until: { below: 0.5, atLeast: 4 },
       floor: 0.45,
       gameOver: 'game_over: storm',
-      beat: [{ say: 'phase: storm' }, { who: 'foe', say: 'phase: storm foe' }, { who: 'vesper', say: 'phase: storm vesper' }],
+      beat: [{ pause: CHANGE_SECONDS }, { say: 'phase: storm' }, { who: 'foe', say: 'phase: storm foe' }, { who: 'bramble', say: 'phase: storm bramble' }, { who: 'vesper', say: 'phase: storm vesper' }],
     },
     {
       id: 'whirlpool',
@@ -191,7 +201,7 @@ export const CORRIE_BOSS = {
       until: { below: 0.25, atLeast: 4 },
       floor: 0.2,
       gameOver: 'game_over: whirlpool',
-      beat: [{ say: 'phase: whirlpool' }, { who: 'foe', say: 'phase: whirlpool foe' }, { who: 'bramble', say: 'phase: whirlpool bramble' }],
+      beat: [{ pause: CHANGE_SECONDS }, { say: 'phase: whirlpool' }, { who: 'foe', say: 'phase: whirlpool foe' }, { who: 'bramble', say: 'phase: whirlpool bramble' }, { who: 'vesper', say: 'phase: whirlpool vesper' }],
     },
     {
       id: 'lamp',
@@ -201,20 +211,21 @@ export const CORRIE_BOSS = {
       sprite: { rows: CORRIE_LAMP_SPRITE, palette: CORRIE_BATTLE_PALETTE },
       anim: CORRIE_LAMP_ANIM,
       introSfx: 'flare',
-      flash: true,
       patterns: LAMP_ATTACKS,
       // Sadder, and it hurts the most. The fight's peak: the lamp's patterns
       // are the thickest of his four (2026-11-10, round 2: was density 1.6,
       // speed 1.25, when the careful dodger took 0.04 hits a turn here).
       damage: 138,
-      difficulty: { density: 1.9, speed: 1.4 },
-      // A fuller encore than his others: everything he has left.
-      encore: { at: 0.85, seconds: 5, density: 0.85 },
+      // (Speed 1.4 before 15 November 2026.)
+      difficulty: { density: 1.9, speed: 1.65 },
+      // A fuller encore than his others: everything he has left (15 November
+      // 2026: was { at: 0.85, seconds: 5, density: 0.85 }, speed 1.4).
+      encore: { at: 0.75, seconds: 5.5, density: 1.1 },
       // At the very end he puts everything he has left into it.
       secondWind: { below: 0.12, density: 0.3, delay: 2.5 },
       lowHp: 0.12,
       gameOver: 'game_over: lamp',
-      beat: [{ say: 'phase: lamp' }, { who: 'foe', say: 'phase: lamp foe' }, { who: 'vesper', say: 'phase: lamp vesper' }],
+      beat: [{ pause: CHANGE_SECONDS }, { say: 'phase: lamp' }, { who: 'foe', say: 'phase: lamp foe' }, { who: 'bramble', say: 'phase: lamp bramble' }, { who: 'vesper', say: 'phase: lamp vesper' }],
       leaveBeat: { defeated: [{ who: 'foe', say: 'beaten: lamp foe' }] },
     },
   ],

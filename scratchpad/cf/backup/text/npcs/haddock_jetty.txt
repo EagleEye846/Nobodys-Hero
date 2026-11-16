@@ -1,0 +1,7 @@
+# HADDOCK (on the jetty, gullrest_jetty), by the Bother. Stepping onto the end of the pier starts the boat ride (the scene the_sky_turns); once it has played, he and the boat are gone from here.
+
+[first]
+{proud}Hop in, then. Sit still. Don't touch the oars.
+
+[repeat]
+{determined}Hop in. Tide's right.

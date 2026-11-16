@@ -167,6 +167,9 @@ export const SOUNDINGS_DROWNED_CHAPEL = {
     { sprite: 'sd_glass_shards', x: 9, y: 18, flat: true, walkable: true },
     { sprite: 'sd_glass_shards', x: 27, y: 18, flat: true, walkable: true },
     { sprite: 'sd_scree', x: 5, y: 19, flat: true, walkable: true },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_hymn_board', x: 6, y: 3, text: 'lp_hymn_board' },
+    { sprite: 'lv_votive_boats', x: 8, y: 3, text: 'lp_votive_boats' },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'chapel_water', X: 'chapel_floor', ';': 'hall_puddle', I: 'chapel_pillar', x: 'sound_glass', s: 'chapel_stair' },
 
@@ -175,7 +178,10 @@ export const SOUNDINGS_DROWNED_CHAPEL = {
   // Clear of the chest (3,17), the altar (15 to 17), the stair (16 and 17), the purse (30,18) and
   // every tile the tide changes (the nave, x 7 to 26). No cutscenes here.
   npcs: [
-    { enemy: 'net_wraith', x: 27, y: 17, patrol: [26, 28], behaviour: 'patrol' },
-    { enemy: 'wrackeel', x: 28, y: 15, patrol: [27, 29], behaviour: 'patrol' },
+    // The pair is now a Blind Grotto Crab, passing for a white shell on the dais, and a Tidewight in the
+    // east aisle's water that only stands up while the chapel is flooded (drain it at the Three Wells
+    // and it sinks out of reach).
+    { enemy: 'blind_crab', x: 27, y: 17, patrol: [27, 27], behaviour: 'disguise', look: 'white_shell' },
+    { enemy: 'tidewight', x: 28, y: 15, patrol: [27, 29], behaviour: 'patrol', tide: 'high' },
   ],
 };

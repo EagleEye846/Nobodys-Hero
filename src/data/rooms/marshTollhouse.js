@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE OLD TOLLHOUSE (a secret): off the dark spur on the Lantern Path, where
 // no lantern is. The old city's tollhouse, where its road crossed the fen. The
 // keeper's blade is still in its rack, and the last of the tolls is still in
@@ -58,6 +59,8 @@ export const MARSH_TOLLHOUSE = {
     { sprite: 'sign', x: 4, y: 8, text: 'toll_board' },
     { sprite: 'rubble_heap', x: 8, y: 7, text: 'rubble' },
     { sprite: 'savepoint', x: 2, y: 4, save: true },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_tollhouse'] ?? []),
   ],
   tileTexts: { W: 'toll_wall', '#': 'toll_wall', I: 'road_pillar', J: 'road_pillar', $: 'fen_water' },
 

@@ -1,0 +1,27 @@
+# BT_SQ_OFFSHIFT: A mole just up from the Diggings, grey with dust, walking the long way home through the square because the short way is too quiet.
+
+[first]
+Off shift. Don't mind the dust. I'll have a wash at the pump. I say that every day. I've never washed.
+
+[repeat]
+Home's a bowl of stew and an early night. That's the plan. The plan's been the same for forty years.
+
+[first after the_kings_welcome]
+Mattock says you're off to the Diggings. Mind the carts. They've got a mind of their own and it's a bad one.
+
+[repeat after the_kings_welcome]
+Take a lamp. Take a spare lamp. Then take a third. Then, if you can, don't go.
+
+[first after the_light_goes_up]
+The Sunstone! I walked in and thought I'd gone up the stairs by mistake. I'm going to look at it all night.
+
+[repeat after the_light_goes_up]
+The dust looks nicer in this light. I never knew. Forty years, grey as a tombstone, and it's gold.
+
+# (draft)
+[repeat 2]
+If I get home and my lamp's still lit, I count it a good shift. That's all I ask. A lamp that's still lit.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}A lamp that's still lit. {bored}That's a better wish than most people get.

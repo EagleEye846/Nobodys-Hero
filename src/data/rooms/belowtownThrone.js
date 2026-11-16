@@ -111,8 +111,8 @@ export const BELOWTOWN_THRONE = {
     { sprite: 'relic_case_cloak', x: 2, y: 9, text: 'relic_cloak', after: 'the_kings_welcome' },
     { sprite: 'relic_case_cup', x: 2, y: 13, text: 'relic_cup', after: 'the_kings_welcome' },
     { sprite: 'relic_case_boot', x: 23, y: 12, text: 'relic_boot', after: 'the_kings_welcome' },
-    { sprite: 'glowworm_string', x: 6, y: 7, animation: 'glowworm_string', speed: 0.4, walkable: true },
-    { sprite: 'glowworm_string', x: 17, y: 7, animation: 'glowworm_string', speed: 0.4, walkable: true },
+    { sprite: 'glowworm_string', x: 6, y: 7, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
+    { sprite: 'glowworm_string', x: 17, y: 7, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
     { sprite: 'glowworm_lamp', x: 9, y: 7, text: 'throne_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 16, y: 7, text: 'throne_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     // A post at the far end of each string too, so it hangs between two.

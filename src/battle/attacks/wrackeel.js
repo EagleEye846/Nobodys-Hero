@@ -1,11 +1,15 @@
 import { defineBulletArt } from '../projectiles.js';
-import { withSnipes } from './snipes.js';
+import { PathShot, Deco, Guide, Zone, blit } from './coastKit.js';
 
-// The Wrackeel's attacks. It's a sparking eel, so everything it does is a
-// jolt: little eels that dart in zigzags, a chain of sparks that jumps from
-// node to node (the whole chain is drawn first), coils that close into
-// rings with one gap that turns, and surges along the rows and columns of
-// the box. It stands to the right of the box.
+// The Wrackeel's attacks. A long teal eel that lives in the half-drowned
+// lanes and is wired wrong, crackling whenever it's cross:
+//   - Hole to hole: it shoots out of one hole in the wall, across, and into a
+//     hole on the far side; next time it comes out of the hole it went into.
+//   - Current: it swims across in long waves with a spark running down its
+//     body; when the spark reaches its tail it jumps off at you.
+//   - Wet lanes: its head pokes in at the end of a lane, it swims the lane,
+//     and the whole lane lights up just after it passes.
+// It coils to the right of the box.
 
 const EEL = { b: '#2f8fa8', B: '#1d5f78', y: '#fff06a', c: '#8ff0ff', w: '#ffffff', k: '#0f1b26' };
 
@@ -87,259 +91,164 @@ defineBulletArt('eelPlug', {
   frameSeconds: 0.1,
 });
 
+// A hole in the wall it lives in: dark, and lit round the rim when it's coming out.
+const HOLE = ['.BBB.', 'BkkkB', 'BkkkB', '.BBB.'];
+const HOLE_LIT = ['.yyy.', 'ykkky', 'ykkky', '.yyy.'];
+
+// A whole eel along a path: head, four lengths of body, a tail, each a beat
+// behind the one in front, so it slides along the path like an eel.
+function wholeEel(bullets, path, warn, life, lag = 0.045) {
+  const parts = ['eelCoilHead', 'eelCoil', 'eelCoil', 'eelCoil', 'eelCoil', 'eelCoilTail'];
+  parts.forEach((art, i) => bullets.push(new PathShot({ art, warn: warn + i * lag, life, path })));
+}
+
 export const WRACKEEL_ATTACKS = {
-  // Zigzag: little eels come in from the right, each darting up and down in a
-  // zigzag that flips on a steady beat (they blink first). One in two starts
-  // on your row.
-  eelZig(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let made = 0;
+  // Hole to hole: there are holes in both side walls, and it lives in them.
+  // It shoots out of one hole, straight across the box and into a hole on
+  // the far side, and next time it comes out of the hole it last went into.
+  // So you always know where it's coming from: the hole it went in by.
+  eelHoles(box, density, { rand }) {
+    const ys = [0.2, 0.5, 0.8].map((f) => box.y + box.h * f);
+    const holes = [...ys.map((y) => ({ x: box.x + 2, y, side: 0 })), ...ys.map((y) => ({ x: box.x + box.w - 2, y, side: 1 }))];
+    const GLOW = 0.55;
+    const SPEED = 150;
+    let real = 0;
     let next = 0.2;
-    const darts = [];
+    let n = 0;
+    let made = false;
+    let from = holes[3 + Math.floor(rand(0, 3))];
+    let lit = null;
     return {
-      duration: 6.8,
+      duration: 7,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && made < 14 && t < 5.2) {
-          next = t + 0.36;
-          const y = made % 3 !== 2
-            ? clamp(soul.y + rand(-10, 10), box.y + 8, box.y + box.h - 8)
-            : rand(box.y + 8, box.y + box.h - 8);
-          const dart = new Shot({ x: box.x + box.w - 3, y, vx: -66, vy: 0, warn: 0.5, art: 'eelDart', life: 3.4 });
-          dart.dir = made % 2 === 0 ? 1 : -1;
-          dart.flip = 0;
-          bullets.push(dart);
-          darts.push(dart);
-          made++;
+        real += dt / density;
+        if (!made) {
+          made = true;
+          bullets.push(new Deco({ life: 7, paint(ctx, d) {
+            for (const h of holes) blit(ctx, h === lit && Math.floor(d.age * 10) % 2 ? HOLE_LIT : HOLE, EEL, h.x, h.y);
+          } }));
         }
-        for (const dart of darts) {
-          if (dart.age < dart.warn) continue;
-          dart.flip -= dt;
-          if (dart.flip <= 0) {
-            dart.flip = rand(0.3, 0.42);
-            dart.dir = Math.random() < 0.9 && Math.abs(soul.y - dart.y) > 6 ? Math.sign(soul.y - dart.y) : dart.dir * -1;
+        if (real < next || n >= 6) return;
+        n++;
+        // Across to the far hole nearest your row.
+        const far = holes.filter((h) => h.side !== from.side);
+        let to = far[0];
+        for (const h of far) if (Math.abs(h.y - soul.y) < Math.abs(to.y - soul.y)) to = h;
+        const f = from;
+        const secs = Math.hypot(to.x - f.x, to.y - f.y) / SPEED;
+        const a = Math.atan2(to.y - f.y, to.x - f.x);
+        lit = f;
+        bullets.push(new Guide({ x: f.x, y: f.y, angle: a, length: Math.hypot(to.x - f.x, to.y - f.y), warn: GLOW, color: '#fff06a' }));
+        wholeEel(bullets, (k) => {
+          const u = Math.min(1, k / secs);
+          return { x: f.x + (to.x - f.x) * u, y: f.y + (to.y - f.y) * u, a };
+        }, GLOW, secs);
+        from = to;
+        next = real + GLOW + secs + 0.3;
+      },
+    };
+  },
+
+  // Current: it swims across the box in long waves, and a spark runs down
+  // its body from head to tail. When the spark reaches the tip of its tail
+  // it jumps off, straight at you. Watch the spark run down to the tail.
+  eelCurrent(box, density, { Shot, rand }) {
+    const SWIM = 2.4;
+    const RUN = 0.55;
+    const LAG = 0.06;
+    let real = 0;
+    let n = 0;
+    let next = 0.15;
+    const jumps = [];
+    return {
+      duration: 7,
+      update: (dt, bullets, soul) => {
+        real += dt / density;
+        if (real >= next && n < 3) {
+          n++;
+          next = real + SWIM - 0.3;
+          const y0 = rand(box.y + 18, box.y + box.h - 18);
+          const right = n % 2 === 1;
+          const x0 = right ? box.x + box.w + 10 : box.x - 10;
+          const x1 = right ? box.x - 30 : box.x + box.w + 30;
+          const amp = rand(12, 18);
+          const path = (k) => {
+            const u = k / SWIM;
+            const x = x0 + (x1 - x0) * u;
+            const y = y0 + Math.sin(u * Math.PI * 3) * amp;
+            const dx = (x1 - x0) / SWIM;
+            const dy = (Math.cos(u * Math.PI * 3) * amp * Math.PI * 3) / SWIM;
+            return { x, y, a: Math.atan2(dy, dx) };
+          };
+          const WARN = 0.4;
+          wholeEel(bullets, path, WARN, SWIM, LAG);
+          // Sparks run head to tail; each leaves the tail when it gets there.
+          for (let s = 0.2; s < SWIM - 0.6; s += 0.62) {
+            const startK = s;
+            bullets.push(new PathShot({ art: 'eelSpark', harmless: true, warn: WARN + startK, life: RUN, path: (k) => path(Math.max(0, startK + k - (k / RUN) * 5 * LAG)) }));
+            jumps.push({ at: real + WARN + startK + RUN, path, k: startK + RUN - 5 * LAG });
           }
-          if (dart.y < box.y - 3) dart.dir = 1;
-          if (dart.y > box.y + box.h + 3) dart.dir = -1;
-          dart.vy = dart.dir * 66;
+        }
+        for (let i = jumps.length - 1; i >= 0; i--) {
+          const j = jumps[i];
+          if (real < j.at) continue;
+          jumps.splice(i, 1);
+          const p = j.path(Math.max(0, j.k));
+          const a = Math.atan2(soul.y - p.y, soul.x - p.x);
+          bullets.push(new Shot({ x: p.x, y: p.y, vx: Math.cos(a) * 85, vy: Math.sin(a) * 85, art: 'eelSpark', warn: 0.12, life: 1.3 }));
         }
       },
     };
   },
 
-  // Chain: four nodes light up in the box and a bolt jumps down the chain, link
-  // by link, each link flickering thin before it goes off. The first node is
-  // right by you. Each node it reaches spits sparks, and the last throws one
-  // more link at wherever you've got to.
-  eelChain(box, density, { Shot, Line, rand, clamp }) {
+  // Wet lanes: the floor's awash in lanes, and it swims along them. Its head
+  // pokes in at the end of a lane first; then it swims the length of it,
+  // and the lane it swam through lights up behind it, the whole lane, for a
+  // moment. Keep off the lane it's in, and off it just after, too.
+  eelLanes(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const LANES = 5;
+    const LH = box.h / LANES;
+    const PEEK = 0.45;
+    const SPEED = 140;
+    const SHOCK = 0.45;
     let t = 0;
-    let rounds = 0;
-    let next = 0.2;
-    let bursts = [];
-    let later = [];
-    const chase = { x: 0, y: 0 };
+    let n = 0;
+    let made = false;
     return {
-      duration: 6.8,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        chase.x = soul.x;
-        chase.y = soul.y;
-        for (const item of later) if (t >= item.at) { item.done = true; item.run(); }
-        later = later.filter((item) => !item.done);
-        if (t >= next && rounds < 3 && t < 4.4) {
-          next = t + 1.9;
-          rounds++;
-          const pts = [{ x: clamp(soul.x + rand(-7, 7), box.x + 6, box.x + box.w - 6), y: clamp(soul.y + rand(-7, 7), box.y + 6, box.y + box.h - 6) }];
-          let tries = 0;
-          while (pts.length < 4 && tries < 40) {
-            tries++;
-            const p = { x: rand(box.x + 6, box.x + box.w - 6), y: rand(box.y + 6, box.y + box.h - 6) };
-            const last = pts[pts.length - 1];
-            if (Math.hypot(p.x - last.x, p.y - last.y) > 28) pts.push(p);
-          }
-          pts.forEach((p, i) => {
-            bullets.push(new Shot({ x: p.x, y: p.y, harmless: true, life: 0.55 + i * 0.34 + 0.1, art: 'eelNode' }));
-          });
-          for (let i = 0; i < pts.length - 1; i++) {
-            const a = pts[i];
-            const b = pts[i + 1];
-            const warn = 0.55 + i * 0.34;
-            bullets.push(new Line({
-              x: a.x, y: a.y, angle: Math.atan2(b.y - a.y, b.x - a.x), length: Math.hypot(b.x - a.x, b.y - a.y),
-              thickness: 3, warn, life: 0.26, color: '#fff06a', glow: '#8ff0ff',
-            }));
-            bursts.push({ at: t + warn + 0.05, x: b.x, y: b.y });
-          }
-          // The last node throws one more link, at where you've got to.
-          const end = pts[pts.length - 1];
-          later.push({ at: t + 1.0, run: () => {
-            bullets.push(new Line({
-              x: end.x, y: end.y, angle: Math.atan2(chase.y - end.y, chase.x - end.x), length: 150,
-              thickness: 3, warn: 0.55, life: 0.26, color: '#fff06a', glow: '#8ff0ff',
-            }));
-          } });
+        if (!made) {
+          made = true;
+          bullets.push(new Deco({ life: 7, paint(ctx) {
+            ctx.globalAlpha *= 0.18;
+            ctx.fillStyle = '#2f8fa8';
+            for (let i = 0; i < LANES; i += 2) ctx.fillRect(box.x, box.y + i * LH, box.w, LH);
+          } }));
         }
-        for (const b of bursts) {
-          if (t < b.at) continue;
-          b.done = true;
-          const turn = rand(0, Math.PI / 3);
-          for (let k = 0; k < 6; k++) {
-            const a = turn + (k / 6) * Math.PI * 2;
-            bullets.push(new Shot({ x: b.x, y: b.y, vx: Math.cos(a) * 40, vy: Math.sin(a) * 40, art: 'eelSpark', life: 1.2 }));
-          }
+        if (t >= T(0.2 + n * 0.8) && n < 7) {
+          n++;
+          const mine = Math.min(LANES - 1, Math.max(0, Math.floor((soul.y - box.y) / LH)));
+          const lane = n % 2 ? mine : Math.floor(rand(0, LANES));
+          const y = box.y + (lane + 0.5) * LH;
+          const right = Math.random() < 0.5;
+          const x0 = right ? box.x + box.w + 8 : box.x - 8;
+          const x1 = right ? box.x - 40 : box.x + box.w + 40;
+          const secs = Math.abs(x1 - x0) / SPEED;
+          const a = right ? Math.PI : 0;
+          bullets.push(new Shot({ x: right ? box.x + box.w - 3 : box.x + 3, y, harmless: true, life: PEEK, art: 'eelPlug' }));
+          wholeEel(bullets, (k) => ({ x: x0 + (x1 - x0) * Math.min(1, k / secs), y, a }), PEEK, secs, 0.05);
+          // The lane lights once the eel has gone right through it.
+          const lit = PEEK + (box.w + 16) / SPEED + 0.05;
+          bullets.push(new Zone({ x: box.x, y: box.y + lane * LH + 1, w: box.w, h: LH - 2, warn: lit, life: SHOCK, paint(ctx, z) {
+            if (z.age < z.warn) return;
+            ctx.globalAlpha *= Math.floor(z.age * 20) % 2 ? 0.7 : 0.45;
+            ctx.fillStyle = '#fff06a';
+            ctx.fillRect(z.x, z.y, z.w, z.h);
+          } }));
         }
-        bursts = bursts.filter((b) => !b.done);
-      },
-    };
-  },
-
-  // Coil: an eel wraps itself round where you are and squeezes, turning, its
-  // head at one end of the gap and its tail at the other. Slip into the gap and
-  // ride round with it. Three coils, the second turns the other way.
-  eelCoil(box, density, { Shot, rand }) {
-    let t = 0;
-    let made = 0;
-    // A bead steers itself round its ring (so its path can be read ahead), and
-    // faces along the ring the way the eel swims.
-    class Bead extends Shot {
-      constructor(opts, ring, base) {
-        super(opts);
-        this.ring = ring;
-        this.base = base;
-        this.place();
-      }
-
-      place() {
-        const R = Math.max(42 - Math.max(0, this.age - 0.5) * 18, 0);
-        const a = this.base + this.ring.rot + this.ring.dir * 0.7 * this.age;
-        this.x = this.ring.cx + Math.cos(a) * R;
-        this.y = this.ring.cy + Math.sin(a) * R;
-        this.angle = a + this.ring.dir * Math.PI / 2;
-      }
-
-      update(dt) {
-        this.age += dt;
-        this.place();
-      }
-    }
-    // The body between the beads: a dark tube with a pale stripe, drawn under
-    // them so the ring reads as one eel, not a ring of beads. It never hurts.
-    class Body {
-      constructor(beads) {
-        this.beads = beads;
-        this.age = 0;
-        this.grazed = false;
-      }
-
-      update(dt) {
-        this.age += dt;
-      }
-
-      isGone(box) {
-        return this.beads.every((b) => b.isGone(box));
-      }
-
-      edgeDistance() {
-        return Infinity;
-      }
-
-      draw(ctx) {
-        const b0 = this.beads[0];
-        if (!b0) return;
-        let alpha = b0.age < b0.warn ? (Math.floor(b0.age * 10) % 2 ? 0.25 : 0.6) : 1;
-        const over = b0.age - (b0.warn + b0.life);
-        if (over > 0) alpha = Math.max(0, 1 - over / 0.25);
-        ctx.save();
-        ctx.globalAlpha = alpha;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        for (const [w, colour] of [[6, '#0f1b26'], [4, '#1d5f78'], [1, '#9ff4ff']]) {
-          ctx.strokeStyle = colour;
-          ctx.lineWidth = w;
-          ctx.beginPath();
-          this.beads.forEach((b, i) => (i ? ctx.lineTo(b.x, b.y) : ctx.moveTo(b.x, b.y)));
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-    }
-    return {
-      duration: 7.2,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (made < 3 && t >= 0.2 + made * 2.3) {
-          const ring = { rot: rand(0, Math.PI * 2), dir: made === 1 ? -1 : 1, cx: soul.x, cy: soul.y };
-          // The gap opens toward the middle of the box (it turns with the ring,
-          // so it's aimed to face the middle about a second into the squeeze):
-          // caught by a wall, the way out is never into the wall.
-          const mx = box.x + box.w / 2 - soul.x;
-          const my = box.y + box.h / 2 - soul.y;
-          const toMid = Math.hypot(mx, my) < 10 ? rand(0, Math.PI * 2) : Math.atan2(my, mx);
-          const gap = toMid - ring.dir * 0.7 * 1.1 + rand(-0.3, 0.3) - ring.rot;
-          const count = 17;
-          const beads = [];
-          // Round the ring from one side of the gap to the other, so the body runs tail to head.
-          for (let i = 0; i < count; i++) {
-            const a = (i / count) * Math.PI * 2;
-            // The gap is a fifth of the way round.
-            const off = Math.abs(((a - gap + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-            if (off > Math.PI - 0.68) continue;
-            beads.push({ a, from: (((a - gap - Math.PI) % (Math.PI * 2)) + Math.PI * 4) % (Math.PI * 2) });
-          }
-          beads.sort((p, q) => p.from - q.from);
-          // It swims head first: the head is the end the ring turns toward.
-          if (ring.dir < 0) beads.reverse();
-          const shots = beads.map(({ a }, k) => new Bead({
-            x: ring.cx, y: ring.cy, warn: 0.5, life: 2.15,
-            art: k === beads.length - 1 ? 'eelCoilHead' : k === 0 ? 'eelCoilTail' : 'eelCoil',
-          }, ring, a));
-          bullets.push(new Body(shots), ...shots);
-          made++;
-        }
-      },
-    };
-  },
-
-  // Surge: three of the box's five rows go off like a live wire (the plugs
-  // spark at the wall and the line flickers first). Then three of the five
-  // columns. Then the rows again. One of them is always yours.
-  eelSurge(box, density, { Shot, Line, rand }) {
-    let t = 0;
-    let waves = 0;
-    const lanes = [0, 1, 2, 3, 4];
-    return {
-      // (The third surge is out by 4.4 s: 6.4, was 7.2, so the next attack isn't long in coming.)
-      duration: 6.4,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (waves >= 3 || t < 0.2 + waves * 2.2) return;
-        const rows = waves !== 1;
-        const at = rows ? soul.y : soul.x;
-        const lo = rows ? box.y : box.x;
-        const size = rows ? box.h : box.w;
-        const pos = (k) => lo + 8 + k * ((size - 16) / 4);
-        // The lane nearest you is lit, plus two more.
-        const mine = lanes.reduce((a, b) => (Math.abs(pos(b) - at) < Math.abs(pos(a) - at) ? b : a));
-        const others = lanes.filter((k) => k !== mine).sort(() => Math.random() - 0.5).slice(0, 2);
-        const warn = 0.85;
-        for (const k of [mine, ...others]) {
-          const p = pos(k);
-          if (rows) {
-            bullets.push(new Line({ x: box.x - 4, y: p, angle: 0, length: box.w + 8, thickness: 5, warn, life: 0.34, color: '#fff06a', glow: '#8ff0ff' }));
-            bullets.push(new Shot({ x: box.x + 2, y: p, harmless: true, life: warn + 0.3, art: 'eelPlug' }));
-            bullets.push(new Shot({ x: box.x + box.w - 2, y: p, harmless: true, life: warn + 0.3, art: 'eelPlug' }));
-          } else {
-            bullets.push(new Line({ x: p, y: box.y - 4, angle: Math.PI / 2, length: box.h + 8, thickness: 5, warn, life: 0.34, color: '#fff06a', glow: '#8ff0ff' }));
-            bullets.push(new Shot({ x: p, y: box.y + 2, harmless: true, life: warn + 0.3, art: 'eelPlug' }));
-            bullets.push(new Shot({ x: p, y: box.y + box.h - 2, harmless: true, life: warn + 0.3, art: 'eelPlug' }));
-          }
-        }
-        waves++;
       },
     };
   },
 };
-
-// Aimed shots on top, so standing still or running one way is never safe (see snipes.js).
-WRACKEEL_ATTACKS.eelZig = withSnipes(WRACKEEL_ATTACKS.eelZig, { art: 'eelDart', count: 4, first: 1.0, every: 1.2, lead: 0.8 });
-WRACKEEL_ATTACKS.eelChain = withSnipes(WRACKEEL_ATTACKS.eelChain, { art: 'eelSpark' });

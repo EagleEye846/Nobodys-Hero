@@ -599,40 +599,41 @@ const BRAMBLE_PORTRAIT_PALETTE = {
 };
 
 const BRAMBLE_EXPRESSIONS = {
-  // Big and toothy.
-  grin: { patches: [[20, 14, 'smmmmmmms'], [21, 14, 'smEEEEEms'], [22, 14, 'ssmmmmmss']] },
-  // Laughing, eyes squeezed shut.
-  glee: { closed: true, patches: [[14, 12, 'sss'], [15, 12, 'sks'], [16, 12, 'ksk'], [17, 12, 'sss'], [14, 22, 'sss'], [15, 22, 'sks'], [16, 22, 'ksk'], [17, 22, 'sss'], [20, 14, 'smmmmmmms'], [21, 14, 'smoooooms'], [22, 14, 'ssmnnnmss'], [19, 10, 'bbb'], [19, 24, 'bbb'], [18, 10, 'b'], [18, 26, 'b']] },
-  // Chin up, eyes shut, very pleased with himself.
-  proud: { closed: true, patches: [[14, 12, 'sss'], [15, 12, 'sss'], [16, 12, 'kkk'], [17, 12, 'sss'], [14, 22, 'sss'], [15, 22, 'sss'], [16, 22, 'kkk'], [17, 22, 'sss'], [13, 12, 'kk'], [13, 23, 'kk'], [18, 17, 'SsS'], [20, 14, 'ssssssssm'], [21, 14, 'smmmmmmms'], [22, 14, 'sssssssss']] },
-  // Brows down, mouth set.
-  determined: { patches: [[13, 12, 'kk'], [13, 23, 'kk'], [14, 12, 'kkk'], [14, 22, 'kkk'], [14, 14, 'k'], [14, 22, 'k'], [20, 14, 'sssssssss'], [21, 14, 'ssmmmmmss'], [22, 14, 'sssssssss']] },
-  // Glaring, teeth gritted.
-  angry: { patches: [[13, 11, 'kk'], [13, 24, 'kk'], [14, 12, 'skk'], [14, 22, 'kks'], [15, 12, 'eEk'], [15, 22, 'kEi'], [20, 14, 'smmmmmmms'], [21, 14, 'sEkEkEkEs'], [22, 14, 'smmmmmmms'], [19, 11, 'bb'], [19, 24, 'bb'], [18, 10, 'b'], [18, 26, 'b']] },
-  // HOLLERING: eyes screwed up, mouth enormous.
-  shout: { closed: true, patches: [[14, 12, 'sss'], [15, 12, 'kss'], [16, 12, 'skk'], [17, 12, 'kss'], [14, 22, 'sss'], [15, 22, 'ssk'], [16, 22, 'kks'], [17, 22, 'ssk'], [13, 11, 'kk'], [13, 24, 'kk'], [19, 14, 'smmmmmmms'], [20, 14, 'mooooooom'], [21, 14, 'monnnnnom'], [22, 14, 'smmmmmmms']] },
-  // Eyes wide, mouth an O.
-  surprised: { patches: [[13, 12, 'kkk'], [13, 22, 'kkk'], [14, 12, 'EeE'], [14, 22, 'EeE'], [15, 12, 'EeE'], [15, 22, 'EeE'], [16, 12, 'sss'], [16, 22, 'sss'], [17, 12, 'sss'], [17, 22, 'sss'], [20, 14, 'sssmmmsss'], [21, 14, 'ssmooomss'], [22, 14, 'ssmooomss'], [23, 14, 'sssmmmsss']] },
-  // Eyes wide, brows up, mouth wobbling, a bead of sweat.
-  scared: { patches: [[12, 12, 'ss'], [12, 23, 'ss'], [13, 12, 'kkk'], [13, 22, 'kkk'], [14, 12, 'EeE'], [14, 22, 'EeE'], [15, 12, 'EeE'], [15, 22, 'EeE'], [16, 12, 'sss'], [16, 22, 'sss'], [17, 12, 'sss'], [17, 22, 'sss'], [20, 14, 'sssssssss'], [21, 14, 'ssmsmsmss'], [22, 14, 'sssmsmsss'], [14, 26, 't'], [15, 26, 't']] },
-  // Brows up in the middle, mouth wobbling.
-  worried: { patches: [[13, 13, 'kk'], [13, 22, 'kk'], [14, 12, 'kss'], [14, 22, 'ssk'], [20, 14, 'sssssssss'], [21, 14, 'ssmsmsmss'], [22, 14, 'sssmsmsss']] },
-  // Eyes down, a frown.
-  sad: { patches: [[13, 13, 'kk'], [13, 22, 'kk'], [14, 12, 'kss'], [14, 22, 'ssk'], [15, 12, 'kkk'], [15, 22, 'kkk'], [20, 14, 'sssssssss'], [21, 14, 'sssmmmsss'], [22, 14, 'ssmsssmss']] },
-  // Tears running down both cheeks.
-  crying: { patches: [[13, 13, 'kk'], [13, 22, 'kk'], [14, 12, 'kss'], [14, 22, 'ssk'], [15, 12, 'kkk'], [15, 22, 'kkk'], [16, 12, 'iTi'], [16, 22, 'iTi'], [18, 12, 't'], [19, 12, 't'], [20, 11, 't'], [18, 24, 't'], [19, 24, 't'], [20, 25, 't'], [20, 14, 'sssssssss'], [21, 14, 'ssmmmmmss'], [22, 14, 'smoooooms'], [23, 14, 'ssmmmmmss']] },
-  // Caught out: looking away, red in the face, a drop of sweat.
-  sheepish: { patches: [[13, 13, 'kk'], [13, 22, 'kk'], [15, 12, 'Eie'], [15, 22, 'Eie'], [11, 27, 't'], [12, 27, 't'], [20, 14, 'sssssssms'], [21, 14, 'smmmmmmss'], [22, 14, 'sssssssss'], [19, 10, 'bbb'], [19, 24, 'bbb'], [18, 10, 'b'], [18, 26, 'b']] },
-  // Half-shut eyes slid sideways, and a smirk.
-  sly: { patches: [[14, 12, 'sss'], [15, 12, 'kkk'], [16, 12, 'iie'], [17, 12, 'iie'], [14, 22, 'sss'], [15, 22, 'kkk'], [16, 22, 'iie'], [17, 22, 'iie'], [13, 22, 'kk'], [20, 14, 'sssssssms'], [21, 14, 'ssmmmmmss'], [22, 14, 'sssssssss']] },
-  // Looking off to one side, mouth pulled over.
-  thinking: { patches: [[13, 22, 'kk'], [15, 12, 'iEe'], [15, 22, 'iEe'], [16, 12, 'iie'], [16, 22, 'iie'], [20, 14, 'sssssssss'], [21, 14, 'sssssmmms'], [22, 14, 'sssssssss']] },
-  // Heavy eyelids, flat mouth.
-  bored: { patches: [[14, 12, 'sss'], [15, 12, 'kkk'], [16, 12, 'iIi'], [17, 12, 'eii'], [14, 22, 'sss'], [15, 22, 'kkk'], [16, 22, 'iIi'], [17, 22, 'eii'], [20, 14, 'sssssssss'], [21, 14, 'sssmmmsss'], [22, 14, 'sssssssss']] },
-  // Eyes shining, mouth a little o.
-  awed: { patches: [[13, 12, 'kkk'], [13, 22, 'kkk'], [14, 12, 'eEi'], [14, 22, 'eEi'], [15, 12, 'iEI'], [15, 22, 'iEI'], [16, 12, 'eiE'], [16, 22, 'eiE'], [17, 12, 'sss'], [17, 22, 'sss'], [20, 14, 'sssssssss'], [21, 14, 'sssmomsss'], [22, 14, 'ssssmssss'], [19, 11, 'bb'], [19, 24, 'bb'], [18, 10, 'b'], [18, 26, 'b']] },
-  // Eyes nearly shut, shadows under them.
-  tired: { patches: [[14, 12, 'sss'], [15, 12, 'sss'], [16, 12, 'kkk'], [17, 12, 'eii'], [14, 22, 'sss'], [15, 22, 'sss'], [16, 22, 'kkk'], [17, 22, 'eii'], [20, 14, 'sssssssss'], [21, 14, 'sssmmmsss'], [22, 14, 'sssssssss'], [18, 12, 'S'], [18, 24, 'S']] },
+  // Each mood changes his brows (rows 12-13, which stay put when he blinks), his eyes and his
+  // mouth, so it reads at a glance in the dialogue box. Grin: brows up, eyes crinkled, a big toothy grin.
+  grin: { patches: [[12, 11, 'dkkkh'], [12, 21, 'hkkks'], [16, 11, 'skkks'], [16, 21, 'skkks'], [17, 11, 'sssss'], [17, 21, 'sssss'], [20, 13, 'smmmmmmmmms'], [21, 13, 'smEEEEEEEms'], [22, 13, 'ssmmmmmmmss']] },
+  // Laughing: brows up, eyes squeezed into ^ ^, mouth wide open, cheeks red.
+  glee: { closed: true, patches: [[12, 11, 'dkkkh'], [12, 21, 'hkkks'], [14, 11, 'sssss'], [14, 21, 'sssss'], [15, 11, 'sskss'], [15, 21, 'sskss'], [16, 11, 'sksks'], [16, 21, 'sksks'], [17, 11, 'sssss'], [17, 21, 'sssss'], [20, 13, 'smmmmmmmmms'], [21, 13, 'smoooooooms'], [22, 13, 'ssmonnnomss'], [23, 13, 'kssmmmmmssk'], [19, 10, 'bbb'], [19, 24, 'bbb']] },
+  // Brows up, eyes shut, very pleased with himself: a lopsided smirk.
+  proud: { closed: true, patches: [[12, 11, 'dkkkh'], [12, 21, 'hkkks'], [14, 11, 'sssss'], [14, 21, 'sssss'], [15, 11, 'sssss'], [15, 21, 'sssss'], [16, 11, 'skkks'], [16, 21, 'skkks'], [17, 11, 'ksssk'], [17, 21, 'ksssk'], [19, 13, 'sssssssssms'], [20, 13, 'ssssssssmss'], [21, 13, 'ssmmmmmmsss'], [19, 10, 'bbb'], [19, 24, 'bbb']] },
+  // Brows slanted down at the middle, lids lowered, mouth set in a line.
+  determined: { patches: [[12, 11, 'dkssh'], [12, 21, 'hdsks'], [13, 11, 'sskks'], [13, 21, 'skkss'], [15, 11, 'skkks'], [15, 21, 'skkks'], [16, 11, 'seEis'], [16, 21, 'seEis'], [17, 11, 'siIis'], [17, 21, 'siIis'], [20, 13, 'sssssssssss'], [21, 13, 'ssmmmmmmmss']] },
+  // Brows slanted hard, a narrowed glare, teeth gritted, red in the face.
+  angry: { patches: [[12, 11, 'dkssh'], [12, 21, 'hdsks'], [13, 11, 'sskks'], [13, 21, 'skkss'], [15, 11, 'skkks'], [15, 21, 'skkks'], [16, 11, 'seEis'], [16, 21, 'seEis'], [17, 11, 'sieis'], [17, 21, 'sieis'], [20, 13, 'smmmmmmmmms'], [21, 13, 'smEkEkEkEms'], [22, 13, 'smmmmmmmmms'], [19, 10, 'bbb'], [19, 24, 'bbb']] },
+  // HOLLERING: brows down, eyes screwed into > <, mouth enormous.
+  shout: { closed: true, patches: [[12, 11, 'dkssh'], [12, 21, 'hdsks'], [13, 11, 'sskks'], [13, 21, 'skkss'], [14, 11, 'sssss'], [14, 21, 'sssss'], [15, 11, 'skkss'], [15, 21, 'sskks'], [16, 11, 'sskks'], [16, 21, 'skkss'], [17, 11, 'skkss'], [17, 21, 'sskks'], [19, 13, 'ssmmmmmmmss'], [20, 13, 'smoooooooms'], [21, 13, 'smoonnnooms'], [22, 13, 'ssmonnnomss'], [23, 13, 'kssmmmmmssk'], [19, 10, 'bbb'], [19, 24, 'bbb']] },
+  // Brows shot up, eyes wide white with tiny pupils, mouth an O.
+  surprised: { patches: [[12, 11, 'dkkkh'], [12, 21, 'hkkks'], [15, 11, 'sEEEs'], [15, 21, 'sEEEs'], [16, 11, 'sEeEs'], [16, 21, 'sEeEs'], [17, 11, 'sEEEs'], [17, 21, 'sEEEs'], [20, 13, 'ssssmmmssss'], [21, 13, 'sssmooomsss'], [22, 13, 'sssmooomsss'], [23, 13, 'kssssmssssk']] },
+  // Brows up in the middle, eyes wide white, mouth wobbling, sweat.
+  scared: { patches: [[12, 11, 'dsskh'], [12, 21, 'hksss'], [13, 11, 'skkss'], [13, 21, 'sskks'], [15, 11, 'sEEEs'], [15, 21, 'sEEEs'], [16, 11, 'sEeEs'], [16, 21, 'sEeEs'], [17, 11, 'sEEEs'], [17, 21, 'sEEEs'], [20, 13, 'sssssssssss'], [21, 13, 'ssmsmsmsmss'], [22, 13, 'smsmsmsmsms'], [14, 26, 't'], [15, 26, 't'], [16, 26, 't']] },
+  // Brows up in the middle, a frown, a bead of sweat.
+  worried: { patches: [[12, 11, 'dsskh'], [12, 21, 'hksss'], [13, 11, 'skkss'], [13, 21, 'sskks'], [20, 13, 'sssssssssss'], [22, 13, 'ssmsssssmss'], [13, 26, 't'], [14, 26, 't']] },
+  // Brows up in the middle, eyes cast down, a frown.
+  sad: { patches: [[12, 11, 'dsskh'], [12, 21, 'hksss'], [13, 11, 'skkss'], [13, 21, 'sskks'], [14, 11, 'sssss'], [14, 21, 'sssss'], [15, 11, 'skkks'], [15, 21, 'skkks'], [16, 11, 'seiis'], [16, 21, 'seiis'], [17, 11, 'siiis'], [17, 21, 'siiis'], [20, 13, 'sssssssssss'], [21, 13, 'ssssmmmssss'], [22, 13, 'sssmsssmsss']] },
+  // Sad brows, eyes swimming, tears down both cheeks, mouth open.
+  crying: { patches: [[12, 11, 'dsskh'], [12, 21, 'hksss'], [13, 11, 'skkss'], [13, 21, 'sskks'], [14, 11, 'sssss'], [14, 21, 'sssss'], [15, 11, 'skkks'], [15, 21, 'skkks'], [16, 11, 'sTTTs'], [16, 21, 'sTTTs'], [17, 11, 'siiis'], [17, 21, 'siiis'], [18, 11, 'ftfss'], [18, 21, 'sstsf'], [20, 13, 'ssssmmmssss'], [21, 13, 'sssmooomsss'], [22, 13, 'ssmsssssmss'], [19, 12, 't'], [20, 12, 't'], [21, 11, 't'], [19, 23, 't'], [20, 24, 't'], [21, 24, 't']] },
+  // Caught out: brows up, eyes slid away, a crooked smile, red in the face, sweat.
+  sheepish: { patches: [[12, 11, 'dsskh'], [12, 21, 'hksss'], [13, 11, 'skkss'], [13, 21, 'sskks'], [15, 11, 'sEies'], [15, 21, 'sEies'], [16, 11, 'sIiis'], [16, 21, 'sIiis'], [17, 11, 'sssss'], [17, 21, 'sssss'], [20, 13, 'sssssssssms'], [21, 13, 'ssmmmmmmmss'], [11, 27, 't'], [12, 27, 't'], [19, 10, 'bbb'], [19, 24, 'bbb']] },
+  // One brow up, eyes half shut and slid sideways, a smirk.
+  sly: { patches: [[12, 21, 'hkkks'], [13, 11, 'skkks'], [14, 11, 'sssss'], [15, 11, 'skkks'], [15, 21, 'sssss'], [16, 11, 'ssiie'], [16, 21, 'ssiie'], [17, 11, 'sssss'], [17, 21, 'ssiis'], [20, 13, 'sssssssssms'], [21, 13, 'sssmmmmmmss']] },
+  // One brow up, eyes rolled up to the side, mouth pushed over: hmm.
+  thinking: { patches: [[12, 21, 'hkkks'], [13, 11, 'skkks'], [14, 11, 'sssss'], [15, 11, 'skkks'], [15, 21, 'sseEs'], [16, 11, 'sseEs'], [16, 21, 'ssiis'], [17, 11, 'ssiis'], [17, 21, 'sssss'], [20, 13, 'sssssssssss'], [21, 13, 'ssssssmmmss']] },
+  // Brows flat and low, lids half down, a flat mouth off to one side.
+  bored: { patches: [[13, 11, 'skkks'], [13, 21, 'skkks'], [14, 11, 'sssss'], [14, 21, 'sssss'], [15, 11, 'skkks'], [15, 21, 'skkks'], [16, 11, 'seiIs'], [16, 21, 'seiIs'], [17, 11, 'sssss'], [17, 21, 'sssss'], [20, 13, 'sssssssssss'], [21, 13, 'ssssmmmmmss']] },
+  // Brows up, eyes big and shining, mouth a little o, blushing.
+  awed: { patches: [[12, 11, 'dkkkh'], [12, 21, 'hkkks'], [15, 11, 'seEEs'], [15, 21, 'seEEs'], [16, 11, 'sEiIs'], [16, 21, 'sEiIs'], [17, 11, 'seiEs'], [17, 21, 'seiEs'], [20, 13, 'sssssssssss'], [21, 13, 'ssssmomssss'], [22, 13, 'sssssmsssss'], [19, 10, 'bbb'], [19, 24, 'bbb']] },
+  // Brows sagging, eyes nearly shut, shadows under them, mouth hanging open.
+  tired: { patches: [[12, 11, 'dsskh'], [12, 21, 'hksss'], [13, 11, 'skkss'], [13, 21, 'sskks'], [14, 11, 'sssss'], [14, 21, 'sssss'], [15, 11, 'sssss'], [15, 21, 'sssss'], [16, 11, 'skkks'], [16, 21, 'skkks'], [18, 11, 'SSSss'], [18, 21, 'ssSSS'], [20, 13, 'sssssssssss'], [21, 13, 'ssssmmmssss'], [22, 13, 'ssssmomssss'], [23, 13, 'kssssmssssk']] },
 };
 
 export const BRAMBLE_PORTRAIT = {
@@ -772,191 +773,180 @@ export const BRAMBLE_HOLLER_ANIM_SPRITES = {
 };
 
 // CRAWLING through a gap only he fits (a kid gap in a hedge, a cat flap, a
-// drain grating): on hands and knees, the hatchet strapped across his back,
-// at the same size as his standing frames (the same head). Left and right
-// are 24x17, down and up 16x20 and 16x19; two frames each way
+// drain grating, a torn hull plate): not on hands and knees (that read as a
+// grown-up) but crouched right down and scurrying, a small, scrappy kid with
+// his own standing head, knees up by his chin and a hand out to the ground.
+// Left and right are 16x17, down and up 16x17; two frames each way
 // ('bramble_crawl_left', _right, _down, _up). Player.currentFrame shows them
-// while he squeezes through.
-// Side on: his head as big as it is standing up, the back flat, the hatchet
-// strapped across it with the blade up by his hips. One hand reaches on while
-// the far knee comes up, then the other way about (the far side darker).
+// while he squeezes through. (The old hands-and-knees frames are in
+// notes/bugfix-backup-2026-11-13/.)
+// Side on: hunched over, the hatchet tucked flat behind his head, one hand
+// down in front; then the hand reaching on and the other foot forward.
 export const BRAMBLE_CRAWL_LEFT_PALETTE = BRAMBLE_PALETTE;
 export const BRAMBLE_CRAWL_LEFT_SPRITES = {
   a: [
-    '.......k.kk.......kk....',
-    '......kk-k3k.....kSMk...',
-    '....kk-+k+U3k...kSSMk...',
-    '...k+-+++-+-k...kSMOk...',
-    '..k-+-++-+++kkkkkkOkk...',
-    '..k+-+-++-++k33U33l33k..',
-    '..k+C+C++-++k33U33lDDDk.',
-    '..kCkCC++-++kUUZUlZDwDk.',
-    '.kCCkCC*++/+kk3Ul3UDDDk.',
-    '..kCCC*CC++/k3kl33UkkDk.',
-    '...kkUCCkkkkk3kU33kDDk..',
-    '..........k333kkkkDDDk..',
-    '..........kCCk*kkwDDkk..',
-    '.........kCCCk*kkDDDkkk.',
-    '........kCCCk**kDDDD)))k',
-    '.......kCCCkk**kDDDD))Lk',
-    '........kkk..kk.kkkkkkk.',
+    '.......k.kk.....',
+    '......kk-k3k....',
+    '....kk-+k+U3k...',
+    '...k+-+++-+-k...',
+    '..k-+-++-+++k...',
+    '..k+-+-++-++kkk.',
+    '..k+C+C++-++kSMk',
+    '..kCkCC++-++kMOk',
+    '.kCCkCC*++/+kkkk',
+    '..kCCC*CC++/klk.',
+    '...kkUCCkkkklk..',
+    '..k3U33U33Ulk3k.',
+    '.kCk3ZUUZUUZUUk.',
+    '.kCkU33U33U33Uk.',
+    '.kCkkDDDDwDDDDk.',
+    '.kCCkDwkkkDDDDk.',
+    '..kkk))Lk.k))Lk.',
   ],
   b: [
-    '.......k.kk.......kk....',
-    '......kk-k3k.....kSMk...',
-    '....kk-+k+U3k...kSSMk...',
-    '...k+-+++-+-k...kSMOk...',
-    '..k-+-++-+++kkkkkkOkk...',
-    '..k+-+-++-++k33U33l33k..',
-    '..k+C+C++-++k33U33lDDDk.',
-    '..kCkCC++-++kUUZUlZDwDk.',
-    '.kCCkCC*++/+kkkUl3UDDDk.',
-    '..kCCC*CC++/k33k33UkkDk.',
-    '...kkUCCkkkkkU3k33kDDk..',
-    '..........kk333kkkkDwk..',
-    '..........k*kCCk.kkDDk..',
-    '.........k**kCCkkLkDDkkk',
-    '........k***kCCkLLLkDD)L',
-    '.......k***kCCCkLLLkDD)L',
-    '........kkk.kkk.kkkkkkkk',
+    '.......k.kk.....',
+    '......kk-k3k....',
+    '....kk-+k+U3k...',
+    '...k+-+++-+-k...',
+    '..k-+-++-+++k...',
+    '..k+-+-++-++kkk.',
+    '..k+C+C++-++kSMk',
+    '..kCkCC++-++kMOk',
+    '.kCCkCC*++/+kkkk',
+    '..kCCC*CC++/klk.',
+    '...kkUCCkkkklk..',
+    '.kk3U33U33Ulk3k.',
+    'kCCk3ZUUZUUZUUk.',
+    'kCkkU33U33U33Uk.',
+    '.k.kDDDDwDDDDk..',
+    '...kDDkkkDwDk...',
+    '..k))Lk.k))Lk...',
   ],
 };
 // The same, the other way (left mirrored).
 export const BRAMBLE_CRAWL_RIGHT_PALETTE = BRAMBLE_PALETTE;
 export const BRAMBLE_CRAWL_RIGHT_SPRITES = {
   a: [
-    '....kk.......kk.k.......',
-    '...kMSk.....k3k-kk......',
-    '...kMSSk...k3U+k+-kk....',
-    '...kOMSk...k-+-+++-+k...',
-    '...kkOkkkkkk+++-++-+-k..',
-    '..k33l33U33k++-++-+-+k..',
-    '.kDDDl33U33k++-++C+C+k..',
-    '.kDwDZlUZUUk++-++CCkCk..',
-    '.kDDDU3lU3kk+/++*CCkCCk.',
-    '.kDkkU33lk3k/++CC*CCCk..',
-    '..kDDk33Uk3kkkkkCCUkk...',
-    '..kDDDkkkk333k..........',
-    '..kkDDwkk*kCCk..........',
-    '.kkkDDDkk*kCCCk.........',
-    'k)))DDDDk**kCCCk........',
-    'kL))DDDDk**kkCCCk.......',
-    '.kkkkkkk.kk..kkk........',
+    '.....kk.k.......',
+    '....k3k-kk......',
+    '...k3U+k+-kk....',
+    '...k-+-+++-+k...',
+    '...k+++-++-+-k..',
+    '.kkk++-++-+-+k..',
+    'kMSk++-++C+C+k..',
+    'kOMk++-++CCkCk..',
+    'kkkk+/++*CCkCCk.',
+    '.klk/++CC*CCCk..',
+    '..klkkkkCCUkk...',
+    '.k3klU33U33U3k..',
+    '.kUUZUUZUUZ3kCk.',
+    '.kU33U33U33UkCk.',
+    '.kDDDDwDDDDkkCk.',
+    '.kDDDDkkkwDkCCk.',
+    '.kL))k.kL))kkk..',
   ],
   b: [
-    '....kk.......kk.k.......',
-    '...kMSk.....k3k-kk......',
-    '...kMSSk...k3U+k+-kk....',
-    '...kOMSk...k-+-+++-+k...',
-    '...kkOkkkkkk+++-++-+-k..',
-    '..k33l33U33k++-++-+-+k..',
-    '.kDDDl33U33k++-++C+C+k..',
-    '.kDwDZlUZUUk++-++CCkCk..',
-    '.kDDDU3lUkkk+/++*CCkCCk.',
-    '.kDkkU33k33k/++CC*CCCk..',
-    '..kDDk33k3UkkkkkCCUkk...',
-    '..kwDkkkk333kk..........',
-    '..kDDkk.kCCk*k..........',
-    'kkkDDkLkkCCk**k.........',
-    'L)DDkLLLkCCk***k........',
-    'L)DDkLLLkCCCk***k.......',
-    'kkkkkkkk.kkk.kkk........',
+    '.....kk.k.......',
+    '....k3k-kk......',
+    '...k3U+k+-kk....',
+    '...k-+-+++-+k...',
+    '...k+++-++-+-k..',
+    '.kkk++-++-+-+k..',
+    'kMSk++-++C+C+k..',
+    'kOMk++-++CCkCk..',
+    'kkkk+/++*CCkCCk.',
+    '.klk/++CC*CCCk..',
+    '..klkkkkCCUkk...',
+    '.k3klU33U33U3kk.',
+    '.kUUZUUZUUZ3kCCk',
+    '.kU33U33U33UkkCk',
+    '..kDDDDwDDDDk.k.',
+    '...kDwDkkkDDk...',
+    '...kL))k.kL))k..',
   ],
 };
-// Coming towards you: his face, a hand down either side, his back and the
-// hatchet behind his head and his boot soles up at the back.
+// Coming towards you: squatting low, the hatchet still in his fist, hands by his boots.
 export const BRAMBLE_CRAWL_DOWN_PALETTE = BRAMBLE_PALETTE;
 export const BRAMBLE_CRAWL_DOWN_SPRITES = {
   a: [
-    '..kL)kkkkkkkk...',
-    '..k)kDwDDDDkkk..',
-    '...kkkkkkkkkMSk.',
-    '...kZUUZUUZkMSSk',
-    '..k3U33U33llOMk.',
-    '..k3U33UllU3kk..',
-    '..kUZUUkUkZkkk..',
-    '..k3Ukk-k-k33k..',
-    '..k3k-+k+-+U3k..',
-    '.kkk+-+++-+kkkk.',
-    'k3k+-++++-+-k33k',
-    'k3k++-+-+++-kU3k',
-    'k3k+C+CC+C+Ck33k',
-    'kCkCCkCCCkCCkCCk',
-    'kCkCCkCCCkCCkCCk',
-    'kCk*C*CCC*C*kCCk',
-    'kCkkCCCUCCCkkCCk',
-    'kCCk........kkk.',
-    'kCCCk...........',
-    '.kkk............',
+    '................',
+    '..kk.....k.k.kk.',
+    '.kSMk..kk-k-k33k',
+    'kSSMk.k-+k+-+U3k',
+    'kSMOkk+-+++-+kk.',
+    '.kkkk+-++++-+-k.',
+    '..klk++-+-+++-k.',
+    '..klk+C+CC+C+Ck.',
+    '..klkCCkCCCkCCk.',
+    '..klkCCkCCCkCCk.',
+    '..klk*C*CCC*C*k.',
+    '..klkkCCCUCCCkk.',
+    '..kCCk33U33U3k..',
+    '.kUUkZUUZUUZUUk.',
+    '.kCkkDDDDwDDDkk.',
+    '.kCkDDkkkkDDkCk.',
+    '..kk))Lk.k))Lkk.',
   ],
   b: [
-    '...kkkkkkkk)Lk..',
-    '..kLkDwDDDDkkk..',
-    '..k)kkkkkkkkMSk.',
-    '...kZUUZUUZkMSSk',
-    '..k3U33U33llOMk.',
-    '..k3U33UllU3kk..',
-    '..kUZUUkUkZkkk..',
-    '..k3Ukk-k-k33k..',
-    '..k3k-+k+-+U3k..',
-    '.kkk+-+++-+kkkk.',
-    'k3k+-++++-+-k33k',
-    'k3k++-+-+++-kU3k',
-    'k3k+C+CC+C+Ck33k',
-    'kCkCCkCCCkCCkCCk',
-    'kCkCCkCCCkCCkCCk',
-    'kCk*C*CCC*C*kCCk',
-    'kCkkCCCUCCCkkCCk',
-    '.kkk........kCCk',
-    '...........kCCCk',
-    '............kkk.',
+    '................',
+    '..kk.....k.k.kk.',
+    '.kSMk..kk-k-k33k',
+    'kSSMk.k-+k+-+U3k',
+    'kSMOkk+-+++-+kk.',
+    '.kkkk+-++++-+-k.',
+    '..klk++-+-+++-k.',
+    '..klk+C+CC+C+Ck.',
+    '..klkCCkCCCkCCk.',
+    '..klkCCkCCCkCCk.',
+    '..klk*C*CCC*C*k.',
+    '..klkkCCCUCCCkk.',
+    '..kCCk33U33U3k..',
+    '.kUUkZUUZUUZUUk.',
+    '..kkkDDDDwDDDkk.',
+    '..kDDkkkkkDDkCk.',
+    '.k))Lk...k))Lkk.',
   ],
 };
-// Going away: the back of his head, the hands out ahead, the hatchet across
-// his back, and the soles of his boots taking turns.
+// Going away: the same from behind.
 export const BRAMBLE_CRAWL_UP_PALETTE = BRAMBLE_PALETTE;
 export const BRAMBLE_CRAWL_UP_SPRITES = {
   a: [
-    '....kk.k.k......',
-    '...k33kk-k-k....',
-    '..kU3-+k+-+k....',
-    '...k+-+++-+-k...',
-    'kkk++-+++-+++k..',
-    'kkk+++-+++/+k...',
-    'SMk+-+++++++kkkk',
-    'SSk/++-++-+/kCCC',
-    'kMk+/++++/++kkCk',
-    '3kkC+/++/++CkZk3',
-    '3kkkCCCCCCCkkUk3',
-    '3k3kkllkkkkkkUk3',
-    'kkk3U33U33U33kkk',
-    '..kUDwDDDDDD3k..',
-    '..kDDDDDDDkkkk..',
-    '...kkkkkkk)))k..',
-    '..k)))k..kLLLk..',
-    '..kLLLk...kkk...',
-    '...kkk..........',
+    '................',
+    '..kk..kk.k.k....',
+    '.kSMkk33kk-k-k..',
+    'kSSMkU3-+k+-+k..',
+    'kSMOkk+-+++-+-k.',
+    '.kkkk++-+++-+++k',
+    '..klk+++-+++/+k.',
+    '..klk+-+++++++k.',
+    '..klk/++-++-+/k.',
+    '..klk+/++++/++k.',
+    '..klkC+/++/++Ck.',
+    '..klkkCCCCCCCkk.',
+    '..kCCk33U33U3k..',
+    '.kUUkZUUZUUZUUk.',
+    '.kCkkDDDDwDDDkk.',
+    '.kCkDDkkkkDDkCk.',
+    '..kk))Lk.k))Lkk.',
   ],
   b: [
-    '....kk.k.k......',
-    '...k33kk-k-k....',
-    '..kU3-+k+-+k....',
-    '...k+-+++-+-k...',
-    '..k++-+++-+++kkk',
-    'kkk+++-+++/+kCCC',
-    'SMk+-+++++++kCCk',
-    'SSk/++-++-+/kCCk',
-    'kMk+/++++/++kkCk',
-    '3kkC+/++/++CkZk3',
-    '3kkkCCCCCCCkkUk3',
-    '3k3kkllkkkkkkUk3',
-    'kkk3U33U33U33kkk',
-    '..kUDwDDDDDD3k..',
-    '..kkkkDDDDDDDk..',
-    '..k)))kkkkkkk...',
-    '..kLLLk..k)))k..',
-    '...kkk...kLLLk..',
-    '..........kkk...',
+    '................',
+    '..kk..kk.k.k....',
+    '.kSMkk33kk-k-k..',
+    'kSSMkU3-+k+-+k..',
+    'kSMOkk+-+++-+-k.',
+    '.kkkk++-+++-+++k',
+    '..klk+++-+++/+k.',
+    '..klk+-+++++++k.',
+    '..klk/++-++-+/k.',
+    '..klk+/++++/++k.',
+    '..klkC+/++/++Ck.',
+    '..klkkCCCCCCCkk.',
+    '..kCCk33U33U3k..',
+    '.kUUkZUUZUUZUUk.',
+    '..kkkDDDDwDDDkk.',
+    '..kDDkkkkkDDkCk.',
+    '.k))Lk...k))Lkk.',
   ],
 };
 

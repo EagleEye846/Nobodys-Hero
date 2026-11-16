@@ -1,0 +1,384 @@
+# TAPER'S HOME: the things you can press Z on in her potting room, kitchen,
+# dipping room and glasshouse. Each entry (separated by a blank line) is one
+# page of the textbox.
+
+# --- Potting room ---
+
+[home_hearth]
+A brick hearth, too hot to stand close to.
+An iron crane holds a copper pot of wax over the fire.
+
+It smells of beeswax and tomato leaves.
+
+[home_hearth_cold]
+The fire has gone out. The wax in the pot has set hard, with the ladle stuck in it.
+
+The bricks are still a little warm.
+
+[home_drying]
+Bunches of flowers hung head-down from a peg rail to dry: lavender, tansy, something pink.
+
+A hank of candle wick hangs in among them, as if it were just another crop.
+
+[home_drying_wick]
+More flowers drying over the fire, each bunch tied with wick.
+Nothing in this house goes to waste.
+
+[home_sconce]
+A candle on an iron arm, screwed into the wall. One of Taper's own. It burns very straight.
+
+[home_vat]
+A second wax pot on its own little stove, for when the big one's busy. A ladle leans out of it.
+
+A label on the stove, in Taper's hand: "NOT SOUP."
+
+[home_vat_cold]
+The little stove has gone out. The wax in the pot has set, smooth as a pond.
+
+[home_cot]
+A low cot by the fire, built like a seedling tray: slatted sides, little holes in the bottom.
+
+There's a patched green quilt on it, and a plant label stuck in at the head.
+
+The label says "SPROUT." The ink is still fresh.
+
+[home_stool]
+A three-legged stool by the cot. Taper sat you on it to look at your hands.
+
+[home_rug]
+A braided rag rug in front of the hearth. Someone has swept round it very carefully.
+
+[home_drawers]
+A chest of little drawers, every one labelled in Taper's round hand.
+
+"MOONBELL. DO NOT RUSH."
+"SNAPDRAGON (BITES)."
+"WICK, SPARE. WICK, SPARE SPARE."
+
+One drawer is labelled only "LATER." It's empty.
+
+[home_bench]
+Taper's potting bench. A heap of soil, a trowel stuck upright in it, and a seedling waiting to go into its pot.
+
+She was halfway through when she came down to find you.
+
+[home_sacks]
+Two sacks by the bench. One is compost. The other is rolled open on a heap of bulbs, every one already sprouting.
+
+[home_staging]
+Shelves of seedlings just pricked out, one to a pot, waiting their turn in the glasshouse.
+Each pot has a tag. Most of them just say "WAIT."
+
+[home_trug]
+A garden trug: a pair of gloves worn through at the thumbs, and a trowel.
+
+[home_can]
+Taper's watering can. Still a little damp.
+
+[home_can_left]
+Taper's watering can, left where she always stood.
+The seedlings are already starting to droop.
+
+[home_beds]
+Raised beds of seedlings, in rows as straight as a ruler. Each row has a little name tag.
+Some of the names are rude.
+
+[home_pots]
+A potted plant. It looks well looked after, and a bit smug about it.
+
+[save_point]
+The crystal's light mixes with the firelight.
+You feel at home. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Kitchen ---
+
+[kitchen_herbs]
+Herbs drying on a peg rail, a ladle and a sieve hung in between.
+Rosemary, sage, and something that smells like mint and argues like nettles.
+
+[kitchen_jars]
+Jars of seed on a shelf, each with a paper label.
+"BEANS (LAST YEAR'S)." "BEANS (THIS YEAR'S)." "BEANS (DON'T)."
+
+[kitchen_sconce]
+Another of Taper's candles, on its iron arm. It's been trimmed this morning.
+
+[kitchen_counter]
+A scrubbed counter. A knife, a board, and a neat little heap of carrot tops saved for compost.
+
+[kitchen_stove]
+A pot of soup ticking on the stove. There's enough in it for about nine people.
+
+A note on the lid: "STIR. DON'T TASTE. I'LL KNOW."
+
+[kitchen_cake]
+A heavy seed cake cooling on a wire rack. It's been baked in a candle mould, so it's tall and ribbed.
+
+A label tucked under it: "FOR ANYONE LOOKING PEAKY."
+
+[kitchen_cake_gone]
+Just the wire rack now, and a few seeds. You looked peaky.
+
+[kitchen_sink]
+A stone sink with a pump over it. A pail of potato peelings waits underneath for the compost.
+
+[kitchen_sacks]
+Sacks of potatoes and onions. The onions have started to sprout. She's let them.
+
+[kitchen_table]
+A plain table, laid for two.
+Faded rings mark the wood where other plates have sat, over the years. Six of them, if you count.
+This place has been wiped clean, just for you.
+
+[kitchen_rug]
+A blue rag rug under the table, so nobody's feet get cold while they eat.
+
+[kitchen_chair]
+A small wooden chair. It's just your size.
+
+[kitchen_chair_hers]
+A tall chair with a cushion, flattened into the shape of a candle. There's a ring of old wax on it.
+
+[kitchen_trug]
+A trug of muddy carrots, waiting to be scrubbed. One of them has legs.
+
+# --- Dipping room ---
+
+[dip_vats]
+A pot of hot wax on a brick stove, and a tub of cold water beside it.
+
+Dip the wicks in the wax, then in the water, then in the wax again. A candle grows a skin at a time.
+
+[dip_vats_cold]
+The stove under the wax has gone out, and the wax has set.
+A wick is still hanging in the water tub, waiting for its next dip.
+
+[dip_rack]
+A rack of candles hung in pairs over its pegs, cooling. These are nearly done: fat and smooth.
+
+[dip_rack_thin]
+Another rack. These candles are still thin as pencils.
+Taper says they need a few more cold dips before they're any use.
+
+[dip_wick]
+A pegboard of wick on spools, and a pair of shears on a hook.
+The board is tidy. The shears are sharp. You leave them alone.
+
+[dip_moulds]
+A shelf of tin candle moulds and cakes of wax, stacked by size.
+
+[dip_sconce]
+A candle on an iron arm, lighting the work. It doesn't flicker when you walk past. Hers never do.
+
+[dip_crate]
+A crate of pale wax cakes, shed by the little waxlings and saved up.
+Some of them still have footprints in.
+
+[dip_stool]
+A stool by the vats, worn smooth in the middle. She sits here for hours.
+
+[dip_sacks]
+Sacks of something for the garden. It smells strongly of "for the garden."
+
+# --- Glasshouse ---
+
+[glass_panes]
+Old glass panes in wooden bars. A thin grey daylight comes down through them, from a crack somewhere far up in the roof.
+
+[glass_slate]
+A slate on a nail, chalked with tally marks: one for each cold night.
+
+At the end there's a tiny chalk sprout, and the words "NEARLY READY."
+
+[glass_sconce]
+A candle on an iron arm. The seedlings nearest it are leaning toward it.
+
+[glass_staging]
+Shelves of seedlings in clay pots. They all lean the same way: not up at the daylight, but toward the door, where the candles are.
+
+Taper turns them round every morning. Every evening they've leaned back.
+
+At the end of the bottom shelf, six clean pots sit upside down.
+
+[glass_frame]
+A cold frame, its glass lid propped open on a stick. The seedlings inside are short and tough.
+
+A note on the lid: "A LITTLE COLD EACH DAY. NOT TOO MUCH. NOT TOO LITTLE."
+
+[glass_frame_late]
+A second cold frame, the lid open a bit wider. These seedlings are nearly ready to go out.
+Their leaves have gone dark and leathery from the cold. Taper says that means they'll live.
+
+[glass_can]
+A watering can with a long brass rose. Full, and cold to the touch.
+
+[glass_trug]
+A trug full of empty seed packets, each one written on: what it was, when it went in, when it came up.
+
+# Taper's candle-making notebook, on its stand by the stairs (it has a "!" over
+# it until you've read it). Each entry is a page. The enemies are riddles.
+[candle_book]
+A well-thumbed notebook, open on a little stand. The handwriting is round and careful.
+
+HOW TO MAKE A CANDLE, by T.
+Every candle needs Wax, and Thread for its wick. The rest is just for flavour.
+
+WAX: shed by the little candles that wander about on their own.
+
+THREAD: pulled from a sack of fluff, come to life.
+
+MOONBELL PETALS: carried off by the dusty, long-eared things that nibble my flowers.
+
+GLOW DUST: left behind by the winged things that can't stay away from a flame.
+
+SHADOW ASH: what's left when something from the dark between the lanterns fades away.
+
+PLAIN: 2 Wax, 1 Thread. Nothing fancy.
+HEARTH: 4 Wax, 2 Thread. Warms you right through.
+
+MOONBELL: add 2 petals. Its scent calms even angry things.
+
+GLOW: add 2 Glow Dust. Bright and long, and it makes you braver.
+
+ASH: add 2 Shadow Ash. More smoke than light, and the smoke hides you.
+
+Light a candle when you need it most.
+And never follow a light you didn't make yourself.
+
+(You can make candles from CANDLES in your menu. Press C.)
+
+# ---- THE LIFE PASS (chapter 1, Taper) BEGIN ----
+# Set dressing and small things in Taper's house (round 2 of the life pass, 15 Nov 2026). (draft)
+
+# taper_home
+
+[r1_th_pegs]
+A peg rail by the door: a green shawl, a floppy hat with a flower in it, an apron. One peg is empty, with a label in Taper's hand: SPROUT.
+
+[r1_th_clock]
+A wall clock, stopped at ten past four. A note on the glass in Taper's hand:
+
+IT'S RIGHT TWICE A DAY. THAT'S MORE THAN MOST.
+
+[r1_th_books]
+A short stack of Taper's reading: A HUNDRED USES FOR BEESWAX. MOONBELLS AND THEIR MOODS. WHAT TO DO WHEN YOUR CANDLE HAS OPINIONS.
+
+[r1_th_wool]
+A basket of wool, two needles, and half a something. It might be a sock. It might be a very small hat for a very large candle. A tag: DON'T ASK.
+
+[r1_th_tea]
+A tea tray: a pot under a knitted cosy, and two cups. One is chipped. The chipped one has been turned to face the stool.
+
+[r1_th_boots]
+Boots by the stairs. Taper's, wide and caked with mud; a pair of green wellies; and one pair so small they'd fit a mouse in a hurry.
+
+[r1_th_mat]
+A doormat, knitted. It says HELLO in one colour of thread and, underneath, in another: (YES, YOU).
+
+[r1_th_broom]
+A broom worn to the shape of the corner it lives in. The dustpan is full of tiny wax shavings. She sweeps up every one and puts them back in the vat.
+
+[r1_th_mop]
+A bucket and a mop. The mop's head looks like a sleeping sheep. It has a name, you suspect, and a bad temper.
+
+[r1_th_labels]
+Plant tags in a tray: LAST YEAR'S. THIS YEAR'S. THE ONE THAT GOT AWAY.
+
+# taper_kitchen
+
+[r1_tk_jam]
+A shelf of jam jars, each in a paper hat. FIG. FIG AND SOMETHING. SOMETHING (BRAVE).
+
+[r1_tk_hole]
+A mouse hole with a thimble lantern lit over it and a crumb trail leading in. A very small sign: NO CATS.
+
+Under it, smaller still: (WICK EXCEPTED).
+
+[r1_tk_books]
+Taper's cookery books. SOUP: A LIFE. ONE POT, NINE GUESTS. WHEN THE CAKE SAYS NO.
+
+[r1_tk_tea]
+A tea tray laid for one. The cup is cold. The pot is still warm, which is a mystery you leave alone.
+
+[r1_tk_mop]
+A mop and bucket, standing at attention. The kitchen floor is cleaner than most people's plates.
+
+[r1_tk_wool]
+A ball of wool that's escaped from its basket and is making a break for the door. It's been caught in a chair leg. It looks relieved.
+
+[r1_tk_labels]
+Tags saved for the garden: BEANS. MORE BEANS. NO. NOT THOSE BEANS.
+
+# taper_hall
+
+[r1_tl_chalk]
+A slate on an easel, chalked:
+
+DIPS TODAY: 4. DIPS YESTERDAY: 400.
+
+Under it, smaller: I MEAN 40. I'M OUT OF PRACTICE.
+
+[r1_tl_ledger]
+A ledger: CANDLES MADE. CANDLES BURNT. CANDLES BORROWED. CANDLES NOT RETURNED.
+
+The last column has a very long number.
+
+[r1_tl_crate]
+A crate of snapped candles, labelled FOR THE POT. Nothing here is thrown out. It's only reshaped.
+
+[r1_tl_broom]
+A broom and pan. Every shaving of wax is swept into the pan, and every pan into the pot.
+
+[r1_tl_mop]
+A mop, drying upside down against the wall. Even the mop is tidy.
+
+[r1_tl_drips]
+The floor under the racks is a map of every candle's last drip.
+
+# your_room
+
+[r1_tg_beans]
+Bean canes hung with beans, and every vine leans toward the door, like everything else in here.
+
+[r1_tg_cloche]
+A glass jar over a seedling, with a label: WAIT. It has been waiting. It is extremely good at it.
+
+[r1_tg_cloche2]
+A jar, a seedling, a label: WAIT (LONGER).
+
+[r1_tg_tags]
+Tags in the soil: WAIT. WAIT. WAIT (LONGER). The writing gets less sure as the row goes on.
+
+[r1_tg_barrow]
+A wheelbarrow of pots, parked mid-job. The handle's still warm. From her hands, or from the sun.
+
+[r1_tg_barrel]
+A rain barrel with a dipper hung on the rim. The water is the clearest thing in the house.
+
+[r1_tg_pot]
+A pot of moonbells, kept in the dark on purpose, to sulk.
+
+[r1_tg_pot2]
+Another pot. This one's been turned to face the glass. It looks out of place and perfectly content.
+
+[r1_tg_wool]
+A ball of wool in a flowerpot. The cat's work, you'd say. She isn't here to deny it.
+
+[r1_tg_flower]
+A weed with a pink flower, let alone. In this house, that's an honour.
+
+[r1_tg_later]
+A seed packet, tucked in behind the barrow where nobody would look. Written on it in her round hand: LATER.
+
+Underneath, smaller, as if she hoped no one would read it: (IF THERE'S A LATER.)
+
+# The cat on the warm tile in front of the hearth (stroked: a long, slow blink back).
+[r1_th_cat]
+A tabby cat, asleep on the warmest tile in the house, one paw over her nose. A tag on her collar says WICK.
+
+She has been asleep since the last candle. She is very good at it.
+# ---- THE LIFE PASS (chapter 1, Taper) END ----

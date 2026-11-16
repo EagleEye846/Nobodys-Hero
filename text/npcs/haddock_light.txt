@@ -1,10 +1,10 @@
 # HADDOCK (in his parlour, haddock_light_parlour): at home in his armchair after he has told it. The first time is the scene haddock_tells_it; these are what he says afterwards. (draft).
 
 [first]
-{determined}Boat's at the bottom when you're ready. No rush. The sea's waited this long.
-{eh}And I'm not climbing that tower with you, before you ask. Stairs and me fell out years ago.
+{determined}Boat's at the bottom when ye're ready. No rush. The sea's waited this long.
+{eh}And I'm not climbin' that tower with you, afore ye ask. Stairs and me fell out years ago.
 
 [repeat]
-{eh}Eh? No, I'm not coming up. Stairs and me fell out years ago.
+{eh}Eh? No, I'm not comin' up. Stairs and me fell out years ago.
 
-{determined}Boat's at the bottom when you're ready. No rush.
+{determined}Boat's at the bottom when ye're ready. No rush.

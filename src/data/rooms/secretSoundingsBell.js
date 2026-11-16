@@ -45,15 +45,22 @@ export const SECRET_SOUNDINGS_BELL = {
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
-  cutscenes: [],
+  cutscenes: [
+    // (2026-11-14) A piece of the night the Fair Return went down, as soon as you carry the compass piece (the whole room, once).
+    { x: 1, y: 2, w: 14, h: 6, scene: 'needle_memory', gear: 'compass_needle' },
+  ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/soundings.txt',
   props: [
     // QUEST PIECE 2 (the Fair Return's compass needle): in the divers' helmet by the bell.
-    { sprite: 'gs_compass_needle', x: 8, y: 3, text: 'bell_compass', gives: 'compass_needle', taken: { gone: true } },
-    { sprite: 'sd_diving_bell', x: 6, y: 4, text: 'bell_bell', notice: true },
+    // The diving bell. Before the captain's book (the Fair Return's cabin) it's only a bell; after it, the
+    // compass needle is tucked under the bench inside, where only somebody who knew to look would find it,
+    // with a "!" over the bell till you do. (Moved here 15 Nov 2026: it used to lie out on the floor.)
+    { sprite: 'sd_diving_bell', x: 6, y: 4, text: 'bell_bell', notice: true, until: ['captain_spared', 'captain_beaten'] },
+    { sprite: 'sd_diving_bell', x: 6, y: 4, text: 'bell_bell_needle', gives: 'compass_needle', notice: true, after: ['captain_spared', 'captain_beaten'], taken: { sprite: 'sd_diving_bell', text: 'bell_bell' } },
     { sprite: 'c5_chest', x: 2, y: 4, text: 'bell_chest', gives: 'sounders_flask', taken: { sprite: 'c5_chest_open', text: 'chest_empty' } },
+    { sprite: 'c5_chest', x: 3, y: 6, text: 'bell_cape', gives: 'bell_rope_cape', taken: { sprite: 'c5_chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 12, y: 3, text: 'bell_pouch', gold: 300, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'sign', x: 11, y: 6, text: 'bell_slate' },
     { sprite: 'c5_rope_coil', x: 3, y: 6, text: 'bell_line', walkable: true },
@@ -71,6 +78,8 @@ export const SECRET_SOUNDINGS_BELL = {
     { sprite: 'sd_scree', x: 5, y: 7, flat: true, walkable: true },
     { sprite: 'sd_glass_bed', x: 10, y: 2, flat: true, walkable: true },
     { sprite: 'c5_stalactite_drip', x: 9, y: 2, text: 'sound_drip', animation: 'c5_stalactite_drip', speed: 0.5 },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_ledge_cups', x: 3, y: 5, text: 'lp_bell_cups', walkable: true },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', x: 'sound_glass' },
 

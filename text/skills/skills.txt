@@ -17,7 +17,7 @@ FIGHT gets a fourth slash to hit.
 Grazing builds 25% more SP.
 
 [lull]
-Learn the spell Lull: 24% SP to raise an enemy's MERCY by 30%.
+Learn the spell Lull: 24% SP to raise an enemy's MERCY by 3%.
 
 [wide_graze]
 Your graze area grows, so near misses are easier to catch.
@@ -87,7 +87,7 @@ Fights pay 25% more gold.
 TALK, Lull and Hush raise MERCY 25% more.
 
 [hush]
-Learn the spell Hush: 45% SP to raise every enemy's MERCY by 20%.
+Learn the spell Hush: 45% SP to raise every enemy's MERCY by 2%.
 
 [gentle_hands]
 Pacify costs half as much SP.
@@ -124,7 +124,7 @@ Learn the spell Siphon: 48% SP to hit one enemy hard and drink back half of it a
 Learn the spell Chain Bolt: 60% SP for lightning through every enemy, each as hard as a good FIGHT.
 
 [nova]
-Learn the spell Nova: all your SP for three times a good FIGHT. Everything goes white.
+Learn the spell Nova: all your SP. A huge hit on every enemy, their next attack shorter, and the party mended a little. Everything goes white.
 
 # --- Chapter 3: the Hushwood, Lasthome and the Dead City ---
 
@@ -191,7 +191,7 @@ Run another 25% faster, and swing on ropes 50% faster.
 Food heals another 30% more.
 
 [serenade]
-Learn the spell Serenade: 65% SP to raise every enemy's MERCY by 35%.
+Learn the spell Serenade: 65% SP to raise every enemy's MERCY by 4%.
 
 [open_hand]
 Shops charge 15% less, and calming works 15% better.
@@ -451,7 +451,7 @@ Attack spells hit harder, by another 25%.
 Attack spells hit harder, by another 15%.
 
 [nova]
-Wakes by itself, when the water comes up the stair. Then: all your SP for three times a good FIGHT. Everything goes white.
+Wakes by itself, when the water comes up the stair. Then: all your SP for a huge hit on every enemy, and a little healing.
 
 [tide_brine]
 Learn the spell Scald: 50% SP for a little damage now, and a burn after each of the next 3 enemy turns.
@@ -580,7 +580,7 @@ Pump a rope swing up 50% faster.
 Food heals 40% more, and you run 15% faster. You've done a lot of walking.
 
 [soothe]
-Learn the spell Soothe: 75% SP. Every enemy's MERCY rises by 50%.
+Learn the spell Soothe: 75% SP. Every enemy's MERCY rises by 5%.
 
 [peacemaker]
 TALK, Lull and Hush raise MERCY 40% more. Most fights don't need to be fights.
@@ -792,7 +792,7 @@ Ves learns WINDBREAK: her SHELTER, and nothing can touch you at the start of the
 Bramble's attack spells do 6 more damage.
 
 [bram_notch]
-Bramble learns NOTCH: a small chop, and that enemy takes 30% more from every hit for 2 turns.
+Bramble learns MARK IT: a small chop, and that enemy takes 30% more from every hit for 2 turns.
 
 [bram_deep_lungs]
 Bramble's WAR CRY fills 8 more SP.
@@ -831,7 +831,7 @@ Ember Flare catches up with how strong you've got. Every enemy burns about as ha
 Comet catches up with how strong you've got. Well over a good FIGHT, on one enemy.
 
 [starfall_2]
-Starfall catches up with how strong you've got. Well over a good FIGHT, on one enemy.
+Starfall burns brighter: a little more power, on one enemy.
 
 [spark_2]
 Spark catches up with how strong you've got. Still cheap, and a little harder than a good FIGHT.
@@ -852,7 +852,7 @@ Ember Flare catches up again. Every enemy still burns about as hard as a good FI
 Comet catches up again. Well over a good FIGHT, even now.
 
 [starfall_3]
-Starfall catches up again. Well over a good FIGHT, even now.
+Starfall burns brighter again: a little more power, on one enemy.
 
 [spark_3]
 Spark catches up again. Still cheap, and still a little harder than a good FIGHT.
@@ -868,3 +868,70 @@ Sunder catches up with how strong you've got. Well over a good FIGHT, on one ene
 
 [lance_2]
 Light Lance catches up with how strong you've got. Harder than a good FIGHT again.
+
+# --- Chapter 5, the fourth wave ---
+
+[sunburst_2]
+Sunburst catches up with how strong you've got. Every enemy takes well over a good FIGHT.
+
+[tempest_2]
+Tempest catches up with how strong you've got. About two good FIGHTs, on one enemy.
+
+[not_yet]
+Last Stand holds twice: survive a second knockout in the same battle, with 1 HP.
+
+[ves_fine_silk]
+Ves's attack spells hit 6% harder, and her FLURRY calms 4% more.
+
+[ves_heirloom]
+Ves's attack spells hit 6% harder, her ZEPHYR gives back 10 more HP, and FLURRY calms 6% more.
+
+[ves_keen_wind]
+Ves's attack spells do 10 more damage.
+
+[ves_bluster]
+Ves's attack spells hit 6% harder, and do 8 more damage.
+
+[ves_second_pot]
+Ves's ZEPHYR gives back 12 more HP and fills 4 more SP.
+
+[ves_tuck_in]
+Whenever Ves holds her umbrella over you (SHELTER and the like), everyone under it gets some HP back.
+
+[ves_heavy_air]
+Ves's attack spells do 8 more damage, and her FLURRY calms 4% more.
+
+[ves_thunderhead]
+Ves's attack spells hit 6% harder, and do 10 more damage.
+
+[ves_fresh_air]
+Ves's ZEPHYR fills 8 more SP, and her FLURRY calms 6% more.
+
+[ves_high_spirits]
+Ves's ZEPHYR gives back 10 more HP and fills 8 more SP, and her FLURRY calms 6% more.
+
+# --- Bramble, the fourth wave ---
+
+[bram_heavy_head]
+Bramble's attack spells do 10 more damage.
+
+[bram_lumberjack]
+Bramble's attack spells do 14 more damage, and his HOLLER calms 4% more.
+
+[bram_pipe_up]
+Bramble's HOLLER calms 6% more, and stops the next attack a little sooner.
+
+[bram_town_crier]
+Bramble's WAR CRY fills 10 more SP, and his HOLLER calms 8% more.
+
+[bram_sly]
+Bramble's sneak attack hits 25% harder, and his attack spells do 4 more damage.
+
+[bram_hiding_spot]
+When Bramble HIDES, he has a snack down there too, and gets some HP back.
+
+[bram_cool_head]
+Bramble's HOLLER calms 6% more, and his BISCUIT gives back 8 more HP.
+
+[bram_nerves]
+Bramble's BISCUIT gives back 12 more HP, and his WAR CRY fills 8 more SP.

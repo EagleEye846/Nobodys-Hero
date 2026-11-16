@@ -34,10 +34,11 @@ export const ISLES_STAR_BROUGHT = {
     { do: 'wait', seconds: 0.6 },
     { do: 'say', who: 'orla', text: '{gruff}Shut the door. The forge doesn\'t heat the whole...\n\n{annoyed}No. Wait. Stand still.' },
     { do: 'wait', seconds: 0.4 },
+    // The sword at your side and the shard in your pocket hum back and forth: the same note. (draft)
     { do: 'sound', name: 'shimmer' },
     { do: 'emote', who: 'bramble', emote: '!', wait: false },
-    // (draft) "from the figurehead": the shard now comes from the ghost ship's guardian.
-    { do: 'say', text: 'At your side, the Fallen Star is humming. In your pocket, the shard from the figurehead hums back. The same note.' },
+    { do: 'stage', notes: { at: { x: 8, y: 9 }, seconds: 3 } },
+    { do: 'wait', seconds: 1.8 },
     { do: 'say', who: 'orla', text: '{gruff}That\'s the one. Both of them. Over here, before it stops.' },
     // Across to the middle of the room, then up to the anvil.
     { do: 'walk', who: 'player', to: { x: 8, y: 9 }, wait: false },
@@ -51,8 +52,13 @@ export const ISLES_STAR_BROUGHT = {
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'face', who: 'bramble', dir: 'up' },
     { do: 'reforge', smith: 'orla_forge', marks: 'isles_star_held' },
-    { do: 'say', text: 'Orla sets the shard on the anvil, beside the notch in the blade where it broke away.\n\nThen she stops. She looks at the sword in your hand, and then at you.' },
+    // She sets the shard on the anvil by the notch where it broke away, and stops. (draft)
+    { do: 'camera', to: { x: 6, y: 4 } },
+    { do: 'sound', name: 'clink' },
+    { do: 'wait', seconds: 1.4 },
+    { do: 'camera' },
     { do: 'say', who: 'orla', text: '{gruff}...Before I start. Take it over to the window, where the big light comes down. Hold it up in that. I want to see something.' },
     ...ISLES_STAR_HELD.steps,
   ],
 };
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

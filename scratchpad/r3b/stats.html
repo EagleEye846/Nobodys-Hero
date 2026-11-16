@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8"><pre id="report">STATS START
+</pre>
+<script type="module">
+import { ROOMS } from '../../src/data/rooms/index.js';
+import { Room } from '../../src/overworld/room.js';
+import { Touches } from '../../src/overworld/touches.js';
+const report = document.getElementById('report');
+const re = /^(pinefall|hollin|hush|drains|marsh|lasthome|city|registry|baths)/;
+const rows = [];
+for (const [id, d] of Object.entries(ROOMS)) {
+  if (!(re.test(id) || re.test(id.replace(/^[a-z]+_/, '')) && ['pinefall','hollin','hush','drains','marsh','lasthome','city','registry','baths'].some(a=>d.area===a))) continue;
+  let t = -1; try { const room = new Room(d); t = new Touches({ roomData: d, room, time: 0, calm: false, spire: false, camera: { x: 0, y: 0 } }).list.length; } catch (e) { t = 'E'; }
+  const props = d.props ?? [];
+  const talk = props.filter((p) => p.text && !p.decor).length;
+  const dec = props.length - talk;
+  const npcs = (d.npcs ?? []).filter((n) => !n.enemy).length;
+  const mons = (d.npcs ?? []).filter((n) => n.enemy).length;
+  const w = d.tiles?.[0]?.length, h = d.tiles?.length;
+  rows.push(`${id}|${d.area}|${w}x${h}|talk ${talk}|decor ${dec}|touch ${t}|npc ${npcs}|mon ${mons}|doors ${(d.doors??[]).length}|scn ${(d.cutscenes??[]).length}|${d.music ?? ''}`);
+}
+report.textContent += rows.join('\n') + `\n${rows.length} rooms\nSTATS DONE\n`;
+</script>

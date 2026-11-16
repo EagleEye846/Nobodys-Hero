@@ -75,9 +75,9 @@ export const LANES_MILL = {
     { sprite: 'treadle', x: 26, y: 3, text: 'mill_plate_bramble', treadle: 'mill_b', who: 'bramble' },
     { sprite: 'c5_sluice_wheel', x: 17, y: 10, text: 'mill_wheel_ves' },
     { sprite: 'treadle', x: 17, y: 11, text: 'mill_plate_ves', treadle: 'mill_v', who: 'vesper' },
-    { sprite: 'gate_narrow', x: 33, y: 14, text: 'mill_gate', opensWith: ['mill_h', 'mill_v', 'mill_b'], openText: 'mill_gate_open' },
+    { sprite: 'gate_narrow', x: 33, y: 14, text: 'mill_gate', opensWith: ['mill_h', 'mill_v', 'mill_b'], openText: 'mill_gate_open', jamsOpen: true },
     // The hole into the sluice pit (a small body only), and a chest in the pit.
-    { sprite: 'kid_gap', x: 26, y: 6, text: 'mill_hole', gap: true },
+    { sprite: 'c5_stone_gap', x: 26, y: 6, text: 'mill_hole', gap: true },
     { sprite: 'c5_chest', x: 24, y: 2, text: 'mill_chest', gives: 'winkle_skewer', taken: { sprite: 'c5_chest_open', text: 'chest_empty' } },
     // The old mill wheel in the race, turning.
     { sprite: 'c5_mill_wheel', x: 18, y: 9, text: 'mill_millwheel', animation: 'c5_mill_wheel', speed: 0.35 },
@@ -117,6 +117,12 @@ export const LANES_MILL = {
     { sprite: 'ln_moss_b', x: 29, y: 16, flat: true, walkable: true },
     { sprite: 'ln_moss_b', x: 25, y: 10, flat: true, walkable: true },
     { sprite: 'ln_wall_weed', x: 23, y: 6, flat: true, walkable: true },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_sign_bakery', x: 10, y: 4, text: 'lp_flour_sign' },
+    { sprite: 'lv_milestone', x: 29, y: 15, text: 'lp_milestone_mill' },
+    { sprite: 'lv_bench', x: 5, y: 9, text: 'lp_bench_mill' },
+    { sprite: 'lv_barrow', x: 14, y: 6, text: 'lp_barrow_mill' },
+    { sprite: 'lv_lunch_pail', x: 36, y: 8, text: 'lp_worm_tin', react: true, gives: 'lane_worm', taken: { gone: true } },
   ],
   tileTexts: { '#': 'lanes_rock', W: 'lanes_rock', '~': 'mill_race', 5: 'mill_house', 6: 'mill_window', 7: 'mill_house', 8: 'mill_door', g: 'mill_bridge', x: 'lanes_stone', O: 'lanes_stone', F: 'fork_weed', ';': 'fork_shallows' },
 
@@ -124,8 +130,11 @@ export const LANES_MILL = {
   // wraith hanging over the pond's shallow edge just north of it (row 13, x 3 to 6), two rows apart,
   // so they fight together. Both keep well away from the three plates, the hole, the gate, the stump
   // and the doors, and from Ves's way to her plate. No cutscenes in this room.
+  // AMBUSH: the wrackeel lies under the pond (4,15) and bursts out when you come within two and a
+  // half tiles (bubbles come up over it, and now and then a fin: `look: 'eel_pond'`, src/overworld/
+  // hideouts.js). Only the pond's own shallow edge (rows 12 to 16, x 1 to 7) is that close.
   npcs: [
-    { enemy: 'wrackeel', x: 4, y: 15, patrol: [3, 6], behaviour: 'patrol' },
+    { enemy: 'wrackeel', x: 4, y: 15, patrol: [4, 4], behaviour: 'burrow', look: 'eel_pond', reach: 2.5 },
     { enemy: 'net_wraith', x: 5, y: 13, patrol: [3, 6], behaviour: 'patrol' },
   ],
 };

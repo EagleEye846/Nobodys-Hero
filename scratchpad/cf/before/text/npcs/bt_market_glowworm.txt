@@ -1,0 +1,45 @@
+# BT_MARKET_GLOWWORM: A glow-worm who lights the market's far end, gloomy by nature and cheerful on this one subject.
+
+[first]
+Lamps, lamps, lamps. Always lamps. Do you know it's not easy to be a lamp when the big lamp's gone dim?
+
+I keep thinking: it's me. It isn't. It's the Sunstone. But it feels like me.
+
+[repeat]
+I'm all right. I'm just a little bit lit.
+
+[first after the_kings_welcome]
+It's not you, you know. Whatever he said. The Sunstone's just tired. Like me.
+
+[repeat after the_kings_welcome]
+Do go down. Tell it we said thank you. For all the years.
+
+[first after the_light_goes_up]
+Oh no. I'm glowing. I'm not even trying. I don't know what to do with my face.
+
+[repeat after the_light_goes_up]
+I keep waiting to feel tired. It hasn't happened. It's very unsettling.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+If I turn myself down, people don't stop. If I turn myself up, they stop and talk about the Sunstone. I'm turning down.
+
+# (draft)
+[repeat 3]
+Sometimes I glow a little brighter, at the Sunstone end. In case it's lonely. It's silly. I do it anyway.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Say it from all of us. The little lamps. It might like to know we tried.
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}We'll pass it on. {bored}To a rock. At the bottom of the world.
+
+{smile}It'll be the nicest thing anyone's said to it.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Somebody asked me to turn down. Me! Because I was too bright! I've never been happier.

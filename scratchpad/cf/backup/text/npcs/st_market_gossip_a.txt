@@ -1,0 +1,23 @@
+# ST_MARKET_GOSSIP_A: an otter in a red coat, gossiping beside the market's west stalls with a grey seal in a green coat. The life pass.
+
+[first]
+So she says to me, she says, "I don't DO fish on a Tuesday." And I said, "Then what do you do?" And she didn't say.
+
+[repeat]
+I'd tell you the rest, but it needs the voices. I'm saving it for when I've got the voices.
+
+# (draft)
+[repeat 2]
+Can you keep a secret? Not that one. I've told that one. Can you keep a different one?
+
+# (draft)
+[repeat_ves 2]
+{bored}Absolutely. Don't tell me one.
+
+# (draft)
+[first after the_light_answers]
+Well! Everything's different, and I'll still tell you first.
+
+# (draft)
+[repeat after the_light_answers]
+She said the sun made her feel exposed. I said, "You're a seal." She said, "Exactly."

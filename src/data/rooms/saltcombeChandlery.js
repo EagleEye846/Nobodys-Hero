@@ -81,7 +81,11 @@ export const SALTCOMBE_CHANDLERY = {
     // stock stacked by the west wall that nobody has needed since the herring.
     { sprite: 'c5_doormat', x: 7, y: 10, text: 'in_chandler_mat', walkable: true, flat: true },
     { sprite: 'in_lamp_stool', x: 5, y: 9, text: 'in_chandler_lamp' },
-    { sprite: 'c5_crates_stack', x: 1, y: 8, text: 'in_chandler_stock' },
+    { sprite: 'c5_crates_stack', x: 1, y: 8, text: 'in_chandler_stock' },
+    // (life pass 2026-11-14)
+    { sprite: 'st_price_board', x: 11, y: 7, text: 'life_c_prices' },
+    { sprite: 'st_cat_loaf_b', x: 13, y: 4, text: 'life_c_cat', animation: 'st_cat_loaf_b', speed: 1.2 },
+    { sprite: 'st_broom_bucket', x: 12, y: 10, text: 'life_c_broom' },
   ],
   tileTexts: { h: 'chandler_wall' },
 

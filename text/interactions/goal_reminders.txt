@@ -1,0 +1,93 @@
+# GOAL REMINDERS (chapter 5): at a save point, the first time after the goal on the C menu has changed, one of
+# Ves or Bramble says one short line about where you're headed and why. (src/overworld/overworldScene.js,
+# useSavePoint; the goal keys are the ones in text/goals.txt.) Never during a scene, never twice for one goal.
+# Sections are [<goal key> ves] or [<goal key> bramble]: one speaker a goal. They don't know answers ahead: they
+# only say what the goal line already says.
+
+# (draft) 2026-11-15
+[5 ves]
+{smile}East, then, the way the boy in the big coat went. It seems rude not to.
+
+# (draft)
+[5: first_sight_of_the_sea bramble]
+{worried}We're going to ask somebody about the green storm. ...Politely.
+
+# (draft)
+[5: meet_haddock ves]
+{smile}Haddock first. Anyone who rings a bell at the sea has opinions about the weather.
+
+# (draft)
+[5: lantern_at_noon bramble]
+{thinking}Haddock's boat goes toward the storm. So we go where the boat is.
+
+# (draft)
+[5: haddock_shows_bell ves]
+{bored}Bell, jetty, boat. I'm told there will be a boat. I'm choosing to believe it.
+
+# (draft)
+[5: the_sky_turns bramble]
+{worried}Saltcombe. Somebody there has to know what that green is.
+
+# (draft)
+[5: bathtub_gate ves]
+{determined}Saltcombe next. I'd like to hear what a whole town thinks the storm is.
+
+# (draft)
+[5: inn_hall_first bramble]
+{thinking}The town hall. Everybody's up there, talking about the storm.
+
+# (draft)
+[5: town_meeting ves]
+{determined}The Last Light, then. Find Haddock, get out there, and make that storm stop.
+
+# (draft)
+[5: haddock_hums bramble]
+{thinking}Haddock's boat gets us out to the tower. The lagoon is on the way. Somehow.
+
+# (draft)
+[5: swimming_lesson ves]
+{smile}A boat, out to sea, toward the tower. I never thought I'd say that and mean it.
+
+# (draft)
+[5: wreck_crossing bramble]
+{worried}The Wreck Yard. A way out to the tower might be out here. Or a lot of boats that didn't make it.
+
+# (draft)
+[5: wreck_star_shard ves]
+{thinking}The star shard pointed at something. We ask Haddock what, then get on.
+
+# (draft)
+[5: wreck_slip_home bramble]
+{worried}The road out goes under the water. Under. ...I'll hold my breath at the right bits.
+
+# (draft)
+[5: lanes_lantern ves]
+{bored}Through the Lanes, to the sea, to the tower. Wet the whole way. Naturally.
+
+# (draft)
+[5: merrow_in bramble]
+{thinking}Merrow's under the water, and we have to get through it. Quietly. It looks asleep.
+
+# (draft)
+[5: merrow_sea_gate ves]
+{determined}Out through the sea caves, and on toward the Last Light.
+
+# (draft)
+[5: soundings_in bramble]
+{determined}Up through the Soundings to the Isles. Then Haddock's Light. Then the tower!
+
+# (draft)
+[5: isles_four_lights ves]
+{smile}Across the Isles to Haddock's Light. Then the tower. Keep a list.
+
+# (draft)
+[5: isles_star_held bramble]
+{determined}Haddock's Light, then the Reach, then the tower. One bit at a time.
+
+# (draft)
+[5: haddock_tells_it ves]
+{determined}Across the Reach to the Last Light. Saltcombe's counting on us, and so is its quay.
+
+# (draft)
+[5: reach_eye_talk bramble]
+{determined}Up the tower and stop the storm. That's all. That's the whole plan.

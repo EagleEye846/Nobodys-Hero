@@ -46,8 +46,9 @@ Bubbles come up from somewhere down in the street and pop on the top. Something 
 [steps_sign]
 A post office sign on a bracket: MERROW. LETTERS COLLECTED 7 A.M. AND 4 P.M.
 
+# (draft)
 [steps_sign_ves]
-{bored}I'd say they've missed the post.
+{smile}I'd say they've missed the post.
 
 [steps_washing]
 Washing on a line between two posts, pegged out and never brought in. It's been rained on for a long time.
@@ -98,8 +99,9 @@ A board nailed to a post: OVER THE TOP TO THE SQUARE. MIND THE PLANKS. Someone h
 [roofs_boat]
 A rowing boat, upside down, stranded right on the ridge of the roof. The water must have put it there on its way down. Or on its way up.
 
+# (draft)
 [roofs_boat_ves]
-{bored}Somebody's going to have a very confusing morning.
+{laughing}Somebody's going to have a very confusing morning.
 
 [roofs_washing]
 More washing, on a line up on the roof, between the chimneys. Somebody's good shirts.
@@ -128,8 +130,9 @@ A slate roof. From the ridge you can see the whole drowned town: roofs and roofs
 [roofs_plank]
 A plank across the gap between two roofs. It bends a bit in the middle. It's fine. It's fine.
 
+# (draft)
 [roofs_plank_bramble]
-{scared}Don't jump on it. Don't anybody JUMP on it.
+{shout}Don't jump on it. Don't anybody JUMP on it.
 
 # --- THE DROWNED SQUARE -----------------------------------------------------------
 
@@ -142,8 +145,9 @@ The ringers' hall door, standing open. A narrow stair goes up inside.
 [square_frame]
 The ringers' practice frame, with a painted board: MERROW RINGERS. Underneath, smaller, in somebody's careful hand: "Practise on these. Then ring it the way the tower does."
 
+# (draft)
 [square_frame_ves]
-{thoughtful}The way the tower does. Well, it's been doing it all day.
+{surprised}The way the tower does? ...Somebody was counting, I hope. I wasn't counting.
 
 [square_bell_low]
 A bronze bell on an iron bracket, the biggest of the three.
@@ -157,8 +161,9 @@ A bronze bell on an iron bracket, the smallest of the three.
 [chime_answered]
 The last bell's note hangs in the air, and then, from the drowned tower across the town, the big bells answer it: the same four strokes, slow and even. Somewhere behind the ringers' door, a bar falls.
 
+# (draft)
 [chime_answered_ves]
-{surprised}It answered. {bored}At least something round here keeps its word.
+{glee}It answered! {smile}...I mean. Good. Something round here keeps its word.
 
 [square_cross]
 The market cross, on its three steps. The bottom step is green. Pinned to it: SUNDAY. THE BAND. 3 O'CLOCK. WEATHER PERMITTING.
@@ -229,8 +234,9 @@ A plain wall. Dry.
 [street_sign]
 A board on a post: HIGH STREET. NO HORSES ON THE PAVEMENT. The pavement is a river.
 
+# (draft)
 [street_sign_ves]
-{bored}Good news for the horses.
+{smile}Good news for the horses.
 
 # (draft)
 [street_sign 2]
@@ -300,8 +306,9 @@ Old bell ropes, coiled on the porch floor, waiting for somebody to carry them up
 [lane_sign]
 A board on a post: THE BELLS OF MERROW. RUNG FOR WEDDINGS, SUNDAYS AND THE TIDE. VISITORS WELCOME TO THE TOWER.
 
+# (draft)
 [lane_sign_ves]
-{bored}"Welcome." The door's barred on the inside.
+{angry}"Welcome." The door's barred on the inside.
 
 [lane_pouch]
 A purse in the gutter, dropped on the way somewhere.
@@ -343,8 +350,9 @@ A hole in the floor where the boards gave way under the bell. The water in it go
 [gate_shut]
 The town's sea gate: a great fish's head in iron, set in the wall, with its mouth wide open. The bars across the tunnel are its teeth. One tooth at the front is missing. There's an empty socket where it should be.
 
+# (draft)
 [gate_shut_ves]
-{thoughtful}One tooth gone. I've seen a tooth like that today.
+{surprised}One tooth gone. ...Haven't we seen a tooth like that somewhere?
 
 [gate_open]
 The sea gate, with its iron jaws open and the Gulper Tooth sitting in its socket. The tunnel behind it runs east under the cliff.
@@ -378,8 +386,9 @@ Merrow's harbour, full to the brim, with the town wall all round it. The boats a
 [loft_board]
 A peal board, in gold letters on black: the peals rung by the Merrow Ringers, every one with its date and the names of the ringers. The last one has a date and a time, and the names, and then nothing where the number of changes should be.
 
+# (draft)
 [loft_board_ves]
-{thoughtful}They never finished it.
+{sad}They never finished it.
 
 [loft_rope]
 A practice rope, hanging from its beam. Its grip is worn pale where the hands went.
@@ -449,8 +458,9 @@ Two mugs on a stool, left after practice. One of them says TENOR.
 [square_house_not_yet]
 Every door on the square is shut fast, except one. On the west side, a house has its door standing open.
 
+# (draft)
 [square_house_not_yet_ves]
-{bored}A drowned town, and one door open. I'm not walking past that.
+{determined}A drowned town, and one door open. I'm not walking past that.
 
 # House fronts and what's in the water (2026-11-08).
 [front_gable]
@@ -527,3 +537,11 @@ Barrels and a crate stood out by a door for the carter. The carter never came.
 
 [loft_barrels]
 Two barrels. One says ALE in chalk. It's empty. Ringing is thirsty work.
+
+# (draft) THE FAIR RETURN'S LOG (optional, secret), page 4: in a bottle the ringers kept by their window.
+[loft_log_bottle]
+On the floor under the window, set upright as carefully as a vase: a green bottle, corked, sealed with red wax. FR, pressed into the wax. A roll of paper inside. On the sill above it somebody has chalked: FOUND OFF THE POINT. NOT OURS TO OPEN.
+
+# (draft)
+[loft_log_bottle_bramble]
+{awed}They kept it dry. In a drowned town. That's very polite.

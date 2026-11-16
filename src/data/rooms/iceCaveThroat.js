@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE GLITTERING THROAT: through the cave mouth at the back of the
 // Weathervane Shelf, the first of the ice caves. A long throat of rock lit
 // only by the ice crystals growing out of it, a frozen pool to skate across,
@@ -11,6 +12,7 @@
 //   v  stalactite (walk under it)                 ^  stalagmite (solid)
 //   x  ice crystals (they glow) (solid)           D  doorway (walk through it; see `doors`)
 //   b  low stone block (jump up onto it)          B  tall stone block (jump onto it from a low block)
+import { R3A_PROPS } from '../r3aLife.js';
 export const ICE_CAVE_THROAT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'ice_cave_throat',
@@ -72,6 +74,10 @@ export const ICE_CAVE_THROAT = {
     { sprite: 'sign', x: 17, y: 17, text: 'throat_sign' },
     // Behind the false wall (6..7, 13): a hidden alcove.
     { sprite: 'chest', x: 2, y: 13, text: 'throat_chest', gives: 'coldlight_lantern', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['ice_cave_throat'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['ice_cave_throat'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

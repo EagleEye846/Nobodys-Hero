@@ -3,8 +3,9 @@ import { defineBulletArt } from '../projectiles.js';
 // The Ice Moth's attacks. It's a moth of frost from the ice caves, and like
 // every moth it can't keep away from a light, only here the lights are the
 // glowing crystals in the rock. So: little ice moths circling a crystal (and
-// now and then one deciding you're brighter), frost scales shed from its
-// wings, drifting down like leaves, and a flurry of moths in a long line,
+// now and then one deciding you're brighter), the moth flitting from crystal
+// to crystal with frost forming in the air behind it, and a flurry of moths
+// in a long line,
 // all following the leader.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
@@ -36,14 +37,6 @@ defineBulletArt('iceMothCrystal', {
   frameSeconds: 0.25,
 });
 
-// A frost scale off its wing: a little six-sided flake of ice, tumbling.
-defineBulletArt('iceMothScale', {
-  frames: [['.i.', 'iIc', '.c.'], ['.I.', 'cii', '.c.'], ['.c.', 'cIi', '.i.']],
-  palette: FROST,
-  radius: 1.5,
-  frameSeconds: 0.12,
-});
-
 // The ice moth itself, big, fluttering along the top of the box.
 defineBulletArt('iceMothBig', {
   frames: [
@@ -53,6 +46,18 @@ defineBulletArt('iceMothBig', {
   palette: FROST,
   hitbox: { w: 9, h: 5 },
   frameSeconds: 0.12,
+});
+
+// Frost forming in the air where the moth has flown: a little starburst of
+// rime, glinting.
+defineBulletArt('iceMothFrost', {
+  frames: [
+    ['i.c.i', '.iIi.', 'cIgIc', '.iIi.', 'i.c.i'],
+    ['..c..', '.iIi.', 'cIIIc', '.iIi.', '..c..'],
+  ],
+  palette: FROST,
+  radius: 2,
+  frameSeconds: 0.2,
 });
 
 export const ICE_MOTH_ATTACKS = {
@@ -126,42 +131,64 @@ export const ICE_MOTH_ATTACKS = {
     };
   },
 
-  // Frost Scales. The ice moth flutters back and forth along the top of the
-  // box, shedding frost scales that drift down, see-sawing like leaves. Each
-  // time it turns round it gives its wings a shake and a whole fan of them
-  // falls at once.
-  iceMothScales(box, density, { Shot, every, rand }) {
+  // Frost forms on everything it flies past. The ice moth flits from one
+  // glowing crystal to the next (each one lights up just before it goes),
+  // and behind it a trail of frost forms in the air: glinting at first,
+  // then set hard for a moment, then cracking away. Every other crystal
+  // lights up right where you are. Get out of its way, and don't stand in
+  // its wake.
+  iceMothFrostTrail(box, density, { Shot, rand, clamp, pointAwayFrom }) {
+    const SPEED = 62;
+    const LIGHT = 0.6;
+    const GAP = 7;
     let moth = null;
-    let scales = [];
-    const shed = every(0.2, 0.28, (bullets) => {
-      const scale = new Shot({ x: moth.x + rand(-4, 4), y: moth.y + 3, vy: rand(24, 32), art: 'iceMothScale' });
-      scale.sway = { size: rand(18, 26), rate: rand(2.6, 3.4), phase: rand(0, Math.PI * 2) };
-      bullets.push(scale);
-      scales.push(scale);
-    }, { first: 0.4 });
-    let heading = 0;
+    let crystal = null;
+    let target = null;
+    let wait = 0;
+    let stops = 0;
+    let laid = 0;
+    const light = (bullets, soul) => {
+      stops++;
+      target = stops % 2 === 0
+        ? { x: clamp(soul.x, box.x + 5, box.x + box.w - 5), y: clamp(soul.y, box.y + 5, box.y + box.h - 5) }
+        : pointAwayFrom(box, moth, 34, 8);
+      crystal = new Shot({ ...target, art: 'iceMothCrystal', harmless: true, life: LIGHT + 2 });
+      bullets.push(crystal);
+      wait = LIGHT;
+    };
     return {
-      duration: 7,
-      update: (dt, bullets) => {
+      duration: 7.4,
+      update: (dt, bullets, soul) => {
         if (!moth) {
-          const fromLeft = Math.random() < 0.5;
-          moth = new Shot({ x: fromLeft ? box.x + 8 : box.x + box.w - 8, y: box.y + 6, vx: fromLeft ? 40 : -40, bounce: true, warn: 0.5, art: 'iceMothBig' });
+          const start = pointAwayFrom(box, soul, 40, 8);
+          moth = new Shot({ ...start, warn: 0.5, art: 'iceMothBig' });
           bullets.push(moth);
-          heading = Math.sign(moth.vx);
+          light(bullets, soul);
         }
-        if (moth.age >= moth.warn) shed(dt, bullets);
-        // It turned round: a shake of the wings.
-        if (Math.sign(moth.vx) !== heading) {
-          heading = Math.sign(moth.vx);
-          for (let i = -2; i <= 2; i++) {
-            bullets.push(new Shot({ x: moth.x, y: moth.y + 3, vx: i * 14, vy: 30, accel: 8, art: 'iceMothScale' }));
-          }
+        if (moth.age < moth.warn) return;
+        if (wait > 0) {
+          wait -= dt;
+          return;
         }
-        // Scales see-saw from side to side as they fall.
-        for (const scale of scales) {
-          scale.vx = Math.cos(scale.sway.phase + scale.age * scale.sway.rate) * scale.sway.size;
+        const dx = target.x - moth.x;
+        const dy = target.y - moth.y;
+        const away = Math.hypot(dx, dy);
+        const step = Math.min(away, SPEED * dt);
+        if (away > 0) {
+          moth.x += (dx / away) * step;
+          moth.y += (dy / away) * step;
         }
-        scales = scales.filter((scale) => scale.y < box.y + box.h + 6 && bullets.includes(scale));
+        // Frost behind it, every few pixels it flies.
+        laid += step;
+        while (laid >= GAP) {
+          laid -= GAP;
+          bullets.push(new Shot({ x: moth.x + rand(-1, 1), y: moth.y + rand(-1, 1), art: 'iceMothFrost', warn: 0.45, life: 1.3 }));
+        }
+        if (away <= step + 0.01) {
+          // It's reached the crystal: off to the next.
+          crystal.life = 0;
+          light(bullets, soul);
+        }
       },
     };
   },

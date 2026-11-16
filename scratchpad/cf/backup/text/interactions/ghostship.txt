@@ -1,0 +1,2157 @@
+# THE FAIR RETURN (Chapter 5): the brig on the Wreck Yard's bar, the ghost ship. Nine rooms: the plank, the deck, the crew's
+# quarters, the gun deck, the hold, the bilge, the crow's nest, the captain's cabin and the purser's locker (the secret).
+# The brig sailed from Saltcombe and was due home on the 14th, a hundred years ago. Her crew are still aboard and still
+# waiting to be told they can go home. Nobody has told them. Everything here is quiet, and sad before it is frightening.
+# A section with `_ves` or `_bramble` on the end is what they say after it. Every story line is a DRAFT for the designer to
+# read; the mechanical lines (the list, the save crystal) are plain.
+
+[save_point]
+The crystal hums at the end of the quay, small and steady. Behind it the fog stands about like a crowd that has stopped talking.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. Damp, and very old.
+
+[chest_empty]
+An empty chest.
+
+[rock_stump]
+An old stone mounting block. Press on it, and everyone goes back to where they came in.
+
+[chime_answered]
+The harmonium plays the tune back, all by itself, fuller than you played it, and holds the last note a long time. Then, somewhere forward, a latch lets go.
+
+# --- THE PLANK ---------------------------------------------------------------------------------
+
+# (draft)
+# (draft) The gangway's foot before she asks you up (ship_boarding takes the posts away).
+[plank_shut]
+Her rail comes right down to the quay here, and the gangway is shipped: hauled up and lashed against her side, out of reach. Somebody up there decides who comes aboard.
+
+[plank_board]
+A shipowner's board on a post, the paint gone to the ghost of itself. FAIR RETURN, brig, 214 tons. Saltcombe for the Brightwater roads, and home. DUE: the 14th.
+
+Under that, in a clerk's hand, in a later ink: Not yet in. Under that, in the same hand, in another ink: Not yet in. There are a great many of them. The last is nearly too faint to read.
+
+# (draft)
+[plank_board_ves]
+{surprised}Due the 14th. ...The 14th of WHEN?
+
+# (draft)
+[plank_lamp]
+A lamp on a post, the glass sooted, the wick burned down to nothing. The sort of lamp you light for a ship you're expecting.
+
+# (draft)
+[plank_post]
+A mooring post with the rope still on it, tied in a knot somebody was proud of. The other end goes up the plank into the fog.
+
+# (draft)
+[plank_bollard]
+A bollard. The ship's lines are made fast to it, and have been for a hundred years. They are still drawn as tight as harp strings, as if she were pulling to be gone.
+
+# (draft)
+[plank_name]
+The ship's side, black wood, with a bright line of wet along it though it hasn't rained here in a long time. Her name in gilt letters nobody has repainted: FAIR RETURN. Under it, smaller: SALTCOMBE.
+
+# (draft)
+[plank_name_ves]
+{surprised}Everything else in this yard is a wreck. She looks as if she'd only stopped for breath.
+
+# (draft)
+[plank_name_bramble]
+{thinking}Fair Return. That's what you say when you hope you'll get something back, isn't it? The ship, I mean. Not the money.
+
+# (draft)
+[plank_coil]
+Rope, coiled by somebody who coiled it properly. Every turn the same size.
+
+# (draft)
+[plank_crates]
+Crates and barrels roped on the quay, stencilled, waiting to be loaded. Cargo for the voyage after this one. Nobody came for it, either.
+
+# (draft)
+[plank_nets]
+A net frame with a net half mended. The needle is still in it, and the twine is still on the needle.
+
+# (draft)
+[plank_rowboat]
+A rowboat tied up by her stern, stove in. Her oars are laid neatly along the bottom, as if someone had meant to come back for them.
+
+[plank_hull]
+The ship's hull, black timber, close enough to touch. It is cold in the way a cellar is cold.
+
+[plank_quay]
+Quay planks, silvered, held down by iron nails that have rusted to the shape of the nail.
+
+[plank_planks]
+The gangway: a long plank with cleats nailed across it for your feet, worn pale in the middle.
+
+[plank_edge]
+Dark, and then the fog.
+
+[plank_water]
+Black water. It doesn't move the way water moves. It waits.
+
+# --- THE DECK ----------------------------------------------------------------------------------
+
+[deck_helm]
+The ship's wheel, polished by a hundred years of hands that aren't there. Lean on it and she leans with you: to port, and everything loose slides to the north rail; to starboard, and it all slides south.
+
+[helm_port]
+You put your weight on the wheel. It turns, very slowly, with a long groan from somewhere under your feet, and the whole ship leans to port. Everything that isn't lashed down begins to slide north.
+
+[helm_star]
+You put your weight on the wheel. It turns back, with the same long groan, and the whole ship leans to starboard. Everything that isn't lashed down begins to slide south.
+
+[helm_busy]
+The wheel won't give while she's still leaning over.
+
+[helm_already]
+She's leaning that way as far as she goes.
+
+# (draft)
+[deck_lantern]
+A ship's lantern on a bracket by the captain's door, burning with a small, steady flame. There is no oil in the glass and the wick is dry. It is the only light on the ship, and it looks as if it had been left on for somebody.
+
+# (draft)
+[deck_lantern_ves]
+{determined}You've picked up the only light on this ship. ...Good. Don't put it down.
+
+# (draft)
+[deck_lantern_bramble]
+{surprised}It's warm. Why is it WARM?
+
+{awed}...It's nice, though. Don't let it go out.
+
+# (draft)
+[deck_lantern_taken]
+The empty bracket. The dark has come a little closer to it.
+
+# (draft)
+[deck_cabin_door]
+The captain's door, under the poop deck. Shut, bolted, with a big brass lock, and a plate: CAPT. A. TARRY.
+
+From the other side, very faint, a man says: "Mr Pike." A pause. "Mr Pike?"
+
+# (draft)
+[deck_cabin_door_ves]
+{smile}...There's someone IN there. I'm not knocking. You knock.
+
+# (draft)
+[deck_cabin_door_open]
+The captain's door, open on the dark of his cabin. A smell of lamp oil and wet wool and a closed room.
+
+# (draft)
+[cabin_locked]
+The door is locked: a big brass lock, wanting a big brass key. Someone aboard must have hung it up somewhere, if only to be able to say they had.
+
+# (draft)
+[deck_mast]
+The mainmast. It goes up into the fog, and the fog doesn't say where it stops. Belaying pins round its foot, every one with a line hitched to it. The shrouds climb it like a ladder.
+
+# (draft)
+[deck_shrouds]
+The shrouds, up the mast to the crow's nest. The ratlines are worn pale in the middle of each, by feet.
+
+# (draft)
+[deck_hatch_quarters]
+The crew's hatch, open. Below it a smell of lye soap and wet wool, and, if you hold your breath, the sound of a lot of people sleeping.
+
+# (draft)
+[deck_hatch_hold]
+The hold hatch, forward of the mast. Under it, the cargo; under the cargo, the dark.
+
+# (draft)
+[hatch_barred]
+The hatch won't lift. It's barred from underneath. Whoever shut it down there wanted nobody coming up this way.
+
+# (draft)
+[deck_lashed_barrel]
+A barrel, rolled off the hatch and roped to a ring bolt. You didn't do that. The knot is a good one, and very old.
+
+# (draft)
+
+[deck_loose_barrel]
+A barrel with nothing holding it, sitting on the hatch. It goes wherever the ship leans, like everything else here that nobody's told to stop.
+
+# (draft)
+[deck_loose_crate]
+A crate that has slid against the rail, the way it has every time she's leaned, for a hundred years. Something is squashed flat underneath it.
+
+# (draft)
+[deck_purse]
+A purse, wedged in the corner where the crate has been sitting on it. Somebody's pay: spent on a thing he never came back to buy.
+
+# (draft)
+[deck_purse_b]
+A purse under the crate, soaked through, the string pulled tight in somebody's hurry to keep it.
+
+# (draft)
+[deck_bell]
+The ship's bell on its post. Eight bells, in pairs, is how you strike a watch. It is cold as a stone and rings a very small note.
+
+# (draft) 2026-11-14: the stem head at the bow's point, and the light out past it (until the figurehead is dealt with).
+[deck_bow_star]
+The stem head, at the very point of the bow: a great timber standing up out of the rail, with the bowsprit lashed to it and running out into the fog. Out past the end of what you can see of it, low over the water, there is a small blue light. It doesn't move with the ship. It is waiting at the front of her.
+
+# (draft)
+[deck_bow_star_ves]
+{surprised}That's not a lantern. Lanterns are yellow, and they have the decency to flicker.
+
+# (draft)
+[deck_bow_star_bramble]
+{scared}I'm not going out on that pole. Nobody's asked me yet, but I'm not.
+
+# (draft)
+[deck_bow_dark]
+The stem head, at the point of the bow, and the bowsprit running out from it into the fog. Out at the end of it there is nothing now but the fog, and the fog is only fog.
+
+# (draft)
+[deck_bollard]
+A bollard on the foredeck with a line round it, stretched taut over the rail. It leads off into the fog toward a harbour nobody has seen for a hundred years.
+
+# (draft)
+[deck_barrels]
+Barrels lashed to the rail, a stencil on each: SALTCOMBE, SALTCOMBE, SALTCOMBE. The way home, written down.
+
+# (draft)
+[deck_crates]
+Crates, lashed. A label on one says: TO BE OPENED BY MISS HESTER LANG. It hasn't been.
+
+# (draft)
+[deck_coil]
+A coil of rope, left flaked ready to run, where it was needed a hundred years ago.
+
+# (draft)
+[deck_oar]
+An oar stuck upright in a crack of the deck, a bit of rag tied round its blade. Somebody was trying to signal.
+
+# (draft)
+[deck_boots]
+A pair of sea boots, side by side and a little apart, the way a man puts them down when he means to be back on his feet in a minute.
+
+# (draft)
+[deck_chalk]
+Chalk on the planks, in a corner out of the wind: a tally, in fives, each stroke gone over so many times it has worn a groove. It stops at forty-one. Under it, one word, pressed so hard the chalk snapped: HOME.
+
+[deck_rail]
+The ship's rail, waist high, worn bright on top by the hands of people looking out.
+
+[deck_rail_face]
+Planking, black with a hundred years of wet that doesn't feel wet.
+
+[deck_water]
+Black water beyond the hull. The fog sits on it like a lid.
+
+[deck_planks]
+The poop deck's boards, laid fore and aft, scrubbed pale by someone who still thinks it's Saturday.
+
+# (draft)
+[ghost_mate]
+A tall man in a long coat stands at the wheel with his hands on the spokes. The wheel isn't turning. He doesn't look round. "Hard a-port," he says, very quietly, to nobody. Then, in the same voice: "Aye, Captain." He says both parts himself.
+
+# (draft)
+[ghost_mate_ves]
+{worried}...He didn't look round. I'd much rather he didn't start.
+
+# (draft)
+[ghost_rail_a]
+A sailor at the rail, looking out at the fog. "Is that the light?" he says. "I think that's the light." He says it again while you stand there, word for word, the way you might say a prayer you have stopped believing.
+
+# (draft)
+[ghost_rail_b]
+A sailor with his cap in his hands, turning it round and round. "Three weeks," he says, "and my girl'll have the room done up." He doesn't look at you. He looks at where a harbour ought to be.
+
+# (draft)
+[ghost_rail_c]
+A man at the rail counting on his fingers. Days, you think. He gets to forty-one, and starts again.
+
+# (draft)
+[ghost_boy]
+A boy of about twelve, kneeling, coiling a rope that isn't there. Round and round, neat as anything, and the end comes, and he begins again. "It's my first voyage," he says to the rope. "I want it to be right."
+
+# (draft)
+[ghost_boy_bramble]
+{sad}He's only my size.
+
+# (draft)
+[ghost_old]
+An old hand on a sea chest, pipe in his teeth, the bowl glowing a very little. He nods to you the way a man does who has said all he has to say about the weather. "Late," he says. "She's late. She's never late."
+
+# (draft)
+[ghost_prints]
+Wet, bare footprints, quite fresh, going on ahead of you. Whoever made them is still walking, and has been for a hundred years, and still hasn't got there.
+
+# --- THE CREW'S QUARTERS -------------------------------------------------------------------
+
+# (draft)
+[quarters_hammock]
+A hammock slung from two iron hooks, the blanket turned back, the hollow in it still the shape of someone. The canvas is dry. It hasn't been slept in, and it has been slept in a great deal.
+
+# (draft)
+[ghost_sleeper]
+Somebody is asleep in the hammock, very lightly, the way you sleep when you've been told you'll be called. You can see the canvas through him. He breathes in, and out, and in.
+
+# (draft)
+[ghost_sleeper_b]
+Somebody small in the hammock, asleep with his knees drawn up, a hand under his cheek. He is smiling a little. He is the only one on the ship who is.
+
+# (draft)
+[quarters_calendar]
+A calendar on a nail, the days crossed off in neat strokes. The strokes go on past the end of the month, onto the wall, and stop at forty-one.
+
+# (draft)
+[quarters_portrait_boy]
+A little picture of a boy in a sailor suit, pinned up by a hammock. He is looking at you. He's still looking at you when you go to the other side of the room.
+
+# (draft)
+[quarters_portrait_wife]
+A picture of a young woman with her hair pinned up, and across the bottom, in ink: Come home. She's looking at you, too.
+
+# (draft)
+[quarters_lamp]
+An oil lamp on an iron arm, the wick burned down to a little black thread. Nobody has trimmed it since the night they left.
+
+# (draft)
+[quarters_ladder]
+The ladder up to the deck, worn pale where every hand has taken it.
+
+# (draft)
+[quarters_harmonium]
+A little harmonium, its bellows patched with sailcloth. Four keys still sound; the others are dead. Press one and it plays its note. The four are worn into hollows where fingers pressed them the same way, night after night.
+
+# (draft)
+[quarters_bulkhead]
+A heavy bulkhead door, shut, a latch on the far side. A wire runs from its latch along the beam to the harmonium. Pinned to the door with a tack, a scrap of paper, the ink almost gone: Play the watch down. Then the gun deck.
+
+# (draft)
+[quarters_bulkhead_open]
+The bulkhead door stands open on the gun deck.
+
+# (draft)
+[quarters_table]
+The crew's table, laid for supper: tin mugs, hard biscuit, a knife at every place. A hundred years of dust hasn't been allowed to settle on it.
+
+# (draft)
+[quarters_bench]
+A bench, bare and clean. The hollow in it fits somebody.
+
+# (draft)
+[quarters_chair]
+A rocking chair, by itself in the corner, rocking. Gently. Back and forth. There's no draught.
+
+# (draft)
+[quarters_chair_ves]
+{bored}I'm not going to say anything about the chair. I'm going to stand over here.
+
+# (draft)
+[quarters_cat_bed]
+A small bed made of a coat, and the hollow in it. A bowl beside it, still put out, still with the shine of milk.
+
+# (draft)
+[quarters_chest]
+A sea chest, brass-cornered, a name painted on the lid in white. Locked. They all are. A sailor's whole life, shut up and left where it'd be easy to find.
+
+# (draft)
+[quarters_chest_moved]
+A sea chest with a name on the lid. It was somewhere else a minute ago. You are fairly sure.
+
+# (draft)
+[quarters_letter]
+A loose board, and under it, folded very small and worn soft at every crease from being read, a letter. A mother's hand: the garden is coming on, the kettle is always on, come home when you can. It has never been answered.
+
+# (draft)
+[quarters_letter_ves]
+{tender}Keep that. Someone ought to.
+
+# (draft)
+[quarters_letter_bramble]
+{sad}Somebody read this so many times it's gone soft. I hope he got to the end of it.
+
+# (draft)
+[quarters_letter_taken]
+A loose board with nothing under it. The nail-holes round it are worn from a thumb, lifted and put back every night.
+
+# (draft)
+[quarters_chalk]
+On the planks by the wall, in chalk: HOME. Over it, smaller: BILLY. Under it, smaller still, in a different hand: his mother says come home.
+
+# (draft)
+[quarters_handprint]
+A wet handprint on the bulkhead, fingers spread, as if someone were holding up the wall. Or leaning on it, to listen for something on the other side.
+
+[quarters_wall]
+Planking, black, close, damp with the breath of a lot of people who aren't breathing.
+
+# --- THE GUN DECK ------------------------------------------------------------------------------
+
+# (draft)
+[gun_cannon]
+A gun, run out to its port, loaded, the match laid ready beside it. A hundred years is a long time to be ready.
+
+# (draft)
+[gun_port]
+A gunport, its lid propped up. Fog beyond, grey, no sea in it.
+
+# (draft)
+[gun_tackle]
+Block and tackle on a ring bolt: the gear that runs a gun in and out. Throw your weight on the falls and the whole ship heels over to starboard, and every gun that isn't lashed goes with her. She won't stay over long.
+
+[tackle_star]
+You throw your weight on the falls. She heels hard to starboard with a groan, and the loose guns go thundering down the deck. She won't hold there long.
+
+[tackle_busy]
+The falls won't run while she's still going over.
+
+[tackle_already]
+She's over as far as she goes. She won't stay there.
+
+# (draft)
+[gun_loose]
+A gun on its carriage, its lashings rotted through. When she heels, it goes down the deck like a runaway cart, and it does not stop for anybody.
+
+# (draft)
+[gun_loose_shot]
+A rack of round shot on a skid, loose. It goes wherever the gun beside it goes, and just as fast.
+
+# (draft)
+[gun_ladder]
+A ladder going down through a hatch in the deck, to the hold. Every rung is worn the same way, like a staircase in a house.
+
+# (draft)
+[ghost_gunner]
+A gunner's mate on an upturned bucket, a ramrod across his knees, looking at the gun in front of him. "Wait for the roll," he tells it. "Wait for the roll. Wait." He has not once, in a hundred years, been given the word to fire.
+
+# (draft)
+[ghost_powder_boy]
+A boy of eleven or twelve with a leather cartridge pouch, holding it carefully away from the lamp. He has the look of someone being brave on purpose. "I'm not scared," he says. "I've got the powder. I'm not scared."
+
+# (draft)
+[ghost_powder_boy_bramble]
+{sheepish}That's what I say. It doesn't work for me either.
+
+# (draft)
+[ghost_at_port]
+A man at a gunport with his hands on the sill, looking out. "They've seen us," he says. "They've seen us, they must have. They'll come with a boat." There is nothing out there at all. He says it kindly.
+
+# (draft)
+[gun_chalk]
+Chalk on the planking: DAY 41. Under it, DAY 41. Under that, DAY 41. The whole deck is written over with it, in every hand there is.
+
+# (draft)
+[gun_handprint]
+A handprint on the ladder's upright, fingers wide, as if somebody were going down for the last time, and wanted to say they had been.
+
+# (draft)
+[gun_shot]
+A rack of round shot, neat, in a pyramid, every ball polished. The powder boys used to bring them up. There's a gap in the pile where one has been taken, and never put back.
+
+# (draft)
+[gun_kegs]
+Powder kegs, stowed in the dark corner under a wet blanket. Nobody told them they needn't.
+
+# (draft)
+[gun_crates]
+Crates of cutlasses and boarding pikes, rusted into a single block. Nobody ever boarded anything.
+
+[gun_lamp]
+A lamp in a wire cage, unlit. Down here a naked flame is the one thing that was ever forbidden, and nobody has dared to light it since.
+
+[gun_wall]
+Planking and ribs. The ribs have a line of notches cut in them, a tally, in fives, neat as a ledger.
+
+# --- THE HOLD ------------------------------------------------------------------------------------
+
+# (draft)
+[hold_ladder_up]
+The ladder up to the gun deck.
+
+# (draft)
+[hold_nook]
+A gap between two stacks of crates, a body wide and as deep as one. With the lantern out, nobody would see a thing in there.
+
+# (draft)
+[hold_ladder_deck]
+A ladder up to the deck hatch. You can see a square of fog at the top of it, thicker than the dark.
+
+# (draft)
+[hold_hatch_bilge]
+The hatch down to the bilge, open. The smell that comes up is the smell of a very old well.
+
+# (draft)
+[hold_boarded]
+A small door in the bulkhead, boarded up with planks, and nailed. Chalked across them: PURSER. KEEP OUT. DO NOT OPEN TILL PORT. Behind it, something rustles, very softly, like paper.
+
+The planks won't budge. But a step or two down the aisle, the floor gives a little knock, as if something under it wants you to look. It's far too dark down there to see the boards without a light.
+
+# (draft)
+[hold_boarded_open]
+The boards lie in a heap and the little door is open: the purser's locker, and not a sound from it.
+
+# (draft)
+[hold_ring]
+A ring in a plate set in the planking, and you can feel, rather than hear, that it is pulled, from the other side, by somebody who has been very patient.
+
+# (draft)
+[hold_crates]
+Cargo crates stacked to the beams, stencilled: SALTCOMBE. Fragile, the stencil says. Some of them say what's inside: a clock, a kettle, six dozen glass floats, a rocking horse.
+
+# (draft)
+[hold_barrels]
+Barrels of salt pork and flour and lamp oil, bought to last a long voyage. They have lasted a good deal longer.
+
+# (draft)
+[hold_chain]
+A pile of anchor chain with a rust-brown stain on it, in the shape of the end of the world.
+
+# (draft)
+[hold_chalk]
+A line of chalk across the beam, and a tally under it. Every fifth stroke is crossed through. There is room left for more, and nobody has added any.
+
+# (draft)
+[hold_handprint]
+A handprint on the beam, higher than a man could reach. As if somebody had been lifted, once.
+
+# (draft)
+[ghost_hold_old]
+A deckhand with a lantern that isn't lit, looking at the dark. "It's a long way down," he says, "to the bilge. Mind the ladder." He says it to everybody who comes. He says it kindly. He is the last man who went down to look, and he's never quite finished being careful.
+
+# (draft)
+[ghost_hold_boy]
+A ship's boy sitting among the sacks, knees up, very small. "I'm waiting for the bosun," he says. "He said stay here. He said he'd be back." He looks at the ladder.
+
+# (draft)
+[ghost_hold_boy_ves]
+{worried}...Don't wave at him. If he waves back I'm leaving.
+
+[hold_lamp]
+A ship's lamp in a cage, burned out. The glass is black on the inside.
+
+[hold_wall]
+The hull, from inside: great curved ribs, black as a church, and between them the planking, and behind that the sea, which is not the sea you left.
+
+[hold_stack]
+Crates, and then more crates, stacked to the beams. SALTCOMBE, SALTCOMBE, SALTCOMBE.
+
+# --- THE BILGE ----------------------------------------------------------------------------------
+
+# (draft)
+[bilge_ladder]
+The ladder back up to the hold. It's very dark at the top, which is better than it is at the bottom.
+
+# (draft)
+[bilge_key]
+On the sump's board, on a nail, a long brass key on a ring gone green. A paper tag is tied to the ring. In a neat, careful, mate's hand: CABIN. And under it, in a different hand, rubbed nearly through from being held: LET HIM REST.
+
+# (draft)
+[bilge_key_ves]
+{surprised}Locked in? On PURPOSE? By somebody who thought he needed a rest. ...I wonder if it worked.
+
+# (draft)
+[bilge_key_bramble]
+{sad}That's the kindest thing anybody's said down here.
+
+# (draft)
+[bilge_key_taken]
+The nail, and the board with a pale mark on it where the key hung, polished by a thumb.
+
+# (draft)
+[bilge_purse]
+A purse in the mud of the south bed, with a ring of green on the leather. The crew's, or the ship's: somebody dropped it carrying it down, and it has lain here since, waiting for the water to go out again.
+
+# (draft)
+[bilge_purse_b]
+A purse stuffed behind the last rib, with a note pinned on: FOR MA. IF FOUND. The note is sound. The purse is empty of everything but this.
+
+# (draft)
+[bilge_chest]
+A sea chest, the lid warped, a name on the lid in ink that has run into the grain. Nothing inside but a pair of dry boots and a hymn book.
+
+# (draft)
+[ghost_bilge_boy]
+A boy on his knees at the sump with a bucket, bailing. He pours it out over the side where there is no side. Scrape, slop. Scrape, slop. "It's only a little water," he says. "It's only a little. I can keep up."
+
+# (draft)
+[ghost_bilge_boy_bramble]
+{sad}He can't, can he. He's been bailing the whole time.
+
+# (draft)
+[bilge_chalk]
+Chalk on the planks over the sump: bail, bail, bail. And one more word, written last, by a very steady hand: Sorry.
+
+# (draft)
+[bilge_handprint]
+A handprint on the hull, right down at the waterline, and under it, fainter, another, and another, going up, as if somebody had been climbing the wall of the ship.
+
+# (draft)
+[bilge_ribs]
+Ribs of the ship, black and wet and thick as a man, and into every one a tally of days cut with a knife. Somebody went down here to count in peace.
+
+# (draft)
+[bilge_slick]
+A slick of black water spread over the planks, the colour of a lamp's reflection that isn't there.
+
+[bilge_wall]
+The bottom of the ship, from inside. The sea is the other side of this plank, and has been waiting.
+
+[bilge_water]
+Black bilge water, deep. Every time she rolls it runs across the floor to the low side, all at once, as if it had somewhere to be.
+
+# --- THE CROW'S NEST -----------------------------------------------------------------------------
+
+# (draft)
+[rig_haul]
+A line from the yard to a cleat on the platform. Haul it, and the whole ship leans with a long groan, and the spar swings across the gap it was waiting for.
+
+[rig_port]
+You haul. The mast creaks, the whole ship leans to port, and the spar swings across the gap below.
+
+[rig_star]
+You haul the other way. The mast groans, the whole ship leans to starboard, and the spar swings across the gap above.
+
+[rig_busy]
+The line won't run while she's still leaning over.
+
+[rig_already]
+She's leaning that way as far as she goes.
+
+# (draft)
+[rig_mast]
+The mast, from the middle: thick as a house, wet, humming a little with the weight of everything the ship has tried to carry for a hundred years.
+
+# (draft)
+[rig_log]
+A logbook on a little stand, the pages lifting in a wind you can't feel. The last page says DAY 41. PORT TOMORROW. So does the one before. So does every one before that, back and back, a hundred years of the same line in the same hand, never one word different.
+
+# (draft)
+[rig_log_ves]
+{thoughtful}He's written the same day for a hundred years. I think he wants somebody to turn the page.
+
+# (draft)
+[rig_log_taken]
+The stand where the log was, and a mark on it where a hand has rested.
+
+# (draft)
+[ghost_lookout]
+A man at the very top of the mast, one arm out, pointing into the fog. "Land," he says. "Land ho. I see lights. I see the lights of the town." There are no lights. There is the fog and the high thin cold. He points at them, steadily, with great love.
+
+# (draft)
+[ghost_lookout_ves]
+{worried}...There's nothing out there. I looked. I looked twice.
+
+# (draft)
+[rig_chalk]
+Chalk on the platform edge, a tally of days, a name, and the same word as everywhere: HOME.
+
+[rig_planks]
+A platform of planks, lashed to the mast with rope, swaying a little though there is no wind to sway it.
+
+[rig_spar]
+A spar swung across the gap, wet and bowed, thick enough to walk. Somebody's tied it with a hundred-year-old knot that doesn't give.
+
+[rig_void]
+Nothing. Fog above, fog below, and the fog moves a little, like water.
+
+# --- THE CAPTAIN'S CABIN -------------------------------------------------------------------------
+
+# (draft)
+[cabin_window]
+A stern window, a dark glass with a grey light in it. It is always just before dawn in it.
+
+# (draft)
+[cabin_bunk]
+A narrow bunk against the bulkhead, the blanket turned back, the pillow smooth. Nobody has slept in it. Nobody will.
+
+# (draft)
+[cabin_chart]
+The chart table. A chart held flat by brass weights; the coast drawn and rubbed out and drawn, and a course line running across it from the Brightwater roads toward Saltcombe, and stopping, a thumb's width short.
+
+# (draft)
+[cabin_desk]
+A desk, a quill in an inkwell, and a space where a logbook was.
+
+# (draft) 2026-11-14: once the captain is dealt with, his own book on the chart table (gives captains_book).
+[cabin_chart_book]
+The chart table, and on it, squared up with the edge of the chart, a little book in dark leather that was not there before. Its ribbon hangs over the side and its clasp is undone, the way you leave a book out for somebody.
+
+# (draft)
+[cabin_chart_book_ves]
+{smile}He's left his homework out. ...Go on. He clearly wants it read, and it would be rude not to.
+
+# (draft)
+[cabin_trunk]
+A captain's sea chest, brass-cornered, locked, a ribbon tied round the handle: a girl's, pale blue.
+
+# (draft)
+[cabin_chair]
+A rocking chair by the stern window, rocking. A rug under it is worn through where the rockers have gone for a hundred years.
+
+# (draft)
+[cabin_portrait_wife]
+A portrait of a woman with her hair up, laughing at the painter. She's looking at you, and she's stopped laughing.
+
+# (draft)
+[cabin_portrait_boy]
+A boy of eight or nine in a sailor's collar, scowling at being made to sit still. His eyes are following you across the cabin.
+
+# (draft)
+[cabin_portrait_captain]
+A young man in a captain's coat, very proud of it, the braid too bright. Painted before the first voyage. He has the same eyes as the man at the chart table, and none of the weight.
+
+# (draft)
+[cabin_barometer]
+A barometer on a backboard, the needle stuck at the far end: STORMY, and past it, scratched in with a pin, a little mark, and the word still.
+
+# (draft)
+[cabin_chart_wall]
+A chart of the coast pinned to the wall, Saltcombe circled in red, so many times the paper's worn through.
+
+# (draft)
+[cabin_bottle_ship]
+A ship in a bottle on a shelf with a little rail. The ship in the bottle is the Fair Return. The bottle is full of fog.
+
+# (draft)
+[cabin_lamp]
+A cabin lamp burning low, with no oil in it, like the others.
+
+# (draft)
+[cabin_boots]
+A pair of boots by the bunk, side by side. A pair of slippers beside them, a woman's, tucked in neatly. Brought for a homecoming.
+
+# (draft)
+[cabin_chalk]
+On the deck beam, in chalk, in a firm hand: 41. In another, shaky: 41. In another, not a hand at all, only the mark of a thumb: 41. One for every hundred years of nights.
+
+# (draft)
+[cabin_prints]
+Wet footprints going round and round the cabin, from the window to the chart table to the door and back, always the same loop, deep as a groove in the boards.
+
+# (draft)
+[cabin_stern_shut]
+The stern door is shut tight. He stands between you and it, and he has no intention of moving.
+
+[cabin_wall]
+The great cabin's panelling: dark oak, carved, a ship's name worked into every corner.
+
+# --- THE PURSER'S LOCKER (the secret) -------------------------------------------------------------
+
+# (draft)
+[post_rack]
+Pigeonholes, every one stuffed with letters, tied with string and tagged with a name: the crew's post, written on the voyage out, to be sent from the first port. Forty-one days of them. Nobody could post them in a port that never came.
+
+# (draft)
+[post_bag]
+The mail bag, the last of the letters still tied up in it. There's a tag on the neck: TO BE POSTED AT SALTCOMBE. Inside, a bundle in the purser's careful hand. They are all addressed to people on the quay.
+
+# (draft)
+[post_bag_ves]
+{determined}Somebody ought to get these. We could be somebody.
+
+# (draft)
+[post_bag_bramble]
+{proud}I'll take them. I'm good at post. I'll carry them very carefully.
+
+# (draft)
+[post_bag_taken]
+The mail bag, empty, the tag still on it. TO BE POSTED AT SALTCOMBE.
+
+# (draft)
+[post_chest]
+The purser's chest, shut, with a note pinned to the lid: Held in trust for the crew. In the event of loss, apply to the owners.
+
+# (draft)
+[post_purse]
+The purser's purse, under the rack, held shut with a hair-ribbon. Kept back, in trust. A hundred years later, still in trust.
+
+# (draft)
+[post_stool]
+A stool, a mug, a pen laid across the rim of the mug. He was in the middle of a letter.
+
+# (draft)
+[post_pile]
+A scatter of letters on the floor, as if the bag had been knocked, long ago, and nobody had had the heart to pick them up. A name on each. A town on each. Never a ship.
+
+# (draft)
+[ghost_purser]
+A neat man in a neat waistcoat, writing at a desk that isn't there. "Dear Margaret," he says. "I hope this finds you well. We're nearly home." He stops, and looks at the pen, and begins again. "Dear Margaret."
+
+# (draft)
+[ghost_purser_ves]
+{worried}...Don't say anything. Back away slowly and let him finish his letter.
+
+[post_lamp]
+A purser's lamp, a little brass one, unlit. Somebody taught himself to write in the dark.
+
+[post_wall]
+The purser's cupboard of a room, panelled, close, smelling of paper and sealing wax.
+
+# --- dressing (draft) ---
+# (draft)
+[dress_rail]
+A stretch of rail gone, the plank splintered off short, the edge worn smooth by hands that leaned on it, looking out.
+
+# (draft)
+[dress_net]
+A net hung on the rail's posts to dry, a hundred years ago. A glass float or two still caught in it. It has not dried.
+
+# (draft)
+[dress_lantern]
+A lantern on a post, lit with a cold green light that gives no warmth. A small round pool of it lies on the planks. It has never once flickered. It is not the one that was left for you.
+
+# (draft)
+[dress_sail]
+A sail come down and left where it fell, folded over on itself, a rope still through its eyelets. Somebody meant to bend it on again in the morning.
+
+# (draft)
+[dress_spar]
+A spar come down across the deck, its rope still on it. It fell a very long time ago, and nobody has stepped over it any differently since.
+
+
+# --- THE DEEP PART (optional): the hatch, the orlop, the sail locker, the flooded bow, the figurehead's perch. All (draft) ---
+
+# (draft)
+[cabin_hatch_painted]
+A square in the planking, painted over to match the boards so well that you only see it where the paint has built up thick along the edges. A hatch, with no handle, and a great many coats.
+
+# (draft)
+[cabin_hatch_open]
+The painted hatch stands open on a smell of tar and cold, and a ladder going down.
+
+# (draft)
+[cabin_hatch_shut]
+The hatch won't lift: there's no handle, and it is painted fast to the boards. Beside it the compass stand, the binnacle, waits with its bowl empty, and the needle-mark scratched on its rim points straight down at the hatch.
+
+# (draft)
+[cabin_ring]
+An iron ring in a plate set flush with the planking, as cold as water. The paint has been scraped away from round it, again and again, by somebody who didn't want it seen.
+
+# (draft)
+[cabin_ring_ves]
+{surprised}Somebody scraped the paint off that a hundred times. Either they wanted down there very badly, or they wanted nobody else to.
+
+# --- The orlop ---
+
+# (draft)
+[orlop_ladder]
+The hatch ladder, iron rungs, going up into the captain's cabin.
+
+# (draft)
+[orlop_pig]
+A pig of ballast iron, a hundred pounds if it is an ounce, lashed to a ring bolt with a knot nobody has undone in a hundred years.
+
+# (draft)
+[orlop_gate]
+A low door in the bulkhead, its gate of iron-bound oak swung back against the frame and chocked with a wedge. Somebody wanted this way kept open.
+
+# (draft)
+[ghost_orlop]
+A cable-hand coiling a cable that is not there, in the lantern's light. "Keep the gates chocked," he says. "Always keep the gates chocked. Then nobody's ever shut down here." He says it to everyone, and kindly.
+
+# (draft)
+[orlop_chalk]
+Chalk on the planking, in the lantern's light: KEEP THE GATES CHOCKED. And under it, in a child's hand: and the cuddy is mine.
+
+# (draft)
+[orlop_purse]
+A purse on a nail in the third chamber, hung there out of the damp.
+
+# (draft)
+[orlop_cuddy_purse]
+A purse tucked in the cuddy's corner, behind a coil, where you'd only find it with a light. A child's savings, by the look of the coins: all small, and all polished.
+
+# (draft)
+[orlop_cuddy_letter]
+A letter on the cuddy floor, in big careful capitals: THIS IS MY CUDDY. NOBODY COME IN WITHOUT KNOCKING. Under it, smaller: except if you are lost.
+
+# --- The sail locker ---
+
+# (draft)
+[locker_bale]
+A bale of canvas, roped, as heavy as a cow, stowed against the wall where it belongs.
+
+# (draft)
+[locker_jib]
+A halyard at the back of the alcove, with a tag in a hand that took pains: JIB. The line goes up through the deckhead, and it sings a little when you touch it.
+
+# (draft)
+[locker_main]
+A halyard at the back of the alcove, the thickest of the four. The tag: MAIN. It hums when you touch it, low, like a held note.
+
+# (draft)
+[locker_fore]
+A halyard at the back of the alcove, with a tag worn almost smooth: FORE. The rope is warm. Nothing else in the locker is warm.
+
+# (draft)
+[locker_tops]
+A halyard at the back of the alcove, thin and tight: TOPS'L. It twangs, and the sound goes on a long time up the mast.
+
+# (draft)
+[locker_tag_jib]
+Chalked big on the boards at the alcove's mouth: JIB.
+
+# (draft)
+[locker_tag_main]
+Chalked big on the boards at the alcove's mouth: MAIN.
+
+# (draft)
+[locker_tag_fore]
+Chalked big on the boards at the alcove's mouth: FORE.
+
+# (draft)
+[locker_tag_tops]
+Chalked big on the boards at the alcove's mouth: TOPS'L.
+
+# (draft)
+[locker_gate]
+A gate of oak and canvas at the east end of the hall, sewn shut with sail-twine. Four lines run up from it through the deckhead to four halyards, and it does not look as if any one of them would be enough.
+
+# (draft)
+[locker_gate_open]
+The twine parts, stitch after stitch, and the gate falls open. The way on is open.
+
+# (draft)
+[locker_gate_reset]
+Every halyard goes slack at once, and the gate stitches itself shut again, stitch by stitch. She does not care for the wrong order. Start over.
+
+# (draft)
+[locker_gate_ves]
+{angry}Four ropes, one gate, and no instructions. My favourite kind of door.
+
+# (draft)
+[ghost_sailmaker]
+A woman with a needle and a bundle of canvas, in the lantern's light, going round the alcoves the way she has every watch for a hundred years. "Main first, so she bites," she says. "Then the jib, to bring her head round. Tops'l, when she's paying off. Fore last. Always the fore last: never early, or she luffs, and then you're all in it." She doesn't look up. She says it to everybody, and kindly.
+
+# (draft)
+[locker_chalk]
+A board on a post, the order chalked on it in a neat hand and gone over many times: MAIN. JIB. TOPS'L. FORE. And underneath, smaller: or she luffs.
+
+# (draft)
+[locker_sails]
+Sailcloth in a heap, a rent in it stitched up with thread of three different colours.
+
+# (draft)
+[locker_needle]
+A sail-needle as long as your forearm, stuck into a pad of folded canvas, the thread still through the eye.
+
+# (draft)
+[locker_stool]
+A three-legged stool, its seat worn to the shape of someone who sat there for forty years.
+
+# (draft)
+[locker_purse]
+A purse in the fold of a sail, where the sailmaker kept her wages out of the way of the needles.
+
+# --- The flooded bow ---
+
+# (draft)
+[bow_water]
+Black water to the beams. It is very cold, and it does not move when you look at it.
+
+# (draft)
+[bow_water_ves]
+{worried}It is the sort of water that has opinions about you.
+
+# (draft)
+[bow_gate]
+A bulkhead door across the east end, barred on the inside. The bar lifts from a ring somewhere on this side of it.
+
+# (draft)
+[bow_gate_open]
+The bar lifts. The bulkhead door swings out on a cold blue light, and the laughing is very much closer.
+
+# (draft)
+[bow_ring]
+An iron ring in a plate in the deck, wet with something that is not seawater. A rope runs from it to the bar on the bulkhead door. It is very cold.
+
+# (draft)
+[ghost_bow_boy]
+A ship's boy in the lantern's light, up to his knees in water that isn't there, watching the planks come up and go under. "She rolls, and she rolls," he says. "You go when your plank comes up, and you don't stop on it." He says it to everybody, and kindly.
+
+# (draft)
+[bow_chalk]
+Chalk on the deck, in big letters anyone could read: GO WHEN IT COMES UP. DON'T STOP ON THE PLANK. An arrow points along the plank to the east, and beside it a P.
+
+# (draft)
+[bow_chalk_star]
+Chalk by the head of the plank going north: an S, and an arrow, and DON'T STOP. Somebody pressed so hard the chalk broke.
+
+# (draft)
+[bow_chalk_port]
+Chalk by the head of the plank going south: a P, and an arrow, and under it, smaller: nearly there.
+
+# (draft)
+[bow_plank]
+A plank on cleats between two decks, streaming wet. When she rolls it rises clear of the water, or goes under.
+
+# (draft)
+[bow_purse]
+A purse in a crack between two cleats, the leather gone hard as a plank.
+
+# --- The figurehead's perch ---
+
+# (draft)
+[perch_figurehead]
+The carved woman at the head of the bowsprit, her chin lifted, her hand held out. In her breast, a small blue star, burning.
+
+# (draft)
+[perch_figurehead_dark]
+The carved woman at the head of the bowsprit, her chin lifted, her hand held out, and a dark crack in her breast where something shone. She looks as if she is waiting for a morning, and does not mind how long.
+
+# (draft)
+[perch_capstan]
+A capstan with its bars shipped, a loop of weed round the head like a ribbon on a maypole.
+
+# (draft)
+[perch_lantern]
+A cold lantern on a post. Its light is a little bluer here, and very slightly, it is keeping time.
+
+# (draft)
+[perch_sea]
+Fog, with stars in it. They are on the wrong side of the water.
+
+# --- THE QUEST for the deep part: the binnacle compass in three pieces. All (draft) ---
+
+# (draft)
+[cabin_binnacle]
+The binnacle: a brass-bound post by the chart table with a bowl on top for the compass. The bowl is empty. Three little seats have been cut in it, and a name beside each in the captain's hand: GLASS. NEEDLE. CARD. Under them, in a different ink: Glass lent, to a house by the water that has since had the sea in. Needle pawned, to the men who go down on ropes for soundings. Card given away, to somewhere kept very tidy that only opens when the water goes out. Never mind. We'll find our way by the stars.
+
+# (draft)
+[cabin_binnacle_ves]
+{smile}Lent, pawned and given away. He might have kept one bit of it. For luck.
+
+# (draft)
+[cabin_binnacle_bramble]
+{surprised}He gave his compass away and then wondered why he couldn't find home?
+
+# (draft) Pressing Z on the binnacle with some of the compass's three pieces (lookWithPieces): [cabin_binnacle_some_N], then a
+# _has_ line for each piece you carry (same page), then a _miss_ hint for each you don't (next page).
+[cabin_binnacle_some_1]
+The binnacle's bowl, with its three seats: GLASS. NEEDLE. CARD. You have one of the three.
+
+[cabin_binnacle_some_2]
+The binnacle's bowl, with its three seats: GLASS. NEEDLE. CARD. You have two of the three.
+
+[cabin_binnacle_some_3]
+All three seats would be filled. The needle twitches in your pack. Stand square in front of the binnacle.
+
+[cabin_binnacle_has_compass_glass]
+The glass fits its seat like a word on the tip of the tongue.
+
+[cabin_binnacle_has_compass_needle]
+The needle sits on its pivot and swings, looking for something to point at.
+
+[cabin_binnacle_has_compass_card]
+The card lies in the bottom of the bowl, its blank point turned towards you.
+
+[cabin_binnacle_miss_compass_glass]
+The GLASS seat is empty. Lent, the captain wrote: to a house that has since had the sea come in.
+
+[cabin_binnacle_miss_compass_needle]
+The NEEDLE seat is empty. Pawned: to people who go down on ropes for measurements, and keep what comes up.
+
+[cabin_binnacle_miss_compass_card]
+The CARD seat is empty. Given away: to somewhere kept very tidy, that only opens when the water goes out.
+
+# (draft)
+[cabin_binnacle_some_1_ves]
+{proud}One down. Two to go. He might at least have lent them all to the same person.
+
+[cabin_binnacle_some_2_ves]
+{smile}Two of three. Nearly a compass. Nearly is the worst kind.
+
+[cabin_binnacle_some_2_bramble]
+{worried}...Is the last one somewhere wet? It's always somewhere wet.
+
+# (draft)
+[cabin_binnacle_set]
+The binnacle's bowl is full: a glass, a needle, a card. The needle is not pointing north. It points down through the floor, and it does not waver.
+
+# (draft) THE FAR SHIP (src/overworld/farShip.js): the first time her crew's singing is heard off the water, in a sea-facing
+# room, before she's been found. Said once, ever.
+[far_singing]
+From somewhere out on the water, so faint it might be the wind: men singing, slow, all together. A few notes of a tune, and then it stops, as if the singers had all forgotten the end at once.
+
+[far_singing_bramble]
+{scared}...Did you hear that? Out THERE. There's nobody out there.
+
+# (draft)
+[far_singing_ves]
+{determined}Sound carries over water. ...Everybody says so.
+
+{worried}...Not that far, though. Probably.
+
+# The first time she's leaned, ever (shipList.js, once a save): Bramble and Ves catch up with what just happened.
+# (draft)
+[ship_first_lean_bramble]
+{shout}The FLOOR went downhill! Everything that wasn't nailed down just went with it!
+
+[ship_first_lean_ves]
+{surprised}...Ships do that. I'm almost sure ships do that.
+
+# (draft) The first time she ever goes over by herself (shipList.js `lurch`, once a save).
+[ship_first_lurch_bramble]
+{scared}Nobody touched ANYTHING! She did that all by herself!
+
+# (draft)
+[ship_first_lurch_ves]
+{smile}...Well. At least now we know whose idea it was.
+
+# (draft) The first time a careening gun knocks you aside (once a save).
+[ship_careen_hit_bramble]
+{worried}It went right INTO you! ...Are you all right?
+
+{awed}That was the loudest thing I've ever heard.
+
+# (draft)
+[ship_careen_hit_ves]
+{angry}Ah. The guns don't stop. Good to know. Good to have known a second ago.
+
+# (draft) The first time the water washes you off (once a save).
+[ship_washed_bramble]
+{surprised}It just came UP! The water came up and threw you!
+
+# (draft)
+[ship_washed_ves]
+{laughing}You're dripping. ...It suits you, actually.
+
+# (draft) The first time you lose the one hunting you in the hold's stacks (haunt.js `nooks`, once a save).
+[ship_hold_hid_bramble]
+{awed}...He walked right past us. Right PAST.
+
+# (draft)
+[ship_hold_hid_ves]
+{glee}Don't breathe yet. ...All right. Breathe a bit. That was brilliant.
+
+# ======================================================================================================
+# THE LIFE PASS (round 2, 15 November 2026): the crew's belongings, the barnacles, the weed, the lamps that gutter.
+# Billy's whale, Hobbs's purse, the rats' little doors. Every line is a draft. Ves and Bramble answer where they have something to say.
+
+# (draft)
+[r5g_pl_lamp]
+A lantern on a hook on the quay post, burning cold blue-white. Every so often the flame sinks right down to a bead, hangs there, and comes back. It does not need oil. It does not seem to need anything.
+
+[r5g_pl_lamp_ves]
+{thoughtful}Every time it nearly goes out I hold my breath. Then it doesn't, and I'm cross with myself.
+
+[r5g_pl_lamp_bramble]
+{scared}It's going out. It's going OUT. ...No. It's back. Please stop doing that.
+
+# (draft)
+[r5g_pl_noughts]
+Noughts and crosses scratched into a quay plank with a knife-point. Three crosses, two noughts, nobody has won. It is X's turn. It has been X's turn for some time.
+
+[r5g_pl_noughts_ves]
+{bored}It's a draw. It was always going to be a draw. Somebody move, so it can stop.
+
+[r5g_pl_noughts_bramble]
+{thinking}If I put a cross in the last square it's finished. ...Is it rude to finish somebody's game? I think it's rude.
+
+# (draft)
+[r5g_pl_boots]
+A pair of sea boots, set side by side on the edge of the quay, toes to the ship. Left there as if their owner had popped back aboard for his coat.
+
+[r5g_pl_boots_ves]
+{thoughtful}Somebody took their boots off to be neat. Whoever he was, he meant to be a minute.
+
+[r5g_pl_boots_bramble]
+{sad}They're so tidy. Why are they so tidy.
+
+# (draft)
+[r5g_pl_tin]
+A biscuit tin on a bollard, lid up. Ship's biscuit, grey, solid, a hundred years old. One has a tiny set of tooth marks that go all the way round.
+
+[r5g_pl_tin_ves]
+{bored}I'm not eating it. I'm telling you that now, before you look at it like that.
+
+[r5g_pl_tin_bramble]
+{glee}There are TEETH on it! Little ones! Somebody got to the biscuit! ...Is it still a somebody?
+
+# (draft)
+[r5g_pl_barnacles]
+Barnacles crusted on the quay's edge, white cones in a crust. Each has a dark mouth, and each mouth snaps shut when you lean near. They've been busy, down here in the quiet.
+
+[r5g_pl_barnacles_ves]
+{smile}They're the only things on this ship that are doing what they're meant to.
+
+[r5g_pl_barnacles_bramble]
+{surprised}They SHUT! They shut when I looked! ...Sorry. Sorry, barnacles.
+
+# (draft)
+[r5g_pl_mug]
+A tin mug on the planks, with a ring of tea dried on the bottom and a bit of fog drifting in it. Somebody was going to finish that.
+
+[r5g_pl_mug_ves]
+{thoughtful}Even the tea is waiting for somebody.
+
+[r5g_pl_mug_bramble]
+{worried}Nobody's going to drink it. We should leave it where it is. It's theirs.
+
+# (draft)
+[r5g_dk_cage]
+A bird cage on a hook arm, the door standing open, a perch worn pale in the middle. It swings a little, to and fro, in air that is not moving. A grey feather caught in the bars.
+
+[r5g_dk_cage_ves]
+{thoughtful}The door's open. Whatever lived in there got out. I like that. Let me have that one.
+
+[r5g_dk_cage_bramble]
+{surprised}It was a PARROT. It had to be a parrot. ...Do you think it still says things?
+
+# (draft)
+[r5g_dk_lamp]
+A lantern on an iron hook by the rail, guttering. The glow on the planks leans and shrinks and swells, like something breathing in its sleep.
+
+[r5g_dk_lamp_ves]
+{bored}It's a lamp. It's doing its best. We could all be less judgemental.
+
+[r5g_dk_lamp_bramble]
+{awed}It nearly went OUT and it came BACK. It's the bravest lamp I've ever seen.
+
+# (draft)
+[r5g_dk_dice]
+Two bone dice and three coins on the planks, the game stopped mid-throw. A five and a two. The coins are green.
+
+[r5g_dk_dice_ves]
+{smile}Seven. Even the dice thought it was a decent hand.
+
+[r5g_dk_dice_bramble]
+{thinking}Whose throw is it? Is it whoever's next? I'm not going to find out.
+
+# (draft)
+[r5g_dk_cards]
+A fan of cards, face down, and one turned up: a queen with a damp corner. The hand was somebody's. Whoever it was, they were winning.
+
+[r5g_dk_cards_ves]
+{bored}Four of a kind, I'd bet. They always look pleased with themselves when they're winning.
+
+[r5g_dk_cards_bramble]
+{surprised}Do you think they'd mind if I looked at one? ...No. No, I'll leave them.
+
+# (draft)
+[r5g_dk_mug]
+A tin mug standing on the step of the binnacle. A skin of cold on the tea, and a thumbprint on the rim from a hand that was holding the wheel too.
+
+[r5g_dk_mug_ves]
+{thoughtful}Mr Pike kept the wheel and his tea at the same time. Someone had to.
+
+[r5g_dk_mug_bramble]
+{sad}He still keeps the wheel. He never gets to drink his tea. That's the worst part.
+
+# (draft)
+[r5g_dk_letter]
+A letter stuck under a rail post, never posted. The ink has run so that the address reads, all the way down, MY DEAR. The seal is red and perfect.
+
+[r5g_dk_letter_ves]
+{thoughtful}Somebody was going to post it in Saltcombe. There are a lot of those on this ship.
+
+[r5g_dk_letter_bramble]
+{sad}...Can we post it? When we're out? To MY DEAR? Somebody must be MY DEAR.
+
+# (draft)
+[r5g_dk_ratdoor]
+A tiny arched door at the foot of the rail, with a thimble hung beside it for a lamp. It's lit, a pale blue. A rind of biscuit on the step. Whoever lives here isn't quite here either.
+
+[r5g_dk_ratdoor_ves]
+{smile}Saltcombe has a mouse with a door. It seems the mouse has relatives.
+
+[r5g_dk_ratdoor_bramble]
+{surprised}Hello? ...Sorry. We don't have anything. We're just passing through. ...Nice door.
+
+# (draft)
+[r5g_dk_slate]
+A slate on a post, hung from a nail: tallies, in fives, in a firm mate's hand. The last stroke, the one that would make the fifth, has never been drawn.
+
+[r5g_dk_slate_ves]
+{thoughtful}He stopped one short. Of course he did. Four and a gap. The log says forty-one days, and the slate says four.
+
+[r5g_dk_slate_bramble]
+{worried}Why didn't he finish it? It's one line. ...Maybe if you finish it you've admitted something.
+
+# (draft)
+[r5g_dk_weed]
+A string of weed hung on an iron hook, swaying slowly to and fro, wet and green. There's no wind aboard. It sways the way a sleeper's hand does.
+
+[r5g_dk_weed_ves]
+{thoughtful}Weed doesn't sway in air. So either the air is pretending, or the weed is.
+
+[r5g_dk_weed_bramble]
+{scared}It's waving at me. Tell me it's just waving.
+
+# (draft)
+[r5g_dk_bucket]
+A pail on the planks with a slow drip landing in it from somewhere above. Plink. A ring spreads, and stops, and the pail never fills, however long it has been.
+
+[r5g_dk_bucket_ves]
+{bored}A hundred years of drip and it's still not full. That's the best argument for patience I've heard.
+
+[r5g_dk_bucket_bramble]
+{glee}It goes PLINK. Do it again. ...Do it again!
+
+# (draft)
+[r5g_dk_barnacles]
+A crust of barnacles at the foot of the rail. They've grown straight up out of dry boards. They have never heard of dry boards.
+
+[r5g_dk_barnacles_ves]
+{smile}A dry deck and they've set up anyway. I admire the nerve.
+
+[r5g_dk_barnacles_bramble]
+{surprised}They're growing out of the FLOOR. In the middle of the ship! Where is the sea?
+
+# (draft)
+[r5g_qr_dice]
+A pair of dice and a pile of buttons for stakes, on the floor by a hammock, where the loser sat. The buttons are all the same sort of brass.
+
+[r5g_qr_dice_ves]
+{smile}Buttons. They played for buttons. Grown men, a hundred years ago, and the stakes were buttons.
+
+[r5g_qr_dice_bramble]
+{thinking}I bet it was for who does the washing up. That's the real stakes. Always.
+
+# (draft)
+[r5g_qr_fiddle]
+A fiddle on a rack of two posts, hung by its scroll, a bow on the next peg. The strings are tight. When you lean close, one of them hums, very low, by itself.
+
+[r5g_qr_fiddle_ves]
+{thoughtful}Somebody plays this at night. Not in tune. Never quite in tune. It's one note short of the harmonium.
+
+[r5g_qr_fiddle_bramble]
+{awed}Can I touch it? ...It's humming. I didn't DO anything!
+
+# (draft)
+[r5g_qr_mugs]
+Three tin mugs on the floor beside the table, in a row, each with a ring of dried tea. One has been turned upside down, as if someone was told not to.
+
+[r5g_qr_mugs_ves]
+{bored}Three mugs, three men, one turned over. Somebody was in trouble.
+
+[r5g_qr_mugs_bramble]
+{sheepish}That's what happens in our house if you leave your cup. Not that I'd know.
+
+# (draft)
+[r5g_qr_tin]
+A biscuit tin, lid up, with a paper label on the inside: BARRY. A biscuit lies in it, sulking in a corner, a little rounder than the others.
+
+[r5g_qr_tin_ves]
+{smile}There's a biscuit called Barry. I'm told Gary has a cousin on the Reach. They don't speak.
+
+[r5g_qr_tin_bramble]
+{surprised}A biscuit with a NAME! I'd never eat a biscuit with a name. ...Well. Not on a ship like this.
+
+# (draft)
+[r5g_qr_boots]
+A pair of sea boots stood together by a hammock, a sock hanging out of each, the way a boy leaves them when he's been told twice.
+
+[r5g_qr_boots_ves]
+{thoughtful}Two socks. Mismatched. They're his. He's so ordinary I could cry, and I'm not going to.
+
+[r5g_qr_boots_bramble]
+{sad}Hobbs's. They're about my size. ...Oh.
+
+# (draft)
+[r5g_qr_knots]
+A board of practice knots on two legs: bowline, sheet bend, a clove hitch, a monkey's fist. Under the last, in chalk, YOU'LL GET IT, HOBBS.
+
+[r5g_qr_knots_ves]
+{smile}The monkey's fist is almost right. It's the best of them. I hope he got it.
+
+[r5g_qr_knots_bramble]
+{glee}I can do a bowline! I can do the rabbit one! ...I can do half of the rabbit one.
+
+# (draft)
+[r5g_qr_sewing]
+A scrap of canvas, a sailmaker's palm and a needle still threaded in red, stuck mid-stitch. A boy's shirt, half mended. The patch is the wrong colour, and put on with great love.
+
+[r5g_qr_sewing_ves]
+{thoughtful}A boy's shirt, mended by a man who sews sails. It's too big at the shoulders. It was always going to be.
+
+[r5g_qr_sewing_bramble]
+{sad}Somebody mended it. Somebody who isn't any good at it. That's the best kind.
+
+# (draft)
+[r5g_qr_lamp]
+A lantern on a hook by the wall, guttering. Its glow lies over the nearest hammocks as if tucking them in.
+
+[r5g_qr_lamp_ves]
+{smile}It checks on them. I'd say it's the only one on the ship still working a night shift.
+
+[r5g_qr_lamp_bramble]
+{awed}It's making sure they're all right. The little lamp is looking after everyone.
+
+# (draft)
+[r5g_qr_weed]
+A string of weed on an iron hook, swaying, in a cabin with no draught. Below it the planks are dry.
+
+[r5g_qr_weed_ves]
+{bored}Add it to the list of things I'm not going to ask about.
+
+[r5g_qr_weed_bramble]
+{scared}It's moving. It's SWAYING. Nothing's moving it! Is something breathing?
+
+# (draft)
+[r5g_qr_barnacles]
+A cluster of barnacles on the planking, well above any waterline. They snap shut when you come close, and open again, a little at a time, when you go.
+
+[r5g_qr_barnacles_ves]
+{thoughtful}They only open when nobody's looking. I've known people like that.
+
+[r5g_qr_barnacles_bramble]
+{surprised}They shut when I got close! Are they shy? ...They're a bit like Ves.
+
+# (draft)
+[r5g_qr_ratdoor]
+A rat's door at the foot of the wall, an arch with a brass plate: BED AND BREAKFAST. Under it, in tiny chalk, NO VACANCIES. FULL OF CREW.
+
+[r5g_qr_ratdoor_ves]
+{smile}It's full of crew. Of course it is. Even the rats are on the muster.
+
+[r5g_qr_ratdoor_bramble]
+{glee}Bed and breakfast! They've got a sign! They're so organised!
+
+# (draft)
+[r5g_qr_letter]
+A letter folded very small and wedged in a hammock's cord. To a MISS LIZZIE TARRY, with a picture drawn in the corner of a ship, her sails full and not a single wave.
+
+[r5g_qr_letter_ves]
+{thoughtful}Tarry. The captain's daughter. ...Or sister. I'm not going to guess.
+
+[r5g_qr_letter_bramble]
+{worried}Lizzie. Where have I heard...? ...No. It's just a name. A very sad one.
+
+# (draft)
+[r5g_qr_hoard]
+Behind the sea chests, tied to the leg of a bunk, a small purse, with a note pinned on it in a boy's careful capitals: FOR MA. FROM H. DO NOT TELL THE BOSUN. DO NOT SPEND ON GROG.
+
+[r5g_qr_hoard_ves]
+{thoughtful}Twenty-five coins. A whole boy's wages, tied up behind a box. ...We're taking it. We'll know where it belongs.
+
+[r5g_qr_hoard_bramble]
+{sad}It's for his MA. We have to take it to her. ...Somewhere. Someday. I promise.
+
+# (draft)
+[r5g_gd_toy]
+On the planks by the first gun, a half-carved wooden whale, one nick for an eye, no tail yet, and a knife stood in the block. Scratched underneath: BILLY. FOR LIZZIE.
+
+[r5g_gd_toy_ves]
+{thoughtful}Billy's whale. He'd have finished it if the night had gone differently. Bring it with us. It should be somewhere warm.
+
+[r5g_gd_toy_bramble]
+{sad}He didn't get to do the tail. ...I know where he sleeps. We can take it to his hammock.
+
+# (draft)
+[r5g_gd_lamp]
+A lantern on an iron hook, over the second gun's rack of shot. It gutters, and the shadows of the guns slide a hand's breadth along the planking, and slide back.
+
+[r5g_gd_lamp_ves]
+{bored}Even the shadows are on a rota. Left, right, wait. It's very orderly.
+
+[r5g_gd_lamp_bramble]
+{surprised}The gun MOVED. ...No. The shadow did. I think. Let's say the shadow.
+
+# (draft)
+[r5g_gd_bucket]
+A pail under a port-sill, catching a slow drip. Plink. The ring spreads. The water in it is the same level as ever.
+
+[r5g_gd_bucket_ves]
+{smile}A bucket under a leak, in a ship that's under the sea. I do respect the effort.
+
+[r5g_gd_bucket_bramble]
+{glee}It's a very good pail! It's doing a really important job!
+
+# (draft)
+[r5g_gd_noughts]
+Noughts and crosses scratched in a plank, in a boy's hand and a gunner's hand. The gunner is winning. Under the boy's last nought: I LET HIM.
+
+[r5g_gd_noughts_ves]
+{smile}...He let the boy win and wrote down that he did. I like him a lot, and I'd like to stop liking him.
+
+[r5g_gd_noughts_bramble]
+{glee}Billy won! ...No, he lost. ...Oh, he lost on purpose? That's the other way round!
+
+# (draft)
+[r5g_gd_dice]
+Dice, in a hollow worn in a plank, among the splinters. Three sixes. The gunners always thought of that as a bad omen, and the hollow tells you how often it came up.
+
+[r5g_gd_dice_ves]
+{bored}Three sixes. Either he cheated or the ship did.
+
+[r5g_gd_dice_bramble]
+{thinking}Do you think they're loaded? ...Don't answer. I'd like to think they're just lucky.
+
+# (draft)
+[r5g_gd_boots]
+A boy's boots, very small, set together under a bunk-less wall, with a spare lace tied round each. Two sizes too large, and polished anyway.
+
+[r5g_gd_boots_ves]
+{thoughtful}Polished. Two sizes too large, and polished. He was trying to grow into them.
+
+[r5g_gd_boots_bramble]
+{sad}Billy's. They're too big. They were meant to last.
+
+# (draft)
+[r5g_gd_barnacles]
+Barnacles crusted along the foot of the wall, white and tight, in a long row. Every so often one opens, and the little feathered arm flicks out, and in.
+
+[r5g_gd_barnacles_ves]
+{smile}It's very peaceful, being a barnacle. No orders. Just tide.
+
+[r5g_gd_barnacles_bramble]
+{awed}Look at their little arms! They're catching something! What are they catching?
+
+# (draft)
+[r5g_gd_weed]
+A string of weed on an iron hook, swaying, with a very small drip coming off its tip. It sways away from you as you come near, and back.
+
+[r5g_gd_weed_ves]
+{bored}It is not a draught. I've checked.
+
+[r5g_gd_weed_bramble]
+{scared}It's AVOIDING me! Does the weed not like me? What did I do to the weed?
+
+# (draft)
+[r5g_gd_ratdoor]
+A tiny door at the foot of the bulkhead, a thimble for a lamp, and a toothpick for a flagstaff. On the flag, drawn in chalk: a gun.
+
+[r5g_gd_ratdoor_ves]
+{smile}They flew the flag of the ship's own artillery. It's so small it's brave.
+
+[r5g_gd_ratdoor_bramble]
+{glee}Rats on the GUN DECK! They've got a gun-rat flag! Salute!
+
+# (draft)
+[r5g_gd_tin]
+A tin of powder-tamper's grease with a finger-mark in it, and a heel of ship's biscuit. A gunner's lunch, left for after the next broadside.
+
+[r5g_gd_tin_ves]
+{thoughtful}Lunch for after. They never got to the after.
+
+[r5g_gd_tin_bramble]
+{surprised}They were about to eat! Right in the middle of a battle! ...That's the most sailor thing I've ever heard.
+
+# (draft)
+[r5g_hd_lamp]
+A lantern on a hook in the north aisle, burning low and cold, guttering, so that every crate has a shadow that is not quite where the crate is.
+
+[r5g_hd_lamp_ves]
+{worried}I don't like how the shadows are a little late. They're a bit behind. Like they're thinking about it.
+
+[r5g_hd_lamp_bramble]
+{scared}Please don't go out. Please, please don't go out. Not with HIM sleeping.
+
+# (draft)
+[r5g_hd_mug]
+A big tin mug by the bosun's post, heavy, with BOSUN stamped on the base. Something has been drunk out of it, and not tea.
+
+[r5g_hd_mug_ves]
+{bored}Grog. Of course it's grog. Of course he sleeps next to it.
+
+[r5g_hd_mug_bramble]
+{surprised}He didn't drink it! There's some left! ...He's got a mug and he's SLEEPING. That's the best job.
+
+# (draft)
+[r5g_hd_letter]
+A letter pressed flat under the lid of a crate, to a MRS JOSIAH HOBBS. It says, in the first line, I AM WELL. The second line says, I AM VERY WELL. The third line has been rubbed out.
+
+[r5g_hd_letter_ves]
+{thoughtful}He kept trying to say it was fine. Three lines of it. The fourth would have been the truth.
+
+[r5g_hd_letter_bramble]
+{sad}Hobbs again. He wrote his ma three lines and rubbed out the last one.
+
+# (draft)
+[r5g_hd_dice]
+Dice wedged in a crack between two crates. They've been rolled and not picked up, a hundred times, by nobody.
+
+[r5g_hd_dice_ves]
+{smile}Rolled by the draught. We're not allowed to take credit for the throws of nothing.
+
+[r5g_hd_dice_bramble]
+{thinking}It's the same number every time I look. Two. ...Sneaky.
+
+# (draft)
+[r5g_hd_ratdoor]
+A tiny arched door at the foot of the stacks, and a sign on a pin: BOSUN'S CAT. ENQUIRE WITHIN. A drawing of a very small cat, upside down.
+
+[r5g_hd_ratdoor_ves]
+{smile}They've made a very good joke. In rat. It's got a drawing of a cat on it. Upside down. It's perfect.
+
+[r5g_hd_ratdoor_bramble]
+{glee}'Bosun's cat'! There's a cat?! ...Is there a cat? I'm not looking.
+
+# (draft)
+[r5g_hd_weed]
+A string of weed on an iron hook at the top of the aisle, swaying slowly. It sways, and the shadow on the crate behind it sways a little late, so there are two of it.
+
+[r5g_hd_weed_ves]
+{thoughtful}Two of it. I'm going to pretend that's the lamp.
+
+[r5g_hd_weed_bramble]
+{scared}Why are there TWO of them. There was one before.
+
+# (draft)
+[r5g_hd_barnacles]
+Barnacles in a crust on the planks beside the first stack, the little arms out, feeling at the dark, shutting when you come near.
+
+[r5g_hd_barnacles_ves]
+{smile}They shut up when they see us. It's the only sensible reaction on this ship.
+
+[r5g_hd_barnacles_bramble]
+{surprised}They SHUT! They shut like a drawer!
+
+# (draft)
+[r5g_hd_bucket]
+A pail on its side, a drip going into it from a seam in the deck above. It's on its side. The drip goes in anyway.
+
+[r5g_hd_bucket_ves]
+{bored}The pail's on its side and it still gets the drip. Nobody told the drip.
+
+[r5g_hd_bucket_bramble]
+{thinking}If I stood it up it'd fill. ...I won't. It's his. Someone's.
+
+# (draft)
+[r5g_hd_tin]
+A biscuit tin chained to a stack, with a note in a tight hand: NOT FOR THE CREW. FOR THE BOSUN'S BOYS. Inside: two biscuits, a bite out of each, and the biggest bite is a child's.
+
+[r5g_hd_tin_ves]
+{thoughtful}The bosun kept two biscuits back for the boys. He had a soft spot, and chained it down.
+
+[r5g_hd_tin_bramble]
+{sad}He looked after them. The big scary one. He looked after them.
+
+# (draft)
+[r5g_bg_bottle]
+A corked bottle wedged in the ribs, with a paper rolled inside. It says, in a boy's hand: TO WHOEVER FINDS THIS. WE ARE IN A BOTTLE INSIDE A SHIP INSIDE THE SEA. I HAVE LOST TRACK OF WHO IS RESCUING WHOM.
+
+[r5g_bg_bottle_ves]
+{smile}I have the same problem. Mostly with you.
+
+[r5g_bg_bottle_bramble]
+{glee}That's the BEST message in a bottle! It's got a joke AND it's sad!
+
+# (draft)
+[r5g_bg_lamp]
+A lantern on a hook on the east landing, the only dry light in the bilge. It gutters. Somebody's footprints come up to it, and stop, and go away again, every night.
+
+[r5g_bg_lamp_ves]
+{thoughtful}Somebody stands by it and warms their hands on a lamp with no heat. Every night. I'm not going to wait up.
+
+[r5g_bg_lamp_bramble]
+{worried}It's the only thing keeping the dark off. It can't go out. It's NOT allowed to go out.
+
+# (draft)
+[r5g_bg_bucket]
+A bailing pail on the west landing, with a rope handle, the rim worn smooth by a boy's hand. It's full again. It's always full again.
+
+[r5g_bg_bucket_ves]
+{thoughtful}Bail, bail, bail. And it fills. That's the whole ship, isn't it. That's the whole hundred years.
+
+[r5g_bg_bucket_bramble]
+{sad}He never stops bailing. Can we tell him it's all right to stop?
+
+# (draft)
+[r5g_bg_boots]
+A pair of boots, drying, on the west landing, filled with a little pool each. They've been drying for a century. They're about to be dry any day.
+
+[r5g_bg_boots_ves]
+{bored}They're getting there. Slowly. Any day now.
+
+[r5g_bg_boots_bramble]
+{surprised}They're still wet! After a hundred years! This is a very wet ship!
+
+# (draft)
+[r5g_bg_barnacles]
+A reef of barnacles around the edge of the south bed, the little arms swaying, combing the water that slides over them. A ship is just a slow rock, to a barnacle.
+
+[r5g_bg_barnacles_ves]
+{smile}To them it's a rock with a tide. They've never been happier.
+
+[r5g_bg_barnacles_bramble]
+{awed}It's a whole TOWN of them. With streets!
+
+# (draft)
+[r5g_bg_ratdoor]
+A tiny door in the bulkhead, near the ladder, with a sign: PLEASE DO NOT BAIL ME. Under that: THIS MEANS YOU, HOBBS.
+
+[r5g_bg_ratdoor_ves]
+{smile}It's addressed to him. By name. The rats and Hobbs have an understanding.
+
+[r5g_bg_ratdoor_bramble]
+{glee}They know him! Hobbs the deckhand! The rats LIKE him!
+
+# (draft)
+[r5g_bg_weed]
+A string of weed on an iron hook hung over the slop of the south bed, dripping. It sways with the water below, a beat behind it.
+
+[r5g_bg_weed_ves]
+{thoughtful}It sways when the water sways. It's remembering the sea. I know the feeling.
+
+[r5g_bg_weed_bramble]
+{surprised}It's matching the water! In time! It knows the tune!
+
+# (draft)
+[r5g_bg_cards]
+A hand of cards on the east landing, held together with a bit of string so that the draught couldn't have them. They were saved for later.
+
+[r5g_bg_cards_ves]
+{bored}Somebody had a good hand and tied it up. That's very sailor. That's very, very sad.
+
+[r5g_bg_cards_bramble]
+{sheepish}If I picked them up I'd have to learn the game. I'm not good at the game.
+
+# (draft)
+[r5g_rg_glass]
+A brass spyglass set down on the nest's platform, cap off, pointing at nothing, very carefully, a little to the left of the harbour that isn't there.
+
+[r5g_rg_glass_ves]
+{thoughtful}He kept looking for port tomorrow. It's tomorrow in there, every day.
+
+[r5g_rg_glass_bramble]
+{awed}Can I look? ...There's nothing. There's just fog. It's the nicest fog I've ever seen though.
+
+# (draft)
+[r5g_rg_mug]
+A tin mug jammed in the rope of the nest, with the dregs of the lookout's last tea, gone cold. Somebody's drawn a smile on the side, and a little ship under it.
+
+[r5g_rg_mug_ves]
+{smile}A smiley mug. At the top of a mast, in the dark. I'd have liked him.
+
+[r5g_rg_mug_bramble]
+{glee}Somebody drew a ship on it! The lookout was an artist!
+
+# (draft)
+[r5g_rg_lamp]
+A lantern on a hook on the mid-platform. It gutters. Its light goes a little way into the fog, and sulks, and comes back.
+
+[r5g_rg_lamp_ves]
+{bored}It's a lighthouse for the one person up here. Me. Marvellous.
+
+[r5g_rg_lamp_bramble]
+{worried}It's SO high up. And it keeps nearly going out.
+
+# (draft)
+[r5g_rg_dice]
+A single bone die on the platform, and a lookout's note scratched beside it: ONE FOR EVERY DAY OF FOG. It's a one. It's a one. It's a one.
+
+[r5g_rg_dice_ves]
+{thoughtful}A one a day. And it's a one now. He's counting days on a die, and the die doesn't change.
+
+[r5g_rg_dice_bramble]
+{sad}Forty-one ones. I counted. ...I counted the ones I can see.
+
+# (draft)
+[r5g_rg_weed]
+A string of weed on a hook arm lashed to the lower platform, swaying. Up here, in the nothing, the only thing that moves is the weed and your breath.
+
+[r5g_rg_weed_ves]
+{smile}It's company. Of a kind. I'm not above company of a kind.
+
+[r5g_rg_weed_bramble]
+{awed}Even up here, there's weed. How did it get up HERE?
+
+# (draft)
+[r5g_rg_letter]
+A letter folded into a square and tucked into the rail, addressed to nobody. Inside, just a drawing: a small house, a smoking chimney, a dog, and a line of washing.
+
+[r5g_rg_letter_ves]
+{thoughtful}He drew his house. In case he forgot it. ...Or in case it forgot him.
+
+[r5g_rg_letter_bramble]
+{sad}It's got a dog. Of course it's got a dog.
+
+# (draft)
+[r5g_cb_patience]
+A game of patience laid out on the chart table, half played, in rows. One red card is out of order. It would be the easiest move in the game, and it has not been made.
+
+[r5g_cb_patience_ves]
+{bored}The four of clubs goes on the five of hearts. It's right there. ...He stopped one move short of winning.
+
+[r5g_cb_patience_bramble]
+{thinking}If I move it he wins. ...Can a ghost win patience? Is that allowed?
+
+# (draft)
+[r5g_cb_mug]
+A china cup, not tin, with a gilt rim, and a saucer, on a bracket beside the bunk. The tea in it has gone to a brown crust. Captains take it with the saucer.
+
+[r5g_cb_mug_ves]
+{smile}Gilt rim. A saucer. Even at the end of the world, he's got standards.
+
+[r5g_cb_mug_bramble]
+{surprised}A real cup! It's got a little saucer! It's so tiny!
+
+# (draft)
+[r5g_cb_cage]
+A tall brass cage on a stand, the door shut, a ribbon tied to it, a little hat of felt on the perch. The note under it: FOR POLLY. SHE'LL BE LATE TOO.
+
+[r5g_cb_cage_ves]
+{thoughtful}Polly. A parrot, a daughter, a wife. ...I'm going to say parrot. I'll say parrot.
+
+[r5g_cb_cage_bramble]
+{sad}She's late too. That's the saddest joke I've ever heard.
+
+# (draft)
+[r5g_cb_boots]
+A pair of captain's boots, polished, with a jack spurred to each heel, set neatly at the foot of the bunk. Not a mark on them. They've never been out in the weather. They've never been to bed.
+
+[r5g_cb_boots_ves]
+{bored}They've never touched the deck. He's been late for a hundred years and never once stood up.
+
+[r5g_cb_boots_bramble]
+{worried}Are they too clean? I think they're too clean. It's sad, how clean.
+
+# (draft)
+[r5g_cb_lamp]
+A lantern on a hook on the stern bracket, guttering. Its light turns the cracked pane of the stern window a green-grey, and the fog beyond it lifts a little, and sinks.
+
+[r5g_cb_lamp_ves]
+{thoughtful}Even the window's tired.
+
+[r5g_cb_lamp_bramble]
+{awed}It's like looking at the inside of a pearl.
+
+# (draft)
+[r5g_cb_letter]
+A letter in the Captain's own hand, sealed and addressed: TO ANYONE WHO IS WAITING. It has never been delivered because, in a ship this late, nobody can be sure who that is.
+
+[r5g_cb_letter_ves]
+{thoughtful}It's meant for them. All the families. We can't open it. ...We'll know where to take it.
+
+[r5g_cb_letter_bramble]
+{sad}Everyone's waiting. All of them. For a hundred years.
+
+# (draft)
+[r5g_cb_ratdoor]
+A tiny door at the foot of the stern wall, painted the same cream as the captain's door. The brass plate says, in letters thin as a hair: SECOND MATE. (RAT.)
+
+[r5g_cb_ratdoor_ves]
+{smile}They've got a second mate. Mr Pike has an understudy.
+
+[r5g_cb_ratdoor_bramble]
+{glee}A SECOND MATE! They're proper! They've got a proper rank!
+
+# (draft)
+[r5g_cb_barnacles]
+Barnacles in the corner of the cabin, on the planking under the stern window. They've found their way in from the one cracked pane, and settled, and opened.
+
+[r5g_cb_barnacles_ves]
+{bored}Squatters.
+
+[r5g_cb_barnacles_bramble]
+{surprised}They came in through the WINDOW! Sorry, barnacles. Sorry, window.
+
+# (draft)
+[r5g_or_lamp]
+A lantern on a hook amid the coiled cables, guttering. Each coil of rope has a shadow like a sleeping animal, and when the lamp sinks they seem to turn over.
+
+[r5g_or_lamp_ves]
+{thoughtful}They're just ropes. They're only turning over because the light does. I keep telling myself.
+
+[r5g_or_lamp_bramble]
+{scared}Did the rope MOVE? ...Did the SHADOW of the rope move? It's the shadow. Tell me it's the shadow.
+
+# (draft)
+[r5g_or_knots]
+A board of splices and hitches on two legs, a cable-hand's. Under the last: THE ONLY KNOT YOU NEED IS THE ONE THAT HOLDS. Somebody has underlined it.
+
+[r5g_or_knots_ves]
+{smile}That's the best advice on this ship. I'd like it stitched on a pillow.
+
+[r5g_or_knots_bramble]
+{awed}That's WISE. That's actually wise. ...I'll remember that.
+
+# (draft)
+[r5g_or_mug]
+A tin mug on a cable-tier shelf, and in it, wound round the dregs, a perfect small coil of thread, like a cable in miniature. It is, in its way, the best thing aboard.
+
+[r5g_or_mug_ves]
+{thoughtful}A cable in a mug. He couldn't help it. I'd like to meet whoever couldn't help it.
+
+[r5g_or_mug_bramble]
+{glee}It's a very small cable!
+
+# (draft)
+[r5g_or_noughts]
+A game of noughts and crosses scratched on a bulkhead, the cable-hand against the cable-hand. Both sides have won. The line down the middle was added later.
+
+[r5g_or_noughts_ves]
+{bored}He cheated against himself and was too proud to admit it. I know people like that.
+
+[r5g_or_noughts_bramble]
+{surprised}You can play with yourself! You can WIN with yourself! ...Don't tell me that's cheating.
+
+# (draft)
+[r5g_or_boots]
+A pair of heavy boots, tarred, stood on a coil of cable, with a pair of worn gloves drying inside each. The gloves have taken the shape of the hands.
+
+[r5g_or_boots_ves]
+{thoughtful}They kept their shape. Hands that worked that hard don't forget the shape.
+
+[r5g_or_boots_bramble]
+{sad}It looks like someone's holding them still. ...Right there.
+
+# (draft)
+[r5g_or_barnacles]
+Barnacles in a long crust along the cable tier's foot, the little arms flicking, shutting as you pass, opening behind you. It's like walking through applause.
+
+[r5g_or_barnacles_ves]
+{smile}Polite applause. At last.
+
+[r5g_or_barnacles_bramble]
+{glee}They're CLAPPING! They're clapping for us!
+
+# (draft)
+[r5g_or_ratdoor]
+A tiny door in the corner of the cable tier. A scrap of chain across it, a hair-thin padlock, and the card: GONE FISHING. BACK 14TH.
+
+[r5g_or_ratdoor_ves]
+{smile}Back on the fourteenth. Everyone on this ship is back on the fourteenth.
+
+[r5g_or_ratdoor_bramble]
+{surprised}They've locked it! They've gone fishing! ...Where?!
+
+# (draft)
+[r5g_or_bucket]
+A pail, a drip, a ring. Under the captain's cabin, the ceiling weeps, and a pail has been set to catch it. It never overflows. It never fills.
+
+[r5g_or_bucket_ves]
+{bored}Another one. The ship is a series of buckets.
+
+[r5g_or_bucket_bramble]
+{glee}It's another one! They're everywhere! The ship's got a whole BUCKET system!
+
+# (draft)
+[r5g_or_weed]
+A string of weed on a hook, hung by the east bulkhead, swaying. When you stand under it, a drop falls from its tip onto your sleeve and is gone.
+
+[r5g_or_weed_ves]
+{thoughtful}A drop of sea on my sleeve. It's from before. I'm going to be careful with it.
+
+[r5g_or_weed_bramble]
+{scared}It was COLD! The drop was cold! It was from a hundred years ago!
+
+# (draft)
+[r5g_sl_palm]
+A sailmaker's palm, a needle in a block of beeswax and a bobbin of waxed thread, laid out on a bale as if she'd stepped out for a minute. Next to it, a thimble with a face drawn on it.
+
+[r5g_sl_palm_ves]
+{smile}A thimble with a face. She was lonely, or she was brilliant. Probably both.
+
+[r5g_sl_palm_bramble]
+{glee}It's got EYEBROWS!
+
+# (draft)
+[r5g_sl_mug]
+A tin mug on a stool, full of fine needles, standing up like a bunch of tiny silver flowers. It's the only tidy thing in the room.
+
+[r5g_sl_mug_ves]
+{thoughtful}A mug of needles. A mug for a living, a mug for a hobby.
+
+[r5g_sl_mug_bramble]
+{surprised}Don't touch! Somebody's counting them!
+
+# (draft)
+[r5g_sl_lamp]
+A lantern on a hook above the sailmaker's stool, guttering. The canvas bales around it are all the colour of old teeth.
+
+[r5g_sl_lamp_ves]
+{bored}It's a very dim lamp for reading by. She must have gone by feel.
+
+[r5g_sl_lamp_bramble]
+{worried}If it goes out I won't know which bale is which.
+
+# (draft)
+[r5g_sl_fiddle]
+A fiddle on a rack, hung by its scroll. A scrap of sailcloth is draped over it, tucked in at the corners, to keep the damp from it. It's the driest thing aboard.
+
+[r5g_sl_fiddle_ves]
+{thoughtful}She tucked it in. The fiddle's somebody's. She covered it up for them.
+
+[r5g_sl_fiddle_bramble]
+{sad}She covered it up so it wouldn't get cold. A fiddle! It's a FIDDLE!
+
+# (draft)
+[r5g_sl_cards]
+A hand of cards stood in a sail-needle's eye, a whole pack of them, fanned, one by one, each stuck on a thread: a little mobile of sixteen of clubs. Somebody was proud of this.
+
+[r5g_sl_cards_ves]
+{smile}It's art. It's a bit useless. I love it.
+
+[r5g_sl_cards_bramble]
+{awed}It's a card MOBILE! Somebody made a card mobile!
+
+# (draft)
+[r5g_sl_barnacles]
+Barnacles on the bale-stack's lowest canvas, tiny, white, in neat rows, as if sewn on. The sailmaker would have approved of the stitching.
+
+[r5g_sl_barnacles_ves]
+{thoughtful}Seed pearls. If you squint.
+
+[r5g_sl_barnacles_bramble]
+{surprised}They look SEWN on! They're so neat!
+
+# (draft)
+[r5g_sl_ratdoor]
+A tiny door in the lowest bale, round, the size of a button. It has been sewn in, neatly, with a rat-sized flap. On it, a card: NO SAILS TODAY.
+
+[r5g_sl_ratdoor_ves]
+{smile}Everybody has opinions about sails. Even the rats.
+
+[r5g_sl_ratdoor_bramble]
+{glee}It's got a FLAP! It's so tiny!
+
+# (draft)
+[r5g_sl_weed]
+A string of weed on a hook, hung on the nearest alcove post, swaying. A halyard beside it swings the other way. It's like the two are dancing, and the weed has the lead.
+
+[r5g_sl_weed_ves]
+{bored}The weed leads. The rope follows. Ridiculous, and yet.
+
+[r5g_sl_weed_bramble]
+{awed}They're dancing! The weed and the rope! They know the steps!
+
+# (draft)
+[r5g_sl_letter]
+A letter folded into a canvas patch and sewn, neatly, into the corner of a spare sail. The note on top, in thread: IN CASE WE'RE LOST. Inside: a drawing of a ship, a tiny house, and an arrow between them.
+
+[r5g_sl_letter_ves]
+{thoughtful}She sewed a letter into the sail. So it'd be found when the sail was. ...She was right.
+
+[r5g_sl_letter_bramble]
+{sad}And it was! We found it! She was RIGHT!
+
+# (draft)
+[r5g_fb_barnacles]
+Barnacles on the west island's boards, crusted, wet, the little arms combing at the slop. The water laps right up to them. They are the only ones aboard who are at home.
+
+[r5g_fb_barnacles_ves]
+{smile}They're thrilled to be here. I'd say they're the only ones.
+
+[r5g_fb_barnacles_bramble]
+{surprised}They shut when I looked! ...Sorry! I'm sorry!
+
+# (draft)
+[r5g_fb_mug]
+A tin mug washed up on the middle island, jammed between two boards, the water going in and out of it with the tide, as if the sea were taking tea.
+
+[r5g_fb_mug_ves]
+{bored}The sea's having tea. Somebody should tell it to wash up.
+
+[r5g_fb_mug_bramble]
+{glee}It's got WATER in it! The sea is drinking out of it!
+
+# (draft)
+[r5g_fb_lamp]
+A lantern on a hook on the north island's post, guttering over the black water. The ripples under it shake, and settle, and shake.
+
+[r5g_fb_lamp_ves]
+{thoughtful}The only light in the flood. It flickers and the water flickers with it.
+
+[r5g_fb_lamp_bramble]
+{scared}Don't go out! There's no plan if you go out!
+
+# (draft)
+[r5g_fb_weed]
+A string of weed on a post at the edge of the east island, dripping into the flood. It sways in time with the ship's lean, a second after.
+
+[r5g_fb_weed_ves]
+{bored}A second behind. It's the only one with timing like mine.
+
+[r5g_fb_weed_bramble]
+{surprised}It leans! It leans AFTER we do!
+
+# (draft)
+[r5g_fb_bottle]
+A bottle bobbing against the south island's edge, tied to a cleat with a bit of twine, a paper rolled up in it: STILL HERE. STILL FINE. STILL LATE. SEND SOUP.
+
+[r5g_fb_bottle_ves]
+{smile}It says send soup. In a bottle. To the sea. ...I'm not surprised the sea hasn't answered.
+
+[r5g_fb_bottle_bramble]
+{glee}Soup! I'd send soup! ...I haven't got any! I'd send soup if I had it!
+
+# (draft)
+[r5g_fb_dice]
+Dice in a crack between two planks on the west island, washed up and washed back, rolling a one or a two in turn, by the tide. They are, you decide, playing.
+
+[r5g_fb_dice_ves]
+{thoughtful}The sea plays the dice with the ship. I'd say the ship was winning, but the ship's under the sea.
+
+[r5g_fb_dice_bramble]
+{thinking}Whose turn is it? The tide's. It's always the tide's.
+
+# (draft)
+[r5g_fp_barnacles]
+Barnacles in a crust on the ledge's edge, the little arms out toward the water, shutting when you step near. Below them the sea slaps at the timbers: a hundred years of hello.
+
+[r5g_fp_barnacles_ves]
+{smile}They're the welcoming committee. They've got a very small agenda.
+
+[r5g_fp_barnacles_bramble]
+{surprised}They shut! Sorry! We're only visiting!
+
+# (draft)
+[r5g_fp_lamp]
+A lantern on a hook at the ledge's edge, guttering, putting a pale ring of light on the water. The ring sways. Out on the dark, something stirs, and settles.
+
+[r5g_fp_lamp_ves]
+{worried}I'd like it to stay lit. I'd like it very much.
+
+[r5g_fp_lamp_bramble]
+{scared}Don't go out. Not here. Not with HER out there.
+
+# (draft)
+[r5g_fp_weed]
+A string of weed hung on a post at the edge of the ledge, swaying. It points, now and then, along the plank, toward the figure at the far end, as a hand might.
+
+[r5g_fp_weed_ves]
+{thoughtful}It points. It does it every few seconds. I've decided it's not a hint.
+
+[r5g_fp_weed_bramble]
+{scared}It's POINTING! Is it saying 'go that way'?!
+
+# (draft)
+[r5g_fp_mug]
+A tin mug on the ledge, a candle-stub stood in it, burnt right down. Beside it, a scrap of paper, folded small: SHE LIKES THE LIGHT. DON'T BE LONG.
+
+[r5g_fp_mug_ves]
+{thoughtful}Somebody left a candle for her. A candle, and a note, in case. ...I hadn't expected anyone to be kind to her.
+
+[r5g_fp_mug_bramble]
+{sad}They were nice to her. Even then. They were nice.
+
+# (draft)
+[r5g_gd_toy_gone]
+The block the whale sat on, and the knife stood in it. You have the rest.
+
+# --- R3D BEGIN (round 3 fun check, helper D) ---
+# (draft)
+
+[r3d_ship_figurehead_perch_bottles]
+A row of bottles on a rail, all corked, all empty, all labelled: FOR LATER.
+
+[r3d_ship_figurehead_perch_bottles_bramble]
+{worried}Later what?
+
+[r3d_ship_figurehead_perch_bottles_ves]
+{bored}They never said. It's why they're empty.
+
+[r3d_ship_figurehead_perch_hat]
+A hat on a nail, its brim pressed to the shape of a head that isn't there. It tilts when you look away.
+
+[r3d_ship_figurehead_perch_hat_bramble]
+{worried}It tilted.
+
+[r3d_ship_figurehead_perch_hat_ves]
+{bored}Everything tilts. It's a ship.
+
+[r3d_ship_figurehead_perch_logbottle]
+A bottle on the deck with a log page rolled up inside: DAY 1,000. THE FIGUREHEAD HAS NOT MOVED. (IT IS LOOKING AT ME.)
+
+[r3d_ship_figurehead_perch_logbottle_bramble]
+{worried}...
+
+[r3d_ship_figurehead_perch_logbottle_ves]
+{bored}Don't look at it back.
+
+# --- R3D END ---

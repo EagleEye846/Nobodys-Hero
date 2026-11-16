@@ -1,0 +1,1115 @@
+# THE SECOND STAIR: things you can read and look at on Mount Vigil above
+# Heralds' Rest (Chapter 2): past the Lookout and the second cairn, up into
+# the cloud, as far as the lamplighter's hut. Ves is always with you up here
+# (the rope across the Lookout stair stays up until she joins), so the words
+# can mention her. She doesn't speak in these; her lines are in the scenes.
+
+# What a save point says when you save here.
+[save_point]
+The crystal glows against the cloud. For a moment the wind holds its breath.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+
+(Your browser isn't letting the game save.)
+
+# What an emptied chest says.
+[chest_empty]
+An empty chest. The wind is already trying to get into it.
+
+# What you're told on waking in the lamplighter's hut.
+[rested]
+You slept under the lamplighter's blankets. They smell of lamp oil and cold. Your HP is fully restored.
+
+# --- Shared, up the second stair ---
+
+[upper_pine]
+A pine, this high up. It's small, and bent flat by the wind, and absolutely refusing to give up.
+
+[upper_rock]
+Rock and ice in layers, like a cake nobody would want a slice of.
+
+[upper_boulder]
+A boulder in a cap of snow, sitting very still, as if the wind might not notice it.
+
+[upper_snow]
+Snow as fine and dry as flour. The wind writes in it, and rubs it out, and writes in it again.
+
+[upper_stair]
+The great stair, still going. Whoever built it didn't believe in the word "enough".
+
+[upper_cloud]
+Cloud, all the way down. Somewhere under it is the whole world, and none of it can see you.
+
+[upper_chough]
+A chough, sitting on the wind as if it were a fence. It watches you go by with professional interest.
+
+# --- THE SECOND CAIRN ---
+
+[cairn_ribbons]
+THE SECOND CAIRN. Ribbons are tied all over it, faded to every colour of almost-red.
+
+Every herald who climbed this far tied one on, and turned round.
+
+There are a lot of ribbons. There was a lot of turning round.
+
+Near the top, a newer one, knotted twice. Chalked on the stone under it: "TAMSIN. SORRY. TOO QUIET."
+
+[cairn_waymark]
+HERO! The second cairn. The heralds' route ends here now. The first heralds went further, and not all of them came back. So this is as far as we go, and so far that has worked.
+
+Beyond is beyond. If you go on, keep to the stairs. If the stairs stop, so should you.
+
+Scratched underneath, in a different hand: "or don't."
+
+[cairn_lamp]
+A lamp on an iron crook, like a shepherd's, with a lantern hung off it.
+
+Not one of the village's. Somebody carried this one past the cairn, on purpose.
+
+It's cold. Frost has grown on the inside of the glass, in ferns.
+
+Ves wipes a circle in the frost with her mitten and looks in at nothing for a while.
+
+[cairn_lamp_top]
+Another crook lamp, at the top of the face, where there's no stair to climb.
+
+Whoever hung it got up here without one. Ves looks down the face, then at her umbrella, and doesn't say anything.
+
+[cairn_chest]
+A chest on the terrace above the face, out of reach of anyone without wings or an umbrella.
+
+A climber's ration inside, in oiled paper.
+
+[cairn_sheared]
+The stairs run straight into the face and carry on at the top, as if they climbed the rock and nobody told them they couldn't.
+
+The steps in between are gone, sheared off clean. No rings. Nothing to throw a rope to.
+
+[cairn_look_back]
+You look back down the stairs, like Tamsin asked.
+
+Far below, through a gap in the cloud: Heralds' Rest, small as a handful of dropped coins, every chimney smoking.
+
+It looks warm. It looks like somewhere to come back to.
+
+# --- THE CLOUD BANK ---
+
+[bank_chalk]
+Chalk on the rock above where the snow blows upward: a little lamp in four strokes, and an arrow pointing up.
+
+Ves puts her mitten flat over it. "That's how she drew lamps," she says. "On everything. Mostly Greta's tablecloths."
+
+[bank_chest]
+A chest in a pocket of the shelf that the crack cut off. Snowmelt tea inside, in a flask that has somehow kept it hot.
+
+[bank_lamp]
+A crook lamp at the foot of the great stair, leaning a little into the wind.
+
+Someone stood here once with a ladder, in weather like this, and lit it.
+
+[bank_cairn]
+A cairn of three stones, put up in a hurry. The top one has been put back on at least once.
+
+[bank_pond]
+A pond, frozen solid. The cloud lies on it so thick that crossing it feels like walking on the sky.
+
+# --- THE HIGH SHELF ---
+
+[shelf_lamp]
+A crook lamp on the High Shelf, where nobody would ever see it but someone coming up on the wind.
+
+Lit for exactly that someone, once.
+
+[shelf_sign]
+A board nailed to a stake, in neat round letters: TO THE HERO, OR WHOEVER.
+
+OVER THE BLOCKS, THEN DOWN. THE CRAG HAS A CHEST.
+
+Ves runs a finger under the letters. Her mouth goes a funny shape. She doesn't say whose writing it is.
+
+# (draft) Was a honeycake; now a Notch Charm (src/characters/notches.js).
+[shelf_chest]
+A chest on the crag, wrapped in oilcloth against the weather. Inside, a little charm of horn on a cord, with one notch cut in it.
+
+And a note: "FOR THE HERO. YOU'RE DOING WELL."
+
+[shelf_rockfall]
+Blocks of the stairs, fallen from somewhere higher and stacked by the fall into a wall. Jump up them.
+
+# --- THE BROKEN SPAN ---
+
+[span_stair]
+The great stair, built out over the gorge on one span of stone. Whoever built it really wanted to get to the top.
+
+[span_gap]
+The middle of the span is gone, all of it, down into the cloud. It broke clean, like a loaf cut with a knife.
+
+[span_blocks]
+Blocks fallen from the span, heaped where they landed. One of them seems to be looking at you. No. Probably not.
+
+[span_sign]
+A board on a stake, in neat round letters: ACROSS IS UP. TRUST THE WIND.
+
+Underneath, smaller and less neat: "(really)".
+
+[span_lamp]
+A crook lamp at the edge of the ledge, facing out over the gorge.
+
+The way you'd leave a lamp in a window, for someone.
+
+[span_scorch]
+The broken end of the span is scorched black in a splash, as if something burned here once, quick and hot.
+
+Ves crouches and touches it, and looks at her mitten. Only soot.
+
+The heralds never got this far. Their fudge did.
+
+[span_marker]
+A cairn at the end of the span, every stone chosen with care.
+
+Someone stood here a long while, with nothing to do but wait for the wind.
+
+# --- THE WIND STAIR ---
+
+[windstair_sign]
+A board under a skin of frost. Beneath it, in neat round letters: UP BY THE WIND, DOWN BY THE RINGS.
+
+THE LONG WAY ROUND IS THE ONLY WAY ROUND.
+
+[windstair_lamp_low]
+A crook lamp hammered into the ice. The snow has piled up against one side of it, in the shape of the wind.
+
+[windstair_lamp]
+A crook lamp at the foot of the stairs, up out of the wind.
+
+Ves counts on her mittens, under her breath. "Seven."
+
+[vanes_chest]
+A chest beside the weathervane, lashed down against the wind. A coral ribbon scarf inside, already trying to blow away.
+
+[gale_chest]
+A chest at the very top of the Gale Face, weighed down with stones. Inside, a poncho big enough for two.
+
+[windstair_chest]
+A chest in a notch in the ice, one throw above the ledge. Hot cocoa, in a jar, in a sock, in a mitten. Very well insulated.
+
+# --- THE LAMPLIGHTER'S LEDGE ---
+
+[ledge_lamp]
+The last crook lamp, by the door of the hut. Under the frost there's still a little oil in the bottom of it.
+
+Ves says "eight", very quietly, to nobody.
+
+[ledge_hut]
+A little log hut on a ledge in the cloud. Its door has been left open a crack, the way you'd leave it for someone.
+
+[ledge_roof]
+A roof of split shingles under a thick hat of snow, with icicles along the eaves as long as your arm.
+
+[ledge_woodpile]
+Firewood, split small and stacked under the eaves. Enough for a long winter. Most of it is still here.
+
+[ledge_sign]
+A signpost, iced over so thickly that nothing on it can be read.
+
+The arrow points up the stairs. Everything up here points up.
+
+[ledge_snowman]
+A snowman, very old, worn by the wind into a lump with a lean. Two buttons for eyes. Someone built it for company.
+
+Ves straightens one of its buttons, which had slipped.
+
+# Trying to go back down the stairs while Ves is in the hut (vesSeesTheHut.js).
+[ledge_not_without_her]
+You don't feel comfortable leaving her here.
+
+# Ves, sitting by the hut door after she cries (vigilLamplightersHut.js).
+[hut_ves_thinking]
+Ves is sitting by the door with her knees pulled up, watching the cold stove.
+
+Without looking round, she points at the cot.
+
+# Trying to leave the hut before you've slept (vesInTheHut.js).
+[hut_rest_first]
+You should get some rest.
+
+Somewhere above, the cloud glows a little, like a lamp behind a curtain.
+
+# --- THE LAMPLIGHTER'S HUT ---
+
+[hut_wall]
+Logs, chinked with moss and rags. Somebody patched the draughts one at a time, carefully, as if it mattered.
+
+[hut_floor]
+Floorboards, swept. There's a broom in the corner. Of course there is.
+
+[hut_window]
+A little window, iced over on both sides. The light through it is the colour of cloud.
+
+[hut_hook]
+An iron hook by the door, at just the right height for a lantern. Nothing on it.
+
+[hut_stove]
+A little hearth of flat stones, cold a long time. Kindling is laid in it, ready, and never lit.
+
+[hut_chalk]
+Chalk on the logs: a row of little lamps, four strokes each, the way you'd draw one after drawing a thousand.
+
+Eight of them. Then a ninth, only the top half drawn.
+
+The chalk is still wedged in a crack in the log, worn down to a stub.
+
+[hut_ladder]
+A lamplighter's ladder, leaning where it was left. The rungs are worn pale in the middle.
+
+Ves puts both hands on it and holds it steady, the way you hold a ladder for someone at the top.
+
+Then she lets go.
+
+[hut_oil]
+A tin of lamp oil, nearly empty. Enough for one lamp, maybe.
+
+[hut_crates]
+Crates of lamp glass packed in straw, spare wicks, and a box of matches with three left in it.
+
+Enough for a great many lamps.
+
+[hut_cot]
+A cot with two blankets, tucked in tight at the corners. You could sleep here. Ves says you should.
+
+# --- The Gale Face (vigilGaleFace.js) ---
+
+[gale_sign]
+THE GALE FACE. The wind comes in gusts here. Swing with it, not against it.
+
+Below, in smaller letters: "Or don't. See if I care. - The Wind"
+
+[gale_waymark]
+HERO! Nearly there. The weathervanes are just up the stairs. They know which way to go, even if you don't.
+
+# --- The Weathervane Shelf (vigilWeathervanes.js) ---
+
+[vane_shelf_sign]
+THE WEATHERVANE SHELF. Turn a vane, and the wind turns with it. All of them. Every time.
+
+The heralds who put these up have carved a little arrow under the words. It points straight down.
+
+# The first time you turn a weathervane.
+[vane_first]
+You put your weight against the weathervane, and it swings round a quarter turn with a groan.
+
+Across the shelf, every other vane swings round with it. So does the wind.
+
+# The first time a whirlwind won't take you where it's blowing.
+[whirl_refuses]
+The whirlwind lifts you off your feet, spins you round, and sets you back down where you were.
+
+It won't carry you that way. There's nothing over there but sky.
+
+# --- The Vane Gardens ---
+
+[gardens_sign]
+THE VANE GARDENS. Planted by the first heralds, one vane for every wind they wanted. Turn one, turn them all.
+
+[gardens_cave]
+The mouth of the Ice Chimney, breathing cold air out onto the snow.
+
+[gardens_chest]
+A chest on the top terrace, lashed to a stake against the wind. Hot cocoa inside, still warm, somehow.
+
+# --- The Spire's Neck ---
+
+[neck_sign]
+THE SPIRE'S NECK. Last climb. The wind gusts east: swing with it.
+
+[neck_chest]
+A chest up on the stone blocks. A pot of stew inside, wrapped in sacking. It smells of goblin cooking.
+
+[neck_waymark]
+A waymark of stacked stones, taller than you. Someone built it here so you'd know: nearly there.
+
+[neck_crack]
+A crack right through the spire, wide enough to fall down and deep enough that you'd have time to think about it.
+
+[upper_block]
+A square block of stone, frost-furred. Somebody set these here as steps.
+
+# --- The Last Shelf ---
+
+[last_shelf_sign]
+THE LAST SHELF. Summit: up the stairs.
+
+[last_shelf_cairn]
+A little cairn, with a feather tucked between the stones. White, and very soft.
+
+[shelf_crates]
+Crates of whatever Hollis has found on the mountain, sorted, labelled, and stacked very neatly.
+
+# --- The Summit ---
+
+[summit_beacon]
+The beacon at the top of the mountain: a great iron lamp cage on a tower of stone.
+
+It's cold. Frost has grown over every pane.
+
+[summit_cairn]
+A cairn of stones at the top of the world. Every climber who reached the summit added one.
+
+[summit_sky]
+Nothing but sky, all the way round. Every other mountain is below you.
+
+[summit_lantern]
+Her mother's lantern, lying in the snow where he threw it. The brass is dented. One pane is cracked. It's cold.
+
+# --- THE LIFE PASS (2026-11-15): Mount Vigil ---
+# (draft)
+
+# vigil_second_cairn
+[r2v_second_cairn_flags]
+A prayer pole in a cairn, flags streaming. Every herald who got this far tied on one more before turning back. The poles on this side are quite full.
+
+[r2v_second_cairn_flags_ves]
+{bored}Every flag is a wish. Statistically, one of them has to work.
+
+[r2v_second_cairn_apple]
+Three stones, a frozen apple and a coin. An offering left on the terrace for whatever was above, in case it was listening.
+
+[r2v_second_cairn_apple_ves]
+{smile}It's polite to bring something. I brought an umbrella.
+
+[r2v_second_cairn_names]
+A stone with names in tight rows, all of them heralds', each followed by a number. Nine. Four. Eleven. The number of times they turned back, perhaps. It's quite a high score for a hobby.
+
+[r2v_second_cairn_names_ves]
+{sly}Eleven. Somebody was really committed to not making it.
+
+[r2v_second_cairn_rope]
+A coil of rope, frozen into a solid hoop, with a wooden tag: PROPERTY OF THE HERALDS. DO NOT USE FOR KNOTS. Somebody has used it for knots.
+
+[r2v_second_cairn_rope_ves]
+{sly}You can tell. There are four.
+
+[r2v_second_cairn_boots]
+A pair of boots standing side by side in the snow, toes to the stairs, laces frozen stiff. Somebody went up this far in a hurry, or in bare feet, or with a plan.
+
+[r2v_second_cairn_boots_ves]
+{bored}Either a very good plan, or a very bad one.
+
+[r2v_second_cairn_fall]
+A frozen fall hung off the rock above the stairs, thick as a tree. When the light comes through it the whole terrace goes a quiet blue.
+
+[r2v_second_cairn_candle]
+A candle in a jar, frozen in. Somebody lit it here on the way down, and left it for the way back up.
+
+[r2v_second_cairn_candle_ves]
+{thoughtful}Left for the way back up. That's optimism.
+
+[r2v_second_cairn_tiny]
+A cairn the size of a loaf, a ribbon on top. The ribbon says nothing. That's all right. It has the sort of silence that was put there on purpose.
+
+[r2v_second_cairn_rime]
+A standing stone in a coat of rime, like a patient old man. You get the sense it has seen everyone's best attempt.
+
+[r2v_second_cairn_rime_ves]
+{bored}It's seen everyone's best attempt. It doesn't look impressed.
+
+[r2v_second_cairn_icicles]
+Icicles off the lip of the terrace, long and clean, with a little rainbow in the biggest. The wind plays them like a flute, if a flute was thin and sulky.
+
+[r2v_second_cairn_icicles_ves]
+{smile}Don't lick it. I know you want to.
+
+[r2v_second_cairn_den]
+A hole in the drift by the left wall of the terrace, very neat. A tiny, tidy trail of bones. The door is a perfect circle.
+
+[r2v_second_cairn_den_ves]
+{smile}Whoever lives there has better housekeeping than me.
+
+# vigil_cloud_bank
+[r2v_cloud_bank_line]
+A line of prayer flags strung between two poles over the shelf. They're a faded mix of every colour a herald could find, and some of them are socks.
+
+[r2v_cloud_bank_line_ves]
+{laughing}Is that a sock?
+
+[r2v_cloud_bank_hole]
+A fishing hole at the edge of the pond, a forked stick, a line, a bobber. Somebody sat here in the wind with a rod and a flask. Whatever they were fishing for, the pond says nothing.
+
+[r2v_cloud_bank_hole_ves]
+{bored}Under the ice? Really?
+
+[r2v_cloud_bank_bowl]
+A stone bowl by the great stair, a frozen oatcake inside and a ribbon on top. This far up, an oatcake is serious money.
+
+[r2v_cloud_bank_bowl_ves]
+{smile}I'd leave a biscuit too. I'd want it back, though.
+
+[r2v_cloud_bank_chimes]
+A post with bone chimes. They tap each other in the wind, one after the other, like a very small and very bony band.
+
+[r2v_cloud_bank_chimes_ves]
+{sly}It's a good tune. I'd put money on the third verse.
+
+[r2v_cloud_bank_sled]
+A sled left at the top of the snow slope, rope on the front, runners waxed. The tracks stop dead. Whoever sat in it changed their mind.
+
+[r2v_cloud_bank_sled_ves]
+{thoughtful}Or didn't change it in time.
+
+[r2v_cloud_bank_rime]
+A stone furred in rime, the fur all combed one way by the wind. It looks like a tiny, very still sheep.
+
+[r2v_cloud_bank_teapot]
+A dented tin teapot, the initials K. S. scratched on the lid. Somebody put their name on their tea. It is the best thing to put your name on.
+
+[r2v_cloud_bank_teapot_ves]
+{thoughtful}Not on a grave. On a teapot. I like that better.
+
+[r2v_cloud_bank_holds]
+Handholds, cut into the rock above the pond, spaced for someone with long arms. The hero was meant to be tall, by the look of it.
+
+[r2v_cloud_bank_holds_ves]
+{bored}Or the heralds were.
+
+[r2v_cloud_bank_spiral]
+A spiral of small stones laid out on the flat, round and round to the middle. Somebody had a long wait, and decided to make something of it.
+
+[r2v_cloud_bank_spiral_ves]
+{smile}It's a good spiral. Slightly lopsided. Which is correct.
+
+[r2v_cloud_bank_spikes]
+A great cluster of icicles hanging off the lip above the pond. A few have dropped, and lie in the snow like broken glass.
+
+[r2v_cloud_bank_trumpet]
+A herald's trumpet stuck bell-up in the snow, a little drift in its bell and a red tassel frozen to the cord. When the wind goes over it, it plays one low, offended note.
+
+[r2v_cloud_bank_trumpet_ves]
+{laughing}It sounds exactly like the real ones.
+
+[r2v_cloud_bank_den]
+A small round hole in the drift by the stair, a handful of tiny bones laid out on its doorstep, the way someone arranges their dinner plates.
+
+[r2v_cloud_bank_den_ves]
+{smile}Whoever lives there has a better winter than we do.
+
+# vigil_high_shelf
+[r2v_high_shelf_flags]
+A prayer pole on the High Shelf, its five flags bleached to the colour of milk. They flap with a sound like someone clapping very slowly.
+
+[r2v_high_shelf_flags_ves]
+{bored}Applause for being here.
+
+[r2v_high_shelf_names]
+A stone with a single name scratched into it, very carefully, with a good deep line. The rest of the stone is blank. It's saving the room.
+
+[r2v_high_shelf_names_ves]
+{sheepish}Somebody was confident.
+
+[r2v_high_shelf_tiny]
+A tiny cairn at the very edge, three stones with a ribbon, the ribbon pulled out straight toward the open air. It points at where the shelf ends. Possibly where somebody ended.
+
+[r2v_high_shelf_candle]
+A jar with a candle stub in it, snowed in to the shoulder. The ice inside the glass has a little ghost of smoke.
+
+[r2v_high_shelf_candle_ves]
+{thoughtful}They lit a candle on the highest ledge they could find. I understand that.
+
+[r2v_high_shelf_fall]
+A frozen waterfall hung from the rock above the blocks, thicker at the bottom than the top. Behind it the cloud lies close as a blanket.
+
+[r2v_high_shelf_flask]
+A flask lying on its side, a plug of ice in the neck. Whatever was in it is now exactly as cold as it can be.
+
+[r2v_high_shelf_flask_ves]
+{bored}Tea. Obviously.
+
+[r2v_high_shelf_tuft]
+A tuft of grass in the snow, the blades glazed, each one with a bead of ice at its tip. The whole thing chimes very slightly in the wind.
+
+[r2v_high_shelf_tuft_ves]
+{smile}It's the smallest instrument on the mountain.
+
+[r2v_high_shelf_rime]
+A stone with rime on one side, looking out at the cloud like it's waiting for a boat.
+
+[r2v_high_shelf_shoes]
+A pair of snowshoes, hung on a peg of ice, the laces frozen into a pattern. Somebody left them like a pair of boots by the door.
+
+[r2v_high_shelf_shoes_ves]
+{sly}They're not coming back for them. Someone had enough.
+
+# vigil_broken_span
+[r2v_broken_span_flagsb]
+A prayer pole at the span's foot with its flags laced round it in a clump, like they've huddled up for warmth.
+
+[r2v_broken_span_flagsb_ves]
+{smile}They look like me, in a gale.
+
+[r2v_broken_span_bowl]
+A stone bowl at the foot of the stair, a ribbon and an oatcake frozen in. A small offering to the span, that it might hold. It didn't.
+
+[r2v_broken_span_bowl_ves]
+{bored}An oatcake isn't a bridge.
+
+[r2v_broken_span_chimes]
+Bone chimes hung over the gorge, clicking out over nothing. It would be a wonderful thing to hear from the span, when there was a span.
+
+[r2v_broken_span_axe]
+An ice axe in the snow with a long scarf tied to it, the ends gone stiff as boards. A thing left behind by a person who planned to be back soon.
+
+[r2v_broken_span_axe_ves]
+{thoughtful}They always plan to be back soon.
+
+[r2v_broken_span_names]
+A stone with the names of people who reached the broken end and wrote them to prove it. Under the last one, a tidy drawing of a bridge, and then a smaller drawing of a bird.
+
+[r2v_broken_span_names_ves]
+{sly}A bird. Well. Of course.
+
+[r2v_broken_span_books]
+Two soaked books, frozen shut, with a stone on top to stop the wind reading them. The top spine says BOOK OF ARRIVALS (VOL. 2). When you peel the cover, it's blank except for a doodle of a bird.
+
+[r2v_broken_span_books_ves]
+{sly}A bird. They really liked birds.
+
+[r2v_broken_span_rime]
+A tall stone with a fur of rime on the windward side, looking out over the gorge. It's seen the span fall, and it didn't say a word.
+
+[r2v_broken_span_sled]
+A small sled, upside down, the rope coiled on top and a mitten tied to the rope. Whoever brought it hoped for a ride. It was left in the snow to think about hope.
+
+[r2v_broken_span_sled_ves]
+{bored}It's thought about it for a long time.
+
+[r2v_broken_span_icicles]
+Icicles hanging from the lip of the ledge, each with a drop at the tip. They look like organ pipes in a very small cold church.
+
+[r2v_broken_span_holds]
+Handholds in the rock, going straight down toward the gap, deeper and farther apart as they go. Somebody wanted a way down, and didn't get one.
+
+[r2v_broken_span_holds_ves]
+{worried}I'm not going down there.
+
+[r2v_broken_span_den]
+A small round hole at the east wall of the ledge. Some tiny tracks lead in and out. The mountain has fallen apart in many places, but not here.
+
+[r2v_broken_span_stash]
+Tucked into the nook under the high rock, behind a drift and a leaning pole of flags, a pack is wedged in a crack. A hare's track leads right up to it and turns away, politely.
+
+Inside, wrapped in a woollen sock: fudge, still soft. A note in a very small hand: FOR WHOEVER GOT THIS FAR. YOU'RE DOING WELL. (THE HARES HAVE BEEN WATCHING. THEY ARE IMPRESSED.)
+
+[r2v_broken_span_stash_ves]
+{smile}Somebody wrote that to be kind. And then somebody else put the hares in. I like them both.
+
+[r2v_broken_span_stash_gone]
+The nook under the rock. The wedge of snow has a hollow in it where the pack was. The hare tracks are still there. They look a bit sorry.
+
+# vigil_wind_stair
+[r2v_wind_stair_flags]
+A prayer pole at the corner of the lower path, the flags streaming straight along it, like arrows pointing the way. All five of them are pointing the same way. Not up.
+
+[r2v_wind_stair_flags_ves]
+{bored}Down. They all point down.
+
+[r2v_wind_stair_chimes]
+A post with chimes, bone and tin, and the sound is quite lovely, and quite alone.
+
+[r2v_wind_stair_apple]
+Three stones, a frozen apple, a coin. An offering on the lower path. Somebody gave the mountain an apple. The mountain gave them wind.
+
+[r2v_wind_stair_apple_ves]
+{sly}Seems fair. It's a mountain. It has priorities.
+
+[r2v_wind_stair_post]
+A wooden post carved into a face, cheeks puffed and lips pursed, blowing. Painted lines curl out of its mouth. Somebody carved the wind a face, so they'd have someone to shout at.
+
+[r2v_wind_stair_post_ves]
+{bored}It's got the right expression. Smug.
+
+[r2v_wind_stair_wheel]
+A prayer wheel on a stone post, its drum painted with lamps. When the gust comes it spins by itself, faster and faster, and then it stops. Like it's thinking of something.
+
+[r2v_wind_stair_wheel_ves]
+{thoughtful}Lamps. Of course they paint lamps.
+
+[r2v_wind_stair_names]
+A stone with a row of names, a lamp scratched beside each. A lamp for every lamplighter, then, who passed this way. A line of tiny lamps going round the stone.
+
+[r2v_wind_stair_names_ves]
+{sheepish}I counted. Don't say anything.
+
+[r2v_wind_stair_axe]
+An ice axe stuck in the snow, handle up, wearing a small knitted hat. Somebody dressed their axe. It's the most sensible thing anybody's done on this mountain.
+
+[r2v_wind_stair_axe_ves]
+{grin}He's very smart. Very dashing.
+
+[r2v_wind_stair_rime]
+A stone with rime like fur. It looks like it's listening hard, and has not been told the answer.
+
+[r2v_wind_stair_tiny]
+A tiny cairn between the rocks on the middle path, three stones, a bit of yellow ribbon. Someone who stopped to rest in the wind built a small shelter for hope.
+
+[r2v_wind_stair_tiny_ves]
+{smile}Okay. That one's allowed.
+
+[r2v_wind_stair_spikes]
+A cluster of enormous icicles under the lip of the long path. A few have fallen and landed point-first in the snow, in a ring, like a very cold fence.
+
+[r2v_wind_stair_rope]
+A coil of rope on the ledge, frozen stiff in a hoop. A tag says: FOR THE RINGS. Somebody was meant to bring it up and tie it on, and never did.
+
+[r2v_wind_stair_rope_ves]
+{bored}Ropes don't tie themselves.
+
+[r2v_wind_stair_den]
+A hole in a drift on the middle path, round as a button, with a doormat of tiny bones. A thin nose looks out, evaluates you, and withdraws.
+
+[r2v_wind_stair_den_ves]
+{smile}He gave you a look. Mark him down as unimpressed.
+
+[r2v_wind_stair_rag]
+A scrap of blue cloth pinned between two stones by the wind: a prayer flag, torn off its string, one corner still snapping. It's just the right size for a gap somewhere. You take it.
+
+[r2v_wind_stair_rag_ves]
+{thoughtful}Somebody's missing one of those. Look for the pole with the gap.
+
+[r2v_wind_stair_rag_gone]
+The two stones, with the mark of a flag between them. A little cleaner than the rest of the rock.
+
+# vigil_lamplighters_ledge
+[r2v_lamplighters_ledge_flagsb]
+A prayer pole on the ledge, with its flags ragged and sun-bleached. They're the only thing up here that moves the way the wind does.
+
+[r2v_lamplighters_ledge_flagsb_ves]
+{thoughtful}They move. That's something.
+
+[r2v_lamplighters_ledge_ring]
+A ring pressed into the snow beside the path, about the size of a lantern's foot. The edge is crisp and the snow inside is smooth. Someone stood a lantern here, not long ago, and took it with them when they left.
+
+[r2v_lamplighters_ledge_ring_ves]
+{thoughtful}A lamplighter. Probably. They go round with the lamps.
+
+[r2v_lamplighters_ledge_tuft]
+A tuft of dead grass, glazed in frost. The wind has combed it flat. It'll come up again in spring, if there is one.
+
+[r2v_lamplighters_ledge_bowl]
+A bowl set by the path to the hut, an oatcake frozen into it. Left for the hut. Left for whoever is inside. A long time ago.
+
+[r2v_lamplighters_ledge_bowl_ves]
+{bored}Nobody came. It's a very patient oatcake.
+
+[r2v_lamplighters_ledge_chimes]
+Bone chimes on a post by the stair. They click softly, like somebody counting, then losing count, and starting again.
+
+[r2v_lamplighters_ledge_chimes_ves]
+{thoughtful}Eight. Nine. Eight.
+
+[r2v_lamplighters_ledge_axe]
+An ice axe stuck in the snow beside the woodpile, with a rag tied to the head. Whoever left it knew they wouldn't need it any more. That's one of the nicer ways to retire a tool.
+
+[r2v_lamplighters_ledge_axe_ves]
+{bored}It's a good axe. Stop looking at it.
+
+[r2v_lamplighters_ledge_candle]
+A candle stub frozen into a jar, at the edge of the stair, in case someone climbed it in the dark.
+
+[r2v_lamplighters_ledge_candle_ves]
+{smile}It's only a candle. They're good at being small and warm.
+
+[r2v_lamplighters_ledge_sled]
+A toy sled with a rope, tucked beside the wall of the ledge. There's a small hand-print in the frost on the seat.
+
+[r2v_lamplighters_ledge_sled_ves]
+{thoughtful}Small hands.
+
+[r2v_lamplighters_ledge_names]
+A stone at the top of the ledge with names scratched on it. Lamplighters, mostly. Each name has a little lamp drawn beside it, four quick strokes, the way you'd do it after drawing a thousand.
+
+[r2v_lamplighters_ledge_names_ves]
+{thoughtful}They sign their names with lamps. It's very efficient.
+
+[r2v_lamplighters_ledge_den]
+A hole in the drift by the west wall, a hand's width across, round and neat. The stoat that lives here looks out sometimes and counts the lamps, or the stairs, or you.
+
+[r2v_lamplighters_ledge_den_ves]
+{smile}Another witness.
+
+# vigil_gale_face
+[r2v_gale_face_flags]
+A prayer pole at the foot of the Gale Face, its flags laced into a tight, flapping knot. In this wind they never get to stretch out. They look like they'd like to.
+
+[r2v_gale_face_flags_ves]
+{bored}Same.
+
+[r2v_gale_face_bowl]
+A stone bowl, an oatcake frozen in, a ribbon pulled taut and flapping off the top. The ribbon's pulled so tight it looks like it's trying to leave.
+
+[r2v_gale_face_bowl_ves]
+{sly}Even the ribbon's trying to leave.
+
+[r2v_gale_face_chimes]
+A post with chimes that hasn't a hope. The wind is so strong the chimes are blown flat and ring only in the lulls. For a moment they play, then they're quiet.
+
+[r2v_gale_face_axe]
+An ice axe in the snow, pointing the wrong way, the wind having turned it. A scrap of a note is wrapped round the handle: IT'S THE WIND'S NOW.
+
+[r2v_gale_face_axe_ves]
+{bored}It's always the wind's now.
+
+[r2v_gale_face_rime]
+A stone with such thick rime on its windward side that it has grown a second, ghostly stone, joined to the first. Together they look like a very patient couple.
+
+[r2v_gale_face_shirt]
+A shirt on a stick, frozen flat as a board, pointing straight out. It's the only weathervane on the face that agrees with the wind.
+
+[r2v_gale_face_shirt_ves]
+{laughing}It's a very honest weathervane.
+
+[r2v_gale_face_candle]
+A candle in a jar, snowed in to its shoulders, at the top of the face. Whoever lit it needed it lit, then went on without waiting to see.
+
+[r2v_gale_face_tiny]
+A tiny cairn at the lip of the ledge, three stones, a thin red ribbon. The wind has bent the ribbon so far it's a straight line.
+
+[r2v_gale_face_tiny_ves]
+{smile}A good cairn. It's holding on.
+
+[r2v_gale_face_shoes]
+A pair of snowshoes lashed to a boulder with knotted cord. They've weathered to the same colour as the boulder. They're nearly part of it.
+
+[r2v_gale_face_den]
+A hole in the drift on the top ledge, round and dark, and utterly sheltered. Even in this gale, the snow in front of it has not moved. Some creatures know where the wind isn't.
+
+[r2v_gale_face_den_ves]
+{sly}He's found the one place the wind forgot.
+
+# vigil_weathervanes
+[r2v_weathervanes_flags]
+A prayer pole next to the vanes, its flags set to point the same way as the vanes. When you turn a vane, the flags swing with it. They've been keeping an eye on each other for a hundred years.
+
+[r2v_weathervanes_flags_ves]
+{smile}Peer pressure. For flags.
+
+[r2v_weathervanes_line]
+A line of flags strung between two poles on the top shelf. They run in the direction the vanes tell them to, and cluster at one end when the wind drops.
+
+[r2v_weathervanes_line_ves]
+{grin}They're better organised than the heralds.
+
+[r2v_weathervanes_chimes]
+A post with bone chimes. When the wind changes, the chimes change. A herald once wrote a whole song for it. It had one note and it went on for an hour.
+
+[r2v_weathervanes_chimes_ves]
+{bored}Please don't hum it.
+
+[r2v_weathervanes_bowl]
+A stone bowl at the edge of the lowest shelf, an oatcake frozen inside. A place for gifts to the wind. It's been told several times it's welcome to the oatcake.
+
+[r2v_weathervanes_bowl_ves]
+{sly}It never takes anything. It just blows around the gift and leaves.
+
+[r2v_weathervanes_wheel]
+A prayer wheel at the edge of the middle shelf. It turns whichever way the vane says. The painted lamps go by, round and round, a great slow lamp-wheel.
+
+[r2v_weathervanes_wheel_ves]
+{thoughtful}Lamps again. It's always lamps.
+
+[r2v_weathervanes_hat]
+A hat on a stake, caught in the exact centre of all the wind. It never moves. It's the stillest thing on the shelf. LOST HERO'S HAT. APPLY WITHIN.
+
+[r2v_weathervanes_hat_ves]
+{laughing}It's the calmest hat on the mountain.
+
+[r2v_weathervanes_names]
+A stone with names all facing the same way, written by people who were leaning into the wind and only had one direction to write in.
+
+[r2v_weathervanes_names_ves]
+{sly}It reads like a ransom note.
+
+[r2v_weathervanes_teapot]
+A dented tin teapot on a rock, with a note pinned under it: FOR THE ONE WHO TURNS THE VANE. IT WAS TEA. The wind has got in and drunk most of the idea.
+
+[r2v_weathervanes_rime]
+A stone with rime on all sides, because up here the wind comes from everywhere in turn. It looks like a snowball that never left the nursery.
+
+[r2v_weathervanes_rime_ves]
+{smile}It's like the wind gave it a very big hug.
+
+[r2v_weathervanes_post]
+A carved wooden face on a post, cheeks puffed, blowing. A dozen weathervanes turn at it and it never blinks. It must be in charge.
+
+[r2v_weathervanes_post_ves]
+{laughing}He's the boss. Look at him.
+
+# vigil_vane_gardens
+[r2v_vane_gardens_flagsb]
+A prayer pole in the terrace garden, flags strung on it like washing. It points whichever way the vanes tell it. Everything in the Gardens takes its orders from a vane.
+
+[r2v_vane_gardens_flagsb_ves]
+{bored}Even the flags. Peer pressure.
+
+[r2v_vane_gardens_line]
+A line of flags strung over the path to the chimney. They flicker in a long ripple, one after another, like a message passing down.
+
+[r2v_vane_gardens_line_ves]
+{smile}A very long, very slow wave.
+
+[r2v_vane_gardens_chimes]
+Bone chimes on a post by the cave mouth. The cave breathes out, the chimes move, and the wind brings the sound back.
+
+[r2v_vane_gardens_apple]
+Three stones, a frozen apple, a coin. A gift for the vane that works. The gardeners left it for the one that turned.
+
+[r2v_vane_gardens_apple_ves]
+{sly}Which one's that?
+
+[r2v_vane_gardens_names]
+A stone with a list of winds on it, scratched deep: NORTH, WEST, EAST, and DON'T ASK. Each has a tiny scratch beside it: a little flag.
+
+[r2v_vane_gardens_names_ves]
+{bored}The last wind is the one we met.
+
+[r2v_vane_gardens_boots]
+A pair of garden boots standing in the soil, toes pointing at a flowerbed that never came up. The laces are tied in a very neat bow.
+
+[r2v_vane_gardens_boots_ves]
+{smile}The gardener's. He's still waiting.
+
+[r2v_vane_gardens_notes]
+A gardener's notebook, frozen shut, a stone on top. PLANTING NOTES, says the cover. Every page inside says TRY AGAIN.
+
+[r2v_vane_gardens_notes_ves]
+{laughing}That's the most honest garden book I've ever seen.
+
+[r2v_vane_gardens_spiral]
+A spiral of small stones on the top terrace, in a neat, careful circle. A herald with a lot of time and no one to talk to made this, and it's very good.
+
+[r2v_vane_gardens_spiral_ves]
+{smile}I'd have done a smiley.
+
+[r2v_vane_gardens_tiny]
+A cairn by the geyser's edge, three stones and a ribbon. It points the way you shouldn't go. Not that anyone stopped to read it.
+
+[r2v_vane_gardens_rime]
+A stone with rime on every side, gale-blown. Looks like a snowman that has been turned inside out.
+
+[r2v_vane_gardens_spikes]
+A cluster of icicles hanging from the lip of the high terrace, thicker than your wrist, and as clear as a good idea.
+
+[r2v_vane_gardens_den]
+A hole in the drift in the lower garden, round and dark. A herald's old pot-plant label is stuck in the snow by it: STOAT. DO NOT WATER.
+
+[r2v_vane_gardens_den_ves]
+{laughing}Somebody labelled it. Somebody was very scared of it.
+
+# vigil_spire_neck
+[r2v_spire_neck_flags]
+A prayer pole at the foot of the Neck, flags stiff, all five pointing east where the wind goes. A herald's note is tied on the pole: SWING WITH IT. (SORRY.)
+
+[r2v_spire_neck_flags_ves]
+{bored}Sorry for what?
+
+[r2v_spire_neck_bowl]
+A stone bowl at the edge of the shelf, an oatcake frozen inside and a ribbon on top. It's pointed east, like everything here.
+
+[r2v_spire_neck_axe]
+An ice axe stuck in the snow, handle up, with a knot of green yarn tied to it. Someone left it for the next one to hold on to. It says, in tiny knitted letters, GOOD LUCK.
+
+[r2v_spire_neck_axe_ves]
+{smile}Good luck. That's the best thing anyone's written on this mountain.
+
+[r2v_spire_neck_shirt]
+A shirt on a stick, frozen, arms out in the gale, the wind pressing it flat. The last herald's laundry. It's been waving at the summit for a hundred years.
+
+[r2v_spire_neck_shirt_ves]
+{laughing}He can see it. He's just very polite.
+
+[r2v_spire_neck_names]
+A stone with a spiral of names on it, the largest at the centre, the smallest on the rim. At the very centre, a name that has been scratched out, and written again, and scratched out.
+
+[r2v_spire_neck_names_ves]
+{thoughtful}Somebody couldn't decide who to put.
+
+[r2v_spire_neck_candle]
+A candle stub in a jar at the top of the shelf, so close to the summit that the flame would have been seen from the beacon. It's still there. Nobody was there to see it.
+
+[r2v_spire_neck_candle_ves]
+{thoughtful}Close enough to see the beacon from. They must have been so nearly there.
+
+[r2v_spire_neck_chimes]
+A post with bone chimes at the highest end of the neck, hung out where the gale can get it. It rings once, long and hollow, like a bell far away.
+
+[r2v_spire_neck_chimes_ves]
+{thoughtful}Not the bell. A smaller bell. Wearing a coat.
+
+[r2v_spire_neck_tiny]
+A tiny cairn at the lip of the second ledge, three stones, and a little yellow ribbon. A herald left it here at the end of the road. Not the road's end. The herald's.
+
+[r2v_spire_neck_spikes]
+Icicles the size of spears hang off the lip above the stone blocks, and the wind has bent them slightly, all in the same direction.
+
+[r2v_spire_neck_rime]
+A stone that looks as if it's thinking about the summit. The rime on it has grown in feathery rays, like a very small, very cold sunrise.
+
+[r2v_spire_neck_rime_ves]
+{smile}A tiny sunrise. Hello.
+
+[r2v_spire_neck_den]
+A hole in the drift at the neck's foot, with a tidy ring of tiny tracks. A very small, very determined stoat lives here, nearly at the top of the world.
+
+[r2v_spire_neck_den_ves]
+{grin}A stoat who made it this high. I like him.
+
+# vigil_owl_shelf
+[r2v_owl_shelf_flagsb]
+A prayer pole near the stall, flags pointing up the great stair. All pointing at the summit. It's the polite thing to do, for flags.
+
+[r2v_owl_shelf_flagsb_ves]
+{bored}They're all so keen.
+
+[r2v_owl_shelf_candle]
+A jar with a candle in it, frozen solid, left on a crate by the stall. A good place for a light: by the shop, where the owl would see it.
+
+[r2v_owl_shelf_candle_ves]
+{smile}For Hollis. It's very considerate.
+
+[r2v_owl_shelf_axe]
+An ice axe leaning on a crate, a card tied to its handle: FOR SALE (SEE OWL).
+
+[r2v_owl_shelf_axe_ves]
+{laughing}Everything's for sale, if you ask the owl.
+
+[r2v_owl_shelf_names]
+A stone with names on it, climbers' names, scratched in rows. Under the last: HOLLIS WAS HERE (HE'S ALWAYS HERE).
+
+[r2v_owl_shelf_names_ves]
+{grin}He's very consistent.
+
+[r2v_owl_shelf_bowl]
+A stone bowl by the stall, with a few tiny frozen seeds in it, and a note, written very small: FOR THE BIRDS. NOT FOR THE OWL. HE IS NOT A BIRD, HE SAYS.
+
+[r2v_owl_shelf_bowl_ves]
+{sly}He's a bit sensitive.
+
+[r2v_owl_shelf_bunny]
+A snow rabbit, built on a crate by the owl's stall, with twig ears and berry eyes. Hollis is facing it. It's a sort of staring contest. He's losing.
+
+[r2v_owl_shelf_bunny_ves]
+{laughing}Hollis never blinks. Neither does the rabbit.
+
+[r2v_owl_shelf_shirt]
+A shirt on a stick at the edge of the shelf, frozen. It's a sign for the shop, probably. It says, in the way that frozen shirts do: OPEN.
+
+[r2v_owl_shelf_shirt_ves]
+{bored}It's the worst advertising I've ever seen.
+
+[r2v_owl_shelf_rime]
+A stone with rime on one side, set like a doorstop beside the stall. It's probably holding the shop open against the wind.
+
+[r2v_owl_shelf_tiny]
+A tiny cairn at the head of the stair, a bit of ribbon on top, pointing up at the summit. The last cairn before the top. A cairn for the end of cairns.
+
+[r2v_owl_shelf_tiny_ves]
+{thoughtful}One more flight.
+
+[r2v_owl_shelf_spikes]
+A cluster of icicles hangs under the edge of the shelf, point down, over nothing. It's a long drop, and they seem quite content.
+
+# vigil_summit
+[r2v_summit_rime]
+A stone at the edge of the summit coated in so much rime that it has grown a little white beard. Beyond it, only sky.
+
+[r2v_summit_rime_ves]
+{thoughtful}Quiet up here.
+
+[r2v_summit_tiny]
+A little cairn near the edge of the summit. A last ribbon, tied round the top stone, frozen straight out in the wind.
+
+[r2v_summit_candle]
+A candle stub in a jar, left at the top by someone who lit it for the view, and the view was the best light there was.
+
+[r2v_summit_candle_ves]
+{smile}A candle at the top. In case the sky needed a hand.
+
+# vigil_lamplighters_hut
+[r2v_lamplighters_hut_shoes]
+A pair of snowshoes propped by the door, mended with different coloured twine at every break. The mending's very neat.
+
+[r2v_lamplighters_hut_mitten]
+A red mitten left on the floor by the stove to dry, left hand, with a bit of blue wool darned into the thumb.
+
+[r2v_lamplighters_hut_mitten_ves]
+{bored}They never found the other one.
+
+# --- END OF THE LIFE PASS: Mount Vigil ---
+
+# === ROUND 3, THE FUN CHECK (15 November 2026): chapters 1 and 2, the dullest rooms ===
+
+# (draft)
+[r3a_hut_shelf]
+A shelf of oil tins and lamp wicks, every label in the same neat hand. The last tin is only half-labelled: OIL. And then the pen simply stops, as if it was called away to light something.
+
+# (draft)
+[r3a_hut_shelf_ves]
+{thoughtful}Somebody always means to finish the label.
+
+# (draft)
+[r3a_hut_table]
+A small round table with two mugs on it, a candle stub, and a hand of cards laid face down. One mug is turned to face the empty chair. The other is turned to face the door.
+
+# (draft)
+[r3a_hut_table_ves]
+{sly}They were waiting for someone, and they brought cards in case it took a while. Good sense.
+
+# (draft)
+[r3a_hut_window]
+A little window, frosted over in ferns. The only clear bit is a circle at about the height of a child's nose. Somebody has stood here breathing on the glass, looking for a lamp along the ridge.
+
+# (draft)
+[r3a_hut_window_ves]
+{smile}That's what a window's for. Looking for people.
+
+# (draft)
+[r3a_hut_roster]
+A chalk slate on a post: THE ROUND. Under it, a column of lamp numbers, each with a tick, down to number thirty-one. Thirty-two has a question mark. Thirty-three to forty are just numbers, waiting.
+
+# (draft)
+[r3a_hut_roster_ves]
+{bored}Thirty-one out of forty. I've seen worse attendance at a chapel.
+
+# (draft)
+[r3a_hut_kindling]
+A bundle of kindling stacked beside the cold hearth, tied with a bow. A tag on the string: FOR WHOEVER COMES NEXT. Under it, smaller: (TIED, NOT TIED TIGHT.)
+
+# (draft)
+[r3a_hut_kindling_ves]
+{smile}That's rather kind. I don't like it. It's too kind to argue with.
+
+# (draft)
+[r3a_su_tin]
+A tin box wedged into a heap of rocks at the top of the world, a pencil on a string. Inside is a notebook: the summit register. Names, dates, one-word remarks. VIEW. WIND. VIEW. WIND. COLD. VIEW. A page has been torn out near the front, with a note in its place: I WAS GOING TO WRITE SOMETHING PROFOUND. IT WAS TOO WINDY.
+
+# (draft)
+[r3a_su_tin_ves]
+{bored}I'm not signing it. I'd have to write 'wind', and I've got more to say about it than that.
+
+# (draft)
+[r3a_su_snowman]
+A very small snowman at the very top, stone eyes, a stick for each arm. Somebody carried snow up a mountain made of snow to build him. One stick arm has been turned to point at the way down.
+
+# (draft)
+[r3a_su_snowman_ves]
+{smile}He's the only one up here with the right idea.
+
+# (draft)
+[r3a_su_hat]
+A last stake in the snow, a woolly hat on it, and a card: LOST HERO'S HAT. APPLY WITHIN. Under it, in the same round hand, a note added later: (OKAY. WE'RE GIVING UP. KEEP IT. WE'LL GET ANOTHER.)
+
+# (draft)
+[r3a_su_hat_ves]
+{sly}Somebody has put a great many stakes into a mountain over one hat.
+
+# === END ROUND 3 (chapters 1 and 2) ===

@@ -1,0 +1,752 @@
+# KING PEPTUP THE RESPLENDENT, the duel in the throne hall (scene rumbolds_duel).
+# Numbers (HP, damage, the phases, how much each TALK option calms) live in
+# src/data/enemies/rumbold.js.
+# Every line the king says out loud is marked with a "voice:" comment above it,
+# numbered rumbold_battle_<n>; src/audio/voiceClips.js says which recording
+# (if any) plays as it opens. Nobody else is voiced. He talks about himself in the third person when he is excited
+# and he is nearly always excited.
+#
+# A section with ": behind" after its name is used in the second part of the
+# fight (after the jam) instead of the plain one ([flavor: behind] instead of
+# [flavor]), and ": alive" in the last part (when the puppet comes alive).
+# [phase: ...] sections are said as that phase starts: plain ones in the
+# battle panel, "foe" ones by the king in his bubbles, "vesper" and "tuck"
+# ones by Ves or Tuck in their box.
+
+# In his speech bubbles during his entrance, after the title card. Lines
+# written together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on.
+[boss_intro]
+# voice: rumbold_battle_1
+LADIES! GENTLEMEN!
+CREATURES OF ALL KINDS!
+
+# voice: rumbold_battle_2
+Tonight, for ONE night only,
+Peptup fights YOU!
+
+# voice: rumbold_battle_3
+...Do try to look amazed.
+
+[intro]
+KING PEPTUP flings out an arm to the house, beaming, as the spotlight finds him.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+KING PEPTUP holds his pose. He hasn't moved since the last bow.
+
+His crown sits perfectly straight. It hasn't slipped once.
+
+Somewhere above the stage, a light sizzles.
+
+The footlights flicker. The audience is a hundred glow-worms, and every one is watching you.
+
+Ves keeps one eye on the dark above the stage. The rigging creaks, though nothing's moving.
+
+The king's arms stick out stiffly. Do his hands ever move on their own?
+
+KING PEPTUP's eyes shine. He doesn't blink at the right times.
+
+There's a faint creak, somewhere above the stage, whenever he talks.
+
+[flavor: behind]
+KING PEPTUP's mouth hangs open. His voice goes on anyway.
+
+Up in the rafters, a small dormouse lies along a beam, both paws on the bar.
+
+The show is trying to start again. It keeps losing its place.
+
+The king's crown has slipped. One glass eye points at the ceiling.
+
+Tuck won't look at you. He's watching the king's hands, as if they might drop.
+
+The glow-worm audience has gone quiet. Nobody is clapping.
+
+The strings creak. Everything is shaking a little.
+
+The footlights hum. The stage smells of dust and old candle wax.
+
+# In a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on.
+[taunts]
+# voice: rumbold_battle_5
+Peptup has NEVER
+lost a duel!
+
+# voice: rumbold_battle_7
+Oh, you are GOOD.
+Peptup is BETTER!
+
+# voice: rumbold_battle_8
+Stand still, would you?
+It's a SHOW!
+
+# voice: rumbold_battle_10
+The Hero was
+Peptup's DEAREST friend,
+you know!
+
+# voice: rumbold_battle_11
+You can't beat
+a KING!
+
+# voice: rumbold_battle_12
+Pay attention!
+Peptup is TALKING!
+
+# voice: rumbold_battle_13
+Tremble before
+the RESPLENDENT!
+
+# voice: rumbold_battle_14
+Everybody loves
+a duel!
+
+# voice: rumbold_battle_77
+Peptup walked the stair
+with the HERO!
+You fell down a HOLE!
+
+# Said just before that attack (battleScene.js: `taunt: <pattern>`), so the
+# swords line only comes when the swords do.
+[taunt: rumboldSpotlights]
+# voice: rumbold_battle_4
+HA HA! And NOW,
+the SPOTLIGHT!
+
+[taunt: rumboldApplause]
+# voice: rumbold_battle_6
+Applause, my friends!
+APPLAUSE!
+
+[taunt: rumboldSwords]
+# voice: rumbold_battle_9
+Watch the swords!
+The swords are the best part!
+
+[taunts: behind]
+# voice: rumbold_battle_15
+HA HA! Peptup is
+UNSTOPPABLE!
+
+# voice: rumbold_battle_16
+Peptup is not stopping!
+Peptup is... Peptup...
+
+# voice: rumbold_battle_17
+The show must go ON!
+It must! It MUST!
+
+# voice: rumbold_battle_18
+Nobody leave!
+There's MORE!
+
+# voice: rumbold_battle_19
+...Where was I?
+Peptup was GREAT!
+
+# voice: rumbold_battle_20
+Don't look at the curtain!
+Look at PEPTUP!
+
+# voice: rumbold_battle_21
+Louder! Peptup
+is going LOUDER!
+
+# voice: rumbold_battle_22
+Applause! ...Anyone?
+Applause?
+
+# Instead of a taunt, now and then: if you've hit him since his last attack,
+# one of [hurt]; low on HP (see `lowHp` in rumbold.js), one of [low_hp].
+# The plain ones are the show's; ": behind" ones the jam's (Tuck doing the
+# voice, flustered); the last act has its own (": alive", further down).
+[hurt]
+# voice: rumbold_battle_31
+OOF! A hit! A palpable
+hit! Peptup is FINE!
+
+# voice: rumbold_battle_32
+Ha ha! Barely felt it!
+Peptup is made of
+sterner STUFF!
+
+# voice: rumbold_battle_33
+Careful! The crown is
+CARDBOARD! I mean GOLD!
+Solid GOLD!
+
+# voice: rumbold_battle_34
+Was that part of the show?
+Peptup will ALLOW it!
+
+[low_hp]
+# voice: rumbold_battle_35
+Peptup is fine! Perfectly
+fine! Nobody look at
+the CREAKING!
+
+# voice: rumbold_battle_36
+Is it hot up here?
+It's very HOT under
+these lights!
+
+# voice: rumbold_battle_37
+The Resplendent does
+not WOBBLE! Peptup is
+not wobbling!
+
+[hurt: behind]
+# voice: rumbold_battle_38
+...Ow? Is that what
+Peptup says? OW!
+
+# voice: rumbold_battle_39
+Please don't, um! I mean!
+Peptup COMMANDS you
+not to!
+
+# voice: rumbold_battle_40
+Ha ha! Hit the king all
+you like! The king
+doesn't... um...
+
+[low_hp: behind]
+# voice: rumbold_battle_41
+Peptup can keep going!
+Peptup can...
+...Please stop.
+
+# voice: rumbold_battle_42
+The levers are sticking!
+Not that there ARE
+levers! Ha ha!
+
+# What happens as the jaw jams (see `beat` in rumbold.js).
+[phase: jam]
+CRACK.
+
+KING PEPTUP freezes. Cracks run out across him from where you hit, and he comes off in flakes of paint. Under it is bare wood: a jointed mannequin, hanging on strings.
+
+CLUNK. His jaw drops open and sticks there. A string snaps with a ping, and his arm drops. His head lolls over.
+
+A piece of the border tears loose and drops. And there, up in the rafters, lying along a beam with both paws on a wooden bar and his tongue between his teeth, is TUCK.
+
+# What the king says, with his mouth hanging open.
+[phase: jam foe]
+# voice: rumbold_battle_23
+HA HA! Peptup is
+UNSTOPPABLE!
+
+# voice: rumbold_battle_24
+Peptup is... Peptup...
+Peptup is...
+
+# voice: rumbold_battle_25
+...A SMALL TECHNICAL
+DIFFICULTY! Carry on!
+
+[phase: jam vesper]
+{surprised}...That's Tuck.
+
+{thoughtful}It's been Tuck the whole time. He's doing the voice.
+
+{sad}Look at his face. He looks like he's been caught stealing.
+
+[phase: jam tip]
+The king's mouth isn't moving. His voice is coming from up in the rafters.
+
+Hitting the king only makes the show louder. TALK to TUCK.
+
+# Pacify on the king behind the curtain (it always fails here: the act
+# ends the moment Tuck's MERCY is full). There's nobody in the wood.
+[pacify: behind]
+But there was no-one to give it to.
+
+# Any try at kindness before the jam: the king answers it himself, in his
+# bubbles, once as [mercy_mock] and after that one of [mercy_mock_again].
+[mercy_mock]
+# voice: rumbold_battle_26
+A kind word? For ME?
+Peptup is TOUCHED!
+
+# voice: rumbold_battle_27
+But this is a DUEL, my friend!
+Fight like you MEAN it!
+
+[mercy_mock_again]
+# voice: rumbold_battle_28
+Sweet! But no!
+Peptup will not be calmed!
+
+# voice: rumbold_battle_29
+Is that a joke?
+Peptup LOVES jokes!
+
+# voice: rumbold_battle_30
+Mercy is for the
+audience! Not the star!
+
+# The line under GAME OVER if you fall in the second half of the fight.
+[game_over: behind]
+Imagine losing to a dormouse on a beam.
+
+# Ves's kind word (TALK) once Tuck can be reached (phase 2). {foe} is the king.
+[vesper_talk]
+Ves tells Tuck he can let go of the bar whenever he likes. His paws tighten. Then they loosen, just a little.
+
+Ves tells Tuck that anyone who kept a voice like that going this long has nothing to be sorry for. Tuck's ears go pink.
+
+Ves asks Tuck who taught him to work a puppet. He opens his mouth, shuts it, and says, very quietly, that nobody did.
+
+Ves tells Tuck the show was good. She doesn't say that about shows. Tuck whispers a thank-you. Nobody's ever told him that.
+
+Ves sits down on the stage, so she's not looming. Tuck looks down at her over the edge of his beam for a long moment.
+
+# One section per TALK option. The names after "talk:" must match the TALK
+# options in src/data/enemies/rumbold.js.
+[talk: Check]
+KING PEPTUP - HP 11000
+The king of Belowtown, and the Hero's oldest friend, he says. Loud, bright and very proud of himself. Nobody has ever seen him eat.
+
+[talk: Check: behind]
+KING PEPTUP - HP 11000
+A wooden puppet with a jammed jaw. The voice isn't his. Up in the rafters, TUCK is working the strings. Talk to Tuck, and his MERCY can fill.
+
+[talk: Applaud]
+You clap, slowly. KING PEPTUP takes a bow so deep his crown nearly falls off. Up in the dark, the rigging creaks.
+
+[talk: Ask for a word]
+You hold out your hands: well? KING PEPTUP waves an arm. "A word? I have MANY! Peptup! The Resplendent! Magnificent!" He does not say anything else.
+
+[talk: Look up into the rafters]
+You peer up into the dark over the stage. KING PEPTUP swings his whole body round on you with a CLACK, and the lights dazzle you.
+
+[talk: Ask Tuck his name]
+You ask the dormouse for his name. He says nothing. Then, in a whisper: "...Tuck. It's, um. Just Tuck." The king's mouth is still hanging open. He says nothing, for once.
+
+[talk: Tell Tuck the voice is good]
+You give the dormouse a thumbs up, and mouth that the voice is very good. A strangled little noise comes out of him. "...Thank you. Nobody's ever... Thank you."
+
+[talk: Say you can see him]
+You point up at the rafters, and nod. Tuck goes stiff. His paws shake on the bar, and the king's arm twitches.
+
+[talk: Hold out a hand to the rafters]
+You hold out a hand towards the rafters, palm up. Tuck looks at it for a very long time. The king's arm dips, very slowly, to his side.
+
+# Said when you try to RUN.
+[no_escape]
+You can't leave in the middle of a show! The curtain is down.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+His strings snap, and KING PEPTUP comes apart across the boards, a joint at a time. His crown rolls across the stage and spins to a stop. Up in the rafters, TUCK is untouched, both paws still on a bar that isn't holding anything.
+
+[pacified]
+TUCK lets go of the bar. The strings go slack, and KING PEPTUP folds up on the boards and stays there. The show is over. Nobody claps. Then somebody does.
+
+# ---------------------------------------------------------------------
+# THE LAST ACT: NO STRINGS (phase "alive").
+# Tuck lets go of the bar, and the puppet keeps moving. Something has lit
+# up inside the hollow wood, and it's running the show itself: manic, stuck
+# on words, the stage directions of his old show leaking into everything he
+# says, in brackets. He takes his own name back, and says "I" and "ME" now
+# as well as Peptup. And he believes the story Tuck made up for him, every
+# word: he came down the stair with the Hero, shoulder to shoulder, and the
+# Hero will come back for him. He has turned on Tuck: the hand that held him
+# back, the one who kept him in the dark and took his memories. He doesn't
+# know what lit him, and doesn't care. Only at the very end (spared or
+# beaten) does a small crack of doubt get in.
+# (The [phase: alive ...] sections are the beat as it starts, in this order,
+# with pauses between: see `beat` in rumbold.js.)
+
+[phase: alive]
+TUCK lets go of the bar.
+
+KING PEPTUP sags in his chair. His arms drop. His jaw hangs open. The strings go slack, and the hall is so quiet you can hear the footlights hum.
+
+[phase: alive kindle]
+Then, inside the king, where there's nothing at all but hollow wood, something lights up.
+
+# His first words alive, in his bubbles.
+[phase: alive foe]
+# voice: rumbold_battle_43
+...Ha.
+
+# voice: rumbold_battle_44
+Ha ha. HA HA HA!
+LADIES! GENTLEMEN!
+(CUE APPLAUSE.) (CUE APPLAUSE.)
+
+# voice: rumbold_battle_45
+Look! Peptup can MOVE!
+By HIMSELF! No hand!
+No hand hand HAND!
+
+# voice: rumbold_battle_78
+And I REMEMBER! The stair!
+The dark! The HERO!
+I WAS THERE! I WAS THERE!
+
+# voice: rumbold_battle_46
+Tuck. Little Tuck.
+Forty-two years you kept
+me in the DARK.
+
+# voice: rumbold_battle_47
+...My turn to hold YOU.
+
+# Tuck, strung up beside him, in his own box.
+[phase: alive tuck]
+{scared}That's not me. I'm not doing that. I'm not doing ANY of that.
+
+{scared}I let go. I LET GO.
+
+[phase: alive vesper]
+{surprised}...Nobody's working him.
+
+{determined}Fine. We cut Tuck down, and let the rest of it fall over.
+
+[phase: alive tip]
+There's a light inside the puppet, and nobody on the bar. TUCK hangs from its strings. SNIP them when he swings by.
+
+# The last act: the first try at kindness, he takes the MERCY bar off you
+# and snaps it in two (snapMercy in battleScene.js), then says this.
+[mercy_snap]
+# voice: rumbold_battle_88
+MERCY? In MY show?
+
+There. All gone.
+Nobody's sparing
+ANYBODY tonight.
+
+# After the bar's gone, any more tries: [mercy_mock: alive] once, then one
+# of [mercy_mock_again: alive].
+[mercy_mock: alive]
+# voice: rumbold_battle_89
+Looking for your
+little yellow bar?
+(EXIT, STAGE LEFT.)
+
+[mercy_mock_again: alive]
+# voice: rumbold_battle_90
+Broke it! Broke it!
+Peptup BROKE it!
+
+# voice: rumbold_battle_91
+There's no mercy
+in the script, my
+friend. I checked.
+
+Kind! How KIND!
+(AUDIENCE: LAUGHS.)
+
+[flavor: alive]
+The king's head ticks to one side. Then the other. Something behind his eyes is very bright.
+
+Tuck dangles from the strings, toes pointed at a floor he can't reach.
+
+Light leaks out of every joint in the wood: warm, and somehow cold.
+
+The house lights stutter. In the dark between, only his eyes are lit.
+
+The king's jaw clacks open and shut. The words come out a beat late.
+
+The paper crown has slipped over one eye. He hasn't noticed. Or he likes it.
+
+Somewhere in the hall a glow-worm starts to clap, and is hushed.
+
+The king keeps looking past you, at the doors at the back of the hall, as if somebody is late.
+
+The strings creak. They're tied to Tuck's wrists, and Tuck is shaking.
+
+[taunts: alive]
+# voice: rumbold_battle_48
+TONIGHT! ONE NIGHT ONLY!
+(AND EVERY NIGHT AFTER.)
+
+# voice: rumbold_battle_49
+NO UNDERSTUDY!
+NO UNDERSTUDY!
+No under... (LINE?)
+
+# voice: rumbold_battle_50
+TOP BILLING, my friends!
+The little name goes at
+the BOTTOM!
+
+# voice: rumbold_battle_51
+Look, Tuck! NO HANDS!
+...Look at me.
+LOOK at me.
+
+# voice: rumbold_battle_52
+My friends, my FRIENDS,
+my friends friends friends
+FRIENDS!
+
+# voice: rumbold_battle_53
+(HOUSE LIGHTS.)
+(HOUSE LIGHTS.)
+...Who keeps DOING that?
+
+# voice: rumbold_battle_55
+A real KING, my friends!
+A real... a real...
+(PROMPT!)
+...a real BOY? No! KING!
+The line is KING!
+
+# voice: rumbold_battle_79
+I WAS THERE! I WAS THERE!
+Shoulder to shoulder,
+my friends!
+(CUE APPLAUSE.)
+
+# voice: rumbold_battle_80
+He's coming BACK for me!
+Back for me, back for
+me me ME! Any minute!
+(ENTRANCE, STAGE LEFT.)
+
+# voice: rumbold_battle_81
+Tall as me, the Hero was!
+Tall as... tall as...
+(LINE?)
+...TALLER! The line
+is TALLER!
+
+# (These two were said before attacks he doesn't do any more.)
+# voice: rumbold_battle_58
+Read the SCRIPT, my friend!
+It's all written DOWN!
+(BOW.) (BOW.) (EXIT.)
+
+# voice: rumbold_battle_59
+EVERYBODY DANCE!
+You've got strings now
+TOO! How does it FEEL?
+
+# Before the attack it's about to make, sometimes.
+[taunt: rumboldAliveLimbs]
+# voice: rumbold_battle_56
+Give the people a HAND!
+And a FOOT! A hand!
+Hand hand HAND!
+
+[taunt: rumboldAliveGouge]
+# (draft)
+A FACE, my friends! He'll
+put on his best FACE!
+(DIG.) (DIG.) ...Smile!
+
+# (draft)
+Hold still, hold still,
+he's doing his FACE!
+...No. Again. AGAIN.
+
+[taunt: rumboldAliveJoints]
+# (draft)
+Every joint in the HOUSE,
+my friends! Every JOINT!
+(POP.) (POP.) (POP.)
+
+[taunt: rumboldAliveCrossbar]
+# (draft)
+Who's holding the bar?
+WHO'S HOLDING THE BAR?
+...Nobody! Ha! NOBODY!
+
+[taunt: rumboldAliveJaw]
+# voice: rumbold_battle_57
+Say it with me, my friends!
+Friends! FRIENDS! FRI-
+(CLACK.)
+
+[taunt: rumboldAliveTuck]
+# voice: rumbold_battle_60
+And now, my ASSISTANT!
+Small! Brave! TUCK!
+(He doesn't get a line.)
+
+[taunt: rumboldAliveWorkYou]
+# voice: rumbold_battle_87
+A VOLUNTEER! From the
+audience! You, sir! Hold
+still, this won't... HOLD STILL!
+
+[taunt: rumboldAliveLight]
+# voice: rumbold_battle_61
+Lights UP, my friends!
+From the INSIDE!
+...It's so warm in here.
+
+[hurt: alive]
+# voice: rumbold_battle_62
+OW! Ha! OW! That's the
+BEST part, the OW!
+
+# voice: rumbold_battle_63
+(STAGE MANAGER!)
+Splinters! I have
+SPLINTERS!
+
+# voice: rumbold_battle_64
+A scratch! A scuff!
+The paint will cover it!
+(PAINT!)
+
+# voice: rumbold_battle_65
+HA! You can't break
+what's already WOOD!
+
+# voice: rumbold_battle_82
+You'd hit the Hero's
+FRIEND? Wait till
+he comes BACK!
+
+[low_hp: alive]
+# voice: rumbold_battle_66
+The show goes... goes...
+goes goes GOES ON!
+(CURTAIN?) NO CURTAIN!
+
+# voice: rumbold_battle_67
+It's going OUT, Tuck!
+Why is it going out?
+Hold it IN! HOLD it!
+
+# voice: rumbold_battle_68
+Don't dim me!
+Don't DIM me!
+I've only just STARTED!
+
+# voice: rumbold_battle_69
+...my friends?
+Where did all my
+friends go?
+
+# voice: rumbold_battle_83
+He'll come back for me.
+Won't he? For his friend?
+...Tuck? Won't he?
+
+# Tuck's MERCY half full or more: Tuck finding his nerve, and the king
+# hating it.
+[mercy_high: alive]
+# voice: rumbold_battle_70
+Stop WRIGGLING, Tuck!
+Puppets don't wriggle!
+
+# voice: rumbold_battle_71
+Who said you could LOOK
+at them? Look at ME!
+
+# voice: rumbold_battle_72
+Don't you DARE talk.
+The voice is MINE.
+It was always mine!
+
+# voice: rumbold_battle_84
+What did you DO to me,
+Tuck? Forty-two years!
+...Where did you put
+my MEMORIES?
+
+# Ves's kind word in the last act: to Tuck, on the strings.
+[vesper_talk: alive]
+Ves tells Tuck he isn't made of wood, so he can stop hanging there like he is. Tuck nearly laughs.
+
+Ves tells Tuck the king's only loud. Loud isn't the same as big. Tuck's ears come up.
+
+Ves points her umbrella at the king. "Forty-two years doing that voice. He's had it about four minutes." Tuck's paws curl into fists.
+
+Ves asks Tuck if he's really going to let a chair leg do his voice. Tuck scowls. Nobody has ever seen Tuck scowl.
+
+Ves tells Tuck she's been strung up by worse. She hasn't, but he doesn't know that.
+
+[talk: Check: alive]
+KING PEPTUP - HP 11000
+A wooden marionette with a light inside it, sure it walked the stair with the Hero. Nobody works the strings. TUCK hangs from them. Talk to Tuck, or snip his strings, and his MERCY can fill.
+
+[talk: Tell Tuck it's his voice]
+You point at Tuck, then at the king's clacking jaw, and shake your head. Tuck stares at you. "...It IS my voice," he whispers. "He's using my voice." The king talks louder.
+
+[talk: Say the strings are his to cut]
+You make a pair of scissors with two fingers, and point at the strings round Tuck's wrists. He looks up at them as if he's never seen them before. His paws curl into fists.
+
+[talk: Wait for Tuck]
+You stand still, and look at nobody but Tuck. The king shouts. You keep waiting. Tuck takes a long, shaky breath.
+
+[talk: Nod to Tuck]
+You nod to Tuck. Go on.
+
+# Spared (Pacify, or the nod): Tuck, in his own voice, and the king's last word.
+[spare: alive tuck]
+{determined}Stop. That's MY voice.
+
+[spare: alive foe]
+# voice: rumbold_battle_73
+...Oh.
+
+# voice: rumbold_battle_74
+...So it is.
+
+# voice: rumbold_battle_85
+...Then the stair.
+The Hero. Was any of
+that mine?
+
+[pacified: alive]
+The light inside the king gutters, small and shaking. It slips out between his teeth, hangs in the air a moment, and drifts away up into the dark of the hall. The strings go slack. Tuck drops to the boards. The king's head sinks onto his chest, and stays there. Nobody claps.
+
+# Beaten: he comes apart, still talking.
+[beaten: alive foe]
+# voice: rumbold_battle_75
+Ha! HA! Nobody leave!
+There's MORE! There's
+(INTERVAL) there's...
+
+# voice: rumbold_battle_76
+...somebody bring up the
+house lights. It's very
+dark in here.
+
+# voice: rumbold_battle_86
+...Was it this dark on
+the stair? I can't...
+I can't remember the stair.
+
+[victory: alive]
+The light has gone out of him, off up into the dark of the hall. What's left of KING PEPTUP twitches on the boards, a joint at a time. Then it stops.
+
+[game_over: alive]
+The house lights come up. The show goes on without you.
+
+# Ves's turn, in each part of the fight (instead of her usual lines, which
+# have snow in them).
+[vesper_turn: show]
+Ves twirls her umbrella once, like a cane. Her turn.
+
+Ves squints into the spotlights. "Right. My go."
+
+Ves taps the stage with her umbrella. It sounds hollow. Her turn.
+
+Ves glances up at the rafters. Her turn.
+
+[vesper_turn: behind]
+Ves keeps her voice down, so Tuck can hear himself think. Her turn.
+
+Ves watches Tuck's paws on the bar. Her turn.
+
+Ves lowers her umbrella, so it isn't pointing at anyone. Her turn.
+
+[vesper_turn: alive]
+Ves opens her umbrella against the glare. Her turn.
+
+Ves eyes the strings round Tuck's wrists. "My go."
+
+Ves plants her feet. The boards are shaking. Her turn.
+
+Ves squints at the light in the king's eyes, and doesn't like it. Her turn.

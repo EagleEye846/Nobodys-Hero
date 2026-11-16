@@ -95,7 +95,22 @@ export const LANES_FORK = {
     { sprite: 'mw_laundry_line', x: 11, y: 3, text: 'dress_washing' },
     { sprite: 'ln_moss_a', x: 13, y: 11, flat: true, walkable: true },
     { sprite: 'ln_moss_b', x: 5, y: 13, flat: true, walkable: true },
-    { sprite: 'c5_rubble', x: 8, y: 2, walkable: true },
+    { sprite: 'c5_rubble', x: 8, y: 2, walkable: true, decor: true },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_letterbox', x: 15, y: 4, text: 'lp_letterbox' },
+    { sprite: 'lv_bench', x: 8, y: 5, text: 'lp_bench' },
+    { sprite: 'lv_rain_barrel', x: 22, y: 3, text: 'lp_rainbarrel' },
+    { sprite: 'lv_scarecrow', x: 9, y: 13, text: 'lp_scarecrow' },
+    { sprite: 'lv_cat_bowl', x: 6, y: 3, text: 'lp_catbowl', walkable: true },
+    { sprite: 'lv_skep', x: 15, y: 14, text: 'lp_skep' },
+    { sprite: 'lv_willow', x: 34, y: 2, text: 'lp_willow' },
+    { sprite: 'gold_pouch', x: 32, y: 2, text: 'lp_nook_pouch', gold: 70, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'lv_gnome', x: 20, y: 15, npc: 'lp_gnome', quest: [
+      { needs: ['has:lane_worm'], take: 'lane_worm', set: ['q_gnome_done'], give: 'gnome_catch', text: 'gnome_done' },
+      { needs: ['q_gnome_done'], text: 'gnome_after' },
+      { needs: ['q_gnome_asked'], text: 'gnome_wait' },
+      { needs: ['!q_gnome_asked'], set: 'q_gnome_asked', text: 'gnome_ask' },
+    ] },
   ],
   tileTexts: { '#': 'lanes_rock', W: 'lanes_rock', '~': 'fork_flood', ';': 'fork_shallows', Z: 'lanes_hedge', x: 'lanes_stone', J: 'fork_gatepost' },
 

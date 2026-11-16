@@ -8,6 +8,7 @@ import { COAST_GLOWS } from '../data/art/coastProps.js';
 import { IN_GLOWS } from '../data/art/interiorProps.js';
 import { TH_GLOWS } from '../data/art/taperHouse.js';
 import { GS_GLOWS } from '../data/art/ghostShip.js';
+import { SHIP_SIGN_GLOWS } from '../data/art/shipSignposts.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 
 // Lamplight: how a lived-in place is lit by its own flames. The Ruins' dark
@@ -154,6 +155,8 @@ Object.assign(PROP_GLOWS, IN_GLOWS);
 Object.assign(PROP_GLOWS, TH_GLOWS);
 // The ghost ship's lantern and harmonium (src/data/art/ghostShip.js).
 Object.assign(PROP_GLOWS, GS_GLOWS);
+// The light out past the ghost ship's bow (src/data/art/shipSignposts.js).
+Object.assign(PROP_GLOWS, SHIP_SIGN_GLOWS);
 
 // Lit cabin windows and open doors, outdoors.
 const WINDOW_GLOW = [
@@ -327,6 +330,9 @@ const AREA_AMBIENT = {
   haddock_light: { shade: 0.44, nightShade: 0, tint: '6, 46, 38', inside: { shade: 0.26, tint: '36, 18, 6' } },
   reach: { shade: 0.56, nightShade: 0, tint: '4, 54, 34', inside: { shade: 0.4, tint: '14, 30, 20' } },
   lastlight: { shade: 0.62, nightShade: 0, tint: '2, 50, 28', inside: { shade: 0.42, tint: '24, 18, 8' } },
+  // Chapter 6's Ash Road: a smoky grey-brown overcast that never changes with the hour,
+  // the cracks and fires glowing in it.
+  ashroad: { shade: 0.3, nightShade: 0, tint: '40, 28, 22', inside: { shade: 0.36, tint: '30, 18, 10' } },
 };
 
 // Whether the room's light has been lifted by a scene (see AREA_AMBIENT).

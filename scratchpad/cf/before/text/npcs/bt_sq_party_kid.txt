@@ -1,0 +1,19 @@
+# BT_SQ_PARTY_KID: A frog kid at the party, in a saucepan helmet worn the wrong way round for the occasion.
+
+[first]
+PARTY! PARTY! It's the best day of my life! Even better than the last one!
+
+[repeat]
+I've had three buns and a toffee. I'm FINE. I'm not going to be sick. Probably.
+
+# (draft)
+[repeat 2]
+That's four buns now. And a bit of a fifth. The fifth bit's having a lie-down.
+
+# (draft)
+[repeat 3]
+My helmet's on backwards so I can see where I've been. It's been brilliant.
+
+# (draft)
+[repeat_ves 3]
+{smile}That's not a bad system. {bored}I just use an umbrella.

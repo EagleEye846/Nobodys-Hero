@@ -1,8 +1,8 @@
 import { MURK_PALETTE, MURK_SPRITE, MURK_ANIM } from '../art/murk.js';
 
 // The MURK's numbers: a patch of the dark in the Deep that got up and
-// followed a light, afraid of it and starving for it. It shrinks your light
-// to a circle, reaches for it with tendrils, eats the little motes of it,
+// followed a light, afraid of it and starving for it. It creeps up behind
+// you, reaches for your light with tendrils, eats the little motes of it,
 // throws shadows of things that aren't there, and swallows the whole box
 // whole for a beat. Everything it says is in text/enemies/murk.txt.
 export const MURK = {
@@ -21,7 +21,7 @@ export const MURK = {
   anim: MURK_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1900,
+  maxHp: 3050,
   damage: 44,
 
   // The Deep: the hardest regulars of the chapter, and the strangest.
@@ -29,7 +29,7 @@ export const MURK = {
 
   // Its attacks live in src/battle/attacks/murk.js.
   patterns: [
-    { name: 'murkShrink', weight: 3 },
+    { name: 'murkBehind', weight: 3 },
     { name: 'murkTendrils', weight: 2 },
     { name: 'murkMotes', weight: 2 },
     { name: 'murkShadows', weight: 2 },

@@ -8,6 +8,7 @@
 //   t  cave mouth (walk through it; see `doors`)  n  snow
 //   :  dirt path                                  O  boulder (solid)
 //   s  the great stair
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_HOLLOW = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_hollow',
@@ -79,6 +80,7 @@ export const VIGIL_HOLLOW = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/mount_vigil.txt',
   props: [
+    { sprite: 'col_pin_rope', x: 39, y: 28, walkable: true, flat: true, gives: 'pin_rope', taken: { gone: true } },
     { sprite: 'sign', x: 16, y: 29, text: 'hollow_sign' },
     { sprite: 'savepoint', x: 28, y: 29, save: true },
     // A short throw up to a spur with a chest.
@@ -87,6 +89,8 @@ export const VIGIL_HOLLOW = {
     { sprite: 'waymark', x: 33, y: 29, text: 'hollow_waymark' },
     { sprite: 'campfire_cold', x: 13, y: 26, text: 'hollow_fire' },
     { sprite: 'old_pack', x: 11, y: 28, text: 'hollow_pack', gives: 'herald_honeycake' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_hollow'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

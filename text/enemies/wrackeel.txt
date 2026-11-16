@@ -55,7 +55,7 @@ Static!
 # TALK options in src/data/enemies/wrackeel.js.
 [talk: Inspect]
 WRACKEEL - HP 2050
-A teal eel wired wrong. Darts in zigzags, links its sparks into a chain, closes in rings with a gap that turns, and lights up whole rows. Keep moving, and keep off the wet.
+A teal eel wired wrong. Comes out of the hole it went into, sends sparks down its body and off its tail, and lights up whichever lane it swims. Keep off the wet.
 
 [talk: Offer a rubber boot]
 You set a rubber boot down in the shallows. WRACKEEL sniffs it, loops round it twice, and gives a long, happy fizz. It is the first thing in years that didn't hurt to touch.

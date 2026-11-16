@@ -9,6 +9,7 @@
 //   h  wall with wood panelling (solid)
 //   o  wooden floorboards
 //   r  rug
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const LASTHOME_HEALER = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lasthome_healer',
@@ -72,6 +73,8 @@ export const LASTHOME_HEALER = {
     { sprite: 'table', x: 2, y: 6, text: 'healer_table' },
     { sprite: 'chair', x: 4, y: 6, text: 'healer_chair' },
     { sprite: 'savepoint', x: 2, y: 9, save: true },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['lasthome_healer'] ?? []),
   ],
   tileTexts: { h: 'healer_wall', r: 'healer_rug' },
 

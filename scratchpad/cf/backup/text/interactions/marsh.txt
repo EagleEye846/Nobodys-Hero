@@ -1,0 +1,1057 @@
+# THE LANTERN MARSH (Chapter 3): the fen below the Outfall, where the old
+# conduit's water spreads out under the mist. Old lanterns on poles mark the
+# one safe way. Where Ves came down. Things you can read and look at. See
+# notes/docs/chapter-3-marsh.md.
+#
+# A section with `_bramble` on the end of its name is what Bramble says
+# after the section of that name, if he's with you; `_ves` is what Ves says
+# after that, once she's with you again (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal's light goes out a long way into the mist. Further than the lanterns'.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Things all over the marsh ---
+
+[reeds]
+Reeds and bulrushes, taller than you, packed so close you can't see through.
+
+[reeds_ves]
+{worried}Anything could be standing in there. Don't look. I'm not looking.
+
+[bog]
+Black mud, wet and shining. It looks like you could walk on it.
+
+You couldn't.
+
+[bog_bramble]
+{scared}That's the kind that keeps your boots. And then the rest of you.
+
+[fen_water]
+Still, dark water. You can't see the bottom. You can't see if there is one.
+
+[duckboards]
+Old planks laid across the fen on sunk posts, grey and soft and green at the edges. Somebody laid these, a long time ago, and somebody's mended them since.
+
+[marsh_lantern]
+An old lantern hung on a crooked pole, still burning. Its glass is clean.
+
+They go on across the fen in a line, one after another, as far as the mist lets you see.
+
+[marsh_lantern_bramble]
+{thinking}Who keeps these lit, all the way out here?
+
+{bored}...Probably nobody. Probably they just burn.
+
+[marsh_lantern_out]
+A lantern on a pole, gone out. It's cold. The wick's burnt right down.
+
+[marsh_lantern_out_ves]
+{worried}Stay where the lit ones are. That's the rule out here. I worked that out the hard way.
+
+[drag_print]
+A boot print in the mud. Then, beside it, a long smear, where the other foot dragged.
+
+Then another boot print.
+
+[drag_print_bramble]
+{worried}That's her. One foot walking. One foot... not.
+
+[drag_print_2]
+More of them. One print, one drag. They don't go wandering. They go straight on.
+
+[drag_print_2_bramble]
+{determined}She's still going, Sword. Hurt, and she's still going.
+
+[drag_print_3]
+The prints stop where the turf gets firm. Somebody stood here a while. Then they went on, toward the light.
+
+[reed_gap]
+Reeds, thinner here, parted at the bottom. Something small could wriggle through.
+
+You won't fit.
+
+[reed_gap_bramble]
+{proud}I will. (Press Q.)
+
+[bog_log]
+A drift log, grey and smooth, washed down out of the forest and left on the bank.
+
+(Walk into it to push it. It rolls till something stops it, and sinks into bog or water as a bridge.)
+
+[bog_log_bramble]
+{grin}Logs! The forest's still looking after us.
+
+[bog_rock]
+A big stone.
+
+(Walk into it to push it. Shoved into the bog, it sinks in up to its shoulders: something to step on.)
+
+[rock_home]
+Everything you've pushed comes back out of the mud and goes back to where it was. Somehow.
+
+[chest_empty]
+Empty.
+
+[gold_pouch_empty]
+An empty purse.
+
+[treadle]
+A stone plate in the floor, the old city's kind. It goes down under anyone standing on it.
+
+[drain_grate]
+An iron grating, rusted through at the bottom, the bars bent apart. Something small has been squeezing through.
+
+[drain_grate_bramble]
+{proud}Something small. That's me. (Press Q.)
+
+[rubble]
+Fallen stone from the old city. Nothing goes past it.
+
+# Sinking in the bog: you (or Bramble) come back out at the door you came in by.
+[bog_sunk_you]
+The mud takes your feet, and then your knees, and it doesn't let go.
+
+...You come to back where you came in, black to the waist.
+
+[bog_sunk_you_bramble]
+{scared}I grabbed you! I grabbed you and I PULLED and you came out like a cork!
+
+{sheepish}...Stay on the boards. Please.
+
+[bog_again_you_ves]
+{furious}I am NOT going in there a second time! Third time! Whatever it is!
+
+[bog_sunk_kid]
+Bramble goes in up to his middle with a yell, and then he's out again somehow, and you're both back where you came in.
+
+[bog_sunk_kid_bramble]
+{angry}It took my boot! It took my BOOT, Sword!
+
+{sheepish}...No, it's there. It's on my foot. Never mind.
+
+[bog_again_you]
+The bog takes you again. Again, you're hauled out back where you came in.
+
+[bog_again_kid]
+The bog takes Bramble again. Again, he's hauled out back where you came in.
+
+[carry_rope]
+Not with Ves on your back. You'd need both hands for the rope, and she'd need both of hers for you.
+
+[carry_rope_ves]
+{angry}Don't even think about it.
+
+# --- 1. THE FALLS FOOT ---
+
+[falls]
+The conduit's water comes down off the broken edge high above, all of it, and goes into the pool with a long roar.
+
+[falls_cliff]
+The old stone of the conduit, high overhead, with the falls coming off it.
+
+[falls_stone]
+An old stone post, sunk crooked in the turf. Words are cut in it, worn nearly smooth:
+
+KEEP TO THE LIGHTS
+
+[falls_stone_bramble]
+{thinking}Keep to the lights. That's easy.
+
+{worried}...It's easy, isn't it?
+
+[falls_purse]
+A purse, dropped in the sedge by the pool.
+
+# --- 2. THE LANTERN PATH ---
+
+[lantern_strip]
+A strip of evening-blue wool, knotted tight round a reed beside the boards. It's been torn off something. Something with a hem.
+
+[lantern_strip_bramble]
+{surprised}That's her coat! Same blue as the bits you picked up in the Tatters.
+
+{thinking}She tied it. That's not torn off, that's TIED. She's marking her way.
+
+[lantern_purse]
+A purse, out on a tussock where the boards stop.
+
+[lantern_spur_end]
+The boards just stop here. There's a post with nothing on it, and the bog all round.
+
+Somebody started a way off this way, once, and gave up.
+
+# --- 3. THE RUSHES ---
+
+[rushes_scarf]
+A scarf, trodden into the mud. You lift it out. It's cream, with a stripe of coral, and it's soaked through.
+
+[rushes_channel]
+A channel of fen water across the way, too wide to jump. On the far bank, a drift log. At the top end, the rushes have grown right across the water, thick.
+
+[rushes_channel_bramble]
+{sly}Too thick for you. Not for me.
+
+[rushes_chest]
+A chest on the far bank, half sunk in the turf.
+
+[rushes_knife_chest]
+A chest tucked in the corner of the reeds. Inside: a short blade for cutting rushes, its handle wound with twine.
+
+# --- 4. THE SUNKEN ROAD ---
+
+[road_milestone]
+An old milestone, half sunk. The words on it are the old city's, and most have worn away. One line's left:
+
+...TO THE GATE
+
+[road_milestone_bramble]
+{thinking}The gate of what? There's nothing out here but out here.
+
+[road_block]
+A block of the old road's stone, fallen out of the causeway. It's heavy, but it'll shift.
+
+(Walk into it to push it. Shoved into the bog, it sinks in up to its shoulders: something to step on. Z on it twice and everything goes back.)
+
+[road_strip]
+Another strip of blue, knotted round the old pillar.
+
+[road_strip_bramble]
+{proud}She's leaving us a trail. On PURPOSE. Like in a story.
+
+[road_purse]
+A purse on the bank.
+
+[road_slump]
+The causeway's slumped into the bog here, a long way down. You can see the road's stones under the mud, going on.
+
+[road_pillar]
+An old pillar of the city's stone, sunk to its knees in the fen.
+
+# --- 5. THE STILT HUT ---
+
+[hut_post]
+A post by the landing, with a hook on it for a lantern. Nothing hangs from it.
+
+[hut_old_fire]
+A ring of stones with old, old ash in it. Somebody used to sit out here, once.
+
+[hut_island_chest]
+A little chest in the nook by the reeds, under the hut. Inside, folded small: a coat woven from dry rushes, light as anything.
+
+[hut_log]
+A log for sitting on, worn smooth on top.
+
+[hut_outside]
+The hut's walls: grey boards, weathered soft. Warmth comes through the cracks.
+
+[hut_thatch]
+Reed thatch, gone green. Smoke is coming out through it.
+
+[hut_window]
+Firelight, in the window. Someone's in there.
+
+[hut_stilts]
+The hut stands up on stilts, over the water.
+
+# --- INSIDE THE STILT HUT ---
+
+[hut_stove]
+A little iron stove, with a fire in it, made of whatever was in reach. Reed stalks, mostly. And a chair leg.
+
+[hut_stove_ves]
+{bored}The chair had three legs left. It still has two. It's fine.
+
+[hut_cot]
+A cot against the wall, with an old blanket on it. You could lie down a while.
+
+[hut_table]
+A little table, with nothing on it but a ring where a cup stood, a long time ago.
+
+[hut_chair]
+The chair. It's down to two legs.
+
+[hut_hooks]
+Hooks along the wall, a row of them, for hanging things. They're all empty.
+
+[hut_wall]
+The hut's boards, from the inside. Somebody's patched every crack with moss.
+
+[hut_barrel]
+A water barrel. The water in it is clean.
+
+[hut_barrel_ves]
+{exhausted}I filled it. It took most of a day.
+
+[hut_crates]
+Old crates. Nothing in them but straw.
+
+# --- THE OLD TOLLHOUSE (a secret) ---
+
+[toll_board]
+A board on the wall, the old city's writing cut into it. You can make out a list of things, and numbers beside them. Carts. Goats. People.
+
+It cost something to cross the fen, once.
+
+[toll_rack]
+A rack on the wall, and in it, the toll-keeper's blade, left where they hung it.
+
+[toll_box]
+The strongbox, its lid rusted open. The last of the tolls are still in it.
+
+[toll_wall]
+The old city's stone, damp and close.
+
+# --- 6. THE FAR JETTY ---
+
+[jetty_post]
+A post on the jetty, with a painted hand on it pointing on across the fen. The paint's nearly gone.
+
+[jetty_post_ves]
+{thoughtful}I came this way in the dark. I didn't see much of it.
+
+{determined}But it's got to go somewhere. Everything does.
+
+[jetty_purse]
+A purse, down among the reeds at the end of the jetty.
+
+[jetty_chest]
+A boat chest, lashed to the jetty post. The boat's long gone. The pole that pushed it isn't.
+
+[jetty_chest_ves]
+{thoughtful}Somebody used to punt out here. Lanterns, a jetty, a boat... They must have liked it, once.
+
+# --- 7. THE WISP HOLLOW ---
+
+[hollow_strip]
+A strip of blue wool knotted round a reed: one of hers.
+
+[hollow_strip_ves]
+{shy}I tied them so I'd know I'd been somewhere. In case I went round in a circle.
+
+{bored}...Didn't think anybody'd be daft enough to follow them.
+
+[hollow_purse]
+A purse, on a tussock just off the boards.
+
+# --- 8. THE HERON FLATS ---
+
+[flats_stone]
+A big stone, sunk a little into the mud, but not stuck.
+
+(Walk into it to push it. Shoved into the bog, it sinks in up to its shoulders: something to step on. Z on it twice and everything goes back.)
+
+[flats_stone_ves]
+{worried}Push from your legs. Not your back. Your back's busy.
+
+[flats_strip]
+A strip of blue, knotted round a reed, on the far side of the bog.
+
+[flats_strip_ves]
+{thoughtful}I crossed this in the dark. Twice. On one leg.
+
+{smile}I'd like that written down somewhere.
+
+[flats_chest]
+A chest in the reeds, old and green.
+
+[flats_down_chest]
+A chest on the dry corner of the flats, grey feathers caught round its lid. Inside: a soft coat lined with heron down.
+
+[flats_down_chest_ves]
+{smile}That's warm. Is that for me? That's for me.
+
+# --- 9. THE WATERGATE ---
+
+[watergate]
+An old watergate of the city's, a door in the wall for letting the fen in and out. It's held shut, until something holds it open.
+
+[watergate_sign]
+Cut in the stone, very old:
+
+ONE HOLDS, ONE PASSES
+
+[watergate_sign_bramble]
+{grin}That's us! I hold, you pass. Or you hold. Somebody holds.
+
+[watergate_sign_ves]
+{smile}I didn't have anyone to hold it. I squeezed through the grating instead. Both ways.
+
+{bored}I'm smaller than I look.
+
+[watergate_carving]
+A carving in the wall: the road, going on out of the fen and up a long valley to a city with a great gate, and people walking along it.
+
+[watergate_carving_ves]
+{surprised}There's a city. Down there. Look, there's people on the road.
+
+[watergate_purse]
+A purse on the ledge, in the sluice room.
+
+[watergate_wall]
+The old city's stone, wet to the height of a man.
+
+# --- 10. THE FAR SHORE ---
+
+[shore_grass]
+Dry grass. Real, dry, ordinary grass.
+
+[shore_path]
+A path, going on east and down.
+
+[shore_cairn]
+A little cairn of stones, the kind you build to show a way. Someone's put a strip of blue on top, under a stone.
+
+[shore_cairn_ves]
+{smile}That's the last one I tied. I saw the lights from here, and then I turned round.
+
+{bored}Worst walk of my life. Back to the hut, on one leg.
+
+[shore_view]
+Far off to the east, past the end of the fen, a long valley, and in it, broken towers, and lights in some of the windows.
+
+[shore_end]
+A path goes on east, down toward the valley and the lights.
+
+# (draft) THE REGISTRY'S QUEST: the Leaf of Hours, on the Clerk's Islet off the Far Shore.
+
+[shore_toll_sign]
+A board nailed to a stake at the mouth of a path trodden into the reeds:
+
+TOLL: ONE PENNY. PAY AT THE ISLET.
+
+Somebody's crossed out PAY and written LEAVE.
+
+[islet_sign]
+A clerk's board on a post:
+
+HOURS OF THE TOLL, DUSK TO DAWN. THE WATER IS TWO DEEP. TWO STONES, AND THE FIRST ONE'S NO USE WITHOUT THE SECOND.
+
+[islet_stone]
+A stone the size of a loaf, worn round by water. Walk into it to push it. It will sink wherever you push it into the fen.
+
+[islet_stump]
+A low stump with a hand worn into the top. Press it, and everything goes back where it started.
+
+[islet_leaf]
+A page of ruled paper, pinned flat to a clerk's board with a fish hook. Tiny hours down the side, one to a line, from dusk to dawn, every line ticked. In the corner: II.
+
+[islet_leaf_taken]
+A clerk's board on a post, with a fish hook through it, and a clean square where a page was pinned.
+
+# --- THE LIFE PASS (15 November 2026): the Lantern Marsh ---
+# (draft)
+
+[r3m_falls_foot_1]
+A handcart sunk to its axle in the turf, one wheel up in the air, a lashed barrel still in the bed. It went into the marsh a long time ago, and the marsh kept it.
+
+[r3m_falls_foot_1_bramble]
+{thinking}Somebody tried to take a cart across. Past the lanterns. ...What did they put in the barrel, I wonder.
+
+
+[r3m_falls_foot_2]
+A cartwheel, half in the mud. It always is the wheel that gets left.
+
+
+[r3m_falls_foot_3]
+A lantern post with no lantern on it, only the hook. Whoever kept these ran out of lanterns, or patience.
+
+[r3m_falls_foot_3_bramble]
+{worried}...Do you think they run out? The lanterns? Of oil?
+
+
+[r3m_falls_foot_4]
+Cotton-grass: little white tufts on stems, soft as anything. Everything here is soft. That's the trick of it.
+
+[r3m_falls_foot_4_bramble]
+{thinking}They look like clouds that fell over.
+
+
+[r3m_falls_foot_5]
+A boot stuck upright in the mud with a reed growing out of the top. It's gone native.
+
+[r3m_falls_foot_5_bramble]
+{grin}It's a boot-reed. It's the first of its kind. Can I name it?
+
+
+[r3m_falls_foot_6]
+A nest on three stakes, with a clutch of speckled eggs in it. Something here is very proud.
+
+[r3m_falls_foot_6_bramble]
+{scared}Do NOT touch the eggs. I'm not touching the eggs. Whatever owns these has a BEAK.
+
+
+[r3m_falls_foot_7]
+A rotten stump gone to shelves of fungus, a blue-grey beetle on the top. It's the only thing in the fen with a view.
+
+[r3m_falls_foot_7_bramble]
+{glee}A blue one! Look at him! He's got a shell like a helmet!
+
+
+[r3m_falls_foot_8]
+A grey heron's feather, stuck upright in the mud like a flag. A heron stood here and decided against you.
+
+
+[r3m_falls_foot_9]
+A wicker eel trap on a stake, lid tied shut. Something in it is not pleased.
+
+[r3m_falls_foot_9_bramble]
+{worried}Is it an eel? It sounds like an eel. It sounds like an eel with MANNERS gone.
+
+
+[r3m_falls_foot_10]
+A column drum of the old city's stone, half in the mud, the fluting still sharp on top. It's the same stone as the Drains. You came down through the same thing.
+
+[r3m_falls_foot_10_bramble]
+{awed}Look how big it is. They built a whole city out of THAT.
+
+
+[r3m_falls_foot_11]
+A ring of pale toadstools, as neat as a table laid for six. Nobody's sat down.
+
+[r3m_falls_foot_11_bramble]
+{sly}A fairy ring. ...Nobody step in it. I'm only saying.
+
+
+[r3m_lantern_path_2]
+A lantern on a post, the glass cracked, the wick gone black. A green skin is growing over the tin. It's the nearest of the dead ones to the safe path.
+
+[r3m_lantern_path_2_bramble]
+{worried}Don't go to the dead ones. Stay where it's lit.
+
+
+[r3m_lantern_path_3]
+A bare lantern post, tilted, the hook empty. Out in the bog it looks like someone pointing, and not pointing at anything.
+
+[r3m_lantern_path_3_bramble]
+{scared}It's pointing. What's it pointing AT?
+
+
+[r3m_lantern_path_4]
+A punt, nose up in the bog, a pole across it and a hat that didn't get picked up. The hat has water in it. The water has a frog in it.
+
+[r3m_lantern_path_4_bramble]
+{grin}A frog in a hat! I'm calling him the Captain.
+
+
+[r3m_lantern_path_5]
+The ribs of a horse come up out of the mud, white as pipe-clay, beside a wreck of a cart. The cart is gone to its axles. The horse is gone to the ribs.
+
+[r3m_lantern_path_5_bramble]
+{sad}...It couldn't get out. I hope it was quick.
+
+
+[r3m_lantern_path_6]
+A wicker trap on a stake in the bog, split down one side. Whatever it caught let itself out, and took its time.
+
+
+[r3m_lantern_path_7]
+A patch of cotton-grass nodding out in the bog. Pretty. Dangerous. The two always go together.
+
+
+[r3m_lantern_path_8]
+A column drum sunk in the bog like a drowned drum, a ring of fungus round it. It marks something, or it did.
+
+
+[r3m_rushes_1]
+Bulrushes in a clump, all brown velvet heads. Bramble could use one as a sword. Bramble is going to ask.
+
+[r3m_rushes_1_bramble]
+{proud}Can I have one? For a sword? ...For a SWORD. It's for the cause.
+
+
+[r3m_rushes_2]
+A boot, upright in the mud, with a stitched patch on the toe in plum thread. You know whose thread that is.
+
+[r3m_rushes_2_bramble]
+{determined}Her thread! She was here! Keep going, Sword. Keep going.
+
+
+[r3m_rushes_3]
+A mossy milestone leaning in the reeds. The numbers are worn off. Underneath, someone's scratched: STILL NOT THERE.
+
+[r3m_rushes_3_bramble]
+{grin}Same, milestone. Same.
+
+
+[r3m_rushes_4]
+A stump in the reeds, with a heron's feather stuck in the top and a smear of fish scales. A heron has a dining table here.
+
+
+[r3m_rushes_5]
+A tin of lamp oil, empty and bent. Someone stood on it, perhaps to see over the reeds.
+
+[r3m_rushes_5_bramble]
+{thinking}Good idea. I'd stand on it if I thought it'd help.
+
+
+[r3m_rushes_6]
+A wooden heron on a post, painted grey, with a yellow beak and a stare. It was put there to scare the real ones off. It has not worked.
+
+[r3m_rushes_6_bramble]
+{sly}It's not fooling anybody. The real ones aren't even afraid of it. They just look sorry for it.
+
+
+[r3m_rushes_7]
+A ring of toadstools in the sedge, with a ladybird on one and a snail on another, both waiting for the other to move.
+
+
+[r3m_rushes_8]
+Cotton-grass, white heads nodding. It has a lot of nodding to do. There's a gap in the wind.
+
+
+[r3m_sunken_road_1]
+A fallen column of the old city, lying along the road with its sections gone like a dropped string of beads. Every one of them is as big as a barrel.
+
+[r3m_sunken_road_1_bramble]
+{awed}They had roads with PILLARS. Roads! With PILLARS!
+
+
+[r3m_sunken_road_2]
+A stone head, face up in the mud, with a chip out of the nose and no opinion at all. It has been looking at the sky for three thousand years.
+
+[r3m_sunken_road_2_bramble]
+{grin}Hello! ...He's not going to say anything. He's a very serious head.
+
+
+[r3m_sunken_road_3]
+Something's ribs, long and curved, come up out of the roadside. Not a horse. Not a cow either. A big bird with ideas.
+
+[r3m_sunken_road_3_bramble]
+{scared}...Can we not stand near it?
+
+
+[r3m_sunken_road_4]
+A fingerpost with one arm snapped off and lying at its foot. The arm that's left says THE CITY, and points at the road, and the other arm would have said where else.
+
+[r3m_sunken_road_4_bramble]
+{thinking}If we know where we're going, we don't need it. ...We don't know where we're going.
+
+
+[r3m_sunken_road_5]
+A cart half sunk off the roadside, a spar sticking up with a rag on it. A rag on a stick is as close to a flag as the marsh gets.
+
+
+[r3m_hut_island_1]
+Two stakes and a washing line, with a strip of plum cloth pegged out to dry, a stocking, and somebody's sock. The plum cloth is just the colour of her coat.
+
+[r3m_hut_island_1_bramble]
+{determined}It's HER coat. She's been washing! She wouldn't wash if she wasn't being herself!
+
+
+[r3m_hut_island_2]
+A pole with a tin hat on top and a face scratched in it, arms of a crosspiece. The marsh's only scarecrow, and he's looking at you like you've been tracking mud into his house.
+
+[r3m_hut_island_2_bramble]
+{sly}Hello, sir. Don't mind us. We're only passing.
+
+
+[r3m_hut_island_3]
+A fishing rod pushed into the bank, the line out in the water, a tin of nothing beside it. Whoever fished here has done it with enormous patience and no luck.
+
+
+[r3m_hut_island_4]
+A wicker trap at the edge of the water, a rag tied to the stake. Whoever lives here sets a trap and doesn't tell the eel.
+
+
+[r3m_hut_island_5]
+A basket of mended socks with a needle stuck in, plum thread. The socks are all the same colour. It's a very sensible way to live.
+
+[r3m_hut_island_5_bramble]
+{thinking}It's tidy. Her camp's TIDY. She does that when she's scared. She tidies.
+
+
+[r3m_hut_island_6]
+A tin of lamp oil, nearly empty, the lid put back with a care that tells you someone's been rationing it.
+
+
+[r3m_hut_island_7]
+A mooring post with a rope round it and the rope's end trailing in the water. No boat on it. Whatever it moored has gone, or sunk, or been given away.
+
+
+[r3m_island_purse]
+A bundle of reeds in the lee of the hut, tied up with plum thread. Inside it, wedged tight, is a little purse. Somebody put it away safe, and then got busy surviving.
+
+There's a note stuck in the knot, in a very neat hand: FOR EMERGENCIES. THIS IS NOT AN EMERGENCY. PUT IT BACK.
+
+[r3m_island_purse_bramble]
+{surprised}That's HER purse. She hid her emergency money. That's the most Ves thing I've ever seen.
+
+{grin}We're borrowing it. We'll put it back with interest. In a thank-you.
+
+
+[r3m_hut_1]
+Bunches of herbs hung from a rafter hook to dry, tied with plum thread. Someone's been keeping house in the middle of a marsh, and doing it properly.
+
+[r3m_hut_1_bramble]
+{thinking}She's making TEA. In a MARSH. With HERBS.
+
+[r3m_hut_1_ves]
+{proud}It was that or go mad. And I was going to be hurt and furious and brewed, not mad.
+
+
+[r3m_hut_2]
+A shelf of jam jars with lids tied on in cloth, each one labelled in pencil: DON'T. PROBABLY FINE. DEFINITELY NOT. DON'T (AGAIN).
+
+[r3m_hut_2_bramble]
+{grin}They're all warnings! It's a shelf of warnings!
+
+[r3m_hut_2_ves]
+{bored}I labelled them as I went. Seemed fair to whoever came after.
+
+
+[r3m_hut_3]
+A rack of wooden spoons and an iron ladle on pegs, hung in order of size. All of them have been used.
+
+[r3m_hut_3_ves]
+{bored}One was a sword for a while. That's all I'll say.
+
+
+[r3m_hut_4]
+A slate on a nail with a tally of days chalked in fives. The fives go on past what you'd think. There's a note at the bottom: ALMOST.
+
+[r3m_hut_4_bramble]
+{sad}She counted. Every day she counted.
+
+[r3m_hut_4_ves]
+{angry}I'll thank you not to read that. ...It was eleven. I'm not telling you that it was eleven.
+
+
+[r3m_hut_5]
+A basket of kindling, dry, stacked in the right order, the kind of thing that takes someone an hour and a lot of damp wood to find.
+
+
+[r3m_tollhouse_1]
+A handbell on a post, and a card nailed under it: RING FOR THE TOLL. A tiny sub-note: IF NO ANSWER, WAIT. A tinier one: IF STILL NO ANSWER, LEAVE IT ON THE STEP.
+
+[r3m_tollhouse_1_bramble]
+{grin}Ding! ...Ding! ...Nobody's coming. It's only us, and the bell.
+
+
+[r3m_tollhouse_2]
+A slate on the wall with tolls marked in chalk, four sticks and a stroke to the line. The last line says TOLLS TODAY: 0. It was a good day for travellers, and a bad one for toll-keepers.
+
+[r3m_tollhouse_2_bramble]
+{thinking}I wonder what they asked for. A coin? A song?
+
+
+[r3m_tollhouse_3]
+Jars of pickled something, dated and shelved in the toll-keeper's own handwriting. The labels say what they are. The jars say otherwise.
+
+[r3m_tollhouse_3_bramble]
+{worried}I'm not eating that. I'm not eating ANYTHING in here.
+
+
+[r3m_tollhouse_4]
+A basket of mended gloves, all left hands. The toll-keeper had a lot of left hands to mend.
+
+
+[r3m_tollhouse_5]
+Bunches of reeds hung from a rafter hook to dry. The room smells of old hay and old rain.
+
+
+[r3m_tollhouse_6]
+A tin of lamp oil, empty, with a wick dangling out of the spout like a tail.
+
+
+[r3m_jetty_1]
+A mooring post at the end of a stretch of old board, with a rope still round it, half rotted through. The rope has had a hundred years of knots tied and untied in it.
+
+[r3m_jetty_1_bramble]
+{thinking}They moored things here. In a marsh. What would you moor?
+
+[r3m_jetty_1_ves]
+{bored}Optimism.
+
+
+[r3m_jetty_2]
+A wicker trap, split, no eel in it. A note on the stake says THANK YOU FOR NOTHING in someone's best handwriting.
+
+[r3m_jetty_2_ves]
+{bored}The eel got the last word. It always does.
+
+
+[r3m_jetty_3]
+A fishing rod pushed into the bank, the line out in the water. The float bobs. Nothing is on the line. The float just likes it.
+
+
+[r3m_jetty_4]
+A fingerpost with a name worn off it. The arm that's left points back the way you came. It seems to have given up waiting for anyone to go any other way.
+
+[r3m_jetty_4_bramble]
+{grin}Is it telling us to go home?
+
+[r3m_jetty_4_ves]
+{bored}It's telling us it's not our problem. That's very marsh.
+
+
+[r3m_jetty_5]
+Cotton-grass, white heads nodding over the boards. The wind is coming from nowhere, and the grass has got used to it.
+
+
+[r3m_jetty_6]
+A stump with a ring of toadstools round it and a frog sitting very upright, like a vicar. He's got an expression of mild disapproval.
+
+[r3m_jetty_6_bramble]
+{glee}Reverend Frog! Good morning, Reverend!
+
+[r3m_jetty_6_ves]
+{bored}He's judging us. Frogs do that.
+
+
+[r3m_wisp_hollow_1]
+A cart tipped on its side in the bog, the wheels gone, the shafts snapped, a barrel rolled out of it into the mud and sat there ever since.
+
+[r3m_wisp_hollow_1_ves]
+{bored}That's the one that tried to go straight. Don't be that one.
+
+
+[r3m_wisp_hollow_2]
+A pale curve of ribs sticking out of the bog like the keel of a very small boat. It isn't a boat.
+
+[r3m_wisp_hollow_2_bramble]
+{scared}Don't look. Don't look. I looked.
+
+
+[r3m_wisp_hollow_3]
+A stone head, face up in the mud, with moss on one cheek like a beard. It looks quite comfortable. It's been here a very long time.
+
+[r3m_wisp_hollow_3_bramble]
+{grin}Hello, sir! Lovely evening!
+
+[r3m_wisp_hollow_3_ves]
+{bored}He's had better.
+
+
+[r3m_wisp_hollow_4]
+A cartwheel half in the bog, the spokes caught with reeds. The reeds are doing a better job than the spokes ever did.
+
+
+[r3m_wisp_hollow_6]
+A stump with shelf fungus, a long dark crack down its side, and a pale glow in the crack. It's the only light in the Hollow that isn't hers.
+
+[r3m_wisp_hollow_6_ves]
+{bored}Don't touch it. It's pretty, which in the marsh means 'no'.
+
+
+[r3m_heron_flats_1]
+A wooden heron on a post, painted grey, with a yellow beak. A sign is nailed under it: BEWARE OF THE HERON. The real herons in the reeds haven't read it, and they seem unbothered.
+
+[r3m_heron_flats_1_bramble]
+{glee}It's a pretend one! There's a pretend heron! He's got a SIGN!
+
+[r3m_heron_flats_1_ves]
+{bored}It's the worst decoy I've ever seen. Even the heron over there looks embarrassed for it.
+
+
+[r3m_heron_flats_2]
+A board nailed to a post: BEWARE OF THE HERON. A heron has drawn a face on it, in mud, with a beak. It's very polite. It's a sign that has been signed.
+
+[r3m_heron_flats_2_bramble]
+{sly}He's signed it. The heron signed it. That's a legal document.
+
+[r3m_heron_flats_2_ves]
+{bored}That's not a sign. That's a threat in nice handwriting.
+
+
+[r3m_heron_flats_3]
+A heron's feather standing up in the mud like a flag. It says, as clearly as anything: I was here and I wasn't scared.
+
+[r3m_heron_flats_3_ves]
+{bored}We're being watched by feathers. That's very restful.
+
+
+[r3m_heron_flats_4]
+A nest on three stakes, empty. The eggs have hatched or been stolen. There's a long grey feather in it, and a fish bone, tidily laid.
+
+[r3m_heron_flats_4_bramble]
+{worried}They're not going to come back and find us, are they?
+
+
+[r3m_heron_flats_5]
+Fish bones in a heap at the edge of the water, picked clean and arranged in a pattern. It's a heron's table. It's laid for one.
+
+[r3m_heron_flats_5_ves]
+{bored}That's where the fish went. Don't ask which fish.
+
+
+[r3m_heron_flats_6]
+A thick clump of cotton-grass at the water's edge. A frog is sitting in the middle of it, entirely camouflaged, and entirely unembarrassed.
+
+
+[r3m_heron_flats_7]
+A stump with a ring of fungus. The fungus ring is neat. The ring round it is neater. Somebody has been mowing round it.
+
+[r3m_heron_flats_7_bramble]
+{thinking}Mowing? In the marsh?
+
+[r3m_heron_flats_7_ves]
+{bored}Don't. Don't ask. Don't think about who.
+
+
+[r3m_watergate_1]
+A column from the city's gate, snapped at the base and lying where it fell, moss-grown, with a swallow's nest at one end. It's the gateway to everything, and it's broken.
+
+[r3m_watergate_1_bramble]
+{awed}It's the real gate. THE gate. The bit we've been walking to.
+
+[r3m_watergate_1_ves]
+{bored}Then we're nearly there. Don't say nearly. It's bad luck.
+
+
+[r3m_watergate_2]
+A stone head set on a plinth by the gate, with a chip in the nose and one eye gone. A toll-keeper's, or a king's. It has a lot of moss for an expression.
+
+[r3m_watergate_2_bramble]
+{grin}Hello, sir. We'd like to come in, please.
+
+[r3m_watergate_2_ves]
+{bored}He's not the doorman. He's the door.
+
+
+[r3m_watergate_3]
+A handbell on a post at the gate, rusted green, with a card: RING FOR THE GATE. The card has been rained on until it said: RING FOR THE.
+
+[r3m_watergate_3_bramble]
+{thinking}Ring for the what? The WHAT?
+
+[r3m_watergate_3_ves]
+{bored}Ring for it and find out. Gently.
+
+
+[r3m_watergate_4]
+A fingerpost at the foot of the watergate wall. Both arms still there: THE CITY, and, on the other, FOR TRADE. The trade arm has been used for a wasp's nest.
+
+[r3m_watergate_4_bramble]
+{glee}A wasp's nest! ...Is it occupied?
+
+[r3m_watergate_4_ves]
+{bored}Not by anyone you want to meet.
+
+
+[r3m_watergate_5]
+A barrel sunk to its belly at the water's edge, with a hand-pump beside it. The label says BREW. The label's been scratched and said something ruder.
+
+
+[r3m_watergate_6]
+Flat stones in a line beside the gate, worn smooth as bread by a thousand crossings. People came to this gate for centuries and went on to the next thing.
+
+[r3m_watergate_6_bramble]
+{thinking}You can feel them in the stone. All the people.
+
+
+[r3m_far_shore_1]
+A milestone at the edge of the fen with the miles worn off, and scratched across the front in chalk: WALT WOZ ERE.
+
+There's a smaller scratch: ...AND ERE.
+
+[r3m_far_shore_1_bramble]
+{surprised}WALT! WALT'S been HERE! He GOT OUT! He got out of the Drains and ALL THE WAY across the marsh!
+
+{glee}We have to find Walt. We have to. I have SO MANY QUESTIONS.
+
+[r3m_far_shore_1_ves]
+{bored}Who is Walt?
+
+{bored}...Never mind. I don't want to know.
+
+
+[r3m_far_shore_2]
+A stone head, face up in the sedge, a pale lichen over the eyes like spectacles. It's looking at the valley. It's been looking for three thousand years. It looks like it approves.
+
+[r3m_far_shore_2_bramble]
+{awed}It's looking at the city. It's been looking at it for AGES.
+
+[r3m_far_shore_2_ves]
+{bored}It's got a better view than we have.
+
+
+[r3m_far_shore_3]
+A column drum at the edge of the fen, with the mark of a toll-keeper's chain on it, worn smooth. Somebody sat here and watched the road a long time.
+
+[r3m_far_shore_3_bramble]
+{thinking}I'd watch the road from here. You'd see everyone coming.
+
+
+[r3m_far_shore_4]
+A fingerpost, both arms intact: THE CITY, and THE FEN. The fen arm points back the way you came. It seems very glad to be pointing at it.
+
+[r3m_far_shore_4_ves]
+{bored}Smug fingerpost. It's never had to go through it.
+
+
+[r3m_far_shore_6]
+A stump at the fen's edge with a little row of shells on it, placed by size. Somebody was sorting things here. The sorting is not finished.
+
+[r3m_far_shore_6_bramble]
+{thinking}Somebody left the job half done. I know that feeling.
+
+
+[r3m_far_shore_7]
+A wooden heron on a post by the water, painted grey. It's been a long time since it fooled anyone. It's got the look of someone who's done their best.
+
+[r3m_far_shore_7_ves]
+{bored}I've met more convincing herons in a children's book.
+
+
+[r3m_far_shore_picnic]
+A basket tucked into the north-east corner of the shore, where the reeds hide it from the road. A cloth over the top. A note: FOR WHOEVER GETS THIS FAR.
+
+Inside: a loaf of bulrush bread, still wrapped, and a smaller note: WELL DONE.
+
+[r3m_far_shore_picnic_bramble]
+{surprised}For whoever gets this far! That's US! We got this far!
+
+{glee}It's a PRIZE. Somebody left a prize. At the END.
+
+[r3m_far_shore_picnic_ves]
+{bored}That's very nice of someone. I'd like to know who. ...No. I'd like to eat the bread first.
+
+
+[r3m_clerks_islet_1]
+A slate on a stake with a note chalked on it in a clerk's hand: LEAVES NOT TO BE TAKEN HOME. LEAVES ARE FOR REGISTERING. WE ARE NOT AN ARCHIVE.
+
+[r3m_clerks_islet_1_bramble]
+{grin}He's very strict about leaves.
+
+[r3m_clerks_islet_1_ves]
+{bored}I'd have liked to meet him.
+
+
+[r3m_clerks_islet_2]
+A basket of letters, all of them in the same neat hand, all addressed to the same office, none of them sent. The first line of each is: SIR, REGARDING THE REEDS.
+
+[r3m_clerks_islet_2_ves]
+{bored}He kept writing about the reeds. He kept writing and nobody answered.
+
+
+[r3m_clerks_islet_3]
+A stump that someone sat on, a brass nameplate nailed to it. CLERK. The nameplate has the dent of a hat on it.
+
+[r3m_clerks_islet_3_bramble]
+{thinking}It's a seat for one. The loneliest seat in the fen.
+
+
+[r3m_clerks_islet_4]
+Cotton-grass, white heads in a row, planted by somebody who liked things in rows.
+
+
+[r3m_island_purse_after]
+The bundle of reeds, with the knot undone and tied up again, a little worse. The note is still stuck in it: PUT IT BACK.
+
+[r3m_island_purse_after_bramble]
+{sheepish}We will. We definitely will. As soon as we find her.
+[r3m_far_shore_after]
+The basket is empty now, apart from the cloth, and a smaller note: THAT WAS FOR YOU.
+[r3m_egg_found]
+A speckled egg, tucked in the sedge where somebody dropped it. It's warm, in the way that eggs are warm when they're meant to be somewhere else.
+
+You pick it up. It's very light.
+
+[r3m_egg_found_bramble]
+{worried}An egg. A lost egg. Somebody's baby is out here on its own and nobody's even noticed. We have to take it home.

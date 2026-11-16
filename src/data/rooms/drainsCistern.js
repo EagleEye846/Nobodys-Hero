@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE CISTERN: Hollin's great brick cistern under the square, where the well
 // drew its water. Its basin is full to the brim, with a deep trench down the
 // middle that never drains. A valve wheel on the west bank lets the water
@@ -132,6 +133,8 @@ export const DRAINS_CISTERN = {
     { sprite: 'water_flow', x: 11, y: 13, text: 'drain_water', wet: ['!a'], animation: 'water_flow', speed: 0.3 },
     { sprite: 'water_flow', x: 13, y: 13, text: 'drain_water', wet: ['!a'], animation: 'water_flow', speed: 0.3 },
     { sprite: 'water_flow', x: 14, y: 13, text: 'drain_water', wet: ['!a'], animation: 'water_flow', speed: 0.3 },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_cistern'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

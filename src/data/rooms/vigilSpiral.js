@@ -11,6 +11,7 @@
 //   B  tall stone block (jump onto it from a low block)T  pine tree (walk or hide behind) (solid)
 //   O  boulder (solid)                            g  plank bridge
 //   _  open sky (the view shows through) (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_SPIRAL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_spiral',
@@ -104,6 +105,8 @@ export const VIGIL_SPIRAL = {
     { sprite: 'chest', x: 18, y: 12, text: 'spiral_chest', gives: 'herald_cloak', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'waymark', x: 36, y: 16, text: 'spiral_waymark' },
     { sprite: 'chough', x: 31, y: 29, text: 'ridge_chough', walkable: true },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_spiral'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

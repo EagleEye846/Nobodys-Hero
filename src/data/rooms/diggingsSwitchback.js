@@ -27,6 +27,8 @@
 //   h  timber-framed wall (solid)   O  ore rock (solid)   I  timber post (solid, standing)
 //   .  packed dirt floor
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_SWITCHBACK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_switchback',
@@ -115,6 +117,7 @@ export const DIGGINGS_SWITCHBACK = {
   // wrecked carts, tools, and a purse at the far end of the second level's west dead end.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_switchback ?? []),
     // A save point near the way in (added so the mines have more of them).
     { sprite: 'savepoint', x: 2, y: 7, save: true },
     { sprite: 'mine_cart', x: 3, y: 3, cart: 'a', dir: 'R', text: 'cart_stuck' },
@@ -165,6 +168,7 @@ export const DIGGINGS_SWITCHBACK = {
     { sprite: 'ore_crumbs', x: 24, y: 15, walkable: true, flat: true },
     // A tea break left mid-pasty, and spare pit props stacked for the next bit of roof.
     { sprite: 'lunch_crate', x: 20, y: 9, text: 'd_lunch' },
+    { sprite: 'col_token', x: 2, y: 13, walkable: true, flat: true, gives: 'tally_lamp', taken: { gone: true } },
   ],
   tileTexts: { '#': 'd_rock', O: 'd_ore', I: 'd_post', W: 'd_face' },
 

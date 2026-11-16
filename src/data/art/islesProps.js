@@ -17,6 +17,7 @@
 //   il_shutter_crank_on   shutter. The _on look has the handle round and the chain taut
 //   il_light_shaft*       the big light's beam coming down through the forge's high window:
 //                         a pale column with dust in it (lay it `flat, walkable`; speed 0.3)
+//   il_cave_crack         a low dark gap in the cliff's foot, half behind a fallen slab and weed (1 tile)
 //   il_far_light          Haddock's Light, far off across the water: a white tower, one warm
 //                         window (stands on the sea; no footprint of its own to walk into)
 //   il_note_tidy          a scrap of paper under a pebble (flat)
@@ -174,6 +175,57 @@ function tower(old) {
   }
   g.rect(cx - 1, 2, 2, 4, IRON[2]);
   g.rect(cx - 1, 1, 2, 1, IRON[3]);
+  return g.rows();
+}
+
+// --- The old light, up on its shelf ---------------------------------------
+// 36 wide, 80 high (5 tiles, about four heroes), a stone plinth, a door the size of a door, a red band,
+// the gallery, the lantern (dark and cracked) and the cap. Stands on its foot tile (the door's).
+function towerOld() {
+  const g = new Grid(36, 80);
+  const cx = 18;
+  // Plinth: two courses of big stones, with a step to the door.
+  g.rect(1, 75, 34, 5, ROCK[1]);
+  g.rect(1, 75, 34, 1, ROCK[3]);
+  g.rect(3, 71, 30, 4, ROCK[2]);
+  g.rect(3, 71, 30, 1, ROCK[3]);
+  for (let x = 4; x < 34; x += 7) g.rect(x, 76, 1, 4, ROCK[0]);
+  g.rect(cx - 7, 77, 14, 3, ROCK[3]);
+  // The tower: tapering, lit from the left, rust weeping through the paint.
+  for (let y = 24; y < 72; y++) {
+    const half = Math.round(10 + ((y - 24) / 48) * 4);
+    for (let x = cx - half; x < cx + half; x++) {
+      const t = (x - (cx - half)) / (2 * half);
+      let c = t < 0.25 ? WHITE[3] : t < 0.7 ? WHITE[2] : t < 0.9 ? WHITE[1] : WHITE[0];
+      if (y >= 34 && y < 42) c = t < 0.25 ? RED[2] : t < 0.8 ? RED[1] : RED[0];
+      if ((x * 7 + y * 3) % 19 === 0 || (y > 46 && (x * 5 + y) % 13 === 0)) c = RUST[(x + y) % 2];
+      g.set(x, y, c);
+    }
+  }
+  for (let y = 25; y < 36; y++) { g.set(cx - 5, y, RUST[1]); if (y < 32) g.set(cx + 4, y, RUST[0]); }
+  // Two narrow windows, and the door: wide enough and tall enough for somebody, standing a little open.
+  for (const wy of [28, 44]) { g.rect(cx - 1, wy, 3, 6, IRON[0]); g.set(cx, wy, IRON[2]); }
+  g.rect(cx - 5, 53, 10, 24, IRON[0]);
+  g.rect(cx - 4, 54, 8, 23, WOOD[1]);
+  g.rect(cx - 4, 54, 8, 1, WOOD[3]);
+  g.rect(cx - 4, 62, 8, 1, WOOD[0]);
+  g.rect(cx - 4, 54, 2, 23, WOOD[2]);
+  g.rect(cx + 1, 65, 1, 2, RUST[1]);
+  g.rect(cx + 2, 54, 2, 23, IRON[0]);
+  // The gallery: a ledge on brackets, a rail on posts.
+  g.rect(cx - 13, 22, 26, 3, IRON[1]);
+  g.rect(cx - 13, 22, 26, 1, IRON[3]);
+  g.rect(cx - 13, 16, 26, 1, IRON[2]);
+  for (let x = cx - 13; x <= cx + 12; x += 4) g.rect(x, 16, 1, 6, IRON[2]);
+  // The lantern: iron frame, dark cracked glass.
+  g.rect(cx - 8, 5, 16, 11, IRON[1]);
+  for (let y = 6; y < 15; y++) for (let x = cx - 7; x < cx + 7; x++) g.set(x, y, (x - (cx - 7)) % 5 === 4 ? IRON[0] : GLASS[y % 3 === 0 ? 1 : 0]);
+  g.set(cx - 5, 7, GLASS[3]); g.set(cx - 5, 8, GLASS[3]); g.set(cx - 4, 7, GLASS[3]);
+  g.set(cx + 2, 9, IRON[0]); g.set(cx + 3, 10, IRON[0]); g.set(cx + 2, 11, GLASS[3]);
+  // The cap and its vane rod.
+  for (let y = 1; y < 5; y++) { const half = 3 + (y - 1) * 2; for (let x = cx - half; x < cx + half; x++) g.set(x, y, x < cx - half + 2 ? IRON[3] : x % 3 ? IRON[1] : RUST[0]); }
+  g.rect(cx - 1, 0, 2, 2, IRON[2]);
+  g.outline(OUT);
   return g.rows();
 }
 
@@ -936,10 +988,76 @@ function oilCans() {
   return g.rows();
 }
 
+
+// --- Life pass (2026-11-14) ---------------------------------------------
+//   il_kettle      a black iron kettle stood on the floor, its lid beside it, a rag in the spout
+//   il_dandelion   one dandelion growing out of a crack in the flagstones (walkable)
+function kettle() {
+  const g = new Grid(16, 14);
+  g.oval(7, 8, 5, 4, IRON[1]);
+  g.rect(3, 4, 9, 3, IRON[1]);
+  g.rect(4, 3, 7, 1, IRON[2]);
+  g.rect(3, 5, 1, 5, IRON[2]);
+  g.rect(5, 12, 5, 1, IRON[0]);
+  // The spout, with a bit of cloth rolled into it, and the handle arching over.
+  g.line(12, 7, 14, 4, IRON[2]); g.line(13, 7, 15, 4, IRON[1]); g.set(14, 3, PAPER[1]); g.set(15, 3, PAPER[0]);
+  g.line(4, 4, 7, 0, IRON[3]); g.line(10, 4, 7, 0, IRON[3]);
+  g.rect(6, 0, 3, 1, IRON[3]);
+  // A shine on the belly and a rust speck.
+  g.set(5, 7, IRON[3]); g.set(5, 8, IRON[3]); g.set(9, 10, RUST[1]);
+  g.outline(OUT);
+  return g.rows();
+}
+
+function dandelion() {
+  shoreSeed = 4421;
+  const g = new Grid(16, 20);
+  const LEAF = ['#1e3a22', '#2c5030', '#3e6a3a'];
+  g.rect(1, 18, 14, 2, IRON[1]);
+  g.rect(0, 19, 16, 1, IRON[0]);
+  for (let i = 0; i < 4; i++) {
+    g.line(8, 18, 3 + i * 3, 14 + (i % 2), LEAF[1 + (i % 2)]);
+    g.line(8, 18, 3 + i * 3, 15 + (i % 2), LEAF[0]);
+  }
+  g.line(8, 18, 8, 7, LEAF[2]);
+  g.line(9, 18, 9, 8, LEAF[1]);
+  g.oval(8, 5, 4, 3, '#e8b820');
+  g.oval(8, 4, 3, 2, '#ffd848');
+  g.set(7, 3, '#fff08a'); g.set(9, 5, '#c88a10'); g.set(6, 5, '#c88a10');
+  g.outline(OUT);
+  return g.rows();
+}
+
+
+// A low dark gap in the foot of the cliff (the tidy cave's mouth, 1 tile), cut in the same grey-green
+// courses as the cliff face, a fallen slab leaning across half of it and weed hanging over the rest.
+function caveCrack() {
+  const g = new Grid(16, 16);
+  for (let y = 0; y < 16; y++) {
+    for (let x = 0; x < 16; x++) {
+      const course = y % 6 === 5;
+      const joint = (x + (Math.floor(y / 6) % 2) * 5) % 9 === 0;
+      g.set(x, y, course || joint ? ROCK[0] : (x * 7 + y * 3) % 5 === 0 ? ROCK[2] : ROCK[1]);
+    }
+  }
+  // The gap: low and ragged, wider at the foot.
+  g.poly([[2, 15], [3, 8], [6, 5], [11, 5], [13, 8], [14, 15]], '#04080a');
+  g.rect(5, 6, 6, 1, '#0a1418');
+  // The slab that came down, leaning across the left half of it.
+  g.poly([[0, 15], [2, 9], [7, 6], [8, 8], [5, 15]], ROCK[2]);
+  g.poly([[2, 9], [7, 6], [7, 7], [3, 10]], ROCK[3]);
+  g.line(5, 15, 8, 8, ROCK[0]);
+  // Weed hanging over the lintel and heaped at the foot.
+  for (const [x, l] of [[7, 3], [9, 2], [10, 4], [12, 2]]) for (let i = 0; i < l; i++) g.set(x, 5 + i, WEED[(x + i) % 3]);
+  g.rect(9, 14, 4, 2, WEED[1]);
+  g.set(10, 14, WEED[2]); g.set(12, 15, WEED[0]);
+  return g.rows();
+}
+
 // --- Registry ----------------------------------------------------------
 export const IL_PROP_SPRITES = {
   il_light_tower: tower(false),
-  il_light_tower_old: tower(true),
+  il_light_tower_old: towerOld(),
   il_dead_lens: deadLens(),
   il_tea_table: teaTable(0),
   il_shutter_crank: shutterCrank(false),
@@ -949,6 +1067,7 @@ export const IL_PROP_SPRITES = {
   il_note_tidy: noteTidy(),
   il_broom: broom(),
   il_shell_row: shellRow(),
+  il_cave_crack: caveCrack(),
   il_logbook: logbook(),
   il_lantern_glass: lanternGlass(''),
   il_lantern_glass_cracked: lanternGlass('cracked'),
@@ -979,6 +1098,8 @@ export const IL_PROP_SPRITES = {
   il_workbench: workbench(),
   il_lens_rack: lensRack(),
   il_oil_cans: oilCans(),
+  il_kettle: kettle(),
+  il_dandelion: dandelion(),
 };
 
 export const IL_PALETTE = palette;

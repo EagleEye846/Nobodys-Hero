@@ -1,0 +1,45 @@
+# BT_THRONE_MINER: A mole miner in the audience at the throne hall, in his Sunday-best hard hat, wondering if his lunch break is up.
+
+[first]
+Shh. The king's talking. Or he's just stopped. I can't tell. He talks in such a way that you can't tell.
+
+[repeat]
+I came to see the show. Haven't seen the show. Seen the king. Same thing.
+
+Seven years lost in the dark, he was. Or seventeen? He tells it different every time. Better every time, mind.
+
+[first after the_kings_welcome]
+That Sunstone flicker gave me a turn. I've worked in the dark since I was a pup and it never gave me one.
+
+[repeat after the_kings_welcome]
+Long way down, the Deep. Pack a lunch. Pack two. I always eat the first one on the stairs.
+
+[first after the_light_goes_up]
+Brilliant! The whole hall went bright! I wanted to cheer but I was holding my hat.
+
+[repeat after the_light_goes_up]
+Beautiful. That's all there is to say. Beautiful. I'll go back to work now.
+
+# (draft)
+[repeat 2]
+Twenty-seven years he was lost, last time he told it. Next week it'll be a hundred. Can't wait.
+
+# (draft)
+[repeat 3]
+Best seat in the house, this. I can see right up the king's nose. Nothing up there. Very tidy.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Pack a candle as well. And a spare. The spare's for when you eat the first lunch by the light of the first candle.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+I'd come with you, but I've only just got my good hat on straight.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've put my hat back on. Now I can cheer. HURRAH. That's done.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Back to work tomorrow. With the light on. I'll dig twice as much. I'll see what I'm doing.

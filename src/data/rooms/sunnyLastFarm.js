@@ -9,6 +9,7 @@
 //   5 6 7 8  the farmhouse: wall, window, thatch, green door (solid)
 //   I  oak   T  apple tree   J  blossom tree (solid, standing)
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_LAST_FARM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_last_farm',
@@ -79,10 +80,10 @@ export const SUNNY_LAST_FARM = {
     { sprite: 'haystack', x: 18, y: 5, text: 'farm_haystack' },
     { sprite: 'gold_pouch', x: 2, y: 17, text: 'farm_pouch', gold: 55, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 37, y: 17, text: 'farm_chest', gives: 'jam_tart', taken: { sprite: 'chest_open', text: 'chest_empty' } },
-    { sprite: 'daisy_patch', x: 26, y: 7, walkable: true },
-    { sprite: 'daisy_patch', x: 10, y: 13, walkable: true },
-    { sprite: 'buttercups', x: 24, y: 10, walkable: true },
-    { sprite: 'buttercups', x: 36, y: 11, walkable: true },
+    { sprite: 'daisy_patch', x: 26, y: 7, walkable: true, decor: true },
+    { sprite: 'daisy_patch', x: 10, y: 13, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 24, y: 10, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 36, y: 11, walkable: true, decor: true },
     { sprite: 'sy_seed_heads', x: 2, y: 11, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 8, y: 16, animation: 'sy_seed_heads', speed: 1.1 },
     { sprite: 'sy_seed_heads', x: 14, y: 12, animation: 'sy_seed_heads', speed: 0.9 },
@@ -90,13 +91,15 @@ export const SUNNY_LAST_FARM = {
     { sprite: 'sy_seed_heads', x: 38, y: 12, animation: 'sy_seed_heads', speed: 1.2000000000000002 },
     { sprite: 'sy_seed_heads', x: 24, y: 17, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 30, y: 15, animation: 'sy_seed_heads', speed: 1.3 },
-    { sprite: 'sy_seed_drift', x: 4, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 12, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 20, y: 7, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 28, y: 11, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 33, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 14, y: 17, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'butterflies', x: 24, y: 6, animation: 'butterflies', speed: 0.2, walkable: true },
+    { sprite: 'sy_seed_drift', x: 4, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 12, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 20, y: 7, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 28, y: 11, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 33, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 14, y: 17, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'butterflies', x: 24, y: 6, animation: 'butterflies', speed: 0.2, walkable: true, decor: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_last_farm ?? []),
   ],
   tileTexts: { '#': 'field_hedge', W: 'field_hedge', F: 'field_flowers', T: 'field_apple', J: 'field_blossom', f: 'soft_fence', '5': 'cottage_wall', '6': 'cottage_window', '7': 'cottage_roof', '8': 'farm_door' },
 

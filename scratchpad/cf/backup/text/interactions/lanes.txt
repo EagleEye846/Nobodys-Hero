@@ -1,0 +1,1277 @@
+# THE SUNKEN LANES (Chapter 5): the half-drowned roads and hamlet past Saltcombe. The fork, the
+# causeway, the sluices, the drowned hamlet and its half a church, the mill, the dry pocket under
+# the water, the way down, and the attic in the hamlet. Hedges with their feet in the flood, and
+# every road going on under the water as if nothing had happened.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums on the last dry stone of the Lanes, small and steady, like a lamp in a window.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[chest_empty]
+An empty chest, green at the hinges.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and the water and everything you've moved go back where they started.
+
+[lanes_rock]
+Old stone, mossy and running with rain.
+
+# (draft) after the storm.
+[lanes_rock_calm]
+Old stone, mossy, drying in patches.
+
+[lanes_hedge]
+A hedge so tangled with weed that the flood has made it its own. Something small rustles in it, and thinks better of it.
+
+[lanes_stone]
+A stone with barnacles on it, a long way from any sea it would have chosen.
+
+# --- THE FORK ------------------------------------------------------------------
+
+[fork_signpost]
+A signpost, leaning. Three arms. SALTCOMBE, back the way you came. THE CHURCH, to the north-east. The third arm points down the lane into the water, and says MERROW. The water has reached the R.
+
+# (draft)
+[fork_signpost_ves]
+{surprised}Merrow's down THERE? Under the lane? Somebody put a whole town under a lane?
+
+[fork_lamp]
+A lamp on an iron post, hissing in the rain. The glass is cracked, and the flame doesn't seem to care.
+
+# After the chapter (the storm over).
+[fork_lamp_calm]
+A lamp on an iron post, dripping. The glass is cracked, and the flame doesn't seem to care.
+
+[fork_cottage]
+A cottage stands in the flood up to its windowsills. The curtains are still drawn. A cat sits on the roof with the patience of something that has decided this is fine.
+
+# (draft)
+[fork_cottage_bramble]
+{thinking}Do they still live in it? ...Do they live upstairs?
+
+[fork_sign]
+A board on a post: THE SUNKEN LANES. KEEP TO THE ROAD. THE ROAD IS UNDER HERE SOMEWHERE.
+
+[fork_buoy]
+A buoy, washed up a long way from the sea, in a field.
+
+[fork_barrel]
+A barrel, bobbing a little whenever the wind hits it, even on dry land. It has spent too long in the water to stop.
+
+[fork_weed]
+A heap of weed, glossy and green, and moving very slightly in a way that's probably the wind.
+
+[fork_pouch]
+A purse in the long grass by the hedge, on the dry side, where somebody left it to keep.
+
+[fork_flood]
+Brown-green water, flat and quiet over the fields. Hedge tops stick out of it in lines, the way the lanes went.
+
+# (draft)
+[fork_flood_bramble]
+{shout}It's in the FIELD. It's not meant to be in the field.
+
+[fork_shallows]
+Shallow water over cobbles. Your boots go in to the ankle and the cold comes in after them.
+
+[fork_gatepost]
+A gatepost, standing up out of the water with nothing to hold.
+
+# --- THE CAUSEWAY --------------------------------------------------------------
+
+[causeway_dial]
+A post with a round face, crusted with rust. A blue arc for the water in, a sandy arc for the water out, and a hand that goes round whether anybody's watching or not.
+
+[causeway_crate]
+A crate, sealed with tar. When the water's in, it bobs about. When the water's out, it sits in the mud like it's always lived there. Two deep drains cut the fields, and they never empty.
+
+# (draft)
+[causeway_crate_ves]
+{smile}Another crate. This coast is mostly crates.
+
+[causeway_signpost]
+A signpost on the island, its arms gone. Someone has chalked an arrow on it pointing east, and under the arrow, SOON.
+
+[causeway_pouch]
+A purse wedged in the signpost's crack, above the waterline.
+
+[causeway_sign]
+A board: THE CAUSEWAY. AT LOW WATER, CROSS. AT HIGH WATER, DON'T. A line under DON'T.
+
+# (draft)
+[causeway_sign_bramble]
+{thinking}Which one is it now? ...How do you know?
+
+[causeway_water]
+The fields are under water. Somewhere down there is a road, and a hedge, and a farm gate, all keeping very still.
+
+[causeway_puddle]
+A puddle in the mud. Tiny crabs scatter as you look at it, as if you'd said something.
+
+# --- THE SLUICES ---------------------------------------------------------------
+
+[sluice_drain]
+A sluice wheel with DRAIN painted on its rim, worn down to DR N. It turns one way only.
+
+[sluice_drain_turn]
+You heave the wheel round. Somewhere under the quay a paddle groans, and the basin starts to drain out through it.
+
+[sluice_drain_already]
+The water's already down. The wheel won't go any further that way.
+
+[sluice_busy]
+The wheel won't budge. The water's still moving.
+
+[sluice_fill]
+A sluice wheel with FILL painted on its rim. It turns one way only.
+
+[sluice_fill_turn]
+You heave the wheel round. Out past the weir the pool lifts, and comes over into the basin, and keeps coming.
+
+[sluice_fill_already]
+The water's already up. The wheel won't go any further that way.
+
+[sluice_sign]
+A board: SLUICES. DRAIN TO WALK. FILL TO FORD. DO NOT DO BOTH AT ONCE, YOU KNOW WHO YOU ARE.
+
+# (draft)
+[sluice_sign_ves]
+{laughing}That's a direct accusation, and I respect it.
+
+[sluice_house]
+The sluice house: a stone hut on the quay with a paddle gate under it. The door's rusted shut, but you can hear the water talking to itself inside.
+
+[sluice_pouch]
+A purse on a kitchen shelf that is now in the middle of a field. The rest of the kitchen's gone. The shelf held on.
+
+[sluice_buoys]
+A pile of buoys, painted with house numbers. A whole lane's worth.
+
+[sluice_rope]
+A coil of rope on the quay, tarred, and coiled the way someone who was proud of it would coil it.
+
+[sluice_water]
+The basin. Its water is the colour of strong tea, and about as warm as the sea.
+
+[sluice_ford]
+The weir, under the water. The stones of its crest are flat enough to wade along, if the water is up and you go slowly.
+
+# (draft)
+[sluice_ford_bramble]
+{worried}It's touching my KNEES.
+
+[sluice_teeth]
+The weir's crest, out of the water: broken stones like a row of teeth. Nobody is getting over those.
+
+[sluice_post]
+A post at the corner of the quay, with a ring in it for a boat that isn't coming back.
+
+# --- THE DROWNED HAMLET --------------------------------------------------------
+
+[hamlet_sign]
+A board on the green: SAINT ELMS, AND THE LANES. PLEASE CLOSE ALL GATES. The gates are under the water.
+
+[hamlet_church_wall]
+What's left of the church's north wall: good grey stone, a pointed window with its tracery still in it, and above the window, nothing. The roof went the way of the east end.
+
+[hamlet_church_window]
+A pointed window, and in it a little of the old glass: a blue piece, a green piece, and the corner of a red one. The rain runs down the glass on both sides.
+
+# After the chapter (the storm over).
+[hamlet_church_window_calm]
+A pointed window, and in it a little of the old glass: a blue piece, a green piece, and the corner of a red one. Drops run down it from the eaves.
+
+[hamlet_church_window_ves]
+{thoughtful}Someone fitted every piece of that by hand. ...And the sea took the other half anyway.
+
+[hamlet_pillar]
+A church pillar, standing. The one beside it isn't. The water is up to the second step of the altar, and the altar's under it.
+
+[hamlet_font]
+The font, a stone bowl on a stem, full to the brim with rain. It's the only water in the hamlet that's where it's meant to be.
+
+# (draft) after the storm.
+[hamlet_font_calm]
+The font, a stone bowl on a stem, still full to the brim with the storm's rain. It's the only water in the hamlet that's where it's meant to be.
+
+[hamlet_rubble]
+The east end of the church, tumbled into the flood, block on block.
+
+[hamlet_flood]
+The lanes go on under the water between the hedge tops. A gate, a pump, a bench. The bench has a little brass plate on it.
+
+[hamlet_cottage]
+A cottage, half under the water. The upstairs curtains are drawn, as if whoever lives there is having a lie-in until it all goes down.
+
+# (draft)
+[hamlet_cottage_bramble]
+{sheepish}Should we knock? ...Not me. Somebody.
+
+[hamlet_signpost]
+A signpost out in the shallows, its arms just clear of the water: SALTCOMBE. MERROW. SAINT ELMS. All three point a little down.
+
+[hamlet_pots]
+Lobster pots, stacked against the terrace wall where the tide brought them.
+
+[hamlet_pouch]
+A purse on the altar step, in an inch of water. Collection, perhaps.
+
+[hamlet_gable]
+A cottage built into the bank, the old way, so its attic window opens straight onto the top of it.
+
+[hamlet_terrace_sign]
+A board at the foot of the wall: CHURCHYARD. THE STEPS ARE GONE. THERE IS A RING. PLEASE USE THE RING. (STAND UNDER IT, FACE THE WALL, THROW.)
+
+# --- THE MILL ------------------------------------------------------------------
+
+[mill_sign]
+A board: SAINT ELMS MILL. TAIL GATE ON THE THREE WHEELS. ALL THREE AT ONCE, OR NOT AT ALL.
+
+[mill_gate_sign]
+A board by the gate: HOLD THEM ALL, THEN GO. DO NOT LET GO WHILE YOU ARE UNDER IT.
+
+[mill_gate]
+The tail gate, a slab of oak in an iron frame. It hangs from three paddles, and the paddles hang from three wheels.
+
+[mill_gate_open]
+All three wheels hold, and the tail gate rises on its chains, dripping.
+
+[mill_wheel_hero]
+A big iron wheel beside the gate, stiff. Stand at it and lean, and it will hold.
+
+[mill_plate_hero]
+The step in front of the gate wheel, worn hollow by a hundred years of millers leaning.
+
+[mill_wheel_bramble]
+A little wheel down in the sluice pit, set low for a boy to turn. There's a boy-sized dip in the step in front of it.
+
+[mill_plate_bramble]
+The step in front of the pit wheel, worn down by small boots.
+
+[mill_wheel_ves]
+A wheel beside the old mill wheel, rusted stiff. Its spokes want something hooked through them and pulled, like the crook of an umbrella.
+
+[mill_wheel_ves_ves]
+{proud}Finally. A job that calls for an umbrella.
+
+[mill_plate_ves]
+The step in front of the stiff wheel, slick with spray from the mill wheel.
+
+[mill_hole]
+A hole low in the wall of the sluice pit, where the old drain went through. Too small for you.
+
+[mill_hole_bramble]
+{proud}I fit. I always fit. It's my best thing.
+
+[mill_chest]
+A chest at the bottom of the sluice pit, dry, under a ledge. Inside, wrapped in a flour sack: a WINKLE SKEWER.
+
+[mill_millwheel]
+The old mill wheel, half in the race, going round and round with nothing to grind. It doesn't seem to mind.
+
+[mill_stump]
+An old stone post by the door. Press on it, and all three of you are back here together.
+
+[mill_sacks]
+Barrels of flour that the flood got to first. They've set like stone.
+
+[mill_pouch]
+A purse on the far side of the gate, on a nail, where the miller kept the takings.
+
+[mill_race]
+The mill race, deep and fast, the colour of a puddle in a coal yard.
+
+# (draft)
+[mill_race_bramble]
+{determined}Nobody fall in. That's a rule now. I just made it.
+
+[mill_house]
+The mill house: stone below, slate above, its door shut tight against the wet.
+
+[mill_window]
+A window. Inside, the millstones stand in a foot of water.
+
+[mill_door]
+The mill house door, swollen in its frame. It hasn't opened in a long time.
+
+[mill_bridge]
+A footbridge over the race, a little springy in the middle.
+
+# --- THE DRY POCKET ------------------------------------------------------------
+
+[bubble_lantern]
+A lantern on an iron post, on the old lane, under the water. It's lit. The glass is clean and dry, and the flame stands straight up, the way flames do in a room with the door shut.
+
+[bubble_rim]
+The edge of the pocket, where the water stands up like a wall of glass. You could put your hand in it. You don't.
+
+[bubble_water]
+The flood, seen from inside. Bubbles go up through it in threads, toward a roof of rain you can't see.
+
+# After the chapter (the storm over).
+[bubble_water_calm]
+The flood, seen from inside. Bubbles go up through it in threads, toward a roof of sky you can't see.
+
+# (draft)
+[bubble_water_bramble]
+{shout}We're UNDER it. We are under the water. I want that written down.
+
+[bubble_fish]
+A fish, nosing at the outside of the pocket. It looks at the lantern for a while, then goes off as if it's seen it before.
+
+[bubble_signpost]
+A finger-post from when this was a lane, still pointing the way to somewhere. The words have gone green.
+
+[bubble_weed]
+Weed, left in a heap where the water let go of it. It's still wet, and it's the only thing down here that is.
+
+[bubble_culvert]
+The culvert's stone, slick and cold. The whole weight of the flood is on the other side of it.
+
+[bubble_deep]
+Deep water, dark green, going down further than the lane did.
+
+# --- THE WAY DOWN --------------------------------------------------------------
+
+[down_signpost]
+A signpost at the crossroads. One arm: MERROW, pointing down the stair. The other arm points along the cliff and has been painted over so many times you can't read it.
+
+[down_wall]
+A wall of the old chapel at the crossroads, with a pointed window looking out over the water.
+
+[down_pouch]
+A purse tucked behind a stone on the cliff lane, out of the rain.
+
+[down_stair]
+A broad stone stair, going down. Every step is a little wetter than the last, and then they're under the water, and they keep going.
+
+# (draft) World reacts: Old Gulper's bell has gone quiet.
+[down_stair after merrow_sea_gate]
+A broad stone stair, going down into the water. Nothing rings down there now. It is very quiet, the way a house is quiet when somebody is having a nap.
+
+# (draft)
+[down_stair_bramble after merrow_sea_gate]
+{sly}Shh. He's sleeping.
+
+# (draft)
+[down_stair_ves after merrow_sea_gate]
+{smile}A hundred years of toothache. I'd ring things too.
+
+[down_east_sign]
+A board by the cliff lane: THE SOUNDINGS. ALONG THE CLIFF. GATE AT THE FAR END KEPT BOLTED (HARBOUR BOARD). FOR MERROW, TAKE THE STAIR.
+
+[down_flood]
+The flood, wide and still, the rain hissing on it. Far out, a church spire stands up out of the water like a finger saying "shh".
+
+# After the chapter (the storm over).
+[down_flood_calm]
+The flood, wide and still, and nothing falling on it now. Far out, a church spire stands up out of the water like a finger saying "shh".
+
+# --- THE ATTIC (secret) --------------------------------------------------------
+
+[attic_chest]
+A sea chest under the eaves, painted with a blue bell. Inside, folded with lavender that has long since given up: the BELLBUOY MANTLE.
+
+[attic_pouch]
+A teapot on the floor with its lid on. Inside it, a purse. The oldest bank there is.
+
+[attic_trunks]
+Barrels and boxes, carried up the stairs one at a time, the last ones in a hurry.
+
+[attic_rope]
+A coil of rope by the window. Somebody climbed out this way too.
+
+[attic_buoy]
+A red buoy with a child's name painted on it in careful letters. It has been kept somewhere dry on purpose.
+
+[attic_lamp]
+A lamp on an iron crook, put out a long time ago. Dry, and ready, for whenever.
+
+[attic_beams]
+The roof beams, black with age. Rain on the slates just over your head.
+
+# After the chapter (the storm over).
+[attic_beams_calm]
+The roof beams, black with age. Something drips on the slates just over your head, slower and slower.
+
+[attic_wall]
+Board walls, papered once, with a pattern of little ships.
+
+[attic_stairwell]
+The top of the stairs, and three steps down, black water. The rest of the house is down there.
+
+[attic_stairwell_bramble]
+{worried}I'm not looking at it. You can't make me look at it.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_attic_ship]
+A ship in a bottle on a little shelf, carried up here out of the water.
+
+# (draft)
+[in_attic_sketch]
+A sketch of a boat, framed and hung up high where the water couldn't reach it.
+
+# (draft)
+[in_attic_chest]
+A little sea chest, a blanket folded on the lid. Somebody slept up here for a while.
+
+# (draft)
+[in_attic_boots]
+A pair of boots in the corner, side by side, dry.
+
+# (draft)
+[in_attic_bucket]
+A pail under a leak in the roof. The only water in this house anyone has bothered to catch.
+
+# (draft)
+[in_attic_bucket_calm]
+A pail under where the roof leaked. The water in it has gone still.
+
+# (draft)
+[in_attic_chair]
+An armchair, turned to face the top of the stairs. Somebody sat here and watched the water come up, one step at a time.
+
+# (draft)
+[in_attic_plant]
+A potted plant, carried up out of the flood and then left to die of thirst. It managed it.
+
+# --- DRESSING (second pass): things standing in the flood, any lane ---------------
+
+# (draft)
+[dress_sunk_fence]
+A picket fence wading out into the water, as if it could still keep something in.
+
+# (draft)
+[dress_sunk_cart]
+A cart tipped into the flood, one wheel up. Whatever was pulling it got away.
+
+# (draft)
+[dress_sunk_bed]
+A drowned bed of cabbages. The beans are still climbing. Nobody has told them.
+
+# (draft)
+[dress_sunk_wall]
+A garden wall up to its middle in water. Ivy above, weed below.
+
+# (draft)
+[dress_sunk_door]
+A doorway with no house round it. The door stands open, the way you'd leave it for someone.
+
+# (draft) The two shut ones (lanes_down, lanes_hamlet).
+[dress_sunk_door_shut]
+A doorway with no house round it. Somebody's shut the door. From which side, you couldn't say.
+
+# (draft)
+[dress_washing]
+Washing still pegged out. It is never going to be dry.
+
+# (draft)
+[dress_headstone]
+A leaning headstone, the name gone soft under lichen. Someone still cuts the grass round it.
+
+# (draft)
+[dress_pews]
+Pews in their rows, facing an altar that is mostly water now.
+
+# (draft)
+[dress_mill_cart]
+The mill's cart, down on one corner. Its wheel leans beside it, waiting for someone handy.
+
+# (draft)
+[dress_millstone]
+A spare millstone in the grass. It weighs more than the cart and its horse.
+
+# (draft)
+[dress_reeds]
+Reeds at the pond's edge, beaten flat by the rain and standing up again.
+
+# (draft)
+[dress_well]
+The crossroads' well, level with the flood now. Rather takes the point out of it.
+
+# (draft) QUEST PIECE 1 for the ghost ship's deep part.
+[attic_compass]
+A brass-rimmed glass, standing in a teacup on the sill like something that was put somewhere safe. Round the rim, in letters worn nearly smooth: FAIR RETURN. BINNACLE. It is dry, which is more than the rest of the house.
+
+# (draft) THE FAIR RETURN'S LOG (optional, secret), page 2: in a bottle stuck in the mud behind the sluice house (low water).
+[sluice_log_bottle]
+A green bottle, stuck neck-up in the mud where the water left it, corked and sealed with red wax. Pressed into the wax, FR. There's a roll of paper inside, and the paper is dry.
+
+# (draft)
+[sluice_log_bottle_ves]
+{laughing}It came all the way up the fields to sit behind a sluice house. Some bottles have no sense of occasion.
+
+# --- THE PARLOUR (secret_lanes_door): through the open doorway in the Sluices' pool -------
+# (draft)
+[pdoor_window]
+Rain runs down the glass.
+
+Behind it the lane is dry and full of sun: the hedges cut, washing out, a cottage with a red roof.
+
+# (draft)
+[pdoor_window_ves]
+{thoughtful}Lovely day out there. Wherever there is.
+
+# (draft)
+[pdoor_window_bramble]
+{awed}It's summer in the window! Real summer! I think I can hear birds.
+
+# (draft)
+[pdoor_fire]
+A good fire, banked up high, the way you'd leave it if you meant to be back soon.
+
+Nobody has put a log on it in a long time. It doesn't seem to need one.
+
+# (draft)
+[pdoor_clock]
+A tall clock, going. Tick. Tock. Ten to four. You watch it a while. It stays ten to four.
+
+# (draft)
+[pdoor_table]
+The tea things, out on the good cloth. The pot is warm under its cosy.
+
+A note is propped against it: "Gone to see about the water. Kettle's on. Back by four."
+
+# (draft)
+[pdoor_box]
+A painted blanket box. Under the blankets, wrapped in a tea towel: a scone, still warm.
+
+# (draft)
+[pdoor_box_empty]
+A blanket box, the blankets folded back in it. Somebody would want them folded.
+
+# (draft)
+[pdoor_chair]
+An armchair pulled up to the fire, the cushion still the shape of somebody. Down the side of it, with the crumbs: a purse.
+
+# (draft)
+[pdoor_chair_empty]
+An armchair pulled up to the fire, the cushion still the shape of somebody. You don't sit in it.
+
+# (draft)
+[pdoor_rug]
+A rag rug in front of the hearth. Not a drop of water on it.
+
+# (draft)
+[pdoor_lamp]
+An oil lamp, lit, the wick trimmed. The oil is right up to the line.
+
+# (draft)
+[pdoor_shelf]
+A shelf of tins, labels to the front: TEA, SUGAR, BUTTONS, STRING.
+
+# (draft)
+[pdoor_sketch]
+A pencil sketch of a little boat, framed, on a nail. Somebody in this house went out on the water.
+
+# (draft)
+[pdoor_books]
+A pile of books by the chair. The top one lies open, face down, to keep the place.
+
+# (draft)
+[pdoor_boots]
+Boots by the door, a big pair and a small pair. Both dry.
+
+# (draft)
+[pdoor_wall]
+Painted boards, dry right down to the skirting.
+
+# (draft)
+[pdoor_floor]
+Floorboards, swept. Out there, this would all be under water.
+
+# --- LIFE PASS (14 November 2026): belongings, signs, trees and small life ----------
+
+# (draft)
+[lp_porch]
+A front door in a scrap of cottage wall, with a scraped step and a pair of boots lined up beside it. Nobody's at home, but the boots are facing out, ready.
+
+# (draft)
+[lp_porch_ves]
+{bored}Boots by the door, facing out. That's either very tidy or very hopeful.
+
+# (draft)
+[lp_sill]
+A window in the old garden wall, and on its sill a pot of geraniums, a candle in a jar and one cup. The geraniums are doing better than you'd think.
+
+# (draft)
+[lp_sill_ves]
+{smile}Geraniums. In a flood. They'll outlive us all. Plants are like that.
+
+# (draft)
+[lp_letterbox]
+A red letterbox on a post. The number on it has been painted out and painted in again, three times, each time a bit more cross. There's no post in it. Just a snail.
+
+# (draft)
+[lp_letterbox_bramble]
+{thinking}Who writes to a lane? What would you even say?
+
+# (draft)
+[lp_bench]
+A bench with someone's knitting left on it: a very long scarf, still on its needles, going nowhere. The bench has one leg in the mud and has made its peace.
+
+# (draft)
+[lp_bench_ves]
+{smile}Marta would approve of that scarf. It's much too long.
+
+# (draft)
+[lp_rainbarrel]
+A rain barrel, full to the brim and then some. It has been doing its one job extremely well.
+
+# (draft)
+[lp_rainbarrel_bramble]
+{grin}Look at it! It's the happiest thing in the whole lane.
+
+# (draft)
+[lp_lanesign]
+A finger-post, blue enamel, white letters: ROSE LANE. Nobody has told the lane it's mostly water.
+
+# (draft)
+[lp_lanesign_ves]
+{bored}Rose Lane. I can see the 'lane'. Is there a rose?
+
+# (draft)
+[lp_scarecrow]
+A scarecrow in a coat, standing to attention in what used to be a vegetable bed. A gull has settled on its shoulder to make a point.
+
+# (draft)
+[lp_scarecrow_bramble]
+{shout}It's guarding the cabbages! Brave! And also, the gull is winning.
+
+# (draft)
+[lp_nofishing]
+A board nailed to a post: NO FISHING. Under it, in smaller letters: THIS MEANS YOU, SIR. Beside it, a garden gnome with a rod. It's been fishing for a long time, and it has never once done what the sign says.
+
+# (draft)
+[lp_nofishing_ves]
+{laughing}The gnome is the one fishing. The sign's for the gnome. I'd like to see this argument.
+
+# (draft)
+[lp_milestone]
+A milestone. SALTCOMBE 2. And the other face, with the figures gone under green: MERROW, and then a number the moss has had.
+
+# (draft)
+[lp_milestone_bramble]
+{thinking}Merrow's under the... no. It's in the lane, past the lane. It's so far down it hasn't got a number.
+
+# (draft)
+[lp_appletree]
+An apple tree standing in the flood, still in leaf, still in fruit. The apples dangle just over the water. A few have fallen in and are going round and round.
+
+# (draft)
+[lp_appletree_ves]
+{thinking}It hasn't noticed. I'd leave it. It's got enough on.
+
+# (draft)
+[lp_chimney]
+A chimney standing out of the flood, with its pot cracked and a rim of old soot. The rest of the house is somewhere under it.
+
+# (draft)
+[lp_chimney_bramble]
+{awed}That's somebody's whole fireplace. Down there. With the water going through it.
+
+# (draft)
+[lp_catbowl]
+A saucer by the porch with a fishbone in it, clean as a whistle. A very small drift of fur on the step says the cat isn't far.
+
+# (draft)
+[lp_catbowl_ves]
+{smile}There's a cat on the cottage roof. It's pretending it isn't watching its bowl.
+
+# (draft)
+[lp_churn]
+A milk churn, tide-marked halfway up. Whatever was in it was either very good milk or very bad water.
+
+# (draft)
+[lp_skep]
+A straw beehive on a stand. It's humming. It doesn't care about the flood, because it has never once been in the water; it lives in the second storey.
+
+# (draft)
+[lp_skep_bramble]
+{scared}I'm not going near it. They know I'm here. They know I'm HERE.
+
+# (draft)
+[lp_willow]
+A willow, trailing its fronds right down to the ground. Standing under it is like standing in a green room with the lights off, and the rain on the leaves sounds a long way off.
+
+# (draft)
+[lp_willow_ves]
+{smile}Quiet under here. I like it. Don't tell Bramble, he'll want to live here.
+
+# (draft)
+[lp_willow_bramble]
+{grin}It's a SECRET HOUSE! Look, it has a door, and the door is a tree!
+
+# (draft)
+[lp_nook_pouch]
+A purse tucked at the foot of the willow, where a child might put the thing they most wanted to keep. Small, and green with mould, and still heavy.
+
+# (draft)
+[lp_toyboat]
+A toy boat on its side under the branches, with a name painted on the stern in careful wobbly letters: BRAVE. The sail's a handkerchief.
+
+# (draft)
+[lp_toyboat_ves]
+{smile}Brave. Good name. Optimistic, for a boat that's ended up in a hedge.
+
+# (draft)
+[lp_toyboat_bramble]
+{awed}...I'd call my boat that. Don't laugh. If I had a boat.
+
+# (draft)
+[lp_willow_bank]
+A willow on the west bank, leaning out over the field as if it wanted to see the water better. The fronds trail in it. One of them has a bird's nest in it, and the bird has the manners to look embarrassed.
+
+# (draft)
+[lp_willow_bank_bramble]
+{grin}Bird! Hello, bird! It's okay! It's only us!
+
+# (draft)
+[lp_bench_bank]
+A bench on the bank facing the field. Whoever sat here watched the tide come in and out twice a day for years and never got tired of it. There's a flask on the seat, empty, with a thumbprint in the dust.
+
+# (draft)
+[lp_bench_bank_ves]
+{thinking}Somebody sat here to watch the water. Every day, probably. Imagine that being your whole job.
+
+# (draft)
+[lp_sign_inn]
+A pub sign on a post: a tankard, and under it, THE FORD AND FIDDLE. No pub. No ford, at high water. Possibly no fiddle.
+
+# (draft)
+[lp_sign_inn_ves]
+{bored}I'd have liked the pub. I'd have liked there to be a pub.
+
+# (draft)
+[lp_sign_inn_bramble]
+{shout}THERE'S NO FIDDLE! It's a FIDDLE-LESS PUB!
+
+# (draft)
+[lp_barrow]
+A wheelbarrow of turnips, tide-wet and a little pale. Somebody was bringing in the last of the crop when the water decided otherwise.
+
+# (draft)
+[lp_barrow_bramble]
+{thinking}Do you think they were going to come back? They left the turnips. Nobody leaves turnips.
+
+# (draft)
+[lp_island_tree]
+An apple tree on the island, the only tree for a field in any direction. It has more apples than anything has a right to.
+
+# (draft)
+[lp_island_tree_ves]
+{smile}Nobody's picked them. We could. It'd be a kind of service.
+
+# (draft)
+[lp_birdbath]
+A stone birdbath, full to the rim with rain. A wren sits on the edge and takes a long look at you before deciding you're not a cat.
+
+# (draft)
+[lp_birdbath_bramble]
+{awed}Look how small it is. And it's NOT SCARED. That's the bravest thing I've seen all day.
+
+# (draft)
+[lp_sill_cw]
+A window in the wall of the old causeway keeper's house, long gone. The window's all that's left, and on the sill, a cup and a pair of spectacles.
+
+# (draft)
+[lp_sill_cw_ves]
+{thinking}Somebody's left their glasses. They'll want those. When they're back. If they're back.
+
+# (draft)
+[lp_milestone_cw]
+A milestone: SALTCOMBE 3, with the other side scratched over: SOMEWHERE ELSE, in a child's writing. Somebody else crossed this causeway as a child, and had views on where it went.
+
+# (draft)
+[lp_roof_ridge]
+The roof of a cottage, just the ridge of it, poking up out of the basin. There's a weathercock on top, still pointing the way the wind was going when it was last interested.
+
+# (draft)
+[lp_roof_ridge_ves]
+{bored}Somebody's roof. Their whole house is under there, and that bit is all that's willing to look.
+
+# (draft)
+[lp_roof_ridge_bramble]
+{shout}It's a TOWN under the water! Everything's under the water!
+
+# (draft)
+[lp_chimney_sl]
+A chimney in the basin, a cracked pot on top. A swallow's nest is jammed in it, high and dry, and absolutely not going anywhere.
+
+# (draft)
+[lp_tree_sl]
+An apple tree on the east bank, with its feet in the flood and a gull in its top. The gull owns it now.
+
+# (draft)
+[lp_tree_sl_bramble]
+{grin}Apples! Can we have apples?
+
+# (draft)
+[lp_sign_bakery]
+A shop sign on a post, a bread loaf on a bracket. The shop is nowhere. The sign still thinks it's open.
+
+# (draft)
+[lp_sign_bakery_ves]
+{smile}No bakery. A sign for one. I think that's the saddest thing I've seen all week and I'm not going to talk about it.
+
+# (draft)
+[lp_bench_sl]
+A bench with a view. The view is a drained basin, a sluice house and a lot of mud. It's a good bench anyway.
+
+# (draft)
+[lp_barrel_sl]
+A water butt full of water. In a flood. Somebody's idea of a joke, or an old habit.
+
+# (draft)
+[lp_barrel_sl_ves]
+{laughing}Water butt. Full. In the middle of a flood. This is the funniest thing in the Lanes.
+
+# (draft)
+[lp_letterbox_sl]
+A letterbox, red, with a letter in it. A damp one. The ink has run so much it could say anything, and now it does.
+
+# (draft)
+[lp_letterbox_sl_ves]
+{sly}A letter. Should we read it? ...No. Fine. But I want it noted that I wanted to.
+
+# (draft)
+[lp_willow_sl]
+A willow on the quay's far bank, its fronds in the weir's pool. It makes a noise like rain even when it isn't raining.
+
+# (draft)
+[lp_sill_sl]
+A window in the quay wall with its shutters hooked back and a little flowerpot on the sill, the flowers a good deal better than they have any right to be.
+
+# (draft)
+[lp_sill_sl_bramble]
+{thinking}Why's nobody told them? Do you think the geraniums know?
+
+# (draft)
+[lp_churn_sl]
+A milk churn, mud to the lid. The mud's got a hand-print in it, and the print is much too small to be anyone's you'd want to fight.
+
+# (draft)
+[lp_churn_sl_bramble]
+{awed}...That's a kid's. That's a kid's hand. A kid's been all the way down here?
+
+# (draft)
+[lp_roof_ridge_h]
+A cottage roof just clear of the water, slates gone green, a chimney pot leaning. A gull's sat on it so long it's started to look like part of the roof.
+
+# (draft)
+[lp_roof_ridge_h_ves]
+{bored}The ridge of a roof. And, look, a gull on the ridge. They've thought of everything.
+
+# (draft)
+[lp_chimney_h]
+A chimney sticking out of the water, with the last of somebody's soot at its mouth. They'd had a fire the day it all came in.
+
+# (draft)
+[lp_chimney_h_bramble]
+{thinking}Do you think they got out? The smoke would've gone out the top. They must have been warm for ages.
+
+# (draft)
+[lp_tree_h]
+A drowned apple tree with the water at its waist and its apples still on. A rowing boat has drifted into it and stuck.
+
+# (draft)
+[lp_tree_h_ves]
+{smile}That's the best-fed boat in the Lanes.
+
+# (draft)
+[lp_sundial]
+A sundial in the churchyard. The gnomon throws a clear shadow across the plate, to a quarter to eleven. It's gone quarter to eleven for a hundred years.
+
+# (draft)
+[lp_sundial_ves]
+{proud}Quarter to eleven. Right twice a day, according to it. It's never been right and it's never been sorry.
+
+# (draft)
+[lp_sign_inn_h]
+An inn sign on a post: THE LAST ORDERS. A tankard painted on it, with the froth running down. Somebody's added a smile in chalk.
+
+# (draft)
+[lp_sign_inn_h_ves]
+{laughing}The Last Orders. Honest of them.
+
+# (draft)
+[lp_sign_inn_h_bramble]
+{thinking}Someone drew a smile on it. On purpose. When the water came.
+
+# (draft)
+[lp_porch_h]
+The front of a cottage: a blue door, a scraped step, and one very large wet boot where it was left. The door's ajar. Inside there's a floor, and not much else.
+
+# (draft)
+[lp_porch_h_bramble]
+{shout}I'm not going in. It's dark. It's... dark and there could be a... a goose.
+
+# (draft)
+[lp_bench_h]
+A bench under the cottage eave with a cushion on it, squashed flat in the shape of someone who sat here every evening. The cushion remembers.
+
+# (draft)
+[lp_bench_h_ves]
+{smile}The cushion's got a dent in it exactly the size of someone's evenings. I don't like how much that gets me.
+
+# (draft)
+[lp_letterbox_h]
+A red letterbox on a gatepost. THE OLD MANSE, in brass, gone green. Not one letter is missing, which is more than you can say for the house.
+
+# (draft)
+[lp_letterbox_h_ves]
+{sly}THE OLD MANSE. Somebody was very pleased about that.
+
+# (draft)
+[lp_barrel_h]
+A rain barrel, set under a gutter that isn't there any more. It's full anyway. The rain's got good aim.
+
+# (draft)
+[lp_birdbath_h]
+A birdbath in the corner of someone's garden, the bowl cracked clean across and still holding water, somehow. A single scarlet leaf is floating in it, from a tree that doesn't grow anywhere near here.
+
+# (draft)
+[lp_birdbath_h_ves]
+{thinking}That's a Pinefall leaf. That's red. We've come all this way and a leaf got here before us.
+
+# (draft)
+[lp_birdbath_h_bramble]
+{shout}PINEFALL! It's from PINEFALL! The wind brought it! All that way!
+
+# (draft)
+[lp_kettle_h]
+A kettle on the cottage step, the spout turned to the door, as if waiting for someone to come out and take it in. It's cold, and it's been cold for a very long time.
+
+# (draft)
+[lp_kettle_h_ves]
+{bored}A kettle, left on the step, spout to the door. Somebody was about to bring it in. They'll have wanted that tea.
+
+# (draft)
+[lp_sillpots_h]
+Three flowerpots lined up on a wall-end, all geraniums, all facing the same way: toward the door that isn't there.
+
+# (draft)
+[lp_sillpots_h_bramble]
+{thinking}They're all facing the same way. Like they're listening for someone.
+
+# (draft)
+[lp_catbowl_h]
+A saucer by the step with a few biscuit crumbs in it. Cat or mouse, it was very well fed.
+
+# (draft)
+[lp_sill_mill]
+The mill house's old window, boarded from outside and curtained from inside. There's a small clay pot on the sill, and a tally scratched in the frame: forty-one marks. One for every winter the miller stayed.
+
+# (draft)
+[lp_sill_mill_ves]
+{thinking}Forty-one winters. And then forty-two, and it was over. I don't want to think about who made the last mark.
+
+# (draft)
+[lp_tree_mill]
+A big old apple tree beside the race, a swing on a low branch. The rope is new. The seat has a child's initials burnt in it: B.
+
+# (draft)
+[lp_tree_mill_bramble]
+{sheepish}That's not mine. It's got a B. It's not. It's a different B.
+
+# (draft)
+[lp_flour_sign]
+A sign on a post, a sack on a bracket: FLOUR, FRESH. The 'FRESH' has been added on later, in a different hand.
+
+# (draft)
+[lp_flour_sign_ves]
+{bored}FRESH. In a hundred-year-old sign. We love an optimist.
+
+# (draft)
+[lp_milestone_mill]
+A milestone that says MILL, and nothing else. There's only one place it could be saying it about.
+
+# (draft)
+[lp_bench_mill]
+A bench with a loaf-sized dent in the seat. Whoever sat here had a loaf of the mill's bread and nothing else to do, which is the best way to have it.
+
+# (draft)
+[lp_bench_mill_bramble]
+{grin}They sat here and ate the bread. I would do that. That's what the bench is for.
+
+# (draft)
+[lp_barrow_mill]
+A wheelbarrow of flour sacks, tied and ready, the tide-line on them half a foot up. Ready to go. Nowhere to.
+
+# (draft)
+[lp_barrow_mill_ves]
+{bored}Ready to go. For a hundred years. It's the sort of thing I'd put on a headstone.
+
+# (draft)
+[lp_churn_mill]
+A churn by the race, rust at the base. Something's living in it. It's quiet, and it's welcome to stay.
+
+# (draft)
+[lp_churn_mill_bramble]
+{scared}Is it a mouse? It's a mouse. It's definitely a mouse. Please be a mouse.
+
+# (draft)
+[lp_worm_tin]
+A tin pail by the east lane's wall, lid held down with a stone. Scratched on the lid: BAIT. Don't open this. It moves when you pick it up.
+
+# (draft)
+[lp_worm_tin_ves]
+{bored}BAIT. It's a tin of worms. It wriggles. I'm not carrying that.
+
+# (draft)
+[lp_worm_tin_bramble]
+{shout}WORMS! I'll carry it! I'll carry the worms! I'm the best at worms!
+
+# (draft)
+[lp_roof_down]
+The ridge of a cottage roof, just out of the flood by the stair's foot. Whoever stood on the stair last would have passed within a few feet of their own front door.
+
+# (draft)
+[lp_roof_down_ves]
+{bored}It's a roof. At the bottom of the stair. Of course it is.
+
+# (draft)
+[lp_chimney_down]
+A chimney, its pot gone, a tuft of weed growing out of the stack. The smoke's been replaced by something with more roots.
+
+# (draft)
+[lp_willow_down]
+A willow on the crossroads' west side, its fronds trailing in the flood. Under it, out of the rain, the ground is dry and brown. Somebody's left a blanket here.
+
+# (draft)
+[lp_willow_down_ves]
+{smile}I'd sit here. If we weren't, you know. On the clock.
+
+# (draft)
+[lp_lanesign_down]
+A finger-post: ROSE LANE, one arm; ELM CLOSE, another; THE STAIR, a third. All arms are very polite about being under water.
+
+# (draft)
+[lp_lanesign_down_bramble]
+{thinking}Elm Close. Rose Lane. They were all named after plants. Where did all the plants go?
+
+# (draft)
+[lp_sundial_down]
+A sundial on the crossroads green, with a motto round the rim: I COUNT ONLY THE SUNNY HOURS. It's been counting nothing for years and looks very pleased with itself.
+
+# (draft)
+[lp_sundial_down_ves]
+{laughing}I COUNT ONLY THE SUNNY HOURS. That's the most useful thing in the Lanes. It's been unemployed since the storm.
+
+# (draft)
+[lp_bench_down]
+A bench against the church wall. A hat has been left on it, and a book, with a stone on the book so it wouldn't blow away. The book's long since gone to pulp, and the stone stayed on it all the same.
+
+# (draft)
+[lp_bench_down_ves]
+{thinking}A stone on the book, so it wouldn't blow away. That's a very careful person. It didn't help the book.
+
+# (draft)
+[lp_barrow_down]
+A barrow of bricks, the start of a wall somebody was putting up. They'd got three courses in.
+
+# (draft)
+[lp_barrow_down_bramble]
+{grin}I could finish it! Give me a trowel, I'll do the fourth course!
+
+# (draft)
+[lp_letterbox_down]
+A letterbox on the crossroads' corner: LAST POST 4 O'CLOCK. It never said which four o'clock.
+
+# (draft)
+[lp_letterbox_down_ves]
+{sly}Last post at four. Ish. I'd like a letter, one day. Written to me. Wouldn't that be strange.
+
+# (draft)
+[lp_milestone_down]
+A milestone: MERROW, UNDER. Somebody's scratched the last word in. It was meant to say STAIR.
+
+# (draft)
+[lp_milestone_down_bramble]
+{awed}It doesn't say 'down', it says 'under'. I like honest signs.
+
+# (draft)
+[lp_kettle_down]
+A kettle on the church's step, cold as a stone. Beside it, two cups, upside down, where somebody put them to dry a hundred years ago.
+
+# (draft)
+[lp_kettle_down_ves]
+{worried}Two cups. Two people. Well. They'll have had a nice time. Until the end of it.
+
+# (draft)
+[lp_sillpots_down]
+Pots on the church wall's ledge, each with a little sprig of something green in it. Nobody planted them. They just came.
+
+# (draft)
+[lp_sillpots_down_ves]
+{smile}Weeds in pots. And everyone calls them flowers. They're not wrong.
+
+# (draft)
+[lp_chimney_b]
+The top of a chimney, standing up through the pocket's wall and out into the flood. The soot on the lip is wet, and has been wet for as long as anyone can remember.
+
+# (draft)
+[lp_chimney_b_bramble]
+{awed}We're IN somebody's garden. UNDER the water. And there's a chimney. It's keeping the house down.
+
+# (draft)
+[lp_boot_b]
+A single boot on the old cobbles, upright, toes pointing at the lantern. Its pair is nowhere. It looks like it's been waiting for a very long time for somebody to say 'well?'.
+
+# (draft)
+[lp_boot_b_ves]
+{bored}One boot. Facing the lantern. I'm not going to ask.
+
+# (draft)
+[lp_boot_b_bramble]
+{thinking}Do you think it walked here? Did it just walk in here and stop?
+
+# (draft)
+[lp_bench_b]
+A bench under the water, inside the pocket's air, set square to the lantern. A cup on the seat, and the saucer next to it, and no spoon.
+
+# (draft)
+[lp_bench_b_ves]
+{worried}Somebody had tea here. By the lantern. They left the cup.
+
+# (draft)
+[lp_letterbox_b]
+A letterbox on a gatepost, the flap held open by a folded paper. The paper says, in a neat hand, 'for whoever's next'. There's nothing else on it.
+
+# (draft)
+[lp_letterbox_b_ves]
+{thinking}For whoever's next. Next what? Next to read it? Next to... stay?
+
+# (draft)
+[lp_letterbox_b_bramble]
+{awed}It's FOR us. It's for the next person. That's us. We're the next person.
+
+# (draft)
+[lp_lanesign_b]
+A finger-post inside the pocket: THE LANTERN (here), THE MILL (back), THE WAY DOWN (on). Somebody's drawn a small, careful arrow under 'here'.
+
+# (draft)
+[lp_lanesign_b_ves]
+{smile}'Here'. It's got a sign that says 'here'. We know. We're in it.
+
+# (draft)
+[lp_catbowl_attic]
+A saucer on the attic floor with the last of a fishbone in it. Cat or mouse, it's been a fine attic for both.
+
+# (draft)
+[lp_catbowl_attic_ves]
+{smile}There's a cat in here somewhere. I can feel it judging us.
+
+# --- R3D BEGIN (round 3 fun check, helper D) ---
+# (draft)
+
+[r3d_lanes_causeway_bench]
+A bench built for waiting. It faces the water, and the sign over it says NEXT TIDE: LATER.
+
+[r3d_lanes_causeway_bench_bramble]
+{thinking}How much later?
+
+[r3d_lanes_causeway_bench_ves]
+{bored}That's the question the bench answers.
+
+[r3d_lanes_causeway_boot]
+A single wader boot upright on a post, rain pouring out of the top in a neat line. Somebody's idea of a signpost.
+
+[r3d_lanes_causeway_boot_bramble]
+{glee}BOOT SIGN!
+
+[r3d_lanes_causeway_boot_ves]
+{bored}It points in no direction. Efficient.
+
+[r3d_lanes_causeway_skep]
+A bee skep on a flat stone, dry and silent.
+
+[r3d_lanes_causeway_skep_bramble]
+{worried}Where did the bees go?
+
+[r3d_lanes_causeway_skep_ves]
+{thoughtful}Up the hill, I imagine. Bees are sensible.
+
+[r3d_lanes_causeway_butt]
+A rain butt, full to the brim, its lid floating on top like a hat. The only thing in the Lanes with a good reason to be this full.
+
+[r3d_lanes_causeway_butt_bramble]
+{glee}I'm jumping in it.
+
+[r3d_lanes_causeway_butt_ves]
+{bored}No.
+
+[r3d_lanes_bubble_tea]
+A tea table in a bubble of air under the sea, set for three. The tea's long cold, a crumb of cake on each plate.
+
+[r3d_lanes_bubble_tea_bramble]
+{thinking}Three places. Who's the third?
+
+[r3d_lanes_bubble_tea_ves]
+{bored}Somebody late.
+
+[r3d_lanes_bubble_sundial]
+A sundial under a roof of water. The gnomon throws a shadow from a light that isn't here.
+
+[r3d_lanes_bubble_sundial_bramble]
+{thinking}What time is it in a bubble?
+
+[r3d_lanes_bubble_sundial_ves]
+{bored}Bubble time. About half past.
+
+[r3d_lanes_bubble_birdbath]
+A birdbath full of sea. A small crab sits in it, looking extremely at home.
+
+[r3d_lanes_bubble_birdbath_bramble]
+{glee}A crab bath!
+
+[r3d_lanes_bubble_birdbath_ves]
+{smile}He thinks he's a bird. Let him.
+
+[r3d_lanes_bubble_glove]
+A single glove on a hook, fingers curled as if waiting to be held. The leather's gone green, but it's soft.
+
+[r3d_lanes_bubble_glove_bramble]
+{worried}...Gloves are the worst.
+
+[r3d_lanes_bubble_glove_ves]
+{bored}That's very specific.
+
+[r3d_lanes_sluices_log]
+The sluice-keeper's log: GATES UP. GATES DOWN. GATES UP. WHO KEEPS CHANGING THE GATES? The last entry just says: ME.
+
+[r3d_lanes_sluices_log_bramble]
+{glee}ME!
+
+[r3d_lanes_sluices_log_ves]
+{bored}He worked it out. That's something.
+
+[r3d_lanes_sluices_cat]
+A ginger cat on top of a sluice post, flat as a loaf, watching the water go by with great disapproval.
+
+[r3d_lanes_sluices_cat_bramble]
+{glee}Hello!
+
+[r3d_lanes_sluices_cat_ves]
+{bored}It won't answer. It's judging the water.
+
+[r3d_lanes_sluices_pail]
+A lunch pail on a ledge above the water line, tied with string. On the lid: NOT FOR SLUICE-KEEPERS. Written by a sluice-keeper.
+
+[r3d_lanes_sluices_pail_bramble]
+{grin}Hah!
+
+[r3d_lanes_sluices_pail_ves]
+{bored}A rule he'd clearly tested.
+
+# --- R3D END ---

@@ -120,10 +120,10 @@ export const STILLWATER_SUNKEN_HALL = {
     { sprite: 'glow_reeds', x: 25, y: 13, text: 'glow_reeds', animation: 'glow_reeds', speed: 0.4 },
     { sprite: 'glow_reeds_tall', x: 38, y: 11, text: 'glow_reeds', animation: 'glow_reeds_tall', speed: 0.55 },
     { sprite: 'glow_reeds', x: 35, y: 9, text: 'glow_reeds', animation: 'glow_reeds', speed: 0.5 },
-    { sprite: 'fungus_pads', x: 15, y: 13, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 21, y: 11, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 11, y: 7, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 19, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9 },
+    { sprite: 'fungus_pads', x: 15, y: 13, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 21, y: 11, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 11, y: 7, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 19, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
     { sprite: 'sunken_pillar_top', x: 15, y: 6, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     { sprite: 'sunken_pillar_top', x: 19, y: 10, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     { sprite: 'sunken_pillar_top', x: 21, y: 13, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
@@ -135,6 +135,10 @@ export const STILLWATER_SUNKEN_HALL = {
     { sprite: 'floor_pebbles_cool', x: 28, y: 9, walkable: true, flat: true },
     { sprite: 'floor_pebbles_cool', x: 4, y: 11, walkable: true, flat: true },
     { sprite: 'floor_pebbles_cool', x: 30, y: 13, walkable: true, flat: true },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'sw_pale_snails', x: 4, y: 6, text: 'sp_snails' },
+    { sprite: 'sw_fish_bones', x: 8, y: 9, text: 'sp_bones', walkable: true },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'lake_rock', W: 'lake_wall', h: 'hall_wall', '~': 'lake_water', ';': 'lake_shallows', q: 'lake_shingle', g: 'lake_jetty',

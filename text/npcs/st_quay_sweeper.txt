@@ -1,0 +1,51 @@
+# ST_QUAY_SWEEPER: an old seal in a mauve coat with a broom, sweeping the rain off the quay, which it falls on again. The life pass.
+
+[first]
+Sweeping. Don't mind me. Don't mind the sea either, it's always coming in.
+
+[repeat]
+I push it that way, it comes back this way. We've reached an understanding. I let it, and it lets me think I'm helping.
+
+# (draft)
+[repeat 2]
+Forty years on this quay with the same broom. Three heads, two handles. Still the same broom. Don't tell it.
+
+# (draft)
+[repeat_ves 2]
+{smile}...Everybody's got one of those, haven't they. A broom that's different and the same.
+
+# (draft)
+[repeat 3]
+The trick with a wet quay is not to sweep for a clean quay. Sweep for the sound. Swish, swish. It's company.
+
+# (draft)
+[first after the_light_answers]
+Dry! Dry planks! I'd forgotten they were brown. I've swept the same bit for an hour and it's still lovely.
+
+# (draft)
+[repeat after the_light_answers]
+Nothing to push. I'm just walking up and down with a broom, like a lunatic. It's the nicest thing I've ever done.
+
+# (draft) 2026-11-15: the flood.
+[first after wreck_slip_home]
+Sweeping. Don't mind me. It's coming in over the boards at the far end now, and I'm sweeping it back. It's a lovely system. It doesn't work.
+
+# (draft)
+[repeat after wreck_slip_home]
+I've started sweeping towards the hill. Something's got to give. It won't be the sea.
+
+# (draft)
+[first after merrow_sea_gate]
+Half the pier's under. I used to sweep it. Now I sweep the bit that's left, out of respect.
+
+# (draft)
+[repeat after merrow_sea_gate]
+Respect. It's all I've got left to give the sea. That, and a broom.
+
+# (draft)
+[first after soundings_weight_gate]
+Whole pier gone under, and the boards awash. I've put the broom on a high shelf. I'm going to sit on this crate for a bit.
+
+# (draft)
+[repeat after soundings_weight_gate]
+Don't tell the quay I've stopped. It's got enough on.

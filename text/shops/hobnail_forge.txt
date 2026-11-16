@@ -43,6 +43,10 @@ Nothing?
 [cant_sell]
 Wearing it.
 
+# (draft) A Notch Charm bought: one more SPELL NOTCH for everyone.
+[bought_notch]
+Hn. Notch. (He taps it, points at you, then at your friends.) SPELLS. C.
+
 [owned]
 Got one.
 

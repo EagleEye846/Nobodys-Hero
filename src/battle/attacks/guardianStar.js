@@ -1,6 +1,6 @@
 import { defineBulletArt } from '../projectiles.js';
 
-// The Falling Star, drawn once for all three guardians (Tally, Pudding, Madam Fairweather),
+// The Falling Star, drawn once for all three guardians (Quire, the Pale Olm, Madam Fairweather),
 // so the motif reads the same wherever it turns up: a four-pointed star, long points up and
 // down and across, a white heart, a pale gold body and a soft halo round it. Only the halo and
 // the outer edge pick up the guardian's own colour (the same star-glass cyan in all three).

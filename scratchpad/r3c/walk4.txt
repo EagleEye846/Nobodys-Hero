@@ -1,0 +1,162 @@
+PASS L6 sunny_gate_field
+PASS L7 sunny_soft_field
+PASS L10 glimmer_landing
+PASS L11 glimmer_echo_falls
+PASS L12 glimmer_tuck
+PASS L14 glimmer_tuck
+PASS L16 glimmer_crystal_bridge
+PASS L19 glimmer_kings_road
+FAIL L20 deep_way_up
+exit:deep_last_flight  ->  deep_last_flight: you 3,35 | logs  | bridged  | gates  | treadles  | followers vesper@56.0,576.0(still)
+go:4,32  ->  deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | followers vesper@79.0,544.0(walking)
+PLAY FAIL: climb: nothing to climb from 4,32; deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | TEXT OPEN | followers vesper@78.0,544.0(walking)
+PLAY DONE
+PASS L21 belowtown_square
+PASS L23 belowtown_throne
+PASS L25 belowtown_square
+PASS L27 belowtown_throne
+PASS L28 belowtown_throne
+PASS L30 belowtown_square
+PASS L33 diggings_pithead
+PASS L34 diggings_switchback
+PASS L35 diggings_old_seam
+PASS L36 diggings_trestle
+PASS L37 diggings_flooded_drift
+PASS L38 diggings_cave_in
+PASS L39 diggings_lift
+PASS L40 diggings_old_seam
+PASS L43 stillwater_shore
+PASS L44 stillwater_isles
+PASS L45 stillwater_isles
+PASS L46 stillwater_reeds
+PASS L47 stillwater_sunken_hall
+PASS L48 stillwater_far_shore
+FAIL L51 deep_heros_camp
+exit:deep_last_flight  ->  deep_last_flight: you 3,35 | logs  | bridged  | gates  | treadles  | followers vesper@56.0,576.0(still)
+go:4,32  ->  deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | followers vesper@79.0,544.0(walking)
+PLAY FAIL: climb: nothing to climb from 4,32; deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | TEXT OPEN | followers vesper@78.0,544.0(walking)
+PLAY DONE
+PASS L53 deep_crawl
+PASS L55 deep_crawl
+PASS L57 deep_crawl
+PASS L59 deep_first_dark
+PASS L61 deep_first_dark
+PASS L62 deep_first_dark
+PASS L63 deep_hidden_vug
+FAIL L64 deep_way_up
+exit:deep_last_flight  ->  deep_last_flight: you 3,35 | logs  | bridged  | gates  | treadles  | followers vesper@56.0,576.0(still)
+go:4,32  ->  deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | followers vesper@69.0,551.6(walking)
+PLAY FAIL: climb: nothing to climb from 4,32; deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | TEXT OPEN | followers vesper@69.0,550.6(walking)
+PLAY DONE
+PASS L66 glimmer_landing
+PASS L67 diggings_pithead
+PASS L68 belowtown_square
+PASS L71 glimmer_kings_road
+PASS L72 glimmer_kings_road
+PASS L94 stillwater_isles
+PASS L96 stillwater_reeds
+PASS L99 sunny_lane
+PASS L100 belowtown_market
+PASS L101 belowtown_forge
+PASS L102 deep_heros_camp
+PASS L103 belowtown_square
+PASS L104 deep_hidden_vug
+PASS L105 belowtown_hall_of_the_visit
+PASS L109 belowtown_market
+PASS L111 belowtown_market
+PASS L115 glimmer_echo_falls
+PASS L116 glimmer_echo_falls
+PASS L118 belowtown_throne
+PASS L119 diggings_pithead
+PASS L121 diggings_old_seam
+PASS L122 diggings_lost_seam
+PASS L123 diggings_lost_seam
+FAIL L125 deep_way_up
+exit:deep_last_flight  ->  deep_last_flight: you 3,35 | logs  | bridged  | gates  | treadles  | followers vesper@56.0,576.0(still)
+go:4,32  ->  deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | followers vesper@79.0,544.0(walking)
+PLAY FAIL: climb: nothing to climb from 4,32; deep_last_flight: you 4,32 | logs  | bridged  | gates  | treadles  | TEXT OPEN | followers vesper@78.0,544.0(walking)
+PLAY DONE
+PASS L130 diggings_lost_seam
+PASS L132 diggings_star_scorch
+PASS L134 diggings_star_scorch
+PASS L136 diggings_star_glass
+PASS L138 diggings_star_glass
+PASS L141 glimmer_geode
+FAIL L142 belowtown_forge
+PLAY START
+PLAY FAIL: use:11,4: stuck going to 10,6 (at 164,118, ground 0, z 0.0) strollers [object HTMLCanvasElement]@170,112 waits 6; belowtown_forge: you 10,7 | logs  | bridged  | gates  | treadles  | followers vesper@149.4,127.8(walking)
+PLAY DONE
+PASS L143 stillwater_isles
+PASS L145 glimmer_geode
+PASS L146 belowtown_forge
+PASS L147 stillwater_isles
+PASS L149 diggings_lost_seam
+PASS L151 diggings_star_spill
+PASS L153 diggings_star_siding
+PASS L155 diggings_star_gallery
+PASS L158 diggings_star_camp
+PASS L159 diggings_star_camp
+PASS L160 diggings_star_pool
+PASS L162 diggings_star_pool
+PASS L163 diggings_star_pool
+FAIL L167 diggings_lost_seam
+PLAY START
+go:3,13  ->  diggings_lost_seam: you 3,13 | logs  | bridged  | gates  | treadles  | room diggings_lost_seam carts  | followers vesper@58.2,187.5(walking)
+PLAY FAIL: exit:diggings_star_scorch: kept being interrupted; diggings_lost_seam: you 3,14 | logs  | bridged  | gates  | treadles  | room diggings_lost_seam carts  | followers vesper@58.0,235.0(walking)
+PLAY DONE
+FAIL L168 diggings_lost_seam
+go:3,13  ->  diggings_lost_seam: you 3,13 | logs  | bridged  | gates  | treadles  | room diggings_lost_seam carts  | followers vesper@57.7,189.4(walking)
+finish  ->  diggings_lost_seam: you 3,13 | logs  | bridged  | gates  | treadles  | room diggings_lost_seam carts  | followers vesper@57.7,189.4(walking)
+PLAY FAIL: exit:diggings_star_scorch: kept being interrupted; diggings_lost_seam: you 3,14 | logs  | bridged  | gates  | treadles  | room diggings_lost_seam carts  | followers vesper@56.0,235.0(walking)
+PLAY DONE
+FAIL L170 diggings_star_spill
+PLAY START
+PLAY FAIL: go:15,6: no way on foot from 1,8 (ground 0, z 0.0); diggings_star_spill: you 1,8 | logs 7,9 21,5 | bridged  | gates  | treadles  | followers vesper@24.0,144.0(still)
+PLAY DONE
+FAIL L171 diggings_star_spill
+go:6,9  ->  diggings_star_spill: you 6,9 | logs 7,9 21,5 | bridged  | gates  | treadles  | followers vesper@81.3,143.0(walking)
+push:R  ->  diggings_star_spill: you 8,9 | logs 10,9 21,5 | bridged  | gates  | treadles  | followers vesper@112.0,155.0(still)
+PLAY FAIL: go:15,6: no way on foot from 8,9 (ground 0, z 0.0); diggings_star_spill: you 8,9 | logs 10,9 21,5 | bridged  | gates  | treadles  | followers vesper@112.0,155.0(still)
+PLAY DONE
+FAIL L173 diggings_star_siding
+push:D  ->  diggings_star_siding: you 24,6 | logs  | rocks 24,7 | bridged  | gates shut,shut | treadles  | beams 0 (0 tiles) | prisms 28,6\ | lit  | room diggings_star_siding carts a@21,4 | followers vesper@389.0,89.2(still)
+wait:60  ->  diggings_star_siding: you 24,6 | logs  | rocks 24,7 | bridged  | gates shut,shut | treadles  | beams 0 (0 tiles) | prisms 28,6\ | lit  | room diggings_star_siding carts a@21,4 | followers vesper@389.0,89.2(still)
+PLAY FAIL: go:34,8: no way on foot from 24,6 (ground 0, z 0.0); diggings_star_siding: you 24,6 | logs  | rocks 24,7 | bridged  | gates shut,shut | treadles  | beams 0 (0 tiles) | prisms 28,6\ | lit  | room diggings_star_siding carts a@21,4 | followers vesper@389.0,89.2(still)
+PLAY DONE
+FAIL L174 diggings_star_siding
+push:D  ->  diggings_star_siding: you 24,6 | logs  | rocks 24,7 | bridged  | gates shut,shut | treadles  | beams 1 (8 tiles) | prisms 28,6/ | lit  | room diggings_star_siding carts a@22,10 | followers vesper@389.0,89.2(still)
+wait:60  ->  diggings_star_siding: you 24,6 | logs  | rocks 24,7 | bridged  | gates shut,shut | treadles  | beams 1 (8 tiles) | prisms 28,6/ | lit  | room diggings_star_siding carts a@22,10 | followers vesper@389.0,89.2(still)
+PLAY FAIL: go:34,8: no way on foot from 24,6 (ground 0, z 0.0); diggings_star_siding: you 24,6 | logs  | rocks 24,7 | bridged  | gates shut,shut | treadles  | beams 1 (8 tiles) | prisms 28,6/ | lit  | room diggings_star_siding carts a@22,10 | followers vesper@389.0,89.2(still)
+PLAY DONE
+FAIL L176 diggings_star_gallery
+PLAY START
+PLAY FAIL: go:27,4: no way on foot from 1,8 (ground 0, z 0.0); diggings_star_gallery: you 1,8 | logs  | rocks 21,9 | bridged  | gates shut,shut | treadles  | followers vesper@24.0,144.0(still)
+PLAY DONE
+FAIL L177 diggings_star_gallery
+use:11,4  ->  diggings_star_gallery: you 11,5 | logs  | rocks 21,9 | bridged  | gates shut,shut | treadles  | followers vesper@164.0,90.0(still)
+wait:200  ->  diggings_star_gallery: you 11,5 | logs  | rocks 21,9 | bridged  | gates shut,shut | treadles  | followers vesper@164.0,90.0(still)
+PLAY FAIL: expected lit seam_tune; diggings_star_gallery: you 11,5 | logs  | rocks 21,9 | bridged  | gates shut,shut | treadles  | followers vesper@164.0,90.0(still)
+PLAY DONE
+FAIL L179 diggings_star_siding
+PLAY START
+PLAY FAIL: go:34,8: no way on foot from 1,8 (ground 0, z 0.0); diggings_star_siding: you 1,8 | logs  | rocks 24,6 | bridged  | gates shut,shut | treadles  | beams 0 (0 tiles) | prisms 28,6/ | lit  | room diggings_star_siding carts a@6,4 | followers vesper@24.0,144.0(still)
+PLAY DONE
+FAIL L180 diggings_star_gallery
+PLAY START
+PLAY FAIL: go:34,8: no way on foot from 1,8 (ground 0, z 0.0); diggings_star_gallery: you 1,8 | logs  | rocks 21,9 | bridged  | gates shut,shut | treadles  | followers vesper@24.0,144.0(still)
+PLAY DONE
+PASS L184 belowtown_square
+PASS L186 diggings_lost_seam
+PASS L188 diggings_lost_seam
+PASS L190 belowtown_throne
+PASS L191 belowtown_throne
+PASS L195 diggings_lost_seam
+PASS L197 diggings_lost_seam
+PASS L199 belowtown_forge
+PASS L200 belowtown_forge
+PASS L201 stillwater_isles
+PASS L205 deep_heros_camp
+PASS L208 belowtown_market
+PASS L209 belowtown_square
+PASS L210 belowtown_inn
+PASS L211 belowtown_hall_of_the_visit

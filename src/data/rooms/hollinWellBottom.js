@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // UNDER THE WELL: where you come down, after the jump. Black water, a
 // ledge of stone, a tunnel going on into the dark, and Ves's chalk on the
 // wall. The first room of the Old Drains: the tunnel goes east to Hollin's
@@ -7,6 +9,8 @@
 //   k  cave rock (solid)
 //   q  cave floor
 //   ~  brook (solid, until a log sinks into it)
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HOLLIN_WELL_BOTTOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hollin_well_bottom',
@@ -55,8 +59,10 @@ export const HOLLIN_WELL_BOTTOM = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hollin_well_bottom ?? []),
     { sprite: 'chalk_rock_right', x: 9, y: 2, text: 'well_bottom_chalk', light: 20 },
     { sprite: 'sign', x: 15, y: 5, text: 'well_bottom_end' },
+    ...(R3P_PROPS['hollin_well_bottom'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

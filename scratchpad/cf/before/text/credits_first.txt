@@ -1,0 +1,84 @@
+# THE CHAPTER FOUR CREDITS: they roll after the hall comes down and Bramble
+# turns up, while the chapter's credits song plays (the song is "Three Cuts
+# and a Climb", src/data/music/creditsFirstTheme.js, built on Bramble's motif).
+# Cards work just like text/credits.txt: the first line is the heading, the
+# lines after it are names, and a line starting with @ shows a character
+# beside the card.
+
+# The procession along the bottom of the screen, one look per line, leader
+# first: 'hero', 'member:vesper', or any card look (@prop:, @enemy:).
+# Voice credits: halfturkey voiced King Peptup (thanked on the Special
+# Thanks card, by the name exactly as they want it written).
+
+[walkers]
+hero
+member:vesper
+member:bramble
+prop:bf_tuck
+prop:bf_hobnail
+prop:bf_marigold
+enemy:olm
+
+[title]
+Chapter Four: The First
+NOBODY'S HERO
+
+[created]
+Created by
+EagleEye846
+
+[story]
+Story and Writing
+EagleEye846
+@prop:vesper_stand
+
+[characters]
+Characters
+EagleEye846
+@prop:bramble_stand
+
+[art]
+Art and Animation
+EagleEye846
+@prop:bf_tuck
+
+[music]
+Music and Sound
+EagleEye846
+@enemy:dandylion
+
+[programming]
+Programming
+EagleEye846
+@enemy:drillbug
+
+[world]
+Level Design
+EagleEye846
+@enemy:olm
+
+[battles]
+Battle and Bullet Design
+EagleEye846
+@enemy:rumbold
+
+[town]
+The People of Belowtown
+Tuck, Hobnail, Pebble,
+and a great many moles
+@prop:bf_hobnail
+
+[along]
+Along the Way
+Marigold, at her lemonade stand
+Gubb, on the Stillwater
+@prop:bf_marigold
+
+[thanks]
+Special Thanks
+halfturkey, the voice of King Peptup
+Everyone who didn't mind the camp
+@enemy:rumbold
+
+[end]
+To be continued

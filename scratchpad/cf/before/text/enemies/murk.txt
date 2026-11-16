@@ -1,0 +1,78 @@
+# MURK
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/murk.js.
+
+[intro]
+The dark in front of you is a little darker than the dark behind you. Then two pale eyes open in it. A MURK!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+MURK leans toward your light. It is not trying to be subtle.
+
+MURK swallows a patch of the dark beside it, just to have something to do.
+
+MURK has a lot of eyes today. It isn't sure why. Neither are they.
+
+Wherever you look, MURK is just a little bit behind it.
+
+Smells like nothing at all. That's how you can tell.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+MURK has gone thin and grey at the edges, like the dark just before morning. It doesn't like it one bit.
+
+# (draft)
+[flavor: spareable]
+MURK has shrunk to a size you could sit on, and is sitting very close to your light, the way a cat sits near a fire it doesn't trust.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Light.
+
+Give it.
+
+Hungry.
+
+Where did it
+go? The
+light?
+
+So... bright.
+
+Shh. Shh.
+Dark.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/murk.js.
+[talk: Inspect]
+MURK - HP 1250
+A patch of the dark that got up and followed a light. It's afraid of it, and hungry for it, which is a hard way to live. Eats light, and whatever's in it.
+
+[talk: Cover your light]
+You cup your hands round your light until it's only a glow between your fingers. MURK stops lunging. It leans in, very slowly, and warms its eyes at it.
+
+[talk: Share a little light]
+You hold out a spark of your light. MURK takes it in the smallest, most careful gulp you've ever seen, and glows from the inside for a second. It goes very quiet.
+
+[talk: Sit with it in the dark]
+You sit down in the dark beside MURK and don't say anything. It lets you. After a while it shuffles a little closer, and the dark round you gets, if anything, slightly warmer.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+MURK comes apart into thinner and thinner dark, until it's only the ordinary kind.
+
+[pacified]
+MURK shrinks to a small, soft patch of dark and settles in a corner, where it is most comfortable. It watches your light go with both eyes, and doesn't follow.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tucks her umbrella under her arm and holds out her empty hands, to show {foe} there's no light in them. It creeps close enough to check.
+
+Ves tells {foe} the dark isn't so bad. It's mostly just a lack of lamps. {foe} seems moved, as far as you can tell with no face to speak of.
+
+Ves opens her umbrella and holds it over {foe}, so it has a bit of dark all of its own. {foe} doesn't know what to do with itself. She says it suits it.

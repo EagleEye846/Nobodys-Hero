@@ -25,10 +25,14 @@ export const WRECK_FOG = {
   ambience: 'wreck_yard',
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 1.2, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_wreck_yard', lamplight: { shade: 0.24, tint: '34, 44, 68' }, skyline: true },
+  // Once the Fair Return has sailed (crew_go_free, 2026-11-14), her fog has gone with her: the yard's fog thins to this.
+  fogLiftAfter: { scene: 'crew_go_free', fog: 0.6 },
   vesWell: true,
+  // Before the Fair Return is found: her crew's song off the water now and then, or her lantern far out (farShip.js).
+  farShip: { sing: true, light: { x: 14, y: 1 } },
   // The fog comes right up over the deck here.
   atmosphere: { fog: 2.2, rain: 0.8 },
-  lastLight: { x: 30, y: 1 },
+  lastLight: { x: 30, y: 1, scale: 0.95 },
 
   tiles: [
     '############################################',
@@ -81,7 +85,7 @@ export const WRECK_FOG = {
     // The secret: weed in the rail (Bramble's gap), his bolt wheel, the gate, the hatch.
     { sprite: 'c5_weed_gap_small', x: 36, y: 4, text: 'fog_gap', gap: true },
     { sprite: 'valve_wheel', x: 41, y: 4, text: 'fog_bolt', lever: 'fog_bolt', by: 'bramble', byText: 'fog_bolt_not_you' },
-    { sprite: 'gate_narrow', x: 39, y: 6, text: 'fog_gate', opensWith: ['fog_bolt'], openText: 'fog_gate_open' },
+    { sprite: 'c5_gangway_gate', x: 39, y: 6, text: 'fog_gate', opensWith: ['fog_bolt'], openText: 'fog_gate_open' },
     { sprite: 'wy_hatch', x: 39, y: 3, text: 'fog_hatch', walkable: true, flat: true },
     // Dressing (2026-11-08), clear of the drowned's beat (x 17 to 20, rows 8 to 11) and the
     // foredeck nook: rust breaking out where the sea sits on the iron, deck planks patched in
@@ -98,7 +102,7 @@ export const WRECK_FOG = {
     { sprite: 'c5_puddle', x: 6, y: 7, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 30, y: 11, flat: true, walkable: true },
     { sprite: 'c5_gull_marks', x: 33, y: 4, flat: true, walkable: true },
-    { sprite: 'c5_rope_coil', x: 12, y: 4, walkable: true },
+    { sprite: 'c5_rope_coil', x: 12, y: 4, walkable: true, decor: true },
     { sprite: 'c5_anchor', x: 3, y: 10 },
     { sprite: 'c5_crate', x: 26, y: 13, text: 'hull_cargo' },
     // (Second pass.) The bulwark's shadow along the deck under the north rail, scuppers bleeding
@@ -129,6 +133,15 @@ export const WRECK_FOG = {
     { sprite: 'wy_bilge_slick_b', x: 32, y: 13, flat: true, walkable: true },
     { sprite: 'wy_edge_r', x: 21, y: 9, flat: true, walkable: true },
     { sprite: 'wy_edge_l', x: 15, y: 9, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'gold_pouch', x: 1, y: 14, text: 'sl_pouch_fog', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'shore_rivets', x: 42, y: 14, text: 'sl_buttons', walkable: true },
+    { sprite: 'shore_flag_post', x: 17, y: 4, text: 'sl_flag', animation: 'shore_flag_post', speed: 0.5 },
+    { sprite: 'shore_tally_post', x: 33, y: 7, text: 'sl_tally' },
+    { sprite: 'c5_oar_stuck', x: 24, y: 12, text: 'sl_oar' },
+    { sprite: 'shore_boot', x: 40, y: 14, text: 'sl_boot', walkable: true },
+    { sprite: 'shore_fishbones', x: 6, y: 6, text: 'sl_bones', flat: true, walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'hull_plate', '~': 'fog_sea', f: 'gate_rail', I: 'fog_mast', J: 'fog_stump', O: 'hull_cargo', F: 'hull_net' },
 

@@ -3,9 +3,8 @@ import { defineBulletArt } from '../projectiles.js';
 // The Slipjack's attacks. It's an eel that lives in the Old Drains' fast
 // culvert currents and rides them for fun, so it fights with the water and
 // with itself: currents that run across the box and carry you with them,
-// itself shooting through in an S with bubbles in its wake, lunging wall to
-// wall, coiling round you and pulling tight, and a whirlpool it swims round
-// and round. Its body is a chain of pieces that follow its head along the
+// its party trick (a figure of eight, swum round and round), coiling round
+// you and pulling tight, and a whirlpool it swims round and round. Its body is a chain of pieces that follow its head along the
 // way it went, so you dodge the whole eel, not just its teeth.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
@@ -57,13 +56,7 @@ defineBulletArt('slipFroth', {
   palette: WATER,
   radius: 1.3,
 });
-// Spray off its snap, a drop flying.
-defineBulletArt('slipSpray', {
-  frames: [['Bbw']],
-  palette: WATER,
-  radius: 1.2,
-  rotate: true,
-});
+
 // A minnow it's chasing, drawn swimming right.
 defineBulletArt('slipMinnow', {
   frames: [['S.sss.', '.SsfSk', 'S.sss.'], ['.Ssss.', 'S.sfSk', '.Ssss.']],
@@ -191,7 +184,7 @@ export const SLIPJACK_ATTACKS = {
       }
     }, { first: 0.2 });
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         open(dt, bullets, soul);
         for (const lane of lanes) {
@@ -238,128 +231,80 @@ export const SLIPJACK_ATTACKS = {
     };
   },
 
-  // Look at me go: the Slipjack shoots through the box in a big S, showing
-  // off, and leaves a trail of bubbles hanging in its wake that slowly rise.
-  // A string of ripples blinks along the way it's going to go first. Across,
-  // then down, then across the other way.
-  slipShowOff(box, density, { Shot, rand }) {
-    const passes = [];
-    let made = 0;
-    let t = 0;
+  // Figure of eight: it shows you its best trick. Bubbles mark out a big
+  // figure of eight across the box first, then it swims it, round and round,
+  // the whole long eel following its head along the line. The middles of
+  // the two loops are calm water, but it crosses through the middle of the
+  // eight twice a lap, once blowing bubbles out to the corners. Then
+  // it gets bored, the bubbles mark out an eight the
+  // other way up, and off it goes along that one.
+  slipEight(box, density, { Shot, rand }) {
     const cx = box.x + box.w / 2;
     const cy = box.y + box.h / 2;
-    // Where pass `p` is at `s` pixels along its way.
-    const pointOf = (p, s) => {
-      const wave = Math.sin(s / p.wavelength * Math.PI * 2 + p.phase) * p.amp;
-      return p.across
-        ? { x: p.start + p.dir * s, y: cy + wave }
-        : { x: cx + wave, y: p.start + p.dir * s };
+    const LAP = 2.6;
+    const SHOW = 0.9;
+    let t = 0;
+    let eel = null;
+    let upright = Math.random() < 0.5;
+    let s = 0;
+    let shownAt = -9;
+    let swimming = false;
+    let laps = 0;
+    const point = (u, stood) => {
+      // A figure of eight lying down (or stood up).
+      const a = Math.cos(u) * 30;
+      const b = Math.sin(u) * Math.cos(u) * 52;
+      return stood ? { x: cx + b, y: cy + a } : { x: cx + a, y: cy + b };
     };
-    const launch = (bullets) => {
-      const across = made !== 1;
-      const dir = made === 2 ? -1 : 1;
-      const span = across ? box.w : box.h;
-      const start = across ? (dir > 0 ? box.x - 14 : box.x + box.w + 14) : box.y - 14;
-      const p = { across, dir, start, amp: rand(22, 28), wavelength: rand(52, 62), phase: rand(0, Math.PI * 2), s: 0, length: span + 80, warn: 0.6 };
-      // The route, blinking.
-      for (let s = 14; s < span + 14; s += 7) {
-        const a = pointOf(p, s);
-        const b = pointOf(p, s + 1);
-        bullets.push(new Shot({ x: a.x, y: a.y, harmless: true, warn: 0.6, life: 0.01, art: 'slipRipple', angle: Math.atan2(b.y - a.y, b.x - a.x) }));
+    const show = (bullets) => {
+      for (let i = 0; i < 24; i++) {
+        const p = point((i / 24) * Math.PI * 2, upright);
+        bullets.push(new Shot({ x: p.x, y: p.y, harmless: true, warn: SHOW, life: 0, art: 'slipBubble' }));
       }
-      const first = pointOf(p, 0);
-      p.eel = makeEel(bullets, Shot, { x: first.x, y: first.y, length: 10 });
-      p.bubble = 0;
-      passes.push(p);
-      made++;
+      shownAt = t;
     };
     return {
-      duration: 6.9,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (made < 3 && t >= 0.1 + made * 2.1) launch(bullets);
-        for (const p of passes) {
-          if (p.warn > 0) {
-            p.warn -= dt;
-            continue;
-          }
-          p.s += 105 * dt;
-          const at = pointOf(p, p.s);
-          p.eel.to(at.x, at.y);
-          // Bubbles left hanging in its wake, which drift up.
-          p.bubble -= dt;
-          const inside = at.x > box.x && at.x < box.x + box.w && at.y > box.y && at.y < box.y + box.h;
-          if (p.bubble <= 0 && inside) {
-            p.bubble = 0.13;
-            bullets.push(new Shot({ x: at.x + rand(-2, 2), y: at.y + rand(-2, 2), vy: -rand(6, 12), wobble: { amplitude: 1.5, frequency: 5 }, life: 2.2, art: Math.random() < 0.5 ? 'slipBubble' : 'slipFroth' }));
-          }
-          if (p.s > p.length) {
-            p.eel.end();
-            p.done = true;
+        if (!eel) {
+          show(bullets);
+          const p = point(0, upright);
+          eel = makeEel(bullets, Shot, { x: p.x, y: p.y, length: 12, warn: SHOW });
+          return;
+        }
+        if (!swimming) {
+          if (t - shownAt < SHOW) return;
+          swimming = true;
+        }
+        s += (Math.PI * 2 / LAP) * dt;
+        if (s >= Math.PI * 2) {
+          s -= Math.PI * 2;
+          // Two laps, then the other way up.
+          if (++laps % 2 === 0 && t < 8) {
+            upright = !upright;
+            show(bullets);
+            swimming = false;
+            // (It waits at the start of the new eight while you look.)
+            const p = point(0, upright);
+            bullets.push(new Shot({ x: p.x, y: p.y, harmless: true, life: 0.4, art: 'slipFroth' }));
           }
         }
-        for (let i = passes.length - 1; i >= 0; i--) if (passes[i].done) passes.splice(i, 1);
-      },
-    };
-  },
-
-  // Snap: its head shows at one wall, level with you, and ripples run
-  // across the box where it's going to go. Then it lunges wall to wall, the
-  // whole of it, faster than anything, and snaps its jaws at the far side:
-  // spray flies back off it. From the sides, and then from above.
-  slipSnap(box, density, { Shot, rand, clamp, shuffleBag }) {
-    const side = shuffleBag(['left', 'right', 'top']);
-    const lunges = [];
-    let made = 0;
-    let t = 0;
-    const plan = (bullets, soul) => {
-      const from = side();
-      const across = from !== 'top';
-      const dir = from === 'right' ? -1 : 1;
-      const lane = across ? clamp(soul.y + rand(-4, 4), box.y + 6, box.y + box.h - 6) : clamp(soul.x + rand(-4, 4), box.x + 6, box.x + box.w - 6);
-      const start = across ? (dir > 0 ? box.x - 4 : box.x + box.w + 4) : box.y - 4;
-      const span = across ? box.w : box.h;
-      const angle = across ? (dir > 0 ? 0 : Math.PI) : Math.PI / 2;
-      for (let s = 8; s < span; s += 9) {
-        bullets.push(new Shot({
-          x: across ? start + dir * s : lane, y: across ? lane : start + s,
-          harmless: true, warn: 0.6, life: 0.01, art: 'slipRipple', angle,
-        }));
-      }
-      // Its head waits at the wall, blinking.
-      const point = (s) => (across ? { x: start + dir * s, y: lane } : { x: lane, y: start + s });
-      const eel = makeEel(bullets, Shot, { ...point(-1), length: 9, warn: 0.6 });
-      eel.head.angle = angle;
-      lunges.push({ eel, point, s: 0, wait: 0.6, span, angle, snapped: false });
-      made++;
-    };
-    return {
-      duration: 6.6,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (made < 5 && t >= 0.15 + made * 1.2) plan(bullets, soul);
-        for (const l of lunges) {
-          if (l.wait > 0) {
-            l.wait -= dt;
-            continue;
-          }
-          l.s += 270 * dt;
-          const p = l.point(l.s);
-          l.eel.to(p.x, p.y);
-          if (!l.snapped && l.s >= l.span - 4) {
-            // Snap! Spray flies back off its jaws.
-            l.snapped = true;
-            for (let i = -2; i <= 2; i++) {
-              const a = l.angle + Math.PI + i * 0.38;
-              bullets.push(new Shot({ x: p.x, y: p.y, vx: Math.cos(a) * 70, vy: Math.sin(a) * 70, accel: -40, life: 1.4, art: 'slipSpray' }));
+        // Through the middle of the eight (once a lap) it shows off: a spurt
+        // of bubbles out to all four corners.
+        const before = s - (Math.PI * 2 / LAP) * dt;
+        for (const cross of [Math.PI / 2]) {
+          if (before < cross && s >= cross) {
+            for (let k = 0; k < 4; k++) {
+              const a = Math.PI / 4 + (k * Math.PI) / 2;
+              bullets.push(new Shot({ x: cx, y: cy, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, life: 1.6, art: 'slipBubble' }));
             }
           }
-          if (l.s > l.span + 70) {
-            l.eel.end();
-            l.done = true;
-          }
         }
-        for (let i = lunges.length - 1; i >= 0; i--) if (lunges[i].done) lunges.splice(i, 1);
+        const p = point(s, upright);
+        eel.to(p.x, p.y);
+        // A bubble left in its wake now and then, drifting up.
+        if (Math.random() < dt * 4) bullets.push(new Shot({ x: p.x, y: p.y, vx: rand(-5, 5), vy: -18, life: 1.6, art: 'slipBubble' }));
       },
     };
   },
@@ -395,7 +340,7 @@ export const SLIPJACK_ATTACKS = {
       return k < 0.62 ? 54 - (54 - 3) * (k / 0.62) : 3 + (54 - 3) * ((k - 0.62) / 0.38);
     };
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
         if (!built) build(bullets);
@@ -410,7 +355,7 @@ export const SLIPJACK_ATTACKS = {
           shot.y = cy + Math.sin(a) * r;
           shot.angle = a + (Math.PI / 2) * way;
         }
-        if (t > 6.5) for (const shot of pieces) shot.life = Math.min(shot.life, shot.age - shot.warn);
+        if (t > 9.9) for (const shot of pieces) shot.life = Math.min(shot.life, shot.age - shot.warn);
       },
     };
   },
@@ -437,7 +382,7 @@ export const SLIPJACK_ATTACKS = {
       bullets.push(shot);
     }, { first: 0.6 });
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (!started) {
@@ -445,11 +390,13 @@ export const SLIPJACK_ATTACKS = {
           bullets.push(swirl, eye);
           eel = makeEel(bullets, Shot, { x: cx + Math.cos(angle) * 37, y: cy + Math.sin(angle) * 37, length: 12, gap: 4.2, warn: 0.5 });
         }
-        // Round it goes, a little faster as the water gets going.
+        // Round it goes, a little faster as the water gets going, right
+        // into the corners of the box.
         angle += (1.7 + Math.min(t, 4) * 0.12) * dt;
-        eel.to(cx + Math.cos(angle) * 37, cy + Math.sin(angle) * 37);
+        const reach = 36 / Math.pow(Math.pow(Math.abs(Math.cos(angle)), 8) + Math.pow(Math.abs(Math.sin(angle)), 8), 1 / 8);
+        eel.to(cx + Math.cos(angle) * reach, cy + Math.sin(angle) * reach);
         // The pull, towards the middle (and a little round with the water).
-        if (t > 0.8 && t < 6.4) {
+        if (t > 0.8 && t < 9.8) {
           const a = Math.atan2(soul.y - cy, soul.x - cx);
           const d = Math.hypot(soul.x - cx, soul.y - cy);
           if (d > 2) {
@@ -459,7 +406,7 @@ export const SLIPJACK_ATTACKS = {
             soul.y += Math.cos(a) * 9 * dt;
           }
         }
-        if (t < 6.2) catchFish(dt, bullets);
+        if (t < 9.6) catchFish(dt, bullets);
         for (const f of fish) {
           if (f.age < f.warn) continue;
           f.polar.a += 2.1 * dt;
@@ -473,7 +420,7 @@ export const SLIPJACK_ATTACKS = {
           }
         }
         fish = fish.filter((f) => !f.done);
-        if (t > 6.4) {
+        if (t > 9.8) {
           eel.end();
           eye.life = Math.min(eye.life, eye.age - eye.warn);
           swirl.life = Math.min(swirl.life, swirl.age);

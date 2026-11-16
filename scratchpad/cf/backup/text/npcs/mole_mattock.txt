@@ -1,0 +1,83 @@
+# MATTOCK: a brown mole in a red hard hat and a blue neckerchief, the other
+# miner left at the pithead. A talker. Staying "until it goes properly dark".
+
+[first]
+Don't mind Sedge. He's been foreman for forty years, and he's decided we're all still on shift.
+
+I'm Mattock. I'm staying till it goes properly dark. Then I'm going home. It's a plan.
+
+[repeat]
+My grandad's grandad dug with the Hero, you know. Well, near the Hero. In the same mountain.
+
+He said the Hero never took a pick. Just walked down the old workings like they owed him money. And he said the Hero was small.
+
+Nobody believed him. We all thought the Hero would be, you know. Bigger.
+
+He swore he saw a star come down once, too. Straight through the roof of the Old Seam and on down, into Seam Nine.
+
+Seam Nine's not on any map. They shut it up after, and hung a sign on the lever saying it was broken. Funny thing to do with a broken lever.
+
+Oh, and if the postman's still after me, it'll be from Mum. I can't read, so I keep them in my hat. It's a very full hat.
+
+[first after the_light_goes_up]
+It's not going to go properly dark now, is it? I said I'd stay till it did. That's a good sort of problem to have.
+
+I'll go home. After a bit.
+
+[repeat after the_light_goes_up]
+My grandad's grandad said the Hero was small. I'll tell his headstone he was right.
+
+# --- SIDE QUEST: the letter from his mum (see bt_vendor_beetle) ---
+
+[letter_in]
+Mattock takes his hat off and shakes it. A shower of letters falls out, dozens of them, some very old, and he points at one on top with a muddy paw. That one's got a postmark on. That's new.
+
+You take it. You read it to him, all the way through, while he sits on an upturned bucket with his ears flat.
+
+"Dear Mattock. It's Mum. The roof is fine. The hen is fine. Your dad says stop digging. I say dig if you like, but eat something. There's a stew. It's been on since March. Come home when it's dark, or when it isn't. I'll leave the door on the latch. Love, Mum. P.S. Empty your hat."
+
+Mattock wipes his face on his neckerchief. On the latch. She's left it on the latch since I was four.
+
+Tell her... no. I can't write. Hold on.
+
+He presses his thumb in the dirt, and then on a scrap of sacking, and then, carefully, draws a hat. That's "soon". She'll know.
+
+You take the reply.
+
+# More turns (2026-11-09 polish)
+
+# (draft)
+[repeat 2]
+Is it properly dark yet? No? I'll wait.
+
+...Is it now?
+
+# (draft)
+[repeat_ves 2]
+{bored}It's a cave. {thoughtful}It's never going to be properly anything.
+
+# (draft)
+[repeat 3]
+That broken lever in the Old Seam. Grandad's grandad said the lever was fine. It was the sign that was broken. I've thought about that for years. I still don't know what he meant.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Packing up. That's my hat, my other hat, my spare lamp, and Mum's letters. Mostly Mum's letters. It's a lot of hat for one mole.
+
+# --- THE LIFE PASS: his lost boot (found in the Flooded Drift's nook) ---
+
+[repeat 4]
+Don't suppose you've seen a boot? Left foot, brown, a great deal of character. I lost it in the spring, when the lake came up. It was never a very loyal boot.
+
+[repeat_ves 4]
+{smile}That explains the lopsided walk.
+
+[boot_back]
+Mattock squeaks, snatches the boot, and holds it to his chest like a baby. "My left! Oh, my left. Since spring I've been walking in circles. Sedge said I walk lopsided. I thought it was the hat."
+
+He pulls it on, stamps twice, and wobbles. "Wrong way round. Hold on." He swaps feet. "Better."
+
+Then he digs in the hat for a long time, and comes out with a brass pin with a tiny enamel mole on it. "For you. It's from my best hat. Don't tell the other hats."
+
+[boot_back_ves]
+{smile}It's the nicest thing anyone's given you today, isn't it.

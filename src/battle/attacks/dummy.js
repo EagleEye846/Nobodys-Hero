@@ -1,8 +1,10 @@
 import { defineBulletArt } from '../projectiles.js';
 
 // The Rogue Dummy's attacks. It's a training dummy stuffed with cotton, so
-// everything it throws comes out of a sewing basket: pins, buttons, needles
-// and thread, tufts of stuffing, and the practice targets it was made to face.
+// everything it throws comes out of a sewing basket: buttons, needles and
+// thread, its own stuffing (which it wants back), the practice targets it was
+// made to face, and the wooden sword it was trained with, swung the way it
+// was taught: a practice swing first, every time.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // `tools` holds the bullet classes and helpers (see PATTERN_TOOLS in
@@ -57,17 +59,6 @@ defineBulletArt('tuft', {
   frameSeconds: 0.15,
 });
 
-// A ball of stuffing, swelling before it bursts (harmless itself).
-defineBulletArt('cottonBall', {
-  frames: [
-    ['..www..', '.wwWww.', 'wwWwWww', 'wWwwwWw', 'wwWwWww', '.wwWww.', '..www..'],
-    ['.wwwww.', 'wwWwWww', 'wWwwwWw', 'wwwWwww', 'wWwwwWw', 'wwWwWww', '.wwwww.'],
-  ],
-  palette: { w: '#f2ecff', W: '#c9c2e0' },
-  radius: 3,
-  frameSeconds: 0.08,
-});
-
 // A practice target (harmless itself; it fires pins).
 defineBulletArt('target', {
   frames: [[
@@ -85,28 +76,122 @@ defineBulletArt('target', {
   radius: 4,
 });
 
+// A split in the dummy's burlap where the stuffing comes out (harmless).
+defineBulletArt('dummySeam', {
+  frames: [
+    ['.w.', 'kWk', '.w.', 'kWk', '.w.'],
+    ['w.w', 'kWk', 'w.w', 'kWk', 'w.w'],
+  ],
+  palette: { k: '#6b4a2a', w: '#f2ecff', W: '#c9c2e0' },
+  radius: 1,
+  frameSeconds: 0.1,
+});
+
+// The dummy's wooden practice sword, swung from a pivot at the edge of the
+// box. A `ghost` swing is the dummy practising: dashed, faint and harmless.
+// The real one follows exactly the same arc. (Its own little hazard: it has
+// update, isGone, edgeDistance and draw like any bullet.)
+class PracticeSwing {
+  constructor({ px, py, from, to, length, warn, time, ghost }) {
+    this.x = px;
+    this.y = py;
+    this.from = from;
+    this.to = to;
+    this.length = length;
+    this.warn = warn;
+    this.time = time;
+    this.ghost = ghost;
+    this.age = 0;
+    this.dmg = null;
+    this.grazed = false;
+  }
+
+  get angle() {
+    const t = Math.min(Math.max((this.age - this.warn) / this.time, 0), 1);
+    return this.from + (this.to - this.from) * t * t * (3 - 2 * t);
+  }
+
+  update(dt) {
+    this.age += dt;
+  }
+
+  isGone() {
+    return this.age > this.warn + this.time + 0.3;
+  }
+
+  edgeDistance(px, py) {
+    if (this.ghost || this.age < this.warn || this.age > this.warn + this.time + 0.05) return Infinity;
+    const dx = Math.cos(this.angle);
+    const dy = Math.sin(this.angle);
+    const along = Math.min(Math.max((px - this.x) * dx + (py - this.y) * dy, 0), this.length);
+    return Math.hypot(px - (this.x + dx * along), py - (this.y + dy * along)) - 2.5;
+  }
+
+  draw(ctx) {
+    const angle = this.angle;
+    const tipX = this.x + Math.cos(angle) * this.length;
+    const tipY = this.y + Math.sin(angle) * this.length;
+    const stroke = (colour, width) => {
+      ctx.strokeStyle = colour;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(tipX, tipY);
+      ctx.stroke();
+    };
+    ctx.save();
+    ctx.lineCap = 'round';
+    if (this.ghost || this.age < this.warn) {
+      // The practice swing: a faint dashed sword.
+      ctx.globalAlpha = this.age < this.warn ? 0.25 : 0.55;
+      ctx.setLineDash([3, 2]);
+      stroke('#f2ecff', 1);
+    } else {
+      const over = this.age - (this.warn + this.time);
+      if (over > 0) ctx.globalAlpha = Math.max(0, 1 - over / 0.25);
+      stroke('#08070d', 6);
+      stroke('#a8703a', 4);
+      stroke('#e0b070', 1);
+    }
+    ctx.restore();
+  }
+}
+
 export const DUMMY_ATTACKS = {
-  // A column of sewing pins lines up at one side of the box, level with you,
-  // blinks a warning, then shoots across. Step out of their row.
-  pinCushion(box, density, { Shot, every, pick, rand, clamp, shuffleBag }) {
-    const spacing = 10;
-    const side = shuffleBag(['left', 'right']);
-    const volley = every(1.3, 1.7, (bullets, soul) => {
-      const fromLeft = side() === 'left';
-      const count = pick([2, 3]);
-      const span = (count - 1) * spacing;
-      const top = clamp(soul.y - span / 2 + rand(-5, 5), box.y + 4, box.y + box.h - 4 - span);
-      for (let i = 0; i < count; i++) {
-        bullets.push(new Shot({
-          x: fromLeft ? box.x + 4 : box.x + box.w - 4,
-          y: top + i * spacing,
-          vx: fromLeft ? 90 : -90,
-          art: 'pin',
-          warn: 0.6,
-        }));
-      }
-    });
-    return { duration: 6, update: (dt, bullets, soul) => volley(dt, bullets, soul) };
+  // Practice makes perfect. The dummy swings its wooden practice sword in
+  // from one edge of the box, but it was made for training, so it always
+  // practises first: a faint dashed swing shows the exact arc (sized to
+  // reach you), then the real swing follows it, faster. Watch the practice
+  // and get out of the arc: further away than the sword reaches, or round
+  // past the end of the swing.
+  dummyPractice(box, density, { rand, clamp, angleTo, shuffleBag }) {
+    const edges = shuffleBag(['left', 'right', 'top', 'bottom']);
+    const half = Math.PI * 0.3;
+    const drill = (bullets, soul) => {
+      const edge = edges();
+      const nearX = clamp(soul.x + rand(-22, 22), box.x + 6, box.x + box.w - 6);
+      const nearY = clamp(soul.y + rand(-22, 22), box.y + 6, box.y + box.h - 6);
+      const px = edge === 'left' ? box.x - 2 : edge === 'right' ? box.x + box.w + 2 : nearX;
+      const py = edge === 'top' ? box.y - 2 : edge === 'bottom' ? box.y + box.h + 2 : nearY;
+      const facing = angleTo({ x: px, y: py }, soul);
+      const length = clamp(Math.hypot(soul.x - px, soul.y - py) + 14, 40, 92);
+      const way = Math.random() < 0.5 ? 1 : -1;
+      const from = facing - way * half;
+      const to = facing + way * half;
+      bullets.push(new PracticeSwing({ px, py, from, to, length, warn: 0.15, time: 0.9, ghost: true }));
+      bullets.push(new PracticeSwing({ px, py, from, to, length, warn: 1.45, time: 0.5, ghost: false }));
+    };
+    let timer = 0.1;
+    return {
+      duration: 7.2,
+      update: (dt, bullets, soul) => {
+        timer -= dt;
+        if (timer <= 0) {
+          timer += 2.3;
+          drill(bullets, soul);
+        }
+      },
+    };
   },
 
   // Big buttons pop off and ricochet around the box, spinning, while loose
@@ -139,7 +224,7 @@ export const DUMMY_ATTACKS = {
       bullets.push(new Shot({ x: fluffX(), y: box.y - 3, vy: rand(38, 52), art: 'tuft' }));
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         pop(dt, bullets, soul);
         fluff(dt, bullets);
@@ -178,30 +263,67 @@ export const DUMMY_ATTACKS = {
     return { duration: 7, update: (dt, bullets, soul) => stitch(dt, bullets, soul) };
   },
 
-  // Balls of stuffing swell up around the box (never right on top of you),
-  // then burst into a ring of six tufts, one of them coming your way.
-  stuffingBurst(box, density, { Shot, every, rand, pointAwayFrom, angleTo }) {
-    const swell = 0.8;
-    let swelling = [];
-    const grow = every(1.2, 1.6, (bullets, soul) => {
-      const { x, y } = pointAwayFrom(box, soul, 28);
-      bullets.push(new Shot({ x, y, art: 'cottonBall', harmless: true, life: swell }));
-      swelling.push({ x, y, t: swell });
-    });
+  // Coming apart at the seams. A seam splits at the edge of the box and a
+  // fan of stuffing bursts out, slows and hangs in the air... then the dummy
+  // sucks it all back in, down exactly the same lines it came out on. Stand
+  // between the lines, and stay there for the way back.
+  dummyRestuff(box, density, { Shot, rand, clamp, angleTo, shuffleBag }) {
+    const edges = shuffleBag(['left', 'right', 'top', 'bottom']);
+    const WARN = 0.6;
+    const OUT = 0.9;
+    const HANG = 0.45;
+    let seams = [];
+    let timer = 0.1;
+    const split = (bullets, soul) => {
+      const edge = edges();
+      const x = edge === 'left' ? box.x + 1 : edge === 'right' ? box.x + box.w - 1 : clamp(soul.x + rand(-20, 20), box.x + 14, box.x + box.w - 14);
+      const y = edge === 'top' ? box.y + 1 : edge === 'bottom' ? box.y + box.h - 1 : clamp(soul.y + rand(-20, 20), box.y + 14, box.y + box.h - 14);
+      bullets.push(new Shot({ x, y, art: 'dummySeam', harmless: true, life: WARN + OUT + HANG + 1.2 }));
+      // (Aimed so the middle tuft stops just past you.)
+      const facing = angleTo({ x, y }, soul);
+      const reach = Math.hypot(soul.x - x, soul.y - y) + 10;
+      const tufts = [];
+      for (let i = 0; i < 5; i++) {
+        const angle = facing + (i - 2) * 0.32 + rand(-0.04, 0.04);
+        const speed = clamp((2 * reach) / OUT, 60, 190) * rand(0.92, 1.08);
+        // (It slows to a stop at the end of its burst.)
+        // (Its burst is set next frame, after the battle's bullet-speed
+        // tuning, so it still stops just where it was meant to.)
+        const tuft = new Shot({ x, y, warn: WARN, art: 'tuft' });
+        tuft.burst = { vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, accel: -speed / OUT };
+        bullets.push(tuft);
+        tufts.push(tuft);
+      }
+      seams.push({ x, y, tufts, t: 0 });
+    };
     return {
-      duration: 6,
+      duration: 7.4,
       update: (dt, bullets, soul) => {
-        grow(dt, bullets, soul);
-        for (const ball of swelling) {
-          ball.t -= dt;
-          if (ball.t > 0) continue;
-          const turn = angleTo(ball, soul) + rand(-0.08, 0.08);
-          for (let i = 0; i < 6; i++) {
-            const angle = turn + (i / 6) * Math.PI * 2;
-            bullets.push(new Shot({ x: ball.x, y: ball.y, vx: Math.cos(angle) * 44, vy: Math.sin(angle) * 44, art: 'tuft' }));
+        timer -= dt;
+        if (timer <= 0) {
+          timer += 2.2;
+          split(bullets, soul);
+        }
+        for (const seam of seams) {
+          for (const tuft of seam.tufts) {
+            if (!tuft.burst || tuft.age === 0) continue;
+            Object.assign(tuft, tuft.burst);
+            tuft.burst = null;
+          }
+          seam.t += dt;
+          if (seam.t < WARN + OUT + HANG) continue;
+          seam.pulled = true;
+          for (const tuft of seam.tufts) {
+            const angle = angleTo(tuft, seam);
+            tuft.vx = Math.cos(angle) * 12;
+            tuft.vy = Math.sin(angle) * 12;
+            tuft.accel = 130;
+            // (Gone once it's back in the seam.)
+            const back = Math.hypot(tuft.x - seam.x, tuft.y - seam.y);
+            tuft.life = tuft.age - tuft.warn + Math.max(0.2, (Math.sqrt(144 + 260 * back) - 12) / 130);
           }
         }
-        swelling = swelling.filter((ball) => ball.t > 0);
+        seams = seams.filter((seam) => !seam.pulled);
       },
     };
   },
@@ -211,14 +333,14 @@ export const DUMMY_ATTACKS = {
   trainingTargets(box, density, { Shot, every, rand, angleTo, spreadAcross }) {
     const targetX = spreadAcross(box.x + 12, box.x + box.w - 12, 3);
     let targets = [];
-    const raise = every(1.5, 1.9, (bullets) => {
+    const raise = every(1.9, 2.25, (bullets) => {
       const x = targetX();
       const y = rand(box.y + 10, box.y + box.h * 0.45);
       bullets.push(new Shot({ x, y, art: 'target', harmless: true, life: 1.3 }));
       targets.push({ x, y, t: 0.75 });
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         raise(dt, bullets);
         for (const target of targets) {

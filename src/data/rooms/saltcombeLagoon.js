@@ -47,6 +47,7 @@ export const SALTCOMBE_LAGOON = {
   vesWell: true,
 
   // The HIGH-tide map.
+
   tiles: [
     '####################################',
     '#hhhhhhhhhhhhhhhhhhhh###############',
@@ -117,7 +118,7 @@ export const SALTCOMBE_LAGOON = {
     to: 'saltcombe_lookout',
     spawn: { x: 6, y: 14 },
     barks: [
-      { at: 5, who: 'bramble', text: '{worried}I\'m not looking down. I\'m looking UP.\n\n{thinking}Up is fine. Up is just sky.' },
+      { at: 5, who: 'bramble', text: '{determined}I\'m not looking down. I\'m looking UP.\n\n{proud}Up is fine. Up is just sky.' },
       { at: 3, who: 'vesper', text: '{bored}If anyone sees my umbrella fall, no they didn\'t.' },
     ],
   },
@@ -171,7 +172,7 @@ export const SALTCOMBE_LAGOON = {
     { sprite: 'c5_planks_scatter', x: 28, y: 13, flat: true, walkable: true },
     { sprite: 'c5_wrack_line', x: 14, y: 19, flat: true, walkable: true },
     { sprite: 'c5_lantern_hook', x: 1, y: 19 },
-    { sprite: 'c5_rope_coil', x: 6, y: 19, walkable: true },
+    { sprite: 'c5_rope_coil', x: 6, y: 19, walkable: true, decor: true },
     { sprite: 'c5_barrel', x: 20, y: 5 },
     { sprite: 'c5_crates_stack', x: 19, y: 4 },
     { sprite: 'c5_puddle', x: 12, y: 5, flat: true, walkable: true },
@@ -185,6 +186,17 @@ export const SALTCOMBE_LAGOON = {
     { sprite: 'sc_herring_crans', x: 14, y: 3, text: 'lagoon_crans' },
     { sprite: 'c5_pot_single', x: 1, y: 14, text: 'lagoon_pot' },
     { sprite: 'c5_boat_upturned', x: 3, y: 6, text: 'lagoon_boat' },
+    // (life pass 2026-11-14)
+    // The promenade: a shelter over the bench, a boat on trestles, a man mending a pot, a cat on its walk, a board of rules.
+    { sprite: 'st_boat_trestle', x: 16, y: 5, text: 'life_l_trestle' },
+    { sprite: 'st_mender', x: 11, y: 5, npc: 'st_lagoon_mender', animation: 'st_mender', speed: 0.7 },
+    { sprite: 'st_cat_walk', x: 4, y: 4, text: 'life_l_cat', animation: 'st_cat_walk', speed: 0.22, stroll: { path: [[3, 4], [8, 4]], speed: 10, pause: [3, 6], scatter: true, keepAnim: true } },
+    { sprite: 'st_flower_tub', x: 2, y: 4, text: 'life_l_tub' },
+    { sprite: 'st_rain_barrel', x: 2, y: 5, text: 'life_l_barrel', animation: 'st_rain_barrel', speed: 0.5 },
+    { sprite: 'st_boot_planter', x: 15, y: 3, text: 'life_l_boot' },
+    // Pilchard, asleep in the corner behind the crates and the barrel: Skerry's lost cat (the market's errand).
+    { sprite: 'st_cat_loaf', x: 20, y: 4, text: 'life_l_pilchard', animation: 'st_cat_loaf', speed: 1.1, gives: 'pilchard_cat', react: true, taken: { gone: true } },
+    // The west shore: what the tide leaves.
   ],
   tileTexts: {
     h: 'lagoon_backs', '#': 'lagoon_cliff', K: 'lagoon_cliff', f: 'lagoon_rail',
@@ -195,3 +207,4 @@ export const SALTCOMBE_LAGOON = {
   npcs: [
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

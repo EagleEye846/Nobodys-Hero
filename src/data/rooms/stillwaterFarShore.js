@@ -73,6 +73,8 @@ export const STILLWATER_FAR_SHORE = {
   textFile: 'interactions/stillwater.txt',
   props: [
     { sprite: 'savepoint', x: 11, y: 7, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 10, y: 7, travel: 'far_shore', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'cold_campfire', x: 22, y: 6, text: 'far_fire' },
     { sprite: 'old_bedroll', x: 20, y: 6, text: 'far_bedroll' },
     { sprite: 'cairn_down', x: 24, y: 6, text: 'far_cairn' },
@@ -84,9 +86,9 @@ export const STILLWATER_FAR_SHORE = {
     { sprite: 'glow_reeds', x: 8, y: 12, text: 'glow_reeds', animation: 'glow_reeds', speed: 0.45 },
     { sprite: 'glow_reeds', x: 14, y: 13, text: 'glow_reeds', animation: 'glow_reeds', speed: 0.4 },
     { sprite: 'glow_reeds_tall', x: 31, y: 5, text: 'glow_reeds', animation: 'glow_reeds_tall', speed: 0.55 },
-    { sprite: 'fungus_pads', x: 3, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 4, y: 12, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 11, y: 13, walkable: true, animation: 'fungus_pads', speed: 0.9 },
+    { sprite: 'fungus_pads', x: 3, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 4, y: 12, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 11, y: 13, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
     { sprite: 'sunken_pillar_top', x: 2, y: 3, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     { sprite: 'sunken_pillar_top', x: 9, y: 4, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     // Set dressing: roots down the walls, and smooth stones and a drip or two
@@ -104,6 +106,12 @@ export const STILLWATER_FAR_SHORE = {
     { sprite: 'floor_pebbles_cool', x: 26, y: 9, walkable: true, flat: true },
     { sprite: 'floor_pebbles_cool', x: 15, y: 11, walkable: true, flat: true },
     { sprite: 'floor_pebbles_cool', x: 19, y: 13, walkable: true, flat: true },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'bf_frog_kid_a', x: 9, y: 10, npc: 'skip', animation: 'bf_frog_kid_a', speed: 0.4, quest: [{ needs: ['has:paper_boat'], take: 'paper_boat', set: 'q_skip_boat', give: 'skipping_stone', text: 'boat_back' }, { needs: ['q_skip_boat'], text: 'boat_after' }] },
+    { sprite: 'sw_old_boat', x: 25, y: 8, text: 'lp_far_boat' },
+    { sprite: 'sw_oar', x: 32, y: 12, text: 'sp_oar' },
+    { sprite: 'sw_drying_net', x: 32, y: 8, text: 'sp_net', animation: 'sw_drying_net', speed: 0.8 },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'lake_rock', W: 'lake_wall', '~': 'lake_water', ';': 'lake_shallows', q: 'lake_shingle', g: 'lake_jetty',

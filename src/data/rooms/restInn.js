@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE SOFT BEDS: the inn of Heralds' Rest, promised on the waymarks. Greta
 // runs it: a fire, a pot of soup that's never off, and beds made up fresh
 // every morning for a hundred years. Sleep in one and your HP comes back
@@ -72,6 +73,8 @@ export const REST_INN = {
     { sprite: 'hot_mug', x: 7, y: 5, text: 'inn_mug', gives: 'hot_cocoa', taken: { sprite: 'hot_mug', text: 'inn_mug_empty' } },
     { sprite: 'skis', x: 14, y: 2, text: 'inn_skis' },
     { sprite: 'sign', x: 10, y: 12, text: 'inn_rules' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_inn'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

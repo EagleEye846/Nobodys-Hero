@@ -20,6 +20,8 @@ export const WRACK_BOARDWALK = {
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_shore', lamplight: { shade: 0.16, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
 
+
+
   tiles: [
     '######################foof######',
     '#WWWWWWWWWWWWWWWWWWWWWfoofWWWWW#',
@@ -66,6 +68,8 @@ export const WRACK_BOARDWALK = {
   textFile: 'interactions/wrack.txt',
   props: [
     { sprite: 'savepoint', x: 20, y: 17, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 21, y: 16, travel: 'boardwalk', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'street_lamp', x: 15, y: 22, text: 'walk_lamp' },
     { sprite: 'street_lamp', x: 27, y: 14, text: 'walk_lamp' },
     { sprite: 'street_lamp', x: 14, y: 8, text: 'walk_lamp' },
@@ -100,6 +104,17 @@ export const WRACK_BOARDWALK = {
     { sprite: 'c5_sea_holly', x: 6, y: 18, flat: true, walkable: true },
     { sprite: 'c5_shingle_spill', x: 4, y: 10, flat: true, walkable: true },
     { sprite: 'c5_shingle_spill', x: 5, y: 16, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'c5_pot_single', x: 8, y: 18, text: 'sl_pot', walkable: true },
+    { sprite: 'shore_bottle', x: 22, y: 10, text: 'sl_bottle', walkable: true },
+    { sprite: 'c5_boat_upturned', x: 7, y: 4, text: 'sl_dinghy' },
+    { sprite: 'c5_rope_coil', x: 3, y: 22, text: 'sl_rope', walkable: true },
+    { sprite: 'shore_nest', x: 5, y: 6, text: 'sl_nest', walkable: true },
+    { sprite: 'shore_boot', x: 12, y: 5, text: 'sl_boot', walkable: true },
+    { sprite: 'c5_oar_stuck', x: 12, y: 10, text: 'sl_oar' },
+    { sprite: 'shore_starfish_purple', x: 4, y: 14, text: 'sl_star_b', flat: true, walkable: true },
+    { sprite: 'shore_anemone_pool', x: 7, y: 6, text: 'sl_anemone_a', flat: true, walkable: true, animation: 'shore_anemone_pool', speed: 0.5 },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', '~': 'walk_sea', x: 'landing_rock', f: 'walk_rail' },
 

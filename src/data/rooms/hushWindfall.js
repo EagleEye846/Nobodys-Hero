@@ -12,6 +12,10 @@
 //   d  leaf litter
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   y  leaf path
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_WINDFALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_windfall',
@@ -73,6 +77,7 @@ export const HUSH_WINDFALL = {
   // them back up.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_windfall ?? []),
     { sprite: 'thin_pine', x: 27, y: 18, text: 'thin_pine', chop: true },
     { sprite: 'thin_pine', x: 10, y: 10, text: 'thin_pine', chop: true },
     { sprite: 'thin_pine', x: 11, y: 9, text: 'thin_pine', chop: true },
@@ -82,6 +87,8 @@ export const HUSH_WINDFALL = {
     { sprite: 'chest', x: 30, y: 1, text: 'windfall_chest', gives: 'ember_potato', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 1, y: 9, text: 'windfall_pouch', gold: 140, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'paw_print', x: 8, y: 18, text: 'paw_print' },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_windfall ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', B: 'windfall_trunk', b: 'windfall_stump' },
 

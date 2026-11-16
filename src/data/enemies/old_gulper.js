@@ -60,8 +60,11 @@ export const OLD_GULPER = {
   beatenSprite: { rows: OLD_GULPER_DEATH_LAST, palette: OLD_GULPER_PALETTE },
   boss: true,
   gentle: true,
-  // The coast's pirate fight song (Cutlass Weather): big enough for a midboss.
-  music: 'pirateBattle',
+  // His own song, "Long in the Tooth" (src/data/music/oldGulperBattleTheme.js):
+  // heavy and grumpy in half time, his loose tooth wobbling in the hook, the
+  // great bell bonging every other bar. (It was Cutlass Weather until
+  // 15 November 2026.)
+  music: 'oldGulperBattle',
   backdrop: 'merrow_belfry',
   battlePos: { x: 200, y: 36 },
   maxHp: 39500,
@@ -95,6 +98,10 @@ export const OLD_GULPER = {
       damage: 119,
       difficulty: { density: 2.00, speed: 1.76 },
       introSfx: 'bell',
+      // Awake, the song jumps to its drop (section D: the gong, the BRAAAM,
+      // double time, the hook on every brass seat; then the chomp).
+      music: 'oldGulperBattle',
+      musicFrom: 'D',
       lowHp: 0.25,
       beat: [{ say: 'phase: awake' }, { who: 'vesper', say: 'phase: awake vesper' }, { who: 'foe', say: 'phase: awake foe' }],
     },
@@ -124,6 +131,6 @@ export const OLD_GULPER = {
   ],
   lullCalm: 12,
 
-  // A little more than the Dowager (10,800 / 60): he's the longer fight.
-  rewards: { exp: 13000, coins: 70 },
+  // About one level at Merrow (a level there costs about 15,500-19,500 since the 12 November curve).
+  rewards: { exp: 17000, coins: 70 },
 };

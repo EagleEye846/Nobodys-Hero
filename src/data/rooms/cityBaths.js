@@ -9,6 +9,7 @@
 //   I  old stone pillar (solid)
 //   W  the old city's stone wall (solid)
 //   ~  water (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const CITY_BATHS = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_baths',
@@ -67,6 +68,8 @@ export const CITY_BATHS = {
     // A stack of pots that isn't fixed to anything (push it aside): it hides the door to the Stokehold.
     { sprite: 'pot_pile', x: 18, y: 12, text: 'baths_loose_pots', rock: true },
     { sprite: 'sign', x: 14, y: 3, text: 'baths_sign' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_baths'] ?? []),
   ],
   tileTexts: { W: 'baths_wall', '#': 'baths_wall', '~': 'baths_pool', I: 'city_pillar' },
 

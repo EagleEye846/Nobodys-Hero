@@ -2,9 +2,9 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Russet's attacks. It's a fox the red of the leaves, playing a game of
 // hide-and-seek it's sure it's winning: it hides in one of several leaf
-// piles and bursts out at you, pounces on where you're standing, sweeps its
-// great brush of a tail across the box, and leaves a trail of paw prints for
-// you to read before it runs along them.
+// piles and bursts out at you, pounces on where you're standing the way a
+// fox pounces on a mouse in the leaves, follows in your footsteps a moment
+// behind you, and races you for a pie it has its eye on.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -38,6 +38,26 @@ const mirror = (rows) => rows.map((row) => [...row].reverse().join(''));
 defineBulletArt('russetLeap', { frames: LEAP, palette: FOX, radius: 3.5, frameSeconds: 0.1 });
 defineBulletArt('russetLeapLeft', { frames: LEAP.map(mirror), palette: FOX, radius: 3.5, frameSeconds: 0.1 });
 const leapArt = (dx) => (dx < 0 ? 'russetLeapLeft' : 'russetLeap');
+// The look of each (from a bullet made with it), for a fox that turns round.
+let LOOKS = null;
+const looks = (Shot) => LOOKS ?? (LOOKS = { left: new Shot({ x: 0, y: 0, art: 'russetLeapLeft' }).art, right: new Shot({ x: 0, y: 0, art: 'russetLeap' }).art });
+const leftArt = (Shot) => looks(Shot).left;
+const rightArt = (Shot) => looks(Shot).right;
+
+// A pie someone left out (touch it first and it's yours: HP back), and the
+// crumbs when the fox gets it instead.
+const PIE_HEAL = 5;
+defineBulletArt('russetPieDish', {
+  frames: [['.ccccc.', 'crcrcrc', 'ccccccc', '.CCCCC.']],
+  palette: { c: '#e8b060', r: '#a03050', C: '#b07838' },
+  radius: 3,
+});
+defineBulletArt('russetCrumb', {
+  frames: [['.c.', 'cCr', '.C.']],
+  palette: { c: '#e8b060', r: '#a03050', C: '#b07838' },
+  radius: 1.3,
+  spin: 5,
+});
 
 // Its shadow, where it's going to land.
 defineBulletArt('russetShadow', {
@@ -82,7 +102,7 @@ export const RUSSET_ATTACKS = {
   // fox in: watch for the white tip of its tail. Then they all burst: the
   // empty ones into rings of leaves, and the fox comes flying out at you.
   russetPiles(box, density, { Shot, rand, angleTo, pointAwayFrom }) {
-    const round = 2.3;
+    const round = 2.65;
     let t = 0;
     let piles = [];
     let played = 0;
@@ -101,7 +121,7 @@ export const RUSSET_ATTACKS = {
       piles.burst = false;
     };
     return {
-      duration: 7,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (t >= played * round && played < 3) {
@@ -148,7 +168,7 @@ export const RUSSET_ATTACKS = {
       leaps.push({ fox, from, to, t: 0 });
     }, { first: 0.3 });
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
         pounce(dt, bullets, soul);
         for (const leap of leaps) {
@@ -168,128 +188,163 @@ export const RUSSET_ATTACKS = {
     };
   },
 
-  // Tail sweep: its brush comes in from a bottom corner, a long arm of fur
-  // that swings up across the box like the hand of a clock. There's always
-  // a gap in it somewhere along its length (where the fur parts): be in the
-  // gap when it passes. Then the other corner.
-  russetTail(box, density, { Shot, rand }) {
-    const pieces = 14;
-    const spacing = 6.2;
-    const swing = 1.5;
-    let sweeps = [];
+  // Watching your feet: the fox falls in behind you and runs exactly where
+  // you've been, step for step, a moment behind, leaving its prints in your
+  // footsteps and kicking up leaves, out to the side and at you. Stop, or
+  // turn back over your own trail, and it's on you. And every so often it
+  // gets bored of following and pounces, a little ahead of you, where it
+  // thinks you're going (its shadow shows where), and picks up your trail
+  // again from there.
+  russetTrail(box, density, { Shot, rand, clamp }) {
+    let path = [];
     let t = 0;
-    let next = 0.2;
-    let fromLeft = Math.random() < 0.5;
-    const start = (bullets) => {
-      const pivot = { x: fromLeft ? box.x : box.x + box.w, y: box.y + box.h };
-      const gapAt = 3 + Math.floor(rand(0, pieces - 6));
-      const fur = [];
-      for (let i = 0; i < pieces; i++) {
-        if (i === gapAt || i === gapAt + 1) continue;
-        const shot = new Shot({ x: pivot.x, y: pivot.y, warn: 0.6, art: i === pieces - 1 ? 'russetTuftTip' : 'russetTuft' });
-        shot.reach = (i + 1) * spacing;
-        bullets.push(shot);
-        fur.push(shot);
-      }
-      sweeps.push({ pivot, fur, t: 0, dir: fromLeft ? 1 : -1 });
-      fromLeft = !fromLeft;
-    };
+    let fox = null;
+    let from = null;
+    let fromT = 0;
+    let kick = 0.3;
+    let side = 1;
+    let print = 0;
+    let leap = null;
+    let nextLeap = 2.6;
+    const DELAY = 1.1;
+    const FLIGHT = 0.7;
     return {
-      duration: 6.6,
-      update: (dt, bullets) => {
+      duration: 8,
+      update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next) {
-          start(bullets);
-          next += 2.1;
+        path.push({ t, x: soul.x, y: soul.y });
+        if (!fox) {
+          // It comes in from the corner furthest from you.
+          from = { x: soul.x < box.x + box.w / 2 ? box.x + box.w - 5 : box.x + 5, y: soul.y < box.y + box.h / 2 ? box.y + box.h - 5 : box.y + 5 };
+          fromT = 0.6;
+          fox = new Shot({ x: from.x, y: from.y, warn: 0.6, art: 'russetLeap' });
+          bullets.push(fox);
+          return;
         }
-        for (const sweep of sweeps) {
-          sweep.t += dt;
-          // Flat along the floor while it warns, then up and over.
-          const u = Math.min(1, Math.max(0, (sweep.t - 0.6) / swing));
-          const eased = u * u * (3 - 2 * u);
-          const angle = sweep.dir > 0 ? -eased * Math.PI / 2 : Math.PI + eased * Math.PI / 2;
-          for (const shot of sweep.fur) {
-            shot.x = sweep.pivot.x + Math.cos(angle) * shot.reach;
-            shot.y = sweep.pivot.y + Math.sin(angle) * shot.reach;
-            if (u >= 1 && shot.life === Infinity) shot.life = shot.age - shot.warn;
+        if (fox.age < fox.warn) return;
+        let to;
+        if (leap) {
+          // In the air (harmless: it's above you), coming down on the shadow.
+          leap.t += dt;
+          const u = Math.min(1, leap.t / FLIGHT);
+          to = { x: leap.a.x + (leap.b.x - leap.a.x) * u, y: leap.a.y + (leap.b.y - leap.a.y) * u - Math.sin(u * Math.PI) * 22 };
+          if (u >= 1) {
+            fox.harmless = false;
+            for (let i = 0; i < 6; i++) {
+              const a = (i / 6) * Math.PI * 2 + rand(0, 1);
+              bullets.push(new Shot({ x: leap.b.x, y: leap.b.y, vx: Math.cos(a) * 45, vy: Math.sin(a) * 45, life: 1.2, art: 'russetLeaf' }));
+            }
+            // It waits there a moment, then takes up the trail from that spot.
+            from = { ...leap.b };
+            fromT = t + 0.35;
+            path = path.filter((step) => step.t > t);
+            path.unshift({ t: fromT, x: from.x, y: from.y });
+            leap = null;
+            nextLeap = t + rand(2.3, 2.7);
           }
-          if (u >= 1) sweep.done = true;
+        } else if (t >= nextLeap && t < 9) {
+          // It knows where you're going to step: it lands a little ahead.
+          const last = path[path.length - 1];
+          const back = path[Math.max(0, path.length - 7)];
+          const span = Math.max(0.05, last.t - back.t);
+          const b = {
+            x: clamp(soul.x + ((last.x - back.x) / span) * FLIGHT, box.x + 5, box.x + box.w - 5),
+            y: clamp(soul.y + ((last.y - back.y) / span) * FLIGHT, box.y + 5, box.y + box.h - 5),
+          };
+          leap = { a: { x: fox.x, y: fox.y }, b, t: 0 };
+          fox.harmless = true;
+          bullets.push(new Shot({ x: b.x, y: b.y + 2, harmless: true, life: FLIGHT, art: 'russetShadow' }));
+          to = { x: fox.x, y: fox.y };
+        } else {
+          const when = t - DELAY;
+          if (when <= path[0].t) {
+            // Still on its way to where the trail starts.
+            const u = Math.min(1, Math.max(0, (t - fromT) / Math.max(0.1, path[0].t + DELAY - fromT)));
+            to = { x: from.x + (path[0].x - from.x) * u, y: from.y + (path[0].y - from.y) * u };
+          } else {
+            while (path.length > 2 && path[1].t <= when) path.shift();
+            to = path[0];
+          }
         }
-        sweeps = sweeps.filter((sweep) => !sweep.done);
+        const dx = to.x - fox.x;
+        const dy = to.y - fox.y;
+        if (Math.abs(dx) > 0.2) {
+          fox.artName = dx < 0 ? 'russetLeapLeft' : 'russetLeap';
+          fox.art = dx < 0 ? leftArt(Shot) : rightArt(Shot);
+        }
+        // Moved by its velocity, so it reads as running.
+        fox.vx = dx / Math.max(dt, 1e-4);
+        fox.vy = dy / Math.max(dt, 1e-4);
+        fox.x = to.x - fox.vx * dt;
+        fox.y = to.y - fox.vy * dt;
+        if (leap) return;
+        const moving = Math.hypot(dx, dy) / Math.max(dt, 1e-4);
+        print -= dt;
+        if (print <= 0 && moving > 20) {
+          print = 0.18;
+          bullets.push(new Shot({ x: to.x, y: to.y + 2, harmless: true, life: 0.8, art: 'russetPrint' }));
+        }
+        kick -= dt;
+        if (kick <= 0 && moving > 20) {
+          kick = rand(0.22, 0.28);
+          // Out to the side, then (every other one) flicked at you.
+          const heading = side > 0 ? Math.atan2(dy, dx) + Math.PI / 2 : Math.atan2(soul.y - to.y, soul.x - to.x);
+          side = -side;
+          bullets.push(new Shot({ x: to.x, y: to.y, vx: Math.cos(heading) * 46, vy: Math.sin(heading) * 46, warn: 0.15, life: 1.6, art: 'russetLeaf' }));
+        }
       },
     };
   },
 
-  // Tracks: paw prints appear across the box one by one, a winding trail,
-  // and then the fox runs along it, fast, kicking up a leaf at every print.
-  // One trail in two runs right through where you are.
-  russetTracks(box, density, { Shot, every, rand, clamp }) {
-    let runs = [];
-    let aimed = Math.random() < 0.5;
-    const lay = every(1.9, 2.1, (bullets, soul) => {
-      const fromLeft = Math.random() < 0.5;
-      const points = [];
-      const steps = 5;
-      for (let i = 0; i <= steps; i++) {
-        const u = i / steps;
-        const x = fromLeft ? box.x + u * box.w : box.x + box.w - u * box.w;
-        points.push({ x, y: rand(box.y + 8, box.y + box.h - 8) });
-      }
-      if (aimed) {
-        // Bend the middle of the trail through you.
-        const i = clamp(Math.round(((soul.x - box.x) / box.w) * steps), 1, steps - 1);
-        points[fromLeft ? i : steps - i].y = soul.y;
-      }
-      aimed = !aimed;
-      const prints = [];
-      for (let i = 0; i < points.length - 1; i++) {
-        for (const u of [0, 0.5]) {
-          prints.push({ x: points[i].x + (points[i + 1].x - points[i].x) * u, y: points[i].y + (points[i + 1].y - points[i].y) * u });
-        }
-      }
-      prints.push(points[points.length - 1]);
-      runs.push({ points, prints, laid: 0, t: 0, fox: null });
-    }, { first: 0.15 });
-    const layEvery = 0.08;
-    const runSeconds = 0.6;
+  // Pie thief: a pie turns up on the leaves somewhere away from you, and the
+  // fox's line shows from the edge of the box straight to it. Then it dashes
+  // along that line for the pie. Get there first and the pie's yours (a
+  // little HP back) and it runs on past, empty-pawed; let it get the pie
+  // and it gobbles it, and crumbs fly everywhere. Either way, mind the dash.
+  russetPie(box, density, { Shot, Line, every, rand, edgePoint, pointAwayFrom }) {
+    let dashes = [];
+    const lay = every(1.2, 1.35, (bullets, soul) => {
+      const at = pointAwayFrom(box, soul, 22, 10);
+      const pie = new Shot({ x: at.x, y: at.y, art: 'russetPieDish' });
+      pie.heals = PIE_HEAL;
+      bullets.push(pie);
+      let from = edgePoint(box);
+      for (let tries = 0; tries < 6 && Math.hypot(from.x - at.x, from.y - at.y) < 40; tries++) from = edgePoint(box);
+      const angle = Math.atan2(at.y - from.y, at.x - from.x);
+      const length = Math.hypot(at.x - from.x, at.y - from.y);
+      const warn = 0.85;
+      // The line runs on past the pie: it won't stop for you.
+      bullets.push(new Line({ x: from.x, y: from.y, angle, length: length + 60, thickness: 7, warn, life: 0, color: '#e0662c' }));
+      const fox = new Shot({ x: from.x, y: from.y, harmless: true, warn, art: leapArt(Math.cos(angle)) });
+      bullets.push(fox);
+      dashes.push({ fox, pie, angle, t: 0, warn, gobbled: false });
+    }, { first: 0.3 });
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         lay(dt, bullets, soul);
-        for (const run of runs) {
-          run.t += dt;
-          while (run.laid < run.prints.length && run.t >= run.laid * layEvery) {
-            const p = run.prints[run.laid++];
-            p.shot = new Shot({ x: p.x, y: p.y, harmless: true, life: 1.6, art: 'russetPrint' });
-            bullets.push(p.shot);
-          }
-          const startAt = run.prints.length * layEvery + 0.45;
-          if (run.t < startAt) continue;
-          if (!run.fox) {
-            run.fox = new Shot({ x: run.points[0].x, y: run.points[0].y, art: leapArt(run.points[1].x - run.points[0].x) });
-            run.kicked = 0;
-            bullets.push(run.fox);
-          }
-          const u = Math.min(1, (run.t - startAt) / runSeconds);
-          const along = u * (run.points.length - 1);
-          const i = Math.min(run.points.length - 2, Math.floor(along));
-          const a = run.points[i];
-          const b = run.points[i + 1];
-          const f = along - i;
-          run.fox.x = a.x + (b.x - a.x) * f;
-          run.fox.y = a.y + (b.y - a.y) * f;
-          // A leaf up off every print it passes.
-          const passed = Math.floor(u * (run.prints.length - 1));
-          while (run.kicked <= passed && run.kicked < run.prints.length) {
-            const p = run.prints[run.kicked++];
-            bullets.push(new Shot({ x: p.x, y: p.y, vx: rand(-20, 20), vy: rand(-45, -30), gravity: 90, life: 1.2, art: 'russetLeaf' }));
-          }
-          if (u >= 1) {
-            run.fox.life = run.fox.age;
-            run.done = true;
+        for (const dash of dashes) {
+          dash.t += dt;
+          const { fox, pie, angle } = dash;
+          if (dash.t < dash.warn) continue;
+          fox.harmless = false;
+          fox.vx = Math.cos(angle) * 150;
+          fox.vy = Math.sin(angle) * 150;
+          if (dash.gobbled || Math.hypot(fox.x - pie.x, fox.y - pie.y) > 6) continue;
+          dash.gobbled = true;
+          if (pie.spent) continue;
+          // Got it. Crumbs everywhere.
+          pie.spent = true;
+          pie.life = 0;
+          const turn = rand(0, Math.PI * 2);
+          for (let i = 0; i < 10; i++) {
+            const a = turn + (i / 10) * Math.PI * 2;
+            bullets.push(new Shot({ x: pie.x, y: pie.y, vx: Math.cos(a) * 50, vy: Math.sin(a) * 50, life: 1.5, art: 'russetCrumb' }));
           }
         }
-        runs = runs.filter((run) => !run.done);
+        // A pie you took is gone from the leaves.
+        for (const dash of dashes) if (dash.pie.spent && dash.pie.life > 0) dash.pie.life = 0;
+        dashes = dashes.filter((dash) => dash.t < dash.warn + 1.5);
       },
     };
   },

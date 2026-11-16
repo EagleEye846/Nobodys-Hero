@@ -1,0 +1,83 @@
+# CHARCUR
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/charcur.js.
+
+[intro]
+A dog comes down the road toward you, all ribs and long legs, black as a burnt log, its tail smoking. It stops. It looks past you, down the road, and then at you. A CHARCUR!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CHARCUR looks past you, down the road. Whoever it's waiting for, it isn't you.
+
+CHARCUR's tail swings once. A little smoke comes off the end of it.
+
+CHARCUR sniffs the air for someone. The air smells only of ash.
+
+CHARCUR lies down on the road, then gets up again at once, in case it missed them.
+
+Smells of a hearth rug and a long, long walk.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+The glow in CHARCUR's flanks has gone dim. It is still standing in the road.
+
+[flavor: spareable]
+CHARCUR has sat down. Its tail is going, slowly, in the ash.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Grrr.
+
+Rrrrf!
+
+Not
+you.
+
+...Home?
+
+Wait.
+Wait.
+
+AROOO!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/charcur.js.
+[talk: Inspect]
+CHARCUR - HP 6000
+A stray of charcoal that keeps the old road, waiting for someone to come back along it. Walls of bones with a gap, a howl in arcs, cinders dug up, and a game of fetch it plays very hard.
+
+[talk: Hold out a hand]
+You crouch and hold out the back of your hand, the way you do with a dog you don't know. CHARCUR sniffs it for a long time. It isn't the hand it wanted, but it's a hand.
+
+[talk: Throw a stick]
+You pick up a burnt stick and throw it down the road. CHARCUR goes after it like a shot and brings it back, and drops it at your feet, and looks at you, and then down the road again.
+
+[talk: Wait with it]
+You sit down at the side of the road and look the way it's looking. Nobody comes. Nobody comes for a long time. CHARCUR sits down next to you, close enough to lean.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+CHARCUR lies down in the middle of the road with its head toward the town. The glow goes out of it slowly, from the tail up. Its collar is lying in the ash.
+
+[pacified]
+CHARCUR licks your hand once, quickly, as if it might get into trouble for it. Then it trots off down the road, tail smoking, to go on waiting somewhere you can't see.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that it's a good dog. {foe} has not been told that in a long time. Its tail goes so hard it sends up sparks.
+
+Ves sits by {foe} and waits with it. She says she's very good at waiting. She once waited in a chapel for longer than she'll say. {foe} seems to understand.
+
+Ves tells {foe} that whoever it's waiting for would want it to eat something. {foe} looks at her as if she has said a very hard thing.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble says he always wanted a dog. {foe} looks at him. Bramble says not this one, specially, but he wouldn't say no.
+
+Bramble throws {foe} a stick and it is too far and it goes down a hole. {foe} looks at the hole, and then at Bramble, very disappointed.
+
+Bramble gives {foe} a scratch behind the ear and gets soot all up his arm. He says it was worth it. He says it twice.

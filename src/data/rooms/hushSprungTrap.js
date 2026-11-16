@@ -12,6 +12,10 @@
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_SPRUNG_TRAP = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_sprung_trap',
@@ -75,6 +79,7 @@ export const HUSH_SPRUNG_TRAP = {
   // hold), the way out north.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_sprung_trap ?? []),
     { sprite: 'gate_narrow', x: 15, y: 10, text: 'trap_inner_gate', opensWith: ['trap_treadle'] },
     { sprite: 'treadle', x: 21, y: 7, text: 'treadle', treadle: 'trap_treadle' },
     { sprite: 'kid_gap', x: 20, y: 15, text: 'kid_gap', gap: true },
@@ -94,6 +99,8 @@ export const HUSH_SPRUNG_TRAP = {
     { sprite: 'paw_print', x: 4, y: 9, text: 'paw_print' },
     { sprite: 'paw_print', x: 2, y: 13, text: 'paw_print' },
     { sprite: 'gold_pouch', x: 28, y: 22, text: 'trap_pouch', gold: 140, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_sprung_trap ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'trap_stakes', b: 'pen_stump' },
 

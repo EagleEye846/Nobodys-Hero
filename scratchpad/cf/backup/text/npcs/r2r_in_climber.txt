@@ -1,0 +1,22 @@
+# DAG: a cheerful climber in the inn with his pack still on, because he's about to leave and has been for two days. The life pass.
+
+[first]
+Dag! Rope team of one. Just back from the Lookout's second cairn. It's cold up there in a way that feels personal.
+
+I'm leaving in a minute. Soon. I'm doing the thing where I put my pack on, to feel like I'm leaving.
+
+Greta says it's a sort of a loop. I say it's a plan.
+
+[first_ves]
+{sly}It's the longest plan I've seen.
+
+[repeat]
+Tip. The mountain's a lot nicer if you go up it slowly, with good socks. People say it's the view. It's the socks.
+
+Past the Lookout, nobody who's gone up has told me what's there. They've been very, very quiet about it. That's not like climbers. Climbers can't help telling you about a rock.
+
+[repeat 2]
+I'd go up with you, but my knees have a fixed amount of mountain in them, and I've spent it. They say hello, though. Both of them.
+
+[repeat 3]
+Pack's on. Pack's on! I'm going. ...After the soup.

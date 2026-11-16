@@ -56,7 +56,7 @@ ledge!
 # TALK options in src/data/enemies/barnacle_bat.js.
 [talk: Inspect]
 BARNACLE BAT - HP 1850
-A cave bat crusted with barnacles. Drips off the roof (one always over you), squeaks echoes that bounce off the walls, shakes barnacles down that open where they land, and swoops along a path you can see first. Watch the roof.
+A cave bat crusted with barnacles. Its echo marks you and it swoops through the mark; its cousins drop when their eyes open; its barnacles comb at you on every squeak. Move once the echo finds you.
 
 [talk: Hang your head upside down]
 You bend right over and look at BARNACLE BAT between your knees, so the cave is the wrong way up and it's the right way up. It goes very still. Then it squeaks, softly, the friendly sort of squeak. Nobody has ever met it halfway before.

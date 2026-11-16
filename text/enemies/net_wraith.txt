@@ -55,7 +55,7 @@ home.
 # TALK options in src/data/enemies/net_wraith.js.
 [talk: Inspect]
 NET WRAITH - HP 2150
-A drowned fishing net that still thinks it's at work. Closes the box to a small window, rolls floats in on the swell, lowers a hook and jerks it up, and lets a curtain of knots fall with a hole in it. Look for the window and the hole.
+A drowned fishing net that still thinks it's at work. Closes round you (find the tear), drifts across the box as a whole net, and lets loose fish that swim the way they face.
 
 [talk: Untangle a knot]
 You find a knot in its edge, as big as your fist and hard as a nut, and you work it loose with your thumbs. NET WRAITH goes completely still. Then it lets out a long, thin sigh, and its whole mesh loosens, just a little, like a held breath.

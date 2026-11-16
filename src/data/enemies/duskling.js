@@ -7,19 +7,20 @@ export const DUSKLING = {
   gait: 'float',
   textFile: 'enemies/duskling.txt',
   sprite: { rows: DUSKLING_SPRITE, palette: DUSKLING_PALETTE },
-  maxHp: 130,
+  maxHp: 340,
   damage: 9,
 
   difficulty: { density: 0.95, speed: 0.9 },
 
   // Its attacks, in src/battle/attacks/duskling.js: staring eyes, grasping
-  // hands, curving crescents, a cage of tendrils and wisps that follow you.
+  // hands, shadows that stretch when a lantern flickers, a cage of tendrils,
+  // and itself, following you as your shadow.
   patterns: [
     { name: 'dusklingWatchingEyes', weight: 2 },
     { name: 'dusklingGraspingHands', weight: 2 },
-    { name: 'dusklingCrescentBlades', weight: 2 },
+    { name: 'dusklingFlicker', weight: 2 },
     { name: 'dusklingTendrilCage', weight: 2 },
-    { name: 'dusklingLostWisps', weight: 2 },
+    { name: 'dusklingFollow', weight: 2 },
   ],
 
   talk: [

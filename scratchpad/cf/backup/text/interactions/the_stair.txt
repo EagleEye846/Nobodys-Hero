@@ -1,0 +1,262 @@
+# THE LONG STAIR: things you can read and look at on the mountain (Chapter 2).
+
+# What a save point says when you save here.
+[save_point]
+The crystal's light is pale in the daylight, but warm all the same.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# The sign at the bottom of the stairs.
+[stair_tally]
+Carved into the bottom step: six tally marks, worn almost smooth by the weather.
+
+Beneath them, in fresh chalk, someone has added a seventh.
+And a question mark.
+
+# The old pack on the ledge (it gives you a Climber's Ration).
+[stair_pack]
+A weathered pack, wedged up on the ledge long ago. Someone left in a hurry.
+
+Inside, still sealed in waxed paper: a climber's ration.
+
+[stair_rockslide]
+A rockslide has buried the stairs here. Boulders, packed tight.
+
+Hoofprints lead off east, along the foot of the cliff.
+
+[stair_boulder]
+A boulder, mossy on top. It looks like it's been here longer than the stairs.
+
+[stair_pine]
+A mountain pine. It smells sharp and clean, nothing like the Ruins.
+
+[stair_cliff]
+Sheer rock, layered like the pages of a very old book.
+
+[stair_block]
+A fallen block of the stairs, about knee-high. You could jump up onto it.
+
+[stair_tall_block]
+A tall block of the old stair, too high to jump onto from the grass. Something lower might help.
+
+# --- THE GOAT TRACK ---
+
+[goat_rockslide]
+The rockslide, piled higher than your head. Something with hooves has been over it, somehow.
+
+[goat_fallen_stair]
+A whole run of the stairs came down with the slide and landed on top of it. You could climb onto it, a block at a time.
+
+# The old pack on the end of the fallen stair (it gives you a Climber's Jacket).
+[goat_pack]
+Another pack, wedged between the blocks. The same make as the one at the bottom.
+
+Folded inside: a padded jacket, patched at the elbows. Whoever wore it meant to go a long way.
+
+[goat_cairn]
+Six flat stones stacked on the boulder, one on top of another.
+
+There's room on top for one more.
+
+# --- THE START OF THE CLIMB ---
+
+# The herald's waymark at the top of the lower stair.
+[climb_waymark]
+WELCOME, HERO, TO MOUNT VIGIL!
+
+The Long Stair climbs from here to the summit, where the sun first touches the world.
+
+Halfway up waits HERALDS' REST: hot soup, soft beds, and a fanfare in your honour.
+(Please do not ring the bell after dark.)
+
+Underneath, scratched into the post in a different hand:
+"stair's gone above here. use the rings."
+
+[climb_tent]
+A small tent, patched in three colours. The flap is tied shut from outside.
+
+Whoever pitched it meant to come back.
+
+[climb_campfire]
+A ring of stones round a fire that went out a long time ago. The ash is cold all the way through.
+
+# The pack by the tent (it gives you the Climbing Rope).
+[climb_pack]
+A third pack, the same make as the others. This one was left on purpose, propped against the tent.
+
+Inside, coiled neatly: a long rope with an iron hook. A single tally mark is scratched into the hook.
+
+[climb_pack_empty]
+The empty pack. Someone packed it for a long climb, and then didn't take it.
+
+[climb_broken_stair]
+The great stair just stops here, snapped off at the foot of the cliff. The rest of it is somewhere up above.
+
+[climb_cliff]
+Sheer rock, too smooth to climb by hand.
+
+[climb_stair_onward]
+The stairs wind on up the mountain. Somewhere above, a bell rings once.
+
+# --- THE SHEER FACE ---
+
+# The notice at the foot of the face (how swinging works).
+[face_notice]
+CLIMBERS, TAKE NOTE!
+This face is too high for one throw. Hook the lowest ring and swing.
+
+Hold left or right along with your swing to swing higher. The higher you swing, the farther you can reach.
+
+Press Z at the right moment to catch the next ring.
+
+For a ring off to the side, wait for the top of your swing. For one straight above, catch it as you pass the bottom.
+
+Miss, and you'll be starting over from the grass. (X lets go, if you'd rather.)
+
+[face_rock]
+A sheer wall of rock. Iron rings are hammered into it here and there, all the way up.
+
+# === THE LIFE PASS, ROUND 2 (builder 3) ===
+# (draft)
+[r2r_gk_edel]
+A tuft of edelweiss in the shelter of a boulder, white and woolly, the kind of flower that looks like it's made of felt. It's a hard plant to grow up here. It's winning.
+
+# (draft)
+[r2r_gk_scree]
+A heap of loose scree that's slid off the cliff and settled against the boulder. A line of tiny hoof-prints goes up it and stops, then comes down and goes round. A goat had a go and thought better of it.
+
+# (draft)
+[r2r_gk_blaze]
+A trail post, painted red-white-red. Someone's added a tiny arrow, then a tinier arrow, then a smiling face. It's pointing at the next post, which is looking pleased with itself.
+
+# (draft)
+[r2r_gk_pole]
+A bent tent pole with a rag of orange cloth still tied to it, wedged between two rocks. The rest of the tent went down the mountain some years ago. The pole stayed to guard the rock.
+
+# (draft)
+[r2r_gk_kid]
+A goat kid asleep on a heap of coats. They're not its coats. It's been sleeping on them for a while. It is wearing a climber's cap, back to front, and nobody's asked it to explain.
+
+# (draft)
+[r2r_gk_bird]
+A ptarmigan, still half in its summer brown, as though the weather's changed its mind about her. She's pecking in the grass. She looks very unsure of herself.
+
+# (draft)
+[r2r_cs_tally]
+A post with tally marks cut into it, in groups of five. CLIMBS STARTED: a lot of marks. CLIMBS FINISHED: fewer. At the bottom, in a neat hand: 'RETURNED: ..' and the ink's gone.
+
+# (draft)
+[r2r_cs_tally 2]
+You count the marks. There are a lot more than you'd like. There's a second hand at the bottom, shakier, that's added a smiley.
+
+# (draft)
+[r2r_cs_stove]
+A little camp stove, a blackened billy on it, the flame long blown out. The billy has a lid and a scrap of paper under it: 'TEA. PRESS ON.' It's stone cold. The tea has become a very solid decision.
+
+# (draft)
+[r2r_cs_mug]
+A tin mug upside down on a stone to keep the snow out. Whoever lived here was tidy right up until they left.
+
+# (draft)
+[r2r_cs_boots]
+A pair of boots by the tent door, laced up, with their toes together and the tongues out. Somebody went out in their socks. For a short walk. They said.
+
+# (draft)
+[r2r_cs_candle]
+A candle stub in a jar, stamped with a tiny T. The same wax as the candles in the wax house at the foot of the Stair. It's burnt down to a thumbnail, as if somebody sat up reading.
+
+# (draft)
+[r2r_cs_candle 2]
+The T on the jar is very small, like a hallmark. Somebody took this a long way in a pocket.
+
+# (draft)
+[r2r_cs_piton]
+An iron peg in the rock, with a loop of rope still on it. You'd not trust that rope with a cat, let alone a person. It's still tied off, the way somebody left it, pointing up.
+
+# (draft)
+[r2r_cs_blaze]
+A post, painted red-white-red, with a hand-lettered sign nailed to it: LAST CHEAP TEA. A pointing hand; the finger's cracked. The tea, as far as you can tell, is behind you.
+
+# (draft)
+[r2r_cs_stash]
+A tin box wedged behind the pine, as far into the corner as it'll go. Inside: a Climber's Ration, wrapped in a sock, and a note: 'FOR WHOEVER GETS FURTHER THAN ME.' Whoever wrote it, you've got further than the sock.
+
+# (draft)
+[r2r_cs_stash_empty]
+The tin's empty now, apart from the note. You put it back where it was, folded tight, for the next one.
+
+# (draft)
+[r2r_sf_tally]
+Another tally post, nearer the bottom. These marks are all in different hands. It's a book that everybody's been writing in, one stroke at a time. Nobody's written the last line.
+
+# (draft)
+[r2r_sf_blaze]
+A blaze post, freshly painted. Under the paint, you can see three older coats. Whoever does this does it every spring, and doesn't go further than here.
+
+# (draft)
+[r2r_sf_pole]
+A tent pole, bent in an arc like a bow, still hanging on to a scrap of cloth. Somebody camped on this ledge in a gale. The pole says they didn't enjoy it.
+
+# (draft)
+[r2r_sf_mug]
+A tin mug wedged into the cleft between two rocks so the wind can't have it. Inside: a pencil stub and a folded note: 'IF YOU FIND THIS, I'M FINE. I JUST WENT DOWN A DIFFERENT WAY.'
+
+# (draft)
+[r2r_sf_rope]
+A rope coil on the middle ledge, frozen into one lump, tied with a smart knot. Somebody sat here and coiled it like they meant to leave in the morning.
+
+# (draft)
+[r2r_sf_mug2]
+A tin mug with a lid of ice and a tea bag still in it, set carefully on a ledge. The climber stopped for tea half-way. It sounds like a very good idea.
+# === END THE LIFE PASS, ROUND 2 (builder 3) ===
+
+# === ROUND 3, THE FUN CHECK (15 November 2026): chapters 1 and 2, the dullest rooms ===
+
+# (draft)
+[r3a_bf_picnic]
+A rug laid out in the grass, a basket with its lid on, and two cups, one chipped and one not. The loaf has been out so long it's become a geological feature. Whoever laid this out expected company at the foot of the Stair, and was patient about it. Both cups are the right way up, ready.
+
+# (draft)
+[r3a_bf_signpost]
+A signpost with three boards. The top one says UP, and underneath, smaller: (BURIED.) The next says GOATS, with an arrow and the word SCENIC. The lowest says THE RUINS, and then, in a different hand: PLEASE MIND THE DUMMY.
+
+# (draft)
+[r3a_bf_firering]
+A ring of stones round old ash, a burnt stick leaning in it. The ash still holds the shape of a very small fire. Whoever built it knew not to build it big, in case the Stair noticed.
+
+# (draft)
+[r3a_bf_flask]
+A dented flask lying in the grass with its cup screwed on tight. A name is scratched under the base: BARNABY. It rattles. Somebody has put a button in it for luck.
+
+# (draft)
+[r3a_bf_names]
+A flat stone with a column of names scratched into it: climbers who put their names down before they started up the Stair, just in case. Near the bottom, one has been crossed out and written again smaller: BERT (TURNED BACK). Beside it, in a bigger hand: BERT (WENT AGAIN).
+
+# (draft)
+[r3a_sf_scope]
+A brass telescope bolted to the last ledge, pointing back down the way you came. You put your eye to it. The whole valley lies there like a plate, with the Ruins no bigger than a thumbprint at the bottom. Something very small and wooden is walking in front of the door, to the end of its patch and back. It has never once looked up.
+
+# (draft)
+[r3a_sf_cairn]
+A little cairn at the top of the climb, built from stones that aren't from this ledge. Somebody carried each one up. A stick in the top has a ribbon on it, and the ribbon says nothing. It's just a ribbon. It's glad you made it.
+
+# (draft)
+[r3a_sf_flask]
+A flask wedged in a crack on the halfway ledge so the wind can't have it. A note is taped round it: FOR THE NEXT ONE. IT'S STILL TEA. You don't open it. You feel looked after anyway.
+
+# (draft)
+[r3a_sf_cairn_low]
+A cairn at the very bottom of the face, no higher than your knee. Every stone has one little line scratched on it, one for every climber who started. There are a lot of stones. Beside it is a much smaller pile, for the ones who got back down to say so.
+
+# (draft)
+[r3a_sf_firering]
+A cold fire ring on the bottom ledge, the print of a kettle still pressed in the ash. Somebody had a last hot drink here before the face. It looks like a very good decision.
+
+# (draft)
+[r3a_sf_bert]
+BERT WAS HERE. It's scratched in the rock at the height of a hand reaching up. Under it, smaller, an arrow pointing UP. Under that, smaller still, an arrow pointing down, with a question mark.
+
+# === END ROUND 3 (chapters 1 and 2) ===

@@ -1,0 +1,1471 @@
+# HERALDS' REST: things you can read and look at in the village and its
+# houses (Chapter 2, high on Mount Vigil).
+
+# What a save point says when you save here.
+[save_point]
+The crystal hums along with the wind in the lamp posts.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+An empty chest. Someone will have refilled it by next week; that's how things go here.
+
+# What you're told on waking at the inn.
+[rested]
+You slept like a stone under a mountain. Your HP is fully restored.
+
+[rest_snow]
+Snow, trodden into paths by small busy feet.
+
+[rest_lane]
+A lane, swept down to the cobbles before breakfast. The Hero should not have to wade.
+
+# --- THE GATE ---
+
+[gate_arch]
+An arch of old timber over the stairs, and across it, in letters a hundred years old and repainted every spring:
+
+"HERALDS' REST. WELCOME, HERO."
+
+Bunting hangs from it, red and blue and gold. It's been there so long the wind has given up on it.
+
+[gate_lamp]
+An iron lamp, lit, with a cap of snow on it.
+
+[gate_banner]
+A banner on a pole, a golden trumpet on red. The heralds' colours.
+
+[gate_sign]
+PLEASE WIPE YOUR FEET. (There is a mat. It is under the snow.)
+
+[gate_board]
+THE NOTICE BOARD. Every notice ever pinned here is still pinned here, underneath the next one.
+
+The top one: "HERO EXPECTED ANY DAY NOW. Please keep the square tidy. - H. Horace, Head Herald"
+
+Under it, older: "HERO EXPECTED ANY DAY NOW. Please keep the square tidy. - H. Horace, Head Herald (the first)"
+
+[gate_snowman]
+A snowman on lookout duty at the gate. Somebody gave it a herald's hat. It's taking the job very seriously.
+
+[gate_bench]
+A bench with a view of the whole stair, all the way down into the cloud. Someone has sat here every day and looked.
+
+[gate_stair]
+The last of the great stair, swept and salted. A hundred years of being ready wore a groove in the middle step.
+
+# --- THE SQUARE ---
+
+[square_fountain]
+The fountain, frozen mid-splash a long time ago. The water never fell. It's quite beautiful, if you don't mind the cold.
+
+A plaque: "FOR THE HERO, WHO WILL DRINK HERE FIRST."
+
+[square_ice_hero]
+A statue of the Hero carved from ice, plumed helmet and all. The heralds carve a new one every winter, from a guess.
+
+This year's guess is a bit taller than you. Last year's, judging by the lump beside it, was shorter.
+
+[square_lamp]
+A lamp post. The heralds light them at dusk. Nobody is quite sure who the light is for any more, and nobody will say it.
+
+[square_board]
+THE SQUARE NOTICE BOARD (overflow). "LOST: one trumpet. If found, it's Bram's. He knows what he did."
+
+"CHOIR PRACTICE: Thursday. Fanfare practice: every other day. Hero practice: cancelled until we have one."
+
+[square_bench]
+A bench, cleared of snow this morning. Everything here is cleared of snow this morning.
+
+[square_snowman]
+A snowman the kids built. It has a herald's tabard, a trumpet made of a stick, and an expression of great responsibility.
+
+[square_brazier]
+A brazier, glowing. The heralds keep one lit in the square for whoever comes in off the stairs cold. That's you, today.
+
+[square_barrels]
+Barrels and crates stacked by the stores, stamped FOR THE WELCOME FEAST in letters that have been repainted a few times.
+
+[square_skis]
+A pair of skis leaning on the wall, waxed and ready. Nobody in the village has ever used them. They're for the Hero.
+
+[square_pond]
+Ice over the pond, swept clear for skating. Small scratched circles all over it where somebody practised and practised.
+
+[square_roof]
+A roof deep in snow, icicles along the eaves. Smoke from the chimney.
+
+[square_wall]
+Log walls, snug and warm, the gaps stuffed with moss.
+
+[square_window]
+A lit window. Inside, the shadow of someone moving about, and the smell of something baking.
+
+[square_fence]
+A picket fence, every post wearing a hat of snow.
+
+[square_chough]
+A chough on the fence post. It's watching the brazier. It might be warming its feet from here.
+
+[square_inn_sign]
+THE SOFT BEDS. Inn. Soup always on. Beds always made. Dreams not guaranteed but very likely.
+
+[square_hall_sign]
+THE HALL OF HERALDS. Feast laid. Fanfare rehearsed. Please do not sit in the big chair.
+
+[square_stores_sign]
+REST STORES. Prop. F. Fennick. Everything a climber needs, and a lot of things they don't.
+
+[square_tower_sign]
+THE BELL TOWER. Rung once at dawn, for the Hero. DO NOT ring after dark. We've all heard the story.
+
+[square_marta_sign]
+MARTA. Knitting, mending, and no opinions about the Hero at all, thank you.
+
+[square_forge_sign]
+TILDA'S FORGE. Ironwork, mending, hot food. The fire has not gone out in a hundred years. Please do not try.
+
+[square_anvil]
+A spare anvil outside the forge, with snow on it. Someone has drawn a face in the snow. The face looks determined.
+
+[square_pottle_sign]
+THE POTTLES. Please knock. Please knock LOUDLY. The children are drumming.
+
+[square_lookout_sign]
+THE LOOKOUT, and the stairs to the summit. Beyond here the mountain is the mountain's business.
+
+[square_chapel_sign]
+THE CHAPEL. Prayers at dusk, every dusk. Please come in quietly, in case anyone is listening.
+
+[square_chapel_spire]
+A little spire, a gold star on top, and a bell no bigger than a teapot. It rings softly, so as not to upset the big one.
+
+Over the door, a round window of coloured glass. Candlelight glows through it, red and blue.
+
+# --- THE SOFT BEDS (the inn) ---
+
+[inn_fire]
+A fire that's been fed for a hundred years and has got very good at being a fire.
+
+[inn_counter]
+The inn's counter, polished by elbows. A bell on it says "RING FOR GRETA". Greta is standing right there.
+
+[inn_soup]
+The soup pot, which is never off and never empty. Greta ladles some into a jar for you without being asked.
+
+[inn_soup_empty]
+The soup pot, which is never off and never empty, except that Greta would like you to have a wash before the next one.
+
+[inn_books]
+Books left behind by guests: "KNOTS FOR CLIMBERS", "A HUNDRED SOUPS", and "WHAT TO SAY TO A HERO" (unread, spine uncracked).
+
+# (draft) The true ending: a faint early mention of the Fallen Star.
+Wedged behind them, a thin one for children: "THE STAR THAT FELL". Somebody has torn out the last few pages.
+
+[inn_bed]
+A bed, made this morning with sheets that smell of pine and wind. You could sleep in it.
+
+[inn_bed_made]
+The Hero's bed. It has been turned down every night for a hundred years. Greta says you may as well, it's getting silly.
+
+[inn_side_table]
+A candle, a glass of water, and a note: "if you need anything in the night, ring the bell. no, the little one."
+
+[inn_table]
+A table by the fire, set for one, with a second place half laid just in case.
+
+[inn_chair]
+A chair worn smooth by a hundred years of guests who were mostly the same three heralds.
+
+[inn_mug]
+A mug of cocoa on the table, going cold. Greta nods at it: "Go on."
+
+[inn_mug_empty]
+Your empty mug. Greta's already taken it to wash.
+
+[inn_skis]
+A guest's skis, left behind long ago and kept, because they might come back for them.
+
+[inn_rules]
+HOUSE RULES: 1. No snow indoors. 2. No trumpets after supper. 3. The Hero's bed is for the Hero (or whoever needs it, honestly, it's a bed).
+
+[inn_rug]
+A thick rug, warm underfoot, with a trumpet woven into the middle of it.
+
+[inn_wall]
+Log walls hung with pictures of the stairs in every season. Someone painted them all from the same bench.
+
+# --- REST STORES ---
+
+[stores_counter]
+A counter with a brass scale on it, a ledger a foot thick, and a jar of pine candies with a sign: "TAKE ONE. ONE."
+
+[stores_shelves]
+Shelves of everything: rope, candles, tins, lamp oil, mittens by the dozen, and a single, dusty, enormous cape labelled HERO (XL).
+
+[stores_crates]
+Crates stamped with places you've never heard of, carried up the stairs on small backs over a very long time.
+
+[stores_barrel]
+A barrel of salted something. The lid is nailed down. Fennick says it's "for the feast" in a voice that ends the conversation.
+
+[stores_skis]
+Skis for sale. Fennick has never sold a pair and keeps them in stock out of principle.
+
+[stores_sign]
+PRICES FIRM. PRICES FAIR. PRICES FOR THE HERO: ALSO FIRM, SORRY.
+
+[stores_trumpet]
+A herald's trumpet on a stand, with a price tag. Fennick will tell you it's for display. It isn't; everything in here has a price.
+
+[stores_wall]
+Shelves to the ceiling. Fennick knows where everything is, and tests himself on it most evenings.
+
+# --- TILDA'S FORGE ---
+
+[forge_fire]
+The forge, roaring. Loaves bake at the back, a horseshoe glows at the front, and neither seems to mind.
+
+[forge_counter]
+Thick planks, scorched in rings where hot things were set down. A sign says HOT. Several signs say HOT.
+
+[forge_anvil]
+The anvil, worn bright by a hundred years of hammering. Above it, two iron hooks hold nothing at all.
+
+On the stone between them, a black smudge. It's shaped like a hand.
+
+[forge_pot]
+A pot of stew on a hook, simmering since before Tilda was born. Nobody has got to the bottom of it.
+
+[forge_barrel]
+A barrel of snowmelt for cooling hot iron. It steams quietly. Somebody has floated an apple in it.
+
+[forge_crates]
+Crates of iron bars, horseshoes and flour, packed together. One crate is labelled "HERO: SPARES".
+
+[forge_sign]
+IF IT GLOWS, DON'T TOUCH IT. IF IT DOESN'T GLOW, ASK FIRST.
+
+[forge_wall]
+Hammers, tongs and pans hang along the wall in order of size. One hook is empty, for the hammer Tilda never puts down.
+
+# --- THE HALL OF HERALDS ---
+
+[hall_chair]
+The Hero's chair at the head of the table: carved, cushioned, dusted daily, and never once sat in.
+
+There's a small sign on the seat: "RESERVED." You could move it. You don't.
+
+[hall_table]
+The feast table, laid end to end: plates, cups, candles, a honeycake under a cloth. Everything is relaid every week, and the cake is fresh.
+
+Somewhere down the table is a place card with your name on it. No. You looked twice. It says HERO.
+
+[hall_chairs]
+Chairs for all the heralds. They've eaten the welcome feast about five thousand times, as practice.
+
+[hall_trumpets]
+A rack of trumpets, polished every morning until you can see the whole hall in them, upside down.
+
+[hall_book]
+THE BOOK OF ARRIVALS. Six names, six stories, in six different inks. The seventh line is blank and the pen is beside it.
+
+A note from the Head Herald: you may write in it when you decide what you are.
+
+[hall_fire]
+A great hearth, roaring. The hall is the warmest room on the mountain and knows it.
+
+[hall_banner]
+A banner on a pole, red and gold, the trumpet in the middle. The heralds' colours, bright as the day they were dyed. They re-dye them.
+
+[hall_sign]
+TODAY'S REHEARSAL: the Fanfare of Welcome (full), the Fanfare of Welcome (short, for if the Hero is tired), and the Lament (in case). Please don't practise the Lament where the kids can hear.
+
+[hall_rug]
+A long rug down the middle of the hall, so the Hero's boots never touch cold stone. Yours are allowed on it; the Head Herald said so, after thinking it over.
+
+[hall_wall]
+The hall's walls are hung with a hundred years of banners, each a little brighter than the last.
+
+# --- THE BELL TOWER ---
+
+[tower_bell]
+The great bell of Heralds' Rest. Dunstan rings it once at dawn, so the Hero will know which way is up.
+
+You give the rope a pull. The bell says BONNNG, enormously. Somewhere below, a herald drops a plate.
+
+[tower_sign]
+UP: the bell. The blocks in the corner are the stairs; the real stairs rotted in year forty and nobody minded.
+
+[tower_rules]
+BELL RULES: ONE ring at dawn. NO rings after dark. (In year sixty-two somebody rang it at midnight and three heralds ran out onto the stairs in their nightshirts to welcome a goat.)
+
+[tower_barrel]
+A barrel of bell polish. Dunstan goes through one a year.
+
+[tower_crates]
+Crates of spare rope, in case the bell rope ever wears through. It has, twice. Both ropes are kept, in a box, with labels.
+
+[tower_log]
+THE BELL LOG. One line a day, for a hundred years: "Dawn. Rang once. No Hero."
+
+Today's line is still blank. Dunstan is waiting to see what to write.
+
+[tower_lamp]
+A lamp by the ladder, lit, so Dunstan can see the rope at dawn.
+
+[tower_wall]
+The tower's walls are hung with ropes, old and new, and one very old pair of earmuffs on a nail.
+
+[tower_blocks]
+Blocks of stone, stacked into steps up to the bell platform. Jump up them.
+
+# --- MARTA'S ---
+
+[marta_fire]
+A small fire, just enough. Marta knits by it and has for a hundred years, minus the days she knitted in the square.
+
+[marta_chair]
+Marta's chair, with a scarf trailing off it that goes under the door and, as far as you can tell, all the way round the village.
+
+[marta_bed]
+A neat bed with a knitted blanket in every colour the heralds have. It took sixty years. She says she rushed the end.
+
+[marta_patterns]
+Pattern books, handwritten. "MITTENS FOR HEROES" has a lot of crossings out where she kept guessing at the hand size.
+
+[marta_drawer]
+A drawer full of balls of wool, and, under them, a paper bag of pine candies. Marta says help yourself in a voice that means it.
+
+[marta_basket]
+A basket of mending: everything in the village with a hole in it ends up here, and leaves without one.
+
+[marta_table]
+A side table with a cup of tea on it, exactly the right temperature. Marta's tea is always exactly the right temperature. Nobody knows how.
+
+[marta_rug]
+A rag rug made from a hundred years of worn-out scarves. If you look closely you can find every colour.
+
+[marta_wall]
+The walls are hung with scarves, mittens and socks, drying, or waiting, or just there to be looked at.
+
+# --- THE POTTLES' ---
+
+[pottle_stove]
+A stove with a tray of honeycake in it. There is always a tray of honeycake in it. The recipe is on the wall, worn illegible with use.
+
+[pottle_counter]
+A counter dusted with flour, and two small flour handprints where the kids helped.
+
+[pottle_cake]
+A honeycake on the counter, cooling, with a note: "DO NOT TOUCH - Mum". Mrs Pottle sees you looking and cuts you a slice anyway.
+
+[pottle_cake_gone]
+The cooling rack, minus your slice. Mrs Pottle has already put another cake in.
+
+[pottle_table]
+The kitchen table, covered in drawings of the Hero. The Hero has, variously, a cape, two capes, wings, a dog and a very large hat.
+
+[pottle_chair]
+A small chair with a cushion that says POTTLE on both sides, in case anyone forgets whose chair it is.
+
+[pottle_bed_big]
+Mrs Pottle's bed, made with corners you could cut yourself on.
+
+[pottle_bed_small]
+The kids' bed, unmade, with a toy trumpet under the pillow and a drawing of a goat on the headboard.
+
+[pottle_toys]
+A toy chest: wooden trumpets, a rope with a hook made of a bent spoon, and a doll with a plumed helmet that has clearly been to war.
+
+[pottle_drawings]
+Drawings pinned to the wall: POTTLE MEETS THE HERO, POTTLE BEATS THE HERO, THE HERO MEETS A GOAT. In the last one the goat is winning.
+
+[pottle_book]
+A storybook on a stand, open at the last page: "...and the Hero came up the stairs, and everyone cheered, and there was cake. THE END."
+
+Someone small has added, in crayon: "AND THEN WHAT".
+
+[pottle_rug]
+A rug with a hopscotch grid drawn on it in chalk. The chalk is not coming out.
+
+[pottle_wall]
+The walls are covered in drawings, up to exactly the height a small herald can reach, and then a few higher where one stood on the other.
+
+# --- THE CHAPEL ---
+
+[chapel_window]
+The great round window: petals of red and blue and gold, all around one clear pane in the middle.
+
+The Hero was meant to go there. Nobody knew what he looked like, so the glass was left clear. Now it's just sky.
+
+[chapel_lancet_left]
+A tall window. In the glass, a row of heralds blow their trumpets down a flight of stairs. The stairs are empty.
+
+[chapel_lancet_right]
+A tall window: someone climbing the stairs to the heralds. Their face is a yellow blob. The glassmaker was being honest.
+
+[chapel_altar]
+The altar, under a cloth stitched with a golden trumpet. On it, a book of prayers for the Hero's safe arrival.
+
+They have been prayed so often that the pages have gone soft as cloth.
+
+[chapel_candles]
+A candle stand, three candles burning. New ones are lit every evening, so the Hero will know someone is still up.
+
+[chapel_prayers]
+THE BOOK OF PRAYERS. Every page is the same prayer in a different hand: "Let it be today."
+
+Near the back, in small careful letters: "Or tomorrow. Tomorrow is also fine."
+
+[chapel_hymns]
+The hymn board. Today's hymns: 1, 1 and 1.
+
+There is only one hymn. It's called "Any Day Now". Everybody knows all eleven verses.
+
+[chapel_pew_front]
+The front pew. A card on it says RESERVED, in case the Hero wants a sit. Under it, an older card says RESERVED.
+
+[chapel_pew]
+A pew, polished by a hundred years of heralds sitting very still and hoping.
+
+[chapel_pew_back]
+The back pew. Carved very small into the wood: "WHAT IF THEY'RE NOT COMING". Carved under it, in another hand: "HUSH."
+
+[chapel_votives]
+Little candles, one lit for each prayer. Most are for the Hero. One, labelled in a child's hand, is for Old Nan's knees.
+
+[chapel_sign]
+PRAYERS AT DUSK. If the Hero arrives during prayers, please let him in and carry on as normal. (Nobody will.)
+
+[chapel_runner]
+A red runner up the aisle, worn pale down the middle by a hundred years of heralds walking up it to ask.
+
+[chapel_wall]
+Pine walls, scrubbed. The whole chapel smells of candle wax and cold air.
+
+# --- THE LOOKOUT ---
+
+[lookout_telescope]
+A brass telescope, pointed at the summit. You look through it.
+
+Cloud. Then, for a moment, the cloud parts: stairs, very far up, climbing to a point where the sky is the wrong colour. Then cloud again.
+
+[lookout_bench]
+A bench at the edge of everything. Below it, the cloud sea goes on forever. Above it, the mountain does.
+
+[lookout_sign]
+THE LOOKOUT. A herald watches here from dawn to dusk, for the Hero. The shift is popular. The view is the reason.
+
+[lookout_waymark]
+HERO! Here is the end of us and the start of the rest. The stairs go on north to the summit. Nobody from the village has gone past the second cairn and come back. Come back and tell us.
+
+[lookout_chest]
+A chest at the edge of the platform, roped to a post so the wind can't take it. Fudge inside, and a note: "for the last bit".
+
+[lookout_cairn]
+A cairn at the edge of the platform, built much tidier than the rest. Someone has stacked a great many stones on one particular thing.
+
+You move the top three. Brass. A trumpet, dented, frozen into the bottom of the pile, with a label tied to it in a hopeful hand: "B. (HIS.)"
+
+[lookout_cairn_bare]
+A cairn with a hole in the middle where a trumpet used to be. Someone has politely put the top stones back.
+
+[lookout_stair]
+The stairs go on north, up into the cloud, towards the top of Mount Vigil.
+
+[lookout_onward]
+The stairs climb on into the cloud, towards the second cairn and whatever is past it.
+
+# The rope across the stairs north, until Ves has joined you.
+[lookout_rope]
+A rope strung across the stairs, with a board hung off it: NOBODY GOES UP ALONE.
+
+Underneath, in smaller letters: "Not after last time."
+
+# --- After dark ---
+
+# Ringing the great bell a second time, against the BELL RULES: game over.
+[tower_bell_wrath]
+You give the rope a second pull. BONNNG.
+
+The tower goes very quiet. Dunstan puts down his pen.
+
+Every door in Heralds' Rest opens at once. A hundred years of patience come up the stairs, carrying trumpets.
+
+ONE RING. THE RULES SAID ONE RING.
+
+[tower_bell_night]
+It's after dark. The sign was very clear about this.
+
+...You give the rope a pull anyway. BONNNG.
+
+Far below, a door bangs. Then another. Then three heralds in nightshirts run out onto the stairs with a lantern, a trumpet and a cake, shouting "WELCOME!" at a goat.
+
+Dunstan is looking at you. He's not angry. He's writing it in the log.
+
+[square_lamp_night]
+A lamp post, lit against the dark. Moths would come, if there were moths up here. There's one. It looks very cold.
+
+[gate_lamp_night]
+The lamps are lit for the night, as they've been lit every night for a hundred years, so the Hero never arrives in the dark. Tonight somebody did arrive. The lamps don't seem to have noticed.
+
+[lookout_telescope_night]
+You look through the telescope, at night.
+
+Stars. More stars than you've ever seen, right down to where the ground should be.
+
+And, at the very top of the mountain, one light that isn't a star. It's warm-coloured. It flickers, like a lantern. Then the cloud closes.
+
+# === THE LIFE PASS, ROUND 2 (builder 3) ===
+# (draft)
+[r2r_in_win1]
+A frosted window. Snow has heaped up on the outside sill into a little loaf, and somebody has drawn a face in the frost on the inside. It looks pleased about the weather.
+
+# (draft)
+[r2r_in_win1_ves]
+{smile}Whoever drew that has more cheer than the mountain deserves.
+
+# (draft)
+[r2r_in_win2]
+A red geranium blooming on the sill, in a mountain's worth of snow. There's a note taped to the pot: DO NOT TELL IT.
+
+# (draft)
+[r2r_in_win2_ves]
+{bored}Tell it what? That it's winter?
+
+# (draft)
+[r2r_in_herbs]
+Dried herbs on a hook above the stove: thyme, a sort of mint, and a grey bunch the label calls SOUP. Greta swears by it.
+
+# (draft)
+[r2r_in_herbs_ves]
+{thinking}I'd like to know what the soup is made of. I'd like it more if I'd already eaten it.
+
+# (draft)
+[r2r_in_menu]
+The chalkboard. TODAY: SOUP. TOMORROW: SOUP, BUT DIFFERENT. EVERY DAY: SOUP, BECAUSE THE POT IS NEVER OFF.
+
+# (draft)
+[r2r_in_menu_ves]
+{smile}I respect the commitment.
+
+# (draft)
+[r2r_in_coats]
+Coats, a scarf and a pom-pom hat, hung up to drip. The pegs say GUEST, GUEST, GUEST and, in a different hand, HERO. The HERO peg has a very small hat on it. A joke, perhaps. Or a guess.
+
+# (draft)
+[r2r_in_coats_ves]
+{thoughtful}Somebody keeps that peg dusted. I can tell.
+
+# (draft)
+[r2r_in_boots]
+Two pairs of boots steaming on a tray by the fire, toes up, laces hanging. A note: DRYING. IF THESE ARE YOURS, I AM SORRY ABOUT THE FIRE.
+
+# (draft)
+[r2r_in_boots_ves]
+{bored}Somebody's about to find out how toasted a boot can get.
+
+# (draft)
+[r2r_in_cat]
+A ginger cat, loafed up by the hearth, so warm it's practically a second fire. It opens one eye, judges you, and shuts it again.
+
+# (draft)
+[r2r_in_cat 2]
+Soup the cat has not moved. He lets you stroke him on the understanding that you're not to stop.
+
+# (draft)
+[r2r_in_cat_ves]
+{smile}Greta says he's called Soup. Naturally.
+
+# (draft)
+[r2r_in_sleeper]
+A guest asleep in the red armchair, hat over his eyes, blanket up to his chin, snoring in time with the fire. It's a very good snore. There's a mug at his elbow, still warm. He'll be up for it any minute now.
+
+# (draft)
+[r2r_in_sleeper_ves]
+{sly}He's been asleep since before we came in, and he's still winning.
+
+# (draft)
+[r2r_in_map]
+A map of the mountain spread across the table, held down by two mugs and a compass. Someone has drawn a neat line from the village up past the Lookout and written HERE BE... and run out of room.
+
+# (draft)
+[r2r_in_map_ves]
+{thinking}That line stops exactly where I'd rather it didn't.
+
+# (draft)
+[r2r_in_cards]
+A round table, a hand of cards face-down, three half-drunk mugs and a candle stub. The game is called Hero's Rest. Nobody can tell you how you win it.
+
+# (draft)
+[r2r_in_cards_ves]
+{sly}I could learn it in one go. I'm choosing not to.
+
+# (draft)
+[r2r_in_mat]
+The doormat says WELCOME, in letters Greta repaints every spring. The snow you've brought in has turned it into WELC and a heap.
+
+# (draft)
+[r2r_in_guestbook]
+THE GUEST BOOK. Names going back a hundred years, in every kind of hand. Under Reason For Visit most of them wrote 'Hero?' A few wrote 'Hero.' One of them wrote 'yes'.
+
+# (draft)
+[r2r_in_guestbook_ves]
+{thoughtful}'Hero?' is a lot of people hoping at once.
+
+# (draft)
+[r2r_in_bookpile]
+A pile of guests' books left on the floor beside the Hero's bed in case he's a reader: WHAT TO PACK, BIRDS OF THE STAIR, and a cookery book with a ring on the cover where a mug has been.
+
+# (draft)
+[r2r_in_bookpile_ves]
+{bored}He's a hero. He'll read whatever he's told. That's the problem.
+
+# (draft)
+[r2r_in_globe]
+A snow globe on the floor, which is an odd place for it. Inside, a tiny village on a tiny mountain. Shake it and the snow falls on a tiny gate with a tiny figure standing at it, looking out. You can't see his face. He's very small.
+
+# (draft)
+[r2r_in_globe 2]
+You shake it. The snow falls again. The tiny figure is still waiting by the gate. You put it back.
+
+# (draft)
+[r2r_in_globe_ves]
+{sad}...Put it back where it was.
+
+# (draft)
+[r2r_hl_win1]
+A tall frosted window, the glass thick as a bottle. The sill has a little snow-hill on it, and a smaller one on top of that.
+
+# (draft)
+[r2r_hl_win1_ves]
+{bored}Snow on snow. It's committed.
+
+# (draft)
+[r2r_hl_win2]
+A pot on the sill with nothing in it but a lolly stick and a label: CRESS, MAYBE. Underneath, in a different hand, 'No.'
+
+# (draft)
+[r2r_hl_win2_ves]
+{smile}I'd back the lolly stick.
+
+# (draft)
+[r2r_hl_coats]
+A row of coats on pegs, each one for a different herald. The pegs are named: HORACE, WICK, DUNSTAN, SEDGE. At the end, a peg with no name and no coat. It's been waiting for a hundred years, so it isn't fussy.
+
+# (draft)
+[r2r_hl_coats_ves]
+{thoughtful}Which one of those is for the Hero's coat? The unnamed one? Or does he get a name, and that's the joke?
+
+# (draft)
+[r2r_hl_boots]
+Boots set out on a tray by the east fire, the soles steaming. Each pair has a small card: 'Mine. - Horace.' 'Mine too. - Horace.' The Head Herald has a lot of boots.
+
+# (draft)
+[r2r_hl_boots_ves]
+{bored}It's a long way down the stair when you've got that many feet to cover.
+
+# (draft)
+[r2r_hl_logs]
+A basket of split logs by the west fire. Every log has a small chalk number on its end, so they're burnt in order. Nobody remembers why, and nobody wants to be the one to stop.
+
+# (draft)
+[r2r_hl_cards]
+A small round table in the corner, the bandsmen's: a pack of cards worn soft, a plate of crumbs and a trumpet mouthpiece used as a paperweight. Somebody's been winning for years.
+
+# (draft)
+[r2r_hl_cards_ves]
+{sly}Let me guess. The conductor.
+
+# (draft)
+[r2r_hl_darts]
+A dartboard with a face painted on it, and a card: THE HERO (EXPECTED). Three darts in it, every one in the left ear. Either nobody here can aim, or they're all fond of that ear.
+
+# (draft)
+[r2r_hl_darts 2]
+The darts are in the ear again. Somebody's been practising. Somebody's very consistent.
+
+# (draft)
+[r2r_hl_darts_ves]
+{sly}Remind me never to be expected.
+
+# (draft)
+[r2r_hl_toy]
+A little toy trumpet, dented, with a sock stuffed in the bell. It's the size for a very small bandsman. Nobody has played it in a while, and that's probably the sock.
+
+# (draft)
+[r2r_hl_toy_ves]
+{smile}It's a mercy, whoever did the sock.
+
+# (draft)
+[r2r_sr_win1]
+A window with a candle on its sill, so the shop is always lit for anybody coming up the stair at dusk. The snow on the glass has frozen into the shape of a very ambitious fern.
+
+# (draft)
+[r2r_sr_win1_ves]
+{smile}Fern's better than most things I've seen on glass.
+
+# (draft)
+[r2r_sr_win2]
+A tin mug on the sill with a sprig of pine in it, and a label: SALE. The sale has been on since the winter before last. At this point it's just the price.
+
+# (draft)
+[r2r_sr_win2_ves]
+{bored}That's a very patient shopkeeper.
+
+# (draft)
+[r2r_sr_shoes]
+Snowshoes stood on their ends against the wall, one pair per customer who left without any. The note says FOR HIRE: 1 COIN OR A STORY. Nobody has ever paid in coin.
+
+# (draft)
+[r2r_sr_shoes_ves]
+{smile}What's the going rate in stories?
+
+# (draft)
+[r2r_sr_scarves]
+A rail of scarves and mittens, in every colour wool comes in. One scarf has a tag saying MARTA, STILL DRYING, DO NOT SELL. It's been a week.
+
+# (draft)
+[r2r_sr_scarves_ves]
+{bored}She'll knit you another, whether you want one or not.
+
+# (draft)
+[r2r_sr_axes]
+A rack of ice axes, five on pegs, one empty peg and a card: BORROWED, WILL BRING BACK. The card has been rewritten so many times it's soft as cloth.
+
+# (draft)
+[r2r_sr_axes_ves]
+{thoughtful}I'd say it was wishful. It's more that somebody trusts them.
+
+# (draft)
+[r2r_sr_sack]
+A sack of grain with a hole poked in the corner. A trail of tiny seeds runs across the floor to a crack at the foot of the wall. It's tidy for a mouse's work.
+
+# (draft)
+[r2r_sr_sack_ves]
+{smile}It's the kind of tidy you get when you're stealing on purpose.
+
+# (draft)
+[r2r_sr_sack2]
+Coffee beans, a label says. They are clearly hazelnuts. The shopkeeper has been very firm about it.
+
+# (draft)
+[r2r_sr_sack2_ves]
+{sly}That's not coffee. I'm not saying a word.
+
+# (draft)
+[r2r_sr_cat]
+A tabby cat on a crate by the till, tail going like a metronome. It's keeping an eye on the stock, and on you. It isn't clear which of the two it trusts less.
+
+# (draft)
+[r2r_sr_cat_ves]
+{bored}It reminds me of the way I used to look at people.
+
+# (draft)
+[r2r_sr_mat]
+A mat that reads SHOP. The ink's worn off the other half. It could be anything: SHOPPING, SHOPPER, SHOPLIFTER. Better wipe your feet to be safe.
+
+# (draft)
+[r2r_bt_rope]
+A spare bell rope, thick as your wrist and coiled as neat as a snail. It's labelled IN CASE. In case of what, it doesn't say.
+
+# (draft)
+[r2r_bt_rope_ves]
+{thoughtful}In case the bell rope breaks. In case it doesn't break and someone needs the other one. In case.
+
+# (draft)
+[r2r_bt_sack]
+A sack of sand, for weighing the ringers' end of the rope down. It has a face drawn on it in ash, and a small woollen hat. It's the strongest ringer here.
+
+# (draft)
+[r2r_bt_sack_ves]
+{smile}It's got that bell-ringer look. Don't ask me what I mean.
+
+# (draft)
+[r2r_bt_mug]
+A tin mug on a stone, frozen over, with a spoon standing up in it and a note under: DUNSTAN, THIS IS TEA. PLEASE DRINK IT BEFORE IT BECOMES A SCULPTURE.
+
+# (draft)
+[r2r_bt_mug_ves]
+{bored}It's a sculpture already. A small one. Called Tea.
+
+# (draft)
+[r2r_bt_boots]
+A pair of boots by the wall, both left. Whoever wore them down the stairs a hundred years ago wore them proudly, and in circles.
+
+# (draft)
+[r2r_bt_boots_ves]
+{sly}Left, left, left. They'd go round forever. It explains the tower.
+
+# (draft)
+[r2r_ma_win]
+A window with a window box on the inside: three pots of wool, labelled RED, MORE RED, and OTHER. The sill's got its own snow, so it's the only window in Heralds' Rest with a hare's footprint in the frost.
+
+# (draft)
+[r2r_ma_win_ves]
+{smile}The hare's been checking on the weather. It's the right height for it.
+
+# (draft)
+[r2r_ma_logs]
+A basket of logs, and a ball of grey wool nested in it. Either the wool's learned to burn, or Marta's lost track of what goes where.
+
+# (draft)
+[r2r_ma_logs_ves]
+{bored}She's built a nest. Not a basket.
+
+# (draft)
+[r2r_ma_boots]
+Three pairs of tiny woollen slippers drying by the fire, one pair with a hole in the toe and a hastily knitted patch. The patch has its own patch.
+
+# (draft)
+[r2r_ma_boots_ves]
+{smile}That's how you know it's well loved.
+
+# (draft)
+[r2r_ma_patterns]
+Marta's pattern books, spines cracked and labelled: MITTENS (1-40), MITTENS (41-80), SCARVES (SHORT), SCARVES (LONG), SCARVES (FOR EMERGENCIES). There's a special book for hats. It has a very small hat on it.
+
+# (draft)
+[r2r_ma_patterns_ves]
+{thoughtful}Is a scarf for emergencies what it sounds like?
+
+# (draft)
+[r2r_po_win]
+A small window with a frost picture on it: a horse, or a dog, or both. The kids drew round it with a finger, and round that with a mitten. A great big smile.
+
+# (draft)
+[r2r_po_win_ves]
+{smile}It looks like a family of three, plus the stove.
+
+# (draft)
+[r2r_po_herbs]
+A hook of dried lavender. Mrs. Pottle claims it keeps the moths off. It does. The moths all moved to the Hall.
+
+# (draft)
+[r2r_po_herbs_ves]
+{bored}Not the worst trade.
+
+# (draft)
+[r2r_po_toy]
+Another toy trumpet. This one has been chewed. The label, in a very small hand: DO NOT BLOW. DO NOT BLOW. DO NOT.
+
+# (draft)
+[r2r_po_toy_ves]
+{sly}It's not blown yet. Not for want of trying.
+
+# (draft)
+[r2r_po_globe]
+A snow globe on the floor, put down hastily. Inside, a small version of the village, snowing without being shaken. It's been shaken a lot.
+
+# (draft)
+[r2r_po_globe_ves]
+{smile}It's the most lived-in thing here, and it fits in a hand.
+
+# (draft)
+[r2r_po_boots]
+Pottle's boots, a size too small, by the stove. One has a note tucked inside: 'ASK ABOUT THE TOE.' Nobody has.
+
+# (draft)
+[r2r_po_boots_ves]
+{bored}I'd not ask about the toe.
+
+# (draft)
+[r2r_ch_herbs]
+Rosemary hung to dry in the corner, for the altar. A bit of ribbon holds it, tied in a knot that is neat and mean. You'd need a knife.
+
+# (draft)
+[r2r_ch_herbs_ves]
+{proud}Mine. It's a very good knot. Don't touch it.
+
+# (draft)
+[r2r_ch_mug]
+A tin mug on the window ledge with a skin of ice on it and a toothbrush standing in it. Somebody lives here and is trying to look as if they don't.
+
+# (draft)
+[r2r_ch_mug_ves]
+{sheepish}That's a good toothbrush. Don't look at it.
+
+# (draft)
+[r2r_ch_drip]
+A little pool under a crack in the roof. The drip lands in the same place every few seconds. Whoever put the bucket there didn't leave one.
+
+# (draft)
+[r2r_ch_drip_ves]
+{bored}I put the bucket there. It froze to the floor and I let it.
+
+# (draft)
+[r2r_gt_wood]
+A woodpile under a cap of snow, the logs stacked so square you could use them as a ruler. Under the cap, a card: FOR THE HERO'S FIRST FIRE. KEEP DRY. The card's gone soft. So has the wood, a bit.
+
+# (draft)
+[r2r_gt_wood_ves]
+{bored}A hundred years of 'first fire'. I do hope someone's tested it.
+
+# (draft)
+[r2r_gt_sled]
+A child's sled with a coil of rope, tipped on its side against a post. Fresh runner marks go down the bank and stop at the edge of the stair. A smaller set go back up again, in a hurry.
+
+# (draft)
+[r2r_gt_sled_ves]
+{smile}Whoever it is, they thought better of it. Well done, them.
+
+# (draft)
+[r2r_gt_fort]
+A knee-high snow fort with a stick flag, built to a very serious plan. A card: FORT HEROES. NO HEROES ALLOWED. The flag is an old scarf of Marta's. She says she'll want it back, in the spring.
+
+# (draft)
+[r2r_gt_fort_ves]
+{sly}We're a hero. We could argue.
+
+# (draft)
+[r2r_gt_dog]
+A snow dog somebody built, with a stick for a tail and a red knitted ribbon round its neck. Its eyes are two lumps of coal. It has been standing guard at this gate longer than anyone can explain.
+
+# (draft)
+[r2r_gt_dog 2]
+You pat the snow dog on its head. A little snow falls off. It still looks like a good dog.
+
+# (draft)
+[r2r_gt_dog_ves]
+{smile}It's the best guard in the village. Nobody's ever got past it.
+
+# (draft)
+[r2r_gt_angel]
+A snow angel pressed into the drift beside the path. It's hero-sized. It's hero-sized in the way that a child's idea of a hero is, with a very long hat.
+
+# (draft)
+[r2r_gt_angel_ves]
+{thoughtful}It's got a long hat. It means that somebody was practising.
+
+# (draft)
+[r2r_gt_blaze]
+A way post with the village's blaze painted on it, red-white-red, freshly done. It points at the gate. There's a second one, fainter, under the first, pointing at the gate too. The mountain's never had to give directions twice.
+
+# (draft)
+[r2r_gt_blaze_ves]
+{bored}Every sign here says 'welcome'. I wish one of them said 'how'.
+
+# (draft)
+[r2r_lk_wood]
+A woodpile by the lookout's hut that isn't there, snow-capped, with a little path trodden to it. Sedge keeps a fire in a pot, and the wood is hers. A card: PLEASE ASK. Hers, said as though it were the law.
+
+# (draft)
+[r2r_lk_wood_ves]
+{bored}That's a lot of wood for one person watching clouds.
+
+# (draft)
+[r2r_lk_mug]
+A tin mug of tea on the rock next to the bench, frozen at the rim. Someone has left a biscuit on the saucer, and a chough is taking an interest in it.
+
+# (draft)
+[r2r_lk_mug_ves]
+{smile}The chough has the right of it.
+
+# (draft)
+[r2r_lk_tally]
+A post with Sedge's tally scratched into it, four columns. DRAGONS: none. HEROES: none. WRONG-COLOURED CLOUDS: 14. ONE PTARMIGAN: 4,060. A different hand, in pencil: 'does the ptarmigan count?'
+
+# (draft)
+[r2r_lk_tally_ves]
+{bored}Four thousand sixty days, one ptarmigan. She counts the ptarmigan as a person.
+
+# (draft)
+[r2r_lk_piton]
+An iron peg hammered into the rock, a loop of old rope still through its eye. Somebody tied off here a long time ago to look over the edge. The rope hasn't forgotten.
+
+# (draft)
+[r2r_lk_piton 2]
+The rope's old, and the peg's been here longer. You decide not to test either.
+
+# (draft)
+[r2r_lk_piton_ves]
+{worried}I don't like what's at the other end of that rope.
+
+# (draft)
+[r2r_lk_bird]
+A ptarmigan in its winter white, pecking at the snow as though there were seeds in it. There are. It found them. It's very proud.
+
+# (draft)
+[r2r_lk_bird_ves]
+{smile}It's half-camouflaged. That bit it's missed is still brown.
+
+# (draft)
+[r2r_sq_mat1]
+The inn's doormat says WELCOME. Greta repaints it every spring and the snow takes it back every winter. It's a very polite fight.
+
+# (draft)
+[r2r_sq_mat1_ves]
+{smile}It's the longest-running argument here.
+
+# (draft)
+[r2r_sq_shoes]
+Snowshoes leaned on the inn wall, each with a different guest's name chalked on the rim. The last one reads HERO, and it's very small. It has a little ribbon, so you'd know it.
+
+# (draft)
+[r2r_sq_shoes_ves]
+{thoughtful}They'd all have gone further if somebody'd thought to leave them a bigger pair.
+
+# (draft)
+[r2r_sq_axes]
+A post by the inn door with ice axes hung on it, and a coil of rope, and a note: PLEASE RETURN AFTER USE. UNLESS YOU ARE NOT RETURNING. IN WHICH CASE, THANK YOU FOR THE AXE.
+
+# (draft)
+[r2r_sq_axes_ves]
+{bored}That last bit is cheerful. I don't like how cheerful it is.
+
+# (draft)
+[r2r_sq_wood]
+A woodpile under its snow-cap, one of a dozen the village keeps. They burn in a ring: the oldest wood in the outer piles, the newest in the middle. Greta calls it 'the long fire'.
+
+# (draft)
+[r2r_sq_wood_ves]
+{thoughtful}A fire that never lights from scratch. That's a good trick.
+
+# (draft)
+[r2r_sq_chop]
+A chopping block, a good axe stuck in it, the handle polished by a hundred winters of hands. Chips of wood lie round it like confetti. There's a card on the axe: 'IT BITES. - H.'
+
+# (draft)
+[r2r_sq_chop_ves]
+{bored}Nobody's cut a finger. They've cut a lot of cards.
+
+# (draft)
+[r2r_sq_mat2]
+The Hall's mat has a horn painted on it, and under that: PLEASE ANNOUNCE YOURSELF. You could, if you had anything to announce. You haven't.
+
+# (draft)
+[r2r_sq_sled]
+A sled, a long one, with a rope for pulling and a flag that says PIGEON POST. Marta says it's faster than the pigeons. The pigeons say nothing.
+
+# (draft)
+[r2r_sq_sled_ves]
+{bored}I'd like to see it race the pigeon.
+
+# (draft)
+[r2r_sq_mat3]
+A mat that reads SHOP, and below that 'ALSO OPEN'. The 'ALSO' has been added later, in pen, and nobody's told the pen what to do about 'ALSO OPEN WHAT'.
+
+# (draft)
+[r2r_sq_sacks]
+Two sacks of grain left out in the snow for the stores. They've both got a layer of frost. The mouse in charge has made a very small hole.
+
+# (draft)
+[r2r_sq_sacks_ves]
+{smile}It's thorough work.
+
+# (draft)
+[r2r_sq_fort]
+A proper snow fort, with a moat. The moat is a trench somebody dug. Inside, a rank of snowballs ready on a ledge, stacked in a pyramid, labelled: FOR HERO. IF HE COMES. WE'LL SEE.
+
+# (draft)
+[r2r_sq_fort_ves]
+{sly}I'd like to see them try.
+
+# (draft)
+[r2r_sq_trough]
+A water trough frozen solid, a hole chopped in the middle so Old Nan can drink. Someone's left a spare pick beside it. It's seen a lot of use.
+
+# (draft)
+[r2r_sq_trough_ves]
+{bored}Old Nan has a better plan than most of us.
+
+# (draft)
+[r2r_sq_dog]
+A snow dog on the green, a little taller than Pottle, with a very wide grin made from pebbles. It's wearing Pottle's hat. Pottle says it's on loan.
+
+# (draft)
+[r2r_sq_dog_ves]
+{smile}It's wearing it better than he does.
+
+# (draft)
+[r2r_sq_mat4]
+A mat at the chapel door, damp, with a pair of tiny muddy boots in it. They came in and didn't come out.
+
+# (draft)
+[r2r_sq_mat4_ves]
+{bored}They didn't come out because I took them off. I don't like wet socks.
+
+# (draft)
+[r2r_sq_mat5]
+Marta's mat is hand-knitted and says HOME. It's the right way up, but only just.
+
+# (draft)
+[r2r_sq_sack2]
+A sack of wool left out for the sheep, which are in the stable, which is a joke they're still telling the visitors. Marta says it's for the loom. The loom is behind a door nobody's seen.
+
+# (draft)
+[r2r_sq_sack2_ves]
+{bored}I'd like to see this loom.
+
+# (draft)
+[r2r_sq_den]
+A biscuit tin pushed into the corner behind the pine, where the wind can't get at it. Inside: a jar of frostberry jam, and a note in crayon. 'IF YOU FOUND THIS YOU CAN HAVE IT. BUT PUT SOMETHING BACK.'
+
+# (draft)
+[r2r_sq_den_ves]
+{smile}I'm not putting anything back. We're not that kind of party.
+
+# (draft)
+[r2r_sq_den_empty]
+The tin's still there, empty, with a crumb in it and a tiny drawing of a face with a smile. The back of the den is quite cosy now that you've seen it.
+
+# (draft)
+[r2r_sq_den_empty_ves]
+{smile}Somebody's going to be very pleased with you. They'll never know why.
+# === END THE LIFE PASS, ROUND 2 (builder 3) ===
+
+# === ROUND 3, THE FUN CHECK (15 November 2026): chapters 1 and 2, the dullest rooms ===
+
+# (draft)
+[r3a_hl_banner]
+A banner across the wall: WELCOME, HERO. It's been repainted so many times the lettering has gone lumpy: the W has a bump, the O has a second O trying to be born. A small card is pinned in one corner: REPAINTED (11TH). NEXT REPAINT: ON ARRIVAL.
+
+# (draft)
+[r3a_hl_banner_ves]
+{thoughtful}Eleven repaints. That's a lot of waiting to put on one wall.
+
+# (draft)
+[r3a_hl_statue]
+A statue under a bedsheet, tied at the neck with a red ribbon. A card pinned to it: UNVEIL ON ARRIVAL. There's a line of dust along the top of the sheet and a yellow ring where the ribbon sits. Whoever's under there has been waiting patiently, with no face, in the dark.
+
+# (draft)
+[r3a_hl_statue_ves]
+{sly}I'd peek. But somebody has been very serious about the ribbon.
+
+# (draft)
+[r3a_hl_chair]
+A chair under a dust sheet with a small tag on it: SAVED. The sheet has been lifted and put back so often it's fitted itself to the chair like a second skin.
+
+# (draft)
+[r3a_hl_chair_ves]
+{bored}I wonder who it's saved for. And whether they'd sit still.
+
+# (draft)
+[r3a_hl_bowl]
+A wooden bowl of paper slips under a card: SUGGESTIONS FOR THE HERO'S WELCOME. You read a few. MORE CHAIRS. LESS SINGING. SOUP. WHAT IF THEY'RE SHY. ASK THEM WHAT THEY WANT. (THEN DO IT.) That last one has been underlined twice.
+
+# (draft)
+[r3a_hl_bowl_ves]
+{smile}Whoever wrote the last one has the right idea.
+
+# (draft)
+[r3a_hl_board]
+A chalk board of arrivals, two columns: DATE and WHO. The DATE column is full, back and back and back. The WHO column is a row of neat blanks, one beside every date, because the herald is an optimist. Today's has been left blank in the nicest possible way.
+
+# (draft)
+[r3a_hl_board_ves]
+{bored}'Nobody' has a lot of dates.
+
+# (draft)
+[r3a_st_cheese]
+A stack of cheese wheels with a wedge cut out of the top one. A sign: HERALD'S HARD. FOR TRAVELLERS, AND FOR PROPPING DOORS.
+
+# (draft)
+[r3a_st_cheese_ves]
+{bored}A cheese you can wedge a door with. That's a recommendation, I think.
+
+# (draft)
+[r3a_st_scales]
+A set of brass scales at the end of the counter, a loaf in one pan, a weight in the other. The loaf pan sits lower. It's always the loaf pan. The shopkeeper has stopped looking.
+
+# (draft)
+[r3a_st_scales_ves]
+{sly}Nobody checks the scales. That's the secret of this village.
+
+# (draft)
+[r3a_st_rope]
+Hanks of rope on pegs, every size and colour. A card on the biggest: NOT FOR SALE. THIS IS THE LAST ROPE. I'VE BEEN SAVING IT. Underneath: (FOR WHAT, I'D LOVE TO KNOW.)
+
+# (draft)
+[r3a_st_rope_ves]
+{thoughtful}Saving rope for an emergency. In a shop that sells rope. Hm.
+
+# (draft)
+[r3a_st_hams]
+Four smoked hams on hooks along a rail, each with a tag in the shopkeeper's loopy hand. They say PAULINE, DOREEN, ONE FOR THE HERO, and, on the fourth: DON'T ASK.
+
+# (draft)
+[r3a_st_hams_ves]
+{bored}I'm not asking. Not asking is my favourite way to eat.
+
+# (draft)
+[r3a_st_flour]
+A sack of flour, open, a scoop standing up in it. A line of tiny floury footprints leads from the sack, under the counter and out of sight. Something small has been very thorough about not being seen.
+
+# (draft)
+[r3a_st_flour_ves]
+{smile}The shop mouse. I'd like to buy some of that confidence.
+
+# (draft)
+[r3a_st_slate]
+A chalk slate at the counter: TODAY: SOUP-TINS, 2 FOR 3 (NOT HALF OFF.) ALSO TODAY: PLEASE STOP ASKING IF THE ROPE'S FOR SALE.
+
+# (draft)
+[r3a_st_slate_ves]
+{sly}It's the rope, isn't it. It's always the rope.
+
+# (draft)
+[r3a_fg_bellows]
+Bellows with a patched leather belly, hung by the hearth, the nozzle pointing into the coals. Somebody has chalked a tally on the handle: 14,000 pumps. It's gone round onto the second handle.
+
+# (draft)
+[r3a_fg_bellows_ves]
+{bored}I'd count something else. Anything else.
+
+# (draft)
+[r3a_fg_blades]
+A rack of blades with no edge yet, hilts on, point-down like a row of very serious cutlery. Each has a tag tied to the hilt, with a name: not a person's name. GALE. THAW. DRIZZLE. WHAT NOW.
+
+# (draft)
+[r3a_fg_blades_ves]
+{sly}I want to be called Drizzle.
+
+# (draft)
+[r3a_fg_shoes]
+Horseshoes on nails, open end up so the luck can't run out. A card: PLEASE DO NOT TELL THE HORSE. There's no horse in the village. You wonder how long it's been a joke, and whether the joke is the horse.
+
+# (draft)
+[r3a_fg_shoes_ves]
+{bored}Don't tell the horse. Understood.
+
+# (draft)
+[r3a_fg_tongs]
+Tongs of every size and a few hammers, each hung in its own painted outline on the board, so you'd know at once if one went missing. The outline for the biggest hammer is empty. A card: THE SMITH HAS IT.
+
+# (draft)
+[r3a_fg_tongs_ves]
+{thoughtful}'The smith has it.' That does seem like a safe place for a hammer.
+
+# (draft)
+[r3a_fg_tub]
+A barrel of black water for quenching, a ladle hooked on its side, an oil skin on top that shows you a small rainbow of the room. When something hot goes in, it hisses. The lid has a hiss-shaped scorch mark on it.
+
+# (draft)
+[r3a_fg_tub_ves]
+{thoughtful}Put something hot in and it comes out better. I don't think that works on people.
+
+# (draft)
+[r3a_fg_coal]
+A heap of coal with a shovel standing in it, and a nest of coal dust pressed into the shape of a cat. No cat.
+
+# (draft)
+[r3a_fg_coal_ves]
+{bored}A cat-shaped absence. Very forge.
+
+# (draft)
+[r3a_fg_stone]
+A grindstone in its trough of water, the wheel glinting. A word is carved into the frame, over and over, in different hands: SHARPER. SHARPER. SHARPER. It's either an instruction or a prayer.
+
+# (draft)
+[r3a_fg_stone_ves]
+{sly}It's a threat, and it's aimed at the blades.
+
+# (draft)
+[r3a_bt_doves]
+A dovecote on a post, one grey dove peering from the door with the look of a bird who's been woken for something dull. A tag on the post: RESIDENT. (ASKED.) Another underneath: PLEASE DON'T RING THE BELL WHILE SHE'S HOME.
+
+# (draft)
+[r3a_bt_doves_ves]
+{smile}A tenant with boundaries.
+
+# (draft)
+[r3a_bt_cleat]
+The bell rope coiled on its cleat at the foot, a tuft of red wool tied on where hands go. The wool is worn flat. A hundred years of people thinking about ringing it, and some of them doing it.
+
+# (draft)
+[r3a_bt_cleat_ves]
+{thoughtful}It's polite. It gives you something to hold on to.
+
+# (draft)
+[r3a_bt_tea]
+A ringer's tea corner: a spirit stove, a kettle, two cups, a biscuit tin with a lid that says ONE EACH. Inside, one biscuit. Someone has been very good, or very busy.
+
+# (draft)
+[r3a_bt_tea_ves]
+{bored}'One each.' So there's a person in this village who counts biscuits. I'd like to avoid them.
+
+# (draft)
+[r3a_bt_slate]
+A slate at the foot of the stair: THE BELL IS NOT A SNOOZE BUTTON. -- MGMT. Underneath, in another hand: IT'S A LITTLE BIT A SNOOZE BUTTON.
+
+# (draft)
+[r3a_bt_slate_ves]
+{sly}It's a snooze button for the whole valley.
+
+# (draft)
+[r3a_bt_flask]
+A flask propped on a ledge, wearing a knitted cosy that someone has taken a great deal of time over. It has a face.
+
+# (draft)
+[r3a_bt_flask_ves]
+{smile}It's got ears. I want one.
+
+# (draft)
+[r3a_bt_rope]
+Spare bell rope in loops on pegs: one for a calm day, one for a high wind, and a short, thick one labelled: FOR IF THE BELL GETS CROSS.
+
+# (draft)
+[r3a_bt_rope_ves]
+{bored}If the bell gets cross. Of course.
+
+# (draft)
+[r3a_bt_slit1]
+An arrow slit with a view straight down the village: roofs like little tin lids, smoke going straight up in the still air. Someone is hanging washing on the line across the middle. From up here they look like a thought somebody had.
+
+# (draft)
+[r3a_bt_slit2]
+The other slit looks out at the mountain, and the mountain looks back, much larger. A chough sits on the sill with a snowflake on its head. It doesn't seem to mind it, or you.
+
+# (draft)
+[r3a_bt_slit2_ves]
+{awed}It looks like it's about to say something, doesn't it?
+
+# (draft)
+[r3a_bt_geranium]
+A geranium in a clay pot on the floor, doing very well in a tower with no sun. A card stuck in the soil: PLEASE DO NOT TELL THE INN. (THEY'D WANT IT BACK.)
+
+# (draft)
+[r3a_bt_geranium_ves]
+{bored}This village runs on secret geraniums.
+
+# (draft)
+[r3a_ma_loom]
+A tall loom taking up most of the wall, a half-finished scarf on it. The scarf is already longer than the room. It runs out of the window and, if you follow it with your eye, away down the street, over the roofs and into the snow, and out of sight. So the loom does exist. It's a very good loom.
+
+# (draft)
+[r3a_ma_loom_ves]
+{awed}How long is that scarf?
+
+# (draft)
+[r3a_ma_wheel]
+A spinning wheel with a puff of grey wool on the distaff, the treadle worn into a smooth shallow dip. A stool beside it, with a cushion in the shape of its sitter. The wool keeps trying to drift off and keeps being tucked back.
+
+# (draft)
+[r3a_ma_wheel_ves]
+{thoughtful}It's like watching someone mind a very small cloud.
+
+# (draft)
+[r3a_ma_basket]
+A basket of wool balls with the needles stuck in mid-row, as if the knitter had to answer the door and will be right back. The row is long. The moment has also been long.
+
+# (draft)
+[r3a_ma_basket_ves]
+{bored}Don't touch it. I know the look of 'mid-row'.
+
+# (draft)
+[r3a_ma_window]
+A frosted window with a clear circle breathed into the middle, at exactly the height of a knitter watching the road. A sprig of heather is stuck in the frame, nearly dry, nearly still blue.
+
+# (draft)
+[r3a_ma_window_ves]
+{smile}The sort of window you look out of while you pretend you aren't.
+
+# (draft)
+[r3a_ma_balls]
+Balls of wool spilled across the floor in red and blue and gold, trailing threads. One thread leads under the bed. Something has been hunting it, and it has been hunting back.
+
+# (draft)
+[r3a_ma_balls_ves]
+{sly}The hare. It's always the hare.
+
+# (draft)
+[r3a_po_buns]
+A tray of buns cooling under a cloth with one corner flipped back. Three buns, steaming. One has a very small, very careful bite taken out of it, from someone about this high. The cloth has been put back to look innocent.
+
+# (draft)
+[r3a_po_buns_ves]
+{sly}I know that bite. I did that bite.
+
+# (draft)
+[r3a_po_flour]
+A sack of flour with a scoop in it and a handprint on the side. A small one. It's been pressed quite thoroughly, as if to check it was real.
+
+# (draft)
+[r3a_po_flour_ves]
+{bored}Another culprit. I'd say it's the same one.
+
+# (draft)
+[r3a_po_bird]
+A finch in a brass cage, round as a bun, regarding the buns with great interest. A tag on the cage: CRUMB. DO NOT FEED CRUMB. (CRUMB IS A LIAR. CRUMB HAS ALREADY BEEN FED.)
+
+# (draft)
+[r3a_po_bird_ves]
+{smile}I believe every word on that tag.
+
+# (draft)
+[r3a_po_geranium]
+A red geranium in a pot on the sill, blooming in the sort of heat only a bakery has. A note on a stick: PLEASE DO NOT TELL THE TOWER.
+
+# (draft)
+[r3a_po_geranium_ves]
+{bored}There's a theme in this village.
+
+# (draft)
+[r3a_po_window]
+A window steamed solid on the inside. Someone has drawn a bun on it with a finger, and a smile on the bun. It's dripping now. The bun is crying a bit.
+
+# (draft)
+[r3a_po_window_ves]
+{smile}Poor bun.
+
+# (draft)
+[r3a_po_scales]
+Scales with a lump of dough on one side and an exact weight on the other. They're balanced. A mark chalked on the beam: PERFECT. Under it, smaller: (ONCE.)
+
+# (draft)
+[r3a_po_scales_ves]
+{sly}They won't balance for us, will they.
+
+# (draft)
+[r3a_po_slate]
+A slate by the door: TODAY: BUNS. TOMORROW: BUNS. (CHANGE ON REQUEST.) Underneath, in different chalk: THERE'S NEVER A REQUEST.
+
+# (draft)
+[r3a_po_slate_ves]
+{bored}Bold menu. I'd put 'surprise' if I wanted to sound optimistic.
+
+# (draft)
+[r3a_ch_box]
+A donation box with a slot and a chalk label: FOR THE HERO'S COMING-HOME. You peer through the slot. Buttons, mostly, and two lucky stones, and a pressed flower that's long since stopped being any colour.
+
+# (draft)
+[r3a_ch_box_ves]
+{thoughtful}Buttons. That's a lot of people with nothing left to give but buttons, giving them.
+
+# (draft)
+[r3a_ch_bowl]
+A bowl of folded paper slips beside the door, under a card: WISHES. You don't unfold any. One sticks out, and you read it before you can stop yourself: COME SOON. The next one says COME SOON, PLEASE. The one after: BRING SOUP.
+
+# (draft)
+[r3a_ch_bowl_ves]
+{smile}I like the last one best. It's the only one that's practical.
+
+# (draft)
+[r3a_ch_hymnals]
+A stack of hymnals with a candle stub on top, a ribbon marking the place in each. All the ribbons are in the same page. It's the one with the shortest verse.
+
+# (draft)
+[r3a_ch_hymnals_ves]
+{sly}Efficient.
+
+# (draft)
+[r3a_ch_geranium]
+A geranium on the sill by the left window, red as a stop-sign. Somebody waters it before they pray, and if the soil is anything to go by, they've started praying a lot.
+
+# (draft)
+[r3a_ch_geranium_ves]
+{bored}Don't look at me. I'm not the one who waters.
+
+# (draft)
+[r3a_ch_kneeler]
+A knee cushion worn flat in the middle, its tassels gone, a neat patch on one corner. It's been knelt on a very long time by people who all had the same bad knee.
+
+# (draft)
+[r3a_ch_kneeler_ves]
+{sly}Nobody warned them about the floor.
+
+# === END ROUND 3 (chapters 1 and 2) ===

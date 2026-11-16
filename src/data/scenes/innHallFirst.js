@@ -1,6 +1,7 @@
 // INN, HALL FIRST: into the Drowned Rat before the town meeting. Haddock opens
 // one eye and sends you up to the hall; the innkeeper adds why he doesn't go.
-// Plays every time you come in until the meeting (town_meeting), and never
+// Plays once each time you come in (not again while you walk about the room:
+// `oncePerVisit`) until the meeting (town_meeting), and never
 // for a save already past the inn (haddock_hums). (The hero never speaks.)
 //
 // Nobody walks: the party stays in the doorway and the box is over the room.
@@ -8,6 +9,7 @@ export const INN_HALL_FIRST = {
   id: 'inn_hall_first',
   room: 'saltcombe_inn',
   once: false,
+  oncePerVisit: true,
 
   actors: [
     { id: 'haddock', look: 'prop:cf_haddock_sit', x: 6, y: 4, portrait: 'haddock', plays: 'haddock_inn', centered: true, animation: 'cf_haddock_sit', speed: 0.6 },
@@ -15,9 +17,13 @@ export const INN_HALL_FIRST = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: a little staging (Haddock opens an eye, the innkeeper polishes through it).
     { do: 'face', who: 'player', dir: 'up' },
+    { do: 'wait', seconds: 0.6 },
     { do: 'animate', who: 'haddock', animation: 'cf_haddock', speed: 0.5 },
-    { do: 'say', who: 'haddock', text: '{eh}Eh? Oh, it\'s you lot.\n\n{smile}Meeting up at the hall, top of the market. They\'ll want a look at you. Go on. I\'ll be here.' },
+    { do: 'emote', who: 'haddock', emote: '?', wait: false },
+    { do: 'say', who: 'haddock', text: '{eh}Eh? Oh, it\'s you lot.\n\n{smile}Meetin\' up at the hall, top o\' the market. They\'ll want a look at you. Go on. I\'ll be here.' },
+    { do: 'act', who: 'rat', act: 'nod', wait: false },
     { do: 'say', who: 'rat', text: '{wry}He doesn\'t go to the meetings. He won one once, and they\'ve never forgiven him.' },
     { do: 'animate', who: 'haddock', animation: 'cf_haddock_sit', speed: 0.6 },
   ],

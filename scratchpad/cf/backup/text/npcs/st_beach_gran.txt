@@ -1,0 +1,27 @@
+# ST_BEACH_GRAN: a grey seal in a green coat and flat cap, sitting very straight by the boardwalk with a scarf on her lap that is much longer than she is, still going. The life pass.
+
+[first]
+Scarf. It's for my great-nephew. Or his great-nephew. I'm not sure it'll be done in time for either.
+
+[repeat]
+Knit one, purl one. I've been at it since the autumn. I'll be at it till the winter. And the winter after that, if I'm honest.
+
+# (draft)
+[repeat 2]
+I knit while I watch the sea. Gets me through. Do you know, in all that time, I've never once dropped a stitch while looking at it? Never. It holds my hands steady.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}...I might try that. Watching something big while doing something small.
+
+# (draft)
+[repeat 3]
+Between you and me, it's not a scarf. It's a rope. For the lifeboat. But the lifeboat's been out of the way a while, so I'm making it into a scarf. A very long one. I'm calling it a scarf.
+
+# (draft)
+[first after the_light_answers]
+It's too warm for a scarf! I've put it down! I've picked it back up! I can't help myself!
+
+# (draft)
+[repeat after the_light_answers]
+Knit one, purl one. It's all the same in the sun. Sun or no sun. The knitting doesn't care.

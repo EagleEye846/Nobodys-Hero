@@ -8,10 +8,14 @@
 // Scene ship_nest (the nest's front row, once). The way down is the shrouds (9-10, row 20).
 // Tile key: o spar-planking platform   g the swinging spar   ~ fog and a long drop (solid)   # edge (solid)
 
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
+
 export const SHIP_RIGGING = {
   id: 'ship_rigging',
   name: 'THE CROW\'S NEST',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.2,
   music: 'ghostShip',
   musicFrom: 'list',
   ambience: 'ghost_ship_high',
@@ -125,18 +129,20 @@ export const SHIP_RIGGING = {
     { sprite: 'gs_fog_a', x: 14, y: 7, flat: true, walkable: true },
     { sprite: 'gs_fog_b', x: 6, y: 12, flat: true, walkable: true },
     // ART PASS 2 (decoration only: flat things are walked over, tall things stand on walls and rails)
-    { sprite: 'gs_stay_mast', x: 6, y: 4, walkable: true },
-    { sprite: 'gs_stay_mast', x: 13, y: 4, walkable: true },
-    { sprite: 'gs_stay_mast', x: 6, y: 8, walkable: true },
-    { sprite: 'gs_stay_mast', x: 13, y: 11, walkable: true },
-    { sprite: 'gs_stay_mast', x: 14, y: 16, walkable: true },
-    { sprite: 'gs_stay_mast', x: 5, y: 18, walkable: true },
+    { sprite: 'gs_stay_mast', x: 6, y: 4, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 13, y: 4, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 6, y: 8, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 13, y: 11, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 14, y: 16, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 5, y: 18, walkable: true, decor: true },
     { sprite: 'gs_bottles', x: 10, y: 2, flat: true, walkable: true },
     { sprite: 'gs_cutlass', x: 8, y: 3, flat: true, walkable: true },
     { sprite: 'gs_letter_dropped', x: 9, y: 12, flat: true, walkable: true },
     { sprite: 'gs_net_heap', x: 7, y: 9, flat: true, walkable: true },
     { sprite: 'gs_weed_a', x: 11, y: 18, flat: true, walkable: true },
     { sprite: 'gs_shoe', x: 7, y: 17, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_rigging ?? []),
   ],
   tileTexts: { '#': 'rig_void', '~': 'rig_void', o: 'rig_planks', g: 'rig_spar' },
 

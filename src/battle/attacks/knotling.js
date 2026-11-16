@@ -2,10 +2,10 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Knotling's attacks. It's a cross old stump that was cut down once and
 // has never got over it, so it fights with everything a tree has left: its
-// rings, rippling out across the box with a notch where the saw went in; its
-// roots, bursting up through the floor and grabbing sideways; acorns, spat out
-// of its knot-hole; the memory of the axe, chopping across the box in a spray
-// of splinters; and bark and sap coming down, the sap sticking where it lands.
+// rings, rippling out across the box with a notch where the saw went in; the
+// memory of the axe, chopping across the box in a spray of splinters; bark
+// and sap coming down, the sap sticking where it lands; a grudge against
+// every spot you've stood on; and the saw itself, working its way down.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -18,14 +18,6 @@ const BARK = '#6a4a30';
 const RING = '#d8b07a';
 const RING_EDGE = '#3e2a1a';
 
-// An acorn, cap and all.
-defineBulletArt('knotAcorn', {
-  frames: [['.kck.', 'ccccc', 'kRrrk', 'kRrqk', '.kRk.', '..k..']],
-  palette: WOOD,
-  radius: 2.2,
-  spin: 5,
-});
-
 // A splinter, pale where it broke and dark at its sharp end.
 defineBulletArt('knotSplinter', {
   frames: [['qqrrRBk', '.rrRBk.']],
@@ -34,17 +26,30 @@ defineBulletArt('knotSplinter', {
   rotate: true,
 });
 
-// A crack in the floor where a root's about to come up, and the stump's
-// rings, flashing on the spot they're about to ripple out from.
-defineBulletArt('knotCrack', {
-  frames: [['k.k.k', '.kBk.', 'kBkBk']],
-  palette: WOOD,
-  radius: 2,
-});
+// The stump's rings, flashing on the spot they're about to ripple out from.
 defineBulletArt('knotStamp', {
   frames: [['.kkkkk.', 'krRRRrk', 'kRrkrRk', 'krRRRrk', '.kkkkk.']],
   palette: WOOD,
   radius: 3,
+});
+
+// A notch it cuts where you stood (harmless, for now), the spike of old wood
+// that bursts up out of it, and a pinch of sawdust.
+defineBulletArt('knotNotch', {
+  frames: [['k...k', '.kBk.', '..k..', '.kBk.', 'k...k']],
+  palette: WOOD,
+  radius: 1,
+});
+defineBulletArt('knotSpike', {
+  frames: [['..k..', '.kqk.', '.krk.', 'krRRk', 'kRBRk', 'kkkkk']],
+  palette: WOOD,
+  radius: 3,
+});
+defineBulletArt('knotDust', {
+  frames: [['q.r', '.q.', 'r.q']],
+  palette: WOOD,
+  radius: 1.2,
+  spin: 3,
 });
 
 // A slab of bark, falling flat, with its grooves.
@@ -180,81 +185,7 @@ export const KNOTLING_ATTACKS = {
       if (warn > 0.5) bullets.push(new Shot({ x: from.x, y: from.y, harmless: true, life: warn, art: 'knotStamp' }));
       bullets.push(new Ring({ x: from.x, y: from.y, grow: 38, gapAt, gap, warn }));
     }, { first: 0.2 });
-    return { duration: 7, update: (dt, bullets, soul) => ripple(dt, bullets, soul) };
-  },
-
-  // Grudge Roots: the floor cracks under you and a root punches up out of
-  // the crack, a little ahead of where you're going. Then it grabs: a shoot
-  // flashes out sideways from the root, toward where you were, and snaps
-  // across. Get clear of the root, then out of the way of its grab.
-  knotRoots(box, density, { Line, Shot, every, rand, clamp }) {
-    const floor = box.y + box.h;
-    let last = null;
-    let drift = 0;
-    const root = every(0.62, 0.72, (bullets, soul) => {
-      if (last !== null) drift = clamp((soul.x - last) * 6, -14, 14);
-      last = soul.x;
-      const x = clamp(soul.x + drift + rand(-3, 3), box.x + 4, box.x + box.w - 4);
-      const warn = 0.6;
-      const length = rand(44, 62);
-      bullets.push(new Shot({ x, y: floor - 2, harmless: true, life: warn, art: 'knotCrack' }));
-      bullets.push(new Line({
-        x, y: floor, angle: -Math.PI / 2, length, thickness: 5, warn, life: 0.95, grow: 380, color: BARK,
-      }));
-      // The grab, toward whichever side you're on (or either, right on top).
-      const way = soul.x < x - 2 ? Math.PI : soul.x > x + 2 ? 0 : (Math.random() < 0.5 ? 0 : Math.PI);
-      const y = clamp(soul.y, floor - length + 4, floor - 8);
-      bullets.push(new Line({
-        x, y, angle: way + rand(-0.12, 0.12), length: rand(22, 28), thickness: 3, warn: warn + 0.35, life: 0.5, grow: 260, color: '#8a6a44',
-      }));
-    }, { first: 0.3 });
-    return { duration: 6.5, update: (dt, bullets, soul) => root(dt, bullets, soul) };
-  },
-
-  // Spit Take: it hawks acorns out of its knot-hole, up over the top of the
-  // box, and they come down where you're standing (or just beside it) and
-  // bounce twice before they roll off. Every third spit is three at once.
-  knotAcorns(box, density, { Shot, every, rand, clamp }) {
-    const floor = box.y + box.h;
-    const mouth = { x: box.x + box.w / 2, y: box.y - 4 };
-    const gravity = 150;
-    let acorns = [];
-    let spit = 0;
-    const lob = (bullets, targetX) => {
-      const vy = rand(5, 20);
-      // How long it takes to reach the floor, so it lands on target.
-      const drop = floor - 3 - mouth.y;
-      const t = (-vy + Math.sqrt(vy * vy + 2 * gravity * drop)) / gravity;
-      const x = mouth.x + rand(-6, 6);
-      const acorn = new Shot({ x, y: mouth.y, vx: (targetX - x) / t, vy, gravity, art: 'knotAcorn' });
-      acorn.bounces = 0;
-      bullets.push(acorn);
-      acorns.push(acorn);
-    };
-    const hawk = every(0.7, 0.85, (bullets, soul) => {
-      const at = clamp(soul.x, box.x + 4, box.x + box.w - 4);
-      if (spit++ % 3 === 2) {
-        for (const off of [-22, 0, 22]) lob(bullets, clamp(at + off, box.x + 3, box.x + box.w - 3));
-      } else {
-        lob(bullets, at + (spit % 2 ? 0 : rand(-12, 12)));
-      }
-    }, { first: 0.2 });
-    return {
-      duration: 6.5,
-      update: (dt, bullets, soul) => {
-        hawk(dt, bullets, soul);
-        for (const acorn of acorns) {
-          // Off the walls, and up off the floor (lower each time).
-          if ((acorn.x < box.x + 2 && acorn.vx < 0) || (acorn.x > box.x + box.w - 2 && acorn.vx > 0)) acorn.vx = -acorn.vx;
-          if (acorn.y >= floor - 3 && acorn.vy > 0 && acorn.bounces < 2) {
-            acorn.y = floor - 3;
-            acorn.vy = -acorn.vy * 0.6;
-            acorn.bounces++;
-          }
-        }
-        acorns = acorns.filter((acorn) => acorn.y < floor + 10);
-      },
-    };
+    return { duration: 8, update: (dt, bullets, soul) => ripple(dt, bullets, soul) };
   },
 
   // Old Wounds: it remembers the axe. A cut flashes across the box, close by
@@ -281,7 +212,7 @@ export const KNOTLING_ATTACKS = {
       if (blow++ % 3 === 2) cut(bullets, x, y, angle + Math.PI / 2 + rand(-0.2, 0.2));
     }, { first: 0.2 });
     return {
-      duration: 7,
+      duration: 8,
       update: (dt, bullets, soul) => {
         swing(dt, bullets, soul);
         for (const chop of pending) {
@@ -337,7 +268,7 @@ export const KNOTLING_ATTACKS = {
       drops.push(drop);
     }, { first: 0.6 });
     return {
-      duration: 7,
+      duration: 8,
       update: (dt, bullets, soul) => {
         shed(dt, bullets, soul);
         ooze(dt, bullets, soul);
@@ -360,6 +291,99 @@ export const KNOTLING_ATTACKS = {
           soul.y = last.y + (soul.y - last.y) * 0.5;
         }
         last = { x: soul.x, y: soul.y };
+      },
+    };
+  },
+  // Holding a grudge: it never forgets a thing, and it's keeping a list of
+  // everywhere you've stood. Every moment it carves a notch where you are.
+  // A little later each notch cracks (it blinks) and a spike of old wood
+  // bursts up out of it, throwing splinters. So everywhere you've been comes
+  // back at you: keep moving on to new ground, and don't double back.
+  knotGrudge(box, density, { Shot, rand }) {
+    let t = 0;
+    let carve = 0.3;
+    let events = [];
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        carve -= dt;
+        if (carve <= 0 && t < 8.4) {
+          carve = 0.55;
+          const at = { x: soul.x, y: soul.y };
+          bullets.push(new Shot({ x: at.x, y: at.y, harmless: true, life: 1.35, art: 'knotNotch' }));
+          events.push({ when: t + 1.35, at, step: 0 });
+        }
+        for (const event of events) {
+          if (event.when > t) continue;
+          if (event.step === 0) {
+            // It cracks open, and the spike comes up.
+            event.step = 1;
+            event.when = t + 0.45;
+            bullets.push(new Shot({ x: event.at.x, y: event.at.y, warn: 0.45, life: 0.55, art: 'knotSpike' }));
+          } else if (event.step === 1) {
+            event.step = 2;
+            const turn = rand(0, Math.PI * 2);
+            for (let i = 0; i < 6; i++) {
+              const a = turn + (i / 6) * Math.PI * 2;
+              bullets.push(new Shot({ x: event.at.x, y: event.at.y, vx: Math.cos(a) * 46, vy: Math.sin(a) * 46, life: 1.1, art: 'knotSplinter' }));
+            }
+          }
+        }
+        events = events.filter((event) => event.step < 2);
+      },
+    };
+  },
+
+  // The saw: a great two-handled saw comes in across the top of the box
+  // and goes to work, back and forth, back and forth, cutting its way down
+  // through the box (and sawdust pours out under it), and then back up
+  // again. It's shorter than the box is wide, so at the end of each stroke
+  // there's a gap on one side: slip through the gap past it, then again
+  // when it comes back.
+  knotSaw(box, density, { Line, Shot, rand }) {
+    const LENGTH = 56;
+    const STROKE = 1.3;
+    const top = box.y + 5;
+    let t = 0;
+    let saw = null;
+    let dust = 0;
+    const left = (time) => box.x + (box.w - LENGTH) / 2 + Math.sin((time / STROKE) * Math.PI * 2) * ((box.w - LENGTH) / 2);
+    // Down through the box, then back up the other way.
+    // It saws a full stroke at the top and at the bottom before it turns.
+    const SPEED = 18;
+    const travel = (box.y + box.h - 5) - (box.y + 5);
+    const height = (time) => {
+      const go = travel / SPEED;
+      let u = time - 0.6 - STROKE;
+      if (u <= 0) return box.y + 5;
+      if (u < go) return box.y + 5 + u * SPEED;
+      u -= go + STROKE;
+      if (u <= 0) return box.y + box.h - 5;
+      return Math.max(box.y + 5, box.y + box.h - 5 - u * SPEED);
+    };
+    return {
+      duration: 8,
+      update: (dt, bullets) => {
+        t += dt;
+        if (!saw) {
+          saw = new Line({ x: left(0), y: top, angle: 0, length: LENGTH, thickness: 4, warn: 0.6, life: 30, color: '#c0c8d0', dash: [2, 1] });
+          bullets.push(saw);
+          return;
+        }
+        // It moves by its velocity, so it reads as moving.
+        // (Its own clock runs `density` times fast; the box's doesn't.)
+        const step = Math.max(dt / density, 1e-4);
+        saw.vx = (left(t + dt) - saw.x) / step;
+        saw.vy = (height(t + dt) - saw.y) / step;
+        if (saw.age < saw.warn) return;
+        dust -= dt;
+        if (dust <= 0) {
+          dust = 0.05;
+          // Out of the cut, under the leading end.
+          const end = saw.vx >= 0 ? saw.x + LENGTH : saw.x;
+          bullets.push(new Shot({ x: end + rand(-4, 4), y: saw.y + 3, vx: rand(-10, 10), vy: 15, gravity: 70, life: 1.2, art: 'knotDust' }));
+        }
       },
     };
   },

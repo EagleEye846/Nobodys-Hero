@@ -1,0 +1,47 @@
+PASS L17 sunny_soft_field
+PASS L51 lanes_fork
+PASS L53 lanes_hamlet
+PASS L56 saltcombe_lookout
+PASS L58 saltcombe_lookout
+PASS L81 ship_hold
+PASS L85 ship_bilge
+PASS L97 wreck_watch_rock
+PASS L122 wreck_mast
+PASS L125 ship_cabin
+PASS L134 secret_soundings_bell
+PASS L139 ship_cabin
+PASS L140 ship_cabin
+PASS L141 ship_orlop
+PASS L143 ship_orlop
+PASS L145 ship_sail_locker
+PASS L146 ship_sail_locker
+PASS L161 lanes_down
+PASS L171 merrow_belfry
+PASS L176 merrow_sea_gate
+PASS L189 secret_soundings_bell
+PASS L195 isles_landing
+PASS L197 haddock_light_door
+PASS L199 reach_foot
+PASS L204 lastlight_upper
+PASS L208 isles_causeway
+PASS L215 reach_eye
+PASS L217 isles_bridge
+PASS L225 reach_reef
+PASS L234 reach_reef
+FAIL L248 sunny_soft_field
+ok: tide low
+go:14,16  ->  isles_bridge: you 14,16 | logs  | bridged  | gates  | treadles  | tide room:isles_bridge low clock 4.4s crates  | followers vesper@227.4,238.7(walking) bramble@214.1,226.0(walking)
+PLAY FAIL: exit:secret_isles_cave: kept being interrupted; isles_bridge: you 17,16 | logs  | bridged  | gates  | treadles  | tide room:isles_bridge low clock 1.7s crates  | followers vesper@287.9,272.1(walking) bramble@281.8,271.0(walking)
+PLAY DONE
+PASS L283 soundings_three_wells
+PASS L307 wreck_watch_rock
+PASS L309 wreck_watch_rock
+PASS L311 wreck_mast
+PASS L315 secret_soundings_bell
+PASS L326 wreck_gate
+PASS L327 reach_foot
+PASS L328 isles_gannet_stack
+PASS L339 reach_first_rock
+PASS L340 wreck_hull
+PASS L346 secret_soundings_bell
+PASS L350 sunny_dandelion_hill

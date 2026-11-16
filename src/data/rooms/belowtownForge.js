@@ -50,7 +50,7 @@ export const BELOWTOWN_FORGE = {
     { sprite: 'coal_heap', x: 2, y: 3, text: 'forge_coal' },
     { sprite: 'anvil', x: 4, y: 4, text: 'forge_anvil' },
     // Hale's whistle mouthpiece, left in the tub "to cool" (the whistle quest: Seam Nine's roster).
-    { sprite: 'quench_tub', x: 11, y: 4, text: 'forge_quench_mouth', gives: 'whistle_mouth', taken: { sprite: 'quench_tub', text: 'forge_quench' } },
+    { sprite: 'quench_tub', x: 11, y: 4, text: 'forge_quench_mouth', gives: 'whistle_mouth', notice: true, taken: { sprite: 'quench_tub', text: 'forge_quench' } },
     { sprite: 'grindstone', x: 13, y: 4, text: 'forge_grindstone' },
     { sprite: 'barrel', x: 2, y: 9, text: 'forge_barrel' },
     { sprite: 'crates', x: 3, y: 9, text: 'forge_crates' },
@@ -66,6 +66,11 @@ export const BELOWTOWN_FORGE = {
     { sprite: 'ore_crumbs', x: 14, y: 6, walkable: true, flat: true },
     { sprite: 'ore_crumbs', x: 4, y: 7, walkable: true, flat: true },
     { sprite: 'ore_crumbs', x: 9, y: 7, walkable: true, flat: true },
+    // The life pass (14 Nov): what a smithy collects.
+    { sprite: 'bf_frog_kid_a', x: 11, y: 9, npc: 'bt_forge_kid', animation: 'bf_frog_kid_a', speed: 0.4 },
+    { sprite: 'bt_pick_rack', x: 12, y: 2, text: 'bl_forge_rack' },
+    { sprite: 'bt_hand_cart', x: 2, y: 6, text: 'bl_cart' },
+
   ],
   tileTexts: { W: 'town_wall', '#': 'town_rock', V: 'town_lamps_wall', H: 'town_banner_wall' },
 

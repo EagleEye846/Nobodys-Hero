@@ -17,3 +17,23 @@ Your friend came across it alone, hurt, in the dark? Then she's tougher than I a
 
 [repeat after ves_on_her_feet]
 Stay on the boards. Follow the ones on poles. Don't follow anything that moves.
+
+# --- THE LIFE PASS, ROUND 2: the red float (a tiny errand) ---
+
+[float_ask]
+She pats her basket, frowning.
+
+Oh, and if you come across a red float, about so big, a bit chewed: I'd be glad of it. The dog got into my tackle. I'm not saying whose dog. I'm saying it lives in a kennel by the inn.
+
+[float_wait]
+Still short a float. Red, chewed, about so big. The dog knows.
+
+[float_done]
+She turns the float over in her hands, and her whole face unclenches.
+
+That's it. Look at the state of it! Four years of eels on that float. ...I'll tie it back on and say nothing to the dog. He's been punished enough, by the look of this.
+
+Here. Take this. It's a knot I tie in the eel-line, for luck. It holds anything. Except a grudge.
+
+[float_after]
+The red float's back on its line, bobbing in the bucket. The dog, she says, has been watching her all afternoon with what she believes is guilt.

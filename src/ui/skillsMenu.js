@@ -7,6 +7,7 @@ import { HERO_STATE } from '../characters/heroState.js';
 import { expToNext, hasSkill, learnSkill, skillBlocker, pointsFor } from '../characters/progress.js';
 import { skillPages } from '../data/skills.js';
 import { partyIds } from '../characters/party.js';
+import { isNotched } from '../characters/notches.js';
 import { WORLD_STATE } from '../state/saveGame.js';
 import { ICONS } from '../data/art/icons.js';
 import { soulSprite } from '../battle/soul.js';
@@ -185,6 +186,9 @@ export class SkillsMenu {
       } else if (learnSkill(branch, this.index)) {
         sfx('levelUp');
         this.message = `Learned ${branch.skills[this.index].name}!`;
+        // A new spell with every SPELL NOTCH full: it waits until it's put in one.
+        const { spell, command } = branch.skills[this.index].effect;
+        if ((spell || command) && !isNotched(branch.member ?? 'hero', spell ?? command)) this.message = `Learned ${branch.skills[this.index].name}! Notch it in SPELLS.`;
         this.burst(this.branch, this.index, branch.color);
       }
     }
@@ -507,7 +511,12 @@ export class SkillsMenu {
     // Below the selection ring, with a dark outline round the letters (no box)
     // so the line on to the next star reads as passing behind it.
     const labelY = y + NODE_RADIUS + 7;
-    drawText(ctx, skill.name, x, labelY, { size: 15, color: selected ? COLORS.gold : labelColor, align: 'center', shadow: '#05030f', outline: '#0a0618' });
+    // With many branches the columns get narrow: shrink a long name until it
+    // fits its column, so neighbours never run into each other.
+    const room = W / this.branches.length - 6;
+    let size = 15;
+    while (size > 11 && textWidth(ctx, skill.name, size) > room) size -= 1;
+    drawText(ctx, skill.name, x, labelY, { size, color: selected ? COLORS.gold : labelColor, align: 'center', shadow: '#05030f', outline: '#0a0618' });
   }
 
   // Arrows when a branch runs off the top or bottom of the sky.

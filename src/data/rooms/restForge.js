@@ -5,6 +5,7 @@
 // Tile key (see src/overworld/tileset.js):
 //   #  wall top (solid)                           h  papered wall with wood panelling (solid)
 //   o  wooden floorboards                         D  doorway (walk through it; see `doors`)
+import { R3A_PROPS } from '../r3aLife.js';
 export const REST_FORGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'rest_forge',
@@ -64,6 +65,8 @@ export const REST_FORGE = {
     { sprite: 'crates', x: 1, y: 8, text: 'forge_crates' },
     { sprite: 'crates', x: 2, y: 9, text: 'forge_crates' },
     { sprite: 'sign', x: 9, y: 8, text: 'forge_sign' },
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['rest_forge'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

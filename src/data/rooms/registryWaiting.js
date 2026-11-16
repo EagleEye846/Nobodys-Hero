@@ -8,6 +8,9 @@
 //   I  old stone pillar (solid)
 //   J  broken pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const REGISTRY_WAITING = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'registry_waiting',
@@ -50,6 +53,7 @@ export const REGISTRY_WAITING = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.registry_waiting ?? []),
     { sprite: 'savepoint', x: 10, y: 5, save: true },
     { sprite: 'bench', x: 5, y: 3, text: 'waiting_bench' },
     { sprite: 'bench', x: 8, y: 3, text: 'waiting_bench' },
@@ -62,6 +66,8 @@ export const REGISTRY_WAITING = {
     { sprite: 'inscription', x: 10, y: 3, text: 'waiting_board' },
     { sprite: 'sign', x: 19, y: 4, text: 'waiting_sign' },
     { sprite: 'book_heap', x: 2, y: 8, text: 'stacks_heap' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['registry_waiting'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', I: 'city_pillar', J: 'city_pillar' },
 

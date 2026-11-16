@@ -3,7 +3,8 @@ import { defineBulletArt } from '../projectiles.js';
 // The Waxling's attacks. It's a grumpy little living candle in a hurry before
 // it melts, so everything it throws is candle stuff: drips of hot wax that
 // splash when they land, flames, more little candles, the matchsticks that
-// lit it, and the smoke it gives off when it sputters.
+// lit it, a fuse (it is mostly wick, after all), and itself, running laps
+// before it melts.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // `tools` holds the bullet classes and helpers (see PATTERN_TOOLS in
@@ -83,15 +84,35 @@ defineBulletArt('waxlingMatch', {
   frameSeconds: 0.07,
 });
 
-// A curl of grey candle smoke, swirling.
-defineBulletArt('waxlingSmoke', {
+// The Waxling itself, running flat out with its eyes screwed shut, at three
+// heights: tall, worn down, and nearly a stub.
+const RUNNER = { ...WAX, ...FIRE, k: '#4a2a14', e: '#120c1c' };
+defineBulletArt('waxlingRunTall', {
   frames: [
-    ['.ss..', 's..s.', '.sSs.', '..s.s', '..ss.'],
-    ['..ss.', '.s..s', '.sSs.', 's.s..', '.ss..'],
+    ['..f..', '.fFf.', '.fwf.', '..k..', 'ccccc', 'cecec', 'ccccC', 'cckcC', 'ccccC', 'ccccC', 'CCCCC'],
+    ['.f...', '.Ff..', '.fwf.', '..k..', 'ccccc', 'cecec', 'ccccC', 'cckcC', 'ccccC', 'ccccC', 'CCCCC'],
   ],
-  palette: { s: '#a8a0b8', S: '#e2dcec' },
-  radius: 2,
-  frameSeconds: 0.2,
+  palette: RUNNER,
+  hitbox: { w: 5, h: 9 },
+  frameSeconds: 0.08,
+});
+defineBulletArt('waxlingRunMid', {
+  frames: [
+    ['..f..', '.fFf.', '.fwf.', '..k..', 'ccccc', 'cecec', 'cckcC', 'ccccC', 'CCCCC'],
+    ['.f...', '.Ff..', '.fwf.', '..k..', 'ccccc', 'cecec', 'cckcC', 'ccccC', 'CCCCC'],
+  ],
+  palette: RUNNER,
+  hitbox: { w: 5, h: 7 },
+  frameSeconds: 0.07,
+});
+defineBulletArt('waxlingRunStub', {
+  frames: [
+    ['..f..', '.fFf.', '.fwf.', '..k..', 'cecec', 'cckcC', 'CCCCC'],
+    ['.f...', '.Ff..', '.fwf.', '..k..', 'cecec', 'cckcC', 'CCCCC'],
+  ],
+  palette: RUNNER,
+  hitbox: { w: 5, h: 5 },
+  frameSeconds: 0.06,
 });
 
 // Ends a shot right now, wherever it is: it fades out and can't hurt.
@@ -120,7 +141,7 @@ export const WAXLING_ATTACKS = {
       falling.push(drip);
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         form(dt, bullets, soul);
         for (const drip of falling) {
@@ -174,7 +195,7 @@ export const WAXLING_ATTACKS = {
         }));
       }
     });
-    return { duration: 6.5, update: (dt, bullets, soul) => light(dt, bullets, soul) };
+    return { duration: 7, update: (dt, bullets, soul) => light(dt, bullets, soul) };
   },
 
   // Lit matchsticks are flicked in from the sides, blinking first at the
@@ -205,69 +226,127 @@ export const WAXLING_ATTACKS = {
         }));
       }
     });
-    return { duration: 6.5, update: (dt, bullets, soul) => toss(dt, bullets, soul) };
+    return { duration: 7, update: (dt, bullets, soul) => toss(dt, bullets, soul) };
   },
 
-  // A wall of candle flames creeps down from the ceiling with one gap in it.
-  // Each new wall has its gap somewhere else, so you have to keep sliding
-  // over to find it.
-  waxlingFlameCurtain(box, density, { Shot, every, rand }) {
-    const spacing = 8;
-    const gapWidth = 28;
-    let gapCentre = rand(box.x + 16, box.x + box.w - 16);
-    const lower = every(2.3, 2.6, (bullets) => {
-      let next = rand(box.x + 14, box.x + box.w - 14);
-      for (let tries = 0; tries < 8 && Math.abs(next - gapCentre) < 22; tries++) {
-        next = rand(box.x + 14, box.x + box.w - 14);
+  // The wick. A fuse is laid across the box in a zigzag (a flashing dotted
+  // line), and then the far end catches: the flame runs along the fuse and
+  // it burns behind it for a moment. It's laid right under you, but you can
+  // see the whole path first, so
+  // cross it ahead of the flame, or wait until it's burnt out. At the end of
+  // the fuse it pops in a little puff of sparks. The fuses come from all
+  // four sides, one after another.
+  waxlingFuse(box, density, { Shot, Line, rand, clamp, shuffleBag }) {
+    const sides = shuffleBag(['left', 'right', 'top', 'bottom']);
+    const SPEED = 62;
+    const LAY = 1.0;
+    const BURN = 0.8;
+    let sparks = [];
+    let unlit = [];
+    const lay = (bullets, soul) => {
+      const side = sides();
+      const across = side === 'left' || side === 'right';
+      const sign = side === 'left' || side === 'top' ? 1 : -1;
+      // Corner points along the zigzag: in from the edge, bent right through
+      // where you're standing, a kink, and out the far side.
+      const run = (k) => (sign > 0 ? k : 80 - k);
+      const yours = clamp(across ? soul.x - box.x : soul.y - box.y, 3, 77);
+      const yourSide = clamp(across ? soul.y - box.y : soul.x - box.x, 2, 78);
+      const marks = [
+        [0, rand(10, 70)],
+        [sign > 0 ? yours : 80 - yours, yourSide],
+        [(sign > 0 ? yours : 80 - yours) + (80 - (sign > 0 ? yours : 80 - yours)) / 2, rand(10, 70)],
+        [80, rand(10, 70)],
+      ];
+      const points = marks.map(([k, offset]) => (across ? { x: box.x + run(k), y: box.y + offset } : { x: box.x + offset, y: box.y + run(k) }));
+      let delay = LAY;
+      const path = [];
+      for (let i = 0; i < 3; i++) {
+        const a = points[i];
+        const b = points[i + 1];
+        const length = Math.hypot(b.x - a.x, b.y - a.y);
+        const angle = Math.atan2(b.y - a.y, b.x - a.x);
+        // (Its burn speed is set next frame, after the battle's bullet-speed
+        // tuning, so the flame and the fuse keep pace with each other.)
+        const fuse = new Line({ x: a.x, y: a.y, angle, length, thickness: 3, warn: delay, life: length / SPEED + BURN, color: '#ff8c1a', glow: '#ffe14d' });
+        bullets.push(fuse);
+        unlit.push(fuse);
+        path.push(fuse);
+        delay += length / SPEED;
       }
-      gapCentre = next;
-      for (let x = box.x + 3; x <= box.x + box.w - 3; x += spacing) {
-        if (Math.abs(x - gapCentre) < gapWidth / 2) continue;
-        bullets.push(new Shot({ x, y: box.y + 3, vy: 28, art: 'waxlingFlame', warn: 0.6 }));
-      }
-    });
-    return { duration: 6.5, update: (dt, bullets) => lower(dt, bullets) };
-  },
-
-  // Curls of smoke appear around the box (never right on top of you), then
-  // drift lazily toward you, swaying, before they thin out. Now and then a stray
-  // flame flickers across the box too.
-  waxlingSmokeCurls(box, density, { Shot, every, rand, angleTo, pointAwayFrom, edgePoint, shuffleBag }) {
-    const straySide = shuffleBag(['left', 'right']);
-    const puff = every(1.3, 1.7, (bullets, soul) => {
-      const { x, y } = pointAwayFrom(box, soul, 30);
-      const aim = angleTo({ x, y }, soul) + rand(-0.6, 0.6);
-      const speed = rand(30, 38);
-      bullets.push(new Shot({
-        x,
-        y,
-        vx: Math.cos(aim) * speed,
-        vy: Math.sin(aim) * speed,
-        art: 'waxlingSmoke',
-        warn: 0.6,
-        life: 2.2,
-        homing: { target: soul, turn: 0.35 },
-        wobble: { amplitude: 2, frequency: 7 },
-      }));
-    });
-    const stray = every(2.6, 3.2, (bullets, soul) => {
-      const start = edgePoint(box, straySide(), -3);
-      const aim = angleTo(start, soul) + rand(-0.25, 0.25);
-      bullets.push(new Shot({
-        x: start.x,
-        y: start.y,
-        vx: Math.cos(aim) * 60,
-        vy: Math.sin(aim) * 60,
-        art: 'waxlingFlame',
-        warn: 0.6,
-        wobble: { amplitude: 3, frequency: 12 },
-      }));
-    });
+      // The little flame running along the fuse (harmless: the fuse burns).
+      const flame = new Shot({ x: points[0].x, y: points[0].y, art: 'waxlingFlame', harmless: true, life: delay + 0.05 });
+      bullets.push(flame);
+      sparks.push({ flame, path, end: points[3] });
+    };
+    let timer = 0.1;
     return {
-      duration: 6.5,
+      duration: 7.6,
       update: (dt, bullets, soul) => {
-        puff(dt, bullets, soul);
-        stray(dt, bullets, soul);
+        for (const fuse of unlit) fuse.grow = SPEED;
+        unlit = [];
+        timer -= dt;
+        if (timer <= 0) {
+          timer += 2.3;
+          lay(bullets, soul);
+        }
+        for (const spark of sparks) {
+          // (The flame rides the head of whichever piece of fuse is burning.)
+          const leg = [...spark.path].reverse().find((fuse) => fuse.age >= fuse.warn) ?? spark.path[0];
+          spark.flame.x = leg.x + Math.cos(leg.angle) * leg.solidLength;
+          spark.flame.y = leg.y + Math.sin(leg.angle) * leg.solidLength;
+          const last = spark.path[spark.path.length - 1];
+          if (last.age < last.warn || last.solidLength < last.length) continue;
+          spark.flame.life = 0;
+          spark.popped = true;
+          for (let i = 0; i < 4; i++) {
+            const angle = Math.PI / 4 + i * Math.PI / 2;
+            bullets.push(new Shot({ x: spark.end.x, y: spark.end.y, vx: Math.cos(angle) * 38, vy: Math.sin(angle) * 38, art: 'waxlingFleck', life: 0.7 }));
+          }
+        }
+        sparks = sparks.filter((spark) => !spark.popped);
+      },
+    };
+  },
+
+  // In a hurry! The Waxling runs flat out across the box at your height,
+  // dripping as it goes: the drips hang where it passed, then fall. Every lap
+  // it's a little shorter (it's melting) and a little faster. Step off its
+  // row, and don't step in under where it's just been.
+  waxlingHurry(box, density, { Shot, rand, clamp, shuffleBag }) {
+    const side = shuffleBag(['left', 'right']);
+    const looks = ['waxlingRunTall', 'waxlingRunMid', 'waxlingRunStub', 'waxlingRunStub'];
+    let lap = 0;
+    let runners = [];
+    let timer = 0.1;
+    const run = (bullets, soul) => {
+      const fromLeft = side() === 'left';
+      const speed = 66 + lap * 10;
+      const y = clamp(soul.y + rand(-3, 3), box.y + 6, box.y + box.h - 6);
+      const runner = new Shot({ x: fromLeft ? box.x + 3 : box.x + box.w - 3, y, vx: fromLeft ? speed : -speed, warn: 0.65, art: looks[Math.min(lap, looks.length - 1)] });
+      bullets.push(runner);
+      runners.push({ runner, nextDrip: 0, y });
+      lap++;
+    };
+    return {
+      duration: 7.4,
+      update: (dt, bullets, soul) => {
+        timer -= dt;
+        if (timer <= 0) {
+          timer += 1.75;
+          run(bullets, soul);
+        }
+        for (const r of runners) {
+          const { runner } = r;
+          if (runner.age < runner.warn) continue;
+          // A drip every 14 pixels or so, that hangs, then falls.
+          const travelled = Math.abs(runner.x - (runner.vx > 0 ? box.x + 3 : box.x + box.w - 3));
+          if (travelled >= r.nextDrip && runner.x > box.x + 4 && runner.x < box.x + box.w - 4) {
+            r.nextDrip += 14 + rand(-2, 2);
+            bullets.push(new Shot({ x: runner.x, y: r.y + 5, art: 'waxlingDrip', warn: 0.55, vy: 10, gravity: 90 }));
+          }
+        }
+        runners = runners.filter((r) => r.runner.x > box.x - 10 && r.runner.x < box.x + box.w + 10);
       },
     };
   },

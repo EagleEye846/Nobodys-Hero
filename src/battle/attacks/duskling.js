@@ -2,8 +2,9 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Duskling's attacks. It's a shadow that got left behind, so everything it
 // throws is made of the dark: eyes that open in the walls and stare, hands that
-// reach in to grab you, crescents of shadow, tendrils that close in like a
-// cage, and little wisps of itself that follow you for a while.
+// reach in to grab you, the shadows that stretch when a lantern flickers,
+// tendrils that close in like a cage, and itself, following you about as
+// your shadow (it hasn't had anyone to follow in a long time).
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // `tools` holds the bullet classes and helpers (see PATTERN_TOOLS in
@@ -72,22 +73,6 @@ defineBulletArt('dusklingHandDown', { frames: [HAND_REACHING_DOWN], palette: DUS
 defineBulletArt('dusklingHandLeft', { frames: [HAND_REACHING_LEFT], palette: DUSKLING_COLOURS, radius: 3 });
 defineBulletArt('dusklingHandUp', { frames: [HAND_REACHING_UP], palette: DUSKLING_COLOURS, radius: 3 });
 
-// A crescent blade of shadow, spinning.
-defineBulletArt('dusklingCrescent', {
-  frames: [[
-    '..LLL..',
-    '.LSs...',
-    'LSs....',
-    'LSs....',
-    'LSs....',
-    '.LSs...',
-    '..LLL..',
-  ]],
-  palette: DUSKLING_COLOURS,
-  radius: 2.5,
-  spin: 7,
-});
-
 // The thorny tip of a tendril, riding the front of it as it grows (harmless
 // itself; the tendril behind it is what hurts).
 defineBulletArt('dusklingTendrilTip', {
@@ -112,6 +97,37 @@ defineBulletArt('dusklingWisp', {
   palette: DUSKLING_COLOURS,
   radius: 2.5,
   frameSeconds: 0.18,
+});
+
+// A lantern hanging at the edge of the box, flickering (harmless).
+defineBulletArt('dusklingLantern', {
+  frames: [
+    ['..k..', '.kkk.', 'kyYyk', 'kYwYk', 'kyYyk', '.kkk.'],
+    ['..k..', '.kkk.', 'ky.yk', 'k.y.k', 'ky.yk', '.kkk.'],
+    ['..k..', '.kkk.', 'kyYyk', 'kYYYk', 'kyYyk', '.kkk.'],
+    ['..k..', '.kkk.', 'k...k', 'k.y.k', 'k...k', '.kkk.'],
+  ],
+  palette: { k: '#5a4a3a', y: '#ffb347', Y: '#ffe14d', w: '#fff6c0' },
+  radius: 2,
+  frameSeconds: 0.09,
+});
+
+// A little standing stone the lantern throws a shadow from (harmless).
+defineBulletArt('dusklingStone', {
+  frames: [['.ggg.', 'gGGgg', 'gGggd', 'gggdd', 'ggddd', 'ddddd']],
+  palette: { g: '#8a8296', G: '#b8b0c8', d: '#5e5874' },
+  radius: 2,
+});
+
+// The Duskling walking behind you as your shadow: a head with its eyes on you.
+defineBulletArt('dusklingFollower', {
+  frames: [
+    ['.LLLLL.', 'LsssssL', 'LsESEsL', 'LseSesL', 'LsssssL', '.LsssL.', '..LLL..'],
+    ['.LLLLL.', 'LsssssL', 'LsssssL', 'LseSesL', 'LsssssL', '.LsssL.', '..LLL..'],
+  ],
+  palette: DUSKLING_COLOURS,
+  radius: 3,
+  frameSeconds: 0.5,
 });
 
 // Which hand art reaches in from each side of the box.
@@ -146,7 +162,7 @@ export const DUSKLING_ATTACKS = {
       waking.push({ x, y, t: shutSeconds });
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         openEye(dt, bullets);
         for (const eye of waking) {
@@ -215,7 +231,7 @@ export const DUSKLING_ATTACKS = {
     });
 
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         elapsed += dt;
         lunge(dt, bullets, soul);
@@ -239,77 +255,47 @@ export const DUSKLING_ATTACKS = {
     };
   },
 
-  // Crescents of shadow are flung in from the edges, slow at first, then
-  // pick up speed while their path bends, so they sweep around instead of
-  // flying straight. Each one curves the opposite way to the last.
-  dusklingCrescentBlades(box, density, { Shot, every, rand, edgePoint, angleTo, shuffleBag }) {
-    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
-    let crescents = [];
-    let bendWay = 1;
-    const fling = every(0.95, 1.25, (bullets, soul) => {
-      const start = edgePoint(box, edge());
-      const bend = bendWay * rand(1.0, 1.4); // radians per second
-      bendWay = -bendWay;
-      // Aim off to one side so the bend carries it back across where you
-      // are: it tries a spread of throws and takes the one whose curve
-      // comes closest to you (a fixed lean used to miss a still soul in a
-      // corner by a mile), then wobbles it a little.
-      const missBy = (aim) => {
-        let x = start.x;
-        let y = start.y;
-        let vx = Math.cos(aim) * 30;
-        let vy = Math.sin(aim) * 30;
-        let closest = Infinity;
-        const step = 0.05;
-        for (let t = 0; t < 3; t += step) {
-          const sp = Math.hypot(vx, vy);
-          vx *= (sp + 30 * step) / sp;
-          vy *= (sp + 30 * step) / sp;
-          const turn = bend * density * step;
-          [vx, vy] = [vx * Math.cos(turn) - vy * Math.sin(turn), vx * Math.sin(turn) + vy * Math.cos(turn)];
-          x += vx * step;
-          y += vy * step;
-          closest = Math.min(closest, Math.hypot(x - soul.x, y - soul.y));
-        }
-        return closest;
-      };
-      let aim = angleTo(start, soul) - bend * 0.55;
-      let best = Infinity;
-      for (let k = -12; k <= 12; k++) {
-        const tryAim = angleTo(start, soul) + k * 0.1;
-        const miss = missBy(tryAim);
-        if (miss < best) {
-          best = miss;
-          aim = tryAim;
-        }
+  // The lanterns flicker. A lantern hangs at the edge of the box and a few
+  // little standing stones stand about in it. When the lantern flickers, the
+  // Duskling stretches: every stone's shadow shoots out across the box, away
+  // from the light. Shadows always fall away from the lantern, so get on its
+  // side of the stones. Then the lantern moves, and the shadows swing round.
+  dusklingFlicker(box, density, { Shot, Line, rand, clamp, angleTo, shuffleBag }) {
+    const spots = shuffleBag(['top', 'right', 'bottom', 'left']);
+    const WARN = 0.9;
+    let timer = 0.1;
+    const flicker = (bullets, soul) => {
+      const side = spots();
+      const along = rand(14, 66);
+      const lamp = side === 'top' ? { x: box.x + along, y: box.y + 3 }
+        : side === 'bottom' ? { x: box.x + along, y: box.y + box.h - 3 }
+          : side === 'left' ? { x: box.x + 3, y: box.y + along } : { x: box.x + box.w - 3, y: box.y + along };
+      bullets.push(new Shot({ ...lamp, art: 'dusklingLantern', harmless: true, life: WARN + 0.9 }));
+      // One stone stands between the lantern and you; the others somewhere
+      // else, not too close to it or each other.
+      const between = rand(0.4, 0.6);
+      const stones = [{
+        x: clamp(lamp.x + (soul.x - lamp.x) * between, box.x + 8, box.x + box.w - 8),
+        y: clamp(lamp.y + (soul.y - lamp.y) * between, box.y + 8, box.y + box.h - 8),
+      }];
+      for (let tries = 0; stones.length < 3 && tries < 30; tries++) {
+        const stone = { x: rand(box.x + 10, box.x + box.w - 10), y: rand(box.y + 10, box.y + box.h - 10) };
+        const apart = stones.every((other) => Math.hypot(other.x - stone.x, other.y - stone.y) > 22);
+        if (apart && Math.hypot(stone.x - lamp.x, stone.y - lamp.y) > 18) stones.push(stone);
       }
-      aim += rand(-0.06, 0.06);
-      const shot = new Shot({
-        x: start.x,
-        y: start.y,
-        vx: Math.cos(aim) * 30,
-        vy: Math.sin(aim) * 30,
-        accel: 30,
-        art: 'dusklingCrescent',
-        warn: 0.55,
-      });
-      bullets.push(shot);
-      crescents.push({ shot, bend });
-    });
+      for (const stone of stones) {
+        bullets.push(new Shot({ ...stone, art: 'dusklingStone', harmless: true, life: WARN + 0.9 }));
+        bullets.push(new Line({ x: stone.x, y: stone.y, angle: angleTo(lamp, stone), length: 120, thickness: 7, warn: WARN, grow: 260, life: 0.7, color: '#4a3478', glow: '#7a5cc0' }));
+      }
+    };
     return {
-      duration: 6.5,
+      duration: 7.4,
       update: (dt, bullets, soul) => {
-        fling(dt, bullets, soul);
-        for (const crescent of crescents) {
-          const shot = crescent.shot;
-          if (shot.age < shot.warn) continue;
-          const turn = crescent.bend * dt;
-          const vx = shot.vx * Math.cos(turn) - shot.vy * Math.sin(turn);
-          const vy = shot.vx * Math.sin(turn) + shot.vy * Math.cos(turn);
-          shot.vx = vx;
-          shot.vy = vy;
+        timer -= dt;
+        if (timer <= 0) {
+          timer += 2.1;
+          flicker(bullets, soul);
         }
-        crescents = crescents.filter((crescent) => !crescent.shot.isGone(box));
       },
     };
   },
@@ -366,45 +352,75 @@ export const DUSKLING_ATTACKS = {
     return { duration: 7, update: (dt, bullets) => close(dt, bullets) };
   },
 
-  // Little wisps of the duskling peel off the walls and drift after you, but
-  // they lose interest after a moment, veer off to one side and wander away,
-  // speeding up. Don't stand where they wander.
-  dusklingLostWisps(box, density, { Shot, every, rand, pick, edgePoint, angleTo, shuffleBag }) {
-    const edge = shuffleBag(['top', 'left', 'right', 'bottom']);
-    const followSeconds = 1.1;
-    let wisps = [];
-    const peel = every(1.0, 1.3, (bullets, soul) => {
-      const start = edgePoint(box, edge());
-      const aim = angleTo(start, soul) + rand(-0.7, 0.7);
-      const shot = new Shot({
-        x: start.x,
-        y: start.y,
-        vx: Math.cos(aim) * 38,
-        vy: Math.sin(aim) * 38,
-        art: 'dusklingWisp',
-        warn: 0.55,
-        homing: { target: soul, turn: 1.1 },
-      });
-      bullets.push(shot);
-      wisps.push(shot);
-    });
+  // Left behind. The Duskling lost its owner, so it tries you instead: it
+  // sticks to you as your shadow, walking exactly where you walked a moment
+  // ago. Keep moving and don't double back over your own path. It gets
+  // impatient: the longer it follows, the closer behind you it walks, and
+  // every so often its eyes flash and it lunges straight at where you are,
+  // cutting the corner, before it slips back into your footsteps.
+  dusklingFollow(box, density, { Shot }) {
+    const WARN = 0.7;
+    const LAG_FROM = 1.35;
+    const LAG_TO = 0.8;
+    const LENGTH = 7.4;
+    const TELL = 0.45;
+    const LUNGE = 0.4;
+    let t = 0;
+    let trail = [];
+    let shadow = null;
+    let nextLunge = WARN + LAG_FROM + 1.4;
+    let lunge = null;
+    // Where you were `ago` seconds back.
+    const back = (ago) => {
+      const when = t - ago;
+      for (let i = trail.length - 1; i >= 0; i--) if (trail[i].t <= when) return trail[i];
+      return trail[0];
+    };
     return {
-      duration: 6.5,
+      duration: LENGTH,
       update: (dt, bullets, soul) => {
-        peel(dt, bullets, soul);
-        for (const shot of wisps) {
-          if (shot.age < shot.warn + followSeconds) continue;
-          // Bored now: stop following, veer off to one side and drift away,
-          // faster.
-          const veer = pick([-1, 1]) * rand(0.6, 1.0);
-          const vx = shot.vx * Math.cos(veer) - shot.vy * Math.sin(veer);
-          const vy = shot.vx * Math.sin(veer) + shot.vy * Math.cos(veer);
-          shot.vx = vx;
-          shot.vy = vy;
-          shot.homing = null;
-          shot.accel = 45;
+        t += dt;
+        trail.push({ t, x: soul.x, y: soul.y });
+        if (!shadow) {
+          // A head and two trailing wisps of shadow, like a little figure.
+          shadow = [0, 0.16, 0.32].map((extra, i) => {
+            const piece = new Shot({ x: soul.x, y: soul.y, art: i ? 'dusklingWisp' : 'dusklingFollower', warn: WARN + LAG_FROM + extra });
+            bullets.push(piece);
+            return { piece, extra };
+          });
         }
-        wisps = wisps.filter((shot) => shot.homing);
+        const lag = LAG_FROM + (LAG_TO - LAG_FROM) * Math.min(t / (LENGTH * 0.8), 1);
+        const head = shadow[0].piece;
+        if (!lunge && t >= nextLunge && t < LENGTH - 1) {
+          // Its eyes flash...
+          lunge = { at: t };
+          bullets.push(new Shot({ x: head.x, y: head.y - 6, art: 'dusklingEyeOpen', harmless: true, life: TELL }));
+        }
+        if (lunge && !lunge.from && t >= lunge.at + TELL) {
+          // ...and it goes for where you are now.
+          lunge.from = { x: head.x, y: head.y };
+          // (Leading you a little, the way you're heading.)
+          const was = back(0.15);
+          lunge.to = { x: soul.x + (soul.x - was.x) * (LUNGE / 0.15), y: soul.y + (soul.y - was.y) * (LUNGE / 0.15) };
+        }
+        for (const { piece, extra } of shadow) {
+          const at = back(lag + extra);
+          if (lunge?.from) {
+            // (The whole figure lunges, then eases back onto your path.)
+            const k = Math.min((t - lunge.at - TELL) / LUNGE, 2);
+            const out = k < 1 ? k : 2 - k;
+            piece.x = at.x + (lunge.to.x - at.x) * out;
+            piece.y = at.y + (lunge.to.y - at.y) * out;
+          } else {
+            piece.x = at.x;
+            piece.y = at.y;
+          }
+        }
+        if (lunge?.from && t >= lunge.at + TELL + LUNGE * 2) {
+          lunge = null;
+          nextLunge = t + 1.3;
+        }
+        trail = trail.filter((p) => p.t > t - LAG_FROM - 1);
       },
     };
   },

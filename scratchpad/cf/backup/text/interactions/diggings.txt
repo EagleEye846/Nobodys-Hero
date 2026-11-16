@@ -1,0 +1,1847 @@
+# THE DIGGINGS (Chapter 4): the creature folk's mines, under Belowtown. Things
+# you can read and look at in diggings_pithead, diggings_cart_yard,
+# diggings_switchback, diggings_old_seam, diggings_trestle,
+# diggings_flooded_drift, diggings_cave_in, diggings_lift and the secret
+# diggings_lost_seam. The mole miners' own words are in text/npcs/.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal hums low and steady, a note you feel in your teeth, as if the whole mine were humming along. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. Somebody counted their wages out of it in a hurry.
+
+[chest_empty]
+An empty chest, scuffed from being sat on at lunch.
+
+# --- Things every room shares ---
+
+[d_rock]
+Rough dark rock overhead. A few drips fall from it, taking their time.
+
+[d_face]
+Rock face, brown and banded like a stale cake, with threads of green and copper through it. All the ore is still in the wall. Nobody's had the heart.
+
+[d_timber_wall]
+A timber-framed wall: posts, a beam, a brace. All of it is old, and all of it is holding, out of spite.
+
+[d_ore]
+A lump of rock full of green and orange ore. Too hard to shift and too much trouble to carry.
+
+[d_post]
+A timber post under a cap beam, holding up the mountain. There's a worn groove in it where a hundred shoulders have leaned.
+
+[d_snapped]
+A snapped timber, split down the middle. It did its best.
+
+[d_stalag]
+A stalagmite, brown and pointed. The roof drips on it, and it takes it personally.
+
+[d_drop]
+A drop, black and cold, with a smell of wet stone coming up out of it.
+
+[d_water]
+Brown water, cold and flat as a tabletop. Something under it knocks, once, and thinks better of it.
+
+[d_planks]
+Planks laid over the water, slimy and sound. The kind you walk on with respect.
+
+[d_trestle]
+Trestle planks over the drop, a rail down the middle. Between the gaps you can see a very long way down. You can also not look.
+
+[d_lamp]
+A mine lamp, swinging a little on its hook, its flame as steady as a nervous cat. It's still lit, which is more than you can say for most of the shift.
+
+[d_sacks]
+Sacks of ore, tied at the neck and stacked tidy. Someone has chalked ORE on them. Someone else has added: ALSO ORE.
+
+[d_sacks_ves]
+{bored}'Also ore.' The most honest sign in the mine.
+
+# (draft)
+[d_sacks 2]
+ORE. ALSO ORE. Further down the stack, in a third hand that has clearly been waiting years for its chance: MOSTLY ORE.
+
+[d_toolbox]
+A toolbox with a dozen hammers in it and a sandwich. The sandwich has been here a very long time and has formed views.
+
+# (draft)
+[d_toolbox 2]
+The sandwich in the toolbox has moved, slightly, since you last looked. Towards you.
+
+# (draft)
+[d_toolbox_ves 2]
+{bored}Shut the lid. {smile}Slowly. No sudden moves.
+
+# (draft)
+[d_toolbox 10]
+You open the toolbox one more time. The sandwich is gone.
+
+In its place, set down very neatly in the middle of the hammers, is a pinecone.
+
+# (draft)
+[d_toolbox_ves 10]
+{surprised}A pinecone. Down a mine. {bored}...No. I'm not going to think about that.
+
+[d_spoil]
+A heap of waste rock with a shovel stuck in the top of it, like a flag on a hill that nobody wanted.
+
+[d_hat]
+A hard hat on a nail. Chalked inside the brim: WHOEVER FINDS THIS, IT'S MINE.
+
+# (draft)
+[d_hat 2]
+WHOEVER FINDS THIS, IT'S MINE. Under it, in other chalk: FOUND IT. And under that, in the first: STILL MINE.
+
+[d_pick]
+A pickaxe left stuck in the rock face at a jaunty angle, as if it were just going to be fetched after tea.
+
+[d_ladder]
+A broken ladder, two rungs short of useful and three short of a joke.
+
+# (draft)
+[d_ladder 2]
+Two rungs short of useful. Somebody has chalked the missing rungs on the rock above it. Nobody has tried them. Probably.
+
+[d_wreck]
+A cart with a wheel off and a lean to it. Someone has painted STOP on the side, in case it was thinking of going anywhere.
+
+[d_tiny_tools]
+A pick, a shovel and a broom, each about as long as your hand, leaned neatly against the rock. Somebody's whole kit. They've gone home and left it ready for tomorrow.
+
+[d_tiny_door]
+A little round door in the rock, with a knocker and a mat. A note on it says ON SHIFT. Underneath, newer: NOT ON SHIFT. SHIFT CANCELLED. GONE UP TO TOWN.
+
+# (draft)
+[d_tiny_door 2]
+GONE UP TO TOWN. The mat has been turned over. The other side says GO AWAY, NICELY.
+
+[cart_stuck]
+The cart won't go. Something is in the way along the track, or the track runs out. It wants a clear line.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and every rock goes back where it began, and the carts roll home.
+
+[rock_home]
+Everything you've moved goes back to where it started. The carts rattle back to their places.
+
+[cart_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF IT ALL GOES WRONG. Press on it, and the carts roll themselves back to where they began.
+
+# --- THE PITHEAD ---
+
+[pit_winch]
+The winch over the shaft: an A-frame of black timber, a drum of rope as thick as your arm, and a bucket hanging empty. A plate on the frame says: WEIGHT LIMIT, TEN MOLES OR ONE VERY LARGE BADGER.
+
+[pit_winch_ves]
+{glee}Ten moles, or one large badger. {bored}I'd love to meet whoever did that sum.
+
+# (draft)
+[pit_winch 2]
+TEN MOLES OR ONE VERY LARGE BADGER. A smaller plate, screwed on underneath: THE BADGER KNOWS WHAT HE DID.
+
+# (draft)
+[pit_winch_ves 2]
+{glee}There's a story there. {bored}We'll never hear it. That's the worst part.
+
+[pit_shaft]
+The shaft: a round black hole, boarded over, with a rope round it. Cold air breathes up between the boards, smelling of a very long way down. The sign says the lift is round the back, and would you please stop looking at the hole.
+
+[pit_warning]
+A red warning sign, hand-painted: DANGER. Under that, smaller: DEEP. Under that, smaller still: (VERY).
+
+# (draft)
+[pit_warning 2]
+(VERY). Somebody has added, almost too small to read: (no, really).
+
+[pit_tally]
+The shift board: a slate with a peg for every miner. The ON SHIFT column has two pegs in it. The GONE HOME column has all the rest, and under them, in chalk: SINCE THE LIGHT STARTED GOING.
+
+[pit_tally_ves]
+{surprised}Two on shift. {bored}Brave, or stubborn. Down a mine they look the same.
+
+# (draft)
+[pit_tally 2]
+Two pegs ON SHIFT. Somebody has hung a tiny paper hat on each of them, as if to say well done.
+
+[pit_office]
+PIT OFFICE. CLOSED. Under that, smaller: (OPEN ALTERNATE WEDNESDAYS). Under that, smaller still: (NOT THIS ONE). Somebody is snoring behind the door, and nobody is going to wake him.
+
+# (draft)
+[pit_office 2]
+The snoring behind the door stops. There's a long pause. Then it starts again, a bit louder, to make a point.
+
+[pit_warning_ves]
+{bored}'Very.' Finally, a sign that gives a number.
+
+[pit_hat]
+A hard hat on a nail by the shaft. Chalked on the brim, in a very small hand: FIRST ONE DOWN IS A MOLE. A second hand has added: WE WERE ALL MOLES.
+
+# (draft)
+[pit_hat 2]
+WE WERE ALL MOLES. Under it, in a third hand, smaller: (I WAS A VOLE. NOBODY ASKED.)
+
+[pit_pouch]
+A wage purse, tucked behind the ladder where somebody hid it from a friend. You found it first.
+
+# --- THE CART YARD ---
+
+[yard_sign]
+CART YARD. ONE CART PER CUSTOMER. Under it: THE CART HAS NO BRAKES. Under that: THIS IS NOT A DEFECT, THIS IS HOW CARTS WORK.
+
+[yard_sign_ves]
+{surprised}I've never been in one of these. {bored}Obviously. There aren't many mine carts in a chapel.
+
+{smile}I'd like it noted that I'm only slightly interested.
+
+# (draft)
+[yard_sign 2]
+THIS IS HOW CARTS WORK. Under it, newer: COMPLAINTS TO THE CART.
+
+[yard_board]
+A slate of carts out and carts back. Out: thirty-six. Back: nineteen. A note in the margin says: THEY KNOW THE WAY HOME. THEY JUST DON'T WANT TO.
+
+Below it, in a tidier hand: SIDING POINTS HAVE NO LEVER. THEY ARE HELD BY THE EAST PLATE. WEIGHT ON THE PLATE, EAST. NO WEIGHT, STRAIGHT ON.
+
+[yard_warning]
+MIND THE POINTS. Someone has scratched out POINTS and written PRICES. Someone else has scratched out PRICES and written POINTS. It's a long-running argument.
+
+# (draft)
+[yard_warning 2]
+POINTS. Under it, in fresh chalk: PRICES. The argument goes on. Somebody has left a stool here for whoever's turn it is.
+
+[yard_lever]
+A points lever with an iron handle worn bright. The junction up the track shows how it's set: the bright rail with the yellow arrow is the way a cart will go. Z throws it.
+
+[yard_lever_ves]
+{bored}Straight on, or down and round. {smile}I'll take the interesting one.
+
+[yard_hold]
+A round iron plate at the buffer at the east end of the run, with a rod running off under the floor towards the siding. Whatever sits on it holds the siding's second fork turned east. When it's empty, the fork lets go and goes straight on.
+
+[yard_hold_ves]
+{bored}So the first cart is a doorstop. {smile}Everyone's good at something.
+
+[yard_plate]
+A round iron plate set in the floor at the end of the siding. Something heavy sitting on it would press it down. A cart, for instance.
+
+[yard_gate]
+A timber gate across the way east, held shut by a spring and a plate somewhere down the line. And, you suspect, by pride.
+
+[yard_gate_open]
+The plate clunks, a spring lets go in the timbers, and the gate swings wide, creaking like it's been waiting.
+
+[yard_pouch]
+A purse at the end of the dead-end line, half under the spoil heap. Whoever left it has long since stopped remembering where.
+
+# --- THE SWITCHBACK ---
+
+[sb_sign]
+THE SWITCHBACK. Two sets of points with levers, three without. Under it, in a firm hand: SPRUNG POINTS TAKE THE WAY THE WHEELS CAME IN. Under that, in a firmer one: BACKWARDS COUNTS.
+
+[sb_sign_ves]
+{bored}Points with no lever. {smile}So the cart does the pulling, and we do the thinking. It's a fair split.
+
+[sb_board]
+A chalk diagram of the three levels, drawn by someone who only ever thought about the cart going down. Beside it, a second diagram of the cart going round the other way, up the west side and along the bottom, with a ring drawn round the places it passes the sprung points and the words WHEELS REMEMBER. At the bottom he's written ARRIVE, with a smiling face. The face has been scribbled out.
+
+[sb_warning]
+WARNING: CARTS DO NOT STOP FOR LEVELS. Neither, it's said, do the people in them.
+
+# (draft)
+[sb_warning 2]
+Neither, it's said, do the people in them. Somebody has added, in a shaky hand: CONFIRMED.
+
+[sb_lever_1]
+The top points lever, beside the first fork. Thrown, the cart goes down the west side instead of along the top. The paint has worn off the handle exactly where a hand goes. The junction shows how it's set: the bright rail is the way the cart will go.
+
+[sb_lever_4]
+The points lever by the last fork on the bottom level. A tin tag on it says LAST ONE. Somebody has scratched PROBABLY underneath. Set one way, a cart runs on east to the plate; the other, it turns back along the west side.
+
+[sb_plate]
+The stone plate at the end of the long bottom siding. A cart's wheels would hold it down.
+
+[sb_gate]
+A gate across the way east, with a plate on a long chain somewhere out of sight. It's the kind of gate that opens when you've got everything right and not before.
+
+[sb_gate_open]
+The plate drops with a thump, a chain runs through the timbers, and the gate drags open, grumbling.
+
+[sb_pouch]
+A purse at the end of the middle level's dead end, in the place where a surprised rider would have got out. It's been waiting to be useful.
+
+# --- THE OLD SEAM ---
+
+[seam_sign]
+EMPTY CARTS ONLY BEYOND THIS POINT. Underneath, smaller: FULL CARTS, SEE LAST SENTENCE.
+
+[seam_sign_ves]
+{bored}So the cart goes and we don't. {smile}I like this seam already.
+
+[seam_board]
+The old shift board, in a thinner chalk than the one at the pithead. Nearly all the names are crossed out in one sweep, and under it: ALL HOME EARLY. It doesn't say what for.
+
+Down the side, in a cramped hand: FORK AT THE FOOT OF THE CHAMBER TAKES EVERYTHING FROM THE WEST DOWN TO THE STORE. THE LEVER IS FOR WHAT COMES BACK UP. LEVER IS IN THE STORE. DON'T ASK ME WHY.
+
+In the corner, in older chalk, somebody has drawn a little star, and an arrow from it pointing down the tunnel towards the lever by the BROKEN sign.
+
+[seam_lever]
+A points lever bolted to the store room wall, its handle worn bright by someone with a favourite way. It works the fork at the foot of the west chamber, a long way off. A tag on it says: FOR WHAT COMES UP. Set straight, a cart coming back up the store line goes out west; thrown, it turns east into the tunnel.
+
+[seam_barricade]
+A barricade of nailed planks across the rails, with old nails, the sort that stay in on principle. A cart with someone in it would only bump the planks. Something heavy and empty would go straight through.
+
+[seam_barricade_ves]
+{bored}So we push it, and then run. {smile}I'm not running. I'm following it, quickly.
+
+[seam_nope]
+A hand-painted sign: BROKEN. LEAVE IT. And underneath, in the same hand: THIS MEANS YOU. And underneath that, much smaller: THIS ONE ESPECIALLY.
+
+[seam_nope_ves]
+{bored}It says it three times. {smile}That's practically an invitation.
+
+# (draft)
+[seam_nope 2]
+THIS ONE ESPECIALLY. Lower down, in older, fainter paint you missed the first time, there's a little star.
+
+[seam_nope_lever]
+A lever in the wall with a paper tag tied to the handle: OUT OF ORDER. It's very well oiled for something out of order.
+
+[seam_nope_lever_ves]
+{surprised}Oiled. {smile}Somebody has been looking after something they said was broken.
+
+[seam_gate_secret]
+A small iron gate across a narrow shaft that goes down from the east chamber. It's older than anything else here, and cleaner than it ought to be.
+
+Far down the shaft, something gives off a faint, cold light, like a star at the bottom of a well.
+
+[seam_gate_open]
+Somewhere inside the wall a bolt slides across. The little gate swings open on a shaft that goes down into the dark.
+
+[seam_chest]
+A chest in the store room, marked PROPERTY OF THE SHIFT. It has been the property of the shift for a very long time.
+
+[seam_pouch]
+A purse on the store room floor, right where somebody put it down to take a breather. They must have had a lot of breath to take.
+
+[seam_pouch_east]
+A purse behind a stalagmite. The stalagmite has been guarding it for centuries and seems pleased to be relieved.
+
+[seam_warning]
+WARNING: ROOF. Under it: (AND FLOOR). Under that: (AND ALL THE BITS IN BETWEEN).
+
+# (draft)
+[seam_warning 2]
+(AND ALL THE BITS IN BETWEEN). Under that: (THAT MEANS YOU). Under that: (YOU ARE A BIT IN BETWEEN).
+
+# --- THE TRESTLE ---
+
+[tr_sign]
+THE TRESTLE. A HUNDRED PACES OF PLANK AND RAIL OVER NOTHING. KEEP TO THE MIDDLE. Under that, in a different hand: THERE IS NO MIDDLE. IT'S ALL EDGE. Under that, in a third hand: RIDE IT. YOU'LL ONLY LOOK ONCE.
+
+[tr_sign_ves]
+{surprised}...{bored}It's fine. Heights are for people who fall off things.
+
+{smile}Which we won't. Obviously.
+
+[tr_warning]
+DO NOT LEAN OVER THE EDGE TO SEE HOW FAR IT IS. IT'S FAR.
+
+# (draft)
+[tr_warning 2]
+IT'S FAR. Under it, in pencil: HOW FAR? Under that: FARTHER THAN THAT.
+
+[tr_drop]
+The drop: black, cold and bottomless. A pebble dropped into it in your head never finishes landing.
+
+# (draft)
+[tr_drop 2]
+You drop a real pebble this time, and count. You stop counting. You never hear it land. It must still be going. You leave it to it.
+
+# (draft)
+[tr_drop_ves 2]
+{bored}Don't do that. {surprised}...Did it land? {bored}Don't tell me.
+
+[tr_pouch]
+A purse in the corner of the west platform, in the one spot where nobody would stand to look over the edge.
+
+[tr_pouch_east]
+A purse on the east platform, left by someone who got over the trestle and decided to celebrate with a sit.
+
+# --- THE FLOODED DRIFT ---
+
+[drift_sign]
+THE DRIFT. FLOODED SINCE THE PUMP GAVE OUT. Under that: THE PUMP GAVE OUT IN THE SPRING. Under that: WHICH SPRING? Under that: (NOBODY KNOWS.) Under that, an arrow: PUMP, ALONG THE FOOTBRIDGE. WHEEL, END OF THE UPPER DECK. PLATE, UPPER DECK. DRAIN WHEEL, EAST BANK. And scratched underneath, in someone's penknife: THE LAKE IS THE SAME SIZE IT ALWAYS WAS. IT JUST MOVES ABOUT.
+
+Under that, smaller: A LOG ROLLS TILL SOMETHING TELLS IT NO. WATER IS VERY GOOD AT NO.
+
+[drift_warning]
+CAUTION: WET. Somebody has drawn a small, worried fish.
+
+[drift_lever]
+The pump's lever, on the pump house, out on the water at the end of a footbridge. Whoever put it there wanted it out of reach of everyone except a bird, or a person with nerve. Pull it and the old pump coughs, grinds and starts to drag the water down off the near causeway.
+
+[drift_lever_ves]
+{smile}A lever, at the end of a rotten bridge, over cold water. {bored}Somebody's idea of a joke, or of security.
+
+{bored}Right. Pump, then. Don't anyone say anything encouraging.
+
+[rotten_planks]
+Footbridge planks, black with wet and rotten through, over dark water. They'd never hold you.
+
+[rotten_planks_ves]
+{smile}They'll hold me. I've been told I'm lighter than I look.
+
+{bored}I wasn't told it kindly.
+
+[drift_valve]
+An iron wheel on a pipe, at the end of the upper causeway, with a red handle. A tag on it says: MIDDLE BASIN. It squeals when it turns. Turned one way, the water comes up over the middle of this deck and, somewhere off along the lower deck, goes down with a long slow gurgle. Turned the other, the lake goes back where it was.
+
+[drift_valve_ves]
+{bored}It drains one deck by filling the other. {smile}Lakes are very fair like that. They never lose anything, they just move it behind you.
+
+[drift_plate]
+A square board set in the planks, with a pipe running off under the lower deck. A tag says: FLOAT PLATE. WEIGHED, THE EAST SLUICE OPENS. UNWEIGHED, IT SHUTS. Somebody standing on it can hear the water go out of the planks a long way off. When they step off, it comes back.
+
+[drift_plate_ves]
+{bored}So somebody stands here and holds the water off. {smile}It's the first time anyone has asked me to be heavy.
+
+[drift_drain]
+An iron wheel, newer than the others, set on the east bank. A tag says: EAST SLUICE, HOLD OPEN. Turn it and the east half of the lower deck stays drained, plate or no plate.
+
+[drift_drain_ves]
+{smile}That's me off the plate, then. {bored}I'll put it on my list, between the rotten planks and the umbrella.
+
+[drift_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF THE LOG GOES WRONG. Press on it and the log goes back to the bank, and you with it. The wheels stay as you left them.
+
+[drift_water]
+Black water, lapping over the planks. It looks shallow, the way a lie looks short.
+
+[drift_log]
+A log, thick and round, left on the bank by the last shift. Lean on it and it rolls.
+
+[drift_start_log]
+A log left lying at the head of the upper deck, round and heavy and perfectly happy to roll. Lean on it and it goes east along the planks until something tells it no.
+
+[drift_chest]
+A chest on the islet, a bit damp, with a fish painted on the lid. The fish looks relieved to be somewhere dry.
+
+[drift_pouch_islet]
+A purse on the islet, next to a bone that probably belongs to a pasty.
+
+[drift_pouch]
+A purse on the pump house, on top of a pile of old pump washers. The washers are worth nothing, but the purse isn't.
+
+# --- THE CAVE-IN ---
+
+[cave_sign]
+ROCKFALL. DO NOT ENTER. Someone has crossed out DO NOT and written PLEASE.
+
+Under it, in a careful hand: LOADS ARE WEIGHED AT THE PLATE BEFORE THE GATE. A LOAD THAT DOES NOT STOP DOES NOT COUNT.
+
+[cave_warning]
+THE ROOF IS NOT YOUR FRIEND. Under it, smaller: THE ROOF IS NOBODY'S FRIEND.
+
+# (draft)
+[cave_warning 2]
+THE ROOF IS NOBODY'S FRIEND. A tiny addition, underneath: (THE ROOF IS A BIT LONELY.)
+
+[cave_rock]
+A big rock off the roof, the size of a barrel and about as friendly. Walk into it, steadily, and it will shift a tile at a time.
+
+[cave_hat]
+A hard hat on a ledge, dented in the exact shape of a falling rock. The hat looks smug. (It was empty at the time. The owner is fine. He'll tell you so himself.)
+
+# (draft)
+[cave_hat 2]
+The hat still looks smug. Inside the brim, in chalk: TOLD YOU. And it's signed: THE HAT.
+
+[cave_barricade]
+A heavy barricade across the tunnel: timbers, planks, wedges. The old shift put it up against the fall, and it has held for a hundred years. Nothing alive is going to get through it, but an empty cart at speed might.
+
+[cave_plate]
+A heavy iron plate laid in the line, scored by a hundred years of wheels. It was made to be sat on, not rolled over. A rock would just sit there: this one wants the weight of a cart, and the cart has to stop.
+
+[cave_plate_ves]
+{bored}Weigh it, don't just drive over it. {smile}I do hope that's a figure of speech.
+
+[cave_gate]
+A drop gate across the tunnel, hung from a beam, held shut by a long chain that runs off down the line to the weigh plate. It has the look of something that was shut on purpose, by someone with a grudge against the fall.
+
+[cave_gate_open]
+The plate clunks down, the chain slackens all the way down the line, and the gate drops into its slot overhead with a long relieved groan.
+
+[cave_barricade_ves]
+{bored}A hundred years of holding. {smile}Let's see what it makes of a cart.
+
+[cave_pouch]
+A purse in the corner of the west cavern, a long way from the rocks. A careful sort of person owned it.
+
+[cave_pouch_east]
+A purse beside the east cavern's wall, half-buried in grit. The fall must have missed it by a fraction.
+
+# --- THE LIFT ---
+
+[lift_sign]
+THE LIFT. DOWN ONLY. For up, see LADDERS (NONE).
+
+# (draft)
+[lift_sign 2]
+For up, see LADDERS (NONE). Somebody has drawn a little ladder under it. It's very wobbly, and it doesn't reach the top of the sign.
+
+[lift_winch]
+The lift's winch: a drum, a brake as big as a door, a crank as long as a mole is tall, and a box of counterweights with a slot in the lid. The brake is on. The gate to the cage is on with it.
+
+[lift_winch_ves]
+{bored}Cart, plate, gate, brake. {smile}The diggers did like the long way round.
+
+[lift_board]
+The winchman's log. DOWN: 4. UP: 4. DOWN: 7. UP: 7. Then, in a different pen, one line: DOWN 1. UP --. After that a clean page, and a tidy hand: MAINTENANCE.
+
+At the bottom, in the tidy hand: TWO PLATES. EAST LINE, ONE SHORT OF THE BUFFER. SIDING, END OF THE LINE. BUFFER PLATE WORKS THE SIDING FORK.
+
+[lift_board_ves]
+{bored}Down one. Up none. {surprised}...That's not a slip of the chalk, is it.
+
+# (draft)
+[lift_board 2]
+DOWN 1. UP --. The dash has been gone over, more than once, by somebody hoping it would turn into a number.
+
+# (draft)
+[lift_board_ves 2]
+{thoughtful}...{determined}Two more down. {bored}And two more up, after. I'll write it in myself.
+
+[lift_warning]
+STAND CLEAR OF THE ROPE. Under it: STAND CLEAR OF THE CAGE. Under that: STAND CLEAR.
+
+[lift_lever]
+The points lever for the first fork. Set straight, a cart runs out along the east line; thrown, it turns down the siding. The fork at the far end of the siding hasn't got a lever of its own.
+
+[lift_hold]
+A round iron plate at the very end of the east line, with a rod that runs off under the floor towards the siding. It isn't one of the lift's plates: it's the other end of the rod to the siding's second fork. Weight on it holds that fork turned down towards the lower plate. Nothing on it, and the fork lets go and runs straight on.
+
+[lift_hold_ves]
+{bored}Something heavy, left at the end of the line, so another heavy something can turn the corner. {smile}It's the most sensible thing I've heard all week.
+
+[lift_plate]
+A counterweight plate set in the floor, with LIFT stamped on it. It wants a cart's weight on it, and the lift wants both plates held at once. It's a lot to ask of a plate. This one isn't at the buffer: the buffer's a little further on.
+
+[lift_barricade]
+A barricade across the line, nailed up by whoever was last to leave, for reasons nobody wrote down. A cart with someone in it would only bump the planks. An empty one goes through.
+
+[lift_barricade_ves]
+{bored}Another one. {smile}They really didn't want anybody going anywhere.
+
+[lift_gate]
+A gate across the way to the cage, held shut by the winch's brake. It will let go when both plates are down.
+
+[lift_gate_open]
+Both plates clunk down. Somewhere the brake lets go, and the gate to the lift sags open with a groan of relief.
+
+[lift_pouch]
+A purse on the spoil heap above the yard, for whoever is quick on the last day of the line.
+
+# --- SEAM NINE (the secret) ---
+
+# (draft) The roster: where the seventh shift put the three pieces of the whistle (the whistle quest).
+[lost_roster]
+A duty roster, tacked up beside the hats, ruled in chalk. Most of it is who has the pick and who has the kettle. At the bottom, in a bossy hand:
+
+WHISTLE. KEPT IN THREE, SO NOBODY BLOWS IT BY HABIT.
+  PEA .......... FENN. UP TO THE LIGHT. NEEDS A STONE UNDER IT.
+  MOUTH ........ HALE. TO THE SMITH'S. STILL COOLING.
+  BARREL ....... TARN. THE LONG WAY ROUND, WHERE THE STONES RUN OUT.
+ALL THREE AT THE CRACK, OR NOT AT ALL.
+
+# (draft)
+[lost_roster_ves]
+{bored}Three miners, three pockets, and not a one of them thought to write down which town.
+{thoughtful}Up to the light. The smith's. Where the stones run out. I'd say that was a tour.
+
+# (draft) Plainer reading of the roster, so the three towns are named: the Glimmering, Belowtown, the lake.
+{smile}Up to the light is the Glimmering, all that crystal. The smith's is Hobnail, and he's the only smith down here. And stepping stones that run out can only be the Stillwater. So: the hill, the forge, the lake.
+
+# (draft)
+[crack_not_yet]
+The crack runs on into the floor here, but a skin of glass has set across it, clear as pond ice, and it hums at the sword and does not give. It is a seal, not a break: somebody laid it on purpose.
+
+Wherever it is meant to be opened from, it is not from here, and not with a sword. The roster by the hats said ALL THREE AT THE CRACK.
+
+[lost_hats]
+A row of hard hats on nails, each with a tin tag: names, in a hand that was in no hurry. They're all brushed clean and ready for the next shift.
+
+[lost_hats_ves]
+{sad}Somebody brushed them. {bored}And then went on a break and never came back from it. I don't like how tidy it is.
+
+[lost_board]
+The tally board of Seam Nine. The last column says, in chalk: BACK AFTER LUNCH. The date next to it is a very long time ago.
+
+# (draft) The end-of-shift whistle (the Pale Olm's TALK sings it back).
+Under the last column, in smaller chalk, in a different hand: END OF SHIFT. THREE DOWN, ONE UP. WHISTLE IT. HE LIKES IT.
+
+The HE has a line under it, as if somebody had been told off for the pronoun.
+
+[lost_sign]
+SEAM NINE. NOT ON THE MAP. If you've read this sign, you're not supposed to be here. You're welcome to the tea.
+
+# (draft)
+[lost_sign 2]
+You're welcome to the tea. You look at the seven rings of dust. It's a very kind offer.
+
+[lost_table]
+A table laid for a break: seven tin mugs, a kettle, and a plate of something that was once a pasty. The tea has gone to a ring of dust in each mug. Seven mugs, and one stool pushed back, as if someone had just stood up.
+
+[lost_table_ves]
+{bored}Seven mugs. {surprised}And a stool pushed back. I'd rather we didn't sit down.
+
+# (draft)
+[lost_table 2]
+Seven mugs. One has a chip in the rim, turned carefully to the back, so nobody would have to drink from that side.
+
+[lost_bench]
+A bench worn smooth in seven places. The eighth place is a little less smooth.
+
+# (draft)
+[lost_bench 2]
+The eighth place, a little less smooth. Somebody who only came now and then. Or somebody who never quite sat down.
+
+[lost_chest]
+A chest under the back wall with a rivet-studded lid. Chalked on it: TO THE NEXT SHIFT.
+
+# (draft) Only a sliver now: the real shard is at the bottom of the crack, south-west.
+[lost_shard]
+A sliver of pale metal wedged in a crack in the back wall, no bigger than a fingernail, giving off a faint, cold light. It hums when you come near, and the sword answers.
+
+But it isn't the sliver the sword is answering. The hum comes up from below. The crack runs on across the floor, out of the south-west corner, and down.
+
+# (draft)
+[lost_shard_ves]
+{thoughtful}Too small to hold. Too small to be what it's humming at. Whatever it is, it's down there.
+
+[lost_pouch]
+A purse beside the back wall, left by someone who had a good day. It's been the same good day ever since.
+
+# (draft)
+[d_lunch]
+Somebody's tea break, left exactly where they left it: a tin lunch box with half a mushroom pasty in it, a mug gone cold, a candle stuck to the crate in its own wax.
+
+They'll be back for the pasty. Nobody leaves half a pasty.
+
+# (draft)
+[d_lunch 2]
+The candle has burned down another finger since you were here. Nobody's been. Candles down here just have to get on with it.
+
+# (draft)
+[d_timber]
+Spare pit props, sawn to length and stacked on two stones, ready for the next bit of roof that wants holding up.
+
+Down here there's always a next bit.
+
+# --- THE AIR SHAFT (diggings_air_shaft): a ring climb up an old shaft to a chest ---
+
+[shaft_sign]
+A tin sign on a post: AIR SHAFT. CLOSED. Under that, scratched in: BOLTS STILL GOOD. PROBABLY.
+
+[shaft_face]
+The shaft goes straight up through the rock.
+
+Iron eye-bolts are hammered into the face, where the diggers used to rope up and down.
+
+[shaft_face_ves]
+{bored}"Probably." Lovely. You first.
+
+[shaft_scree]
+Loose stone that's come off the face over the years. Some of it quite recently.
+
+[shaft_crate]
+A crate on the landing, with a lid that says LUNCH. Inside: nothing, and a note. GONE UP FOR MORE. BACK SOON.
+
+[shaft_hats]
+Hard hats on nails, all in a row, for whoever came up next. Nobody has in a long time.
+
+[shaft_chest]
+A chest at the top of the shaft, stencilled SPARES.
+
+Under the spare rope and a very old sandwich, something worth the climb.
+
+# ===== LIFE PASS (14 November 2026): set dressing, generated with src/data/diggingsDressing.js =====
+
+# --- diggings_pithead ---
+
+[dgp_rota]
+The shift rota on a chalkboard. Every name is crossed out but two. One is SEDGE (FOREMAN), written by Sedge. The other is MATTOCK, written by Sedge as well.
+
+[dgp_rota_ves]
+{bored}Two names. That's a very efficient mine.
+
+[dgp_coal]
+A heap of coal, which is odd, because nobody ever dug coal here. Somebody must have carried it in for the stove. A shovel still stands in it, at attention.
+
+[dgp_coal_ves]
+{smile}At least something down here is still on duty.
+
+[dgp_mug]
+A tin mug of tea gone stone cold, with a skin on it you could stand a spoon on. A stub of candle burns beside it, as if the owner had just stepped out.
+
+[dgp_mug_ves]
+{bored}That's not tea any more. That's an opinion.
+
+[dgp_stool]
+A three-legged stool, worn dark and dished in the seat. There's a burn on it where a pipe was put down in a hurry, and never picked up again.
+
+[dgp_stool_ves]
+{smile}I'd sit. It looks like it's taken, though.
+
+[dgp_boots]
+A pair of boots left by the wall, one standing, one fallen over, as if they'd had a row. The owner went home in his socks.
+
+[dgp_boots_ves]
+{bored}Or he's still here, in his socks, being brave about it.
+
+[dgp_beam]
+Chalked along a cap beam: NO RUNNING. Underneath, smaller: (WE KNOW.) Underneath that, smaller still: (WE DID, ONCE.)
+
+[dgp_beam_ves]
+{smile}Somebody's been heckling the safety rules.
+
+[dgp_fossil]
+A curled shell the size of a saucer, set in the rock face like a coin in a cake. The miners polished all round it but left the shell alone. Respect.
+
+[dgp_fossil_ves]
+{thoughtful}That was the sea once. It's hard to picture from here.
+
+[dgp_bucket]
+A bucket set under a drip. It filled up years ago and has been overflowing politely ever since, a little at a time.
+
+[dgp_bucket_ves]
+{bored}Full since spring. Which spring is up for debate.
+
+[dgp_stub]
+A pit prop sawn off short and never used, split across the top. Someone has chalked MIDDLING on it, which is the best anyone ever said of it.
+
+[dgp_stub_ves]
+{smile}Middling. High praise, down here.
+
+[dgp_rind]
+A cheese rind, gnawed. Beside it in the dust, a row of tiny footprints, and a mouse-sized drag mark where something much heavier was taken away.
+
+[dgp_rind_ves]
+{surprised}Don't look at me. I haven't touched it.
+
+[dgp_grit]
+A little drift of grit on the floor, shaken down from the roof. The mountain does this whenever it shifts its weight. It shifts its weight a lot.
+
+[dgp_grit_ves]
+{bored}Don't look up.
+
+[dgp_rope]
+A coil of rope hung on a peg, stiff with old mud. It's been coiled so neatly that you suspect it was never used.
+
+[dgp_rope_ves]
+{thoughtful}Somebody was proud of that coil. I respect it.
+
+[dgp_barrel]
+A water barrel, lid pushed back. The water's clear and very cold, and a small beetle is doing slow laps round the rim as if it owned the place.
+
+[dgp_barrel_ves]
+{smile}It looks very sure of itself.
+
+[dgp_pipe]
+A clay pipe on a ledge, with a thumb of old ash in the bowl. Someone left it where they'd find it. They didn't.
+
+[dgp_pipe_ves]
+{bored}Nobody's coming back for that.
+
+[dgp_box]
+A box nailed to a post, with a slot cut in the lid and SUGGESTIONS painted on the front. The slot has been stopped with a pasty crust. Something rattles inside: MORE PASTY, MORE PASTY and, in a very small hand, PASTY.
+
+[dgp_box_ves]
+{glee}Finally, a management that listens.
+
+# --- diggings_cart_yard ---
+
+[dgy_wreck]
+A cart on its side, a wheel gone and its floor rusted through, pushed off the line to be dealt with later. Later has been a long time coming.
+
+[dgy_wreck_ves]
+{bored}Retired with full honours.
+
+[dgy_coal]
+Coal, again, with a shovel in it, again. Whoever stocked these stoves was very sure of himself.
+
+[dgy_coal_ves]
+{smile}Or very cold.
+
+[dgy_tally]
+A tally on a plank: gates of five, scratched deep, then a second tally chalked beside it. The scratched one is carts out. The chalked one is carts back. They don't match.
+
+[dgy_tally_ves]
+{thoughtful}Neither do the carts.
+
+[dgy_lamp]
+A lamp that's gone out and rusted on its hook. Somebody has written NEW WICK ON REQUEST under it. Nobody ever requested.
+
+[dgy_lamp_ves]
+{bored}I'd request one, but I don't think anyone's in.
+
+[dgy_barrel]
+A barrel of oil, lid tied on with a bootlace. It's sat so long that a dark ring has gone right through the floor under it.
+
+[dgy_barrel_ves]
+{surprised}I'm not lighting anything near that.
+
+[dgy_pipe]
+A clay pipe on a shelf of rock with a note tucked under it: NOT YOURS. The handwriting is shaky. It's nobody's now.
+
+[dgy_pipe_ves]
+{smile}Not mine, then.
+
+[dgy_board]
+A board listing which carts go where. Every line says YARD in a neat hand, until the last one, which says WHERE'S MY CART, underlined three times.
+
+[dgy_board_ves]
+{bored}Somebody lost a cart in a cart yard. That takes skill.
+
+[dgy_lean]
+A pit prop leaned on the wall for next time. It has a cheerful dent where a mallet slipped, and a name scratched in it: BRIDGET.
+
+[dgy_lean_ves]
+{thoughtful}They named the props. That's love, in a way.
+
+[dgy_boots]
+A pair of boots, laces tied together and slung on a nail, as if someone wanted to find them again and wasn't taking chances.
+
+[dgy_boots_ves]
+{bored}It worked. We found them.
+
+[dgy_bucket]
+A bucket with a rope handle and a thumb of water in the bottom. Beside it in the dust there's a very small, very damp footprint.
+
+[dgy_bucket_ves]
+{surprised}Something wet lives down here. Wonderful.
+
+[dgy_leaf]
+A single scarlet leaf lies on the floor, curled at the edges and quite dry. It's the red of the trees up in the wood, and a very long way from any of them.
+
+[dgy_leaf_ves]
+{thoughtful}Odd. Nothing grows down here. It must have come in on somebody's boot.
+
+[dgy_mug]
+A tin mug on a rock, with a spoon in it that stands up by itself. The tea has set solid. It has not moved since it set.
+
+[dgy_mug_ves]
+{smile}The spoon's holding up the tea. Not the other way round.
+
+[dgy_stool]
+A stool with one leg shorter than the rest, mended with a folded cap. The cap has seen better days and worse floors.
+
+[dgy_stool_ves]
+{bored}Sit down and rock a bit. It's the only seat that comes with a lullaby.
+
+[dgy_beam]
+Chalked on a beam: CARTS KEEP LEFT. Someone has crossed out LEFT and written RIGHT. Someone else has crossed out RIGHT and written WHICHEVER.
+
+[dgy_beam_ves]
+{smile}Standards are slipping.
+
+[dgy_grit]
+Grit and a few small stones in a neat fan, where the roof coughed. Further on, the fan has footprints in it, small and busy.
+
+[dgy_grit_ves]
+{bored}Busy little feet. I hope they know where they're going.
+
+[dgy_rind]
+A thin sliver of cheese rind in the middle of the floor. Somebody has stuck a very small flag in it. It says CLAIMED.
+
+[dgy_rind_ves]
+{surprised}It's a battlefield.
+
+[dgy_fossil]
+A fossil in the wall, a little coil of shell with a shine on it. Somebody has rubbed it for luck so often that it's the brightest thing in the yard.
+
+[dgy_fossil_ves]
+{smile}I'd rub it too.
+
+# --- diggings_trestle ---
+
+[dgt_coal]
+A small heap of coal with the shovel left in it. The shovel has a note tied round the handle: BROUGHT BACK. Next to it, in different chalk: NOT BY ME.
+
+[dgt_coal_ves]
+{smile}Nobody here owns a shovel. They just pass the blame.
+
+[dgt_tally]
+A tally scratched into a plank, a stroke for every cart that crossed the trestle. It stops at a number and then, much more neatly, starts again at one.
+
+[dgt_tally_ves]
+{thoughtful}They started over. I like that.
+
+[dgt_fossil]
+A coiled shell in the rock face, no bigger than a biscuit, with one clean notch where somebody tried a chisel and thought better of it.
+
+[dgt_fossil_ves]
+{smile}Good decision.
+
+[dgt_beam]
+Chalked along the top beam: THROW A COIN, COUNT TO TEN. Beneath it: WE'RE STILL COUNTING.
+
+[dgt_beam_ves]
+{surprised}Please don't try it.
+
+[dgt_boots]
+A pair of boots, upright and neat, set side by side at the lip of the plank. Whoever stood in them stepped out and went another way.
+
+[dgt_boots_ves]
+{bored}That's the most reassuring thing I've seen all day. Or the least.
+
+[dgt_stool]
+A stool put just where the view is best. The view is a drop into the dark, and the stool has been sat on for hours.
+
+[dgt_stool_ves]
+{bored}Some people pay a lot for a view like that.
+
+[dgt_mug]
+A tin mug with three coins in it, dropped from the stool one at a time. Nobody ever heard them land.
+
+[dgt_mug_ves]
+{thoughtful}That's a long way down.
+
+[dgt_bucket]
+A bucket on a rope, tied off to the post and let down over the edge to see how deep it goes. The rope has never run out.
+
+[dgt_bucket_ves]
+{surprised}There's no splash at the end of it. I listened.
+
+[dgt_lamp]
+A lamp on a hook, gone out and gone rust-red. A miner has stuck a warning on it: DO NOT LIGHT. IT KNOWS.
+
+[dgt_lamp_ves]
+{bored}It knows what? Don't tell me.
+
+[dgt_barrel]
+A barrel marked OIL, which it isn't, and then marked NOT OIL, which isn't a great help either. It sloshes a bit when you lean on it.
+
+[dgt_barrel_ves]
+{smile}I'm leaving it alone out of respect.
+
+[dgt_stub]
+A pit prop cut short, standing on its own where the roof used to need it. It looks pleased to be of no use whatsoever.
+
+[dgt_stub_ves]
+{smile}Retired. Lucky.
+
+[dgt_lean]
+A tall prop leaned on the wall, with a lean of its own. Someone has pinned a note to it: STRAIGHTEN ME. I'VE BEEN LIKE THIS SINCE THE TUESDAY.
+
+[dgt_lean_ves]
+{bored}Which Tuesday?
+
+[dgt_mush]
+Pale mushrooms growing in a ring on the floor, each one on its own tiny stalk, none of them looking at you. They're very polite about it.
+
+[dgt_mush_ves]
+{surprised}I wouldn't eat them. I wouldn't ask them to dance either.
+
+[dgt_rind]
+A rind of cheese on a flat stone, with a very small wooden spoon beside it, which is the proper way to eat a rind.
+
+[dgt_rind_ves]
+{smile}I take back what I said about the footprints.
+
+[dgt_grit]
+Grit, fine as flour, in a drift against the wall. Every so often a little more trickles down off the roof. It doesn't mean anything. It's just the mountain thinking.
+
+[dgt_grit_ves]
+{bored}Please stop thinking.
+
+[dgt_board]
+A board with the crossing times chalked on: first cart, last cart, and CARTS WHICH HAVE ALREADY GONE. The last list is much the longest.
+
+[dgt_board_ves]
+{bored}Optimistic bookkeeping.
+
+[dgt_coal2]
+More coal. Whoever laid this trestle kept the stoves burning on both sides, and fell out about it, judging by the chalk marks.
+
+[dgt_coal2_ves]
+{smile}They fell out over coal. Respect.
+
+[dgt_pipe]
+A clay pipe left on a ledge, still faintly smelling of cherry. Someone was very fond of it, and very far from home.
+
+[dgt_pipe_ves]
+{thoughtful}Cherry. Funny what you remember.
+
+[dgt_beam2]
+Another beam, another scrawl: MIND THE GAP. A second hand has added: WHICH GAP? A third: ALL OF IT.
+
+[dgt_beam2_ves]
+{smile}Honestly, that's good advice.
+
+# --- diggings_switchback ---
+
+[dgs_tally]
+A tally board, headed DAYS WITHOUT A CAVE-IN. The number has been rubbed out so many times the plank has gone thin. The current number is a very cheerful zero.
+
+[dgs_tally_ves]
+{bored}They keep it zero out of habit.
+
+[dgs_coal]
+A coal heap, a shovel, and a hat on the shovel. The hat is the only thing in the heap that looks content.
+
+[dgs_coal_ves]
+{smile}It's the head-wear of someone who's let go.
+
+[dgs_lean]
+A pit prop leaned against the wall, with a cap beam on one shoulder, like a man carrying his own coffin lid. A chalked note: WAITING FOR THE OTHER ONE.
+
+[dgs_lean_ves]
+{bored}There's always another one.
+
+[dgs_stub]
+A stub of a prop, no more than knee high, with a hat hung on it. The hat says FOREMAN, which is a big word for a very short post.
+
+[dgs_stub_ves]
+{smile}Sedge would approve.
+
+[dgs_bucket]
+A bucket collecting a drip, and a tin cup collecting the bucket's overflow, and a tin saucer collecting the cup's. Somebody was very thorough.
+
+[dgs_bucket_ves]
+{smile}It's drips all the way down.
+
+[dgs_boots]
+A pair of boots, toes out, left to dry beside a long-dead stove. They're stiff as boards. They'll be dry by next week. They've said that for years.
+
+[dgs_boots_ves]
+{bored}They'll never dry. It's a cave.
+
+[dgs_mush]
+A patch of pale mushrooms in the damp corner, some of them as big as plates. A sign beside them reads ONLY ONE OF THESE IS FOOD. The sign doesn't say which.
+
+[dgs_mush_ves]
+{surprised}Statistically, we should leave them all.
+
+[dgs_lamp]
+A rusty lamp on a hook, wick long gone, a very small spider living in the glass where the flame used to be. The spider is paying no rent.
+
+[dgs_lamp_ves]
+{smile}I suppose it's an upgrade on the dark.
+
+[dgs_beam]
+On the beam, in chalk: UP IS THAT WAY. A bit further along: NO, THAT WAY. A bit further: ASK SOMEONE.
+
+[dgs_beam_ves]
+{bored}This is the most honest map in the whole mine.
+
+[dgs_stool]
+A stool facing the wall. Somebody must have put it there on purpose and then never turned it round. There's a name chalked on the seat: KEITH. Just that.
+
+[dgs_stool_ves]
+{smile}Poor Keith.
+
+[dgs_rope]
+A coil of rope on a peg, a big knot at the end. Someone has tied a very small bell on it: for if you fall, so they know to come.
+
+[dgs_rope_ves]
+{thoughtful}That's thoughtful. And a bit sad.
+
+[dgs_fossil]
+A small coiled shell in the rock, right at the height of a miner's eye, as if the rock had been put up to be looked at.
+
+[dgs_fossil_ves]
+{thoughtful}Every wall down here has a little face if you look.
+
+[dgs_barrel]
+A barrel on its side, rolled out of the way, with a tiny door knocked into the end and a doormat. A very small household has taken it over.
+
+[dgs_barrel_ves]
+{surprised}Mice, I think. They've got better taste in furniture than most.
+
+[dgs_grit]
+A fan of grit and stones under a crack in the roof. The crack looks quite comfortable. You hope it stays that way.
+
+[dgs_grit_ves]
+{bored}Let's not be here when it changes its mind.
+
+[dgs_rind]
+A cheese rind with a very small pickaxe stuck in it. It's been there a while. It looks like a flag at the top of a very small mountain.
+
+[dgs_rind_ves]
+{smile}A summit. Well done to whoever did it.
+
+[dgs_nook_sign]
+Chalked on the wall of a little dead-end nook: NAP NOOK. KNOCK FIRST. Below, smaller: (THERE'S NO DOOR, KNOCK ANYWAY.)
+
+[dgs_nook_sign_ves]
+{smile}I knocked. Nobody answered, which is as it should be.
+
+[dgs_nook_pouch]
+A little parcel tucked behind a mushroom-coloured cushion. It's been left for whoever finds the nook, with a note: YOU'VE EARNED A NAP. HERE'S SOMETHING FOR AFTER. Inside, a biscuit.
+
+# --- diggings_old_seam ---
+
+[dgo_cage]
+A canary cage hung from a hook on a post. The door's open, and the perch is bare, and there's one yellow feather on the floor of it.
+
+A label on the bars, in a careful hand: GONE UP. WILL SING FROM THE TOP.
+
+[dgo_cage_ves]
+{sad}...I hope so.
+
+[dgo_coal]
+A heap of coal, black and perfectly dry, with a shovel standing in it. Dust lies on the shovel an inch thick. Nobody's stoked a fire in this place for a long time.
+
+[dgo_coal_ves]
+{bored}It's the quiet kind of cold.
+
+[dgo_tally]
+A tally scratched into the wall by one person, in a very steady hand: gate after gate after gate, hundreds of them. The last gate has four strokes and no slash.
+
+[dgo_tally_ves]
+{thoughtful}They didn't finish counting. Or the count didn't need finishing.
+
+[dgo_beam]
+A beam over the old store line, with chalk on it that's mostly rubbed away. You can just read: LAST ONE OUT, MIND THE LAMP.
+
+[dgo_beam_ves]
+{sad}Somebody did. Mind the lamp, I mean.
+
+[dgo_lamp]
+A lamp on a hook, gone out, rust bleeding down the post below it in a long orange stain. There's a little wax left in its dish, shaped like a thumb.
+
+[dgo_lamp_ves]
+{thoughtful}Someone pinched the flame out with their fingers. That's careful.
+
+[dgo_wreck]
+A cart pushed off the line and left on its side, gone rust-brown. Its wheel lies a little way off, and a few green and copper lumps of ore have spilled out of it and stayed where they fell.
+
+[dgo_wreck_ves]
+{bored}It's not a good sign when the cart's lying down.
+
+[dgo_boots]
+A pair of boots set neatly side by side by the wall, as if for a night's sleep, with a pair of dry socks tucked into them. Nobody's come back for the socks.
+
+[dgo_boots_ves]
+{sad}...They left their socks.
+
+[dgo_bucket]
+A bucket, a third full of dark water, and a tin ladle. The ladle's handle has a groove in it, worn smooth by a thumb. Somebody drank here every shift.
+
+[dgo_bucket_ves]
+{bored}And the water's still there. Reliable, at least.
+
+[dgo_fossil]
+A curled shell fossil in the wall by the cage, bigger than a plate. It's older than the mine, and much older than the miners, and it's the only thing in here that looks relaxed about it.
+
+[dgo_fossil_ves]
+{smile}I'd like to be that calm.
+
+[dgo_lean]
+A prop leaned in a corner, its top end splintered where something heavy pressed on it for a long time. A little pile of dust has settled at its foot.
+
+[dgo_lean_ves]
+{thoughtful}Props get tired too, I suppose.
+
+[dgo_stub]
+A stub of pit prop with a worn hollow on top, where a lamp used to sit. A lamp-shaped ring in the dust shows where it stood.
+
+[dgo_stub_ves]
+{bored}That lamp went somewhere. Probably with its owner.
+
+[dgo_mush]
+Pale mushrooms in a crack in the wall, growing straight out of the rock. They've no business being here, and they look very pleased about it.
+
+[dgo_mush_ves]
+{smile}They look more alive than anything else in here.
+
+[dgo_pipe]
+A clay pipe resting on a flat stone, ash still in the bowl and a half-burnt match beside it. Somebody settled down for a smoke and then wasn't there.
+
+[dgo_pipe_ves]
+{sad}Not a happy way to leave a pipe.
+
+[dgo_stool]
+A stool, a good one, with a cushion on it made from an old coat. Someone really did sit here a lot. It's the comfiest place in the whole Seam.
+
+[dgo_stool_ves]
+{bored}I'm not sitting down. I might not get up.
+
+[dgo_mug]
+A tin mug with a thin ring of old tea in the bottom, and a note folded under it: BACK IN A TICK. A tick is a mite. It's been a long tick.
+
+[dgo_mug_ves]
+{sad}I suppose a tick is relative.
+
+[dgo_board]
+A last rota, still chalked on a board. The list of names is long and very tidy, and every single one has a tick against it except the last line, which is just a name, without anything after.
+
+[dgo_board_ves]
+{sad}...
+
+[dgo_rope]
+A coil of good rope on a peg, still clean and bright, as if no-one had ever needed it. That's the best sort of rope to have.
+
+[dgo_rope_ves]
+{thoughtful}That's rope that never got used. I'll take that as a mercy.
+
+[dgo_grit]
+A drift of grit under the roof, deeper than in the rooms above. It's not falling any more. It's settling. It has the patience of something very old.
+
+[dgo_grit_ves]
+{bored}It's definitely listening.
+
+[dgo_rind]
+A cheese rind and, laid very carefully across it, a tiny bunch of three pale mushrooms. It looks like an offering. You don't touch it.
+
+[dgo_rind_ves]
+{surprised}Somebody's very fond of someone.
+
+[dgo_barrel]
+A barrel in the store room, lid sealed with wax. On it, in a careful hand: NOT TO BE OPENED TILL THE END OF THE SHIFT. It's been some shift.
+
+[dgo_barrel_ves]
+{smile}I would love to be there when somebody does.
+
+[dgo_stub2]
+A little stub of prop in the store room, holding up a shelf of nothing at all. Something has nibbled the shelf thoroughly.
+
+[dgo_stub2_ves]
+{bored}Fair enough. It's been very empty for a very long time.
+
+[dgo_feather]
+A small white feather with a dark tip is wedged in a crack in the rock. Not a cave bird's feather: it's the colour of snow. It looks like a snow bunting's.
+
+Somebody carried it all the way down here, and tucked it where it wouldn't blow away.
+
+[dgo_feather_ves]
+{surprised}That's a mountain bird's. It's a very long way from the mountain.
+
+# --- diggings_flooded_drift ---
+
+[dgf_coal]
+A coal heap gone damp and shiny, black as a seal's back. The shovel in it has been in so long that the handle's gone soft.
+
+[dgf_coal_ves]
+{bored}It's a heap of wet. Brilliant.
+
+[dgf_bucket]
+A bucket for bailing, with a hole in it. Next to it, a second bucket, for bailing the first one. It also has a hole.
+
+[dgf_bucket_ves]
+{smile}I admire their optimism.
+
+[dgf_mush]
+Pale cave mushrooms in the damp, tall and spindly, leaning toward the water like tiny bathers. The nearest one is almost as tall as your boot.
+
+[dgf_mush_ves]
+{surprised}They're all facing the same way. Don't look.
+
+[dgf_lamp]
+A lamp hung on a post at the water's edge, the glass long gone green with damp. There's a mark on the post, high up, where the water once came.
+
+[dgf_lamp_ves]
+{thoughtful}Higher than my head. So it can get worse.
+
+[dgf_stool]
+A stool, with fish bones neatly stacked on the seat. Somebody was sitting here with a line over the water, and fishing for something that doesn't exist.
+
+[dgf_stool_ves]
+{bored}Nothing's in there. I'm almost sure.
+
+[dgf_boots]
+A pair of tall boots, hung upside down on stakes to drain. They have. They've been draining so long that a small garden has started in the heels.
+
+[dgf_boots_ves]
+{smile}Honestly, that's the best use of boots.
+
+[dgf_barrel]
+A barrel marked WATER. It's been left out in a flooded mine. The irony has been noticed and chalked on the lid: (HA).
+
+[dgf_barrel_ves]
+{bored}Even the barrels have a sense of humour here.
+
+[dgf_mug]
+A tin mug floating in a puddle, tied to a post by a bit of string so it doesn't wander off. It's been trying for years.
+
+[dgf_mug_ves]
+{smile}Loyalty, in a mug.
+
+[dgf_stub]
+A prop stub stuck in the east bank, with a green high-water line drawn round it in moss. Someone has drawn a tiny smiling face on it.
+
+[dgf_stub_ves]
+{smile}Somebody's been busy being cheerful.
+
+[dgf_lean]
+A tall prop leaned on the wall, with a rope round it and a little tag: ENTRY AT YOUR OWN RISK. A second tag: AS IF.
+
+[dgf_lean_ves]
+{bored}Standard safety signage.
+
+[dgf_board]
+A tide board on the east bank, with a rota of waterlines chalked up and rubbed out and chalked up again. They're all wrong. They're all going up.
+
+[dgf_board_ves]
+{bored}Well, they got that part right.
+
+[dgf_coal2]
+A coal heap on the east bank, covered with a tarpaulin that someone put a rock on. The rock has a small hat.
+
+[dgf_coal2_ves]
+{smile}A rock in a hat is protecting the coal. Fine.
+
+[dgf_pipe]
+A pipe on a dry ledge, the bowl full of rainwater from the drips. A tiny fish has taken up residence. Probably not a fish.
+
+[dgf_pipe_ves]
+{surprised}That's... still moving. Okay.
+
+[dgf_rope]
+A rope hung on a peg, soaked and heavy, trailing in a puddle. The knot at the end is a very neat, very wet loop.
+
+[dgf_rope_ves]
+{thoughtful}Somebody tied it off for the next shift. Tidy.
+
+[dgf_rind]
+A cheese rind on a flat stone, with three tiny cups of water arranged round it, and a bit of moss for a napkin. A very small dinner party.
+
+[dgf_rind_ves]
+{smile}I'm not interrupting that.
+
+[dgf_beam]
+Chalk on the wall of the nook, at about the height of your knee: HIGH WATER, SPRING. And a long way above it: HIGH WATER, THE ONE WE DON'T TALK ABOUT.
+
+[dgf_beam_ves]
+{surprised}Good grief. How tall was that wave?
+
+[dgf_fossil]
+A shell set in the damp rock, the size of a plate, with a glitter of water in every curl. It's been looking at the lake longer than any of us.
+
+[dgf_fossil_ves]
+{thoughtful}Imagine how much it's seen.
+
+[dgf_boot]
+A single boot, stood neatly on its own in the corner of the nook: brown, left-footed, with a good deal of character. Somebody has stuffed a note into it: PROPERTY OF MATTOCK. FOUND THE HARD WAY.
+
+[dgf_boot_ves]
+{smile}One boot. The other one will have run away.
+
+# --- diggings_cave_in ---
+
+[dgc_coal]
+A heap of coal beside a stove that's long gone cold. Somebody's drawn a face in the top of the heap with a finger. It looks surprised.
+
+[dgc_coal_ves]
+{smile}It's seen the ceiling. I don't blame it.
+
+[dgc_tally]
+A tally scratched into the wall, a stroke for every shift that went out, and a stroke across for every one that came back. The crosses stop partway down. Then there's a row of plain strokes, with no crosses at all.
+
+[dgc_tally_ves]
+{sad}Right.
+
+[dgc_fossil]
+A fossil shell in the wall, right at the edge of the fall. Half of it has been broken away by the rubble. The other half has stayed put, curled up, determined.
+
+[dgc_fossil_ves]
+{thoughtful}Stubborn. I like it.
+
+[dgc_beam]
+A beam above the west chamber, chalked: SAFE UNDER HERE. Below it, a different hand: WAS. Below that, another: STILL IS.
+
+[dgc_beam_ves]
+{bored}Three people, three opinions, and one beam. It's still up.
+
+[dgc_lamp]
+A rusty lamp, put out by grit and left hanging. There's a spider's thread across the glass, taut as a harp string.
+
+[dgc_lamp_ves]
+{thoughtful}Something lives in there and it's very good at its job.
+
+[dgc_boots]
+A pair of boots, crusted with the grey dust that's on everything on this side. One has a stone in it. You don't check which.
+
+[dgc_boots_ves]
+{bored}Someone got out of those in a hurry.
+
+[dgc_bucket]
+A bucket, half full of grit instead of water, as if someone tried to bail out the roof. There's a note: DID NOT WORK.
+
+[dgc_bucket_ves]
+{smile}I could have told them that.
+
+[dgc_wreck]
+A cart half-buried in a long slope of fallen rock, its wheels poking out of the dust. A hand-lettered tag swings from it: LOAD SHIFTED.
+
+[dgc_wreck_ves]
+{bored}That's one way of putting it.
+
+[dgc_stool]
+A stool where somebody sat to watch the roof, as if watching would help. Beside it, a tin plate with a heel of bread on it, hard as a brick.
+
+[dgc_stool_ves]
+{bored}Did it help? Not much, I'd say.
+
+[dgc_mug]
+A tin mug on its side with a thin cold stain spilling from it that's become part of the floor. Someone dropped it and ran.
+
+[dgc_mug_ves]
+{sad}That's a lot of running for one mug.
+
+[dgc_lean]
+A prop leaned on the wall with a crack all the way down it, and a note nailed to it: THIS ONE FOR THE NEW SEAM. IT WILL DO.
+
+[dgc_lean_ves]
+{bored}It did not do.
+
+[dgc_stub]
+The stump of a prop, snapped clean across by the weight. The top half lies a little way off. Neither piece looks sorry.
+
+[dgc_stub_ves]
+{bored}Brave of it, though.
+
+[dgc_mush]
+A few pale mushrooms by the spill, new growth in the broken ground. Things come up in the cracks, if you leave them long enough.
+
+[dgc_mush_ves]
+{smile}That's the nicest thing I've seen on a collapse.
+
+[dgc_board]
+A rota board, chalked and then half erased by a sweep of grit. You can make out two lines: ALL PRESENT. And underneath: PLEASE, ALL PRESENT.
+
+[dgc_board_ves]
+{sad}...
+
+[dgc_grit]
+Grit in a drift, shaken down in the last fall, with a hand print in it where someone pushed off to stand. It's small, and has four fingers and a thumb.
+
+[dgc_grit_ves]
+{surprised}That's a mole hand. Or a very determined child's.
+
+[dgc_rind]
+A cheese rind, dry as paper, with a crumb trail leading off into a crack in the wall. It's a very tidy crack, with a very small doormat.
+
+[dgc_rind_ves]
+{smile}A neat household. Somebody survived, at least.
+
+[dgc_tally2]
+A second tally on the east side, in a different hand. Its strokes are much shorter, and they've been joined at the tops, so it looks like a row of tiny fences.
+
+[dgc_tally2_ves]
+{thoughtful}Somebody was making a garden out of it. In their head, at least.
+
+[dgc_coal2]
+A coal heap on the east side, buried halfway in the fall. The shovel handle sticks out like a flag on a very dark island.
+
+[dgc_coal2_ves]
+{smile}They've claimed it for the shovel.
+
+[dgc_barrel]
+A barrel on the east side, lid sprung, a cloud of dust round it. It's full of nails. All of them have been put back the right way up, point down.
+
+[dgc_barrel_ves]
+{bored}Careful of them. Even now.
+
+[dgc_lamp2]
+A lamp that's survived on a hook all this time, glass cracked but whole. A small, slow moth sits on the cracked part, unbothered.
+
+[dgc_lamp2_ves]
+{surprised}A moth. Down here. It must have followed somebody in.
+
+[dgc_boots2]
+A pair of boots left neatly at the edge of a puddle. One has a very small mushroom growing out of the heel.
+
+[dgc_boots2_ves]
+{smile}It's the only thing that's growing on this side.
+
+[dgc_board2]
+A board with a cart schedule. Underneath, someone's added in careful letters: THE BUSIEST MORNING OF THE YEAR WAS THE LAST ONE.
+
+[dgc_board2_ves]
+{sad}Right.
+
+[dgc_fossil2]
+Another shell in the rock face, the twin of the one in the west chamber. They're looking at each other across the fall, patiently.
+
+[dgc_fossil2_ves]
+{thoughtful}Neighbours.
+
+[dgc_bucket2]
+A bucket full of dusty water with a spoon standing in it. A note on the rim: TEA. A second note: DON'T.
+
+[dgc_bucket2_ves]
+{surprised}Two opposite messages. I admire the commitment.
+
+[dgc_stub2]
+A stub of a prop with a hat hung on it, grey with dust. The hat's too small for a mole. Too small for anyone you've met.
+
+[dgc_stub2_ves]
+{surprised}...whose is that?
+
+[dgc_mush2]
+A little ring of pale mushrooms by the wall, glowing a very faint blue in the half-dark. They sway a bit when you breathe.
+
+[dgc_mush2_ves]
+{smile}It's rude to stare.
+
+[dgc_stool2]
+A stool at the foot of the fall, facing up, where somebody sat and watched the roof till their lamp ran out. They left the lamp.
+
+[dgc_stool2_ves]
+{sad}That's a long watch.
+
+[dgc_mug2]
+A tin mug under the stool, upright, with a coin in it and a note: FOR WHOEVER'S NEXT. It's a small coin. It's the thought that counts.
+
+[dgc_mug2_ves]
+{smile}I'll leave it. It's for whoever's next.
+
+[dgc_rind2]
+A rind on a flat stone, beside a very small pile of three pebbles and a note: ONE FOR EACH OF US. The note has three signatures, each a single dot.
+
+[dgc_rind2_ves]
+{smile}That's... adorable. And mildly alarming.
+
+[dgc_nook_bed]
+A matchbox bed with a teacup lid for a blanket, made up very neatly with a leaf for a pillow. There are six more in a row, all empty, all neatly made.
+
+A tiny sign: THE LITTLE SHIFT. QUIET, PLEASE.
+
+[dgc_nook_bed_ves]
+{surprised}Seven beds. Six empty. Somebody's still keeping watch.
+
+[dgc_nook_rind]
+A rind, a crust, a button, and a tiny chalk drawing of the roof coming down, with a tiny stick-figure sticking out of it giving a thumbs up.
+
+[dgc_nook_rind_ves]
+{smile}Resilient. I like them.
+
+[dgc_nook_pouch]
+A tiny parcel, tied with a thread. Inside: a cake the size of a matchbox, a shirt button, a note. THE LITTLE SHIFT THANKS YOU FOR NOT TELLING.
+
+# --- diggings_lift ---
+
+[dgl_coal]
+A heap of coal at the foot of the lift, the last load that ever went up and the first that came back down. Somebody has written MIND YOUR HEAD on the shovel.
+
+[dgl_coal_ves]
+{smile}I'll mind it. It's the only one I've got.
+
+[dgl_fossil]
+A fossil shell in the wall, the size of a plate, with the lift's own chain-shadow lying across it. It looks like a very slow clock.
+
+[dgl_fossil_ves]
+{thoughtful}Very slow indeed.
+
+[dgl_tally]
+A tally of lifts: a stroke for each trip, scratched in by the winchman. The count at the bottom has been crossed out and replaced with one word: PLENTY.
+
+[dgl_tally_ves]
+{bored}Exact figures are for the boss.
+
+[dgl_beam]
+On the beam above the lift: DO NOT OVERLOAD. A second line: THIS MEANS YOU, MARGE. A third: SHE KNOWS.
+
+[dgl_beam_ves]
+{smile}Marge sounds like a lot.
+
+[dgl_boots]
+A pair of boots stood in a puddle that's the exact shape of a pair of boots. They've been there so long the puddle is a bit of a monument.
+
+[dgl_boots_ves]
+{smile}A monument to boots.
+
+[dgl_bucket]
+A bucket on a chain, a spare for the lift. It's turned out to be the only thing in here that still goes up and down, because it's caught on the chain by its handle and sways whenever anyone walks by.
+
+[dgl_bucket_ves]
+{surprised}It's waving.
+
+[dgl_stool]
+A winchman's stool, with a cushion that's gone flat from forty years of waiting. There's a bell beside it, with the clapper removed.
+
+[dgl_stool_ves]
+{bored}He had to stop it chiming. I'd have done the same.
+
+[dgl_mug]
+A tin mug of cold tea on the winchman's shelf, with a biscuit gone as hard as stone. A note: SAVING THIS FOR WHEN THE LIFT'S FIXED.
+
+[dgl_mug_ves]
+{smile}Optimism. It's the most valuable thing down here.
+
+[dgl_wreck]
+A cart with its wheels off, propped on stones, with a patch of fresh paint on one panel that says MENDED. The paint's very old. It never got mended.
+
+[dgl_wreck_ves]
+{bored}It says MENDED. It's lying.
+
+[dgl_barrel]
+A barrel of grease for the chain, black and thick as treacle. A very small fly is stuck in the top, resting, quite content.
+
+[dgl_barrel_ves]
+{surprised}It looks happy. I don't understand it.
+
+[dgl_lean]
+A pit prop, leaned on the wall, with a hook screwed to its top and a lamp-shaped dent where one used to hang.
+
+[dgl_lean_ves]
+{bored}The lamp went on a trip.
+
+[dgl_stub]
+A short stub of a prop at the lift's foot. Many hands have rested on it while waiting for the cage. The top is polished to a shine.
+
+[dgl_stub_ves]
+{smile}That's a very well-loved bit of wood.
+
+[dgl_board]
+A board listing the lift's timetable. Going up: ON THE HOUR. Coming down: WHEN IT FEELS LIKE IT. The last line says: IT DOESN'T.
+
+[dgl_board_ves]
+{bored}Honest, at least.
+
+[dgl_mush]
+A ring of pale mushrooms by the foot of the lift, in the one patch where the damp collects. They lean away from the chain. Wise.
+
+[dgl_mush_ves]
+{smile}Very sensible.
+
+[dgl_rope]
+A spare coil of rope on a peg, thick as your wrist, with a splice done by someone who was extremely proud of it.
+
+[dgl_rope_ves]
+{smile}It's a very good splice. I can tell.
+
+[dgl_rind]
+A rind on a sheet of tin, with a thimble of water beside it, and a very small chair made of three matchsticks. Somebody lives well.
+
+[dgl_rind_ves]
+{smile}They've got better manners than the lift.
+
+[dgl_grit]
+Grit under the chain, shaken down every time the cage went up. A line in it, from the cage's foot, is straight as a ruler.
+
+[dgl_grit_ves]
+{bored}That's the straightest thing in the place.
+
+[dgl_pipe]
+A clay pipe left on the rim of a stone, with a thread of old smoke still, impossibly, curling off the bowl. You blink and it's gone.
+
+[dgl_pipe_ves]
+{surprised}Did you see that? Neither did I.
+
+# --- diggings_lost_seam ---
+
+[dgz_coal]
+A heap of coal that nobody burned. The shovel's been polished by someone who never got round to using it.
+
+[dgz_coal_ves]
+{bored}Somebody cared about this shovel.
+
+[dgz_tally]
+A tally of shifts, scratched deep and clean, gate on gate. At the end, one more gate. And one more stroke, very small, that doesn't join the others.
+
+[dgz_tally_ves]
+{sad}...Someone was counting the days they'd been left here.
+
+[dgz_beam]
+A beam chalked with the seam's name: THE LOST SEAM. And in smaller letters: NOT LOST. JUST NOT FOUND.
+
+[dgz_beam_ves]
+{smile}That is a very miner thing to say.
+
+[dgz_lamp]
+A lamp hung up and carefully put out. A stub of candle stands beside it, with the same ring of wax burned round the base all the way down.
+
+[dgz_lamp_ves]
+{thoughtful}Somebody was saving the last of the light.
+
+[dgz_wreck]
+The last cart, run off the rails at the end of the line and left where it stopped. There's a tin lunch box still tied to the handle, and nothing in it.
+
+[dgz_wreck_ves]
+{sad}So that's what stopped.
+
+[dgz_boots]
+Boots, set neatly next to a folded coat. The coat has a hat on it. The hat has a note: BACK SOON.
+
+[dgz_boots_ves]
+{sad}Yes. Of course.
+
+[dgz_bucket]
+A bucket of drinking water with a lid on, dry as bone. Somebody planned for the shift to go on a lot longer than it did.
+
+[dgz_bucket_ves]
+{thoughtful}They were hopeful.
+
+[dgz_stool]
+A stool with a lamp beneath it and a crossword on the seat. The crossword is nearly done. One clue's left: THE ONE WE'VE ALL BEEN WAITING FOR (3,4). Nothing's been written in.
+
+[dgz_stool_ves]
+{bored}Three, four. I know the answer. I'm not saying it.
+
+[dgz_mug]
+A tin mug on a rock, a spoon laid across the top. The tea has dried to a glossy brown skin that's like a little pond of time.
+
+[dgz_mug_ves]
+{thoughtful}It's the right shape for a story.
+
+[dgz_barrel]
+A barrel marked EMERGENCY. It's been opened. The emergency, it seems, was biscuits.
+
+[dgz_barrel_ves]
+{smile}A good emergency, as emergencies go.
+
+[dgz_stub]
+A prop stub with a lamp-hook screwed in the top, and a ring of soot round it, showing exactly how many lamps it carried before the last.
+
+[dgz_stub_ves]
+{bored}Seven, I'd say.
+
+[dgz_lean]
+A prop leaned in the corner with a rag tied round the top like a scarf. The rag has gone grey. It's a kind thing to do to a prop.
+
+[dgz_lean_ves]
+{smile}Somebody kept it warm.
+
+[dgz_fossil]
+A fossil in the wall, the biggest you've seen here: a whorl as broad as your two hands. Somebody has put a tin cup under it, as if it might drip.
+
+[dgz_fossil_ves]
+{smile}It might. Better safe.
+
+[dgz_mush]
+Pale mushrooms in a little ring on the floor, standing quite still. One has a very small hat. You can't think who put it there.
+
+[dgz_mush_ves]
+{surprised}Don't ask.
+
+[dgz_board]
+The last board. At the top: SEVENTH SHIFT. Below it: all the names, in a line, all ticked. And along the bottom, in a different hand: COME AND GET US WHEN YOU CAN.
+
+[dgz_board_ves]
+{sad}I think we're getting there.
+
+[dgz_rind]
+A rind on a flat stone, and a pocket watch beside it, stopped at ten past four. It's been that way for a very long while.
+
+[dgz_rind_ves]
+{thoughtful}That's not a bad time to stop.
+
+[dgz_grit]
+A heap of fine grit. The footprints in it are very old and half filled in, going in one direction. There's nothing that comes back out.
+
+[dgz_grit_ves]
+{sad}...
+
+# --- diggings_air_shaft ---
+
+[dga_rope]
+A coil of old climbing rope on a peg, left for the next shift to go up. The next shift never got the memo.
+
+[dga_rope_ves]
+{bored}And the next-next shift. And the one after.
+
+[dga_boots]
+A pair of boots, tied together by the laces and hung over a bolt. A note on them: FOR THE JOURNEY UP. SPARE. NOT YOURS.
+
+[dga_boots_ves]
+{smile}A spare pair. That's more planning than I expected.
+
+[dga_stub]
+A stub of a prop with a tin mug hung on it, upside down, so it doesn't gather dust. It has gathered dust. Somebody's mug-hanging is sadly flawed.
+
+[dga_stub_ves]
+{smile}It's the thought.
+
+[dga_mug]
+A tin mug in a niche in the rock, a stub of candle in it, burned right down to the rim. It's the one thing here that was alight recently.
+
+[dga_mug_ves]
+{surprised}Recently. Who lit it?
+
+[dga_bucket]
+A bucket under a steady drip. It's about a drop from full, and has been for a long time. It's the most patient thing you've ever seen.
+
+[dga_bucket_ves]
+{bored}Go on, then. Just fill up.
+
+[dga_mush]
+Pale mushrooms at the foot of the shaft, leaning toward the little light that falls from the top. It's a very, very long way up.
+
+[dga_mush_ves]
+{thoughtful}They're climbing, too. Slowly.
+
+[dga_grit]
+Grit in a heap at the shaft's foot, shaken down from the climb above. A few pale feathers are mixed in it. Birds don't live down here.
+
+[dga_grit_ves]
+{surprised}Feathers? Whose?
+
+[dga_board]
+A board listing who went up and who came down. The names go up in a column. The names coming down are shorter. The board stops there.
+
+[dga_board_ves]
+{bored}Let's try to be on the right list.
+
+[dga_lamp]
+A lamp at the top of the shaft, still on its hook, still lit, very low. Someone has been up here to trim it. You can tell by the wick.
+
+[dga_lamp_ves]
+{surprised}Somebody comes up here.
+
+[dga_rope2]
+A coil of rope hung on a peg at the top, a bit frayed, with a handwritten tag: NOT FOR USE. USED ANYWAY. IT HELD.
+
+[dga_rope2_ves]
+{smile}It held. That's all you need from rope.
+
+# --- second looks, and the boot errand ---
+
+[dgf_boot_gone]
+Just a damp ring on the floor where the boot stood, and a smell of mud and mole.
+
+[dgf_boot_gone_ves]
+{smile}Right. Go and make somebody's day.
+
+# --- second looks at a few things ---
+
+[dgp_box 2]
+You post a very small thought into the slot. Something inside rustles, and a stub of pencil writes: THANK YOU FOR ASKING. MORE PASTY.
+
+[dgp_box_ves 2]
+{glee}They said thank you. That's more than I get.
+
+[dgs_tally 2]
+The cheerful zero has been rubbed out and written again, a little smaller, a little shakier. Underneath: (NOT TODAY.)
+
+[dgs_tally_ves 2]
+{bored}That's what they all say.
+
+[dgo_feather 2]
+The feather is still in its crack. You touch it and it stirs a little, though nothing down here is moving the air.
+
+[dgo_feather_ves 2]
+{thoughtful}I'll pretend I didn't see that.
+
+[dgy_leaf 2]
+The leaf is still there. You turn it over: it has a small crease in it, as if somebody had held it very tight and then put it down in a hurry.
+
+[dgy_leaf_ves 2]
+{thoughtful}Hm. Still strange.
+
+[dgo_cage 2]
+The cage is just as you left it, the door open, the one yellow feather on the floor. For a moment, up in the dark, you think you hear a very small note.
+
+[dgo_cage_ves 2]
+{sad}...I heard it too.
+
+# ===== end of the life pass =====

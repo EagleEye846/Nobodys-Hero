@@ -1,0 +1,53 @@
+# BT_INNKEEPER: The toad who keeps The Mossy Pillow, with a tuft of moss on her head and a ladle she never puts down. Brisk, kind, a little bit frightening.
+
+[first]
+Don't stand in my door like a draught. Sit down. Have a bed. It's free for heroes, and cheap for everyone else. Which are you?
+
+Oh, don't answer. I can see. Bed's through there.
+
+[repeat]
+Sleep on the left, not the right. The right's the bat's. He pays in snoring.
+
+[first after the_kings_welcome]
+So the KING's sending you down. Well. He's a lovely man. Loud, but lovely. I made his birthday cake. He didn't eat it. I don't know why. He never eats.
+
+[repeat after the_kings_welcome]
+Eat something before you go. Somebody in this town ought to. I've always said so. Nobody listens.
+
+He hasn't aged a day since Tuck found him, you know. Humans keep very well, apparently.
+
+[first after the_light_goes_up]
+I knew it! I told the bat! He slept through the whole thing! Come in, come in, everything's on the house!
+
+[repeat after the_light_goes_up]
+I'm making a stew the size of the Sunstone. It's going to take a week. Stay for the first bowl.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Boots off the bench. I don't care whose boots. The Hero put his boots on that bench once. I made him take them off and all.
+
+# (draft)
+[repeat_ves 2]
+{surprised}You told the Hero off?
+
+# (draft)
+[repeat 3]
+Breakfast's when I say it is. I say it's whenever you wake up, so don't make me say it twice.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+I'd pack you a pie, but the bat would only follow it down. He's done it before. We found him in the lift.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+I sent a stew up to the hall last week. It came back full and cold, with a note: "MAGNIFICENT." In big letters.
+
+# (draft)
+[repeat_ves 3 after the_kings_welcome]
+{thoughtful}Big letters. {bored}For a stew he didn't touch.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Third bowl? Course you can. You've had a week of the dark. That's at least three bowls of dark.

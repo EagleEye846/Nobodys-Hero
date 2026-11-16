@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE HALL OF GLASS: the third ice cave, darker than the others, long and
 // low, with a frozen pool, the upper hall reached up a ramp of fallen blocks,
 // and golems and glintlings among the crystals. A false wall at the east end
@@ -11,6 +12,7 @@
 //   v  stalactite (walk under it)                 ^  stalagmite (solid)
 //   x  ice crystals (they glow) (solid)           D  doorway (walk through it; see `doors`)
 //   b  low stone block (jump up onto it)          B  tall stone block (jump onto it from a low block)
+import { R3A_PROPS } from '../r3aLife.js';
 export const ICE_CAVE_HALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'ice_cave_hall',
@@ -72,6 +74,10 @@ export const ICE_CAVE_HALL = {
     { sprite: 'chest', x: 32, y: 10, text: 'hall_chest', gives: 'crystal_cuirass', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     // Up in the top hall, at the far end: a muff for Ves.
     { sprite: 'chest', x: 2, y: 3, text: 'hall_upper_chest', gives: 'icefox_muff', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['ice_cave_hall'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['ice_cave_hall'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

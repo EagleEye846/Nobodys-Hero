@@ -1,0 +1,382 @@
+import { UI_WIDTH, UI_HEIGHT } from '../config.js';
+import { textSection } from '../engine/textLoader.js';
+import { WEAPONS } from '../data/weapons.js';
+import { ARMOR, armorLabels } from '../data/armor.js';
+import { ITEMS, healLabel, lightLabel } from '../data/items.js';
+import { SOUL_ABILITIES } from '../battle/soulAbilities.js';
+import { soulSprite } from '../battle/soul.js';
+import { MEMBERS, partyIds, memberSprites, hurtState } from '../characters/party.js';
+import { HERO_ANIMATIONS } from '../characters/hero.js';
+import { PORTRAITS } from '../data/art/portraits.js';
+import { makeSprite } from '../engine/sprite.js';
+import { HERO, wielderOf, memberGearLabels } from '../characters/equipment.js';
+import { drawText, wrapLines, textWidth } from './text.js';
+import { glide, opening, bob } from './uiMotion.js';
+
+// Shared layout for full-screen menus (EQUIP, SKILLS), in UI pixels (640x480):
+// a header, a scrolling weapon list on the left, details on the right, and a
+// footer for messages and controls. The weapon list and details can also be
+// placed elsewhere (the shop does).
+
+export const MENU = { x: 40, y: 30, w: 560, h: 420 };
+export const FOOTER_Y = MENU.y + 330;
+export const MENU_COLORS = {
+  text: '#ffffff',
+  highlight: '#ffe14d',
+  dim: '#8a82b0',
+  description: '#c9c2e0',
+  divider: '#33304a',
+  fight: '#ff8c1a',
+  ability: '#4fe3d0',
+  // Armor stats, and a stat that's a drawback.
+  defense: '#7fb0ff',
+  magic: '#b07cff',
+  spGain: '#4fe3d0',
+  bad: '#ff7a8a',
+  // A party member's gear stats (see src/characters/equipment.js).
+  calm: '#ffd25e',
+  heal: '#5fc27a',
+};
+
+const BORDER = 4;
+const LIST = { x: MENU.x + 24, y: MENU.y + 78, width: 272, rowHeight: 30, rows: 8 };
+// `h` is how tall the panel is: a description too long for it shrinks to fit.
+// It stops above the footer's divider (FOOTER_Y - 8), so a long description
+// never runs over the line.
+const DETAILS = { x: MENU.x + 320, y: MENU.y + 78, w: 216, h: FOOTER_Y - 14 - (MENU.y + 78) };
+
+// Where the title row sits, for menus that add their own header text.
+export const HEADER_Y = MENU.y + 16;
+const WEAPON_TEXT = 'items/weapons.txt';
+const ARMOR_TEXT = 'items/armor.txt';
+const ITEM_TEXT = 'items/items.txt';
+
+function divider(ctx, x, y, w, h) {
+  ctx.fillStyle = MENU_COLORS.divider;
+  ctx.fillRect(x, y, w, h);
+}
+
+// Whose menu you're in, the same way everywhere (EQUIP, the skill tree, the
+// gear panels): the hero or a party member (`who`: 'hero' or a member id),
+// with their name, their colour, and their face: a member's portrait, or
+// (the hero has none) the top rows of their sprite.
+export const HERO_COLOR = '#4fe3d0';
+const FACE_ROWS = 9;
+const faces = new Map();
+function faceOf(who) {
+  // While they're hurt, their `hurt` block can give another portrait.
+  const portrait = who === HERO ? null : hurtState(who)?.portrait ?? MEMBERS[who].portrait;
+  const key = portrait ?? who;
+  if (!faces.has(key)) {
+    const art = portrait ? PORTRAITS[portrait] : null;
+    const sprite = art ? makeSprite(art.idle, art.palette) : who === HERO ? HERO_ANIMATIONS.right[0] : memberSprites(who).right;
+    // The part of the image that's the face: all of a portrait, or the top of a sprite.
+    faces.set(key, { image: sprite, sw: sprite.width, sh: art ? sprite.height : FACE_ROWS });
+  }
+  return faces.get(key);
+}
+export function ownerLook(who) {
+  if (who === HERO) return { name: 'HERO', color: HERO_COLOR };
+  return { name: MEMBERS[who].name, color: MEMBERS[who].color };
+}
+
+// A tag for `who`: their face and name in a pill of their colour, filled
+// when it's the one you're on (`selected`), dim when it isn't. `x`, `y` is
+// its top-left; `size` the name's size. Returns its width.
+export function drawOwnerTag(ctx, who, x, y, { selected = true, size = 22 } = {}) {
+  const { name, color } = ownerLook(who);
+  const { image, sw, sh } = faceOf(who);
+  const h = size + 10;
+  const faceH = h - 6;
+  const faceW = Math.round((faceH * sw) / sh);
+  const w = 8 + faceW + 6 + textWidth(ctx, name, size) + 10;
+  ctx.save();
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(x, y, w, h, h / 2);
+  else ctx.rect(x, y, w, h);
+  ctx.fillStyle = selected ? color : 'rgba(20, 16, 36, 0.9)';
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = selected ? '#ffffff' : MENU_COLORS.divider;
+  ctx.stroke();
+  ctx.globalAlpha = selected ? 1 : 0.45;
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(image, 0, 0, sw, sh, x + 8, y + 3, faceW, faceH);
+  ctx.restore();
+  drawText(ctx, name, x + 8 + faceW + 6, y + 4, { size, color: selected ? '#120c1c' : MENU_COLORS.dim });
+  return w;
+}
+
+// `split` draws the line between a list on the left and details on the right.
+// `accent` colours the border: whose menu it is (see ownerLook).
+// The menu eases open over its first few frames (a little small and faint,
+// then full size): the scale and fade are left on `ctx` for the rest of the
+// menu's drawing, which every caller does inside inUiSpace, so it's undone
+// when that's done.
+export function drawMenuFrame(ctx, title, rightLabel, { split = true, accent = MENU_COLORS.text } = {}) {
+  const open = opening('menuFrame');
+  ctx.fillStyle = `rgba(0, 0, 0, ${0.5 * open})`;
+  ctx.fillRect(0, 0, UI_WIDTH, UI_HEIGHT);
+  if (open < 1) {
+    const scale = 0.94 + 0.06 * open;
+    const cx = MENU.x + MENU.w / 2;
+    const cy = MENU.y + MENU.h / 2;
+    ctx.translate(cx, cy);
+    ctx.scale(scale, scale);
+    ctx.translate(-cx, -cy);
+    ctx.globalAlpha *= 0.35 + 0.65 * open;
+  }
+  ctx.fillStyle = accent;
+  ctx.fillRect(MENU.x, MENU.y, MENU.w, MENU.h);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(MENU.x + BORDER, MENU.y + BORDER, MENU.w - BORDER * 2, MENU.h - BORDER * 2);
+
+  drawText(ctx, title, MENU.x + 24, MENU.y + 16, { size: 40 });
+  drawText(ctx, rightLabel, MENU.x + MENU.w - 24, MENU.y + 28, { size: 24, color: MENU_COLORS.highlight, align: 'right' });
+  divider(ctx, MENU.x + 24, MENU.y + 64, MENU.w - 48, 2);
+  if (split) divider(ctx, DETAILS.x - 16, LIST.y - 4, 2, LIST.rows * LIST.rowHeight);
+  divider(ctx, MENU.x + 24, FOOTER_Y - 8, MENU.w - 48, 2);
+}
+
+// The list scrolls to keep the cursor in view; small arrows show there's more.
+// nameColor(id) colours each name; tag(id) can return { text, color } for the right edge.
+// `area` is { x, y, width, rowHeight, rows }. `name(id)` is what to call each
+// row (weapons by default; the ITEMS menu and shops pass their own).
+// `icon(id)` can give a small picture (see listIcon) to sit before each name.
+// The cursor slides from row to row rather than jumping (see uiMotion.js).
+export function drawWeaponList(ctx, ids, cursor, { nameColor, tag, area = LIST, name = (id) => WEAPONS[id].name, icon = null, rowFill = null }) {
+  const first = Math.min(Math.max(0, cursor - Math.floor(area.rows / 2)), Math.max(0, ids.length - area.rows));
+  const last = Math.min(ids.length, first + area.rows);
+
+  if (cursor >= first && cursor < last) {
+    const at = glide(`list:${area.x},${area.y}`, area.x, area.y + (cursor - first) * area.rowHeight);
+    ctx.drawImage(soulSprite(), at.x, at.y + 5);
+  }
+  for (let i = first; i < last; i++) {
+    const id = ids[i];
+    const y = area.y + (i - first) * area.rowHeight;
+    // A band behind the row (`rowFill`: the spells in notches, on the SPELLS screen).
+    const fill = rowFill?.(id);
+    if (fill) {
+      ctx.fillStyle = fill;
+      ctx.fillRect(area.x + 22, y + 1, area.width - 18, area.rowHeight - 4);
+    }
+    // A name too long for its row shrinks to fit (down to 20).
+    const label = name(id);
+    // (A name that wouldn't fit beside its picture goes without it.)
+    let picture = icon?.(id);
+    if (picture && (28 * (area.width - 50)) / textWidth(ctx, label, 28) < 20) picture = null;
+    const nameX = area.x + 26 + (picture ? 24 : 0);
+    if (picture) {
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      ctx.globalAlpha *= i === cursor ? 1 : 0.7;
+      ctx.drawImage(picture, area.x + 26, y + 5, 18, 18);
+      ctx.restore();
+    }
+    const room = area.width - (nameX - area.x);
+    const size = Math.max(20, Math.min(28, Math.floor((28 * room) / textWidth(ctx, label, 28))));
+    drawText(ctx, label, nameX, y + (28 - size) / 2, { size, color: nameColor(id) });
+    const tagged = tag(id);
+    if (tagged) drawText(ctx, tagged.text, area.x + area.width, y + 4, { size: 22, color: tagged.color, align: 'right' });
+  }
+
+  // The "more this way" arrows nudge gently outward.
+  const arrowX = area.x + area.width / 2;
+  const nudge = bob(2, 900);
+  ctx.fillStyle = MENU_COLORS.dim;
+  if (first > 0) triangle(ctx, arrowX, area.y - 10 - nudge, -1);
+  if (last < ids.length) triangle(ctx, arrowX, area.y + area.rows * area.rowHeight - 2 + nudge, 1);
+}
+
+// Little 9x9 pictures for list rows, in a colour: a sword, a shield, a
+// bowl of food, a candle, a star, a pouch (anything else). Made once each.
+const LIST_ICONS = {
+  weapon: ['.......##', '......###', '.....###.', '....###..', '.#.###...', '..###....', '..##.....', '.#..#....', '#........'],
+  armor: ['#########', '#.......#', '#.......#', '#.......#', '.#.....#.', '.#.....#.', '..#...#..', '...#.#...', '....#....'],
+  food: ['..#..#...', '...#..#..', '..#..#...', '.........', '#########', '#.......#', '.#.....#.', '..#####..', '.........'],
+  candle: ['....#....', '...###...', '....#....', '..#####..', '..#...#..', '..#...#..', '..#...#..', '..#...#..', '.#######.'],
+  star: ['....#....', '....#....', '...###...', '#########', '.#######.', '..#####..', '..##.##..', '.##...##.', '.#.....#.'],
+  // A spell notch: a gem set in its socket (filled: a spell is in it), or the empty socket.
+  gem: ['...###...', '..#####..', '.#######.', '#########', '#########', '.#######.', '..#####..', '...###...', '.........'],
+  socket: ['...###...', '..#...#..', '.#.....#.', '#.......#', '#.......#', '.#.....#.', '..#...#..', '...###...', '.........'],
+  other: ['...###...', '..#...#..', '.#######.', '#.......#', '#...#...#', '#..###..#', '#...#...#', '#.......#', '.#######.'],
+};
+const listIconCache = new Map();
+export function listIcon(kind, color) {
+  const key = `${kind}|${color}`;
+  if (!listIconCache.has(key)) listIconCache.set(key, makeSprite(LIST_ICONS[kind] ?? LIST_ICONS.other, { '#': color }));
+  return listIconCache.get(key);
+}
+// The picture for an item in the bag: food, a candle, or something else.
+export function itemIcon(id) {
+  const item = ITEMS[id];
+  if (item?.light) return listIcon('candle', MENU_COLORS.highlight);
+  if (item?.heal && !item.use) return listIcon('food', MENU_COLORS.heal);
+  return listIcon('other', MENU_COLORS.description);
+}
+
+function triangle(ctx, x, y, direction) {
+  ctx.beginPath();
+  ctx.moveTo(x - 6, y);
+  ctx.lineTo(x + 6, y);
+  ctx.lineTo(x, y + direction * 6);
+  ctx.fill();
+}
+
+// Comparing gear (the EQUIP menu passes what's on now as `compare`): a small
+// green arrow up beside a stat that's better than what's equipped, a red one
+// down beside one that's worse. Nothing when they're the same.
+function gearStat(slot, id, stat) {
+  return (slot === 'weapon' ? WEAPONS : ARMOR)[id]?.[stat] ?? 0;
+}
+const COMPARE_ROOM = 18;
+function drawCompare(ctx, slot, id, compare, stats, x, y) {
+  if (!compare || compare === id) return;
+  const signs = stats.map((stat) => Math.sign(gearStat(slot, id, stat) - gearStat(slot, compare, stat))).filter(Boolean);
+  // A line with two stats (DEF and MAG) only gets an arrow if they agree.
+  if (!signs.length || signs.some((sign) => sign !== signs[0])) return;
+  const up = signs[0] > 0;
+  ctx.fillStyle = up ? MENU_COLORS.heal : MENU_COLORS.bad;
+  ctx.beginPath();
+  if (up) {
+    ctx.moveTo(x, y + 16);
+    ctx.lineTo(x + 12, y + 16);
+    ctx.lineTo(x + 6, y + 6);
+  } else {
+    ctx.moveTo(x, y + 7);
+    ctx.lineTo(x + 12, y + 7);
+    ctx.lineTo(x + 6, y + 17);
+  }
+  ctx.fill();
+}
+// The stats one line of labels is about: two for a shared DEF and MAG line.
+function labelStats(label) {
+  return label.stat === 'defense' && label.text.includes('MAG') ? ['defense', 'magic'] : [label.stat];
+}
+
+// Name, FIGHT power, SHIFT ability and description of one weapon. `area` is
+// { x, y, w }; `compare` is the weapon it's being weighed against, if any.
+export function drawWeaponDetails(ctx, id, area = DETAILS, compare = null) {
+  if (wielderOf('weapon', id) !== HERO) {
+    drawMemberGearDetails(ctx, 'weapon', id, WEAPONS[id].name, WEAPON_TEXT, area, compare);
+    return;
+  }
+  const weapon = WEAPONS[id];
+  const ability = weapon.ability ? SOUL_ABILITIES[weapon.ability] : null;
+  let y = area.y;
+
+  drawText(ctx, weapon.name, area.x, y, { size: 30 });
+  y += 34;
+  drawHeroMark(ctx, area, y);
+  drawText(ctx, `FIGHT x${weapon.fightPower}`, area.x, y, { size: 24, color: MENU_COLORS.fight });
+  drawCompare(ctx, 'weapon', id, compare, ['fightPower'], area.x + textWidth(ctx, `FIGHT x${weapon.fightPower}`, 24) + 8, y);
+  y += 26;
+  const abilityLabel = ability ? `${ability.hold ? 'HOLD SHIFT' : 'SHIFT'}: ${ability.name}` : 'No shadow ability';
+  drawText(ctx, abilityLabel, area.x, y, { size: 24, color: ability ? MENU_COLORS.ability : MENU_COLORS.dim });
+  y += 34;
+
+  drawDescription(ctx, textSection(WEAPON_TEXT, id)[0], area, y);
+}
+
+// Name, stats (DEF, MAG, SP) and description of a piece of armor. `area` is
+// { x, y, w }; `compare` as for drawWeaponDetails.
+export function drawArmorDetails(ctx, id, area = DETAILS, compare = null) {
+  if (wielderOf('armor', id) !== HERO) {
+    drawMemberGearDetails(ctx, 'armor', id, ARMOR[id].name, ARMOR_TEXT, area, compare);
+    return;
+  }
+  let y = area.y;
+  drawText(ctx, ARMOR[id].name, area.x, y, { size: 30 });
+  y += 34;
+  drawHeroMark(ctx, area, y);
+  const labels = armorLabels(id);
+  if (!labels.length) {
+    drawText(ctx, 'No protection', area.x, y, { size: 24, color: MENU_COLORS.dim });
+    y += 26;
+  }
+  for (const label of labels) {
+    drawText(ctx, label.text, area.x, y, { size: 24, color: label.bad ? MENU_COLORS.bad : MENU_COLORS[label.stat] });
+    drawCompare(ctx, 'armor', id, compare, [label.stat], area.x + textWidth(ctx, label.text, 24) + 8, y);
+    y += 26;
+  }
+  y += 8;
+  drawDescription(ctx, textSection(ARMOR_TEXT, id)[0], area, y);
+}
+
+// The hero's own gear says so, beside its first stat, once there's a party
+// member it might otherwise be for (theirs says their name in the same spot).
+function drawHeroMark(ctx, area, y) {
+  if (partyIds().length) drawText(ctx, 'HERO', area.x + area.w, y, { size: 24, color: HERO_COLOR, align: 'right' });
+}
+
+// A party member's weapon or armor: its name, its stats (one a line, with
+// who it's for beside the first, in their colour) and its description.
+function drawMemberGearDetails(ctx, slot, id, name, textPath, area, compare = null) {
+  const member = MEMBERS[wielderOf(slot, id)];
+  let y = area.y;
+  // A long name shrinks to fit the panel.
+  const size = Math.min(30, Math.floor((30 * area.w) / textWidth(ctx, name, 30)));
+  drawText(ctx, name, area.x, y + (30 - size), { size });
+  y += 34;
+  const labels = memberGearLabels(slot, id);
+  // Their name shrinks if the first stat line (DEF and MAG together) would run into it.
+  const firstWidth = labels.length ? textWidth(ctx, labels[0].text, 24) : 0;
+  const nameRoom = area.w - firstWidth - 8 - (compare && compare !== id ? COMPARE_ROOM : 0);
+  const nameSize = Math.max(16, Math.min(24, Math.floor((24 * nameRoom) / textWidth(ctx, member.name, 24))));
+  drawText(ctx, member.name, area.x + area.w, y + (24 - nameSize), { size: nameSize, color: member.color, align: 'right' });
+  if (!labels.length) {
+    drawText(ctx, 'No bonus', area.x, y, { size: 24, color: MENU_COLORS.dim });
+    y += 26;
+  }
+  for (const label of labels) {
+    drawText(ctx, label.text, area.x, y, { size: 24, color: label.bad ? MENU_COLORS.bad : MENU_COLORS[label.color] });
+    drawCompare(ctx, slot, id, compare, labelStats(label), area.x + textWidth(ctx, label.text, 24) + 8, y);
+    y += 26;
+  }
+  y += 8;
+  drawDescription(ctx, textSection(textPath, id)[0], area, y);
+}
+
+// A description under the details, in the space left: smaller if it needs to be.
+function drawDescription(ctx, text, area, y) {
+  const room = area.h ? area.y + area.h - y : Infinity;
+  let size = 22;
+  let lines = wrapLines(ctx, text, area.w, size);
+  while (size > 14 && lines.length * size > room) {
+    size -= 1;
+    lines = wrapLines(ctx, text, area.w, size);
+  }
+  drawText(ctx, lines.join('\n'), area.x, y, { size, lineHeight: size, color: MENU_COLORS.description });
+}
+
+// Name, how much it heals, and the description of one item. `area` is { x, y, w }.
+export function drawItemDetails(ctx, id, area = DETAILS) {
+  let y = area.y;
+  drawText(ctx, ITEMS[id].name, area.x, y, { size: 30 });
+  y += 34;
+  drawText(ctx, healLabel(id), area.x, y, { size: 24, color: MENU_COLORS.ability });
+  y += 34;
+  // A candle also says how it lights the dark.
+  const light = lightLabel(id);
+  if (light) {
+    drawText(ctx, light, area.x, y - 6, { size: 20, color: MENU_COLORS.highlight });
+    y += 24;
+  }
+  drawDescription(ctx, textSection(ITEM_TEXT, id)[0], area, y);
+}
+
+// Name and description of something you carry for good (the KEEPSAKES page
+// of the ITEMS menu): `name` and `text` from src/data/gear.js. `area` is { x, y, w }.
+export function drawKeepsakeDetails(ctx, name, text, area = DETAILS) {
+  let y = area.y;
+  // A long name shrinks to fit the panel.
+  const size = Math.min(30, Math.floor((30 * area.w) / textWidth(ctx, name, 30)));
+  drawText(ctx, name, area.x, y + (30 - size), { size });
+  y += 42;
+  drawDescription(ctx, text, area, y);
+}
+
+export function drawControls(ctx, text) {
+  drawText(ctx, text, MENU.x + MENU.w / 2, MENU.y + MENU.h - 34, { size: 22, color: MENU_COLORS.dim, align: 'center' });
+}

@@ -21,7 +21,7 @@ export const FIDDLER = {
   anim: FIDDLER_ANIM,
   // The Chapter 4 battle song.
   music: 'belowBattle',
-  maxHp: 1830,
+  maxHp: 3050,
   damage: 43,
 
   difficulty: { density: 1.5, speed: 1.4 },
@@ -30,11 +30,11 @@ export const FIDDLER = {
 
   // Its attacks live in src/battle/attacks/fiddler.js.
   patterns: [
-    { name: 'fidScale', weight: 3 },
+    { name: 'fidPlayback', weight: 3 },
     { name: 'fidStrum', weight: 2 },
     { name: 'fidLeap', weight: 2 },
     { name: 'fidFeelers', weight: 2 },
-    { name: 'fidEcho', weight: 2 },
+    { name: 'fidPhrase', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // MARTA'S: the knitter's cottage. Every scarf in the village came from this
 // room, and so did the one that goes all the way round the square. Her hare,
 // Button, has the chair by the fire.
@@ -5,6 +6,7 @@
 //   #  wall top (solid)                           h  papered wall with wood panelling (solid)
 //   o  wooden floorboards                         r  rug
 //   D  doorway (walk through it; see `doors`)
+import { R3A_PROPS } from '../r3aLife.js';
 export const REST_HOUSE_MARTA = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'rest_house_marta',
@@ -57,6 +59,10 @@ export const REST_HOUSE_MARTA = {
     { sprite: 'toy_chest', x: 1, y: 7, text: 'marta_basket' },
     { sprite: 'snow_hare', x: 6, y: 5, npc: 'marta_hare' },
     { sprite: 'side_table', x: 8, y: 7, text: 'marta_table' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_house_marta'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['rest_house_marta'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

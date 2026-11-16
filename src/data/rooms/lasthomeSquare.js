@@ -46,6 +46,7 @@ const SMITHY_GLOW = [
 const CARTER_GLOW = [...windows([-21, -41], [3, -41], [5, -26], [-7, -60]), spill(5, 34), ...doorLantern(-8, -25)];
 const BAKEHOUSE_GLOW = [...windows([-24, -27], [22, -27], [14, -45]), spill(-24, 34), spill(22, 34), ...doorLantern(-10, -25)];
 
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const LASTHOME_SQUARE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lasthome_square',
@@ -113,6 +114,7 @@ export const LASTHOME_SQUARE = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/lasthome.txt',
   props: [
+    { sprite: 'col_marble_corkscrew', x: 32, y: 19, walkable: true, flat: true, gives: 'marble_corkscrew', taken: { gone: true } },
     // The houses, along the back wall and down by the market. Each stands on
     // its block of wall tiles, walkable itself, and plays its own smoke.
     { sprite: 'house_healer', x: 1, y: 5, text: 'square_healer_house', animation: 'house_healer', speed: 0.42, walkable: true, glow: HEALER_GLOW },
@@ -136,7 +138,12 @@ export const LASTHOME_SQUARE = {
     { sprite: 'lh_pell', x: 13, y: 9, shop: 'lasthome_market' },
     { sprite: 'market_stall', x: 12, y: 10, text: 'square_stall' },
     { sprite: 'market_stall_fish', x: 19, y: 10, text: 'square_fish_stall' },
-    { sprite: 'lh_fisher', x: 21, y: 9, npc: 'lh_fisher' },
+    { sprite: 'lh_fisher', x: 21, y: 9, npc: 'lh_fisher', quest: [
+      { needs: ['has:lp3_red_float'], take: 'lp3_red_float', set: ['q_float_asked', 'q_float_done'], give: 'fishers_knot', text: 'float_done' },
+      { needs: ['q_float_done'], text: 'float_after', append: true },
+      { needs: ['q_float_asked'], text: 'float_wait', append: true },
+      { needs: ['!q_float_asked'], set: 'q_float_asked', text: 'float_ask', append: true },
+    ] },
     { sprite: 'lh_wren', x: 16, y: 13, npc: 'lh_wren', quest: [
       { needs: ['has:biscuit'], take: 'biscuit', set: ['q_cat_asked', 'q_cat_done'], give: 'bean_medal', text: 'cat_done' },
       { needs: ['q_cat_done'], text: 'cat_after', append: true },
@@ -156,6 +163,8 @@ export const LASTHOME_SQUARE = {
     { sprite: 'street_lamp', x: 22, y: 7, text: 'square_lamp' },
     { sprite: 'street_lamp', x: 11, y: 16, text: 'square_lamp' },
     { sprite: 'bench', x: 13, y: 15, text: 'square_bench' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['lasthome_square'] ?? []),
   ],
   tileTexts: { W: 'hall_wall', '#': 'hall_wall', I: 'hall_pillar', '5': 'square_house', F: 'square_flowers' },
 

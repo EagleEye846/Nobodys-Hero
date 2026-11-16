@@ -1,0 +1,23 @@
+# ST_MARKET_GOSSIP_B: a grey seal in a green coat and a flat cap, listening to the otter in the red coat with enormous enjoyment. The life pass.
+
+[first]
+Mm. Oh, never. No. Not a Tuesday. She didn't.
+
+[repeat]
+She DID. I've told you. I've told her. I've told the cat. The cat said nothing, but it had a look.
+
+# (draft)
+[repeat 2]
+That's the thing about gossip. It's a kind of fishing. You cast out a bit, and something comes back. Usually a boot.
+
+# (draft)
+[repeat_bramble 2]
+{grin}A boot! That's a good catch!
+
+# (draft)
+[first after the_light_answers]
+You can see all the faces. I can see she's smiling when she says it. It's much worse.
+
+# (draft)
+[repeat after the_light_answers]
+We're just standing in the sun, being rude about the sun. It's wonderful.

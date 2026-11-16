@@ -6,7 +6,8 @@ import { Pix, flash, shift } from './ch5Kit.js';
 // perfectly happy until the tide comes, and the tide is always coming. Its
 // battle clips (SANDCASTLE_ANIM, see `anim` in src/battle/battleScene.js):
 // the flag waves and grains trickle; before an attack the turrets swivel
-// open and the door gapes; hit, chunks fall off and it flashes; beaten, it
+// open, the door gapes and a little hand pokes up holding a sign (CAN'T);
+// hit, chunks fall off and it flashes; beaten, it
 // slumps into a mound; spared, the flag stands up and the shells wink. Drawn
 // from a pose (see src/data/art/ch5Kit.js).
 export const SANDCASTLE_PALETTE = {
@@ -32,7 +33,7 @@ export const SANDCASTLE_PALETTE = {
 // eyes ('open' | 'angry' | 'happy' | 'dead'), shake, trickle (sand falling),
 // lift (turret hatch lifted: windup).
 function draw(pose = {}) {
-  const { flag = 0, door = 0, crumble: cr = 0, eyes = 'open', trickle = 0, lift = 0, flagUp = 0 } = pose;
+  const { flag = 0, door = 0, crumble: cr = 0, eyes = 'open', trickle = 0, lift = 0, flagUp = 0, sign = 0 } = pose;
   const p = new Pix(42, 40);
   const sink = Math.round(cr * 14);
   const baseY = 34;
@@ -129,6 +130,25 @@ function draw(pose = {}) {
     p.rect(5, 22 + sink, 7, 1, 'D');
     p.rect(30, 20 + sink, 7, 1, 'D');
   }
+  if (sign) {
+    // A little sand hand pokes up out of the left tower holding a sign on a
+    // lolly stick: CAN'T (it would like to move; it's a sandcastle).
+    const drop = Math.round((1 - sign) * 8);
+    p.line(9, 18, 9, 9 + drop, 'f');
+    p.rect(8, 13 + drop, 3, 3, 's');
+    p.set(7, 14 + drop, 's');
+    p.set(11, 13 + drop, 'l');
+    p.rect(0, 1 + drop, 21, 9, 'k');
+    p.rect(1, 2 + drop, 19, 7, 'f');
+    const GLYPH = {
+      C: ['DDD', 'D..', 'D..', 'D..', 'DDD'],
+      A: ['.D.', 'D.D', 'DDD', 'D.D', 'D.D'],
+      N: ['D.D', 'DDD', 'DDD', 'D.D', 'D.D'],
+      "'": ['.D.', '.D.', '...', '...', '...'],
+      T: ['DDD', '.D.', '.D.', '.D.', '.D.'],
+    };
+    [..."CAN'T"].forEach((ch, i) => p.stamp(GLYPH[ch], 1 + i * 4, 3 + drop));
+  }
   return p.outline('k').rows();
 }
 
@@ -147,9 +167,9 @@ export const SANDCASTLE_ANIM = {
   windup: {
     fps: 6,
     frames: [
-      draw({ flag: 1, door: 1, lift: 1, eyes: 'angry' }),
-      draw({ flag: 2, door: 3, lift: 1, eyes: 'angry', trickle: 1 }),
-      draw({ flag: 3, door: 4, lift: 1, eyes: 'angry', trickle: 2 }),
+      draw({ flag: 1, door: 1, lift: 1, eyes: 'angry', sign: 0.5 }),
+      draw({ flag: 2, door: 3, lift: 1, eyes: 'angry', trickle: 1, sign: 1 }),
+      draw({ flag: 3, door: 4, lift: 1, eyes: 'angry', trickle: 2, sign: 1 }),
     ],
   },
   hurt: {

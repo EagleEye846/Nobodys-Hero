@@ -5,9 +5,9 @@ import { defineBulletArt } from '../projectiles.js';
 // the marsh's heavy: not many bullets, all slow to come and easy to see
 // coming, but every one of them hurts a LOT. It fights with its spear of a
 // beak (aimed at where you are, after a long, steady look), reeds that come
-// up round you with one that isn't a reed, the grey feathers it shakes out,
-// stabbing down into the water after fish, and its long legs wading
-// through the box.
+// up round you with one that isn't a reed, a neck whose reach you can see
+// (and had better stay just outside of), stabbing down into the water after
+// fish, and its long legs wading through the box.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -38,6 +38,13 @@ defineBulletArt('stalkerHead', {
   palette: HEAD,
   radius: 3,
   rotate: true,
+});
+
+// A reed-tip, one of the ring that shows how far its neck reaches (harmless).
+defineBulletArt('stalkerReedTip', {
+  frames: [['.r.', 'rCr', '.c.']],
+  palette: CATTAIL,
+  radius: 1,
 });
 
 // A grey feather, see-sawing down (tipped one way, then the other).
@@ -142,10 +149,10 @@ export const REED_STALKER_ATTACKS = {
       strikes.push(strike);
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 6) {
+        if (t >= next && t < 8.4) {
           aim(bullets, soul);
           next = t + 1.35;
         }
@@ -175,7 +182,7 @@ export const REED_STALKER_ATTACKS = {
     let started = false;
     let nextStrike = 1.6;
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (!started) {
@@ -185,8 +192,8 @@ export const REED_STALKER_ATTACKS = {
             // Never right where you start: you get a moment to look first.
             if (Math.abs(x - soul.x) < 6) x += 7;
             const height = rand(36, 70);
-            const line = new Line({ x, y: bottom, angle: -Math.PI / 2, length: height, thickness: 2, warn: 0.6, grow: 120, life: 5.2, color: REED_COLOR });
-            const head = new Shot({ x, y: bottom, warn: 0.6, life: 5.2, art: 'stalkerCattail' });
+            const line = new Line({ x, y: bottom, angle: -Math.PI / 2, length: height, thickness: 2, warn: 0.6, grow: 120, life: 9, color: REED_COLOR });
+            const head = new Shot({ x, y: bottom, warn: 0.6, life: 9, art: 'stalkerCattail' });
             reeds.push({ line, head, x, height, sway: rand(0, Math.PI * 2) });
             bullets.push(line, head);
           }
@@ -198,7 +205,7 @@ export const REED_STALKER_ATTACKS = {
           reed.head.y = bottom - Math.max(grown, 2) - 2;
         }
         // One of them opens an eye... and strikes across, along your row.
-        if (t >= nextStrike && t < 6) {
+        if (t >= nextStrike && t < 8.6) {
           nextStrike = t + 1.45;
           const reed = pick(reeds);
           const y = Math.max(box.y + 6, Math.min(box.y + box.h - 6, soul.y));
@@ -214,42 +221,93 @@ export const REED_STALKER_ATTACKS = {
     };
   },
 
-  // Shake out: it ruffles itself up and shakes, and grey feathers come
-  // see-sawing down all over. Every so often it beats its wings, and the
-  // gust blows every feather in the box sideways at once.
-  stalkerFeathers(box, density, { Shot, every, rand, spreadAcross }) {
-    const nextX = spreadAcross(box.x + 5, box.x + box.w - 5, 6);
-    let feathers = [];
+  // Its reach: its head leans in over the edge of the box, and a ring of
+  // reed-tips shows exactly how far that neck can go. It waits. Step inside
+  // the ring and the beak comes for you (a line first, then the stab, as
+  // far as the ring and no further). Stay outside, and it wades a step
+  // closer, ring and all, kicking water at you. A few goes, then it tries
+  // from another side.
+  // Live just outside its reach.
+  stalkerReach(box, density, { Shot, Line, rand, clamp, shuffleBag }) {
+    const REACH = 40;
+    const DOTS = 14;
+    const sides = shuffleBag(['left', 'right', 'top', 'bottom']);
+    let head = null;
+    let dots = [];
     let t = 0;
-    let gust = 0;
-    let gustDir = 1;
-    let nextGust = 1.8;
-    const fall = every(0.24, 0.32, (bullets) => {
-      const x = nextX();
-      const feather = new Shot({ x, y: box.y - 4, vy: rand(14, 20), art: 'stalkerFeather' });
-      feather.baseX = x;
-      feather.sway = rand(0, Math.PI * 2);
-      bullets.push(feather);
-      feathers.push(feather);
-    });
+    let act = 0.9;
+    let goes = 0;
+    let wade = null;
+    const place = (bullets, soul) => {
+      const side = sides();
+      const along = (v, lo, hi) => clamp(v, lo + 10, hi - 10);
+      const at = side === 'left' ? { x: box.x - 2, y: along(soul.y, box.y, box.y + box.h) }
+        : side === 'right' ? { x: box.x + box.w + 2, y: along(soul.y, box.y, box.y + box.h) }
+        : side === 'top' ? { x: along(soul.x, box.x, box.x + box.w), y: box.y - 2 }
+        : { x: along(soul.x, box.x, box.x + box.w), y: box.y + box.h + 2 };
+      if (head) head.life = 0;
+      for (const dot of dots) dot.life = 0;
+      head = new Shot({ x: at.x, y: at.y, warn: 0.5, art: 'stalkerHead', angle: Math.atan2(box.y + box.h / 2 - at.y, box.x + box.w / 2 - at.x) });
+      bullets.push(head);
+      dots = [];
+      for (let i = 0; i < DOTS; i++) {
+        const dot = new Shot({ x: at.x, y: at.y, harmless: true, art: 'stalkerReedTip' });
+        dot.slot = (i / DOTS) * Math.PI * 2;
+        bullets.push(dot);
+        dots.push(dot);
+      }
+      goes = 0;
+    };
+    const ring = () => {
+      for (const dot of dots) {
+        dot.x = head.x + Math.cos(dot.slot) * REACH;
+        dot.y = head.y + Math.sin(dot.slot) * REACH;
+      }
+    };
     return {
-      duration: 6.6,
-      update: (dt, bullets) => {
+      duration: 8,
+      update: (dt, bullets, soul) => {
         t += dt;
-        if (t < 6) fall(dt, bullets);
-        // The wingbeat: a push one way, dying off.
-        if (t >= nextGust && t < 5.6) {
-          nextGust = t + 1.7;
-          gustDir = Math.random() < 0.5 ? -1 : 1;
-          gust = 55;
+        if (!head) place(bullets, soul);
+        if (wade) {
+          // A slow step closer.
+          const u = Math.min(1, (t - wade.start) / 0.5);
+          head.x = wade.from.x + (wade.to.x - wade.from.x) * u;
+          head.y = wade.from.y + (wade.to.y - wade.from.y) * u;
+          if (u >= 1) wade = null;
         }
-        gust = Math.max(0, gust - dt * 45);
-        for (const feather of feathers) {
-          feather.baseX += gustDir * gust * dt;
-          // Back and forth as it falls.
-          feather.x = feather.baseX + Math.sin(feather.age * 2.6 + feather.sway) * 7;
+        ring();
+        act -= dt;
+        if (act > 0 || t > 9.2) return;
+        act = 0.85;
+        if (goes++ >= 4) {
+          place(bullets, soul);
+          act = 1.2;
+          return;
         }
-        feathers = feathers.filter((feather) => feather.y < box.y + box.h + 8);
+        const aim = Math.atan2(soul.y - head.y, soul.x - head.x);
+        head.angle = aim;
+        if (Math.hypot(soul.x - head.x, soul.y - head.y) < REACH + 3) {
+          // In reach: the stab, exactly as far as the ring.
+          bullets.push(new Line({ x: head.x, y: head.y, angle: aim, length: REACH, thickness: 4, warn: 0.55, life: 0.3, grow: 260, color: BEAK_COLOR }));
+          const tip = { x: head.x + Math.cos(aim) * REACH, y: head.y + Math.sin(aim) * REACH };
+          for (let i = -1; i <= 1; i++) {
+            const a = aim + i * 0.7;
+            bullets.push(new Shot({ x: tip.x, y: tip.y, vx: Math.cos(a) * 40, vy: Math.sin(a) * 40, warn: 0.6, life: 1, art: 'stalkerDrop' }));
+          }
+        } else {
+          const step = 16;
+          const to = {
+            x: clamp(head.x + Math.cos(aim) * step, box.x - 2, box.x + box.w + 2),
+            y: clamp(head.y + Math.sin(aim) * step, box.y - 2, box.y + box.h + 2),
+          };
+          wade = { from: { x: head.x, y: head.y }, to, start: t };
+          // It kicks the water up at you as it steps.
+          for (let i = 0; i < 7; i++) {
+            const a = aim + (i - 3) * 0.24;
+            bullets.push(new Shot({ x: head.x, y: head.y, vx: Math.cos(a) * 55, vy: Math.sin(a) * 55, warn: 0.2, life: 1.6, art: 'stalkerDrop' }));
+          }
+        }
       },
     };
   },
@@ -271,10 +329,10 @@ export const REED_STALKER_ATTACKS = {
       stabs.push(strike);
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.9) {
+        if (t >= next && t < 8.3) {
           count++;
           stab(bullets, soul.x);
           // Every third, a second stab just beside the first, a beat later.
@@ -335,10 +393,10 @@ export const REED_STALKER_ATTACKS = {
       steps++;
     };
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.8) {
+        if (t >= next && t < 8.2) {
           step(bullets, soul);
           next = t + 0.95;
         }

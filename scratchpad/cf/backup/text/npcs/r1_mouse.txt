@@ -1,0 +1,26 @@
+# R1_MOUSE: Fennel, a mouse in a scarf by her door in the Ruins' entrance hall. A tiny errand of the life pass: her lucky button is lost. (draft)
+
+[first]
+A mouse in a knitted scarf sits outside her tiny door, twisting her paws. She sees you, and freezes, all at once, the way mice do.
+
+"You're very big," she says. "Don't be alarmed. I'm Fennel. I live here. It's the only entrance with a doormat."
+
+[repeat]
+Fennel sits outside her tiny door and watches the corridor. She keeps a very careful eye on the dummy.
+
+[button_ask]
+"I've lost my button," Fennel says, in a rush. "Brass. Round. Shiny. It's my lucky one. I was going to give it to the Hero, for luck, when they came, and then I dropped it, and then... well. Nobody's come, so it's only me who's out a button."
+
+"If you see it, I'd be so grateful. I think it rolled towards the flowers. Everything does."
+
+[button_done]
+You put the button down in front of her. She looks at it for a long moment, then at you, then at it again.
+
+"Oh," says Fennel. "Oh! It's the right one. It's even still shiny."
+
+She gives it a quick, rough polish on her scarf, tucks it into her pocket, and gives you something in return, with both paws: a scarf. It's about as long as your thumb.
+
+"I made it," she says. "It's for when you're cold. Just... the thumb. But it's the thought."
+
+[button_after]
+"It's still shiny," Fennel says, patting her pocket. "Thank you. Mind the dummy."

@@ -18,7 +18,7 @@ export const CLOVER_SNAIL = {
   feel: { hit: 'shell', defeat: 'clatter', color: '#c8e8a0' },
   // Sunnyside's own battle song, the Dandelion Lion Rag.
   music: 'sunnyBattle',
-  maxHp: 9000,
+  maxHp: 5900,
   damage: 83,
 
   // The easy end of Chapter 5, like the coast's first monsters.
@@ -36,7 +36,7 @@ export const CLOVER_SNAIL = {
   patterns: [
     { name: 'snailTrail', weight: 3 },
     { name: 'snailClover', weight: 3 },
-    { name: 'snailZzz', weight: 2 },
+    { name: 'snailZzz', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -47,7 +47,7 @@ export const CLOVER_SNAIL = {
     { name: 'Sit beside it', calm: 30 },
   ],
 
-  rewards: { exp: 2200, coins: 10 },
+  rewards: { exp: 2200, coins: 8 },
 
   // What it sometimes leaves behind (src/data/items.js), with the chance of it.
   drops: [{ item: 'lucky_clover', chance: 0.4 }],

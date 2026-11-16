@@ -115,6 +115,24 @@ export const GULLREST_BEACH = {
     { sprite: 'sy_dune_grass', x: 42, y: 11, flat: true, walkable: true },
     { sprite: 'c5_sea_holly', x: 39, y: 7, flat: true, walkable: true },
     { sprite: 'c5_marram', x: 1, y: 10, flat: true, walkable: true },
+    { sprite: 'col_glass_blue', x: 1, y: 13, walkable: true, flat: true, gives: 'glass_blue', taken: { gone: true } },
+    // (life pass 2026-11-14)
+    // Folk on the sand: Tibby (who has lost a bucket), a walker, a gran with her knitting, a fellow asleep in a deckchair, a beach ball on the breeze.
+    { sprite: 'cf_kid_otter', x: 5, y: 7, npc: 'st_pip', animation: 'cf_kid_otter', speed: 0.3, quest: [
+      { needs: ['has:pips_bucket'], take: 'pips_bucket', set: ['q_pip_asked', 'q_pip_done'], give: 'sandcastle_flag', text: 'found' },
+      { needs: ['q_pip_done'], text: 'after', append: true },
+      { needs: ['!q_pip_asked'], set: 'q_pip_asked', text: 'ask', append: true },
+    ], stroll: { wander: [2, 6, 7, 7], speed: 20, pause: [1.5, 3.5], hop: true, scatter: true, greet: true } },
+    { sprite: 'st_folk_d', x: 16, y: 6, npc: 'st_beach_walker', animation: 'st_folk_d', speed: 0.8, stroll: { path: [[14, 6], [21, 6]], speed: 9, pause: [2, 5], greet: true } },
+    { sprite: 'st_folk_c', x: 27, y: 7, npc: 'st_beach_gran', animation: 'st_folk_c', speed: 0.9 },
+    { sprite: 'st_sleeper_chair', x: 22, y: 10, text: 'life_b_sleeper', animation: 'st_sleeper_chair', speed: 1.4 },
+    { sprite: 'st_beach_ball', x: 16, y: 10, text: 'life_b_ball', walkable: true, stroll: { wander: [14, 9, 18, 11], speed: 7, pause: [3, 7], flip: false } },
+    // Beach furniture: an umbrella between the deckchairs, tubs on the boards, a rack of drying fish, a bucket of crabs, a sandcastle, an old rib, a face in a root.
+    { sprite: 'st_fish_rack', x: 35, y: 7, text: 'life_b_rack' },
+    // The dunes behind the huts: a hideaway. A deckchair, a tin, a flask of tea.
+    { sprite: 'st_tin_box', x: 15, y: 3, text: 'life_b_dune_tin', gives: 'lantern_tea', react: true, taken: { text: 'life_b_dune_tin_after' } },
+    // What the tide left.
+    { sprite: 'st_old_boot', x: 24, y: 12, text: 'life_b_boot' },
   ],
   tileTexts: { '#': 'beach_wall', W: 'beach_wall', O: 'beach_boulder', '~': 'beach_sea' },
 

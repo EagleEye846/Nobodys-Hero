@@ -101,7 +101,7 @@ export const ARMOR = {
   // Grig's, the last stall before the root: a padded hood with two sewn-on feelers.
   feeler_hood: { name: 'Feeler Hood', defense: 8, spGain: 0.2, magic: 0.1 },
   olmskin_vest: { name: 'Olmskin Vest', defense: 7, magic: 0.4, spGain: 0.25 },
-  // Chapter 4's secret superboss: Pudding, the Glass Olm, at the bottom of Seam Nine (the scenes
+  // Chapter 4's secret superboss: the Pale Olm, at the bottom of Seam Nine (the scenes
   // `pudding_spared` and `pudding_beaten` give it). The best of the chapter's mixes: the Miner's Helm's
   // DEF 8, with the Mossweave Cloak's magic a little down and the Olmskin Vest's SP.
   olmglass_mantle: { name: 'Olm-Glass Mantle', defense: 8, magic: 0.5, spGain: 0.3 },
@@ -139,9 +139,13 @@ export const ARMOR = {
   // MAG, grazing, the same DEF); a different mix from the Cork Float after the chapter.
   little_gansey: { name: 'Little Gansey', wielder: 'bramble', defense: 5, magic: 0.15, regen: 4, grazeSp: 0.3, shorten: 0.1 },
   // The Fair Return's captain, beaten or talked down (the ship's cabin scenes `captain_spared` and
-  // `captain_beaten` give it): the chapter's balanced tank. DEF 9 like the Diver's Plate, but with
-  // none of its -0.2 MAG, and a little SP.
-  captains_greatcoat: { name: "Captain's Greatcoat", defense: 9, magic: 0.1, spGain: 0.1 },
+  // `captain_beaten` give it): the chapter's tank, and the reward for the optional ship. DEF 10, the most
+  // of the chapter (one over the Lightman's Coat and the Diver's Plate, two over chapter 4's best), with
+  // less MAG and SP than the Lightman's Coat (0.5, 0.4): you trade spells for standing up to things.
+  captains_greatcoat: { name: "Captain's Greatcoat", defense: 10, magic: 0.3, spGain: 0.25 },
+  // The Needle (reach_needle), the hardest ring climb on the coast: the old keepers' locker on its top.
+  // The Lightman's Coat's DEF 9 with a little more MAG (0.6 over 0.5) and less SP (0.3 under 0.4): a different mix.
+  keepers_oilskin: { name: "Keeper's Oilskin", defense: 9, magic: 0.6, spGain: 0.3 },
   // Haddock's shed (secret_haddocks_shed, open after the chapter): one for each of the three.
   // The hero's matches the Lightman's Coat on DEF with a little less MAG.
   haddocks_muffler: { name: "Haddock's Muffler", defense: 9, magic: 0.45, spGain: 0.45 },
@@ -149,6 +153,17 @@ export const ARMOR = {
   ugly_sou_wester: { name: "Ugly Sou'wester", wielder: 'vesper', defense: 6, magic: 0.5, shelterDef: 5, regen: 5, grazeSp: 0.4 },
   // Bramble's: swim proper. DEF 5 as his best, the gain is grazing and staying afloat.
   cork_float: { name: 'Cork Float', wielder: 'bramble', defense: 5, grazeSp: 0.45, regen: 3, shorten: 0.15 },
+  // Chapter 5, more for the two of them (Ves stays at DEF 6, Bramble goes to 6 only at the end).
+  // Ves: a cape for standing in the wind (the Soundings' bell room), mitts for grazing (the
+  // chandlery) and a shawl for healing (Orla's).
+  bell_rope_cape: { name: 'Bell-Rope Cape', wielder: 'vesper', defense: 6, magic: 0.3, shelterDef: 6, regen: 3, grazeSp: 0.2 },
+  net_menders_mitts: { name: "Net-Mender's Mitts", wielder: 'vesper', defense: 5, magic: 0.3, grazeSp: 0.6, regen: 2 },
+  beacon_wick_shawl: { name: 'Beacon-Wick Shawl', wielder: 'vesper', defense: 5, magic: 0.6, shelterDef: 3, regen: 6, grazeSp: 0.25 },
+  // Bramble: a sneaky duffel from the gulls' hoard, a waistcoat that calms and flinches, and a
+  // greatcoat cut down for him (DEF 6, one over his best).
+  beachcombers_duffel: { name: "Beachcomber's Duffel", wielder: 'bramble', defense: 5, grazeSp: 0.25, regen: 2, sneak: 0.5 },
+  cabin_boys_waistcoat: { name: "Cabin Boy's Waistcoat", wielder: 'bramble', defense: 5, magic: 0.2, regen: 4, allyCalm: 5, shorten: 0.2 },
+  deckhands_greatcoat: { name: "Deckhand's Greatcoat", wielder: 'bramble', defense: 6, regen: 5, grazeSp: 0.2, shorten: 0.1 },
 };
 
 // One stat of a piece of armor, 0 if it hasn't got it.

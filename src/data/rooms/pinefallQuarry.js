@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE OLD QUARRY: a hollow where someone cut stone a long time ago, on the
 // way down to the Long Drop. Three rocks in a bramble pen, three plates, and
 // a hedge gate between you and the ravine. The hardest of the Pinefall's
@@ -74,6 +76,7 @@ export const PINEFALL_QUARRY = {
     { sprite: 'push_rock', x: 5, y: 5, text: 'push_rock', rock: true },
     { sprite: 'push_rock', x: 7, y: 5, text: 'push_rock', rock: true },
     { sprite: 'push_rock', x: 6, y: 7, text: 'push_rock', rock: true },
+    ...(R3P_PROPS['pinefall_quarry'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'pen_hedge', b: 'pen_stump' },
 

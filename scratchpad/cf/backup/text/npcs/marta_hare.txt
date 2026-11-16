@@ -1,0 +1,9 @@
+# BUTTON: Marta's hare, asleep in the chair by her fire.
+
+[first]
+A snow hare, curled up in the warmest chair in the house. Its name, on a little tag on the chair, is BUTTON.
+
+Button opens one eye, decides you're not Marta, and closes it again.
+
+[repeat]
+Button is asleep. Its back feet are running somewhere.

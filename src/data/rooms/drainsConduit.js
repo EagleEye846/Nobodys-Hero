@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE OLD CONDUIT: under Hollin's brickwork, the old city's great
 // water-conduit, as old as the Ruins and built of the same stone, and still
 // carrying the mountain's water down to a city that's gone. Three channels
@@ -306,6 +307,8 @@ export const DRAINS_CONDUIT = {
     { sprite: 'water_flow', x: 28, y: 11, text: 'conduit_still', wet: ['!weir'], animation: 'water_flow_side', speed: 0.3 },
     { sprite: 'water_flow', x: 29, y: 11, text: 'conduit_still', wet: ['!weir'], animation: 'water_flow_side', speed: 0.3 },
     { sprite: 'water_flow', x: 30, y: 11, text: 'conduit_still', wet: ['!weir'], animation: 'water_flow_side', speed: 0.3 },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_conduit'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

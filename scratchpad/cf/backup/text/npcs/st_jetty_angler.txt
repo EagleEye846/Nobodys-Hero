@@ -1,0 +1,23 @@
+# ST_JETTY_ANGLER: a seal in a yellow hat sitting on the sand at the foot of the jetty, rod over his shoulder, line in a puddle, content. The life pass.
+
+[first]
+Shh. They can hear you. ...No, it's a puddle. I know it's a puddle. It's the principle.
+
+[repeat]
+Eleven years I've been fishing this puddle. Never caught a thing. Don't tell the puddle I said so. It'd be devastated.
+
+# (draft)
+[repeat 2]
+I'm not here for the fish, you understand. I'm here for the...what's the word. The waiting. The waiting's got a lot to be said for it.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}Waiting's underrated. People think it's doing nothing. It isn't.
+
+# (draft)
+[first after the_light_answers]
+Moved to the jetty's end, now it's bright. Caught a sock. First catch in eleven years. I've framed it.
+
+# (draft)
+[repeat after the_light_answers]
+Sock's still on the wall. Puddle's gone quiet. I think it's jealous.

@@ -84,7 +84,7 @@ export const SAMPLE_SETS = {
   rideBell: { notes: [60], unpitched: true },
   shaker: { notes: [60], unpitched: true },
   bassPizz: { notes: [28, 30, 31, 34, 36, 38, 40, 42, 44, 45, 49, 52, 56, 59] },
-  // Added 11 November 2026, for Tally's song (the Welcome Register): an old
+  // Added 11 November 2026, for Quire's song (the Welcome Register): an old
   // typewriter's keys and a pencil on paper, as instruments. Each note is a
   // different real recording, so play each at its own note (a few at random
   // keeps a run of them from sounding like one sample). typewriter: 60-66 seven

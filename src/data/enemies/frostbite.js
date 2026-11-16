@@ -17,7 +17,7 @@ export const FROSTBITE = {
     frames: [FROSTBITE_DISGUISE_SPRITES.still, FROSTBITE_DISGUISE_SPRITES.look, FROSTBITE_DISGUISE_SPRITES.grin],
     palette: FROSTBITE_PALETTE,
   },
-  maxHp: 305,
+  maxHp: 600,
   damage: 13,
 
   // A Chapter 2 enemy: slow things, but a lot of them.
@@ -25,7 +25,7 @@ export const FROSTBITE = {
 
   // Its attacks live in src/battle/attacks/frostbite.js.
   patterns: [
-    { name: 'frostDrift', weight: 3 },
+    { name: 'frostHug', weight: 3 },
     { name: 'frostIcicles', weight: 3 },
     { name: 'frostSnowball', weight: 2 },
     { name: 'frostShiver', weight: 2 },

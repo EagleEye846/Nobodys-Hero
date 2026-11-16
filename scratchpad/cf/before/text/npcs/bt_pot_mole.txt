@@ -1,0 +1,27 @@
+# BT_POT_MOLE: A mole off shift, hovering by the stew pot in the market with a bowl he has been "just about to start" for some time.
+
+[first]
+Shh. I'm waiting for the pot to be ready. It's been ready since lunch. I'm giving it time to be sure.
+
+[repeat]
+If you stand here too, it's a queue. I'm a very good queue. I've been told.
+
+[first after the_kings_welcome]
+The king's party gave out cake and I'm STILL here for the stew. That's loyalty, that is.
+
+[repeat after the_kings_welcome]
+The pot doesn't care about parties. I find that restful.
+
+[first after the_light_goes_up]
+The Sunstone's back and the stew's still the same. Nobody's ever been so relieved about a stew.
+
+[repeat after the_light_goes_up]
+Hot, bright, and not even a little bit different. This is what home tastes like.
+
+# (draft)
+[repeat 2]
+Seventeen years in the Diggings and my knees tell me it's stew time. They've never once been wrong.
+
+# (draft)
+[repeat_ves 2]
+{smile}Is it good stew? {bored}...Don't answer that. He's looking at me.

@@ -1312,8 +1312,21 @@ function drawIsles(ctx, time, height, home = false, calm = false) {
 // ---------- the Last Light: the lamp room at the top ----------
 // After the storm (`calm`) the glass shows a washed grey-blue sky and a quiet sea: no
 // lightning, no rain, no streaks on the panes.
-function drawLastLight(ctx, time, height, calm = false) {
-  const fl = flashAt(time, calm ? 0 : 7.5, 1);
+//
+// In Corrie's fight the room comes apart round you, phase by phase (`room`,
+// battle.lastLightRuin, eased by src/battle/corrieStage.js): `ruin` 0 the room
+// whole and the great lamp cold; 1 the panes cracked and blown in, rain inside;
+// 2 the windows gone, the roof torn half away, the stone parapet broken and the
+// sea far below in the gaps; 3 the roof nearly all gone, only stumps of its
+// ribs, the great lamp lit (`lamp`) and turning under the open sky, the sea
+// heaving up the outside of the tower in spray. Other fights up here have no
+// `room`: the room whole, the lamp lit.
+const LL_PANES = [[0, 26], [26, 94], [94, 226], [226, 294], [294, 320]];
+const LL_MULLIONS = [26, 94, 226, 294];
+function drawLastLight(ctx, time, height, calm = false, room = null) {
+  const r = room ? room.ruin : 0;
+  const lit = room ? room.lamp : 1;
+  const fl = flashAt(time, calm ? 0 : Math.max(2.6, 7.5 - r * 1.6), 1);
   // Outside, seen through the glass all round: green storm sky (grey-blue after it).
   if (calm) {
     skyGradient(ctx, 0, height, ['#3e5064', '#53667c', '#6e8298', '#8c9db0', '#a8b4c2']);
@@ -1321,41 +1334,201 @@ function drawLastLight(ctx, time, height, calm = false) {
   } else {
     skyGradient(ctx, 0, height, ['#04181c', '#0a2c2c', '#14483a', '#2a7046', '#58944c']);
     if (fl.f) rect(ctx, `rgba(215, 255, 225, ${(fl.f * 0.5).toFixed(3)})`, 0, 0, W, height);
-    drift(ctx, cloudStrip('lastlight_cl', height, 4, 70, ['#06222a', '#0c3434', '#144238'], 7000, 12), time, 9);
+    drift(ctx, cloudStrip('lastlight_cl', height, 4, 70, ['#06222a', '#0c3434', '#144238'], 7000, 12), time, 9 + r * 6);
     if (fl.f > 0.5 && fl.p < 0.3) bolt(ctx, 60 + hash(fl.n * 5.3) * 200, 0, 90, fl.n * 13, '#f4fff6');
   }
-  // Waves far below, hardly visible.
+  // Once the roof starts to go you see what's over the tower: the storm's eye,
+  // pale and turning, right overhead. (The broken roof and frames stand out
+  // black against it.)
+  if (!calm && r > 1.2) {
+    const k = Math.min(1, (r - 1.2) / 0.6);
+    const ex = 104;
+    const ey = 6;
+    glow(ctx, ex, ey, 130, '150, 235, 170', 0.3 * k);
+    oval(ctx, `rgba(170, 236, 186, ${(0.3 * k).toFixed(3)})`, ex, ey, 46, 13);
+    oval(ctx, `rgba(214, 250, 214, ${(0.4 * k).toFixed(3)})`, ex, ey, 28, 7);
+    if (fl.f) oval(ctx, `rgba(244, 255, 240, ${(fl.f * 0.5 * k).toFixed(3)})`, ex, ey, 36, 10);
+    for (let arm = 0; arm < 3; arm++) {
+      for (let j = 0; j < 46; j++) {
+        const rr = 16 + j * 3;
+        const a = arm * 2.094 + rr * 0.03 - time * 0.3;
+        const x = ex + Math.cos(a) * rr * 1.7;
+        const y = ey + Math.sin(a) * rr * 0.5;
+        rect(ctx, `rgba(8, 40, 38, ${(0.75 * k).toFixed(3)})`, x - 7, y - 1, 14 + j * 0.3, 4);
+        if (j % 2 === 0) rect(ctx, `rgba(120, 200, 150, ${(0.4 * k).toFixed(3)})`, x - 6 - Math.cos(a) * 2, y - 1 - Math.sin(a) * 2, 8, 1);
+      }
+    }
+  }
+  // The sea far below: hardly there with the parapet up; heaving once it's gone.
+  const swell = calm ? 1.5 : 3 + r * 2.2;
   for (let x = 0; x < W; x++) {
-    const y = 118 + Math.sin(x * 0.05 + time * (calm ? 0.8 : 1.4)) * (calm ? 1.5 : 3);
+    const y = 112 - r * 3 + Math.sin(x * 0.05 + time * (calm ? 0.8 : 1.4 + r * 0.3)) * swell + Math.sin(x * 0.13 - time * 2.1) * r;
     rect(ctx, calm ? '#30465a' : '#0a2c2c', x, y, 1, height - y);
-    if (Math.sin(x * 0.05 + time * 1.4) > 0.93) rect(ctx, calm ? CALM_FOAM : '#8cc8a8', x, y - 1, 2, 1);
+    rect(ctx, calm ? '#30465a' : '#124038', x, y + 3, 1, 2);
+    if (Math.sin(x * 0.05 + time * 1.4) > 0.93 - r * 0.08) rect(ctx, calm ? CALM_FOAM : '#8cc8a8', x, y - 1, 2, 1);
+  }
+  // The stone parapet under the windows, breaking away in the whirl.
+  for (let x = 0; x < W; x += 12) {
+    const gone = (r > 1.6 && hash(x * 0.37 + 4400) < (r - 1.6) * 0.45) || (r > 1.7 && x >= 36 && x < 84);
+    if (gone) {
+      // In the gap the sea shows, heaving, and by the end it's up over the sill.
+      const up = Math.max(0, r - 2.4) * 16;
+      for (let dx = 0; dx < 12; dx++) {
+        const wy = 106 - up + Math.sin((x + dx) * 0.16 + time * 2.2) * (2 + up * 0.25);
+        rect(ctx, '#17574a', x + dx, wy, 1, 119 - wy);
+        rect(ctx, '#2c7c62', x + dx, wy + 1, 1, 2);
+        rect(ctx, (x + dx + Math.floor(time * 6)) % 5 ? '#a8dcc0' : '#ffffff', x + dx, wy, 1, 1);
+      }
+      // A broken stump at the gap.
+      rect(ctx, '#2a2a28', x, 110 + hash(x + 4410) * 6, 2, 8);
+      rect(ctx, '#3c4842', x, 110 + hash(x + 4410) * 6, 2, 1);
+      continue;
+    }
+    const top = 100 + (r > 1.6 ? Math.round(hash(x * 1.3 + 4420) * (r - 1.6) * 5) : 0);
+    rect(ctx, '#1e2422', x, top, 12, 118 - top);
+    rect(ctx, '#2e3632', x + 1, top + 1, 10, 7);
+    rect(ctx, '#2a302e', x + (x % 24 ? 6 : 0), top + 9, 6, 8);
+    rect(ctx, '#3c4842', x, top, 12, 1);
+  }
+  // The sea coming up the outside of the tower: spray bursting up past the sill.
+  if (!calm && r > 2.4) {
+    const k = Math.min(1, (r - 2.4) / 0.6);
+    for (let i = 0; i < 5; i++) {
+      const period = 2.6 + hash(i + 4500) * 1.6;
+      const phase = ((time + hash(i + 4510) * period) % period) / period;
+      if (phase > 0.55) continue;
+      const x = 20 + hash(i + 4520) * 280;
+      const up = Math.sin((phase / 0.55) * Math.PI) * (40 + hash(i + 4530) * 40) * k;
+      for (let j = 0; j < 16; j++) {
+        const dx = (hash(i * 31 + j) - 0.5) * 26 * (0.5 + phase);
+        const dy = up * (0.4 + hash(i * 17 + j) * 0.6);
+        rect(ctx, j % 3 ? 'rgba(220, 250, 240, 0.7)' : '#ffffff', x + dx, 112 - dy, 2, 2);
+      }
+      glow(ctx, x, 112 - up * 0.6, 20, '200, 240, 230', 0.25 * k);
+    }
   }
   if (!calm) rain(ctx, time, height, 130, 'rgba(200, 235, 225, 0.5)', 220, 1.5, 800, 1.2);
+
   // The great lens at the back, turning: its beam sweeps across the room.
+  // Cold (unlit) at the start of Corrie's fight; lit at its end.
   const cx = 160;
   const cy = 74;
-  const sweep = (time * 0.5) % 6.2832;
+  const sweep = (time * (0.5 + r * 0.1)) % 6.2832;
   const bx = Math.cos(sweep);
-  glow(ctx, cx, cy, 90, '255, 240, 190', 0.55);
-  glow(ctx, cx, cy, 36, '255, 252, 225', 0.8);
-  const beamW = 8 + Math.abs(bx) * 40;
-  poly(ctx, `rgba(255, 244, 200, ${(0.14 * (0.4 + Math.abs(bx) * 0.6)).toFixed(3)})`, [[cx, cy], [cx + bx * 200, cy - 20 - beamW], [cx + bx * 200, cy + 20 + beamW]]);
-  // The lens: a barrel of glass rings.
+  if (lit > 0) {
+    glow(ctx, cx, cy, 90 + r * 10, '255, 240, 190', 0.55 * lit);
+    glow(ctx, cx, cy, 36, '255, 252, 225', 0.8 * lit);
+    const beamW = 8 + Math.abs(bx) * 40;
+    poly(ctx, `rgba(255, 244, 200, ${(0.14 * lit * (0.4 + Math.abs(bx) * 0.6) * (1 + r * 0.25)).toFixed(3)})`, [[cx, cy], [cx + bx * 200, cy - 20 - beamW - r * 12], [cx + bx * 200, cy + 20 + beamW]]);
+  }
+  // With the roof off, its light stands straight up into the storm as well.
+  if (lit > 0 && r > 2.4) {
+    const k = Math.min(1, (r - 2.4) / 0.4) * lit;
+    poly(ctx, `rgba(255, 244, 200, ${(0.13 * k).toFixed(3)})`, [[cx - 12, cy - 30], [cx - 44, 0], [cx + 44, 0], [cx + 12, cy - 30]]);
+    poly(ctx, `rgba(255, 250, 225, ${(0.16 * k).toFixed(3)})`, [[cx - 5, cy - 34], [cx - 14, 0], [cx + 14, 0], [cx + 5, cy - 34]]);
+  }
+  // The lens: a barrel of glass rings (dark and grey when it's cold).
+  const ringA = lit > 0.5 ? '#e8f4d8' : '#5a7470';
+  const ringB = lit > 0.5 ? '#8cc8c0' : '#2c4442';
   oval(ctx, '#3a2a0c', cx, cy, 38, 40);
   oval(ctx, '#b88a28', cx, cy, 36, 38);
-  for (let r = 36; r > 6; r -= 5) oval(ctx, r % 10 === 6 ? '#e8f4d8' : '#8cc8c0', cx, cy, r - 2, r - 1);
-  oval(ctx, '#ffffff', cx, cy, 8, 8);
-  oval(ctx, '#fff6c8', cx, cy, 5, 5);
+  for (let rr = 36; rr > 6; rr -= 5) oval(ctx, rr % 10 === 6 ? ringA : ringB, cx, cy, rr - 2, rr - 1);
+  oval(ctx, lit > 0.5 ? '#ffffff' : '#3a504c', cx, cy, 8, 8);
+  oval(ctx, lit > 0.5 ? '#fff6c8' : '#24363a', cx, cy, 5, 5);
   rect(ctx, '#d8a838', cx - 40, cy - 1, 80, 3);
   rect(ctx, '#6a4a14', cx - 18, cy + 40, 36, 14);
   // A glint sliding over the glass.
   const gx = cx - 30 + ((time * 22) % 60);
-  for (let y = cy - 30; y < cy + 30; y++) rect(ctx, 'rgba(255,255,255,0.75)', gx + (y - cy) / 4, y, 2, 1);
-  // Window frames: brass mullions all round, rain streaks on the glass.
-  for (const x of [26, 94, 226, 294]) {
-    rect(ctx, '#2a1c08', x - 2, 0, 6, 120);
-    rect(ctx, '#a07820', x - 1, 0, 3, 120);
-    rect(ctx, '#e8c860', x - 1, 0, 1, 120);
+  for (let y = cy - 30; y < cy + 30; y++) rect(ctx, `rgba(255,255,255,${lit > 0.5 ? 0.75 : 0.3})`, gx + (y - cy) / 4, y, 2, 1);
+
+  // The brass mullions snap off one by one as the room goes (the two on the
+  // left, where there's room to see them, first): how far down each one's
+  // broken top is (0: still whole).
+  const mullionTop = (x) => {
+    const i = LL_MULLIONS.indexOf(x);
+    if (i < 0) return 0;
+    const from = [1.8, 1.45, 2.3, 2.6][i];
+    if (r < from) return 0;
+    return r < 2.5 ? [58, 44, 40, 52][i] : [84, 62, 56, 74][i];
+  };
+  // The glass: whole (a faint sheen and its glazing bars), then cracked, then
+  // blown in, with only jagged teeth of it left in the frames.
+  for (const [i, [x0, x1]] of LL_PANES.entries()) {
+    if (i === 2) continue; // (behind the lens)
+    const w = x1 - x0;
+    if (r < 0.95) {
+      rect(ctx, 'rgba(170, 220, 210, 0.07)', x0, 0, w, 118);
+      for (let y = 6; y < 118; y += 3) rect(ctx, 'rgba(230, 255, 245, 0.12)', x0 + ((y * 0.6 + i * 9) % w), y, 2, 1);
+      for (const gy of [38, 78]) { rect(ctx, '#2a1c08', x0, gy - 1, w, 3); rect(ctx, '#a07820', x0, gy, w, 1); }
+    } else {
+      // Teeth of glass left in the frame, and the bent glazing bars.
+      for (const gy of [38, 78]) {
+        const stub = r > 1.5 ? 5 : 12;
+        // (Bent down, where the glass took them with it.)
+        if (gy > mullionTop(x0)) { rect(ctx, '#2a1c08', x0, gy - 1, stub, 3); rect(ctx, '#a07820', x0, gy, stub, 1); line(ctx, '#a07820', x0 + stub, gy, x0 + stub + 5, gy + 6); }
+        if (gy > mullionTop(x1)) { rect(ctx, '#2a1c08', x1 - stub, gy + 1, stub, 3); line(ctx, '#a07820', x1 - stub, gy + 2, x1 - stub - 4, gy + 9); }
+      }
+      if (r < 2.7) {
+        for (let j = 0; j < 9; j++) {
+          const yy = 4 + j * 12 + hash(i * 7 + j) * 6;
+          const left = j % 2 === 0;
+          const sx = left ? x0 + 2 : x1 - 2;
+          if (yy < mullionTop(left ? x0 : x1) + 3) continue;
+          // (No two alike: some gone altogether, a few long ones left.)
+          const roll = hash(i * 3 + j + 4600);
+          if (roll < 0.22) continue;
+          const len = (roll > 0.8 ? 16 + roll * 8 : 3 + roll * 10) * (r > 1.6 ? 0.6 : 1);
+          const tipX = sx + (left ? len : -len);
+          const tipY = yy + 2 + hash(j + i) * 6;
+          poly(ctx, 'rgba(176, 226, 214, 0.5)', [[sx, yy], [sx, yy + 5 + roll * 9], [tipX, tipY]]);
+          line(ctx, 'rgba(240, 255, 250, 0.9)', sx, yy, tipX, tipY);
+        }
+        // And along the sill.
+        for (let x = x0 + 5; x < x1 - 4; x += 7) {
+          const hgt = 3 + hash(x + 4650) * 9;
+          if (hash(x + 4660) < 0.3 || r > 1.7) continue;
+          poly(ctx, 'rgba(176, 226, 214, 0.5)', [[x, 100], [x + 5, 100], [x + 1 + hash(x) * 3, 100 - hgt]]);
+          line(ctx, 'rgba(240, 255, 250, 0.9)', x, 100, x + 1 + hash(x) * 3, 100 - hgt);
+        }
+      }
+    }
+    // Cracks spreading across the glass as the storm comes.
+    if (r > 0.25 && r < 0.95) {
+      const k = (r - 0.25) / 0.7;
+      const ix = x0 + w * (0.3 + hash(i + 4700) * 0.4);
+      const iy = 20 + hash(i + 4710) * 70;
+      for (let j = 0; j < 7; j++) {
+        const a = j * 0.9 + hash(i * 5 + j) * 0.6;
+        const len = (8 + hash(i * 9 + j) * 22) * k;
+        let px = ix;
+        let py = iy;
+        for (let s2 = 0; s2 < 4; s2++) {
+          const nx = px + (Math.cos(a + (hash(j * 3 + s2) - 0.5) * 0.8) * len) / 4;
+          const ny = py + (Math.sin(a + (hash(j * 3 + s2) - 0.5) * 0.8) * len) / 4;
+          line(ctx, 'rgba(240, 255, 250, 0.85)', px, py, nx, ny);
+          px = nx;
+          py = ny;
+        }
+      }
+      oval(ctx, 'rgba(235, 255, 248, 0.6)', ix, iy, 1, 1);
+    }
+  }
+  // The brass mullions all round, broken off at the top where the roof tore away.
+  // (The roof tears away from the left, the side you can see: `tearX` is how far.)
+  const tearX = r < 1.2 ? -1 : r < 2 ? ((r - 1.2) / 0.8) * 190 : Math.min(292, 190 + (r - 2) * 102);
+  for (const [i, x] of LL_MULLIONS.entries()) {
+    const top = mullionTop(x);
+    const bend = top ? (i % 2 ? 4 : -4) : 0;
+    rect(ctx, '#2a1c08', x - 2, top, 6, 120 - top);
+    rect(ctx, '#a07820', x - 1, top, 3, 120 - top);
+    rect(ctx, '#e8c860', x - 1, top, 1, 120 - top);
+    if (top) {
+      // Its snapped end, splayed.
+      line(ctx, '#a07820', x, top, x + bend, top - 7);
+      line(ctx, '#e8c860', x - 1, top, x - 1 + bend, top - 6);
+      line(ctx, '#2a1c08', x + 2, top, x + 2 + bend, top - 5);
+      line(ctx, '#a07820', x + 1, top, x + 1 - bend * 0.6, top - 4);
+    }
   }
   rect(ctx, '#2a1c08', 0, 118, W, 4);
   rect(ctx, '#a07820', 0, 119, W, 2);
@@ -1364,13 +1537,110 @@ function drawLastLight(ctx, time, height, calm = false) {
     const y = (hash(i + 7110) * 120 + time * (8 + hash(i + 7120) * 8)) % 120;
     rect(ctx, 'rgba(190, 235, 225, 0.5)', x, y, 1, 4);
   }
+
+  // The roof: iron plates on ribs over the whole room, a brass rim round its
+  // edge. It tears away from the right, ribs bent up into the sky.
+  if (tearX < W) {
+    const left = Math.max(0, Math.round(tearX));
+    for (let x = left; x < W; x++) {
+      const torn = tearX >= 0 && x < left + 14;
+      const edge = Math.round(16 + Math.sin(x * 0.02) * 2 - (torn ? hash(x * 0.9 + 4900) * 10 : 0));
+      rect(ctx, '#141612', x, 0, 1, edge);
+      if (x % 20 < 9) rect(ctx, '#1c201a', x, 0, 1, edge - 2);
+      rect(ctx, '#a07820', x, edge, 1, 2);
+      rect(ctx, '#2a1c08', x, edge + 2, 1, 1);
+    }
+    // The ribs, and rivets.
+    for (let x = 10; x < W; x += 20) {
+      if (x < left + 4) continue;
+      rect(ctx, '#3a3428', x, 0, 2, 17);
+      rect(ctx, '#6a5a38', x, 0, 1, 17);
+      for (let y = 3; y < 15; y += 5) rect(ctx, '#8a7448', x + 5, y, 1, 1);
+    }
+    // Torn: ribs wrenched up and out past the tear, a plate hanging, swinging.
+    if (tearX >= 0) {
+      for (let j = 0; j < 4; j++) {
+        const x = left + 8 - j * 7;
+        const tipX = x - 12 - j * 7;
+        const tipY = 14 - j * 6 + Math.sin(time * 3 + j) * 1.5;
+        line(ctx, '#3a3428', x, 16, tipX, tipY);
+        line(ctx, '#3a3428', x, 17, tipX, tipY + 1);
+        line(ctx, '#6a5a38', x + 1, 15, tipX + 1, tipY - 1);
+      }
+    }
+    // A plate torn loose, hanging by a corner, swinging (two, once it's tearing).
+    for (const sx of tearX >= 0 ? [left + 6, Math.min(W - 30, left + 58)] : r > 0.9 ? [136] : []) {
+      const swing = Math.sin(time * 2.4 + sx) * 4;
+      poly(ctx, '#0c0e0c', [[sx - 1, 16], [sx + 12, 16], [sx + 11 + swing, 39], [sx - 2 + swing, 34]]);
+      poly(ctx, '#1c201a', [[sx, 16], [sx + 11, 16], [sx + 10 + swing, 37], [sx - 1 + swing, 33]]);
+      line(ctx, '#a07820', sx + 1, 17, sx + swing, 33);
+      line(ctx, '#6a5a38', sx + 6, 18, sx + 5 + swing, 34);
+    }
+  }
+  // Inside, now the room is open: rain driving in.
+  if (!calm && r > 0.9) rain(ctx, time, height, Math.round(40 + r * 30), 'rgba(210, 245, 235, 0.55)', 260, 2.2 + r * 0.3, 830, 1);
+
   // The floor: iron grating, a rail, the room's lamp stand and brass bands.
   rect(ctx, '#0a1014', 0, 122, W, height - 122);
   for (let y = 124; y < height; y += 6) rect(ctx, '#1a242c', 0, y, W, 1);
   for (let x = 0; x < W; x += 10) rect(ctx, '#141c24', x, 122, 2, height - 122);
   rect(ctx, '#c89a30', 0, 122, W, 2);
+  if (r > 0.9) {
+    // Puddles on the grating, rippling; glass and broken plates lying about.
+    for (let i = 0; i < 6; i++) {
+      const x = 20 + hash(i + 5000) * 280;
+      const y = 128 + hash(i + 5010) * 24;
+      oval(ctx, 'rgba(120, 190, 180, 0.22)', x, y, Math.round(10 + hash(i) * 8), 2);
+      const ripple = Math.sin(time * 3 + i * 2);
+      if (ripple > 0.6) oval(ctx, 'rgba(220, 255, 245, 0.35)', x, y, Math.round(3 + ripple * 3), 1);
+    }
+    for (let i = 0; i < Math.round(r * 10); i++) {
+      const x = hash(i + 5100) * W;
+      const y = 126 + hash(i + 5110) * 30;
+      rect(ctx, i % 4 ? 'rgba(210, 245, 235, 0.7)' : '#3a3428', x, y, i % 4 ? 2 : 5, 1);
+    }
+  }
+  // What's come down into the room: a roof girder fallen across the left of it,
+  // its top caught on the stump of a mullion, a roof plate flat on the grating,
+  // and the stones of the parapet where the wall went.
+  if (r > 1.45) {
+    const k = Math.min(1, (r - 1.45) / 0.35);
+    const drop = -(1 - k) * (1 - k) * 150;
+    const mt = mullionTop(94) || 44;
+    const ax = 34;
+    const ay = 134 + drop;
+    const bx2 = 99;
+    const by2 = mt + 3 + drop * 0.4;
+    // (An iron lattice girder: two rails and the braces between them.)
+    poly(ctx, '#060806', [[ax - 7, ay - 2], [ax + 6, ay + 4], [bx2 + 9, by2 + 3], [bx2 - 3, by2 - 7]]);
+    poly(ctx, '#232b27', [[ax - 5, ay - 2], [ax + 5, ay + 3], [bx2 + 7, by2 + 2], [bx2 - 2, by2 - 5]]);
+    for (const off of [0, 1]) {
+      line(ctx, lit > 0.5 ? '#c8b070' : '#56665c', ax - 5, ay - 2 + off, bx2 - 2, by2 - 5 + off);
+      line(ctx, '#a07820', ax + 4, ay + 2 + off, bx2 + 6, by2 + 1 + off);
+    }
+    line(ctx, '#e8c860', ax + 4, ay + 2, bx2 + 6, by2 + 1);
+    for (let j = 0; j < 9; j++) {
+      const gx = ax + ((bx2 - ax) * (j + 0.5)) / 9;
+      const gy = ay + ((by2 - ay) * (j + 0.5)) / 9;
+      line(ctx, '#0c100e', gx - 3, gy - 2, gx + 5, gy);
+      rect(ctx, '#8a7448', gx - 4, gy - 3, 1, 1);
+    }
+    // The plate, and a twist of rib beside it.
+    const py = 128 + drop * 0.7;
+    poly(ctx, '#080a08', [[4, py + 1], [44, py - 4], [56, py + 4], [12, py + 11]]);
+    poly(ctx, '#1c201a', [[6, py + 1], [43, py - 3], [54, py + 3], [13, py + 9]]);
+    line(ctx, '#a07820', 6, py + 1, 43, py - 3);
+    for (let j = 0; j < 3; j++) line(ctx, '#3a3428', 16 + j * 11, py, 22 + j * 11, py + 7 - j);
+    if (r > 1.7) {
+      for (const [sx, sy, sw, sh] of [[62, 125, 9, 6], [74, 128, 7, 5], [48, 141, 8, 5], [86, 124, 6, 4], [70, 136, 5, 4]]) {
+        rect(ctx, '#161a18', sx - 1, sy + drop * 0.2, sw + 2, sh + 1);
+        rect(ctx, '#2e3632', sx, sy + drop * 0.2, sw, sh - 1);
+        rect(ctx, '#3c4842', sx, sy + drop * 0.2, sw, 1);
+      }
+    }
+  }
   // Warm light from the lens on the floor, swinging with the beam.
-  glow(ctx, cx + bx * 70, 140, 60, '255, 230, 150', 0.28);
+  if (lit > 0) glow(ctx, cx + bx * 70, 140, 60, '255, 230, 150', 0.28 * lit);
   // A handrail along the near side, with balusters, and an iron stair post.
   for (let x = 4; x < W; x += 16) rect(ctx, '#1a242c', x, height - 24, 2, 24);
   rect(ctx, '#3a4854', 0, height - 26, W, 3);
@@ -1816,7 +2086,7 @@ export const COAST_BACKDROPS = {
   isles: (ctx, time, height, battle) => drawIsles(ctx, time, height, false, calmFor(battle)),
   haddock_light: (ctx, time, height, battle) => drawIsles(ctx, time, height, true, calmFor(battle)),
   reach: (ctx, time, height, battle) => drawReach(ctx, time, height, calmFor(battle)),
-  lastlight: (ctx, time, height, battle) => drawLastLight(ctx, time, height, calmFor(battle)),
+  lastlight: (ctx, time, height, battle) => drawLastLight(ctx, time, height, calmFor(battle), battle?.lastLightRuin ?? null),
   // The brig Fair Return (see src/battle/attacks/ghost_deckhand.js and friends): below decks, and the captain's cabin.
   ghostship: (ctx, time, height) => drawGhostShip(ctx, time, height),
   ghostship_cabin: (ctx, time, height) => drawGhostCabin(ctx, time, height),

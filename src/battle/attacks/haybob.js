@@ -2,10 +2,15 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Haybob's attacks. It's a round hay bale in a straw hat that has got
 // loose from its field and is having a lovely time, so it fights with its
-// field: itself, rolling and bouncing across the box, loose straw, the
-// pitchfork its farmer lost in it, little haystacks tumbling down, and the
-// harvest mouse that lives in its side. Easy and bouncy, and still every
-// attack goes where you're standing.
+// field and the things that live in it:
+//   - Roll: itself, rolling and bouncing across the box.
+//   - Pitchfork: the fork its farmer lost in it, jabbing.
+//   - The mouse: the harvest mouse that lives in its side, scurrying.
+//   - The gate: "No fences!" Fences slide across the box, and the only way
+//     through is the gate in each, which swings open and bangs shut.
+//   - Under the hats: the mouse hides under one of three straw hats and the
+//     hats are swapped about. Follow the mouse's hat: it comes out of it.
+// Easy and bouncy, and every attack still goes where you're standing.
 //
 // It stands to the right of the box. Each attack is a factory
 // `(box, density, tools) => ({ duration, update })`; see dummy.js.
@@ -114,6 +119,23 @@ defineBulletArt('hayPeek', {
   frameSeconds: 0.2,
 });
 
+// Its straw hat, upside down on the ground, with a red band (the mouse
+// hides under one).
+defineBulletArt('hayHat', {
+  frames: [[
+    '...aaaaa...',
+    '..ahaaaAa..',
+    '..aaaaaAa..',
+    '..rrrrrrr..',
+    '.aaaaaaaAa.',
+    'ahaaaaaaaAa',
+    '.AAAAAAAAA.',
+  ]],
+  palette: { ...STRAW, r: '#c83c2c' },
+  radius: 4.5,
+  hitbox: { w: 10, h: 6 },
+});
+
 // The line of a jab from a pitchfork: out fast, held, drawn back.
 function forkOut(line, from, angle, reach) {
   const k = line.age - line.warn;
@@ -136,10 +158,10 @@ export const HAYBOB_ATTACKS = {
     let count = 0;
     let bales = [];
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && count < 4 && t < 5) {
+        if (t >= next && count < 6) {
           // From the far side from you, so there's always room to see it come.
           const fromRight = soul.x < box.x + box.w / 2;
           const bale = new Shot({ x: fromRight ? box.x + box.w - 5 : box.x + 5, y: rand(box.y + 10, floor - 20), warn: 0.7, art: 'hayRound', life: 4.5 });
@@ -174,46 +196,6 @@ export const HAYBOB_ATTACKS = {
     };
   },
 
-  // Straw: a gust through the Haybob and loose straw streaks across in a
-  // sheet with one gap in it, never in your row, so you have to go somewhere.
-  // It comes sideways, then from above.
-  hayStraw(box, density, { Shot, rand, clamp }) {
-    const lanes = 8;
-    let t = 0;
-    let next = 0.2;
-    let count = 0;
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        if ((t += dt) < next || count >= 5 || t > 5.2) return;
-        const sideways = count % 2 === 0;
-        const span = sideways ? box.h : box.w;
-        const origin = sideways ? box.y : box.x;
-        const width = span / lanes;
-        const yours = clamp(Math.floor(((sideways ? soul.y : soul.x) - origin) / width), 0, lanes - 1);
-        // The gap is two or three lanes away from yours.
-        let gap = yours + (Math.random() < 0.5 ? -1 : 1) * (2 + Math.floor(Math.random() * 2));
-        if (gap < 0 || gap >= lanes) gap = yours + (yours < lanes / 2 ? 3 : -3);
-        for (let i = 0; i < lanes; i++) {
-          if (i === gap) continue;
-          // (In your own lane, it's aimed right at you.)
-          const at = i === yours ? (sideways ? soul.y : soul.x) : origin + (i + 0.5) * width + rand(-1.5, 1.5);
-          const speed = rand(66, 78);
-          for (let n = 0; n < 2; n++) {
-            const back = n * 9;
-            if (sideways) {
-              bullets.push(new Shot({ x: box.x + box.w - 5 + back, y: at, vx: -speed, warn: 0.65, art: 'hayStraw', life: 3 }));
-            } else {
-              bullets.push(new Shot({ x: at, y: box.y + 4 - back, vy: speed, warn: 0.65, angle: Math.PI / 2, art: 'hayStraw', life: 3 }));
-            }
-          }
-        }
-        count++;
-        next = t + 1.1;
-      },
-    };
-  },
-
   // Pitchfork: the fork its farmer lost in the bale. It jabs in, aimed at
   // you, from the side, from above, from below. The three tines show first.
   // It follows you while it warns and aims a little ahead of where you're
@@ -226,7 +208,7 @@ export const HAYBOB_ATTACKS = {
     let last = null;
     const heading = { x: 0, y: 0 };
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
         // How fast you're moving, smoothed a little.
@@ -235,7 +217,7 @@ export const HAYBOB_ATTACKS = {
           heading.y += ((soul.y - last.y) / dt - heading.y) * Math.min(1, dt * 8);
         }
         last = { x: soul.x, y: soul.y };
-        if (t >= next && count < 5 && t < 5.6) {
+        if (t >= next && count < 5) {
           const way = count % 3;
           let from;
           if (way === 0) from = { x: box.x + box.w + 10, y: clamp(soul.y + rand(-12, 12), box.y + 6, box.y + box.h - 6) };
@@ -317,50 +299,6 @@ export const HAYBOB_ATTACKS = {
     };
   },
 
-  // Stacking up: little haystacks tumble down the box and pile up where they
-  // land, one on another, hurting all the way. Every third one comes down
-  // on your column, so the floor is no place to wait.
-  hayStack(box, density, { Shot, rand }) {
-    const cols = 8;
-    const width = box.w / cols;
-    const floor = box.y + box.h - 4;
-    const heights = Array(cols).fill(0);
-    let t = 0;
-    let next = 0.2;
-    let count = 0;
-    let falling = [];
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && t < 4.9) {
-          // Not on a column that's already three high.
-          let col = count % 3 === 2 ? Math.min(cols - 1, Math.max(0, Math.floor((soul.x - box.x) / width))) : Math.floor(rand(0, cols));
-          for (let tries = 0; tries < 6 && heights[col] >= 3; tries++) col = Math.floor(rand(0, cols));
-          const bit = new Shot({ x: box.x + (col + 0.5) * width, y: box.y + 4, vy: 62, warn: 0.45, art: 'hayStackBit', life: 3.4 });
-          bit.col = col;
-          falling.push(bit);
-          bullets.push(bit);
-          count++;
-          next = t + 0.52;
-        }
-        for (const bit of falling) {
-          if (bit.age <= bit.warn) continue;
-          const landing = floor - heights[bit.col] * 7;
-          if (bit.y >= landing) {
-            bit.y = landing;
-            bit.vy = 0;
-            heights[bit.col]++;
-            bit.landed = true;
-            // A puff of chaff where it lands.
-            for (const side of [-1, 1]) bullets.push(new Shot({ x: bit.x, y: landing - 3, vx: side * rand(14, 26), vy: -rand(20, 40), gravity: 90, art: 'hayChaff', life: 0.9 }));
-          }
-        }
-        falling = falling.filter((bit) => !bit.landed && bit.age < 5);
-      },
-    };
-  },
-
   // The mouse: the harvest mouse that lives in the Haybob pops its head out
   // of a hole in the bale's side, squeaks, and scurries across the box along
   // your row, leaving chaff behind it. Now and then it brings its cousin.
@@ -368,41 +306,228 @@ export const HAYBOB_ATTACKS = {
     let t = 0;
     let next = 0.2;
     let count = 0;
-    let waiting = [];
     let runners = [];
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5) {
+        if (t >= next && t < 6.4) {
           const fromRight = count % 2 === 0;
           const pair = count % 3 === 2;
           const x = fromRight ? box.x + box.w - 3 : box.x + 3;
           for (let i = 0; i < (pair ? 2 : 1); i++) {
             const y = clamp(soul.y + (pair ? (i ? 12 : -12) : rand(-6, 6)), box.y + 5, box.y + box.h - 5);
-            bullets.push(new Shot({ x, y: y - 1, harmless: true, life: 0.8, art: 'hayPeek' }));
-            waiting.push({ at: t + 0.8, x, y, fromRight });
+            // It sits in its hole a moment first, blinking (the warning).
+            const run = new Shot({ x, y, vx: (fromRight ? -1 : 1) * 74, warn: 0.8 / density, wobble: { amplitude: 3, frequency: 14 }, art: fromRight ? 'hayMouseL' : 'hayMouseR', life: 3 });
+            run.drop = 0;
+            runners.push(run);
+            bullets.push(run);
           }
           count++;
-          next = t + 1.05;
+          next = t + 1.3;
         }
-        for (const mouse of waiting) {
-          if (t < mouse.at) continue;
-          mouse.done = true;
-          const run = new Shot({ x: mouse.x, y: mouse.y, vx: (mouse.fromRight ? -1 : 1) * 74, wobble: { amplitude: 3, frequency: 14 }, art: mouse.fromRight ? 'hayMouseL' : 'hayMouseR', life: 3 });
-          run.drop = 0;
-          runners.push(run);
-          bullets.push(run);
-        }
-        waiting = waiting.filter((mouse) => !mouse.done);
         for (const run of runners) {
           run.drop -= dt;
-          if (run.drop <= 0 && run.age < 2.6) {
-            run.drop = 0.16;
+          if (run.age > run.warn && run.drop <= 0 && run.age < run.warn + 2.6) {
+            run.drop = 0.26;
             bullets.push(new Shot({ x: run.x, y: run.y + 2, art: 'hayChaff', life: 0.8 }));
           }
         }
-        runners = runners.filter((run) => run.age < 3);
+        runners = runners.filter((run) => run.age < run.warn + 3);
+      },
+    };
+  },
+
+  // The gate: "No fences!" A field fence comes sliding across the box, top
+  // to bottom, and the only way through it is the field gate in it, which
+  // swings open and bangs shut, open and shut, on its hinge. Wait for it,
+  // and go through while it's open. Then the farmer puts up another, from
+  // the other side, with the gate somewhere else. Three fences.
+  hayGate(box, density) {
+    // Real seconds (on the attack's clock, which runs `density` times fast);
+    // when it's layered on another, lighter (density under 1), it spreads out.
+    const pace = Math.max(density, 1);
+    const T = (s) => s * pace;
+    const SPEED = 30;
+    const GAP = 20;
+    const OPEN = 0.95;
+    const SHUT = 0.6;
+    const WARN = 0.7;
+    const THICK = 2;
+    class Fence {
+      constructor(fromLeft, gapY, phase) {
+        this.fromLeft = fromLeft;
+        this.gapY = gapY;
+        this.phase = phase;
+        this.age = 0;
+        this.grazed = false;
+        this.dmg = null;
+        this.x0 = fromLeft ? box.x + 1 : box.x + box.w - 1;
+      }
+      get k() {
+        return this.age - WARN;
+      }
+      get x() {
+        return this.x0 + (this.fromLeft ? 1 : -1) * SPEED * Math.max(0, this.k);
+      }
+      get shut() {
+        return (this.k + this.phase) % (OPEN + SHUT) >= OPEN;
+      }
+      get active() {
+        return this.k >= 0;
+      }
+      update(dt) {
+        this.age += dt;
+      }
+      isGone() {
+        return this.k > box.w / SPEED;
+      }
+      edgeDistance(px, py) {
+        if (!this.active) return Infinity;
+        const dx = Math.max(Math.abs(px - this.x) - THICK, 0);
+        const top = this.gapY - GAP / 2;
+        const bottom = this.gapY + GAP / 2;
+        // Inside the gateway: only the gate, if it's shut.
+        if (py > top && py < bottom) return this.shut ? dx : Math.hypot(dx, Math.min(py - top, bottom - py));
+        return dx;
+      }
+      draw(ctx) {
+        const x = Math.round(this.x);
+        const top = Math.round(this.gapY - GAP / 2);
+        const bottom = Math.round(this.gapY + GAP / 2);
+        ctx.save();
+        if (this.k < 0) ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.25 : 0.6;
+        // The rail and the posts.
+        ctx.fillStyle = '#8a5a24';
+        ctx.fillRect(x - 1, box.y, 3, top - box.y);
+        ctx.fillRect(x - 1, bottom, 3, box.y + box.h - bottom);
+        ctx.fillStyle = '#5a3a14';
+        for (let y = box.y + 3; y < box.y + box.h; y += 9) {
+          if (y > top - 2 && y < bottom + 2) continue;
+          ctx.fillRect(x - 2, y, 5, 3);
+        }
+        // The gateposts, and the gate: across the gap when shut, swung back
+        // along the hinge side when open.
+        ctx.fillStyle = '#3a2410';
+        ctx.fillRect(x - 2, top - 3, 5, 3);
+        ctx.fillRect(x - 2, bottom, 5, 3);
+        ctx.fillStyle = '#c89a5a';
+        if (this.shut) {
+          ctx.fillRect(x - 1, top, 3, bottom - top);
+          ctx.fillStyle = '#8a5a24';
+          for (let y = top + 2; y < bottom - 1; y += 4) ctx.fillRect(x - 1, y, 3, 1);
+        } else {
+          const dir = this.fromLeft ? -1 : 1;
+          for (let i = 0; i < GAP - 2; i++) ctx.fillRect(x + dir * Math.round(i * 0.6), top + Math.round(i * 0.3), 1, 2);
+        }
+        ctx.restore();
+      }
+    }
+    let t = 0;
+    let n = 0;
+    return {
+      duration: 8.6,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (n >= 3 || t < T(0.1 + n * 2.7)) return;
+        // The gate is never across your row.
+        let gapY;
+        do gapY = box.y + GAP / 2 + 3 + Math.random() * (box.h - GAP - 6);
+        while (Math.abs(gapY - soul.y) < 22);
+        // From the side you're furthest from, so there's room to read it.
+        const fromLeft = soul.x > box.x + box.w / 2;
+        bullets.push(new Fence(fromLeft, gapY, Math.random() * (OPEN + SHUT)));
+        n++;
+      },
+    };
+  },
+
+  // Under the hats: the harvest mouse peeks out, and pops under one of three
+  // straw hats, and the hats swap about, sliding round each other, four
+  // swaps (the hats don't hurt). Keep your eye on the hat with the mouse. Then all three lift:
+  // the empty ones only puff out chaff, but the mouse comes scampering out
+  // of its hat straight at you. Twice, along two different rows.
+  hayHats(box, density, { Shot, rand }) {
+    // Real seconds (on the attack's clock, which runs `density` times fast);
+    // when it's layered on another, lighter (density under 1), it spreads out.
+    const pace = Math.max(density, 1);
+    const T = (s) => s * pace;
+    const PEEK = 0.8;
+    const SWAP = 0.42;
+    const SWAPS = 4;
+    const ROUND = PEEK + SWAP * SWAPS + 1.4;
+    const cols = [box.x + 16, box.x + 40, box.x + 64];
+    let t = 0;
+    let round = null;
+    let rounds = 0;
+    const rows = Math.random() < 0.5 ? [box.y + 26, box.y + 56] : [box.y + 56, box.y + 26];
+    return {
+      duration: 8.4,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (rounds < 2 && t >= T(0.1 + rounds * (ROUND + 0.4))) {
+          const y = rows[rounds];
+          rounds++;
+          // Hats by slot; each swap trades two slots.
+          const hats = cols.map((x) => new Shot({ x, y, harmless: true, art: 'hayHat', life: ROUND }));
+          const mouse = Math.floor(rand(0, 3));
+          const swaps = [];
+          for (let i = 0; i < SWAPS; i++) {
+            const a = Math.floor(rand(0, 3));
+            swaps.push([a, (a + 1 + Math.floor(rand(0, 2))) % 3]);
+          }
+          bullets.push(...hats);
+          bullets.push(new Shot({ x: cols[mouse], y: y - 6, harmless: true, art: 'hayPeek', life: PEEK - 0.1 }));
+          round = { born: t, y, hats, slot: [0, 1, 2], mouse, swaps, lifted: false };
+        }
+        if (!round) return;
+        const k = (t - round.born) / pace;
+        // Slide the hats: each swap, the two go round each other in a half circle.
+        if (k >= PEEK && !round.lifted) {
+          const i = Math.min(SWAPS - 1, Math.floor((k - PEEK) / SWAP));
+          const u = Math.min(1, (k - PEEK - i * SWAP) / SWAP);
+          // Where each hat stands before swap i.
+          const at = [0, 1, 2];
+          for (let j = 0; j < i; j++) {
+            const [a, b] = round.swaps[j];
+            for (let h = 0; h < 3; h++) {
+              if (at[h] === a) at[h] = b;
+              else if (at[h] === b) at[h] = a;
+            }
+          }
+          const [a, b] = round.swaps[i];
+          round.hats.forEach((hat, h) => {
+            const from = at[h];
+            if (from !== a && from !== b) {
+              hat.x = cols[from];
+              hat.y = round.y;
+              return;
+            }
+            const to = from === a ? b : a;
+            // One goes over the top, the other underneath.
+            const side = from === a ? -1 : 1;
+            hat.x = cols[from] + ((cols[to] - cols[from]) * (1 - Math.cos(Math.PI * u))) / 2;
+            hat.y = round.y + side * Math.sin(Math.PI * u) * 12;
+          });
+        }
+        if (k >= PEEK + SWAP * SWAPS && !round.lifted) {
+          round.lifted = true;
+          round.hats.forEach((hat, h) => {
+            hat.life = hat.age - hat.warn + 0.05;
+            if (h === round.mouse) {
+              // Out it comes, straight at you, dropping chaff.
+              const ang = Math.atan2(soul.y - hat.y, soul.x - hat.x);
+              const mouse = new Shot({ x: hat.x, y: hat.y, vx: Math.cos(ang) * 92, vy: Math.sin(ang) * 92, warn: 0.3, art: Math.cos(ang) > 0 ? 'hayMouseR' : 'hayMouseL', life: 2 });
+              bullets.push(mouse);
+              for (let c = 0; c < 2; c++) bullets.push(new Shot({ x: hat.x, y: hat.y, vx: Math.cos(ang) * 92, vy: Math.sin(ang) * 92, warn: 0.42 + c * 0.12, art: 'hayChaff', life: 2 }));
+            } else {
+              for (let c = 0; c < 5; c++) {
+                const a = (c / 5) * Math.PI * 2 + rand(0, 0.5);
+                bullets.push(new Shot({ x: hat.x, y: hat.y, vx: Math.cos(a) * 26, vy: Math.sin(a) * 26, art: 'hayChaff', life: 1.2 }));
+              }
+            }
+          });
+        }
       },
     };
   },

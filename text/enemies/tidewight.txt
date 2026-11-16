@@ -1,0 +1,90 @@
+# TIDEWIGHT
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/tidewight.js.
+
+[intro]
+The black water in the well goes still, then goes up. It stands, taller than the rim, with the outline of somebody's head and shoulders. A TIDEWIGHT! There are small, steady lamps hanging in it.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+TIDEWIGHT sways on a swell that isn't there. The little lamps inside it sway a beat late, as though they were on ropes.
+
+TIDEWIGHT's arms hang a little too far. Water runs off its fingers, up, and back into them.
+
+The light inside TIDEWIGHT is the old, steady amber of a work lamp. It doesn't flicker. It has been lit a very long time.
+
+TIDEWIGHT turns its head toward the sound of the sea in the rock, and then, slowly, toward you, like a thing that has learned to wait.
+
+Smells like the bottom of a very deep well.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+TIDEWIGHT is coming apart at the edges, and filling in again, and coming apart. The lamps are the only parts of it that hold still.
+
+[flavor: spareable]
+TIDEWIGHT has stopped rising. It stands level with the rim of its well, calm as a plate of water, and the lamps hang quiet and steady in it.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Three
+fathom.
+
+...Four.
+
+Rising.
+
+Mark
+twain.
+
+The line
+is slack.
+
+No
+bottom.
+
+Deeper.
+
+Hold
+the line.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/tidewight.js.
+[talk: Inspect]
+TIDEWIGHT - HP 8800
+A shape of black water from the deepest well. It rises in the box and slows you below it: stay above the surface. It opens whirlpools that pull you in, and drifts old sounders' work lamps through; the middle one flares. It only stands at high tide.
+
+[talk: Call out a depth]
+You call out a depth, the way the sounders did: "By the mark, three!" TIDEWIGHT goes very still. Then, in a voice like a bucket being let down a long way, it answers: "And a half." Its lamps all brighten, together.
+
+[talk: Lower a lamp on a line]
+You hold your lamp out over the water, as if on a line, and let the light go down. TIDEWIGHT leans over it, all that black, and watches the little flame. It has seen a great many lamps go down. It hasn't seen one come back up in a long time, and it waits to be sure yours does.
+
+[talk: Sit by the edge]
+You sit down by the edge of the well and put your boots in the shallows. TIDEWIGHT lowers itself, bit by bit, until its face is level with yours. It doesn't do anything. It has never had anyone sit with it. It seems to find out what that is, slowly.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+TIDEWIGHT sinks back into its well all at once, with a long, hollow slosh. The little lamps go down one at a time, still lit, until the dark takes them. The water is only water again.
+
+[pacified]
+TIDEWIGHT lets itself down, level, quiet, until it is only a dark circle in the floor with a few amber lights going down in it, and then it is only the circle. The surface closes over, smooth as a lid.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves calls out a depth, flatly, as though reading it off a card. {foe} corrects her by half a fathom. She says that's rude. She also says she'll accept the correction.
+
+Ves lowers her umbrella over {foe}'s edge, handle first, and says that she is not fishing. {foe} lets the handle go all the way down, and brings it back up with a faint shine on it. She says nothing, and holds it carefully.
+
+Ves sits down on the stone beside you, with her umbrella across her knees, and tells {foe} it is a very good well. {foe} says nobody has told it that. She says it is a very good well, again, because it wanted a second go.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble leans right over the edge to shout a depth and is held back by his collar. He shouts "FOUR" from where he is. {foe} says "and a half." He says that is the best number he has ever been given.
+
+Bramble asks {foe} if the little lamps are real. {foe} lets one drift up to his hands. It is warm. He keeps very, very still, and then lets it go back down, and waves at it, and it dips.
+
+Bramble tells {foe} he used to be scared of wells, and now only a bit. {foe} makes room for him by the edge. He sits down by it, boots in the water, and says "oh, this is nice" in an extremely small voice.

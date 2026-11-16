@@ -4,7 +4,7 @@
 // below, standing on the bottom edge. Every id starts `tf_`.
 //
 //   tf_corrie_sit   Corrie after the fight: sitting on the floor, small, the
-//                   oilskin round him like a tent, head down, dripping; his
+//                   oilskin pooled round him, the hood fallen back, head down, dripping; his
 //                   staff lying by him, its light nearly out (3 frames, 24x18)
 //   tf_oilskin      where he was: only the oilskin, empty, slumped flat in a
 //                   puddle on the boards (2 frames, 24x10)
@@ -99,51 +99,84 @@ const PUDDLE = ['rgba(120, 190, 200, 0.35)', 'rgba(190, 236, 240, 0.5)'];
 const SEA = ['#123c38', '#1c5a4e', '#2a7864', '#45967c', '#79bc9c', '#b4e2c8'];
 const FOAM = ['#ffffff', '#e4fbef', '#c2ead8'];
 
-// Corrie sitting on the floor, knees drawn up under the coat, which stands
-// round him like a tent; head down, wet hair, eyes nearly shut. `drip` moves
-// the drops; `glow` is how much light is left in the staff by him.
-function corrieSit({ drip = 0, glow = 1, blink = false } = {}) {
+/// Corrie sitting on the floor, knees drawn up inside the coat, which is far
+// too big: the hood fallen back in a heap behind his neck, its shoulders
+// sliding off his, one bare thin shoulder showing, the sleeves lying empty
+// over his knees, and the rest of it pooled flat on the boards round him in
+// heavy folds. Head bowed, wet hair in clumps, eyes shut, a tear; bare toes
+// showing. `drip` moves the drops; `glow` is how much light is left in the
+// staff lying by him. `breath` lifts his shoulders a pixel.
+// (2026-11-15: redrawn twice; he was a yellow pyramid, then a thin boy with a
+// flat head. The older drawings are in notes/art-backup-2026-11-15/corrie/
+// and corrie-v2/.)
+const SHIRT = ['rgba(222, 226, 238, 0.92)', 'rgba(164, 172, 194, 0.9)'];
+const COAT_SHINE = 'rgba(255, 250, 228, 0.9)';
+const TEAR = 'rgba(216, 246, 255, 0.95)';
+function corrieSit({ drip = 0, glow = 1, blink = false, breath = 0 } = {}) {
   const g = new Grid(24, 18);
+  // The puddle he's sitting in.
+  g.oval(12, 17, 11, 0.6, PUDDLE[0]);
   // The staff, lying on the boards beside him, its end barely lit.
-  g.line(1, 16, 9, 15, WOOD[0]);
-  g.line(1, 15, 8, 14, WOOD[1]);
-  if (glow) g.set(1, 14, GLOW[glow > 1 ? 1 : 0]);
-  // The coat: a tent of yellow from his shoulders to the floor, spread wide.
-  for (let y = 7; y <= 17; y++) {
-    const half = 3.5 + (y - 7) * 0.75;
-    const x0 = Math.round(13 - half);
-    const x1 = Math.round(13 + half);
-    for (let x = x0; x <= x1; x++) g.set(x, y, x <= x0 + 1 ? COAT[0] : x >= x1 - 1 ? COAT[2] : COAT[1]);
-  }
-  // Its hem on the floor, darker, a little ragged.
-  g.rect(5, 17, 17, 1, COAT[3]);
-  [6, 9, 15, 19].forEach((x) => g.set(x, 16, COAT[2]));
-  // Folds where his knees push it up, and the line down the front.
-  g.line(13, 9, 13, 16, COAT[2]);
-  g.set(10, 11, COAT[0]);
-  g.set(16, 11, COAT[0]);
-  g.line(9, 12, 11, 12, COAT[2]);
-  g.line(15, 12, 17, 12, COAT[2]);
-  // Tiny hands, holding his knees through the sleeves.
-  g.rect(11, 12, 2, 1, SKIN[0]);
-  g.rect(14, 12, 2, 1, SKIN[0]);
-  // The collar, up round his chin.
-  g.rect(10, 7, 7, 1, COAT[2]);
-  // His head, bowed a little: too big, pale, wet hair plastered down.
-  g.oval(13, 4, 3, 3, SKIN[0]);
-  g.rect(10, 1, 7, 2, HAIR[0]);
-  g.rect(11, 0, 5, 1, HAIR[1]);
-  g.set(10, 3, HAIR[0]);
-  g.set(16, 3, HAIR[0]);
-  g.set(12, 1, HAIR[1]);
-  // Eyes nearly shut, looking at the floor.
-  g.rect(11, 4, 2, 1, blink ? SKIN[1] : HAIR[0]);
-  g.rect(14, 4, 2, 1, blink ? SKIN[1] : HAIR[0]);
-  g.set(13, 6, SKIN[1]);
-  g.outline(OUT, [GLOW[0], GLOW[1]]);
+  g.line(0, 16, 8, 15, WOOD[0]);
+  g.line(0, 15, 7, 14, WOOD[1]);
+  g.set(1, 14, WOOD[0]);
+  // The coat pooled flat round him, in heavy folds, the hem ragged.
+  g.oval(13, 15, 9, 2, COAT[1]);
+  g.rect(4, 16, 18, 1, COAT[2]);
+  [5, 9, 14, 18, 21].forEach((x) => { g.set(x, 15, COAT[2]); g.set(x - 1, 15, COAT[0]); g.set(x, 16, COAT[3]); });
+  [6, 12, 20].forEach((x) => g.set(x, 17, COAT[3]));
+  // Over his drawn-up knees: two round bumps under the oilskin.
+  const top = 9 - breath;
+  g.oval(11, 12, 2, 1, COAT[0]);
+  g.oval(15, 12, 2, 1, COAT[1]);
+  g.rect(9, 12, 9, 3, COAT[1]);
+  g.line(9, 12, 9, 14, COAT[0]);
+  g.line(17, 12, 17, 14, COAT[2]);
+  g.line(13, 12, 13, 14, COAT[3]);
+  g.set(10, 12, COAT_SHINE);
+  // Bare toes poking out at the front.
+  g.rect(10, 15, 2, 1, SKIN[0]);
+  g.rect(14, 15, 2, 1, SKIN[0]);
+  g.set(11, 15, SKIN[1]);
+  // The shoulders: the near one still in the coat, the far one slipped bare.
+  g.rect(7, top, 7, 2, COAT[1]);
+  g.set(7, top, COAT[0]);
+  g.rect(14, top + 1, 4, 1, SHIRT[0]);
+  g.set(17, top + 1, SHIRT[1]);
+  g.rect(13, top + 2, 7, 1, COAT[2]);
+  g.set(19, top + 2, COAT[3]);
+  // The sleeves, lying limp over his knees, the cuffs empty and dark.
+  g.line(6, top + 1, 7, 13, COAT[0]);
+  g.line(7, top + 1, 8, 13, COAT[1]);
+  g.rect(7, 14, 2, 1, COAT[3]);
+  g.line(19, top + 2, 18, 13, COAT[2]);
+  g.line(18, top + 2, 17, 13, COAT[1]);
+  g.rect(17, 14, 2, 1, COAT[3]);
+  // The hood fallen back in a heap behind his neck.
+  g.oval(15, top - 1, 3, 1, COAT[2]);
+  g.set(17, top - 1, COAT[3]);
+  // His head, bowed: pale, wet hair in clumps falling forward.
+  const hy = 4 - breath;
+  g.oval(12, hy, 3, 3, SKIN[0]);
+  g.set(14, hy + 1, SKIN[1]); g.set(14, hy + 2, SKIN[1]);
+  g.rect(9, hy - 3, 7, 2, HAIR[0]);
+  g.rect(10, hy - 4, 5, 1, HAIR[0]);
+  g.set(9, hy - 1, HAIR[0]); g.set(15, hy - 1, HAIR[0]); g.set(15, hy, HAIR[0]); g.set(9, hy, HAIR[0]);
+  [10, 12, 14].forEach((x) => g.set(x, hy - 1, HAIR[0]));
+  g.set(11, hy - 3, HAIR[1]); g.set(13, hy - 4, HAIR[1]);
+  // Eyes shut, looking at the floor; a tear.
+  g.set(10, hy + 1, blink ? SKIN[1] : HAIR[0]);
+  g.set(11, hy + 1, HAIR[0]);
+  g.set(13, hy + 1, HAIR[0]);
+  g.set(14, hy + 1, blink ? SKIN[1] : HAIR[0]);
+  g.set(12, hy + 3, SKIN[1]);
+  g.set(10, hy + 2 + (drip % 2), TEAR);
+  g.outline(OUT, [PUDDLE[0], GLOW[0], GLOW[1]]);
+  // The staff's last light, over the outline.
+  if (glow) { g.set(0, 14, GLOW[glow > 1 ? 1 : 0]); g.set(1, 13, GLOW[0]); }
   // Drops running off the coat into the boards.
-  g.set(5 + (drip % 2), 14 + drip, DROP);
-  g.set(21 - (drip % 2), 13 + ((drip + 1) % 3), DROP);
+  g.set(4 + (drip % 2), 14 + (drip % 2), DROP);
+  g.set(22 - (drip % 2), 13 + ((drip + 1) % 3), DROP);
   return g.rows();
 }
 
@@ -428,3 +461,22 @@ export const TF_HADDOCK_LOOK_SPRITES = HADDOCK_CRANK_BACK.look;
 
 // The colours every sprite here uses (private characters), for the animations.
 export const TF_PALETTE = palette;
+
+// Old Gulper's crooked tooth (gulper_beaten, gulper_spared): as long as your arm, curved and
+// pale as a candle, thick at the root and curling to a point. Two frames (a glint), 18x9, for a toss.
+// (draft)
+const TOOTH = ['#f4eed6', '#d8cda8', '#aa9e78'];
+function tooth(glint = false) {
+  const g = new Grid(18, 9);
+  for (let x = 0; x <= 15; x++) {
+    const k = x / 15;
+    const y = 6 - Math.round(Math.sin(k * 1.5) * 4);
+    const thick = x < 5 ? 3 : x < 10 ? 2 : 1;
+    for (let j = 0; j < thick; j++) g.set(x + 1, y + j, j === thick - 1 ? TOOTH[1] : TOOTH[0]);
+  }
+  g.set(2, 5, TOOTH[2]);
+  if (glint) g.set(8, 5, '#ffffff');
+  g.outline(OUT);
+  return g.rows();
+}
+export const TF_TOOTH_SPRITES = { a: tooth(), b: tooth(true) };

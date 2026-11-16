@@ -1,0 +1,39 @@
+M
+=== ash_tideline 38x16 area=ashroad tide=false text=interactions/ashroad.txt
+    01234567890123456789012345678901234567
+  0 ######################################
+  1 ######################################
+  2 ####+++++###########+ooo+#####++++####
+  3 #pxx+++++pxSxx+####o+oTo++ooo+p#+ooo##
+  4 #xxx+++++xxSpx+++oTo+ooo++oTo++++oT#+#
+  5 Dxxx+++++xxSxx+++ooo++++++oooooo+ooo+#
+  6 Dxxx+++++xxSxooo+++++++++++++oTo+++xx#
+  7 #xxx+++++xxSxoTo++++++++++xxxooox++xx#
+  8 #xx++p+++x#Sxooo++++T+++++xxxxxxxp+xxD
+  9 #+++++oooxxSxxooo+++s#++++xxxxxxxxxxxD
+ 10 #+++##oT#xxSxxoTo+++++++++xxxExxxxxxx#
+ 11 #++####ooxxSoo#oooo+++#+oooxxxx#xxxxx#
+ 12 #+++##++pxxSoTo+oTo+++++oToxxxxExxx+##
+ 13 ##++++p++xxSooo+ooo+++++pooxx#xxxx####
+ 14 ###++++++xx###++++++++################
+ 15 ######################################
+tiles:
+  0 ######################################
+  1 ####WWWWW###########WWWWW#####WWWW####
+  2 #WWW.....WWWWW######.....WWWWW....WW##
+  3 #qqq...........WWWW...,,.......T....W#
+  4 #qqqqq..............,,,,,..........T.#
+  5 qqqqqqqq.....::::.......,,.....,,....#
+  6 qqqqqqqqq..::::::::::........,,,,....#
+  7 #qqqqqqq.....,,,..:::::::::.....,....#
+  8 #qqqqqq...O.........,,..::::::::::::::
+  9 #qqqqqqq.............T.....,,::::::::.
+ 10 #qqq~~qqqq.......,,,.............,...#
+ 11 #qq~~~~qqqq...T.......O........T.....#
+ 12 #qqq~~qqqqqq.........,,,,...........##
+ 13 ##qqqqqqqqqqqqq.......,,.....O....####
+ 14 ###qqqqqqqq~~~qqq.....WWW#####WWWW####
+ 15 ######################################
+props: ar_milestone@18,4* ar_signpost@27,4* ar_cairn@30,6* ar_weed@5,8 ar_weed@8,12 ar_skull@25,12* c5_driftwood@7,10* gold_pouch@34,4* col_flower_harebell@1,3 al_ashman@15,10* al_snag_tree@22,3* al_snag@13,12* al_fence_bit@9,3 al_wheel_sunk@14,7* al_shoe@20,8* al_cairn_rag@17,12* al_dune_a@33,8 al_dune_b@12,4 al_dune_c@24,13 al_stalks@6,13 al_stalks@30,3
+
+CHECK DONE

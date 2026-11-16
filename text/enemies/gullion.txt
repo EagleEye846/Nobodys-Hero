@@ -58,7 +58,7 @@ a chip?
 # TALK options in src/data/enemies/gullion.js.
 [talk: Inspect]
 GULLION - HP 1850
-A brawler gull with a swag sack. Dives at you and drops chips as he goes, throws off feathers, lobs the junk from his sack in arcs, and fights with two jabs and a haymaker. Mind the line he dives along.
+A brawler gull with a swag sack. Dives for whichever chip is nearest you, throws junk that each goes its own way, and brawls in a cloud with fists on the side facing you.
 
 [talk: Offer a chip]
 You hold out a chip, flat on your palm. GULLION goes absolutely still. Then he snatches it, drops his fists, and swallows it whole with his eyes shut. A very small, very happy noise comes out of him, and he looks about to cry.

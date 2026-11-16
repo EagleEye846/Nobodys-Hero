@@ -1,0 +1,45 @@
+# MOTHER TAPER: the oldest waxling, a tall candle in a shawl. She finds you in
+# the Flower Room (src/data/scenes/meetTaper.js), then waits at her home up
+# the stairs (src/data/rooms/taperHome.js).
+# Each entry (separated by a blank line) is one page of the textbox.
+
+# Said the first time you talk to her at home.
+[first]
+There you are, sprout. Come in, come in. Sit by the fire and thaw out.
+
+Stay near the lanterns out there. Most of them, anyway.
+
+The waxlings may snap at you. Be gentle with them. They're only frightened.
+
+If you get hurt, come straight home. Warm wax mends most things.
+
+# Said every time after that.
+[repeat]
+Back again? Good. Let me look at you. ...Yes, still all there.
+
+Hero or not, there's always a seat by my fire for you.
+
+The Keeper's lantern... I don't like how it leans toward people. Do be careful, sprout.
+
+# Said the first time you talk to her at home after sparing her at the way out
+# (src/data/scenes/taperSpared.js).
+[first after taper_spared]
+{surprised}...Sprout? Is that you?
+
+{surprised}You came back. You actually came back.
+
+{sad}I was sure that door had swallowed you, like all the others.
+
+{sad}I keep thinking about it, you know. I threw everything I had at you...
+
+{crying}...and you never once raised a hand. Not one of them ever did that for me.
+
+{glee}Well! Don't just stand in the doorway. The soup's still warm.
+
+{glee}I made too much. I always make too much.
+
+# Said every time after that.
+[repeat after taper_spared]
+{glee}Still coming home to visit. I'll never get used to it, sprout.
+
+{worried}Mind that light out there. And eat something green now and then.

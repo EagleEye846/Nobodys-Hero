@@ -1,7 +1,10 @@
 # MADAM FAIRWEATHER, THE FIGUREHEAD: the secret superboss of chapter 5, at the end of the ghost
 # ship's deep part. The carved wooden woman on the brig Fair Return's prow, woken by a piece of the
-# Fallen Star that lodged in her breast a hundred years ago. She laughs, she spins, she is glad
-# of anyone at all, and she doesn't know her own strength. She speaks in bright, broken
+# Fallen Star that lodged in her breast a hundred years ago. On the Fair Return's last good night
+# she made one wish on it: that the night would never end. The star granted it to the letter, so
+# it is a party nobody can leave, and she can't stop laughing. She isn't mad or possessed; she is
+# stuck inside that wish. Sparing her lets it go (morning can come); beating her breaks it.
+# She laughs, she spins, she is glad of anyone at all, and she doesn't know her own strength. She speaks in bright, broken
 # fragments, like a person at a party who has been alone for a very long time. The hero never speaks.
 # (draft: every line here)
 # Numbers (HP, damage, her four phases) live in src/data/enemies/fairweather.js.
@@ -40,17 +43,19 @@ Her laugh goes out over the sea in rings you can almost see. The waves answer it
 
 The star in her breast beats like a second, quicker heart. The wood round it is cracked, and the cracks are full of light.
 
-Her hair is a run of carved waves. Where the carving ends, the waves go on, and they are real.
+Her hair is carved in thick ribbons and painted walnut. The salt has had the paint off every edge.
 
 She smells of old varnish and a clean night with the frost coming.
 
+Out past her the night goes on, and on. There is no grey in the east at all.
+
 [flavor: shower]
-MADAM FAIRWEATHER has her arms up, and the stars have noticed. Some of them are coming down to see what she is looking at.
+MADAM FAIRWEATHER's hand can't hold the light in any more, and the stars have noticed. Some of them are coming down to see.
 
 The sky over the perch is much too full. It keeps adding one.
 
 [flavor: carousel]
-MADAM FAIRWEATHER is turning, and the box turns with her. Somewhere a barrel organ plays a waltz that has lost its way home.
+MADAM FAIRWEATHER is turning, and the deck heels over under her. Somewhere a barrel organ plays a waltz that has lost its way home.
 
 The painted horses have got loose from nothing and are riding round on gilt poles. They look delighted. Their eyes are empty.
 
@@ -171,8 +176,9 @@ you go.
 # One section per TALK option. The names after "talk:" must match the TALK options in
 # src/data/enemies/fairweather.js.
 [talk: Inspect]
-MADAM FAIRWEATHER - HP 85000
-The brig Fair Return's figurehead, woken by a splinter of the Fallen Star in her breast. Foam, splinters, her laugh in rings; then falling stars and comets; then the carousel and the maypole; then all of it at once. She isn't cruel. She is playing, and nobody has told her how hard.
+MADAM FAIRWEATHER - HP 62000
+The brig Fair Return's figurehead, woken by a splinter of the Fallen Star in her breast, on a night she wished would never end. Foam, splinters, her laugh in rings; then falling stars and comets; then the carousel and the maypole; then all of it at once. She isn't cruel. She is playing, and nobody has told her how hard.
+Her deck lists, and rolls over when she laughs. And she will want to dance.
 Everything she throws blinks first. Nowhere in the box stays safe.
 
 [talk: Laugh along]
@@ -202,7 +208,7 @@ The perch is a plank at the end of a ship in the middle of a fog. There is nowhe
 
 # What's said as each phase starts.
 [phase: shower]
-The sky over the perch fills up. The stars were always there, and now they are looking. MADAM FAIRWEATHER throws both arms up, and they come down.
+The sky over the perch fills up. The stars were always there, and now they are looking. MADAM FAIRWEATHER lifts her open hand, and they come down.
 
 [phase: shower foe]
 Make a
@@ -212,11 +218,20 @@ Make
 a
 hundred!
 
+# She curtsies (the beat's `curtsy` cue), then asks. From here on she leads: the waltz rule.
+[phase: shower curtsy foe]
+Oh! But
+where are my
+manners?
+
+May I have
+this dance?
+
 [phase: shower vesper]
 {determined}She's using the sky as a toy box. They fall in columns and they flash where they'll land. Watch the flash, not the star. ...And don't catch the glass.
 
 [phase: carousel]
-The whole figurehead turns, and the box turns with her. Out of the dark come painted horses on poles of gold, round and round, a slow, sweet, impossible tune under them.
+The whole figurehead turns, and the deck heels over under her. Out of the dark come painted horses on poles of gold, round and round, a slow, sweet, impossible tune under them.
 
 [phase: carousel foe]
 Round and
@@ -250,12 +265,34 @@ STOP!
 [phase: chaos vesper]
 {determined}She's doing two at once now and I don't think she knows how. Stay moving. It's all warned, it's just a lot of warnings.
 
+# Her two rules for the box (src/battle/fairweatherDeck.js): said in the panel the first time
+# each comes in.
+[deck_hint: list]
+Her deck LISTS. Your SHADOW slides downhill: walk against it. When she laughs, the ship rolls over the other way.
+
+[deck_hint: dance]
+She has your hand. Your SHADOW steps only on her beats, ONE two three, and further on ONE. Hold a way, or press it early.
+
+[deck_hint: both]
+Now you dance on a listing deck. Take the long step, the one on ONE, uphill.
+
+[deck_hint: swap]
+Every time she laughs she changes the game: the listing deck, then the dance, then the deck again.
+
+# Her counting, in her bubble, the first times she dances with you (ONE, two, three).
+[deck_count foe]
+ONE!
+
+two,
+
+three,
+
 # How the fight ends. The rewards line is added automatically.
 [victory]
 The pink goes out of the cracks, and then the white. MADAM FAIRWEATHER stops laughing in the middle of a breath, and stays where she is, a carved figurehead on a prow, her chin lifted, her hand held out. The star in her breast is only a dull stone now.
 
 [pacified]
-MADAM FAIRWEATHER lets her hand fall. She hangs on her prow a moment longer, smiling, looking out at a morning that is not coming. The star in her breast goes down, slowly, like a lantern turned low.
+MADAM FAIRWEATHER lets her hand fall. She hangs on her prow a moment longer, smiling, looking out to where the morning is going to be. The star in her breast goes down, slowly, like a lantern turned low.
 
 # Ves's own TALK lines for her ({foe} is her name).
 [vesper_talk]

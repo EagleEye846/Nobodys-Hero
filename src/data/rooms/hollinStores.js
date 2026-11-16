@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // HOLLIN STORES: the village shop, off the green at Hollin Gate. Mags, who
 // kept it, left with everyone else fifty years ago and never came back, but
 // the shop's still stocked, the honesty tin's still on the counter, and her
@@ -72,6 +74,7 @@ export const HOLLIN_STORES = {
     { sprite: 'chair', x: 2, y: 5, text: 'hstores_chair' },
     // A shelf with nothing fixing it to the wall (push it aside): it hides the way to the back room.
     { sprite: 'bookshelf', x: 12, y: 6, text: 'hstores_loose_shelf', rock: true },
+    ...(R3P_PROPS['hollin_stores'] ?? []),
   ],
   tileTexts: { h: 'hstores_wall' },
 

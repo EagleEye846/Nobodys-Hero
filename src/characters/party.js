@@ -37,7 +37,16 @@ export const MEMBERS = {
     // How much stronger they get with every level after the first: FIGHT power
     // (as a share: 0.1 is 10% more a level), and what their spells add (the
     // same effects their gear adds to: see equipment.js).
-    growth: { fight: 0.05, allyStrike: 2, allyHeal: 3, allyCalm: 1 },
+    // She's the party's mage (13 November 2026): her attack spells grow 1.2%
+    // a level on top (`spellPower`, see allyStrikeDamage in battleScene.js:
+    // about +13% at LV 12, +30% at 26, +45% at 38, +60% at 51), and her MAG
+    // half a percent a level (her heals and calming). Her FIGHT is untouched,
+    // so it stays under Bramble's.
+    growth: { fight: 0.05, allyStrike: 2, allyHeal: 3, allyCalm: 1, spellPower: 0.012, magic: 0.005 },
+    // The party's MAGE (14 November 2026: "we want her the powerful mage"): her attack spells don't come
+    // out of her arm alone. They're measured halfway between her FIGHT (which stays the weakest) and the
+    // hero's best, so they hit well above Bramble's hatchet spells (see allyStrikeDamage in battleScene.js).
+    spellBase: 'hero',
     // Before chapter 5 her FIGHT grows slower (the hero's doesn't grow with
     // levels at all): at 0.05 she was hitting 75-80% as hard as him at each
     // chapter's start. 0.03 keeps her near 60%, under Bramble.
@@ -197,10 +206,10 @@ export const MEMBERS = {
       conkers: { label: 'CONKERS', cost: 18, strikeAll: 0.7, shorten: 0.05, text: 'Bramble whirls a conker on a string round his head and lets go of the string. Several times.' },
       // CHILL's last star: he stands in front of everyone and patches them up.
       got_you: { label: "I'VE GOT YOU", cost: 50, wade: true, healAll: 40, text: 'Bramble plants himself in front of everyone and doesn\'t move. "I\'ve got you."' },
-      // Chapter 5's third wave. NOTCH leaves the enemy open (`expose`), like
+      // Chapter 5's third wave. MARK IT leaves the enemy open (`expose`), like
       // Ves's CHARGE; LOOK OUT shouts a warning (CALL OUT) and gets you out of
       // the way of the first hit (BRACE's `absorb`).
-      notch: { label: 'NOTCH', cost: 36, strikeOne: 0.8, expose: { bonus: 0.3, turns: 2 }, text: 'Bramble cuts a neat notch in it, like his dad showed him. "That\'s where you hit it."' },
+      notch: { label: 'MARK IT', cost: 36, strikeOne: 0.8, expose: { bonus: 0.3, turns: 2 }, text: 'Bramble cuts a neat notch in it, like his dad showed him. "That\'s where you hit it."' },
       rally: { label: 'RALLY', cost: 34, healAll: 20, sp: 16, text: 'Bramble waves his hatchet over his head. "Come on! We\'re not done!"' },
       pocket_sand: { label: 'POCKET SAND', cost: 16, headwind: 3, text: 'Bramble flings a handful of sand from his pocket. Nobody can see a thing.' },
       look_out: { label: 'LOOK OUT!', cost: 24, callOut: true, absorb: true, text: 'Bramble climbs up on something to keep watch.' },

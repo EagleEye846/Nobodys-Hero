@@ -9,6 +9,8 @@
 //   #  dark rock overhead (solid)   W  rock face (solid)   O  ore rock (solid)
 //   x  glassy crystal (solid)       q  loose gravel        ^  stalagmite (solid)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_STAR_CAMP = {
   id: 'diggings_star_camp',
   name: 'THE LAST CAMP',
@@ -53,6 +55,7 @@ export const DIGGINGS_STAR_CAMP = {
 
   textFile: 'interactions/star_seam.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_star_camp ?? []),
     { sprite: 'savepoint', x: 14, y: 6, save: true },
     // The rules, pinned up by the door that leads on, and a table laid for a break.
     { sprite: 'notice_board', x: 18, y: 3, text: 'k_rules' },

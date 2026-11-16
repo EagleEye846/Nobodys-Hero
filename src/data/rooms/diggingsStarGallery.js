@@ -27,6 +27,8 @@
 //   B  a tall ledge of rock (jump on from a stone)   x  glassy crystal (solid)
 //   q  loose gravel   ^  stalagmite (solid)   .  packed dirt floor
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_STAR_GALLERY = {
   id: 'diggings_star_gallery',
   name: 'THE WHISTLE GALLERY',
@@ -66,6 +68,7 @@ export const DIGGINGS_STAR_GALLERY = {
 
   textFile: 'interactions/star_seam.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_star_gallery ?? []),
     { sprite: 'savepoint', x: 2, y: 12, save: true },
     // The singing crystals, lowest to highest note (E, F-sharp, G, B): the tune is d, c, a, b.
     { sprite: 'singing_a', x: 5, y: 4, text: 'ga_crystal', chime: { set: 'seam', note: 0 } },

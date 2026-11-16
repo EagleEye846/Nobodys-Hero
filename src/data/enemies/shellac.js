@@ -24,7 +24,7 @@ export const SHELLAC = {
   feel: { hit: 'china', windup: 'glint', at: [0.1, 0.42], defeat: 'shards', exit: 'scuttle' },
   // The chapter 5 coast battle song (the Wrack Shore and Gullrest).
   music: 'coastBattleStorm',
-  maxHp: 10200,
+  maxHp: 7100,
   damage: 84,
 
   difficulty: { density: 1.75, speed: 1.60 },
@@ -37,10 +37,9 @@ export const SHELLAC = {
 
   // Its attacks live in src/battle/attacks/shellac.js.
   patterns: [
-    { name: 'shellClaws', weight: 3 },
-    { name: 'shellCups', weight: 3 },
-    { name: 'shellSpin', weight: 2 },
-    { name: 'shellSteam', weight: 2 },
+    { name: 'shellPour', weight: 3 },
+    { name: 'shellKettle', weight: 3 },
+    { name: 'shellTeaSet', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -51,7 +50,7 @@ export const SHELLAC = {
     { name: 'Mime a cup of tea', calm: 30 },
   ],
 
-  rewards: { exp: 2100, coins: 12 },
+  rewards: { exp: 2100, coins: 10 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'teapot_shell', chance: 0.4 }],

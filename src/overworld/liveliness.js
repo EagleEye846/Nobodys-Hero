@@ -5,6 +5,8 @@ import { daylight } from './daylight.js';
 import { animationFrame } from '../engine/animations.js';
 import { hash } from '../engine/noise.js';
 import { SmallLife } from './smallLife.js';
+import { makeMonsterFlavour } from './monsterFlavour.js';
+import { makeCompanionLife } from './companionLife.js';
 
 // LIVELINESS: the world noticing you. Small things that answer to the party
 // being there, wherever you are, without a room having to ask for them:
@@ -99,6 +101,11 @@ export class Liveliness {
     // Skids, trodden grass, mice, frogs, fireflies, falling leaves, chests (smallLife.js).
     this.small = new SmallLife(scene, this);
     this.birdThings.push(...this.small.things);
+    // Monsters doing things before a fight, and the party's idle moments and reactions (chapters 4 to 6).
+    this.monsters = scene.monsterFlavour = makeMonsterFlavour(scene);
+    this.companions = makeCompanionLife(scene, this);
+    if (this.monsters) this.birdThings.push(...this.monsters.things);
+    if (this.companions) this.birdThings.push(...this.companions.things);
     this.things = this.birdThings;
   }
 
@@ -131,6 +138,8 @@ export class Liveliness {
     this.updateBirds(dt, bodies);
     this.updateMoths(dt);
     this.small.update(dt, bodies);
+    this.monsters?.update(dt);
+    this.companions?.update(dt);
     this.restBramble();
     this.glanceAtMirrors();
     // Things drawn among everyone: the birds on the ground, and what's round
@@ -614,6 +623,7 @@ export class Liveliness {
   // Drawn over the dark (they're in the candle's light).
   drawTop(ctx) {
     if (this.ordinary) this.small.drawTop(ctx);
+    this.companions?.drawTop(ctx);
     if (!this.moths.length || !this.ordinary) return;
     const s = this.scene;
     const cam = s.camera;

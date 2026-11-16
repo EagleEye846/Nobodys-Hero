@@ -14,16 +14,24 @@ export const SOUNDINGS_IN = {
 
   steps: [
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', text: 'The tunnel climbs up out of the water and comes out in a cave. The sea comes in with it, right into the hill: white at the mouth, black further in, booming.\n\nHere and there the walls glow green, like old bottles with a light behind them.' },
+    // The sea comes right in under the hill: the camera goes out over the black water, the walls
+    // glowing green, the whole cave booming. (draft)
+    { do: 'stage', spots: [{ at: { x: 9, y: 3 }, color: '120, 230, 170', radius: 34 }, { at: { x: 14, y: 8 }, color: '120, 230, 170', radius: 30 }] },
+    { do: 'sound', name: 'whoosh' },
+    { do: 'quake', amount: 0.6, seconds: 3 },
+    { do: 'camera', to: { x: 12, y: 6 } },
+    { do: 'wait', seconds: 2.2 },
+    { do: 'camera' },
     { do: 'act', who: 'bramble', act: 'startle' },
     { do: 'face', who: 'player', at: 'bramble' },
-    { do: 'say', who: 'bramble', text: '{scared}It\'s INSIDE now. The sea. It got in.' },
     { do: 'face', who: 'ves', at: 'bramble' },
     { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{bored}It does that. It\'s very forward.' },
+    { do: 'say', who: 'ves', text: '{laughing}It\'s very forward, the sea.' },
     { do: 'act', who: 'bramble', act: 'fidget', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}It\'s only a big puddle with a roof on. I\'m not scared of a puddle.' },
-    { do: 'say', who: 'ves', text: '{thoughtful}There\'s a chart on that board. Somebody measured all this. Let\'s see what they thought of it.' },
+    { do: 'say', who: 'bramble', text: '{determined}It\'s only a big puddle with a roof on. I\'m not scared of a puddle.' },
+    { do: 'say', who: 'ves', text: '{smile}There\'s a chart on that board. Let\'s see what somebody made of it.' },
     { do: 'face', who: 'player', dir: 'right' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

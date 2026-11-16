@@ -52,7 +52,7 @@ Be soft.
 # TALK options in src/data/enemies/moonjelly.js.
 [talk: Inspect]
 MOONJELLY - HP 2000
-A jellyfish that glows like a moon. Lashes in long ripples, pulses rings of pale light, and lets go slow little bells. Nothing it does is quick. There's just a lot of it.
+A jellyfish that glows like a moon. Moves only on the pulse, its babies hop together on one beat, and its tendrils sting only where the moonlight runs along them.
 
 [talk: Hold your breath]
 You hold your breath, and your arms, and your boots, and wait. MOONJELLY comes closer, and then closer, and the light inside it goes slow. It has never had anything be so quiet next to it.

@@ -9,7 +9,7 @@
 // (SPELL_WEAPON_CAP). So an old spell stops growing and the new ones take
 // over. `power` is how many of those FIGHTs it's worth; armor MAG and Arcane
 // Focus add to it (a quarter of the MAG, half the Focus), rather than
-// multiplying everything again. `all` hits every enemy. `siphon` heals you
+// multiplying everything again. `all` hits every enemy (and, with `shove` or `heals`, drags their next attack short and mends the party too: Nova). `siphon` heals you
 // for that share of the damage.
 export const SPELLS = {
   heal: { name: 'Heal Pulse', sp: 32 },
@@ -41,7 +41,10 @@ export const SPELLS = {
   serenade: { name: 'Serenade', sp: 65, calm: 35 },
   tempest: { name: 'Tempest', sp: 95, power: 2.2, chapter: 4 },
   // Chapter 5.
-  nova: { name: 'Nova', sp: 100, power: 3, chapter: 5 },
+  // The chapter's earned light, and the strongest spell so far (15 Nov 2026): the whole bar for 4 good FIGHTs on EVERY
+  // enemy (Overwhelm is 3.3 on one, Starstorm 1.8 on all), their next attack shorter (`shove`, as Overwhelm's) and the party
+  // mended a little (`heals`, `all`, as Restore's).
+  nova: { name: 'Nova', sp: 100, power: 4, all: true, shove: 0.3, heals: 20, chapter: 5 },
   // The TIDE branch (see src/data/skills.js). Undertow hits and drags the
   // enemy back (`shove`: its next attack is that much shorter). Brine hits a
   // little, then burns for `dot.power` of a good FIGHT after each of the next

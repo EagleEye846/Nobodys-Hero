@@ -25,7 +25,10 @@ export const GREAT_BAT_BOSS = {
   // Chapter 2's bosses are its hardest fights, and each chapter's are harder
   // than the last: well above Taper (320 HP, 6 damage) and the caves' toughest
   // regulars (300 HP), with spells now hitting harder than any FIGHT.
-  maxHp: 1230,
+  // HP since 13 November 2026: about 20 rounds of good FIGHTs from the party
+  // you have when you meet this boss (every boss's rule; regulars take 4-5).
+  // The numbers in the older notes above are from before.
+  maxHp: 5000,
   damage: 16,
 
   // A good step above the caves' regulars.
@@ -62,7 +65,8 @@ export const GREAT_BAT_BOSS = {
     { name: 'Stand by Ves', calm: 16 },
   ],
 
-  rewards: { exp: 730, coins: 110 },
+  // About one level when you meet her (a level costs about 950-1,050 in the ice cave).
+  rewards: { exp: 1000, coins: 110 },
 
   // No drop: her plum comes from her pup, after (bat_defeated).
   drops: [],

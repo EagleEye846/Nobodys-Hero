@@ -20,7 +20,7 @@ export const SAPLING = {
     frames: [SAPLING_DISGUISE_SPRITES.still, SAPLING_DISGUISE_SPRITES.peek, SAPLING_DISGUISE_SPRITES.twitch],
     palette: SAPLING_PALETTE,
   },
-  maxHp: 550,
+  maxHp: 1300,
   damage: 18,
 
   // A Chapter 3 enemy: slow things, but they close in.
@@ -29,9 +29,9 @@ export const SAPLING = {
   // Its attacks live in src/battle/attacks/sapling.js.
   patterns: [
     { name: 'sapCreep', weight: 3 },
-    { name: 'sapBranches', weight: 3 },
-    { name: 'sapRoots', weight: 2 },
-    { name: 'sapLeaffall', weight: 2 },
+    { name: 'sapBranches', weight: 2 },
+    { name: 'sapGrow', weight: 3 },
+    { name: 'sapBlink', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

@@ -18,7 +18,7 @@ export const STORM_IMP = {
   feel: { hit: 'zap', idle: 'static', windup: 'charge', at: [0.5, 0.45], defeat: 'rainout' },
   // The coast's fights from the Wreck Yard on: the storm one.
   music: 'coastBattleStorm',
-  maxHp: 14600,
+  maxHp: 9600,
   damage: 99,
 
   difficulty: { density: 1.65, speed: 1.50 },
@@ -35,10 +35,9 @@ export const STORM_IMP = {
 
   // Its attacks live in src/battle/attacks/storm_imp.js.
   patterns: [
-    { name: 'impFork', weight: 3 },
-    { name: 'impRain', weight: 2 },
-    { name: 'impGust', weight: 2 },
-    { name: 'impBall', weight: 2 },
+    { name: 'impRods', weight: 3 },
+    { name: 'impThunder', weight: 3 },
+    { name: 'impGust', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -49,7 +48,7 @@ export const STORM_IMP = {
     { name: 'Do a lighthouse', calm: 30 },
   ],
 
-  rewards: { exp: 3250, coins: 25 },
+  rewards: { exp: 3250, coins: 20 },
 
   // A scrap of it that doesn't blow away (src/data/items.js), with the chance of it.
   drops: [{ item: 'static_puff', chance: 0.4 }],

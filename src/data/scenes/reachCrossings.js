@@ -2,22 +2,26 @@
 //
 // How the Reach works: Haddock puts the three ashore on the near (west) landing of each rock,
 // reef or wreck and rows round the back to the far side, where he waits off a little jetty.
-// Cross the stop on foot, then walk out to the jetty's END to row on, or onto the little STEP
-// off the jetty's west side to row back. The boat lies along the jetty's east side. Each room's header has the tiles.
+// Cross the stop on foot, walk out along the jetty and press Z on the boat (or on Haddock): he
+// asks "Where to?" in a CHOICE box (src/ui/choiceBox.js) and you pick "Row on to ...", "Row
+// back to ..." or "Not yet". Nothing on the jetty moves you by itself: there are no step
+// triggers out there. The boat lies along the jetty's east side, with a "!" over it.
 //
-//   to_the_reach         any room (Haddock's Light's boat): off into the Reach -> reach_first_rock
+//   to_the_reach         the ride out of Haddock's Light -> reach_first_rock
+//   reach_boat_*         the "Where to?" choice at each jetty (a prop's `playScene`), one per stop
+//                        (reach_boat_home at Haddock's Light's jetty); an option plays the ride
 //   reach_crossing_*     once, on each stop's landing: the ride itself, on board, each rougher
 //                        than the last (more rain, more lightning, a bigger swell)
-//   reach_to_*           repeatable, the jetty's end: one line, the fade, on to the next landing
-//   reach_back_to_*      repeatable, the side step: back to the last stop's jetty (by the boat)
+//   reach_to_*           repeatable ride on to the next landing (played by the choice's option)
+//   reach_back_to_*      repeatable ride back to the last stop's jetty (by the boat)
 //
 // The rides happen on the water west of each landing (x 1 to 8, the landing's row) and on the
 // landing itself (x 9 and 10), which nothing else in those rooms stands on, and no monster's
 // range comes near. In the boat (`cf_haddock_row`, 4 tiles, placed by its centre): Ves sits in
 // the stern, Bramble amidships, the hero stands in the bow (offsets as in wreck_crossing).
-// The hero never speaks. Haddock is a bit deaf.
+// The hero never speaks. Haddock is a bit deaf. After haddock_gone Ves rows and asks.
 //
-// `reach_back_to_haddock` (the first rock's stern step) goes home to the Bother's jetty in
+// `reach_back_to_haddock` (the first rock's option) goes home to the Bother's jetty in
 // haddock_light_door.
 
 // Everyone into the boat in the dark, on the row `y`, the boat out at x 2.
@@ -70,7 +74,7 @@ const ROWS_OFF = [
 // A short ride: Haddock's line from out of sight, the fade, the goto. After the chapter
 // (haddock_gone) Ves rows instead, and says so (steps with `until` / `after`).
 // (draft) (Ves's line).
-const VES_ROWS = "{bored}In. Sit still. I'm rowing, and I don't take requests.";
+const VES_ROWS = "{proud}In. Sit still. I'm rowing, and I don't take requests.";
 function ride(id, room, line, to, spawn) {
   return {
     id,
@@ -108,26 +112,27 @@ export const REACH_CROSSING_ROCK = {
     ...aboard(),
     { do: 'stage', dim: 0, rain: 0.4, seconds: 2.5 },
     { do: 'wait', seconds: 1.2 },
-    { do: 'say', text: 'The last lit window drops out of sight behind you. Out here there is no shore to steer by, only the swell, and the black tower on the skyline, a little bigger every time the boat climbs a wave.' },
-    { do: 'quake', amount: 0.6, seconds: 1.2 },
+    // (draft) The last lit window drops out of sight; only the swell, and the black tower a little bigger each wave.
+    { do: 'sound', name: 'whoosh' },
+    { do: 'quake', amount: 0.6, seconds: 1.6 },
     { do: 'act', who: 'bramble', act: 'startle', wait: false },
     { do: 'say', who: 'bramble', text: '{scared}Is it supposed to go UP like that?' },
     { do: 'say', who: 'boat', text: '{proud}That\'s only the swell, lad. She\'s breathing.' },
-    { do: 'say', who: 'bramble', text: '{worried}I don\'t want it to breathe. I want it to lie still and be a floor.' },
+    { do: 'say', who: 'bramble', text: '{angry}I don\'t want it to breathe. I want it to lie still and be a floor.' },
     { do: 'walk', who: 'boat', to: { x: 4, y: 10 }, keep: true },
     { do: 'say', who: 'boat', text: '{determined}First rock. I\'ll put you on the near side and row round the back. Too much sea on the point. Walk over and I\'ll meet you.' },
-    { do: 'say', who: 'ves', text: '{bored}And you\'ll hear us shout, will you?' },
-    { do: 'say', who: 'boat', text: '{eh}Eh?' },
-    { do: 'wait', seconds: 0.5 },
+    { do: 'say', who: 'ves', text: '{smile}And you\'ll hear us shout, will you?' },
+    { do: 'emote', who: 'boat', emote: '?' },
+    { do: 'wait', seconds: 0.3 },
     { do: 'say', who: 'boat', text: '{smile}Aye, miss, it is a stout rock. Mind the barnacles.' },
     { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{thoughtful}...We\'ll just walk over, then.' },
+    { do: 'say', who: 'ves', text: '{determined}...We\'ll just walk over, then.' },
     ...ashore(10),
     { do: 'act', who: 'bramble', act: 'shiver' },
     { do: 'face', who: 'player', at: 'bramble' },
     { do: 'face', who: 'ves', at: 'bramble' },
-    { do: 'say', who: 'bramble', text: '{worried}It\'s still moving. The ground. It\'s moving.' },
-    { do: 'say', who: 'ves', text: '{bored}That\'s your knees.' },
+    { do: 'say', who: 'bramble', text: '{surprised}It\'s still moving. The ground. It\'s moving.' },
+    { do: 'say', who: 'ves', text: '{laughing}That\'s your knees.' },
     ...ROWS_OFF,
   ],
 };
@@ -146,21 +151,21 @@ export const REACH_CROSSING_REEF = {
     ...aboard(),
     { do: 'stage', dim: 0, rain: 0.8, seconds: 2.5 },
     { do: 'wait', seconds: 1 },
-    { do: 'say', text: 'The rain comes sideways now. Every wave is taller than the boat, and every one of them has to be climbed and come down off again.' },
-    { do: 'quake', amount: 1.2, seconds: 1.4 },
+    // (draft) The rain sideways, every wave taller than the boat.
+    { do: 'quake', amount: 1.2, seconds: 2.2 },
     { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
     { do: 'say', who: 'bramble', text: '{scared}I\'m not looking. Tell me when it\'s over.' },
-    { do: 'say', who: 'ves', text: '{bored}It\'s the sea, Bramble. It doesn\'t do over.' },
+    { do: 'say', who: 'ves', text: '{smile}I\'ll tell you. ...Not yet. ...Not yet.' },
     { do: 'wait', seconds: 0.6 },
     { do: 'stage', bolt: true },
-    { do: 'wait', seconds: 0.3 },
-    { do: 'say', text: 'Lightning. In the flash there are little shapes up in the cloud, wheeling round and round like gulls.\n\nThey are not gulls.' },
+    // (draft) In the flash, little shapes in the cloud, wheeling like gulls: not gulls.
     { do: 'emote', who: 'player', emote: '!', wait: false },
+    { do: 'wait', seconds: 0.9 },
     { do: 'say', who: 'boat', text: '{determined}Storm imps. They come off the weather. Keep your heads down on the reef.' },
     { do: 'walk', who: 'boat', to: { x: 4, y: 10 }, keep: true },
     { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{bored}Your boat\'s leaking.' },
-    { do: 'say', who: 'boat', text: '{eh}Eh?' },
+    { do: 'say', who: 'ves', text: '{worried}Your boat\'s leaking.' },
+    { do: 'emote', who: 'boat', emote: '?' },
     { do: 'wait', seconds: 0.5 },
     { do: 'say', who: 'boat', text: '{proud}Sleek? She is, miss. Sleek as a seal. Same as before: over the reef, and I\'ll be off the far side.' },
     ...ashore(10),
@@ -188,15 +193,18 @@ export const REACH_CROSSING_WRECK = {
     { do: 'wait', seconds: 0.8 },
     { do: 'quake', amount: 2, seconds: 1.2 },
     { do: 'sound', name: 'splash' },
-    { do: 'say', text: 'A wave breaks over the bow and fills the boat to Bramble\'s knees. Haddock rows straight on as if it hadn\'t happened.' },
+    // (draft) A wave breaks over the bow and fills the boat to Bramble's knees; Haddock rows straight on.
+    { do: 'stage', flood: 0.14, seconds: 0.6 },
+    { do: 'stage', flood: 0, seconds: 5 },
     { do: 'act', who: 'bramble', act: 'startle', wait: false },
-    { do: 'say', who: 'bramble', text: '{scared}There\'s SEA in the BOAT.' },
+    { do: 'say', who: 'bramble', text: '{shout}There\'s SEA in the BOAT.' },
     { do: 'say', who: 'boat', text: '{smile}Always a bit of sea in a boat, lad. That\'s how you know she\'s working.' },
-    { do: 'say', who: 'bramble', text: '{worried}That is NOT how you know.' },
+    { do: 'say', who: 'bramble', text: '{angry}That is NOT how you know.' },
     { do: 'stage', bolt: true },
-    { do: 'wait', seconds: 0.3 },
-    { do: 'say', text: 'In the flash: a big ship lying on her side on a rock ahead, her masts snapped short, white water going right over her.' },
-    { do: 'wait', seconds: 0.3 },
+    // (draft) In the flash: a big ship on her side on a rock ahead, masts snapped, white water over her.
+    { do: 'camera', to: { x: 14, y: 8 } },
+    { do: 'wait', seconds: 1.4 },
+    { do: 'camera' },
     { do: 'say', who: 'ves', text: '{thoughtful}Somebody else tried this, then.' },
     { do: 'quake', amount: 1.6, seconds: 1 },
     { do: 'walk', who: 'boat', to: { x: 4, y: 10 }, keep: true },
@@ -205,11 +213,11 @@ export const REACH_CROSSING_WRECK = {
     ...ashore(10),
     { do: 'face', who: 'bramble', at: 'ves' },
     { do: 'face', who: 'player', at: 'bramble' },
-    { do: 'say', who: 'bramble', text: '{worried}Can we live here now? On the land bit?' },
+    { do: 'say', who: 'bramble', text: '{sheepish}Can we live here now? On the land bit?' },
     { do: 'face', who: 'ves', at: 'bramble' },
-    { do: 'say', who: 'ves', text: '{bored}It\'s a shipwreck, Bramble.' },
+    { do: 'say', who: 'ves', text: '{laughing}It\'s a shipwreck, Bramble.' },
     { do: 'act', who: 'bramble', act: 'bounce', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}It\'s a DRY shipwreck.' },
+    { do: 'say', who: 'bramble', text: '{proud}It\'s a DRY shipwreck.' },
     ...ROWS_OFF,
   ],
 };
@@ -232,18 +240,18 @@ export const REACH_CROSSING_EYE = {
     { do: 'stage', dim: 0, rain: 1.5, sky: 0.5, seconds: 1.5 },
     { do: 'quake', amount: 2.4, seconds: 1.4 },
     { do: 'stage', bolt: true },
-    { do: 'say', text: 'The wind screams. The boat stands on her end, drops, and stands up again.' },
+    { do: 'sound', name: 'whoosh' },
     { do: 'say', who: 'bramble', text: '{scared}I\'m holding it TOGETHER, I\'m holding it TOGETHER...' },
     { do: 'quake', amount: 2, seconds: 1 },
     // Then it stops.
     { do: 'stage', rain: 0, sky: 0, seconds: 4 },
-    { do: 'wait', seconds: 3.5 },
-    { do: 'say', text: 'Then, all at once, it stops.\n\nThe wind drops. The rain thins to nothing. Overhead the cloud has opened in a ring on a patch of dull silver sky, and the sea lies down flat as a plate.' },
+    // (draft) All at once it stops: the wind drops, the rain thins to nothing, the sea lies flat as a plate.
+    { do: 'wait', seconds: 4.5 },
     { do: 'emote', who: 'bramble', emote: '?', wait: false },
     { do: 'say', who: 'bramble', text: '{worried}...Why\'s it stopped? Is it a trick?' },
     { do: 'say', who: 'boat', text: '{smile}The eye, lad. The middle of it. Quiet as a church for a bit. Get out and stretch your legs.' },
     { do: 'walk', who: 'boat', to: { x: 4, y: 10 }, keep: true },
-    { do: 'say', who: 'ves', text: '{smile}It\'s so quiet I can hear my ears.' },
+    { do: 'say', who: 'ves', text: '{surprised}It\'s so quiet I can hear my ears.' },
     ...ashore(10),
     ...ROWS_OFF,
   ],
@@ -280,23 +288,20 @@ export const REACH_CROSSING_FOOT = {
     { do: 'stage', dim: 0, rain: 1.6, sky: 0.6, seconds: 1.5 },
     { do: 'quake', amount: 3, seconds: 1.6 },
     { do: 'stage', bolt: true },
-    { do: 'say', text: 'Out of the eye, and the storm takes hold of the boat like a hand. The sea stands up in walls on every side.' },
     { do: 'say', who: 'bramble', text: '{scared}I don\'t like it I don\'t like it I don\'t LIKE it.' },
     { do: 'say', who: 'boat', text: '{determined}Nearly there. Hold on to her.' },
     { do: 'quake', amount: 2.6, seconds: 1.2 },
     { do: 'stage', bolt: true },
     { do: 'wait', seconds: 0.3 },
-    { do: 'say', text: 'And there it is. Not on the skyline any more.' },
-    // Up the tower, and back down.
+    // (draft) Up the tower and back down: black brick ribbed with iron, broken spars round its crown.
     { do: 'camera', to: { x: 20, y: 6 } },
-    { do: 'wait', seconds: 0.8 },
-    { do: 'say', text: 'The Last Light goes up out of the sea right over you: black brick ribbed with iron, up and up, until the rain hides it. Spars stick out round its crown like broken ribs. No lamp burns at the top. Only a thin green slit, that brightens and fades as if it were breathing.' },
+    { do: 'wait', seconds: 1.2 },
     { do: 'stage', bolt: true },
-    { do: 'wait', seconds: 0.6 },
+    { do: 'wait', seconds: 1.4 },
     { do: 'camera' },
-    { do: 'say', who: 'bramble', text: '{worried}...That\'s not a lighthouse. That\'s a lighthouse that\'s cross with us.' },
+    { do: 'say', who: 'bramble', text: '{awed}...That\'s not a lighthouse. That\'s a lighthouse that\'s cross with us.' },
     { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{thoughtful}...Big, isn\'t it.' },
+    { do: 'say', who: 'ves', text: '{surprised}...Big, isn\'t it.' },
     { do: 'walk', who: 'boat', to: { x: 4, y: 23 }, keep: true },
     { do: 'quake', amount: 1.6, seconds: 0.8 },
     ...ashore(23),
@@ -304,7 +309,7 @@ export const REACH_CROSSING_FOOT = {
     { do: 'face', who: 'ves', dir: 'left' },
     { do: 'face', who: 'bramble', dir: 'left' },
     { do: 'say', who: 'boat', text: '{tired}There\'s your door. I\'ll tie her up here and mind the boat.' },
-    { do: 'say', who: 'ves', text: '{bored}You\'re mad, you know.' },
+    { do: 'say', who: 'ves', text: '{smile}You\'re mad, you know.' },
     { do: 'say', who: 'boat', text: '{eh}Eh?' },
     { do: 'wait', seconds: 0.5 },
     { do: 'say', who: 'boat', text: '{smile}Glad? I am, miss. Glad to be of use.' },
@@ -323,4 +328,44 @@ export const REACH_BACK_TO_EYE = ride('reach_back_to_eye', 'reach_foot',
 
 // The first rock's stern step goes home: the Bother's jetty at Haddock's Light.
 export const REACH_BACK_TO_HADDOCK = ride('reach_back_to_haddock', 'reach_first_rock',
-  '{eh}Back, is it? Right you are. In you get.', 'haddock_light_door', { x: 24, y: 10 });
+  '{eh}Back, is it? Right you are. In you get.', 'haddock_light_door', { x: 25, y: 9 });
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.
+
+// --- "Where to?": the choice at each jetty (a prop's `playScene` opens it) ---------------------
+// Press Z on the Bother (or Haddock in her): the CHOICE box, and whatever you pick plays that ride.
+// After haddock_gone it is Ves at the oars who asks. `next` / `back` are [label, ride scene].
+function boatChoice(id, room, next, back) {
+  const options = [
+    ...(next ? [{ text: next[0], then: next[1].steps }] : []),
+    ...(back ? [{ text: back[0], then: back[1].steps }] : []),
+    { text: 'Not yet', cancel: true, then: [] },
+  ];
+  return {
+    id,
+    room,
+    once: false,
+    actors: [
+      { id: 'haddock', look: 'prop:cf_haddock', x: 1, y: 1, portrait: 'haddock', hidden: true },
+      { id: 'ves_voice', look: 'prop:vesper_stand', x: 1, y: 1, portrait: 'vesper', hidden: true },
+    ],
+    steps: [
+      { do: 'choose', who: 'haddock', question: '{smile}Where to?', options, until: 'haddock_gone' },
+      { do: 'choose', who: 'ves_voice', question: '{bored}Where to?', options, after: 'haddock_gone' },
+    ],
+  };
+}
+
+export const REACH_BOAT_HOME = boatChoice('reach_boat_home', 'haddock_light_door',
+  ['Row out to the first rock', TO_THE_REACH], null);
+export const REACH_BOAT_ROCK = boatChoice('reach_boat_rock', 'reach_first_rock',
+  ['Row on to the reef', REACH_TO_REEF], ["Row back to Haddock's Light", REACH_BACK_TO_HADDOCK]);
+export const REACH_BOAT_REEF = boatChoice('reach_boat_reef', 'reach_reef',
+  ['Row on to the wreck', REACH_TO_WRECK], ['Row back to the first rock', REACH_BACK_TO_ROCK]);
+export const REACH_BOAT_WRECK = boatChoice('reach_boat_wreck', 'reach_wreck',
+  ['Row on to the eye', REACH_TO_EYE], ['Row back to the reef', REACH_BACK_TO_REEF]);
+export const REACH_BOAT_EYE = boatChoice('reach_boat_eye', 'reach_eye',
+  ['Row on to the Last Light', REACH_TO_FOOT], ['Row back to the wreck', REACH_BACK_TO_WRECK]);
+export const REACH_BOAT_FOOT = boatChoice('reach_boat_foot', 'reach_foot',
+  null, ['Row back to the eye', REACH_BACK_TO_EYE]);
+// (draft) 2026-11-15: the jetty-end and side-step triggers are gone; every ride is picked from "Where to?".

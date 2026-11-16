@@ -1,6 +1,7 @@
 import { TILE_SIZE as T } from '../config.js';
 import { sfx, music } from '../audio/music.js';
 import { animationFrame } from '../engine/animations.js';
+import { WORLD_STATE } from '../state/saveGame.js';
 
 // A long rope hanging down a sheer face (a room's `rope`: the Long Rope out
 // of Belowtown), climbed by the whole party together: you at the top, the
@@ -14,7 +15,8 @@ import { animationFrame } from '../engine/animations.js';
 //     top       the row it's tied off at; climbing past it, you're out
 //     bottom    the row of floor at its foot, where you take hold
 //     barks     things said on the way up: { at: row, who, text }, each said
-//               once as you climb past that row (who: a party member id)
+//               once as you climb past that row (who: a party member id),
+//               the first time only: later climbs are a plain climb
 //     daylight  how many rows down from the top the daylight reaches
 //     music     cues for the song that's playing: { at: row, from: section },
 //               each once, as you climb past that row (the old one fades out
@@ -39,6 +41,12 @@ const PORTRAITS = { vesper: 'vesper', bramble: 'bramble' };
 // Standing at the foot of the rope, facing up into it.
 export function atRopeFoot(rope, player) {
   return Math.floor(player.x / T) === rope.x && Math.floor((player.y - 1) / T) === rope.bottom && player.facing === 'up';
+}
+
+// Standing at the top of a rope whose top is in the same room (the Wreck Yard's mast: `to` is
+// the room itself), facing down over the edge: take hold and climb back down.
+export function atRopeTop(rope, player) {
+  return Math.floor(player.x / T) === rope.x && Math.floor((player.y - 1) / T) === rope.top - 1 && player.facing === 'down';
 }
 
 // The daylight falling down the shaft from the top: warm and strong up
@@ -84,17 +92,21 @@ export function drawHangingRope(ctx, camera, rope, time) {
 }
 
 export class RopeClimb {
-  constructor(rope, player, followers) {
+  constructor(rope, player, followers, roomId = '', fromTop = false) {
     this.rope = rope;
+    // Barks already said on an earlier climb are kept with the save (seenScenes), as `<room>:rope_bark<i>`.
+    this.barkKey = (i) => `${roomId}:rope_bark${i}`;
     this.player = player;
     this.followers = followers;
     this.x = (rope.x + 0.5) * T;
     this.foot = (rope.bottom + 1) * T;
     this.topY = (rope.top + 1) * T;
-    // How far up you are: your feet.
-    this.y = this.foot;
+    // How far up you are: your feet. From the top, just over the edge, on the way down.
+    this.y = fromTop ? this.topY - T + 1 : this.foot;
     this.climbed = 0;
     this.said = new Set();
+    // Going down, nobody says the things they said on the way up.
+    if (fromTop) (rope.barks ?? []).forEach((b, i) => this.said.add(i));
     this.done = null;
     this.time = 0;
     // Seconds since you last moved: they hang still a moment after you stop.
@@ -141,9 +153,12 @@ export class RopeClimb {
       if (music.songName) music.play(music.songName, music.ambienceWanted ?? null, cue.from);
     }
     // Something said on the way up.
-    const bark = (this.rope.barks ?? []).find((b, i) => !this.said.has(i) && row <= b.at && this.followers.some((f) => f.id === b.who));
+    const seen = WORLD_STATE.seenScenes ??= [];
+    const bark = (this.rope.barks ?? []).find((b, i) => !this.said.has(i) && !seen.includes(this.barkKey(i)) && row <= b.at && this.followers.some((f) => f.id === b.who));
     if (bark) {
-      this.said.add(this.rope.barks.indexOf(bark));
+      const i = this.rope.barks.indexOf(bark);
+      this.said.add(i);
+      seen.push(this.barkKey(i));
       textbox.open(String(bark.text).split(/\n\s*\n/), PORTRAITS[bark.who] ?? null);
     }
   }

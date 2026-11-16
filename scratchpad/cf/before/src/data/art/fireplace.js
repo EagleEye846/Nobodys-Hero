@@ -1,0 +1,122 @@
+// The fireplace's fire flickering, 48x32: put the fireplace animation on a
+// fireplace object in the Room Editor. Edit it in the Sprite Editor.
+export const FIREPLACE_PALETTE = {
+  k: '#120c1c', // outline and the dark of the hearth
+  l: '#8a5a32', // mantel
+  w: '#c08a4e', // mantel, lit
+  L: '#5a3a1e', // logs
+  M: '#8a8296', // stone
+  O: '#5a5468', // stone in shadow
+  E: '#ece4d4', // candles
+  b: '#c08a4e', // brass clock
+  o: '#ff8c1a', // fire
+  A: '#ffcc66', // flame
+  a: '#fff2c0', // flame's heart
+};
+
+export const FIREPLACE_SPRITES = {
+  flicker1: [
+    '......kAEk...........kbbbbk...........kEAk......',
+    '......kEEk...........kbEbbk...........kEEk......',
+    '.kkkkkkEEkkkkkkkkkkkkkbbbbkkkkkkkkkkkkkEEkkkkkk.',
+    'kwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwk',
+    'kllllllllllllllllllllllllllllllllllllllllllllllk',
+    'kllllllllllllllllllllllllllllllllllllllllllllllk',
+    'kLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLk',
+    '.kkMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMkk.',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kOOOOOOOOOOOkkkkkkkkkkkkkoookkkkOOOOOOOOOOOk..',
+    '..kOMMMMMOMMMMkkkkkkkoookkkoookkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkkkkkoookkkoAokkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkkkkkoAoooooAokkkkMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOkkkkooooAoooooAooookOOOOOOOOOOOk..',
+    '..kMMMOMMMMMOMkkkkooooAooAooAooookMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkoAooAooAooAooAokMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkoAooaooAooaooAokMMOMMMMMOMMk..',
+    '..kOOOOOOOOOOOkkkkoAooAooAooAooAokOOOOOOOOOOOk..',
+    '..kOMMMMMOMMMMkkkkkllllllllllkkkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkLLLLLLLLLLLLLLkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkLLLLLLLLLLLLLLkkkMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOkkkkkkkkkkkkkkkkkkkkOOOOOOOOOOOk..',
+    '..kMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMk..',
+    '..kMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOMk..',
+    '...kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk...',
+    '..kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk..',
+  ],
+  flicker2: [
+    '......kAEk...........kbbbbk...........kEAk......',
+    '......kEEk...........kbEbbk...........kEEk......',
+    '.kkkkkkEEkkkkkkkkkkkkkbbbbkkkkkkkkkkkkkEEkkkkkk.',
+    'kwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwk',
+    'kllllllllllllllllllllllllllllllllllllllllllllllk',
+    'kllllllllllllllllllllllllllllllllllllllllllllllk',
+    'kLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLk',
+    '.kkMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMkk.',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kOOOOOOOOOOOkkkkkkkkkkoookkkkkkkOOOOOOOOOOOk..',
+    '..kOMMMMMOMMMMkkkkkkkkkkoookkkkkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkkoookkkoAokkkoookMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkkoooooooAoooooookMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOkkkkoAoooooAoooooAokOOOOOOOOOOOk..',
+    '..kMMMOMMMMMOMkkkkoAooAooAooAooAokMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkoAooAooAooAooAokMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkoaooAooaooAooaokMMOMMMMMOMMk..',
+    '..kOOOOOOOOOOOkkkkoAooAooAooAooAokOOOOOOOOOOOk..',
+    '..kOMMMMMOMMMMkkkkkllllllllllkkkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkLLLLLLLLLLLLLLkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkLLLLLLLLLLLLLLkkkMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOkkkkkkkkkkkkkkkkkkkkOOOOOOOOOOOk..',
+    '..kMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMk..',
+    '..kMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOMk..',
+    '...kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk...',
+    '..kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk..',
+  ],
+  flicker3: [
+    '......kAEk...........kbbbbk...........kEAk......',
+    '......kEEk...........kbEbbk...........kEEk......',
+    '.kkkkkkEEkkkkkkkkkkkkkbbbbkkkkkkkkkkkkkEEkkkkkk.',
+    'kwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwk',
+    'kllllllllllllllllllllllllllllllllllllllllllllllk',
+    'kllllllllllllllllllllllllllllllllllllllllllllllk',
+    'kLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLk',
+    '.kkMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMkk.',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkkkkkkkkkkkkkkkkkMMOMMMMMOMMk..',
+    '..kOOOOOOOOOOOkkkkkkkoookkkkkkkkkkOOOOOOOOOOOk..',
+    '..kOMMMMMOMMMMkkkkkkkoookkkoookkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkkkkkoAoooooookkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkkooooAoooooAooookMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOkkkkooooAooAooAooookOOOOOOOOOOOk..',
+    '..kMMMOMMMMMOMkkkkoAooAooAooAooAokMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkoAooAooAooAooAokMMOMMMMMOMMk..',
+    '..kMMMOMMMMMOMkkkkoAooaooaooaooAokMMOMMMMMOMMk..',
+    '..kOOOOOOOOOOOkkkkoAooAooAooAooAokOOOOOOOOOOOk..',
+    '..kOMMMMMOMMMMkkkkkllllllllllkkkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkLLLLLLLLLLLLLLkkkMMMMMOMMMMMk..',
+    '..kOMMMMMOMMMMkkkLLLLLLLLLLLLLLkkkMMMMMOMMMMMk..',
+    '..kOOOOOOOOOOOkkkkkkkkkkkkkkkkkkkkOOOOOOOOOOOk..',
+    '..kMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMk..',
+    '..kMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOMk..',
+    '...kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk...',
+    '..kOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk..',
+  ],
+};
+
+export const FIREPLACE_SPRITE = FIREPLACE_SPRITES.flicker1;

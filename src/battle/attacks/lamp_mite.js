@@ -2,22 +2,19 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Lamp Mites' attacks. They're tiny dusty moths that nest in the dead
 // street lamps of the old city, and they can't leave anything that glows
-// alone: your SOUL glows. So they fight the way moths do round a light, and
-// all at once, in swarms: pouring out of an old lamp and streaming at you,
-// shaking dust off their wings, bursting out through panes of old lamp
-// glass, circling round and round you, and darting about in those mad
-// zigzags moths do. Lots of tiny, quick things; none of them big.
+// alone. So they fight the way moths do round a light, and all at once: the
+// whole cloud of them streams for whichever old lamp flickers on, they
+// bumble about the box bumping into each other in puffs of wing dust, and
+// they circle round your own light, tighter and tighter. Lots of tiny,
+// quick things; none of them big.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. Their `density` is high, so their own clock
-// (`t`) runs fast: about 8 of it fits in a turn.
+// (`t`) runs fast: about 11 of it fits in a turn.
 
 const WING = { w: '#c8bca8', W: '#8a7e70', F: '#b0a088', f: '#e8dcc0', a: '#6a5e50' };
 const DUST = { d: '#d8c890', D: '#f4ecc8' };
-const SCALE = { w: '#c8bca8', W: '#8a7e70' };
-const GLASS = { G: '#6a8494', g: '#b8d0d8', w: '#ffffff' };
-const PANE = { k: '#2a2430', i: '#6a6278', G: '#3a4650', g: '#8aa8b4', w: '#ffffff' };
-const LAMP = { k: '#1a1620', i: '#4a4458', I: '#6a6278', G: '#2a3038', g: '#5a6a70', f: '#e8dcc0', e: '#101010' };
+const LAMP = { k: '#1a1620', i: '#4a4458', I: '#6a6278', G: '#2a3038', g: '#5a6a70', f: '#e8dcc0', e: '#101010', y: '#ffe890', Y: '#ffc848', w: '#fffbe0' };
 
 // One mite, drawn heading right: wings open, then shut, very fast.
 defineBulletArt('miteMite', {
@@ -42,35 +39,6 @@ defineBulletArt('miteDust', {
   frameSeconds: 0.15,
 });
 
-// A scale off a wing, see-sawing down.
-defineBulletArt('miteScale', {
-  frames: [['.w', 'wW', 'W.']],
-  palette: SCALE,
-  radius: 1.2,
-  spin: 4,
-});
-
-// A sliver of old lamp glass, tumbling.
-defineBulletArt('miteShard', {
-  frames: [['g...', 'Gg..', 'GGg.', 'GGGw']],
-  palette: GLASS,
-  radius: 1.8,
-  spin: 9,
-});
-
-// A pane of old lamp glass in its iron frame (harmless): it cracks, more
-// and more, then they burst out through it.
-defineBulletArt('mitePane', {
-  frames: [
-    ['kiiiiik', 'iGGgGGi', 'iGgGGGi', 'iGGGGgi', 'iGgGGGi', 'iGGGgGi', 'kiiiiik'],
-    ['kiiiiik', 'iGGgGGi', 'iGgwGGi', 'iGGwwgi', 'iGwGGGi', 'iGGGgGi', 'kiiiiik'],
-    ['kiiiiik', 'iwGgGwi', 'iGwwGwi', 'iwGwwgi', 'iGwGwGi', 'iwGGgwi', 'kiiiiik'],
-  ],
-  palette: PANE,
-  radius: 1,
-  frameSeconds: 0.2,
-});
-
 // The dead street lamp they pour out of (harmless), leaning in over the
 // top of the box, with a pair of eyes in the dark glass.
 defineBulletArt('miteLamp', {
@@ -83,114 +51,163 @@ defineBulletArt('miteLamp', {
   frameSeconds: 0.3,
 });
 
+// The same lamp flickering as it tries to catch, and lit.
+defineBulletArt('miteLampFlicker', {
+  frames: [
+    ['..kk..', '.kiik.', 'kkkkkk', 'kGyGGk', 'kGGGgk', 'kGfGGk', 'kkkkkk', '.kIIk.', '..iI..', '..iI..'],
+    ['..kk..', '.kiik.', 'kkkkkk', 'kGgGGk', 'kGGGgk', 'kGfGGk', 'kkkkkk', '.kIIk.', '..iI..', '..iI..'],
+    ['..kk..', '.kiik.', 'kkkkkk', 'kyYyYk', 'kYwYyk', 'kyYYyk', 'kkkkkk', '.kIIk.', '..iI..', '..iI..'],
+  ],
+  palette: LAMP,
+  radius: 1,
+  frameSeconds: 0.08,
+});
+defineBulletArt('miteLampLit', {
+  frames: [
+    ['..kk..', '.kiik.', 'kkkkkk', 'kyYyYk', 'kYwwyk', 'kyYwYk', 'kkkkkk', '.kIIk.', '..iI..', '..iI..'],
+    ['..kk..', '.kiik.', 'kkkkkk', 'kYyYyk', 'kywwYk', 'kYwYyk', 'kkkkkk', '.kIIk.', '..iI..', '..iI..'],
+  ],
+  palette: LAMP,
+  radius: 1,
+  frameSeconds: 0.2,
+});
+
+// Changes a lamp's look (to the art of a bullet made with the new one).
+const LOOKS = {};
+const setLook = (shot, name, Shot) => {
+  LOOKS[name] ??= new Shot({ x: 0, y: 0, art: name }).art;
+  shot.artName = name;
+  shot.art = LOOKS[name];
+};
+
 export const LAMP_MITE_ATTACKS = {
-  // The swarm: a dead lamp leans in over one top corner of the box, and
-  // they come pouring out of it in a stream, all wanting your light,
-  // swerving after you. Halfway through, the lamp on the other side wakes
-  // up too.
-  miteSwarm(box, density, { Shot, rand }) {
-    let t = 0;
-    let next = 0.4;
-    let lamps = [];
-    const lampAt = (bullets, side) => {
-      const x = side < 0 ? box.x + 8 : box.x + box.w - 8;
-      const lamp = new Shot({ x, y: box.y + 3, harmless: true, life: 4.2, art: 'miteLamp' });
-      bullets.push(lamp);
-      lamps.push({ lamp, x, y: box.y + 8 });
-    };
-    return {
-      duration: 6.6,
-      update: (dt, bullets, soul) => {
-        if (t === 0) lampAt(bullets, Math.random() < 0.5 ? -1 : 1);
-        t += dt;
-        if (lamps.length === 1 && t > 3.6) lampAt(bullets, lamps[0].x < box.x + box.w / 2 ? 1 : -1);
-        // Every so often the stream stops for a breath.
-        const pause = (t % 2.6) > 2.1;
-        if (t >= next && t < 8 && !pause) {
-          next = t + rand(0.14, 0.2);
-          for (const { x, y } of lamps) {
-            const aim = Math.atan2(soul.y - y, soul.x - x) + rand(-0.45, 0.45);
-            const speed = rand(40, 52);
-            bullets.push(new Shot({
-              x, y, vx: Math.cos(aim) * speed, vy: Math.sin(aim) * speed,
-              homing: { target: soul, turn: 0.9 }, life: 2.4, art: 'miteMite',
-            }));
-          }
-        }
-      },
-    };
-  },
-
-  // Dust: they're all up over the box, beating their wings, and a curtain
-  // of dust sifts down out of them. There's always a clear patch where
-  // fewer of them are, and it wanders. Now and then a wing scale comes
-  // see-sawing down through it.
-  miteDust(box, density, { Shot, rand }) {
-    let t = 0;
-    let next = 0;
-    let scales = [];
-    const gapWidth = 20;
-    return {
-      duration: 6.4,
-      update: (dt, bullets) => {
-        t += dt;
-        const gap = box.x + box.w / 2 + Math.sin(t * 0.55) * (box.w / 2 - gapWidth / 2 - 4);
-        if (t >= next && t < 8) {
-          next = t + 0.3;
-          for (let x = box.x + 3 + rand(0, 4); x < box.x + box.w - 2; x += rand(6, 8)) {
-            if (Math.abs(x - gap) < gapWidth / 2) continue;
-            bullets.push(new Shot({ x, y: box.y - 3, vx: rand(-4, 4), vy: rand(30, 36), art: 'miteDust' }));
-          }
-          // A scale, falling through the clear patch.
-          if (Math.random() < 0.35) {
-            const scale = new Shot({ x: gap, y: box.y - 3, vy: 18, art: 'miteScale' });
-            scale.baseX = gap;
-            scales.push(scale);
-            bullets.push(scale);
-          }
-        }
-        for (const scale of scales) scale.x = scale.baseX + Math.sin(scale.age * 3) * 8;
-        scales = scales.filter((scale) => scale.y < box.y + box.h + 6);
-      },
-    };
-  },
-
-  // Old glass: panes of lamp glass turn up round the box, crack, and burst,
-  // and the glass flies out every way, with a couple of mites in it that
-  // were nesting behind.
-  miteGlass(box, density, { Shot, rand, pointAwayFrom }) {
+  // Lamplight: four dead street lamps stand round the edge of the box. One
+  // flickers, then catches, and every mite there is goes straight for it:
+  // a cloud of them pours out of the dark corners, and the ones already
+  // flying turn round mid-air. Then it goes out, and another one catches.
+  // They're not after you; they're after the light. Keep out of their way,
+  // and away from a lamp when it goes out: they scatter off it.
+  miteLamps(box, density, { Shot, rand, shuffleBag }) {
+    const spots = [
+      { x: box.x + 7, y: box.y + box.h / 2 },
+      { x: box.x + box.w - 7, y: box.y + box.h / 2 },
+      { x: box.x + box.w / 2, y: box.y + box.h - 9 },
+      { x: box.x + box.w / 2, y: box.y + 9 },
+    ];
+    const order = shuffleBag([0, 1, 2, 3]);
+    const light = { x: box.x + box.w / 2, y: box.y + box.h / 2 };
+    let lamps = null;
+    let mites = [];
+    let lit = -1;
     let t = 0;
     let next = 0.2;
-    let panes = [];
+    let catching = null;
+    let settled = 0;
     return {
-      duration: 6.6,
-      update: (dt, bullets, soul) => {
+      duration: 8,
+      update: (dt, bullets) => {
         t += dt;
-        if (t >= next && t < 7.6) {
-          next = t + 1.05;
-          const at = pointAwayFrom(box, soul, 30, 10);
-          const pane = new Shot({ x: at.x, y: at.y, harmless: true, life: 0.6, art: 'mitePane' });
-          pane.burstAt = t + 0.6;
-          bullets.push(pane);
-          panes.push(pane);
+        if (!lamps) {
+          lamps = spots.map((spot) => {
+            const lamp = new Shot({ x: spot.x, y: spot.y, harmless: true, art: 'miteLamp' });
+            bullets.push(lamp);
+            return lamp;
+          });
         }
-        for (const pane of panes) {
-          if (pane.burst || t < pane.burstAt) continue;
-          pane.burst = true;
-          const count = 9;
-          const turn = rand(0, Math.PI * 2);
-          for (let i = 0; i < count; i++) {
-            const angle = turn + (i / count) * Math.PI * 2;
-            const speed = rand(42, 56);
-            bullets.push(new Shot({ x: pane.x, y: pane.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, art: 'miteShard' }));
+        if (t >= next) {
+          // The next lamp starts to flicker.
+          next = t + 2.4;
+          if (lit >= 0) {
+            // It goes out, and the ones that settled on it scatter.
+            setLook(lamps[lit], 'miteLamp', Shot);
+            const count = Math.min(settled, 9);
+            const turn = rand(0, Math.PI * 2);
+            for (let i = 0; i < count; i++) {
+              const out = turn + (i / count) * Math.PI * 2;
+              bullets.push(new Shot({ x: light.x, y: light.y, vx: Math.cos(out) * 48, vy: Math.sin(out) * 48, life: 2.2, art: 'miteMite' }));
+            }
           }
-          // The mites that lived behind it, off after your light.
-          for (let i = 0; i < 2; i++) {
-            const aim = Math.atan2(soul.y - pane.y, soul.x - pane.x) + (i ? 0.5 : -0.5);
-            bullets.push(new Shot({ x: pane.x, y: pane.y, vx: Math.cos(aim) * 50, vy: Math.sin(aim) * 50, life: 2.5, art: 'miteMite' }));
+          settled = 0;
+          lit = -1;
+          catching = { lamp: order(), at: t + 0.8 };
+          setLook(lamps[catching.lamp], 'miteLampFlicker', Shot);
+        }
+        if (catching && t >= catching.at) {
+          // It catches: every mite in the box turns for it, and more come.
+          lit = catching.lamp;
+          catching = null;
+          setLook(lamps[lit], 'miteLampLit', Shot);
+          light.x = spots[lit].x;
+          light.y = spots[lit].y;
+          for (let i = 0; i < 10; i++) {
+            // Out of the dark corners, the far ones first.
+            const corners = [
+              { x: box.x + 2, y: box.y + 2 }, { x: box.x + box.w - 2, y: box.y + 2 },
+              { x: box.x + 2, y: box.y + box.h - 2 }, { x: box.x + box.w - 2, y: box.y + box.h - 2 },
+            ].sort((p, q) => Math.hypot(q.x - light.x, q.y - light.y) - Math.hypot(p.x - light.x, p.y - light.y));
+            const corner = corners[i % 3];
+            const from = { x: corner.x + rand(-6, 6), y: corner.y + rand(-6, 6) };
+            const angle = Math.atan2(light.y - from.y, light.x - from.x) + rand(-0.5, 0.5);
+            const mite = new Shot({
+              x: from.x, y: from.y, vx: Math.cos(angle) * 58, vy: Math.sin(angle) * 58,
+              warn: 0.35 + i * 0.05, life: 3.2, homing: { target: light, turn: 3.2 }, art: 'miteMite',
+            });
+            bullets.push(mite);
+            mites.push(mite);
           }
         }
-        panes = panes.filter((pane) => !pane.burst);
+        // The ones that reach it settle on the glass.
+        for (const mite of mites) {
+          if (mite.active && Math.hypot(mite.x - light.x, mite.y - light.y) < 5) {
+            mite.life = mite.age - mite.warn;
+            settled++;
+          }
+        }
+        mites = mites.filter((mite) => mite.age < mite.warn + mite.life);
+      },
+    };
+  },
+
+  // Bumping about: they come fluttering in and bounce round the box in
+  // straight lines, wall to wall, no sense at all. When two of them bump
+  // into each other, they both go off in a puff of wing dust that flies out
+  // from where they met. Then into you, if you're not careful. Watch for two
+  // about to meet.
+  miteBump(box, density, { Shot, rand, edgePoint, pick }) {
+    let mites = [];
+    let spawn = 0.1;
+    return {
+      duration: 8,
+      update: (dt, bullets) => {
+        spawn -= dt;
+        if (spawn <= 0 && mites.length < 9) {
+          spawn = rand(0.32, 0.42);
+          const from = edgePoint(box, pick(['top', 'left', 'right', 'bottom']), -4);
+          const to = { x: rand(box.x + 15, box.x + box.w - 15), y: rand(box.y + 15, box.y + box.h - 15) };
+          const angle = Math.atan2(to.y - from.y, to.x - from.x);
+          const mite = new Shot({ x: from.x, y: from.y, vx: Math.cos(angle) * 44, vy: Math.sin(angle) * 44, warn: 0.4, life: 4, bounce: true, art: 'miteMite' });
+          bullets.push(mite);
+          mites.push(mite);
+        }
+        mites = mites.filter((mite) => mite.age < mite.warn + mite.life);
+        // Bump!
+        for (let i = 0; i < mites.length; i++) {
+          const a = mites[i];
+          if (!a.active) continue;
+          for (let j = i + 1; j < mites.length; j++) {
+            const b = mites[j];
+            if (!b.active || Math.hypot(a.x - b.x, a.y - b.y) > 4) continue;
+            const at = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+            a.life = a.age - a.warn;
+            b.life = b.age - b.warn;
+            const turn = rand(0, Math.PI / 2);
+            for (let k = 0; k < 4; k++) {
+              const out = turn + (k / 4) * Math.PI * 2;
+              bullets.push(new Shot({ x: at.x, y: at.y, vx: Math.cos(out) * 38, vy: Math.sin(out) * 38, life: 1.3, art: 'miteDust' }));
+            }
+            break;
+          }
+        }
       },
     };
   },
@@ -220,10 +237,10 @@ export const LAMP_MITE_ATTACKS = {
       rings.push({ center, spin, mites, age: 0, scattered: false });
     };
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 7.2) {
+        if (t >= next && t < 9.6) {
           next = t + 2.4;
           ring(bullets, soul);
         }
@@ -248,40 +265,6 @@ export const LAMP_MITE_ATTACKS = {
           }
         }
         rings = rings.filter((r) => r.age < 5);
-      },
-    };
-  },
-
-  // Zigzag: one at a time, quick as anything, mites dart in from the edges
-  // at you, and halfway there each one changes its mind, the way moths do,
-  // and jinks off somewhere else.
-  miteDart(box, density, { Shot, rand, edgePoint }) {
-    let t = 0;
-    let next = 0.1;
-    let darts = [];
-    return {
-      duration: 6.4,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && t < 8) {
-          next = t + rand(0.22, 0.3);
-          const from = edgePoint(box, undefined, 2);
-          const aim = Math.atan2(soul.y - from.y, soul.x - from.x);
-          const speed = rand(70, 85);
-          const dart = new Shot({ x: from.x, y: from.y, warn: 0.3, vx: Math.cos(aim) * speed, vy: Math.sin(aim) * speed, art: 'miteMite' });
-          dart.jinkAt = rand(0.25, 0.45);
-          darts.push(dart);
-          bullets.push(dart);
-        }
-        for (const dart of darts) {
-          if (dart.jinked || dart.age - dart.warn < dart.jinkAt) continue;
-          dart.jinked = true;
-          const heading = Math.atan2(dart.vy, dart.vx) + (Math.random() < 0.5 ? -1 : 1) * rand(0.6, 0.9);
-          const speed = Math.hypot(dart.vx, dart.vy);
-          dart.vx = Math.cos(heading) * speed;
-          dart.vy = Math.sin(heading) * speed;
-        }
-        darts = darts.filter((dart) => !dart.jinked);
       },
     };
   },

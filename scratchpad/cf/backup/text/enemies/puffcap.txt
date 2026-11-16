@@ -1,0 +1,73 @@
+# PUFFCAP
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/puffcap.js.
+
+[intro]
+Something in the moss wakes up with a start and goes POOF! A PUFFCAP blocks the way!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+PUFFCAP yawns so wide its whole cap tips back. It looks very pleased with the yawn.
+
+PUFFCAP has been sitting in the same damp spot for eleven years. It calls this "travelling".
+
+PUFFCAP's eyes close. Then open. Then close. It's winning, it thinks.
+
+Smells like wet leaves, and someone's grandma's cellar.
+
+PUFFCAP is humming to itself. It only knows the first two notes.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Hmf. Hmf!
+
+Don't wake me.
+...I'm awake.
+
+You startled me.
+On purpose.
+
+I've got spots.
+You haven't.
+
+Five more minutes...
+
+POOF! Ha.
+That was me.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/puffcap.js.
+[talk: Inspect]
+PUFFCAP - HP 340
+A toadstool from the edge of the mist. Puffs when startled. Startled by everything.
+
+[talk: Sing a lullaby]
+You hum something soft. PUFFCAP's eyelids droop.
+"I wasn't listening," it mumbles, still listening.
+
+[talk: Tiptoe]
+You tiptoe past very, very quietly. PUFFCAP doesn't puff at all. It looks a little proud of you.
+
+[talk: Admire its cap]
+You look at PUFFCAP's cap for a long time. It goes pink all over. "It's the spots," it whispers. "Everyone says."
+
+# Said by Bramble when he talks to it (his ACT, or when he's asked to). One
+# is picked at random; {foe} is its name.
+[bramble_talk]
+Bramble pokes {foe} with a stick. It puffs. He puffs back, louder. Nobody wins.
+
+Bramble tells {foe} his Ma says you can't eat the spotty ones. {foe} looks thrilled.
+
+Bramble asks {foe} if it's seen a beast. {foe} says it's been asleep since Tuesday.
+
+Bramble tries to sit on {foe} like a stool. {foe} lets him, for about a second.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+PUFFCAP goes poof one last time, and settles back into the moss to have a long sulk and a longer nap.
+
+[pacified]
+PUFFCAP yawns, waves a stubby foot goodnight, and is asleep before it finishes.

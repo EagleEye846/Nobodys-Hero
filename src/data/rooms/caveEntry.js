@@ -8,6 +8,7 @@
 //   K  cave wall (solid)                          q  cave floor
 //   v  stalactite (walk under it)                 x  ice crystals (they glow) (solid)
 //   ^  stalagmite (solid)                         z  ice
+import { R3A_PROPS } from '../r3aLife.js';
 export const CAVE_ENTRY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'cave_entry',
@@ -76,6 +77,8 @@ export const CAVE_ENTRY = {
     { sprite: 'chest', x: 29, y: 9, text: 'cave_chest', gives: 'vigil_mail', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'old_pack', x: 2, y: 15, text: 'cave_pack', gives: 'hot_cocoa' },
     { sprite: 'cairn', x: 16, y: 9, text: 'cave_cairn' },
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['cave_entry'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -16,6 +16,8 @@
 //   o  landings and flights   .  flagstones   ~  the sea (solid)   q  shingle (low tide)
 // (draft).
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const LASTLIGHT_STAIR = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lastlight_stair',
@@ -154,6 +156,7 @@ export const LASTLIGHT_STAIR = {
     { sprite: 'll_kelp_drag', x: 8, y: 18, flat: true, walkable: true },
     { sprite: 'll_kelp_drag', x: 16, y: 21, flat: true, walkable: true },
     { sprite: 'c5_wrack_line', x: 9, y: 22, flat: true, walkable: true },
+    ...(LIFE5_PROPS['lastlight_stair'] ?? []),
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', H: 'll_niche', 6: 'll_window', D: 'stair_top_door', o: 'stair_boards', '.': 'stair_bank', '~': 'stair_water', q: 'stair_shingle' },
 

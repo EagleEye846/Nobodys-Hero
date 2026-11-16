@@ -1,0 +1,82 @@
+# LIMPET KNIGHT
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/limpet_knight.js.
+
+[intro]
+A small cone of shell with a red plume stands very straight on the rock, a shield on one side and a sword on the other. It has seen you. LIMPET KNIGHT!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+LIMPET KNIGHT holds its ground. It has held it for years, and the ground has not complained.
+
+The plume stirs in the wind. LIMPET KNIGHT does not stir.
+
+LIMPET KNIGHT raises its visor a crack, looks at you, and lowers it again with a click.
+
+Somewhere inside the armour, a very small voice recites regulations.
+
+Smells of rock pool, polish and duty.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+LIMPET KNIGHT's shell is cracked. The small voice inside has moved on to the regulations about retreat.
+
+[flavor: spareable]
+LIMPET KNIGHT lowers its lance and lifts its visor all the way up. Duty, it seems, has been done.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Halt!
+
+Hold the
+line!
+
+This rock
+is held.
+
+I do not
+yield.
+
+I do not
+move.
+
+...Not
+even for
+tide.
+
+State your
+business.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/limpet_knight.js.
+[talk: Inspect]
+LIMPET KNIGHT - HP 2250
+A limpet in tiny armour, very serious. Jousts along your row and rides home the same way, cracks its rock where the seams show, and its clingers clamp on the bugle.
+
+[talk: Salute]
+You put your hand to your brow, properly, with your elbow up. LIMPET KNIGHT freezes. Then it gives the smallest, sharpest salute you have ever seen, and the plume trembles a little with feeling.
+
+[talk: Gesture to pass]
+You bow, very formally, and point at the gap past its rock, with your eyebrows up. LIMPET KNIGHT considers it for a long moment. Nobody has ever asked. They've only gone round. It is not sure what the form is.
+
+[talk: Admire the shield]
+You look at the shield for a good while and give it a long, approving nod. The limpet on it has the same face as the knight. LIMPET KNIGHT turns it very slightly in the light. That is the one it likes best.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The shell slides off with a scrape and the soft little foot underneath is only a limpet after all. The sword rattles down. The shield rolls in a slow circle and lies flat. The knight stays exactly where it is, which is the only thing it ever wanted to do.
+
+[pacified]
+LIMPET KNIGHT lowers its sword, bows to the ground with its whole shell, and stands aside as if it had meant to all along. The plume ruffles. It holds the rock still, but it lets you by.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says she's been told the rock is held and she believes it. She'd only like to know by whom. {foe} straightens, and says: by me.
+
+Ves lowers her umbrella and presents it, point first, the way a person presents a sword. {foe} presents its own. There is a very small, very correct clink.
+
+Ves says she'd never dream of moving the rock. She only wants to walk past it. {foe} hesitates. It had not thought of those as different things.

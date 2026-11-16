@@ -346,3 +346,108 @@ Between two nightshirts hangs something that isn't washing: a brown felt hat, pe
 Washing on a line between Corran's and the square. The sheets have gone grey. Everything near Corran goes grey.
 
 There's a peg on the line with nothing in it, and a damp patch where a hat was.
+
+# --- THE LIFE PASS, ROUND 2 (builder 7) ---
+
+# lasthome_gate
+[lp3_gate_tub]
+A tub of geraniums by the gate, red as a hot coal. A label on a stick says THISTLE'S. DO NOT. In smaller letters: (SORRY.)
+
+[lp3_gate_tub_bramble]
+{grin}Do not WHAT? Pick them? Smell them? I need the rules so I can follow them!
+
+[lp3_gate_tub_ves]
+{smile}'Do not.' And then 'sorry'. That's a whole friendship in two words.
+
+[lp3_gate_logs]
+Split logs stacked tight, bark side out so the rain runs off. Somebody built this wall with great care and then stopped in the middle of a row, to go and see a man about a cat.
+
+[lp3_gate_logs_ves]
+{bored}Neatly stacked and half finished. This town in a nutshell, and I mean that kindly.
+
+[lp3_gate_cabbages]
+A bed of cabbages, planted in a perfect row and then, you can see, argued with. One has a little flag in it that says MINE.
+
+[lp3_gate_cabbages_ves]
+{thoughtful}Somebody's very proud of one cabbage. I think I'd like to meet them.
+
+[lp3_gate_mat]
+A coir mat before the great doors, worn through in the middle. WIPE YOUR FEET is woven into it. Whoever wove it ran short of mat for the last word, and it says WIPE YOUR FEE.
+
+[lp3_gate_mat_bramble]
+{sheepish}...I did NOT wipe my feet.
+
+[lp3_gate_mat_ves]
+{bored}He did say wipe your feet. First thing he said to us. I'd like it noted that I'm the one who listened.
+
+# lasthome_square
+[lp3_sq_beans]
+Bean poles in a wigwam, wound all over with runner beans, red flowers still on. A board at the foot is lettered in careful capitals: BEANS. (THE LAW.) Below it, smaller, in another hand: it isn't really the law.
+
+[lp3_sq_beans_bramble]
+{awed}Wren's! She told us all about the beans! She wasn't joking about the beans!
+
+[lp3_sq_beans_ves]
+{smile}'It isn't really the law.' Someone told her. She put the sign up anyway.
+
+[lp3_sq_purse]
+A small purse stuffed in behind the bean poles. A note is pinned to it: FOR WHOEVER FINDS THIS. IT WAS MINE. DON'T TELL MUM.
+
+[lp3_sq_purse_bramble]
+{sly}I'm not telling. I'm GOOD at not telling. ...Mostly.
+
+[lp3_sq_purse_ves]
+{laughing}Finders keepers. And we don't tell Mum.
+
+[lp3_sq_kennel]
+A kennel at the end of the alley, empty but for a bone in the straw. Beside it, chewed to a pulp and soaked through: a red fishing float, with a bit of line still tied on. You take it.
+
+[lp3_sq_kennel_ves]
+{thoughtful}Somebody's dog has been in the fisher's tackle. That's a conversation waiting to happen.
+
+[lp3_sq_kennel_empty]
+An empty kennel with a bone in the straw. The dog is somewhere being innocent.
+
+[lp3_sq_kennel_empty_ves]
+{smile}Innocent. That dog has the look.
+
+[lp3_sq_apples]
+A crate of Valley apples with a tray of seconds on top, the ones with a bite out. SECONDS: 1 COPPER. SECONDS OF SECONDS: FREE. A queue of wasps has formed.
+
+[lp3_sq_apples_bramble]
+{grin}The wasps got there first. I'm not fighting a wasp for an apple. ...Okay I am, but not today.
+
+[lp3_sq_apples_ves]
+{smile}Seconds of seconds. I'm taking a moral stand and it's going to be that apple.
+
+[lp3_hl_cards]
+A board of get-well cards pinned up by the whole town. Some are drawings. One is only a very big scribbled sun. All of them are addressed to 'whoever is in the bed', because that's what the town was told.
+
+[lp3_hl_cards_bramble]
+{awed}Look at all of them! They drew SUNS!
+
+[lp3_hl_cards_ves]
+{shy}...They wrote to a stranger. Forty of them.
+
+[lp3_inn_casks]
+A rack of three casks, one tapped. A sign hangs off the tap: THIS ONE IS A SURPRISE. Under it, somebody has written 'THE SURPRISE IS IT'S WATER'.
+
+[lp3_inn_casks_ves]
+{bored}Brave. A tavern with a bad joke on tap.
+
+[lp3_inn_board]
+A slate on an easel: TODAY: STEW. TOMORROW: STEW. SPECIALS: ASK THE KETTLE. The kettle, a few feet away, says nothing, and smells of the answer.
+
+[lp3_inn_board_bramble]
+{grin}I'm asking the kettle!
+
+[lp3_inn_board_ves]
+{smile}I like to think the kettle's got range.
+
+[lp3_ch_hassock]
+A kneeling cushion embroidered with a star. It has been knelt on until the star's nearly gone. Somebody has stitched on a patch, and then a patch on the patch.
+
+[lp3_ch_hassock_ves]
+{bored}Worn out by years of 'please'.
+
+# --- end life pass round 2 (builder 7) ---

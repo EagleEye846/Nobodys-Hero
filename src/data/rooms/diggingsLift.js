@@ -39,6 +39,8 @@
 //   .  packed dirt floor
 //   o  planks of the lift cage (walkable)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_LIFT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_lift',
@@ -127,6 +129,7 @@ export const DIGGINGS_LIFT = {
   // the winch, the save crystal, a mole winchman, signs and a purse.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_lift ?? []),
     { sprite: 'mine_cart', x: 5, y: 9, cart: 'a', dir: 'R', text: 'cart_stuck' },
     { sprite: 'mine_cart', x: 7, y: 9, cart: 'b', dir: 'R', text: 'cart_stuck' },
     { sprite: 'mine_cart', x: 9, y: 9, cart: 'c', dir: 'R', text: 'cart_stuck' },

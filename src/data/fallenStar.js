@@ -57,3 +57,27 @@ export function reforgeAt(smith) {
   HERO_STATE.starForged = index;
   return true;
 }
+
+// STARFALL, THE SPELL, GROWS WITH THE SWORD: the hero's own star spell is the
+// one old spell that keeps up. Owning the Fallen Star adds to its power, and
+// every reforge adds more (+0.25 pulled from the stone, then +0.2 a forging:
+// +0.85 at +3), on top of its power (see starfallPower below).
+export function starfallBonus() {
+  if (!HERO_STATE.weapons?.includes('fallen_star')) return 0;
+  return 0.25 + 0.2 * starLevel();
+}
+
+// Starfall's whole power (13 November 2026). It's the hero's signature spell,
+// so it is measured against the chapter you're in (spellStrike in
+// battleScene.js), never capped at chapter 1 like the other old spells. Its
+// power is 1.6 good FIGHTs, plus the sword's bonus above, plus 0.15 for each
+// of Starfall II and III. With the sword that rivals each chapter's best
+// attack spell for less SP: chapter 3 about 1.85-2.05 (Sunder 1.55),
+// chapter 4 about 2.25-2.4 (Tempest 2.2), chapter 5 about 2.45-2.75
+// (Cleave 2.0, Overwhelm 3.3 for the whole bar).
+const STARFALL_POWER = 1.6;
+const STARFALL_SHARPENED = 0.15;
+export function starfallPower() {
+  const sharpened = ['starfall_2', 'starfall_3'].filter((id) => HERO_STATE.skills?.includes(id)).length;
+  return STARFALL_POWER + STARFALL_SHARPENED * sharpened + starfallBonus();
+}

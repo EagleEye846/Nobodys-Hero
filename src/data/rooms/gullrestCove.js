@@ -145,6 +145,15 @@ export const GULLREST_COVE = {
     { sprite: 'c5_weed_mat', x: 21, y: 10, flat: true, walkable: true },
     { sprite: 'c5_wrack_line', x: 13, y: 15, flat: true, walkable: true },
     { sprite: 'c5_crab_trail', x: 16, y: 8, flat: true, walkable: true },
+    { sprite: 'col_glass_green', x: 31, y: 3, walkable: true, flat: true, gives: 'glass_green', taken: { gone: true } },
+    // (life pass 2026-11-14)
+    // Tibby's bucket and spade, lost on the sea floor (the beach's errand): only there while the tide is out.
+    { sprite: 'st_bucket_spade', x: 16, y: 12, text: 'life_v_bucket', lowTide: true, gives: 'pips_bucket', react: true, taken: { gone: true } },
+    // The cove's pools and what the sea left in them.
+    { sprite: 'st_glass_float', x: 5, y: 3, text: 'life_v_float', animation: 'st_glass_float', speed: 0.9 },
+    { sprite: 'st_old_boot', x: 3, y: 17, text: 'life_v_boot' },
+    { sprite: 'st_message_bottle', x: 25, y: 16, text: 'life_v_bottle' },
+    { sprite: 'st_driftwood_face', x: 29, y: 4, text: 'life_v_face' },
   ],
   tileTexts: { '#': 'cove_wall', W: 'cove_wall', x: 'cove_pool', O: 'cove_boulder', '~': 'cove_sea' },
 

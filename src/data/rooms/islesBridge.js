@@ -7,10 +7,14 @@
 // shows (secret_isles_cave); on the east bed, a purse. The tide runs on a clock (20 s each way,
 // 3 s warning; a dial on each isle). Nobody drowns: the water waits for you, then lifts you up
 // onto your isle.
+// (At high tide two slabs of the cliff's foot, x 17-18 row 16, stand clear of the water: the ledge the cave mouth
+// opens onto, and where you step out of it.)
 // Tile key (see src/overworld/coastTiles.js, isles):
 //   #  rock top (solid)   W  rock face (solid)   ,  wind turf   .  rock slabs   :  path
 //   ~  the sea (solid)   g  the bridge, afloat   o  the bridge, lying on the bed (low tide)
 //   q  the gully bed's shingle (low tide)   ;  rock pools (walk)   x  barnacle rock (solid)
+
+import { LIFE5_PROPS } from '../lifePass5.js';
 
 export const ISLES_BRIDGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -27,6 +31,7 @@ export const ISLES_BRIDGE = {
   vesWell: true,
 
   // The HIGH-tide map.
+
   tiles: [
     '########################################',
     '#WWWWWW##W~~~x~~~~~~~~~~~~x~~~WWWWWW##W#',
@@ -44,7 +49,7 @@ export const ISLES_BRIDGE = {
     '#,,,,..,,,;~~~~~~~~~~~~~~~~~.;,,,,,..,,#',
     '#,,;,,,x,,~~~~~~~~~~~~~~~~~~~.~,,,,,xx,#',
     '#,,,,x.,x,.~~~~~~~~~~~~~~~~~~~,.,,,,,,,#',
-    '#x,,xx,.,x.~~~~~~~~~x~~~~~~~~.x,,,,x;,,#',
+    '#x,,xx,.,x.~~~~~~..~x~~~~~~~~.x,,,,x;,,#',
     '#W,,WW,WWWWWWWWWWWWWWW~~~WWWWWWW,,WW,WW#',
     '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
     '########################################',
@@ -70,7 +75,7 @@ export const ISLES_BRIDGE = {
       '           .q.qq;x;   ;;.qqqq           ',
       '           qqqqqqxx   xqqqqq.           ',
       '           ;;qqqq.;   ..qq.q;           ',
-      '              qq                        ',
+      '                  q                     ',
       '                                        ',
       '                                        ',
     ],
@@ -85,9 +90,10 @@ export const ISLES_BRIDGE = {
   doors: [
     { x: 0, y: 9, w: 1, h: 2, to: 'isles_old_lightroom', spawn: { x: 15, y: 8 } },
     { x: 39, y: 9, w: 1, h: 2, to: 'isles_forge', spawn: { x: 2, y: 9 } },
-    // The cave mouth on the west bed: dry at low tide only (water at high, so the tide never
-    // lifts anyone onto it). Coming back out you climb up onto the west isle's edge (10,16).
-    { x: 14, y: 17, w: 2, h: 1, to: 'secret_isles_cave', spawn: { x: 6, y: 8 } },
+    // The cave mouth at the foot of the bridge's low point, in the west bed's south cliff: dry at low tide
+    // only, and a crack too small to use until the ship's captain is dealt with (the needle's rule).
+    // Coming back out you stand in the mouth (18,16).
+    { x: 18, y: 17, w: 1, h: 1, to: 'secret_isles_cave', spawn: { x: 6, y: 8 }, after: ['captain_spared', 'captain_beaten'], notYet: 'bridge_cave_not_yet' },
   ],
 
   cutscenes: [],
@@ -104,9 +110,17 @@ export const ISLES_BRIDGE = {
     { sprite: 'c5_chain_bollard', x: 29, y: 8, text: 'bridge_post_far' },
     { sprite: 'c5_chain_bollard', x: 29, y: 11, text: 'bridge_post_far' },
     { sprite: 'sign', x: 7, y: 8, text: 'bridge_sign' },
-    // The cave mouth in the west bed's south cliff (walkable: it's the door).
-    // `lowTide`: only there while the tide is out (the high water covers the mouth).
-    { sprite: 'c5_sea_cave', x: 14, y: 17, text: 'bridge_cave', walkable: true, lowTide: true },
+    // The cave mouth: a low dark gap in the cliff at the foot of the bridge's sag, half behind a slab and weed.
+    // `lowTide`: only there while the tide is out. Before the captain's book it reads as a crack too small to use.
+    { sprite: 'il_cave_crack', x: 18, y: 17, text: 'bridge_crack', walkable: true, flat: true, lowTide: true, until: ['captain_spared', 'captain_beaten'] },
+    { sprite: 'il_cave_crack', x: 18, y: 17, text: 'bridge_cave', walkable: true, flat: true, lowTide: true, after: ['captain_spared', 'captain_beaten'] },
+    // The cue you can see at high water too: shells set out in a tidy row on the west isle's edge, at the top of the
+    // way down to the bed, then on the bed itself (low tide) in a line along the south cliff to the mouth.
+    { sprite: 'il_shell_row', x: 10, y: 15, text: 'bridge_shells', walkable: true, flat: true },
+    { sprite: 'il_shell_row', x: 10, y: 16, text: 'bridge_shells', walkable: true, flat: true },
+    { sprite: 'il_shell_row', x: 13, y: 16, text: 'bridge_shells', walkable: true, flat: true, lowTide: true },
+    { sprite: 'il_shell_row', x: 15, y: 16, text: 'bridge_shells', walkable: true, flat: true, lowTide: true },
+    { sprite: 'il_shell_row', x: 17, y: 16, text: 'bridge_shells', walkable: true, flat: true, lowTide: true },
     // On the beds at low tide: a purse on the east bed (shown only at low tide). Lobster pots and
     // the rest up on the isles.
     { sprite: 'gold_pouch', x: 25, y: 14, text: 'bridge_pouch', lowTide: true, gold: 240, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
@@ -117,29 +131,18 @@ export const ISLES_BRIDGE = {
     // rain in the hollows, gulls and a crab; a net blown off the frame; and a lantern on a post at
     // each bridge head, for crossing in the dark.
     { sprite: 'c5_wrack_line', x: 1, y: 15, flat: true, walkable: true },
-    { sprite: 'c5_planks_scatter', x: 6, y: 4, flat: true, walkable: true },
-    { sprite: 'c5_puddle', x: 2, y: 11, flat: true, walkable: true },
     { sprite: 'c5_gull_marks', x: 37, y: 3, flat: true, walkable: true },
-    { sprite: 'c5_crab_trail', x: 33, y: 10, flat: true, walkable: true },
-    { sprite: 'c5_net_torn', x: 31, y: 15, flat: true, walkable: true },
     { sprite: 'c5_lantern_hook', x: 8, y: 6 },
     { sprite: 'c5_lantern_hook', x: 31, y: 6 },
     // The gully's sides, worn ragged: pools bitten into the isles' edges, rocks come down off the
     // cliffs into the water, and the sea's rubbish going round in the deep channel (all on tiles
     // that are water at both tides, so nothing lies on the bed at low water).
     { sprite: 'wy_rocks_fallen', x: 12, y: 2, flat: true, walkable: true },
-    { sprite: 'wy_weed_mat', x: 17, y: 1, flat: true, walkable: true },
-    { sprite: 'wy_timber_sunk', x: 22, y: 2, flat: true, walkable: true },
     { sprite: 'wy_rock_sunk', x: 28, y: 2, flat: true, walkable: true },
-    { sprite: 'wy_rock_sunk', x: 10, y: 4, flat: true, walkable: true },
-    { sprite: 'wy_rocks_fallen', x: 10, y: 14, flat: true, walkable: true },
     { sprite: 'wy_rock_sunk', x: 29, y: 5, flat: true, walkable: true },
-    { sprite: 'wy_rocks_fallen', x: 29, y: 15, flat: true, walkable: true },
-    { sprite: 'wy_weed_mat_b', x: 20, y: 6, flat: true, walkable: true },
     { sprite: 'wy_plank_slick', x: 20, y: 14, flat: true, walkable: true },
-    { sprite: 'wy_rock_sunk', x: 23, y: 17, flat: true, walkable: true },
-    { sprite: 'c5_seaweed_heap', x: 9, y: 3, flat: true, walkable: true },
     { sprite: 'c5_seaweed_heap', x: 30, y: 12, flat: true, walkable: true },
+    ...(LIFE5_PROPS['isles_bridge'] ?? []),
   ],
   tileTexts: { '#': 'isles_rock', W: 'isles_rock', '~': 'bridge_water', x: 'isles_light_rock', g: 'bridge_planks', o: 'bridge_slack', q: 'bridge_bed', ';': 'bridge_pool' },
 

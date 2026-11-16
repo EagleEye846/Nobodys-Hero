@@ -165,7 +165,7 @@ export const DIGGINGS_BATTLE_THEME = {
   title: 'Struck Quartz',
   bpm: 144,
   stepsPerBeat: 4,
-  volume: 1.25,
+  volume: 1.5,
 
   instruments: {
     // The gems: the tune on a real glockenspiel with the celesta under it.

@@ -1,4 +1,4 @@
 # HADDOCK (at the cove's tide bell, gullrest_cove). He is only here until the scene haddock_shows_bell, then he goes round the back way to the jetty.
 
 [first]
-{proud}Cove tide. Easy as breathing. See that post? Ring it.
+{proud}Cove tide. Easy as breathin'. See that post? Ring it.

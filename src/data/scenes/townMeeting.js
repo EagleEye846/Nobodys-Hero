@@ -61,15 +61,29 @@ export const TOWN_MEETING = {
     { do: 'act', who: 'vole', act: 'shake' },
     { do: 'say', who: 'vole', text: 'Well, I\'m not going out. Not past the point. Not in that.' },
     { do: 'say', who: 'otter', text: 'Nobody\'s going out. Nobody\'s been out since the herring.' },
+    // (draft) 2026-11-15: the goal lands. The tide table that has stopped turning, the red line, the green slit on the tower, and the
+    // town knowing where the storm comes from (the Last Light) without knowing why. Nothing about the boy, or Corrie.
+    // Shown, not explained: the tide table, the tower in the lightning, the quay going under.
+    { do: 'face', who: 'otter', at: 'badger' },
+    { do: 'act', who: 'stoat', act: 'shake', wait: false },
+    { do: 'say', text: 'On the wall by the board of winters hangs a tide table, every day ruled off in a neat hand. The last nine boxes all say the same word: HIGH.' },
+    { do: 'face', who: 'vole', dir: 'up' },
+    { do: 'act', who: 'vole', act: 'lunge', wait: false },
+    { do: 'say', who: 'vole', text: 'It\'s that light. Out past the Reach. The Last Light. The storm sits on it like a hen.' },
+    { do: 'stage', bolt: true },
+    { do: 'quake', amount: 1, seconds: 0.3 },
+    { do: 'say', text: 'Lightning fills the windows. Far out on the skyline a black tower stands up against the green, a slit of light at the top, and the thunder rolls in after it.' },
+    { do: 'face', who: 'badger', at: 'stoat' },
+    { do: 'say', who: 'badger', text: 'A hundred years it kept to its own side of the point. This winter it hasn\'t. The quay goes under next.' },
     { do: 'face', who: 'stoat', at: 'vole' },
     { do: 'say', who: 'stoat', text: 'Haddock goes out.' },
     { do: 'say', who: 'vole', text: 'Haddock\'s a walrus. Haddock floats.' },
     { do: 'say', who: 'otter', text: 'He\'s down the Drowned Rat, if anybody wants to tell him to stop. Nobody\'s managed it in forty years.' },
     { do: 'face', who: 'bramble', at: 'ves' },
-    { do: 'say', who: 'bramble', text: '{worried}...Is it always like this?' },
+    { do: 'say', who: 'bramble', text: '{surprised}...Is it always like this?' },
     { do: 'face', who: 'badger', at: 'bramble' },
     { do: 'say', who: 'badger', text: 'Only on meeting nights. Biscuit?' },
-    { do: 'say', who: 'ves', text: '{bored}And how often are meeting nights?' },
+    { do: 'say', who: 'ves', text: '{smile}And how often are meeting nights?' },
     { do: 'say', who: 'badger', text: 'Every night.' },
     { do: 'say', text: 'The meeting breaks up the way it always does. Nobody agrees, and everybody goes home to be right about it.' },
     { do: 'ambience' },
@@ -89,6 +103,10 @@ export const TOWN_MEETING = {
     { do: 'face', who: 'player', at: 'badger' },
     { do: 'face', who: 'ves', at: 'badger' },
     { do: 'face', who: 'bramble', at: 'badger' },
-    { do: 'say', who: 'badger', text: 'If it\'s the sea you\'re after, Haddock\'s at the Drowned Rat, down on the quay. By the fire. He always is.' },
+    // (draft) 2026-11-15: the badger says it plainly, and the party takes it on as the goal.
+    { do: 'say', who: 'badger', text: 'If it\'s the storm you\'ve come about, that\'s the Last Light, and nobody goes near it. Haddock might take you. He\'s at the Drowned Rat, on the quay, by the fire.' },
+    { do: 'say', who: 'bramble', text: '{determined}Then we go to the Last Light. And we make it stop.' },
+    { do: 'say', who: 'ves', text: '{smile}After a word with the walrus.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

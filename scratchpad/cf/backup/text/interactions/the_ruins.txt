@@ -1,0 +1,436 @@
+# THE RUINS: signs and other things you can inspect, in every room of the Ruins.
+# Each entry (separated by a blank line) is one page of the textbox.
+# Section names match the `text` of each prop in src/data/rooms/.
+
+[welcome_sign]
+Welcome to the Ruins.
+Use the arrow keys to walk.
+
+Hold X or Shift to run.
+Press Z to read signs, and C to open your menu.
+
+The old floor here is fragile. Careful where you jump.
+
+[east_sign]
+This is the east room.
+A rogue dummy haunts it. Touch it and it attacks!
+
+The doorway to the north leads to the Lantern Hall.
+
+[hall_plaque]
+LANTERN HALL
+The lanterns here were lit by the first Keeper, and were never to go out.
+
+# Shown at save points (the floating crystals).
+[save_point]
+The crystal's warm light washes over you.
+Your progress is saved.
+
+# Added after the save words when the crystal healed you.
+[save_healed]
+Your HP is fully restored.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# Tiles you can press Z on (see `tileTexts` in the rooms).
+[flower_beds]
+Neat rows of flowers, freshly watered.
+Someone loves these very much.
+
+[ruins_water]
+Still, dark water.
+Your reflection looks unsure of itself.
+
+[ruins_pillars]
+An old stone pillar. Someone has scratched tally marks into it.
+
+They stop at one hundred.
+
+[ruins_statue]
+A statue of a hero, sword raised.
+The face has been worn smooth by a hundred years of waiting.
+
+# --- Lantern Hall puzzle: light the lanterns in the old order ---
+[hall_riddle]
+The lanterns of this hall were lit in the old way:
+First the east, where the sun wakes.
+Then the heart.
+And last of all, the west, where it goes to sleep.
+
+Scrawled underneath, in a different hand:
+...or something, I don't know.
+
+[hall_lantern]
+You light the lantern. Its flame is small, but steady.
+
+[hall_gate]
+An iron gate. Words are carved above it:
+LIGHT THE WAY.
+
+[hall_gate_open]
+The last flame catches... and with a long groan, the gate swings open.
+
+[hall_gate_reset]
+The flames gutter and go out, one by one.
+That wasn't the old way.
+
+# --- Pillar Room puzzle: two levers, one hidden ---
+[pillar_lever]
+You pull the lever. Stone grinds somewhere nearby.
+
+[pillar_gate]
+A wide iron gate. Two lever-shaped marks are carved into the stone beside it.
+
+One lever must be hiding somewhere. The other is up high, out of easy reach.
+
+[pillar_gate_open]
+Clunk. The gate rattles open.
+# --- Beyond the Ruins (the next region: still to be built) ---
+[beyond_sign]
+The air is different out here. Fresher.
+The Ruins are behind you now.
+
+# What's left of Mother Taper by the way out, if you fought her until her flame went out.
+[taper_remains]
+A pool of cooled wax, with her shawl folded over it, as if she'd only sat down to rest.
+
+The wick is cold.
+
+# Pressing Z on something that's up on a raised block, from down on the floor.
+[out_of_reach]
+It's up out of reach. Maybe you could jump up there.
+
+# Raised stone blocks you can jump onto (Space). Shown when you press Z on one.
+[stone_block]
+A block of old stone, about knee-high. You could jump up onto it.
+
+[tall_block]
+A tall block of stone, too high to jump onto from the floor. Something lower might get you halfway.
+
+# ---- THE LIFE PASS (chapter 1, Ruins) BEGIN ----
+# Set dressing and small things in the Ruins (round 2 of the life pass, 15 Nov 2026). (draft)
+
+# ruins_entrance
+
+[r1_en_banner]
+A banner hung from a rod, faded to the colour of old tea.
+
+There was a sun on it once. Now it's mostly an idea of a sun.
+
+[r1_en_banner2]
+A shorter banner, blue, the hem torn into tongues. A moth has made it a home and a living.
+
+[r1_en_post]
+A cabinet of pigeonholes, every one labelled FOR THE HERO. Nearly all of them are empty.
+
+One holds a letter, addressed in a nervous hand: TO WHOEVER TURNS UP.
+
+You decide it isn't yours to open.
+
+[r1_en_mural]
+A painting in a frame, flaked almost bare. A bright sun, and a small figure under it with something held up.
+
+The face has gone altogether. So has most of the sky.
+
+[r1_en_wipe]
+A brass plaque, polished at the edges: PLEASE WIPE YOUR FEET.
+
+Underneath, scratched in later and smaller: ALL OF THEM.
+
+[r1_en_ivy]
+Ivy, coming in through a crack no wider than a thumb. It has done very well for itself.
+
+[r1_en_hole]
+A tiny arched door at the foot of the wall, with a mat the size of a stamp and a lantern the size of a thimble.
+
+The lantern is lit.
+
+[r1_en_mat]
+A doormat, worn through in the middle. It says WELCOME, HERO in careful letters.
+
+The word HERO has been crossed out. Beside it someone has written ANYONE. Under that, smaller: (NOT THE DUMMY).
+
+[r1_en_chalk]
+A slate on an easel, chalked:
+
+DAYS SINCE LAST DUMMY INCIDENT: 0
+
+The zero has been rubbed out and redrawn so many times it's gone shiny.
+
+[r1_en_candles]
+Three stubs of candle in a saucer, burning low. Somebody keeps them lit, and trims them, and the wax is still soft.
+
+[r1_en_candles2]
+More stubs in a saucer. The flames all lean a little toward the north door, as if they'd like a look at the Lantern Hall.
+
+[r1_en_rubble]
+Fallen stonework, heaped. Something's been living in the gaps. You hear it stop breathing when you lean in.
+
+[r1_en_column]
+A fallen column, snapped in two. Someone has used it as a bench, and someone else as a bed for moss. The moss won.
+
+[r1_en_urn]
+A cracked urn with a fern in it. The fern is delighted about the crack.
+
+[r1_en_bench]
+A stone bench, worn into a hollow by a great many people sitting down to think about it.
+
+[r1_en_boot]
+One old boot, standing up straight. There's no sign of the other one, or of the foot.
+
+[r1_en_hop]
+A hopscotch, chalked on the floor. The numbers go up to nine. After nine someone has written: ???
+
+[r1_en_bones]
+The skeleton of a very small mouse, in a thimble for a helmet, a toothpick sword in its paw.
+
+It's lying down very bravely. You take a moment.
+
+[r1_en_tip]
+A jar beside the shop, with a hand-lettered label: TIPS. (NOT BRIBES. THEY ARE DIFFERENT.)
+
+[r1_en_crate]
+A crate of stock, lid off, packed in straw. The straw is a bit warmer than straw ought to be.
+
+[r1_en_books]
+A heap of damp books. The top one is open at a page that says Chapter One. The rest is mould.
+
+[r1_en_leaves]
+Dry leaves, a long way from any tree. The Ruins have a draught with a very good sense of direction.
+
+[r1_en_shell]
+A snail shell, empty, with a silver trail going the way it went. You can't tell if it was fast or just determined.
+
+[r1_en_toad]
+A ring of pale toadstools. You step round it out of respect. Nothing happens, which is what they wanted.
+
+[r1_en_puddle]
+A puddle, under a drip that has been dripping for a very long time. The puddle is patient too.
+
+[r1_en_wax]
+Old wax on the floor in drips, as if a candle had come this way, thinking.
+
+[r1_en_flower]
+A small pink flower growing out of a crack in the floor. You stand very still, so as not to upset it.
+
+[r1_en_flower2]
+Another one. Whoever keeps putting flowers in the cracks hasn't heard that cracks are bad.
+
+[r1_en_stash]
+A mouse's treasury behind a heap of rubble: bottle caps, shirt buttons, a bent spoon and one real coin, all sorted by size.
+
+You take only the coin. A very small voice, somewhere, says nothing, loudly.
+
+# lantern_hall
+
+[r1_lh_banner]
+Another banner. This one's the colour of a bruise that's nearly better.
+
+[r1_lh_mural]
+A painting of this very hall, every lantern lit. The painter has given it a great many more pillars than it has.
+
+[r1_lh_bell]
+A bell pull: a long rope with a tassel. You tug it.
+
+Somewhere deep in the wall a small bell answers once, and thinks better of it.
+
+[r1_lh_banner2]
+A blue banner. The corner's been folded over so many times it has learned to stay folded.
+
+[r1_lh_ivy]
+Ivy up the wall, all reaching toward the lanterns, as if warming its hands.
+
+[r1_lh_seat]
+A stone chair with a cushion, and a paper sign tied on: RESERVED.
+
+The cushion is perfectly plump. Nobody has ever sat in it, and it's trying not to take it personally.
+
+[r1_lh_books]
+A stack of damp books held together by their mould. The top one is open at a page that just says: INTERVAL.
+
+[r1_lh_stump]
+The stump of a pillar, broken off at the knee. Ivy has moved into it as if it was always going to.
+
+[r1_lh_column]
+A fallen pillar, lying where it fell. Somebody has swept carefully round it, every day, for years.
+
+[r1_lh_cage]
+An empty birdcage on a post, the door open, one yellow feather on the floor of it.
+
+Whatever lived here left on its own.
+
+[r1_lh_candles]
+Stubs of candle in a saucer, burning in a corner. They've been trimmed lately.
+
+[r1_lh_urn]
+An urn holding a dead stick that is quite sure it will bloom.
+
+[r1_lh_toad]
+Toadstools in a ring at the foot of a pillar, all facing the light, as if at a concert.
+
+[r1_lh_helm]
+An old helmet, rusted open like a flower, with a daisy growing out of it. The daisy has the grace not to look smug.
+
+# pillar_room
+
+[r1_pi_banner]
+A banner so old the thread has given up. It's only the dust that's holding the shape.
+
+[r1_pi_mural]
+A painting of two small figures hauling on one enormous lever. The lever is painted extremely large, to be fair to it.
+
+[r1_pi_plaque]
+A brass plaque: IN CASE OF EMERGENCY, PULL.
+
+It doesn't say what.
+
+[r1_pi_bell]
+A bell pull, tied in a knot. That's somebody saying no.
+
+[r1_pi_banner2]
+A blue banner, shredded to the rod. It hangs the way a sleeve hangs when the arm has left it.
+
+[r1_pi_hamper]
+A picnic hamper tied with a ribbon, tucked into the corner where the pillars throw their shadow. A card on the lid:
+
+OPEN ON ARRIVAL. (IT'S FINE. NOBODY MINDS.)
+
+You open it. The flask inside is still sealed.
+
+[r1_pi_column]
+A pillar that lay down for a rest a long time ago. The floor has grown round it, a little.
+
+[r1_pi_rubble]
+Some of the ceiling, down on the floor. It doesn't look sorry.
+
+[r1_pi_stump]
+Another broken pillar. They'll all be like this one day. The tall ones know it. You can tell by how they stand.
+
+[r1_pi_helm]
+An old helmet, a daisy growing out of it. Somebody has left it standing up straight, as if it might still be wanted.
+
+[r1_pi_lost]
+A box marked LOST. Under it, a second label: FOUND. Under that, a third: NOT MINE.
+
+Inside: one glove, a spoon, and an apple core that has become a fossil.
+
+[r1_pi_candles]
+Candle stubs in a saucer, burning in the corner of a very empty room. Somebody likes to leave a light on for whoever's next.
+
+[r1_pi_candles2]
+A saucer of stubs, lit. The wax has run down into a little stalagmite, which is the closest thing to a pet this room has.
+
+[r1_pi_books]
+A short stack of books with a bookmark in the top one. The bookmark is a pressed daisy, and it's the only thing in here that's been loved.
+
+[r1_pi_bench]
+A stone bench. Someone has carved a tiny arrow into the seat, pointing at the gate, and underneath: YES, THAT WAY.
+
+[r1_pi_toad]
+Toadstools, in a ring, at the foot of a pillar. They're very proud of the pillar.
+
+[r1_pi_flower]
+A flower in a crack. Whoever put it there picked the one place a pillar's shadow wouldn't kill it.
+
+# flower_room
+
+[r1_fl_ivy]
+Ivy right up the wall, in a room with no window. It found a way. It generally does.
+
+[r1_fl_sign]
+A little sign pushed into the soil:
+
+MOONBELLS: LOOK, DON'T PICK. THEY'VE HAD A LONG DAY.
+
+[r1_fl_tags]
+Plant tags in the soil. MOONBELL. MOONBELL (SULKING). MOONBELL (DON'T TELL THE OTHER ONE). NOT A WEED (WEED).
+
+[r1_fl_tags2]
+More tags. LATE. LATER. LATEST. It looks as though she ran out of words for "wait".
+
+[r1_fl_can]
+A second watering can, left by the beds, nearly full. A bee is using it as a hot tub.
+
+[r1_fl_trug]
+A trug of gloves and a trowel. The gloves are so worn they've taken the shape of a hand holding a flower.
+
+[r1_fl_gnome]
+A clay gnome in a red cap with a wick sticking out of the top of it. A tag round his neck says NORBERT.
+
+You don't ask. He looks as if he's been asked.
+
+[r1_fl_barrow]
+A wheelbarrow of pots. One wheel, and a great deal of faith.
+
+[r1_fl_barrel]
+A barrel brim-full of rainwater, which is odd indoors. You let it be odd.
+
+[r1_fl_cloche]
+A glass jar over a seedling. The seedling presses its face to the glass to look at you.
+
+[r1_fl_cloche2]
+Another jar, another seedling. This one's turned its back. You've offended it somehow.
+
+[r1_fl_beans]
+Bean canes hung with beans as long as your arm. Taper's pride, you'd guess.
+
+[r1_fl_pot]
+A pot of moonbells with their faces closed for the day. All but one, which is watching you.
+
+[r1_fl_pot2]
+A pot of moonbells, glowing a very faint blue. They ring, a bit, if you stand close and are quiet.
+
+[r1_fl_bench]
+A stone bench facing the beds, a cushion on it with a knitted flower. It's the best seat in the house, and she knows it.
+
+[r1_fl_toad]
+A ring of toadstools by the barrow. Even the weeds in here are tidy.
+
+[r1_fl_button]
+A small brass button, lying at the edge of the pool, shining like it wants to be found.
+
+# way_out
+
+[r1_wo_drawing]
+A drawing pinned to the wall: a door, a big yellow sun behind it, and a small figure waving from the doorstep.
+
+The paper has gone soft as cloth.
+
+[r1_wo_head]
+MIND YOUR HEAD, says the plaque. Someone has drawn an arrow pointing up, and then one pointing down, in case you were unsure where to look.
+
+[r1_wo_banner]
+A banner by the great door, blue and thin as a petal. It stirs when you stand near it, as if the door were breathing.
+
+[r1_wo_cups]
+Tin cups lined up on a ledge, three to a row. Each one has a dried ring of soup in the bottom.
+
+[r1_wo_cups2]
+Another three cups, the same ring in each. Six, if you count.
+
+[r1_wo_bench]
+A stone bench halfway along, for people who needed to think about it. The seat is worn in two places.
+
+[r1_wo_prints]
+Boot-prints, worn into the stone. A great many feet have come this way. Every one of them is pointing at the door.
+
+[r1_wo_candles]
+A saucer of candle stubs by the great door, lit. The flames all lean the same way, like something inhaling.
+
+[r1_wo_leaves]
+Dry grit and a few dead leaves, blown in under the great door from somewhere with weather.
+
+[r1_wo_rubble]
+A heap of rubble, tidy. Whoever swept the corridor swept up to it and, apparently, gave up.
+
+[r1_wo_stump]
+A pillar stub, broken off short. It keeps the corridor honest.
+
+[r1_en_stash_gone]
+The treasury, minus one coin. The rest is arranged with great dignity.
+
+[r1_pi_hamper_gone]
+The hamper, empty, with its card still on the lid. It looks pleased to have been opened.
+# ---- THE LIFE PASS (chapter 1, Ruins) END ----

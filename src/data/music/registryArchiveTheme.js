@@ -27,7 +27,7 @@ import { starFall } from './parts/starGuardians.js';
 //     over C, when the Hush's shadow comes over the skylights, it's wrong.
 //
 //   THE TUNE (the hook): the valley's own opening, F# E D C#, the Register's
-//     count (Tally's four strokes), here in long notes and left hanging on
+//     count (Quire's four strokes), here in long notes and left hanging on
 //     the C# where the fifth stroke should be. Then it climbs back up, hoping
 //     (D E F#, A G F#), comes down (G F# E, D C# B), stops on C# again, and
 //     the phrase's fifth bar is THE FALLING STAR (parts/starGuardians.js: B,

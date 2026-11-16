@@ -1,7 +1,7 @@
 // THE GALLEY: the cook's room of the big wreck, still dry, still laid for a crew that
 // went down forty years ago. The stove is stone cold. The cook is not: he's a ghost, and
 // he has not noticed. He floats over his pot stirring nothing, delighted to have diners at
-// last. Puzzle-free and no monsters: a laugh, a bowl of chowder (the pot is a gift), a
+// last. Puzzle-free and no monsters: a save crystal, a laugh, a bowl of chowder (the pot is a gift), a
 // menu board, and the crew's places still set. Ves is unimpressed; Bramble likes him.
 //
 // Stepping in plays the_ghost_cook (once; trigger the column at x 3). The cook stands at
@@ -60,8 +60,11 @@ export const WRECK_GALLEY = {
   textFile: 'interactions/wreck.txt',
   props: [
     // The cook, over his cold stove, with his pot (a gift: a bowl of chowder, once).
+    // A save crystal by the cook's tables (added 12 November): the Wreck Yard is long, and he would hate you to go hungry for want of a rest.
+    { sprite: 'savepoint', x: 8, y: 5, save: true },
     { sprite: 'c5_galley_stove', x: 14, y: 3, text: 'galley_stove' },
-    { sprite: 'wy_ghost_cook', x: 15, y: 4, text: 'galley_cook', cast: 'ghost_cook', animation: 'wy_ghost_cook', speed: 0.4, glow: [{ dx: 0, dy: -14, bloom: 16, strength: 0.5, flicker: 0.2, color: '170, 255, 220' }] },
+    // He keeps a shop now: press Z on him for his galley (shops.js ghost_galley).
+    { sprite: 'wy_ghost_cook', x: 15, y: 4, shop: 'ghost_galley', cast: 'ghost_cook', animation: 'wy_ghost_cook', speed: 0.4, glow: [{ dx: 0, dy: -14, bloom: 16, strength: 0.5, flicker: 0.2, color: '170, 255, 220' }] },
     { sprite: 'wy_pot', x: 13, y: 4, text: 'galley_pot', gives: 'cockle_chowder', taken: { sprite: 'wy_pot_empty', text: 'galley_pot_empty' } },
     { sprite: 'sign', x: 10, y: 2, text: 'galley_menu' },
     // The crew's table, still laid (no candle: nothing burns in here), and the benches along its near side.
@@ -110,6 +113,13 @@ export const WRECK_GALLEY = {
     { sprite: 'in_sea_chest_small', x: 8, y: 12, text: 'galley_sea_chests' },
     { sprite: 'in_sea_chest_small', x: 12, y: 12, text: 'galley_sea_chests' },
     { sprite: 'in_boots', x: 13, y: 12, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_fishbones', x: 18, y: 6, text: 'sl_bones', flat: true, walkable: true },
+    { sprite: 'c5_lantern_fallen', x: 5, y: 7, text: 'sl_lantern', flat: true, walkable: true },
+    { sprite: 'c5_pot_single', x: 11, y: 6, text: 'sl_pot', walkable: true },
+    { sprite: 'c5_oar_stuck', x: 20, y: 5, text: 'sl_oar' },
+    { sprite: 'shore_boot', x: 11, y: 4, text: 'sl_boot', walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'hull_plate', W: 'hull_plate', w: 'galley_porthole', v: 'galley_pans' },
 

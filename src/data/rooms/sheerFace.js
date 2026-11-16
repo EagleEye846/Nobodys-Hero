@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE SHEER FACE: north of the Start of the Climb, the first steep face, too
 // tall for one throw of the rope. Rings are hammered into the rock in a route
 // up it: hook the lowest, then swing and time Z to catch each next one (see
@@ -9,6 +10,7 @@
 //   m  cliff top (solid)                           M  cliff face (solid)
 //   ,  grass                                       s  the great stair
 //   T  pine tree (walk or hide behind) (solid)
+import { R3A_PROPS } from '../r3aLife.js';
 export const SHEER_FACE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sheer_face',
@@ -85,6 +87,10 @@ export const SHEER_FACE = {
     { sprite: 'swing_ring', x: 12, y: 6 },
     { sprite: 'swing_ring', x: 13, y: 4 },
     { sprite: 'grapple_ring', x: 13, y: 2, grapple: true },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['sheer_face'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['sheer_face'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

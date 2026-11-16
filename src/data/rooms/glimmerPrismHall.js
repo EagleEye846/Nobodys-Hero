@@ -101,12 +101,15 @@ export const GLIMMER_PRISM_HALL = {
     { sprite: 'glowcap_trio', x: 2, y: 11, text: 'hall_trio' },
     { sprite: 'glowcap_tall', x: 12, y: 12, text: 'hall_glowcap' },
     { sprite: 'glowcap_small', x: 29, y: 8, text: 'hall_glowcap' },
-    { sprite: 'glow_moss', x: 7, y: 6, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 15, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 27, y: 10, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 7, y: 6, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 15, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 27, y: 10, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'crystal_pool', x: 20, y: 4, text: 'hall_pool', animation: 'crystal_pool', speed: 0.5 },
     { sprite: 'sign', x: 5, y: 7, text: 'hall_sign' },
     { sprite: 'gold_pouch', x: 29, y: 4, text: 'hall_purse', gold: 70, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'gold_pouch', x: 21, y: 12, text: 'lp_hall_nook', gives: 'glow_pebble', taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', H: 'cave_moss_wall', K: 'cave_wall',

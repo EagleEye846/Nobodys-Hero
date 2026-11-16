@@ -1,6 +1,7 @@
-import { defineBulletArt, Line } from '../projectiles.js';
+import { defineBulletArt, Line, Shot } from '../projectiles.js';
 import { defineGuardianStar } from './guardianStar.js';
 import { art } from '../../data/art/ch5Kit.js';
+import { BEAT } from '../fairweatherDeck.js';
 
 // Madam Fairweather's attacks: the carved figurehead of the brig Fair Return, woken by the piece
 // of the Fallen Star that lodged in her breast. She laughs, she spins, she throws what she is made
@@ -18,6 +19,12 @@ import { art } from '../../data/art/ch5Kit.js';
 //   maypole; the box turns with them.
 // CHAOS (phase 4): masks that bounce, and a mixture: two of the others at once, one after the
 //   other by a beat.
+//
+// HER RULES (14 November 2026, src/battle/fairweatherDeck.js): the box lists (you slide downhill)
+// and/or she waltzes with you (you step only on the beats of her song). Every attack here fires on
+// the song's beats (beatsOf), lasts her whole turn, and has a waltz version: fewer, slower, warned
+// longer, timed so a step on the beat is the dodge. The carousel's horses and the maypole's
+// ribbons turn a notch a beat along a known path (stepTurn), so they can be counted.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`; see dummy.js for
 // the shape. The attack's own clock (`t`) runs `density` times faster than the seconds on the
@@ -252,74 +259,166 @@ class Laugh {
   }
 }
 
-// How quickly to turn: +1, a stall about the middle of `at` (a time in seconds), then -1.
-const turning = (tr, at) => {
-  if (tr < at - 0.3) return 1;
-  if (tr > at + 0.3) return -1;
-  return 1 - ((tr - (at - 0.3)) / 0.6) * 2;
-};
+// Her song's beats, for an attack: called each frame, it says which beat just came ({ n, the
+// count from the attack's start; one, whether it's a ONE; dance, whether the waltz rule is on})
+// or null between beats. The beat is the deck's (fairweatherDeck.js: the song's own clock);
+// with no deck, a clock of the same speed.
+function beatsOf(box, density) {
+  let own = 0;
+  let n = -1;
+  return (dt) => {
+    const deck = box.deck;
+    if (deck) {
+      if (!deck.beatTick) return null;
+      n++;
+      return { n, one: deck.one, dance: deck.rule.dance };
+    }
+    own += dt / density;
+    if (own < BEAT) return null;
+    own -= BEAT;
+    n++;
+    return { n, one: n % 3 === 0, dance: false };
+  };
+}
+const dancing = (box) => Boolean(box.deck?.rule.dance);
+
+// A turn in steps, on the beat: how far round something has gone `c` seconds after it started,
+// turning `notch` on each beat from beat `from` (a quick glide, then still till the next),
+// standing `stall` beats at beat `turnAt` (or each of a list of them), then going back. It is a sum over the song's own
+// beat grid (`c0`, the deck's clock when it started), so it's a function of time alone: the
+// dodging bot's copies, run on ahead, know where it will be, as a player counting does.
+function stepTurn({ c0, notch, from = 0, turnAt, stall = 2, glide = 0.09 }) {
+  const b0 = Math.floor(c0 / BEAT + 1e-6);
+  const turns = [turnAt].flat();
+  const after = [0];
+  for (let i = 1; i < 64; i++) {
+    const passed = turns.filter((t) => i >= t).length;
+    const standing = turns.some((t) => i >= t && i < t + stall);
+    after.push(after[i - 1] + (i < from || standing ? 0 : passed % 2 ? -notch : notch));
+  }
+  const at = (k) => after[Math.min(Math.max(k, 0), after.length - 1)];
+  return (c) => {
+    const b = (c0 + c) / BEAT;
+    const whole = Math.floor(b + 1e-6);
+    const k = whole - b0;
+    const into = (b - whole) * BEAT;
+    return at(k - 1) + (at(k) - at(k - 1)) * Math.min(1, into / glide);
+  };
+}
+
+// A horse on the carousel and a ribbon on the maypole: they move themselves along `path(c, i)`
+// (c: seconds since they came), rather than being moved by the attack.
+class Rider extends Shot {
+  constructor(opts, path, i) {
+    super(opts);
+    Object.assign(this, { path, i, c: 0, drives: true });
+    Object.assign(this, path(0, i));
+  }
+
+  update(dt, box) {
+    super.update(dt, box);
+    this.c += dt;
+    const p = this.path(this.c, this.i);
+    this.x = p.x;
+    this.y = p.y;
+  }
+}
+class Spoke extends Line {
+  constructor(opts, path, i) {
+    super(opts);
+    Object.assign(this, { path, i, c: 0, drives: true });
+    Object.assign(this, path(0, i));
+  }
+
+  update(dt, box) {
+    super.update(dt, box);
+    this.c += dt;
+    Object.assign(this, this.path(this.c, this.i));
+  }
+}
+
+// Every attack runs the length of her turn (about eleven and a half seconds, a bar a
+// second), so each has time to show off the list or the dance it's played under.
+const LONG = 11.5;
+const LAST_BEAT = 31;
 
 export const FAIRWEATHER_ATTACKS = {
-  // "Sea foam": waves of foam roll in from her side, bobbing. Every wave has a two-slot gap that
-  // is never where you are, and the next wave's gap is a step or two from the last. Bubbles rise
-  // off the floor between them.
+  // "Sea foam": waves of foam come over the high rail and roll downhill, bobbing (when the deck
+  // rolls over, they come from the other side; on a level deck, from her side). Every wave has
+  // a two-slot gap that is never where you are, and the next wave's gap is a step or two from
+  // the last. A wave every other beat; spray rises off the floor on every beat, most of it
+  // where the water has run, at the low side.
   fwFoam(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = T(0.3);
-    let nextBubble = T(0.6);
+    const beat = beatsOf(box, density);
     let waves = 0;
     const slots = 7;
     return {
-      duration: 7.6,
+      duration: LONG,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && waves < 7 && t < T(6.6)) {
+        const b = beat(dt);
+        if (!b || b.n > LAST_BEAT) return;
+        if (b.n % 2 === 0 && b.n <= 28) {
           waves++;
-          next = t + T(0.95);
           const step = (box.h - 12) / (slots - 1);
           const mine = clamp(Math.round((soul.y - box.y - 6) / step), 0, slots - 1);
           let g = clamp(mine + (Math.random() < 0.5 ? -1 : 1) * (1 + Math.floor(rand(0, 2))), 0, slots - 2);
           if (g === mine || g + 1 === mine) g = mine > 2 ? mine - 2 : mine + 1;
+          const slope = box.deck ? box.deck.slopeAt(box.deck.tt + 0.8) : 0;
+          const dir = slope > 0.1 ? 1 : -1;
+          const from = dir > 0 ? box.x - 9 : box.x + box.w + 9;
           for (let i = 0; i < slots; i++) {
             if (i === g || i === g + 1) continue;
             const y = box.y + 6 + i * step;
-            bullets.push(new Shot({ x: box.x + box.w + 9, y, vx: -40, warn: 0.8, life: 5, art: 'fwFoam', wobble: { amplitude: 5, frequency: 3 + waves * 0.6 } }));
-            bullets.push(new Shot({ x: box.x + box.w - 7, y, harmless: true, warn: 0.85, life: 0, art: 'fwFoam' }));
+            bullets.push(new Shot({ x: from, y, vx: 56 * dir, warn: 0.8, life: 5, art: 'fwFoam', wobble: { amplitude: 5, frequency: 3 + (waves % 7) * 0.6 } }));
+            bullets.push(new Shot({ x: from + 16 * dir, y, harmless: true, warn: 0.85, life: 0, art: 'fwFoam' }));
           }
         }
-        if (t >= nextBubble && t < T(6.2)) {
-          nextBubble = t + T(rand(0.28, 0.5));
-          bullets.push(new Shot({ x: rand(box.x + 6, box.x + box.w - 6), y: box.y + box.h + 4, vy: -36, warn: 0.5, life: 5, art: 'fwBubble' }));
+        // Spray off the water at the low side: most bubbles come up there, so the low wall is
+        // no place to lean.
+        if (b.n <= 29) {
+          const slope = box.deck ? box.deck.slopeAt(box.deck.tt) : 0;
+          for (let i = 0; i < 2; i++) {
+            const lowSide = Math.abs(slope) > 0.2 && Math.random() < 0.7;
+            const x = lowSide ? (slope > 0 ? rand(box.x + box.w * 0.6, box.x + box.w - 4) : rand(box.x + 4, box.x + box.w * 0.4)) : rand(box.x + 6, box.x + box.w - 6);
+            bullets.push(new Shot({ x, y: box.y + box.h + 4, vy: -rand(40, 52), warn: 0.5, life: 5, art: 'fwBubble' }));
+          }
         }
       },
     };
   },
 
   // "Whittling": she snaps splinters off her own hand and flicks them at you in fans that leave
-  // the line to you empty, with a few dropping out of the dark above each time.
+  // the line to you empty, with a few dropping out of the dark above each time. Every other beat
+  // on the deck; in the waltz, on each ONE, every fan open where you stand, so you hold your
+  // ground on ONE and step out from under the drops after.
   fwSplinters(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
+    const beat = beatsOf(box, density);
     let n = 0;
-    const cues = [0.3, 0.95, 1.6, 2.25, 2.9, 3.55, 4.2, 4.85, 5.5, 6.15];
     return {
-      duration: 7.6,
+      duration: LONG,
       update: (dt, bullets, soul) => {
-        t += dt;
-        while (n < cues.length && t >= T(cues[n])) {
-          const ox = box.x + box.w - 3;
-          const oy = clamp(soul.y + rand(-22, 22), box.y + 8, box.y + box.h - 8);
-          const aim = Math.atan2(soul.y - oy, soul.x - ox);
-          const offs = n % 2 ? [-0.66, -0.44, -0.22, 0.22, 0.44, 0.66] : [-0.5, -0.25, 0, 0.25, 0.5];
-          for (const o of offs) {
-            bullets.push(new Shot({ x: ox, y: oy, vx: Math.cos(aim + o) * 100, vy: Math.sin(aim + o) * 100, warn: 0.55, life: 3, art: 'fwSplinter', angle: aim + o }));
-          }
-          // A pair out of the dark overhead, off to the side of you.
-          for (const side of [-1, 1]) {
-            const x = clamp(soul.x + side * rand(8, 26), box.x + 5, box.x + box.w - 5);
-            bullets.push(new Shot({ x, y: box.y - 2, vx: 0, vy: 64, warn: 0.8, life: 3, art: 'fwSplinter', angle: Math.PI / 2 }));
-          }
+        const b = beat(dt);
+        if (!b || b.n < 1 || b.n > 30) return;
+        if (b.dance ? !b.one : b.n % 2 === 1) return;
+        const ox = box.x + box.w - 3;
+        const oy = clamp(soul.y + rand(-22, 22), box.y + 8, box.y + box.h - 8);
+        const aim = Math.atan2(soul.y - oy, soul.x - ox);
+        const offs = n % 2 || b.dance ? [-0.66, -0.44, -0.22, 0.22, 0.44, 0.66] : [-0.5, -0.25, 0, 0.25, 0.5];
+        for (const o of offs) {
+          bullets.push(new Shot({ x: ox, y: oy, vx: Math.cos(aim + o) * 100, vy: Math.sin(aim + o) * 100, warn: 0.55, life: 3, art: 'fwSplinter', angle: aim + o }));
+        }
+        // A pair out of the dark overhead, off to the side of you.
+        for (const side of [-1, 1]) {
+          const x = clamp(soul.x + side * rand(8, 26), box.x + 5, box.x + box.w - 5);
+          bullets.push(new Shot({ x, y: box.y - 2, vx: 0, vy: 64, warn: 0.8, life: 3, art: 'fwSplinter', angle: Math.PI / 2 }));
+        }
+        if (b.dance) {
+          // In the waltz, one straight down on you, late: the step after ONE. And one up off
+          // the floor beside you.
+          bullets.push(new Shot({ x: clamp(soul.x, box.x + 5, box.x + box.w - 5), y: box.y - 2, vx: 0, vy: 70, warn: 1.0, life: 3, art: 'fwSplinter', angle: Math.PI / 2 }));
+          const ux = clamp(soul.x + (Math.random() < 0.5 ? -1 : 1) * rand(10, 18), box.x + 5, box.x + box.w - 5);
+          bullets.push(new Shot({ x: ux, y: box.y + box.h + 2, vx: 0, vy: -70, warn: 0.9, life: 3, art: 'fwSplinter', angle: -Math.PI / 2 }));
+        } else {
           // And a trio from the top or bottom edge, aimed where you are heading.
           const fromTop = n % 2 === 0;
           const ex = clamp(soul.x + rand(-30, 30), box.x + 8, box.x + box.w - 8);
@@ -328,64 +427,77 @@ export const FAIRWEATHER_ATTACKS = {
           for (const o of [-0.3, 0, 0.3]) {
             bullets.push(new Shot({ x: ex, y: ey, vx: Math.cos(ea + o) * 92, vy: Math.sin(ea + o) * 92, warn: 0.6, life: 3, art: 'fwSplinter', angle: ea + o }));
           }
-          n++;
         }
+        n++;
       },
     };
   },
 
   // "Laughter": ha, ha, ha ... HA. Each laugh is a ring going out from her, solid in one arc: the
   // first where you are, the next a step ahead of where you are going, the third behind. Then a
-  // rest, long enough to think it is over, and the last one comes late.
+  // rest, long enough to think it is over, and the last one comes late and big. Twelve beats
+  // round: ha ha ha, rest, ha ha, rest, HA. In the waltz she laughs on fewer beats, the
+  // arcs narrower and warned longer, so a step or two takes you out of them.
   fwLaugh(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    const cues = [0.3, 0.72, 1.14, 2.3, 2.72, 3.14, 3.56, 4.9, 5.32, 6.2];
+    const beat = beatsOf(box, density);
     let done = 0;
     const tx = box.x + box.w + 8;
     const heading = { x: 0, y: 0 };
     const seen = { x: null, y: null };
+    const ON = [0, 1, 2, 6, 7, 10];
+    const ON_DANCE = [0, 2, 4, 6, 8, 10];
     return {
-      duration: 7.6,
+      duration: LONG,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (seen.x !== null && dt > 0) {
-          heading.x = heading.x * 0.85 + ((soul.x - seen.x) / (dt / density)) * 0.15;
-          heading.y = heading.y * 0.85 + ((soul.y - seen.y) / (dt / density)) * 0.15;
+        const real = dt / density;
+        if (seen.x !== null && real > 0) {
+          heading.x = heading.x * 0.85 + ((soul.x - seen.x) / real) * 0.15;
+          heading.y = heading.y * 0.85 + ((soul.y - seen.y) / real) * 0.15;
         }
         seen.x = soul.x;
         seen.y = soul.y;
-        while (done < cues.length && t >= T(cues[done])) {
-          const lead = done % 3 === 0 ? 0 : done % 3 === 1 ? 0.8 : -0.6;
-          const aimY = clamp(soul.y + heading.y * lead, box.y + 4, box.y + box.h - 4);
-          const aimX = clamp(soul.x + heading.x * lead, box.x + 4, box.x + box.w - 4);
-          const ty = box.y + (done % 2 ? 14 : box.h - 14) + rand(-6, 6);
-          const a = Math.atan2(aimY - ty, aimX - tx);
-          const late = done === cues.length - 1;
-          bullets.push(new Laugh({ x: tx, y: ty, centre: a, half: late ? 0.75 : 0.52, grow: late ? 78 : 70, warn: late ? 0.8 : 0.55, thick: late ? 4.4 : 3.4 }));
-          bullets.push(new Shot({ x: tx - 14, y: ty - 8, vx: -4, vy: -14, harmless: true, warn: 0, life: 0.7, art: 'fwHa' }));
-          done++;
-        }
+        const b = beat(dt);
+        if (!b || b.n < 1 || b.n > 30) return;
+        const k = (b.n - 1) % 12;
+        if (!(b.dance ? ON_DANCE : ON).includes(k)) return;
+        const late = k === 10;
+        const lead = b.dance ? 0 : done % 3 === 0 ? 0 : done % 3 === 1 ? 0.8 : -0.6;
+        const aimY = clamp(soul.y + heading.y * lead, box.y + 4, box.y + box.h - 4);
+        const aimX = clamp(soul.x + heading.x * lead, box.x + 4, box.x + box.w - 4);
+        const ty = box.y + (done % 2 ? 14 : box.h - 14) + rand(-6, 6);
+        const a = Math.atan2(aimY - ty, aimX - tx);
+        const half = b.dance ? (late ? 0.52 : 0.44) : late ? 0.7 : 0.48;
+        const warn = b.dance ? 0.68 : late ? 0.8 : 0.55;
+        bullets.push(new Laugh({ x: tx, y: ty, centre: a, half, grow: late ? 78 : 70, warn, thick: late ? 4.4 : 3.4 }));
+        bullets.push(new Shot({ x: tx - 14, y: ty - 8, vx: -4, vy: -14, harmless: true, warn: 0, life: 0.7, art: 'fwHa' }));
+        done++;
       },
     };
   },
 
   // "Falling stars": stars fall out of the dark in columns, each flashing where it will land
-  // (with a dotted line down to the floor), and break into glass. The box rocks the whole time.
+  // (with a dotted line down to the floor), and break into glass. On the deck, a volley every
+  // other beat; in the waltz one a bar, on ONE, so the long step takes you out from under it.
   fwStars(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
+    const beat = beatsOf(box, density);
     let n = 0;
-    const cues = [0.3, 1.05, 1.8, 2.55, 3.3, 4.05, 4.8, 5.55];
     const falling = [];
     return {
-      duration: 7.6,
+      duration: LONG,
       update: (dt, bullets, soul) => {
-        const real = dt / density;
-        t += dt;
-        const now = t / density;
-        box.tilt = 0.11 * Math.min(1, now / 0.8) * Math.sin(now * 2.1);
-        while (n < cues.length && t >= T(cues[n])) {
+        const b = beat(dt);
+        // (In the waltz, two more on three, either side of you: the step on ONE has to choose.)
+        if (b && b.dance && b.n % 3 === 2 && b.n <= 28) {
+          for (const side of [-1, 1]) {
+            const x = clamp(soul.x + side * rand(12, 22), box.x + 6, box.x + box.w - 6);
+            const s = new Shot({ x, y: box.y + 2, vx: 0, vy: 30, gravity: 170, warn: 0.75, life: 6, art: 'fwStar' });
+            s.waltz = true;
+            bullets.push(s);
+            bullets.push(new Guide({ x1: x, y1: box.y, x2: x, y2: box.y + box.h, warn: 0.75 }));
+            falling.push(s);
+          }
+        }
+        if (b && b.n >= 1 && b.n <= 29 && (b.dance ? b.one : b.n % 2 === 1)) {
           const xs = [clamp(soul.x + rand(-5, 5), box.x + 6, box.x + box.w - 6)];
           for (let tries = 0; xs.length < 3 && tries < 40; tries++) {
             const x = rand(box.x + 6, box.x + box.w - 6);
@@ -393,6 +505,7 @@ export const FAIRWEATHER_ATTACKS = {
           }
           for (const x of xs) {
             const s = new Shot({ x, y: box.y + 2, vx: 0, vy: 30, gravity: 170, warn: 0.75, life: 6, art: 'fwStar' });
+            s.waltz = b.dance;
             bullets.push(s);
             bullets.push(new Guide({ x1: x, y1: box.y, x2: x, y2: box.y + box.h, warn: 0.75 }));
             falling.push(s);
@@ -404,32 +517,31 @@ export const FAIRWEATHER_ATTACKS = {
           s.done = true;
           s.life = 0;
           s.age = 99;
-          for (const k of [-1.3, 0, 1.3]) {
-            bullets.push(new Shot({ x: s.x, y: box.y + box.h - 5, vx: k * 30, vy: -50, gravity: 96, warn: 0.12, life: 1.1, art: 'fwShard' }));
+          // (In the waltz it only chips: two low splinters of glass, slow enough to step over.)
+          for (const k of s.waltz ? [-1, 1] : [-1.3, 0, 1.3]) {
+            bullets.push(new Shot({ x: s.x, y: box.y + box.h - 5, vx: k * (s.waltz ? 16 : 30), vy: s.waltz ? -26 : -50, gravity: 96, warn: 0.12, life: s.waltz ? 0.8 : 1.1, art: 'fwShard' }));
           }
         }
-        void real;
       },
     };
   },
 
   // "Comets": slow crystal comets come after you from her side, a tail of pink behind each, and
-  // at the end of their run they burst into a ring of glass (it blinks first).
+  // at the end of their run they burst into a ring of glass (it blinks first). Every other beat
+  // on the deck; in the waltz, on ONE and three, turning after you more lazily, so the
+  // step that dodges it is the one you take as it comes.
   fwComet(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let n = 0;
-    const cues = [0.3, 1.0, 1.7, 2.4, 3.1, 3.8, 4.5];
+    const beat = beatsOf(box, density);
     const comets = [];
     return {
-      duration: 7.8,
+      duration: LONG,
       update: (dt, bullets, soul) => {
-        t += dt;
-        while (n < cues.length && t >= T(cues[n])) {
-          const c = new Shot({ x: box.x + box.w + 6, y: clamp(soul.y + rand(-26, 26), box.y + 8, box.y + box.h - 8), vx: -58, vy: 0, warn: 0.5, life: 3.2, art: 'fwComet', homing: { target: soul, turn: 1.7 } });
+        const b = beat(dt);
+        if (b && b.n >= 1 && b.n <= 27 && (b.dance ? b.n % 3 !== 1 : b.n % 2 === 1)) {
+          const c = new Shot({ x: box.x + box.w + 6, y: clamp(soul.y + rand(-26, 26), box.y + 8, box.y + box.h - 8), vx: b.dance ? -62 : -60, vy: 0, warn: 0.5, life: 3.2, art: 'fwComet', homing: { target: soul, turn: b.dance ? 1.3 : 1.8 } });
+          c.ring = b.dance ? 9 : 11;
           bullets.push(c);
           comets.push(c);
-          n++;
         }
         for (const c of comets) {
           if (c.done || c.age < c.warn + 2.0) continue;
@@ -437,8 +549,8 @@ export const FAIRWEATHER_ATTACKS = {
           c.life = 0;
           c.age = 99;
           const spin = Math.random() * Math.PI;
-          for (let i = 0; i < 11; i++) {
-            const a = spin + (i / 11) * TAU;
+          for (let i = 0; i < c.ring; i++) {
+            const a = spin + (i / c.ring) * TAU;
             bullets.push(new Shot({ x: c.x, y: c.y, vx: Math.cos(a) * 46, vy: Math.sin(a) * 46, warn: 0.25, life: 1.6, art: 'fwShard' }));
           }
         }
@@ -447,110 +559,130 @@ export const FAIRWEATHER_ATTACKS = {
   },
 
   // "Round and round": painted horses ride round the box on gilded poles that rise and fall, so
-  // the ring breathes in and out. Halfway, the carousel slows right down, nearly stops, and
-  // goes the other way.
+  // the ring breathes in and out. The carousel turns a notch on every beat of her waltz (you can
+  // count it), and halfway it stands for a bar and goes the other way. On each ONE a horse breaks
+  // off the ring and gallops at where you are (it blinks first); in the waltz, one every beat,
+  // slower, so each step is a step out of a horse's way.
   fwCarousel(box, density, { Shot }) {
+    const beat = beatsOf(box, density);
     const N = 13;
     const cx = box.x + box.w / 2;
     const cy = box.y + box.h / 2;
-    let tr = 0;
-    let angle = Math.random() * TAU;
-    let nextBreak = 1.4;
     let breaks = 0;
     const horses = [];
-    const place = (i, time) => {
-      const r = 24 + 17 * Math.sin(1.9 * time + i * 0.9);
-      const a = angle + (i / N) * TAU;
-      return { x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r * 0.92 };
-    };
     return {
-      duration: 7.6,
+      duration: LONG,
       update: (dt, bullets, soul) => {
-        const real = dt / density;
-        tr += real;
         if (!horses.length) {
+          const start = Math.random() * TAU;
+          const turn = stepTurn({ c0: box.deck?.clock ?? 0, notch: 0.26, from: 1, turnAt: 15 });
+          const path = (c, i) => {
+            const r = 25 + 18 * Math.sin(2.1 * c + i * 0.9);
+            const a = start + turn(c) + (i / N) * TAU;
+            return { x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r * 0.92 };
+          };
           for (let i = 0; i < N; i++) {
-            const at = place(i, 0);
-            const s = new Shot({ x: at.x, y: at.y, warn: 0.9, life: 6.4, art: 'fwHorse' });
+            const s = new Rider({ warn: 0.9, life: LONG - 0.8, art: 'fwHorse' }, path, i);
             horses.push(s);
             bullets.push(s);
           }
         }
-        angle += turning(tr, 3.5) * 2.2 * real;
-        // A horse breaks off the ring now and then and gallops at where you are (it blinks first).
-        if (tr >= nextBreak && tr < 6.2) {
-          nextBreak = tr + 0.7;
+        const b = beat(dt);
+        // (On ONE; in the waltz, on every beat, more slowly.)
+        if (b && (b.one || b.dance) && b.n >= 3 && b.n <= 30) {
           const h = horses[(breaks++ * 5) % N];
           const aim = Math.atan2(soul.y - h.y, soul.x - h.x);
-          bullets.push(new Shot({ x: h.x, y: h.y, vx: Math.cos(aim) * 88, vy: Math.sin(aim) * 88, warn: 0.45, life: 2, art: 'fwHorse' }));
+          const v = b.dance ? 72 : 88;
+          bullets.push(new Shot({ x: h.x, y: h.y, vx: Math.cos(aim) * v, vy: Math.sin(aim) * v, warn: b.dance ? 0.66 : 0.45, life: 2.4, art: 'fwHorse' }));
         }
-        horses.forEach((h, i) => {
-          const at = place(i, tr);
-          h.x = at.x;
-          h.y = at.y;
-        });
       },
     };
   },
 
-  // "The maypole": three gilded ribbons turn from a hub that wanders about the box, like spokes,
-  // flinging a bow off the end now and then. They slow, stall and turn back once.
+  // "The maypole": gilded ribbons turn from a hub that wanders about the box, like spokes, a
+  // notch on every beat (they stand still between), flinging a bow off the hub each beat. Twice
+  // they stand a bar, and turn back. In the waltz they turn a smaller notch, so you can step round
+  // after them.
   fwRibbons(box, density, { Shot, rand }) {
+    const beat = beatsOf(box, density);
     const cx = box.x + box.w / 2;
     const cy = box.y + box.h / 2;
-    let tr = 0;
-    let angle = Math.random() * TAU;
     const spokes = [];
-    let nextBow = 1.6;
+    let hub = null;
     return {
-      duration: 7.6,
+      duration: LONG,
       update: (dt, bullets) => {
-        const real = dt / density;
-        tr += real;
-        const hx = cx + 14 * Math.sin(tr * 1.3);
-        const hy = cy + 13 * Math.cos(tr * 1.0);
         if (!spokes.length) {
-          for (let i = 0; i < 4; i++) {
-            const l = new Line({ x: hx, y: hy, angle: 0, length: 62, thickness: 4, warn: 1.0, life: 6.2, color: '#e8c060', glow: '#c03a48' });
+          const waltz = dancing(box);
+          const count = 4;
+          const start = Math.random() * TAU;
+          const turn = stepTurn({ c0: box.deck?.clock ?? 0, notch: waltz ? 0.48 : 0.56, from: 3, turnAt: [13, 23], stall: 3 });
+          hub = (c) => ({ x: cx + 15 * Math.sin(c * 1.2), y: cy + 14 * Math.cos(c * 0.95) });
+          const path = (c, i) => ({ ...hub(c), angle: start + turn(c) + (i / count) * TAU });
+          for (let i = 0; i < count; i++) {
+            const l = new Spoke({ x: cx, y: cy, angle: 0, length: 62, thickness: 4, warn: 1.0, life: LONG - 1.3, color: '#e8c060', glow: '#c03a48' }, path, i);
             spokes.push(l);
             bullets.push(l);
           }
         }
-        angle += turning(tr, 3.9) * (1.4 + 0.4 * Math.sin(tr * 1.9)) * real;
-        spokes.forEach((l, i) => {
-          l.x = hx;
-          l.y = hy;
-          l.angle = angle + (i / 4) * TAU;
-        });
-        if (tr >= nextBow && tr < 6) {
-          nextBow = tr + 0.22;
+        const b = beat(dt);
+        if (b && b.n >= 4 && b.n <= 30) {
+          const at = hub(spokes[0].c);
           const a = rand(0, TAU);
-          bullets.push(new Shot({ x: hx, y: hy, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, warn: 0.4, life: 2.2, art: 'fwBow' }));
+          bullets.push(new Shot({ x: at.x, y: at.y, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, warn: 0.4, life: 2.2, art: 'fwBow' }));
         }
       },
     };
   },
 
   // "Masks": gilt laughing masks on sticks come bouncing into the box from her side, wall to wall,
-  // with star-dust spilling off them (harmless, only to look glad).
-  fwMasks(box, density, { Shot, rand }) {
+  // with star-dust spilling off them (harmless, only to look glad). On every ONE one of them
+  // turns its grin on you and comes. In the waltz they slow to a walk, so your steps can keep
+  // out of their way.
+  fwMasks(box, density, { Shot, rand, second = false }) {
+    const beat = beatsOf(box, density);
     let t = 0;
-    let started = false;
+    const masks = [];
     const T = (s) => s * density;
     let nextDust = 0;
     return {
-      duration: 7.4,
-      update: (dt, bullets) => {
+      duration: LONG - 0.2,
+      update: (dt, bullets, soul) => {
         t += dt;
-        if (!started) {
-          started = true;
-          for (let i = 0; i < 8; i++) {
+        if (!masks.length) {
+          const count = second ? 5 : 10;
+          for (let i = 0; i < count; i++) {
             const a = Math.PI + rand(-1.0, 1.0);
-            const sp = rand(52, 66);
-            bullets.push(new Shot({ x: box.x + box.w - 9, y: box.y + 8 + i * ((box.h - 16) / 7), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, warn: 0.9, life: 6.2, art: 'fwMask', bounce: true }));
+            const sp = rand(58, 72);
+            const m = new Shot({ x: box.x + box.w - 9, y: box.y + 8 + i * ((box.h - 16) / (count - 1)), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, warn: 0.9, life: LONG - 1.2, art: 'fwMask', bounce: true });
+            masks.push(m);
+            bullets.push(m);
           }
         }
-        if (t >= nextDust && t < T(6.4)) {
+        // Their speed as the rules stand (read once they're flying: the fight's `speed` is in it).
+        for (const m of masks) {
+          const v = Math.hypot(m.vx, m.vy);
+          if (!v) continue;
+          m.top ??= v;
+          const want = m.top * (dancing(box) ? 0.6 : 1);
+          const k = v + (want - v) * Math.min(1, (dt / density) * 3);
+          m.vx *= k / v;
+          m.vy *= k / v;
+        }
+        // On each ONE one of them turns to look at you, and comes (it flashes as it turns).
+        const b = beat(dt);
+        if (b && b.one && b.n >= 3 && !second) {
+          const live = masks.filter((m) => m.age > m.warn && m.age < m.warn + m.life - 1);
+          const m = live[(b.n * 7) % Math.max(1, live.length)];
+          if (m) {
+            const v = Math.hypot(m.vx, m.vy);
+            const a = Math.atan2(soul.y - m.y, soul.x - m.x);
+            m.vx = Math.cos(a) * v;
+            m.vy = Math.sin(a) * v;
+            bullets.push(new Shot({ x: m.x, y: m.y - 8, vx: 0, vy: -16, harmless: true, life: 0.6, art: 'fwHa' }));
+          }
+        }
+        if (t >= nextDust && t < T(LONG - 1.2)) {
           nextDust = t + T(0.2);
           bullets.push(new Shot({ x: rand(box.x + 4, box.x + box.w - 4), y: box.y + box.h + 2, vy: -rand(14, 24), vx: rand(-6, 6), harmless: true, life: 4, art: 'fwDust' }));
         }
@@ -559,7 +691,8 @@ export const FAIRWEATHER_ATTACKS = {
   },
 };
 
-// CHAOS: two of the others at once, the second a beat late. (The box rocks and spins on top.)
+// CHAOS: two of the others at once, the second two seconds late and lighter (fewer masks;
+// otherwise every other volley of it left out). The deck's rules swap on her laugh on top.
 const MIXES = [
   ['fwMasks', 'fwFoam'],
   ['fwLaugh', 'fwMasks'],
@@ -571,15 +704,20 @@ const MIXES = [
 FAIRWEATHER_ATTACKS.fwChaos = (box, density, tools) => {
   const [a, b] = MIXES[Math.floor(Math.random() * MIXES.length)];
   const first = FAIRWEATHER_ATTACKS[a](box, density, tools);
-  const second = FAIRWEATHER_ATTACKS[b](box, density, tools);
+  const second = FAIRWEATHER_ATTACKS[b](box, density, { ...tools, second: true });
   let t = 0;
-  const delay = 2.0 * density;
+  let volleys = 0;
+  const delay = 2 * density;
   return {
-    duration: Math.min(9, Math.max(first.duration, second.duration + 0.9)),
+    duration: Math.min(12.5, Math.max(first.duration, second.duration + 0.9)),
     update: (dt, bullets, soul) => {
       t += dt;
       first.update(dt, bullets, soul);
-      if (t >= delay) second.update(dt, bullets, soul);
+      if (t < delay) return;
+      const before = bullets.length;
+      second.update(dt, bullets, soul);
+      // (Its masks, all at once, are its first volley: always kept.)
+      if (bullets.length > before && volleys++ % 2 === 1 && b !== 'fwMasks') bullets.length = before;
     },
   };
 };

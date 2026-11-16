@@ -58,9 +58,14 @@ export const GLIMMER_VUG = {
     { sprite: 'crystal_violet_s', x: 5, y: 4, text: 'vug_crystal' },
     { sprite: 'crystal_pool', x: 9, y: 8, text: 'vug_pool', animation: 'crystal_pool', speed: 0.5 },
     { sprite: 'glowcap_small', x: 4, y: 8, text: 'vug_glowcap' },
-    { sprite: 'glow_moss', x: 7, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 5, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 7, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 5, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'gold_pouch', x: 10, y: 4, text: 'vug_purse', gold: 120, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'col_token', x: 2, y: 6, walkable: true, flat: true, gives: 'tally_candle', taken: { gone: true } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'gl_geode_half', x: 4, y: 7, text: 'lp_vug_geode' },
+    { sprite: 'gl_glowbug', x: 10, y: 8, text: 'gp_bug', animation: 'gl_glowbug', speed: 0.5 },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', x: 'vug_wall', O: 'cave_cluster', J: 'cave_spires', '^': 'cave_spike',

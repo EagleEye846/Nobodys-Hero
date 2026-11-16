@@ -1,0 +1,92 @@
+# BLIND GROTTO CRAB
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/blind_crab.js.
+
+[intro]
+The big white rock beside you unfolds, and unfolds, and keeps on unfolding. A BLIND GROTTO CRAB! It has no eyes at all. Its feelers have already found you.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+BLIND GROTTO CRAB's feelers fan out and wave, reading the air. They are reading you. They seem to find you interesting, and slightly damp.
+
+BLIND GROTTO CRAB taps the floor with one claw. Tap. Tap. It listens for the answer. The cave answers, a bit late.
+
+A feeler touches your sleeve, lets go, and touches it again, as though checking it hadn't changed.
+
+BLIND GROTTO CRAB turns its smooth, eyeless face to the left of you, and then, politely, to the right of you.
+
+Smells like a wet cave and a very clean shell.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+BLIND GROTTO CRAB's feelers droop, one at a time. It has stopped following your footsteps and is just listening to them.
+
+[flavor: spareable]
+BLIND GROTTO CRAB has folded its claws. Its feelers rest lightly on your boot, the way you'd rest a hand on a door to feel if the room beyond was warm.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Tick
+tick.
+
+Found
+you.
+
+Where
+you
+were.
+
+Click.
+
+Mind the
+roof.
+
+...There
+you are.
+
+Pearl?
+
+Tap.
+Tap.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/blind_crab.js.
+[talk: Inspect]
+BLIND GROTTO CRAB - HP 8400
+A huge white cave crab with no eyes. Its feelers follow the path you walked a moment ago, so keep moving and don't double back over yourself. It spits pearls, and it knocks the roof down: watch for the shadows.
+
+[talk: Stand perfectly still]
+You stand perfectly still. A feeler comes in, touches your sleeve, your hand, the very end of your nose, and goes away satisfied. It was only asking who you were. BLIND GROTTO CRAB does a small, pleased click.
+
+[talk: Tap a slow rhythm]
+You tap a slow rhythm on the rock. The feelers all turn to it, one by one, like flowers to a window. BLIND GROTTO CRAB taps it back, a little off. You fix it. It copies you. Neither of you hurries.
+
+[talk: Offer your hand, palm up]
+You hold out your hand, palm up, and wait. A single feeler lowers itself onto it. Then a pearl, small and cold, is set in your palm, and taken back, and set there again. It is the nicest thing anyone has done in this cave.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+BLIND GROTTO CRAB folds in on itself with a long, hollow click. Its feelers lie down, one by one. The cave is much quieter without something listening to it.
+
+[pacified]
+BLIND GROTTO CRAB gathers its feelers in, taps the floor twice, and sidles off into the dark with a whole lot of dignity. It leaves a pearl behind, in case you came back.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that she is standing exactly where she was a moment ago, and that she'd like that noted as a decision. {foe} touches her umbrella, and finds it, and withdraws. It seems satisfied.
+
+Ves says she's never been tapped in time before and isn't sure of the etiquette. {foe} taps. She taps back, dry as a biscuit. {foe} appears to find her funny, which she says she'll allow.
+
+Ves holds out her hand to {foe} and says, quite coolly, that this doesn't mean anything. {foe} puts a pearl in it. She looks at it for longer than she'd like to admit.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} he can stand still for ages, ages, he is the best at it. He lasts nine seconds. {foe} waits all nine, and gives him a click like a small round of applause.
+
+Bramble asks {foe} if it can hear him tapping. {foe} says yes, in clicks. He asks if it can hear his heart. It can. He says that is the best thing he has ever heard about himself.
+
+Bramble tells {foe} that it is the biggest crab he has ever met and also his new favourite. {foe} puts a pearl in his hand. He says he will never wash this hand again, and then he has to, in a minute.

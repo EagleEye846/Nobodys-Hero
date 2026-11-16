@@ -1,0 +1,15 @@
+# The square's sweeper: a marmot with a long broom. Part of the life pass, round 2. (draft)
+
+[first]
+A marmot with a long-handled broom, sweeping a patch of cobbles that is already clean.
+
+The leaves come in through the roof. Always have. It isn't a job. It's a conversation. They say 'here we are' and I say 'no you're not'.
+
+[repeat]
+Sweep, sweep. They'll be back by supper. They always are.
+
+[first after ves_on_her_feet]
+Your friend's walking! Good. Walking's what the cobbles are for. I only sweep them so people can.
+
+[repeat after ves_on_her_feet]
+Mind the leaf by your boot. It's going to say it's been here longer than you.

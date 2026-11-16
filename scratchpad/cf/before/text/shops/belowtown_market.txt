@@ -1,0 +1,100 @@
+# PEBBLE'S STALL: Pebble, a market shrew in Belowtown, with a tray of
+# toadstools and a nose that never stops. Fast-talking, nosy, loves a
+# bargain and loves gossip more. She's heard everything that's ever
+# happened in Belowtown, mostly twice. She sells what grows and gets baked
+# down here, and the cloaks the shrews weave from moss.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Oh! New faces! Surface faces, by the colour. Pebble. Pasties, honey, toffee, cloaks. Touch the toadstools and you buy them.
+
+[menu_prompt]
+Anything else? Pebble's got ears. Pebble's got a lot of ears, really, on account of the gossip.
+
+[buy_prompt]
+Hot pasties, glow-worm honey, frog toffee. Candles for the dark bits. And a cloak, woven by my aunties. They're particular.
+
+[sell_prompt]
+Selling! I buy anything. I'll find a use. Or a cousin.
+
+[talk_prompt]
+Talk? Pebble LOVES talk. Pull up a toadstool. Not that one. That one's for sale.
+
+[bought]
+Sold! Good choice. Pebble's aunties will be thrilled. They like to hear it's gone to a good home.
+
+[bought_item]
+Eat it while it's hot! Or warm. Or at all. It's good.
+
+[bought_skill]
+There! A fresh idea, sold by the pound. Pebble doesn't know how it works. Pebble doesn't ask.
+
+[skill_sold_out]
+That's the last one, dear. I've sold all the ideas. Come back after the next brainwave.
+
+[sold]
+Lovely! I'll put it out front. It'll draw a crowd. Or a cousin.
+
+[nothing_to_sell]
+Nothing to sell? Pebble is shocked. Pebble is also curious.
+
+[cant_sell]
+You're wearing that, dear. Take it off first, with C. Pebble doesn't buy things off people's backs. Aunties' rule.
+
+[owned]
+You've got one of those already. Two of a cloak is a lot of cloak. You'd rustle.
+
+[wont_fit]
+That's for your friend. Let her try it. Moss suits a sharp tongue.
+
+[too_poor]
+Oh dear, not enough. Pebble would love to, Pebble can't. Aunties' rule again. They have a lot of rules.
+
+[bought_stored]
+Bag's full! I've put it in the chest by the crystal. Pebble's tidy like that.
+
+[bag_full]
+Your bag's full and so's the chest! Eat something. Pebble recommends the pasty.
+
+[farewell]
+Off you go! Mind the steps, mind the drips, and mind the king. Not necessarily in that order.
+
+[talk: Belowtown]
+Oh, it's the best town there is, and the only one, so that helps. Everybody knows everybody, and everybody's cousin runs a stall. Pebble's got forty cousins. They're all in the market. Don't buy from them. Buy from Pebble.
+
+[talk: The king]
+King Peptup! The Resplendent! Oh, he's marvellous. He's so loud. He's never once dropped by for a pasty, which Pebble finds odd, but kings are busy. He wouldn't eat anything that's not on a plate with a crest, anyway.
+
+[talk: The Sunstone]
+It's gone dim, dearie. It used to be bright as noon down here. Now it's more of a tea-time. Everybody says it's nothing. Everybody says it in a very quiet voice.
+
+[talk: The Hero]
+Oh, that old song. The Hero came through, long ago, little thing, hardly said a word. Pebble's gran gave him a pasty. Some say he ate it. Gran said he kept it for later. Gran was always a bit sad about that.
+
+[talk: The Sunstone after the_light_goes_up]
+Did you SEE it, dearie? Bright as noon again, all at once. Pebble dropped a whole tray of pasties. Nobody's saying anything in a quiet voice now. They're all saying it very loudly.
+
+[talk: Belowtown after the_light_goes_up]
+Listen to it! Somebody's got a fiddle out, and somebody else is dancing who shouldn't be. Pebble's forty cousins have put their prices up. Don't buy from them. Buy from Pebble.
+
+[talk: Hobnail]
+The mole at the vent? Grumpy as a wet cat, and the best smith there is. Don't ask him anything. Bring him something shiny, and he'll tell you everything. In grunts.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[greeting 2]
+Back already! Pebble knew you would. Pebble's told everyone she knew. Pasty?
+
+# (draft)
+[greeting 3]
+You again! Lovely. Nine people asked after you this morning. Pebble told them all something different.
+
+# (draft)
+[greeting after the_kings_welcome]
+Off on the king's quest! Everybody's saying. Pebble said it first. Pasties for the road?
+
+# (draft)
+[greeting after the_light_goes_up]
+The light! You did the light! Pebble saw the whole thing. Well. Pebble heard it from someone who did. Same thing!

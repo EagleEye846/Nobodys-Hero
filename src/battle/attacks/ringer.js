@@ -312,7 +312,7 @@ export const RINGER_ATTACKS = {
       }
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         strike(dt, bullets, soul);
         for (const next of queued) {
@@ -353,7 +353,7 @@ export const RINGER_ATTACKS = {
       marks.push({ mark, t: 0.4 });
     }, { first: 1.0 });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         time += dt;
         trail.push({ t: time, x: soul.x, y: soul.y });
@@ -397,6 +397,6 @@ export const RINGER_ATTACKS = {
         }
       }
     }, { first: 0.1 });
-    return { duration: 6.5, update: (dt, bullets) => rig(dt, bullets) };
+    return { duration: 7, update: (dt, bullets) => rig(dt, bullets) };
   },
 };

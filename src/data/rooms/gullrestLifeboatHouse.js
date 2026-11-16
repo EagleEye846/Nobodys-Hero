@@ -88,6 +88,9 @@ export const GULLREST_LIFEBOAT_HOUSE = {
     { sprite: 'in_tins_crate', x: 16, y: 6, text: 'in_house_crate' },
     { sprite: 'in_sea_chest_small', x: 1, y: 8, text: 'in_house_chest' },
     { sprite: 'c5_oar_stuck', x: 1, y: 10, text: 'in_house_oar' },
+    // (life pass 2026-11-14)
+    { sprite: 'st_cat_loaf_b', x: 13, y: 6, text: 'life_g_cat', animation: 'st_cat_loaf_b', speed: 1.2 },
+    { sprite: 'st_broom_bucket', x: 4, y: 9, text: 'life_g_broom' },
   ],
   tileTexts: { h: 'house_wall' },
 

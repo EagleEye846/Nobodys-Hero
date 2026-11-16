@@ -3,6 +3,7 @@
 // and a note. Nothing hostile. Reached from the orchard's bush ring once
 // Bramble has pulled the lever.
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SECRET_SUNNY_BURROW = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'secret_sunny_burrow',
@@ -57,6 +58,8 @@ export const SECRET_SUNNY_BURROW = {
     { sprite: 'sign', x: 8, y: 8, text: 'burrow_note' },
     // The pantry's round door in the back wall (shut).
     { sprite: 'sy_round_door', x: 5, y: 2, text: 'burrow_pantry' },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.secret_sunny_burrow ?? []),
   ],
   tileTexts: { K: 'burrow_wall', k: 'burrow_roof' },
 

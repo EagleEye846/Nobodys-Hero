@@ -86,7 +86,10 @@ export const USURPER_BOSS = {
   // only phase 3 can hurt him, and the lantern catching burns off a quarter,
   // so it's about 1050 HP of real fighting, with Ves's blade and the team
   // attack to do it with (see notes/docs/mountain-enemies.md for the sums).
-  maxHp: 1920,
+  // HP since 13 November 2026: about 20 rounds of good FIGHTs from the party
+  // you have when you meet this boss (every boss's rule; regulars take 4-5).
+  // The numbers in the older notes above are from before.
+  maxHp: 5500,
   damage: 21,
   difficulty: { density: 1.35, speed: 1.18 },
 
@@ -166,8 +169,8 @@ export const USURPER_BOSS = {
     { name: 'Guard the lantern', flameGuard: 2 },
   ],
 
-  // Well above the Roost Mother's 380: most of a level at the summit.
-  rewards: { exp: 910, coins: 160 },
+  // About one level at the summit (a level there costs about 1,050-1,200).
+  rewards: { exp: 1150, coins: 160 },
 
   // A candle lit from her mother's lantern.
   drops: [{ item: 'lamplight_candle', chance: 1 }],

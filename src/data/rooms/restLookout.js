@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE LOOKOUT: a platform off the east side of the village, hanging over the
 // cloud sea, with a telescope trained on the summit. The stair goes on north
 // from here, up into the cloud, to the second cairn (vigilSecondCairn.js) and
@@ -66,6 +67,7 @@ export const REST_LOOKOUT = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/heralds_rest.txt',
   props: [
+    { sprite: 'col_pin_boot', x: 2, y: 13, walkable: true, flat: true, gives: 'pin_boot', taken: { gone: true } },
     { sprite: 'telescope', x: 16, y: 10, text: 'lookout_telescope', nightText: 'lookout_telescope_night' },
     { sprite: 'bench', x: 7, y: 13, text: 'lookout_bench' },
     { sprite: 'savepoint', x: 4, y: 6, save: true },
@@ -81,6 +83,8 @@ export const REST_LOOKOUT = {
     { sprite: 'chough', x: 3, y: 12, text: 'ridge_chough', walkable: true },
     // Across the stair north, until Ves joins you in the chapel.
     { sprite: 'stair_rope', x: 12, y: 1, text: 'lookout_rope', until: 'ves_in_the_chapel' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_lookout'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

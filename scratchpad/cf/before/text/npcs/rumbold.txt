@@ -1,0 +1,38 @@
+# KING PEPTUP THE RESPLENDENT: a huge painted wooden marionette man in a paper crown,
+# the showman king of Belowtown. Short, punchy, BIG; calls everyone "my
+# friends"; talks about himself as Peptup when he's excited. He never eats and
+# he never walks anywhere while you're looking (clues for a second play).
+# The folk believe he's a human, the Hero's friend who came down the stair
+# with him and got lost in the dark. He tells it a little differently every
+# time (another clue: Tuck made it up).
+# These are only what he says when you walk up to him; the show itself is the
+# scene the_kings_welcome (src/data/scenes/theKingsWelcome.js).
+# A line with a "voice:" comment above it plays a recording of him as it
+# opens (src/audio/voiceClips.js says which).
+
+[first]
+My friends! The show is OVER, and what a show it was! Wait for the next one!
+
+[repeat]
+Peptup is busy being magnificent. Come back later!
+
+[first after the_kings_welcome]
+The QUEST, my friends! The back door's open! The Diggings await! Peptup's name goes with you!
+
+The Hero's last words to Peptup, you know: "Look after them, Peptup!"
+
+# voice: rumbold_hall_2
+Or possibly "Look OUT, Peptup!" It was very loud on that stair.
+
+[repeat after the_kings_welcome]
+# voice: rumbold_hall_1
+Dinner? Peptup dines on applause! Go on, go down, and come back to a standing ovation!
+
+[first after the_light_goes_up]
+# voice: rumbold_hall_3
+THE LIGHT! The light, my friends! Peptup KNEW you could do it! Peptup planned it all along!
+
+Just like the Hero! Tall, the Hero was. Tall as Peptup. Well. You'll grow.
+
+[repeat after the_light_goes_up]
+What a show! What a day! What a... what a lot of people looking at you. Ahem. Peptup likes it.

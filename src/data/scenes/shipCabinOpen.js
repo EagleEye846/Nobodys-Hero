@@ -22,9 +22,10 @@ export const SHIP_CABIN_OPEN = {
     { do: 'sound', name: 'door' },
     { do: 'say', text: 'The key turns. It turns the way a key does that\'s been turned a thousand times and never once all the way. The bolt goes back. The door swings in a hand\'s width on its own, and stops.' },
     { do: 'say', text: 'From the other side, nearer now, a man\'s voice says: "Mr Pike?" It is the voice of someone who has said the name so many times he has stopped expecting anything to come of it.' },
-    { do: 'say', who: 'bramble', text: '{worried}He sounds so tired.' },
-    { do: 'say', who: 'ves', text: '{thoughtful}...He\'s the captain. I don\'t think he\'s allowed to be.' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Whatever he says in there: he isn\'t cruel. Remember that. He\'ll be frightened, and he\'ll be proud, and those two make a man very difficult.' },
+    { do: 'say', who: 'bramble', text: '{sad}He sounds so tired.' },
+    { do: 'say', who: 'ves', text: '{smile}...It says CAPTAIN on the door. I\'d have liked it to say COOK.' },
+    { do: 'say', who: 'ves', text: '{worried}Whoever\'s in there has been asking for a long time. I\'m not sure he\'ll like who answers.' },
     { do: 'face', who: 'ves', dir: 'left' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

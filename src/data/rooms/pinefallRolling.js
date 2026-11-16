@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE ROLLING STONES: past the woodcutters' camp, a second pen of bramble
 // with two rocks and two plates, and the gate to the Turning Wood beyond the
 // hedge. Which rock goes first matters: put the wrong one down and the
@@ -63,6 +65,7 @@ export const PINEFALL_ROLLING = {
   // `button`, `rockReset`); the gate opens when every plate is down.
   textFile: 'interactions/pinefall.txt',
   props: [
+    { sprite: 'col_marble_oxblood', x: 22, y: 2, walkable: true, flat: true, gives: 'marble_oxblood', taken: { gone: true } },
     { sprite: 'sign', x: 2, y: 8, text: 'rolling_sign' },
     { sprite: 'gate_wide', x: 16, y: 7, text: 'pen_gate', opensWith: ['near_plate', 'far_plate'], openText: 'pen_gate_open' },
     { sprite: 'rock_stump', x: 12, y: 13, text: 'rock_stump', rockReset: true },
@@ -70,6 +73,7 @@ export const PINEFALL_ROLLING = {
     { sprite: 'stone_button', x: 10, y: 10, text: 'stone_plate', button: 'far_plate' },
     { sprite: 'push_rock', x: 10, y: 9, text: 'push_rock', rock: true },
     { sprite: 'push_rock', x: 9, y: 12, text: 'push_rock', rock: true },
+    ...(R3P_PROPS['pinefall_rolling'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'pen_hedge', b: 'pen_stump' },
 

@@ -54,7 +54,7 @@ mind.
 # TALK options in src/data/enemies/capbee.js.
 [talk: Inspect]
 FLATCAP BEE - HP 1800
-A bumblebee in a flat cap. His mates dance across in weaving lines, he lets honey drip from above, and he throws his cap like a boomerang. It comes back the way it went.
+A bumblebee in a flat cap. His mates' waggle dance points the way they'll fly, honey floods every cell he hasn't capped, and he visits his flowers in the order they opened.
 
 [talk: Point at the clover]
 You point at the clover and raise your eyebrows at FLATCAP BEE. His whole body unclenches. He tells you about the red, and the white, and the one patch by the wall that flowers late. He is still going when you stop listening and, a long while after, when you start again.

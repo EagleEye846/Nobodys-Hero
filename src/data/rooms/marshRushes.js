@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE RUSHES: tall rushes higher than your head, in a little maze, and Ves's
 // scarf trodden into the mud in the middle of it (the_scarf). Then a channel
 // of fen water across the way, and one drift log lying on the far bank. At the
@@ -71,6 +72,8 @@ export const MARSH_RUSHES = {
     { sprite: 'marsh_lantern', x: 27, y: 10, text: 'marsh_lantern', light: 60 },
     { sprite: 'chest', x: 27, y: 2, text: 'rushes_chest', gives: 'gloam_honeydew', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'chest', x: 1, y: 15, text: 'rushes_knife_chest', gives: 'reed_knife', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_rushes'] ?? []),
   ],
   tileTexts: { '"': 'reeds', '%': 'bog', $: 'fen_water' },
 

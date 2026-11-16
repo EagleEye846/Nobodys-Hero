@@ -1,19 +1,19 @@
 import { defineBulletArt, Line } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
-import { withSnipes } from './snipes.js';
+import { PathShot, Deco, Zone } from './coastKit.js';
 
 // The Deckhand's attacks. A young sailor of the Fair Return, still on watch,
 // still doing his round of the ship's chores a hundred years after there was
-// anyone to do them for: he swabs, he empties the bilge bucket, he strikes the
-// ship's bell for the watch, and, last, he holds out the letter he meant to
-// post. Every one of these is a chore, done a little too hard. He stands to the
-// right of the box, so most things come from that side (the swab from the top
-// and bottom).
-//
-// Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. The attack's own clock (`t`) runs `density`
-// times faster than the seconds on the wall, hence the `T` below.
+// anyone to do them for, and every chore done a little too hard:
+//   - Bilge pump: on every downstroke of the pump handle, water spurts from
+//     the next scupper round the ship's side, aimed at you. The next one
+//     along is always the next to go.
+//   - Watch bells: every stroke of the ship's bell is a bilge bucket slung
+//     at where you are; count the strokes, mind the shadows.
+//   - The letter home: letters drift down, and when one touches the deck it
+//     opens and its words lift off the page and rise back up the box.
+// He stands to the right of the box. Nothing is meant unkindly.
 
 const P = {
   k: '#14212a', w: '#f0f6f2', W: '#a4c4c4', r: '#d8d0b4', R: '#8c8468', m: '#b04a3a', M: '#6a2a26',
@@ -92,258 +92,166 @@ defineBulletArt('deckRag', {
   rotate: true,
 });
 
-// The wet stripe a swab leaves (harmless).
-const drawWet = (ctx, x, y, w) => {
-  ctx.fillStyle = 'rgba(124, 196, 212, 0.28)';
-  ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), 2);
+// The words of the letter, lifting off the page: a few capitals, 5x5.
+const GLYPHS = {
+  D: ['rrrr.', 'r...r', 'r...r', 'r...r', 'rrrr.'],
+  E: ['rrrrr', 'r....', 'rrrr.', 'r....', 'rrrrr'],
+  A: ['.rrr.', 'r...r', 'rrrrr', 'r...r', 'r...r'],
+  R: ['rrrr.', 'r...r', 'rrrr.', 'r..r.', 'r...r'],
+  M: ['r...r', 'rr.rr', 'r.r.r', 'r...r', 'r...r'],
+  U: ['r...r', 'r...r', 'r...r', 'r...r', '.rrr.'],
+  H: ['r...r', 'r...r', 'rrrrr', 'r...r', 'r...r'],
+  O: ['.rrr.', 'r...r', 'r...r', 'r...r', '.rrr.'],
+  S: ['.rrrr', 'r....', '.rrr.', '....r', 'rrrr.'],
+  N: ['r...r', 'rr..r', 'r.r.r', 'r..rr', 'r...r'],
 };
-
-// One pass of the swab: a ragged band of wet rag, a stripe across the whole
-// box but for a gap (a ripple of clean deck). It sweeps down (or up) the box.
-// While it warns the band's outline blinks at the edge it comes from.
-class Swab {
-  constructor({ box, y, vy, gapX, gapW = 25, warn = 0.8, h = 9 }) {
-    Object.assign(this, { box, y, vy, gapX, gapW, warn, h });
-    this.age = 0;
-    this.dmg = null;
-    this.grazed = false;
-    // Where it comes from, so the warning shows in the box.
-    this.startY = y;
-    this.trail = [];
-  }
-
-  get active() {
-    return this.age >= this.warn;
-  }
-
-  update(dt) {
-    this.age += dt;
-    if (this.age >= this.warn) this.y += this.vy * dt;
-  }
-
-  isGone() {
-    return this.age >= this.warn && (this.vy > 0 ? this.y > this.box.y + this.box.h + 14 : this.y < this.box.y - 14);
-  }
-
-  edgeDistance(px, py) {
-    if (!this.active) return Infinity;
-    const b = this.box;
-    const dy = Math.max(this.y - this.h / 2 - py, 0, py - (this.y + this.h / 2));
-    // In the gap's column the deck is clean.
-    if (px > this.gapX - this.gapW / 2 && px < this.gapX + this.gapW / 2) return Infinity;
-    const dx = Math.max(b.x - px, 0, px - (b.x + b.w));
-    return Math.hypot(dx, dy);
-  }
-
-  draw(ctx) {
-    const b = this.box;
-    ctx.save();
-    const edgeY = this.vy > 0 ? b.y + 4 : b.y + b.h - 4;
-    if (this.age < this.warn) {
-      // The gap shown on the edge it comes from, the band's line blinking.
-      ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.25 : 0.6;
-      ctx.fillStyle = '#d8d0b4';
-      for (let x = b.x; x < b.x + b.w; x += 4) {
-        if (x > this.gapX - this.gapW / 2 && x < this.gapX + this.gapW / 2) continue;
-        ctx.fillRect(x, Math.round(edgeY), 2, 1);
-      }
-      ctx.strokeStyle = '#bfeaf0';
-      ctx.strokeRect(Math.round(this.gapX - this.gapW / 2) + 0.5, Math.round(edgeY - 3) + 0.5, this.gapW, 6);
-      ctx.restore();
-      return;
-    }
-    const y = Math.round(this.y - this.h / 2);
-    // Wet trail behind it.
-    const behind = this.vy > 0 ? b.y : y + this.h;
-    const behindH = this.vy > 0 ? y - b.y : b.y + b.h - (y + this.h);
-    if (behindH > 0) {
-      ctx.fillStyle = 'rgba(124, 196, 212, 0.14)';
-      for (let x = b.x; x < b.x + b.w; x += 1) {
-        if (x > this.gapX - this.gapW / 2 && x < this.gapX + this.gapW / 2) continue;
-        if ((x * 7) % 3 === 0) ctx.fillRect(x, behind, 1, Math.max(0, behindH));
-      }
-    }
-    for (let x = b.x - 2; x < b.x + b.w + 2; x++) {
-      if (x > this.gapX - this.gapW / 2 && x < this.gapX + this.gapW / 2) continue;
-      // Strands of rag: pale cords with darker tips, ragged by column.
-      const ragged = ((x * 13) % 4) - 1;
-      ctx.fillStyle = '#14212a';
-      ctx.fillRect(x, y - 1 - (ragged > 1 ? 1 : 0), 1, this.h + 2 + ragged);
-      ctx.fillStyle = x % 3 ? '#d8d0b4' : '#8c8468';
-      ctx.fillRect(x, y, 1, this.h + ragged);
-      if (x % 5 === 0) { ctx.fillStyle = '#e4f2ee'; ctx.fillRect(x, y, 1, 2); }
-    }
-    // The mop handle's end at the gap: a clean lip of deck on either side.
-    ctx.fillStyle = '#7cc4d4';
-    for (const gx of [this.gapX - this.gapW / 2 - 1, this.gapX + this.gapW / 2]) ctx.fillRect(Math.round(gx), y, 1, this.h);
-    ctx.restore();
-  }
+for (const [ch, rows] of Object.entries(GLYPHS)) {
+  defineBulletArt(`deckGlyph${ch}`, { frames: [rows.map((r) => r.replace(/r/g, 'w')), rows.map((r) => r.replace(/r/g, 'W'))], palette: P, radius: 2.6, frameSeconds: 0.2 });
 }
+const WORDS = ['DEAR', 'MUM', 'HOME', 'SOON', 'DEAR', 'SON'];
+
+// A hole in the ship's side (harmless): a dark scupper with a wet lip.
+defineBulletArt('deckScupper', { frames: [['.iii.', 'iIkIi', 'iIkIi', '.iii.']], palette: P, radius: 1 });
+// The shadow where a slung bucket will come down.
+defineBulletArt('deckShadow', { frames: [['..BBB..', '.BBBBB.', '..BBB..']], palette: P, radius: 1 });
 
 export const GHOST_DECKHAND_ATTACKS = {
-  // Swab: the mop comes down (and back up) the deck, three passes, each with
-  // a clean gap that is never where you're standing; every other pass is the
-  // return stroke with its gap a step across. Rags fly off the end of it.
-  deckSwab(box, density, { rand, clamp, Shot }) {
+  // Bilge pump: he works the pump handle up and down (on the right wall of the
+  // box), and on every downstroke bilge water spurts from the next scupper
+  // round the ship's side, in order: along the floor, then up the far wall,
+  // then along the top. Each spurt is aimed at you; the scupper it comes
+  // from winks first, and the next one along is always the next to go.
+  deckPump(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const holes = [];
+    for (let i = 0; i < 4; i++) holes.push({ x: box.x + box.w - 10 - i * 20, y: box.y + box.h - 1 });
+    for (let i = 0; i < 4; i++) holes.push({ x: box.x + 1, y: box.y + box.h - 10 - i * 20 });
+    for (let i = 0; i < 4; i++) holes.push({ x: box.x + 10 + i * 20, y: box.y + 1 });
+    const STROKE = 0.62;
     let t = 0;
-    let next = T(0.2);
-    let passes = 0;
-    let lastGap = null;
+    let n = 0;
+    let made = false;
+    const start = Math.floor(rand(0, 12));
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && passes < 3 && t < T(5.0)) {
-          passes++;
-          next = t + T(2.0);
-          const lo = box.x + 14;
-          const hi = box.x + box.w - 14;
-          let gap = clamp(soul.x + (Math.random() < 0.5 ? -1 : 1) * rand(26, 36), lo, hi);
-          if (Math.abs(gap - soul.x) < 18) gap = soul.x < (lo + hi) / 2 ? hi : lo;
-          if (lastGap !== null && Math.abs(gap - lastGap) < 12) gap = clamp(gap + (gap < (lo + hi) / 2 ? 1 : -1) * 20, lo, hi);
-          lastGap = gap;
-          const down = passes % 2 === 1;
-          bullets.push(new Swab({ box, y: down ? box.y - 6 : box.y + box.h + 6, vy: down ? 36 : -36, gapX: gap, warn: 0.85 }));
-          // Rags thrown off the wet end.
-          for (let i = 0; i < 3; i++) {
-            bullets.push(new Shot({ x: box.x + rand(6, box.w - 6), y: down ? box.y - 4 : box.y + box.h + 4, vx: rand(-14, 14), vy: down ? 24 : -24, warn: 1.0 + i * 0.35, life: 3.2, art: 'deckRag' }));
+        if (!made) {
+          made = true;
+          for (const h of holes) {
+            const s = new Shot({ x: h.x, y: h.y, harmless: true, art: 'deckScupper' });
+            s.life = 7;
+            bullets.push(s);
           }
+          // The pump handle, rocking.
+          bullets.push(new Deco({ life: 7, paint(ctx, d) {
+            const a = Math.sin((d.age / STROKE) * Math.PI * 2) * 0.5;
+            const x = box.x + box.w - 4;
+            const y = box.y + box.h / 2 - 9;
+            ctx.strokeStyle = '#14212a';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(x, y + 18);
+            ctx.lineTo(x, y);
+            ctx.lineTo(x + Math.cos(a - 2.4) * 14, y + Math.sin(a - 2.4) * 14);
+            ctx.stroke();
+            ctx.strokeStyle = '#b49c68';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          } }));
+        }
+        if (t >= T(0.3 + n * STROKE) && n < 10) {
+          const h = holes[(start + n) % holes.length];
+          n++;
+          const WARN = 0.55;
+          bullets.push(new Shot({ x: h.x, y: h.y, harmless: true, life: WARN, art: 'deckDrop' }));
+          const aim = Math.atan2(soul.y - h.y, soul.x - h.x);
+          bullets.push(new Line({ x: h.x, y: h.y, angle: aim, length: 110, thickness: 5, warn: WARN, life: 0.32, grow: 320, color: '#bfeaf0', glow: '#7cc4d4' }));
         }
       },
     };
   },
 
-  // Bilge bucket: he swings the pail and lets go; each lands in a heap of
-  // slopped water that bursts into drops all round. A shadow blinks where it
-  // will land.
-  deckBucket(box, density, { Shot, rand, clamp }) {
+  // Watch bells: he strikes the ship's bell the way the watch is kept, in
+  // pairs, and every stroke of the bell is a bilge bucket slung at where you
+  // are that moment. A shadow marks where each will come down, and it lands
+  // in a splash of drops. Count the strokes: that's how many are in the air.
+  deckBells(box, density, { Shot }) {
     const T = (s) => s * density;
+    const strikes = [0.3, 0.6, 1.6, 1.9, 2.9, 3.2, 4.2, 4.5, 5.3];
+    const FLY = 0.95;
     let t = 0;
-    let next = T(0.3);
-    let thrown = 0;
-    const flying = [];
+    let n = 0;
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && thrown < 5 && t < T(5.2)) {
-          thrown++;
-          next = t + T(1.05);
-          // Land somewhere near you but not on you.
-          // (at least 26 px off you, in a random direction, then kept inside the box)
-          const away = rand(0, Math.PI * 2);
-          const gap = rand(26, 40);
-          const lx = clamp(soul.x + Math.cos(away) * gap, box.x + 8, box.x + box.w - 8);
-          const ly = clamp(soul.y + Math.sin(away) * gap, box.y + 8, box.y + box.h - 8);
-          const fromX = box.x + box.w + 6;
-          const fromY = box.y + rand(8, box.h - 8);
-          const flight = 1.0;
-          // The marker blinks where it will land (and is harmless); the bucket itself is carried
-          // by hand along an arc, so its speed isn't scaled by the enemy's `speed`.
-          for (const dx of [0, -5, 5]) bullets.push(new Shot({ x: lx + dx, y: ly, harmless: true, warn: flight, life: 0, art: 'deckDrop' }));
-          const b = new Shot({ x: fromX, y: fromY, harmless: true, life: 99, art: 'deckBucket' });
-          flying.push({ t0: t, at: t + T(flight), x: lx, y: ly, fromX, fromY, b });
-          bullets.push(b);
-        }
-        for (const f of flying) {
-          if (f.done) continue;
-          if (t < f.at) {
-            // (t runs `density` times faster than the wall clock, so one flight is T(flight) long.)
-            const k = (t - f.t0) / (f.at - f.t0);
-            f.b.x = f.fromX + (f.x - f.fromX) * k;
-            f.b.y = f.fromY + (f.y - f.fromY) * k - Math.sin(k * Math.PI) * 18;
-            continue;
-          }
-          f.done = true;
-          f.b.life = 0;
-          f.b.age = 99;
-          // The splash: seven drops all round.
-          const n = 7;
-          const spin = Math.random() * Math.PI;
-          for (let i = 0; i < n; i++) {
-            const a = spin + (i / n) * Math.PI * 2;
-            bullets.push(new Shot({ x: f.x, y: f.y, vx: Math.cos(a) * 36, vy: Math.sin(a) * 36, life: 1.5, art: 'deckDrop' }));
-          }
-        }
-      },
-    };
-  },
-
-  // Eight bells: he strikes the ship's bell on the right of the box, and
-  // rings of sound go out across it, each with a gap in it that is never
-  // quite where you are. The bell is struck in pairs, the way a watch is.
-  deckBell(box, density, { rand }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = T(0.35);
-    let tolls = 0;
-    const cx = box.x + box.w + 6;
-    return {
-      duration: 7,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && tolls < 6 && t < T(5.4)) {
-          tolls++;
-          // Pairs: two close, then a pause.
-          next = t + T(tolls % 2 ? 0.55 : 1.25);
-          const cy = box.y + box.h / 2 + rand(-18, 18);
-          const toSoul = Math.atan2(soul.y - cy, soul.x - cx);
-          const off = (Math.random() < 0.5 ? -1 : 1) * rand(0.55, 0.85);
-          bullets.push(new Ring({ x: cx, y: cy, r: 2, grow: 52, thick: 3, life: 3.4, warn: 0.5, gap: { angle: toSoul + off, width: 0.85 }, color: '#f2d88a', glow: '#c8a040' }));
-          bullets.push({
-            // A harmless pip of the bell, there and gone.
-            x: cx - 4, y: cy, dmg: null, grazed: false, age: 0,
-            update(d) { this.age += d; },
-            isGone() { return this.age > 0.9; },
-            edgeDistance() { return Infinity; },
-            draw(ctx) {
-              ctx.save();
-              ctx.globalAlpha = Math.max(0, 1 - this.age / 0.9);
-              ctx.fillStyle = '#c8a040';
-              ctx.fillRect(Math.round(this.x - 2), Math.round(this.y - 3), 5, 5);
-              ctx.fillStyle = '#80601c';
-              ctx.fillRect(Math.round(this.x - 3), Math.round(this.y + 2), 7, 1);
-              ctx.restore();
+        if (n < strikes.length && t >= T(strikes[n])) {
+          n++;
+          const from = { x: box.x + box.w + 8, y: box.y + 4 };
+          const to = { x: soul.x, y: soul.y };
+          bullets.push(new Shot({ x: box.x + box.w - 7, y: box.y + 7, harmless: true, life: 0.3, art: 'deckBell' }));
+          bullets.push(new Shot({ x: to.x, y: to.y + 3, harmless: true, life: FLY, art: 'deckShadow' }));
+          // The bucket, high in an arc (harmless in the air), hurting where it lands.
+          bullets.push(new PathShot({
+            art: 'deckBucket', harmless: true, life: FLY,
+            path: (k) => {
+              const u = Math.min(1, k / FLY);
+              return { x: from.x + (to.x - from.x) * u, y: from.y + (to.y - from.y) * u - Math.sin(Math.PI * u) * 26 };
             },
-          });
+          }));
+          bullets.push(new Zone({ x: to.x, y: to.y, r: 7, warn: FLY, life: 0.2, paint(ctx, z) {
+            if (z.age < z.warn) return;
+            ctx.fillStyle = '#bfeaf0';
+            ctx.beginPath();
+            ctx.arc(z.x, z.y, 7, 0, Math.PI * 2);
+            ctx.fill();
+          } }));
+          for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2 + n;
+            bullets.push(new Shot({ x: to.x, y: to.y, vx: Math.cos(a) * 46, vy: Math.sin(a) * 46, art: 'deckDrop', warn: FLY, life: 1.1 }));
+          }
         }
       },
     };
   },
 
-  // The letter: he holds it out and letters come off the top of the box,
-  // drifting and turning in a slow curtain, and the wax seals on them come
-  // off and drop straight down. There's a lane through where the curtain is
-  // thin, and he never fills it. Nothing is meant unkindly.
-  deckLetters(box, density, { Shot, rand, clamp, every }) {
+  // The letter home: he holds out the letter he never posted, and more of
+  // them come drifting down. When a letter touches the deck it opens, and
+  // the words lift off the page and rise back up the box, one letter after
+  // another. One comes down over you each time.
+  deckLetters(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const FALL = 40;
+    const pending = [];
     let t = 0;
-    let next = T(0.3);
-    let waves = 0;
+    let rt = 0;
+    let n = 0;
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && waves < 6 && t < T(5.6)) {
-          waves++;
-          next = t + T(0.9);
-          const gapX = clamp(soul.x + (Math.random() < 0.5 ? -1 : 1) * rand(18, 30), box.x + 10, box.x + box.w - 10);
-          for (let x = box.x + 6; x <= box.x + box.w - 6; x += 15) {
-            if (Math.abs(x - gapX) < 12) continue;
-            bullets.push(new Shot({ x: x + rand(-3, 3), y: box.y - 6, vy: 36, wobble: { amplitude: 4, frequency: 3.5 }, warn: 0.4, life: 4, art: 'deckLetter' }));
+        rt += dt / density;
+        for (let i = pending.length - 1; i >= 0; i--) {
+          const g = pending[i];
+          if (rt < g.at) continue;
+          pending.splice(i, 1);
+          bullets.push(new Shot({ x: g.x, y: box.y + box.h - 4, vy: -62, art: `deckGlyph${g.ch}`, warn: 0.12, life: 1.6 }));
+        }
+        if (t >= T(0.2 + n * 0.95) && n < 6) {
+          n++;
+          const xs = [soul.x + rand(-4, 4), rand(box.x + 8, box.x + box.w - 8)];
+          for (const x0 of xs) {
+            const x = Math.min(Math.max(x0, box.x + 8), box.x + box.w - 8);
+            const y0 = box.y - 6;
+            const land = (box.y + box.h - 4 - y0) / FALL;
+            bullets.push(new PathShot({ art: 'deckLetter', warn: 0.35, life: land, path: (k) => ({ x: x + Math.sin(k * 4) * 3, y: y0 + FALL * k }) }));
+            const word = WORDS[(n + xs.indexOf(x0)) % WORDS.length];
+            // Bullets made as the letter lands (so they don't sit stacked on the deck before).
+            [...word].forEach((ch, i) => pending.push({ at: rt + 0.35 + land + i * 0.17, x, ch }));
           }
-          // The seal off one of them, dropping hard.
-          bullets.push(new Shot({ x: clamp(soul.x + rand(-8, 8), box.x + 6, box.x + box.w - 6), y: box.y - 6, vy: 70, warn: 0.7, life: 2.4, art: 'deckSeal' }));
         }
       },
     };
   },
 };
-
-GHOST_DECKHAND_ATTACKS.deckSwab = withSnipes(GHOST_DECKHAND_ATTACKS.deckSwab, { art: 'deckRag', count: 3, first: 1.0, every: 1.4, lead: [0.9, 'mean', 0.5] });
-GHOST_DECKHAND_ATTACKS.deckBucket = withSnipes(GHOST_DECKHAND_ATTACKS.deckBucket, { art: 'deckDrop', count: 3, first: 1.2, every: 1.5, lead: [0.9, 'mean', 0.5] });
-GHOST_DECKHAND_ATTACKS.deckBell = withSnipes(GHOST_DECKHAND_ATTACKS.deckBell, { art: 'deckSeal', count: 3, first: 1.2, every: 1.5, lead: [0.9, 'mean', 0.5] });
-GHOST_DECKHAND_ATTACKS.deckLetters = withSnipes(GHOST_DECKHAND_ATTACKS.deckLetters, { art: 'deckSeal', count: 3, first: 1.2, every: 1.5, lead: [0.9, 'mean', 0.5] });
-// (Line is kept for a rope the captain's file borrows; nothing here needs it.)
-void Line;

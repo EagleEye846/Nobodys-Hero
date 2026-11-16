@@ -23,9 +23,11 @@ export const THE_DOWAGER_CRAB = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed. The camera goes to the mat and the notice; the bathtub getting
+    // up is a thud, a quake and a bell, not a paragraph; the feet-wiping is a long silent beat.
     { do: 'music', song: null },
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', text: 'The beach goes quiet in a way the others did not. The rain is still falling, but it seems to be falling more politely.\n\nSomeone has laid a mat out on the shingle. A very neat mat, squared up with the tide line, with a notice beside it.' },
+    { do: 'wait', seconds: 0.6 },
     { do: 'walk', who: 'ves', to: { x: 8, y: 8 }, wait: false },
     // (Bramble round below the notice at 6,10.)
     { do: 'walk', who: 'bramble', to: { x: 5, y: 11 }, wait: false },
@@ -36,21 +38,23 @@ export const THE_DOWAGER_CRAB = {
     { do: 'face', who: 'player', dir: 'right' },
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'face', who: 'bramble', dir: 'right' },
+    // The mat, squared up with the tide line, and the notice beside it; then the rest of the beach.
+    { do: 'camera', to: { x: 10, y: 9 } },
+    { do: 'wait', seconds: 1.4 },
     { do: 'camera', to: { x: 17, y: 9 } },
-    { do: 'wait', seconds: 0.8 },
+    { do: 'wait', seconds: 1.2 },
     { do: 'sound', name: 'thud' },
     { do: 'appear', who: 'crab' },
     { do: 'quake', amount: 2, seconds: 0.3 },
     { do: 'act', who: 'bramble', act: 'startle', wait: false },
-    { do: 'wait', seconds: 0.8 },
-    { do: 'say', text: 'Out on the shingle, a bathtub gets up.\n\nIt has iron feet and a blue painted band and a ship\'s bell bolted to its top with a pink bow on it, and underneath it, in a string of pearls, with a monocle on one eyestalk, is a crab the size of a cart.' },
+    { do: 'wait', seconds: 0.5 },
     { do: 'sound', name: 'bell' },
+    { do: 'wait', seconds: 0.8 },
     { do: 'say', who: 'crab', text: '"Good afternoon."\n\n"You have walked on my beach."' },
     { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}...She\'s very big.' },
     { do: 'wait', seconds: 0.3 },
     { do: 'face', who: 'ves', at: 'bramble' },
-    { do: 'say', who: 'ves', text: '{bored}She\'s got a monocle. That\'s not a threat. That\'s a lifestyle.' },
+    { do: 'say', who: 'ves', text: '{glee}She\'s got a MONOCLE. That\'s not a threat. That\'s a lifestyle.' },
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'say', who: 'crab', text: '"In those."\n\n"Do wipe your feet."' },
     // The hero wipes his feet on the mat (all still in view).
@@ -60,14 +64,16 @@ export const THE_DOWAGER_CRAB = {
     { do: 'walk', who: 'player', to: { x: 9, y: 9 }, pace: 70 },
     { do: 'walk', who: 'player', to: { x: 10, y: 9 }, pace: 70 },
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', text: 'You wipe your feet. Left, right. Left, right. A great deal of wet shingle comes off, and a little of the mat.\n\nFrom the far end of the beach comes a long, careful silence, as of a very old crab counting.' },
+    // A long, careful silence, as of a very old crab counting.
+    { do: 'wait', seconds: 1.2 },
+    { do: 'emote', who: 'crab', emote: '...' },
     { do: 'wait', seconds: 0.6 },
     { do: 'say', who: 'crab', text: '"...Acceptable."\n\n"Thank you. That is the first correct thing anybody has done on this beach since the spring tides."' },
     { do: 'act', who: 'bramble', act: 'hop', wait: false },
-    { do: 'say', who: 'ves', text: '{thoughtful}So we\'re fine?' },
+    { do: 'say', who: 'ves', text: '{hopeful}So we\'re fine?' },
     { do: 'say', who: 'crab', text: '"Certainly not."\n\n"You came in. You were not asked in. There is a notice. I shall have to see you off."' },
     { do: 'act', who: 'bramble', act: 'bounce', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}But we wiped our FEET.' },
+    { do: 'say', who: 'bramble', text: '{angry}But we wiped our FEET.' },
     { do: 'say', who: 'crab', text: '"And I am grateful. It will be taken into account."\n\n"Do mind the bell."' },
     // She comes up the beach at you, so she's in the spotlight with you when it closes.
     { do: 'camera', to: { x: 13, y: 9 } },

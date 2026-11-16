@@ -107,6 +107,11 @@ export const SALTCOMBE_INN = {
     { sprite: 'sc_bunk_tally', x: 16, y: 11, text: 'inn_bunk' },
     { sprite: 'bed', x: 16, y: 6, text: 'inn_bunks' },
     { sprite: 'savepoint', x: 2, y: 11, save: true },
+    // The doorstop by the door (10,12): a heavy brass pear on an iron loop, which is the Fair Return's fog bell's tongue
+    // (optional, secret). Before the bell has been found it is only a doorstop that hums; after (bell_found), pressing Z on
+    // it, the innkeeper tells you whose it was and lets you take it (the gear `fog_bell_tongue`).
+    { sprite: 'gs_doorstop', x: 10, y: 12, text: 'inn_doorstop', walkable: true, until: 'bell_found' },
+    { sprite: 'gs_doorstop', x: 10, y: 12, text: 'inn_doorstop_give', gives: 'fog_bell_tongue', walkable: true, after: 'bell_found', notice: true, taken: { gone: true } },
     // Lived in (2026-11-08): a window (the storm, then the sky), the inn's mugs on a rail, bottles
     // behind the bar, a sketch of the light, a wet oilskin by the fire and somebody's boots drying,
     // a rag rug and the cat's bowl. (Clear of haddock_hums: his walk down column 4 and along row 12
@@ -129,7 +134,9 @@ export const SALTCOMBE_INN = {
     { sprite: 'cf_fisher_a', x: 14, y: 10, text: 'in_inn_dozer', animation: 'cf_fisher_a', speed: 0.9 },
     { sprite: 'in_stool_mugs', x: 11, y: 10, text: 'in_inn_stool' },
     { sprite: 'sc_leak_bucket', x: 18, y: 8, text: 'in_inn_bucket' },
-    { sprite: 'sc_herring_crans', x: 1, y: 9, text: 'in_inn_crans' },
+    { sprite: 'sc_herring_crans', x: 1, y: 9, text: 'in_inn_crans' },
+    // (life pass 2026-11-14)
+    { sprite: 'st_boot_planter', x: 8, y: 3, text: 'life_n_boot' },
   ],
   tileTexts: { h: 'inn_wall' },
   // The inn's grey cat, asleep by the fire while it rains (drawn in src/data/touches.js): Z

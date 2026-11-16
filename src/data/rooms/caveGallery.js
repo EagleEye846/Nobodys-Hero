@@ -12,6 +12,7 @@
 //   x  ice crystals (they glow) (solid)           B  tall stone block (jump onto it from a low block)
 //   b  low stone block (jump up onto it)          z  ice
 //   D  doorway (walk through it; see `doors`)
+import { R3A_PROPS } from '../r3aLife.js';
 export const CAVE_GALLERY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'cave_gallery',
@@ -85,6 +86,8 @@ export const CAVE_GALLERY = {
     { sprite: 'campfire_cold', x: 30, y: 22, text: 'gallery_fire' },
     { sprite: 'old_pack', x: 32, y: 22, text: 'gallery_pack', gives: 'fanfare_fudge' },
     { sprite: 'cairn', x: 12, y: 20, text: 'gallery_cairn' },
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['cave_gallery'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

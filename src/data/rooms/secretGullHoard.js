@@ -6,6 +6,7 @@
 // Tile key (see src/overworld/coastTiles.js, gullrest):
 //   #  cave top (solid)   W  cave wall (solid)   .  sand floor
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SECRET_GULL_HOARD = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'secret_gull_hoard',
@@ -55,6 +56,7 @@ export const SECRET_GULL_HOARD = {
     { sprite: 'c5_dinner_bell', x: 2, y: 4, text: 'hoard_tinsel' },
     { sprite: 'sign', x: 11, y: 6, text: 'hoard_note' },
     { sprite: 'chest', x: 11, y: 4, text: 'hoard_chest', gives: 'sea_silk_shawl', react: true, taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    { sprite: 'chest', x: 3, y: 5, text: 'hoard_duffel', gives: 'beachcombers_duffel', react: true, taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 2, y: 7, text: 'hoard_pouch', gold: 95, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     // Dressing (second pass): stones in the corners, the gulls' marks, shells and a torn net.
     { sprite: 'c5_rock_sunny', x: 1, y: 3, text: 'beach_rocks' },
@@ -65,6 +67,8 @@ export const SECRET_GULL_HOARD = {
     { sprite: 'c5_gull_marks', x: 4, y: 8, flat: true, walkable: true },
     { sprite: 'sy_shells', x: 9, y: 7, flat: true, walkable: true },
     { sprite: 'sy_shells', x: 7, y: 4, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.secret_gull_hoard ?? []),
   ],
   tileTexts: { W: 'hoard_wall', '#': 'hoard_wall' },
 

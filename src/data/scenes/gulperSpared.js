@@ -8,6 +8,7 @@ export const GULPER_SPARED = {
   once: true,
 
   actors: [
+    { id: 'tooth', look: 'anim:tf_tooth', x: 14, y: 10, hidden: true },
     { id: 'gulper', look: 'anim:mw_gulper_out', animation: 'mw_gulper_out', speed: 0.6, x: 14, y: 9, centered: true },
     { id: 'ves', look: 'prop:vesper_stand', x: 12, y: 12, portrait: 'vesper', plays: 'vesper' },
     { id: 'bramble', look: 'prop:bramble_stand', x: 16, y: 12, portrait: 'bramble', plays: 'bramble' },
@@ -16,17 +17,27 @@ export const GULPER_SPARED = {
   steps: [
     { do: 'camera', to: { x: 14, y: 11 } },
     { do: 'wait', seconds: 0.6 },
-    { do: 'say', text: 'The tooth is in your hand: as long as your arm, curved, pale as a candle, and still warm. It came out with a small, wet pop.\n\nOld Gulper works his jaw this way and that. Nothing hurts. He looks very surprised about it.' },
+    // He works his jaw this way and that, and nothing hurts. (draft)
+    { do: 'act', who: 'gulper', act: 'shake' },
+    { do: 'emote', who: 'gulper', emote: '?', wait: false },
+    { do: 'act', who: 'gulper', act: 'shake' },
+    // The tooth pops out into your hand. (draft)
+    { do: 'appear', who: 'tooth', at: { x: 14, y: 10 }, instant: true },
+    { do: 'sound', name: 'clink' },
+    { do: 'toss', who: 'tooth', to: { x: 14, y: 12 }, height: 30, bounces: 0 },
+    { do: 'leave', who: 'tooth', instant: true },
     { do: 'give', item: 'gulper_tooth' },
     { do: 'say', who: 'gulper', text: '"...Huh."\n\n"Keep it. I don\'t want it."' },
     { do: 'act', who: 'bramble', act: 'bounce', wait: false },
-    { do: 'say', who: 'bramble', text: '{grin}He said keep it. We\'ve got an eel\'s tooth.' },
+    { do: 'say', who: 'bramble', text: '{glee}He said keep it. We\'ve got an eel\'s tooth.' },
+    // Chin on the rim, so as not to ring it; quiet. (draft)
     { do: 'animate', who: 'gulper', animation: 'mw_gulper_doze', speed: 1.1 },
-    { do: 'say', text: 'He lays his chin on the rim of the bell, carefully, so as not to ring it, and shuts his eye. The ropes stop swaying. For the first time in a hundred years, the tower is completely quiet.' },
-    { do: 'wait', seconds: 0.3 },
+    { do: 'wait', seconds: 2 },
     { do: 'face', who: 'ves', at: 'bramble' },
     { do: 'say', who: 'ves', text: '{bored}Nobody ring anything.' },
     { do: 'camera' },
     { do: 'music', song: 'merrow' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

@@ -9,6 +9,7 @@
 //   .  the old city's flagstones
 //   !  cracked flagstones: they give way under you (see src/overworld/crumble.js)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const CITY_LIBRARY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_library',
@@ -82,6 +83,8 @@ export const CITY_LIBRARY = {
     { sprite: 'bookshelf', x: 26, y: 14, text: 'library_loose_shelf', rock: true },
     { sprite: 'gold_pouch', x: 2, y: 16, text: 'library_purse', gold: 160, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 19, y: 16, text: 'library_chest', gives: 'vellum_canopy', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_library'] ?? []),
   ],
   tileTexts: { W: 'library_shelves', '#': 'city_wall', '!': 'cracked_floor' },
 

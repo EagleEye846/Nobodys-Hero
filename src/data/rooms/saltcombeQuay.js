@@ -18,6 +18,8 @@
 //   D  an open door   :  the hill stair   ,  turf banks   f  rail (solid)
 //   ~  the harbour (solid)   X  the cobbled apron along the house fronts
 
+import { quayFloodProps } from '../floodStages.js';
+
 export const SALTCOMBE_QUAY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'saltcombe_quay',
@@ -33,10 +35,13 @@ export const SALTCOMBE_QUAY = {
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_stilt_town', lamplight: { shade: 0.22, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
+  // Before the Fair Return is found: her crew's song off the water now and then, or her lantern far out (farShip.js).
+  farShip: { sing: true, light: { x: 37, y: 19 }, chance: 0.35 },
 
   // The fish crates in the north-west corner (b and B, drawn as crates): jump from the
   // planks at (3,7) onto the b, then up onto a B. The gull's stash is on top.
   cargo: [{ x: 1, y: 6, w: 2, h: 2 }],
+
 
   tiles: [
     '#################################:::####',
@@ -78,7 +83,14 @@ export const SALTCOMBE_QUAY = {
   ],
 
   // Mrs. Tansy says her piece when you talk to her (text/npcs/tansy.txt).
-  cutscenes: [],
+  // The Fair Return's last page (optional, secret): holding the other four torn pages of her log, the first step onto the
+  // quay's boards plays last_page_ashore (once), and the bottle with the fifth is at the quay steps (26,13) after it.
+  cutscenes: [
+    { x: 1, y: 7, w: 38, h: 6, scene: 'last_page_ashore', gear: ['log_page_1', 'log_page_2', 'log_page_3', 'log_page_4'] },
+    // (2026-11-14) Once the Fair Return has sailed (crew_go_free): two of her crew say goodbye on the quay (crew_home_quay, once),
+    // the first step onto its boards from any way in (the office and inn doors put you down on row 6).
+    { x: 1, y: 6, w: 38, h: 7, scene: 'crew_home_quay', after: 'fair_return_gone' },
+  ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/saltcombe.txt',
@@ -127,6 +139,33 @@ export const SALTCOMBE_QUAY = {
     { sprite: 'c5_sandbags', x: 12, y: 6, text: 'quay_sandbags' },
     { sprite: 'sc_herring_crans', x: 27, y: 6, text: 'quay_crans' },
     { sprite: 'c5_boat_upturned', x: 33, y: 11, text: 'quay_boat_upturned' },
+    // The last page of the Fair Return's log, washed up at the steps (after last_page_ashore).
+    { sprite: 'gs_log_bottle', x: 26, y: 13, text: 'quay_log_bottle', gives: 'log_page_5', after: 'last_page_ashore', taken: { gone: true } },
+    // (2026-11-14) The Fair Return's lookout at Tansy's last lamp, and her ship's boy on the fisher's step, once she has sailed;
+    // gone after they've said goodbye (crew_home_quay plays them). The boy leaves the stoat's line coiled on the step.
+    { sprite: 'gs_ghost_lookout', x: 27, y: 8, cast: 'home_lookout', animation: 'gs_ghost_lookout', speed: 1.2, walkable: true, after: 'fair_return_gone', until: 'crew_home_quay' },
+    { sprite: 'gs_ghost_boy', x: 26, y: 6, cast: 'home_boy', animation: 'gs_ghost_boy', speed: 0.8, walkable: true, after: 'fair_return_gone', until: 'crew_home_quay' },
+    { sprite: 'gs_coil', x: 26, y: 6, text: 'quay_ghost_coil', flat: true, walkable: true, after: 'crew_home_quay' },
+    { sprite: 'col_glass_frosted', x: 37, y: 12, walkable: true, flat: true, gives: 'glass_frosted', taken: { gone: true } },
+    // (life pass 2026-11-14)
+    // Townsfolk at their jobs (nobody can stroll here: the goodbye scene's trigger covers the whole quay).
+    { sprite: 'st_mender', x: 31, y: 10, npc: 'st_net_mender', animation: 'st_mender', speed: 0.6 },
+    { sprite: 'st_sweeper', x: 8, y: 10, npc: 'st_quay_sweeper', animation: 'st_sweeper', speed: 0.45 },
+    { sprite: 'st_folk_a', x: 36, y: 9, npc: 'st_quay_gossip_a', animation: 'st_folk_a', speed: 0.8 },
+    { sprite: 'st_folk_d', x: 37, y: 9, npc: 'st_quay_gossip_b', animation: 'st_folk_d', speed: 0.9 },
+    { sprite: 'cf_kid_otter', x: 24, y: 10, npc: 'st_hop_kid', animation: 'cf_kid_otter', speed: 0.25 },
+    // Along the house fronts: a rain barrel, a mouse's door, the day's prices, a cat on a crate, drying fish, a tub of thrift.
+    { sprite: 'st_rain_barrel', x: 9, y: 6, text: 'life_q_barrel', animation: 'st_rain_barrel', speed: 0.5 },
+    { sprite: 'st_price_board', x: 11, y: 7, text: 'life_q_prices' },
+    { sprite: 'st_fish_rack', x: 19, y: 7, text: 'life_q_rack' },
+    { sprite: 'st_flower_tub', x: 22, y: 7, text: 'life_q_tub' },
+    // The kids' den in the north-west corner: crates and a barrel make a wall, the way in is from the south. A biscuit tin in it.
+    { sprite: 'st_tin_box', x: 1, y: 9, text: 'life_q_den_tin', gives: 'candle_cake', react: true, taken: { text: 'life_q_den_tin_after' } },
+    // Moored boats out on the water, bobbing.
+    { sprite: 'st_dinghy_b', x: 21, y: 17, text: 'life_q_dinghy_b', animation: 'st_dinghy_b', speed: 1.1 },
+    // The quay's litter and wear.
+    // (2026-11-15) The town floods a little more each time you come back (src/data/floodStages.js).
+    ...quayFloodProps(),
   ],
   tileTexts: {
     '~': 'quay_water', W: 'quay_wall', '#': 'quay_wall', f: 'quay_rail',

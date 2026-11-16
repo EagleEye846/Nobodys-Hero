@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE CLERK'S ISLET (a secret, Chapter 3): off the Far Shore, through a gap in the
 // reeds that somebody has kept trodden. The fen cuts a channel across a little
 // patch of turf, two tiles wide, and on the far side, on a stand of old
@@ -68,6 +69,8 @@ export const MARSH_CLERKS_ISLET = {
     { sprite: 'sign', x: 8, y: 8, text: 'islet_sign' },
     { sprite: 'marsh_lantern', x: 14, y: 5, text: 'marsh_lantern', light: 50 },
     { sprite: 'cairn', x: 6, y: 1, text: 'shore_cairn' },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_clerks_islet'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

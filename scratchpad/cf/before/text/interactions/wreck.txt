@@ -1,0 +1,1274 @@
+# THE WRECK YARD (Chapter 5): the ship graveyard under the full green storm. The gate,
+# the hull, the pumps, the fog deck, the galley, the mast, the slip, and the pocket under
+# the fog deck. Black wrecks, green sky, rain on everything, and one ghost who cooks.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums on the shingle, small and steady, the only thing in the yard that isn't broken.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[chest_empty]
+An empty chest, rusted open.
+
+[rock_stump]
+A cleat, bolted to the deck and worn smooth. Press on it, and everything you've pushed goes back where it started.
+
+# --- THE GATE ---------------------------------------------------------------------
+
+[gate_jetty_post]
+The jetty's mooring post, iron, with a chain still looped round it. The chain goes down into the water and doesn't come back up.
+
+[gate_sign]
+A board nailed to the bridge's first post. Somebody has painted on it, a long time ago: WRECK YARD. NO LANDING. NO SALVAGE. NO.
+Under it, scratched in with a knife: ALL RIGHT, A BIT OF SALVAGE.
+
+# (draft)
+[gate_sign_ves]
+{smile}They held out for one whole line.
+
+[gate_bollard]
+A squat iron bollard at the bridge's end. A chain runs off it along the rail, keeping the bridge from going anywhere. Mostly.
+
+[gate_hulk]
+A hulk lying over on her side, half out of the water, her plates rusted the colour of old blood. The rain drums on her like a roof.
+
+# After the chapter (the storm over).
+[gate_hulk_calm]
+A hulk lying over on her side, half out of the water, her plates rusted the colour of old blood. The last of the rain runs off her in strings.
+
+[gate_mast]
+A mast standing up out of the water on its own, snapped off at the top. Whatever it belonged to is underneath.
+
+# (draft)
+[gate_mast_bramble]
+{thinking}Where's the rest of the boat?
+
+# (draft)
+[gate_mast_ves]
+{smile}Downstairs, I'd guess.
+
+[gate_ribs]
+The ribs of a ship, bare, sticking up out of the water like a hand that's given up waving.
+
+[gate_sail]
+A sail on a broken spar, lashed to its post with three turns of rope. It's more hole than sail now. It still flaps like it's going somewhere.
+
+[gate_flag]
+A flag on a staff jammed into the shingle. The colours are long gone. It snaps in the wind anyway, very sure of itself.
+
+[gate_figurehead]
+A ship's figurehead, wedged upright in the shingle: a lady with her arms folded, looking out to sea with an expression of tremendous disappointment.
+
+# (draft)
+[gate_figurehead 2]
+The figurehead's face hasn't changed. You get the feeling it was meant for you all along.
+
+[gate_figurehead_ves]
+{thoughtful}Somebody carved that face on purpose. I'd like to meet them.
+
+[gate_anchor]
+An anchor, bigger than Bramble, rusted fast to the stones. It held something here once. It's still holding on.
+
+[gate_crate]
+A crate, washed up and split. Inside: straw, and the smell of oranges, and no oranges.
+
+[gate_pouch]
+A purse under the shingle by the anchor, buttoned shut. Somebody's salvage.
+
+[gate_edge]
+Rusted iron and black rock, slick with rain.
+
+# (draft) after the storm.
+[gate_edge_calm]
+Rusted iron and black rock, crusted white with salt.
+
+[gate_water]
+Green-black water, heaving slowly between the wrecks. There's no telling how deep it is. There's no wanting to know.
+
+[gate_rail]
+The bridge's rail: a rope, tarred, threaded through iron stanchions. It's the most trustworthy thing here.
+
+[gate_bridge]
+The plank bridge. Every board is a different wood, nailed down by a different hand.
+
+# (draft)
+[gate_bridge_bramble]
+{shout}It bends. Why does it BEND.
+
+# --- THE HULL ---------------------------------------------------------------------
+
+[hull_crate]
+A loose crate of ship's biscuit, light enough to shove. It's about as high as a step.
+
+[hull_crate_ves]
+{smile}About as high as a step. I'm just saying it out loud.
+
+[hull_sign]
+A board hung by a nail on the walkway's post, in a tidy hand: MIDDLE DECK. MIND THE BILGE. STEPS WASHED AWAY 4TH MARCH.
+Nobody ever put them back.
+
+[hull_chest]
+A sea chest, up on top of the cargo where the bilge couldn't reach it. Inside, wrapped in oilcloth: a short, heavy maul with an anchor's fluke for a head.
+
+[hull_pouch]
+A purse, tucked between two crates where only somebody climbing would find it.
+
+[hull_barrels]
+Barrels, strapped down with iron hoops. Rainwater, in the top one. Something worse in the others.
+
+[hull_rope]
+A coil of rope, wet through and heavier than it looks.
+
+[hull_anchor]
+A spare anchor, lashed to the deck, still waiting for somebody to need it.
+
+[hull_cargo]
+Cargo crates, stamped with a harbour's name that's been washed off.
+
+[hull_pots]
+Lobster pots, stacked up. One of them has a crab in it, who looks at you as if you've come to the wrong house.
+
+[hull_figurehead]
+Another figurehead, lying on her back: a man with a magnificent beard, staring up at the holes in the deck as if somebody owes him money.
+
+[hull_plate]
+The ship's iron plates, rivets as big as buttons, rust running down them in long stripes.
+
+[hull_porthole]
+A porthole, the glass salted over. Out there the sea heaves grey-green, and the rain hits it sideways.
+
+# After the chapter (the storm over).
+[hull_porthole_calm]
+A porthole, the glass salted over. Out there the sea heaves grey and slow, with nothing hitting it for once.
+
+[hull_bilge]
+Bilge water. Black, still, and it smells like the inside of a boot.
+
+[hull_net]
+A heap of old net, tangled and stiff with salt.
+
+[hull_barnacles]
+Barnacles, thick as a crust.
+
+[hull_walkway]
+The middle deck, a walkway two good steps above the hold. The steps up to it are gone. The bilge laps at its foot.
+
+[hull_lowcargo]
+Cargo, stacked up a step high.
+
+# --- THE PUMPS --------------------------------------------------------------------
+
+[pumps_sign]
+A notice, nailed to a beam: BILGE PUMPS. ONE ON EVERY DECK. WORK ALL THREE OR DON'T BOTHER.
+Somebody has underlined BOTHER twice.
+
+# (draft)
+[pumps_sign_bramble]
+{glee}BOTHER! That's what Haddock's boat is called!
+
+# (draft)
+[pumps_sign_ves]
+{laughing}It was a word first, Bramble.
+
+[pumps_main_pump]
+An iron bilge pump bolted to the deck, the handle worked by a treadle at its foot. A hose runs off it over the side.
+
+[pumps_plate_hero]
+The main deck pump's treadle. Stand on it and work it, and the pump sucks and gurgles.
+
+[pumps_hole]
+A torn plate low in the hull's side. Behind it, a narrow crawl goes down between the hull and the decks into the dark.
+
+# (draft)
+[pumps_hole_bramble]
+{sly}I fit in that. Bet I fit in that.
+
+[pumps_bilge_pump]
+The bilge pump, right at the bottom of the ship. It's rusted, but somebody kept it greased.
+
+[pumps_plate_bramble]
+The bilge pump's treadle, small and stiff, down where only somebody small can get to it.
+
+[pumps_companionway]
+The stairs down to the 'tween deck, full to the top step with black water. Something has to pump it out.
+
+[pumps_companionway_open]
+Two pumps going, and the companionway gurgles and drains, the water going down the stairs one step at a time.
+
+[pumps_tween_pump]
+The 'tween deck pump, its handle stuck up on a beam where the water left it. Only something with a hook on the end would reach it.
+
+[pumps_tween_pump_ves]
+{proud}Something with a hook on the end. How fortunate.
+
+[pumps_hatch]
+The way into the forecastle, full of bilge water to the brim. It isn't going anywhere by itself.
+
+[pumps_hatch_open]
+The third pump coughs, and gulps, and keeps going. In the forecastle, the black water sinks away down the hatch with a long sucking noise, and stays gone.
+
+[pumps_stump]
+A cleat on the deck, worn smooth. Press on it, and everyone is back together at the door.
+
+[pumps_barrels]
+Barrels marked FRESH WATER. They are not.
+
+[pumps_pouch]
+A purse, floating in the bilge on its own, buttoned tight. Lucky purse.
+
+[pumps_buoys]
+A heap of old buoys, painted in colours that used to mean something.
+
+[pumps_shallows]
+Bilge water, ankle deep, cold as a cellar.
+
+# (draft)
+[pumps_shallows_bramble]
+{angry}It's in my boots. It's IN them.
+
+# --- THE FOG DECK -----------------------------------------------------------------
+
+[fog_bell]
+A ship's bell on a frame bolted to the deck, green with age. The wind leans on it now and then, and it rings once into the fog, and nothing rings back.
+
+[fog_bell_bramble]
+{scared}Who's it ringing FOR?
+
+# (draft)
+[fog_bell_ves]
+{surprised}For ships, I suppose. ...There aren't any ships.
+
+# (draft) Ten times.
+[fog_bell 10]
+You ring the fog bell a tenth time. It rings out into the fog, and nothing rings back. You're almost sure.
+
+[fog_wheel]
+The ship's wheel, still on its post. It turns if you push it. Nothing else turns with it.
+
+[fog_sail]
+A sail, on a spar lashed to a stump of mast. The fog goes through it like it's not there.
+
+[fog_bollard]
+An iron bollard, with a chain round it that disappears into the fog.
+
+[fog_flag]
+A flag on a staff jammed in a hole in the deck, flapping hard at nothing.
+
+[fog_net]
+A net hung out to dry on its frame, a hundred years ago. It's still not dry.
+
+[fog_log]
+A board nailed to the mast, the ship's notice of the day, in chalk that the rain hasn't quite got to yet:
+FOG. ALL HANDS STAY AWAY FROM THE RAIL. COOK SAYS SOUP.
+
+[fog_pouch]
+A purse in a coil of rope on the deck, where somebody meant to come back for it.
+
+[fog_gap]
+The rail's broken here, and the gap's choked with weed. There's a little room under it, about the size of a ten-year-old.
+
+[fog_gap_bramble]
+{proud}I'm a ten-year-old!
+
+[fog_gap_ves]
+{bored}We're aware.
+
+[fog_bolt]
+A bolt wheel on the inside of the foredeck gate. Bramble hangs off it with all his weight, and it squeals round, and the bolt shoots back.
+
+[fog_bolt_not_you]
+It's on the far side of the gate, and the gate is bolted. Somebody would have to be on that side already.
+
+[fog_gate]
+An iron gate in the rail, bolted on the inside. Somebody wanted the foredeck to themselves.
+
+[fog_gate_open]
+The gate swings open with a long, rusty complaint.
+
+[fog_hatch]
+An open hatch in the foredeck, a ladder going down into the dark. It smells dry. Nothing else here does.
+
+[fog_sea]
+Holes in the deck, and the green sea heaving under them. Mind your feet.
+
+[fog_mast]
+A mast, going up into the fog until there isn't any more of it to see.
+
+[fog_stump]
+The stump of a mast, sawn off neat. Somebody needed the wood more than the ship did.
+
+# --- THE GALLEY -------------------------------------------------------------------
+
+[galley_stove]
+The galley stove. It's iron, and stone cold, and the firebox is full of seawater.
+
+# (draft)
+[galley_stove_ves]
+{smile}Cooking with confidence, if nothing else.
+
+[galley_cook]
+The ghost cook floats over his cold stove, stirring a pot with a ladle and humming. He beams at you. "More soup? There's always more soup."
+
+[galley_cook_bramble]
+{grin}Thanks, Mister Cook!
+
+# (draft)
+[galley_cook_ves]
+{smile}There isn't any soup, Bramble.
+
+# (draft)
+[galley_cook 2]
+The ghost cook stirs and hums. "Twelve to feed," he says, "and they're always late. Never mind. It keeps."
+
+[galley_cook_bramble 2]
+{thinking}...Where are the twelve?
+
+# (draft)
+[galley_cook_ves 2]
+{tender}Let him keep it, Bramble.
+
+[galley_pot]
+The cook's great iron pot. You lift the lid, braced for nothing, and find chowder: a real bowl of it, thick and hot. The cook beams. "Told you."
+
+[galley_pot_empty]
+The pot is empty now. The cook keeps stirring it anyway.
+
+[galley_menu]
+A slate on a post by the stove, the chalk written over and over:
+TODAY: SOUP.
+TOMORROW: SOUP.
+SUNDAY: SOUP (SPECIAL).
+
+[galley_menu_ves]
+{smile}What makes Sunday's special?
+
+[galley_menu_bramble]
+{grin}Bigger spoons.
+
+[galley_table]
+The crew's table, laid for twelve. Every bowl is full of rain.
+
+# (draft) after the storm.
+[galley_table_calm]
+The crew's table, laid for twelve. Every bowl is full of old rain with a skin of salt on top.
+
+[galley_bench]
+A long bench, worn smooth by a hundred years of nobody sitting on it.
+
+[galley_barrels]
+Barrels of salt pork. The salt has won.
+
+[galley_stores]
+The cook's stores, labelled in a careful hand: FLOUR. MORE FLOUR. DO NOT TOUCH (THIS MEANS YOU, PIKE).
+
+[galley_porthole]
+A porthole. Through it, the fog, and a long way off, a tall black tower.
+
+[galley_pans]
+Pans and ladles, hung on hooks along the beam.
+
+# --- THE MAST ---------------------------------------------------------------------
+
+[mast_sign]
+A board on a post by the basin, the paint nearly gone: HIGH WATER FLOATS THE RAFT. LOW WATER BARES THE FLATS. THE MAST IS NOT FOR CLIMBING.
+The last line has been crossed out.
+
+# (draft)
+[mast_sign_ves]
+{determined}High for the raft, low for the mud. Right.
+
+[mast_wheel]
+A tide wheel, its rim green with brass and salt. Out in the basin, the water waits to see what you'll do.
+
+[mast_wheel_turn]
+You heave the wheel round. Out in the basin, the water starts to move.
+
+[mast_wheel_busy]
+The wheel won't budge. The water's still moving.
+
+[mast_dial]
+A tide dial on a post, its hand pointing at what the basin's doing now.
+
+[mast_raft_post]
+An iron post, with a chain running out from it into the moat. At the other end, under the water, something wooden bumps against the bank.
+
+# (draft)
+[mast_raft_post_bramble]
+{surprised}A raft that sinks on purpose?
+
+# (draft)
+[mast_raft_post_ves]
+{smile}A shy raft. I like it.
+
+[mast_mast]
+The great mast, snapped high up. Its rigging hangs down it in ropes as thick as your arm. At the very top, where the wood splits, the grain is black and glassy, as if something hot had been pulled out of it.
+
+# (draft) The hint that the star-shard is somewhere else: a scorch running east, out to sea.
+[mast_scorch]
+A scorch along the planks, a thumb deep, running east in a line as straight as a ruled one. It has burnt the wet wood dry. Down in the char, a few flecks of something pale blue, still bright. The line goes on over the end of the yard and out towards the sea.
+
+# (draft)
+[mast_scorch_ves]
+{surprised}Something hot came through here. In a hurry, by the look of it.
+
+# (draft)
+[mast_scorch_bramble]
+{thinking}Why does it point at nothing?
+
+[mast_halyard]
+The halyard, an old rope run down the mast to the deck. Step onto the coil and you could slide down it, if you didn't value your hands. Or climb down the rigging, the way you came up.
+
+[mast_flag]
+A flag at the very top of the yard, black and torn. It's been flying the whole time. Nobody saw.
+
+[mast_yard_end]
+The yard's end, lashed to an iron post sunk in the rock of the cliff.
+
+[mast_pouch]
+A purse on the sandbar, half buried, where the tide dropped it.
+
+[mast_water]
+The basin. Green, black, and patient.
+
+[mast_hulk]
+The hulk's side, all rivets and weed, stood up out of the basin like a wall.
+
+[mast_yard]
+The main yard: a spar as wide as a bench, running out over the water to the cliff. The rain beads along it.
+
+# (draft) after the storm.
+[mast_yard_calm]
+The main yard: a spar as wide as a bench, running out over the water to the cliff. The gulls have found it.
+
+[mast_yard_bramble]
+{scared}Don't think about it. Don't think about it.
+
+# --- THE SLIP ---------------------------------------------------------------------
+
+[slip_bother]
+The Bother, rocking at the end of the slip with her oars shipped. Rain pools in the bottom of her. She looks pleased to see you, which for a boat is saying something.
+
+# (draft) after the storm.
+[slip_bother_calm]
+The Bother, rocking at the end of the slip with her oars shipped. She looks pleased to see you, which for a boat is saying something.
+
+# (draft)
+[slip_bother_bramble]
+{sheepish}...Still very small.
+
+[slip_sign]
+A board on a post at the head of the slip, newer than anything else here: SLIP. FERRY BY ARRANGEMENT. RING LOUDLY.
+There's no bell.
+
+# (draft) THE FOG BELL'S POST: on the cove's far east point, an old bell frame with nothing in its bracket. The bell was taken
+# down long ago; the Fair Return's torn log says where (the steps under the old boat on the point, the cave, the Watch Rock).
+[slip_fog_bell_post]
+A post at the very point of the cove, beside an old frame for a bell. On the post, a brass plate gone green everywhere but the words, as if somebody used to rub them: IN FOG, RING FOR THE FAIR RETURN.
+
+# (draft)
+[slip_fog_bell_post_ves]
+{smile}Ring for it. With what, I wonder.
+
+[slip_fog_bell_gone]
+A frame of heavy black timber, for a bell. The iron bracket under the crossbeam is empty. Its bolts haven't rusted through or been broken: they were taken out, carefully, one by one, and the holes stopped with tallow so the rain wouldn't get in. Somebody didn't want this bell. Somebody didn't want it hurt, either.
+
+# (draft)
+[slip_fog_bell_gone_bramble]
+{proud}So the sign was right. There's no bell.
+
+# (draft)
+[slip_fog_bell_gone_ves]
+{determined}There was, though. You don't take that much care over nothing.
+
+# (draft) The old boat on the point, keel up, lying over the fog-watch's steps. Before the last page of the log, it is only
+# a boat (a draught under it is the hint); after point_boat it lies on its side and the steps are open.
+[slip_point_boat]
+An old boat lying keel up on the point, black with tar, weighted all round its gunwale with big round stones. It hasn't been in the water for a long, long time. A cold draught breathes out from under its side, and with it, very faint and very far down, the sound of the sea.
+
+[slip_point_boat_bramble]
+{scared}Boats shouldn't breathe.
+
+[slip_point_boat_rolled]
+The old boat, keel up at the water's edge where it came to rest. It looks like it would quite like to be put back.
+
+[slip_point_steps]
+Worn stone steps going down into the rock of the point, into the dark. The air coming up them is cold and smells of the sea.
+
+# (draft)
+[slip_point_steps_ves]
+{laughing}After you. I mean that kindly.
+
+# (draft)
+[slip_sign_ves]
+{smile}Shout loudly, then. He'll hear you eventually.
+
+[slip_nets]
+Nets on a drying frame, two poles and a line between them. These ones are dry. Somebody comes here.
+
+[slip_bollard]
+A bollard at the head of the slip, its iron worn bright by ropes.
+
+[slip_pouch]
+A purse, wedged in the cliff's foot above the tide line.
+
+[slip_cliff]
+The cliff, black and running with rain.
+
+# (draft) after the storm.
+[slip_cliff_calm]
+The cliff, black and dripping.
+
+[slip_planks]
+Planks laid over an old stone slip, running down into the water.
+
+# --- THE POCKET (secret) ----------------------------------------------------------
+
+[pocket_chest]
+The bosun's chest, padlocked, with the padlock rusted through. Inside, folded in a sail: a breastplate of brass, from a diving suit, heavy as a door.
+
+[pocket_pouch]
+A swear jar, tucked against the wall and full to the lid with coins. Whoever ran this ship had a lot to say.
+
+[pocket_barrels]
+Barrels of rum, empty. All of them. Every single one.
+
+[pocket_note]
+A note pinned to a post, in pencil: BOSUN'S. KEEP OUT. THIS MEANS YOU, COOK.
+Under it, in a different hand: I WASN'T GOING TO.
+
+# (draft)
+[pocket_note_bramble]
+{sly}He was going to.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_galley_mugs]
+The crew's mugs on their rail, a name painted on each. The paint is mostly gone.
+
+# (draft)
+[in_galley_pans]
+Pans and a ladle on their hooks, ready for a dinner a hundred years late.
+
+# (draft)
+[in_galley_bottles]
+The cook's bottles: VINEGAR, SAUCE, SAUCE (HOT), and one marked DO NOT.
+
+# (draft)
+[in_galley_tins]
+Tins on a crate. PEAS, PEAS, PEAS, PEAS.
+
+# (draft)
+[in_galley_bowl]
+A bowl put out for the ship's cat. There's a fish in it, and it's fresh.
+
+# (draft)
+[in_pocket_ship]
+A ship in a bottle, on a ship, inside a ship. The bosun liked a joke.
+
+# (draft)
+[in_pocket_knots]
+The bosun's knot board. Every knot perfect, except the last one, which is a bow.
+
+# (draft)
+[in_hull_oilskin]
+An oilskin still on its peg, green with weed at the hem.
+
+# (draft)
+[in_hull_chart]
+A chart gone soft with damp. A course is pencilled across it, and stops short.
+
+# (draft)
+[galley_sea_chests]
+A sailor's sea chest, his name cut in the lid. Locked. Whatever he kept, he's still keeping it.
+
+# (draft)
+[pocket_sea_chest]
+The bosun's own sea chest. Inside: one dry sock, and a note that says WHO TOOK THE OTHER ONE.
+
+# --- UNDER THE POINT (the fog-watch's cave, the way to the Fair Return's bell). (draft) ---------------------
+
+[point_bench]
+A bench cut out of a ship's timber, wedged between two rocks where the landing is driest. The seat is worn into two hollows by people who sat here a long time, in the cold, waiting for fog.
+
+[point_tally]
+Chalk on the rock, gone soft with the damp: a little bell drawn at the top, and under it strokes in fives, rows and rows of them, one for every fog somebody sat down here and rang through. The last five stops at three.
+
+[point_tally_ves]
+{thoughtful}They counted. Of course they counted.
+
+[point_hook]
+The fog-watch's lantern on its post, cold. The glass is cracked, the wick long gone to nothing, and the rock above it is black with old smoke.
+
+[point_rope]
+A coil of rope, gone stiff as wood, the end tied in a knot nobody's needed to untie for a very long time.
+
+[point_rock]
+The rock of the point, wet and black. Somewhere above you, through all of it, is the slip.
+
+[point_water]
+Black water, moving in and out of the cave on its own slow breath. The sea comes all the way in here at high tide, and goes all the way out again.
+
+[point_water_bramble]
+{worried}It'll go out again. Won't it? It will.
+
+[point_pool]
+A rock pool the tide left. Something with a lot of legs is very still in it, hoping you'll go.
+
+[point_weed]
+Weed, wet and heavy, combed all one way by the tide.
+
+[point_steps]
+The fog-watch's steps, up to the slip. Every one is worn into a dip in the middle.
+
+[point_pouch]
+A purse, wedged in a crack at the bottom of the wall, where somebody carrying something heavy through here must have brushed it off their belt.
+
+# --- THE WATCH ROCK (the Fair Return's fog bell). (draft) ----------------------------------------------
+
+[rock_mouth]
+The mouth of the cave under the point. The dark inside breathes with the sea.
+
+[rock_cliff]
+The cliff of the point, black and wet. The slip is just over the top of it, and might as well be in another country.
+
+[rock_water]
+Green-black water. Out here the sea fills and empties the gap between the rocks twice a day, and the fog comes and goes with it.
+
+[rock_stepping]
+A line of flat stones running out from the rock towards nothing at all, the way stepping stones do in a dream.
+
+[rock_hook]
+A lantern on a post where the fog-watch kept their light. It's cold, and the glass is green with salt. The post leans out to sea, as if it got tired of waiting and started to go.
+
+[rock_ring]
+An iron ring in the rock, for tying a boat. Worn bright on one side by a rope that isn't there any more.
+
+[rock_stones]
+A heap of round stones, piled the way people pile stones to sit on.
+
+[rock_pool]
+A rock pool full of sky. Something in it moves, and stops when you look.
+
+[rock_weed]
+Weed heaped against the cliff's foot, still wet from the last tide, and the one before.
+
+# (draft) The bell, before its tongue is back (after bell_found).
+[rock_bell_mute]
+The Fair Return's fog bell, green with salt, on its iron arm. You haul the rope. It swings out over the water and back without a sound. The iron eye inside, where its tongue should hang, is empty.
+
+# (draft)
+[rock_bell_mute_ves]
+{smile}Dry, with a door that's never shut. Bramble says the Drowned Rat. I was about to say the Drowned Rat.
+
+# (draft) The bell rung in clear air, at low water: nothing comes (the lever stays off).
+[rock_bell_clear]
+The bell speaks: a flat, deep note that goes out over the grey water a long, long way, and comes back off the cliff. Then nothing. The sea is clear all the way out. Whatever it was cast to call, it can't hear it like this.
+
+# (draft)
+[rock_bell_clear_ves]
+{determined}IN FOG, it says. This is just weather. ...Maybe when the tide's up.
+
+# (draft) The bell once it has been rung in the fog (and she has come). Also said as the fog wall parts.
+[rock_bell]
+The bell's note goes out into the fog and doesn't come back. Out at the end of the stones, something is moving in the white.
+
+# (draft) The bell after she has come.
+[rock_bell_after]
+The bell's note goes out into the fog. Out at the end of the stones, close and patient, the Fair Return creaks against her ropes, as if to say she heard you the first time.
+
+[rock_her_side]
+A lantern on a post at the gap in her rail, burning blue and cold. Nobody lit it. Past it her deck runs off into the fog, every rope coiled, every sail furled, as if she came in this morning and the crew have only stepped below.
+
+[rock_fog_wall]
+Fog, standing at the end of the stones as thick as wool and quite still, the way a door stands when it has been shut on you. The rest of the fog drifts. This doesn't.
+
+# (draft)
+[rock_fog_wall_ves]
+{worried}...Is fog meant to stand still like that?
+
+# --- THE POCKET: a page of the Fair Return's log. (draft) ---
+[pocket_log_bottle]
+On the rack in the corner, between two of the bosun's own bottles, a green one that isn't his: corked, sealed with red wax, and a roll of paper inside. Pressed into the wax: FR. By the look of it, nobody ever dared open it.
+
+# (draft)
+[pocket_log_bottle_ves]
+{surprised}He kept it with his own bottles and never opened it. ...I'd have opened it.
+
+# --- THE CHAIN CLIFF (optional, 2026-11-14) ------------------------------------------
+
+# (draft)
+[chain_sign]
+A board, painted by somebody in a temper: YARD CHAINS. NO CLIMBING THE BOLTS. THIS MEANS YOU. - Yard Master
+
+The chains have gone. The bolts haven't.
+
+# (draft)
+[chain_sign_bramble]
+{sly}It says "you". It doesn't say "us".
+
+# (draft)
+[chain_cliff]
+Black rock, running wet. Big iron ring-bolts are leaded into it, all the way up, rusted the colour of tea.
+
+# (draft)
+[chain_cliff_calm]
+Black rock, drying in streaks. Big iron ring-bolts are leaded into it, all the way up, rusted the colour of tea.
+
+# (draft)
+[chain_pile]
+What's left of a yard chain: a heap of links each as big as your head, rusted into one lump. It isn't going anywhere.
+
+# (draft)
+[chain_pouch]
+A purse wedged in a crack on the ledge. Somebody climbed this far, and stopped for a rest, and forgot it.
+
+# (draft)
+[chain_bollard]
+The winch's iron bollard.
+
+The chains ran round it and down the cliff to the hulks in the water. It's worn smooth as a pebble on one side.
+
+# (draft)
+[chain_lantern]
+The breakers' lantern, cold. The glass is so crusted with salt it would only ever have given a sort of glow.
+
+# (draft)
+[chain_locker]
+The breakers' locker, chained to the rock so it couldn't blow away.
+
+Inside, wrapped in oilcloth in a tin with a tight lid: a figgy duff, a whole one, still good.
+
+Sailors' puddings were made to last.
+
+# (draft)
+[chain_locker_bramble]
+{glee}A whole pudding! At the top of a cliff!
+
+# (draft)
+[chain_locker_ves]
+{smile}Best thing I've ever seen on a cliff. Bramble, you're second.
+
+[chain_locker_empty]
+The locker's empty. It still smells of spice.
+
+# ===== THE LIFE PASS (2026-11-14): rock pools, shells, the breakers' leavings and the odds the sea left. (draft) =====
+
+[sl_anemone_a]
+Anemones open like small flowers in the pool: pink, green, and one very orange. A tentacle curls round your finger and lets go again, politely.
+
+[sl_anemone_a 2]
+The anemones close up when you breathe on them. You try breathing very carefully.
+
+[sl_anemone_a_bramble]
+It GRABBED me! ...It's let go. It was only being friendly.
+
+[sl_anemone_a_ves]
+It's tasted you and decided against.
+
+[sl_barrel]
+A barrel on its side, stove in at one end, full of sand and one crab's idea of a bedroom.
+
+[sl_barrel_bramble]
+Hello? ...He's out.
+
+[sl_bars]
+A rack of iron pry-bars and a pick, leaning in order of size. The breakers were tidy people about their tools.
+
+[sl_bars_ves]
+Everything in its place, in a graveyard of ships. I respect it.
+
+[sl_bones]
+A fish picked down to its bones and left in a tidy comb. The gulls were thorough.
+
+[sl_bones_ves]
+Somebody enjoyed their dinner.
+
+[sl_bones_b]
+A fishbone arch, a whole ribcage of it, standing up out of the shingle like a tiny church. A hermit crab has moved in and is making the best of it.
+
+[sl_bones_b_bramble]
+It's got a roof! It's got a ROOF!
+
+[sl_boot]
+A single boot, stiff with salt. A very small crab has moved in and put out a doormat of weed.
+
+[sl_boot_ves]
+The other boot is probably still out there, looking for it.
+
+[sl_boot_b]
+A boot lying on its side with the laces still done up, as if the owner just stepped out of it politely and kept going.
+
+[sl_boot_b_ves]
+Left foot. I wonder where the right one went.
+
+[sl_bottle]
+A green glass bottle half sunk in the shingle, corked and empty. You hold it up to the light anyway.
+
+[sl_bottle_bramble]
+Maybe the note went out and found a better bottle.
+
+[sl_bottle_ves]
+No note. Pity. I do like a note.
+
+[sl_bottle_b]
+A bottle, brown this time, stoppered with a lump of wax. Inside, one dead moth, and a very small boat made of a matchstick.
+
+[sl_bottle_b_bramble]
+A ship in a bottle! In a bottle in the sea! That's the wrong way round!
+
+[sl_bottle_b_ves]
+Somebody took a lot of trouble over that.
+
+[sl_buoy]
+A buoy with half its paint left, rolling very slightly in the wind as if it wants to go home.
+
+[sl_buoy_ves]
+It's rolling the wrong way. Home's that way.
+
+[sl_buttons]
+A biscuit tin full of buttons, hundreds, every sort. A card on the lid: LOST PROPERTY. CLAIM AT THE FRONT. Somebody has added: THERE IS NO FRONT.
+
+[sl_buttons_bramble]
+Can I have one? ...Just the blue one. ...No, put it back, it's somebody's.
+
+[sl_buttons_ves]
+I'd like to meet whoever sat down and sorted these by size.
+
+[sl_chalk_arrow]
+An arrow chalked on a plate, pointing at the sea, and a hand drawn beside it. TEA'S THAT WAY. MIND THE STEP.
+
+[sl_chalk_arrow_ves]
+There isn't a step. There is a lot of sea.
+
+[sl_chalk_mind]
+Scratched into a plate in capital letters: MIND THE GAP. There's no gap. There never was. Whoever it was just really wanted to say it.
+
+[sl_chalk_mind_bramble]
+MIND THE GAP! ...I'm minding it. I can't see it. But I'm minding it.
+
+[sl_chalk_ship]
+A rust plate propped on stones with a ship chalked on it and a smiling sun. Under it, smaller: HERE LIES THE LAST ONE. ALSO THE NEXT ONE.
+
+[sl_chalk_ship_ves]
+They had a sense of humour. Of a sort.
+
+[sl_chalk_skull]
+A skull and crossbones chalked on a plate, with a smile added later in a different chalk. WORST PIRATES IN THE YARD, it says. BEST TEA.
+
+[sl_chalk_skull_bramble]
+That's not very pirate. ...I like it.
+
+[sl_chalk_tally]
+Chalk on a plate: a tally, and a stick man swinging a hammer, very pleased with himself. DUNCAN WAS HERE, it says. DUNCAN DID MOST OF IT.
+
+[sl_chalk_tally_bramble]
+Duncan's got a big hammer!
+
+[sl_chalk_tally_ves]
+Duncan did not do most of it.
+
+[sl_crabshell]
+An empty crab shell, orange-red and big as a saucer. All the doors and windows are open.
+
+[sl_crabshell_bramble]
+Where's the crab?! Is it walking round with no shell on? Is it embarrassed?
+
+[sl_crabshell_ves]
+It's called moulting. It's perfectly respectable.
+
+[sl_crabshell_b]
+A crab claw as big as your hand, bleached white, with a tiny barnacle on the pincer. It points straight at the sea.
+
+[sl_crabshell_b_ves]
+It's the same direction we're going. Convenient.
+
+[sl_dinghy]
+A dinghy lying keel up with a stone on it and a rope to a post, in case it gets ideas. Somebody has been very careful and very wrong.
+
+[sl_dinghy_bramble]
+It's a boat that's decided not to be a boat. I respect that.
+
+[sl_flag]
+A pole with a rag of red cloth tied to it, streaming. A signal for somebody. A hundred years of rain haven't got it down.
+
+[sl_flag_ves]
+Somebody wanted to be seen from the sea.
+
+[sl_float]
+A glass float from a net, green and thick as a bottle, with a seam down the middle. A spider has made a web inside.
+
+[sl_float_ves]
+A little house for a spider. Better than the net ever did.
+
+[sl_hulk]
+The ribs of a hull coming up out of the shingle like a ship that was swallowed and has begun to climb back out.
+
+[sl_hulk_bramble]
+I bet there's something in it. ...It's sand. There's sand in it.
+
+[sl_hulk_ves]
+Keel up. Every wreck here has given up in a different pose.
+
+[sl_jelly]
+A moon jelly stranded on the stones, a clear dish with four pale rings in it. The tide will come and fetch it. Probably.
+
+[sl_jelly_bramble]
+It looks like a lampshade. A very sad lampshade.
+
+[sl_jelly_ves]
+Don't poke it.
+
+[sl_kelp_a]
+Long brown kelp, rooted to a rock and combing out in the current like hair. It squeaks when you pull it.
+
+[sl_kelp_a_bramble]
+It squeaks!
+
+[sl_kelp_b]
+Kelp stems, rubbery and slick. Somebody has tied one in a knot. Whoever it was had time on their hands.
+
+[sl_kelp_b_ves]
+A sailor. Only a sailor ties a knot in something that isn't holding anything.
+
+[sl_kettle]
+A camp kettle on three stones, black with old smoke, a cold crust of ash beneath. The spout's been mended with a spoon handle.
+
+[sl_kettle_bramble]
+Is there any left? ...There's a bit of a spider.
+
+[sl_kettle_ves]
+Tea for forty. Or one man, forty years.
+
+[sl_ladder_gag]
+A ladder leaning against nothing at all, tied to a post, with a bucket on the top rung. A hand-lettered sign: NOT YET.
+
+[sl_ladder_gag_bramble]
+Somebody's going to climb that. Somebody always does.
+
+[sl_ladder_gag_ves]
+I'm going to pretend I didn't see that.
+
+[sl_lantern]
+A lantern lying where the wind dropped it, glass whole, wick dry. Nobody lit it. Nobody will.
+
+[sl_lantern_ves]
+Leave it. It's earned a lie-down.
+
+[sl_log]
+A bleached log wedged between two rocks. Somebody has carved a face in the end, a surprised one.
+
+[sl_log_bramble]
+He looks like he's seen the sea! For the first time!
+
+[sl_log_ves]
+He looks like he's just heard the price of rope.
+
+[sl_maul]
+A big iron maul left standing in a stump, the handle worn to the shape of a hand. For knocking the pins out of hulls.
+
+[sl_maul 2]
+The maul is still in the stump. It's holding on.
+
+[sl_maul_bramble]
+Can I lift it? ...No. No, I can't. Don't tell anyone.
+
+[sl_maul_ves]
+Left in the stump overnight. Never came back for it.
+
+[sl_net]
+Net, torn, hung over a rock to dry and never collected. A small fish is still in it. Dry. A very long time dry.
+
+[sl_net_bramble]
+Is it still good? ...No. No, it's not.
+
+[sl_net_ves]
+Poor thing. It was nearly out.
+
+[sl_net_b]
+A net strung between two stakes to dry, with starfish caught in it like medals. Whoever hung them did it carefully, so as not to hurt them.
+
+[sl_net_b_ves]
+Somebody put them back on the rocks, and then somebody put them back on the net. They like the net.
+
+[sl_no_loiter]
+A board on a post: NO LOITERING. Chalked underneath: (YOU ARE LOITERING.)
+
+[sl_no_loiter_bramble]
+Is this loitering? I'm just standing. In one place. For a while.
+
+[sl_no_loiter_ves]
+I'm not loitering. I'm waiting for you to finish reading.
+
+[sl_oar]
+An oar stuck upright in the stones like a flag nobody's claimed. A name is burnt into the blade, worn almost to nothing.
+
+[sl_oar_ves]
+Whoever it was, they got where they were going. Or they didn't, and that's why it's here.
+
+[sl_oar_b]
+An oar stuck in the shingle blade up, with a gull on the top of the handle. The gull looks entirely settled. It has been there longer than you have.
+
+[sl_oar_b_ves]
+He's on watch.
+
+[sl_pipe_found]
+A clay pipe lying on a bit of plank in a corner of the pumps, stem chewed flat. Somebody put it down for a moment and went to do something.
+
+[sl_pipe_found_bramble]
+Somebody's left their pipe! Somebody's going to want it!
+
+[sl_pipe_found_ves]
+A five-minute break. The five minutes are, apparently, still running.
+
+[sl_pipe_gone]
+A bit of plank, worn pale in the shape of a pipe. A faint smell of tobacco, or of salt, or of someone who has just stood up.
+
+[sl_plank]
+A plank with a painted letter on it: an R, or a P, in blue. The rest of the word is in another part of the sea.
+
+[sl_plank_bramble]
+It could be PIE! ...It's not PIE.
+
+[sl_plank_ves]
+R-something. Probably RUN.
+
+[sl_pool_a]
+A pool in the rock, clear as a window. A shrimp has noticed you and is deciding what to do about it.
+
+[sl_pool_a 2]
+The shrimp is back at the ledge, pretending it was never gone.
+
+[sl_pool_a_bramble]
+THERE. Under the ledge. Did you see it go?
+
+[sl_pool_a_ves]
+Don't stare. It can tell.
+
+[sl_pot]
+A lobster pot with the door chewed open from inside. Whatever it was, it wasn't going to stay.
+
+[sl_pot_ves]
+I'd have chewed too.
+
+[sl_pouch_chain]
+A breaker's lunch tin in a crack by the climb, lid rusted shut and hinges gone. A few coins inside, and a sandwich that gave up long ago. You take the coins and leave the sandwich its dignity.
+
+[sl_pouch_fog]
+A tin cup half buried in the corner of the deck with some coins in it. Somebody was saving for something. The name scratched in the bottom has been scrubbed out, so you look after it.
+
+[sl_puddle]
+A puddle in a dent of the rock, with the whole stormy sky in it, upside down.
+
+[sl_puddle_bramble]
+I can see a cloud in it! A tiny cloud!
+
+[sl_rivets]
+A bucket of rivets rusted into one lump. The breakers kept them to use again. Nobody ever did.
+
+[sl_rivets_bramble]
+That's a LOT of rivets. Imagine how much ship was holding on to these.
+
+[sl_rope]
+A coil of rope gone stiff as a board, tarred and salted and curled up on itself like a sleeping cat.
+
+[sl_rope_bramble]
+Can I take it? I could do loads with a rope. ...It would snap. All right.
+
+[sl_rope_b]
+A rope's end whipped with twine, hung over a post in a perfect loop. Whoever tied it expected to be back.
+
+[sl_rope_b_bramble]
+I can do that knot! ...I can't do that knot.
+
+[sl_sandbags]
+A stack of sandbags from a sea wall that isn't there any more. The bags have held. Somebody was good at sacks.
+
+[sl_sandbags_bramble]
+Sandbags! We could build a fort. ...In a storm. Hm.
+
+[sl_shells_a]
+A drift of small shells: whelks, cockles, one with a hole worn through the middle. Somebody gathered these into a pile and then forgot why.
+
+[sl_shells_a_ves]
+A collection nobody got to finish.
+
+[sl_shells_b]
+A heap of empty cockles, all bleached the same bone white. The crabs have been using them as furniture.
+
+[sl_shells_b_bramble]
+I'm keeping one. ...No. Somebody lives in it. I'll leave it.
+
+[sl_star_a]
+A starfish clamped to the rock, orange as a tin of paint. It isn't moving. It isn't not moving, either.
+
+[sl_star_a 2]
+The starfish hasn't moved. You can't tell if that's good news.
+
+[sl_star_a_bramble]
+Five arms! I counted twice! It still has five!
+
+[sl_star_a_ves]
+It's thinking. Leave it to it.
+
+[sl_star_b]
+A purple starfish, wedged in a crack where the tide can't quite reach. All five arms point at the sea.
+
+[sl_star_b_ves]
+Purple. Of course the posh one gets the good crack.
+
+[sl_star_c]
+A pink starfish with a limpet riding on its back like a hat. Neither seems bothered.
+
+[sl_star_c_bramble]
+They're friends. That's a friendship. Look at them!
+
+[sl_tally]
+A post cut with tally marks in gates of five, row on row. One mark for every ship broken up here. The last gate has four strokes. Somebody meant to come back and finish it.
+
+[sl_tally_bramble]
+I'd put the fifth one in, but I think that's cheating.
+
+[sl_tally_ves]
+They stopped on a four. That bothers me more than it should.
+
+[sl_tar]
+A bucket of pitch with its brush stuck in upright, set hard as a stone. The breakers sealed rope-ends with it.
+
+[sl_tar_ves]
+It will never be used again. The brush has made peace with it.
+
+[sl_tar_b]
+A tar pot with a ladle, the pitch still warm at the edges, as if it's been stirred recently. It has not been stirred recently. You check.
+
+[sl_tar_b_ves]
+Don't check it twice.
+
+[r5s_pocket_tub]
+A tub of old rainwater with a single sea biscuit floating in it, soft as a cloud. Somebody was trying to bring it back to life.
+
+[r5s_pocket_tub_ves]
+{bored}It's not coming back.
+
+[r5s_pocket_tub_bramble]
+{determined}Give it time.
+
+[r5s_pocket_bottle]
+A bottle with a ship in it. The ship's name has been painted over so many times it is just a lump of paint now.
+
+[r5s_pocket_bottle_ves]
+{thinking}Somebody really wanted to get the name right.
+
+[r5s_pocket_bottle_bramble]
+{awed}How did it get in there?
+
+[r5s_pocket_boots]
+A pair of sea boots stuck on two nails to dry, one with a note: THEY'RE NOT LEAKING. THEY'RE LETTING GO.
+
+[r5s_pocket_boots_ves]
+{bored}Optimism.
+
+[r5s_pocket_boots_bramble]
+{worried}They look like they're leaking.
+
+# --- R3D BEGIN (round 3 fun check, helper D) ---
+# (draft)
+
+[r3d_wreck_watch_rock_log]
+A watchkeeper's log in a biscuit tin to keep the rain off. Every entry says the same: FOG. FOG. FOG. Then one that says: CLEAR. (JOKE.)
+
+[r3d_wreck_watch_rock_log_bramble]
+{grin}Ha!
+
+[r3d_wreck_watch_rock_log_ves]
+{smile}It's a decent joke for a man alone with a bell.
+
+[r3d_wreck_watch_rock_mug]
+A tin mug upside down on a rock, full of rain. It's a very small pond with a handle.
+
+[r3d_wreck_watch_rock_mug_bramble]
+{thinking}I wonder if there are fish in it.
+
+[r3d_wreck_watch_rock_mug_ves]
+{bored}There's rain in it. Stop looking for fish.
+
+[r3d_wreck_watch_rock_gull]
+A gull standing on the rock, utterly still, looking at the bell. When you step near, it says nothing and doesn't leave.
+
+[r3d_wreck_watch_rock_gull_bramble]
+{worried}Is it a ghost gull?
+
+[r3d_wreck_watch_rock_gull_ves]
+{bored}It's a gull. They have the same expression either way.
+
+[r3d_wreck_chain_cliff_tally]
+A post notched in bundles of five. Someone counted the days of the chain. The last bundle has only four, and then, cut deep: GONE HOME.
+
+[r3d_wreck_chain_cliff_tally_bramble]
+{thoughtful}Four. They were so close to five.
+
+[r3d_wreck_chain_cliff_tally_ves]
+{bored}Or they got bored of counting. That's more likely.
+
+[r3d_wreck_chain_cliff_bitts]
+A bollard worn smooth by chain and a century of wanting to go somewhere.
+
+[r3d_wreck_chain_cliff_bitts_bramble]
+{grin}It's smooth like a doorknob.
+
+[r3d_wreck_chain_cliff_bitts_ves]
+{bored}Please don't try to open it.
+
+[r3d_wreck_chain_cliff_pipe]
+A clay pipe jammed in a crack, a twist of tobacco still in the bowl. Whoever kept the chain liked a quiet smoke.
+
+[r3d_wreck_chain_cliff_pipe_bramble]
+{thoughtful}It's cold.
+
+[r3d_wreck_chain_cliff_pipe_ves]
+{bored}That's what happens to pipes.
+
+[r3d_wreck_chain_cliff_kettle]
+A kettle on a flat stone with its lid on, full to the top. The rain keeps topping it up.
+
+[r3d_wreck_chain_cliff_kettle_bramble]
+{glee}Free tea! If we had a fire.
+
+[r3d_wreck_chain_cliff_kettle_ves]
+{bored}It's rain. Boiled rain, if you had a fire. A recipe for nobody.
+
+[r3d_wreck_chain_cliff_oilskin]
+A hook with an oilskin on it, shaped like a man who's just stepped out. It drips.
+
+[r3d_wreck_chain_cliff_oilskin_bramble]
+{worried}It's dripping on my boot.
+
+[r3d_wreck_chain_cliff_oilskin_ves]
+{bored}It's what oilskins do. They drip, we dry, nobody wins.
+
+[r3d_wreck_under_point_boots]
+A pair of sea boots set neatly side by side on a rock, as if their owner took them off to paddle and never came back for them.
+
+[r3d_wreck_under_point_boots_bramble]
+{worried}Don't think about it.
+
+[r3d_wreck_under_point_boots_ves]
+{bored}I'm not.
+
+[r3d_wreck_under_point_bottle]
+A bottle with a log page inside: FOG. FOG. TIDE. FOG. LUNCH.
+
+[r3d_wreck_under_point_bottle_bramble]
+{grin}Lunch is the best bit.
+
+[r3d_wreck_under_point_bottle_ves]
+{bored}Lunch is always the best bit.
+
+# --- R3D END ---

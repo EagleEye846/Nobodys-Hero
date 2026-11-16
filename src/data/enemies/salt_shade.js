@@ -26,7 +26,7 @@ export const SALT_SHADE = {
   feel: { hit: 'ghost', idle: 'wisps', defeat: 'ghost', exit: 'float' },
   // The chapter 5 storm battle song (the Wreck Yard and on).
   music: 'coastBattleStorm',
-  maxHp: 11400,
+  maxHp: 9600,
   damage: 93,
 
   difficulty: { density: 1.75, speed: 1.60 },
@@ -39,9 +39,9 @@ export const SALT_SHADE = {
 
   // His attacks live in src/battle/attacks/salt_shade.js.
   patterns: [
-    { name: 'shadeAnchor', weight: 3 },
-    { name: 'shadeBottle', weight: 3 },
-    { name: 'shadeRope', weight: 3 },
+    { name: 'shadeLamp', weight: 3 },
+    { name: 'shadeBrine', weight: 3 },
+    { name: 'shadeLead', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -52,7 +52,7 @@ export const SALT_SHADE = {
     { name: 'Point at the tide', calm: 30 },
   ],
 
-  rewards: { exp: 2950, coins: 18 },
+  rewards: { exp: 2950, coins: 14 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'ghost_rope', chance: 0.4 }],

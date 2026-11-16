@@ -7,7 +7,11 @@
 # behind (a hard hat, a boot, a tin mug, a pocket watch). It keeps far too
 # still. Its mouth is a seam that opens much too wide. When the star wakes,
 # seven eyes open down its side. It speaks only in the miners' voices.
-# Underneath, it is still waiting for everyone to come back after lunch.
+# When the miners didn't come back, it made one wish on the star: that they
+# would come back after lunch. The star gave it their voices and the things
+# they left behind instead of the miners themselves. It isn't mad or
+# possessed; it is stuck inside that wish, still waiting for everyone to come
+# back after lunch. Sparing it lets the wish go. Beating it breaks it.
 # The hero never speaks, so every TALK is something the hero does.
 # (draft: every line here)
 # Numbers (HP, damage, its three phases) live in src/data/enemies/pudding.js.
@@ -69,7 +73,7 @@ The PALE OLM is coming apart in slow pieces. Deep inside all that glass is a ver
 
 # (draft)
 [flavor: spareable]
-The PALE OLM has gone still, the right kind of still. The star has dimmed to a candle. It is listening, the way you do when something sounds like home.
+The PALE OLM has gone still, the right kind of still. The star has dimmed to a candle. It listens, as if something sounded like home.
 
 # Said in a speech bubble before each attack, picked at random.
 # (draft)
@@ -179,7 +183,7 @@ shift.
 # (draft)
 [talk: Inspect]
 PALE OLM - HP 25200
-The miners' cave olm, grown huge and glassy round a star. You can see straight through it to what it kept. It swims through rock: gill-light, thrown stone, glass bubbles, its tail, tin mugs. When the star wakes, rings of light, and then it stops choosing. It only wants the shift back.
+The miners' cave olm, grown huge and glassy round a star. It asked for the miners back after lunch, and got their voices and their things. You can see straight through it to what it kept. It swims through rock: gill-light, thrown stone, glass bubbles, its tail, tin mugs. When the star wakes, rings of light, and then it stops choosing. It only wants the shift back.
 
 # (draft)
 [talk: Offer the half pasty]

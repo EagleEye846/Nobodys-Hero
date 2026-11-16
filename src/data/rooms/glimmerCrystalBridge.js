@@ -139,12 +139,15 @@ export const GLIMMER_CRYSTAL_BRIDGE = {
     { sprite: 'glowcap_trio', x: 9, y: 6, text: 'bridge_trio' },
     { sprite: 'glowcap_big', x: 29, y: 11, text: 'bridge_glowcap' },
     { sprite: 'glowcap_tall', x: 2, y: 10, text: 'bridge_glowcap' },
-    { sprite: 'glow_moss', x: 5, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 25, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 6, y: 11, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 5, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 25, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 6, y: 11, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'sign', x: 8, y: 9, text: 'bridge_sign' },
     // A purse on a high block on the far ledge (b, then B, then B).
     { sprite: 'gold_pouch', x: 29, y: 4, text: 'bridge_purse_high', gold: 105, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'crystal_pink_s', x: 10, y: 6, text: 'gp_gem' },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', H: 'cave_moss_wall', K: 'cave_wall',

@@ -53,7 +53,7 @@ Snip!
 # TALK options in src/data/enemies/whelkling.js.
 [talk: Inspect]
 WHELKLING - HP 1950
-A hermit crab in a big whelk shell crusted with glowing anemones. Buds anemones near you that burst into rings of stings, spins its shell to throw grit round in two arms, and pinches its big claw shut along your row or column. Watch the line, then step off it.
+A hermit crab in a big whelk shell crusted with glowing anemones. Hops into shells biggest first, topples the way it leans, and its anemones go off round you like a clock.
 
 [talk: Admire the shell]
 You lean in and look at the shell properly: the spiral going round and up, the bands, the little lights on top. You nod slowly. WHELKLING comes all the way out to see you looking, and turns, so you can see the other side as well.

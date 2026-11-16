@@ -16,7 +16,7 @@ export const SILTLING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'drains',
   sprite: { rows: SILTLING_SPRITE, palette: SILTLING_PALETTE },
-  maxHp: 700,
+  maxHp: 2450,
   damage: 22,
 
   // The Old Drains, below Hollin: a step up from the Hushwood's.
@@ -25,9 +25,8 @@ export const SILTLING = {
   // Its attacks live in src/battle/attacks/siltling.js.
   patterns: [
     { name: 'siltFling', weight: 3 },
-    { name: 'siltSort', weight: 3 },
+    { name: 'siltCount', weight: 3 },
     { name: 'siltSink', weight: 2 },
-    { name: 'siltSettle', weight: 2 },
     { name: 'siltGrab', weight: 2 },
   ],
 

@@ -1,5 +1,5 @@
 // SEAM NINE'S LOWER WORKINGS (draft): the few props the secret detour under
-// Seam Nine needs that nothing else has: the miners' tea shelf in Pudding's
+// Seam Nine needs that nothing else has: the miners' tea shelf in the Pale Olm's
 // pool (a kettle, seven tin mugs and one small dish), and the crack in the
 // floor of Seam Nine that the star's light comes up through. Same way of
 // working as deepProps.js: each prop is { palette, rows } on a small grid, 16 px

@@ -1,0 +1,388 @@
+# THE GLIMMERING (Chapter 4): the bright crystal caves at the top of the
+# buried kingdom. Things you can read and look at in the Glimmering's rooms,
+# starting with glimmer_landing (more are added as the rest are built). See
+# notes/docs/chapter-4-the-first.md.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal rings softly, like a glass someone's run a finger round. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. It sparkles, anyway.
+
+[chest_empty]
+An empty chest, glittering with crystal dust.
+
+# --- THE LANDING ---
+
+[landing_cap]
+The giant mushroom, glowing violet: the size of a house, and about as soft as a very good bed. There's a deep dent in the top of the cap, and a faint cloud of spores still going up out of it.
+
+[landing_cap_ves]
+{bored}We don't speak of the mushroom.
+
+{smile}...It was very comfortable, though.
+
+# (draft)
+[landing_cap 2]
+You give the cap a prod. It gives back, slowly, and sighs out a little cloud of spores that smells of warm bread.
+
+# (draft)
+[landing_cap_ves 2]
+{bored}Stop poking it. It's been through enough. {smile}We both have.
+
+# (draft)
+[landing_cap 10]
+You prod the cap one more time. It wobbles, sags, and with a great soft BWUMP blows a ring of glowing spores clean up to the roof.
+
+They come down over everything, very slowly, as if it's snowing in a bakery.
+
+# (draft)
+[landing_cap_ves 10]
+{laughing}It sneezed on us. {bored}...A mushroom got the last word. Nobody hears about this.
+
+[landing_sign]
+A hand-painted sign, nailed to a crystal: MIND THE PINK ONES. THEY BITE.
+
+And underneath, in a smaller and much shakier hand: (sorry).
+
+[landing_sign_ves]
+{bored}Pink ones bite. Noted. {smile}Apology accepted.
+
+# (draft)
+[landing_sign 2]
+You read it again. Under the "(sorry)", smaller still, is a line you missed: (they only bite a bit).
+
+# (draft)
+[landing_sign_ves 2]
+{bored}"A bit." {smile}That's a sign somebody wrote after they'd been bitten.
+
+[landing_bloom]
+A great bloom of crystals in every colour, all growing from a single point, like the world's most expensive bouquet.
+
+[landing_pool]
+A little pool of glowing water, no deeper than a plate, full of tiny drifting lights. Your reflection in it is a bit brighter than you are.
+
+# (draft)
+[landing_pool 2]
+Your reflection in the pool is still a bit brighter than you are. It's also standing up straighter. You stand up straighter. It looks pleased.
+
+[landing_crystal]
+A crystal, humming faintly, warm to the touch and one clear colour all the way through.
+
+[landing_trio]
+Three little glowing mushrooms in a row, teal, violet and pink, standing close together like a family waiting to be let in.
+
+# (draft)
+[landing_trio 2]
+The three little mushrooms have shuffled a fraction closer together. The pink one has gone to the back. The teal one is being very brave about it.
+
+[landing_small]
+A small pink mushroom. It's very cute, and you don't touch it. You have a feeling about it.
+
+# (draft)
+[landing_small 2]
+The small pink mushroom has turned, very slightly, to face you. You didn't see it move. You're quite sure about that.
+
+[landing_pouch]
+A purse wedged between the crystal spires. Somebody dropped it in a hurry, or hid it with great care. Either way, it's yours now.
+
+[landing_rock]
+The cavern roof, high overhead. You can't see where it ends.
+
+[landing_wall]
+Rock, laced with veins of crystal that pulse very slowly, as if the wall were breathing.
+
+[landing_vein]
+A fat vein of crystal running up the wall, thick as your arm, glowing from the inside.
+
+[landing_moss_wall]
+Glowing moss hanging down the rock in long strands. They sway, though there's no breeze.
+
+[landing_spires]
+Tall crystal spires, three colours, standing very straight, like they were told to wait there and say something important.
+
+# (draft)
+[landing_spires 2]
+The spires are still waiting to say something important. Whatever it is, they've been rehearsing it for a very long time.
+
+[landing_spike]
+A crystal spike, sharp as a pin. The kind of thing you walk around.
+
+[landing_mushrooms]
+Small glowing mushrooms, close together, whispering.
+
+[landing_thicket]
+A thicket of spiky crystal. Nothing's getting through that.
+
+# --- THE CHIMNEY (glimmer_chimney): a ring climb up to a chest ---
+
+[chimney_sign]
+A board nailed to a crystal, the paint nearly gone: CUTTERS ONLY. HOOK THE LOW RING. SWING. CATCH THE NEXT ONE.
+
+Underneath, smaller: DON'T LOOK DOWN. (THE PINK ONES ARE DOWN.)
+
+[chimney_face]
+The chimney's wall goes up and up into the crystal.
+
+Old iron rings are hammered into it, one above another, all the way to a shelf at the top.
+
+[chimney_face_ves]
+{bored}Someone climbed that for fun. Someone with no friends.
+
+[chimney_pink]
+A big pink crystal at the foot of the chimney. It looks like it's waiting for somebody to fall on it.
+
+[chimney_chest]
+A chest on the shelf, at the top of the chimney.
+
+Whoever left it here wanted it kept dry and very hard to get to. It worked.
+
+# --- THE LIFE PASS: things to look at (set dressing) ---
+
+[gp_bug]
+A glowbug, lamp end up, going about its business. It lets you look for a moment, then remembers an appointment.
+
+[gp_bug_ves]
+{smile}It has a better light than we do and it's using it to commute.
+
+[gp_bug 2]
+It turns its lamp towards you, very slowly, to see who you are. Then it turns it away again. Not interested.
+
+[gp_bug_ves 2]
+{smile}Rude. But I respect a creature that knows when to stop looking.
+
+[gp_chime]
+A thin crystal stalk hung with little crystal bells. When the draught comes round it they tick together, very faintly, like someone counting under their breath.
+
+[gp_chime_ves]
+{thoughtful}Wind chimes. In a cave. Somebody's been decorating, and not for us.
+
+[gp_chime 2]
+One small bell swings, and the rest answer it, one after another, down the stalk. Then quiet again.
+
+[gp_chime_ves 2]
+{smile}Lovely note. I'm going to pretend that was me.
+
+[gp_crumbs]
+A heap of crystal crumbs, swept into a corner. Somebody tidies the Glimmering, and then never takes the dustpan anywhere.
+
+[gp_crumbs_ves]
+{bored}I respect the sweeping. I question the destination.
+
+[gp_crumbs 2]
+The pile is faintly warm and smells of sugar. Crystal sugar, probably. Probably.
+
+[gp_crumbs_ves 2]
+{bored}Don't lick it. I can see you thinking about it.
+
+[gp_gem]
+A little crystal, pink at the heart, standing on its own. It gives a faint tick when the light moves across it, as if it's thinking about chiming.
+
+[gp_gem_ves]
+{smile}A very small crystal with very big opinions. I can tell.
+
+[gp_gem 2]
+It ticks again. You get the feeling it was about to say something.
+
+[gp_gem_ves 2]
+{smile}Give it time. They always wait for the end of the room.
+
+[gp_geode]
+A geode, cracked clean in half and left where it fell. The inside is packed with crystals so tight they look like they're gossiping.
+
+[gp_geode_ves]
+{smile}Half a geode. The other half is somebody's very expensive doorstop.
+
+[gp_geode 2]
+You hold your hand up beside it. The geode is winning.
+
+[gp_geode_ves 2]
+{bored}Stop sizing it up. It's not for sale and you couldn't afford it.
+
+[gp_puddle]
+A puddle so still it holds the whole ceiling: every crystal upside down, and twice as bright.
+
+[gp_puddle_ves]
+{thoughtful}Down there it's another cave. Better lit, honestly.
+
+[gp_puddle 2]
+You lean over. Your reflection leans over. The cave in the puddle has more crystals than the one you're standing in.
+
+[gp_puddle_ves 2]
+{thoughtful}Don't fall in. It's deeper than it looks. Everything here is.
+
+[gp_ribbon]
+A scrap of red ribbon snagged on a crystal spike, so thin you can see the glow through it. Whoever lost it didn't come back.
+
+[gp_ribbon_ves]
+{bored}Somebody lost a ribbon and kept walking. Priorities.
+
+[gp_ribbon 2]
+The ribbon moves in a breeze you can't feel. It's the only thing in the cave that's moving at all.
+
+[gp_ribbon_ves 2]
+{thoughtful}Red doesn't fade down here. Nothing does.
+
+[gp_shell]
+A gleamsnail's old shell, empty. The crystals inside went on growing with nobody home to mind them.
+
+[gp_shell_ves]
+{bored}They moved out and left the house standing. That's the most snail thing I've ever heard.
+
+[gp_shell 2]
+Something has been round the inside with a tiny brush. The crystals are cleaner than anything else in the cave.
+
+[gp_shell_ves 2]
+{surprised}Somebody's still looking after it. A snail with a mortgage.
+
+[gp_web]
+A small web strung between two crystals, beaded with dew. The spider's out. It'll be back, and it'll be smug about it.
+
+[gp_web_ves]
+{surprised}Don't touch it. It's the only thing down here that's actually handmade.
+
+[gp_web 2]
+A drop of dew slides down a thread, reaches the crystal, and rings it, just barely.
+
+[gp_web_ves 2]
+{surprised}Even the spider has better timing than I do.
+
+[lp_nibble]
+A glowing mushroom with a neat bite out of it. Whoever it was left the stem, which is the polite way.
+
+[lp_nibble_ves]
+{smile}Don't look at me. I'd have taken the whole thing.
+
+[lp_daisy]
+A daisy. It came down the hole with you, landed on a moss tuft, and is now the only thing in the cave that looks pleased to be here.
+
+[lp_daisy_ves]
+{bored}It's tougher than it looks. I'm not saying that's a recommendation.
+
+[lp_land_nook]
+A twist of glowing sugar wedged in behind the crystal spires, with a glowbug asleep on top of it. It shuffles over, grudgingly, and lets you have it.
+
+[lp_fell_tally]
+Four scratches and a fifth through them, at knee height. Beside them, in the same hand: FELL. Then another bundle of five. FELL. Then a smaller one.
+
+[lp_fell_tally_ves]
+{bored}Encouraging. At least they kept count.
+
+# --- end life pass ---
+
+# --- THE LIFE PASS, ROUND 3 (helper C, 15 November 2026): the dullest rooms of chapter 4 ---
+
+[r3c_gl_jar]
+A glass jar full of glowbugs, set neatly on a flat stone. The bugs have stuck a tiny mushroom cap in as a hat. Who did that?
+
+[r3c_gl_jar_ves]
+{surprised}That's a hat. On a glowbug. That's not nature.
+
+[r3c_gl_jar 2]
+The glowbug in the hat is looking very calm about it.
+
+[r3c_gl_jar_ves 2]
+{smile}I want one.
+
+[r3c_gl_hammock]
+A rope hammock strung between two crystal spikes, with a dent in it the size of somebody who naps. A boot sits beside it, laces undone.
+
+[r3c_gl_hammock_ves]
+{bored}A bed. In a crystal cavern. I'd give it a four.
+
+[r3c_gl_hammock 2]
+The dent in the hammock is still warm. Or maybe it's the glow.
+
+[r3c_gl_geode]
+A geode cut clean in two, one half lined with purple and one with pink. Someone has put them side by side, like a cup and its saucer.
+
+[r3c_gl_geode_ves]
+{smile}They've paired them off. Nice work, whoever you are.
+
+[r3c_gl_cups]
+Four little crystal cups set out on a flat rock, each filled with a different colour of glitter. A tea party for guests who haven't turned up.
+
+[r3c_gl_cups_ves]
+{thoughtful}They've set it all out. They only forgot the guests.
+
+[r3c_gl_cups 2]
+One cup is chipped. Somebody has put a tiny crystal into the chip, like a filling.
+
+[r3c_gl_cups_ves 2]
+{surprised}It's a cup with a tooth.
+
+[r3c_gl_glove]
+A knitted glove with the fingers cut off, perfect for climbing. It's been left on a spike to dry. It's quite possible it's the best idea anyone ever had.
+
+[r3c_gl_glove_ves]
+{smile}I'd steal that. But it's too small.
+
+[r3c_gl_sign]
+A hand-lettered board: PLEASE DO NOT LICK THE CRYSTALS. (WE'VE ALL TRIED.)
+
+[r3c_gl_sign_ves]
+{bored}Of course you did.
+
+[r3c_gl_sign 2]
+Underneath, in a smaller hand: THE BLUE ONES TASTE OF PENNIES.
+
+[r3c_gl_sign_ves 2]
+{surprised}They did a taste test. For science.
+
+[r3c_gl_chimes]
+A thin crystal stalk with little bells on it. When the draught finds it, a thin, sweet tune comes out. It's the same four notes, every time.
+
+[r3c_gl_chimes_ves]
+{smile}Four notes and it's still better than half of what the folk upstairs call music.
+
+[r3c_ch_rope]
+A rope hung in a loop on a spike at the chimney's foot, with a label: FOR THE FIRST TIME. A little further along: FOR THE SECOND TIME. (PLEASE RETURN.)
+
+[r3c_ch_rope_ves]
+{smile}Somebody set this up for every attempt. Good manners, in a cave.
+
+[r3c_ch_arrow]
+A chalk arrow pointing up the chimney. Next to it: UP. And under that: YES. REALLY.
+
+[r3c_ch_arrow_ves]
+{bored}We have been advised.
+
+[r3c_ch_arrow 2]
+Further down the arrow, someone has scribbled, in another hand: 'IT GETS HARDER.' And someone else: 'IT DOES NOT.'
+
+[r3c_ch_arrow_ves 2]
+{surprised}They've been arguing on the wall.
+
+[r3c_ch_flask]
+A flask propped against the wall, with a note stuck to it. DRINK BEFORE YOU GO UP. DO NOT DRINK WHEN YOU COME BACK DOWN, YOU'LL NEED IT.
+
+[r3c_ch_flask_ves]
+{smile}It makes no sense at all, and I respect it.
+
+[r3c_ch_boot]
+A lone boot on a flat stone, filled with crystal sand and one small flower made of quartz. Somebody left it as an offering to the chimney.
+
+[r3c_ch_boot_ves]
+{thoughtful}Leaving your boot at the foot of a climb. I wonder what they asked for.
+
+[r3c_ch_ribbon]
+A ribbon snagged on a crystal at the top of the room, as if someone threw it up there as a flag. It has a message in thread: MADE IT.
+
+[r3c_ch_ribbon_ves]
+{smile}That's the sort of flag I'd put up too.
+
+[r3c_ch_cups]
+Three crystal cups on a ledge, each with a little bit of glitter in. Nobody's drunk from them. They're just there for the look.
+
+[r3c_ch_cups_ves]
+{bored}It's a very small party.
+
+# --- end life pass round 3 (helper C) ---

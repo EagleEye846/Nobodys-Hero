@@ -30,8 +30,8 @@ export const MERROW_SEA_GATE = {
   tiles: [
     '####################################',
     '####################################',
-    '#WWWWWWWWWWWWWWW;;;;;;;;;;;;;;;;;;;;',
-    '#WWWWWWWWWWWWWWW;;;;;;;;;;;;;;;;;;;;',
+    '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
+    '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
     '#WWWWWWWWWWWWWWW;;;;WWWWWWWWWWWWWWW#',
     '#O.....:::::::::::::::::::::::::..O#',
     '#.XXX..::::::::::::::::::::XX:::..:#',
@@ -56,8 +56,9 @@ export const MERROW_SEA_GATE = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 0, y: 9, w: 1, h: 2, to: 'merrow_belfry', spawn: { x: 27, y: 8 } },
-    // The far end of the tunnel, east under the cliff into the Soundings' mouth.
-    { x: 35, y: 2, w: 1, h: 2, to: 'soundings_mouth', spawn: { x: 2, y: 5 } },
+    // Through the open jaws of the sea gate and down the flooded tunnel into the Soundings' mouth
+    // (only once the gate is open: until then the shut gate stands on these tiles).
+    { x: 16, y: 4, w: 4, h: 1, to: 'soundings_mouth', spawn: { x: 2, y: 5 }, after: ['merrow_sea_gate'] },
   ],
 
   // Stepping onto these tiles plays a cutscene: in front of the gate, once you have the tooth.

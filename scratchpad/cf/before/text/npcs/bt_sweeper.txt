@@ -1,0 +1,59 @@
+# BT_SWEEPER: A mole with a straw broom who sweeps the market every day and has never once finished.
+
+[first]
+Dust, dust, dust. I sweep it here, it goes there. I sweep it there, it comes back. We have an understanding.
+
+[repeat]
+Mind your boots. Not for my sake. For the dust's.
+
+[first after the_kings_welcome]
+Confetti! Eleven kinds! I'll be sweeping till spring and I've never been so pleased.
+
+[repeat after the_kings_welcome]
+Found a streamer behind a barrel. I'm keeping it. For the floor's morale.
+
+[first after the_light_goes_up]
+Even the dust is sparkling. I almost don't want to sweep it. Almost.
+
+[repeat after the_light_goes_up]
+Look at it all, shining. Nobody tell the broom.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+Seventy years with this broom. Three new heads and two new handles. Still the same broom.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}...I'm not going to think about that.
+
+# (draft)
+[repeat 3]
+Every speck of this street I've swept a hundred times. Some of them know me by name.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Some of this confetti's very old. Same colours as the last show, and the one before. Somebody sweeps it up and throws it again.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've leant the broom on the wall and sat down. First time. I've no idea what you do with the rest of a day.
+
+# --- SIDE QUEST: the good dustpan (it's in the Hall of the Visit) ---
+
+[pan_ask]
+Oh! You've got the look of somebody who goes places. Listen. I've lost my good dustpan. Last seen in the Hall of the Visit, where I swept the exhibits and the exhibits swept me.
+
+It's got a dent in the side. You'll know it. It'll be looking at you like you owe it money.
+
+[pan_wait]
+Dustpan. Hall of the Visit. Dented. Don't let the curator tell you it's an exhibit.
+
+[pan_done]
+My dustpan! Oh, and it's still got the dent. Good. I wouldn't know it without.
+
+Here. A pin. Don't tell the broom.
+
+[pan_after]
+I've swept the same spot six times today with the right dustpan. I've never felt so thorough.

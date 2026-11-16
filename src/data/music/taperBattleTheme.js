@@ -166,6 +166,7 @@ const CLIMAX = {
 export const TAPER_BATTLE_THEME = {
   title: 'Keeper of the Small Flames',
   bpm: 140,
+  volume: 1.76,
   stepsPerBeat: 4,
 
   instruments: {

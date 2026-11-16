@@ -1,0 +1,262 @@
+# CORRIE, THE TIDECALLER: chapter 5's last boss, at the top of the Last Light.
+# A boy of about eight in an oilskin far too big for him, who tried to stop the
+# sea with a spell and became the storm. He speaks a little, in fragments, like
+# the child he is. The hero never speaks. (draft: every line here)
+# Numbers (HP, damage, his four phases) live in src/data/enemies/corrie.js.
+# He can't be spared: the storm answers every kindness ([no_mercy]).
+#
+# A section with ": boy", ": storm", ": whirlpool" or ": lamp" after its name is
+# used in that phase of his fight instead of the plain one. [phase: ...]
+# sections are what's said as a phase starts: plain ones in the battle panel,
+# "vesper" and "bramble" ones in their boxes, "foe" ones by him in speech
+# bubbles. Lines written together (no blank line between) share a bubble.
+
+[boss_intro]
+You came up
+all the stairs.
+
+Nobody comes
+up the stairs.
+
+I'm stopping
+the sea.
+I've nearly
+done it.
+
+Like the Hero
+would.
+
+Go home.
+...Go HOME.
+
+[intro]
+The boy lifts his driftwood staff, and the sea comes up the tower to meet it. CORRIE, THE TIDECALLER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CORRIE floats over nothing. His coat is far too big for him. The sleeves are rolled four times and still hang past his hands.
+
+The glow in the fork of his staff flickers like a candle in a draught.
+
+Water runs off his hem and never reaches the floor.
+
+He holds the staff the way you'd hold something you were told not to touch.
+
+[flavor: storm]
+The storm pours out of him. Somewhere in the middle of it, a small boy is shouting.
+
+The tide is coming up. Every turn, a little higher.
+
+Rain lashes the lamp room's glass. The lightning finds the water first.
+
+TIP: Haddock's bell, rung by you and Bramble together, sends the water back down.
+
+[flavor: whirlpool]
+The sea under the tower is turning. Everything it ever took is going round in it.
+
+Planks. Oars. A figurehead with salt in her hair. Round and round.
+
+Below the waist, CORRIE isn't there any more. Only the whirl.
+
+The pull's in your bones now. Don't let it take you to the middle.
+
+[flavor: lamp]
+The great lamp turns, slow. Each time the beam crosses him, he flinches.
+
+He's only a boy now, mostly. A tired one. The staff is too heavy for him.
+
+The water on his face might be the sea. It might not.
+
+Hide behind the pillars when the beam comes round.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Watch.
+I can do
+the boats.
+
+The Hero had
+a coat like
+this.
+Mine's nearly
+the same.
+
+Don't come
+closer.
+I'm busy.
+
+I learned this
+one myself.
+Mostly.
+
+I'm being
+brave.
+See?
+
+[taunts: storm]
+It's ALL the
+sea now.
+
+I said STOP.
+Why won't
+it stop?
+
+I'm the storm.
+I'm meant
+to be.
+
+Louder.
+LOUDER.
+
+It's not
+listening.
+It never
+listens.
+
+[taunts: whirlpool]
+Round and round.
+Round and round.
+
+Everything
+comes back
+down here.
+
+Hold on.
+Hold ON.
+
+Make it stop
+spinning.
+
+[taunts: lamp]
+It's too bright.
+Turn it off.
+
+I waited.
+I waited
+ever so long.
+
+I'm tired.
+I'm so tired.
+
+Was I good?
+Was I like
+him?
+
+Nobody came.
+The light
+went out
+and nobody
+came.
+
+# Low on HP (below his phase's lowHp), often instead of a taunt.
+[low_hp]
+I can still
+do it.
+I CAN.
+
+[low_hp: lamp]
+I'm sorry.
+I'm sorry.
+I can't stop.
+
+# One section per TALK option (the names must match corrie.js).
+[talk: Check]
+CORRIE - HP 36000
+A boy who tried to stop the sea and became the storm. Darts, boats, a spell circle, a lullaby. Then the tide, the whirlpool and the lamp. He can't be talked down. The storm won't let him hear.
+His bullets come too thick to feed on: grazing them gives little SP. Spend it well.
+
+[talk: Ring Haddock's bell]
+You and Bramble take Haddock's bell by its cord together and ring it, hard. The note goes out over the water, and for a moment the storm holds its breath.
+The sea pulls back. The next attack will be gentler.
+
+[talk: Wave to him]
+You wave to him across the water, both arms, the way you'd wave a boat in.
+
+[talk: Hold out a hand]
+You hold out a hand.
+
+# Any kindness at all (a TALK, Pacify, a candle, a friend's kind word): the
+# storm answers, not him. The first time, all of [no_mercy]; after that, one
+# of [no_mercy_again].
+[no_mercy]
+The wind tears it away and throws it back into the sea.
+
+Somewhere in the storm, he might have heard. If he did, the storm didn't let him.
+
+[no_mercy_again]
+A wave comes over the rail, and he's gone behind it.
+
+The thunder answers instead. It doesn't sound like him.
+
+The rain is too loud. Nothing gets through to him.
+
+The whirl takes it and turns it round and round until it's gone.
+
+# Said when you try to RUN.
+[no_escape]
+The stair behind you is under water. There's only up, and up is him.
+
+# What's said as each phase starts (see `beat` in corrie.js).
+[phase: storm]
+CORRIE lifts the staff over his head, and the sky comes down into the box. The sea starts to climb the walls.
+
+[phase: storm foe]
+It's meant
+to go
+DOWN.
+
+[phase: storm vesper]
+{determined}Right. He's the weather now. Keep above the water, and don't stand where it lights up.
+
+[phase: whirlpool]
+The sea below the tower starts to turn. The whole box turns with it, and the wreckage of every boat it took comes round.
+
+[phase: whirlpool foe]
+I can't
+stop now.
+If I stop,
+it all
+comes in.
+
+[phase: whirlpool bramble]
+{scared}That's a plughole. That's the biggest plughole there is. I'm not going down a plughole.
+
+[phase: lamp]
+High above, the Last Light's great lamp swings round, and its beam comes down through the storm.
+
+CORRIE flinches from it. For a moment he's only a small boy in a big coat.
+
+[phase: lamp foe]
+...The light's on.
+
+Haddock always
+left it on.
+So I'd find
+the way back.
+
+[phase: lamp vesper]
+{resolute}The beam's coming round. Get behind something and stay there.
+
+# His last words as he's beaten (before the panel says so).
+[beaten: lamp foe]
+I tried.
+I tried
+ever so hard.
+
+# How the fight ends. The rewards line is added automatically. He doesn't die
+# here: the scene after the battle does the rest.
+[victory]
+The storm goes quiet all at once. CORRIE sinks down over the water, small, the staff across his knees, and stays there.
+
+# Under GAME OVER, by the phase you fell in.
+[game_over: boy]
+The paper boats drift off over the water, one by one.
+
+[game_over: storm]
+The tide came up over everything.
+
+[game_over: whirlpool]
+Round and round, and down.
+
+[game_over: lamp]
+The light went out.

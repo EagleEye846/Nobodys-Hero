@@ -3,7 +3,7 @@ import { OLM_PALETTE, OLM_SPRITE, OLM_ANIM } from '../art/olm.js';
 // The OLM's numbers: a long, pale, blind salamander, older than the stair,
 // that lives in the Stillwater and is terribly polite about it. It hates
 // being looked at. It would never dream of being rude, so it only coils
-// round you, fans its frills, lays a few eggs, puts out the lights, and
+// round you, lines its hatchlings up, lays a few eggs, puts out the lights, and
 // drips. Everything it says is in text/enemies/olm.txt.
 export const OLM = {
   name: 'OLM',
@@ -23,7 +23,7 @@ export const OLM = {
   anim: OLM_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1800,
+  maxHp: 3050,
   damage: 42,
 
   // The Stillwater's other regular: slow and patient, but with a lot of it.
@@ -32,7 +32,7 @@ export const OLM = {
   // Its attacks live in src/battle/attacks/olm.js.
   patterns: [
     { name: 'olmCoil', weight: 3 },
-    { name: 'olmFrills', weight: 2 },
+    { name: 'olmQueue', weight: 3 },
     { name: 'olmEggs', weight: 2 },
     { name: 'olmDim', weight: 2 },
     { name: 'olmDrip', weight: 2 },

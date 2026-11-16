@@ -1,0 +1,74 @@
+# LADLE'S NOOK: Old Ladle, the cistern's hob, in his nook in the Old Drains
+# under Hollin. A little old house-hob in a faded blue nightcap and a damp
+# apron, with a long tin ladle he holds like a staff. He has kept Hollin's
+# water sweet for fifty years for a village that isn't there any more,
+# because nobody told him to stop. Kindly, a bit deaf, glad of company, and
+# fifty years behind: he thinks Bramble is "young Oakley", Bramble's grandad.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Visitors! Down MY well! Come in, come in, drip where you like. Everything drips down here. Young Oakley, is that you? You've not grown an inch.
+
+[menu_prompt]
+Anything else, my dears? I've all the time in the world. I've had fifty years of it.
+
+[buy_prompt]
+Sweet water, buns, porridge, and candles for the dark bits further down. And some waders that came down the drain. Don't ask me whose.
+
+[sell_prompt]
+Selling? Oh, I keep everything that comes down. Let's see.
+
+[talk_prompt]
+Talk! Nobody's talked to me since the bucket stopped coming down. What'll it be?
+
+[bought]
+There you are. Mind it doesn't get wet. Ha! Everything gets wet.
+
+[bought_item]
+Eat up. You're both thin as drainpipes.
+
+[sold]
+I'll keep that safe. I keep everything safe. It's what I'm for.
+
+[nothing_to_sell]
+Nothing? Never mind. Nothing's very light to carry.
+
+[cant_sell]
+You're wearing that, dear. Take it off first, or you'll catch your death.
+
+[owned]
+You've one of those already. Two's greedy, my mum used to say. Hobs have mums.
+
+[wont_fit]
+That's not for you, dear. That's for the little one.
+
+[too_poor]
+Not enough, I'm afraid. Young Oakley still owes Mags a penny, you know. Hollin runs on pennies.
+
+[bought_stored]
+Your bag's full, so I've put it in the storage chest by the crystal. Tidy, that.
+
+[bag_full]
+Your bag's full up. Eat something first, dear. Go on.
+
+[farewell]
+Off you go, then. Follow the water: it always knows the way out. And come back! The kettle's always on. Well. It's always wet.
+
+[talk: The drains]
+Hollin's cistern, and the culverts the woodcutters cut to take the overflow. I scrub them. Every brick, every week. Somebody has to keep the water sweet.
+
+[talk: The old conduit]
+Further down, the brick stops and the old stone starts. The old city's pipe, from before Hollin, before anybody. Big as a lane. Hollin was only ever sipping from it.
+
+[talk: The girl]
+A girl came down my well, oh, not a day ago. Wet as a herring, and limping a bit. Wouldn't stop for porridge. Said thank you, though. Lovely manners.
+
+[talk: Young Oakley]
+Look at you, Oakley, still with that hatchet. ...Bramble? Oakley's boy's boy? No. No, it can't have been fifty years. ...Has it? Well. Tell your grandad he owes Mags a penny.
+
+[talk: The Hush]
+It looked down the well once before, you know. The day they all left. It looked, and it went away, and nobody came back for the bucket. I waited. I'm still waiting, I suppose.
+
+[talk: The fen]
+Where the old pipe broke, ages back, the water got loose under the trees and made a fen of it. Mist and reeds and mud up to your middle. Mind your feet out there, my mum used to say.

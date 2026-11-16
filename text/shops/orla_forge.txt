@@ -50,6 +50,10 @@ Nothing? Then stand somewhere else.
 [cant_sell]
 You've got that on. Take it off first, with C.
 
+# (draft) A Notch Charm bought: one more SPELL NOTCH for everyone.
+[bought_notch]
+One more notch, for all of you. Don't lose it in the sea. Pick your spells from SPELLS, with C.
+
 [owned]
 You've got that already. I only made the one.
 
@@ -99,7 +103,7 @@ The one on the shelf? Nobody's used that in years. The draught up there keeps a 
 [forge_ask]
 Let me see that. (She takes the sword in both hands and turns it in the forge-light. Her face goes very still.)
 
-Hm. There's a piece missing off the edge. Snapped when it fell. The rest of it came down at the Wreck Yard, I'd say, and then went on: I can hear it off the sea past the yard's far point, where the old fog bell hangs. Whatever's got it won't give it up for asking. I'd know it by the hum.
+Hm. There's a piece missing off the edge. Snapped when it fell. The rest of it came down at the Wreck Yard, I'd say, and then went on: I can hear it off the sea past the yard's far point, where the old fog bell used to hang. Whatever's got it won't give it up for asking. I'd know it by the hum.
 
 # (draft)
 Bring it. I'll put it back where it goes.
@@ -124,7 +128,7 @@ Can't. There's a smith's work missing from this, further back along the road. It
 
 [forge_hint]
 # (draft)
-Star-metal? I've heard of it. A while back, something came down over the coast, skipped across the Wreck Yard's masts, and went on, out into the fog past the slip. On a still night I can hear it humming from here, with something that sounds a lot like laughing on top.
+Star-metal? I've heard of it. A hundred years back, they say, something came down over the coast, skipped across the Wreck Yard's masts, and went on, out into the fog past the slip. On a still night I can hear it humming from here, with something that sounds a lot like laughing on top.
 
 If you ever find a sword that hums the same note, bring both. I'd like to hear that.
 

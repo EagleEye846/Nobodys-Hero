@@ -1,0 +1,51 @@
+# BT_SQ_FROGKID_SWORD: A frog kid in a saucepan helmet with a wooden sword, on the lookout for monsters, of which there are none.
+
+[first]
+On guard! Who goes... oh, it's you. Hello. I'm protecting the square from monsters. There aren't any. That's why I'm good at it.
+
+[repeat]
+Sh. I've seen one. It was behind the well. It was a leaf. A leaf that sneezed.
+
+[first after the_kings_welcome]
+You have a REAL quest. I have a pretend one. Mine's the same, but with fewer teeth.
+
+[repeat after the_kings_welcome]
+Is the dark really that dark? Dad says you can put your hand in front of your face and not see it.
+
+[first after the_light_goes_up]
+I'm not scared of the dark now! The dark's the one that should be scared!
+
+[repeat after the_light_goes_up]
+I've retired from guarding. It's a party. Everyone should be unguarded.
+
+# (draft)
+[repeat 2]
+I do a patrol. Round, back, round, back. It's a short patrol. The square's not very big.
+
+# (draft)
+[repeat 3]
+If a monster comes, I'll shout "On guard!" and then you do the rest.
+
+# (draft)
+[repeat_ves 3]
+{smile}Fair division of labour. {bored}It's how we do it too.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+If you find a monster down there, bring it back. Just a small one. On a string.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+I've drawn you a map. It's of the square. You're already here, so it works.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Did you fight anything big? Bigger than Dad? Dad says nothing's bigger than Dad.
+
+# (draft)
+[repeat_ves 2 after the_light_goes_up]
+{proud}Much bigger than Dad. {bored}Don't tell Dad.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+I'm going to be a hero when I grow up. I'll start small. Like the real one did.

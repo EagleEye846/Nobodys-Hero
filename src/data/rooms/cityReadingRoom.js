@@ -5,6 +5,9 @@
 //   #  the old city's stone, overhead (solid)
 //   .  the old city's flagstones
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_READING_ROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_reading_room',
@@ -47,12 +50,15 @@ export const CITY_READING_ROOM = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_reading_room ?? []),
     { sprite: 'chest', x: 7, y: 3, text: 'reading_desk', gives: 'bookmark', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'bookshelf', x: 2, y: 2, text: 'reading_shelves' },
     { sprite: 'bookshelf', x: 10, y: 2, text: 'reading_shelves' },
     { sprite: 'lamp', x: 9, y: 3, text: 'reading_lamp' },
     { sprite: 'gold_pouch', x: 11, y: 7, text: 'reading_purse', gold: 260, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'armchair', x: 5, y: 4, text: 'reading_chair' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_reading_room'] ?? []),
   ],
   tileTexts: { W: 'reading_wall', '#': 'reading_wall' },
 

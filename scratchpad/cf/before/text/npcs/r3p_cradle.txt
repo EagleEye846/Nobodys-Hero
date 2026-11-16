@@ -1,0 +1,40 @@
+# THE CRADLE (Hollin Lane): a wooden cradle on a porch, with a dent in its pillow. Nobody speaks: it's a cradle.
+# The words are what you notice. (life pass, 15 November 2026)
+
+# (draft)
+[first]
+A wooden cradle on a porch, a tiny pillow in it with the shape of a head still pressed in. Empty.
+
+# (draft)
+[repeat]
+The cradle, with the dent in its pillow.
+
+# (draft)
+[cradle_ask]
+A wooden cradle on a porch, a tiny pillow in it with the shape of a head still pressed in. It's empty. It's the kind of empty that has a gap in it, the shape of one small thing.
+
+You think of the doll in the long grass outside the gate.
+
+# (draft)
+[cradle_wait]
+The cradle, with its dent in the pillow. Somewhere in the village, in the long grass, there's something small that belongs in it.
+
+# (draft)
+[cradle_done]
+You lay the rag doll in the cradle, tuck the blanket round her, and set her boot down beside her. She looks, for the first time in fifty years, like she's where she's meant to be.
+
+There's a wooden rattle on the pillow. You hadn't seen it. You pick it up, because it's offered, and because it's the kind of thing you don't say no to.
+
+The wind comes down the lane, very softly, and the cradle rocks once.
+
+# (draft)
+[cradle_after]
+The cradle, a rag doll tucked in it, her one boot beside her. A very small rocking, when the wind comes up the lane. Not much. Enough.
+
+# (draft)
+[cradle_ask_bramble]
+{sad}...It looks like it's waiting for somebody.
+
+# (draft)
+[cradle_done_bramble]
+{sad}...Don't tell me it's the wind.

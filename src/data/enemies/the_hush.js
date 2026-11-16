@@ -179,8 +179,8 @@ export const THE_HUSH_BOSS = {
     { name: 'Hold out a hand', calm: 22, hurt: 12 },
   ],
 
-  // Well above the Usurper's 600: most of a level at the Gate.
-  rewards: { exp: 3470, coins: 300 },
+  // About one level, just after the Warden (a level there costs about 4,200-4,800).
+  rewards: { exp: 4600, coins: 300 },
 
   // Spared or beaten, a hank of its bristles is left on your sleeve.
   drops: [{ item: 'hush_fur', chance: 1 }],

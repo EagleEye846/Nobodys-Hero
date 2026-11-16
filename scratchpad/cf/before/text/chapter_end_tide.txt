@@ -1,0 +1,11 @@
+# Between chapters: shown after the Chapter Five credits, after dawn on the
+# Last Light's balcony. (draft).
+
+[title]
+THE TIDE HELD
+
+[subtitle]
+Chapter Five complete
+
+[neutral]
+In Saltcombe, behind the harbour office, a door that was always locked is standing open.

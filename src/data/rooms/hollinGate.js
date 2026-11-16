@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // HOLLIN GATE: the edge of Hollin, the woodcutters' old village, left
 // fifty years ago when the Hush came out of its hollow and walked down the
 // lane. Its palisade still stands, and its gate is still barred from the
@@ -100,6 +102,7 @@ export const HOLLIN_GATE = {
     { sprite: 'washing_line', x: 3, y: 8, text: 'hollin_washing' },
     { sprite: 'chalk_rock_up', x: 17, y: 6, text: 'hollin_chalk' },
     { sprite: 'gold_pouch', x: 1, y: 20, text: 'hollin_gate_pouch', gold: 150, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    ...(R3P_PROPS['hollin_gate'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

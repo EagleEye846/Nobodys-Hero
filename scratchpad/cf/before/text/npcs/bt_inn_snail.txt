@@ -1,0 +1,57 @@
+# BT_INN_SNAIL: A very old snail sipping tea at the inn, who has been at the same table so long a bit of table has grown into her shell.
+
+[first]
+Oh. Visitors. How nice. Sit, sit. I'll be finished with this cup in... let's say... an hour.
+
+[repeat]
+Mm. Tea. I used to take it with sugar. Now I take it with time.
+
+[first after the_kings_welcome]
+A quest? Dear me. In my day we just had... a Tuesday.
+
+[repeat after the_kings_welcome]
+I'd come with you but I'm halfway through the cup.
+
+[first after the_light_goes_up]
+Hm. Brighter. I can see the bottom of the cup. It's disappointing.
+
+[repeat after the_light_goes_up]
+I think I'll have another. In a few hours.
+
+# --- SIDE QUEST: the toffee (from the market snail) ---
+
+[toffee_done]
+The old snail takes the toffee with all the time in the world. She turns it over. She looks at it for what might be a minute or might be a nap.
+
+Ah. Last spring's. Right on time. I ordered it for the next time the light went. I thought, I'll want something sweet for that. I think it went. I might have slept through it.
+
+Well. It's a good toffee. I can tell from the pleats. Nineteen. He does nineteen for the ones he likes.
+
+I'll have it with the next cup. In a while.
+
+Here. Don't look at it, just hold it. A spare cup, for visitors who stay. You won't stay. But you might, one day, and it'll be warm.
+
+[toffee_after]
+The snail is looking at the toffee, in its nineteen pleats, with great satisfaction. She will not be eating it for some time. That is the point of a toffee.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I came in for one cup. That was a while ago. The table grew. I stayed.
+
+# (draft)
+[repeat 3]
+Mm. Do sit. Nobody sits. They all stand about in a hurry, as if a cup of tea were a race.
+
+# (draft)
+[repeat_ves 3]
+{bored}We'd sit. {smile}We'd never get up again. That's the trouble.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Down there you'll want a warm drink. Take it slowly. That's the only advice I've got, and I've used it all my life.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+The bat woke up for a moment. I've never seen him awake. He has lovely eyes. Then he went back.

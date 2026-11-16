@@ -34,6 +34,10 @@ Empty-handed? Fine by me. Less to melt.
 [cant_sell]
 You're wearing that. Take it off out there first, with C. I don't buy things off people's backs.
 
+# (draft) A Notch Charm bought: one more SPELL NOTCH for everyone.
+[bought_notch]
+One notch, filed clean. That's one more spell each for the lot of you. Sort them out from SPELLS, with C.
+
 [owned]
 You've got that one already. I never make the same thing twice for anyone.
 

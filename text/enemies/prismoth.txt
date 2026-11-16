@@ -55,7 +55,7 @@ squint.
 # TALK options in src/data/enemies/prismoth.js.
 [talk: Inspect]
 PRISMOTH - HP 950
-A fuzzy moth whose wings are panes of coloured glass. It bends every bit of light into beams, glitter and glass shards. Stay out from under its rainbows.
+A fuzzy moth whose wings are panes of coloured glass. It bends every bit of light into beams and rainbows, and can't keep away from a lamp. Only the glass that matches the light is really there.
 
 [talk: Hold up a glass]
 You hold up a bit of crystal, so the light goes through it, and PRISMOTH sees itself in the rainbow on the floor. It stares for a long time. It's the most beautiful thing it has ever seen.

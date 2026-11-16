@@ -1,17 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
-import { withSnipes } from './snipes.js';
+import { PathShot, Deco, Zone, blit } from './coastKit.js';
 
-// The Shellac's attacks. It's a hermit crab living in a teapot, and it is
-// proud of its home: so it snaps its big claw (a fan of pincers aimed where
-// you stand, edges flashing first), tosses its good teacups (they bounce
-// about the box), spins the whole teapot until the china flies in rings of
-// shards, and lets off steam from the spout in scalding columns. It stands
-// to the right of the box, so most things come in from that side.
-//
-// Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. The attack's own clock (`t`) runs `density`
-// times faster than the seconds on the wall, hence the `T` below.
+// The Shellac's attacks. A hermit crab that has moved into a teapot and is
+// extremely house-proud, so everything it does is tea:
+//   - Pouring: it tips the pot and a long arc of tea walks across the box as
+//     it tips and rights itself. The lid rattles before each pour.
+//   - The kettle: it sets the pot down by you to boil. The rattle gets
+//     faster and faster, and when it can't go faster it blows steam all round.
+//   - The tea set: cups about the box fill in turn, and each full cup spills
+//     over the lip away from its handle.
+// It stands to the right of the box.
 
 const CHINA = { k: '#1c1a24', c: '#f4eedb', C: '#cfc7ac', w: '#ffffff', b: '#4f7fc8', B: '#2f4f94' };
 const CLAW = { k: '#1c1a24', r: '#e0673a', R: '#a8432a', o: '#f5a070' };
@@ -78,160 +77,149 @@ defineBulletArt('shlPuff', {
 });
 defineBulletArt('shlDrop', { frames: [['.t.', 'ttt', 'tTt', '.t.']], palette: STEAM, radius: 1.6 });
 
+// A teacup sitting still, handle to the right (the tea spills out to the left).
+const SITTING = CUP;
+const SITTING_L = CUP.map((r) => [...r].reverse().join(''));
+// The teapot sitting still (not spinning): it rattles its lid when it boils.
+defineBulletArt('shlKettle', { frames: [POT], palette: CHINA, radius: 5 });
+// Its lid, jumping.
+const LID = ['.cbc.', 'ccccc'];
+
 export const SHELLAC_ATTACKS = {
-  // Claw-snap: its big claw reaches round the pot and snaps, and a fan of
-  // pincers flies out aimed at where you were. The edges of the fan flash
-  // first. Odd number of pincers, so the middle one is always on you.
-  shellClaws(box, density, { Shot, Line, rand, clamp }) {
+  // Pouring: it tips the pot and pours, a long arc of hot tea from the spout
+  // over the top right of the box, aimed to land at your height. The more it
+  // tips, the further the tea lands, so the stream walks across the box as
+  // it tips and rights itself. The lid rattles before each pour. Keep out from under it.
+  shellPour(box, density, { rand }) {
     const T = (s) => s * density;
+    const spout = { x: box.x + box.w + 4, y: box.y - 2 };
+    const G = 160;
     let t = 0;
-    let next = T(0.2);
-    let fans = 0;
-    let firing = [];
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && fans < 4 && t < T(5.2)) {
-          fans++;
-          next = t + T(1.55);
-          const from = { x: box.x + box.w + 6, y: clamp(soul.y + rand(-22, 22), box.y + 6, box.y + box.h - 6) };
-          const aim = Math.atan2(soul.y - from.y, soul.x - from.x);
-          const spread = 0.5;
-          for (const side of [-1, 1]) bullets.push(new Line({ x: from.x, y: from.y, angle: aim + side * spread, length: 100, thickness: 2, warn: 0.75, life: 0, color: '#e0673a' }));
-          bullets.push(new Shot({ x: from.x - 2, y: from.y, harmless: true, warn: 0, life: 0.75, art: 'shlPincer' }));
-          firing.push({ at: t + T(0.75), aim, spread, from });
-        }
-        for (const fan of firing) {
-          if (t < fan.at) continue;
-          fan.done = true;
-          // A second, narrower snap follows half a beat later, aimed afresh.
-          if (!fan.second) firing.push({ at: t + T(0.5), second: true, aim: Math.atan2(soul.y - fan.from.y, soul.x - fan.from.x), spread: 0.22, from: fan.from });
-          if (fan.second) fan.aim = Math.atan2(soul.y - fan.from.y, soul.x - fan.from.x);
-          const count = fan.second ? 3 : 7;
-          for (let i = 0; i < count; i++) {
-            const a = fan.aim - fan.spread + (2 * fan.spread * i) / (count - 1);
-            const middle = i === (count - 1) / 2;
-            bullets.push(new Shot({ x: fan.from.x, y: fan.from.y, vx: Math.cos(a) * (fan.second ? 54 : 52), vy: Math.sin(a) * (fan.second ? 54 : 52), art: 'shlPincer', life: 4, homing: middle ? { target: soul, turn: 0.9 } : null }));
-          }
-        }
-        firing = firing.filter((fan) => !fan.done);
-      },
-    };
-  },
-
-  // Teacup toss: it lobs its good cups in high arcs; they hit the walls of
-  // the box and keep bouncing, and now and then one is thrown straight at you.
-  shellCups(box, density, { Shot, every, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let thrown = 0;
-    const toss = every(0.7, 0.9, (bullets, soul) => {
-      if (thrown >= 8) return;
-      thrown++;
-      const y = rand(box.y + 12, box.y + box.h - 10);
-      const aimed = thrown % 2 === 0;
-      const vx = -rand(42, 56);
-      const vy = aimed ? clamp((soul.y - y) * 0.9, -40, 40) : -rand(25, 70);
-      bullets.push(new Shot({ x: box.x + box.w + 6, y, vx, vy, gravity: aimed ? 0 : 95, bounce: true, art: 'shlCup', life: 4.2 }));
-    });
+    let pour = 0;
+    let drip = 0;
+    let pours = 0;
+    let started = -1;
+    let from = 0;
+    let to = 0;
+    let level = 0;
+    const POUR = 1.5;
+    const RATTLE = 0.5;
     return {
       duration: 7,
-      update: (dt, bullets, soul) => {
+      update: (dt, bullets, soul, real = dt / density) => {
         t += dt;
-        if (t < T(5.6)) toss(dt, bullets, soul);
+        if (started < 0 && pours < 4 && t >= T(0.2 + pours * 1.6)) {
+          pours++;
+          started = 0;
+          // Sweep from one side of you to past the other.
+          const near = soul.x;
+          from = Math.min(Math.max(near + (pours % 2 ? 26 : -26), box.x), box.x + box.w);
+          to = Math.min(Math.max(near + (pours % 2 ? -30 : 30) + rand(-6, 6), box.x), box.x + box.w);
+          // It pours at the height you're at (the tea splashes on, and on down).
+          level = soul.y;
+          bullets.push(new Deco({ life: RATTLE, paint(ctx, d) { blit(ctx, LID, CHINA, box.x + box.w - 6, box.y + 3 + (Math.floor(d.age * 16) % 2) * 2); } }));
+        }
+        if (started < 0) return;
+        started += real;
+        pour = started - RATTLE;
+        if (pour < 0) return;
+        if (pour > POUR) { started = -1; return; }
+        drip += real;
+        if (drip < 0.035) return;
+        drip = 0;
+        // Where this drop should land on the floor: along the sweep, eased.
+        const u = 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, pour / POUR));
+        const landX = from + (to - from) * u;
+        const fall = Math.max(14, level - spout.y);
+        // A drop thrown level from the spout lands after sqrt(2h/g) at the right speed.
+        const time = Math.sqrt((2 * fall) / G);
+        const vx = (landX - spout.x) / time;
+        bullets.push(new PathShot({ art: 'shlDrop', life: time * 1.6, path: (k) => ({ x: spout.x + vx * k, y: spout.y + 0.5 * G * k * k }) }));
       },
     };
   },
 
-  // Shell spin: the whole teapot rolls into the box and spins, flinging
-  // rings of china shards that turn a little each time, then rolls out.
-  shellSpin(box, density, { Shot, rand, pointAwayFrom, clamp }) {
+  // The kettle: it sets its teapot down in the box, near you, and leaves it
+  // to boil. The lid starts to rattle, slow, then faster, faster, and when
+  // it can't go any faster it blows: steam jets out all round, and the lid
+  // flies off. The faster the rattle, the sooner it goes.
+  shellKettle(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const BOIL = 1.5;
     let t = 0;
-    let pot = null;
-    let angle = rand(0, Math.PI);
-    let spawnAt = 0;
-    const start = { x: box.x + box.w + 14, y: box.y + box.h / 2 };
-    let target = null;
-    return {
-      duration: 7,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (!pot) {
-          pot = new Shot({ x: start.x, y: start.y, harmless: true, life: 6.4, art: 'shlPot' });
-          bullets.push(pot);
-          target = pointAwayFrom(box, soul, 30, 18);
-        }
-        const k = clamp((t - T(0.1)) / T(0.9), 0, 1);
-        const leave = clamp((t - T(5.6)) / T(0.9), 0, 1);
-        if (leave > 0) {
-          pot.x = target.x + (start.x - target.x) * leave;
-          pot.y = target.y + (start.y - target.y) * leave;
-        } else {
-          pot.x = start.x + (target.x - start.x) * k;
-          pot.y = start.y + (target.y - start.y) * k;
-          // Once it's in, it rolls slowly after you (and stops short of you).
-          if (k >= 1) {
-            const dx = soul.x - target.x;
-            const dy = soul.y - target.y;
-            const d = Math.hypot(dx, dy);
-            if (d > 26) {
-              target.x += (dx / d) * 11 * (dt / density);
-              target.y += (dy / d) * 11 * (dt / density);
-            }
-          }
-        }
-        if (t >= T(1.1) && t < T(5.4) && t >= spawnAt) {
-          spawnAt = t + T(0.68);
-          angle += 0.42;
-          const n = 7;
-          for (let i = 0; i < n; i++) {
-            const a = angle + (i / n) * Math.PI * 2;
-            bullets.push(new Shot({ x: pot.x, y: pot.y, vx: Math.cos(a) * 28, vy: Math.sin(a) * 28, art: i % 3 === 0 ? 'shlChunk' : 'shlShard', warn: 0.45, life: 4 }));
-          }
-        }
-      },
-    };
-  },
-
-  // Let off steam: the pot whistles. Columns of scalding steam shoot up from
-  // the floor of the box (each flashes first), one always where you are and
-  // one somewhere else, and drops of tea fall between them.
-  shellSteam(box, density, { Shot, Line, every, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = T(0.2);
     let n = 0;
-    const drip = every(0.35, 0.5, (bullets) => {
-      bullets.push(new Shot({ x: rand(box.x + 6, box.x + box.w - 6), y: box.y - 3, vy: rand(34, 48), art: 'shlDrop', life: 4 }));
-    });
-    // One Line is both the warning (a thin dashed preview of the column) and
-    // the column itself, which shoots up the moment the warning is over.
-    const column = (bullets, x) => {
-      bullets.push(new Line({ x, y: box.y + box.h, angle: -Math.PI / 2, length: box.h, thickness: 8, warn: 0.95, life: 0.5, grow: 330, color: '#e8f6f4', glow: '#b8d8d6' }));
-      bullets.push(new Shot({ x, y: box.y + box.h - 3, harmless: true, warn: 0, life: 0.95, art: 'shlPuff' }));
-    };
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < T(5.8)) drip(dt, bullets);
-        if (t >= next && n < 5 && t < T(5)) {
+        if (t >= T(0.2 + n * 0.9) && n < 6) {
           n++;
-          next = t + T(1.2);
-          const x1 = clamp(soul.x + rand(-4, 4), box.x + 7, box.x + box.w - 7);
-          column(bullets, x1);
-          let x2 = rand(box.x + 7, box.x + box.w - 7);
-          if (Math.abs(x2 - x1) < 16) x2 = x1 < box.x + box.w / 2 ? x1 + 22 : x1 - 22;
-          column(bullets, clamp(x2, box.x + 7, box.x + box.w - 7));
+          // Set down beside you, not on you.
+          const side = rand(0, Math.PI * 2);
+          const x = Math.min(Math.max(soul.x + Math.cos(side) * 16, box.x + 10), box.x + box.w - 10);
+          const y = Math.min(Math.max(soul.y + Math.sin(side) * 16, box.y + 10), box.y + box.h - 10);
+          // Ticks come closer together: at 0, 0.5, 0.85, 1.1, 1.28, 1.4 ... 1.5.
+          const ticks = [0, 0.5, 0.85, 1.1, 1.28, 1.4, 1.47];
+          bullets.push(new Deco({ x, y, life: BOIL, paint(ctx, d) {
+            blit(ctx, POT, CHINA, d.x, d.y);
+            const last = ticks.filter((k) => d.age >= k).pop() ?? 0;
+            const jump = d.age - last < 0.07 ? 3 : 0;
+            blit(ctx, LID, CHINA, d.x, d.y - 7 - jump);
+          } }));
+          bullets.push(new Zone({ x, y, r: 5, warn: 0.3, life: BOIL - 0.3, paint() {} }));
+          for (let i = 0; i < 12; i++) {
+            const a = (i / 12) * Math.PI * 2 + n * 0.3;
+            bullets.push(new Shot({ x: x + Math.cos(a) * 6, y: y + Math.sin(a) * 6, vx: Math.cos(a) * 80, vy: Math.sin(a) * 80, art: 'shlPuff', warn: BOIL, life: 0.9 }));
+          }
+          bullets.push(new Shot({ x, y: y - 7, vx: rand(-20, 20), vy: -70, gravity: 120, art: 'shlShard', warn: BOIL, life: 1.4 }));
+        }
+      },
+    };
+  },
+
+  // The tea set: it sets out cups about the box and pours, filling them in
+  // turn (you can see the tea rise in the one being filled). When a cup is
+  // full, it spills over the lip away from its handle, in a splash of hot
+  // tea. Mind which way each handle points.
+  shellTeaSet(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const FILL = 0.55;
+    let t = 0;
+    let n = 0;
+    return {
+      duration: 7,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (t >= T(0.2 + n * 1.8) && n < 4) {
+          n++;
+          // Five cups, the first one by you.
+          const spots = [{ x: soul.x + rand(-8, 8), y: soul.y + rand(-8, 8) }];
+          for (let guard = 0; spots.length < 5 && guard < 300; guard++) {
+            const s = { x: rand(box.x + 10, box.x + box.w - 10), y: rand(box.y + 10, box.y + box.h - 10) };
+            if (spots.every((o) => Math.hypot(o.x - s.x, o.y - s.y) > 18)) spots.push(s);
+          }
+          spots.forEach((s, i) => {
+            const x = Math.min(Math.max(s.x, box.x + 8), box.x + box.w - 8);
+            const y = Math.min(Math.max(s.y, box.y + 8), box.y + box.h - 8);
+            const right = x < box.x + box.w / 2 ? -1 : 1;
+            const full = 0.4 + i * FILL + FILL;
+            bullets.push(new Deco({ x, y, life: full + 0.3, paint(ctx, d) {
+              blit(ctx, right > 0 ? SITTING : SITTING_L, CHINA, d.x, d.y);
+              const level = Math.max(0, Math.min(1, (d.age - (full - FILL)) / FILL));
+              if (level > 0) {
+                ctx.fillStyle = '#a8723a';
+                ctx.fillRect(Math.round(d.x - 3), Math.round(d.y - 2 + (1 - level) * 3), 6, Math.max(1, Math.round(level * 3)));
+              }
+            } }));
+            // The spill: away from the handle.
+            const away = right > 0 ? Math.PI : 0;
+            for (const o of [-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6]) {
+              bullets.push(new Shot({ x, y, vx: Math.cos(away + o) * 80, vy: Math.sin(away + o) * 80, art: 'shlDrop', warn: full, life: 1.2 }));
+            }
+            bullets.push(new Zone({ x: x + (right > 0 ? -8 : 8), y, r: 6, warn: full, life: 0.3, paint(ctx, z) { if (z.age >= z.warn) { ctx.fillStyle = '#a8723a'; ctx.beginPath(); ctx.arc(z.x, z.y, 5, 0, Math.PI * 2); ctx.fill(); } } }));
+          });
         }
       },
     };
   },
 };
-
-// Aimed shots on top, so standing still or running one way is never safe (see snipes.js).
-SHELLAC_ATTACKS.shellClaws = withSnipes(SHELLAC_ATTACKS.shellClaws, { art: 'shlPincer' });
-SHELLAC_ATTACKS.shellCups = withSnipes(SHELLAC_ATTACKS.shellCups, { art: 'shlCup' });
-SHELLAC_ATTACKS.shellSpin = withSnipes(SHELLAC_ATTACKS.shellSpin, { art: 'shlChunk', count: 2, first: 2.4, every: 2 });

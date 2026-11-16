@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE STILT HUT: an island of turf out in the fen, and standing in the water
 // beside it on its stilts, a little hut, with smoke coming out of the thatch
 // and firelight in the window. Somebody built it to live out here, a long time
@@ -71,6 +72,8 @@ export const MARSH_HUT_ISLAND = {
     { sprite: 'sign', x: 6, y: 6, text: 'hut_post' },
     { sprite: 'roll_log', x: 9, y: 11, text: 'hut_log' },
     { sprite: 'chest', x: 5, y: 12, text: 'hut_island_chest', gives: 'reedwoven_coat', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_hut_island'] ?? []),
   ],
   tileTexts: { '"': 'reeds', $: 'fen_water', '1': 'hut_outside', '2': 'hut_thatch', '3': 'hut_window', '9': 'hut_stilts' },
 

@@ -1,0 +1,87 @@
+# CLOVER SNAIL
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/clover_snail.js.
+
+[intro]
+There is a four-leaf clover in the path, and under it, very slowly, a snail. Its eyes are on stalks and are mostly shut. A CLOVER SNAIL!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CLOVER SNAIL yawns. You feel the yawn go round the whole field.
+
+CLOVER SNAIL's eye-stalks droop together, then snap back up. It would like you to think it was thinking.
+
+A little Z drifts out of CLOVER SNAIL and over your head. You catch yourself nodding.
+
+CLOVER SNAIL looks at its shell, then at you, then at its shell. It seems to be counting naps.
+
+Smells like cut clover, and a warm afternoon with nothing in it.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+CLOVER SNAIL is pulling itself back into its shell, one tired inch at a time.
+
+[flavor: spareable]
+CLOVER SNAIL has fallen asleep. Properly asleep, this time. It looks very pleased with itself.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+...Mmm?
+
+Five more
+minutes...
+
+Zzz...
+
+Oh.
+Hello.
+
+Is it
+morning?
+
+...Slow
+down.
+
+Yawwwn.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/clover_snail.js.
+[talk: Inspect]
+CLOVER SNAIL - HP 1900
+A sleepy green snail with a clover for a shell. Its slime trail dries from the tail, its lucky four-leaf clovers do you good, and its Z's drift in the moment you stop. Don't join in.
+
+[talk: Hum it a lullaby]
+You hum something soft, low and old. CLOVER SNAIL listens with both eyes shut. It sways. At the end it opens one eye and, in the smallest voice, asks if you know any others.
+
+[talk: Find the lucky leaf]
+You look over the shell, leaf by leaf. There are four, which is the usual number for a clover, and the unusual one for a lucky one. CLOVER SNAIL watches you work, and gives the smallest nod when you point at the right one.
+
+[talk: Sit beside it]
+You sit down beside CLOVER SNAIL on the warm grass. Neither of you says anything. A bee goes by. A cloud goes by. After a long time CLOVER SNAIL says that was lovely, and that you must come again in an hour.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+CLOVER SNAIL rolls onto its back, with its shell tilted skyward and its eyes shut. It says, from a long way off, that it will just have a little lie down, and does not move again for some time.
+
+[pacified]
+CLOVER SNAIL tucks its eyes in, pulls up its clover like a quilt and goes properly, beautifully to sleep, with a small smile on its face. A single Z goes up, and up, and stays there, like a cloud.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves says that {foe} is the only person she has met who is more tired than she is. {foe} says that is very kind. She says it wasn't a compliment, and then that perhaps it was.
+
+Ves asks {foe} how long it takes to cross a field. {foe} thinks, and thinks, and says a week. She says that sounds restful, and not for the first time wishes it were true.
+
+Ves tells {foe} that her mother used to say a snail carries its house so it can nap anywhere. {foe} thinks that is the wisest thing it has heard, and says so, slowly.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble asks {foe} if it is tired. {foe} says it is. Bramble says he isn't, and then yawns so hard that his ears pop. They look at one another with respect.
+
+Bramble sits very still next to {foe} to see how it does it. After a long minute he says he thinks it is mostly doing nothing. {foe} says that, at last, someone understands.
+
+Bramble asks {foe} if he can have the lucky leaf. {foe} says that is up to the leaf. Bramble asks the leaf. The leaf is a leaf. {foe} gives him one anyway.

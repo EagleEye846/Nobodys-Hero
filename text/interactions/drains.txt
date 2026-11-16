@@ -476,3 +476,152 @@ A broken pillar, all on its own at the edge.
 
 [outfall_purse]
 A purse in the rubble by the wall.
+
+# --- THE LIFE PASS (15 November 2026): the Old Drains ---
+# (draft)
+
+[r3m_cistern_1]
+Chalk on the brick, in a hand that learned its letters in a hurry:
+
+KEEP IT SWEET
+
+Underneath, in a second hand, much smaller: (please).
+
+[r3m_cistern_1_bramble]
+{thinking}Keep what sweet? ...Oh. The water. Somebody wrote it so the water would read it.
+
+
+[r3m_cistern_2]
+An iron pipe along the wall, rusted orange where it isn't green. It drips at the joint, one slow drop at a time. It has been dripping at that joint for longer than anyone in Hollin has been alive.
+
+[r3m_cistern_2_bramble]
+{grin}Fifty years of one drip. That's dedication. I can't even finish my porridge.
+
+
+[r3m_culvert_2]
+A heap of bricks that fell out of the wall. Somebody's put them back in a neat pile, because it was the right thing to do.
+
+[r3m_culvert_2_bramble]
+{proud}Someone tidied. In a DRAIN. I like them already.
+
+
+[r3m_culvert_3]
+A wooden sieve on three legs, silt still in the mesh. A few buttons and a farthing are caught in it. Whoever was sifting was hoping for better.
+
+[r3m_culvert_3_bramble]
+{sly}Is that a farthing? ...It IS a farthing. We could be rich. A farthing's worth of rich.
+
+
+[r3m_gratings_1]
+Chalk on the brick: a cup, and the words TEA FOUR. Below, somebody has crossed out FOUR and put THREE, and below that, FIVE, and below that, ANY TIME.
+
+[r3m_gratings_1_bramble]
+{grin}That's a crew that gave up on tea having rules.
+
+
+[r3m_gratings_5]
+A little tin with air holes punched in the lid. Somebody was keeping beetles. Nobody could say why. Nobody wants to ask.
+
+
+[r3m_ladle_1]
+A saucer of milk on the step, with a spoon laid beside it. It's fresh. There's a thumbprint on the rim.
+
+[r3m_ladle_1_bramble]
+{sly}That's for a cat. ...Is there a cat? Somebody's got a cat.
+
+
+[r3m_ladle_4]
+KEEP IT SWEET, in chalk, in a hand a lot tidier than the one in the Cistern. This one has gone over it, again and again, for years.
+
+
+[r3m_sumps_1]
+DAY 41, in chalk, with the tally under it: four sticks, a stroke, four sticks, a stroke. The tally goes on. Nobody's finished it. After DAY 41 somebody has written, smaller: SAME AS DAY 40.
+
+[r3m_sumps_1_bramble]
+{grin}Day 42: no change. Day 43: no change. I know this one. That's school.
+
+
+[r3m_sumps_boot]
+A boot. A left one, a good leather boot with the laces still done up, lying on its side in the silt.
+
+There's no foot in it. There's no right one anywhere.
+
+[r3m_sumps_boot_bramble]
+{thinking}It's a perfectly good boot. Somebody's missing a boot.
+
+
+[r3m_sumps_6]
+A tin of beetles. They've set up a small society in it. There's a ladder.
+
+[r3m_sumps_6_bramble]
+{glee}There's a LADDER. They made a LADDER.
+
+
+[r3m_conduit_1]
+MIND YR HEAD, in chalk on the carved wall. Not for the ceiling. The carving above it (a god with an urn, tipping it) is at exactly head height.
+
+[r3m_conduit_1_bramble]
+{grin}Mind your head! Ha! ...Ow. ...Okay. Okay, I minded it too late.
+
+
+[r3m_conduit_2]
+MAB SAYS NO, and under it a long chalk line, as if somebody drew it with a ruler. Whatever Mab said no to, it seems to have been final.
+
+[r3m_conduit_2_bramble]
+{thinking}I wonder what she said no to. ...It was probably Walt.
+
+
+[r3m_vault_1]
+WALT WOZ ERE. Written on the wall of a room that was sealed for three thousand years. There isn't a seal. There's a crack. Walt found the crack.
+
+[r3m_vault_1_bramble]
+{surprised}WALT'S BEEN IN HERE. He got in BEFORE us. He got everywhere before us. I'm furious and I admire him.
+
+
+[r3m_vault_2]
+A tin mug on a plinth of the old city's gold, with a candle end in it. Somebody put a lunch down in a treasury.
+
+
+[r3m_weir_1]
+WALT WOZ ERE (AGAIN), in much larger chalk, high up. He must have stood on something. Under it, in a different hand: NO HE DIDNT.
+
+
+[r3m_stair_1]
+WELL IS UP, chalked on the wall of the stair, with an arrow pointing up the way you've come, in case anybody got turned round and wanted to go home.
+
+[r3m_stair_1_bramble]
+{thinking}It's pointing the wrong way for us. But thanks.
+
+
+[r3m_stair_3]
+A round face scratched into the wall under a miner's cap, grinning. Someone was very bored on the long way down.
+
+[r3m_stair_3_bramble]
+{grin}He's having a nice time. Look at him. HELLO!
+
+
+[r3m_stair_larder]
+A rats' hoard, tucked into the corner under the stair. It's all small shiny things: a thimble, three buttons, a spoon the size of your thumbnail, and a little purse of coins, a little crown made of a jam-tin lid.
+
+There's a note, in tiny letters: THE KING IS OUT. LEAVE A COIN, TAKE A COIN.
+
+[r3m_stair_larder_bramble]
+{awed}A RAT KING. A real one! With a throne! ...He's out. Quick. Take the purse. ...Leave a thimble? We haven't got a thimble.
+
+
+[r3m_outfall_1]
+WALT WOZ HERE, in chalk, at the end of the Drains, with the Z crossed out and an S put in. He learned to spell on the way. Underneath: FIRST.
+
+[r3m_outfall_1_bramble]
+{surprised}FIRST? He wrote FIRST!? ...I want to know where he is now. I hope it's somewhere warm.
+
+
+[r3m_outfall_4]
+A little cairn of Hollin bricks, stacked as a marker at the edge of the Drains. A very small, neat way of saying: this is where we stopped.
+
+[r3m_outfall_4_bramble]
+{thinking}A cairn. Like the Pinefall. People do that when they've finished something.
+
+
+[r3m_stair_larder_after]
+The hoard, a coin lighter. You left a button in its place, which seems fair. The jam-tin crown hangs on its nail. Somebody will be very pleased with it when he gets back.

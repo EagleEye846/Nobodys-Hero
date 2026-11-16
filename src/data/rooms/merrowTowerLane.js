@@ -33,16 +33,18 @@ export const MERROW_TOWER_LANE = {
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_drowned_town', lamplight: { shade: 0.18, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
+  // The porch (x 16 to 20, rows 2 to 5, and the doorway): its front wall and door go see-through while the party is in it.
+  porch: { x: 16, y: 2, w: 5, h: 5, cover: 'mw_tower_porch', doors: ['mw_tower_door', 'mw_tower_door_open'] },
   // No wreck masts or hulls on the skyline: the water here is the drowned town, not the open sea.
   skyline: false,
 
   tiles: [
     '####################################',
-    '#77##7777777777#######77777###77777#',
-    '#77777777777777##..###777777#777777#',
-    '#77777777777777#.....#7777777777777#',
-    '#77777777777777#.....#7777777777777#',
-    '#77777777777777#....;#7777777777777#',
+    '#77777777777777#######7777777777777#',
+    '#77777777777777##::###7777777777777#',
+    '#77777777777777#:::::#7777777777777#',
+    '#55555555555555#:::::#5555555555555#',
+    '#55555555555555#:::::#5555555555555#',
     '#56556556556556WW..W;W5655655655655#',
     '#::::::::::::::::::;;;;;;;;;;;;;;;;#',
     '#..XX.........::...;;;;;;;;;;;;;;;;#',
@@ -80,8 +82,8 @@ export const MERROW_TOWER_LANE = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/merrow.txt',
   props: [
-    // The tower, standing over its porch (drawn only: you walk under its foot to the inner door).
-    { sprite: 'mw_bell_tower', x: 16, y: 2, text: 'lane_tower', walkable: true },
+    // The tower, standing behind its porch (drawn only; its foot, the inner door, is the back wall).
+    { sprite: 'mw_bell_tower', x: 16, y: 1, text: 'lane_tower', walkable: true },
     // The porch door: barred inside until Bramble lifts the bar. Its open look stands under it.
     { sprite: 'mw_tower_door', x: 17, y: 6, text: 'lane_door', opensWith: ['tower_bar'], openText: 'lane_door_open' },
     { sprite: 'mw_tower_door_open', x: 17, y: 6, text: 'lane_door_opened', walkable: true },
@@ -90,6 +92,9 @@ export const MERROW_TOWER_LANE = {
     // The bar, inside the porch.
     { sprite: 'lever', x: 16, y: 5, text: 'lane_bar', lever: 'tower_bar', by: 'bramble', byText: 'lane_bar_not_you' },
     { sprite: 'mw_ropes_coiled', x: 19, y: 3, text: 'lane_porch_ropes', walkable: true },
+    // The tower's front wall over the porch: seen from the lane it is the wall the door is in; it
+    // fades out while anyone is inside (`porch` below). Listed after everything in the porch.
+    { sprite: 'mw_tower_porch', x: 16, y: 5, walkable: true },
     { sprite: 'rock_stump', x: 3, y: 13, text: 'rock_stump', rockReset: true },
     { sprite: 'sign', x: 10, y: 8, text: 'lane_sign' },
     { sprite: 'mw_laundry_line', x: 4, y: 8, text: 'square_washing' },
@@ -113,9 +118,9 @@ export const MERROW_TOWER_LANE = {
     { sprite: 'c5_lantern_hook', x: 34, y: 9 },
     // Chimney pots along the terraces' roofs, so the slates read as houses.
     { sprite: 'mw_chimney_pots', x: 4, y: 3, text: 'steps_chimney' },
-    { sprite: 'mw_chimney_pots', x: 11, y: 4, text: 'steps_chimney' },
+    { sprite: 'mw_chimney_pots', x: 11, y: 3, text: 'steps_chimney' },
     { sprite: 'mw_chimney_pots', x: 25, y: 3, text: 'steps_chimney' },
-    { sprite: 'mw_chimney_pots', x: 31, y: 4, text: 'steps_chimney' },
+    { sprite: 'mw_chimney_pots', x: 31, y: 3, text: 'steps_chimney' },
     { sprite: 'mw_bubbles', x: 29, y: 15, text: 'merrow_bubbles', flat: true, walkable: true, animation: 'mw_bubbles', speed: 0.25 },
     // House fronts (2026-11-08): the two terraces as different houses, the roofline going up and
     // down; on the solid front row only (x 1 to 14 and 22 to 34), the tower's porch and the grating left bare.
@@ -127,7 +132,7 @@ export const MERROW_TOWER_LANE = {
     { sprite: 'mw_ov_shutters_open', x: 8, y: 6, text: 'front_shutters' },
     { sprite: 'mw_house_gable_b', x: 9, y: 6, text: 'front_gable' },
     { sprite: 'mw_ov_window_box', x: 11, y: 6, text: 'front_window_box' },
-    { sprite: 'mw_ov_wall_lamp', x: 12, y: 6, text: 'front_lamp', glow: [{ dx: 2, dy: -10, bloom: 10, strength: 0.7, flicker: 0.4, color: '255, 156, 68' }, { dx: 2, dy: -2, pool: 46, strength: 0.45, flicker: 0.3, color: '255, 156, 68' }] },
+    { sprite: 'mw_ov_wall_lamp', x: 12, y: 6, text: 'front_lamp', glow: [{ dx: 2, dy: -23, bloom: 10, strength: 0.7, flicker: 0.4, color: '255, 156, 68' }, { dx: 2, dy: -2, pool: 46, strength: 0.45, flicker: 0.3, color: '255, 156, 68' }] },
     { sprite: 'mw_house_narrow', x: 13, y: 6, text: 'front_narrow' },
     { sprite: 'mw_ov_shutters_hanging', x: 14, y: 6, text: 'front_shutters' },
     { sprite: 'mw_ov_drainpipe', x: 22, y: 6, text: 'front_pipe' },
@@ -139,11 +144,11 @@ export const MERROW_TOWER_LANE = {
     { sprite: 'mw_house_narrow_b', x: 30, y: 6, text: 'front_narrow' },
     { sprite: 'mw_ov_door_arched', x: 31, y: 6, text: 'front_door' },
     { sprite: 'mw_house_gable_c', x: 32, y: 6, text: 'front_gable' },
-    { sprite: 'mw_ov_wall_lamp', x: 34, y: 6, text: 'front_lamp', glow: [{ dx: 2, dy: -10, bloom: 10, strength: 0.7, flicker: 0.4, color: '255, 156, 68' }, { dx: 2, dy: -2, pool: 46, strength: 0.45, flicker: 0.3, color: '255, 156, 68' }] },
-    { sprite: 'mw_dormer', x: 7, y: 5, text: 'merrow_roof' },
-    { sprite: 'mw_dormer', x: 28, y: 5, text: 'merrow_roof' },
-    { sprite: 'mw_chimney_short', x: 14, y: 4, text: 'merrow_chimney' },
-    { sprite: 'mw_chimney_short', x: 22, y: 3, text: 'merrow_chimney' },
+    { sprite: 'mw_ov_wall_lamp', x: 34, y: 6, text: 'front_lamp', glow: [{ dx: 2, dy: -23, bloom: 10, strength: 0.7, flicker: 0.4, color: '255, 156, 68' }, { dx: 2, dy: -2, pool: 46, strength: 0.45, flicker: 0.3, color: '255, 156, 68' }] },
+    { sprite: 'mw_dormer', x: 7, y: 3, text: 'merrow_roof' },
+    { sprite: 'mw_dormer', x: 28, y: 3, text: 'merrow_roof' },
+    { sprite: 'mw_chimney_short', x: 14, y: 2, text: 'merrow_chimney' },
+    { sprite: 'mw_chimney_short', x: 22, y: 2, text: 'merrow_chimney' },
     // In the water (2026-11-08): a cart, a lamp still burning, a drowned stall in the west pool.
     // Clear of the bellbuoy's row 15, the stump and every walk.
     { sprite: 'mw_cart_sunk', x: 33, y: 13, text: 'water_cart' },

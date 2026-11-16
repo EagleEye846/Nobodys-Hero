@@ -140,6 +140,7 @@ const RUMBLE = {
 export const CAVE_BATTLE_THEME = {
   title: 'Glass Hollows',
   bpm: 156,
+  volume: 1.57,
   stepsPerBeat: 4,
 
   instruments: {

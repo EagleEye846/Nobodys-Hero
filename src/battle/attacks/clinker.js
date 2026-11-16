@@ -3,9 +3,10 @@ import { defineBulletArt } from '../projectiles.js';
 // The Clinker's attacks. It's a crayfish living in an old enamel mug that
 // came down Hollin's well, so it fights like a crayfish and a mug: pincers
 // that snap shut like shears, the CLANG when it bangs on the mug (it's a
-// bit deaf from it), rust flaking off the drain pipes, the way a crayfish
-// shoots off backwards with a flick of its tail, and the mug itself, with
-// the Clinker tucked inside, rolling round the box.
+// bit deaf from it), the mug turning round to see who started it
+// (with a pincer shooting out of it at whoever's in front), the way a
+// crayfish shoots off backwards with a flick of its tail, and the mug
+// itself, with the Clinker tucked inside, rolling round the box.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -64,31 +65,13 @@ defineBulletArt('clinkerClangWord', {
   radius: 1,
 });
 
-// A flake of rust off the pipes, fluttering; and a drip of rusty water.
+// A flake of rust off the pipes, fluttering.
 defineBulletArt('clinkerFlake', {
   frames: [['uUo', 'Uu.'], ['.uo', 'uU.'], ['oU.', 'uuU']],
   palette: RUST,
   radius: 1.5,
   frameSeconds: 0.18,
 });
-defineBulletArt('clinkerDrip', {
-  frames: [['.o.', 'uou', 'uUu', '.U.']],
-  palette: RUST,
-  radius: 1.6,
-});
-
-// The drain pipe it all comes off, along the top of the box (harmless).
-defineBulletArt('clinkerPipe', {
-  frames: [[
-    'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU',
-    'uouuuuuuuouuuuuuuuuuuuuouuuuuuuuuuuouuuuuuuuuuuuuouuuuuuuuuuuuouuuuuuuuuuuouuuuu',
-    'uuuuUuuuuuuuuuUuuuuuuuuuuuuUuuuuuuuuuuuuuUuuuuuuuuuuuuUuuuuuuuuuuuuuUuuuuuuuuuuu',
-    'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU',
-  ]],
-  palette: RUST,
-  radius: 1,
-});
-
 // The Clinker going backwards, tail first, drawn heading right: its fanned
 // tail at the front, claws trailing behind.
 defineBulletArt('clinkerDash', {
@@ -116,6 +99,20 @@ defineBulletArt('clinkerDash', {
   hitbox: { w: 12, h: 5 },
   rotate: true,
   frameSeconds: 0.08,
+});
+
+// The mug standing up, seen from above, and the Clinker peeking out of it
+// (eyes and pincer tips, drawn facing right; harmless).
+defineBulletArt('clinkerUpright', {
+  frames: [['..kkkkkk..', '.kbbbbbbk.', 'kbmmmmmmbk', 'kbmccccmbk', 'kbmccccmbk', 'kbmccccmbk', 'kbmmmmmmbk', '.kbbbbbbk.', '..kkkkkk..']],
+  palette: TIN,
+  radius: 4.5,
+});
+defineBulletArt('clinkerPeek', {
+  frames: [['..kr', 'ek..', '....', 'ek..', '..kr']],
+  palette: SHELL,
+  radius: 1,
+  rotate: true,
 });
 
 // The mug, on its side and rolling, with the Clinker tucked up inside.
@@ -169,10 +166,10 @@ export const CLINKER_ATTACKS = {
       snips.push({ pair, t: 0, burst: false, across, at });
     };
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.6) {
+        if (t >= next && t < 8.6) {
           snip(bullets, soul);
           next = t + 0.95;
         }
@@ -218,18 +215,21 @@ export const CLINKER_ATTACKS = {
       // The gap moves a few places each bang: far enough to make you go, not
       // so far you can't get there.
       gap = Math.max(2, Math.min(pieces - 5, gap + (Math.random() < 0.5 ? -1 : 1) * Math.floor(rand(3, 7))));
+      // (Each ring sits a little round from the last, so no spot between its
+      // pieces stays safe for long.)
+      const shift = rand(0, 1);
       for (let i = 0; i < pieces; i++) {
         if (i >= gap && i <= gap + 2) continue;
-        const a = 0.12 + (i / (pieces - 1)) * (Math.PI - 0.24);
+        const a = 0.12 + ((i + shift) / pieces) * (Math.PI - 0.24);
         bullets.push(new Shot({ x: origin.x, y: origin.y, vx: Math.cos(a) * 44, vy: Math.sin(a) * 44, life: 3, art: 'clinkerRing' }));
       }
       bangs++;
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (t >= next && t < 5.4) {
+        if (t >= next && t < 8.4) {
           bang(bullets);
           next = t + Math.max(0.75, 1.15 - bangs * 0.07);
         }
@@ -237,54 +237,81 @@ export const CLINKER_ATTACKS = {
     };
   },
 
-  // Rust: something up in the pipes shakes loose. Flakes of rust come
-  // fluttering down all over, rocking side to side as they fall; and every
-  // so often a fat drip of rusty water drops straight onto you and splashes
-  // out along the floor.
-  clinkerRust(box, density, { Shot, every, rand, clamp, spreadAcross }) {
-    const nextX = spreadAcross(box.x + 5, box.x + box.w - 5, 6);
-    let flakes = [];
-    const pipe = new Shot({ x: box.x + box.w / 2, y: box.y + 2, harmless: true, life: 6.2, art: 'clinkerPipe' });
-    const flutter = every(0.2, 0.28, (bullets) => {
-      const x = nextX();
-      const flake = new Shot({ x, y: box.y + 4, vy: rand(20, 28), art: 'clinkerFlake' });
-      flake.baseX = x;
-      flake.sway = rand(0, Math.PI * 2);
-      flake.swing = rand(5, 9);
-      bullets.push(flake);
-      flakes.push(flake);
-    });
-    let drips = [];
-    const drip = every(1.0, 1.3, (bullets, soul) => {
-      const x = clamp(soul.x + rand(-4, 4), box.x + 5, box.x + box.w - 5);
-      const d = new Shot({ x, y: box.y + 5, vy: 20, gravity: 260, warn: 0.45, art: 'clinkerDrip' });
-      bullets.push(d);
-      drips.push(d);
-    }, { first: 0.7 });
-    let started = false;
+  // Who started it? The mug stands in the box with the Clinker inside, and
+  // it turns, slowly, to face you (it's cross, and it wants to know who
+  // started it). Every so often both pincers come shooting out of the mouth
+  // of the mug in a V, as far as they reach (lines first): so get
+  // round behind the mug, where it isn't looking, and keep circling, since
+  // it keeps turning. Every snap clanks the mug and shakes rust down off
+  // the pipes, and every few it loses its temper and shuffles after you.
+  clinkerPeek(box, density, { Shot, Line, rand, clamp, pointAwayFrom }) {
+    const TURN = 1.9;
+    const REACH = 48;
+    let mug = null;
+    let facing = 0;
+    let t = 0;
+    let snap = 1.0;
+    let snaps = 0;
+    let shuffle = 0;
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets, soul) => {
-        if (!started) {
-          started = true;
-          bullets.push(pipe);
+        t += dt;
+        if (!mug) {
+          const at = pointAwayFrom(box, soul, 30, 14);
+          mug = new Shot({ x: at.x, y: at.y, warn: 0.5, art: 'clinkerUpright' });
+          bullets.push(mug);
+          facing = Math.atan2(soul.y - at.y, soul.x - at.x) + Math.PI;
+          return;
         }
-        flutter(dt, bullets);
-        drip(dt, bullets, soul);
-        for (const flake of flakes) flake.x = flake.baseX + Math.sin(flake.age * 3.2 + flake.sway) * flake.swing;
-        flakes = flakes.filter((flake) => flake.y < box.y + box.h + 8);
-        for (const d of drips) {
-          if (d.age < d.warn || d.y < box.y + box.h - 3) continue;
-          // Splash: it bursts along the floor both ways.
-          d.life = d.age - d.warn;
-          d.done = true;
-          for (const side of [-1, 1]) {
-            for (const speed of [34, 58]) {
-              bullets.push(new Shot({ x: d.x, y: box.y + box.h - 3, vx: side * speed, vy: -40, gravity: 160, life: 1.2, art: 'clinkerDrip' }));
-            }
+        if (mug.age < mug.warn) return;
+        // Round it turns, to face you, never quickly.
+        const want = Math.atan2(soul.y - mug.y, soul.x - mug.x);
+        const diff = ((want - facing + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+        facing += clamp(diff, -TURN * dt, TURN * dt);
+        // Its eyes and the tips of its pincers show at the mouth of the mug.
+        if (!mug.peek || mug.peek.age > 0.12) {
+          mug.peek = new Shot({ x: mug.x + Math.cos(facing) * 7, y: mug.y + Math.sin(facing) * 7, harmless: true, life: 0.05, angle: facing, art: 'clinkerPeek' });
+          bullets.push(mug.peek);
+        }
+        if (shuffle > 0) {
+          // Cross: it shuffles after you, banging the mug.
+          shuffle -= dt;
+          mug.vx = Math.cos(want) * 48;
+          mug.vy = Math.sin(want) * 48;
+          if (shuffle <= 0) { mug.vx = 0; mug.vy = 0; }
+          mug.x = clamp(mug.x, box.x + 8, box.x + box.w - 8);
+          mug.y = clamp(mug.y, box.y + 8, box.y + box.h - 8);
+          return;
+        }
+        snap -= dt;
+        if (snap > 0 || t > 9.6) return;
+        snap = 0.7;
+        // Both pincers, in a V.
+        for (const side of [-1, 1]) {
+          const angle = facing + side * 0.32;
+          bullets.push(new Line({ x: mug.x, y: mug.y, angle, length: REACH, thickness: 6, warn: 0.45, life: 0.3, grow: 320, color: '#b8442a' }));
+          const tip = { x: mug.x + Math.cos(angle) * REACH, y: mug.y + Math.sin(angle) * REACH };
+          bullets.push(new Shot({ x: tip.x, y: tip.y, warn: 0.45, life: 0.3, angle, art: 'clinkerClaw' }));
+          // Grit flies off where it snaps shut.
+          for (let i = 0; i < 2; i++) {
+            const a = angle + side * (0.5 + i * 0.6);
+            bullets.push(new Shot({ x: tip.x, y: tip.y, vx: Math.cos(a) * 45, vy: Math.sin(a) * 45, warn: 0.6, life: 1, art: 'clinkerGrit' }));
           }
         }
-        drips = drips.filter((d) => !d.done);
+        // Every snap clanks the mug, and rust shakes down off the pipes.
+        for (let i = 0; i < 4; i++) {
+          const x = i === 0 ? clamp(soul.x + rand(-6, 6), box.x + 4, box.x + box.w - 4) : rand(box.x + 4, box.x + box.w - 4);
+          bullets.push(new Shot({ x, y: box.y + 2, vx: rand(-6, 6), vy: rand(14, 22), gravity: 40, warn: 0.3, life: 3, art: 'clinkerFlake' }));
+        }
+        if (++snaps % 3 === 0) {
+          shuffle = 1.2;
+          bullets.push(new Shot({ x: mug.x, y: mug.y - 10, vy: -10, harmless: true, life: 0.8, art: 'clinkerClangWord' }));
+          for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2 + rand(0, 1);
+            bullets.push(new Shot({ x: mug.x, y: mug.y, vx: Math.cos(a) * 38, vy: Math.sin(a) * 38, warn: 0.3, life: 1.3, art: 'clinkerRing' }));
+          }
+        }
       },
     };
   },
@@ -309,10 +336,10 @@ export const CLINKER_ATTACKS = {
       dashes.push({ crayfish, dir, kicked: 0, grit: [] });
     };
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.5) {
+        if (t >= next && t < 8.5) {
           flick(bullets, soul);
           next = t + 0.9;
         }
@@ -346,29 +373,30 @@ export const CLINKER_ATTACKS = {
   // bouncing round the box off every wall. Each time it hits one there's a
   // little CLANG, and a few rings of sound go off from where it hit. Then it
   // gets dizzy and slows down, a bit.
-  clinkerMugRoll(box, density, { Shot, rand }) {
+  clinkerMugRoll(box, density, { Shot, rand, clamp }) {
     const start = { x: box.x + box.w / 2, y: box.y + 12 };
     const angle = rand(0.6, 1.0) * (Math.random() < 0.5 ? 1 : -1) + Math.PI / 2;
-    const mug = new Shot({ x: start.x, y: start.y, vx: Math.cos(angle) * 78, vy: Math.sin(angle) * 78, bounce: true, warn: 0.6, life: 5.4, art: 'clinkerMug' });
+    const mug = new Shot({ x: start.x, y: start.y, vx: Math.cos(angle) * 78, vy: Math.sin(angle) * 78, bounce: true, warn: 0.6, life: 9, art: 'clinkerMug' });
     let lastVx = mug.vx;
     let lastVy = mug.vy;
     let started = false;
     let t = 0;
-    const ring = (bullets, nx, ny) => {
+    const ring = (bullets, soul, nx, ny) => {
       // Off the wall it hit, away from it, in a fan.
       const out = Math.atan2(ny, nx);
-      for (let i = -2; i <= 2; i++) {
-        const a = out + i * 0.42;
-        bullets.push(new Shot({ x: mug.x + nx * 3, y: mug.y + ny * 3, vx: Math.cos(a) * 40, vy: Math.sin(a) * 40, life: 1.6, art: 'clinkerRing' }));
+      for (let i = -3; i <= 3; i++) {
+        const a = out + i * 0.36;
+        bullets.push(new Shot({ x: mug.x + nx * 3, y: mug.y + ny * 3, vx: Math.cos(a) * 44, vy: Math.sin(a) * 44, life: 1.6, art: 'clinkerRing' }));
       }
-      // And the knock shakes rust down off the pipes overhead.
-      for (let i = 0; i < 3; i++) {
-        bullets.push(new Shot({ x: rand(box.x + 6, box.x + box.w - 6), y: box.y + 3, vy: rand(16, 24), gravity: 30, warn: 0.3, art: 'clinkerFlake' }));
+      // And the knock shakes rust down off the pipes overhead (one over you).
+      for (let i = 0; i < 4; i++) {
+        const x = i === 0 ? clamp(soul.x, box.x + 6, box.x + box.w - 6) : rand(box.x + 6, box.x + box.w - 6);
+        bullets.push(new Shot({ x, y: box.y + 3, vy: rand(16, 24), gravity: 30, warn: 0.3, art: 'clinkerFlake' }));
       }
     };
     return {
-      duration: 6.4,
-      update: (dt, bullets) => {
+      duration: 8,
+      update: (dt, bullets, soul) => {
         t += dt;
         if (!started) {
           started = true;
@@ -377,14 +405,14 @@ export const CLINKER_ATTACKS = {
         if (mug.age < mug.warn) return;
         // Dizzier as it goes.
         const speed = Math.hypot(mug.vx, mug.vy);
-        const want = t < 3.5 ? 78 : 60;
+        const want = t < 4.5 ? 78 : 66;
         if (speed > 0) {
           mug.vx *= want / speed;
           mug.vy *= want / speed;
         }
         const hitSide = Math.sign(mug.vx) !== Math.sign(lastVx);
         const hitEnd = Math.sign(mug.vy) !== Math.sign(lastVy);
-        if (hitSide || hitEnd) ring(bullets, hitSide ? Math.sign(mug.vx) : 0, hitEnd ? Math.sign(mug.vy) : 0);
+        if (hitSide || hitEnd) ring(bullets, soul, hitSide ? Math.sign(mug.vx) : 0, hitEnd ? Math.sign(mug.vy) : 0);
         lastVx = mug.vx;
         lastVy = mug.vy;
       },

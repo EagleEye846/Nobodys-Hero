@@ -1,0 +1,48 @@
+# ST_PIP: an otter child, seven and a half, on the beach in the sun, who built a very good sandcastle and has lost the bucket and the spade that built it.
+# An errand: the bucket and spade are on the cove's sea floor, out at low tide (the tide bell in the cove). The life pass.
+
+[first]
+Hello! I'm Tibby! I'm seven and a half! I'm building a castle! Well, I've BUILT it. I'm just standing next to it so nobody steps on it.
+
+[repeat]
+It's got a moat. The moat's real. The sea comes in, that's what it does.
+
+[ask]
+I had a bucket. And a spade. A blue one and a red one. And I put them down by the water for ONE minute, and then the sea went out, and when it came back they'd GONE. Somebody took them, or the sea did. I think the sea did.
+
+[ask_ves]
+{smile}Blue bucket. Red spade. Seven and a half. Understood.
+
+[ask_bramble]
+{determined}We'll find them. The sea doesn't get to keep a bucket.
+
+[found]
+You hold out the bucket and the spade. Tibby looks at them. Tibby looks at you. Tibby looks at them again, very slowly, as if they might not be real.
+
+"My BUCKET," Tibby says, in a small voice. "It's got my CRAB in it. Look. Look, he's still in there." He is. He has the face of someone who has been through a lot and has, in the end, been cheated of a very good adventure.
+
+Tibby puts the bucket down and lets the crab out and watches him scuttle off, a bit sideways, a bit slow. "He'll be all right," Tibby says. "He's tough."
+
+Then, from a pocket, a lolly stick with a bit of red paper. "That's my best flag. I made it for the top of the castle, but I haven't got a castle that's good enough. You have it."
+
+[found_ves]
+{smile}A flag, for a bucket. Fair trade.
+
+[found_bramble]
+{proud}King of the beach. That's us now. We're royalty.
+
+[after]
+The crab's gone home. The castle's still standing. The flag's the best thing on it. The castle's the best thing on the beach. That's seven and a half for you.
+
+[repeat 2]
+I'm going to build a BIGGER castle tomorrow. With a gate. And a drawbridge. And a thing for the gull. Gulls need somewhere to stand, or they get cross.
+
+# (draft)
+[repeat_bramble 2]
+{glee}Can I do the drawbridge? I'm really good at bridges.
+
+[first after the_light_answers]
+The sun's out and the sand's SO hot! And I've made a thing! It's a different kind of castle! It's got a window!
+
+[repeat after the_light_answers]
+Windows are new. I'd never needed one. Now I've made a lot. I'm calling it "The Castle of the Sun."

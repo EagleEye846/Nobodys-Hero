@@ -15,6 +15,8 @@
 //   N  thin bramble: walk straight through it (a secret)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
 export const HUSH_STARFALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_starfall',
@@ -73,7 +75,9 @@ export const HUSH_STARFALL = {
     { sprite: 'lever', x: 14, y: 6, text: 'starfall_lever', lever: 'star' },
     { sprite: 'gate_narrow', x: 11, y: 12, text: 'starfall_gate', opensWith: ['star'], openText: 'starfall_gate_open' },
     { sprite: 'gold_pouch', x: 2, y: 2, text: 'starfall_pouch', gold: 300, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
-    { sprite: 'sign', x: 19, y: 7, text: 'starfall_sign' },
+    { sprite: 'sign', x: 19, y: 7, text: 'starfall_sign' },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_starfall ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', N: 'bramble', Z: 'starfall_brambles' },
 

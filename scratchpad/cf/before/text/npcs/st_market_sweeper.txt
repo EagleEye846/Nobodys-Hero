@@ -1,0 +1,27 @@
+# ST_MARKET_SWEEPER: a seal with a straw broom who sweeps the market's cobbles, and the fish heads back down them again. The life pass.
+
+[first]
+Sweep, sweep. People drop things. Fish things, mainly. I find a head, I think: some days a head is just a head. Some days it's an omen.
+
+[repeat]
+Mind your boots. The cobbles are wet and the gulls are watching. They're always watching. They have a view on how I hold the broom.
+
+# (draft)
+[repeat 2]
+The trick is to sweep toward the sea. Everything's going there anyway. I'm just helping it along.
+
+# (draft)
+[repeat_bramble 2]
+{thinking}Where does the sea put it all?
+
+# (draft)
+[repeat 3]
+Had a feather in the broom this morning. White one. Big. Thought: the gulls are growing something. Then thought: not my business.
+
+# (draft)
+[first after the_light_answers]
+All of it's visible now. Every crack. Look at that. A button! Been under that stall for a year. I'm keeping the button.
+
+# (draft)
+[repeat after the_light_answers]
+Sweeping with sun on the cobbles. It's like sweeping a different place. Same place. Different place.

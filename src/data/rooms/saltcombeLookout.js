@@ -16,6 +16,8 @@
 //   #  wall top (solid)   ~  the sea (solid)   f  rail (solid)   ,  turf   :  path
 //   0  the drop to the lagoon (solid)   K  the cliff's rock face (solid)   .  the landing's planks
 
+import { lookoutFloodProps } from '../floodStages.js';
+
 export const SALTCOMBE_LOOKOUT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'saltcombe_lookout',
@@ -31,8 +33,10 @@ export const SALTCOMBE_LOOKOUT = {
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_stilt_town', lamplight: { shade: 0.22, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
+  // Before the Fair Return is found: her crew's song off the water now and then, or her lantern far out (farShip.js).
+  farShip: { sing: true, light: { x: 20, y: 1 } },
   // The black tower on the skyline, over the sea.
-  lastLight: { x: 27, y: 4 },
+  lastLight: { x: 27, y: 4, scale: 1.1 },
   atmosphere: { rain: 1, lightning: 0.6 },
 
   tiles: [
@@ -139,6 +143,18 @@ export const SALTCOMBE_LOOKOUT = {
     { sprite: 'c5_gull_marks', x: 22, y: 13, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 4, y: 11, flat: true, walkable: true },
     { sprite: 'gold_pouch', x: 33, y: 13, text: 'lookout_pouch', gold: 50, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // (life pass 2026-11-14)
+    // The headland: a watcher at the telescope, a walker out for his constitutional, a cat on the turf, tubs, a price for the view.
+    { sprite: 'st_folk_c', x: 12, y: 7, npc: 'st_lookout_watcher', animation: 'st_folk_c', speed: 0.9 },
+    { sprite: 'st_folk_a', x: 8, y: 8, npc: 'st_lookout_walker', animation: 'st_folk_a', speed: 0.7, stroll: { path: [[3, 8], [9, 8]], speed: 8, pause: [3, 6], greet: true } },
+    { sprite: 'st_cat_walk', x: 22, y: 8, text: 'life_k_cat', animation: 'st_cat_walk', speed: 0.22, stroll: { path: [[22, 8], [28, 8]], speed: 9, pause: [3, 7], scatter: true, keepAnim: true } },
+    { sprite: 'st_tin_box', x: 22, y: 7, text: 'life_k_tin' },
+    { sprite: 'st_flower_tub', x: 7, y: 7, text: 'life_k_tub' },
+    { sprite: 'st_boot_planter', x: 18, y: 7, text: 'life_k_boot' },
+    // Things the wind brought and nobody took back.
+    { sprite: 'st_tin_can', x: 27, y: 10, text: 'life_k_can' },
+    // (2026-11-15) The town floods a little more each time you come back (src/data/floodStages.js).
+    ...lookoutFloodProps(),
   ],
   tileTexts: {
     '~': 'lookout_sea', f: 'lookout_rail', '0': 'lookout_drop', K: 'lookout_cliff', '#': 'lookout_cliff', ',': 'lookout_turf',

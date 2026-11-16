@@ -3,7 +3,7 @@
 // got_brass_sounding_weight in gear.txt), the boss key of the Soundings: it hangs on the empty
 // hook of the gate's counterweight in soundings_up. The frame's props go as this begins (`until` /
 // `after`), so two actors stand in for them (16.5: the middle of the 2-wide frame at prop x 16) and
-// swap when the text says the weight is lifted. Nobody walks (the trigger is on the platform, which has no
+// swap when the text says the weight is lifted. Nobody walks (Z on the frame plays it, `setOut` on the prop, after Z once has read the tag; the platform has no
 // monsters on it). The hero never speaks.
 export const SOUNDINGS_THE_WEIGHT = {
   id: 'soundings_the_weight',
@@ -19,21 +19,30 @@ export const SOUNDINGS_THE_WEIGHT = {
 
   steps: [
     { do: 'face', who: 'player', dir: 'up' },
-    { do: 'say', text: 'The gallows creaks over the well. The cord runs down past the weight into the dark, knotted every fathom, and the knots go on further than the light does.' },
+    // The camera goes down the well along the knotted cord, into the dark. (draft)
+    { do: 'camera', to: { x: 16, y: 17 } },
+    { do: 'sound', name: 'creak' },
+    { do: 'quake', amount: 0.5, seconds: 1.4 },
+    { do: 'wait', seconds: 1.8 },
+    { do: 'camera', to: { x: 16, y: 15 } },
+    { do: 'wait', seconds: 0.4 },
+    // You lift the brass weight off its hook: it is heavier than it looks. (Z on the frame plays this, after
+    // Z once has read the tag wired to the weight's eye.)
+    { do: 'act', who: 'player', act: 'crouch' },
     { do: 'sound', name: 'creak' },
     { do: 'leave', who: 'frame', instant: true },
     { do: 'appear', who: 'frame_empty', instant: true },
-    { do: 'say', text: 'You lift the brass weight off its hook. It is heavier than it looks, and it looks heavy.' },
-    { do: 'act', who: 'player', act: 'crouch' },
     { do: 'act', who: 'player', act: 'stand' },
+    { do: 'camera' },
     { do: 'give', item: 'brass_sounding_weight' },
     { do: 'face', who: 'bramble', at: 'frame_empty' },
-    { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}How deep does it GO?' },
-    { do: 'face', who: 'ves', at: 'bramble' },
-    { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{bored}Deep enough that they drew a red ring round it on the chart.' },
-    { do: 'face', who: 'ves', at: 'player' },
-    { do: 'say', who: 'ves', text: '{thoughtful}And the gate on the way up wants a weight. I\'d bet this is the one.' },
+    { do: 'face', who: 'ves', at: 'frame_empty' },
+    { do: 'wait', seconds: 0.6 },
+    // The tag is what says why: they only know what it says. (draft)
+    { do: 'say', who: 'ves', text: '{thoughtful}"For the gate above." ...Which gate?' },
+    { do: 'emote', who: 'bramble', emote: '?', wait: false },
+    { do: 'say', who: 'bramble', text: '{thinking}The shut one, probably. There\'s always one.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

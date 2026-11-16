@@ -1,13 +1,17 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Glow, dimmed, stillness } from './underShapes.js';
+import { PathShot } from './coastKit.js';
 
 // The Murk's attacks. It's a patch of the dark that got up and followed a
 // light: afraid of it, and starving for it. So most of what it does is about
-// your light. It shrinks it to a small pool round you (and fills the dark
-// with wisps you only see when they're close), reaches for it with
-// tendrils from the edges, eats the little motes of it that drift down
-// (grab them first), throws the shadows of things that aren't there, and
-// swallows the whole box for a beat, until there's only its eyes.
+// your light:
+//   - Tendrils: it reaches for your light from the edges, with hands.
+//   - Motes: little lights drift down to catch (they heal), and its mouth
+//     goes after them too.
+//   - Shadows: the shadows of things that aren't there.
+//   - The swallow: it drinks your light down, and there's only its eyes.
+//   - Behind you: wherever you look, it's just behind. A hand opens at your
+//     back and grabs where you were. Keep going; don't turn back.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. The attack's own clock (`t`) runs `density`
@@ -116,64 +120,6 @@ defineBulletArt('murkLamp', {
 });
 
 export const MURK_ATTACKS = {
-  // Shrinking light: your light is a pool round you, and it gets smaller. The
-  // dark fills with wisps that drift in from every side, and you only see
-  // them once they're close. Now and then your light flares, for a breath.
-  // Stand still and the dark makes a wisp right next to you.
-  murkShrink(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    const light = { x: box.x + box.w / 2, y: box.y + box.h / 2, r: 34 };
-    const Dim = dimmed(Shot, light, 0.04);
-    const glow = new Glow(light, { color: '216, 244, 255', alpha: 0.28 });
-    const still = stillness();
-    let t = 0;
-    let started = false;
-    let next = 0.25;
-    let nextFlare = 1.5;
-    let flareUntil = 0;
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        if (!started) {
-          started = true;
-          bullets.push(glow);
-        }
-        t += dt;
-        const stood = still(dt, soul);
-        light.x = soul.x;
-        light.y = soul.y;
-        if (t >= nextFlare) {
-          nextFlare = t + T(1.5);
-          flareUntil = t + 0.4;
-        }
-        const base = Math.max(16, 34 - (t / density) * 3.4);
-        light.r = t < flareUntil ? base + 10 : base;
-        if (t >= next && t < T(5.8)) {
-          next = t + 0.34;
-          const side = Math.floor(rand(0, 4));
-          const edge = [
-            { x: box.x - 3, y: rand(box.y, box.y + box.h) },
-            { x: box.x + box.w + 3, y: rand(box.y, box.y + box.h) },
-            { x: rand(box.x, box.x + box.w), y: box.y - 3 },
-            { x: rand(box.x, box.x + box.w), y: box.y + box.h + 3 },
-          ][side];
-          const aim = Math.atan2(soul.y - edge.y, soul.x - edge.x) + rand(-0.4, 0.4);
-          bullets.push(new Dim({
-            x: edge.x, y: edge.y, vx: Math.cos(aim) * 27, vy: Math.sin(aim) * 27,
-            homing: { target: soul, turn: 0.7 }, life: 3.4, art: 'murkWisp',
-          }));
-        }
-        if (stood > 0.7 && t < T(6) && Math.random() < dt * 2.2) {
-          const a = rand(0, Math.PI * 2);
-          const x = clamp(soul.x + Math.cos(a) * 26, box.x + 3, box.x + box.w - 3);
-          const y = clamp(soul.y + Math.sin(a) * 26, box.y + 3, box.y + box.h - 3);
-          const aim = Math.atan2(soul.y - y, soul.x - x);
-          bullets.push(new Dim({ x, y, warn: 0.35, vx: Math.cos(aim) * 34, vy: Math.sin(aim) * 34, life: 2, art: 'murkWisp' }));
-        }
-      },
-    };
-  },
-
   // Tendrils: pairs of eyes open at the edge of the box, and from each a
   // long dark tendril reaches across for where you are, ending in a hand. It
   // stays a moment, then slides back. Up to three at a time, from different
@@ -186,10 +132,10 @@ export const MURK_ATTACKS = {
     let reaching = [];
     const SIDES = ['left', 'right', 'top', 'bottom'];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < T(5)) {
+        if (t >= next && t < T(6.2)) {
           next = t + T(1.5);
           const n = Math.min(3, 1 + volley);
           const used = [];
@@ -241,14 +187,14 @@ export const MURK_ATTACKS = {
     let motes = [];
     let maw = null;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (!maw) {
           maw = new Shot({ x: box.x + box.w - 10, y: box.y + box.h - 5, warn: 0.9, art: 'murkMaw' });
           bullets.push(maw);
         }
-        if (t >= next && t < T(5)) {
+        if (t >= next && t < T(6.2)) {
           next = t + 0.62;
           const mote = new Shot({ x: nextX(), y: box.y - 3, vy: rand(15, 20), art: 'murkMote' });
           mote.heals = 8;
@@ -257,14 +203,14 @@ export const MURK_ATTACKS = {
           motes.push(mote);
           bullets.push(mote);
         }
-        if (t >= nextDrop && t < T(5.8)) {
+        if (t >= nextDrop && t < T(6.8)) {
           nextDrop = t + 0.5;
           // Every other drop falls on wherever you're standing.
           const dropX = dropCount++ % 2 ? soul.x + rand(-6, 6) : rand(box.x + 4, box.x + box.w - 4);
           bullets.push(new Shot({ x: clamp(dropX, box.x + 4, box.x + box.w - 4), y: box.y - 3, warn: 0.45, vy: rand(34, 44), art: 'murkWisp' }));
         }
         // The dark reaches in from the sides for you as well, along your row.
-        if (t >= nextSide && t < T(5.4)) {
+        if (t >= nextSide && t < T(6.4)) {
           nextSide = t + T(0.95);
           const left = sideCount++ % 2 === 0;
           const x = left ? box.x - 3 : box.x + box.w + 3;
@@ -312,11 +258,11 @@ export const MURK_ATTACKS = {
     let lampAt = T(2.6);
     const lamps = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (birds < 2 && t >= nextBirds) {
-          nextBirds = t + T(3.6);
+          nextBirds = t + T(4);
           const fromLeft = birds % 2 === 0;
           const y = clamp(soul.y + rand(-10, 10), box.y + 14, box.y + box.h - 14);
           for (let i = 0; i < 5; i++) {
@@ -329,8 +275,8 @@ export const MURK_ATTACKS = {
         }
         // Hands reach in, one after another, each from a different side, along
         // the row or column you're in.
-        if (hands < 4 && t >= handAt) {
-          handAt = t + T(1.15);
+        if (hands < 5 && t >= handAt) {
+          handAt = t + T(1.2);
           const side = hands === 0 ? 0 : 1 + ((hands + Math.floor(rand(0, 2))) % 3);
           const wide = side < 2;
           const x = side === 0 ? box.x - 6 : side === 1 ? box.x + box.w + 6 : clamp(soul.x, box.x + 12, box.x + box.w - 12);
@@ -382,7 +328,7 @@ export const MURK_ATTACKS = {
     let prev = null;
     const vel = { x: 0, y: 0 };
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         if (!started) {
           started = true;
@@ -434,6 +380,78 @@ export const MURK_ATTACKS = {
             bullets.push(new Shot({ x: soul.x + Math.cos(a) * 30, y: soul.y + Math.sin(a) * 30, warn: 0.45, vx: -Math.cos(a) * 24, vy: -Math.sin(a) * 24, life: 1.4, art: 'murkSpark' }));
           }
         }
+      },
+    };
+  },
+
+  // Behind you: wherever you look, it's just behind it. Your light is a
+  // small pool round you, getting smaller, and out of the dark at your back, a hand opens
+  // (it flickers first) and grabs at the spot where you were when it opened.
+  // Keep going (briskly) and it closes on nothing; dawdle, stop, or turn
+  // back, and it has you. An empty hand crumbles into wisps that drift
+  // after you. Again and again, always from behind, the way you've come.
+  murkBehind(box, density, { Shot, rand, clamp }) {
+    const WARN = 0.5;
+    const REACH = 0.24;
+    const HOLD = 0.18;
+    const light = { x: box.x + box.w / 2, y: box.y + box.h / 2, r: 30 };
+    const glow = new Glow(light, { color: '216, 244, 255', alpha: 0.24 });
+    const Dim = dimmed(Shot, light, 0.05);
+    const heading = { x: -1, y: 0 };
+    const crumbles = [];
+    let last = null;
+    let now = 0;
+    let next = 0.35;
+    let started = false;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        const real = dt / density;
+        now += real;
+        if (!started) {
+          started = true;
+          bullets.push(glow);
+        }
+        light.x = soul.x;
+        light.y = soul.y;
+        // The light gets smaller as it goes on.
+        light.r = Math.max(18, 30 - now * 1.8);
+        // Which way you're going (it remembers the last way, if you stop).
+        if (last && real > 0) {
+          const vx = (soul.x - last.x) / real;
+          const vy = (soul.y - last.y) / real;
+          const v = Math.hypot(vx, vy);
+          if (v > 20) {
+            heading.x = heading.x * 0.8 + (vx / v) * 0.2;
+            heading.y = heading.y * 0.8 + (vy / v) * 0.2;
+            const h = Math.hypot(heading.x, heading.y) || 1;
+            heading.x /= h;
+            heading.y /= h;
+          }
+        }
+        last = { x: soul.x, y: soul.y };
+        // An empty hand crumbles into wisps that drift after you in the dark.
+        for (const c of crumbles) {
+          if (c.done || now < c.at) continue;
+          c.done = true;
+          for (const side of [-1, 0, 1]) {
+            const a = Math.atan2(soul.y - c.y, soul.x - c.x) + side * 0.9;
+            bullets.push(new Dim({ x: c.x, y: c.y, vx: Math.cos(a) * 22, vy: Math.sin(a) * 22, homing: { target: soul, turn: 0.8 }, life: 2.2, art: 'murkWisp' }));
+          }
+        }
+        if (now < next || now > 6.8) return;
+        next = now + rand(0.44, 0.54);
+        // Out of the dark just behind you; it grabs where you are now.
+        const from = { x: clamp(soul.x - heading.x * 17, box.x + 3, box.x + box.w - 3), y: clamp(soul.y - heading.y * 17, box.y + 3, box.y + box.h - 3) };
+        const to = { x: clamp(soul.x + heading.x * 12, box.x + 3, box.x + box.w - 3), y: clamp(soul.y + heading.y * 12, box.y + 3, box.y + box.h - 3) };
+        crumbles.push({ at: now + WARN + REACH + HOLD, x: to.x, y: to.y });
+        bullets.push(new PathShot({
+          art: 'murkHand', warn: WARN, life: REACH + HOLD,
+          path: (k) => {
+            const u = Math.min(1, k / REACH);
+            return { x: from.x + (to.x - from.x) * u, y: from.y + (to.y - from.y) * u };
+          },
+        }));
       },
     };
   },

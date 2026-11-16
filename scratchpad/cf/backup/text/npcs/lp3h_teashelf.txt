@@ -1,0 +1,18 @@
+# NAN CINDER'S TEA SHELF (the Kiln): a tiny errand of the life pass. The tea tin from the Felled Run goes back on its shelf. (draft)
+
+[first]
+A shelf by Nan's tent with four round rings in the dust where tins stand. Three are still there. The fourth ring has been wiped clean, and the shelf looks, somehow, put out about it.
+
+[repeat]
+Three tins, and a clean round ring where the fourth goes.
+
+[tea_ask]
+Whatever stood here went in a hurry. There's a smear of ash where a hand steadied itself on the shelf.
+
+[tea_done]
+You set the tin back in its ring. It fits exactly, as though the shelf had been holding its breath.
+
+Across the clearing, without turning round, Nan Cinder says: "Not a word." Then she flicks something over her shoulder at you. It's a stub of charcoal, black to the knuckle.
+
+[tea_after]
+The tin sits in its ring, lid on. Beside it, in the dust, somebody has drawn a very small, very black smiley face.

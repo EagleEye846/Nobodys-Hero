@@ -15,14 +15,14 @@ export const AREA_TOUCHES = {
 };
 
 export const ROOM_TOUCHES = {
+  // ---- Mother Taper's house (chapter 1) ----
+  // Grey daylight down through the glasshouse roof.
+  your_room: [{ kind: 'shaft', x: 4, y: 0.5, w: 6, h: 8.5, color: '210,225,235' }],
   // ---- Sunnyside ----
   sunny_lane: [
-    { kind: 'pinwheel', x: 6, y: 14 },
-    { kind: 'bees', x: 20, y: 14, n: 3 },
     { kind: 'grass', x: 10, y: 3, w: 9, h: 3 },
   ],
   sunny_brook: [
-    { kind: 'fishjump', x: 2, y: 9, w: 29, h: 2.5, n: 2, every: 7 },
     { kind: 'dragonfly', x: 10, y: 8, w: 12, h: 3 },
     { kind: 'bees', x: 15, y: 3, n: 3 },
   ],
@@ -31,25 +31,20 @@ export const ROOM_TOUCHES = {
     { kind: 'bees', x: 9, y: 4, n: 3 },
   ],
   sunny_soft_field: [
-    { kind: 'grass', x: 1, y: 3, w: 12, h: 4 },
-    { kind: 'bees', x: 17, y: 5, n: 3 },
   ],
 
   // ---- The Glimmering ----
   glimmer_landing: [
-    { kind: 'shaft', x: 6, y: 3, w: 4, h: 9 },
     { kind: 'caustics', x: 20, y: 8, w: 5, h: 2 },
   ],
   glimmer_kings_road: [
     { kind: 'banner', x: 17.4, y: 1.7, w: 10, h: 22, color: '#5a3f93', trim: '#c9b6ff' },
-    { kind: 'banner', x: 28.4, y: 1.7, w: 10, h: 18, color: '#3f6f93', trim: '#b6e4ff', emblem: false },
   ],
   glimmer_tuck: [
     { kind: 'caustics', x: 9, y: 6, w: 5, h: 2 },
     { kind: 'glints', chime: true },
   ],
   glimmer_vug: [
-    { kind: 'spores', x: 6, y: 6, w: 3, h: 2, color: '120, 255, 230', n: 6 },
     { kind: 'glints', chime: true },
   ],
   glimmer_crystal_bridge: [{ kind: 'spores', x: 11, y: 5, w: 10, h: 7, color: '190, 160, 255', n: 14 }],
@@ -61,33 +56,41 @@ export const ROOM_TOUCHES = {
   belowtown_gate: [
     { kind: 'laundry', x: 1.4, y: 3, x2: 6.6, y2: 3.2 },
     { kind: 'sleeper', x: 18, y: 2 },
+    // The life pass (14 Nov): lanterns between the lamp posts, a hot pot of tea, a cat on the crates, a bat or two.
+    { kind: 'lanterns', x: 3.5, y: 6.1, x2: 11.5, y2: 6.1, n: 5, posts: false },
+    { kind: 'cat', x: 26, y: 3.4, color: '#7a7a86', dark: '#4a4a56', light: '#d8d8de' },
   ],
   belowtown_market: [
     { kind: 'lanterns', x: 2.5, y: 5.1, x2: 12.5, y2: 5.1, n: 6, posts: true },
-    { kind: 'lanterns', x: 17.5, y: 5.1, x2: 28.5, y2: 5.1, n: 6, posts: true, shell: '#4a7a3a', color: '170, 255, 150' },
     { kind: 'steam', x: 15, y: 6, lean: 1 },
+    // The life pass (14 Nov): the stew, a cat at its dish, spores off the tall mushroom, bats about the roof.
+    { kind: 'bats', x: 8, y: 1.3, w: 16, n: 2, every: 15 },
   ],
   belowtown_square: [
     { kind: 'laundry', x: 28.4, y: 13.2, x2: 33.8, y2: 13.4, items: 4 },
     { kind: 'sleeper', x: 18.2, y: 11, color: '#d8c8a0', dark: '#a89878' },
+    // The life pass (14 Nov): washing in the south, steam off the stew and the tea, a cat by the bench, bats.
+    { kind: 'cat', x: 14.4, y: 15.6, color: '#8a8a96', dark: '#55555f', light: '#e0e0e4' },
+    { kind: 'spores', x: 35.6, y: 5.4, w: 2, h: 2, color: '255, 170, 150', n: 6 },
   ],
   belowtown_inn: [
-    { kind: 'steam', x: 13, y: 2, lean: -1 },
     { kind: 'sparks', x: 6, y: 2.2, n: 4 },
-    { kind: 'sleeper', x: 8, y: 3.2, color: '#c0a070', dark: '#8a6a40' },
+    // The life pass (14 Nov): lamps on chains, a cat on the hearth rug's edge, the teapot.
+    { kind: 'steam', x: 11.3, y: 5.3, lean: 0.3 },
   ],
   belowtown_forge: [
     { kind: 'sparks', x: 4, y: 3.4, n: 7 },
     { kind: 'steam', x: 11, y: 3.4 },
+    // The life pass (14 Nov): a lamp on a chain over the work.
   ],
   belowtown_hall_of_the_visit: [
     { kind: 'banner', x: 7.2, y: 1.2, w: 10, h: 24, color: '#3a5a8a', trim: '#d8e4f0' },
-    { kind: 'banner', x: 16.6, y: 1.2, w: 10, h: 24, color: '#3a5a8a', trim: '#d8e4f0' },
     { kind: 'shaft', x: 9, y: 4.2, w: 6, h: 7, color: '255, 226, 160' },
+    // The life pass (14 Nov): the pinwheel in the tub that has no business turning, a lamp, dust motes round the stash.
+    { kind: 'hanglamp', x: 4.5, y: 1.3, len: 18 },
   ],
   belowtown_throne: [
     { kind: 'banner', x: 2.4, y: 1.2, w: 12, h: 30, color: '#a8323a', trim: '#e8c25a' },
-    { kind: 'banner', x: 21.4, y: 1.2, w: 12, h: 30, color: '#a8323a', trim: '#e8c25a' },
   ],
   // The folk's back lane: somebody's washing, strung along the wall.
   belowtown_secret_way: [
@@ -95,12 +98,10 @@ export const ROOM_TOUCHES = {
   ],
   belowtown_collapse: [
     { kind: 'drip', x: 5, y: 1.2, fall: 3, dust: true, every: 4 },
-    { kind: 'drip', x: 19, y: 1.2, fall: 3, dust: true, every: 5 },
   ],
   belowtown_long_rope: [
     { kind: 'shaft', x: 6, y: 2, w: 7, h: 22, color: '255, 220, 150' },
     { kind: 'bats', x: 6.5, y: 12, w: 6, n: 2 },
-    { kind: 'bats', x: 6.5, y: 34, w: 6, n: 1, every: 17 },
   ],
 
   // ---- The Diggings ----
@@ -113,33 +114,23 @@ export const ROOM_TOUCHES = {
     { kind: 'drip', x: 27, y: 1.2, fall: 1, every: 3.8 },
   ],
   diggings_trestle: [
-    { kind: 'bats', x: 10, y: 5, w: 20, n: 3, every: 11 },
     { kind: 'drip', x: 6, y: 1.3, fall: 2 },
   ],
   diggings_switchback: [
-    { kind: 'drip', x: 11.5, y: 1.2, fall: 3, every: 3.6 },
-    { kind: 'drip', x: 27, y: 1.2, fall: 3, every: 4.4 },
   ],
   diggings_old_seam: [
     { kind: 'drip', x: 9, y: 1.2, fall: 2, dust: true, every: 5.3 },
     { kind: 'seam', x: 1, y: 2.2, w: 11, h: 0.9, n: 6 },
-    { kind: 'seam', x: 28, y: 3, w: 8, h: 0.9, n: 6 },
   ],
   diggings_flooded_drift: [
     { kind: 'drip', x: 14, y: 1.2, fall: 2, every: 3.4 },
-    { kind: 'drip', x: 30, y: 1.2, fall: 2, every: 4.1 },
   ],
   diggings_cave_in: [
-    { kind: 'drip', x: 5, y: 1.2, fall: 2.5, dust: true, every: 4.2 },
-    { kind: 'drip', x: 22.5, y: 2.2, fall: 2, dust: true, every: 5.1 },
   ],
   diggings_lift: [
-    { kind: 'hanglamp', x: 8, y: 2.3, len: 14 },
-    { kind: 'drip', x: 20, y: 2.3, fall: 2, dust: true, every: 4.7 },
   ],
   diggings_lost_seam: [
     { kind: 'seam', x: 4, y: 3.5, w: 21, h: 9, n: 5, color: '190, 220, 255' },
-    { kind: 'drip', x: 13, y: 1.5, fall: 3, every: 3.8 },
   ],
 
   // ---- The Stillwater ----
@@ -156,11 +147,8 @@ export const ROOM_TOUCHES = {
   stillwater_sunken_hall: [
     { kind: 'drip', x: 6, y: 1.2, fall: 3, every: 4.6 },
     { kind: 'bubbles', x: 14, y: 9 },
-    { kind: 'bubbles', x: 18, y: 12 },
   ],
   stillwater_stair_down: [
-    { kind: 'spores', x: 7, y: 3, w: 5, h: 2, color: '150, 255, 200', n: 7 },
-    { kind: 'drip', x: 8, y: 6.3, fall: 1.5, every: 3.9 },
   ],
   stillwater_far_shore: [
     { kind: 'fishjump', x: 1, y: 3, w: 6, h: 10, n: 1, every: 8 },
@@ -184,7 +172,6 @@ export const ROOM_TOUCHES = {
   ],
   deep_hidden_vug: [
     { kind: 'moss', points: [[3, 6], [10, 7]] },
-    { kind: 'spores', x: 5, y: 4, w: 4, h: 4, color: '120, 255, 230', n: 8 },
   ],
   deep_keepers_fire: [
     { kind: 'sparks', x: 22, y: 6.4, n: 7 },
@@ -196,7 +183,6 @@ export const ROOM_TOUCHES = {
   deep_way_up: [
     { kind: 'moss', points: [[3, 16], [19, 21], [4, 32]] },
     { kind: 'eyes', points: [[2, 13], [22, 27]] },
-    { kind: 'bats', x: 3, y: 41.5, w: 14, n: 2, every: 15 },
   ],
 
   // ---- Chapter 5: the coast (kinds in src/overworld/coastTouches.js) ----
@@ -204,33 +190,26 @@ export const ROOM_TOUCHES = {
 
   // Sunnyside: the mill pond.
   sunny_mill_pond: [
-    { kind: 'fishjump', x: 10.5, y: 12.5, w: 18, h: 2.5, n: 1, every: 9 },
-    { kind: 'dragonfly', x: 22, y: 4.5, w: 7, h: 2 },
   ],
 
   // Gullrest: gulls on mooring posts, crabs in the sand, fish and floats out in the bay.
   gullrest_beach: [
     { kind: 'gull', x: 13.5, y: 15.1, post: true, face: -1 },
-    { kind: 'gull', x: 30.5, y: 15.3, post: true },
     { kind: 'crab', x: 16, y: 11 },
-    { kind: 'crab', x: 40, y: 12, r: 1.2 },
     { kind: 'fishjump', x: 2, y: 16.5, w: 40, h: 2.5, n: 2, every: 8 },
     { kind: 'floats', points: [[5, 17.2], [7, 17.5], [9, 17.3], [11, 17.6]] },
   ],
   // (Nothing out on the water here: the tide drains the middle to walkable shingle.)
   gullrest_cove: [
-    { kind: 'crab', x: 30, y: 11 },
     { kind: 'crab', x: 6, y: 12, r: 1.2 },
   ],
   gullrest_jetty: [
     { kind: 'gull', x: 17.5, y: 11.6, post: true, face: -1 },
-    { kind: 'gull', x: 26.5, y: 13.2, post: true },
     { kind: 'floats', points: [[29, 14.2], [31, 14.6], [33, 14.3], [35, 14.7]] },
     { kind: 'fishjump', x: 24, y: 15, w: 20, h: 2, n: 1, every: 8 },
   ],
   gullrest_cliff_steps: [
     { kind: 'gull', x: 5.5, y: 9.2, post: true },
-    { kind: 'crab', x: 14, y: 27 },
   ],
   gullrest_lifeboat_house: [
     { kind: 'steam', x: 15, y: 2.6, lean: -1 },
@@ -244,42 +223,33 @@ export const ROOM_TOUCHES = {
   // hunched on a post, puddles on the path. Crabs come out once the storm's gone.
   // (Nothing on the tide rooms' water: wrack_pools and wrack_tide_clock drain.)
   wrack_landing: [
-    { kind: 'gull', x: 30.5, y: 8.1, post: true, face: -1 },
     { kind: 'blown', x: 1, y: 8.5, w: 38, h: 5, n: 7, wind: 95, colors: ['#4a5a2a', '#6a5a32', '#3a4a2a'], when: 'storm' },
     { kind: 'puddles', points: [[13, 12.6], [27.5, 11.5, 18]] },
-    { kind: 'crab', x: 21, y: 9, when: 'calm' },
+  ],
+  wrack_headland: [
+    { kind: 'blown', x: 1, y: 2, w: 38, h: 5, n: 6, wind: 95, colors: ['#4a5a2a', '#6a5a32', '#3a4a2a'], when: 'storm' },
+    { kind: 'crab', x: 33, y: 13, when: 'calm' },
   ],
   wrack_dunes: [
-    { kind: 'blown', x: 1, y: 2, w: 42, h: 13, n: 9, wind: 80, colors: ['#d8c89a', '#c0ae80', '#6a7a3a'], when: 'storm' },
-    { kind: 'grass', x: 36, y: 11, w: 6, h: 3 },
-    { kind: 'crab', x: 31, y: 9, when: 'calm' },
   ],
   wrack_bathtub: [
-    { kind: 'gull', x: 20.5, y: 3.1, post: true },
     { kind: 'puddles', points: [[8, 9.6, 16], [28, 8.4]] },
-    { kind: 'blown', x: 1, y: 4, w: 35, h: 11, n: 6, wind: 90, colors: ['#4a5a2a', '#6a5a32'], when: 'storm' },
   ],
   wrack_boardwalk: [
     { kind: 'gull', x: 17.5, y: 20.3, post: true, face: -1 },
-    { kind: 'gull', x: 29.5, y: 6.2, post: true },
     { kind: 'floats', points: [[20, 22.4], [22, 22.8], [24, 22.5], [26, 22.9]] },
   ],
   wrack_pools: [
-    { kind: 'crab', x: 36, y: 10, when: 'calm' },
     { kind: 'crab', x: 4, y: 7, r: 1, when: 'calm' },
   ],
   wrack_tide_clock: [
-    { kind: 'crab', x: 38, y: 9, when: 'calm' },
   ],
   wrack_gaps: [
     { kind: 'puddles', points: [[10, 11.6], [21, 14.5, 18], [32, 11.3]] },
-    { kind: 'crab', x: 31, y: 13, when: 'calm' },
   ],
   // The old hulk lets the rain in through its seams.
   secret_wrack_hulk: [
     { kind: 'drip', x: 4, y: 2.6, fall: 1.6, every: 3.4, when: 'storm' },
-    { kind: 'drip', x: 11, y: 2.6, fall: 2.2, every: 4.6, when: 'storm' },
-    { kind: 'drip', x: 6, y: 2.8, fall: 0.9, every: 3.1, when: 'storm' },
   ],
 
   // Saltcombe: chimneys smoking (torn sideways in the storm), gulls on the harbour posts,
@@ -287,16 +257,12 @@ export const ROOM_TOUCHES = {
   // washing out between the market lamps once there's something to dry it.
   saltcombe_quay: [
     { kind: 'smoke', x: 6.5, y: 1.6, stack: true },
-    { kind: 'smoke', x: 17.5, y: 1.6, stack: true, lean: 0.6 },
-    { kind: 'smoke', x: 26.5, y: 1.6, stack: true },
     { kind: 'gull', x: 14.5, y: 15.2, post: true },
-    { kind: 'gull', x: 36.5, y: 15, post: true, face: -1 },
     { kind: 'puddles', points: [[13, 10.6], [27, 8.5]] },
     { kind: 'cat', x: 3.15, y: 4.25, color: '#8a8a96', dark: '#55555f', light: '#e0e0e4', eye: '#e8d050', when: 'calm' },
   ],
   saltcombe_market: [
     { kind: 'smoke', x: 5.5, y: 1.6, stack: true },
-    { kind: 'smoke', x: 19.5, y: 0.7, stack: true, lean: 0.7 },
     { kind: 'puddles', points: [[11, 10.5, 18], [24, 13.6], [20, 18.4]] },
     { kind: 'laundry', x: 28.6, y: 2.5, x2: 33.4, y2: 2.5, items: 4, posts: false, when: 'calm' },
   ],
@@ -305,14 +271,12 @@ export const ROOM_TOUCHES = {
     // The oilskin by the fire dripping while it rains (indoor details, 2026-11-08).
     { kind: 'drip', x: 1, y: 2.8, fall: 0.9, every: 2.6, when: 'storm' },
     // The leak over the bucket by the east wall (2026-11-09).
-    { kind: 'drip', x: 18, y: 7.4, fall: 1.4, every: 2.8, when: 'storm' },
   ],
   // The town hall's oilskin dripping in the rain, the badger's tea steaming on its stool.
   saltcombe_town_hall: [
     { kind: 'drip', x: 3, y: 2.8, fall: 0.9, every: 2.9, when: 'storm' },
     { kind: 'steam', x: 19, y: 4.9, lean: -0.3 },
     // The leak over the bucket (2026-11-09).
-    { kind: 'drip', x: 16, y: 5.4, fall: 1.4, every: 2.2, when: 'storm' },
   ],
   saltcombe_chandlery: [
     { kind: 'rope', x: 10.6, y: 2.6, len: 12 },
@@ -322,7 +286,6 @@ export const ROOM_TOUCHES = {
     { kind: 'blown', x: 1, y: 6, w: 34, h: 9, n: 7, wind: 85, colors: ['#5a7a3a', '#7a8a4a', '#4a6a2a'], when: 'storm' },
   ],
   saltcombe_lagoon: [
-    { kind: 'crab', x: 4, y: 11, when: 'calm' },
   ],
 
   // The Sunken Lanes: left behind. Someone's washing still out in the storm, puddles in
@@ -344,6 +307,10 @@ export const ROOM_TOUCHES = {
   secret_lanes_attic: [
     { kind: 'drip', x: 8, y: 2.6, fall: 1.6, every: 3.1, when: 'storm' },
   ],
+  // The parlour behind the doorway in the Sluices (2026-11-14): the teapot on the table, still hot.
+  secret_lanes_door: [
+    { kind: 'steam', x: 9.05, y: 5, lean: 0.3 },
+  ],
   lanes_hamlet: [
     { kind: 'puddles', points: [[6, 14.6, 18], [24, 14.4], [36, 14.6]] },
     { kind: 'crab', x: 11, y: 15, when: 'calm' },
@@ -352,15 +319,12 @@ export const ROOM_TOUCHES = {
     { kind: 'crab', x: 37, y: 13, r: 1, when: 'calm' },
   ],
   secret_lanes_attic: [
-    { kind: 'drip', x: 3, y: 1.8, fall: 2.6, every: 2.6, when: 'storm' },
-    { kind: 'drip', x: 3, y: 1.8, fall: 2.6, every: 7, when: 'calm' },
   ],
 
   // Merrow: nobody left but the crabs, which have the run of the square; a gull on a post
   // in the flood; drips in the cold house and the bell tower.
   merrow_square: [
     { kind: 'crab', x: 7, y: 7 },
-    { kind: 'crab', x: 33, y: 8, r: 1.2 },
     { kind: 'gull', x: 22.5, y: 17.3, post: true, face: -1 },
   ],
   merrow_tower_lane: [
@@ -374,7 +338,6 @@ export const ROOM_TOUCHES = {
   ],
   merrow_belfry: [
     { kind: 'drip', x: 9, y: 2.2, fall: 2.4, every: 3.8 },
-    { kind: 'drip', x: 22, y: 2.2, fall: 1.6, every: 5.1 },
   ],
   merrow_sea_gate: [
     { kind: 'gull', x: 33.5, y: 9, sort: 17 },
@@ -384,10 +347,8 @@ export const ROOM_TOUCHES = {
   // wrecks, the old hulks dripping inside, the ghost cook's pot steaming.
   wreck_gate: [
     { kind: 'gull', x: 17.5, y: 8, sort: 17, face: -1 },
-    { kind: 'gull', x: 31.5, y: 11, sort: 17 },
   ],
   wreck_fog: [
-    { kind: 'gull', x: 22.5, y: 7, sort: 17 },
     { kind: 'blown', x: 1, y: 3, w: 42, h: 12, n: 6, wind: 80, colors: ['#4a5a2a', '#6a5a32'], when: 'storm' },
   ],
   wreck_slip: [
@@ -396,8 +357,6 @@ export const ROOM_TOUCHES = {
   ],
   wreck_hull: [
     { kind: 'drip', x: 8, y: 1.4, fall: 2.2, every: 4.4 },
-    { kind: 'drip', x: 25, y: 1.4, fall: 1.6, every: 5.6 },
-    { kind: 'drip', x: 5, y: 1.8, fall: 0.9, every: 3.6, when: 'storm' },
   ],
   wreck_galley: [
     { kind: 'steam', x: 13, y: 3.6, lean: 0.5 },
@@ -405,7 +364,6 @@ export const ROOM_TOUCHES = {
   ],
   wreck_pumps: [
     { kind: 'drip', x: 7, y: 1.4, fall: 1.4, every: 3.9 },
-    { kind: 'drip', x: 21, y: 14.4, fall: 1.4, every: 4.6 },
   ],
   secret_wreck_pocket: [
     { kind: 'drip', x: 4, y: 1.4, fall: 2.2, every: 5 },
@@ -428,48 +386,47 @@ export const ROOM_TOUCHES = {
   // bollards, crabs once it's over. Orla's forge spits sparks and the quench tub steams.
   isles_landing: [
     { kind: 'blown', x: 1, y: 3, w: 34, h: 12, n: 8, wind: 110, colors: ['#e0eef0', '#4a5a2a', '#c8dce0'], when: 'storm' },
-    { kind: 'crab', x: 13, y: 14, when: 'calm' },
   ],
   isles_causeway: [
     { kind: 'blown', x: 1, y: 2, w: 46, h: 13, n: 9, wind: 120, colors: ['#e0eef0', '#c8dce0', '#4a5a2a'], when: 'storm' },
   ],
+  // The ring climbs (2026-11-14): spray and weed torn off the tops, a gull on the stack.
+  isles_gannet_stack: [
+    { kind: 'blown', x: 1, y: 2, w: 38, h: 6, n: 7, wind: 120, colors: ['#e0eef0', '#c8dce0', '#4a5a2a'], when: 'storm' },
+    { kind: 'gull', x: 30.5, y: 12.2, face: -1 },
+  ],
+  reach_needle: [
+    { kind: 'blown', x: 1, y: 1, w: 28, h: 36, n: 10, wind: 140, colors: ['#e0eef0', '#c8dce0', '#4a5a2a'], when: 'storm' },
+  ],
   isles_west_light: [
     { kind: 'gull', x: 25.5, y: 10, sort: 17, face: -1 },
-    { kind: 'gull', x: 33.5, y: 13, sort: 17 },
   ],
   isles_east_light: [
-    { kind: 'crab', x: 6, y: 16, when: 'calm' },
     { kind: 'blown', x: 1, y: 2, w: 42, h: 17, n: 7, wind: 110, colors: ['#e0eef0', '#4a5a2a'], when: 'storm' },
   ],
   isles_forge: [
     { kind: 'sparks', x: 3, y: 3.2, n: 6 },
     { kind: 'steam', x: 12, y: 2.8, lean: 1 },
     // Orla's oilskin, near enough to the forge to steam.
-    { kind: 'steam', x: 5, y: 1.9, lean: 0.4 },
   ],
   isles_old_lightroom: [
     { kind: 'spores', x: 6, y: 3, w: 6, h: 4, color: '220, 214, 196', n: 7 },
   ],
   reach_eye: [
-    { kind: 'gull', x: 12.5, y: 13.3, face: -1 },
-    { kind: 'crab', x: 20, y: 13, r: 1.2 },
   ],
   reach_reef: [
     { kind: 'blown', x: 9, y: 3, w: 25, h: 13, n: 7, wind: 120, colors: ['#e0eef0', '#c8dce0', '#4a5a2a'], when: 'storm' },
-    { kind: 'crab', x: 12, y: 10, when: 'calm' },
   ],
   reach_first_rock: [
     { kind: 'blown', x: 9, y: 2, w: 22, h: 12, n: 6, wind: 120, colors: ['#e0eef0', '#c8dce0'], when: 'storm' },
   ],
   reach_wreck: [
     { kind: 'rope', x: 25.5, y: 3.6, len: 16 },
-    { kind: 'gull', x: 40.5, y: 8, sort: 17, face: -1 },
   ],
 
   // Haddock's Light: his stovepipe smoking while he's there, cold after; floats by the Bother.
   haddock_light_door: [
     { kind: 'smoke', x: 17.6, y: 1.4, stack: true, when: 'storm' },
-    { kind: 'smoke', x: 17.6, y: 1.4, stack: true, cold: true, when: 'calm' },
     { kind: 'floats', points: [[24, 13.3], [26, 13.7], [28, 13.4]] },
   ],
   haddock_light_parlour: [

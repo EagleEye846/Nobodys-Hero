@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><body style="background:#2a2a30;margin:0"><canvas id="c"></canvas><pre id="report">SHEET START</pre>
+<script type="module">
+import { makeSprite } from '../../src/engine/sprite.js';
+import { PROP_PALETTE, PROP_SPRITES } from '../../src/data/art/props.js';
+const names = Object.keys(PROP_SPRITES).filter((n) => n.startsWith('r3b_'));
+const Z = 3;
+const c = document.getElementById('c'); c.width = 1100; c.height = 700; const x = c.getContext('2d'); x.imageSmoothingEnabled = false; x.fillStyle = '#3a3a44'; x.fillRect(0, 0, c.width, c.height);
+let cx = 6, cy = 6, rowH = 0;
+x.font = '10px monospace';
+for (const n of names) {
+  const s = makeSprite(PROP_SPRITES[n], PROP_PALETTE); const img = s.canvas ?? s;
+  const w = img.width * Z, h = img.height * Z;
+  if (cx + w > 1090) { cx = 6; cy += rowH + 16; rowH = 0; }
+  x.drawImage(img, cx, cy, w, h); x.fillStyle = '#fff'; x.fillText(n.slice(4), cx, cy + h + 10); cx += Math.max(w, 70) + 8; rowH = Math.max(rowH, h);
+}
+document.getElementById('report').textContent = `SHEET DONE ${names.length}`;
+</script>

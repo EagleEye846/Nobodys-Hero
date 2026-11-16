@@ -1,0 +1,79 @@
+# HAYWARD
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/hayward.js.
+
+[intro]
+A scarecrow at the end of the lane turns its head. It's a HAYWARD! It waves.
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+HAYWARD is guarding a field of nettles. The nettles are very well guarded.
+
+The crow on HAYWARD's arm is eating its straw. HAYWARD pretends not to notice.
+
+HAYWARD looks down the empty lane. Then back at you. Then down the lane again.
+
+HAYWARD's stitched smile has been mended a lot. Always into a smile.
+
+Smells like old hay and rain.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Good morning!
+Lovely morning!
+Is it morning?
+
+Shoo! Shoo, crows!
+...Please?
+
+You're not a farmer.
+Are you a farmer?
+
+Off the barley!
+...There was barley.
+
+I'm minding it all
+till they're back.
+
+Fifty-one springs.
+I've minded
+every one.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/hayward.js.
+[talk: Inspect]
+HAYWARD - HP 400
+Hollin's scarecrow. Its people left long ago. It didn't. Nobody told it to.
+
+[talk: Say good morning]
+You nod good morning. HAYWARD's whole sack face lights up.
+
+"Good morning! GOOD MORNING! Nobody's said it back in fifty years!"
+
+[talk: Shoo the crow]
+You shoo the crow. It hops off HAYWARD's arm, waits, and hops straight back on.
+HAYWARD seems relieved. They're old friends.
+
+[talk: Wave back]
+You wave. HAYWARD waves back with both arms, very hard. Straw goes everywhere.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+HAYWARD tips over into the nettles. The crow sits on it and waits with it.
+
+[pacified]
+HAYWARD stands up straight and goes back to its post. "If you see the farmers, tell them it's all minded."
+
+# Bramble's own TALK lines for it ({foe} is its name). His grandad was born
+# in Hollin and told him all about this scarecrow.
+[bramble_talk]
+Bramble tells {foe} his grandad was born here. {foe} asks if he's well. He's well!
+
+Bramble yells "GOOD MORNING!" at {foe} as loud as he can. {foe} is overjoyed.
+
+Bramble tells {foe} the farmers aren't coming back. Then says sorry. {foe} pats his head.
+
+Bramble says his grandad used to hide in {foe}'s coat. {foe} remembers. It kept the pocket.

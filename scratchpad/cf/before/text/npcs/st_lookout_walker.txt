@@ -1,0 +1,23 @@
+# ST_LOOKOUT_WALKER: a seal in a yellow hat, taking the headland's air, to and fro along the turf, with his hands behind his back. The life pass.
+
+[first]
+Constitutional. Three times along, three times back. It's good for you. I was told it's good for you. I don't know by whom, but they sounded very sure.
+
+[repeat]
+One and two and... What's that? A gull? Don't point. It'll know.
+
+# (draft)
+[repeat 2]
+I used to walk to the Wrack and back. Now the planks are gone. So it's here. Three along, three back. I'm told it's the same.
+
+# (draft)
+[repeat_bramble 2]
+{sad}It isn't the same. Is it?
+
+# (draft)
+[first after the_light_answers]
+Walked to the very end of the headland today. First time. Never could see it for the weather. It's got a little rail and everything.
+
+# (draft)
+[repeat after the_light_answers]
+Four along, four back. A new record. The sun does something to my knees.

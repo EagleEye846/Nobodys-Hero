@@ -29,8 +29,8 @@ export const THE_DEN_TALLY = {
     { do: 'face', who: 'bramble', dir: 'up' },
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'say', text: 'Cut into the back wall, in fives: tally marks. Very neat at the start. Then they stop.' },
-    { do: 'say', who: 'bramble', text: '{thinking}Somebody lived in here?' },
-    { do: 'say', who: 'ves', text: '{bored}Somebody small. Who didn\'t want finding.' },
+    { do: 'say', who: 'bramble', text: '{surprised}Somebody lived in here?' },
+    { do: 'say', who: 'ves', text: '{thoughtful}Somebody small. Who didn\'t want finding, maybe.' },
     { do: 'wait', seconds: 0.4 },
     { do: 'say', who: 'bramble', text: '{worried}...Why\'d they stop?' },
     { do: 'wait', seconds: 0.6 },
@@ -40,3 +40,4 @@ export const THE_DEN_TALLY = {
     { do: 'emote', who: 'ves', emote: '...' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

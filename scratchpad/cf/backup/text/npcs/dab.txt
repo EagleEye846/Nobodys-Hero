@@ -1,0 +1,22 @@
+# DAB: a small cave-frog kid on the King's Road, who has lost his tin of sweets. (The tin is in the
+# grotto where Tuck finds you; see glimmer_tuck.) A tiny errand: bring the tin, get a lucky pebble.
+
+[first]
+Have you seen a tin? Small. Rattles. It's got my sweets in it, and my lucky pebble's in with the sweets, so it's practically two tins.
+
+I put it down in the grotto at the back, to have a proper look at the biggest crystal. Then there were voices, and I ran. I'm still running, a bit. On the inside.
+
+[repeat]
+It's got sugar on the lid. That's how you know it's mine. That, and the thumbprint. I did the thumbprint on purpose.
+
+[tin_back]
+You hold out the tin. Dab's whole face goes round.
+
+IT'S MINE! You found it! It rattles! It's all still in it!
+
+He opens it, counts, closes it, and presses something into your hand.
+
+That's my lucky one. It's lucky. It's yours now, for exactly the amount of luck you've got coming. Don't lose it. It's not insured.
+
+[tin_after]
+I've eaten two. For the shock. The rest are for emergencies, and I'm having one now.

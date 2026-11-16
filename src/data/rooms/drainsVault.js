@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE DROWNED VAULT: a secret, behind the cracked breach in the conduit's
 // north wall. A room the old city kept dry, with a stone chest on a dais, and
 // water standing in its corners. Whoever bricked up the breach didn't look
@@ -56,6 +57,8 @@ export const DRAINS_VAULT = {
     { sprite: 'gold_pouch', x: 4, y: 7, text: 'vault_purse', gold: 260, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'conduit_carving', x: 9, y: 6, text: 'vault_carving' },
     { sprite: 'light_shaft', x: 7, y: 5, text: 'vault_light', light: 50, walkable: true },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_vault'] ?? []),
   ],
   tileTexts: { W: 'vault_wall', '#': 'vault_wall', '~': 'vault_water', I: 'vault_pillar', G: 'conduit_breach' },
 

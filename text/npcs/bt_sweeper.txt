@@ -39,3 +39,21 @@ Some of this confetti's very old. Same colours as the last show, and the one bef
 # (draft)
 [repeat 2 after the_light_goes_up]
 I've leant the broom on the wall and sat down. First time. I've no idea what you do with the rest of a day.
+
+# --- SIDE QUEST: the good dustpan (it's in the Hall of the Visit) ---
+
+[pan_ask]
+Oh! You've got the look of somebody who goes places. Listen. I've lost my good dustpan. Last seen in the Hall of the Visit, where I swept the exhibits and the exhibits swept me.
+
+It's got a dent in the side. You'll know it. It'll be looking at you like you owe it money.
+
+[pan_wait]
+Dustpan. Hall of the Visit. Dented. Don't let the curator tell you it's an exhibit.
+
+[pan_done]
+My dustpan! Oh, and it's still got the dent. Good. I wouldn't know it without.
+
+Here. A pin. Don't tell the broom.
+
+[pan_after]
+I've swept the same spot six times today with the right dustpan. I've never felt so thorough.

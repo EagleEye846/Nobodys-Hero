@@ -1,0 +1,9 @@
+# HADDOCK (by the fire in the Drowned Rat, saltcombe_inn), on a crate, eyes shut. He is only here
+# until the scene haddock_hums (which plays as you come in); after it he has gone on ahead to the
+# lagoon and left his mug.
+
+[first]
+{smile}Mm? Sit down, sit down. Fire's lit.
+
+[repeat]
+{eh}Eh?

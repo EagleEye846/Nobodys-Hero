@@ -1,0 +1,230 @@
+# CAPTAIN TARRY: the midboss of the ghost ship, master of the brig Fair Return,
+# which went down on the Wreck Yard's bar about a hundred years ago. He has not
+# admitted it. He still gives the orders he gave that night, and his crew still
+# answer "Aye, Captain", because they can't do anything else. He promised their
+# families he would bring them home. He is not cruel. He is late. The hero never
+# speaks, so every TALK is something the hero does.
+# (draft: every line here)
+# Numbers (HP, damage, his three phases) live in src/data/enemies/captain_tarry.js.
+#
+# A section with ": mutiny" or ": heave" after its name is used in that phase of
+# his fight instead of the plain one. [phase: ...] sections are what's said as a
+# phase starts: plain ones in the battle panel, "vesper" ones by Ves in her box,
+# "foe" ones by him in speech bubbles. Lines written together (no blank line
+# between) share a bubble; a line starting with ... waits for a bubble of its own.
+
+[boss_intro]
+Mr Pike.
+Mr Pike?
+
+...Aye,
+Captain.
+
+Good.
+Hold her
+steady.
+
+We'll be
+in by
+morning.
+
+[intro]
+The cabin door swings in on a hundred years of damp, and a tall coat steps out of the fog with a speaking-trumpet in its hand. CAPTAIN TARRY!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CAPTAIN TARRY stands at a chart table with nothing on it. His finger follows a course that was rubbed off the paper long ago.
+
+His boots never touch the deck. The deck creaks anyway, politely, for him.
+
+Somewhere below, a voice says "Aye, Captain." It is not the same voice twice, and it is not alive.
+
+He looks at the stern windows. It is always just before dawn in them.
+
+Smells of lamp oil, wet wool and a closed room.
+
+[flavor: mutiny]
+CAPTAIN TARRY keeps looking over your shoulder, at the door, for a crew that has stopped answering.
+
+His cutlass shakes in his fist. He has not once, in a hundred years, wanted to use it.
+
+The ship is full of letters, and not one has been sent.
+
+[flavor: heave]
+CAPTAIN TARRY has taken his hat off. Without it he looks tired, and a good deal younger.
+
+The deck is leaning. He leans with it, the way a man does who has stood on a hundred years of night watch.
+
+The bell is tolling by itself, slowly, the way it would for port.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full).
+[flavor: low]
+CAPTAIN TARRY is fading at the edges. Through his coat you can see the stern windows, and in them, the first grey of a morning that is not coming.
+
+[flavor: spareable]
+CAPTAIN TARRY has put down the trumpet. He is looking at you the way you look at someone who has come to tell you something you already know.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Run out
+the guns!
+
+Hard
+a-port!
+
+Steady,
+steady.
+
+Draw.
+
+Mr Pike,
+the
+braces!
+
+Port
+by
+morning.
+
+Not
+much
+further.
+
+[taunts: mutiny]
+Why does
+nobody
+ANSWER?
+
+Boarders!
+
+Hold the
+line!
+
+Mr Pike?
+...Mr
+PIKE?
+
+I gave my
+word.
+
+Throw
+lines!
+
+[taunts: heave]
+All hands,
+brace!
+
+...She's
+leaning.
+
+Make
+port.
+
+Is it
+morning?
+
+Nearly
+there.
+
+Day forty-
+one.
+
+[low_hp]
+Not
+yet.
+
+One more
+tide.
+
+[low_hp: heave]
+...I'm
+so tired.
+
+Is it
+morning
+yet?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/captain_tarry.js.
+[talk: Inspect]
+CAPTAIN TARRY - HP 42000
+Master of the brig Fair Return, which never made port. Draws a cutlass, runs out the guns, shouts orders through a trumpet and throws the last of his rum; then his crew boards you, with letters, and lines come over the rail; at the end the deck lists, and the bell tolls. He is not cruel. He gave his word to bring them home.
+
+[talk: Ask the day]
+You point at the log on the table, then at the sky in the stern windows, and mime a question: what day is it? CAPTAIN TARRY opens his mouth, and says it is the forty-first. He says it very confidently. Then he says it is the forty-first again, a little more slowly, and frowns at the table as if it had moved.
+
+[talk: Read him a letter]
+You take one of the letters from the crew's lockers and read it aloud: a mother's hand, a Tuesday long gone, "the garden is coming on, and the kettle is always on, come home when you can." CAPTAIN TARRY goes quite still. He asks whose it is. When you say, he takes off his hat, and puts it on again, and does not trust his voice.
+
+[talk: Show him the log]
+You open the log on the chart table to the last page and hold it up. It says "Day 41. Port tomorrow." And above it "Day 41. Port tomorrow." And above that, all the way back, the same line, in the same hand, over and over, a hundred years of pages. CAPTAIN TARRY reads one. He reads the next. He puts a finger on the paper and it goes through.
+
+[talk: Hold up the compass]
+You take out the brass compass from the chart table and hold it up. The needle does not point north. It does not point anywhere. It turns, slowly, toward the stern windows, and then toward you, and then it settles on the floor, like a thing looking for ground. CAPTAIN TARRY says it has been doing that since the night of the storm, and that he has always meant to have it seen to.
+
+[talk: Ask who is left]
+You gesture at the cabin, at the quiet ship below it, and at the doorway where nobody is standing. Who is left to give orders to? CAPTAIN TARRY says the crew, of course. Then he calls for Mr Pike. And for Hobbs. And for the boy, whose name he has lost. Nothing answers but the deck, and it is very quiet, and he stands in the quiet for a while.
+
+[talk: Say it plainly]
+You step up to him and say it with your hands, plainly, as kindly as you know how: the ship went down. A long time ago. Everyone aboard went down with her, and you are all still here because nobody told you to go. CAPTAIN TARRY looks at you for a long time. Then he asks, in a very small voice, how long. You hold up your hands, and then you keep holding them up.
+
+# Said when you try to RUN.
+[no_escape]
+The cabin door has swung shut behind you. It is the sort of door that stays shut until the captain says otherwise.
+
+# What's said as each phase starts.
+[phase: mutiny]
+CAPTAIN TARRY looks at the door, and the stairs beyond it, and the quiet where a crew should be. He draws the cutlass at last. His hand is shaking so badly the blade rings.
+
+[phase: mutiny vesper]
+{determined}He's lost his crew and doesn't know it. Mind the men on the rail. They aren't coming for you. They just aren't able to stop.
+
+[phase: mutiny foe]
+Where are
+my MEN?
+
+I gave my
+word.
+
+I GAVE
+my word.
+
+[phase: heave]
+The cutlass drops. The ship gives a long, slow groan, and the cabin begins, very gently, to lean. Loose things start to roll toward the low side.
+
+CAPTAIN TARRY takes off his hat and holds it against his chest.
+
+[phase: heave vesper]
+{thoughtful}The whole room's tipping. Everything loose goes downhill, and so do we. ...He isn't angry any more. That's worse.
+
+[phase: heave foe]
+...Hold on.
+
+She's only
+heaving to.
+
+We'll make
+port by
+morning.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+CAPTAIN TARRY sinks down at the chart table, his hat on his chest, his eyes shut. "Not yet," he says. "One more tide." The cabin stops leaning, and the bell stops tolling, and the room is very quiet.
+
+[pacified]
+CAPTAIN TARRY puts down the trumpet and takes off his hat. He straightens, with a great effort, and turns to the stern windows, where it is always just before dawn.
+
+# Ves's own TALK lines for him ({foe} is his name).
+[vesper_talk]
+Ves tells {foe} that she knows a bit about promises, and that the good ones are the ones you're allowed to put down. {foe} hasn't heard that before. It takes him a while to hear it now.
+
+Ves asks {foe} what his ship was called. "The Fair Return," he says, with such pride that she doesn't say anything dry at all.
+
+Ves says she'd like to hear the order for port, if he wouldn't mind, and that she would like to be in the room when it's carried out. {foe} stands up straighter, and then doesn't know what to do with the straightness.
+
+# Bramble's own TALK lines for him.
+[bramble_talk]
+Bramble asks {foe} if his crew are all right down there, and says he's sorry about the cold. {foe} says they are fine, they are always fine, and then tries to remember when he last saw them.
+
+Bramble says he's not scared of the ship, or the fog, or the creaking, or the bell. His voice goes very small at the bell. {foe} lowers the trumpet, a little, so as not to shout at him.
+
+Bramble asks {foe} if he wants him to carry a letter, because he's very good at post. {foe} looks at the letters on the table, and does not say no.

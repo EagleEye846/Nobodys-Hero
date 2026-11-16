@@ -15,7 +15,13 @@ export const ISLES_FOUR_LIGHTS = {
 
   steps: [
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', text: 'The stair comes out of the rock into the wind. Rain, salt, and a lot of sky.\n\nOut across the water, each on its own rock, are little lighthouses. One is turning. One is dark. Further off there are more, and past all of them, a long way east, a taller one with a warm window low down.' },
+    // The camera goes out over the water, rock by rock: one lighthouse turning, one dark, then far off to the
+    // east a taller one with a warm window low down. (draft)
+    { do: 'camera', to: { x: 13, y: 5 } },
+    { do: 'wait', seconds: 1.4 },
+    { do: 'camera', to: { x: 24, y: 5 } },
+    { do: 'wait', seconds: 1.6 },
+    { do: 'camera' },
     { do: 'walk', who: 'bramble', to: { x: 8, y: 7 } },
     { do: 'face', who: 'bramble', dir: 'right' },
     { do: 'wait', seconds: 0.6 },
@@ -25,16 +31,16 @@ export const ISLES_FOUR_LIGHTS = {
     { do: 'walk', who: 'ves', to: { x: 7, y: 6 } },
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{bored}It\'s an island. That\'s the deal with islands.' },
-    { do: 'face', who: 'bramble', at: 'ves' },
-    { do: 'say', who: 'bramble', text: '{worried}Who builds a house in the middle of a puddle? On purpose?' },
-    { do: 'say', who: 'ves', text: '{smile}Four someones, by the look of it.' },
+    { do: 'say', who: 'ves', text: '{smile}Four lighthouses, by the look of it.' },
     { do: 'wait', seconds: 0.4 },
     { do: 'face', who: 'bramble', dir: 'right' },
-    { do: 'say', who: 'bramble', text: '{thinking}Three. That one\'s off.' },
+    { do: 'say', who: 'bramble', text: '{proud}Three. That one\'s off.' },
     { do: 'face', who: 'ves', at: 'bramble' },
-    { do: 'say', who: 'ves', text: '{bored}Three and a half, then. Come on. The sea isn\'t going anywhere.' },
-    { do: 'say', who: 'bramble', text: '{scared}That\'s what I\'m worried about.' },
+    { do: 'say', who: 'ves', text: '{angry}Three and a half, then. Don\'t count at me. The sea isn\'t going anywhere.' },
+    { do: 'say', who: 'ves', text: '{bored}The lit ones are burning green-white. I wouldn\'t look straight at one.' },
+    { do: 'say', who: 'bramble', text: '{worried}That\'s what I\'m worried about.' },
     { do: 'act', who: 'bramble', act: 'shiver', wait: false },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

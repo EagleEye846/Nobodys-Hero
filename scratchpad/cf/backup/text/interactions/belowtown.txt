@@ -1,0 +1,1026 @@
+# BELOWTOWN (Chapter 4): the creature folk's town under the Sunstone. The
+# gate, the market, the square, Hobnail's forge, the Mossy Pillow inn, the
+# Hall of the Visit and King Peptup's throne hall. Things you can read and
+# look at. A section ending `_ves` is what Ves says after the section of that
+# name, if she's with you (see OverworldScene.say). People have their own
+# files in text/npcs/ (bt_*.txt).
+#
+# The Keeper's moment lives in [mural_lantern] and nowhere else in town. Keep
+# it small.
+
+[save_point]
+The crystal glows warm and steady, like the lamps.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+An empty chest. Not even a spore.
+
+[gold_pouch_empty]
+An empty purse. It still smells faintly of dice.
+
+# --- THE TOWN'S WALLS AND LAMPS (every room) ---
+
+[town_wall]
+Old carved stone, older than the town. Somebody has patched the worst bits with planks, and somebody else has painted the planks to match the stone, not quite.
+
+[town_rock]
+Bare cavern rock, high above. Somewhere up there is the roof of the world.
+
+[town_lamps_wall]
+A string of glow-worm lamps running along the wall, each one with a worm in it, glowing quietly and looking a bit tired.
+
+[town_banner_wall]
+A red-and-gold banner, hung up for the king's last show. It has a little mushroom stitched in the corner, which is the town's mark.
+
+[town_pillar]
+A carved stone pillar with a glow-worm lantern hung from it. The carving is of a lot of little hands, all holding something up.
+
+[town_broken_pillar]
+A pillar snapped off short, with toadstools growing out of the top. Nobody has the heart to tidy it.
+
+[town_barrel]
+A barrel. It says SPORES on it, in the sort of letters you use when you want people to be careful.
+
+[town_house]
+A round-windowed house with a roof of moss and little toadstools. Someone is cooking inside.
+
+[town_house_door]
+A round door, shut. There's a welcome mat on the step that says GO AWAY, WELCOME.
+
+[town_plank]
+A creature-built wall of lashed planks, tight as a drum, with a mushroom-cap roof over it. Warm light comes through the window.
+
+[town_toadstools]
+A bed of toadstools with a stone edge. A sign pushed into the soil says PLEASE DON'T, and then, underneath, in smaller letters, SERIOUSLY.
+
+# --- THE GATE ---
+
+[gate_banner]
+A great banner hung over the gate:
+
+WELLCOME
+
+...Two Ls. Somebody has stitched them in very carefully, so it must be on purpose.
+
+[gate_banner_ves]
+{bored}Wellcome. {smile}Two Ls. They must be very pleased to see us.
+
+# (draft)
+[gate_banner 2]
+WELLCOME. Up close, behind the second L, you can see the ghost of an older stitch, unpicked. Somebody spelt it right once, and was overruled.
+
+# (draft)
+[gate_banner_ves 2]
+{smile}Somebody fought for that second L. {bored}And won. Bad day for spelling.
+
+[gate_lamp]
+A glow-worm lamp on a post. The worm inside has a very small, very serious face.
+
+[gate_signpost]
+A signpost with a lot of arms:
+
+MARKET, THIS WAY.
+SQUARE, THAT WAY.
+THE KING, SOONER OR LATER.
+THE EDGE OF THE WORLD, UP, BUT DON'T.
+
+# (draft)
+[gate_signpost 2]
+THE EDGE OF THE WORLD, UP, BUT DON'T. That arm is the only one that's been nailed back on. More than once.
+
+[gate_noticeboard]
+A noticeboard, crowded with notices:
+
+LOST: ONE BALL. RED. BOUNCES. IF FOUND, DON'T BOUNCE IT.
+
+THE SUNSTONE IS FINE. -- BY ORDER
+
+PIE CONTEST POSTPONED (THE SUNSTONE). BE HONEST, IT WAS GOING TO BE POSTPONED ANYWAY.
+
+[gate_noticeboard_ves]
+{bored}"The Sunstone is fine." {smile}By order. So it's fine, or else.
+
+# (draft)
+[gate_noticeboard 2]
+A new notice on top of the others, the paint still tacky: STRANGERS FROM THE TOP. DO NOT STARE.
+
+Pinned under it, in another hand: (STARE A BIT. IT'S POLITE.)
+
+[gate_barrels]
+Barrels of pickled glow-cap, stacked by the gatehouse. A newt has written GUARD RATIONS on them and then, lower down, NOT THAT KIND OF GUARD.
+
+[gate_crates]
+Crates stencilled WELLCOME BANNERS, SPARE. There are a great many spares.
+
+[gate_pouch]
+A purse wedged behind the barrels where the guards' dice rolled. It's heavier than it looks.
+
+# --- THE MARKET ---
+
+[market_stall_mole]
+A stall of cheese. Rock-hard cheese, in fact. A sign says TASTES BETTER THAN IT LOOKS, and below it, in a different hand, IT'D HAVE TO.
+
+[market_stall_pebble]
+Pebble's stall: toadstool pasties under a glass dome, honey in jars with the lamp-light caught in them, toffee, candles for the dark, and a rail of mossweave cloaks that look warm enough to live in.
+
+[market_stall_frog]
+A frog's stall of marbles and fishing lines. All the marbles are slightly slimy. There is no explaining it.
+
+[market_stall_snail]
+A snail's stall, selling very small, very slow-to-eat sweets. A sign says BACK IN A MOMENT. The sign has been up a while.
+
+[market_stall_snail_ves]
+{bored}"A moment." {smile}In snail, that's about a week.
+
+# (draft)
+[market_stall_snail 2]
+BACK IN A MOMENT. The snail is, in fact, at the stall. He has been the whole time, behind the sign, very slowly turning it round.
+
+# (draft)
+[market_stall_snail_ves 2]
+{bored}He's turning it round. {smile}We'll know by Thursday.
+
+[market_stall_beetle]
+A beetle's stall of letters. Folded letters, sealed letters, a pile marked WRITE BACK. Mostly the pile is the one marked WRITE BACK.
+
+[market_burrow_door]
+A round burrow door, shut tight, with a brass knocker the shape of a mushroom and a note: BACK AFTER THE SUNSTONE. Somebody has crossed out AFTER and written IF.
+
+# (draft)
+[market_burrow_door 2]
+BACK IF THE SUNSTONE. Somebody else has crossed out IF and written WHEN. A third somebody has crossed out WHEN and drawn a small, hopeful sun.
+
+[market_lamp]
+A glow-worm lamp. The worm is humming to itself, a little flat.
+
+[market_barrels]
+Barrels, stacked and tied. One of them is warm and is making a quiet noise like a snore.
+
+# (draft)
+[market_barrels 2]
+The warm barrel is still snoring. It turns over, inside, with a slosh, and mumbles something that sounds a lot like "five more minutes".
+
+[market_crates]
+Crates of spore-bread. The one on top is labelled FRAGILE, HEAVY, DON'T DROP, DON'T LEAN, which narrows it down to nothing.
+
+[market_noticeboard]
+A noticeboard covered in notes:
+
+WANTED: A HEARTY SOUL TO HOLD THE LADDER. (IT'S NOT SAFE.)
+
+WANTED: THE HERO. (APPLY TO HIS MAJESTY. THEY KNOW EACH OTHER PERSONALLY.)
+
+FOR SALE: ONE BOOT. LEFT. ONLY. MAKE AN OFFER.
+
+[market_noticeboard_ves]
+{bored}Everyone's very sure the Hero's coming back. {smile}Nobody's put out a chair for him.
+
+# (draft)
+[market_noticeboard 2]
+FOR SALE: ONE BOOT. Somebody has written under it: IS IT THE HERO'S? And under that, in the seller's hand: NO. BUT IT COULD BE. MAKE AN OFFER.
+
+[market_signpost]
+A signpost: THE GATE, WEST. THE SQUARE, EAST. YOU ARE HERE, BUT NOT FOR LONG, IF YOU'RE SENSIBLE. THE MARKET CLOSES AT THE SUNSTONE.
+
+[market_chest]
+A chest tucked into the corner behind a wall of barrels. Whoever hid it forgot, or was waiting for somebody patient.
+
+# --- THE SQUARE ---
+
+[square_well]
+A well with a little stone roof. The bucket comes up full of water and, once, a very small frog. He says he's fine.
+
+# (draft)
+[square_well 2]
+You haul the bucket up again. Water, and no frog this time. Just a note, floating, in a jar: GONE INTO TOWN. BACK FOR SUPPER.
+
+# (draft)
+[square_well 10]
+You haul the bucket up one more time. It's full to the brim with frogs. Nine of them, with the small one from before at the front.
+
+They all look at you. The small one says they're fine. They're all fine. They'd like to go back down now, please.
+
+# (draft)
+[square_well_ves 10]
+{laughing}He's brought the family. {smile}Put them back gently.
+
+[square_statue]
+A statue of the Hero, half-crumbled, standing in the plaza. It was carved a long time ago, by someone who had not seen him. The head is the size of a barrel, the sword is the size of a door, and the feet are missing.
+
+Underneath there's a plaque: NINE FEET TALL, AND WORTH EVERY INCH.
+
+[square_statue_ves]
+{bored}Nine feet. {smile}Somebody was either very excited, or very short.
+
+# (draft)
+[square_statue 2]
+You walk round the back of the statue. The back is much less finished than the front. Whoever carved it lost interest about where nobody would be standing.
+
+# (draft)
+[square_statue_ves 2]
+{bored}He's flat at the back. {thoughtful}Like a bit of scenery.
+
+[square_noticeboard]
+The town noticeboard, mostly about the Sunstone:
+
+THE SUNSTONE IS NOT DIM. IT IS "RESTING". -- HIS MAJESTY
+
+LOST: ONE LAMPLIGHTER'S POLE. IT WAS HERE A MOMENT AGO.
+
+CHOIR PRACTICE: CANCELLED (THE SUNSTONE). ALSO CANCELLED: THE CHOIR.
+
+# (draft)
+[square_noticeboard 2]
+ALSO CANCELLED: THE CHOIR. Under it, in a lot of different hands: WE ARE STILL MEETING. WE ARE JUST NOT SINGING. WE BRING CAKE.
+
+[square_signpost]
+A signpost: THE INN, THE MOSSY PILLOW (ALWAYS OPEN, NEVER QUIET). THE FORGE (HOT, DON'T TALK). THE KING (TALK, DON'T HOT). THE HALL OF THE VISIT (THE HERO WAS HERE).
+
+[square_bench]
+A bench, polished by a lot of waiting.
+
+# (draft)
+[square_bench 2]
+You sit a moment. The town goes on round you, a bit quieter than a town should, every so often looking up at the Sunstone and then pretending it didn't.
+
+[square_lamp]
+A glow-worm lamp. Its worm waves, a bit shyly.
+
+# (draft)
+[square_lamp 2]
+The glow-worm waves again, a bit less shyly. Then it looks so pleased with itself it has to turn away.
+
+[square_barrels]
+Spare lamp-oil and a dozen jars of glow-worm feed. A tag says PLEASE FEED THEM. THEY'RE TIRED.
+
+[square_pouch]
+A purse in the corner behind the toadstool beds. The toadstools aren't telling.
+
+# --- HOBNAIL'S FORGE ---
+
+[forge_vent]
+A great iron grate over a crack in the rock, with heat pouring up out of it and a glow like a small sunrise. The air above it wobbles. The floor's warm through your boots.
+
+[forge_coal]
+A heap of coal, black and shining. A chest is half-buried behind it, as if it had been shoved there in a hurry.
+
+[forge_anvil]
+An anvil as big as a wheelbarrow, scarred all over. One dent in it is the exact shape of Hobnail's hammer. It was there before the apprentice was born.
+
+# (draft)
+[forge_anvil 2]
+Beside the dent the shape of Hobnail's hammer there's another, much smaller. The shape of a smaller hammer, on a very bad day.
+
+# (draft) The whistle mouthpiece, in the tub (the whistle quest, Seam Nine's roster).
+[forge_quench_mouth]
+A quenching tub. The water in it is black and, if you listen, hisses a little at you.
+
+Something brass sits on the bottom, under a hundred years of soot: a mouthpiece, with a paper tag tied to it by a bit of wire. The tag says HALE. FOR MENDING. DON'T TOUCH, STILL COOLING.
+
+It has had plenty of time. You fish it out. The water sulks.
+
+[forge_quench]
+A quenching tub. The water in it is black and, if you listen, hisses a little at you.
+
+# (draft)
+[forge_quench 2]
+The tub hisses at you again, a bit louder. You step back. It stops. It's made its point.
+
+[forge_grindstone]
+A grindstone, still turning slowly by itself. Nobody's near it. It is better not to ask.
+
+# (draft)
+[forge_grindstone 2]
+The grindstone is still turning by itself. As you watch, it slows, stops, and then, very deliberately, starts again the other way.
+
+[forge_barrel]
+A barrel of horseshoe nails. Wait, there aren't any horses. They're for something else.
+
+[forge_crates]
+Crates of ore, labelled by a hand that only uses one word: ORE. ORE. ORE. MORE ORE.
+
+[forge_sign]
+A sign hammered into the wall in letters like crowbars:
+
+NO TOUCHING.
+NO ASKING.
+NO.
+-- H.
+
+[forge_sign_ves]
+{bored}Three rules and a signature. I respect anyone who gets to the point.
+
+# (draft)
+[forge_sign 2]
+NO. -- H. Under it, scratched in so lightly you'd miss it, as if the writer were scared of the sign: (he means yes, mostly).
+
+# (draft)
+[forge_sign_ves 2]
+{smile}The apprentice wrote that. {bored}And then hid.
+
+[forge_chest]
+A chest behind the coal, with a layer of soot on the lid. Whoever put it there wanted it forgotten.
+
+# --- THE MOSSY PILLOW ---
+
+[inn_wall]
+Panelling the colour of strong tea, with a row of little coat hooks. Most of the hooks are holding a hat that has not moved in years.
+
+[inn_rug]
+A round rug, woven in mushroom rings. It's frayed at the edge where someone's been practising their dancing.
+
+[inn_fire]
+A hearth with a fire that never goes out, and a sign over it: THE MOSSY PILLOW. WARM, DRY, AND ONLY MOSTLY MOSSY.
+
+[inn_counter]
+The innkeeper's counter, scrubbed bare. Behind it hang a hundred keys, none of which are for any door in the building.
+
+# (draft)
+[inn_counter 2]
+A hundred keys, none for any door in the building. One of them has a tag: THE HERO'S ROOM. There isn't a Hero's room. Somebody keeps the key polished anyway.
+
+[inn_pot]
+A pot of toadstool stew, bubbling quietly on the stove. There's one pasty left in a cloth beside it.
+
+[inn_pot_empty]
+An empty pot with a spoon in it and a sign: BACK TOMORROW.
+
+[inn_table]
+A long table with mugs, a half-played game of toadstool-and-ladders, and the great dent where a guest once fell asleep face-first.
+
+[inn_bench]
+A bench, worn smooth. There's a pillow at one end, very mossy, and a sign: DON'T.
+
+# (draft)
+[inn_bench 2]
+DON'T. The mossy pillow has moved a little since you last looked. Somebody did. Nobody's saying who.
+
+[inn_bed]
+A real bed, with a patched quilt and a pillow that looks, frankly, a bit damp, but in a friendly way. You could sleep here.
+
+[inn_barrel]
+A barrel of ginger moss-beer. A sign says IT'S NOT FOR YOU, and somebody has added, THE BAT.
+
+[inn_rules]
+HOUSE RULES, painted on a board:
+
+1. NO SHOUTING (THE BAT).
+2. NO SINGING (THE BAT).
+3. NO BAT.
+4. WE'VE TRIED.
+
+[inn_rules_ves]
+{smile}'We've tried.' I'm beginning to like this town.
+
+# (draft)
+[inn_rules 2]
+5. ALL RIGHT. ONE BAT. It's in different paint, and the brush has dripped, as if it was written in a hurry by someone who'd just lost an argument.
+
+# (draft)
+[inn_rules_ves 2]
+{bored}They lost to the bat. {smile}Good for the bat.
+
+[inn_pouch]
+A purse that rolled under the last bed and has been waiting there ever since.
+
+# --- THE HALL OF THE VISIT ---
+
+[hall_wall]
+A long carved wall, covered in little painted panels. Damp has got into most of them.
+
+# (draft)
+[collapse_bench]
+A bench from the welcome show, knocked flat by somebody leaving in a hurry. Then by several more somebodies.
+
+# (draft)
+[collapse_barrels]
+Barrels of something for after the show. Nobody is getting to after the show.
+
+[hall_bench]
+A bench for sitting and looking at the mural. A tiny sign says PLEASE LOOK RESPECTFULLY. Somebody has scratched in underneath it: AT AN ANGLE.
+
+# (draft)
+[hall_bench 2]
+AT AN ANGLE. You try it. From the bench, at an angle, the Hero on the mural looks about the right size for a person. You lose it the moment you sit up straight.
+
+[hall_noticeboard]
+The curator's notices:
+
+THE HERO CAME DOWN THE OLD STAIR (WHERE THE LONG ROPE HANGS NOW).
+THE HERO WENT BACK UP IT (WE ARE FAIRLY SURE). THE STAIR FELL IN SOON AFTER. NOT OUR FAULT.
+RELICS: SEE THE KING. DON'T ASK.
+THE DAMP: SORRY.
+
+# (draft)
+[hall_noticeboard 2]
+THE DAMP: SORRY. Under it, in a damper hand: THE DAMP IS NOT SORRY.
+
+[hall_sign]
+HALL OF THE VISIT. Admission free. Opinions free. A damp patch by the door is free but please do not take it with you.
+
+[hall_lamp]
+A glow-worm lamp. The worm is looking up at the mural as if it had never seen it before.
+
+[hall_chest]
+A chest in the corner, half hidden behind the barrels, with a note on it: DONATIONS. Underneath: IT'S MOSTLY SWEETS.
+
+[hall_barrels]
+Barrels of paste and whitewash. The curator keeps patching the mural, and the damp keeps winning.
+
+[hist_founding]
+A small painting in a frame: three little figures round a lamp, with a stone arch behind them. A label says HOW WE CAME TO BE HERE. A second label, in a different hand, says BY ACCIDENT.
+
+[hist_pie]
+A small painting: a very large mushroom, a very proud toad, and a pie. The label says THE FIRST PIE CONTEST. Under it: "SHE WON. SHE ALWAYS WINS."
+
+# (draft)
+[hist_pie 2]
+SHE ALWAYS WINS. Under it, in a fresh, furious hand: NOT THIS YEAR. Under that, in the first hand: (SHE DID.)
+
+[hist_stair]
+A small painting: a long stair going down into the dark, with nothing at the bottom of it. The label says THE WAY. Nobody has finished the picture.
+
+# (draft)
+[hist_stair 2]
+THE WAY. Somebody has started a small figure on the stair in pencil, and rubbed it out, and started again, and rubbed it out again.
+
+[hist_founding_two]
+A small painting: the same three figures, a few years on, with the lamp now big enough to be a sun. The label says LATER. "WE GOT A LITTLE CARRIED AWAY."
+
+[mural_visit]
+A great painting of the Hero's visit. The Hero stands on the stair with the sword raised, and the dark below him like deep water. Whoever painted it had never seen the Hero. The Hero is about nine feet tall.
+
+[mural_visit_ves]
+{laughing}Look at the size of him. {bored}He'd have had to come down the stair sideways.
+
+# (draft)
+[mural_visit 2]
+You step right back against the far wall to get the whole of him in. It doesn't help. He's still nine feet tall, and you're still about the size of his boot.
+
+# (draft)
+[mural_visit_ves 2]
+{bored}They've given him a chin like a shelf. {smile}You could stand a pie on it.
+
+[mural_end]
+The plain end of the mural, carved stone with a border of little stars. It's the one part the damp hasn't got to.
+
+[mural_lantern]
+Low down on the stair, almost lost in the cracks of the plaster: a small figure, carrying a lantern.
+
+[mural_lantern_ves]
+{surprised}Huh. Somebody went with him.
+
+{bored}...Or the painter sneezed.
+
+# (draft)
+[mural_lantern 2]
+Still there, low on the stair. You lean in. It's definitely a figure, or definitely damp. It could well be both.
+
+# (draft)
+[mural_lantern_ves 2]
+{bored}Stop staring at the damp. People will talk.
+
+# --- KING PEPTUP'S HALL ---
+
+[throne_chair]
+The throne is hidden behind a curtain, which bulges now and then, and which is very still when you look at it. A tail tip is showing under the hem. It goes back in.
+
+# (draft)
+[throne_chair 2]
+The curtain is very still. The tail tip doesn't come out again. Somewhere behind it, something small breathes in, and holds it.
+
+[throne_crowd]
+One of the court, standing very respectfully. They are looking at the king. Now and then they look at the Sunstone. They don't look at each other.
+
+[throne_lamp]
+A glow-worm lamp, turned up high for the show. The worm looks like it wants a lie-down.
+
+[throne_sign]
+A sign at the foot of the aisle, painted in gold:
+
+PLEASE APPLAUD.
+THIS MEANS YOU.
+THANK YOU. -- THE MANAGEMENT
+
+# (draft)
+[throne_sign 2]
+PLEASE APPLAUD. The gold paint on THIS MEANS YOU is much brighter than the rest. It's been touched up a lot.
+
+[throne_carpet]
+A long red carpet, thick and soft and a bit worn down the middle where a great many people have walked up to be welcomed.
+
+[throne_pouch]
+A purse someone dropped in the crush at the back of the hall, and nobody had the nerve to pick up with the king looking.
+
+[relic_cloak]
+In a glass case: a small grey-green cloak, much mended, with a tarnished clasp. A card says THE HERO'S CLOAK. DO NOT TOUCH. IT'S NOT BEEN WASHED.
+
+# (draft)
+[relic_cloak 2]
+The clasp has been done up and undone so many times the catch is worn smooth. Somebody who wasn't used to clasps, getting used to one.
+
+[relic_cup]
+In a glass case: a tin cup, dented, with a handle bent flat. A card says THE HERO'S CUP. HE DRANK FROM THIS. ALMOST CERTAINLY.
+
+# (draft)
+[relic_cup 2]
+ALMOST CERTAINLY. The dent is in the side, about where a small hand might knock it against a step, going down.
+
+[relic_boot]
+In a glass case: one boot. Brown, worn through at the toe, laced with a bit of string. A card says THE HERO'S BOOT. THE OTHER ONE IS WITH THE HERO.
+
+[relic_boot_ves]
+{thoughtful}...Small, isn't it.
+
+# (draft)
+[relic_boot 2]
+The string is tied in a bow: a big, careful one, with the loops very even, the way you tie a bow when you've only just learnt how.
+
+# (draft)
+[relic_boot_ves 2]
+{thoughtful}...Somebody was proud of that bow.
+
+# (draft) The back door to the Diggings, before Tuck's had his word in the square
+# (tucks_whisper): it waits for it (src/data/rooms/belowtownThrone.js).
+[throne_back_not_yet]
+Tuck is standing in the little door, as wide as a dormouse can make himself. He points at the big front doors. Then he points at them again, harder, and scurries off that way.
+
+# (draft)
+[throne_back_not_yet_ves]
+{thoughtful}He wants a word somewhere the king can't hear it.
+
+{bored}Very subtle. Like a brass band in a cupboard.
+
+[duel_no_run]
+You can't leave in the middle of a show! The doors are shut.
+
+# --- THE LONG ROPE (the way home, at the end of the chapter) ---
+
+[rope_face]
+Sheer carved stone, going up and up into the dark.
+
+Somewhere at the top there's a little square of daylight.
+
+# (draft)
+[rope_face 2]
+Up and up. The little square of daylight hasn't moved. It's waiting, the way a door left open waits.
+
+# (draft)
+[rope_face_bramble 2]
+{grin}That's the sky. {proud}I'd know it anywhere. I've been sneaking about under it for weeks.
+
+[rope_tuck]
+{shy}Two pulls when you're up. Don't forget.
+
+{sad}...I'll be listening.
+
+[rope_king_head]
+The king's carved head, paper crown and all, propped against the rock.
+
+Tuck dragged it all the way out. He hasn't let go of it since.
+
+[rope_king_head_ves]
+{thoughtful}He looks smaller with nobody in him.
+
+# (draft)
+[rope_king_head 2]
+The king's head, propped against the rock. Tuck has turned it a little, so it can see the rope too.
+
+# (draft)
+[rope_king_head_bramble 2]
+{thinking}Is that a head? {worried}...Why's it smiling? There's nobody in it.
+
+[rope_mole]
+Mind the fourth knot from the top. It's been loose for a hundred years.
+
+Nobody's ever been up far enough to fix it.
+
+[rope_frog]
+Are you going UP? Is it true there's no roof up there? What holds the sky up, then?
+
+[rope_glowworm]
+I'd light the way for you, but it's a long way, and I'm a short worm.
+
+# (draft)
+[secret_roots]
+Roots, come a long way down through the rock to see what's going on. This is where the tunnel gets low.
+
+They've been rubbed smooth at exactly one height. About the height of a dormouse's ears.
+
+# (draft)
+[secret_roots 2]
+You run a hand along the smooth place on the roots. Exactly the height of a dormouse's ears. Forty-two years of ducking, and he still forgot sometimes.
+
+# (draft)
+[secret_roots_bramble 2]
+{grin}I'd have just cut them. {thinking}...He likes them, doesn't he.
+
+# (draft)
+[secret_post]
+An old pit prop holding the roof up. Somebody has carved MIND YOUR HEAD into it, at about the height of a mole's knee.
+
+[bt_tiny_tools]
+A pick, a shovel and a broom, each about as long as your hand, leaned against the wall in order of size. Somebody tidy lives near here.
+
+# (draft)
+[bt_tiny_tools 2]
+The little broom has been worn right down on one side. Somebody tidy lives near here, and has done for a very long time.
+
+# --- THE LIFE PASS (14 Nov): the things the folk have left lying about, in every room of the town ---
+
+[bl_menu_board]
+A chalkboard on two legs. TODAY: SPORE STEW. ALSO TODAY: SPORE STEW. TOMORROW: SEE TODAY.
+
+Underneath, in a different hand: (THE STEW IS GOOD. WE'RE ALLOWED TO SAY.)
+
+# (draft)
+[bl_menu_board 2]
+Somebody has added a line since you last looked: SPECIAL OFFER, FREE SECOND BOWL. Somebody else has crossed it out: THERE IS NO SECOND BOWL. A third hand: THERE WAS.
+
+[bl_menu_board_ves]
+{smile}A place that knows what it is. I respect that.
+
+[bl_inn_board]
+A chalkboard outside the Mossy Pillow: BED. BREAKFAST. A VERY LONG TALK ABOUT HOW YOU SLEEP. (THE TALK IS FREE. THE BED IS NOT.)
+
+[bl_inn_board_ves]
+{bored}I'd take the bed and skip the talk.
+
+[bl_stew_pot]
+A pot on a tripod, bubbling over a bed of coals. A ladle hangs off the rim on a bit of string, and a card says HELP YOURSELF, THEN PUT SOMETHING IN.
+
+Nobody has ever been sure what. It smells of onions, and of something older than onions.
+
+# (draft)
+[bl_stew_pot 2]
+You give it a stir. It stirs back, slowly. You decide that's the stew's business.
+
+[bl_stew_pot_ves]
+{bored}I'm not putting anything in. {smile}I'm also not asking what's already in there.
+
+[bl_tall_shroom]
+A mushroom as tall as a doorframe, red cap, white spots, growing out of a crack in the cobbles. Somebody has tied a tiny sign to the stem: PLEASE DON'T EAT THE LANDMARK.
+
+[bl_tall_shroom_ves]
+{thinking}It's a landmark. {smile}It's also a very good umbrella, if you're a mouse.
+
+[bl_pegs]
+A rail of pegs by somebody's door: a cap, an apron and a lantern, all hung up by a person who plainly expects to be back in a minute. The lantern's still warm.
+
+[bl_poster_bat]
+A notice, pinned at the corners. LOST: ONE BAT. ANSWERS TO "HEY". LAST SEEN: THE ROOF. IF FOUND, PLEASE LEAVE WHERE FOUND. HE ALWAYS FINDS HIS WAY BACK.
+
+[bl_poster_bat_ves]
+{smile}They've lost a bat in a cave. {bored}He's up there. Being a bat. It's fine.
+
+[bl_poster_gig]
+A yellow poster. THE FROG BAND. ONE NIGHT ONLY. THEN ANOTHER NIGHT. THEN ANOTHER. (THEY ARE VERY KEEN.) Underneath: DOORS AT HALF PAST THE SUNSTONE.
+
+[bl_poster_gig_ves]
+{laughing}Doors at half past the Sunstone. {smile}...I'd go.
+
+[bl_shoes]
+A row of boots on a doorstep, biggest to smallest, set out for the morning. The smallest pair has a hole in the toe, and a very bright little eye looks out of it. Then it's gone.
+
+[bl_shoes_b]
+Boots on a step. All left feet. Somebody here has a system, and it isn't working.
+
+[bl_sq_shoes]
+Small boots outside the inn door, and over one of them a stripy sock with a hole in the heel, left out to dry. It's dry. It's also very soft, and nobody's coming for it.
+
+You take the sock. It's not stealing. It's an errand, if anyone asks.
+
+[bl_sq_shoes_ves]
+{bored}If anyone asks, you're a sock rescuer.
+
+[bl_produce]
+A crate of caps and roots for sale. The price is chalked on the front: ONE COIN. TWO IF YOU ASK WHAT IT IS.
+
+[bl_produce_ves]
+{thinking}I'm not asking.
+
+[bl_tub]
+A washtub with mushrooms growing in it, grown with great care and a little bit of conversation. A tag on the rim: DON'T TELL ME ABOUT YOUR DAY. HE'S HAD A LONG ONE.
+
+# (draft)
+[bl_tub 2]
+The red one leans towards you as you go by. The orange one leans too. You decide it's a draught.
+
+[bl_cart]
+A hand cart, tipped to rest, full of ore that's gone a bit green. Somebody has chalked on the side: NOT STOLEN. BORROWED. WITH PERMISSION. FROM A MOLE.
+
+[bl_cart_ves]
+{smile}Which mole? {bored}Never mind. There's always a mole.
+
+[bl_pick_rack]
+A rack of picks and shovels, each with a name burnt into the handle: HOLLY. BIG HOLLY. AUNT HOLLY. NOT HOLLY'S. On the top peg is a hard hat with a candle stub in the brim, left for the next shift. Or the one after.
+
+# (draft)
+[bl_pick_rack 2]
+You lift the hard hat an inch. There's a note under it: IF YOU'RE READING THIS, I'M ON MY BREAK. DON'T MOVE ANYTHING. I'LL KNOW.
+
+[bl_sacks]
+Sacks of spore-meal, slumped together like they're sharing a secret. One is leaking a soft, golden dust, and the floor under it has gone fluffy.
+
+[bl_toys]
+A wooden sword with a cheese rind for a hilt-guard, and a top with a bat painted on it. Left in the road with great care, by somebody who means to be back for them.
+
+[bl_toys_ves]
+{smile}Somebody's saving the world. {bored}From tea.
+
+[bl_dice]
+A game of stones scratched into a flagstone, nine squares, a few pebbles left on it. Somebody was winning. You can tell by how smug the pebbles are.
+
+[bl_cat_dish]
+A dish by the wall: a fishbone, licked clean, and a smear of fur on the stones. Whatever lives here has dinner at the same time every night, and wants you to know.
+
+[bl_cat_dish_ves]
+{smile}There's a cat. {bored}There's always a cat. You don't see it until you've been rude to it.
+
+[bl_pigeons]
+Two grey pigeons pecking at crumbs on the stones. They have a lot of opinions and none of them are for you. One looks up, decides you're nothing special, and goes back to the crumbs.
+
+# (draft)
+[bl_pigeons 2]
+You step closer. They each take one hop away, in the same direction, at the same moment, like they've practised.
+
+[bl_sign_pigeons]
+A sign. NO FEEDING THE PIGEONS. Under it, in smaller letters: THEY KNOW WHO YOU ARE. Under that, smaller still: (ONE OF THEM IS MY AUNT.)
+
+[bl_sign_pigeons_ves]
+{laughing}Which one?
+
+[bl_stalagmite]
+A rough pillar of rock coming up out of the floor, older than the town and not at all bothered about it. Someone has hung a mug on it, which is how you know it's a landmark.
+
+# (draft)
+[bl_stalagmite 2]
+There's a little scratched ladder up the side, about a thumb high. Somebody's been measuring it. It's grown a hair since last year.
+
+[bl_odd_barrel]
+A barrel with a leafy sprig jammed in the bunghole, as if somebody ran out of corks. A single leaf has fallen on the cobbles beside it. There's no wind down here.
+
+[bl_odd_barrel_ves]
+{thinking}Hm. {bored}I'd swear that was nearer the noticeboard.
+
+[bl_niche_pouch]
+A snug little niche in the wall under the sleeping bat, with a biscuit hung on a nail. The tag says FOR WHOEVER LOOKS UP.
+
+You looked up.
+
+[bl_niche_pouch_ves]
+{smile}It's good to be rewarded for looking up. {bored}Usually it's only for looking down, and the reward's a puddle.
+
+# --- THE GATE ---
+
+[bl_gate_stool]
+A folding stool with a notice taped to the seat: RESERVED FOR THE HERO. (SORRY.) It's been wiped. Every day, by the look of it.
+
+[bl_gate_stool after the_light_goes_up]
+There's a cushion on the stool now, and the notice has changed: RESERVED FOR THE HERO'S FRIENDS. (YOU. YES, YOU. SIT.)
+
+[bl_gate_stool_ves]
+{bored}I'm not sitting on the Hero's stool. {thinking}...Not while somebody's watching.
+
+[bl_gate_tally]
+A wall of chalk tally marks in neat fives, hundreds of them, in rows. At the bottom: WAITING FOR THE HERO. Under that, in different chalk: SAME. Under that: SAME. Under that: SAME, AND THE TEA'S GONE COLD.
+
+[bl_gate_tally_ves]
+{thoughtful}That's a lot of days.
+
+[bl_gate_poster]
+WANTED: ONE HERO. LIKELY TO BE: TALL. SWORD: YES. PERSONALITY: UNCERTAIN. REWARD: A PASTY. (A SMALL ONE.)
+
+[bl_gate_poster_ves]
+{bored}A small pasty. {smile}Don't sell yourself short.
+
+[bl_gate_pegs]
+Three little capes on pegs, each about knee height, and one huge one with its sleeves rolled up. A tag on the big one says HERO. It's been pressed.
+
+[bl_gate_tea]
+A little round table with two cups and a teapot, set out for guests who haven't come. The tea is hot. Whoever sets it out comes back every hour to check.
+
+[bl_gate_tea_ves]
+{bored}Hot tea for a hero who isn't coming. {smile}I'll drink his share.
+
+# --- THE SQUARE ---
+
+[bl_drying_rack]
+A drying rack, strung with caps and little red chillies, all hung out in the lamplight to go leathery. The label says DON'T ASK WHAT FOR. It's for soup. It's always for soup.
+
+[bl_sq_tea]
+A tea table outside the Hall of the Visit. Two cups, a pot, a plate with a single biscuit that nobody wants to be the one to take.
+
+# (draft)
+[bl_sq_tea 2]
+The biscuit has a bite out of it. There's a note: IT WAS THE PIGEON.
+
+[bl_stool]
+A three-legged stool, a mug left on it, the tea long gone cold. It's been sat on so often it has a shape in it.
+
+[bl_sq_poster]
+A poster in an official hand. NOTICE: THE SUNSTONE IS NOT DIMMING. IT IS "RESTING". THE KING.
+
+Somebody has crossed out "RESTING" and written "WORRIED". Somebody has crossed that out too, and drawn a smiling face.
+
+[bl_sq_poster_ves]
+{thoughtful}Somebody keeps correcting the king. {smile}Somebody's very brave.
+
+[bl_sq_alley]
+A skinny alley between the Hall of the Visit and the throne hall, one body wide. At the end is a stash: a spare shoe and a note in a small hand. DEN. KEEP OUT. (EXCEPT THE BAT. HE KNOWS WHAT HE DID.) You take the shoe.
+
+[bl_sq_alley_ves]
+{smile}We're not the bat. {bored}We'll make an exception for the purse.
+
+# --- THE INN ---
+
+[bl_inn_pegs]
+A row of pegs by the stove with a ladle hung on each one. All the ladles are the same. All the ladles have names. The innkeeper has seven. She uses one.
+
+[bl_inn_poster]
+A poster in the innkeeper's round hand. IF YOU BREAK IT, YOU'VE BOUGHT IT. IF YOU'VE BOUGHT IT, I'M MAKING IT LAST.
+
+[bl_inn_tea]
+A round table by the wall with a pot of tea and one cup, as if somebody got up for a moment and forgot to come back. The tea is still steaming. Nobody's in sight.
+
+[bl_inn_lost]
+A cupboard marked LOST PROPERTY. A hat. A spoon. A very small boot. A hand-knitted mitten, red, left hand, with a paper tag: FOUND ON THE STAIRS. NOBODY KNOWS WHICH STAIRS.
+
+[bl_inn_lost_ves]
+{thinking}That's good wool. {bored}...Never mind. A lot of people knit.
+
+[bl_bucket]
+A bucket, a mop, and a puddle that's spreading very slowly in no particular direction.
+
+[bl_inn_larder]
+A cold little larder hidden behind a curtain of the innkeeper's washing. Jars in rows, each labelled in a hurry. One says DO NOT. One says STILL DO NOT. At the back is a pot of glow-worm honey, with a note: FOR WHOEVER FINDS THIS. (YOU. DON'T TELL ANYONE.)
+
+You take the honey. It glows, a little, like it's pleased.
+
+[bl_inn_larder_ves]
+{smile}Hidden food. {bored}I'd forgive a lot for hidden food.
+
+[bl_inn_larder_empty]
+The larder's emptier than it was, and tidier. The jars that say DO NOT are still saying it.
+
+# --- THE FORGE ---
+
+[bl_forge_rack]
+A rack of picks, all sharpened, all pointing the same way, in order of age. The oldest is more handle than head. The newest is a very serious tool and looks it.
+
+[bl_forge_pegs]
+Aprons on pegs, scorched at the hems, each one with a name on the strap. Hobnail's is the biggest. It's also the only one that's clean. He's very particular about it.
+
+[bl_forge_poster]
+A safety notice. MIND YOUR BEARD. MIND YOUR EYEBROWS. MIND YOUR BUSINESS. (SIGNED, HOBNAIL. THE LAST ONE'S MINE.)
+
+[bl_forge_poster_ves]
+{laughing}He's a mole. He doesn't have a beard. {smile}He's keeping a stern one in reserve.
+
+[bl_forge_sacks]
+Sacks of coal and sacks of slag, easy to tell apart by the quantity of swearing on them.
+
+[bl_forge_lunch]
+A round table by the wall with a flask and a single heel of slag bread, set out on a cloth and nobody's touched it. A tag says HOBNAIL'S LUNCH. A smaller one says THAT MEANS YOU.
+
+# --- THE HALL OF THE VISIT ---
+
+[bl_hall_poster]
+A poster for the Hall's new exhibition: THINGS THE HERO MIGHT HAVE TOUCHED. Entry's free. The exhibits are mostly doorknobs.
+
+[bl_hall_pegs]
+Pegs with the curator's coats on them: a duster, a warm coat, and a very long scarf that goes round three pegs and back. All of it smells of beeswax.
+
+[bl_hall_cart]
+A little ore cart on a plinth, with a brass plate: THE FIRST CART. (NOT THE SECOND. THE SECOND IS IN THE DIGGINGS, AND LEAKS.)
+
+[bl_hall_rack]
+A rack of famous picks behind a rope that nobody's ever stepped over. A card: PLEASE DO NOT DIG THE EXHIBITS. Somebody has underlined DIG.
+
+[bl_hall_pinwheel]
+A tub of dark soil with a child's pinwheel stuck in it, turning. The label says DONATED BY A TRAVELLER FROM THE TOP. NOT TO BE WISHED ON.
+
+It's turning. There's no wind down here. You decide not to ask.
+
+[bl_hall_pinwheel_ves]
+{thinking}...That's a Sunnyside pinwheel. {bored}Probably. They sell them at every fair.
+
+[bl_hall_bucket]
+A bucket by the wall with a dustpan hooked over the rim. There's a dent in the pan the size and shape of a very small king's very cross foot.
+
+You take the dustpan. A tag falls off it: PROPERTY OF THE SWEEPER. NOT AN EXHIBIT. (STOP TELLING PEOPLE IT'S AN EXHIBIT.)
+
+[bl_hall_bucket_empty]
+A bucket and a puddle. The dustpan's gone back to work.
+
+[bl_hall_stash]
+A tiny hollow in the wall behind a hanging banner, where somebody keeps a shred of paper that reads: IF FOUND, THE CURATOR OWES ME TWO COINS AND AN APOLOGY. You take the paper. The coins are long gone.
+
+You take the purse. The apology is not in it.
+
+[bl_hall_stash_ves]
+{bored}Two coins and an apology. {smile}We've got the coins.
+
+# --- THE LIFE PASS, ROUND 3 (helper C, 15 November 2026): the dullest rooms of chapter 4 ---
+
+[r3c_lr_parcel_a]
+A parcel tied up with string, and a label in a round hand: FOR THE HERO'S JOURNEY. (SANDWICHES.) It's warm. Somebody carried it down here against their chest.
+
+[r3c_lr_parcel_a_ves]
+{surprised}That's the third one. They've packed for a walk, and we've got a very long rope.
+
+[r3c_lr_parcel_a 2]
+You don't open it. It's the first thing anyone down here has made for you.
+
+[r3c_lr_parcel_a_ves 2]
+{smile}We'll eat it at the top. Slowly. So it lasts.
+
+[r3c_lr_parcel_b]
+Another parcel, tied with a different string. The label says: FOR THE HERO. (NOT THE SANDWICHES, THESE ARE THE GOOD ONES.)
+
+[r3c_lr_parcel_b_ves]
+{bored}There's a sandwich hierarchy. Wonderful.
+
+[r3c_lr_flask]
+A tea flask on a flat stone, a spoon tied to its handle. Someone has made sure it won't roll.
+
+[r3c_lr_flask_ves]
+{smile}Warm. Whoever left it was here a minute ago, and ran off before we could say thank you.
+
+[r3c_lr_stool]
+A stool set square in front of the rope, facing up. One of the folk has been sitting here looking at the square of daylight, a long time, by the polish on the seat.
+
+[r3c_lr_stool_ves]
+{thoughtful}Looking at the way out. I know the feeling.
+
+[r3c_lr_stool 2]
+The seat's still a little warm. You wonder how many of them came to look, one at a time, when nobody else was about.
+
+[r3c_lr_queue]
+A board nailed to a post: PLEASE FORM AN ORDERLY QUEUE FOR THE ROPE. UP IS THAT WAY. (IT IS ALL UP IS THAT WAY.) Beside it, in a child's hand: ME FIRST.
+
+[r3c_lr_queue_ves]
+{smile}They've thought of the queue. They've thought of everything except it being the two of us.
+
+[r3c_lr_spare_coil]
+A spare coil of rope, neat as a cinnamon bun, with a tag: IN CASE. Somebody doesn't trust the first one.
+
+[r3c_lr_spare_coil_ves]
+{bored}In case of what? It goes up. There isn't a sideways.
+
+[r3c_lr_toys]
+A cloth mole on a bit of string, with its arms in the air. Someone has been practising how the climb goes.
+
+[r3c_lr_toys_ves]
+{smile}He's got the right idea. Hold on and look brave.
+
+[r3c_lr_toys 2]
+You hang the mole back on its string. It doesn't say what it thinks of the drop.
+
+[r3c_lr_crown]
+A little crown folded out of a pamphlet, left on a stone. A hand-lettered note: YOUR TURN TO BE KING. Whoever left it didn't say who it was for.
+
+[r3c_lr_crown_ves]
+{thoughtful}Someone's got that job now, haven't they. I wouldn't wish it on a stool.
+
+[r3c_lr_mushrooms]
+A tub of fat brown mushrooms with a ribbon round it. A card: FOR THE ROAD. DO NOT EAT THE BLUE ONES. (THERE ARE NO BLUE ONES.)
+
+[r3c_lr_mushrooms_ves]
+{bored}Which means there was a blue one.
+
+[r3c_hf_poster]
+A poster, trampled: A GRAND DUEL! ADMISSION FREE. FIRST HOUR OF TEA INCLUDED. Under it, a boot-print the size of a small cart.
+
+[r3c_hf_poster_ves]
+{bored}They'd have sold tickets if they'd known.
+
+[r3c_hf_handbell]
+The herald's handbell, on its side. The clapper is still swinging, just a little, as if it was the last thing to stop.
+
+[r3c_hf_handbell_ves]
+{sad}Somebody rang that when it started. I hope they were quick afterwards.
+
+[r3c_hf_hat]
+A tall paper hat with a feather in it, flattened. It says MC in marker pen.
+
+[r3c_hf_hat_ves]
+{smile}It was a good hat. It had a good run.
+
+[r3c_hf_cup]
+A teacup, still upright and still half full, on the one flagstone nothing fell on. The tea has a skin of dust on it.
+
+[r3c_hf_cup_ves]
+{thoughtful}Not one drop out of place. I respect that more than I should.
+
+[r3c_hf_shoes]
+A pair of small shoes, kicked off and left by somebody who ran. They aren't the rubble's, so they're hers, or his, or theirs, and they got out.
+
+[r3c_hf_shoes_ves]
+{thoughtful}Nobody runs back for shoes. That's how you know they meant it.
+
+# --- end life pass round 3 (helper C) ---

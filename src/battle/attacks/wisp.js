@@ -5,9 +5,10 @@ import { defineBulletArt } from '../projectiles.js';
 // cruel: it just wants someone to come and see it). So it fights with
 // lights you'd like to follow: little lanterns drifting in to meet you
 // (most of them burn, but one is real, and touching that one HEALS you),
-// a path of lights that leads into a dead end, the Wisp itself blinking in
-// and out, bubbles of marsh gas that catch light and pop, and a ring of its
-// lights that comes in close round you, because it's lonely.
+// a path of lights that leads into a dead end, the Wisp itself wandering
+// about with the bog flaring up all round it (stay close: it keeps a calm
+// spot for a friend), and a ring of its lights that comes in close round
+// you, because it's lonely.
 //
 // The real light is the one that burns STEADY and gold. The fakes flicker,
 // and go a bit green when they do. (`heals` on a Shot: see checkBullets in
@@ -112,7 +113,7 @@ defineBulletArt('wispBubble', {
   radius: 2.5,
 });
 
-// The Wisp itself, small, blinking in somewhere (lid hat and all).
+// The Wisp itself, small (lid hat and all).
 defineBulletArt('wispSelf', {
   frames: [
     [
@@ -180,10 +181,10 @@ export const WISP_ATTACKS = {
       rounds++;
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.8) {
+        if (t >= next && t < 8.5) {
           call(bullets, soul);
           next = t + 2.75;
         }
@@ -203,27 +204,43 @@ export const WISP_ATTACKS = {
   },
 
   // The path: two rows of lights come down the box like lanterns marking a
-  // way through the bog, winding, and you keep between them. Then the path
+  // way through the bog, winding, and you keep between them (off the path
+  // the bog flares up under you, it blinks first). Then the path
   // splits in two... and one way is a dead end. The lights on that side
   // close in, starting from the far end, so look up and pick the other.
-  wispPath(box, density, { Shot }) {
+  wispPath(box, density, { Shot, rand }) {
     const cx = box.x + box.w / 2;
-    const forkAt = 3.1;
-    const closeAt = 3.9;
+    const forkAt = 5.2;
+    const closeAt = 6.0;
     const falseSide = Math.random() < 0.5 ? -1 : 1;
     const sway = Math.random() * Math.PI * 2;
     let t = 0;
     let next = 0;
+    let bog = 1;
     // Where the middle of the path is, `time` seconds in.
     const middle = (time) => cx + Math.sin(time * 1.1 + sway) * 16 + Math.sin(time * 0.45) * 6;
     const post = (bullets, x, art = 'wispFlame') => {
       bullets.push(new Shot({ x, y: box.y - 4, vy: 40, art }));
     };
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (t < next || t > 6.2) return;
+        // Off the path, the bog bubbles up in flames (they blink first).
+        bog -= dt;
+        if (bog <= 0 && t < 8.6) {
+          bog = 0.13;
+          const m = t < forkAt ? middle(Math.max(0, t - 1.6)) : middle(forkAt);
+          const half = t < forkAt + 1.6 ? 19 : 32;
+          const left = m - half - (box.x + 2);
+          const right = box.x + box.w - 2 - (m + half);
+          if (left + right > 4) {
+            const u = rand(0, left + right);
+            const x = u < left ? box.x + 2 + u : m + half + (u - left);
+            bullets.push(new Shot({ x, y: rand(box.y + 30, box.y + box.h - 3), vy: -10, warn: 0.45, life: 0.6, art: 'wispFlame' }));
+          }
+        }
+        if (t < next || t > 8.6) return;
         next = t + 0.16;
         const m = t < forkAt ? middle(t) : middle(forkAt);
         if (t < forkAt) {
@@ -247,74 +264,78 @@ export const WISP_ATTACKS = {
     };
   },
 
-  // Here! No, here! The Wisp blinks in somewhere in the box, away from you,
-  // and goes off in a ring of little flames with one gap in it. Then it
-  // blinks out, and in again somewhere else, quicker as it goes.
-  wispBlink(box, density, { Shot, rand, pointAwayFrom }) {
+  // Keep it company: the Wisp itself comes drifting about the box, and all
+  // round it the bog lets go of its gas, bubbles flaring up into flames
+  // everywhere (they blink first). Everywhere but near the Wisp: it keeps a
+  // little pool of calm round itself, just big enough for a friend. It's
+  // harmless, and it only wants you close. Stay by it as it wanders, and
+  // when it blinks somewhere else (it shows where first), hurry after it.
+  wispCompany(box, density, { Shot, rand, clamp }) {
+    const SAFE = 13;
+    let wisp = null;
+    let goal = null;
+    let flare = 0.4;
+    let hop = 2.4;
+    let next = null;
     let t = 0;
-    let next = 0.15;
-    let blinks = 0;
-    let waiting = [];
-    const appear = (bullets, soul) => {
-      const at = pointAwayFrom(box, soul, 30, 12);
-      const self = new Shot({ x: at.x, y: at.y, warn: 0.5, life: 0.12, harmless: true, art: 'wispSelf' });
-      self.gap = rand(0, Math.PI * 2);
-      bullets.push(self);
-      waiting.push(self);
-      blinks++;
-    };
+    const pickGoal = () => ({ x: rand(box.x + 16, box.x + box.w - 16), y: rand(box.y + 16, box.y + box.h - 16) });
     return {
-      duration: 6.5,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && t < 5.6) {
-          appear(bullets, soul);
-          next = t + Math.max(0.6, 1.0 - blinks * 0.06);
-        }
-        for (const self of waiting) {
-          if (self.age < self.warn) continue;
-          self.popped = true;
-          const pieces = 11;
-          for (let i = 0; i < pieces; i++) {
-            const a = self.gap + ((i + 1) / (pieces + 1)) * Math.PI * 2;
-            bullets.push(new Shot({ x: self.x, y: self.y, vx: Math.cos(a) * 46, vy: Math.sin(a) * 46, accel: -16, life: 2.4, art: 'wispFlame' }));
-          }
-        }
-        waiting = waiting.filter((self) => !self.popped);
-      },
-    };
-  },
-
-  // Marsh gas: bubbles come wobbling up out of the bog, and each one, when
-  // it gets high enough, catches light off the Wisp and pops into a few
-  // little flames that drop back down.
-  wispGas(box, density, { Shot, every, rand, spreadAcross }) {
-    const nextX = spreadAcross(box.x + 6, box.x + box.w - 6, 6);
-    let bubbles = [];
-    const rise = every(0.3, 0.42, (bullets) => {
-      const bubble = new Shot({
-        x: nextX(), y: box.y + box.h + 4, vy: -rand(26, 34), wobble: null, art: 'wispBubble',
-      });
-      bubble.baseX = bubble.x;
-      bubble.sway = rand(0, Math.PI * 2);
-      bubble.popAt = rand(box.y + 12, box.y + box.h * 0.55);
-      bullets.push(bubble);
-      bubbles.push(bubble);
-    });
-    return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets) => {
-        rise(dt, bullets);
-        for (const bubble of bubbles) {
-          bubble.x = bubble.baseX + Math.sin(bubble.age * 4 + bubble.sway) * 3;
-          if (bubble.y > bubble.popAt) continue;
-          // Pop: it's gone, and three flames fall out of where it was.
-          bubble.spent = true;
-          for (const vx of [-24, 0, 24]) {
-            bullets.push(new Shot({ x: bubble.x, y: bubble.y, vx, vy: -30, gravity: 70, life: 2.6, art: 'wispFlame' }));
+        t += dt;
+        if (!wisp) {
+          wisp = new Shot({ x: box.x + box.w / 2, y: box.y + box.h / 2, harmless: true, art: 'wispSelf' });
+          bullets.push(wisp);
+          goal = pickGoal();
+          return;
+        }
+        // Now and then it hops: it shows where first, then it's there.
+        hop -= dt;
+        if (!next && hop <= 0.7) {
+          do next = pickGoal(); while (Math.hypot(next.x - wisp.x, next.y - wisp.y) < 34);
+          bullets.push(new Shot({ x: next.x, y: next.y, harmless: true, warn: 0.7, life: 0, art: 'wispSelf' }));
+        }
+        if (next && hop <= 0) {
+          // Off it goes in a puff of flame.
+          const turn = rand(0, Math.PI * 2);
+          for (let k = 0; k < 6; k++) {
+            const a = turn + (k / 6) * Math.PI * 2;
+            bullets.push(new Shot({ x: wisp.x, y: wisp.y, vx: Math.cos(a) * 38, vy: Math.sin(a) * 38, life: 1.2, art: 'wispFlame' }));
+          }
+          wisp.x = next.x;
+          wisp.y = next.y;
+          goal = pickGoal();
+          next = null;
+          hop = rand(2.1, 2.5);
+        }
+        // It wanders from spot to spot, never in a hurry.
+        const dx = goal.x - wisp.x;
+        const dy = goal.y - wisp.y;
+        const far = Math.hypot(dx, dy);
+        if (far < 3) goal = pickGoal();
+        wisp.vx = far > 0 ? (dx / far) * 24 : 0;
+        wisp.vy = far > 0 ? (dy / far) * 24 : 0;
+        wisp.x = clamp(wisp.x, box.x + 12, box.x + box.w - 12);
+        wisp.y = clamp(wisp.y, box.y + 12, box.y + box.h - 12);
+        flare -= dt;
+        while (flare <= 0 && t > 0.8) {
+          flare += 0.07;
+          let x;
+          let y;
+          let tries = 0;
+          do {
+            x = rand(box.x + 3, box.x + box.w - 3);
+            y = rand(box.y + 3, box.y + box.h - 3);
+          } while (Math.hypot(x - wisp.x, y - wisp.y) < SAFE + 6 && ++tries < 12);
+          if (tries >= 12) continue;
+          // A bubble comes up, then flares (it's the bubble that blinks).
+          bullets.push(new Shot({ x, y, harmless: true, life: 0.38, art: 'wispBubble' }));
+          // It flares into three little flames.
+          for (let k = 0; k < 3; k++) {
+            const a = (k / 3) * Math.PI * 2 + rand(0, 2);
+            bullets.push(new Shot({ x: x + Math.cos(a) * 4, y: y + Math.sin(a) * 4, vx: Math.cos(a) * 10, vy: Math.sin(a) * 10 - 8, warn: 0.38, life: 0.7, art: 'wispFlame' }));
           }
         }
-        bubbles = bubbles.filter((bubble) => !bubble.spent);
       },
     };
   },
@@ -365,10 +386,10 @@ export const WISP_ATTACKS = {
       count++;
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.4) {
+        if (t >= next && t < 8.6) {
           gather(bullets, soul);
           next = t + 3.2;
         }

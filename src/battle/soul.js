@@ -91,6 +91,8 @@ export class Soul {
     this.vy = 0;
     this.grounded = false;
     this.platform = null;
+    this.mover = null;
+    this.deckState = null;
     this.focused = false;
     this.iframes = 0;
     this.locked = false;
@@ -112,7 +114,8 @@ export class Soul {
     this.modeFlash = Math.max(0, this.modeFlash - dt);
     this.grazeGlow = Math.max(0, this.grazeGlow - dt);
     this.hurtGlow = Math.max(0, this.hurtGlow - dt);
-    if (!this.locked) this.mode.update(this, dt, input, box);
+    // (A turn's rules can move it instead of its mode: Madam Fairweather's deck.)
+    if (!this.locked) (this.mover ?? this.mode).update(this, dt, input, box);
     this.clampTo(box);
   }
 

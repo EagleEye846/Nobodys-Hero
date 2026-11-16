@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE HERON FLATS: open mudflats, and across them a band of bog three strides
 // wide. Two fallen stones on your side to shove in, one after the other along
 // the same line, and a drift log on the far side for Bramble (who can hop it)
@@ -63,6 +64,7 @@ export const MARSH_HERON_FLATS = {
   // everything back).
   textFile: 'interactions/marsh.txt',
   props: [
+    { sprite: 'col_marble_steelie', x: 1, y: 4, walkable: true, flat: true, gives: 'marble_steelie', taken: { gone: true } },
     { sprite: 'push_rock', x: 8, y: 6, text: 'flats_stone', rock: true },
     { sprite: 'push_rock', x: 6, y: 11, text: 'flats_stone', rock: true },
     { sprite: 'roll_log', x: 21, y: 8, text: 'bog_log', log: true },
@@ -72,6 +74,8 @@ export const MARSH_HERON_FLATS = {
     { sprite: 'coat_strip', x: 17, y: 7, text: 'flats_strip' },
     { sprite: 'chest', x: 1, y: 15, text: 'flats_chest', gives: 'wisp_cordial', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'chest', x: 28, y: 1, text: 'flats_down_chest', gives: 'heron_down_coat', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_heron_flats'] ?? []),
   ],
   tileTexts: { '"': 'reeds', '%': 'bog', $: 'fen_water' },
 

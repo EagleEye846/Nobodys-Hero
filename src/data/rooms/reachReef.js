@@ -21,6 +21,8 @@
 //   .  wet rock slabs   ,  turf   o  planks   ~  heavy green sea (solid)
 //   x  barnacle rock and coral (solid)   ;  pools (walk)
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const REACH_REEF = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'reach_reef',
@@ -37,7 +39,7 @@ export const REACH_REEF = {
   vesWell: true,
   // Rougher than the first rock.
   atmosphere: { rain: 1.3, lightning: 0.9, spray: 1.4 },
-  lastLight: { x: 37, y: 16 },
+  lastLight: { x: 37, y: 16, scale: 1.45 },
   // The wrecks' silhouettes on the sea keep this many tiles clear of any shore (not in the cuts,
   // not by the coral head): src/overworld/atmosphere.js, buildSkyline.
   skylineClear: 2,
@@ -46,6 +48,10 @@ export const REACH_REEF = {
     { kind: 'mast', x: 37, y: 5, lean: -1, tall: 40 },
   ],
 
+  // The storm's far wrecks stay well out to sea: never in the boat's lane (west of the landing, row 10) or by
+  // the jetty, where they used to stand over the Bother and the party. (15 Nov 2026)
+  skylineClear: 5,
+  skylineKeepOut: [{ x: 0, y: 5, w: 13, h: 9 }],
   tiles: [
     '##########################################',
     '#~~~~~~~~~~~~~~~x~~~~~~~~~~~~~~~~~~~~~~~~#',
@@ -95,9 +101,6 @@ export const REACH_REEF = {
   cutscenes: [
     // The landing: the second crossing, once.
     { x: 9, y: 8, w: 2, h: 5, scene: 'reach_crossing_reef' },
-    // The jetty's end: on to the wreck. The side step: back to the first rock.
-    { x: 35, y: 11, w: 1, h: 1, scene: 'reach_to_wreck' },
-    { x: 34, y: 10, w: 1, h: 1, scene: 'reach_back_to_rock' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
@@ -108,9 +111,9 @@ export const REACH_REEF = {
     // After the chapter: a bead of stormglass on the west reef, for the innkeeper.
     { sprite: 'il_shell_row', x: 17, y: 12, text: 'reef_stormglass', gives: 'storm_glass', walkable: true, flat: true, after: 'the_light_answers', taken: { text: 'reef_stormglass_gone' } },
     // Haddock in the Bother alongside the east jetty (x 36-39).
-    { sprite: 'cf_haddock_row', x: 36, y: 9, npc: 'haddock_reach', animation: 'cf_haddock_row', speed: 0.6, until: 'haddock_gone' },
+    { sprite: 'cf_haddock_row', x: 36, y: 9, playScene: 'reach_boat_reef', notice: 'stays', animation: 'cf_haddock_row', speed: 0.6, until: 'haddock_gone' },
     // After the chapter: the Bother, empty (Ves rows her now).
-    { sprite: 'cf_bother', x: 36, y: 9, text: 'bother_after', animation: 'cf_bother', speed: 0.6, after: 'haddock_gone' },
+    { sprite: 'cf_bother', x: 36, y: 9, text: 'bother_after', playScene: 'reach_boat_reef', notice: 'stays', animation: 'cf_bother', speed: 0.6, after: 'haddock_gone' },
     { sprite: 'c5_chain_bollard', x: 33, y: 6, text: 'reach_bollard' },
     { sprite: 'sign', x: 13, y: 7, text: 'reef_sign' },
     { sprite: 'c5_seaweed_heap', x: 10, y: 13, text: 'reach_weed' },
@@ -135,10 +138,10 @@ export const REACH_REEF = {
     // blowholes or their landings (x 16-26), the landing and its water, the jetty or the pack's ground.
     { sprite: 'il_tidepool', x: 12, y: 8, flat: true, walkable: true },
     { sprite: 'il_cairn', x: 12, y: 3, text: 'reach_cairn' },
-    { sprite: 'il_thrift', x: 12, y: 5, walkable: true },
-    { sprite: 'il_grass_tuft', x: 13, y: 6, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 11, y: 11, walkable: true },
-    { sprite: 'il_thrift', x: 13, y: 13, walkable: true },
+    { sprite: 'il_thrift', x: 12, y: 5, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 13, y: 6, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft_b', x: 11, y: 11, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 13, y: 13, walkable: true, decor: true },
     { sprite: 'il_rowboat_half', x: 14, y: 15, text: 'reach_rowboat_half' },
     { sprite: 'il_pot_broken', x: 16, y: 14, text: 'reach_pot' },
     { sprite: 'il_lichen', x: 16, y: 10, flat: true, walkable: true },
@@ -146,9 +149,9 @@ export const REACH_REEF = {
     { sprite: 'il_lichen', x: 15, y: 3, flat: true, walkable: true },
     { sprite: 'il_tidepool', x: 29, y: 13, flat: true, walkable: true },
     { sprite: 'il_cairn', x: 31, y: 14, text: 'reach_cairn' },
-    { sprite: 'il_thrift', x: 30, y: 16, walkable: true },
-    { sprite: 'il_grass_tuft', x: 31, y: 17, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 29, y: 8, walkable: true },
+    { sprite: 'il_thrift', x: 30, y: 16, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 31, y: 17, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft_b', x: 29, y: 8, walkable: true, decor: true },
     { sprite: 'il_lichen', x: 27, y: 15, flat: true, walkable: true },
     { sprite: 'il_lichen', x: 26, y: 11, flat: true, walkable: true },
     { sprite: 'il_gull_rock', x: 36, y: 3, text: 'reach_gull_rock' },
@@ -156,6 +159,7 @@ export const REACH_REEF = {
     { sprite: 'il_rocks', x: 7, y: 16, text: 'reach_rocks' },
     { sprite: 'il_rocks', x: 38, y: 13, text: 'reach_rocks' },
     { sprite: 'il_rocks', x: 13, y: 18, text: 'reach_rocks' },
+    ...(LIFE5_PROPS['reach_reef'] ?? []),
   ],
   tileTexts: { '~': 'reach_sea', x: 'reef_coral', o: 'reach_planks', ';': 'reach_pool', '.': 'reef_rock' },
 

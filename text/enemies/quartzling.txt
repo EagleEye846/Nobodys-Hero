@@ -62,7 +62,7 @@ me.
 # TALK options in src/data/enemies/quartzling.js.
 [talk: Inspect]
 QUARTZLING - HP 950
-A small crystal creature that stands among crystals and pretends to be one. Any of the crystals round you might be one too. Shards split. Some of them glint.
+A small crystal creature that stands among crystals and pretends to be one. Any of the crystals round you might be one too. It never blinks. When it does, mind the shards.
 
 [talk: Say what a fine crystal it is]
 You tell QUARTZLING it's the finest crystal in the whole cave. It says nothing, in a way that means a great deal. A slow blush spreads through its facets. It is still being a crystal. It's just a pink one.

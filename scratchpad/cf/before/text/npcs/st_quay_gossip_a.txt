@@ -1,0 +1,23 @@
+# ST_QUAY_GOSSIP_A: a seal in a yellow hat, gossiping with the hare in the gold coat on the quay's east end. The life pass.
+
+[first]
+Now I'm not one to talk. But I heard it from the same one who heard it from the one who saw it. And her sister confirms.
+
+[repeat]
+Shh. Now, where was I. Oh yes. A hat. The size of a hat. I'll tell you later.
+
+# (draft)
+[repeat 2]
+I'd tell you, but I promised I wouldn't. I'd tell you what I promised. Same thing.
+
+# (draft)
+[repeat_ves 2]
+{laughing}Does that ever work?
+
+# (draft)
+[first after the_light_answers]
+Did you SEE it? Did YOU see it? I said to her, I said, did you see it, and she said, I did.
+
+# (draft)
+[repeat after the_light_answers]
+It's all anybody's talking about. I've heard seven different versions and I was there for all of them.

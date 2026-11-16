@@ -20,6 +20,8 @@ export const WRACK_TIDE_CLOCK = {
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_shore', lamplight: { shade: 0.16, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
 
+
+
   tiles: [
     '############################################',
     '##W###WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW####W#',
@@ -125,6 +127,14 @@ export const WRACK_TIDE_CLOCK = {
     // Weed lying on the causeway's shallows (on the rocks when the tide's out).
     { sprite: 'c5_weed_mat', x: 26, y: 8, flat: true, walkable: true },
     { sprite: 'c5_weed_mat', x: 30, y: 9, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'gold_pouch', x: 2, y: 2, text: 'sl_pouch_tide', gold: 40, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'c5_oar_stuck', x: 6, y: 9, text: 'sl_oar' },
+    { sprite: 'c5_buoy_yellow', x: 38, y: 9, text: 'sl_float' },
+    { sprite: 'shore_bottle', x: 2, y: 11, text: 'sl_bottle', walkable: true },
+    { sprite: 'c5_barrel', x: 42, y: 2, text: 'sl_barrel' },
+    { sprite: 'c5_lantern_fallen', x: 10, y: 2, text: 'sl_lantern', flat: true, walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', '~': 'clock_sea', x: 'landing_rock', O: 'landing_rock', F: 'landing_weed' },
 

@@ -1,0 +1,30 @@
+# ST_FLOOD_SANDBAGGER (the quay, from the Wreck Yard on): a stoat in a green coat, filling sandbags by the dinghy steps. A walk-through
+# figure of the flood (src/data/floodStages.js). Draft 2026-11-15.
+
+# (draft)
+[first]
+Sandbags. Fifty of them, and the first row's wet already. The boards were dry last week. I'd say the sea was being rude, but I'm told it's the tide.
+
+# (draft)
+[repeat]
+Fill, tie, stack. Fill, tie, stack. The trick is not to look at the post.
+
+# (draft)
+[repeat 2]
+If it comes over the red line, I'm going up the hill, and I'm taking the shovel.
+
+# (draft)
+[first after merrow_sea_gate]
+Sandbags again. They're not for the quay now. They're for the stairs, so the water goes up them slower.
+
+# (draft)
+[repeat after merrow_sea_gate]
+Slower is a plan. It's not a good plan. It's a plan.
+
+# (draft)
+[first after soundings_weight_gate]
+I've run out of sandbags. I've started on the herring.
+
+# (draft)
+[repeat after soundings_weight_gate]
+Herring's heavier than you'd think. It holds a door beautifully.

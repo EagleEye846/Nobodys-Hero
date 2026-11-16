@@ -1,0 +1,49 @@
+# BT_SQ_MOLE: A mole miner sitting by the plaza with his hat in his hands, worried about the Sunstone like everyone else, but louder.
+
+[first]
+It's going out, you know. Everyone says it's fine. It's not fine. I've worked in the dark all my life. I know when a light's going.
+
+Is it you? Are you the Hero, come back? We need one.
+
+[repeat]
+I've been counting the cracks in it. Forty-one now. Used to be twelve.
+
+[first after the_kings_welcome]
+Down through the Diggings, is it? I know them. Don't take the left tunnel at the cart yard.
+
+[repeat after the_kings_welcome]
+Left tunnel's bad. Rotten timber. I'd go right. Everyone goes right. That's why the left's rotten.
+
+[first after the_light_goes_up]
+Forty-one cracks and not one's dark. Not one! I'll have to find something else to count. I've never not been counting.
+
+[repeat after the_light_goes_up]
+I'm going back down. To work. First time in months I've wanted to.
+
+# (draft)
+[repeat 2]
+Forty-two. No, that's a shadow. Forty-one. Shadows count as cracks if you're tired.
+
+# (draft)
+[repeat 3]
+If the Hero does come back, I'll shake his hand. Then I'll tell him about the cracks. All of them.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Right tunnel, then left, then... it's been a while. Just keep going down. Down's always right.
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}"Down's always right." {bored}Somebody tell the stairs.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+I'll count the cracks while you're gone. Keep you up to date. For when you're back.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I tried counting the lights instead. There's one. It's very big. I've finished.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Thank you. Miners don't say that. There. I've said it. Don't make it a thing.

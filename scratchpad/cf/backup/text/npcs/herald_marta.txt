@@ -1,0 +1,66 @@
+# MARTA: a herald who knits, on the bench in the square. Her scarf is longer
+# than the square. She has no opinions about the Hero, and will tell you so.
+
+[first]
+Mm. Hello, dear. Mind the scarf.
+
+You'll be the one from the stairs. Everyone's very excited. I'm knitting.
+
+Are you the Hero? I've no opinion. I've knitted for six so far and not one of them wanted a scarf. Big heroic types. Cold necks, every one.
+
+Here. Marta measures your neck with her eyes. Mm. Give me a day.
+
+Have you met Ves yet? The girl in the chapel, with the umbrella. Go and say hello, dear.
+
+[repeat]
+Knit one, purl one, a hundred years. You get a rhythm.
+
+If you go up past the Lookout, dear, take mittens. The Hero's meant to be above all that. You are not, no offence.
+
+That scarf of mine? Goes round the square twice and into the inn. The innkeeper uses the end for the soup pot handle.
+
+[first after ves_in_the_chapel]
+Mm. Hello, dears. Mind the scarf.
+
+So you found Ves. Good. She's sat in that chapel long enough to take root.
+
+Marta measures your neck with her eyes, then looks at Ves's scarf and nods. Her mum's work. Good wool.
+
+Yours is next, dear. Give me a day.
+
+[repeat after ves_in_the_chapel]
+Knit one, purl one, a hundred years. You get a rhythm.
+
+If you go up past the Lookout, dear, take mittens. The Hero's meant to be above all that. You are not, no offence.
+
+That scarf of mine? Goes round the square twice and into the inn. The innkeeper uses the end for the soup pot handle.
+
+# --- SIDE QUEST: mittens for Dunstan, and a scarf ---
+
+[mittens_ask]
+Oh, and dear. While you're about.
+
+Marta finally looks up from the scarf, and holds out a pair of mittens without letting go of her needles. They're grey and thick, with a small trumpet knitted on the back of each.
+
+For Dunstan. In the bell tower, south-east corner, with the earmuffs and the rope. Forty years he's rung that bell with bare paws, and every winter he says he's fine. Mind the rope in there.
+
+You take the mittens.
+
+[mittens_wait]
+The mittens are for Dunstan, dear. The bell tower, south-east corner. He's the one with the earmuffs and the rope. Don't let him tell you he's fine.
+
+[mittens_done]
+Marta reads Dunstan's note twice, holding it very close, then very far away, then close again.
+
+"Fits." Mm. He always says that. He said it about the first pair and the second, and it was the third before I found out he'd never worn any of them.
+
+She puts her needles down. It's the first time you've seen her do it.
+
+Now. Your neck, dear. I said a day, and I took five, so don't remark on it. I knit the stair stitch: one row for every step of the great stair, up and back, so the Hero should never have to count. Nobody's ever finished a Hero's scarf to the last row.
+
+I have. Not for a Hero, mind. For you. Here.
+
+[mittens_after]
+Marta has started the next row of the next scarf. She doesn't look up.
+
+Wear it, dear. It's not for looking at. It's for the neck.

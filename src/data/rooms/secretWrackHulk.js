@@ -5,6 +5,7 @@
 // Tile key (see src/overworld/coastTiles.js, wrack; this room is indoors):
 //   #  hull top (solid)   W  hull wall (solid)   o  wet boards
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SECRET_WRACK_HULK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'secret_wrack_hulk',
@@ -50,9 +51,13 @@ export const SECRET_WRACK_HULK = {
     { sprite: 'c5_ships_wheel', x: 3, y: 3, text: 'hulk_wheel' },
     { sprite: 'c5_barrels', x: 12, y: 3, text: 'hulk_barrels' },
     { sprite: 'table', x: 7, y: 5, text: 'hulk_log' },
-    { sprite: 'chest', x: 12, y: 6, text: 'hulk_chest', gives: 'brine_tonic', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    { sprite: 'chest', x: 12, y: 6, text: 'hulk_chest', gives: 'notch_hulk', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    { sprite: 'chest', x: 4, y: 8, text: 'hulk_ribs', gives: 'whalebone_ribs', react: true, taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 2, y: 7, text: 'hulk_pouch', gold: 75, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'c5_rope_coil', x: 9, y: 7, text: 'hulk_rope', walkable: true },
+    // A page of the Fair Return's log (optional, secret: the way to her fog bell), in a bottle somebody fished out of the sea
+    // and kept behind the barrels without opening it.
+    { sprite: 'gs_log_bottle', x: 11, y: 3, text: 'hulk_log_bottle', gives: 'log_page_1', notice: true, taken: { gone: true } },
     // (2026-11-08) A chart on the wall and an oilskin on its peg.
     { sprite: 'in_oilskin_peg', x: 6, y: 2, text: 'in_hulk_oilskin' },
     { sprite: 'in_chart', x: 8, y: 2, text: 'in_hulk_chart' },
@@ -63,6 +68,8 @@ export const SECRET_WRACK_HULK = {
     { sprite: 'c5_crates_stack', x: 14, y: 8, text: 'in_hulk_crates' },
     { sprite: 'c5_lantern_fallen', x: 1, y: 4, walkable: true, text: 'in_hulk_lamp' },
     { sprite: 'c5_planks_scatter', x: 10, y: 8, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.secret_wrack_hulk ?? []),
   ],
   tileTexts: { W: 'hulk_wall', '#': 'hulk_wall' },
 

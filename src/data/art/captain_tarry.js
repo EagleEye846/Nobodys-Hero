@@ -43,7 +43,7 @@ export const CAPTAIN_TARRY_PALETTE = {
 function draw(pose = {}) {
   const {
     sway = 0, bob = 0, lean = 0, trumpet = 1, sword = 0, hat = 'on', eyes = 'glow', wave = 0,
-    torn = false, hold = false, mouth = 'closed',
+    torn = false, hold = false, mouth = 'closed', shake = 0,
   } = pose;
   const p = new Pix(60, 70);
   const cx = 30 + sway;
@@ -83,7 +83,8 @@ function draw(pose = {}) {
   // The tatters drift: every strip of the hem and the coat's edges sways a little out of step with the next.
   for (let x = cx - 10; x <= cx + 10; x += 2) {
     const len = 3 + ((x * 7) % 3) + Math.round(Math.sin(wave + x * 0.9) * 1.6);
-    const dx = Math.round(Math.sin(wave * 1.3 + x * 0.7) * 1.4);
+    // (Out of step with the length by a fixed phase, so a full turn of `wave` comes back to where it began.)
+    const dx = Math.round(Math.sin(wave + 2 + x * 0.7) * 1.4);
     p.line(x, top + 47, x + dx, top + 48 + len, 'c');
     p.set(x + dx, top + 48 + len, 'g');
     if (len > 4) p.set(x + dx + 1, top + 48 + len - 1, 'G');
@@ -141,7 +142,8 @@ function draw(pose = {}) {
   const hx0 = cx - 10;
   const hy0 = top + 14;
   if (sword) {
-    // A cutlass held up (1) or swung out (2): his hand shakes.
+    // A cutlass held up (1) or swung out (2): his hand shakes, and `shake`
+    // moves the blade's point a pixel (the arm and the rest of him stay put).
     const hx = cx - 17 - (sword === 2 ? 6 : 0);
     const hy = top + (sword === 2 ? 28 : 15);
     p.line(hx0, hy0, hx, hy, 'k', 5);
@@ -149,12 +151,12 @@ function draw(pose = {}) {
     p.ellipse(hx, hy, 2.4, 2.4, 'k');
     p.ellipse(hx, hy, 1.6, 1.6, 'f');
     if (sword === 1) {
-      p.line(hx, hy, hx - 3, hy - 17, 'S', 3);
-      p.line(hx, hy, hx - 3, hy - 17, 's', 1);
+      p.line(hx, hy, hx - 3 + shake, hy - 17, 'S', 3);
+      p.line(hx, hy, hx - 3 + shake, hy - 17, 's', 1);
       p.rect(hx - 3, hy - 1, 7, 2, 'b');
     } else {
-      p.line(hx, hy, hx - 17, hy + 8, 'S', 3);
-      p.line(hx, hy, hx - 17, hy + 8, 's', 1);
+      p.line(hx, hy, hx - 17, hy + 8 + shake, 'S', 3);
+      p.line(hx, hy, hx - 17, hy + 8 + shake, 's', 1);
       p.rect(hx - 1, hy - 3, 2, 7, 'b');
     }
   } else if (hold) {
@@ -267,133 +269,157 @@ function draw(pose = {}) {
   return rows;
 }
 
-// ORDERS
-const ORDERS = [
-  draw({ sway: -1, wave: 0, bob: 0 }),
-  draw({ sway: 0, wave: 0.9, bob: -1, trumpet: 1 }),
-  draw({ sway: 1, wave: 1.8, bob: 0 }),
-  draw({ sway: 0, wave: 2.7, bob: -1, eyes: 'closed' }),
-];
-export const CAPTAIN_TARRY_SPRITE = ORDERS[0];
+
+// How he moves: like a ghost, never like a puppet. His body holds still; only
+// the coat's tatters, his beard and the fog drift (`wave`, a full turn of it a
+// loop, so the loop has no seam), he floats a single pixel up and back down
+// over a long slow breath (`bob`), and he blinks seldom. The loops run at 8
+// fps with `holds` doing the slowness; the one-off clips (windup, hurt, intro,
+// death, spared) repeat a frame to hold it, since those don't read `holds`.
+const TURN = Math.PI * 2;
+// The float: up a pixel for the middle half of the cycle, down for the rest.
+const float = (i, n) => (i >= n / 4 && i < (3 * n) / 4 ? -1 : 0);
+// A frame `times` times over, so a one-off clip lingers on it.
+const held = (frame, times) => Array(times).fill(frame);
+// A drifting loop: `n` frames of `pose`, the fog turning `turns` times, and
+// `blink` (the frame index, the pose it swaps in and how long it's held) once.
+function drift(pose, { n, turns = 1, hold = 2, blink = null, each = () => ({}) }) {
+  const frames = [];
+  const holds = [];
+  for (let i = 0; i < n; i++) {
+    const at = { ...pose, wave: (TURN * turns * i) / n, bob: float(i, n), ...each(i) };
+    frames.push(draw(at));
+    holds.push(hold);
+    if (blink && i === blink.at) {
+      frames.push(draw({ ...at, ...blink.pose }));
+      holds.push(blink.hold);
+    }
+  }
+  return { fps: 8, frames, holds };
+}
+
+// ORDERS: upright, the trumpet to his mouth and staying there. The fog and
+// tatters drift on a 3 s turn, he floats on a 6 s breath, and blinks once.
+const ORDERS_POSE = { trumpet: 1 };
+const ORDERS_IDLE = drift(ORDERS_POSE, { n: 24, turns: 2, hold: 2, blink: { at: 17, pose: { eyes: 'closed' }, hold: 1 } });
+export const CAPTAIN_TARRY_SPRITE = ORDERS_IDLE.frames[0];
+
+// A windup is a gather, then the order: he draws himself up (rises a pixel,
+// settles back a pixel), lifts the trumpet with a breath, holds, and shouts.
+function gatherAndShout(pose, back, fwd = 0, gatherPose = pose) {
+  const gather = draw({ ...gatherPose, bob: -1, lean: back });
+  const lift = draw({ ...pose, trumpet: 2, eyes: pose.eyes ?? 'flare', bob: -1, lean: back });
+  const shout = (wave) => draw({ ...pose, trumpet: 2, mouth: 'shout', eyes: pose.eyes ?? 'flare', lean: fwd, wave });
+  return { fps: 8, frames: [...held(gather, 2), ...held(lift, 2), ...held(shout(0.6), 2), shout(1.2), shout(1.8)] };
+}
+// Hurt: a short recoil of a pixel, eyes shut, and back.
+function recoil(pose, back = 1) {
+  const shut = { ...pose, eyes: 'closed' };
+  return { fps: 10, frames: [flash(shift(draw(shut), back, 0)), shift(draw(shut), back, 0), shift(draw(shut), back, 0), draw(pose)] };
+}
+
+// Beaten: bare-headed, hat to his chest, still leaning as in HEAVE-TO, he
+// sinks a little and goes to mist from the top down.
+const GONE = { eyes: 'soft', hat: 'off', hold: true, trumpet: 0, lean: 4 };
+const DEATH = {
+  fps: 4,
+  frames: [
+    draw({ ...GONE, wave: 0.5 }),
+    draw({ ...GONE, wave: 1, bob: 1 }),
+    crumble(draw({ ...GONE, wave: 1.5, bob: 1 }), 0.2, true),
+    crumble(draw({ ...GONE, eyes: 'closed', wave: 2, bob: 2 }), 0.4, true),
+    crumble(draw({ ...GONE, eyes: 'closed', wave: 2.5, bob: 2 }), 0.6, true),
+    crumble(draw({ ...GONE, eyes: 'closed', wave: 3, bob: 3 }), 0.8, true),
+    crumble(draw({ ...GONE, eyes: 'closed', wave: 3.5, bob: 3 }), 1, true),
+  ],
+};
+// Spared: upright, at rest, a breath, and his eyes close.
+const REST = { eyes: 'soft', hat: 'off', hold: true, trumpet: 0 };
+const SPARED = {
+  fps: 3,
+  frames: [
+    ...held(draw({ ...REST, wave: 0 }), 2),
+    ...held(draw({ ...REST, wave: 1, bob: -1 }), 2),
+    ...held(draw({ ...REST, eyes: 'closed', wave: 2 }), 5),
+  ],
+};
 
 export const CAPTAIN_TARRY_ANIM = {
   chips: ['#5a7a6c', '#86aa9a', '#c8a040', '#a8bcb4'],
-  idle: { fps: 3, frames: ORDERS, holds: [2, 1, 2, 1] },
-  windup: {
-    fps: 7,
-    frames: [
-      draw({ trumpet: 2, mouth: 'shout', sway: 1, wave: 1, eyes: 'flare' }),
-      draw({ trumpet: 2, mouth: 'shout', sway: 2, wave: 2, eyes: 'flare', bob: -1 }),
-      draw({ trumpet: 2, mouth: 'shout', sway: 2, wave: 3, eyes: 'flare', bob: -1 }),
-    ],
-  },
-  hurt: {
-    fps: 10,
-    frames: [
-      flash(shift(draw({ eyes: 'closed', lean: 4 }), 2, 0)),
-      shift(draw({ eyes: 'closed', sway: -1, wave: 1.5, lean: 3 }), 2, 0),
-      shift(draw({ wave: 2 }), 1, 0),
-    ],
-  },
-  death: {
-    fps: 3,
-    frames: [
-      draw({ eyes: 'soft', hat: 'off', hold: true, trumpet: 0, lean: 3, wave: 1 }),
-      crumble(draw({ eyes: 'soft', hat: 'off', hold: true, trumpet: 0, lean: 5, wave: 2, bob: 2 }), 0.35, true),
-      crumble(draw({ eyes: 'closed', hat: 'off', hold: true, trumpet: 0, lean: 6, wave: 3, bob: 4 }), 0.7, true),
-    ],
-  },
-  spared: {
-    fps: 3,
-    frames: [
-      draw({ eyes: 'soft', hat: 'off', hold: true, trumpet: 0, wave: 0 }),
-      draw({ eyes: 'soft', hat: 'off', hold: true, trumpet: 0, wave: 1, bob: -1 }),
-      draw({ eyes: 'closed', hat: 'off', hold: true, trumpet: 0, wave: 2 }),
-    ],
-    holds: [2, 2, 5],
-  },
+  idle: ORDERS_IDLE,
+  windup: gatherAndShout(ORDERS_POSE, -1),
+  hurt: recoil(ORDERS_POSE),
+  death: DEATH,
+  spared: SPARED,
 };
-CAPTAIN_TARRY_ANIM.death.frames.push(crumble(draw({ eyes: 'closed', hat: 'off', hold: true, trumpet: 0, lean: 7, wave: 4, bob: 6 }), 1, true));
 
-// MUTINY: his crew has stopped answering, and he can't understand why.
-const MUTINY = [
-  draw({ sword: 1, torn: true, hat: 'tipped', sway: -1, wave: 0, eyes: 'flare' }),
-  draw({ sword: 1, torn: true, hat: 'tipped', sway: 0, wave: 1, bob: -1, eyes: 'flare', lean: 1 }),
-  draw({ sword: 1, torn: true, hat: 'tipped', sway: 1, wave: 2, eyes: 'glow' }),
-  draw({ sword: 1, torn: true, hat: 'tipped', sway: 0, wave: 3, bob: -1, eyes: 'flare', lean: -1 }),
-];
-export const CAPTAIN_TARRY_MUTINY_SPRITE = MUTINY[0];
+// MUTINY: his crew has stopped answering, and he can't understand why. Coat
+// torn, hat tipped, eyes flaring, the cutlass up. He holds as still as ever:
+// the fear is all in the blade, its point trembling a pixel.
+const MUTINY_POSE = { sword: 1, torn: true, hat: 'tipped', eyes: 'flare' };
+const TREMBLE = [0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1];
+const tremble = (i) => ({ shake: TREMBLE[i % TREMBLE.length] });
+const MUTINY_IDLE = drift(MUTINY_POSE, { n: 24, turns: 1, hold: 1, each: tremble });
+export const CAPTAIN_TARRY_MUTINY_SPRITE = MUTINY_IDLE.frames[0];
 export const CAPTAIN_TARRY_MUTINY_ANIM = {
   chips: CAPTAIN_TARRY_ANIM.chips,
-  idle: { fps: 5, frames: MUTINY },
+  idle: MUTINY_IDLE,
+  // He draws back, the blade trembling, then swings it out and holds.
   windup: {
-    fps: 9,
+    fps: 8,
     frames: [
-      draw({ sword: 1, torn: true, hat: 'tipped', eyes: 'flare', sway: 1, wave: 1 }),
-      draw({ sword: 2, torn: true, hat: 'tipped', eyes: 'flare', sway: 3, wave: 2, lean: 2 }),
-      draw({ sword: 2, torn: true, hat: 'tipped', eyes: 'flare', sway: 4, wave: 3, lean: 3 }),
+      draw({ ...MUTINY_POSE, bob: -1, lean: -1, shake: 1 }),
+      draw({ ...MUTINY_POSE, bob: -1, lean: -1 }),
+      draw({ ...MUTINY_POSE, bob: -1, lean: -1, shake: 1 }),
+      draw({ ...MUTINY_POSE, bob: -1, lean: -1 }),
+      ...held(draw({ ...MUTINY_POSE, sword: 2, lean: 1, wave: 0.6 }), 2),
+      draw({ ...MUTINY_POSE, sword: 2, lean: 1, wave: 1.2, shake: 1 }),
+      draw({ ...MUTINY_POSE, sword: 2, lean: 1, wave: 1.8 }),
     ],
   },
-  hurt: {
-    fps: 10,
-    frames: [
-      flash(shift(draw({ sword: 1, torn: true, hat: 'tipped', eyes: 'closed', lean: 4 }), 2, 0)),
-      shift(draw({ sword: 1, torn: true, hat: 'tipped', eyes: 'closed', sway: -1, lean: 3 }), 2, 0),
-      shift(draw({ sword: 1, torn: true, hat: 'tipped', wave: 2 }), 1, 0),
-    ],
-  },
-  death: CAPTAIN_TARRY_ANIM.death,
-  spared: CAPTAIN_TARRY_ANIM.spared,
-  // Played as he turns to the mutiny: he draws the cutlass, shaking.
+  hurt: recoil(MUTINY_POSE),
+  death: DEATH,
+  spared: SPARED,
+  // Played as he turns to the mutiny: the light flares, the cutlass is in his
+  // hand, and its point starts to shake.
   intro: {
-    fps: 6,
+    fps: 8,
     frames: [
-      flash(draw({ sword: 1, torn: true, hat: 'tipped', eyes: 'flare', sway: -2, lean: 2 })),
-      draw({ sword: 1, torn: true, hat: 'tipped', eyes: 'flare', sway: 2, lean: -2, wave: 1 }),
-      draw({ sword: 1, torn: true, hat: 'tipped', eyes: 'glow', wave: 2 }),
+      flash(draw(MUTINY_POSE)),
+      flash(draw(MUTINY_POSE)),
+      ...held(draw({ ...MUTINY_POSE, wave: 0.3 }), 3),
+      ...[1, 0, 1, 1, 0, 1, 0].map((shake, i) => draw({ ...MUTINY_POSE, wave: 0.4 + i * 0.1, shake })),
     ],
   },
 };
 
-// HEAVE-TO: the hat comes off. He leans as though the deck were tipping.
-const HEAVE = [
-  draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'soft', lean: 4, wave: 0 }),
-  draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'soft', lean: 5, wave: 1, bob: 1 }),
-  draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'soft', lean: 4, wave: 2 }),
-  draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'closed', lean: 3, wave: 3, bob: 1 }),
-];
-export const CAPTAIN_TARRY_HEAVE_SPRITE = HEAVE[0];
+// HEAVE-TO: the hat comes off. He leans as though the deck were tipping, and
+// stays leant: the slowest loop of the three (a 6 s drift), and now and then
+// his eyes close for a long tired moment.
+const HEAVE_POSE = { hat: 'off', hold: true, trumpet: 0, eyes: 'soft', lean: 4 };
+const HEAVE_IDLE = drift(HEAVE_POSE, { n: 16, turns: 1, hold: 3, blink: { at: 11, pose: { eyes: 'closed' }, hold: 6 } });
+export const CAPTAIN_TARRY_HEAVE_SPRITE = HEAVE_IDLE.frames[0];
 export const CAPTAIN_TARRY_HEAVE_ANIM = {
   chips: CAPTAIN_TARRY_ANIM.chips,
-  idle: { fps: 2, frames: HEAVE, holds: [2, 2, 2, 1] },
-  windup: {
+  idle: HEAVE_IDLE,
+  windup: gatherAndShout({ hat: 'off', trumpet: 0, eyes: 'soft' }, 3, 4, HEAVE_POSE),
+  hurt: recoil(HEAVE_POSE),
+  death: DEATH,
+  spared: SPARED,
+  // The deck tips: he lets the hat come off and leans over, a pixel at a time.
+  intro: {
     fps: 6,
     frames: [
-      draw({ hat: 'off', trumpet: 2, mouth: 'shout', eyes: 'soft', lean: 5, wave: 1 }),
-      draw({ hat: 'off', trumpet: 2, mouth: 'shout', eyes: 'soft', lean: 6, wave: 2, bob: -1 }),
-      draw({ hat: 'off', trumpet: 2, mouth: 'shout', eyes: 'soft', lean: 6, wave: 3, bob: -1 }),
+      flash(draw({ ...HEAVE_POSE, lean: 0 })),
+      draw({ ...HEAVE_POSE, lean: 0 }),
+      draw({ ...HEAVE_POSE, lean: 1, wave: 0.2 }),
+      draw({ ...HEAVE_POSE, lean: 2, wave: 0.4 }),
+      draw({ ...HEAVE_POSE, lean: 3, wave: 0.6 }),
+      ...held(draw({ ...HEAVE_POSE, lean: 4, wave: 0.8 }), 3),
     ],
-  },
-  hurt: {
-    fps: 10,
-    frames: [
-      flash(shift(draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'closed', lean: 7 }), 2, 0)),
-      shift(draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'closed', lean: 6 }), 2, 0),
-      shift(draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'soft', lean: 5 }), 1, 0),
-    ],
-  },
-  death: CAPTAIN_TARRY_ANIM.death,
-  spared: CAPTAIN_TARRY_ANIM.spared,
-  intro: {
-    fps: 3,
-    frames: [
-      flash(draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'soft', lean: 2 })),
-      draw({ hat: 'off', hold: true, trumpet: 0, eyes: 'soft', lean: 5, wave: 1 }),
-    ],
-    holds: [1, 3],
   },
 };
 
 // Beaten (or spared) he doesn't vanish: he is there, bare-headed, eyes shut,
 // hat to his chest, and fading. (The room's own scene finishes it.)
-export const CAPTAIN_TARRY_DEATH_LAST = crumble(draw({ eyes: 'closed', hat: 'off', hold: true, trumpet: 0, lean: 7, wave: 4, bob: 6 }), 0.8, true);
+export const CAPTAIN_TARRY_DEATH_LAST = crumble(draw({ ...GONE, eyes: 'closed', wave: 3.5, bob: 3 }), 0.8, true);

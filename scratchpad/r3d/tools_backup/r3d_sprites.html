@@ -1,0 +1,8 @@
+<!doctype html><html><head><meta charset="utf-8"><base href="../"><title>r3d sprites</title></head><body><pre id="report">S
+</pre><script type="module">
+const r=document.getElementById('report');
+try{ const m=await import('./src/data/art/props.js');
+ const names=Object.keys(m.PROP_SPRITES);
+ r.textContent+=names.map(n=>{const s=m.PROP_SPRITES[n];const a=Array.isArray(s)?s:(s.rows??s.frames?.[0]??[]);return `${n} ${a[0]?.length??'?'}x${a.length}`}).join('\n')+'\n';
+}catch(e){r.textContent+='ERR '+e+'\n'}
+r.textContent+='CHECK DONE\n';</script></body></html>

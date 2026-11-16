@@ -64,6 +64,9 @@ export const AREA_NAMES = {
   haddock_light: "HADDOCK'S LIGHT",
   reach: 'THE STORM REACH',
   lastlight: 'THE LAST LIGHT',
+  // Chapter 6: the ash wastes. The Ash Road runs up off the bare seabed, through
+  // the burnt land, to the gate of a town buried in ash (src/overworld/ashTiles.js).
+  ashroad: 'THE ASH ROAD',
 };
 
 // Regions out under the open sky: no dark vignette around the screen's edges
@@ -82,4 +85,4 @@ export const STORM_AREAS = ['wrack', 'saltcombe', 'lanes', 'wreck', 'ghostship',
 // A room can choose for itself with `lamplight: true` or `false`.
 // (The Glimmering is lamplit so its crystals and mushrooms glow, in a soft
 // violet shade rather than the usual ember brown.)
-export const LAMPLIT_AREAS = new Set(['rest', 'lasthome', 'belowtown', 'glimmer', 'diggings', 'stillwater', ...STORM_AREAS]);
+export const LAMPLIT_AREAS = new Set(['rest', 'lasthome', 'belowtown', 'glimmer', 'diggings', 'stillwater', ...STORM_AREAS, 'ashroad']);

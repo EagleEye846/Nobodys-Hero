@@ -121,7 +121,7 @@ export const DEEP_BATTLE_THEME = {
   title: 'Rain on the Roots',
   bpm: 140,
   stepsPerBeat: 4,
-  volume: 1.0,
+  volume: 1.53,
 
   instruments: {
     // The rain: harp and soft piano, each note left to ring.

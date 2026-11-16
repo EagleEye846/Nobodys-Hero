@@ -393,6 +393,7 @@ const MUSIC_BOX = {
 export const BAT_BATTLE_THEME = {
   title: 'Brave in the Dark',
   bpm: 152,
+  volume: 1.78,
   stepsPerBeat: 4,
 
   instruments: {

@@ -43,8 +43,9 @@ the **public domain**. It is 27.6 seconds long, levelled to match `waves.ogg`, w
 The sea caves' far `boom` and the muffled surf heard indoors are the `seaWaves` crashes again,
 slowed and darkened, not new recordings.
 
-`assets/audio/sfx/` holds the chest opening sounds (the `chest` and `storage` sound
-effects in src/audio/music.js). Each is a few recordings layered together (a latch, creaks,
+`assets/audio/sfx/` holds the old chest opening sounds (`chest.ogg` and `storage.ogg`;
+since 13 November 2026 the `chest`, `storage`, `pouch` and `pack` sound effects in
+src/audio/music.js are made by the synth instead, and these four recordings are kept but not played). Each is a few recordings layered together (a latch, creaks,
 cloth, leather, a buckle, a thump) from "RPG Audio" by Kenney (https://kenney.nl/assets/rpg-audio),
 released under **CC0 1.0**. Each is cut to its first quick hit, crushed to a low, gritty quality (short and game-like rather
 than realistic), and levelled to the same loudness.
@@ -180,3 +181,20 @@ Added 11 November 2026, for Tally's song ("tallyBattle", the Welcome Register in
   stretch of it (a whole line written), and `67` a rub from `pencil_erase.ogg`, both from "Pencil
   Sounds" by AntumDeluge on OpenGameArt (https://opengameart.org/content/pencil-sounds). **CC0 1.0**.
   Highpassed at 140 Hz, faded at the ends, levelled.
+
+Added 14 November 2026 (room by room sound for chapters 4 to 6, src/audio/roomAmbience.js): no new
+recordings. The far-off one-shots that play now and then over each ambience (`farGull`, `farCreak`,
+`farDrip`, `farBoat`, `farPick`, `farCart`) are the recordings already in `assets/audio/gulls/` and
+`assets/audio/under/` (credited above), played softly and slowed a little. The two made by the
+synth (`farCaw`, a crow a long way off, and `emberPop`, a cinder cracking) are not waves. All waves
+in the new room mixes are the real recordings already here (the `surf`, `boom` and `lapping` layers).
+
+Added 15 November 2026 (room by room sound for chapters 1 to 3, src/audio/roomAmbience.js):
+- `assets/audio/under/forestEve.ogg` (the `recording` bed of the Pinefall, the Hushwood, the Marsh and
+  the Ruins' garden and courtyard) and `assets/audio/under/bird1.ogg` to `bird4.ogg` (the `farBird`
+  one-shots) are cut from "Waidachswald Oberschefflenz Abend 20250616 2005" by Evillan on Wikimedia
+  Commons (https://commons.wikimedia.org/wiki/File:Waidachswald_Oberschefflenz_Abend_20250616_2005.ogg),
+  a summer evening in a wood, **CC0 1.0**. `forestEve` is 45 seconds (seconds 100 to 148 of the
+  original, mixed to mono, resampled to 32 kHz, highpassed at 80 Hz, the ends crossfaded so it loops,
+  levelled). The four birds are 2.4-second stretches from other places in the recording, highpassed
+  at 500 Hz and faded at the ends. Everything else in the new mixes is a recording already here.

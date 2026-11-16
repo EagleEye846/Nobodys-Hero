@@ -11,7 +11,7 @@ The ledger? You may look. Don't lick your fingers. It falls open at the same pag
 
 # (draft)
 [first_bramble]
-{grin}We get our own column.
+{glee}We get our own column.
 
 [repeat]
 Everything that leaves this harbour goes in the book, and everything that comes back. Mostly they come back.
@@ -29,6 +29,14 @@ Everything that leaves this harbour goes in the book, and everything that comes 
 {flustered}Don't mind the bell. People ring it. I hear every single one. I don't write them down.
 
 {stern}...Much.
+
+# (draft) The Fair Return, in passing (the ghost ship's trail).
+[repeat 4]
+{stern}The book falls open at the same page. Not that page. The other one, at the back.
+
+FAIR RETURN, brig, two hundred and fourteen tons. Due the fourteenth. Not yet in.
+
+{flustered}We don't close an entry till the ship's in. It's the rule. That one's been open a hundred years. I just... dust round it.
 
 # The side quest "The Clerk's Stamp" (src/data/rooms/saltcombeHarbourOffice.js): the stamp is in a gull's stash on the quay's fish crates.
 [stamp_ask]
@@ -56,6 +64,12 @@ Everything that leaves this harbour goes in the book, and everything that comes 
 
 [repeat after wreck_slip_home]
 {smile}Time in. Underlined. I keep turning back to look at it.
+
+# (draft) The Fair Return, in passing.
+[repeat 2 after wreck_slip_home]
+{stern}There's another entry at the back of the book with no time in. FAIR RETURN. Due the fourteenth.
+
+{flustered}A hundred years. My grandfather used to read it out on foggy nights, in case. In case what, he never said.
 
 # (draft) World reacts: after the chapter (the storm gone, Haddock gone).
 [first after haddock_gone]

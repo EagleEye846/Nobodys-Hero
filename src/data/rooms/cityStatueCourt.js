@@ -10,6 +10,9 @@
 //   S  statue (solid)
 //   W  the old city's stone wall (solid)
 //   ~  water (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_STATUE_COURT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_statue_court',
@@ -63,6 +66,7 @@ export const CITY_STATUE_COURT = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_statue_court ?? []),
     { sprite: 'gate_narrow', x: 15, y: 1, text: 'court_gate', opensWith: ['plate', 'court'], openText: 'court_gate_open' },
     { sprite: 'gate_narrow', x: 16, y: 1, text: 'court_gate', opensWith: ['plate', 'court'] },
     { sprite: 'stone_button', x: 13, y: 7, text: 'stone_button', button: 'plate' },
@@ -74,6 +78,8 @@ export const CITY_STATUE_COURT = {
     { sprite: 'rock_stump', x: 1, y: 15, text: 'rock_stump', rockReset: true },
     { sprite: 'inscription', x: 18, y: 3, text: 'court_inscription' },
     { sprite: 'gold_pouch', x: 29, y: 15, text: 'court_purse', gold: 220, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_statue_court'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', S: 'court_statue', '~': 'forum_water' },
 

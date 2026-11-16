@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE FAR JETTY: out of the stilt hut's back door with Ves on your back.
 // Strips of bog cross the way, each only a stride wide. Alone you'd hop them;
 // you can't, carrying her. Bramble can, and on the far side of each lies a
@@ -66,6 +67,8 @@ export const MARSH_JETTY = {
     { sprite: 'sign', x: 5, y: 3, text: 'jetty_post' },
     { sprite: 'gold_pouch', x: 28, y: 12, text: 'jetty_purse', gold: 150, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 1, y: 11, text: 'jetty_chest', gives: 'punt_pole', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_jetty'] ?? []),
   ],
   tileTexts: { '"': 'reeds', '%': 'bog', $: 'fen_water', '=': 'duckboards' },
 

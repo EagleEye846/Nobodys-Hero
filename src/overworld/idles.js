@@ -20,8 +20,13 @@ import { flipHorizontal } from '../engine/sprite.js';
 // How the idles get on with each other: which come up, in what order, is
 // picked at random but never the one just done.
 export function pickIdle(who, last = null) {
-  const names = Object.keys(IDLES[who] ?? {}).filter((name) => name !== last);
+  const names = Object.keys(IDLES[who] ?? {}).filter((name) => name !== last && !IDLES[who][name].manual);
   return names.length ? names[Math.floor(Math.random() * names.length)] : null;
+}
+
+// More idles for `who` (companionLife.js): `manual` ones are only started by name, never picked at random.
+export function addIdles(who, table) {
+  IDLES[who] = { ...(IDLES[who] ?? {}), ...table };
 }
 
 export const idleLength = (who, name) => IDLES[who]?.[name]?.length ?? 0;

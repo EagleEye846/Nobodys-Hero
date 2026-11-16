@@ -1,0 +1,21 @@
+# THE KEEPERS' LOGBOOKS (Old Lightroom): a stack of logbooks by year, one page missing from the top one.
+# A tiny errand of the life pass. (draft)
+
+[first]
+A stack of logbooks, tied with string, one for every year. The top one is open, with a pressed sea-pink holding the place. The page after it has been torn out.
+
+[repeat]
+The top logbook, with its pink holding the place. One page missing, torn clean along the spine.
+
+[page_ask]
+Somebody has torn the last page out of the book, very neatly, as if they wanted it for something. The next page is blank.
+
+[page_done]
+You press the page back in against its stub. It sits there as if it never left, and the sea-pink drops out of the book.
+
+Written on it, in tidy pencil: LAMPS OUT, NINE. LAMPS LIT, FOUR. ODD. TEA. And then, at the bottom, underlined: SOMEBODY WILL COME.
+
+A pencil is tucked in the spine of the book. It looks as if it's meant for you.
+
+[page_after]
+The logbook, with its last page back where it belongs. SOMEBODY WILL COME. You turn the page. It's blank, and waiting.

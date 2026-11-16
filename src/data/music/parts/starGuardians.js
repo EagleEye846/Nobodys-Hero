@@ -1,7 +1,9 @@
 // Shared pieces of the star guardians' songs (not songs themselves:
 // tools/serve.py only lists the files directly in src/data/music/). A star
-// guardian is whatever a fallen star shard woke up and now keeps: the
-// Figurehead on the ghost ship in chapter 5 is the first ("Star Aboard",
+// guardian is whatever a fallen star shard woke up and now keeps: each one
+// made a single wish on its shard, and the star granted it too literally
+// (not madness: a wish come true the wrong way). The
+// Figurehead on the ghost ship in chapter 5 is the first ("Never Morning",
 // figureheadBattleTheme.js). Each later chapter's guardian shares this one
 // motif, in its own key, speed and colour, so the player hears the same star
 // falling every time and knows what they've found.
@@ -9,8 +11,8 @@
 //   THE FALLING STAR (4 notes): the high tonic, down to the fifth, a
 //     semitone slip to the flat fifth, then down a tritone to land on the
 //     tonic. In C: C6 G5 F#5 C5. The first fall (an octave to a fifth) is
-//     the star dropping clean; the slip is the crack in it, the wrongness
-//     the shard puts into whatever it lands in; the tritone drop is the
+//     the star dropping clean; the slip is the crack in it, the wish
+//     that came true the wrong way; the tritone drop is the
 //     impact. Rhythm: quick, quick, a breath, long (STAR_LENGTHS, in 8ths:
 //     1 1 2 4, or 1 1 2 2 to fit a 3/4 bar). Nothing else in the game uses
 //     the octave, fifth, flat-fifth, tonic fall, so keep the shape exact;
@@ -20,11 +22,12 @@
 //     octave): kept back for the true ending, when a shard is taken home
 //     instead of guarded. Don't spend it in a fight.
 //
-//   HOW THE FIRST ONE USES IT: on a music box at the very start; as the
-//     first bar of the Figurehead's hook; as the call in her call and
-//     laugh; slowed right down in the quiet middle; and at the very end it
-//     is the only thing that lands on the home note the ship's shanty never
-//     reaches (the ship never made port; the star took it).
+//   HOW THE FIRST ONE USES IT ("Never Morning"): on a music box under the
+//     midnight clock at the very start; as the punchline of her hook; as the
+//     brass call in her star shower, raining in canon, climbing a step at a
+//     time, and falling in half notes across the bar lines to land; rung
+//     slowly in the quiet turn; and dropped into the gap where the ship's
+//     shanty stops a semitone short of home.
 //
 // starFall('C5') gives the motif as steps for a track (C6 G5 F#5 C5, an
 // 8th a token on a 16th-note grid). starNotes('C5') gives just the notes.

@@ -1,0 +1,94 @@
+# FISHING with Gubb (Chapter 4, stillwater_shore): the optional pastime. Knock
+# on the jetty post after the first crossing and he lends you his rod. All
+# of it is Gubb talking from out on the water (his face), plus one dry line
+# from Ves the first time. Code: src/ui/fishingScene.js. A section called
+# catch_<fish id> is what he says about that catch (the fish are ITEMS in
+# src/data/items.js; the pearl is a keepsake in src/data/gear.js).
+
+# Said after the knock, with a choice (BORROW THE ROD / NO, THANKS) after it.
+[offer]
+Fancy a line in, dear? There's a rod on the hook by the post. I leave it there for nobody, and nobody takes it.
+
+[offer_again]
+Rod's on the hook, dear. Cast it out and keep still. The lake does the rest.
+
+[declined]
+Quite right. Fish are poor company. Terrible listeners.
+
+# The first cast, spelled out once.
+[how_to]
+Z throws the line. Then you wait, and waiting is most of it.
+
+When she dips and goes ping, Z again, quick, before she thinks better of it.
+
+Then it's a tug of war. Hold Z and your marker rises. Let go and it sinks. Keep it on the fish and the bar fills.
+
+Bar fills, you've got her. Bar empties, she's got you. X puts the rod back, any time you like.
+
+[too_soon]
+Too keen, dear. She hadn't even heard of you yet.
+
+[too_late]
+Gone. They do that. It's the one thing they're any good at.
+
+[lost]
+Off she goes, with my hook. No, no, it's all right. I've more hooks than verses.
+
+[nothing_hooked]
+Just the weed. Lovely weed, though.
+
+[leave]
+Back on the bank, then. Mind the edges, dear.
+
+# After the visit's last catch (CATCHES_PER_VISIT), he wants the rod back.
+[rod_back]
+That'll do the lake for now, dear. Hang the rod back on its hook. They get shy if you keep at them.
+
+# Knocking again before you've been away from the Stillwater.
+[rod_resting]
+Rod's drying, dear. Go and see a bit of the world and come back. The fish will have forgotten you by then. They're good at that.
+
+[bag_full]
+Your pockets are full, dear, and there's nowhere left to put her. Back she goes. She'll be pleased.
+
+[stored]
+Bag's brimming, so she's gone in the storage chest by the crystal. Fish keep better in the dark. Most things do.
+
+[ves_first]
+We've been down a mine, up a mountain and through a forest, and now this. It's the most relaxing thing we've done, and I mean that as an insult to the rest.
+
+# What Gubb says about each catch (two bits: the catch, then the afterthought).
+[catch_moonblind_minnow]
+A blind one! Never seen a thing in its life, and still it bites better than I do.
+
+Eat her quick, dear, before she hears me being nice about her.
+
+[catch_grumbling_olm]
+An olm! Hundred years old, that is, and she still looks at me like I'm late.
+
+Don't tell her what you're making. Next verse: "oh, olm, you old..." No. I'll come back to it.
+
+[catch_lantern_gudgeon]
+Oh, she's a shiny one. Hold her up, dear. She's got a lamp in her where her thoughts ought to be.
+
+That's a verse, that is. That's... no. It's gone. It's always gone.
+
+[catch_boiled_boot]
+That's a boot. Somebody's. They'll be wanting it back, I expect.
+
+The lake's got a lot of left boots. I think it's the shape of the lake. Waste not, dear: a boot's a boot, boiled.
+
+[catch_ancient_sweet]
+Ha! That's one of mine! I dropped that years back, and thought nothing of it.
+
+It's gone a bit crunchy. You have it, dear. I've plenty. I've always plenty.
+
+[catch_slowfin_carp]
+Now that's a carp! Fat as me and twice as quiet.
+
+She's been down there since before the verse. Thank her, dear. Take your time about it.
+
+[catch_pearl_button]
+A button! Mother-of-pearl, and round as a moon. Somebody's coat, once.
+
+The lake's full of little things that nobody missed. Keep it, dear. It's lucky to have been found.

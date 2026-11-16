@@ -622,6 +622,32 @@ function seaCave() {
   return g.rows();
 }
 
+// A small hole low in a wet stone wall, where a few stones have been knocked out:
+// only a child fits. The stone-wall twin of the Hushwood's kid_gap, for the coast's
+// pit walls, cave cracks and sluices. 16 x 16; the hole sits on the bottom edge.
+function stoneGap() {
+  const MOSSY = ['#1e2a26', '#3a4a44', '#5a6a62', '#7e8c84'];
+  const g = new Grid(16, 16);
+  stoneWall(g, 0, 0, 16, 16, MOSSY);
+  // The hole: a low, rough arch, dark inside.
+  g.poly([[3, 15], [3, 10], [5, 7], [8, 6], [11, 7], [13, 10], [13, 15]], MOSSY[0]);
+  g.poly([[4, 15], [4, 11], [6, 8], [8, 7], [10, 8], [12, 11], [12, 15]], '#0a0e10');
+  g.poly([[6, 15], [6, 12], [8, 10], [10, 12], [10, 15]], '#04070a');
+  // Broken edges catching the light round the top of the hole.
+  g.set(5, 7, MOSSY[3]);
+  g.set(8, 5, MOSSY[3]);
+  g.set(11, 6, MOSSY[2]);
+  // Moss and a wet streak down from the top.
+  for (let x = 0; x < 16; x += 3) g.set(x, 0, WEED[1 + (x % 2)]);
+  g.line(13, 1, 14, 5, WEED[1]);
+  g.line(2, 2, 1, 6, MOSSY[0]);
+  // Two knocked-out stones lying at the foot.
+  box(g, 0, 13, 3, 3, MOSSY);
+  box(g, 13, 14, 3, 2, MOSSY);
+  g.outline(OUT);
+  return g.rows();
+}
+
 function netFrame() {
   const g = new Grid(32, 44);
   post(g, 2, 4, 43, 3);
@@ -1076,13 +1102,25 @@ function halfSunkCottage() {
   g.rect(42, 30, 1, 9, WOOD[0]);
   g.rect(24, 36, 10, 26, WOOD[0]);
   g.rect(25, 37, 8, 25, WOOD[1]);
-  // The flood: water to the windowsills at the front.
-  waterBand(g, 44, 0, 64);
-  g.rect(0, 52, 64, 10, WATER[0]);
-  for (let x = 1; x < 63; x += 5) g.rect(x, 54 + (x % 3), 3, 1, WATER[1]);
+  // The flood: water to the windowsills at the front. Below the line the walls go dark and
+  // green and then away into the water, so the room's own water shows round the foot (no
+  // block of water of its own), with a lapping edge along the line and rings off the corners.
   weedTuft(g, 12, 47, 3, 5);
   weedTuft(g, 50, 47, 3, 5);
   g.outline(OUT);
+  for (let y = 45; y < g.h; y++) for (let x = 0; x < g.w; x++) {
+    if (!g.cells[y][x]) continue;
+    const d = y - 44;
+    if (d > 9 || (d > 5 && (x + y) % 2)) g.set(x, y, null);
+    else g.set(x, y, d < 4 ? '#1e4a42c8' : '#2a5a5090');
+  }
+  for (let x = 4; x < 60; x++) {
+    const wob = Math.round(Math.sin(x / 3) * 0.6);
+    if ((x * 7) % 5 !== 0) g.set(x, 44 + wob, x % 4 ? '#8ad0c0d0' : '#c8f0e4e0');
+  }
+  for (const [cx, cy, r] of [[6, 49, 5], [58, 49, 5], [29, 56, 8]]) {
+    for (let a = 0; a < 32; a++) if (a % 5 !== 4) g.set(cx + Math.cos((a / 32) * Math.PI) * r, cy + Math.sin((a / 32) * Math.PI) * r * 0.35, '#5a9a9080');
+  }
   return g.rows();
 }
 function churchWall() {
@@ -1569,20 +1607,37 @@ function lightBase(kind) {
   return g.rows();
 }
 function littleLight(step) {
-  // A complete toy-sized lighthouse whose lantern pulses (step 0..3).
+  // A navigation beacon, small on purpose: a stone pillar on a plinth with an iron lamp cage on top. The
+  // lamp's flame pulses (step 1..3). Its middle (y 9) is 37 px above the foot, where the glow sits.
+  return beaconPillar(step);
+}
+// lit: step 1..3 is the flame; 0 is the same pillar with the cage empty and cold.
+function beaconPillar(step) {
   const g = new Grid(20, 46);
-  g.poly([[5, 44], [7, 14], [13, 14], [15, 44]], WHITE[1]);
-  g.poly([[5, 44], [7, 14], [9, 14], [8, 44]], WHITE[2]);
-  g.poly([[7, 23], [13, 23], [14, 32], [6, 32]], RED[1]);
-  g.rect(4, 42, 12, 3, STONE[2]);
-  g.rect(8, 36, 4, 8, WOOD[0]);
-  g.rect(5, 12, 10, 2, IRON[1]);
-  const c = [LAMPY[0], LAMPY[1], LAMPY[2], LAMPY[3]][step];
-  g.rect(6, 5, 8, 7, c);
-  g.rect(7, 6, 6, 5, step > 1 ? LAMPY[3] : c);
-  g.rect(9, 5, 2, 7, IRON[1]);
-  g.poly([[5, 5], [10, 0], [15, 5]], RED[1]);
-  g.rect(9, 0, 2, 1, IRON[2]);
+  // Plinth: two courses of big stones.
+  g.rect(3, 42, 14, 4, STONE[1]);
+  g.rect(3, 42, 14, 1, STONE[3]);
+  g.rect(5, 39, 10, 3, STONE[2]);
+  g.rect(5, 39, 10, 1, STONE[3]);
+  // The pillar: squared stone, lit from the left, joints every few rows.
+  for (let y = 18; y < 39; y++) {
+    for (let x = 7; x < 13; x++) {
+      const joint = (y - 18) % 5 === 4 || (x + ((y - 18) / 5 | 0) * 3) % 6 === 0;
+      g.set(x, y, joint ? STONE[0] : x < 9 ? STONE[3] : x < 11 ? STONE[2] : STONE[1]);
+    }
+  }
+  // A slab on top to stand the cage on.
+  g.rect(5, 16, 10, 2, STONE[2]);
+  g.rect(5, 16, 10, 1, STONE[3]);
+  // The iron cage: four posts, a rim above and below, the lamp inside.
+  g.rect(5, 15, 10, 1, IRON[2]);
+  const c = step ? [LAMPY[0], LAMPY[1], LAMPY[2], LAMPY[3]][step] : IRON[0];
+  g.rect(6, 6, 8, 9, step ? c : '#1a2228');
+  if (step) { g.rect(7, 7, 6, 7, step > 1 ? LAMPY[3] : c); g.rect(8, 8, 4, 5, LAMPY[3]); }
+  for (const x of [5, 9, 10, 14]) g.rect(x, 5, 1, 10, IRON[1]);
+  g.rect(5, 5, 10, 1, IRON[2]);
+  g.poly([[6, 5], [10, 1], [14, 5]], IRON[1]);
+  g.rect(10, 0, 1, 2, IRON[2]);
   g.outline(OUT);
   return g.rows();
 }
@@ -2457,6 +2512,38 @@ function potSingle() {
   return g.rows();
 }
 
+// c5_gangway_gate: a ship's gangway gate for a one-tile gap in a deck rail: two
+// iron stanchions with brass caps, a gate of upright planks between them with
+// riveted iron bands and a cross brace, and a chain slung across the top. It
+// opens with its bolt wheel; open, it isn't drawn at all (like gate_narrow).
+function gangwayGate() {
+  const g = new Grid(16, 26);
+  // The stanchions, posts of iron, a brass cap on each.
+  post(g, 0, 2, 25, 3, IRON);
+  post(g, 13, 2, 25, 3, IRON);
+  g.rect(0, 1, 3, 2, BRASS[2]); g.set(0, 1, BRASS[3]); g.rect(0, 2, 3, 1, BRASS[1]);
+  g.rect(13, 1, 3, 2, BRASS[2]); g.set(13, 1, BRASS[3]); g.rect(13, 2, 3, 1, BRASS[1]);
+  // The gate: upright planks.
+  vplanks(g, 3, 6, 10, 19, WOOD, 3);
+  g.rect(3, 24, 10, 1, WOOD[0]);
+  // A cross brace, bottom left to top right.
+  g.thick(4, 22, 11, 9, 2, WOOD[3]);
+  g.line(5, 23, 12, 10, WOOD[0]);
+  // Iron bands with rivets, and the bolt plate on the right.
+  for (const y of [8, 20]) {
+    g.rect(3, y, 10, 2, IRON[1]);
+    g.rect(3, y, 10, 1, IRON[2]);
+    for (let x = 4; x < 13; x += 3) g.set(x, y, IRON[3]);
+  }
+  g.rect(10, 13, 3, 4, IRON[2]); g.set(11, 14, IRON[3]); g.rect(10, 16, 3, 1, IRON[1]);
+  // Rust where the sea sits on the iron.
+  g.set(4, 10, RUST[2]); g.set(8, 21, RUST[1]); g.set(1, 18, RUST[2]); g.set(14, 12, RUST[1]); g.set(12, 22, RUST[2]);
+  // The chain across the top, sagging a little.
+  for (let x = 2; x <= 13; x++) g.set(x, 3 + Math.round(Math.sin(((x - 2) / 11) * 3.1416) * 2), x % 2 ? IRON[3] : IRON[2]);
+  g.outline(OUT);
+  return g.rows();
+}
+
 export const COAST_PROP_SPRITES = {
   // Gullrest: the happy beach
   c5_bunting_string: buntingString(0),
@@ -2478,6 +2565,7 @@ export const COAST_PROP_SPRITES = {
   c5_haddock_rock: haddockRock(),
   c5_sea_cave: seaCave(),
   c5_net_frame: netFrame(),
+  c5_gangway_gate: gangwayGate(),
   c5_anchor: anchor(),
   c5_rope_coil: ropeCoil(),
   c5_doormat: doormat(),
@@ -2507,6 +2595,7 @@ export const COAST_PROP_SPRITES = {
   c5_halfsunk_cottage: halfSunkCottage(),
   c5_church_wall: churchWall(),
   c5_sluice_wheel: sluiceWheel(0),
+  c5_stone_gap: stoneGap(),
   c5_mill_wheel: millWheel(0),
   c5_drowned_signpost: drownedSignpost(),
   // The Wreck Yard
@@ -2527,7 +2616,7 @@ export const COAST_PROP_SPRITES = {
   c5_sounding_weight: soundingWeight(),
   c5_chapel_pews: chapelPews(0),
   // The Beacon Isles and Haddock's Light
-  c5_light_base_b: lightBase('b'),
+  c5_light_base_b: beaconPillar(0),
   c5_little_light: littleLight(2),
   c5_rope_bridge_post: ropeBridgePost(),
   c5_forge: forge(0),

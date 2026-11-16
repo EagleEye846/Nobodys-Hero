@@ -22,8 +22,9 @@ An empty chest, salted white at the hinges.
 [steps_sign]
 A board at the top of the stair. THE STEPS ARE EXTRA. (THEY ARE ALSO NUMEROUS.) MIND THE BUNTING.
 
+# (draft)
 [steps_sign_ves]
-{bored}"Numerous." That's one way of putting it.
+{smile}"Numerous." I like a sign that admits things.
 
 [steps_sea]
 The sea, a long way down, lapping the cliff foot as if it had all day. It has.
@@ -37,8 +38,9 @@ Flags in red, yellow, blue and white, strung from post to post. They're flapping
 [steps_deckchair]
 A striped deckchair on the landing, set facing the sea. There is a hat on it, and a note: BACK IN A MINUTE. The hat has been here a while.
 
+# (draft)
 [steps_deckchair_ves]
-{bored}It's a lovely spot to be back in a minute from.
+{smile}It's a lovely spot to be back in a minute from.
 
 # (draft)
 [steps_deckchair 2]
@@ -70,8 +72,9 @@ A chest on the second landing. Inside, a sea biscuit, hard as a roof tile and la
 [steps_foot_sign]
 WELCOME TO GULLREST. PLEASE DO NOT FEED THE GULLS. THEY HAVE ALREADY EATEN.
 
+# (draft)
 [steps_foot_sign_ves]
-{bored}That's not a joke. That's a warning.
+{laughing}"They have already eaten." ...Is that a joke, or a warning?
 
 [steps_rock]
 Sandstone, warm to the touch, with a thin pink vein running through it.
@@ -116,8 +119,9 @@ Flags strung between two posts, rippling. They've been mended in many places, wi
 [beach_deckchair]
 A deckchair in the sun, facing the water. There's a book on it, upside down. A gull is sitting on the book. The gull has the look of a reader.
 
+# (draft)
 [beach_deckchair_ves]
-{bored}Don't ask him to move. He's got a good page.
+{laughing}Don't ask him to move. He's got to a good bit.
 
 # (draft)
 [beach_deckchair 2]
@@ -138,15 +142,17 @@ Lobster pots, stacked three high and tied with rope, each with a little brass ta
 [beach_pup]
 A seal pup with a bucket and spade, very carefully not building a sandcastle. "You have to poke them first," she says. "To see if they poke back."
 
+# (draft)
 [beach_pup_bramble]
-{worried}...Do they poke back?
+{thinking}...Do they poke back?
 
 # (draft)
 [beach_pup 2]
 "I poked one yesterday," says the seal pup. "It didn't poke back. It just went a bit flat." She looks at you very seriously. "That's how you know."
 
+# (draft)
 [beach_pup_bramble 2]
-{thinking}...Know what?
+{surprised}...Know WHAT?
 
 # (draft) World reacts: the sky went green round the point.
 [beach_pup after the_sky_turns]
@@ -207,15 +213,17 @@ A child's oilskin, hung on a peg by the door. It's yellow, patched at both elbow
 [house_tide_board]
 A chalk board, big and neat, headed HADDOCK'S TIDES. Under it: HIGH: WHEN IT'S HIGH. LOW: WHEN IT ISN'T. A row of times is chalked below, with a lot of crossing out. Down the side, a line has been rubbed out so hard the board has gone shiny. Underneath, in big letters: LIGHTMAN. LIGHTMAN. LIGHTMAN.
 
+# (draft)
 [house_tide_board_ves]
-{bored}I didn't think a board could look offended.
+{laughing}I didn't know a board could look offended.
 
 # (draft) World reacts: after the chapter (Haddock is gone).
 [house_tide_board after haddock_gone]
 HADDOCK'S TIDES. The last row of times is in his big, crossed-out chalk. The row under it is in somebody else's hand, small and round, with nothing crossed out at all. Underneath, still: LIGHTMAN. LIGHTMAN. LIGHTMAN.
 
+# (draft)
 [house_tide_board_ves after haddock_gone]
-{thoughtful}...Somebody's minding it.
+{tender}...Somebody's minding it.
 
 [house_lifeboat]
 The lifeboat itself, on a cradle by the big doors, scrubbed and ready, with a name in white on her bow: DAISY. She has never been launched, by the look of the ropes. She has been polished every week for years.
@@ -249,8 +257,9 @@ A purse in a coil of rope, with a note: FOR WHOEVER NEEDS IT MOST. THE ROPE WAS 
 [house_lantern]
 A lantern on a post just inside the big doors, lit, in full daylight. The glass is clean. The wick has been trimmed.
 
+# (draft)
 [house_lantern_ves]
-{thoughtful}...It's noon.
+{surprised}...It's noon. Who lights a lamp at noon?
 
 [house_rope]
 A coil of rope, laid down flat in a perfect spiral, tidy enough to sit on.
@@ -281,8 +290,9 @@ Fish crates, stacked and lashed, stencilled GULLREST. They're empty, and smell a
 [cove_pool]
 A rock pool, bright with anemones and a single furious crab. The crab regards you with great dignity.
 
+# (draft)
 [cove_pool_bramble]
-{grin}He's the king of the pool. I'd listen to him.
+{awed}He's the king of the pool. I'd listen to him.
 
 # (draft)
 [cove_pool 2]
@@ -301,8 +311,9 @@ A purse in a niche at the back of the cove. A note: I'LL BE BACK FOR THIS. (SIGN
 [cove_hole]
 A hole at the foot of the cliff, just wider than you are, with a little shingle path leading into it. Something in the dark is glinting. A lot of somethings.
 
+# (draft)
 [cove_hole_ves]
-{smile}That's a lot of glinting for one hole.
+{glee}That's a lot of glinting for one hole.
 
 [cove_sea]
 Deep water, very still and very clear. Small silver fish hang in it like thoughts.
@@ -310,8 +321,9 @@ Deep water, very still and very clear. Small silver fish hang in it like thought
 [cove_wall]
 A cliff of pale sandstone, sea-worn and full of holes.
 
+# (draft)
 [cove_wall_ves]
-{bored}It looks like the sea tried to eat it and gave up.
+{smile}It looks like the sea tried to eat it and gave up.
 
 # --- THE JETTY -------------------------------------------------------------
 
@@ -324,8 +336,9 @@ Sandstone, shouldered up against the sea, with a ladder of old iron rungs runnin
 [jetty_sea]
 Open water beyond the end of the jetty, blue and glittering, running out to a low brown point of rock. Beyond that, on the very edge of the sky, a lid of cloud sits very still.
 
+# (draft)
 [jetty_sea_ves]
-{thoughtful}That's not a normal colour for cloud.
+{surprised}Is that cloud? Cloud doesn't come in that colour.
 
 [jetty_buoys]
 A pile of buoys, bright as sweets, put out in a neat row on the planks.
@@ -353,23 +366,35 @@ Pale sandstone, scuffed and pecked. Nothing in this cave was put here by anyone 
 [hoard_pile]
 A heap of shiny things, all stolen: spoons, a thimble, a monocle, three buttons, a ship's bell the size of a fist, a christening spoon and a very small trumpet. The gulls are very proud of it.
 
+# (draft)
 [hoard_pile_ves]
-{bored}A thief with taste. I'm almost impressed.
+{smile}A thief with taste. ...I'm not impressed. I'm a bit impressed.
 
+# (draft)
 [hoard_pile_bramble]
-{grin}That's a whole bell! Where did they even carry that?
+{awed}That's a whole bell! Where did they even carry that?
 
 [hoard_note]
 A stake of driftwood pushed into the sand, with a scrap of wrapping paper speared on it, scratched with something sharp: NOT STOLEN. BORROWED. (FOR A LONG TIME.)
 
+# (draft)
 [hoard_note_ves]
-{bored}I've heard that excuse. I've used that excuse.
+{laughing}I've heard that excuse. I've USED that excuse.
 
 [hoard_chest]
 A chest, much dented, with gull-prints all round it and a neat little pile of sardine tins beside it, as a sort of toll. Inside, folded with great care for a gull: a SEA-SILK SHAWL, light as spray.
 
+# (draft)
+[hoard_duffel]
+A second chest, behind the first, with a gull-feather stuck in the lock like a key. Inside, rolled tight: a small DUFFEL COAT, a beachcomber's, cut down. There is sand in every pocket.
+
+# (draft)
+[hoard_duffel_bramble]
+{sheepish}There's a marble in the pocket. Can I keep the marble?
+
+# (draft)
 [hoard_chest_ves]
-{smile}Mine, then. They can have the sardines back.
+{glee}Mine, then. They can have the sardines back.
 
 [hoard_pouch]
 A purse hung from a hook of driftwood, heavy for its size. Somebody has pecked their initials into it: G. (THIS IS NOT THE ONLY ONE.)
@@ -414,8 +439,9 @@ Big sea boots by the door, standing in a puddle of their own.
 [beach_cove_not_yet]
 The cove is round the point. But Haddock said the lifeboat house first: the big red doors, up the beach, kettle on.
 
+# (draft)
 [beach_cove_not_yet_ves]
-{bored}He said kettle. I heard kettle.
+{determined}He said kettle. I heard kettle.
 
 # --- SHORE DRESSING (2026-11-08) ------------------------------------------------
 
@@ -450,3 +476,162 @@ A little sea chest with rope handles. A folded blanket on top, for whoever comes
 # (draft)
 [in_house_oar]
 A spare oar stood in the corner, a red rag tied round it so it can't be borrowed without somebody noticing.
+
+# --- THE LIFE PASS (2026-11-14): the lifeboat house. (draft) ---
+
+[life_g_cat]
+A tabby asleep on a coil of rope in the corner, perfectly round. It has not moved for, as far as you can tell, a launch or two. Whoever it belongs to is the lifeboat crew, in the sense that it's the only one of them still here.
+
+[life_g_cat_ves]
+{smile}The crew went home. The cat stayed to keep the rope warm.
+
+[life_g_cat_bramble]
+{grin}It's on watch! It's on a really good watch.
+
+[life_g_broom]
+A broom in a bucket, bristles up. Next to it, a hook with a life-ring on, and a label that reads: THE BROOM IS NOT A LIFE-RING. NEITHER IS THE BUCKET.
+
+[life_g_broom_bramble]
+{sheepish}Somebody tried. You can tell somebody tried.
+
+[life_b_sleeper]
+A fellow asleep in a striped deckchair, a yellow sun hat over his whole face, one foot sticking out the end. The hat goes up. The hat goes down. Every so often, from under it, comes a small, content, whistling noise, like a kettle that's thinking about it.
+
+[life_b_sleeper 2]
+You lean a little closer. Under the hat: "...no, the cod goes on the LEFT..." He turns over, not a whisker nearer to waking, and continues.
+
+[life_b_sleeper_ves]
+{smile}That's the most relaxed anyone's ever been. By far. I'd pay him to teach us.
+
+[life_b_sleeper_bramble]
+{glee}Is he dreaming about cod? I think he's dreaming about cod.
+
+[life_b_ball]
+A beach ball, striped red and white and blue, rolling very slowly along the sand with nobody near it. There's no wind to speak of. It's simply decided to go somewhere. It looks very sure about it.
+
+[life_b_ball_ves]
+{bored}Don't chase it. That's how it gets you.
+
+[life_b_ball_bramble]
+{determined}I'm going to catch it. Watch. I'm going to...wait. Where's it gone?
+
+[life_b_umbrella 2]
+The tiny eyes in the hole blink at the umbrella, then at you, then at the umbrella again. They seem to be doing the arithmetic on who owns it.
+
+[life_b_rack]
+A drying rack for fish, put up on the dry sand where the sun gets it. The fish hang by the tail, silver and stiff, turning slowly in the sea air. Under the rack, in the shade, a very large gull is sitting, with the face of someone who has already won.
+
+[life_b_rack 2]
+The gull has not moved. It has not looked at the fish. It has not looked at you. It is simply sitting, in the shade, with the confidence of an animal that has all afternoon.
+
+[life_b_rack_ves]
+{bored}Whoever put the rack there knows exactly what they're doing. And that's what the fish is for.
+
+[life_b_rack_bramble]
+{determined}I'll guard them. Nobody gets the fish while I'm here.
+
+[life_b_castle 2]
+You've not touched it. You've been very, very careful not to touch it. Somewhere down the beach, a small otter, without turning round, says "Thank you."
+
+[life_b_face 2]
+You look away, and back. The face has changed. You can't say how. The mouth is the same. The eyes are the same. It's just somehow more surprised.
+
+[life_b_dune_tin]
+Behind the hut, in the shade, a tin with a flask in it. LIFEBOAT FLASK. HOT, USUALLY. Under it, a notebook with one line a day, in pencil, for what looks like thirty years: NOTHING TO REPORT.
+
+[life_b_dune_tin_ves]
+{smile}Thirty years of nothing to report. We'll drink it. It's a very good flask.
+
+[life_b_dune_tin_bramble]
+{proud}Thirty years of NOTHING TO REPORT. That's the best job in the world.
+
+[life_b_dune_tin_after]
+The lifeboat flask, empty, and the notebook with its one line a day. You left it as you found it. You've put the lid back on. You've said thank you, to nobody.
+
+[life_b_boot]
+A single boot at the tideline, toe to the sky, left by the tide, filled with sand and a very small crab. The crab is looking out through the hole in the toe. It does not want to be moved.
+
+[life_b_boot_ves]
+{bored}Boots always wash up on their own. I've never understood it.
+
+[life_v_bucket]
+Out on the bare sea floor, half sunk in wet sand, a small blue bucket and a red spade, side by side, exactly where somebody put them down. The bucket's still full. Something in it is rattling: a small, extremely cross hermit crab, shaking its whole shell.
+
+[life_v_bucket_ves]
+{smile}A blue bucket and a red spade. Seven and a half years old, probably.
+
+[life_v_bucket_bramble]
+{glee}We found it! The sea gave it back! Well. The sea went away, and it was still here.
+
+[life_v_float]
+A glass net-float sitting in the dune grass, green as an old bottle, with a scrap of net knotted round its neck. In the sun it throws a green coin of light onto the sand. Somebody has stood it on a stone, very gently, like it was somebody's best vase.
+
+[life_v_float_ves]
+{thoughtful}Someone wanted it to be seen. Not kept. Seen.
+
+[life_v_boot]
+An old boot on the sand, the leather gone soft and white with salt. A small pool has collected in the toe, with a tiny prawn in it, doing very slow circuits, like a bather in a very small private lido.
+
+[life_v_boot_bramble]
+{awed}It's got a swimming pool in it. A boot with a pool.
+
+[life_v_bottle]
+A green bottle half-buried at the tideline with a scrap of paper in it. You can read the first line through the glass: DEAR SEA, PLEASE SEND BACK THE OTHER SOCK. I HAVE TRIED EVERYTHING. And at the bottom, tiny: P.S. THANK YOU FOR THE LEFT ONE.
+
+[life_v_bottle_ves]
+{laughing}Somebody's been writing to the sea about their socks.
+
+[life_v_bottle_bramble]
+{thinking}Do you think it'll write back?
+
+[life_v_face]
+A driftwood root stood up in the dunes, its grey bark worn into a knot-hole face. This one is a bit smaller than the one on the beach, and has a different expression: a kind of deep, tired, ancient patience, like it has been waiting for a very late train for a hundred years.
+
+[life_v_face_ves]
+{smile}A cousin. It's got to be a cousin of the one on the beach.
+
+[life_v_face_bramble]
+{grin}It looks like it's been told the train's coming. Soon. Probably.
+
+[life_j_rack]
+A fish rack in the shade of the jetty, laden with silvery whiting, going stiff as paper. The sun slants through the planks above, and every fish has a little bar of gold across it, like a barcode. A gull stands under the jetty, pretending to be a rock.
+
+[life_j_rack_ves]
+{bored}The gull has not read the notice. It has not read ANY notice.
+
+[life_j_cat]
+A grey tabby on a crate in the shade of the jetty, watching the water with bottomless patience. It has not, as far as anyone knows, ever caught anything. It has the demeanour of a cat that is in it for the principle.
+
+[life_j_cat_ves]
+{smile}Nobody tell it. It's a lovely hobby.
+
+[life_j_cat_bramble]
+{glee}He's FISHING! The cat's fishing! With his EYES!
+
+[life_s_steps]
+A board at the top of the stairs. THE STEPS: 212. (WE COUNTED. TWICE. WE GOT DIFFERENT NUMBERS. SO WE PUT 212, WHICH IS THE ONE THAT SOUNDED NICEST.) Someone's added: IT'S 213. And someone else has added: DON'T.
+
+[life_s_steps_ves]
+{laughing}Two hundred and twelve. Or thirteen. We'll never know. I'm choosing not to count.
+
+[life_s_steps_bramble]
+{determined}I'll count them. Going down. I'll tell you the answer.
+
+[life_s_boot]
+A boot full of daisies at the top of the stair. Somebody's planted it here for people who've come up the cliff and need a reason to keep going. It is, somehow, extremely effective.
+
+[life_s_tub]
+A tub of sea thrift by the sign, clinging on in the wind. A little ladybird is walking round the rim, as if on patrol, and stopping at each pink pom-pom to ask about its health.
+
+[life_s_rack]
+A drying rack at the foot of the stairs, fish hung up in the sun, shining like coins. A gull stands under the stairs with its beak open, in hope. It looks at the fish. It looks at you. It looks at the fish.
+
+[r5s_hoard_float]
+A glass float, pearly green, sitting in a nest of seaweed as though it laid itself. A gull has stolen it and not yet worked out what it is for.
+
+[r5s_hoard_float_ves]
+{bored}They steal everything that shines.
+
+[r5s_hoard_float_bramble]
+{awed}It's beautiful. Even if it's stolen.
+

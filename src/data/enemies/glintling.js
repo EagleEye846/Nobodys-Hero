@@ -12,7 +12,7 @@ export const GLINTLING = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'vigil',
   sprite: { rows: GLINTLING_SPRITE, palette: GLINTLING_PALETTE },
-  maxHp: 190,
+  maxHp: 1150,
   damage: 12,
 
   // A Chapter 2 enemy: small, but its tricks come thick and fast.
@@ -22,7 +22,7 @@ export const GLINTLING = {
   patterns: [
     { name: 'glintRefract', weight: 3 },
     { name: 'glintMirror', weight: 2 },
-    { name: 'glintBurst', weight: 3 },
+    { name: 'glintBounce', weight: 3 },
     { name: 'glintSkate', weight: 2 },
   ],
 

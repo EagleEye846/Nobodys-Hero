@@ -99,9 +99,9 @@ export const GLIMMER_KINGS_ROAD = {
     { sprite: 'glowcap_big', x: 25, y: 4, text: 'road_glowcap' },
     { sprite: 'glowcap_tall', x: 2, y: 9, text: 'road_glowcap' },
     { sprite: 'glowcap_small', x: 16, y: 9, text: 'road_glowcap' },
-    { sprite: 'glow_moss', x: 8, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 20, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 27, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 8, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 20, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 27, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     // The first of the town's lamps, lit along the edge, and a post for what's ahead.
     { sprite: 'glowworm_lamp', x: 30, y: 9, text: 'road_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 33, y: 9, text: 'road_lamp', animation: 'glowworm_lamp', speed: 0.5 },
@@ -109,6 +109,11 @@ export const GLIMMER_KINGS_ROAD = {
     { sprite: 'town_signpost', x: 35, y: 6, text: 'road_signpost' },
     // A purse up on a high block (b, then B), tucked into a corner of the cave wall.
     { sprite: 'gold_pouch', x: 36, y: 4, text: 'road_purse', gold: 90, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'bf_frog_kid_b', x: 14, y: 9, npc: 'dab', animation: 'bf_frog_kid_b', speed: 0.4, quest: [{ needs: ['has:dab_tin'], take: 'dab_tin', set: 'q_dab_tin', give: 'lucky_pebble', text: 'tin_back' }, { needs: ['q_dab_tin'], text: 'tin_after' }] },
+    { sprite: 'gl_crystal_web', x: 24, y: 4, text: 'gp_web', animation: 'gl_crystal_web', speed: 0.9 },
+    { sprite: 'crystal_gold_s', x: 32, y: 9, text: 'gp_gem' },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', H: 'cave_moss_wall', K: 'cave_wall',

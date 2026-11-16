@@ -1,9 +1,15 @@
 import { defineBulletArt } from '../projectiles.js';
+import { PathShot, GatedShot, Deco } from './coastKit.js';
 
-// The Prismoth's attacks. Its wings are panes of rainbow, so everything it
-// does is light bent into colours: a crystal that bursts into beams, scales
-// of wing-glitter snowing down, copies of itself flashing across the box, a
-// rainbow arching overhead, and shards that glance off every wall.
+// The Prismoth's attacks. Its wings are panes of rainbow glass, it is drawn
+// to anything bright, and it is far too proud of its colours:
+//   - Burst: a crystal bends the light into a star of beams.
+//   - Mirror: flat copies of itself flash across the box.
+//   - Rainbow: an arch of colours rolls across, light bent down under it.
+//   - Lamps: a lamp lights, and moths fly straight to it from the edges,
+//     whirl round it, and scatter when it goes out.
+//   - Colours: the light turns red, yellow, green, in turn, and only the
+//     glass of the colour the light is now is really there.
 //
 // It stands to the right of the box. Each attack is a factory `(box, density,
 // tools) => ({ duration, update })`; see dummy.js for the shape.
@@ -92,6 +98,29 @@ BAND.forEach((b, i) => {
   });
 });
 
+// A crystal lamp, lit (harmless: it's what the moths are after).
+defineBulletArt('prismLamp', {
+  frames: [
+    ['..www..', '.wyyyw.', 'wyyWyyw', 'wyWWWyw', 'wyyWyyw', '.wyyyw.', '..kkk..'],
+    ['.......', '..www..', '.wyyyw.', 'wyyWyyw', '.wyyyw.', '..www..', '..kkk..'],
+  ],
+  palette: { w: '#fff6c0', y: '#ffe65a', W: '#ffffff', k: '#5a4a6a' },
+  radius: 1,
+  frameSeconds: 0.12,
+});
+
+// A little moth, drawn flying right, with rainbow wings.
+defineBulletArt('prismMothlet', {
+  frames: [
+    ['rr...', 'yrk..', '.kkkw', 'gck..', 'cc...'],
+    ['.r...', 'yyk..', '.kkkw', 'gck..', '.c...'],
+  ],
+  palette: { k: '#2a1e3c', w: '#f6f0fb', r: '#ff5a78', y: '#ffe65a', g: '#6ae88a', c: '#5adcf0' },
+  radius: 2,
+  rotate: true,
+  frameSeconds: 0.06,
+});
+
 export const PRISMOTH_ATTACKS = {
   // Burst: a crystal of glass hangs in the air (it flashes, and shows where
   // it will bend the light), then five beams of colour go off from it in a
@@ -102,10 +131,10 @@ export const PRISMOTH_ATTACKS = {
     let count = 0;
     let next = 0.2;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || count >= 3 || t > 4.6) return;
+        if (t < next || count >= 4) return;
         count++;
         next = t + 1.9;
         const d = rand(16, 24);
@@ -125,33 +154,6 @@ export const PRISMOTH_ATTACKS = {
     };
   },
 
-  // Glitter: it shakes its wings and the scales come off in a snow, drifting
-  // down from the top of the box and swaying as they come. A column of
-  // scales always falls where you are, and the rest fall around.
-  prismGlitter(box, density, { Shot, rand, clamp, every }) {
-    let t = 0;
-    let n = 0;
-    const fall = every(0.11, 0.17, (bullets, soul) => {
-      n++;
-      const near = n % 3 === 0;
-      const x = near ? clamp(soul.x + rand(-5, 5), box.x + 5, box.x + box.w - 5) : rand(box.x + 5, box.x + box.w - 5);
-      const scale = new Shot({ x, y: box.y - 4, vy: rand(34, 46), vx: 0, art: `prismScale${n % 7}`, life: 5 });
-      // They sway: a sideways drift that turns.
-      scale.sway = rand(0, 6.28);
-      bullets.push(scale);
-    });
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t < 5.2) fall(dt, bullets, soul);
-        for (const b of bullets) {
-          if (b.sway !== undefined && b.age > b.warn) b.vx = Math.sin(b.age * 2.4 + b.sway) * 14;
-        }
-      },
-    };
-  },
-
   // Mirror: it makes copies of itself, flat as glass, that flash across the
   // box one after another, along a row and then down a column, and so on.
   // The line the copy will cross flashes first, and the first one is always
@@ -164,12 +166,12 @@ export const PRISMOTH_ATTACKS = {
     let last = null;
     let vel = { x: 0, y: 0 };
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         if (last && dt > 0) vel = { x: vel.x * 0.7 + ((soul.x - last.x) / dt) * 0.3, y: vel.y * 0.7 + ((soul.y - last.y) / dt) * 0.3 };
         last = { x: soul.x, y: soul.y };
-        if (t < next || count >= 6 || t > 5) return;
+        if (t < next || count >= 8) return;
         const column = count % 2 === 1;
         const warn = 0.85;
         const color = BAND[(count * 2) % 7];
@@ -205,16 +207,16 @@ export const PRISMOTH_ATTACKS = {
     let fired = 0;
     let beams = 0;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (beams < 4 && t >= 0.9 + beams * 1.25) {
+        if (beams < 6 && t >= 0.9 + beams * 1.25) {
           const x = Math.min(Math.max(soul.x, box.x + 2), box.x + box.w - 2);
           const color = BAND[(beams * 2 + 1) % 7];
           bullets.push(new Line({ x, y: box.y - 2, angle: Math.PI / 2, length: box.h + 4, thickness: 6, warn: 0.8, life: 0.3, color: color.c, glow: color.g }));
           beams++;
         }
-        if (fired >= 2 || t < fired * 2.2 + 0.2) return;
+        if (fired >= 3 || t < fired * 2.2 + 0.2) return;
         const up = fired === 1;
         const cx = box.x + box.w + 50;
         const cy = up ? box.y : box.y + box.h;
@@ -233,26 +235,103 @@ export const PRISMOTH_ATTACKS = {
     };
   },
 
-  // Ricochet: shards of coloured glass spin into the box and glance off every
-  // wall, a few at a time, one more colour each time, until the air is
-  // full of them. They're slow; there are just a lot.
-  prismBounce(box, density, { Shot, rand }) {
+
+  // Lamps: it can't resist anything bright. A crystal lamp lights up near
+  // you (it flickers on first), and moths come flying straight to it from
+  // the edges of the box, each flashing where it starts. They whirl round
+  // the lamp while it burns, and when it goes out they scatter outward.
+  // So: don't stand between a moth and the lamp, and don't stay close.
+  prismLamps(box, density, { Shot, rand, clamp }) {
+    const T = (s) => s * density;
+    const WARN = 0.7;
+    const FLY = 0.75;
+    const WHIRL = 1.0;
     let t = 0;
-    let count = 0;
-    let next = 0.2;
+    let n = 0;
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || count >= 7 || t > 4.4) return;
-        next = t + 0.6;
-        const y = box.y + rand(10, box.h - 10);
-        const aim = Math.atan2(soul.y - y, soul.x - (box.x + box.w)) + rand(-0.3, 0.3);
-        bullets.push(new Shot({
-          x: box.x + box.w - 6, y, vx: Math.cos(aim) * 56, vy: Math.sin(aim) * 56, bounce: true,
-          warn: 0.5, art: `prismShard${count % 7}`, life: 5.6,
+        if (n >= 5 || t < T(0.1 + n * 1.35)) return;
+        n++;
+        // The lamp, a little way from you.
+        const a = rand(0, Math.PI * 2);
+        const d = rand(10, 20);
+        const lamp = { x: clamp(soul.x + Math.cos(a) * d, box.x + 10, box.x + box.w - 10), y: clamp(soul.y + Math.sin(a) * d, box.y + 10, box.y + box.h - 10) };
+        bullets.push(new Shot({ x: lamp.x, y: lamp.y, harmless: true, art: 'prismLamp', life: WARN + FLY + WHIRL }));
+        const moths = 4 + (n > 2 ? 1 : 0);
+        const turn = rand(0, Math.PI * 2);
+        for (let i = 0; i < moths; i++) {
+          // From a point on the edge of the box, round the lamp.
+          const dir = turn + (i / moths) * Math.PI * 2;
+          const from = { x: clamp(lamp.x + Math.cos(dir) * 120, box.x + 2, box.x + box.w - 2), y: clamp(lamp.y + Math.sin(dir) * 120, box.y + 2, box.y + box.h - 2) };
+          const spin = i % 2 ? 1 : -1;
+          const path = (k) => {
+            if (k < FLY) {
+              const u = k / FLY;
+              return { x: from.x + (lamp.x - from.x) * u, y: from.y + (lamp.y - from.y) * u, a: Math.atan2(lamp.y - from.y, lamp.x - from.x) };
+            }
+            const w = k - FLY;
+            const ang = dir + spin * w * 7;
+            if (w < WHIRL) return { x: lamp.x + Math.cos(ang) * 6, y: lamp.y + Math.sin(ang) * 6, a: ang + spin * Math.PI / 2 };
+            // The lamp's out: off they go, outward.
+            const end = dir + spin * WHIRL * 7;
+            const r = 6 + (w - WHIRL) * 70;
+            return { x: lamp.x + Math.cos(end) * r, y: lamp.y + Math.sin(end) * r, a: end };
+          };
+          bullets.push(new PathShot({ path, warn: WARN, art: 'prismMothlet', life: FLY + WHIRL + 1.6 }));
+        }
+      },
+    };
+  },
+
+  // Colours: its wings turn the cave red, then yellow, then green, over and
+  // over, and coloured glass hangs drifting all through the box. Only the
+  // glass of the colour the light is now is really there; the rest is only
+  // a reflection, faint, and you can go straight through it. The bar along
+  // the top shows the colour, and flashes the next one just before it turns.
+  prismColours(box, density, { rand }) {
+    const T = (s) => s * density;
+    const STEP = 1.15;
+    const COLOURS = [0, 2, 3];
+    const colourAt = (s) => Math.floor(s / STEP) % 3;
+    let t = 0;
+    let next = 0;
+    let started = false;
+    return {
+      duration: 8.2,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        const now = t / density;
+        if (!started) {
+          started = true;
+          bullets.push(new Deco({
+            life: 8.2,
+            paint: (ctx, d) => {
+              const c = colourAt(d.age);
+              const soon = d.age % STEP > STEP - 0.35;
+              const show = soon && Math.floor(d.age * 10) % 2 ? (c + 1) % 3 : c;
+              ctx.globalAlpha *= 0.08;
+              ctx.fillStyle = BAND[COLOURS[c]].c;
+              ctx.fillRect(box.x, box.y, box.w, box.h);
+              ctx.globalAlpha /= 0.08;
+              ctx.fillStyle = BAND[COLOURS[show]].c;
+              ctx.fillRect(box.x, box.y, box.w, 2);
+              ctx.fillRect(box.x, box.y + box.h - 2, box.w, 2);
+            },
+          }));
+        }
+        if (t < next || now > 6.6) return;
+        next = t + T(0.13);
+        // Glass drifting in from the right, some along your row.
+        const which = Math.floor(rand(0, 3));
+        const y = Math.random() < 0.3 ? soul.y + rand(-8, 8) : rand(box.y + 4, box.y + box.h - 4);
+        const born = now;
+        bullets.push(new GatedShot({
+          x: box.x + box.w + 6, y: Math.min(Math.max(y, box.y + 4), box.y + box.h - 4), vx: -rand(30, 44), vy: rand(-6, 6),
+          art: `prismShard${COLOURS[which]}`, life: 5, offAlpha: 0.22,
+          on: (k) => colourAt(born + k) === which,
         }));
-        count++;
       },
     };
   },

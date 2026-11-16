@@ -68,7 +68,7 @@ const song = {
   title: 'Upside Down',
   bpm: 150,
   stepsPerBeat: 4,
-  volume: 0.55,
+  volume: 0.4,
   limit: 1,
   instruments: INSTRUMENTS,
 

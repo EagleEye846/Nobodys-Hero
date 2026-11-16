@@ -17,6 +17,8 @@
 //      just the same: only its look differs)   D  the door up   o  the door down
 // (draft).
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const LASTLIGHT_UPPER = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lastlight_upper',
@@ -129,6 +131,7 @@ export const LASTLIGHT_UPPER = {
     { sprite: 'll_pipe_riser', x: 22, y: 2, text: 'll_pipes' },
     { sprite: 'll_chain_hook', x: 25, y: 2, text: 'll_chain_hook' },
     { sprite: 'gold_pouch', x: 28, y: 13, text: 'upper_pouch', gold: 250, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    ...(LIFE5_PROPS['lastlight_upper'] ?? []),
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', H: 'll_niche', 6: 'll_window', D: 'upper_door', o: 'll_door', '.': 'll_floor', I: 'upper_pillar', J: 'upper_pillar_broken' },
 

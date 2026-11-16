@@ -1,19 +1,18 @@
 import { defineBulletArt } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
-import { withSnipes } from './snipes.js';
+import { PathShot, Deco, Zone, blit } from './coastKit.js';
 
-// The Powder Monkey's attacks. The gunner's boy of the Fair Return, ten years
-// old and in charge of the powder, carrying it from the magazine to the guns at
-// a run: round shot he rolls along the deck, a keg with a slow fuse he sets and
-// leaves, the rammer he pokes down the barrel, and the smoke and burning wadding
-// that every gun leaves hanging in the air. Everything he does is slow to go
-// off, because a boy with a match is told to be careful. He stands to the right
-// of the box, so most things come from that side.
-//
-// Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. The attack's own clock (`t`) runs `density`
-// times faster than the seconds on the wall, hence the `T` below.
+// The Powder Monkey's attacks. The gunner's boy of the Fair Return, ten
+// years old and still running powder to the guns, where everything goes
+// off slowly because a boy with a match is told to be careful:
+//   - Rolling kegs: kegs roll along the rows and burst only when they hit
+//     the far wall, throwing splinters back the way they came.
+//   - The long fuse: a spark runs along a fuse to a keg by you; when it gets
+//     there, the keg goes up. Watch the spark.
+//   - Fire on the word: he loads the gun ports one by one (each glows), and
+//     on FIRE! every loaded gun goes off at once along its row.
+// He stands to the right of the box.
 
 const P = {
   k: '#1c1a1c', q: '#303034', Q: '#585860', C: '#9a9a84', w: '#f4f0dc', o: '#ff9a2a', O: '#ffe070', r: '#c8442a', R: '#6a2a1c',
@@ -90,231 +89,163 @@ defineBulletArt('monkeyFlick', {
   spin: 6,
 });
 
-// The rammer: a long pole, a round wooden head, a clean rope grip.
-class Rammer {
-  // Thrusts in from the right along its lane, holds, draws back. It flashes its
-  // outline where it will be first (just inside the edge it comes from).
-  constructor({ box, y, len = 56, thick = 6, warn = 0.8, thrust = 0.22, hold = 0.45, back = 0.45 }) {
-    Object.assign(this, { box, y, len, thick, warn, thrust, hold, back });
-    this.age = 0;
-    this.dmg = null;
-    this.grazed = false;
-    // The pole's tip, in x (the head); it comes in from beyond the right edge.
-    this.vx = 0;
-  }
+// A powder keg rolling along the deck (it hurts while it rolls).
+defineBulletArt('monkeyKegRoll', {
+  frames: [
+    art(13, 13, (p) => { p.ellipse(6, 6, 5.4, 5.8, 'h'); p.rect(1, 3, 11, 1, 'B'); p.rect(1, 9, 11, 1, 'B'); p.line(3, 2, 3, 10, 'H'); }),
+    art(13, 13, (p) => { p.ellipse(6, 6, 5.4, 5.8, 'h'); p.rect(3, 1, 1, 11, 'B'); p.rect(9, 1, 1, 11, 'B'); p.line(2, 3, 10, 3, 'H'); }),
+  ],
+  palette: P,
+  radius: 5,
+  frameSeconds: 0.12,
+});
+// A gun port in the ship's side, shut, or loaded and glowing at the touch-hole.
+const port = (lit) => art(9, 9, (p) => { p.rect(0, 0, 9, 9, 'h'); p.rect(1, 1, 7, 7, 'q'); p.ellipse(4, 4, 2.4, 2.4, 'k'); if (lit) { p.set(4, 0, 'O'); p.set(3, 0, 'o'); p.set(5, 0, 'o'); } });
+defineBulletArt('monkeyPort', { frames: [port(false)], palette: P, radius: 1 });
+defineBulletArt('monkeyPortLit', { frames: [port(true), port(false)], palette: P, radius: 1, frameSeconds: 0.1 });
 
-  get end() {
-    return this.warn + this.thrust + this.hold + this.back;
-  }
-
-  // How far out it is, 0 (outside the box) to 1 (full reach).
-  reach() {
-    const t = this.age - this.warn;
-    if (t < 0) return 0;
-    const ease = (u) => u * u * (3 - 2 * u);
-    if (t < this.thrust) return ease(t / this.thrust);
-    if (t < this.thrust + this.hold) return 1;
-    return Math.max(0, 1 - ease((t - this.thrust - this.hold) / this.back));
-  }
-
-  tip() {
-    const b = this.box;
-    return b.x + b.w + 4 - this.len * this.reach();
-  }
-
-  update(dt) {
-    this.age += dt;
-  }
-
-  isGone() {
-    return this.age >= this.end + 0.05;
-  }
-
-  edgeDistance(px, py) {
-    if (this.age < this.warn || this.reach() <= 0.02) return Infinity;
-    const b = this.box;
-    const left = this.tip();
-    const dx = Math.max(left - px, 0, px - (b.x + b.w + 8));
-    const dy = Math.max(this.y - this.thick / 2 - py, 0, py - (this.y + this.thick / 2));
-    return Math.hypot(dx, dy);
-  }
-
-  draw(ctx) {
-    const b = this.box;
-    ctx.save();
-    if (this.age < this.warn) {
-      ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.25 : 0.6;
-      ctx.strokeStyle = '#cfd4c8';
-      ctx.setLineDash([3, 2]);
-      ctx.strokeRect(b.x + b.w - this.len + 0.5, Math.round(this.y - this.thick / 2) + 0.5, this.len, this.thick);
-      ctx.restore();
-      return;
-    }
-    const left = Math.round(this.tip());
-    const y = Math.round(this.y - this.thick / 2);
-    const right = b.x + b.w + 10;
-    ctx.fillStyle = '#1c1a1c';
-    ctx.fillRect(left - 2, y - 1, right - left + 2, this.thick + 2);
-    ctx.fillStyle = '#74604c';
-    ctx.fillRect(left + 4, y + 1, right - left - 4, this.thick - 2);
-    ctx.fillStyle = '#c8a448';
-    ctx.fillRect(left + 4, y + 1, right - left - 4, 1);
-    // The rope grip and the round wooden head, scorched.
-    ctx.fillStyle = '#80601c';
-    for (let x = left + 12; x < right - 4; x += 8) ctx.fillRect(x, y, 3, this.thick);
-    ctx.fillStyle = '#4a3a30';
-    ctx.fillRect(left, y - 1, 6, this.thick + 2);
-    ctx.fillStyle = '#6a2a1c';
-    ctx.fillRect(left, y, 2, this.thick);
-    ctx.fillStyle = '#ff9a2a';
-    ctx.fillRect(left, y + 1, 1, 1);
-    ctx.restore();
-  }
-}
+// The word, shouted: FIRE! in little 3x5 capitals.
+const SHOUT = {
+  F: ['OOO', 'O..', 'OO.', 'O..', 'O..'],
+  I: ['OOO', '.O.', '.O.', '.O.', 'OOO'],
+  R: ['OO.', 'O.O', 'OO.', 'O.O', 'O.O'],
+  E: ['OOO', 'O..', 'OO.', 'O..', 'OOO'],
+  '!': ['.O.', '.O.', '.O.', '...', '.O.'],
+};
 
 export const POWDER_MONKEY_ATTACKS = {
-  // Round shot: he rolls iron balls across the deck from his side, in lanes,
-  // a fuse spark on each. A ball that hits the far wall rolls back, slower.
-  monkeyShot(box, density, { Shot, rand, clamp }) {
+  // Rolling kegs: he trundles powder kegs down the deck along the rows. A
+  // keg doesn't go off till it fetches up against the far side, and then
+  // it bursts, throwing splinters back the way it came. So the wall's
+  // the danger, and the splinters come back at you.
+  monkeyKeg(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const SPEED = 76;
     let t = 0;
-    let next = T(0.25);
-    let volleys = 0;
+    let n = 0;
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && volleys < 6 && t < T(5.4)) {
-          volleys++;
-          next = t + T(0.85);
-          // A ball through where you are, one either side a good way off (and a gap between).
-          const lanes = [soul.y, soul.y - rand(20, 26), soul.y + rand(20, 26)].map((y) => clamp(y, box.y + 7, box.y + box.h - 7));
-          lanes.forEach((y, i) => {
-            if (i && Math.random() < 0.2) return;
-            bullets.push(new Shot({ x: box.x + box.w + 6, y, vx: -rand(58, 68), warn: 0.5, life: 4.6, art: 'monkeyShot' }));
-          });
-        }
-      },
-    };
-  },
-
-  // Slow fuse: he sets a keg down in the box (somewhere other than where you
-  // are) and lights it. The spark creeps along the deck to it (you can watch
-  // it come) and the keg goes off in a ring of splinters. Three, one after another.
-  monkeyKeg(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = T(0.3);
-    let kegs = 0;
-    const going = [];
-    return {
-      duration: 7,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && kegs < 3 && t < T(4.4)) {
-          kegs++;
-          next = t + T(1.5);
-          // At least 24 px from you, on whichever side has most room.
-          const side = soul.x < box.x + box.w / 2 ? 1 : -1;
-          let kx = clamp(soul.x + side * rand(24, 34), box.x + 10, box.x + box.w - 10);
-          const ky = clamp(soul.y + rand(-22, 22), box.y + 10, box.y + box.h - 10);
-          if (Math.abs(kx - soul.x) < 20) kx = soul.x < box.x + box.w / 2 ? box.x + box.w - 10 : box.x + 10;
-          const fuseFrom = { x: box.x + box.w + 4, y: ky };
-          const burn = 1.2;
-          // The keg is there at once, blinking; the fuse's spark runs in along the deck.
-          bullets.push(new Shot({ x: kx, y: ky, harmless: true, warn: burn, life: 0, art: 'monkeyKeg' }));
-          const spark = new Shot({ x: fuseFrom.x, y: ky, harmless: true, life: 99, art: 'monkeySpark' });
-          bullets.push(spark);
-          going.push({ at: t + T(burn), t0: t, kx, ky, spark, from: fuseFrom.x, done: false });
-        }
-        for (const g of going) {
-          if (g.done) continue;
-          if (t < g.at) {
-            g.spark.x = g.from + (g.kx - g.from) * ((t - g.t0) / (g.at - g.t0));
-            continue;
-          }
-          g.done = true;
-          g.spark.life = 0;
-          g.spark.age = 99;
-          // The keg goes: a ring of splinters, and a short ring of flame.
-          bullets.push(new Ring({ x: g.kx, y: g.ky, r: 2, grow: 40, thick: 2.5, life: 0.5, color: '#ffb040', glow: '#ff7a20' }));
-          const n = 10;
-          const spin = Math.random() * Math.PI;
-          for (let i = 0; i < n; i++) {
-            const a = spin + (i / n) * Math.PI * 2;
-            bullets.push(new Shot({ x: g.kx, y: g.ky, vx: Math.cos(a) * 44, vy: Math.sin(a) * 44, life: 1.7, art: 'monkeySplinter' }));
+        if (t >= T(0.2 + n * 0.7) && n < 9) {
+          n++;
+          const y = n % 2 ? soul.y : rand(box.y + 8, box.y + box.h - 8);
+          const x0 = box.x + box.w + 8;
+          const x1 = box.x + 6;
+          const WARN = 0.4;
+          const roll = (x0 - x1) / SPEED;
+          bullets.push(new PathShot({ art: 'monkeyKegRoll', warn: WARN, life: roll, path: (k) => ({ x: x0 - SPEED * Math.min(k, roll), y }) }));
+          for (const o of [-0.9, -0.6, -0.3, 0, 0.3, 0.6, 0.9]) {
+            bullets.push(new Shot({ x: x1, y, vx: Math.cos(o) * 80, vy: Math.sin(o) * 80, art: 'monkeySplinter', warn: WARN + roll, life: 1.3 }));
           }
         }
       },
     };
   },
 
-  // The rammer: poles come in from the right along lanes, thrust, hold,
-  // withdraw; a lane or two are left clear. The lane you are in is never the
-  // clear one the first time.
-  monkeyRam(box, density, { rand, clamp }) {
+  // The long fuse: he lays a fuse across the deck to a keg and lights it.
+  // The spark runs along the fuse (it burns, so keep off it), and when it
+  // reaches the keg, the keg goes up in a ring of splinters. Watch the spark,
+  // not the keg: it tells you when.
+  monkeyFuse(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const RUN = 1.3;
     let t = 0;
-    let next = T(0.2);
-    let waves = 0;
+    let n = 0;
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && waves < 5 && t < T(5.4)) {
-          waves++;
-          next = t + T(1.1);
-          // Lanes every 14 px; the clear lane is a step or two from you.
-          const lanes = [];
-          for (let y = box.y + 8; y < box.y + box.h - 5; y += 14) lanes.push(y);
-          const mine = lanes.reduce((a, y, i) => (Math.abs(y - soul.y) < Math.abs(lanes[a] - soul.y) ? i : a), 0);
-          const dir = Math.random() < 0.5 ? -1 : 1;
-          let clear = clamp(mine + dir * (1 + (Math.random() < 0.5 ? 1 : 0)), 0, lanes.length - 1);
-          if (clear === mine) clear = mine > 0 ? mine - 1 : mine + 1;
-          lanes.forEach((y, i) => {
-            if (i === clear) return;
-            // Every other lane waits a little longer (a backhand), so staying in the clear lane isn't enough.
-            bullets.push(new Rammer({ box, y, warn: 0.75 + (i % 2) * 0.12 + rand(0, 0.06) }));
-          });
+        if (t >= T(0.2 + n * 1.0) && n < 5) {
+          n++;
+          // The keg sits near you; the fuse snakes in to it from the right wall.
+          const keg = { x: Math.min(Math.max(soul.x + rand(-10, 10), box.x + 10), box.x + box.w - 10), y: Math.min(Math.max(soul.y + rand(-10, 10), box.y + 10), box.y + box.h - 10) };
+          const start = { x: box.x + box.w - 2, y: rand(box.y + 8, box.y + box.h - 8) };
+          const wig = rand(8, 14) * (Math.random() < 0.5 ? -1 : 1);
+          const along = (u) => ({ x: start.x + (keg.x - start.x) * u, y: start.y + (keg.y - start.y) * u + Math.sin(u * Math.PI * 2) * wig });
+          bullets.push(new Deco({ life: RUN + 0.3, paint(ctx, d) {
+            const burnt = Math.min(1, d.age / RUN);
+            ctx.strokeStyle = '#4a3a30';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([2, 1]);
+            ctx.beginPath();
+            for (let u = burnt; u <= 1.001; u += 0.04) { const p = along(u); if (u === burnt) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); }
+            ctx.stroke();
+          } }));
+          bullets.push(new PathShot({ art: 'monkeySpark', life: RUN, path: (k) => along(Math.min(1, k / RUN)) }));
+          const kegPip = new Shot({ x: keg.x, y: keg.y, harmless: true, art: 'monkeyKeg' });
+          kegPip.life = RUN;
+          bullets.push(kegPip);
+          for (let i = 0; i < 12; i++) {
+            const a = (i / 12) * Math.PI * 2 + n;
+            bullets.push(new Shot({ x: keg.x, y: keg.y, vx: Math.cos(a) * 66, vy: Math.sin(a) * 66, art: 'monkeySplinter', warn: RUN, life: 1.2 }));
+          }
+          bullets.push(new Zone({ x: keg.x, y: keg.y, r: 9, warn: RUN, life: 0.2, paint(ctx, z) {
+            if (z.age < z.warn) return;
+            ctx.fillStyle = '#ffe070';
+            ctx.beginPath();
+            ctx.arc(z.x, z.y, 9, 0, Math.PI * 2);
+            ctx.fill();
+          } }));
         }
       },
     };
   },
 
-  // Powder smoke: the guns' smoke rolls across the box, grey and slow, and
-  // out of it burning wadding falls, still alight, wobbling down. You can see
-  // clearly through the smoke; it's the embers you watch.
-  monkeySmoke(box, density, { Shot, rand, clamp, every }) {
+  // Fire on the word: a row of gun ports down the right side of the box. He
+  // runs along them loading one gun after another (each loaded port's
+  // touch-hole glows), and then the word comes, FIRE!, and every loaded gun
+  // goes off at once, straight across. Count the glowing ports.
+  monkeyBroadside(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const ROWS = 6;
+    const rowY = (i) => box.y + 7 + i * ((box.h - 14) / (ROWS - 1));
     let t = 0;
-    let next = T(0.2);
-    let clouds = 0;
-    const drift = [];
-    const embers = every(0.14, 0.22, (bullets, soul) => {
-      const c = drift[Math.floor(Math.random() * drift.length)];
-      if (!c) return;
-      bullets.push(new Shot({ x: clamp(c.shot.x + rand(-6, 6), box.x + 4, box.x + box.w - 4), y: c.shot.y + 3, vy: 14, gravity: 12, wobble: { amplitude: 3, frequency: 4 }, warn: 0.45, life: 3.2, art: 'monkeyEmber' }));
-    });
+    let made = false;
+    const loaded = [];
+    const glowing = [];
+    const plan = [];
+    // Three volleys: load five of the six guns, a beat apart, then FIRE.
+    for (let v = 0; v < 3; v++) {
+      for (let i = 0; i < 5; i++) plan.push({ at: 0.3 + v * 2 + i * 0.26, kind: 'load' });
+      plan.push({ at: 0.3 + v * 2 + 1.5, kind: 'fire' });
+    }
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && clouds < 4 && t < T(4.4)) {
-          clouds++;
-          next = t + T(1.0);
-          const y = box.y + 8 + (clouds % 2 ? 2 : 14) + rand(0, 8);
-          const shot = new Shot({ x: box.x + box.w + 8, y, vx: -20, harmless: true, life: 8, art: 'monkeySmoke' });
-          bullets.push(shot);
-          drift.push({ shot });
+        if (!made) {
+          made = true;
+          for (let i = 0; i < ROWS; i++) {
+            const s = new Shot({ x: box.x + box.w - 5, y: rowY(i), harmless: true, art: 'monkeyPort' });
+            s.life = 7;
+            bullets.push(s);
+          }
         }
-        if (t < T(5.6) && drift.length) embers(dt, bullets, soul);
-        // A spark flicked off the slow-match at you now and then.
+        while (plan.length && t >= T(plan[0].at)) {
+          const step = plan.shift();
+          if (step.kind === 'load') {
+            // The first gun loaded each volley is the one on your row.
+            const free = [...Array(ROWS).keys()].filter((i) => !loaded.includes(i));
+            const mine = Math.round(((soul.y - box.y - 7) / (box.h - 14)) * (ROWS - 1));
+            const i = loaded.length === 0 && free.includes(mine) ? mine : free[Math.floor(rand(0, free.length))];
+            loaded.push(i);
+            const lit = new Shot({ x: box.x + box.w - 5, y: rowY(i), harmless: true, art: 'monkeyPortLit' });
+            lit.life = 3;
+            glowing.push(lit);
+            bullets.push(lit);
+          } else {
+            for (const g of glowing.splice(0)) g.life = g.age;
+            bullets.push(new Deco({ life: 0.7, paint(ctx, d) {
+              [...'FIRE!'].forEach((ch, j) => blit(ctx, SHOUT[ch], P, box.x + box.w / 2 - 10 + j * 5, box.y + 6 - d.age * 4));
+            } }));
+            for (const i of loaded.splice(0)) {
+              bullets.push(new Shot({ x: box.x + box.w - 5, y: rowY(i), vx: -140, art: 'monkeyShot', warn: 0.3, life: 1.4 }));
+              bullets.push(new Shot({ x: box.x + box.w - 2, y: rowY(i), vx: -30, art: 'monkeySmoke', harmless: true, life: 0.6 }));
+            }
+          }
+        }
       },
     };
   },
 };
-
-POWDER_MONKEY_ATTACKS.monkeyShot = withSnipes(POWDER_MONKEY_ATTACKS.monkeyShot, { art: 'monkeyFlick', count: 3, first: 1.2, every: 1.4, lead: [0.9, 'mean', 0.5] });
-POWDER_MONKEY_ATTACKS.monkeyKeg = withSnipes(POWDER_MONKEY_ATTACKS.monkeyKeg, { art: 'monkeyFlick', count: 3, first: 1.3, every: 1.5, lead: [0.9, 'mean', 0.5] });
-POWDER_MONKEY_ATTACKS.monkeyRam = withSnipes(POWDER_MONKEY_ATTACKS.monkeyRam, { art: 'monkeyFlick', count: 3, first: 1.3, every: 1.5, lead: [0.9, 'mean', 0.5] });
-POWDER_MONKEY_ATTACKS.monkeySmoke = withSnipes(POWDER_MONKEY_ATTACKS.monkeySmoke, { art: 'monkeyFlick', count: 3, first: 1.3, every: 1.5, lead: [0.9, 'mean', 0.5] });

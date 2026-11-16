@@ -1,0 +1,27 @@
+# ST_LAGOON_MENDER: an old otter on a crate by the lagoon's bench, weaving a lobster pot out of willow, very slowly, to the sound of rain. The life pass.
+
+[first]
+Pot. It's a pot. It will catch a lobster, in time. In time it will. Don't hurry it.
+
+[repeat]
+Willow's the thing. It bends, and it keeps what it's told. Nothing else does that. Not even boys.
+
+# (draft)
+[repeat 2]
+Haddock brings me the willow. Walks a mile for it, up past the last of the houses. Won't be paid. Says it's no trouble. Says the walking suits him.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}Everyone says that about him. "Suits him." What does he do all day?
+
+# (draft)
+[repeat 3]
+Seventeen turns of the withy to the rim, then you tuck it. Seventeen. Eighteen and it's a different pot. A worse one.
+
+# (draft)
+[first after the_light_answers]
+Haven't touched the willow since the sun. I just sit here and look at it. The willow looks back. We're both a bit stunned.
+
+# (draft)
+[repeat after the_light_answers]
+Still a pot. Still not hurrying it. But somebody walks a mile for willow, and then he's gone. I'll finish this one for him.

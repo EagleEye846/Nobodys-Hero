@@ -7,19 +7,20 @@ export const DUST_BUNNY = {
   gait: 'hop',
   textFile: 'enemies/dust_bunny.txt',
   sprite: { rows: BUNNY_SPRITE, palette: BUNNY_PALETTE },
-  maxHp: 80,
+  maxHp: 300,
   damage: 7,
 
   // Small and skittish: an easy fight.
   difficulty: { density: 0.85, speed: 0.85 },
 
   // Its own attacks, in src/battle/attacks/bunny.js: dusty sneezes, hopping
-  // baby bunnies, a broom sweeping lint, falling carrots and corner cobwebs.
+  // baby bunnies, a broom sweeping lint, its ears listening for you to move
+  // (hold still!) and corner cobwebs.
   patterns: [
     { name: 'bunnySneeze', weight: 3 },
     { name: 'bunnyHopscotch', weight: 3 },
     { name: 'bunnyBroomSweep', weight: 2 },
-    { name: 'bunnyCarrotDrop', weight: 2 },
+    { name: 'bunnyListen', weight: 3 },
     { name: 'bunnyCobweb', weight: 2 },
   ],
 

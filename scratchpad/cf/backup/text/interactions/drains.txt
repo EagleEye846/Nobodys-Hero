@@ -1,0 +1,923 @@
+# THE OLD DRAINS: under Hollin's well (Chapter 3). Hollin's brick cistern and
+# culverts, built down onto the old city's great stone water-conduit, which
+# runs on under the wood to where it breaks out into the marsh. Things you
+# can read and look at. See notes/docs/chapter-3-drains.md.
+#
+# A section with `_bramble` on the end of its name is what Bramble says
+# after the section of that name, if he's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal glows in the dark, and the water nearby glows with it. Down here, that's a lot.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+# --- Things all through the drains ---
+
+[current]
+Fast, shallow water, racing along its channel.
+
+(Step in and it carries you, one way only, till something stops you. Stopped, you can step out sideways.)
+
+[current_bramble]
+{glee}It's like a slide! A wet slide! Grandad never said there were SLIDES.
+
+[cask]
+A cask, lying on its side, hooped with rusty iron. It washed down from Hollin's cellars some time in the last fifty years.
+
+(Walk into it to push it. It rolls till something stops it, rides the currents, and wedges in deep water for you to step on.)
+
+[cask_bramble]
+{grin}Barrels are just logs that have been to the village. I can do barrels.
+
+[drain_water]
+Water, deep and cold, standing in the channel.
+
+[drain_grate]
+An iron grating across the culvert, rusted through at the bottom. The bars there have been bent apart. Something small has been squeezing through.
+
+You won't fit.
+
+[drain_grate_bramble]
+{proud}I will. I fit through EVERYTHING. (Press Q.)
+
+[root_plug]
+Roots have grown down through the bricks and right across the culvert, as thick as your arm. There's a draught coming through them.
+
+[root_plug_bramble]
+{determined}Roots are just trees that went the wrong way. Stand back, Sword.
+
+[roots_open]
+{grin}CHOP! ...And chop. And chop. There. Roots.
+
+[rubble]
+Bricks and stones fallen out of the roof. Nothing goes past them: not water, not you.
+
+[silt_heap]
+A heap of grey silt. There's a button in it, and a thimble, and something that might have been a spoon.
+
+[silt_heap_bramble]
+{thinking}Everything that ever went down Hollin's drains is in here somewhere. Grandad lost a marble down the well once. He cried about it for a WEEK.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it and everything in here goes back where it started.
+
+[rock_stump_bramble]
+{sheepish}For when you get it wrong. Not that I would.
+
+[rock_home]
+Everything you've pushed rolls and bumps back to where it started.
+
+[chest_empty]
+Empty.
+
+[gold_pouch_empty]
+An empty purse.
+
+# --- 1. THE CISTERN ---
+
+[cistern_chalk]
+A chalk arrow on the bricks, east. Underneath, smaller:
+
+"it's not following. I think."
+
+[cistern_chalk_bramble]
+{worried}She thinks. She THINKS.
+
+{thinking}...It didn't follow us either. It just looked. Like it was waiting for something.
+
+[cistern_sign]
+A wooden board, carved, black with damp:
+
+HOLLIN CISTERN. KEEP IT SWEET.
+Wheel lets the basin down. Mind the trench, it's deep.
+
+[cistern_wheel]
+An iron wheel on the sluice. Something heavy shifts under the water when you turn it, and the basin starts to drain.
+
+[cistern_grating]
+High overhead, a grating, and a little grey daylight coming down through it: the square, up there.
+
+Something passes over the light. The grating goes dark for a long, long moment.
+
+Then it's light again.
+
+[cistern_grating_bramble]
+{scared}...
+
+{scared}We're not here. We're NOT here. We're under the ground and it can't see under the ground.
+
+{determined}Keep going, Sword. Quietly.
+
+[cistern_vault]
+The vault of the cistern, brick on brick, all of it sweating.
+
+[cistern_wall]
+Old red brick, wet through. There's a line of green on it where the water used to stand.
+
+[cistern_trench]
+A trench down the middle of the basin, black and deep. You can't see the bottom.
+
+[cistern_basin]
+The floor of the basin, slimy with fifty years of not being looked at.
+
+[cistern_chest]
+A jar of jam, sealed with wax, that somebody hid here a long time ago. "MAGS", it says on the lid.
+
+[cistern_purse]
+A little purse, wedged in the bricks. Somebody's savings, dropped down the well.
+
+# --- 2. THE CULVERT ---
+
+[culvert_chalk]
+A chalk arrow, east, and a note:
+
+"careful, it's slippy"
+
+[culvert_chalk_bramble]
+{grin}She's not wrong.
+
+[culvert_sign]
+Scratched on a tin plate, nailed to the wall:
+
+OVERFLOW. DO NOT PLAY IN THE CULVERTS.
+
+[culvert_sign_bramble]
+{sly}Signs like that are for kids who don't go in.
+
+[culvert_wall]
+Brick, and more brick. The culverts were dug when Hollin was young.
+
+[culvert_gap]
+A gap in the brick between the channels, just wide enough to step through.
+
+[culvert_purse]
+Coins in a rotten purse, caught where the current goes round the corner.
+
+[culvert_chest]
+A chest, lodged where the current left it.
+
+# --- 3. THE GRATINGS ---
+
+[gratings_chalk]
+A chalk arrow, pointing on, and a note:
+
+"I can hear water. Water goes SOMEWHERE."
+
+[gratings_chalk_bramble]
+{thinking}That's true. Water always goes somewhere. Ma says if you're ever lost, follow the water and it'll take you out.
+
+{worried}...Out where, though.
+
+[gratings_sign]
+An old notice, half rotted:
+
+GRATINGS TO BE CLEARED EVERY SPRING.
+SEND A SMALL BOY.
+
+[gratings_sign_bramble]
+{proud}I'M a small boy.
+
+[gratings_wheel_ledge]
+An iron wheel, beside the channel. Somewhere ahead, something clunks.
+
+[gratings_wheel_far]
+An iron wheel at the far end of the channel. Somewhere back the way you came, something clunks.
+
+[gratings_wheel_far_bramble]
+{glee}I did it! Did you hear that? That was ME.
+
+[gratings_gate]
+An iron gate, shut. It's worked from somewhere else.
+
+[gratings_gate_open]
+With a groan, the gate swings open.
+
+[gratings_wall]
+Brick, slimy and cold. The gratings are rusted into it.
+
+[gratings_purse]
+A purse in a nook in the wall.
+
+[gratings_chest]
+A chest, hidden in a nook. The lid's stuck, then isn't.
+
+# --- 4. LADLE'S NOOK ---
+
+[ladle_fire]
+A little fire in an old iron grate. It's the warmest thing for a mile.
+
+[ladle_kettle]
+A kettle, always just about to boil.
+
+[ladle_cot]
+A bed of folded sacks, very neat. You could sleep here.
+
+[ladle_crates]
+Crates of things Ladle has fished out of the water and sorted: spoons, buttons, a doll, three left boots.
+
+[ladle_barrel]
+A barrel of clean water. Ladle's.
+
+[ladle_gutter]
+A gutter of running water along the wall, clear as glass. It's the only clean water you've seen down here.
+
+[ladle_wall]
+The bricks here are swept, and somebody has whitewashed a bit of them, a long time ago.
+
+[ladle_chalk]
+A chalk arrow by the far way out. Next to it, small, a note:
+
+"(he's nice) (say thank you)"
+
+[ladle_chalk_bramble]
+{awed}...She said thank you. Even running away from a monster, she said thank you.
+
+{proud}I'd have said thank you as well.
+
+# --- 5. THE SETTLING SUMPS ---
+
+[sumps_chalk]
+A chalk arrow, east, drawn very low on the wall: down by the floor.
+
+[sumps_chalk_bramble]
+{thinking}That's a funny place to draw it. You'd have to be sitting down to draw it there.
+
+{worried}...Sword. Why was she sitting down?
+
+[sumps_sign]
+Carved in the brick:
+
+SETTLING SUMPS. DEEP.
+
+[sumps_wall]
+Brick, old and slick. The dark down here is very thick.
+
+[sumps_purse]
+A purse, half sunk in the silt at the back of the hall.
+
+[sumps_chest]
+A chest on a dry ledge past the sumps.
+
+[sumps_trench]
+A sump, black and deep, where the silt settles out of the water. You can't see the bottom, and you don't want to.
+
+# --- 6. THE OLD CONDUIT ---
+
+[conduit_chalk]
+A chalk arrow on the old stone, low down. The line wobbles.
+
+[conduit_chalk_bramble]
+{worried}It's all wobbly. Her hand was shaking.
+
+{determined}...Then we'd better hurry up.
+
+[conduit_sign]
+There's writing cut into the stone, but it isn't any writing you know. Under it, scratched much later, in letters you do know:
+
+WOODCUTTERS GO NO FURTHER
+
+[conduit_sign_bramble]
+{sly}Grandad's people put that there. Grandad's people never went ANYWHERE.
+
+[conduit_carving]
+A carving, worn nearly smooth by water: a mountain, and water running down from it in wavy lines, all the way to a city with walls round it and a great gate.
+
+[conduit_carving_bramble]
+{awed}That's here. That's this. They made the water go to their city, on purpose.
+
+{thinking}...What city?
+
+[conduit_carving_2]
+The same carving: the mountain, the water, the city, the gate. Somebody carved it over and over, all the way along.
+
+[conduit_weir]
+A great iron wheel, worked into the old stone. It turns the weir. Somewhere, the water changes its mind.
+
+[conduit_current]
+The great current, racing down its channel.
+
+(Step in and it carries you. You can't walk against it.)
+
+[conduit_still]
+Deep water, held still behind the weir, waiting.
+
+[conduit_channel]
+A channel of the old conduit, cut out of the living stone.
+
+[conduit_wall]
+Old, old stone, the same as the Ruins are made of. The water's worn it smooth up to a line, and above the line it's green.
+
+[conduit_pool]
+A pool where the floor has fallen in. Deep.
+
+[conduit_service_lever]
+A lever by a little door in the wall. It's stiff, but it goes.
+
+[conduit_service_gate]
+A narrow door in the stone, iron-bound. A passage up the side of the conduit, for whoever looked after it, once.
+
+[conduit_service_open]
+The little door grinds open. There's a way back up the side, now.
+
+[conduit_breach]
+A hole in the old stone, bricked up long ago, badly. The bricks are cracked, and a cold draught comes through.
+
+[conduit_breach_bramble]
+{sly}That wasn't bricked up very well. Somebody was in a hurry.
+
+[conduit_breach_rubble]
+Bricks, fallen out of the patch in the wall.
+
+[conduit_purse]
+A purse, on a ledge of the old stone.
+
+[conduit_chest]
+A chest, set back in a niche.
+
+# --- 7. THE DROWNED VAULT ---
+
+[vault_chest]
+A stone chest on a dais. Inside, wrapped in oiled cloth that's still somehow dry: a sword, with a line etched along its blade like the mark water leaves on a wall.
+
+[vault_purse]
+Coins, very old, stamped with a gate.
+
+[vault_carving]
+The carving again, but here someone has added to it: people, small, standing at the city's gate, all facing the mountain. Waiting.
+
+[vault_carving_bramble]
+{thinking}What are they all waiting for?
+
+[vault_light]
+Light, from somewhere far up, falling through a crack in the vault's roof.
+
+[vault_wall]
+The old stone, dry in here. Somebody built this room to stay dry for a very long time.
+
+[vault_water]
+Water, standing in the corners. It's clear, and very still.
+
+[vault_pillar]
+A pillar, carved with water-lines from top to bottom.
+
+# --- 8. THE GREAT WEIR ---
+
+[weir_chalk]
+A chalk arrow, low down, and next to it in very small, shaky writing:
+
+"sorry this one's wobbly"
+
+[weir_chalk_bramble]
+{sad}She's saying sorry to US. She's the one who's...
+
+{determined}We're coming, umbrella girl. Hold on.
+
+[weir_sign]
+Cut into the stone, and under it, scratched in later:
+
+THE WEIR TURNS THE WATER.
+THE WATER TURNS EVERYTHING ELSE.
+
+[weir_wheel]
+The weir's wheel. You turn it, and the great water turns round in its channels, and goes the other way.
+
+[weir_rock]
+A block of fallen stone. Heavy, but it'd shift.
+
+[weir_rock_bramble]
+{sheepish}That one's yours, Sword. I tried. It didn't notice.
+
+[weir_treadle_house]
+A treadle set into the floor of the sluice house. Something heavy is meant to sit on it.
+
+[weir_treadle_basin]
+A treadle in the basin floor, worn down in the middle by somebody's feet, a long time ago.
+
+[weir_side_gate]
+A gate in the basin wall, shut. It opens while somebody's on the basin's treadle.
+
+[weir_gate]
+The way on, shut behind a gate. It's worked from the sluice house, up above.
+
+[weir_purse]
+A purse, left in the nook by the shaft.
+
+[weir_chest]
+A chest at the bottom of the basin.
+
+# --- 9. THE WATER STAIR ---
+
+[stair_chalk]
+A chalk arrow at the foot of the steps, drawn right down by the floor. The chalk's been smudged, like somebody sat against the wall here for a long time.
+
+[stair_chalk_bramble]
+{sad}She sat here. For ages, it looks like.
+
+{determined}...But she got up again. She went on up. So we go up too.
+
+[stair_sign]
+Cut in the stone:
+
+THE WATER CLIMBS. SO CAN YOU.
+
+[stair_wheel_a]
+A wheel on the old sluice. Somewhere on the steps, a fall stops, and another starts.
+
+[stair_wheel_b]
+A wheel on the high sluice. Across the gap, the far fall stops.
+
+[stair_fall]
+Water, pouring down the step. You can't climb that.
+
+[stair_step]
+A great stone step, worn by the water. Jump up it.
+
+[stair_wall]
+The conduit's old stone, climbing with the steps.
+
+[stair_purse]
+A purse, high up on the gallery.
+
+[stair_chest]
+A chest, up on the east gallery.
+
+# --- 10. THE OUTFALL ---
+
+[outfall_chalk]
+A chalk arrow on the last pillar, drawn so low it's nearly on the floor. One word:
+
+"nearly"
+
+[outfall_chalk_bramble]
+{worried}Nearly what? Nearly out? Nearly...
+
+{determined}Nearly out. It means nearly out.
+
+[outfall_light]
+Grey daylight. Real daylight, coming in through the broken roof.
+
+[outfall_end]
+Out past the broken edge, the water goes over and down into the mist, and far below, there's a fen: flat grey water and reeds, going on for miles.
+
+Old steps go down beside the falls, cut in the conduit's own stone.
+
+[outfall_mist]
+The conduit's broken lip, and past it, nothing but mist, and the sound of a great deal of water falling a long way.
+
+[outfall_wall]
+The old stone, cracked right through. This is where it broke.
+
+[outfall_pillar]
+A broken pillar, all on its own at the edge.
+
+[outfall_purse]
+A purse in the rubble by the wall.
+
+# --- THE LIFE PASS (15 November 2026): the Old Drains ---
+# (draft)
+
+[r3m_cistern_1]
+Chalk on the brick, in a hand that learned its letters in a hurry:
+
+KEEP IT SWEET
+
+Underneath, in a second hand, much smaller: (please).
+
+[r3m_cistern_1_bramble]
+{thinking}Keep what sweet? ...Oh. The water. Somebody wrote it so the water would read it.
+
+
+[r3m_cistern_2]
+An iron pipe along the wall, rusted orange where it isn't green. It drips at the joint, one slow drop at a time. It has been dripping at that joint for longer than anyone in Hollin has been alive.
+
+[r3m_cistern_2_bramble]
+{grin}Fifty years of one drip. That's dedication. I can't even finish my porridge.
+
+
+[r3m_cistern_3]
+An oilskin coat on a peg, stiff as a board. Someone hung it up to dry on the last day of work and never came back for it. It's still dripping a little. That's the damp, not the coat.
+
+[r3m_cistern_3_bramble]
+{worried}...Nobody's in it. I checked. With my eyes. From here.
+
+
+[r3m_cistern_4]
+A flat cap on the next peg, and a tin for a candle, and no candle. The last shift can't have had much.
+
+[r3m_cistern_4_bramble]
+{thinking}It's a good cap. Shame to leave a good cap. Unless you were in a hurry.
+
+
+[r3m_cistern_6]
+Water-level marks chalked up the brick: five ticks, each higher than the last, and a wavering blue line where someone dipped the chalk in the wet.
+
+The top tick has a word next to it: WORSE.
+
+The water's about level with it now.
+
+[r3m_cistern_6_bramble]
+{worried}So it's WORSE. It's always worse. Can we go?
+
+
+[r3m_cistern_7]
+Spare bricks, stacked, a trowel stuck in the top. Whoever was mending the wall put the trowel down halfway through. The wall is still halfway mended.
+
+[r3m_cistern_7_bramble]
+{proud}I could finish that. I'd need to know how. And have a hat for it.
+
+
+[r3m_cistern_8]
+A bucket of mortar that set hard in the bucket. The brush is still in it, standing up, like a spoon in a very stiff stew.
+
+
+[r3m_cistern_9]
+A canvas toolbox with a spanner laid on the lid. H. DOBB is painted on it. The spanner is nearly as long as your arm.
+
+[r3m_cistern_9_bramble]
+{awed}That could fix ANYTHING. Or hit anything. Can we keep it? ...No. Okay.
+
+
+[r3m_cistern_10]
+A rats' nest, built of shredded paper, with a button and a thimble and a doll's shoe stitched in for luck. Nobody's home.
+
+Or somebody's very good at hiding.
+
+[r3m_cistern_10_bramble]
+{scared}...Don't look at it. It might look back.
+
+
+[r3m_cistern_11]
+A tin mug with a candle end in it. Somebody made a very small cup of light, once, and never got round to drinking it.
+
+
+[r3m_cistern_12]
+Pale mushrooms growing out of a crack in the brick. They have never had a day of sun. They look like they'd faint if they saw any.
+
+[r3m_cistern_12_bramble]
+{thinking}Are those the kind you eat? ...I'm not eating them. I'm just asking.
+
+
+[r3m_cistern_13]
+A spare valve wheel leaning on the bricks, waiting for a valve that wore out first. A tag is wired to it: FOR NUMBER 3.
+
+Number 3 isn't here.
+
+[r3m_cistern_13_bramble]
+{grin}Number 3 got away.
+
+
+[r3m_culvert_1]
+A tin mug, wedged in the corner, with a skin of old tea in it. Somebody sat here to drink it while the water ran past. You can see why. It's hypnotic.
+
+[r3m_culvert_1_bramble]
+{thinking}Mm. That's good water to look at. I could look at it all day. ...No. Ves.
+
+
+[r3m_culvert_2]
+A heap of bricks that fell out of the wall. Somebody's put them back in a neat pile, because it was the right thing to do.
+
+[r3m_culvert_2_bramble]
+{proud}Someone tidied. In a DRAIN. I like them already.
+
+
+[r3m_culvert_3]
+A wooden sieve on three legs, silt still in the mesh. A few buttons and a farthing are caught in it. Whoever was sifting was hoping for better.
+
+[r3m_culvert_3_bramble]
+{sly}Is that a farthing? ...It IS a farthing. We could be rich. A farthing's worth of rich.
+
+
+[r3m_culvert_4]
+A scrap of rat-chewed paper, rolled into a bed. A very small boot (a doll's) is the pillow.
+
+[r3m_culvert_4_bramble]
+{grin}Even the rats have a pillow. I sleep on a coat.
+
+
+[r3m_culvert_5]
+A jam tin of beetles, lid off. They're in it by choice. One is waving a leg at you.
+
+[r3m_culvert_5_bramble]
+{glee}Hello! He waved! He WAVED!
+
+
+[r3m_culvert_6]
+A toolbox with H. DOBB on the lid and nothing in it but a sandwich, so old it has become a kind of stone. A little note: DONT.
+
+[r3m_culvert_6_bramble]
+{scared}Don't what? Don't WHAT?
+
+
+[r3m_culvert_7]
+Fungus, pale as a plate, growing out of a join in the brick. It leans toward the water.
+
+[r3m_culvert_7_bramble]
+{thinking}Everything down here leans toward the water. I'd lean too.
+
+
+[r3m_gratings_1]
+Chalk on the brick: a cup, and the words TEA FOUR. Below, somebody has crossed out FOUR and put THREE, and below that, FIVE, and below that, ANY TIME.
+
+[r3m_gratings_1_bramble]
+{grin}That's a crew that gave up on tea having rules.
+
+
+[r3m_gratings_2]
+A rusted chain on a hook, the end of it coiled in the damp. The hook is bolted right into the stone. It's the best-fixed thing down here.
+
+
+[r3m_gratings_3]
+Another coat on another peg, dry as paper. The pockets are empty except for a string and a very short pencil.
+
+[r3m_gratings_3_bramble]
+{thinking}A pencil. For writing 'WALT WOZ ERE', I bet.
+
+
+[r3m_gratings_4]
+A tin mug, still with a ring of tea. It must have been a good cup. Somebody took it to the end of the day.
+
+
+[r3m_gratings_5]
+A little tin with air holes punched in the lid. Somebody was keeping beetles. Nobody could say why. Nobody wants to ask.
+
+
+[r3m_gratings_6]
+Spare bricks, each with a number scratched in the end. They're numbered so you can put them back in order. Somebody was very careful.
+
+[r3m_gratings_6_bramble]
+{proud}I'd have liked these people.
+
+
+[r3m_gratings_7]
+A frill of pale fungus on the brick. It's the only thing in this room that's doing well.
+
+
+[r3m_ladle_1]
+A saucer of milk on the step, with a spoon laid beside it. It's fresh. There's a thumbprint on the rim.
+
+[r3m_ladle_1_bramble]
+{sly}That's for a cat. ...Is there a cat? Somebody's got a cat.
+
+
+[r3m_ladle_3]
+A little oilskin coat on a very low peg. It would fit someone half your height. The sleeves are patched with the sleeves of other coats.
+
+
+[r3m_ladle_4]
+KEEP IT SWEET, in chalk, in a hand a lot tidier than the one in the Cistern. This one has gone over it, again and again, for years.
+
+
+[r3m_ladle_5]
+A tin mug, rinsed and turned upside down on a folded cloth. Everything in this nook is rinsed, and turned over, and folded.
+
+
+[r3m_ladle_6]
+A tiny toolbox. Everything in it is the right size for someone about knee high: a spoon-sized spanner, a thimble-sized hammer, and a very small brush for dusting taps.
+
+[r3m_ladle_6_bramble]
+{awed}It's a hob-sized toolbox! It's got a hob-sized SPANNER.
+
+
+[r3m_ladle_7]
+Pale mushrooms growing out of the corner, in a little line, in a bucket, as if they'd been planted. Somebody here is growing supper.
+
+
+[r3m_sumps_1]
+DAY 41, in chalk, with the tally under it: four sticks, a stroke, four sticks, a stroke. The tally goes on. Nobody's finished it. After DAY 41 somebody has written, smaller: SAME AS DAY 40.
+
+[r3m_sumps_1_bramble]
+{grin}Day 42: no change. Day 43: no change. I know this one. That's school.
+
+
+[r3m_sumps_boot]
+A boot. A left one, a good leather boot with the laces still done up, lying on its side in the silt.
+
+There's no foot in it. There's no right one anywhere.
+
+[r3m_sumps_boot_bramble]
+{thinking}It's a perfectly good boot. Somebody's missing a boot.
+
+
+[r3m_sumps_3]
+DAMP AGAIN, chalked on the wall with an exclamation mark that has been rubbed out by damp.
+
+
+[r3m_sumps_4]
+A tin mug, black inside, with a candle stub. In the dark it's a very small, very optimistic idea.
+
+
+[r3m_sumps_5]
+A rusty chain hung from a hook, long enough to reach the water. Somebody used it to haul silt buckets up. The links are worn smooth.
+
+
+[r3m_sumps_6]
+A tin of beetles. They've set up a small society in it. There's a ladder.
+
+[r3m_sumps_6_bramble]
+{glee}There's a LADDER. They made a LADDER.
+
+
+[r3m_sumps_7]
+A miner's cap on a peg, with a candle tin on the front. The candle in it is fresh. It has been lit and snuffed lately.
+
+[r3m_sumps_7_bramble]
+{scared}Lately. Lately like... today lately.
+
+
+[r3m_sumps_8]
+Pale fungus, glowing very faintly. It's the only light down here that isn't yours.
+
+
+[r3m_conduit_1]
+MIND YR HEAD, in chalk on the carved wall. Not for the ceiling. The carving above it (a god with an urn, tipping it) is at exactly head height.
+
+[r3m_conduit_1_bramble]
+{grin}Mind your head! Ha! ...Ow. ...Okay. Okay, I minded it too late.
+
+
+[r3m_conduit_2]
+MAB SAYS NO, and under it a long chalk line, as if somebody drew it with a ruler. Whatever Mab said no to, it seems to have been final.
+
+[r3m_conduit_2_bramble]
+{thinking}I wonder what she said no to. ...It was probably Walt.
+
+
+[r3m_conduit_3]
+A coat on a peg in a wall of the old city. The coat is the newest thing here by about three thousand years. It's covered in more damp.
+
+
+[r3m_conduit_4]
+A chain hung through a ring in the old stone. The ring is old. The chain is newer. Neither is as old as the wall.
+
+
+[r3m_conduit_5]
+Another spare valve wheel, with a tag: FOR THE WEIR. Somebody was going to fit it. The weir's wheel turns fine, so they must have.
+
+[r3m_conduit_5_bramble]
+{proud}They fixed it! They actually FIXED it! I'm going to say something nice about them.
+
+
+[r3m_conduit_6]
+A toolbox with a spanner. DOBB again. The man gets about nearly as much as Walt.
+
+[r3m_conduit_6_bramble]
+{sly}Dobb and Walt. I bet they were a pair. I bet one of them did all the work.
+
+
+[r3m_conduit_7]
+A silt sieve, with a very old coin in the mesh. Not a Hollin coin. The face on it is a stranger's, with a crown made of what could be leaves.
+
+[r3m_conduit_7_bramble]
+{awed}That's... a CITY coin. From the actual city. We could be touching history.
+
+
+[r3m_conduit_8]
+A pale fungus frill. It has opinions about the damp, and all of them are good.
+
+
+[r3m_vault_1]
+WALT WOZ ERE. Written on the wall of a room that was sealed for three thousand years. There isn't a seal. There's a crack. Walt found the crack.
+
+[r3m_vault_1_bramble]
+{surprised}WALT'S BEEN IN HERE. He got in BEFORE us. He got everywhere before us. I'm furious and I admire him.
+
+
+[r3m_vault_2]
+A tin mug on a plinth of the old city's gold, with a candle end in it. Somebody put a lunch down in a treasury.
+
+
+[r3m_vault_3]
+A few Hollin bricks, stacked in a corner. Somebody sealed the crack back up, behind themselves, neatly, and then took the bricks away again, as if to say it was never opened.
+
+[r3m_vault_3_bramble]
+{thinking}Walt, Walt... what did you take?
+
+
+[r3m_weir_1]
+WALT WOZ ERE (AGAIN), in much larger chalk, high up. He must have stood on something. Under it, in a different hand: NO HE DIDNT.
+
+
+[r3m_weir_2]
+A valve wheel bolted to a bracket, not in use. Somebody put a spare on a spare. You get the feeling that wheels were the biggest worry of the whole job.
+
+[r3m_weir_2_bramble]
+{grin}A wheel for a wheel. It's wheels all the way down.
+
+
+[r3m_weir_3]
+A tin mug, set on a ledge, with the dried ring of tea in it and a candle end. Walt's, probably.
+
+
+[r3m_weir_4]
+Two coats and a hat on pegs. The coats are the same size. The hat is much smaller. A kid worked here, and no one has ever mentioned him.
+
+[r3m_weir_4_bramble]
+{sad}A kid. They had a kid on the crew. I wonder what he did. ...I hope it was tea.
+
+
+[r3m_weir_5]
+A toolbox. The lid says H. DOBB. Under it, in smaller paint: AND SON.
+
+[r3m_weir_5_bramble]
+{thinking}And son. That's the kid, then. That's Dobb's kid.
+
+
+[r3m_weir_6]
+Fungus in the corner where the spray from the weir falls. It's the most thriving thing in the Drains. It has never been so well.
+
+
+[r3m_stair_1]
+WELL IS UP, chalked on the wall of the stair, with an arrow pointing up the way you've come, in case anybody got turned round and wanted to go home.
+
+[r3m_stair_1_bramble]
+{thinking}It's pointing the wrong way for us. But thanks.
+
+
+[r3m_stair_tube]
+A brass speaking tube comes out of the pipe, with a little cup for a mouth and a label: UP.
+
+You put your ear to it. Very far away, there's wind in some trees.
+
+[r3m_stair_tube_bramble]
+{glee}HELLO UP THERE! ...
+
+{bored}Nobody's answered. It's a long way to the top.
+
+
+[r3m_stair_3]
+A round face scratched into the wall under a miner's cap, grinning. Someone was very bored on the long way down.
+
+[r3m_stair_3_bramble]
+{grin}He's having a nice time. Look at him. HELLO!
+
+
+[r3m_stair_4]
+A fish, drawn in chalk, all bones. It must have been done from memory. There have never been fish in the Drains.
+
+[r3m_stair_4_bramble]
+{thinking}What would a fish do down here? ...Swim, I suppose.
+
+
+[r3m_stair_5]
+A tin mug at the foot of the steps. A step-by-step mug: somebody had a rest here every time.
+
+
+[r3m_stair_6]
+A cap on a peg at the stair's foot, with the candle stub still in it. A cap to say 'I went up the stair, and I'll be back down in a minute'.
+
+
+[r3m_stair_7]
+A frill of fungus, pale as a plate. Nobody would tell you to eat it.
+
+
+[r3m_stair_8]
+Stacked bricks, each one scratched with a little wavy line: water. Somebody was bricking up the stair against the water. The stair won.
+
+
+[r3m_stair_larder]
+A rats' hoard, tucked into the corner under the stair. It's all small shiny things: a thimble, three buttons, a spoon the size of your thumbnail, and a little purse of coins, a little crown made of a jam-tin lid.
+
+There's a note, in tiny letters: THE KING IS OUT. LEAVE A COIN, TAKE A COIN.
+
+[r3m_stair_larder_bramble]
+{awed}A RAT KING. A real one! With a throne! ...He's out. Quick. Take the purse. ...Leave a thimble? We haven't got a thimble.
+
+
+[r3m_outfall_1]
+WALT WOZ HERE, in chalk, at the end of the Drains, with the Z crossed out and an S put in. He learned to spell on the way. Underneath: FIRST.
+
+[r3m_outfall_1_bramble]
+{surprised}FIRST? He wrote FIRST!? ...I want to know where he is now. I hope it's somewhere warm.
+
+
+[r3m_outfall_2]
+An old oilskin coat on a peg, right at the end of the Drains. Somebody hung it up here as they stepped out into the light, and decided to go on without it.
+
+[r3m_outfall_2_bramble]
+{sad}He went out into the daylight. I'm glad he did.
+
+
+[r3m_outfall_3]
+A tin mug, left on a rock in the light, with a candle end that has no job any more. It's very clean. It's been rinsed in rainwater.
+
+
+[r3m_outfall_4]
+A little cairn of Hollin bricks, stacked as a marker at the edge of the Drains. A very small, neat way of saying: this is where we stopped.
+
+[r3m_outfall_4_bramble]
+{thinking}A cairn. Like the Pinefall. People do that when they've finished something.
+
+
+[r3m_outfall_5]
+A jam tin with a note: FOR THE BEETLES. SORRY ABOUT THE DAMP. Somebody brought the beetles all the way out to the daylight. That was kind.
+
+[r3m_outfall_5_bramble]
+{glee}They set them FREE! ...Oh. They're not coming out. They like the tin.
+
+
+[r3m_stair_larder_after]
+The hoard, a coin lighter. You left a button in its place, which seems fair. The jam-tin crown hangs on its nail. Somebody will be very pleased with it when he gets back.

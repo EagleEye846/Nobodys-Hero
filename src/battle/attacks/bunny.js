@@ -2,12 +2,11 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Dust Bunny's attacks. It's made of every speck that was ever swept into
 // a corner, so it fights with what lives down there: sneezes full of dust,
-// little bunnies hopping about, lint pushed by a broom, cobwebs, and the odd
-// carrot it was saving for later.
+// little bunnies hopping about, lint pushed by a broom, cobwebs, and its big
+// ears, which hear every move you make.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. Carrots are drawn pointing right and turn to
-// face where they fly.
+// see dummy.js for the shape.
 
 // A speck of dust, flickering as it tumbles.
 defineBulletArt('bunnyMote', {
@@ -71,18 +70,28 @@ defineBulletArt('bunnyBroom', {
   radius: 3,
 });
 
-// A carrot, drawn pointing right (its tip), leaves at the back.
-defineBulletArt('bunnyCarrot', {
+// The bunny's big ears poking up over the rim of the box (harmless): flopped
+// down while it fidgets, straight up and swivelling while it listens.
+defineBulletArt('bunnyEarsDown', {
   frames: [[
-    'g.oo.....',
-    '.gOooooo.',
-    'ggoOoOooo',
-    '.gOooooo.',
-    'g.oo.....',
+    '...........',
+    '...........',
+    'kk.......kk',
+    'fpkk...kkpf',
+    '.ffpk.kpff.',
+    '...fk.kf...',
   ]],
-  palette: { g: '#5fbf4a', o: '#ff8c1a', O: '#c8620e' },
-  radius: 2,
-  rotate: true,
+  palette: { k: '#8a82a0', f: '#b8b0c8', p: '#e89ab0' },
+  radius: 1,
+});
+defineBulletArt('bunnyEarsUp', {
+  frames: [
+    ['.kk....kk..', '.fpk..kpf..', '.fpk..kpf..', '.fpk..kpf..', '.fpk..kpf..', '..fk..kf...'],
+    ['..kk....kk.', '..fpk..kpf.', '..fpk..kpf.', '..fpk..kpf.', '..fpk..kpf.', '...fk..kf..'],
+  ],
+  palette: { k: '#8a82a0', f: '#b8b0c8', p: '#e89ab0' },
+  radius: 1,
+  frameSeconds: 0.3,
 });
 
 // A spider-free little web knot where the cobweb strands meet (harmless).
@@ -114,7 +123,7 @@ export const BUNNY_ATTACKS = {
       clouds.push({ x, y, t: windUp });
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         inhale(dt, bullets);
         for (const cloud of clouds) {
@@ -177,7 +186,7 @@ export const BUNNY_ATTACKS = {
       if (aimed) pouncers.push(kit);
     });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         hop(dt, bullets, soul);
         for (const kit of pouncers) {
@@ -218,17 +227,90 @@ export const BUNNY_ATTACKS = {
       bullets.push(new Shot({ x: x - (fromLeft ? 7 : -7), y: broomY, vx, warn, harmless: true, art: 'bunnyBroom', angle: 0 }));
       fromLeft = !fromLeft;
     });
-    return { duration: 6.5, update: (dt, bullets) => sweep(dt, bullets) };
+    return { duration: 7, update: (dt, bullets) => sweep(dt, bullets) };
   },
 
-  // Carrots the bunny was hoarding drop from the top of the box near you,
-  // point first. Each hangs and blinks, then falls faster and faster.
-  bunnyCarrotDrop(box, density, { Shot, every, rand, clamp }) {
-    const drop = every(0.75, 1.0, (bullets, soul) => {
-      const x = clamp(soul.x + rand(-18, 18), box.x + 4, box.x + box.w - 4);
-      bullets.push(new Shot({ x, y: box.y + 4, vy: 20, accel: 120, warn: 0.7, art: 'bunnyCarrot', angle: Math.PI / 2 }));
-    });
-    return { duration: 6, update: (dt, bullets, soul) => drop(dt, bullets, soul) };
+  // Ears up! Lint rolls across the box in rows (one along your row), so you
+  // have to move. Then the bunny's big ears flop up over the rim and swivel:
+  // it's listening. Hold still until they flop down again. Move while it's
+  // listening and it hears you: a baby dust bunny leaps from under its ears
+  // at where you're going, and keeps leaping for as long as you keep moving.
+  bunnyListen(box, density, { Shot, rand, clamp, shuffleBag }) {
+    const side = shuffleBag(['left', 'right']);
+    const CYCLE = 2.9;
+    const PERK = 1.6;
+    const LISTEN_FROM = 1.95;
+    const LISTEN_TO = 2.65;
+    const FLIGHT = 0.45;
+    const earsX = box.x + box.w / 2;
+    const earsY = box.y + 4;
+    let t = 0;
+    let cycle = -1;
+    let rolled = 0;
+    let perked = false;
+    let last = null;
+    let moved = 0;
+    let check = 0;
+    let pounces = 0;
+    let vx = 0;
+    let vy = 0;
+    const roll = (bullets, y) => {
+      const fromLeft = side() === 'left';
+      bullets.push(new Shot({
+        x: fromLeft ? box.x - 3 : box.x + box.w + 3,
+        y: clamp(y, box.y + 5, box.y + box.h - 5),
+        vx: fromLeft ? 80 : -80,
+        warn: 0.35,
+        art: 'bunnyLint',
+      }));
+    };
+    return {
+      duration: 7.6,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        // (How you're moving, smoothed, to leap where you're going.)
+        if (last && dt > 0) {
+          vx += ((soul.x - last.x) / dt - vx) * Math.min(1, dt * 10);
+          vy += ((soul.y - last.y) / dt - vy) * Math.min(1, dt * 10);
+        }
+        const step = last ? Math.hypot(soul.x - last.x, soul.y - last.y) : 0;
+        last = { x: soul.x, y: soul.y };
+        const now = Math.floor(t / CYCLE);
+        const c = t - now * CYCLE;
+        if (now !== cycle) {
+          cycle = now;
+          rolled = 0;
+          perked = false;
+          bullets.push(new Shot({ x: earsX, y: earsY, art: 'bunnyEarsDown', harmless: true, life: PERK }));
+        }
+        // Two rows of lint, the first along yours.
+        if (rolled === 0 && c >= 0.05) { roll(bullets, soul.y + rand(-3, 3)); rolled = 1; }
+        if (rolled === 1 && c >= 0.3) { roll(bullets, soul.y > box.y + box.h / 2 ? rand(box.y + 8, box.y + 30) : rand(box.y + 50, box.y + 72)); rolled = 2; }
+        if (!perked && c >= PERK) {
+          perked = true;
+          bullets.push(new Shot({ x: earsX, y: earsY, art: 'bunnyEarsUp', harmless: true, life: LISTEN_TO - PERK }));
+          moved = 0;
+          check = 0;
+          pounces = 0;
+        }
+        if (c < LISTEN_FROM || c >= LISTEN_TO) return;
+        moved += step;
+        check -= dt;
+        if (check > 0) return;
+        check = 0.22;
+        if (moved < 4 || pounces >= 3) {
+          moved = 0;
+          return;
+        }
+        moved = 0;
+        pounces++;
+        // Heard you! A leap from under the ears to where you'll be.
+        const x = clamp(soul.x + vx * FLIGHT, box.x + 4, box.x + box.w - 4);
+        const y = clamp(soul.y + vy * FLIGHT, box.y + 4, box.y + box.h - 4);
+        const from = { x: earsX + rand(-6, 6), y: earsY + 4 };
+        bullets.push(new Shot({ ...from, vx: (x - from.x) / FLIGHT, vy: (y - from.y) / FLIGHT, warn: 0.12, life: FLIGHT + 0.6, art: 'bunnyKit' }));
+      },
+    };
   },
 
   // Cobwebs from the corners the bunny lives in. A knot appears in a corner,

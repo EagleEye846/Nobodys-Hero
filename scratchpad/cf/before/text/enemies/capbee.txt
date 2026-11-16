@@ -1,0 +1,89 @@
+# FLATCAP BEE
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/capbee.js.
+
+[intro]
+A plump bumblebee drifts into your path, in a tweed flat cap and a very put-upon expression. He looks you up and down like someone who has seen better clover. A FLATCAP BEE!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+FLATCAP BEE hovers, arms folded, and sniffs. The cap does not move. The cap has never moved.
+
+FLATCAP BEE says that in his day clover was clover. He does not say what it is now.
+
+FLATCAP BEE straightens his cap, then checks the clover for signs of enthusiasm. There are some. He is displeased.
+
+A little honey falls from FLATCAP BEE onto the grass. He tuts and wipes it off with his sleeve, which is also honey.
+
+Smells like clover, warm wax, and old tweed.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+FLATCAP BEE's cap has slipped over one eye. He hasn't the energy to put it right, and that worries him most of all.
+
+[flavor: spareable]
+FLATCAP BEE has sat down on a clover. He says it isn't bad clover. From him, that's a speech.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Mind the
+clover!
+
+Bzzz.
+
+In MY day...
+
+This is a
+nice cap.
+
+Don't
+touch
+the hive.
+
+The lads are
+dancing,
+mind.
+
+...Honey?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/capbee.js.
+[talk: Inspect]
+FLATCAP BEE - HP 1800
+A bumblebee in a flat cap. His mates' waggle dance points the way they'll fly, honey floods every cell he hasn't capped, and he visits his flowers in the order they opened.
+
+[talk: Point at the clover]
+You point at the clover and raise your eyebrows at FLATCAP BEE. His whole body unclenches. He tells you about the red, and the white, and the one patch by the wall that flowers late. He is still going when you stop listening and, a long while after, when you start again.
+
+[talk: Admire the cap]
+You tip an invisible cap to his, very respectfully. FLATCAP BEE takes it off and shows you the inside. There is a name sewn in it. It is not his. He says it is his father's, and he is in no hurry to find out whose it was before.
+
+[talk: Sniff the honey]
+You breathe in the smell of the honey, long and slow, and sigh. FLATCAP BEE tries to look as if he hasn't noticed, and fails completely. He offers you a taste on the end of one finger. It is, by a distance, the best thing you have eaten all week.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+FLATCAP BEE drops, spinning, and lands on his back in the clover with his legs in the air and the cap over his face. Under it he says that it is only a flesh wound, and that he would like to be left here a bit.
+
+[pacified]
+FLATCAP BEE takes off his cap, holds it to his chest, and bows from the middle. He buzzes straight up over the hedge, trailing a thin gold line of honey, towards a patch of clover that is, for once, perfectly all right.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves asks {foe} if he has a hive. {foe} has a hive. {foe} has a very specific hive, with a door and a number and a mat. She says she'd love to see it, and means about half of it.
+
+Ves tells {foe} that his cap is a good cap. {foe} says it is the only thing he owns that is not made of wax. She says that makes it more special, and he is moved.
+
+Ves says she is dreadfully sorry about the umbrella. {foe} says it's all right, a good brolly is a good brolly, and a bee knows when to come in out of the rain.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble asks {foe} if he can try the cap on. {foe} says certainly not. Bramble says please. {foe} says only for the count of one. Bramble gets four. He is very careful with it.
+
+Bramble tells {foe} that he is not scared of bees. {foe} says that is sensible. Bramble hides behind Ves and says it is the cap he is scared of.
+
+Bramble asks {foe} what the dance is. {foe} says it is how you say where the good clover is. Bramble does a small wiggle and says he thinks it was by the pond.

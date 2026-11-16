@@ -160,7 +160,7 @@ export const SOUNDINGS_BATTLE_THEME = {
   title: 'No Bottom',
   bpm: 132,
   stepsPerBeat: 4,
-  volume: 1.3,
+  volume: 1.84,
 
   instruments: {
     // The hook, low and hard: cellos and violas in unison.

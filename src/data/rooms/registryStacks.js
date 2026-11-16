@@ -9,6 +9,9 @@
 //   I  old stone pillar (solid)
 //   J  broken pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const REGISTRY_STACKS = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'registry_stacks',
@@ -55,6 +58,7 @@ export const REGISTRY_STACKS = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.registry_stacks ?? []),
     // Alcoves along the top aisle and the bottom one: the only places to keep still.
     { sprite: 'alcove', x: 6, y: 4, text: 'stacks_alcove', hide: true },
     { sprite: 'alcove', x: 13, y: 4, text: 'stacks_alcove', hide: true },
@@ -77,6 +81,8 @@ export const REGISTRY_STACKS = {
     { sprite: 'sign', x: 40, y: 9, text: 'stacks_sign' },
     // The claw marks on the shelves: it's been in here too.
     { sprite: 'bristle_tuft', x: 26, y: 5, text: 'bristle_tuft', walkable: true },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['registry_stacks'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', I: 'city_pillar', J: 'city_pillar' },
 

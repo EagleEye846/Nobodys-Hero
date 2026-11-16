@@ -13,6 +13,7 @@
 //   E  ice-veined cliff face (solid)              t  a cave mouth
 //   n  snow                                       s  the great stair
 //   _  open sky (the view shows through) (solid)  Q  snowy boulder (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_WEATHERVANES = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_weathervanes',
@@ -113,6 +114,8 @@ export const VIGIL_WEATHERVANES = {
     { sprite: 'snowdrift', x: 3, y: 13, drift: ['down'] },
     { sprite: 'snowdrift', x: 12, y: 4, drift: ['right'] },
     { sprite: 'snowdrift', x: 25, y: 12, drift: ['up', 'right'] },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_weathervanes'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

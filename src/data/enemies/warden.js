@@ -71,7 +71,10 @@ export const WARDEN_BOSS = {
   // Clearly the hardest fight so far: above the Usurper (1400 HP, damage
   // 19, density 1.3 to 1.45) and every Chapter 3 regular (540 to 760 HP,
   // damage 20 to 28), and everything lands, start to finish.
-  maxHp: 3510,
+  // HP since 13 November 2026: about 20 rounds of good FIGHTs from the party
+  // you have when you meet this boss (every boss's rule; regulars take 4-5).
+  // The numbers in the older notes above are from before.
+  maxHp: 7800,
   damage: 34,
   difficulty: { density: 1.4, speed: 1.2 },
 
@@ -133,8 +136,8 @@ export const WARDEN_BOSS = {
     { name: 'Point at Ves' },
   ],
 
-  // Well above the Usurper's 600: most of a level, at the Gate.
-  rewards: { exp: 3130, coins: 250 },
+  // About one level at the Gate (a level there costs about 4,000-4,500).
+  rewards: { exp: 4300, coins: 250 },
 
   // The city's offering to the Hero, left in its open hand.
   drops: [{ item: 'heros_offering', chance: 1 }],

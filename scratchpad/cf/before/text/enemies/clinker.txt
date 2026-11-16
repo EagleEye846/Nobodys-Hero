@@ -1,0 +1,76 @@
+# CLINKER
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/clinker.js.
+
+[intro]
+Clank. Clank. CLANK. Something is banging on a tin mug. A CLINKER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CLINKER clacks its pincers at you. Then at the wall, in case the wall started it.
+
+CLINKER polishes its mug with one claw. It's still mostly rust.
+
+CLINKER bangs on the mug. It didn't need to. It just likes the noise.
+
+CLINKER backs into its mug a little way, then thinks better of it and comes out cross.
+
+Smells like old pipes and cold tea.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+MY mug.
+MINE.
+
+WHAT?
+Speak UP.
+
+Get out of
+my drain.
+
+Snip snip.
+
+Fifty years
+I've had this mug.
+FIFTY.
+
+Clank!
+...Did you
+hear that?
+I didn't.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/clinker.js.
+[talk: Inspect]
+CLINKER - HP 520
+A crayfish living in an old enamel mug that fell down the well. A bit deaf. Very cross.
+
+[talk: Admire the mug]
+You admire the mug. Nice chips. Lovely rust. CLINKER puffs up so much it nearly gets stuck in it.
+
+[talk: Knock politely]
+You knock on the mug, twice, very politely. CLINKER has never been knocked for before. It doesn't know what to do with its claws.
+
+[talk: Say it LOUDER]
+You try saying hello. CLINKER says WHAT. You say it louder. CLINKER finally hears you, and looks a bit embarrassed.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+CLINKER pulls itself all the way into its mug. The mug rolls away down the drain, clanking crossly.
+
+[pacified]
+CLINKER gives the mug one last proud CLANK, for you this time. Then it waddles off to bang on something else.
+
+# Bramble's own TALK lines for it ({foe} is its name). He's never seen a
+# crayfish, and he's sure he knows all about them.
+[bramble_talk]
+Bramble tells {foe} it's the biggest beetle he's ever seen. {foe} bangs its mug at him for a whole minute.
+
+Bramble asks {foe} if he can have a go on the mug. {foe} says WHAT. Bramble says it louder. They both shout for a bit.
+
+Bramble tells {foe} his Ma drinks out of a mug just like that. {foe} holds on to its mug a lot tighter.
+
+Bramble asks {foe} if a girl with a plum umbrella came by. {foe} says nobody comes by. It says it very loudly.

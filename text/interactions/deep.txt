@@ -547,3 +547,202 @@ A little pile of flat stones, tucked into the corner of the hollow. It has been 
 
 [vg_chest]
 In the middle of the hollow, on a bed of crystal dust, a chest. Inside is a blade of black glass, sharp as a thought. It has been waiting so long it has stopped minding.
+
+# --- THE LAST FLIGHT (deep_last_flight, draft): the top of the Way Up, a ring climb ---
+
+[lf_face]
+Where the stair should go on up, there's only the face.
+
+Old iron rings are hammered into it, going up where the steps used to be.
+
+[lf_face_ves]
+{bored}Up. Always up. I'm starting to miss the dark.
+
+[lf_step]
+A broken step, the last of the old stair. The rest of it is somewhere down the shaft.
+
+[lf_top]
+The stair again, at last: a few worn steps up into the town. You can hear the noise from here.
+
+# --- THE LIFE PASS: things to look at (set dressing) ---
+
+[dd_ash 2]
+Under the ash there's a bit of wick, a bit of wax. A great many candles, burned right down, one after another.
+
+[dd_bud 2]
+It pulses in time with your steps for a moment, then forgets and goes back to its own rhythm.
+
+[dd_caps 2]
+They lean towards you as you come near, and away as you go. By the time you look back, they all lean the same way again.
+
+[dd_tuft 2]
+The moving thread has curled round your finger. You unhook it, gently. It doesn't seem to mind.
+
+[dd_worms]
+A heap of sleeping glow-worms, curled up together, each breathing a slow pale light. The light brightens a little when you breathe near them.
+
+[dd_worms_ves]
+{smile}Don't wake them. The last glow-worms that woke up wanted to sit on my umbrella.
+
+[dd_worms 2]
+One of them uncurls, looks at you, and curls up again. Whatever it was going to say, it's decided against.
+
+[dd_worms_ves 2]
+{bored}Wise worm.
+
+[lp_crawl_mitten]
+A mitten with a patched thumb, a child's, left on a rock to dry and never picked up. It is dry now. You put it in your pocket, carefully.
+
+[lp_crawl_mitten_ves]
+{sad}...It's so small.
+
+[lp_camp_candle]
+A stub of candle in a thumb of its own wax, black from being lit and lit again. The wick has been trimmed. Even down here, someone trimmed the wick.
+
+[lp_camp_candle_ves]
+{thoughtful}I'd have liked to meet whoever did that.
+
+[lp_root_nook]
+A knot of pale root wedged between the wall and a stalagmite, at the very end of the floor. More roots have grown round it like fingers. They let go, one by one, when you pull.
+
+[r3c_lf_rest_stub]
+A candle stub standing in its own wax on the first flat ledge. Somebody sat here to get their breath, and lit it to keep the dark off their knees.
+
+[r3c_lf_rest_stub_ves]
+{thoughtful}You'd need a rest, going up this. I'd have taken a nap.
+
+[r3c_lf_rest_stub 2]
+The wax has run in three layers. Three rests, one after another. Whoever it was was getting tired.
+
+[r3c_lf_rest_stub_ves 2]
+{sad}Or getting brave. It's the same wax.
+
+[r3c_lf_dry_flask]
+A dented flask, dry as dust. The cork is tied to its neck with a bit of someone's shoelace.
+
+[r3c_lf_dry_flask_ves]
+{bored}Dry. Well, they used it all. Good for them.
+
+[r3c_lf_tuft 2]
+It sways for a while, then goes still, as if it heard you.
+
+[r3c_cr_prints 2]
+The prints stop where the passage splits, then pick up again, going the other way. Someone changed their mind. Once.
+
+[r3c_cr_pot]
+A tin pot with a lid, tied shut with string. When you tilt it, something rattles. Small pebbles. They've been collected to throw.
+
+[r3c_cr_pot_ves]
+{smile}They had the same idea as us. Throw something to make it go away.
+
+[r3c_cr_pot 2]
+The pebbles are all smooth ones, picked for their sound. This was somebody's craft.
+
+[r3c_cr_pot_ves 2]
+{surprised}Somebody planned the clatter.
+
+[r3c_cr_jar]
+A glass jar with a handful of glowbugs in it, set on the floor with its lid off. They aren't trapped. They've simply decided to stay.
+
+[r3c_cr_jar_ves]
+{smile}A little lamp that can't be made angry. I like it.
+
+[r3c_cr_jar 2]
+The glowbugs shift when you lean in, then go back to glowing at each other.
+
+[r3c_cr_jar_ves 2]
+{thoughtful}We should take notes.
+
+[r3c_cr_arrow 2]
+The third arrow has been rubbed out with a sleeve. Whoever it was ran out of ideas.
+
+[r3c_wu_flask]
+A flask on its side, cork out and dry. Somebody put it down at the end of a long switchback and didn't pick it up again.
+
+[r3c_wu_flask_ves]
+{bored}That's the sound of someone saying, 'one more turn and then I'll rest.'
+
+[r3c_wu_stub]
+A candle stub on a ledge, melted flat. Whoever lit it had been counting turns and lost count.
+
+[r3c_wu_stub_ves]
+{sad}I lost count of the turns two flights ago.
+
+[r3c_wu_stub 2]
+There's a number scratched beside it, then crossed out, then a bigger one, then crossed out.
+
+[r3c_wu_stub_ves 2]
+{bored}It's a lot of switchbacks, I think.
+
+[r3c_wu_count 2]
+The marks stop at seven. Nobody counted the last turn. Perhaps it felt rude.
+
+[r3c_wu_cairn 2]
+The big pebble is balanced on the smallest bit of the cairn. It hasn't fallen yet. You feel obscurely proud of it.
+
+[r3c_kf_logs]
+A little stack of split logs, the bark dry and silvery. Carried in a long way from somewhere with trees.
+
+[r3c_kf_logs_ves]
+{bored}That's a lot of effort for a campfire. And a lot of stairs.
+
+[r3c_kf_logs 2]
+The ends have been cut square, each to the same length. Nobody does that when they're in a hurry.
+
+[r3c_kf_logs_ves 2]
+{thoughtful}Somebody was never in a hurry.
+
+[r3c_kf_kettle]
+A blackened pot with a spoon standing in it, set a little back from the coals. The spoon is straight up, the way you leave it when you'll be back in a moment.
+
+[r3c_kf_kettle_ves]
+{thoughtful}A moment, said once. It has lasted a long time.
+
+[r3c_rt_journal]
+A thin notebook weighed down with a stone. The first line says: IT'S VERY BIG. The second: I'M GOING TO NEED A LONGER ROPE. The rest has been torn out.
+
+[r3c_rt_journal_ves]
+{thoughtful}Whoever it was came to the same edge we're about to stand on. And wrote it down.
+
+[r3c_rt_journal 2]
+Under the stone, a pencil, sharpened to a stub. A pencil you'd use to say one last thing.
+
+[r3c_rt_journal_ves 2]
+{sad}They left the pencil. In case someone wanted to add something.
+
+[r3c_rt_flask]
+A flask on its side at the foot of the cliff, a thin bit of string tied round its neck. A good flask. Somebody carried it all this way and didn't drink from it.
+
+[r3c_rt_flask_ves]
+{bored}That's an unusual kind of self-restraint.
+
+[r3c_rt_rope 2]
+You turn the rope over. There's a name tag, almost worn away, with a single letter left, and it could be any of them.
+
+[r3c_rt_pot 2]
+The pot has been sitting here so long the chocolate's gone hard and sweet as a stone. It would still be warm if it could.
+
+[r3c_fd_welcome 2]
+Somebody scratched out 'LOWER' and wrote 'QUIETER' above it. A fussy neighbour.
+
+[r3c_fd_flask]
+A flask on its side, wedged in a crack. A name has been scratched into the side with a nail, and then scratched out, and then written again, smaller.
+
+[r3c_fd_flask_ves]
+{surprised}They kept trying to get it right. I recognise that.
+
+[r3c_hc_socks 2]
+The darning is very neat in the first few mends and very hasty in the last. The same hand, getting tired.
+
+[r3c_hc_journal 2]
+The page opposite is a small drawing: a lamp, a lot of stairs, and somebody small on them, waving.
+
+[r3c_hc_knife 2]
+The bird has one wing finished and the other one only started. The knife is lying where the next cut would go.
+
+[r3c_hv_stub 2]
+The wax has dripped into a neat little coin. Whoever lit it sat and watched it all the way down.
+
+[r3c_hv_bud 2]
+You step round the vug. Every bud turns its tip to follow you for a breath, then settles back to the blade.
+

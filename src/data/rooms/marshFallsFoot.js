@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE FALLS FOOT: down the old steps beside the falls from the Outfall, where
 // the conduit's water comes down into a pool and spreads out into the fen. The
 // first bog: a strip you can hop, then a wider one with a log beside it to
@@ -79,6 +80,8 @@ export const MARSH_FALLS_FOOT = {
     { sprite: 'marsh_lantern', x: 17, y: 7, text: 'marsh_lantern', light: 60 },
     { sprite: 'marsh_lantern', x: 24, y: 8, text: 'marsh_lantern', light: 60 },
     { sprite: 'gold_pouch', x: 1, y: 10, text: 'falls_purse', gold: 120, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_falls_foot'] ?? []),
   ],
   tileTexts: { '"': 'reeds', '%': 'bog', $: 'fen_water', W: 'falls_cliff', '#': 'falls_cliff' },
 

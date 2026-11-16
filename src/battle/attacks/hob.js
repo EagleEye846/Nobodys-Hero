@@ -2,9 +2,9 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Hob's attacks. It's the house-hob of Hollin, and it has kept every
 // cottage spotless for fifty years in case the families come home, so it
-// fights with what a hob keeps house with: its broom, the dust bunnies it
-// chases out from under the beds, the good plates it lays out every evening,
-// the kettle it keeps on the boil, and the ring of keys to every empty door.
+// fights with what a hob keeps house with: its broom, the good plates it
+// lays out every evening, the kettle it keeps on the boil, and its scrubbing
+// brush, for the mud you're tracking all over its clean floor.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -13,7 +13,6 @@ const BROOM = { k: '#1e140e', h: '#b07a46', H: '#7a4e28', y: '#e8c46a', Y: '#a87
 const DUST = { d: '#b8b0c8', D: '#867e98', e: '#2a2230', w: '#ece6f4' };
 const CROCKERY = { k: '#2a2a3a', p: '#f4f0e8', P: '#c8c2b4', b: '#5a8ad0', B: '#3a5a9a', s: '#c8ccd8', S: '#8a90a0' };
 const KETTLE = { k: '#1e1a22', c: '#b86a3a', C: '#7a4220', h: '#e8a070', w: '#f4f4fa', W: '#c0c4d8', b: '#7ac0f0', B: '#4a8ad0' };
-const KEYS = { k: '#2a2010', y: '#e8c45a', Y: '#a8862a', r: '#7a6a5a', R: '#4e4236' };
 
 // The broom's handle, a bit at a time, and its bristles.
 defineBulletArt('hobHandle', {
@@ -28,17 +27,6 @@ defineBulletArt('hobBristles', {
   spin: 2,
 });
 
-// A dust bunny, with its two little eyes, hopping (squashed, then tall); and
-// the motes it puffs into.
-defineBulletArt('hobBunny', {
-  frames: [
-    ['.......', '.dDdDd.', 'dwedewd', 'dDdddDd', '.DdDdD.'],
-    ['..d.d..', '.dDdDd.', 'dwedewd', 'dDdddDd', '.DdDdD.'],
-  ],
-  palette: DUST,
-  radius: 2.5,
-  frameSeconds: 0.18,
-});
 defineBulletArt('hobMote', {
   frames: [['.d.', 'dwD', '.D.'], ['d.D', '.w.', 'D.d']],
   palette: DUST,
@@ -99,19 +87,23 @@ defineBulletArt('hobDrop', {
   radius: 1.3,
 });
 
-// The iron ring the keys hang on (harmless), and a key, drawn pointing right
-// (out from the ring, or where it's thrown).
-defineBulletArt('hobRing', {
-  frames: [['.rrr.', 'rR.Rr', 'r...r', 'rR.Rr', '.rrr.']],
-  palette: KEYS,
-  radius: 2.5,
-  spin: 1,
+// Its scrubbing brush (bristles down), a muddy footprint you left on its
+// clean floor (harmless), and a soap bubble off the scrubbing.
+defineBulletArt('hobBrush', {
+  frames: [['.hhhhhh.', 'hHHHHHHh', 'yYyYyYyY', 'Y.Y.Y.Y.'], ['.hhhhhh.', 'hHHHHHHh', 'YyYyYyYy', '.Y.Y.Y.Y']],
+  palette: BROOM,
+  radius: 3.5,
+  frameSeconds: 0.08,
 });
-defineBulletArt('hobKey', {
-  frames: [['.yy.....', 'y.Yyyyyy', '.yy..Y.Y']],
-  palette: KEYS,
+defineBulletArt('hobPrint', {
+  frames: [['.mm.', 'mmmm', '.mm.', '....', '.mm.']],
+  palette: { m: '#6a4e34' },
+  radius: 1,
+});
+defineBulletArt('hobSuds', {
+  frames: [['.ww.', 'wW.w', 'w..w', '.ww.']],
+  palette: { w: '#e8f0ff', W: '#ffffff' },
   radius: 1.8,
-  rotate: true,
 });
 
 export const HOB_ATTACKS = {
@@ -154,10 +146,10 @@ export const HOB_ATTACKS = {
       return u;
     };
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (made < 4 && t >= 0.1 + made * 1.55) {
+        if (made < 6 && t >= 0.1 + made * 1.55) {
           plant(bullets);
           made++;
         }
@@ -211,7 +203,7 @@ export const HOB_ATTACKS = {
       for (const s of spots) lay(bullets, s.x, s.y);
     }, { first: 0.15 });
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         if (places.length < 15) supper(dt, bullets, soul);
         for (const p of places) {
@@ -235,7 +227,8 @@ export const HOB_ATTACKS = {
   // above it when it whistles.
   hobKettle(box, density, { Shot, rand, clamp }) {
     const floor = box.y + box.h - 5;
-    const kettle = new Shot({ x: box.x + box.w / 2, y: floor, harmless: true, art: 'hobKettle' });
+    // (It's hot: don't touch it.)
+    const kettle = new Shot({ x: box.x + box.w / 2, y: floor, warn: 0.5, art: 'hobKettle' });
     const rattle = 0.75;
     const whistle = 0.95;
     let t = 0;
@@ -243,14 +236,14 @@ export const HOB_ATTACKS = {
     let spit = 0;
     let puff = 0;
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets, soul) => {
         if (!started) {
           started = true;
           bullets.push(kettle);
         }
         t += dt;
-        if (t > 6.0) return;
+        if (t > 9.6) return;
         const cycle = (rattle + whistle) + 0.1;
         const into = t % cycle;
         if (into < rattle) {
@@ -280,93 +273,53 @@ export const HOB_ATTACKS = {
     };
   },
 
-  // The keys to every door: its great iron ring of keys floats round the
-  // box, turning, and breathes in and out as it's jangled. There's a gap
-  // where three keys are missing (the doors with nobody behind them), and
-  // inside the ring is safe. Every so often it throws a key at you.
-  hobKeys(box, density, { Shot, every, rand, angleTo }) {
-    const count = 18;
-    const missing = 3;
-    const hub = new Shot({ x: box.x + box.w / 2, y: box.y + box.h / 2, harmless: true, art: 'hobRing' });
-    const keys = [];
-    for (let i = missing; i < count; i++) keys.push({ i, shot: new Shot({ x: hub.x, y: hub.y, warn: 0.6, art: 'hobKey' }) });
-    const phase = rand(0, Math.PI * 2);
-    const turn = Math.random() < 0.5 ? 1.3 : -1.3;
-    let t = 0;
-    let started = false;
-    const toss = every(1.3, 1.5, (bullets, soul) => {
-      const angle = angleTo(hub, soul);
-      const r = radius();
-      bullets.push(new Shot({ x: hub.x + Math.cos(angle) * r, y: hub.y + Math.sin(angle) * r, vx: Math.cos(angle) * 70, vy: Math.sin(angle) * 70, warn: 0.25, art: 'hobKey' }));
-    }, { first: 1.2 });
-    const radius = () => 21 + Math.sin(t * 2.6 + phase) * 9;
+  // Mud on the floor: wherever you go, you leave muddy footprints (look),
+  // and the Hob can't stand it. Its scrubbing brush comes after them, one
+  // at a time, oldest first, and every print it scrubs up froths into soap
+  // bubbles that float up off the floor. When there's nothing left to scrub,
+  // the brush comes for your boots. Lead it a dance, and mind the suds.
+  hobMud(box, density, { Shot, rand }) {
+    const STRIDE = 11;
+    let prints = [];
+    let brush = null;
+    let last = null;
+    let side = 1;
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
-        if (!started) {
-          started = true;
-          bullets.push(hub, ...keys.map((k) => k.shot));
+        if (!brush) {
+          brush = new Shot({ x: box.x + box.w / 2, y: box.y + 6, warn: 0.6, art: 'hobBrush' });
+          bullets.push(brush);
+          last = { x: soul.x, y: soul.y };
+          return;
         }
-        t += dt;
-        // The ring drifts round the box in a slow figure of eight.
-        hub.x = box.x + box.w / 2 + Math.sin(t * 0.7 + phase) * 16;
-        hub.y = box.y + box.h / 2 + Math.sin(t * 1.4 + phase) * 12;
-        const r = radius();
-        for (const k of keys) {
-          const angle = (k.i / count) * Math.PI * 2 + t * turn;
-          k.shot.x = hub.x + Math.cos(angle) * r;
-          k.shot.y = hub.y + Math.sin(angle) * r;
-          k.shot.angle = angle;
+        // A muddy print every stride you take.
+        if (Math.hypot(soul.x - last.x, soul.y - last.y) >= STRIDE) {
+          const print = new Shot({ x: soul.x + side * 1.5, y: soul.y, harmless: true, life: 30, art: 'hobPrint' });
+          side = -side;
+          bullets.push(print);
+          prints.push(print);
+          last = { x: soul.x, y: soul.y };
         }
-        if (t < 6) toss(dt, bullets, soul);
-      },
-    };
-  },
-
-  // Out from under the beds: dust bunnies come hopping in along the floor
-  // from both sides, some in little hops and some in big ones. On their
-  // third landing they burst into a puff of motes. Meanwhile it beats a rug
-  // somewhere up above, and dust sifts down from the top.
-  hobDust(box, density, { Shot, every, rand, pick }) {
-    const floor = box.y + box.h - 3;
-    let bunnies = [];
-    let fromLeft = Math.random() < 0.5;
-    const hop = every(0.42, 0.55, (bullets) => {
-      const speed = rand(32, 46);
-      const bunny = new Shot({
-        x: fromLeft ? box.x - 4 : box.x + box.w + 4, y: floor, vx: fromLeft ? speed : -speed, gravity: 230, art: 'hobBunny',
-      });
-      bunny.jump = pick([85, 100, 125]);
-      bunny.vy = -bunny.jump;
-      bunny.landings = 0;
-      bullets.push(bunny);
-      bunnies.push(bunny);
-      fromLeft = !fromLeft;
-    }, { first: 0.15 });
-    const sift = every(0.3, 0.45, (bullets) => {
-      bullets.push(new Shot({ x: rand(box.x + 4, box.x + box.w - 4), y: box.y - 3, vy: rand(22, 30), wobble: { amplitude: 2, frequency: 3 }, art: 'hobMote' }));
-    }, { first: 0.8 });
-    return {
-      duration: 6.6,
-      update: (dt, bullets) => {
-        hop(dt, bullets);
-        sift(dt, bullets);
-        for (const bunny of bunnies) {
-          if (bunny.vy <= 0 || bunny.y < floor) continue;
-          bunny.y = floor;
-          if (++bunny.landings < 3) {
-            bunny.vy = -bunny.jump;
-            continue;
-          }
-          // Poof.
-          bunny.done = true;
-          bunny.life = bunny.age - bunny.warn;
-          for (let i = 0; i < 5; i++) {
-            const angle = -Math.PI / 2 + (i - 2) * 0.4;
-            bullets.push(new Shot({ x: bunny.x, y: bunny.y - 2, vx: Math.cos(angle) * 36, vy: Math.sin(angle) * 36, life: 0.9, art: 'hobMote' }));
+        if (brush.age < brush.warn) return;
+        const goal = prints[0] ?? soul;
+        const dx = goal.x - brush.x;
+        const dy = goal.y - brush.y;
+        const far = Math.hypot(dx, dy);
+        const speed = prints.length ? 52 : 34;
+        brush.vx = far > 0.5 ? (dx / far) * speed : 0;
+        brush.vy = far > 0.5 ? (dy / far) * speed : 0;
+        if (prints.length && far < 3) {
+          // Scrubbed: the print's gone in a froth of suds.
+          const print = prints.shift();
+          print.life = 0;
+          for (let i = 0; i < 3; i++) {
+            bullets.push(new Shot({
+              x: print.x + rand(-3, 3), y: print.y, vx: rand(-12, 12), vy: rand(-26, -18),
+              wobble: { amplitude: 2, frequency: 6 }, warn: 0.25, life: 1.8, art: 'hobSuds',
+            }));
           }
         }
-        bunnies = bunnies.filter((bunny) => !bunny.done);
       },
     };
   },

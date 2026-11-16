@@ -2,7 +2,8 @@
 // in it. The stairs go down into black water; up here the family's last things are where they
 // were carried when the flood came up the stairs a step at a time. A chest under the eaves holds
 // the Bellbuoy Mantle (the best magic coat of the chapter), and there is a purse in a teapot.
-// Reached from the hamlet's north-west bank (the second rope ring) through the attic window.
+// Reached from the flooded cottage's kitchen (secret_lanes_kitchen): up the rope to the landing and
+// through the hatch. The hatch (6..7, row 9) goes back down to the landing.
 // Tile key: #  roof beams (solid)   h  board wall (solid)   o  floorboards   ~  the stairwell's water (solid)
 
 export const SECRET_LANES_ATTIC = {
@@ -39,20 +40,26 @@ export const SECRET_LANES_ATTIC = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 6, y: 9, w: 2, h: 1, to: 'lanes_hamlet', spawn: { x: 5, y: 2 } },
+    // Down the hatch, onto the kitchen's landing.
+    { x: 6, y: 9, w: 2, h: 1, to: 'secret_lanes_kitchen', spawn: { x: 10, y: 2 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
-  cutscenes: [],
+  cutscenes: [
+    // (2026-11-14) A piece of the night the Fair Return went down, as soon as you carry the compass piece (the whole room, once).
+    { x: 1, y: 2, w: 12, h: 7, scene: 'glass_memory', gear: 'compass_glass' },
+  ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/lanes.txt',
   props: [
     // QUEST PIECE 1 (the Fair Return's compass glass): a brass-rimmed glass in a teacup on the sill, only found by people who looked in a flooded house's attic.
-    { sprite: 'gs_compass_glass', x: 6, y: 5, text: 'attic_compass', gives: 'compass_glass', taken: { gone: true } },
+    { sprite: 'gs_compass_glass', x: 6, y: 5, text: 'attic_compass', gives: 'compass_glass', taken: { gone: true }, notice: true },
     { sprite: 'c5_chest', x: 10, y: 2, text: 'attic_chest', gives: 'bellbuoy_mantle', taken: { sprite: 'c5_chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 2, y: 7, text: 'attic_pouch', gold: 300, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'c5_barrels', x: 7, y: 2, text: 'attic_trunks' },
+    // The hatch down to the kitchen's landing (the door at the bottom).
+    { sprite: 'gs_hatch', x: 6, y: 9, text: 'attic_hatch', walkable: true, flat: true },
     { sprite: 'c5_rope_coil', x: 9, y: 6, text: 'attic_rope', walkable: true },
     { sprite: 'c5_buoy_red', x: 12, y: 7, text: 'attic_buoy' },
     { sprite: 'lamp_cold', x: 5, y: 2, text: 'attic_lamp' },
@@ -69,6 +76,8 @@ export const SECRET_LANES_ATTIC = {
     { sprite: 'sc_leak_bucket', x: 8, y: 4, text: 'in_attic_bucket' },
     { sprite: 'armchair', x: 5, y: 5, text: 'in_attic_chair' },
     { sprite: 'in_plant_pot', x: 1, y: 4, text: 'in_attic_plant' },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_cat_bowl', x: 3, y: 7, text: 'lp_catbowl_attic', walkable: true },
   ],
   tileTexts: { '#': 'attic_beams', h: 'attic_wall', '~': 'attic_stairwell' },
 

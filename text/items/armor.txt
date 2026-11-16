@@ -182,9 +182,9 @@ A miner's helmet, dented from every direction at once. There's a candle bracket 
 [olmskin_vest]
 A vest from skin an olm shed, which they do politely, once a year. Thin, pale, cool, and tougher than it looks. It clings.
 
-# (draft) Chapter 4's secret superboss, Pudding's pool at the bottom of Seam Nine.
+# (draft) Chapter 4's secret superboss, the Pale Olm's pool at the bottom of Seam Nine.
 [olmglass_mantle]
-A heavy grey-blue coat stitched all over with beads of glass that catch the light, and warm in the way a coat is when something large has been keeping it for you. The tag says FOR WHOEVER CAME BACK.
+A heavy grey-blue coat stitched all over with beads of glass that catch the light, cold and faintly damp, the way a coat is when something large has kept it very close for a very long time. The tag says FOR WHOEVER CAME BACK.
 
 # Ves's.
 # In a chest in the Stillwater.
@@ -251,6 +251,10 @@ Tall waxed boots that come up to his belt. They stomp in the shallows, and they'
 [darned_jersey]
 A fisher's jersey, navy and thick, darned at the elbows so neatly you can't find where the holes were. It was folded as flat as a letter.
 
+# (draft)
+[keepers_oilskin]
+A long black oilskin with a hood, stiff with salt, from the locker on top of the Needle. The keepers wore these to watch the storms. It sheds rain like a duck.
+
 [petrel_scarf]
 A scarf of storm-petrel grey, light as down and warm right through. It smells of tar and the sea. The wind likes it.
 
@@ -260,3 +264,22 @@ A knitted gansey, thick as rope, far too small for anyone grown. The elbows have
 # (draft) The Fair Return's captain.
 [captains_greatcoat]
 A tall coat of dark blue broadcloth gone grey-green, with brass buttons, most of them still on. The cuffs are worn from a hundred years of a hand on a rail. It does not smell of the sea any more, only of a closed cabin, and it fits as if it had been waiting for someone to be on time.
+
+# (draft) More for Ves and Bramble, chapter 5.
+[bell_rope_cape]
+A cape of bell rope, woven tight and tarred. It stands up to any wind, and so does she.
+
+[net_menders_mitts]
+Fingerless mitts for mending nets in the cold. They're good at catching things, and so is she.
+
+[beacon_wick_shawl]
+A shawl of lamp wick, spun on Orla's wheel. It smells of lamp oil and mends you every turn.
+
+[beachcombers_duffel]
+A duffel coat, cut down from a beachcomber's. The pockets are full of sand and one marble.
+
+[cabin_boys_waistcoat]
+A waistcoat from a ship's cabin boy, with a row of tiny brass buttons. It still holds a little of the boy's bravery.
+
+[deckhands_greatcoat]
+A deckhand's greatcoat, cut down to his size and hemmed twice. It's stiff and warm, and it keeps the wet off.

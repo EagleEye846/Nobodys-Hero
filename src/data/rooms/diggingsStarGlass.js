@@ -25,6 +25,8 @@
 //   x  glassy crystal (solid)       q  loose gravel        ^  stalagmite (solid)
 //   0  the drop (solid, a beam flies over it)   .  packed dirt floor
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_STAR_GLASS = {
   id: 'diggings_star_glass',
   name: 'THE GLASSWORKS',
@@ -71,6 +73,7 @@ export const DIGGINGS_STAR_GLASS = {
 
   textFile: 'interactions/star_seam.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_star_glass ?? []),
     // The first road: the sun-crystal, the prism you turn, the clamped prism, the eye.
     { sprite: 'sun_crystal', x: 2, y: 4, beam: 'right', text: 'g_sun' },
     { sprite: 'prism', x: 6, y: 4, mirror: '/', text: 'g_prism' },

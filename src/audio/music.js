@@ -2,6 +2,7 @@ import { SETTINGS } from '../state/settings.js';
 import { SONGS } from '../data/music/index.js';
 import { HOLD, HIT } from './notation.js';
 import { SAMPLE_SETS } from './sampleSets.js';
+import { EXTRA_AMBIENCES, EXTRA_EXTRAS, EXTRA_SFX, EXTRA_FEEL, EXTRA_ECHO } from './roomAmbience.js';
 
 // Songs are synthesised live with the Web Audio API, chiptune style, from the
 // note data in src/data/music/. Rooms, shops, menus and enemies pick a song by
@@ -207,6 +208,15 @@ const SFX = {
     { midi: 47, wave: 'sawtooth', length: 0.16, volume: 0.018, slide: 4 },
     { midi: 54, wave: 'triangle', length: 0.1, volume: 0.02, delay: 0.07, slide: -5 },
   ],
+  // The Fair Return's gangway let go (ship_boarding): the hoist line running out through its block, the plank groaning
+  // off her side. Then landing on the quay: a heavy plank slapped flat on wet stones, a dull knock and a low thump under it.
+  gangwayLetGo: [{ clip: 'rope', volume: 0.5, rate: 0.8 }, { clip: 'timber', volume: 0.22, rate: 1.25, delay: 0.15 }],
+  gangwayThump: [
+    { clip: 'chopHit', volume: 0.75, rate: 0.5 },
+    { clip: 'counter', volume: 0.5, rate: 0.55, delay: 0.01 },
+    { midi: 31, wave: 'sine', length: 0.45, volume: 0.2, slide: -8 },
+    { clip: 'chopHit', volume: 0.25, rate: 0.62, delay: 0.24 },
+  ],
   // The Fair Return taking a list, or settling: the real timber creak under a long low groan (shipList.js).
   shipGroan: [
     { clip: 'timber', volume: 0.4 },
@@ -262,6 +272,24 @@ const SFX = {
     { midi: 33, wave: 'sine', length: 0.12, volume: 0.11, slide: -3 },
     { midi: 31, wave: 'sine', length: 0.14, volume: 0.07, slide: -3, delay: 0.17 },
   ],
+  // The end of chapter 5 (tideHeldFinale.js). The lamp room's glass going: a hard crack,
+  // then high bright pieces raining.
+  shatter: [
+    { noise: 'highpass', frequency: 3000, q: 0.7, length: 0.18, volume: 0.2 },
+    { noise: 'bandpass', frequency: 6000, q: 1.4, length: 0.9, volume: 0.09, delay: 0.06, sweep: 0.6 },
+    ...[0.08, 0.15, 0.21, 0.3, 0.38, 0.5, 0.63].map((delay, i) => ({ midi: 96 + ((i * 5) % 9), wave: 'triangle', length: 0.07, volume: 0.03, delay })),
+  ],
+  // Bubbles coming up out of the water and breaking: small rising blips.
+  bubbles: [0, 0.14, 0.31, 0.4, 0.62].map((delay, i) => ({ midi: 70 + ((i * 7) % 12), wave: 'sine', length: 0.06, volume: 0.035, slide: 9, delay })),
+  // Coughing up the sea: two rough barks of breath.
+  cough: [
+    { noise: 'bandpass', frequency: 700, q: 1.1, length: 0.16, volume: 0.16, attack: 0.01 },
+    { noise: 'bandpass', frequency: 520, q: 1.1, length: 0.2, volume: 0.13, attack: 0.01, delay: 0.3 },
+  ],
+  // A gasp: a sharp breath in, out of the water.
+  gasp: [{ noise: 'bandpass', frequency: 1500, q: 0.9, length: 0.45, volume: 0.12, sweep: 1.8, attack: 0.05 }],
+  // Going into the sea head first: the splash, and the rush of the water closing over.
+  plunge: [{ clip: 'paddle', volume: 0.55 }, { clip: 'tideRush', volume: 0.3, delay: 0.03 }, { noise: 'lowpass', frequency: 300, q: 0.7, length: 0.9, volume: 0.18, delay: 0.05 }],
   // The game over's words coming up one letter at a time: a low, dull tone.
   toll: [{ midi: 41, wave: 'triangle', length: 0.09, volume: 0.035, slide: -2 }],
   // Pulling the Fallen Star out of its stone: our own little jingle. A
@@ -387,21 +415,45 @@ const SFX = {
     { midi: 91, wave: 'triangle', length: 0.16, volume: 0.04, delay: 0.12 },
     { midi: 98, wave: 'sine', length: 0.3, volume: 0.02, delay: 0.13 },
   ],
-  // A chest's lid: the latch, then the hinge giving.
-  // Opening things: game-like takes on real recordings (assets/audio/sfx/,
-  // from Kenney's CC0 "RPG Audio" pack, roughened; see
-  // assets/audio/samples/README.md), shaped after Deltarune's: a chest is a
-  // dark, heavy clunk that rumbles off; a bag is a quick, bright grab.
-  // A treasure chest: the latch, then the lid's heavy ka-CHUNK.
-  chest: [{ clip: 'chest', volume: 0.35 }],
-  // A coin pouch: a real leather pouch picked up and its tie pulled (the
-  // coins jingle after it, as `coins`). An old pack, a bundle: real cloth
-  // and leather dropped open. Both from Kenney's CC0 "RPG Audio" and
-  // roughened like the chest's.
-  pouch: [{ clip: 'pouch', volume: 0.55 }],
-  pack: [{ clip: 'pack', volume: 0.45 }],
-  // The storage chest: bigger and lower still, a creak and a long thud.
-  storage: [{ clip: 'storage', volume: 0.32 }],
+  // Opening things (remade 13 November 2026): short, crisp game sounds made
+  // here, not recordings. Chirpy square and triangle blips and little pops of
+  // noise, so they read as "you got something", not as the real object.
+  // (The old recorded versions are kept in assets/audio/sfx/: chest, pouch,
+  // pack and storage.)
+  // A treasure chest: a tick of the latch, the lid's quick pop, then a little
+  // chime running up (C E G C, ringing out on a high E). It's its own "got
+  // it"; the `pickup` ding still plays after it (see overworldScene.js).
+  chest: [
+    { midi: 88, wave: 'square', length: 0.022, volume: 0.088 },
+    { midi: 57, wave: 'square', length: 0.07, volume: 0.132, slide: -12, delay: 0.025 },
+    { noise: 'lowpass', frequency: 1600, q: 0.8, length: 0.06, volume: 0.704, delay: 0.025 },
+    ...[72, 76, 79, 84].map((midi, i) => ({ midi, wave: 'square', length: 0.055, volume: 0.075, delay: 0.09 + i * 0.038 })),
+    { midi: 88, wave: 'triangle', length: 0.4, volume: 0.132, delay: 0.242 },
+    { midi: 96, wave: 'sine', length: 0.45, volume: 0.048, delay: 0.245 },
+  ],
+  // A coin pouch: a small soft "pomf" as it's picked up (the coins jingle
+  // over it, as `coins`).
+  pouch: [
+    { noise: 'lowpass', frequency: 1500, q: 0.9, length: 0.08, volume: 0.85, sweep: 0.35 },
+    { midi: 60, wave: 'triangle', length: 0.075, volume: 0.136, slide: -9 },
+  ],
+  // An old pack, a bundle: a rounder, lower "pomf" as it flops open, and a
+  // second smaller one as it settles. (`pickup` plays its chime over it.)
+  pack: [
+    { noise: 'lowpass', frequency: 1100, q: 1, length: 0.11, volume: 0.96, sweep: 0.3 },
+    { midi: 52, wave: 'triangle', length: 0.1, volume: 0.16, slide: -10 },
+    { noise: 'lowpass', frequency: 900, q: 1, length: 0.06, volume: 0.48, sweep: 0.4, delay: 0.1 },
+    { midi: 55, wave: 'triangle', length: 0.05, volume: 0.08, slide: -7, delay: 0.1 },
+  ],
+  // The storage chest: a deeper "ka-thunk" of the lid, and two soft notes up
+  // (G to D) as it opens on what you've kept.
+  storage: [
+    { midi: 84, wave: 'square', length: 0.02, volume: 0.084 },
+    { midi: 45, wave: 'square', length: 0.09, volume: 0.144, slide: -12, delay: 0.03 },
+    { noise: 'lowpass', frequency: 800, q: 0.9, length: 0.1, volume: 1.08, delay: 0.03 },
+    { midi: 67, wave: 'triangle', length: 0.1, volume: 0.144, delay: 0.13 },
+    { midi: 74, wave: 'triangle', length: 0.3, volume: 0.144, delay: 0.2 },
+  ],
   // Chapter 5's third wave of battle moves (8 November 2026). The ones that
   // are something real being handled are real recordings (assets/audio/sfx/,
   // Kenney's CC0 "RPG Audio", see assets/audio/samples/README.md); the rest
@@ -514,7 +566,7 @@ const SFX = {
   stepRock: [{ clip: STEP_SETS.rock, volume: 0.145 }],
   stepPaving: [{ clip: STEP_SETS.rock, volume: 0.13, rate: 1.08 }],
   // Crystal underfoot: the step on rock, and a faint glassy tink with it.
-  // (No glass tink on every step any more: too busy, Patrick 2026-11-10.)
+  // (No glass tink on every step any more: too busy, 2026-11-10.)
   stepCrystal: [{ clip: STEP_SETS.rock, volume: 0.13 }],
   stepGravel: [{ clip: STEP_SETS.gravel, volume: 0.07 }],
   stepDirtReal: [{ clip: STEP_SETS.gravel, volume: 0.055, rate: 0.85 }],
@@ -545,10 +597,220 @@ const SFX = {
     { midi: 74, wave: 'triangle', length: 0.07, volume: 0.022, delay: 0.06 },
   ],
   // Putting on a weapon or armor: a buckle done up, a little ring of metal.
+  // (Now only for gear with no sound of its own: see below.)
   equip: [
     { noise: 'highpass', frequency: 4500, q: 0.7, length: 0.05, volume: 0.03 },
     { midi: 86, wave: 'triangle', length: 0.1, volume: 0.03, delay: 0.02 },
     { midi: 98, wave: 'sine', length: 0.25, volume: 0.018, delay: 0.03 },
+  ],
+  // --- Equipping, by what the thing is (added 13 November 2026; which
+  // weapon or armor gets which is in src/audio/equipSounds.js). All made
+  // here, game-style: short blips and puffs of noise, under half a second.
+  // A sword going home in its sheath: a quick bright slide, a click, and a
+  // high metal "shing" ringing off (two notes not quite in tune, like steel).
+  equipSword: [
+    { noise: 'highpass', frequency: 2500, q: 0.7, length: 0.1, volume: 0.07, sweep: 2.2, attack: 0.03 },
+    { midi: 91, wave: 'square', length: 0.02, volume: 0.04, delay: 0.1 },
+    { midi: 100, wave: 'triangle', length: 0.35, volume: 0.05, delay: 0.1 },
+    { midi: 106.4, wave: 'sine', length: 0.3, volume: 0.025, delay: 0.1 },
+  ],
+  // A knife or a thin blade: the same, shorter and higher, a little "tsing".
+  equipDagger: [
+    { noise: 'highpass', frequency: 4000, q: 0.7, length: 0.06, volume: 0.06, sweep: 1.8, attack: 0.02 },
+    { midi: 96, wave: 'square', length: 0.015, volume: 0.035, delay: 0.06 },
+    { midi: 105, wave: 'triangle', length: 0.22, volume: 0.045, delay: 0.06 },
+    { midi: 111.3, wave: 'sine', length: 0.2, volume: 0.02, delay: 0.06 },
+  ],
+  // The Fallen Star: the sword's shing, with a few stars running up after it.
+  equipStar: [
+    { noise: 'highpass', frequency: 2500, q: 0.7, length: 0.1, volume: 0.07, sweep: 2.2, attack: 0.03 },
+    { midi: 91, wave: 'square', length: 0.02, volume: 0.04, delay: 0.1 },
+    { midi: 100, wave: 'triangle', length: 0.35, volume: 0.045, delay: 0.1 },
+    ...[91, 95, 98, 103].map((midi, i) => ({ midi, wave: 'sine', length: 0.35, volume: 0.03, delay: 0.17 + i * 0.05 })),
+  ],
+  // A hammer, a maul, a stone fist: set down hard, a low "clunk" with a
+  // bang of metal on top and a small bounce after.
+  equipHeavy: [
+    { midi: 43, wave: 'square', length: 0.1, volume: 0.07, slide: -8 },
+    { midi: 31, wave: 'triangle', length: 0.22, volume: 0.13, slide: -5 },
+    { noise: 'lowpass', frequency: 600, q: 0.9, length: 0.12, volume: 0.6 },
+    { midi: 70, wave: 'square', length: 0.04, volume: 0.035 },
+    { midi: 77.5, wave: 'square', length: 0.03, volume: 0.02 },
+    { midi: 40, wave: 'square', length: 0.05, volume: 0.035, slide: -5, delay: 0.12 },
+    { noise: 'lowpass', frequency: 500, q: 0.9, length: 0.05, volume: 0.25, delay: 0.12 },
+  ],
+  // An axe or a hatchet: a hollow wooden "thunk", and a little "tok" after.
+  equipAxe: [
+    { midi: 64, wave: 'square', length: 0.018, volume: 0.03 },
+    { midi: 53, wave: 'triangle', length: 0.1, volume: 0.12, slide: -9 },
+    { noise: 'bandpass', frequency: 700, q: 2.5, length: 0.05, volume: 0.3 },
+    { midi: 60, wave: 'triangle', length: 0.05, volume: 0.06, slide: -6, delay: 0.1 },
+    { noise: 'bandpass', frequency: 1000, q: 3, length: 0.03, volume: 0.15, delay: 0.1 },
+  ],
+  // A spear, a pole, a pike, a fork, a hook: a swish round, then the butt
+  // knocked on the ground, "tok".
+  equipPole: [
+    { noise: 'bandpass', frequency: 700, q: 1.2, length: 0.15, volume: 0.22, sweep: 3, attack: 0.08 },
+    { midi: 57, wave: 'triangle', length: 0.07, volume: 0.1, slide: -7, delay: 0.15 },
+    { noise: 'bandpass', frequency: 1200, q: 2, length: 0.035, volume: 0.2, delay: 0.15 },
+  ],
+  // A bow: the string plucked, a springy "twang" dropping a little.
+  equipBow: [
+    { noise: 'highpass', frequency: 3000, q: 0.7, length: 0.02, volume: 0.06 },
+    { midi: 67, wave: 'triangle', length: 0.22, volume: 0.09, slide: -2.5 },
+    { midi: 79, wave: 'square', length: 0.08, volume: 0.025, slide: -2 },
+  ],
+  // A sling: two quick whirls and a click as the stone sits in the pouch.
+  equipSling: [
+    { noise: 'bandpass', frequency: 1300, q: 1.6, length: 0.07, volume: 0.27, sweep: 1.8, attack: 0.03 },
+    { noise: 'bandpass', frequency: 1600, q: 1.6, length: 0.07, volume: 0.27, sweep: 1.8, attack: 0.03, delay: 0.08 },
+    { midi: 76, wave: 'square', length: 0.025, volume: 0.06, delay: 0.16 },
+    { midi: 83, wave: 'triangle', length: 0.08, volume: 0.06, delay: 0.18 },
+  ],
+  // A staff: a wooden "tok", and a little twinkle of magic.
+  equipStaff: [
+    { midi: 55, wave: 'triangle', length: 0.08, volume: 0.11, slide: -6 },
+    { noise: 'bandpass', frequency: 850, q: 2.5, length: 0.04, volume: 0.25 },
+    ...[88, 93, 100].map((midi, i) => ({ midi, wave: 'sine', length: 0.25, volume: 0.03, delay: 0.06 + i * 0.045 })),
+  ],
+  // A lantern: a glassy "tink", and the flame catching with a soft "fwoom".
+  equipLantern: [
+    { midi: 96, wave: 'triangle', length: 0.08, volume: 0.045 },
+    { midi: 103, wave: 'sine', length: 0.3, volume: 0.025 },
+    { noise: 'lowpass', frequency: 500, q: 1, length: 0.28, volume: 0.45, sweep: 3, attack: 0.1, delay: 0.05 },
+    { midi: 76, wave: 'triangle', length: 0.2, volume: 0.03, attack: 0.08, delay: 0.1 },
+  ],
+  // A shield or a buckler: a round metal "bonk" that rings for a moment.
+  equipShield: [
+    { midi: 57, wave: 'square', length: 0.08, volume: 0.045, slide: -2 },
+    { midi: 45, wave: 'triangle', length: 0.18, volume: 0.12 },
+    { noise: 'lowpass', frequency: 900, q: 1, length: 0.06, volume: 0.35 },
+    { midi: 69.5, wave: 'triangle', length: 0.3, volume: 0.04 },
+    { midi: 76.2, wave: 'sine', length: 0.25, volume: 0.02 },
+  ],
+  // Gauntlets: two little metal "clink-clank"s as they go on.
+  equipGauntlets: [
+    { midi: 81, wave: 'square', length: 0.035, volume: 0.048 },
+    { noise: 'bandpass', frequency: 3200, q: 3, length: 0.03, volume: 0.216 },
+    { midi: 48, wave: 'triangle', length: 0.06, volume: 0.084, slide: -5 },
+    { midi: 76, wave: 'square', length: 0.04, volume: 0.048, delay: 0.09 },
+    { noise: 'bandpass', frequency: 2600, q: 3, length: 0.035, volume: 0.216, delay: 0.09 },
+    { midi: 88.4, wave: 'sine', length: 0.18, volume: 0.024, delay: 0.09 },
+  ],
+  // A bell: struck once, a clear "ding" with a not-quite-in-tune overtone.
+  equipBell: [
+    { midi: 84, wave: 'square', length: 0.02, volume: 0.025 },
+    { midi: 84, wave: 'sine', length: 0.7, volume: 0.07 },
+    { midi: 91.2, wave: 'sine', length: 0.45, volume: 0.03 },
+    { midi: 96, wave: 'triangle', length: 0.25, volume: 0.02 },
+  ],
+  // A trumpet: a little two-note "ta-taa".
+  equipHorn: [
+    { midi: 72, wave: 'square', length: 0.06, volume: 0.04, attack: 0.008 },
+    { midi: 79, wave: 'square', length: 0.18, volume: 0.04, attack: 0.01, delay: 0.08 },
+    { midi: 79, wave: 'triangle', length: 0.18, volume: 0.04, delay: 0.08 },
+  ],
+  // A book: three pages flicked, and the cover shut with a soft "plop".
+  equipBook: [
+    ...[0, 0.035, 0.07].map((delay, i) => ({ noise: 'bandpass', frequency: 2600 + i * 300, q: 1.2, length: 0.03, volume: 0.12, delay })),
+    { midi: 50, wave: 'triangle', length: 0.07, volume: 0.1, slide: -6, delay: 0.12 },
+    { noise: 'lowpass', frequency: 900, q: 1, length: 0.05, volume: 0.3, delay: 0.12 },
+  ],
+  // Ves's umbrella parts: a quick "fwip" as it opens and two little clicks
+  // of the ribs locking.
+  equipUmbrella: [
+    { noise: 'bandpass', frequency: 1100, q: 1.3, length: 0.11, volume: 0.325, sweep: 2.6, attack: 0.05 },
+    { midi: 88, wave: 'square', length: 0.02, volume: 0.052, delay: 0.11 },
+    { midi: 95, wave: 'square', length: 0.02, volume: 0.046, delay: 0.145 },
+    { midi: 76, wave: 'triangle', length: 0.14, volume: 0.052, delay: 0.11 },
+  ],
+  // Clothes: a soft rustle, "ffsh-ffsh", and a tiny blip as it's on.
+  equipCloth: [
+    { noise: 'bandpass', frequency: 2400, q: 0.8, length: 0.07, volume: 0.238, sweep: 0.7, attack: 0.025 },
+    { noise: 'bandpass', frequency: 1900, q: 0.8, length: 0.08, volume: 0.238, sweep: 0.7, attack: 0.025, delay: 0.075 },
+    { midi: 76, wave: 'triangle', length: 0.06, volume: 0.06, delay: 0.15 },
+  ],
+  // A coat, a jacket, leathers: a heavier swish round the shoulders and a
+  // soft "fwump" as it settles.
+  equipCoat: [
+    { noise: 'bandpass', frequency: 1300, q: 0.7, length: 0.13, volume: 0.204, sweep: 0.6, attack: 0.04 },
+    { noise: 'lowpass', frequency: 500, q: 1, length: 0.08, volume: 0.54, delay: 0.12 },
+    { midi: 55, wave: 'triangle', length: 0.07, volume: 0.084, slide: -6, delay: 0.12 },
+    { midi: 67, wave: 'triangle', length: 0.06, volume: 0.036, delay: 0.17 },
+  ],
+  // Chain mail: a quick shiver of little links, and the weight landing.
+  equipMail: [
+    ...[0, 0.025, 0.045, 0.07, 0.09, 0.115].map((delay, i) => ({ noise: 'bandpass', frequency: 4200 + (i % 3) * 900, q: 5, length: 0.02, volume: 0.286 - i * 0.02, delay })),
+    ...[93, 98, 95].map((midi, i) => ({ midi, wave: 'square', length: 0.015, volume: 0.026, delay: 0.01 + i * 0.04 })),
+    { midi: 45, wave: 'triangle', length: 0.08, volume: 0.117, slide: -6, delay: 0.12 },
+    { noise: 'lowpass', frequency: 700, q: 1, length: 0.05, volume: 0.325, delay: 0.12 },
+  ],
+  // A breastplate, a cuirass, a diver's plate: "clank-clank", two plates
+  // buckled to.
+  equipPlate: [
+    { midi: 64, wave: 'square', length: 0.04, volume: 0.045 },
+    { midi: 76.3, wave: 'triangle', length: 0.18, volume: 0.035 },
+    { noise: 'lowpass', frequency: 800, q: 1, length: 0.06, volume: 0.35 },
+    { midi: 60, wave: 'square', length: 0.045, volume: 0.045, delay: 0.09 },
+    { midi: 72.3, wave: 'triangle', length: 0.25, volume: 0.035, delay: 0.09 },
+    { noise: 'lowpass', frequency: 700, q: 1, length: 0.06, volume: 0.35, delay: 0.09 },
+  ],
+  // Crystal armour: a glassy clink of plates, with a cold sparkle on top.
+  equipCrystal: [
+    { midi: 64, wave: 'square', length: 0.035, volume: 0.048 },
+    { noise: 'lowpass', frequency: 900, q: 1, length: 0.05, volume: 0.36 },
+    ...[96, 103, 100].map((midi, i) => ({ midi, wave: 'triangle', length: 0.25, volume: 0.042, delay: 0.05 + i * 0.05 })),
+  ],
+  // Bark armour: like the axes, a dry wooden "tok-tok".
+  equipWood: [
+    { midi: 57, wave: 'triangle', length: 0.07, volume: 0.11, slide: -7 },
+    { noise: 'bandpass', frequency: 900, q: 2.5, length: 0.04, volume: 0.28 },
+    { midi: 52, wave: 'triangle', length: 0.08, volume: 0.1, slide: -7, delay: 0.09 },
+    { noise: 'bandpass', frequency: 750, q: 2.5, length: 0.04, volume: 0.25, delay: 0.09 },
+  ],
+  // Mittens and a muff: two soft pats, a little blip on each.
+  equipMitts: [
+    { noise: 'lowpass', frequency: 1600, q: 1, length: 0.045, volume: 0.35 },
+    { midi: 67, wave: 'triangle', length: 0.045, volume: 0.04 },
+    { noise: 'lowpass', frequency: 1800, q: 1, length: 0.045, volume: 0.35, delay: 0.08 },
+    { midi: 71, wave: 'triangle', length: 0.05, volume: 0.04, delay: 0.08 },
+  ],
+  // A hat or a hood: a soft "pomf" on the head and a little blip up.
+  equipHat: [
+    { noise: 'lowpass', frequency: 1400, q: 1, length: 0.07, volume: 0.4, sweep: 0.5 },
+    { midi: 72, wave: 'triangle', length: 0.08, volume: 0.05, slide: 5, delay: 0.03 },
+  ],
+  // A metal helmet: a hollow "tonk".
+  equipHelm: [
+    { midi: 57, wave: 'triangle', length: 0.14, volume: 0.11 },
+    { midi: 71.4, wave: 'square', length: 0.05, volume: 0.035 },
+    { midi: 83.2, wave: 'triangle', length: 0.22, volume: 0.03 },
+    { noise: 'lowpass', frequency: 1000, q: 1, length: 0.04, volume: 0.25 },
+  ],
+  // Goggles: the strap snapped, and a tink off the glass.
+  equipGoggles: [
+    { midi: 81, wave: 'square', length: 0.03, volume: 0.06, slide: -12 },
+    { noise: 'highpass', frequency: 3000, q: 0.7, length: 0.02, volume: 0.09 },
+    { midi: 100, wave: 'triangle', length: 0.15, volume: 0.06, delay: 0.06 },
+  ],
+  // Boots and waders: two quick stomps.
+  equipBoots: [
+    { midi: 45, wave: 'triangle', length: 0.07, volume: 0.12, slide: -7 },
+    { noise: 'lowpass', frequency: 600, q: 1, length: 0.06, volume: 0.4 },
+    { midi: 43, wave: 'triangle', length: 0.08, volume: 0.12, slide: -7, delay: 0.12 },
+    { noise: 'lowpass', frequency: 550, q: 1, length: 0.06, volume: 0.4, delay: 0.12 },
+  ],
+  // A belt: a quick "zzip" through the loops, and a tug as it's knotted.
+  equipBelt: [
+    { noise: 'bandpass', frequency: 1500, q: 1.3, length: 0.08, volume: 0.234, sweep: 2, attack: 0.02 },
+    { midi: 55, wave: 'triangle', length: 0.05, volume: 0.104, slide: -5, delay: 0.09 },
+    { midi: 79, wave: 'square', length: 0.02, volume: 0.039, delay: 0.09 },
+  ],
+  // The cork float: a cork popping, "pok!", and a little bob up.
+  equipCork: [
+    { midi: 70, wave: 'square', length: 0.035, volume: 0.06, slide: 12 },
+    { noise: 'bandpass', frequency: 1800, q: 2, length: 0.025, volume: 0.3 },
+    { midi: 79, wave: 'triangle', length: 0.1, volume: 0.075, slide: 3, delay: 0.06 },
   ],
   // A box of words coming up, and turning to the next page: tiny ticks.
   textOpen: [
@@ -887,7 +1149,7 @@ const ECHO_BY_AMBIENCE = {
 const ECHO_PREFIXES = ['step', 'door'];
 const ECHOED = new Set([
   'jump', 'land', 'bump', 'shipGroan', 'chest', 'storage', 'pouch', 'pack', 'coins', 'lever', 'push', 'splash', 'creak', 'clack', 'click',
-  'crumble', 'chop', 'thunk', 'thud', 'pebble', 'squeak', 'flutter', 'scuttle', 'pounce', 'hook', 'paddle', 'splashes', 'whistle', 'settle',
+  'crumble', 'chop', 'thunk', 'thud', 'gangwayThump', 'pebble', 'squeak', 'flutter', 'scuttle', 'pounce', 'hook', 'paddle', 'splashes', 'whistle', 'settle',
 ]);
 const echoes = (name) => ECHOED.has(name) || ECHO_PREFIXES.some((start) => name.startsWith(start));
 
@@ -1016,7 +1278,7 @@ export function compile(song) {
   let loopStart = 0;
   // Where each section begins (a scene can start a song part way in).
   const starts = {};
-  // A song's `coda` (added 11 November 2026, for Tally's song): section names
+  // A song's `coda` (added 11 November 2026, for Quire's song): section names
   // that come after the loop, never part of it. Only a scene or a fight asking
   // for one by name (`from`) gets there; it plays once and rings out. The loop
   // goes round at `loopEnd`, where the coda begins.
@@ -1225,10 +1487,24 @@ export function loadSamples(ctx, song) {
       cache.loading.set(name, Promise.all(set.notes.map(async (midi) => {
         // Recordings are .ogg, unless an uploaded set says otherwise (`ext`).
         const file = `${midi}.${set.ext ?? 'ogg'}`;
-        const response = await fetch(new URL(`${name}/${file}`, SAMPLE_ROOT));
-        if (!response.ok) throw new Error(`Couldn't load the ${name} sample ${file}`);
-        return [midi, await ctx.decodeAudioData(await response.arrayBuffer())];
-      })).then((buffers) => cache.ready.set(name, new Map(buffers))));
+        // A fetch the server drops is tried again a couple of times (15 Nov 2026).
+        for (let attempt = 1; ; attempt++) {
+          try {
+            const response = await fetch(new URL(`${name}/${file}`, SAMPLE_ROOT));
+            if (!response.ok) throw new Error(`Couldn't load the ${name} sample ${file}`);
+            return [midi, await ctx.decodeAudioData(await response.arrayBuffer())];
+          } catch (error) {
+            if (attempt >= 3) throw error;
+            await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+          }
+        }
+      })).then((buffers) => cache.ready.set(name, new Map(buffers)), (error) => {
+        // A set that failed is forgotten, so the next song that wants it asks again. (Before,
+        // the failed promise stayed in the cache: one dropped fetch left that instrument
+        // silent in every song for the rest of the session.)
+        cache.loading.delete(name);
+        throw error;
+      }));
     }
     return cache.loading.get(name);
   }));
@@ -1525,7 +1801,16 @@ class SongPlayback {
     // the first time); one without starts straight away.
     const loading = loadSamples(ctx, song);
     if (loading) {
-      loading.catch((error) => console.error(`${song.title}: couldn't load its instruments:`, error)).then(begin);
+      loading.catch((error) => {
+        console.error(`${song.title}: couldn't load its instruments:`, error);
+        // Start anyway, and keep asking for what's missing: each note looks its recording up as
+        // it plays, so the instrument comes in as soon as the set arrives.
+        const again = (left) => setTimeout(() => {
+          if (this.stopped || left <= 0) return;
+          loadSamples(ctx, song)?.catch(() => again(left - 1));
+        }, 2500);
+        again(4);
+      }).then(begin);
     } else {
       begin();
     }
@@ -1774,6 +2059,8 @@ const AMBIENCES = {
   // The Fair Return (the ghost ship): her own timbers, a moored hull's boards, rigging, a far bell, the drip
   // of fog off the yards, very little wind. Heard through the hull (muffled a little), never loud.
   ghost_ship: { timbers: 0.9, boats: 0.35, rigging: 0.35, drips: 0.3, slowdrips: 0.25, bell: 0.28, wind: 0.08, hum: 0.2, muffle: 900 },
+  // Up in her rigging (ship_rigging): the wind, the rigging creaking all round you, the hull groaning far below, the bell off in the fog.
+  ghost_ship_high: { wind: 0.4, rigging: 0.6, timbers: 0.35, boats: 0.2, drips: 0.15, bell: 0.22, hum: 0.12, muffle: 2400 },
   ghost_ship_deep: { timbers: 0.8, boats: 0.3, slowdrips: 0.4, drips: 0.25, hum: 0.3, rumble: 0.25, bell: 0.2, muffle: 700 },
   // The Wreck Yard: hulls groaning, a bell buoy far off, a fine rain in the fog.
   wreck_yard: { drizzle: 0.8, rain: 0.3, creaks: 1.1, bell: 0.7, surf: 0.4, thunder: 0.4, wind: 0.25, rigging: 0.45 },
@@ -1807,6 +2094,10 @@ const AMBIENCES = {
   // the hulls still groaning and the bell buoy tolling, but no rain; `calm_hulk`
   // is inside one of them, the sea slapping the plates and drips in the dark.
   calm_shore: { surf: 0.6, gulls: 0.45, wind: 0.2, drips: 0.25 },
+  // Chapter 6's Ash Road: a low wind over the ash and the odd crackle of the cracks; the
+  // bare seabed below it, the sea a long way off now, just a murmur.
+  ash_waste: { wind: 0.4, fire: 0.07, hum: 0.08 },
+  ash_seabed: { surf: 0.18, wind: 0.3, gulls: 0.08, muffle: 900 },
   calm_stilt_town: { surf: 0.3, creaks: 0.5, tavern: 0.5, gulls: 0.35, drips: 0.3, wind: 0.1, rigging: 0.35, bell: 0.2 },
   calm_stilt_inside: { tavern: 0.8, creaks: 0.35, fire: 0.3 },
   calm_wreck_yard: { creaks: 1, bell: 0.55, surf: 0.4, gulls: 0.3, drips: 0.3, wind: 0.2, rigging: 0.3 },
@@ -1851,6 +2142,14 @@ const AMBIENCES = {
   // on a Tropical Beach" from Wikimedia Commons, cut to a seamless 50 s).
   credits_sea: { recording: { url: 'assets/audio/waves.ogg', level: 0.22 } },
 };
+
+// Room by room mixes for chapters 4 to 6, their far-off one-shots and how they ring
+// (src/audio/roomAmbience.js).
+Object.assign(AMBIENCES, EXTRA_AMBIENCES);
+Object.assign(AMBIENT_EXTRAS, EXTRA_EXTRAS);
+Object.assign(SFX, EXTRA_SFX);
+Object.assign(SFX_FEEL, EXTRA_FEEL);
+Object.assign(ECHO_BY_AMBIENCE, EXTRA_ECHO);
 
 // Real recordings for `recording` layers, fetched once and kept.
 const recordings = new Map();
@@ -3466,6 +3765,31 @@ class MusicPlayer {
     const loading = loadSamples(this.ctx, { title: 'chime', instruments: { chime: instrument } });
     if (loading) loading.then(play, () => {});
     else play();
+  }
+
+  // A breath of air through a bellows (the Fair Return's harmonium): soft noise in a reedy band, swelling in and
+  // out over `seconds`.
+  bellows({ seconds = 0.9, volume = 0.05, delay = 0, tone = 900 } = {}) {
+    if (!this.ctx) return;
+    const { ctx } = this;
+    const length = Math.max(1, Math.floor(ctx.sampleRate * seconds));
+    const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    const band = ctx.createBiquadFilter();
+    band.type = 'bandpass';
+    band.frequency.value = tone;
+    band.Q.value = 0.8;
+    const gain = ctx.createGain();
+    const start = ctx.currentTime + delay;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(volume, start + seconds * 0.25);
+    gain.gain.linearRampToValueAtTime(0, start + seconds);
+    source.connect(band).connect(gain).connect(this.sfxBus);
+    source.start(start);
+    source.stop(start + seconds + 0.05);
   }
 
   // Loads recordings ahead of time, so a chime rings the moment it's struck.

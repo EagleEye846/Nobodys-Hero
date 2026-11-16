@@ -1,0 +1,61 @@
+# BT_GATE_NEWT: A newt guard at the gate in a helmet too big for him. The spelling of the banner is his fault, though he doesn't know it.
+
+[first]
+Move along! Move... oh, are you the visitors? Welcome. WELLCOME. It's on the banner.
+
+I checked the spelling. Twice. That's where the second L came from.
+
+[repeat]
+The crowd's not usually like this. We usually have one mole and a bat.
+
+[first after the_kings_welcome]
+You're the king's guests! Wonderful. I mean, I always knew. Please don't mention the spelling.
+
+[repeat after the_kings_welcome]
+I've been told to say nothing about the banner. I'll say nothing. The banner's perfect.
+
+[first after the_light_goes_up]
+I've made a new banner! WELLDUN. Two words. I checked.
+
+[repeat after the_light_goes_up]
+Tomorrow's banner says HAPPPY. I checked it three times.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+That's the official crowd. We count them. Today: eleven moles, four frogs, a bat, and me. I'm not sure I count.
+
+# (draft)
+[repeat 3]
+If anyone asks, the banner's a family name. The Wellcomes. Very old Belowtown family.
+
+# (draft)
+[repeat_ves 3]
+{bored}Very old family. {smile}Can't spell, but very old.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+His Majesty called the banner "a TRIUMPH". He says that about everything. He said it about my helmet.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Somebody's written under WELLDUN, in small letters: "well done". I'm choosing to take it as agreement.
+
+# --- SIDE QUEST: something soft for the helmet (an odd sock, drying by the inn door) ---
+
+[sock_ask]
+Could I ask something? It's the helmet. It's too big. It keeps coming down over my eyes, and the last thing I saw clearly was the second L.
+
+I'd stuff it with something soft, but I've only got my own socks and I need those. If you see an odd one lying about...?
+
+[sock_wait]
+Anything soft would do. A sock, a scarf, a cloud. Not a hat. The helmet's the hat.
+
+[sock_done]
+A sock! Stripy! It's PERFECT! ...I can see. There's a WHOLE ROOM out here.
+
+I want you to have this. It's a badge. I've two. One for the gate, and one for me, and I'd rather it was you.
+
+[sock_after]
+I can see the whole banner now. I wish I couldn't. The spelling, I mean. The sock is wonderful.

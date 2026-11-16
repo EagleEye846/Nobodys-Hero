@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE LANTERN PATH: thick mist over open bog, and one way across it, old
 // duckboards winding from tussock to tussock with lanterns on poles beside
 // them. In the mist you can only see the boards near a lantern. Two in the
@@ -84,13 +85,19 @@ export const MARSH_LANTERN_PATH = {
     { sprite: 'coat_strip', x: 7, y: 3, text: 'lantern_strip' },
     { sprite: 'gold_pouch', x: 26, y: 2, text: 'lantern_purse', gold: 160, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'sign', x: 13, y: 15, text: 'lantern_spur_end' },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_lantern_path'] ?? []),
   ],
   tileTexts: { '"': 'reeds', '%': 'bog', $: 'fen_water', '=': 'duckboards' },
 
-  // Wisps, drifting over the bog (they glow in the mist, like the lanterns).
+  // Wisps, drifting over the bog (they glow in the mist, like the lanterns). AMBUSH: the middle
+  // one isn't drifting: it stands at the end of the spur up to the purse (25,1), passing for one
+  // more lantern on a pole, till you come within three and a half tiles, halfway up the spur (it blinks, its flame flares:
+  // the wisp's own lantern art, with `look: 'marsh_lantern'` for the shower of sparks,
+  // src/overworld/hideouts.js). The main way (row 7 and down) is five tiles or more away.
   npcs: [
     { enemy: 'wisp', x: 9, y: 9, patrol: [7, 11], behaviour: 'wander', light: 44 },
-    { enemy: 'wisp', x: 21, y: 10, patrol: [19, 23], behaviour: 'wander', light: 44 },
+    { enemy: 'wisp', x: 25, y: 1, patrol: [25, 25], behaviour: 'disguise', look: 'marsh_lantern', reach: 3.5, light: 44 },
     { enemy: 'wisp', x: 27, y: 15, patrol: [25, 29], behaviour: 'wander', light: 44 },
   ],
 };

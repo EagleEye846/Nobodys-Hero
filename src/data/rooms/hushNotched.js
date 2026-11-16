@@ -10,6 +10,10 @@
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_NOTCHED = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_notched',
@@ -71,6 +75,7 @@ export const HUSH_NOTCHED = {
   // its place in the order.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_notched ?? []),
     { sprite: 'gate_narrow', x: 15, y: 6, text: 'notched_gate', opensWith: ['one', 'two', 'three', 'four'], inOrder: true, openText: 'notched_gate_open', resetText: 'notched_gate_reset' },
     { sprite: 'sign', x: 17, y: 8, text: 'notched_sign' },
     { sprite: 'lever', x: 4, y: 13, text: 'notched_lever', lever: 'three' },
@@ -87,6 +92,8 @@ export const HUSH_NOTCHED = {
     { sprite: 'notched_post', x: 29, y: 19, text: 'notched_ma' },
     { sprite: 'chest', x: 2, y: 2, text: 'notched_chest', gives: 'charcoal_toffee', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 3, y: 15, text: 'notched_pouch', gold: 130, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_notched ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

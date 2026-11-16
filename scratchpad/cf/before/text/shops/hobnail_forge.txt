@@ -1,0 +1,129 @@
+# HOBNAIL'S FORGE: Hobnail, a grumpy old mole smith at the heat vent in
+# Belowtown, goggles pushed up, tongs and a hammer always in hand. He talks
+# in grunts, three words at most, usually one. Under all the grunting he's
+# the kindest soul in the place, and would die before he'd say so.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Hn.
+
+# (draft)
+[greeting 2]
+Hn. Back.
+
+# (draft)
+[greeting 3]
+(He kicks a stool towards the vent. It's the warm one.) Sit.
+
+[menu_prompt]
+Well?
+
+[buy_prompt]
+Pick. Goggles. Bread.
+
+[sell_prompt]
+Show.
+
+[talk_prompt]
+Hn. Talk.
+
+[bought]
+Hn. Good.
+
+[bought_item]
+Eat.
+
+[sold]
+Fine.
+
+[nothing_to_sell]
+Nothing?
+
+[cant_sell]
+Wearing it.
+
+# (draft) A Notch Charm bought: one more SPELL NOTCH for everyone.
+[bought_notch]
+Hn. Notch. (He taps it, points at you, then at your friends.) SPELLS. C.
+
+[owned]
+Got one.
+
+[wont_fit]
+Not yours.
+
+[too_poor]
+Short.
+
+[bought_stored]
+Bag's full. Chest.
+
+[bag_full]
+Full. Eat.
+
+[farewell]
+Hn. Go.
+
+[talk: The Hero]
+Small.
+
+Brave.
+
+Gone.
+
+[talk: The Hero after the_light_goes_up]
+Small.
+Brave.
+...Lit it. Hn.
+
+[talk: The king]
+Loud.
+
+[talk: Tuck]
+(Hobnail stops hammering. He doesn't say anything for a very long time.)
+
+...Good lad.
+
+[talk: The forge]
+Hot.
+
+[talk: Ves]
+Sharp. Good.
+
+# The star sword (the Fallen Star: src/data/fallenStar.js). Not a "talk:"
+# section: the topic only shows once you've got the sword.
+[forge_ask]
+Sword. (He holds out a huge hand, and looks at the blade for a long time.) Hn. Good.
+
+Missing. Bring star.
+
+(He jabs a thumb at the floor.) Fell. Down. Old Seam. Hn.
+
+# (draft) The shard is no longer just lying in the crack: something keeps it, at the bottom of Seam Nine.
+(He lowers the thumb. Then lowers it again, further.) ...Deeper. Past the hats. Something keeps it. Hn.
+
+[forge_now]
+Hn!
+
+(Hobnail pulls his goggles down. The shard goes into the fire, then onto the blade, and the whole forge fills with sparks.)
+
+# The rest, after the show: the scene reforge_hobnail (src/data/scenes/reforgeShows.js).
+
+[forge_done]
+Done. Good.
+
+# (draft) The true ending: a hint that it isn't finished.
+(He taps the blade with one claw, and listens to it ring for a long time.) ...Not finished. More. Out there.
+
+[forge_later]
+First. Other. Smith.
+
+# (draft) The true ending's rule: an earlier forging was missed, and it's too late now.
+(He turns the blade over, slowly, and shakes his head.) Missed one. Too late. Hn.
+
+[forge_hint]
+Star? Hn. Sword. Find.
+
+[forge_shard_only]
+Shard. Pretty. Sword?

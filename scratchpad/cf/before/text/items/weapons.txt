@@ -1,0 +1,275 @@
+# Weapon descriptions for the EQUIP menu (C in the overworld) and shops.
+# One section per weapon id in src/data/weapons.js. The menus show FIGHT power
+# and the SHIFT ability automatically, so these are just flavour and how it works.
+
+[worn_sword]
+A dependable old blade. No tricks, full damage.
+
+[old_shield]
+Dented, but sturdy.
+Raise a barrier around your SHADOW that destroys bullets. Takes a few seconds to recharge.
+
+[duelist_blade]
+Thin, quick and very sharp.
+A fast slash around your SHADOW. Parry a bullet just before it hits and it recharges instantly.
+
+[ash_spear]
+Made of ash wood, this spear is known to dash through attacks like a phantom. Some say you can hear the screams of its past wielders wailing from it.
+Dash the way you're moving. Nothing can hurt you mid-dash.
+
+[hunting_bow]
+Strung with something that hums.
+Fire arrows straight up that break the first bullet they hit. Three arrows per turn.
+
+[oak_staff]
+Warm to the touch, even here.
+Hold SHIFT to stand still and channel. Grazing builds SP three times as fast.
+
+[stone_hammer]
+Mostly rock. Partly handle.
+Slam the ground to clear the bullets closest to you. Slow to recharge.
+
+[spare_lantern]
+The Keeper says it was never needed. Until now.
+Leave a pool of light. Bullets inside it slow to a crawl.
+
+[glass_dagger]
+You can see yourself in it, slightly to the left.
+Blink to the opposite side of the box.
+
+[iron_gauntlets]
+Heavy, cold, and eager.
+Punch the nearest bullet back at the enemy for damage. It has to be close!
+
+[chapel_bell]
+One clear note, and everything listens.
+Ring it to freeze every bullet for a moment.
+
+[old_tome]
+The pages remember what you forgot.
+Spend 20% SP to heal 12 HP, right in the middle of an attack.
+
+# Mount Vigil and Heralds' Rest.
+[ice_pick]
+A climber's pick with a worn leather grip, found in the caves inside the spire. It bites deep, and it's made for lunging.
+
+[herald_trumpet]
+A herald's brass trumpet, polished for a hundred years. One blast and everything stops to listen (Toll).
+
+# Sold by Rimble, the goblin in the ice caves.
+[glintstone_sling]
+A leather sling and a pouch of pebbles that glitter in the dark. Rimble picked them up somewhere he won't say. Fire them straight up (Shoot).
+
+[coldlight_lantern]
+A lantern with an ice crystal in it instead of a flame. It glows a cold, steady blue, and never goes out. Hold it up to slow the bullets in its light (Light).
+
+[golem_knuckle]
+A fist of cave stone, hollowed out to fit a hand. It still twitches sometimes. Slam the ground with it to clear the bullets around you (Quake).
+
+# Ves's umbrella parts. Only she can use them (see `wielder` in
+# src/data/weapons.js); the menus show her stats by themselves.
+[lamplighters_handle]
+The umbrella that came down on the wind: a brass hook worn smooth by her mother's hand, and the patched plum canopy. Ves won't hear a word against either.
+
+[bellwire_ribs]
+Umbrella ribs restrung with old wire from the belltower. They ring when she swings, and the sleet comes off them meaning it. Snow gets in the way.
+
+[hearthwood_crook]
+A handle carved from an offcut of the inn's hearth beam. Greta swears it's still warm. The wind it calls certainly is.
+
+[weathervane_hilt]
+An iron weathercock off a long-gone roof. It always turns into the wind.
+With it, SHELTER brings a gust that slows the next attack.
+
+[tempered_ferrule]
+A steel tip for the end of an umbrella, hammered out and quenched in snow at Tilda's forge. Ves says it's for walking. It isn't for walking.
+
+[skyiron_blade]
+A long blade of dark iron that fell from the sky, Hollis says, and was found in the snow. It's light, it's sharp, and it rings when it parries.
+
+[owlfeather_canopy]
+A canopy of white owl feathers laid over each other like snow on a roof. It turns the wind, and Ves swears it's quieter inside.
+
+[frostglass_canopy]
+An umbrella canopy of paper-thin ice-glass panes, stitched on with goblin thread. It never melts. Its wind soothes, and it mends a little too.
+
+# Chapter 3, below the clouds.
+[woodcutters_hatchet]
+A woodcutter's hatchet, the handle dark with years of hands. No tricks. It just hits very, very hard.
+
+[pinewood_bow]
+A bow cut from a red pine and strung with gut. It smells of sap, and it shoots straight up like the trees grow.
+
+[punt_pole]
+A long ash pole for pushing a boat through the marsh. Push it through a fight instead: you go where it points, and fast.
+
+[reed_knife]
+A knife of sharpened reed, so light you forget you're holding it. So do the bullets, for a moment.
+
+[cistern_maul]
+A great iron mallet from the drowned city's waterworks, made for knocking stuck valves loose. It knocks other things loose too.
+
+[statue_buckler]
+A round stone shield, broken off the arm of one of the city's statues. It was made to greet a hero. It'll do to guard a nobody.
+
+[hollow_blade]
+A sword found in the ruined city, plain and perfectly balanced, with no name on it anywhere. It rings like a bell when it parries.
+
+[scarlet_silk_canopy]
+An umbrella canopy of red silk from the woodcutters' good chest, the colour of the Pinefall in autumn. It hits like a slammed door.
+
+[forum_bronze_ferrule]
+A heavy bronze tip off one of the forum's railings, cut down to fit an umbrella. For when Ves has hers back. It'll hit like a church bell.
+
+[vellum_canopy]
+An umbrella canopy of old vellum pages from the library, waxed and stitched together. The writing's still on them. Things go quiet under it.
+
+[fountain_brass_handle]
+A curved brass handle off a dry fountain, polished smooth by a hundred years of hands. It feels warm, somehow.
+
+[bog_oak_handle]
+A handle of black bog-oak, a thousand years in the marsh and hard as iron. The wind it calls smells of rain, and it mends.
+
+# The Hushwood.
+[fallen_star]
+A sword of pale star-metal, pulled out of the stone that brought it down. It's warm. It glows in the dark like it remembers being up there.
+
+[tidemark]
+A sword out of the old city, kept dry in its vault for longer than Hollin stood. A line runs along the blade like the mark water leaves on a wall, and it turns a blow aside the way a weir turns water.
+
+[bookmark]
+A thin old blade, left in a book to keep somebody's place, a hundred years ago. It was a very long book. It's light as a page and it slips through things like a page through fingers.
+
+[sculptors_mallet]
+The mallet the old city's sculptor carved all the Hero's statues with. Its head is worn into a shape that fits stone exactly. Swing it, and stone remembers it.
+
+[reedcutter]
+The old city's toll-keepers kept the causeway clear with this: a long, curved blade on a short haft, for cutting back the reeds. It still goes through them like a breath. It goes through other things, too, and it wants to go forward.
+
+[sled_runner_sabre]
+A herald's sled runner, ground down to an edge and given a grip of twine. Rummage swears it went downhill faster than anything alive. So do you, now.
+
+[clock_hand_pike]
+The minute hand off a great clock, on a broom handle. Hold it right and you're somewhere else for a second. It's always five to something.
+
+[kettle_shield]
+A huge iron kettle lid with a strap riveted on. It's taken worse than bullets. It's taken a woodcutters' breakfast.
+
+[grandads_hatchet]
+Bramble's grandad's hatchet, far too big for him. The handle's worn to the shape of a much bigger hand. He holds it where his grandad did anyway.
+
+[mas_felling_axe]
+Ma's spare felling axe, left at the trap. Twice as heavy as Bramble's. He says she'd want him to have it. She would also want him at camp.
+
+[twin_hatchets]
+Two little hatchets, one for each hand. Bramble insists he's always been ambidextrous. He found out today.
+
+[splitting_maul]
+A woodsplitter's maul, all head and no manners. Bramble can barely lift it, but when it comes down, everything flinches.
+
+[heartwood_axe]
+An axe with a head of black heartwood, harder than iron, from the oldest tree in the wood. It never needs sharpening. It never needs anything.
+
+# Teasel's forge, in Lasthome's square: the old city's iron and the bell's
+# last bronze, made into weapons for the first time in anyone's memory.
+[hinge_cleaver]
+A hinge off one of the old city's doors, ground to an edge and hafted. It isn't pretty. It's very heavy. No tricks, full damage.
+
+[bell_bronze_gauntlets]
+Cast from the last ingot of the chapel bell. They still ring when they're struck.
+Punch the nearest bullet back at the enemy for damage. It has to be close!
+
+[forge_lantern]
+An iron lantern with a coal from Teasel's forge in it. It never goes out, and it's too hot to hold for long.
+Leave a pool of light. Bullets inside it slow to a crawl.
+
+[stokers_staff]
+The iron bar Teasel stirs the fire with. It's warm all the way up.
+Hold SHIFT to stand still and channel. Grazing builds SP three times as fast.
+
+[bell_shard]
+A piece of the chapel bell that never went into the pots, on a leather thong. Teasel kept it. She won't say why.
+Ring it to freeze every bullet for a moment.
+
+[iron_shod_ferrule]
+A heavy iron tip for the end of Ves's umbrella, for when she has it back. Teasel made it without ever seeing the umbrella. "Bring it and I'll see."
+
+# Chapter 4, under the fields.
+# Sold by Marigold at her lemonade stand in Sunnyside.
+[hayfork]
+A hayfork, for hay. Also for anything that looks at you funny. Marigold says it came with the stand. Lunge straight ahead and nothing in the way gets a say.
+
+# In a quartz nook in the Glimmering, if you know where to look.
+[quartz_edge]
+A blade of clear quartz, chipped to an edge by something very patient. It lets the light right through, and it lets you right through bullets, too. Slip through them for a moment.
+
+# Sold by Hobnail.
+[miners_pick]
+Hobnail's own pick, from before the mine was a mine. The head is as wide as your face and the handle is mostly dents. Slam it down and the ground hops.
+
+# In a chest in the Stillwater.
+[ferry_pole]
+A long punting pole, polished by a hundred years of hands. It's for pushing off the bottom, and for pushing off everything else. Plant it and bullets stop at the pole.
+
+# In the Deep, past a lot of dark.
+[deepglass_blade]
+A blade of black glass that formed in the dark, slowly, around nothing. It rings very quietly. It catches a blow and hands it back with interest.
+
+# Ves's.
+# In the fishers' chest in the cliff cave.
+[gaff_hook]
+A fisher's long hook for landing big fish. It lands other things too.
+
+# In a chest in Sunnyside.
+[daisy_ferrule]
+A brass tip for Ves's umbrella, with a daisy stamped in it. Ves says it's embarrassing. She hasn't taken it off.
+
+# In a chest in the Glimmering.
+[prism_canopy]
+Ves's umbrella, re-covered in thin panes of crystal. Rain doesn't fall on it, it shines. It calms things down just by being pretty.
+
+# In a chest in the Diggings.
+[rivet_handle]
+A handle riveted together out of mine-cart scrap. It's heavy, ugly and exactly the right shape for a hand. Ves hits things with it and calls it "persuasion".
+
+# In a chest in the Deep.
+[glowcap_canopy]
+Glowing caps grew right on Ves's umbrella. They hum, and they're warm. It mends you a little every turn.
+
+# CHAPTER 5, the drowned coast.
+# Mrs. Wrasse's Chandlery, in Saltcombe.
+[driftwood_cutlass]
+A cutlass whittled from a ship's rib that washed up smooth as a bone. It's light, and quick, and slightly damp forever. Lunge ahead and nothing in the way gets a say.
+
+[brine_harpoon]
+A harpoon with a barbed tip and a salted shaft. Mrs. Wrasse sells it with a coil of rope and a warning not to throw it at anything you'd like to keep.
+
+# In a chest in the Wreck Yard.
+[anchor_maul]
+A ship's anchor on a driftwood haft. It was never meant to be swung. Slam it down and the ground, the deck and the sea all hop.
+
+# In a chest in the Soundings.
+[glass_float_staff]
+A fisher's glass float on a crook of bleached wood. Something shifts inside it, slow and green. It's calm in your hand.
+
+# (draft) The Fair Return's captain, with his greatcoat.
+[captains_cutlass]
+A brass-hilted cutlass, curved and heavy at the tip, in a sheath gone green at the throat. A hundred years at a captain's hip and hardly drawn: the edge is still the one the smith put on. Lunge, and it goes where it's sent, like a good crew.
+
+# Dropped by Corrie, the Tidecaller.
+[stormglass_blade]
+A blade of storm-green glass with lightning frozen in it. It was the storm, once. Now it's yours, and it catches a blow and hands it back, with a roll of thunder.
+
+# Ves's.
+[sailcloth_umbrella]
+Ves's umbrella in patched sailcloth. It smells of salt and tar, and mends you a little every turn.
+
+[storm_umbrella]
+Orla built a canopy frame for Ves out of iron ribs and old lamp-brass. It sings in the wind, and the wind does what it says. SHELTER holds the bullets back for longer.
+
+# Bramble's.
+[boat_axe]
+An axe for cutting boat ropes in a hurry, cut down to his size. Bramble says it's his now. Mrs. Wrasse says it's still on the tag.
+
+[ships_cleaver]
+A short, heavy cleaver off a wreck. It's rusted in the shape of a ship's wheel. Orla reground it on the forge, and it goes in quiet.

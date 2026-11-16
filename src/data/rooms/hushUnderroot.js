@@ -8,6 +8,10 @@
 //   K  cave wall (solid)
 //   k  cave rock (solid)
 //   q  cave floor
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_UNDERROOT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_underroot',
@@ -66,6 +70,7 @@ export const HUSH_UNDERROOT = {
   // dead ends.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_underroot ?? []),
     { sprite: 'chalk_rock_down', x: 29, y: 10, text: 'underroot_chalk', seenInLight: true },
     { sprite: 'chalk_rock_up', x: 24, y: 17, text: 'underroot_chalk', seenInLight: true },
     { sprite: 'chalk_rock_up', x: 22, y: 15, text: 'underroot_chalk', seenInLight: true },
@@ -80,6 +85,8 @@ export const HUSH_UNDERROOT = {
     { sprite: 'sign', x: 29, y: 10, text: 'underroot_sign' },
     { sprite: 'chest', x: 13, y: 11, text: 'underroot_chest', gives: 'kiln_jerkin', seenInLight: true, taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 29, y: 1, text: 'underroot_pouch', gold: 140, seenInLight: true, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_underroot ?? []),
   ],
   tileTexts: { K: 'underroot_wall', k: 'underroot_wall' },
 

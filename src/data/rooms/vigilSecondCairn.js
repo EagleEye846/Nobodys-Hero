@@ -11,6 +11,7 @@
 //   n  snow                                       i  trodden snow path
 //   s  the great stair                            Y  snow pine (walk or hide behind) (solid)
 //   Q  snowy boulder (solid)                      _  open sky (the view shows through) (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_SECOND_CAIRN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_second_cairn',
@@ -87,6 +88,7 @@ export const VIGIL_SECOND_CAIRN = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/upper_vigil.txt',
   props: [
+    { sprite: 'col_pin_bell', x: 22, y: 13, walkable: true, flat: true, gives: 'pin_bell', taken: { gone: true } },
     // The second cairn, where the village turns back, and the heralds' last waymark.
     { sprite: 'ribbon_cairn', x: 16, y: 17, text: 'cairn_ribbons' },
     { sprite: 'waymark', x: 7, y: 20, text: 'cairn_waymark' },
@@ -97,6 +99,8 @@ export const VIGIL_SECOND_CAIRN = {
     { sprite: 'chest', x: 21, y: 4, text: 'cairn_chest', gives: 'climbers_ration', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'grapple_ring', x: 18, y: 6, grapple: true },
     { sprite: 'chough', x: 3, y: 13, text: 'upper_chough', walkable: true },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_second_cairn'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

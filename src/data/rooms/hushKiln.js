@@ -9,6 +9,8 @@
 //   d  leaf litter
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   y  leaf path
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
 export const HUSH_KILN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_kiln',
@@ -66,6 +68,7 @@ export const HUSH_KILN = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/hushwood.txt',
   props: [
+    { sprite: 'col_marble_galaxy', x: 28, y: 18, walkable: true, flat: true, gives: 'marble_galaxy', taken: { gone: true } },
     { sprite: 'kiln', x: 18, y: 7, text: 'kiln_kiln' },
     { sprite: 'charcoal_heap', x: 21, y: 8, text: 'kiln_charcoal' },
     { sprite: 'charcoal_heap', x: 22, y: 10, text: 'kiln_charcoal' },
@@ -77,7 +80,9 @@ export const HUSH_KILN = {
     { sprite: 'savepoint', x: 12, y: 12, save: true },
     { sprite: 'barrel', x: 23, y: 12, text: 'kiln_barrel' },
     { sprite: 'chalk_tree', x: 4, y: 8, text: 'kiln_chalk' },
-    { sprite: 'crates', x: 22, y: 5, text: 'kiln_crates' },
+    { sprite: 'crates', x: 22, y: 5, text: 'kiln_crates' },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_kiln ?? []),
   ],
   tileTexts: { L: 'scarlet_tree' },
 

@@ -6,7 +6,7 @@ import { drops } from './parts/chapter3.js';
 import { starFall } from './parts/starGuardians.js';
 
 // "Something Hums Below": the secret seam under Seam Nine (The Scorch, The
-// Glassworks, The Last Camp and Pudding's Pool). The star came down through
+// Glassworks, The Last Camp and the Pale Olm's Pool). The star came down through
 // the roof here and glazed the rock to glass, and the miners laid their line
 // across it anyway, until one day they sat down to lunch at the last camp
 // and never came back. A tin mug, a kettle, a tea shelf; seven hats left

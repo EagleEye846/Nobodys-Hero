@@ -293,7 +293,7 @@ export const BELOW_BATTLE_THEME = {
   title: 'Scurry',
   bpm: 132,
   stepsPerBeat: 6,
-  volume: 1.2,
+  volume: 1.11,
 
   instruments: {
     // The tune, staccato piano and a flute in unison.

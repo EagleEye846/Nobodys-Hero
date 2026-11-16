@@ -20,6 +20,10 @@ A fine choice! Press C out there to equip it.
 [bought_item]
 Thank you kindly! Eat it in a pinch. In a fight, I mean.
 
+# (draft) A Notch Charm bought: one more SPELL NOTCH for everyone.
+[bought_notch]
+A notch charm! Everyone with you can carry one more spell into a fight now. Pick them from SPELLS. Press C!
+
 [owned]
 You already have that one, friend.
 

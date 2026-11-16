@@ -60,7 +60,7 @@ Tea?
 # TALK options in src/data/enemies/gleamsnail.js.
 [talk: Inspect]
 GLEAMSNAIL - HP 950
-A snail with a cracked geode for a shell. Carries its house, and keeps it spotless. Slow, but its crystals ring and its light bends. Mind the slime.
+A snail with a cracked geode for a shell. Carries its house, and keeps it spotless. Slow, but very tidy, and it does its washing wherever it is. Mind the slime.
 
 [talk: Admire the house]
 You tell GLEAMSNAIL it's a lovely house. A truly fine one. GLEAMSNAIL's eyestalks rise as high as they'll go. It points out the chimney. And the door. And the doormat.

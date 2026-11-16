@@ -1,15 +1,20 @@
 import { defineBulletArt } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
 import { Ring } from './underShapes.js';
+import { PathShot, Deco, Zone, Tether } from './coastKit.js';
 
 // The Dowager Crab's attacks. A very old, very polite hermit crab who lives in
-// a bathtub with a ship's bell on it, and who has been trespassed upon. Her
-// house is her weapon: soap bubbles that pop into droplets, the bell tolling
-// in rings, her claws snipping shut on a column or a row, rubber ducks and
-// bath sponges lobbed in from the tub, barnacles flung to stick where you
-// stand, and (once she has lost her patience) the bath water itself, slopping
-// over half the box at a time. She stands to the right of the box, so
-// everything comes in from that side.
+// a bathtub with a ship's bell on it, and who has been trespassed upon. Every
+// attack is her manners, turned on you:
+//   - Wipe your feet: be on the doormat when she inspects your feet.
+//   - Her pearls: the string snaps, the pearls scatter and stop, and then
+//     come back exactly the way they rolled when she pulls the string.
+//   - The minuet: four of her claws dance round you in three time, stepping
+//     on the ONE, curtseying into the middle every fourth bar.
+//   - The monocle: the lens drifts after you and burns where it settles.
+//   - How very forward: her claws snip shut across the way you are going.
+//   - The bath water (riled): it slops over the half of the box you're in.
+// She stands to the right of the box.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`.
 // `update` is given dt times `density`; a bullet's own clock is real time.
@@ -326,242 +331,374 @@ class Tide {
   }
 }
 
+// A pearl off her necklace: round, white, with a pink sheen.
+defineBulletArt('crabPearl', { frames: [art(7, 7, (p) => { p.ellipse(3, 3, 2.6, 2.6, 'W'); p.set(2, 2, 'w'); p.set(4, 4, 'p'); })], palette: P, radius: 2.6 });
+// One of her claws, out on the floor for the minuet (pincers up).
+defineBulletArt('crabDancer', {
+  frames: [
+    art(11, 11, (p) => { p.ellipse(5, 7, 3.6, 3, 'o'); p.poly([[2, 5], [3, 0], [5, 4]], 'o'); p.poly([[6, 4], [8, 0], [9, 5]], 'q'); p.set(5, 7, 'O'); p.set(4, 8, 'q'); }),
+    art(11, 11, (p) => { p.ellipse(5, 7, 3.6, 3, 'o'); p.poly([[2, 5], [2, 1], [5, 4]], 'o'); p.poly([[6, 4], [9, 1], [9, 5]], 'q'); p.set(5, 7, 'O'); p.set(4, 8, 'q'); }),
+  ],
+  palette: P,
+  radius: 4,
+  frameSeconds: 0.19,
+});
+// A grain of sand shaken out of the mat.
+defineBulletArt('crabGrit', { frames: [['.s.', 'sSs', '.s.']], palette: P, radius: 1.7, spin: 4 });
+
+// Everything but the doormat, for a moment: where her look falls hard when
+// she inspects your feet. Hurts anywhere off the mat while it lasts.
+class OffMat {
+  constructor({ box, mat, warn, life = 0.22 }) {
+    Object.assign(this, { box, mat, warn, life });
+    this.age = 0;
+    this.dmg = null;
+    this.grazed = false;
+  }
+
+  get active() {
+    return this.age >= this.warn && this.age < this.warn + this.life;
+  }
+
+  update(dt) {
+    this.age += dt;
+  }
+
+  isGone() {
+    return this.age >= this.warn + this.life + 0.2;
+  }
+
+  edgeDistance(px, py) {
+    if (!this.active) return Infinity;
+    const m = this.mat;
+    // Inside the mat (with the soul's own size to spare) is safe.
+    const inside = Math.min(px - m.x, m.x + m.w - px, py - m.y, m.y + m.h - py);
+    return inside > 2.5 ? Infinity : 0;
+  }
+
+  draw(ctx) {
+    const b = this.box;
+    const m = this.mat;
+    ctx.save();
+    if (this.age < this.warn) {
+      // Her monocle glints: a pale flicker round the edge of the box.
+      if (this.warn - this.age < 0.35) {
+        ctx.globalAlpha = Math.floor(this.age * 20) % 2 ? 0.25 : 0.5;
+        ctx.strokeStyle = '#fff0a0';
+        ctx.strokeRect(b.x + 1.5, b.y + 1.5, b.w - 3, b.h - 3);
+      }
+      ctx.restore();
+      return;
+    }
+    const over = this.age - this.warn - this.life;
+    ctx.globalAlpha = over > 0 ? Math.max(0, 0.45 * (1 - over / 0.2)) : 0.45;
+    ctx.fillStyle = '#e8742e';
+    ctx.beginPath();
+    ctx.rect(b.x, b.y, b.w, b.h);
+    ctx.rect(m.x + m.w, m.y, -m.w, m.h);
+    ctx.fill('evenodd');
+    ctx.restore();
+  }
+}
+
+// A doormat: coir bristles, a border, WIPE on it.
+const drawMat = (ctx, m, alpha = 1) => {
+  ctx.save();
+  ctx.globalAlpha *= alpha;
+  ctx.fillStyle = '#8a6a22';
+  ctx.fillRect(Math.round(m.x), Math.round(m.y), m.w, m.h);
+  ctx.fillStyle = '#d8c070';
+  ctx.fillRect(Math.round(m.x) + 2, Math.round(m.y) + 2, m.w - 4, m.h - 4);
+  ctx.fillStyle = '#8a7a38';
+  for (let x = 4; x < m.w - 3; x += 3) ctx.fillRect(Math.round(m.x) + x, Math.round(m.y) + 3, 1, m.h - 6);
+  ctx.restore();
+};
+
 export const DOWAGER_CRAB_ATTACKS = {
-  // Soap bubbles: big shimmering bubbles drift in from the tub on your row,
-  // wobbling, and pop part-way across into a ring of drops. The pop is
-  // where you would have been, so holding still is no good.
-  crabBubbles(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let made = 0;
-    let next = 0.2;
-    const pops = [];
+  // Wipe your feet: a doormat lies in the box, and every so often she
+  // inspects your feet (her monocle glints round the box first). Anywhere
+  // off the mat at that moment, her look lands hard. Then she has the mat
+  // moved (its next place shows as an outline well before) and the old one
+  // is shaken out, in a puff of sand. Be on the mat when she looks.
+  crabMat(box, density, { Shot, rand }) {
+    const EVERY = 2.4;
+    const MW = 38;
+    const MH = 27;
+    let real = 0;
+    let n = 0;
+    let mat = null;
+    let next = null;
+    let shown = null;
+    let pending = null;
+    let inspecting = false;
+    const place = (avoid) => {
+      let m;
+      let tries = 0;
+      do {
+        m = { x: rand(box.x + 2, box.x + box.w - MW - 2), y: rand(box.y + 2, box.y + box.h - MH - 2), w: MW, h: MH };
+        tries++;
+      } while (tries < 30 && avoid && Math.hypot(m.x - avoid.x, m.y - avoid.y) < 30);
+      return m;
+    };
     return {
-      duration: 7.4,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (made < 9 && t >= next) {
-          made++;
-          next = t + rand(0.55, 0.75);
-          const y = clamp(soul.y + rand(-16, 16), box.y + 8, box.y + box.h - 8);
-          const shot = new Shot({ x: box.x + box.w + 8, y, vx: -36, warn: 0.3, life: 6, art: 'crabBubble', wobble: { frequency: 4.5, amplitude: 6 } });
-          bullets.push(shot);
-          pops.push({ shot, atX: rand(box.x + 18, box.x + box.w - 16), done: false });
+      duration: 11.5,
+      update: (dt, bullets) => {
+        real += dt / density;
+        if (!mat) {
+          mat = place(null);
+          next = place(mat);
+          shown = { m: mat };
+          bullets.push(new Deco({ life: 11.5, paint(ctx) { drawMat(ctx, shown.m); } }));
+          bullets.push(new Deco({ life: 11.5, paint(ctx, d) {
+            // The outline of where the mat goes next.
+            if (!next) return;
+            ctx.strokeStyle = '#d8c070';
+            ctx.setLineDash([2, 2]);
+            ctx.globalAlpha *= Math.floor(d.age * 8) % 2 ? 0.4 : 0.8;
+            ctx.strokeRect(Math.round(next.x) + 0.5, Math.round(next.y) + 0.5, next.w - 1, next.h - 1);
+          } }));
         }
-        for (const pop of pops) {
-          if (pop.done || pop.shot.age < pop.shot.warn || pop.shot.x > pop.atX) continue;
-          pop.done = true;
-          const { x, y } = pop.shot;
-          pop.shot.life = 0;
-          pop.shot.age = pop.shot.warn + 0.01;
-          const turn = Math.random() * Math.PI;
-          for (let k = 0; k < 7; k++) {
-            const a = turn + (k / 7) * Math.PI * 2;
-            // (The drops hang a blink where it burst before they fly, so a bubble
-            // popping beside you isn't a hit from point-blank. 2026-11-10.)
-            bullets.push(new Shot({ x, y, vx: Math.cos(a) * 34, vy: Math.sin(a) * 34, warn: 0.22, art: 'crabDrop', life: 1.4 }));
+        // An inspection every EVERY seconds, the first after a good look at the
+        // mat. Each is set going as soon as the mat it checks is down, so its
+        // hard look is known (and can be read) well ahead.
+        if (!inspecting) {
+          inspecting = true;
+          bullets.push(new OffMat({ box, mat: { ...mat }, warn: 1.4 - real }));
+        }
+        if (real >= 1.4 + n * EVERY && n < 4) {
+          n++;
+          pending = { at: real + 0.6, old: mat, to: next };
+        }
+        const p = pending;
+        if (p && real >= p.at) {
+          pending = null;
+          mat = p.to;
+          shown.m = mat;
+          next = place(mat);
+          if (n < 4) bullets.push(new OffMat({ box, mat: { ...mat }, warn: 1.4 + n * EVERY - real }));
+          const cx = p.old.x + MW / 2;
+          const cy = p.old.y + MH / 2;
+          for (let i = 0; i < 8; i++) {
+            const a = (i / 8) * Math.PI * 2;
+            bullets.push(new Shot({ x: cx, y: cy, vx: Math.cos(a) * 40, vy: Math.sin(a) * 40, art: 'crabGrit', warn: 0.4, life: 1.4 }));
           }
         }
       },
     };
   },
 
-  // Toll: the bell on her tub rings, and the sound spreads in a ring with a
-  // gap. Pairs of tolls, the second a beat later with the gap turned away.
-  crabToll(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let tolls = 0;
-    let echo = null;
-    const rings = [];
-    return {
-      duration: 8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (tolls < 5 && t >= 0.2 + tolls * 1.35) {
-          tolls++;
-          const ox = box.x + box.w + 8;
-          const oy = clamp(soul.y + rand(-22, 22), box.y + 6, box.y + box.h - 6);
-          bullets.push(new Shot({ x: ox, y: oy, harmless: true, life: 0.9, art: 'crabBell' }));
-          // The gap is a way through that is NOT where you stand: a point 22-34 px
-          // up or down from you (the side with room), seen from the bell.
-          const room = soul.y - (box.y + 8) > box.y + box.h - 8 - soul.y ? -1 : 1;
-          const side = Math.random() < 0.3 ? -room : room;
-          let ty = soul.y + side * rand(22, 34);
-          ty = clamp(ty, box.y + 8, box.y + box.h - 8);
-          if (Math.abs(ty - soul.y) < 20) ty = soul.y - side * 26 < box.y + 8 || soul.y - side * 26 > box.y + box.h - 8 ? soul.y + side * 22 : soul.y - side * 26;
-          ty = clamp(ty, box.y + 8, box.y + box.h - 8);
-          const reachD = Math.hypot(soul.x - ox, ty - oy);
-          const gap = { angle: Math.atan2(ty - oy, soul.x - ox), width: 2 * Math.atan2(13, reachD) };
-          const first = new Ring({ x: ox, y: oy, r: 3, grow: 50, thick: 3, warn: 0.5, life: 3.4, gap, color: '#f0d890', glow: '#e0b84a' });
-          bullets.push(first);
-          rings.push(first);
-          echo = { at: t + 0.4, ox, oy, sx: soul.x, sy: soul.y, angle: Math.atan2(ty + rand(-8, 8) - oy, soul.x - ox) };
-        }
-        if (echo && t >= echo.at) {
-          bullets.push(new Ring({ x: echo.ox, y: echo.oy, r: 3, grow: 50, thick: 2.4, warn: 0.5, life: 3.4, gap: { angle: echo.angle, width: 2 * Math.atan2(14, Math.max(30, Math.hypot(echo.ox - echo.sx, echo.oy - echo.sy))) }, color: '#fff4c8', glow: '#e0b84a' }));
-          echo = null;
-        }
-      },
-    };
-  },
-
-  // Snips: her claws close on a column, then a row, then (later in the turn)
-  // both at once. Each follows you while it flickers and locks just before it
-  // shuts.
-  crabSnips(box, density, { rand }) {
-    let t = 0;
+  // Her pearls: the string snaps, and the pearls scatter from beside you in
+  // a burst, roll to a stop, and sit. Then she pulls the string: every pearl
+  // comes back exactly the way it went, to where it broke, and the whole
+  // string is drawn home to her. Three times. Remember where they rolled from.
+  crabPearls(box, density, { rand }) {
+    const OUT = 0.7;
+    const SIT = 0.7;
+    const BACK = 0.55;
+    const HOME = 0.5;
+    let real = 0;
     let n = 0;
     return {
-      // (The last snip is open again by 5.5 s: 7.0, was 8, so the next attack isn't long in coming.)
-      duration: 7.0,
+      duration: 11,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (n < 7 && t >= 0.2 + n * 1.12) {
-          const vertical = n % 2 === 0;
-          const warn = 0.95;
-          const snip = new Snip({ box, vertical, at: vertical ? soul.x : soul.y, warn, follow: soul });
-          // The odd one is shifted a little to a side: you must read it, not sit in the middle.
-          snip.offset = rand(-6, 6);
-          bullets.push(snip);
-          if (n >= 4) {
-            const second = new Snip({ box, vertical: !vertical, at: vertical ? soul.y : soul.x, warn: warn + 0.2, follow: soul });
-            second.offset = rand(-4, 4);
-            bullets.push(second);
-          }
-          n++;
+        real += dt / density;
+        if (real < 0.3 + n * 3.3 || n >= 3) return;
+        n++;
+        const a0 = rand(0, Math.PI * 2);
+        const sx = Math.min(Math.max(soul.x + Math.cos(a0) * 14, box.x + 8), box.x + box.w - 8);
+        const sy = Math.min(Math.max(soul.y + Math.sin(a0) * 14, box.y + 8), box.y + box.h - 8);
+        const home = { x: box.x + box.w + 10, y: box.y + 14 };
+        const COUNT = 11;
+        for (let i = 0; i < COUNT; i++) {
+          const a = (i / COUNT) * Math.PI * 2 + rand(-0.12, 0.12);
+          const d = rand(26, 46);
+          const ex = Math.min(Math.max(sx + Math.cos(a) * d, box.x + 4), box.x + box.w - 4);
+          const ey = Math.min(Math.max(sy + Math.sin(a) * d, box.y + 4), box.y + box.h - 4);
+          bullets.push(new PathShot({
+            art: 'crabPearl', warn: 0.45, life: OUT + SIT + BACK + HOME,
+            path: (k) => {
+              if (k < OUT) { const u = 1 - (1 - k / OUT) ** 2; return { x: sx + (ex - sx) * u, y: sy + (ey - sy) * u }; }
+              if (k < OUT + SIT) return { x: ex, y: ey };
+              if (k < OUT + SIT + BACK) { const u = ((k - OUT - SIT) / BACK) ** 2; return { x: ex + (sx - ex) * u, y: ey + (sy - ey) * u }; }
+              const u = Math.min(1, (k - OUT - SIT - BACK) / HOME);
+              return { x: sx + (home.x - sx) * u, y: sy + (home.y - sy) * u };
+            },
+          }));
         }
+        // The string itself, drawn home at the end (a thread from the knot to her).
+        bullets.push(new Tether({ warn: 0.45 + OUT + SIT + BACK, life: HOME, thick: 2, color: '#f4f6f4', dark: '#5a7090', ends: (k) => {
+          const u = Math.min(1, k / HOME);
+          return [sx + (home.x - sx) * u, sy + (home.y - sy) * u, home.x, home.y];
+        } }));
       },
     };
   },
 
-  // Ducks and sponges: she shies rubber ducks at you from the tub (some at
-  // you, some ahead of you), and drops bath sponges from above that squeeze
-  // out a spray where they land.
-  crabDucks(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let thrown = 0;
-    let next = 0.2;
-    const GRAVITY = 130;
-    const FLIGHT = 0.8;
-    const flying = [];
-    const falling = [];
-    const heading = { x: 0, y: 0 };
-    const seen = { x: null, y: null };
-    const spray = (bullets, x, y, n) => {
-      for (let k = 0; k < n; k++) {
-        const a = -Math.PI + 0.3 + (k / (n - 1)) * (Math.PI - 0.6);
-        bullets.push(new Shot({ x, y, vx: Math.cos(a) * 46, vy: Math.sin(a) * 58, gravity: 110, art: 'crabDrop', life: 1.1 }));
-      }
-    };
+  // The minuet: four of her claws take the floor round you, at the corners
+  // of a square, and dance to her minuet, which is in three: on the ONE of
+  // every bar they all step round to the next corner, and on the two and
+  // three they hold. Every fourth bar they curtsey: all four step into the
+  // middle and back. The square is set round where you were as each phrase
+  // begins. Move on the two and three.
+  crabMinuet(box, density) {
+    const BEAT = 0.4;
+    const BAR = BEAT * 3;
+    const STEP = 0.3;
+    const PHRASES = 2;
+    let real = 0;
+    let phrase = 0;
     return {
-      duration: 7.6,
+      duration: 11,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (seen.x !== null && dt > 0) {
-          heading.x = heading.x * 0.85 + ((soul.x - seen.x) / dt) * 0.15;
-          heading.y = heading.y * 0.85 + ((soul.y - seen.y) / dt) * 0.15;
-        }
-        seen.x = soul.x;
-        seen.y = soul.y;
-        if (thrown < 12 && t >= next) {
-          next = t + 0.6;
-          if (thrown % 2 === 0) {
-            const duck = new Shot({ x: box.x + box.w + 8, y: rand(box.y + 8, box.y + 34), warn: 0.55, life: 4, art: 'crabDuck', gravity: GRAVITY });
-            duck.ahead = thrown % 4 === 2;
-            bullets.push(duck);
-            flying.push(duck);
-          } else {
-            const x = clamp(soul.x + rand(-13, 13), box.x + 6, box.x + box.w - 6);
-            const sponge = new Shot({ x, y: box.y - 6, warn: 0.6, life: 4, art: 'crabSponge' });
-            bullets.push(sponge);
-            falling.push(sponge);
-          }
-          thrown++;
-        }
-        for (const duck of flying) {
-          if (!duck.set && duck.age >= duck.warn - 0.03) {
-            const lead = duck.ahead ? FLIGHT * 0.9 : 0;
-            const tx = clamp(soul.x + heading.x * lead, box.x + 4, box.x + box.w - 4);
-            const ty = clamp(soul.y + heading.y * lead, box.y + 4, box.y + box.h - 4);
-            duck.vx = (tx - duck.x) / FLIGHT;
-            duck.vy = (ty - duck.y - 0.5 * GRAVITY * FLIGHT * FLIGHT) / FLIGHT;
-            duck.set = true;
-          }
-          if (duck.set && duck.vy > 0 && duck.y > box.y + box.h - 3 && !duck.bounced) {
-            duck.bounced = true;
-            duck.y = box.y + box.h - 3;
-            duck.vy = -duck.vy * 0.5;
-            spray(bullets, duck.x, duck.y, 4);
-          }
-        }
-        for (const sponge of falling) {
-          if (!sponge.set && sponge.age >= sponge.warn) {
-            sponge.vy = 60;
-            sponge.set = true;
-          }
-          if (sponge.set && !sponge.splat && sponge.y > box.y + box.h - 5) {
-            sponge.splat = true;
-            sponge.life = 0;
-            sponge.age = sponge.warn + 0.01;
-            spray(bullets, sponge.x, box.y + box.h - 4, 6);
-          }
+        real += dt / density;
+        if (phrase >= PHRASES || real < 0.2 + phrase * BAR * 4) return;
+        phrase++;
+        const H = phrase % 2 ? 22 : 28;
+        const cx = Math.min(Math.max(soul.x, box.x + H - 4), box.x + box.w - H + 4);
+        const cy = Math.min(Math.max(soul.y, box.y + H - 4), box.y + box.h - H + 4);
+        const corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([x, y]) => ({ x: cx + x * H, y: cy + y * H }));
+        const WARN = 0.6;
+        // The bell on her tub ticks the ONE.
+        bullets.push(new Deco({ life: WARN + BAR * 4, paint(ctx, d) {
+          const k = d.age - WARN;
+          const one = k >= 0 && k % BAR < 0.12;
+          ctx.fillStyle = one ? '#fff0a0' : '#8a6a22';
+          ctx.fillRect(box.x + box.w - 8, box.y + 3, 5, 5);
+        } }));
+        for (let i = 0; i < 4; i++) {
+          const at = (j) => corners[(i + j) % 4];
+          bullets.push(new PathShot({
+            art: 'crabDancer', warn: WARN, life: BAR * 4,
+            path: (k) => {
+              const bar = Math.floor(k / BAR);
+              const f = Math.min(1, (k - bar * BAR) / STEP);
+              if (bar === 3) {
+                // The curtsey: in to the middle and back out within the bar.
+                const c = at(3);
+                const g = Math.sin(Math.PI * Math.min(1, (k - bar * BAR) / (BAR * 0.8)));
+                return { x: c.x + (cx - c.x) * g, y: c.y + (cy - c.y) * g };
+              }
+              const from = at(bar);
+              const to = at(bar + 1);
+              return { x: from.x + (to.x - from.x) * f, y: from.y + (to.y - from.y) * f };
+            },
+          }));
         }
       },
     };
   },
 
-  // Barnacles: she flings them at where you stand. Each slows to a stop and
-  // stays, stuck fast, for a couple of seconds: a middle one at you and two
-  // either side, so the box fills up with them.
-  crabBarnacles(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let volleys = 0;
-    const flying = [];
-    const heading = { x: 0, y: 0 };
-    const seen = { x: null, y: null };
-    const STOP = 0.95;
+  // The monocle: she screws in her monocle and looks for you through it. The
+  // lens drifts after you, and while it's over you it focuses (its ring
+  // draws in); if it finishes focusing, the sunlight through it burns that
+  // spot. Keep the lens from settling on you.
+  crabMonocle(box, density, { Shot, rand }) {
+    const lens = { x: box.x + box.w - 10, y: box.y + 10, focus: 0, cool: 0 };
+    const FOCUS = 0.75;
+    let real = 0;
+    let made = false;
     return {
-      duration: 7.8,
+      duration: 10.5,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (seen.x !== null && dt > 0) {
-          heading.x = heading.x * 0.85 + ((soul.x - seen.x) / dt) * 0.15;
-          heading.y = heading.y * 0.85 + ((soul.y - seen.y) / dt) * 0.15;
+        const step = dt / density;
+        real += step;
+        if (!made) {
+          made = true;
+          bullets.push(new Deco({ life: 10.5, paint(ctx) {
+            const r = 10 - 6 * (lens.focus / FOCUS);
+            ctx.strokeStyle = '#d8c070';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(lens.x, lens.y, 10, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.globalAlpha *= 0.6;
+            ctx.strokeStyle = '#fff0a0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(lens.x, lens.y, Math.max(1, r), 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.globalAlpha = 0.25;
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(lens.x, lens.y, 9, 0, Math.PI * 2);
+            ctx.fill();
+          } }));
         }
-        seen.x = soul.x;
-        seen.y = soul.y;
-        if (volleys < 5 && t >= 0.2 + volleys * 1.25) {
-          volleys++;
-          const ox = box.x + box.w + 8;
-          const oy = rand(box.y + 20, box.y + box.h - 20);
-          for (const off of [0, -32, 32]) {
-            const b = new Shot({ x: ox, y: oy, warn: 0.6, life: 2.6, art: 'crabBarnacle' });
-            b.off = off;
-            bullets.push(b);
-            flying.push(b);
+        if (real > 10) return;
+        // It drifts after you (faster the longer the turn goes on).
+        const SPEED = 34 + real * 1.5;
+        const dx = soul.x - lens.x;
+        const dy = soul.y - lens.y;
+        const d = Math.hypot(dx, dy);
+        if (lens.cool > 0) {
+          lens.cool -= step;
+        } else if (d > 0.5) {
+          lens.x += (dx / d) * Math.min(d, SPEED * step);
+          lens.y += (dy / d) * Math.min(d, SPEED * step);
+        }
+        lens.focus = d < 9 ? lens.focus + step : Math.max(0, lens.focus - step * 1.5);
+        if (lens.focus >= FOCUS) {
+          lens.focus = 0;
+          lens.cool = 0.8;
+          bullets.push(new Zone({ x: lens.x, y: lens.y, r: 9, warn: 0.45, life: 0.35, paint(ctx, z) {
+            ctx.fillStyle = z.age < z.warn ? '#fff0a0' : '#ffffff';
+            ctx.beginPath();
+            ctx.arc(z.x, z.y, z.age < z.warn ? 3 : 9, 0, Math.PI * 2);
+            ctx.fill();
+          } }));
+          // And the glare scatters off the burnt spot.
+          for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2 + rand(0, 1);
+            bullets.push(new Shot({ x: lens.x, y: lens.y, vx: Math.cos(a) * 55, vy: Math.sin(a) * 55, art: 'crabDrop', warn: 0.45, life: 1 }));
           }
-        }
-        for (const b of flying) {
-          if (b.set || b.age < b.warn - 0.03) continue;
-          b.set = true;
-          const lead = STOP * 0.45;
-          const tx = clamp(soul.x + heading.x * lead, box.x + 6, box.x + box.w - 6);
-          const ty = clamp(soul.y + heading.y * lead + b.off, box.y + 6, box.y + box.h - 6);
-          const dx = tx - b.x;
-          const dy = ty - b.y;
-          const dist = Math.hypot(dx, dy);
-          const v0 = (2 * dist) / STOP;
-          b.vx = (dx / dist) * v0;
-          b.vy = (dy / dist) * v0;
-          b.accel = -v0 / STOP;
-          b.life = STOP + 1.4;
         }
       },
     };
   },
 
-  // Tide (once she's lost patience): the bath water sloshes over the half of
-  // the box you are standing in, from the taps above or the plug below. Cross
-  // before it lands. Three times, and in between, her bubbles.
+  // How very forward: her claws snip shut across the way you are going.
+  // Walk sideways and a column shuts ahead of you; walk up or down and a
+  // row shuts ahead of you; stand still and both come at you. Each pair of
+  // claws shows where it will shut before it does.
+  crabSnips(box, density) {
+    let real = 0;
+    let n = 0;
+    let last = null;
+    let vx = 0;
+    let vy = 0;
+    return {
+      duration: 10,
+      update: (dt, bullets, soul) => {
+        const step = dt / density;
+        real += step;
+        if (last && step > 0) {
+          vx = vx * 0.8 + ((soul.x - last.x) / step) * 0.2;
+          vy = vy * 0.8 + ((soul.y - last.y) / step) * 0.2;
+        }
+        last = { x: soul.x, y: soul.y };
+        if (n >= 8 || real < 0.3 + n * 1.1) return;
+        n++;
+        const warn = 0.95;
+        const moving = Math.hypot(vx, vy) > 15;
+        const across = Math.abs(vx) >= Math.abs(vy);
+        if (!moving || across) {
+          // A column ahead of you (or on you, standing still).
+          const ahead = moving ? Math.sign(vx) * 16 : 0;
+          const s = new Snip({ box, vertical: true, at: Math.min(Math.max(soul.x + ahead, box.x + 6), box.x + box.w - 6), warn });
+          bullets.push(s);
+        }
+        if (!moving || !across) {
+          const ahead = moving ? Math.sign(vy) * 16 : 0;
+          const s = new Snip({ box, vertical: false, at: Math.min(Math.max(soul.y + ahead, box.y + 6), box.y + box.h - 6), warn: warn + (moving ? 0 : 0.2) });
+          bullets.push(s);
+        }
+      },
+    };
+  },
+
+  // The bath water (riled only): it slops over the half of the box you are
+  // in (a dashed line shows the level first), holds, and drains, three or
+  // four times; soap bubbles drift in on it.
   // (Made fair 2026-11-08: the surges came on the pattern's clock, which
   // runs `density` fast, while the water itself runs in real time, so the
   // next surge rose before the last had drained and the two halves met:
@@ -574,20 +711,20 @@ export const DOWAGER_CRAB_ATTACKS = {
     let nextBubble = 0.5;
     let last = null;
     return {
-      duration: 8.2,
+      duration: 10.5,
       update: (dt, bullets, soul) => {
         t += dt;
         const ready = last ? last.age >= last.end - last.warn + 0.12 : t >= 0.2;
-        if (surges < 3 && ready) {
+        if (surges < 4 && ready) {
           surges++;
           const mid = box.y + box.h / 2;
           last = new Tide({ box, fromTop: soul.y < mid, depth: 46, warn: 0.9 });
           bullets.push(last);
         }
         // Soap on the water: small bubbles drifting in from the right.
-        if (t >= nextBubble && bubbles < 12) {
+        if (t >= nextBubble && bubbles < 16) {
           bubbles++;
-          nextBubble = t + rand(0.9, 1.1);
+          nextBubble = t + rand(0.6, 0.75);
           bullets.push(new Shot({ x: box.x + box.w + 8, y: clamp(soul.y + rand(-26, 26), box.y + 8, box.y + box.h - 8), vx: -30, warn: 0.3, life: 5, art: 'crabBubble', wobble: { frequency: 4, amplitude: 5 } }));
         }
       },

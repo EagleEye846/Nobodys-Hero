@@ -1,0 +1,1088 @@
+# THE BEACON ISLES (Chapter 5): the little lights on their rocks in the storm, past the
+# Soundings. The landing, the East Light and its turning lamp, the old lightroom at the top of
+# the dark light, the rope bridge the tide lifts, Orla's forge in the foot of the big light, the
+# West Light's two lamps, the causeway toward Haddock's Light, and the tidy cave under the bridge.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums in the forge-light, warm as a hearth stone.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, salted stiff.
+
+[chest_empty]
+An empty chest. The salt has got into the hinges.
+
+[isles_rock]
+Bare rock, scoured clean by the wind and the sea, with a skin of rain running down it.
+
+# (draft) after the storm.
+[isles_rock_calm]
+Bare rock, scoured clean by the wind and the sea, drying pale in the light.
+
+[isles_sea]
+The sea, grey-green and heaving, white where it hits the rocks.
+
+[isles_light_rock]
+A rock with barnacles all over it, standing up out of the water like a knuckle.
+
+# --- THE LANDING ---------------------------------------------------------------
+
+[landing_cave]
+The mouth of the Soundings' long stair, back down into the dark under the isles. Wet steps go down out of sight.
+
+[landing_light_far]
+One of the little lights, on its own rock across the water. Its lamp is turning, and every few seconds the beam goes over you.
+
+[landing_light_far_bramble]
+{worried}It keeps looking at us.
+
+[landing_light_dark]
+The stump of a lighthouse on a rock, with nothing on top but sky. Whatever it used to shine, it doesn't.
+
+[landing_haddocks_light]
+Far off to the east, past all the little lights, a taller lighthouse, white, with one warm window low down. It looks like somebody's home.
+
+[landing_haddocks_light_after]
+Far off to the east, past all the little lights, a taller lighthouse, white. Its lamp is dark. One window low down still glows, very faintly.
+
+[landing_signpost]
+A signpost with four arms, all pointing different ways across the water: EAST LIGHT. OLD LIGHT. BIG LIGHT (FORGE). WEST LIGHT. Under them, in smaller letters: MIND THE LAMPS.
+
+# (draft)
+[landing_signpost_ves]
+{smile}Four lights. Four arms. Somebody's very proud of their lights.
+
+[landing_bottles]
+A garden of bottles on sticks, and buoys hung on poles, all chinking in the wind. Somebody has planted it in rows and comes back to straighten it.
+
+# (draft)
+[landing_bottles 2]
+You straighten one bottle on its stick. The wind knocks it crooked again at once. Whoever keeps this garden must come out every single day.
+
+[landing_bench]
+A bench facing the sea, bolted to the rock. It has been sat on a lot, and the seat is worn into two dips.
+
+[landing_bench_bramble]
+{thinking}Who comes all the way out here to sit and look at more sea?
+
+# (draft)
+[landing_bench 2]
+Two dips worn into the seat, side by side. One is a good deal bigger than the other.
+
+[landing_buoys]
+A heap of old buoys, red paint flaking. One of them still has a bell in it that rings when the wind leans on it.
+
+[landing_rope]
+A coil of rope, neatly flaked down, weighted with a stone.
+
+[landing_anchor]
+An anchor rusted to the rock, as if the isle were a boat somebody moored here a long time ago and forgot.
+
+[landing_post]
+A post with a lifebuoy on it. Painted on the buoy: IF FOUND, THROW BACK.
+
+[landing_pouch]
+A purse tucked in a crack of the rock just by the stair, out of the rain.
+
+# --- THE EAST LIGHT --------------------------------------------------------------
+
+[east_sign]
+A board: THE EAST LIGHT. LAMP TURNS. KEEP TO THE WALL. A second hand has added, underneath: IT WILL NOT HURT YOU. IT WILL JUST SEE YOU.
+
+# (draft)
+[east_sign_ves]
+{surprised}"It will just see you." ...Why is that worse? That's worse.
+
+[east_seen]
+{bored}It saw us. Back to the dark bit, then. Keep in the wall's shadow, and go when it's just gone by.
+
+[east_seen_again]
+{bored}Again. It's very good at its job.
+
+[east_tower]
+The East Light, on its own rock in the middle of the lamp-yard pool. The lamp at the top turns and turns, and the beam goes out over the isle and the sea and comes round again.
+
+[east_tower_bramble]
+{awed}It's like a giant looking for his keys.
+
+[east_wall]
+The lamp-yard's wall, waist high, of squared stone with a row of capstones along the top. Where a stretch has fallen, the beam comes through.
+
+[east_yard]
+The lamp-yard's slabs, swept bare by the wind.
+
+[east_cliff]
+A rock face, slick with rain. At the top there's an iron ring hammered into the rock.
+
+# (draft) after the storm.
+[east_cliff_calm]
+A rock face, still damp. At the top there's an iron ring hammered into the rock.
+
+[east_cliff_sign]
+A board at the foot of the rock: OLD LIGHT. STEPS GONE. USE THE RING.
+
+[east_old_tower]
+The old light, up on its shelf. Its paint is rusting through, and the glass at the top is dark. A door at its foot stands a little open.
+
+[east_lifebuoy]
+A lifebuoy on a post. Somebody has painted EAST on it, in case of doubt.
+
+[east_pots]
+Lobster pots, stacked and tied down. Empty, and smelling as if they weren't, always.
+
+[east_weed]
+Weed thrown up on the rock by the last big wave. It's still dripping.
+
+[east_oil_crate]
+A crate stencilled LAMP OIL. Empty. The lid has been put back on properly.
+
+[east_pouch]
+A purse at the foot of the light's rock, right out in the open, where the beam goes over it every turn.
+
+[east_pouch_far]
+A purse at the end of the path, in the lee of a rock, where the spray doesn't reach.
+
+# --- THE OLD LIGHTROOM ---------------------------------------------------------
+
+[old_wall]
+The lightroom's brick wall, curving round. Damp has drawn maps on it.
+
+[old_glass]
+The lantern glass, all the way round the room: tall panes in an iron frame, salt in the corners. Outside, the storm, and the sea a long way down.
+
+# (draft) after the storm.
+[old_glass_calm]
+The lantern glass, all the way round the room: tall panes in an iron frame, salt in the corners. Outside, the sea a long way down, and quiet for once.
+
+[old_glass_cracked]
+One pane of the lantern glass is starred, as if something hit it a long time ago. The wind whistles through it, very quietly.
+
+# (draft)
+[old_glass_cracked_ves]
+{smile}That'll be the draught, then.
+
+[old_floor]
+Old boards, deep in dust. There are no prints in it but yours.
+
+[old_lens]
+The great lens, taller than you, stands in its iron frame in the middle of the room. Its rings of glass are grey with dust. It hasn't turned in years.
+
+[old_lens_ves]
+{thoughtful}Nobody's been up here in a long time.
+
+[old_tea]
+A little round table under the window, under an old lace cloth. On it, a lantern, lit, and a cup of tea on a saucer, the spoon still in the saucer. The steam is still coming off the tea.
+
+[old_tea_bramble]
+{worried}Don't drink it. It's somebody's.
+
+[old_chair]
+A chair pulled up to the table. Dust on the seat, thick and undisturbed.
+
+[old_logbook]
+The old light's logbook, open on its lectern. The last entry is years ago, in a careful hand: "Oil gone. Lamp out. Closing up. Somebody will want her again."
+
+[old_stove]
+A little iron stove, cold right through. There's no fire in it and no ash. The kettle on top is dry.
+
+[old_rope]
+A coil of rope by the wall, furred with dust.
+
+[old_oil_crate]
+A crate that said LAMP OIL once. It's empty, and the dust in it is the same as the dust on it.
+
+[old_oil_barrel]
+An oil barrel, empty, the bung rusted in.
+
+# --- THE ROPE BRIDGE -------------------------------------------------------------
+
+[bridge_sign]
+A board: ROPE BRIDGE. CROSS AT HIGH WATER ONLY. AT LOW WATER, DON'T.
+
+# (draft)
+[bridge_sign_ves]
+{smile}"At low water, don't." Don't what? They've left the end off.
+
+[bridge_dial]
+A tide dial on a post. The hand creeps round; the blue half is high water, the sandy half low.
+
+[bridge_post]
+The bridge's post, sunk deep in the rock. The ropes run off across the gully from an iron ring.
+
+[bridge_post_far]
+A bollard with the bridge's rope made fast round it, many times, by someone who didn't trust it.
+
+[bridge_planks]
+The bridge's planks, lifted level by the floats under them, rocking on the swell.
+
+# (draft)
+[bridge_planks_bramble]
+{scared}It's moving. Why is it moving. Bridges are supposed to be the not-moving part.
+
+[bridge_slack]
+The bridge, lying slack on the gully bed now the water's gone out of it, its floats on their sides in the shingle.
+
+[bridge_water]
+The sea in the gully, rising and falling against the rocks.
+
+[bridge_bed]
+The gully's bed: shingle, weed, and things the sea lost.
+
+[bridge_pool]
+A rock pool, left by the tide. A crab in it is busy.
+
+# (draft) 2026-11-14: a cue for the tidy cave you can see at high water too: shells set out at the top of the way down.
+[bridge_shells]
+Shells, set out along the edge of the rock in a neat row, smallest to largest, the largest at the end nearest the gully. Somebody very tidy came this way, and went down onto the bed.
+
+# (draft)
+[bridge_shells_ves]
+{thinking}Somebody lined those up. On a rock. In a storm. ...I'd like to meet them, and I'd like to be very polite.
+
+[bridge_cave]
+A cave mouth in the cliff, at the bottom of the gully, that the high tide covers. A breath of still air comes out of it.
+
+[bridge_pouch]
+A purse in the shingle on the gully bed, half buried, where the tide put it down.
+
+[bridge_pots]
+Lobster pots, roped together so the wind can't have them.
+
+[bridge_buoy]
+A red buoy, beached. Somebody has painted a face on it. It looks surprised.
+
+[bridge_net]
+A net drying on a frame. It will be drying for some time.
+
+# --- ORLA'S FORGE ----------------------------------------------------------------
+
+[forge_wall]
+The big light's brick, warm from the forge.
+
+[forge_floor]
+Boards scorched in a ring round the forge, and swept everywhere else.
+
+[forge_window]
+A high window. Through it, straight down from the lamp at the top of the tower, comes the light.
+
+[forge_shaft]
+The big light's beam, coming down through the high window and standing on the boards in a pale column. Dust turns slowly in it. Put your hand in it and it's warm.
+
+# (draft)
+[forge_shaft_ves]
+{surprised}It's warm. ...You could work all night by that.
+
+[forge_fire]
+The forge, burning lamp oil. The fire is white at the heart and doesn't smoke.
+
+[forge_tub]
+The quench tub, full of black water. A pair of tongs stands in it.
+
+[forge_grind]
+A grindstone. The handle is worn bright where a big hand has turned it.
+
+# (draft)
+[forge_grind 2]
+You give the handle one turn. It is very, very heavy. Whoever turns it every day doesn't think so.
+
+[forge_oil]
+Barrels of lamp oil, stencilled BIG LIGHT. One has a tap in it and a tin cup hung under the tap.
+
+[forge_crates]
+Crates of iron bar and nails, stacked square.
+
+[forge_rope]
+A coil of rope on the floor. Somebody trips over it, sometimes, and doesn't move it.
+
+[forge_sign]
+A board: ORLA COBB. SMITH. KNOCK. (The board has been knocked on so often there's a dent.)
+
+# (draft) Knocked on ten times, inside the forge.
+[forge_sign 2]
+You knock on the board. The dent is exactly the size of a knuckle. Several hundred knuckles.
+
+# (draft)
+[forge_sign 10]
+You knock on the board a tenth time. Orla doesn't look round from the anvil. "You're inside. You're already inside. The dent's for people who aren't." 
+
+[forge_chest]
+A chest by the door, with a bun in it wrapped in a cloth. A label on the cloth says: FOR WHOEVER COMES THROUGH. Inside: a TINDER BUN.
+
+# --- THE WEST LIGHT ----------------------------------------------------------------
+
+[west_sign]
+A board: THE WEST LIGHT. TWO LAMPS. EACH HAS A SHUTTER. EACH SHUTTER HAS A CRANK. HOLD THE CRANK, THE SHUTTER STAYS SHUT. THE BIG CRANK SHUTS BOTH.
+
+# (draft)
+[west_sign_ves]
+{angry}Two lamps, two little cranks, and a big crank. I've read it twice and it's got worse.
+
+[west_sign_far]
+A board by the big crank: WIND TO SHUT BOTH. UNWIND TO OPEN. DON'T LEAVE THEM SHUT ALL NIGHT.
+
+[west_seen]
+{bored}Straight down the bridge, every time. Nobody's getting over that with the shutter open.
+
+[west_seen_again]
+{bored}It's not a subtle lamp.
+
+[west_tower]
+One of the West Light's two towers, standing in the sea on its own rock at the head of the inlet. Its beam rocks a little either side of straight down, and never lets go of the bridge.
+
+[west_crank_a]
+A crank on a post, in a pen of rocks. Its chain runs up over a pulley and away across the water to the west lamp's shutter. It's a little crank, low down. A board on it says: HOLD.
+
+[west_plate_a]
+The step in front of the little crank, worn into a dip by small boots.
+
+[west_gap]
+A gap between two of the pen's rocks, too narrow for you.
+
+[west_gap_bramble]
+{proud}I fit. I always fit.
+
+[west_crank_b]
+A crank on a tall post, on the middle isle. Its chain runs away to the east lamp's shutter. The handle is up at the top of the post, out of reach, with a hook-shaped loop on it, the right size for the crook of an umbrella.
+
+[west_crank_b_ves]
+{proud}An umbrella job. Finally, somebody's thought it through.
+
+[west_plate_b]
+The step under the tall crank, slick with spray.
+
+[west_crank_big]
+You wind the big crank. Chains run out across the water, and on both towers the shutters close over the lamps and lock with a clank. The beams go out.
+
+[west_stump]
+An old stone post by the door. Press on it, and all three of you are back here together.
+
+[west_pen_rock]
+A big rock, one of a ring of them, piled up round the little crank like a fence round a sheep.
+
+[west_oil]
+Barrels of lamp oil, roped to an iron ring. The rope is new.
+
+[west_pouch]
+A purse wedged under a rock at the bottom of the middle isle, where the beams don't go.
+
+# --- THE CAUSEWAY ----------------------------------------------------------------
+
+[causeway_sign]
+A board: CAUSEWAY TO HADDOCK'S LIGHT. SEA COMES OVER. KEEP WALKING.
+
+# (draft)
+[causeway_sign_bramble]
+{worried}"Sea comes over." It says it like it's normal.
+
+[causeway_stones]
+The old road's cobbles, laid from rock to rock, worn smooth and green by the sea coming over them.
+
+[causeway_wash]
+A low place in the causeway where the sea comes over in sheets and runs off again. Ankle deep, and cold enough to make you say something, if you were the sort to say things.
+
+[causeway_sea]
+The sea on both sides of the causeway, much too close on both sides.
+
+[causeway_haddocks_light]
+Haddock's Light, at the end of the causeway: a white tower, its lamp turning slow at the top, and the warm window low down. Smoke comes out of a little chimney.
+
+# (draft)
+[causeway_haddocks_light_ves]
+{hopeful}...That one's his, isn't it.
+
+# After the chapter (haddock_gone).
+[causeway_haddocks_light_after]
+Haddock's Light, at the end of the causeway: a white tower under a quiet sky. The lamp at the top has stopped turning, and no smoke comes from the little chimney. The window low down still glows a little, the way a fire does when it's been banked for the night.
+
+# (draft)
+[causeway_haddocks_light_after_ves]
+{sad}Banked the fire before he went. Course he did.
+
+[causeway_lifebuoy]
+A lifebuoy on a post, halfway. The rope on it has been knotted and re-knotted many times.
+
+[causeway_buoy]
+A yellow buoy, wedged on the rock. It has HADDOCK painted on it, and under that, in different paint, NOT LOST.
+
+[causeway_driftwood]
+A long piece of driftwood, grey and smooth as a bone.
+
+[causeway_weed]
+A heap of weed. Something in it is ticking. Probably a crab.
+
+[causeway_pouch]
+A purse on the second rock, down in a crack, where somebody hid it from the weather.
+
+# --- THE TIDY CAVE (secret) --------------------------------------------------------
+
+[cave_rock]
+The cave's rock, wet and dark. Somebody has wiped the green off it as high as an arm can reach.
+
+[cave_floor]
+The shingle on the floor has been raked smooth, in lines.
+
+[cave_lantern]
+A lantern on an iron post, in the middle of the cave, lit. Its glass has been wiped.
+
+[cave_lantern_bramble]
+{thinking}Fishers keep their gear in caves. ...They'd want a lamp. For the gear.
+
+[cave_note]
+A scrap of paper on the shingle, by the lantern, weighted with a pebble. One word on it, in pencil: "tidy".
+
+# (draft)
+[cave_note_ves]
+{laughing}...It is, to be fair.
+
+[cave_shells]
+Shells set out in a row on a flat stone, largest to smallest. The smallest is very small.
+
+[cave_rope]
+A coil of rope, flaked down so neatly it could be in a picture of rope.
+
+[cave_broom]
+A broom standing in a bucket. The bristles are worn down on one side, the way a broom goes when somebody uses it every day.
+
+[cave_crates]
+Crates, stacked square, their labels all turned to face out.
+
+[cave_chest]
+A chest against the wall, its lid dusted. Inside, folded as flat as a letter: a fisher's jersey, navy and thick, darned at the elbows so neatly you can't find where the holes were.
+
+# (draft)
+[cave_chest_ves]
+{smile}Even the darning's tidy.
+
+[cave_pouch]
+A purse on the floor, set down square in the middle of a raked patch, as if it were meant to be found.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_forge_oilskin]
+Orla's oilskin on its peg, near enough to the forge to steam.
+
+# (draft)
+[in_forge_shelf]
+Tins of nails, rivets, flux, and one of humbugs.
+
+# (draft)
+[in_forge_lamp]
+A lamp on an iron arm. Orla made the arm; it is the best thing on the wall.
+
+# (draft)
+[in_forge_tea]
+A mug of tea on a stool by the anvil, stone cold. She forgets it every time.
+
+# --- SHORE AND RUIN DETAILS (2026-11-08) ------------------------------------------
+
+# (draft)
+[isle_cairn]
+A cairn of flat stones, stacked by somebody with patience. The wind has had every storm since to knock it down, and it hasn't.
+
+# (draft)
+[isle_rocks]
+Rocks, black with wet, barnacles all over the side the sea comes from.
+
+# (draft)
+[isle_stakes]
+Three stakes with a rope run between them, to hold on to when the wind gets up. There's a rag tied on the middle one so you can find it.
+
+# (draft)
+[isle_gull_rock]
+Gulls on a rock, sitting the storm out with their backs to it. They look at you like you're the weather.
+
+# (draft)
+[isle_gull_rock_bramble]
+{grin}That one's got a crab. ...Had a crab.
+
+# (draft)
+[isle_rowboat_half]
+The front half of a rowboat. Wherever the back half went, it went in a hurry.
+
+# (draft)
+[isle_pot_broken]
+A lobster pot, stove in, the netting torn open. Whatever was in it got out.
+
+# (draft)
+[old_workbench]
+A bench with a vice on the end, and on it a chipped prism and a lamp chimney waiting to be mended. Dust over all of it, even the waiting.
+
+# (draft)
+[old_lens_rack]
+A rack of spare glass for the lens: curved rings and a round piece as big as a cartwheel, each in its own slot. One slot is empty.
+
+# (draft)
+[old_oil_cans]
+Oil cans with long spouts for reaching into the lamp. All empty. One has fallen over, and nobody stood it back up.
+
+# (draft)
+[old_stores]
+Crates of stores, nailed shut. The top one says WICKS.
+
+# (draft)
+[old_broom]
+A broom in a bucket. Whoever swept up here last did a good job, and then stopped.
+
+# (draft)
+[old_chest]
+A little sea chest, with a blanket folded on the lid. The blanket has gone the colour of the dust.
+
+# (draft)
+[old_tins]
+A crate with tins on it: polish, putty, wick trimmings. Everything a lamp needs except the lamp.
+
+# (draft)
+[old_note]
+A list, in the logbook's careful hand: "Polish glass. Trim wick. Wind clock. Again."
+
+# (draft)
+[forge_bench]
+A bench with a vice, a hammer and pliers, and a prism off the big lens that Orla is putting right. She has put a cloth under it, which is more than she does for her tea.
+
+# (draft)
+[forge_oil_cans]
+Oil cans for the big light's lamp, filled and lined up, spouts all pointing the same way.
+
+# (draft)
+[forge_tins]
+A crate with tins on it: rivets, flux, polish. One tin says BISCUITS and is full of nails.
+
+# (draft)
+[forge_crate]
+A crate of coal, the lid off. The top lumps have been picked out one by one for being the right size.
+
+# (draft)
+[forge_barrel]
+A barrel of rainwater for the forge. Orla says the sea's no good for quenching; it leaves the salt in.
+
+# (draft)
+[forge_shelf_neat]
+A shelf of tins, labels out, in order of size.
+
+# (draft)
+[forge_chart]
+A chart of the isles, the lights marked in red ink. Somebody has drawn a little teapot by the old one.
+
+# (draft)
+[cave_cairn]
+A cairn of flat stones, the biggest at the bottom and the smallest at the top. Not one of them is crooked.
+
+# (draft)
+[cave_shelf]
+A plank on two pegs, with bottles on it: sea-glass in one, buttons in another, string. All sorted. All labelled.
+
+# (draft) QUEST PIECE 3 for the ghost ship's deep part.
+[cave_compass]
+A round card, painted with a compass rose, put away between two rows of shells where it would be tidy. Every point on it is lettered but one, where the letter has been rubbed out by a thumb. Along the edge: FAIR RETURN.
+
+# --- THE GANNET STACK (2026-11-14) ---------------------------------------------------
+
+# (draft)
+[stack_sign]
+A board on a post: LAMP ROAD. OVER THE STACK. MIND THE GUSTS.
+
+Somebody has crossed out LADDER and not written anything instead.
+
+# (draft)
+[stack_sign_bramble]
+{worried}Where's the ladder?
+
+# (draft)
+[stack_sign_ves]
+{bored}Down there, in bits. Keep up.
+
+# (draft)
+[stack_ladder]
+The keepers' ladder, or what the sea left of it: a few rungs, still pegged to one long side, smashed on the rocks.
+
+# (draft)
+[stack_face]
+The stack's face, sheer and streaming.
+
+Iron pitons are hammered into it where the ladder used to hang, each one with a ring in its head.
+
+# (draft)
+[stack_face_calm]
+The stack's face, sheer and drying in the sun.
+
+Iron pitons are hammered into it where the ladder used to hang, each one with a ring in its head.
+
+# (draft)
+[stack_store]
+The keepers' oil store, fallen in. The roof is in the middle of the floor and the floor is in the sea.
+
+# (draft)
+[stack_oil]
+Oil cans, rusted through, stacked as neat as the day they were left.
+
+The keepers carried every drop of the little lights' oil over this rock.
+
+# (draft)
+[stack_cupboard]
+A cupboard built into a niche in the face, out of the wind, its door swollen shut.
+
+Inside: two mugs, a candle stub and a tin of the keepers' tea. Strong enough to stand a spoon in.
+
+# (draft)
+[stack_cupboard_ves]
+{proud}They hid their tea halfway up a cliff. I like these people.
+
+# (draft)
+[stack_cupboard_bramble]
+{surprised}They climbed all the way up here for TEA?
+
+[stack_cupboard_empty]
+The cupboard. Two mugs, a candle stub, and a ring on the shelf where the tin was.
+
+# --- LIFE PASS (2026-11-14): extra things to look at ---
+# (draft)
+
+# isles_landing
+[lp_ln_can]
+A lamp-oil can with a long spout, empty, left at the foot of the path. Whoever was carrying oil round the lights got this far.
+
+[lp_ln_can_ves]
+{bored}Which is further than I'd have got.
+
+[lp_ln_can_bramble]
+{worried}Do you think they ran out of oil, or ran out of road?
+
+[lp_ln_mug]
+A tin mug on the end of the bench, with rainwater in it and a drowned moth. The handle has a bit of string tied round it, for a thumb.
+
+[lp_ln_mug_ves]
+{smile}Nobody's coming back for that. It's a bird bath now.
+
+[lp_ln_mug_bramble]
+{sad}Somebody only put it down for a minute, I bet.
+
+[lp_ln_scope]
+A brass telescope on a tripod, lashed down with string. You put your eye to it. Haddock's Light, very small, and a gull sitting on top of it as if it owned the place.
+
+[lp_ln_scope_ves]
+{smile}Even the gull's got a lighthouse. Everyone has, except us.
+
+[lp_ln_scope_bramble]
+{awed}I can see the window! There's somebody in!
+
+[lp_ln_scope after haddock_gone]
+A brass telescope on a tripod, lashed down with string. You put your eye to it. Haddock's Light, very small and very still, with the gull still sat on top. The window low down still glows.
+
+[lp_ln_scope_ves after haddock_gone]
+{thoughtful}Leave it pointed there.
+
+[lp_ln_weather]
+A weather board, chalked. Today: WIND. Yesterday: WIND. The day before: a very small drawing of a cross face.
+
+[lp_ln_weather_ves]
+{smile}Whoever keeps this is honest, at least.
+
+[lp_ln_weather_bramble]
+{grin}I like the cross face best.
+
+[lp_ln_pinks]
+A little board stuck in the turf: PLEASE KEEP OFF THE SEA-PINKS. The pinks are trodden flat anyway. The only prints are small and have three toes.
+
+[lp_ln_pinks_ves]
+{bored}Fined by a gull. That's the worst kind of fine.
+
+[lp_ln_boat]
+A toy boat, painted blue, sitting in the rock pool. Somebody small sailed it here a long time ago. It has grown a barnacle.
+
+[lp_ln_boat_ves]
+{bored}Smallest ship in the harbour.
+
+[lp_ln_boat_bramble]
+{sad}Do you think they came back for it?
+
+[lp_ln_barrel]
+A rain barrel, brimming. Someone has painted a gull on the side with a bar across it, and the word NO.
+
+[lp_ln_barrel_ves]
+{bored}Gull-proofing by paint. Ambitious.
+
+[lp_ln_oar]
+An oar stuck blade-down in the turf like a flagpole, a rag of red cloth tied to the loom. It marks where a boat should come in.
+
+[lp_ln_oar_bramble]
+{thinking}Does it work? Has anybody come in at it?
+
+# isles_causeway
+[lp_cw_nets]
+A frame of drying nets, stiff with salt. Whatever was in them left with the last tide. A tiny silver scale is stuck on the top rope.
+
+[lp_cw_nets_ves]
+{smile}It's catching sunshine, at least. When there is any.
+
+[lp_cw_nets_bramble]
+{thinking}Who dries nets out here? Who's there to buy the fish?
+
+[lp_cw_pots]
+Lobster pots in a stack, each with a number burnt on the side. They go up to nine. Number five is missing, and there's a little cross scratched where it should be.
+
+[lp_cw_pots_ves]
+{bored}A cross for a pot. That's a lot of feeling about a pot.
+
+[lp_cw_pots_bramble]
+{sad}Maybe it was a good pot.
+
+[lp_cw_bottles]
+A crate of corked bottles, each with a note rolled up inside. Half the notes say ANYBODY THERE? The other half say YES, in the same hand.
+
+[lp_cw_bottles_ves]
+{smile}Somebody's been having a long conversation with himself.
+
+[lp_cw_bottles_bramble]
+{glee}Can I write one? What do I put? Hello?
+
+[lp_cw_tiny]
+A pebble lighthouse, three hands high: flat stones for the tower, a limpet shell for the lamp, a red thread round the middle for the band. A child built it, and the sea hasn't had the heart to knock it down.
+
+[lp_cw_tiny_ves]
+{smile}Best lighthouse on the isles. Cleanest, anyway.
+
+[lp_cw_tiny_bramble]
+{awed}It's even got a door! It's a crab's door, but it's a door!
+
+[lp_cw_hook]
+A hook in the rock with a yellow oilskin hung on it, empty and stiff, waving its arms in the wind. It looks as if it's waiting for a boat.
+
+[lp_cw_hook_ves]
+{surprised}I thought it was a person. I'm going to say that was the wind.
+
+[lp_cw_hook_bramble]
+{scared}It waved. It definitely waved.
+
+[lp_cw_queue]
+A board with a pointing hand: QUEUE FOR HADDOCK'S LIGHT. Nobody's in the queue. A gull stands at the front of it.
+
+[lp_cw_queue_ves]
+{bored}The gull's been here since morning, I'd say.
+
+[lp_cw_queue_bramble]
+{grin}Excuse me, I think I'm next.
+
+[lp_cw_queue after haddock_gone]
+A board with a pointing hand: QUEUE FOR HADDOCK'S LIGHT. Nobody's in the queue. Somebody has put a small stone at the front of it, to hold the place.
+
+[lp_cw_queue_ves after haddock_gone]
+{sad}Let them keep their place.
+
+# isles_gannet_stack
+[lp_gs_guano]
+The rocks up here are white as a tablecloth. Everything that ever landed on them left a message.
+
+[lp_gs_guano_ves]
+{bored}Don't look at the rocks. Look at literally anything else.
+
+[lp_gs_guano_bramble]
+{laughing}They've painted the whole stack! They're very good at painting!
+
+[lp_gs_flag]
+A flag on a bent pole, so torn it's mostly a rumour of cloth. Whatever colours it had, the wind has taken them one at a time.
+
+[lp_gs_flag_ves]
+{thoughtful}It's still flying, though. You have to respect that.
+
+[lp_gs_flag_bramble]
+{awed}It's like it's waving at everyone, one stripe at a time.
+
+[lp_gs_rope]
+A coil of climbing rope, hard as a plank, weighted with a stone so it doesn't leave. Somebody used to come up here to take the eggs.
+
+[lp_gs_rope_ves]
+{sly}And the gannets let them? Brave. Or very polite birds.
+
+[lp_gs_rope_bramble]
+{worried}I wouldn't take eggs off a gannet. Not that beak.
+
+[lp_gs_cairn]
+A cairn on the cliff edge with a gannet's feather stuck in the top, held by a pebble. The feather points the way the wind's going.
+
+[lp_gs_cairn_ves]
+{smile}A weathervane for people who can't afford a weathervane.
+
+[lp_gs_nest_sign]
+A board nailed to a post: DO NOT FEED THE GANNETS. Under it, in different paint: THEY WILL FIND OUT.
+
+[lp_gs_nest_sign_ves]
+{surprised}Find out what? From whom? What's the arrangement?
+
+[lp_gs_nest_sign_bramble]
+{scared}They're looking at us. All of them. At once.
+
+[lp_gs_plank]
+A plank worn white and smooth as bone, wedged in a crack. Someone has carved: SKYE WAS HERE. And then, underneath, smaller: SO WAS A GANNET.
+
+[lp_gs_plank_ves]
+{grin}The gannet had the last word.
+
+[lp_gs_plank_bramble]
+{glee}Do you think the gannet carved it?
+
+# isles_bridge
+[lp_br_knot]
+The bridge's post, wrapped in so many lashings it looks knitted. Every knot is a different knot, and every one is perfectly tied.
+
+[lp_br_knot_ves]
+{thoughtful}Someone who ties this well never ties anything for fun.
+
+[lp_br_knot_bramble]
+{awed}Can you teach me this one? The one that looks like a pretzel?
+
+[lp_br_boat]
+An upturned rowboat, sat on stones for a roof. There's a gap under it just the size of a person, with a blanket in, and a tin cup.
+
+[lp_br_boat_ves]
+{surprised}Somebody lived here. Under a boat. In this weather.
+
+[lp_br_boat_bramble]
+{worried}We should say sorry to the person that lives here. Sorry! Sorry, person!
+
+[lp_br_pots]
+Lobster pots stacked to dry, tied together with the sort of knots that were learned the hard way.
+
+[lp_br_pots_bramble]
+{thinking}Why would a lobster go in a pot? That's a terrible idea. Even for a lobster.
+
+[lp_br_tide_sign]
+A board: BRIDGE UP AT HIGH WATER. BRIDGE DOWN AT LOW. BRIDGE IN THE SEA AT ALL OTHER TIMES. And a tally of how many times someone has been wrong about that.
+
+[lp_br_tide_sign_ves]
+{bored}It's a long tally.
+
+[lp_br_oar]
+A single oar, jammed in a crack, leaning out over the water. A bit of rope hangs from it, with a hook on the end and no fish.
+
+[lp_br_oar_ves]
+{smile}Fishing with no fish. It's the purest kind.
+
+[lp_br_oar_bramble]
+{sad}He's been waiting a very long time, whoever he is.
+
+[lp_br_alcove_note]
+In the nook behind the rocks, a bottle wedged in a crack, with a note rolled up in it: IF YOU'VE FOUND THIS, YOU'VE BEEN WHERE I SIT. IT'S THE BEST VIEW ON THE ISLES. DON'T TELL THE GULLS.
+
+[lp_br_alcove_note_ves]
+{smile}It really is a good view. I won't tell the gulls.
+
+[lp_br_alcove_note_bramble]
+{glee}A secret spot! We found a secret spot!
+
+[lp_br_alcove_pouch]
+A purse, hidden behind the stones in the nook. Whoever left it knew nobody would look here.
+
+# isles_east_light
+[lp_el_nets_dry]
+Nets hung up to dry along the wall, stiff and silvery, rattling softly where something small has got itself tangled. It's a bottle top.
+
+[lp_el_nets_dry_ves]
+{bored}Dinner.
+
+[lp_el_nets_dry_bramble]
+{sheepish}I thought it was a crab for a second. Don't tell the crabs.
+
+[lp_el_mug]
+A tin mug on a stone, upside down so the rain stays out. Written on the bottom, small: BRIDIE. MINE.
+
+[lp_el_mug_ves]
+{smile}'Mine.' Fair enough.
+
+[lp_el_mug_bramble]
+{thinking}Who's Bridie? Do you think she's coming back for it?
+
+[lp_el_deckchair]
+A deckchair, sat by the wall in the one spot where the wind doesn't reach. The canvas has a dip in it the shape of someone who stayed a long time.
+
+[lp_el_deckchair_ves]
+{thoughtful}You could watch the light go round and round from there. If you liked being looked at.
+
+[lp_el_deckchair_bramble]
+{sad}Whoever it was is still keeping the seat warm. For somebody.
+
+[lp_el_board]
+A chalk board: LAMP TURNS 22 TIMES A MINUTE. DO NOT STAND IN THE LIGHT AND WAIT. IT IS NOT A STAGE. Under that, someone has added: (SOME DO.)
+
+[lp_el_board_ves]
+{bored}Somebody tried. Somebody always does.
+
+[lp_el_board_bramble]
+{grin}I'd stand in it. I'd wave.
+
+[lp_el_coat]
+An oilskin on a nail by the east door, hanging on its own. Rain has made it stiff, so it holds its arms a little out from its sides.
+
+[lp_el_coat_ves]
+{surprised}It's a bit much, a coat that looks like that.
+
+[lp_el_coat_bramble]
+{scared}Could we maybe not look at it too long?
+
+[lp_el_cans]
+Oil cans in a row, every spout capped with a cork. A label on each one: LAMP. And one, in smaller writing: ALSO LAMP.
+
+[lp_el_cans_ves]
+{bored}Subtle.
+
+# isles_west_light
+[lp_wl_page]
+A page torn out of a logbook, flattened against the rocks by the wind. It's all in tidy pencil. You fold it into your pocket before the wind takes it back.
+
+[lp_wl_page_ves]
+{bored}It's got a lot of nerve, being a page.
+
+[lp_wl_page_bramble]
+{thinking}Somebody will want that. Somebody always wants a page.
+
+[lp_wl_page_gone]
+Nothing else here. You already have what was lying about.
+
+[lp_wl_nets]
+Nets hung up to dry on a frame, so old the knots have fused. A very small crab is living in one corner.
+
+[lp_wl_nets_ves]
+{smile}It's got the best flat on the isles.
+
+[lp_wl_nets_bramble]
+{glee}Hello! Hello crab!
+
+[lp_wl_barrels]
+Barrels in a row, all full of the same thing: rain. It's the only supply on the island that hasn't run out.
+
+[lp_wl_barrels_ves]
+{bored}It would be silly to go thirsty out here. Which is the point of the barrels.
+
+[lp_wl_oar]
+An oar standing in the turf with a bucket hung on it. The bucket has a hole. Whoever hung it there knew perfectly well.
+
+[lp_wl_oar_ves]
+{surprised}Why hang a bucket with a hole in?
+
+[lp_wl_oar_bramble]
+{thinking}Maybe it's for catching the wind.
+
+[lp_wl_driftwood]
+A branch of driftwood, worn to a smooth white curve. It has the shape of a bird: a long neck, a flat wing. Someone has carved an eye in it.
+
+[lp_wl_driftwood_ves]
+{smile}That's a good bird. It's much calmer than the real ones.
+
+[lp_wl_driftwood_bramble]
+{awed}It's looking at me. It's got the best eye.
+
+[lp_wl_seat]
+Two flat stones set facing the sea, side by side. One is worn smooth in the middle. The other has a rime of moss.
+
+[lp_wl_seat_ves]
+{thoughtful}One of them still comes here, then. The other doesn't.
+
+[lp_wl_seat_bramble]
+{sad}The moss one's the one nobody sits on.
+
+# isles_old_lightroom
+[lp_ol_cup]
+A cup on the arm of the chair, the tea long gone to a brown ring. There's a spoon standing in it, as though someone meant to come back and stir.
+
+[lp_ol_cup_ves]
+{thoughtful}Doesn't it feel like someone's just stepped out?
+
+[lp_ol_cup_bramble]
+{worried}Don't say that. Don't say that out loud.
+
+[lp_ol_hook]
+A peg by the door with nothing on it. Underneath, a pair of sea boots stand side by side, tidy, toes to the wall.
+
+[lp_ol_hook_ves]
+{sad}Somebody was very tidy about leaving.
+
+[lp_ol_moths]
+A paper bag of wicks on the sill, and a note: DO NOT LET THE MOTHS HAVE THESE. The bag is full of holes.
+
+[lp_ol_moths_ves]
+{bored}The moths read it. They've never had anything so interesting.
+
+[lp_ol_moths_bramble]
+{grin}The moths win.
+
+[lp_ol_scribbles]
+A stack of paper under a pebble, covered in pencil sketches of the same lighthouse, again and again, getting a little better each time.
+
+[lp_ol_scribbles_ves]
+{smile}Practice. Look, the last one is quite good.
+
+[lp_ol_scribbles_bramble]
+{awed}He drew it so many times! He must really like lighthouses.
+
+# --- THE LIFE PASS, ROUND 2: the tidy cave ---
+
+[r5s_tidy_boots]
+A pair of boots set side by side, laces tucked in, toes exactly level with the wall. Nobody has ever been this tidy about boots.
+
+[r5s_tidy_boots_ves]
+{bored}Show-off.
+
+[r5s_tidy_boots_bramble]
+{surprised}Even the laces are ironed!
+
+[r5s_tidy_trap]
+A crab trap with its rope coiled on top in a perfect spiral. Inside, a crab, sitting very neatly, looking as though it has been told not to touch anything.
+
+[r5s_tidy_trap_ves]
+{smile}It's got the hang of the place.
+
+[r5s_tidy_cairn]
+A cairn of seven stones, graded by size, each with a number scratched on it. The fourth has been turned the wrong way round, and the whole cairn looks faintly worried.
+
+[r5s_tidy_cairn_ves]
+{thinking}Turn it round.
+
+[r5s_tidy_cairn_bramble]
+{sheepish}...No, you do it.
+
+# --- R3D BEGIN (round 3 fun check, helper D) ---
+# (draft)
+
+[r3d_isles_gannet_stack_stake]
+A bird-counter's stake with a tally: 1,214 ADULTS. 1,213 ADULTS. 1,215 ADULTS. The last number has been rubbed out and written again, very firmly.
+
+[r3d_isles_gannet_stack_stake_bramble]
+{thinking}How do you count a gannet?
+
+[r3d_isles_gannet_stack_stake_ves]
+{bored}Carefully. And never twice.
+
+[r3d_isles_gannet_stack_scope]
+A telescope on a tripod, pointed at one nest. In the lens: a chick bigger than its mother, being fed anyway.
+
+[r3d_isles_gannet_stack_scope_bramble]
+{glee}Let me see!
+
+[r3d_isles_gannet_stack_scope_ves]
+{smile}He's enormous.
+
+[r3d_isles_gannet_stack_note]
+A note held under a stone: BACK AT FOUR. (CHICKS.)
+
+[r3d_isles_gannet_stack_note_bramble]
+{glee}What time is it?
+
+[r3d_isles_gannet_stack_note_ves]
+{bored}Not four.
+
+[r3d_isles_gannet_stack_deckchair]
+A deckchair, a flask and a pair of binoculars on the seat. Everything is pointed at the cliff, which is full of birds who aren't looking back.
+
+[r3d_isles_gannet_stack_deckchair_bramble]
+{grin}They're ignoring us. It's rude.
+
+[r3d_isles_gannet_stack_deckchair_ves]
+{smile}They've got a lot to ignore.
+
+# --- R3D END ---

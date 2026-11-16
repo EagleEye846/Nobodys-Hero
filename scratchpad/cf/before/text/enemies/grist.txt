@@ -1,0 +1,81 @@
+# GRIST
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/grist.js.
+
+[intro]
+A floury rat in an apron stands up on a sack. It's GRIST! "Who's in MY mill?"
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+GRIST dusts off its apron. More flour comes out of the apron than goes off it.
+
+GRIST takes a bite of its loaf, then hides it behind its back. You saw.
+
+GRIST is standing on tiptoe to look bigger. It's working. A bit.
+
+GRIST keeps glancing at the door. Just checking where it is.
+
+Smells like old flour and wet wood.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+MY mill!
+
+I'm the Miller now.
+Says so on the door.
+I wrote it.
+
+Watch this!
+...Did you watch?
+
+Fifty years
+I've run this place.
+Nobody complained.
+
+Don't touch the wheel.
+It's mine.
+
+Come any closer
+and I'll... stay here.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/grist.js.
+[talk: Inspect]
+GRIST - HP 460
+A rat who moved into the empty mill and gave itself a job. It's very proud of it.
+
+[talk: Admire the mill]
+You look round the mill and nod, impressed. GRIST puffs up so much flour falls off.
+
+"Built it myself! ...Well. Kept it. Keeping's harder."
+
+[talk: Call it Miller]
+You call it Miller. GRIST stops. Its whiskers twitch.
+
+"Nobody's ever called me that. Except me. Say it again?"
+
+[talk: Say "boo"]
+You lean in and go "boo". GRIST jumps clean out of its apron.
+
+It climbs back in very slowly, like that was on purpose.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+GRIST drops its loaf and scurries off behind the sacks. "The mill's still MINE!"
+
+[pacified]
+GRIST tips an imaginary hat. "Come back when we're open. We're always open."
+
+# Bramble's own TALK lines for it ({foe} is its name). His grandad was born
+# in Hollin and told him about the mill.
+[bramble_talk]
+Bramble tells {foe} his grandad's dad was the real miller. {foe} goes very quiet.
+
+Bramble asks {foe} for a bit of loaf. {foe} gives him the smallest crumb in the world.
+
+Bramble roars like a bear. {foe} hides in a sack. Bramble says sorry into the sack.
+
+Bramble tells {foe} it's a good miller. {foe} goes pink under the flour.

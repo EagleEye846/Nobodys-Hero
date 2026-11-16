@@ -1,0 +1,10 @@
+PASS L8 saltcombe_harbour_office
+PASS L11 ash_seabed
+PASS L15 ash_orchard
+PASS L16 ash_drift_cut
+PASS L18 ash_cinder_field
+PASS L20 ash_town_gate
+PASS L22 ash_storm_flats
+PASS L24 ash_tideline
+PASS L25 ash_waystation
+PASS L26 ash_waystation

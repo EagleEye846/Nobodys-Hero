@@ -1,0 +1,6 @@
+PASS L12 glimmer_tuck
+PASS L14 glimmer_tuck
+PASS L16 glimmer_crystal_bridge
+PASS L46 stillwater_reeds
+PASS L47 stillwater_sunken_hall
+PASS L96 stillwater_reeds

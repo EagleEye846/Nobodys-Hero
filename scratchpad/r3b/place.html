@@ -1,0 +1,91 @@
+<!doctype html><meta charset="utf-8"><pre id="report">PLACE START
+</pre>
+<script type="module">
+import { ROOMS } from '../../src/data/rooms/index.js';
+import { Room } from '../../src/overworld/room.js';
+import { PROP_FOOTPRINTS } from '../../src/data/art/props.js';
+const report = document.getElementById('report');
+const spec = await (await fetch('./spec.json?' + Date.now())).json();
+const KITS = spec.kits, FILL = spec.fill;
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const hash = (s) => [...s].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261);
+const BAD = new Set(['D', 'U', 'u', 's', '~', 'g', 'b', 'B', 'S']);
+const out = {}, fails = [];
+for (const [rid, rs] of Object.entries(spec.rooms)) {
+  const d = ROOMS[rid]; if (!d) { fails.push(`no room ${rid}`); continue; }
+  const room = new Room(d);
+  const W = d.tiles[0].length, H = d.tiles.length;
+  const R = rng(hash(rid));
+  const solid = (x, y) => x < 0 || y < 0 || x >= W || y >= H || room.isSolidTile(x, y);
+  const tch = (x, y) => d.tiles[y]?.[x];
+  const props = d.props.filter((p) => !p.r3b);
+  const busy = Array.from({ length: H }, () => Array(W).fill(0)); // 0 free,1 decor/walkable,2 text/walkable,3 bodied
+  const mark = (x, y, v, r = 0, fp = 1) => { for (let j = -r; j <= r; j++) for (let i = -r; i <= r + fp - 1; i++) { const a = x + i, b = y + j; if (a >= 0 && b >= 0 && a < W && b < H) busy[b][a] = Math.max(busy[b][a], v); } };
+  const SPECIAL = ['lever', 'log', 'push', 'treadle', 'rock', 'button', 'hide', 'save', 'chest', 'gap', 'door', 'quest', 'gives', 'ring', 'swing', 'cart', 'smash', 'inOrder', 'rope', 'plank'];
+  for (const p of props) {
+    if (p.x === undefined) continue; const fp = PROP_FOOTPRINTS[p.sprite] ?? 1; const x = Math.floor(p.x), y = Math.floor(p.y);
+    const special = SPECIAL.some((k) => p[k] !== undefined);
+    if (!p.walkable) mark(x, y, 3, 0, fp); else if (special) mark(x, y, 3, 1, fp); else if (p.text) mark(x, y, 2, 0, fp); else mark(x, y, 1, 0, fp);
+  }
+  const ban = [];
+  const banRect = (x0, y0, x1, y1, r) => { for (let y = y0 - r; y <= y1 + r; y++) for (let x = x0 - r; x <= x1 + r; x++) if (x >= 0 && y >= 0 && x < W && y < H) ban.push(`${x},${y}`); };
+  for (const dr of d.doors ?? []) banRect(dr.x, dr.y, dr.x + (dr.w ?? 1) - 1, dr.y + (dr.h ?? 1) - 1, 2);
+  banRect(d.playerStart.x, d.playerStart.y, d.playerStart.x, d.playerStart.y, 2);
+  const cutBan = new Set(); for (const c of d.cutscenes ?? []) for (let y = c.y - 1; y <= c.y + (c.h ?? 1); y++) for (let x = c.x - 1; x <= c.x + (c.w ?? 1); x++) cutBan.add(`${x},${y}`);
+  for (const n of d.npcs ?? []) { if (n.patrol) banRect(n.patrol[0], n.y, n.patrol[1], n.y, 1); else banRect(n.x, n.y, n.x, n.y, 2); }
+  for (const dr of d.doors ?? []) { /* spawn points of doors from here are in other rooms */ }
+  const banned = new Set(ban);
+  // hush stealth lane
+  const laneBan = (x, y) => rid === 'hollin_lane' && x >= 10 && x <= 21;
+  // reachable
+  const reach = new Set(); const q = [];
+  const seed = [[d.playerStart.x, d.playerStart.y], ...(d.doors ?? []).flatMap((dr) => [[dr.x, dr.y]])];
+  for (const [x, y] of seed) { reach.add(`${x},${y}`); q.push([x, y]); }
+  while (q.length) { const [x, y] = q.shift(); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const a = x + dx, b = y + dy; if (!solid(a, b) && !reach.has(`${a},${b}`)) { reach.add(`${a},${b}`); q.push([a, b]); } } }
+  const placed = [];
+  const okTile = (x, y, kind, fp, flatOK = false) => {
+    for (let i = 0; i < fp; i++) {
+      const a = x + i;
+      if (solid(a, y) || !reach.has(`${a},${y}`) || BAD.has(tch(a, y)) || tch(a, y) === 'y' || banned.has(`${a},${y}`) || laneBan(a, y) || (cutBan.has(`${a},${y}`) && !flatOK)) return false;
+      if (kind === 'text') { if (busy[y][a] >= 1) return false; } else if (kind === 'decor') { if (busy[y][a] >= 2) return false; }
+    }
+    if (kind === 'text') {
+      // the poke tile below must be standable and clear of bodied props; no other text prop within 1 tile
+      if (solid(x, y + 1) || busy[y + 1]?.[x] >= 3 || BAD.has(tch(x, y + 1)) || banned.has(`${x},${y + 1}`)) return false;
+      for (let j = -1; j <= 1; j++) for (let i = -1; i <= fp; i++) if ((busy[y + j]?.[x + i] ?? 0) === 2) return false;
+    }
+    return true;
+  };
+  const zoneRect = (z) => {
+    if (Array.isArray(z)) return z;
+    const m = { n: [0, 0, 1, 0.4], s: [0, 0.6, 1, 1], w: [0, 0, 0.4, 1], e: [0.6, 0, 1, 1], c: [0.3, 0.3, 0.7, 0.7], nw: [0, 0, 0.5, 0.5], ne: [0.5, 0, 1, 0.5], sw: [0, 0.5, 0.5, 1], se: [0.5, 0.5, 1, 1] }[z] ?? [0, 0, 1, 1];
+    return [Math.floor(m[0] * W), Math.floor(m[1] * H), Math.ceil(m[2] * W) - 1, Math.ceil(m[3] * H) - 1];
+  };
+  const candidates = (z, kind, fp, flatOK) => { const [x0, y0, x1, y1] = zoneRect(z); const c = []; for (let y = Math.max(1, y0); y <= Math.min(H - 2, y1); y++) for (let x = Math.max(1, x0); x <= Math.min(W - 2 - (fp - 1), x1); x++) if (okTile(x, y, kind, fp, flatOK)) c.push([x, y]); return c; };
+  const best = (c) => { // pick the candidate farthest from what's already placed (blue noise), sampled
+    let pick = null, score = -1;
+    for (let k = 0; k < 14; k++) { const t = c[Math.floor(R() * c.length)]; let md = 99; for (const p of placed) md = Math.min(md, Math.hypot(p.x - t[0], p.y - t[1])); if (md > score) { score = md; pick = t; } }
+    return pick;
+  };
+  const list = [];
+  const putItem = (it, kind) => {
+    const fp = PROP_FOOTPRINTS[it.sprite] ?? 1;
+    const flatOK = kind === 'decor' && it.flat && FILL[rid][2] === 'flatCut';
+    let c = candidates(it.zone, kind, fp, flatOK);
+    if (!c.length) c = candidates(null, kind, fp, flatOK);
+    if (!c.length) { fails.push(`${rid}: no tile for ${it.sprite} ${it.name ?? ''}`); return false; }
+    const [x, y] = best(c);
+    const prop = { sprite: it.sprite, x, y, walkable: true };
+    if (it.flat) prop.flat = true;
+    if (kind === 'text') { prop.text = it.key; mark(x, y, 2, 0, fp); } else { prop.decor = true; mark(x, y, 1, 0, fp); }
+    placed.push({ x, y }); list.push(prop); return true;
+  };
+  for (const it of rs.items) if (it.name) putItem({ ...it, key: it.key }, 'text');
+  const kit = KITS[FILL[rid][0]]; let n = FILL[rid][1];
+  const pool = []; for (const [s, w] of kit) for (let i = 0; i < w; i++) pool.push(s);
+  let guard = 0;
+  while (n > 0 && guard++ < 200) { const s = pool[Math.floor(R() * pool.length)]; if (putItem({ sprite: s, zone: null, flat: spec.flatset.includes(s) }, 'decor')) n--; }
+  out[rid] = list;
+}
+report.textContent += JSON.stringify(out) + '\nFAILS ' + JSON.stringify(fails) + '\nPLACE DONE\n';
+</script>

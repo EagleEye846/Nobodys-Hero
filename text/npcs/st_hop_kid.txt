@@ -1,0 +1,27 @@
+# ST_HOP_KID: an otter child on a hopscotch grid chalked on the quay boards, in the rain, on one leg. The life pass.
+
+[first]
+Don't step on the chalk! It's the sea. If you step on the sea you're out.
+
+[repeat]
+One, two, three, hop. The sixth square's the lighthouse. You can't land on the lighthouse. Nobody's ever allowed.
+
+# (draft)
+[repeat 2]
+I got all the way to nine once. Then a wave came up the slip. Mrs. Tansy said it counted. I said it didn't. We still talk about it.
+
+# (draft)
+[repeat_bramble 2]
+{determined}Show me the lighthouse square. I'll do it.
+
+# (draft)
+[repeat 3]
+Nobody's ever done the lighthouse. Not Pup, not Dab, not me. My gran did, once, but she'd had a pasty.
+
+# (draft)
+[first after the_light_answers]
+The sun's drying the chalk! I'll have to redo the squares. It's all gone orangey on the sea.
+
+# (draft)
+[repeat after the_light_answers]
+I've drawn the lighthouse square again, bigger. This time it's got a light. I did the light in yellow.

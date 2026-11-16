@@ -131,7 +131,13 @@ export const WEAPONS = {
   // The Wreck Yard's chest.
   anchor_maul: { name: 'Anchor Maul', fightPower: 2.3, ability: 'quake' },
   // A chest in the Soundings.
-  glass_float_staff: { name: 'Glass-Float Staff', fightPower: 1.1, ability: 'channel' },
+  // Raised 15 Nov 2026 (it was 1.1, far behind the chapter's other ability weapons): level with
+  // the Brine Harpoon and the Gaff Hook, so CHANNEL costs a little FIGHT, not most of it.
+  glass_float_staff: { name: 'Glass-Float Staff', fightPower: 1.9, ability: 'channel' },
+  // The Fair Return's captain, talked down or beaten (the cabin scenes `captain_spared` and `captain_beaten`
+  // give it, with his greatcoat): the best lunge of the chapter. Over the chandlery's cutlass (2.1) and the
+  // Anchor Maul (2.3), under the Stormglass Blade (2.55) and the Fallen Star once Orla has reforged it (2.7).
+  captains_cutlass: { name: "Captain's Cutlass", fightPower: 2.45, ability: 'lunge' },
   // Dropped by Corrie, the Tidecaller.
   stormglass_blade: { name: 'Stormglass Blade', fightPower: 2.55, ability: 'parry' },
   // Ves's, chapter 5: a sailcloth canopy that heals, and the storm umbrella
@@ -146,4 +152,17 @@ export const WEAPONS = {
   // party.js; see "Chapter 5 balance pass" in the builders guide).
   boat_axe: { name: 'Boat Axe', wielder: 'bramble', fightPower: 1.45, allyStrike: 10, allyCalm: 3 },
   ships_cleaver: { name: "Ship's Cleaver", wielder: 'bramble', fightPower: 1.55, allyStrike: 12, sneak: 0.6, shorten: 0.15 },
+  // Chapter 5, more for the two of them (each beats chapter 4's best in its role; Ves's stay
+  // under Bramble's axes, 1.45 and up).
+  // Ves: whalebone ribs from the Wrack Shore's hulk (a harder hitter than the Rivet Handle, less
+  // calming), a canopy from the chandlery that calms and grazes, and the best of her healers,
+  // from the Last Light's den.
+  whalebone_ribs: { name: 'Whalebone Ribs', wielder: 'vesper', fightPower: 1.25, allyStrike: 10, allyCalm: -4 },
+  spindrift_canopy: { name: 'Spindrift Canopy', wielder: 'vesper', fightPower: 1.1, allyCalm: 14, allyHeal: 10, grazeSp: 0.25 },
+  lampwick_handle: { name: 'Lamp-Wick Handle', wielder: 'vesper', fightPower: 1.3, allyHeal: 22, allySp: 17, regen: 5 },
+  // Bramble: a sneaky hatchet from the bosun's pocket in the Wreck Yard, a maul that cuts attacks
+  // short, and the best axe he finds, on top of the Needle (just over the Ship's Cleaver).
+  marlinspike_hatchet: { name: 'Marlinspike Hatchet', wielder: 'bramble', fightPower: 1.4, allyStrike: 9, sneak: 0.8 },
+  capstan_maul: { name: 'Capstan Maul', wielder: 'bramble', fightPower: 1.4, allyStrike: 6, shorten: 0.3, allyCalm: -3 },
+  keepers_hatchet: { name: "Keeper's Hatchet", wielder: 'bramble', fightPower: 1.6, allyStrike: 13, allyCalm: 4, sneak: 0.4 },
 };

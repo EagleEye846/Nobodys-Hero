@@ -1,0 +1,84 @@
+# GORSE (at the waystation, ash_waystation): a hedgehog from Hearth, the town up the road, out
+# scavenging down the old road for what a hundred years has left lying about: hinges, pans, nails.
+# Gruff, a bit prickly, secretly delighted to see anyone. One of Hearth's stubborn folk. She makes
+# you want to see the town; she doesn't say what's up north, only that it's best left alone, and she
+# never mentions the old woman or what burned the land. She tells you how to get in: the folk will
+# dig you through for anything that's never gone cold, the Lum's hearth brick above all.
+# Bramble speaks first, Ves answers. (draft)
+# [repeat 4] (15 November 2026, draft): the first teaser of the one ahead of you (patched coat, polite, in a hurry,
+# asks if the dragon is "still up north"). No name. Bramble and Ves do not know who it is.
+
+[first]
+{stern}Well, now. Boots. Three pairs of boots, and one of them small. I thought you were the wind, the way the ash was going on.
+
+{smile}Gorse. Hearth, up the road, past the cut. Don't look at me like that. There IS a Hearth. Somebody's got to be stubborn about it.
+
+{stern}I come down here and pick over what's left. Hinges, pans, the odd good nail. You'd be amazed what a hundred years leaves lying about. Mostly it's ash. Occasionally it's a very good pan.
+
+{smile}Hearth's worth the walk, mind. Warm doors, a smith's fire you can hear from the gate. Only the gate's choked. Bring something that's never gone cold, and the folk will dig you in.
+
+[first_bramble]
+{glee}Is Hearth a proper town? With doors? And food?
+
+[first_ves]
+{bored}She said "a very good pan". I think that means yes.
+
+[repeat]
+{grin}Soup on every stove and a smith's fire you can hear from the gate. Every doorstep swept, every window sill with a pot of something green on it. Yes, green. Don't tell the neighbours.
+
+{stern}It's only a squeeze. We've dug it out three times. It keeps filling. That's a town for you: you dig, it fills, you dig.
+
+[repeat_bramble]
+{thinking}Green? On a sill? In all this?
+
+[repeat_ves]
+{thoughtful}If somebody's still growing things in this, I'd like to meet them.
+
+[repeat 2]
+{stern}You'll want the gate. It's choked up to the lintel, mind. The folk will dig you through, if you show them something that's never gone cold. A brick off a hearth that's stayed lit. There's a chimney by the gate, a stubborn one. Light sleeper.
+
+{smile}If it'll let you have a brick, show them that, and they'll open the ground for you like a door.
+
+[repeat_bramble 2]
+{surprised}Is it a... friendly chimney?
+
+[repeat_ves 2]
+{bored}"Light sleeper." That's not an answer, is it.
+
+[repeat 3]
+{stern}And that black orchard? The green shoot, by the third tree from the road. That's mine. I put one in every trip. Most of them the wind takes. This one took.
+
+{grin}Don't step on it.
+
+[repeat_bramble 3]
+{proud}We didn't! We said hello to it!
+
+[repeat_ves 3]
+{smile}We said hello to a shoot, Bramble. It didn't say anything back.
+
+[repeat 4]
+{stern}Busy, for a dead road. You, and one other this week, and he didn't stop for soup.
+
+{stern}Someone in a patched coat went through ahead of you. Very polite. Very much in a hurry. Asked whether the dragon was "still up north," like it was a coach that might have left.
+
+{stern}I said it didn't keep a timetable. He thanked me and went off the way you're going. Whistling, I think.
+
+[repeat_bramble 4]
+{surprised}Somebody's ahead of us? Do you think they're going to Hearth? Do you think they're nice? 
+
+[repeat_ves 4]
+{bored}Polite, in a hurry, and asking after the dragon. I'm sure that ends well.
+
+[repeat 5]
+{stern}If you hear a lot of grinding up north, past the town, keep walking. The ground goes hot up that way. There's something up there that's best left to its own business.
+
+{stern}That's all I'll say. I'm a scavenger, not a poet.
+
+[repeat 6]
+{smile}Go on, then. I've a hinge to find.
+
+[repeat_bramble 6]
+{glee}See you in Hearth!
+
+[repeat_ves 6]
+{smile}Mind the pans.

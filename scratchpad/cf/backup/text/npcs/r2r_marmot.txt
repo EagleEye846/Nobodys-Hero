@@ -1,0 +1,17 @@
+# THE MARMOT: sits on a rock at the north end of the Goat Track and wants a flower. A tiny errand (edelweiss grows in the south meadow). The life pass.
+
+[first]
+A marmot sits up on a flat rock with its paws held together in front of it, a bit like a small, furry judge. It looks at you. It looks at your hands.
+
+It whistles. It's a very sharp whistle, and it means 'I've lost something and it's flowers.'
+
+[repeat]
+The marmot whistles again, lower, pointing its nose at the south meadow, where the grass is thickest. The edelweiss. It wants the edelweiss. It would have told you sooner but it's a marmot.
+
+[flowers_back]
+You hold out the tuft of edelweiss. The marmot goes quite still. It takes the flower in both paws, sniffs it, and eats the whole thing in three bites with its eyes closed.
+
+Then it opens its eyes, gives you a long, shrill whistle, and presses a small bone whistle into your hand. It's warm. It's been in a very small pocket.
+
+[flowers_after]
+The marmot is busy. It has a flower's worth of happiness and nothing to do with it. It sits on its rock and whistles to itself, very softly, like a kettle.

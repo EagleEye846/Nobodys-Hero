@@ -17,6 +17,7 @@
 //   ,  meadow   :  dirt lane   N  buttercup meadow   b  bank (12)   B  bank (24)
 //   I  oak   T  apple tree   J  blossom tree (solid, standing)
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_DANDELION_HILL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_dandelion_hill',
@@ -96,9 +97,9 @@ export const SUNNY_DANDELION_HILL = {
     { sprite: 'bench', x: 3, y: 14, text: 'hill_bench' },
     { sprite: 'sy_seed_basket', x: 34, y: 5, text: 'hill_basket' },
     { sprite: 'haystack', x: 22, y: 12, text: 'hill_haystack' },
-    { sprite: 'daisy_patch', x: 6, y: 10, walkable: true },
-    { sprite: 'daisy_patch', x: 38, y: 11, walkable: true },
-    { sprite: 'buttercups', x: 20, y: 7, walkable: true },
+    { sprite: 'daisy_patch', x: 6, y: 10, walkable: true, decor: true },
+    { sprite: 'daisy_patch', x: 38, y: 11, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 20, y: 7, walkable: true, decor: true },
     { sprite: 'sy_seed_heads', x: 2, y: 3, animation: 'sy_seed_heads', speed: 1.1 },
     { sprite: 'sy_seed_heads', x: 7, y: 6, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 11, y: 15, animation: 'sy_seed_heads', speed: 1.1 },
@@ -114,18 +115,20 @@ export const SUNNY_DANDELION_HILL = {
     { sprite: 'sy_seed_heads', x: 36, y: 17, animation: 'sy_seed_heads', speed: 1.3 },
     { sprite: 'sy_seed_heads', x: 17, y: 17, animation: 'sy_seed_heads', speed: 1.0 },
     { sprite: 'sy_seed_heads', x: 4, y: 17, animation: 'sy_seed_heads', speed: 0.9 },
-    { sprite: 'sy_seed_drift', x: 5, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 9, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 12, y: 14, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 16, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 19, y: 3, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 24, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 27, y: 14, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 34, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 38, y: 6, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 41, y: 15, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 45, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 34, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
+    { sprite: 'sy_seed_drift', x: 5, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 9, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 12, y: 14, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 16, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 19, y: 3, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 24, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 27, y: 14, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 34, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 38, y: 6, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 41, y: 15, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 45, y: 8, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 34, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_dandelion_hill ?? []),
   ],
   tileTexts: { '#': 'field_hedge', W: 'field_hedge', I: 'field_oak', T: 'field_apple', J: 'field_blossom', b: 'field_bank', B: 'field_bank', V: 'lane_blossom_hedge' },
 

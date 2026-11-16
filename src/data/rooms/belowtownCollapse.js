@@ -14,6 +14,8 @@
 //
 // Tile key: # rock  W carved stone  V lamp wall  H banner wall  . flagstone
 //   r  royal carpet    I  carved pillar with a lantern (solid)   D  doorway
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const BELOWTOWN_COLLAPSE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'belowtown_collapse',
@@ -72,6 +74,7 @@ export const BELOWTOWN_COLLAPSE = {
   // folk run, the pillars and the doorway): benches knocked over, the barrels
   // for afterwards, and the show's confetti and streamers trodden into the floor.
   props: [
+    ...(R3C_PROPS.belowtown_collapse ?? []),
     { sprite: 'bench', x: 2, y: 10, text: 'collapse_bench' },
     { sprite: 'bench', x: 23, y: 6, text: 'collapse_bench' },
     { sprite: 'town_barrels', x: 1, y: 20, text: 'collapse_barrels' },

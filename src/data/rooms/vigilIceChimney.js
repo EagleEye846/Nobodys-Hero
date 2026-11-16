@@ -11,6 +11,7 @@
 //   v  stalactite (walk under it)                 ^  stalagmite (solid)
 //   x  ice crystals (they glow) (solid)           b  low ice block (jump up onto it)
 //   B  tall ice block (jump onto it from a low block)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_ICE_CHIMNEY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_ice_chimney',
@@ -85,6 +86,8 @@ export const VIGIL_ICE_CHIMNEY = {
     { sprite: 'chest', x: 9, y: 12, text: 'chimney_chest', gives: 'fanfare_fudge', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     // A short cliff, one throw, up to the top chamber.
     { sprite: 'grapple_ring', x: 16, y: 6, grapple: true },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_ice_chimney'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

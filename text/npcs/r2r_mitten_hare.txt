@@ -1,0 +1,20 @@
+# A snow hare in the Frozen Grotto with one red mitten on, who has lost the other. A tiny errand (the mitten lies in the Hall of Glass). The life pass.
+
+[first]
+A snow hare, sitting very straight with one red mitten on its left paw. The right paw is bare, and it's holding it up to its chest as if it's cold. It is cold. You can tell by the way it's looking at you.
+
+It twitches its nose at you, and at the cave, and at its bare paw.
+
+[first_ves]
+{thoughtful}It's got one mitten. It wants the other. It's the only thing it's said, and it didn't need to say it.
+
+[repeat]
+The hare holds up the bare paw and shakes it, pointedly. It looks, very slowly, towards the Hall of Glass. Somewhere past the ice there is a mitten, and the hare does not like how far away it is.
+
+[mitten_back]
+You hold out the little red mitten. The hare takes it with the bare paw, turns it over, puts it on, and flexes its fingers. Then it looks up at you and presses its newly warm paw to a smooth bit of ice at its feet.
+
+When it lifts it away, there's a perfect pawprint in the frost, and the hare pushes the whole slab to you with its nose. It's solid. It's lovely. It's very, very cold.
+
+[mitten_after]
+The hare has both mittens on. It's sitting very straight and looking at its paws, one after the other. It's the happiest hare in the mountain.

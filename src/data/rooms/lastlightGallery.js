@@ -13,6 +13,8 @@
 //   #  wall top (solid)   h  black brick (solid)   H  lamp niche   .  flagstones   I  iron pillar   o  a door
 // (draft).
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const LASTLIGHT_GALLERY = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lastlight_gallery',
@@ -96,6 +98,7 @@ export const LASTLIGHT_GALLERY = {
     { sprite: 'c5_floor_crack', x: 15, y: 11, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 24, y: 4, flat: true, walkable: true },
     { sprite: 'c5_rubble', x: 30, y: 3, flat: true, walkable: true },
+    ...(LIFE5_PROPS['lastlight_gallery'] ?? []),
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', G: 'll_wall', H: 'll_niche', o: 'll_door', '.': 'll_floor', I: 'll_pillar' },
 

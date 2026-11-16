@@ -4,6 +4,7 @@
 // either way. At low tide, push the crate two tiles into the trench: it sinks and makes a
 // bridge, and the far bank (and the way on) is reachable. The reset stump sets everything
 // back if the crate goes wrong.
+// The west door goes back over the Headland (wrack_headland) to the landing.
 // Tile key (see src/overworld/coastTiles.js, wrack):
 //   #  cliff top (solid)   W  cliff face (solid)   .  wet shingle   ,  salt grass   q  shingle
 //   ;  shallows (walk)   ~  sea (solid)   x  barnacle rock (solid)   O  boulder   F  weed pile
@@ -21,6 +22,8 @@ export const WRACK_POOLS = {
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_shore', lamplight: { shade: 0.16, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
+
+
 
   tiles: [
     '############################################',
@@ -77,7 +80,7 @@ export const WRACK_POOLS = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 0, y: 8, w: 1, h: 2, to: 'wrack_landing', spawn: { x: 38, y: 10 } },
+    { x: 0, y: 8, w: 1, h: 2, to: 'wrack_headland', spawn: { x: 37, y: 11 } },
     { x: 43, y: 8, w: 1, h: 2, to: 'wrack_gaps', spawn: { x: 2, y: 12 } },
   ],
 
@@ -150,6 +153,14 @@ export const WRACK_POOLS = {
     { sprite: 'c5_rock_weedy', x: 8, y: 12, text: 'shore_rocks' },
     { sprite: 'c5_rock_weedy', x: 29, y: 5, text: 'shore_rocks' },
     { sprite: 'c5_rock_weedy', x: 29, y: 13, text: 'shore_rocks' },
+    { sprite: 'col_glass_white', x: 6, y: 12, walkable: true, flat: true, gives: 'glass_white', taken: { gone: true } },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_whelk', x: 42, y: 12, text: 'sl_whelk_found', gives: 'big_whelk', react: true, taken: { sprite: 'shore_shells', text: 'sl_whelk_empty' } },
+    { sprite: 'shore_nest', x: 29, y: 10, text: 'sl_nest', walkable: true },
+    { sprite: 'shore_kelp_b', x: 29, y: 8, text: 'sl_kelp_b', walkable: true, animation: 'shore_kelp_b', speed: 0.4 },
+    { sprite: 'c5_lantern_fallen', x: 4, y: 2, text: 'sl_lantern', flat: true, walkable: true },
+    { sprite: 'c5_buoy_yellow', x: 42, y: 3, text: 'sl_float' },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', '~': 'pools_sea', x: 'landing_rock', O: 'landing_rock', F: 'landing_weed', ';': 'pools_pool' },
 
@@ -159,9 +170,14 @@ export const WRACK_POOLS = {
   // tiles of each other so they fight together. The pair is east of the shingle (x 29 on is dry at
   // both tides), clear of the wheel (32,5), the door and the return crate's lane (row 11, x 21 to
   // 23). No cutscenes in this room.
+  // AMBUSH: the limpet knight isn't on sentry by the pinwheel any more. It stands as one more weedy
+  // rock in the north-east turf (39,4), by the purse (40,4), and jumps out when you come within two
+  // and a half tiles (its visor slit glints now and then: `look: 'weedy_rock'`, src/overworld/
+  // hideouts.js). The way across the east bank (rows 8 and 9) passes four tiles below it, so only
+  // going up for the purse wakes it.
   npcs: [
     { enemy: 'shellac', x: 5, y: 13, patrol: [4, 8], behaviour: 'patrol' },
-    { enemy: 'limpet_knight', x: 33, y: 12, patrol: [32, 34], behaviour: 'patrol' },
+    { enemy: 'limpet_knight', x: 39, y: 4, patrol: [39, 39], behaviour: 'disguise', look: 'weedy_rock', reach: 2.5 },
     { enemy: 'pinwheel', x: 34, y: 11, patrol: [32, 35], behaviour: 'wander' },
   ],
 };

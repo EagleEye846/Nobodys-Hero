@@ -8,6 +8,7 @@
 //   n  snow                                       A  snowy cliff top (solid)
 //   b  low stone block (jump up onto it)          Y  snow pine (walk or hide behind) (solid)
 //   i  trodden snow path                          Q  snowy boulder (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_KNIFE_EDGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_knife_edge',
@@ -108,6 +109,8 @@ export const VIGIL_KNIFE_EDGE = {
     { sprite: 'cairn', x: 36, y: 14, text: 'knife_cairn' },
     { sprite: 'chough', x: 34, y: 10, text: 'ridge_chough', walkable: true },
     { sprite: 'tally_stone', x: 28, y: 10, text: 'knife_tally' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_knife_edge'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

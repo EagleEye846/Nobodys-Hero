@@ -37,9 +37,9 @@ export const MERROW_HIGH_STREET = {
   skyline: false,
 
   tiles: [
-    '########################################',
-    '#77777777777###777777777777777##7777777#',
-    '#777777777777#7777777777777777777777777#',
+    '#77777777777777777777777777777777777777#',
+    '#55555555555555555555555555555555555555#',
+    '#55555555555555555555555555555555555555#',
     '#56565565656556565565656556565655656565#',
     '#.XX..~~~~~~~~~~~~~~~.....~~~B~~~~.XX..#',
     '#.....;;;;;;;;;;;;;;;.....;;;B;;;;.....#',
@@ -165,7 +165,7 @@ export const MERROW_HIGH_STREET = {
     { sprite: 'mw_house_parapet', x: 1, y: 3, text: 'front_parapet' },
     { sprite: 'mw_ov_door_arched', x: 3, y: 3, text: 'front_door' },
     { sprite: 'mw_ov_shutters_open', x: 4, y: 3, text: 'front_shutters' },
-    { sprite: 'mw_ov_wall_lamp', x: 5, y: 3, text: 'front_lamp', glow: [{ dx: 2, dy: -10, bloom: 10, strength: 0.7, flicker: 0.4, color: '255, 156, 68' }, { dx: 2, dy: -2, pool: 46, strength: 0.45, flicker: 0.3, color: '255, 156, 68' }] },
+    { sprite: 'mw_ov_wall_lamp', x: 5, y: 3, text: 'front_lamp', glow: [{ dx: 2, dy: -23, bloom: 10, strength: 0.7, flicker: 0.4, color: '255, 156, 68' }, { dx: 2, dy: -2, pool: 46, strength: 0.45, flicker: 0.3, color: '255, 156, 68' }] },
     { sprite: 'mw_house_shop', x: 6, y: 3, text: 'front_shop' },
     { sprite: 'mw_ov_drainpipe', x: 8, y: 3, text: 'front_pipe' },
     { sprite: 'mw_ov_window_drowned', x: 9, y: 3, text: 'street_window' },
@@ -193,11 +193,11 @@ export const MERROW_HIGH_STREET = {
     { sprite: 'mw_ov_door_hanging', x: 36, y: 3, text: 'front_door_hanging' },
     { sprite: 'mw_ov_shutters_open', x: 37, y: 3, text: 'front_shutters' },
     { sprite: 'mw_ov_drainpipe', x: 38, y: 3, text: 'front_pipe' },
-    { sprite: 'mw_dormer', x: 8, y: 2, text: 'merrow_roof' },
-    { sprite: 'mw_dormer', x: 27, y: 2, text: 'merrow_roof' },
-    { sprite: 'mw_chimney_short', x: 10, y: 2, text: 'merrow_chimney' },
-    { sprite: 'mw_chimney_short', x: 36, y: 2, text: 'merrow_chimney' },
-    { sprite: 'mw_chimney_short', x: 19, y: 2, text: 'merrow_chimney' },
+    { sprite: 'mw_dormer', x: 8, y: 0, text: 'merrow_roof' },
+    { sprite: 'mw_dormer', x: 27, y: 0, text: 'merrow_roof' },
+    { sprite: 'mw_chimney_short', x: 10, y: 0, text: 'merrow_chimney' },
+    { sprite: 'mw_chimney_short', x: 36, y: 0, text: 'merrow_chimney' },
+    { sprite: 'mw_chimney_short', x: 19, y: 0, text: 'merrow_chimney' },
     // In the flood (2026-11-08): a drowned stall and what floated off it, a lamp still burning
     // in the water, a cart nose-down. All on deep water, clear of the races, the wrackeel's row 11 and the kelpie's row 17.
     { sprite: 'mw_ripples', x: 11, y: 7, text: 'street_water', flat: true, walkable: true, animation: 'mw_ripples', speed: 0.22 },

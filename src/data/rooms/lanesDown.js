@@ -23,6 +23,8 @@ export const LANES_DOWN = {
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_shore', lamplight: { shade: 0.18, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
+  // No wreck masts on the skyline: a snapped mast out over the flood read as a tent, and this water is the drowned Lanes, not the open sea.
+  skyline: false,
 
   tiles: [
     '################################',
@@ -67,13 +69,16 @@ export const LANES_DOWN = {
   textFile: 'interactions/lanes.txt',
   props: [
     { sprite: 'savepoint', x: 8, y: 5, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 9, y: 5, travel: 'way_down', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     // The stair down, drawn over its 's' tiles and the '#' parapets either side (flat, walkable).
     { sprite: 'ln_stair', x: 12, y: 17, text: 'down_stair', flat: true, walkable: true },
     { sprite: 'street_lamp', x: 11, y: 12, text: 'fork_lamp' },
     { sprite: 'street_lamp', x: 20, y: 12, text: 'fork_lamp' },
     { sprite: 'street_lamp', x: 26, y: 7, text: 'fork_lamp' },
     { sprite: 'ln_signpost', x: 22, y: 5, text: 'down_signpost' },
-    { sprite: 'c5_church_wall', x: 4, y: 2, text: 'down_wall' },
+    // The board at the stair's head: MERROW, an arrow down.
+    { sprite: 'sign', x: 12, y: 12, text: 'down_head_sign' },
     { sprite: 'c5_buoy_yellow', x: 3, y: 6, text: 'fork_buoy' },
     { sprite: 'gold_pouch', x: 29, y: 3, text: 'down_pouch', gold: 60, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     // The sign for the cliff lane on to the Soundings.
@@ -89,15 +94,16 @@ export const LANES_DOWN = {
     { sprite: 'c5_puddle', x: 20, y: 8, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 6, y: 4, flat: true, walkable: true },
     { sprite: 'mw_laundry_line', x: 24, y: 2, text: 'dress_washing' },
-    { sprite: 'ln_sunk_door', x: 3, y: 15, text: 'dress_sunk_door' },
+    { sprite: 'ln_sunk_door_shut', x: 3, y: 15, text: 'dress_sunk_door_shut' },
     { sprite: 'ln_sunk_wall', x: 22, y: 16, text: 'dress_sunk_wall' },
     { sprite: 'ln_sunk_cart', x: 8, y: 17, text: 'dress_sunk_cart' },
     { sprite: 'ln_sunk_fence', x: 27, y: 14, text: 'dress_sunk_fence' },
     { sprite: 'ln_under_b', x: 6, y: 16, flat: true, walkable: true },
     { sprite: 'ln_under_a', x: 25, y: 17, flat: true, walkable: true },
     { sprite: 'ln_lily_mat_b', x: 1, y: 13, flat: true, walkable: true },
-    { sprite: 'ln_lily_small', x: 21, y: 15, flat: true, walkable: true },
-    { sprite: 'ln_lily_small', x: 10, y: 15, flat: true, walkable: true },
+    { sprite: 'lv_sign_lane', x: 14, y: 3, text: 'lp_lanesign_down' },
+    { sprite: 'lv_bench', x: 2, y: 3, text: 'lp_bench_down' },
+    { sprite: 'lv_kettle', x: 4, y: 2, text: 'lp_kettle_down' },
   ],
   tileTexts: { '#': 'lanes_rock', W: 'lanes_rock', '~': 'down_flood', s: 'down_stair', x: 'lanes_stone', O: 'lanes_stone', J: 'fork_gatepost', '^': 'hamlet_pillar' },
 

@@ -60,8 +60,9 @@ North of the hall: the WAY UP, to the Isles. "Gate weighted. Weight kept below."
 [mouth_sign]
 A board on a post: THE SOUNDINGS. HARBOUR BOARD WORKINGS. CHART AT THE ENTRANCE. KEEP OFF THE SEA.
 
+# (draft)
 [mouth_sign_ves]
-{bored}"Keep off the sea." In a cave full of sea. Bold.
+{laughing}"Keep off the sea." In a cave full of sea. Bold.
 
 [mouth_boat]
 A sounders' boat drawn up on the shingle, oars shipped, a lead line coiled in the bow. Nobody has rowed it for years. It has been waiting very politely.
@@ -81,8 +82,9 @@ A purse, tucked in a crack in the rock above the tideline. Somebody's pay, never
 [mouth_sea]
 The open sea, coming in under the cliff. It booms in the dark and goes out again, and comes back, and goes out.
 
+# (draft)
 [mouth_sea_bramble]
-{scared}It came in. It's IN. Doesn't it know it's meant to stay outside?
+{angry}It came in. It's IN. Doesn't it know it's meant to stay outside?
 
 [mouth_shingle]
 Shingle, round as eggs, clacking under your boots and under every wave.
@@ -96,8 +98,9 @@ Black water in the mouth of an old tunnel. It runs back under the hill to Merrow
 [mouth_lane_gate]
 An iron gate across the cliff lane, with a bolt as thick as a wrist. The bolt is on the cave side.
 
+# (draft)
 [mouth_lane_gate_ves]
-{bored}Bolted from in here. So everyone who came in, came in the long way.
+{surprised}Bolted from in here? So anyone who came in, came in some other way.
 
 [mouth_lane_bolt]
 The gate's bolt, on a lever, stiff with salt. It draws the bolt on the cliff lane's gate, or shoots it again.
@@ -113,18 +116,21 @@ A board: ECHO HALL. FLOODS. SLUICE WORKED FROM THE TIDE STAIR (EAST, AND UP). CH
 [hall_echo_post]
 A notice, nailed to a post: SOUNDERS. SHOUT HERE. COUNT THE ECHOES. THREE IS SAFE.
 
+# (draft)
 [hall_echo_post_bramble]
-{grin}HELLO! ...hello. ...hello. ...Three! It's safe!
+{glee}HELLO! ...hello. ...hello. ...Three! It's safe!
 
+# (draft)
 [hall_echo_post_ves]
-{bored}It's safe until it says four.
+{smile}It's safe until it says four.
 
 # (draft)
 [hall_echo_post 2]
 SHOUT HERE. COUNT THE ECHOES. THREE IS SAFE. Scratched into the post underneath, by some sounder with time on their hands: FOUR IS ALSO FINE. FIVE, RUN.
 
+# (draft)
 [hall_echo_post_bramble 2]
-{worried}...I'm not shouting again. In case it's five.
+{sheepish}...I'm not shouting again. In case it's five.
 
 [hall_wheel]
 The hall's own sluice wheel, rusted into one solid lump. A chain runs from it up the wall and into the rock, toward the east and up.
@@ -135,8 +141,9 @@ A tide dial on a post, for the hall's water.
 [hall_water]
 The Echo Hall's sea, black and still, with a green glow coming up from somewhere under it.
 
+# (draft)
 [hall_water_bramble]
-{worried}There's a door down there. Under it. I saw the top of it.
+{surprised}There's a door down there. Under it. I saw the top of it.
 
 [hall_shingle]
 Wet shingle, still running with the water that was on it a moment ago.
@@ -150,8 +157,9 @@ A pillar of rock. Tap it and the hall taps back three times.
 [hall_crack]
 A crack in the sea-glass, low down, with a draught coming out of it. Far too small for you.
 
+# (draft)
 [hall_crack_bramble]
-{grin}It's my size. Everything good is my size.
+{proud}It's my size. Everything good is my size.
 
 [hall_bolt]
 A little iron wheel on a bolt, inside the crack. It winds the grille.
@@ -182,8 +190,9 @@ A tide dial on a post, for the sea in the bottom of the shaft.
 [stair_sign]
 A board: TIDE STAIR. AT LOW WATER, THE BAR. AT HIGH WATER, THE FORD. NEVER BOTH. WAIT ON THE ROCK.
 
+# (draft)
 [stair_sign_ves]
-{smile}Out to the rock while it's low, wait for it to come in, then wade. The sea's on a timetable. Like a coach.
+{surprised}The sea's on a timetable? Like a coach? ...I don't trust it.
 
 [stair_cliff_sign]
 A board at the foot of a short cliff, with an iron ring at the top: FOR ROPES.
@@ -204,8 +213,9 @@ Painted on the rock: GREAT SLUICE. ECHO HALL. TURN TO DRAIN.
 [stair_water]
 The sea in the bottom of the shaft, breathing in and out.
 
+# (draft)
 [stair_water_bramble]
-{scared}It went up. Now it's going down. Make it STOP.
+{shout}It went up. Now it's going down. Make it STOP.
 
 [stair_ford]
 A reef of sea-glass teeth, under a foot of water. At high water you could wade it.
@@ -279,8 +289,9 @@ The Drowned Chapel is draining.
 [wells_chute_sign]
 Painted by the chute: TO THE ECHO HALL. QUICKLY. NO WAY BACK UP.
 
+# (draft)
 [wells_chute_sign_bramble]
-{scared}"Quickly." I don't like "quickly".
+{worried}"Quickly." I don't like "quickly".
 
 [wells_chute]
 The chute, a race of water pouring down a slot in the rock. Nobody is climbing that.
@@ -302,8 +313,9 @@ Shallow water, cold enough to make your teeth ache through your boots.
 [chapel_board]
 A hymn board, the numbers still up: 107, 23, 8. Underneath, in chalk: FOR CALM WATER.
 
+# (draft)
 [chapel_board_ves]
-{smile}I sat in a chapel once and someone walked in on me. I'll be quick in this one.
+{shy}I sat in a chapel once and someone walked in on me. I'll be quick in this one.
 
 [chapel_wheel]
 The chapel's own sluice, seized solid. Its rod goes up into the roof, toward the wells.
@@ -311,8 +323,9 @@ The chapel's own sluice, seized solid. Its rod goes up into the roof, toward the
 [chapel_pews]
 Pews standing in the water in the aisles, the hymn books floating. The last row still has its cushions.
 
+# (draft)
 [chapel_pews_bramble]
-{worried}Did they come to church in BOATS?
+{awed}Did they come to church in BOATS?
 
 [chapel_altar]
 The altar, under a cloth stiff with salt. A brass plate on it: THE SOUNDERS. THEY WENT DOWN AND CAME UP.
@@ -340,11 +353,16 @@ A stair behind the altar, going down. The steps are wet.
 [weight_sign]
 A board: WEIGHT ROOM. RACES RUN ONE WAY. THE WHEEL ON THE FAR LEDGE TURNS THEM. ROPE OUT.
 
+# (draft)
 [weight_sign_ves]
-{smile}Ride across, turn the wheel, ride the others. Then up the rope with it. They even told us how to leave.
+{laughing}They even put in how to leave. I'm starting to love the Harbour Board.
 
 [weight_frame]
 An oak gallows over the deepest well in the caves. From its pulley, on a knotted cord, hangs a big brass weight, glowing in the light off the water.
+
+A brass tag is wired to its eye: FOR THE GATE ABOVE. DO NOT LOSE.
+
+It would lift off its hook.
 
 [weight_frame_empty]
 The gallows, with its cord hanging slack. The knots go down into the dark further than you can see.
@@ -393,8 +411,9 @@ An iron grille across the throat of the stair, too heavy to lift. It hangs from 
 [up_counterweight]
 The grille's counterweight frame. The chain comes over the wheel and ends in an empty hook. A brass plate on the frame says: WEIGHT KEPT BELOW.
 
+# (draft)
 [up_counterweight_ves]
-{thoughtful}An empty hook, and a key kept somewhere else. Somebody didn't want visitors.
+{determined}An empty hook. "Weight kept below." ...So, below we go.
 
 [up_counterweight_full]
 The counterweight frame, the brass weight hung on its hook and the chain pulled tight. The grille is up.
@@ -411,14 +430,20 @@ The last lead line, coiled neatly by the stair, the way you'd leave a thing you 
 A diving bell, brass gone green, sat on the floor with its chain coiled beside it. SOUNDINGS BELL No. 2. Inside: a little bench, a hook for a coat, and a slate on a string.
 The sounders went down in this, two at a time, to measure the caves by hand.
 
+# (draft)
 [bell_bell_bramble]
-{scared}They went DOWN in it? In the sea? In a CUP?
+{awed}They went DOWN in it? In the sea? In a CUP?
 
+# (draft)
 [bell_bell_ves]
-{bored}A teacup for drowning in. Very civilised.
+{laughing}A teacup for drowning in. Very civilised.
 
 [bell_chest]
 The sounders' kit box, still sealed with wax. Inside, wrapped in a jumper: a SOUNDERS' FLASK, and it's still hot. Somebody always made sure the ones coming up had something warm.
+
+# (draft)
+[bell_cape]
+A coil of old bell rope on the floor, and under it, folded flat: a CAPE, woven from the rope itself and tarred. Somebody wanted to stay put in a gale.
 
 [bell_pouch]
 A pay tin, with the names of a crew on the lid and their pay still in it.
@@ -461,8 +486,9 @@ Old timbers, black with wet and crusted with barnacles. Bits of a boat, or a jet
 [sound_diver_gear]
 A brass diving helmet, a lead boot and a coil of air hose, set down where somebody took them off. The glass in the front of the helmet has gone green.
 
+# (draft)
 [sound_diver_gear_ves]
-{bored}Wear that and you'd sink like a kettle. I suppose that was the point.
+{smile}Wear that and you'd sink like a kettle. I suppose that was the point.
 
 [chapel_nave_pews]
 The backs of the pews, in their rows under the water, as if everybody had only just stood up to go.
@@ -476,12 +502,246 @@ The font, by the door where it belongs. It's full to the brim, and it isn't holy
 [chapel_screen]
 What's left of the rood screen, the carved partition between the nave and the altar. The top has snapped off and the bottom is green to the height of the flood.
 
+# (draft)
 [chapel_screen_bramble]
-{worried}It looks like a gate. Is it a gate? Are we allowed past?
+{thinking}It looks like a gate. Is it a gate? Are we allowed past?
 
 [chapel_candlestick]
 A brass candlestick by the altar, its candle drowned out long ago. Somebody kept it polished right up to the end.
 
 # (draft) QUEST PIECE 2 for the ghost ship's deep part.
+[bell_bell_needle]
+A diving bell, brass gone green, sat on the floor with its chain coiled beside it. SOUNDINGS BELL No. 2. Inside: a little bench, a hook for a coat, and a slate on a string.
+You crouch and look under the bench. Wedged in the gap where the bench meets the brass, where nobody would drop it by accident: a compass needle, long as a finger. Scratched on its pivot: FAIR RETURN.
+
+[bell_bell_needle_ves]
+{smile}Pawned to the people who went down on ropes. And they kept it where it couldn't fall out.
+
+[bell_bell_needle_bramble]
+{glee}The captain's needle! In the bell! He'd never have found it in a hundred years.
+
 [bell_compass]
 A compass needle, long as a finger, laid across the rim of the divers' helmet where somebody wouldn't lose it. It swings, in the still air, and settles pointing at the way you came in. Scratched on its pivot: FAIR RETURN.
+
+# --- LIFE PASS (14 November 2026): belongings, signs, trees and small life ----------
+
+# (draft)
+[lp_boot_gift]
+A single boot in the shingle, sole up, with a crab inside it, so you leave the crab a minute and then reach in round it. It's good leather, and boiled, and you suspect somebody was going to eat it.
+
+# (draft)
+[lp_boot_gift_ves]
+{laughing}You're taking the boot. Of course you are. I'll tell everyone it was a very good boot.
+
+# (draft)
+[lp_boot_gift_bramble]
+{grin}A BOOT! It's a boot! It's a boiled boot! Can we put it in the soup?
+
+# (draft)
+[lp_coil_line]
+A coil of sounding line, knotted at every fathom, with a lead on the end, hard against the wall like it was put down in a hurry. The last knot is a bowline, tied a bit crooked.
+
+# (draft)
+[lp_coil_line_bramble]
+{awed}They counted how deep the sea was. With KNOTS. That's brilliant. How deep is it?
+
+# (draft)
+[lp_tripod]
+A sounder's tripod, the line over its little wheel, the lead hung a hand off the floor. A very patient person set this up, and a very short-lived one.
+
+# (draft)
+[lp_tripod_ves]
+{bored}It's got a line on it. It goes down. It doesn't say how far.
+
+# (draft)
+[lp_echo_stone]
+A standing stone carved with rings, the kind a voice goes round. You scuff your boot on it. A moment later, a long way off, your boot scuffs back, and then once more, further, and then you lose it.
+
+# (draft)
+[lp_echo_stone_ves]
+{smile}Don't. Don't do it again. ...Do it again.
+
+# (draft)
+[lp_echo_stone_bramble]
+{shout}HELLO!  ...hello...  ...ello...  It said hello back! It's so polite!
+
+# (draft)
+[lp_whale_rib]
+The rib of some great whale, arching over the ledge like a doorway into a bigger place. It's older than the hall, and a very long way from home. A brass plate is screwed to the foot of it: 'MABEL'.
+
+# (draft)
+[lp_whale_rib_ves]
+{laughing}They named it MABEL. Of course they did. I'm very glad.
+
+# (draft)
+[lp_whale_rib_bramble]
+{awed}Mabel! It's a whale! It was a WHALE and it got in a cave and they called it Mabel!
+
+# (draft)
+[lp_umbrella]
+An umbrella wedged in a crack in the rock: black, bent at the ribs, and remarkably well kept. It's not an umbrella you'd have thought belonged to anyone down here.
+
+# (draft)
+[lp_umbrella_ves]
+{bored}It's not mine. I checked. Mine's... here. Obviously. Somebody else has taste, is all.
+
+# (draft)
+[lp_umbrella_bramble]
+{thinking}Why's there an umbrella? It's a cave. It's a CAVE, it doesn't rain in a...
+
+# (draft)
+[lp_up_nook]
+A purse stuffed into a crack behind the hanging glow-threads, where the cave is dark and the light is only the threads'. Somebody hid it from themselves and forgot where.
+
+# (draft)
+[lp_up_cups]
+A scrap of ledge with a cup on it. Three little cave-pearls sit in the cup, in the dust-light from the threads, as if somebody had been saving up for something small.
+
+# (draft)
+[lp_up_cups_ves]
+{smile}Little pearls in a cup. Imagine collecting them. Imagine the patience.
+
+# (draft)
+[lp_pearl_up]
+A pool in the rock, black as ink, with a pearl on the bottom of it. It's no great hardship to leave it be.
+
+# (draft)
+[lp_pearl_up_bramble]
+{awed}It's looking at us. The pearl's looking at us. I'm going to be extremely polite.
+
+# (draft)
+[lp_boot_up]
+A boot, a long way up the stair from anywhere you'd think a boot would go. It was going up, by the look of the way it's pointing.
+
+# (draft)
+[lp_boot_up_ves]
+{bored}A boot, heading upstairs. I respect it. It's doing better than the rest of us.
+
+# (draft)
+[lp_echo_stone2]
+A second ring-stone, smaller than the one in the hall. When you knock it, the sound goes down the stair, and a moment after, a small clear note comes back up it, like a coin in a well.
+
+# (draft)
+[lp_echo_stone2_ves]
+{smile}I could do that all day.
+
+# (draft)
+[lp_echo_stone2_bramble]
+{grin}Ding! DING! Hello! Is anybody down there? ...ding.
+
+# (draft)
+[lp_tripod_stair]
+A sounding tripod set up on the ledge to read the tide. The lead hangs a hand above a pool. If the water comes up, you'd know about it before the tripod would.
+
+# (draft)
+[lp_marrow_pail]
+A tin pail with a name scratched on the lid: T. MARROW. The lid's tied down with fishing line. It's heavier than it looks, and what's in it is quiet. Somebody who meant to come back for it set it down very carefully.
+
+# (draft)
+[lp_marrow_pail_ves]
+{worried}T. Marrow. It's tied shut. It's... I'd rather you carried it. I don't mind. I'd just rather.
+
+# (draft)
+[lp_marrow_pail_bramble]
+{awed}It's got his NAME on it! We should take it to him. If he's... we should take it.
+
+# (draft)
+[lp_echo_stone3]
+A ring-stone in the gallery. It hums a very little when the wells below are all running, and goes quiet when one stops. The sounders could tell the whole cave by it.
+
+# (draft)
+[lp_echo_stone3_ves]
+{thinking}It hums when the wells run. So it's a listening thing. Like the rest of this place.
+
+# (draft)
+[lp_candle_wells]
+Candle stubs in a row on a ledge, each burnt down to a different level. They counted the wells with them, one for each. The last one is still tall.
+
+# (draft)
+[lp_candle_wells_ves]
+{thinking}The tall one. The one that isn't done. Somebody had one more to do.
+
+# (draft)
+[lp_boot_wells]
+A boot at the end of the south passage, on its side, the leather boiled to a rind. It's seen things, and refused to say.
+
+# (draft)
+[lp_boot_wells_ves]
+{bored}A boot. I know. We've all got one.
+
+# (draft)
+[lp_hymn_board]
+A hymn board, the numbers still in their slots: 12, 31, 7. The last slot's empty. It was meant to be the hymn after the last one, and nobody had picked it yet.
+
+# (draft)
+[lp_hymn_board_ves]
+{thinking}Twelve, thirty-one, seven. And a blank. Somebody was about to pick the next one.
+
+# (draft)
+[lp_hymn_board_bramble]
+{awed}What would you sing? What do you even sing, in a chapel? Under the sea?
+
+# (draft)
+[lp_votive_boats]
+A shelf of little carved ships, each with a candle-end for a lamp. Tiny, careful, hundreds of hours of somebody's thumbs. They were left for the ones who didn't come up.
+
+# (draft)
+[lp_votive_boats_ves]
+{worried}Each one's got a candle. Somebody lit them. For everybody. That's a lot of people.
+
+# (draft)
+[lp_votive_boats_bramble]
+{sheepish}...That's a lot of boats. That's a lot of people who didn't come back.
+
+# (draft)
+[lp_echo_weight]
+A ring-stone in the gallery's corner. The great weight on its line makes it hum, very low, like a held note. If you put your ear to it, it's the sea you can hear, breathing out.
+
+# (draft)
+[lp_echo_weight_ves]
+{smile}It's breathing. I know that's silly. It's breathing.
+
+# (draft)
+[lp_echo_weight_bramble]
+{awed}It's the sea! It's the sea in a stone!
+
+# (draft)
+[lp_tripod_weight]
+A smaller sounder's tripod beside the great weight, for the small depths: a lead the size of a tin mug on a line you could wind round your hand. The big one's for the deep. This one's for what you can go and look at.
+
+# (draft)
+[lp_boot_weight]
+A boot at the gallery's end, filled to the brim with something very small and very pale that darts out when you lean over.
+
+# (draft)
+[lp_boot_weight_ves]
+{bored}The boot has an occupant.
+
+# (draft)
+[lp_bell_cups]
+A scrap of ledge by the bell with a tea-cup on it. It's half full, and cold, and there's a ring on the rock where the cup has been put down, again and again, in the same place.
+
+# (draft)
+[lp_bell_cups_ves]
+{smile}A diver's tea. In the one place in the world where nobody would look.
+
+# (draft)
+[r3d_soundings_tide_stair_candles]
+Candle stubs on every third step, for the sounders who went down in the dark. Each has a thumbprint pressed in the wax.
+
+[r3d_soundings_tide_stair_candles_bramble]
+{thoughtful}It's like a trail made of little lights.
+
+[r3d_soundings_tide_stair_candles_ves]
+{bored}Practical people. I like them.
+
+
+# The foot of the Three Wells' chute, in the Echo Hall's south-east corner: water only comes down it. (draft)
+[hall_chute_up]
+A chute comes down through the rock here, and the sea comes down it with it, cold and fast. There's no going up that way. Whatever is at the top, you'll have to reach it some other way.
+
+[hall_chute_up_bramble]
+{surprised}It's like a slide! A slide that only goes one way. Down.
+
+[hall_chute_up_ves]
+{bored}Up a waterfall. Bold. No.

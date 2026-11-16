@@ -7,6 +7,7 @@
 //   n  snow                                       s  the great stair
 //   Y  snow pine (walk or hide behind) (solid)    _  open sky (the view shows through) (solid)
 //   b  low stone block (jump up onto it)          B  tall stone block (jump onto it from a low block)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_HIGH_SHELF = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_high_shelf',
@@ -66,9 +67,11 @@ export const VIGIL_HIGH_SHELF = {
     { sprite: 'lamp_cold', x: 2, y: 8, text: 'shelf_lamp' },
     // Over the rockfall by jumping; up the crag by one throw of the rope.
     { sprite: 'grapple_ring', x: 13, y: 3, grapple: true },
-    { sprite: 'chest', x: 12, y: 2, text: 'shelf_chest', gives: 'herald_honeycake', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    { sprite: 'chest', x: 12, y: 2, text: 'shelf_chest', gives: 'notch_high_shelf', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'sign', x: 9, y: 8, text: 'shelf_sign' },
     { sprite: 'chough', x: 25, y: 10, text: 'upper_chough', walkable: true },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_high_shelf'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -1,0 +1,82 @@
+# GUBB: the old cave frog who ferries folk across the Stillwater. Slow, kind,
+# fat, sings the same verse over and over. You can knock on the jetty post
+# to hear him from the water without taking a ride (the sign says "please
+# knock"); the ride itself is the scene gubb_crossing.
+
+[first]
+(You knock on the post. Out on the black water, the humming stops.)
+
+Hm? Someone knocking? That's nice. Nobody knocks.
+
+Whenever you're ready, dear, stand out at the end of the boards. I'll hear you. I hear everything on the lake. It's the only thing that carries.
+
+[repeat]
+Take your time. The lake isn't going anywhere. I've checked.
+
+If you've a song, I'll take it. I'm stuck on a verse.
+
+[first after gubb_crossing]
+(You knock on the post. The humming stops.)
+
+Back already? Or still? Time's slippery out here. It all goes round like the punt.
+
+Stand at the end when you want a ride, either shore. Same fare as before. A sweet, if you've one, but I've plenty.
+
+[repeat after gubb_crossing]
+Mind the edges, dear. Things live in the edges.
+
+Hm-hmm... hm-hm-hmmm... Where was I?
+
+[first after the_light_goes_up]
+(You knock on the post. The humming stops, then starts again, a little higher.)
+
+Did you feel that, dear? The whole lake went warm from underneath, like a bath someone's just run.
+
+Stand at the end of the boards when you want a ride. Either shore. Same fare.
+
+[repeat after the_light_goes_up]
+Warm water and a bit of light. I've found the next verse. Don't ask me what it is. It's about a bath.
+
+# More turns (2026-11-09 polish)
+
+# (draft)
+[repeat 2]
+Hm-hmm, hm-hmm... 'Down he went and...' and then I lose it. Every time. Same place. Hundred years.
+
+If you hear the rest anywhere, dear, bring it back. I'll pay in sweets.
+
+# (draft)
+[repeat_ves 2]
+{bored}'Down he went and up he came.' Marigold had that much.
+
+{thoughtful}...She didn't have the rest either. Nobody's got the rest.
+
+# (draft)
+[repeat 3]
+Still here, dear. I'm always still here. It's the main thing about me.
+
+# (draft)
+[repeat 2 after gubb_crossing]
+The last little one sat right where you sat. Dangled his feet over the side, which you mustn't, and asked me if the lake had a bottom.
+
+I said I'd never looked. He said he would.
+
+# (draft)
+[repeat_ves 2 after gubb_crossing]
+{thoughtful}He said he would.
+
+{bored}Of course he did. Small people always say that. Then they go and do it, which is the annoying part.
+
+# (draft)
+[repeat 3 after gubb_crossing]
+Hm-hmm... hm... no, it's gone again. It was right there. Like a fish.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've taken my scarf off. First time since I can't remember. My neck's very surprised.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+The fish are coming up to look at the light. Little white things, blind as buttons. They can't see it. They come anyway.
+
+I know how they feel.

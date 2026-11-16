@@ -1,0 +1,66 @@
+# THISTLE: keeps Lasthome's gate. An old marmot in a herald's coat that was
+# red once and has been dyed brown, with a pike he uses to hang the washing
+# on. His great-great-grandmother came down the far side of the mountain from
+# Heralds' Rest. He has never once asked anybody if they're the Hero.
+
+[first]
+Evening. Healer's on the left as you go in, green door. Bryony. She'll see to the girl.
+
+Go on. And wipe your feet.
+
+[repeat]
+Wipe your feet. That's the only rule I keep, and I keep it fierce.
+
+[first after the_healer]
+She'll mend. Bryony's mended worse. Bryony mended me, the winter I fell off the roof.
+
+What was I doing on the roof? Hanging the washing. Don't ask.
+
+[repeat after the_healer]
+Go and get some stew in you. Mabb's, by the inn door. You look like the fen chewed you up and spat you out.
+
+[first after ves_on_her_feet]
+Up and about, is she? Good. I'll take my hat off to her. I would, if I had a hat.
+
+The notice? The ridge. The birds went quiet up there two days back, and they've not started again. Last night they stopped down here and all, for a bit. I've seen birds go quiet before. Never two days.
+
+[repeat after ves_on_her_feet]
+Keep your doors shut at night. That's all I'm saying. That's all anybody's saying.
+
+[first after bramble_goes_home]
+Corran'll see him right. Corran's never lost a sack of charcoal in his life, let alone a boy.
+
+Funny little thing. Shouted at me the whole way out the gate. Said he'd be BACK.
+
+[repeat after bramble_goes_home]
+He'll be back. They always say that. Sometimes they are.
+
+# --- SIDE QUEST: Thistle's hat (it's on the washing line in the square) ---
+
+[hat_ask]
+Thistle straightens his coat and looks up at the sky, which is a hole in the roof.
+
+Had a hat. Herald's hat, felt, brass badge, handed down. Wind took it off the gate Tuesday week. It went towards the square. Hats do.
+
+I'm not asking. I'm saying.
+
+[hat_wait]
+Felt. Brown. A brass trumpet badge. If you see a hat doing nothing, it's probably mine. Don't go to any trouble.
+
+[hat_done]
+Thistle holds the hat out at arm's length. It's damp, and quite clean, which it hasn't been since before he was born.
+
+Corran's line. Of course. Corran washes anything that stands still.
+
+He puts it on. He takes it off. He puts it back on, straighter.
+
+There. Now I can take it off to people.
+
+He reaches inside his coat and brings out a brass button, stamped with a trumpet. His thumb has worn the trumpet nearly flat.
+
+My great-great-gran gave this to my gran, who gave it to me. It's off a herald's coat, from Heralds' Rest. She walked down the far side of the mountain when the waiting got to be too much. She said it's a fine thing to wait for someone, but not on a stair.
+
+Take it. I'd rather it went somewhere than hung on a nail with the rest of us.
+
+[hat_after]
+Thistle tips his hat at you. It's a very good tip. He has clearly been practising it in his head for years.

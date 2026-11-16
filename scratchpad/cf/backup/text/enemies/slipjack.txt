@@ -1,0 +1,77 @@
+# SLIPJACK
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/slipjack.js.
+
+[intro]
+Something long and shiny comes down the culvert at a terrible speed, and stops, showing off. A SLIPJACK!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SLIPJACK does a lap of the room. Nobody asked it to.
+
+SLIPJACK is grinning. It's always grinning. It might not be able to stop.
+
+SLIPJACK checks its reflection in the water. Still gorgeous.
+
+SLIPJACK swims a figure of eight, then a figure of nine.
+
+Smells like a wet drain and a little bit like pond.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Wheeeee!
+
+Watch this.
+No, WATCH.
+
+Fastest thing
+in the drains.
+Ask anyone.
+
+Bet you
+can't keep up.
+
+Slippy, slippy,
+can't catch me.
+
+Did you see that?
+Do you want to
+see it again?
+
+Wheee! Again!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/slipjack.js.
+[talk: Inspect]
+SLIPJACK - HP 470
+An eel that rides the culvert currents for fun. The fastest thing in the drains. It'll tell you.
+
+[talk: Clap]
+You clap. SLIPJACK does a little loop of pure joy and nearly swims into a wall.
+
+[talk: Ask to race]
+You point down the culvert. SLIPJACK's eyes go very wide. A race? With it? It's already won. It goes again anyway.
+
+[talk: Count how fast]
+You count on your fingers while it does a lap. SLIPJACK waits to hear the number. Any number. It's sure it's a record.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SLIPJACK goes limp as a wet sock and lets the current carry it off round the bend. "Wasn't even trying," it says, very quietly.
+
+[pacified]
+SLIPJACK does one last lap, a lap of honour, then shoots off down the culvert. Far away, you hear it go "wheee".
+
+# Bramble's own TALK lines for it ({foe} is its name). He's very taken
+# with something that fast, and wants it to know he's fast too.
+[bramble_talk]
+Bramble says he's faster than {foe}. He runs a lap to prove it. {foe} does three laps while he's doing his.
+
+Bramble asks {foe} if it's a snake. {foe} is so insulted it forgets what it was doing.
+
+Bramble tells {foe} his Ma can swim the whole millpond holding her breath. {foe} doesn't believe him. Bramble doesn't totally believe it either.
+
+Bramble asks {foe} if anyone with a plum umbrella came down here. {foe} says a girl went by, ages ago, really slow. Bramble says "That's her!"

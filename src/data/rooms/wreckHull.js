@@ -35,6 +35,8 @@ export const WRECK_HULL = {
   ambience: 'wreck_yard',
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.3, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_wreck_yard', lamplight: { shade: 0.24, tint: '34, 44, 68' }, skyline: true },
+  // Once the Fair Return has sailed (crew_go_free, 2026-11-14), her fog has gone with her: the yard's fog thins to this.
+  fogLiftAfter: { scene: 'crew_go_free', fog: 0.2 },
   vesWell: true,
   // Under her plates: less rain gets in, and the fog hangs low.
   atmosphere: { rain: 0.5, fog: 0.5 },
@@ -138,6 +140,18 @@ export const WRECK_HULL = {
     { sprite: 'wy_bilge_slick', x: 14, y: 6, flat: true, walkable: true },
     { sprite: 'wy_edge_r', x: 16, y: 13, flat: true, walkable: true },
     { sprite: 'wy_edge_r', x: 16, y: 18, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_chair', x: 31, y: 6, npc: 'breaker_chair', quest: [
+      { needs: ['has:duncans_pipe'], take: 'duncans_pipe', set: 'q_duncan_done', give: 'duncans_chalk', text: 'pipe_done' },
+      { needs: ['q_duncan_done'], text: 'pipe_after' },
+    ] },
+    { sprite: 'shore_buried_hull', x: 9, y: 6, text: 'sl_hulk' },
+    { sprite: 'shore_tally_post', x: 25, y: 5, text: 'sl_tally' },
+    { sprite: 'c5_boat_upturned', x: 30, y: 18, text: 'sl_dinghy' },
+    { sprite: 'c5_planks_scatter', x: 19, y: 6, text: 'sl_plank', flat: true, walkable: true },
+    { sprite: 'shore_chalk_arrow', x: 33, y: 18, text: 'sl_chalk_arrow', walkable: true },
+    { sprite: 'shore_crab_shell', x: 12, y: 3, text: 'sl_crabshell_b', flat: true, walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'hull_plate', W: 'hull_plate', w: 'hull_porthole', '~': 'hull_bilge', O: 'hull_cargo', F: 'hull_net', x: 'hull_barnacles', B: 'hull_walkway', b: 'hull_lowcargo' },
 

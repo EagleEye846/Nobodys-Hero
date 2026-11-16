@@ -47,3 +47,50 @@ Deep in the ice caves, where Rimble keeps his stall.
 
 [owl_shelf]
 The quiet shelf below the summit, where Hollis the owl keeps the last stall.
+
+# Chapter 4, under the ground.
+[glimmer_landing]
+Where you landed after the fall, at the top of the Glimmering.
+
+[quiet_grotto]
+The quiet grotto past the Echo Falls, where Tuck found you.
+
+[belowtown]
+The square in the middle of Belowtown, by the inn, the forge and the king's hall.
+
+[old_seam]
+The old workings in the Diggings, halfway down the line.
+
+[stillwater_shore]
+The near shore of the Stillwater, where Gubb keeps his punt.
+
+[far_shore]
+The far shore of the Stillwater, at the top of the stair down.
+
+[heros_camp]
+The Hero's old camp, deep in the dark.
+
+# Chapter 5, down the coast.
+[windmill]
+The windmill, halfway across Sunnyside.
+
+[sea_view]
+The top of the cliffs, where you first saw the sea.
+
+[boardwalk]
+The plank walk up the headland, one flight below Saltcombe's quay.
+
+[wreck_slip]
+The slip at the far end of the Wreck Yard, where the boat comes to take you home.
+
+[way_down]
+The bottom of the Sunken Lanes, above Merrow and the Soundings.
+
+[orlas_forge]
+Orla's smithy, at the foot of the biggest light on the Beacon Isles.
+
+[haddocks_light]
+Haddock's garden, and the jetty where the Bother ties up.
+
+[tower_foot]
+Just inside the door of the Last Light, at the bottom of the climb.

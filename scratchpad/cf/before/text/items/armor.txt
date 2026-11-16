@@ -1,0 +1,266 @@
+# Armor descriptions for the EQUIP menu (C in the overworld) and shops.
+# One section per armor id in src/data/armor.js. The menus show DEF, MAG and
+# SP by themselves, so these are just flavour.
+
+[travel_clothes]
+The clothes you wandered in wearing. Comfortable, and no use at all in a fight.
+
+[padded_vest]
+Quilted cotton, a little lumpy. Takes the edge off a hit.
+
+[moth_silk_shawl]
+Woven from the silk of Lantern Moth cocoons. Spells come more easily wrapped in it.
+
+[waxed_coat]
+Leather hardened in candle wax. Stiff, warm, and surprisingly tough.
+
+[candlewick_robe]
+Threaded through with old wicks. It hums with magic, and catches every blow.
+
+[chain_shirt]
+Heavy rings of old iron. Hard to hurt you in it, and hard to think straight.
+
+[climbers_jacket]
+Patched and padded, made for long climbs. One of the six who came before must have left it.
+
+# Mount Vigil and Heralds' Rest.
+[herald_cloak]
+A herald's red cloak, trimmed in gold thread. Warm, and it makes you feel announced.
+
+[fur_lined_hood]
+A hood lined with snow-hare fur (shed, not taken, Marta insists). The cold stays out and your thoughts stay in.
+
+[ringers_mittens]
+Thick knitted mittens, the kind the bell-ringer wears. Hard to hold a sword in; easy to hold a spell.
+
+[vigil_mail]
+Mail forged for the Hero and carried most of the way up the mountain. It weighs as much as a promise. It's hard to think in it.
+
+[snow_mantle]
+A white mantle quilted from a hundred winters' worth of patience. Sold at Rest Stores to anyone who makes it that far.
+
+[smiths_apron]
+A heavy leather apron, scorched in a hundred places. Tilda had a spare. Tilda has a spare of everything.
+
+[riveted_gambeson]
+A quilted coat with iron plates riveted inside. Warm, solid, and a little hard to think in.
+
+# Sold by Rimble, the goblin in the ice caves.
+[crystal_cuirass]
+A breastplate of clear ice crystal, grown rather than forged. It's lighter than it looks, and warm, somehow.
+
+[aurora_scarf]
+A long scarf that shimmers green and violet when it moves, like the sky on the coldest nights. It's made for Ves.
+
+[rimemoth_shawl]
+A shawl woven from the frosty silk ice moths leave on the cave walls. It glitters when you cast.
+
+[patchwork_parka]
+A huge parka, patched by Rimble with forty-one other coats. Warm, thick, and somehow always a little bit too long.
+
+# Ves's coats, scarves and mittens. Only she can wear them (see `wielder` in
+# src/data/armor.js). Enemies never aim at her, so they look after you.
+[evening_coat]
+Her evening-blue coat and the cream scarf with the coral stripe. Mended at both elbows. Good for standing in front of people.
+
+[ember_knit_scarf]
+A long scarf knitted in lamp-soot grey and ember orange. Wrapped round twice, it keeps whoever's nearest warm. That's usually you.
+
+[goosedown_mittens]
+Big puffy mittens. Ves claps them every time you graze a bullet, which shouldn't help as much as it does.
+
+[oilskin_greatcoat]
+A herald's oilskin, made for keeping watch on the Lookout in all weathers. Heavy as a door, and about as good at being stood behind.
+
+[spark_proof_cape]
+A short cape of felted wool, the kind Tilda wears at the forge. Sparks bounce off it. So do snowballs, and so, Ves hopes, will everything else.
+
+[gale_ribbon_scarf]
+A long scarf of coral ribbon that streams out in the slightest wind. Ves says it tells her which way to dodge. It mostly tells her it's windy.
+
+[cragwool_poncho]
+A heavy poncho of grey mountain-goat wool, cut wide enough to hide two people behind. That's the idea.
+
+[icefox_muff]
+A muff of soft white fur, still warm from somewhere. Ves keeps one hand in it and the other on your sleeve.
+
+[cavers_hood]
+A stiff leather hood with a brim, the kind cavers wear so nothing can drop on their heads. Ves wears it with the brim pulled very low.
+
+[owl_down_coat]
+A long coat quilted with owl down, the warmest thing you've ever worn. Spells seem to come easier with your hands warm.
+
+[snowfeather_shawl]
+A shawl of snowy feathers, soft as a cloud and heavier than it looks. Ves wraps it round you both when the wind gets up.
+
+[rimeweave_cloak]
+A cloak woven from frost-silk and lined with fleece. It sheds snow, ice and bad news, and it's warm enough to share.
+
+# Chapter 3, below the clouds.
+[woodcutters_flannel]
+A thick red-and-black flannel shirt, patched at both elbows. It smells of woodsmoke and it's warm all the way through.
+
+[fallen_leaf_cloak]
+A cloak of scarlet leaves pressed and stitched together. You can disappear into the forest floor in it. Spells come easily in the quiet.
+
+[barkplate]
+Plates of seasoned bark laced over a leather shirt. It stops nearly anything. It also creaks when you think.
+
+[reedwoven_coat]
+A coat of woven marsh reeds, light and dry inside however wet it gets out. Your spells carry further in it, the way sound does over water.
+
+[eelskin_waders]
+Waders of tough, slippery eelskin, all the way up to the chest. Things slide off you, and you slide out of their way.
+
+[mosaic_mail]
+Mail made of the old city's mosaic tiles, each one sewn on, a picture you can't see while you're wearing it.
+
+[woodsmoke_shawl]
+A grey shawl that's sat by the woodcutters' fire for years. It still holds the warmth. Ves wraps herself in it and won't give it back.
+
+[heron_down_coat]
+A long coat quilted with heron down, waterproof and warm. When Ves holds it over you, the rain doesn't get through.
+
+[mended_coat]
+Ves's own evening coat, the one the beast tore, mended with careful stitches. The patches don't match. She wouldn't have it any other way.
+
+[lamp_soot_shawl]
+A lamplighter's shawl, left on a hook by a dead lamp. It still smells of smoke and oil. Warm all the way through.
+
+[herald_banner_cloak]
+A herald's banner, cut and hemmed into a cloak. Held up over you, it's as good as a wall.
+
+[criers_mittens]
+The town crier's mittens, red wool with the fingers worn thin. Good for grabbing things out of the air.
+
+# The Hushwood.
+[lookouts_oilskin]
+A long oilskin coat left up the old lookout tree, still dry inside after all these years. It's watched a lot of weather.
+
+[herald_greatcoat]
+A herald's red-and-gold greatcoat that came down the mountain on the wind, according to Rummage. Nobody's worn it since. It's never been needed.
+
+[hand_me_down_flannel]
+A red flannel shirt that belonged to three cousins first. It comes down past Bramble's knees. He says it's a coat.
+
+[kiln_jerkin]
+A leather jerkin, baked hard by Nan Cinder's kiln and soft on the inside. It smells of charcoal. Bramble says it smells of winning.
+
+[acorn_cap]
+A woolly cap the colour of an acorn, with a stalk on top. Bramble wore it to his den every day last summer. It's lucky. It's been proven.
+
+[mas_scarf]
+Ma's red scarf, found at the trap. Bramble won't say anything about it. He just wears it, tight.
+
+[oilcloth_poncho]
+A poncho cut from an old oilcloth tent. It crackles when Bramble moves, which he says makes him sound bigger.
+
+# Teasel's forge, in Lasthome's square.
+[bell_bronze_breastplate]
+A breastplate hammered out of bell bronze. It takes a great deal of hitting. It rings when a hit just misses, and the ring fills you. It weighs on your spells a little. It weighs on everything a little.
+
+[smiths_leathers]
+Teasel's own leathers, the spare set, scorched down the front. Not much gets through them in a hurry, and you can still move in them.
+
+[tin_lined_cape]
+A short cape lined with hammered tin, against sparks. Ves says it crinkles. It does. It also stops a great deal.
+
+# Chapter 4, under the fields.
+# Sold by Marigold at her lemonade stand.
+[sun_hat]
+A wide straw hat with a ribbon, from Marigold's own peg. It keeps the sun off, and it keeps the bullets off, mostly by being in the way.
+
+# Sold in Belowtown's market.
+[mossweave_cloak]
+A cloak woven from moss and thread by the shrews of Belowtown. It's soft, damp and surprisingly good with spells. It also smells of a very pleasant cellar.
+
+# In a chest in the Diggings.
+[miners_helm]
+A miner's helmet, dented from every direction at once. There's a candle bracket on the front. It weighs a little on your spells and a lot on your neck, and nothing falls on you twice.
+
+# In a chest in the Stillwater.
+[olmskin_vest]
+A vest from skin an olm shed, which they do politely, once a year. Thin, pale, cool, and tougher than it looks. It clings.
+
+# (draft) Chapter 4's secret superboss, the Pale Olm's pool at the bottom of Seam Nine.
+[olmglass_mantle]
+A heavy grey-blue coat stitched all over with beads of glass that catch the light, cold and faintly damp, the way a coat is when something large has kept it very close for a very long time. The tag says FOR WHOEVER CAME BACK.
+
+# Ves's.
+# In a chest in the Stillwater.
+[reedweave_coat]
+A long coat woven from Stillwater reeds. Rain, spray and bullets all run off it. Ves calls it dashing.
+
+# Sold by Grig.
+[feeler_hood]
+A padded hood with two long feelers stitched on, copied off Grig's own. They don't do anything. They do make the dark feel like it's listening to you, kindly.
+
+# Sold by Hobnail.
+[forge_goggles]
+Hobnail's spare goggles, with a leather strap and a crack in one lens. He hands them over without a word. You get the feeling it's a lot, for him.
+
+# CHAPTER 5, the drowned coast.
+# Mrs. Wrasse's Chandlery, in Saltcombe.
+[oilskin_coat]
+Waxed oilskin, twice a year, the old way. The rain runs off it, and so does most of everything else.
+
+[sailcloth_vest]
+A vest stitched from old sailcloth. Light, quick to move in, and strangely good at gathering up the energy of a close shave.
+
+# In the Wreck Yard's secret pocket.
+[brass_divers_plate]
+A diver's brass breastplate, bolts and all. It weighs a lot, it rattles, and it doesn't let in a thing. It's rather hard to cast in.
+
+# In the Sunken Lanes' attic.
+[bellbuoy_mantle]
+A mantle sewn from the skin of a bellbuoy, with a little bell on each shoulder. It rings when you cast, and the spell goes further than it should.
+
+# In a chest in Corrie's room, in Haddock's Light.
+[lightmans_coat]
+A lightman's greatcoat, heavy oilskin with brass buttons, much too big for you and somehow still warm. The cuffs have been mended more than once, by someone patient.
+
+# Ves's.
+[gull_feather_hat]
+A hat trimmed with gull feathers, tied under the chin. Ves says it's sensible. It makes the near-misses ring.
+
+[sea_silk_shawl]
+A shawl of sea-silk, pale gold and thin as breath. It's warm, and it mends. Ves doesn't ask how it's made.
+
+[rope_belt]
+A thick rope belt, knotted by Mrs. Wrasse in a knot she wouldn't name. It cinches the whole coat tight, and SHELTER holds firmer than anything.
+
+# Bramble's.
+[fishers_smock]
+A canvas smock from the fishers' chest, salt-stiff and patched at the elbows. Bramble says it smells of fish. It does.
+
+[small_oilskin]
+A sou'wester and coat in a boy's size, bright yellow. Bramble says he looks like a duck. Everyone agrees. He keeps it on.
+
+[haddocks_muffler]
+A long knitted muffler in oilskin yellow, dropped stitches and all, smelling of tar and tea. Wound twice round, it makes the cold sit further off. Spells come easier. Warm.
+
+[ugly_sou_wester]
+A mustard-green sou'wester with a floppy brim and one pink bobble nobody can explain. It is ugly. It is also very dry.
+
+[cork_float]
+A cork float on a loop of string, one red stripe round it. It bobs on your chest. Swim proper.
+
+[sea_boots]
+Tall waxed boots that come up to his belt. They stomp in the shallows, and they're surprisingly quiet in the sneaky.
+
+[darned_jersey]
+A fisher's jersey, navy and thick, darned at the elbows so neatly you can't find where the holes were. It was folded as flat as a letter.
+
+# (draft)
+[keepers_oilskin]
+A long black oilskin with a hood, stiff with salt, from the locker on top of the Needle. The keepers wore these to watch the storms. It sheds rain like a duck.
+
+[petrel_scarf]
+A scarf of storm-petrel grey, light as down and warm right through. It smells of tar and the sea. The wind likes it.
+
+[little_gansey]
+A knitted gansey, thick as rope, far too small for anyone grown. The elbows have been darned twice, in two different wools. It fits him.
+
+# (draft) The Fair Return's captain.
+[captains_greatcoat]
+A tall coat of dark blue broadcloth gone grey-green, with brass buttons, most of them still on. The cuffs are worn from a hundred years of a hand on a rail. It does not smell of the sea any more, only of a closed cabin, and it fits as if it had been waiting for someone to be on time.

@@ -1,0 +1,76 @@
+# GLOAMWORM
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/gloamworm.js.
+
+[intro]
+Little lights come on in the roots overhead. Then two big eyes. A GLOAMWORM!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+GLOAMWORM hangs on its thread and turns slowly round. It's trying to get a better look at your candle.
+
+GLOAMWORM's tail glows brighter. It's showing off.
+
+A moth flies into one of GLOAMWORM's threads. GLOAMWORM pretends that was the plan.
+
+GLOAMWORM has never seen the sky. It thinks the roots go up forever.
+
+Smells like wet earth and honey.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Ooh. A light.
+Are you a glowworm?
+
+Come and look.
+Come closer.
+...Closer.
+
+Pretty, isn't it?
+It's sticky too.
+
+I made all of these.
+By myself.
+
+Nobody comes
+down here.
+Nobody ever.
+
+Don't go.
+Stay and glow.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/gloamworm.js.
+[talk: Inspect]
+GLOAMWORM - HP 440
+A glowworm of the Underroot. It fishes with lights. Lonely, and a bit sticky.
+
+[talk: Hold up your candle]
+You hold up your candle. GLOAMWORM glows back, very bright. It's so happy to meet another glowworm.
+
+[talk: Tell it about the sky]
+You try to tell it about the sky. A roof so high you can't see it, with lights all over. GLOAMWORM thinks that sounds lovely. It doesn't believe you.
+
+[talk: Stay very still]
+You stand very still. GLOAMWORM creeps down its thread for a closer look. It's shy, close up.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+GLOAMWORM's light goes dim. It winds itself up its thread into the roots and goes very quiet.
+
+[pacified]
+GLOAMWORM leaves one little light hanging by the path, so you won't get lost. Then it goes back up into the dark.
+
+# Bramble's own TALK lines for it ({foe} is its name). He's never been down
+# under the roots before, and he'd rather be anywhere else.
+[bramble_talk]
+Bramble says he's NOT scared of the dark. {foe} glows a bit brighter near him anyway.
+
+Bramble tells {foe} his Ma calls glowworms "lamp grubs". {foe} likes that very much.
+
+Bramble pokes {foe}'s thread. It's sticky. He spends the next turn trying to get it off his hatchet.
+
+Bramble asks {foe} if it's seen a girl with a plum umbrella. {foe} saw a light go by. It was very pretty.

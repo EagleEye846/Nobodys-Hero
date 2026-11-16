@@ -7,6 +7,8 @@
 //   #  black rock overhead (solid)   W  rock face (solid)
 //   .  pale stone   q  worn stone (the steps alternate, so you can see them)
 //   ^  stalagmite (solid)   J  broken pillar (solid)
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const STILLWATER_STAIR_DOWN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'stillwater_stair_down',
@@ -70,14 +72,18 @@ export const STILLWATER_STAIR_DOWN = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/stillwater.txt',
   props: [
+    ...(R3C_PROPS.stillwater_stair_down ?? []),
     { sprite: 'sign', x: 5, y: 5, text: 'stair_notice' },
     { sprite: 'gold_pouch', x: 12, y: 5, text: 'stair_purse', gold: 110, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'glow_reeds_tall', x: 6, y: 4, text: 'glow_reeds', animation: 'glow_reeds_tall', speed: 0.5 },
     { sprite: 'glow_reeds', x: 12, y: 4, text: 'glow_reeds', animation: 'glow_reeds', speed: 0.45 },
-    { sprite: 'fungus_pads', x: 8, y: 4, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 10, y: 6, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 9, y: 9, walkable: true, animation: 'fungus_pads', speed: 1.0 },
+    { sprite: 'fungus_pads', x: 8, y: 4, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 10, y: 6, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 9, y: 9, walkable: true, animation: 'fungus_pads', speed: 1.0, decor: true },
     { sprite: 'jetty_post', x: 7, y: 6, text: 'stair_hook' },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'sw_pale_snails', x: 4, y: 6, text: 'sp_snails', seenInLight: true },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'lake_rock', W: 'stair_wall', q: 'stair_step', '.': 'stair_step', '^': 'lake_stalagmite', J: 'lake_broken_pillar',

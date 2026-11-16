@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE START OF THE CLIMB: up the stair from the Goat Track. A quiet shelf of
 // meadow with no enemies, where the great stair breaks off at a sheer cliff.
 // A herald's waymark tells you about the mountain and Heralds' Rest. One of
@@ -64,9 +65,11 @@ export const CLIMB_START = {
     // The camp of one of the six who came before.
     { sprite: 'tent', x: 2, y: 12, text: 'climb_tent' },
     { sprite: 'campfire_cold', x: 5, y: 13, text: 'climb_campfire' },
-    { sprite: 'old_pack', x: 2, y: 14, text: 'climb_pack', gives: 'climbing_rope', taken: { text: 'climb_pack_empty' } },
+    { sprite: 'old_pack', x: 2, y: 14, text: 'climb_pack', gives: 'climbing_rope', notice: true, taken: { text: 'climb_pack_empty' } },
     // The first climb: at the top of the cliff, beside where the stair broke off.
     { sprite: 'grapple_ring', x: 12, y: 6, grapple: true },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['climb_start'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

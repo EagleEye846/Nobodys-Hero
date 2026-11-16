@@ -3,7 +3,8 @@
 // stand in the middle of the hall. You walk up it (from the column past the
 // save crystal) and it opens by itself, riffling its own pages, and stands up
 // out of them: QUIRE, the Welcome Register, with the star in its binding,
-// counting. It counts you. Then the fight (`tally`, src/data/enemies/tally.js),
+// counting. (It once wished on the star that the count would come out right,
+// and it has been counting ever since.) It counts you. Then the fight (`tally`, src/data/enemies/tally.js),
 // spared or beaten (`tally_spared`, `tally_beaten`). The hero never speaks.
 // Every line is a (draft).
 export const TALLY_WAKES = {
@@ -44,7 +45,7 @@ export const TALLY_WAKES = {
     { do: 'wait', seconds: 1 },
     { do: 'say', who: 'tally', text: 'Seven thousand, four hundred and... no. From the top.\n\nAll present, all present, all present. And... you.\n\nYou are not on the list.' },
     { do: 'say', who: 'ves', text: '{determined}We\'re not on anybody\'s list. We\'ve noticed.' },
-    { do: 'say', who: 'tally', text: 'That won\'t do. That won\'t do at all.\n\nI shall have to count you in.' },
+    { do: 'say', who: 'tally', text: 'That won\'t do. That won\'t do at all.\n\nIt has to come out right. I shall have to count you in.' },
     { do: 'say', who: 'ves', text: '{scared}...I don\'t like how it said "in."' },
     { do: 'battle', enemy: 'tally', who: 'tally', spared: 'tally_spared', defeated: 'tally_beaten' },
   ],

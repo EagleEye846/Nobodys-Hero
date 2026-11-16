@@ -4,10 +4,13 @@
 // free and no monsters (a save room). The way home: walk down to the end of the slip
 // (13..16, row 13) and Haddock rows you back to Saltcombe (wreck_slip_home, any time).
 // The way back into the yard is the door you came in by, along the yard to the mast.
-// THE GHOST SHIP (optional, secret): at the cove's far east point stands an old fog bell (the lever `fog_bell`). Ring it, walk
-// out to the point (the trigger at 29-30, rows 6-8) and the brig Fair Return slides in out of the fog and lays her plank on the
-// shingle (scene ship_looms). The first time in after the mast's scorch, the wind rings it once and the camera looks at it
-// (slip_bell_heard). She leaves again by her stern door, to the point (28,6). The star-shard is at the end of her.
+// THE GHOST SHIP (optional, secret; reworked 14 November): the cove's far east point has an old bell post with an EMPTY
+// bracket (29,4) and its brass plate, IN FOG, RING FOR THE FAIR RETURN: the bell was taken down long ago. The slip's own sign
+// (RING LOUDLY. There's no bell.) is the joke that should make you look. Where the bell went is on the last page of the
+// Fair Return's torn log (log_page_5): down the steps under the old boat on the point. Carrying that page, walking up to
+// the boat plays point_boat (once): Ves and Bramble roll the boat off the steps, and the steps (27..28, row 7) go down into
+// the cave under the point (wreck_under_point), and on out to the Watch Rock (wreck_watch_rock), where the bell hangs.
+// The ship's plank and her stern door both come back out on the Watch Rock now, not here.
 // Tile key (see src/overworld/coastTiles.js, wreck):
 //   #  cliff top (solid)   W  cliff (solid)   q  shingle   ,  turf   o  the slip's planks
 //   ~  green-black water (solid)   x  barnacles   O  crate   F  net heap   J  stump
@@ -24,8 +27,12 @@ export const WRECK_SLIP = {
   ambience: 'wreck_yard',
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.5, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_wreck_yard', lamplight: { shade: 0.24, tint: '34, 44, 68' }, skyline: true },
+  // Once the Fair Return has sailed (crew_go_free, 2026-11-14), her fog has gone with her: the yard's fog thins to this.
+  fogLiftAfter: { scene: 'crew_go_free', fog: 0.25 },
   vesWell: true,
-  lastLight: { x: 24, y: 15 },
+  // Before the Fair Return is found, her crew's song off the water now and then, or her lantern far out (farShip.js).
+  farShip: { sing: true, light: { x: 22, y: 15 } },
+  lastLight: { x: 24, y: 15, scale: 1.0 },
   skyline: [
     { kind: 'hull', x: 6, y: 15, lean: -1 },
     { kind: 'mast', x: 9, y: 14, lean: 1, tall: 52 },
@@ -59,34 +66,40 @@ export const WRECK_SLIP = {
   doors: [
     // Back along the yard to the fighting top of the mast.
     { x: 0, y: 4, w: 1, h: 1, to: 'wreck_mast', spawn: { x: 37, y: 3 } },
+    // The fog-watch's steps under the old boat on the point, once the boat is rolled off them (point_boat): down into
+    // the cave under the point (and on to the Watch Rock and the Fair Return's bell).
+    { x: 27, y: 7, w: 2, h: 1, to: 'wreck_under_point', spawn: { x: 3, y: 3 }, after: ['point_boat', 'ship_looms'] },
   ],
 
-  // The end of the slip: home with Haddock (any time). The point: the Fair Return, once the fog bell has been rung (`when`).
+  // The end of the slip: home with Haddock (any time). The old boat on the point: carrying the log's last page (the one
+  // that says where the bell went), coming up to it plays point_boat (once), and the steps under it open.
   cutscenes: [
+    // Back from the mast without having talked to him: he tells you about Orla himself, once, then rows.
+    { x: 13, y: 13, w: 4, h: 1, scene: 'wreck_slip_orla', after: 'wreck_star_shard', until: ['wreck_slip_orla', 'haddock_gone'], untilTalked: 'haddock_wreck:wreck_star_shard' },
     { x: 13, y: 13, w: 4, h: 1, scene: 'wreck_slip_home' },
-    { x: 29, y: 6, w: 2, h: 3, scene: 'ship_looms', when: 'fog_bell' },
-    // The first time in after the mast's scorch, the wind rings the fog bell once and the camera looks across at it (a pointer, not a key).
-    { x: 5, y: 2, w: 1, h: 9, scene: 'slip_bell_heard', after: 'wreck_star_shard', until: 'ship_looms' },
+    { x: 25, y: 5, w: 6, h: 2, scene: 'point_boat', gear: 'log_page_5' },
+    { x: 25, y: 8, w: 6, h: 2, scene: 'point_boat', gear: 'log_page_5' },
+    { x: 25, y: 7, w: 2, h: 1, scene: 'point_boat', gear: 'log_page_5' },
+    { x: 30, y: 7, w: 1, h: 1, scene: 'point_boat', gear: 'log_page_5' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/wreck.txt',
   props: [
     { sprite: 'savepoint', x: 6, y: 5, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 7, y: 5, travel: 'wreck_slip', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     // Haddock on the slip (footprint 2: 15 and 16; the way past him is x 13-14), and the Bother.
     { sprite: 'cf_haddock', x: 15, y: 10, npc: 'haddock_wreck', animation: 'cf_haddock', speed: 0.5, until: 'haddock_gone' },
     { sprite: 'cf_bother', x: 17, y: 13, text: 'slip_bother', animation: 'cf_bother', speed: 0.5 },
     { sprite: 'sign', x: 11, y: 7, text: 'slip_sign' },
     { sprite: 'c5_net_frame', x: 7, y: 7, text: 'slip_nets' },
-    // The fog bell (secret): the post's plate (28,4), the bell (29,4: a lever, rung once and it stays rung: the fog on the water at
-    // 29,10 is the gate that holds it), and the board's brass plate. Nothing here says it is a way in. The bell's brass carries a
-    // faint cold shine (the colour of the ship's own lanterns), so it can be picked out from the slip across the storm's gloom.
+    // The old fog bell's post on the point (secret): its plate (27,4) and the frame (29,4) with nothing in its bracket. The bell
+    // was taken down a long time ago; where it went is the last page of the Fair Return's log.
     { sprite: 'sign', x: 27, y: 4, text: 'slip_fog_bell_post' },
-    { sprite: 'c5_harbour_bell', x: 29, y: 4, text: 'slip_fog_bell', lever: 'fog_bell', animation: 'c5_harbour_bell', speed: 0.5,
-      glow: [{ dy: -12, bloom: 14, strength: 0.5, flicker: 0.25, color: '170, 226, 255' }, { dy: -2, pool: 40, strength: 0.32, flicker: 0.15, color: '120, 190, 255' }] },
-    { sprite: 'gs_fog_c', x: 29, y: 10, opensWith: ['fog_bell'], openText: 'slip_fog_bell', flat: true },
+    { sprite: 'c5_bell_frame_empty', x: 29, y: 4, text: 'slip_fog_bell_gone' },
     { sprite: 'c5_lobster_pots', x: 20, y: 7, text: 'hull_pots' },
-    { sprite: 'c5_tattered_sail', x: 26, y: 8, text: 'gate_sail', animation: 'c5_tattered_sail', speed: 0.4 },
+    { sprite: 'c5_tattered_sail', x: 23, y: 9, text: 'gate_sail', animation: 'c5_tattered_sail', speed: 0.4 },
     { sprite: 'c5_anchor', x: 3, y: 8, text: 'gate_anchor' },
     { sprite: 'c5_snapped_mast', x: 24, y: 14, text: 'gate_mast' },
     { sprite: 'c5_chain_bollard', x: 12, y: 10, text: 'slip_bollard' },
@@ -109,12 +122,25 @@ export const WRECK_SLIP = {
     { sprite: 'wy_ribs_jag', x: 2, y: 12 },
     { sprite: 'c5_wrack_line', x: 5, y: 9, flat: true, walkable: true },
     { sprite: 'c5_wrack_line', x: 21, y: 9, flat: true, walkable: true },
-    { sprite: 'c5_boat_upturned', x: 27, y: 7 },
+    // The old boat on the point, keel up, weighted with stones, lying over the fog-watch's steps. Rolled off them (point_boat),
+    // it lies keel up at the water's edge, and the steps (a door) go down. (A save from before 14 November that had already
+    // called the ship at the old bell here, ship_looms, finds the steps open too, so it can get back to her.)
+    { sprite: 'c5_boat_upturned', x: 27, y: 7, text: 'slip_point_boat', until: ['point_boat', 'ship_looms'] },
+    { sprite: 'c5_boat_upturned', x: 27, y: 9, text: 'slip_point_boat_rolled', after: ['point_boat', 'ship_looms'] },
+    { sprite: 'gs_point_steps', x: 27, y: 7, text: 'slip_point_steps', flat: true, walkable: true, after: ['point_boat', 'ship_looms'] },
     { sprite: 'c5_driftwood', x: 9, y: 4, flat: true, walkable: true },
     { sprite: 'c5_seaweed_heap', x: 18, y: 5, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 22, y: 6, flat: true, walkable: true },
     { sprite: 'c5_gull_marks', x: 14, y: 4, flat: true, walkable: true },
-    { sprite: 'c5_crab_trail', x: 25, y: 9, flat: true, walkable: true },
+    { sprite: 'c5_crab_trail', x: 25, y: 6, flat: true, walkable: true },
+    { sprite: 'col_glass_brown', x: 30, y: 2, walkable: true, flat: true, gives: 'glass_brown', taken: { gone: true } },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_tally_post', x: 21, y: 2, text: 'sl_tally' },
+    { sprite: 'c5_oar_stuck', x: 14, y: 7, text: 'sl_oar' },
+    { sprite: 'c5_lantern_fallen', x: 3, y: 6, text: 'sl_lantern', flat: true, walkable: true },
+    { sprite: 'shore_chalk_arrow', x: 2, y: 2, text: 'sl_chalk_arrow', walkable: true },
+    { sprite: 'shore_anemone_pool', x: 11, y: 2, text: 'sl_anemone_a', flat: true, walkable: true, animation: 'shore_anemone_pool', speed: 0.5 },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'gate_edge', W: 'slip_cliff', '~': 'gate_water', o: 'slip_planks', x: 'hull_barnacles', O: 'hull_cargo', F: 'hull_net', J: 'fog_stump' },
 

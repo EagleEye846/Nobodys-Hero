@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE GRATINGS: where the culverts meet, and iron gratings were put across
 // them to stop what washed down from going on. A grating stops you, and a
 // cask; it doesn't stop Bramble, who rides a current straight through one and
@@ -143,12 +144,17 @@ export const DRAINS_GRATINGS = {
     { sprite: 'current_left', x: 6, y: 12, text: 'current', flow: 'left', animation: 'current_left', speed: 0.1 },
     { sprite: 'current_left', x: 5, y: 12, text: 'current', flow: 'left', animation: 'current_left', speed: 0.1 },
     { sprite: 'current_left', x: 4, y: 12, text: 'current', flow: 'left', animation: 'current_left', speed: 0.1 },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_gratings'] ?? []),
   ],
   tileTexts: { K: 'gratings_wall', k: 'gratings_wall', j: 'culvert_gap' },
 
-  // A Clinker on the landing, and another along the way out.
+  // A Clinker on the landing, and another along the way out. AMBUSH: the first is under a heap of
+  // rubble in the landing's dead end (2,11), mug and all, till you come within two tiles (now and
+  // then its feelers come out and wave: `look: 'rubble_feelers'`, src/overworld/hideouts.js). Only
+  // the sign (1,12) is that close; the cask (2,8), the door and the way up to the gate aren't.
   npcs: [
-    { enemy: 'clinker', x: 2, y: 11, patrol: [1, 3] },
+    { enemy: 'clinker', x: 2, y: 11, patrol: [2, 2], behaviour: 'disguise', look: 'rubble_feelers', reach: 2 },
     { enemy: 'clinker', x: 18, y: 3, patrol: [9, 25] },
   ],
 };

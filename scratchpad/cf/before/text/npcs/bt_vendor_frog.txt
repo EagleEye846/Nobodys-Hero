@@ -1,0 +1,43 @@
+# BT_VENDOR_FROG: A frog who sells marbles, fishing line and 'luck', all of which he claims are the same thing.
+
+[first]
+Marbles! Fishing line! Luck! They're the same thing, really: you roll them and hope.
+
+Oh, you're the new ones. The king says you're special. Can't see it myself. Where are the wings?
+
+[repeat]
+The marbles are slimy. I know. The luck is slimy too. That's how you know it's good.
+
+[first after the_kings_welcome]
+Off into the dark, are you? Take a marble. It's luck. If it's slimy, it's working.
+
+[repeat after the_kings_welcome]
+I'd come with you but I'm afraid of the dark, the damp and doing something.
+
+[first after the_light_goes_up]
+Luck's up! I sold four! Four marbles! Two were luck!
+
+[repeat after the_light_goes_up]
+It's a lucky day. I can feel it. I can feel it in my marbles.
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+I was lucky once. Found a marble in a fish. Lost it in another fish. Swings and roundabouts.
+
+# (draft)
+[repeat 3]
+Want a free one? Free luck? ...That's not how luck works. Nothing's free. Especially luck.
+
+# (draft)
+[repeat_ves 3]
+{bored}He's a philosopher. {smile}A slimy one.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Roll it before you go down any big hole. If it comes back, you're lucky. If it doesn't, it was the hole's.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+Two of the four came back for a refund. Said it was too lucky. I told them that's on them.

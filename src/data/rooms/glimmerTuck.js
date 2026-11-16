@@ -64,6 +64,8 @@ export const GLIMMER_TUCK = {
     // The crystal he hides behind (2 wide: the scene hides him at 17.5,6).
     { sprite: 'crystal_violet_l', x: 17, y: 7, text: 'tuck_crystal' },
     { sprite: 'savepoint', x: 23, y: 10, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 24, y: 10, travel: 'quiet_grotto', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'crystal_bloom', x: 6, y: 5, text: 'tuck_bloom', animation: 'crystal_bloom', speed: 0.6 },
     { sprite: 'crystal_pink_l', x: 22, y: 5, text: 'tuck_crystal_other' },
     { sprite: 'crystal_teal_s', x: 14, y: 5, text: 'tuck_crystal_other' },
@@ -74,12 +76,18 @@ export const GLIMMER_TUCK = {
     { sprite: 'glowcap_tall', x: 2, y: 5, text: 'tuck_glowcap' },
     { sprite: 'glowcap_small', x: 20, y: 5, text: 'tuck_glowcap' },
     { sprite: 'crystal_pool', x: 10, y: 4, text: 'tuck_pool', animation: 'crystal_pool', speed: 0.5 },
-    { sprite: 'glow_moss', x: 8, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 15, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 21, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 5, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 8, y: 7, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 15, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 21, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 5, y: 8, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'sign', x: 3, y: 7, text: 'tuck_sign' },
     { sprite: 'gold_pouch', x: 24, y: 4, text: 'tuck_purse', gold: 65, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    { sprite: 'col_token', x: 1, y: 6, walkable: true, flat: true, gives: 'tally_rope', taken: { gone: true } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'gl_sweet_tin', x: 21, y: 4, text: 'lp_tuck_tin', gives: 'dab_tin', react: true, walkable: true, taken: { gone: true } },
+    { sprite: 'crystal_gold_s', x: 19, y: 4, text: 'gp_gem' },
+    { sprite: 'gl_glowbug', x: 13, y: 10, text: 'gp_bug', animation: 'gl_glowbug', speed: 0.5 },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', H: 'cave_moss_wall', K: 'cave_wall',

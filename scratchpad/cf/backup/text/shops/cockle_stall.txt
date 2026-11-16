@@ -1,0 +1,99 @@
+# THE COCKLE STALL: a crab in a neat apron behind a stall in Saltcombe's
+# market, who sells whatever the tide leaves, cooked. Bossy, warm, sideways,
+# and sure everyone is underfed, especially small boys. (Bramble's snacks.)
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order.
+
+[greeting]
+Come in, come in, mind the claws, they're mostly decorative. You look peckish. All three of you look peckish. The small one looks ready to fall over.
+
+# (draft) The next times.
+[greeting 2]
+Back again, dear! Nobody has the cockles just the once. And the small one's looking peckish. The small one is always looking peckish.
+
+# (draft)
+[greeting 3]
+Regulars! Sit, sit. Mind the claws. You know about the claws.
+
+[menu_prompt]
+Well, dear? Something hot?
+
+[buy_prompt]
+Biscuits, crisps, skewers, chowder. And a tonic if you've a long day coming. Chowder, I'd say. I always say chowder.
+
+[sell_prompt]
+Selling? I'll take anything edible. Anything that isn't edible, I'll take and pretend.
+
+[talk_prompt]
+Go on, then. Sit. I'll keep one eye on the pot.
+
+[bought]
+There. Good as new, and in the right order.
+
+[bought_item]
+Eat it while it's hot. Not before it's hot. Not after, either, it goes rubbery.
+
+[bought_skill]
+Hm? That's not mine to sell, dear.
+
+[skill_sold_out]
+Nothing like that here. Only chowder.
+
+[sold]
+Lovely. That'll do for the lunch rush.
+
+[nothing_to_sell]
+Nothing? Then buy something. Don't stand there being thin.
+
+[cant_sell]
+You've got that on, dear. Take it off first, with C. Not at my stall, there's a child watching.
+
+[owned]
+You've got one of those. They don't come in pairs. They come in the one size.
+
+[wont_fit]
+Not for you, dear. Not my sort of thing at all, in fact. Whose is it?
+
+[too_poor]
+Oh, you're a few coins short. Never mind. The tide'll bring more.
+
+[bought_stored]
+Your bag's full, so I've popped it in your chest, by the next lamp you find. I do a lot of delivering.
+
+[bag_full]
+Your bag's full, dear, and so's the chest. Eat something now. Eat it in front of me.
+
+[farewell]
+Off you go. Wrap up. It's wet out. It's always wet out.
+
+[talk: Who are you?]
+The Cockle Stall. That's all anyone calls me, so I've stopped minding. Third generation. My gran sold cockles to the lamplighters, my mum sold cockles to the fishers, and I sell cockles to anybody who stands still.
+
+[talk: The cockles]
+Picked at the low tide, soaked in the right water, and not a grain of sand in one. Bad cockles come from the Wrack Shore side. Never buy a cockle from anyone you wouldn't leave your boat with.
+
+[talk: The storm]
+Business has never been better, which is a terrible thing to say. Everybody wants something hot. It's the weather. People will do anything for a warm bowl.
+
+I put a bit more pepper in. For morale.
+
+[talk: Bramble]
+He's the small one. Isn't he? He's been looking at the pot like it might come over the counter at him. It won't. It's the only thing in Saltcombe that stays where it's put. I've given him a biscuit. We don't need to talk about it.
+
+[talk: Ves]
+Has she eaten? The tall one. Dry as a board. Mind she has something. Dry people forget.
+
+[talk: The Hero]
+A little lad, in a coat that didn't fit, a hundred years back. Stood where you're standing. Had a bowl of the chowder, didn't say a word, and left the bowl clean. My gran served him. Said it was the politest bowl she ever washed.
+
+# (draft) World reacts: after the chapter (the storm gone, Haddock gone).
+[talk: The storm after haddock_gone]
+Gone. Just like that. Business is terrible. I've never been so pleased about anything.
+
+I still put a bit more pepper in. For morale. Some of us need it.
+
+[talk: Bramble after haddock_gone]
+He's holding that bell like it's hot. Let him. I've given him two biscuits. We don't need to talk about it.
+
+[farewell after haddock_gone]
+Off you go. Wrap up anyway. It's a habit now.

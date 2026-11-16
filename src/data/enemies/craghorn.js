@@ -9,7 +9,7 @@ export const CRAGHORN = {
   gait: 'bound',
   textFile: 'enemies/craghorn.txt',
   sprite: { rows: CRAGHORN_SPRITE, palette: CRAGHORN_PALETTE },
-  maxHp: 250,
+  maxHp: 600,
   damage: 13,
 
   // A Chapter 2 enemy: busier and quicker than anything in the Ruins.
@@ -18,7 +18,7 @@ export const CRAGHORN = {
   // Its attacks live in src/battle/attacks/craghorn.js.
   patterns: [
     { name: 'cragCharge', weight: 3 },
-    { name: 'cragBleat', weight: 2 },
+    { name: 'cragRace', weight: 2 },
     { name: 'cragRicochet', weight: 3 },
     { name: 'cragGraze', weight: 2 },
   ],

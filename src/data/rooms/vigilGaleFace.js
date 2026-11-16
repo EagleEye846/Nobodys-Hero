@@ -10,6 +10,7 @@
 //   E  ice-veined cliff face (solid)              A  snowy cliff top (solid)
 //   n  snow                                       s  the great stair
 //   Y  snow pine (walk or hide behind) (solid)    Q  snowy boulder (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_GALE_FACE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_gale_face',
@@ -149,6 +150,8 @@ export const VIGIL_GALE_FACE = {
     { sprite: 'grapple_ring', x: 38, y: 27, grapple: true },
     { sprite: 'grapple_ring', x: 33, y: 39, grapple: true },
     { sprite: 'waymark', x: 17, y: 9, text: 'gale_waymark' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_gale_face'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

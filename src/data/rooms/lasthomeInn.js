@@ -7,6 +7,7 @@
 //   h  wall with wood panelling (solid)
 //   o  wooden floorboards
 //   r  rug
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const LASTHOME_INN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lasthome_inn',
@@ -65,6 +66,8 @@ export const LASTHOME_INN = {
     // Side quest (Tam's bell): the clapper, in use as a stirring pole.
     { sprite: 'bell_clapper', x: 9, y: 2, text: 'inn_stirrer', gives: 'bell_clapper', taken: { gone: true } },
     { sprite: 'sign', x: 10, y: 11, text: 'inn_rules' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['lasthome_inn'] ?? []),
   ],
   tileTexts: { h: 'inn_wall', r: 'inn_rug' },
 

@@ -1,11 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Pix } from '../../data/art/pixKit.js';
-import { withSnipes } from './snipes.js';
+import { Shot } from '../projectiles.js';
+import { PathShot, Deco } from './coastKit.js';
 
-// The Seed Sheep's attacks. Its fleece is a dandelion clock, so it's all
-// seeds and wool: a drift of parachute seeds on the breeze (with a gap),
-// woolly charges along your row that shed tufts as they go, and big
-// dandelion clocks that float in and puff apart into rings of seed motes.
+// The Seed Sheep's attacks. A placid sheep whose fleece is a dandelion
+// clock, and everything it does sheds seeds:
+//   - Baa: every baa turns the wind (watch the grass along the top), and the
+//     seeds blow in from the side the wind is from, with a gap.
+//   - Counting sheep: its flock trots along the rows and hops the fence in
+//     the middle. In the air over the fence a sheep is harmless.
+//   - Wishes: big clocks drift across, and blow apart in a ring of seeds the
+//     moment you come near. Give them a wide berth.
 // It stands to the right of the box.
 
 const WOOL = { w: '#ffffff', W: '#f6f3e8', s: '#dcd7c4', d: '#bdb6a0', k: '#3a2e2a', y: '#ffd93b', Y: '#e3a42a', g: '#6aa84f' };
@@ -55,148 +60,176 @@ defineBulletArt('sheepClock', { frames: [clock()], palette: WOOL, radius: 7, spi
 // A seed mote that came out of a clock: a bright little star.
 defineBulletArt('sheepMote', { frames: [['..w..', '.wsw.', 'wsysw', '.wsw.', '..w..']], palette: WOOL, radius: 2.2, spin: 4 });
 
+// A little sheep at a trot, facing left: fleece a dandelion clock, black legs.
+function trotter(step) {
+  const g = new Pix(15, 12);
+  g.disc(8, 5, 5.4, 4.2, 'W');
+  for (const [x, y] of [[4, 2], [8, 1], [12, 3], [6, 8], [11, 8]]) g.set(x, y, 'w');
+  g.disc(2.5, 5, 2.2, 1.8, 'k');
+  g.set(2, 4, 'w');
+  g.line(5, 9, 5 - step, 11, 'k');
+  g.line(11, 9, 11 + step, 11, 'k');
+  g.outline('d');
+  return g.rows();
+}
+defineBulletArt('sheepTrot', { frames: [trotter(0), trotter(1)], palette: WOOL, radius: 4.6, frameSeconds: 0.14 });
+defineBulletArt('sheepHop', { frames: [trotter(1)], palette: WOOL, radius: 1 });
+// A wish clock that bursts when you come near (it hurts too, to bump into).
+defineBulletArt('sheepWish', { frames: [clock()], palette: WOOL, radius: 5.5, spin: 1.2 });
+
+// A wish clock: it drifts, and the moment you come within `near` of it, your
+// breath blows it apart in a ring of seeds.
+class Wish extends Shot {
+  update(dt, box) {
+    super.update(dt, box);
+    if (this.burst || this.age < this.warn) return;
+    if (Math.hypot(this.soul.x - this.x, this.soul.y - this.y) < this.near) {
+      this.burst = true;
+      this.life = this.age - this.warn;
+      // (Only the real clock lets its seeds go, not a copy looking ahead.)
+      if (this.mine.has(this)) this.out.push({ x: this.x, y: this.y });
+    }
+  }
+}
+
 export const SEED_SHEEP_ATTACKS = {
-  // Drift: a wave of parachute seeds on the breeze, eight to a wave, in a
-  // line across the box with a three-wide gap that sits somewhere new each
-  // time. They bob as they come. Five waves.
-  sheepSeeds(box, density, { Shot, rand }) {
+  // Baa: every time it baas, the wind turns (the weathervane of grass at the
+  // top of the box swings round), and the seeds the baa shook loose come
+  // blowing in with it from the side the wind's from. Each baa, look at the
+  // grass, not the sheep.
+  sheepBaa(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const WINDS = [0, Math.PI / 2, Math.PI, -Math.PI / 2, Math.PI / 4, (3 * Math.PI) / 4, -Math.PI / 4, (-3 * Math.PI) / 4];
+    let wind = Math.PI;
     let t = 0;
-    let waves = 0;
-    let next = 0.2;
-    let lastGap = -1;
+    let n = 0;
+    let made = false;
+    const now = { wind };
     return {
-      duration: 7.4,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || waves >= 5 || t > 5.6) return;
-        next = t + 1.15;
-        // The gap is two or more slots from where the last one was, and away from your slot.
-        let gap;
-        let tries = 0;
-        do {
-          gap = Math.floor(rand(0, 6));
-          tries++;
-        } while (tries < 8 && (Math.abs(gap - lastGap) < 2));
-        lastGap = gap;
-        for (let k = 0; k < 8; k++) {
-          if (k >= gap && k < gap + 3) continue;
-          const y = box.y + 5 + k * 10;
-          bullets.push(new Shot({ x: box.x + box.w + 6, y, vx: -56, warn: 0.3, wobble: { amplitude: 3, frequency: 3 + (waves % 2) }, art: 'sheepSeed', life: 3.2 }));
+        if (!made) {
+          made = true;
+          bullets.push(new Deco({ life: 7, paint(ctx, d) {
+            // Blades of grass along the top edge, all leaning the way the wind blows.
+            const lean = Math.cos(now.wind);
+            ctx.strokeStyle = '#6aa84f';
+            ctx.lineWidth = 1;
+            for (let x = box.x + 4; x < box.x + box.w; x += 6) {
+              ctx.beginPath();
+              ctx.moveTo(x, box.y + 7);
+              ctx.lineTo(x + lean * 4 + Math.sin(d.age * 8 + x) * 0.6, box.y + 1);
+              ctx.stroke();
+            }
+          } }));
         }
-        waves++;
+        if (t >= T(0.2 + n * 1.25) && n < 5) {
+          n++;
+          let w;
+          do w = WINDS[Math.floor(rand(0, WINDS.length))]; while (Math.abs(Math.atan2(Math.sin(w - wind), Math.cos(w - wind))) < 1);
+          wind = w;
+          now.wind = w;
+          const BAA = 0.55;
+          bullets.push(new Deco({ x: box.x + box.w + 10, y: box.y + 20, life: BAA, paint(ctx, d) {
+            ctx.strokeStyle = '#ffffff';
+            ctx.globalAlpha *= 0.6;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, 4 + d.age * 30, Math.PI * 0.6, Math.PI * 1.4);
+            ctx.stroke();
+          } }));
+          // A line of seeds along the upwind side, square to the wind, with a gap.
+          const vx = Math.cos(w) * 58;
+          const vy = Math.sin(w) * 58;
+          const cx = box.x + box.w / 2 - Math.cos(w) * 52;
+          const cy = box.y + box.h / 2 - Math.sin(w) * 52;
+          const px = -Math.sin(w);
+          const py = Math.cos(w);
+          const off = (soul.x - (box.x + box.w / 2)) * px + (soul.y - (box.y + box.h / 2)) * py;
+          let gap;
+          let guard = 0;
+          do gap = rand(-36, 36); while (Math.abs(gap - off) < 16 && guard++ < 100);
+          for (let s = -60; s <= 60; s += 9) {
+            if (Math.abs(s - gap) < 9) continue;
+            bullets.push(new Shot({ x: cx + px * s, y: cy + py * s, vx, vy, art: 'sheepSeed', warn: BAA, life: 3, wobble: Math.abs(vy) < 1 ? { amplitude: 2.5, frequency: 4 } : null }));
+          }
+        }
       },
     };
   },
 
-  // Ram: it lowers its head and a big woolly ball charges in along your row
-  // (it blinks first and keeps lining up on you until the last instant),
-  // shedding tufts as it rolls. From the second charge, a second ball comes
-  // a step off your row, a beat later. Four charges.
-  sheepRam(box, density, { Shot, rand, clamp }) {
+  // Counting sheep: a fence stands across the middle of the box, and its
+  // flock trots in along the rows and hops it, one after another. Up in the
+  // air over the fence a sheep is harmless; on the ground, it bowls you
+  // over. At the top of every hop a few seeds shake loose and drift down.
+  sheepCount(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const fx = box.x + box.w * 0.45;
+    const SPEED = 78;
+    const HOP = 22;
     let t = 0;
-    let charges = 0;
-    let next = 0.2;
-    let aiming = [];
+    let n = 0;
+    let made = false;
     return {
-      duration: 7.6,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        for (const ball of aiming) {
-          if (ball.age < ball.warn - 0.1) ball.y = clamp(soul.y + (ball.offset || 0), box.y + 6, box.y + box.h - 6);
-          else if (ball.fire) {
-            ball.fire = false;
-            ball.vx = -128;
-          }
-          // Shedding tufts as it rolls.
-          if (ball.age > ball.warn && ball.age >= ball.nextTuft) {
-            ball.nextTuft = ball.age + 0.13;
-            bullets.push(new Shot({ x: ball.x + 5, y: ball.y + rand(-3, 3), vx: rand(-6, 6), vy: rand(-22, 22), accel: -12, art: 'sheepTuft', life: 0.8 }));
-          }
+        if (!made) {
+          made = true;
+          bullets.push(new Deco({ life: 7, paint(ctx) {
+            ctx.fillStyle = '#8a6a44';
+            ctx.fillRect(fx - 1, box.y, 3, box.h);
+            for (let y = box.y + 6; y < box.y + box.h; y += 14) ctx.fillRect(fx - 4, y, 9, 2);
+          } }));
         }
-        aiming = aiming.filter((ball) => ball.age < ball.warn + ball.life);
-        if (t < next || charges >= 4 || t > 5.8) return;
-        next = t + 1.55;
-        const x = box.x + box.w + 7;
-        const main = new Shot({ x, y: soul.y, warn: 0.62, art: 'sheepBall', life: 1.8 });
-        main.fire = true;
-        main.nextTuft = 0;
-        aiming.push(main);
-        bullets.push(main);
-        if (charges >= 1) {
-          const side = new Shot({ x, y: soul.y, warn: 0.9, art: 'sheepBall', life: 1.8 });
-          side.fire = true;
-          side.nextTuft = 0;
-          side.offset = (charges % 2 ? 1 : -1) * 26;
-          aiming.push(side);
-          bullets.push(side);
+        if (t >= T(0.3 + n * 0.45) && n < 12) {
+          n++;
+          const y = n % 2 ? soul.y : rand(box.y + 7, box.y + box.h - 7);
+          const x0 = box.x + box.w + 8;
+          const x1 = box.x - 10;
+          const total = (x0 - x1) / SPEED;
+          const up = (x0 - (fx + HOP / 2)) / SPEED;
+          const down = (x0 - (fx - HOP / 2)) / SPEED;
+          const WARN = 0.35;
+          const at = (k) => ({ x: x0 - SPEED * k, y: y - (k > up && k < down ? Math.sin(Math.PI * (k - up) / (down - up)) * 10 : 0) });
+          bullets.push(new PathShot({ art: 'sheepTrot', warn: WARN, life: up, path: at }));
+          bullets.push(new PathShot({ art: 'sheepHop', harmless: true, warn: WARN + up, life: down - up, path: (k) => at(k + up) }));
+          bullets.push(new PathShot({ art: 'sheepTrot', warn: WARN + down, life: total - down, path: (k) => at(k + down) }));
+          for (const o of [-6, 6]) bullets.push(new Shot({ x: fx + o, y: y - 10, vy: 26, art: 'sheepSeed', warn: WARN + (up + down) / 2, life: 1.4 }));
         }
-        charges++;
       },
     };
   },
 
-  // Puff: a dandelion clock floats into the box, hangs a moment, and bursts
-  // into a ring of seed motes, then a second ring a beat later turned by half
-  // a step. Each ring has a gap, and it never sits right on you, so you
-  // have to move. Four clocks.
-  sheepPuff(box, density, { Shot, rand, clamp }) {
+  // Wishes: big dandelion clocks drift across the box. Come near one and
+  // your own breath blows it apart: a ring of seeds bursts out from it. Give
+  // them a wide berth, or set one off from as far as you dare and be gone.
+  sheepWish(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const out = [];
+    const mine = new WeakSet();
     let t = 0;
-    let made = 0;
-    let next = 0.2;
-    let clocks = [];
-    const ring = (bullets, x, y, soul, turn) => {
-      const N = 10;
-      const toSoul = Math.atan2(soul.y - y, soul.x - x);
-      const gapAt = toSoul + (Math.random() < 0.5 ? 0.75 : -0.75) + turn;
-      for (let i = 0; i < N; i++) {
-        const a = (i / N) * Math.PI * 2 + turn * 0.5;
-        const d = Math.atan2(Math.sin(a - gapAt), Math.cos(a - gapAt));
-        if (Math.abs(d) < 0.62) continue;
-        bullets.push(new Shot({ x, y, vx: Math.cos(a) * 54, vy: Math.sin(a) * 54, art: 'sheepMote', life: 2.4 }));
-      }
-    };
+    let n = 0;
     return {
-      duration: 7.8,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        for (const c of clocks) {
-          if (!c.burst && c.age >= 0.95) {
-            c.burst = true;
-            ring(bullets, c.x, c.y, soul, 0);
-          }
-          if (!c.second && c.age >= 1.5) {
-            c.second = true;
-            ring(bullets, c.x, c.y, soul, 0.26);
+        if (t >= T(0.2 + n * 0.7) && n < 9) {
+          n++;
+          const y = n % 2 ? soul.y : rand(box.y + 10, box.y + box.h - 10);
+          const w = new Wish({ x: box.x + box.w + 8, y, vx: -24, vy: (soul.y - y) * 0.1, art: 'sheepWish', warn: 0.3, life: 6 });
+          Object.assign(w, { soul, near: 26, out, mine, burst: false });
+          mine.add(w);
+          bullets.push(w);
+        }
+        while (out.length) {
+          const p = out.shift();
+          for (let i = 0; i < 10; i++) {
+            const a = (i / 10) * Math.PI * 2;
+            bullets.push(new Shot({ x: p.x + Math.cos(a) * 4, y: p.y + Math.sin(a) * 4, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, art: 'sheepMote', warn: 0.25, life: 1.5 }));
           }
         }
-        clocks = clocks.filter((c) => c.age < 1.6);
-        if (t < next || made >= 4 || t > 5.2) return;
-        next = t + 1.45;
-        let x;
-        let y;
-        let tries = 0;
-        do {
-          x = rand(box.x + 16, box.x + box.w - 10);
-          y = rand(box.y + 14, box.y + box.h - 14);
-          tries++;
-        } while (tries < 10 && Math.hypot(x - soul.x, y - soul.y) < 26);
-        // It drifts in from the right to its spot.
-        const c = new Shot({ x: box.x + box.w + 8, y, vx: 0, harmless: true, art: 'sheepClock', life: 1.6 });
-        c.target = x;
-        const oldUpdate = c.update.bind(c);
-        c.update = (dt2, b) => {
-          oldUpdate(dt2, b);
-          c.x += (c.target - c.x) * Math.min(1, dt2 * 5);
-        };
-        clocks.push(c);
-        bullets.push(c);
-        made++;
       },
     };
   },
 };
-
-// Aimed seeds on top, so standing still or running one way is never safe (see snipes.js).
-SEED_SHEEP_ATTACKS.sheepSeeds = withSnipes(SEED_SHEEP_ATTACKS.sheepSeeds, { art: 'sheepSeed' });
-SEED_SHEEP_ATTACKS.sheepRam = withSnipes(SEED_SHEEP_ATTACKS.sheepRam, { art: 'sheepMote' });
-SEED_SHEEP_ATTACKS.sheepPuff = withSnipes(SEED_SHEEP_ATTACKS.sheepPuff, { art: 'sheepMote' });

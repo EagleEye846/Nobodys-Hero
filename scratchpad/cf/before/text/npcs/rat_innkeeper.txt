@@ -1,0 +1,96 @@
+# THE INNKEEPER (behind the counter of the Drowned Rat, saltcombe_inn): a fat brown rat with a
+# towel on his shoulder, polishing the same tankard. Tired and kind. The crystal by the fire saves.
+
+[first]
+{smile}Come in, come in, you're letting the weather in. Soup's on, fire's lit, beds are dry. Well. Drier.
+
+{wry}This tankard? My grandad started polishing it when the storm came. I'll stop when it stops.
+
+{smile}The crystal by the fire'll keep you right, if you're staying. Everybody stays a bit.
+
+# (draft)
+[first_bramble]
+{glee}Is it the same soup from when the storm came? Since THEN?
+
+[repeat]
+{smile}Soup's on. It's always on. It's the same soup, mostly, with more put in.
+
+# (draft)
+[repeat_bramble]
+{thinking}...How much is "more"?
+
+# (draft) Turns.
+[repeat 2]
+{wry}You can see your face in this tankard. I've watched mine go grey in it.
+
+# (draft)
+[repeat 3]
+{smile}Bed's there if you want it, love. Nobody's turned away from the Drowned Rat. Not even the gulls, and I've tried.
+
+[first after haddock_hums]
+{smile}He'll have that boy swimming by supper. Or soaked. One of the two.
+
+{wry}He left his mug again. He always leaves his mug. I keep it warm for him, and he never comes back for it till it's cold.
+
+[repeat after haddock_hums]
+{wry}Drip on the mat, love. The mat's paid for.
+
+# (draft)
+[repeat 2 after haddock_hums]
+{smile}If you see him at the lagoon, tell him his mug's warm. It isn't. Tell him anyway.
+
+# (draft) The Fair Return, in passing: the bottles.
+[repeat 3 after haddock_hums]
+{wry}Folk still find bottles on this coast, love. Green glass, red wax, FR pressed in it. You don't open those. Fair Return's. Bad luck to read another ship's post.
+
+{smile}My grandad had one on that shelf for years. Then one morning it wasn't. Nobody took it. It just went back out.
+
+# (draft) World reacts: after the swimming lesson.
+[first after swimming_lesson]
+{smile}Is that the boy? Look at him. Wet right through and grinning. It took, then.
+
+{wry}Haddock's taught half this town to swim and the other half to keep out of it.
+
+{wry}Either way, nobody's gone in off this quay that he didn't fish out.
+
+[repeat after swimming_lesson]
+{wry}Drip on the mat, love. Not on the cat.
+
+# (draft) World reacts: back from the Wreck Yard.
+[first after wreck_slip_home]
+{smile}Out to the Wreck Yard and home again in one go. He came in here roaring about it, and drank his tea while it was hot, for once.
+
+{wry}First time in years that mug's been empty when he left it.
+
+[repeat after wreck_slip_home]
+{smile}Soup's on. He'll be in for it. He's always in for it.
+
+# (draft) The Fair Return, in passing.
+[repeat 2 after wreck_slip_home]
+{wry}Out at the Wreck Yard, did you hear singing? No? Good. Some do. Off the water, in the fog. Men, slow, all together.
+
+{smile}Stops before the end, every time. My grandad used to hum the last note for them, behind the bar. Said somebody ought to.
+
+[shelf_ask]
+{wry}They say when the lightning hits the sand out on the Reach, it runs into glass. Green, like a bottle.
+
+{smile}If this ever stops, bring me a bead of it. Then I'll have something on the shelf that isn't this tankard.
+
+[shelf_done]
+That's it, is it? Stormglass. Off the reef?
+
+{smile}Then it's stopped. And so can I.
+
+{wry}There. On the shelf, where I can see it. And you can have this. It's the shiniest thing in Saltcombe, and I never want to look at it again.
+
+[shelf_after]
+{smile}Look at that on the shelf. Catches the fire lovely. My arm's never felt so idle.
+
+# (draft) World reacts: after the chapter (the storm gone, Haddock gone).
+[first after haddock_gone]
+{wry}Storm's stopped. I said I'd stop polishing when it stopped. Turns out my arm didn't hear.
+
+{smile}He'd have hated all this sun, you know. Too bright to doze by the fire.
+
+[repeat after haddock_gone]
+{smile}Soup's on. Same soup. Sun on the window, for once.

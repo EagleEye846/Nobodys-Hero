@@ -9,6 +9,10 @@
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_QUIET = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_quiet',
@@ -79,6 +83,8 @@ export const HUSH_QUIET = {
   // Leaf piles to hide in while the Hush goes over (`hide`).
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_quiet ?? []),
+    { sprite: 'col_marble_clearie', x: 34, y: 24, walkable: true, flat: true, gives: 'marble_clearie', taken: { gone: true } },
     { sprite: 'leaf_pile', x: 16, y: 22, text: 'leaf_pile', hide: true },
     { sprite: 'leaf_pile', x: 12, y: 17, text: 'leaf_pile', hide: true },
     { sprite: 'leaf_pile', x: 15, y: 14, text: 'leaf_pile', hide: true },
@@ -94,6 +100,9 @@ export const HUSH_QUIET = {
     { sprite: 'paw_print', x: 22, y: 17, text: 'paw_print' },
     { sprite: 'paw_print', x: 27, y: 14, text: 'paw_print' },
     { sprite: 'gold_pouch', x: 33, y: 2, text: 'quiet_pouch', gold: 180, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_quiet ?? []),
   ],
   tileTexts: { L: 'quiet_tree', Z: 'bramble' },
 

@@ -70,16 +70,16 @@ export const SOUNDINGS_WEIGHT_ROOM = {
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
-  cutscenes: [
-    { x: 15, y: 16, w: 4, h: 2, scene: 'soundings_the_weight' },
-  ],
+  // (draft) 2026-11-15: no trigger: taking the weight is deliberate. Z on the frame reads the tag (`weight_frame`),
+  // and Z again lifts it off its hook (`setOut`, which plays soundings_the_weight).
+  cutscenes: [],
 
   // Things you can press Z on. `text` names a section of this room's text file.
   // Each race is a current while the wheel sends water down it, and still deep water otherwise.
   textFile: 'interactions/soundings.txt',
   props: [
     // The weight on its gallows, and the same frame once it's taken.
-    { sprite: 'sd_weight_frame', x: 16, y: 15, text: 'weight_frame', until: 'soundings_the_weight', light: 40 },
+    { sprite: 'sd_weight_frame', x: 16, y: 15, text: 'weight_frame', setOut: 'soundings_the_weight', until: 'soundings_the_weight', light: 40 },
     { sprite: 'sd_weight_frame_empty', x: 16, y: 15, text: 'weight_frame_empty', after: 'soundings_the_weight' },
     // The race wheel on the NE ledge.
     { sprite: 'valve_wheel', x: 33, y: 3, text: 'weight_wheel', lever: 'race' },
@@ -209,6 +209,9 @@ export const SOUNDINGS_WEIGHT_ROOM = {
     { sprite: 'water_flow', x: 25, y: 17, text: 'weight_still', wet: ['!race'], animation: 'sd_still_side', speed: 0.3 },
     { sprite: 'water_flow', x: 26, y: 17, text: 'weight_still', wet: ['!race'], animation: 'sd_still_side', speed: 0.3 },
     { sprite: 'water_flow', x: 27, y: 17, text: 'weight_still', wet: ['!race'], animation: 'sd_still_side', speed: 0.3 },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_echo_stone', x: 6, y: 3, text: 'lp_echo_weight' },
+    { sprite: 'lv_boot', x: 5, y: 9, text: 'lp_boot_weight', walkable: true },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'weight_water', ';': 'weight_shallows', x: 'sound_glass' },
 
@@ -217,7 +220,9 @@ export const SOUNDINGS_WEIGHT_ROOM = {
   // the races' ends, the wheel, the platform, the rope and the scene's trigger (x 15 to 18, rows
   // 16 and 17).
   npcs: [
-    { enemy: 'wrackeel', x: 25, y: 12, patrol: [22, 27], behaviour: 'patrol' },
+    // (An echo bat-shrimp, not a wrackeel: it swims the deep water and goes to look when the race wheel or
+    // the shortcut lever clanks, up to 11 tiles from where it started: monsterHabits.js `hears`.)
+    { enemy: 'echo_shrimp', x: 25, y: 12, patrol: [22, 27], behaviour: 'patrol', hears: 11 },
     { enemy: 'kelpie_foal', x: 31, y: 19, patrol: [29, 33], behaviour: 'patrol' },
   ],
 };

@@ -75,6 +75,8 @@ export const STILLWATER_SHORE = {
   props: [
     // A save crystal, so the caves never go long without one.
     { sprite: 'savepoint', x: 3, y: 6, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 2, y: 6, travel: 'stillwater_shore', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'bf_punt', x: 15, y: 8, cast: 'gubb', until: 'punt_east', text: 'shore_punt_west', animation: 'bf_punt', speed: 0.5 },
     { sprite: 'bf_punt', x: 34, y: 8, cast: 'gubb_far', after: 'punt_east', text: 'shore_punt_east', animation: 'lake_punt_east', speed: 0.5 },
     { sprite: 'sign', x: 10, y: 7, text: 'shore_sign' },
@@ -92,12 +94,12 @@ export const STILLWATER_SHORE = {
     { sprite: 'glow_reeds_tall', x: 39, y: 5, text: 'glow_reeds', animation: 'glow_reeds_tall', speed: 0.5 },
     { sprite: 'glow_reeds', x: 39, y: 11, text: 'glow_reeds', animation: 'glow_reeds', speed: 0.45 },
     { sprite: 'glow_reeds_tall', x: 5, y: 5, text: 'glow_reeds', animation: 'glow_reeds_tall', speed: 0.55 },
-    { sprite: 'fungus_pads', x: 17, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 19, y: 6, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 27, y: 10, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 28, y: 4, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 21, y: 12, walkable: true, animation: 'fungus_pads', speed: 0.9 },
-    { sprite: 'fungus_pads', x: 33, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9 },
+    { sprite: 'fungus_pads', x: 17, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 19, y: 6, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 27, y: 10, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 28, y: 4, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 21, y: 12, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
+    { sprite: 'fungus_pads', x: 33, y: 5, walkable: true, animation: 'fungus_pads', speed: 0.9, decor: true },
     { sprite: 'sunken_pillar_top', x: 24, y: 6, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     { sprite: 'sunken_pillar_top', x: 28, y: 10, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
     { sprite: 'sunken_pillar_top', x: 20, y: 10, text: 'pillar_top', animation: 'sunken_pillar_top', speed: 0.6 },
@@ -111,6 +113,10 @@ export const STILLWATER_SHORE = {
     { sprite: 'floor_pebbles_cool', x: 8, y: 11, walkable: true, flat: true },
     { sprite: 'floor_pebbles_cool', x: 39, y: 12, walkable: true, flat: true },
     { sprite: 'floor_pebbles_cool', x: 7, y: 14, walkable: true, flat: true },
+    { sprite: 'col_token', x: 42, y: 12, walkable: true, flat: true, gives: 'tally_bucket', taken: { gone: true } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'sw_old_boat', x: 4, y: 14, text: 'sp_boat' },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'lake_rock', W: 'lake_wall', '~': 'lake_water', ';': 'lake_shallows', q: 'lake_shingle', g: 'lake_jetty',

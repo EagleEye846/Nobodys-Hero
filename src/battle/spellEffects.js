@@ -11,6 +11,8 @@
 // drawn in stage pixels, on 2-pixel squares like the sprites; the white-out
 // covers the whole screen. See BattleScene.spellFx and allyFx.
 
+import { flashScale } from '../state/settings.js';
+
 // The stage, in stage pixels (UI_WIDTH / UI_SCALE wide, hud.STAGE_HEIGHT tall).
 const STAGE_W = 320;
 const STAGE_H = 164;
@@ -22,15 +24,24 @@ const LIFE = {
   slash: 0.55, spark: 0.6, starfall: 1.1, comet: 1.0, embers: 1.2, chain: 0.8, siphon: 1.2, pebble: 0.7,
   snow: 1.5, downdraft: 0.9,
   shell: 1.5, calm: 1.5, shout: 0.9, leaves: 1.1,
-  nova: 2.8,
+  nova: 2.3, starfallShow: 2.1,
 };
 
-// The white-out: up fast, held, then a slow fade (seconds into the Nova).
-const NOVA_UP = 0.18;
-const NOVA_HOLD = 0.75;
-const NOVA_END = 2.6;
+// The Nova: light drawn in to the target for NOVA_GATHER seconds, then it
+// bursts: the white-out comes up fast, holds a moment and fades by NOVA_END,
+// while rings and rays go out across the whole stage. (Shortened 13 November
+// 2026 from 2.8 seconds, with the gathering added, so it reads as one big
+// moment and doesn't hold the fight up.)
+const NOVA_GATHER = 0.45;
+const NOVA_UP = NOVA_GATHER + 0.08;
+const NOVA_HOLD = NOVA_GATHER + 0.28;
+const NOVA_END = 1.6;
+// Starfall: the sky darkens and fills with stars, a shower streaks across
+// the stage, and the great star (more of them with each forging of the
+// Fallen Star) comes down on the target at STARFALL_LAND.
+const STARFALL_LAND = 1.1;
 // When a Comet (or a falling log) lands, and when the Nova bursts: the stage shakes then.
-const IMPACT = { comet: 0.34, nova: 0.18 };
+const IMPACT = { comet: 0.34, nova: NOVA_GATHER, starfallShow: STARFALL_LAND };
 
 const COLORS = {
   heal: ['#7dff9a', '#3ee08f', '#ffe14d', '#ffffff'],
@@ -462,20 +473,130 @@ const DRAW = {
     ctx.globalAlpha = 1;
   },
 
-  // The Nova's heart on the target: a white core swelling, then (once the
-  // white goes) a last ring of light and sparkles going out from it.
+  // The Nova. First the light is drawn in: the stage dims and streaks of
+  // light pour in from every side to a white core on the target. Then it
+  // bursts (the white-out is drawScreen's): rings go out across the whole
+  // stage, rays of light, and sparkles drifting down after.
   nova(ctx, e) {
-    if (e.t < NOVA_HOLD) {
-      const r = Math.min(1, e.t / NOVA_UP) * 70;
-      for (let k = 0; k < 4; k++) ring(ctx, e.x, e.y, r * (1 - k * 0.2), '#ffffff', 0.85);
+    if (e.t < NOVA_GATHER) {
+      const p = e.t / NOVA_GATHER;
+      ctx.globalAlpha = 0.45 * p;
+      ctx.fillStyle = '#0a0618';
+      ctx.fillRect(0, 0, STAGE_W, STAGE_H);
+      for (let i = 0; i < 26; i++) {
+        const a = rand(e.seed, i) * Math.PI * 2;
+        const start = rand(e.seed, i, 1) * 0.35;
+        const q = Math.max(0, Math.min(1, (p - start) / (1 - start)));
+        if (q <= 0) continue;
+        const d = (1 - q) * (180 + rand(e.seed, i, 2) * 60);
+        ctx.globalAlpha = 0.5 + q * 0.5;
+        const x = e.x + Math.cos(a) * d;
+        const y = e.y + Math.sin(a) * d * 0.7;
+        streak(ctx, x, y, x + Math.cos(a) * 16, y + Math.sin(a) * 11, i % 3 ? '#fff6dc' : '#ffffff');
+      }
+      ctx.globalAlpha = 1;
+      const r = 3 + p * 10 + Math.sin(e.t * 40) * 1.5;
+      ring(ctx, e.x, e.y, r, '#ffffff', 0.9);
+      ring(ctx, e.x, e.y, r * 0.55, '#fff6dc', 0.9);
+      plus(ctx, e.x, e.y, '#ffffff', 2);
       return;
     }
-    const after = e.t - NOVA_HOLD;
-    ctx.globalAlpha = Math.max(0, 1 - after / 1.3);
-    ring(ctx, e.x, e.y, 20 + after * 120, '#fff6dc', 0.8);
-    for (let i = 0; i < 16; i++) {
-      const a = (i / 16) * Math.PI * 2;
-      plus(ctx, e.x + Math.cos(a) * (14 + after * 70), e.y + Math.sin(a) * (14 + after * 55), i % 2 ? '#ffe14d' : '#ffffff', 1);
+    const after = e.t - NOVA_GATHER;
+    const fadeOut = Math.max(0, 1 - after / (e.life - NOVA_GATHER));
+    // Three shock rings out past the edges of the stage.
+    for (let k = 0; k < 3; k++) {
+      const t = after - k * 0.12;
+      if (t < 0) continue;
+      ctx.globalAlpha = Math.max(0, 1 - t / 1.1);
+      ring(ctx, e.x, e.y, 10 + t * (260 - k * 50), k === 1 ? '#ffe14d' : '#ffffff', 0.62);
+    }
+    // Rays.
+    ctx.globalAlpha = Math.max(0, 1 - after / 0.9);
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2 + 0.13;
+      const inner = 14 + after * 120;
+      streak(ctx, e.x + Math.cos(a) * inner, e.y + Math.sin(a) * inner * 0.7, e.x + Math.cos(a) * (inner + 40), e.y + Math.sin(a) * (inner + 40) * 0.7, i % 2 ? '#fff6dc' : '#ffffff', 1, PX * (i % 3 ? 1 : 2));
+    }
+    // Sparkles drifting down over everything.
+    for (let i = 0; i < 30; i++) {
+      const age = after - 0.25 - rand(e.seed, i, 3) * 0.4;
+      if (age < 0) continue;
+      ctx.globalAlpha = fadeOut * (Math.floor((e.t + i) * 12) % 3 ? 1 : 0.4);
+      const x = rand(e.seed, i, 4) * STAGE_W;
+      const y = rand(e.seed, i, 5) * STAGE_H * 0.8 + age * 22;
+      if (i % 4 === 0) plus(ctx, x, y, '#ffe14d');
+      else square(ctx, x, y, '#ffffff');
+    }
+    ctx.globalAlpha = 1;
+  },
+
+  // STARFALL: the sky goes dark and starry, a shower of falling stars
+  // streaks across the whole stage, then the great star (one more for every
+  // forging of the Fallen Star: `stars`) comes down on the target and bursts.
+  starfallShow(ctx, e) {
+    const big = Math.max(1, e.stars ?? 1);
+    const land = STARFALL_LAND;
+    const dark = Math.min(1, e.t / 0.35) * Math.max(0, Math.min(1, (e.life - e.t) / 0.6));
+    ctx.globalAlpha = 0.42 * dark;
+    ctx.fillStyle = '#0c0a2a';
+    ctx.fillRect(0, 0, STAGE_W, STAGE_H);
+    // The star field, twinkling in.
+    for (let i = 0; i < 46; i++) {
+      const on = e.t - rand(e.seed, i) * 0.3;
+      if (on < 0) continue;
+      ctx.globalAlpha = dark * (Math.floor((e.t + rand(e.seed, i, 1)) * 7) % 4 ? 0.9 : 0.35);
+      square(ctx, rand(e.seed, i, 2) * STAGE_W, rand(e.seed, i, 3) * STAGE_H * 0.75, i % 5 ? '#fff6dc' : '#ffe14d');
+    }
+    // The shower: shooting stars across the stage, down and to the left.
+    const shower = 10 + big * 3;
+    for (let i = 0; i < shower; i++) {
+      const start = 0.3 + rand(e.seed, i, 4) * 0.6;
+      const p = (e.t - start) / 0.38;
+      if (p < 0 || p > 1) continue;
+      const x0 = 60 + rand(e.seed, i, 5) * (STAGE_W + 40);
+      const y0 = -10 + rand(e.seed, i, 6) * 30;
+      const x = x0 - p * 160;
+      const y = y0 + p * 120;
+      ctx.globalAlpha = 1 - p * 0.6;
+      streak(ctx, x + 22, y - 16, x, y, i % 2 ? '#ffd25e' : '#fff2a0');
+      plus(ctx, x, y, '#ffffff', 1);
+    }
+    // The great stars, the last one landing at STARFALL_LAND.
+    for (let k = 0; k < big; k++) {
+      const hit = land - (big - 1 - k) * 0.08;
+      const p = (e.t - (hit - 0.32)) / 0.32;
+      const ox = (k - (big - 1) / 2) * 12;
+      if (p < 0) continue;
+      if (p < 1) {
+        const x = e.x + ox + (1 - p) * 120;
+        const y = -20 + (e.y + 20) * p;
+        for (let j = 10; j >= 1; j--) {
+          ctx.globalAlpha = (1 - j / 11) * 0.9;
+          square(ctx, x + j * 6, y - j * 5, j < 4 ? '#ffffff' : j < 7 ? '#ffe14d' : '#ff8c1a', PX * 2);
+        }
+        ctx.globalAlpha = 1;
+        const arm = 3 + Math.min(big, 4);
+        plus(ctx, x, y, '#ffe14d', arm);
+        for (let d = 1; d <= arm - 2; d++) {
+          square(ctx, x - d * PX, y - d * PX, '#fff2a0');
+          square(ctx, x + d * PX, y - d * PX, '#fff2a0');
+          square(ctx, x - d * PX, y + d * PX, '#fff2a0');
+          square(ctx, x + d * PX, y + d * PX, '#fff2a0');
+        }
+        square(ctx, x - PX, y - PX, '#ffffff', PX * 2);
+        continue;
+      }
+      // Its burst.
+      const after = e.t - hit;
+      if (after > 0.8) continue;
+      ctx.globalAlpha = Math.max(0, 1 - after / 0.8);
+      ring(ctx, e.x + ox, e.y, 6 + after * 160, '#ffe14d', 0.7);
+      ring(ctx, e.x + ox, e.y, 4 + after * 100, '#ffffff', 0.7, 3);
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2 + k;
+        const d = after * (70 + rand(e.seed, i, 7 + k) * 60);
+        plus(ctx, e.x + ox + Math.cos(a) * d, e.y + Math.sin(a) * d * 0.7 + after * after * 50, i % 2 ? '#ffe14d' : '#9ad8ff');
+      }
     }
     ctx.globalAlpha = 1;
   },
@@ -519,14 +640,28 @@ export class SpellEffects {
   // Over everything: Nova's white-out.
   drawScreen(ctx) {
     let white = 0;
+    let gold = 0;
     for (const e of this.effects) {
-      if (e.kind !== 'nova') continue;
-      const w = e.t < NOVA_UP ? e.t / NOVA_UP : e.t < NOVA_HOLD ? 1 : Math.max(0, 1 - (e.t - NOVA_HOLD) / (NOVA_END - NOVA_HOLD));
-      white = Math.max(white, w);
+      if (e.kind === 'nova' && e.t >= NOVA_GATHER) {
+        const w = e.t < NOVA_UP ? (e.t - NOVA_GATHER) / (NOVA_UP - NOVA_GATHER) : e.t < NOVA_HOLD ? 1 : Math.max(0, 1 - (e.t - NOVA_HOLD) / (NOVA_END - NOVA_HOLD));
+        white = Math.max(white, w);
+      }
+      // Starfall's great star landing: a short warm flash.
+      if (e.kind === 'starfallShow' && e.t >= STARFALL_LAND) gold = Math.max(gold, 0.75 * Math.max(0, 1 - (e.t - STARFALL_LAND) / 0.2));
     }
-    if (white <= 0) return;
+    // (Dimmed, not lost, with LIGHTNING FLASHES turned down.)
+    const dim = Math.max(0.4, flashScale());
+    white *= dim;
+    gold *= dim;
+    if (white <= 0 && gold <= 0) return;
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
+    if (gold > white) {
+      ctx.fillStyle = `rgba(255, 246, 210, ${gold.toFixed(3)})`;
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      ctx.restore();
+      return;
+    }
     ctx.fillStyle = `rgba(255, 255, 255, ${white.toFixed(3)})`;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.restore();

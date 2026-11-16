@@ -1,0 +1,464 @@
+# THE ASH ROAD (Chapter 6, area 1): the bare seabed, the tideline, the buried road, the cinder
+# field, the black orchard, the open flats, the waystation, the drift cut and the town gate.
+# Burnt, quiet, lonely: ash lying like snow, the ground still smouldering in its cracks.
+# A section with `_ves` or `_bramble` on the end is what they say after it. (draft)
+
+[save_point]
+The crystal hums in the ash, small and steady. Ash settles on it and slides off.
+Your progress is saved.
+
+[gold_pouch_empty]
+An empty purse, stiff with ash.
+
+[ash_pouch]
+A purse, dropped long ago and drifted over. The leather has gone hard as bark.
+
+# --- The ash heaps and the wind post (src/overworld/ashRoad.js) ---
+[heap]
+A heap of soft grey ash, blown up against whatever stopped it.
+
+[heap_stuck]
+Ves gives it a gust. The ash only packs tighter: there's something right behind it.
+
+[heap_bramble]
+{determined}Bramble takes a huge breath and blows at it with everything he has. A very small amount of ash moves, mostly onto Bramble.
+
+[heap_no_ves]
+A heap of soft grey ash. With nothing to shift it but your boots, you'd be here till spring.
+
+[heap_ves_away]
+A heap of ash. Ves and her umbrella are somewhere else just now.
+
+[windpost]
+A post of the old road with a long rag tied to the top. The rag streams out, telling anyone who looks which way the wind is going.
+
+[windpost_reset]
+The rag drops, flutters, and swings round. The wind changes, lifts every heap of ash in the place, and lays it all down again where it was.
+The cracks the ash had smothered breathe out and glow.
+
+[crack]
+The ground has split here, and down in the split it is still burning, a hundred years on. The heat comes up off it in a shiver.
+
+[crack_ves]
+{smile}Fire hates ash. Ash is just fire that's given up.
+
+[crack_bramble]
+{worried}It's breathing. I don't like ground that breathes.
+
+# --- Things all along the road ---
+[cairn]
+A cairn of the old road: stones piled waist high, and on a stick at the top a red rag, faded to the colour of a scab. Someone put them up so the road could be found in the ash.
+
+[skull]
+A cow's skull, bleached white, lying where it's lain for a long time.
+
+[skull_bramble]
+{worried}Moo.
+
+[milestone]
+An old milestone. The miles cut into it have been worn by ash and wind until you could read them only with your fingers. They count down toward the north-east.
+
+[milestone_far]
+An old milestone, the first on the road. Under the soot there's a number, a long one, and a word that might once have been a town's name.
+
+[milestone_far_ves]
+{bored}A long number. I was hoping for a short one.
+
+[milestone_near]
+A milestone. The number on it is small now. Someone has scratched a little house beside it with a nail.
+
+[milestone_last]
+The last milestone. Where the number should be, there's nothing: the stone has been rubbed smooth by a great many hands.
+
+[milestone_last_bramble]
+{thinking}Nothing. Does that mean we're there?
+
+[ash_rock]
+Rock, black with old soot, the ash lying on every ledge of it.
+
+[ash_boulder]
+A boulder, charred on the side that faced the fire.
+
+[burnt_tree]
+A tree burnt black to its tips. It's still standing, out of stubbornness.
+
+[ash_post]
+The stump of a post. Whatever it held up has gone.
+
+[ash_shelf]
+A shelf of rock. You could get up there with a jump and a scramble.
+
+[rubble]
+A heap of burnt stone and a beam gone to charcoal. It was a wall once, or the end of one.
+
+[old_fire]
+A ring of stones round a cold black patch. Somebody camped here, a long time ago, and put their fire out carefully.
+
+[cart]
+A cart, burnt on its side. One wheel still points at the sky. It has turned a little in the wind, every day, for a very long time.
+
+# --- The bare seabed ---
+[seabed_slip]
+The old boat-slip runs down off the shore onto the sand. Cut into the head of it, worn nearly smooth, is the prow of a small boat.
+
+[seabed_slip_ves]
+{thoughtful}Somebody carved that on purpose. You don't do that for any old boat.
+
+[seabed_boat]
+A rowing boat, lying on its side where the sea left it. Weed has dried white on the keel.
+
+[seabed_boat_bramble]
+{worried}Should we put it back in?
+
+[seabed_boat_ves]
+{bored}Put it back in what, Bramble?
+
+[seabed_anchor]
+An anchor half sunk in the sand, its chain running off toward where the sea used to be.
+
+[seabed_rocks]
+Rocks the sea used to cover. The weed on them has gone crisp in the air.
+
+[seabed_sand]
+Wet sand, ribbed in long ripples all the same way. It gives a little underfoot.
+
+[seabed_pool]
+A pool the sea left behind. Something small and shelled is waiting in it for the tide.
+
+[seabed_boulder]
+A boulder with a ring of dead barnacles round its waist, where the water used to stop.
+
+# --- The tideline ---
+[tide_signpost]
+A signpost, charred. One arm points on along the road. The other hangs by a nail and points at the ground, which is honest of it.
+
+[tide_driftwood]
+A log the sea brought here, and then the fire found. It's black on top and pale underneath.
+
+# --- The black orchard ---
+[orchard_tree]
+A fruit tree, burnt black, still standing in its row. Whoever planted the rows had a good eye: they're straight even now.
+
+[orchard_stump]
+A fruit tree that didn't make it to standing. Just the stump, in its row.
+
+[orchard_cart]
+A fruit cart, left where it stopped. There are still baskets in it. There's nothing in the baskets but ash.
+
+[orchard_sign]
+A signpost by the orchard gate. The board is too burnt to read, but someone has painted a little apple on the post, and the apple has lasted.
+
+[orchard_shoot]
+A shoot, pushed up through the ash. It is green. It is the only green thing for as far as you can see in any direction.
+
+[orchard_shoot_bramble]
+{surprised}It's GREEN. Look! It's actually green!
+
+[orchard_shoot_ves]
+{smile}Don't tell anyone. It'll get mobbed.
+
+# --- The waystation ---
+[way_fire]
+A fire, long cold. The stones round it have been set back in their ring by someone who liked things tidy.
+
+[way_bench]
+A bench, scorched along its back. It's still a bench.
+
+[way_hook]
+A post by the old doorway, with an iron hook for a lantern. There's no lantern on it. The ash under the hook has been swept in a neat ring, as if one stood there until not very long ago.
+
+[way_hook_ves]
+{thoughtful}Somebody tidy came through here.
+
+[way_sign]
+A signpost. The arm pointing on along the road says something that ends in -ARTH. The rest has burnt off.
+
+[way_wall]
+The waystation's wall: stones blackened all one side, as if the fire came at it from the north-east and stopped to lean.
+
+[way_floor]
+Old cobbles, swept clean by the wind. People waited here for a coach once.
+
+# --- The town gate ---
+[farmhouse]
+A farmhouse, burnt to its walls. There's a gap in the end wall where its chimney stood.
+
+[farmhouse_after]
+A farmhouse, burnt to its walls. Its chimney is back where it belongs, with a little red glow low down in its hearth.
+
+[farmhouse_after_bramble]
+{grin}Night night.
+
+[town_gate]
+The gate of a town. Its arch stands up out of the ash, and behind it the ash is piled to the lintel, and on up the bank past the roofs. A board hangs across the arch on two chains. Its letters have burnt away.
+
+[roofs]
+Roofs, sticking up out of the ash bank like stones out of a river. One has a chimney pot.
+
+[ash_bank]
+Ash, piled higher than a house. Somewhere under it is a street.
+
+# ====================================================================================
+# THE LIFE PASS (14 November 2026): signs of old life, things to look at and poke. Bramble
+# speaks first, Ves answers. (draft)
+# ====================================================================================
+
+# --- Things all along the road ---
+[scarecrow]
+A scarecrow, burnt down to its post and its crossed arms. It has a sack for a head, with half a face stitched on. It guarded something once, and from the look of it, it's still on duty.
+
+[scarecrow_bramble]
+{worried}It's looking at me. Which half is looking at me?
+
+[scarecrow_ves]
+{bored}Half a face and no opinion. Walk on, Bramble.
+
+[wheel_sunk]
+A cart wheel, sunk to its hub in the ash. It looks as if it's waiting for the rest of the cart to come back.
+
+[wheel_sunk_bramble]
+{thinking}Is the cart under there?
+
+[wheel_sunk_ves]
+{bored}Dig if you like. I'll hold your coat.
+
+[barrel_plain]
+An old barrel, its staves burst, ash drifted in to the brim. Whatever it held is long gone. It's a very empty barrel.
+
+[barrel_plain_bramble]
+{grin}I'd like to be rolled down a hill in it.
+
+[barrel_plain_ves]
+{bored}There's no hill. And no, you wouldn't.
+
+[rag_cairn_bare]
+The little cairn, with its stick bare. Stones stay stones.
+
+# --- The rags (Bramble's errand): five cairns that aren't the road's own ---
+[rag_tide]
+A little cairn off the road, not one of the road's own. Somebody built it out of whatever was lying about and tied a scrap of red rag to a stick on top. It has faded to the colour of a scab, and it's just as stubborn.
+
+[rag_tide_bramble]
+{determined}Can I have it? Just the rag. The cairn can keep the stones.
+
+[rag_tide_ves]
+{bored}It's a rag on a stick, Bramble. Take it. {smile}Put the stones back as you found them.
+
+[rag_road]
+Another small cairn, off to the side of the road, with a red rag on a stick, faded nearly to nothing. It doesn't mark the way. It's the kind of thing you build when you're waiting for someone.
+
+[rag_road_bramble]
+{thinking}They put these up so nobody got lost. So if I take them all, and tie them together, it's a rope you can follow anywhere.
+
+[rag_road_ves]
+{thoughtful}A very long rope. {bored}Go on, then. Somebody ought to keep them.
+
+[rag_field]
+A cairn of black stones in the cinders, with a red rag stuck on top. It lifts a little in the heat off the ground, as if it were waving.
+
+[rag_field_bramble]
+{proud}Three! Ves, that's three now.
+
+[rag_field_ves]
+{smile}I'm very glad for you. I'm also keeping a count.
+
+[rag_orchard]
+A cairn at the edge of the orchard, a red rag on a stick. Somebody put it here to say that the apples were somebody's.
+
+[rag_orchard_bramble]
+{glee}Four. If I get the next one, it's a proper flag.
+
+[rag_orchard_ves]
+{bored}A flag of what, exactly?
+
+[rag_flats]
+A little cairn off the road in the open flats, with a rag on a stick. It would be easy to miss in a storm. It would be easy to miss in anything.
+
+[rag_flats_bramble]
+{determined}That's all of them, I think. It's all of them I could find.
+
+[rag_flats_ves]
+{thoughtful}Then keep them dry. Or dry-ish. {smile}Ash is dry.
+
+# --- The bare seabed ---
+[chimney]
+A chimney, standing all alone, as tall as a house with no house under it. The throat of it is black and cold as stone. You put your hand on it. It's only a chimney.
+
+[chimney_bramble]
+{worried}Do chimneys... wake up?
+
+[chimney_ves]
+{bored}Chimneys don't wake up, Bramble. They stand there. {thoughtful}Mostly.
+
+[orchard_board]
+A signboard, sunk to its knees in the ash. FRE.. APP... it says, and below that, smaller, ...ONE PENNY. Somebody has painted an apple on it, and the apple has lasted.
+
+[orchard_board_bramble]
+{glee}They'd have been so good, though.
+
+[orchard_board_ves]
+{bored}"Fresh." That's optimistic, even for a sign.
+
+[orchard_bell]
+A dinner bell on a post, gone green under the soot. Its rope has burnt to a knot, and the knot is shiny, worn smooth by hands.
+
+[orchard_bell_bramble]
+{thinking}Haddock had one like this by his door. He rang it every night and said the soup was ready.
+
+{grin}It never was.
+
+[orchard_bell_ves]
+{smile}It was always soup of some kind. {bored}Don't ring it. There's nobody left to come.
+
+[milestone_joke]
+A milestone. The miles have been worn off it, but somebody has scratched a line across the top with a nail: 4 MILES TO HEARTH. Under it, in a different hand: FEELS LIKE 40.
+
+[milestone_joke_bramble]
+{glee}Ha!
+
+[milestone_joke_ves]
+{smile}I'd have put 50.
+
+[storm_pack]
+A pack, half buried in the corner of the notch, its straps burnt to string. Inside, wrapped in cloth, perfectly dry: a bun. Black outside, sweet and warm inside. It's still good. You decide not to think about how.
+
+[storm_pack_bramble]
+{glee}A BUN!
+
+[storm_pack_ves]
+{bored}It's a hundred years old. {smile}...Which of us is going to try it?
+
+[storm_pack_empty]
+A pack, empty, half buried in the corner of the notch. It kept its bun a very long time.
+
+# --- The waystation ---
+[way_salvage]
+A scavenger's pile: pans, hinges, a coil of wire, a kettle lid. Everything on it has been wiped clean, so you can see what it is.
+
+[way_salvage_ves]
+{bored}Somebody who knows what things are worth.
+
+[way_trough]
+A long horse trough, where the coach teams drank. The ash lies across it, smooth as a frozen pond.
+
+# --- The drift cut ---
+[cut_toll]
+A toll board by the cut: TOLL, A PENNY A CART, TWO FOR A COW. COW has been crossed out and GOAT written over it, and then GOAT crossed out, and COW written back.
+
+[cut_toll_bramble]
+{grin}They had a very long argument.
+
+[cut_toll_ves]
+{bored}I can feel it from here.
+
+[cut_chair]
+A chair beside the cut, with a battered tin cup on the seat. Whoever sat here took the pennies. The cup's empty now, but it has a little dent where a coin was once thrown a bit too hard.
+
+[cut_chair_bramble]
+{thinking}Do you think they liked it? The sitting and the taking?
+
+[cut_chair_ves]
+{smile}Somebody has to sit. It's a position.
+
+[gate_mailbox]
+A letter box on a post, its little red flag still up. There's a letter in it, or the shape of one: a pale square, perfectly kept, in a drift of ash. It crumbles when you breathe on it.
+
+[gate_mailbox_bramble]
+{thinking}Should we write back?
+
+[gate_mailbox_ves]
+{bored}To a hundred-year-old letter. {smile}Go on. See if it answers.
+
+# --- R3D BEGIN (round 3 fun check, helper D) ---
+# (draft)
+
+[r3d_ash_seabed_shell]
+A shell as big as a hip bath, lying open like a book. The sand inside has been smoothed by a very long tide.
+
+[r3d_ash_seabed_shell_bramble]
+{grin}I could sleep in it. I'm sleeping in it.
+
+[r3d_ash_seabed_shell_ves]
+{bored}You'd be mistaken for a clam. Briefly.
+
+[r3d_ash_seabed_bottle]
+A corked bottle half in the sand, a roll of paper inside. In a careful hand: IS IT STILL RAINING? PLEASE WRITE BACK.
+
+[r3d_ash_seabed_bottle_bramble]
+{thinking}We could write back. We'd have to find the sea first.
+
+[r3d_ash_seabed_bottle_ves]
+{thoughtful}Leave it. Somebody's waiting on an answer, and it's a nice question.
+
+[r3d_ash_tideline_deckchair]
+A deckchair set up facing the dry seabed. The stripes were blue once. Somebody sat here a long time, waiting for the sea to come back.
+
+[r3d_ash_tideline_deckchair_bramble]
+{thinking}It's still pointed the right way.
+
+[r3d_ash_tideline_deckchair_ves]
+{thoughtful}Optimists have good chairs.
+
+[r3d_ash_tideline_castle]
+A sandcastle, baked hard as brick by the ash. A tiny flag sticks out of the tower: a shell on a stick.
+
+[r3d_ash_tideline_castle_bramble]
+{glee}It's still standing! It's the strongest castle in the world!
+
+[r3d_ash_tideline_castle_ves]
+{smile}It's the only one.
+
+[r3d_ash_buried_road_bundle]
+A bundle tied up in a blanket, the knot still tight. Someone dropped it and kept going.
+
+[r3d_ash_buried_road_bundle_bramble]
+{worried}Should we open it?
+
+[r3d_ash_buried_road_bundle_ves]
+{bored}It's socks. It's always socks.
+
+[r3d_ash_buried_road_cart]
+A hand cart with one wheel, still loaded: a sack of something grey, a rolled rug, an empty birdcage with its door open.
+
+[r3d_ash_buried_road_cart_bramble]
+{thinking}Why take a birdcage?
+
+[r3d_ash_buried_road_cart_ves]
+{thoughtful}So you'd know where the bird was safe.
+
+[r3d_ash_cinder_field_washing]
+A washing line with the washing still pegged on: three shirts, a sheet and one very small sock. Stiff as boards, grey as the sky.
+
+[r3d_ash_cinder_field_washing_bramble]
+{thinking}The sock's my size.
+
+[r3d_ash_cinder_field_washing_ves]
+{thoughtful}Somebody was on the last chore of a long day.
+
+[r3d_ash_cinder_field_tub]
+A wash tub on a stand, full to the brim with ash. When you stir it, it's soft as flour.
+
+[r3d_ash_cinder_field_tub_bramble]
+{glee}It's like snow, but it doesn't go away.
+
+[r3d_ash_cinder_field_tub_ves]
+{bored}That's the problem with it.
+
+[r3d_ash_orchard_casks]
+A cask rack, the casks stacked and the bungs in. One has CIDER, FIRST PRESSING chalked on its end, and a smiley.
+
+[r3d_ash_orchard_casks_bramble]
+{glee}Can we open it?
+
+[r3d_ash_orchard_casks_ves]
+{bored}It's been shut since before your grandmother.
+
+[r3d_ash_waystation_rota]
+A chore rota nailed to a post: SWEEPING, WATER, SOUP, HOPE. Someone's ticked the first three.
+
+[r3d_ash_waystation_rota_bramble]
+{worried}Who does HOPE?
+
+[r3d_ash_waystation_rota_ves]
+{thoughtful}Whoever's last in the queue.
+

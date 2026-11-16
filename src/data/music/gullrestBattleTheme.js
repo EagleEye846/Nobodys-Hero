@@ -304,7 +304,7 @@ export const GULLREST_BATTLE_THEME = {
   title: 'Shore Leave',
   bpm: 138,
   stepsPerBeat: 4,
-  volume: 1.3,
+  volume: 1.51,
 
   instruments: {
     // The lead: a solo fiddle, short and bowed hard.

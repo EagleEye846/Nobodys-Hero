@@ -63,3 +63,21 @@ That broken lever in the Old Seam. Grandad's grandad said the lever was fine. It
 # (draft)
 [repeat 2 after the_light_goes_up]
 Packing up. That's my hat, my other hat, my spare lamp, and Mum's letters. Mostly Mum's letters. It's a lot of hat for one mole.
+
+# --- THE LIFE PASS: his lost boot (found in the Flooded Drift's nook) ---
+
+[repeat 4]
+Don't suppose you've seen a boot? Left foot, brown, a great deal of character. I lost it in the spring, when the lake came up. It was never a very loyal boot.
+
+[repeat_ves 4]
+{smile}That explains the lopsided walk.
+
+[boot_back]
+Mattock squeaks, snatches the boot, and holds it to his chest like a baby. "My left! Oh, my left. Since spring I've been walking in circles. Sedge said I walk lopsided. I thought it was the hat."
+
+He pulls it on, stamps twice, and wobbles. "Wrong way round. Hold on." He swaps feet. "Better."
+
+Then he digs in the hat for a long time, and comes out with a brass pin with a tiny enamel mole on it. "For you. It's from my best hat. Don't tell the other hats."
+
+[boot_back_ves]
+{smile}It's the nicest thing anyone's given you today, isn't it.

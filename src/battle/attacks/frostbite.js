@@ -1,8 +1,8 @@
 import { defineBulletArt } from '../projectiles.js';
 
 // The Frostbite's attacks. It's a snowdrift that got up and walked, and it
-// wants a hug, so everything it does closes in on you: a drift of snow
-// sliding across the box with one hole in it, icicles growing from the top
+// wants a hug, so everything it does closes in on you: its arms, opening
+// round you for a hug you'd better step out of, icicles growing from the top
 // of the box until they let go, a snowball that gets bigger every time it
 // bounces, and a cold that frosts the box over from the edges in.
 //
@@ -58,6 +58,13 @@ defineBulletArt('frostChip', {
   palette: SNOW,
   radius: 1.5,
   frameSeconds: 0.08,
+});
+
+// One of Frostbite's mittens, at the end of an arm held open for a hug.
+defineBulletArt('frostMitten', {
+  frames: [['.ww..', 'wwWw.', 'wwwWw', 'WwwWS', '.WSS.', '..k..']],
+  palette: { ...SNOW, k: '#c0392b' },
+  radius: 2.5,
 });
 
 // A snowflake, turning as it falls.
@@ -221,31 +228,73 @@ class Frost {
 }
 
 export const FROSTBITE_ATTACKS = {
-  // A drift of snow slides across the box from one side, wall after wall,
-  // each with one hole in it, and the whole wall bobs up and down as it
-  // comes, taking the hole with it. Each hole is somewhere near the last.
-  frostDrift(box, density, { Shot, every, rand, clamp }) {
-    const fromLeft = Math.random() < 0.5;
-    const gapHalf = 11;
-    let gapY = null;
-    const wall = every(1.55, 1.85, (bullets, soul) => {
-      gapY = gapY === null
-        ? clamp(soul.y + rand(-8, 8), box.y + 16, box.y + box.h - 16)
-        : clamp(gapY + (Math.random() < 0.5 ? -1 : 1) * rand(10, 22), box.y + 16, box.y + box.h - 16);
-      const wobble = { amplitude: 7, frequency: rand(1.8, 2.6) };
-      for (let y = box.y + 2; y <= box.y + box.h - 2; y += 6) {
-        if (Math.abs(y - gapY) < gapHalf) continue;
-        bullets.push(new Shot({
-          x: fromLeft ? box.x - 4 : box.x + box.w + 4,
-          y,
-          vx: fromLeft ? 36 : -36,
-          warn: 0.3,
-          wobble,
-          art: 'frostClump',
-        }));
+  // "Hug?" Frostbite opens its arms round you: a ring of snow forms all the
+  // way round where you stand, open on one side, with its two mittens at the
+  // ends of the opening, and shuffles after you while its arms are open.
+  // Then the arms close in for the hug, the ring
+  // shrinking to nothing. Get out through the opening, between the mittens,
+  // before it closes. A hug that catches nobody puffs into snowflakes. Each
+  // hug opens a little narrower than the last.
+  frostHug(box, density, { Shot, rand }) {
+    const CLUMPS = 26;
+    const RADIUS = 34;
+    const WARN = 0.85;
+    const CLOSE = 1.35;
+    let hugs = [];
+    let count = 0;
+    let timer = 0.1;
+    const open = (bullets, soul) => {
+      const gap = Math.max(3, 5 - count);
+      count++;
+      const turn = rand(0, Math.PI * 2);
+      const pieces = [];
+      for (let i = 0; i < CLUMPS - gap; i++) {
+        // (The first and last pieces are the mittens.)
+        const end = i === 0 || i === CLUMPS - gap - 1;
+        const angle = turn + ((i + gap / 2 + 0.5) / CLUMPS) * Math.PI * 2;
+        const piece = new Shot({ x: soul.x + Math.cos(angle) * RADIUS, y: soul.y + Math.sin(angle) * RADIUS, warn: WARN, art: end ? 'frostMitten' : 'frostClump' });
+        bullets.push(piece);
+        pieces.push({ piece, angle });
       }
-    });
-    return { duration: 6.5, update: (dt, bullets, soul) => wall(dt, bullets, soul) };
+      hugs.push({ x: soul.x, y: soul.y, pieces, t: 0 });
+    };
+    return {
+      duration: 7.4,
+      update: (dt, bullets, soul) => {
+        timer -= dt;
+        if (timer <= 0) {
+          timer += 2.35;
+          open(bullets, soul);
+        }
+        for (const hug of hugs) {
+          hug.t += dt;
+          // While its arms are open it shuffles after you (C'mere!).
+          if (hug.t < WARN) {
+            const away = Math.hypot(soul.x - hug.x, soul.y - hug.y);
+            const step = Math.min(away, 70 * dt);
+            if (away > 0) {
+              hug.x += ((soul.x - hug.x) / away) * step;
+              hug.y += ((soul.y - hug.y) / away) * step;
+            }
+          }
+          const k = Math.min(Math.max((hug.t - WARN) / CLOSE, 0), 1);
+          // Slow to start, then the squeeze.
+          const r = RADIUS * (1 - k * k);
+          for (const { piece, angle } of hug.pieces) {
+            piece.x = hug.x + Math.cos(angle) * r;
+            piece.y = hug.y + Math.sin(angle) * r;
+          }
+          if (k < 1) continue;
+          hug.done = true;
+          for (const { piece } of hug.pieces) piece.life = 0;
+          for (let i = 0; i < 5; i++) {
+            const angle = (i / 5) * Math.PI * 2 + rand(-0.2, 0.2);
+            bullets.push(new Shot({ x: hug.x, y: hug.y, vx: Math.cos(angle) * 30, vy: Math.sin(angle) * 30, life: 0.8, harmless: true, art: 'frostFlake' }));
+          }
+        }
+        hugs = hugs.filter((hug) => !hug.done);
+      },
+    };
   },
 
   // Icicles grow down from the top of the box, a row at a time, each row

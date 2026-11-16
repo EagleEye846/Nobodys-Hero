@@ -36,6 +36,9 @@ export const THE_SKY_TURNS = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed. The sun going, the rain, the green sky and the flash are shown
+    // by the stage effects and the camera; only Haddock's, Ves's and Bramble's words and the one sight in the
+    // lightning are said.
     // The hero and Ves to the end of the pier's top row; Bramble hangs back
     // (it's very small): so the pier's bottom row is clear for Haddock.
     { do: 'walk', who: 'ves', to: { x: 21, y: 8 }, wait: false },
@@ -56,14 +59,14 @@ export const THE_SKY_TURNS = {
     { do: 'animate', who: 'haddock', animation: 'cf_haddock', speed: 0.5 },
     { do: 'face', who: 'bramble', dir: 'right' },
     { do: 'face', who: 'player', at: 'haddock' },
-    { do: 'say', who: 'haddock', text: '{laughing}Back way\'s got longer.' },
-    { do: 'say', who: 'haddock', text: '{proud}Hop in. Sit still. Don\'t touch the oars.' },
+    { do: 'say', who: 'haddock', text: '{laughing}Back way\'s got longer. Hop in. Sit still. Don\'t touch the oars.' },
+    { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
     { do: 'say', who: 'bramble', text: '{worried}...It\'s very small.' },
-    { do: 'say', who: 'ves', text: '{bored}It\'s a boat, Bramble. That\'s the entire idea.' },
+    { do: 'say', who: 'ves', text: '{proud}Boats are meant to be small, Bramble. ...Probably.' },
     { do: 'act', who: 'bramble', act: 'shiver' },
     { do: 'say', who: 'bramble', text: '{worried}A boat is just a bridge that\'s given up.' },
-    { do: 'wait', seconds: 0.4 },
-    { do: 'say', who: 'ves', text: '{smile}...That\'s not bad, actually.' },
+    { do: 'act', who: 'ves', act: 'hop', wait: false },
+    { do: 'say', who: 'ves', text: '{laughing}...That\'s not bad, actually.' },
     // Haddock walks the length of the pier and gets in: the empty boat becomes the rowing one.
     // (Down onto the bottom row, then along it, under the hero and Ves.)
     { do: 'face', who: 'player', dir: 'right' },
@@ -86,7 +89,8 @@ export const THE_SKY_TURNS = {
     // Bramble last, after a good long look at the water.
     { do: 'walk', who: 'bramble', to: { x: 22, y: 9 } },
     { do: 'face', who: 'bramble', dir: 'down' },
-    { do: 'wait', seconds: 0.7 },
+    { do: 'wait', seconds: 0.9 },
+    { do: 'act', who: 'bramble', act: 'shiver' },
     { do: 'face', who: 'bramble', dir: 'right' },
     { do: 'sound', name: 'whoosh' },
     { do: 'toss', who: 'bramble', to: { x: 25, y: 9 }, height: 12, bounces: 0 },
@@ -94,37 +98,32 @@ export const THE_SKY_TURNS = {
     { do: 'animate', who: 'bramble', animation: 'bramble_sit', speed: 1.4 },
     { do: 'face', who: 'player', dir: 'right' },
     { do: 'wait', seconds: 0.6 },
-    { do: 'say', who: 'boat', text: '{smile}Hold the sides. Round the point, and we\'ll see.' },
-    // Off along the pier's end and out to sea, in the sun.
+    // Off along the pier's end and out to sea, in the sun: Gullrest and its bunting shrink behind.
     { do: 'music', song: 'haddock' },
     { do: 'walk', who: 'boat', to: { x: 28, y: 10 }, keep: true },
     { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}It\'s moving. It\'s definitely MOVING.' },
-    { do: 'say', who: 'ves', text: '{bored}That\'s what they do.' },
+    { do: 'act', who: 'bramble', act: 'bounce', wait: false },
+    { do: 'say', who: 'ves', text: '{smile}Sit still. ...It\'s quite good, isn\'t it?' },
     { do: 'walk', who: 'boat', to: { x: 36, y: 10 }, keep: true },
-    { do: 'say', text: 'Gullrest shrinks behind you: a stripe of sand, a row of little red roofs, the bunting still flapping in the sun. The headland slides past on the left like a big sleeping animal.' },
     // The point. The sun goes; the first rain; the sky starts to turn.
     { do: 'music', song: null },
     { do: 'stage', sky: 0.4, dim: 0.06, rain: 0.35, seconds: 4 },
     { do: 'walk', who: 'boat', to: { x: 42, y: 10 }, keep: true },
-    { do: 'say', text: 'Round the point, and the sun goes.\n\nIt doesn\'t set. It just stops being there, like a hand closing. The first drops hit the water in ones and twos, as if somebody were counting.' },
-    { do: 'say', who: 'ves', text: '{thoughtful}...That\'s the cloud from the cliff.' },
+    { do: 'say', who: 'ves', text: '{surprised}...Is that the cloud from the cliff? It\'s got bigger.' },
     { do: 'say', who: 'boat', text: '{tired}Aye. Been sitting out there a good while. Don\'t look at it.' },
-    { do: 'say', who: 'ves', text: '{bored}Looking at it.' },
+    { do: 'say', who: 'ves', text: '{determined}Looking at it.' },
     // The rain comes on in earnest, and the sky goes the colour of a dark bottle.
     { do: 'stage', sky: 0.9, dim: 0.16, rain: 1.1, seconds: 5 },
     { do: 'walk', who: 'boat', to: { x: 44, y: 10 }, keep: true },
-    { do: 'say', text: 'The sea goes the colour of a dark bottle. Overhead the cloud rolls down into green, a low, sickly green like the inside of a pond, and the rain comes on in sheets.' },
+    { do: 'act', who: 'bramble', act: 'shiver', wait: false },
+    { do: 'wait', seconds: 1.2 },
     // One flash, and the thunder behind it.
-    { do: 'wait', seconds: 0.8 },
     { do: 'stage', bolt: true },
     { do: 'wait', seconds: 0.25 },
-    { do: 'say', text: 'For one frame the whole sea is white, and every wave stands still. Far off on the skyline, black against it: a tall, spiked tower.\n\nThen the dark comes down again, and the thunder after it.' },
-    // The thunder.
+    { do: 'say', text: 'In the flash, far off on the skyline, black against it: a tall, spiked tower.' },
     { do: 'quake', amount: 2, seconds: 0.4 },
     { do: 'act', who: 'bramble', act: 'startle', wait: false },
-    { do: 'say', who: 'bramble', text: '{worried}It\'s GREEN.' },
-    { do: 'say', who: 'ves', text: '{bored}And loud. Good to know.' },
+    { do: 'say', who: 'ves', text: '{cold}...Nobody said wet.' },
     { do: 'say', who: 'boat', text: '{determined}That\'s the Wrack, lad. Hold tight. I\'ll have you ashore.' },
     { do: 'wait', seconds: 1 },
     // The ride ends on the shingle of the Wrack Shore.

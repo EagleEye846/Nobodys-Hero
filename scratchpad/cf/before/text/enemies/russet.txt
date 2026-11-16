@@ -1,0 +1,69 @@
+# RUSSET
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/russet.js.
+
+[intro]
+A heap of leaves sits up, grins, and is a RUSSET!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+RUSSET's tail swishes. Leaves stick to it. It doesn't mind.
+
+RUSSET is watching your feet. It already knows where you're going to step.
+
+There's pie on RUSSET's whiskers. It's not saying where it got it.
+
+RUSSET flattens into the leaves and is almost gone. Almost. The tail gives it away.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Found you!
+
+Which pile?
+Which pile?
+
+Hee hee hee.
+
+Foxes can't talk,
+dude.
+
+You're it!
+
+The woodcutters
+leave the window open.
+It's practically
+an invitation.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/russet.js.
+[talk: Inspect]
+RUSSET - HP 280
+A fox the colour of the leaves, playing hide-and-seek with the whole forest. It's winning.
+
+[talk: Hide in the leaves]
+You burrow into a pile of leaves. RUSSET goes looking for you, very loudly, pretending it can't see your boots.
+
+[talk: Throw a stick]
+You throw a stick. RUSSET watches it go. It looks back at you, unimpressed.
+Then it goes and gets it anyway.
+
+[talk: Play dead]
+You flop over. RUSSET pokes you with its nose. It flops over too, to show you how it's really done.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+RUSSET dives into a leaf pile, and when the leaves settle it isn't in it. Or any of them.
+
+[pacified]
+RUSSET bows, play-style, bottom in the air, and darts off. You're it, apparently.
+
+# What Bramble says to it, on his turn (TALK).
+[bramble_talk]
+Bramble challenges RUSSET to hide-and-seek. RUSSET is already hiding. Bramble counts to ten anyway.
+
+Bramble tells RUSSET its tail is the best tail in the wood. RUSSET knows. It swishes it, smug.
+
+Bramble does his best fox noise at RUSSET. RUSSET looks deeply embarrassed for him.

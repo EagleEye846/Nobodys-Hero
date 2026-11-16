@@ -1,0 +1,88 @@
+# POWDER MONKEY: the gunner's boy of the Fair Return, ten or eleven years old in
+# a coat cut for a man, still running powder from the magazine to guns that
+# stopped firing a hundred years ago. Everything he does is slow to go off,
+# because he was told to be careful. The hero never speaks.
+# (draft: every line here)
+# Numbers (HP, damage, how much each TALK option calms him) live in
+# src/data/enemies/powder_monkey.js.
+
+[intro]
+A gunner's cap, pulled down over a child's eyes, and under it a coat far too big, and in one fist a smoking match. In the other arm, hugged to his chest, is a cannonball. A POWDER MONKEY!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+POWDER MONKEY holds the match at arm's length, the way he was told. It has burned down about an inch in a hundred years.
+
+The cannonball is too heavy for him. He hugs it as if it were something that might get cold.
+
+He looks at you, and at the guns, and at you. He is waiting for somebody to say fire.
+
+A thread of smoke goes up from the match and does not go anywhere.
+
+Smells of black powder, singed wool and the dark of a magazine.
+
+[flavor: low]
+POWDER MONKEY is wearing thin. The match is still lit. He is still being careful with it.
+
+[flavor: spareable]
+POWDER MONKEY has stopped watching the guns. He looks at you, and the match, and the cannonball, and notices how tired his arms are.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Powder!
+
+Mind the
+fuse!
+
+Is it
+time?
+
+Not till
+I'm told.
+
+Careful,
+careful.
+
+Coming
+through!
+
+Fire in
+the hole!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/powder_monkey.js.
+[talk: Inspect]
+POWDER MONKEY - HP 11800
+The gunner's boy of the Fair Return, still running powder. Kegs burst at the wall, a spark runs down the fuse to a keg, and the loaded guns all fire on the word. He's waiting to be told.
+
+[talk: Say fire]
+You say it, as gently as you know how, in a voice that sounds like someone who has the right: fire. POWDER MONKEY goes rigid. He looks at the match, and at the guns, and at you. Then, very carefully, he doesn't. He breathes out. He says, in a voice that has been waiting a long time, that he thought it would be louder.
+
+[talk: Take the match]
+You step in and put out your hand for the match. POWDER MONKEY hands it over like a man giving up a post. It is warm, and it weighs nothing, and the tip goes out by itself the moment you hold it. He looks at his empty fist and flexes it, and it shakes.
+
+[talk: Sit down beside him]
+You sit down on the deck beside him, and after a moment so does he, with his cannonball in his lap. Neither of you says anything. He leans, very slightly, against your arm, and it is as cold as a stone and about as heavy as a sleeping child.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+POWDER MONKEY drops the match and, for the first time in a hundred years, doesn't pick it up. He fades from the cap down, and the cannonball rolls off across the deck by itself.
+
+[pacified]
+POWDER MONKEY puts the match out on his boot, with great care, and sits down on his cannonball, and takes off his cap. He is very small without it. He nods, as if someone had finally given the order, and goes out like a spent fuse.
+
+# Ves's own TALK lines for him ({foe} is his name).
+[vesper_talk]
+Ves tells {foe} that nobody has said fire for a hundred years, so she is fairly sure it's over, and that he did very well. He says nobody told him. She says she's telling him.
+
+Ves asks {foe} how old he was. He says he is ten, nearly eleven. She says that's much too young to carry that much powder, and he says it was an honour.
+
+Ves tells {foe} to put the cannonball down and rest his arms. He says he's not allowed to put it down. She says he's allowed now. He doesn't believe her, but he puts it down.
+
+# Bramble's own TALK lines for him.
+[bramble_talk]
+Bramble tells {foe} that he's not frightened of fire. He is a little bit frightened of fire. {foe} looks at the match and says he is, too, and holds it further away.
+
+Bramble asks {foe} if he gets to go home when it's over. {foe} says he doesn't know. Nobody has said what happens after.
+
+Bramble offers {foe} half of a biscuit he is fairly sure was an apple. {foe} takes it in his match hand, so as not to drop the cannonball, and holds it very carefully, and does not eat it.

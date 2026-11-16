@@ -3,8 +3,8 @@ import { defineBulletArt } from '../projectiles.js';
 // The Sapling's attacks. It's a young tree spirit that only moves when
 // nobody's looking, so it fights like a tree that's cheating: seedlings that
 // creep up on you only while you're busy moving, branches that grow across
-// the box, roots that break up through the floor under your feet, and its
-// own leaves and seeds coming down.
+// the box, whole trees it grows up out of the floor to practise being a big
+// one, and saplings that are somewhere else every time you blink.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -35,14 +35,7 @@ defineBulletArt('sapShadow', {
   radius: 2,
 });
 
-// A crack in the floor, where a root's about to come up.
-defineBulletArt('sapCrack', {
-  frames: [['k.k.k', '.kBk.', 'kBkBk']],
-  palette: TREE,
-  radius: 2,
-});
-
-// A red leaf, see-sawing as it falls, and a winged seed spinning down.
+// A red leaf, see-sawing as it falls.
 defineBulletArt('sapLeaf', {
   frames: [
     ['.ll..', 'lgLl.', '.lLLk'],
@@ -52,14 +45,21 @@ defineBulletArt('sapLeaf', {
   radius: 1.8,
   frameSeconds: 0.3,
 });
-defineBulletArt('sapSpinner', {
-  frames: [['ll.....', 'lgl....', '.Llbk..', '...kbBk', '....kBk']],
-  palette: TREE,
-  radius: 2,
-  spin: 12,
-});
 
 const BARK = '#7a5436';
+
+// A sapling standing very still, in one pose and then another (a little
+// red-leaved tree with two dark knot eyes).
+defineBulletArt('sapPoseA', {
+  frames: [['.l.l.l.', 'lLlLlLl', '.lLlLl.', 'b.kbk.b', '.bbbbb.', '...b...', '...b...', '..b.b..']],
+  palette: TREE,
+  radius: 3,
+});
+defineBulletArt('sapPoseB', {
+  frames: [['..lll..', '.lLlLl.', 'lLlLlLl', '..kbk..', '.bbbbb.', 'b..b..b', '...b...', '..b.b..']],
+  palette: TREE,
+  radius: 3,
+});
 
 export const SAPLING_ATTACKS = {
   // Don't look away: seedlings come up round the edge of the box. They only
@@ -86,7 +86,7 @@ export const SAPLING_ATTACKS = {
       acorns.push({ x, y, t: 0.6, shadow });
     }, { first: 0.6 });
     return {
-      duration: 7,
+      duration: 8,
       update: (dt, bullets, soul) => {
         grow(dt, bullets, soul);
         drop(dt, bullets, soul);
@@ -142,7 +142,7 @@ export const SAPLING_ATTACKS = {
       }
     });
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
         grow(dt, bullets, soul);
         for (const fall of leafFalls) {
@@ -165,53 +165,111 @@ export const SAPLING_ATTACKS = {
     };
   },
 
-  // Roots: the floor cracks under you, and a moment later a root shoots up
-  // out of the crack. They come in threes, each a little ahead of where
-  // you're going.
-  sapRoots(box, density, { Line, Shot, every, rand, clamp }) {
+  // Growing up: it's practising being one of the big red trees. A trunk
+  // shoots up from the floor of the box (every other one right under you),
+  // and then its branches come out, one pair at a time, bottom to top, each
+  // showing first as a dotted line. When it's grown, it drops its leaves
+  // and pretends that never happened. Stand between the branches.
+  sapGrow(box, density, { Line, Shot, rand, clamp }) {
     const floor = box.y + box.h;
-    let last = null;
-    let drift = 0;
-    const root = every(0.42, 0.5, (bullets, soul) => {
-      // Lead you a little, the way you're going.
-      if (last) drift = clamp((soul.x - last) * 6, -14, 14);
-      last = soul.x;
-      const x = clamp(soul.x + drift + rand(-3, 3), box.x + 3, box.x + box.w - 3);
-      const warn = 0.6;
-      bullets.push(new Shot({ x, y: floor - 2, harmless: true, life: warn, art: 'sapCrack' }));
-      bullets.push(new Line({
-        x, y: floor, angle: -Math.PI / 2, length: rand(48, 66), thickness: 5, warn, life: 0.55, grow: 400, color: BARK,
-      }));
-    });
-    return { duration: 6, update: (dt, bullets, soul) => root(dt, bullets, soul) };
+    let t = 0;
+    let next = 0.1;
+    let planted = 0;
+    let events = [];
+    const at = (when, act) => events.push({ when, act });
+    const plant = (soul) => {
+      const x = planted++ % 2 === 0 ? clamp(soul.x + rand(-4, 4), box.x + 12, box.x + box.w - 12) : rand(box.x + 12, box.x + box.w - 12);
+      const height = box.h - 2;
+      const life = 3.6;
+      at(t, (bullets) => bullets.push(new Line({ x, y: floor, angle: -Math.PI / 2, length: height, thickness: 5, warn: 0.6, life, grow: 110, color: BARK })));
+      const tiers = [18, 40, 62, 75];
+      tiers.forEach((h, i) => {
+        const start = t + 0.7 + i * 0.4;
+        const reach = rand(24, 32);
+        for (const way of [-1, 1]) {
+          const angle = way < 0 ? Math.PI + 0.3 : -0.3;
+          at(start, (bullets) => bullets.push(new Line({
+            x, y: floor - h, angle, length: reach, thickness: 3, warn: 0.45, life: life - (start - t) - 0.15, grow: 90, color: BARK,
+          })));
+          // Its leaves drop off the branch tips when it's done.
+          at(t + 0.6 + life, (bullets) => {
+            const tip = { x: x + Math.cos(angle) * reach, y: floor - h + Math.sin(angle) * reach };
+            for (let k = 0; k < 2; k++) {
+              bullets.push(new Shot({ x: tip.x + rand(-3, 3), y: tip.y, vx: rand(-15, 15), vy: 10, gravity: 50, life: 2.2, art: 'sapLeaf' }));
+            }
+          });
+        }
+      });
+    };
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (t >= next && t < 7.5) {
+          next = t + 2.2;
+          plant(soul);
+        }
+        for (const event of events) {
+          if (event.when > t || event.done) continue;
+          event.done = true;
+          event.act(bullets);
+        }
+        events = events.filter((event) => !event.done);
+      },
+    };
   },
 
-  // Leaf fall: its crown shakes, and red leaves see-saw down all over the
-  // box. Every second or so a winged seed comes spinning down at you,
-  // faster, and steering a little.
-  sapLeaffall(box, density, { Shot, every, rand }) {
-    const leaves = every(0.16, 0.24, (bullets) => {
-      bullets.push(new Shot({
-        x: rand(box.x + 2, box.x + box.w - 2),
-        y: box.y - 3,
-        vx: rand(-6, 6),
-        vy: rand(22, 32),
-        wobble: { amplitude: rand(3, 6), frequency: rand(3, 5) },
-        life: 4,
-        art: 'sapLeaf',
-      }));
-    });
-    const seeds = every(0.9, 1.1, (bullets, soul) => {
-      const x = rand(box.x + 6, box.x + box.w - 6);
-      bullets.push(new Shot({
-        x, y: box.y - 3, vx: (soul.x - x) * 0.6, vy: 62, homing: { target: soul, turn: 0.7 }, life: 2.2, warn: 0.3, art: 'sapSpinner',
-      }));
-    }, { first: 0.5 });
+  // You blinked: a few saplings stand about the box, very still. Then, in
+  // the blink of an eye, they're all somewhere else, in a new pose, as if
+  // they'd been there all along (they shake a leaf or two loose doing it).
+  // Before each blink, a faint outline shows where each one will be: don't
+  // be standing there. One of them always fancies the spot you're on.
+  sapBlink(box, density, { Shot, rand, pointAwayFrom }) {
+    const COUNT = 4;
+    const CYCLE = 1.75;
+    const SHOW = 0.85;
+    let t = 0;
+    let trees = [];
+    let spots = null;
+    let cycle = -1;
+    const choose = (soul) => {
+      const chosen = [{ x: soul.x + rand(-3, 3), y: soul.y + rand(-3, 3) }];
+      while (chosen.length < COUNT) {
+        let p = pointAwayFrom(box, soul, 14, 8);
+        for (let tries = 0; tries < 10 && chosen.some((q) => Math.hypot(p.x - q.x, p.y - q.y) < 20); tries++) p = pointAwayFrom(box, soul, 14, 8);
+        chosen.push(p);
+      }
+      for (const p of chosen) {
+        p.x = Math.min(Math.max(p.x, box.x + 5), box.x + box.w - 5);
+        p.y = Math.min(Math.max(p.y, box.y + 6), box.y + box.h - 6);
+      }
+      return chosen;
+    };
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
-        leaves(dt, bullets, soul);
-        seeds(dt, bullets, soul);
+        t += dt;
+        const now = Math.floor((t + SHOW) / CYCLE);
+        if (now !== cycle && t < 9) {
+          // The outlines of where they'll be next.
+          cycle = now;
+          spots = choose(soul);
+          const pose = cycle % 2 ? 'sapPoseA' : 'sapPoseB';
+          for (const p of spots) bullets.push(new Shot({ x: p.x, y: p.y, harmless: true, warn: SHOW, life: 0, art: pose }));
+          spots.pose = pose;
+          spots.at = t + SHOW;
+        }
+        if (spots && t >= spots.at) {
+          // Blink.
+          for (const tree of trees) tree.life = 0;
+          trees = spots.map((p) => {
+            const tree = new Shot({ x: p.x, y: p.y, life: CYCLE + 0.05, art: spots.pose });
+            bullets.push(tree);
+            bullets.push(new Shot({ x: p.x, y: p.y - 3, vx: rand(-25, 25), vy: rand(-30, -15), gravity: 70, life: 1.6, art: 'sapLeaf' }));
+            return tree;
+          });
+          spots = null;
+        }
       },
     };
   },

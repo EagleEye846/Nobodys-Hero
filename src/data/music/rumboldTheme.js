@@ -301,7 +301,7 @@ const song = {
   title: 'The Resplendent Hour',
   bpm: 144,
   stepsPerBeat: 4,
-  volume: 1.15,
+  volume: 1.37,
 
   instruments: {
     // The jaw: a dry clack, and a high plucked tock on top of it.

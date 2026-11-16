@@ -36,6 +36,18 @@ export const ICONS = {
     '......###',
     '.......#.',
   ],
+  // A charm on a cord, with notches cut in it (the SPELLS screen: spell notches).
+  notch: [
+    '...#.#...',
+    '....#....',
+    '..#####..',
+    '.#######.',
+    '.#.###.#.',
+    '.#######.',
+    '.#.###.#.',
+    '..#####..',
+    '...###...',
+  ],
   // A drawstring bag.
   items: [
     '...###...',

@@ -11,6 +11,7 @@
 //   Y  snow pine (walk or hide behind) (solid)    Q  snowy boulder (solid)
 //   _  open sky (the view shows through) (solid)  b  low stone block (jump up onto it)
 //   B  tall stone block (jump onto it from a low block)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_BROKEN_SPAN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_broken_span',
@@ -107,6 +108,8 @@ export const VIGIL_BROKEN_SPAN = {
     // The far side, and a ring to rope down its cliff, back to the near side.
     { sprite: 'grapple_ring', x: 21, y: 10, grapple: true },
     { sprite: 'cairn', x: 9, y: 3, text: 'span_marker' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_broken_span'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -25,7 +25,7 @@ export const MOONJELLY = {
   feel: { hit: 'jelly', idle: 'motes', color: '#d8e4ff', defeat: 'pop', defeatAt: 1, exit: 'pop' },
   // The chapter 5 coast battle song (the Wrack Shore and Gullrest).
   music: 'coastBattleStorm',
-  maxHp: 10200,
+  maxHp: 8100,
   damage: 86,
 
   difficulty: { density: 1.65, speed: 1.50 },
@@ -37,9 +37,9 @@ export const MOONJELLY = {
 
   // Its attacks live in src/battle/attacks/moonjelly.js.
   patterns: [
-    { name: 'jelLash', weight: 3 },
-    { name: 'jelPulse', weight: 3 },
-    { name: 'jelBells', weight: 3 },
+    { name: 'jelSwim', weight: 3 },
+    { name: 'jelBloom', weight: 3 },
+    { name: 'jelGlow', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -50,7 +50,7 @@ export const MOONJELLY = {
     { name: 'Drift along', calm: 30 },
   ],
 
-  rewards: { exp: 2350, coins: 13 },
+  rewards: { exp: 2350, coins: 10 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'jelly_bell', chance: 0.4 }],

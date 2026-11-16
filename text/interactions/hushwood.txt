@@ -859,7 +859,7 @@ A sign at the glade's edge, painted carefully, a long time ago:
 
 HERE A STAR FELL. LET IT BE.
 
-Underneath, scratched much later: "or don't. it's been fifty years. it's not doing anything."
+Underneath, scratched much later: "or don't. it's been a hundred years. it's not doing anything."
 
 [starfall_sword]
 A dark stone in a scorched hollow, veined with pale light. Stuck into it, to the hilt: a sword of pale metal that isn't quite any colour.
@@ -878,7 +878,7 @@ The fallen star, dark and cold now, with a sword-shaped slot in it.
 Round the slot, the stone is chipped away in more than one place, as if bits of it broke off on the way down and went on without it.
 
 [starfall_brambles]
-Brambles, grown up thick all round the stone in fifty years, as if the wood wanted to keep it.
+Brambles, grown up thick all round the stone in a hundred years, as if the wood wanted to keep it.
 
 [starfall_gate]
 An old woodcutters' gate in the brambles, barred from the inside. Through the slats you can see a stone glowing, and something standing up out of it.
@@ -1137,3 +1137,417 @@ A nail in a shelf, and a small clean square on the wood where the page was pinne
 [backroom_leaf_bramble]
 {awed}Is it from a book? It's SO old. ...Mags just stuck it up and never told anyone?
 
+# --- THE LIFE PASS, round 2 (15 November 2026): the Hushwood's small things. (draft) ---
+# Sections are r3h_<room>_<thing>; a `_bramble` one is what he says if he's with you (he joins at the
+# Hollow Oak, so he isn't there in the first two rooms until you come back).
+
+[r3h_me_claws]
+Three long scratches down a dead trunk, each as long as your arm and higher than you can reach. The sap is still beading in them.
+
+[r3h_me_claws_bramble]
+{scared}That's... high. That's taller than Ma.
+
+[r3h_me_fur]
+A tuft of coarse dark fur caught on a bramble. It's longer than your hand, and it smells of wet bark and something burnt.
+
+[r3h_me_fur_bramble]
+{awed}Can I keep it? ...No. Can I touch it? ...It's still warm, Sword.
+
+[r3h_fr_teatin]
+A tin of tea left on a stump at lunchtime, lid pressed on and string tied round it. The label says CINDER'S, in a firm, cross hand.
+
+[r3h_fr_teatin_bramble]
+{thinking}That's Nan's tea. She'd NEVER leave her tea. She'd leave a leg first.
+
+[r3h_fr_teatin_gone]
+A bare stump, and a round ring in the moss where a tin sat.
+
+[r3h_fr_lunch]
+A lunch tin, lid off. A crust, a pickled onion, and a note: ROWAN, THIS IS NOT YOURS. Underneath, in pencil: It is now.
+
+[r3h_fr_lunch_bramble]
+{glee}That's MA'S writing! She NICKED it! She always says she never takes anything!
+
+[r3h_fr_coat]
+A woodcutter's coat hung on a peg and left. It still holds the shape of its owner's shoulders. A squirrel has been using the pockets for a larder.
+
+[r3h_fr_coat_bramble]
+{thinking}That's Uncle Dunn's. He's always taking it off because he's hot, and then putting it on because he's cold.
+
+[r3h_ho_fur]
+More of the coarse dark fur, snagged on a splinter at head height. Whatever it is, it goes round this oak a lot.
+
+[r3h_ho_fur_bramble]
+{worried}It likes this oak. That's... that's NOT good.
+
+[r3h_ho_log]
+A hollow log, full of old acorns and one extremely cross spider, who dares you to try it.
+
+[r3h_ho_log_bramble]
+{grin}Don't. She's got friends.
+
+[r3h_kg_sword]
+A stick sword stuck in the ground, and a tin lid on a stick for a shield. The lid is dented all over. Somebody's been practising on a tree, and the tree is winning.
+
+[r3h_kg_sword_bramble]
+{sly}That's not mine. It's a different boy's. He's called Not Me.
+
+[r3h_lp_logs]
+A stack of split logs, left to dry by somebody who meant to come back for them. A mushroom grows from the middle one, so it was a while ago.
+
+[r3h_lp_logs_bramble]
+{thinking}Ma stacks like that. Bark up, so the rain runs off. I know a LOT about logs.
+
+[r3h_lp_horse]
+A sawhorse with half a plank still on it. The sawdust has gone the colour of old butter.
+
+[r3h_lp_bucket]
+A wooden bucket on its side, a ring of dry mud where the water was. Little tracks lead into it and out again. Something went for a drink and left in a hurry.
+
+[r3h_lp_bucket_bramble]
+{worried}Those are my size. Those footprints. ...Huh. Smaller. A bit smaller.
+
+[r3h_lp_larder]
+A squirrel's larder: a heap of acorns under a root, each one tucked in so neatly it looks like they've been put to bed. Tucked in the middle, one is gold. It looks lucky.
+
+[r3h_lp_larder_bramble]
+{sly}We should not. ...We should. ...It's for luck. It's definitely for luck.
+
+[r3h_lp_larder_gone]
+A squirrel's larder, a little untidier than it was. The gold acorn's gone. You hope it forgives you.
+
+[r3h_tr_fort]
+A lean-to of sticks and sacking, a red scarf on a stick for a flag. There's a hole in the middle just big enough for one boy and one very serious plan.
+
+[r3h_tr_fort_bramble]
+{proud}My den. Nobody's allowed. ...You can look. But don't touch the stick on the left. It holds up everything.
+
+[r3h_tr_boots]
+A pair of boots, upside-down on two stakes to dry. They've been drying for years. Something is nesting in the left one.
+
+[r3h_tr_boots_bramble]
+{worried}Don't look in the left one. I did. It looked back.
+
+[r3h_tr_coat]
+A very small coat, patched in six places with six different cloths, hung on a very small peg. The pockets are sticky.
+
+[r3h_tr_coat_bramble]
+{sheepish}...It's not mine. It's my cousin's. He's smaller. And stickier.
+
+[r3h_ki_coat]
+Nan's second-best coat, on a peg, black to the elbows. The best one is on Nan.
+
+[r3h_ki_coat_bramble]
+{sheepish}Nan, if you're listening: I did NOT put a beetle in that pocket.
+
+[r3h_ki_bucket]
+A bucket of black water by the charcoal heap. The tide-line on the inside says it's been used for putting out fires, a lot of them, all small.
+
+[r3h_ur_fur]
+A tuft of dark fur on a root, and a long, deep gouge in the wood above it where something large squeezed through. The dust here hasn't settled.
+
+[r3h_ur_fur_bramble]
+{worried}It came THROUGH here. It's not that big, is it? It must fit. ...It fits.
+
+[r3h_ru_skis]
+A pair of skis, one a little shorter than the other, tagged FELL OFF THE MOUNTAIN. Underneath, in smaller writing: TOOK A WHILE.
+
+[r3h_ru_skis_bramble]
+{awed}Somebody went ALL the way down the mountain on those? ...Do you think they're okay?
+
+[r3h_sp_stone]
+A grindstone with a tin of oil beside it, and a stack of dull saw blades waiting their turn. They've been waiting for years.
+
+[r3h_wf_bracket]
+Shelf fungus on a fallen bough, pale and glowing, climbing a small distance and then thinking better of it.
+
+[r3h_qu_nest]
+A hollow log tucked in behind the last tree in the far corner. Inside, in a nest of dry grass, one very small feather the colour of dusk. It looks like it's been kept.
+
+[r3h_qu_nest_bramble]
+{awed}A real feather. Nobody's heard a bird in ages. ...Keep it somewhere safe, Sword.
+
+[r3h_qu_nest_gone]
+A hollow log with a small dry nest in the end of it. A feather's worth of dent in the grass.
+
+[r3h_sf_can]
+A battered watering can, set down beside the crater. A green shoot stands up out of its spout, and on the shoot, one small white flower. Somebody comes here to water the place. Nobody's here now.
+
+[r3h_sf_can_bramble]
+{thinking}Somebody's been looking after it. ...Who looks after a crater?
+
+[r3h_sf_dust]
+Fine pale dust on the ground that isn't dust. It's cold, and it settles when you stop looking at it, a little like snow, a little like a held note.
+
+[r3h_sf_dust_bramble]
+{awed}It's like the sky left some behind.
+
+[r3p_doll_found]
+A rag doll lying in the long grass outside the palisade, face up, arms out, one boot gone. Dropped at a run. It has the look of a thing someone went back for in their mind, every night, for years.
+
+[r3p_doll_found_bramble]
+{sad}...Somebody dropped her. And couldn't go back. Take her. Maybe there's somewhere she goes.
+
+[r3p_kennel]
+A dog kennel. BRUTUS, in careful letters over the arch. A chewed bowl at the door and a very long chain with nobody on the end of it.
+
+[r3p_kennel_bramble]
+{sad}...Was he a good boy? Say he was a good boy.
+
+[r3p_swing_special]
+A swing, moving a little, though there's no wind you can feel. The seat's worn pale by small people. Somebody's pushed it, not long ago, and gone.
+
+[r3p_swing_special_bramble]
+{worried}...Okay. Okay, that one's definitely moving. Nobody say anything.
+
+[r3p_den_tin]
+A biscuit tin full of marbles, lid off, every colour. Somebody's whole fortune. You take a handful. There's a note in the lid: PAID IN FULL (ONE MARBLE).
+
+[r3p_den_tin_bramble]
+{sheepish}Do we owe them a marble? ...We owe them a marble. Leave one.
+
+[r3p_den_jar]
+A jar of boiled sweets, still wrapped, shut with a cloth and string. At the bottom of the jar somebody has written 'EMERGENCY ONLY'. It seems like an emergency.
+
+[r3p_den_jar_bramble]
+{grin}It IS an emergency. Look at us.
+
+[r3p_red_shrub_0]
+A little tree of red leaves, no taller than you. It looks very proud of itself.
+
+[r3p_web_bush_0]
+A spiderweb strung across a bush, dew on every thread. The spider sits in the middle and is not impressed with you.
+
+[r3p_watering_can]
+A watering can on a doorstep, rusted to the colour of old pennies. Somebody here liked their plants. You think of home, and a gardener with a can very like it and a very long list of flowers.
+
+[r3p_stools_0]
+Two stools by a door, one taller than the other. Two lots of knees sat here.
+
+[r3p_grindstone_0]
+A grindstone with a crank, grooved by a hundred axe edges. It would still put an edge on a leaf.
+
+[r3p_eel_trap_0]
+A basket eel trap, woven tight, one end open. Whoever set it never came back to check. The eel has had a lovely fifty years.
+
+[r3p_eel_trap_0_bramble]
+{glee}Lucky eel!
+
+[r3p_cheese_0]
+A cheese under a glass dome. It's gone to stone, or to geology, it's hard to say. The label says: DON'T.
+
+[r3p_cheese_0_bramble]
+{glee}That's the oldest cheese in the WORLD.
+
+[r3p_horn_0]
+A signal horn with a rag stuffed in its mouth. Somebody stopped it from being blown. Somebody was very frightened of the sound.
+
+[r3p_horn_0_bramble]
+{worried}They didn't want it to hear.
+
+[r3p_rope_coil_0]
+A coil of rope, stiff with sap. It's been in more knots than you've had hot dinners.
+
+[r3b_me2_thorn]
+A thorn bush hung with strips of cloth, dozens, red and ochre and blue and grey. Each is knotted tight. Somebody tied each one on and whispered into it first.
+
+[r3b_me2_thorn_bramble]
+{awed}You whisper a wish and tie it on. Ma did it every year. ...I never found out what she asked for.
+
+[r3b_ho2_thorn]
+A thorn tree at the oak's foot, hung with cloth strips, the oldest gone grey as ash. At the bottom is a new one: a scrap of blue scarf, the knot tied by small, careful hands.
+
+[r3b_ho2_thorn_bramble]
+{sad}That one's mine. ...I wished for something. It's rude to say.
+
+[r3b_go2_thorn]
+A thorn tree leaning out over the gorge, hung with cloth strips. They flick in the updraught without a sound. Every one is tied facing the drop.
+
+[r3b_go2_thorn_bramble]
+{awed}They're wishing at the bottom. Why would you wish at the bottom?
+
+[r3b_go2_cairn]
+A cairn on the ledge, and a hat balanced on top, brim down. It's held there with a stone. It's been held there a long time.
+
+[r3b_go2_cairn_bramble]
+{sad}Somebody's hat. ...Somebody made sure it stayed.
+
+# hush_sawpit
+[r3b_sp2_shoes]
+A rack of shoes with felt tied round every sole, and a second rack of saw teeth with felt tied round every tooth. The woodcutters worked in a hush. You can see the effort.
+
+[r3b_sp2_shoes_bramble]
+{awed}Even the saw had socks.
+
+[r3b_no2_shrine]
+A shrine in the notch of an old stump: a candle, a button, a child's tooth, a note: FOR LUCK. KEEP.
+
+[r3b_no2_shrine_bramble]
+{sad}I'm not going to take the tooth.
+
+[r3b_no2_mouse]
+A mouse's door under the fox's old den. The mouse has chalked a rule of its own: RULE ONE. RUN.
+
+[r3b_no2_mouse_bramble]
+{glee}That's the best rule I've heard.
+
+[r3b_no2_jar]
+A jar of glow on a post, half-sunk in the leaf-litter. The mist makes it a green moon.
+
+[r3b_no2_jar_bramble]
+{awed}It's a moon. It's a tiny moon on a stick.
+
+# hush_sprung_trap
+[r3b_st2_bell]
+A bell in a trap-frame, the cord sprung and the felt still on. It was a warning bell. It was wrapped so it couldn't be a warning.
+
+[r3b_st2_bell_bramble]
+{worried}They set a trap that couldn't ring. ...That's not a trap. That's a hope.
+
+[r3b_st2_shoes]
+A rack of shoes with every sole felted, and a space on the rail the size of one pair. Somebody went out in a hurry in their good shoes.
+
+[r3b_st2_shoes_bramble]
+{sad}Not the good ones. Never go out in the good ones.
+
+[r3b_st2_thorn]
+A thorn tree with a white rag tied on every branch, all of them tied by the same hand. Somebody came alone, and wished many times.
+
+[r3b_st2_thorn_bramble]
+{sad}That's a lot of wishing for one person.
+
+# hush_windfall
+[r3b_wf2_shrine]
+A shrine at a corner of the walls: a felted candle, a clay bird, a thimble that held water once. It's long dry.
+
+[r3b_wf2_shrine_bramble]
+{thinking}Nobody's topped it up. That's fine. That's allowed.
+
+[r3b_wf2_jar]
+A jar of glow set where two walls meet, so you'd know the corner was a corner. It's the only way to tell, in the mist.
+
+[r3b_wf2_jar_bramble]
+{proud}A corner light! That's what I'd do.
+
+# hush_millrace
+[r3b_mr2_thorn]
+A thorn tree at the water's edge with cloth strips tied in the river-side branches. The mill-folk's wishes: for rain, for wheel-grease, for a quiet winter.
+
+[r3b_mr2_thorn_bramble]
+{thinking}A quiet winter. They got one, didn't they.
+
+[r3b_mr2_jar]
+A jar of glow on a mooring post at the race. The water takes the light and gives back a greener one.
+
+[r3b_mr2_jar_bramble]
+{awed}It's green on the water too! Look! Two jars!
+
+[r3b_mr2_bell]
+The mill bell, wrapped in felt. A mill with no bell to say the hour ends: the folk worked by the sun and the stomach.
+
+[r3b_mr2_bell_bramble]
+{sheepish}My stomach would have been a good bell.
+
+# hush_quiet
+[r3b_qu2_shrine]
+A shrine on the edge of the Quiet: the candle stub is the biggest you've seen. It's never been lit. A stone beside it is warm from the sun, and your hand wants to stay on it.
+
+[r3b_qu2_shrine_bramble]
+{sad}It's warm. Why's the rock warm? It's the Quiet.
+
+[r3b_qu2_thorn]
+A thorn tree at the Quiet's edge, with no cloth on it at all. Only the knots, left behind, where the strips were pulled off all at once.
+
+[r3b_qu2_thorn_bramble]
+{scared}Something took them. ...Or someone took them down. In a hurry.
+
+[r3b_qu2_jar]
+A jar of glow, the last on the path, its moss going pale from the cold. You're not sure it's meant to light anything now. It just marks where the lights stop.
+
+[r3b_qu2_jar_bramble]
+{worried}That's where the lights stop. ...Don't go further. ...Go further.
+
+# hush_clawed_bridge
+[r3b_cb2_shoes]
+A rack of felt shoes before the bridge, the last pairs in the wood. Somebody's lined them up toe to heel. Some of them are very small.
+
+[r3b_cb2_shoes_bramble]
+{sad}...They changed their shoes for the bridge. Of course they did.
+
+[r3b_cb2_thorn]
+A thorn bush by the bridge-foot, hung with a last wish or two. The newest strip is the colour of your sleeve. You check. It isn't yours.
+
+[r3b_cb2_thorn_bramble]
+{sly}Is it yours? It looks like yours.
+
+# hush_underroot
+[r3b_ur2_shrine]
+A shrine in a hollow of a root: a felted candle and a child's drawing of the sky, so the dark can know what it's missing.
+
+[r3b_ur2_shrine_bramble]
+{sad}That's for the dark. That's so nice.
+
+[r3b_ur2_stump]
+A root-house with a round door and a window lit green with glow-moss. Tiny curtains. Somebody's put out a doormat the size of a button.
+
+[r3b_ur2_stump_bramble]
+{glee}Somebody lives down here!
+
+# hollin_well
+[r3b_wl2_feast]
+A trestle table laid for a feast: forty plates, forty cups, a cake the size of a cartwheel gone to green velvet. Among the plates, a card in a careful hand: FOR THE HERO. WHEN HE COMES. (START WITHOUT HIM IF IT GETS LATE.)
+
+[r3b_wl2_feast_bramble]
+{sad}They put out all the good plates. ...Nobody started. Look, nobody started.
+
+[r3b_wl2_flowers]
+Wild flowers coming up through the cobbles in a line, as if the stones had been laid with a gap for them. Some days a town can't help having a garden.
+
+[r3b_wl2_flowers_bramble]
+{grin}They came up in a row! They're organised!
+
+[r3b_wl2_mouse]
+A mouse has made a house in an upturned bucket by the well, with a door cut in the side and a doormat made of a leaf.
+
+[r3b_wl2_mouse_bramble]
+{glee}A mouse in a bucket. That's so smart.
+
+# hollin_well_bottom
+[r3b_wb2_jar]
+A jar of glow-moss on a post by the well-bottom landing. Somebody lowered it down on a rope and left it, in case anyone fell, or anyone came down to find them.
+
+[r3b_wb2_jar_bramble]
+{worried}A light for whoever fell. ...That's what I'd do.
+
+[r3b_wb2_face]
+A chalk face on the wall with a big smile and an arrow pointing UP. Underneath, a child's writing: THIS WAY OUT. (WE THINK.)
+
+[r3b_wb2_face_bramble]
+{proud}That's the right way. I can read upside down.
+
+[r3b_bk2_flags]
+A bundle of spare flags, rolled tight, tied with string: WELCOME (SPARE). They never took them out. You leave them rolled.
+
+[r3b_bk2_flags_bramble]
+{sad}Spare welcome. They kept a spare.
+
+[r3b_mi2_stump]
+A mill-stump with a tiny door and a tin-lid roof. A thread of smoke would be rising if it weren't unlit.
+
+[r3b_mi2_stump_bramble]
+{sly}Is it a house? A tiny house?
+
+# hollin_lane
+[r3b_ln2_mouse]
+A mouse's door at the foot of a garden wall, a pea-pod for a doorbell. It's pulled shut, tightly.
+
+[r3b_ln2_mouse_bramble]
+{glee}Doorbell! Doorbell! No, don't.
+
+[r3b_ln2_shoes]
+A rack of felt shoes outside a garden gate, set out, in rows, for a long line of visitors. Not one pair's been moved.
+
+[r3b_ln2_shoes_bramble]
+{sad}Not one pair's been touched. They were all waiting for somebody to need them.
+
+# --- END THE LIFE PASS, ROUND 3 (r3b) ---

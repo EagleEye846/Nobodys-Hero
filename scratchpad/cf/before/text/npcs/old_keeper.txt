@@ -1,0 +1,78 @@
+# OLD KEEPER: a hooded figure with a lantern, in the west room of the Ruins.
+# He introduces himself in a cutscene when you arrive
+# (src/data/scenes/meetingTheKeeper.js), so these pick up from there.
+# Each entry (separated by a blank line) is one page of the textbox.
+
+# Said the first time you talk to them.
+[first]
+Ah, you came back to the light. Good. A lantern gets lonely, you know.
+
+That dummy in the east room was built to train heroes. Now it trains itself to hate them.
+
+If it attacks, don't just run from the bullets. Brushing close past them fills your spell power.
+
+The floating crystals are older than me. Touch one, and the Ruins will remember you.
+
+And up the hall, past me, is Moss.
+
+He is one of many merchants with a shop full of things meant for the Hero.
+
+{sly}Tell him the Keeper sent you. He may even give you a fair price.
+
+# Said every time after that.
+[repeat]
+The lantern still burns. That is enough for today.
+
+The others will say you are not the Hero. Let them talk.
+
+They have had a long time to decide what a Hero looks like.
+
+North of here is the Lantern Hall. Lately a moth has taken a liking to the light. A big one.
+
+# In Heralds' Rest, once he's met you on the Shoulder
+# (src/data/scenes/keeperOnTheShoulder.js): by the frozen fountain.
+[first after keeper_on_the_shoulder]
+There you are. You made it up the ice.
+
+{glee}I told them you would. They didn't believe me; they've been let down before.
+
+{sly}Lovely people, the heralds. A hundred years of practising a welcome. Don't tell them you're tired of it before they've finished.
+
+The old goat, Nan, remembers me. Don't let that worry you. I remember her too.
+
+The stairs go on from the Lookout. I'd rest first, if I were you. A proper bed, a proper sleep. The mountain will keep.
+
+{worried}And whatever you dream up here... it's only the thin air. Don't go looking for it when you wake.
+
+# Chapter 3: by the woodcutters' fire in the Pinefall, after he's told you
+# where the wind took Ves (src/data/scenes/keeperAtTheFire.js).
+[first after keeper_at_the_fire]
+The fire's warm. Sit as long as you like.
+
+South, through the turning wood. {sly}Mind the brambles. They're more patient than they look.
+
+[repeat after keeper_at_the_fire]
+{glee}Stay where the light can find you, little one. Under all this red, it's easy to lose.
+
+[repeat after keeper_on_the_shoulder]
+The fountain's lovely, isn't it. Frozen in the middle of giving.
+
+{sly}I know how it feels.
+
+Sleep at the inn before you go on. The soup, the beds. You won't find either above the clouds.
+
+{glee}Stay where the light can find you, little one. Up here, that's harder than it sounds.
+
+# On the Old Street in the dead city, by the lamp he lit
+# (src/data/scenes/keeperLightsALamp.js).
+[first after keeper_lights_a_lamp]
+Mind the boards in the forum. They'll take her weight, but not yours.
+
+{thoughtful}Strange place, this. Built for a Hero, and every lamp lit for him the night they thought he'd come.
+
+{sad}They burned all night. And the next. Then one by one they went out, and nobody had the heart to light them again.
+
+[repeat after keeper_lights_a_lamp]
+{glee}One more lit. It's slow work, but I've the time.
+
+Go on. Get her umbrella back.

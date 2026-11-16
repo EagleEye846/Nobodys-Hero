@@ -43,7 +43,7 @@ export const LANES_SLUICES = {
     '#,,,,,~~~~~~~~~~~.....,~~~~~~~~~~,,,,,,#',
     '#,,;,,~~~~~~~~~~~~~~~~~~~~~~~~~~~,,,,,,#',
     '#,,,;~~~~~~~~~~~~~~~~~~~~~~~~~x~~~~,;O,#',
-    '#xO,,,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~,,xx#',
+    '#xO,,,~~~~~~~~~~~~~~~~~~;;;~~~~~~~~,,xx#',
     '#WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW#',
     '########################################',
   ],
@@ -69,8 +69,8 @@ export const LANES_SLUICES = {
     '      ::::::::::                        ',
     '      ::xxx:::::                        ',
     '      :::::::;::::::::::                ',
-    '      ::x:x::::::::;;:::                ',
-    '      ::::::::::::::::::                ',
+    '      ::x:x::::::::;;::: ::             ',
+    '      :::::::::::::::::::::             ',
     '                                        ',
     '                                        ',
     ],
@@ -83,6 +83,8 @@ export const LANES_SLUICES = {
   doors: [
     { x: 0, y: 8, w: 1, h: 2, to: 'lanes_causeway', spawn: { x: 37, y: 8 } },
     { x: 39, y: 8, w: 1, h: 2, to: 'lanes_hamlet', spawn: { x: 2, y: 10 } },
+    // The doorway in the pool (low water only: its step is mud then, and water at high).
+    { x: 25, y: 14, w: 2, h: 1, to: 'secret_lanes_door', spawn: { x: 6, y: 8 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -100,6 +102,9 @@ export const LANES_SLUICES = {
     { sprite: 'sluice_gate', x: 20, y: 5, text: 'sluice_house' },
     // The drowned cottage's footings out on the bed, with a purse in what was the kitchen.
     { sprite: 'gold_pouch', x: 9, y: 13, text: 'sluice_pouch', gold: 90, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // A page of the Fair Return's log (optional, secret: the way to her fog bell), in a bottle stuck in the mud in the far
+    // north-east corner of the west basin, behind the sluice house: out of reach in the water at HIGH, walked to at LOW.
+    { sprite: 'gs_log_bottle', x: 22, y: 2, text: 'sluice_log_bottle', gives: 'log_page_2', notice: true, taken: { gone: true } },
     { sprite: 'c5_buoys_pile', x: 2, y: 14, text: 'sluice_buoys' },
     { sprite: 'c5_rope_coil', x: 22, y: 11, text: 'sluice_rope', walkable: true },
     { sprite: 'street_lamp', x: 17, y: 11, text: 'fork_lamp' },
@@ -123,7 +128,11 @@ export const LANES_SLUICES = {
     // a garden wall, a doorway with no house, a bean bed. Weed mats on top, the old lane's
     // walls on the bottom (flat ones in the west basin too, under the water or in the mud).
     { sprite: 'ln_sunk_wall_short', x: 24, y: 3, text: 'dress_sunk_wall' },
-    { sprite: 'ln_sunk_door', x: 25, y: 14, text: 'dress_sunk_door' },
+    // (2026-11-14) The doorway with no house round it is a way in: at LOW water a spit of mud runs out
+    // along the pool's south edge (row 15, x 24 to 26) to its step (at HIGH the step is a patch of
+    // shallows out in the pool, cut off), and through the open door is the
+    // parlour of a house that isn't there (secret_lanes_door). Its jambs stay solid (`solidSides`).
+    { sprite: 'ln_sunk_door', x: 25, y: 14, text: 'dress_sunk_door', walkable: true, solidSides: 5 },
     { sprite: 'ln_sunk_bed', x: 31, y: 13, text: 'dress_sunk_bed' },
     { sprite: 'ln_under_a', x: 25, y: 7, flat: true, walkable: true },
     { sprite: 'ln_under_b', x: 29, y: 15, flat: true, walkable: true },
@@ -132,6 +141,11 @@ export const LANES_SLUICES = {
     { sprite: 'ln_lily_mat', x: 29, y: 6, flat: true, walkable: true },
     { sprite: 'ln_lily_mat_b', x: 31, y: 11, flat: true, walkable: true },
     { sprite: 'ln_lily_small', x: 27, y: 2, flat: true, walkable: true },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_roof_ridge', x: 8, y: 10, text: 'lp_roof_ridge' },
+    { sprite: 'lv_chimney', x: 12, y: 4, text: 'lp_chimney_sl' },
+    { sprite: 'lv_sign_bakery', x: 1, y: 6, text: 'lp_sign_bakery' },
+    { sprite: 'lv_bench', x: 1, y: 13, text: 'lp_bench_sl' },
   ],
   tileTexts: { '#': 'lanes_rock', W: 'lanes_rock', '~': 'sluice_water', ';': 'sluice_ford', x: 'sluice_teeth', h: 'sluice_house', I: 'sluice_post', O: 'lanes_stone', F: 'fork_weed' },
 

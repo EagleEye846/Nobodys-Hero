@@ -440,6 +440,41 @@ function scree() {
   return g.rows();
 }
 
+// The far end of Merrow's flooded tunnel, in the cave's west wall (2 wide, 3 high): a low black
+// arch in the rock with the sea-water running out of it and spreading over the floor. Drawn flat,
+// so everyone wades past in front of it; the rock over the opening stands where the wall is.
+function tunnelMouth() {
+  const g = new Grid(32, 48);
+  // The rock over and beside the opening, banded like the cave's own face.
+  g.rect(0, 0, 32, 20, ROCK[1]);
+  for (let y = 0; y < 20; y += 4) g.rect(0, y, 32, 1, ROCK[0]);
+  g.rect(24, 12, 8, 24, ROCK[1]);
+  for (let y = 0; y < 36; y++) { g.set(31, y, ROCK[0]); g.set(30, y, ROCK[0]); }
+  for (let y = 12; y < 36; y++) g.set(24, y, ROCK[2]);
+  // The dark of the tunnel: a low arch, round at its right shoulder, black going back.
+  for (let y = 11; y < 40; y++) {
+    const shoulder = y < 17 ? Math.round(7 - Math.sqrt(Math.max(0, 49 - (17 - y) * (17 - y)))) : 0;
+    g.rect(0, y, 24 - shoulder, 1, y < 14 ? '#0c1418' : '#070d10');
+  }
+  // Wet streaks down the rock above it, and the lip of the arch catching a little light.
+  for (const x of [4, 10, 15, 20]) g.rect(x, 4 + (x % 5), 1, 7, ROCK[2]);
+  for (let x = 0; x < 19; x++) g.set(x, 11, ROCK[3]);
+  g.rect(0, 12, 23, 1, ROCK[2]);
+  // The water running out: shallows from the floor of the tunnel across the whole foot of it,
+  // bright streaks and foam where it spills, a dark patch of deep water just inside.
+  g.rect(0, 40, 32, 8, WATER[1]);
+  g.rect(0, 36, 25, 4, WATER[0]);
+  for (let x = 0; x < 32; x++) {
+    g.set(x, 40, WATER[2]);
+    if (x % 3 === 0) g.set(x, 43, WATER[2]);
+    if (x % 5 === 1) g.set(x, 46, SEA[2]);
+  }
+  for (const [x, y, w] of [[2, 38, 5], [11, 37, 7], [17, 41, 6], [4, 45, 6], [22, 44, 7], [27, 40, 4], [13, 47, 4]]) g.rect(x, y, w, 1, '#a8dcd8');
+  g.rect(24, 36, 8, 4, WATER[1]);
+  for (const [x, y] of [[25, 35], [29, 36], [26, 37]]) g.set(x, y, WEED[1]);
+  return g.rows();
+}
+
 // A heap of fallen rock (solid).
 function rockPile() {
   const g = new Grid(16, 16);
@@ -799,6 +834,7 @@ export const SD_PROP_SPRITES = {
   sd_stalagmites: stalagmites(),
   sd_slab: slab(),
   sd_scree: scree(),
+  sd_tunnel_mouth: tunnelMouth(),
   sd_rock_pile: rockPile(),
   sd_sea_rock: seaRock(false),
   sd_sea_rocks: seaRock(true),
@@ -835,6 +871,7 @@ export const SD_FOOTPRINTS = {
   sd_slab: 2,
   sd_sea_rocks: 2,
   sd_scree: 2,
+  sd_tunnel_mouth: 2,
   sd_glass_outcrop: 2,
   sd_weed_ledge: 2,
   sd_timbers: 2,

@@ -1,0 +1,21 @@
+# BT_DANCER_A: A glow-worm dancing at the square's party, glowing in time with the music and a little ahead of it.
+
+[first]
+Look at me! LOOK! I'm bright! I'm lit! I'm DANCING!
+
+*twirls, very slowly, because glow-worms are not fast*
+
+[repeat]
+I'd stop to talk but I'd miss the beat! I'd miss the whole BEAT!
+
+# (draft)
+[repeat 2]
+Watch this one! It's called The Lamp! *glows* That's it! That's the dance!
+
+# (draft)
+[repeat_ves 2]
+{bored}I could do that dance. {smile}It's mostly standing there.
+
+# (draft)
+[repeat 3]
+I've danced so long I've gone dim! Only a bit! Worth it!

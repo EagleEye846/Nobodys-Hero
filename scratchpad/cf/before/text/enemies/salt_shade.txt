@@ -1,0 +1,81 @@
+# SALT SHADE
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/salt_shade.js.
+
+[intro]
+A sou'wester rises out of the surf, and under it a long grey coat, and under that nothing but water, running. Two pale lights turn toward you. A SALT SHADE!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+SALT SHADE stands with its face to the sea. It has been waiting a long time to see a sail.
+
+Water runs down it, and out of it, and does not make a puddle.
+
+SALT SHADE coils its rope over an arm, a turn at a time, the way you would if you'd done it ten thousand times.
+
+It looks at you. It is not sure what you are, and is far too polite to ask.
+
+Smells of cold brine, tar and a very long wait.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+SALT SHADE is wearing thin. You can see the sea through it, and it is still watching for a sail.
+
+[flavor: spareable]
+SALT SHADE has turned from the sea to look at you. It seems to have decided what you are, and that it's all right.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Heave!
+
+Mind the
+line!
+
+...Is that
+the Dawn
+Maid?
+
+Stand by
+to catch.
+
+Tide's
+turning.
+
+Hold fast.
+
+...Are you
+a ship?
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/salt_shade.js.
+[talk: Inspect]
+SALT SHADE - HP 2200
+The ghost of a drowned sailor, still waiting for a ship. Signals in dots and dashes, his brine puddles dry into salt spikes, and he heaves the lead and hauls it home.
+
+[talk: Tap your wrist]
+You tap your wrist and point at his post: how long? SALT SHADE counts on its fingers, and loses its count, and starts again. He asks, politely, whether the war is still on. You do not have the heart.
+
+[talk: Take the rope]
+You step in and take the end of the rope from his hand. For a moment you are both pulling the same line, gently, and the water in him goes still. He nods, as if a watch had been handed over.
+
+[talk: Point at the tide]
+You point out to sea, where the water has begun, very slowly, to slide back off the posts. SALT SHADE lifts its head. All its life, and a good while after it, he has been waiting for someone to show him the tide turning, and the lights in his eyes go from pale to warm.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+SALT SHADE comes apart into bubbles, a coat's worth of them, each with a small lit window in it. They rise. The sou'wester drifts down and settles on the water, and floats away on a tide that wasn't running a moment ago.
+
+[pacified]
+SALT SHADE takes off its sou'wester and holds it to its chest. The water in it goes quiet. It bows low to you, to the sea, to a ship that isn't there, and fades, hat first, into the sound of the surf. The way is clear.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that he's done a fine watch, and that his ship is in. It isn't, and she knows it. {foe} straightens, and for a moment he is just a man at a rail.
+
+Ves asks {foe} to show her the knot. He does, slowly. She ties it, wrongly, on purpose. He is so relieved to correct her that he forgets to be dead.
+
+Ves sits down on a rock beside {foe} and says nothing for a good while, which is the right thing to say.

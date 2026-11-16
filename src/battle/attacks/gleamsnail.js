@@ -1,12 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
+import { Deco } from './coastKit.js';
 
 // The Gleamsnail's attacks. It's a slow, proud snail whose shell is a
-// cracked-open geode, so it fights with the crystals in it and the light
-// that goes through them: shards ringing out of the shell, a slime trail
-// (it's a snail; it can't help it), prismatic beams bent through its shell,
-// the whole shell rolling about the box with the snail tucked inside, and,
-// because it's house-proud, rows of tidy little crystals set out very neatly
-// and then knocked over one after another.
+// cracked-open geode, and the shell is its house, which it keeps very tidy:
+//   - Slime trail: it's a snail; it can't help it. The slime drags at you
+//     while crystals drop from the ceiling onto your column.
+//   - Rolling: it tucks in, and the whole shell comes ricocheting round.
+//   - Tidy: rows of little crystals set out very neatly, then knocked over
+//     like dominoes, nearest row first.
+//   - Washing day: three washing lines across the box, pulled along like a
+//     pulley. The lines don't hurt; the washing does. Socks leave room under
+//     them, sheets don't.
 //
 // It stands to the right of the box. Each attack is a factory
 // `(box, density, tools) => ({ duration, update })`; see dummy.js for the
@@ -226,52 +230,33 @@ function headingTracker() {
   return heading;
 }
 
-export const GLEAMSNAIL_ATTACKS = {
-  // Shards: crystals bud out of the floor near you, glint, and ring out in a
-  // burst of shards, a second ring turned half a step behind the first. Stay
-  // between the rays, then step across into the next ring's gap. (The buds
-  // keep a little way off you, and the second ring waits long enough for
-  // that step.)
-  snailShards(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let next = 0.25;
-    let count = 0;
-    let buds = [];
-    const ring = (bullets, at, turn) => {
-      for (let i = 0; i < 8; i++) {
-        const a = turn + (i / 8) * Math.PI * 2;
-        bullets.push(new Shot({ x: at.x, y: at.y, vx: Math.cos(a) * 48, vy: Math.sin(a) * 48, art: 'snailShard', life: 2.4 }));
-      }
-    };
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && count < 5 && t < 5) {
-          const a = rand(0, Math.PI * 2);
-          const d = rand(20, 30);
-          const at = { x: clamp(soul.x + Math.cos(a) * d, box.x + 8, box.x + box.w - 8), y: clamp(soul.y + Math.sin(a) * d, box.y + 8, box.y + box.h - 8) };
-          bullets.push(new Shot({ x: at.x, y: at.y, harmless: true, life: 0.8, art: 'snailGlint' }));
-          buds.push({ at: t + 0.8, pos: at, turn: rand(0, Math.PI / 4), second: false });
-          count++;
-          next = t + 1.05;
-        }
-        for (const bud of buds) {
-          if (t >= bud.at && !bud.fired) {
-            bud.fired = true;
-            ring(bullets, bud.pos, bud.turn);
-          }
-          if (t >= bud.at + 0.5 && !bud.second) {
-            bud.second = true;
-            ring(bullets, bud.pos, bud.turn + Math.PI / 8);
-          }
-        }
-        buds = buds.filter((bud) => !bud.second);
-      },
-    };
-  },
+// The washing: a sock, a shirt, a striped towel and a sheet, pegged at the top.
+const WASH = { p: '#8a6a3a', w: '#f6f2ea', W: '#cfc8bc', b: '#9cc8ff', B: '#5a8ad0', r: '#f48cc8', R: '#c0488e' };
+defineBulletArt('snailSock', {
+  frames: [['.p.p.', 'rrrrr', 'wwwww', 'rrrrr', 'wwwww', 'rrrrr', 'wwwww', 'rrrrr', 'wwwrrr', '.wwrrr']],
+  palette: WASH,
+  radius: 2.5,
+  hitbox: { w: 5, h: 10 },
+});
+defineBulletArt('snailShirt', {
+  frames: [['.p.....p.', 'bbbb.bbbb', 'bbbbbbbbb', 'bbBbbbBbb', 'bb.bbb.bb', 'b..bbb..b', '...bbb...', '...bbb...', '...bBb...', '...bbb...', '...bbb...', '...bbb...', '...BBB...']],
+  palette: WASH,
+  radius: 4,
+  hitbox: { w: 9, h: 13 },
+});
+defineBulletArt('snailTowel', {
+  frames: [['p.......p', 'rrrrrrrrr', 'rrrrrrrrr', 'wwwwwwwww', 'wwwwwwwww', 'rrrrrrrrr', 'RRRRRRRRR', 'wwwwwwwww', 'wwwwwwwww', 'rrrrrrrrr', 'RRRRRRRRR', 'wwwwwwwww', 'wwwwwwwww', 'rrrrrrrrr', 'rrrrrrrrr', 'r.r.r.r.r']],
+  palette: WASH,
+  radius: 4,
+  hitbox: { w: 9, h: 16 },
+});
+const sheet = ['p.....p.....p'];
+for (let i = 0; i < 20; i++) sheet.push(i % 7 === 3 ? 'wWwwwwwwwwwWw' : 'wwwwwwwwwwwww');
+defineBulletArt('snailSheet', { frames: [sheet], palette: WASH, radius: 6, hitbox: { w: 13, h: 21 } });
 
-  // Slime trail: a little snail crawls across the box leaving slime, and the
+export const GLEAMSNAIL_ATTACKS = {
+  // Slime trail: a little snail crawls across the box leaving slime (then
+  // another the other way, and a third), and the
   // slime drags at you (you move at half speed in it), while crystals drop
   // out of the ceiling onto your column (they follow you till the last
   // moment, and a pair fall together). Don't get stuck in it.
@@ -285,12 +270,12 @@ export const GLEAMSNAIL_ATTACKS = {
     const heading = headingTracker();
     const prev = { x: null, y: null };
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         heading.see(dt, soul);
         // Two crawlers, one each way, along your row.
-        if (started < 2 && t >= started * 2.5 + 0.1) {
+        if (started < 3 && t >= started * 2.5 + 0.1) {
           const right = started % 2 === 0;
           const y = clamp(soul.y + rand(-6, 6), box.y + 10, box.y + box.h - 8);
           const crawler = new Shot({ x: right ? box.x + box.w - 4 : box.x + 4, y, vx: right ? -32 : 32, harmless: true, art: 'snailCrawler', life: 3.4 });
@@ -318,9 +303,9 @@ export const GLEAMSNAIL_ATTACKS = {
         prev.y = soul.y;
         // Crystals fall on your column (it flashes first); a pair at a time,
         // every other drop, one either side of it.
-        if (t >= nextDrop && t < 5.6) {
-          nextDrop = t + 0.68;
-          const pair = Math.round(t / 0.68) % 2 === 0;
+        if (t >= nextDrop && t < 8.4) {
+          nextDrop = t + 0.9;
+          const pair = Math.round(t / 0.9) % 2 === 0;
           for (const shift of pair ? [-9, 9] : [0]) {
             const warn = 0.6;
             const line = new Line({ x: soul.x, y: box.y, angle: Math.PI / 2, length: box.h, thickness: 2, warn, life: 0, color: '#d8b0ff' });
@@ -342,69 +327,18 @@ export const GLEAMSNAIL_ATTACKS = {
     };
   },
 
-  // Prism: light through the shell. A beam of white light comes at the spot
-  // where you stand, and there it bends through the geode and splits into
-  // three colours that fan out (the whole bent path flashes first). Don't be
-  // where it bends.
-  snailBeams(box, density, { Shot, Line, rand, clamp }) {
-    let t = 0;
-    let next = 0.15;
-    let count = 0;
-    let beams = [];
-    const heading = headingTracker();
-    const COLORS = [['#ff6a8a', '#ff9ab0'], ['#7af0a0', '#b0ffc8'], ['#7ab0ff', '#b0d0ff']];
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        heading.see(dt, soul);
-        // The bend follows you while it warns, and settles just before.
-        for (const beam of beams) {
-          if (beam.lead.age >= beam.lead.warn - 0.22) continue;
-          const bend = { x: clamp(soul.x + heading.x * 0.3, box.x + 8, box.x + box.w - 8), y: clamp(soul.y + heading.y * 0.3, box.y + 8, box.y + box.h - 8) };
-          const angle = Math.atan2(bend.y - beam.from.y, bend.x - beam.from.x);
-          beam.lead.angle = angle;
-          beam.lead.length = Math.hypot(bend.x - beam.from.x, bend.y - beam.from.y);
-          beam.fan.forEach((line, i) => {
-            line.x = bend.x;
-            line.y = bend.y;
-            line.angle = angle + beam.swing + [-0.3, 0, 0.3][i];
-          });
-          beam.glint.x = bend.x;
-          beam.glint.y = bend.y;
-        }
-        beams = beams.filter((beam) => beam.lead.age < beam.lead.warn);
-        if (t < next || count >= 4 || t > 5) return;
-        count++;
-        next = t + 1.5;
-        const from = { x: box.x + box.w + 8, y: clamp(soul.y + rand(-28, 28), box.y + 4, box.y + box.h - 4) };
-        const bend = { x: clamp(soul.x, box.x + 8, box.x + box.w - 8), y: clamp(soul.y, box.y + 8, box.y + box.h - 8) };
-        const angle = Math.atan2(bend.y - from.y, bend.x - from.x);
-        const warn = 0.95;
-        const lead = new Line({ x: from.x, y: from.y, angle, length: Math.hypot(bend.x - from.x, bend.y - from.y), thickness: 3, warn, life: 0.5, color: '#ffffff', glow: '#c9a2ec' });
-        bullets.push(lead);
-        // Out the other side of the bend, split into three.
-        const swing = (Math.random() < 0.5 ? -1 : 1) * rand(0.35, 0.7);
-        const fan = [-0.3, 0, 0.3].map((spread, i) => new Line({ x: bend.x, y: bend.y, angle: angle + swing + spread, length: 90, thickness: 3, warn, life: 0.5, color: COLORS[i][0], glow: COLORS[i][1] }));
-        const glint = new Shot({ x: bend.x, y: bend.y, harmless: true, life: warn, art: 'snailGlint' });
-        bullets.push(...fan, glint);
-        beams.push({ lead, fan, glint, from, swing });
-      },
-    };
-  },
-
   // Rolling: it draws into its shell, and the shell comes rolling, ricocheting
   // off every wall of the box, a little faster each time, throwing shards
-  // back across the box from where it hit. A second shell follows the first.
+  // back across the box from where it hit. Two more shells follow the first.
   snailShell(box, density, { Shot, rand }) {
     let t = 0;
     let shells = [];
     let started = 0;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (started < 2 && t >= started * 2.6 + 0.1) {
+        if (started < 3 && t >= started * 2.6 + 0.1) {
           const start = { x: box.x + box.w - 8, y: box.y + rand(14, box.h - 14) };
           const aim = Math.atan2(soul.y - start.y, soul.x - start.x) + rand(-0.25, 0.25);
           const shell = new Shot({ x: start.x, y: start.y, vx: Math.cos(aim) * 50, vy: Math.sin(aim) * 50, bounce: true, warn: 0.75, art: 'snailShell', life: 4.4 });
@@ -447,7 +381,7 @@ export const GLEAMSNAIL_ATTACKS = {
     let set = false;
     let chimes = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         for (const chime of chimes) {
@@ -471,6 +405,69 @@ export const GLEAMSNAIL_ATTACKS = {
           // A glint on the first crystal, just before it goes over.
           chimes.push({ at: start - 0.55, x: dir === 1 ? box.x + 7 : box.x + 7 + 6 * 11, y: y - 18 });
         });
+      },
+    };
+  },
+
+  // Washing day: it carries its whole house about, so it does its washing
+  // wherever it is. Three washing lines run across the box, and the washing
+  // on them is pulled along, the top and bottom lines one way and the middle
+  // line the other, like a pulley. The lines themselves don't hurt; the
+  // washing does. Short socks leave room underneath, a sheet hardly any.
+  // Find the gaps, and slip between lines where the washing lets you.
+  snailLaundry(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const LINES = [box.y + 1, box.y + 27, box.y + 53];
+    const SPEED = 17;
+    const KINDS = [
+      { art: 'snailSock', w: 5, h: 10 },
+      { art: 'snailShirt', w: 9, h: 13 },
+      { art: 'snailTowel', w: 9, h: 16 },
+      { art: 'snailSheet', w: 13, h: 21 },
+    ];
+    let t = 0;
+    let hung = false;
+    // The washing waiting to come along each line: how far along it hangs.
+    const lines = LINES.map((y, row) => {
+      const items = [];
+      let along = rand(4, 14) - box.w;
+      while (along < box.w + SPEED * 8.4) {
+        const kind = KINDS[Math.floor(rand(0, KINDS.length))];
+        items.push({ kind, along });
+        // A gap after it, always wide enough to stand in.
+        along += kind.w + rand(12, 19);
+      }
+      return { y, dir: row % 2 === 0 ? -1 : 1, items };
+    });
+    return {
+      duration: 8.2,
+      update: (dt, bullets) => {
+        t += dt;
+        if (!hung) {
+          hung = true;
+          // The lines (harmless).
+          bullets.push(new Deco({
+            life: 8.2,
+            under: true,
+            paint: (ctx) => {
+              ctx.fillStyle = '#d8d0c0';
+              for (const y of LINES) ctx.fillRect(box.x, y, box.w, 1);
+            },
+          }));
+        }
+        // Peg each thing on as it comes up to the box. What's already in
+        // the box at the start flashes first.
+        const pulled = Math.max(0, t / density - 0.8) * SPEED;
+        for (const line of lines) {
+          for (const item of line.items) {
+            const off = item.along - pulled;
+            if (item.on || off > 16) continue;
+            item.on = true;
+            const x = line.dir < 0 ? box.x + box.w + off : box.x - off;
+            const warn = Math.max(0, 0.8 - t / density);
+            bullets.push(new Shot({ x, y: line.y + 1 + item.kind.h / 2, vx: line.dir * SPEED, warn, art: item.kind.art, life: 8.6 - t / density }));
+          }
+        }
       },
     };
   },

@@ -1,0 +1,22 @@
+# PELL: a quiet traveller in the inn, on his third night, one page into KNOTS FOR CLIMBERS. The life pass.
+
+[first]
+Shh. Page one-forty. It's the good bit. The knot gets tied.
+
+...Sorry. Pell. I came for the view, stayed for the soup, and I'm reading KNOTS FOR CLIMBERS because everyone else here is going up the mountain and I'd like to know what they're doing.
+
+You're going up, aren't you? You've got the look. The look of somebody who hasn't checked the weather.
+
+[first_ves]
+{bored}We've checked it. It's bad. It's always bad. That's the weather.
+
+[repeat]
+The bowline's the one that matters. A loop that doesn't slip. Rabbit comes out of the hole, goes round the tree, back down the hole. The rabbit's very good in the book. I'd trust him over most people.
+
+[repeat 2]
+Do you know why they built the village on the shoulder? Nobody does. A flat bit, I expect. Somebody was tired and said 'here'.
+
+I like that. Most of the world's built on 'here', if you look.
+
+[repeat 3]
+I've read the same page eleven times. It's not the knot. It's the picture beside it, of a hand on a rope. It's a very good hand. It's got more confidence than I have.

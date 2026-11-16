@@ -1,13 +1,18 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Ring, stillness } from './underShapes.js';
+import { Deco } from './coastKit.js';
 
 // The Gnawer's attacks. It's a blind, grey, mouse-ish thing with far too many
 // teeth that has been down in the Deep a very long time, and it has learned
-// to hear everything. So it closes its teeth in rows, throws chips of tooth
-// at wherever it last HEARD you (not where you are), gnaws up through the
-// floor, scatters bones, and screams, and the scream comes back off the
-// walls. Keep moving, keep quiet where you can, and don't stand where it
-// last heard you.
+// to hear everything:
+//   - Teeth: rows of teeth close on each other like jaws, with one gap.
+//   - Listening: chips of tooth thrown at wherever it last HEARD you.
+//   - The floor: it gnaws up through the floor where you are.
+//   - Teething: the box is its mouth. A tooth works loose, wobbles, and
+//     shoots across, and a new one grows in. The wobbly one goes next.
+//   - The scream: rings with gaps in them, and the walls scream back.
+// Keep moving, keep quiet where you can, and don't stand where it last
+// heard you.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. The attack's own clock (`t`) runs `density`
@@ -101,12 +106,12 @@ export const GNAWER_ATTACKS = {
     let cycles = [];
     let lastGap = -1;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         const real = dt / density;
         if (closes < 3 && t >= next) {
-          next = t + T(2.15);
+          next = t + T(2.5);
           // The gap is never where you are, but never more than a short run
           // away either: from the far wall you couldn't make it in time.
           let gap;
@@ -178,19 +183,19 @@ export const GNAWER_ATTACKS = {
       }
     };
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         const stood = still(dt, soul);
         if (!last) last = { x: soul.x, y: soul.y };
-        if (t < T(5.8) && t >= nextNoise && Math.hypot(soul.x - last.x, soul.y - last.y) > 7) {
+        if (t < T(6.8) && t >= nextNoise && Math.hypot(soul.x - last.x, soul.y - last.y) > 7) {
           nextNoise = t + 0.4;
           last = { x: soul.x, y: soul.y };
           bullets.push(new Shot({ x: soul.x, y: soul.y, harmless: true, life: 0.45, art: 'gnawEar' }));
           heard.push({ at: { x: soul.x, y: soul.y }, when: t + 0.35 });
         }
         // Still: its own heartbeat gives you away.
-        if (t < T(5.8) && stood > 0.5 && t >= nextBeat) {
+        if (t < T(6.8) && stood > 0.5 && t >= nextBeat) {
           nextBeat = t + 0.75;
           bullets.push(new Shot({ x: soul.x, y: soul.y, harmless: true, life: 0.45, art: 'gnawEar' }));
           heard.push({ at: { x: soul.x, y: soul.y }, when: t + 0.3 });
@@ -208,7 +213,7 @@ export const GNAWER_ATTACKS = {
   // The floor: it gnaws up through the floor of the box. A crack runs along
   // the floor where it's coming, and then a fang bursts up out of it, taller
   // each time, with crumbs of floor flying. First under you, then either
-  // side of you, then under you again, the biggest. A tooth comes down from
+  // side of you (twice), then under you again, and again, the biggest. A tooth comes down from
   // the roof over you each time too.
   gnawFloor(box, density, { Shot, rand, clamp }) {
     const T = (s) => s * density;
@@ -218,13 +223,13 @@ export const GNAWER_ATTACKS = {
     let next = 0.15;
     let fangs = [];
     let roofs = [];
-    const HEIGHTS = [14, 22, 22, 34];
+    const HEIGHTS = [14, 22, 22, 28, 34];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         const real = dt / density;
-        if (bites < 4 && t >= next) {
+        if (bites < 5 && t >= next) {
           next = t + T(1.45);
           const xs = bites === 1 || bites === 2 ? [soul.x - 16, soul.x + 16, rand(box.x + 8, box.x + box.w - 8)] : [soul.x, rand(box.x + 8, box.x + box.w - 8)];
           const reach = HEIGHTS[bites];
@@ -279,48 +284,10 @@ export const GNAWER_ATTACKS = {
     };
   },
 
-  // Bones: it keeps what it kills, and what it kills is a lot. Bones come
-  // flying in from its side and scatter all over the box, bouncing off the
-  // walls and floor, long bones tumbling, ribs, and a skull that rolls along
-  // the floor. They keep bouncing till they've had enough.
-  gnawBones(box, density, { Shot, rand }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = 0.1;
-    let count = 0;
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t < next || t > T(4.4)) return;
-        next = t + T(0.5);
-        const kind = count++ % 4;
-        // One in two, a bone drops from the roof right over you.
-        if (count % 2 === 0) {
-          bullets.push(new Shot({ x: Math.max(box.x + 5, Math.min(box.x + box.w - 5, soul.x + rand(-8, 8))), y: box.y - 4, warn: 0.5, vx: 0, vy: 18, gravity: 120, bounce: true, life: 3, art: 'gnawBone' }));
-        }
-        const fromLeft = count % 3 === 0;
-        const from = { x: fromLeft ? box.x - 4 : box.x + box.w + 4, y: box.y + rand(8, box.h - 30) };
-        if (kind === 3) {
-          // The skull: along the floor, rolling.
-          bullets.push(new Shot({ x: box.x + box.w + 4, y: box.y + box.h - 4, warn: 0.3, vx: -rand(34, 44), vy: 0, bounce: true, gravity: 40, life: 3.4, art: 'gnawSkull' }));
-          return;
-        }
-        for (let i = 0; i < 2; i++) {
-          bullets.push(new Shot({
-            x: from.x, y: from.y + i * 6, warn: 0.3,
-            vx: (fromLeft ? 1 : -1) * rand(36, 66), vy: -rand(10, 60), gravity: 150, bounce: true, life: 3.2,
-            art: kind === 1 && i === 1 ? 'gnawRib' : 'gnawBone',
-          }));
-        }
-      },
-    };
-  },
-
   // The scream: it opens its mouth to the right of the box and screams, and
   // the scream comes across the box as rings, each with a gap in it. Then the
   // walls give it back: an echo ring comes the other way a moment after, with
-  // a gap somewhere else. Four screams. Slip through the gaps.
+  // a gap somewhere else. Five screams. Slip through the gaps.
   gnawScream(box, density, { rand }) {
     const T = (s) => s * density;
     const mouth = { x: box.x + box.w + 12, y: box.y + box.h / 2 };
@@ -329,10 +296,10 @@ export const GNAWER_ATTACKS = {
     let next = 0.15;
     let echoes = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (screams < 4 && t >= next) {
+        if (screams < 5 && t >= next) {
           next = t + T(1.55);
           // A gap, but not the one straight at you: you have to move for it.
           const toYou = Math.atan2(soul.y - mouth.y, soul.x - mouth.x);
@@ -349,6 +316,91 @@ export const GNAWER_ATTACKS = {
           bullets.push(new Ring({ x: from.x, y: from.y, r: 3, grow: 40, thick: 2.2, warn: 0.4, life: 2.6, gap: { angle: gapAngle, width: 1.25 }, color: '#c8b888', glow: '#8c7c58', alpha: 0.85 }));
         }
         echoes = echoes.filter((echo) => !echo.done);
+      },
+    };
+  },
+
+  // Teething: the box is its mouth, a row of teeth along the roof and a row
+  // along the floor. A tooth works loose (it wobbles, blinking), then it
+  // falls out and shoots straight across the mouth, cracking on the teeth
+  // over there into chips that fly back, and a new one starts growing in
+  // its place. The wobbly one is always the next to go, and it's
+  // often the one over your head. Near the end they go in pairs.
+  gnawTeething(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const COLS = 7;
+    const W = box.w / COLS;
+    const colX = (c) => box.x + W * (c + 0.5);
+    const LOOSE = 0.5;
+    const GROW = 1.1;
+    // When each socket last lost its tooth (real seconds), for drawing.
+    const lost = { top: Array(COLS).fill(-9), bottom: Array(COLS).fill(-9) };
+    let t = 0;
+    let next = T(0.15);
+    let count = 0;
+    let started = false;
+    const cracks = [];
+    const fire = (bullets, row, c, now) => {
+      if (now - lost[row][c] < LOOSE + GROW) return false;
+      lost[row][c] = now + LOOSE;
+      const top = row === 'top';
+      bullets.push(new Shot({ x: colX(c), y: top ? box.y + 3 : box.y + box.h - 3, vy: top ? 135 : -135, warn: LOOSE, art: top ? 'gnawTooth' : 'gnawToothUp', life: 1 }));
+      // It cracks on the teeth across the mouth, and chips fly back.
+      cracks.push({ at: now + LOOSE + (box.h - 8) / 135, x: colX(c), y: top ? box.y + box.h - 4 : box.y + 4, up: top ? -1 : 1 });
+      return true;
+    };
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        const now = t / density;
+        if (!started) {
+          started = true;
+          // The gums and the teeth still in them (harmless), and the new
+          // ones growing back.
+          bullets.push(new Deco({
+            life: 8,
+            under: true,
+            paint: (ctx, d) => {
+              ctx.fillStyle = '#d8908c';
+              ctx.fillRect(box.x, box.y, box.w, 2);
+              ctx.fillRect(box.x, box.y + box.h - 2, box.w, 2);
+              for (const row of ['top', 'bottom']) {
+                for (let c = 0; c < COLS; c++) {
+                  const since = d.age - lost[row][c];
+                  if (since < 0 && since > -LOOSE) continue;
+                  const h = since >= 0 && since < GROW ? Math.round(1 + (since / GROW) * 3) : 4;
+                  const x = Math.round(colX(c)) - 2;
+                  ctx.fillStyle = '#c8b888';
+                  if (row === 'top') ctx.fillRect(x, box.y + 2, 4, h);
+                  else ctx.fillRect(x, box.y + box.h - 2 - h, 4, h);
+                }
+              }
+            },
+          }));
+        }
+        for (const k of cracks) {
+          if (k.done || now < k.at) continue;
+          k.done = true;
+          for (const a of [-0.6, 0.6]) {
+            const dir = (Math.PI / 2) * k.up + a;
+            bullets.push(new Shot({ x: k.x, y: k.y, vx: Math.cos(dir) * 40, vy: Math.sin(dir) * 40, art: 'gnawChip', life: 0.8 }));
+          }
+        }
+        if (t < next || now > 6.6) return;
+        next = t + T(now > 4.6 ? 0.5 : 0.32);
+        count++;
+        const mine = Math.min(COLS - 1, Math.max(0, Math.floor((soul.x - box.x) / W)));
+        if (now > 4.6) {
+          // A pair: one from the roof, one from the floor, side by side.
+          const c = Math.min(COLS - 2, Math.max(0, mine - Math.floor(rand(0, 2))));
+          fire(bullets, 'top', c, now);
+          fire(bullets, 'bottom', c + 1, now);
+          return;
+        }
+        const row = count % 2 ? 'top' : 'bottom';
+        const c = Math.random() < 0.55 ? mine : Math.floor(rand(0, COLS));
+        if (!fire(bullets, row, c, now)) fire(bullets, row, Math.floor(rand(0, COLS)), now);
       },
     };
   },

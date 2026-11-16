@@ -56,7 +56,7 @@ me.
 # TALK options in src/data/enemies/fiddler.js.
 [talk: Inspect]
 FIDDLER - HP 1200
-A blind cave cricket that fiddles with its leg. It hears you, not sees you. Notes, strings and feelers, and leaps down on the sound of your feet. Move, and mind the echoes.
+A blind cave cricket that fiddles with its leg. It hears you, not sees you. Strings, feelers and phrases, and it plays your own footsteps back at you. Move on, and don't double back.
 
 [talk: Applaud]
 You clap, softly, three times. FIDDLER freezes. Then it bows so low its feelers touch the floor. It says nobody has ever clapped. They mostly ran. It plays an encore, with its whole heart.

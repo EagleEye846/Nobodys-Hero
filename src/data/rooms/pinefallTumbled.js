@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE TUMBLED STONES: a clearing cut in two by a bramble hedge, with a gate
 // in it that has no lever: its rope runs under the ground to a stone plate
 // in a pen of bramble. There's one mossy rock in the pen. Push it onto the
@@ -67,6 +69,7 @@ export const PINEFALL_TUMBLED = {
     { sprite: 'rock_stump', x: 13, y: 11, text: 'rock_stump', rockReset: true },
     { sprite: 'stone_button', x: 10, y: 9, text: 'stone_plate', button: 'plate' },
     { sprite: 'push_rock', x: 7, y: 9, text: 'push_rock', rock: true },
+    ...(R3P_PROPS['pinefall_tumbled'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'pen_hedge', b: 'pen_stump' },
 

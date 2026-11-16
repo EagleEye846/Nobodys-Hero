@@ -8,7 +8,7 @@
 // and the fight. Spared, `gulper_spared`; beaten, `gulper_beaten`. Both give the Gulper Tooth.
 // He stays in the bell afterwards (a prop playing `mw_gulper_doze` or `mw_gulper_snore`: the same bell, same size and place, with him in it).
 // The way on is the breach in the seaward (east) wall, x 29, rows 8-9, to merrow_sea_gate.
-// No monsters (the boss room). The fight has its own song (pirateBattle) and backdrop.
+// No monsters (the boss room). The fight has its own song (oldGulperBattle, "Long in the Tooth") and backdrop.
 // Tile key (see src/overworld/coastTiles.js, merrow):
 //   #  masonry (solid)   W  dressed stone face (solid)   :  flagstones (dry)   .  the porch step
 //   ;  the flooded floor (walk)   ~  the holes in the floor, deep (solid)

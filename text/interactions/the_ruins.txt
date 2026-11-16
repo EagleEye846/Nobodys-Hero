@@ -108,3 +108,79 @@ A block of old stone, about knee-high. You could jump up onto it.
 
 [tall_block]
 A tall block of stone, too high to jump onto from the floor. Something lower might get you halfway.
+
+# ---- THE LIFE PASS (chapter 1, Ruins) BEGIN ----
+# Set dressing and small things in the Ruins (round 2 of the life pass, 15 Nov 2026). (draft)
+
+# ruins_entrance
+
+[r1_en_column]
+A fallen column, snapped in two. Someone has used it as a bench, and someone else as a bed for moss. The moss won.
+
+[r1_en_urn]
+A cracked urn with a fern in it. The fern is delighted about the crack.
+
+[r1_en_bench]
+A stone bench, worn into a hollow by a great many people sitting down to think about it.
+
+[r1_en_stash]
+A mouse's treasury behind a heap of rubble: bottle caps, shirt buttons, a bent spoon and one real coin, all sorted by size.
+
+You take only the coin. A very small voice, somewhere, says nothing, loudly.
+
+# lantern_hall
+
+[r1_lh_stump]
+The stump of a pillar, broken off at the knee. Ivy has moved into it as if it was always going to.
+
+[r1_lh_column]
+A fallen pillar, lying where it fell. Somebody has swept carefully round it, every day, for years.
+
+[r1_pi_hamper]
+A picnic hamper tied with a ribbon, tucked into the corner where the pillars throw their shadow. A card on the lid:
+
+OPEN ON ARRIVAL. (IT'S FINE. NOBODY MINDS.)
+
+You open it. The flask inside is still sealed.
+
+[r1_pi_column]
+A pillar that lay down for a rest a long time ago. The floor has grown round it, a little.
+
+[r1_pi_stump]
+Another broken pillar. They'll all be like this one day. The tall ones know it. You can tell by how they stand.
+
+[r1_pi_helm]
+An old helmet, a daisy growing out of it. Somebody has left it standing up straight, as if it might still be wanted.
+
+[r1_pi_candles]
+Candle stubs in a saucer, burning in the corner of a very empty room. Somebody likes to leave a light on for whoever's next.
+
+[r1_fl_can]
+A second watering can, left by the beds, nearly full. A bee is using it as a hot tub.
+
+[r1_fl_trug]
+A trug of gloves and a trowel. The gloves are so worn they've taken the shape of a hand holding a flower.
+
+[r1_fl_barrel]
+A barrel brim-full of rainwater, which is odd indoors. You let it be odd.
+
+[r1_fl_button]
+A small brass button, lying at the edge of the pool, shining like it wants to be found.
+
+# way_out
+
+[r1_wo_cups]
+Tin cups lined up on a ledge, three to a row. Each one has a dried ring of soup in the bottom.
+
+[r1_wo_bench]
+A stone bench halfway along, for people who needed to think about it. The seat is worn in two places.
+
+[r1_wo_stump]
+A pillar stub, broken off short. It keeps the corridor honest.
+
+[r1_en_stash_gone]
+The treasury, minus one coin. The rest is arranged with great dignity.
+
+[r1_pi_hamper_gone]
+The hamper, empty, with its card still on the lid. It looks pleased to have been opened.
+# ---- THE LIFE PASS (chapter 1, Ruins) END ----

@@ -116,7 +116,7 @@ KIND.
 # TALK options in src/data/enemies/dowager_crab.js.
 [talk: Inspect]
 DOWAGER CRAB - HP 7600
-A hermit crab in a bathtub, in pearls. Blows bubbles, tolls her bell, snips her claws and shies ducks. When she loses patience the bath water comes out too. She is not a bully. She is a hostess whose house has been entered. Manners work on her.
+A hermit crab in a bathtub, in pearls. Inspects your feet (stay on the mat), dances a minuet with her claws, and her pearls come back the way they rolled. When she loses patience the bath water comes out too. Manners work on her.
 
 [talk: Wipe your feet]
 You drag one boot across the shingle, then the other, and then both again, slowly, where she can see. DOWAGER CRAB leans out of the tub to check. "Thank you," she says, as if it hurt. The monocle drops a little.

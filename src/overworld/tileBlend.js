@@ -34,6 +34,7 @@ import { coastBlendLook, coastIndoorLook, wetOverBuilt } from './coastTiles.js';
 import { sunnyBlendLook } from './brightTiles.js';
 import { caveBlendLook } from './caveBlend.js';
 import { ch3BlendLook } from './ch3Blend.js';
+import { ashBlendLook } from './ashTiles.js';
 import { TILES, floorUnder } from './tileset.js';
 
 const WALL_LETTERS = '#WVHKkG5678awehM';
@@ -176,7 +177,7 @@ function put(d, i, c) {
 // The coast's look, or Sunnyside's (its grass, lane, flagstones, brook and hedges), or
 // indoors on the coast (faint wear on the floor and shadow along the walls only), or
 // Chapter 4 underground (caveBlend.js), or Chapter 3's wood, drains, marsh and dead city (ch3Blend.js).
-const blendLook = (room) => coastBlendLook(room) ?? sunnyBlendLook(room) ?? coastIndoorLook(room) ?? caveBlendLook(room) ?? ch3BlendLook(room);
+const blendLook = (room) => coastBlendLook(room) ?? sunnyBlendLook(room) ?? coastIndoorLook(room) ?? caveBlendLook(room) ?? ch3BlendLook(room) ?? ashBlendLook(room);
 
 export function blendTiles(ctx, room) {
   const look = blendLook(room);
@@ -751,10 +752,74 @@ export function blendTiles(ctx, room) {
           if (pix.every(([dx, dy]) => ground(sx + dx, sy + dy))) for (const [dx, dy, cl] of pix) put(d, ((sy + dy) * PW + sx + dx) * 4, cl);
         }
       }
+      // A crag (coastTiles.js `crag`): its rock, top or face, reaches well out over the ground beside
+      // it and below it in broken lumps (the rock's own picture, mirrored out across the edge), with a
+      // lit or dark rim and its shadow on the ground.
+      const crag = look.crag && look.crag.at(tx, ty) && (isTop(c) || face);
+      const cragTop = crag && isTop(c);
+      // Lumps along an edge: round bulges of 4 to 9 px, each its own size, over a slow wobble.
+      const lumpy = (along, seed, max) => {
+        const a = along + Math.floor(h2(seed, 0, 71) * 9);
+        let at0 = 0;
+        let i = 0;
+        let len = 5;
+        for (; ; i++) { len = 4 + Math.floor(h2(i, seed, 72) * 6); if (at0 + len > (a % 4096)) break; at0 += len; }
+        const u = (a % 4096) - at0 + 0.5;
+        const bulge = Math.sqrt(Math.max(0, 1 - ((u - len / 2) / (len / 2 + 0.4)) ** 2));
+        return Math.round(wobble(along, seed) * 2.5 + h2(i, seed, 73) * (max - 2.5) * bulge);
+      };
+      const fromSrc = (X, Y) => { const j = (Y * PW + X) * 4; return [src[j], src[j + 1], src[j + 2]]; };
+      if (crag) {
+        for (const side of [-1, 1]) {
+          const k = kindName(tx + side, ty);
+          if (!k || look.isWater(k) || k === 'shallows') continue;
+          for (let ly = 0; ly < T; ly++) {
+            const Y = ty * T + ly;
+            const n = Math.max(1, lumpy(Y, tx * 17 + (side > 0 ? 3 : 0), 8));
+            for (let s = 0; s < n; s++) {
+              const X = side < 0 ? tx * T - 1 - s : tx * T + T + s;
+              if (!ground(X, Y)) continue;
+              const inside = side < 0 ? tx * T + s : tx * T + T - 1 - s;
+              const col = s === n - 1 ? (side > 0 ? rock.deep2 : rock.rim) : cragTop ? rgb(look.crag.top(X, Y)) : fromSrc(inside, Y);
+              put(d, (Y * PW + X) * 4, col);
+            }
+            for (let s = 0; s < 3; s++) {
+              const X = side < 0 ? tx * T - 1 - n - s : tx * T + T + n + s;
+              if (ground(X, Y)) dim(d, (Y * PW + X) * 4, [0.62, 0.75, 0.88][s]);
+            }
+          }
+        }
+        // A clifftop with the ground just north of it (the far lip of a cleft): its broken edge rises
+        // over the ground in lumps, lit along the top by the sky.
+        const ku = kindName(tx, ty - 1);
+        if (cragTop && ku && !look.isWater(ku) && ku !== 'shallows') {
+          for (let lx = 0; lx < T; lx++) {
+            const X = tx * T + lx;
+            const n = Math.max(1, lumpy(X, ty * 67 + 5, 6));
+            for (let k = 0; k < n; k++) {
+              const Y = ty * T - 1 - k;
+              if (ground(X, Y)) put(d, (Y * PW + X) * 4, k === n - 1 ? rock.rim : rgb(look.crag.top(X, Y)));
+            }
+            const Y = ty * T - 1 - n;
+            if (ground(X, Y)) dim(d, (Y * PW + X) * 4, 0.8);
+          }
+        }
+        // A face's foot on the ground: lumps of it coming down over the ground.
+        const kd = kindName(tx, ty + 1);
+        if (face && kd && !look.isWater(kd) && kd !== 'shallows') {
+          const Y0 = (ty + 1) * T;
+          for (let lx = 0; lx < T; lx++) {
+            const X = tx * T + lx;
+            const n = lumpy(X, ty * 61 + 7, 6);
+            for (let k = 0; k < n; k++) if (ground(X, Y0 + k)) put(d, ((Y0 + k) * PW + X) * 4, k === n - 1 ? rock.deep2 : fromSrc(X, Y0 - 1 - k));
+            for (let k = 0; k < 3; k++) if (ground(X, Y0 + n + k)) dim(d, ((Y0 + n + k) * PW + X) * 4, [0.66, 0.78, 0.9][k]);
+          }
+        }
+      }
       // Rock jutting out over the ground or the water beside it (foam where the sea meets it).
       for (const side of [-1, 1]) {
         const k = kindName(tx + side, ty);
-        if (!k) continue;
+        if (!k || (crag && !look.isWater(k) && k !== 'shallows')) continue;
         const wet = look.isWater(k) || k === 'shallows';
         for (let ly = 0; ly < T; ly++) {
           const Y = ty * T + ly;

@@ -24,7 +24,7 @@ export const LIMPET_KNIGHT = {
   feel: { hit: 'shell', windup: 'glint', at: [0.9, 0.12], idle: 'drip', defeat: 'clatter' },
   // Wrack Shore fights use the shanty; the wreck yard's use the storm song.
   music: 'coastBattleStorm',
-  maxHp: 11400,
+  maxHp: 7100,
   damage: 93,
 
   difficulty: { density: 1.70, speed: 1.55 },
@@ -40,9 +40,9 @@ export const LIMPET_KNIGHT = {
 
   // Its attacks live in src/battle/attacks/limpet_knight.js.
   patterns: [
-    { name: 'limpBash', weight: 3 },
-    { name: 'limpSuck', weight: 3 },
-    { name: 'limpStones', weight: 3 },
+    { name: 'limpJoust', weight: 3 },
+    { name: 'limpClamp', weight: 3 },
+    { name: 'limpBugle', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -53,7 +53,7 @@ export const LIMPET_KNIGHT = {
     { name: 'Admire the shield', calm: 30 },
   ],
 
-  rewards: { exp: 2450, coins: 13 },
+  rewards: { exp: 2450, coins: 10 },
 
   // Snacks it sometimes leaves behind (src/data/items.js), with the chance of each.
   drops: [{ item: 'limpet_plate', chance: 0.4 }],

@@ -15,6 +15,7 @@
 // water of the pools): lamplight.js adds them to the room's lights.
 
 import { caveBlendOn, caveSoftEdge } from './caveBlend.js';
+import { inCrag, cragFace, CRAG_ROCK } from './cragRock.js';
 
 const T = 16;
 
@@ -772,6 +773,8 @@ function glimWallTop(ctx, x, y, tx, ty, room) {
   if (right !== null && !WALLISH.includes(right)) px(ctx, '#3c2e78', x + T - 1, y, 1, T);
 }
 function glimWallFace(ctx, x, y, tx, ty, room, nubs = true) {
+  // A climbing face (a room's `crag`): broken rock, not courses (cragRock.js).
+  if (room && inCrag(room, tx, ty)) { cragFace(ctx, x, y, tx, ty, room, CRAG_ROCK.glimmer, (c) => 'WKGVH'.includes(c ?? '#')); return; }
   px(ctx, '#43367c', x, y, T, T);
   for (let band = 0; band < 4; band++) {
     const by = y + band * 4;

@@ -34,9 +34,9 @@ export const BELOWTOWN_SQUARE = {
     '######################################',
     '#WWWVWWHWWWWWWVWWWWWVWWWWWVWWWHWWVWWW#',
     '#W7777777WeeeeeeeWWWWWWWWWWWWWWWWWWWW#',
-    '#W5656565WawaaawaWWHWWWWWWHWWWHWWWHWW#',
-    '#W5656565WaaaaaaaWWWWWWWWWWWWWWWWWWWW#',
-    '#W555D555WaaaDaaaWWWWIDDIWWWWWWWDWWWW#',
+    '#W5656565WawaaawaWWHWWWWWWHWW.HWWWHWW#',
+    '#W5656565WaaaaaaaWWWWWWWWWWWW.WWWWWWW#',
+    '#W555D555WaaaDaaaWWWWIDDIWWWW.WWDWWWW#',
     '#...,X.....,.X....,...XX.,......X....#',
     '#,,,,X,,,,,,,X,,,,,,,,XX,,,,,,,,X,,,,#',
     '#...,X....XIXXXXXXXXXXXXXXIX....X....#',
@@ -67,7 +67,7 @@ export const BELOWTOWN_SQUARE = {
     { x: 32, y: 5, w: 1, h: 1, to: 'belowtown_hall_of_the_visit', spawn: { x: 11, y: 12 } },
     // The stair up from the Deep comes out of the gap in the south wall.
     // (`back`: a way back out, not the way in, for the Studio's ordering.)
-    { x: 29, y: 21, w: 2, h: 1, to: 'deep_way_up', spawn: { x: 2, y: 3 }, back: true },
+    { x: 29, y: 21, w: 2, h: 1, to: 'deep_last_flight', spawn: { x: 17, y: 2 }, back: true },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -91,15 +91,17 @@ export const BELOWTOWN_SQUARE = {
     { sprite: 'sunstone', x: 22, y: 4, cast: 'sunstone', animation: 'sunstone_dim_pulse', speed: 1.1, walkable: true, until: 'the_light_goes_up', glow: sunstoneGlow(false, 130) },
     { sprite: 'sunstone_bright', x: 22, y: 4, cast: 'sunstone', animation: 'sunstone_bright_pulse', speed: 0.5, walkable: true, after: 'the_light_goes_up', glow: sunstoneGlow(true, 130) },
     { sprite: 'savepoint', x: 16, y: 10, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 16, y: 8, travel: 'belowtown', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'town_well', x: 17, y: 12, text: 'square_well' },
     { sprite: 'hero_statue_old', x: 21, y: 16, text: 'square_statue' },
     { sprite: 'town_noticeboard', x: 6, y: 8, text: 'square_noticeboard' },
     { sprite: 'town_signpost', x: 9, y: 9, text: 'square_signpost' },
     { sprite: 'bench', x: 30, y: 10, text: 'square_bench' },
     { sprite: 'bench', x: 13, y: 16, text: 'square_bench' },
-    { sprite: 'glowworm_string', x: 14, y: 8, animation: 'glowworm_string', speed: 0.4, walkable: true },
-    { sprite: 'glowworm_string', x: 24, y: 8, animation: 'glowworm_string', speed: 0.4, walkable: true },
-    { sprite: 'glowworm_string', x: 19, y: 17, animation: 'glowworm_string', speed: 0.4, walkable: true },
+    { sprite: 'glowworm_string', x: 14, y: 8, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
+    { sprite: 'glowworm_string', x: 24, y: 8, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
+    { sprite: 'glowworm_string', x: 19, y: 17, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
     { sprite: 'glowworm_lamp', x: 10, y: 7, text: 'square_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 27, y: 7, text: 'square_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 7, y: 15, text: 'square_lamp', animation: 'glowworm_lamp', speed: 0.5 },
@@ -130,6 +132,15 @@ export const BELOWTOWN_SQUARE = {
     { sprite: 'bf_mole_crowd', x: 28, y: 11, npc: 'bt_sq_cheer_a', animation: 'bf_mole_crowd', speed: 0.3, after: 'the_light_goes_up' },
     { sprite: 'bf_mole_crowd_b', x: 30, y: 8, npc: 'bt_sq_cheer_b', animation: 'bf_mole_crowd_b', speed: 0.38, after: 'the_light_goes_up' },
     { sprite: 'bf_mole_crowd_c', x: 12, y: 13, npc: 'bt_sq_cheer_c', animation: 'bf_mole_crowd_c', speed: 0.33, after: 'the_light_goes_up' },
+    // The life pass (14 Nov): washing, tea, a stew pot, chalk, pigeons, and a stash in the alley.
+    { sprite: 'bf_frog_kid_b', x: 34, y: 12, npc: 'bt_sq_hopscotch', animation: 'bf_frog_kid_b', speed: 0.45, stroll: { wander: [34, 12, 36, 15], speed: 24, pause: [0.8, 2.5], hop: true, scatter: true, greet: true } },
+    { sprite: 'bf_mole_miner_a', x: 15, y: 17, npc: 'bt_sq_offshift', animation: 'bf_mole_miner_a', speed: 0.5, stroll: { path: [[14, 17], [24, 17]], speed: 11, pause: [3, 6], greet: true } },
+    { sprite: 'bt_menu_board', x: 8, y: 7, text: 'bl_inn_board' },
+    { sprite: 'bt_doorstep_shoes', x: 5, y: 6, text: 'bl_sq_shoes', gives: 'odd_sock', taken: { sprite: 'bt_doorstep_shoes', text: 'bl_shoes_b' }, walkable: true },
+    { sprite: 'bt_drying_rack', x: 2, y: 7, text: 'bl_drying_rack' },
+    { sprite: 'bt_pick_rack', x: 1, y: 16, text: 'bl_pick_rack' },
+    // The skinny alley between the Hall of the Visit and the throne hall: a stash.
+    { sprite: 'gold_pouch', x: 29, y: 3, text: 'bl_sq_alley', gives: 'bl_den_shoe', taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
   ],
   tileTexts: { W: 'town_wall', '#': 'town_rock', V: 'town_lamps_wall', H: 'town_banner_wall', 5: 'town_house', 6: 'town_house', 7: 'town_house', a: 'town_plank', w: 'town_plank', e: 'town_plank', F: 'town_toadstools', I: 'town_pillar', J: 'town_broken_pillar' },
 

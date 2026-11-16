@@ -53,7 +53,7 @@ done.
 # TALK options in src/data/enemies/ghost_deckhand.js.
 [talk: Inspect]
 DECKHAND - HP 12400
-A boy of the Fair Return's crew, still on watch. Swabs the deck in a wide sweep with a clean gap, slops the bilge bucket in splashes, strikes the bell in rings with gaps, and drops letters from above, with the wax seals coming down hard. Means no harm.
+A boy of the Fair Return's crew, still on watch. Pumps the bilge out of the next scupper along, slings a bucket on every stroke of the bell, and his letters open where they land. Means no harm.
 
 [talk: Ask the day]
 You point at your wrist, then at him: what day is it? DECKHAND thinks about it hard. He says it was a Tuesday. It was definitely a Tuesday, and he'd be paid on Friday, and then he'd go home. He is quiet for a while, and the swab stops.

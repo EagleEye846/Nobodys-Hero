@@ -15,17 +15,18 @@ export const COLUMNEON = {
     frames: [COLUMNEON_DISGUISE_SPRITES.still, COLUMNEON_DISGUISE_SPRITES.tongue, COLUMNEON_DISGUISE_SPRITES.blink],
     palette: COLUMNEON_PALETTE,
   },
-  maxHp: 120,
-  damage: 8,
+  maxHp: 400,
+  damage: 9,
 
-  // An early Ruins enemy, so a little gentler than full strength.
-  difficulty: { density: 0.85, speed: 0.85 },
+  // The Ruins' toughest regular (13 November 2026): more HP than its neighbours,
+  // a harder hit and a busier attack, but still well under Taper.
+  difficulty: { density: 0.95, speed: 0.92 },
 
   // Its attacks live in src/battle/attacks/columneon.js.
   patterns: [
     { name: 'columneonTongue', weight: 3 },
     { name: 'columneonCrumble', weight: 2 },
-    { name: 'columneonCamouflage', weight: 2 },
+    { name: 'columneonISpy', weight: 3 },
     { name: 'columneonTailCurl', weight: 2 },
   ],
 

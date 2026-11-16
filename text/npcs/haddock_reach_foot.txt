@@ -4,4 +4,4 @@
 {determined}That's the door. I'll be here with the boat.
 
 [repeat]
-{smile}Still here. Still minding the boat. The step by the landing, if you want the quiet bit again.
+{smile}Still here. Still mindin' the boat. The step by the landin', if ye want the quiet bit again.

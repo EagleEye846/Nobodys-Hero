@@ -3,7 +3,9 @@
 // is what's for sale and the price in gold: an `item` (src/data/items.js,
 // bought as many times as you like), a `weapon` (src/data/weapons.js, once),
 // `armor` (src/data/armor.js, once), or a `skillPoint` (a point for the skill
-// tree, `limit` times per shop; see HERO_STATE.boughtSkillPoints).
+// tree, `limit` times per shop; see HERO_STATE.boughtSkillPoints), or `gear`
+// (src/data/gear.js, once): each chapter's smith sells a Notch Charm, one more
+// SPELL NOTCH for everyone (src/characters/notches.js).
 //
 // Every shop also buys (SELL): items for three quarters of their price, and
 // weapons and armor nobody's wearing for three quarters of what a shop would charge (see
@@ -20,6 +22,8 @@ export const SHOPS = {
     textFile: 'shops/ruins_shop.txt',
     music: 'shop',
     stock: [
+      // A Notch Charm: one more spell for everyone in a fight (see notches.js).
+      { gear: 'notch_ruins', price: 250 },
       { skillPoint: true, price: 500, limit: 1 },
       { item: 'trail_mix', price: 12 },
       { item: 'lantern_tea', price: 25 },
@@ -97,6 +101,8 @@ export const SHOPS = {
       // Candles: light the dark (and do their own thing in battle; see candles.js).
       { item: 'hearth_candle', price: 60 },
       { item: 'ash_candle', price: 75 },
+      // A Notch Charm: one more spell for everyone in a fight (see notches.js).
+      { gear: 'notch_tilda', price: 400 },
       { weapon: 'glass_dagger', price: 70 },
       { weapon: 'iron_gauntlets', price: 75 },
       { armor: 'smiths_apron', price: 105 },
@@ -275,6 +281,8 @@ export const SHOPS = {
       // Candles: the dead city's lamps all died a hundred years ago.
       { item: 'hearth_candle', price: 60 },
       { item: 'ash_candle', price: 75 },
+      // A Notch Charm: one more spell for everyone in a fight (see notches.js).
+      { gear: 'notch_teasel', price: 600 },
       { weapon: 'hinge_cleaver', price: 480 },
       { weapon: 'bell_bronze_gauntlets', price: 420 },
       { weapon: 'forge_lantern', price: 400 },
@@ -402,6 +410,8 @@ export const SHOPS = {
       counter: '#3a3440', counterTop: '#6a6478', counterGrain: '#2a2630', lantern: '#ff7a2a',
     },
     stock: [
+      // A Notch Charm: one more spell for everyone in a fight (see notches.js).
+      { gear: 'notch_hobnail', price: 800 },
       { item: 'slag_bread', price: 120 },
       { item: 'ash_candle', price: 75 },
       { weapon: 'miners_pick', price: 720 },
@@ -431,8 +441,8 @@ export const SHOPS = {
 
   // Chapter 5: the drowned coast.
   // The Cockle Stall in Saltcombe's market: a crab who sells what the tide
-  // leaves, cooked. Bramble's snacks. (Chapter 5's gold: keep it near 1.4 times
-  // the shops' total, 13,715 G.)
+  // leaves, cooked. Bramble's snacks. (Chapter 5's gold: keep it from 1.3 to 1.6 times
+  // the shops' total, now 15,455 G.)
   cockle_stall: {
     title: 'THE COCKLE STALL',
     textFile: 'shops/cockle_stall.txt',
@@ -447,7 +457,23 @@ export const SHOPS = {
       { item: 'kelp_crisps', price: 160 },
       { item: 'winkle_skewer', price: 170 },
       { item: 'cockle_chowder', price: 185 },
-      { item: 'brine_tonic', price: 190 },
+      { item: 'brine_tonic', price: 5000 },
+    ],
+  },
+  // The ghost cook's galley in the Wreck Yard (wreck_galley): forty years dead and still cooking.
+  ghost_galley: {
+    title: 'THE GALLEY',
+    textFile: 'shops/ghost_galley.txt',
+    music: 'wreckHulls',
+    keeper: { sprite: 'wy_ghost_cook', eyes: [] },
+    look: {
+      wall: '#24363a', wallLine: '#1a2a2e', shelf: '#3e4c48', shelfTop: '#7a9a90',
+      counter: '#3e3228', counterTop: '#6e5a42', counterGrain: '#2a2018', lantern: '#aaffdc',
+    },
+    stock: [
+      { item: 'ships_hardtack', price: 155 },
+      { item: 'galley_cocoa', price: 180 },
+      { item: 'cooks_soup', price: 200 },
     ],
   },
   // Mrs. Wrasse's Chandlery in Saltcombe: rope, oilskin and everything else a
@@ -485,6 +511,10 @@ export const SHOPS = {
       { weapon: 'boat_axe', price: 700 },
       { armor: 'small_oilskin', price: 600 },
       { armor: 'sea_boots', price: 560 },
+      // A step up for each of them, cheap (the shops' total has to stay under the chapter's gold).
+      { weapon: 'spindrift_canopy', price: 280 },
+      { armor: 'net_menders_mitts', price: 220 },
+      { weapon: 'capstan_maul', price: 300 },
     ],
   },
   // Orla Cobb's Forge in the Beacon Isles: a grey seal smith who works with
@@ -504,6 +534,8 @@ export const SHOPS = {
       counter: '#34383e', counterTop: '#5e6874', counterGrain: '#242a30', lantern: '#ffb84a',
     },
     stock: [
+      // A Notch Charm: one more spell for everyone in a fight (see notches.js).
+      { gear: 'notch_orla', price: 1200 },
       // The chapter's late gold sink (4,135 in all): most of the chapter's
       // spare gold comes after the Soundings, so her prices are the highest.
       { skillPoint: true, price: 1250, limit: 1 },
@@ -512,6 +544,10 @@ export const SHOPS = {
       // For Ves, and for Bramble.
       { weapon: 'storm_umbrella', price: 1500 },
       { weapon: 'ships_cleaver', price: 1150 },
+      // The best of the shop pieces for each of them, late and cheap (see the Chandlery).
+      { armor: 'beacon_wick_shawl', price: 340 },
+      { armor: 'cabin_boys_waistcoat', price: 280 },
+      { armor: 'deckhands_greatcoat', price: 320 },
     ],
   },
 };

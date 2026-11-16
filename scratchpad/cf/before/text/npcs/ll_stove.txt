@@ -1,0 +1,21 @@
+# THE COLD STOVE (the Last Light's foot): a little iron stove with its fire laid and not lit. A tiny errand
+# of the life pass. (draft)
+
+[first]
+A small iron stove, its fire laid and never lit: kindling, a twist of paper, a match standing ready. It has a ring on the top the exact size of a kettle's foot, and nothing in it.
+
+[repeat]
+The stove, laid and cold. The ring on top is waiting for a kettle.
+
+[kettle_ask]
+Everything's ready, down to the match. It's only the kettle that's missing.
+
+[kettle_done]
+You set the kettle on the ring. It sits there, heavy and black and exactly right.
+
+You don't light the fire. It's not yours to light. But now when somebody comes down the stair in the dark, there'll be a kettle on a stove, and a match standing ready, and that's something.
+
+Something rattles in the kettle's belly. Under the lid, rolled up in a rag, is a spare lamp wick.
+
+[kettle_after]
+The kettle on the ring, the match beside it. Somebody will want that tea.

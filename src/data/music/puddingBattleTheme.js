@@ -3,13 +3,14 @@ import { ORCHESTRA } from './parts/usurper.js';
 import { starFall, starIn, starNotes, STAR_LENGTHS, STAR_LENGTHS_WALTZ } from './parts/starGuardians.js';
 import { SAMPLE_SETS } from '../../audio/sampleSets.js';
 
-// "Seven Mugs": the fight with PUDDING, the Glass Olm, chapter 4's secret
+// "Seven Mugs": the fight with the PALE OLM, chapter 4's secret
 // star guardian (src/data/enemies/pudding.js). The miners kept a blind cave
 // olm in a tin dish by the kettle, their tea-break mascot. It touched the
 // star's shard in the pool at the bottom of Seam Nine and grew huge and
 // see-through, with the star burning in its belly, and it swims through rock.
-// It isn't cruel and it isn't sane. It is still waiting for everybody to come
-// back after lunch.
+// It wished on the star that the miners would come back after lunch, and the
+// star gave it their voices and their things instead. It isn't cruel and it
+// isn't mad. It is still waiting for everybody to come back after lunch.
 //
 // So the song is a lazy, lopsided waltz on a glass harmonica (the real glass
 // recording, doubled by a bowed vibraphone), with pizzicato bass walking

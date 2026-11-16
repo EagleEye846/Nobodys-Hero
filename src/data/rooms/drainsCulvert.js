@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE CULVERT: Hollin's overflow, running east under the wood in five brick
 // channels, and every one of them a current: fast shallow water you can't walk
 // against. Step in and it carries you to the end. Fallen rubble in a channel
@@ -199,6 +200,8 @@ export const DRAINS_CULVERT = {
     { sprite: 'current_left', x: 5, y: 9, text: 'current', flow: 'left', animation: 'current_left', speed: 0.1 },
     { sprite: 'current_left', x: 4, y: 9, text: 'current', flow: 'left', animation: 'current_left', speed: 0.1 },
     { sprite: 'savepoint', x: 1, y: 6, save: true },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_culvert'] ?? []),
   ],
   tileTexts: { K: 'culvert_wall', k: 'culvert_wall', j: 'culvert_gap' },
 

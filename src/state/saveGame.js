@@ -84,6 +84,19 @@ function upgradeSave(saved) {
   // (not even what this session had on), so everyone in the party gets
   // their starting kit.
   if (!saved.hero.memberGear) HERO_STATE.memberGear = {};
+  // From before SPELL NOTCHES: given the Notch Charms of the chapters before
+  // this one, once (settleNotches in src/characters/notches.js, on CONTINUE).
+  if (!('notchesSettled' in saved.hero)) HERO_STATE.notchesSettled = false;
+  // From before the fog bell's tongue had its own id (16 Nov 2026): it shared `bell_clapper` with the
+  // Lasthome chapel's clapper. A save that has found the bell on the Watch Rock carries the tongue.
+  if (HERO_STATE.gear?.includes('bell_clapper') && (WORLD_STATE.seenScenes ?? []).includes('bell_found')) {
+    HERO_STATE.gear = HERO_STATE.gear.map((id) => (id === 'bell_clapper' ? 'fog_bell_tongue' : id));
+  }
+  // The same for Bramble's paper boat from the swimming lesson, which shared `paper_boat` with the
+  // Stillwater reeds' boat (chapter 4).
+  if (HERO_STATE.gear?.includes('paper_boat') && (WORLD_STATE.seenScenes ?? []).includes('swimming_lesson') && !HERO_STATE.gear.includes('bramble_paper_boat')) {
+    HERO_STATE.gear = HERO_STATE.gear.map((id) => (id === 'paper_boat' ? 'bramble_paper_boat' : id));
+  }
   for (const id of HERO_STATE.party ?? []) giveStartingGear(id);
 }
 

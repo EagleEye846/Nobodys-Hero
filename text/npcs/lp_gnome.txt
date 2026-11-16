@@ -1,0 +1,36 @@
+# THE FISHING GNOME (the Fork, in the Sunken Lanes): a garden gnome with a rod, waiting by the flood.
+# Nobody says anything: it's a gnome. The words are what you notice. (life pass, 14 November 2026)
+
+# (draft)
+[first]
+A garden gnome on a plinth in the shallows, rod out over the flood, a red hat and a very calm face. The line goes into the water and nothing has bitten it for a very long time.
+
+# (draft)
+[repeat]
+The gnome fishes. The line hangs in the water, bare.
+
+# (draft)
+[gnome_ask]
+A garden gnome on a plinth in the shallows, rod out over the flood, a red hat and a very calm face. The line goes into the water and nothing has bitten it for a very long time.
+
+There's no hook. There's no bait. There's just a line, and a gnome, and a lot of patience. You get the strong idea that all it needs is something to put on the end.
+
+Somebody in the Lanes must keep bait. You can't think who.
+
+# (draft)
+[gnome_wait]
+The gnome fishes. The line hangs bare in the flood. Somewhere in these lanes there'll be a tin that says BAIT.
+
+# (draft)
+[gnome_done]
+You tip the worms onto the gnome's line. They go down into the flood very slowly, wriggling, one after another.
+
+For a while nothing happens. The gnome doesn't move. Then the line goes tight, and the rod bends, and the gnome, which has not blinked for a hundred years, doesn't blink in a slightly different way.
+
+Something small and bright comes up out of the water. It's a fish, made of blue glass.
+
+The gnome puts it in your hand without looking round. It's still fishing, you can tell. It's got a fish now. It's going to be very hard to live with.
+
+# (draft)
+[gnome_after]
+The gnome fishes. There's a worm on its line now, turning gently in the water. It's the happiest you've ever seen anything look who doesn't have a face that moves.

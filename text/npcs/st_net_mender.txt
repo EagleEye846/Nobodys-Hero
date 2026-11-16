@@ -1,0 +1,31 @@
+# ST_NET_MENDER: a grey seal on an upturned crate by the quay, a net across her lap, mending it a knot at a time. The life pass.
+
+[first]
+Forty knots to the hand, and it still tears. The net doesn't mind. It's the sea that tears it, and the sea has never once been sorry.
+
+[repeat]
+Over, under, pull. Over, under, pull. Don't stand in the light, love, I'll tie your boots to it.
+
+# (draft)
+[repeat 2]
+I mend this one every night. Come morning, a hole. Not a big one, mind. Never a big one. Just a hole the exact size of something that got away.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}...That's the best sentence anyone's said to me all day.
+
+# (draft)
+[repeat 3]
+Mended a net for Haddock once. Never charged. He paid me in the one thing he's got plenty of: he stood there and listened while I talked. Three hours. Lovely man.
+
+# (draft)
+[repeat_bramble 3]
+{sad}He does that. He listens like it's his job.
+
+# (draft)
+[first after the_light_answers]
+Sun on the planks, and I can see my own knots. Feels like cheating. All the holes are right where I left them.
+
+# (draft)
+[repeat after the_light_answers]
+Over, under, pull. Used to do it by lamplight. Funny. I thought I'd miss it. I miss it a bit.

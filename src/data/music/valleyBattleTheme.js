@@ -138,7 +138,7 @@ export const VALLEY_BATTLE_THEME = {
   title: 'Still Here',
   bpm: 144,
   stepsPerBeat: 4,
-  volume: 0.9,
+  volume: 1.24,
 
   instruments: {
     // The hero: the same brassy sawtooth as "Updraft" and "Bramble Rush".

@@ -1,0 +1,11 @@
+# Between chapters: shown after the Chapter Four credits, once the hall has
+# come down and Bramble has turned up.
+
+[title]
+THE FIRST
+
+[subtitle]
+Chapter Four complete
+
+[neutral]
+Down in the dark, a dormouse is practising saying hello in his own voice.

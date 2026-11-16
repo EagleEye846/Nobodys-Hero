@@ -41,3 +41,21 @@ His Majesty called the banner "a TRIUMPH". He says that about everything. He sai
 # (draft)
 [repeat 2 after the_light_goes_up]
 Somebody's written under WELLDUN, in small letters: "well done". I'm choosing to take it as agreement.
+
+# --- SIDE QUEST: something soft for the helmet (an odd sock, drying by the inn door) ---
+
+[sock_ask]
+Could I ask something? It's the helmet. It's too big. It keeps coming down over my eyes, and the last thing I saw clearly was the second L.
+
+I'd stuff it with something soft, but I've only got my own socks and I need those. If you see an odd one lying about...?
+
+[sock_wait]
+Anything soft would do. A sock, a scarf, a cloud. Not a hat. The helmet's the hat.
+
+[sock_done]
+A sock! Stripy! It's PERFECT! ...I can see. There's a WHOLE ROOM out here.
+
+I want you to have this. It's a badge. I've two. One for the gate, and one for me, and I'd rather it was you.
+
+[sock_after]
+I can see the whole banner now. I wish I couldn't. The spelling, I mean. The sock is wonderful.

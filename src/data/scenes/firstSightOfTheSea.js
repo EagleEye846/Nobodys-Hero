@@ -18,11 +18,12 @@ export const FIRST_SIGHT_OF_THE_SEA = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed. The camera does the describing: down off the cliff to the sea, to
+    // Gullrest's bunting, out to the storm and the tower. Only what they say is left.
     { do: 'music', song: null },
     // They step in from where they were following (no pop).
     { do: 'appear', who: 'ves', instant: true },
     { do: 'appear', who: 'bramble', instant: true },
-    { do: 'say', text: 'The lane has been getting sandier for a while. Now it stops, just like that, at a low green lip of cliff, and there is nothing past it but air.' },
     { do: 'walk', who: 'player', to: { x: 11, y: 11 }, wait: false },
     { do: 'walk', who: 'bramble', to: { x: 10, y: 11 }, wait: false },
     { do: 'walk', who: 'ves', to: { x: 12, y: 11 } },
@@ -34,33 +35,25 @@ export const FIRST_SIGHT_OF_THE_SEA = {
     // "All of It, All at Once" (src/data/music/firstSeaTheme.js).
     { do: 'music', song: 'firstSea' },
     { do: 'camera', to: { x: 12, y: 21 } },
-    { do: 'wait', seconds: 3.4 },
-    { do: 'say', text: 'The sea.\n\nAll of it, all at once. Blue and wide and glittering, with the sky lying flat on top.' },
-    { do: 'say', text: 'A smell comes up the cliff: salt, and warm stone, and something enormous breathing.' },
-    { do: 'wait', seconds: 0.8 },
-    { do: 'say', who: 'bramble', text: '{surprised}...' },
-    { do: 'say', who: 'bramble', text: '{thinking}...That\'s a big puddle.' },
-    { do: 'say', who: 'ves', text: '{smile}It\'s a sea, Bramble.' },
-    { do: 'say', who: 'bramble', text: '{thinking}A big puddle with opinions. I can hear it having them.' },
-    { do: 'say', who: 'ves', text: '{bored}That\'s the surf.' },
+    { do: 'wait', seconds: 4.2 },
+    { do: 'emote', who: 'bramble', emote: '!', wait: false },
+    { do: 'act', who: 'bramble', act: 'hop' },
+    { do: 'say', who: 'bramble', text: '{awed}...That\'s a big puddle. A big puddle with opinions. I can hear it having them.' },
+    { do: 'act', who: 'ves', act: 'sigh', wait: false },
+    { do: 'say', who: 'ves', text: '{laughing}It\'s having them at you, mostly.' },
     { do: 'say', who: 'bramble', text: '{worried}It\'s rude is what it is.' },
     { do: 'wait', seconds: 0.8 },
     // Gullrest.
     { do: 'camera', to: { x: 6, y: 26 } },
-    { do: 'wait', seconds: 2.4 },
-    { do: 'say', text: 'Far below, in the crook of the cliff, a small town of white huts with red roofs sits on a crescent of sand, with bunting strung between them and little boats pulled up in a row.\n\nIt looks like somebody made it for a party.' },
-    { do: 'say', who: 'ves', text: '{smile}Bunting. We\'re going to the bunting.' },
+    { do: 'wait', seconds: 3 },
+    { do: 'say', who: 'ves', text: '{glee}Bunting. We\'re going to the bunting.' },
     // The horizon (west of the cliff path, so the path never stands in front of the tower).
     { do: 'camera', to: { x: 12, y: 21 } },
-    { do: 'wait', seconds: 2.6 },
-    { do: 'say', text: 'And then, out on the very edge of things, where the sky should meet the water neatly: a smudge.\n\nGreen. A bruise of cloud lying low on the sea, thin as a pencil line from here, with rain hanging off it in stripes.' },
-    { do: 'wait', seconds: 0.8 },
-    { do: 'say', text: 'Something stands up out of the bruise: a tall, thin tower, black against the green, with a crown of spikes on top like broken spars. It does not look like any lighthouse you have seen.' },
+    { do: 'wait', seconds: 3.6 },
     { do: 'act', who: 'player', act: 'look' },
-    { do: 'say', who: 'ves', text: '{thoughtful}...That\'s not a very friendly sort of lamp.' },
+    { do: 'say', who: 'ves', text: '{surprised}...Is that a lighthouse? It looks like it bites.' },
     { do: 'say', who: 'bramble', text: '{worried}Is that where we\'re going?' },
-    { do: 'say', who: 'ves', text: '{bored}Eventually. After the bunting.' },
-    { do: 'say', who: 'bramble', text: '{thinking}...I like the bunting.' },
+    { do: 'say', who: 'ves', text: '{proud}Not today. Today is bunting. I\'ve decided.' },
     { do: 'camera' },
   ],
 };

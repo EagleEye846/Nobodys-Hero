@@ -8,6 +8,7 @@
 //   #  wall top (solid)   h  black brick (solid)   6  a slit in the brick   .  flagstones   o  the gap out
 // (draft).
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SECRET_LASTLIGHT_DEN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'secret_lastlight_den',
@@ -52,12 +53,15 @@ export const SECRET_LASTLIGHT_DEN = {
     { sprite: 'c5_crate', x: 2, y: 3, text: 'den_bed' },
     { sprite: 'c5_height_marks', x: 4, y: 2, text: 'den_tally' },
     { sprite: 'c5_chest', x: 6, y: 3, text: 'den_tin', gives: 'humbug_lump', react: true, taken: { sprite: 'c5_chest_open', text: 'den_tin_empty' } },
+    { sprite: 'c5_chest', x: 7, y: 3, text: 'den_spare', gives: 'lampwick_handle', react: true, taken: { sprite: 'c5_chest_open', text: 'den_spare_empty' } },
     // (2026-11-08b) A slit in the brick (6,2) lets in a line of sea light, the only light there is.
     // A boy's things: his handwriting on the wall over the bed, library books, a paper boat.
     { sprite: 'll_chalk_hand', x: 1, y: 2, text: 'gal_hand' },
     { sprite: 'in_book_pile', x: 6, y: 5, text: 'den_books' },
     { sprite: 'c5_toy_boat', x: 2, y: 5, text: 'den_boat' },
     { sprite: 'c5_puddle', x: 5, y: 3, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.secret_lastlight_den ?? []),
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', 6: 'den_window', '.': 'll_floor', o: 'den_gap' },
 

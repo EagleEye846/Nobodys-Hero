@@ -1,0 +1,23 @@
+# ST_QUAY_GOSSIP_B: a hare in a gold coat, gossiping with the seal in the yellow hat. The life pass.
+
+[first]
+Mmm. Mmm-hmm. No! Never. Not THAT one. Well, I never.
+
+[repeat]
+She said it, and I said "Never", and she said "Yes", and I said "Not a hat." We've been going in circles since lunch.
+
+# (draft)
+[repeat 2]
+I could go on. I'm told I do.
+
+# (draft)
+[repeat_bramble 2]
+{thinking}Is it about the hat in the chalk?
+
+# (draft)
+[first after the_light_answers]
+First time I've gossiped in the sun. You can see everyone's face when they hear it. It's much better.
+
+# (draft)
+[repeat after the_light_answers]
+Between you and me: we've nothing to tell. We're just enjoying the light. Don't spread it.

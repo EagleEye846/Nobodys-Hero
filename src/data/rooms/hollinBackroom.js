@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // MAGS'S BACK ROOM (a secret, Chapter 3): behind a loose shelf in Hollin Stores,
 // the stockroom Mags kept for what she didn't want on the counter. On the
 // night the star came down, a leaf of the Welcome Register blew all the way
@@ -9,6 +11,8 @@
 //   #  wall (solid)
 //   h  the shop's back wall
 //   o  wooden floor
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HOLLIN_BACKROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hollin_backroom',
@@ -55,6 +59,7 @@ export const HOLLIN_BACKROOM = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hollin_backroom ?? []),
     // The gate across the room opens while the stone sits on the plate (and for good).
     { sprite: 'gate_narrow', x: 9, y: 6, text: 'backroom_gate', opensWith: ['backroom_plate'] },
     { sprite: 'stone_button', x: 6, y: 8, text: 'backroom_button', button: 'backroom_plate' },
@@ -68,6 +73,7 @@ export const HOLLIN_BACKROOM = {
     { sprite: 'crates', x: 13, y: 9, text: 'hstores_crates' },
     { sprite: 'barrel', x: 11, y: 9, text: 'hstores_barrel' },
     { sprite: 'sign', x: 8, y: 4, text: 'backroom_sign' },
+    ...(R3P_PROPS['hollin_backroom'] ?? []),
   ],
   tileTexts: { h: 'hstores_wall' },
 

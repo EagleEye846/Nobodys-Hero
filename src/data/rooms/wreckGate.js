@@ -8,6 +8,8 @@
 // Arriving by the Bother (to_the_wreck_yard, from Saltcombe) lands you on the jetty at
 // (9,10), which is the trigger of the ride itself (wreck_crossing, once). Later trips
 // arrive on the same spot and nothing plays. The way home is at the far side, the slip.
+// OPTIONAL (2026-11-14): the east end of the shingle runs round a corner of rock (door 39, rows 13-14) to
+// the Chain Cliff (wreck_chain_cliff), a ring climb.
 // Tile key (see src/overworld/coastTiles.js, wreck):
 //   #  hull top (solid)   ~  green-black water (solid)   q  shingle   o  jetty planks
 //   g  bridge (walk)   f  rail (solid)   ,  turf
@@ -24,9 +26,13 @@ export const WRECK_GATE = {
   ambience: 'wreck_yard',
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.5, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_wreck_yard', lamplight: { shade: 0.24, tint: '34, 44, 68' }, skyline: true },
+  // Once the Fair Return has sailed (crew_go_free, 2026-11-14), her fog has gone with her: the yard's fog thins to this.
+  fogLiftAfter: { scene: 'crew_go_free', fog: 0.25 },
   vesWell: true,
+  // Before the Fair Return is found: her crew's song off the water now and then, or her lantern far out (farShip.js).
+  farShip: { sing: true, light: { x: 22, y: 2 } },
   // The Last Light's foot, on the skyline (atmosphere.js: `lastLight`).
-  lastLight: { x: 27, y: 4 },
+  lastLight: { x: 27, y: 4, scale: 0.9 },
   // Big wrecks out in the channel, black against the green.
   skyline: [
     { kind: 'hull', x: 5, y: 4, lean: -1 },
@@ -49,8 +55,8 @@ export const WRECK_GATE = {
     '~~~~~~~~~ooqqqqqqqgggggggggggggqqqqqqqqq',
     '#~~~~~~~~ooqqqqqqqfffffffffffffqqqqqqqq#',
     '#~~~~~~~~~~qqqqqqq~~~~~~~~~~~~~qqqqqqq,#',
-    '#~~~~~~~~~~~qqqqq~~~~~~~~~~~~~~~qqqqq,,#',
-    '#~~~~~~~~~~~~~qq~~~~~~~~~~~~~~~~~qqq,,,#',
+    '#~~~~~~~~~~~qqqqq~~~~~~~~~~~~~~~qqqqq,,,',
+    '#~~~~~~~~~~~~~qq~~~~~~~~~~~~~~~~~qqq,,,,',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~,,,#',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
     '########################################',
@@ -62,6 +68,8 @@ export const WRECK_GATE = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 39, y: 9, w: 1, h: 2, to: 'wreck_hull', spawn: { x: 2, y: 14 } },
+    // (Optional) round the corner of rock at the east end of the shingle: the Chain Cliff.
+    { x: 39, y: 13, w: 1, h: 2, to: 'wreck_chain_cliff', spawn: { x: 2, y: 21 } },
   ],
 
   // The jetty: arriving by boat the first time plays the ride (wreck_crossing).
@@ -108,6 +116,12 @@ export const WRECK_GATE = {
     { sprite: 'wy_weed_mat_b', x: 21, y: 16, flat: true, walkable: true },
     { sprite: 'wy_ribs_jag', x: 37, y: 3 },
     { sprite: 'wy_plank_slick_b', x: 29, y: 15, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_tally_post', x: 34, y: 11, text: 'sl_tally' },
+    { sprite: 'shore_flag_post', x: 33, y: 8, text: 'sl_flag', animation: 'shore_flag_post', speed: 0.5 },
+    { sprite: 'shore_crab_shell', x: 15, y: 10, text: 'sl_crabshell', flat: true, walkable: true },
+    { sprite: 'c5_pot_single', x: 35, y: 10, text: 'sl_pot', walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'gate_edge', '~': 'gate_water', f: 'gate_rail', g: 'gate_bridge' },
 

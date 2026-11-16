@@ -5,6 +5,8 @@ import { PROP_PALETTE, PROP_SPRITES } from '../data/art/props.js';
 import { VES_FRAMES } from '../data/art/vesper.js';
 import { animationFrame } from '../engine/animations.js';
 import { drawShaft } from './shaftVision.js';
+import { WRECK_VISIONS } from './wreckVisions.js';
+import { TIDE_VISIONS } from './tideVisions.js';
 
 // Visions: whole-screen pictures a cutscene can show in the dark, for dreams
 // (a scene step { do: 'vision', name: 'lantern' }; with no name, it goes).
@@ -476,6 +478,10 @@ export const VISIONS = {
   well: drawWell,
   // The fall into the Glimmering (shaftVision.js): moods 'drop' and 'rush'.
   shaft: drawShaft,
+  // The night the Fair Return went down (wreckVisions.js): in the three pieces of her compass.
+  ...WRECK_VISIONS,
+  // The end of chapter 5 (tideVisions.js): Bramble under the water, and the sea pulling back.
+  ...TIDE_VISIONS,
 };
 
 // Draws vision `vision` ({ name, mood, start, moodStart }) at time `now` (seconds).

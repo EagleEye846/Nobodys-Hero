@@ -15,7 +15,7 @@ export const HOB = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'hollin',
   sprite: { rows: HOB_SPRITE, palette: HOB_PALETTE },
-  maxHp: 615,
+  maxHp: 2450,
   damage: 21,
 
   // A Chapter 3 enemy from the village at the end of the wood: about as busy
@@ -27,8 +27,7 @@ export const HOB = {
     { name: 'hobSweep', weight: 3 },
     { name: 'hobTable', weight: 3 },
     { name: 'hobKettle', weight: 2 },
-    { name: 'hobKeys', weight: 2 },
-    { name: 'hobDust', weight: 2 },
+    { name: 'hobMud', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

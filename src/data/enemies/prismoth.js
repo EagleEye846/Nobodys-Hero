@@ -20,7 +20,7 @@ export const PRISMOTH = {
   anim: PRISMOTH_ANIM,
   // The Chapter 4 battle song.
   music: 'belowBattle',
-  maxHp: 1450,
+  maxHp: 2800,
   damage: 37,
 
   difficulty: { density: 1.35, speed: 1.3 },
@@ -28,10 +28,10 @@ export const PRISMOTH = {
   // Its attacks live in src/battle/attacks/prismoth.js.
   patterns: [
     { name: 'prismBurst', weight: 3 },
-    { name: 'prismGlitter', weight: 2 },
+    { name: 'prismLamps', weight: 3 },
     { name: 'prismMirror', weight: 2 },
     { name: 'prismArc', weight: 2 },
-    { name: 'prismBounce', weight: 2 },
+    { name: 'prismColours', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

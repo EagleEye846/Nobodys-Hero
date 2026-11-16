@@ -46,7 +46,7 @@ A quick bolt of light: {amount} damage to one enemy.
 Lightning leaps through every enemy: {amount} damage to each.
 
 [nova]
-Everything goes white: {amount} damage to one enemy.
+Everything goes white: {amount} to all, next attack shorter, all +{heal} HP.
 
 # Chapter 3.
 [sunder]
@@ -309,7 +309,7 @@ One enemy takes 30% more from every hit for 2 enemy turns.
 [vesper_windbreak]
 Next attack halved, each hit {def} less, and safe at its start.
 
-[bramble_notch]
+[bramble_mark it]
 {damage} damage, and it takes 30% more from every hit for 2 turns.
 
 [bramble_rally]

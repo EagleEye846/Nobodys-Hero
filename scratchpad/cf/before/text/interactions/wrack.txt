@@ -1,0 +1,790 @@
+# THE WRACK SHORE (Chapter 5): the first area under the green storm. The landing, the pools,
+# the gaps, the dunes, the tide clock, the Dowager's bathtub, the boardwalk, and the hulk in
+# the dunes. Wet, grey and green, with rain on everything and one extremely tidy crab.
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal hums in the rain, small and steady, like a lamp in a window.
+Your progress is saved.
+
+# After the chapter (the storm over).
+[save_point_calm]
+The crystal hums in the still air, small and steady, like a lamp in a window.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, wet through.
+
+[chest_empty]
+An empty chest, salted white at the hinges.
+
+[rock_stump]
+An old stone post, worn smooth on top. Press on it, and the tide and everything you've moved goes back where it started.
+
+# --- THE LANDING ---------------------------------------------------------------
+
+[landing_bother]
+The Bother, tied up to a stake at the edge of the shallows. Rain beads on BOTHER. She looks like she would quite like to go home.
+
+# (draft)
+[landing_bother_bramble]
+{sheepish}Can she wait here? ...In case.
+
+[landing_sign]
+A board hammered into the shingle, the paint run: THE WRACK. KEEP TO THE SHELL PATH. PLEASE WIPE YOUR FEET. Under it, in different, smaller writing: (SHE MEANS IT.)
+
+# (draft)
+[landing_sign_ves]
+{smile}Somebody here has rules. I'm cautiously impressed.
+
+[landing_driftwood]
+A great bleached log, the bark long gone, polished smooth by the sea. A crab has moved into a knot-hole and put a shell over the door.
+
+# (draft)
+[landing_driftwood 2]
+The crab in the knot-hole has opened its door a crack to see who keeps knocking.
+
+[landing_pots]
+Lobster pots, stacked and lashed and forgotten. Something has been sleeping in the top one. It left a note: it's a bit of weed.
+
+[landing_flag]
+A tatter of flag on a post, snapping in the wind. It was red once.
+
+[landing_weed]
+A heap of wrack, glossy and green and smelling very strongly of the sea. It moves in the wind as if it were breathing.
+
+[landing_buoy]
+A red buoy, washed up and left. The paint's gone to rust at the seams.
+
+[landing_mast]
+A snapped mast, standing on its end in the shingle like a fencepost for something large. The top has split into splinters.
+
+# (draft)
+[landing_mast_ves]
+{surprised}That's a long way up the beach for a mast.
+
+[landing_barrel]
+A barrel, sealed with tar and empty, or at least very quiet.
+
+[landing_pouch]
+A purse in the shingle, buttoned shut against the rain.
+
+[landing_cliff]
+Wet slate, green with weed, running with rain.
+
+# (draft) after the storm.
+[landing_cliff_calm]
+Wet slate, green with weed, dripping.
+
+[landing_sea]
+The sea heaves, grey-green and white-capped, and far away along the skyline stands a thin black tower with a crown of spikes.
+
+# (draft)
+[landing_sea_ves]
+{worried}...Don't stare at it, Bramble. I don't know why. Just don't.
+
+[landing_rock]
+Barnacles, packed tight, and every one of them shut.
+
+# --- THE POOLS -----------------------------------------------------------------
+
+[pools_sign]
+A board: LOW WATER. MIND THE TRENCH. PLEASE WIPE YOUR FEET. Someone has crossed out FEET and written FEET again, very neatly.
+
+[pools_sign_bramble]
+{thinking}Why does everyone keep saying it?
+
+[pools_bell]
+A tide bell on a timber frame, green at the lip, its rope frayed to a knot. The sea here listens to it. Mostly.
+
+[pools_bell_ring]
+You pull the rope. The bell rings out over the inlet. The water thinks about it, and starts to move.
+
+[pools_bell_busy]
+The water's still moving. It won't hear a bell until it's done.
+
+[pools_crate]
+A crate, floating in the middle of the inlet when the tide is in, and sitting on the shingle when it's out. A trench runs down the middle of the bed.
+
+# (draft)
+[pools_crate_ves]
+{angry}It's a crate. I've glared at it. It's still a crate.
+
+[pools_buoys]
+A pile of buoys, half buried in weed, each of them labelled in a neat hand with the date it washed up.
+
+# (draft)
+[pools_buoys 2]
+You read the labels on the buoys. The dates go back a very long way, and every one is in the same neat hand.
+
+[pools_pouch]
+A purse in a tidepool, a little of the sea inside it.
+
+[pools_sea]
+The inlet, full to the brim and the colour of slate.
+
+[pools_pool]
+A tidepool: anemones like wet red buttons, a very small crab, a shell that has moved a little since you last looked.
+
+# --- THE GAPS ------------------------------------------------------------------
+
+# (draft)
+[gaps_sign]
+A board with an arrow pointing east along the shingle: THE GAPS. MIND THE KNIGHTS. THEY DON'T MEAN ANYTHING BY IT, BUT THEY DON'T MOVE FOR ANYONE EITHER.
+
+[gaps_driftwood]
+A tall piece of driftwood, set upright in the shingle. Someone has hung a coat on it, then forgotten the coat.
+
+[gaps_pouch]
+A purse wedged in the rock, well out of the tide.
+
+[gaps_rock]
+Barnacle rock, wet and sharp, and not interested.
+
+[gaps_shallows]
+Shallows, ankle deep and cold as a bad idea.
+
+# (draft)
+[gaps_shallows_bramble]
+{shout}It's up to my KNEES. I'm very small. It's up to my KNEES.
+
+# --- THE DUNES -----------------------------------------------------------------
+
+[dunes_sign]
+A board half buried in the sand: THE RIDGE IS NOT CLIMBABLE. THE WIND IS HELPFUL. PLEASE WIPE YOUR FEET.
+
+# (draft)
+[dunes_sign_ves]
+{surprised}"The wind is helpful." Well, that's new.
+
+[dunes_gust]
+A column of wind, rising out of the sand in a corkscrew. It smells of rain and salt, and Ves's umbrella, faintly.
+
+# (draft) after the storm.
+[dunes_gust_calm]
+A column of wind, rising out of the sand in a corkscrew. It smells of salt, and Ves's umbrella, faintly.
+
+# (draft)
+[dunes_gust_ves]
+{glee}Ooh. One of these. Hold on to your hat. ...You haven't got a hat. Hold on to something.
+
+[dunes_bank]
+A bank of sand and rock, packed hard by the wind, taller than any of you and with not a foothold on it.
+
+[dunes_hulk]
+The bow of a ship, standing out of the dune on its keel like a dropped spoon, with a dark hole in her side. The planks are wet but sound.
+
+[dunes_ribs]
+The ribs of a boat, standing up out of the sand like a fish picked clean.
+
+[dunes_crate]
+A crate, tucked into the lee of the old hull where the wind never gets. The lid's loose. Inside, wrapped in sailcloth: a WINKLE SKEWER.
+
+[dunes_crate_empty]
+An empty crate, with a damp circle in the sailcloth where something once was.
+
+[dunes_pouch]
+A purse half buried in the sand under the cliff, where the wind has heaped it. Nobody else comes this way.
+
+[steps_dune]
+Marram grass, rattling in the wind like a hundred tiny whispers.
+
+# --- THE TIDE CLOCK ------------------------------------------------------------
+
+[clock_sign]
+A board: THE SEA KEEPS ITS OWN TIME. SO DOES THE MANAGEMENT. PLEASE WIPE YOUR FEET.
+
+[clock_dial]
+A post with a round face. A blue arc for the tide in, a sandy arc for the tide out, and a hand going slowly round. It's nearly always right.
+
+[clock_lantern]
+A lantern on a post, on a rock out in the bay, and it is lit. The glass is dry. The post below it is crusted white with salt right up to the waterline, and not a hair above.
+
+# (draft)
+[clock_lantern_ves]
+{worried}...Right.
+
+[clock_pouch]
+A purse wedged in the rock above the waterline, as dry as the lantern.
+
+[clock_net]
+A fishing net hung out on a frame to dry, which it is not going to do.
+
+[clock_sea]
+The bay, slate-green, with the tide going in and out of it like breath.
+
+# --- THE BATHTUB ---------------------------------------------------------------
+
+[bath_mat]
+A mat, neatly squared up with the tide line. WELCOME, it says, in woven letters, with the faintest possible air of doubt.
+
+# (draft) A second look, and ten: the Dowager's bell approves.
+[bath_mat 2]
+You wipe your feet on the mat. It feels, faintly, like being approved of.
+
+# (draft)
+[bath_mat 10]
+You wipe your feet on the mat for the tenth time. Over by the gate, the bell gives one small, approving ting.
+
+# (draft)
+[bath_mat_ves 10]
+{laughing}Don't let it go to your head. Or your feet.
+
+[bath_sign]
+A notice on a post, in very small, very upright writing: PRIVATE BEACH. THE MANAGEMENT REGRETS ANY INCONVENIENCE. PLEASE WIPE YOUR FEET.
+
+[bath_sign_east]
+A notice by the gate: THE BOARDS. RING FOR PASSAGE. NO KNOCKING. PLEASE WIPE YOUR FEET ON THE WAY OUT AS WELL.
+
+[bath_gate]
+A timber gate across the pinch, painted white and very straight. There's a bracket on the post beside it, just the size of a ship's bell.
+
+[bath_bell_post]
+A timber frame with a bell-shaped bracket on its crossbeam and nothing on it. A hand-lettered tag: RING FOR PASSAGE (BRING YOUR OWN BELL).
+
+[bath_bell_hung]
+The Dowager's bell, hung on the frame by the gate, still wearing its pink bow. The tag says PLEASE WIPE YOUR FEET.
+
+[bath_spare_tub]
+An old bathtub, cracked and leaning, full of rain. Somebody has scrubbed it anyway.
+
+[bath_pouch]
+A purse in the grass, set down with great care and squared up with the tide line.
+
+# --- THE BOARDWALK -------------------------------------------------------------
+
+[walk_sign]
+A board at the foot of the boards: SALTCOMBE, UP. THE WAY IS WET. THE WAY IS ALSO LONG.
+
+# (draft)
+[walk_sign_ves]
+{smile}"Also long." They really do tell you everything.
+
+[walk_sign_top]
+A board at the head of the last flight: SALTCOMBE. WARM INSIDE.
+
+[walk_lamp]
+A lamp on a post, its glass fogged, burning steady behind the rain. It's the first warm light you've seen since the boat.
+
+# After the chapter (the storm over).
+[walk_lamp_calm]
+A lamp on a post, its glass fogged, still burning though nobody needs it now. Somebody will be along to trim it. Probably.
+
+[walk_pouch]
+A purse caught between two boards, safe from the sea.
+
+[walk_sea]
+The sea batters the stilts below, green and white.
+
+[walk_rail]
+A rail, wet and cold, gone dark with years of hands.
+
+# --- THE HULK ------------------------------------------------------------------
+
+[hulk_wall]
+Ship's planking, curved and black with wet. Somewhere above, rain drums on the hull.
+
+# After the chapter (the storm over).
+[hulk_wall_calm]
+Ship's planking, curved and black with wet. Somewhere above, the last of the rain drips off the hull.
+
+[hulk_wheel]
+A ship's wheel, leaning on the bulkhead where somebody stood it up and walked away.
+
+[hulk_barrels]
+A stack of barrels, lashed against the roll of a ship that is no longer rolling.
+
+[hulk_log]
+A table, bolted down, with a ship's log open on it. The ink has run, but you can read the last lines: SEA CAME IN AND DID NOT GO BACK. GONE TO MOVE THE BOATS UP. WILL RETURN BY DARK.
+
+[hulk_log_ves]
+{thoughtful}...Whoever it was didn't.
+
+# (draft) Was a Brine Tonic; now a Notch Charm (src/characters/notches.js).
+[hulk_chest]
+A sea chest under the table, its lid not quite shut. Inside, on a fold of sailcloth: a driftwood charm on a tarred string, with one notch cut in it.
+
+[hulk_pouch]
+A purse in a corner of the hold, heavier than it looks.
+
+[hulk_rope]
+A coil of rope, stiff with salt, lying where it was last dropped.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_hulk_oilskin]
+An old oilskin on a peg, stiff as a board with salt.
+
+# (draft)
+[in_hulk_chart]
+A chart from before the water went wrong. The coast on it looks friendlier.
+
+# --- SHORE DRESSING (2026-11-08) ------------------------------------------------
+
+# (draft)
+[shore_rocks]
+Wet stones in a huddle, weed round their feet like a skirt. A limpet holds on to one of them as if it has heard about the storm.
+
+# (draft)
+[shore_fence]
+A bit of fence, put up to keep something in or out. Whatever it was won.
+
+# (draft)
+[shore_fire]
+A little fire of driftwood in a ring of stones, burning low and stubborn under the rain. Somebody comes back to it. Not now, though.
+
+# (draft)
+[shore_fire_ves]
+{cold}Warm hands. Good. I was starting to forget I had them.
+
+# (draft)
+[shore_lantern]
+A storm lantern on a hook, lit. Someone walks this shore at night and wants to find the way back.
+
+# (draft)
+[shore_pot]
+A lobster pot, its rope run out to a red cork. Nothing in it but a very offended crab.
+
+# (draft)
+[shore_log]
+A whole tree, roots and all, come from who knows where. The sea brought it a long way to leave it here.
+
+# (draft)
+[shore_pool]
+A pool the tide forgot. A starfish in it, very still, waiting for the sea to remember.
+
+# (draft)
+[walk_boat]
+A rowboat tied up under the boardwalk, half full of rain. Somebody bails her out every morning and every morning it's full again.
+
+# (draft)
+[in_hulk_lamp]
+A lamp somebody left burning in the hold. It's been burning a long time. It doesn't seem to mind.
+
+# (draft)
+[in_hulk_shelf]
+A shelf of tins screwed to the hull. The labels have gone, so every tin is a surprise.
+
+# (draft)
+[in_hulk_crates]
+Crates stacked in the corner, the stencils washed off them. One rattles.
+
+# (draft) THE FAIR RETURN'S LOG (optional, secret), page 1: in a bottle behind the hulk's barrels.
+[hulk_log_bottle]
+Behind the barrels, on its side where somebody tucked it out of the way: a green bottle, corked, sealed with red wax. Pressed into the wax, FR. There is a roll of paper inside. Whoever fished it out of the sea kept it, and never once opened it.
+
+# (draft)
+[hulk_log_bottle_bramble]
+{awed}It's a letter. In a bottle. That's somebody's letter.
+
+# --- THE HEADLAND (2026-11-14) -----------------------------------------------------
+
+# (draft)
+[headland_sign]
+MOORING RINGS. Hook the low one. Swing with it. Let go at the top of the swing, toward the next.
+
+# (draft)
+[headland_sign_bramble]
+{surprised}Up? We go UP that?
+
+# (draft)
+[headland_sign_ves]
+{bored}Well. It didn't say "down", Bramble.
+
+# (draft)
+[headland_face]
+Black rock, running with rain.
+
+Old iron rings are hammered up it, one above another, each worn bright where a rope used to sit.
+
+# (draft)
+[headland_face_calm]
+Black rock, still dripping.
+
+Old iron rings are hammered up it, one above another, each worn bright where a rope used to sit.
+
+# (draft)
+[headland_tackle]
+The end of an old rope, rotted through. Somebody used to haul boats up this cliff. Somebody strong.
+
+# (draft)
+[headland_bollard]
+An iron bollard on the clifftop, grooved deep by rope.
+
+The boats came up here out of the storms and waited for better weather.
+
+# (draft)
+[headland_boat]
+A boat turned keel-up on the grass. It came up out of a storm and never went back down. Grass grows through its seams.
+
+# (draft)
+[headland_boat_bramble]
+{sad}Nobody came back for it.
+
+# (draft)
+[headland_pouch]
+A purse, tucked under the lip of the cliff, out of the wind.
+
+# ===== THE LIFE PASS (2026-11-14): rock pools, shells, the breakers' leavings and the odds the sea left. (draft) =====
+
+[sl_anemone_a]
+Anemones open like small flowers in the pool: pink, green, and one very orange. A tentacle curls round your finger and lets go again, politely.
+
+[sl_anemone_a 2]
+The anemones close up when you breathe on them. You try breathing very carefully.
+
+[sl_anemone_a_bramble]
+It GRABBED me! ...It's let go. It was only being friendly.
+
+[sl_anemone_a_ves]
+It's tasted you and decided against.
+
+[sl_barrel]
+A barrel on its side, stove in at one end, full of sand and one crab's idea of a bedroom.
+
+[sl_barrel_bramble]
+Hello? ...He's out.
+
+[sl_board_sign]
+A sign nailed to the boardwalk: PLEASE DO NOT FEED THE GULLS. Under it, in different writing: THEY FEED THEMSELVES. Under that, in a third hand: TOO LATE.
+
+[sl_board_sign_ves]
+Three people who agree about nothing, and one sign.
+
+[sl_bones]
+A fish picked down to its bones and left in a tidy comb. The gulls were thorough.
+
+[sl_bones_ves]
+Somebody enjoyed their dinner.
+
+[sl_bones_b]
+A fishbone arch, a whole ribcage of it, standing up out of the shingle like a tiny church. A hermit crab has moved in and is making the best of it.
+
+[sl_bones_b_bramble]
+It's got a roof! It's got a ROOF!
+
+[sl_boot]
+A single boot, stiff with salt. A very small crab has moved in and put out a doormat of weed.
+
+[sl_boot_ves]
+The other boot is probably still out there, looking for it.
+
+[sl_boot_b]
+A boot lying on its side with the laces still done up, as if the owner just stepped out of it politely and kept going.
+
+[sl_boot_b_ves]
+Left foot. I wonder where the right one went.
+
+[sl_bottle]
+A green glass bottle half sunk in the shingle, corked and empty. You hold it up to the light anyway.
+
+[sl_bottle_bramble]
+Maybe the note went out and found a better bottle.
+
+[sl_bottle_ves]
+No note. Pity. I do like a note.
+
+[sl_buoy]
+A buoy with half its paint left, rolling very slightly in the wind as if it wants to go home.
+
+[sl_buoy_ves]
+It's rolling the wrong way. Home's that way.
+
+[sl_crabshell]
+An empty crab shell, orange-red and big as a saucer. All the doors and windows are open.
+
+[sl_crabshell_bramble]
+Where's the crab?! Is it walking round with no shell on? Is it embarrassed?
+
+[sl_crabshell_ves]
+It's called moulting. It's perfectly respectable.
+
+[sl_crabshell_b]
+A crab claw as big as your hand, bleached white, with a tiny barnacle on the pincer. It points straight at the sea.
+
+[sl_crabshell_b_ves]
+It's the same direction we're going. Convenient.
+
+[sl_dinghy]
+A dinghy lying keel up with a stone on it and a rope to a post, in case it gets ideas. Somebody has been very careful and very wrong.
+
+[sl_dinghy_bramble]
+It's a boat that's decided not to be a boat. I respect that.
+
+[sl_duck]
+A yellow buoy that is, you are almost certain, a duck. Somebody has drawn a face on it in marker. The face is very pleased.
+
+[sl_duck_bramble]
+Quack. ...It's not going to quack. I just wanted to say it.
+
+[sl_duck_ves]
+I don't know who did that, and I'm choosing to keep it that way.
+
+[sl_float]
+A glass float from a net, green and thick as a bottle, with a seam down the middle. A spider has made a web inside.
+
+[sl_float_ves]
+A little house for a spider. Better than the net ever did.
+
+[sl_gap_bottle]
+A bottle with a note in it, rolled tight. You pull it out. IF YOU CAN READ THIS, YOU ARE TOO CLOSE TO THE SEA.
+
+[sl_gap_bottle_bramble]
+It's too late! We're way too close!
+
+[sl_gap_bottle_ves]
+Thanks for that.
+
+[sl_jelly]
+A moon jelly stranded on the stones, a clear dish with four pale rings in it. The tide will come and fetch it. Probably.
+
+[sl_jelly_bramble]
+It looks like a lampshade. A very sad lampshade.
+
+[sl_jelly_ves]
+Don't poke it.
+
+[sl_kelp_a]
+Long brown kelp, rooted to a rock and combing out in the current like hair. It squeaks when you pull it.
+
+[sl_kelp_a_bramble]
+It squeaks!
+
+[sl_kelp_b]
+Kelp stems, rubbery and slick. Somebody has tied one in a knot. Whoever it was had time on their hands.
+
+[sl_kelp_b_ves]
+A sailor. Only a sailor ties a knot in something that isn't holding anything.
+
+[sl_lantern]
+A lantern lying where the wind dropped it, glass whole, wick dry. Nobody lit it. Nobody will.
+
+[sl_lantern_ves]
+Leave it. It's earned a lie-down.
+
+[sl_log]
+A bleached log wedged between two rocks. Somebody has carved a face in the end, a surprised one.
+
+[sl_log_bramble]
+He looks like he's seen the sea! For the first time!
+
+[sl_log_ves]
+He looks like he's just heard the price of rope.
+
+[sl_nest]
+A gull's nest in a hollow of the rock: weed, string, a bottle top and three speckled eggs. Somewhere close, a gull is looking at you.
+
+[sl_nest 2]
+The eggs are exactly where they were. So is the gull, now, and it is not pleased.
+
+[sl_nest_bramble]
+I'm not going to touch them! ...I'm going to look at them really hard.
+
+[sl_nest_ves]
+Don't touch the eggs. I'm saying that for you, not them.
+
+[sl_nest_b]
+A nest knitted out of fishing line, buttons and one yellow glove. There is a single egg in it, speckled like a pebble, and a very small note: PLEASE MIND THE EGG.
+
+[sl_nest_b_bramble]
+I'm minding it! I'm minding it so hard!
+
+[sl_net]
+Net, torn, hung over a rock to dry and never collected. A small fish is still in it. Dry. A very long time dry.
+
+[sl_net_bramble]
+Is it still good? ...No. No, it's not.
+
+[sl_net_ves]
+Poor thing. It was nearly out.
+
+[sl_net_b]
+A net strung between two stakes to dry, with starfish caught in it like medals. Whoever hung them did it carefully, so as not to hurt them.
+
+[sl_net_b_ves]
+Somebody put them back on the rocks, and then somebody put them back on the net. They like the net.
+
+[sl_oar]
+An oar stuck upright in the stones like a flag nobody's claimed. A name is burnt into the blade, worn almost to nothing.
+
+[sl_oar_ves]
+Whoever it was, they got where they were going. Or they didn't, and that's why it's here.
+
+[sl_oar_b]
+An oar stuck in the shingle blade up, with a gull on the top of the handle. The gull looks entirely settled. It has been there longer than you have.
+
+[sl_oar_b_ves]
+He's on watch.
+
+[sl_plank]
+A plank with a painted letter on it: an R, or a P, in blue. The rest of the word is in another part of the sea.
+
+[sl_plank_bramble]
+It could be PIE! ...It's not PIE.
+
+[sl_plank_ves]
+R-something. Probably RUN.
+
+[sl_pool_a]
+A pool in the rock, clear as a window. A shrimp has noticed you and is deciding what to do about it.
+
+[sl_pool_a 2]
+The shrimp is back at the ledge, pretending it was never gone.
+
+[sl_pool_a_bramble]
+THERE. Under the ledge. Did you see it go?
+
+[sl_pool_a_ves]
+Don't stare. It can tell.
+
+[sl_pot]
+A lobster pot with the door chewed open from inside. Whatever it was, it wasn't going to stay.
+
+[sl_pot_ves]
+I'd have chewed too.
+
+[sl_pouch_dunes]
+A purse buried to the neck in the sand in the very corner of the dunes, with a stone on top. The stone has a smile painted on it, so whoever buried it wanted it found by somebody nice.
+
+[sl_pouch_headland]
+A purse in an old boot, wedged into a hollow of the cliff where the wind can't find it. Whoever hid it was proud of the spot. It's been raining for a hundred years and the purse is dry, which says something for the spot.
+
+[sl_pouch_tide]
+A purse tucked in the gap between two stones in the corner, with a gull feather stuck in the string for luck. Nobody has been this far into a corner in years.
+
+[sl_puddle]
+A puddle in a dent of the rock, with the whole stormy sky in it, upside down.
+
+[sl_puddle_bramble]
+I can see a cloud in it! A tiny cloud!
+
+[sl_rope]
+A coil of rope gone stiff as a board, tarred and salted and curled up on itself like a sleeping cat.
+
+[sl_rope_bramble]
+Can I take it? I could do loads with a rope. ...It would snap. All right.
+
+[sl_rope_b]
+A rope's end whipped with twine, hung over a post in a perfect loop. Whoever tied it expected to be back.
+
+[sl_rope_b_bramble]
+I can do that knot! ...I can't do that knot.
+
+[sl_sandbags]
+A stack of sandbags from a sea wall that isn't there any more. The bags have held. Somebody was good at sacks.
+
+[sl_sandbags_bramble]
+Sandbags! We could build a fort. ...In a storm. Hm.
+
+[sl_seal_trail]
+Two long smooth drag marks in the shingle, from the water up to a rock and nowhere else. Something heavy and unhurried comes here.
+
+[sl_seal_trail_bramble]
+A SEAL! Is it a seal? I want it to be a seal!
+
+[sl_seal_trail_ves]
+Something that doesn't pay rent, and is entirely right not to.
+
+[sl_shells_a]
+A drift of small shells: whelks, cockles, one with a hole worn through the middle. Somebody gathered these into a pile and then forgot why.
+
+[sl_shells_a_ves]
+A collection nobody got to finish.
+
+[sl_shells_b]
+A heap of empty cockles, all bleached the same bone white. The crabs have been using them as furniture.
+
+[sl_shells_b_bramble]
+I'm keeping one. ...No. Somebody lives in it. I'll leave it.
+
+[sl_star_a]
+A starfish clamped to the rock, orange as a tin of paint. It isn't moving. It isn't not moving, either.
+
+[sl_star_a 2]
+The starfish hasn't moved. You can't tell if that's good news.
+
+[sl_star_a_bramble]
+Five arms! I counted twice! It still has five!
+
+[sl_star_a_ves]
+It's thinking. Leave it to it.
+
+[sl_star_b]
+A purple starfish, wedged in a crack where the tide can't quite reach. All five arms point at the sea.
+
+[sl_star_b_ves]
+Purple. Of course the posh one gets the good crack.
+
+[sl_star_c]
+A pink starfish with a limpet riding on its back like a hat. Neither seems bothered.
+
+[sl_star_c_bramble]
+They're friends. That's a friendship. Look at them!
+
+[sl_tidy_sign]
+A tiny sign stuck in the sand beside a crab hole: PLEASE WIPE YOUR FEET. Under it, smaller: (HE MEANS IT.)
+
+[sl_tidy_sign 2]
+The sign hasn't moved. Nor has the crab. Both of them are watching your feet.
+
+[sl_tidy_sign_bramble]
+I wiped my feet! ...On the sand. Is that what he meant?
+
+[sl_tidy_sign_ves]
+The tidy crab has a sign now. Of course it does.
+
+[sl_turnip]
+A turnip washed up whole, with a faded blue rosette still pinned to it: FIRST PRIZE. It has been a very long way from a field.
+
+[sl_turnip_bramble]
+It went to sea! The turnip went to sea! Tolliver's going to be so jealous!
+
+[sl_turnip_ves]
+That's Tolliver's turnip. It's got further than he has.
+
+[sl_whelk_empty]
+The hollow in the rocks where the big whelk was. A dent in the sand the shape of a shell. It looks relieved.
+
+[sl_whelk_found]
+In a hollow of the rocks, out of the wind, sits a great spiral whelk shell the size of a loaf. Empty. Spotless. Waiting.
+
+[sl_whelk_found_bramble]
+It's HUGE! Put it to your ear! ...It's just the sea. But it's very loud!
+
+[sl_whelk_found_ves]
+That's a shell with a doorway. Somebody has been looking for that.
+# ===== END OF THE LIFE PASS =====
+
+# --- THE LIFE PASS, ROUND 2: the hulk ---
+
+[r5s_hulk_trap]
+A crab trap on the deck with the door shut and a crab inside. A larger crab sits outside it, looking in, with a deeply disappointed face.
+
+[r5s_hulk_trap_ves]
+{bored}Family.
+
+[r5s_hulk_trap_bramble]
+{worried}Should we let him out?
+
+[r5s_hulk_boot]
+A boot with its toe full of sand. Somebody has drawn a tiny map in the sand with a finger. An X marks the boot.
+
+[r5s_hulk_boot_ves]
+{laughing}Very reassuring.
+
+[r5s_hulk_boot_bramble]
+{glee}Treasure!
+
+[r5s_hulk_can]
+A tin can with a candle stub melted flat inside it, and a ring of old wax on the sill beside. Somebody was reading by this. The book is still folded open.
+
+[r5s_hulk_can_ves]
+{thoughtful}Left in a hurry.
+
+[r5s_hulk_can_bramble]
+{worried}What were they reading?

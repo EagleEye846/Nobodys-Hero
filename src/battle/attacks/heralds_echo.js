@@ -5,12 +5,12 @@ import { defineBulletArt } from '../projectiles.js';
 // so it fights with its news: WORDS. The letters of its proclamation fly
 // at you in long wavy ribbons, rows of them come down with the gaps
 // between the words to slip through, and when it shouts a word at you its
-// echo comes after it (and the echo's echo). And with its things: rings of
-// sound off its hand bell, and its scroll, unrolling across the box.
+// echo comes after it (and the echo's echo), and it writes its news across
+// the box in letters as tall as you, which drip off when it's done.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. Its `density` is high, so its own clock
-// (`t`) runs fast: about 9 of it fits in a turn.
+// (`t`) runs fast: about 11 of it fits in a turn.
 
 // Its letters: a little blocky alphabet, 5 pixels square, with an outline
 // added round each one when it's turned into bullet art below. Only the
@@ -46,10 +46,6 @@ const SHOUTS = ['HERO!', 'HAIL!', 'SOON!', 'HEAR!', 'COME!'];
 // fainter and bluer.
 const LETTER = { k: '#2a1e4a', w: '#f4e4b0' };
 const ECHO_LETTER = { k: 'rgba(42, 30, 74, 0.55)', w: 'rgba(190, 204, 240, 0.7)' };
-const RING = { y: '#f0e0a0', Y: '#c8b060' };
-const BELL = { k: '#1e1a3a', b: '#e0c878', B: '#a08840', f: '#c8d4f0' };
-const SCROLL = { k: '#3a2e1e', p: '#f0e8d0', P: '#c8bca0' };
-const SCROLL_COLOR = '#e8dcb8';
 
 // A letter, with a one-pixel outline round it so it reads on anything.
 function outlined(glyph) {
@@ -76,37 +72,11 @@ for (const [char, glyph] of Object.entries(FONT)) {
 }
 const letterArt = (char, echo = false) => `herald${echo ? 'Echo' : 'Letter'}${char}`;
 
-// A ring of sound off the bell: an arc, drawn facing right (outward).
-defineBulletArt('heraldRing', {
-  frames: [['y..', '.Y.', '.yY', '.Y.', 'y..']],
-  palette: RING,
-  radius: 1.8,
-  rotate: true,
-});
-
-// Its hand bell (harmless), swinging as it rings, with its paw on the handle.
-defineBulletArt('heraldBellSwing', {
-  frames: [
-    ['...ff..', '...kk..', '..kbbk.', '.kbbbBk', '.kbbbBk', 'kbbbbbBk', 'kkkkkkkk', '...kb...'].map((row) => row.padEnd(8, '.')),
-    ['..ff...', '..kk...', '.kbbk..', 'kbbbBk.', 'kbbbBk.', 'kbbbbbBk', 'kkkkkkkk', '....kb..'].map((row) => row.padEnd(8, '.')),
-  ],
-  palette: BELL,
-  radius: 1,
-  frameSeconds: 0.22,
-});
-
-// The rolled-up end of its scroll, riding the edge as it unrolls.
-defineBulletArt('heraldScrollEnd', {
-  frames: [['.kk.', 'kppk', 'kpPk', 'kppk', 'kpPk', 'kppk', 'kpPk', '.kk.']],
-  palette: SCROLL,
-  hitbox: { w: 4, h: 8 },
-});
-
-// The same, lying the other way, for a scroll unrolling downward.
-defineBulletArt('heraldScrollEndDown', {
-  frames: [['.kkkkkk.', 'kppPpPpk', 'kpPpPpPk', '.kkkkkk.']],
-  palette: SCROLL,
-  hitbox: { w: 8, h: 4 },
+// An ink blot, one dot of the big letters it writes across the box.
+defineBulletArt('heraldBlot', {
+  frames: [['.k.', 'kwk', '.k.']],
+  palette: LETTER,
+  radius: 1.4,
 });
 
 // Letters laid out along a line, starting at (x, y), each `gap` apart.
@@ -133,26 +103,32 @@ export const HERALDS_ECHO_ATTACKS = {
     let nextLetter = 0.1;
     let y = 0;
     let fromRight = true;
+    let lead = 0;
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (!queue.length && t >= nextLetter && t < 7.8) {
+        if (!queue.length && t >= nextLetter && t < 10.6) {
           queue = [...RIBBONS[line % RIBBONS.length]];
           fromRight = line % 2 === 0;
           line++;
-          y = clamp(soul.y + rand(-6, 6), box.y + 14, box.y + box.h - 14);
+          y = clamp(soul.y + rand(-3, 3), box.y + 10, box.y + box.h - 10);
+          // (Each line's wave starts at a different point in its sway, so it
+          // falls differently across the box.)
+          lead = rand(0, (Math.PI * 2) / 4);
         }
         if (queue.length && t >= nextLetter) {
           const char = queue.shift();
           nextLetter = t + 0.11;
           if (FONT[char]) {
-            bullets.push(new Shot({
+            const letter = new Shot({
               x: fromRight ? box.x + box.w + 6 : box.x - 6, y,
               vx: fromRight ? -56 : 56,
-              wobble: { amplitude: 12, frequency: 4 },
+              wobble: { amplitude: 8, frequency: 4 },
               art: letterArt(char),
-            }));
+            });
+            letter.age = lead;
+            bullets.push(letter);
           }
           // A breath between lines.
           if (!queue.length) nextLetter = t + 0.55;
@@ -161,96 +137,55 @@ export const HERALDS_ECHO_ATTACKS = {
     };
   },
 
-  // The bell: it rings its hand bell over the box, and every ring sends a
-  // ring of sound spreading down through it, with one gap in it. The bell
-  // moves along between rings.
-  heraldBell(box, density, { Shot, rand, pick }) {
+  // In big letters: it writes its news right across the box, in letters
+  // as tall as you are tall, made of ink blots: HERO, SOON, WAIT. Each word
+  // shows faintly first, across your row, and then it's solid, so find a
+  // hole to stand in: the middle of an O, the space between two letters,
+  // the open side of an E. Then the letters drip off one by one, H, E, R,
+  // O, and it writes the next one.
+  heraldSpell(box, density, { Shot, rand, clamp, shuffleBag }) {
+    const words = shuffleBag(['HERO', 'SOON', 'WAIT', 'HEAR', 'NEWS']);
+    const PX = 3.6;
+    const LETTER_W = PX * 5;
+    const SPACE = 2;
     let t = 0;
-    let next = 0.35;
-    let bell = null;
-    let place = 0;
-    const spots = [0.2, 0.5, 0.8];
-    const COUNT = 15;
-    return {
-      duration: 6.6,
-      update: (dt, bullets) => {
-        t += dt;
-        if (!bell) {
-          bell = new Shot({ x: box.x + box.w * 0.5, y: box.y - 6, harmless: true, art: 'heraldBellSwing' });
-          bullets.push(bell);
-        }
-        if (t >= next && t < 7.8) {
-          next = t + 0.95;
-          const from = { x: bell.x, y: bell.y + 4 };
-          const gap = Math.floor(rand(2, COUNT - 4));
-          for (let i = 0; i < COUNT; i++) {
-            if (i >= gap && i < gap + 3) continue;
-            const angle = 0.06 * Math.PI + (i / (COUNT - 1)) * 0.88 * Math.PI;
-            bullets.push(new Shot({ x: from.x, y: from.y, vx: Math.cos(angle) * 40, vy: Math.sin(angle) * 40, art: 'heraldRing' }));
-          }
-          // Off to ring somewhere else next time.
-          place = (place + pick([1, 2])) % spots.length;
-          bell.targetX = box.x + box.w * spots[place];
-        }
-        if (bell.targetX !== undefined) bell.x += (bell.targetX - bell.x) * Math.min(1, dt * 4);
-        // Gone when the ringing's done.
-        if (t > 8.2) bell.life = 0;
-      },
-    };
-  },
-
-  // The scroll: it unrolls its scroll right across the box, along your row,
-  // reads it out, and rolls it back up. From one side, then the other, and
-  // now and then it lets one fall open from the top, down through where
-  // you are.
-  heraldScroll(box, density, { Shot, Line, clamp }) {
-    let t = 0;
-    let next = 0.1;
-    let count = 0;
-    let scrolls = [];
-    const unroll = (bullets, soul) => {
-      const down = count % 3 === 2;
-      const fromLeft = count % 2 === 0;
-      count++;
-      let from;
-      let angle;
-      let reach;
-      if (down) {
-        from = { x: clamp(soul.x, box.x + 6, box.x + box.w - 6), y: box.y - 2 };
-        angle = Math.PI / 2;
-        reach = box.h + 2;
-      } else {
-        from = { x: fromLeft ? box.x - 2 : box.x + box.w + 2, y: clamp(soul.y, box.y + 6, box.y + box.h - 6) };
-        angle = fromLeft ? 0 : Math.PI;
-        reach = box.w + 4;
-      }
-      const line = new Line({ x: from.x, y: from.y, angle, length: reach, thickness: 7, warn: 0.6, life: 1.6, color: SCROLL_COLOR });
-      const end = new Shot({ x: from.x, y: from.y, warn: 0.6, life: 1.6, art: down ? 'heraldScrollEndDown' : 'heraldScrollEnd' });
-      bullets.push(line, end);
-      scrolls.push({ line, end, from, angle, reach });
+    let next = 0.2;
+    let writing = [];
+    const write = (bullets, soul) => {
+      const word = words();
+      const top = clamp(soul.y - rand(3, 15), box.y + 3, box.y + box.h - 3 - LETTER_W);
+      const left = box.x + (box.w - (word.length * LETTER_W + (word.length - 1) * SPACE)) / 2 + PX / 2;
+      const letters = [...word].map((char, n) => {
+        const blots = [];
+        FONT[char].forEach((row, r) => [...row].forEach((on, c) => {
+          if (on !== '#') return;
+          const blot = new Shot({ x: left + n * (LETTER_W + SPACE) + c * PX, y: top + r * PX + PX / 2, warn: 0.9, art: 'heraldBlot' });
+          bullets.push(blot);
+          blots.push(blot);
+        }));
+        return blots;
+      });
+      writing.push({ letters, at: t, dropped: 0 });
     };
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 7.4) {
-          next = t + 1.05;
-          unroll(bullets, soul);
+        if (t >= next && t < 9.6) {
+          write(bullets, soul);
+          next = t + 2.4;
         }
-        for (const scroll of scrolls) {
-          const { line, end, from, angle, reach } = scroll;
-          const k = line.age - line.warn;
-          if (k < 0) continue;
-          // Out quick, read out, rolled back up.
-          let out;
-          if (k < 0.35) out = k / 0.35;
-          else if (k < 1.1) out = 1;
-          else out = Math.max(0, 1 - (k - 1.1) / 0.45);
-          line.length = Math.max(1, reach * out);
-          end.x = from.x + Math.cos(angle) * line.length;
-          end.y = from.y + Math.sin(angle) * line.length;
+        for (const word of writing) {
+          // Solid for a moment, then the letters drip off, one by one.
+          while (word.dropped < word.letters.length && t - word.at > 1.8 + word.dropped * 0.18) {
+            for (const blot of word.letters[word.dropped]) {
+              blot.vy = rand(0, 10);
+              blot.gravity = rand(110, 150);
+            }
+            word.dropped++;
+          }
         }
-        scrolls = scrolls.filter((scroll) => scroll.line.age < scroll.line.warn + 1.9);
+        writing = writing.filter((word) => word.dropped < word.letters.length);
       },
     };
   },
@@ -264,10 +199,10 @@ export const HERALDS_ECHO_ATTACKS = {
     let line = 0;
     const gap = 8;
     return {
-      duration: 6.8,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (t >= next && t < 7.6) {
+        if (t >= next && t < 10.4) {
           next = t + 1.05;
           const text = PROCLAMATION[line++ % PROCLAMATION.length];
           // A short line it says twice, the way a crier does, so it still
@@ -275,7 +210,7 @@ export const HERALDS_ECHO_ATTACKS = {
           // gaps aren't always in the same place.
           const say = text.length <= 5 ? `${text} ${text}` : text;
           const width = say.length * gap;
-          const start = box.x + 4 + rand(0, Math.max(0, box.w - 8 - width));
+          const start = box.x - 2 + rand(0, Math.max(4, box.w + 4 - width));
           bullets.push(...spell(Shot, say, start, box.y - 4, gap, { vy: 24 }));
         }
       },
@@ -309,10 +244,10 @@ export const HERALDS_ECHO_ATTACKS = {
       });
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 7.2) {
+        if (t >= next && t < 10) {
           next = t + 1.3;
           const word = SHOUTS[shout++ % SHOUTS.length];
           const from = edgePoint(box, undefined, 8);

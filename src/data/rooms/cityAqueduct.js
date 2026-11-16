@@ -12,6 +12,9 @@
 //   b  old stone step (jump up onto it; Ves can not)
 //   W  the old city's stone wall (solid)
 //   ~  water (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_AQUEDUCT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_aqueduct',
@@ -66,6 +69,7 @@ export const CITY_AQUEDUCT = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_aqueduct ?? []),
     { sprite: 'gate_narrow', x: 15, y: 11, text: 'aqueduct_gate', opensWith: ['span'], openText: 'aqueduct_gate_open' },
     { sprite: 'lever', x: 18, y: 3, text: 'aqueduct_lever', lever: 'span' },
     { sprite: 'gold_pouch', x: 12, y: 2, text: 'aqueduct_purse', gold: 240, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
@@ -73,6 +77,8 @@ export const CITY_AQUEDUCT = {
     { sprite: 'street_lamp_dead', x: 9, y: 13, text: 'dead_lamp' },
     { sprite: 'street_lamp_dead', x: 20, y: 13, text: 'dead_lamp' },
     { sprite: 'chest', x: 1, y: 14, text: 'aqueduct_chest', gives: 'fountain_brass_handle', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_aqueduct'] ?? []),
   ],
   tileTexts: { W: 'aqueduct_wall', '#': 'city_wall', '!': 'cracked_floor', B: 'aqueduct_top', b: 'city_step', '~': 'forum_water' },
 

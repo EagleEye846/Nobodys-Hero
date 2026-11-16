@@ -31,6 +31,8 @@
 //   .  packed dirt floor
 //   ^  stalagmite (solid)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_OLD_SEAM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_old_seam',
@@ -116,8 +118,11 @@ export const DIGGINGS_OLD_SEAM = {
   // barricades, the shaft gate, signs, the store-room chest (Miner's Helm) and purses.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_old_seam ?? []),
     // A save crystal, so the caves never go long without one.
     { sprite: 'savepoint', x: 3, y: 5, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 2, y: 5, travel: 'old_seam', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'mine_cart', x: 4, y: 8, cart: 'a', dir: 'R', text: 'cart_stuck' },
     { sprite: 'rail_lever', x: 23, y: 12, switch: 'seam_sw', text: 'seam_lever' },
     { sprite: 'rail_lever', x: 3, y: 13, switch: 'seam_secret', text: 'seam_nope_lever' },
@@ -158,6 +163,7 @@ export const DIGGINGS_OLD_SEAM = {
     { sprite: 'floor_pebbles', x: 21, y: 14, walkable: true, flat: true },
     // A tea break left mid-pasty, and spare pit props stacked for the next bit of roof.
     { sprite: 'lunch_crate', x: 11, y: 4, text: 'd_lunch' },
+    { sprite: 'col_token', x: 36, y: 6, walkable: true, flat: true, gives: 'tally_canary', taken: { gone: true } },
   ],
   tileTexts: { '#': 'd_rock', O: 'd_ore', I: 'd_post', '^': 'd_stalag', W: 'd_face' },
 

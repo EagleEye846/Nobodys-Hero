@@ -19,7 +19,7 @@ export const SEED_SHEEP = {
   feel: { hit: 'fluff', idle: 'motes', defeat: 'fluff' },
   // Sunnyside's own battle song, the Dandelion Lion Rag.
   music: 'sunnyBattle',
-  maxHp: 8800,
+  maxHp: 5800,
   damage: 80,
 
   // The easy end of Chapter 5, like the coast's first monsters.
@@ -35,9 +35,9 @@ export const SEED_SHEEP = {
 
   // Its attacks live in src/battle/attacks/seed_sheep.js.
   patterns: [
-    { name: 'sheepSeeds', weight: 3 },
-    { name: 'sheepRam', weight: 2 },
-    { name: 'sheepPuff', weight: 3 },
+    { name: 'sheepBaa', weight: 3 },
+    { name: 'sheepCount', weight: 3 },
+    { name: 'sheepWish', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -48,7 +48,7 @@ export const SEED_SHEEP = {
     { name: 'Make a wish', calm: 30 },
   ],
 
-  rewards: { exp: 2150, coins: 10 },
+  rewards: { exp: 2150, coins: 8 },
 
   // What it sometimes leaves behind (src/data/items.js), with the chance of it.
   drops: [{ item: 'clock_wool', chance: 0.4 }],

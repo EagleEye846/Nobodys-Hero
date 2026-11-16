@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE WATERGATE: the old city's road comes back up out of the fen through a
 // wall with two watergates in it, each held open by a treadle on the far side
 // of the other. Bramble squeezes in through a grating to stand on the first;
@@ -66,6 +67,8 @@ export const MARSH_WATERGATE = {
     { sprite: 'marsh_lantern', x: 2, y: 11, text: 'marsh_lantern', light: 60 },
     { sprite: 'marsh_lantern', x: 27, y: 6, text: 'marsh_lantern', light: 60 },
     { sprite: 'gold_pouch', x: 12, y: 7, text: 'watergate_purse', gold: 200, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_watergate'] ?? []),
   ],
   tileTexts: { W: 'watergate_wall', '#': 'watergate_wall', $: 'fen_water' },
 

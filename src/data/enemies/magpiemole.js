@@ -22,7 +22,7 @@ export const MAGPIEMOLE = {
   anim: MAGPIE_MOLE_ANIM,
   // The Chapter 4 battle song.
   music: 'belowBattle',
-  maxHp: 1600,
+  maxHp: 2850,
   damage: 40,
 
   difficulty: { density: 1.45, speed: 1.35 },
@@ -32,8 +32,8 @@ export const MAGPIEMOLE = {
     { name: 'moleToss', weight: 3 },
     { name: 'moleHills', weight: 2 },
     { name: 'moleSwing', weight: 2 },
-    { name: 'moleClods', weight: 2 },
-    { name: 'moleFeathers', weight: 2 },
+    { name: 'moleSort', weight: 3 },
+    { name: 'moleGrab', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

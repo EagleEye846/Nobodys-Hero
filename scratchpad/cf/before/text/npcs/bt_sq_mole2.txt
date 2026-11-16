@@ -1,0 +1,53 @@
+# BT_SQ_MOLE2: A miner mole in a red hat and blue neckerchief, sitting on the plaza edge and trying to remember if he left the kettle on.
+
+[first]
+Did I leave the kettle on? I've been down the Diggings forty years and every time I come up I wonder.
+
+Hello. Are you the new ones?
+
+[repeat]
+Don't mind me. I'm resting my pick arm. It's been a hard decade.
+
+[first after the_kings_welcome]
+You'll be wanting a lamp for the Diggings. It's dim down there. Dimmer every week.
+
+[repeat after the_kings_welcome]
+Take a flask. I would've, but I'd have had to boil the kettle, and then where would I be?
+
+That's where Tuck found the king, you know. Down the Diggings, wandering about, tall as a pit-prop.
+
+All my life I've been down there and never found so much as a spoon. I must've been on the other shift.
+
+[first after the_light_goes_up]
+The kettle's fine! I remembered! I turned it off in the spring! I'm SO relieved!
+
+[repeat after the_light_goes_up]
+I'm having a nap. In the sun. In the Sunstone, I mean. It's a good sun.
+
+# (draft)
+[repeat 2]
+Kettles run in our family. My dad left one on for a week. Came home to soup.
+
+# (draft)
+[repeat 3]
+I tie a knot in my hanky to remember. Then I forget what the knot's for. Lovely knot, though.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+Tall as a pit-prop, the king, and not a mark on him. Forty years down there, me, and look at my knees.
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}Not a mark on him. {bored}Lucky king.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+Have you got a kettle? You should get one. Then you'd have something to worry about down there.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I've had a terrible thought. Did I leave the OTHER kettle on?
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+No. I haven't got another kettle. Phew. Back to my nap.

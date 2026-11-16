@@ -121,3 +121,137 @@ Small glowing mushrooms, close together, whispering.
 
 [landing_thicket]
 A thicket of spiky crystal. Nothing's getting through that.
+
+# --- THE CHIMNEY (glimmer_chimney): a ring climb up to a chest ---
+
+[chimney_sign]
+A board nailed to a crystal, the paint nearly gone: CUTTERS ONLY. HOOK THE LOW RING. SWING. CATCH THE NEXT ONE.
+
+Underneath, smaller: DON'T LOOK DOWN. (THE PINK ONES ARE DOWN.)
+
+[chimney_face]
+The chimney's wall goes up and up into the crystal.
+
+Old iron rings are hammered into it, one above another, all the way to a shelf at the top.
+
+[chimney_face_ves]
+{bored}Someone climbed that for fun. Someone with no friends.
+
+[chimney_pink]
+A big pink crystal at the foot of the chimney. It looks like it's waiting for somebody to fall on it.
+
+[chimney_chest]
+A chest on the shelf, at the top of the chimney.
+
+Whoever left it here wanted it kept dry and very hard to get to. It worked.
+
+# --- THE LIFE PASS: things to look at (set dressing) ---
+
+[gp_bug]
+A glowbug, lamp end up, going about its business. It lets you look for a moment, then remembers an appointment.
+
+[gp_bug_ves]
+{smile}It has a better light than we do and it's using it to commute.
+
+[gp_bug 2]
+It turns its lamp towards you, very slowly, to see who you are. Then it turns it away again. Not interested.
+
+[gp_bug_ves 2]
+{smile}Rude. But I respect a creature that knows when to stop looking.
+
+[gp_chime 2]
+One small bell swings, and the rest answer it, one after another, down the stalk. Then quiet again.
+
+[gp_crumbs 2]
+The pile is faintly warm and smells of sugar. Crystal sugar, probably. Probably.
+
+[gp_gem]
+A little crystal, pink at the heart, standing on its own. It gives a faint tick when the light moves across it, as if it's thinking about chiming.
+
+[gp_gem_ves]
+{smile}A very small crystal with very big opinions. I can tell.
+
+[gp_gem 2]
+It ticks again. You get the feeling it was about to say something.
+
+[gp_gem_ves 2]
+{smile}Give it time. They always wait for the end of the room.
+
+[gp_geode 2]
+You hold your hand up beside it. The geode is winning.
+
+[gp_puddle 2]
+You lean over. Your reflection leans over. The cave in the puddle has more crystals than the one you're standing in.
+
+[gp_ribbon 2]
+The ribbon moves in a breeze you can't feel. It's the only thing in the cave that's moving at all.
+
+[gp_shell 2]
+Something has been round the inside with a tiny brush. The crystals are cleaner than anything else in the cave.
+
+[gp_web]
+A small web strung between two crystals, beaded with dew. The spider's out. It'll be back, and it'll be smug about it.
+
+[gp_web_ves]
+{surprised}Don't touch it. It's the only thing down here that's actually handmade.
+
+[gp_web 2]
+A drop of dew slides down a thread, reaches the crystal, and rings it, just barely.
+
+[gp_web_ves 2]
+{surprised}Even the spider has better timing than I do.
+
+[lp_land_nook]
+A twist of glowing sugar wedged in behind the crystal spires, with a glowbug asleep on top of it. It shuffles over, grudgingly, and lets you have it.
+
+[r3c_gl_jar]
+A glass jar full of glowbugs, set neatly on a flat stone. The bugs have stuck a tiny mushroom cap in as a hat. Who did that?
+
+[r3c_gl_jar_ves]
+{surprised}That's a hat. On a glowbug. That's not nature.
+
+[r3c_gl_jar 2]
+The glowbug in the hat is looking very calm about it.
+
+[r3c_gl_jar_ves 2]
+{smile}I want one.
+
+[r3c_gl_hammock]
+A rope hammock strung between two crystal spikes, with a dent in it the size of somebody who naps. A boot sits beside it, laces undone.
+
+[r3c_gl_hammock_ves]
+{bored}A bed. In a crystal cavern. I'd give it a four.
+
+[r3c_gl_hammock 2]
+The dent in the hammock is still warm. Or maybe it's the glow.
+
+[r3c_gl_cups]
+Four little crystal cups set out on a flat rock, each filled with a different colour of glitter. A tea party for guests who haven't turned up.
+
+[r3c_gl_cups_ves]
+{thoughtful}They've set it all out. They only forgot the guests.
+
+[r3c_gl_cups 2]
+One cup is chipped. Somebody has put a tiny crystal into the chip, like a filling.
+
+[r3c_gl_cups_ves 2]
+{surprised}It's a cup with a tooth.
+
+[r3c_gl_sign 2]
+Underneath, in a smaller hand: THE BLUE ONES TASTE OF PENNIES.
+
+[r3c_ch_rope]
+A rope hung in a loop on a spike at the chimney's foot, with a label: FOR THE FIRST TIME. A little further along: FOR THE SECOND TIME. (PLEASE RETURN.)
+
+[r3c_ch_rope_ves]
+{smile}Somebody set this up for every attempt. Good manners, in a cave.
+
+[r3c_ch_arrow 2]
+Further down the arrow, someone has scribbled, in another hand: 'IT GETS HARDER.' And someone else: 'IT DOES NOT.'
+
+[r3c_ch_flask]
+A flask propped against the wall, with a note stuck to it. DRINK BEFORE YOU GO UP. DO NOT DRINK WHEN YOU COME BACK DOWN, YOU'LL NEED IT.
+
+[r3c_ch_flask_ves]
+{smile}It makes no sense at all, and I respect it.
+

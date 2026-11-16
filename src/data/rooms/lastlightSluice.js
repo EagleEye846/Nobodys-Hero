@@ -17,6 +17,8 @@
 //   #  wall top (solid)   h  black brick (solid)   H  lamp niche   6  slit window   .  flagstones   o  a door
 // (draft).
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const LASTLIGHT_SLUICE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lastlight_sluice',
@@ -61,9 +63,10 @@ export const LASTLIGHT_SLUICE = {
     { x: 29, y: 11, w: 1, h: 2, to: 'lastlight_gallery', spawn: { x: 1, y: 11 } },
   ],
 
-  // The end of the chapter (tideHeldFinale.js): back in by the east door after the fight, Haddock at the crank.
+  // The end of the chapter (tideHeldFinale.js): back in from the stair after the beach (beach_bramble_dives),
+  // the tower flooding from below, Haddock at the crank.
   cutscenes: [
-    { x: 28, y: 11, w: 1, h: 1, scene: 'the_crank', after: 'corrie_falls' },
+    { x: 2, y: 15, w: 1, h: 1, scene: 'the_crank', after: 'beach_bramble_dives' },
   ],
 
   textFile: 'interactions/lastlight.txt',
@@ -73,13 +76,15 @@ export const LASTLIGHT_SLUICE = {
     { sprite: 'c5_sluice_gate', x: 27, y: 3, text: 'sluice_gate' },
     { sprite: 'c5_lantern_post_unlit', x: 20, y: 3, text: 'sluice_lamp' },
     // The weight grille, and its three plates (each with a wheel on its chain).
-    { sprite: 'gate_narrow', x: 18, y: 8, text: 'sluice_grille', opensWith: ['sl_h', 'sl_v', 'sl_b'], openText: 'sluice_grille_open' },
-    { sprite: 'gate_narrow', x: 18, y: 9, text: 'sluice_grille', opensWith: ['sl_h', 'sl_v', 'sl_b'] },
+    // (Gone for good once the sea has been through the tower: hauled up into its slot, so the
+    // end of the chapter's run to the crank and back goes straight through, however you got here.)
+    { sprite: 'gate_narrow', x: 18, y: 8, text: 'sluice_grille', opensWith: ['sl_h', 'sl_v', 'sl_b'], openText: 'sluice_grille_open', until: 'corrie_falls' },
+    { sprite: 'gate_narrow', x: 18, y: 9, text: 'sluice_grille', opensWith: ['sl_h', 'sl_v', 'sl_b'], until: 'corrie_falls' },
     { sprite: 'c5_sluice_wheel', x: 17, y: 8, text: 'sluice_wheel_hero' },
     { sprite: 'treadle', x: 17, y: 9, text: 'sluice_plate_hero', treadle: 'sl_h', who: 'hero' },
     { sprite: 'c5_sluice_wheel', x: 2, y: 3, text: 'sluice_wheel_bramble' },
     { sprite: 'treadle', x: 2, y: 4, text: 'sluice_plate_bramble', treadle: 'sl_b', who: 'bramble' },
-    { sprite: 'kid_gap', x: 3, y: 6, text: 'sluice_gap', gap: true },
+    { sprite: 'c5_stone_gap', x: 3, y: 6, text: 'sluice_gap', gap: true },
     { sprite: 'c5_sluice_wheel', x: 13, y: 12, text: 'sluice_wheel_ves' },
     { sprite: 'treadle', x: 13, y: 13, text: 'sluice_plate_ves', treadle: 'sl_v', who: 'vesper' },
     { sprite: 'rock_stump', x: 3, y: 14, text: 'rock_stump', rockReset: true },
@@ -127,6 +132,7 @@ export const LASTLIGHT_SLUICE = {
     { sprite: 'll_seep', x: 27, y: 4, flat: true, walkable: true },
     { sprite: 'll_kelp_drag', x: 26, y: 12, flat: true, walkable: true },
     { sprite: 'gold_pouch', x: 28, y: 14, text: 'sluice_pouch', gold: 250, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    ...(LIFE5_PROPS['lastlight_sluice'] ?? []),
   ],
   tileTexts: { '#': 'll_wall', h: 'll_wall', H: 'll_niche', 6: 'll_window', o: 'll_door', '.': 'll_floor' },
 

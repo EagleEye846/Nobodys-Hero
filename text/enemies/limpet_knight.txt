@@ -55,7 +55,7 @@ business.
 # TALK options in src/data/enemies/limpet_knight.js.
 [talk: Inspect]
 LIMPET KNIGHT - HP 2250
-A limpet in tiny armour, very serious. Bashes with a wide plate, sucks you toward its rock, and rolls stones down it. Everything it does is meant to stop you moving. So keep moving.
+A limpet in tiny armour, very serious. Jousts along your row and rides home the same way, cracks its rock where the seams show, and its clingers clamp on the bugle.
 
 [talk: Salute]
 You put your hand to your brow, properly, with your elbow up. LIMPET KNIGHT freezes. Then it gives the smallest, sharpest salute you have ever seen, and the plume trembles a little with feeling.

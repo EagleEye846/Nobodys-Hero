@@ -6,6 +6,7 @@
 //   #  the old city's stone, overhead (solid)
 //   .  the old city's flagstones
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const LASTHOME_CHAPEL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lasthome_chapel',
@@ -70,6 +71,8 @@ export const LASTHOME_CHAPEL = {
       { needs: ['!q_bell_asked'], set: 'q_bell_asked', text: 'bell_ask', append: true },
     ] },
     { sprite: 'sign', x: 1, y: 12, text: 'chapel_board' },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['lasthome_chapel'] ?? []),
   ],
   tileTexts: { W: 'chapel_wall', '#': 'chapel_wall' },
 

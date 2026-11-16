@@ -8,12 +8,15 @@ import {
 // `pudding`, from its first draft name.) The miners' cave olm (a blind pale
 // thing they kept in a tin dish by the kettle, like a mine canary, and called
 // "Pale") touched the fallen star's shard in the pool at the foot of the shaft
-// and warped: now huge and translucent like wet glass, with blood-red gills,
-// a spine you can see, the star burning in its belly, and the miners' lost
-// things (hat, boot, mug, watch) turning inside it. It keeps far too still,
-// its mouth opens much too wide, seven eyes open down its side when the star
-// wakes, and it talks only in the miners' voices. Underneath it is a sad
-// thing, still waiting for everyone to come back after lunch.
+// and grew: now huge and translucent like wet glass, with blood-red gills,
+// a spine you can see, the star burning in its belly. When the miners didn't
+// come back, it made one wish on the star: that they would come back after
+// lunch. The star took it too literally and gave it their voices and their
+// left-behind things (hat, boot, mug, watch, turning inside it) instead of
+// them. It keeps far too still, its mouth opens much too wide, seven eyes
+// open down its side when the star wakes, and it talks only in the miners'
+// voices. It isn't mad or possessed: it is a sad thing stuck inside a wish.
+// Sparing it lets the wish go; beating it breaks it.
 // Everything it says is in text/enemies/pudding.txt (all drafts).
 //
 // Started by a cutscene step in the lair (draft: the parent's `pudding_wakes`):

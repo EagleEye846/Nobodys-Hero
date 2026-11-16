@@ -245,7 +245,7 @@ export const SUNNY_BATTLE_THEME = {
   title: 'Dandelion Lion Rag',
   bpm: 120,
   stepsPerBeat: 4,
-  volume: 1.35,
+  volume: 1.89,
 
   instruments: {
     // The rag piano: the right hand, the same an octave down for the loud

@@ -1,0 +1,27 @@
+# ST_BEACH_WALKER: a hare in a gold coat, strolling the sand from the first hut to the boulders and back, with the look of someone who has all day and no complaints. The life pass.
+
+[first]
+Oh! Hello! Just walking. Nice day for it. It's always a nice day for it, in here. It's a very good beach.
+
+[repeat]
+To the boulders, and back. It's exactly forty paces. I've counted. Forty-one if I take the long way round the sleeping man.
+
+# (draft)
+[repeat 2]
+There's a gull on the second post who's been giving me the eye for a week. I've started saying good morning to him. He's never said it back. Yet.
+
+# (draft)
+[repeat_ves 2]
+{smile}Give him time. He's a gull. They hold grudges for years.
+
+# (draft)
+[repeat 3]
+Used to go the whole way to the cove. But the tide does what it does, and I'm not a young hare. Forty paces suits me. Forty paces and a sit.
+
+# (draft)
+[first after the_light_answers]
+Walked the whole way to the cove today. No hurry. The sun did something to my feet.
+
+# (draft)
+[repeat after the_light_answers]
+Forty paces, forty-one. I've gone back to forty. I've found I like it.

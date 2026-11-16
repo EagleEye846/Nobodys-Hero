@@ -99,7 +99,9 @@ export const SALTCOMBE_TOWN_HALL = {
     { sprite: 'in_lamp_stool', x: 20, y: 10, text: 'in_hall_lamp_stool' },
     // The badger's biscuit tins by the warm side, sandbags kept by the door for when the quay floods.
     { sprite: 'in_tins_crate', x: 17, y: 11, text: 'in_hall_biscuits' },
-    { sprite: 'c5_sandbags', x: 5, y: 12, text: 'in_hall_sandbags' },
+    { sprite: 'c5_sandbags', x: 5, y: 12, text: 'in_hall_sandbags' },
+    // (life pass 2026-11-14)
+    { sprite: 'st_cat_loaf_b', x: 18, y: 4, text: 'life_h_cat', animation: 'st_cat_loaf_b', speed: 1.2 },
   ],
   tileTexts: { h: 'hall_wall', I: 'in_hall_post', X: 'in_hall_hearth' },
 

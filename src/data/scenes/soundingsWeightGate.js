@@ -21,19 +21,28 @@ export const SOUNDINGS_WEIGHT_GATE = {
 
   steps: [
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', text: 'The hook at the end of the chain is just the size of the weight\'s brass eye.' },
+    // The hook, the weight going on it, the chain running over its wheel, the grille climbing into the rock
+    // and daylight coming down the stair. (draft)
+    { do: 'camera', to: { x: 13, y: 16 } },
+    { do: 'wait', seconds: 0.5 },
+    { do: 'act', who: 'player', act: 'lunge' },
     { do: 'leave', who: 'frame', instant: true },
     { do: 'appear', who: 'frame_full', instant: true },
-    { do: 'say', text: 'You hang the Brass Sounding-Weight on it.' },
     { do: 'sound', name: 'door' },
     { do: 'quake', amount: 1, seconds: 0.4 },
     { do: 'wait', seconds: 1.2 },
+    { do: 'camera', to: { x: 11, y: 15 } },
+    { do: 'sound', name: 'creak' },
+    { do: 'quake', amount: 1.2, seconds: 2 },
     { do: 'leave', who: 'gate_a' },
     { do: 'leave', who: 'gate_b' },
-    { do: 'say', text: 'The chain runs over its wheel with a long iron sigh, and the grille climbs into the rock. Somewhere above, there is daylight. Not much. Enough.' },
+    { do: 'stage', shafts: [{ at: { x: 11.5, y: 16 }, w: 1.8, color: '214, 236, 232' }] },
+    { do: 'wait', seconds: 2 },
+    { do: 'camera' },
     { do: 'act', who: 'bramble', act: 'bounce', wait: false },
     { do: 'say', who: 'bramble', text: '{awed}It goes UP. Up is my favourite.' },
     { do: 'face', who: 'ves', at: 'bramble' },
     { do: 'say', who: 'ves', text: '{proud}Finally. A direction I like.' },
   ],
 };
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

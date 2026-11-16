@@ -23,8 +23,8 @@ export const LASTLIGHT_BALCONY = {
   name: 'THE BALCONY',
   // The region it's in (src/data/areas.js): the title card, the storm look and the battle background.
   area: 'lastlight',
-  // None: the finale sets it.
-  music: null,
+  // What the Tide Left (the finale's dawn scene starts in silence; this is for anything after).
+  music: 'saltcombeAfter',
   // Dawn after the storm: the sea lying down, no rain or thunder.
   ambience: 'calm_sea',
   vesWell: true,

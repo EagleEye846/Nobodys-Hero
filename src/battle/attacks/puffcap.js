@@ -2,10 +2,10 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Puffcap's attacks. It's a fat, sleepy toadstool that puffs spores when
 // it's startled, so everything it throws is a mushroom thing: puffballs that
-// swell up and pop into spores, a fairy ring of little toadstools that comes
-// up round you and closes in, curtains of spores shaken loose from the gills
-// under its cap, and drowsy spore clouds that make you slow and heavy while
-// its babies come hopping across the floor.
+// swell up and pop into spores, drowsy spore clouds that make you slow and
+// heavy while its babies come hopping across the floor, a box full of jumpy
+// little puffcaps dozing that go POOF if you come too near, and the first
+// two notes of its song, hummed over and over.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. Forty Winks nudges the soul itself (the clouds
@@ -57,12 +57,28 @@ defineBulletArt('puffSwell', {
   frameSeconds: 0.1,
 });
 
-// A little fairy-ring toadstool, pale and tan like the real ones.
-defineBulletArt('puffRingCap', {
-  frames: [['.kkk.', 'ktttk', 'kTTTk', '.kfk.', '.kfk.']],
+// A little puffcap fast asleep (eyes shut), before something startles it.
+defineBulletArt('puffNapper', {
+  frames: [['.kkkkk.', 'kcsccsk', 'kCCCCCk', '.kfffk.', '.kfffk.', '..k.k..']],
+  palette: SHROOM,
+  radius: 2.5,
+});
+
+// A note of its humming: a little floating crotchet.
+defineBulletArt('puffNote', {
+  frames: [['...Sk', '...S.', '...S.', '.SSS.', 'SSSS.', '.SS..'], ['...Sk', '...Sk', '...S.', '.SSS.', 'SSSS.', '.SS..']],
   palette: SHROOM,
   radius: 2,
+  frameSeconds: 0.2,
 });
+
+// Changes a thing's look (to the art of a bullet made with the new one).
+const LOOKS = {};
+const setLook = (shot, name, Shot) => {
+  LOOKS[name] ??= new Shot({ x: 0, y: 0, art: name }).art;
+  shot.artName = name;
+  shot.art = LOOKS[name];
+};
 
 // A baby puffcap, hopping: a tiny rose cap, two dot eyes, two tiny feet.
 defineBulletArt('puffBaby', {
@@ -118,7 +134,6 @@ defineBulletArt('puffZ', {
   radius: 1,
 });
 
-const GILL = '#e8d8a8';
 
 export const PUFFCAP_ATTACKS = {
   // Startle Pop: it jumps at nothing, and puffballs come tumbling down out of
@@ -139,7 +154,7 @@ export const PUFFCAP_ATTACKS = {
       falling.push(ball);
     }, { first: 0.2 });
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
         drop(dt, bullets, soul);
         for (const ball of falling) {
@@ -168,85 +183,11 @@ export const PUFFCAP_ATTACKS = {
     };
   },
 
-  // Fairy Ring: a ring of little toadstools sprouts up all round you,
-  // blinking, with a gap in it. Then the ring closes in. Get out through the
-  // gap before it shuts. The gap always opens toward the inside of the box.
-  puffFairyRing(box, density, { Shot, every, rand, clamp }) {
-    const count = 15;
-    const radius = 30;
-    const warn = 0.75;
-    const closeIn = 1.1; // seconds to close from the edge to the middle
-    let rings = [];
-    const sprout = every(1.55, 1.75, (bullets, soul) => {
-      const centre = { x: clamp(soul.x, box.x + 14, box.x + box.w - 14), y: clamp(soul.y, box.y + 14, box.y + box.h - 14) };
-      // Pick a gap that's inside the box, so there's always a way out.
-      let gapAngle = 0;
-      for (let tries = 0; tries < 24; tries++) {
-        gapAngle = rand(0, Math.PI * 2);
-        const gx = centre.x + Math.cos(gapAngle) * radius;
-        const gy = centre.y + Math.sin(gapAngle) * radius;
-        if (gx > box.x + 6 && gx < box.x + box.w - 6 && gy > box.y + 6 && gy < box.y + box.h - 6) break;
-      }
-      const caps = [];
-      for (let i = 0; i < count; i++) {
-        const angle = gapAngle + ((i + 1.5) / (count + 2)) * Math.PI * 2;
-        const cap = new Shot({
-          x: centre.x + Math.cos(angle) * radius, y: centre.y + Math.sin(angle) * radius,
-          vx: -Math.cos(angle) * (radius / closeIn), vy: -Math.sin(angle) * (radius / closeIn),
-          warn, life: closeIn * 0.92, art: 'puffRingCap',
-        });
-        bullets.push(cap);
-        caps.push(cap);
-      }
-      rings.push(caps);
-    }, { first: 0.25 });
-    return {
-      duration: 6.5,
-      update: (dt, bullets, soul) => {
-        sprout(dt, bullets, soul);
-        rings = rings.filter((caps) => caps[0].age < caps[0].warn + caps[0].life);
-      },
-    };
-  },
-
-  // Gill Curtain: it tips its cap over the box, and spores pour down off the
-  // gills underneath in streaks, dotted lines first to show where. The
-  // streaks shift every time, so you sidestep, sidestep. Every fourth shake
-  // it's a whole curtain with one gap near you: dart for it.
-  puffGills(box, density, { Line, Shot, every, rand, clamp }) {
-    let beat = 0;
-    const spacing = 20;
-    const streak = (bullets, x, warn) => {
-      bullets.push(new Line({
-        x, y: box.y, angle: Math.PI / 2, length: box.h, thickness: 6, warn, life: 0.45, grow: 320, color: GILL,
-      }));
-      // A spore or two drifts down at the top of each streak.
-      bullets.push(new Shot({ x, y: box.y + 2, vy: 0, harmless: true, life: warn, art: 'puffSpore', angle: Math.PI / 2 }));
-    };
-    const shake = every(0.85, 0.85, (bullets, soul) => {
-      beat++;
-      if (beat % 4 === 0) {
-        // The whole curtain, with one gap 24 pixels wide not far from you.
-        const gapAt = clamp(soul.x + rand(-24, 24), box.x + 14, box.x + box.w - 14);
-        // Streaks 8 apart overlap into a solid wall: no slivers to squeeze through.
-        for (let x = box.x + 3; x < box.x + box.w; x += 8) {
-          if (Math.abs(x - gapAt) < 12) continue;
-          streak(bullets, x, 0.65);
-        }
-        streak(bullets, gapAt - 12, 0.65);
-        streak(bullets, gapAt + 12, 0.65);
-      } else {
-        const offset = rand(0, spacing);
-        for (let x = box.x + offset; x < box.x + box.w; x += spacing) streak(bullets, x, 0.5);
-      }
-    }, { first: 0.2 });
-    return { duration: 6.8, update: (dt, bullets, soul) => shake(dt, bullets, soul) };
-  },
-
   // Forty Winks: it yawns, and two drowsy spore clouds drift about the box.
   // They don't hurt, but inside one you're heavy and slow. Meanwhile its
-  // babies come hopping in from the sides, bounce, bounce, bounce. Hop over
-  // them, and stay out of the clouds while you do.
+  // babies come hopping in from the sides (off the floor, or jumping in from
+  // up the walls), bounce, bounce, bounce. Hop over them, and stay out of
+  // the clouds while you do.
   puffFortyWinks(box, density, { Shot, every, rand }) {
     const floor = box.y + box.h;
     let clouds = [];
@@ -255,12 +196,18 @@ export const PUFFCAP_ATTACKS = {
     let last = null;
     let snore = 0;
     let fromLeft = Math.random() < 0.5;
+    let hops = 0;
     const hop = every(0.55, 0.75, (bullets) => {
-      const height = rand(26, 58); // how high it hops
+      // How high it hops: mostly big hops, up to the top of the box, and
+      // every third one a little scurry along the floor.
+      const height = hops++ % 3 === 2 ? rand(6, 10) : rand(30, 72);
       const gravity = 220;
+      // Some come in off the floor, some jump in from up the wall.
+      const fromWall = hops % 2 === 0;
+      const y = fromWall ? rand(box.y + 4, box.y + 26) : floor - 4;
       const baby = new Shot({
-        x: fromLeft ? box.x - 3 : box.x + box.w + 3, y: floor - 4,
-        vx: (fromLeft ? 1 : -1) * rand(38, 50), vy: -Math.sqrt(2 * gravity * height), gravity, life: 4, warn: 0.2, art: 'puffBaby',
+        x: fromLeft ? box.x - 3 : box.x + box.w + 3, y,
+        vx: (fromLeft ? 1 : -1) * rand(38, 50), vy: fromWall ? rand(-15, 10) : -Math.sqrt(2 * gravity * height), gravity, life: 4, warn: 0.2, art: 'puffBaby',
       });
       baby.bounceAt = floor - 3;
       bullets.push(baby);
@@ -268,7 +215,7 @@ export const PUFFCAP_ATTACKS = {
       fromLeft = !fromLeft;
     }, { first: 0.6 });
     return {
-      duration: 7,
+      duration: 8,
       update: (dt, bullets, soul) => {
         if (!clouds.length) {
           for (let i = 0; i < 2; i++) {
@@ -302,6 +249,106 @@ export const PUFFCAP_ATTACKS = {
           }
         }
         last = { x: soul.x, y: soul.y };
+      },
+    };
+  },
+  // Don't wake them: little puffcaps are dozing all over the box. Every one
+  // of them is jumpy: go too near and its eyes pop open, it jumps, and it
+  // goes POOF in a ring of spores. Then it settles down somewhere else.
+  // Meanwhile spores keep sifting down from above (every third right over
+  // you), so you can't keep still: pick your way between the sleepers.
+  puffJumpy(box, density, { Shot, every, rand, clamp, pointAwayFrom }) {
+    const NEAR = 15;
+    let nappers = [];
+    let started = false;
+    let t = 0;
+    let sift = 0;
+    const settle = (bullets, soul, warn = 0.6) => {
+      const at = pointAwayFrom(box, soul, 30, 8);
+      const napper = new Shot({ x: at.x, y: at.y, warn, art: 'puffNapper' });
+      bullets.push(napper);
+      nappers.push(napper);
+    };
+    const drift = every(0.25, 0.31, (bullets, soul) => {
+      const x = sift++ % 3 === 0 ? clamp(soul.x, box.x + 4, box.x + box.w - 4) : rand(box.x + 4, box.x + box.w - 4);
+      bullets.push(new Shot({ x, y: box.y - 2, vy: 34, warn: 0.2, art: 'puffSpore', angle: Math.PI / 2 }));
+    });
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (!started) {
+          started = true;
+          for (let i = 0; i < 5; i++) settle(bullets, soul);
+        }
+        drift(dt, bullets, soul);
+        for (const napper of nappers) {
+          if (napper.age < napper.warn) continue;
+          if (napper.startled === undefined && Math.hypot(soul.x - napper.x, soul.y - napper.y) < NEAR) {
+            // Eek! Eyes open, a little jump...
+            napper.startled = t;
+            setLook(napper, 'puffBaby', Shot);
+            napper.vy = -20;
+            napper.gravity = 120;
+          }
+          if (napper.startled !== undefined && t - napper.startled > 0.35 && !napper.popped) {
+            // ...POOF.
+            napper.popped = true;
+            napper.life = napper.age - napper.warn;
+            const turn = rand(0, Math.PI * 2);
+            for (let i = 0; i < 8; i++) {
+              const a = turn + (i / 8) * Math.PI * 2;
+              bullets.push(new Shot({ x: napper.x, y: napper.y, vx: Math.cos(a) * 44, vy: Math.sin(a) * 44, life: 1.4, art: 'puffSpore' }));
+            }
+            if (t < 9) settle(bullets, soul, 0.9);
+          }
+        }
+        nappers = nappers.filter((napper) => !napper.popped);
+      },
+    };
+  },
+
+  // Humming: it only knows the first two notes of its song, so that's what
+  // it hums, over and over: a little cluster of notes floats across the box
+  // at one height, then another at a second height, da-DUM, da-DUM. The
+  // first note always comes along your row. Learn the two heights and
+  // stand clear of them. Every few bars it loses its place and starts again,
+  // two new heights (they flash across the box first).
+  puffHum(box, density, { Line, Shot, rand, clamp }) {
+    let t = 0;
+    let verse = null;
+    let next = 0.2;
+    const fromRight = Math.random() < 0.5;
+    const startVerse = (bullets, soul) => {
+      const first = clamp(soul.y, box.y + 8, box.y + box.h - 8);
+      let second = rand(box.y + 8, box.y + box.h - 8);
+      for (let tries = 0; tries < 10 && Math.abs(second - first) < 24; tries++) second = rand(box.y + 8, box.y + box.h - 8);
+      for (const y of [first, second]) bullets.push(new Line({ x: box.x, y, angle: 0, length: box.w, thickness: 14, warn: 0.7, life: 0, color: '#f0e0a0' }));
+      verse = { lanes: [first, second], bars: 0, beat: 0, at: t + 0.7 };
+    };
+    const note = (bullets, y) => {
+      for (let k = -1; k <= 1; k++) {
+        const x = fromRight ? box.x + box.w + 4 : box.x - 4;
+        bullets.push(new Shot({
+          x, y: y + k * 5, vx: (fromRight ? -1 : 1) * 62, wobble: { amplitude: 1.5, frequency: 9 }, art: 'puffNote',
+        }));
+      }
+    };
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (!verse && t >= next) startVerse(bullets, soul);
+        if (!verse || t < verse.at) return;
+        // da...
+        note(bullets, verse.lanes[verse.beat]);
+        verse.beat = 1 - verse.beat;
+        // ...DUM. (Then a breath before the next bar.)
+        verse.at = t + (verse.beat === 1 ? 0.32 : 0.55);
+        if (verse.beat === 0 && ++verse.bars >= 4) {
+          verse = null;
+          next = t + 0.5;
+        }
       },
     };
   },

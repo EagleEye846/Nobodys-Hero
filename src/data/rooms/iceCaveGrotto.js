@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE GOBLIN'S GROTTO: the second ice cave, a great round cavern with a
 // frozen pool in it, and a goblin who has set up shop here behind a stall of
 // crates, trading with the very few climbers who ever come this far (see
@@ -10,6 +11,7 @@
 //   v  stalactite (walk under it)                 ^  stalagmite (solid)
 //   x  ice crystals (they glow) (solid)           D  doorway (walk through it; see `doors`)
 //   b  low stone block (jump up onto it)          B  tall stone block (jump onto it from a low block)
+import { R3A_PROPS } from '../r3aLife.js';
 export const ICE_CAVE_GROTTO = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'ice_cave_grotto',
@@ -75,6 +77,10 @@ export const ICE_CAVE_GROTTO = {
     { sprite: 'lamp', x: 20, y: 11, text: 'grotto_lamp' },
     // In the darkest corner: only there once your own light reaches it.
     { sprite: 'chest', x: 2, y: 14, text: 'grotto_chest', gives: 'aurora_scarf', seenInLight: true, taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['ice_cave_grotto'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['ice_cave_grotto'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

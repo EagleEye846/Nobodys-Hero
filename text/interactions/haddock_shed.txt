@@ -5,14 +5,16 @@
 [shed_nets]
 A net on two nails, mended so many times it is more mend than net. The label on the frame: NET. MENDED (9TH TIME). IT HOLDS. SU. 43.
 
+# (draft)
 [shed_nets_ves]
-{bored}Nine times. That isn't a net, that's a habit.
+{laughing}Nine times. That isn't a net, that's a habit.
 
 [shed_oars]
 Two oars slung from a nail. One is big and scarred, labelled FIRST OAR. SP. 41. The other is short enough for a child, and the label says: SHORT OAR. SP. 54. PULLS TO THE LEFT. (THE ROWER, NOT THE OAR.)
 
+# (draft)
 [shed_oars_bramble]
-{grin}I'd row like that. Round and round and round.
+{glee}I'd row like that. Round and round and round.
 
 [shed_floats]
 A rope of cork floats across two pegs: red, white, plain cork, and one that is just a green bottle. A label under them: FLOATS. 3 MISSING. GULLS. WI. 52.
@@ -20,8 +22,9 @@ A rope of cork floats across two pegs: red, white, plain cork, and one that is j
 [shed_barrel]
 A rain barrel with a lid, and on the lid a rusty bung and a label: THE BOTHER'S OLD BUNG. SU. 38. REPLACED. KEPT. REASONS UNKNOWN.
 
+# (draft)
 [shed_barrel_ves]
-{thoughtful}Reasons unknown. He kept everything for reasons unknown.
+{smile}Reasons unknown. He kept everything for reasons unknown.
 
 [shed_cabinet]
 A little cabinet, one door hanging off. On top, an open matchbox lined with cotton wool, and in it a tooth no bigger than a grain of rice. The label is in smaller capitals than the rest, so as not to crowd it: C. LOST TOOTH. WI. 53. (FIRST ONE. HE WAS VERY BRAVE ABOUT IT. I WAS NOT.)
@@ -38,8 +41,9 @@ A card nailed up over a bucket of fish heads: GULLS: DO NOT FEED. Under it, in n
 [shed_tide_table]
 A tide table pinned up by its corners, the paper gone soft as cloth. The label: TIDE TABLE. THE GOOD YEAR. SP. 44. Every tide in it came when it said it would. There is a pencil tick beside each one.
 
+# (draft)
 [shed_tide_table_ves]
-{thoughtful}A whole year of tides doing as they were told. Imagine.
+{smile}A whole year of tides doing as they were told. Imagine.
 
 [shed_stove]
 A little iron stove, gone cold. A kettle on top, one cup beside it, and a second cup, small, upside down on a clean cloth. The label on the pipe: STOVE. DON'T LET IT GO OUT. (IT HAS. THE KETTLE UNDERSTANDS.)
@@ -47,8 +51,9 @@ A little iron stove, gone cold. A kettle on top, one cup beside it, and a second
 [shed_cot]
 A narrow cot, a patched grey blanket tucked as square as a sail. Folded at the foot is a second blanket, small and red, with a label pinned to it: C. BLANKET. TOO SMALL NOW. KEPT ANYWAY. AU. 55.
 
+# (draft)
 [shed_cot_bramble]
-{worried}It's folded really neat.
+{sad}It's folded really neat.
 
 # The workbench: one gift each. Labels in his handwriting.
 [shed_gift_hero]
@@ -64,8 +69,9 @@ A hat on the bench. A sou'wester, mustard green, with a floppy brim and one pink
 
 Underneath: IT IS. IT'S ALSO DRY. THAT'S ALL A HAT HAS TO BE.
 
+# (draft)
 [shed_gift_ves_ves]
-{thoughtful}It is ugly. He did say it would be.
+{laughing}It is ugly. He did say it would be.
 
 {proud}It's very dry, though.
 

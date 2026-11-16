@@ -118,3 +118,66 @@ Miss, and you'll be starting over from the grass. (X lets go, if you'd rather.)
 
 [face_rock]
 A sheer wall of rock. Iron rings are hammered into it here and there, all the way up.
+
+# === THE LIFE PASS, ROUND 2 (builder 3) ===
+# (draft)
+[r2r_gk_edel]
+A tuft of edelweiss in the shelter of a boulder, white and woolly, the kind of flower that looks like it's made of felt. It's a hard plant to grow up here. It's winning.
+
+# (draft)
+[r2r_gk_pole]
+A bent tent pole with a rag of orange cloth still tied to it, wedged between two rocks. The rest of the tent went down the mountain some years ago. The pole stayed to guard the rock.
+
+# (draft)
+[r2r_gk_kid]
+A goat kid asleep on a heap of coats. They're not its coats. It's been sleeping on them for a while. It is wearing a climber's cap, back to front, and nobody's asked it to explain.
+
+# (draft)
+[r2r_cs_tally]
+A post with tally marks cut into it, in groups of five. CLIMBS STARTED: a lot of marks. CLIMBS FINISHED: fewer. At the bottom, in a neat hand: 'RETURNED: ..' and the ink's gone.
+
+# (draft)
+[r2r_cs_tally 2]
+You count the marks. There are a lot more than you'd like. There's a second hand at the bottom, shakier, that's added a smiley.
+
+# (draft)
+[r2r_cs_stove]
+A little camp stove, a blackened billy on it, the flame long blown out. The billy has a lid and a scrap of paper under it: 'TEA. PRESS ON.' It's stone cold. The tea has become a very solid decision.
+
+# (draft)
+[r2r_cs_candle 2]
+The T on the jar is very small, like a hallmark. Somebody took this a long way in a pocket.
+
+# (draft)
+[r2r_cs_stash]
+A tin box wedged behind the pine, as far into the corner as it'll go. Inside: a Climber's Ration, wrapped in a sock, and a note: 'FOR WHOEVER GETS FURTHER THAN ME.' Whoever wrote it, you've got further than the sock.
+
+# (draft)
+[r2r_cs_stash_empty]
+The tin's empty now, apart from the note. You put it back where it was, folded tight, for the next one.
+
+# (draft)
+[r2r_sf_tally]
+Another tally post, nearer the bottom. These marks are all in different hands. It's a book that everybody's been writing in, one stroke at a time. Nobody's written the last line.
+
+# (draft)
+[r2r_sf_blaze]
+A blaze post, freshly painted. Under the paint, you can see three older coats. Whoever does this does it every spring, and doesn't go further than here.
+
+# (draft)
+[r3a_bf_picnic]
+A rug laid out in the grass, a basket with its lid on, and two cups, one chipped and one not. The loaf has been out so long it's become a geological feature. Whoever laid this out expected company at the foot of the Stair, and was patient about it. Both cups are the right way up, ready.
+
+# (draft)
+[r3a_bf_signpost]
+A signpost with three boards. The top one says UP, and underneath, smaller: (BURIED.) The next says GOATS, with an arrow and the word SCENIC. The lowest says THE RUINS, and then, in a different hand: PLEASE MIND THE DUMMY.
+
+# (draft)
+[r3a_sf_scope]
+A brass telescope bolted to the last ledge, pointing back down the way you came. You put your eye to it. The whole valley lies there like a plate, with the Ruins no bigger than a thumbprint at the bottom. Something very small and wooden is walking in front of the door, to the end of its patch and back. It has never once looked up.
+
+# (draft)
+[r3a_sf_flask]
+A flask wedged in a crack on the halfway ledge so the wind can't have it. A note is taped round it: FOR THE NEXT ONE. IT'S STILL TEA. You don't open it. You feel looked after anyway.
+
+# (draft)

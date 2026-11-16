@@ -519,3 +519,265 @@ You look through the telescope, at night.
 Stars. More stars than you've ever seen, right down to where the ground should be.
 
 And, at the very top of the mountain, one light that isn't a star. It's warm-coloured. It flickers, like a lantern. Then the cloud closes.
+
+# === THE LIFE PASS, ROUND 2 (builder 3) ===
+# (draft)
+[r2r_in_herbs]
+Dried herbs on a hook above the stove: thyme, a sort of mint, and a grey bunch the label calls SOUP. Greta swears by it.
+
+# (draft)
+[r2r_in_herbs_ves]
+{thinking}I'd like to know what the soup is made of. I'd like it more if I'd already eaten it.
+
+# (draft)
+[r2r_in_boots]
+Two pairs of boots steaming on a tray by the fire, toes up, laces hanging. A note: DRYING. IF THESE ARE YOURS, I AM SORRY ABOUT THE FIRE.
+
+# (draft)
+[r2r_in_boots_ves]
+{bored}Somebody's about to find out how toasted a boot can get.
+
+# (draft)
+[r2r_in_cat]
+A ginger cat, loafed up by the hearth, so warm it's practically a second fire. It opens one eye, judges you, and shuts it again.
+
+# (draft)
+[r2r_in_cat 2]
+Soup the cat has not moved. He lets you stroke him on the understanding that you're not to stop.
+
+# (draft)
+[r2r_in_cat_ves]
+{smile}Greta says he's called Soup. Naturally.
+
+# (draft)
+[r2r_in_globe 2]
+You shake it. The snow falls again. The tiny figure is still waiting by the gate. You put it back.
+
+# (draft)
+[r2r_hl_boots]
+Boots set out on a tray by the east fire, the soles steaming. Each pair has a small card: 'Mine. - Horace.' 'Mine too. - Horace.' The Head Herald has a lot of boots.
+
+# (draft)
+[r2r_hl_boots_ves]
+{bored}It's a long way down the stair when you've got that many feet to cover.
+
+# (draft)
+[r2r_hl_logs]
+A basket of split logs by the west fire. Every log has a small chalk number on its end, so they're burnt in order. Nobody remembers why, and nobody wants to be the one to stop.
+
+# (draft)
+[r2r_hl_darts 2]
+The darts are in the ear again. Somebody's been practising. Somebody's very consistent.
+
+# (draft)
+[r2r_hl_toy]
+A little toy trumpet, dented, with a sock stuffed in the bell. It's the size for a very small bandsman. Nobody has played it in a while, and that's probably the sock.
+
+# (draft)
+[r2r_hl_toy_ves]
+{smile}It's a mercy, whoever did the sock.
+
+# (draft)
+[r2r_sr_shoes]
+Snowshoes stood on their ends against the wall, one pair per customer who left without any. The note says FOR HIRE: 1 COIN OR A STORY. Nobody has ever paid in coin.
+
+# (draft)
+[r2r_sr_shoes_ves]
+{smile}What's the going rate in stories?
+
+# (draft)
+[r2r_sr_axes]
+A rack of ice axes, five on pegs, one empty peg and a card: BORROWED, WILL BRING BACK. The card has been rewritten so many times it's soft as cloth.
+
+# (draft)
+[r2r_sr_axes_ves]
+{thoughtful}I'd say it was wishful. It's more that somebody trusts them.
+
+# (draft)
+[r2r_sr_cat]
+A tabby cat on a crate by the till, tail going like a metronome. It's keeping an eye on the stock, and on you. It isn't clear which of the two it trusts less.
+
+# (draft)
+[r2r_sr_cat_ves]
+{bored}It reminds me of the way I used to look at people.
+
+# (draft)
+[r2r_bt_rope]
+A spare bell rope, thick as your wrist and coiled as neat as a snail. It's labelled IN CASE. In case of what, it doesn't say.
+
+# (draft)
+[r2r_bt_rope_ves]
+{thoughtful}In case the bell rope breaks. In case it doesn't break and someone needs the other one. In case.
+
+# (draft)
+[r2r_ma_logs]
+A basket of logs, and a ball of grey wool nested in it. Either the wool's learned to burn, or Marta's lost track of what goes where.
+
+# (draft)
+[r2r_ma_logs_ves]
+{bored}She's built a nest. Not a basket.
+
+# (draft)
+[r2r_po_herbs]
+A hook of dried lavender. Mrs. Pottle claims it keeps the moths off. It does. The moths all moved to the Hall.
+
+# (draft)
+[r2r_po_herbs_ves]
+{bored}Not the worst trade.
+
+# (draft)
+[r2r_ch_herbs]
+Rosemary hung to dry in the corner, for the altar. A bit of ribbon holds it, tied in a knot that is neat and mean. You'd need a knife.
+
+# (draft)
+[r2r_ch_herbs_ves]
+{proud}Mine. It's a very good knot. Don't touch it.
+
+# (draft)
+[r2r_gt_wood]
+A woodpile under a cap of snow, the logs stacked so square you could use them as a ruler. Under the cap, a card: FOR THE HERO'S FIRST FIRE. KEEP DRY. The card's gone soft. So has the wood, a bit.
+
+# (draft)
+[r2r_gt_wood_ves]
+{bored}A hundred years of 'first fire'. I do hope someone's tested it.
+
+# (draft)
+[r2r_gt_sled]
+A child's sled with a coil of rope, tipped on its side against a post. Fresh runner marks go down the bank and stop at the edge of the stair. A smaller set go back up again, in a hurry.
+
+# (draft)
+[r2r_gt_sled_ves]
+{smile}Whoever it is, they thought better of it. Well done, them.
+
+# (draft)
+[r2r_gt_dog 2]
+You pat the snow dog on its head. A little snow falls off. It still looks like a good dog.
+
+# (draft)
+[r2r_lk_wood]
+A woodpile by the lookout's hut that isn't there, snow-capped, with a little path trodden to it. Sedge keeps a fire in a pot, and the wood is hers. A card: PLEASE ASK. Hers, said as though it were the law.
+
+# (draft)
+[r2r_lk_wood_ves]
+{bored}That's a lot of wood for one person watching clouds.
+
+# (draft)
+[r2r_lk_mug]
+A tin mug of tea on the rock next to the bench, frozen at the rim. Someone has left a biscuit on the saucer, and a chough is taking an interest in it.
+
+# (draft)
+[r2r_lk_mug_ves]
+{smile}The chough has the right of it.
+
+# (draft)
+[r2r_lk_piton 2]
+The rope's old, and the peg's been here longer. You decide not to test either.
+
+# (draft)
+[r2r_sq_shoes]
+Snowshoes leaned on the inn wall, each with a different guest's name chalked on the rim. The last one reads HERO, and it's very small. It has a little ribbon, so you'd know it.
+
+# (draft)
+[r2r_sq_shoes_ves]
+{thoughtful}They'd all have gone further if somebody'd thought to leave them a bigger pair.
+
+# (draft)
+[r2r_sq_axes]
+A post by the inn door with ice axes hung on it, and a coil of rope, and a note: PLEASE RETURN AFTER USE. UNLESS YOU ARE NOT RETURNING. IN WHICH CASE, THANK YOU FOR THE AXE.
+
+# (draft)
+[r2r_sq_axes_ves]
+{bored}That last bit is cheerful. I don't like how cheerful it is.
+
+# (draft)
+[r2r_sq_chop]
+A chopping block, a good axe stuck in it, the handle polished by a hundred winters of hands. Chips of wood lie round it like confetti. There's a card on the axe: 'IT BITES. - H.'
+
+# (draft)
+[r2r_sq_chop_ves]
+{bored}Nobody's cut a finger. They've cut a lot of cards.
+
+# (draft)
+[r2r_sq_den]
+A biscuit tin pushed into the corner behind the pine, where the wind can't get at it. Inside: a jar of frostberry jam, and a note in crayon. 'IF YOU FOUND THIS YOU CAN HAVE IT. BUT PUT SOMETHING BACK.'
+
+# (draft)
+[r2r_sq_den_ves]
+{smile}I'm not putting anything back. We're not that kind of party.
+
+# (draft)
+[r2r_sq_den_empty]
+The tin's still there, empty, with a crumb in it and a tiny drawing of a face with a smile. The back of the den is quite cosy now that you've seen it.
+
+# (draft)
+[r2r_sq_den_empty_ves]
+{smile}Somebody's going to be very pleased with you. They'll never know why.
+# === END THE LIFE PASS, ROUND 2 (builder 3) ===
+
+# === ROUND 3, THE FUN CHECK (15 November 2026): chapters 1 and 2, the dullest rooms ===
+
+# (draft)
+[r3a_hl_banner]
+A banner across the wall: WELCOME, HERO. It's been repainted so many times the lettering has gone lumpy: the W has a bump, the O has a second O trying to be born. A small card is pinned in one corner: REPAINTED (11TH). NEXT REPAINT: ON ARRIVAL.
+
+# (draft)
+[r3a_hl_banner_ves]
+{thoughtful}Eleven repaints. That's a lot of waiting to put on one wall.
+
+# (draft)
+[r3a_st_cheese]
+A stack of cheese wheels with a wedge cut out of the top one. A sign: HERALD'S HARD. FOR TRAVELLERS, AND FOR PROPPING DOORS.
+
+# (draft)
+[r3a_st_cheese_ves]
+{bored}A cheese you can wedge a door with. That's a recommendation, I think.
+
+# (draft)
+[r3a_fg_bellows]
+Bellows with a patched leather belly, hung by the hearth, the nozzle pointing into the coals. Somebody has chalked a tally on the handle: 14,000 pumps. It's gone round onto the second handle.
+
+# (draft)
+[r3a_fg_bellows_ves]
+{bored}I'd count something else. Anything else.
+
+# (draft)
+[r3a_bt_doves]
+A dovecote on a post, one grey dove peering from the door with the look of a bird who's been woken for something dull. A tag on the post: RESIDENT. (ASKED.) Another underneath: PLEASE DON'T RING THE BELL WHILE SHE'S HOME.
+
+# (draft)
+[r3a_bt_doves_ves]
+{smile}A tenant with boundaries.
+
+# (draft)
+[r3a_bt_tea]
+A ringer's tea corner: a spirit stove, a kettle, two cups, a biscuit tin with a lid that says ONE EACH. Inside, one biscuit. Someone has been very good, or very busy.
+
+# (draft)
+[r3a_bt_tea_ves]
+{bored}'One each.' So there's a person in this village who counts biscuits. I'd like to avoid them.
+
+# (draft)
+[r3a_ma_loom]
+A tall loom taking up most of the wall, a half-finished scarf on it. The scarf is already longer than the room. It runs out of the window and, if you follow it with your eye, away down the street, over the roofs and into the snow, and out of sight. So the loom does exist. It's a very good loom.
+
+# (draft)
+[r3a_ma_loom_ves]
+{awed}How long is that scarf?
+
+# (draft)
+[r3a_po_buns]
+A tray of buns cooling under a cloth with one corner flipped back. Three buns, steaming. One has a very small, very careful bite taken out of it, from someone about this high. The cloth has been put back to look innocent.
+
+# (draft)
+[r3a_po_buns_ves]
+{sly}I know that bite. I did that bite.
+
+# (draft)
+[r3a_ch_box]
+A donation box with a slot and a chalk label: FOR THE HERO'S COMING-HOME. You peer through the slot. Buttons, mostly, and two lucky stones, and a pressed flower that's long since stopped being any colour.
+
+# (draft)
+[r3a_ch_box_ves]
+{thoughtful}Buttons. That's a lot of people with nothing left to give but buttons, giving them.
+
+# (draft)

@@ -24,7 +24,7 @@ export const SLAGLING = {
   anim: SLAGLING_ANIM,
   // The Chapter 4 battle song, once it's been written.
   music: 'belowBattle',
-  maxHp: 1600,
+  maxHp: 2850,
   damage: 40,
 
   // The Diggings, the first of the deep: heavy, hot and slow, but plenty.
@@ -33,10 +33,10 @@ export const SLAGLING = {
   // Its attacks live in src/battle/attacks/slagling.js.
   patterns: [
     { name: 'slagSpitSparks', weight: 3 },
-    { name: 'slagDrips', weight: 2 },
+    { name: 'slagCrust', weight: 3 },
     { name: 'slagOoze', weight: 2 },
     { name: 'slagPour', weight: 2 },
-    { name: 'slagCinders', weight: 2 },
+    { name: 'slagHug', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

@@ -55,7 +55,7 @@ MINE now.
 # TALK options in src/data/enemies/magpiemole.js.
 [talk: Inspect]
 MAGPIE MOLE - HP 1050
-A mole with a sack of everything shiny. Throws it, swings it, and pops up through the floor wherever you stand. Don't stay put; it's quick, and so is the sack.
+A mole with a sack of everything shiny. Throws it, swings it, files it, and pops up through the floor wherever you stand. Don't stay put; it's quick, and so is the sack.
 
 [talk: Describe a lost thing]
 You describe something you've lost: a brass button, a bit bent. MAGPIE MOLE rummages for a long, long time, and produces a button that is nothing like it. It insists it's the same one. You say thank you.

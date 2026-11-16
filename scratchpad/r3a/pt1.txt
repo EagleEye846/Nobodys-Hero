@@ -1,0 +1,16 @@
+PASS L9 ruins_entrance
+PASS L10 lantern_hall
+PASS L11 pillar_room
+PASS L12 flower_room
+PASS L13 taper_home
+PASS L14 taper_kitchen
+PASS L15 taper_hall
+PASS L16 your_room
+PASS L17 way_out
+PASS L20 ruins_entrance
+PASS L23 flower_room
+PASS L24 ruins_entrance
+PASS L25 ruins_entrance
+PASS L26 pillar_room
+PASS L27 your_room
+PASS L30 ruins_entrance

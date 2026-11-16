@@ -1,15 +1,18 @@
-// PUDDING'S POOL (secret, draft: every line here): the four scenes of the
+// PALE'S POOL (secret, draft: every line here): the four scenes of the
 // chapter 4 superboss, in `diggings_star_pool`.
 //
 //   pudding_wakes   the first time you step up to the water: the shelf, the
-//                   seven mugs and the dish, the sword humming, and PUDDING
-//                   coming up through the stone. Ends in the battle.
+//                   seven mugs and the dish, the sword humming, and the PALE
+//                   OLM coming up through the stone. Ends in the battle.
 //   pudding_again   the same moment, short, for every try after that (a
 //                   retreat, or a game over), until the fight is over.
 //   pudding_spared  the end of the TALK: it hiccups the shard up onto the
 //                   shelf and goes to sleep in the dish.
 //   pudding_beaten  the end of the fight: the glass lets go, the pool goes
 //                   dark, and the shard is left in the dish.
+// The lore under it (14 Nov 2026): the olm wished on the star that the miners
+// would come back after lunch, and got their voices and their things instead.
+// Sparing it lets the wish go (it gives the voices back); beating it breaks it.
 // Both endings give the Deep Star Shard (Hobnail's forging, fallenStar.js) and the
 // Olm-Glass Mantle.
 //
@@ -45,9 +48,11 @@ export const PUDDING_WAKES = {
     { do: 'sound', name: 'crumble' },
     { do: 'say', who: 'ves', text: '{scared}That is not how rock behaves.' },
     { do: 'sound', name: 'splash' },
-    { do: 'say', text: 'Something long and pale and see-through swims up out of the wall like a fish rising through a pond, and the stone closes behind it without a mark. Gills like fans of cut glass. A blunt, blind, smiling head. And in the middle of it, burning right through its belly, a small hard star.\n\nIt turns its whole face towards the shelf. Then towards you.' },
-    { do: 'say', who: 'ves', text: '{surprised}It has a face like a slipper.' },
-    { do: 'say', who: 'ves', text: '{determined}...A slipper that has swallowed a star. Right. Ready when you are.' },
+    { do: 'say', text: 'Something long and pale comes up out of the wall the way a drowned thing rises, and the stone closes behind it without a mark. Its skin is like wet glass. You can see right through it: the long white spine, the gills hanging off its head like raw red feathers, the star burning in its belly.\n\nAnd turning slowly round the star, the way things turn in a jar: a hard hat. A boot. A tin mug.' },
+    { do: 'wait', seconds: 0.6 },
+    { do: 'say', text: 'It stops. It does not drift, or breathe. Its blind head faces the shelf, and its mouth is a thin seam that runs back nearly to its gills.\n\nThen, without seeming to move at all, it is facing you.' },
+    { do: 'say', who: 'ves', text: '{surprised}There\'s a hat in it. {scared}...There\'s a boot in it.' },
+    { do: 'say', who: 'ves', text: '{determined}Right. It knows we\'re here. Don\'t ask me how. Ready when you are.' },
     { do: 'battle', enemy: 'pudding', still: true, spared: 'pudding_spared', defeated: 'pudding_beaten' },
   ],
 };
@@ -64,9 +69,9 @@ export const PUDDING_AGAIN = {
     { do: 'face', who: 'player', dir: 'right' },
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'sound', name: 'shimmer' },
-    { do: 'say', text: 'The ring spreads across the pool again. The stone ripples.\n\nThe long pale shape comes up out of the wall, and turns its blunt face towards the shelf, and then towards you.' },
+    { do: 'say', text: 'The ring spreads across the pool again. The stone goes soft.\n\nThe long pale shape comes up out of the wall with everything it kept turning inside it, and faces the shelf, and then, all at once, you.' },
     { do: 'quake', amount: 1, seconds: 1.0 },
-    { do: 'say', who: 'ves', text: '{bored}Back already. It does say something for its manners.' },
+    { do: 'say', who: 'ves', text: '{bored}Back already. It\'s very patient. I wish it wasn\'t.' },
     { do: 'battle', enemy: 'pudding', still: true, spared: 'pudding_spared', defeated: 'pudding_beaten' },
   ],
 };
@@ -85,20 +90,20 @@ export const PUDDING_SPARED = {
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'camera', to: { x: 4, y: 4 } },
     { do: 'wait', seconds: 0.8 },
-    { do: 'say', text: 'The light in the pool goes out like a lamp being turned down at the end of a long evening. The glass in the walls clouds, and is stone again.\n\nOn the shelf, in the little tin dish, a plain pale cave olm the size of a slipper lies curled round a dull grey lump, with its chin on the rim. It shuts its not-eyes.' },
+    { do: 'say', text: 'The light in the pool goes out like a lamp being turned down at the end of a long evening. The glass in the walls clouds, and is stone again.\n\nOn the shelf, in the little tin dish, a plain pale cave olm the size of a slipper lies curled round a dull grey lump, with its chin on the rim. Round the dish, set out neatly where the glass let go of them: a hard hat, one boot, a tin mug, and a pocket watch, still ticking.' },
     { do: 'wait', seconds: 0.8 },
     { do: 'sound', name: 'clink' },
-    { do: 'say', text: 'It hiccups. Something small and hard bounces off the rim of the dish and rolls to a stop beside the kettle.\n\nIt does not look round to see whether you noticed.' },
-    { do: 'say', who: 'ves', text: '{laughing}It gave it back. It coughed it up and it gave it back. That is the most dignified thing I have ever seen anyone do with a star.' },
+    { do: 'say', text: 'It hiccups. Something small and hard bounces off the rim of the dish and rolls to a stop beside the kettle.\n\nIt does not look round to see whether you noticed. It doesn\'t say anything, in anybody\'s voice. It doesn\'t need to now.' },
+    { do: 'say', who: 'ves', text: '{surprised}It gave it back. It coughed it up and it gave it back. {bored}After the boot, I\'m choosing to find that polite.' },
     { do: 'sound', name: 'starGet' },
     { do: 'give', item: 'star_shard_deep' },
     { do: 'wait', seconds: 0.4 },
-    { do: 'say', text: 'On a nail at the end of the shelf hangs a coat that has been kept warm by something large for a very long time: heavy, grey-blue, and stitched all over with glassy beads that catch the light.\n\nThere is a tag pinned to it, in a hand in no hurry: FOR WHOEVER CAME BACK.' },
+    { do: 'say', text: 'On a nail at the end of the shelf hangs a coat that something large has kept very close for a very long time: heavy, grey-blue, cold and faintly damp, and stitched all over with glassy beads that catch the light.\n\nThere is a tag pinned to it, in a hand in no hurry: FOR WHOEVER CAME BACK.' },
     { do: 'give', item: 'olmglass_mantle' },
     { do: 'camera' },
     { do: 'say', who: 'ves', text: '{smile}Back after lunch.' },
     { do: 'face', who: 'ves', dir: 'right' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Hobnail said to bring him a star. I don\'t think he meant one that had been looked after quite this well.' },
+    { do: 'say', who: 'ves', text: '{thoughtful}Hobnail said to bring him a star. {bored}I\'m not telling him where it\'s been.' },
     { do: 'wait', seconds: 0.3 },
   ],
 };
@@ -115,7 +120,7 @@ export const PUDDING_BEATEN = {
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'wait', seconds: 0.6 },
     { do: 'sound', name: 'crumble' },
-    { do: 'say', text: 'The glass lets go all at once, and it is very quiet. Pieces of light come down through the pool like snow in a bottle and settle, and go out.\n\nThe water is just water. The walls are just rock. The long, patient shape in the stone is not there.' },
+    { do: 'say', text: 'The glass lets go all at once, and it is very quiet. Pieces of light come down through the pool like snow in a bottle, and with them, slowly, everything it kept: a hard hat, one boot, a tin mug, a pocket watch. They settle on the bottom one by one, and the light goes out.\n\nThe water is just water. The walls are just rock. The long, patient shape in the stone is not there.' },
     { do: 'camera', to: { x: 4, y: 4 } },
     { do: 'wait', seconds: 0.6 },
     { do: 'sound', name: 'clink' },
@@ -123,12 +128,12 @@ export const PUDDING_BEATEN = {
     { do: 'sound', name: 'starGet' },
     { do: 'give', item: 'star_shard_deep' },
     { do: 'wait', seconds: 0.4 },
-    { do: 'say', text: 'On a nail at the end of the shelf, behind the kettle, hangs a coat that has been kept warm by something large for a very long time: heavy, grey-blue, and stitched all over with glassy beads that catch the light.\n\nThere is a tag pinned to it, in a hand in no hurry: FOR WHOEVER CAME BACK.' },
+    { do: 'say', text: 'On a nail at the end of the shelf, behind the kettle, hangs a coat that something large has kept very close for a very long time: heavy, grey-blue, cold and faintly damp, and stitched all over with glassy beads that catch the light.\n\nThere is a tag pinned to it, in a hand in no hurry: FOR WHOEVER CAME BACK.' },
     { do: 'give', item: 'olmglass_mantle' },
     { do: 'camera' },
-    { do: 'say', who: 'ves', text: '{sad}It only wanted its tea break back. Seven mugs and a dish.' },
+    { do: 'say', who: 'ves', text: '{sad}It only wanted them back after lunch. Seven mugs and a dish.' },
     { do: 'wait', seconds: 0.5 },
-    { do: 'say', who: 'ves', text: '{thoughtful}...Pour one anyway, would you? The kettle\'s here. I won\'t say anything.' },
+    { do: 'say', who: 'ves', text: '{thoughtful}...It kept their things. All this time. {bored}Pour one anyway, would you? The kettle\'s here. I won\'t say anything.' },
     { do: 'wait', seconds: 0.3 },
   ],
 };
@@ -168,8 +173,8 @@ export const WHISTLE_BLOWN = {
     { do: 'wait', seconds: 0.7 },
     { do: 'sound', name: 'shimmer' },
     { do: 'quake', amount: 1, seconds: 1.2 },
-    { do: 'say', text: 'The glass over the crack rings. Not a crack: a note, the fourth one, the short one going up. It runs away down into the floor like a stone dropped in a well, and the skin of glass lets go of the rock and slides aside without a sound.\n\nBelow, something very large hums the tune back, a bit flat, and then goes quiet, listening.' },
-    { do: 'say', who: 'ves', text: '{scared}It joined in. It does that. The rules said it does that.' },
+    { do: 'say', text: 'The glass over the crack rings. Not a crack: a note, the fourth one, the short one going up. It runs away down into the floor like a stone dropped in a well, and the skin of glass lets go of the rock and slides aside without a sound.\n\nBelow, something very large whistles the tune back, in a man\'s breath, a bit flat. Then it goes quiet, listening.' },
+    { do: 'say', who: 'ves', text: '{scared}It joined in. {bored}The rules said it does that. {scared}They didn\'t say it had a man\'s voice.' },
     { do: 'say', who: 'ves', text: '{determined}...Right. Rules are for people who are not going down there. After you.' },
     { do: 'wait', seconds: 0.3 },
   ],

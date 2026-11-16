@@ -22,6 +22,7 @@ export const THE_LAUNCH_LEDGER = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed (the camera holds on the ledger; the clerk looks away).
     { do: 'walk', who: 'bramble', to: { x: 6, y: 5 }, wait: false },
     { do: 'walk', who: 'ves', to: { x: 4, y: 6 }, wait: false },
     { do: 'walk', who: 'player', to: { x: 5, y: 5 } },
@@ -29,14 +30,16 @@ export const THE_LAUNCH_LEDGER = {
     { do: 'face', who: 'player', dir: 'up' },
     { do: 'face', who: 'bramble', dir: 'up' },
     { do: 'face', who: 'ves', dir: 'up' },
-    { do: 'say', text: 'The launch-ledger lies open on the desk, at a page gone soft as cloth. Boats, crews, times out and times in.\n\nAnd one line in much older ink:\n\nONE SMALL BOAT. ONE PASSENGER.\nNAME: (left blank)\nBOUND: NORTH-EAST, TOWARD THE SMOKE.' },
+    { do: 'wait', seconds: 0.8 },
+    { do: 'say', text: 'The launch-ledger lies open at a page gone soft as cloth. And one line in much older ink:\n\nONE SMALL BOAT. ONE PASSENGER.\nNAME: (left blank)\nBOUND: NORTH-EAST, TOWARD THE SMOKE.' },
     { do: 'act', who: 'bramble', act: 'look' },
     { do: 'say', who: 'bramble', text: '{thinking}There\'s no time in. All the other boats have got a time in.' },
-    { do: 'say', who: 'ves', text: '{bored}Clerks. Leave one box empty and they can\'t sleep.' },
+    { do: 'face', who: 'clerk', dir: 'left' },
     { do: 'emote', who: 'clerk', emote: '...' },
-    { do: 'wait', seconds: 0.4 },
+    { do: 'say', who: 'ves', text: '{smile}Clerks. Leave one box empty and they can\'t sleep.' },
+    { do: 'wait', seconds: 0.6 },
+    { do: 'face', who: 'ves', at: 'clerk' },
     { do: 'say', who: 'ves', text: '{thoughtful}...Somebody keeps opening it at this page, though.' },
-    { do: 'face', who: 'bramble', at: 'ves' },
-    { do: 'say', who: 'bramble', text: '{worried}Maybe they\'re just slow.' },
+    { do: 'face', who: 'clerk', dir: 'down' },
   ],
 };

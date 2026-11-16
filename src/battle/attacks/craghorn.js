@@ -2,7 +2,7 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Craghorn's attacks. It's a mountain goat who's climbed the Long Stair
 // every day for a hundred years, so it fights like one: charging head-down,
-// bleating loud enough to echo off the peaks, its kids ricocheting off the
+// racing you round and round (it always wins), its kids ricocheting off the
 // cliffs, and grazing its way across the mountain grass.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
@@ -27,17 +27,6 @@ defineBulletArt('cragHeadLeft', {
   frames: [HEAD.map((row) => [...row].reverse().join(''))],
   palette: GOAT,
   hitbox: { w: 10, h: 7 },
-});
-
-// A bleat: a little wavy "MEH" of sound.
-defineBulletArt('cragBleat', {
-  frames: [
-    ['.w...', 'w.w.w', '...w.'],
-    ['...w.', 'w.w.w', '.w...'],
-  ],
-  palette: { w: '#f2ecff' },
-  radius: 2,
-  frameSeconds: 0.1,
 });
 
 // A kid goat, legs tucked, mid-bounce.
@@ -82,6 +71,43 @@ defineBulletArt('cragBlade', {
   hitbox: { w: 5, h: 12 },
 });
 
+// The Craghorn's face, head-on, horns curled like two question marks: what
+// you see coming round the track at you.
+defineBulletArt('cragFace', {
+  frames: [[
+    'hh......hh',
+    'hHk....kHh',
+    '.hHkkkkHh.',
+    '..kWwwWk..',
+    '.kwewwewk.',
+    '..kwwwwk..',
+    '..kWwwWk..',
+    '...knnk...',
+    '....kk....',
+  ]],
+  palette: GOAT,
+  hitbox: { w: 8, h: 8 },
+});
+
+// A stone kicked up off the track.
+defineBulletArt('cragStone', {
+  frames: [['.hh.', 'hHHh', 'hHhk', '.kk.']],
+  palette: GOAT,
+  radius: 1.5,
+  spin: 6,
+});
+
+// A puff of dust where it stamps (harmless).
+defineBulletArt('cragDust', {
+  frames: [
+    ['..w..', '.wWw.', 'wW.Ww'],
+    ['.w.w.', 'wW.Ww', 'W...W'],
+  ],
+  palette: { w: '#c4bba8', W: '#8a7a64' },
+  radius: 1,
+  frameSeconds: 0.12,
+});
+
 export const CRAGHORN_ATTACKS = {
   // Head down, horns first: goats charge across the box two at a time, from
   // alternating sides. Each blinks at the edge first, then thunders across,
@@ -109,46 +135,97 @@ export const CRAGHORN_ATTACKS = {
       }
       fromLeft = !fromLeft;
     });
-    return { duration: 6.5, update: (dt, bullets, soul) => charge(dt, bullets, soul) };
+    return { duration: 7, update: (dt, bullets, soul) => charge(dt, bullets, soul) };
   },
 
-  // A bleat that echoes off the peaks: rings of sound spread from the edges
-  // of the box. Each ring has one gap in it, never quite where you are, so
-  // you have to move to slip through it.
-  cragBleat(box, density, { Shot, every, rand, angleTo, shuffleBag }) {
-    const spots = [
-      { x: box.x, y: box.y },
-      { x: box.x + box.w, y: box.y },
-      { x: box.x, y: box.y + box.h },
-      { x: box.x + box.w, y: box.y + box.h },
-      { x: box.x + box.w / 2, y: box.y - 2 },
-    ];
-    const spot = shuffleBag(spots);
-    const notes = 36;
-    const gap = 5;
-    const bleat = every(1.35, 1.65, (bullets, soul) => {
-      const from = spot();
-      // The gap opens off to one side of you (far enough that it never
-      // covers where you are).
-      const toGap = angleTo(from, soul) + (Math.random() < 0.5 ? -1 : 1) * rand(0.65, 0.9);
-      const gapStart = Math.round((toGap / (Math.PI * 2)) * notes) - Math.floor(gap / 2);
-      for (let i = 0; i < notes; i++) {
-        const slot = (((i - gapStart) % notes) + notes) % notes;
-        if (slot < gap) continue;
-        const angle = (i / notes) * Math.PI * 2;
-        bullets.push(new Shot({
-          x: from.x,
-          y: from.y,
-          vx: Math.cos(angle) * 42,
-          vy: Math.sin(angle) * 42,
-          life: 2.4,
-          art: 'cragBleat',
-        }));
-      }
-    });
-    return { duration: 6.5, update: (dt, bullets, soul) => bleat(dt, bullets, soul) };
+  // The race. "Last one to the top is..." The Craghorn runs laps of the box
+  // the way it runs the mountain every morning: round the walls, cutting in a
+  // little tighter every stretch, so its track spirals in toward the middle.
+  // When it's run out of room it stops, stamps (blinking), and charges
+  // straight through where you're standing to the wall. Then a fresh lap
+  // starts from a corner. Round every other corner it kicks a stone back at you.
+  // Keep inside its track, then get off its line.
+  cragRace(box, density, { Shot, rand }) {
+    const SPEED = 150;
+    const LAPS = 1.5;
+    const INSET_FROM = 5;
+    const INSET_TO = 27;
+    const STAMP = 0.55;
+    // A point `u` laps round the inside of the box, `inset` from the walls,
+    // clockwise from the top-left corner, and which way it's heading there.
+    const onTrack = (u, inset) => {
+      const x0 = box.x + inset;
+      const y0 = box.y + inset;
+      const w = box.w - inset * 2;
+      const h = box.h - inset * 2;
+      let d = (u - Math.floor(u)) * 2 * (w + h);
+      if (d < w) return { x: x0 + d, y: y0, dx: 1, dy: 0 };
+      d -= w;
+      if (d < h) return { x: x0 + w, y: y0 + d, dx: 0, dy: 1 };
+      d -= h;
+      if (d < w) return { x: x0 + w - d, y: y0 + h, dx: -1, dy: 0 };
+      d -= w;
+      return { x: x0, y: y0 + h - d, dx: 0, dy: -1 };
+    };
+    let goat = null;
+    let state = 'start';
+    let u = 0;
+    let wait = 0;
+    let start = 0;
+    let heading = null;
+    let corners = 0;
+    const startLap = (bullets) => {
+      // Each lap starts from a different corner.
+      start = Math.floor(rand(0, 4)) / 4;
+      u = start;
+      heading = null;
+      const at = onTrack(u, INSET_FROM);
+      goat = new Shot({ x: at.x, y: at.y, warn: 0.6, art: 'cragFace' });
+      bullets.push(goat);
+      state = 'lap';
+    };
+    return {
+      duration: 7.6,
+      update: (dt, bullets, soul) => {
+        if (state === 'start') startLap(bullets);
+        if (state === 'lap') {
+          if (goat.age < goat.warn) return;
+          const run = Math.min((u - start) / LAPS, 1);
+          const inset = INSET_FROM + (INSET_TO - INSET_FROM) * run;
+          const perimeter = 2 * (box.w + box.h - inset * 4);
+          u += (SPEED * dt) / perimeter;
+          const at = onTrack(u, inset);
+          goat.x = at.x;
+          goat.y = at.y;
+          // Round each corner it kicks a stone back at you.
+          if (heading && (heading.dx !== at.dx || heading.dy !== at.dy) && ++corners % 2 === 0) {
+            const angle = Math.atan2(soul.y - at.y, soul.x - at.x) + rand(-0.15, 0.15);
+            bullets.push(new Shot({ x: at.x, y: at.y, vx: Math.cos(angle) * 46, vy: Math.sin(angle) * 46, art: 'cragStone' }));
+          }
+          heading = at;
+          if (u - start >= LAPS) {
+            state = 'stamp';
+            wait = STAMP;
+            // (A puff of dust while it stamps, eyeing you up.)
+            bullets.push(new Shot({ x: goat.x, y: goat.y + 6, art: 'cragDust', harmless: true, life: STAMP }));
+          }
+        } else if (state === 'stamp') {
+          wait -= dt;
+          if (wait > 0) return;
+          const angle = Math.atan2(soul.y - goat.y, soul.x - goat.x);
+          goat.vx = Math.cos(angle) * 125;
+          goat.vy = Math.sin(angle) * 125;
+          state = 'charge';
+        } else if (state === 'charge') {
+          // Off the far wall, and a new lap.
+          if (goat.x < box.x - 6 || goat.x > box.x + box.w + 6 || goat.y < box.y - 6 || goat.y > box.y + box.h + 6) {
+            goat.life = 0;
+            state = 'start';
+          }
+        }
+      },
+    };
   },
-
   // The kids want to play: little goats spring off the cliff walls and
   // ricochet around the box, bouncing off every side. Each one blinks in a
   // corner first, then springs off at you (they want to play), give or

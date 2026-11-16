@@ -8,13 +8,17 @@
 // down next. It is a long way. Nothing lives on it. (Gubb never saw them
 // again for this reason: they never went back across the lake.)
 //
-// The door at the bottom is back to the root; the door at the top comes out
-// in Belowtown square, among the noise. There is a chest at the corner of the
-// second flight (one of the Belowtown foods) and a purse on the top landing.
+// The door at the bottom is back to the root; the door at the top goes on to
+// the Last Flight (deepLastFlight.js), where the stair has fallen away and the
+// way on is a ring climb; that comes out in Belowtown square, among the noise.
+// There is a chest at the corner of the second flight (one of the Belowtown
+// foods) and a purse on the top landing.
 //
 // Tile key (see src/overworld/deepTiles.js for how the Deep draws them):
 //   #  black rock overhead (solid)   W  smooth black rock face (solid)
 //   .  black stone floor   ^  black stalagmite (solid)   O  glossy black boulder
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DEEP_WAY_UP = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'deep_way_up',
@@ -88,7 +92,7 @@ export const DEEP_WAY_UP = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
     { x: 0, y: 41, w: 1, h: 2, to: 'deep_root', spawn: { x: 32, y: 22 } },
-    { x: 1, y: 1, w: 2, h: 1, to: 'belowtown_square', spawn: { x: 30, y: 20 } },
+    { x: 1, y: 1, w: 2, h: 1, to: 'deep_last_flight', spawn: { x: 3, y: 35 } },
   ],
 
   // The way up from the fourth flight to the fifth (x 1-2, row 23), the only
@@ -103,6 +107,7 @@ export const DEEP_WAY_UP = {
   // (still there, now plainly seen), a chest and a purse.
   textFile: 'interactions/deep.txt',
   props: [
+    ...(R3C_PROPS.deep_way_up ?? []),
     { sprite: 'root_vein_lit', x: 5, y: 40, text: 'wu_vein', animation: 'root_vein_lit', speed: 0.3 },
     { sprite: 'root_vein_lit', x: 12, y: 40, text: 'wu_vein', animation: 'root_vein_lit', speed: 0.34 },
     { sprite: 'root_vein_lit', x: 16, y: 35, text: 'wu_vein', animation: 'root_vein_lit', speed: 0.32 },
@@ -127,6 +132,8 @@ export const DEEP_WAY_UP = {
     { sprite: 'smooth_stone_a', x: 4, y: 3, text: 'wu_top' },
     { sprite: 'chest', x: 21, y: 36, text: 'wu_chest', gives: 'glowworm_honey', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 3, y: 5, text: 'wu_purse', gold: 100, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    // --- end life pass ---
   ],
   tileTexts: { '#': 'deep_rock', W: 'wu_face', '^': 'deep_stalagmite', O: 'deep_boulder' },
 

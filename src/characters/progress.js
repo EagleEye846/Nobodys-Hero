@@ -26,15 +26,20 @@ const ALL_SKILLS = ALL_SKILL_BRANCHES.flatMap((branch) => branch.skills);
 // EXP needed to go from `level` to the next. It climbs steeply, so levels come
 // every few fights rather than every one: 46, 92, 147, 212, 285, 368, 460...
 // (a full clear of the Ruins, Taper included, reaches about LV 5).
-// In chapter 5 on, past LV 20, each level asks for more again on top, climbing
-// faster the higher you go: +360 at LV 23, +1,000 at 25, +4,000 at 30.
+// In chapter 5 on, past LV 20, each level asks for more again on top: +135 at
+// LV 23, +375 at 25, +1,500 at 30, and +3,375 from LV 35 on, where it stops
+// growing (STEEP_TO). Chapter 5's monsters give much the same EXP from one end
+// of the coast to the other, so a top-up that kept climbing made the second
+// half of the chapter twice as slow as the first. Eased 2026-11-12 so a level
+// takes about 4-5 ordinary fights all through chapter 5.
 const EXP_EASE = 0.92;
 const STEEP_FROM = 20;
-const STEEP = 40;
+const STEEP_TO = 35;
+const STEEP = 15;
 // Only from chapter 5 on: chapters 1-4 keep the curve they were balanced for.
 const STEEP_CHAPTER = 5;
 export function expToNext(level) {
-  const past = (WORLD_STATE.chapter ?? 1) >= STEEP_CHAPTER ? Math.max(0, level - STEEP_FROM) : 0;
+  const past = (WORLD_STATE.chapter ?? 1) >= STEEP_CHAPTER ? Math.min(STEEP_TO - STEEP_FROM, Math.max(0, level - STEEP_FROM)) : 0;
   return Math.round(EXP_EASE * (50 * level + 5 * (level - 1) * (level - 2)) + STEEP * past * past);
 }
 

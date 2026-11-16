@@ -15,6 +15,7 @@ import { ARMOR } from '../data/armor.js';
 import { WEAPONS } from '../data/weapons.js';
 import { HERO_STATE } from '../characters/heroState.js';
 import { reforgeAt } from '../data/fallenStar.js';
+import { notchSkill } from '../characters/notches.js';
 import { ReforgeShow } from './reforgeShow.js';
 import { wielderOf, HERO } from '../characters/equipment.js';
 import { saveGame, WORLD_STATE } from '../state/saveGame.js';
@@ -68,6 +69,7 @@ export const STEP_TYPES = {
   stage: 'Stage effects (spotlights, curtains, confetti, flicker, flare)',
   textbox: 'Move the text box to the top of the screen (or back)',
   press: 'The player holds a key down to fill a bar (Nova holding the sea back)',
+  sink: 'Sink into the water (or come up out of it)',
   take: 'Take a keepsake away (it goes to someone else)',
   reforge: "A smith reforges the Fallen Star (if you've brought the piece)",
   forge_show: 'The big reforge show: the forge, the hammer, the shard, the new name',
@@ -105,7 +107,7 @@ function watchedScenes() {
 // Only a scene watched to the end before, and with nothing in it that waits
 // for an answer (a choice or a prompt), can be skipped. `noSkip: true` on a
 // scene keeps one unskippable whatever else is true.
-const ASKING_STEPS = ['choice', 'prompt', 'ask', 'menu', 'shop'];
+const ASKING_STEPS = ['choose', 'choice', 'prompt', 'ask', 'menu', 'shop'];
 export function canSkip(scene) {
   if (scene.noSkip || scene.steps.some((step) => ASKING_STEPS.includes(step.do) || step.choices || step.options)) return false;
   return watchedScenes().includes(scene.id);
@@ -166,9 +168,15 @@ export function lookSprite(look) {
 // that character's place: they start where the character stands, and the
 // character hides until the scene ends.
 class Actor {
-  constructor({ id, look, x, y, portrait = null, hidden = false, plays = null, ahead = false, animation = null, speed = DEFAULT_FRAME_SECONDS, glow = 0, flat = false, centered = false }) {
+  constructor({ id, look, x, y, portrait = null, hidden = false, plays = null, ahead = false, animation = null, speed = DEFAULT_FRAME_SECONDS, glow = 0, flat = false, centered = false, scale = 1, grow = 0 }) {
     // Playing a wide prop (Gubb's three-tile punt): stands on the middle of it, not its first tile.
     this.centered = centered;
+    // Drawn bigger than life (`scale`, a whole number keeps the pixels crisp): something huge, or
+    // somebody the storm has taken. With `grow` (seconds), they swell up to it from their own size,
+    // starting the first moment they're seen.
+    this.scale = scale;
+    this.grow = grow;
+    this.grownAt = null;
     // In a dark room, the light they give off themselves (a radius in pixels),
     // so they can be seen in it: the great bat's eyes, say.
     this.glow = glow;
@@ -229,19 +237,20 @@ class Actor {
     return !this.frames && this.walking && Math.floor(seconds / (BOB_SECONDS / 3)) % 2 ? 1 : 0;
   }
 
-  // Fades in when they appear and out when they leave, rather than blinking.
-  show() {
+  // Fades in when they appear and out when they leave, rather than blinking
+  // (over `ms`: an `appear` or `leave` step's `seconds`, a slow fade).
+  show(ms = FADE_MS) {
     this.hidden = false;
-    this.fade = { from: 0, to: 1, at: performance.now() };
+    this.fade = { from: 0, to: 1, at: performance.now(), ms };
   }
 
-  hide() {
-    this.fade = { from: 1, to: 0, at: performance.now() };
+  hide(ms = FADE_MS) {
+    this.fade = { from: this.alpha, to: 0, at: performance.now(), ms };
   }
 
   get alpha() {
     if (!this.fade) return 1;
-    const t = Math.min(1, (performance.now() - this.fade.at) / FADE_MS);
+    const t = Math.min(1, (performance.now() - this.fade.at) / (this.fade.ms ?? FADE_MS));
     return this.fade.from + (this.fade.to - this.fade.from) * t;
   }
 
@@ -285,13 +294,89 @@ class Actor {
     const off = poseOffset(pose, this.facing);
     const bob = this.bob(seconds);
     ctx.globalAlpha = alpha;
+    // In the water (a `sink` step): what's under the surface drawn dim and sea-dark, going down.
+    if (this.sink && sprite) {
+      const feet = Math.round(this.y) - Math.round(this.lift) + off.y - camera.y;
+      this.drawSunk(ctx, sprite, Math.round(this.x) + off.x - camera.x, feet, pose, alpha);
+      ctx.globalAlpha = 1;
+      return;
+    }
     // A shadow at their feet, that stays on the ground when they're in the
     // air (or hopping). Only for people: not a statue or a beast.
     if (sprite && !this.flat && sprite.width <= 24) drawFootShadow(ctx, Math.round(this.x) - camera.x, Math.round(this.y) - this.ground + this.sag - camera.y);
     const feet = Math.round(this.y) - this.ground - bob - Math.round(this.lift) + this.sag + off.y;
-    drawPosed(ctx, sprite, Math.round(this.x) + off.x - camera.x, feet - camera.y, pose?.sx ?? 1, pose?.sy ?? 1);
+    const size = this.size();
+    drawPosed(ctx, sprite, Math.round(this.x) + off.x - camera.x, feet - camera.y, (pose?.sx ?? 1) * size, (pose?.sy ?? 1) * size);
     ctx.globalAlpha = 1;
   }
+
+  // How many times their own size they're drawn now (see `scale` and `grow`).
+  size() {
+    if (this.scale === 1) return 1;
+    if (!this.grow) return this.scale;
+    const now = performance.now();
+    if (this.grownAt === null) this.grownAt = now;
+    const k = Math.min(1, (now - this.grownAt) / (this.grow * 1000));
+    return 1 + (this.scale - 1) * k * k * (3 - 2 * k);
+  }
+
+  // How far under they've gone (pixels), eased.
+  get sinkDepth() {
+    const s = this.sink;
+    if (!s.seconds || s.t >= s.seconds) return s.to;
+    const k = s.t / s.seconds;
+    return s.from + (s.to - s.from) * k * k * (3 - 2 * k);
+  }
+
+  // Someone in the sea: the surface `line` pixels above where their feet stood. Above it
+  // they're drawn as they are; under it dim and dark with the sea, fading the deeper they
+  // go; and a pale line laps round them where they break the water.
+  drawSunk(ctx, sprite, x, feet, pose, alpha) {
+    const depth = this.sinkDepth;
+    const surface = feet - this.sink.line;
+    const down = feet + Math.round(depth);
+    const sx = pose?.sx ?? 1;
+    const sy = pose?.sy ?? 1;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, surface, SCREEN_WIDTH, SCREEN_HEIGHT);
+    ctx.clip();
+    ctx.globalAlpha = alpha * Math.max(0, 0.55 - depth / (this.sink.fade ?? 44));
+    drawPosed(ctx, seaTinted(sprite), x, down, sx, sy);
+    ctx.restore();
+    const top = down - sprite.height * sy;
+    if (top < surface) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, -SCREEN_HEIGHT, SCREEN_WIDTH, surface + SCREEN_HEIGHT);
+      ctx.clip();
+      ctx.globalAlpha = alpha;
+      drawPosed(ctx, sprite, x, down, sx, sy);
+      ctx.restore();
+      ctx.globalAlpha = alpha * 0.8;
+      const half = Math.round(Math.min(sprite.width, 16) * 0.45);
+      ctx.fillStyle = '#d6f4ec';
+      ctx.fillRect(x - half, surface, half * 2, 1);
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+
+// A sprite as it looks under the sea: the same shape, drowned in green-black.
+const tintCache = new WeakMap();
+function seaTinted(sprite) {
+  if (!tintCache.has(sprite)) {
+    const c = document.createElement('canvas');
+    c.width = sprite.width;
+    c.height = sprite.height;
+    const g = c.getContext('2d');
+    g.drawImage(sprite, 0, 0);
+    g.globalCompositeOperation = 'source-atop';
+    g.fillStyle = 'rgba(8, 46, 50, 0.62)';
+    g.fillRect(0, 0, c.width, c.height);
+    tintCache.set(sprite, c);
+  }
+  return tintCache.get(sprite);
 }
 
 export class ScenePlayer {
@@ -410,6 +495,9 @@ export class ScenePlayer {
       if (step.has && ![step.has].flat().every((id) => (HERO_STATE.gear ?? []).includes(id))) continue;
       if (step.lacks && [step.lacks].flat().some((id) => (HERO_STATE.gear ?? []).includes(id))) continue;
       if (step.holding && step.holding[1].filter((id) => (HERO_STATE.gear ?? []).includes(id)).length !== step.holding[0]) continue;
+      // `wields` (you own this weapon: the Fallen Star humming on the ghost ship) and `unarmed` (you don't).
+      if (step.wields && !(HERO_STATE.weapons ?? []).includes(step.wields)) continue;
+      if (step.unarmed && (HERO_STATE.weapons ?? []).includes(step.unarmed)) continue;
       this.step = { ...step, t: 0 };
       if (!this.begin(this.step)) return;
     }
@@ -428,6 +516,15 @@ export class ScenePlayer {
         const voice = speaker && speaker !== this.overworld.player ? speaker.portrait ?? speaker.plays ?? speaker.id : null;
         // `voice`: a recorded line (src/audio/voiceClips.js), by its id.
         this.overworld.textbox.open(pages, speaker?.portrait ?? null, step.face ?? null, { shake: Boolean(step.shake), top: step.top ?? this.textTop, voice, line: step.voice ?? null });
+        return false;
+      }
+      case 'choose': {
+        // A question and 2 to 4 options in a CHOICE box (src/ui/choiceBox.js). Whichever is picked
+        // (X picks the `cancel` one, else the last), that option's `then` steps play next, then the
+        // scene goes on after the choice. { do: 'choose', who: 'haddock', question: 'Where to?',
+        // options: [{ text: 'Row on', then: [...steps] }, { text: 'Not yet', cancel: true }] }.
+        const asker = step.who && step.who !== 'player' ? this.body(step.who) : null;
+        this.overworld.choiceBox.open(step.question ?? 'Where to?', step.options, asker?.portrait ?? null);
         return false;
       }
       case 'textbox':
@@ -523,11 +620,13 @@ export class ScenePlayer {
           body.x = (step.at.x + 0.5) * T;
           body.y = (step.at.y + 1) * T;
         }
+        // Someone who swells as they come (`grow`): from now.
+        if (body.grow) body.grownAt = performance.now();
         // `instant`: no fade (a swap between two pictures of the same thing).
         if (step.instant) {
           body.hidden = false;
           body.fade = null;
-        } else if (body.show) body.show();
+        } else if (body.show) body.show(step.seconds ? step.seconds * 1000 : undefined);
         else body.hidden = false;
         return true;
       }
@@ -536,7 +635,7 @@ export class ScenePlayer {
         if (step.instant) {
           body.hidden = true;
           body.fade = null;
-        } else if (body.hide) body.hide();
+        } else if (body.hide) body.hide(step.seconds ? step.seconds * 1000 : undefined);
         else body.hidden = true;
         return true;
       }
@@ -573,6 +672,8 @@ export class ScenePlayer {
         if (!step.name) this.overworld.vision = null;
         else if (current?.name === step.name) Object.assign(current, { mood: step.mood ?? 'calm', moodStart: now });
         else this.overworld.vision = { name: step.name, mood: step.mood ?? 'calm', start: now, moodStart: now, fade: step.fade ?? 0 };
+        // `hideText: true` keeps the text box out of the way while the vision is up (the compass memories).
+        if (step.name && this.overworld.vision && step.hideText !== undefined) this.overworld.vision.hideText = Boolean(step.hideText);
         return true;
       }
       case 'bed':
@@ -583,6 +684,16 @@ export class ScenePlayer {
         return true;
       case 'sound':
         if (step.name) sfx(step.name);
+        return true;
+      case 'sing':
+        // A tune with nobody singing it (the ghost crew's shanty): `notes` (MIDI) one after another, `step`
+        // seconds apart, on `voices` (sample sets, default a choir doubled low on cellos). It doesn't wait: put
+        // a `wait` after it as long as the tune. (Not a song: a few held notes, like a chime set's.)
+        (step.notes ?? []).forEach((midi, i) => {
+          for (const [k, sample] of (step.voices ?? ['choir', 'cellos']).entries()) {
+            music.chime(sample, k ? midi - 12 : midi, { delay: i * (step.step ?? 0.7), volume: k ? 0.12 : 0.22, seconds: (step.step ?? 0.7) * 1.3, attack: 0.08 });
+          }
+        });
         return true;
       case 'haunt':
         // The ghost ship (haunt.js, shipList.js): { wake: 'name' } sends a sleeping ghost after you,
@@ -604,12 +715,13 @@ export class ScenePlayer {
         this.overworld.fadeWeather?.(step.to ?? 0, step.seconds ?? 2);
         return true;
       case 'give': {
+        // (The words go where the scene's `textbox` step put them: top or bottom.)
         // A keepsake or a tool (src/data/gear.js), with its own words in
         // interactions/gear.txt, or an item for your bag.
         if (GEAR[step.item]) {
           giveGear(step.item);
           sfx('heal');
-          this.overworld.textbox.open(textSection('interactions/gear.txt', `got_${step.item}`));
+          this.overworld.textbox.open(textSection('interactions/gear.txt', `got_${step.item}`), null, null, { top: this.textTop });
           return false;
         }
         // A weapon or armor (Ves's mended coat, from Bryony), as from a chest.
@@ -621,7 +733,7 @@ export class ScenePlayer {
           const { name } = (slot === 'armor' ? ARMOR : WEAPONS)[step.item];
           const wielder = wielderOf(slot, step.item);
           const forWhom = wielder !== HERO && inParty(wielder) ? ` It's for ${MEMBERS[wielder].name}.` : '';
-          this.overworld.textbox.open([`You got the ${name}!${forWhom} Put it on from EQUIP (press C).`]);
+          this.overworld.textbox.open([`You got the ${name}!${forWhom} Put it on from EQUIP (press C).`], null, null, { top: this.textTop });
           return false;
         }
         const item = ITEMS[step.item];
@@ -629,7 +741,7 @@ export class ScenePlayer {
         const got = giveItem(step.item);
         if (got) sfx('heal');
         this.overworld.textbox.open([got === 'stored' ? `You got ${item.name}. Your bag is full, so it went to storage.`
-          : got ? `You got ${item.name}.` : `You'd take the ${item.name}, but you've nowhere to put it.`]);
+          : got ? `You got ${item.name}.` : `You'd take the ${item.name}, but you've nowhere to put it.`], null, null, { top: this.textTop });
         return false;
       }
       case 'battle': {
@@ -721,13 +833,32 @@ export class ScenePlayer {
         // Whoever's playing them walks in what they wear now (the crutch, or not).
         for (const actor of this.actors.values()) if (actor.plays === step.who && actor.frames) actor.frames = memberFrames(step.who);
         return true;
+      case 'sink': {
+        // { do: 'sink', who: 'ves_sea', depth: 18, seconds: 4, line: 10 }: someone in the sea
+        // goes down (or, with a smaller depth, comes up) to `depth` pixels under where they
+        // were, over `seconds`. `line`: how far above their feet the surface is. `fade`: how
+        // deep they are when they're gone from sight. depth null: out of the water again.
+        // The scene goes straight on.
+        const body = this.body(step.who);
+        if (step.depth === null) {
+          body.sink = null;
+          return true;
+        }
+        const from = body.sink ? body.sinkDepth : 0;
+        body.sink = { line: step.line ?? body.sink?.line ?? 10, fade: step.fade ?? body.sink?.fade, from, to: step.depth ?? 0, t: 0, seconds: step.seconds ?? 0 };
+        return true;
+      }
       case 'press':
         // { do: 'press', seconds: 3, text: 'Hold on.', glow: 'player' }: the
         // player holds Z (confirm) and a bar fills; let go and it slips back
         // (a third as fast). The scene waits till it's full. `text` is shown
         // over the bar; `glow` (an actor id, or 'player') sets the stage's
         // light pouring out of them, as bright as the bar is full (stageShow.js).
-        step.charge = 0;
+        // `quiet`: no words and no bar, only a small "Hold Z" coming up after a while;
+        // `light` (an actor id, or 'player'): the light in the hero (tideFx.js) as the
+        // meter. `from` and `upto` take it part of the way (two steps with something
+        // between); `slip`: how many times slower it slips back than it fills.
+        step.charge = step.from ?? 0;
         return false;
       case 'take':
         // { do: 'take', item: 'haddocks_bell' }: a keepsake leaves you (knocked
@@ -758,6 +889,8 @@ export class ScenePlayer {
         // { do: 'learn', skill: 'nova' }: gives the hero a skill for free, no points
         // (Nova wakes this way, at the end of chapter 5).
         if (!HERO_STATE.skills.includes(step.skill)) HERO_STATE.skills.push(step.skill);
+        // A spell it teaches goes straight into one of the hero's SPELL NOTCHES.
+        notchSkill(step.skill);
         return true;
       case 'save':
         // Saves where you're standing, like a save point (between the two
@@ -792,7 +925,8 @@ export class ScenePlayer {
     const step = this.step;
     step.t += dt;
     for (const emote of this.emotes) emote.t += dt;
-    this.stage.update(dt, this.overworld.camera);
+    this.stage.update(dt, this.overworld.camera, (id) => this.body(id));
+    for (const actor of this.actors.values()) if (actor.sink) actor.sink.t += dt;
     this.background = this.background.filter((going) => !(going.do === 'toss' ? this.toss(going, dt) : this.walk(going, dt)));
     this.emotes = this.emotes.filter((emote) => emote.t < EMOTE_SECONDS);
 
@@ -804,6 +938,15 @@ export class ScenePlayer {
         if (this.overworld.textbox.isOpen) this.overworld.textbox.update(dt, input);
         finished = !this.overworld.textbox.isOpen;
         break;
+      case 'choose': {
+        const picked = this.overworld.choiceBox.update(dt, input);
+        if (picked >= 0) {
+          const then = step.options[picked].then ?? [];
+          this.scene = { ...this.scene, steps: [...this.scene.steps.slice(0, this.index + 1), ...then, ...this.scene.steps.slice(this.index + 1)] };
+          finished = true;
+        }
+        break;
+      }
       case 'walk':
         finished = this.walk(step, dt);
         break;
@@ -831,9 +974,12 @@ export class ScenePlayer {
         // (Skipping, nobody's holding anything: it's simply done.)
         const held = input.isDown('confirm');
         const seconds = step.seconds ?? 3;
-        step.charge = this.skipping ? 1 : Math.max(0, Math.min(1, step.charge + (held ? dt / seconds : -dt / (seconds * 3))));
+        const upto = step.upto ?? 1;
+        step.held = held ? 0 : (step.held ?? 0) + dt;
+        step.charge = this.skipping ? upto : Math.max(step.from ?? 0, Math.min(upto, step.charge + (held ? dt / seconds : -dt / (seconds * (step.slip ?? 3)))));
         if (step.glow) this.stage.glow = { who: step.glow, power: step.charge };
-        finished = step.charge >= 1;
+        if (step.light) this.stage.fx.light = { who: step.light, power: step.charge };
+        finished = step.charge >= upto;
         break;
       }
       case 'forge_show':
@@ -1123,6 +1269,17 @@ export class ScenePlayer {
 
   // The `press` step: its words, and a bar that fills while the key is held.
   drawPress(step, ctx) {
+    if (step.quiet) {
+      // Only a small "Hold Z", low down, coming up slowly once nothing's been pressed for
+      // a while, and going again as soon as it is.
+      const show = Math.min(1, Math.max(0, ((step.held ?? 0) - (step.hint ?? 2.5)) / 1.5));
+      if (show <= 0) return;
+      inUiSpace(ctx, () => {
+        const pulse = 0.7 + 0.3 * Math.sin(step.t * 2.2);
+        drawText(ctx, `Hold ${keyName(keyFor('confirm'))}`, UI_WIDTH / 2, UI_HEIGHT - 40, { size: 16, color: `rgba(255, 246, 224, ${(show * pulse * 0.8).toFixed(2)})`, align: 'center', outline: '#000' });
+      });
+      return;
+    }
     inUiSpace(ctx, () => {
       const w = 280;
       const x = Math.round((UI_WIDTH - w) / 2);

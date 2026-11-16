@@ -22,21 +22,21 @@ export const HAYBOB = {
   anim: HAYBOB_ANIM,
   // Sunnyside's own battle song, once it's there.
   music: 'sunnyBattle',
-  maxHp: 1220,
+  maxHp: 2800,
   damage: 36,
 
   // The easy end of the chapter: big bouncy things, not too many.
   difficulty: { density: 1.2, speed: 1.25 },
   // Chapter 5's Sunnyside (`later`, see enemyForChapter in battleScene.js): the
-  // same monster, met again at the coast's strength, a fight of several rounds.
-  later: { 5: { maxHp: 8500, damage: 54, difficulty: { density: 1.35, speed: 1.35 }, encore: { at: 0.85, seconds: 4.5, density: 0.8 }, secondWind: { below: 0.4, density: 0.3, delay: 1.6 }, drops: [{ item: 'harvest_loaf', chance: 0.4 }] } },
+  // same monster, met again at the coast's strength, three or four hits.
+  later: { 5: { maxHp: 5900, damage: 54, difficulty: { density: 1.35, speed: 1.35 }, encore: { at: 0.85, seconds: 4.5, density: 0.8 }, secondWind: { below: 0.4, density: 0.3, delay: 1.6 }, drops: [{ item: 'harvest_loaf', chance: 0.4 }] } },
 
   // Its attacks live in src/battle/attacks/haybob.js.
   patterns: [
     { name: 'hayRoll', weight: 3 },
-    { name: 'hayStraw', weight: 2 },
+    { name: 'hayGate', weight: 3 },
     { name: 'hayFork', weight: 2 },
-    { name: 'hayStack', weight: 2 },
+    { name: 'hayHats', weight: 3 },
     { name: 'hayMouse', weight: 2 },
   ],
 

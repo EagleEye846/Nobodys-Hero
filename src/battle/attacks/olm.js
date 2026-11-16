@@ -1,13 +1,17 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Ring, Glow, dimmed, stillness } from './underShapes.js';
+import { PathShot } from './coastKit.js';
 
 // The Olm's attacks. It's a long, pale, blind salamander, older than the
 // stair, and it is terribly polite and hates being looked at. So it fights
-// the way a very polite thing would if it had to: it coils its long body
-// round the box (apologising), fans its red gill frills at you (a warning,
-// really), lays eggs that hatch into tiny olms (it's very sorry about the
-// mess), puts out the lights so it can't be seen, and drips. It never
-// moves fast. It just doesn't stop.
+// the way a very polite thing would if it had to:
+//   - Coiling: its long body winds round the box (apologising).
+//   - Eggs: it lays some (so sorry), and they hatch into tiny olms.
+//   - The queue: its hatchlings file across in a polite queue, nose to
+//     tail, each exactly where the leader went, and stop to let you go first.
+//   - The dark: it puts the lights out so it can't be seen.
+//   - Dripping: water runs off it, in rhythm.
+// It never moves fast. It just doesn't stop.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape. The attack's own clock (`t`) runs `density`
@@ -145,7 +149,7 @@ export const OLM_ATTACKS = {
     snakes.push({ ...make(62, 6, 1.5, true, 17, 60), startAt: 0.1 });
     snakes.push({ ...make(54, 20, 1.1, false, 13, 50), startAt: T(2.6) });
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
         // Stood in the middle of the coil: it flicks a frill at you, politely.
@@ -181,58 +185,6 @@ export const OLM_ATTACKS = {
     };
   },
 
-  // Frills: it fans its red gill frills at you, in a spray of feathers, then
-  // a second fan fills in the gaps a beat later (thread between them), and
-  // last it puffs them out all round in a slow ring that turns as it goes.
-  olmFrills(box, density, { Shot, rand }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = 0.2;
-    let round = 0;
-    const fan = (bullets, from, aim, n, spread, speed, offset = 0, warn = 0.3) => {
-      for (let i = 0; i < n; i++) {
-        const a = aim + (i - (n - 1) / 2) * spread + offset;
-        bullets.push(new Shot({ x: from.x, y: from.y, warn, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, art: 'olmFrill' }));
-      }
-    };
-    let pending = [];
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && t < T(5.6)) {
-          // It fans from a different place each time: the top corners, the
-          // bottom corners, or a side, so no part of the box is out of reach.
-          const place = round % 4;
-          const left = Math.random() < 0.5;
-          const from = place === 1
-            ? { x: left ? box.x + 6 : box.x + box.w - 6, y: box.y + box.h + 4 }
-            : place === 3
-              ? { x: left ? box.x - 4 : box.x + box.w + 4, y: rand(box.y + 8, box.y + box.h - 8) }
-              : { x: left ? box.x + 6 : box.x + box.w - 6, y: box.y - 4 };
-          const aim = Math.atan2(soul.y - from.y, soul.x - from.x);
-          if (round % 3 === 2) {
-            const centre = { x: box.x + box.w / 2, y: box.y + 12 };
-            const turn = rand(0, 1);
-            fan(bullets, centre, 0, 11, (Math.PI * 2) / 11, 30, turn, 0.4);
-            next = t + T(1.5);
-          } else {
-            fan(bullets, from, aim, 7, 0.28, 62);
-            pending.push({ when: t + T(0.45), from, aim });
-            next = t + T(1.3);
-          }
-          round++;
-        }
-        for (const p of pending) {
-          if (t < p.when) continue;
-          p.done = true;
-          fan(bullets, p.from, p.aim, 6, 0.28, 62, 0, 0.2);
-        }
-        pending = pending.filter((p) => !p.done);
-      },
-    };
-  },
-
   // Eggs: it is so sorry, but it has laid some. They come drifting down all
   // across the box, slowly, swaying, and after a moment each one hatches: a
   // puff of shell, and a tiny olm that wriggles after you.
@@ -243,10 +195,10 @@ export const OLM_ATTACKS = {
     let next = 0.1;
     let eggs = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < T(4.6)) {
+        if (t >= next && t < T(5.4)) {
           next = t + 0.62;
           const x = nextX();
           const egg = new Shot({ x, y: box.y - 3, vy: rand(13, 17), art: 'olmEgg' });
@@ -295,7 +247,7 @@ export const OLM_ATTACKS = {
     let nextDrip = 1;
     const bodies = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         if (!started) {
           started = true;
@@ -336,12 +288,12 @@ export const OLM_ATTACKS = {
           });
         }
         // And water falling from the roof of the cave, down onto wherever you are.
-        if (t >= nextRain && t < T(5.8)) {
+        if (t >= nextRain && t < T(6.6)) {
           nextRain = t + 0.9;
           bullets.push(new Dim({ x: Math.max(box.x + 5, Math.min(box.x + box.w - 5, soul.x + rand(-5, 5))), y: box.y - 2, warn: 0.5, vy: 30, gravity: 40, art: 'olmDrop' }));
         }
         // Drips off it, in the dark.
-        if (t >= nextDrip && t < T(5.8)) {
+        if (t >= nextDrip && t < T(6.6)) {
           nextDrip = t + 0.26;
           const live = bodies.filter((c) => c.body.s < box.w + 140);
           if (live.length) {
@@ -370,10 +322,10 @@ export const OLM_ATTACKS = {
     const GAPS = [0.28, 0.28, 0.28, 0.75, 0.28, 0.28, 0.28, 1.0];
     const floor = box.y + box.h - 2;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < T(5.6)) {
+        if (t >= next && t < T(6.6)) {
           const gap = GAPS[count % GAPS.length];
           next = t + gap * (0.6 + 0.4 * density / 1.5);
           const big = count % GAPS.length === 7;
@@ -395,6 +347,64 @@ export const OLM_ATTACKS = {
           }
         }
         drops = drops.filter((drop) => !drop.spent);
+      },
+    };
+  },
+
+  // The queue: its hatchlings have been brought up very politely, and they
+  // go everywhere in a queue, nose to tail, each one exactly where the one in
+  // front went. The eldest leads (it flickers at the wall first), wriggling
+  // across the box past where you were, stops there a moment to let you go
+  // first (after you, no, after you), and carries on out the other side. The
+  // whole queue stops and starts with it. Two queues at a time, one from each
+  // side, one through your spot and one just past it. Watch the leaders.
+  olmQueue(box, density, { rand, clamp }) {
+    const T = (s) => s * density;
+    const LONG = 12;
+    const GAP = 0.1;
+    const GO = 1.2;
+    const BOW = 0.45;
+    let t = 0;
+    let n = 0;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (n >= 3 || t < T(0.1 + n * 2.3)) return;
+        n++;
+        // Two queues at once, one from each side: one right through where
+        // you are, the other just past you.
+        for (const fromLeft of [true, false]) {
+          const side = fromLeft ? -1 : 1;
+          const S = { x: fromLeft ? box.x - 4 : box.x + box.w + 4, y: rand(box.y + 8, box.y + box.h - 8) };
+          const E = { x: fromLeft ? box.x + box.w + 8 : box.x - 8, y: rand(box.y + 8, box.y + box.h - 8) };
+          const P = { x: clamp(soul.x, box.x + 6, box.x + box.w - 6), y: clamp(soul.y + (fromLeft === (n % 2 === 1) ? 0 : side * rand(9, 14)), box.y + 6, box.y + box.h - 6) };
+          // A curve through where you were: halfway along it, it's on that spot.
+          const C = { x: 2 * P.x - (S.x + E.x) / 2, y: 2 * P.y - (S.y + E.y) / 2 };
+          const bez = (u) => {
+            const a = (1 - u) * (1 - u);
+            const b = 2 * (1 - u) * u;
+            const c = u * u;
+            return { x: a * S.x + b * C.x + c * E.x, y: a * S.y + b * C.y + c * E.y };
+          };
+          // How far along the curve it is after k seconds: there, a bow, and on.
+          const u = (k) => {
+            if (k < GO) return 0.5 * (k / GO);
+            if (k < GO + BOW) return 0.5;
+            return Math.min(1.15, 0.5 + 0.5 * ((k - GO - BOW) / GO));
+          };
+          const path = (k) => {
+            const now = bez(u(Math.max(0, k)));
+            const ahead = bez(u(Math.max(0, k)) + 0.02);
+            const a = Math.atan2(ahead.y - now.y, ahead.x - now.x);
+            // A little wriggle side to side as it goes (not while it bows).
+            const w = k > GO && k < GO + BOW ? 0 : Math.sin(k * 14) * 1.6;
+            return { x: now.x - Math.sin(a) * w, y: now.y + Math.cos(a) * w, a };
+          };
+          for (let i = 0; i < LONG; i++) {
+            bullets.push(new PathShot({ art: 'olmHatchling', warn: 0.6, life: GO * 2 + BOW + 0.3 + i * GAP, path: (k) => path(k - i * GAP) }));
+          }
+        }
       },
     };
   },

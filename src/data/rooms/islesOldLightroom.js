@@ -8,6 +8,8 @@
 // Tile key (see src/overworld/coastTiles.js, isles):
 //   #  rock top (solid)   h  the light's brick wall, under the lantern glass (solid)   o  old boards
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const ISLES_OLD_LIGHTROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'isles_old_lightroom',
@@ -91,6 +93,7 @@ export const ISLES_OLD_LIGHTROOM = {
     { sprite: 'in_sea_chest_small', x: 11, y: 10, text: 'old_chest' },
     { sprite: 'in_tins_crate', x: 7, y: 10, text: 'old_tins' },
     { sprite: 'il_note_tidy', x: 10, y: 9, text: 'old_note', walkable: true, flat: true },
+    ...(LIFE5_PROPS['isles_old_lightroom'] ?? []),
   ],
   tileTexts: { '#': 'old_wall', h: 'old_wall', o: 'old_floor' },
 

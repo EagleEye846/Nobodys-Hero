@@ -216,7 +216,7 @@ export const PIRATE_BATTLE_THEME = {
   title: 'Cutlass Weather',
   bpm: 120,
   stepsPerBeat: 6,
-  volume: 0.58,
+  volume: 0.71,
 
   instruments: {
     ...ORCHESTRA,

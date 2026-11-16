@@ -18,6 +18,8 @@
 //   #  rock top (solid)   W  cliff (solid)   .  wet rock slabs   ,  turf   o  planks
 //   ~  heavy green sea (solid)   x  barnacle rock (solid)   q  shingle (low swell only)   ;  pools
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const REACH_FIRST_ROCK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'reach_first_rock',
@@ -35,11 +37,15 @@ export const REACH_FIRST_ROCK = {
   // The first rock is the calmest of the Reach's stops; it gets rougher from here.
   atmosphere: { rain: 1.0, lightning: 0.6 },
   // The Last Light's foot, out on the sea to the south-east (atmosphere.js: `lastLight`).
-  lastLight: { x: 34, y: 14 },
+  lastLight: { x: 34, y: 14, scale: 1.35 },
   skyline: [
     { kind: 'mast', x: 4, y: 15, lean: -1, tall: 46 },
   ],
 
+  // The storm's far wrecks stay well out to sea: never in the boat's lane (west of the landing, row 10) or by
+  // the jetty, where they used to stand over the Bother and the party. (15 Nov 2026)
+  skylineClear: 5,
+  skylineKeepOut: [{ x: 0, y: 5, w: 13, h: 9 }],
   tiles: [
     '######################################',
     '#~~~~~~~~~~~~~~~~~~~~~~x...~~~~~~~~~~#',
@@ -97,9 +103,6 @@ export const REACH_FIRST_ROCK = {
   cutscenes: [
     // The landing: the first rough crossing, once (arriving by to_the_reach).
     { x: 9, y: 8, w: 2, h: 5, scene: 'reach_crossing_rock' },
-    // The jetty's end: on to the reef. The side step: back home to Haddock's Light.
-    { x: 31, y: 8, w: 1, h: 1, scene: 'reach_to_reef' },
-    { x: 30, y: 7, w: 1, h: 1, scene: 'reach_back_to_haddock' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
@@ -110,9 +113,9 @@ export const REACH_FIRST_ROCK = {
     // The ring at the top of the cliff (the Climbing Rope: throw from 25,8).
     { sprite: 'grapple_ring', x: 25, y: 4, grapple: true },
     // Haddock in the Bother alongside the jetty (the boat is 4 tiles wide: x 32-35).
-    { sprite: 'cf_haddock_row', x: 32, y: 6, npc: 'haddock_reach', animation: 'cf_haddock_row', speed: 0.6, until: 'haddock_gone' },
+    { sprite: 'cf_haddock_row', x: 32, y: 6, playScene: 'reach_boat_rock', notice: 'stays', animation: 'cf_haddock_row', speed: 0.6, until: 'haddock_gone' },
     // After the chapter: the Bother, empty (Ves rows her now).
-    { sprite: 'cf_bother', x: 32, y: 6, text: 'bother_after', animation: 'cf_bother', speed: 0.6, after: 'haddock_gone' },
+    { sprite: 'cf_bother', x: 32, y: 6, text: 'bother_after', playScene: 'reach_boat_rock', notice: 'stays', animation: 'cf_bother', speed: 0.6, after: 'haddock_gone' },
     { sprite: 'c5_chain_bollard', x: 30, y: 3, text: 'reach_bollard' },
     { sprite: 'sign', x: 14, y: 8, text: 'rock_sign' },
     { sprite: 'c5_seaweed_heap', x: 21, y: 13, text: 'reach_weed' },
@@ -135,26 +138,28 @@ export const REACH_FIRST_ROCK = {
     // the landing and its water, the rope's throw (24-26, rows 7-9) or the jetty.
     { sprite: 'il_tidepool', x: 13, y: 10, flat: true, walkable: true },
     { sprite: 'il_cairn', x: 13, y: 5, text: 'reach_cairn' },
-    { sprite: 'il_grass_tuft', x: 14, y: 6, walkable: true },
-    { sprite: 'il_thrift', x: 12, y: 11, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 11, y: 7, walkable: true },
+    { sprite: 'il_grass_tuft', x: 14, y: 6, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 12, y: 11, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft_b', x: 11, y: 7, walkable: true, decor: true },
     { sprite: 'il_rowboat_half', x: 12, y: 13, text: 'reach_rowboat_half' },
     { sprite: 'il_lichen', x: 24, y: 10, flat: true, walkable: true },
     { sprite: 'il_lichen', x: 28, y: 11, flat: true, walkable: true },
     { sprite: 'il_lichen', x: 21, y: 8, flat: true, walkable: true },
-    { sprite: 'il_thrift', x: 26, y: 11, walkable: true },
-    { sprite: 'il_grass_tuft', x: 27, y: 12, walkable: true },
-    { sprite: 'il_grass_tuft_b', x: 23, y: 13, walkable: true },
+    { sprite: 'il_thrift', x: 26, y: 11, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft', x: 27, y: 12, walkable: true, decor: true },
+    { sprite: 'il_grass_tuft_b', x: 23, y: 13, walkable: true, decor: true },
     { sprite: 'il_stakes_rope', x: 24, y: 14, text: 'reach_stakes' },
-    { sprite: 'il_gull', x: 25, y: 1, walkable: true },
-    { sprite: 'il_thrift', x: 21, y: 2, walkable: true },
-    { sprite: 'il_gull', x: 27, y: 3, walkable: true },
+    { sprite: 'il_gull', x: 25, y: 1, walkable: true, decor: true },
+    { sprite: 'il_thrift', x: 21, y: 2, walkable: true, decor: true },
+    { sprite: 'il_gull', x: 27, y: 3, walkable: true, decor: true },
     { sprite: 'il_lichen', x: 26, y: 2, flat: true, walkable: true },
     { sprite: 'il_gull_rock', x: 5, y: 6, text: 'reach_gull_rock' },
     { sprite: 'il_rocks_big', x: 25, y: 16, text: 'reach_rocks' },
     { sprite: 'il_rocks', x: 36, y: 9, text: 'reach_rocks' },
     { sprite: 'il_rocks', x: 17, y: 2, text: 'reach_rocks' },
     { sprite: 'il_rocks', x: 7, y: 15, text: 'reach_rocks' },
+    { sprite: 'col_glass_red', x: 13, y: 4, walkable: true, flat: true, gives: 'glass_red', taken: { gone: true } },
+    ...(LIFE5_PROPS['reach_first_rock'] ?? []),
   ],
   tileTexts: { '#': 'reach_rock', W: 'reach_cliff', '~': 'reach_sea', x: 'reach_barnacles', o: 'reach_planks', q: 'rock_bar', ';': 'reach_pool' },
 

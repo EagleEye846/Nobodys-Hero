@@ -39,7 +39,7 @@ const BLINK_SECONDS = 0.14;
 
 // A face for `id` in an expression (see `expressions` in portraits.js).
 const portraitCache = new Map();
-function portraitSprites(id, expression = null) {
+export function portraitSprites(id, expression = null) {
   const key = `${id}:${expression ?? ''}`;
   if (!portraitCache.has(key)) {
     const art = PORTRAITS[id];

@@ -1,17 +1,20 @@
 import { defineBulletArt } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
+import { PathShot, Deco, Zone, Tether, blit } from './coastKit.js';
+import { drawText } from '../../ui/text.js';
 
-// The Sandcastle's attacks. A living sandcastle, very pleased with itself,
-// and quite sure the tide is not coming: so it fires sand from its turrets in
-// volleys (pellets and clods, aimed at where you were), sweeps its lolly-stick
-// flag across the box (a flagpole turning round a post, the pennant on the
-// end), and sends the moat out along the floor in a long wave that you have
-// to jump (the wave has a gap in it, and it's slow enough to see coming). It
-// stands to the right of the box, so everything comes from that side.
-//
-// Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. The attack's own clock (`t`) runs `density`
-// times faster than the seconds on the wall, hence the `T` below.
+// The Sandcastle's attacks. A sandcastle that has come to life, is very
+// pleased with itself, and cannot move, which it would like you to know:
+// as each attack begins a little sand hand pokes up in the box holding a
+// sign that says so (and in its battle clip, out of a tower: CAN'T), then turns the sign over to say what it will do
+// about it instead.
+//   - SO IT BUILDS WHERE YOU ARE: a bucket comes down on you and leaves a
+//     tower, and every tower fires one pellet from its window.
+//   - SO IT SENDS THE GARRISON: shell soldiers march out in two files, in step,
+//     along a row and back the next.
+//   - SO IT BRINGS THE MOAT TO YOU: it scratches channels across the sand,
+//     and the moat runs down them from the castle end.
+// It stands to the right of the box.
 
 const SAND = { k: '#3a2e1c', s: '#e8cf8e', S: '#caa968', d: '#a88848', l: '#f6e6b0', m: '#9a7c44', w: '#5aa0c8', W: '#a8d8ec', e: '#ffffff', r: '#d8453a', R: '#9c2a2a', f: '#e0d4b0', c: '#f4dcdc', C: '#e49aa0' };
 
@@ -47,187 +50,225 @@ defineBulletArt('castleWave', {
   frameSeconds: 0.25,
 });
 
-// The flagpole: a lolly stick turning on a post at the box's edge, with a red
-// pennant on the end. It flashes in its first place, then sweeps. (Not a Line,
-// because its end swings far outside the box and must stay.)
-class FlagPole {
-  constructor({ x, y, angle = Math.PI, length = 96, warn = 0.9, life = 5.4 }) {
-    Object.assign(this, { x, y, angle, length, warn, life });
-    this.age = 0;
-    this.dmg = null;
-    this.grazed = false;
-  }
+// A crab of the garrison: a little shell soldier marching (two frames of legs).
+const soldier = (step) => art(11, 9, (p) => {
+  p.ellipse(5, 4, 4, 2.8, 'C');
+  p.ellipse(5, 3.4, 2.6, 1.4, 'c');
+  p.set(3, 2, 'k');
+  p.set(7, 2, 'k');
+  p.line(1, 5, 0, 7 - step, 'R');
+  p.line(9, 5, 10, 7 - step, 'R');
+  p.line(3, 6, 2, 8 + step - 1, 'R');
+  p.line(7, 6, 8, 8 - step, 'R');
+  p.line(5, 1, 5, -1, 'd');
+});
+defineBulletArt('castleSoldier', { frames: [soldier(0), soldier(1)], palette: SAND, radius: 3.6, frameSeconds: 0.15 });
+// A bucket coming down (harmless in the air): a red seaside pail, upside down.
+defineBulletArt('castleBucket', { frames: [art(13, 12, (p) => { p.poly([[1, 11], [3, 1], [9, 1], [11, 11]], 'r'); p.rect(2, 9, 9, 2, 'R'); p.line(4, 2, 4, 9, 'c'); p.line(0, 4, 12, 4, 'k'); })], palette: SAND, radius: 1 });
+defineBulletArt('castleShadow', { frames: [['..mmmmm..', '.mmmmmmm.', '..mmmmm..']], palette: SAND, radius: 1 });
+// A tower stamped out of the bucket: ridged sand with a shell window.
+const TOWER = art(13, 15, (p) => {
+  p.rect(1, 3, 11, 12, 's');
+  p.rect(8, 3, 4, 12, 'S');
+  for (let y = 6; y < 15; y += 4) p.rect(1, y, 11, 1, 'd');
+  for (const x of [1, 5, 9]) p.rect(x, 0, 3, 3, 's');
+  p.ellipse(6, 8, 1.6, 1.4, 'c');
+});
+const TOWER_LIT = TOWER.map((r, y) => (y >= 7 && y <= 9 ? r.replace(/c/g, 'e') : r));
 
-  get active() {
-    return this.age >= this.warn && this.age < this.warn + this.life;
-  }
-
-  update(dt) {
-    this.age += dt;
-  }
-
-  isGone() {
-    return this.age >= this.warn + this.life + 0.25;
-  }
-
-  edgeDistance(px, py) {
-    if (!this.active) return Infinity;
-    const dx = Math.cos(this.angle);
-    const dy = Math.sin(this.angle);
-    const along = Math.max(0, Math.min(this.length, (px - this.x) * dx + (py - this.y) * dy));
-    return Math.hypot(px - (this.x + dx * along), py - (this.y + dy * along)) - 1.8;
-  }
-
-  draw(ctx) {
-    ctx.save();
-    const dx = Math.cos(this.angle);
-    const dy = Math.sin(this.angle);
-    const ex = this.x + dx * this.length;
-    const ey = this.y + dy * this.length;
-    if (this.age < this.warn) {
-      ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.25 : 0.65;
-      ctx.strokeStyle = '#e0d4b0';
-      ctx.setLineDash([3, 2]);
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y);
-      ctx.lineTo(ex, ey);
-      ctx.stroke();
-      ctx.restore();
-      return;
-    }
-    const over = this.age - (this.warn + this.life);
-    if (over > 0) ctx.globalAlpha = Math.max(0, 1 - over / 0.25);
-    ctx.lineCap = 'round';
-    for (const [color, width] of [['#3a2e1c', 4], ['#e0d4b0', 2]]) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = width;
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y);
-      ctx.lineTo(ex, ey);
-      ctx.stroke();
-    }
-    // The pennant: a red triangle streaming behind the end as it swings.
-    const nx = -dy;
-    const ny = dx;
-    const wave = Math.sin(this.age * 9) * 1.5;
-    ctx.fillStyle = '#d8453a';
-    ctx.strokeStyle = '#3a2e1c';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(ex, ey);
-    ctx.lineTo(ex - dx * 9 + nx * (5 + wave), ey - dy * 9 + ny * (5 + wave));
-    ctx.lineTo(ex - dx * 9 - nx * (1 - wave), ey - dy * 9 - ny * (1 - wave));
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.restore();
-  }
-}
+// The sign. It can't move, so as each attack begins a little sand hand pokes
+// up from the bottom of the box holding a sign on a lolly stick, and says
+// so; then it turns the sign over to say what it's going to do about it
+// instead, and ducks back down. Drawn in the game's own lettering so it can
+// be read, and under everything else, so nothing that hurts is hidden.
+const GAG = "IT WOULD LIKE TO\nMOVE, BUT IT'S A\nSANDCASTLE.\nIT CAN'T.";
+const SIGN_LIFE = 3.2;
+const sign = (box, then) => new Deco({ life: SIGN_LIFE, paint(ctx, d) {
+  const W = box.w - 8;
+  const H = 40;
+  const cx = box.x + box.w / 2;
+  const up = Math.min(1, d.age / 0.25);
+  const down = d.age > SIGN_LIFE - 0.3 ? Math.max(0, (SIGN_LIFE - d.age) / 0.3) : 1;
+  const top = box.y + 4 + (1 - Math.min(up, down)) * (box.h + 4);
+  ctx.save();
+  // The lolly stick, and the sand hand gripping it at the bottom of the box.
+  ctx.fillStyle = '#3a2e1c';
+  ctx.fillRect(cx - 2, top + H - 1, 4, box.h);
+  ctx.fillStyle = '#e0d4b0';
+  ctx.fillRect(cx - 1, top + H, 2, box.h);
+  const hy = top + H + 22;
+  ctx.fillStyle = '#3a2e1c';
+  ctx.fillRect(cx - 5, hy, 11, 10);
+  ctx.fillStyle = '#e8cf8e';
+  ctx.fillRect(cx - 4, hy + 1, 9, 9);
+  ctx.fillStyle = '#caa968';
+  ctx.fillRect(cx - 4, hy + 3, 9, 1);
+  ctx.fillRect(cx - 4, hy + 5, 9, 1);
+  ctx.fillRect(cx - 4, hy + 7, 9, 1);
+  // The board.
+  ctx.fillStyle = '#3a2e1c';
+  ctx.fillRect(cx - W / 2 - 1, top - 1, W + 2, H + 2);
+  ctx.fillStyle = '#f6e6b0';
+  ctx.fillRect(cx - W / 2, top, W, H);
+  ctx.fillStyle = '#e8cf8e';
+  ctx.fillRect(cx - W / 2, top + H - 3, W, 3);
+  // Front, then (turned over with a flip) the back.
+  const flip = d.age - 1.6;
+  const squash = Math.abs(flip) < 0.12 ? Math.abs(flip) / 0.12 : 1;
+  ctx.translate(cx, top);
+  ctx.scale(1, squash);
+  drawText(ctx, flip < 0 ? GAG : then, 0, 2, { size: 9, lineHeight: 9, align: 'center', color: '#3a2e1c' });
+  ctx.restore();
+} });
 
 export const SANDCASTLE_ATTACKS = {
-  // Turret volley: the towers fire sand in volleys (a little puff shows
-  // first): a fan of pellets aimed at you from the high turret, a clod lobbed
-  // on an arc from the low one.
-  castleVolley(box, density, { Shot, rand, clamp }) {
+  // "SO IT BUILDS WHERE YOU ARE." A bucket's shadow lands on you, and down
+  // comes the bucket: when it lifts there's a new tower standing there (it
+  // hurts to touch, and stays). A moment later the tower's shell window
+  // glints and it fires a pellet of sand at you. Every tower fires once.
+  castleTowers(box, density, { Shot }) {
     const T = (s) => s * density;
+    const DROP = 0.75;
+    const AIM = 0.9;
     let t = 0;
-    let next = T(0.2);
     let n = 0;
-    let firing = [];
-    return {
-      duration: 7,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && n < 5 && t < T(5.4)) {
-          n++;
-          next = t + T(1.2);
-          const hi = { x: box.x + box.w + 6, y: box.y + rand(4, 22) };
-          const lo = { x: box.x + box.w + 6, y: box.y + box.h - rand(4, 20) };
-          for (const at of [hi, lo]) bullets.push(new Shot({ x: at.x - 2, y: at.y, harmless: true, life: 0.55, art: 'castlePuff' }));
-          firing.push({ at: t + T(0.55), hi, lo, aim: { x: soul.x, y: soul.y }, n });
-        }
-        for (const f of firing) {
-          if (t < f.at) continue;
-          f.done = true;
-          // The fan from the high turret: odd count, the middle on where you stood.
-          const base = Math.atan2(f.aim.y - f.hi.y, f.aim.x - f.hi.x);
-          for (let i = -2; i <= 2; i++) {
-            const a = base + i * 0.17;
-            bullets.push(new Shot({ x: f.hi.x, y: f.hi.y, vx: Math.cos(a) * 54, vy: Math.sin(a) * 54, art: 'castlePellet', life: 3.5 }));
-          }
-          // The clod from the low turret: an arc that comes down near you.
-          const dx = f.aim.x - f.lo.x;
-          const flight = 1;
-          bullets.push(new Shot({ x: f.lo.x, y: f.lo.y, vx: clamp(dx / flight, -80, -30), vy: clamp((f.aim.y - f.lo.y) / flight - 0.5 * 90 * flight, -90, 20), gravity: 90, art: 'castleClod', life: 2.6 }));
-        }
-        firing = firing.filter((f) => !f.done);
-      },
-    };
-  },
-
-  // Flag sweep: the flagpole swings round like a gate, its pennant a hazard on
-  // the end, a long rope of sand streaming from it, and it sweeps back again.
-  // The pole flashes in its first position, then goes.
-  castleFlag(box, density) {
-    const T = (s) => s * density;
-    let t = 0;
     let made = false;
-    let poles = [];
+    const towers = [];
     return {
-      duration: 7.2,
-      update: (dt, bullets) => {
+      duration: 7.8,
+      update: (dt, bullets, soul, real = dt / density) => {
         t += dt;
         if (!made) {
           made = true;
-          // Two poles, one from the top corner, one from the bottom, turning opposite ways.
-          for (const [y, dir, phase] of [[box.y + 6, 1, 0], [box.y + box.h - 6, -1, Math.PI * 0.9]]) {
-            const x = box.x + box.w + 4;
-            const line = new FlagPole({ x, y, angle: Math.PI, length: 96, warn: 0.9, life: 5.4 });
-            poles.push({ x, y, dir, phase, line });
-            bullets.push(line);
-          }
+          bullets.push(sign(box, 'SO IT BUILDS\nWHERE YOU ARE\nINSTEAD.'));
         }
-        const swingT = Math.max(0, t - T(0.9)) / density;
-        for (const p of poles) {
-          // A gate swinging over a wide arc, to and fro.
-          p.line.angle = Math.PI + p.dir * 1.25 * Math.sin(1.0 * swingT + p.phase);
+        if (t >= T(1.3 + n * 0.8) && n < 7) {
+          n++;
+          const x = Math.min(Math.max(soul.x, box.x + 7), box.x + box.w - 7);
+          const y = Math.min(Math.max(soul.y, box.y + 8), box.y + box.h - 8);
+          bullets.push(new Shot({ x, y: y + 5, harmless: true, life: DROP, art: 'castleShadow' }));
+          bullets.push(new PathShot({ art: 'castleBucket', harmless: true, life: DROP, path: (k) => ({ x, y: y - 30 * (1 - Math.min(1, k / DROP) ** 2) }) }));
+          bullets.push(new Zone({ x: x - 5, y: y - 6, w: 10, h: 13, warn: DROP, life: 3.2, paint(ctx, z) {
+            if (z.age < z.warn) return;
+            const glint = z.age > z.warn + AIM - 0.35 && z.age < z.warn + AIM;
+            blit(ctx, glint && Math.floor(z.age * 12) % 2 ? TOWER_LIT : TOWER, SAND, z.x + 5, z.y + 6);
+          } }));
+          towers.push({ x, y, fire: DROP + AIM, done: false });
+        }
+        for (const tw of towers) {
+          if (tw.done) continue;
+          tw.fire -= real;
+          if (tw.fire > 0) continue;
+          tw.done = true;
+          const a = Math.atan2(soul.y - tw.y, soul.x - tw.x);
+          bullets.push(new Shot({ x: tw.x + Math.cos(a) * 7, y: tw.y + Math.sin(a) * 7, vx: Math.cos(a) * 55, vy: Math.sin(a) * 55, art: 'castlePellet', warn: 0.3, life: 1.6 }));
         }
       },
     };
   },
 
-  // Moat wave: the moat water comes out along the floor in a long wave, a
-  // wall of curling breakers with a gap or two, and rolls the length of the
-  // box. Two waves run in from the right, one after another, then one more
-  // from the left. Jump the gap.
-  castleMoat(box, density, { Shot, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let next = T(0.2);
-    let n = 0;
-    const SLOTS = 8;
-    const slotY = (i) => box.y + 7 + (i * (box.h - 14)) / (SLOTS - 1);
+  // "SO IT SENDS THE GARRISON." The door opens and its shell soldiers march
+  // out in two files, in step: a step, a stop, a step. One marches along
+  // the top row to the wall, turns down a row and marches back; the other
+  // does the same up from the bottom. Slip through the file
+  // between steps, or keep ahead of the column.
+  castleGarrison(box, density) {
+    const ROW = 16;
+    const STEP = 10;
+    const BEAT = 0.26;
+    const MEN = 6;
+    const SPACING = 11;
+    const L = box.x + 6;
+    const R = box.x + box.w - 6;
+    const rows = Math.floor((box.h - 8) / ROW) + 1;
+    // The way they march, as distance along it: right to left on the top
+    // row, down a row, back, and so on.
+    const span = R - L;
+    const along = (s) => {
+      const leg = span + ROW;
+      let i = Math.floor(s / leg);
+      const f = s - i * leg;
+      if (i >= rows) i = rows - 1;
+      const y = box.y + 6 + i * ROW + (f > span ? f - span : 0);
+      const run = Math.min(f, span);
+      const x = i % 2 ? L + run : R - run;
+      return { x, y: Math.min(y, box.y + box.h - 6) };
+    };
+    // In step: each beat a quick stride, then a stand.
+    const marched = (k) => {
+      const beats = Math.floor(k / BEAT);
+      const f = Math.min(1, (k - beats * BEAT) / (BEAT * 0.45));
+      return (beats + f) * STEP;
+    };
+    let made = false;
     return {
-      duration: 7.2,
+      duration: 7.8,
+      update: (dt, bullets) => {
+        if (made) return;
+        made = true;
+        bullets.push(sign(box, 'SO IT SENDS\nTHE GARRISON.'));
+        for (let j = 0; j < 2; j++) {
+          for (let i = 0; i < MEN; i++) {
+            const lag = i * SPACING;
+            const start = 1.7 + j * 1.3;
+            // The second file marches up from the bottom row, the mirror of the first.
+            const flip = (q) => (j ? { x: box.x + box.w - (q.x - box.x), y: box.y + box.h - (q.y - box.y) } : q);
+            bullets.push(new PathShot({ art: 'castleSoldier', warn: start, life: 7 - start, path: (k) => flip(along(Math.max(0, marched(k) - lag))) }));
+          }
+        }
+      },
+    };
+  },
+
+  // "SO IT BRINGS THE MOAT TO YOU." It digs channels across the sand (a
+  // groove scratched from the castle side, one of them through you), and
+  // then lets the moat in: the water runs down each channel from the castle
+  // end and stays a moment. Cross a channel before the water reaches you.
+  castleMoat(box, density, { rand }) {
+    const T = (s) => s * density;
+    const DIG = 0.9;
+    const FLOW = 120;
+    const WET = 0.55;
+    let t = 0;
+    let n = 0;
+    let made = false;
+    return {
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && n < 4 && t < T(5.4)) {
+        if (!made) {
+          made = true;
+          bullets.push(sign(box, 'SO IT BRINGS\nTHE MOAT\nTO YOU.'));
+        }
+        if (t >= T(1.4 + n * 0.75) && n < 7) {
           n++;
-          next = t + T(1.5);
-          const mine = Math.round(((soul.y - box.y - 7) / (box.h - 14)) * (SLOTS - 1));
-          // The gap is two slots wide and never where you are.
-          let gap = Math.floor(rand(0, SLOTS - 1));
-          if (gap === mine || gap + 1 === mine) gap = mine < SLOTS / 2 ? SLOTS - 2 : 0;
-          const fromRight = n !== 3;
-          const x = fromRight ? box.x + box.w + 8 : box.x - 8;
-          const vx = fromRight ? -40 : 40;
-          for (let i = 0; i < SLOTS; i++) {
-            if (i === gap || i === gap + 1) continue;
-            bullets.push(new Shot({ x, y: slotY(i), vx, art: 'castleWave', life: 4.5, warn: 0.2 }));
-          }
-          // A thin foam line just before it arrives, marking the gap's edges.
-          bullets.push(new Shot({ x: fromRight ? box.x + box.w - 4 : box.x + 4, y: (slotY(gap) + slotY(gap + 1)) / 2, harmless: true, life: 0.6, art: 'castlePuff' }));
+          // From a point on the castle side, across the box through (or near) you.
+          const sx = box.x + box.w + 2;
+          const sy = rand(box.y + 6, box.y + box.h - 6);
+          const ty = n % 2 ? soul.y : rand(box.y + 6, box.y + box.h - 6);
+          const tx = n % 2 ? soul.x : rand(box.x, box.x + box.w * 0.6);
+          const a = Math.atan2(ty - sy, tx - sx);
+          const len = 130;
+          const reach = (k) => Math.max(0, Math.min(len, k * FLOW));
+          // The groove, scratched in first.
+          bullets.push(new Deco({ life: DIG + len / FLOW + WET, paint(ctx, d) {
+            const g = Math.min(1, d.age / (DIG * 0.6));
+            ctx.strokeStyle = '#a88848';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([3, 1]);
+            ctx.beginPath();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(sx + Math.cos(a) * len * g, sy + Math.sin(a) * len * g);
+            ctx.stroke();
+          } }));
+          bullets.push(new Tether({
+            warn: DIG, life: len / FLOW + WET, thick: 5, color: '#5aa0c8', dark: '#9a7c44',
+            ends: (k) => {
+              const head = reach(k);
+              const tail = Math.max(0, (k - WET) * FLOW);
+              return [sx + Math.cos(a) * tail, sy + Math.sin(a) * tail, sx + Math.cos(a) * head, sy + Math.sin(a) * head];
+            },
+          }));
         }
       },
     };

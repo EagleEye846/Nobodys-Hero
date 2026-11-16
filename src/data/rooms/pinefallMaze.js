@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // THE TURNING WOOD: a maze of bramble where every way looks like every
 // other, and the odd scarlet tree is the only landmark. Its farthest dead end
 // hides an old pack.
@@ -64,6 +66,7 @@ export const PINEFALL_MAZE = {
   textFile: 'interactions/pinefall.txt',
   props: [
     { sprite: 'old_pack', x: 21, y: 13, text: 'maze_pack', gives: 'climbers_ration', taken: { text: 'maze_pack_empty' } },
+    ...(R3P_PROPS['pinefall_maze'] ?? []),
   ],
   tileTexts: { L: 'maze_tree', Z: 'bramble' },
 

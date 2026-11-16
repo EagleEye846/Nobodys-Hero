@@ -1,0 +1,92 @@
+# PLUMB LEAD
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/plumb_lead.js.
+
+[intro]
+A heap of old line on the floor lifts itself off the stone, and the heap was a rope, and the rope has a weight on the end of it. A grey lead, stamped with a number, with two pale slits for eyes. It starts to swing. A PLUMB LEAD!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+PLUMB LEAD swings, and murmurs a number, and swings. The number is never quite the same twice.
+
+The number on PLUMB LEAD's belly is 7. Then 8. Then, a little crossly, 7.
+
+PLUMB LEAD lowers itself an inch on its line and listens, as though the floor might say something.
+
+A loose fibre of PLUMB LEAD's line lifts in the draught and points down. It always points down.
+
+Smells like wet rope, tallow and a very old and very patient job.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+PLUMB LEAD's line is coming apart at the top. The number on its belly has stopped changing.
+
+[flavor: spareable]
+PLUMB LEAD hangs straight and still. The number on its belly says 1. It has found the bottom.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+By the
+mark, five.
+
+By the
+deep, seven.
+
+And a
+half, nine.
+
+No
+bottom.
+
+...Mark
+twain.
+
+Heave.
+
+Heave
+and haul.
+
+Quarter
+less ten.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/plumb_lead.js.
+[talk: Inspect]
+PLUMB LEAD - HP 8400
+A sounder's lead on a frayed line, still taking soundings. Swings its line across the box like a clock, rains tags stamped with depths (the bigger the number, the faster it falls), and hauls the floor of the box up from below.
+
+[talk: Call out a depth]
+You call out a depth, as the old sounders did: "By the mark, twelve!" PLUMB LEAD goes quite still on its line. It says "twelve" back, very carefully, and looks at its own belly, and its slits go wide. It has not had a reading confirmed in a hundred years.
+
+[talk: Hold the line taut]
+You take hold of the loose line and hold it, just taut, so the lead hangs true. PLUMB LEAD stops its swinging. It lets out a long breath of old rope. It says that is how it is meant to be held. It says nobody has held it right since the Board.
+
+[talk: Tie off the loose end]
+You find the frayed end and tie it off with a small neat knot, the kind a sounder uses. PLUMB LEAD swings once, to see the difference. It says it feels like being on a boat again. It says it does not remember what a boat was, but the knot is right.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+PLUMB LEAD's line parts at the top, quite gently, and the weight goes down the way it was always meant to, and does not stop swinging until the floor. It lies there cracked, with a number on it that has worn off. It looks like a weight.
+
+[pacified]
+PLUMB LEAD hangs dead straight and the number on its belly stops at 1. It lowers itself, loop by loop, into a neat coil on the stone, and lies there, and does not swing any more. It has been told the bottom. That was all it was ever asking.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves asks {foe} how deep this cave goes. {foe} says it never found out. It says it was always going to tell them tomorrow.
+
+Ves tells {foe} that its numbers are wrong. {foe} says it knows. It says they were wrong in the Board's day too, and nobody ever minded, because the ships got in.
+
+Ves tells {foe} it is the only thing in this cave that is still doing its job. {foe} says it is touched. It says the job is not going well, but it is going.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble asks {foe} what the number is for. {foe} says it is how deep. Bramble says he's been counting stairs his whole life, and he's at four hundred and six, and {foe} says that's a very good sounding.
+
+Bramble says {foe} is the biggest conker he's ever seen. {foe} says it's lead. Bramble says it can be a lead and a conker, that's allowed.
+
+Bramble swings his arm like the lead does, and says "heave", and {foe} swings, and says "heave", and Ves says if the two of them fall over she is not catching either.

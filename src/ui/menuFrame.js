@@ -144,7 +144,7 @@ export function drawMenuFrame(ctx, title, rightLabel, { split = true, accent = M
 // row (weapons by default; the ITEMS menu and shops pass their own).
 // `icon(id)` can give a small picture (see listIcon) to sit before each name.
 // The cursor slides from row to row rather than jumping (see uiMotion.js).
-export function drawWeaponList(ctx, ids, cursor, { nameColor, tag, area = LIST, name = (id) => WEAPONS[id].name, icon = null }) {
+export function drawWeaponList(ctx, ids, cursor, { nameColor, tag, area = LIST, name = (id) => WEAPONS[id].name, icon = null, rowFill = null }) {
   const first = Math.min(Math.max(0, cursor - Math.floor(area.rows / 2)), Math.max(0, ids.length - area.rows));
   const last = Math.min(ids.length, first + area.rows);
 
@@ -155,6 +155,12 @@ export function drawWeaponList(ctx, ids, cursor, { nameColor, tag, area = LIST, 
   for (let i = first; i < last; i++) {
     const id = ids[i];
     const y = area.y + (i - first) * area.rowHeight;
+    // A band behind the row (`rowFill`: the spells in notches, on the SPELLS screen).
+    const fill = rowFill?.(id);
+    if (fill) {
+      ctx.fillStyle = fill;
+      ctx.fillRect(area.x + 22, y + 1, area.width - 18, area.rowHeight - 4);
+    }
     // A name too long for its row shrinks to fit (down to 20).
     const label = name(id);
     // (A name that wouldn't fit beside its picture goes without it.)
@@ -168,10 +174,18 @@ export function drawWeaponList(ctx, ids, cursor, { nameColor, tag, area = LIST, 
       ctx.drawImage(picture, area.x + 26, y + 5, 18, 18);
       ctx.restore();
     }
-    const room = area.width - (nameX - area.x);
-    const size = Math.max(20, Math.min(28, Math.floor((28 * room) / textWidth(ctx, label, 28))));
-    drawText(ctx, label, nameX, y + (28 - size) / 2, { size, color: nameColor(id) });
+    // The tag on the right (a price, OWNED, E) gets its room first, so a long name can't run into it.
     const tagged = tag(id);
+    const tagRoom = tagged ? textWidth(ctx, tagged.text, 22) + 12 : 0;
+    const room = area.width - (nameX - area.x) - tagRoom;
+    const size = Math.max(20, Math.min(28, Math.floor((28 * room) / textWidth(ctx, label, 28))));
+    // Still too long at the smallest size: cut it short with dots.
+    let shown = label;
+    if (textWidth(ctx, shown, size) > room) {
+      while (shown.length > 1 && textWidth(ctx, `${shown}...`, size) > room) shown = shown.slice(0, -1).trimEnd();
+      shown = `${shown}...`;
+    }
+    drawText(ctx, shown, nameX, y + (28 - size) / 2, { size, color: nameColor(id) });
     if (tagged) drawText(ctx, tagged.text, area.x + area.width, y + 4, { size: 22, color: tagged.color, align: 'right' });
   }
 
@@ -191,6 +205,9 @@ const LIST_ICONS = {
   food: ['..#..#...', '...#..#..', '..#..#...', '.........', '#########', '#.......#', '.#.....#.', '..#####..', '.........'],
   candle: ['....#....', '...###...', '....#....', '..#####..', '..#...#..', '..#...#..', '..#...#..', '..#...#..', '.#######.'],
   star: ['....#....', '....#....', '...###...', '#########', '.#######.', '..#####..', '..##.##..', '.##...##.', '.#.....#.'],
+  // A spell notch: a gem set in its socket (filled: a spell is in it), or the empty socket.
+  gem: ['...###...', '..#####..', '.#######.', '#########', '#########', '.#######.', '..#####..', '...###...', '.........'],
+  socket: ['...###...', '..#...#..', '.#.....#.', '#.......#', '#.......#', '.#.....#.', '..#...#..', '...###...', '.........'],
   other: ['...###...', '..#...#..', '.#######.', '#.......#', '#...#...#', '#..###..#', '#...#...#', '#.......#', '.#######.'],
 };
 const listIconCache = new Map();

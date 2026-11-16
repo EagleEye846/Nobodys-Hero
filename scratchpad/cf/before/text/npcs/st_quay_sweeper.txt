@@ -1,0 +1,27 @@
+# ST_QUAY_SWEEPER: an old seal in a mauve coat with a broom, sweeping the rain off the quay, which it falls on again. The life pass.
+
+[first]
+Sweeping. Don't mind me. Don't mind the sea either, it's always coming in.
+
+[repeat]
+I push it that way, it comes back this way. We've reached an understanding. I let it, and it lets me think I'm helping.
+
+# (draft)
+[repeat 2]
+Forty years on this quay with the same broom. Three heads, two handles. Still the same broom. Don't tell it.
+
+# (draft)
+[repeat_ves 2]
+{smile}...Everybody's got one of those, haven't they. A broom that's different and the same.
+
+# (draft)
+[repeat 3]
+The trick with a wet quay is not to sweep for a clean quay. Sweep for the sound. Swish, swish. It's company.
+
+# (draft)
+[first after the_light_answers]
+Dry! Dry planks! I'd forgotten they were brown. I've swept the same bit for an hour and it's still lovely.
+
+# (draft)
+[repeat after the_light_answers]
+Nothing to push. I'm just walking up and down with a broom, like a lunatic. It's the nicest thing I've ever done.

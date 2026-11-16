@@ -19,8 +19,8 @@
 //   th_hearth_cold     the same hearth gone out, the pot pushed back on its crane (3 wide)
 //   th_seed_drawers    a chest of little drawers, every one labelled in ink (2 wide)
 //   th_potting_bench   a bench of soil and pots, a trowel stuck in, a seedling half potted (2 wide)
-//   th_wax_vat         a copper pot of wax on a little brick stove, embers under it (lit)
-//   th_dipping_vats    a pot of hot wax and a tub of cold water side by side, for dipping (2 wide, lit)
+//   th_wax_vat         a copper pot of wax on a little brick stove, embers under it (lit; _cold: gone out)
+//   th_dipping_vats    a pot of hot wax and a tub of cold water side by side, for dipping (2 wide, lit; _cold: gone out)
 //   th_dipping_rack    two posts and a crossbar, pegs along it, candles hung in pairs by their wicks (2 wide)
 //   th_wax_crate       a crate of pale wax cakes
 //   th_cot             a low cot built like a seedling tray, a quilt, a plant label at its head (2 wide)
@@ -487,21 +487,23 @@ function pottingBench() {
 }
 
 // The wax pot on its little brick stove, embers under it, a ladle in the wax.
-function waxVat() {
+function waxVat(cold = false) {
   const g = new Grid(16, 26);
   g.rect(1, 14, 14, 12, BRICK[1]);
   g.rect(1, 14, 14, 1, BRICK[2]);
   for (let y = 17; y < 26; y += 3) g.rect(1, y, 14, 1, BRICK[0]);
   g.rect(4, 19, 8, 5, '#120c10');
-  g.rect(5, 22, 6, 2, FIRE[0]);
-  g.set(6, 22, FIRE[1]);
-  g.set(9, 21, FIRE[1]);
-  g.set(8, 22, FIRE[2]);
+  if (!cold) {
+    g.rect(5, 22, 6, 2, FIRE[0]);
+    g.set(6, 22, FIRE[1]);
+    g.set(9, 21, FIRE[1]);
+    g.set(8, 22, FIRE[2]);
+  } else g.rect(5, 23, 6, 1, '#3a3236');
   // The pot.
   g.rect(2, 6, 12, 8, COPPER[1]);
   g.rect(2, 6, 12, 1, COPPER[3]);
   g.rect(3, 7, 2, 6, COPPER[2]);
-  g.rect(3, 6, 10, 1, WAX[2]);
+  g.rect(3, 6, 10, 1, cold ? WAX[0] : WAX[2]);
   g.rect(11, 7, 1, 3, WAX[1]);
   // The ladle handle leaning out.
   g.line(10, 6, 14, 1, WOOD[2]);
@@ -510,20 +512,22 @@ function waxVat() {
 }
 
 // A pot of hot wax on its brick stove and a tub of cold water: dip, cool, dip again.
-function dippingVats() {
+function dippingVats(cold = false) {
   const g = new Grid(32, 26);
   // The wax side, as the vat.
   g.rect(1, 14, 14, 12, BRICK[1]);
   g.rect(1, 14, 14, 1, BRICK[2]);
   for (let y = 17; y < 26; y += 3) g.rect(1, y, 14, 1, BRICK[0]);
   g.rect(4, 19, 8, 5, '#120c10');
-  g.rect(5, 22, 6, 2, FIRE[0]);
-  g.set(6, 22, FIRE[1]);
-  g.set(9, 21, FIRE[1]);
+  if (!cold) {
+    g.rect(5, 22, 6, 2, FIRE[0]);
+    g.set(6, 22, FIRE[1]);
+    g.set(9, 21, FIRE[1]);
+  } else g.rect(5, 23, 6, 1, '#3a3236');
   g.rect(2, 4, 12, 10, COPPER[1]);
   g.rect(2, 4, 12, 1, COPPER[3]);
   g.rect(3, 5, 2, 8, COPPER[2]);
-  g.rect(3, 4, 10, 1, WAX[2]);
+  g.rect(3, 4, 10, 1, cold ? WAX[0] : WAX[2]);
   // The water tub: staves and two iron hoops.
   g.rect(17, 10, 14, 16, WOOD[2]);
   for (let x = 19; x < 31; x += 3) g.rect(x, 10, 1, 16, WOOD[1]);
@@ -796,7 +800,9 @@ export const TH_PROP_SPRITES = {
   th_seed_drawers: seedDrawers(),
   th_potting_bench: pottingBench(),
   th_wax_vat: waxVat(),
+  th_wax_vat_cold: waxVat(true),
   th_dipping_vats: dippingVats(),
+  th_dipping_vats_cold: dippingVats(true),
   th_dipping_rack: dippingRack(),
   th_wax_crate: waxCrate(),
   th_cot: cot(),
@@ -835,6 +841,7 @@ export const TH_FOOTPRINTS = {
   th_seed_drawers: 2,
   th_potting_bench: 2,
   th_dipping_vats: 2,
+  th_dipping_vats_cold: 2,
   th_dipping_rack: 2,
   th_cot: 2,
   th_cold_frame: 2,
@@ -850,7 +857,7 @@ export const TH_GLOWS = {
     { dy: 8, pool: 72, strength: 0.55, flicker: 0.7, color: FIRELIGHT },
   ],
   th_sconce: [
-    { dy: -36, bloom: 8, strength: 0.6, flicker: 0.5, color: CANDLE },
+    { dy: -21, bloom: 8, strength: 0.6, flicker: 0.5, color: CANDLE },
     { dy: 8, pool: 46, strength: 0.4, flicker: 0.3, color: CANDLE },
   ],
   th_wax_vat: [

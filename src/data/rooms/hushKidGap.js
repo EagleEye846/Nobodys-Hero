@@ -9,6 +9,10 @@
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_KID_GAP = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_kid_gap',
@@ -64,6 +68,7 @@ export const HUSH_KID_GAP = {
   // gates.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_kid_gap ?? []),
     { sprite: 'sign', x: 12, y: 13, text: 'kidgap_sign' },
     { sprite: 'gate_narrow', x: 14, y: 11, text: 'kidgap_gate', opensWith: ['gap_lever'], openText: 'kidgap_gate_open' },
     { sprite: 'kid_gap', x: 5, y: 11, text: 'kid_gap', gap: true },
@@ -76,6 +81,8 @@ export const HUSH_KID_GAP = {
     // The pocket in the bramble (Bramble only), with a purse somebody hid.
     { sprite: 'kid_gap', x: 21, y: 14, text: 'kid_gap', gap: true },
     { sprite: 'gold_pouch', x: 25, y: 15, text: 'kidgap_pouch', gold: 120, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_kid_gap ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble' },
 

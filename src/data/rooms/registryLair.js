@@ -13,6 +13,7 @@
 //   J  broken pillar (solid)
 //   b  old stone step (the dais the Register's stand is on: jump up onto it)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const REGISTRY_LAIR = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'registry_lair',
@@ -82,6 +83,8 @@ export const REGISTRY_LAIR = {
     { sprite: 'scorch_mark', x: 15, y: 8, text: 'cleft_scorch', walkable: true, light: 18 },
     { sprite: 'inscription', x: 14, y: 4, text: 'registry_inscription' },
     { sprite: 'gold_pouch', x: 27, y: 6, text: 'registry_purse', gold: 420, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['registry_lair'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', I: 'city_pillar', J: 'city_pillar' },
 

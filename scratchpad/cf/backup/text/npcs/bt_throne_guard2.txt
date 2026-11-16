@@ -1,0 +1,49 @@
+# BT_THRONE_GUARD2: The second newt guard inside the great doors, whose helmet fits perfectly, and who is therefore quietly insufferable about it.
+
+[first]
+Don't mind my colleague's helmet. Mine fits. I had it fitted. It cost two weeks' pay and a very small favour.
+
+Please keep to the carpet. It's for walking on. The rest of the floor is for standing on.
+
+[repeat]
+The carpet's the best bit of the hall. It was lent to us by a very rich snail. She wants it back in 1400.
+
+[first after the_kings_welcome]
+Mind the glass cases. The relics are precious. Mostly in the sense that nobody can remember what they're relics OF.
+
+[repeat after the_kings_welcome]
+The boot's my favourite. It's very small. I've always wondered if it was a joke.
+
+[first after the_light_goes_up]
+I'm so glad. I'd put my helmet on for the occasion but I'm wearing it. As ever.
+
+[repeat after the_light_goes_up]
+His Majesty's very pleased. He's practising his speech in the mirror. I can hear him through the door.
+
+# (draft)
+[repeat 2]
+He'll tell you his helmet's fine. It isn't. Last week he guarded a coat stand for an hour.
+
+# (draft)
+[repeat 3]
+Off the carpet, please. That's the standing part. I can tell from here. I can SEE from here.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+The cloak, they say, was mended by the Hero himself. Very small stitches. In a hurry.
+
+# (draft)
+[repeat_ves 2 after the_kings_welcome]
+{thoughtful}Small stitches. {bored}Of course they were.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+The cup's dented on one side. A king's guard doesn't speculate. But somebody dropped it a lot.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+The speech is getting longer. I've heard the word PEPTUP eleven times through that door.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+Twelve.

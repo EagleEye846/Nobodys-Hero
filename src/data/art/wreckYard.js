@@ -972,6 +972,58 @@ function bilgeSlick(seed = 1919) {
   return g.rows();
 }
 
+// wy_rock_cleft: a way out through a west-facing cliff, seen from above and to the south (the Watch Rock's way
+// back into the cave under the point). Not a doorway: a split in the rock that the shelf runs into. The tiles
+// give the rock round it (the cliff's face above, its top below); this lays the dark over them: the floor going
+// on into black toward the room's west edge, the cleft's north wall falling into its own shadow, the overhang's
+// shadow across the floor, wet on the floor catching the last of the light, a few stones fallen at the mouth,
+// weed at the wall's foot and a drip running down it. Flat, walkable, 3 wide x 3 high: put it on the floor tile
+// of the cleft at the room's edge (the door), with the face tiles (W) above it and clifftop (#) below.
+function rockCleft() {
+  const g = new Grid(48, 48);
+  const dark = (a) => `rgba(2, 6, 7, ${a.toFixed(2)})`;
+  const step = (a) => Math.round(Math.max(0, Math.min(1, a)) * 8) / 8;
+  edgeSeed = 4471;
+  // The cleft's north wall (the face above the floor): darker toward the inside (west) and down toward the floor.
+  for (let y = 4; y < 32; y++) {
+    for (let x = 0; x < 48; x++) {
+      const a = step(Math.pow(Math.max(0, (42 - x) / 42), 0.8) * 0.9 + Math.max(0, (y - 10) / 22) * 0.45 - ((x + y) % 2 ? 0 : 0.06));
+      if (a > 0.05) g.set(x, y, dark(Math.min(0.9, a)));
+    }
+  }
+  // The floor running in: black at the west edge, opening out toward the shelf; the overhang's shadow along the top.
+  for (let y = 32; y < 48; y++) {
+    const lip = y < 36 + ((y * 7) % 3) ? 0.35 : 0;
+    for (let x = 0; x < 48; x++) {
+      const ragged = ((x * 13 + y * 5) % 7) / 40;
+      const a = step((x < 14 ? 1 : Math.pow(Math.max(0, (47 - x) / 33), 0.7)) * 0.97 + lip - ragged + (y > 45 ? 0.1 : 0));
+      // (The far lip's broken edge shows through at the bottom: the dark thins out raggedly there.)
+      const thin = y >= 41 + ((x * 7 + (x >> 2)) % 5) ? 0.4 : 1;
+      if (a * thin > 0.05) g.set(x, y, dark(Math.min(0.96, step(a * thin))));
+    }
+  }
+  // The very back: no light at all.
+  for (let y = 26; y < 48; y++) g.rect(0, y, 7 + ((y * 5) % 4), 1, '#020607');
+  // A puddle in the mouth catching the last of the light from the shelf, and the wet going on in.
+  g.oval(33, 40, 5, 1, 'rgba(20, 44, 46, 0.7)');
+  g.rect(30, 39, 5, 1, 'rgba(150, 196, 186, 0.32)');
+  g.set(36, 41, 'rgba(150, 196, 186, 0.2)');
+  g.rect(19, 41, 3, 1, 'rgba(150, 196, 186, 0.12)');
+  // A few stones fallen at the mouth, half in the shadow.
+  const stone = (x, y, w, h) => {
+    g.oval(x + 1, y + 1, w, h, 'rgba(2, 8, 8, 0.5)');
+    g.oval(x, y, w, h, IROCK[1]);
+    g.rect(x - w + 1, y - h, w * 2 - 1, 1, IROCK[3]);
+    g.set(x - w, y - h + 1, IROCK[2]);
+    g.rect(x - w + 2, y + h, w * 2 - 2, 1, IROCK[0]);
+  };
+  stone(42, 45, 3, 2);
+  stone(46, 41, 1, 1);
+  stone(37, 46, 1, 1);
+  stone(25, 45, 2, 1);
+  return g.rows();
+}
+
 export const WY_PALETTE = palette;
 export const WY_GHOST_COOK_SPRITES = { f1: ghostCook(0), f2: ghostCook(1), f3: ghostCook(2), f4: ghostCook(3) };
 export const WY_FLOOD_SPRITES = { f1: flood(0), f2: flood(1), f3: flood(2), f4: flood(3) };
@@ -1024,7 +1076,8 @@ export const WY_PROP_SPRITES = {
   wy_hammock: hammock(),
   wy_bilge_slick: bilgeSlick(),
   wy_bilge_slick_b: bilgeSlick(5353),
+  wy_rock_cleft: rockCleft(),
 };
 
-export const WY_FOOTPRINTS = { wy_crew_table: 4, wy_scorch_line: 2, wy_scorch_line_b: 2 };
+export const WY_FOOTPRINTS = { wy_crew_table: 4, wy_scorch_line: 2, wy_scorch_line_b: 2, wy_rock_cleft: 3 };
 

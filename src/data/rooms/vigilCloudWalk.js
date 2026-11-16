@@ -8,6 +8,7 @@
 //   i  trodden snow path                          Q  snowy boulder (solid)
 //   A  snowy cliff top (solid)                    g  plank bridge
 //   _  open sky (the view shows through) (solid)
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_CLOUD_WALK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_cloud_walk',
@@ -102,6 +103,8 @@ export const VIGIL_CLOUD_WALK = {
     { sprite: 'chough', x: 22, y: 14, text: 'ridge_chough', walkable: true },
     // An umbrella handle for Ves, at the top of the stair by the bridge.
     { sprite: 'chest', x: 42, y: 22, text: 'cloud_vane_chest', gives: 'weathervane_hilt', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_cloud_walk'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

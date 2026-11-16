@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE ROOST: at the end of the black tunnel from the Hall of Glass, a high
 // round chamber of ice where the cave's bats roost, hundreds of them, and
 // the great bat that rules them hangs from the roof. Walking in sets them
@@ -9,6 +10,7 @@
 //   K  cave wall (solid)                          q  cave floor
 //   v  stalactite (walk under it)                 ^  stalagmite (solid)
 //   x  ice crystals (they glow) (solid)           D  doorway (walk through it; see `doors`)
+import { R3A_PROPS } from '../r3aLife.js';
 export const ICE_CAVE_ROOST = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'ice_cave_roost',
@@ -85,6 +87,10 @@ export const ICE_CAVE_ROOST = {
     { sprite: 'small_bat', x: 12, y: 12, animation: 'small_bat_perch', speed: 0.5, text: 'roost_pup', walkable: true, after: 'bat_defeated' },
     { sprite: 'small_bat', x: 14, y: 12, animation: 'small_bat_perch', speed: 0.6, text: 'roost_pup', walkable: true, after: 'bat_defeated' },
     { sprite: 'small_bat', x: 15, y: 12, animation: 'small_bat_perch', speed: 0.55, text: 'roost_pup', walkable: true, after: 'bat_defeated' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['ice_cave_roost'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['ice_cave_roost'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

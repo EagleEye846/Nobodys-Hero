@@ -1,0 +1,65 @@
+# MRS. TANSY (on the quay, saltcombe_quay): a stubby ginger tabby in a navy coat and a flat
+# cap, Saltcombe's lamplighter, with a pole as tall as two of her. She does the quay. Only the
+# quay. Lantern 3: the lamps up the hill are lit too, and she didn't light them. She has a plain
+# excuse and is not at all curious. Nobody says who, and nobody goes to look.
+
+[first]
+{smug}Evening. Mind the ladder.
+
+{smug}Every lamp on this quay is mine. Trimmed, filled, lit, every night, rain or worse. And it's always worse.
+
+{smug}A hundred years of worse, now. Never once gone out on my watch. Nor my mum's.
+
+{huffy}And before you ask: the ones up the hill aren't mine. Must be someone else. The quay's plenty.
+
+# (draft) Ves and Bramble on her (their words after hers, the first time).
+[first_ves]
+{bored}Never once gone out. She'd like a medal. She'd like you to offer.
+
+[first_bramble]
+{thinking}How does she get the pole up the ladder?
+
+[repeat]
+{smile}You can see the quay from the boats, from the point, from right out past the wrecks. That's the idea.
+
+{huffy}Up the hill? Not my lamps. Not my business.
+
+# (draft) Turns: the next times you talk to her.
+[repeat 2]
+{smug}A quay lamp takes oil, a wick and an eye for it. Two out of three and you get a lamp. All three and you get one of mine.
+
+# (draft)
+[repeat 3]
+{huffy}The hill again? They're lit, aren't they? Then somebody's doing it. Good for them. Not my business.
+
+# (draft) The Fair Return, in passing.
+[repeat 4]
+{smug}My gran's gran lit this quay a whole winter for a ship that never came in. The Fair Return. Every lamp, every night, so they'd see home from the point.
+
+{huffy}They don't come in because you light for them. You light for them anyway. That's the job.
+
+# (draft) World reacts: the Bother came back from the Wreck Yard, steering for her lamps.
+[first after wreck_slip_home]
+{smug}Saw you come in round the point. Couldn't miss you. That was my quay you were steering for.
+
+{smile}"Steer for Tansy's," they used to say. Nobody's said it in years. Nobody's been out.
+
+[repeat after wreck_slip_home]
+{smug}Every lamp on this quay is mine. And now somebody's come home by them. Proper.
+
+# (draft) The Fair Return, in passing.
+[repeat 2 after wreck_slip_home]
+{smile}Out past the wrecks, on a still night, you'll sometimes see a light that isn't one of mine. Far out. Swinging, like a lamp on a ship.
+
+{huffy}Then it isn't there. I don't go looking. Not my lamp.
+
+# (draft) World reacts: after the chapter (the storm gone, Haddock gone).
+[first after haddock_gone]
+{smile}First night in my life I've lit the quay under stars. Took me a minute to work out what they were.
+
+{huffy}I've done one more lamp, too. The end of the slip, where the Bother ties up. Nobody asked me to.
+
+{smug}The quay's still plenty. It's plenty and one.
+
+[repeat after haddock_gone]
+{smile}Every lamp on this quay is mine. And the one on the slip.

@@ -25,10 +25,23 @@ export const SHIP_DECK_IN = {
     { do: 'sound', name: 'shipGroan' },
     { do: 'say', text: 'There\'s nobody on the deck. You can\'t see anyone. All the same it feels like walking into a room where everyone has just stopped talking.' },
     { do: 'say', who: 'bramble', text: '{scared}Somebody\'s looking at me.' },
-    { do: 'say', who: 'ves', text: '{bored}Don\'t look at the rail.' },
-    { do: 'say', who: 'bramble', text: '{scared}I\'m not looking at the rail. I\'m looking at the floor. It\'s a very nice floor.' },
+    { do: 'say', who: 'ves', text: '{proud}There\'s nobody here, Bramble. I looked.' },
+    { do: 'say', who: 'bramble', text: '{scared}Then who\'s LOOKING? ...I\'m going to look at the floor. It\'s a very nice floor.' },
     { do: 'face', who: 'ves', at: 'bramble' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Somebody\'s left a light on for us. Charming. We\'d better have it.' },
+    { do: 'say', who: 'ves', text: '{determined}...Somebody\'s left a light on. I\'d rather we were holding it than whoever lit it.' },
     { do: 'face', who: 'ves', dir: 'up' },
+    // (draft) 2026-11-14: the shard at the bow. With the Fallen Star, it hums toward the bow (and keeps on, starPull.js);
+    // with it or without, the faint blue light out past the bow rail (gs_bow_star, the deck's east point).
+    { do: 'wait', seconds: 0.6 },
+    { do: 'sound', name: 'shimmer', wields: 'fallen_star' },
+    { do: 'emote', who: 'player', emote: '!', wait: false, wields: 'fallen_star' },
+    { do: 'say', wields: 'fallen_star', text: 'At your hip, the Fallen Star hums: one thin, high note, like a wet finger round the rim of a glass. It isn\'t the cold. It is pulling, very slightly, forward. Toward the bow.' },
+    { do: 'camera', to: { x: 36, y: 10 } },
+    { do: 'say', text: 'Out at the far end of the deck, where the rail closes to a point, there is a light in the fog. Not a lantern\'s yellow: a pale, cold blue, very small, somewhere out past the bow. It doesn\'t flicker.' },
+    { do: 'camera' },
+    { do: 'say', who: 'bramble', wields: 'fallen_star', text: '{scared}Your sword\'s pointing again. ...At the scary end. Of course it\'s the scary end.' },
+    { do: 'say', who: 'bramble', unarmed: 'fallen_star', text: '{scared}I looked up. I said I wouldn\'t, and I looked up.' },
+    { do: 'say', who: 'ves', text: '{smile}Well. Now we know which end of the ship is the interesting one.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

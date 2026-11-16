@@ -1,0 +1,21 @@
+# DOT: a small herald kid on the square who has lost a toy trumpet. A tiny errand (the trumpet lies on the floor of the Hall of Heralds). The life pass.
+
+[first]
+Have you seen a trumpet? Little. Dented. It's got a sock in it.
+
+I put the sock in myself. I'm not allowed to play it in the Hall. Then somebody took it. I think a herald did. I think they're keeping it safe. From me.
+
+[repeat]
+It's dented in a very particular way. I'd know it anywhere. It's the dent where I sat on it. I didn't mean to. It was a small dent. It got bigger.
+
+[trumpet_back]
+You hold out the little trumpet. Dot's whole face goes round.
+
+THAT'S IT! It's got the sock in it! It's got the DENT in it!
+
+She holds it to her chest for a long moment. Then she presses a folded paper into your hand.
+
+It's a picture. It's you. See, you're very tall, and you've got a trumpet. It's the best picture I've ever done, so it's yours.
+
+[trumpet_after]
+I've decided I'm going to play it in the Hall. Quietly. Quietly enough that the sock doesn't notice.

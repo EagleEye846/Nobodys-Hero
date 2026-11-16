@@ -9,6 +9,7 @@
 //   s  the great stair                             O  boulder (solid)
 //   T  pine tree (walk or hide behind) (solid)     D  doorway (walk through it; see `doors`)
 //   b  low stone block (jump onto it)              B  tall stone block (jump onto it from a low block)
+import { R3A_PROPS } from '../r3aLife.js';
 export const BEYOND_RUINS = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'beyond_ruins',
@@ -59,6 +60,8 @@ export const BEYOND_RUINS = {
     // Up on the ledge in the corner: jump onto the low block, then up onto the
     // tall ledge beside it, and reach across.
     { sprite: 'old_pack', x: 22, y: 3, text: 'stair_pack', gives: 'climbers_ration' },
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['beyond_ruins'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

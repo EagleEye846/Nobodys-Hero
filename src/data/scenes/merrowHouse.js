@@ -16,21 +16,29 @@ export const MERROW_HOUSE_SCENE = {
   steps: [
     { do: 'music', song: null },
     { do: 'face', who: 'player', dir: 'up' },
-    { do: 'say', text: 'It is dry in here. Not a drop on the floor, though the door was standing open onto the flood.' },
     { do: 'walk', who: 'player', to: { x: 7, y: 7 }, wait: false },
     { do: 'walk', who: 'ves', to: { x: 5, y: 6 }, wait: false },
     { do: 'walk', who: 'bramble', to: { x: 9, y: 6 } },
     { do: 'face', who: 'player', dir: 'up' },
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'face', who: 'bramble', dir: 'up' },
-    { do: 'say', text: 'The table is laid for four. Plates, cups, a loaf on its board, the butter out. The chairs are pushed back from it, all four of them, the way chairs are when people have only just got up.\n\nThe clock in the corner says ten to seven, and isn\'t going. Four coats hang on the pegs, and a small hat.' },
+    // The camera looks round it instead of saying so: the laid table, the stopped clock, the coats. (draft)
+    { do: 'camera', to: { x: 7, y: 5 } },
+    { do: 'wait', seconds: 1.8 },
+    { do: 'camera', to: { x: 13, y: 3 } },
+    { do: 'wait', seconds: 1.4 },
+    { do: 'camera', to: { x: 9, y: 3 } },
+    { do: 'wait', seconds: 1.4 },
+    { do: 'camera' },
     { do: 'act', who: 'player', act: 'look', wait: false },
-    { do: 'wait', seconds: 1.6 },
+    { do: 'wait', seconds: 1.2 },
     { do: 'face', who: 'bramble', at: 'ves' },
     { do: 'say', who: 'bramble', text: '{worried}...Somebody\'s left the butter out.' },
     { do: 'wait', seconds: 0.8 },
     { do: 'face', who: 'ves', at: 'bramble' },
-    { do: 'say', who: 'ves', text: '{thoughtful}I\'m not sitting down.' },
+    { do: 'say', who: 'ves', text: '{scared}I\'m not sitting down.' },
     { do: 'music', song: 'merrowIndoor' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

@@ -8,6 +8,7 @@
 //   ~  the pond (solid)   j  stepping stones (walkable)
 //   I  oak   T  apple tree   J  blossom tree (solid, standing)
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_MILL_POND = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_mill_pond',
@@ -67,9 +68,9 @@ export const SUNNY_MILL_POND = {
     { sprite: 'chest', x: 36, y: 3, text: 'pond_chest', gives: 'lemonade', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'bench', x: 6, y: 14, text: 'pond_bench' },
     { sprite: 'haystack', x: 37, y: 17, text: 'pond_haystack' },
-    { sprite: 'daisy_patch', x: 7, y: 6, walkable: true },
-    { sprite: 'daisy_patch', x: 33, y: 7, walkable: true },
-    { sprite: 'buttercups', x: 35, y: 10, walkable: true },
+    { sprite: 'daisy_patch', x: 7, y: 6, walkable: true, decor: true },
+    { sprite: 'daisy_patch', x: 33, y: 7, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 35, y: 10, walkable: true, decor: true },
     { sprite: 'sy_reeds', x: 11, y: 3, animation: 'sy_reeds', speed: 1.1 },
     { sprite: 'sy_reeds', x: 14, y: 3, animation: 'sy_reeds', speed: 1.1 },
     { sprite: 'sy_reeds', x: 22, y: 3, animation: 'sy_reeds', speed: 0.9500000000000001 },
@@ -82,21 +83,23 @@ export const SUNNY_MILL_POND = {
     { sprite: 'sy_reeds', x: 30, y: 12, animation: 'sy_reeds', speed: 0.9500000000000001 },
     { sprite: 'sy_reeds', x: 9, y: 5, animation: 'sy_reeds', speed: 0.8 },
     { sprite: 'sy_reeds', x: 9, y: 14, animation: 'sy_reeds', speed: 0.8 },
-    { sprite: 'sy_lily', x: 13, y: 7, animation: 'sy_lily', speed: 1.3, walkable: true },
-    { sprite: 'sy_lily', x: 24, y: 6, animation: 'sy_lily', speed: 1.1, walkable: true },
-    { sprite: 'sy_lily', x: 26, y: 13, animation: 'sy_lily', speed: 1.3, walkable: true },
-    { sprite: 'sy_lily', x: 21, y: 14, animation: 'sy_lily', speed: 1.5, walkable: true },
-    { sprite: 'sy_lily', x: 12, y: 14, animation: 'sy_lily', speed: 1.5, walkable: true },
-    { sprite: 'sy_lily', x: 28, y: 7, animation: 'sy_lily', speed: 1.3, walkable: true },
-    { sprite: 'sy_lily', x: 16, y: 6, animation: 'sy_lily', speed: 1.1, walkable: true },
+    { sprite: 'sy_lily', x: 13, y: 7, animation: 'sy_lily', speed: 1.3, walkable: true, decor: true },
+    { sprite: 'sy_lily', x: 24, y: 6, animation: 'sy_lily', speed: 1.1, walkable: true, decor: true },
+    { sprite: 'sy_lily', x: 26, y: 13, animation: 'sy_lily', speed: 1.3, walkable: true, decor: true },
+    { sprite: 'sy_lily', x: 21, y: 14, animation: 'sy_lily', speed: 1.5, walkable: true, decor: true },
+    { sprite: 'sy_lily', x: 12, y: 14, animation: 'sy_lily', speed: 1.5, walkable: true, decor: true },
+    { sprite: 'sy_lily', x: 28, y: 7, animation: 'sy_lily', speed: 1.3, walkable: true, decor: true },
+    { sprite: 'sy_lily', x: 16, y: 6, animation: 'sy_lily', speed: 1.1, walkable: true, decor: true },
     { sprite: 'sy_seed_heads', x: 8, y: 4, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 37, y: 6, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 32, y: 12, animation: 'sy_seed_heads', speed: 1.0 },
-    { sprite: 'sy_seed_drift', x: 6, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 16, y: 3, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 27, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 35, y: 6, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 11, y: 17, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
+    { sprite: 'sy_seed_drift', x: 6, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 16, y: 3, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 27, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 35, y: 6, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 11, y: 17, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_mill_pond ?? []),
   ],
   tileTexts: { '#': 'field_hedge', W: 'field_hedge', I: 'field_oak', T: 'field_apple', J: 'field_blossom', '~': 'pond_water', j: 'pond_stones' },
 

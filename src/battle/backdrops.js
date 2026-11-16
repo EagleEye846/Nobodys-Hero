@@ -5,6 +5,7 @@ import { BRIGHT_BACKDROPS } from './brightBackdrops.js';
 import { COAST_BACKDROPS } from './coastBackdrops.js';
 import { THEATRE_BACKDROPS } from './theatreBackdrop.js';
 import { POOL_BACKDROPS } from './poolBackdrop.js';
+import { ASH_BACKDROPS } from './ashBackdrops.js';
 
 // Animated battle backgrounds, one per area. Each draws the stage from y = 0
 // down to `height`; the battle panel covers the rest of the screen.
@@ -2081,8 +2082,10 @@ export const BACKDROPS = {
   ...COAST_BACKDROPS,
   // King Peptup's stage (src/battle/theatreBackdrop.js).
   ...THEATRE_BACKDROPS,
-  // Pudding's glass pool, the bottom of Seam Nine's shaft (src/battle/poolBackdrop.js).
+  // The Pale Olm's glass pool, the bottom of Seam Nine's shaft (src/battle/poolBackdrop.js).
   ...POOL_BACKDROPS,
+  // Chapter 6's Ash Road, and the town gate where the Lum stands (src/battle/ashBackdrops.js).
+  ...ASH_BACKDROPS,
   // Chapter 4's mines, lake and bottom (rooms with `area: 'diggings'`,
   // 'stillwater' and 'deep').
   diggings: drawDiggings,

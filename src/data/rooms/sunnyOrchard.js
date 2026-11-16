@@ -13,6 +13,7 @@
 //   Z  blossoming bush (solid)   N  buttercup meadow   T  apple tree (solid)
 //   b B  the old turf bank in the ring's west side (12 and 24 high)
 
+import { R5S_PROPS } from '../sunnyLifeProps.js';
 export const SUNNY_ORCHARD = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'sunny_orchard',
@@ -79,22 +80,24 @@ export const SUNNY_ORCHARD = {
     { sprite: 'gold_pouch', x: 2, y: 16, text: 'orch_pouch', gold: 55, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'bench', x: 25, y: 7, text: 'orch_bench' },
     { sprite: 'sy_wheelbarrow', x: 37, y: 14, text: 'orch_barrow' },
-    { sprite: 'daisy_patch', x: 14, y: 8, walkable: true },
-    { sprite: 'daisy_patch', x: 26, y: 11, walkable: true },
-    { sprite: 'buttercups', x: 8, y: 14, walkable: true },
-    { sprite: 'buttercups', x: 37, y: 12, walkable: true },
+    { sprite: 'daisy_patch', x: 14, y: 8, walkable: true, decor: true },
+    { sprite: 'daisy_patch', x: 26, y: 11, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 8, y: 14, walkable: true, decor: true },
+    { sprite: 'buttercups', x: 37, y: 12, walkable: true, decor: true },
     { sprite: 'sy_seed_heads', x: 2, y: 4, animation: 'sy_seed_heads', speed: 1.2000000000000002 },
     { sprite: 'sy_seed_heads', x: 16, y: 12, animation: 'sy_seed_heads', speed: 1.3 },
     { sprite: 'sy_seed_heads', x: 30, y: 5, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 37, y: 6, animation: 'sy_seed_heads', speed: 0.9 },
     { sprite: 'sy_seed_heads', x: 36, y: 16, animation: 'sy_seed_heads', speed: 1.2000000000000002 },
-    { sprite: 'sy_seed_drift', x: 8, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 15, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 25, y: 7, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 31, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 37, y: 9, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'sy_seed_drift', x: 12, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true },
-    { sprite: 'butterflies', x: 28, y: 9, animation: 'butterflies', speed: 0.2, walkable: true },
+    { sprite: 'sy_seed_drift', x: 8, y: 5, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 15, y: 10, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 25, y: 7, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 31, y: 12, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 37, y: 9, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'sy_seed_drift', x: 12, y: 16, animation: 'sy_seed_drift', speed: 0.45, walkable: true, decor: true },
+    { sprite: 'butterflies', x: 28, y: 9, animation: 'butterflies', speed: 0.2, walkable: true, decor: true },
+    // The life pass, round 2 (src/data/sunnyLifeProps.js).
+    ...(R5S_PROPS.sunny_orchard ?? []),
   ],
   tileTexts: { b: 'orch_bank', B: 'orch_bank', '#': 'field_hedge', W: 'field_hedge', T: 'field_apple', Z: 'blossom_bush' },
 

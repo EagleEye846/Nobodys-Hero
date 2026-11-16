@@ -1,0 +1,559 @@
+# Item descriptions for the ITEMS menu (C in the overworld) and shops.
+# One section per item id in src/data/items.js. The menus show how much it
+# heals by themselves, so these are just flavour.
+
+[trail_mix]
+Nuts, seeds and the odd raisin. Good for long walks through old halls.
+
+[lantern_tea]
+Tea brewed over a lantern flame. It tastes faintly of smoke and honey.
+
+[ember_toffee]
+Toffee cooked on an ember for a hundred years. Chewy enough to last another hundred.
+
+[cotton_candy]
+A tuft of the Rogue Dummy's stuffing, spun into candy. Surprisingly sweet.
+
+[wild_carrot]
+A Dust Bunny's prized carrot. Slightly dusty.
+
+[glow_jam]
+Jam that glows faintly in the dark. The Lantern Moth was saving it.
+
+[wax_drop]
+A drop of a Waxling's wax, set like a sweet. It tastes like candles. Of course it does.
+
+[dark_chocolate]
+Chocolate as dark as a Duskling. It's gone if you look away.
+
+[pillar_mint]
+A Columneon's breath mint, shaped like a tiny pillar. Very convincing.
+
+[step_shortbread]
+Crumbly shortbread pressed into the shape of a stair step. A Loose Step gave it up, a little grudgingly.
+
+[crag_cheese]
+Sharp goat's cheese wrapped in a dock leaf, aged on a mountain for longer than you'd think.
+
+[shiny_button]
+A butterscotch sweet pressed in the shape of a brass button, polished to a shine. The Chough insisted you have it. It was laughing.
+
+[snow_cone]
+A cone of a Frostbite's very best snow, packed tight, with frostberry syrup on top. It gave you a little of itself. That's practically a hug.
+
+[filings_toffee]
+Dark treacle toffee with something grey flecked through it. Surprisingly chewy. The Ringer swears it's good for the joints.
+
+[rime_jam]
+Pale jam that glitters like frost on a window. A Rimewing was keeping it by a lamp, to stay warm.
+
+[ice_shortbread]
+Shortbread in the shape of a stair step, iced in pale blue. Its brother's recipe, but colder.
+
+[geode_candy]
+A lump of plain grey sugar that cracks open to show blue crystal candy inside. The Stone Golem grew it. Slowly.
+
+[frost_nectar]
+A thimble of nectar from the flowers that grow by the cave crystals, frozen into a pale blue bead. Ice Moths sip it by the glow.
+
+[glint_drop]
+A clear boiled sweet that throws little rainbows when you hold it up. A Glintling swapped it for nothing at all.
+
+[roost_plum]
+A plum from the Roost Mother's winter store, frozen sweet as jam. Her pup brought it to Ves, after. Ves couldn't keep it.
+
+[roast_chestnut]
+A chestnut out of a Burrhog's prickles, roasted in its own husk. It rolled it to you. Gently, for once.
+
+[scarlet_syrup]
+A twist of red sap from a Sapling, sweet as maple. It gave it to you when you weren't looking.
+
+[stolen_pie]
+A berry pie with one bite out of it and a paw print in the crust. The woodcutters have been missing this.
+
+[stump_honey]
+Honey from the bees in a Knotling's hollow. It calls them squatters. It has never once asked them to leave.
+
+[hollin_apple]
+An apple off the old tree Hayward still guards. The farmers never came back for it, so it's yours.
+
+[gloam_honeydew]
+A drop of the sweet dew a Gloamworm hangs its threads with. It glows a little on the way down.
+
+[fifty_year_humbug]
+A striped mint humbug in waxed paper, from the bottom of the well. Fifty years old, and somehow still good.
+
+[hob_scone]
+Still warm, though nobody's lit an oven in Hollin for fifty years. A Hob bakes one every morning, just in case.
+
+[millers_bannock]
+A flat oat loaf from the old mill, nibbled round the edges. Grist swears it was like that when it found it.
+
+[mug_barley_sugar]
+A barley sugar that was stuck to the bottom of a Clinker's mug. Fifty years old, and still sweet. Mostly.
+
+[culvert_cress]
+Watercress from under a grating, where a little light gets down. A Slipjack keeps the bed of it to show off in. It's peppery.
+
+[wisp_cordial]
+A thimble of something pale green that a Wisp left behind. It glows a little in the dark, and tastes of cold mint.
+
+[bog_pudding]
+A dark, wobbly pudding a Bog Toad was sitting on to keep warm. Sort of plum. Don't ask what else.
+
+[bulrush_bread]
+Flat bread made from bulrush roots, the old fen way. A Reed Stalker kept it under its foot, very still, for hours.
+
+[toadstool_toast]
+A slice of toast with a Puffcap's spare cap on top, still warm. It insists the spotty ones are fine. Mostly.
+
+[dust_meringue]
+A meringue so light it's mostly air, found in a nest of Lamp Mites. Dusty on the outside. Sweet as anything inside.
+
+[cairn_biscuit]
+A big, hard biscuit a Cairn Hound was keeping safe under a stone. It's a dog biscuit, really. It's very good anyway.
+
+[welcome_cake]
+A slice of the cake the old city baked to welcome the Hero. Nobody came to eat it, so a Herald's Echo kept it. Still fresh, somehow.
+
+[heros_offering]
+A honey cake sealed in wax, left in the Warden's open hand a hundred years ago, for the Hero. Nobody else came for it.
+
+[candle_cake]
+A cake shaped like a candle, from Taper's kitchen. "FOR OUR GUEST."
+
+[taper_stub]
+The candle Taper gave you. It's still warm. It always will be.
+
+# --- Candles you make (CANDLES, in the C menu). In battle, lighting one does
+# what the menu says; in dark places, the brightest one you carry lights your way.
+
+[plain_candle]
+A plain wax candle on a cotton wick. Nothing special, which is sometimes exactly what you need.
+
+[hearth_candle]
+A thick, slow candle that smells like a warm kitchen. Lighting it feels like coming home.
+
+[moonbell_candle]
+Wax pressed with moonbell petals. Its scent is so gentle that even angry things calm down a little.
+
+[glow_candle]
+Glow dust stirred into the wax. It burns bright and long, and makes you feel braver.
+
+[ash_candle]
+Shadow ash in dark wax. It gives off more smoke than light, and the smoke hides you well.
+
+[lamplight_candle]
+Lit from the lamplighter's lantern on the summit. Shadows lean away from it.
+
+[hush_fur]
+A hank of the Hush's bristles, caught on your sleeve. Coarse and black, and very, very quiet. Held up, it hides you like a shadow.
+
+# (draft)
+[star_ink]
+A little glass vial of the ink the Welcome Register counted with. It shines faintly blue, and it will not stay still on the page. Drunk, it puts you back together.
+
+# Chapter 4's deeper monsters.
+[cinder_toffee]
+Toffee a Slagling pulled out of itself while it was still warm. It's chewy, a little smoky, and stays hot in your pocket for an hour. Good on a cold day.
+
+[smoked_blindfish]
+A blindfish, smoked over a lamp in the Stillwater way. Pale, flaky, and it tastes like the lake smells. It never saw you coming either.
+
+[olm_tea]
+A thin, pale tea steeped from olm gill-fronds, and a great deal of patience. It tastes of cold stone, and of being very politely left alone. Restores SP +90%.
+
+[lightless_jelly]
+A wobbling jelly the colour of the inside of a closed eye. A Murk left it behind. It doesn't glow, and it doesn't reflect, and it is, somehow, delicious.
+
+[gnawbone_broth]
+Thick broth boiled from the bones a Gnawer had been saving. You don't ask whose. It's hearty, it's salty, and every spoonful clicks a little.
+
+[climbers_ration]
+Hard biscuit, dried fruit and a square of chocolate, sealed in waxed paper. Made for a long way up.
+
+# Mount Vigil and Heralds' Rest.
+[pine_candy]
+Boiled sweets that taste of pine needles and sugar. The heralds make them for the kids. And the kids make them for the heralds.
+
+[snowmelt_tea]
+Tea brewed from snow melted over a fire. It tastes of nothing at all, and warms you right down to your boots.
+
+[frostberry_jam]
+Frostberries only ripen after the first hard frost. The jam is sharp, red and a little bit sparkly.
+
+[hot_cocoa]
+A mug of cocoa, still steaming somehow. There's a marshmallow in it shaped like a trumpet.
+
+[herald_honeycake]
+Dense, sticky honeycake, baked for the Hero's welcome and eaten by everyone else. A herald family's recipe. They've had time to perfect it.
+
+[fanfare_fudge]
+Fudge so rich the heralds only cut it for special occasions. You, apparently, are one.
+
+[rest_soup]
+Greta's soup, in a jar with a cloth over the top. Whatever is in it, it fixes everything.
+
+# Sold at Tilda's forge, cooked on the same fire as the iron.
+[forge_loaf]
+A round loaf baked on the forge's back shelf. The crust rings when you tap it. The middle is soft and still warm.
+
+[mulled_cider]
+Apple cider heated with a hot poker straight out of the coals. It hisses when she does it. So will you, if you drink it too fast.
+
+[smiths_pasty]
+A fat pasty with a crimped edge, made to be eaten one-handed while the other hand holds a hammer.
+
+[iron_pot_stew]
+Root stew that has been simmering in the same iron pot since before Tilda was born. Nobody has ever got to the bottom of it.
+
+# Rimble's cave cooking, sold in the ice caves.
+[lichen_crisps]
+Cave lichen, fried crisp in a pan over a candle. Salty and crunchy, and only a little bit purple.
+
+[mystery_jerky]
+Chewy, smoky, and salty. Rimble won't say what it is. "Meat," he says. "From an animal. Probably."
+
+[glowcap_skewer]
+Glowing cave mushrooms roasted on a stick. They keep glowing after you eat them, which is fine. Rimble says it's fine.
+
+[seed_cake]
+A dense round cake of seeds, nuts and frozen berries, pressed together by Hollis. It keeps forever. So does the owl.
+
+[goblin_hotpot]
+A hot pot of everything Rimble found that week, stewed for days. It's lumpy, it's brown, and it's delicious.
+
+# Nan Cinder's baking, sold at her kiln.
+[soot_bun]
+A bun baked in the ashes of a charcoal kiln. Black on the outside, which Bramble says is the best bit, and soft and sweet in the middle.
+
+[ember_potato]
+A potato baked in the embers till its skin cracks. Nan Cinder salts it with something she won't name.
+
+[charcoal_toffee]
+Dark toffee, smoky and very hard. Nan Cinder says it's good for your teeth. Nobody has ever checked.
+
+[kiln_stew]
+A whole pot of stew from the back of the kiln, in a jar with a cloth over the top. It's been cooking for two days.
+
+# Old Ladle's, in the Old Drains.
+[sweet_water]
+A ladleful of the cistern's water, kept sweet for fifty years by a hob who never stopped. Cold, clean, and tastes of nothing at all, which is the point.
+
+[turning_leaf]
+A scarlet leaf off the Tatterwight. Hold it still and it still turns, slowly, round and round, as if there's a wind only it can feel. Holding it makes you want to get going.
+
+[city_hardtack]
+A biscuit baked for the Hero's welcome feast, a hundred years ago, and never eaten. It hasn't gone off. Nothing could make it go off. Soak it first.
+
+[spring_water]
+Hot water from the spring under the Old Baths, in a stoppered jar. It tastes of iron and makes your fingertips tingle.
+
+[dandelion_salad]
+Slowly's favourite. Dandelions from the cracks in the old streets, with a little vinegar. He grew them himself, very slowly.
+
+[valley_apple]
+A small, sharp, red apple from the old orchard by the road. The trees were planted for the Hero's welcome feast. Nobody minds who eats them now.
+
+[eel_pie]
+A pie of fen eels and onions in a thick crust. Better than it sounds. Much better than it sounds.
+
+[honey_oatcake]
+An oatcake with honey baked into it. Pell's mother makes them. Pell says not to tell her you liked it, or she'll make you more.
+
+[willow_tonic]
+Bryony's tonic, made from willow bark. Bitter enough to make your eyes water. It wakes you right up.
+
+[lasthome_stew]
+Mabb's stew, out of the kettle that never comes off the hook. Nobody knows what's in it. Nobody's ever been sorry.
+
+[penny_bun]
+A sticky currant bun. Ladle says it's a penny. He's been saying it's a penny for fifty years.
+
+[hob_porridge]
+A pot of oats Ladle stirs on a hob he calls "the hob". Thick enough to stand the spoon up in. He'd be hurt if you didn't finish it.
+
+# Rummage's: things that fell off the mountain.
+[hardtack]
+Ship's biscuit, from Hollin Stores. Baked to last fifty years. It has. Your teeth might not.
+
+[pickled_onions]
+A jar of Mags's pickled onions, still sealed. Pickles keep. These kept very hard.
+
+[crock_of_honey]
+A crock of Hollin honey off Mags's shelf. Honey never goes off, and this has had fifty years to prove it.
+
+[mags_jam]
+The last jar of Mags's blackberry jam. The label says "NOT FOR SALE - FOR WHEN THEY'RE BACK." Somebody crossed it out.
+
+[lost_lunch]
+A herald's packed lunch, still wrapped, that came down the mountain in a gale. Cheese, bread, a pickled egg and a note: "Good luck, love."
+
+[bottled_updraft]
+A stoppered jar with a gust of mountain wind in it. Open it in a fight and your spirit lifts with it. SP +60%.
+
+[music_box]
+A little music box, dented from the fall, that still plays half a lullaby. Enemies stop to listen. MERCY +30% for everyone.
+
+[herald_helmet]
+A herald's brass parade helmet, much too big. Put it on in a fight and the next attack only does half its damage. It's used up after.
+
+# Chapter 4: Marigold's stand in Sunnyside.
+[lemonade]
+Marigold's lemonade, in a jar with a sprig of mint. Sharp enough to make you stand up straight. She squeezes the lemons herself, in the shade, aggressively.
+
+[cucumber_sandwich]
+Thin bread, thinner cucumber, crusts cut off with great care. Marigold says it's what picnics are for. It heals a lot for something so polite.
+
+[jam_tart]
+A jam tart the size of your hand, still a little warm. Marigold's nan's recipe. It's too good to share, and she knows it.
+
+# Belowtown's market.
+[mushroom_pasty]
+A hand pie of stewed mushrooms, from Pebble's stall. It's warm, earthy, and has never once seen the sun.
+
+[glowworm_honey]
+Honey from the bees that live by the glow-worm lamps. It glows faintly on the spoon. Eat it quickly, or it lights up your teeth.
+
+[frog_toffee]
+Chewy toffee that the cave frogs swear by. It's sticky, a bit odd, and oddly fizzy. Restores SP +80%.
+
+# Hobnail's forge.
+[slag_bread]
+A loaf baked on the heat vent, with a crust you could shoe a horse with. Hobnail says nothing about it. He just pushes it across the counter.
+
+# Grig's pack.
+[cricket_cake]
+A small, dense cake of seeds and sweet root, wrapped in a leaf. Grig bakes them on her kettle. It's chewy, and it keeps you going a good while.
+
+[cave_dew]
+Dew from the roof of a cave that never sees the sun, bottled cold. It tastes like a very clean stone. Restores SP +100%.
+
+[cricket_candle]
+A fat candle of cricket-wax with a wick that burns steady and tall. It lights a wide ring of dark, and gives you a little SP.
+
+# Chapter 4's first monsters (Sunnyside, the Glimmering, the Diggings).
+[dandelion_tea]
+Tea steeped from a Dandy Lion's dropped seeds. It tastes of sunshine, a little of lion, and, on the second sip, of a very good opinion of itself.
+
+[hay_biscuit]
+A dry, golden biscuit baked from a Haybob's best straw. It is much nicer than it sounds. The Haybob would like you to say so.
+
+[glint_sugar]
+Sugar that grew in the cracks of a Gleamsnail's shell, in little crystals. It sparkles on the tongue and tidies your head. Restores SP +80%.
+
+[rock_candy]
+A knob of pale pink candy, hard and clear, that a Quartzling was pretending to be. It says nothing. It has had a lot of practice.
+
+[pit_pasty]
+A thick pasty with a crimped edge you could use as a handle, which is what a Drillbug uses it for. It's hot, hearty and has been down a mine.
+
+[party_ring]
+A pink-iced biscuit with a ring of sugar sprinkles that a Bunting dropped on its way to the next party. It's very sweet, a little squashed, and it still feels like somebody's birthday.
+
+[spectrum_wafer]
+A thin, crisp wafer that a Prismoth shed, striped in seven colours, each of which tastes of a slightly different sweet. Hold it up to a light and it throws a small rainbow on your thumb.
+
+[molehill_muffin]
+A warm, dense muffin, domed like a molehill, with a few shiny sugar flecks on top. A Magpie Mole swears it found it, and that it's lost property, and that you may keep it. It tastes only slightly of buttons.
+
+[rosin_toffee]
+A long, amber toffee, hard as a violin bow and sweet all the way through. A Fiddler leaves a bar behind when it's done playing. It makes a quiet, pleasant squeak as you chew.
+
+# Fished off the Stillwater jetty (Gubb's rod).
+[moonblind_minnow]
+A small, pale cave fish with no eyes at all. It found the hook anyway, which is more than most of us manage with eyes.
+
+[grumbling_olm]
+A long, pink, offended olm, grilled until it stopped giving you that look. It still gives you that look.
+
+[lantern_gudgeon]
+A gudgeon with a little lamp in its chin that still glows a bit, grilled. You can read by it. You'd rather not read by it.
+
+[boiled_boot]
+A boot off the lake bed, boiled until it forgot it was a boot. Mostly. The laces are the best bit.
+
+[ancient_sweet]
+A boiled sweet in a wrapper so old the picture has worn off. It has gone a bit crunchy, but it is still very much a sweet.
+
+[slowfin_carp]
+A fat, calm carp, baked whole. It was in no hurry in life and it is in no hurry now. It is perfectly good.
+
+# Chapter 5: monster drops, batch 2 (the Wrackeel, Pinwheel, Old Diver, Storm Imp, Net Wraith, Gullion, Kelpie Foal).
+[eel_skin]
+A crackling sheet of eel skin, fried crisp in its own sparks. It tingles on the tongue and tastes like the sea and a lightning storm made up. Heals 245 HP.
+
+[urchin_spine]
+A fat violet spine with a bead of gold roe at the tip. Snap it, sip the sweet gold out, and your head clears like a window. SP +100%.
+
+[brass_helmet]
+A dented brass diving helmet off an old suit, much too heavy. Hold it up in a fight and the next attack only does half its damage. It's used up after.
+
+[static_puff]
+A tiny cloud, bottled by accident. It crackles. Pop it open in a fight and your hair stands up and your spirit with it. SP +120%.
+
+[net_float]
+A cork float off a haunted net, still tugging gently toward the sea. Roll it across the ground and enemies stop to watch it bob. MERCY +35% for everyone.
+
+[stolen_chip]
+A hot, salty chip that a gull took from somebody who wanted it very much. It is still warm. It is, somehow, very good. Heals 250 HP.
+
+[kelp_mane]
+A long braid of glossy kelp from a foal's mane, dried and salted. Chewy and green and surprisingly kind to the stomach. Heals 275 HP.
+
+# Chapter 5's Sunnyside monsters (the Seed Sheep, the Flatcap Bee, the Clover Snail).
+[clock_wool]
+A soft tuft of wool from a Seed Sheep's dandelion fleece, still full of tiny seeds. Hold it up and blow, and make a wish, and a little SP comes back to you. SP +80%.
+
+[flatcap_honey]
+A small pot of clover honey, sealed with wax, with a tweed-patterned lid that a Flatcap Bee insists is not a hat. Thick, golden and very slightly smug. Heals 260 HP.
+
+[lucky_clover]
+A four-leaf clover, picked from a Clover Snail's shell, pressed flat. Nobody has ever been unlucky holding one while it napped. MERCY +30% for everyone.
+
+# Chapter 5's cliff cave monsters (the Barnacle Bat, the Whelkling).
+[echo_shell]
+A tiny barnacle that a Barnacle Bat wore off its wing. Hold it to your ear and you hear the whole cave at once, every drip, and somehow it clears your head. SP +90%.
+
+[sea_glass_sweet]
+A boiled sweet that has been in the sea so long it has gone smooth and frosted, just like a bit of sea glass. A Whelkling keeps a hoard of them. It still tastes of lemon. Heals 265 HP.
+
+# Chapter 5: Sunnyside's chapter 4 monsters, met again in the late summer (the Bunting, the Dandy Lion, the Haybob).
+[fete_sponge]
+A slice of sponge cake off the end-of-summer fete, still on its paper doily. A Bunting won it in the raffle and has carried it to every party since. The jam has given up. Heals 245 HP.
+
+[dandelion_burdock]
+A stone bottle of dandelion and burdock that a Dandy Lion was saving for the last hot day. It has gone a bit flat. It is still the best thing in the field. Heals 250 HP.
+
+[harvest_loaf]
+A loaf baked in the shape of a wheatsheaf, the sort left on the church step at harvest. A Haybob was guarding it from the birds. Only one ear is nibbled. Heals 255 HP.
+
+# CHAPTER 5: the Cockle Stall, in Saltcombe's market, and Orla's Forge.
+[ships_hardtack]
+Ship's biscuit, baked forty years ago and not a day older. Hard enough to knock on. Bramble knocked on it. Heals 260 HP.
+
+[galley_cocoa]
+A tin mug of cocoa, hot from a stove that's been out for years. Fills your SP.
+
+[cooks_soup]
+The soup. There's always more soup. A bit of everything, and something the cook won't tell you. Heals 300 HP.
+
+[sea_biscuit]
+A hard, salty sea biscuit. It's been dunked in something warm. Bramble says they're good for teeth.
+
+[kelp_crisps]
+Kelp fried crisp, with a pinch of sea salt. They crackle. Bramble ate three before they were paid for.
+
+[winkle_skewer]
+Six winkles on a skewer, still steaming. You need a pin. The Cockle Stall gives you a pin.
+
+[sounders_flask]
+A dented tin flask from the sounders' kit, the cork waxed in. Cocoa, still hot after all these years. It puts everything right.
+
+[humbug_lump]
+A fist-sized lump of striped humbugs, all stuck together in their jar years ago. Break a bit off. It puts everything right, and it takes a while.
+
+# (draft)
+[still_warm_scone]
+A scone wrapped in a tea towel, from a box in a house that isn't there. Still warm. It puts everything right, and nobody asks where it came from.
+
+# (draft)
+[figgy_duff]
+A sailors' pudding of figs and suet, boiled in a cloth and made to last a voyage. It has. It puts everything right, and you won't want lunch.
+
+# (draft)
+[keepers_tea]
+A tin of the lamp keepers' black tea, strong enough to stand a spoon in. Restores SP +130%. It tastes of tar and staying awake.
+
+[cockle_chowder]
+Creamy, peppery chowder in a thick bowl. The crab ladles it herself. It warms you from the inside out, and from the outside in.
+
+[ringers_cordial]
+A stone bottle with a bell on the label, kept in the ringers' chest for long peals. Restores SP +130%. It tastes of blackcurrant and stamina.
+
+[brine_tonic]
+A tonic of salt water and secrets, in a green bottle. Restores SP +100%, and your next spell costs no SP. It tastes like swimming.
+
+[tinder_bun]
+A warm sticky bun, baked on Orla's forge in the lamp oil's last heat. Sticks to your fingers and your ribs.
+
+# (draft) Mrs. Wrasse's ship's stores, in place of the Hearth and Glow Candles.
+[lamp_oil]
+A small tin of the good lamp oil, the kind Mrs. Wrasse won't sell to anyone who'd waste it. One whiff and you're wide awake. Restores SP +100%.
+
+# (draft)
+[pine_tar]
+A pot of warm pine tar, for ropes and seams. Light a dab of it and the smell is so sweet and homely that enemies forget what they were cross about. MERCY +30% for everyone.
+
+# (draft) Corrie's drop.
+[salt_taffy]
+Salt-water taffy in a twist of old chart paper, from a storm boy's pocket. Sticky, salty, and a little bit sad. Heals 300 HP.
+
+# Chapter 5's first coast monsters (batch 1: shellac, moonjelly, limpet knight, dunlin dancer, bellbuoy, salt shade, sandcastle).
+[teapot_shell]
+A tiny teapot, the shell a Shellac outgrew, still holding a mouthful of tea that has been warm for years. It's strong, sweet and faintly crabby. Restores a good deal of HP.
+
+[jelly_bell]
+A little bell of clear jelly, the kind a Moonjelly lets go. It rings once when you bite it, very softly, and your head goes quiet and clear. Restores SP +90%.
+
+[limpet_plate]
+A plate of steamed limpets, in their little armour, in rows. They hold on to the plate as hard as they held on to the rock. A very sturdy meal.
+
+[sandpiper_feather]
+A speckled feather from a Dunlin Dancer, chewy the way a feather is chewy only in a story, and somehow just the thing for a tired head. Restores SP +80%.
+
+[buoy_bell]
+A bell-shaped sweet cast in green sugar, with a sugar clapper and a dull ring when you tap it. Tastes of mint, rust and being warned about something.
+
+[ghost_rope]
+A coil of salt liquorice, black and tarry and cold as the sea, knotted into a proper sailor's knot. It's hard to untie. It's even harder to stop.
+
+[pail_and_spade]
+A little tin pail packed with sweet sandcake, turned out in a tower, and a spade-shaped spoon to eat it with. It's warm from the sun, gritty in the nicest way, and rather proud of itself.
+
+# (draft) The Fair Return's crew: the deckhand's drop and the powder monkey's.
+[scratched_hardtack]
+A ship's biscuit, hard as a slate and a hundred years old, with a name scratched in it by a bored sailor and a date that never got finished. It is no worse for the wait. Heals a good deal.
+
+[powder_toffee]
+The last length of a slow-match wound in a twist of paper, dipped in toffee by a boy who was told to be careful and has a sweet tooth. It smoulders sweetly and wakes you right up. Restores SP +85%.
+
+# (draft) Madam Fairweather's drop.
+[starfall_cordial]
+A little carved bottle with a stopper of star-glass, the glass still faintly lit, and inside it something that tastes of salt, sugar and a very good night. It hums if you shake it. Heals 700 HP.
+
+# (draft) Chapter 6's Ash Road monsters' drops.
+[ash_button]
+A big round button of black liquorice, the kind you would give a snowman, still warm from the ash it was pressed into. Chewy, smoky and very filling. Heals a good deal.
+
+[sooty_quill]
+A long grey gull's quill, sooty at the tip and white underneath, with a hollow full of something sweet and fizzing. Suck it and your head clears like a sea wind. Restores SP +125%.
+
+[charred_collar]
+A dog's collar of old leather, burnt black, with a little tin tag nobody can read any more. Hold it up in a fight and the next attack only does half its damage. It's used up after.
+
+[mile_chip]
+A flat oat biscuit, hard as stone, stamped with half a number. It takes a mile to eat, and keeps you going for three. Heals a good deal.
+
+# The life pass: the Brook's nut cache, and the kids' den in Hollin.
+[pine_nut_brittle]
+A twist of brown paper with a slab of brittle in it: nuts in toffee, hard enough to hurt and good enough to forgive. It smells of a squirrel's good intentions.
+
+[hollin_humbugs]
+Boiled sweets, still in their twists, from a jar marked EMERGENCY ONLY. Fifty years old and exactly as sweet as the day they were wrapped. Don't think about it.
+
+# Chapter 4's hidden corners (the life pass)
+[dgs_nap_biscuit]
+A soft round biscuit, still a little warm from the cushion it was under. Eaten best lying down.
+
+[dgc_crumb_cake]
+A cake the size of a matchbox, baked by someone with very small hands. It tastes of thanks for not telling.
+
+[bl_lookers_biscuit]
+A biscuit with a hole in the middle, left on a nail for whoever looks up. It tastes of being noticed.
+
+[deep_root_chew]
+A knot of pale root, sweet and chewy, the way roots are when they have been waiting a long time. Better than it looks.
+
+[glow_sugar]
+A twist of crystal sugar that glows faintly in the bag. The glowbug will want to know you ate it.

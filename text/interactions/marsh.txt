@@ -444,3 +444,193 @@ A page of ruled paper, pinned flat to a clerk's board with a fish hook. Tiny hou
 [islet_leaf_taken]
 A clerk's board on a post, with a fish hook through it, and a clean square where a page was pinned.
 
+# --- THE LIFE PASS (15 November 2026): the Lantern Marsh ---
+# (draft)
+
+[r3m_falls_foot_2]
+A cartwheel, half in the mud. It always is the wheel that gets left.
+
+
+[r3m_falls_foot_3]
+A lantern post with no lantern on it, only the hook. Whoever kept these ran out of lanterns, or patience.
+
+[r3m_falls_foot_3_bramble]
+{worried}...Do you think they run out? The lanterns? Of oil?
+
+
+[r3m_rushes_2]
+A boot, upright in the mud, with a stitched patch on the toe in plum thread. You know whose thread that is.
+
+[r3m_rushes_2_bramble]
+{determined}Her thread! She was here! Keep going, Sword. Keep going.
+
+
+[r3m_rushes_3]
+A mossy milestone leaning in the reeds. The numbers are worn off. Underneath, someone's scratched: STILL NOT THERE.
+
+[r3m_rushes_3_bramble]
+{grin}Same, milestone. Same.
+
+
+[r3m_hut_island_1]
+Two stakes and a washing line, with a strip of plum cloth pegged out to dry, a stocking, and somebody's sock. The plum cloth is just the colour of her coat.
+
+[r3m_hut_island_1_bramble]
+{determined}It's HER coat. She's been washing! She wouldn't wash if she wasn't being herself!
+
+
+[r3m_hut_island_2]
+A pole with a tin hat on top and a face scratched in it, arms of a crosspiece. The marsh's only scarecrow, and he's looking at you like you've been tracking mud into his house.
+
+[r3m_hut_island_2_bramble]
+{sly}Hello, sir. Don't mind us. We're only passing.
+
+
+[r3m_hut_island_4]
+A wicker trap at the edge of the water, a rag tied to the stake. Whoever lives here sets a trap and doesn't tell the eel.
+
+
+[r3m_island_purse]
+A bundle of reeds in the lee of the hut, tied up with plum thread. Inside it, wedged tight, is a little purse. Somebody put it away safe, and then got busy surviving.
+
+There's a note stuck in the knot, in a very neat hand: FOR EMERGENCIES. THIS IS NOT AN EMERGENCY. PUT IT BACK.
+
+[r3m_island_purse_bramble]
+{surprised}That's HER purse. She hid her emergency money. That's the most Ves thing I've ever seen.
+
+{grin}We're borrowing it. We'll put it back with interest. In a thank-you.
+
+
+[r3m_hut_1]
+Bunches of herbs hung from a rafter hook to dry, tied with plum thread. Someone's been keeping house in the middle of a marsh, and doing it properly.
+
+[r3m_hut_1_bramble]
+{thinking}She's making TEA. In a MARSH. With HERBS.
+
+[r3m_hut_1_ves]
+{proud}It was that or go mad. And I was going to be hurt and furious and brewed, not mad.
+
+
+[r3m_hut_3]
+A rack of wooden spoons and an iron ladle on pegs, hung in order of size. All of them have been used.
+
+[r3m_hut_3_ves]
+{bored}One was a sword for a while. That's all I'll say.
+
+
+[r3m_tollhouse_1]
+A handbell on a post, and a card nailed under it: RING FOR THE TOLL. A tiny sub-note: IF NO ANSWER, WAIT. A tinier one: IF STILL NO ANSWER, LEAVE IT ON THE STEP.
+
+[r3m_tollhouse_1_bramble]
+{grin}Ding! ...Ding! ...Nobody's coming. It's only us, and the bell.
+
+
+[r3m_tollhouse_2]
+A slate on the wall with tolls marked in chalk, four sticks and a stroke to the line. The last line says TOLLS TODAY: 0. It was a good day for travellers, and a bad one for toll-keepers.
+
+[r3m_tollhouse_2_bramble]
+{thinking}I wonder what they asked for. A coin? A song?
+
+
+[r3m_wisp_hollow_2]
+A pale curve of ribs sticking out of the bog like the keel of a very small boat. It isn't a boat.
+
+[r3m_wisp_hollow_2_bramble]
+{scared}Don't look. Don't look. I looked.
+
+
+[r3m_heron_flats_5]
+Fish bones in a heap at the edge of the water, picked clean and arranged in a pattern. It's a heron's table. It's laid for one.
+
+[r3m_heron_flats_5_ves]
+{bored}That's where the fish went. Don't ask which fish.
+
+
+[r3m_watergate_1]
+A column from the city's gate, snapped at the base and lying where it fell, moss-grown, with a swallow's nest at one end. It's the gateway to everything, and it's broken.
+
+[r3m_watergate_1_bramble]
+{awed}It's the real gate. THE gate. The bit we've been walking to.
+
+[r3m_watergate_1_ves]
+{bored}Then we're nearly there. Don't say nearly. It's bad luck.
+
+
+[r3m_watergate_2]
+A stone head set on a plinth by the gate, with a chip in the nose and one eye gone. A toll-keeper's, or a king's. It has a lot of moss for an expression.
+
+[r3m_watergate_2_bramble]
+{grin}Hello, sir. We'd like to come in, please.
+
+[r3m_watergate_2_ves]
+{bored}He's not the doorman. He's the door.
+
+
+[r3m_far_shore_1]
+A milestone at the edge of the fen with the miles worn off, and scratched across the front in chalk: WALT WOZ ERE.
+
+There's a smaller scratch: ...AND ERE.
+
+[r3m_far_shore_1_bramble]
+{surprised}WALT! WALT'S been HERE! He GOT OUT! He got out of the Drains and ALL THE WAY across the marsh!
+
+{glee}We have to find Walt. We have to. I have SO MANY QUESTIONS.
+
+[r3m_far_shore_1_ves]
+{bored}Who is Walt?
+
+{bored}...Never mind. I don't want to know.
+
+
+[r3m_far_shore_2]
+A stone head, face up in the sedge, a pale lichen over the eyes like spectacles. It's looking at the valley. It's been looking for three thousand years. It looks like it approves.
+
+[r3m_far_shore_2_bramble]
+{awed}It's looking at the city. It's been looking at it for AGES.
+
+[r3m_far_shore_2_ves]
+{bored}It's got a better view than we have.
+
+
+[r3m_far_shore_3]
+A column drum at the edge of the fen, with the mark of a toll-keeper's chain on it, worn smooth. Somebody sat here and watched the road a long time.
+
+[r3m_far_shore_3_bramble]
+{thinking}I'd watch the road from here. You'd see everyone coming.
+
+
+[r3m_far_shore_picnic]
+A basket tucked into the north-east corner of the shore, where the reeds hide it from the road. A cloth over the top. A note: FOR WHOEVER GETS THIS FAR.
+
+Inside: a loaf of bulrush bread, still wrapped, and a smaller note: WELL DONE.
+
+[r3m_far_shore_picnic_bramble]
+{surprised}For whoever gets this far! That's US! We got this far!
+
+{glee}It's a PRIZE. Somebody left a prize. At the END.
+
+[r3m_far_shore_picnic_ves]
+{bored}That's very nice of someone. I'd like to know who. ...No. I'd like to eat the bread first.
+
+
+[r3m_clerks_islet_2]
+A basket of letters, all of them in the same neat hand, all addressed to the same office, none of them sent. The first line of each is: SIR, REGARDING THE REEDS.
+
+[r3m_clerks_islet_2_ves]
+{bored}He kept writing about the reeds. He kept writing and nobody answered.
+
+
+[r3m_island_purse_after]
+The bundle of reeds, with the knot undone and tied up again, a little worse. The note is still stuck in it: PUT IT BACK.
+
+[r3m_island_purse_after_bramble]
+{sheepish}We will. We definitely will. As soon as we find her.
+[r3m_far_shore_after]
+The basket is empty now, apart from the cloth, and a smaller note: THAT WAS FOR YOU.
+[r3m_egg_found]
+A speckled egg, tucked in the sedge where somebody dropped it. It's warm, in the way that eggs are warm when they're meant to be somewhere else.
+
+You pick it up. It's very light.
+
+[r3m_egg_found_bramble]
+{worried}An egg. A lost egg. Somebody's baby is out here on its own and nobody's even noticed. We have to take it home.

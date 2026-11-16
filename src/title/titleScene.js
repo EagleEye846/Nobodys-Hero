@@ -9,6 +9,7 @@ import { ROOMS } from '../data/rooms/index.js';
 import { soulSprite } from '../battle/soul.js';
 import { drawText, textWidth } from '../ui/text.js';
 import { glide } from '../ui/uiMotion.js';
+import { promptName } from '../engine/input.js';
 import { ChapterSelectScene } from './chapterSelectScene.js';
 
 // "LANTERN HALL" or "taper_home" -> "Lantern Hall"
@@ -116,12 +117,18 @@ export class TitleScene {
     }
     this.time += dt;
     if (this.time < PROMPT_DELAY) return;
-    if (!this.save) {
-      if (input.wasPressed('confirm')) this.begin(this.startGame);
-      return;
-    }
     if (this.settings.isOpen) {
       this.settings.update(input);
+      return;
+    }
+    // No save here yet: confirm starts, and the menu key opens OPTIONS (for
+    // SAVE FILE: bringing in a save exported from another browser or address).
+    if (!this.save) {
+      if (input.wasPressed('confirm')) this.begin(this.startGame);
+      else if (input.wasPressed('menu')) {
+        sfx('select');
+        this.settings.open();
+      }
       return;
     }
     if (this.confirming) {
@@ -230,6 +237,9 @@ export class TitleScene {
         ctx.globalAlpha = 1;
       } else if (blinkOn(this.time - PROMPT_DELAY)) {
         drawText(ctx, this.prompt, cx, UI_HEIGHT - 46, { size: 30, align: 'center', outline: '#07040c' });
+      }
+      if (!this.save) {
+        drawText(ctx, `${promptName('menu')}: OPTIONS / IMPORT SAVE`, cx, UI_HEIGHT - 16, { size: 20, align: 'center', color: '#8a82b0', outline: '#07040c' });
       }
     });
     // OPTIONS, over everything, while it's open.

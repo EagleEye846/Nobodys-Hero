@@ -1,7 +1,7 @@
 # THE LOWER WORKINGS OF SEAM NINE (Chapter 4's secret detour and superboss):
 # things you can read and look at in diggings_star_scorch, diggings_star_glass,
 # diggings_star_camp and diggings_star_pool. (draft: every line here)
-# The fight with Pudding is in text/enemies/pudding.txt; the scenes are in
+# The fight with the Pale Olm is in text/enemies/pudding.txt; the scenes are in
 # src/data/scenes/puddingPool.js.
 #
 # A section with `_ves` on the end of its name is what Ves says after the
@@ -175,11 +175,11 @@ A notice board, with rules pinned to it in a careful hand:
 
 1. WIPE YOUR BOOTS.
 2. THE KETTLE IS NOT A PERSON. DON'T WAIT FOR IT.
-3. PUDDING GETS THE CRUSTS. NOT THE WHOLE PASTY. (YES, WE KNOW.)
+3. PALE GETS THE CRUSTS. NOT THE WHOLE PASTY. (YES, WE KNOW.)
 4. DO NOT WHISTLE THE END-OF-SHIFT TUNE DOWN THE LOWER SEAM. HE JOINS IN.
 
 [k_rules_ves]
-{smile}Pudding gets the crusts. {thoughtful}I have a lot of questions, and I think I'm about to meet the answer.
+{smile}"Pale" gets the crusts. {thoughtful}I have a lot of questions, and I think I'm about to meet the answer.
 
 [k_table]
 A long table with a clean oilcloth, seven places laid, and a plate at each of them. Seven plates of nothing, and a good deal of dust, and an eighth plate set at the end on the floor.
@@ -203,15 +203,15 @@ A lunch crate with a lid, and under the lid a note: THE LAST OF THE PASTIES. HIS
 A cart at rest on a short stub of rail that goes nowhere. There's a cushion in it, flattened in the shape of someone who was very fond of the ride.
 
 [k_toolbox]
-A toolbox with a dozen small tools in it, none missing, and a tin spoon with a name scratched in the bowl: PUDDING. The N is backwards.
+A toolbox with a dozen small tools in it, none missing, and a tin spoon with a name scratched in the bowl: PALE. The E is backwards.
 
 [k_timber]
 A neat stack of short timber, sawn to the same length, laid ready. Someone meant to build something here. A hutch, maybe, or a bigger dish.
 
-# --- PUDDING'S POOL ---
+# --- PALE'S POOL ---
 
 [p_pool]
-The pool is perfectly still and perfectly clear, and the light comes up out of it from a long way down. You can't see the bottom. You'd rather not be told what the bottom is.
+The pool is perfectly still and perfectly clear, and the light comes up out of it from a long way down. You can't see the bottom. Something down there has been keeping very still for a very long time.
 
 [p_shelf]
 A plank shelf against the wall, with a kettle, seven tin mugs and, at the end, a small tin dish with a ring worn smooth in the bottom of it. The mugs have all been washed. The dish has been licked clean.
@@ -220,7 +220,7 @@ A plank shelf against the wall, with a kettle, seven tin mugs and, at the end, a
 {tender}Seven for them. One for him. They did the washing up before they left. That's the part I can't stand.
 
 [p_sign]
-A hand-lettered sign: PUDDING'S POOL. MIND YOUR BOOTS. DON'T TAP THE DISH UNLESS YOU MEAN IT.
+A hand-lettered sign: PALE'S POOL. MIND YOUR BOOTS. DON'T TAP THE DISH UNLESS YOU MEAN IT.
 
 [p_sign_ves]
 {bored}That's either a warning or an invitation, and I suspect it's both.
@@ -348,3 +348,95 @@ The last note hangs, and then the whole gallery sings the tune back to you, full
 
 [chime_answered_ves]
 {tender}Three down and one up. {bored}And not one of them could be trusted to blow it properly, so they set it in stone.
+
+# ===== LIFE PASS (14 November 2026): set dressing, generated with src/data/diggingsDressing.js =====
+
+# --- diggings_star_camp ---
+
+[dgk_dish]
+A small tin dish on the floor by the stool, with PALE painted round the rim in white. A crust sits in it, hard as a pebble. Somebody saved it back.
+
+[dgk_dish_ves]
+{surprised}Somebody had a pet. Or a very rude cat.
+
+[dgk_boots]
+A pair of boots, set side by side, soles toward the table, as if the owner meant to warm them. Their toes are worn thin, the way a miner's are, with one patched in leather.
+
+[dgk_boots_ves]
+{sad}They'd have walked home in those.
+
+[dgh_boots]
+A pair of boots, the soles gone to glass, the leather curled and hardened like horn. They're set side by side, toes forward, as if their owner stepped out of them in one clean step.
+
+[dgh_boots_ves]
+{sad}That's a very tidy way to leave.
+
+[dgg_mug]
+A tin mug at the foot of a crystal, rung like a bell: the rim has a very clean note worn into it, from being tapped by a spoon.
+
+[dgg_mug_ves]
+{smile}They'd tap their mugs along with the tune. Cute.
+
+[dgg_pipe]
+A clay pipe on the floor, blown for a note and never lit. There's a thin rim of dust in the bowl, and a tiny, tuneful scratch on the stem.
+
+[dgg_pipe_ves]
+{thoughtful}A whistle they could smoke. Cunning.
+
+[dgl2_boots]
+A pair of boots, stood at the edge of the lit floor, their toes just short of the dark. The boots haven't gone any further. Nor did the owner.
+
+[dgl2_boots_ves]
+{sad}He never made it across.
+
+[dgl2_mug]
+A tin mug, whose tea has turned into a small, perfect lens. It focuses a spot of light on your hand. It's pleasantly warm.
+
+[dgl2_mug_ves]
+{surprised}It's a magnifying glass. A tea one.
+
+[r3c_sp_glass 2]
+In the glass there's a bubble, and in the bubble, a tiny speck of light that keeps its own time.
+
+[r3c_sp_cups]
+A row of seven cups on the tea shelf's lip. The seventh has had a saucer added, and a small spoon, and a chip mended with wax.
+
+[r3c_sp_cups_ves]
+{smile}The seventh is for the Olm. They set a place for it every day.
+
+[r3c_sp_journal]
+A thin notebook, damp at the edges. The last page reads: DAY 400. NOTHING. DAY 401. NOTHING. DAY 402. (A NICE BIT OF NOTHING.)
+
+[r3c_sp_journal_ves]
+{bored}That's a very polite way of being bored.
+
+[r3c_sp_journal 2]
+There's a pressed flower between the pages. It doesn't grow anywhere near here. They brought it down in a pocket.
+
+[r3c_sp_journal_ves 2]
+{sad}A bit of sunshine. They kept a bit of sunshine.
+
+[r3c_ss_pot]
+A tin pot half full of dark water, standing beside the first band. Somebody was trying to taste it. They got as far as sniffing, and put it back.
+
+[r3c_ss_pot_ves]
+{bored}Good call. It's not for drinking.
+
+[r3c_ss_boot]
+A single boot standing neatly on the narrow island between the bands. It's full of black water. The other boot is nowhere.
+
+[r3c_ss_boot_ves]
+{surprised}That's not a boot, it's a message.
+
+[r3c_ss_boot 2]
+You look at it for a while. It's a very small boot, with a bright red lace. Whoever wore it was in a hurry.
+
+[r3c_ss_boot_ves 2]
+{thoughtful}Or just a very tidy swimmer.
+
+[r3c_ss_tally 2]
+A note beneath the frown: THEY DO NOT FLOAT. THEY NEVER DID. WE KEEP TRYING.
+
+[r3c_ss_sock 2]
+A faint whiff of old wool and old star. It really hasn't dried in years.
+

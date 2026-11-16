@@ -50,8 +50,9 @@ A lamp on a post, cold. The glass is crusted white with salt, and the wick insid
 [foot_sign]
 A board by the stair door: THE LAST LIGHT. 212 STEPS. REST ON THE LANDINGS.
 
+# (draft)
 [foot_sign_ves]
-{bored}Rest on the landings. Good advice, from a sign.
+{smile}Rest on the landings. Good advice, from a sign.
 
 [foot_chains]
 A chain bollard. The chains run out through the door to rings in the rock, to hold the tower down in a gale. It doesn't look like it needs holding.
@@ -93,14 +94,16 @@ A tide dial on a post, for the sea in the bottom of the tower. A blue arc for in
 [stair_crate]
 A sea chest, nailed shut and tarred. It floats when the hall is full and sits like a rock when it isn't.
 
+# (draft)
 [stair_crate_bramble]
-{worried}Please don't ask me to push it into the sea. It's a rule.
+{sheepish}Please don't ask me to push it into the sea. It's a rule.
 
 [stair_hall_sign]
 A board on a post: FLOODS AT THE FOOT. WAIT FOR THE EBB, THEN CROSS DRY. Someone has added, in chalk: (MOSTLY.)
 
+# (draft)
 [stair_hall_sign_ves]
-{bored}A tower with a tide. Of course it has.
+{surprised}A tower with a TIDE?
 
 [stair_valve]
 A valve wheel on the wall, rusted open. Under it a grate in the floor, and the sea coming up through the grate.
@@ -154,8 +157,9 @@ A great iron crank on the wall, a wheel as big as a cartwheel with a handle as l
 
 You put your weight on it. It comes a quarter turn, then tries to take your arm back.
 
+# (draft)
 [sluice_crank_ves]
-{thoughtful}It only stays up while somebody leans on it.
+{surprised}That's a big crank. ...That's a VERY big crank.
 
 [sluice_crank_bramble]
 {worried}Nope. Not touching it. It looks like it bites.
@@ -216,8 +220,9 @@ A purse in the corner behind the crate, where the draught has not got at it.
 [gal_circle]
 A circle chalked on the brick, two rings with little waves round it and a boat in the middle. Drawn, rubbed out and drawn again. The lines are shaky and very careful.
 
+# (draft)
 [gal_circle_ves]
-{thoughtful}Somebody's been practising.
+{worried}Somebody's been practising.
 
 [gal_scorch]
 A circle burnt into the brick. The ring is black and the middle is scorched through to the iron. This one worked, a bit.
@@ -231,14 +236,16 @@ Sums, chalked in a child's hand: tide times, high and low. The answers are wrong
 [gal_hand]
 Handwriting, big at the start and small at the end, as if the chalk was running out of wall: WHEN I GET IT RIGHT THE SEA WILL GO BACK. WHEN I GET IT RIGHT HE WILL COME BACK.
 
+# (draft)
 [gal_hand_ves]
-{thoughtful}...Right.
+{worried}...Right.
 
 [gal_hand_sorry]
 SORRY, written down the brick, smaller each time, until the last one is only a dot.
 
+# (draft)
 [gal_hand_sorry_bramble]
-{worried}He says sorry a lot. To a wall.
+{sad}He says sorry a lot. To a wall.
 
 [gal_floor_circle]
 A big circle on the floor, with a paper boat at each of its four points. The boats are dry. They have been dry a long time.
@@ -266,8 +273,9 @@ It was cut from memory by someone who remembered how big the coat looked from un
 [gal_oilskin_ves]
 {thoughtful}Somebody else's coat.
 
+# (draft)
 [gal_oilskin_bramble]
-{worried}He'd trip on that. He'd trip on that every day.
+{thinking}He'd trip on that. He'd trip on that every day.
 
 [gal_boat_wall]
 Another paper boat, on the floor by the wall. This one has its nose right up against the brick, as if it were waiting to be let through.
@@ -317,8 +325,20 @@ A pane starred across, with the storm showing through the star.
 [lamp_glass_cracked_calm]
 A pane starred across, with a bit of clear sky showing through the star.
 
+# (draft) 2026-11-15: after the fight, the glass blown in.
+[lamp_glass_broken]
+The glass is gone, and most of the wall with it. Stumps of brass, bent out over the drop, and the storm coming straight in over them.
+
+# (draft) after the storm.
+[lamp_glass_broken_calm]
+The glass is gone, and most of the wall with it. Stumps of brass, and nothing past them now but grey sea and a long way down.
+
 [lamp_dead]
 The Last Light's great lamp: a drum of glass rings as tall as a house, cold and dark. There is a crack across it, and salt on the brass. It has not been lit in a long time.
+
+# (draft) after the fight: it burned for one night, till the sea came over the top.
+[lamp_drowned]
+The Last Light's great lamp. It burned for one night. The sea put it out, and the glass is still wet.
 
 [lamp_floor]
 Boards, scoured pale and stained dark in a ring where the lamp-trimmer used to stand.
@@ -329,11 +349,16 @@ The glass is white, and the stair behind you is gone. There is nowhere to run to
 [lamp_pillar]
 An iron pillar, spiked at the top, holding up the lantern's roof.
 
+# (draft) after the storm.
+[lamp_pillar_calm]
+An iron pillar, spiked at the top. It held up the lantern's roof. There isn't one now.
+
 [lamp_barrel]
 A barrel of lamp oil, the bung still sealed with wax. It's full. Nobody has used a drop of it in years.
 
+# (draft)
 [lamp_barrel_ves]
-{thoughtful}Full. So it never ran out of oil.
+{surprised}Full? So it never ran out of oil.
 
 [lamp_rope]
 A coil of hauling line for bringing the oil up the outside of the tower, the end whipped tidy. Somebody was taught to be neat about rope.
@@ -382,11 +407,24 @@ Tally marks scratched into the back wall: four strokes and one across, row on ro
 [den_tin]
 A tin with a dented lid. Inside, a jar of humbugs, the striped kind, all stuck together into one big lump years ago. You could break a bit off.
 
+# (draft)
+[den_spare]
+A second tin, behind the first, with a lamp pole's handle wrapped in old wick inside it. It has been wrapped and unwrapped many times, by small hands.
+
+# (draft)
+[den_spare_ves]
+{proud}Somebody wrapped that on purpose. I'll look after it.
+
+# (draft)
+[den_spare_empty]
+An empty tin. It smells of lamp oil.
+
 [den_tin_bramble]
 {grin}He'd want them eaten. ...Probably.
 
+# (draft)
 [den_tin_ves]
-{bored}Humbugs. I'd have hidden them too.
+{smile}Humbugs. I'd have hidden them too.
 
 [den_tin_empty]
 An empty tin. It still smells of mint.
@@ -405,14 +443,16 @@ A chain on an iron hook, hung up in loops. The links are worn bright where hands
 [ll_lamp_bracket]
 A lamp in an iron cage on a bracket. The glass is green. The wick is black and cold, and the oil in it went to jelly long ago.
 
+# (draft)
 [ll_lamp_bracket_ves]
-{bored}Green glass. Of course it's green.
+{angry}Green glass. Of course it's green.
 
 [ll_tide_marks]
 Lines scratched in the brick with a nail, one over another, each with a few strokes after it. The top one is higher than your head. Weed has dried along the bottom.
 
+# (draft)
 [ll_tide_marks_bramble]
-{worried}The sea's been in here. Up to there.
+{surprised}The sea's been in here. Up to there.
 
 [ll_coal]
 Coal for the boiler that works the pumps, shovelled into a heap and left. Black dust over everything near it.
@@ -440,3 +480,166 @@ A paper boat, folded from a page of tide sums. The sums are wrong.
 
 [lamp_oilcan]
 A can of lamp oil with a long spout, for filling the great lamp. It is full. Nobody has filled anything in a long time.
+
+# --- LIFE PASS (2026-11-14): extra things to look at ---
+# (draft)
+
+# lastlight_foot
+[lp_lf_boots]
+A pair of sea boots set by the wall to dry. They're small. They're full of seawater, and one has a limpet on it, settled in.
+
+[lp_lf_boots_ves]
+{sad}Those are not a grown-up's.
+
+[lp_lf_boots_bramble]
+{worried}Whose are they? Are they going to want them back?
+
+[lp_lf_dandelion]
+One dandelion, growing out of a crack in the black flagstones, as yellow as an egg yolk. Nothing else grows in here. It must have taken the whole winter.
+
+[lp_lf_dandelion_ves]
+{smile}Sunnyside gets everywhere.
+
+[lp_lf_dandelion_bramble]
+{awed}A dandelion! Nobody step on it! Nobody breathe on it!
+
+[lp_lf_can]
+A can of lamp oil, full, stood in the middle of the floor by itself, as if it's been put there so you'd trip on it.
+
+[lp_lf_can_ves]
+{bored}It's worked on everyone so far, I'd say.
+
+[lp_lf_lantern]
+A lantern on a post, unlit. The glass is clean. Somebody still comes down here with a rag.
+
+[lp_lf_lantern_ves]
+{thoughtful}Why clean a lamp you aren't going to light?
+
+[lp_lf_lantern_bramble]
+{scared}Somebody's still here, aren't they.
+
+[lp_lf_mouse_card]
+A card tacked to the wall, at about the height of a mouse: NO CATS. NO KEEPERS. NO HEROES. And underneath, in a tiny hand, afterwards: (EXCEPT YOU.)
+
+[lp_lf_mouse_card_ves]
+{surprised}We have a reputation among the mice.
+
+[lp_lf_mouse_card_bramble]
+{glee}I'm the mouse's favourite hero!
+
+# lastlight_sluice
+[lp_ls_kettle]
+A kettle, black with years of use, stood on the floor with its lid beside it. It's cold, and the spout is stuffed with a rolled-up bit of cloth to keep the damp out. Somebody was looking after it.
+
+[lp_ls_kettle_ves]
+{thoughtful}Somebody wants this on a stove.
+
+[lp_ls_kettle_bramble]
+{thinking}It's heavy. Heavy for tea, I mean.
+
+[lp_ls_kettle_gone]
+Nothing else here. You already have what was lying about.
+
+[lp_ls_bucket]
+A bucket under the drip, nearly full. Someone has been emptying it. Someone has been counting: there are tally marks on the wall, and a note, DON'T.
+
+[lp_ls_bucket_ves]
+{bored}Plink. Plink. Plink. I'll be hearing that for the rest of my life.
+
+[lp_ls_bucket_bramble]
+{glee}Plink! I can do it too! Plink plink!
+
+[lp_ls_wicks]
+A crate of lamp wicks. The top layer is dry. The layers underneath are soaked. Someone has kept turning the dry ones on top, so the box always has a hope in it.
+
+[lp_ls_wicks_ves]
+{thoughtful}A bit of hope in a crate.
+
+[lp_ls_dry]
+A barrel with DRY painted on the lid. It's full of seawater. Nobody has said anything about it.
+
+[lp_ls_dry_ves]
+{bored}It's honest to a point.
+
+[lp_ls_corner_pouch]
+A purse wedged behind a stack of crates, high enough up to stay dry. There's a note tucked in: FOR THE NEXT ONE WHO CAN'T SLEEP.
+
+# lastlight_stair
+[lp_lt_dry_boots]
+A pair of boots, dry. The only dry thing in the tower. Somebody puts them up on a high landing every night, so the sea can't have them.
+
+[lp_lt_dry_boots_ves]
+{smile}Smart. It's a good habit.
+
+[lp_lt_dry_boots_bramble]
+{sad}There's only one pair. And they're small.
+
+[lp_lt_books]
+A pile of schoolbooks set out on the stair to dry, like washing. Each has a gull drawn in the margin, one gull per page.
+
+[lp_lt_books_ves]
+{bored}Dedication.
+
+[lp_lt_books_bramble]
+{awed}They're all different gulls! That one's got a hat!
+
+[lp_lt_rope]
+A rope looped over a hook, one end trailing down the stair towards the water. Every few steps it's knotted, so you'd know how deep you were.
+
+[lp_lt_rope_ves]
+{thoughtful}A depth gauge for stairs. That's nearly useful.
+
+[lp_lt_rope_bramble]
+{worried}It goes down a long way.
+
+[lp_lg_tea]
+A little table, laid for four. A cup, a shell, a cork on a saucer, and an empty chair. The tea in the cup is seawater. It's been poured with care.
+
+[lp_lg_tea_ves]
+{sad}I'm not going to say anything about it.
+
+[lp_lg_tea_bramble]
+{sad}Can we sit down? Just for a second?
+
+[lp_lg_cat_bed]
+A basket by the wall with a blanket in, and a dip in it the shape of a cat. No cat. A saucer of milk beside it is full, and has a skin on it.
+
+[lp_lg_cat_bed_ves]
+{bored}Cats don't wait. If it wanted milk it'd have had it.
+
+[lp_lg_cat_bed_bramble]
+{worried}Maybe the cat's just late.
+
+[lp_lu_scope]
+A telescope pointed at the ceiling, at the lamp. A lens cap is tied on with a bootlace. A label: DO NOT LOOK AT THE LAMP. It's been underlined twice.
+
+[lp_lu_scope_ves]
+{bored}It's been looked at directly. A lot.
+
+[lp_lu_scope_bramble]
+{sheepish}I just looked at it. I'm fine. I'm seeing a blue spot, though.
+
+[lp_lu_moths]
+A crate marked MOTHS in capital letters. It's empty. Under the label, in pencil: ESCAPED.
+
+[lp_lu_moths_ves]
+{grin}Good for them.
+
+[lp_lu_moths_bramble]
+{laughing}Run, moths! Run!
+
+[lp_lu_oil]
+Barrels of lamp oil, tarred shut, stacked so the lamp's keeper would never have to climb. They're dusty. They're full.
+
+[lp_lu_oil_ves]
+{thoughtful}Whoever it was had enough oil for years.
+
+[r5s_den_tin]
+A biscuit tin tucked into a nook, with a label in a child's printing: DO NOT OPEN. THIS MEANS YOU. Inside: three buttons, a marble and a very old biscuit.
+
+[r5s_den_tin_ves]
+{smile}Everyone has a tin like that.
+
+[r5s_den_tin_bramble]
+{glee}I had one! Mine had a frog in it. ...Once.
+

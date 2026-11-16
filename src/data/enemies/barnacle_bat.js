@@ -17,7 +17,7 @@ export const BARNACLE_BAT = {
   anim: BARNACLE_BAT_ANIM,
   // The coast's fights (Gullrest's version of it in the cliff cave, as before).
   music: 'coastBattleStorm',
-  maxHp: 9400,
+  maxHp: 6300,
   damage: 80,
 
   // The easy end of the chapter: plenty of room.
@@ -35,10 +35,9 @@ export const BARNACLE_BAT = {
 
   // Its attacks live in src/battle/attacks/barnacle_bat.js.
   patterns: [
-    { name: 'bbatDrip', weight: 3 },
     { name: 'bbatEcho', weight: 3 },
-    { name: 'bbatBarnacles', weight: 2 },
-    { name: 'bbatSwoop', weight: 2 },
+    { name: 'bbatRoost', weight: 3 },
+    { name: 'bbatBarnacles', weight: 3 },
   ],
 
   // TALK options (the hero's own actions; the hero never speaks). Each name
@@ -50,7 +49,7 @@ export const BARNACLE_BAT = {
     { name: 'Pick off a barnacle', calm: 30 },
   ],
 
-  rewards: { exp: 2000, coins: 11 },
+  rewards: { exp: 2000, coins: 9 },
 
   // A barnacle it wore off a wing (src/data/items.js), with the chance of it.
   drops: [{ item: 'echo_shell', chance: 0.4 }],

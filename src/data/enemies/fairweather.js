@@ -8,9 +8,11 @@ import {
 // MADAM FAIRWEATHER, THE FIGUREHEAD: the secret superboss of Chapter 5, at the end of the ghost
 // ship's deep part (the figurehead's perch, past the orlop, the sail locker and the flooded bow).
 // The carved wooden woman on the brig Fair Return's prow. A piece of the Fallen Star came down
-// on the ship a hundred years ago and lodged in her breast, and it woke her: a laughing, spinning,
-// beautiful and wrong creature, glad to see anyone at all. Possibly the real reason the ship never
-// made port. Every line she has is in text/enemies/fairweather.txt (draft). The hero never speaks.
+// on the ship a hundred years ago and lodged in her breast, and it woke her. On the ship's last good
+// night she made one wish on it: that the night would never end. The star granted it to the letter,
+// so it is a party nobody can leave, and she can't stop laughing: a laughing, spinning, beautiful
+// creature, glad to see anyone at all, stuck inside a wish (not mad, not possessed). Sparing her lets
+// the wish go; beating her breaks it. Possibly the real reason the ship never made port. Every line she has is in text/enemies/fairweather.txt (draft). The hero never speaks.
 //
 // Started by a cutscene step (the perch's `figurehead_wakes`):
 //   { do: 'battle', enemy: 'fairweather', who: 'figurehead', noRun: true, spared: 'figurehead_spared', defeated: 'figurehead_beaten' }
@@ -26,9 +28,22 @@ import {
 //   4. CHAOS: all of it at once, two attacks a turn, masks bouncing, and a second wind at the end.
 // Each has a `floor` so a big hit can't skip the next, and `atLeast` turns so each gets its due.
 //
+// HER GIMMICK (14 November 2026): two rules for the box, src/battle/fairweatherDeck.js.
+//   THE LIST: her deck heels over; your SHADOW slides downhill (a pull you can walk against),
+//     and the slope swaps sides on her laugh (a bar's warning: a giggle, a creak).
+//   THE DANCE: she has your hand; your SHADOW steps only on the beats of her song, Never Morning
+//     (ONE two three: a glide each beat, a longer one on ONE; presses wait for the beat).
+//   The Laugh: the list. Star Shower: the dance (she curtsies and asks, first). The Carousel:
+//   the dance on a listing deck. Chaos: one then the other, swapping on every laugh.
+//   Every attack fires on the song's beats and has a waltz version (fewer, slower, warned longer).
+//
 // Strength: harder than Corrie (63,500 HP, damage 120-138, about 0.7-0.84 hits a turn from a careful
-// dodger). Hers: 85,000 HP, damage 140-152, about 1.0-1.3 hits a turn in the hardest phases (see
-// "Superboss" in notes/docs/superboss-ch5.md for the checks).
+// dodger). Hers: 85,000 HP, damage 142-154. Brought to target on 12 November (density/speed and her star
+// volleys only, not damage): a careful dodger takes about 1.13 / 1.24 / 1.42 / 1.41 hits a turn by phase,
+// 1.30 overall (the ladder: Quire 0.99, the Pale Olm 1.14, her 1.30). 14 November, with her deck rules
+// (the bot stepping on the beats and sliding on the list): 1.13 / 1.17 / 1.40 / 1.43, 1.28 overall,
+// at speed 2.0 / 2.15 / 2.12 / 2.06. Note her `density` hardly matters:
+// her attacks time their cues in her own clock, so `speed` is the real dial (see notes/docs/superboss-ch5.md).
 
 // Her attacks live in src/battle/attacks/fairweather.js.
 const LAUGH_ATTACKS = [
@@ -73,19 +88,23 @@ export const FAIRWEATHER = {
   beatenSprite: { rows: FAIRWEATHER_DEATH_LAST, palette: FAIRWEATHER_PALETTE },
   boss: true,
   gentle: true,
-  // "Star Aboard" (src/data/music/figureheadBattleTheme.js); each phase cuts to its own section.
+  // "Never Morning" (src/data/music/figureheadBattleTheme.js); each phase cuts to its own section:
+  // shower to 'spin' (the star's own section), carousel to 'masquerade' (the lost waltz), chaos to 'chaos'.
   music: 'figureheadBattle',
   // The bowsprit's end: open sea, a sky of stars, the gilt rail (coastBackdrops.js).
   backdrop: 'ghostship_perch',
   battlePos: { x: 192, y: 2 },
-  maxHp: 85000,
+  // 13 November 2026: star guardians take about 35-40 rounds of good FIGHTs
+  // from the party you meet them with (85,000 was about 52).
+  maxHp: 62000,
   damage: 142,
   difficulty: { density: 1.5, speed: 2.0 },
   // Her bullets are thick and gleaming: grazing past her gives a share of the usual SP.
   grazeSp: 0.3,
-  // Its turns run long: as one attack winds down, another follows (encore, see startAttack).
-  encore: { at: 0.85, seconds: 5, density: 0.6 },
-  turnSeconds: 11,
+  // Her turns run long, one long attack each (no encore on top since 14 November: each
+  // attack lasts the whole turn, to show off the list and the waltz it's played under).
+  encore: null,
+  turnSeconds: 11.5,
   // She rises out of the fog, laughing.
   entrance: 'whirl',
   introCard: { title: 'FAIRWEATHER', subtitle: 'The Figurehead' },
@@ -114,12 +133,12 @@ export const FAIRWEATHER = {
       musicFrom: 'spin',
       patterns: SHOWER_ATTACKS,
       damage: 146,
-      difficulty: { density: 1.85, speed: 2.0 },
-      encore: { at: 0.9, seconds: 4.4, density: 0.5 },
+      difficulty: { density: 1.85, speed: 2.15 },
       until: { below: 0.5, atLeast: 4 },
       floor: 0.45,
       gameOver: 'game_over: shower',
-      beat: [{ say: 'phase: shower' }, { who: 'foe', say: 'phase: shower foe' }, { who: 'vesper', say: 'phase: shower vesper' }],
+      // She curtsies, and asks you to dance: from here she has your hand (the waltz rule).
+      beat: [{ say: 'phase: shower' }, { who: 'foe', say: 'phase: shower foe' }, { cue: 'curtsy' }, { who: 'foe', say: 'phase: shower curtsy foe' }, { who: 'vesper', say: 'phase: shower vesper' }],
     },
     {
       id: 'carousel',
@@ -134,8 +153,7 @@ export const FAIRWEATHER = {
       musicFrom: 'masquerade',
       patterns: CAROUSEL_ATTACKS,
       damage: 150,
-      difficulty: { density: 2.3, speed: 2.0 },
-      encore: { at: 0.93, seconds: 4, density: 0.45 },
+      difficulty: { density: 2.3, speed: 2.12 },
       until: { below: 0.25, atLeast: 4 },
       floor: 0.2,
       gameOver: 'game_over: carousel',
@@ -154,9 +172,7 @@ export const FAIRWEATHER = {
       musicFrom: 'chaos',
       patterns: CHAOS_ATTACKS,
       damage: 154,
-      difficulty: { density: 2.2, speed: 1.85 },
-      // Everything she has left, on top of itself.
-      encore: { at: 0.9, seconds: 4, density: 0.35 },
+      difficulty: { density: 2.2, speed: 2.06 },
       secondWind: { below: 0.12, density: 0.3, delay: 2.4 },
       lowHp: 0.12,
       gameOver: 'game_over: chaos',

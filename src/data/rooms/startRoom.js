@@ -4,6 +4,7 @@
 //   .  floor                                    r  rug
 //   p  potted plant (solid)                     F  flower bed (solid)
 //   D  doorway (walk through it; see `doors`)   S  statue (walk or hide behind) (solid)
+import { R1_PROPS } from '../ruinsLife.js';
 export const START_ROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'ruins_entrance',
@@ -55,11 +56,14 @@ export const START_ROOM = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/the_ruins.txt',
   props: [
+    { sprite: 'col_charm_sun', x: 1, y: 18, walkable: true, flat: true, gives: 'charm_sun', taken: { gone: true } },
     { sprite: 'sign', x: 6, y: 3, text: 'welcome_sign' },
     { sprite: 'sign', x: 21, y: 3, text: 'east_sign' },
     { sprite: 'merchant', x: 11, y: 5, shop: 'ruins_shop' },
     { sprite: 'savepoint', x: 3, y: 12, save: true },
     { sprite: 'keeper', x: 9, y: 15, npc: 'old_keeper', until: 'keeper_on_the_shoulder' },
+    // The life pass, round 2 (15 November 2026): chapter 1's dressing, in src/data/ruinsLife.js.
+    ...(R1_PROPS['ruins_entrance'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,
@@ -75,5 +79,6 @@ export const START_ROOM = {
   // leap from.
   npcs: [
     { art: 'dummy', enemy: 'dummy', x: 21, y: 11, patrol: [18, 24] },
+    { art: 'bunny', enemy: 'bunny', x: 20, y: 16, patrol: [16, 26] },
   ],
 };

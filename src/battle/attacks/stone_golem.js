@@ -2,7 +2,8 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Stone Golem's attacks. It's a heap of cave stone with ice crystals
 // growing out of it, slow and enormously heavy, so it fights with what it's
-// made of: a stone fist that punches the whole width of the box, crystals
+// made of: a fist that comes down wherever it's finished thinking about
+// (it takes a while: count the dots), crystals
 // that grow out of the floor and roof and shatter, a stamp that heaves the
 // floor up in a wave of rocks, and geodes that crack open full of ice.
 //
@@ -13,23 +14,7 @@ import { defineBulletArt } from '../projectiles.js';
 
 const STONE = { k: '#1a1624', S: '#c8c2d4', s: '#9a94a8', d: '#6e6880', D: '#4e4a5c', c: '#4f9fd8', i: '#9fe0ff', I: '#eafaff' };
 
-// The golem's fist, punching right, and punching left. Its hitbox is the
-// whole fist, knuckles to wrist.
-const FIST = [
-  '..kkkkkkkk..',
-  '.kdsSSSSSSk.',
-  'kdsskSskSSSk',
-  'kdssksskssSk',
-  'kddsssssssSk',
-  'kdddkssksssk',
-  '.kddkkkkkkk.',
-  '..kkk.......',
-];
-const mirror = (rows) => rows.map((row) => [...row].reverse().join(''));
-defineBulletArt('golemFist', { frames: [FIST], palette: STONE, hitbox: { w: 10, h: 6 } });
-defineBulletArt('golemFistLeft', { frames: [mirror(FIST)], palette: STONE, hitbox: { w: 10, h: 6 } });
-
-// A chip of stone knocked off by a punch or a stamp.
+// A chip of stone knocked off by a slam or a stamp.
 defineBulletArt('golemPebble', {
   frames: [['.S.', 'Ssd', '.d.'], ['.s.', 'dSs', '.s.']],
   palette: STONE,
@@ -85,52 +70,107 @@ defineBulletArt('golemGeode', {
   frameSeconds: 0.45,
 });
 
+// The golem's thought bubble over the spot it's thinking about, filling up
+// one dot at a time (harmless).
+const thought = (dots) => [
+  '.sssssssss.',
+  'sIIIIIIIIIs',
+  `sI${[1, 2, 3].map((n) => (dots >= n ? 'D' : 'I')).join('I')}IIIs`,
+  'sIIIIIIIIIs',
+  '.sssssssss.',
+  '..ss.......',
+  '.s.........',
+];
+for (const dots of [1, 2, 3]) {
+  defineBulletArt(`golemThink${dots}`, { frames: [thought(dots)], palette: STONE, radius: 1 });
+}
+
+// Its fist coming down on the spot, knuckles first, seen from above.
+defineBulletArt('golemSlam', {
+  frames: [[
+    '.kkkkkkkkk.',
+    'kSSkSSkSSdk',
+    'kSskSskSsdk',
+    'kssksskssdk',
+    'kdddddddddk',
+    'kdsssssssDk',
+    'kdssssssdDk',
+    '.kdddddDDk.',
+    '..kkkkkkk..',
+  ]],
+  palette: STONE,
+  hitbox: { w: 11, h: 9 },
+});
+
 export const STONE_GOLEM_ATTACKS = {
-  // Rock Fist. A stone fist blinks at one side of the box, level with you,
-  // then punches straight across. When it hits the far wall it knocks loose
-  // a spray of pebbles that bounce back the way it came.
-  golemFist(box, density, { Shot, every, rand, clamp, shuffleBag }) {
-    const side = shuffleBag(['left', 'right']);
-    let fists = [];
-    const punch = every(1.25, 1.55, (bullets, soul) => {
-      const fromLeft = side() === 'left';
-      const fist = new Shot({
-        x: fromLeft ? box.x + 6 : box.x + box.w - 6,
-        y: clamp(soul.y + rand(-3, 3), box.y + 5, box.y + box.h - 5),
-        vx: fromLeft ? 60 : -60,
-        accel: 140,
-        warn: 0.7,
-        art: fromLeft ? 'golemFist' : 'golemFistLeft',
-      });
-      bullets.push(fist);
-      fists.push(fist);
-    });
+  // "...STILL THINKING." The golem is slow, but it gets there. It picks a
+  // spot (where you are, or, every other time, where you're heading) and a
+  // thought bubble pops up over it, and fills, one dot at a time: one... two...
+  // three. On the third dot its fist blinks over the spot and comes down,
+  // knocking a pebble
+  // each way along the ground. It starts thinking about the next spot before
+  // the last one lands, so count the dots: the bubble with three goes first.
+  // Every third is a big think: when it's done, its whole flat hand comes
+  // down right across the box, through you and along the way you're going
+  // (it blinks first). Step off sideways.
+  golemThinking(box, density, { Shot, clamp, rand }) {
+    const DOT = 0.5;
+    let marks = [];
+    let count = 0;
+    let timer = 0.1;
+    let last = null;
+    let vx = 0;
+    let vy = 0;
     return {
-      duration: 6.5,
+      duration: 7.6,
       update: (dt, bullets, soul) => {
-        punch(dt, bullets, soul);
-        for (const fist of fists) {
-          if (fist.age < fist.warn) continue;
-          const hitWall = fist.vx > 0 ? fist.x >= box.x + box.w - 6 : fist.x <= box.x + 6;
-          if (!hitWall) continue;
-          fist.done = true;
-          if (!bullets.includes(fist)) continue;
-          fist.life = fist.age - fist.warn;
-          const back = -Math.sign(fist.vx);
-          fist.vx = 0;
-          for (let i = 0; i < 4; i++) {
-            bullets.push(new Shot({
-              x: fist.x,
-              y: fist.y + rand(-3, 3),
-              vx: back * rand(25, 55),
-              vy: -rand(30, 75),
-              gravity: 140,
-              life: 1.6,
-              art: 'golemPebble',
-            }));
+        if (last && dt > 0) {
+          vx += ((soul.x - last.x) / dt - vx) * Math.min(1, dt * 6);
+          vy += ((soul.y - last.y) / dt - vy) * Math.min(1, dt * 6);
+        }
+        last = { x: soul.x, y: soul.y };
+        timer -= dt;
+        if (timer <= 0 && marks.length < 3) {
+          timer += 0.8;
+          count++;
+          const lead = count % 2 === 0 ? DOT * 3 : 0;
+          marks.push({
+            x: clamp(soul.x + vx * lead + rand(-2, 2), box.x + 6, box.x + box.w - 6),
+            y: clamp(soul.y + vy * lead + rand(-2, 2), box.y + 6, box.y + box.h - 6),
+            t: 0,
+            dots: 0,
+            wide: count % 3 === 0,
+          });
+        }
+        for (const mark of marks) {
+          mark.t += dt;
+          const dots = Math.min(Math.floor(mark.t / DOT) + 1, 4);
+          if (dots === mark.dots) continue;
+          mark.dots = dots;
+          if (dots <= 3) {
+            bullets.push(new Shot({ x: mark.x, y: mark.y, art: `golemThink${dots}`, harmless: true, life: DOT }));
+            // With the third dot, its fist's shadow, blinking, then the fist.
+            // (A big think, every third: its whole flat hand, right across the box.)
+            if (dots === 3 && mark.wide) {
+              // (Laid along the way you're going.)
+              const row = clamp(soul.y, box.y + 5, box.y + box.h - 5);
+              const column = clamp(soul.x, box.x + 5, box.x + box.w - 5);
+              const across = Math.abs(vx) >= Math.abs(vy);
+              for (let along = 6; along < 80; along += 11.5) {
+                bullets.push(new Shot({ x: across ? box.x + along : column, y: across ? row : box.y + along, art: 'golemSlam', warn: DOT, life: 0.3 }));
+              }
+            } else if (dots === 3) {
+              bullets.push(new Shot({ x: mark.x, y: mark.y, art: 'golemSlam', warn: DOT, life: 0.3 }));
+            }
+            continue;
+          }
+          mark.done = true;
+          if (mark.wide) continue;
+          for (const side of [-1, 1]) {
+            bullets.push(new Shot({ x: mark.x + side * 5, y: mark.y, vx: side * 36, vy: -24, gravity: 120, life: 0.6, art: 'golemPebble' }));
           }
         }
-        fists = fists.filter((fist) => !fist.done);
+        marks = marks.filter((mark) => !mark.done);
       },
     };
   },

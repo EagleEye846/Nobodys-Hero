@@ -1,0 +1,367 @@
+# HADDOCK'S LIGHT (Chapter 5): the end of the causeway. The garden and the jetty at the foot of
+# the tower, Haddock's round parlour, the curving stair with the height marks, and the little
+# room at the top. (draft).
+# A section with `_ves` or `_bramble` on the end is what they say after it.
+
+[save_point]
+The crystal glows under the lamp, steady as a lightman's night.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse, salted stiff.
+
+[chest_empty]
+An empty chest. The salt has got into the hinges.
+
+# --- THE GARDEN AND THE JETTY ------------------------------------------------------
+
+[door_sign]
+A board on a post: HADDOCK'S LIGHT. LIGHTMAN IN. KNOCK HARD, HE'S A BIT DEAF.
+
+# (draft)
+[door_sign_ves]
+{smile}Knock hard. Right.
+
+[door_lantern]
+A lantern on a post by the door, lit. Haddock has trimmed the wick this very evening. Haddock always does.
+
+[door_lantern_after]
+A lantern on a post by the door, lit. The wick is trimmed square, the way Haddock did it. Folk from the town take turns now.
+
+[door_bottles]
+Bottles on posts, a message in each. They all say COME HOME.
+
+[door_bottles_bramble]
+{sad}...Bit sad for a garden.
+
+[door_buoys]
+A pile of buoys, painted and repainted. HADDOCK, they say, and HADDOCK, and HADDOCK.
+
+[door_pots]
+Crab pots, stacked in a tidy tower. One has a flower growing out of it.
+
+[door_barrel]
+A rain barrel. It is full, because it is always full.
+
+[door_rope]
+A coil of rope on the jetty's approach, flaked down neatly.
+
+[door_lifebuoy]
+A lifebuoy on a post, scrubbed white. The rope on it is new.
+
+[door_bother]
+The Bother, a stout little rowboat with a blue stripe, moored to the jetty. The oars lie shipped, ready, and there is a bailing tin in the bottom.
+
+[door_pouch]
+A purse in the flowerbed, tucked in among the posies where somebody hid it from the gulls.
+
+[door_rock]
+The rock the light stands on, flat as a table and scoured white by the spray.
+
+[door_sea]
+The sea, grey-green and heaving, all the way round the rock.
+
+[door_wall]
+The tower's white brick, whitewashed every year. It curves away overhead into the rain.
+
+# (draft) after the storm.
+[door_wall_calm]
+The tower's white brick, whitewashed every year. It curves away overhead into a clear sky.
+
+[door_window]
+A window low down in the tower, with a warm lamp in it.
+
+[door_niche]
+A little lamp, in a niche in the brick.
+
+[door_turf]
+A garden on a rock: turf, flowers, and a good deal of salt.
+
+[door_path]
+A gravel path, raked.
+
+[door_planks]
+The jetty's planks, scrubbed pale.
+
+# --- THE PARLOUR ---------------------------------------------------------------------
+
+[parlour_cot]
+A cot against the wall, the blanket pulled up tight. A walrus-sized dent in the pillow.
+
+[parlour_stove]
+A round iron stove with a kettle on it, ticking. The kettle is off the boil, as always, in case anybody comes.
+
+# (draft) World reacts: after the chapter (Haddock is gone).
+[parlour_stove_calm]
+A round iron stove, gone cold. The kettle on it is still full.
+
+# (draft)
+[parlour_stove_calm_ves]
+{sad}He always kept it full.
+
+[parlour_tides]
+A tide board, chalked up to the day. Underneath, in different chalk: STILL HERE.
+
+# (draft) World reacts: after the chapter (Haddock is gone).
+[parlour_tides_calm]
+A tide board, chalked up to the day he went out. Underneath, in different chalk: STILL HERE. Nobody has rubbed it out.
+
+[parlour_ledger]
+HADDOCK'S LIGHT. Lit, lit, lit, lit, lit...
+
+One night, nothing is written at all.
+
+[parlour_tea]
+A little table at the chair's elbow: a lamp, and a mug with a ring of tea gone cold in the bottom.
+
+[parlour_crate]
+A crate of spare wicks, labelled in careful capitals.
+
+[parlour_barrel]
+A barrel of lamp oil. It smells of paraffin and biscuits.
+
+[parlour_lifebuoy]
+A lifebuoy on a post, and a mug hung on it. Somebody has given up on hooks.
+
+[parlour_wall]
+Round white brick, whitewashed, with a tide board chalked up on it.
+
+[parlour_window]
+A window on the sea. It's too dark out there to see anything but the rain.
+
+# (draft) after the storm.
+[parlour_window_calm]
+A window on the sea. It's quiet out there now.
+
+[parlour_floor]
+Warm boards, worn pale in a path from the chair to the door.
+
+# --- THE STAIR -----------------------------------------------------------------------
+
+[stair_marks]
+Marks scratched in the whitewash, with dates beside them: a row of small ones, climbing, and one on its own, a little higher.
+
+The row stops partway.
+
+[stair_marks_bramble]
+{sad}...He was littler than me.
+
+[stair_hook]
+An oilskin on a peg, big enough for a walrus. The peg under it, set low, is empty.
+
+# (draft) World reacts: after the chapter (Haddock is gone).
+[stair_hook_calm]
+Two pegs, one big, one set low. Both empty now.
+
+[stair_crate]
+A crate of lamp-glass, packed in straw.
+
+[stair_barrel]
+A barrel of oil, lashed to the rail so it can't roll down.
+
+[stair_rope]
+A coil of rope, left on the stair. Somebody has been up and down with it, and not put it away.
+
+[stair_oil_crates]
+Crates of lamp oil, stacked against the wall under the niche. The top ones are scuffed, as if something small used to climb them a lot.
+
+[stair_hidey]
+On top of the oil crates, where a small boy could climb and a big walrus couldn't: a biscuit tin. Inside are three shells, a whistle with no pea in it, a knitted gansey, and a list in crayon:
+
+HOW TO BE A HERO.
+1. BIG COAT.
+2. A BOAT.
+3. DONT BE SCARED.
+
+Number three has been crossed out, and written again underneath, bigger.
+
+# (draft)
+[stair_hidey_bramble]
+{sheepish}...It fits me. Is that all right? He won't mind?
+
+[stair_hidey_ves]
+{smile}He'd want it worn. Mind the elbows. Somebody darned those twice.
+
+[stair_hidey_empty]
+The biscuit tin, with the shells and the whistle still in it, and the list folded back on top. You leave those where they are.
+
+[stair_wall]
+Whitewashed brick, curving away round the stair.
+
+[stair_window]
+A narrow window on the storm.
+
+# (draft) after the storm.
+[stair_window_calm]
+A narrow window on a quiet sea.
+
+[stair_niche]
+A little lamp in a niche, lit, to light the stair.
+
+[stair_floor]
+Worn boards, each step hollowed in the middle.
+
+# --- THE LITTLE ROOM ----------------------------------------------------------------
+
+[room_bed]
+Made. The sheets are new.
+
+[room_drawing]
+A child's drawing. A lighthouse, and two small people under it.
+
+One says ME. The other says THE HERO.
+
+# (draft)
+[room_drawing_ves]
+{smile}...Good lighthouse.
+
+[room_boat]
+A little wooden boat. Someone has painted BOTHER II on the side.
+
+[room_chest]
+A sea chest at the foot of the bed. Inside, folded and aired, there is a LIGHTMAN'S COAT: heavy oilskin, mended at the cuffs, smelling of paraffin.
+
+[room_wall]
+White brick, curving in. Someone has dusted it.
+
+[room_window]
+A small window, and a clean sill, and the sea.
+
+[room_floor]
+Scrubbed boards. Nothing on them, anywhere, is out of place.
+
+# After the chapter (haddock_gone). (draft).
+[parlour_chair_after]
+A worn red armchair under the window. The cushion still has the shape of him in it.
+
+# --- INDOOR DETAILS (2026-11-08) ------------------------------------------------
+
+# (draft)
+[in_parlour_calendar]
+A calendar on a nail. Every day crossed off, one neat cross a night.
+
+# (draft)
+[in_parlour_calendar_calm]
+A calendar on a nail. One neat cross a night, and then no more.
+
+# (draft)
+[in_parlour_mug]
+A rail of four pegs. One mug, on the first peg.
+
+# (draft)
+[in_parlour_mug_calm]
+A rail of four pegs. One mug, washed and hung on the first.
+
+# (draft)
+[in_parlour_sketch]
+A pencil sketch of a little boat with BOTHER on her side, drawn over and over until it was right.
+
+# (draft)
+[in_parlour_shelf]
+A shelf of tins, all alike, the labels lined up: TEA, TEA, TEA, SUGAR, TEA, WICKS.
+
+# (draft)
+[in_parlour_ship]
+A ship in a bottle, dusted. There is a very small walrus at the wheel.
+
+# (draft)
+[in_parlour_rug]
+A rag rug in front of the chair, worn thin in two places, the shape of boots.
+
+# (draft)
+[in_parlour_boots]
+Big sea boots by the door, side by side, toes lined up.
+
+# (draft)
+[in_stair_sketch]
+A pencil drawing of this light, every brick of it. Somebody had a lot of evenings.
+
+# (draft)
+[in_room_rug]
+A little rag rug by the bed, shaken out and laid straight.
+
+# --- More of a keeper's home ----------------------------------------------------
+# (draft)
+[in_cat_bed]
+A wicker basket with a cushion in it, and a ginger cat in that, asleep. It does not wake up for you.
+
+[in_cat_bed_bramble]
+{grin}It's got the best bed in the house.
+
+[in_rods]
+Three fishing rods and a landing net, leant in the corner. The lines are wound on neat. The creel smells of a long time ago.
+
+[in_books]
+Books in two leaning piles: tide tables, a fat one about knots, a thin one of poems. A pair of spectacles on top, folded.
+
+[in_coats]
+A navy coat as big as a sail, a red scarf, a yellow hat. All on pegs at walrus height.
+
+[in_plant]
+A red geranium in a clay pot. Somebody waters it. One leaf has gone brown and been left.
+
+[in_net]
+A net over a trestle, half mended. The needle is still in it, waiting.
+
+[in_lamp]
+An oil lamp on a stool, lit and turned low. The matches beside it are the long kind.
+
+[door_bench]
+A workbench against the tower, out of the wind: a float being painted, a tin of tar, a pair of pliers. Everything put back where it goes.
+
+[door_washing]
+A washing line between two posts: a vest the size of a tent, socks, a tea towel. Rained on, then dried, then rained on again.
+
+[door_barrow]
+A barrow for bringing the pots up from the jetty. One handle is tied on with string.
+
+# --- THE LIFE PASS, ROUND 2: the headland (only outdoor things; the rooms inside are as they were) ---
+
+[r5s_hd_cairn]
+A cairn of beach stones at the headland's edge, each a different colour, the top one white. They are stacked with great care. Somebody adds one now and then.
+
+[r5s_hd_cairn_ves]
+{smile}A stone for something. I wonder what.
+
+[r5s_hd_cairn_bramble]
+{thinking}It's like counting without any numbers.
+
+[r5s_hd_cairn_after]
+A cairn of beach stones at the headland's edge, each a different colour, the top one white. There is a new stone on top, still damp, still warm from a hand. Folk from the town are keeping it up.
+
+[r5s_hd_cairn_after_ves]
+{thoughtful}Somebody's counting for him.
+
+[r5s_hd_cairn_after_bramble]
+{sad}It's a good cairn.
+
+[r5s_hd_rod]
+A fishing rod propped against a rock, the line wound in a neat figure of eight. Haddock's. He has never been seen to catch anything, and says that's the point.
+
+[r5s_hd_rod_ves]
+{smile}That's the right way to fish.
+
+[r5s_hd_rod_bramble]
+{grin}You don't need a fish. You need a rod and a good rock.
+
+[r5s_hd_rod_after]
+A fishing rod propped against a rock, the line still wound in a neat figure of eight. Nobody has moved it. Nobody has liked to.
+
+[r5s_hd_rod_after_ves]
+{thoughtful}Leave it where it is.
+
+[r5s_hd_rod_after_bramble]
+{sad}It can wait. It's good at waiting.
+
+[r5s_hd_trap]
+A crab trap by the path, the door propped open with a stone on purpose. A note on the lid: GO ON, THEN. (YOU CAN COME BACK FOR TEA.)
+
+[r5s_hd_trap_ves]
+{smile}The politest trap I've ever met.
+
+[r5s_hd_trap_bramble]
+{glee}They come back for tea!

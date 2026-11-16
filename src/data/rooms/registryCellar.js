@@ -12,6 +12,9 @@
 //   I  old stone pillar (solid)
 //   J  broken pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const REGISTRY_CELLAR = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'registry_cellar',
@@ -61,6 +64,7 @@ export const REGISTRY_CELLAR = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.registry_cellar ?? []),
     // The seal: three levers, in order (the Names, the Hours, the Seal), and the gate they hold.
     { sprite: 'gate_narrow', x: 6, y: 2, text: 'cellar_gate', opensWith: ['ink_names', 'ink_hours', 'ink_seal'], inOrder: true, openText: 'cellar_gate_open', resetText: 'cellar_gate_reset' },
     { sprite: 'gate_narrow', x: 7, y: 2, text: 'cellar_gate', opensWith: ['ink_names', 'ink_hours', 'ink_seal'], inOrder: true },
@@ -75,6 +79,8 @@ export const REGISTRY_CELLAR = {
     { sprite: 'book_heap', x: 8, y: 12, text: 'stacks_heap' },
     { sprite: 'water_mark', x: 21, y: 8, text: 'water_mark', walkable: true },
     { sprite: 'gold_pouch', x: 3, y: 12, text: 'cellar_purse', gold: 260, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['registry_cellar'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', '!': 'cracked_floor', I: 'city_pillar', J: 'city_pillar' },
 

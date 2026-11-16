@@ -1,17 +1,28 @@
-// THE BILGE: the lowest room, black timbers sweating, the ship's own ballast water slopping about in the middle. The
-// water goes where the list sends it: leaning to PORT (as found) it stands over the north half (rows 3-6, x 9-22), the south half is dry bed; leaning to
-// STARBOARD it stands over the south half (rows 8-11) and the north bed shows. The captain's KEY hangs on a nail on the sump board at (15,4): under
-// the north water to port, reachable (from row 5) to starboard. A purse (16,10) on the south bed is reachable only leaning
-// to port. Row 7 is dry both ways, so you can always walk across. A crank on each landing (5,7), (25,7) turns her.
-// Lantern: a boy bailing with a bucket that is not there, his footprints, a handprint on the hull, chalk (HOME).
+// THE BILGE: the lowest room, black timbers sweating, the ship's own ballast water slopping about in the middle. Nothing
+// to turn down here: SHE LURCHES BY HERSELF (shipList.js `list.lurch`). Every few seconds (3.5 of play, after the water
+// has settled) a creak and a shudder, a second's warning, and she rolls over the other way, and the black water runs
+// across the floor to the low side. The middle of the floor (x 9-22) is never all dry: leaning to PORT (as found, every
+// time you come in: `list.own`) the water stands over the north half (rows 3-7) and the south bed (rows 8-11) is dry;
+// to STARBOARD it runs south (rows 7-11) and the north bed shows. Row 7 is always under. The two landings, west (x 1-8,
+// the ladder) and east (x 23-28), are always dry.
+// THE PUZZLE (a timed dash): the captain's KEY hangs on a nail on the sump board at (15,4), out in the north bed. Wait on
+// the west landing for her to roll to starboard, run the seven tiles out to it while the water is away, take it, and
+// get back before she rolls again. Caught by the water you are washed to the nearest dry boards and lose a little HP;
+// never worse, and the landings are always there. A purse (16,10) lies out on the south bed (dry to port), another
+// (26,4) and a sea chest on the east landing.
+// Lantern: a boy bailing with a bucket that is not there, his footprints, a handprint on the hull, chalk.
 // Taking the key is the gift (the captains_key keepsake and the friends' answers): the cabin door on the deck is what turns to it.
-// Scene ship_bilge_in (x 4, rows 4-6, once). The ladder (2-3, row 3) is the way back up to the hold.
+// Scene ship_bilge_in (x 4, rows 3-11, once). The ladder (2-3, row 3) is the way back up to the hold.
 // Tile key: # hull (solid)   W planking face (solid)   . bilge floor   ~ the ballast water (solid)
+
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
 
 export const SHIP_BILGE = {
   id: 'ship_bilge',
   name: 'THE BILGE',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.2,
   music: 'ghostShip',
   musicFrom: 'list',
   ambience: 'ghost_ship_deep',
@@ -28,7 +39,7 @@ export const SHIP_BILGE = {
       '#........~~~~~~~~~~~~~.......#',
       '#........~~~~~~~~~~~~~~......#',
       '#.........~~~~~~~~~~~~~......#',
-      '#............................#',
+      '#........~~~~~~~~~~~~~~......#',
       '#............................#',
       '#............................#',
       '#............................#',
@@ -37,8 +48,9 @@ export const SHIP_BILGE = {
       '##############################',
     ],
 
-  // The STARBOARD map (a space is "same as the port map above").
-  list: { star: [
+  // The STARBOARD map (a space is "same as the port map above"). Her lean is the room's own (port each time you come in),
+  // and she lurches by herself; the water washes you off a tile after 0.3 s.
+  list: { own: true, lurch: { every: 3.5, warn: 1, first: 4 }, creep: 0.9, wait: 0.3, star: [
       '                              ',
       '                              ',
       '                              ',
@@ -59,14 +71,13 @@ export const SHIP_BILGE = {
     { x: 2, y: 3, w: 2, h: 1, to: 'ship_hold', spawn: { x: 34, y: 13 } },
   ],
 
-  cutscenes: [{ x: 4, y: 4, w: 1, h: 3, scene: 'ship_bilge_in' }],
+  // The whole column x 4 (rows 3-11), so you can't step round it on the way in.
+  cutscenes: [{ x: 4, y: 3, w: 1, h: 9, scene: 'ship_bilge_in' }],
 
   textFile: 'interactions/ghostship.txt',
   props: [
     { sprite: 'gs_ladder', x: 2, y: 3, flat: true, walkable: true, text: 'bilge_ladder' },
     { sprite: 'gs_ladder', x: 3, y: 3, flat: true, walkable: true, text: 'bilge_ladder' },
-    { sprite: 'gs_crank', x: 5, y: 7, text: 'bilge_crank', listWheel: { to: 'toggle', port: 'crank_port', star: 'crank_star', busy: 'crank_busy', already: 'crank_already' } },
-    { sprite: 'gs_crank', x: 25, y: 7, text: 'bilge_crank', listWheel: { to: 'toggle', port: 'crank_port', star: 'crank_star', busy: 'crank_busy', already: 'crank_already' } },
     { sprite: 'gs_key_hook', x: 15, y: 4, text: 'bilge_key', gives: 'captains_key', react: true, taken: { sprite: 'gs_key_hook_bare', text: 'bilge_key_taken' } },
     { sprite: 'gold_pouch', x: 16, y: 10, text: 'bilge_purse', gold: 60, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'gold_pouch', x: 26, y: 4, text: 'bilge_purse_b', gold: 50, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
@@ -120,14 +131,17 @@ export const SHIP_BILGE = {
     { sprite: 'gs_lantern_smashed', x: 18, y: 8, flat: true, walkable: true },
     { sprite: 'gs_doll', x: 26, y: 8, flat: true, walkable: true },
     { sprite: 'gs_crate_smashed', x: 3, y: 9, flat: true, walkable: true },
-    { sprite: 'gs_barrel_staves', x: 12, y: 7, flat: true, walkable: true },
+    { sprite: 'gs_barrel_staves', x: 6, y: 7, flat: true, walkable: true },
     { sprite: 'gs_shoe', x: 9, y: 10, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_bilge ?? []),
   ],
   tileTexts: { '#': 'bilge_wall', W: 'bilge_wall', '~': 'bilge_water' },
 
-  // The deckhand patrols the middle band (row 7, x 11-20: dry at both leans) and flees the light; the powder monkey the east landing (row 9, x 24-27) and stops dead in it. Neither is on a tile that changes, a ladder, a crank or the key's pool.
+  // Both on the east landing, which is always dry: the deckhand patrols its north end (row 5, x 24-27) and flees the light; the powder monkey its
+  // south end (row 9, x 24-27) and stops dead in it. Neither is on a tile that changes, the ladder, the scene's column (x 4) or the key's run.
   npcs: [
-    { enemy: 'ghost_deckhand', x: 12, y: 7, patrol: [11, 20], behaviour: 'patrol', lantern: 'flee' },
+    { enemy: 'ghost_deckhand', x: 25, y: 5, patrol: [24, 27], behaviour: 'patrol', lantern: 'flee' },
     { enemy: 'powder_monkey', x: 25, y: 9, patrol: [24, 27], behaviour: 'patrol', lantern: 'freeze' },
   ],
 };

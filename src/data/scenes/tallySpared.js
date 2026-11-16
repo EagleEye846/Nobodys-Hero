@@ -1,5 +1,6 @@
 // QUIRE SPARED (a secret, Chapter 3): you let it count you. It reads out the one
-// word you wrote in its book, and it can finally close. The splinter of the
+// word you wrote in its book, lets go of the sum it wished for (two present will
+// do), and it can finally close. The splinter of the
 // Fallen Star in its binding comes loose and drifts into your hand (the
 // `star_shard`, for Teasel's forge), and it settles back on its stand to rest.
 // The hero never speaks. Every line is a (draft).
@@ -27,7 +28,7 @@ export const TALLY_SPARED = {
     { do: 'say', who: 'ves', text: '{surprised}Me? ...Vesper. With a V.\n\n{bored}Put "present." I\'m not going anywhere. I physically can\'t.' },
     { do: 'wait', seconds: 0.8 },
     { do: 'say', who: 'tally', text: 'Two.\n\nTwo present.' },
-    { do: 'say', who: 'tally', text: 'It comes out right.\n\nIt comes out RIGHT.' },
+    { do: 'say', who: 'tally', text: 'It doesn\'t come out right.\n\n...It doesn\'t have to.' },
     { do: 'sound', name: 'shimmer' },
     { do: 'say', text: 'Quire shuts its great cover very carefully, like a book at the end of a long night. As it goes, something pale slips out of the binding and drifts across the hall into your open hand.' },
     { do: 'give', item: 'star_shard' },

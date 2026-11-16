@@ -33,6 +33,8 @@
 //   .  packed dirt floor
 //   J  snapped timber (solid, standing)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_CAVE_IN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_cave_in',
@@ -112,6 +114,7 @@ export const DIGGINGS_CAVE_IN = {
   // two stumps to reset them, signs, a hard hat and purses.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_cave_in ?? []),
     // A save point near the way in (added so the mines have more of them).
     { sprite: 'savepoint', x: 2, y: 11, save: true },
     { sprite: 'mine_cart', x: 24, y: 8, cart: 'c', text: 'cart_stuck' },
@@ -161,9 +164,13 @@ export const DIGGINGS_CAVE_IN = {
   // A drillbug in the west cavern (row 3, x 4 to 10) and a slagling in the east one (row
   // 13, x 22 to 27). Clear of the rocks' passage, the cart and its run (row 8), and the
   // quake scene (it has no walking in it).
+  // AMBUSH: the slagling has gone cold and still in the east cavern's south (24,13), passing for a
+  // lump of slag, till you come within two tiles (now and then a crack in it glows: `look:
+  // 'slag_lump'`, src/overworld/hideouts.js). Five rows below the line and the plate (row 8),
+  // so pushing the rocks round never wakes it.
   npcs: [
     { enemy: 'drillbug', x: 6, y: 3, patrol: [4, 10] },
-    { enemy: 'slagling', x: 25, y: 13, patrol: [22, 27] },
+    { enemy: 'slagling', x: 24, y: 13, patrol: [24, 24], behaviour: 'disguise', look: 'slag_lump', reach: 2 },
     // A magpie mole in the east cavern's north-east (row 5, x 27 to 30), well off the line
     // (row 8), the plate and the quake trigger at the mouth (13,8).
     { enemy: 'magpiemole', x: 28, y: 5, patrol: [27, 30] },

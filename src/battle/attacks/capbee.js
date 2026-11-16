@@ -1,12 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Pix } from '../../data/art/pixKit.js';
-import { withSnipes } from './snipes.js';
+import { PathShot, Zone, Guide } from './coastKit.js';
 
-// The Flatcap Bee's attacks. A tweed-capped bumblebee with a clover patch to
-// defend: his mates doing a waggle dance across the box (weaving lines of
-// little bees), honey dripping from above that splashes where it lands, and
-// the flat cap itself, thrown out like a boomerang and brought back. He
-// stands to the right of the box.
+// The Flatcap Bee's attacks. A tweed-capped bumblebee who has worked the same
+// clover patch for forty years, so every attack is bee business:
+//   - Waggle dance: a mate lands and waggles along a line; when the dance
+//     ends, a file of bees streams out along the line it pointed.
+//   - Honeycomb: he caps cells with wax one after another, then honey floods
+//     every cell that isn't capped. Get on a lid.
+//   - Flower round: clover springs up at your feet, and he visits the flowers
+//     in the order they opened, the next leg dotted out first.
+// He stands to the right of the box.
 
 const BEE = { k: '#2a2018', y: '#ffcf2e', Y: '#e39c1c', b: '#3a2f28', v: '#cfe8f6', w: '#ffffff', T: '#8a8f7a', t: '#5e6450', u: '#b9bd9f', h: '#f0a020', H: '#c87a10', l: '#fff2a0' };
 
@@ -52,147 +56,189 @@ function cap() {
 }
 defineBulletArt('beeCap', { frames: [cap()], palette: BEE, radius: 4.6, spin: 7 });
 
+// A clover flower springing up (harmless): bud, then open.
+function clover(open) {
+  const g = new Pix(9, 9);
+  g.line(4, 5, 4, 8, 'g');
+  if (open) {
+    for (const [x, y] of [[2, 2], [6, 2], [4, 1], [3, 4], [5, 4]]) g.disc(x, y, 1.6, 1.6, 'p');
+    g.disc(4, 3, 1.2, 1.2, 'P');
+  } else {
+    g.disc(4, 4, 1.6, 2, 'p');
+  }
+  g.outline('k');
+  return g.rows();
+}
+const FLOWER = { ...BEE, g: '#5aa040', p: '#f2b8d8', P: '#d070a0' };
+defineBulletArt('beeClover', { frames: [clover(false), clover(true)], palette: FLOWER, radius: 1, frameSeconds: 0.25 });
+
+// The dancer: a bee waggling its bottom (two frames, side to side), drawn facing right.
+defineBulletArt('beeDancer', { frames: [littleBee(0).map((r) => [...r].reverse().join('')), littleBee(1).map((r) => [...r].reverse().join(''))], palette: BEE, radius: 3, rotate: true, frameSeconds: 0.06 });
+// A bee in flight facing the way it goes (drawn facing right).
+defineBulletArt('beeFlyer', { frames: [littleBee(0).map((r) => [...r].reverse().join('')), littleBee(1).map((r) => [...r].reverse().join(''))], palette: BEE, radius: 3, rotate: true, frameSeconds: 0.07 });
+
+// One cell of comb: drawn as a six-sided cell, empty wax, capped, or brim full of honey.
+const cellPaint = (kind) => (ctx, z) => {
+  const cx = z.x + z.w / 2;
+  const cy = z.y + z.h / 2;
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const a = Math.PI / 6 + (i * Math.PI) / 3;
+    const px = cx + Math.cos(a) * 8.6;
+    const py = cy + Math.sin(a) * 8.6;
+    if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+  }
+  ctx.closePath();
+  if (kind === 'honey') {
+    ctx.fillStyle = z.age < z.warn ? 'rgba(240,160,32,0.35)' : '#f0a020';
+    ctx.fill();
+    if (z.age >= z.warn) {
+      ctx.fillStyle = '#fff2a0';
+      ctx.fillRect(cx - 3, cy - 3, 3, 1);
+    }
+  } else {
+    ctx.fillStyle = '#e8d8a0';
+    ctx.fill();
+    ctx.strokeStyle = '#b89848';
+    ctx.stroke();
+    ctx.fillStyle = '#c8b070';
+    ctx.fillRect(cx - 2, cy - 1, 4, 2);
+  }
+  ctx.strokeStyle = '#8a5a10';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+};
+
 export const CAPBEE_ATTACKS = {
-  // Waggle: his mates dance across, weaving up and down in step like a wave.
-  // Three bees in a four-lane wave, each wave weaving a little later than the
-  // last, so there is always a lane through if you follow the beat. Seven waves.
+  // Waggle dance: one of his mates lands in the box and does the waggle
+  // dance, wiggling along a short line (a dotted line shows the way it's
+  // pointing). The dance tells the others where to go: when it ends, a file
+  // of bees comes streaming out of the dancer along that exact line. Four
+  // dances, each pointed at where you were when it began.
   beeWaggle(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const DANCE = 0.85;
     let t = 0;
-    let waves = 0;
-    let next = 0.2;
-    class Weaver extends Shot {
-      update(dt, box2) {
-        super.update(dt, box2);
-        if (this.age > this.warn) this.y = this.row + Math.sin((this.age - this.warn) * 4.6 + this.phase) * 9;
-      }
-    }
+    let n = 0;
     return {
-      duration: 7.6,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t < next || waves >= 7 || t > 5.8) return;
-        next = t + 0.82;
-        // The free lane is somewhere new, and not the lane you are in.
-        const lanes = [0, 1, 2, 3];
-        const mine = Math.max(0, Math.min(3, Math.floor((soul.y - box.y) / 20)));
-        const free = lanes.filter((l) => l !== mine)[Math.floor(rand(0, 3))];
-        for (const l of lanes) {
-          if (l === free) continue;
-          const row = box.y + 10 + l * 20;
-          const b = new Weaver({ x: box.x + box.w + 6, y: row, vx: -60, warn: 0.3, art: 'beeBuzz', life: 3.2 });
-          b.row = row;
-          b.phase = waves * 0.8 + l * 0.35;
-          bullets.push(b);
+        if (t >= T(0.2 + n * 1.35) && n < 5) {
+          n++;
+          // The dancer lands a little way from you, never on top of you.
+          let x;
+          let y;
+          let tries = 0;
+          do {
+            x = rand(box.x + 10, box.x + box.w - 10);
+            y = rand(box.y + 10, box.y + box.h - 10);
+            tries++;
+          } while (tries < 30 && (Math.hypot(x - soul.x, y - soul.y) < 28 || Math.hypot(x - soul.x, y - soul.y) > 50));
+          const ang = Math.atan2(soul.y - y, soul.x - x);
+          // The waggle run: back and forth along the line, buzzing.
+          bullets.push(new PathShot({
+            art: 'beeDancer', harmless: true, life: DANCE,
+            path: (k) => ({ x: x + Math.cos(ang) * 4 * Math.sin(k * 9), y: y + Math.sin(ang) * 4 * Math.sin(k * 9), a: ang + Math.sin(k * 40) * 0.35 }),
+          }));
+          bullets.push(new Guide({ x, y, angle: ang, length: 120, warn: DANCE, color: '#ffcf2e' }));
+          // The file of bees out along the line.
+          for (let i = 0; i < 5; i++) {
+            bullets.push(new Shot({ x, y, vx: Math.cos(ang) * 105, vy: Math.sin(ang) * 105, art: 'beeFlyer', warn: DANCE + i * 0.1, life: 2 }));
+          }
         }
-        waves++;
       },
     };
   },
 
-  // Honey: honey drips from the top of the box. A bead swells and blinks
-  // first (over your column and either side of it), then falls, and where it
-  // lands it splashes two droplets out sideways. Five rounds of three.
-  beeHoney(box, density, { Shot, rand, clamp }) {
+  // Honeycomb: the box is comb. He flies about capping cells with wax, one
+  // after another (each one he caps gets a pale lid), and then the honey
+  // comes in and fills every cell that isn't capped. Get on a lid before it
+  // floods. Four floods; the cell you're on is never one he caps first.
+  beeComb(box, density) {
+    const T = (s) => s * density;
+    const cells = [];
+    for (let r = 0; r < 5; r++) {
+      for (let c = 0; c < 6; c++) {
+        const x = box.x + c * 16 - (r % 2 ? 8 : 0);
+        const x0 = Math.max(box.x, x);
+        const x1 = Math.min(box.x + box.w, x + 16);
+        if (x1 - x0 < 6) continue;
+        cells.push({ x: x0, y: box.y + r * 16, w: x1 - x0, h: 16 });
+      }
+    }
+    const ROUND = 1.75;
+    const CAPS = 9;
     let t = 0;
-    let rounds = 0;
-    let next = 0.2;
-    let falling = [];
+    let n = 0;
     return {
-      duration: 7.6,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        for (const d of falling) {
-          if (d.age >= d.warn && !d.fallen) {
-            d.fallen = true;
+        if (t >= T(0.2 + n * ROUND) && n < 4) {
+          n++;
+          const inside = (c) => soul.x >= c.x && soul.x < c.x + c.w && soul.y >= c.y && soul.y < c.y + c.h;
+          // Cells to cap: spread out, none the one you're on.
+          const free = cells.filter((c) => !inside(c)).sort(() => Math.random() - 0.5);
+          const capped = [];
+          for (const c of free) {
+            if (capped.length >= CAPS) break;
+            if (capped.every((d) => Math.hypot(d.x - c.x, d.y - c.y) > 20)) capped.push(c);
           }
-          if (d.fallen && d.y > box.y + box.h - 4 && !d.splashed) {
-            d.splashed = true;
-            d.vy = 0;
-            d.vx = 0;
-            d.gravity = 0;
-            d.life = 0;
-            for (const s of [-1, 1]) {
-              bullets.push(new Shot({ x: d.x, y: box.y + box.h - 4, vx: s * 46, vy: -40, gravity: 130, art: 'beeSplat', life: 0.85 }));
-            }
+          const FLOOD = 1.3;
+          capped.forEach((c, i) => {
+            const lid = new Zone({ x: c.x, y: c.y, w: c.w, h: c.h, warn: 0.15 + i * 0.15, life: FLOOD - 0.15 - i * 0.15 + 0.6, paint: cellPaint('lid'), on: () => false });
+            bullets.push(lid);
+          });
+          for (const c of cells) {
+            if (capped.includes(c)) continue;
+            bullets.push(new Zone({ x: c.x + 0.5, y: c.y + 0.5, w: c.w - 1, h: c.h - 1, warn: FLOOD, life: 0.55, paint: cellPaint('honey') }));
           }
         }
-        falling = falling.filter((d) => !d.splashed);
-        if (t < next || rounds >= 5 || t > 5.6) return;
-        next = t + 1.2;
-        const xs = [soul.x + rand(-5, 5), soul.x + rand(-30, -16), soul.x + rand(16, 30)];
-        // A drop is let go at the end of its blink.
-        for (const x of xs) {
-          const d = new Shot({ x: clamp(x, box.x + 6, box.x + box.w - 6), y: box.y + 4, warn: 0.62, art: 'beeDrop', life: 2.2, gravity: 0 });
-          const old = d.update.bind(d);
-          d.update = (dt2, b) => {
-            if (d.age < d.warn && d.age + dt2 >= d.warn) d.gravity = 150;
-            old(dt2, b);
-          };
-          falling.push(d);
-          bullets.push(d);
-        }
-        rounds++;
       },
     };
   },
 
-  // Cap: he doffs his cap and throws it out like a boomerang, one at you and
-  // one or two a little off; each flies out, slows, and comes back along the same
-  // line a bit faster, so the way out is not the way to stand. Four throws
-  // of two, and a flick of the wrist between.
-  beeCap(box, density, { Shot, rand, clamp }) {
+  // Flower round: a clover flower springs up at your feet, and then another,
+  // and another, wherever you are. He visits them in the order they opened:
+  // a dotted line shows the next leg of his round, he flies it, sips a moment,
+  // and moves on. Don't stand where a flower opened, and mind his way between.
+  beeRound(box, density, { Shot }) {
+    const T = (s) => s * density;
+    const SPEED = 95;
+    const SIP = 0.3;
     let t = 0;
-    let throws = 0;
-    let next = 0.2;
-    const T = 1.7;
-    const heading = { x: 0, y: 0 };
-    const seen = { x: null, y: null };
-    class Boomerang extends Shot {
-      update(dt, box2) {
-        this.age += dt;
-        if (this.age < this.warn) return;
-        const s = this.age - this.warn;
-        // Out and back along one line: distance D * sin, a touch faster home.
-        const p = Math.min(1, s / T);
-        const along = this.reach * Math.sin(Math.PI * Math.pow(p, 0.9));
-        this.x = this.ox + Math.cos(this.dir) * along;
-        this.y = this.oy + Math.sin(this.dir) * along;
-        this.angle += dt * 7;
-      }
-    }
+    let real = 0;
+    let n = 0;
+    let at = { x: box.x + box.w + 8, y: box.y + box.h / 2 };
+    let free = 0.9; // when (real seconds) he can next leave
     return {
-      duration: 7.4,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (seen.x !== null && dt > 0) {
-          heading.x = heading.x * 0.85 + ((soul.x - seen.x) / dt) * 0.15;
-          heading.y = heading.y * 0.85 + ((soul.y - seen.y) / dt) * 0.15;
+        real += dt / density;
+        if (t >= T(0.2 + n * 0.7) && n < 8) {
+          n++;
+          const f = { x: soul.x, y: soul.y };
+          const leave = Math.max(free, real + 0.75);
+          const secs = Math.hypot(f.x - at.x, f.y - at.y) / SPEED;
+          const wait = leave - real;
+          const from = at;
+          const flower = new Shot({ x: f.x, y: f.y, harmless: true, art: 'beeClover' });
+          flower.life = wait + secs + SIP;
+          bullets.push(flower);
+          bullets.push(new Guide({ x: from.x, y: from.y, angle: Math.atan2(f.y - from.y, f.x - from.x), length: Math.hypot(f.x - from.x, f.y - from.y), warn: wait, color: '#ffcf2e' }));
+          bullets.push(new PathShot({
+            art: 'beeFlyer', warn: wait, life: secs + SIP,
+            path: (k) => {
+              const u = Math.min(1, k / secs);
+              return { x: from.x + (f.x - from.x) * u, y: from.y + (f.y - from.y) * u, a: Math.atan2(f.y - from.y, f.x - from.x) };
+            },
+          }));
+          at = f;
+          free = leave + secs + SIP;
         }
-        seen.x = soul.x;
-        seen.y = soul.y;
-        if (t < next || throws >= 4 || t > 5.6) return;
-        next = t + 1.55;
-        const ox = box.x + box.w + 7;
-        const oy = clamp(soul.y + rand(-26, 26), box.y + 8, box.y + box.h - 8);
-        const tx = soul.x + heading.x * 0.45;
-        const ty = soul.y + heading.y * 0.45;
-        const aim = Math.atan2(ty - oy, tx - ox);
-        const reach = clamp(Math.hypot(tx - ox, ty - oy) + 18, 60, 120);
-        for (const off of throws % 2 ? [0, 0.42, -0.42] : [0, -0.5]) {
-          const c = new Boomerang({ x: ox, y: oy, warn: off ? 0.75 : 0.55, art: 'beeCap', life: T + 0.05 });
-          c.ox = ox;
-          c.oy = oy;
-          c.dir = aim + off;
-          c.reach = off ? reach * 0.9 : reach;
-          bullets.push(c);
-        }
-        throws++;
       },
     };
   },
 };
-
-// Aimed bees on top, so standing still or running one way is never safe (see snipes.js).
-CAPBEE_ATTACKS.beeWaggle = withSnipes(CAPBEE_ATTACKS.beeWaggle, { art: 'beeBuzz' });
-CAPBEE_ATTACKS.beeHoney = withSnipes(CAPBEE_ATTACKS.beeHoney, { art: 'beeBuzz' });
-CAPBEE_ATTACKS.beeCap = withSnipes(CAPBEE_ATTACKS.beeCap, { art: 'beeBuzz', count: 4, first: 1.0, every: 1.4 });

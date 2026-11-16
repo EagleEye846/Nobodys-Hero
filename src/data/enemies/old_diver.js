@@ -19,7 +19,7 @@ export const OLD_DIVER = {
   feel: { hit: 'brass', idle: 'bubbles', at: [0.55, 0.1], defeat: 'diver', exit: 'sink' },
   // The coast's fights from the Wreck Yard on: the storm one.
   music: 'coastBattleStorm',
-  maxHp: 11700,
+  maxHp: 8700,
   damage: 95,
 
   difficulty: { density: 1.60, speed: 1.45 },
@@ -39,10 +39,9 @@ export const OLD_DIVER = {
 
   // Its attacks live in src/battle/attacks/old_diver.js.
   patterns: [
-    { name: 'diverHarpoon', weight: 3 },
-    { name: 'diverHose', weight: 2 },
-    { name: 'diverBubbles', weight: 2 },
-    { name: 'diverAnchor', weight: 2 },
+    { name: 'diverLamp', weight: 3 },
+    { name: 'diverBoots', weight: 3 },
+    { name: 'diverHose', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -53,7 +52,7 @@ export const OLD_DIVER = {
     { name: 'Bow your head', calm: 30 },
   ],
 
-  rewards: { exp: 3000, coins: 15 },
+  rewards: { exp: 3000, coins: 12 },
 
   // Part of its kit it sometimes leaves behind (src/data/items.js), with the chance of it.
   drops: [{ item: 'brass_helmet', chance: 0.4 }],

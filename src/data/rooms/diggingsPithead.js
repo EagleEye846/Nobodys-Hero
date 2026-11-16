@@ -6,7 +6,8 @@
 // left, being brave about it). A save point, a covered shaft with a winch over
 // it, and the first look at rails: a lone ore cart on a short run of track
 // you can climb in and take for a rattle, just to see what it does.
-// No monsters: it's the top of the line.
+// No monsters: it's the top of the line. In the back corner (north east), a gap
+// in the wall goes up the old Air Shaft (diggingsAirShaft.js), a ring climb.
 
 // Tile key (see src/overworld/deepTiles.js for how the Diggings draws them):
 //   #  dark rock overhead (solid)   W  rock face with ore seams (solid)
@@ -14,6 +15,8 @@
 //   .  packed dirt floor
 //   0  the shaft: a drop, boarded over with a rope round it (solid)
 //   ^  stalagmite (solid)
+
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
 
 export const DIGGINGS_PITHEAD = {
   // Used to remember things about this room (like beaten enemies) and for doors.
@@ -32,8 +35,8 @@ export const DIGGINGS_PITHEAD = {
   vesWell: true,
 
   tiles: [
-    '##################################',
-    '#WWWW##WWWWWWWWWWWWWWWWWWWW##WWW##',
+    '#############################..###',
+    '#WWWW##WWWWWWWWWWWWWWWWWWWW##..W##',
     '#....WW........qq..........WWqqqW#',
     '#..I.....I...0000....I..hhhhhhqqq#',
     '#............0000.......hhhhhhqqq#',
@@ -80,6 +83,8 @@ export const DIGGINGS_PITHEAD = {
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   // West: back up to the king's hall (belowtown_throne's back door). East: the yard.
   doors: [
+    // North, out of the back corner, up the old Air Shaft (a ring climb up to a chest).
+    { x: 29, y: 0, w: 2, h: 1, to: 'diggings_air_shaft', spawn: { x: 9, y: 31 } },
     { x: 0, y: 8, w: 1, h: 2, to: 'belowtown_throne', spawn: { x: 24, y: 16 } },
     { x: 33, y: 8, w: 1, h: 2, to: 'diggings_cart_yard', spawn: { x: 1, y: 8 } },
   ],
@@ -98,6 +103,7 @@ export const DIGGINGS_PITHEAD = {
   // ore cart on the demonstration track is a real cart: Z beside it to climb in.
   textFile: 'interactions/diggings.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_pithead ?? []),
     { sprite: 'savepoint', x: 6, y: 6, save: true },
     { sprite: 'mine_winch', x: 14, y: 5, text: 'pit_winch' },
     { sprite: 'warning_sign', x: 12, y: 5, text: 'pit_warning' },
@@ -120,6 +126,7 @@ export const DIGGINGS_PITHEAD = {
     { sprite: 'bf_mole_miner_a', x: 11, y: 10, npc: 'mole_sedge', animation: 'bf_mole_miner_a', speed: 0.5 },
     { sprite: 'bf_mole_miner_b', x: 19, y: 11, npc: 'mole_mattock', animation: 'bf_mole_miner_b', speed: 0.5, quest: [
       { needs: ['has:mattock_letter'], take: 'mattock_letter', set: 'q_letter_read', give: 'mattock_reply', text: 'letter_in' },
+      { needs: ['has:mattock_boot'], take: 'mattock_boot', set: 'q_boot_back', give: 'mattock_pin', text: 'boot_back' },
     ] },
     // Set dressing: shoring timbers on the walls, and loose stones, spilled
     // ore and a drip or two on the floor (walkable: in nobody's way).

@@ -1,0 +1,83 @@
+# THE GALLEY: the ghost cook of the big wreck in the Wreck Yard, who went down with her forty
+# years ago and hasn't noticed. Delighted to have diners at last. Cheerful, fussy, forgetful,
+# a bit lonely; never sad about it. He cooks with a cold stove and it comes out hot anyway.
+# Each section is one line of the shopkeeper's, shown in the shop's text box.
+# Sections starting with "talk:" become topics under TALK, in this order. All (draft).
+
+[greeting]
+Diners! Real ones! Sit anywhere, sit everywhere, the crew won't mind. They never come down to eat any more. I keep it hot for them.
+
+[greeting 2]
+You came back! Nobody comes back. Well. The tide does. And now you.
+
+[greeting 3]
+My regulars! I've kept your places. I've kept everybody's places.
+
+[menu_prompt]
+What'll it be? Don't say "nothing". Nobody leaves my galley on nothing.
+
+[buy_prompt]
+Hardtack, cocoa, and the soup. Always the soup. There's always more soup.
+
+[sell_prompt]
+Selling to the cook? I'll take anything for the pot. I've put worse in it. I've put a boot in it.
+
+[talk_prompt]
+Pull up a bench. Mind the one on the end, it's for Mr. Pask. He's late.
+
+[bought]
+There you are. On the house. ...No, it isn't, the purser'd have my hide. Coins in the jar.
+
+[bought_item]
+Hot as you like. Don't ask me how. The stove's been out for years, and the soup doesn't know.
+
+[bought_skill]
+That's not on my menu. I only do food. And opinions.
+
+[skill_sold_out]
+Only food here. And the soup.
+
+[sold]
+Into the pot it goes. Thank you kindly.
+
+[nothing_to_sell]
+Nothing for the pot? Then have something out of it.
+
+[cant_sell]
+You're wearing that, friend. Take it off first, with C. Not in my galley, I've just mopped.
+
+[owned]
+You've already got one. Have soup instead. Soup doesn't run out.
+
+[wont_fit]
+That's not for you, I think. Not for anyone in this galley.
+
+[too_poor]
+Short a few coins? Ah. The purser counts them. He counts everything. Go and find a few and come back hungry.
+
+[bought_stored]
+Your pack's full, so I've sent it on to your chest, by the next save light. Don't ask me how. I'm a cook.
+
+[bag_full]
+Your pack's full and so's your chest. Eat something now, then. Go on. I'll watch.
+
+[farewell]
+Come back hungry! The soup'll be on. The soup's always on.
+
+[talk: Who are you?]
+Cook! Ship's cook. Forty years, man and boy. Well. Man. Then... whatever this is. I don't hold with names in a galley. You just shout "COOK" and I come.
+
+[talk: The soup]
+Fish, a bit of everything, and a pinch of something I won't tell you. The secret's that it never stops. I put the lid on that pot forty years ago and it's still simmering.
+
+[talk: The crew]
+They're up on deck. Or down in the hold. Or somewhere. They don't come down to eat any more, and I keep their bowls warm anyway. It's what a cook does. You keep the bowls warm.
+
+[talk: The cold stove]
+Is it cold? So it is. Huh. Well, don't tell the soup.
+
+[talk: Bramble]
+The small one has the right idea about food. Look at him. Two bowls and asking about the third. That's a crewman, that is.
+
+[talk: Ves]
+Your tall friend's had nothing but a crust. I've noticed. Cooks notice. I've put a bowl by her elbow. She'll eat it when she thinks I'm not looking. They always do.

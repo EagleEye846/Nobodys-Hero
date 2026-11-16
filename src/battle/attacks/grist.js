@@ -2,8 +2,8 @@ import { defineBulletArt } from '../projectiles.js';
 
 // Grist's attacks. It's the mill rat who calls itself the Miller, so it
 // fights with whatever's lying about the old mill: sacks of flour that burst,
-// the runaway millstone, oats and grain by the chuteful, the paddles off the
-// waterwheel, and its own long whip of a tail.
+// the runaway millstone, oats and grain by the chuteful, and the great scales
+// it weighs the sacks on (it's very proud of those).
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
@@ -15,7 +15,6 @@ const OATS = { o: '#e2c272', O: '#a8843a', g: '#f6e6a8' };
 const PADDLE = { k: '#2a1a0e', w: '#8a5a32', W: '#5e3c1e', b: '#7ab8e0', B: '#c8e8f8' };
 const LOAF = { k: '#3a2210', l: '#c8862e', L: '#8a5420', o: '#e2c272' };
 // The tail's colour, for the whip (a Line, not art).
-const TAIL = '#e09a9a';
 
 // A flour sack, tied at the top with red string, flung end over end.
 defineBulletArt('gristSack', {
@@ -54,6 +53,13 @@ defineBulletArt('gristPuff', {
   frameSeconds: 0.14,
 });
 
+// The post its scales stand on (harmless).
+defineBulletArt('gristPost', {
+  frames: [['.kk.', '.WW.', '.WW.', '.WW.', '.WW.', 'kWWk', 'kkkk']],
+  palette: { k: '#2a1a0e', W: '#8a5a32' },
+  radius: 1,
+});
+
 // The millstone, a big grey wheel with a square hole, rolling.
 defineBulletArt('gristMillstone', {
   frames: [[
@@ -80,24 +86,6 @@ defineBulletArt('gristOat', {
   palette: OATS,
   radius: 1.2,
   rotate: true,
-});
-
-// A waterwheel paddle, a plank with water slopping off it.
-defineBulletArt('gristPaddle', {
-  frames: [
-    ['kkkkkkkkkk', 'kwWwwWwwWk', 'kkkkkkkkkk', '.b..B..b..'],
-    ['kkkkkkkkkk', 'kwWwwWwwWk', 'kkkkkkkkkk', '..B..b..B.'],
-  ],
-  palette: PADDLE,
-  hitbox: { w: 10, h: 3 },
-  frameSeconds: 0.18,
-});
-
-// A drop of millrace water.
-defineBulletArt('gristDrop', {
-  frames: [['.b.', 'bBb', '.b.']],
-  palette: PADDLE,
-  radius: 1.2,
 });
 
 // The grain chute's hopper (harmless: the oats come out of it).
@@ -140,7 +128,7 @@ export const GRIST_ATTACKS = {
       sacks.push(sack);
     }, { first: 0.15 });
     return {
-      duration: 6.5,
+      duration: 8,
       update: (dt, bullets, soul) => {
         sling(dt, bullets, soul);
         for (const sack of sacks) {
@@ -204,10 +192,10 @@ export const GRIST_ATTACKS = {
       stones.push(stone);
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets) => {
         t += dt;
-        if (t >= next && t < 5.6) {
+        if (t >= next && t < 8.6) {
           roll(bullets);
           next = t + rand(0.95, 1.1);
         }
@@ -231,98 +219,67 @@ export const GRIST_ATTACKS = {
     };
   },
 
-  // Tail whip: it spins round and cracks its long tail across the box from
-  // one wall, aimed at you. You see a faint line where it'll land, then it
-  // snaps. The crack knocks oats loose from the tip. Faster at the end, when
-  // it's showing off.
-  gristTail(box, density, { Shot, Line, rand, angleTo, shuffleBag }) {
-    const side = shuffleBag(['left', 'right', 'top', 'bottom']);
-    let whips = [];
-    let next = 0.15;
+  // Weighing up: it's very proud of its scales. The great beam of them
+  // runs right across the box on a post in the middle, and it drops sacks
+  // onto the pans (each sack's shadow shows which pan first). Down goes the
+  // pan with the sack on, up goes the other one, and the flour in it is
+  // flung up and over. The beam hurts, so pick a side of it; mind the sacks
+  // coming down, and the flour coming off the high pan.
+  gristScales(box, density, { Shot, Line, rand }) {
+    const pivot = { x: box.x + box.w / 2, y: box.y + box.h / 2 + 6 };
+    const HALF = 36;
+    const TIP = 0.42;
+    let beam = null;
+    let tilt = 0;
+    let want = 0;
     let t = 0;
-    const crack = (bullets, soul) => {
-      const s = side();
-      const from = {
-        left: { x: box.x - 2, y: rand(box.y + 8, box.y + box.h - 8) },
-        right: { x: box.x + box.w + 2, y: rand(box.y + 8, box.y + box.h - 8) },
-        top: { x: rand(box.x + 8, box.x + box.w - 8), y: box.y - 2 },
-        bottom: { x: rand(box.x + 8, box.x + box.w - 8), y: box.y + box.h + 2 },
-      }[s];
-      const angle = angleTo(from, soul);
-      const length = 95;
-      const warn = t > 4 ? 0.45 : 0.6;
-      bullets.push(new Line({ x: from.x, y: from.y, angle, length, thickness: 3, warn, life: 0.2, color: TAIL }));
-      // This pattern's clock runs `density` times faster than the bullets',
-      // so the oats fly when the tail really cracks.
-      whips.push({ from, angle, length, at: warn * density });
-    };
+    let next = 0.5;
+    let sacks = [];
+    const end = (side, angle = tilt) => ({ x: pivot.x + side * Math.cos(angle) * HALF, y: pivot.y + side * Math.sin(angle) * HALF });
     return {
-      duration: 6.4,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.8) {
-          crack(bullets, soul);
-          next = t + (t > 4 ? 0.55 : 0.75);
+        if (!beam) {
+          beam = new Line({ x: pivot.x - HALF, y: pivot.y, angle: 0, length: HALF * 2, thickness: 3, warn: 0.6, life: 30, color: '#8a5a32' });
+          bullets.push(beam);
+          bullets.push(new Shot({ x: pivot.x, y: pivot.y + 4, harmless: true, life: 30, art: 'gristPost' }));
+          return;
         }
-        for (const whip of whips) {
-          whip.at -= dt;
-          if (whip.at > 0) continue;
-          whip.done = true;
-          // The tip's out past the far wall, so the oats fly from where the
-          // tail crosses back into the box: a few points along it.
-          for (let i = 1; i <= 3; i++) {
-            const d = (whip.length * i) / 4;
-            const x = whip.from.x + Math.cos(whip.angle) * d;
-            const y = whip.from.y + Math.sin(whip.angle) * d;
-            const away = whip.angle + (i % 2 ? Math.PI / 2 : -Math.PI / 2);
-            bullets.push(new Shot({ x, y, vx: Math.cos(away) * 38, vy: Math.sin(away) * 38, life: 1.2, art: 'gristOat' }));
+        if (t >= next && t < 9.4) {
+          next = t + rand(1.25, 1.45);
+          // Onto the pan on your side, mostly.
+          const side = Math.random() < 0.7 ? (soul.x < pivot.x ? -1 : 1) : (soul.x < pivot.x ? 1 : -1);
+          const pan = end(side);
+          const sack = new Shot({ x: pan.x, y: box.y - 4, vy: 30, gravity: 160, warn: 0.5, art: 'gristSack' });
+          sack.side = side;
+          sacks.push(sack);
+          bullets.push(sack);
+        }
+        for (const sack of sacks) {
+          if (sack.landed || sack.age < sack.warn) continue;
+          if (sack.y < end(sack.side).y - 5) continue;
+          // Thump: that side goes down, the other comes up and flings.
+          sack.landed = true;
+          sack.life = sack.age - sack.warn;
+          want = sack.side * TIP;
+          const high = end(-sack.side, want);
+          for (let i = 0; i < 6; i++) {
+            bullets.push(new Shot({
+              x: high.x + rand(-3, 3), y: high.y - 2, vx: sack.side * rand(5, 40), vy: rand(-110, -80), gravity: 150, life: 2.2, art: 'gristPuff',
+            }));
           }
         }
-        whips = whips.filter((whip) => !whip.done);
-      },
-    };
-  },
-
-  // The waterwheel: rows of paddles come up from the bottom of the box like
-  // the old wheel turning, each row with a gap in it, the gaps zigzagging
-  // side to side. Water slops off the paddles as they go.
-  gristWheel(box, density, { Shot, rand }) {
-    const plank = 10;
-    const gapWidth = 22;
-    let rows = 0;
-    let next = 0.1;
-    let t = 0;
-    let paddles = [];
-    const turn = (bullets) => {
-      // The gap goes from one side to the other and back.
-      const span = box.w - gapWidth - 8;
-      const u = (rows % 6) / 5;
-      const zig = Math.floor(rows / 6) % 2 ? 1 - u : u;
-      const gap = box.x + 4 + gapWidth / 2 + span * zig;
-      rows++;
-      for (let x = box.x + plank / 2; x < box.x + box.w; x += plank) {
-        if (Math.abs(x - gap) < gapWidth / 2) continue;
-        const paddle = new Shot({ x, y: box.y + box.h + 4, vy: -40, art: 'gristPaddle' });
-        paddle.drip = rand(0.4, 1.6);
-        bullets.push(paddle);
-        paddles.push(paddle);
-      }
-    };
-    return {
-      duration: 6.8,
-      update: (dt, bullets) => {
-        t += dt;
-        if (t >= next && t < 5.4) {
-          turn(bullets);
-          next = t + 0.62;
-        }
-        for (const paddle of paddles) {
-          paddle.drip -= dt;
-          if (paddle.drip > 0) continue;
-          paddle.drip += rand(1.8, 2.8);
-          bullets.push(new Shot({ x: paddle.x + rand(-3, 3), y: paddle.y + 3, gravity: 90, life: 0.6, art: 'gristDrop' }));
-        }
-        paddles = paddles.filter((paddle) => paddle.y > box.y - 10);
+        sacks = sacks.filter((sack) => !sack.landed);
+        // The beam swings over to where it's going (by its own velocity, so
+        // it reads as moving).
+        const step = Math.sign(want - tilt) * Math.min(Math.abs(want - tilt), 2.4 * dt);
+        tilt += step;
+        const left = end(-1);
+        const realDt = Math.max(dt / density, 1e-4);
+        beam.vx = (left.x - beam.x) / realDt;
+        beam.vy = (left.y - beam.y) / realDt;
+        beam.angle = tilt;
       },
     };
   },
@@ -340,7 +297,7 @@ export const GRIST_ATTACKS = {
     let loafIn = 1.6;
     let t = 0;
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         if (!started) {
           started = true;
@@ -351,7 +308,7 @@ export const GRIST_ATTACKS = {
         hopper.x += dir * 34 * dt;
         if (hopper.x > box.x + box.w - 6) dir = -1;
         if (hopper.x < box.x + 6) dir = 1;
-        if (t > 6.2) return;
+        if (t > 9.6) return;
         pour -= dt;
         const filling = t % 0.9 > 0.55;
         while (pour <= 0) {

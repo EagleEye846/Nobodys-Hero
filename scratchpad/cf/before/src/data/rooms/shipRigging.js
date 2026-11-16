@@ -1,0 +1,153 @@
+// THE RIGGING AND THE CROW'S NEST: up the shrouds in the fog to three little platforms on the mast, a spar swinging between
+// them, and the lookout still at his post. The fog is under you as well as around you: there is no sea down there to see.
+// THE LEAN works here as a bridge: leaning to PORT the spar (g) lies across the first gap (rows 13-15, x 9-10) between the foot
+// and the middle platform; leaning to STARBOARD it swings across the second (rows 5-7) between the middle platform and the
+// nest. So: haul to port, cross to the middle; haul to starboard, cross to the nest. A trim line on each platform
+// ((7,18), (7,10), (7,2)) turns her, so you are never shut on a platform. No monsters.
+// The nest: the lookout's log (the last page, for the captain) and the lookout, only there in the lantern, who is pointing at a harbour that isn't.
+// Scene ship_nest (the nest's front row, once). The way down is the shrouds (9-10, row 20).
+// Tile key: o spar-planking platform   g the swinging spar   ~ fog and a long drop (solid)   # edge (solid)
+
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
+
+export const SHIP_RIGGING = {
+  id: 'ship_rigging',
+  name: 'THE CROW\'S NEST',
+  area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.2,
+  music: 'ghostShip',
+  musicFrom: 'list',
+  ambience: 'ghost_ship_high',
+  vesWell: true,
+  // Up in the fog: the fog turned right up (atmosphere.js), a wind in the lines.
+  atmosphere: { fog: 3, rain: 0, drips: 0 },
+  haunt: { whispers: ['...land ho...', '...I see the lights...', '...I see the lights...'] },
+  playerStart: { x: 9, y: 19 },
+
+  tiles: [
+      '####################',
+      '#~~~~~oooooooo~~~~~#',
+      '#~~~~~~ooooooo~~~~~#',
+      '#~~~~~ooooooo~~~~~~#',
+      '#~~~~~oooooooo~~~~~#',
+      '#~~~~~~~~~~~~~~~~~~#',
+      '#~~~~~~~~~~~~~~~~~~#',
+      '#~~~~~~~~~~~~~~~~~~#',
+      '#~~~~~oooooooo~~~~~#',
+      '#~~~~~~ooooooo~~~~~#',
+      '#~~~~~ooooooo~~~~~~#',
+      '#~~~~~oooooooo~~~~~#',
+      '#~~~~~~ooooooo~~~~~#',
+      '#~~~~~~~~gg~~~~~~~~#',
+      '#~~~~~~~~gg~~~~~~~~#',
+      '#~~~~~~~~gg~~~~~~~~#',
+      '#~~~~oooooooooo~~~~#',
+      '#~~~~~ooooooooo~~~~#',
+      '#~~~~ooooooooo~~~~~#',
+      '#~~~~oooooooooo~~~~#',
+      '#~~~~~ooooooooo~~~~#',
+      '####################',
+    ],
+
+  // The STARBOARD map (a space is "same as the port map above").
+  list: { star: [
+      '                    ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '         gg         ',
+      '         gg         ',
+      '         gg         ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '         ~~         ',
+      '         ~~         ',
+      '         ~~         ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '                    ',
+      '                    ',
+    ] },
+
+  doors: [
+    { x: 9, y: 20, w: 2, h: 1, to: 'ship_deck', spawn: { x: 22, y: 9 } },
+  ],
+
+  cutscenes: [{ x: 9, y: 4, w: 2, h: 1, scene: 'ship_nest' }],
+
+  textFile: 'interactions/ghostship.txt',
+  props: [
+    { sprite: 'gs_trim_line', x: 7, y: 18, text: 'rig_haul', listWheel: { to: 'toggle', port: 'rig_port', star: 'rig_star', busy: 'rig_busy', already: 'rig_already' } },
+    { sprite: 'gs_trim_line', x: 7, y: 10, text: 'rig_haul', listWheel: { to: 'toggle', port: 'rig_port', star: 'rig_star', busy: 'rig_busy', already: 'rig_already' } },
+    { sprite: 'gs_trim_line', x: 7, y: 2, text: 'rig_haul', listWheel: { to: 'toggle', port: 'rig_port', star: 'rig_star', busy: 'rig_busy', already: 'rig_already' } },
+    { sprite: 'gs_mast', x: 11, y: 10, text: 'rig_mast' },
+    { sprite: 'in_logbook_stand', x: 12, y: 3, text: 'rig_log', gives: 'ship_log', react: true, taken: { sprite: 'in_logbook_stand', text: 'rig_log_taken' } },
+    { sprite: 'gs_ghost_lookout', x: 10, y: 2, text: 'ghost_lookout', animation: 'gs_ghost_lookout', speed: 1.3, walkable: true, haunt: { kind: 'ghost' } },
+    { sprite: 'gs_chalk', x: 7, y: 4, text: 'rig_chalk', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gs_prints_a', x: 9, y: 19, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gs_prints_b', x: 10, y: 17, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
+    { sprite: 'gs_coil', x: 12, y: 18, flat: true, walkable: true, text: 'deck_coil' },
+    { sprite: 'gs_coil', x: 8, y: 12, flat: true, walkable: true, text: 'deck_coil' },
+    { sprite: 'gs_puddle', x: 11, y: 19, flat: true, walkable: true },
+    { sprite: 'gs_puddle_b', x: 9, y: 3, flat: true, walkable: true },
+    { sprite: 'c5_rope_coil', x: 13, y: 11, text: 'deck_coil', walkable: true },
+    { sprite: 'gs_fog_a', x: 10, y: 18, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 6, y: 11, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 10, y: 1, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 10, y: 12, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 7, y: 17, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 10, y: 18, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 4, y: 9, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 15, y: 2, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 16, y: 9, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 18, y: 5, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 3, y: 16, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 14, y: 8, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 3, y: 1, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 4, y: 2, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 17, y: 7, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 8, y: 6, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 3, y: 1, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 1, y: 11, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 13, y: 14, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 18, y: 2, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 4, y: 8, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 1, y: 4, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 5, y: 13, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 18, y: 9, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 3, y: 6, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 14, y: 8, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 18, y: 7, flat: true, walkable: true },
+    { sprite: 'gs_fog_c', x: 17, y: 16, flat: true, walkable: true },
+    { sprite: 'gs_fog_a', x: 14, y: 7, flat: true, walkable: true },
+    { sprite: 'gs_fog_b', x: 6, y: 12, flat: true, walkable: true },
+    // ART PASS 2 (decoration only: flat things are walked over, tall things stand on walls and rails)
+    { sprite: 'gs_stay_mast', x: 6, y: 4, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 13, y: 4, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 6, y: 8, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 13, y: 11, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 14, y: 16, walkable: true, decor: true },
+    { sprite: 'gs_stay_mast', x: 5, y: 18, walkable: true, decor: true },
+    { sprite: 'gs_bottles', x: 10, y: 2, flat: true, walkable: true },
+    { sprite: 'gs_cutlass', x: 8, y: 3, flat: true, walkable: true },
+    { sprite: 'gs_letter_dropped', x: 9, y: 12, flat: true, walkable: true },
+    { sprite: 'gs_net_heap', x: 7, y: 9, flat: true, walkable: true },
+    { sprite: 'gs_weed_a', x: 11, y: 18, flat: true, walkable: true },
+    { sprite: 'gs_shoe', x: 7, y: 17, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_rigging ?? []),
+  ],
+  tileTexts: { '#': 'rig_void', '~': 'rig_void', o: 'rig_planks', g: 'rig_spar' },
+
+  // None: a quiet, puzzle-light climb (the lantern, the lookout, the log) with no monsters.
+  npcs: [
+
+  ],
+};

@@ -2,6 +2,7 @@ import { TILE_SIZE as T, SCREEN_WIDTH, SCREEN_HEIGHT } from '../config.js';
 import { glowSprite } from './lamplight.js';
 import { drawRainLayer, lightningLevel, paintFlash } from './atmosphere.js';
 import { music } from '../audio/music.js';
+import { TideFx } from './tideFx.js';
 
 // STAGE EFFECTS for cutscenes: the lights, curtains and confetti of King
 // Peptup's show, the Sunstone guttering, and the wave of light when it
@@ -124,10 +125,13 @@ export class Stage {
     this.doorway = null;
     this.flood = { from: 0, to: 0, t: 1, seconds: 0 };
     this.glow = null;
+    // The sea's effects at the end of chapter 5 (tideFx.js): `fx`.
+    this.fx = new TideFx();
   }
 
   // One `stage` step.
   apply(step) {
+    if (step.fx) this.fx.apply(step.fx);
     if (step.spots !== undefined) {
       this.spots = (step.spots ?? []).map((spot, i) => ({ ...spot, i, color: spot.color ?? '255, 240, 180', radius: spot.radius ?? 34 }));
     }
@@ -259,8 +263,9 @@ export class Stage {
     return m.from + (m.to - m.from) * k * k * (3 - 2 * k);
   }
 
-  update(dt, camera) {
+  update(dt, camera, bodyAt = null) {
     this.time += dt;
+    this.fx.update(dt, bodyAt);
     this.dim.t += dt;
     this.white.t += dt;
     this.tilt.t += dt;
@@ -382,6 +387,8 @@ export class Stage {
 
   // Everything, over the room. `bodyAt(id)` finds a scene actor.
   draw(ctx, camera, bodyAt) {
+    // (Under any dim or spotlight: the sea's effects, then the light in the hero over it all.)
+    this.fx.draw(ctx, camera, bodyAt);
     this.drawSpots(ctx, camera, bodyAt);
     this.drawCurtains(ctx, camera);
     this.drawConfetti(ctx, camera);

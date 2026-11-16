@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE POTTLES': home of Pottle, the smallest and loudest herald, and his
 // mother, who has baked a welcome cake every single week for a hundred years
 // and has, by now, really got the recipe right.
@@ -5,6 +6,7 @@
 //   #  wall top (solid)                           h  papered wall with wood panelling (solid)
 //   o  wooden floorboards                         r  rug
 //   D  doorway (walk through it; see `doors`)
+import { R3A_PROPS } from '../r3aLife.js';
 export const REST_HOUSE_POTTLE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'rest_house_pottle',
@@ -61,6 +63,10 @@ export const REST_HOUSE_POTTLE = {
     { sprite: 'mirror', x: 8, y: 2, text: 'pottle_drawings' },
     { sprite: 'herald', x: 2, y: 6, npc: 'herald_mrs_pottle' },
     { sprite: 'book_stand', x: 1, y: 8, text: 'pottle_book' },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_house_pottle'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['rest_house_pottle'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

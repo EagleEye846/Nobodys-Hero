@@ -61,8 +61,8 @@ export const BELOWTOWN_GATE = {
   textFile: 'interactions/belowtown.txt',
   props: [
     { sprite: 'wellcome_banner', x: 14, y: 5, text: 'gate_banner', animation: 'wellcome_banner', speed: 0.5, walkable: true },
-    { sprite: 'glowworm_string', x: 6, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true },
-    { sprite: 'glowworm_string', x: 22, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true },
+    { sprite: 'glowworm_string', x: 6, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
+    { sprite: 'glowworm_string', x: 22, y: 5, animation: 'glowworm_string', speed: 0.4, walkable: true, decor: true },
     { sprite: 'glowworm_lamp', x: 3, y: 6, text: 'gate_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 3, y: 10, text: 'gate_lamp', animation: 'glowworm_lamp', speed: 0.5 },
     { sprite: 'glowworm_lamp', x: 11, y: 6, text: 'gate_lamp', animation: 'glowworm_lamp', speed: 0.5 },
@@ -74,7 +74,12 @@ export const BELOWTOWN_GATE = {
     { sprite: 'bf_mole_miner_a', x: 20, y: 7, npc: 'bt_gate_mole', animation: 'bf_mole_miner_a', speed: 0.5 },
     { sprite: 'bf_frog_kid_a', x: 19, y: 9, npc: 'bt_gate_frogkid', animation: 'bf_frog_kid_a', speed: 0.4 },
     { sprite: 'bf_frog_kid_b', x: 21, y: 10, npc: 'bt_gate_frogkid2', animation: 'bf_frog_kid_b', speed: 0.45 },
-    { sprite: 'bf_newt_guard', x: 12, y: 5, npc: 'bt_gate_newt', animation: 'bf_newt_guard', speed: 0.5 },
+    { sprite: 'bf_newt_guard', x: 12, y: 5, npc: 'bt_gate_newt', animation: 'bf_newt_guard', speed: 0.5, quest: [
+      { needs: ['q_sock_done'], text: 'sock_after', append: true },
+      { needs: ['has:odd_sock'], take: 'odd_sock', set: ['q_sock_asked', 'q_sock_done'], give: 'newt_badge', text: 'sock_done' },
+      { needs: ['q_sock_asked'], text: 'sock_wait' },
+      { needs: ['!q_sock_asked'], set: 'q_sock_asked', text: 'sock_ask', append: true },
+    ] },
     { sprite: 'bf_newt_guard', x: 18, y: 11, npc: 'bt_gate_newt2', animation: 'bf_newt_guard', speed: 0.5, stroll: { path: [[18, 11], [21, 11]], speed: 10, pause: [4, 8], greet: true } },
     { sprite: 'bf_glowworm', x: 5, y: 11, npc: 'bt_gate_lamplighter', animation: 'bf_glowworm', speed: 0.4, stroll: { path: [[5, 11], [11, 11]], speed: 12, pause: [3, 5], greet: true }, glow: [{ dx: 0, dy: -4, bloom: 14, strength: 0.7, flicker: 0.2, color: '190, 255, 120' }, { dx: 0, dy: 2, pool: 40, strength: 0.4, flicker: 0.2, color: '190, 255, 120' }] },
     { sprite: 'bf_snail_elder', x: 23, y: 11, npc: 'bt_gate_snail', animation: 'bf_snail_elder', speed: 0.5, stroll: { path: [[23, 11], [26, 11]], speed: 4, pause: [3, 7], greet: true } },
@@ -84,6 +89,10 @@ export const BELOWTOWN_GATE = {
     // Set dressing: a front door and a tidy row of tools along the wall.
     { sprite: 'tiny_door', x: 13, y: 1, text: 'town_house_door' },
     { sprite: 'tiny_tools', x: 27, y: 1, text: 'bt_tiny_tools' },
+    // The life pass (14 Nov): the waiting crowd's things, and the guards' corner.
+    { sprite: 'bt_stool', x: 19, y: 6, text: 'bl_gate_stool' },
+    { sprite: 'bt_pick_rack', x: 9, y: 3, text: 'bl_pick_rack' },
+
   ],
   tileTexts: { W: 'town_wall', '#': 'town_rock', V: 'town_lamps_wall', H: 'town_banner_wall', I: 'town_pillar', O: 'town_barrel' },
 

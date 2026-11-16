@@ -1,0 +1,22 @@
+# A WOODEN DUCK on the rim of the old baths' pool: its pair is lost in the stokehold. A tiny errand of the life pass. (draft)
+
+[first]
+A small wooden duck on the rim of the pool, bright yellow, with one painted eye. Beside it, in the dust, there's a duck-shaped gap, where a second one used to sit.
+
+[repeat]
+The wooden duck, on its own, looking at its gap.
+
+[duck_ask]
+The gap beside the duck is exactly the right size, and has been for a very long time. Somebody should do something about it.
+
+[duck_done]
+You set the second duck down in its gap. The pair of them look instantly, absurdly right.
+
+From across the room, without turning his head, Slowly says: "Ah. The boats."
+
+A long pause.
+
+"Two boats. Please. Take this. It is also a boat."
+
+[duck_after]
+Two wooden ducks, side by side on the rim of the bath. A boat each. A small, patient convoy.

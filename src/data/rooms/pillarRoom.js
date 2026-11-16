@@ -4,6 +4,7 @@
 //   .  floor                                    r  rug
 //   D  doorway (walk through it; see `doors`)   I  tall pillar (walk or hide behind) (solid)
 //   b  low stone block (jump up onto it)        B  tall stone block (jump onto it from a low block)
+import { R1_PROPS } from '../ruinsLife.js';
 export const PILLAR_ROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'pillar_room',
@@ -49,9 +50,12 @@ export const PILLAR_ROOM = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/the_ruins.txt',
   props: [
+    { sprite: 'col_charm_leaf', x: 1, y: 9, walkable: true, flat: true, gives: 'charm_leaf', taken: { gone: true } },
     { sprite: 'gate_wide', x: 9, y: 3, text: 'pillar_gate', opensWith: ['lever_east', 'lever_hidden'], openText: 'pillar_gate_open' },
     { sprite: 'lever', x: 17, y: 3, text: 'pillar_lever', lever: 'lever_east' },
     { sprite: 'lever', x: 14, y: 10, text: 'pillar_lever', lever: 'lever_hidden' },
+    // The life pass, round 2 (15 November 2026): chapter 1's dressing, in src/data/ruinsLife.js.
+    ...(R1_PROPS['pillar_room'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

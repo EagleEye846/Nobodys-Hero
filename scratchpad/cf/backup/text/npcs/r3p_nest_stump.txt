@@ -1,0 +1,32 @@
+# THE BARE STUMP (the Cold Brook, in the Pinefall): somebody's built here and lost it. Nobody says anything: it's a stump.
+# The words are what you notice. (life pass, 15 November 2026)
+
+# (draft)
+[first]
+A stump with a few bare twigs on it, in a ring. Somebody started a home here.
+
+# (draft)
+[repeat]
+A stump with a ring of twigs on it. It's missing something.
+
+# (draft)
+[nest_ask]
+A stump at the foot of a tree, with a ring of bare twigs laid on top, neat as a plate. A small home was built here. It's gone now: you can see the dent where it sat.
+
+A robin watches from a branch. It isn't singing. It's the loudest silence you've ever walked through.
+
+# (draft)
+[nest_wait]
+The stump with its ring of twigs. Somebody knocked a nest off, and it's lying somewhere in the Pinefall. You think back through the leaves: you saw one, upside down.
+
+# (draft)
+[nest_done]
+You set the nest back on its ring of twigs, eggs and all, and turn it a little so it sits. It fits.
+
+For a moment, nothing. Then something small lands on the stump beside you, and looks at the eggs, and looks at you. It doesn't say anything. It pulls out one of its own tail feathers, sets it on the stump, and goes to sit on the eggs.
+
+You've been paid. It's in the biggest coin there is: it didn't peck you.
+
+# (draft)
+[nest_after]
+The stump, the nest, and a robin on it, very fluffed up and very busy. It gives you a look that says it's got everything in hand.

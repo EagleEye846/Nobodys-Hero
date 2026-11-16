@@ -12,6 +12,10 @@
 //   O  boulder (solid)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_SAWPIT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_sawpit',
@@ -69,6 +73,8 @@ export const HUSH_SAWPIT = {
   // logs, not you.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_sawpit ?? []),
+    { sprite: 'col_marble_tiger', x: 30, y: 2, walkable: true, flat: true, gives: 'marble_tiger', taken: { gone: true } },
     { sprite: 'roll_log', x: 16, y: 5, text: 'roll_log', log: true },
     { sprite: 'treadle', x: 10, y: 6, text: 'treadle', treadle: 't1' },
     { sprite: 'treadle', x: 10, y: 13, text: 'treadle', treadle: 't2' },
@@ -80,6 +86,9 @@ export const HUSH_SAWPIT = {
     { sprite: 'chest', x: 1, y: 18, text: 'sawpit_chest', gives: 'lost_lunch', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 30, y: 18, text: 'sawpit_pouch', gold: 120, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'notched_post', x: 5, y: 2, text: 'notched_post' },
+
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_sawpit ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', b: 'sawpit_bench', O: 'mist_boulder' },
 

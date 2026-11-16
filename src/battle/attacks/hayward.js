@@ -2,15 +2,14 @@ import { defineBulletArt } from '../projectiles.js';
 
 // The Hayward's attacks. It's Hollin's old scarecrow, still minding fields
 // nobody has planted in fifty years, so it fights with what a scarecrow has:
-// the crows it was meant to scare (they've never been scared of it), the
-// straw it's stuffed with, its battered hat, its great wide arms, and a
-// pocketful of seed it's been saving for the farmers.
+// the crows it was meant to scare (and for once, does: they fly straight
+// away from it), its battered hat, a pocketful of seed it's been saving for
+// the farmers, and the darning needle it keeps its smile mended with.
 //
 // Each attack is a factory `(box, density, tools) => ({ duration, update })`;
 // see dummy.js for the shape.
 
 const STRAW = { y: '#ecc65a', Y: '#b08a2a', k: '#24160c' };
-const COAT = { k: '#24160c', c: '#93a660', C: '#62723c', p: '#b8603a', y: '#ecc65a', Y: '#b08a2a' };
 // Its crows are a little paler than real ones, so you can see them in the dark.
 const CROW = { b: '#5c5c88', B: '#a2a2d0', o: '#e8a838', g: '#ffffff' };
 const HAT = { k: '#24160c', h: '#a0825c', H: '#6e563a', r: '#b84a34', y: '#ecc65a' };
@@ -42,31 +41,6 @@ defineBulletArt('haywardStraw', {
   palette: STRAW,
   radius: 1.2,
   rotate: true,
-});
-
-// A coat cuff with straw sticking out, pointing right (harmless itself: the
-// straw comes out of it). And one pointing left.
-defineBulletArt('haywardCuffRight', {
-  frames: [['kkkk..', 'cCck.y', 'cpCkyY', 'cCck.y', 'kkkk..']],
-  palette: COAT,
-  radius: 2.5,
-});
-defineBulletArt('haywardCuffLeft', {
-  frames: [['..kkkk', 'y.kcCc', 'Yykcpc', 'y.kcCc', '..kkkk']],
-  palette: COAT,
-  radius: 2.5,
-});
-
-// A piece of its sleeve, faded green, with a patch on every other one.
-defineBulletArt('haywardSleeve', {
-  frames: [['kkkkkk', 'cCcccC', 'cccCcc', 'kkkkkk']],
-  palette: COAT,
-  hitbox: { w: 6, h: 4 },
-});
-defineBulletArt('haywardPatch', {
-  frames: [['kkkkkk', 'cpppcC', 'cpppCc', 'kkkkkk']],
-  palette: COAT,
-  hitbox: { w: 6, h: 4 },
 });
 
 // Its hat, spinning, with straw poking out from under the band.
@@ -108,128 +82,34 @@ defineBulletArt('haywardGrain', {
   rotate: true,
 });
 
+// A crow sat down, pecking about (it's not scared of anything. Yet).
+defineBulletArt('haywardCrowSitting', {
+  frames: [
+    ['..bbgo', '.bbbb.', 'bbBbb.', '.b..b.'],
+    ['......', '..bbgo', 'bbBbbb', '.b..b.'],
+  ],
+  palette: CROW,
+  radius: 2.5,
+  frameSeconds: 0.25,
+});
+
+// A big darning needle, drawn pointing right.
+defineBulletArt('haywardNeedle', {
+  frames: [['kk.......', 'kyYYYYYYw', 'kk.......']],
+  palette: { k: '#24160c', y: '#e8dcb0', Y: '#a8b0b8', w: '#ffffff' },
+  radius: 1.5,
+  rotate: true,
+});
+
+// Changes a thing's look (to the art of a bullet made with the new one).
+const LOOKS = {};
+const setLook = (shot, name, Shot) => {
+  LOOKS[name] ??= new Shot({ x: 0, y: 0, art: name }).art;
+  shot.artName = name;
+  shot.art = LOOKS[name];
+};
+
 export const HAYWARD_ATTACKS = {
-  // Shoo, crows: its crows come flapping in along the top of the box from
-  // either side. Each one stops, hangs in the air and looks at you, then
-  // dives at where you were when it looked. Every third time two come at
-  // once, one from each side. They drop feathers when they stop.
-  haywardCrows(box, density, { Shot, every, rand, angleTo }) {
-    let crows = [];
-    let fromLeft = Math.random() < 0.5;
-    let flock = 0;
-    const send = (bullets, left) => {
-      const crow = new Shot({
-        x: left ? box.x - 6 : box.x + box.w + 6,
-        y: rand(box.y + 6, box.y + 28),
-        vx: left ? 62 : -62,
-        wobble: { amplitude: 2, frequency: 10 },
-        art: 'haywardCrow',
-      });
-      crow.cruise = rand(0.45, 0.85);
-      crow.stage = 'cruise';
-      bullets.push(crow);
-      crows.push(crow);
-    };
-    const flap = every(0.6, 0.75, (bullets) => {
-      if (++flock % 3 === 0) {
-        send(bullets, true);
-        send(bullets, false);
-      } else {
-        send(bullets, fromLeft);
-        fromLeft = !fromLeft;
-      }
-    });
-    return {
-      duration: 6.5,
-      update: (dt, bullets, soul) => {
-        flap(dt, bullets, soul);
-        for (const crow of crows) {
-          if (crow.stage === 'cruise') {
-            crow.cruise -= dt;
-            if (crow.cruise > 0) continue;
-            // It stops, hangs there, and fixes you with one eye.
-            crow.stage = 'look';
-            crow.look = 0.38;
-            crow.wobble = null;
-            crow.speed = Math.hypot(crow.vx, crow.vy) * 1.8;
-            crow.vx = 0;
-            crow.vy = 0;
-            crow.aim = angleTo(crow, soul);
-            crow.angle = crow.aim;
-            bullets.push(new Shot({ x: crow.x, y: crow.y + 3, vx: rand(-4, 4), vy: 20, wobble: { amplitude: 2, frequency: 4 }, life: 3, art: 'haywardFeather' }));
-          } else if (crow.stage === 'look') {
-            crow.look -= dt;
-            if (crow.look > 0) continue;
-            crow.stage = 'dive';
-            crow.vx = Math.cos(crow.aim) * crow.speed;
-            crow.vy = Math.sin(crow.aim) * crow.speed;
-          }
-        }
-        crows = crows.filter((crow) => crow.stage !== 'dive');
-      },
-    };
-  },
-
-  // Stuffing spray: its two coat cuffs creep up and down the walls of the
-  // box, always at opposite heights, and take turns blowing a stream of
-  // straw across. The stream follows the cuff, so it comes as a wave: watch
-  // the cuff, not the straw. Every third gust ends with a sneeze of straw
-  // aimed at you.
-  haywardStraw(box, density, { Shot, rand, angleTo }) {
-    const mid = box.y + box.h / 2;
-    const reach = box.h / 2 - 8;
-    const left = new Shot({ x: box.x + 3, y: mid, harmless: true, art: 'haywardCuffRight' });
-    const right = new Shot({ x: box.x + box.w - 3, y: mid, harmless: true, art: 'haywardCuffLeft' });
-    const phase = rand(0, Math.PI * 2);
-    let t = 0;
-    let started = false;
-    let gust = 0;
-    let puffIn = 0;
-    const gustSeconds = 0.55;
-    const restSeconds = 0.3;
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        if (!started) {
-          started = true;
-          bullets.push(left, right);
-        }
-        t += dt;
-        left.y = mid + Math.sin(t * 1.5 + phase) * reach;
-        right.y = mid - Math.sin(t * 1.5 + phase) * reach;
-        // A short breath before the first gust, then gusts and rests in turn.
-        const into = t - 0.6;
-        if (into < 0 || t > 6.4) return;
-        const round = Math.floor(into / (gustSeconds + restSeconds));
-        const inGust = into - round * (gustSeconds + restSeconds) < gustSeconds;
-        const cuff = round % 2 ? right : left;
-        const dir = round % 2 ? -1 : 1;
-        if (round !== gust) {
-          // The last gust's over: every third one, a sneeze at you.
-          if (gust % 3 === 2) {
-            const was = gust % 2 ? right : left;
-            const aim = angleTo(was, soul);
-            for (let i = -2; i <= 2; i++) {
-              const angle = aim + i * 0.22;
-              bullets.push(new Shot({ x: was.x, y: was.y, vx: Math.cos(angle) * 70, vy: Math.sin(angle) * 70, life: 2, art: 'haywardStraw' }));
-            }
-          }
-          gust = round;
-        }
-        if (!inGust) return;
-        puffIn -= dt;
-        while (puffIn <= 0) {
-          puffIn += 0.07;
-          const angle = (dir > 0 ? 0 : Math.PI) + rand(-0.1, 0.1);
-          const speed = rand(76, 84);
-          bullets.push(new Shot({
-            x: cuff.x + dir * 3, y: cuff.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, gravity: 30, life: 1.8, art: 'haywardStraw',
-          }));
-        }
-      },
-    };
-  },
-
   // Hat trick: it takes off its hat and skims it at you. The hat blinks at
   // the edge of the box, then flies out in a loop that passes through where
   // you were standing and comes back round to its hand, dropping straw from
@@ -268,10 +148,10 @@ export const HAYWARD_ATTACKS = {
       });
     };
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && t < 5.4) {
+        if (t >= next && t < 8.2) {
           toss(bullets, soul);
           next = t + rand(1.0, 1.15);
         }
@@ -294,75 +174,6 @@ export const HAYWARD_ATTACKS = {
           }
         }
         throws = throws.filter((th) => !th.done);
-      },
-    };
-  },
-
-  // Big hug: its arms come in from both walls, a sleeve from each side with
-  // a gap between the hands, and sweep down the box (then up it, then down).
-  // The gap opens where you aren't, and closes as the arms come, so get
-  // under it early.
-  haywardHug(box, density, { Shot, rand, clamp }) {
-    const travel = 1.6;
-    const warn = 0.6;
-    const piece = 6;
-    // Half the gap between the hands, when they start and when they've closed in.
-    const OPEN = 16;
-    const SHUT = 9;
-    let passes = [];
-    let made = 0;
-    let t = 0;
-    const embrace = (bullets, soul) => {
-      const down = made % 2 === 0;
-      made++;
-      // The gap's middle is at least a good step from you.
-      let gap = rand(box.x + 16, box.x + box.w - 16);
-      for (let tries = 0; tries < 12 && Math.abs(gap - soul.x) < 24; tries++) gap = rand(box.x + 16, box.x + box.w - 16);
-      // The sleeves stay put either side; the hands (a cuff and a wrist
-      // each) slide in from the edges of the gap.
-      const sleeves = [];
-      for (let x = box.x + piece / 2; x < box.x + box.w; x += piece) {
-        if (Math.abs(x - gap) < OPEN + piece / 2) continue;
-        const shot = new Shot({ x, y: 0, warn, art: Math.floor(x / piece) % 3 === 0 ? 'haywardPatch' : 'haywardSleeve' });
-        sleeves.push(shot);
-      }
-      const cuffs = [
-        new Shot({ x: 0, y: 0, warn, art: 'haywardCuffRight' }),
-        new Shot({ x: 0, y: 0, warn, art: 'haywardCuffLeft' }),
-        new Shot({ x: 0, y: 0, warn, art: 'haywardSleeve' }),
-        new Shot({ x: 0, y: 0, warn, art: 'haywardSleeve' }),
-      ];
-      const pass = { sleeves, cuffs, gap, down, t: 0 };
-      place(pass);
-      bullets.push(...sleeves, ...cuffs);
-      passes.push(pass);
-    };
-    // Sets the arms where they are this far into their pass.
-    const place = (pass) => {
-      const u = clamp((pass.t - warn) / travel, 0, 1);
-      const top = box.y + 3;
-      const bottom = box.y + box.h - 3;
-      const y = pass.down ? top + (bottom - top) * u : bottom - (bottom - top) * u;
-      const half = OPEN - (OPEN - SHUT) * u; // the hands close in as they come
-      for (const shot of [...pass.sleeves, ...pass.cuffs]) shot.y = y;
-      pass.cuffs[0].x = pass.gap - half - 2;
-      pass.cuffs[1].x = pass.gap + half + 2;
-      pass.cuffs[2].x = pass.gap - half - 8;
-      pass.cuffs[3].x = pass.gap + half + 8;
-      return u;
-    };
-    return {
-      duration: 6.4,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (made < 3 && t >= 0.1 + made * 1.9) embrace(bullets, soul);
-        for (const pass of passes) {
-          pass.t += dt;
-          if (place(pass) < 1) continue;
-          for (const shot of [...pass.sleeves, ...pass.cuffs]) shot.life = shot.age - shot.warn;
-          pass.done = true;
-        }
-        passes = passes.filter((pass) => !pass.done);
       },
     };
   },
@@ -395,7 +206,7 @@ export const HAYWARD_ATTACKS = {
       handful++;
     }, { first: 0.2 });
     return {
-      duration: 6.6,
+      duration: 8,
       update: (dt, bullets, soul) => {
         scatter(dt, bullets, soul);
         for (const seed of seeds) {
@@ -427,6 +238,120 @@ export const HAYWARD_ATTACKS = {
           }
         }
         seeds = seeds.filter((seed) => !seed.done);
+      },
+    };
+  },
+  // SHOO: crows come down to sit all over the box (they blink as they land),
+  // a couple of them right between it and you. Then it flaps its arms (its
+  // hat jumps first) and for once they're scared: every crow flies off
+  // straight AWAY from the scarecrow, dropping a feather. So never be on the
+  // far side of a crow from the hat. It moves round the box between goes.
+  haywardScare(box, density, { Shot, rand, clamp, pointAwayFrom }) {
+    const sides = [{ x: box.x + box.w / 2, y: box.y - 6 }, { x: box.x - 6, y: box.y + box.h / 2 }, { x: box.x + box.w + 6, y: box.y + box.h / 2 }];
+    const scarecrow = { ...sides[0] };
+    const CYCLE = 2.1;
+    let hat = null;
+    let crows = [];
+    let t = 0;
+    let round = -1;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (!hat) {
+          hat = new Shot({ x: scarecrow.x, y: scarecrow.y + 2, harmless: true, art: 'haywardHat' });
+          bullets.push(hat);
+        }
+        const now = Math.floor(t / CYCLE);
+        const into = t - now * CYCLE;
+        if (now !== round && t < 9.4) {
+          round = now;
+          crows = [];
+          // It shuffles round to another side of the box each time.
+          Object.assign(scarecrow, sides[round % sides.length]);
+          hat.x = scarecrow.x;
+          const spots = [];
+          // Two between it and you...
+          for (const u of [rand(0.35, 0.5), rand(0.6, 0.75)]) {
+            spots.push({ x: scarecrow.x + (soul.x - scarecrow.x) * u + rand(-5, 5), y: scarecrow.y + (soul.y - scarecrow.y) * u + rand(-5, 5) });
+          }
+          // ...and more about the place.
+          for (let i = 0; i < 3; i++) spots.push(pointAwayFrom(box, soul, 22, 8));
+          for (const spot of spots) {
+            const crow = new Shot({ x: clamp(spot.x, box.x + 5, box.x + box.w - 5), y: clamp(spot.y, box.y + 8, box.y + box.h - 5), warn: 0.5, art: 'haywardCrowSitting' });
+            bullets.push(crow);
+            crows.push(crow);
+          }
+        }
+        // The hat jumps: it's about to flap.
+        hat.y = scarecrow.y + (scarecrow.y < box.y ? 2 : 0) - (into > 1.05 && into < 1.45 ? Math.abs(Math.sin(into * 30)) * 3 : 0);
+        if (into >= 1.45 && !crows.flown) {
+          crows.flown = true;
+          for (const crow of crows) {
+            const away = Math.atan2(crow.y - scarecrow.y, crow.x - scarecrow.x);
+            setLook(crow, 'haywardCrow', Shot);
+            crow.angle = away;
+            crow.vx = Math.cos(away) * 72;
+            crow.vy = Math.sin(away) * 72;
+            bullets.push(new Shot({ x: crow.x, y: crow.y, vx: rand(-8, 8), vy: 14, life: 1.6, art: 'haywardFeather' }));
+          }
+        }
+      },
+    };
+  },
+
+  // Mending: its smile has been stitched back together a hundred times,
+  // and it's still handy with a needle. A big darning needle comes stitching
+  // across the box, zig, zag, and the thread it leaves stays pulled tight
+  // behind it for a moment. Get past it ahead of the needle, through a
+  // gap in the zigzag, not through the fresh thread. Then one from the
+  // other side, along your row.
+  haywardStitch(box, density, { Shot, Line, rand, clamp }) {
+    const SPEED = 34;
+    let needles = [];
+    let t = 0;
+    let next = 0.2;
+    let fromLeft = Math.random() < 0.5;
+    return {
+      duration: 8,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (t >= next && t < 8.4) {
+          next = t + 2.3;
+          const y = clamp(soul.y, box.y + 6, box.y + box.h - 6);
+          const x = fromLeft ? box.x - 2 : box.x + box.w + 2;
+          const needle = new Shot({ x, y, warn: 0.6, art: 'haywardNeedle', angle: fromLeft ? 0 : Math.PI });
+          needle.dir = fromLeft ? 1 : -1;
+          needle.mid = y;
+          needle.last = { x, y };
+          // Timed so the seam goes through the spot you're standing on.
+          needle.phase = -(Math.abs(soul.x - x) / SPEED) * 5;
+          needle.thread = 0;
+          bullets.push(needle);
+          needles.push(needle);
+          fromLeft = !fromLeft;
+        }
+        for (const needle of needles) {
+          if (needle.age < needle.warn) continue;
+          const run = needle.age - needle.warn;
+          // Zig, zag: it dives through the cloth and back up.
+          const wantY = clamp(needle.mid + Math.sin(run * 5 + needle.phase) * 20, box.y + 2, box.y + box.h - 2);
+          needle.vx = needle.dir * SPEED;
+          needle.vy = (wantY - needle.y) / Math.max(dt / density, 1e-4);
+          needle.angle = Math.atan2(needle.vy, needle.vx);
+          needle.thread -= dt;
+          if (needle.thread <= 0) {
+            needle.thread = 0.12;
+            const dx = needle.x - needle.last.x;
+            const dy = needle.y - needle.last.y;
+            const length = Math.hypot(dx, dy);
+            if (length > 0.5) {
+              bullets.push(new Line({ x: needle.last.x, y: needle.last.y, angle: Math.atan2(dy, dx), length, thickness: 2, warn: 0, life: 0.9, color: '#e8dcb0' }));
+            }
+            needle.last = { x: needle.x, y: needle.y };
+          }
+        }
+        needles = needles.filter((needle) => needle.x > box.x - 10 && needle.x < box.x + box.w + 10);
       },
     };
   },

@@ -32,10 +32,12 @@ export const ISLES_STAR_HELD = {
     { do: 'animate', who: 'player', animation: 'player_sword_get', speed: 0.1, once: true },
     { do: 'wait', seconds: 0.8 },
     { do: 'sound', name: 'shimmer' },
-    // The big light comes down the shaft onto the blade, brighter for a moment.
+    // The big light comes down the shaft onto the blade, and runs down it: pale gold, then white, then
+    // something else: a glint like a star a long way up. (draft)
     { do: 'stage', shafts: [{ at: { x: 9, y: 6 }, w: 1.2, color: '255, 244, 210' }] },
-    { do: 'wait', seconds: 1.4 },
-    { do: 'say', text: 'You hold the Fallen Star up into the light from the window. It runs down the blade, and the whole of it goes pale gold, then white, then something else. For a moment it glints the way a star does, a long way up.' },
+    { do: 'wait', seconds: 1 },
+    { do: 'stage', flare: { at: { x: 9, y: 5 }, seconds: 2.4 } },
+    { do: 'wait', seconds: 2.4 },
     { do: 'say', who: 'orla', text: '{soft}...Right. That\'s what I wanted to see. It\'s lit from the inside. It wants to be.' },
     { do: 'stage', shafts: [] },
     { do: 'animate', who: 'player' },
@@ -44,16 +46,17 @@ export const ISLES_STAR_HELD = {
     { do: 'sound', name: 'clink' },
     { do: 'wait', seconds: 0.25 },
     { do: 'sound', name: 'clink' },
-    // Back round to her at the anvil, to hand it over.
+    // She nods, once, takes the sword back to the anvil and pulls her goggles down. (draft)
     { do: 'face', who: 'player', dir: 'left' },
-    { do: 'say', text: 'She nods, once, to nobody. Then she takes the sword back to the anvil and pulls her goggles down.' },
     // The big reforge show (src/overworld/reforgeShow.js): the forge, the hammer, the shard, the new name.
     { do: 'forge_show', smith: 'orla_forge' },
-    { do: 'wait', seconds: 0.4 },
-    { do: 'say', text: 'When she\'s done, the blade hums back.' },
+    { do: 'sound', name: 'shimmer' },
+    { do: 'wait', seconds: 0.6 },
     { do: 'say', who: 'orla', text: '{proud}There. Four stars now, if you ask. Don\'t ask for them all at once.' },
     { do: 'act', who: 'bramble', act: 'bounce', wait: false },
     { do: 'wait', seconds: 0.3 },
-    { do: 'say', who: 'ves', text: '{bored}It hummed at her. It never hums at me.' },
+    { do: 'say', who: 'ves', text: '{angry}It hummed at her. It never hums at me.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

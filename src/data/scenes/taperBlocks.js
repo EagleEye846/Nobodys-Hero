@@ -18,12 +18,11 @@ export const TAPER_BLOCKS = {
   // What happens, in order (see STEP_TYPES in src/overworld/scenePlayer.js).
   steps: [
     { do: 'face', who: 'player', dir: 'right' },
-    { do: 'say', who: 'taper', face: 'sad', text: 'You came anyway. Of course you did.\n\nGrowing things always lean toward the open air.' },
-    { do: 'say', who: 'taper', face: 'sad', text: 'I\'ve stood here before. Every one who came down this hall, I tended, and I watched them go.\n\nNot one of them ever came back up those steps.' },
+    { do: 'say', who: 'taper', face: 'sad', text: 'You followed me. Of course you did.\n\nGrowing things always lean toward the open air.' },
+    { do: 'say', who: 'taper', face: 'sad', text: 'I\'ve watched heroes walk out this door before. I fed every one of them first.\n\nNot one of them ever came back through this door.' },
     { do: 'emote', who: 'taper', emote: '...' },
     { do: 'say', who: 'taper', text: '{worried}There\'s a light out there that calls to people. It called them, one by one.\n\n{crying}I can\'t bear for it to call you too.' },
-    { do: 'say', who: 'taper', text: '{sad}Before a seedling goes out, you harden it off. A little more cold every day, until it can stand the frost.\n\nI never did that for the others. I just opened the door.' },
-    { do: 'say', who: 'taper', text: '{angry}So. Here\'s your cold, sprout.\n\nIf you can stand it, you can go.' },
+    { do: 'say', who: 'taper', text: '{sad}So I\'m sorry, sprout. Truly.\n\n{angry}If you want to go, then let me see you can stand the cold out there.' },
     { do: 'battle', enemy: 'taper', who: 'taper', spared: 'taper_spared', defeated: 'taper_defeated' },
   ],
 };

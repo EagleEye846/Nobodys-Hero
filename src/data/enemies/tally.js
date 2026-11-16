@@ -4,10 +4,12 @@ import { TALLY_PALETTE, TALLY_SPRITE, TALLY_CHAOS_SPRITE, TALLY_ANIM, TALLY_CHAO
 // guardian of the Fallen Star's shard. In the old city, the clerks kept one great
 // ledger of everyone who had promised to be present on the day the Hero came,
 // and counted it every night. When the star went over the Old Street low enough
-// to chip its steps, a splinter of it went into the binding, and the book woke.
-// Now it counts, by itself, and it will not stop: it is trying to get the number
-// to come out right. Everyone on its list is present. Everyone but the Hero.
-// And you are standing there, counted or not.
+// to chip its steps, a splinter of it went into the binding, and the book made
+// one wish on it: that the count would come out right. The star granted it to
+// the letter. Now it counts, by itself, and it will not stop, and it will add
+// you to make the figures fit. Everyone on its list is present. Everyone but
+// the Hero. It isn't mad or possessed: it is stuck inside a wish that came true
+// the wrong way. Sparing it lets the wish go; beating it breaks it.
 //
 // It is chaotic the way a clerk is when the figures won't add up: tally
 // strokes, ink, rubber stamps, loose pages, a quill, an abacus, a bookcase
@@ -67,9 +69,10 @@ export const TALLY_BOSS = {
   music: 'tallyBattle',
   backdrop: 'valley',
   // Chapter 3's secret superboss: harder than the Hush (10500 HP, damage 46, then
-  // 57 enraged) at about 1.7 times its HP, and it never stops hitting. It can be
-  // spared, so the HP is for those who would rather fight.
-  maxHp: 17500,
+  // 57 enraged), and it never stops hitting. It can be spared, so the HP is for
+  // those who would rather fight. 13 November 2026: star guardians take about
+  // 35-40 rounds of good FIGHTs from the party you meet them with (it was 50).
+  maxHp: 13200,
   damage: 52,
   difficulty: { density: 1.85, speed: 1.28 },
   gentle: true,

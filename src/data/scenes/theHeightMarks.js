@@ -34,7 +34,11 @@ export const THE_HEIGHT_MARKS = {
     { do: 'face', who: 'player', dir: 'up' },
     { do: 'face', who: 'bramble', dir: 'up' },
     { do: 'face', who: 'ves', dir: 'up' },
-    { do: 'say', text: 'Marks scratched in the whitewash, with dates beside them. A row of small ones, climbing. One on its own, a little higher.\n\nThe row stops partway.' },
+    // The camera holds on the whitewash: a row of small marks climbing, one on its own a little higher, and
+    // the row stopping partway. (draft)
+    { do: 'camera', to: { x: 6, y: 3 } },
+    { do: 'wait', seconds: 2.2 },
+    { do: 'camera' },
     // Bramble backs up against the wall to be measured.
     { do: 'face', who: 'bramble', dir: 'down' },
     { do: 'act', who: 'bramble', act: 'hop' },
@@ -42,13 +46,13 @@ export const THE_HEIGHT_MARKS = {
     { do: 'face', who: 'ves', at: 'bramble' },
     { do: 'say', who: 'ves', text: '{smile}Heels down.' },
     { do: 'act', who: 'bramble', act: 'sigh' },
-    { do: 'say', who: 'bramble', text: '{sheepish}...Taller than most of them.' },
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'wait', seconds: 0.5 },
-    { do: 'say', who: 'ves', text: '{thoughtful}The one on its own only got measured the once.' },
-    { do: 'say', who: 'ves', text: '{bored}Didn\'t stay long enough to grow, then.' },
+    { do: 'say', who: 'ves', text: '{surprised}The one on its own only got measured the once.\n\n{bored}Didn\'t stay long enough to grow, then.' },
     { do: 'face', who: 'bramble', dir: 'up' },
-    { do: 'wait', seconds: 0.6 },
+    { do: 'wait', seconds: 0.8 },
     { do: 'say', who: 'bramble', text: '{thinking}...The little ones stopped, though.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

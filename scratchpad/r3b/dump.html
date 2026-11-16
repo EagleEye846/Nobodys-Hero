@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf-8"><pre id="report">DUMP START
+</pre>
+<script type="module">
+import { ROOMS } from '../../src/data/rooms/index.js';
+import { Room } from '../../src/overworld/room.js';
+const report = document.getElementById('report');
+const ids = (new URLSearchParams(location.search).get('ids') ?? '').split(',');
+let out = '';
+for (const id of ids) {
+  const d = ROOMS[id]; if (!d) { out += `NO ${id}\n`; continue; }
+  const room = new Room(d);
+  const W = d.tiles[0].length, H = d.tiles.length;
+  const grid = [];
+  for (let y = 0; y < H; y++) { const row = []; for (let x = 0; x < W; x++) row.push(room.isSolidTile(x, y) ? '#' : (room.tileAt(x, y) === '~' ? '~' : (['.','d','y'].includes(room.tileAt(x,y)) ? (room.tileAt(x,y)==='y'?'=':'.') : room.tileAt(x, y).toLowerCase()))); grid.push(row); }
+  const mark = (x, y, c) => { if (grid[y]?.[x] !== undefined) grid[y][x] = c; };
+  for (const p of d.props) { const w = Math.max(1, Math.round(1)); const c = p.walkable ? (p.text ? 't' : 'd') : 'P'; if (p.x !== undefined) mark(Math.floor(p.x), Math.floor(p.y), p.walkable ? (grid[Math.floor(p.y)]?.[Math.floor(p.x)] === 'P' ? 'P' : c) : 'P'); }
+  for (const dr of d.doors ?? []) for (let i = 0; i < (dr.w ?? 1); i++) for (let j = 0; j < (dr.h ?? 1); j++) mark(dr.x + i, dr.y + j, 'D');
+  for (const c of d.cutscenes ?? []) for (let i = 0; i < (c.w ?? 1); i++) for (let j = 0; j < (c.h ?? 1); j++) mark(c.x + i, c.y + j, 'S');
+  for (const n of d.npcs ?? []) { mark(n.x, n.y, n.enemy ? 'M' : 'N'); if (n.patrol) for (let x = n.patrol[0]; x <= n.patrol[1]; x++) if (grid[n.y]?.[x] === '.') grid[n.y][x] = 'm'; }
+  mark(d.playerStart.x, d.playerStart.y, '@');
+  const pathy = (x, y) => d.tiles[y][x];
+  out += `=== ${id} ${W}x${H} area ${d.area} start ${d.playerStart.x},${d.playerStart.y} hush ${JSON.stringify(d.hush ?? null)}\n   ${[...Array(W).keys()].map((x) => x % 10).join('')}\n`;
+  grid.forEach((r, y) => { out += `${String(y).padStart(2)} ${r.join('')}\n`; });
+  out += `tilechars: ${[...new Set(d.tiles.join(''))].join('')}\n`;
+}
+report.textContent += out + 'DUMP DONE\n';
+</script>

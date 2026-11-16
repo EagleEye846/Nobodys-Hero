@@ -23,6 +23,7 @@ export const THE_BUNK_TALLY = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed (the camera holds on the bunk rail; Bramble counts on his fingers).
     { do: 'textbox', top: true },
     { do: 'walk', who: 'player', to: { x: 17, y: 12 }, wait: false },
     { do: 'walk', who: 'ves', to: { x: 15, y: 12 }, wait: false },
@@ -31,16 +32,19 @@ export const THE_BUNK_TALLY = {
     { do: 'face', who: 'player', dir: 'up' },
     { do: 'face', who: 'bramble', dir: 'up' },
     { do: 'face', who: 'ves', dir: 'up' },
-    { do: 'say', text: 'Under the stair there\'s a bunk so small it can only have been a child\'s.\n\nThe rail along the front is notched from one end to the other, in fives.' },
-    { do: 'act', who: 'bramble', act: 'look' },
-    { do: 'say', who: 'bramble', text: '{thinking}Five, ten, fifteen, twenty...' },
     { do: 'wait', seconds: 1 },
-    { do: 'say', who: 'bramble', text: '{surprised}...I\'ve run out of fingers. Twice.' },
+    { do: 'say', text: 'A bunk so small it can only have been a child\'s. The rail along the front is notched from one end to the other, in fives.' },
+    // Bramble counts, on his fingers, and runs out.
+    { do: 'act', who: 'bramble', act: 'look' },
+    { do: 'act', who: 'bramble', act: 'fidget' },
+    { do: 'wait', seconds: 0.8 },
+    { do: 'emote', who: 'bramble', emote: 'sweat', wait: false },
+    { do: 'say', who: 'bramble', text: '{surprised}Five, ten, fifteen, twenty... I\'ve run out of fingers. Twice.' },
     { do: 'emote', who: 'ves', emote: '...' },
-    { do: 'say', who: 'ves', text: '{thoughtful}I\'ve seen that before. Scratched in the rock, down in the Deep.' },
+    { do: 'say', who: 'ves', text: '{surprised}...Hang on. Haven\'t we seen that before? Scratched in the rock, down in the Deep.' },
     { do: 'face', who: 'bramble', at: 'ves' },
-    { do: 'say', who: 'bramble', text: '{thinking}Whose?' },
-    { do: 'say', who: 'ves', text: '{bored}Somebody who liked things in rows.' },
+    { do: 'emote', who: 'bramble', emote: '?' },
+    { do: 'say', who: 'ves', text: '{smile}No idea whose. Somebody who liked rows.' },
     { do: 'textbox', top: false },
   ],
 };

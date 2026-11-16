@@ -53,7 +53,7 @@ export const SOUL_MODES = {
       if (soul.platform && !(platforms?.includes(soul.platform) && under(soul.platform))) soul.platform = null;
       if (soul.platform) soul.grounded = true;
 
-      const jumpPressed = input.wasPressed('up') || input.wasPressed('jump');
+      const jumpPressed = (input.firstPressed?.('up') ?? input.wasPressed('up')) || input.wasPressed('jump');
       const jumpHeld = input.isDown('up') || input.isDown('jump');
       if (soul.grounded && jumpPressed) {
         soul.vy = -HEAVY_JUMP;

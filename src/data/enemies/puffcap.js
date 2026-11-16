@@ -14,7 +14,7 @@ export const PUFFCAP = {
   // this area's heading; see tools/order.js). The game itself doesn't use it.
   area: 'pinefall',
   sprite: { rows: PUFFCAP_SPRITE, palette: PUFFCAP_PALETTE },
-  maxHp: 495,
+  maxHp: 2250,
   damage: 17,
 
   // A Hushwood enemy: a touch busier than the Pinefall's.
@@ -23,9 +23,9 @@ export const PUFFCAP = {
   // Its attacks live in src/battle/attacks/puffcap.js.
   patterns: [
     { name: 'puffStartle', weight: 3 },
-    { name: 'puffFairyRing', weight: 3 },
-    { name: 'puffGills', weight: 2 },
     { name: 'puffFortyWinks', weight: 2 },
+    { name: 'puffJumpy', weight: 3 },
+    { name: 'puffHum', weight: 2 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

@@ -1,0 +1,83 @@
+# DRILLBUG
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/drillbug.js.
+
+[intro]
+The floor shudders, a drill pokes up through the dirt, and a small, proud face follows it. A DRILLBUG!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+DRILLBUG revs its drill, to show that it can. It can.
+
+The lamp on DRILLBUG's helmet swivels to look at you. It's very bright. It looks very proud.
+
+DRILLBUG taps the wall, listens, and nods. It has a good tunnel in mind. It's wrong, but it's nodding.
+
+A little grit sifts down from the ceiling. DRILLBUG says that's normal.
+
+Smells like a hot cellar and a very long weekend.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+# (draft)
+[flavor: low]
+DRILLBUG's drill coughs, splutters, and turns a quarter turn. DRILLBUG says it meant to do that. It's very proud of the quarter.
+
+# (draft)
+[flavor: spareable]
+DRILLBUG has switched off its drill and is pointing its helmet lamp at the ceiling, so you can see the way out. It's the real way, this time.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+I dug it
+MYSELF.
+
+Mind the
+ceiling.
+
+Nobody digs
+like I dig.
+
+Straight
+through!
+
+...Was that
+your cellar?
+
+This way!
+Probably.
+
+Brrrrrrr!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/drillbug.js.
+[talk: Inspect]
+DRILLBUG - HP 1050
+A beetle with a drill for a nose and a lamp on its hat. Proud of every tunnel. Digs where you stand, so don't stand still. Hopeless with directions, and its lamp is very bright.
+
+[talk: Praise a tunnel]
+You point to a tunnel, any tunnel, and tell DRILLBUG it's the straightest you've ever seen. It's not straight at all. DRILLBUG's antennae stand bolt upright. It scratches the date into the wall beside it, so the tunnel will remember the day.
+
+[talk: Ask for directions]
+You ask DRILLBUG the way to the next cave. It lights up. It draws a map in the dirt, with a great deal of detail. All of it goes through one wall. It's very sure about the wall.
+
+[talk: Admire the drill]
+You ask to see the drill up close. DRILLBUG presents it, reverently, like a sword. It is very shiny. It has a tiny engraving on it that says WORLD'S BEST DRILLBUG. It engraved it itself.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+DRILLBUG rolls onto its back with all six legs in the air. The drill stutters, spins down, and stops. Its helmet lamp stays on a little longer, then dims.
+
+[pacified]
+DRILLBUG takes off its helmet and holds it to its chest. It points you down the tunnel it's actually sure about, this time. It's the right one.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that half its tunnels end in somebody's cellar. {foe} says that's what makes them landmarks. She has to admit that's a good answer.
+
+Ves asks {foe} to please never dig under her umbrella. {foe} swears it won't. A small tunnel opens, just in front of her boot. It shuts it, with a lot of dirt, and does not look at her.
+
+Ves says {foe}'s drill is the loudest thing she's heard since the bells. {foe} revs it in thanks. She'd like that to be the last time.

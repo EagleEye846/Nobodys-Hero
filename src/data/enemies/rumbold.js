@@ -239,7 +239,7 @@ export const RUMBOLD_BOSS = {
       // climb you can see, even if Tuck was talked round at half), and it's
       // harder than anything yet: his own body thrown at you, and no hand
       // holding him back.
-      // (Buffed 2026-11-10 at Patrick's ask: mends to 70%, harder hits,
+      // (Buffed 2026-11-10: mends to 70%, harder hits,
       // denser and quicker, finale too; still one attack at a time.)
       renew: { to: 0.7, seconds: 2.6 },
       // (No second attack laid on top: one thing of his at a time, each with

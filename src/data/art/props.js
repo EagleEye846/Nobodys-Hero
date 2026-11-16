@@ -11,6 +11,8 @@ import { DEADCITY_PALETTE_EXTRA, DEADCITY_PROP_SPRITES, DEADCITY_FOOTPRINTS } fr
 import { BF_PALETTE_EXTRA, BF_PROP_SPRITES, BF_FOOTPRINTS } from './belowFolk.js';
 import { CF_PALETTE, CF_PROP_LOOKS, CF_FOOTPRINTS } from './coastFolk.js';
 import { DEEP_PALETTE_EXTRA, DEEP_PROP_SPRITES, DEEP_FOOTPRINTS } from './deepProps.js';
+import { CAVE_PALETTE_EXTRA, CAVE_PROP_SPRITES, CAVE_FOOTPRINTS } from './caveLife.js';
+import { BL_PALETTE_EXTRA, BL_PROP_SPRITES, BL_FOOTPRINTS } from './belowLife.js';
 import { CARTS_PROP_SPRITES } from './carts.js';
 import { SS_PALETTE_EXTRA, SS_PROP_SPRITES, SS_FOOTPRINTS } from './starSeam.js';
 import { BEAM_PALETTE_EXTRA, BEAM_PROP_SPRITES } from './beams.js';
@@ -18,10 +20,21 @@ import { BRIGHT_PALETTE_EXTRA, BRIGHT_PROP_SPRITES, BRIGHT_FOOTPRINTS } from './
 import { COAST_PALETTE_EXTRA, COAST_PROP_SPRITES, COAST_FOOTPRINTS } from './coastProps.js';
 import { SY_PALETTE_EXTRA, SY_PROP_SPRITES, SY_FOOTPRINTS } from './sunnyAutumn.js';
 import { LN_PALETTE_EXTRA, LN_PROP_SPRITES, LN_FOOTPRINTS } from './lanesProps.js';
+import { LV_PALETTE_EXTRA, LV_PROP_SPRITES, LV_FOOTPRINTS } from './lanesLife.js';
+import { R3C_PALETTE_EXTRA, R3C_PROP_SPRITES, R3C_FOOTPRINTS } from './r3cLife.js';
+import { R5G_PALETTE_EXTRA, R5G_PROP_SPRITES, R5G_FOOTPRINTS } from './shipLife.js';
+import { CL_PALETTE_EXTRA, CL_PROP_SPRITES, CL_FOOTPRINTS } from './cityLife.js';
+import { R3P_PALETTE_EXTRA, R3P_PROP_SPRITES, R3P_FOOTPRINTS } from './r3pLife.js';
+import { R3B_PALETTE_EXTRA, R3B_PROP_SPRITES, R3B_FOOTPRINTS } from './r3bLife.js';
 import { MW_PALETTE_EXTRA, MW_PROP_SPRITES, MW_FOOTPRINTS } from './merrowProps.js';
 import { IL_PALETTE_EXTRA, IL_PROP_SPRITES, IL_FOOTPRINTS } from './islesProps.js';
+import { R2V_PALETTE_EXTRA, R2V_PROP_SPRITES, R2V_FOOTPRINTS } from './vigilLife.js';
 import { LL_PALETTE_EXTRA, LL_PROP_SPRITES, LL_FOOTPRINTS } from './lastLightProps.js';
+import { TR_PALETTE_EXTRA, TR_PROP_SPRITES } from './tideRescue.js';
 import { SC_PALETTE_EXTRA, SC_PROP_SPRITES, SC_FOOTPRINTS } from './saltcombeProps.js';
+import { ST_PALETTE_EXTRA, ST_PROP_SPRITES, ST_FOOTPRINTS } from './saltLife.js';
+import { R2R_PALETTE_EXTRA, R2R_PROP_SPRITES, R2R_FOOTPRINTS } from './restLife.js';
+import { R5S_PALETTE_EXTRA, R5S_PROP_SPRITES, R5S_FOOTPRINTS } from './sunnyLife.js';
 import { HS_PALETTE_EXTRA, HS_PROP_SPRITES, HS_FOOTPRINTS } from './haddockShed.js';
 import { IN_PALETTE_EXTRA, IN_PROP_SPRITES, IN_FOOTPRINTS } from './interiorProps.js';
 import { TH_PALETTE_EXTRA, TH_PROP_SPRITES, TH_FOOTPRINTS } from './taperHouse.js';
@@ -30,8 +43,17 @@ import { SUNNY_SCENE_PALETTE_EXTRA, SUNNY_SCENE_PROP_SPRITES } from './sunnyScen
 import { BT_SCENE_PALETTE_EXTRA, BT_SCENE_PROP_SPRITES, BT_SCENE_FOOTPRINTS } from './belowtownScenes.js';
 import { SIDEQUEST_PROP_SPRITES } from './sideQuests.js';
 import { WY_PALETTE, WY_PROP_SPRITES, WY_FOOTPRINTS } from './wreckYard.js';
+import { SHORE_PALETTE, SHORE_PROP_SPRITES, SHORE_FOOTPRINTS } from './shoreLife.js';
 import { GS_PALETTE, GS_PROP_SPRITES, GS_FOOTPRINTS } from './ghostShip.js';
+import { SHIP_SIGN_PALETTE, SHIP_SIGN_PROP_SPRITES, SHIP_SIGN_FOOTPRINTS } from './shipSignposts.js';
 import { SD_PALETTE_EXTRA, SD_PROP_SPRITES, SD_FOOTPRINTS } from './soundingsProps.js';
+import { AR_PALETTE_EXTRA, AR_PROP_SPRITES, AR_FOOTPRINTS } from './ashProps.js';
+import { COL_PALETTE_EXTRA, COL_PROP_SPRITES } from './collectibles.js';
+import { AL_PROP_SPRITES, AL_FOOTPRINTS } from './ashLife.js';
+import { DG_PALETTE_EXTRA, DG_PROP_SPRITES, DG_FOOTPRINTS } from './diggingsDressing.js';
+import { R1_PALETTE_EXTRA, R1_PROP_SPRITES, R1_FOOTPRINTS } from './ruinsLife.js';
+import { R3M_PALETTE_EXTRA, R3M_PROP_SPRITES, R3M_FOOTPRINTS } from './marshLife.js';
+import { HUSH_LIFE_PALETTE_EXTRA, HUSH_LIFE_PROP_SPRITES, HUSH_LIFE_FOOTPRINTS } from './hushLife.js';
 
 export const PROP_PALETTE = {
   k: '#120c1c', // outline
@@ -119,6 +141,8 @@ export const PROP_PALETTE = {
   // The Coast Folk's colours, on private characters (src/data/art/coastFolk.js).
   ...CF_PALETTE,
   ...DEEP_PALETTE_EXTRA,
+  ...CAVE_PALETTE_EXTRA,
+  ...BL_PALETTE_EXTRA,
   ...SS_PALETTE_EXTRA,
   // The light-beam puzzles' teals and golds (Greek letters: src/data/art/beams.js).
   ...BEAM_PALETTE_EXTRA,
@@ -130,20 +154,46 @@ export const PROP_PALETTE = {
   ...SY_PALETTE_EXTRA,
   // Chapter 5's Sunken Lanes (src/data/art/lanesProps.js).
   ...LN_PALETTE_EXTRA,
+  ...LV_PALETTE_EXTRA,
+  ...R3C_PALETTE_EXTRA,
+  // The ghost ship's life pass (src/data/art/shipLife.js).
+  ...R5G_PALETTE_EXTRA,
+  ...CL_PALETTE_EXTRA,
+  ...R3P_PALETTE_EXTRA,
+  ...R3B_PALETTE_EXTRA,
   // Chapter 5's Merrow, the drowned town (src/data/art/merrowProps.js).
   ...MW_PALETTE_EXTRA,
   // Chapter 5's Beacon Isles (src/data/art/islesProps.js).
   ...IL_PALETTE_EXTRA,
+  // The life pass on Mount Vigil (src/data/art/vigilLife.js).
+  ...R2V_PALETTE_EXTRA,
   // Chapter 5's Last Light, inside (src/data/art/lastLightProps.js).
   ...LL_PALETTE_EXTRA,
+  // The end of chapter 5: the lamp room after the fight (src/data/art/tideRescue.js).
+  ...TR_PALETTE_EXTRA,
   // The Wreck Yard's own props (src/data/art/wreckYard.js).
   ...WY_PALETTE,
+  // Life for the Wrack Shore and the Wreck Yard (src/data/art/shoreLife.js).
+  ...SHORE_PALETTE,
   // The ghost ship's own props (src/data/art/ghostShip.js).
   ...GS_PALETTE,
+  ...SHIP_SIGN_PALETTE,
   // The Soundings' chart, windlasses, weight frame, counterweight and diving bell (src/data/art/soundingsProps.js).
   ...SD_PALETTE_EXTRA,
+  // Chapter 6's Ash Road (src/data/art/ashProps.js).
+  ...AR_PALETTE_EXTRA,
+  // The collectible sets' pickups (src/data/art/collectibles.js).
+  ...COL_PALETTE_EXTRA,
+  ...DG_PALETTE_EXTRA,
+  ...R1_PALETTE_EXTRA,
+  ...R3M_PALETTE_EXTRA,
+  ...HUSH_LIFE_PALETTE_EXTRA,
   // Saltcombe's bunk, ledger, chart, board, painting and the two in the lagoon (src/data/art/saltcombeProps.js).
   ...SC_PALETTE_EXTRA,
+  // Life for Saltcombe and Gullrest (src/data/art/saltLife.js).
+  ...ST_PALETTE_EXTRA,
+  ...R2R_PALETTE_EXTRA,
+  ...R5S_PALETTE_EXTRA,
   // Haddock's shed (src/data/art/haddockShed.js).
   ...HS_PALETTE_EXTRA,
   // Chapter 5's indoor odds and ends: shelves, charts, mugs, boots, windows (src/data/art/interiorProps.js).
@@ -3334,6 +3384,10 @@ export const PROP_SPRITES = {
   ...CF_PROP_LOOKS,
   // The Diggings, the Stillwater and the Deep (src/data/art/deepProps.js).
   ...DEEP_PROP_SPRITES,
+  // Set dressing for the Glimmering, the Stillwater and the Deep (src/data/art/caveLife.js).
+  ...CAVE_PROP_SPRITES,
+  // Belowtown's life pass (src/data/art/belowLife.js): tubs, pots, racks, pigeons, toys.
+  ...BL_PROP_SPRITES,
   // Seam Nine's lower workings (src/data/art/starSeam.js): the tea shelf and the star's crack.
   ...SS_PROP_SPRITES,
   // The Diggings (src/data/art/carts.js): mine carts, the rail lever, the barricade.
@@ -3348,13 +3402,25 @@ export const PROP_SPRITES = {
   // Chapter 5's Sunnyside: seed clocks, the windmill, Farmer Tolliver, the slipped path.
   ...SY_PROP_SPRITES,
   ...LN_PROP_SPRITES,
+  ...LV_PROP_SPRITES,
+  ...R3C_PROP_SPRITES,
+  ...R5G_PROP_SPRITES,
+  ...CL_PROP_SPRITES,
+  ...R3P_PROP_SPRITES,
+  ...R3B_PROP_SPRITES,
   // Merrow: bells, the market cross, the laid table, the tower, the sea gate.
   ...MW_PROP_SPRITES,
   // The Beacon Isles: little lighthouses, the old lightroom, the shutter cranks.
   ...IL_PROP_SPRITES,
+  ...R2V_PROP_SPRITES,
   ...LL_PROP_SPRITES,
+  ...TR_PROP_SPRITES,
   // Saltcombe (src/data/art/saltcombeProps.js).
   ...SC_PROP_SPRITES,
+  ...ST_PROP_SPRITES,
+  ...R2R_PROP_SPRITES,
+  // Sunnyside's farm life, round 2 (src/data/art/sunnyLife.js).
+  ...R5S_PROP_SPRITES,
   ...HS_PROP_SPRITES,
   ...IN_PROP_SPRITES,
   ...TH_PROP_SPRITES,
@@ -3365,8 +3431,17 @@ export const PROP_SPRITES = {
   // The side quests' cat and bell clapper (src/data/art/sideQuests.js).
   ...SIDEQUEST_PROP_SPRITES,
   ...WY_PROP_SPRITES,
+  ...SHORE_PROP_SPRITES,
   ...GS_PROP_SPRITES,
+  ...SHIP_SIGN_PROP_SPRITES,
   ...SD_PROP_SPRITES,
+  ...AR_PROP_SPRITES,
+  ...COL_PROP_SPRITES,
+  ...AL_PROP_SPRITES,
+  ...DG_PROP_SPRITES,
+  ...R1_PROP_SPRITES,
+  ...R3M_PROP_SPRITES,
+  ...HUSH_LIFE_PROP_SPRITES,
 };
 
 // How many tiles wide a prop stands, for the big ones. It stands on its tile
@@ -3405,21 +3480,41 @@ export const PROP_FOOTPRINTS = {
   ...BF_FOOTPRINTS,
   ...CF_FOOTPRINTS,
   ...DEEP_FOOTPRINTS,
+  ...CAVE_FOOTPRINTS,
+  ...BL_FOOTPRINTS,
   ...SS_FOOTPRINTS,
   ...BRIGHT_FOOTPRINTS,
   ...COAST_FOOTPRINTS,
   ...SY_FOOTPRINTS,
   ...LN_FOOTPRINTS,
+  ...LV_FOOTPRINTS,
+  ...R3C_FOOTPRINTS,
+  ...R5G_FOOTPRINTS,
+  ...CL_FOOTPRINTS,
+  ...R3P_FOOTPRINTS,
+  ...R3B_FOOTPRINTS,
   ...MW_FOOTPRINTS,
   ...IL_FOOTPRINTS,
+  ...R2V_FOOTPRINTS,
   ...LL_FOOTPRINTS,
   ...SC_FOOTPRINTS,
+  ...ST_FOOTPRINTS,
+  ...R2R_FOOTPRINTS,
+  ...R5S_FOOTPRINTS,
   ...HS_FOOTPRINTS,
   ...IN_FOOTPRINTS,
   ...TH_FOOTPRINTS,
   ...GLIMMER_FALLS_FOOTPRINTS,
   ...BT_SCENE_FOOTPRINTS,
   ...WY_FOOTPRINTS,
+  ...SHORE_FOOTPRINTS,
   ...GS_FOOTPRINTS,
+  ...SHIP_SIGN_FOOTPRINTS,
   ...SD_FOOTPRINTS,
+  ...AR_FOOTPRINTS,
+  ...AL_FOOTPRINTS,
+  ...DG_FOOTPRINTS,
+  ...R1_FOOTPRINTS,
+  ...R3M_FOOTPRINTS,
+  ...HUSH_LIFE_FOOTPRINTS,
 };

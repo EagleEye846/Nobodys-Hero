@@ -114,7 +114,7 @@ export const RIMEWING_ATTACKS = {
       bullets.push(new Shot({ x: from.x, y: from.y, vx: Math.cos(aim) * 56, vy: Math.sin(aim) * 56, art: 'rimeScale' }));
     }, { first: 0.5 });
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         if (!lamp) {
           lamp = new Shot({ x: soul.x, y: soul.y, harmless: true, art: 'rimeLamp' });
@@ -159,7 +159,7 @@ export const RIMEWING_ATTACKS = {
     let frost = null;
     let last = null;
     return {
-      duration: 6.5,
+      duration: 7,
       update: (dt, bullets, soul) => {
         time += dt;
         turn += spin * dt;

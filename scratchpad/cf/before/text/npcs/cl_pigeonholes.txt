@@ -1,0 +1,18 @@
+# THE WAITING ROOM'S PIGEONHOLES: one slot empty. A tiny errand of the life pass. (draft)
+
+[first]
+A wall of pigeonholes by the benches, A to Z, one for each kind of waiting file. Every one is full, except W. The W is empty, and its label has been rubbed so shiny by someone's thumb that the letter is nearly gone.
+
+[repeat]
+The pigeonholes, A to Z, all full but the W.
+
+[page_ask]
+Something about the empty W slot is making your eye twitch.
+
+[page_done]
+You slide the loose W page into its pigeonhole. It fits perfectly, with a small tidy sound like a key. Deep inside the wall, something clicks, and a drawer you hadn't noticed slides open by an inch. In it: a clerk's blotter, printed backwards, with the whole of someone's handwriting on it.
+
+You take it.
+
+[page_after]
+The pigeonholes, every one full. The W holds a single page, very straight.

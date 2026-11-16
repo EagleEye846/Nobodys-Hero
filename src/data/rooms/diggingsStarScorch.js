@@ -27,6 +27,8 @@
 //   x  glassy crystal (solid)       q  loose gravel        ^  stalagmite (solid)
 //   .  packed dirt floor (here, a glaze over it)
 
+import { DIGGINGS_DRESSING } from '../diggingsDressing.js';
+
 export const DIGGINGS_STAR_SCORCH = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'diggings_star_scorch',
@@ -96,6 +98,7 @@ export const DIGGINGS_STAR_SCORCH = {
 
   textFile: 'interactions/star_seam.txt',
   props: [
+    ...(DIGGINGS_DRESSING.diggings_star_scorch ?? []),
     // A save point where the crack lets you out.
     { sprite: 'savepoint', x: 5, y: 7, save: true },
     // The two carts: b behind (to ride), a ahead (to send on alone).

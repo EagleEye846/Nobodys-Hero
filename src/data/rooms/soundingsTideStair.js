@@ -168,6 +168,9 @@ export const SOUNDINGS_TIDE_STAIR = {
     { sprite: 'sd_sea_rock', x: 9, y: 26 },
     { sprite: 'sd_sea_rocks', x: 19, y: 21 },
     { sprite: 'sd_sea_rock', x: 20, y: 27 },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_echo_stone', x: 22, y: 4, text: 'lp_echo_stone2' },
+    { sprite: 'lv_tripod', x: 24, y: 12, text: 'lp_tripod_stair' },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'stair_water', ';': 'stair_ford', q: 'hall_shingle', x: 'sound_glass', s: 'stair_steps' },
 
@@ -176,7 +179,8 @@ export const SOUNDINGS_TIDE_STAIR = {
   // three rows off the bar). Both keep clear of the doors, the stair, the rope's foot, the dials,
   // the wheel and every tile the tide changes (rows 23 and 24). No cutscenes in this room.
   npcs: [
-    { enemy: 'wrackeel', x: 17, y: 12, patrol: [15, 20], behaviour: 'patrol' },
+    // (The mid level's pool now holds a Tidewight: it stands up only while the tide is high.)
+    { enemy: 'tidewight', x: 17, y: 12, patrol: [15, 20], behaviour: 'patrol', tide: 'high' },
     { enemy: 'moonjelly', x: 9, y: 20, patrol: [7, 11], behaviour: 'patrol' },
   ],
 };

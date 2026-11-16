@@ -23,7 +23,7 @@ export const LAMP_MITE = {
     frames: [LAMP_MITE_DISGUISE_SPRITES.still, LAMP_MITE_DISGUISE_SPRITES.eyes, LAMP_MITE_DISGUISE_SPRITES.peek],
     palette: LAMP_MITE_PALETTE,
   },
-  maxHp: 845,
+  maxHp: 1550,
   // Each mite hardly stings, but there are a LOT of them.
   damage: 23,
 
@@ -33,11 +33,9 @@ export const LAMP_MITE = {
 
   // Their attacks live in src/battle/attacks/lamp_mite.js.
   patterns: [
-    { name: 'miteSwarm', weight: 3 },
-    { name: 'miteDust', weight: 2 },
-    { name: 'miteGlass', weight: 2 },
+    { name: 'miteLamps', weight: 3 },
+    { name: 'miteBump', weight: 3 },
     { name: 'miteCircle', weight: 3 },
-    { name: 'miteDart', weight: 2 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.

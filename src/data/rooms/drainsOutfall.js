@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE OUTFALL: where the old conduit broke, long ago, and all the mountain's
 // water goes over its broken lip into the mist. Grey daylight, the first since
 // Hollin. Out there in the fog, far off, lights on poles. Ves's last arrow is
@@ -61,6 +62,7 @@ export const DRAINS_OUTFALL = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/drains.txt',
   props: [
+    { sprite: 'col_marble_peewee', x: 1, y: 12, walkable: true, flat: true, gives: 'marble_peewee', taken: { gone: true } },
     { sprite: 'chalk_rock_right', x: 16, y: 6, text: 'outfall_chalk' },
     { sprite: 'light_shaft', x: 14, y: 5, text: 'outfall_light', walkable: true },
     { sprite: 'light_shaft', x: 15, y: 10, text: 'outfall_light', walkable: true },
@@ -68,6 +70,8 @@ export const DRAINS_OUTFALL = {
     { sprite: 'gold_pouch', x: 3, y: 2, text: 'outfall_purse', gold: 200, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'rubble_heap', x: 13, y: 12, text: 'rubble' },
     { sprite: 'rubble_heap', x: 6, y: 2, text: 'rubble' },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_outfall'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

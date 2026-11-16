@@ -108,7 +108,7 @@ export const SOUNDINGS_THREE_WELLS = {
     { sprite: 'treadle', x: 8, y: 13, text: 'wells_plate_hero', treadle: 'wh' },
     { sprite: 'push_rock', x: 9, y: 9, text: 'wells_boulder', rock: true },
     // Bramble's: the crack, his plate, his windlass.
-    { sprite: 'kid_gap', x: 14, y: 6, text: 'wells_crack', gap: true },
+    { sprite: 'c5_stone_gap', x: 14, y: 6, text: 'wells_crack', gap: true },
     { sprite: 'treadle', x: 19, y: 13, text: 'wells_plate_bramble', treadle: 'wb', who: 'bramble' },
     { sprite: 'sd_windlass', x: 20, y: 11, text: 'wells_windlass_bramble' },
     { sprite: 'gate_narrow', x: 25, y: 6, text: 'wells_grille_ves', opensWith: ['wb'], openText: 'wells_grille_ves_open' },
@@ -179,6 +179,12 @@ export const SOUNDINGS_THREE_WELLS = {
     { sprite: 'current_down', x: 33, y: 14, text: 'wells_chute', flow: 'down', animation: 'sd_current_down', speed: 0.1 },
     { sprite: 'current_down', x: 33, y: 15, text: 'wells_chute', flow: 'down', animation: 'sd_current_down', speed: 0.1 },
     { sprite: 'current_down', x: 33, y: 16, text: 'wells_chute', flow: 'down', animation: 'sd_current_down', speed: 0.1 },
+    { sprite: 'col_glass_pink', x: 3, y: 17, walkable: true, flat: true, gives: 'glass_pink', taken: { gone: true } },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_lunch_pail', x: 2, y: 6, text: 'lp_marrow_pail', walkable: true, react: true, gives: 'marrow_pail', taken: { gone: true } },
+    { sprite: 'lv_echo_stone', x: 18, y: 3, text: 'lp_echo_stone3' },
+    { sprite: 'lv_candle_stubs', x: 20, y: 5, text: 'lp_candle_wells', flat: true, walkable: true },
+    { sprite: 'lv_boot', x: 30, y: 15, text: 'lp_boot_wells', walkable: true },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'wells_water', ';': 'wells_shallows', x: 'sound_glass' },
 
@@ -188,6 +194,7 @@ export const SOUNDINGS_THREE_WELLS = {
   // her windlass (27,10). Nothing in the gallery, the pocket or the chute. No cutscenes here.
   npcs: [
     { enemy: 'kelpie_foal', x: 5, y: 17, patrol: [2, 9], behaviour: 'patrol' },
-    { enemy: 'net_wraith', x: 25, y: 15, patrol: [24, 26], behaviour: 'patrol' },
+    // (A Blind Grotto Crab sits there as a big white shell, same place the net wraith was, until you come within four tiles.)
+    { enemy: 'blind_crab', x: 25, y: 15, patrol: [25, 25], behaviour: 'disguise', look: 'white_shell' },
   ],
 };

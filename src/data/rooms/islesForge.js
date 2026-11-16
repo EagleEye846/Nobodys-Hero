@@ -3,7 +3,7 @@
 // window into the room: a pale shaft of it stands on the floor all day and all night. Orla Cobb,
 // a gruff grey seal, works at her anvil beside the forge she lights from the lamp's oil. Her
 // shop (`orla_forge`, src/data/shops.js) sells a little and reforges the Fallen Star (+3) once
-// you bring the shard from the Wreck Yard's snapped mast: her TALK menu's "The star sword"
+// you bring the Wreck Star Shard (from Madam Fairweather, the Figurehead at the end of the ghost ship): her TALK menu's "The star sword"
 // (src/data/fallenStar.js; the words, with the hold-it-up-to-the-light moment, are in
 // text/shops/orla_forge.txt). Walk in with the sword and the shard and it plays as a scene instead
 // (isles_star_brought), the shop's topic kept for anyone who missed that. A save point.
@@ -53,7 +53,7 @@ export const ISLES_FORGE = {
     { x: 19, y: 9, w: 1, h: 2, to: 'isles_west_light', spawn: { x: 2, y: 11 } },
   ],
 
-  // Walking in with the Fallen Star and the Wreck Yard's shard, Orla hears them hum and does the
+  // Walking in with the Fallen Star and the Figurehead's shard (the ghost ship), Orla hears them hum and does the
   // reforge there and then (isles_star_brought, then the sword in the light as isles_star_held).
   // Just inside each door; `forge` keeps it shut until that reforge is ready, so without the sword
   // or the shard nothing plays. The shop's "The star sword" still works for anyone who missed it.
@@ -74,6 +74,8 @@ export const ISLES_FORGE = {
     { sprite: 'grindstone', x: 14, y: 3, text: 'forge_grind' },
     { sprite: 'c5_barrels', x: 16, y: 2, text: 'forge_oil' },
     { sprite: 'savepoint', x: 15, y: 7, save: true },
+    // A green updraft: find it, and you can travel here from save points (src/data/travel.js).
+    { sprite: 'travel_draft', x: 16, y: 7, travel: 'orlas_forge', animation: 'travel_draft', speed: 0.14, notice: true, walkable: true },
     { sprite: 'c5_crates_stack', x: 2, y: 11, text: 'forge_crates' },
     { sprite: 'c5_rope_coil', x: 13, y: 11, text: 'forge_rope', walkable: true, flat: true },
     { sprite: 'sign', x: 4, y: 8, text: 'forge_sign' },

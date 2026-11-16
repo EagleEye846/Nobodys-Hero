@@ -1,0 +1,24 @@
+# LIGHT BEAMS and VES WELL AGAIN (Chapter 4): what Ves says about her
+# umbrella and the beams, and about being steered now she's not on a crutch.
+# See src/overworld/beams.js. (Your own rooms' beam props take their words
+# from the room's text file as usual.)
+
+# The first time you switch to Ves once she's well (Q).
+[swap_first_vesper_well]
+{smile}Oh, I get to go on my own. Lovely.
+
+{proud}I can jump and climb now, and I'm light as a feather, so old boards hold me. I still can't push a thing. That's your department.
+
+(Press Q to switch between you. Z on the other one to go together again.)
+
+# Ves, steered, in front of a rope.
+[ves_rope_well]
+{bored}A rope. I'm an umbrella girl, not a squirrel. You do it.
+
+# The first beam that lands on her umbrella.
+[umbrella_first]
+{surprised}Oh. It's shining straight at me.
+
+{smile}Fine. Umbrella up. It bounces off, look.
+
+{bored}The light goes the way I'm facing. Press Z to turn me, and walk me out of it when you're done.

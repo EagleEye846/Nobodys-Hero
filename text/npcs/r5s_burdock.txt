@@ -1,0 +1,36 @@
+# R5S_BURDOCK: a mole on Dandelion Hill who has lost his spectacles. An errand: his neighbour, two holes along, found
+# them and is wearing them (r5s_mole_neighbour.txt). Burdock cannot see to notice. The life pass, round 2.
+
+[first]
+Who's that? Don't tell me. A boot. A boot and a half. Two boots and a smaller boot. Hello! I'm Burdock. I'd shake your hand but I've got no idea where it is.
+
+[repeat]
+It's very bright up here. I think. I can't tell. It's all one big yellow smudge, and I think the smudge is the hill.
+
+[ask]
+I had spectacles. Round ones. Very good. I took them off to look at something small, and I put them down, and then I couldn't see where I'd put them, which is the trouble with spectacles. They can't have gone far. Nobody round here would just pick up a man's spectacles and wear them.
+
+[ask_ves]
+{bored}...Round spectacles. We'll look. We won't have to look far.
+
+[ask_bramble]
+{determined}Don't worry! We'll find them. We're very good at finding things. Mostly we find them by accident.
+
+[found]
+You put the spectacles into Burdock's paws. He turns them over, finds the arms, finds his face, and puts them on, in that order.
+
+The whole hill arrives. Burdock turns slowly in a circle, looking at everything, and then looks at you, and his whiskers go quite stiff.
+
+"Oh," he says. "You're much smaller than you sounded." He rummages in the earth and comes up with a big brass button. "Here. It came off a coat. A much bigger coat than I've ever owned. I don't know whose. It's very valuable. It's a button."
+
+[found_ves]
+{smile}Somebody's got a very good eye for treasure.
+
+[found_bramble]
+{glee}A button! A real one! It's brilliant!
+
+[after]
+Burdock sits in the middle of the hill with his spectacles on, staring at a daisy. He has stared at it for some time. He seems to be getting something out of it.
+
+[repeat 2]
+Everything's so sharp. The daisies have edges. I never knew they had edges.

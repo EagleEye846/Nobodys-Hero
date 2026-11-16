@@ -5,6 +5,8 @@
 // Tile key (see src/overworld/tileset.js):
 //   a  log cabin wall (solid)                     D  doorway (walk through it; see `doors`)
 //   #  wall top (solid)                           o  wooden floorboards
+import { VIGIL_PROPS } from '../vigilLifePass.js';
+import { R3A_PROPS } from '../r3aLife.js';
 export const VIGIL_LAMPLIGHTERS_HUT = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_lamplighters_hut',
@@ -62,6 +64,10 @@ export const VIGIL_LAMPLIGHTERS_HUT = {
     // Ves, sitting up by the door to think, from when she cries over the tally
     // (vesInTheHut.js) until you've slept (hutDream.js).
     { sprite: 'vesper_sit', x: 3, y: 7, text: 'hut_ves_thinking', animation: 'ves_sit', speed: 1.2, member: 'vesper', after: 'ves_in_the_hut', until: 'hut_dream' },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_lamplighters_hut'] ?? []),
+    // Round 3, the fun check (15 November 2026): see src/data/r3aLife.js.
+    ...(R3A_PROPS['vigil_lamplighters_hut'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -111,13 +111,14 @@ export const LANES_BUBBLE = {
     { sprite: 'ln_moss_a', x: 12, y: 14, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 14, y: 12, flat: true, walkable: true },
     { sprite: 'c5_puddle', x: 18, y: 10, flat: true, walkable: true },
-    { sprite: 'c5_rubble', x: 19, y: 13, walkable: true },
-    { sprite: 'c5_rubble', x: 11, y: 6, walkable: true },
+    { sprite: 'c5_rubble', x: 19, y: 13, walkable: true, decor: true },
+    { sprite: 'c5_rubble', x: 11, y: 6, walkable: true, decor: true },
     // Weed and wet streaks down the culvert walls.
     { sprite: 'ln_wall_weed', x: 3, y: 8, flat: true, walkable: true },
     { sprite: 'ln_wall_weed_b', x: 24, y: 8, flat: true, walkable: true },
     { sprite: 'ln_wall_weed_b', x: 6, y: 11, flat: true, walkable: true },
     { sprite: 'ln_wall_weed', x: 22, y: 11, flat: true, walkable: true },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
   ],
   tileTexts: { '#': 'bubble_culvert', W: 'bubble_culvert', '~': 'bubble_water', 0: 'bubble_deep' },
 

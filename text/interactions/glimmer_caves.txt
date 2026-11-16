@@ -591,3 +591,94 @@ A small glowing mushroom, sitting in the middle of the treasure like it owns the
 
 [vug_purse]
 A purse set right at the back of the vug, with a pebble on it to keep it down. Under the pebble is a note: WELL DONE. (you found it.)
+
+# --- THE LIFE PASS: things to look at (set dressing) ---
+
+[gp_bug]
+A glowbug, lamp end up, going about its business. It lets you look for a moment, then remembers an appointment.
+
+[gp_bug_ves]
+{smile}It has a better light than we do and it's using it to commute.
+
+[gp_bug 2]
+It turns its lamp towards you, very slowly, to see who you are. Then it turns it away again. Not interested.
+
+[gp_bug_ves 2]
+{smile}Rude. But I respect a creature that knows when to stop looking.
+
+[gp_cap 2]
+The cap tilts as you lean in, the way they do. The glow goes up a notch, then down.
+
+[gp_chime 2]
+One small bell swings, and the rest answer it, one after another, down the stalk. Then quiet again.
+
+[gp_crumbs 2]
+The pile is faintly warm and smells of sugar. Crystal sugar, probably. Probably.
+
+[gp_gem]
+A little crystal, pink at the heart, standing on its own. It gives a faint tick when the light moves across it, as if it's thinking about chiming.
+
+[gp_gem_ves]
+{smile}A very small crystal with very big opinions. I can tell.
+
+[gp_gem 2]
+It ticks again. You get the feeling it was about to say something.
+
+[gp_gem_ves 2]
+{smile}Give it time. They always wait for the end of the room.
+
+[gp_geode 2]
+You hold your hand up beside it. The geode is winning.
+
+[gp_puddle 2]
+You lean over. Your reflection leans over. The cave in the puddle has more crystals than the one you're standing in.
+
+[gp_ribbon 2]
+The ribbon moves in a breeze you can't feel. It's the only thing in the cave that's moving at all.
+
+[gp_shell 2]
+Something has been round the inside with a tiny brush. The crystals are cleaner than anything else in the cave.
+
+[gp_web]
+A small web strung between two crystals, beaded with dew. The spider's out. It'll be back, and it'll be smug about it.
+
+[gp_web_ves]
+{surprised}Don't touch it. It's the only thing down here that's actually handmade.
+
+[gp_web 2]
+A drop of dew slides down a thread, reaches the crystal, and rings it, just barely.
+
+[gp_web_ves 2]
+{surprised}Even the spider has better timing than I do.
+
+[lp_shelf_pebbles]
+Crystal chips, stacked in a neat little pile right at the edge. Somebody has been dropping them over to hear how long they fall.
+
+[lp_shelf_pebbles_ves]
+{smile}I'd like to know the answer. I'd like even more not to find out personally.
+
+[lp_hall_nook]
+A smooth, faintly bright pebble tucked under the lip of a rock, down in the corner where the beams never reach. A glowbug has been guarding it. It does not look worried.
+
+[lp_hall_nook_ves]
+{smile}Finders keepers. The bug had a go at it first.
+
+[lp_geode_half]
+Another half-geode, in a cave that is itself the inside of one. Somebody has set it on a stone to look out at the rest.
+
+[lp_geode_half_ves]
+{thoughtful}A geode, looking at a geode. I'm trying not to read into it.
+
+[lp_tuck_tin]
+A small tin box, shut, tucked behind a crystal at the back of the grotto. There's a smear of sugar on the lid and a very small thumbprint in it. It rattles. You take it.
+
+[lp_tuck_tin_ves]
+{smile}Somebody's going to be very sorry they put that down.
+
+[lp_vug_geode]
+A halved geode on the floor, glowing. The pocket's been hidden for so long that the crystals here have never seen another crystal grow.
+
+[lp_vug_geode_ves]
+{smile}A very private little cave. I'll keep the secret if you will.
+
+# --- end life pass ---

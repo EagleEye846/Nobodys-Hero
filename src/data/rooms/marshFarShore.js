@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE FAR SHORE: the end of the marsh. The ground rises out of the fen, dry
 // turf at last, and far off in the dusk to the east, the broken towers of a
 // city in a valley, with lights in some of its windows (far_shore). The path
@@ -67,6 +68,8 @@ export const MARSH_FAR_SHORE = {
     { sprite: 'cairn', x: 18, y: 4, text: 'shore_cairn' },
     // The toll board at the gap in the reeds: the Clerk's Islet.
     { sprite: 'sign', x: 9, y: 1, text: 'shore_toll_sign' },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['marsh_far_shore'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

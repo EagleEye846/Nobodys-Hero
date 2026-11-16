@@ -29,16 +29,20 @@ export const ME_AND_THE_HERO = {
     { do: 'face', who: 'player', dir: 'up' },
     { do: 'face', who: 'bramble', dir: 'up' },
     { do: 'face', who: 'ves', dir: 'up' },
-    { do: 'say', text: 'Pinned up by the window, a child\'s drawing in crayon. A lighthouse, and two small people under it, holding hands.\n\nOne says ME. The other says THE HERO.' },
+    // The camera goes up to the drawing by the window: a lighthouse, two small people holding hands. (draft)
+    { do: 'camera', to: { x: 7, y: 2 } },
+    { do: 'wait', seconds: 1.8 },
+    { do: 'camera' },
     { do: 'act', who: 'bramble', act: 'look' },
     { do: 'say', who: 'bramble', text: '{thinking}THE HERO\'s got a sword. It\'s bigger than he is.' },
-    { do: 'say', who: 'ves', text: '{bored}Artistic licence.' },
-    // She looks at the hero (and what's at his side) a moment too long, and back.
+    // Ves looks at the hero (and what's at his side) a moment too long, and says nothing. (draft)
     { do: 'face', who: 'ves', at: 'player' },
-    { do: 'wait', seconds: 0.8 },
+    { do: 'wait', seconds: 1.4 },
     { do: 'face', who: 'ves', dir: 'up' },
     { do: 'say', who: 'bramble', text: '{grin}And ME\'s got a coat on. Right down to his feet.' },
-    { do: 'say', who: 'ves', text: '{smile}He did himself first. Bigger letters, too.' },
+    { do: 'say', who: 'ves', text: '{laughing}He did himself first. Bigger letters, too.' },
     { do: 'act', who: 'bramble', act: 'nod' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).
+// (draft) 2026-11-15: staged to show it (camera, stage effects, acts) and the narration cut.

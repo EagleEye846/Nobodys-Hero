@@ -9,16 +9,16 @@
 [first after lantern_at_noon]
 {offended}Kettle's on. Mugs on the hook. Mind the biscuits; they're for emergencies.
 
-{offended}Been minding that kettle since dawn, I have. Does it thank me? It does not.
+{offended}Been mindin' that kettle since dawn, I have. Does it thank me? It does not.
 
 [repeat after lantern_at_noon]
-{offended}Tide table's on the wall. Chalked it myself. Read it. Don't rub it.
+{offended}Tide table's on the wall. Chalked it meself. Read it. Don't rub it.
 
-{eh}Eh? No, miss. The lantern's none of mine.
+{eh}Eh? No, miss. The lantern's none o' mine.
 
 # (draft) Turns.
 [repeat 2 after lantern_at_noon]
-{offended}Biscuits are for emergencies, lad. Being peckish is not an emergency.
+{offended}Biscuits are for emergencies, lad. Bein' peckish is not an emergency.
 
 {eh}...Go on, then. One.
 

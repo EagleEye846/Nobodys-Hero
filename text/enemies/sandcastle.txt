@@ -9,6 +9,8 @@ Three towers and a keep, turned out of a bucket and crowned with a lolly-stick f
 [flavor]
 SANDCASTLE trickles a little from its top turret and tidies itself, grain by grain.
 
+A little sand hand pokes up out of SANDCASTLE holding a sign. IT WOULD LIKE TO MOVE, BUT IT'S A SANDCASTLE. IT CAN'T.
+
 The flag snaps in the wind. SANDCASTLE straightens it with a creak.
 
 A shell in the wall falls out and is put back, with great dignity.
@@ -58,7 +60,7 @@ of damp.
 # TALK options in src/data/enemies/sandcastle.js.
 [talk: Inspect]
 SANDCASTLE - HP 2000
-A sandcastle that has come to life and is sure it will last. Fires sand from its turrets, sweeps its flag round like a gate, and sends its moat out along the floor in a wave. Always a gap in the wave. Don't count on the tide.
+A sandcastle that has come to life. It would like to move, but it is a sandcastle. So it builds towers where you stand, sends out its garrison, and brings the moat to you.
 
 [talk: Admire the towers]
 You walk slowly round it, looking up, and nod at every tower in turn. SANDCASTLE swells until a little sand runs off its keep. It has never been so pleased in its life. It will last, it thinks, forever.

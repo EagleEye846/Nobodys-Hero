@@ -1359,6 +1359,8 @@ export class ReforgeShow {
     // The smith's last word.
     const a3 = smooth((u - 1.3) / 0.4) * fade;
     drawText(ctx, s.captions.name, cx, y + size + 92, { size: 24, color: `rgba(230, 220, 240, ${a3.toFixed(3)})`, align: 'center', outline: `rgba(0,0,0,${a3.toFixed(3)})` });
+    // Every forging cuts one more SPELL NOTCH too (forgedNotches in src/characters/notches.js).
+    drawText(ctx, '+1 SPELL NOTCH', cx, y - 34, { size: 24, color: `rgba(255, 225, 77, ${a3.toFixed(3)})`, align: 'center', outline: `rgba(0,0,0,${a3.toFixed(3)})` });
     // Z to go on, once it can be.
     if (this.u >= this.holdMin && !this.ending) {
       const blink = 0.5 + 0.5 * Math.sin(this.real * 4);

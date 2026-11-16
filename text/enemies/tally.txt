@@ -3,9 +3,13 @@
 # Numbers (HP, damage, its phases) live in src/data/enemies/tally.js.
 #
 # It was the city's list of everyone who promised to be present on the day the Hero came. It has
-# been counting them for a hundred years and the figures never come out. It speaks like a clerk who
-# has stopped sleeping: precisely, a little too fast, losing its place, starting again from the top.
-# It isn't cruel. It wants the number to be right. It can be spared: let it count you.
+# been counting them for a hundred years and the figures never come out. When the star went over, the
+# book made one wish on it: that the count would come out right, every name that promised present on
+# the Day, present. The star granted it to the letter, so it counts forever, and it will add you to
+# make the figures fit. It isn't mad and it isn't possessed: it is stuck inside a wish.
+# It speaks like a clerk who has stopped sleeping: precisely, a little too fast, losing its place,
+# starting again from the top. It isn't cruel. It wants the number to be right. It can be spared: let
+# it count you, until it can let the sum go. Beaten, the wish breaks.
 #
 # A section with ": roll_call", ": late_fees" or ": margins" after its name is used in that phase of
 # its fight instead of the plain one. [phase: ...] sections are what's said as a phase starts: plain
@@ -170,7 +174,7 @@ THE MARGINS
 # src/data/enemies/tally.js.
 [talk: Check]
 QUIRE - HP 17500
-The Welcome Register of the Dead City, with a splinter of star in its binding. It is counting everyone who promised to come. It is trying to get the number to come out right.
+The Welcome Register of the Dead City, with a splinter of star in its binding. It only ever asked for one thing: that the count come out right. It has been counting ever since. You would make the numbers fit.
 
 [talk: Check: late_fees]
 QUIRE - HP 17500

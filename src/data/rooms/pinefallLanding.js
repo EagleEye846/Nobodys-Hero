@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // WHERE YOU FELL: the first room of Chapter 3. A clearing at the foot of a
 // great scarlet tree, its crown snapped off where something fell down through
 // it: you. Ves's mustard mitten is in the leaves beside you, the first thing of
@@ -59,6 +61,7 @@ export const PINEFALL_LANDING = {
   props: [
     { sprite: 'ves_mitten', x: 13, y: 10, text: 'landing_mitten', gives: 'ves_mitten', taken: { gone: true } },
     { sprite: 'savepoint', x: 4, y: 12, save: true },
+    ...(R3P_PROPS['pinefall_landing'] ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

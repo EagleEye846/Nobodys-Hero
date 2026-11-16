@@ -11,6 +11,7 @@
 //   I  old stone pillar (solid)
 //   W  the old city's stone wall (solid)
 //   ~  water (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
 export const CITY_FORUM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_forum',
@@ -79,6 +80,8 @@ export const CITY_FORUM = {
     { sprite: 'hero_statue_broken', x: 19, y: 3, text: 'forum_statue' },
     { sprite: 'gold_pouch', x: 29, y: 8, text: 'forum_purse', gold: 180, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 1, y: 16, text: 'forum_chest', gives: 'forum_bronze_ferrule', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_forum'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', '!': 'cracked_floor', I: 'city_pillar', J: 'city_pillar', b: 'city_step', '~': 'forum_water' },
 

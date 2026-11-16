@@ -1,0 +1,53 @@
+# BT_THRONE_KID2: A frog kid with a saucepan helmet in the throne room's audience, who has noticed something about the king and isn't sure if it's rude to mention.
+
+[first]
+Sh! Look at his jaw. It goes up and down. Like a door. Doesn't yours?
+
+Mum says it's polite not to stare. I've been staring for forty minutes.
+
+[repeat]
+He never moves his arms when he talks. Do you think he's shy?
+
+[first after the_kings_welcome]
+I think he's the best king. I also think the curtain wiggles. I haven't said anything. It's not my place.
+
+[repeat after the_kings_welcome]
+I asked the newt about the curtain. He said, 'What curtain?' He said it VERY fast.
+
+[first after the_light_goes_up]
+I knew it'd work. I knew it! I told Mum! I told the newt! They didn't believe me!
+
+[repeat after the_light_goes_up]
+I've decided not to tell anyone about the curtain. It's more fun.
+
+# (draft)
+[repeat 2]
+I tried talking without moving my arms. It's very hard. My arms want to help.
+
+# (draft)
+[repeat_ves 2]
+{thoughtful}She's not wrong. {bored}Try it. You can't.
+
+# (draft)
+[repeat 3]
+I'm not staring. I'm looking hard at one place for a long time.
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+I've decided the curtain's a draught. Draughts wiggle things. That's what they're for.
+
+# (draft)
+[repeat 3 after the_kings_welcome]
+The curtain's got a tail. I didn't say that. Draughts don't have tails. It's a very good draught.
+
+# (draft)
+[repeat_ves 3 after the_kings_welcome]
+{bored}A draught with a tail. {thoughtful}...Belowtown has unusual weather.
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+I told Mum it would work and she said "eat your tea". That means I was right.
+
+# (draft)
+[repeat 3 after the_light_goes_up]
+I'm saving the curtain for my birthday. Then I'm telling EVERYONE.

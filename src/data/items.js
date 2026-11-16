@@ -131,7 +131,13 @@ export const ITEMS = {
   lucky_clover: { name: 'Lucky Clover', use: 'calm', amount: 30 },
   // Chapter 5's cliff cave monsters (the Barnacle Bat, the Whelkling).
   echo_shell: { name: 'Echo Shell', use: 'sp', amount: 90 },
+  // The Soundings' monsters (the Blind Grotto Crab, the Tidewight).
+  ghost_pearl: { name: 'Ghost Pearl', use: 'calm', amount: 30 },
+  black_brine: { name: 'Black Brine', heal: 290 },
   sea_glass_sweet: { name: 'Sea-Glass Sweet', heal: 265 },
+  // The Soundings' monsters: the Echo Bat-Shrimp and the Plumb Lead.
+  echo_shrimp_shell: { name: 'Echo Shrimp Shell', use: 'calm', amount: 30 },
+  fathom_knot: { name: 'Fathom Knot', heal: 275 },
   // Sunnyside's chapter 4 monsters met again in chapter 5 (the Bunting, the Dandy Lion,
   // the Haybob): late-summer loot at the coast's numbers (their `later` drops).
   fete_sponge: { name: 'Fete Sponge', heal: 245 },
@@ -145,9 +151,24 @@ export const ITEMS = {
   humbug_lump: { name: 'Humbug Lump', heal: 999 },
   // Merrow's secret, the ringers' loft (chapter 5): a big SP drink, not sold anywhere.
   ringers_cordial: { name: "Ringers' Cordial", use: 'sp', amount: 130 },
+  // The Sunken Lanes' secret parlour, behind the doorway in the Sluices (chapter 5): a full mend, not sold anywhere.
+  still_warm_scone: { name: 'Still-Warm Scone', heal: 999 },
+  // The ring climbs (chapter 5): the breakers' locker at the top of the Chain Cliff (a full mend), and
+  // the lamp keepers' cupboard on the Gannet Stack (a big SP drink). Neither is sold anywhere.
+  figgy_duff: { name: 'Figgy Duff', heal: 999 },
+  keepers_tea: { name: "Keepers' Tea", use: 'sp', amount: 130 },
   climbers_ration: { name: "Climber's Ration", heal: 50 },
   // Mount Vigil and Heralds' Rest: sold at Rest Stores, or found in chests.
   pine_candy: { name: 'Pine Candy', heal: 30, price: 10 },
+  // The life pass (Pinefall, Hollin): small finds in hidden corners.
+  pine_nut_brittle: { name: 'Pine Nut Brittle', heal: 70 },
+  hollin_humbugs: { name: 'Hollin Humbugs', heal: 90 },
+  // Chapter 4's hidden corners (life pass): small snacks.
+  dgs_nap_biscuit: { name: 'Nap Biscuit', heal: 50 },
+  dgc_crumb_cake: { name: 'Little Shift Crumb Cake', heal: 50 },
+  bl_lookers_biscuit: { name: "Looker's Biscuit", heal: 50 },
+  deep_root_chew: { name: 'Root Chew', heal: 55 },
+  glow_sugar: { name: 'Glowbug Sugar', heal: 50 },
   snowmelt_tea: { name: 'Snowmelt Tea', heal: 55, price: 30 },
   frostberry_jam: { name: 'Frostberry Jam', heal: 45, price: 22 },
   hot_cocoa: { name: 'Hot Cocoa', heal: 65, price: 35 },
@@ -211,7 +232,13 @@ export const ITEMS = {
   kelp_crisps: { name: 'Kelp Crisps', heal: 265, price: 160 },
   winkle_skewer: { name: 'Winkle Skewer', heal: 275, price: 170 },
   cockle_chowder: { name: 'Cockle Chowder', heal: 285, price: 185 },
-  brine_tonic: { name: 'Brine Tonic', use: 'sp', amount: 110, price: 190 },
+  // Full SP, and the next spell after it is free: a whole bar's worth twice over.
+  brine_tonic: { name: 'Brine Tonic', use: 'sp', amount: 100, freeSpell: true, price: 5000 },
+  // The ghost cook's galley in the Wreck Yard (14 November 2026): his own cooking, a touch better than the
+  // Cockle Stall's for a touch more, and a hot cocoa that fills SP.
+  ships_hardtack: { name: "Ship's Hardtack", heal: 260, price: 155 },
+  galley_cocoa: { name: 'Galley Cocoa', use: 'sp', amount: 100, price: 180 },
+  cooks_soup: { name: "Cook's Soup", heal: 300, price: 200 },
   tinder_bun: { name: 'Tinder Bun', heal: 250, price: 160 },
   // Mrs. Wrasse's Chandlery (Chapter 5): ship's stores in place of the
   // candles (the coast has no dark rooms). Lamp oil for SP, pine tar to calm.
@@ -226,6 +253,12 @@ export const ITEMS = {
   powder_toffee: { name: 'Powder Toffee', use: 'sp', amount: 85 },
   // The Figurehead's, Madam Fairweather's (the ghost ship's secret superboss): a stopper of star-glass with the light still in it.
   starfall_cordial: { name: 'Starfall Cordial', heal: 700 },
+  // Chapter 6's Ash Road monsters (the Ashling, the Soot Gull, the Charcur, the
+  // Milestone): each beats the coast's best drop by a little (heal 285, SP 120).
+  ash_button: { name: 'Ash Button', heal: 305 },
+  sooty_quill: { name: 'Sooty Quill', use: 'sp', amount: 125 },
+  charred_collar: { name: 'Charred Collar', use: 'guard' },
+  mile_chip: { name: 'Mile Chip', heal: 320 },
 };
 
 // How many items you can carry.

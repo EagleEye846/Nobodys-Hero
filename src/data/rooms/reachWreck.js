@@ -16,6 +16,8 @@
 //   h  hull side (solid)   a  deckhouse wall (solid)   w  deckhouse porthole (solid)
 //   ~  heavy green sea (solid)   x  barnacle rock (solid)
 
+import { LIFE5_PROPS } from '../lifePass5.js';
+
 export const REACH_WRECK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'reach_wreck',
@@ -32,12 +34,16 @@ export const REACH_WRECK = {
   vesWell: true,
   // Rougher again: the sea comes over her rail.
   atmosphere: { rain: 1.5, lightning: 1.1, spray: 1.6, fog: 0.9 },
-  lastLight: { x: 44, y: 16 },
+  lastLight: { x: 44, y: 16, scale: 1.55 },
   skyline: [
     { kind: 'mast', x: 4, y: 6, lean: 1, tall: 58 },
     { kind: 'hull', x: 30, y: 16, lean: -1 },
   ],
 
+  // The storm's far wrecks stay well out to sea: never in the boat's lane (west of the landing, row 10) or by
+  // the jetty, where they used to stand over the Bother and the party. (15 Nov 2026)
+  skylineClear: 5,
+  skylineKeepOut: [{ x: 0, y: 5, w: 13, h: 9 }],
   tiles: [
     '################################################',
     '#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#',
@@ -69,9 +75,6 @@ export const REACH_WRECK = {
   cutscenes: [
     // The landing: the third crossing, once.
     { x: 9, y: 8, w: 2, h: 5, scene: 'reach_crossing_wreck' },
-    // The jetty's end: on to the eye. The side step: back to the reef.
-    { x: 42, y: 13, w: 1, h: 1, scene: 'reach_to_eye' },
-    { x: 41, y: 12, w: 1, h: 1, scene: 'reach_back_to_reef' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file.
@@ -82,13 +85,13 @@ export const REACH_WRECK = {
     // The deckhouse: the gap low in its side (Bramble only), his bolt wheel inside, the gangway gates.
     { sprite: 'wy_hull_hole', x: 29, y: 6, text: 'wreck_gap', gap: true },
     { sprite: 'valve_wheel', x: 29, y: 4, text: 'wreck_bolt', lever: 'reach_bolt', by: 'bramble', byText: 'wreck_bolt_not_you' },
-    { sprite: 'gate_narrow', x: 34, y: 6, text: 'wreck_gate', opensWith: ['reach_bolt'], openText: 'wreck_gate_open' },
-    { sprite: 'gate_narrow', x: 34, y: 7, text: 'wreck_gate', opensWith: ['reach_bolt'] },
+    { sprite: 'c5_gangway_gate', x: 34, y: 6, text: 'wreck_gate', opensWith: ['reach_bolt'], openText: 'wreck_gate_open' },
+    { sprite: 'c5_gangway_gate', x: 34, y: 7, text: 'wreck_gate', opensWith: ['reach_bolt'] },
     { sprite: 'rock_stump', x: 24, y: 7, text: 'rock_stump', rockReset: true },
     // Haddock in the Bother alongside the east jetty (x 43-46).
-    { sprite: 'cf_haddock_row', x: 43, y: 11, npc: 'haddock_reach', animation: 'cf_haddock_row', speed: 0.6, until: 'haddock_gone' },
+    { sprite: 'cf_haddock_row', x: 43, y: 11, playScene: 'reach_boat_wreck', notice: 'stays', animation: 'cf_haddock_row', speed: 0.6, until: 'haddock_gone' },
     // After the chapter: the Bother, empty (Ves rows her now).
-    { sprite: 'cf_bother', x: 43, y: 11, text: 'bother_after', animation: 'cf_bother', speed: 0.6, after: 'haddock_gone' },
+    { sprite: 'cf_bother', x: 43, y: 11, text: 'bother_after', playScene: 'reach_boat_wreck', notice: 'stays', animation: 'cf_bother', speed: 0.6, after: 'haddock_gone' },
     { sprite: 'c5_chain_bollard', x: 40, y: 8, text: 'reach_bollard' },
     // Her deck: a broken wheel, a stump of mast, a sail in rags, the figurehead on the shingle.
     { sprite: 'c5_ships_wheel', x: 19, y: 7, text: 'wreck_wheel' },
@@ -133,6 +136,7 @@ export const REACH_WRECK = {
     { sprite: 'wy_grating', x: 22, y: 6, flat: true, walkable: true },
     { sprite: 'wy_chain_pile', x: 26, y: 8, flat: true, walkable: true },
     { sprite: 'c5_planks_scatter', x: 30, y: 8, flat: true, walkable: true },
+    ...(LIFE5_PROPS['reach_wreck'] ?? []),
   ],
   tileTexts: { '~': 'reach_sea', x: 'reach_barnacles', h: 'wreck_side', a: 'wreck_house', w: 'wreck_porthole', f: 'wreck_rail', o: 'wreck_deck', g: 'wreck_gangway', q: 'wreck_shingle' },
 

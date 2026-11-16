@@ -18,11 +18,12 @@ export const COMPASS_SET = {
     { do: 'face', who: 'bramble', dir: 'left' },
     { do: 'say', text: 'You set the glass in the bowl of the binnacle. It fits like a word on the tip of the tongue. The needle goes on its pivot, the card under it.\n\nFor a moment nothing at all. Then the needle swings, once round, and again, and stops. It is not pointing north. It is pointing straight down, through the planking, at a square of floor painted over to match.' },
     { do: 'sound', name: 'creak' },
-    { do: 'say', who: 'bramble', text: '{scared}It knows where it wants to go.' },
-    { do: 'say', who: 'ves', text: '{thoughtful}A compass that points at the way home. And the way home is down. ...I have nothing clever to say about that, and I would like it noted.' },
+    { do: 'say', who: 'bramble', text: '{awed}It knows where it wants to go.' },
+    { do: 'say', who: 'ves', text: '{surprised}It\'s pointing DOWN. Compasses don\'t point down. ...I have nothing clever to say about that, and I\'d like it noted.' },
     { do: 'wait', seconds: 0.6 },
     { do: 'sound', name: 'shipGroan' },
     { do: 'say', text: 'Under your feet, very faintly, from a long way forward and a long way down, someone laughs.' },
-    { do: 'say', who: 'bramble', text: '{scared}...She heard it too.' },
+    { do: 'say', who: 'bramble', text: '{scared}...Something heard it too.' },
   ],
 };
+// (draft) 2026-11-14: Ves's and Bramble's lines and moods rewritten (they guess, they don't explain).

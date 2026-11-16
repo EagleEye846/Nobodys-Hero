@@ -19,7 +19,7 @@ export const PINWHEEL = {
   feel: { hit: 'spines', windup: 'glint', at: [0.5, 0.12], defeat: 'spines', exit: 'roll' },
   // The coast's fights from the Wrack Shore on: the shanty.
   music: 'coastBattleStorm',
-  maxHp: 10500,
+  maxHp: 8700,
   damage: 89,
 
   difficulty: { density: 1.50, speed: 1.40 },
@@ -35,10 +35,9 @@ export const PINWHEEL = {
 
   // Its attacks live in src/battle/attacks/pinwheel.js.
   patterns: [
-    { name: 'pinFan', weight: 3 },
-    { name: 'pinRoll', weight: 2 },
-    { name: 'pinRain', weight: 2 },
-    { name: 'pinBurst', weight: 2 },
+    { name: 'pinTread', weight: 3 },
+    { name: 'pinRoll', weight: 3 },
+    { name: 'pinWind', weight: 3 },
   ],
 
   // TALK options. Each name needs a [talk: Name] section in the text file.
@@ -49,7 +48,7 @@ export const PINWHEEL = {
     { name: 'Sit down nearby', calm: 30 },
   ],
 
-  rewards: { exp: 2400, coins: 13 },
+  rewards: { exp: 2400, coins: 10 },
 
   // A spine it sometimes sheds (src/data/items.js), with the chance of it.
   drops: [{ item: 'urchin_spine', chance: 0.4 }],

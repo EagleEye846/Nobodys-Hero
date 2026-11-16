@@ -62,7 +62,7 @@ bunny!
 # TALK options in src/data/enemies/bunting.js.
 [talk: Inspect]
 BUNTING - HP 800
-A little round bird wearing a string of party bunting. Throws the party at you: flags, poppers, balloons and streamers. Every one is a bit slower than it looks.
+A little round bird wearing a string of party bunting. Throws the party at you: poppers, balloons, streamers, a cake, and musical chairs. Every one is a bit slower than it looks.
 
 [talk: Wish it well]
 You wish BUNTING a very happy birthday. It's overcome. It says nobody has said that all year, and then it says it's not even its birthday, and then it cries a little with joy anyway.

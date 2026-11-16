@@ -1,17 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
-import { withSnipes } from './snipes.js';
+import { PathShot, Deco, Zone, blit, Guide } from './coastKit.js';
 
-// The Dunlin Dancer's attacks. Five sandpipers that move as one, so
-// everything comes in rows and waves: whole rows of little running birds
-// scurrying across the box with a gap or two, a rain of diving beaks that
-// all come down at the same slant, and a flyover that drops shells (they hit
-// the floor and bounce). It stands to the right of the box, so the runners
-// come in from that side.
-//
-// Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. The attack's own clock (`t`) runs `density`
-// times faster than the seconds on the wall, hence the `T` below.
+// The Dunlin Dancer's attacks. Five sandpipers that move as one bird, the
+// way a flock on the tideline does:
+//   - Chase the tide: the sea washes up the box and back, and the flock runs
+//     along the very edge of the foam. The row hurts; slip through its gap.
+//   - Follow the leader: the leader marks out a leg and flies it, and the
+//     others follow its exact path, one after another.
+//   - Probing: one bird over each strip, probing the sand in a ripple across
+//     the box and back. Step into a strip just after it's been probed.
+// It stands to the right of the box.
 
 const DUN = { k: '#1c1a1e', b: '#a89478', B: '#7c6a54', r: '#c0703e', w: '#f4efe4', K: '#3a3436', l: '#6a5a4a', o: '#e0a060', s: '#d8c8a0', S: '#a8946a', e: '#ffffff' };
 
@@ -72,127 +71,146 @@ defineBulletArt('dunDive', { frames: [['w.e.w', '.ses.', '..s..']], palette: DUN
 // and a shell's shadow on the floor, where it will land.
 defineBulletArt('dunMark', { frames: [['.sssss.', 'ssSSSss', '.sssss.']], palette: DUN, radius: 1 });
 
-// (The tells were added 2026-11-08: the attacks used to open with no
-// warning at all, the only ch5 monster's that did.)
-const TELL = 0.4; // real seconds
+// A dunlin flying, facing the way it goes (drawn facing right).
+defineBulletArt('dunLeader', { frames: [fly(false).map((r) => [...r].reverse().join('')), fly(true).map((r) => [...r].reverse().join(''))], palette: DUN, radius: 3.2, rotate: true, frameSeconds: 0.12 });
 
 export const DUNLIN_DANCER_ATTACKS = {
-  // Wave run: whole rows of little running dunlin cross the box one lane
-  // after another, each row starting a beat after the last so the wave
-  // rolls down the box. Four neighbouring lanes are left empty, never the
-  // ones you're in. Seven waves.
-  dunWave(box, density, { Shot, rand }) {
+  // Chase the tide: the sea washes up the box from the bottom and back
+  // down again, and the flock runs along the very edge of it, a row of
+  // little birds always just ahead of the foam (two of them missing, so
+  // there's a gap). In the water or above the line you're fine: what hurts
+  // is the row. Every wave reaches a bit past where you were.
+  dunTide(box, density, { rand }) {
     const T = (s) => s * density;
+    const W = 1.55;
     let t = 0;
-    let next = T(0.2);
-    let waves = 0;
-    const queue = [];
-    const LANES = 8;
-    const laneY = (i) => box.y + 6 + i * ((box.h - 12) / (LANES - 1));
+    let n = 0;
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && waves < 7 && t < T(6.2)) {
-          waves++;
-          next = t + T(0.95);
-          const mine = Math.round(((soul.y - box.y - 6) / (box.h - 12)) * (LANES - 1));
-          let gap = Math.floor(rand(0, LANES - 3));
-          if (mine >= gap - 1 && mine <= gap + 4) gap = mine < LANES / 2 ? LANES - 4 : 0;
-          const down = Math.random() < 0.5;
-          for (let k = 0; k < LANES; k++) {
-            const lane = down ? k : LANES - 1 - k;
-            if (lane >= gap && lane <= gap + 3) continue;
-            // Footprints at the right-hand edge of the lane first, then the runners.
-            bullets.push(new Shot({ x: box.x + box.w - 4, y: laneY(lane), harmless: true, warn: TELL + k * 0.09, life: 0, art: 'dunPrint' }));
-            queue.push({ at: t + T(TELL + k * 0.09), y: laneY(lane) });
+        if (t >= T(0.2 + n * W * 0.85) && n < 6) {
+          n++;
+          const bottom = box.y + box.h + 4;
+          const reach = Math.min(box.h - 4, bottom - soul.y + rand(10, 18));
+          const line = (k) => bottom - reach * Math.sin(Math.PI * Math.min(1, k / W));
+          const WARN = 0.45;
+          bullets.push(new Deco({ life: WARN + W + 0.1, paint(ctx, d) {
+            const k = Math.max(0, d.age - WARN);
+            const y = line(k);
+            ctx.globalAlpha *= 0.35;
+            ctx.fillStyle = '#4a8aa8';
+            ctx.fillRect(box.x, y, box.w, bottom - y);
+            ctx.globalAlpha = 0.9;
+            ctx.fillStyle = '#f4efe4';
+            for (let x = box.x; x < box.x + box.w; x += 3) ctx.fillRect(x, Math.round(y + 3 + Math.sin(x * 0.7 + d.age * 9)), 2, 1);
+          } }));
+          const gap = Math.floor(rand(0, 8));
+          for (let i = 0; i < 10; i++) {
+            if (i === gap || i === gap + 1) continue;
+            const x = box.x + 4 + i * 8;
+            bullets.push(new PathShot({ art: 'dunRunner', warn: WARN, life: W, path: (k) => ({ x: x + Math.sin(k * 20 + i) * 0.8, y: line(k) - 4 }) }));
           }
         }
-        for (const q of queue) {
-          if (t < q.at) continue;
-          q.done = true;
-          for (let n = 0; n < 3; n++) bullets.push(new Shot({ x: box.x + box.w + 6 + n * 13, y: q.y, vx: -60, art: 'dunRunner', life: 4 }));
-        }
-        for (let i = queue.length - 1; i >= 0; i--) if (queue[i].done) queue.splice(i, 1);
       },
     };
   },
 
-  // Peck rain: beaks dive out of the sky all on the same slant, a curtain of
-  // them, a couple aimed straight at you.
-  dunPeck(box, density, { Shot, every, rand, clamp }) {
-    const T = (s) => s * density;
-    let t = 0;
-    let flip = 1;
-    let nextFlip = T(3.2);
-    const rain = every(0.15, 0.21, (bullets, soul) => {
-      const aimed = Math.random() < 0.3;
-      const vx = -30 * flip;
-      const vy = 52;
-      // Slant: they start high and to the side, so they cross the box on a diagonal.
-      // (It waits a moment above the box first, while a puff of feathers
-      // shows where it will come in: its own warning would be out of sight.)
-      const x = aimed ? soul.x - vx * ((soul.y - (box.y - 4)) / vy) : rand(box.x - 30, box.x + box.w + 30);
-      const from = clamp(x, box.x - 40, box.x + box.w + 40);
-      const inX = from + vx * (8 / vy);
-      bullets.push(new Shot({ x: from, y: box.y - 5, vx, vy, warn: TELL, art: 'dunBeak', life: 3 }));
-      if (inX > box.x + 2 && inX < box.x + box.w - 2) bullets.push(new Shot({ x: inX, y: box.y + 3, harmless: true, warn: TELL, life: 0, art: 'dunDive' }));
-    });
+  // Follow the leader: the five fly as one, in a file. The leader marks out
+  // a leg (a dotted line, through where you are), flies it, and the others
+  // follow its exact path a beat behind each other; at the end of each leg
+  // they bunch up, bob, and the leader marks out the next. Six legs.
+  dunFollow(box, density) {
+    const SPEED = 135;
+    const GAP = 0.12;
+    const MARK = 0.5;
+    let real = 0;
+    let next = 0.2;
+    let legs = 0;
+    let at = { x: box.x + box.w + 10, y: box.y + 10 };
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= nextFlip) {
-          nextFlip = Infinity;
-          flip = -1;
+        real += dt / density;
+        if (real < next || legs >= 6) return;
+        legs++;
+        // Through where you are, and on a bit further, kept in the box.
+        const ang = Math.atan2(soul.y - at.y, soul.x - at.x);
+        const len = Math.hypot(soul.x - at.x, soul.y - at.y) + 22;
+        const end = { x: Math.min(Math.max(at.x + Math.cos(ang) * len, box.x + 6), box.x + box.w - 6), y: Math.min(Math.max(at.y + Math.sin(ang) * len, box.y + 6), box.y + box.h - 6) };
+        const from = at;
+        const secs = Math.max(0.2, Math.hypot(end.x - from.x, end.y - from.y) / SPEED);
+        const a = Math.atan2(end.y - from.y, end.x - from.x);
+        bullets.push(new Guide({ x: from.x, y: from.y, angle: a, length: Math.hypot(end.x - from.x, end.y - from.y), warn: MARK, color: '#d8c8a0' }));
+        for (let i = 0; i < 5; i++) {
+          bullets.push(new PathShot({
+            art: 'dunLeader', warn: MARK + i * GAP, life: secs,
+            path: (k) => {
+              const u = Math.min(1, k / secs);
+              return { x: from.x + (end.x - from.x) * u, y: from.y + (end.y - from.y) * u, a };
+            },
+          }));
         }
-        if (t < T(6.2)) rain(dt, bullets, soul);
+        at = end;
+        next = real + MARK + secs + 4 * GAP;
       },
     };
   },
 
-  // Dropped shells: the flock flies over the top of the box, one bird after
-  // another, and each lets go a cockle shell above where you were. The shells
-  // hit the floor and bounce.
-  dunShells(box, density, { Shot, rand, clamp }) {
+  // Probing: the flock lines the top of the box, one bird over each strip,
+  // and they probe the sand in a ripple, one after the next, across the
+  // box; the next ripple comes back the other way. The bird the ripple
+  // starts from calls first, and each bird dips its beak just before it
+  // probes. Step into a strip just after its bird has probed it.
+  dunProbe(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const COLS = 5;
+    const CW = box.w / COLS;
+    const STEP = 0.34;
+    const STAB = 0.2;
     let t = 0;
-    let next = T(0.2);
-    let flights = 0;
-    const live = [];
+    let n = 0;
+    let made = false;
+    let from = 0;
     return {
-      duration: 7.2,
-      update: (dt, bullets, soul) => {
+      duration: 7,
+      update: (dt, bullets) => {
         t += dt;
-        if (t >= next && flights < 11 && t < T(6.2)) {
-          const fromRight = flights % 2 === 0;
-          flights++;
-          next = t + T(0.52);
-          const aim = clamp(soul.x + rand(-14, 14), box.x + 8, box.x + box.w - 8);
-          const speed = 70;
-          const startX = fromRight ? box.x + box.w + 14 : box.x - 14;
-          const bird = new Shot({ x: startX, y: box.y + 4, vx: fromRight ? -speed : speed, harmless: true, life: 3, art: 'dunFlyer' });
-          bullets.push(bird);
-          // It drops its shell when it's over the mark. The shell's shadow
-          // shows on the floor from the moment the bird sets off.
-          const mark = new Shot({ x: aim, y: box.y + box.h - 3, harmless: true, warn: 4, life: 0, art: 'dunMark' });
-          bullets.push(mark);
-          live.push({ bird, x: aim, fromRight, mark });
+        if (!made) {
+          made = true;
+          for (let c = 0; c < COLS; c++) {
+            bullets.push(new Deco({ life: 7, x: box.x + CW * (c + 0.5), y: box.y + 3, paint(ctx, d) { blit(ctx, ['..bbb', '.bbbbs', 'bwwwb.', '.o.o..'], DUN, d.x, d.y - 1); } }));
+          }
         }
-        for (const d of live) {
-          if (d.fromRight ? d.bird.x > d.x : d.bird.x < d.x) continue;
-          d.done = true;
-          d.mark.warn = Math.min(d.mark.warn, d.mark.age + 0.8);
-          bullets.push(new Shot({ x: d.x, y: box.y + 6, vy: 8, gravity: 105, bounce: true, art: 'dunShell', life: 3.4 }));
+        if (t >= T(0.2 + n * 1.25) && n < 5) {
+          n++;
+          from = n === 1 ? (rand(0, 1) < 0.5 ? 0 : COLS - 1) : from === 0 ? COLS - 1 : 0;
+          const dir = from === 0 ? 1 : -1;
+          const CALL = 0.5;
+          bullets.push(new Shot({ x: box.x + CW * (from + 0.5), y: box.y + 9, harmless: true, life: CALL, art: 'dunPrint' }));
+          // Across the box, one strip after the next; the next pass comes back.
+          const seq = [];
+          for (let c = 0; c < COLS; c++) seq.push(from + dir * c);
+          seq.forEach((c, i) => {
+            const x = box.x + CW * c;
+            bullets.push(new Zone({
+              x: x + 1, y: box.y, w: CW - 2, h: box.h, warn: CALL + i * STEP, life: STAB,
+              paint(ctx, z) {
+                if (z.age < z.warn) {
+                  // The bird over this strip bobs its beak down just before it probes.
+                  if (z.warn - z.age < 0.3) { ctx.globalAlpha = 1; ctx.fillStyle = '#d8c8a0'; ctx.fillRect(z.x + z.w / 2 - 1, z.y, 3, 5); }
+                  return;
+                }
+                const k = Math.min(1, (z.age - z.warn) / 0.08);
+                ctx.fillStyle = '#d8c8a0';
+                ctx.fillRect(z.x + z.w / 2 - 1, z.y, 3, z.h * k);
+                ctx.globalAlpha *= 0.3;
+                ctx.fillRect(z.x, z.y, z.w, z.h * k);
+              },
+            }));
+          });
         }
-        for (let i = live.length - 1; i >= 0; i--) if (live[i].done) live.splice(i, 1);
       },
     };
   },
 };
-
-// A lone dunlin dives at you on top of each, aimed a little ahead of where
-// you're going, so standing still or running one way is never safe (see snipes.js).
-DUNLIN_DANCER_ATTACKS.dunWave = withSnipes(DUNLIN_DANCER_ATTACKS.dunWave, { art: 'dunBeak', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });
-DUNLIN_DANCER_ATTACKS.dunPeck = withSnipes(DUNLIN_DANCER_ATTACKS.dunPeck, { art: 'dunBeak', count: 3, first: 1.2, every: 1.6, lead: [0.9, 'mean', 0.5] });
-DUNLIN_DANCER_ATTACKS.dunShells = withSnipes(DUNLIN_DANCER_ATTACKS.dunShells, { art: 'dunBeak', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });

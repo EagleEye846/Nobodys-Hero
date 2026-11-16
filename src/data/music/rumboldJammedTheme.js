@@ -190,7 +190,7 @@ const song = {
   title: 'Behind the Curtain',
   bpm: 66,
   stepsPerBeat: 4,
-  volume: 1.25,
+  volume: 1.83,
 
   instruments: {
     // The jaw, once more, and the thud of it jamming.

@@ -143,6 +143,13 @@ const HIT = {
     const { x, y } = middle(foe);
     flakes(bits, x, y, 5, [color ?? '#ffffff', '#f4f0e0']);
   },
+  // Ash (the Ash Road): a grey puff, flakes drifting down, a spark or two out of it.
+  ash(bits, foe) {
+    const { x, y } = middle(foe);
+    bits.puff(x + rand(-6, 6), y + rand(-4, 4), { vx: rand(-20, 20), vy: -rand(5, 15), r: 3, grow: 10, life: 0.5, color: '#8d8781' });
+    flakes(bits, x, y, 4, ['#b4aea6', '#8d8781', '#d8d2c8']);
+    for (let i = 0; i < 2; i++) bits.spark(x, y, { vx: rand(-60, 60), vy: -rand(50, 110), gravity: 120, life: rand(0.4, 0.7), color: pick(['#ff8c1a', '#ffd25e']), size: 1 });
+  },
 };
 
 // ---------- windup ----------
@@ -220,6 +227,12 @@ const IDLE = {
   motes: [1, (bits, foe, color) => {
     const { x, y } = spot(foe, rand(0.2, 0.8), rand(0.2, 0.6));
     bits.mote(x, y, { vy: -rand(8, 16), life: 1.2, color: color ?? '#fff2cf', size: 1, sway: rand(0, Math.PI * 2) });
+  }],
+  // Embers lifting off it (the Ash Road), now and then a fleck of ash with them.
+  embers: [1.6, (bits, foe, color) => {
+    const { x, y } = spot(foe, rand(0.2, 0.8), rand(0.3, 0.8));
+    const ash = random() < 0.3;
+    bits.mote(x, y, { vy: -rand(14, 28), life: rand(0.9, 1.4), color: ash ? '#8d8781' : (random() < 0.5 ? color ?? '#ff8c1a' : '#ffd25e'), size: 1, sway: rand(0, Math.PI * 2) });
   }],
 };
 
@@ -310,6 +323,12 @@ const DEFEAT = {
   fluff(bits, foe, color) {
     const { x, y } = middle(foe);
     flakes(bits, x, y, 14, [color ?? '#ffffff', '#f4f0e0', '#e8e4d4'], { spread: 50, life: 1.8 });
+  },
+  // Ash slumping down in a grey cloud, the last embers going up out of it (the Ash Road).
+  ashfall(bits, foe) {
+    bits.dust(foe.center.x, feet(foe), foe.sprite.width * 1.6, 14, { color: '#8d8781', random });
+    flakes(bits, foe.center.x, foe.center.y, 12, ['#b4aea6', '#8d8781', '#d8d2c8', '#5e5856'], { spread: 50, life: 1.8 });
+    for (let i = 0; i < 8; i++) bits.mote(foe.center.x + rand(-16, 16), feet(foe) - rand(0, 24), { vy: -rand(20, 45), life: rand(1, 1.6), color: pick(['#ff8c1a', '#ffd25e', '#a8401a']), size: 1, sway: rand(0, Math.PI * 2) });
   },
 };
 

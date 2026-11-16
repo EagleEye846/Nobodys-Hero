@@ -9,6 +9,10 @@
 //   L  old scarlet tree (walk or hide behind) (solid)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_HOLLOW_OAK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_hollow_oak',
@@ -69,6 +73,7 @@ export const HUSH_HOLLOW_OAK = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_hollow_oak ?? []),
     // Bramble's things, under the oak: he's been camping here.
     { sprite: 'old_pack', x: 4, y: 7, text: 'oak_pack', gives: 'pine_candy', taken: { text: 'oak_pack_empty' } },
     { sprite: 'dropped_cap', x: 6, y: 12, text: 'oak_cap' },
@@ -76,6 +81,8 @@ export const HUSH_HOLLOW_OAK = {
     { sprite: 'chest', x: 27, y: 2, text: 'oak_chest', gives: 'herald_honeycake', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'paw_print', x: 23, y: 17, text: 'paw_print' },
     { sprite: 'paw_print', x: 25, y: 18, text: 'paw_print' },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_hollow_oak ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

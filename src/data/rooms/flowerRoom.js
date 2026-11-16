@@ -6,6 +6,7 @@
 //   F  flower bed (solid)                       ~  water (solid)
 //   D  doorway (walk through it; see `doors`)   U  stairs up (walk through it; see `doors`)
 //   C  candle stand (walk or hide behind) (solid)
+import { R1_PROPS } from '../ruinsLife.js';
 export const FLOWER_ROOM = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'flower_room',
@@ -53,7 +54,10 @@ export const FLOWER_ROOM = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/the_ruins.txt',
   props: [
+    { sprite: 'col_charm_star', x: 1, y: 13, walkable: true, flat: true, gives: 'charm_star', taken: { gone: true } },
     { sprite: 'taper', x: 10, y: 5, npc: 'mother_taper', animation: 'taper_watering', until: 'meet_taper' },
+    // The life pass, round 2 (15 November 2026): chapter 1's dressing, in src/data/ruinsLife.js.
+    ...(R1_PROPS['flower_room'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE SETTLING SUMPS: a dark brick hall where Hollin's water stood to let its
 // silt settle, and two deep sumps across the far end of it, between you and
 // the way on. A cask will wedge in a sump for you to step on, and roll over
@@ -69,6 +70,8 @@ export const DRAINS_SUMPS = {
     { sprite: 'gold_pouch', x: 14, y: 12, text: 'sumps_purse', gold: 180, seenInLight: true, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 22, y: 3, text: 'sumps_chest', gives: 'sweet_water', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'silt_heap', x: 12, y: 12, text: 'silt_heap' },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_sumps'] ?? []),
   ],
   tileTexts: { K: 'sumps_wall', k: 'sumps_wall', '~': 'sumps_trench' },
 

@@ -1,0 +1,633 @@
+# LASTHOME (Chapter 3's hub) and the Valley Road: the living town built
+# inside the old city's biggest hall, by the people who stopped waiting for
+# the Hero. Things you can read and look at. See notes/docs/chapter-3-lasthome.md.
+#
+# A section with `_bramble` on the end of its name is what Bramble says
+# after the section of that name, if he's with you; `_ves` is what Ves says
+# after that (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal glows warm and steady, like the lamps.
+Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[chest_empty]
+Empty.
+
+[gold_pouch_empty]
+An empty purse.
+
+# --- THE VALLEY ROAD ---
+
+[road_notice]
+A notice, nailed to a post, in big careful letters:
+
+BIRDS GONE QUIET ON THE NORTH RIDGE. TWO DAYS NOW. KEEP YOUR DOORS SHUT AT NIGHT. -- THISTLE
+
+[road_notice_bramble]
+{scared}Birds gone quiet.
+
+{worried}...Sword. That's how you know it's near. That's what everyone at camp says.
+
+[road_notice_ves]
+{worried}It came down after us. Didn't it.
+
+[road_signpost]
+An old signpost, its arms broken off. Someone's nailed a plank across it and written on it in chalk:
+
+LASTHOME. YOU'RE NEARLY THERE.
+
+[road_signpost_ves]
+{smile}Nearly. Ha.
+
+[road_statue]
+A great stone statue, toppled on its face in the weeds long ago, and broken in three. You can see a hand, bigger than you are, still holding the hilt of a stone sword.
+
+[road_statue_bramble]
+{awed}It's a giant! A stone giant!
+
+{thinking}...It's a statue. I knew that.
+
+[road_statue_ves]
+{thoughtful}Somebody built that for the Hero, I think. To say hello.
+
+{sad}I wonder how long it stood there saying hello before it fell over.
+
+[road_cairn]
+A little cairn by the old paving. Travellers have left things on it: a button, a ribbon, a pebble with a face drawn on.
+
+[road_lamp]
+A lamp on a post, lit. Someone comes out this far every evening to light it.
+
+[road_trees]
+Pines, dark and quiet in the dusk.
+
+[road_pillar]
+One of the old city's pillars, standing all on its own in the grass.
+
+[road_boulder]
+A boulder, mossy, warm from the day.
+
+[road_rubble]
+Fallen stone from the statue, half sunk in the grass.
+
+[road_paving]
+The old city's paving, under the grass. It goes on and on, under everything.
+
+# --- LASTHOME GATE ---
+
+[hall_front]
+The front of the old city's great hall: a wall of dressed stone as tall as a cliff, carved all over with things too worn to make out.
+
+[hall_pillar]
+A pillar of the great hall, taller than a pine.
+
+[gate_brazier]
+A brazier, burning. Thistle's warming his paws at it. He's put potatoes in the ashes.
+
+[gate_washing]
+A washing line, strung between the old pillars. Shirts, socks, a baby's blanket. Somebody's knitted a cover for the peg bag.
+
+[gate_washing_bramble]
+{grin}Socks! Ma would have a fit, putting the washing out at dusk.
+
+[gate_lamp]
+A lamp on a post by the gate, newly filled.
+
+[gate_flowers]
+Flower beds, along the hall's foot, with marigolds and beans in them. Mostly beans.
+
+[gate_cart]
+A cart heaped high with sacks of charcoal, and a shaggy pony in the shafts, eating somebody's beans.
+
+[gate_sign]
+A painted board by the gate:
+
+LASTHOME. ALL WELCOME. WIPE YOUR FEET.
+
+[gate_sign_ves]
+{surprised}All welcome. That's all? No trumpets? No speeches?
+
+{laughing}...I think I'm going to like it here.
+
+# --- LASTHOME (the square) ---
+
+[hall_wall]
+The great hall's inner wall. People have built right up against it: chimneys, shelves, a window box.
+
+[square_house]
+A cottage, built inside the hall, out of its own fallen stone and some new timber. A curl of smoke goes up to the holes in the roof.
+
+[square_window]
+A lit window. Somebody inside is singing, badly.
+
+[square_roof]
+Cottage roofs, inside a roof. The rain doesn't get in, mostly. The pigeons do.
+
+[square_flowers]
+A long flower bed in front of the old fountain wall. Somebody's grown sunflowers in it, as high as they'll go, reaching for the holes in the roof.
+
+[square_stall]
+Pell's market stall: apples, oatcakes, and pies under a striped awning.
+
+[square_fish_stall]
+A fish stall: eels from the fen, laid out on reeds, and baskets of something that's still wriggling.
+
+[square_fish_stall_bramble]
+{scared}It moved. Sword. It MOVED.
+
+[square_well]
+A well, in the middle of the square. Its bucket is new. Its rope is new. The well is very, very old.
+
+[square_well_bramble]
+{worried}I'm not going down another well.
+
+[square_well_ves]
+{bored}Nobody's going down another well.
+
+[square_notices]
+The town notice board:
+
+LOST: one goat (Fennel). ANSWERS TO "FENNEL", SOMETIMES.
+WANTED: help with the bean harvest. Pay in beans.
+BIRDS GONE QUIET ON THE NORTH RIDGE. KEEP DOORS SHUT. -- THISTLE
+CHOIR PRACTICE CANCELLED (no bell to start it with). -- TAM
+
+[square_pots]
+A heap of pots and pans by a doorway, all of the same dark, ringing bronze. Tap one and it hums.
+
+[square_pots_ves]
+{thoughtful}That's bell metal. I'd know it anywhere. Every pan in this heap was a bell once.
+
+[square_far_door]
+A great door in the far wall of the hall, barred with a beam as thick as you are. Past it is the rest of the old city: the dead part.
+
+(The way on isn't open yet.)
+
+[square_far_door_bramble]
+{worried}Why's it got such a big bar on it?
+
+[square_light]
+A long shaft of evening light, coming down through a hole in the great roof, with dust going round and round in it.
+
+[square_lamp]
+A street lamp, lit. There are lamps all over the square, at every corner.
+
+[square_lamp_ves]
+{tender}Somebody lights all these. Every evening.
+
+{sad}...Mum would have liked it here.
+
+[square_bench]
+A bench by the square, worn smooth by a lot of sitting.
+
+[square_barrel]
+A rain barrel, under a gutter that runs down from a hole in the hall's roof.
+
+[square_crates]
+Crates of apples, waiting to go to market.
+
+# --- THE HEALER'S ---
+
+[healer_wall]
+The healer's walls: whitewashed, with bunches of herbs hung everywhere it's possible to hang something.
+
+[healer_rug]
+A rag rug, plaited out of old clothes. You can see a sleeve in it.
+
+[healer_herbs]
+Bunches of herbs, hung up to dry. Willow, yarrow, comfrey, and some you've never seen.
+
+[healer_kettle]
+A kettle on the stove, always just about to boil.
+
+[healer_jars]
+Shelves of jars, all labelled in tidy writing. FOR BRUISES. FOR COUGHS. FOR WHEN YOU'VE DONE SOMETHING SILLY.
+
+[healer_table]
+A scrubbed table, with a pestle and mortar on it, and a cup of tea gone cold.
+
+[healer_chair]
+Bryony's chair. It's got a cushion with a cat embroidered on it. The cat is cross-eyed.
+
+[healer_cat]
+A brown cat is curled in the corner by the shelves, in the exact shape of a loaf, one eye open. She looks at you. She looks at the door. She is clearly making a decision.
+
+You pick her up. She lets you. Once. She has decided.
+
+[healer_ves_bed]
+Ves, asleep, her leg splinted and up on a pillow. She's frowning in her sleep like she's arguing with someone.
+
+[healer_empty_bed]
+Ves's cot, made up again, the blanket folded square.
+
+[healer_your_bed]
+A cot by the wall, made up for you. You could lie down. You could sleep for a week.
+
+# --- THE KETTLE AND STRAW ---
+
+[inn_wall]
+The inn's walls, hung with everyone's coats.
+
+[inn_rug]
+A rug in front of the fire, with a cat-shaped hollow in the middle of it. No cat.
+
+[inn_fire]
+A big fire, roaring. Somebody's socks are drying in front of it.
+
+[inn_counter]
+The counter, and behind it, Mabb.
+
+[inn_stirrer]
+A long iron pole leaning against the hearth, black from years of stew. This is what Mabb stirs the kettle with. It has a heavy iron knob on one end and a loop on the other, as if it were made to hang from something.
+
+You lift it out of its bucket.
+
+[inn_kettle]
+The kettle that never comes off the hook, and the stew in it. Mabb ladles you a bowl without asking.
+
+[inn_kettle_empty]
+The kettle. You've had a bowl. Mabb's watching to see you don't have a second.
+
+[inn_table]
+A long table, scrubbed white. Everyone eats at it together, Mabb says, whether they like each other or not.
+
+[inn_bench]
+A bench along the long table.
+
+[inn_bed]
+A bed of clean straw with a blanket on it. You could sleep here.
+
+[inn_barrel]
+A barrel of cider. There's a sign on it: NOT FOR CHILDREN, BRAMBLE.
+
+[inn_barrel_bramble]
+{surprised}How do they know my NAME?
+
+[inn_rules]
+A sign on the wall:
+
+RULES OF THE HOUSE
+1. Boots off.
+2. No arguing at the table. Arguing in the yard.
+3. Nobody is turned away. Nobody.
+
+# --- THE CHAPEL WITH NO BELL ---
+
+[chapel_wall]
+The chapel's walls: the great hall's own stone, and on it, painted long ago, a figure with a sword, walking toward the light. Someone's painted over its face.
+
+[chapel_bell_frame]
+A bell frame over the altar, oak, carved with leaves. There's no bell in it. There hasn't been for a long time.
+
+[chapel_bell_frame_ves]
+{sad}The chapel at home has a bell. Everyone rings it whenever anybody comes up the stairs, in case it's the Hero.
+
+{thoughtful}...These people took theirs down. I don't know which is sadder.
+
+[chapel_altar]
+The altar, with a clean cloth on it, and on the cloth a jar of sunflowers.
+
+[chapel_candles]
+Candles in a rack, a few of them lit. People come in and light one, Tam says. For whatever they like.
+
+[chapel_candles_ves]
+{tender}I used to light one every night. For Mum.
+
+{smile}...I don't think I need to, any more. I know where she is.
+
+[chapel_pew]
+A pew, polished by a long time of people sitting.
+
+[chapel_board]
+A board by the door, in old Tam's handwriting:
+
+THE BELL. Taken down in the year the waiting stopped, and given to the town. It made forty-one pots, nine pans, and a kettle. Every one of them still rings.
+
+# --- THE SQUARE'S HOUSES, AND TEASEL'S FORGE YARD ---
+
+[square_healer_house]
+Bryony's: pale plaster and black timbers, herbs hung under the eaves to dry, a green door, and steam off the chimney. The kettle's never off.
+
+[square_smithy]
+Teasel's forge: squat and stone, soot up the front, and the fire going in the back of it. Horseshoes over the arch, for luck. She says she doesn't believe in luck. She hasn't taken them down.
+
+[square_inn_house]
+The Kettle and Straw: the biggest house in the square, with a straw roof and a kettle on the sign. Every window's lit. Somebody inside is singing, badly.
+
+[square_carter_house]
+Soot round the door and sacks of charcoal under the lean-to. Corran's. The window's the cleanest thing on it, and that's not saying much.
+
+[square_bakehouse]
+A squat house with a round oven chimney and a loaf on the sign. Pell's mum's. It smells of oatcakes from here. From everywhere, really.
+
+[square_coal]
+A heap of charcoal for the forge. Corran brings it down from the Pinefall, a cart at a time.
+
+[square_anvil]
+Teasel's anvil, the face worn bright. Don't touch it. It's warmer than it looks.
+
+[square_quench]
+A tub of black water for cooling hot iron. It hisses when she dips something in. Wren comes to listen.
+
+[square_grindstone]
+A grindstone on a treadle, with a bucket under it to catch the sparks. The bucket's melted a bit.
+
+[square_washing]
+Washing on a line between Corran's and the square. The sheets have gone grey. Everything near Corran goes grey.
+
+Between two nightshirts hangs something that isn't washing: a brown felt hat, pegged by the brim, dripping. Someone has washed a hat. It has a brass trumpet badge on the front, the kind the heralds wear.
+
+[square_washing_bare]
+Washing on a line between Corran's and the square. The sheets have gone grey. Everything near Corran goes grey.
+
+There's a peg on the line with nothing in it, and a damp patch where a hat was.
+
+# --- THE LIFE PASS, ROUND 2 (builder 7) ---
+
+# lasthome_gate
+[lp3_gate_tub]
+A tub of geraniums by the gate, red as a hot coal. A label on a stick says THISTLE'S. DO NOT. In smaller letters: (SORRY.)
+
+[lp3_gate_tub_bramble]
+{grin}Do not WHAT? Pick them? Smell them? I need the rules so I can follow them!
+
+[lp3_gate_tub_ves]
+{smile}'Do not.' And then 'sorry'. That's a whole friendship in two words.
+
+[lp3_gate_horse]
+A stick with a horse's head sewn on, leaning on the wall. The horse has button eyes, wool for a mane and a look of deep and misplaced confidence.
+
+[lp3_gate_horse_bramble]
+{glee}Mine was a broom! Dad said it was a broom. I said HORSE. The broom never said.
+
+[lp3_gate_horse_ves]
+{smile}I had one of these. Mine was called Gallop. It never did.
+
+[lp3_gate_logs]
+Split logs stacked tight, bark side out so the rain runs off. Somebody built this wall with great care and then stopped in the middle of a row, to go and see a man about a cat.
+
+[lp3_gate_logs_ves]
+{bored}Neatly stacked and half finished. This town in a nutshell, and I mean that kindly.
+
+[lp3_gate_cabbages]
+A bed of cabbages, planted in a perfect row and then, you can see, argued with. One has a little flag in it that says MINE.
+
+[lp3_gate_cabbages_ves]
+{thoughtful}Somebody's very proud of one cabbage. I think I'd like to meet them.
+
+[lp3_gate_butt]
+A rain butt with its lid propped open for the sparrows, and a tin cup on a string for anyone thirsty. The water is clear. The string is very, very long.
+
+[lp3_gate_butt_ves]
+{bored}A very long string on a very small cup. Somebody learned something here.
+
+[lp3_gate_butt_bramble]
+{thinking}Why's the string so long? ...So nobody drops the cup in? ...Because somebody DROPPED the cup in.
+
+[lp3_gate_flour]
+Sacks of flour left by the gate for the bakehouse cart. Each has a paw print on it, in flour. It's the same paw print on all of them.
+
+[lp3_gate_flour_ves]
+{laughing}One cat, and a great deal of nerve.
+
+[lp3_gate_wheel]
+A spare wheel leaning on the gatepost, one spoke bound up with string. Corran carries it everywhere in case. Of what, he has never said.
+
+[lp3_gate_wheel_ves]
+{thoughtful}Spoke tied with string. I would also carry it everywhere. Just in case.
+
+[lp3_gate_wheel_bramble]
+{worried}Corran says a cart without a spare wheel is just a big box. He says that a lot.
+
+[lp3_gate_mat]
+A coir mat before the great doors, worn through in the middle. WIPE YOUR FEET is woven into it. Whoever wove it ran short of mat for the last word, and it says WIPE YOUR FEE.
+
+[lp3_gate_mat_bramble]
+{sheepish}...I did NOT wipe my feet.
+
+[lp3_gate_mat_ves]
+{bored}He did say wipe your feet. First thing he said to us. I'd like it noted that I'm the one who listened.
+
+# lasthome_square
+[lp3_sq_beds]
+The kitchen garden behind the flower beds: leeks, kale and a row of something that is, according to its marker, PROBABLY CARROTS. A blackbird is looking at it like a landlord.
+
+[lp3_sq_beds_bramble]
+{grin}Probably carrots! It's an adventure every time you pull one!
+
+[lp3_sq_beds_ves]
+{smile}Probably carrots. The most honest label I've ever seen on a vegetable.
+
+[lp3_sq_beans]
+Bean poles in a wigwam, wound all over with runner beans, red flowers still on. A board at the foot is lettered in careful capitals: BEANS. (THE LAW.) Below it, smaller, in another hand: it isn't really the law.
+
+[lp3_sq_beans_bramble]
+{awed}Wren's! She told us all about the beans! She wasn't joking about the beans!
+
+[lp3_sq_beans_ves]
+{smile}'It isn't really the law.' Someone told her. She put the sign up anyway.
+
+[lp3_sq_birdtable]
+A bird table with its own little roof, a pile of seed, and a crust dragged to one side. A sparrow sits on the roof, supervising.
+
+[lp3_sq_birdtable_ves]
+{smile}It's got a roof. Someone built a roof for the birds' lunch.
+
+[lp3_sq_stool]
+A stool by the bean wigwam with a colander of peas on it, half shelled. The shelling stopped mid-pod. You can tell by the pod.
+
+[lp3_sq_stool_ves]
+{bored}Somebody got up for 'just a minute'. I know that minute.
+
+[lp3_sq_purse]
+A small purse stuffed in behind the bean poles. A note is pinned to it: FOR WHOEVER FINDS THIS. IT WAS MINE. DON'T TELL MUM.
+
+[lp3_sq_purse_bramble]
+{sly}I'm not telling. I'm GOOD at not telling. ...Mostly.
+
+[lp3_sq_purse_ves]
+{laughing}Finders keepers. And we don't tell Mum.
+
+[lp3_sq_kennel]
+A kennel at the end of the alley, empty but for a bone in the straw. Beside it, chewed to a pulp and soaked through: a red fishing float, with a bit of line still tied on. You take it.
+
+[lp3_sq_kennel_ves]
+{thoughtful}Somebody's dog has been in the fisher's tackle. That's a conversation waiting to happen.
+
+[lp3_sq_kennel_empty]
+An empty kennel with a bone in the straw. The dog is somewhere being innocent.
+
+[lp3_sq_kennel_empty_ves]
+{smile}Innocent. That dog has the look.
+
+[lp3_sq_apples]
+A crate of Valley apples with a tray of seconds on top, the ones with a bite out. SECONDS: 1 COPPER. SECONDS OF SECONDS: FREE. A queue of wasps has formed.
+
+[lp3_sq_apples_bramble]
+{grin}The wasps got there first. I'm not fighting a wasp for an apple. ...Okay I am, but not today.
+
+[lp3_sq_apples_ves]
+{smile}Seconds of seconds. I'm taking a moral stand and it's going to be that apple.
+
+[lp3_sq_flour]
+Sacks of flour stacked by the bakehouse, a floury hand print on each one at exactly the height of a marmot aged about nine.
+
+[lp3_sq_flour_ves]
+{bored}That's not a robbery. That's a signature.
+
+[lp3_sq_oatcakes]
+A cooling rack of oatcakes on the bakehouse step. You count nine. The sign says TEN. A trail of crumbs goes off round the corner.
+
+[lp3_sq_oatcakes_bramble]
+{awed}The crumbs go round the corner! Should we follow them? We should follow them.
+
+[lp3_sq_oatcakes_ves]
+{bored}Nine. A trail of crumbs. The mystery solves itself.
+
+[lp3_sq_butt]
+A rain butt under Corran's gutter. The water is the colour of weak tea and quite warm. Everyone washes in it and nobody has ever said they felt cleaner.
+
+[lp3_sq_butt_ves]
+{bored}'Cleaner' isn't a word that comes up near Corran's.
+
+[lp3_sq_logs]
+Corran's logs, stacked head-high against his lean-to and split by somebody who gave up halfway down. The first half are perfect. The second half are what you do to a log when you're tired.
+
+[lp3_sq_logs_bramble]
+{proud}That's a BAD split! I'd have done it in one. ...Two. Two, maybe.
+
+[lp3_sq_logs_ves]
+{smile}Anyone who's ever chopped anything can tell exactly where they stopped.
+
+[lp3_sq_wheel]
+A cart wheel leaning on the log stack, one spoke newly cut and wired in. The sawdust is still on the ground. Somebody keeps this cart going one spoke at a time.
+
+[lp3_sq_wheel_ves]
+{thoughtful}Repairs. Most of the best things in the world are held together with repairs.
+
+[lp3_sq_broom]
+A broom and a bucket parked by the lamp as if they'd gone for a short walk. The bucket has water in. The broom is still wet. Somebody was called away, and is coming back.
+
+[lp3_sq_broom_ves]
+{bored}Wet broom. They'll be back. It's a trap.
+
+[lp3_sq_horse]
+A stick horse lying in the grass, head off. It has been very recently loved to pieces. A trail of wool leads away, and then a small marmot in a hurry leads away from the trail.
+
+[lp3_sq_horse_bramble]
+{worried}That's a TRAGEDY. Does anyone have a needle?
+
+[lp3_sq_horse_ves]
+{smile}Somebody's about to have a very bad afternoon. Or a very good one.
+
+[lp3_sq_tub]
+A flower tub at the smithy gate: pansies, planted by someone who is not a gardener but is full of hope. Singed at the edges. Teasel waters them out of the quench tub.
+
+[lp3_sq_tub_ves]
+{bored}Pansies and hot iron. Neither one is in charge.
+
+[lp3_sq_hopscotch]
+A hopscotch scratched in chalk right up to the bakehouse wall, so whoever is winning has to take care not to bump the bread. Somebody has put a small stone on the 8.
+
+[lp3_sq_hopscotch_bramble]
+{glee}I'm good at this! I practised in the Pinefall! It's harder with roots!
+
+[lp3_sq_hopscotch_ves]
+{smile}It's rigged. The 8 is right next to the oven.
+
+# lasthome_healer
+[lp3_hl_cards]
+A board of get-well cards pinned up by the whole town. Some are drawings. One is only a very big scribbled sun. All of them are addressed to 'whoever is in the bed', because that's what the town was told.
+
+[lp3_hl_cards_bramble]
+{awed}Look at all of them! They drew SUNS!
+
+[lp3_hl_cards_ves]
+{shy}...They wrote to a stranger. Forty of them.
+
+[lp3_hl_basin]
+A stone basin of clean water with a cloth folded beside it, for the splints. The water is warm, and has been for however long Bryony has been shouting at it.
+
+[lp3_hl_basin_ves]
+{bored}Bryony's the only person I know who could make water behave.
+
+[lp3_hl_flowers]
+A jar of flowers by the wall, brought in by someone who didn't want to be thanked. There's a note: FROM NOBODY. The handwriting is Mabb's.
+
+[lp3_hl_flowers_ves]
+{smile}Mabb. She'd rather be hit with a ladle than be thanked.
+
+[lp3_hl_notes]
+Bryony's case notes, stacked by the door. The top one reads: PATIENT, THE GIRL. LEG: SPLINTED. MIND: FOUL. SPIRITS: MUCH TOO HIGH. Below that: PATIENT, THE BOY. COLD FEET (NOT A DISEASE).
+
+[lp3_hl_notes_bramble]
+{sheepish}It's not a disease! She wrote it down! It's in WRITING!
+
+[lp3_hl_notes_ves]
+{bored}'Mind: foul.' She's not wrong. I'd like a second opinion, though.
+
+# lasthome_inn
+[lp3_inn_darts]
+A dartboard with every dart stuck in the same spot, dead centre of the bull, packed like pins in a cushion. A chalk note underneath: MABB. DON'T ASK.
+
+[lp3_inn_darts_bramble]
+{awed}That's the best aim I've ever seen! That's the BEST aim!
+
+[lp3_inn_darts_ves]
+{laughing}We won't ask. We'll just stand a long way to one side.
+
+[lp3_inn_casks]
+A rack of three casks, one tapped. A sign hangs off the tap: THIS ONE IS A SURPRISE. Under it, somebody has written 'THE SURPRISE IS IT'S WATER'.
+
+[lp3_inn_casks_ves]
+{bored}Brave. A tavern with a bad joke on tap.
+
+[lp3_inn_board]
+A slate on an easel: TODAY: STEW. TOMORROW: STEW. SPECIALS: ASK THE KETTLE. The kettle, a few feet away, says nothing, and smells of the answer.
+
+[lp3_inn_board_bramble]
+{grin}I'm asking the kettle!
+
+[lp3_inn_board_ves]
+{smile}I like to think the kettle's got range.
+
+[lp3_inn_dog]
+The inn dog, asleep on the hearth with her nose on her paws. One eyebrow lifts as you pass. Then it lowers, very slowly, as if it had been a lot of work.
+
+[lp3_inn_dog_bramble]
+{awed}Can I stroke her? I'll be gentle! I'm gentle!
+
+[lp3_inn_dog_ves]
+{tender}She's the only one in here with the right idea.
+
+# lasthome_chapel
+[lp3_ch_pots]
+A rack of pots and pans on the chapel wall, forty-one pots, nine pans and a kettle. Every one of them used to be the bell. Touch one, gently, and it hums the note it was.
+
+[lp3_ch_pots_bramble]
+{awed}I'm going to touch them all. Not hard! Just a hum each!
+
+[lp3_ch_pots_ves]
+{tender}Forty-one pots. One bell. Somebody counted.
+
+[lp3_ch_wishes]
+A board of paper slips, pinned all over, in a hundred hands. Not prayers, exactly. Things like: MORE SUN. A KINDER WINTER. THAT PELL WOULD STOP SINGING. One slip says only: WHATEVER COMES, LET IT BE FED.
+
+[lp3_ch_wishes_bramble]
+{thinking}Do the wishes come true? Do we have to wait?
+
+[lp3_ch_wishes_ves]
+{thoughtful}'Let it be fed.' That one's the saddest, and the one I like best.
+
+[lp3_ch_hassock]
+A kneeling cushion embroidered with a star. It has been knelt on until the star's nearly gone. Somebody has stitched on a patch, and then a patch on the patch.
+
+[lp3_ch_hassock_ves]
+{bored}Worn out by years of 'please'.
+
+# --- end life pass round 2 (builder 7) ---

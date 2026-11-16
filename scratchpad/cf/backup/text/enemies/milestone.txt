@@ -1,0 +1,88 @@
+# MILESTONE
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/milestone.js.
+
+[intro]
+The milestone at the side of the road stands up on two square stone feet and steps into your way. The number carved on it says three. A MILESTONE!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+MILESTONE stands in the road the way milestones stand at the side of it: as if it has always been there.
+
+The number carved on MILESTONE says three. You are sure it said four a moment ago.
+
+MILESTONE shifts its weight. Somewhere under the ash, the road shifts with it.
+
+A little soot runs down MILESTONE's face like a tear. It is only soot.
+
+Smells of wet stone and old moss, burnt.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+A corner has come off MILESTONE. The number on it is cracked. It still says three.
+
+[flavor: spareable]
+MILESTONE is leaning back toward the side of the road, where it used to stand.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+THREE.
+
+Three
+miles.
+
+Not
+far
+now.
+
+Keep
+to the
+road.
+
+Two...
+...one...
+
+THIS
+WAY.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/milestone.js.
+[talk: Inspect]
+MILESTONE - HP 6400
+An old stone that counted the miles to the buried town, and got up to count them nearer. Throws its numbers, sends chips down the road, drops little stones out of the sky and points the way, hard.
+
+[talk: Trace the number]
+You run your finger round the number carved in MILESTONE's face, slowly, the whole way round. It is a three. MILESTONE stands very still, as if being read was the thing it was made for.
+
+[talk: Scrape off the soot]
+You rub the soot off MILESTONE's face with your sleeve. Under it the stone is pale and the letters are sharp. MILESTONE leans closer to let you get at the top.
+
+[talk: Walk the mile with it]
+You fall in beside MILESTONE and walk with it a little way along the road, step for step. It is very slow. You don't hurry it. When you stop, the number on it says two.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+MILESTONE topples over onto its back in the road with a long, grinding thump. The number on it says nought. A chip has come off the corner.
+
+[pacified]
+MILESTONE steps back to the side of the road, turns round to face it, and settles into the ash until it's standing where a milestone ought to. The number says three. It will wait.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that it has very good lettering. {foe} doesn't say anything, being a stone. She says she can tell it's pleased.
+
+Ves asks {foe} how far it is now. {foe} says three. Ves says it said three a mile ago. {foe} says it's a long three.
+
+Ves leans her umbrella against {foe} and leans on it herself. {foe} holds them both up without a word.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble climbs up on {foe} to see down the road. He says he can see the town. He can't. He says it anyway, to be nice.
+
+Bramble asks {foe} what number it is when you get there. {foe} thinks about it for a very long time. Bramble says it's nought, and {foe} looks frightened.
+
+Bramble counts down from three with {foe}. At one, he jumps. Nothing happens. They are both a bit let down.

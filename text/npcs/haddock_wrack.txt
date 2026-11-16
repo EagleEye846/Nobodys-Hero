@@ -3,9 +3,9 @@
 [first]
 {determined}This is the Wrack. I put in here, and I don't go further. The bay's no place for a boat that wants to stay a boat.
 
-{proud}Follow the shore east. Up the boards at the end is Saltcombe. I'll go round by the water and see you there.
+{proud}Follow the shore east. Up the boards at the end is Saltcombe. I'll go round by the water and see ye there.
 
-{smile}And wipe your feet where it asks. Most places don't ask. Here, somebody does.
+{smile}And wipe yer feet where it asks. Most places don't ask. Here, somebody does.
 
 [repeat]
-{proud}East, and up the boards. I'll see you in Saltcombe.
+{proud}East, and up the boards. I'll see ye in Saltcombe.

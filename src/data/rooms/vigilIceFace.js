@@ -8,6 +8,7 @@
 //   A  snowy cliff top (solid)                    i  trodden snow path
 //   Y  snow pine (walk or hide behind) (solid)    Q  snowy boulder (solid)
 //   s  the great stair
+import { VIGIL_PROPS } from '../vigilLifePass.js';
 export const VIGIL_ICE_FACE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'vigil_ice_face',
@@ -105,6 +106,8 @@ export const VIGIL_ICE_FACE = {
     { sprite: 'swing_ring', x: 23, y: 6 },
     { sprite: 'swing_ring', x: 23, y: 3 },
     { sprite: 'grapple_ring', x: 23, y: 0, grapple: true },
+    // The life pass (2026-11-15): see src/data/vigilLifePass.js.
+    ...(VIGIL_PROPS['vigil_ice_face'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

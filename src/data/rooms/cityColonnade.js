@@ -8,6 +8,9 @@
 //   .  the old city's flagstones
 //   I  old stone pillar (solid)
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_COLONNADE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_colonnade',
@@ -58,6 +61,7 @@ export const CITY_COLONNADE = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_colonnade ?? []),
     { sprite: 'rotten_planks', x: 9, y: 5, text: 'rotten_planks', gap: true },
     { sprite: 'treadle', x: 9, y: 3, text: 'treadle', treadle: 'hold' },
     { sprite: 'gate_narrow', x: 15, y: 7, text: 'city_gate', opensWith: ['hold'] },
@@ -69,12 +73,18 @@ export const CITY_COLONNADE = {
     { sprite: 'street_lamp_dead', x: 25, y: 9, text: 'dead_lamp' },
     { sprite: 'sign', x: 13, y: 9, text: 'colonnade_sign' },
     { sprite: 'chest', x: 1, y: 2, text: 'colonnade_chest', gives: 'herald_banner_cloak', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_colonnade'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall', I: 'city_pillar' },
 
-  // Two Lamp Mites.
+  // Two Lamp Mites. AMBUSH: the first nests in a dead street lamp by the chest in the north-west
+  // (3,2), and the whole swarm comes out when you come within two and a half tiles (an eye opens,
+  // a wing twitches: the mites' own lamp art, with `look: 'dead_lamp'` for the puff of dust,
+  // src/overworld/hideouts.js). Only going for the chest (1,2) wakes it; the way in (rows 7 and
+  // 8) and the treadle room's door (9,5) are more than that away.
   npcs: [
-    { enemy: 'lamp_mite', x: 4, y: 12, patrol: [2, 8] },
+    { enemy: 'lamp_mite', x: 3, y: 2, patrol: [3, 3], behaviour: 'disguise', look: 'dead_lamp', reach: 2.5 },
     { enemy: 'lamp_mite', x: 22, y: 6, patrol: [18, 26] },
   ],
 };

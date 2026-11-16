@@ -1,0 +1,91 @@
+# ECHO BAT-SHRIMP
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/echo_shrimp.js.
+
+[intro]
+Something clicks, very softly, in the water. Then again, nearer. A pale shrimp unrolls from the dark, with two great lilac ears like a bat's and nothing at all where its eyes should be. An ECHO BAT-SHRIMP!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+ECHO BAT-SHRIMP clicks. Somewhere behind you, the cave clicks back.
+
+ECHO BAT-SHRIMP turns its ears toward you, one and then the other. It has just learned something about you. It looks very pleased.
+
+A single drip falls, a long way off. ECHO BAT-SHRIMP flinches, then turns to listen to where it landed.
+
+ECHO BAT-SHRIMP clicks at the wall, at the water, at you. All three come back different. It seems to find this wonderful.
+
+Smells like cold water, wet stone and the inside of a shell.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+ECHO BAT-SHRIMP's clicks come out thin and cracked. Hardly anything is coming back.
+
+[flavor: spareable]
+ECHO BAT-SHRIMP has stopped clicking. It is only listening now, ears wide, to the quiet.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Click.
+
+Click,
+click.
+
+...Is that
+you?
+
+Hello,
+hello,
+hello.
+
+...Found
+you.
+
+Again.
+
+Listen.
+
+Come back,
+come back.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/echo_shrimp.js.
+[talk: Inspect]
+ECHO BAT-SHRIMP - HP 7600
+A blind cave shrimp that finds the world by clicking. Sends out rings that bounce off the walls, calls a shape of chits and calls it again a beat later, and clicks a row of tiny shrimp at you on a steady beat. Find the gap in the ring, then learn the beat.
+
+[talk: Click back, softly]
+You tap your tongue, once, very quietly. ECHO BAT-SHRIMP freezes, ears straight up. The cave gives your click back to you three times, smaller each time, and ECHO BAT-SHRIMP's whole body softens, like somebody who has been shouting into a well and has finally heard a voice.
+
+[talk: Stand perfectly still]
+You hold completely still. ECHO BAT-SHRIMP clicks at you, and clicks again, and gets the same answer each time, the same shape, nothing more. It takes this for trust. Its ears lie down by degrees.
+
+[talk: Whisper into the dark]
+You whisper a word into the dark and let the cave carry it. It comes back from three directions, and each one is a little kinder than the last. ECHO BAT-SHRIMP clicks very faintly, in time with it, as though joining in.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+ECHO BAT-SHRIMP curls up, tight, with its ears folded flat, and goes quiet in the water. Nothing comes back from where it was. The cave seems very large all of a sudden.
+
+[pacified]
+ECHO BAT-SHRIMP uncurls, ears high, and clicks once at you, and listens to the answer for a long time. Then it slips away down the dark, still clicking, still pleased, finding its way by the sound of you.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} to say something it hasn't said yet. {foe} clicks for a while, thinking. It says the same thing. She says that's fair.
+
+Ves tells {foe} that she can hear herself in here three times over, and that she was right the first time. {foe} says the cave hasn't been right once.
+
+Ves asks {foe} what it makes of her umbrella. {foe} clicks at it for some time and says it's the most interesting shape it has ever heard. She says she is flattered. She is not sure it can tell the difference.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble whispers hello to {foe} and says he's sorry about his boots, they're very loud. {foe} says it likes them. It says they sound like a friend, coming.
+
+Bramble asks {foe} if it can hear his heart. {foe} says it can hear everyone's. Bramble goes very pale and says that's brilliant, and also not to mention it to anyone.
+
+Bramble does a big echo, "OOOOH", and {foe} does one back, "oooooh", and then they both do it again, and again, and they are both having the best time, and Ves says that is enough now.

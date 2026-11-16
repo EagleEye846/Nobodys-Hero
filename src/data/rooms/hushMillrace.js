@@ -16,6 +16,10 @@
 //   &  false scarlet tree: walk straight through it (a secret)
 //   y  leaf path
 //   Z  bramble hedge (solid)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_MILLRACE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_millrace',
@@ -80,6 +84,7 @@ export const HUSH_MILLRACE = {
   // `wet`).
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_millrace ?? []),
     { sprite: 'sign', x: 13, y: 20, text: 'millrace_sign' },
     // The two sluices: `a` on the east bank, `b` on the west.
     { sprite: 'lever_sluice', x: 27, y: 12, text: 'millrace_lever_a', lever: 'a' },
@@ -147,6 +152,8 @@ export const HUSH_MILLRACE = {
     { sprite: 'water_flow', x: 15, y: 6, text: 'millrace_water', wet: ['b'], animation: 'water_flow', speed: 0.15 },
     { sprite: 'water_flow', x: 15, y: 7, text: 'millrace_water', wet: ['b'], animation: 'water_flow', speed: 0.15 },
     { sprite: 'water_flow', x: 15, y: 8, text: 'millrace_water', wet: ['b'], animation: 'water_flow', speed: 0.15 },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_millrace ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', j: 'millrace_channel', N: 'bramble' },
 

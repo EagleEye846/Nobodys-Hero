@@ -2,7 +2,36 @@ import { SCREEN_WIDTH as W, SCREEN_HEIGHT as H, TILE_SIZE as T } from '../config
 import { glowSprite, roomLights } from './lamplight.js';
 import { sfx } from '../audio/music.js';
 import { ROOM_TOUCHES, AREA_TOUCHES } from '../data/touches.js';
+import { R3D_TOUCHES } from '../data/r3dTouches.js';
 import { COAST_KINDS } from './coastTouches.js';
+import { ASH_KINDS, ashTouchesFor } from './ashTouches.js';
+import { LANES_KINDS } from './lanesLife.js';
+import { LANES_TOUCHES } from '../data/lanesTouches.js';
+import { R3P_KINDS } from './r3pLife.js';
+import { R3P_TOUCHES } from '../data/r3pTouches.js';
+import { CITY_KINDS } from './cityLife.js';
+import { CITY_TOUCHES } from '../data/cityTouches.js';
+import { RUINS_KINDS } from './ruinsLife.js';
+import { RUINS_TOUCHES } from '../data/ruinsTouches.js';
+import { CAVE_KINDS } from './caveTouches.js';
+import { CAVE_ROOM_TOUCHES } from '../data/caveTouches.js';
+import { SHORE_KINDS } from './shoreLife.js';
+import { SHORE_ROOM_TOUCHES } from '../data/shoreTouches.js';
+import './diggingsLife.js';
+import './hushLife.js';
+import { ISLE_KINDS } from './isleTouches.js';
+import { ISLE_ROOM_TOUCHES } from '../data/islesTouches.js';
+import { TOWN_KINDS } from './townLife.js';
+import { TOWN_ROOM_TOUCHES } from '../data/townTouches.js';
+import { REST_KINDS } from './restLife.js';
+import { R2R_ROOM_TOUCHES } from '../data/restTouches.js';
+import { SHIP_KINDS } from './shipLife.js';
+import { SHIP_ROOM_TOUCHES } from '../data/shipTouches.js';
+import { SUNNY_KINDS, sunnyTouchesFor } from './sunnyLife.js';
+import { MARSH_KINDS } from './marshLife.js';
+import { MARSH_TOUCHES } from '../data/marshTouches.js';
+import { VIGIL_KINDS } from './vigilLife.js';
+import { VIGIL_ROOM_TOUCHES } from '../data/vigilTouches.js';
 import { fract, hash } from '../engine/noise.js';
 
 // TOUCHES: the small, living extras that give each Chapter 4 room its own
@@ -854,14 +883,15 @@ export class Touches {
   constructor(scene) {
     this.scene = scene;
     const id = scene.roomData.id;
-    const specs = [...(AREA_TOUCHES[scene.roomData.area] ?? []), ...(ROOM_TOUCHES[id] ?? [])];
+    // Round a spire only the mountain's own living things run (they bend with it: see vigilLife.js).
+    const specs = scene.spire ? [...(VIGIL_ROOM_TOUCHES[id] ?? [])] : [...(VIGIL_ROOM_TOUCHES[id] ?? []), ...(AREA_TOUCHES[scene.roomData.area] ?? []), ...(ROOM_TOUCHES[id] ?? []), ...(CAVE_ROOM_TOUCHES[id] ?? []), ...(ISLE_ROOM_TOUCHES[id] ?? []), ...(SHORE_ROOM_TOUCHES[id] ?? []), ...(TOWN_ROOM_TOUCHES[id] ?? []), ...(R2R_ROOM_TOUCHES[id] ?? []), ...(LANES_TOUCHES[id] ?? []), ...(R3P_TOUCHES[id] ?? []), ...(MARSH_TOUCHES[id] ?? []), ...(SHIP_ROOM_TOUCHES[id] ?? []), ...(CITY_TOUCHES[id] ?? []), ...(RUINS_TOUCHES[id] ?? []), ...ashTouchesFor(scene.roomData), ...sunnyTouchesFor(scene.roomData), ...(R3D_TOUCHES[id] ?? [])];
     this.list = [];
     // `when: 'storm'` or `when: 'calm'`: only while a green-storm room's storm is on, or once it has
     // lifted (the room's `calmAfter`); a room with no `calmAfter` is never calm.
     const calm = Boolean(scene.calm);
     for (const spec of specs) {
       if (spec.when === 'storm' ? calm : spec.when === 'calm' ? !calm : false) continue;
-      const make = KINDS[spec.kind] ?? COAST_KINDS[spec.kind];
+      const make = KINDS[spec.kind] ?? COAST_KINDS[spec.kind] ?? CAVE_KINDS[spec.kind] ?? ISLE_KINDS[spec.kind] ?? SHORE_KINDS[spec.kind] ?? TOWN_KINDS[spec.kind] ?? REST_KINDS[spec.kind] ?? LANES_KINDS[spec.kind] ?? R3P_KINDS[spec.kind] ?? SHIP_KINDS[spec.kind] ?? CITY_KINDS[spec.kind] ?? RUINS_KINDS[spec.kind] ?? ASH_KINDS[spec.kind] ?? VIGIL_KINDS[spec.kind] ?? SUNNY_KINDS[spec.kind] ?? MARSH_KINDS[spec.kind];
       if (!make) throw new Error(`Room '${id}': unknown touch '${spec.kind}'`);
       const parts = make({ ...spec, scene });
       this.list.push(parts);
@@ -891,7 +921,7 @@ export class Touches {
 }
 
 export function makeTouches(scene) {
-  if (scene.spire) return null;
+  if (scene.spire && !VIGIL_ROOM_TOUCHES[scene.roomData.id]) return null;
   const touches = new Touches(scene);
   return touches.empty ? null : touches;
 }

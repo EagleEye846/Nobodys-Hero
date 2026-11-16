@@ -5,6 +5,7 @@
 //   .  floor                           r  rug
 //   P  pillar with a lantern (solid)   D  doorway (walk through it; see `doors`)
 //   b  low stone block (jump up onto it)
+import { R1_PROPS } from '../ruinsLife.js';
 export const LANTERN_HALL = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'lantern_hall',
@@ -51,6 +52,7 @@ export const LANTERN_HALL = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/the_ruins.txt',
   props: [
+    { sprite: 'col_charm_key', x: 1, y: 14, walkable: true, flat: true, gives: 'charm_key', taken: { gone: true } },
     { sprite: 'sign', x: 5, y: 3, text: 'hall_plaque' },
     { sprite: 'savepoint', x: 16, y: 13, save: true },
     { sprite: 'gate', x: 10, y: 3, text: 'hall_gate', opensWith: ['east', 'heart', 'west'], inOrder: true, openText: 'hall_gate_open', resetText: 'hall_gate_reset' },
@@ -58,6 +60,8 @@ export const LANTERN_HALL = {
     { sprite: 'lantern_post', x: 5, y: 11, text: 'hall_lantern', lever: 'west' },
     { sprite: 'lantern_post', x: 16, y: 11, text: 'hall_lantern', lever: 'east' },
     { sprite: 'lantern_post', x: 10, y: 8, text: 'hall_lantern', lever: 'heart' },
+    // The life pass, round 2 (15 November 2026): chapter 1's dressing, in src/data/ruinsLife.js.
+    ...(R1_PROPS['lantern_hall'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

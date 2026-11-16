@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><base href="../"><title>r3d stats</title></head>
+<body style="background:#000;color:#ddd"><pre id="report">STATS START
+</pre>
+<script type="module">
+const r = document.getElementById('report');
+try {
+const { ROOM_TOUCHES, AREA_TOUCHES } = await import('./src/data/touches.js');
+const T = {};
+const imp = async (p, n) => { try { return (await import(p))[n] ?? {}; } catch (e) { r.textContent += `noimp ${p}\n`; return {}; } };
+const tabs = [
+ await imp('./src/data/lanesTouches.js','LANES_TOUCHES'), await imp('./src/data/caveTouches.js','CAVE_ROOM_TOUCHES'),
+ await imp('./src/data/islesTouches.js','ISLE_ROOM_TOUCHES'), await imp('./src/data/shoreTouches.js','SHORE_ROOM_TOUCHES'),
+ await imp('./src/data/townTouches.js','TOWN_ROOM_TOUCHES'), await imp('./src/data/shipTouches.js','SHIP_ROOM_TOUCHES'),
+ await imp('./src/data/sunnyTouches.js','SUNNY_TOUCHES'), ROOM_TOUCHES];
+const { ROOMS } = await import('./src/data/rooms/index.js');
+const { Room } = await import('./src/overworld/room.js');
+const ash = await import('./src/overworld/ashTouches.js');
+const sun = await import('./src/overworld/sunnyLife.js');
+const re = new RegExp(new URLSearchParams(location.search).get('re') ?? '.');
+for (const [id, d] of Object.entries(ROOMS)) {
+  if (!re.test(id)) continue;
+  const props = d.props ?? [];
+  const words = props.filter((p) => p.text && !p.decor).length;
+  const bodies = props.filter((p) => !p.walkable && !p.flat).length;
+  const decor = props.length - words;
+  let tc = (AREA_TOUCHES[d.area] ?? []).length;
+  for (const t of tabs) tc += (t[id] ?? []).length;
+  try { tc += ash.ashTouchesFor(d).length; } catch {}
+  try { tc += sun.sunnyTouchesFor(d).length; } catch {}
+  const w = (d.tiles[0] ?? '').length, h = d.tiles.length;
+  const rm = new Room(d); let open = 0; for (let y=0;y<h;y++) for (let x=0;x<w;x++){ const cx=(x+0.5)*16, cy=(y+1)*16; if(!rm.collides(cx-5,cy-5,cx+5,cy)) open++; }
+  const npcs = (d.npcs ?? []).filter((n) => !n.enemy).length, en = (d.npcs ?? []).filter((n) => n.enemy).length;
+  const kinds = new Set(props.map((p) => p.sprite ?? p.kind ?? p.id)).size;
+  r.textContent += `${id}|${d.area}|${w}x${h}|props ${props.length}|open ${open}|words ${words}|bodies ${bodies}|touch ${tc}|npc ${npcs}|en ${en}|kinds ${kinds}|scenes ${(d.cutscenes??[]).length}|open ${open}\n`;
+}
+} catch (e) { r.textContent += 'ERROR ' + (e.stack ?? e) + '\n'; }
+r.textContent += 'CHECK DONE\n';
+</script></body></html>

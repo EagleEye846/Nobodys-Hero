@@ -19,8 +19,9 @@
 //     fighting top (17,4), and the scene wreck_star_shard plays (the id is kept for the goals and
 //     Haddock's lines): the mast's split top has a scorch on it and a line of burnt grain running out
 //     to sea. The star shard is NOT here any more: it is at the end of the optional ghost ship.
-//   - From the fighting top, walk the yard east to the slip (door 39,3). Or slide back down
-//     the halyard (the coil at 13,3 is a door back to the rope's foot).
+//   - From the fighting top, walk the yard east to the slip (door 39,3). Or go back down:
+//     walk down off the top where the rigging comes up (17,4, facing down) and climb down it,
+//     or slide down the halyard (the coil at 13,3 is a door back to the rope's foot).
 // Tile key (see src/overworld/coastTiles.js, wreck):
 //   #  edge (solid)   ~  green-black water (solid)   q  shingle / mud   .  iron deck
 //   W  the hulk's side (solid)   o  fighting-top planks   g  the yard (and the raft at high)
@@ -38,8 +39,10 @@ export const WRECK_MAST = {
   ambience: 'wreck_yard',
   // After chapter 5 the storm is over (`calmAfter`, see atmosphere.js): no rain, a washed grey-blue light, quieter sounds.
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.5, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_wreck_yard', lamplight: { shade: 0.24, tint: '34, 44, 68' }, skyline: true },
+  // Once the Fair Return has sailed (crew_go_free, 2026-11-14), her fog has gone with her: the yard's fog thins to this.
+  fogLiftAfter: { scene: 'crew_go_free', fog: 0.25 },
   vesWell: true,
-  lastLight: { x: 33, y: 7 },
+  lastLight: { x: 33, y: 7, scale: 0.95 },
   skyline: [
     { kind: 'hull', x: 27, y: 14, lean: 1 },
     { kind: 'mast', x: 31, y: 18, lean: -1, tall: 56 },
@@ -184,6 +187,13 @@ export const WRECK_MAST = {
     { sprite: 'wy_scupper', x: 20, y: 12, flat: true, walkable: true },
     { sprite: 'wy_grating', x: 16, y: 15, flat: true, walkable: true },
     { sprite: 'wy_chain_pile', x: 14, y: 14, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_crab_shell', x: 15, y: 14, text: 'sl_crabshell', flat: true, walkable: true },
+    { sprite: 'c5_boat_upturned', x: 1, y: 14, text: 'sl_dinghy' },
+    { sprite: 'c5_rope_coil', x: 15, y: 19, text: 'sl_rope', walkable: true },
+    { sprite: 'shore_bottle', x: 3, y: 9, text: 'sl_bottle', walkable: true },
+    { sprite: 'shore_tally_post', x: 3, y: 18, text: 'sl_tally' },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'gate_edge', '~': 'mast_water', W: 'mast_hulk', f: 'gate_rail', g: 'mast_yard', O: 'hull_cargo', F: 'hull_net', x: 'hull_barnacles' },
 

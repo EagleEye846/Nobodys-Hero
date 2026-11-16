@@ -4,6 +4,7 @@
 // long way off to the north-east, on the skyline, stands the Last Light: a tall
 // black lighthouse with a crown of spikes. Puzzle-free, and no monsters (the first
 // room of an area): a place to look at the storm. The way on is the east door.
+// (It leads to the Headland, wrack_headland: the first ring climb of the coast, then the pools.)
 // Tile key (see src/overworld/coastTiles.js, wrack):
 //   #  cliff top (solid)   W  cliff face (solid)   .  wet shingle   ,  salt grass
 //   :  shell path   ;  shallows   j  stepping stones   ~  sea (solid)   x  barnacle rock (solid)
@@ -23,7 +24,7 @@ export const WRACK_LANDING = {
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_shore', lamplight: { shade: 0.16, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
   // The Last Light's foot, on the skyline (src/overworld/atmosphere.js: `lastLight`).
-  lastLight: { x: 31, y: 7 },
+  lastLight: { x: 31, y: 7, scale: 0.7 },
 
   tiles: [
     '########################################',
@@ -49,7 +50,7 @@ export const WRACK_LANDING = {
 
   // Walking onto a door's tiles takes you to another room; `spawn` is where you arrive.
   doors: [
-    { x: 39, y: 10, w: 1, h: 2, to: 'wrack_pools', spawn: { x: 2, y: 9 } },
+    { x: 39, y: 10, w: 1, h: 2, to: 'wrack_headland', spawn: { x: 2, y: 16 } },
   ],
 
   // Stepping onto these tiles plays a cutscene (a file in src/data/scenes/).
@@ -95,6 +96,18 @@ export const WRACK_LANDING = {
     { sprite: 'c5_sea_holly', x: 8, y: 12, flat: true, walkable: true },
     { sprite: 'c5_sea_holly', x: 25, y: 12, flat: true, walkable: true },
     { sprite: 'c5_sea_holly', x: 36, y: 13, flat: true, walkable: true },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_hermit', x: 24, y: 10, npc: 'hermit_crab', animation: 'shore_hermit', speed: 1.3, quest: [
+      { needs: ['has:big_whelk'], take: 'big_whelk', set: 'q_hermit_done', give: 'little_old_shell', text: 'shell_done' },
+      { needs: ['q_hermit_done'], text: 'shell_after' },
+    ] },
+    { sprite: 'sign', x: 22, y: 11, text: 'sl_tidy_sign' },
+    { sprite: 'c5_net_torn', x: 2, y: 11, text: 'sl_net', flat: true, walkable: true },
+    { sprite: 'shore_nest', x: 28, y: 11, text: 'sl_nest', walkable: true },
+    { sprite: 'shore_fishbones', x: 15, y: 10, text: 'sl_bones', flat: true, walkable: true },
+    { sprite: 'shore_kelp', x: 14, y: 8, text: 'sl_kelp_a', walkable: true, animation: 'shore_kelp', speed: 0.45 },
+    { sprite: 'c5_buoy_yellow', x: 20, y: 13, text: 'sl_float' },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', '~': 'landing_sea', x: 'landing_rock', O: 'landing_rock', F: 'landing_weed' },
 

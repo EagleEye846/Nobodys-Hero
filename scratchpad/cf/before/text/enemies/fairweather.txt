@@ -1,0 +1,323 @@
+# MADAM FAIRWEATHER, THE FIGUREHEAD: the secret superboss of chapter 5, at the end of the ghost
+# ship's deep part. The carved wooden woman on the brig Fair Return's prow, woken by a piece of the
+# Fallen Star that lodged in her breast a hundred years ago. On the Fair Return's last good night
+# she made one wish on it: that the night would never end. The star granted it to the letter, so
+# it is a party nobody can leave, and she can't stop laughing. She isn't mad or possessed; she is
+# stuck inside that wish. Sparing her lets it go (morning can come); beating her breaks it.
+# She laughs, she spins, she is glad of anyone at all, and she doesn't know her own strength. She speaks in bright, broken
+# fragments, like a person at a party who has been alone for a very long time. The hero never speaks.
+# (draft: every line here)
+# Numbers (HP, damage, her four phases) live in src/data/enemies/fairweather.js.
+# She CAN be talked down: a strange TALK (play with her, then say goodbye), as with Jevil.
+#
+# A section with ": laugh", ": shower", ": carousel" or ": chaos" after its name is used in that
+# phase of her fight instead of the plain one. [phase: ...] sections are what's said as a phase
+# starts: plain ones in the battle panel, "vesper" and "bramble" ones in their boxes, "foe" ones by
+# her in speech bubbles. Lines written together (no blank line between) share a bubble; a line
+# starting with ... waits for a bubble of its own.
+
+[boss_intro]
+A GUEST!
+
+Oh, a guest!
+I'd given
+up on
+guests!
+
+Come out
+past the
+rail, dear,
+it's ever so
+bright.
+
+Let's PLAY!
+
+[intro]
+The figurehead turns her whole carved body round on the prow, and her wooden face splits into a laugh. A star burns in her breast. MADAM FAIRWEATHER!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+MADAM FAIRWEATHER hangs out over the water on her own prow, one hand held out for a coin that has not been given since before the ship sank.
+
+Her laugh goes out over the sea in rings you can almost see. The waves answer it a moment late.
+
+The star in her breast beats like a second, quicker heart. The wood round it is cracked, and the cracks are full of light.
+
+Her hair is a run of carved waves. Where the carving ends, the waves go on, and they are real.
+
+She smells of old varnish and a clean night with the frost coming.
+
+Out past her the night goes on, and on. There is no grey in the east at all.
+
+[flavor: shower]
+MADAM FAIRWEATHER has her arms up, and the stars have noticed. Some of them are coming down to see what she is looking at.
+
+The sky over the perch is much too full. It keeps adding one.
+
+[flavor: carousel]
+MADAM FAIRWEATHER is turning, and the deck heels over under her. Somewhere a barrel organ plays a waltz that has lost its way home.
+
+The painted horses have got loose from nothing and are riding round on gilt poles. They look delighted. Their eyes are empty.
+
+[flavor: chaos]
+MADAM FAIRWEATHER has come apart down the middle, and every piece of her is laughing at a different time.
+
+It is a party, and it is the whole sky, and it is all at you.
+
+The light in her cracks has stopped being white and turned a pink you do not like at all.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full).
+[flavor: low]
+MADAM FAIRWEATHER is flaking. Gilt and varnish are coming off her in curls, and under them is plain, grey, honest wood.
+
+[flavor: spareable]
+MADAM FAIRWEATHER has stopped spinning. She hangs on her prow, chin lifted, the star beating slowly, looking at you as a figurehead looks at the horizon.
+
+# Said in a speech bubble before each attack, picked at random.
+[taunts]
+Ha ha
+ha!
+
+Catch me
+if you can!
+
+Oh, DO
+keep up!
+
+Again!
+Again!
+
+Isn't it
+LOVELY?
+
+Watch
+THIS!
+
+Don't go
+yet!
+
+[taunts: shower]
+Make a
+wish!
+
+Stars,
+stars,
+STARS!
+
+Look UP!
+
+Mind your
+head, dear!
+
+They fall
+so nicely.
+
+[taunts: carousel]
+Round and
+round!
+
+Choose a
+horse!
+
+Hold
+on!
+
+One more
+go!
+
+Whee-
+eee!
+
+Faster!
+
+[taunts: chaos]
+HA!
+HA HA!
+HA!
+
+Everything
+at once!
+
+I can't
+STOP!
+
+Isn't it
+a PARTY?
+
+Nobody
+leaves!
+
+More!
+MORE!
+
+[low_hp]
+Oh, it's
+only
+varnish.
+
+Are we
+done?
+...Already?
+
+I was
+having
+such a
+nice time.
+
+[low_hp: chaos]
+...Stay.
+Just
+a bit.
+
+It's so
+quiet when
+you go.
+
+# One section per TALK option. The names after "talk:" must match the TALK options in
+# src/data/enemies/fairweather.js.
+[talk: Inspect]
+MADAM FAIRWEATHER - HP 62000
+The brig Fair Return's figurehead, woken by a splinter of the Fallen Star in her breast, on a night she wished would never end. Foam, splinters, her laugh in rings; then falling stars and comets; then the carousel and the maypole; then all of it at once. She isn't cruel. She is playing, and nobody has told her how hard.
+Her deck lists, and rolls over when she laughs. And she will want to dance.
+Everything she throws blinks first. Nowhere in the box stays safe.
+
+[talk: Laugh along]
+You laugh. It isn't much of a laugh, but it's yours. MADAM FAIRWEATHER stops, astonished, and then laughs so hard she has to hold on to the rail. For a moment the rings of her laughter go out softer than before.
+
+[talk: Dance with her]
+You hold out your arms, and the two of you turn round on the prow, badly, under the sky. She leads. She is a figurehead and has never danced. She is thrilled. When the waltz runs out, she is still turning, but more slowly.
+
+[talk: Catch a star]
+A star comes down, a small one, and you catch it, and it burns your hand for exactly as long as it takes to be surprised. You put it in your pocket. MADAM FAIRWEATHER claps her carved hands, and the clap goes off over the sea like a gun.
+
+[talk: Hold out a hand]
+You hold out a hand, palm up, the way hers has been held out for a hundred years. She looks at it. She looks at hers. She puts something into yours. It is nothing, and it is gold, and it weighs exactly what a coin does.
+
+[talk: Ask her name]
+You point at her, and then at yourself, and shrug: who are you? She says it is Madam Fairweather. She says it twice, in two different voices, one of them younger. She says the carpenter chose it, for luck, and that the ship had a good deal of that, at first.
+
+[talk: Name the ship]
+You gesture up at the masts behind her, the rail, the bow, and she follows your hand. You say, with your lips, the way a sailor would: Fair Return. MADAM FAIRWEATHER goes quite still. "Fair," she says, "Return." She says it again, as if trying the weight. "Was that her name?" She has been out here in front of it all this time, and she has never been able to read it.
+
+[talk: Say goodbye]
+You say it with your hands, plainly, as kindly as you know how: you have to go, and she can stop now. She doesn't have to keep the party up for anyone. The star in her breast beats once, slowly, and then once more. MADAM FAIRWEATHER looks out at the sea she has been showing off to for a hundred years. "Is it morning?" she says. And then, quieter, in her own voice: "...Oh. It's very quiet."
+
+# Said when you try to RUN.
+[no_escape]
+The perch is a plank at the end of a ship in the middle of a fog. There is nowhere to run to but the sea, and the sea is laughing too.
+
+# What's said as each phase starts.
+[phase: shower]
+The sky over the perch fills up. The stars were always there, and now they are looking. MADAM FAIRWEATHER throws both arms up, and they come down.
+
+[phase: shower foe]
+Make a
+WISH!
+
+Make
+a
+hundred!
+
+# She curtsies (the beat's `curtsy` cue), then asks. From here on she leads: the waltz rule.
+[phase: shower curtsy foe]
+Oh! But
+where are my
+manners?
+
+May I have
+this dance?
+
+[phase: shower vesper]
+{determined}She's using the sky as a toy box. They fall in columns and they flash where they'll land. Watch the flash, not the star. ...And don't catch the glass.
+
+[phase: carousel]
+The whole figurehead turns, and the deck heels over under her. Out of the dark come painted horses on poles of gold, round and round, a slow, sweet, impossible tune under them.
+
+[phase: carousel foe]
+Round and
+round and
+ROUND!
+
+Pick a
+horse,
+dear!
+
+[phase: carousel bramble]
+{scared}...It's very pretty and I would like to get off.
+
+[phase: chaos]
+The star in her breast cracks all the way through, and the light comes out of every seam. MADAM FAIRWEATHER splits down the middle and laughs, in two voices, at slightly different times.
+
+[phase: chaos foe]
+Oh,
+it's
+ALL
+going!
+
+I can't
+SEE
+who's
+playing!
+
+Don't
+STOP!
+
+[phase: chaos vesper]
+{determined}She's doing two at once now and I don't think she knows how. Stay moving. It's all warned, it's just a lot of warnings.
+
+# Her two rules for the box (src/battle/fairweatherDeck.js): said in the panel the first time
+# each comes in.
+[deck_hint: list]
+Her deck LISTS. Your SHADOW slides downhill: walk against it. When she laughs, the ship rolls over the other way.
+
+[deck_hint: dance]
+She has your hand. Your SHADOW steps only on her beats, ONE two three, and further on ONE. Hold a way, or press it early.
+
+[deck_hint: both]
+Now you dance on a listing deck. Take the long step, the one on ONE, uphill.
+
+[deck_hint: swap]
+Every time she laughs she changes the game: the listing deck, then the dance, then the deck again.
+
+# Her counting, in her bubble, the first times she dances with you (ONE, two, three).
+[deck_count foe]
+ONE!
+
+two,
+
+three,
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+The pink goes out of the cracks, and then the white. MADAM FAIRWEATHER stops laughing in the middle of a breath, and stays where she is, a carved figurehead on a prow, her chin lifted, her hand held out. The star in her breast is only a dull stone now.
+
+[pacified]
+MADAM FAIRWEATHER lets her hand fall. She hangs on her prow a moment longer, smiling, looking out to where the morning is going to be. The star in her breast goes down, slowly, like a lantern turned low.
+
+# Ves's own TALK lines for her ({foe} is her name).
+[vesper_talk]
+Ves tells {foe} that she has a very good laugh, and that she'd like to hear it again when it isn't aimed at anyone. {foe} looks as if no one has ever said so, and then, carefully, laughs, very softly, to nobody.
+
+Ves says she knows what it is to be the cheerful one when everyone else has gone. {foe} says she is not lonely, she is HAVING FUN. Ves says, quite gently, that she knows.
+
+Ves asks {foe} what she has been looking at all this time. "The sea," says {foe}. "It's ever so big. Nobody's ever come back from it." She says it brightly. It takes her a moment to hear it.
+
+[bramble_talk]
+Bramble tells {foe} that her horses are really good, and also really scary, and could they be a bit less scary. {foe} is so surprised she lets the horses go slow for a moment.
+
+Bramble offers {foe} a toffee. {foe} says she has never been given a toffee. She holds it very carefully, the way you'd hold a star.
+
+Bramble says he'll stay a minute if she wants. He says it in a small, fierce voice, with his hands in fists. {foe} looks at him for a long time and doesn't say anything at all.
+
+# Under GAME OVER, by the phase you fell in.
+[game_over: laugh]
+Ha ha ha. The foam closed over the rail.
+
+[game_over: shower]
+A star came down on the very spot, and it was lovely.
+
+[game_over: carousel]
+Round and round, and the music stops.
+
+[game_over: chaos]
+Everybody left, and she laughed until nobody could hear her.

@@ -17,6 +17,8 @@ export const WRECK_STAR_SHARD = {
   ],
 
   steps: [
+    // (draft) 2026-11-15: staged and trimmed. The camera follows the scorch east along the yard and out to
+    // where the Last Light stands in the storm, instead of the paragraph saying so.
     { do: 'walk', who: 'ves', to: { x: 17, y: 2 }, wait: false },
     { do: 'walk', who: 'bramble', to: { x: 18, y: 3 }, wait: false },
     { do: 'walk', who: 'player', to: { x: 16, y: 4 } },
@@ -24,18 +26,24 @@ export const WRECK_STAR_SHARD = {
     { do: 'wait', seconds: 0.4 },
     { do: 'face', who: 'ves', dir: 'left' },
     { do: 'face', who: 'bramble', dir: 'left' },
-    { do: 'say', text: 'The top of the mast comes up through the planks of the lookout, split like a broken pencil. The wood at the split is black and glassy, as though something very hot was pulled out of it, a long time ago.\n\nThere is nothing wedged in it now.' },
+    { do: 'say', text: 'The top of the mast comes up through the planks, split like a broken pencil. The wood at the split is black and glassy, as though something very hot was pulled out of it, a long time ago.\n\nThere is nothing wedged in it now.' },
     { do: 'emote', who: 'player', emote: '!', wait: false },
     { do: 'sound', name: 'shimmer' },
-    { do: 'say', text: 'At your side, the Fallen Star stirs. Not a hum: a tug, like a dog that has seen a gate.\n\nOn the planks beyond the split, a long scorch runs east, as straight as a ruled line, a few flecks of pale blue still caught in the char. It goes on over the end of the yard, and out over the water.' },
+    { do: 'act', who: 'player', act: 'startle' },
+    // The Fallen Star tugs, like a dog that has seen a gate: the camera runs east along the scorch, out over the water.
+    { do: 'camera', to: { x: 24, y: 3 } },
+    { do: 'wait', seconds: 1.4 },
+    { do: 'camera', to: { x: 33, y: 5 } },
+    { do: 'wait', seconds: 2 },
+    { do: 'camera' },
     { do: 'face', who: 'bramble', dir: 'right' },
-    { do: 'say', who: 'bramble', text: '{worried}...It\'s pointing. Why is it pointing?' },
     { do: 'face', who: 'ves', dir: 'right' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Something came down on this mast, and stuck, and then it was carried on. The line goes on past the slip, out along the cove to the far point. And then into the fog.' },
+    { do: 'act', who: 'bramble', act: 'hop', wait: false },
+    { do: 'say', who: 'ves', text: '{surprised}Something was stuck in here. Something hot. And then it went... that way. Past the slip. Out to that point.' },
     { do: 'say', who: 'bramble', text: '{scared}There is nothing out in the fog.' },
-    { do: 'say', who: 'ves', text: '{bored}That\'s exactly where I\'d hide a star, if I were one.' },
+    { do: 'say', who: 'ves', text: '{smile}That\'s exactly where I\'d hide a star, if I were one.' },
     { do: 'face', who: 'ves', at: 'player' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Slip first. Haddock will want to see that sword. And I\'d like a look at that far point, while we\'re there. Whatever it wants out there can wait until we know how to get to it.' },
+    { do: 'say', who: 'ves', text: '{determined}Slip first. Haddock\'s there, and Haddock might know what this is. Then that point. Whatever\'s out there can wait till we know how to get to it.' },
     { do: 'face', who: 'ves', dir: 'right' },
   ],
 };

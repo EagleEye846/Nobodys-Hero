@@ -29,7 +29,7 @@ export const GHOST_DECKHAND = {
   // "Still on Watch" (src/data/music/ghostCrewBattleTheme.js): the fight song for the crew's two
   // boys, small and lonely, on the ship's shanty. (It used to be the storm fight song.)
   music: 'ghostCrewBattle',
-  maxHp: 12400,
+  maxHp: 7300,
   damage: 97,
 
   difficulty: { density: 1.8, speed: 1.62 },
@@ -42,9 +42,8 @@ export const GHOST_DECKHAND = {
 
   // His attacks live in src/battle/attacks/ghost_deckhand.js.
   patterns: [
-    { name: 'deckSwab', weight: 3 },
-    { name: 'deckBucket', weight: 3 },
-    { name: 'deckBell', weight: 3 },
+    { name: 'deckPump', weight: 3 },
+    { name: 'deckBells', weight: 3 },
     { name: 'deckLetters', weight: 3 },
   ],
 
@@ -56,7 +55,7 @@ export const GHOST_DECKHAND = {
     { name: 'Hum along', calm: 30 },
   ],
 
-  rewards: { exp: 3100, coins: 17 },
+  rewards: { exp: 3100, coins: 14 },
 
   // A hundred-year-old ship's biscuit with a name scratched in it, left behind (src/data/items.js).
   drops: [{ item: 'scratched_hardtack', chance: 0.4 }],

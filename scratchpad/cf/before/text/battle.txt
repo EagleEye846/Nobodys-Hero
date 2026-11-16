@@ -1,0 +1,278 @@
+# Lines the battle screen says by itself (not any one enemy's).
+
+# The very first time you fight: your shadow stands up to take the hits.
+# Shown once, before the enemy's own intro line.
+[first_shadow]
+Danger! Your shadow peels up off the floor and stands between you and the enemy.
+It doesn't look like you. It looks like a Hero.
+
+# Running away (RUN), and getting away: a line about where you are. The
+# section is the area the fight is in (see battleArea in overworldScene.js):
+# ruins, stair (the green lower mountain), vigil (the snowy heights), cave
+# (any cave), rest (Heralds' Rest). One is picked at random.
+[escape: ruins]
+You slipped away into the ruins!
+
+You ducked behind a pillar and kept going!
+
+[escape: stair]
+You slipped away behind the rocks!
+
+You ducked into the long grass and didn't look back!
+
+You scrambled off down the path and out of sight!
+
+[escape: vigil]
+You slipped away into the snow!
+
+You ducked behind a drift and kept low until it gave up!
+
+The wind threw snow between you, and you were gone!
+
+[escape: cave]
+You slipped away into the dark!
+
+You ducked behind a stalagmite and held your breath!
+
+You squeezed into a crack in the ice until it went away!
+
+[escape: rest]
+You slipped away down a side street!
+
+You ducked behind a snowman. It worked!
+
+[escape: pinefall]
+You slipped away between the red trunks!
+
+You ducked into the ferns and kept still!
+
+You were gone into the pines before it turned round!
+
+[escape: drains]
+You slipped away down a side tunnel!
+
+You splashed off round a bend in the dark!
+
+You ducked under a pipe and kept going!
+
+[escape: marsh]
+You slipped away into the mist!
+
+You squelched off through the reeds!
+
+You hid behind a hummock until it gave up!
+
+[escape: lasthome]
+You slipped away down the lane!
+
+You ducked behind a wall and kept low!
+
+[escape: valley]
+You slipped away down a dead street!
+
+You ducked into an empty doorway!
+
+You were gone among the old stones!
+
+[escape: belowtown]
+You slipped away down a side street!
+
+You ducked behind a market stall!
+
+[escape: deep]
+You slipped away into the dark!
+
+You crept off down a low tunnel!
+
+You held your breath until it lost you!
+
+[escape: diggings]
+You slipped away behind a spoil heap!
+
+You ducked behind an old cart!
+
+You scrambled off down a side shaft!
+
+[escape: glimmer]
+You slipped away between the crystals!
+
+You ducked behind a glittering rock!
+
+The light flashed in its eyes, and you were gone!
+
+[escape: stillwater]
+You slipped away along the shore!
+
+You ducked under the overhang and kept still!
+
+[escape: sunnyside]
+You slipped away into the long grass!
+
+You ducked behind a hedge and kept going!
+
+You ran off between the haystacks!
+
+[escape: gullrest]
+You slipped away behind a beach hut!
+
+You ran off up the promenade!
+
+You ducked behind the bunting. It worked!
+
+[escape: saltcombe]
+You slipped away down an alley!
+
+You ducked behind a stack of crab pots!
+
+You ran off up the harbour steps!
+
+[escape: lanes]
+You slipped away down a flooded lane!
+
+You waded off round a corner!
+
+You ducked behind a garden wall!
+
+[escape: wrack]
+You slipped away into the dunes!
+
+You ducked behind a broken hull!
+
+You ran off over the shingle!
+
+[escape: wreck]
+You slipped away between the cargo!
+
+You ducked behind a barrel!
+
+You scrambled off up a ladder!
+
+[escape: soundings]
+You slipped away into the echoes!
+
+You ducked behind a pillar of sea-glass!
+
+You splashed off down a side cave!
+
+[escape: isles]
+You slipped away round the rocks!
+
+You ducked behind the lighthouse wall!
+
+You ran off over the causeway!
+
+[escape: reach]
+You slipped away into the storm!
+
+The rain came down between you, and you were gone!
+
+You ducked behind a rock and held on!
+
+[escape: lastlight]
+You slipped away down the stairs!
+
+You ducked round the turn of the stair and were gone!
+
+The lamp swung past, and so did you!
+
+# --- VES, on her own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
+
+# Shown in the panel while she picks what to do. One is picked at random.
+# Keep each to a line or two: it isn't split into pages.
+[vesper_turn]
+Ves shakes out her umbrella. Her turn.
+
+Ves taps the brass handle twice, for luck. Her turn.
+
+Ves plants her feet. "Right. My go."
+
+Ves peers out from under her umbrella. Her turn.
+
+# Her TALK: a kind word to one enemy, which raises its MERCY a little.
+# {foe} is the enemy's name. One is picked at random. An enemy's own text
+# file can have a [vesper_talk] section of its own instead.
+[vesper_talk]
+Ves tells {foe} it's doing very well, considering.
+
+Ves asks {foe} if it's eaten. It hasn't thought about it in years.
+
+Ves holds her umbrella over {foe} for a moment. Just to keep the weather off.
+
+Ves says sorry to {foe}, for everything. It isn't sure what for. Neither is she.
+
+Ves hums a few bars of an old village song at {foe}.
+
+# Her DEFEND: the plain version of SHELTER.
+[vesper_defend]
+Ves plants her umbrella and ducks behind it like a little wall.
+
+# --- VES, HURT (after the Lantern Marsh: her leg's bad, her umbrella's lost) ---
+# While she's hurt these take the place of the ones above. She sits on the
+# ground to fight.
+[vesper_hurt_turn]
+Ves shifts her bad leg and winces. "I'm fine. My turn."
+
+Ves pushes her hair out of her eyes. Her turn.
+
+Ves holds her coat tight round her. "Right. What can I do?"
+
+[vesper_hurt_talk]
+Ves tells {foe} it's doing very well, considering.
+
+Ves asks {foe} if it's eaten. It hasn't thought about it in years.
+
+Ves asks {foe}, very politely, to leave her leg alone.
+
+Ves hums a few bars of an old village song at {foe}.
+
+[vesper_hurt_defend]
+Ves ducks down behind you and holds on.
+
+# Her CALL OUT: what she shouts as the next attack starts, in the panel
+# under the box. {foe} is the name of the enemy attacking. Keep each to a line.
+[vesper_call_out]
+Ves shouts: "{foe}'s winding up! Get ready!"
+
+Ves shouts: "Here it comes! Watch it, watch it!"
+
+Ves shouts: "{foe}! Now! Move!"
+
+# Bramble's LOOK OUT!: what he shouts as the next attack starts (like Ves's
+# CALL OUT). {foe} is the name of the enemy attacking. Keep each to a line.
+[bramble_call_out]
+Bramble yells: "{foe}'s doing a thing! LOOK OUT!"
+
+Bramble yells: "Here it comes! Duck! No, the other way!"
+
+Bramble yells: "{foe}! Now! NOW!"
+
+# --- BRAMBLE, on his own turn (see ALLY_COMMANDS in src/battle/battleScene.js) ---
+
+# Shown in the panel while he picks what to do. One is picked at random.
+[bramble_turn]
+Bramble spits on his hands like the grown-ups do. His turn.
+
+Bramble hefts his hatchet. It hefts him back a bit. His turn.
+
+Bramble bounces on his toes. "Me! Me! My go!"
+
+Bramble wipes his nose on his sleeve. His turn.
+
+Bramble squints at the enemy like Ma does at logs. His turn.
+
+# His TALK: a word to one enemy, which raises its MERCY a little. {foe} is
+# the enemy's name. An enemy's own text file can have [bramble_talk] instead.
+[bramble_talk]
+Bramble tells {foe} it's not allowed round here. It looks confused.
+
+Bramble asks {foe} if it wants to see a frog he found. It sort of does.
+
+Bramble tells {foe} his Ma could beat it up. {foe} believes him.
+
+Bramble offers {foe} half a biscuit. It's the smaller half, but still.
+
+Bramble pulls a face at {foe}. It's a really good face.
+
+# His DEFEND.
+[bramble_defend]
+Bramble gets behind his hatchet and makes himself very small.

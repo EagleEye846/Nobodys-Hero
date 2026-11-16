@@ -105,7 +105,9 @@ export const SOUNDINGS_ECHO_HALL = {
     { x: 21, y: 0, w: 2, h: 1, to: 'soundings_up', spawn: { x: 11, y: 26 } },
     { x: 21, y: 22, w: 2, h: 1, to: 'soundings_drowned_chapel', spawn: { x: 16, y: 2 } },
     // The shortcuts: the chute's foot from the Three Wells, and the passage up to the Weight Room's gallery.
-    { x: 43, y: 17, w: 1, h: 2, to: 'soundings_three_wells', spawn: { x: 34, y: 17 } },
+    // The foot of the Three Wells' chute: water only comes DOWN it (a one-way way back from the wells), so it
+    // turns you back rather than dropping you in the pocket at its bottom. (`after` a scene that never plays.)
+    { x: 43, y: 17, w: 1, h: 2, to: 'soundings_three_wells', spawn: { x: 34, y: 17 }, after: ['never_up_the_chute'], notYet: 'hall_chute_up' },
     { x: 0, y: 17, w: 1, h: 2, to: 'soundings_weight_room', spawn: { x: 1, y: 10 } },
     // The secret, up through the outcrop.
     { x: 3, y: 0, w: 2, h: 1, to: 'secret_soundings_bell', spawn: { x: 7, y: 7 } },
@@ -128,7 +130,7 @@ export const SOUNDINGS_ECHO_HALL = {
     { sprite: 'c5_stalactite_drip', x: 33, y: 2, text: 'sound_drip', animation: 'c5_stalactite_drip', speed: 0.6 },
     { sprite: 'c5_stalactites_wide', x: 25, y: 2, text: 'sound_stalactites' },
     // The secret: Bramble's crack (4,4), his bolt wheel inside (5,2), the grille it lifts (2,4).
-    { sprite: 'kid_gap', x: 4, y: 4, text: 'hall_crack', gap: true },
+    { sprite: 'c5_stone_gap', x: 4, y: 4, text: 'hall_crack', gap: true },
     { sprite: 'lever', x: 5, y: 2, text: 'hall_bolt', lever: 'bell_bolt', by: 'bramble', byText: 'hall_bolt_not_you' },
     { sprite: 'gate_narrow', x: 2, y: 4, text: 'hall_grille', opensWith: ['bell_bolt'], openText: 'hall_grille_open' },
     // Two purses: one on the east strip, one out on the bed (only reachable at low water).
@@ -161,16 +163,22 @@ export const SOUNDINGS_ECHO_HALL = {
     { sprite: 'sd_glass_rock', x: 42, y: 13, text: 'sound_glass', glow: GLASS_GLOW },
     { sprite: 'sd_scree', x: 37, y: 17, flat: true, walkable: true },
     { sprite: 'sd_stalagmites', x: 4, y: 20, text: 'sound_stalagmites' },
+    // Life pass (14 November 2026): belongings, signs, trees and small life.
+    { sprite: 'lv_echo_stone', x: 24, y: 6, text: 'lp_echo_stone' },
+    { sprite: 'lv_whale_rib', x: 12, y: 3, text: 'lp_whale_rib' },
+    { sprite: 'lv_umbrella', x: 41, y: 9, text: 'lp_umbrella' },
   ],
   tileTexts: { '#': 'sound_rock', W: 'sound_rock', '~': 'hall_water', q: 'hall_shingle', ';': 'hall_puddle', x: 'sound_glass', I: 'hall_pillar' },
 
-  // A PAIR at the east end: a net wraith patrolling the ledge's lip (row 8, x 32 to 34) and a
+  // A PAIR at the east end: a plumb lead lying coiled on the ledge's lip (row 8, x 33) and a
   // moonjelly drifting over the east pool just below it (row 10, x 33 to 35: deep at both tides),
   // close enough to fight together. Neither comes near a door, the dial, the crack or a tile the
   // tide changes (the bed is x 12 to 31, rows 9 to 20, and x 7 to 11, rows 17 to 19). No cutscenes
   // in this room.
   npcs: [
-    { enemy: 'net_wraith', x: 33, y: 8, patrol: [32, 34], behaviour: 'patrol' },
+    // (A plumb lead, not a net wraith: it lies coiled on the slate south of the ledge until you are within
+    // 2 tiles (a walk along the ledge's row 5 or 6 passes it by), then swings up. Clear of the ledge's walking row; there are no cutscenes in this room.)
+    { enemy: 'plumb_lead', x: 33, y: 8, patrol: [33, 33], behaviour: 'disguise', reach: 1.8 },
     { enemy: 'moonjelly', x: 34, y: 10, patrol: [33, 35], behaviour: 'patrol' },
   ],
 };

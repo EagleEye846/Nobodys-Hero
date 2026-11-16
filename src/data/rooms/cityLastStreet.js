@@ -6,6 +6,9 @@
 //   #  the old city's stone, overhead (solid)
 //   .  the old city's flagstones
 //   W  the old city's stone wall (solid)
+import { LIFE3C_PROPS } from '../lifePass3c.js';
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const CITY_LAST_STREET = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'city_last_street',
@@ -54,6 +57,7 @@ export const CITY_LAST_STREET = {
   // Things you can press Z on. `text` names a section of this room's text file.
   textFile: 'interactions/deadcity.txt',
   props: [
+    ...(R3B_PROPS.city_last_street ?? []),
     { sprite: 'alcove', x: 5, y: 4, text: 'alcove', hide: true },
     { sprite: 'alcove', x: 11, y: 4, text: 'alcove', hide: true },
     { sprite: 'alcove', x: 19, y: 4, text: 'alcove', hide: true },
@@ -71,6 +75,8 @@ export const CITY_LAST_STREET = {
     { sprite: 'street_lamp_fallen', x: 15, y: 9, text: 'fallen_lamp' },
     { sprite: 'bristle_tuft', x: 12, y: 5, text: 'bristle_tuft', walkable: true },
     { sprite: 'bristle_tuft', x: 26, y: 5, text: 'bristle_tuft', walkable: true },
+    // The life pass, round 2 (15 November 2026).
+    ...(LIFE3C_PROPS['city_last_street'] ?? []),
   ],
   tileTexts: { W: 'city_wall', '#': 'city_wall' },
 

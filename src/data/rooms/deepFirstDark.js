@@ -34,6 +34,8 @@
 //   I  smooth pinched column (solid)   J  smooth knob (solid)
 //   ^  black stalagmite (solid)   O  glossy black boulder (solid)
 //   x  glowing crystal (solid, gives light)
+import { R3C_PROPS } from '../r3cLife.js';
+
 export const DEEP_FIRST_DARK = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'deep_first_dark',
@@ -98,6 +100,7 @@ export const DEEP_FIRST_DARK = {
   // the gnawer sleeps on, and a purse at the end of a blind nook.
   textFile: 'interactions/deep.txt',
   props: [
+    ...(R3C_PROPS.deep_first_dark ?? []),
     // A save crystal, so the caves never go long without one.
     { sprite: 'savepoint', x: 3, y: 3, save: true },
     // The child's waymarks: a cairn with three pale pebbles laid in a line in front of it, pointing
@@ -128,6 +131,9 @@ export const DEEP_FIRST_DARK = {
     { sprite: 'smooth_stone_c', x: 31, y: 3, text: 'fd_stone', seenInLight: true },
     { sprite: 'big_bones', x: 9, y: 13, text: 'fd_bones', seenInLight: true },
     { sprite: 'gold_pouch', x: 2, y: 14, text: 'fd_purse', gold: 60, seenInLight: true, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'dp_worm_pile', x: 15, y: 13, text: 'dd_worms', animation: 'dp_worm_pile', speed: 0.7, walkable: true, seenInLight: true },
+    // --- end life pass ---
   ],
   tileTexts: { '#': 'deep_rock', W: 'deep_face', I: 'deep_column', J: 'deep_knob', '^': 'deep_stalagmite', O: 'deep_boulder', x: 'deep_crystal', '0': 'deep_drop', q: 'deep_ash' },
 

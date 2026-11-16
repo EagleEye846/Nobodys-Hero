@@ -1,0 +1,56 @@
+# BT_VENDOR_SNAIL: A snail with a stall of tiny, slow-to-eat sweets, who has been 'back in a moment' since the Sunstone started to dim.
+
+[first]
+Sweets... welcome... one moment... let me find... the one you want...
+
+...There. That's a toffee. I'll have it wrapped by... teatime.
+
+[repeat]
+It takes me an hour to serve one customer. I like to give them the time to think.
+
+[first after the_kings_welcome]
+So... you're... going down...? Take... your... time... ha... I'll... see... you... when... you're... back.
+
+[repeat after the_kings_welcome]
+Good luck... on your... way... I'll have your sweets... ready by then.
+
+[first after the_light_goes_up]
+It's... bright... again... lovely... I think... I'll look at it... for a moment...
+
+[repeat after the_light_goes_up]
+I'm... back... in a moment... as ever.
+
+# --- SIDE QUEST: a toffee for Auntie at the inn ---
+
+[toffee_ask]
+Ah... yes... one... moment... before you... go... I've got... something... for Auntie... at the inn...
+
+She ordered... a toffee... last spring... I've finished... wrapping it... It took... a while... You'll be... quicker...
+
+He holds out the toffee. It takes him some time. You wait. It's worth it.
+
+[toffee_wait]
+The inn... Auntie... the snail... with the table... growing into her... She's waited... a year... another hour... won't hurt...
+
+[toffee_after]
+Thank you... for taking it... I do miss... doing a delivery... myself... but I'd have... got there... by next week...
+
+# --- More turns, and Ves on some of them ---
+
+# (draft)
+[repeat 2]
+...I remember... every customer... There was one... long ago... small... in a hurry...
+
+He wanted... directions... not sweets... I gave him both... I'm still... a bit cross...
+
+# (draft)
+[repeat 3]
+...Don't rush... you'll... drop it...
+
+# (draft)
+[repeat 2 after the_kings_welcome]
+...Mind the... bottom of things... It comes up... quicker... than you'd think...
+
+# (draft)
+[repeat 2 after the_light_goes_up]
+...Something's... different... Oh. It's me. I'm... smiling. Give it... a moment... It'll... spread.

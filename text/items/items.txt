@@ -418,6 +418,13 @@ A tiny barnacle that a Barnacle Bat wore off its wing. Hold it to your ear and y
 [sea_glass_sweet]
 A boiled sweet that has been in the sea so long it has gone smooth and frosted, just like a bit of sea glass. A Whelkling keeps a hoard of them. It still tastes of lemon. Heals 265 HP.
 
+# The Soundings' monsters (the Echo Bat-Shrimp, the Plumb Lead).
+[echo_shrimp_shell]
+The curl of pale shell an Echo Bat-Shrimp sheds when it has outgrown it. Hold it up to a foe and it hears itself, very faintly, and is moved. MERCY +30% for everyone.
+
+[fathom_knot]
+A knot off a sounder's line, tied where the old Harbour Board men marked a depth. It is still tight, and still counting under its breath. Chewing it is not advised, but a loop of it laid on a hurt does wonders. Heals 275 HP.
+
 # Chapter 5: Sunnyside's chapter 4 monsters, met again in the late summer (the Bunting, the Dandy Lion, the Haybob).
 [fete_sponge]
 A slice of sponge cake off the end-of-summer fete, still on its paper doily. A Bunting won it in the raffle and has carried it to every party since. The jam has given up. Heals 245 HP.
@@ -429,6 +436,15 @@ A stone bottle of dandelion and burdock that a Dandy Lion was saving for the las
 A loaf baked in the shape of a wheatsheaf, the sort left on the church step at harvest. A Haybob was guarding it from the birds. Only one ear is nibbled. Heals 255 HP.
 
 # CHAPTER 5: the Cockle Stall, in Saltcombe's market, and Orla's Forge.
+[ships_hardtack]
+Ship's biscuit, baked forty years ago and not a day older. Hard enough to knock on. Bramble knocked on it. Heals 260 HP.
+
+[galley_cocoa]
+A tin mug of cocoa, hot from a stove that's been out for years. Fills your SP.
+
+[cooks_soup]
+The soup. There's always more soup. A bit of everything, and something the cook won't tell you. Heals 300 HP.
+
 [sea_biscuit]
 A hard, salty sea biscuit. It's been dunked in something warm. Bramble says they're good for teeth.
 
@@ -444,6 +460,18 @@ A dented tin flask from the sounders' kit, the cork waxed in. Cocoa, still hot a
 [humbug_lump]
 A fist-sized lump of striped humbugs, all stuck together in their jar years ago. Break a bit off. It puts everything right, and it takes a while.
 
+# (draft)
+[still_warm_scone]
+A scone wrapped in a tea towel, from a box in a house that isn't there. Still warm. It puts everything right, and nobody asks where it came from.
+
+# (draft)
+[figgy_duff]
+A sailors' pudding of figs and suet, boiled in a cloth and made to last a voyage. It has. It puts everything right, and you won't want lunch.
+
+# (draft)
+[keepers_tea]
+A tin of the lamp keepers' black tea, strong enough to stand a spoon in. Restores SP +130%. It tastes of tar and staying awake.
+
 [cockle_chowder]
 Creamy, peppery chowder in a thick bowl. The crab ladles it herself. It warms you from the inside out, and from the outside in.
 
@@ -451,7 +479,7 @@ Creamy, peppery chowder in a thick bowl. The crab ladles it herself. It warms yo
 A stone bottle with a bell on the label, kept in the ringers' chest for long peals. Restores SP +130%. It tastes of blackcurrant and stamina.
 
 [brine_tonic]
-A tonic of salt water and secrets, in a green bottle. Restores SP +110%. It tastes like swimming.
+A tonic of salt water and secrets, in a green bottle. Restores SP +100%, and your next spell costs no SP. It tastes like swimming.
 
 [tinder_bun]
 A warm sticky bun, baked on Orla's forge in the lamp oil's last heat. Sticks to your fingers and your ribs.
@@ -500,3 +528,46 @@ The last length of a slow-match wound in a twist of paper, dipped in toffee by a
 # (draft) Madam Fairweather's drop.
 [starfall_cordial]
 A little carved bottle with a stopper of star-glass, the glass still faintly lit, and inside it something that tastes of salt, sugar and a very good night. It hums if you shake it. Heals 700 HP.
+
+# (draft) Chapter 6's Ash Road monsters' drops.
+[ash_button]
+A big round button of black liquorice, the kind you would give a snowman, still warm from the ash it was pressed into. Chewy, smoky and very filling. Heals a good deal.
+
+[sooty_quill]
+A long grey gull's quill, sooty at the tip and white underneath, with a hollow full of something sweet and fizzing. Suck it and your head clears like a sea wind. Restores SP +125%.
+
+[charred_collar]
+A dog's collar of old leather, burnt black, with a little tin tag nobody can read any more. Hold it up in a fight and the next attack only does half its damage. It's used up after.
+
+[mile_chip]
+A flat oat biscuit, hard as stone, stamped with half a number. It takes a mile to eat, and keeps you going for three. Heals a good deal.
+
+# The life pass: the Brook's nut cache, and the kids' den in Hollin.
+[pine_nut_brittle]
+A twist of brown paper with a slab of brittle in it: nuts in toffee, hard enough to hurt and good enough to forgive. It smells of a squirrel's good intentions.
+
+[hollin_humbugs]
+Boiled sweets, still in their twists, from a jar marked EMERGENCY ONLY. Fifty years old and exactly as sweet as the day they were wrapped. Don't think about it.
+
+# Chapter 4's hidden corners (the life pass)
+[dgs_nap_biscuit]
+A soft round biscuit, still a little warm from the cushion it was under. Eaten best lying down.
+
+[dgc_crumb_cake]
+A cake the size of a matchbox, baked by someone with very small hands. It tastes of thanks for not telling.
+
+[bl_lookers_biscuit]
+A biscuit with a hole in the middle, left on a nail for whoever looks up. It tastes of being noticed.
+
+[deep_root_chew]
+A knot of pale root, sweet and chewy, the way roots are when they have been waiting a long time. Better than it looks.
+
+[glow_sugar]
+A twist of crystal sugar that glows faintly in the bag. The glowbug will want to know you ate it.
+
+# The Soundings' monsters (the Blind Grotto Crab, the Tidewight).
+[ghost_pearl]
+A cold, pale pearl a Blind Grotto Crab spat out, still warm from its mouth. It never saw anything, and it doesn't mind a bit. Hold it up in a fight and enemies lose a little of their edge. MERCY +30% for everyone.
+
+[black_brine]
+A stoppered phial of black water out of the deepest well, so cold it hurts your teeth. Drink it quickly and it is, somehow, very good for you. Heals 290 HP.

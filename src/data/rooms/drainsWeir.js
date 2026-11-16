@@ -1,3 +1,4 @@
+import { R3M_PROPS } from '../lifePass3m.js';
 // THE GREAT WEIR: where the old conduit drops into a basin, and the weir that
 // turned its water this way and that. Here the weir doesn't still a channel,
 // it turns it round: weir up, the top channel runs east to the sluice house
@@ -128,6 +129,8 @@ export const DRAINS_WEIR = {
     { sprite: 'current_down', x: 24, y: 11, text: 'current', flow: 'down', animation: 'current_down', speed: 0.1, wet: ['!weir'] },
     { sprite: 'current_down', x: 24, y: 12, text: 'current', flow: 'down', animation: 'current_down', speed: 0.1, wet: ['!weir'] },
     { sprite: 'current_down', x: 24, y: 13, text: 'current', flow: 'down', animation: 'current_down', speed: 0.1, wet: ['!weir'] },
+    // The life pass (15 November 2026): see src/data/lifePass3m.js.
+    ...(R3M_PROPS['drains_weir'] ?? []),
   ],
   tileTexts: { W: 'conduit_wall', '#': 'conduit_wall', j: 'conduit_channel' },
 

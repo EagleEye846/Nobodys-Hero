@@ -13,6 +13,10 @@
 //   y  leaf path
 //   Z  bramble hedge (solid)
 //   ~  brook (solid, until a log sinks into it)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_MIST_EDGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_mist_edge',
@@ -70,6 +74,7 @@ export const HUSH_MIST_EDGE = {
   // `log`, `rockReset`).
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_mist_edge ?? []),
     { sprite: 'roll_log', x: 17, y: 10, text: 'roll_log', log: true },
     { sprite: 'rock_stump', x: 24, y: 12, text: 'rock_stump', rockReset: true },
     { sprite: 'chalk_rock_left', x: 22, y: 11, text: 'mist_chalk' },
@@ -80,6 +85,8 @@ export const HUSH_MIST_EDGE = {
     // Tucked in behind the trees in the far corner, past the brook.
     { sprite: 'gold_pouch', x: 1, y: 15, text: 'mist_pouch', gold: 90, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'chest', x: 26, y: 2, text: 'mist_chest', gives: 'toadstool_toast', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_mist_edge ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

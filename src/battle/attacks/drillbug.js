@@ -1,11 +1,15 @@
 import { defineBulletArt } from '../projectiles.js';
+import { PathShot, Deco, Guide } from './coastKit.js';
 
-// The Drillbug's attacks. It's a beetle with a drill for a nose, proud of
-// its tunnels, so it digs: it drills through the walls of the box and the
-// holes spit grit, it bores along under your feet and bursts out where you
-// were, it spins up drill bits and sends them off, it makes the whole place
-// rumble and rocks come down, and it sends a rail-load of rock dust whizzing
-// across. Every tunnel it digs, it digs towards you.
+// The Drillbug's attacks. It's a beetle with a drill for a nose and a lamp
+// on its helmet, very proud of its tunnels, and an awful navigator:
+//   - Through the wall: the drill bores in along your row; the holes spit grit.
+//   - Boring along: it tunnels under your trail and bursts up where you were.
+//   - Rail: a rail-load of rock dust whizzes along a mine-cart rail.
+//   - The lamp: its helmet lamp sweeps the box. Stay in the light and it
+//     finds you, and the drill comes straight down the beam.
+//   - The wrong turn: it plans a tunnel (the plan shows, dotted), digs
+//     exactly along it, and comes up in somebody's cellar at the end.
 //
 // It stands to the right of the box. Each attack is a factory
 // `(box, density, tools) => ({ duration, update })`; see dummy.js for the
@@ -108,6 +112,27 @@ defineBulletArt('drillRubble', {
   frameSeconds: 0.1,
 });
 
+// The cellar's trapdoor, at the end of the plan (harmless).
+defineBulletArt('drillTrapdoor', {
+  frames: [['RRRRRRR', 'RrrkrrR', 'RrrkrrR', 'RkkkkkR', 'RrrkrrR', 'RRRRRRR']],
+  palette: { R: '#4a321c', r: '#8a6238', k: '#241810' },
+  radius: 1,
+});
+
+// What's in the cellar: a jam jar and a potato.
+defineBulletArt('drillJar', {
+  frames: [['.www.', 'wkkkw', 'wrrrw', 'wrlrw', 'wrrrw', '.www.']],
+  palette: { w: '#e8f0f4', k: '#d8b060', r: '#c83c4c', l: '#ff9aa8' },
+  radius: 2.2,
+  spin: 4,
+});
+defineBulletArt('drillSpud', {
+  frames: [['.ppp.', 'ppPpp', 'pPppP', '.ppp.']],
+  palette: { p: '#c8a066', P: '#8a6a3a' },
+  radius: 2,
+  spin: 3,
+});
+
 // A mine-cart rail across the box: two lines with ties. Harmless; it only
 // shows where the load is coming.
 class Rail {
@@ -172,10 +197,10 @@ export const DRILLBUG_ATTACKS = {
     let drills = [];
     let holes = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && count < 5 && t < 5.4) {
+        if (t >= next && count < 5) {
           const fromRight = count % 2 === 0;
           const wallX = fromRight ? box.x + box.w : box.x;
           const y = clamp(soul.y + rand(-5, 5), box.y + 7, box.y + box.h - 7);
@@ -189,7 +214,7 @@ export const DRILLBUG_ATTACKS = {
           // A crack in the wall where it will come through.
           bullets.push(new Shot({ x: wallX + (fromRight ? -2 : 2), y, harmless: true, warn: 0, life: warn, art: 'drillHole' }));
           count++;
-          next = t + 1.4;
+          next = t + 1.6;
         }
         for (const drill of drills) {
           if (drill.line.age < drill.line.warn) {
@@ -240,17 +265,17 @@ export const DRILLBUG_ATTACKS = {
     let nextBurst = 1.4;
     let bursts = 0;
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= nextDot && t < 5.6) {
+        if (t >= nextDot && t < 9) {
           nextDot = t + 0.22;
           const dot = { x: soul.x, y: soul.y, at: t };
           dots.push(dot);
           bullets.push(new Shot({ x: soul.x, y: soul.y + 3, harmless: true, life: 3, art: 'drillTunnelDot' }));
         }
         // (Seven, closer together, now each shows where it'll come up.)
-        if (t >= nextBurst && bursts < 7 && t < 5.6) {
+        if (t >= nextBurst && bursts < 10 && t < 9) {
           nextBurst = t + 0.68;
           // The oldest scuff that isn't already spoken for.
           const spot = dots.find((dot) => !dot.used && t - dot.at > 0.9) ?? dots.find((dot) => !dot.used);
@@ -275,88 +300,6 @@ export const DRILLBUG_ATTACKS = {
     };
   },
 
-  // Bit rack: drill bits sit in a row along the top, revving (they blink),
-  // and one after another each is let go at where you are, picking up speed
-  // and slowly turning to follow you as it goes.
-  drillBits(box, density, { Shot, rand, shuffleBag }) {
-    const racked = [];
-    let t = 0;
-    let built = false;
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (!built) {
-          built = true;
-          const order = [...Array(6).keys()].sort(() => Math.random() - 0.5);
-          for (let i = 0; i < 6; i++) {
-            const x = box.x + 8 + i * ((box.w - 16) / 5);
-            const bit = new Shot({ x, y: box.y + 5, harmless: true, angle: Math.PI / 2, life: 8, art: 'drillBit' });
-            racked.push({ bit, goAt: 0.9 + order[i] * 0.7 });
-            bullets.push(bit);
-          }
-        }
-        for (const slot of racked) {
-          if (slot.gone) continue;
-          // Revving: it shakes a little before it goes.
-          const left = slot.goAt - t;
-          if (left < 0.5 && left > 0) slot.bit.x += Math.sin(t * 90) * 0.5;
-          if (left > 0) continue;
-          slot.gone = true;
-          slot.bit.age = 1e9;
-          const aim = Math.atan2(soul.y - slot.bit.y, soul.x - slot.bit.x);
-          bullets.push(new Shot({ x: slot.bit.x, y: slot.bit.y, vx: Math.cos(aim) * 22, vy: Math.sin(aim) * 22, accel: 75, homing: { target: soul, turn: 1.8 }, art: 'drillBit', life: 3 }));
-        }
-      },
-    };
-  },
-
-  // Rumble: the place shakes. Dust trickles from the ceiling in a few
-  // places, one of them over you, and a moment later rocks come down where
-  // the dust was. Big ones crack on the floor into stones that skip away.
-  drillRumble(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let next = 0.15;
-    let waves = 0;
-    let rocks = [];
-    const floor = box.y + box.h - 4;
-    return {
-      duration: 6.8,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (t >= next && waves < 5 && t < 5.2) {
-          waves++;
-          next = t + 1.1;
-          const xs = [clamp(soul.x + rand(-4, 4), box.x + 5, box.x + box.w - 5)];
-          while (xs.length < 3) {
-            const x = rand(box.x + 5, box.x + box.w - 5);
-            if (xs.every((other) => Math.abs(other - x) > 14)) xs.push(x);
-          }
-          for (const x of xs) {
-            // Dust trickling, where it's about to come down.
-            for (let i = 0; i < 4; i++) bullets.push(new Shot({ x: x + rand(-3, 3), y: box.y + 3 + i * 3, vy: 14, harmless: true, life: 0.7, art: 'drillGrit' }));
-            const big = Math.random() < 0.5;
-            const rock = new Shot({ x, y: box.y + 3, gravity: 200, warn: 0.75, art: big ? 'drillRock' : 'drillPebble', life: 3 });
-            rock.big = big;
-            rocks.push(rock);
-            bullets.push(rock);
-          }
-        }
-        for (const rock of rocks) {
-          if (rock.age <= rock.warn || rock.vy <= 0 || rock.y < floor) continue;
-          rock.age = 1e9;
-          rock.done = true;
-          if (rock.big) {
-            for (const side of [-1, 1]) {
-              bullets.push(new Shot({ x: rock.x, y: floor, vx: side * rand(24, 40), vy: -rand(50, 70), gravity: 200, art: 'drillPebble', life: 1.6 }));
-            }
-          }
-        }
-        rocks = rocks.filter((rock) => !rock.done);
-      },
-    };
-  },
-
   // Rail: a mine-cart rail flickers into being across the box, and a
   // rail-load of rock dust comes whizzing along it, shedding stones that
   // fall away below. The first rail is across your row.
@@ -366,10 +309,10 @@ export const DRILLBUG_ATTACKS = {
     let count = 0;
     let carts = [];
     return {
-      duration: 6.8,
+      duration: 7.8,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && count < 5 && t < 5.4) {
+        if (t >= next && count < 5) {
           const fromRight = count % 2 === 0;
           const y = clamp(soul.y + (count ? rand(-9, 9) : rand(-3, 3)), box.y + 8, box.y + box.h - 8);
           const warn = 0.85;
@@ -379,7 +322,7 @@ export const DRILLBUG_ATTACKS = {
           carts.push(cart);
           bullets.push(cart);
           count++;
-          next = t + 1.05;
+          next = t + 1.7;
         }
         for (const cart of carts) {
           if (cart.age <= cart.warn) continue;
@@ -390,6 +333,171 @@ export const DRILLBUG_ATTACKS = {
           }
         }
         carts = carts.filter((cart) => cart.age < 3);
+      },
+    };
+  },
+
+  // The lamp: it pokes its head through a hole in the wall and looks for you
+  // with the lamp on its helmet. The beam sweeps the box (it's only light),
+  // and swings after you once its edge touches you, a little slower than
+  // you can run. Stay in it a moment and it's found you: the beam goes red, and down it
+  // comes the drill, straight along the middle of the beam. Step out of the
+  // middle. Then it tries the hole on the other side.
+  drillLamp(box, density, { Shot }) {
+    const SPOT = 0.22;
+    const LOCK = 0.5;
+    const HALF = 0.24;
+    const WIDE = HALF * 1.35;
+    const SWEEP = 1.25;
+    const FOLLOW = 1.1;
+    const HOLE = 2.7;
+    const beam = { x: 0, y: 0, a: 0, locked: 0, on: false };
+    let now = 0;
+    let hole = -1;
+    let seen = 0;
+    let rest = 0;
+    let dir = 1;
+    const lo = Math.PI / 2 + 0.12;
+    const hi = (3 * Math.PI) / 2 - 0.12;
+    return {
+      duration: 8.2,
+      update: (dt, bullets, soul) => {
+        const real = dt / density;
+        now += real;
+        const h = Math.floor(now / HOLE);
+        if (h !== hole && h < 3) {
+          hole = h;
+          // A new hole: right wall, then left, then right, at a fresh height.
+          const right = h % 2 === 0;
+          beam.right = right;
+          beam.x = right ? box.x + box.w : box.x;
+          beam.y = box.y + 14 + Math.random() * (box.h - 28);
+          beam.a = right ? (Math.random() < 0.5 ? lo : hi) : (Math.random() < 0.5 ? lo - Math.PI : hi - Math.PI);
+          dir = beam.a === lo || beam.a === lo - Math.PI ? 1 : -1;
+          beam.on = true;
+          beam.locked = 0;
+          seen = 0;
+          rest = 0.45;
+          bullets.push(new Shot({ x: beam.x, y: beam.y, harmless: true, art: 'drillHole', life: HOLE - 0.1 }));
+          bullets.push(new Deco({
+            life: HOLE - 0.05,
+            paint: (ctx) => {
+              const r = 120;
+              ctx.globalAlpha *= beam.locked > 0 ? 0.32 : 0.16;
+              ctx.fillStyle = beam.locked > 0 ? '#ff6a4a' : '#fff2a0';
+              ctx.beginPath();
+              ctx.moveTo(beam.x, beam.y);
+              ctx.lineTo(beam.x + Math.cos(beam.a - WIDE) * r, beam.y + Math.sin(beam.a - WIDE) * r);
+              ctx.lineTo(beam.x + Math.cos(beam.a + WIDE) * r, beam.y + Math.sin(beam.a + WIDE) * r);
+              ctx.closePath();
+              ctx.fill();
+            },
+          }));
+        }
+        if (!beam.on || now > HOLE * 3 - 0.2) return;
+        if (rest > 0) {
+          rest -= real;
+          return;
+        }
+        if (beam.locked > 0) {
+          beam.locked -= real;
+          if (beam.locked <= 0) rest = 0.35;
+          return;
+        }
+        // Sweep, turning back at the walls; but once the edge of the light
+        // touches you, it swings after you (not quite as fast as you can run).
+        const span = beam.right ? [lo, hi] : [lo - Math.PI, hi - Math.PI];
+        const to = Math.atan2(soul.y - beam.y, soul.x - beam.x);
+        const diff = Math.atan2(Math.sin(to - beam.a), Math.cos(to - beam.a));
+        if (Math.abs(diff) < WIDE + 0.08) {
+          beam.a += Math.sign(diff) * Math.min(Math.abs(diff), FOLLOW * real);
+          dir = Math.sign(diff) || dir;
+        } else beam.a += dir * SWEEP * real;
+        if (beam.a > span[1]) { beam.a = span[1]; dir = -1; }
+        if (beam.a < span[0]) { beam.a = span[0]; dir = 1; }
+        // Are you in the light?
+        const off = Math.abs(Math.atan2(Math.sin(to - beam.a), Math.cos(to - beam.a)));
+        seen = off < HALF ? seen + real : Math.max(0, seen - real);
+        if (seen >= SPOT) {
+          // Found you. The beam reddens, holds, and the drill comes down it.
+          seen = 0;
+          beam.locked = LOCK + 0.5;
+          beam.a = to;
+          bullets.push(new Shot({ x: beam.x, y: beam.y, vx: Math.cos(to) * 150, vy: Math.sin(to) * 150, warn: LOCK, art: 'drillTip', life: 1.2 }));
+          // Grit thrown out either side of it, so it's a proper step aside.
+          for (const off of [-0.2, -0.1, 0.1, 0.2]) {
+            const a = to + off;
+            bullets.push(new Shot({ x: beam.x, y: beam.y, vx: Math.cos(a) * 120, vy: Math.sin(a) * 120, warn: LOCK + 0.06, art: 'drillGrit', life: 1.3 }));
+          }
+        }
+      },
+    };
+  },
+
+  // The wrong turn: it plans a tunnel, and the plan shows, dotted, before it
+  // digs: in from a wall, past you, and off round a turn or two, because it
+  // has no idea where it's going. Then the drill comes along exactly that
+  // line. Where the plan ends is somebody's cellar, and it bursts up into it,
+  // and out come the jars and the potatoes, all round.
+  drillRoute(box, density, { Shot, rand, clamp }) {
+    const T = (s) => s * density;
+    const PLAN = 0.85;
+    const SPEED = 110;
+    let t = 0;
+    let n = 0;
+    return {
+      duration: 8.2,
+      update: (dt, bullets, soul) => {
+        t += dt;
+        if (n >= 3 || t < T(0.1 + n * 2.5)) return;
+        n++;
+        // In from a wall, through a spot right beside you, then two wrong turns.
+        const side = Math.floor(rand(0, 4));
+        const start = [
+          { x: box.x - 4, y: rand(box.y + 8, box.y + box.h - 8) },
+          { x: box.x + box.w + 4, y: rand(box.y + 8, box.y + box.h - 8) },
+          { x: rand(box.x + 8, box.x + box.w - 8), y: box.y - 4 },
+          { x: rand(box.x + 8, box.x + box.w - 8), y: box.y + box.h + 4 },
+        ][side];
+        const pts = [start, { x: clamp(soul.x + rand(-5, 5), box.x + 6, box.x + box.w - 6), y: clamp(soul.y + rand(-5, 5), box.y + 6, box.y + box.h - 6) }];
+        for (let i = 0; i < 2; i++) {
+          const last = pts[pts.length - 1];
+          let p;
+          for (let tries = 0; tries < 30; tries++) {
+            p = { x: rand(box.x + 10, box.x + box.w - 10), y: rand(box.y + 10, box.y + box.h - 10) };
+            if (Math.hypot(p.x - last.x, p.y - last.y) > 26 && (i < 1 || Math.hypot(p.x - soul.x, p.y - soul.y) > 22)) break;
+          }
+          pts.push(p);
+        }
+        // Lengths along the route, for the drill's clock.
+        const legs = [];
+        let total = 0;
+        for (let i = 1; i < pts.length; i++) {
+          const len = Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
+          legs.push({ a: pts[i - 1], b: pts[i], from: total, len });
+          total += len;
+          bullets.push(new Guide({ x: pts[i - 1].x, y: pts[i - 1].y, angle: Math.atan2(pts[i].y - pts[i - 1].y, pts[i].x - pts[i - 1].x), length: len, warn: PLAN + total / SPEED, color: '#d2b080' }));
+        }
+        const along = (d) => {
+          const leg = legs.find((l) => d <= l.from + l.len) ?? legs[legs.length - 1];
+          const u = Math.min(1, (d - leg.from) / leg.len);
+          return { x: leg.a.x + (leg.b.x - leg.a.x) * u, y: leg.a.y + (leg.b.y - leg.a.y) * u, a: Math.atan2(leg.b.y - leg.a.y, leg.b.x - leg.a.x) };
+        };
+        const time = total / SPEED;
+        bullets.push(new PathShot({ path: (k) => along(Math.min(total, k * SPEED)), warn: PLAN, art: 'drillTip', life: time }));
+        // The tunnel caves in behind it: loose grit along the route for a moment.
+        for (let d = 6; d < total; d += 9) {
+          const p = along(d);
+          bullets.push(new Shot({ x: p.x, y: p.y, harmless: false, warn: PLAN + d / SPEED, art: 'drillGrit', life: 0.6 }));
+        }
+        // The cellar: its trapdoor shows at the end of the plan, then out it all comes.
+        const end = pts[pts.length - 1];
+        bullets.push(new Shot({ x: end.x, y: end.y, harmless: true, art: 'drillTrapdoor', life: PLAN + time }));
+        const turn = rand(0, Math.PI);
+        for (let i = 0; i < 12; i++) {
+          const a = turn + (i / 12) * Math.PI * 2;
+          bullets.push(new Shot({ x: end.x, y: end.y, vx: Math.cos(a) * 44, vy: Math.sin(a) * 44, warn: PLAN + time, art: i % 3 === 0 ? 'drillJar' : 'drillSpud', life: 1.8 }));
+        }
       },
     };
   },

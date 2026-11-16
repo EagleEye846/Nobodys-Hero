@@ -1,6 +1,7 @@
 import { music, sfx } from '../audio/music.js';
 import { cellIn } from '../data/music/parts/chapter4.js';
 import { hasGear } from '../data/gear.js';
+import { hearNoise } from './monsterHabits.js';
 
 // Singing crystals (Chapter 4's Glimmering, optional): a set of crystals that
 // each ring a different note when you press Z on them. Ring them in the order
@@ -24,6 +25,8 @@ export const CHIME_SETS = {
     opens: 'ship_tune',
     sample: 'clarinet',
     octave: 0,
+    // Not a crystal: a reed organ (sound(), below).
+    voice: 'harmonium',
   },
   // The chapter's four-note tune (the first cell, in C: G C E D), for the
   // four crystals on the King's Road. G4 C5 D5 E5 are 67 72 74 76; the glock
@@ -99,11 +102,29 @@ export class Chimes {
   sound(prop, { full = false } = {}) {
     const set = CHIME_SETS[prop.chime.set];
     const midi = set.notes[prop.chime.note];
+    if (set.voice === 'harmonium') return this.harmonium(midi, full);
     music.chime(set.sample, midi, { octave: set.octave, volume: full ? 0.26 : 0.3, seconds: 1.2 });
     music.chime('vibesBowed', midi, { volume: full ? 0.2 : 0.12, seconds: 1.6, attack: 0.04 });
     if (full) {
       music.chime('harp', midi, { volume: 0.22, seconds: 1.2 });
       music.chime('cellos', midi - 12, { volume: 0.16, seconds: 1.5, attack: 0.1 });
+    }
+  }
+
+  // A harmonium key: a reed organ's stops all drawn (the clarinet and the oboe at pitch, a soft clarinet an octave
+  // down, a breath of flute an octave up), swelling in as the bellows fill and hanging on after, with the wheeze of the
+  // bellows under it. `full` (the tune played right through) holds a low C under the last note, the whole thing at once.
+  harmonium(midi, full = false) {
+    const hold = full ? 2.6 : 1.4;
+    music.chime('clarinet', midi, { volume: 0.26, seconds: hold, attack: 0.07, release: 0.7 });
+    music.chime('oboe', midi, { volume: 0.12, seconds: hold, attack: 0.09, release: 0.6 });
+    music.chime('clarinet', midi - 12, { volume: 0.12, seconds: hold, attack: 0.1, release: 0.8 });
+    music.chime('flute', midi + 12, { volume: 0.05, seconds: hold, attack: 0.12, release: 0.6 });
+    music.bellows({ seconds: hold * 0.7, volume: 0.035 });
+    if (full) {
+      music.chime('clarinet', 48, { volume: 0.16, seconds: 3, attack: 0.2, release: 1.2 });
+      music.chime('oboe', 55, { volume: 0.08, seconds: 3, attack: 0.25, release: 1.2 });
+      music.bellows({ seconds: 2.4, volume: 0.04, tone: 600 });
     }
   }
 
@@ -122,11 +143,13 @@ export class Chimes {
     const name = prop.chime.set;
     if (!this.warmed) {
       this.warmed = true;
-      music.warm(CHIME_SETS[name].sample, 'vibesBowed', 'harp', 'cellos');
+      music.warm(CHIME_SETS[name].sample, 'vibesBowed', 'harp', 'cellos', ...(CHIME_SETS[name].voice === 'harmonium' ? ['oboe', 'flute'] : []));
     }
     // The cavern is singing; wait for it.
     if (this.answer) return true;
     this.sound(prop);
+    // A crystal sings: monsters that listen go to see (monsterHabits.js).
+    hearNoise(this.scene.npcs, prop);
     prop.ringing = 0.5;
     this.idle = 0;
     // Already sung: just a chime, whenever you like.

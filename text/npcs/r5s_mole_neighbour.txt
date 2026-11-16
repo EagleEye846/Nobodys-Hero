@@ -1,0 +1,34 @@
+# R5S_MOLE_NEIGHBOUR: Burdock's neighbour on Dandelion Hill, up out of his own molehill two along from
+# Burdock's, wearing Burdock's lost spectacles and delighted with them. The first talk he shows them off;
+# then he hands them over in the same talk (take them to Burdock). (draft)
+
+[first]
+Hello! Have a look at these. Found them in the grass. Cool glasses. Everything's enormous. You're enormous. That daisy is the size of a cart.
+
+[repeat]
+I can see every single bit of the hill. I didn't know the hill had bits.
+
+[show]
+He pushes the spectacles up his nose with one claw, very slowly, so you can see how well they fit. They don't.
+
+[show_ves]
+{bored}...Those are round.
+
+[show_bramble]
+{surprised}The mole right next to him lost round spectacles!
+
+[give]
+He pushes the spectacles up his nose with one claw, very slowly, so you can see how well they fit. They don't.
+
+"His? Burdock's?" He looks two holes along, where Burdock is squinting hard at a stone. "...Oh. He did say."
+
+He takes the spectacles off. The hill goes small and soft again, and he blinks at it with some relief. "Here. Everything was a bit much, to be honest."
+
+[give_ves]
+{smile}Nicely done. Nobody even had to fight anybody.
+
+[give_bramble]
+{glee}Go on, give them back to him! Quick, before he tries them on again!
+
+[after]
+He's sitting by his hill with his eyes shut. "Resting them," he says. "They saw a lot."

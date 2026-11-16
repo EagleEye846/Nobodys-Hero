@@ -12,6 +12,10 @@
 //   y  leaf path
 //   Z  bramble hedge (solid)
 //   ~  brook (solid, until a log sinks into it)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_CLAWED_BRIDGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_clawed_bridge',
@@ -70,6 +74,7 @@ export const HUSH_CLAWED_BRIDGE = {
   // The log, the two saplings, and the carved stump that puts it all back.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_clawed_bridge ?? []),
     { sprite: 'roll_log', x: 19, y: 3, text: 'roll_log', log: true },
     { sprite: 'thin_pine', x: 15, y: 11, text: 'thin_pine', chop: true },
     { sprite: 'thin_pine', x: 19, y: 12, text: 'thin_pine', chop: true },
@@ -80,6 +85,8 @@ export const HUSH_CLAWED_BRIDGE = {
     { sprite: 'paw_print', x: 9, y: 12, text: 'paw_print' },
     { sprite: 'chest', x: 1, y: 18, text: 'bridge_chest', gives: 'kiln_stew', taken: { sprite: 'chest_open', text: 'chest_empty' } },
     { sprite: 'gold_pouch', x: 30, y: 1, text: 'bridge_pouch', gold: 170, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_clawed_bridge ?? []),
   ],
 
   // Words for tiles: `looks` for one spot, `tileTexts` for every tile of a kind.

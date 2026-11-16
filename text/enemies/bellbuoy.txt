@@ -54,7 +54,7 @@ Danger!
 # TALK options in src/data/enemies/bellbuoy.js.
 [talk: Inspect]
 BELLBUOY - HP 2150
-A bell buoy that rings by itself. Tolls rings on a steady beat, swings its chains in a sweep, and blows a foghorn cone. It is warning you off. The beat is the clue.
+A bell buoy that rings by itself. Its rings only hurt while the note is loud, rocks rise where the water ripples, and its foghorn shoves you back. The beat is the clue.
 
 [talk: Ring back]
 You knock a stone against the nearest post, in time with its toll. BELLBUOY goes quiet to listen. Then it tolls again, and you answer. It has never, in all those years, been answered.

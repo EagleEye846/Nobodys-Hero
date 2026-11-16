@@ -19,6 +19,7 @@ import { textSection } from '../engine/textLoader.js';
 import { drawText } from '../ui/text.js';
 import { inUiSpace } from '../engine/screen.js';
 import { registerPropSprite } from './prop.js';
+import { hearNoise } from './monsterHabits.js';
 
 const DEFAULT_CREEP = 1.8;
 // How far a tile that must wait for someone standing on it gets (of its fade).
@@ -631,6 +632,8 @@ export class Tides {
       return true;
     }
     sfx(wheel ? 'door' : 'bell');
+    // A wheel grinds, a bell rings: monsters that listen go to see (monsterHabits.js).
+    hearNoise(s.npcs, prop);
     if (wheel) prop.shake = 0.5;
     this.call(want, { group: cfg.group ?? null });
     if (cfg.text) say(cfg.text);

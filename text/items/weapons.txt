@@ -252,6 +252,10 @@ A ship's anchor on a driftwood haft. It was never meant to be swung. Slam it dow
 [glass_float_staff]
 A fisher's glass float on a crook of bleached wood. Something shifts inside it, slow and green. It's calm in your hand.
 
+# (draft) The Fair Return's captain, with his greatcoat.
+[captains_cutlass]
+A brass-hilted cutlass, curved and heavy at the tip, in a sheath gone green at the throat. A hundred years at a captain's hip and hardly drawn: the edge is still the one the smith put on. Lunge, and it goes where it's sent, like a good crew.
+
 # Dropped by Corrie, the Tidecaller.
 [stormglass_blade]
 A blade of storm-green glass with lightning frozen in it. It was the storm, once. Now it's yours, and it catches a blow and hands it back, with a roll of thunder.
@@ -269,3 +273,22 @@ An axe for cutting boat ropes in a hurry, cut down to his size. Bramble says it'
 
 [ships_cleaver]
 A short, heavy cleaver off a wreck. It's rusted in the shape of a ship's wheel. Orla reground it on the forge, and it goes in quiet.
+
+# (draft) More for Ves and Bramble, chapter 5.
+[whalebone_ribs]
+Umbrella ribs cut from a washed-up whale jaw. They're heavier than they look, and they hit harder than Ves lets on.
+
+[spindrift_canopy]
+A canopy of waxed gauze that catches the spray and turns it into a fine, calming mist. Grazing a bullet charges you up.
+
+[lampwick_handle]
+A lamp pole's handle, wrapped in old wick and stitched to the umbrella by a child's hand. It mends you more every turn.
+
+[marlinspike_hatchet]
+A hatchet with a marlinspike for a handle, so it goes in quiet. Bramble can hit twice as hard from behind a barrel.
+
+[capstan_maul]
+A maul made from a capstan bar, nicked at one end. Bramble can roar the next attack short with it.
+
+[keepers_hatchet]
+The keepers' own hatchet, kept dry in a tin box up the Needle. The best axe on the coast, and exactly the right size for him.

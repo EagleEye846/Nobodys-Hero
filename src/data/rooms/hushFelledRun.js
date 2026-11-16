@@ -11,6 +11,10 @@
 //   y  leaf path
 //   Z  bramble hedge (solid)
 //   ~  brook (solid, until a log sinks into it)
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
+import { R3B_PROPS } from '../r3bLife.js';
+
 export const HUSH_FELLED_RUN = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_felled_run',
@@ -69,6 +73,7 @@ export const HUSH_FELLED_RUN = {
   // Two logs and the carved stump that puts them back.
   textFile: 'interactions/hushwood.txt',
   props: [
+    ...(R3B_PROPS.hush_felled_run ?? []),
     { sprite: 'roll_log', x: 15, y: 2, text: 'roll_log', log: true },
     { sprite: 'roll_log', x: 18, y: 8, text: 'roll_log', log: true },
     { sprite: 'rock_stump', x: 26, y: 12, text: 'rock_stump', rockReset: true },
@@ -82,6 +87,9 @@ export const HUSH_FELLED_RUN = {
     { sprite: 'boot_print', x: 5, y: 9, text: 'boot_print' },
     { sprite: 'boot_print', x: 3, y: 5, text: 'boot_print' },
     { sprite: 'chest', x: 1, y: 15, text: 'felled_chest', gives: 'stump_honey', taken: { sprite: 'chest_open', text: 'chest_empty' } },
+
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_felled_run ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', Z: 'bramble', '~': 'mist_brook', O: 'mist_boulder' },
 

@@ -1,0 +1,92 @@
+# PINWHEEL
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/pinwheel.js.
+
+[intro]
+Something round and violet rolls up the shingle, stops, and puts out every spine at once. A PINWHEEL!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+PINWHEEL turns its spines a notch, like a dial. Click. It wants you to know it can do that.
+
+PINWHEEL is scowling at a pebble. The pebble has not done anything. PINWHEEL is making sure it never does.
+
+A drop of gold roe beads on the tip of one spine. PINWHEEL sees you looking and rolls it round to the back.
+
+PINWHEEL tries to look big. It's already big. It tries to look bigger. A spine falls off.
+
+Smells like wet rock and something sweet and expensive.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+PINWHEEL is down to its last few spines, and keeps the bare side turned away from you.
+
+[flavor: spareable]
+PINWHEEL turns its spines a notch, click, and lays them all down flat. From an urchin, that's a handshake.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Don't
+step on me!
+
+I SAID
+don't!
+
+Round and
+dangerous.
+
+Spin,
+spin,
+spin!
+
+Mind
+the points.
+
+I'm not
+cross. I'm
+BRISTLING.
+
+...Ow. A
+spine.
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/pinwheel.js.
+[talk: Inspect]
+PINWHEEL - HP 2050
+A sea urchin with a temper. Spines come up wherever you've walked, it sheds spines on every bounce, and it turns the way the wind blows. Don't go back the way you came.
+
+[talk: Offer it a smooth stone]
+You set a smooth, flat stone in front of it. PINWHEEL pokes it with one spine. Then another. Then it leans on it, spines drooping, like a creature that has never once sat on something soft.
+
+[talk: Admire its roundness]
+You trace a big, slow circle in the air, then point at PINWHEEL and nod, very impressed. It stops spinning. It turns slowly to look at its own side. It goes a very deep, proud pink.
+
+[talk: Sit down nearby]
+You sit down on the shingle, a good way off, and look at the water. PINWHEEL watches you for a long time. Then it rolls a little closer, and then a little closer, and then it sits too.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+PINWHEEL's spines drop off, one by one, ticking on the shingle like rain. It sits in the middle of them, small and plain and violet, and rolls slowly off.
+
+[pacified]
+PINWHEEL lets its spines go slack and soft. It rolls once, all the way round, so you can see there's nothing in it but a very small, very pleased urchin. Then it rolls off down the beach.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} that she knows how it feels to be prickly. {foe} says it isn't prickly, it's well defended. She lets that stand.
+
+Ves holds out her umbrella, closed, and asks {foe} if it would like to stand under it. {foe} says it would rather poke it. It pokes it. She feels seen.
+
+Ves says {foe} would make a very fine hat for a very difficult person. {foe} takes it as a compliment. Possibly it is one.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble tells {foe} he stepped on one of its cousins once and it was the worst day of his life. {foe} says it was worse for the cousin. Bramble agrees.
+
+Bramble asks {foe} if it's a hedgehog that went swimming. {foe} is deeply, deeply offended. Bramble takes a long step back.
+
+Bramble offers {foe} half of a biscuit. {foe} doesn't have a mouth for it. It puts a spine through it anyway, very gently, and keeps it.

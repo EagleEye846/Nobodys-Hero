@@ -13,6 +13,7 @@ import { LADLE_PORTRAIT } from './ladle.js';
 import { BRYONY_PORTRAIT, THISTLE_PORTRAIT } from './lasthome.js';
 import { SLOWLY_PORTRAIT } from './deadcity.js';
 import { TUCK_PORTRAIT, RUMBOLD_PORTRAIT, HOBNAIL_PORTRAIT, MARIGOLD_PORTRAIT, GUBB_PORTRAIT } from './belowFolk.js';
+import { GORSE_PORTRAIT } from './ashLife.js';
 import { HADDOCK_PORTRAIT, HADDOCK_HATLESS_PORTRAIT, ORLA_PORTRAIT, CORRIE_PORTRAIT, TANSY_PORTRAIT, WRASSE_PORTRAIT, CRAB_PORTRAIT, RAT_PORTRAIT, PUFFIN_PORTRAIT } from './coastFolk.js';
 import { WY_COOK_PORTRAIT } from './wreckYard.js';
 
@@ -164,29 +165,51 @@ const VES_PALETTE = {
 // strongly, so her face goes a long way either side of her gentle smile:
 // beaming and laughing, tender, resolute, furious, sobbing.
 const VES_EXPRESSIONS = {
-  smile: { patches: [[16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'smssms'], [20, 13, 'ssmmss']] },
-  glee: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'kkk'], [14, 18, 'kkk'], [15, 11, 'sss'], [15, 18, 'sss'], [15, 10, 'k'], [15, 14, 'k'], [15, 17, 'k'], [15, 21, 'k'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'mmmmmm'], [20, 13, 'smooms']] },
-  laughing: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'kkk'], [14, 18, 'kkk'], [15, 11, 'sss'], [15, 18, 'sss'], [15, 10, 'k'], [15, 14, 'k'], [15, 17, 'k'], [15, 21, 'k'], [11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'mmmmmm'], [20, 13, 'moooom']] },
-  tender: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'smssms'], [20, 13, 'ssmmss']] },
-  sad: { patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [14, 11, 'eii'], [14, 18, 'eii'], [19, 13, 'ssmmss'], [20, 13, 'smssms']] },
-  crying: { patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [14, 11, 'eTi'], [14, 18, 'eTi'], [16, 11, 't'], [17, 11, 't'], [16, 20, 't'], [17, 20, 't'], [18, 10, 't'], [18, 21, 't'], [19, 13, 'smmmms'], [20, 13, 'mossom']] },
-  sobbing: { closed: true, patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'sss'], [14, 18, 'sss'], [15, 10, 'kkkk'], [15, 18, 'kkkk'], [16, 10, 'tt'], [17, 11, 't'], [18, 11, 't'], [16, 20, 'tt'], [17, 20, 't'], [18, 20, 't'], [19, 10, 't'], [19, 21, 't'], [19, 13, 'smmmms'], [20, 13, 'moooom']] },
-  worried: { patches: [[11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [19, 13, 'ssssss'], [20, 13, 'smsmms']] },
-  surprised: { patches: [[12, 10, 'kkkk'], [12, 18, 'kkkk'], [13, 10, 'seEi'], [13, 18, 'eEis'], [14, 11, 'eii'], [14, 18, 'eii'], [11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [19, 13, 'ssmmss'], [20, 13, 'smooms']] },
-  scared: { patches: [[12, 10, 'kkkk'], [12, 18, 'kkkk'], [13, 10, 'seEi'], [13, 18, 'eEis'], [14, 11, 'eii'], [14, 18, 'eii'], [11, 11, 'ssh'], [12, 11, 'hh'], [11, 18, 'hss'], [12, 19, 'hh'], [19, 13, 'msmsms'], [20, 13, 'ssssss']] },
-  determined: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [19, 13, 'ssssss'], [20, 13, 'smmmms']] },
-  resolute: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [13, 10, 'skkk'], [13, 18, 'kkks'], [14, 11, 'kEi'], [14, 18, 'eEk'], [19, 13, 'ssssss'], [20, 13, 'smmmms']] },
-  angry: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [14, 11, 'kEi'], [14, 18, 'eEk'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'smmmms'], [20, 13, 'mssssm']] },
-  furious: { patches: [[11, 11, 'hss'], [12, 12, 'hh'], [11, 18, 'ssh'], [12, 18, 'hh'], [12, 11, 'khh'], [12, 18, 'hhk'], [14, 11, 'kik'], [14, 18, 'kik'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'mmmmmm'], [20, 13, 'mommom']] },
-  praying: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'sss'], [14, 18, 'sss'], [15, 10, 'kkkk'], [15, 18, 'kkkk'], [19, 13, 'ssssss'], [20, 13, 'ssmmss']] },
-  bored: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [15, 11, 'eei'], [15, 18, 'eei'], [19, 13, 'ssssss'], [20, 13, 'sssmms']] },
-  shy: { patches: [[14, 11, 'eeE'], [14, 18, 'eeE'], [15, 11, 'eei'], [15, 18, 'eei'], [16, 10, 'bbb'], [16, 19, 'bbb'], [17, 10, 'bb'], [17, 20, 'bb'], [19, 13, 'ssssss'], [20, 13, 'sssmms']] },
-  thoughtful: { patches: [[14, 11, 'Eie'], [14, 18, 'Eie'], [11, 18, 'sss'], [10, 18, 'hhh'], [19, 13, 'ssssss'], [20, 13, 'ssmmms']] },
-  // Smug and pleased with herself, never gushing: lids half down, one brow up, a closed smirk that climbs on one side. ({proud} is written all through her lines.)
-  proud: { patches: [[12, 11, 'hhh'], [13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [19, 13, 'ssssms'], [20, 13, 'smmmss']] },
-  hopeful: { patches: [[11, 11, 'sss'], [11, 18, 'sss'], [10, 18, 'hhh'], [14, 11, 'EEi'], [14, 18, 'EEi'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'msssms'], [20, 13, 'smmmms']] },
-  exhausted: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [19, 13, 'ssssss'], [20, 13, 'smmmms']] },
-  cold: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 11, 'kss'], [14, 18, 'ssk'], [15, 10, 'sskk'], [15, 18, 'kkss'], [17, 16, 'b'], [18, 15, 'bb'], [16, 10, 'bbb'], [16, 19, 'bbb'], [19, 13, 'ssssss'], [20, 13, 'msmsms']] },
+  // Each mood changes her eyes (rows 12-16: lid line, eyes, cheeks) and her mouth (rows 19-21),
+  // so it reads at a glance in the dialogue box. Happy: eyes crinkled from below, a wide closed smile.
+  smile: { patches: [[15, 10, 'skkk'], [15, 18, 'kkks'], [16, 10, 'bbbs'], [16, 18, 'sbbb'], [19, 12, 'smssssms'], [20, 12, 'ssmmmmss']] },
+  // Eyes shut in happy arcs, mouth wide open.
+  glee: { closed: true, patches: [[13, 10, 'skks'], [13, 18, 'skks'], [14, 10, 'kssk'], [14, 18, 'kssk'], [15, 10, 'ssss'], [15, 18, 'ssss'], [16, 10, 'bbbs'], [16, 18, 'sbbb'], [19, 12, 'smmmmmms'], [20, 12, 'smooooms'], [21, 12, 'ssmbbmss']] },
+  // Eyes squeezed into > <, a big open laugh, tears of laughter at the corners.
+  laughing: { closed: true, patches: [[13, 10, 'kkss'], [13, 18, 'sskk'], [14, 10, 'sskk'], [14, 18, 'kkss'], [15, 10, 'kkss'], [15, 18, 'sskk'], [16, 10, 'tbbs'], [16, 18, 'sbbt'], [19, 12, 'smmmmmms'], [20, 12, 'moooooom'], [21, 12, 'smobboms']] },
+  // Lids lowered softly, a gentle smile, blushing.
+  tender: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [16, 10, 'bbbs'], [16, 18, 'sbbb'], [19, 12, 'ssssssss'], [20, 12, 'smssssms'], [21, 12, 'ssmmmmss']] },
+  // Lids tilted down at the outsides, eyes cast down, a small frown.
+  sad: { patches: [[12, 10, 'sskk'], [12, 18, 'kksh'], [13, 10, 'kkss'], [13, 18, 'sskk'], [14, 10, 'seii'], [14, 18, 'eiis'], [19, 12, 'ssssssss'], [21, 12, 'ssmssmss']] },
+  // Sad lids, eyes brimming, tears down both cheeks, a wobbling open mouth.
+  crying: { patches: [[12, 10, 'sskk'], [12, 18, 'kksh'], [13, 10, 'kkss'], [13, 18, 'sskk'], [14, 10, 'sTTi'], [14, 18, 'TTis'], [16, 10, 'tbbs'], [16, 18, 'sbbt'], [19, 12, 'ssssssss'], [20, 12, 'ssmmmmss'], [21, 12, 'smossoms'], [17, 10, 't'], [18, 10, 't'], [17, 21, 't'], [18, 21, 't']] },
+  // Eyes screwed shut, streams of tears, mouth wide.
+  sobbing: { closed: true, patches: [[12, 10, 'sskk'], [12, 18, 'kksh'], [13, 10, 'kkss'], [13, 18, 'sskk'], [14, 10, 'ssss'], [14, 18, 'ssss'], [15, 10, 'kkkk'], [15, 18, 'kkkk'], [16, 10, 'tttb'], [16, 18, 'bttt'], [19, 12, 'smmmmmms'], [20, 12, 'moooooom'], [21, 12, 'smmmmmms'], [17, 11, 't'], [18, 11, 't'], [17, 20, 't'], [18, 20, 't'], [19, 11, 't'], [19, 20, 't']] },
+  // Sad lids, a grimace, a bead of sweat.
+  worried: { patches: [[12, 10, 'sskk'], [12, 18, 'kksh'], [13, 10, 'kkss'], [13, 18, 'sskk'], [15, 10, 'seii'], [15, 18, 'eiis'], [16, 10, 'ssss'], [16, 18, 'ssss'], [19, 12, 'ssssssss'], [20, 12, 'sssmmmss'], [21, 12, 'ssmsssms'], [13, 23, 't'], [14, 23, 't']] },
+  // Lids up, whites showing round tiny pupils, mouth a little o.
+  surprised: { patches: [[12, 10, 'kkkk'], [12, 18, 'kkkh'], [13, 10, 'sEEE'], [13, 18, 'EEEs'], [14, 10, 'sEeE'], [14, 18, 'EeEs'], [15, 10, 'sEEE'], [15, 18, 'EEEs'], [16, 10, 'ssss'], [16, 18, 'ssss'], [19, 12, 'sssmmsss'], [20, 12, 'ssmoomss'], [21, 12, 'sssmmsss'], [11, 11, 'sss'], [11, 18, 'sss']] },
+  // Wide white eyes, a shaking mouth, sweat.
+  scared: { patches: [[12, 10, 'kkkk'], [12, 18, 'kkkh'], [13, 10, 'sEEE'], [13, 18, 'EEEs'], [14, 10, 'sEeE'], [14, 18, 'EeEs'], [15, 10, 'sEEE'], [15, 18, 'EEEs'], [16, 10, 'ssss'], [16, 18, 'ssss'], [19, 12, 'ssssssss'], [20, 12, 'smsmmsms'], [21, 12, 'msmssmsm'], [11, 11, 'ssh'], [11, 18, 'hss'], [12, 23, 't'], [13, 23, 't'], [14, 23, 't']] },
+  // Lids slanted down hard at the middle, eyes narrowed, mouth set in a line.
+  determined: { patches: [[12, 10, 'kkss'], [12, 18, 'sskk'], [13, 10, 'skkk'], [13, 18, 'kkks'], [14, 10, 'sskE'], [14, 18, 'Ekss'], [16, 10, 'ssss'], [16, 18, 'ssss'], [19, 12, 'ssssssss'], [20, 12, 'smmmmmms']] },
+  // A lighter slant and a set mouth with one corner tucked up: here we go.
+  resolute: { patches: [[12, 10, 'ksss'], [12, 18, 'sssk'], [13, 10, 'skkk'], [13, 18, 'kkks'], [16, 10, 'ssss'], [16, 18, 'ssss'], [19, 12, 'sssssssm'], [20, 12, 'ssmmmmms']] },
+  // Hard slant, narrowed eyes, a scowl, red cheeks.
+  angry: { patches: [[12, 10, 'kkss'], [12, 18, 'sskk'], [13, 10, 'skkk'], [13, 18, 'kkks'], [14, 10, 'sskE'], [14, 18, 'Ekss'], [19, 12, 'ssssssss'], [20, 12, 'smmmmmms'], [21, 12, 'msssssms']] },
+  // Hard slant, tiny pupils, teeth bared.
+  furious: { patches: [[12, 10, 'kkss'], [12, 18, 'sskk'], [13, 10, 'skkk'], [13, 18, 'kkks'], [14, 10, 'ssEk'], [14, 18, 'kEss'], [15, 10, 'sEeE'], [15, 18, 'EeEs'], [16, 10, 'bbbs'], [16, 18, 'sbbb'], [19, 12, 'mmmmmmmm'], [20, 12, 'mEEEEEEm'], [21, 12, 'smmmmmms']] },
+  // Eyes closed, mouth soft.
+  praying: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'ssss'], [14, 18, 'ssss'], [15, 10, 'kkkk'], [15, 18, 'kkkk'], [19, 12, 'ssssssss']] },
+  // Dry and unimpressed: both lids half down, eyes slid sideways, a flat mouth pushed to one side.
+  bored: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [15, 10, 'ssei'], [15, 18, 'seis'], [16, 10, 'ssss'], [16, 18, 'ssss'], [19, 12, 'ssssssss'], [20, 12, 'sssmmmms']] },
+  // Eyes glancing down and away, a big blush, a tiny mouth, a drop of sweat.
+  shy: { patches: [[14, 10, 'ssei'], [14, 18, 'seis'], [15, 10, 'ssiI'], [15, 18, 'siIs'], [16, 10, 'bbbb'], [16, 18, 'bbbb'], [19, 12, 'ssssssss'], [20, 12, 'ssssmmss'], [17, 10, 'bb'], [17, 20, 'bb'], [12, 23, 't']] },
+  // One brow and eye raised looking up, the other narrowed, a small "hmm" mouth off to the side.
+  thoughtful: { patches: [[12, 18, 'kkkh'], [13, 10, 'ssss'], [13, 18, 'eEis'], [14, 10, 'kkkk'], [14, 18, 'eiIs'], [15, 10, 'seEi'], [15, 18, 'ssss'], [16, 10, 'ssss'], [16, 18, 'ssss'], [19, 12, 'ssssssss'], [20, 12, 'sssssmms']] },
+  // Smug, never gushing: eyes shut pleased, cheeks pink, a closed smirk that climbs on one side. ({proud} is written all through her lines.)
+  proud: { closed: true, patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [15, 10, 'ksss'], [15, 18, 'sssk'], [16, 10, 'bbbs'], [16, 18, 'sbbb'], [19, 12, 'ssssssms'], [20, 12, 'smmmmmss']] },
+  // Brows lifted, eyes big and sparkling, a soft smile.
+  hopeful: { patches: [[12, 10, 'shhs'], [12, 18, 'shhs'], [14, 10, 'sEEi'], [14, 18, 'EEis'], [15, 10, 'seiE'], [15, 18, 'eiEs'], [16, 10, 'bbbs'], [16, 18, 'sbbb'], [19, 12, 'ssssssss'], [20, 12, 'smssssms'], [21, 12, 'ssmmmmss'], [11, 11, 'sss'], [11, 18, 'sss']] },
+  // Heavy lids, shadows under the eyes, mouth hanging open, sweat.
+  exhausted: { patches: [[13, 10, 'ssss'], [13, 18, 'ssss'], [14, 10, 'kkkk'], [14, 18, 'kkkk'], [16, 10, 'SSSs'], [16, 18, 'sSSS'], [19, 12, 'ssssssss'], [20, 12, 'ssmmmsss'], [21, 12, 'ssmssmss'], [13, 23, 't'], [14, 23, 't']] },
+  // Eyes squeezed shut against the wind, teeth chattering, red nose.
+  cold: { closed: true, patches: [[13, 10, 'kkss'], [13, 18, 'sskk'], [14, 10, 'sskk'], [14, 18, 'kkss'], [15, 10, 'kkss'], [15, 18, 'sskk'], [16, 10, 'bbbs'], [16, 18, 'sbbb'], [19, 12, 'ssssssss'], [20, 12, 'smEEEEms'], [21, 12, 'ssmmmmss'], [17, 16, 'b'], [18, 15, 'bb']] },
 };
 
 const GRETA_PALETTE = {
@@ -633,6 +656,8 @@ export const PORTRAITS = {
   cockle: CRAB_PORTRAIT,
   rat_innkeeper: RAT_PORTRAIT,
   harbour_clerk: PUFFIN_PORTRAIT,
+  // Gorse, the scavenger from Hearth (src/data/art/ashLife.js).
+  gorse: GORSE_PORTRAIT,
   // The ghost cook in the Wreck Yard's galley (src/data/art/wreckYard.js).
   ghost_cook: WY_COOK_PORTRAIT,
 };

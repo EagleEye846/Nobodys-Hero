@@ -1,3 +1,4 @@
+import { R2R_PROPS } from '../restLife.js';
 // THE GATE: the stair arrives at last at Heralds' Rest, under an arch of old
 // timber with the village's name on it and bunting that never came down.
 // Lamps, banners, a notice board a hundred years deep, and a snowman on
@@ -69,6 +70,7 @@ export const REST_GATE = {
   // `npc` names a file in text/npcs/; `shop` a shop in src/data/shops.js; `save` a save point.
   textFile: 'interactions/heralds_rest.txt',
   props: [
+    { sprite: 'col_pin_kettle', x: 26, y: 17, walkable: true, flat: true, gives: 'pin_kettle', taken: { gone: true } },
     // The gate itself, across the path: you walk under it, but not through its posts.
     { sprite: 'rest_arch', x: 13, y: 9, text: 'gate_arch', walkable: true, solidSides: 7 },
     { sprite: 'street_lamp', x: 11, y: 12, text: 'gate_lamp', nightText: 'gate_lamp_night' },
@@ -81,6 +83,8 @@ export const REST_GATE = {
     { sprite: 'savepoint', x: 8, y: 4, save: true },
     { sprite: 'bench', x: 20, y: 4, text: 'gate_bench' },
     { sprite: 'chough', x: 24, y: 16, text: 'ridge_chough', walkable: true },
+    // The life pass, round 2 (15 November 2026)
+    ...(R2R_PROPS['rest_gate'] ?? []),
   ],
 
   // Words for tiles, shown when you press Z on them: `looks` for one spot,

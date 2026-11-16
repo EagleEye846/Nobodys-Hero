@@ -1,0 +1,72 @@
+# CAIRN HOUND
+# Numbers (HP, damage, how much each TALK option calms it) live in
+# src/data/enemies/cairn_hound.js.
+
+[intro]
+The cairn by the road stands up and shakes itself. A CAIRN HOUND!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+CAIRN HOUND stands between you and the old stones. It isn't going to move.
+
+CAIRN HOUND growls. It sounds like gravel in a bucket.
+
+CAIRN HOUND's tail wags, clack clack clack. It stops. It's on duty.
+
+CAIRN HOUND sniffs you. You don't smell like anyone it knows.
+
+Smells like wet stone and moss.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Grrrr.
+
+WOOF.
+
+Stay back.
+These are
+my people's.
+
+I guard.
+I always
+guard.
+
+Good dog.
+I am a
+good dog.
+
+Rrruff!
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/cairn_hound.js.
+[talk: Inspect]
+CAIRN HOUND - HP 760
+A dog of stacked stones, guarding the old city's dead. Heavy. Loyal. Hits like rocks.
+
+[talk: Call it a good dog]
+You tell CAIRN HOUND it's a good dog. The best dog. CAIRN HOUND's tail goes clack clack clack. It's been a long time since anyone said.
+
+[talk: Add a stone to it]
+You find a nice flat stone and put it carefully on CAIRN HOUND's back. It holds very still so it won't fall off. It looks honoured.
+
+[talk: Throw a stick]
+You throw a stick. CAIRN HOUND watches it go. It looks at you. It looks at the stones it's guarding. It doesn't go. But it really, really wants to.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+CAIRN HOUND comes apart into a heap of stones. After a while, the heap gets up again, and goes back to its post.
+
+[pacified]
+CAIRN HOUND lies down by the cairns and puts its head on its paws. It lets you past. It watches you go, wagging, very slowly.
+
+# Ves's own TALK lines for it ({foe} is its name). She's hurt, on her
+# crutch, and she talks to it kindly.
+[vesper_hurt_talk]
+Ves holds out her hand, low down, and lets {foe} sniff it. It sniffs for a long time. Then it leans on her crutch, very gently, like a friend.
+
+Ves tells {foe} its people would be proud of it, still keeping watch after all this time. {foe} sits up very straight.
+
+Ves asks {foe} what its name is. It doesn't remember. She says it can borrow one of hers until it does.

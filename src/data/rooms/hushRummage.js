@@ -7,6 +7,8 @@
 //   K  cave wall (solid)
 //   k  cave rock (solid)
 //   q  cave floor
+import { HUSH_LIFE_PROPS } from '../hushLife.js';
+
 export const HUSH_RUMMAGE = {
   // Used to remember things about this room (like beaten enemies) and for doors.
   id: 'hush_rummage',
@@ -59,6 +61,8 @@ export const HUSH_RUMMAGE = {
     { sprite: 'savepoint', x: 3, y: 9, save: true },
     { sprite: 'crates', x: 12, y: 7, text: 'rummage_crates' },
     { sprite: 'barrel', x: 2, y: 6, text: 'rummage_barrel' },
+    // The life pass, round 2 (15 November 2026): see src/data/hushLife.js.
+    ...(HUSH_LIFE_PROPS.hush_rummage ?? []),
   ],
   tileTexts: { K: 'rummage_wall', k: 'rummage_wall' },
 

@@ -5,19 +5,26 @@
 // on its cover). One ship's lantern is burning on its hook beside the cabin, with no oil in it. Take it: L puts it
 // out and lights it, and what is only there in the light (the crew, still at their stations, wet footprints, chalk)
 // shows (src/overworld/haunt.js).
-// The list: she starts leaning to PORT (everything at the north rail). The two forward barrels sit on the hold's hatch
-// cover while she leans to port and slide to the south rail when she leans to starboard. The crate at the north rail
-// hides a purse (27,5) while she leans to port; at the south rail (27,15) it hides the other purse while she leans
-// starboard. Nothing here is needed to go on except the lantern and the way down to the quarters.
+// NO PUZZLE on the deck. The helm still turns (she leans, the loose crate slides), for the feel of her and for one small
+// secret: the crate at the north rail sits on a purse (27,5) while she leans to port; at the south rail (27,15) it sits
+// on the other purse while she leans starboard, so turn the wheel and both come free. (Her lean on deck is the ship's own
+// one list, shared with the quarters, hold, cabin and rigging; the gun deck, bilge and flooded bow keep their own.)
+// The hold hatch: barred from below until you have been down (ship_hold_in); the two barrels that sat on it are found
+// roped clear either side of it after that, so the way down is open whichever way she leans. Nothing here is needed to
+// go on except the lantern and the way down to the quarters.
 // Scenes: ship_deck_in (the row above the gangway, once), ship_cabin_open (once the captain's key is in the bag).
 // Tile key (src/overworld/coastTiles.js, ghostship):
 //   #  rail / bulkhead top (solid)   W  rail face (solid)   w  porthole (solid)   .  deck planks   o  the poop's boards / the gangway end
 //   ~  black water outside the hull (solid)
 
+import { SHIP_LIFE_PROPS } from '../lifeShip.js';
+
 export const SHIP_DECK = {
   id: 'ship_deck',
   name: 'THE DECK',
   area: 'ghostship',
+  // The shard at the bow calling to the Fallen Star (src/overworld/starPull.js): how near the bow, by the way there (0 to 1).
+  starPull: 0.3,
   // "Port Tomorrow" (src/data/music/ghostShipTheme.js).
   music: 'ghostShip',
   ambience: 'ghost_ship',
@@ -71,33 +78,50 @@ export const SHIP_DECK = {
   ],
 
   cutscenes: [
-    { x: 19, y: 15, w: 4, h: 1, scene: 'ship_deck_in' },
+    // Rows 15-16 at the gangway's head, taking in the tile you arrive on (20,16), so it plays as you step aboard.
+    { x: 19, y: 15, w: 4, h: 2, scene: 'ship_deck_in' },
     // The key turns in the captain's door (only once it's been found).
     { x: 12, y: 9, w: 1, h: 3, scene: 'ship_cabin_open', gear: 'captains_key' },
+    // (2026-11-14) Bramble and the ship's boy (bramble_and_the_boy, once): the deck just north of the boy (17,14), once you
+    // carry the lantern (he can only be spoken to in its light; the scene lights it). Off the boy's own tile, the lantern's
+    // hook (13,12) and the gangway head's trigger (19-22, rows 15-16).
+    { x: 12, y: 8, w: 10, h: 6, scene: 'bramble_and_the_boy', gear: 'ship_lantern', after: 'ship_deck_in' },
   ],
 
   // Things you can press Z on. `text` names a section of this room's text file. `loose` is cargo that slides when she leans (shipList.js).
   textFile: 'interactions/ghostship.txt',
   props: [
+    // A save point at the gangway's head (beside where you come aboard), before the captain.
+    { sprite: 'savepoint', x: 15, y: 16, save: true },
     { sprite: 'gs_helm', x: 7, y: 10, text: 'deck_helm', listWheel: { to: 'toggle', port: 'helm_port', star: 'helm_star', busy: 'helm_busy', already: 'helm_already' } },
     { sprite: 'gs_lantern', x: 13, y: 12, text: 'deck_lantern', animation: 'gs_lantern', speed: 0.35, gives: 'ship_lantern', react: true, taken: { sprite: 'gs_lantern_hook', text: 'deck_lantern_taken' } },
-    { sprite: 'gs_cabin_door', x: 11, y: 10, text: 'deck_cabin_door', until: 'ship_cabin_open' },
-    { sprite: 'gs_cabin_door_open', x: 11, y: 10, text: 'deck_cabin_door_open', walkable: true, after: 'ship_cabin_open' },
+    // The captain's door: a framed gap in the poop's front wall with a warm lit threshold, so it reads as a door even swung open.
+    { sprite: 'gs_door_frame', x: 11, y: 10, flat: true, walkable: true },
+    { sprite: 'gs_side_door_low', x: 11, y: 10, text: 'deck_cabin_door', until: 'ship_cabin_open' },
+    { sprite: 'gs_side_door_low_open', x: 11, y: 10, text: 'deck_cabin_door_open', walkable: true, after: 'ship_cabin_open' },
     { sprite: 'gs_mast', x: 23, y: 10, text: 'deck_mast' },
     { sprite: 'gs_ratlines', x: 22, y: 7, text: 'deck_shrouds', walkable: true },
     { sprite: 'gs_hatch', x: 16, y: 5, text: 'deck_hatch_quarters', walkable: true, flat: true },
     { sprite: 'gs_hatch', x: 29, y: 10, text: 'deck_hatch_hold', walkable: true, flat: true },
-    { sprite: 'c5_barrel', x: 29, y: 10, text: 'deck_loose_barrel', loose: { port: [29, 10], star: [29, 16] } },
-    { sprite: 'c5_barrel', x: 30, y: 10, text: 'deck_loose_barrel', loose: { port: [30, 10], star: [30, 16], seconds: 1.5 } },
+    { sprite: 'c5_barrel', x: 29, y: 10, text: 'deck_loose_barrel', loose: { port: [29, 10], star: [29, 16] }, until: 'ship_hold_in' },
+    { sprite: 'c5_barrel', x: 30, y: 10, text: 'deck_loose_barrel', loose: { port: [30, 10], star: [30, 16], seconds: 1.5 }, until: 'ship_hold_in' },
+    // Once you've been down in the hold, the two barrels stand roped either side of the hatch, so the way back down
+    // is always open from the deck, whichever way she's leaning.
+    { sprite: 'c5_barrel', x: 28, y: 10, text: 'deck_lashed_barrel', after: 'ship_hold_in' },
+    { sprite: 'c5_barrel', x: 31, y: 10, text: 'deck_lashed_barrel', after: 'ship_hold_in' },
     { sprite: 'c5_crate', x: 27, y: 5, text: 'deck_loose_crate', loose: { port: [27, 5], star: [27, 15], seconds: 1.7 } },
     { sprite: 'gold_pouch', x: 27, y: 5, text: 'deck_purse', gold: 60, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'gold_pouch', x: 27, y: 15, text: 'deck_purse_b', gold: 60, taken: { sprite: 'gold_pouch_empty', text: 'gold_pouch_empty' } },
     { sprite: 'gs_ship_bell', x: 35, y: 10, text: 'deck_bell', sound: 'bell' },
+    // The bow's point (2026-11-14): the stem head on the rail, the bowsprit's heel lashed to it, and out at the end of it
+    // in the fog, a small cold blue light (the shard in the figurehead, far forward: shipSignposts.js). Dark once she's dealt with.
+    { sprite: 'gs_bow_star', x: 40, y: 11, text: 'deck_bow_star', until: ['figurehead_spared', 'figurehead_beaten'] },
+    { sprite: 'gs_bow_dark', x: 40, y: 11, text: 'deck_bow_dark', after: ['figurehead_spared', 'figurehead_beaten'] },
     { sprite: 'gs_ghost_mate', x: 5, y: 11, text: 'ghost_mate', animation: 'gs_ghost_mate', speed: 0.9, walkable: true, haunt: { kind: 'ghost' } },
     { sprite: 'gs_ghost_rail', x: 20, y: 4, text: 'ghost_rail_a', animation: 'gs_ghost_rail', speed: 1.1, walkable: true, haunt: { kind: 'ghost' } },
     { sprite: 'gs_ghost_rail', x: 26, y: 4, text: 'ghost_rail_b', animation: 'gs_ghost_rail', speed: 1.3, walkable: true, haunt: { kind: 'ghost' } },
     { sprite: 'gs_ghost_rail', x: 33, y: 15, text: 'ghost_rail_c', animation: 'gs_ghost_rail', speed: 1.0, walkable: true, haunt: { kind: 'ghost' } },
-    { sprite: 'gs_ghost_boy', x: 17, y: 14, text: 'ghost_boy', animation: 'gs_ghost_boy', speed: 0.7, walkable: true, haunt: { kind: 'ghost' } },
+    { sprite: 'gs_ghost_boy', x: 17, y: 14, cast: 'deck_boy', text: 'ghost_boy', animation: 'gs_ghost_boy', speed: 0.7, walkable: true, haunt: { kind: 'ghost' } },
     { sprite: 'gs_ghost_old', x: 31, y: 6, text: 'ghost_old', animation: 'gs_ghost_old', speed: 1.4, walkable: true, haunt: { kind: 'ghost' } },
     { sprite: 'gs_prints_a', x: 20, y: 15, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
     { sprite: 'gs_prints_b', x: 19, y: 13, text: 'ghost_prints', flat: true, walkable: true, haunt: { kind: 'unseen' } },
@@ -237,6 +261,8 @@ export const SHIP_DECK = {
     { sprite: 'gs_weed_a', x: 20, y: 16, flat: true, walkable: true },
     { sprite: 'gs_weed_b', x: 35, y: 11, flat: true, walkable: true },
     { sprite: 'gs_bottles', x: 29, y: 5, flat: true, walkable: true },
+    // The life pass, round 2 (src/data/lifeShip.js): belongings, barnacles, weed, guttering lamps.
+    ...(SHIP_LIFE_PROPS.ship_deck ?? []),
   ],
   tileTexts: { '#': 'deck_rail', W: 'deck_rail_face', '~': 'deck_water', o: 'deck_planks' },
 

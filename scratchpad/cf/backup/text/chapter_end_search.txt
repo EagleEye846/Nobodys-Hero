@@ -1,0 +1,11 @@
+# Between chapters: shown after the Chapter Three credits, once you've walked
+# through the Hero's Gate with Ves.
+
+[title]
+THE SEARCH
+
+[subtitle]
+Chapter Three complete
+
+[neutral]
+Somewhere up the valley, a boy with a hatchet is telling everyone who'll listen that he's going back.

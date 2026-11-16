@@ -1,36 +1,80 @@
-// SHIP LOOMS (DRAFT, the secret way into the ghost ship): the cove's far east point (wreck_slip, the trigger at x 29-30,
-// rows 6-8), once the old fog bell (the lever `fog_bell`, 29,4) has been rung. The bell's one long note, an answer out of the fog (eight
-// bells, in pairs), and the brig Fair Return slides in against the point and lays her plank on the shingle. The first time it is
-// said at length; after that (any time, `once: false`) the same thing quick. Then the party goes up the plank (goto ship_plank).
-// Ves (28,9) and Bramble (28,6) stand on the shingle, clear of the pouch (28,5), the bell and the upturned boat (27,7). The hero never speaks.
+// SHIP LOOMS (DRAFT, the secret way into the ghost ship): plays once, the moment the Fair Return's own fog bell (the lever
+// `fog_bell`, on the fog-watch's stump on the Watch Rock, wreck_watch_rock 22..23,5) is first rung IN THE FOG (at high water:
+// the bell only takes then, `onlyTide`). It is the bell's own scene. The note goes out; the fog wall at the end of the
+// fog-watch's stones (31, rows 7-8) answers with eight bells and parts like a curtain, and behind it is a black hull with the
+// stones running out to her side. Then it is over and you walk out to her yourself (the door at 33, rows 7-8, to ship_plank,
+// where her gangway comes down: ship_boarding). Reworked 14 November (it used to be on the Wreck Yard slip's point).
+// The hero stands at the bell (22..23, 6); Ves (20,7) and Bramble (20,9) stand back on the rock, clear of the pool (21,9), the
+// ring (19,10) and the hook (26,6). No monsters on the rock. The hero never speaks.
 export const SHIP_LOOMS = {
   id: 'ship_looms',
-  room: 'wreck_slip',
-  once: false,
+  room: 'wreck_watch_rock',
+  once: true,
+  // When it's over she lies alongside (the room's gs_hull_rock and her plank, `after` this).
+  sees: ['ship_alongside'],
 
   actors: [
-    { id: 'ves', look: 'prop:vesper_stand', x: 28, y: 9, portrait: 'vesper', plays: 'vesper' },
-    { id: 'bramble', look: 'prop:bramble_stand', x: 28, y: 6, portrait: 'bramble', plays: 'bramble' },
+    { id: 'ves', look: 'prop:vesper_stand', x: 20, y: 7, portrait: 'vesper', plays: 'vesper' },
+    { id: 'bramble', look: 'prop:bramble_stand', x: 20, y: 9, portrait: 'bramble', plays: 'bramble' },
+    // Her, lying off the rock (the room's gs_hull_rock, x 36-43, rows 0-16), hidden until the fog parts.
+    // Her: she sails in from the south, out of the fog, bow first, and comes to rest off the rock (the room's own
+    // gs_hull_rock, x 36-43, rows 0-16, takes over once the scene is done: `sees: ship_alongside`).
+    { id: 'ship', look: 'prop:gs_hull_rock', x: 39.5, y: 34, hidden: true, flat: true },
+    // Her boarding plank, hauled up against the gap in her rail (hinged at x 36, rows 7-8), until it swings down onto the stones.
+    { id: 'plank', look: 'prop:gs_gangway_up', x: 33.5, y: 9, hidden: true },
   ],
 
   steps: [
-    { do: 'face', who: 'player', dir: 'right' },
+    // (draft) 2026-11-15: trimmed (the answering bell is heard, the fog parting and the brig gliding in are seen).
     { do: 'face', who: 'ves', dir: 'right' },
     { do: 'face', who: 'bramble', dir: 'right' },
-    { do: 'sound', name: 'bell', until: 'ship_boarding' },
-    { do: 'wait', seconds: 0.8, until: 'ship_boarding' },
-    { do: 'say', text: 'The fog has come in to the end of the shingle and stopped, like something waiting for a word. The bell you rang is still humming on its post.\n\nThen, from a long way out in the grey, something answers it. Not an echo. Eight bells, struck slowly, in pairs.', until: 'ship_boarding' },
-    { do: 'say', who: 'bramble', text: '{scared}That isn\'t us. We only rang it the once.', until: 'ship_boarding' },
-    { do: 'say', who: 'ves', text: '{bored}I\'d call that an answer. Rude of it, to speak up before the bell had finished.', until: 'ship_boarding' },
-    { do: 'quake', seconds: 1.2 },
+    { do: 'camera', to: { x: 33, y: 8 } },
+    { do: 'face', who: 'player', dir: 'right' },
+    { do: 'wait', seconds: 1.2 },
+    { do: 'sound', name: 'bell' },
+    { do: 'wait', seconds: 0.4 },
+    { do: 'sound', name: 'bell' },
+    { do: 'wait', seconds: 1.2 },
+    { do: 'sound', name: 'bell' },
+    { do: 'wait', seconds: 0.4 },
+    { do: 'sound', name: 'bell' },
+    { do: 'wait', seconds: 2.2 },
+    // From inside the fog, a bell answers yours: two strokes and a gap, two strokes and a gap, struck by nobody.
+    { do: 'sound', name: 'toll' },
+    { do: 'wait', seconds: 0.5 },
+    { do: 'sound', name: 'toll' },
+    { do: 'wait', seconds: 1.6 },
+    { do: 'act', who: 'bramble', act: 'startle', wait: false },
+    { do: 'sound', name: 'toll' },
+    { do: 'wait', seconds: 0.5 },
+    { do: 'sound', name: 'toll' },
+    { do: 'wait', seconds: 1.6 },
+    // She glides down along the rock out of the fog, no wind and no oars, slowing, slowing, and stops dead by the stones.
+    { do: 'appear', who: 'ship', instant: true },
+    { do: 'sound', name: 'creak' },
+    { do: 'walk', who: 'ship', to: { x: 39.5, y: 22 }, pace: 64 },
+    { do: 'sound', name: 'creak' },
+    { do: 'walk', who: 'ship', to: { x: 39.5, y: 17.5 }, pace: 30 },
+    { do: 'walk', who: 'ship', to: { x: 39.5, y: 16 }, pace: 10 },
     { do: 'sound', name: 'shipGroan' },
-    { do: 'say', text: 'The fog at the point leans in, and thickens, and is a wall. A great black side comes out of it without a sound: masts, ropes, gilt on a name. She settles against the end of the shingle as gently as a hand laid on a table.\n\nA plank slides out from her rail and rests on the stones. Nobody pushed it.' },
-    { do: 'say', text: 'At your side, the Fallen Star is humming. It has been pointing at this fog since the mast.', until: 'ship_boarding' },
-    { do: 'say', who: 'bramble', text: '{worried}...You\'re going to go aboard her, aren\'t you.', until: 'ship_boarding' },
-    { do: 'say', who: 'ves', text: '{thoughtful}Of course he is. She doesn\'t go anywhere, and there is no other reason for anything out here to look like a prize. They always have a prize.', until: 'ship_boarding' },
-    { do: 'say', who: 'ves', text: '{bored}Plank. Up. Mind the gap.', after: 'ship_boarding' },
-    { do: 'walk', who: 'player', to: { x: 30, y: 7 } },
-    { do: 'stage', dim: 1, seconds: 1.0 },
-    { do: 'goto', room: 'ship_plank', spawn: { x: 2, y: 8 } },
+    { do: 'quake', seconds: 0.8, amount: 1 },
+    { do: 'wait', seconds: 0.8 },
+    // Her plank: there against her side, then the line runs free and it swings down across the stones with a knock.
+    { do: 'appear', who: 'plank' },
+    { do: 'wait', seconds: 0.6 },
+    { do: 'sound', name: 'gangwayLetGo' },
+    { do: 'animate', who: 'plank', animation: 'gs_gangway_swing', speed: 0.08, once: true },
+    { do: 'wait', seconds: 1.12 },
+    { do: 'sound', name: 'gangwayThump' },
+    { do: 'quake', seconds: 0.3, amount: 1 },
+    { do: 'wait', seconds: 1.2 },
+    { do: 'say', who: 'bramble', text: '{scared}It came when you RANG it. Why did it COME?' },
+    { do: 'face', who: 'ves', at: 'bramble' },
+    { do: 'say', who: 'ves', text: '{surprised}...We rang. It came. I suppose that\'s what a bell\'s for. I just didn\'t think anybody was listening.' },
+    { do: 'face', who: 'ves', dir: 'right' },
+    { do: 'say', who: 'ves', text: '{smile}Well. She\'s left the door open. It would be rude not to. ...I\'d quite like to be rude.' },
+    { do: 'camera' },
+    { do: 'leave', who: 'ship', instant: true },
+    { do: 'leave', who: 'plank', instant: true },
   ],
 };

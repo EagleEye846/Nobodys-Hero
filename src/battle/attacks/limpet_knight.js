@@ -1,18 +1,16 @@
 import { defineBulletArt } from '../projectiles.js';
 import { art } from '../../data/art/ch5Kit.js';
-import { withSnipes } from './snipes.js';
+import { PathShot, Zone, Deco, blit } from './coastKit.js';
 
-// The Limpet Knight's attacks. Very serious, very armoured, and it will not
-// be moved: so it bashes (two wide steel plates slam across the box with a
-// gap between them, and the gap is never where you're standing), it sucks
-// (a limpet's one real trick: you're pulled toward its side of the box, where
-// a bed of barnacles waits, and pebbles are dragged in with you), and it sends
-// stones rolling down its rock in diagonal lanes. It stands to the right of
-// the box, so everything comes in from that side.
-//
-// Each attack is a factory `(box, density, tools) => ({ duration, update })`;
-// see dummy.js for the shape. The attack's own clock (`t`) runs `density`
-// times faster than the seconds on the wall, hence the `T` below.
+// The Limpet Knight's attacks. A limpet in tiny armour, very serious, and it
+// will not be moved, so it brings the fight to you:
+//   - Joust, and home again: visor down, it charges along your row, and then
+//     (a limpet always goes home to its own scar) straight back the same way.
+//   - Clamp down: the box is its rock. The cracks about to split show
+//     faintly, one through you; then it clamps and they open.
+//   - Clingers and the bugle: little limpets cling where they land, harmless,
+//     until it sounds the bugle and every one of them clamps at once.
+// It stands to the right of the box.
 
 const ROCK = { k: '#1b1a22', h: '#b4a68a', H: '#d8ccb0', s: '#8a7c64', D: '#35302c', g: '#7e8a78', G: '#aab6a0', w: '#f0f4ee' };
 
@@ -54,206 +52,149 @@ defineBulletArt('limpSwirl', {
   spin: 3,
 });
 
-// A steel plate slamming across the box: a rectangle with rivets and a
-// limpet crest. It flashes where it will be before it moves.
-class Plate {
-  // `peek`: where its warning outline shows (inside the box, by the wall it
-  // comes from), since it waits just outside the box where nothing is seen.
-  constructor({ x, y, w, h, vx, warn = 0.6, life = 3, peek = null }) {
-    Object.assign(this, { x, y, w, h, vx, warn, life, peek });
-    this.age = 0;
-    this.dmg = null;
-    this.grazed = false;
-  }
-
-  get active() {
-    return this.age >= this.warn && this.age < this.warn + this.life;
-  }
-
-  update(dt) {
-    this.age += dt;
-    if (this.age >= this.warn) this.x += this.vx * dt;
-  }
-
-  isGone() {
-    return this.age >= this.warn + this.life + 0.25;
-  }
-
-  edgeDistance(px, py) {
-    if (!this.active) return Infinity;
-    const dx = Math.max(this.x - px, 0, px - (this.x + this.w));
-    const dy = Math.max(this.y - py, 0, py - (this.y + this.h));
-    return Math.hypot(dx, dy);
-  }
-
-  draw(ctx) {
-    ctx.save();
-    if (this.age < this.warn) {
-      ctx.globalAlpha = Math.floor(this.age * 10) % 2 ? 0.2 : 0.5;
-      ctx.strokeStyle = '#a8b8c8';
-      ctx.setLineDash([3, 2]);
-      ctx.lineWidth = 1;
-      const px = this.peek ?? this.x;
-      ctx.strokeRect(px + 0.5, this.y + 0.5, this.w, this.h);
-      // Chevrons down the outline: the way it will slam.
-      ctx.setLineDash([]);
-      ctx.globalAlpha *= 1.4;
-      for (let cy = this.y + 6; cy < this.y + this.h - 4; cy += 10) {
-        ctx.beginPath();
-        ctx.moveTo(px + this.w - 2, cy - 3);
-        ctx.lineTo(px + 2, cy);
-        ctx.lineTo(px + this.w - 2, cy + 3);
-        ctx.stroke();
-      }
-      ctx.restore();
-      return;
-    }
-    const over = this.age - (this.warn + this.life);
-    if (over > 0) ctx.globalAlpha = Math.max(0, 1 - over / 0.25);
-    const x = Math.round(this.x);
-    const y = Math.round(this.y);
-    ctx.fillStyle = '#1b1a22';
-    ctx.fillRect(x - 1, y - 1, this.w + 2, this.h + 2);
-    ctx.fillStyle = '#617488';
-    ctx.fillRect(x, y, this.w, this.h);
-    ctx.fillStyle = '#a8b8c8';
-    ctx.fillRect(x, y, Math.max(2, this.w - 3), this.h);
-    ctx.fillStyle = '#e8f2fa';
-    ctx.fillRect(x + 1, y, 1, this.h);
-    // Rivets and a limpet crest.
-    ctx.fillStyle = '#e8f2fa';
-    for (let ry = y + 3; ry < y + this.h - 2; ry += 9) {
-      ctx.fillRect(x + this.w - 3, ry, 1, 1);
-    }
-    ctx.fillStyle = '#b4a68a';
-    for (let ry = y + this.h / 2 - 3; ry < y + this.h / 2 + 3; ry += 1) {
-      const half = (ry - (y + this.h / 2 - 3)) / 2;
-      ctx.fillRect(x + this.w / 2 - half, ry, half * 2 + 1, 1);
-    }
-    ctx.restore();
-  }
-}
+const KNIGHT = { ...ROCK, r: '#c83a3a', R: '#ff7a6a', n: '#9aa4b0', N: '#5a6470', y: '#e8c050' };
+// The knight at the charge, lance couched, drawn facing left: a limpet cone in
+// a steel visor, a red plume streaming back, the lance out in front.
+const charger = (f) => art(25, 13, (p) => {
+  p.poly([[9, 11], [14, 2], [19, 11]], 'h');
+  p.line(11, 9, 14, 3, 'H');
+  p.rect(10, 7, 9, 3, 'n');
+  p.rect(11, 8, 7, 1, 'N');
+  p.line(17, 3, 23, 1 + f, 'r', 2);
+  p.line(19, 4, 24, 4 - f, 'R');
+  p.line(0, 9, 10, 9, 'y');
+  p.line(0, 9, 3, 9, 'w');
+  p.rect(9, 11, 11, 1, 'g');
+});
+defineBulletArt('limpCharger', { frames: [charger(0), charger(1)], palette: KNIGHT, hitbox: { w: 22, h: 8 }, radius: 4, frameSeconds: 0.08 });
+defineBulletArt('limpChargerR', { frames: [charger(0).map((r) => [...r].reverse().join('')), charger(1).map((r) => [...r].reverse().join(''))], palette: KNIGHT, hitbox: { w: 22, h: 8 }, radius: 4, frameSeconds: 0.08 });
+// A little limpet thrown out to cling where it lands (harmless while it clings).
+defineBulletArt('limpClinger', { frames: [art(9, 7, (p) => { p.poly([[0, 6], [4, 0], [8, 6]], 'h'); p.line(2, 5, 4, 1, 'H'); p.rect(0, 6, 9, 1, 'g'); })], palette: KNIGHT, radius: 1 });
+defineBulletArt('limpClingerFly', { frames: [art(9, 7, (p) => { p.poly([[0, 6], [4, 0], [8, 6]], 'h'); p.line(2, 5, 4, 1, 'H'); p.rect(0, 6, 9, 1, 'g'); })], palette: KNIGHT, radius: 3, spin: 6 });
+// A spike of shell snapping out when a clinger clamps.
+defineBulletArt('limpSpike', { frames: [art(7, 3, (p) => { p.line(0, 1, 6, 1, 'H'); p.set(6, 1, 'w'); })], palette: KNIGHT, radius: 1.8, rotate: true });
+// The bugle note it sounds (harmless).
+defineBulletArt('limpBugle', { frames: [['..y..', '.yyy.', 'yywyy', '..y..', '..y..'], ['.....', '..y..', '.yyy.', '..y..', '.....']], palette: KNIGHT, radius: 1, frameSeconds: 0.1 });
 
 export const LIMPET_KNIGHT_ATTACKS = {
-  // Shield bash: two wide plates slam across the box with a gap between
-  // them. The gap is never where you are, and the plates' outlines flash
-  // first. Every other bash has a backhand: a second pair close behind,
-  // its gap a step up or down from the first.
-  limpBash(box, density, { rand, clamp }) {
+  // Joust, and home again: it lowers its visor (the row it faces lights up),
+  // couches its lance and charges across the box along that row. Then,
+  // because a limpet always goes home to its own scar on the rock, it comes
+  // straight back along the same row. While the visor is up it turns to
+  // face your row; once it's down, it's set.
+  limpJoust(box, density, { rand }) {
     const T = (s) => s * density;
+    const VISOR = 0.42;
+    const SPEED = 260;
+    const across = (box.w + 40) / SPEED;
     let t = 0;
-    let next = T(0.2);
-    let waves = 0;
+    let n = 0;
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && waves < 6 && t < T(6.2)) {
-          waves++;
-          next = t + T(1.1);
-          const gapH = 23;
-          const lo = box.y + 4 + gapH / 2;
-          const hi = box.y + box.h - 4 - gapH / 2;
-          // Somewhere other than where you stand.
-          let c = clamp(soul.y + (Math.random() < 0.5 ? -1 : 1) * rand(24, 34), lo, hi);
-          if (Math.abs(c - soul.y) < 18) c = soul.y < (lo + hi) / 2 ? hi : lo;
-          const x = box.x + box.w + 3;
-          const speed = -76;
-          const pair = (gy, warn) => {
-            bullets.push(new Plate({ x, y: box.y - 2, w: 9, h: gy - gapH / 2 - (box.y - 2), vx: speed, warn, life: 3, peek: box.x + box.w - 11 }));
-            bullets.push(new Plate({ x, y: gy + gapH / 2, w: 9, h: box.y + box.h + 2 - (gy + gapH / 2), vx: speed, warn, life: 3, peek: box.x + box.w - 11 }));
-          };
-          pair(c, 0.65);
-          // The backhand waits a little longer (its outline flashing all the
-          // while), then follows the first pair in.
-          if (waves % 2 === 0) pair(clamp(c + (c < (lo + hi) / 2 ? 1 : -1) * rand(18, 26), lo, hi), 1.15);
+        if (t >= T(0.2 + n * 0.95) && n < 7) {
+          n++;
+          const y = Math.min(Math.max(soul.y + rand(-3, 3), box.y + 6), box.y + box.h - 6);
+          const x0 = box.x + box.w + 20;
+          const x1 = box.x - 20;
+          bullets.push(new Deco({ warn: VISOR, life: VISOR, paint(ctx, d) {
+            ctx.globalAlpha *= Math.floor(d.age * 10) % 2 ? 0.2 : 0.45;
+            ctx.fillStyle = '#e8c050';
+            ctx.fillRect(box.x, y - 4, box.w, 8);
+          } }));
+          bullets.push(new PathShot({ art: 'limpCharger', warn: VISOR, life: across, path: (k) => ({ x: x0 + (x1 - x0) * Math.min(1, k / across), y }) }));
+          // Home again, after a breath at the far wall.
+          bullets.push(new PathShot({ art: 'limpChargerR', warn: VISOR + across + 0.1, life: across, path: (k) => ({ x: x1 + (x0 - x1) * Math.min(1, k / across), y }) }));
         }
       },
     };
   },
 
-  // Suction: the knight clamps down and pulls. You're dragged toward its side
-  // of the box, where a bed of barnacles waits (with a gap or two), and
-  // pebbles are dragged in with you, faster and faster.
-  limpSuck(box, density, { Shot, every, rand, clamp }) {
+  // Clamp down: the box is its rock, cracked into stones. Before each clamp
+  // the cracks it is about to split show faintly (one runs through where
+  // you are, across and down); then it clamps down hard and the cracks
+  // split open. Stand in the middle of a stone, not on a crack.
+  limpClamp(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const WARN = 0.6;
     let t = 0;
-    let bed = false;
-    const pebbles = every(0.19, 0.27, (bullets, soul) => {
-      const y = Math.random() < 0.55 ? clamp(soul.y + rand(-6, 6), box.y + 4, box.y + box.h - 4) : rand(box.y + 4, box.y + box.h - 4);
-      bullets.push(new Shot({ x: box.x - 3, y, vx: 14, accel: 38, art: 'limpPebble', life: 3.5 }));
-    });
+    let n = 0;
+    const crack = (x, y, w, h, i) => new Zone({ x, y, w, h, warn: WARN + i * 0.03, life: 0.4, paint(ctx, z) {
+      if (z.age < z.warn) {
+        ctx.fillStyle = '#d8ccb0';
+        ctx.globalAlpha *= 0.6;
+        if (z.w > z.h) ctx.fillRect(z.x, z.y + z.h / 2, z.w, 1); else ctx.fillRect(z.x + z.w / 2, z.y, 1, z.h);
+        return;
+      }
+      ctx.fillStyle = '#35302c';
+      ctx.fillRect(z.x, z.y, z.w, z.h);
+      ctx.fillStyle = '#d8ccb0';
+      if (z.w > z.h) ctx.fillRect(z.x, z.y, z.w, 1); else ctx.fillRect(z.x, z.y, 1, z.h);
+    } });
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (!bed) {
-          bed = true;
-          // The barnacles along the right wall: a gap or two in the row.
-          const gaps = [rand(box.y + 12, box.y + 30), rand(box.y + 48, box.y + box.h - 12)];
-          for (let y = box.y + 5; y <= box.y + box.h - 4; y += 9) {
-            if (gaps.some((g) => Math.abs(g - y) < 8)) continue;
-            bullets.push(new Shot({ x: box.x + box.w - 3, y, warn: 0.9, life: 5.4, art: 'limpBarnacle' }));
-          }
-          for (let i = 0; i < 3; i++) bullets.push(new Shot({ x: box.x + box.w - 6, y: box.y + 14 + i * 26, harmless: true, life: 6, art: 'limpSwirl' }));
-        }
-        if (t >= T(0.9) && t < T(6.2)) {
-          soul.x += 24 * (dt / density);
-          if (t < T(5.6)) pebbles(dt, bullets, soul);
+        if (t >= T(0.2 + n * 0.8) && n < 8) {
+          n++;
+          // The seams: one row and one column through you, plus one of each more, a stone apart.
+          const rows = [soul.y + rand(-2, 2)];
+          const cols = [soul.x + rand(-2, 2)];
+          rows.push(rows[0] + (rows[0] > box.y + box.h / 2 ? -1 : 1) * rand(18, 24));
+          cols.push(cols[0] + (cols[0] > box.x + box.w / 2 ? -1 : 1) * rand(18, 24));
+          rows.forEach((y, i) => bullets.push(crack(box.x, y - 3.5, box.w, 7, i)));
+          cols.forEach((x, i) => bullets.push(crack(x - 3.5, box.y, 7, box.h, i + 2)));
+          // Grit thrown up by the clamp, where the cracks through you cross.
+          for (const y of rows.slice(0, 1)) for (const x of cols.slice(0, 1)) bullets.push(new Shot({ x, y, vx: rand(-20, 20), vy: -30, gravity: 80, art: 'limpPebble', warn: WARN, life: 0.8 }));
         }
       },
     };
   },
 
-  // Stones: it shoves stones off its rock, and they roll down diagonal lanes
-  // across the box, a lane through where you stand and others to either
-  // side, some big. Dust puffs up where each one starts.
-  limpStones(box, density, { Shot, rand }) {
+  // Clingers and the bugle: it flings little limpets out of its shield, and
+  // every one clings where it lands (at your feet, mostly) and sits there
+  // harmless. Then it sounds the bugle, and every clinger in the box clamps
+  // at once, snapping out a star of shell spikes. Count the clingers, and
+  // be clear of them when the bugle goes.
+  limpBugle(box, density, { Shot, rand }) {
     const T = (s) => s * density;
+    const clingers = [];
     let t = 0;
-    let next = T(0.2);
-    let volleys = 0;
-    let firing = [];
+    let n = 0;
+    let calls = 0;
+    const FLY = 0.55;
     return {
       duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (t >= next && volleys < 7 && t < T(6.0)) {
-          volleys++;
-          next = t + T(0.78);
-          // Lanes run down and to the left, then up and to the left (each
-          // volley turns the other way), so strafing one way never beats it.
-          // A lane is the value of (x + dir * y).
-          const dir = volleys % 2 === 1 ? 1 : -1;
-          const base = soul.x + dir * soul.y;
-          const offsets = [0, rand(24, 32), -rand(24, 32), rand(48, 60), -rand(48, 60)];
-          const cut = [];
-          for (const o of offsets) {
-            const lane = base + o;
-            // Where the lane enters the box: along the top (or bottom) edge, or the right edge.
-            const edgeY = dir === 1 ? box.y : box.y + box.h;
-            let x = lane - dir * edgeY;
-            let y = edgeY;
-            if (x > box.x + box.w) { x = box.x + box.w; y = (lane - x) * dir; }
-            if (y > box.y + box.h || y < box.y || x < box.x) continue;
-            cut.push({ x: x + 3, y: y - 3 * dir, dir, big: o === 0 ? Math.random() < 0.4 : Math.random() < 0.3 });
+        // Four throws, then the bugle; three times over.
+        const plan = [0.2, 0.45, 0.7, 0.95, 2.1, 2.35, 2.6, 2.85, 4.0, 4.25, 4.5];
+        const bugles = [1.5, 3.4, 5.3];
+        if (n < plan.length && t >= T(plan[n])) {
+          n++;
+          const from = { x: box.x + box.w + 6, y: rand(box.y + 10, box.y + box.h - 10) };
+          const to = { x: soul.x + rand(-5, 5), y: soul.y + rand(-5, 5) };
+          bullets.push(new PathShot({ art: 'limpClingerFly', life: FLY, path: (k) => { const u = Math.min(1, k / FLY); return { x: from.x + (to.x - from.x) * u, y: from.y + (to.y - from.y) * u - Math.sin(Math.PI * u) * 14 }; } }));
+          const c = new Shot({ x: to.x, y: to.y, harmless: true, warn: FLY, art: 'limpClinger' });
+          c.life = 9;
+          clingers.push(c);
+          bullets.push(c);
+        }
+        if (calls < bugles.length && t >= T(bugles[calls])) {
+          calls++;
+          const CALL = 0.5;
+          bullets.push(new Shot({ x: box.x + box.w - 6, y: box.y + 6, harmless: true, life: CALL, art: 'limpBugle' }));
+          for (const c of clingers.splice(0)) {
+            c.life = c.age - c.warn + CALL + 0.3;
+            bullets.push(new Zone({ x: c.x, y: c.y, r: 6, warn: CALL, life: 0.3, paint(ctx, z) { if (z.age >= z.warn) blit(ctx, ['..H..', '.HhH.', 'HhwhH', '.HhH.', '..H..'], KNIGHT, z.x, z.y); } }));
+            for (let i = 0; i < 8; i++) {
+              const a = (i / 8) * Math.PI * 2;
+              bullets.push(new Shot({ x: c.x, y: c.y, vx: Math.cos(a) * 82, vy: Math.sin(a) * 82, art: 'limpSpike', warn: CALL, life: 0.6 }));
+            }
           }
-          for (const s of cut) bullets.push(new Shot({ x: s.x + 5, y: s.y - 5 * s.dir, harmless: true, life: 0.65, art: 'limpPebble' }));
-          firing.push({ at: t + T(0.65), cut });
         }
-        for (const v of firing) {
-          if (t < v.at) continue;
-          v.done = true;
-          for (const s of v.cut) bullets.push(new Shot({ x: s.x, y: s.y, vx: -54, vy: 54 * s.dir, art: s.big ? 'limpBoulder' : 'limpStone', life: 4 }));
-        }
-        firing = firing.filter((v) => !v.done);
       },
     };
   },
 };
-
-// Pebbles flicked off the rim of its shield on top, aimed a little ahead of
-// you, so standing still or running one way is never safe (see snipes.js).
-LIMPET_KNIGHT_ATTACKS.limpBash = withSnipes(LIMPET_KNIGHT_ATTACKS.limpBash, { art: 'limpPebble', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });
-LIMPET_KNIGHT_ATTACKS.limpSuck = withSnipes(LIMPET_KNIGHT_ATTACKS.limpSuck, { art: 'limpPebble', count: 3, first: 1.4, every: 1.5, lead: [0.9, 'mean', 0.5] });
-LIMPET_KNIGHT_ATTACKS.limpStones = withSnipes(LIMPET_KNIGHT_ATTACKS.limpStones, { art: 'limpPebble', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });

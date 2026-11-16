@@ -105,9 +105,9 @@ export const GLIMMER_GEODE = {
     { sprite: 'glowcap_trio', x: 12, y: 11, text: 'geode_trio' },
     { sprite: 'glowcap_big', x: 27, y: 11, text: 'geode_glowcap' },
     { sprite: 'glowcap_small', x: 1, y: 7, text: 'geode_glowcap' },
-    { sprite: 'glow_moss', x: 14, y: 12, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 5, y: 11, walkable: true, animation: 'glow_moss', speed: 0.7 },
-    { sprite: 'glow_moss', x: 25, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7 },
+    { sprite: 'glow_moss', x: 14, y: 12, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 5, y: 11, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
+    { sprite: 'glow_moss', x: 25, y: 9, walkable: true, animation: 'glow_moss', speed: 0.7, decor: true },
     { sprite: 'sign', x: 2, y: 12, text: 'geode_sign' },
     // The two stepping stones (flat-topped, a jump high: `step`). The loose one
     // is the way onto the hill; the other is shut in the yard on top of it.
@@ -116,8 +116,11 @@ export const GLIMMER_GEODE = {
     { sprite: 'push_rock', x: 14, y: 5, text: 'geode_rock_yard', rock: true, step: true },
     // The yard on top of the hill, which only the top of the hill touches: a miner's lunch tin
     // left there (Fenn's, "taken up to the light"): the whistle pea (the seven-shift quest, Seam Nine's roster).
-    { sprite: 'lunch_crate', x: 13, y: 6, text: 'geode_tin', gives: 'whistle_pea', taken: { sprite: 'lunch_crate', text: 'geode_tin_empty' } },
+    { sprite: 'lunch_crate', x: 13, y: 6, text: 'geode_tin', gives: 'whistle_pea', notice: true, taken: { sprite: 'lunch_crate', text: 'geode_tin_empty' } },
     { sprite: 'rock_stump', x: 2, y: 9, text: 'rock_stump', rockReset: true },
+    // --- life pass: things to see and poke (all bodiless) ---
+    { sprite: 'gl_crystal_web', x: 6, y: 4, text: 'gp_web', animation: 'gl_crystal_web', speed: 0.9 },
+    // --- end life pass ---
   ],
   tileTexts: {
     '#': 'cave_rock', W: 'cave_wall', V: 'cave_vein', H: 'cave_moss_wall', K: 'cave_wall',

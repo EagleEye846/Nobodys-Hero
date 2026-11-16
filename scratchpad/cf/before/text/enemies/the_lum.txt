@@ -1,0 +1,181 @@
+# THE LUM: the Ash Road's mini-boss ("lum" is an old word for a chimney). The
+# last standing chimney of a burnt farmhouse at the gate of the buried town,
+# its hearth fire never out. Old, gruff, keeping the road like a farmer keeps
+# a gate. Not wicked. The hero never speaks, so every TALK is something he does.
+# Numbers (HP, damage, its two phases) live in src/data/enemies/the_lum.js.
+#
+# A section with ": caught" after its name is used in its second phase (from half
+# its HP, when its hearth catches) instead of the plain one. [phase: caught]
+# sections are what's said as that phase starts: plain ones in the battle panel,
+# "vesper" ones by Ves in her box, "foe" ones by it in speech bubbles. (draft)
+
+# Said in speech bubbles during its entrance, after its title card. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[boss_intro]
+Hm.
+
+Visitors.
+
+Nobody
+goes up
+to the
+town.
+
+Not on
+my watch.
+
+[intro]
+The chimney at the gate breathes out a long grey breath and steps down off its hearthstones. Its fire looks at you. THE LUM!
+
+# Shown at the start of each of your turns, in order, then repeating.
+[flavor]
+THE LUM breathes out through its pot. The smoke goes straight up. There is no wind, and nothing for it to lean on.
+
+The fire in THE LUM's hearth settles with a soft crunch, the sound a house makes at night.
+
+There is one mug on THE LUM's mantelshelf. It has not moved, the whole fight.
+
+THE LUM looks past you, up the road, at the town under the ash. Then back at you.
+
+Smells of a kitchen on a winter evening, and of everything after.
+
+[flavor: caught]
+THE LUM's hearth has caught. The heat comes off it in a wall.
+
+Flames are standing up out of THE LUM's pot like a crown. The mortar glows between its bricks.
+
+The mug on the mantel is rattling. THE LUM puts out a hearthstone to steady itself, and goes on.
+
+THE LUM roars. It is the sound of every chimney on a stormy night.
+
+# Nearly beaten (under 30% HP), then ready to be spared (MERCY full): shown in the
+# flavour box instead of [flavor] (wornFlavor in battleScene.js).
+[flavor: low]
+THE LUM's fire has gone low and red. A brick slides off the stack and it doesn't notice.
+
+[flavor: spareable]
+THE LUM's smoke is going up in slow, round puffs, like an old man thinking with a pipe.
+
+# Said in a speech bubble before each attack, picked at random. Lines written
+# together (no blank line between) share a bubble; a line starting with
+# ... waits for a bubble of its own, and words that won't fit run on into
+# the next.
+[taunts]
+Off
+my road.
+
+Hm.
+
+Mind
+the
+step.
+
+Nobody
+goes up.
+
+I kept
+it in.
+All this
+time.
+
+Go home.
+You have
+one.
+
+[taunts: caught]
+OUT.
+
+STAND
+BACK
+FROM
+THE
+GRATE.
+
+It is
+MY
+fire.
+
+I SAID
+NOBODY.
+
+Burnt
+once.
+NOT
+AGAIN.
+
+# Said when it's below 25-55% of its HP, now and then, instead of a taunt.
+[low_hp]
+...Still
+lit.
+
+Hm.
+Hmm.
+
+[low_hp: caught]
+Still...
+lit...
+
+# One section per TALK option. The names after "talk:" must match the
+# TALK options in src/data/enemies/the_lum.js.
+[talk: Inspect]
+THE LUM - HP 26000
+The last chimney of a burnt farmhouse, its fire never out, keeping the road to the buried town. Bricks, smoke rings, sparks, coals; when its hearth catches, fire on the floor and its own pot. Not wicked. Gruff.
+
+[talk: Warm your hands]
+You hold your hands out to its hearth, the way you would at home on a cold night. The fire is very warm. THE LUM stops. It has not been used for that in a long time. Its smoke goes up a little slower.
+
+[talk: Sweep the hearth]
+You find a stub of brush in the ash and sweep its hearthstone clean, out from the grate to the edge, the way somebody used to. THE LUM looks down at it. Its eyes go a little dimmer, and softer.
+
+[talk: Set a brick back]
+A brick has fallen off its stack into the ash. You pick it up, knock it clean and push it back into its gap. It fits. THE LUM shifts its weight, as if a tooth had stopped aching.
+
+[talk: Straighten the mug]
+You reach up to the mantel and turn the mug so its handle faces out, ready for whoever it was for. THE LUM watches you do it, and says nothing at all for a long time.
+
+[talk: Bank the fire]
+You rake its coals in close and cover them over with ash, the way you bank a fire for the night, so it keeps till morning without anybody minding it. THE LUM's fire sinks down to a warm red. It doesn't go out. It rests.
+
+# Said when you try to RUN.
+[no_escape]
+THE LUM is standing in the gateway, and a chimney does not step aside.
+
+# What's said as its second phase starts.
+[phase: caught]
+A crack runs up THE LUM's stack and the hearth catches with a roar: fire comes up out of its mouth and out of its pot, and the mortar glows red between every brick.
+
+[phase: caught vesper]
+{determined}It's caught. Mind the floor.
+
+[phase: caught foe]
+NOT
+THE
+HOUSE.
+
+NOT
+AGAIN.
+
+# How the fight ends. The rewards line is added automatically.
+[victory]
+THE LUM settles back onto its hearthstones with a long sigh of smoke. Its fire sinks to a low red glow. It doesn't go out. A brick comes loose from the hearth and drops at your feet.
+
+[pacified]
+THE LUM breathes out one slow ring of smoke, and steps back to the side of the gate. "Go on up, then," it says, very low. "Wipe your feet. And take this. It's warm. It'll stay warm." A brick comes loose from its hearth and drops at your feet.
+
+# Ves's own TALK lines for it ({foe} is its name).
+[vesper_talk]
+Ves tells {foe} she grew up with a chimney that smoked whenever the wind was east. {foe} says that's the fault of the cowl, not the chimney. Ves says she'll tell it.
+
+Ves warms her hands at {foe} and says it's the first warm thing in miles. {foe} grumbles. It burns a little brighter anyway.
+
+Ves tells {foe} it's the best-kept chimney on the whole road. {foe} says it's the only chimney on the whole road. Ves says that's what makes it the best kept.
+
+# Bramble's own TALK lines for it.
+[bramble_talk]
+Bramble asks {foe} if it does toast. {foe} says it has not done toast in a very long time. Bramble says that's a shame, because he has bread.
+
+Bramble stands in front of {foe} with his back to it and his coat held up behind him, warming his backside. {foe} lets him. It's what chimneys are for.
+
+Bramble asks {foe} if anybody lived here. {foe} doesn't answer. It looks at the mug. Bramble says sorry, and means it.

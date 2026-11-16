@@ -1,0 +1,1014 @@
+# THE LOWER WORKINGS OF SEAM NINE (Chapter 4's secret detour and superboss):
+# things you can read and look at in diggings_star_scorch, diggings_star_glass,
+# diggings_star_camp and diggings_star_pool. (draft: every line here)
+# The fight with the Pale Olm is in text/enemies/pudding.txt; the scenes are in
+# src/data/scenes/puddingPool.js.
+#
+# A section with `_ves` on the end of its name is what Ves says after the
+# section of that name, if she's with you (see OverworldScene.say).
+
+# What a save point says when you save here.
+[save_point]
+The crystal hums low and steady, a note you feel in your teeth, as if the whole mine were humming along. Your progress is saved.
+
+[save_failed]
+The crystal flickers, but nothing happens...
+(Your browser isn't letting the game save.)
+
+[gold_pouch_empty]
+An empty purse. Somebody counted their wages out of it in a hurry.
+
+[chest_empty]
+An empty chest, scuffed from being sat on at lunch.
+
+# The east door, shut until the Deep is done.
+[camp_pool_not_yet]
+# (draft)
+The door's tied shut with a tea towel, and a card is pinned to it: "NOT YET. FINISH YOUR SHIFT FIRST." Whatever's behind it can wait for you to come back from the Deep.
+
+# --- Things every room shares ---
+
+[sc_rock]
+Dark rock overhead, glazed on its underside to a dull blue-grey. It looks like something that has been very hot and then thought better of it.
+
+[sc_face]
+Rock face, run to glass. Where the heat was, it's smooth as a bottle. Where it wasn't, it's the ordinary banded brown of the mine, and the line between them is as clean as a ruled one.
+
+[sc_ore]
+A knuckle of ore the glass has run round and left alone.
+
+[sc_glass]
+A crystal the colour of a dull sky, grown straight out of the glaze. It's cold, and it gives off a thin light that has no business being there. When the sword gets near, it hums.
+
+[sc_stalag]
+A stalagmite of glass, thick as a leg, with a drip frozen halfway down it.
+
+[sc_lamp]
+A miner's lamp, trimmed and lit by somebody a long time ago. It's not gone out. It has just been very, very patient.
+
+[sc_shoring]
+A pit prop, wedged in tight against the wall. The glass has crept up it and stopped at the cap beam, as if it had been told not to go further.
+
+[sc_sacks]
+Sacks of ore, tied at the neck and stacked just so. Whoever stacked them would have hated how long they've been left.
+
+[sc_spoil]
+A heap of spoil with a shovel in it, the glaze run down one side like icing.
+
+# --- THE SCORCH ---
+
+[sc_cart]
+The cart won't go. Something is in the way along the track, or the track runs out. It wants a clear line.
+
+[sc_lever_1]
+The first points lever, stiff and iron. The junction up the track at the end of the first run shows how it's set: the bright rail with the yellow arrow is the way a cart will go. Z throws it.
+
+[sc_lever_1_ves]
+{bored}Left to right, then. The first one. I can see the arrow from here.
+
+[sc_lever_2]
+The second points lever. The junction it works is on the long drop down the middle of the room.
+
+[sc_lever_3]
+The third points lever, with a bit of chalk on the handle: an arrow pointing ahead.
+
+[sc_lever_3_ves]
+{smile}Someone drew an arrow on it. I'll assume they weren't lying.
+
+[sc_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF IT ALL GOES WRONG. Press on it, and the carts roll themselves back to where they began.
+
+[sc_route]
+THE SHIFT ROUTE, in neat chalk on a board:
+
+DOWN. ACROSS. THEN STRAIGHT ON.
+
+Underneath, in the same hand, smaller: THE THIRD IS THE ONE EVERYBODY GETS WRONG.
+
+[sc_route_ves]
+{thoughtful}Down, across, straight on. {bored}That's either directions or a prayer.
+
+[sc_warning]
+A red warning sign: DEAD END. NOTHING DOWN HERE BUT A VERY LONG WALK BACK.
+
+[sc_pouch_a]
+A purse in the stub at the end of the top line, left by somebody who went the wrong way and had the grace to leave a tip.
+
+[sc_pouch_c]
+A purse at the dead end of the drop line. Whoever left it wasn't coming back for it. They'd found the right way by then.
+
+# --- THE GLASSWORKS ---
+
+[g_drop]
+The floor just stops, and where it stops it's glass. Below the glass edge there's a lot of dark, and a faint warm glow a very long way down, like a window in a town seen from a hill.
+
+[g_sign]
+A neat hand-lettered notice: THE GLASS IS TOO HOT TO CROSS. LIGHT IS FINE. TURN THE FIRST ONE, THEN SEE.
+
+[g_sign_ves]
+{smile}"Then see." They thought of everything but a second sentence.
+
+[g_sun]
+A sun-crystal on a stand, throwing a beam straight along the floor. The miners hung it here to go to work.
+
+[g_prism]
+A prism on a stand. It's set so the beam goes up into the rock, where it does nobody any good. Press Z beside it to turn it over.
+
+[g_prism_ves]
+{bored}Pointing at the ceiling. The light's got a lot of ceiling to be getting on with.
+
+[g_prism_fixed]
+A prism set into the stone. It won't turn. It takes the beam down the column and sends it along the floor, and it has done that every day it could.
+
+[g_eye_1]
+A crystal eye at the edge of the drop. When a beam finds it, a span of light will come out and lie across the first gap.
+
+[g_eye_2]
+A crystal eye on the island, dark and patient. The beam would have to come down onto it from above.
+
+[g_eye_2_ves]
+{thoughtful}It wants the beam from the side-crystal, from the side. I know someone who can do that.
+
+[g_eye_3]
+A crystal eye on the far wall, high up. A beam coming up from the floor would find it.
+
+[g_sun_island]
+A sun-crystal on the island, dark and cold. Something on the near side has to wake it.
+
+[g_sun_far]
+A sun-crystal on the far ledge, dark and cold. It's waiting for the second span before it wakes.
+
+[g_pillar]
+A tall crystal, grown up out of the island like a candle. It stands exactly in the way of the island's beam, and has done for as long as there has been an island.
+
+[g_pillar_ves]
+{smile}A very good crystal for being in the way. It's the best thing it does.
+
+[g_prism_loose]
+A prism on a low sled, set so the beam goes down into the floor. It slides when you lean on it, one tile at a time, and Z turns it over.
+
+[g_prism_loose_ves]
+{bored}I can't push it. {smile}I'm told that's a spare-hands problem.
+
+[g_gate]
+A narrow gate across the corridor to the east, shut. A fine wire runs from it to a crystal eye on the wall.
+
+[g_gate_open]
+The crystal eye lights, and the wire goes slack. The gate swings open.
+
+[g_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF IT ALL GOES WRONG. Press on it, and the sled and the prisms go back where they began.
+
+[g_crystal]
+A little crystal, glowing a pale colour of its own. It's the only thing in the room not trying to be glass.
+
+[g_pouch_i]
+A purse in the middle of the island. Somebody sat down on the one dry bit of floor for a rest, and left their wages by way of apology.
+
+[g_pouch_w]
+A purse tucked behind a stalagmite, near the start. Somebody was keeping it safe for the way back.
+
+# --- THE LAST CAMP ---
+
+[k_rules]
+A notice board, with rules pinned to it in a careful hand:
+
+1. WIPE YOUR BOOTS.
+2. THE KETTLE IS NOT A PERSON. DON'T WAIT FOR IT.
+3. PALE GETS THE CRUSTS. NOT THE WHOLE PASTY. (YES, WE KNOW.)
+4. DO NOT WHISTLE THE END-OF-SHIFT TUNE DOWN THE LOWER SEAM. HE JOINS IN.
+
+[k_rules_ves]
+{smile}"Pale" gets the crusts. {thoughtful}I have a lot of questions, and I think I'm about to meet the answer.
+
+[k_table]
+A long table with a clean oilcloth, seven places laid, and a plate at each of them. Seven plates of nothing, and a good deal of dust, and an eighth plate set at the end on the floor.
+
+[k_table_ves]
+{sad}The eighth plate's on the floor. {bored}For somebody low to the ground.
+
+[k_bench]
+A bench worn smooth in seven places, and at the end, a low stool with a notch in it, the kind you'd cut for something to rest its chin on.
+
+[k_chest]
+A chest under the table with a note on the lid: FOR WHOEVER'S NEXT. DON'T LET HIM HAVE THE CRUSTS TWICE.
+
+[k_pouch]
+A purse by the bench. They'd had a good week. They were going to spend it on the proper kettle.
+
+[k_lunch]
+A lunch crate with a lid, and under the lid a note: THE LAST OF THE PASTIES. HIS TOO. DON'T FORGET HIS TOO. Underneath, a heap of crusts, long gone to a sort of biscuit.
+
+[k_cart]
+A cart at rest on a short stub of rail that goes nowhere. There's a cushion in it, flattened in the shape of someone who was very fond of the ride.
+
+[k_toolbox]
+A toolbox with a dozen small tools in it, none missing, and a tin spoon with a name scratched in the bowl: PALE. The E is backwards.
+
+[k_timber]
+A neat stack of short timber, sawn to the same length, laid ready. Someone meant to build something here. A hutch, maybe, or a bigger dish.
+
+# --- PALE'S POOL ---
+
+[p_pool]
+The pool is perfectly still and perfectly clear, and the light comes up out of it from a long way down. You can't see the bottom. Something down there has been keeping very still for a very long time.
+
+[p_shelf]
+A plank shelf against the wall, with a kettle, seven tin mugs and, at the end, a small tin dish with a ring worn smooth in the bottom of it. The mugs have all been washed. The dish has been licked clean.
+
+[p_shelf_ves]
+{tender}Seven for them. One for him. They did the washing up before they left. That's the part I can't stand.
+
+[p_sign]
+A hand-lettered sign: PALE'S POOL. MIND YOUR BOOTS. DON'T TAP THE DISH UNLESS YOU MEAN IT.
+
+[p_sign_ves]
+{bored}That's either a warning or an invitation, and I suspect it's both.
+
+[p_pouch]
+A purse on the far side of the pool, tucked behind a crystal. It's the only thing in the room that seems to have been hidden from him on purpose.
+
+# --- THE SPILL (draft: every line in the new rooms) ---
+
+[sp_log]
+A drift log, barked and grey, with a chalk mark on its end: an arrow, and under it the word STOP?. It rolls when you lean on it, until something stops it.
+
+[sp_log_ves]
+{bored}Logs. They always want logs. I'd say I can't push one, but I wouldn't want to take the credit.
+
+[sp_boulder]
+A boulder, not a natural one. It has been sat in exactly this spot, on purpose, by someone who then went away and left it to be a landmark.
+
+[sp_water]
+Black water, still and warm and perfectly clear, with the glow of the star somewhere underneath. It is two strides wide here. You'd rather have a bridge.
+
+[sp_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF IT ALL GOES WRONG. Press on it, and the logs roll themselves back to where they began.
+
+[sp_sign]
+A board in chalk: TWO CROSSINGS, ONE STRIDE WIDE. A LOG GOES WHERE IT IS STOPPED. BOULDERS ARE PINNED ON PURPOSE, SO DON'T MOVE THEM, YOU CAN'T.
+
+[sp_sign_ves]
+{thoughtful}"One stride wide." So there's a place where one log's enough, and a lot of places where it isn't. {bored}Typical. They always put the easy bit in the middle of the hard bit.
+
+[sp_sign_far]
+A second board, on the far bank: LOG ONE, MINDING THE BOULDERS. LOG TWO, MINDING THE FIRST ONE. HAT ON, MIND THE WATER.
+
+[sp_pouch]
+A purse on the island's south edge, in the lee of a boulder. The previous owner must have been very lucky with logs.
+
+# --- THE SIDING ---
+
+[sd_cart]
+The cart won't go. Something is in the way along the track, or the track runs out. It wants a clear line.
+
+[sd_lever]
+A points lever, stiff and iron, at the fork. The junction shows how it's set: the bright rail with the yellow arrow is the way a cart will go. Z throws it.
+
+[sd_lever_ves]
+{bored}The straight way goes somewhere sensible. That should have been the first warning.
+
+[sd_plate]
+A stone plate set in the floor at the very end of the long track. It is worn shiny in the middle, from one cart, resting. A rock would be no use on it: it wants the weight of a cart.
+
+[sd_sun]
+A sun-crystal in a niche at the foot of the east wall, dull as a stone. There is a little brass plaque under it: WAKES WHEN THE CART IS HOME.
+
+[sd_prism]
+A prism on a post, turned to throw the light out east, into the wall, where it does nobody any good. It turns when you press it.
+
+[sd_rock]
+A heavy rock, sitting in the middle of the room in a line with the eye. It would be easy to blame it on the miners.
+
+[sd_eye]
+A crystal eye on a post, set facing east. A fine wire runs from it, along the roof, to a gate.
+
+[sd_gate]
+A narrow gate across the way east, shut. A fine wire runs from it to a crystal eye in the middle of the room.
+
+[sd_gate_open]
+The crystal eye lights, and the wire goes slack. The gate swings open.
+
+[sd_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF IT ALL GOES WRONG. Press on it, and the cart, the barricade, the rock and the prism go back where they began.
+
+[sd_sign]
+A board in chalk: THE LONG WAY ROUND IS THE RIGHT WAY ROUND. LEAVE THE CART IN BED. AND DON'T BLAME THE ROCK.
+
+[sd_sign_ves]
+{thoughtful}"Leave the cart in bed." I think that means the plate. {smile}I think it means a lot of things, and none of them are polite.
+
+[sd_warning]
+A warning sign: DEAD END. NOTHING TO SEE. PURSE (RETURNED).
+
+[sd_pouch]
+A purse, left in plain view at the end of a track that goes nowhere. This is the miners' idea of a joke.
+
+# --- THE WHISTLE GALLERY ---
+
+[ga_crystal]
+A singing crystal, a hand taller than the last, standing in the line along the wall. It rings a note when you press it, a thin, clear one, and shivers when you stop.
+
+[ga_crystal_tall]
+The tallest of the four, standing up on the ledge like a candle on a mantelpiece. It hums when the sword comes near, and its note is the highest in the hall.
+
+[ga_ledge]
+A shelf of rock, as tall as two of you, with a sheer face towards the room. Nothing on it but a very tall crystal. A jump gets you up one step, and never two.
+
+[ga_stone]
+A flat-topped stone, loose, a jump high: a stepping stone. A miner's, left where a miner meant to need it. It rolls a tile at a time when you lean on it.
+
+[ga_stone_ves]
+{bored}A step. I'm told that's a thing you can put your foot on.
+
+[ga_stump]
+A stump of rock, worn smooth on top, with a chalk sign: PUSH IF IT ALL GOES WRONG. Press on it, and the stone rolls itself home.
+
+[ga_sign]
+A board in chalk, with four little crystals drawn on it, tall and short: THREE DOWN FROM THE TALLEST. ONE UP FROM THE LAST. DON'T LET IT GO COLD BETWEEN NOTES.
+
+[ga_sign_ves]
+{thoughtful}Three down, one up. {smile}It's the same tune as the one on the tally board. They really were fond of it.
+
+[ga_sign_far]
+A second board: TALLEST IS ON THE SHELF. YES, WE KNOW. IT'S SO NOBODY RINGS IT BY ACCIDENT.
+
+[ga_gate]
+A narrow gate across the way east, shut. A bar of brass runs across it, and the brass hums, very slightly, at the crystals along the wall.
+
+[ga_gate_open]
+The gallery rings the tune back, and the brass bar slides out of the gate with a long, satisfied note. The gate swings open.
+
+[ga_pouch]
+A purse in the corner by the east gate. Somebody set it down to watch the tune, and never came back for it.
+
+# (draft) Said when the gallery has been sung (chimes.js).
+[chime_answered]
+The last note hangs, and then the whole gallery sings the tune back to you, fuller than you gave it: three long notes down, and one short one, up. It is the tune of the tally board, every day at the end of the shift. Over by the east gate, a brass bar slides out of its staple with a sound like a long breath let go.
+
+[chime_answered_ves]
+{tender}Three down and one up. {bored}And not one of them could be trusted to blow it properly, so they set it in stone.
+
+# ===== LIFE PASS (14 November 2026): set dressing, generated with src/data/diggingsDressing.js =====
+
+# --- diggings_star_camp ---
+
+[dgk_mug1]
+A tin mug at the head of the table, half full of cold tea. A thin line of dust has settled on it, level as a ruler. Nobody's disturbed it in a very long time.
+
+[dgk_mug1_ves]
+{thoughtful}Seven places, and nobody's drunk theirs.
+
+[dgk_mug2]
+A second mug, with a spoon laid neatly across it. A third and fourth, further along, are the same. Whoever was sitting here put down their spoon first.
+
+[dgk_mug2_ves]
+{sad}They were all about to go back.
+
+[dgk_stool]
+A stool pushed back from the table a little, the way you do when you mean to stand up in a minute. It's still waiting for the minute.
+
+[dgk_stool_ves]
+{bored}It's a long minute.
+
+[dgk_stool2]
+A second stool, turned on its side. Nothing's been disturbed round it. It simply fell over, in the quiet, some time in the last hundred years.
+
+[dgk_stool2_ves]
+{thoughtful}Even the quiet gets tired.
+
+[dgk_dish]
+A small tin dish on the floor by the stool, with PALE painted round the rim in white. A crust sits in it, hard as a pebble. Somebody saved it back.
+
+[dgk_dish_ves]
+{surprised}Somebody had a pet. Or a very rude cat.
+
+[dgk_boots]
+A pair of boots, set side by side, soles toward the table, as if the owner meant to warm them. Their toes are worn thin, the way a miner's are, with one patched in leather.
+
+[dgk_boots_ves]
+{sad}They'd have walked home in those.
+
+[dgk_board]
+A rota board, with a single line: SEVENTH SHIFT. ALL PRESENT. And under it, in chalk that's hardly faded: BACK AFTER LUNCH.
+
+[dgk_board_ves]
+{sad}...
+
+[dgk_pipe]
+A clay pipe on a ledge, the bowl still packed. A box of matches next to it, with one match half-struck. It's the last thing anyone in this room meant to do.
+
+[dgk_pipe_ves]
+{sad}I wish they'd finished it.
+
+[dgk_beam]
+On the beam, in a round, friendly hand: BACK AFTER LUNCH. And beside it, in a smaller one, in case: (IF NOT, WAIT.)
+
+[dgk_beam_ves]
+{sad}They waited, you know.
+
+[dgk_tally]
+A tally of seven strokes, scratched in all at once and all the same depth, as if seven hands had held the pick together. There's no slash through them.
+
+[dgk_tally_ves]
+{thoughtful}Seven. All together.
+
+[dgk_fossil]
+A fossil shell in the rock face, put up on the wall at head height, like a clock. Somebody's pinned a note to it: IT'S NOT LATE. IT'S JUST SLOW.
+
+[dgk_fossil_ves]
+{smile}Reasonable.
+
+[dgk_coal]
+A neat little heap of coal, enough for exactly one more pot of tea. The shovel's still on top of it. Nobody's lit the stove.
+
+[dgk_coal_ves]
+{sad}One more pot.
+
+[dgk_barrel]
+A barrel of water with a ladle hung on its side. The water's quite fresh. It's the only thing in the room that is.
+
+[dgk_barrel_ves]
+{thoughtful}Fresh. That's... odd, isn't it.
+
+[dgk_rope]
+A coil of rope on a peg, tidy, with the last loop tucked under the first, the way the foreman likes it. It hasn't been used in years.
+
+[dgk_rope_ves]
+{bored}Neat enough to make you nervous.
+
+[dgk_rind]
+A crust, a rind and a button, all laid out on a flat stone in a very small row, like a tiny supper set for someone.
+
+[dgk_rind_ves]
+{thoughtful}They never forgot anyone, did they.
+
+# --- diggings_star_siding ---
+
+[dgd_board]
+A siding board. Four carts out on the line, four chalked in the SIDING column, none in the BACK column. Under it, in different chalk: ONE STILL TO COME.
+
+[dgd_board_ves]
+{bored}They're still expecting it.
+
+[dgd_boots]
+A pair of boots left on the platform by the lever, dusty, the left one on its side. The man who owned them has left the lever for the last time.
+
+[dgd_boots_ves]
+{sad}He just stepped off.
+
+[dgd_coal]
+A heap of coal for the little stove, with a shovel in it. The stove's cold, but somebody has been sweeping round it, which is odd, and the only odd thing here.
+
+[dgd_coal_ves]
+{surprised}Somebody's been sweeping. In here.
+
+[dgd_tally]
+A tally of carts, scratched by a man who liked everything in fives. There's a last gate at the bottom with no slash. It looks like it's still waiting for one more.
+
+[dgd_tally_ves]
+{thoughtful}Yes, so do I.
+
+[dgd_beam]
+A beam over the siding: ONE CART, ONE LEVER, ONE CHANCE. Beneath it, in another hand: TWO CHANCES. And a third: OH, JUST TRY IT.
+
+[dgd_beam_ves]
+{smile}That sounds like the Seam.
+
+[dgd_lean]
+A pit prop leaned on the wall, with a mug hung on the end of it. The tea in the mug has dried to a perfect brown disc. It's holding up a sign: LEVER OUT OF ORDER. It isn't.
+
+[dgd_lean_ves]
+{bored}Signs lie. Mine tell the truth, mostly.
+
+[dgd_barrel]
+A barrel of oil, sealed with candle wax, with a very small lantern hung from the top. The lantern is out. The barrel's just as well.
+
+[dgd_barrel_ves]
+{bored}Sensible.
+
+[dgd_stool]
+A stool by the track, where somebody sat to watch for the cart. The cushion has a dent exactly the shape of a person who waited a lot.
+
+[dgd_stool_ves]
+{sad}They waited a lot.
+
+[dgd_lamp]
+A rusty lamp on a hook, a signal lamp, with a red glass in front of it. It's the colour of the end of something.
+
+[dgd_lamp_ves]
+{bored}Red for stop. That one's very certain.
+
+[dgd_mush]
+Pale mushrooms growing round the base of a rock, quite unbothered, turning slightly to watch you go by.
+
+[dgd_mush_ves]
+{surprised}They're all facing you. Don't look.
+
+[dgd_rind]
+A rind with a tiny flag stuck in it, and a note: LAST CART'S LUNCH. A second note, smaller: IT CAN WAIT.
+
+[dgd_rind_ves]
+{smile}It can. It's very good at it.
+
+[dgd_bucket]
+A bucket of sand, a shovel and a sign: FOR FIRES. Beside it, a smaller bucket: FOR SMALL FIRES. Beside that, a thimble: FOR VERY SMALL FIRES.
+
+[dgd_bucket_ves]
+{smile}I trust the thimble.
+
+[dgd_pipe]
+A clay pipe left on the rail-side ledge, with a faint dent in the stem where someone clenched it, thinking hard about a lever.
+
+[dgd_pipe_ves]
+{thoughtful}Everyone thinks hard about the lever.
+
+# --- diggings_star_scorch ---
+
+[dgh_slag1]
+A lump of grey-blue glass, set in a ripple, where the rock ran like wax. It's still warm to the touch, a deep, slow warmth, like something sleeping.
+
+[dgh_slag1_ves]
+{surprised}It's warm. After all this time.
+
+[dgh_slag2]
+A pool of set glass shaped like a splash, with a small stone caught in the middle of it. The stone has a glint of its own.
+
+[dgh_slag2_ves]
+{thoughtful}Caught in the middle of falling. Odd.
+
+[dgh_slag3]
+Glass that ran across the floor and stopped in a long tongue, with a rail sleeper lying in it, half melted, half whole.
+
+[dgh_slag3_ves]
+{bored}Half and half. Like most things.
+
+[dgh_scorch]
+A black scorch on the glassy floor, in a ragged star shape. The edges are sharp and the middle is blacker than the dark.
+
+[dgh_scorch_ves]
+{bored}Something came down here hard.
+
+[dgh_scorch2]
+A second scorch, smaller, in the shadow of a rock. A boot print is pressed into the edge of it, going the wrong way, away from it.
+
+[dgh_scorch2_ves]
+{sad}Running.
+
+[dgh_scorch3]
+A thin black mark, like a long scratch, running toward the wall. It stops at a crack in the rock the size of a door.
+
+[dgh_scorch3_ves]
+{surprised}It went through the wall. Brilliant.
+
+[dgh_boots]
+A pair of boots, the soles gone to glass, the leather curled and hardened like horn. They're set side by side, toes forward, as if their owner stepped out of them in one clean step.
+
+[dgh_boots_ves]
+{sad}That's a very tidy way to leave.
+
+[dgh_board]
+A scorched board, half melted, with a few words still legible: SEVENTH SHIFT. UNDER THE STAR.
+
+[dgh_board_ves]
+{bored}Under the star, hmm.
+
+[dgh_mug]
+A tin mug with its handle gone to a drip of silver on the floor. It's a puddle of metal with a mug's worth of tea in it, baked to a glaze.
+
+[dgh_mug_ves]
+{surprised}That must have been very hot.
+
+[dgh_stool]
+A stool, its legs fused to the floor with glass. Someone's sat very still on it for a long time and been preserved without ever knowing.
+
+[dgh_stool_ves]
+{sad}...
+
+[dgh_pipe]
+A clay pipe, glazed blue-grey all over by the heat, as pretty as a bead. The smoke inside it never got out.
+
+[dgh_pipe_ves]
+{thoughtful}It looks like glass jewellery. Pretty. Horrible.
+
+[dgh_tally]
+A tally scratched into the wall, then glazed over by the same heat, so every stroke shines. It's like looking at it through a very thin window.
+
+[dgh_tally_ves]
+{thoughtful}Fixed. Like a photograph, almost.
+
+[dgh_beam]
+On a beam, half melted, half chalk, half readable: MIND THE STA. The rest has run off the end.
+
+[dgh_beam_ves]
+{bored}It's a helpful warning. Eventually.
+
+[dgh_fossil]
+A shell in the rock, glazed over with a clear skin of glass, so it looks like a tiny snow-globe with nothing in it but time.
+
+[dgh_fossil_ves]
+{smile}That's quite lovely.
+
+[dgh_rope]
+A coil of rope turned to a coil of glass thread, every fibre bright. It rings when you touch it, a long thin note like a wet finger on a glass.
+
+[dgh_rope_ves]
+{surprised}Ow. That's loud.
+
+# --- diggings_star_spill ---
+
+[dgp2_bucket]
+A bucket with a rope handle, filled with black water that's perfectly still. When you look into it, there's a moment where your face isn't quite there.
+
+[dgp2_bucket_ves]
+{surprised}Let's not look into it.
+
+[dgp2_rope]
+A coil of rope on a peg, soaked and stiff, hung high where the water can't reach it. The miners learned that the hard way.
+
+[dgp2_rope_ves]
+{bored}Practical.
+
+[dgp2_tally]
+A tally scratched high on the wall, well above the water. Each stroke has a date beside it: the day the lake got higher. The dates run out. The strokes don't.
+
+[dgp2_tally_ves]
+{sad}The lake didn't stop.
+
+[dgp2_beam]
+On a beam: LOGS ARE FOR CROSSING, NOT FOR SITTING. And under it: (WE TRIED.)
+
+[dgp2_beam_ves]
+{smile}Of course they did.
+
+[dgp2_mug]
+A tin mug on a rock at the water's edge, quite full of black water. Tied to the rock with a bit of string, in case it was needed.
+
+[dgp2_mug_ves]
+{bored}In case you got thirsty. In a lake that isn't water.
+
+[dgp2_stool]
+A stool at the shore, facing the water. It must be the best view in the room. It's also the only view.
+
+[dgp2_stool_ves]
+{smile}A room with a view. Of a lot of nothing.
+
+[dgp2_mush]
+Pale mushrooms on the far bank, very thin and tall, all bending toward the water in a row. They could be bowing. It's hard to say.
+
+[dgp2_mush_ves]
+{surprised}They're bowing to it. Why do they bow?
+
+[dgp2_barrel]
+A barrel pinned against the wall with a log wedged behind it. A note: NOT FOR SALE. NOT FOR PUSHING EITHER.
+
+[dgp2_barrel_ves]
+{bored}Message received.
+
+[dgp2_board]
+A board for the log shift, with the names and a column for the logs each man rolled. The logs column is a column of zeros. Someone's added a very small sad face.
+
+[dgp2_board_ves]
+{smile}The man's honest, at least.
+
+[dgp2_fossil]
+A shell high on the wall, polished by wet fingers, right above the old high-water line. Somebody lifted a child up to see it. You can tell by the little handprints.
+
+[dgp2_fossil_ves]
+{smile}I'd have been the child, probably.
+
+[dgp2_rind]
+A rind on a flat stone with a tiny raft made of three matchsticks beside it, ready for launching. It has a very small flag. The flag says HELLO.
+
+[dgp2_rind_ves]
+{smile}Bon voyage.
+
+[dgp2_boots]
+A pair of tall boots hung on stakes to drain, so soaked they've gone black. One is full of water, as if somebody had stepped out of it at the lake's edge.
+
+[dgp2_boots_ves]
+{sad}Stepped out. Right.
+
+# --- diggings_star_gallery ---
+
+[dgg_mug]
+A tin mug at the foot of a crystal, rung like a bell: the rim has a very clean note worn into it, from being tapped by a spoon.
+
+[dgg_mug_ves]
+{smile}They'd tap their mugs along with the tune. Cute.
+
+[dgg_stool]
+A stool beside the singing crystals, where the whistler sat for the end-of-shift tune. The seat has a very slight tilt toward the north wall.
+
+[dgg_stool_ves]
+{thoughtful}Toward the crystals.
+
+[dgg_boots]
+A pair of boots under a bench, with a tin whistle sticking out of one, and a note tucked into it: FOR THE NEXT ONE WHO CAN'T SLEEP.
+
+[dgg_boots_ves]
+{surprised}A whistle. In a boot. Right.
+
+[dgg_pipe]
+A clay pipe on the floor, blown for a note and never lit. There's a thin rim of dust in the bowl, and a tiny, tuneful scratch on the stem.
+
+[dgg_pipe_ves]
+{thoughtful}A whistle they could smoke. Cunning.
+
+[dgg_coal]
+A neat heap of coal with a shovel standing in it, and a comb stuck in the shovel's handle for no reason you can think of.
+
+[dgg_coal_ves]
+{bored}Don't ask. I'm not.
+
+[dgg_stub]
+A short prop with a sign nailed to its top: PLEASE DON'T WHISTLE AT THE WALLS. The walls, you suspect, have been whistling back.
+
+[dgg_stub_ves]
+{surprised}Are the walls... humming?
+
+[dgg_bucket]
+A bucket of cold water with a tuning fork in it, laid across the rim like a spoon. The water is trembling very slightly, all the time.
+
+[dgg_bucket_ves]
+{surprised}It's trembling. By itself.
+
+[dgg_tally]
+A tally of tunes, every stroke a different length: long and short, high and low, as if the miner had written the music in notches. It's very hard to read, and easy to hum.
+
+[dgg_tally_ves]
+{smile}I can almost hear it.
+
+[dgg_beam]
+On the beam, in a careful hand: B G E, THEN UP. And beneath, in a looser one: DON'T FORGET THE UP.
+
+[dgg_beam_ves]
+{smile}I'll try not to forget the up.
+
+[dgg_fossil]
+A fossil in the rock at the far end, curled so tight it's like a note written in a spiral. It makes a faint sound when the crystals ring. Perhaps.
+
+[dgg_fossil_ves]
+{thoughtful}It's listening. I'd swear it is.
+
+[dgg_rope]
+A coil of rope with a slipknot at one end and a cord whistle tied to the other, the loop worn to a shine. A whistle you could wear round your neck.
+
+[dgg_rope_ves]
+{smile}A necklace and a whistle. Very practical.
+
+[dgg_rind]
+A rind on a stone, a tiny pipe made of straw beside it. Somebody very small has been practising the tune, and not got it quite right.
+
+[dgg_rind_ves]
+{smile}That's very sweet. Keep going.
+
+[dgg_grit]
+Grit, shaken down in the shape of a small wave, as if a long low note went through the floor. It's still holding the shape.
+
+[dgg_grit_ves]
+{surprised}It's... the shape of a sound. Somehow.
+
+# --- diggings_star_glass ---
+
+[dgl2_slag1]
+A smooth lump of glass, the size of a loaf. Where the light touches it, a small bright mote slides across the inside and doesn't come out.
+
+[dgl2_slag1_ves]
+{surprised}Something's inside it.
+
+[dgl2_slag2]
+A drift of glassy chips, as fine as sugar, with a footprint in it, preserved. The footprint is very small, and has five toes.
+
+[dgl2_slag2_ves]
+{thoughtful}Nobody's walked here since. It's very small.
+
+[dgl2_slag3]
+A glassy ripple, like a frozen pond with a leaf stuck in it. The leaf is a prism, tiny and exact.
+
+[dgl2_slag3_ves]
+{smile}Lovely.
+
+[dgl2_slag4]
+A long smooth swirl of glass, with a rainbow caught in the thick of it that moves when you move.
+
+[dgl2_slag4_ves]
+{smile}Don't stare. It'll want to keep you.
+
+[dgl2_boots]
+A pair of boots, stood at the edge of the lit floor, their toes just short of the dark. The boots haven't gone any further. Nor did the owner.
+
+[dgl2_boots_ves]
+{sad}He never made it across.
+
+[dgl2_mug]
+A tin mug, whose tea has turned into a small, perfect lens. It focuses a spot of light on your hand. It's pleasantly warm.
+
+[dgl2_mug_ves]
+{surprised}It's a magnifying glass. A tea one.
+
+[dgl2_stool]
+A stool on the west bank, facing the drop, where somebody sat to watch the light come across. Its legs have a rim of glass round them like a collar.
+
+[dgl2_stool_ves]
+{thoughtful}A good seat for a long watch.
+
+[dgl2_board]
+A board listing the light-hangers: who hung which crystal, and when. There's a line crossed out, rewritten, and crossed out again: THE LAST ONE IS THE ONE THAT MATTERS.
+
+[dgl2_board_ves]
+{bored}Cryptic. Typical.
+
+[dgl2_beam]
+A beam over the entrance, chalked in good bold letters: LIGHT FIRST. THEN WALK.
+
+[dgl2_beam_ves]
+{smile}Good advice for most of life.
+
+[dgl2_tally]
+A tally of crossings, a stroke for every shift that got over and a hollow circle for every shift that didn't. There are a lot of strokes. And a few circles.
+
+[dgl2_tally_ves]
+{thoughtful}More strokes than circles. That's encouraging.
+
+[dgl2_fossil]
+A fossil shell set into the glassy rock, lit from inside by the beam's afterglow, like a tiny lamp. It's the loveliest thing here.
+
+[dgl2_fossil_ves]
+{smile}It's glowing.
+
+[dgl2_pipe]
+A clay pipe with a bit of blue glass in the bowl, from the heat, like a gemstone. Somebody must have been very proud of it.
+
+[dgl2_pipe_ves]
+{smile}It's quite fancy.
+
+[dgl2_coal]
+A heap of coal in a bucket of glass, the lot fused together into a single glittering lump, like jewellery for a giant.
+
+[dgl2_coal_ves]
+{surprised}Is that... expensive?
+
+[dgl2_barrel]
+A barrel of grease, now a solid block of glass the colour of honey. It has a ladle in it, still, trapped mid-stir.
+
+[dgl2_barrel_ves]
+{smile}Trapped mid-stir. I know that feeling.
+
+# --- diggings_star_pool ---
+
+[dgq_stool]
+A stool by the shelf where the shift took their tea, set down very close to the water. There's a smooth hollow in the seat the size of someone small who often sat here to watch the pool.
+
+[dgq_stool_ves]
+{thoughtful}Somebody small.
+
+[dgq_mug]
+A tin mug beside the shelf, apart from the seven. It's a smaller, plainer one, with a chip in the rim. It's the only one with water in it.
+
+[dgq_mug_ves]
+{surprised}Fresh water. Who?
+
+[dgq_boots]
+A pair of boots set neatly by the stool, much smaller than the rest. They belong to the shift's youngest, who never quite reached the table.
+
+[dgq_boots_ves]
+{sad}Oh.
+
+[dgq_board]
+A board with a single entry: FEED PALE. Underneath are seven ticks, one for each of the seven days of the week. Every day, every shift, till the end.
+
+[dgq_board_ves]
+{sad}...
+
+[dgq_stub]
+A stub of a prop at the far side, with a hook for a lantern, and a lantern left alight on it. Somebody's been topping it up. You'd swear somebody has.
+
+[dgq_stub_ves]
+{surprised}...Somebody's here.
+
+[dgq_slag]
+A smooth curl of glass on the dry floor, still faintly warm, in the shape of a very large fingerprint pressed into the stone.
+
+[dgq_slag_ves]
+{surprised}Something very big put that there.
+
+[dgq_rope]
+A rope hanging down from a peg in the roof, trailing into the dark pool, tied to nothing. The end has been chewed.
+
+[dgq_rope_ves]
+{bored}By something with a lot of teeth.
+
+[dgq_fossil]
+A shell in the rock face over the pool, with its colours shifting, pearl and blue. It's very slightly turning, as if to keep an eye on the water.
+
+[dgq_fossil_ves]
+{thoughtful}It's watching it.
+
+[dgq_beam]
+On the beam over the shelf: TEA'S UP. And below, a little smaller, in the hand of someone who wrote everything with care: (AND SOMETHING FOR YOU, PALE.)
+
+[dgq_beam_ves]
+{sad}Oh.
+
+# ===== end of the life pass =====
+
+# --- THE LIFE PASS, ROUND 3 (helper C, 15 November 2026): the dullest rooms of chapter 4 ---
+
+[r3c_sp_glass]
+A knob of glass as clear as a window, melted flat on one side. It's warm, and it hums very faintly, like a kettle thinking about it.
+
+[r3c_sp_glass_ves]
+{thoughtful}Pretty. It's what's left of something much bigger.
+
+[r3c_sp_glass 2]
+In the glass there's a bubble, and in the bubble, a tiny speck of light that keeps its own time.
+
+[r3c_sp_glass_ves 2]
+{surprised}It's alive. A bit.
+
+[r3c_sp_cups]
+A row of seven cups on the tea shelf's lip. The seventh has had a saucer added, and a small spoon, and a chip mended with wax.
+
+[r3c_sp_cups_ves]
+{smile}The seventh is for the Olm. They set a place for it every day.
+
+[r3c_sp_stool]
+A low stool facing the pool. Whoever sat on it sat for years, the legs sunk a finger into the rock.
+
+[r3c_sp_stool_ves]
+{thoughtful}Waiting for a lake to get over itself. That's a long wait.
+
+[r3c_sp_journal]
+A thin notebook, damp at the edges. The last page reads: DAY 400. NOTHING. DAY 401. NOTHING. DAY 402. (A NICE BIT OF NOTHING.)
+
+[r3c_sp_journal_ves]
+{bored}That's a very polite way of being bored.
+
+[r3c_sp_journal 2]
+There's a pressed flower between the pages. It doesn't grow anywhere near here. They brought it down in a pocket.
+
+[r3c_sp_journal_ves 2]
+{sad}A bit of sunshine. They kept a bit of sunshine.
+
+[r3c_sp_dish]
+A tin dish with a tiny crumb of something in it. Not much. It's been licked clean by something with very small teeth.
+
+[r3c_sp_dish_ves]
+{smile}Somebody's still being fed. That's the whole point.
+
+[r3c_sp_fossil]
+A curl of old shell in the glass, perfect, held there like a flower in a paperweight. It was a snail before the star came. It's still a snail.
+
+[r3c_sp_fossil_ves]
+{thoughtful}Imagine being caught in the best moment of your life.
+
+[r3c_ss_pot]
+A tin pot half full of dark water, standing beside the first band. Somebody was trying to taste it. They got as far as sniffing, and put it back.
+
+[r3c_ss_pot_ves]
+{bored}Good call. It's not for drinking.
+
+[r3c_ss_boot]
+A single boot standing neatly on the narrow island between the bands. It's full of black water. The other boot is nowhere.
+
+[r3c_ss_boot_ves]
+{surprised}That's not a boot, it's a message.
+
+[r3c_ss_boot 2]
+You look at it for a while. It's a very small boot, with a bright red lace. Whoever wore it was in a hurry.
+
+[r3c_ss_boot_ves 2]
+{thoughtful}Or just a very tidy swimmer.
+
+[r3c_ss_tally]
+Tally marks on a boulder: logs rolled, logs sunk. The sunk count has been crossed out and changed, twice, to a higher number. The last number has a small frown drawn next to it.
+
+[r3c_ss_tally_ves]
+{smile}They kept honest books. And they kept losing logs.
+
+[r3c_ss_tally 2]
+A note beneath the frown: THEY DO NOT FLOAT. THEY NEVER DID. WE KEEP TRYING.
+
+[r3c_ss_tally_ves 2]
+{bored}The mining way. Try. Sink. Try again.
+
+[r3c_ss_lamp]
+A lamp with its glass cracked, set on a rock facing the water. Whoever left it wanted to see which way the logs were going.
+
+[r3c_ss_lamp_ves]
+{thoughtful}Looking out for each other. Even down here.
+
+[r3c_ss_sock]
+A grey sock laid across a flat stone to dry. It has been laid out with a good deal of care. It has also not dried in who knows how long.
+
+[r3c_ss_sock_ves]
+{bored}Dry socks, down here. The dream.
+
+[r3c_ss_sock 2]
+A faint whiff of old wool and old star. It really hasn't dried in years.
+
+[r3c_ss_sock_ves 2]
+{smile}I'm going to leave it. It looks happier.
+
+# --- end life pass round 3 (helper C) ---

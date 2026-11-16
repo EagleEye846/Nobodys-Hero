@@ -1,3 +1,5 @@
+import { R3P_PROPS } from '../r3pDressing.js';
+
 // WOODCUTTERS' CAMP: the first people below the clouds live here: tents
 // round a fire, a long table, and a stall with a hand-painted sign, the
 // camp's own little sale (in the spirit of the Scarlet Forest's bake sale).
@@ -77,6 +79,7 @@ export const PINEFALL_CAMP = {
     // A rhyme on a scrap of ruled paper: the first clue to the Registry's three torn leaves (see src/data/gear.js).
     { sprite: 'sign', x: 22, y: 7, text: 'camp_riddle' },
     { sprite: 'savepoint', x: 7, y: 11, save: true },
+    ...(R3P_PROPS['pinefall_camp'] ?? []),
   ],
   tileTexts: { L: 'scarlet_tree', f: 'camp_fence' },
 

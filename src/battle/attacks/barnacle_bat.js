@@ -1,14 +1,18 @@
 import { defineBulletArt } from '../projectiles.js';
 import { Pix } from '../../data/art/pixKit.js';
-import { withSnipes } from './snipes.js';
+import { Line } from '../projectiles.js';
+import { PathShot, Deco, Guide } from './coastKit.js';
 
-// The Barnacle Bat's attacks. It's a little cave bat crusted with barnacles,
-// hanging over a wet ledge in the dark, so it's drips and echoes and barnacles:
-// drips off the roof that form first and splash where they land (one always
-// over you), squeaks that go out as arcs of echo and bounce back off the walls,
-// barnacles shaken off its wings that land on the floor and open, and a swoop
-// down through the box along a path that shows first. It hangs to the right of
-// the box, near the top, so things come from up there.
+// The Barnacle Bat's attacks. A little cave bat crusted with barnacles,
+// hanging over a wet ledge in the dark. It is nearly blind, so it hunts by
+// ear, and the barnacles on it eat whenever it squeaks:
+//   - Echo: it squeaks, and where the echo finds you it leaves a mark; a
+//     moment later it swoops straight through the mark. Move once it's found you.
+//   - Roost: a row of its cousins hangs from the roof. The one whose eyes
+//     open is the next to drop, and it dives at where you were when it woke.
+//   - Feeding time: barnacles crust the walls. On every squeak the ones with
+//     their lids up comb the water with their feathery arms, out at you.
+// It hangs to the right of the box, near the top.
 
 const BB = {
   k: '#14161a', b: '#c8c4b4', B: '#8a867a', h: '#26262a', s: '#a8d8e0', S: '#e8fcff', c: '#5a9aa4',
@@ -115,215 +119,198 @@ const SWOOP = swooper();
 defineBulletArt('bbatSwooper', { frames: [SWOOP], palette: BB, hitbox: { w: 12, h: 6 }, radius: 4 });
 defineBulletArt('bbatSwooperL', { frames: [SWOOP.map((row) => [...row].reverse().join(''))], palette: BB, hitbox: { w: 12, h: 6 }, radius: 4 });
 
+// The bat diving through the box, any way at all (drawn flying right).
+defineBulletArt('bbatDiver', { frames: [SWOOP], palette: BB, radius: 3.6, rotate: true });
+
+// A cousin hanging from the roof, wings folded: asleep, then eyes open.
+function hanger(awake) {
+  const g = new Pix(9, 11);
+  g.line(4, 0, 4, 1, 'B');
+  g.disc(4, 5, 3.2, 4.2, 'm');
+  g.disc(4, 5, 1.8, 3, 'f');
+  g.set(1, 3, 'b');
+  g.set(7, 7, 'b');
+  if (awake) { g.set(3, 7, 'e'); g.set(5, 7, 'e'); } else { g.set(3, 7, 'M'); g.set(5, 7, 'M'); }
+  g.line(3, 9, 5, 9, 'F');
+  g.outline('k');
+  return g.rows();
+}
+defineBulletArt('bbatHangAsleep', { frames: [hanger(false)], palette: BB, radius: 1 });
+defineBulletArt('bbatHangAwake', { frames: [hanger(true), hanger(false)], palette: BB, radius: 1, frameSeconds: 0.09 });
+
+// A barnacle on the wall: lid shut, or lid up and arms ready to comb.
+defineBulletArt('bbatWallShut', { frames: [['.bbb.', 'bBhBb', 'bBBBb']], palette: BB, radius: 1 });
+defineBulletArt('bbatWallOpen', { frames: [['s.s.s', '.bhb.', 'bBhBb', 'bBBBb'], ['.s.s.', 's.h.s', 'bBhBb', 'bBBBb']], palette: BB, radius: 1, frameSeconds: 0.1 });
+
+// A dive along a curve: from `a` through `via` (at the middle of the dive)
+// to `b`, taking `secs`. A quadratic curve bent so it really passes `via`.
+const dive = (a, via, b, secs) => {
+  const cx = 2 * via.x - (a.x + b.x) / 2;
+  const cy = 2 * via.y - (a.y + b.y) / 2;
+  return (k) => {
+    const u = Math.min(1, k / secs);
+    const v = 1 - u;
+    const x = v * v * a.x + 2 * v * u * cx + u * u * b.x;
+    const y = v * v * a.y + 2 * v * u * cy + u * u * b.y;
+    const dx = 2 * v * (cx - a.x) + 2 * u * (b.x - cx);
+    const dy = 2 * v * (cy - a.y) + 2 * u * (b.y - cy);
+    return { x, y, a: Math.atan2(dy, dx) };
+  };
+};
+
 export const BARNACLE_BAT_ATTACKS = {
-  // Drips: drops gather on the roof of the box (you see them swell) and fall,
-  // splashing into two little drops where they land. Each wave has one drip
-  // that follows you along the roof until just before it drops, and two more
-  // somewhere else. Four waves.
-  bbatDrip(box, density, { Shot, rand, clamp }) {
+  // Echo: it squeaks and a ring of echo spreads from it (harmless, pale).
+  // Where the ring reaches you it leaves a little mark, and a dotted line
+  // shows through it; a moment later the bat swoops along that line, right
+  // through the mark, shaking grit off as it goes. Four squeaks.
+  bbatEcho(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
     let t = 0;
-    let waves = 0;
-    let forming = [];
-    let falling = [];
-    const heading = { x: 0 };
-    let lastX = null;
-    const floor = box.y + box.h - 3;
+    let n = 0;
+    const pings = [];
     return {
-      duration: 7.2,
-      update: (dt, bullets, soul) => {
+      duration: 7,
+      update: (dt, bullets, soul, real = dt / density) => {
         t += dt;
-        if (lastX !== null && dt > 0) heading.x = heading.x * 0.85 + ((soul.x - lastX) / dt) * 0.15;
-        lastX = soul.x;
-        if (waves < 4 && t >= 0.2 + waves * 1.6) {
-          const xs = [soul.x];
-          for (let k = 0; k < 2; k++) {
-            let x = rand(box.x + 6, box.x + box.w - 6);
-            if (Math.abs(x - soul.x) < 14) x = clamp(soul.x + (x < soul.x ? -1 : 1) * rand(18, 30), box.x + 6, box.x + box.w - 6);
-            xs.push(x);
-          }
-          xs.forEach((x, i) => {
-            const warn = 0.7 + i * 0.12;
-            const marker = new Shot({ x, y: box.y + 3, harmless: true, life: warn, art: 'bbatDripForm' });
-            bullets.push(marker);
-            forming.push({ marker, at: t + warn, follows: i === 0 });
-          });
-          waves++;
+        if (t >= T(0.2 + n * 1.45) && n < 4) {
+          n++;
+          const src = { x: n % 2 ? box.x + box.w + 10 : box.x - 10, y: box.y + 6 };
+          pings.push({ r: 0, src, done: false });
+          bullets.push(new Deco({ life: 1.6, paint(ctx, d) {
+            ctx.strokeStyle = '#d8ffe8';
+            ctx.globalAlpha *= 0.5;
+            ctx.setLineDash([2, 3]);
+            for (const off of [0, -6]) {
+              const r = d.age * 70 + off;
+              if (r <= 0) continue;
+              ctx.beginPath();
+              ctx.arc(src.x, src.y, r, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          } }));
         }
-        for (const f of forming) {
-          // The drip over you slides along the roof after you until the last third of a second.
-          if (f.follows && t < f.at - 0.3) f.marker.x = clamp(soul.x + heading.x * 0.35, box.x + 4, box.x + box.w - 4);
-          if (t < f.at) continue;
-          f.done = true;
-          const drop = new Shot({ x: f.marker.x, y: box.y + 5, vy: 30, gravity: 200, art: 'bbatDrop', life: 2 });
-          bullets.push(drop);
-          falling.push(drop);
-        }
-        forming = forming.filter((f) => !f.done);
-        for (const d of falling) {
-          if (d.y < floor) continue;
-          d.life = 0;
-          d.splashed = true;
-          for (const dir of [-1, 1]) bullets.push(new Shot({ x: d.x, y: floor - 2, vx: dir * 36, vy: -60, gravity: 220, art: 'bbatSplash', life: 0.7 }));
-        }
-        falling = falling.filter((d) => !d.splashed);
-      },
-    };
-  },
-
-  // Echo: it squeaks (two ripples show on the wall level with you), and arcs of
-  // echo go out at you in a fan of three, bouncing off the walls and coming back
-  // round. Three squeaks, each from a different height.
-  bbatEcho(box, density, { Shot, rand, clamp }) {
-    let t = 0;
-    let squeaks = 0;
-    let pending = [];
-    return {
-      duration: 7.0,
-      update: (dt, bullets, soul) => {
-        t += dt;
-        if (squeaks < 3 && t >= 0.2 + squeaks * 2.0) {
-          const y = clamp(soul.y + [-14, 14, 0][squeaks], box.y + 8, box.y + box.h - 8);
-          const warn = 0.6;
-          const marker = new Shot({ x: box.x + box.w - 4, y, harmless: true, life: warn, art: 'bbatChirp' });
-          bullets.push(marker);
-          pending.push({ marker, at: t + warn });
-          squeaks++;
-        }
-        for (const p of pending) {
-          // The squeak's height follows you a little, then is fixed.
-          if (t < p.at - 0.3) p.marker.y = clamp(p.marker.y + (soul.y - p.marker.y) * Math.min(1, dt * 3), box.y + 8, box.y + box.h - 8);
-          if (t < p.at) continue;
+        for (const p of pings) {
+          if (p.done) continue;
+          p.r += 70 * real;
+          if (p.r < Math.hypot(soul.x - p.src.x, soul.y - p.src.y)) continue;
           p.done = true;
-          const a = Math.atan2(soul.y - p.marker.y, soul.x - p.marker.x);
-          for (const k of [-1, 0, 1]) {
-            const b = a + k * 0.42;
-            bullets.push(new Shot({ x: box.x + box.w - 4, y: p.marker.y, vx: Math.cos(b) * 66, vy: Math.sin(b) * 66, art: 'bbatEcho', bounce: true, life: 2.1 }));
+          const mark = { x: soul.x, y: soul.y };
+          bullets.push(new Shot({ x: mark.x, y: mark.y, harmless: true, life: 0.7, art: 'bbatChirp' }));
+          // The swoop: from outside the box on the squeak's side, through the mark, out the far side.
+          const ang = Math.atan2(mark.y - p.src.y, mark.x - p.src.x) + rand(-0.15, 0.15);
+          const a = { x: mark.x - Math.cos(ang) * 110, y: mark.y - Math.sin(ang) * 110 };
+          const SPEED = 280;
+          bullets.push(new Guide({ x: a.x, y: a.y, angle: ang, length: 220, warn: 0.5, color: '#d8ffe8' }));
+          const path = (k) => ({ x: a.x + Math.cos(ang) * SPEED * k, y: a.y + Math.sin(ang) * SPEED * k, a: ang });
+          bullets.push(new PathShot({ path, art: 'bbatDiver', warn: 0.5, life: 1.5 }));
+          // Its mate, a beat behind on the same line.
+          bullets.push(new PathShot({ path, art: 'bbatDiver', warn: 0.72, life: 1.5 }));
+          // Grit shaken off along the way, falling from where the bat will be.
+          for (let i = 1; i <= 4; i++) {
+            const at = path(0.45 + i * 0.12);
+            bullets.push(new Shot({ x: at.x, y: at.y, vy: 20, gravity: 40, art: 'bbatGrit', warn: 0.5 + 0.45 + i * 0.12, life: 1.4 }));
           }
         }
-        pending = pending.filter((p) => !p.done);
       },
     };
   },
 
-  // Barnacles: it shakes its wings and barnacles come off, tumbling over in
-  // arcs and landing on the floor of the box (one where you are heading, the others
-  // either side). Where one lands it sticks and opens, and flicks its five
-  // feathery arms out in a fan, up and away. Six barnacles.
-  bbatBarnacles(box, density, { Shot, rand, clamp }) {
+  // Roost: five of its cousins hang along the roof of the box, asleep. Every
+  // so often one opens its eyes (they blink yellow), and a moment later it
+  // drops and dives at where you were when it woke, then swings back up to
+  // the roof on the other side, where it hangs up again. Watch for the eyes.
+  bbatRoost(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const top = box.y + 6;
     let t = 0;
-    let thrown = 0;
-    let flying = [];
-    let stuck = [];
-    const floor = box.y + box.h - 4;
-    const heading = { x: 0 };
-    let lastX = null;
+    let n = 0;
+    let made = false;
+    const sleepers = [];
+    const WAKE = 0.6;
+    const DIVE = 0.85;
+    const hang = (x, warn, life) => {
+      const s = new Shot({ x, y: top, harmless: true, warn, art: 'bbatHangAsleep' });
+      s.life = life;
+      return s;
+    };
     return {
-      duration: 7.4,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (lastX !== null && dt > 0) heading.x = heading.x * 0.85 + ((soul.x - lastX) / dt) * 0.15;
-        lastX = soul.x;
-        if (thrown < 6 && t >= 0.3 + thrown * 0.95) {
-          const x0 = box.x + box.w + 6;
-          const y0 = box.y + 8;
-          const tx = thrown % 2 === 0 ? clamp(soul.x + heading.x * 0.9, box.x + 6, box.x + box.w - 6) : clamp(soul.x + (Math.random() < 0.5 ? -1 : 1) * rand(16, 28), box.x + 6, box.x + box.w - 6);
-          // It flies its arc by the clock (not by speed), so it lands just where it was thrown.
-          const b = new Shot({ x: x0, y: y0, warn: 0.35, art: 'bbatBarnacle', life: 3 });
-          b.arc = { x0, y0, tx, start: t + 0.35, T: rand(0.9, 1.1) };
-          bullets.push(b);
-          flying.push(b);
-          thrown++;
-        }
-        for (const b of flying) {
-          const u = (t - b.arc.start) / b.arc.T;
-          if (u < 0) continue;
-          if (u < 1) {
-            b.x = b.arc.x0 + (b.arc.tx - b.arc.x0) * u;
-            b.y = b.arc.y0 + (floor - b.arc.y0) * u * u - 16 * Math.sin(Math.PI * u);
-            continue;
-          }
-          b.life = 0;
-          b.landed = true;
-          bullets.push(new Shot({ x: b.arc.tx, y: floor - 1, harmless: true, life: 0.6, art: 'bbatBarnOpen' }));
-          stuck.push({ x: b.arc.tx, at: t + 0.55 });
-        }
-        flying = flying.filter((b) => !b.landed);
-        for (const s of stuck) {
-          if (t < s.at) continue;
-          s.done = true;
-          // Five arms in a fan, up and out.
-          for (const k of [-2, -1, 0, 1, 2]) {
-            const a = -Math.PI / 2 + k * 0.36;
-            bullets.push(new Shot({ x: s.x, y: floor - 3, vx: Math.cos(a) * 56, vy: Math.sin(a) * 56, art: 'bbatCirri', life: 1.7 }));
+        if (!made) {
+          made = true;
+          for (let i = 0; i < 5; i++) {
+            const s = hang(box.x + 8 + i * 16, 0, 7.5);
+            sleepers.push(s);
+            bullets.push(s);
           }
         }
-        stuck = stuck.filter((s) => !s.done);
+        if (t >= T(0.4 + n * 0.72) && n < 8) {
+          n++;
+          // Wake a sleeper that isn't right over you (so the dive comes at an angle).
+          const choice = sleepers.filter((s) => Math.abs(s.x - soul.x) > 10);
+          const s = choice.length ? choice[Math.floor(rand(0, choice.length))] : sleepers[n % sleepers.length];
+          const a = { x: s.x, y: s.y };
+          const via = { x: soul.x, y: soul.y };
+          const bx = Math.min(Math.max(2 * via.x - a.x + rand(-6, 6), box.x + 6), box.x + box.w - 6);
+          const b = { x: bx, y: top };
+          s.life = 0;
+          bullets.push(new Shot({ x: a.x, y: a.y, harmless: true, life: WAKE, art: 'bbatHangAwake' }));
+          bullets.push(new PathShot({ path: dive(a, via, b, DIVE), art: 'bbatDiver', warn: WAKE, life: DIVE }));
+          const back = hang(b.x, WAKE + DIVE, 7);
+          bullets.push(back);
+          sleepers.splice(sleepers.indexOf(s), 1, back);
+        }
       },
     };
   },
 
-  // Swoop: a faint dotted path shows where it will fly, dipping down through
-  // the box to your height and back up (it follows you until a moment before
-  // it goes); then the bat swoops along it, shaking barnacle grit down as it
-  // passes. Three swoops, from alternate sides, the dip a step off where you were.
-  bbatSwoop(box, density, { Shot, rand, clamp }) {
+  // Feeding time: barnacles crust the walls of the box. On every squeak (a
+  // ripple at the bat), the barnacles with their lids up comb the water:
+  // each flicks a fan of five feathery arms at where you are. The lids go
+  // up a beat before the squeak, five barnacles at a time.
+  bbatBarnacles(box, density, { Shot, rand }) {
+    const T = (s) => s * density;
+    const spots = [];
+    for (let i = 0; i < 3; i++) spots.push({ x: box.x + 2, y: box.y + 16 + i * 24, reach: 62 });
+    for (let i = 0; i < 3; i++) spots.push({ x: box.x + box.w - 2, y: box.y + 16 + i * 24, reach: 62 });
+    for (let i = 0; i < 3; i++) spots.push({ x: box.x + 16 + i * 24, y: box.y + box.h - 2, reach: 52 });
+    const order = [0, 1, 2, 3, 4, 5, 6, 7, 8].sort(() => Math.random() - 0.5);
+    const BEAT = 1.15;
+    const WARN = 0.55;
     let t = 0;
-    let swoops = 0;
-    let runs = [];
-    const N = 7;
-    const pathAt = (run, k) => {
-      const u = k;
-      const x = run.dir > 0 ? box.x - 10 + (box.w + 20) * u : box.x + box.w + 10 - (box.w + 20) * u;
-      const y = box.y - 6 + (run.depth - (box.y - 6)) * Math.sin(Math.PI * u);
-      return { x, y };
-    };
+    let n = 0;
+    let made = false;
     return {
-      duration: 7.2,
+      duration: 7,
       update: (dt, bullets, soul) => {
         t += dt;
-        if (swoops < 3 && t >= 0.2 + swoops * 2.1) {
-          const run = { dir: swoops % 2 ? 1 : -1, depth: soul.y, dots: [], at: t + 0.9, bat: null, shed: 0 };
-          for (let k = 1; k < N; k++) {
-            const p = pathAt(run, k / N);
-            const dot = new Shot({ x: p.x, y: p.y, harmless: true, life: 0.9, art: 'bbatPath' });
-            run.dots.push({ dot, k: k / N });
-            bullets.push(dot);
-          }
-          runs.push(run);
-          swoops++;
-        }
-        for (const run of runs) {
-          if (!run.bat) {
-            // The dip follows you until the last third of a second.
-            if (t < run.at - 0.3) {
-              run.depth = clamp(soul.y + (swoops % 2 ? 6 : -6), box.y + 10, box.y + box.h - 6);
-              for (const { dot, k } of run.dots) Object.assign(dot, pathAt(run, k));
-            }
-            if (t >= run.at) {
-              const p = pathAt(run, 0);
-              run.bat = new Shot({ x: p.x, y: p.y, art: run.dir > 0 ? 'bbatSwooper' : 'bbatSwooperL', life: 2 });
-              run.start = t;
-              bullets.push(run.bat);
-            }
-            continue;
-          }
-          const u = (t - run.start) / 1.25;
-          if (u >= 1) { run.bat.life = 0; run.done = true; continue; }
-          Object.assign(run.bat, pathAt(run, u));
-          run.shed -= dt;
-          if (run.shed <= 0 && run.bat.x > box.x + 4 && run.bat.x < box.x + box.w - 4) {
-            run.shed = 0.2;
-            bullets.push(new Shot({ x: run.bat.x, y: run.bat.y + 3, vx: rand(-8, 8), vy: 24, gravity: 90, art: 'bbatGrit', life: 1.2 }));
+        if (!made) {
+          made = true;
+          for (const s of spots) {
+            const shut = new Shot({ x: s.x, y: s.y, harmless: true, art: 'bbatWallShut' });
+            shut.life = 7;
+            bullets.push(shut);
           }
         }
-        runs = runs.filter((run) => !run.done);
+        if (t >= T(0.3 + n * BEAT) && n < 5) {
+          n++;
+          const open = [];
+          for (const i of order) {
+            if (open.length < 5) open.push(i);
+          }
+          order.push(...order.splice(0, 4));
+          bullets.push(new Shot({ x: box.x + box.w - 6, y: box.y + 8, harmless: true, warn: WARN - 0.15, life: 0.3, art: 'bbatChirp' }));
+          for (const i of open) {
+            const s = spots[i];
+            bullets.push(new Shot({ x: s.x, y: s.y, harmless: true, life: WARN + 0.5, art: 'bbatWallOpen' }));
+            const aim = Math.atan2(soul.y - s.y, soul.x - s.x) + rand(-0.06, 0.06);
+            for (const off of [-0.4, -0.2, 0, 0.2, 0.4]) {
+              bullets.push(new Line({ x: s.x, y: s.y, angle: aim + off, length: s.reach, thickness: 3, warn: WARN, life: 0.45, grow: 260, color: '#c8c4b4', dash: [3, 1] }));
+            }
+          }
+        }
       },
     };
   },
 };
-
-// Aimed drips and barnacles on top (see snipes.js), so running one way all turn (along the
-// floor under the barnacles, say) never works.
-BARNACLE_BAT_ATTACKS.bbatEcho = withSnipes(BARNACLE_BAT_ATTACKS.bbatEcho, { art: 'bbatBarnacle', count: 3, first: 1.4, every: 1.8, lead: [0.9, 'mean', 0.5] });
-BARNACLE_BAT_ATTACKS.bbatBarnacles = withSnipes(BARNACLE_BAT_ATTACKS.bbatBarnacles, { art: 'bbatDrop', count: 4, first: 1.2, every: 1.4, lead: [0.9, 'mean', 0.9, 'mean'] });
-BARNACLE_BAT_ATTACKS.bbatSwoop = withSnipes(BARNACLE_BAT_ATTACKS.bbatSwoop, { art: 'bbatDrop', count: 4, first: 1.0, every: 1.3, lead: [0.9, 'mean', 0.5, 'mean'] });

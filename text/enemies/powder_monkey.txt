@@ -53,7 +53,7 @@ the hole!
 # TALK options in src/data/enemies/powder_monkey.js.
 [talk: Inspect]
 POWDER MONKEY - HP 11800
-The gunner's boy of the Fair Return, still running powder. Rolls round shot along the deck, sets a keg with a slow fuse, pokes the rammer in along the lanes and leaves the guns' smoke hanging about, dropping burning wadding. Everything goes off slowly. He's waiting to be told.
+The gunner's boy of the Fair Return, still running powder. Kegs burst at the wall, a spark runs down the fuse to a keg, and the loaded guns all fire on the word. He's waiting to be told.
 
 [talk: Say fire]
 You say it, as gently as you know how, in a voice that sounds like someone who has the right: fire. POWDER MONKEY goes rigid. He looks at the match, and at the guns, and at you. Then, very carefully, he doesn't. He breathes out. He says, in a voice that has been waiting a long time, that he thought it would be louder.

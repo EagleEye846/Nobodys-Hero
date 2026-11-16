@@ -23,6 +23,8 @@ export const WRACK_GAPS = {
   calmAfter: { scene: 'the_light_answers', atmosphere: { rain: 0, lightning: 0, spray: 0.2, foam: 0.6, fog: 0.15, drips: 0.4, gulls: 0.6, shimmer: 0.5 }, ambience: 'calm_shore', lamplight: { shade: 0.16, tint: '34, 44, 68' }, skyline: true },
   vesWell: true,
 
+
+
   tiles: [
     '######################################',
     '#############################~~~~~~~~#',
@@ -91,6 +93,13 @@ export const WRACK_GAPS = {
     // Stones in the sea.
     { sprite: 'c5_rocks_weedy', x: 31, y: 4, text: 'shore_rocks' },
     { sprite: 'c5_rock_weedy', x: 29, y: 7, text: 'shore_rocks' },
+    // LIFE-PASS-BEGIN (builder 3, 2026-11-14): rock-pool life, shells, kelp, the odds the sea left. Everything here is walkable, so nothing is ever in anyone's way.
+    { sprite: 'shore_bottle', x: 12, y: 12, text: 'sl_gap_bottle', walkable: true },
+    { sprite: 'c5_net_torn', x: 14, y: 3, text: 'sl_net', flat: true, walkable: true },
+    { sprite: 'c5_boat_upturned', x: 5, y: 6, text: 'sl_dinghy' },
+    { sprite: 'c5_rope_coil', x: 21, y: 12, text: 'sl_rope', walkable: true },
+    { sprite: 'shore_shells', x: 3, y: 12, text: 'sl_shells_a', flat: true, walkable: true },
+    // LIFE-PASS-END
   ],
   tileTexts: { '#': 'landing_cliff', W: 'landing_cliff', '~': 'landing_sea', x: 'gaps_rock', F: 'landing_weed', ';': 'gaps_shallows' },
 
